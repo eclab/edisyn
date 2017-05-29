@@ -1,0 +1,23 @@
+INSTALLATION
+
+Edisyn requires coremidi4j installed.  This is easy on the Mac: just copy the file
+
+	coremidi4j-1.0.jar
+
+... to the directory /Library/Java/Extensions/
+
+and you're done!
+
+
+
+DISTRIBUTION
+
+The Jar File coremidi4j-1.0.jar is distributed under the Eclipse Common License.
+Edisyn does not modify or extend it, but just links against it.  If you would like
+the source code to this jar file, you're in luck!  It's embedded within the jar
+file itself, in a subdirectory called "source".
+
+The CoreMidi4J distribution is maintained here:
+	https://github.com/DerekCook/CoreMidi4J
+
+I'd go there for the most recent copies.

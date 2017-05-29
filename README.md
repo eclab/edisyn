@@ -1,6 +1,11 @@
 # edisyn
 Synthesizer Patch Editor
 
+By Sean Luke (sean@cs.gmu.edu)
+
+
+## About
+
 Edisyn is a synthesizer patch editor library written in pure Java.  It comes with one completed patch editor
 for the *Waldorf Blofeld*, but will ultimately have some more written for it as well as I get time.  Edisyn
 has no graphical interface editor system like Ctrlr, but it's designed to make the GUI pretty easy to write.

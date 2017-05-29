@@ -77,6 +77,21 @@ patch are replaced with the old patch.  Then Edisyn will then send the patch to 
 
 * *Disconnect MIDI* disconnects the MIDI interface.
 
+* *Send All Sounds Off* sends the All Sounds Off message to all channels.
+
+* *Send Test Note* sends a 1/2 second test note to the primary channel.
+
+
+### The MIDI Interface
+
+Edisyn makes up to three MIDI device connections.  The *Receiving Device* is the MIDI device from which we will accept
+patches.  This is usually your synthesizer.  The *Sending Device* is the MIDI device to which we will send 
+patches and parameter changes.  We'll also need a channel for the Sending Device so we can send test notes.
+
+Optionally you can route your controller keyboard through Edisyn to play the sounds directly if you wish.  To do this,
+the *Keyboard Device* is the MIDI Device of your controller keyboard.  You'll also specify an incoming keyboard
+channel of course.  This can be set to "Any" for any channel (Omni).
+
 
 ## Caveats and Bugs
 
@@ -88,4 +103,7 @@ For now, there's no interface for sending test notes via the screen.
 
 Everything has to be sent via sysex for the moment: I don't have code written to make it easy to send CC or NRPN
 if you wanted to build a patch which did that.
+
+Making a new panel is slow.  Profiling suggests that the primary reason for this is that JComboBox construction
+is slow.  So I can't get around it.
 

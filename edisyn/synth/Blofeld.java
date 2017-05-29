@@ -99,7 +99,7 @@ public class Blofeld extends Synth
         soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
-        hbox.add(addNameGlobal(COLOR_GLOBAL));
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
         hbox.addLast(addOscillatorGlobal(Style.COLOR_A));
                 
         vbox.add(hbox);
@@ -214,7 +214,7 @@ public class Blofeld extends Synth
 
         hbox.add(vbox);
                 
-        comp = new LabelledDial("Pattern", this, "arpeggiatorpatternlength", color, 0, 9)
+        comp = new LabelledDial("Pattern", this, "arpeggiatorpatternlength", color, 0, 16)
             {
             public String map(int val)
                 {
@@ -1270,7 +1270,8 @@ public class Blofeld extends Synth
 
         if (osc != 3)
             {
-            comp = new CheckBox("Limit WT", this, "osc" + osc + "limitwt");
+            // 0 is ON for Limit WT, 1 is OFF.  It's flipped relative to other switches
+            comp = new CheckBox("Limit WT", this, "osc" + osc + "limitwt", true);
             vbox.add(comp);
             }
                 

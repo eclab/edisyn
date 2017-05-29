@@ -21,18 +21,30 @@ import java.awt.event.*;
 public class CheckBox extends NumericalComponent
     {
     JCheckBox check;
+    boolean flipped;
 
     public void update(String key, Model model) 
         { 
         // we don't compare against min or max here because they
         // could be used by other widgets.  See for example Blofeld parameter 8
-        check.setSelected(getState() > 0); 
+        if (flipped)
+        	check.setSelected(getState() == 0);
+        else
+        	check.setSelected(getState() != 0); 
         }
 
     public CheckBox(String label, Synth synth, String key)
+		{
+		this(label, synth, key, false);
+		}
+		
+		
+    public CheckBox(String label, Synth synth, String key, boolean flipped)
         {
         super(synth, key);
 
+		this.flipped = flipped;
+		
         check = new JCheckBox(label);
         check.setFont(Style.SMALL_FONT);
         check.setBackground(Style.TRANSPARENT);
@@ -49,7 +61,10 @@ public class CheckBox extends NumericalComponent
             {
             public void actionPerformed( ActionEvent e)
                 {
-                setState(check.isSelected() ? getMax() : getMin());
+                if (CheckBox.this.flipped)
+                	setState(check.isSelected() ? getMin() : getMax());
+				else
+                	setState(check.isSelected() ? getMax() : getMin());				
                 }
             });
         }

@@ -34,51 +34,6 @@ import java.io.*;
 
 public abstract class Synth extends JComponent implements Updatable
     {
-    /** Background color */
-    public static final Color BACKGROUND_COLOR = Color.BLACK;
-    /** Text color */
-    public static final Color TEXT_COLOR = Color.WHITE;
-    /** Color of the unset region in Dials etc. */ 
-    public static final Color UNSET_COLOR = Color.GRAY;
-    /** Color of the set region in Dials etc. when being updated. */
-    public static final Color DYNAMIC_COLOR = Color.RED;
-    /** Transparent color. */
-    public static final Color TRANSPARENT = new Color(0,0,0,0);
-    /** Width of the set region in Dials etc.  */
-    public static final float STROKE_WIDTH = 4.0f;
-    /** The stroke for the set region in Dials etc. */
-    public static final BasicStroke STROKE_THIN = new BasicStroke(STROKE_WIDTH / 2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
-    /** The stroke for the unset region in Dials etc. */
-    public static final BasicStroke STROKE = new BasicStroke(STROKE_WIDTH, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
-    /** Insets for labelled dials to set them apart slightly from one another. */
-    public static final Insets LABELLED_DIAL_INSETS = new Insets(0, 3, 0, 3);
-    /** Font for labels. */
-    public static final Font SMALL_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 10);
-    /** Medium-sized font, used primarily in the center of a Dial. */
-    public static final Font MEDIUM_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
-    /** Font in the center of a Dial. */
-    public static final Font DIAL_FONT = MEDIUM_FONT;
-    /** Font for category borders. */
-    public static final Font CATEGORY_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 18);
-    /** Stroke width for category borders. */
-    public static final int CATEGORY_STROKE_WIDTH = 3;
-    /** The category border. */
-    public static final Border CATEGORY_BORDER = BorderFactory.createEmptyBorder(0, -2, 4, 4);
-    /** The synth panel's insets */
-    public static final Insets SYNTH_PANEL_INSETS = new Insets(40, 40, 40, 40);
-    /** Insets for VBoxes, by default zero. */
-    public static final Insets VBOX_INSETS = new Insets(0, 0, 0, 0);
-    /** Insets for HBoxes, by default zero. */
-    public static final Insets HBOX_INSETS = new Insets(0, 0, 0, 0);
-    /** Color of the first category on a page. */
-    public static final Color COLOR_A = Color.green;
-    /** Color of the second category on a page. */
-    public static final Color COLOR_B = new Color(128, 128, 255);
-    /** Color of the third category on a page. */
-    public static final Color COLOR_C = Color.yellow;
-    /** Color for the category holding critical global stuff like patch name, patch number, etc. */
-    public static final Color COLOR_GLOBAL = Color.white;
-        
     // The model proper
     protected Model model;
     // Our own private random number generator
@@ -292,7 +247,7 @@ public abstract class Synth extends JComponent implements Updatable
     public void update(String key, Model model)
         {
         if (getSendMIDI())
-            tryToSendMidi(emit(key));
+            tryToSendSysex(emit(key));
         }
 
     // A helper class which outputs the name of the MIDI device properly so
@@ -454,11 +409,31 @@ public abstract class Synth extends JComponent implements Updatable
 		}
 
 
+    /** Attempts to send a NON-Sysex MIDI message. Returns false if (1) the data was empty or null (2)
+        synth has turned off the ability to send temporarily (3) the sysex message is not
+        valid (4) an error occurred when the receiver tried to send the data.  */
+    public boolean tryToSendMIDI(ShortMessage message)
+        {
+        if (message == null) 
+            return false;
+
+        if (getSendMIDI())
+            {
+            Receiver receiver = getReceiver();
+            if (receiver == null) return false;
+            receiver.send(message, -1); 
+            return true;
+            }
+        else
+            return false;
+        }
+                
+                        
 
     /** Attempts to send MIDI sysex. Returns false if (1) the data was empty or null (2)
         synth has turned off the ability to send temporarily (3) the sysex message is not
         valid (4) an error occurred when the receiver tried to send the data.  */
-    public boolean tryToSendMidi(byte[] data)
+    public boolean tryToSendSysex(byte[] data)
         {
         if (data == null || data.length == 0) 
             return false;
@@ -547,7 +522,7 @@ public abstract class Synth extends JComponent implements Updatable
                 
                 Model tempModel = new Model();
                 if (gatherInfo("Request Patch and Send", tempModel))
-		            tryToSendMidi(requestDump(tempModel));
+		            tryToSendSysex(requestDump(tempModel));
                 }
             });
                 
@@ -649,7 +624,7 @@ public abstract class Synth extends JComponent implements Updatable
                 	}
                 
                 if (gatherInfo("Burn Patch", getModel()))
-	                tryToSendMidi(emit(getModel()));
+	                tryToSendSysex(emit(getModel()));
                 }
             });
                 
@@ -687,7 +662,7 @@ public abstract class Synth extends JComponent implements Updatable
 		if (gatherInfo("Request Merge and Send", tempModel))
 			{
 			Synth.this.merging = probability;
-			tryToSendMidi(requestDump(tempModel));
+			tryToSendSysex(requestDump(tempModel));
 			}
 		}
 
@@ -700,7 +675,7 @@ public abstract class Synth extends JComponent implements Updatable
     	String[] keys = getModel().getKeys();
     	for(int i = 0; i < keys.length; i++)
     		{
-    		tryToSendMidi(emit(keys[i]));
+    		tryToSendSysex(emit(keys[i]));
     		}
     	}
                 

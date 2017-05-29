@@ -1,0 +1,383 @@
+-
+osc1octave			*
+osc1semitone
+osc1detune
+osc1bendrange
+osc1keytrack
+osc1fmsource
+osc1fmamount
+osc1shape
+osc1pulsewidth
+osc1pwmsource
+osc1pwmamount
+-
+-
+osc1limitwt
+-
+osc1brilliance
+osc2octave			*
+osc2semitone
+osc2detune
+osc2bendrange
+osc2keytrack
+osc2fmsource
+osc2fmamount
+osc2shape
+osc2pulsewidth
+osc2pwmsource
+osc2pwmamount
+-
+-
+osc2limitwt
+-
+osc2brilliance
+osc3octave			*
+osc3semitone
+osc3detune
+osc3bendrange
+osc3keytrack
+osc3fmsource
+osc3fmamount
+osc3shape
+osc3pulsewidth
+osc3pwmsource
+osc3pwmamount
+-
+-
+-
+-
+osc3brilliance
+osc2synctoosc3
+oscpitchsource
+oscpitchamount
+-
+glide
+-
+-
+glidemode
+gliderate
+oscallocation, unisono		*
+unisonodetune
+-
+osc1level
+osc1balance
+osc2level
+osc2balance
+osc3level
+osc3balance
+noiselevel
+noisebalance
+noisecolour
+-
+ringmodlevel
+ringmodbalance
+-
+-
+-
+-
+filter1type
+filter1cutoff
+-
+filter1resonance
+filter1drive
+filter1drivecurve
+-
+-
+-
+filter1keytrack
+filter1envamount
+filter1envvelocity
+filter1modsource
+filter1modamount
+filter1fmsource
+filter1fmamount
+filter1pan
+filter1pansource
+filter1panamount
+-
+filter2type
+filter2cutoff
+-
+filter2resonance
+filter2drive
+filter2drivecurve
+-
+-
+-
+filter2keytrack
+filter2envamount
+filter2envvelocity
+filter2modsource
+filter2modamount
+filter2fmsource
+filter2fmamount
+filter2pan
+filter2pansource
+filter2panamount
+-
+filterrouting
+-
+-
+-
+amplifiervolume
+amplifiervelocity
+amplifiermodsoure
+amplifiermodamount
+-
+-
+-
+effect1type
+effect1mix
+effect1parameter1
+effect1parameter2
+effect1parameter3
+effect1parameter4
+effect1parameter5
+effect1parameter6
+effect1parameter7
+effect1parameter8
+effect1parameter9
+effect1parameter10
+effect1parameter11
+effect1parameter12
+effect1parameter13
+effect1parameter14
+effect2type
+effect2mix
+effect2parameter1
+effect2parameter2
+effect2parameter3
+effect2parameter4
+effect2parameter5
+effect2parameter6
+effect2parameter7
+effect2parameter8
+effect2parameter9
+effect2parameter10
+effect2parameter11
+effect2parameter12
+effect2parameter13
+effect2parameter14
+lfo1shape
+lfo1speed
+-
+lfo1sync
+lfo1clocked
+lfo1startphase
+lfo1delay
+lfo1fade
+-
+-
+lfo1keytrack
+-
+lfo2shape
+lfo2speed
+-
+lfo2sync
+lfo2clocked
+lfo2startphase
+lfo2delay
+lfo2fade
+-
+-
+lfo2keytrack
+-
+lfo3shape
+lfo3speed
+-
+lfo3sync
+lfo3clocked
+lfo3startphase
+lfo3delay
+lfo3fade
+-
+-
+lfo3keytrack
+-
+filterenvelopemode
+-
+-
+filterenvelopeattack
+filterenvelopeattacklevel
+filterenvelopedecay
+filterenvelopesustain
+filterenvelopedecay2
+filterenvelopesustain2
+filterenveloperelease
+-
+-
+amplifierenvelopemode
+-
+-
+amplifierenvelopeattack
+amplifierenvelopeattacklevel
+amplifierenvelopedecay
+amplifierenvelopesustain
+amplifierenvelopedecay2
+amplifierenvelopesustain2
+amplifierenveloperelease
+-
+-
+envelope3mode
+-
+-
+envelope3attack
+envelope3attacklevel
+envelope3decay
+envelope3sustain
+envelope3decay2
+envelope3sustain2
+envelope3release
+-
+-
+envelope4mode
+-
+-
+envelope4attack
+envelope4attacklevel
+envelope4decay
+envelope4sustain
+envelope4decay2
+envelope4sustain2
+envelope4release
+-
+-
+-
+modifier1sourcea
+modifier1sourceb
+modifier1operation
+modifier1constant
+modifier2sourcea
+modifier2sourceb
+modifier2operation
+modifier2constant
+modifier3sourcea
+modifier3sourceb
+modifier3operation
+modifier3constant
+modifier4sourcea
+modifier4sourceb
+modifier4operation
+modifier4constant
+modulation1source
+modulation1destination
+modulation1amount
+modulation2source
+modulation2destination
+modulation2amount
+modulation3source
+modulation3destination
+modulation3amount
+modulation4source
+modulation4destination
+modulation4amount
+modulation5source
+modulation5destination
+modulation5amount
+modulation6source
+modulation6destination
+modulation6amount
+modulation7source
+modulation7destination
+modulation7amount
+modulation8source
+modulation8destination
+modulation8amount
+modulation9source
+modulation9destination
+modulation9amount
+modulation10source
+modulation10destination
+modulation10amount
+modulation11source
+modulation11destination
+modulation11amount
+modulation12source
+modulation12destination
+modulation12amount
+modulation13source
+modulation13destination
+modulation13amount
+modulation14source
+modulation14destination
+modulation14amount
+modulation15source
+modulation15destination
+modulation15amount
+modulation16source
+modulation16destination
+modulation16amount
+-
+-
+arpeggiatormode
+arpeggiatorpattern
+-
+arpeggiatorclock
+arpeggiatorlength
+arpeggiatoroctave
+arpeggiatordirection
+arpeggiatorsortorder
+arpeggiatorvelocity
+arpeggiatortimingfactor
+-
+arpeggiatorpatternreset
+arpeggiatorpatternlength
+-
+-
+arpeggiatortempo
+arp01step, arp01glide, arp01accent			*
+arp02step, arp02glide, arp02accent			*
+arp03step, arp03glide, arp03accent			*
+arp04step, arp04glide, arp04accent			*
+arp05step, arp05glide, arp05accent			*
+arp06step, arp06glide, arp06accent			*
+arp07step, arp07glide, arp07accent			*
+arp08step, arp08glide, arp08accent			*
+arp09step, arp09glide, arp09accent			*
+arp10step, arp10glide, arp10accent			*
+arp11step, arp11glide, arp11accent			*
+arp12step, arp12glide, arp12accent			*
+arp13step, arp13glide, arp13accent			*
+arp14step, arp14glide, arp14accent			*
+arp15step, arp15glide, arp15accent			*
+arp16step, arp16glide, arp16accent			*
+arp01timing, arp01length			*
+arp02timing, arp02length			*
+arp03timing, arp03length			*
+arp04timing, arp04length			*
+arp05timing, arp05length			*
+arp06timing, arp06length			*
+arp07timing, arp07length			*
+arp08timing, arp08length			*
+arp09timing, arp09length			*
+arp10timing, arp10length			*
+arp11timing, arp11length			*
+arp12timing, arp12length			*
+arp13timing, arp13length			*
+arp14timing, arp14length			*
+arp15timing, arp15length			*
+arp16timing, arp16length			*
+-
+-
+-
+-
+name		*
+name		*
+name		*
+name		*
+name		*
+name		*
+name		*
+name		*
+name		*
+name		*
+name		*
+name		*
+name		*
+name		*
+name		*
+name		*
+category
+-
+-
+-

@@ -630,11 +630,13 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
+                /*
                 if (tuple == null || tuple.out == null)
                 	{
                 	if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
                 		return;
                 	}
+                */
                 
                 mutate(1.0);
                 sendAllParameters();

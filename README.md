@@ -1,5 +1,5 @@
 # edisyn
-Synthesizer Patch Editor
+Synthesizer Patch Editor (Version 2)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -13,7 +13,7 @@ has no graphical interface editor system like Ctrlr, but it's designed to make t
 At present Edisyn *only runs on OS X* (well, I've only tried it on OS X, that's its target).  If you try running
 it elsewhere, you're on your own.
 
-This is Edisyn version 1, a very early prerelease which doesn't feel very MacOS like yet, and which has lots of
+This is Edisyn version 2, a very early prerelease which doesn't feel very MacOS like yet, and which has lots of
 wires sticking out.  But it works!  Try it out on your Blofeld.
 
 
@@ -23,7 +23,7 @@ For the time being, to install Edisyn you need to do the following three things.
 
 1. Install the Java JDK.
 2. Place the file `libraries/coremidi4j-1.0.jar` in the directory `/Library/Java/Extensions`
-3. Put file `jar/edisyn.1.jar` where you like (it's Edisyn's executable).
+3. Put file `jar/edisyn.2.jar` where you like (it's Edisyn's executable).
 
 
 ## Running

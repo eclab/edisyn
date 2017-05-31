@@ -44,6 +44,9 @@ public abstract class Synth extends JComponent implements Updatable
     File file;
     // will the next load be a merge?  If 0, we're not merging.  Else it's the merge probability.
     double merging = 0.0;
+
+	public Midi.Tuple tuple;
+
         
     /** Handles mutation (or not) of keys declared immutable in the Model.
         When the user is mutating (randomizing) a parameter, and it was declared
@@ -138,7 +141,7 @@ public abstract class Synth extends JComponent implements Updatable
         	frame.setTitle(getSynthName().trim() + "        " + 
         				   getPatchName().trim() + 
         				   (getFile() == null ? "" : "        " + getFile().getName()) +
-        				   (in == null ? "        (DISCONNECTED)" : ""));
+        				   ((tuple == null || tuple.in == null) ? "        (DISCONNECTED)" : ""));
         }
 
         
@@ -157,6 +160,7 @@ public abstract class Synth extends JComponent implements Updatable
         model.register(Model.ALL_KEYS, this);
         random = new Random(System.currentTimeMillis());
         }
+        
         
     /** Updates the graphics rendering hints before drawing.  */
     public static void prepareGraphics(Graphics g)
@@ -247,130 +251,20 @@ public abstract class Synth extends JComponent implements Updatable
     public void update(String key, Model model)
         {
         if (getSendMIDI())
+        	{
             tryToSendSysex(emit(key));
+            }
         }
 
-    // A helper class which outputs the name of the MIDI device properly so
-    // JComboBoxes in JOptionPane can display them nicely.
-    static class MidiDeviceName
-        {
-        public MidiDevice device;
-        public MidiDeviceName(MidiDevice d) { device = d; }
-        public String toString() 
-        	{ 
-        	String desc = device.getDeviceInfo().getDescription().trim();
-        	
-        	// All CoreMIDI4J names begin with "CoreMIDI4J - "
-        	String name = device.getDeviceInfo().getName().substring(13).trim();
 
-        	if (name.equals(""))
-	        	return desc; 
-			else 
-	        	return desc + ": " + name; 
-        	}
-        }
-        
-    int indexOfMidiDevice(MidiDevice dev, ArrayList list)
-    	{
-    	for(int i = 0; i < list.size(); i++)
-    		{
-    		// Sadly, new device are returned each time by the MIDI system, GARGH.
-    		// So for NOW :-( we're going by comparing strings to do defaults.  This obviously will fail
-    		// in a lot of cases. 
-    		if ((list.get(i)) instanceof String)		// it's "None"
-    			{
-    			if (dev == null) return i;
-    			}
-    		else
-    			{
-	    		if ((new MidiDeviceName(dev).toString()).equals(
-	    			((MidiDeviceName)(list.get(i))).toString()))
-	    			return i;
-	    		}
-    		}
-    	return -1;
-    	}
-    
-    // Synchronize the device access.  Not that it'll make much difference
-    // as I'm trying to make sure everything is accessed from the Swing Event Thread
-    Object lock = new Object[0];
-        
-    // Our Keyboard
-    MidiDevice key = null;
-    MidiDeviceName keyn = null;
-    Transmitter keyr = null;
-    public static final int KEYCHANNEL_NONE = 0;
-    int keyChannel = KEYCHANNEL_NONE;
-    
-    // Our input device
-    MidiDevice in = null;   
-    MidiDeviceName inn = null;
-    Transmitter inr = null;
-        
-    // Our output device
-    MidiDevice out = null;
-    MidiDeviceName outn = null;
-    Receiver outr = null;
-    int sendChannel = 1;
-        
-    /** Returns our output device */
-    public MidiDevice getReceiverDevice() 
-    	{ 
-    	synchronized(lock) 
-    		{ return out; }
-    	}
-
-    /** Returns our input device */
-    public MidiDevice getTransmitterDevice() 
-    	{ 
-    	synchronized(lock) 
-    	{ return in; } 
-    	}
-
-	/** Returns our keyboard device */
-	public MidiDevice getKeyboardDevice() 
-		{ 
-		synchronized(lock) 
-		{ return in; } 
-		}
-
-    /** Returns our output stream */
-    public Receiver getReceiver() 
-    	{ 
-    	synchronized(lock) 
-    	{ return outr; } 
-    	}
-
-    /** Returns our input stream */
-    public Transmitter getTransmitter() 
-    	{ 
-    	synchronized(lock) 
-    	{ return inr; } 
-    	}
-        
-	/** Returns our keyboard device */
-	public Transmitter getKeyboard() 
-		{ 
-		synchronized(lock) 
-		{ return inr; } 
-		}
-
-    /** Attaches the synth to receive sysex provided by the transmitter.  To do
-        this, the transmitter must actually exist (not be null). */
-    public void attachToTransmitter()
-        {
-        if (inr != null) 
-        	inr.setReceiver(new Receiver()
+	/** Builds a receiver to attach to the current IN transmitter.  The receiver
+		can handle merging and patch reception. */
+	Receiver buildInReceiver()
+		{
+		return new Receiver()
             {
             public void close()
                 {
-                // this doesn't matter since we're not returning the Receiver, but whatever
-                synchronized(lock) 
-                    { 
-                    if (inr != null) 
-                        inr.close(); 
-                    }
-                inr = null;
                 }
                                 
             public void send(MidiMessage message, long timeStamp)
@@ -389,9 +283,9 @@ public abstract class Synth extends JComponent implements Updatable
                             	merging = 0.0;
                 				Synth newSynth = doNew();
                 				newSynth.parse(data);
-                				sendMIDI = false;
+                				setSendMIDI(false);
                 				merge(newSynth.getModel(), 0.5);
-                				sendMIDI = true;
+                				setSendMIDI(true);
                 				sendAllParameters();
                 				updateTitle();
                             	}
@@ -408,20 +302,17 @@ public abstract class Synth extends JComponent implements Updatable
                         });
                     }
                 }
-            });
-
-        if (keyr != null) 
-        	keyr.setReceiver(new Receiver()
+            };
+        }
+        
+	/** Builds a receiver to attach to the current KEY transmitter.  The receiver
+		can resend all incoming requests to the OUT receiver. */
+    public Receiver buildKeyReceiver()
+    	{
+		return new Receiver()
             {
             public void close()
                 {
-                // this doesn't matter since we're not returning the Receiver, but whatever
-                synchronized(lock) 
-                    { 
-                    if (keyr != null) 
-                        keyr.close(); 
-                    }
-                keyr = null;
                 }
                                 
             public void send(MidiMessage message, long timeStamp)
@@ -453,88 +344,65 @@ public abstract class Synth extends JComponent implements Updatable
 							{
 							e.printStackTrace();
 							}
-
 						}
 					else if (message instanceof SysexMessage)
+						{
 						tryToSendSysex(message.getMessage());
+						}
                 	}
         		}
-        	});
+        	};
         }
 
 
+	/** Same as setupMIDI(message, null); */
 	public boolean setupMIDI(String message)
 		{
-		return setupMIDI(message, null, null, null, 1, KEYCHANNEL_NONE);
+		return setupMIDI(message, null);
 		}
 	
-	public boolean setupMIDI(String message, MidiDevice previousTrans, MidiDevice previousRecv, MidiDevice previousKeybd, int previousOutChannel, int previousKeyChannel)
+	/** Lets the user set up the MIDI in/out/key devices.  The old devices are provided in oldTuple,
+		or you may pass null in if there are no old devices.  Returns TRUE if a new tuple was set up. */
+	public boolean setupMIDI(String message, Midi.Tuple oldTuple)
 		{
-		synchronized(lock)
+		Midi.Tuple result = Midi.getNewTuple(tuple, this, message, buildInReceiver(), buildKeyReceiver());
+		boolean retval = false;
+		
+		if (result == Midi.FAILED)
 			{
-			Transmitter old_inr = inr;
-			MidiDevice old_in = in;
-			MidiDeviceName old_inn = inn;
-			Receiver old_outr = outr;
-			MidiDevice old_out = out;
-			MidiDeviceName old_outn = outn;
-			Transmitter old_keyr = keyr;
-			MidiDevice old_key = key;
-			MidiDeviceName old_keyn = keyn;
-			
-			boolean returnval = false;
-			int result = gatherMidiDevices(message, previousTrans, previousRecv, previousKeybd, previousOutChannel, previousKeyChannel);
-			if (result == Synth.FAILED || result == Synth.CANCELLED)
-				{
-				if (result == Synth.FAILED)
-					{
-                	JOptionPane.showOptionDialog(this, "An error occurred while trying to connect to the chosen MIDI devices.",  
-                							 "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                							 JOptionPane.WARNING_MESSAGE, null,
-                							 new String[] { "Revert" }, "Revert");
-					//JOptionPane.showMessageDialog(this, "An error occurred while trying to connect to the chosen MIDI devices.  Reverting.",  "Failed to Connect", JOptionPane.ERROR_MESSAGE);
-					}
-				inr = old_inr;
-				in = old_in;
-				inn = old_inn;
-				outr = old_outr;
-				out = old_out;
-				outn = old_outn;
-				keyr = old_keyr;
-				key = old_key;
-				keyn = old_keyn;
-				}
-			else
-				{
-				attachToTransmitter();
-				returnval = true;
-				}
-	        setSendMIDI(true);
-	        updateTitle();
-	        return returnval;
-		    }
+			JOptionPane.showOptionDialog(this, "An error occurred while trying to connect to the chosen MIDI devices.",  
+									 "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+									 JOptionPane.WARNING_MESSAGE, null,
+									 new String[] { "Revert" }, "Revert");
+			result = oldTuple;
+			}
+		else if (result == Midi.CANCELLED)
+			{
+			// nothing
+			}
+		else
+			{
+			retval = true;
+			}
+		
+		tuple = result;
+		setSendMIDI(true);
+		updateTitle();
+		return retval;
 		}
 
 
+	/** Removes the in/out/key devices. */
 	public void disconnectMIDI()
 		{
-		synchronized(lock)
+		if (tuple != null)
 			{
-			if (in != null)
-				{
-				inr.close();
-				in.close();
-				outr.close();
-				out.close();
-				}
-				
-			inr = null;
-			in = null;
-			inn = null;
-			outr = null;
-			out = null;
-			outn = null;
-		    }
+			if (tuple.in != null && tuple.inReceiver != null)
+				tuple.in.removeReceiver(tuple.inReceiver);
+			if (tuple.key != null && tuple.keyReceiver != null)
+				tuple.key.removeReceiver(tuple.keyReceiver);
+			}
+		tuple = null;
         setSendMIDI(true);
         updateTitle();
 		}
@@ -545,21 +413,19 @@ public abstract class Synth extends JComponent implements Updatable
         valid (4) an error occurred when the receiver tried to send the data.  */
     public boolean tryToSendMIDI(ShortMessage message)
         {
-        synchronized(lock)
-        	{
-			if (message == null) 
-				return false;
+		if (message == null) 
+			return false;
 
-			if (getSendMIDI())
-				{
-				Receiver receiver = getReceiver();
-				if (receiver == null) return false;
-				receiver.send(message, -1); 
-				return true;
-				}
-			else
-				return false;
+		if (getSendMIDI())
+			{
+			if (tuple == null) return false;
+			Receiver receiver = tuple.out;
+			if (receiver == null) return false;
+			receiver.send(message, -1); 
+			return true;
 			}
+		else
+			return false;
         }
                 
                         
@@ -569,21 +435,20 @@ public abstract class Synth extends JComponent implements Updatable
         valid (4) an error occurred when the receiver tried to send the data.  */
     public boolean tryToSendSysex(byte[] data)
         {
-        synchronized(lock)
-        	{
-			if (data == null || data.length == 0) 
-				return false;
+		if (data == null || data.length == 0) 
+			return false;
 
-			if (getSendMIDI())
-				{
-				Receiver receiver = getReceiver();
-				if (receiver == null) return false;
-				try { receiver.send(new SysexMessage(data, data.length), -1); return true; }
-				catch (InvalidMidiDataException e) { e.printStackTrace(); return false; }
-				}
-			else
-				return false;
+		if (getSendMIDI())
+			{
+			if (tuple == null) return false;
+			Receiver receiver = tuple.out;
+			if (receiver == null) return false;
+			try { SysexMessage m = new SysexMessage(data, data.length);
+			receiver.send(m, -1); return true; }
+			catch (InvalidMidiDataException e) { e.printStackTrace(); return false; }
 			}
+		else
+			return false;
         }
                 
                         
@@ -603,9 +468,10 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                	Synth newSynth = doNew();
+               	newSynth.sprout();
         	    JFrame frame = ((JFrame)(SwingUtilities.getRoot(newSynth)));
         	    frame.setVisible(true);
-        	    newSynth.setupMIDI("Choose MIDI devices to send to and receive from.", in, out, key, sendChannel, keyChannel);
+        	    newSynth.setupMIDI("Choose MIDI devices to send to and receive from.", tuple);
                 }
             });
                 
@@ -647,25 +513,28 @@ public abstract class Synth extends JComponent implements Updatable
         menubar.add(menu);
                 
                 
-        JMenuItem receive = new JMenuItem("Request Patch and Send");
+        JMenuItem receive = new JMenuItem("Request Patch");
+		receive.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(receive);
         receive.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (in == null)
+                if (tuple == null || tuple.out == null)
                 	{
-                	if (!setupMIDI("You are disconnected. <p>First choose MIDI devices to send to and receive from."))
+                	if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
                 		return;
                 	}
                 
                 Model tempModel = new Model();
-                if (gatherInfo("Request Patch and Send", tempModel))
+                if (gatherInfo("Request Patch", tempModel))
+                	{
 		            tryToSendSysex(requestDump(tempModel));
+		            }
                 }
             });
                 
-        JMenu merge = new JMenu("Request Merge and Send");
+        JMenu merge = new JMenu("Request Merge");
         menu.add(merge);
         JMenuItem merge25 = new JMenuItem("Merge in 25%");
         merge.add(merge25);
@@ -678,9 +547,9 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (in == null)
+                if (tuple == null || tuple.out == null)
                 	{
-                	if (!setupMIDI("You are disconnected. <p>First choose MIDI devices to send to and receive from."))
+                	if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
                 		return;
                 	}
                 
@@ -692,9 +561,9 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (in == null)
+                if (tuple == null || tuple.out == null)
                 	{
-                	if (!setupMIDI("You are disconnected. <p>First choose MIDI devices to send to and receive from."))
+                	if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
                 		return;
                 	}
                 
@@ -706,9 +575,9 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (in == null)
+                if (tuple == null || tuple.out == null)
                 	{
-                	if (!setupMIDI("You are disconnected. <p>First choose MIDI devices to send to and receive from."))
+                	if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
                 		return;
                 	}
                 
@@ -722,9 +591,9 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (in == null)
+                if (tuple == null || tuple.out == null)
                 	{
-                	if (!setupMIDI("You are disconnected. <p>First choose MIDI devices to send to and receive from."))
+                	if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
                 		return;
                 	}
                 
@@ -732,15 +601,15 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
                 
-        JMenuItem random = new JMenuItem("Randomize and Send");
+        JMenuItem random = new JMenuItem("Randomize");
         menu.add(random);
         random.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (in == null)
+                if (tuple == null || tuple.out == null)
                 	{
-                	if (!setupMIDI("You are disconnected. <p>First choose MIDI devices to send to and receive from."))
+                	if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
                 		return;
                 	}
                 
@@ -752,20 +621,23 @@ public abstract class Synth extends JComponent implements Updatable
 
 		menu.addSeparator();
 
-        JMenuItem burn = new JMenuItem("Burn Patch");
+        JMenuItem burn = new JMenuItem("Write Patch");
+		burn.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(burn);
         burn.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (in == null)
+                if (tuple == null || tuple.out == null)
                 	{
-                	if (!setupMIDI("You are disconnected. <p>First choose MIDI devices to send to and receive from."))
+                	if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
                 		return;
                 	}
                 
-                if (gatherInfo("Burn Patch", getModel()))
+                if (gatherInfo("Write Patch", getModel()))
+	                {
 	                tryToSendSysex(emit(getModel()));
+	                }
                 }
             });
                 
@@ -812,6 +684,7 @@ public abstract class Synth extends JComponent implements Updatable
             });
                 
         JMenuItem testNote = new JMenuItem("Send Test Note");
+		testNote.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(testNote);
         testNote.addActionListener(new ActionListener()
             {
@@ -819,9 +692,12 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 try
                 	{
-					tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, keyChannel, 60, 127));
+                	int channel = 1;
+                	if (tuple != null)
+                		channel = tuple.outChannel;
+					tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, 60, 127));
 					Thread.currentThread().sleep(500);
-					tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, keyChannel, 60, 127));
+					tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, 60, 127));
 					}
 				catch (InterruptedException e2)
 					{
@@ -841,10 +717,11 @@ public abstract class Synth extends JComponent implements Updatable
         return frame;
         }
     
+    /** Perform a patch merge */
     void doMerge(double probability)
 		{
 		Model tempModel = new Model();
-		if (gatherInfo("Request Merge and Send", tempModel))
+		if (gatherInfo("Request Merge", tempModel))
 			{
 			Synth.this.merging = probability;
 			tryToSendSysex(requestDump(tempModel));
@@ -863,8 +740,9 @@ public abstract class Synth extends JComponent implements Updatable
     		tryToSendSysex(emit(keys[i]));
     		}
     	}
-                
-    public static String ensureFileEndsWith(String filename, String ending)
+            
+    /** Guarantee that the given filename ends with the given ending. */    
+    static String ensureFileEndsWith(String filename, String ending)
         {
         // do we end with the string?
         if (filename.regionMatches(false,filename.length()-ending.length(),ending,0,ending.length()))
@@ -877,7 +755,7 @@ public abstract class Synth extends JComponent implements Updatable
         the editor. */
     public void doSaveAs()
         {
-        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save Simulation As...", FileDialog.SAVE);
+        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save Patch to Sysex File...", FileDialog.SAVE);
         if (file == null)
             {
             fd.setFile("Untitled.syx");
@@ -951,7 +829,7 @@ public abstract class Synth extends JComponent implements Updatable
         This does NOT open a new editor window -- it loads directly into this editor. */
     public void doOpen()
         {
-        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Load Sysex File...", FileDialog.LOAD);
+        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Load Sysex Patch File...", FileDialog.LOAD);
         fd.setFilenameFilter(new FilenameFilter()
             {
             public boolean accept(File dir, String name)
@@ -985,9 +863,9 @@ public abstract class Synth extends JComponent implements Updatable
                 if (val != getExpectedSysexLength())  // uh oh
                     throw new RuntimeException("File too short");
 
-                sendMIDI = false;
+                setSendMIDI(false);
                 parse(data);
-                sendMIDI = true;
+                setSendMIDI(true);
                                 
                 file = f;
                 }        
@@ -1004,231 +882,11 @@ public abstract class Synth extends JComponent implements Updatable
                 
         updateTitle();
         }
-    
-    
-    
-
 
 		
-		
-    
-    public static final int FAILED = -1;
-    public static final int CANCELLED = 0;
-    public static final int SUCCEEDED = 1;
-    
-	public int gatherMidiDevices(String message, MidiDevice oldIn, MidiDevice oldOut, MidiDevice oldKey, int oldSendChannel, int oldKeyChannel)
-		{
-        synchronized(lock)
-            {
-            // Obtain information about all the installed synthesizers.
-            MidiDevice.Info[] midi = uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider.getMidiDeviceInfo();
-            ArrayList transdevices = new ArrayList();
-            for(int i = 0; i < midi.length; i++)
-                {
-                try
-                    {
-                    MidiDevice d = MidiSystem.getMidiDevice(midi[i]);
-                    // get rid of java devices
-                    if (d instanceof javax.sound.midi.Sequencer ||
-                    	d instanceof javax.sound.midi.Synthesizer)
-                    		continue;
-                    if (d.getMaxTransmitters() != 0)
-                        {
-                        transdevices.add(new MidiDeviceName(d));
-                        }
-                    }
-                catch(Exception e) { }
-                }
-
-            ArrayList recvdevices = new ArrayList();
-            for(int i = 0; i < midi.length; i++)
-                {
-                try
-                    {
-                    MidiDevice d = MidiSystem.getMidiDevice(midi[i]);
-                    // get rid of java devices
-                    if (d instanceof javax.sound.midi.Sequencer ||
-                   		d instanceof javax.sound.midi.Synthesizer)
-                    		continue;
-                    if (d.getMaxReceivers() != 0)
-                        {
-                        recvdevices.add(new MidiDeviceName(d));
-                        }
-                    }
-                catch(Exception e) { }
-                }
-
-            ArrayList keydevices = new ArrayList();
-            keydevices.add("None");
-            for(int i = 0; i < midi.length; i++)
-                {
-                try
-                    {
-                    MidiDevice d = MidiSystem.getMidiDevice(midi[i]);
-                    // get rid of java devices
-                    if (d instanceof javax.sound.midi.Sequencer ||
-                   		d instanceof javax.sound.midi.Synthesizer)
-                    		continue;
-                    if (d.getMaxTransmitters() != 0)
-                        {
-                        keydevices.add(new MidiDeviceName(d));
-                        }
-                    }
-                catch(Exception e) { }
-                }
-                
-            if (transdevices.size() == 0)
-                {
-                JOptionPane.showOptionDialog(this, "There are no MIDI devices available to receive from.",  
-                							 "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                							 JOptionPane.WARNING_MESSAGE, null,
-                							 new String[] { "Run Disconnected" }, "Run Disconnected");
-//                JOptionPane.showMessageDialog(this, "There are no MIDI devices available to receive from.",  "Cannot Connect", JOptionPane.ERROR_MESSAGE);
-                return CANCELLED;
-                }
-            else if (recvdevices.size() == 0)
-                {
-                JOptionPane.showOptionDialog(this, "There are no MIDI devices available to send to.",  
-                							 "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                							 JOptionPane.WARNING_MESSAGE, null,
-                							 new String[] { "Run Disconnected" }, "Run Disconnected");
-                //JOptionPane.showMessageDialog(this, "There are no MIDI devices available to send to.",  "Cannot Connect", JOptionPane.ERROR_MESSAGE);
-                return CANCELLED;
-                }
-            else
-                {
-                String[] kc = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
-                String[] rc = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
-                JComboBox transcombo = new JComboBox(transdevices.toArray());
-                if (oldIn != null && indexOfMidiDevice(oldIn, transdevices) >= 0)
-                	transcombo.setSelectedIndex(indexOfMidiDevice(oldIn, transdevices));
-                JComboBox recvcombo = new JComboBox(recvdevices.toArray());
-                if (oldOut != null && indexOfMidiDevice(oldOut, recvdevices) >= 0)
-                	recvcombo.setSelectedIndex(indexOfMidiDevice(oldOut, recvdevices));
-                JComboBox recvchannelscombo = new JComboBox(rc);
-                recvchannelscombo.setSelectedIndex(oldSendChannel - 1);
-                JComboBox keycombo = new JComboBox(keydevices.toArray());
-                if (oldKey != null && indexOfMidiDevice(oldKey, keydevices) >= 0)
-                	keycombo.setSelectedIndex(indexOfMidiDevice(oldKey, keydevices));
-                JComboBox keychannelscombo = new JComboBox(kc);
-                keychannelscombo.setSelectedIndex(oldKeyChannel);
-                //boolean result = doMultiOption(this, new String[] { "Send To", "Receive From" },  new JComponent[] { recvcombo, transcombo }, "MIDI Devices", message);
-                boolean result = doMultiOption(this, new String[] { "Receive From", "Send To", "Send Channel", "Keyboard", "Keyboard Channel" },  new JComponent[] { transcombo, recvcombo, recvchannelscombo, keycombo, keychannelscombo }, "MIDI Devices", message);
-
-                if (result)
-                    {
-                    // transmitter
-                    
-                    Transmitter transmitter;
-                    Object choice = transcombo.getSelectedItem();
-                    try { ((MidiDeviceName)choice).device.open(); }
-                    catch (Exception e) { e.printStackTrace(); return FAILED; }
-                    try { transmitter = ((MidiDeviceName)choice).device.getTransmitter(); }
-                    catch (Exception e) 
-                        { 
-                        e.printStackTrace(); 
-                        ((MidiDeviceName)choice).device.close(); 
-                        return FAILED; 
-                        }
-
-                    if (inr != null)
-                        inr.close(); 
-                    if (in != null)
-                        in.close();
-                    inn = (MidiDeviceName) choice;
-                    in = ((MidiDeviceName)choice).device;
-                    inr = transmitter;
-
-					// receiver
-	
-                    Receiver receiver;
-                    choice = recvcombo.getSelectedItem();
-                    try { ((MidiDeviceName)choice).device.open(); }
-                    catch (Exception e) 
-                    	{ 
-                        e.printStackTrace(); 
-                        in.close();
-                        inr.close();
-                        return FAILED; 
-						}
-                    try { receiver = ((MidiDeviceName)choice).device.getReceiver(); }
-                    catch (Exception e) 
-                        { 
-                        e.printStackTrace(); 
-                        ((MidiDeviceName)choice).device.close();
-                        in.close();
-                        inr.close();
-                        return FAILED; 
-						}
-
-                    if (outr != null)
-                        outr.close();
-                    if (out != null)
-                        out.close();
-                    outn = (MidiDeviceName) choice;
-                    out = ((MidiDeviceName)choice).device;
-                    outr = receiver;
-                    
-                    // keyboard
-                    
-                    Transmitter keybd;
-                    choice = keycombo.getSelectedItem();
-                    if (!(choice instanceof String)) // it's "None"
-                    	{
-						try { ((MidiDeviceName)choice).device.open(); }
-						catch (Exception e) 
-							{ 
-							e.printStackTrace(); 
-							JOptionPane.showOptionDialog(this, "Could not connect to the requested keyboard.",  
-							 "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-							 JOptionPane.WARNING_MESSAGE, null,
-							 new String[] { "Run without Keyboard" }, "Run without Keyboard");
-							return SUCCEEDED;
-							}
-						try { transmitter = ((MidiDeviceName)choice).device.getTransmitter(); }
-						catch (Exception e) 
-							{ 
-							e.printStackTrace(); 
-							((MidiDeviceName)choice).device.close(); 
-							JOptionPane.showOptionDialog(this, "Could not connect to the requested keyboard.",  
-							 "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-							 JOptionPane.WARNING_MESSAGE, null,
-							 new String[] { "Run without Keyboard" }, "Run without Keyboard");
-							return SUCCEEDED; 
-							}
-
-						if (keyr != null)
-							keyr.close(); 
-						if (key != null)
-							key.close();
-						keyn = (MidiDeviceName) choice;
-						key = ((MidiDeviceName)choice).device;
-						keyr = transmitter;
-						}
-					else
-						{
-						if (keyr != null)
-							keyr.close(); 
-						if (key != null)
-							key.close();
-						keyn = null;
-						}
-						
-					keyChannel = keychannelscombo.getSelectedIndex();
-					sendChannel = recvchannelscombo.getSelectedIndex() + 1;
-                    return SUCCEEDED;
-                    }
-                else
-                    {
-                    return CANCELLED;
-                    }
-                }
-            }
-		}
-
-
-
-
+	/** Perform a JOptionPane confirm dialog with MUTLIPLE widgets that the user can select.  The widgets are provided
+		in the array WIDGETS, and each has an accompanying label in LABELS.   Returns TRUE if the user performed
+		the operation, FALSE if cancelled. */
     public static boolean doMultiOption(JComponent root, String[] labels, JComponent[] widgets, String title, String message)
     	{
     	JPanel panel = new JPanel();

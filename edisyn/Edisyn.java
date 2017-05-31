@@ -21,7 +21,8 @@ public class Edisyn
 	{
     public static void main(String[] args)
         {
-        Blofeld blofeld = Blofeld.makeNewBlofeld();
+        Blofeld blofeld = new Blofeld();
+        blofeld.sprout();
 	    JFrame frame = ((JFrame)(SwingUtilities.getRoot(blofeld)));
     	frame.setVisible(true);
     	blofeld.setupMIDI("Choose MIDI devices to send to and receive from.");

@@ -56,22 +56,23 @@ doesn't open a new window.
 
 ### The MIDI Menu
 
-Note that you can *send* a patch to the synthesizer and you can *burn* a patch to the synthesizer.  The former
+Note that you can *send* a patch to the synthesizer and you can *write* a patch to the synthesizer.  The former
 just temporarily updates the synth's current patch memory so you can play it.  The latter actually writes the 
 patch to an address in the synth, replacing whatever is there.
 
-* *Request Patch and Send* asks the synthesizer to load a specific patch into the editor.  If the synthesizer complies,
+* *Request Patch* asks the synthesizer to load a specific patch into the editor.  If the synthesizer complies,
 once the patch is loaded, Edisyn will then send the patch to the synthesizer.
 
-* *Request Merge and Send* asks the synthesizer to load a specific patch into the editor.  If the synthesizer complies,
+* *Request Merge* asks the synthesizer to load a specific patch into the editor.  If the synthesizer complies,
 then the patch is *merged* with the existing patch, meaning that some *percentage* of parameters in the existing
 patch are replaced with the old patch.  Then Edisyn will then send the patch to the synthesizer.
 
-* *Send Patch* sends the current patch to the synthesizer.
+* *Randomize* randomizes the editor's current patch, then sends it to the synthesizer.
 
-* *Randomize and Send* randomizes the editor's current patch, then sends it to the synthesizer.
+* *Send Patch* sends the current patch to the synthesizer.  This isn't actually used much since other commands
+send the patch automatically.
 
-* *Burn Patch* burns the patch to a given location in the synthesizer.
+* *Write Patch* writes the patch to a given location in the synthesizer.
 
 * *Change MIDI* sets or updates the MIDI interface.
 
@@ -95,11 +96,11 @@ channel of course.  This can be set to "Any" for any channel (Omni).
 
 ## Caveats and Bugs
 
-CoreMIDI sometimes doesn't launch properly.  If Edisyn seems to be hanging on startup, just kill it and try again.
+To work around some bugs in OS X Midi and CoreMIDI4J, Edisyn's architecture at present does not let you
+plug in new devices (or remove them) after Edisyn has been launched.  If you need to do so, restart Edisyn
+(for now). 
 
 Randomize and Send isn't very useful right now.  I'm working on it.
-
-For now, there's no interface for sending test notes via the screen.
 
 Everything has to be sent via sysex for the moment: I don't have code written to make it easy to send CC or NRPN
 if you wanted to build a patch which did that.

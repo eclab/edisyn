@@ -2125,17 +2125,9 @@ public class Blofeld extends Synth
         
     public Synth doNew()
         {
-        return makeNewBlofeld();
+        return new Blofeld();
         }
-    
-    /** Returns null if failed */
-    public static Blofeld makeNewBlofeld()
-    	{
-        Blofeld b = new Blofeld();
-        b.sprout();
-        return b;
-    	}
-    	
+
     public String getSynthName() { return "Waldorf Blofeld"; }
     
     public String getPatchName() { return model.get("name", "Init            "); }

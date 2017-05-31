@@ -237,6 +237,14 @@ public class Midi
 		public Receiver keyReceiver;
 		/** The channel to receive voiced messages from on the keyboard/controller input. */
 		public int keyChannel = KEYCHANNEL_OMNI;
+		
+		void dispose()
+			{
+			if (key != null && keyReceiver != null)
+				key.removeReceiver(keyReceiver);
+			if (in != null && inReceiver!= null)
+				in.removeReceiver(inReceiver);
+			}	
 		}
 
 	public static final Tuple CANCELLED = new Tuple();

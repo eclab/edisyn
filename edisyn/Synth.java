@@ -34,6 +34,8 @@ import java.io.*;
 
 public abstract class Synth extends JComponent implements Updatable
     {
+    public static int numOpenWindows = 0;
+    
     // The model proper
     protected Model model;
     // Our own private random number generator
@@ -130,6 +132,10 @@ public abstract class Synth extends JComponent implements Updatable
     
     /** Returns the name of the current patch. */
     public abstract String getPatchName();
+    
+    /** Return true if the window can be closed and disposed of. You should do some cleanup
+    	as necessary (the system will handle cleaning up the receiver and transmitters. */
+    public abstract boolean requestCloseWindow();
     
         
     /** Updates the JFrame title to reflect the synthesizer type, the patch information, and the filename
@@ -385,6 +391,9 @@ public abstract class Synth extends JComponent implements Updatable
 			retval = true;
 			}
 		
+		if (tuple != null)
+			tuple.dispose();
+			
 		tuple = result;
 		setSendMIDI(true);
 		updateTitle();
@@ -401,8 +410,9 @@ public abstract class Synth extends JComponent implements Updatable
 				tuple.in.removeReceiver(tuple.inReceiver);
 			if (tuple.key != null && tuple.keyReceiver != null)
 				tuple.key.removeReceiver(tuple.keyReceiver);
+			tuple.dispose();
+			tuple = null;
 			}
-		tuple = null;
         setSendMIDI(true);
         updateTitle();
 		}
@@ -486,6 +496,19 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
+		menu.addSeparator();
+
+        JMenuItem close = new JMenuItem("Close Window");
+		close.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menu.add(close);
+        close.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doCloseWindow();
+                }
+            });
+                
 		menu.addSeparator();
 
         JMenuItem save = new JMenuItem("Save");
@@ -713,7 +736,17 @@ public abstract class Synth extends JComponent implements Updatable
         frame.getContentPane().add(this);
         frame.pack();
                 
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); 
+		frame.addWindowListener(new java.awt.event.WindowAdapter() 
+			{
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) 
+		    	{
+		    	doCloseWindow();
+		    	}
+		    });
+    
         updateTitle();
+        numOpenWindows++;
         return frame;
         }
     
@@ -825,6 +858,28 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
 
+	public void doCloseWindow()
+		{
+		if (requestCloseWindow())
+			{
+			if (tuple != null)
+				tuple.dispose();
+			JFrame frame = (JFrame)(SwingUtilities.getRoot(this));
+			if (frame != null)
+				{
+				frame.setVisible(false);
+				frame.dispose();
+				}
+				
+			numOpenWindows--;
+			if (numOpenWindows <= 0)
+				{
+				System.exit(0);
+				}
+			}
+		
+		}
+		
     /** Goes through the process of opening a file and loading it into this editor. 
         This does NOT open a new editor window -- it loads directly into this editor. */
     public void doOpen()

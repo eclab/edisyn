@@ -2128,6 +2128,8 @@ public class Blofeld extends Synth
         return new Blofeld();
         }
 
+    public boolean requestCloseWindow() { return true; }
+
     public String getSynthName() { return "Waldorf Blofeld"; }
     
     public String getPatchName() { return model.get("name", "Init            "); }

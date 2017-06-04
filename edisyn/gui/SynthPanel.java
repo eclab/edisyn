@@ -27,4 +27,4 @@ public class SynthPanel extends JPanel
         setBackground(Style.BACKGROUND_COLOR);
         setBorder(BorderFactory.createMatteBorder(2, 2, 0, 4, Color.black));
         }
-	}
+    }

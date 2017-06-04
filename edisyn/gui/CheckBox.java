@@ -28,23 +28,23 @@ public class CheckBox extends NumericalComponent
         // we don't compare against min or max here because they
         // could be used by other widgets.  See for example Blofeld parameter 8
         if (flipped)
-        	check.setSelected(getState() == 0);
+            check.setSelected(getState() == 0);
         else
-        	check.setSelected(getState() != 0); 
+            check.setSelected(getState() != 0); 
         }
 
     public CheckBox(String label, Synth synth, String key)
-		{
-		this(label, synth, key, false);
-		}
-		
-		
+        {
+        this(label, synth, key, false);
+        }
+                
+                
     public CheckBox(String label, Synth synth, String key, boolean flipped)
         {
         super(synth, key);
 
-		this.flipped = flipped;
-		
+        this.flipped = flipped;
+                
         check = new JCheckBox(label);
         check.setFont(Style.SMALL_FONT);
         check.setBackground(Style.TRANSPARENT);
@@ -62,9 +62,9 @@ public class CheckBox extends NumericalComponent
             public void actionPerformed( ActionEvent e)
                 {
                 if (CheckBox.this.flipped)
-                	setState(check.isSelected() ? getMin() : getMax());
-				else
-                	setState(check.isSelected() ? getMax() : getMin());				
+                    setState(check.isSelected() ? getMin() : getMax());
+                else
+                    setState(check.isSelected() ? getMax() : getMin());                             
                 }
             });
         }

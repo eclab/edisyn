@@ -27,8 +27,8 @@ import java.awt.event.*;
 public class HBox extends JComponent
     {
     Box box;
-	JPanel panel = new JPanel();
-	JComponent lastComponent;
+    JPanel panel = new JPanel();
+    JComponent lastComponent;
         
     public Insets getInsets() { return Style.HBOX_INSETS; }
 
@@ -44,15 +44,15 @@ public class HBox extends JComponent
         }
     
     public void addLast(JComponent component)
-    	{
-    	lastComponent = component;
-    	panel.add(lastComponent, BorderLayout.CENTER);
-    	}
-    	
+        {
+        lastComponent = component;
+        panel.add(lastComponent, BorderLayout.CENTER);
+        }
+        
     public void removeLast()
         {
         if (lastComponent != null)
-        	panel.remove(lastComponent);
+            panel.remove(lastComponent);
         lastComponent = null;
         }       
         
@@ -66,16 +66,16 @@ public class HBox extends JComponent
         box.removeAll();
         }       
 
-	public int getCount()
-		{
-		return box.getComponentCount();
-		}
-		
+    public int getCount()
+        {
+        return box.getComponentCount();
+        }
+                
     public void remove(int component)
-    	{
-    	box.remove(component);
-    	}        
-    	
+        {
+        box.remove(component);
+        }        
+        
     public void add(JComponent component)
         {
         box.add(component);

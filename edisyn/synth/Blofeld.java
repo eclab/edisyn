@@ -134,7 +134,7 @@ public class Blofeld extends Synth
         vbox.add(addEnvelope(2, Style.COLOR_B));
         vbox.add(addEnvelope(3, Style.COLOR_B));
         vbox.add(addEnvelope(4, Style.COLOR_B));
-		
+                
         lfoEnvelopePanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("LFOs and Envelopes", lfoEnvelopePanel);
                 
@@ -167,6 +167,9 @@ public class Blofeld extends Synth
                 
                 
         model.set("name", "Init            ");  // has to be 16 long
+        
+        addDefaults();
+        getModel().resetToDefaults();
         }
                 
                 
@@ -691,9 +694,9 @@ public class Blofeld extends Synth
     public static final int FILTER_ENVELOPE = 1;
     public static final int AMPLIFIER_ENVELOPE = 2;
 
-	EnvelopeDisplay[/*Env Number */][/*Envelope Type */] envelopeDisplays = new EnvelopeDisplay[4][5];
-	HBox[/*Env Number*/] envelopeHBoxes = new HBox[4];
-	
+    EnvelopeDisplay[/*Env Number */][/*Envelope Type */] envelopeDisplays = new EnvelopeDisplay[4][5];
+    HBox[/*Env Number*/] envelopeHBoxes = new HBox[4];
+        
     /** Add an Envelope category */
     public JComponent addEnvelope(final int envelope, Color color)
         {
@@ -724,19 +727,19 @@ public class Blofeld extends Synth
         
         final boolean[] goAhead = new boolean[] { false };
         Chooser comp1 = new Chooser("Mode", this, "envelope" + envelope + "mode", params)
-        	{
-        	public void update(String key, Model model)
+            {
+            public void update(String key, Model model)
                 {
                 super.update(key, model);
                 if (goAhead[0])
-                	{
-	                envelopeHBoxes[envelope - 1].removeLast();
-	                envelopeHBoxes[envelope - 1].addLast(envelopeDisplays[envelope - 1][model.get(key, 0)]);
-	                envelopeHBoxes[envelope - 1].revalidate();
-	                envelopeHBoxes[envelope - 1].repaint();
-	                }
+                    {
+                    envelopeHBoxes[envelope - 1].removeLast();
+                    envelopeHBoxes[envelope - 1].addLast(envelopeDisplays[envelope - 1][model.get(key, 0)]);
+                    envelopeHBoxes[envelope - 1].revalidate();
+                    envelopeHBoxes[envelope - 1].repaint();
+                    }
                 }
-        	};
+            };
         vbox.add(comp1);
 
         comp = new CheckBox("Single Trigger", this, "envelope" + envelope + "trigger");
@@ -765,47 +768,50 @@ public class Blofeld extends Synth
 
         comp = new LabelledDial("Release", this, "envelope" + envelope + "release", color, 0, 127);
         hbox.add(comp);
-    	
-
-		// ADSR
-    	envelopeDisplays[envelope - 1][0] = new EnvelopeDisplay(this, Color.red, 
-        	new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", null, "envelope" + envelope + "release" },
-        	new String[] { null, null, "envelope" + envelope + "sustain", "envelope" + envelope + "sustain", null },
-        	new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
-        	new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
-
-		// ADS1DS2R
-    	envelopeDisplays[envelope - 1][1] = new EnvelopeDisplay(this, Color.red, 
-        	new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", null, "envelope" + envelope + "release" },
-        	new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", "envelope" + envelope + "sustain2", null },
-        	new double[] { 0, 0.2/127.0, 0.2 / 127.0,   0.2/127.0, 0.2, 0.2/127.0},
-        	new double[] { 0, 1.0/127.0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 });
-
-		// One Shot
-    	envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Color.red, 
-        	new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "release" },
-        	new String[] { null, null, "envelope" + envelope + "sustain", null },
-        	new double[] { 0, (1/3.0)/127.0, (1/3.0) / 127.0,   (1/3.0)/127.0 },
-        	new double[] { 0, 1.0, 1.0 / 127.0, 0 });
-			
-		// Loop S1S2
-    	envelopeDisplays[envelope - 1][3] = new EnvelopeDisplay(this, Color.red, 
-        	new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", "envelope" + envelope + "release" },
-        	new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", null },
-        	new double[] { 0, 0.25/127.0, 0.25 / 127.0, 0.25/127.0, 0.25/127.0 },
-        	new double[] { 0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 });
-
-		// Loop All
-    	envelopeDisplays[envelope - 1][4] = envelopeDisplays[envelope - 1][3];
-    		
-     	comp = envelopeDisplays[envelope - 1][0];  // placeholder
-        hbox.addLast(comp);
-    	envelopeHBoxes[envelope - 1] = hbox;
         
-       // now we re-update the popup                
+
+        // ADSR
+        envelopeDisplays[envelope - 1][0] = new EnvelopeDisplay(this, Color.red, 
+            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", null, "envelope" + envelope + "release" },
+            new String[] { null, null, "envelope" + envelope + "sustain", "envelope" + envelope + "sustain", null },
+            new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
+            new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
+
+        // ADS1DS2R
+        envelopeDisplays[envelope - 1][1] = new EnvelopeDisplay(this, Color.red, 
+            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", null, "envelope" + envelope + "release" },
+            new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", "envelope" + envelope + "sustain2", null },
+            new double[] { 0, 0.2/127.0, 0.2 / 127.0,   0.2/127.0, 0.2, 0.2/127.0},
+            new double[] { 0, 1.0/127.0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 });
+
+        // One Shot
+        envelopeDisplays[envelope - 1][2] = envelopeDisplays[envelope - 1][1];
+        /*
+          new EnvelopeDisplay(this, Color.red, 
+          new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "release" },
+          new String[] { null, null, "envelope" + envelope + "sustain", null },
+          new double[] { 0, (1/3.0)/127.0, (1/3.0) / 127.0,   (1/3.0)/127.0 },
+          new double[] { 0, 1.0, 1.0 / 127.0, 0 });
+        */
+                        
+        // Loop S1S2
+        envelopeDisplays[envelope - 1][3] = new EnvelopeDisplay(this, Color.red, 
+            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", "envelope" + envelope + "release" },
+            new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", null },
+            new double[] { 0, 0.25/127.0, 0.25 / 127.0, 0.25/127.0, 0.25/127.0 },
+            new double[] { 0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 });
+
+        // Loop All
+        envelopeDisplays[envelope - 1][4] = envelopeDisplays[envelope - 1][3];
+                
+        comp = envelopeDisplays[envelope - 1][0];  // placeholder
+        hbox.addLast(comp);
+        envelopeHBoxes[envelope - 1] = hbox;
+        
+        // now we re-update the popup                
         goAhead[0] = true;
-		comp1.update("envelope" + envelope + "mode", getModel());
-		
+        comp1.update("envelope" + envelope + "mode", getModel());
+                
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
@@ -891,60 +897,60 @@ public class Blofeld extends Synth
 
 
 
-	public boolean gatherInfo(String title, Model change)
-		{
-		JComboBox bank = new JComboBox(BANKS);
-		bank.setEditable(false);
-		bank.setMaximumRowCount(32);
-		bank.setSelectedIndex(model.get("bank", 0));
-		
-		JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
+    public boolean gatherInfo(String title, Model change)
+        {
+        JComboBox bank = new JComboBox(BANKS);
+        bank.setEditable(false);
+        bank.setMaximumRowCount(32);
+        bank.setSelectedIndex(model.get("bank", 0));
+                
+        JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
 
-		JTextField id = new JTextField("" + model.get("id", 0), 3);
-		
-		while(true)
-			{
-			boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number", "Blofeld ID" }, 
-				new JComponent[] { bank, number, id }, title, "Enter the Bank, Patch number, and Blofeld ID.");
-		
-			if (result == false) 
-				return false;
-				
-			int n;
-			try { n = Integer.parseInt(number.getText()); }
-			catch (NumberFormatException e)
-				{
+        JTextField id = new JTextField("" + model.get("id", 0), 3);
+                
+        while(true)
+            {
+            boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number", "Blofeld ID" }, 
+                new JComponent[] { bank, number, id }, title, "Enter the Bank, Patch number, and Blofeld ID.");
+                
+            if (result == false) 
+                return false;
+                                
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
                 JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1 ... 128 ", title, JOptionPane.ERROR_MESSAGE);
-				continue;
-				}
-			if (n < 1 || n > 128)
-				{
+                continue;
+                }
+            if (n < 1 || n > 128)
+                {
                 JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1 ... 128 ", title, JOptionPane.ERROR_MESSAGE);
-				continue;
-				}
-				
-			int i;
-			try { i = Integer.parseInt(id.getText()); }
-			catch (NumberFormatException e)
-				{
+                continue;
+                }
+                                
+            int i;
+            try { i = Integer.parseInt(id.getText()); }
+            catch (NumberFormatException e)
+                {
                 JOptionPane.showMessageDialog(null, "The Blofeld ID must be an integer 0 ... 127 ", title, JOptionPane.ERROR_MESSAGE);
-				continue;
-				}
-			if (i < 0 || i > 127)
-				{
+                continue;
+                }
+            if (i < 0 || i > 127)
+                {
                 JOptionPane.showMessageDialog(null, "The Blofeld ID  must be an integer 0 ... 127 ", title, JOptionPane.ERROR_MESSAGE);
-				continue;
-				}
-			
-			change.set("bank", bank.getSelectedIndex());
-			change.set("number", n - 1);
-			change.set("id", i);
-			
-			return true;
-			}
-		}
+                continue;
+                }
+                        
+            change.set("bank", bank.getSelectedIndex());
+            change.set("number", n - 1);
+            change.set("id", i);
+                        
+            return true;
+            }
+        }
 
-	public Category globalCategory;
+    public Category globalCategory;
 
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
@@ -1263,9 +1269,9 @@ public class Blofeld extends Synth
         if (osc == 3) params = WAVES_SHORT;
         comp = new Chooser("Wave", this, "osc" + osc + "shape", params);
         if (osc == 3)
-        	model.setSpecial("osc" + osc + "shape", 0);
+            model.setSpecial("osc" + osc + "shape", 0);
         else
-        	model.setImmutable("osc" + osc + "shape", true);
+            model.setImmutable("osc" + osc + "shape", true);
         vbox.add(comp);
 
         if (osc != 3)
@@ -1365,401 +1371,401 @@ public class Blofeld extends Synth
     HashMap allParametersToIndex = new HashMap();
 
 
-	/** List of all Waldorf parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
+    /** List of all Waldorf parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
 
-	/// * indicates parameters which must be handled specially due to packing
-	/// that Waldorf decided to do.  :-(
+    /// * indicates parameters which must be handled specially due to packing
+    /// that Waldorf decided to do.  :-(
 
     final static String[] allParameters = new String[] 
-		{
-		"-",
-		"osc1octave",                   // *
-		"osc1semitone",
-		"osc1detune",
-		"osc1bendrange",
-		"osc1keytrack",
-		"osc1fmsource",
-		"osc1fmamount",
-		"osc1shape",
-		"osc1pulsewidth",
-		"osc1pwmsource",
-		"osc1pwmamount",
-		"-",
-		"-",
-		"osc1limitwt",
-		"-",
-		"osc1brilliance",
-		"osc2octave",                   // *
-		"osc2semitone",
-		"osc2detune",
-		"osc2bendrange",
-		"osc2keytrack",
-		"osc2fmsource",
-		"osc2fmamount",
-		"osc2shape",
-		"osc2pulsewidth",
-		"osc2pwmsource",
-		"osc2pwmamount",
-		"-",
-		"-",
-		"osc2limitwt",
-		"-",
-		"osc2brilliance",
-		"osc3octave",                   // *
-		"osc3semitone",
-		"osc3detune",
-		"osc3bendrange",
-		"osc3keytrack",
-		"osc3fmsource",
-		"osc3fmamount",
-		"osc3shape",
-		"osc3pulsewidth",
-		"osc3pwmsource",
-		"osc3pwmamount",
-		"-",
-		"-",
-		"-",
-		"-",
-		"osc3brilliance",
-		"osc2synctoosc3",
-		"oscpitchsource",
-		"oscpitchamount",
-		"-",
-		"oscglide",
-		"-",
-		"-",
-		"oscglidemode",
-		"oscgliderate",
-		"oscallocation, unisono",       // *
-		"unisonodetune",
-		"-",
-		"osc1level",
-		"osc1balance",
-		"osc2level",
-		"osc2balance",
-		"osc3level",
-		"osc3balance",
-		"noiselevel",
-		"noisebalance",
-		"noisecolour",
-		"-",
-		"ringmodlevel",
-		"ringmodbalance",
-		"-",
-		"-",
-		"-",
-		"-",
-		"filter1type",
-		"filter1cutoff",
-		"-",
-		"filter1resonance",
-		"filter1drive",
-		"filter1drivecurve",
-		"-",
-		"-",
-		"-",
-		"filter1keytrack",
-		"filter1envamount",
-		"filter1envvelocity",
-		"filter1modsource",
-		"filter1modamount",
-		"filter1fmsource",
-		"filter1fmamount",
-		"filter1pan",
-		"filter1pansource",
-		"filter1panamount",
-		"-",
-		"filter2type",
-		"filter2cutoff",
-		"-",
-		"filter2resonance",
-		"filter2drive",
-		"filter2drivecurve",
-		"-",
-		"-",
-		"-",
-		"filter2keytrack",
-		"filter2envamount",
-		"filter2envvelocity",
-		"filter2modsource",
-		"filter2modamount",
-		"filter2fmsource",
-		"filter2fmamount",
-		"filter2pan",
-		"filter2pansource",
-		"filter2panamount",
-		"-",
-		"filterrouting",
-		"-",
-		"-",
-		"-",
-		"amplifiervolume",
-		"amplifiervelocity",
-		"amplifiermodsource",
-		"amplifiermodamount",
-		"-",
-		"-",
-		"-",
-		"effect1type",
-		"effect1mix",
+    {
+    "-",
+    "osc1octave",                   // *
+    "osc1semitone",
+    "osc1detune",
+    "osc1bendrange",
+    "osc1keytrack",
+    "osc1fmsource",
+    "osc1fmamount",
+    "osc1shape",
+    "osc1pulsewidth",
+    "osc1pwmsource",
+    "osc1pwmamount",
+    "-",
+    "-",
+    "osc1limitwt",
+    "-",
+    "osc1brilliance",
+    "osc2octave",                   // *
+    "osc2semitone",
+    "osc2detune",
+    "osc2bendrange",
+    "osc2keytrack",
+    "osc2fmsource",
+    "osc2fmamount",
+    "osc2shape",
+    "osc2pulsewidth",
+    "osc2pwmsource",
+    "osc2pwmamount",
+    "-",
+    "-",
+    "osc2limitwt",
+    "-",
+    "osc2brilliance",
+    "osc3octave",                   // *
+    "osc3semitone",
+    "osc3detune",
+    "osc3bendrange",
+    "osc3keytrack",
+    "osc3fmsource",
+    "osc3fmamount",
+    "osc3shape",
+    "osc3pulsewidth",
+    "osc3pwmsource",
+    "osc3pwmamount",
+    "-",
+    "-",
+    "-",
+    "-",
+    "osc3brilliance",
+    "osc2synctoosc3",
+    "oscpitchsource",
+    "oscpitchamount",
+    "-",
+    "oscglide",
+    "-",
+    "-",
+    "oscglidemode",
+    "oscgliderate",
+    "oscallocation, unisono",       // *
+    "unisonodetune",
+    "-",
+    "osc1level",
+    "osc1balance",
+    "osc2level",
+    "osc2balance",
+    "osc3level",
+    "osc3balance",
+    "noiselevel",
+    "noisebalance",
+    "noisecolour",
+    "-",
+    "ringmodlevel",
+    "ringmodbalance",
+    "-",
+    "-",
+    "-",
+    "-",
+    "filter1type",
+    "filter1cutoff",
+    "-",
+    "filter1resonance",
+    "filter1drive",
+    "filter1drivecurve",
+    "-",
+    "-",
+    "-",
+    "filter1keytrack",
+    "filter1envamount",
+    "filter1envvelocity",
+    "filter1modsource",
+    "filter1modamount",
+    "filter1fmsource",
+    "filter1fmamount",
+    "filter1pan",
+    "filter1pansource",
+    "filter1panamount",
+    "-",
+    "filter2type",
+    "filter2cutoff",
+    "-",
+    "filter2resonance",
+    "filter2drive",
+    "filter2drivecurve",
+    "-",
+    "-",
+    "-",
+    "filter2keytrack",
+    "filter2envamount",
+    "filter2envvelocity",
+    "filter2modsource",
+    "filter2modamount",
+    "filter2fmsource",
+    "filter2fmamount",
+    "filter2pan",
+    "filter2pansource",
+    "filter2panamount",
+    "-",
+    "filterrouting",
+    "-",
+    "-",
+    "-",
+    "amplifiervolume",
+    "amplifiervelocity",
+    "amplifiermodsource",
+    "amplifiermodamount",
+    "-",
+    "-",
+    "-",
+    "effect1type",
+    "effect1mix",
 
-		// Note that we start at 0 -- this makes things easier in the code
-		"effect1parameter0",
-		"effect1parameter1",
-		"effect1parameter2",
-		"effect1parameter3",
-		"effect1parameter4",
-		"effect1parameter5",
-		"effect1parameter6",
-		"effect1parameter7",
-		"effect1parameter8",
-		"effect1parameter9",
-		"effect1parameter10",
-		"effect1parameter11",
-		"effect1parameter12",
-		"effect1parameter13",
-		"effect2type",
-		"effect2mix",
+    // Note that we start at 0 -- this makes things easier in the code
+    "effect1parameter0",
+    "effect1parameter1",
+    "effect1parameter2",
+    "effect1parameter3",
+    "effect1parameter4",
+    "effect1parameter5",
+    "effect1parameter6",
+    "effect1parameter7",
+    "effect1parameter8",
+    "effect1parameter9",
+    "effect1parameter10",
+    "effect1parameter11",
+    "effect1parameter12",
+    "effect1parameter13",
+    "effect2type",
+    "effect2mix",
 
-		// Note that we start at 0 -- this makes things easier in the code
-		"effect2parameter0",
-		"effect2parameter1",
-		"effect2parameter2",
-		"effect2parameter3",
-		"effect2parameter4",
-		"effect2parameter5",
-		"effect2parameter6",
-		"effect2parameter7",
-		"effect2parameter8",
-		"effect2parameter9",
-		"effect2parameter10",
-		"effect2parameter11",
-		"effect2parameter12",
-		"effect2parameter13",
-		"lfo1shape",
-		"lfo1speed",
-		"-",
-		"lfo1sync",
-		"lfo1clocked",
-		"lfo1startphase",
-		"lfo1delay",
-		"lfo1fade",
-		"-",
-		"-",
-		"lfo1keytrack",
-		"-",
-		"lfo2shape",
-		"lfo2speed",
-		"-",
-		"lfo2sync",
-		"lfo2clocked",
-		"lfo2startphase",
-		"lfo2delay",
-		"lfo2fade",
-		"-",
-		"-",
-		"lfo2keytrack",
-		"-",
-		"lfo3shape",
-		"lfo3speed",
-		"-",
-		"lfo3sync",
-		"lfo3clocked",
-		"lfo3startphase",
-		"lfo3delay",
-		"lfo3fade",
-		"-",
-		"-",
-		"lfo3keytrack",
-		"-",
-		"envelope1mode, envelope1trigger",		// *
-		"-",
-		"-",
-		"envelope1attack",
-		"envelope1attacklevel",
-		"envelope1decay",
-		"envelope1sustain",
-		"envelope1decay2",
-		"envelope1sustain2",
-		"envelope1release",
-		"-",
-		"-",
-		"envelope2mode, envelope2trigger",		// *
-		"-",
-		"-",
-		"envelope2attack",
-		"envelope2attacklevel",
-		"envelope2decay",
-		"envelope2sustain",
-		"envelope2decay2",
-		"envelope2sustain2",
-		"envelope2release",
-		"-",
-		"-",
-		"envelope3mode, envelope3trigger",		// *
-		"-",
-		"-",
-		"envelope3attack",
-		"envelope3attacklevel",
-		"envelope3decay",
-		"envelope3sustain",
-		"envelope3decay2",
-		"envelope3sustain2",
-		"envelope3release",
-		"-",
-		"-",
-		"envelope4mode, envelope4trigger",		// *
-		"-",
-		"-",
-		"envelope4attack",
-		"envelope4attacklevel",
-		"envelope4decay",
-		"envelope4sustain",
-		"envelope4decay2",
-		"envelope4sustain2",
-		"envelope4release",
-		"-",
-		"-",
-		"-",
-		"modifier1sourcea",
-		"modifier1sourceb",
-		"modifier1operation",
-		"modifier1constant",
-		"modifier2sourcea",
-		"modifier2sourceb",
-		"modifier2operation",
-		"modifier2constant",
-		"modifier3sourcea",
-		"modifier3sourceb",
-		"modifier3operation",
-		"modifier3constant",
-		"modifier4sourcea",
-		"modifier4sourceb",
-		"modifier4operation",
-		"modifier4constant",
-		"modulation1source",
-		"modulation1destination",
-		"modulation1amount",
-		"modulation2source",
-		"modulation2destination",
-		"modulation2amount",
-		"modulation3source",
-		"modulation3destination",
-		"modulation3amount",
-		"modulation4source",
-		"modulation4destination",
-		"modulation4amount",
-		"modulation5source",
-		"modulation5destination",
-		"modulation5amount",
-		"modulation6source",
-		"modulation6destination",
-		"modulation6amount",
-		"modulation7source",
-		"modulation7destination",
-		"modulation7amount",
-		"modulation8source",
-		"modulation8destination",
-		"modulation8amount",
-		"modulation9source",
-		"modulation9destination",
-		"modulation9amount",
-		"modulation10source",
-		"modulation10destination",
-		"modulation10amount",
-		"modulation11source",
-		"modulation11destination",
-		"modulation11amount",
-		"modulation12source",
-		"modulation12destination",
-		"modulation12amount",
-		"modulation13source",
-		"modulation13destination",
-		"modulation13amount",
-		"modulation14source",
-		"modulation14destination",
-		"modulation14amount",
-		"modulation15source",
-		"modulation15destination",
-		"modulation15amount",
-		"modulation16source",
-		"modulation16destination",
-		"modulation16amount",
-		"-",
-		"-",
-		"arpeggiatormode",
-		"arpeggiatorpattern",
-		"-",
-		"arpeggiatorclock",
-		"arpeggiatorlength",
-		"arpeggiatoroctave",
-		"arpeggiatordirection",
-		"arpeggiatorsortorder",
-		"arpeggiatorvelocitymode",
-		"arpeggiatortimingfactor",
-		"-",
-		"arpeggiatorpatternreset",
-		"arpeggiatorpatternlength",
-		"-",
-		"-",
-		"arpeggiatortempo",
-		"arp01step, arp01glide, arp01accent",                   // *
-		"arp02step, arp02glide, arp02accent",                   // *
-		"arp03step, arp03glide, arp03accent",                   // *
-		"arp04step, arp04glide, arp04accent",                   // *
-		"arp05step, arp05glide, arp05accent",                   // *
-		"arp06step, arp06glide, arp06accent",                   // *
-		"arp07step, arp07glide, arp07accent",                   // *
-		"arp08step, arp08glide, arp08accent",                   // *
-		"arp09step, arp09glide, arp09accent",                   // *
-		"arp10step, arp10glide, arp10accent",                   // *
-		"arp11step, arp11glide, arp11accent",                   // *
-		"arp12step, arp12glide, arp12accent",                   // *
-		"arp13step, arp13glide, arp13accent",                   // *
-		"arp14step, arp14glide, arp14accent",                   // *
-		"arp15step, arp15glide, arp15accent",                   // *
-		"arp16step, arp16glide, arp16accent",                   // *
-		"arp01timing, arp01length",                     // *
-		"arp02timing, arp02length",                     // *
-		"arp03timing, arp03length",                     // *
-		"arp04timing, arp04length",                     // *
-		"arp05timing, arp05length",                     // *
-		"arp06timing, arp06length",                     // *
-		"arp07timing, arp07length",                     // *
-		"arp08timing, arp08length",                     // *
-		"arp09timing, arp09length",                     // *
-		"arp10timing, arp10length",                     // *
-		"arp11timing, arp11length",                     // *
-		"arp12timing, arp12length",                     // *
-		"arp13timing, arp13length",                     // *
-		"arp14timing, arp14length",                     // *
-		"arp15timing, arp15length",                     // *
-		"arp16timing, arp16length",                     // *
-		"-",
-		"-",
-		"-",
-		"-",
-		"name",         // *
-		"name",         // *
-		"name",         // *
-		"name",         // *
-		"name",         // *
-		"name",         // *
-		"name",         // *
-		"name",         // *
-		"name",         // *
-		"name",         // *
-		"name",         // *
-		"name",         // *
-		"name",         // *
-		"name",         // *
-		"name",         // *
-		"name",         // *
-		"category",
-		"-",
-		"-",
-		"-"
-		};
+    // Note that we start at 0 -- this makes things easier in the code
+    "effect2parameter0",
+    "effect2parameter1",
+    "effect2parameter2",
+    "effect2parameter3",
+    "effect2parameter4",
+    "effect2parameter5",
+    "effect2parameter6",
+    "effect2parameter7",
+    "effect2parameter8",
+    "effect2parameter9",
+    "effect2parameter10",
+    "effect2parameter11",
+    "effect2parameter12",
+    "effect2parameter13",
+    "lfo1shape",
+    "lfo1speed",
+    "-",
+    "lfo1sync",
+    "lfo1clocked",
+    "lfo1startphase",
+    "lfo1delay",
+    "lfo1fade",
+    "-",
+    "-",
+    "lfo1keytrack",
+    "-",
+    "lfo2shape",
+    "lfo2speed",
+    "-",
+    "lfo2sync",
+    "lfo2clocked",
+    "lfo2startphase",
+    "lfo2delay",
+    "lfo2fade",
+    "-",
+    "-",
+    "lfo2keytrack",
+    "-",
+    "lfo3shape",
+    "lfo3speed",
+    "-",
+    "lfo3sync",
+    "lfo3clocked",
+    "lfo3startphase",
+    "lfo3delay",
+    "lfo3fade",
+    "-",
+    "-",
+    "lfo3keytrack",
+    "-",
+    "envelope1mode, envelope1trigger",              // *
+    "-",
+    "-",
+    "envelope1attack",
+    "envelope1attacklevel",
+    "envelope1decay",
+    "envelope1sustain",
+    "envelope1decay2",
+    "envelope1sustain2",
+    "envelope1release",
+    "-",
+    "-",
+    "envelope2mode, envelope2trigger",              // *
+    "-",
+    "-",
+    "envelope2attack",
+    "envelope2attacklevel",
+    "envelope2decay",
+    "envelope2sustain",
+    "envelope2decay2",
+    "envelope2sustain2",
+    "envelope2release",
+    "-",
+    "-",
+    "envelope3mode, envelope3trigger",              // *
+    "-",
+    "-",
+    "envelope3attack",
+    "envelope3attacklevel",
+    "envelope3decay",
+    "envelope3sustain",
+    "envelope3decay2",
+    "envelope3sustain2",
+    "envelope3release",
+    "-",
+    "-",
+    "envelope4mode, envelope4trigger",              // *
+    "-",
+    "-",
+    "envelope4attack",
+    "envelope4attacklevel",
+    "envelope4decay",
+    "envelope4sustain",
+    "envelope4decay2",
+    "envelope4sustain2",
+    "envelope4release",
+    "-",
+    "-",
+    "-",
+    "modifier1sourcea",
+    "modifier1sourceb",
+    "modifier1operation",
+    "modifier1constant",
+    "modifier2sourcea",
+    "modifier2sourceb",
+    "modifier2operation",
+    "modifier2constant",
+    "modifier3sourcea",
+    "modifier3sourceb",
+    "modifier3operation",
+    "modifier3constant",
+    "modifier4sourcea",
+    "modifier4sourceb",
+    "modifier4operation",
+    "modifier4constant",
+    "modulation1source",
+    "modulation1destination",
+    "modulation1amount",
+    "modulation2source",
+    "modulation2destination",
+    "modulation2amount",
+    "modulation3source",
+    "modulation3destination",
+    "modulation3amount",
+    "modulation4source",
+    "modulation4destination",
+    "modulation4amount",
+    "modulation5source",
+    "modulation5destination",
+    "modulation5amount",
+    "modulation6source",
+    "modulation6destination",
+    "modulation6amount",
+    "modulation7source",
+    "modulation7destination",
+    "modulation7amount",
+    "modulation8source",
+    "modulation8destination",
+    "modulation8amount",
+    "modulation9source",
+    "modulation9destination",
+    "modulation9amount",
+    "modulation10source",
+    "modulation10destination",
+    "modulation10amount",
+    "modulation11source",
+    "modulation11destination",
+    "modulation11amount",
+    "modulation12source",
+    "modulation12destination",
+    "modulation12amount",
+    "modulation13source",
+    "modulation13destination",
+    "modulation13amount",
+    "modulation14source",
+    "modulation14destination",
+    "modulation14amount",
+    "modulation15source",
+    "modulation15destination",
+    "modulation15amount",
+    "modulation16source",
+    "modulation16destination",
+    "modulation16amount",
+    "-",
+    "-",
+    "arpeggiatormode",
+    "arpeggiatorpattern",
+    "-",
+    "arpeggiatorclock",
+    "arpeggiatorlength",
+    "arpeggiatoroctave",
+    "arpeggiatordirection",
+    "arpeggiatorsortorder",
+    "arpeggiatorvelocitymode",
+    "arpeggiatortimingfactor",
+    "-",
+    "arpeggiatorpatternreset",
+    "arpeggiatorpatternlength",
+    "-",
+    "-",
+    "arpeggiatortempo",
+    "arp01step, arp01glide, arp01accent",                   // *
+    "arp02step, arp02glide, arp02accent",                   // *
+    "arp03step, arp03glide, arp03accent",                   // *
+    "arp04step, arp04glide, arp04accent",                   // *
+    "arp05step, arp05glide, arp05accent",                   // *
+    "arp06step, arp06glide, arp06accent",                   // *
+    "arp07step, arp07glide, arp07accent",                   // *
+    "arp08step, arp08glide, arp08accent",                   // *
+    "arp09step, arp09glide, arp09accent",                   // *
+    "arp10step, arp10glide, arp10accent",                   // *
+    "arp11step, arp11glide, arp11accent",                   // *
+    "arp12step, arp12glide, arp12accent",                   // *
+    "arp13step, arp13glide, arp13accent",                   // *
+    "arp14step, arp14glide, arp14accent",                   // *
+    "arp15step, arp15glide, arp15accent",                   // *
+    "arp16step, arp16glide, arp16accent",                   // *
+    "arp01timing, arp01length",                     // *
+    "arp02timing, arp02length",                     // *
+    "arp03timing, arp03length",                     // *
+    "arp04timing, arp04length",                     // *
+    "arp05timing, arp05length",                     // *
+    "arp06timing, arp06length",                     // *
+    "arp07timing, arp07length",                     // *
+    "arp08timing, arp08length",                     // *
+    "arp09timing, arp09length",                     // *
+    "arp10timing, arp10length",                     // *
+    "arp11timing, arp11length",                     // *
+    "arp12timing, arp12length",                     // *
+    "arp13timing, arp13length",                     // *
+    "arp14timing, arp14length",                     // *
+    "arp15timing, arp15length",                     // *
+    "arp16timing, arp16length",                     // *
+    "-",
+    "-",
+    "-",
+    "-",
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "category",
+    "-",
+    "-",
+    "-"
+    };
 
 
 
@@ -1788,11 +1794,11 @@ public class Blofeld extends Synth
             return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
             }
         else if (key.equals("envelope1mode") || key.equals("envelope1trigger") ||
-				key.equals("envelope2mode") || key.equals("envelope2trigger") ||
-				key.equals("envelope3mode") || key.equals("envelope3trigger") ||
-				key.equals("envelope4mode") || key.equals("envelope4trigger"))
+            key.equals("envelope2mode") || key.equals("envelope2trigger") ||
+            key.equals("envelope3mode") || key.equals("envelope3trigger") ||
+            key.equals("envelope4mode") || key.equals("envelope4trigger"))
             {
-        	int i;
+            int i;
             try { i = Integer.parseInt(key.substring(8, 9)); }
             catch (Exception e) { e.printStackTrace(); return new byte[0]; }
             int index = 196 + (i - 1) * 12;
@@ -1858,7 +1864,7 @@ public class Blofeld extends Synth
     public byte[] emit(Model tempModel)
         {
         if (tempModel == null)
-        	tempModel = getModel();
+            tempModel = getModel();
         byte DEV = (byte) tempModel.get("id", 0);
         byte BB = (byte) tempModel.get("bank", 0);
         byte NN = (byte) tempModel.get("number", 0);
@@ -1880,19 +1886,19 @@ public class Blofeld extends Synth
                 {
                 bytes[i] = (byte)((model.get("oscallocation", 0) << 4) | (model.get("unisono", 0)));
                 }
-			else if (key.equals("envelope1mode, envelope1trigger") ||
-					key.equals("envelope2mode, envelope2trigger") ||
-					key.equals("envelope3mode, envelope3trigger") ||
-					key.equals("envelope4mode, envelope4trigger"))
-				{
-				int j;
-				bytes[i] = 0;  // or whatever
-				try { 
-					j = Integer.parseInt(key.substring(8, 9)); 
-					bytes[i] = (byte)((model.get("envelope" + j + "trigger", 0) << 5) | (model.get("envelope" + j + "mode", 0)));
-					}
-				catch (Exception e) { e.printStackTrace(); }
-				}
+            else if (key.equals("envelope1mode, envelope1trigger") ||
+                key.equals("envelope2mode, envelope2trigger") ||
+                key.equals("envelope3mode, envelope3trigger") ||
+                key.equals("envelope4mode, envelope4trigger"))
+                {
+                int j;
+                bytes[i] = 0;  // or whatever
+                try { 
+                    j = Integer.parseInt(key.substring(8, 9)); 
+                    bytes[i] = (byte)((model.get("envelope" + j + "trigger", 0) << 5) | (model.get("envelope" + j + "mode", 0)));
+                    }
+                catch (Exception e) { e.printStackTrace(); }
+                }
             else if (i >= 327 && i <= 342) // step/glide/accent
                 {
                 int j = i - 326;
@@ -1967,7 +1973,7 @@ public class Blofeld extends Synth
     public byte[] requestDump(Model tempModel)
         {
         if (tempModel == null)
-        	tempModel = getModel();
+            tempModel = getModel();
         byte DEV = (byte)tempModel.get("id", 0);
         byte BB = (byte)tempModel.get("bank", 0);
         byte NN = (byte)tempModel.get("number", 0);
@@ -2044,18 +2050,18 @@ public class Blofeld extends Synth
                 model.set("oscallocation", b >> 4);
                 model.set("unisono", b & 7);
                 }
-			else if (key.equals("envelope1mode, envelope1trigger") ||
-					key.equals("envelope2mode, envelope2trigger") ||
-					key.equals("envelope3mode, envelope3trigger") ||
-					key.equals("envelope4mode, envelope4trigger"))
-				{
-				try { 
-					int j = Integer.parseInt(key.substring(8, 9)); 
-					model.set("envelope" + j + "trigger", b >> 5);
-					model.set("envelope" + j + "mode", b & 7);  // even though it's supposed to be 5 bits, only 3 are used!
-					}
-				catch (Exception e) { e.printStackTrace(); }
-				}
+            else if (key.equals("envelope1mode, envelope1trigger") ||
+                key.equals("envelope2mode, envelope2trigger") ||
+                key.equals("envelope3mode, envelope3trigger") ||
+                key.equals("envelope4mode, envelope4trigger"))
+                {
+                try { 
+                    int j = Integer.parseInt(key.substring(8, 9)); 
+                    model.set("envelope" + j + "trigger", b >> 5);
+                    model.set("envelope" + j + "mode", b & 7);  // even though it's supposed to be 5 bits, only 3 are used!
+                    }
+                catch (Exception e) { e.printStackTrace(); }
+                }
             else if (i >= 327 && i <= 342) // step/glide/accent
                 {
                 int j = i - 326;
@@ -2087,40 +2093,40 @@ public class Blofeld extends Synth
         }
         
     public void merge(Model otherModel, double probability)
-    	{
-    	String[] keys = getModel().getKeys();
-    	for(int i = 0; i < keys.length; i++)
-    		{
-    		if (keys[i].equals("id")) continue;
-    		if (keys[i].equals("number")) continue;
-    		if (keys[i].equals("bank")) continue;
-    		if (keys[i].equals("name")) continue;
-    		if (keys[i].equals("category")) continue;
-    		
-    		if (coinToss(probability))
-    			{
-    			if (otherModel.isString(keys[i]))
-    				{
-    				getModel().set(keys[i], otherModel.get(keys[i], getModel().get(keys[i], "")));
-    				}
-    			else
-    				{
-    				getModel().set(keys[i], otherModel.get(keys[i], getModel().get(keys[i], 0)));
-    				}
-    			}
-    		}
-    	}
+        {
+        String[] keys = getModel().getKeys();
+        for(int i = 0; i < keys.length; i++)
+            {
+            if (keys[i].equals("id")) continue;
+            if (keys[i].equals("number")) continue;
+            if (keys[i].equals("bank")) continue;
+            if (keys[i].equals("name")) continue;
+            if (keys[i].equals("category")) continue;
+                
+            if (coinToss(probability))
+                {
+                if (otherModel.isString(keys[i]))
+                    {
+                    getModel().set(keys[i], otherModel.get(keys[i], getModel().get(keys[i], "")));
+                    }
+                else
+                    {
+                    getModel().set(keys[i], otherModel.get(keys[i], getModel().get(keys[i], 0)));
+                    }
+                }
+            }
+        }
     
     public void immutableMutate(String key)
         {
         // we randomize these specially, taking care not to do the high waves
         if (key.equals("osc1shape") || key.equals("osc2shape"))
-        	{
-        	if (coinToss(0.5))
-        		model.set(key, 0);
-        	else
-        		model.set(key, random.nextInt(WAVES_LONG.length -1) + 1);
-        	}
+            {
+            if (coinToss(0.5))
+                model.set(key, 0);
+            else
+                model.set(key, random.nextInt(WAVES_LONG.length -1) + 1);
+            }
         }
         
     public Synth doNew()
@@ -2134,5 +2140,373 @@ public class Blofeld extends Synth
     
     public String getPatchName() { return model.get("name", "Init            "); }
     
-
+    
+    /** Adds all the defaults in DEFAULT_PARAMS to the Model's defaults storage. */
+    void addDefaults()
+        {
+        for(int i = 0; i < DEFAULT_PARAMS.length; i++)
+            {
+            if (model.isString(DEFAULT_PARAMS[i][0]))
+                {
+                model.addDefault(DEFAULT_PARAMS[i][0], DEFAULT_PARAMS[i][1]);
+                }
+            else
+                {
+                try { model.addDefault(DEFAULT_PARAMS[i][0], Integer.parseInt(DEFAULT_PARAMS[i][1])); }
+                catch (NumberFormatException e) { e.printStackTrace(); } // shouldn't ever happen
+                }
+            }
+        }
+    
+    /** These are the parameters stored in the Blofeld when it is reset to the Init patch */
+    public final static String[][] DEFAULT_PARAMS = new String[][]
+    {
+    {"category", "0"},    
+    {"bank", "0"},
+    {"number", "0"},    
+    {"id", "0"},    
+    {"oscglidemode", "0"},    
+    {"oscglide", "0"},    
+    {"oscallocation", "0"},    
+    {"oscgliderate", "20"},    
+    {"unisono", "0"},    
+    {"unisonodetune", "0"},    
+    {"noiselevel", "0"},    
+    {"noisebalance", "0"},    
+    {"noisecolour", "64"},    
+    {"ringmodlevel", "0"},    
+    {"ringmodbalance", "0"},    
+    {"osc1shape", "2"},    
+    {"osc1limitwt", "0"},    
+    {"osc1fmsource", "0"},    
+    {"osc1pwmsource", "1"},    
+    {"osc1octave", "4"},    
+    {"osc1semitone", "64"},    
+    {"osc1detune", "64"},    
+    {"osc1bendrange", "66"},    
+    {"osc1keytrack", "96"},    
+    {"osc1fmamount", "0"},    
+    {"osc1pulsewidth", "127"},    
+    {"osc1pwmamount", "64"},    
+    {"osc1brilliance", "0"},    
+    {"osc1level", "127"},    
+    {"osc1balance", "0"},    
+    {"osc2shape", "0"},    
+    {"osc2limitwt", "0"},    
+    {"osc2synctoosc3", "0"},    
+    {"osc2fmsource", "0"},    
+    {"osc2pwmsource", "3"},    
+    {"osc2octave", "4"},    
+    {"osc2semitone", "64"},    
+    {"osc2detune", "64"},    
+    {"osc2bendrange", "66"},    
+    {"osc2keytrack", "96"},    
+    {"osc2fmamount", "0"},    
+    {"osc2pulsewidth", "127"},    
+    {"osc2pwmamount", "64"},    
+    {"osc2brilliance", "0"},    
+    {"osc2level", "127"},    
+    {"osc2balance", "0"},    
+    {"osc3shape", "0"},    
+    {"osc3fmsource", "0"},    
+    {"osc3pwmsource", "5"},    
+    {"osc3octave", "3"},    
+    {"osc3semitone", "64"},    
+    {"osc3detune", "64"},    
+    {"osc3bendrange", "66"},    
+    {"osc3keytrack", "96"},    
+    {"osc3fmamount", "0"},    
+    {"osc3pulsewidth", "127"},    
+    {"osc3pwmamount", "64"},    
+    {"osc3brilliance", "0"},    
+    {"osc3level", "127"},    
+    {"osc3balance", "0"},    
+    {"filter1type", "1"},    
+    {"filter1drivecurve", "0"},    
+    {"filter1modsource", "1"},    
+    {"filter1pansource", "1"},    
+    {"filter1fmsource", "0"},    
+    {"filter1cutoff", "127"},    
+    {"filter1resonance", "0"},    
+    {"filter1drive", "0"},    
+    {"filter1keytrack", "64"},    
+    {"filter1envamount", "64"},    
+    {"filter1envvelocity", "64"},    
+    {"filter1modamount", "64"},    
+    {"filter1fmamount", "0"},    
+    {"filter1pan", "64"},    
+    {"filter1panamount", "64"},    
+    {"filter2type", "0"},    
+    {"filter2drivecurve", "0"},    
+    {"filter2modsource", "0"},    
+    {"filter2pansource", "3"},    
+    {"filter2fmsource", "0"},    
+    {"filterrouting", "0"},    
+    {"filter2cutoff", "127"},    
+    {"filter2resonance", "0"},    
+    {"filter2drive", "0"},    
+    {"filter2keytrack", "64"},    
+    {"filter2envamount", "64"},    
+    {"filter2envvelocity", "64"},    
+    {"filter2modamount", "64"},    
+    {"filter2fmamount", "0"},    
+    {"filter2pan", "64"},    
+    {"filter2panamount", "64"},    
+    {"lfo1shape", "0"},    
+    {"lfo1sync", "0"},    
+    {"lfo1clocked", "0"},    
+    {"lfo1speed", "50"},    
+    {"lfo1startphase", "0"},    
+    {"lfo1delay", "0"},    
+    {"lfo1fade", "64"},    
+    {"lfo1keytrack", "64"},    
+    {"lfo3shape", "0"},    
+    {"lfo3sync", "0"},    
+    {"lfo3clocked", "0"},    
+    {"lfo3speed", "30"},    
+    {"lfo3startphase", "0"},    
+    {"lfo3delay", "0"},    
+    {"lfo3fade", "64"},    
+    {"lfo3keytrack", "64"},    
+    {"lfo2shape", "0"},    
+    {"lfo2sync", "0"},    
+    {"lfo2clocked", "0"},    
+    {"lfo2speed", "40"},    
+    {"lfo2startphase", "0"},    
+    {"lfo2delay", "0"},    
+    {"lfo2fade", "64"},    
+    {"lfo2keytrack", "64"},    
+    {"amplifiermodsource", "5"},    
+    {"amplifiervolume", "127"},    
+    {"amplifiervelocity", "114"},    
+    {"amplifiermodamount", "64"},    
+    {"envelope1mode", "0"},    
+    {"envelope1trigger", "0"},    
+    {"envelope1attack", "0"},    
+    {"envelope1attacklevel", "127"},    
+    {"envelope1decay", "50"},    
+    {"envelope1sustain", "0"},    
+    {"envelope1decay2", "0"},    
+    {"envelope1sustain2", "127"},    
+    {"envelope1release", "0"},    
+    {"envelope2mode", "0"},    
+    {"envelope2trigger", "0"},    
+    {"envelope2attack", "0"},    
+    {"envelope2attacklevel", "127"},    
+    {"envelope2decay", "52"},    
+    {"envelope2sustain", "127"},    
+    {"envelope2decay2", "0"},    
+    {"envelope2sustain2", "127"},    
+    {"envelope2release", "0"},    
+    {"envelope3mode", "0"},    
+    {"envelope3trigger", "0"},    
+    {"envelope3attack", "0"},    
+    {"envelope3attacklevel", "64"},    
+    {"envelope3decay", "64"},    
+    {"envelope3sustain", "64"},    
+    {"envelope3decay2", "64"},    
+    {"envelope3sustain2", "64"},    
+    {"envelope3release", "64"},    
+    {"envelope4mode", "0"},    
+    {"envelope4trigger", "0"},    
+    {"envelope4attack", "0"},    
+    {"envelope4attacklevel", "64"},    
+    {"envelope4decay", "64"},    
+    {"envelope4sustain", "64"},    
+    {"envelope4decay2", "64"},    
+    {"envelope4sustain2", "64"},    
+    {"envelope4release", "64"},    
+    {"modulation1source", "1"},    
+    {"modulation1destination", "1"},    
+    {"modulation1amount", "64"},    
+    {"modulation2source", "0"},    
+    {"modulation2destination", "0"},    
+    {"modulation2amount", "64"},    
+    {"modulation3source", "0"},    
+    {"modulation3destination", "0"},    
+    {"modulation3amount", "64"},    
+    {"modulation4source", "0"},    
+    {"modulation4destination", "0"},    
+    {"modulation4amount", "64"},    
+    {"modulation5source", "0"},    
+    {"modulation5destination", "0"},    
+    {"modulation5amount", "64"},    
+    {"modulation6source", "0"},    
+    {"modulation6destination", "0"},    
+    {"modulation6amount", "64"},    
+    {"modulation7source", "0"},    
+    {"modulation7destination", "0"},    
+    {"modulation7amount", "64"},    
+    {"modulation8source", "0"},    
+    {"modulation8destination", "0"},    
+    {"modulation8amount", "64"},    
+    {"modulation9source", "0"},    
+    {"modulation9destination", "0"},    
+    {"modulation9amount", "64"},    
+    {"modulation10source", "0"},    
+    {"modulation10destination", "0"},    
+    {"modulation10amount", "64"},    
+    {"modulation11source", "0"},    
+    {"modulation11destination", "0"},    
+    {"modulation11amount", "64"},    
+    {"modulation12source", "0"},    
+    {"modulation12destination", "0"},    
+    {"modulation12amount", "64"},    
+    {"modulation13source", "0"},    
+    {"modulation13destination", "0"},    
+    {"modulation13amount", "64"},    
+    {"modulation14source", "0"},    
+    {"modulation14destination", "0"},    
+    {"modulation14amount", "64"},    
+    {"modulation15source", "0"},    
+    {"modulation15destination", "0"},    
+    {"modulation15amount", "64"},    
+    {"modulation16source", "0"},    
+    {"modulation16destination", "0"},    
+    {"modulation16amount", "64"},    
+    {"modifier1sourcea", "0"},    
+    {"modifier1sourceb", "0"},    
+    {"modifier1operation", "0"},    
+    {"modifier1constant", "64"},    
+    {"modifier2sourcea", "0"},    
+    {"modifier2sourceb", "0"},    
+    {"modifier2operation", "0"},    
+    {"modifier2constant", "64"},    
+    {"modifier3sourcea", "0"},    
+    {"modifier3sourceb", "0"},    
+    {"modifier3operation", "0"},    
+    {"modifier3constant", "64"},    
+    {"modifier4sourcea", "0"},    
+    {"modifier4sourceb", "0"},    
+    {"modifier4operation", "0"},    
+    {"modifier4constant", "64"},    
+    {"effect1parameter0", "20"},    
+    {"effect1parameter1", "64"},    
+    {"effect1parameter2", "64"},    
+    {"effect1parameter3", "0"},    
+    {"effect1parameter4", "127"},    
+    {"effect1parameter5", "127"},    
+    {"effect1parameter6", "127"},    
+    {"effect1parameter7", "127"},    
+    {"effect1parameter8", "127"},    
+    {"effect1parameter9", "127"},    
+    {"effect1parameter10", "29"},    
+    {"effect1type", "1"},    
+    {"effect1mix", "0"},    
+    {"effect2parameter0", "53"},    
+    {"effect2parameter1", "64"},    
+    {"effect2parameter2", "100"},    
+    {"effect2parameter3", "0"},    
+    {"effect2parameter4", "64"},    
+    {"effect2parameter5", "100"},    
+    {"effect2parameter6", "0"},    
+    {"effect2parameter7", "100"},    
+    {"effect2parameter8", "110"},    
+    {"effect2parameter9", "0"},    
+    {"effect2parameter10", "15"},    
+    {"effect2type", "8"},    
+    {"effect2mix", "0"},    
+    {"arpeggiatormode", "0"},    
+    {"arpeggiatordirection", "0"},    
+    {"arpeggiatorsortorder", "0"},    
+    {"arpeggiatorvelocitymode", "1"},    
+    {"arpeggiatorpatternreset", "0"},    
+    {"arpeggiatorpatternlength", "15"},    
+    {"arpeggiatorpattern", "0"},    
+    {"arpeggiatorclock", "8"},    
+    {"arpeggiatorlength", "5"},    
+    {"arpeggiatoroctave", "0"},    
+    {"arpeggiatortimingfactor", "12"},    
+    {"arpeggiatortempo", "55"},    
+    {"arp01step", "0"},    
+    {"arp01glide", "0"},    
+    {"arp01accent", "4"},    
+    {"arp01length", "4"},    
+    {"arp01timing", "4"},    
+    {"arp02step", "0"},    
+    {"arp02glide", "0"},    
+    {"arp02accent", "4"},    
+    {"arp02length", "4"},    
+    {"arp02timing", "4"},    
+    {"arp03step", "0"},    
+    {"arp03glide", "0"},    
+    {"arp03accent", "4"},    
+    {"arp03length", "4"},    
+    {"arp03timing", "4"},    
+    {"arp04step", "0"},    
+    {"arp04glide", "0"},    
+    {"arp04accent", "4"},    
+    {"arp04length", "4"},    
+    {"arp04timing", "4"},    
+    {"arp05step", "0"},    
+    {"arp05glide", "0"},    
+    {"arp05accent", "4"},    
+    {"arp05length", "4"},    
+    {"arp05timing", "4"},    
+    {"arp06step", "0"},    
+    {"arp06glide", "0"},    
+    {"arp06accent", "4"},    
+    {"arp06length", "4"},    
+    {"arp06timing", "4"},    
+    {"arp07step", "0"},    
+    {"arp07glide", "0"},    
+    {"arp07accent", "4"},    
+    {"arp07length", "4"},    
+    {"arp07timing", "4"},    
+    {"arp08step", "0"},    
+    {"arp08glide", "0"},    
+    {"arp08accent", "4"},    
+    {"arp08length", "4"},    
+    {"arp08timing", "4"},    
+    {"arp09step", "0"},    
+    {"arp09glide", "0"},    
+    {"arp09accent", "4"},    
+    {"arp09length", "4"},    
+    {"arp09timing", "4"},    
+    {"arp10step", "0"},    
+    {"arp10glide", "0"},    
+    {"arp10accent", "4"},    
+    {"arp10length", "4"},    
+    {"arp10timing", "4"},    
+    {"arp11step", "0"},    
+    {"arp11glide", "0"},    
+    {"arp11accent", "4"},    
+    {"arp11length", "4"},    
+    {"arp11timing", "4"},    
+    {"arp12step", "0"},    
+    {"arp12glide", "0"},    
+    {"arp12accent", "4"},    
+    {"arp12length", "4"},    
+    {"arp12timing", "4"},    
+    {"arp13step", "0"},    
+    {"arp13glide", "0"},    
+    {"arp13accent", "4"},    
+    {"arp13length", "4"},    
+    {"arp13timing", "4"},    
+    {"arp14step", "0"},    
+    {"arp14glide", "0"},    
+    {"arp14accent", "4"},    
+    {"arp14length", "4"},    
+    {"arp14timing", "4"},    
+    {"arp15step", "0"},    
+    {"arp15glide", "0"},    
+    {"arp15accent", "4"},    
+    {"arp15length", "4"},    
+    {"arp15timing", "4"},    
+    {"arp16step", "0"},    
+    {"arp16glide", "0"},    
+    {"arp16accent", "4"},    
+    {"arp16length", "4"},    
+    {"arp16timing", "4"},    
+    {"name", "Init            "},    
+    {"oscpitchsource", "2"},    
+    {"oscpitchamount", "64"},    
+    {"effect1parameter11", "127"},    
+    {"effect1parameter12", "127"},    
+    {"effect1parameter13", "127"},    
+    {"effect2parameter11", "64"},    
+    {"effect2parameter12", "127"},    
+    {"effect2parameter13", "127"},
+    };
+                
     }

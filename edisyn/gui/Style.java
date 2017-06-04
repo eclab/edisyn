@@ -58,7 +58,7 @@ public class Style
     public static final Color COLOR_GLOBAL = Color.white;
 
 
-	/////// VBOX AND HBOX CONSTANTS
+    /////// VBOX AND HBOX CONSTANTS
 
     /** Insets for VBoxes, by default zero. */
     public static final Insets VBOX_INSETS = new Insets(0, 0, 0, 0);
@@ -66,7 +66,7 @@ public class Style
     public static final Insets HBOX_INSETS = new Insets(0, 0, 0, 0);
 
 
-	/////// DIAL CONSTANTS
+    /////// DIAL CONSTANTS
 
     /** Color of the unset region in Dials etc. */ 
     public static final Color DIAL_UNSET_COLOR = Color.GRAY;
@@ -84,9 +84,9 @@ public class Style
     public static final Insets LABELLED_DIAL_INSETS = new Insets(0, 3, 0, 3);
 
 
-	/////// ENVELOPE DISPLAY CONSTANTS
+    /////// ENVELOPE DISPLAY CONSTANTS
 
-	/** Degree of Transparency of the fill region with respect to the stroked lines. */
+    /** Degree of Transparency of the fill region with respect to the stroked lines. */
     public static final double ENVELOPE_DISPLAY_FILL_TRANSPARENCY = 0.25;
     /** Thickness of effective border around the Envelope Display, except the top. */
     public static final int ENVELOPE_DISPLAY_BORDER_THICKNESS = 10;

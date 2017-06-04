@@ -79,7 +79,7 @@ public class StringComponent extends JComponent implements Updatable
         change.putClientProperty("JComponent.sizeVariant", "small");
         change.setFont(Style.SMALL_FONT);
         change.setPreferredSize(change.getPreferredSize());
-		change.setHorizontalAlignment(SwingConstants.LEFT);
+        change.setHorizontalAlignment(SwingConstants.LEFT);
                 
         change.addActionListener(new ActionListener()
             {

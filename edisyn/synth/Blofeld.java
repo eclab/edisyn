@@ -326,6 +326,7 @@ public class Blofeld extends Synth
 
                 comp = new LabelledDial("Accent " + i, this, "arp" + (i < 10 ? "0" : "") + i + "accent", color, 0, 7)
                     {
+					public double getStartAngle() { return 270 / 7 * 4 + 90; }
                     public String map(int val)
                         {
                         // if 0, it's silent
@@ -339,6 +340,7 @@ public class Blofeld extends Synth
                 // the little spaces cause Java to not slice off a bit of the last digit
                 comp = new LabelledDial(" Length " + i + " ", this, "arp" + (i < 10 ? "0" : "") + i + "length", color, 0, 7)
                     {
+					public double getStartAngle() { return 270 / 7 * 4 + 90; }
                     public String map(int val)
                         {
                         // if 0, it's legato
@@ -352,6 +354,7 @@ public class Blofeld extends Synth
                 // the little spaces cause Java to not slice off a bit of the last digit
                 comp = new LabelledDial(" Timing " + i + " ", this, "arp" + (i < 10 ? "0" : "") + i + "timing", color, 0, 7)
                     {
+					public double getStartAngle() { return 270 / 7 * 4 + 90; }
                     public String map(int val)
                         {
                         // if 0, it's random
@@ -882,6 +885,7 @@ public class Blofeld extends Synth
 
         comp = new LabelledDial("Keytrack", this, "lfo" + lfo + "keytrack", color, 0, 127, 64)
             {
+            public boolean isSymmetric() { return true; } 
             public String map(int val)
                 {
                 return "" + (int)((val - 64) / 64.0 * 200.0) + "%";
@@ -1104,6 +1108,7 @@ public class Blofeld extends Synth
 
         comp = new LabelledDial("Noise", this, "noisebalance", color, 0, 127)
             {
+            public boolean isSymmetric() { return true; } 
             public String map(int val)
                 {
                 val -= 64;
@@ -1127,6 +1132,7 @@ public class Blofeld extends Synth
 
         comp = new LabelledDial("Ringmod", this, "ringmodbalance", color, 0, 127)
             {
+            public boolean isSymmetric() { return true; } 
             public String map(int val)
                 {
                 val -= 64;
@@ -1204,6 +1210,7 @@ public class Blofeld extends Synth
 
         comp = new LabelledDial("Keytrack", this, "filter" + filter + "keytrack", color, 0, 127)
             {
+            public boolean isSymmetric() { return true; } 
             public String map(int val)
                 {
                 return "" + (int)((val - 64) / 64.0 * 200.0) + "%";
@@ -1229,6 +1236,7 @@ public class Blofeld extends Synth
 
         comp = new LabelledDial("Pan", this, "filter" + filter + "pan", color, 0, 127)
             {
+            public boolean isSymmetric() { return true; }
             public String map(int val)
                 {
                 val -= 64;
@@ -1324,6 +1332,7 @@ public class Blofeld extends Synth
 
         comp = new LabelledDial("Keytrack", this, "osc" + osc + "keytrack", color, 0, 127)
             {
+            public boolean isSymmetric() { return true; } 
             public String map(int val)
                 {
                 return "" + (int)((val - 64) / 64.0 * 200.0) + "%";
@@ -1350,6 +1359,7 @@ public class Blofeld extends Synth
 
         comp = new LabelledDial("Filter", this, "osc" + osc + "balance", color, 0, 127)
             {
+            public boolean isSymmetric() { return true; } 
             public String map(int val)
                 {
                 val -= 64;

@@ -172,7 +172,7 @@ public class Dial extends NumericalComponent
         field.setText(map(getState()));
         repaint();
         }
-
+        
     /** Returns the actual square within which the Dial's circle
         is drawn. */
     public Rectangle getDrawSquare()
@@ -203,6 +203,30 @@ public class Dial extends NumericalComponent
             }
         }
 
+	public boolean isSymmetric() { if (map != null) return map.isSymmetric(); else return getCanonicalSymmetric(); } 
+	
+	public boolean getCanonicalSymmetric() { return subtractForDisplay == 64; }
+	
+	public double getCanonicalStartAngle()
+		{
+		if (isSymmetric())
+			{
+			return 90 + (270 / 2);
+			}
+		else
+			{
+			return 270;
+			}
+		}
+		
+	public double getStartAngle()
+		{
+		if (map != null)
+			return map.getStartAngle();
+		else return getCanonicalStartAngle();
+		}
+		
+	
     public void paintComponent(Graphics g)
         {
         int min = getMin();
@@ -221,25 +245,32 @@ public class Dial extends NumericalComponent
         graphics.setPaint(Style.DIAL_UNSET_COLOR);
         graphics.setStroke(Style.DIAL_THIN_STROKE);
         Arc2D.Double arc = new Arc2D.Double();
-        arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270, -270, Arc2D.OPEN);
+        
+        double startAngle = getStartAngle();
+        double interval = -270;
+                
+        arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, startAngle, interval, Arc2D.OPEN);
+
         graphics.draw(arc);
         graphics.setStroke(Style.DIAL_THICK_STROKE);
         arc = new Arc2D.Double();
                 
-                
         int state = getState();
+        interval = -((state - min) / (double)(max - min) * 265) - 5;
+
         if (status == STATUS_DIAL_DYNAMIC)
             {
             graphics.setPaint(Style.DIAL_DYNAMIC_COLOR);
             if (state == min)
                 {
+                interval = -5;
                 // If we're basically at zero, we still want to show a little bit while the user is scrolling so
                 // he gets some feedback. 
-                arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270,  -5, Arc2D.OPEN);
+                //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270,  -5, Arc2D.OPEN);
                 }
             else
                 {
-                arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270,  -((state - min) / (double)(max - min) * 265) - 5, Arc2D.OPEN);
+                //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270,  -((state - min) / (double)(max - min) * 265) - 5, Arc2D.OPEN);
                 }
             }
         else
@@ -247,13 +278,16 @@ public class Dial extends NumericalComponent
             graphics.setPaint(staticColor);
             if (state == min)
                 {
+                interval = 0;
                 // do nothing.  Here we'll literally draw a zero
                 }
             else
                 {
-                arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270,  -((state - min) / (double)(max - min) * 265) - 5, Arc2D.OPEN);
+                //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270,  -((state - min) / (double)(max - min) * 265) - 5, Arc2D.OPEN);
                 }
             }
+
+		arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, startAngle, interval, Arc2D.OPEN);            
         graphics.draw(arc);
         }
 
@@ -262,6 +296,8 @@ public class Dial extends NumericalComponent
         {
         /** Maps an integer to an appropriate String value. */ 
         public String map(int val); 
+        public boolean isSymmetric(); 
+        public double getStartAngle();
         }
     }
 

@@ -51,6 +51,10 @@ public class LabelledDial extends NumericalComponent implements Dial.Map
 
     public String map(int val) { return "" + (val - dial.subtractForDisplay); }
 
+    public boolean isSymmetric() { return dial.getCanonicalSymmetric(); }
+    
+    public double getStartAngle() { return dial.getCanonicalStartAngle(); }
+
     /** Adds a second (or third or fourth or more!) label to the dial, to allow
         for multiline labels. */
     public void setSecondLabel(String _label)

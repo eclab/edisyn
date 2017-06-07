@@ -78,12 +78,8 @@ patch are replaced with the old patch.  Then Edisyn will then send the patch to 
 
 * *Randomize* randomizes the editor's current patch, then sends it to the synthesizer.
 
-<<<<<<< .mine
-* *Randomize* randomizes the editor's current patch, then sends it to the synthesizer.
-=======
 * *Send Patch* sends the current patch to the synthesizer.  This isn't actually used much since other commands
 send the patch automatically.
->>>>>>> .r15
 
 * *Write Patch* writes the patch to a given location in the synthesizer.
 

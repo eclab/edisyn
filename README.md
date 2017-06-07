@@ -114,6 +114,6 @@ Randomize and Send isn't very useful right now.  I'm working on it.
 Everything has to be sent via sysex for the moment: I don't have code written to make it easy to send CC or NRPN
 if you wanted to build a patch which did that.
 
-Making a new panel is slow.  Profiling suggests that the primary reason for this is that JComboBox construction
+Popping up a new panel is slow.  Profiling suggests that the primary reason for this is that JComboBox construction
 is slow.  So I can't get around it.
 

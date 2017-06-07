@@ -28,30 +28,39 @@ For the time being, to install Edisyn you need to do the following three things.
 
 ## Running
 
-Double click on the file `edisyn.1.jar`
+Double click on the file `edisyn.2.jar`
 
 Edisyn should launch and either present you with a window asking what MIDI interface you want to use, or tell
-you that there are no avaialble MIDI interfaces, and that you'll need to work offline.
+you that there are no available MIDI interfaces, and that you'll need to work offline.
 
 
 ### The Editor Pane
 
 The editor pane should be self-explanatory.  There are four tabs which together cover all of the parameters of 
-the synthesizer.  The first tab, *Oscillators and Filters*, contains an are called *Waldorf Blofeld* which
+the synthesizer.  The first tab, *Oscillators and Filters*, also contains an area called *Waldorf Blofeld* which
 lets you set the patch name and category, bank, number, and Blofeld ID.   The bank, number, and ID are mostly
 for saving out to sysex files: whenever you upload or download patch to/from the Blofeld, you'll be prompted
 to revise those if necessary.
 
 ### The File Menu
 
-* *New* creates a new editor pane.  Note that only the frontmost editor pane will receive MIDI.  So if you for
+* *New* creates a new editor pane, set to the default (the Blofeld's Init patch setting).  Note that only the frontmost editor pane will receive MIDI.  So if you for
 some reason set up both editor panes with the same interface, then request MIDI from one pane, then quickly
 switch to the other pane, you could in theory get the MIDI sent to the other pane.  So don't do that.
 
-* *Load* loads a sysex file into the existing editor pane.  It's called Load instead of Open because it 
+* *Load...* loads a sysex file into the existing editor pane.  It's called Load instead of Open because it 
 doesn't open a new window.
 
+* *Close Window* closes, well, you know, it closes, um, the window.
+
 * *Save* and *Save As...* save to a sysex file.
+
+* *Reset to Default* resets the window to display the Blofeld's Init patch setting.
+
+* *Export Diff to Text...* saves out to a text file a line-by-line description of every parameter which is *different* 
+from the default Init patch setting, plus the current value it's set to.  The patch value is either a string (in the
+case of the Patch name) or a number from 0...127: this may not be that useful to you, but the parameter names might
+be useful if you want to publish your patch on a sebsite and need to know which parameter settings to mention. 
 
 
 ### The MIDI Menu
@@ -69,8 +78,12 @@ patch are replaced with the old patch.  Then Edisyn will then send the patch to 
 
 * *Randomize* randomizes the editor's current patch, then sends it to the synthesizer.
 
+<<<<<<< .mine
+* *Randomize* randomizes the editor's current patch, then sends it to the synthesizer.
+=======
 * *Send Patch* sends the current patch to the synthesizer.  This isn't actually used much since other commands
 send the patch automatically.
+>>>>>>> .r15
 
 * *Write Patch* writes the patch to a given location in the synthesizer.
 

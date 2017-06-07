@@ -111,7 +111,18 @@ public class Dial extends NumericalComponent
         field.setFont(Style.DIAL_FONT);
         field.setBackground(Style.TRANSPARENT);
         field.setForeground(Style.TEXT_COLOR);
-                
+        
+        addMouseWheelListener(new MouseWheelListener()
+        	{
+        	public void mouseWheelMoved(MouseWheelEvent e) 
+        	    {
+        	    int val = getState() +  e.getWheelRotation();
+        	    if (val > getMax()) val = getMax();
+        	    if (val < getMin()) val = getMin();
+        	    setState(val);
+				}
+        	});
+        
         addMouseListener(new MouseAdapter()
             {
             public void mousePressed(MouseEvent e)

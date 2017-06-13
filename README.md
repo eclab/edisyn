@@ -1,5 +1,5 @@
 # edisyn
-Synthesizer Patch Editor (Version 2)
+Synthesizer Patch Editor (Version 3)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -13,8 +13,10 @@ has no graphical interface editor system like Ctrlr, but it's designed to make t
 At present Edisyn *only runs on OS X* (well, I've only tried it on OS X, that's its target).  If you try running
 it elsewhere, you're on your own.
 
-This is Edisyn version 2, a very early prerelease which doesn't feel very MacOS like yet, and which has lots of
+This is Edisyn version 3, a very early prerelease which doesn't feel very MacOS like yet, and which has lots of
 wires sticking out.  But it works!  Try it out on your Blofeld.
+
+There is also part of an editor for the Waldorf II/XT/Xtk, but it's not done yet.
 
 
 ## Installation

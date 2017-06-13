@@ -27,7 +27,7 @@ public class Style
     /** Transparent color. */
     public static final Color TRANSPARENT = new Color(0,0,0,0);
     /** Small font, primarily for labels, button and combo box text. */
-    public static final Font SMALL_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 10);
+    public static Font SMALL_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 10);
     /** Medium-sized font, used primarily in the center of a Dial. */
     public static final Font MEDIUM_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
     /** Large Font, primarily for category headers. */
@@ -56,7 +56,12 @@ public class Style
     public static final Color COLOR_C = Color.yellow;
     /** Color for the category holding critical global stuff like patch name, patch number, etc. */
     public static final Color COLOR_GLOBAL = Color.white;
-
+    
+    
+    /////// CHOOSER CONSTANTS
+    
+    public static Insets CHOOSER_INSETS = null;  // no insets
+    
 
     /////// VBOX AND HBOX CONSTANTS
 
@@ -92,4 +97,31 @@ public class Style
     public static final int ENVELOPE_DISPLAY_BORDER_THICKNESS = 10;
     /** Thickness of effective top border above the Envelope Display. */
     public static final int ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS = 0;
+    
+
+    private static String OS = System.getProperty("os.name").toLowerCase();
+
+    public static boolean isWindows() 
+    	{
+        return (OS.indexOf("win") >= 0);
+	    }
+
+    public static boolean isMac() 
+    	{
+        return (OS.indexOf("mac") >= 0);
+	    }
+
+    public static boolean isUnix() 
+    	{
+        return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
+    	}
+    	
+    static
+    	{
+    	if (true) //isUnix())
+    		{
+    		SMALL_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 9);
+    		CHOOSER_INSETS = new Insets(0, 0, 2, 4); 
+    		}
+    	}    
     }

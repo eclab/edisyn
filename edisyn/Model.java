@@ -48,6 +48,8 @@ public class Model
     HashSet immutable = new HashSet();
     HashMap special = new HashMap();
     HashMap defaults = new HashMap();
+    
+    String lastKey = null;
 
     public static final String ALL_KEYS = "ALL_KEYS";
     
@@ -69,6 +71,11 @@ public class Model
         return (String[])(storage.keySet().toArray(new String[0]));
         }
         
+    public String getLastKey()
+    	{
+    	return lastKey;
+    	}
+    
     /** Add the given integer as a default for the key. */
     public void addDefault(String key, int value)
         {
@@ -113,6 +120,7 @@ public class Model
                 ((Updatable)(list.get(i))).update(key, this);
                 }
             }
+        lastKey = key;
         }
         
 
@@ -136,6 +144,7 @@ public class Model
                 ((Updatable)(list.get(i))).update(key, this);
                 }
             }
+        lastKey = key;
         }
         
     public void resetToDefaults()
@@ -155,6 +164,7 @@ public class Model
                     }
                 }
             }
+        lastKey = null;
         }
                 
     /** Returns an array of integer values associated with this

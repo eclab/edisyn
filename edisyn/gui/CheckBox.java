@@ -43,7 +43,9 @@ public class CheckBox extends NumericalComponent
     	{
     	width = val;
     	}
-                
+              
+    public JCheckBox getCheckBox() { return check; }
+      
     public CheckBox(String label, Synth synth, String key, boolean flipped)
         {
         super(synth, key);

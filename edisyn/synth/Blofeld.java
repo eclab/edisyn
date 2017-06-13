@@ -298,8 +298,6 @@ public class Blofeld extends Synth
         }
 
 
-
-
     // Adds the Arpeggiator Patterns category       
     public JComponent addArpeggiatorPatterns(Color color)
         {
@@ -591,6 +589,10 @@ public class Blofeld extends Synth
 
 
 
+
+	///// MODULATION
+
+
     /** Add the Modulation category */
     public JComponent addModulation(Color color)
         {
@@ -629,8 +631,6 @@ public class Blofeld extends Synth
         category.add(main, BorderLayout.WEST);
         return category;
         }
-
-
 
 
 
@@ -691,6 +691,12 @@ public class Blofeld extends Synth
         return category;
         }
 
+
+
+
+
+
+	///// ENVELOPES
 
 
 
@@ -790,13 +796,6 @@ public class Blofeld extends Synth
 
         // One Shot
         envelopeDisplays[envelope - 1][2] = envelopeDisplays[envelope - 1][1];
-        /*
-          new EnvelopeDisplay(this, Color.red, 
-          new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "release" },
-          new String[] { null, null, "envelope" + envelope + "sustain", null },
-          new double[] { 0, (1/3.0)/127.0, (1/3.0) / 127.0,   (1/3.0)/127.0 },
-          new double[] { 0, 1.0, 1.0 / 127.0, 0 });
-        */
                         
         // Loop S1S2
         envelopeDisplays[envelope - 1][3] = new EnvelopeDisplay(this, Color.red, 
@@ -820,6 +819,11 @@ public class Blofeld extends Synth
         return category;
         }
 
+
+
+
+
+	///// LFOS
 
 
 
@@ -902,65 +906,15 @@ public class Blofeld extends Synth
 
 
 
-    public boolean gatherInfo(String title, Model change)
-        {
-        JComboBox bank = new JComboBox(BANKS);
-        bank.setEditable(false);
-        bank.setMaximumRowCount(32);
-        bank.setSelectedIndex(model.get("bank", 0));
-                
-        JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
 
-        JTextField id = new JTextField("" + model.get("id", 0), 3);
-                
-        while(true)
-            {
-            boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number", "Blofeld ID" }, 
-                new JComponent[] { bank, number, id }, title, "Enter the Bank, Patch number, and Blofeld ID.");
-                
-            if (result == false) 
-                return false;
-                                
-            int n;
-            try { n = Integer.parseInt(number.getText()); }
-            catch (NumberFormatException e)
-                {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1 ... 128 ", title, JOptionPane.ERROR_MESSAGE);
-                continue;
-                }
-            if (n < 1 || n > 128)
-                {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1 ... 128 ", title, JOptionPane.ERROR_MESSAGE);
-                continue;
-                }
-                                
-            int i;
-            try { i = Integer.parseInt(id.getText()); }
-            catch (NumberFormatException e)
-                {
-                JOptionPane.showMessageDialog(null, "The Blofeld ID must be an integer 0 ... 127 ", title, JOptionPane.ERROR_MESSAGE);
-                continue;
-                }
-            if (i < 0 || i > 127)
-                {
-                JOptionPane.showMessageDialog(null, "The Blofeld ID  must be an integer 0 ... 127 ", title, JOptionPane.ERROR_MESSAGE);
-                continue;
-                }
-                        
-            change.set("bank", bank.getSelectedIndex());
-            change.set("number", n - 1);
-            change.set("id", i);
-                        
-            return true;
-            }
-        }
 
-    public Category globalCategory;
-
+	///// PATCH INFORMATION
+	
+	
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
-        globalCategory = new Category("Waldorf Blofeld", color);
+        Category globalCategory = new Category("Waldorf Blofeld", color);
                 
         JComponent comp;
         String[] params;
@@ -1032,6 +986,11 @@ public class Blofeld extends Synth
         }
 
         
+        
+        
+        
+        
+    ////// VCA
 
 
     /** Add the Amplifier category. */
@@ -1066,6 +1025,11 @@ public class Blofeld extends Synth
         return category;
         }
 
+
+
+
+
+	///// OSCILLATORS
 
 
 
@@ -1158,113 +1122,8 @@ public class Blofeld extends Synth
         }
 
 
-
-    /** Add a Filter category */
-    public JComponent addFilter(int filter, Color color)
-        {
-        Category category = new Category("Filter " + filter, color);
-
-        JComponent comp;
-        String[] params;
-        HBox hbox = new HBox();
-        VBox vbox = new VBox();
-                
-        params = FILTER_TYPES;
-                
-        comp = new Chooser("Type", this, "filter" + filter + "type", params);
-        model.setSpecial("filter" + filter + "type", 0);
-        vbox.add(comp);
-                
-        params = DRIVE_CURVES;
-        comp = new Chooser("Drive Curve", this, "filter" + filter + "drivecurve", params);
-        vbox.add(comp);
-
-        hbox.add(vbox);
-        vbox = new VBox();
-                
-        params = MOD_SOURCES;
-        comp = new Chooser("Mod Source", this, "filter" + filter + "modsource", params);
-        model.setSpecial("filter" + filter + "modsource", 0);
-        vbox.add(comp);
-
-        params = MOD_SOURCES;
-        comp = new Chooser("Pan Source", this, "filter" + filter + "pansource", params);
-        model.setSpecial("filter" + filter + "pansource", 0);
-        vbox.add(comp);
-
-        hbox.add(vbox);
-        vbox = new VBox();
-
-        params = FM_SOURCES;
-        comp = new Chooser("FM Source", this, "filter" + filter + "fmsource", params);
-        model.setSpecial("filter" + filter + "fmsource", 0);
-        vbox.add(comp);
-
-        if (filter == 2)
-            {
-            comp = new CheckBox("Serial", this, "filterrouting");
-            vbox.add(comp);
-            }
-
-        hbox.add(vbox);
-                
-        comp = new LabelledDial("Cutoff", this, "filter" + filter + "cutoff", color, 0, 127);
-        hbox.add(comp);
-                
-        comp = new LabelledDial("Resonance", this, "filter" + filter + "resonance", color, 0, 127);
-        hbox.add(comp);
-
-        comp = new LabelledDial("Drive", this, "filter" + filter + "drive", color, 0, 127);
-        hbox.add(comp);
-
-        comp = new LabelledDial("Keytrack", this, "filter" + filter + "keytrack", color, 0, 127)
-            {
-            public boolean isSymmetric() { return true; } 
-            public String map(int val)
-                {
-                return "" + (int)((val - 64) / 64.0 * 200.0) + "%";
-                }
-            };
-        hbox.add(comp);
-
-        comp = new LabelledDial("Env", this, "filter" + filter + "envamount", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Amount");
-        hbox.add(comp);
-
-        comp = new LabelledDial("Env", this, "filter" + filter + "envvelocity", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Velocity");
-        hbox.add(comp);
-                
-        comp = new LabelledDial("Mod", this, "filter" + filter + "modamount", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Amount");
-        hbox.add(comp);
-                
-        comp = new LabelledDial("FM", this, "filter" + filter + "fmamount", color, 0, 127);
-        ((LabelledDial)comp).setSecondLabel("Amount");
-        hbox.add(comp);
-
-        comp = new LabelledDial("Pan", this, "filter" + filter + "pan", color, 0, 127)
-            {
-            public boolean isSymmetric() { return true; }
-            public String map(int val)
-                {
-                val -= 64;
-                if (val < 0) return "L " + Math.abs(val);
-                else if (val > 0) return "R " + val;
-                else return "--";
-                }
-            };
-        hbox.add(comp);
-
-        comp = new LabelledDial("Pan", this, "filter" + filter + "panamount", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Amount");
-        hbox.add(comp);
-
-        category.add(hbox, BorderLayout.WEST);
-        return category;
-        }
-                
-
+	// Changes the wavetable chooser to be either a list of wavetables or
+	// a list of sample numbers
 	public void buildWavetable(Chooser chooser, int osc, int bank)
 		{
 		if (bank == 0)
@@ -1443,6 +1302,126 @@ public class Blofeld extends Synth
         return category;
         }
         
+
+
+
+
+
+
+	///// FILTERS
+
+
+    /** Add a Filter category */
+    public JComponent addFilter(int filter, Color color)
+        {
+        Category category = new Category("Filter " + filter, color);
+
+        JComponent comp;
+        String[] params;
+        HBox hbox = new HBox();
+        VBox vbox = new VBox();
+                
+        params = FILTER_TYPES;
+                
+        comp = new Chooser("Type", this, "filter" + filter + "type", params);
+        model.setSpecial("filter" + filter + "type", 0);
+        vbox.add(comp);
+                
+        params = DRIVE_CURVES;
+        comp = new Chooser("Drive Curve", this, "filter" + filter + "drivecurve", params);
+        vbox.add(comp);
+
+        hbox.add(vbox);
+        vbox = new VBox();
+                
+        params = MOD_SOURCES;
+        comp = new Chooser("Mod Source", this, "filter" + filter + "modsource", params);
+        model.setSpecial("filter" + filter + "modsource", 0);
+        vbox.add(comp);
+
+        params = MOD_SOURCES;
+        comp = new Chooser("Pan Source", this, "filter" + filter + "pansource", params);
+        model.setSpecial("filter" + filter + "pansource", 0);
+        vbox.add(comp);
+
+        hbox.add(vbox);
+        vbox = new VBox();
+
+        params = FM_SOURCES;
+        comp = new Chooser("FM Source", this, "filter" + filter + "fmsource", params);
+        model.setSpecial("filter" + filter + "fmsource", 0);
+        vbox.add(comp);
+
+        if (filter == 2)
+            {
+            comp = new CheckBox("Serial", this, "filterrouting");
+            vbox.add(comp);
+            }
+
+        hbox.add(vbox);
+                
+        comp = new LabelledDial("Cutoff", this, "filter" + filter + "cutoff", color, 0, 127);
+        hbox.add(comp);
+                
+        comp = new LabelledDial("Resonance", this, "filter" + filter + "resonance", color, 0, 127);
+        hbox.add(comp);
+
+        comp = new LabelledDial("Drive", this, "filter" + filter + "drive", color, 0, 127);
+        hbox.add(comp);
+
+        comp = new LabelledDial("Keytrack", this, "filter" + filter + "keytrack", color, 0, 127)
+            {
+            public boolean isSymmetric() { return true; } 
+            public String map(int val)
+                {
+                return "" + (int)((val - 64) / 64.0 * 200.0) + "%";
+                }
+            };
+        hbox.add(comp);
+
+        comp = new LabelledDial("Env", this, "filter" + filter + "envamount", color, 0, 127, 64);
+        ((LabelledDial)comp).setSecondLabel("Amount");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Env", this, "filter" + filter + "envvelocity", color, 0, 127, 64);
+        ((LabelledDial)comp).setSecondLabel("Velocity");
+        hbox.add(comp);
+                
+        comp = new LabelledDial("Mod", this, "filter" + filter + "modamount", color, 0, 127, 64);
+        ((LabelledDial)comp).setSecondLabel("Amount");
+        hbox.add(comp);
+                
+        comp = new LabelledDial("FM", this, "filter" + filter + "fmamount", color, 0, 127);
+        ((LabelledDial)comp).setSecondLabel("Amount");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Pan", this, "filter" + filter + "pan", color, 0, 127)
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                val -= 64;
+                if (val < 0) return "L " + Math.abs(val);
+                else if (val > 0) return "R " + val;
+                else return "--";
+                }
+            };
+        hbox.add(comp);
+
+        comp = new LabelledDial("Pan", this, "filter" + filter + "panamount", color, 0, 127, 64);
+        ((LabelledDial)comp).setSecondLabel("Amount");
+        hbox.add(comp);
+
+        category.add(hbox, BorderLayout.WEST);
+        return category;
+        }
+                
+
+
+
+
+
+
 
 
     /** Map of parameter -> index in the allParameters array. */
@@ -1849,6 +1828,14 @@ public class Blofeld extends Synth
 
 
 
+
+
+	////////////// SYNTH ABSTRACT METHOD IMPLEMENTATIONS  //////////////////
+
+
+
+	// READING AND WRITING
+
     public byte[] emit(String key)
         {
         if (key.equals("id")) return new byte[0];  // this is not emittable
@@ -1936,7 +1923,7 @@ public class Blofeld extends Synth
             }
         }
     
-    
+
     
     
     public byte[] emit(Model tempModel)
@@ -2026,79 +2013,6 @@ public class Blofeld extends Synth
         }
 
 
-    /** Generate a Waldorf checksum of the data bytes */
-    byte produceChecksum(byte[] bytes)
-        {
-        //      From the sysex document:
-        //
-        //      "Sum of all databytes truncated to 7 bits.
-        //  The addition is done in 8 bit format, the result is    
-        //  masked to 7 bits (00h to 7Fh). A checksum of 7Fh is
-        //  always accepted as valid.
-        //  IMPORTANT: the MIDI status-bytes as well as the 
-        //  ID's are not used for computing the checksum."
-                
-        byte b = 0;  // I *think* signed will work
-        for(int i = 0; i < bytes.length; i++)
-            b += bytes[i];
-        
-        b = (byte)(b & (byte)127);
-        
-        return b;
-        }
-
-
-    public byte[] requestDump(Model tempModel)
-        {
-        if (tempModel == null)
-            tempModel = getModel();
-        byte DEV = (byte)tempModel.get("id", 0);
-        byte BB = (byte)tempModel.get("bank", 0);
-        byte NN = (byte)tempModel.get("number", 0);
-        return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x00, BB, NN, 0x00, (byte)0xF7 };
-        }
-        
-    public static boolean recognize(byte[] data)
-        {
-        boolean v = (data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x3E &&
-            data[2] == (byte)0x13 &&
-            data.length == 392);
-        return v;
-        }
-        
-        
-    public int getExpectedSysexLength() { return 392; }
-        
-        
-    /** Verify that all the parameters are within valid values, and tweak them if not. */
-    void revise()
-        {
-        for(int i = 0; i < allParameters.length; i++)
-            {
-            String key = allParameters[i];
-            if (!model.isString(key))
-                {
-                if (model.minExists(key) && model.maxExists(key))
-                    {
-                    int val = model.get(key, 0);
-                    if (val < model.getMin(key))
-                        model.set(key, model.getMin(key));
-                    if (val > model.getMax(key))
-                        model.set(key, model.getMax(key));
-                    }
-                }
-            }
-        // handle "name" specially
-        StringBuffer name = new StringBuffer(model.get("name", "Init            "));  // has to be 16 long
-        for(int i = 0; i < name.length(); i++)
-            {
-            char c = name.charAt(i);
-            if (c < 32 || c > 127)
-                name.setCharAt(i, (char)32);
-            }
-        model.set("name", name.toString());
-        }
         
     public void parse(byte[] data)
         {
@@ -2170,6 +2084,141 @@ public class Blofeld extends Synth
         revise();       
         }
         
+
+    /** Generate a Waldorf checksum of the data bytes */
+    byte produceChecksum(byte[] bytes)
+        {
+        //      From the sysex document:
+        //
+        //      "Sum of all databytes truncated to 7 bits.
+        //  The addition is done in 8 bit format, the result is    
+        //  masked to 7 bits (00h to 7Fh). A checksum of 7Fh is
+        //  always accepted as valid.
+        //  IMPORTANT: the MIDI status-bytes as well as the 
+        //  ID's are not used for computing the checksum."
+                
+        byte b = 0;  // I *think* signed will work
+        for(int i = 0; i < bytes.length; i++)
+            b += bytes[i];
+        
+        b = (byte)(b & (byte)127);
+        
+        return b;
+        }
+
+
+    public byte[] requestDump(Model tempModel)
+        {
+        if (tempModel == null)
+            tempModel = getModel();
+        byte DEV = (byte)tempModel.get("id", 0);
+        byte BB = (byte)tempModel.get("bank", 0);
+        byte NN = (byte)tempModel.get("number", 0);
+        return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x00, BB, NN, 0x00, (byte)0xF7 };
+        }
+    
+    
+    public static boolean recognize(byte[] data)
+        {
+        boolean v = (data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x3E &&
+            data[2] == (byte)0x13 &&
+            data.length == 392);
+        return v;
+        }
+    
+        
+    public int getExpectedSysexLength() { return 392; }
+    
+    
+    
+    
+    
+    /////// OTHER ABSTRACT METHODS
+    
+    public boolean gatherInfo(String title, Model change)
+        {
+        JComboBox bank = new JComboBox(BANKS);
+        bank.setEditable(false);
+        bank.setMaximumRowCount(32);
+        bank.setSelectedIndex(model.get("bank", 0));
+                
+        JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
+
+        JTextField id = new JTextField("" + model.get("id", 0), 3);
+                
+        while(true)
+            {
+            boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number", "Blofeld ID" }, 
+                new JComponent[] { bank, number, id }, title, "Enter the Bank, Patch number, and Blofeld ID.");
+                
+            if (result == false) 
+                return false;
+                                
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
+                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1 ... 128 ", title, JOptionPane.ERROR_MESSAGE);
+                continue;
+                }
+            if (n < 1 || n > 128)
+                {
+                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1 ... 128 ", title, JOptionPane.ERROR_MESSAGE);
+                continue;
+                }
+                                
+            int i;
+            try { i = Integer.parseInt(id.getText()); }
+            catch (NumberFormatException e)
+                {
+                JOptionPane.showMessageDialog(null, "The Blofeld ID must be an integer 0 ... 127 ", title, JOptionPane.ERROR_MESSAGE);
+                continue;
+                }
+            if (i < 0 || i > 127)
+                {
+                JOptionPane.showMessageDialog(null, "The Blofeld ID  must be an integer 0 ... 127 ", title, JOptionPane.ERROR_MESSAGE);
+                continue;
+                }
+                        
+            change.set("bank", bank.getSelectedIndex());
+            change.set("number", n - 1);
+            change.set("id", i);
+                        
+            return true;
+            }
+        }
+
+    /** Verify that all the parameters are within valid values, and tweak them if not. */
+    void revise()
+        {
+        for(int i = 0; i < allParameters.length; i++)
+            {
+            String key = allParameters[i];
+            if (!model.isString(key))
+                {
+                if (model.minExists(key) && model.maxExists(key))
+                    {
+                    int val = model.get(key, 0);
+                    if (val < model.getMin(key))
+                        model.set(key, model.getMin(key));
+                    if (val > model.getMax(key))
+                        model.set(key, model.getMax(key));
+                    }
+                }
+            }
+        // handle "name" specially
+        StringBuffer name = new StringBuffer(model.get("name", "Init            "));  // has to be 16 long
+        for(int i = 0; i < name.length(); i++)
+            {
+            char c = name.charAt(i);
+            if (c < 32 || c > 127)
+                name.setCharAt(i, (char)32);
+            }
+        model.set("name", name.toString());
+        }
+        
+        
     public void merge(Model otherModel, double probability)
         {
         String[] keys = getModel().getKeys();
@@ -2195,6 +2244,7 @@ public class Blofeld extends Synth
             }
         }
     
+    
     public void immutableMutate(String key)
         {
         // we randomize these specially, taking care not to do the high waves
@@ -2207,16 +2257,18 @@ public class Blofeld extends Synth
             }
         }
         
-    public Synth doNew()
-        {
-        return new Blofeld();
-        }
 
     public boolean requestCloseWindow() { return true; }
 
     public String getSynthName() { return "Waldorf Blofeld"; }
     
     public String getPatchName() { return model.get("name", "Init            "); }
+    
+    
+    
+    
+    
+    /////// DEFAULT SETTINGS
     
     
     /** Adds all the defaults in DEFAULT_PARAMS to the Model's defaults storage. */

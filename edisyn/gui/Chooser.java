@@ -60,6 +60,13 @@ public class Chooser extends NumericalComponent
                 }
         }
 
+    public Insets getInsets() 
+    	{ 
+    	if (Style.CHOOSER_INSETS == null)
+    		return super.getInsets();
+    	else return Style.CHOOSER_INSETS; 
+    	}
+
     /** Creates a JComboBox with the given label, modifying the given key in the Style.
         The elements in the box are given by elements, and their corresponding numerical
         values in the model are given in vals. */

@@ -85,13 +85,6 @@ public abstract class Synth extends JComponent implements Updatable
     */
     public abstract byte[] requestDump(Model tempModel);
     
-    /** Creates and returns new, empty synth editor window of the same type as yours.  
-        The window should not be visible.  If withMIDIConnection is FALSE,
-        then the Synth should not attempt to connect to MIDI -- it'll just be used as
-        a temporary repository, probably for merging, and then discarded.
-        See Blofeld.doNew() for inspiration. */
-    public abstract Synth doNew();
-    
     /** Returns the expected length of a sysex patch dump for your type of synthesizer. */
     public abstract int getExpectedSysexLength();
 
@@ -287,7 +280,7 @@ public abstract class Synth extends JComponent implements Updatable
                             if (merging != 0.0)
                                 {
                                 merging = 0.0;
-                                Synth newSynth = doNew();
+                                Synth newSynth = instantiate(getClass(), getSynthName(), true, false, tuple);
                                 newSynth.parse(data);
                                 setSendMIDI(false);
                                 merge(newSynth.getModel(), 0.5);
@@ -462,17 +455,37 @@ public abstract class Synth extends JComponent implements Updatable
         }
            
            
-    void generateNewSynth(Synth newSynth)
+    static Synth instantiate(Class _class, String name, boolean throwaway, boolean setupMIDI, Midi.Tuple tuple)
     	{
-		newSynth.sprout();
-		JFrame frame = ((JFrame)(SwingUtilities.getRoot(newSynth)));
-		frame.setVisible(true);
-		newSynth.setupMIDI("Choose MIDI devices to send to and receive from.", tuple);
-    	}     
+		try
+			{
+			Synth synth = (Synth)(_class.newInstance());
+			if (!throwaway)
+				{
+				synth.sprout();
+				JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+				frame.setVisible(true);
+				if (setupMIDI) 
+					synth.setupMIDI("Choose MIDI devices to send to and receive from.", tuple);
+				}
+			return synth;
+			}
+		catch (IllegalAccessException e2)
+			{
+			e2.printStackTrace();
+			JOptionPane.showMessageDialog(null, "An error occurred while creating the synth editor for \n" + name, "Creation Error", JOptionPane.ERROR_MESSAGE);
+			}
+		catch (InstantiationException e2)
+			{
+			e2.printStackTrace();
+			JOptionPane.showMessageDialog(null, "An error occurred while creating the synth editor for \n" + name, "Creation Error", JOptionPane.ERROR_MESSAGE);
+			}
+		return null;
+    	}    
 
 
-	Class[] synths = new Class[] { Blofeld.class, MicrowaveXT.class };
-	String[] synthNames = { "Waldorf Blofeld (Single)", "Waldorf Microwave II/XT/XTk (Single)" };
+	public static final Class[] synths = new Class[] { Blofeld.class, MicrowaveXT.class };
+	public static final String[] synthNames = { "Waldorf Blofeld (Single)", "Waldorf Microwave II/XT/XTk (Single)" };
           
     public JFrame sprout()
         {
@@ -489,7 +502,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed(ActionEvent e)
                 {
-                generateNewSynth(doNew());
+                instantiate(Synth.this.getClass(), getSynthName(), false, true, tuple);
                 }
             });
 
@@ -503,37 +516,12 @@ public abstract class Synth extends JComponent implements Updatable
             	{
             	public void actionPerformed(ActionEvent e)
             	    {
-            	    try
-            	    	{
-            	    	Synth synth = (Synth)(synths[_i].newInstance());
-	            	    generateNewSynth(synth);
-	            	    }
-	            	catch (IllegalAccessException e2)
-	            		{
-	            		e2.printStackTrace();
-                		JOptionPane.showMessageDialog(Synth.this, "An error occurred while creating the synth editor for " + synthNames[_i], "Creation Error", JOptionPane.ERROR_MESSAGE);
-	            		}
-	            	catch (InstantiationException e2)
-	            		{
-	            		e2.printStackTrace();
-                		JOptionPane.showMessageDialog(Synth.this, "An error occurred while creating the synth editor for " + synthNames[_i], "Creation Error", JOptionPane.ERROR_MESSAGE);
-	            		}
+            	    instantiate(synths[_i], synthNames[_i], false, true, tuple);
             	    }
             	});
             newSynth.add(synthMenu);
         	}
         
-        newSynth.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                Synth newSynth = doNew();
-                newSynth.sprout();
-                JFrame frame = ((JFrame)(SwingUtilities.getRoot(newSynth)));
-                frame.setVisible(true);
-                newSynth.setupMIDI("Choose MIDI devices to send to and receive from.", tuple);
-                }
-            });
                 
         JMenuItem open = new JMenuItem("Load...");
         open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -702,14 +690,6 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                /*
-                  if (tuple == null || tuple.out == null)
-                  {
-                  if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
-                  return;
-                  }
-                */
-                
                 mutate(1.0);
                 sendAllParameters();
                 }
@@ -1092,6 +1072,27 @@ public abstract class Synth extends JComponent implements Updatable
         p.add(new JLabel("    "), BorderLayout.SOUTH);
         panel.add(p, BorderLayout.NORTH);
         return (JOptionPane.showConfirmDialog(root, panel, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null) == JOptionPane.OK_OPTION);
+        }
+           
+           
+    /** Pops up at the start of the program to ask the user what synth he wants. */
+    public static Synth doNewSynthPanel()
+    	{
+        JPanel p = new JPanel();
+        p.setLayout(new BorderLayout());
+        p.add(new JLabel("    "), BorderLayout.NORTH);
+        p.add(new JLabel("Select a Synthesizer to Edit"), BorderLayout.CENTER);
+        p.add(new JLabel("    "), BorderLayout.SOUTH);
+
+		JPanel p2 = new JPanel();
+        p2.setLayout(new BorderLayout());
+		p2.add(p, BorderLayout.NORTH);
+		JComboBox combo = new JComboBox(synthNames);
+		p2.add(combo, BorderLayout.CENTER);
+        
+        int result = JOptionPane.showOptionDialog(null, p2, "Edisyn", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Run", "Cancel", "Disconnected" }, "Run");
+        if (result == 1) return null;
+        else return instantiate(synths[combo.getSelectedIndex()], synthNames[combo.getSelectedIndex()], false, (result == 0), null);
         }
                 
     }

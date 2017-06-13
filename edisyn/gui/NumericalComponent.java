@@ -76,8 +76,7 @@ public abstract class NumericalComponent extends JComponent implements Updatable
             if (val > max) val = max;
             }
                 
-        if (!synth.getModel().exists(key) ||
-            getState() != val)
+        if (!synth.getModel().exists(key) || getState() != val)
             {
             synth.getModel().set(key, val); 
             update(key, synth.getModel());

@@ -1163,7 +1163,7 @@ public class Blofeld extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
                 
-		final Chooser chooser = new Chooser("Wave", this, "osc" + osc + "shape", new String[0]);
+		final Chooser chooser = new Chooser("Wave", this, "osc" + osc + "shape", new String[]{ "Yo Mama" });
         comp = chooser;
         vbox.add(comp);
         buildWavetable(chooser, osc, 0);

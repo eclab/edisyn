@@ -70,11 +70,11 @@ public class Chooser extends NumericalComponent
     /** Creates a JComboBox with the given label, modifying the given key in the Style.
         The elements in the box are given by elements, and their corresponding numerical
         values in the model are given in vals. */
-    public Chooser(String _label, Synth synth, String key, String[] elements, int[] vals)
-        {
-        this(_label, synth, key, elements);
-        System.arraycopy(vals, 0, this.vals, 0, vals.length);
-        }
+    //public Chooser(String _label, Synth synth, String key, String[] elements, int[] vals)
+    //    {
+    //    this(_label, synth, key, elements);
+    //    System.arraycopy(vals, 0, this.vals, 0, vals.length);
+    //    }
                 
     /** Creates a JComboBox with the given label, modifying the given key in the Style.
         The elements in the box are given by elements, and their corresponding numerical
@@ -83,14 +83,6 @@ public class Chooser extends NumericalComponent
         {
         super(synth, key);
                 
-        vals = new int[elements.length];
-        for(int i = 0; i < vals.length; i++) 
-            vals[i] = i;
-                        
-        setMin(0);
-        setMax(vals.length - 1);
-
-        label.setText("  " + _label);
         label.setFont(Style.SMALL_FONT);
         label.setBackground(Style.TRANSPARENT);
         label.setForeground(Style.TEXT_COLOR);
@@ -101,6 +93,8 @@ public class Chooser extends NumericalComponent
         combo.setEditable(false);
         combo.setFont(Style.SMALL_FONT);
         combo.setMaximumRowCount(32);
+        
+        setElements(_label, elements);
 
         setState(getState());
                 
@@ -143,8 +137,19 @@ public class Chooser extends NumericalComponent
     	{
         label.setText("  " + _label);
         combo.removeAllItems();
+        
         for(int i = 0; i < elements.length; i++)
         	combo.addItem(elements[i]);
+
+        vals = new int[elements.length];
+        for(int i = 0; i < vals.length; i++) 
+            vals[i] = i;
+                        
+        setMin(0);
+        setMax(elements.length - 1);
+        
+        combo.setSelectedIndex(0);
+        setState(combo.getSelectedIndex());
     	}
         
     public void paintComponent(Graphics g)

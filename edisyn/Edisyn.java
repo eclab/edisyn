@@ -21,8 +21,8 @@ public class Edisyn
     {
     public static void main(String[] args)
         {
-        MicrowaveXT blofeld = new MicrowaveXT();
-        //Blofeld blofeld = new Blofeld();
+        //MicrowaveXT blofeld = new MicrowaveXT();
+        Blofeld blofeld = new Blofeld();
         blofeld.sprout();
         JFrame frame = ((JFrame)(SwingUtilities.getRoot(blofeld)));
         frame.setVisible(true);

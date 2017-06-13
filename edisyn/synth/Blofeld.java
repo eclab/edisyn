@@ -93,7 +93,6 @@ public class Blofeld extends Synth
         setLayout(new BorderLayout());
                 
         tabs = new JTabbedPane();
-        tabs.setBackground(Style.BACKGROUND_COLOR);
                 
         /// SOUND PANEL
                 

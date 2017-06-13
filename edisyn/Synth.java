@@ -460,8 +460,20 @@ public abstract class Synth extends JComponent implements Updatable
         else
             return false;
         }
-                
-                        
+           
+           
+    void generateNewSynth(Synth newSynth)
+    	{
+		newSynth.sprout();
+		JFrame frame = ((JFrame)(SwingUtilities.getRoot(newSynth)));
+		frame.setVisible(true);
+		newSynth.setupMIDI("Choose MIDI devices to send to and receive from.", tuple);
+    	}     
+
+
+	Class[] synths = new Class[] { Blofeld.class, MicrowaveXT.class };
+	String[] synthNames = { "Waldorf Blofeld (Single)", "Waldorf Microwave II/XT/XTk (Single)" };
+          
     public JFrame sprout()
         {
         JFrame frame = new JFrame();
@@ -470,10 +482,48 @@ public abstract class Synth extends JComponent implements Updatable
         JMenu menu = new JMenu("File");
         menubar.add(menu);
 
-        JMenuItem _new = new JMenuItem("New");
+        JMenuItem _new = new JMenuItem("New " + getSynthName());
         _new.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(_new);
         _new.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                generateNewSynth(doNew());
+                }
+            });
+
+        JMenu newSynth = new JMenu("New Synth...");
+        menu.add(newSynth);
+        for(int i = 0; i < synths.length; i++)
+        	{
+        	final int _i = i;
+        	JMenuItem synthMenu = new JMenuItem(synthNames[i]);
+        	synthMenu.addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            	    {
+            	    try
+            	    	{
+            	    	Synth synth = (Synth)(synths[_i].newInstance());
+	            	    generateNewSynth(synth);
+	            	    }
+	            	catch (IllegalAccessException e2)
+	            		{
+	            		e2.printStackTrace();
+                		JOptionPane.showMessageDialog(Synth.this, "An error occurred while creating the synth editor for " + synthNames[_i], "Creation Error", JOptionPane.ERROR_MESSAGE);
+	            		}
+	            	catch (InstantiationException e2)
+	            		{
+	            		e2.printStackTrace();
+                		JOptionPane.showMessageDialog(Synth.this, "An error occurred while creating the synth editor for " + synthNames[_i], "Creation Error", JOptionPane.ERROR_MESSAGE);
+	            		}
+            	    }
+            	});
+            newSynth.add(synthMenu);
+        	}
+        
+        newSynth.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {

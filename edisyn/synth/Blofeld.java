@@ -80,6 +80,7 @@ public class Blofeld extends Synth
     // Produces a popup menu the same width as WAVES_LONG
     static final String[] WAVES_SHORT = new String[] { "Off               ", "Pulse", "Saw", "Triangle", "Sine" };
     static final String[] OSCILLATOR_OCTAVES = new String[] { "128'", "64'", "32'", "16'", "8'", "4'", "2'", "1'", "1/2'" };
+    static final String[] SAMPLE_BANKS = new String[] { "None", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L" };
         
         
     public Blofeld()
@@ -1014,7 +1015,15 @@ public class Blofeld extends Synth
         model.setImmutable("number", true);
         hbox.add(comp);
 
-        comp = new LabelledDial("Blofeld ID", this, "id", color, 0, 127);
+        comp = new LabelledDial("Blofeld ID", this, "id", color, 0, 127)
+        	{
+            public String map(int val)
+                {
+                if (val == 127)
+                	return "All";
+                else return "" + val;
+                }
+        	};
         model.setImmutable("id", true);
         hbox.add(comp);
 
@@ -1256,9 +1265,37 @@ public class Blofeld extends Synth
         }
                 
 
+	public void buildWavetable(Chooser chooser, int osc, int bank)
+		{
+		if (bank == 0)
+			{
+			if (chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0]))
+				return;
+			// maybe we can't do this ... checking....
+			String[] params1 = WAVES_LONG;
+			String[] params = new String[125];
+			System.arraycopy(params1, 0, params, 0, 73);
+			for(int i = 73; i < 86; i++)
+				params[i] = "Reserved " + (i - 6);
+			for(int i = 86; i < 125; i++)
+				params[i] = "User " + (i - 6);
+			if (osc == 3) params = WAVES_SHORT;
+			chooser.setElements("Wave", params);
+			}
+		else
+			{
+			if (!(chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0])))
+				return;
+			String[] params = new String[128];
+			for(int i = 0; i < 128; i++)
+				params[i] = "" + i + "              ";
+			chooser.setElements("Sample", params);
+			}
+		}
+	
 
     /** Add an Oscillator category */
-    public JComponent addOscillator(int osc, Color color)
+    public JComponent addOscillator(final int osc, Color color)
         {
         Category category = new Category("Oscillator " + osc, color);
 
@@ -1267,27 +1304,31 @@ public class Blofeld extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
                 
-        String[] params1 = WAVES_LONG;
-        params = new String[125];
-        System.arraycopy(params1, 0, params, 0, 73);
-        for(int i = 73; i < 86; i++)
-            params[i] = "Reserved " + (i - 6);
-        for(int i = 86; i < 125; i++)
-            params[i] = "User " + (i - 6);
-        if (osc == 3) params = WAVES_SHORT;
-        comp = new Chooser("Wave", this, "osc" + osc + "shape", params);
+		final Chooser chooser = new Chooser("Wave", this, "osc" + osc + "shape", new String[0]);
+        comp = chooser;
+        vbox.add(comp);
+        buildWavetable(chooser, osc, 0);
+        
+        // Lock the Wave chooser so it doesn't change size if it gets modified to
+        // a sample chooser 
+        Dimension d = chooser.getCombo().getPreferredSize();
+        chooser.getCombo().setPreferredSize(d);
+        chooser.getCombo().setMinimumSize(d);
+        chooser.getCombo().setMaximumSize(d);
+        
         if (osc == 3)
             model.setSpecial("osc" + osc + "shape", 0);
         else
             model.setImmutable("osc" + osc + "shape", true);
-        vbox.add(comp);
+
 
         if (osc != 3)
             {
             // 0 is ON for Limit WT, 1 is OFF.  It's flipped relative to other switches
             comp = new CheckBox("Limit WT", this, "osc" + osc + "limitwt", true);
             vbox.add(comp);
-            }
+          }
+            
                 
         if (osc == 2)
             {
@@ -1371,6 +1412,33 @@ public class Blofeld extends Synth
         ((LabelledDial)comp).setSecondLabel("Balance");
         hbox.add(comp);
 
+		if (osc != 3)
+			{
+            comp = new LabelledDial("Sample", this, "osc" + osc + "samplebank", color, 0, 12)
+            	{
+            	public String map(int val)
+                	{
+                	String[] oct = SAMPLE_BANKS;
+                	return oct[val];
+                	}
+				};
+        	((LabelledDial)comp).setSecondLabel("Bank [SL]");
+			
+			model.register("osc" + osc + "samplebank", new Updatable()
+				{
+   				public void update(String key, Model model)
+   					{
+   					int state = model.get(key, 0);
+   					buildWavetable(chooser, osc, state);
+   					// force an emit
+   					model.set("osc" + osc + "shape", model.get("osc" + osc + "shape", 0));
+   					}
+				});
+        	model.setImmutable("osc" + osc + "samplebank", true);
+
+            hbox.add(comp);
+            }
+
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
@@ -1396,14 +1464,14 @@ public class Blofeld extends Synth
     "osc1keytrack",
     "osc1fmsource",
     "osc1fmamount",
-    "osc1shape",
+    "osc1shape",					// *
     "osc1pulsewidth",
     "osc1pwmsource",
     "osc1pwmamount",
     "-",
     "-",
     "osc1limitwt",
-    "-",
+    "osc1samplebank",					// *
     "osc1brilliance",
     "osc2octave",                   // *
     "osc2semitone",
@@ -1412,14 +1480,14 @@ public class Blofeld extends Synth
     "osc2keytrack",
     "osc2fmsource",
     "osc2fmamount",
-    "osc2shape",
+    "osc2shape",					// *
     "osc2pulsewidth",
     "osc2pwmsource",
     "osc2pwmamount",
     "-",
     "-",
     "osc2limitwt",
-    "-",
+    "osc2samplebank",					// *
     "osc2brilliance",
     "osc3octave",                   // *
     "osc3semitone",
@@ -2200,7 +2268,8 @@ public class Blofeld extends Synth
     {"osc1pwmamount", "64"},    
     {"osc1brilliance", "0"},    
     {"osc1level", "127"},    
-    {"osc1balance", "0"},    
+    {"osc1balance", "0"},
+    {"osc1samplebank", "0"}, 
     {"osc2shape", "0"},    
     {"osc2limitwt", "0"},    
     {"osc2synctoosc3", "0"},    
@@ -2217,6 +2286,7 @@ public class Blofeld extends Synth
     {"osc2brilliance", "0"},    
     {"osc2level", "127"},    
     {"osc2balance", "0"},    
+    {"osc2samplebank", "0"}, 
     {"osc3shape", "0"},    
     {"osc3fmsource", "0"},    
     {"osc3pwmsource", "5"},    

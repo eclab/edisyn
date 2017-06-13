@@ -87,7 +87,7 @@ public class Chooser extends NumericalComponent
         label.setFont(Style.SMALL_FONT);
         label.setBackground(Style.TRANSPARENT);
         label.setForeground(Style.TEXT_COLOR);
-        label.setMaximumSize(label.getPreferredSize());
+        //label.setMaximumSize(label.getPreferredSize());
 
         combo = new JComboBox(elements);
         combo.putClientProperty("JComponent.sizeVariant", "small");
@@ -116,6 +116,29 @@ public class Chooser extends NumericalComponent
                 }
             });
         }
+    
+    public JComboBox getCombo()
+    	{
+    	return combo;
+    	}
+    	
+    public String getElement(int position)
+    	{
+    	return (String)(combo.getItemAt(position));
+    	}
+    	
+    public int getNumElements()
+    	{
+    	return combo.getItemCount();
+    	}
+    	
+    public void setElements(String _label, String[] elements)
+    	{
+        label.setText("  " + _label);
+        combo.removeAllItems();
+        for(int i = 0; i < elements.length; i++)
+        	combo.addItem(elements[i]);
+    	}
         
     public void paintComponent(Graphics g)
         {

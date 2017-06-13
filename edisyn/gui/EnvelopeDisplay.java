@@ -34,7 +34,18 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     Color color;
     Color semiTransparent;
     Synth synth;
-
+	int width = 128;
+	
+	public void setPreferredWidth(int width)
+		{
+		this.width = width;
+		}
+		
+	public int getPreferredWidth()
+		{
+		return this.width;
+		}
+		
     public void update(String key, Model model)
         {
         repaint();
@@ -42,7 +53,11 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         
     public void postProcess(double[] xVals, double[] yVals) { }
     
-    public Dimension getPreferredSize() { return new Dimension(440, 64); }
+    public Dimension getPreferredSize() { return new Dimension(width, 64); }
+    public Dimension getMinimiumSize() { return new Dimension(64, 64); }
+    public Dimension getMaximumSize() { return new Dimension(100000, 100000); }
+    
+    public Color getColor() { return color; }
     
     public EnvelopeDisplay(Synth synth, Color color, String[] xKeys, String[] yKeys, double xConstants[], double yConstants[])
         {
@@ -163,7 +178,20 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         graphics.fill(p);
         graphics.setColor(color);
         graphics.draw(p);
+        
+        if (axis != 0)
+        	{
+        	graphics.setColor(color);
+        	double height = rect.height - (rect.height * axis);
+        	line = new Line2D.Double(rect.x, rect.y + height, rect.x + rect.width, rect.y + height);
+			graphics.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, new float[] { 4.0f }, 0.0f));
+			graphics.draw(line);
+        	}
         }
+        
+    double axis = 0.0;
+    public void setAxis(double val) { if (val >= 0.0 && val < 1.0) axis = val; }
+    public double getAxis() { return axis; } 
     }
 
 

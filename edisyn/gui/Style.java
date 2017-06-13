@@ -118,7 +118,7 @@ public class Style
     	
     static
     	{
-    	if (true) //isUnix())
+    	if (isUnix())
     		{
     		SMALL_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 9);
     		CHOOSER_INSETS = new Insets(0, 0, 2, 4); 

@@ -23,12 +23,12 @@ For the time being, to install Edisyn you need to do the following three things.
 
 1. Install the Java JDK.
 2. Place the file `libraries/coremidi4j-1.0.jar` in the directory `/Library/Java/Extensions`
-3. Put file `jar/edisyn.2.jar` where you like (it's Edisyn's executable).
+3. Put file `jar/edisyn.3.jar` where you like (it's Edisyn's executable).
 
 
 ## Running
 
-Double click on the file `edisyn.2.jar`
+Double click on the file `edisyn.3.jar`
 
 Edisyn should launch and either present you with a window asking what MIDI interface you want to use, or tell
 you that there are no available MIDI interfaces, and that you'll need to work offline.

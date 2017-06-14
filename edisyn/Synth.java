@@ -297,9 +297,9 @@ public abstract class Synth extends JComponent implements Updatable
                             if (merging != 0.0)
                                 {
                                 merging = 0.0;
+                                setSendMIDI(false);
                                 Synth newSynth = instantiate(Synth.this.getClass(), getSynthName(), true, false, tuple);
                                 newSynth.parse(data);
-                                setSendMIDI(false);
                                 merge(newSynth.getModel(), 0.5);
                                 setSendMIDI(true);
                                 sendAllParameters();
@@ -924,6 +924,7 @@ public abstract class Synth extends JComponent implements Updatable
             catch (IOException e) // fail
                 {
                 JOptionPane.showMessageDialog(this, "An error occurred while saving to the file " + (f == null ? " " : f.getName()), "File Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
                 }
             finally
                 {
@@ -956,6 +957,7 @@ public abstract class Synth extends JComponent implements Updatable
             catch (Exception e) // fail
                 {
                 JOptionPane.showMessageDialog(this, "An error occurred while saving to the file " + file, "File Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
                 }
             finally
                 {
@@ -998,6 +1000,7 @@ public abstract class Synth extends JComponent implements Updatable
             catch (IOException e) // fail
                 {
                 JOptionPane.showMessageDialog(this, "An error occurred while exporting to the file " + (f == null ? " " : f.getName()), "File Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
                 }
             finally
                 {
@@ -1078,6 +1081,7 @@ public abstract class Synth extends JComponent implements Updatable
             catch (Throwable e) // fail  -- could be an Error or an Exception
                 {
                 JOptionPane.showMessageDialog(this, "An error occurred while loading to the file " + f, "File Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
                 }
             finally
                 {
@@ -1151,5 +1155,35 @@ public abstract class Synth extends JComponent implements Updatable
         if (result == 1) return null;
         else return instantiate(synths[combo.getSelectedIndex()], synthNames[combo.getSelectedIndex()], false, (result == 0), null);
         }
-                
+    
+    public abstract String getDefaultResourceFileName();
+    
+    public void loadDefaults()
+    	{
+        InputStream stream = getClass().getResourceAsStream(getDefaultResourceFileName());
+    	if (stream != null)
+			{
+            try 
+            	{
+            	byte[] data = new byte[getExpectedSysexLength()];
+				int val = stream.read(data, 0, getExpectedSysexLength());
+                setSendMIDI(false);
+                parse(data);
+                setSendMIDI(true);
+				}
+			catch (Exception e)
+				{
+				e.printStackTrace();
+				}
+			finally
+				{
+				try { stream.close(); }
+				catch (IOException e) { }
+				}
+			}
+		else
+			{
+			System.err.println("Didn't Parse");
+			}
+    	}       
     }

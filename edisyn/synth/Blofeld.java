@@ -82,17 +82,18 @@ public class Blofeld extends Synth
     static final String[] WAVES_SHORT = new String[] { "Off               ", "Pulse", "Saw", "Triangle", "Sine" };
     static final String[] OSCILLATOR_OCTAVES = new String[] { "128'", "64'", "32'", "16'", "8'", "4'", "2'", "1'", "1/2'" };
     static final String[] SAMPLE_BANKS = new String[] { "None", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L" };
-        
+    
+    static final String INIT_RESOURCE = "../init/Blofeld.init";
         
     public Blofeld()
         {
-        setSendsAllParametersInBulk(true);
-        
         for(int i = 0; i < allParameters.length; i++)
             {
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
-                
+
+        setSendsAllParametersInBulk(true);
+        
         setLayout(new BorderLayout());
                 
         tabs = new JTabbedPane();
@@ -171,12 +172,11 @@ public class Blofeld extends Synth
                 
         model.set("name", "Init            ");  // has to be 16 long
         
-        addDefaults();
-        getModel().resetToDefaults();
+        loadDefaults();
         }
                 
                 
-               
+    public String getDefaultResourceFileName() { return "Blofeld.init"; }
                 
     /// ARPEGGIATION
 
@@ -1860,6 +1860,7 @@ public class Blofeld extends Synth
 
     public byte[] emit(String key)
         {
+        if (!getSendMIDI()) return new byte[0];  // MIDI turned off, don't bother
         if (key.equals("id")) return new byte[0];  // this is not emittable
         if (key.equals("bank")) return new byte[0];  // this is not emittable
         if (key.equals("number")) return new byte[0];  // this is not emittable
@@ -2344,12 +2345,12 @@ public class Blofeld extends Synth
     
     
     
-    
     /////// DEFAULT SETTINGS
     
     
     /** Adds all the defaults in DEFAULT_PARAMS to the Model's defaults storage. */
-    void addDefaults()
+        /*
+	void addDefaults()
         {
         for(int i = 0; i < DEFAULT_PARAMS.length; i++)
             {
@@ -2364,9 +2365,11 @@ public class Blofeld extends Synth
                 }
             }
         }
+    */
     
     /** These are the parameters stored in the Blofeld when it is reset to the Init patch */
-    public final static String[][] DEFAULT_PARAMS = new String[][]
+        /*
+	public final static String[][] DEFAULT_PARAMS = new String[][]
     {
     {"category", "0"},    
     {"bank", "0"},
@@ -2717,5 +2720,5 @@ public class Blofeld extends Synth
     {"effect2parameter12", "127"},    
     {"effect2parameter13", "127"},
     };
-                
+                */
     }

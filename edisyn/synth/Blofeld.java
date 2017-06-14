@@ -86,6 +86,8 @@ public class Blofeld extends Synth
         
     public Blofeld()
         {
+        setSendsAllParametersInBulk(true);
+        
         for(int i = 0; i < allParameters.length; i++)
             {
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
@@ -1946,14 +1948,15 @@ public class Blofeld extends Synth
 
     
     
-    public byte[] emit(Model tempModel)
+    public byte[] emit(Model tempModel, boolean toWorkingMemory)
         {
         if (tempModel == null)
             tempModel = getModel();
         byte DEV = (byte) tempModel.get("id", 0);
         byte BB = (byte) tempModel.get("bank", 0);
         byte NN = (byte) tempModel.get("number", 0);
-        
+        if (toWorkingMemory) { BB = 0x7F; NN = 0x0; }
+
         byte[] bytes = new byte[383];
         
         for(int i = 0; i < 363; i++)
@@ -2093,8 +2096,6 @@ public class Blofeld extends Synth
 			{
 			model.set(key, b);
 			}
-
-        revise();       
 		}
 
 
@@ -2124,10 +2125,12 @@ public class Blofeld extends Synth
         	{
         	// we'll put CC here later
         	}
+        revise();
 		}
         
-    public void parse(byte[] data)
+    public boolean parse(byte[] data)
         {
+        boolean retval = true;
         model.set("id", data[3]);
         if (data[5] < 8)  // otherwise it's probably just local patch data.  Too bad they do this. :-(
         	{
@@ -2138,6 +2141,7 @@ public class Blofeld extends Synth
         	{
         	model.set("bank", 0);
         	model.set("number", 0);
+        	retval = false;
         	}
         	
         for(int i = 0; i < 380; i++)
@@ -2145,6 +2149,7 @@ public class Blofeld extends Synth
             setParameterByIndex(i, data[i + 7]);
             }
         revise();       
+        return retval;     
         }
         
 
@@ -2194,6 +2199,7 @@ public class Blofeld extends Synth
         return (data[0] == (byte)0xF0 &&
            		data[1] == (byte)0x3E &&
             	data[2] == (byte)0x13 &&
+            	// presently I'm not filtering by device, so no data[3]
             	data[4] == (byte)0x10 &&
             	data.length == 392);
         }
@@ -2272,9 +2278,9 @@ public class Blofeld extends Synth
                     {
                     int val = model.get(key, 0);
                     if (val < model.getMin(key))
-                        model.set(key, model.getMin(key));
+                        { model.set(key, model.getMin(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key, 0));}
                     if (val > model.getMax(key))
-                        model.set(key, model.getMax(key));
+                        { model.set(key, model.getMax(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key, 0));}
                     }
                 }
             }
@@ -2284,7 +2290,7 @@ public class Blofeld extends Synth
             {
             char c = name.charAt(i);
             if (c < 32 || c > 127)
-                name.setCharAt(i, (char)32);
+                { name.setCharAt(i, (char)32); System.err.println("Warning: Revised name from \"" + model.get("name", "Init            ") + "\" to \"" + name.toString() + "\"");}
             }
         model.set("name", name.toString());
         }

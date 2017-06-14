@@ -71,12 +71,12 @@ Note that you can *send* a patch to the synthesizer and you can *write* a patch 
 just temporarily updates the synth's current patch memory so you can play it.  The latter actually writes the 
 patch to an address in the synth, replacing whatever is there.
 
-* *Request Patch...* asks the synthesizer to load a specific patch into the editor.  If the synthesizer complies,
-once the patch is loaded, Edisyn will then send the patch to the synthesizer.
-
 * *Request Current Patch* asks the synthesizer to load the current patch memory into the editor.  Note that on
 some machines (like the Waldorf Blofeld) when the patch is loaded, the bank and patch number are invalid and will
 be reset to some defaults, which might be confusing!
+
+* *Request Patch...* asks the synthesizer to load a specific patch into the editor.  If the synthesizer complies,
+once the patch is loaded, Edisyn will then send the patch to the synthesizer.
 
 * *Request Merge* asks the synthesizer to load a specific patch into the editor.  If the synthesizer complies,
 then the patch is *merged* with the existing patch, meaning that some *percentage* of parameters in the existing
@@ -87,7 +87,7 @@ patch are replaced with the old patch.  Then Edisyn will then send the patch to 
 * *Send Patch* sends the current patch to the synthesizer.  This isn't actually used much since other commands
 send the patch automatically.
 
-* *Write Patch* writes the patch to a given location in the synthesizer.
+* *Write Patch...* writes the patch to a given location in the synthesizer.
 
 * *Change MIDI* sets or updates the MIDI interface.
 

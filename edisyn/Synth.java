@@ -56,8 +56,10 @@ public abstract class Synth extends JComponent implements Updatable
         as you like (or refuse to). */
     public abstract void immutableMutate(String key);
         
-    /** Updates the model to reflect the following sysex patch dump for your synthesizer type. */
-    public abstract void parse(byte[] data);
+    /** Updates the model to reflect the following sysex patch dump for your synthesizer type. 
+    	If the patch is from current working memory and so doesn't need to be sent to the synth
+    	to update it, return FALSE, else return TRUE. */
+    public abstract boolean parse(byte[] data);
     
     /** Updates the model to reflect the following sysex or CC (or other!) message from your synthesizer. 
     	You are free to IGNORE this message entirely.  Patch dumps will generally not be sent this way; 
@@ -73,8 +75,9 @@ public abstract class Synth extends JComponent implements Updatable
         If tempModel is non-null, then it should be used to extract meta-parameters
         such as the bank and patch number (stuff that's specified by gatherInfo(...).
         Otherwise the primary model should be used.  The primary model should be used
-        for all other parameters.  */
-    public abstract byte[] emit(Model tempModel);
+        for all other parameters.  toWorkingMemory indicates whether the patch should
+        be directed to working memory of the synth or to the patch number in tempModel. */
+    public abstract byte[] emit(Model tempModel, boolean toWorkingMemory);
     
     /** Produces a sysex parameter change request for the given parameter.  
         If you return a zero-length byte array, nothing will be sent.  */
@@ -189,7 +192,7 @@ public abstract class Synth extends JComponent implements Updatable
         that your synthesizer subclass is asked to implement. */
     public boolean recognizeLocal(byte[] data)
         {
-        return recognize(this.getClass(), data);
+        return recognize(Synth.this.getClass(), data);
         }
                 
     /** Returns whether the given sysex patch dump data is of the type for a synth of the given
@@ -294,7 +297,7 @@ public abstract class Synth extends JComponent implements Updatable
                             if (merging != 0.0)
                                 {
                                 merging = 0.0;
-                                Synth newSynth = instantiate(getClass(), getSynthName(), true, false, tuple);
+                                Synth newSynth = instantiate(Synth.this.getClass(), getSynthName(), true, false, tuple);
                                 newSynth.parse(data);
                                 setSendMIDI(false);
                                 merge(newSynth.getModel(), 0.5);
@@ -305,9 +308,10 @@ public abstract class Synth extends JComponent implements Updatable
                             else
                                 {
                                 sendMIDI = false;  // so we don't send out parameter updates in response to reading/changing parameters
-                                parse(data);
+                                boolean sendParameters = parse(data);
                                 sendMIDI = true;
-                                sendAllParameters();
+                                if (sendParameters == false) 
+                                	sendAllParameters();
                                 file = null;
                                 updateTitle();
                                 }
@@ -751,7 +755,7 @@ public abstract class Synth extends JComponent implements Updatable
                 
                 if (gatherInfo("Write Patch", getModel()))
                     {
-                    tryToSendSysex(emit(getModel()));
+                    tryToSendSysex(emit(getModel(), false));
                     }
                 }
             });
@@ -854,16 +858,31 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
     
-    /** Sends all the parameters in a patch to the synth.  This differs
-        from sending a bulk patch because it likely doesn't save permanently
-        in memory.  But it's not fast. */
+    boolean sendsAllParametersInBulk = false;
+    public void setSendsAllParametersInBulk(boolean val) { sendsAllParametersInBulk = val; }
+    public boolean getSendsAllParametersInBulk() { return sendsAllParametersInBulk; }
+
+    /** Sends all the parameters in a patch to the synth.  
+    	If sendsAllParametersInBulk was set to TRUE, then this is done by sending
+    	a single patch write to working memory, which may not be supported by all synths.
+    	
+    	Otherwise this is done by sending each parameter separately, which isn't as fast.
+    	The default sends each parameter separately.
+	*/    
     public void sendAllParameters()
         {
-        String[] keys = getModel().getKeys();
-        for(int i = 0; i < keys.length; i++)
-            {
-            tryToSendSysex(emit(keys[i]));
-            }
+        if (sendsAllParametersInBulk)
+        	{
+        	tryToSendSysex(emit(getModel(), true));
+        	}
+        else
+        	{
+	        String[] keys = getModel().getKeys();
+	        for(int i = 0; i < keys.length; i++)
+	            {
+	            tryToSendSysex(emit(keys[i]));
+	            }
+	        }
         }
             
     /** Guarantee that the given filename ends with the given ending. */    
@@ -898,7 +917,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 f = new File(fd.getDirectory(), ensureFileEndsWith(fd.getFile(), ".syx"));
                 os = new FileOutputStream(f);
-                os.write(emit((Model)null));
+                os.write(emit((Model)null, false));
                 os.close();
                 file = f;
                 } 
@@ -931,7 +950,7 @@ public abstract class Synth extends JComponent implements Updatable
             try
                 {
                 os = new FileOutputStream(file);
-                os.write(emit((Model)null));
+                os.write(emit((Model)null, false));
                 os.close();
                 }
             catch (Exception e) // fail

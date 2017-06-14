@@ -1924,7 +1924,7 @@ public class Blofeld extends Synth
             {
             byte[] bytes = new byte[16 * 10];
             String name = model.get(key, "Init            ") + "                ";  // just to be safe, has to be 16 long
-            for(int i = 0; i < 15; i++)
+            for(int i = 0; i < 16; i++)
                 {
                 byte c = (byte)(name.charAt(i));
                 int index = i + 363;

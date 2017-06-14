@@ -59,6 +59,11 @@ public abstract class Synth extends JComponent implements Updatable
     /** Updates the model to reflect the following sysex patch dump for your synthesizer type. */
     public abstract void parse(byte[] data);
     
+    /** Updates the model to reflect the following sysex or CC (or other!) message from your synthesizer. 
+    	You are free to IGNORE this message entirely.  Patch dumps will generally not be sent this way; 
+    	and furthermore it is possible that this is crazy sysex from some other synth so you need to check for it.  */
+    public abstract void parseParameter(byte[] data);
+    
     /** Merges the given model into yours, replacing elements of your model with the given
         probability. */
     public abstract void merge(Model model, double probability);
@@ -79,11 +84,20 @@ public abstract class Synth extends JComponent implements Updatable
     /** Produces a sysex message to send to a synthesizer to request it to initiate
         a patch dump to you.  If you return a zero-length byte array, nothing will be sent. 
         If tempModel is non-null, then it should be used to extract meta-parameters
-        such as the bank and patch number (stuff that's specified by gatherInfo(...).
+        such as the bank and patch number or machine ID (stuff that's specified by gatherInfo(...).
         Otherwise the primary model should be used.  The primary model should be used
         for all other parameters.  
     */
     public abstract byte[] requestDump(Model tempModel);
+    
+    /** Produces a sysex message to send to a synthesizer to request it to initiate
+        a patch dump to you for the CURRENT PATCH.  If you return a zero-length byte array, 
+        nothing will be sent.  If tempModel is non-null, then it should be used to extract 
+        meta-parameters such as the machine ID (stuff that's specified by gatherInfo(...).
+        Otherwise the primary model should be used.  The primary model should be used
+        for all other parameters.  
+    */
+    public abstract byte[] requestCurrentDump(Model tempModel);
     
     /** Returns the expected length of a sysex patch dump for your type of synthesizer. */
     public abstract int getExpectedSysexLength();
@@ -300,6 +314,13 @@ public abstract class Synth extends JComponent implements Updatable
                             }
                         });
                     }
+                else					// Maybe it's a local Parameter change in sysex or CC?
+                	{
+					sendMIDI = false;  // so we don't send out parameter updates in response to reading/changing parameters
+					parseParameter(data);
+					sendMIDI = true;
+					updateTitle();
+                	}
                 }
             };
         }
@@ -596,8 +617,25 @@ public abstract class Synth extends JComponent implements Updatable
         menubar.add(menu);
                 
                 
-        JMenuItem receive = new JMenuItem("Request Patch");
-        receive.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        JMenuItem receiveCurrent = new JMenuItem("Request Current Patch");
+        receiveCurrent.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(receiveCurrent);
+        receiveCurrent.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                if (tuple == null || tuple.out == null)
+                    {
+                    if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
+                        return;
+                    }
+                
+                tryToSendSysex(requestCurrentDump(null));
+                }
+            });
+
+        JMenuItem receive = new JMenuItem("Request Patch...");
+        //receive.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(receive);
         receive.addActionListener(new ActionListener()
             {
@@ -698,7 +736,7 @@ public abstract class Synth extends JComponent implements Updatable
 
         menu.addSeparator();
 
-        JMenuItem burn = new JMenuItem("Write Patch");
+        JMenuItem burn = new JMenuItem("Write Patch...");
         burn.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(burn);
         burn.addActionListener(new ActionListener()

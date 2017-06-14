@@ -133,6 +133,16 @@ public class Chooser extends NumericalComponent
     	return combo.getItemCount();
     	}
     	
+    public int getIndex()
+    	{
+    	return combo.getSelectedIndex();
+    	}
+    	
+    public void setIndex(int index)
+    	{
+    	combo.setSelectedIndex(index);
+    	}
+    	
     public void setElements(String _label, String[] elements)
     	{
         label.setText("  " + _label);

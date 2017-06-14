@@ -71,8 +71,12 @@ Note that you can *send* a patch to the synthesizer and you can *write* a patch 
 just temporarily updates the synth's current patch memory so you can play it.  The latter actually writes the 
 patch to an address in the synth, replacing whatever is there.
 
-* *Request Patch* asks the synthesizer to load a specific patch into the editor.  If the synthesizer complies,
+* *Request Patch...* asks the synthesizer to load a specific patch into the editor.  If the synthesizer complies,
 once the patch is loaded, Edisyn will then send the patch to the synthesizer.
+
+* *Request Current Patch* asks the synthesizer to load the current patch memory into the editor.  Note that on
+some machines (like the Waldorf Blofeld) when the patch is loaded, the bank and patch number are invalid and will
+be reset to some defaults, which might be confusing!
 
 * *Request Merge* asks the synthesizer to load a specific patch into the editor.  If the synthesizer complies,
 then the patch is *merged* with the existing patch, meaning that some *percentage* of parameters in the existing
@@ -104,6 +108,13 @@ Optionally you can route your controller keyboard through Edisyn to play the sou
 the *Keyboard Device* is the MIDI Device of your controller keyboard.  You'll also specify an incoming keyboard
 channel of course.  This can be set to "Any" for any channel (Omni).
 
+### Sending and Recieving Parameters
+
+If you change a widget in the editor, Edisyn will send the appropriate sysex command to the synthesizer to change it on
+the synth as well.  Additionally, if you change a parameter on the synthesizer and it forwards a *sysex* command to Edisyn,
+then Edisyn will update the appropriate widget in the editor.  At present Edisyn does't support CC commands from the
+synthesizer (maybe later).  So (for example) on the Blofeld you'll need to change the machine to send sysex -- not CC only --
+when changing parameters on the synth.
 
 ## Caveats and Bugs
 

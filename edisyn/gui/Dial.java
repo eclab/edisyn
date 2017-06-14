@@ -116,7 +116,7 @@ public class Dial extends NumericalComponent
         	{
         	public void mouseWheelMoved(MouseWheelEvent e) 
         	    {
-        	    int val = getState() +  e.getWheelRotation();
+        	    int val = getState() - e.getWheelRotation();
         	    if (val > getMax()) val = getMax();
         	    if (val < getMin()) val = getMin();
         	    setState(val);

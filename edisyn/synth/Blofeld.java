@@ -13,6 +13,7 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
+import java.io.*;
 
 /**
    A patch editor for the Waldorf Blofeld.  Does not deal with Multi mode, global parameters,
@@ -1121,14 +1122,24 @@ public class Blofeld extends Synth
         }
 
 
+
+	int waves[] = { 0, 0, 0 };  // we don't NEED 3, but it keeps me from special-casing osc 3 in buildWavetable
+	int samples[] = { 0, 0, 0 };  // we don't NEED 3, but it keeps me from special-casing osc 3 in buildWavetable
+	
 	// Changes the wavetable chooser to be either a list of wavetables or
 	// a list of sample numbers
 	public void buildWavetable(Chooser chooser, int osc, int bank)
 		{
+		int index = chooser.getIndex();
+		
 		if (bank == 0)
 			{
 			if (chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0]))
 				return;
+				
+			// save old sample index
+			samples[osc - 1] = chooser.getIndex();
+			
 			// maybe we can't do this ... checking....
 			String[] params1 = WAVES_LONG;
 			String[] params = new String[125];
@@ -1139,15 +1150,25 @@ public class Blofeld extends Synth
 				params[i] = "User " + (i - 6);
 			if (osc == 3) params = WAVES_SHORT;
 			chooser.setElements("Wave", params);
+			
+			// restore old wave index
+			chooser.setIndex(waves[osc - 1]);
 			}
 		else
 			{
 			if (!(chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0])))
 				return;
+				
+			// save old wave index
+			waves[osc - 1] = chooser.getIndex();
+			
 			String[] params = new String[128];
 			for(int i = 0; i < 128; i++)
 				params[i] = "" + i + "              ";
 			chooser.setElements("Sample", params);
+			
+			// restore old sample index
+			chooser.setIndex(samples[osc - 1]);
 			}
 		}
 	
@@ -1162,7 +1183,7 @@ public class Blofeld extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
                 
-		final Chooser chooser = new Chooser("Wave", this, "osc" + osc + "shape", new String[]{ "Yo Mama" });
+		final Chooser chooser = new Chooser("Wave", this, "osc" + osc + "shape", new String[]{ "Yo Mama" });  // gotta have at least one item as a throwaway and it can't be WAVES_LONG[0]
         comp = chooser;
         vbox.add(comp);
         buildWavetable(chooser, osc, 0);
@@ -2012,74 +2033,117 @@ public class Blofeld extends Synth
         }
 
 
+
+	public void setParameterByIndex(int i, byte b)
+		{
+		String key = allParameters[i];
+		if (key.equals("-"))
+			{
+			// do nothing
+			}
+		else if (key.equals("osc1octave") || key.equals("osc2octave") || key.equals("osc3octave"))
+			{
+			model.set(key, (b - 16) / 12);
+			}
+		else if (key.equals("oscallocation, unisono"))
+			{
+			model.set("oscallocation", b >> 4);
+			model.set("unisono", b & 7);
+			}
+		else if (key.equals("envelope1mode, envelope1trigger") ||
+			key.equals("envelope2mode, envelope2trigger") ||
+			key.equals("envelope3mode, envelope3trigger") ||
+			key.equals("envelope4mode, envelope4trigger"))
+			{
+			try { 
+				int j = Integer.parseInt(key.substring(8, 9)); 
+				model.set("envelope" + j + "trigger", b >> 5);
+				model.set("envelope" + j + "mode", b & 7);  // even though it's supposed to be 5 bits, only 3 are used!
+				}
+			catch (Exception e) { e.printStackTrace(); }
+			}
+		else if (i >= 327 && i <= 342) // step/glide/accent
+			{
+			int j = i - 326;
+			model.set("arp" + (j < 10 ? "0" : "") + j + "step", b >> 4);
+			model.set("arp" + (j < 10 ? "0" : "") + j + "glide", (b >> 3) & 1);
+			model.set("arp" + (j < 10 ? "0" : "") + j + "accent", (b & 7));
+			}
+		else if (i >= 343 && i <= 358) // timing/length
+			{
+			int j = i - 342;
+			model.set("arp" + (j < 10 ? "0" : "") + j + "length", b >> 4);
+			model.set("arp" + (j < 10 ? "0" : "") + j + "timing", b & 7);
+			}
+		else if (i >= 363 && i < 363 + 16)  // name
+			{
+			try 
+				{
+				String name = model.get("name", "Init            ");
+				byte[] str = name.getBytes("US-ASCII");
+				str[i - 363] = b;
+				model.set("name", new String(str, "US-ASCII"));
+				}
+			catch (UnsupportedEncodingException e)
+				{
+				e.printStackTrace();
+				}
+			}
+		else
+			{
+			model.set(key, b);
+			}
+
+        revise();       
+		}
+
+
+
+    public void parseParameter(byte[] data)
+		{
+		int index = -1;
+		byte b = 0;
+		
+		// is it a sysex parameter change?
+        if (data[0] == (byte)0xF0 &&
+           	data[1] == (byte)0x3E &&
+            data[2] == (byte)0x13 &&
+            // filter by ID?  Presently I'm not
+            data[4] == (byte)0x20 &&
+            data[5] == 0x00 &&  // only Sound Mode Edit Bufer
+            data.length == 10)
+            {
+            int hi = (int)(data[6] & 127);
+            int lo = (int)(data[7] & 127);
+             
+            index = (hi << 7) | (lo);
+            b = (byte)(data[8] & 127);
+            setParameterByIndex(index, b);
+            }
+        else
+        	{
+        	// we'll put CC here later
+        	}
+		}
         
     public void parse(byte[] data)
         {
         model.set("id", data[3]);
-        model.set("bank", data[5]);
-        model.set("number", data[6]);
-        
-        byte[] bytes = new byte[383];
-        System.arraycopy(data, 7, bytes, 0, 383);
-        
-        for(int i = 0; i < 363; i++)
+        if (data[5] < 8)  // otherwise it's probably just local patch data.  Too bad they do this. :-(
+        	{
+       	 	model.set("bank", data[5]);
+        	model.set("number", data[6]);
+        	}
+        else
+        	{
+        	model.set("bank", 0);
+        	model.set("number", 0);
+        	}
+        	
+        for(int i = 0; i < 380; i++)
             {
-            byte b = data[i + 7];
-            bytes[i] = b;
-                
-            String key = allParameters[i];
-            if (key.equals("-"))
-                {
-                // do nothing
-                }
-            else if (key.equals("osc1octave") || key.equals("osc2octave") || key.equals("osc3octave"))
-                {
-                model.set(key, (b - 16) / 12);
-                }
-            else if (key.equals("oscallocation, unisono"))
-                {
-                model.set("oscallocation", b >> 4);
-                model.set("unisono", b & 7);
-                }
-            else if (key.equals("envelope1mode, envelope1trigger") ||
-                key.equals("envelope2mode, envelope2trigger") ||
-                key.equals("envelope3mode, envelope3trigger") ||
-                key.equals("envelope4mode, envelope4trigger"))
-                {
-                try { 
-                    int j = Integer.parseInt(key.substring(8, 9)); 
-                    model.set("envelope" + j + "trigger", b >> 5);
-                    model.set("envelope" + j + "mode", b & 7);  // even though it's supposed to be 5 bits, only 3 are used!
-                    }
-                catch (Exception e) { e.printStackTrace(); }
-                }
-            else if (i >= 327 && i <= 342) // step/glide/accent
-                {
-                int j = i - 326;
-                model.set("arp" + (j < 10 ? "0" : "") + j + "step", b >> 4);
-                model.set("arp" + (j < 10 ? "0" : "") + j + "glide", (b >> 3) & 1);
-                model.set("arp" + (j < 10 ? "0" : "") + j + "accent", (b & 7));
-                }
-            else if (i >= 343 && i <= 358) // timing/length
-                {
-                int j = i - 342;
-                model.set("arp" + (j < 10 ? "0" : "") + j + "length", b >> 4);
-                model.set("arp" + (j < 10 ? "0" : "") + j + "timing", b & 7);
-                }
-            else
-                {
-                model.set(key, b);
-                }
+            setParameterByIndex(i, data[i + 7]);
             }
-
-        byte[] name_b = new byte[16];
-        System.arraycopy(data, 363 + 7, name_b, 0, 16);
-                
-        String name = new String(name_b); // default encoding should be sufficient
-        model.set("name", name);
-
-        model.set("category", data[379 + 7]);   
-                
         revise();       
         }
         
@@ -2116,14 +2180,22 @@ public class Blofeld extends Synth
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x00, BB, NN, 0x00, (byte)0xF7 };
         }
     
+    public byte[] requestCurrentDump(Model tempModel)
+        {
+        if (tempModel == null)
+            tempModel = getModel();
+        byte DEV = (byte)tempModel.get("id", 0);
+        return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x00, 0x7F, 0x00, 0x00, (byte)0xF7 };
+        }
+    
     
     public static boolean recognize(byte[] data)
         {
-        boolean v = (data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x3E &&
-            data[2] == (byte)0x13 &&
-            data.length == 392);
-        return v;
+        return (data[0] == (byte)0xF0 &&
+           		data[1] == (byte)0x3E &&
+            	data[2] == (byte)0x13 &&
+            	data[4] == (byte)0x10 &&
+            	data.length == 392);
         }
     
         

@@ -143,6 +143,11 @@ public class Chooser extends NumericalComponent
     	combo.setSelectedIndex(index);
     	}
     	
+    public void setLabel(String _label)
+    	{
+        label.setText("  " + _label);
+    	}
+    	
     public void setElements(String _label, String[] elements)
     	{
         label.setText("  " + _label);

@@ -1159,15 +1159,19 @@ public class Blofeld extends Synth
 		else
 			{
 			if (!(chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0])))
+				{
+				// maybe change just the label
+				chooser.setLabel("Sample Bank " + SAMPLE_BANKS[bank]);
 				return;
+				}
 				
 			// save old wave index
 			waves[osc - 1] = chooser.getIndex();
 			
 			String[] params = new String[128];
 			for(int i = 0; i < 128; i++)
-				params[i] = "" + i + "              ";
-			chooser.setElements("Sample", params);
+				params[i] = "" + (i + 1) + "              ";
+			chooser.setElements("Sample Bank " + SAMPLE_BANKS[bank], params);
 			
 			// restore old sample index
 			chooser.setIndex(samples[osc - 1]);

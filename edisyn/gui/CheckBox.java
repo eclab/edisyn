@@ -22,7 +22,7 @@ public class CheckBox extends NumericalComponent
     {
     JCheckBox check;
     boolean flipped;
-    int width = 0;
+    int addToWidth = 0;
 
     public void update(String key, Model model) 
         { 
@@ -39,9 +39,9 @@ public class CheckBox extends NumericalComponent
         this(label, synth, key, false);
         }
                 
-    public void setWidth(int val)
+    public void addToWidth(int val)
     	{
-    	width = val;
+    	addToWidth = val;
     	}
               
     public JCheckBox getCheckBox() { return check; }
@@ -56,14 +56,14 @@ public class CheckBox extends NumericalComponent
         	{
         	public Dimension getMinimumSize() 
         		{
-        		if (width != 0)
-        			{
-        			Dimension d = super.getMinimumSize();
-        			d.width += width;
-        			return d;
-        			} 
-        		else return getPreferredSize(); 
+        		return getPreferredSize(); 
         		}
+        	public Dimension getPreferredSize()
+        		{
+				Dimension d = super.getPreferredSize();
+				d.width += addToWidth;
+				return d;
+        		}        		
         	};
         check.setFont(Style.SMALL_FONT);
         check.setBackground(Style.TRANSPARENT);
@@ -75,7 +75,7 @@ public class CheckBox extends NumericalComponent
                 
         setLayout(new BorderLayout());
         add(check, BorderLayout.CENTER);
-                
+        
         check.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)

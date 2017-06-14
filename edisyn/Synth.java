@@ -310,7 +310,7 @@ public abstract class Synth extends JComponent implements Updatable
                                 sendMIDI = false;  // so we don't send out parameter updates in response to reading/changing parameters
                                 boolean sendParameters = parse(data);
                                 sendMIDI = true;
-                                if (sendParameters == false) 
+                                if (sendParameters) 
                                 	sendAllParameters();
                                 file = null;
                                 updateTitle();
@@ -814,9 +814,9 @@ public abstract class Synth extends JComponent implements Updatable
                     int channel = 1;
                     if (tuple != null)
                         channel = tuple.outChannel;
-                    tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, 60, 127));
+                    tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel - 1, 60, 127));
                     Thread.currentThread().sleep(500);
-                    tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, 60, 127));
+                    tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel - 1, 60, 127));
                     }
                 catch (InterruptedException e2)
                     {

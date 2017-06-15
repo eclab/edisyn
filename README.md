@@ -112,16 +112,40 @@ channel of course.  This can be set to "Any" for any channel (Omni).
 If you change a widget in the editor, Edisyn will send the appropriate sysex command to the synthesizer to change it on
 the synth as well.  Additionally, if you change a parameter on the synthesizer and it forwards a *sysex* command to Edisyn,
 then Edisyn will update the appropriate widget in the editor.  At present Edisyn does't support CC commands from the
-synthesizer (maybe later).  So (for example) on the Blofeld you'll need to change the machine to send sysex -- not CC only --
+synthesizer (maybe later).  So (for example) on the Blofeld you'll need to change the machine to *send sysex* -- not CC only --
 when changing parameters on the synth.
 
-## Caveats and Bugs
+## Blofeld Bugs
+
+These aren't Edisyn bugs: they're Waldorf synthesizer bugs that you should be aware of.
+
+1. When you request the current patch, the synthesizer doesn't indicate which patch number or bank it was :-(.  So at present Edisyn
+sets the default patch number and bank to A1.  Take note  of this before you accidentally overwrite your A1 patch with a write.
+
+
+## Waldorf II/XT/XTk Bugs
+
+These aren't Edisyn bugs: they're Waldorf synthesizer bugs that you should be aware of.
+
+1. When you request the current patch, the synthesizer doesn't indicate which patch number or bank it was :-(.  So at present Edisyn
+sets the default patch number and bank to A1.  Take note  of this before you accidentally overwrite your A1 patch with a write.
+
+2. The XT (and likely the XTk and II) does not respond to nor does it send parameter changes for effect type.  So changing it on
+the machine will not update Edisyn, and changing it in Edisyn will not update the machine (until you send or receive a patch).
+
+3. Changing the arpeggiation triggers in Edisyn don't update then on the synth's scren, though they're
+updated in memory internally.  Similarly, changing the name in Edisyn doesn't update the name in the
+name edit screen on the synth, though it's changed internally.
+
+4. The Overdrive Effect's Amp Drive parameter is weirdly biased towards "Stack" due to how it's encoded in Waldorf's sysex. 
+
+## Caveats
 
 To work around some bugs in OS X Midi and CoreMIDI4J, Edisyn's architecture at present does not let you
 plug in new devices (or remove them) after Edisyn has been launched.  If you need to do so, restart Edisyn
 (for now). 
 
-Randomize and Send isn't very useful right now.  I'm working on it.
+Randomize isn't very useful right now.  I'm working on it.
 
 Everything has to be sent via sysex for the moment: I don't have code written to make it easy to send CC or NRPN
 if you wanted to build a patch which did that.

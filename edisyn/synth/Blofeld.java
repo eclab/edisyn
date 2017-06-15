@@ -335,7 +335,8 @@ public class Blofeld extends Synth
                         }
                     };
                 vbox.add(comp);
-
+				vbox.add(Strut.makeVerticalStrut(3));
+				
                 // the little spaces cause Java to not slice off a bit of the last digit
                 comp = new LabelledDial(" Length " + i + " ", this, "arp" + (i < 10 ? "0" : "") + i + "length", color, 0, 7)
                     {
@@ -349,7 +350,8 @@ public class Blofeld extends Synth
                         }
                     };
                 vbox.add(comp);
-                                
+				vbox.add(Strut.makeVerticalStrut(3));
+				                                
                 // the little spaces cause Java to not slice off a bit of the last digit
                 comp = new LabelledDial(" Timing " + i + " ", this, "arp" + (i < 10 ? "0" : "") + i + "timing", color, 0, 7)
                     {

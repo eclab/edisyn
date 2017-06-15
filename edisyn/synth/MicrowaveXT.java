@@ -2051,9 +2051,9 @@ JComponent extras[];
         	 }
         }
 
-        String name = model.get("name", "Init            ");  // has to be 16 long
+        String name = model.get("name", "Init Sound V1.1 ");  // has to be 16 long
                                 
-        for(int i = 240; i < 255; i++)
+        for(int i = 240; i < 256; i++)
             {
             bytes[i] = (byte)(name.charAt(i - 240));
             }
@@ -2149,12 +2149,12 @@ JComponent extras[];
                 }
             }
         // handle "name" specially
-        StringBuffer name = new StringBuffer(model.get("name", "Init            "));  // has to be 16 long
+        StringBuffer name = new StringBuffer(model.get("name", "Init Sound V1.1 "));  // has to be 16 long
         for(int i = 0; i < name.length(); i++)
             {
             char c = name.charAt(i);
             if (c < 32 || c > 127)
-                { name.setCharAt(i, (char)32); System.err.println("Warning: Revised name from \"" + model.get("name", "Init            ") + "\" to \"" + name.toString() + "\"");}
+                { name.setCharAt(i, (char)32); System.err.println("Warning: Revised name from \"" + model.get("name", "Init Sound V1.1 ") + "\" to \"" + name.toString() + "\"");}
             }
         model.set("name", name.toString());
         }
@@ -2329,7 +2329,7 @@ JComponent extras[];
 
     public String getSynthName() { return "Microwave II/XT/XTk"; }
     
-    public String getPatchName() { return model.get("name", "Init            "); }
+    public String getPatchName() { return model.get("name", "Init Sound V1.1 "); }
     
 
                 

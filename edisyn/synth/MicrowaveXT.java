@@ -80,7 +80,7 @@ public class MicrowaveXT extends Synth
                                                            "PulSync1", "PulSync2", "PulSync3", "SinSync1", "SinSync2", "SinSync3", "PWM Pulse", "PWM Saw", 
                                                            "Fuzz Wave", "Distorted", "HeavyFuzz", "Fuzz Sync", "K+Strong1", "K+Strong2", "K+Strong3", "1-2-3-4-5", 
                                                            "19/twenty", "Wavetrip1", "Wavetrip2", "Wavetrip3", "Wavetrip4", "MaleVoice", "Low Piano", "ResoSweep", 
-                                                           "Xmas Bell", "FM Piano", "Fat Organ", "Vibes", "Chorus 2", "True PWM", "UpperWaves", };
+                                                           "Xmas Bell", "FM Piano", "Fat Organ", "Vibes", "Chorus 2", "True PWM" };
 	// how to modify this?  Search for "notation" in manual
     static final String[] RATE = new String[] { "1/96", "1/48", "1/32", "1/16 T", "1/32 .", "1/16", "1/8T", "1/16 .", "1/8", "1/4 T", "1/8 .", "1/4", "1/2 T", "1/4 .", "1/2", "1/1 T", "1/2 .", "1", "1.5", "2", "2.5", "3", "3.5", "4", "5", "6", "7", "8", "9", "10", "12", "14", "16", "18", "20", "24", "28", "32", "36", "40", "48", "56", "64" };
     static final String[] ARP_CLOCK = new String[] { "1/1", "1/2 .", "1/2 T", "1/2", "1/4 .", "1/4 T", "1/4", "1/8 .", "1/8 T", "1/8", "1/16 .", "1/16 T", "1/16", "1/32 .", "1/32 T", "1/32"};
@@ -203,8 +203,7 @@ public class MicrowaveXT extends Synth
                 
         model.set("name", "Init            ");  // has to be 16 long
         
-        addDefaults();
-        getModel().resetToDefaults();
+        loadDefaults();
         }
                 
                 
@@ -343,11 +342,11 @@ public class MicrowaveXT extends Synth
         
         String[] params1 = WAVES;
         params = new String[128];
-        System.arraycopy(params1, 0, params, 0, 64);
-        for(int i = 64; i < 96; i++)
-            params[i] = "Reserved " + (i - 6);
+        System.arraycopy(params1, 0, params, 0, 65);
+        for(int i = 65; i < 96; i++)
+            params[i] = "Reserved " + (i - 65 + 66);
         for(int i = 96; i < 128; i++)
-            params[i] = "User " + (i - 6);
+            params[i] = "User " + (i - 96 + 1);
         comp = new Chooser("Wavetable", this, "wavetable", params);
         model.setImmutable("wavetable", true);
         vbox.add(comp);
@@ -1870,9 +1869,6 @@ JComponent extras[];
     };
 
 
-	public void parseParameter(byte[] data) { }
-
-
 
     public byte[] emit(String key)
         {
@@ -1910,7 +1906,7 @@ JComponent extras[];
             byte XX = (byte)(total);
             return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
             }
-        else if (key.equals("arpuser5") || key.equals("arpuser5") || key.equals("arpuser7") || key.equals("arpuser8"))
+        else if (key.equals("arpuser5") || key.equals("arpuser6") || key.equals("arpuser7") || key.equals("arpuser8"))
             {
             int index = 103;
             int arp1 = model.get("arpuser5", 0);
@@ -2071,7 +2067,7 @@ JComponent extras[];
         full[5] = BB;
         full[6] = NN;
         System.arraycopy(bytes, 0, full, 7, bytes.length);
-        full[263] = produceChecksum(bytes);
+        full[263] = produceChecksum(BB, NN, bytes);
         full[264] = (byte)0xF7;
 
         return full;
@@ -2079,7 +2075,7 @@ JComponent extras[];
 
 
     /** Generate a Waldorf checksum of the data bytes */
-    byte produceChecksum(byte[] bytes)
+    byte produceChecksum(byte bb, byte nn, byte[] bytes)
         {
         //      From the sysex document:
         //
@@ -2090,7 +2086,8 @@ JComponent extras[];
         //  IMPORTANT: the MIDI status-bytes as well as the 
         //  ID's are not used for computing the checksum."
                 
-        byte b = 0;  // I *think* signed will work
+        byte b = bb;
+        b += nn;  // I *think* signed will work
         for(int i = 0; i < bytes.length; i++)
             b += bytes[i];
         
@@ -2107,7 +2104,8 @@ JComponent extras[];
         byte DEV = (byte)tempModel.get("id", 0);
         byte BB = (byte)tempModel.get("bank", 0);
         byte NN = (byte)tempModel.get("number", 0);
-        return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x00, BB, NN, 0x00, (byte)0xF7 };
+        //(BB + NN)&127 is checksum
+        return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x00, BB, NN, (byte)((BB + NN)&127), (byte)0xF7 };
         }
         
     public byte[] requestCurrentDump(Model tempModel)
@@ -2115,7 +2113,8 @@ JComponent extras[];
         if (tempModel == null)
             tempModel = getModel();
         byte DEV = (byte)tempModel.get("id", 0);
-        return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x00, 0x7F, 0x00, 0x00, (byte)0xF7 };
+        //(0x75 + 0x00)&127 is checksum
+        return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x00, 0x20, 0x00, (byte)((0x20 + 0x00)&127), (byte)0xF7 };
         }
 
     public static boolean recognize(byte[] data)
@@ -2123,12 +2122,12 @@ JComponent extras[];
         boolean v = (data[0] == (byte)0xF0 &&
             data[1] == (byte)0x3E &&
             data[2] == (byte)0x0E &&
-            data.length == 392);
+            data.length == 265);
         return v;
         }
         
         
-    public int getExpectedSysexLength() { return 256; }
+    public int getExpectedSysexLength() { return 265; }
         
         
     /** Verify that all the parameters are within valid values, and tweak them if not. */
@@ -2232,6 +2231,35 @@ JComponent extras[];
 		}
 
         
+    public void parseParameter(byte[] data)
+		{
+		int index = -1;
+		byte b = 0;
+		
+		// is it a sysex parameter change?
+        if (data[0] == (byte)0xF0 &&
+           	data[1] == (byte)0x3E &&
+            data[2] == (byte)0x0E &&		// Microwave
+            // filter by ID?  Presently I'm not
+            data[4] == (byte)0x20 &&
+            data[5] == 0x00 &&  // only Sound Mode Edit Bufer
+            data.length == 10)
+            {
+            int hi = (int)(data[6] & 127);
+            int lo = (int)(data[7] & 127);
+             
+            index = (hi << 7) | (lo);
+            b = (byte)(data[8] & 127);
+            setParameterByIndex(index, b);
+            }
+        else
+        	{
+        	// we'll put CC here later
+        	}
+        revise();
+		}
+        
+
     public boolean parse(byte[] data)
         {
         boolean retval = true;
@@ -2247,8 +2275,8 @@ JComponent extras[];
         	model.set("number", 0);
         	retval = false;
         	}
-        	
-        for(int i = 0; i < 380; i++)
+        
+        for(int i = 0; i < 255; i++)
             {
             setParameterByIndex(i, data[i + 7]);
             }
@@ -2303,373 +2331,6 @@ JComponent extras[];
     
     public String getPatchName() { return model.get("name", "Init            "); }
     
-    
-    /** Adds all the defaults in DEFAULT_PARAMS to the Model's defaults storage. */
-    void addDefaults()
-        {
-        for(int i = 0; i < DEFAULT_PARAMS.length; i++)
-            {
-            if (model.isString(DEFAULT_PARAMS[i][0]))
-                {
-                model.addDefault(DEFAULT_PARAMS[i][0], DEFAULT_PARAMS[i][1]);
-                }
-            else
-                {
-                try { model.addDefault(DEFAULT_PARAMS[i][0], Integer.parseInt(DEFAULT_PARAMS[i][1])); }
-                catch (NumberFormatException e) { e.printStackTrace(); } // shouldn't ever happen
-                }
-            }
-        }
-    
-    /** These are the parameters stored in the Blofeld when it is reset to the Init patch */
-    public final static String[][] DEFAULT_PARAMS = new String[][]
-    {
-    {"category", "0"},    
-    {"bank", "0"},
-    {"number", "0"},    
-    {"id", "0"},    
-    {"oscglidemode", "0"},    
-    {"oscglide", "0"},    
-    {"oscallocation", "0"},    
-    {"oscgliderate", "20"},    
-    {"unisono", "0"},    
-    {"unisonodetune", "0"},    
-    {"noiselevel", "0"},    
-    {"noisebalance", "0"},    
-    {"noisecolour", "64"},    
-    {"ringmodlevel", "0"},    
-    {"ringmodbalance", "0"},    
-    {"osc1shape", "2"},    
-    {"osc1limitwt", "0"},    
-    {"osc1fmsource", "0"},    
-    {"osc1pwmsource", "1"},    
-    {"osc1octave", "4"},    
-    {"osc1semitone", "64"},    
-    {"osc1detune", "64"},    
-    {"osc1bendrange", "66"},    
-    {"osc1keytrack", "0"},    
-    {"osc1fmamount", "0"},    
-    {"osc1pulsewidth", "127"},    
-    {"osc1pwmamount", "64"},    
-    {"osc1brilliance", "0"},    
-    {"osc1level", "127"},    
-    {"osc1balance", "0"},    
-    {"osc2shape", "0"},    
-    {"osc2limitwt", "0"},    
-    {"osc2synctoosc3", "0"},    
-    {"osc2fmsource", "0"},    
-    {"osc2pwmsource", "3"},    
-    {"osc2octave", "4"},    
-    {"osc2semitone", "64"},    
-    {"osc2detune", "64"},    
-    {"osc2bendrange", "66"},    
-    {"osc2keytrack", "0"},    
-    {"osc2fmamount", "0"},    
-    {"osc2pulsewidth", "127"},    
-    {"osc2pwmamount", "64"},    
-    {"osc2brilliance", "0"},    
-    {"osc2level", "127"},    
-    {"osc2balance", "0"},    
-    {"osc3shape", "0"},    
-    {"osc3fmsource", "0"},    
-    {"osc3pwmsource", "5"},    
-    {"osc3octave", "3"},    
-    {"osc3semitone", "64"},    
-    {"osc3detune", "64"},    
-    {"osc3bendrange", "66"},    
-    {"osc3keytrack", "96"},    
-    {"osc3fmamount", "0"},    
-    {"osc3pulsewidth", "127"},    
-    {"osc3pwmamount", "64"},    
-    {"osc3brilliance", "0"},    
-    {"osc3level", "127"},    
-    {"osc3balance", "0"},    
-    {"filter1type", "1"},    
-    {"filter1drivecurve", "0"},    
-    {"filter1modsource", "1"},    
-    {"filter1pansource", "1"},    
-    {"filter1fmsource", "0"},    
-    {"filter1cutoff", "127"},    
-    {"filter1resonance", "0"},    
-    {"filter1drive", "0"},    
-    {"filter1keytrack", "64"},    
-    {"filter1envamount", "64"},    
-    {"filter1envvelocity", "64"},    
-    {"filter1modamount", "64"},    
-    {"filter1fmamount", "0"},    
-    {"filter1pan", "64"},    
-    {"filter1panamount", "64"},    
-    {"filter2type", "0"},    
-    {"filter2drivecurve", "0"},    
-    {"filter2modsource", "0"},    
-    {"filter2pansource", "3"},    
-    {"filter2fmsource", "0"},    
-    {"filterrouting", "0"},    
-    {"filter2cutoff", "127"},    
-    {"filter2resonance", "0"},    
-    {"filter2drive", "0"},    
-    {"filter2keytrack", "64"},    
-    {"filter2envamount", "64"},    
-    {"filter2envvelocity", "64"},    
-    {"filter2modamount", "64"},    
-    {"filter2fmamount", "0"},    
-    {"filter2pan", "64"},    
-    {"filter2panamount", "64"},    
-    {"lfo1shape", "0"},    
-    {"lfo1sync", "0"},    
-    {"lfo1clocked", "0"},    
-    {"lfo1speed", "50"},    
-    {"lfo1startphase", "0"},    
-    {"lfo1delay", "0"},    
-    {"lfo1fade", "64"},    
-    {"lfo1keytrack", "64"},    
-    {"lfo3shape", "0"},    
-    {"lfo3sync", "0"},    
-    {"lfo3clocked", "0"},    
-    {"lfo3speed", "30"},    
-    {"lfo3startphase", "0"},    
-    {"lfo3delay", "0"},    
-    {"lfo3fade", "64"},    
-    {"lfo3keytrack", "64"},    
-    {"lfo2shape", "0"},    
-    {"lfo2sync", "0"},    
-    {"lfo2clocked", "0"},    
-    {"lfo2speed", "40"},    
-    {"lfo2startphase", "0"},    
-    {"lfo2delay", "0"},    
-    {"lfo2fade", "64"},    
-    {"lfo2keytrack", "64"},    
-    {"amplifiermodsource", "5"},    
-    {"amplifiervolume", "127"},    
-    {"amplifiervelocity", "114"},    
-    {"amplifiermodamount", "64"},    
-    {"envelope1mode", "0"},    
-    {"envelope1trigger", "0"},    
-    {"envelope1attack", "0"},    
-    {"envelope1attacklevel", "127"},    
-    {"envelope1decay", "50"},    
-    {"envelope1sustain", "0"},    
-    {"envelope1decay2", "0"},    
-    {"envelope1sustain2", "127"},    
-    {"envelope1release", "0"},    
-    {"envelope2mode", "0"},    
-    {"envelope2trigger", "0"},    
-    {"envelope2attack", "0"},    
-    {"envelope2attacklevel", "127"},    
-    {"envelope2decay", "52"},    
-    {"envelope2sustain", "127"},    
-    {"envelope2decay2", "0"},    
-    {"envelope2sustain2", "127"},    
-    {"envelope2release", "0"},    
-    {"envelope3mode", "0"},    
-    {"envelope3trigger", "0"},    
-    {"envelope3attack", "0"},    
-    {"envelope3attacklevel", "64"},    
-    {"envelope3decay", "64"},    
-    {"envelope3sustain", "64"},    
-    {"envelope3decay2", "64"},    
-    {"envelope3sustain2", "64"},    
-    {"envelope3release", "64"},    
-    {"envelope4mode", "0"},    
-    {"envelope4trigger", "0"},    
-    {"envelope4attack", "0"},    
-    {"envelope4attacklevel", "64"},    
-    {"envelope4decay", "64"},    
-    {"envelope4sustain", "64"},    
-    {"envelope4decay2", "64"},    
-    {"envelope4sustain2", "64"},    
-    {"envelope4release", "64"},    
-    {"modulation1source", "1"},    
-    {"modulation1destination", "1"},    
-    {"modulation1amount", "64"},    
-    {"modulation2source", "0"},    
-    {"modulation2destination", "0"},    
-    {"modulation2amount", "64"},    
-    {"modulation3source", "0"},    
-    {"modulation3destination", "0"},    
-    {"modulation3amount", "64"},    
-    {"modulation4source", "0"},    
-    {"modulation4destination", "0"},    
-    {"modulation4amount", "64"},    
-    {"modulation5source", "0"},    
-    {"modulation5destination", "0"},    
-    {"modulation5amount", "64"},    
-    {"modulation6source", "0"},    
-    {"modulation6destination", "0"},    
-    {"modulation6amount", "64"},    
-    {"modulation7source", "0"},    
-    {"modulation7destination", "0"},    
-    {"modulation7amount", "64"},    
-    {"modulation8source", "0"},    
-    {"modulation8destination", "0"},    
-    {"modulation8amount", "64"},    
-    {"modulation9source", "0"},    
-    {"modulation9destination", "0"},    
-    {"modulation9amount", "64"},    
-    {"modulation10source", "0"},    
-    {"modulation10destination", "0"},    
-    {"modulation10amount", "64"},    
-    {"modulation11source", "0"},    
-    {"modulation11destination", "0"},    
-    {"modulation11amount", "64"},    
-    {"modulation12source", "0"},    
-    {"modulation12destination", "0"},    
-    {"modulation12amount", "64"},    
-    {"modulation13source", "0"},    
-    {"modulation13destination", "0"},    
-    {"modulation13amount", "64"},    
-    {"modulation14source", "0"},    
-    {"modulation14destination", "0"},    
-    {"modulation14amount", "64"},    
-    {"modulation15source", "0"},    
-    {"modulation15destination", "0"},    
-    {"modulation15amount", "64"},    
-    {"modulation16source", "0"},    
-    {"modulation16destination", "0"},    
-    {"modulation16amount", "64"},    
-    {"modifier1source1", "0"},    
-    {"modifier1source2", "0"},    
-    {"modifier1operation", "0"},    
-    {"modifier1constant", "64"},    
-    {"modifier2source1", "0"},    
-    {"modifier2source2", "0"},    
-    {"modifier2operation", "0"},    
-    {"modifier2constant", "64"},    
-    {"modifier3source1", "0"},    
-    {"modifier3source2", "0"},    
-    {"modifier3operation", "0"},    
-    {"modifier3constant", "64"},    
-    {"modifier4source1", "0"},    
-    {"modifier4source2", "0"},    
-    {"modifier4operation", "0"},    
-    {"modifier4constant", "64"},    
-    {"effect1parameter0", "20"},    
-    {"effect1parameter1", "64"},    
-    {"effect1parameter2", "64"},    
-    {"effect1parameter3", "0"},    
-    {"effect1parameter4", "127"},    
-    {"effect1parameter5", "127"},    
-    {"effect1parameter6", "127"},    
-    {"effect1parameter7", "127"},    
-    {"effect1parameter8", "127"},    
-    {"effect1parameter9", "127"},    
-    {"effect1parameter10", "29"},    
-    {"effect1type", "1"},    
-    {"effect1mix", "0"},    
-    {"effect2parameter0", "53"},    
-    {"effect2parameter1", "64"},    
-    {"effect2parameter2", "100"},    
-    {"effect2parameter3", "0"},    
-    {"effect2parameter4", "64"},    
-    {"effect2parameter5", "100"},    
-    {"effect2parameter6", "0"},    
-    {"effect2parameter7", "100"},    
-    {"effect2parameter8", "110"},    
-    {"effect2parameter9", "0"},    
-    {"effect2parameter10", "15"},    
-    {"effect2type", "8"},    
-    {"effect2mix", "0"},    
-    {"arpeggiatormode", "0"},    
-    {"arpeggiatordirection", "0"},    
-    {"arpeggiatorsortorder", "0"},    
-    {"arpeggiatorvelocitymode", "1"},    
-    {"arpeggiatorpatternreset", "0"},    
-    {"arpeggiatorpatternlength", "15"},    
-    {"arpeggiatorpattern", "0"},    
-    {"arpeggiatorclock", "8"},    
-    {"arpeggiatorlength", "5"},    
-    {"arpeggiatoroctave", "0"},    
-    {"arpeggiatortimingfactor", "12"},    
-    {"arpeggiatortempo", "55"},    
-    {"arp01step", "0"},    
-    {"arp01glide", "0"},    
-    {"arp01accent", "4"},    
-    {"arp01length", "4"},    
-    {"arp01timing", "4"},    
-    {"arp02step", "0"},    
-    {"arp02glide", "0"},    
-    {"arp02accent", "4"},    
-    {"arp02length", "4"},    
-    {"arp02timing", "4"},    
-    {"arp03step", "0"},    
-    {"arp03glide", "0"},    
-    {"arp03accent", "4"},    
-    {"arp03length", "4"},    
-    {"arp03timing", "4"},    
-    {"arp04step", "0"},    
-    {"arp04glide", "0"},    
-    {"arp04accent", "4"},    
-    {"arp04length", "4"},    
-    {"arp04timing", "4"},    
-    {"arp05step", "0"},    
-    {"arp05glide", "0"},    
-    {"arp05accent", "4"},    
-    {"arp05length", "4"},    
-    {"arp05timing", "4"},    
-    {"arp06step", "0"},    
-    {"arp06glide", "0"},    
-    {"arp06accent", "4"},    
-    {"arp06length", "4"},    
-    {"arp06timing", "4"},    
-    {"arp07step", "0"},    
-    {"arp07glide", "0"},    
-    {"arp07accent", "4"},    
-    {"arp07length", "4"},    
-    {"arp07timing", "4"},    
-    {"arp08step", "0"},    
-    {"arp08glide", "0"},    
-    {"arp08accent", "4"},    
-    {"arp08length", "4"},    
-    {"arp08timing", "4"},    
-    {"arp09step", "0"},    
-    {"arp09glide", "0"},    
-    {"arp09accent", "4"},    
-    {"arp09length", "4"},    
-    {"arp09timing", "4"},    
-    {"arp10step", "0"},    
-    {"arp10glide", "0"},    
-    {"arp10accent", "4"},    
-    {"arp10length", "4"},    
-    {"arp10timing", "4"},    
-    {"arp11step", "0"},    
-    {"arp11glide", "0"},    
-    {"arp11accent", "4"},    
-    {"arp11length", "4"},    
-    {"arp11timing", "4"},    
-    {"arp12step", "0"},    
-    {"arp12glide", "0"},    
-    {"arp12accent", "4"},    
-    {"arp12length", "4"},    
-    {"arp12timing", "4"},    
-    {"arp13step", "0"},    
-    {"arp13glide", "0"},    
-    {"arp13accent", "4"},    
-    {"arp13length", "4"},    
-    {"arp13timing", "4"},    
-    {"arp14step", "0"},    
-    {"arp14glide", "0"},    
-    {"arp14accent", "4"},    
-    {"arp14length", "4"},    
-    {"arp14timing", "4"},    
-    {"arp15step", "0"},    
-    {"arp15glide", "0"},    
-    {"arp15accent", "4"},    
-    {"arp15length", "4"},    
-    {"arp15timing", "4"},    
-    {"arp16step", "0"},    
-    {"arp16glide", "0"},    
-    {"arp16accent", "4"},    
-    {"arp16length", "4"},    
-    {"arp16timing", "4"},    
-    {"name", "Init            "},    
-    {"oscpitchsource", "2"},    
-    {"oscpitchamount", "64"},    
-    {"effect1parameter11", "127"},    
-    {"effect1parameter12", "127"},    
-    {"effect1parameter13", "127"},    
-    {"effect2parameter11", "64"},    
-    {"effect2parameter12", "127"},    
-    {"effect2parameter13", "127"},
-    };
+
                 
     }

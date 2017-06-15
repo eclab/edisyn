@@ -82,9 +82,7 @@ public class Blofeld extends Synth
     static final String[] WAVES_SHORT = new String[] { "Off               ", "Pulse", "Saw", "Triangle", "Sine" };
     static final String[] OSCILLATOR_OCTAVES = new String[] { "128'", "64'", "32'", "16'", "8'", "4'", "2'", "1'", "1/2'" };
     static final String[] SAMPLE_BANKS = new String[] { "None", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L" };
-    
-    static final String INIT_RESOURCE = "../init/Blofeld.init";
-        
+            
     public Blofeld()
         {
         for(int i = 0; i < allParameters.length; i++)
@@ -2197,7 +2195,10 @@ public class Blofeld extends Synth
         //  always accepted as valid.
         //  IMPORTANT: the MIDI status-bytes as well as the 
         //  ID's are not used for computing the checksum."
-                
+        
+        // NOTE: it appears that the Blofeld's sysex does NOT include
+        // the NN or DD data bytes.        
+        
         byte b = 0;  // I *think* signed will work
         for(int i = 0; i < bytes.length; i++)
             b += bytes[i];

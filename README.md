@@ -1,22 +1,21 @@
 # edisyn
-Synthesizer Patch Editor (Version 3)
+Synthesizer Patch Editor (Version 4)
 
 By Sean Luke (sean@cs.gmu.edu)
 
 
 ## About
 
-Edisyn is a synthesizer patch editor library written in pure Java.  It comes with one completed patch editor
-for the *Waldorf Blofeld*, but will ultimately have some more written for it as well as I get time.  Edisyn
-has no graphical interface editor system like Ctrlr, but it's designed to make the GUI pretty easy to write.
+Edisyn is a synthesizer patch editor library written in pure Java.  It comes with two completed patch editors,
+for the *Waldorf Blofeld* and the *Waldorf Microwave II* series (including the XT and XTk), but will ultimately 
+have some more written for it as well as I get time.  Edisyn has no graphical interface editor system like 
+Ctrlr, but it's designed to make the GUI pretty easy to write (well, for me anyway).
 
 At present Edisyn *only runs on OS X* (well, I've only tried it on OS X, that's its target).  If you try running
-it elsewhere, you're on your own.
+it elsewhere, you're on your own.  We have confirmation that it runs fine under Linux.
 
-This is Edisyn version 3, a very early prerelease which doesn't feel very MacOS like yet, and which has lots of
-wires sticking out.  But it works!  Try it out on your Blofeld.
+This is Edisyn version 4, an early prerelease which doesn't feel very MacOS like yet, and which has lots of wires sticking out.  But it works!  Try it out on your synth!
 
-There is also part of an editor for the Waldorf II/XT/Xtk, but it's not done yet.
 
 
 ## Installation
@@ -25,12 +24,12 @@ For the time being, to install Edisyn you need to do the following three things.
 
 1. Install the Java JDK.
 2. Place the file `libraries/coremidi4j-1.0.jar` in the directory `/Library/Java/Extensions`
-3. Put file `jar/edisyn.3.jar` where you like (it's Edisyn's executable).
+3. Put file `jar/edisyn.4.jar` where you like (it's Edisyn's executable).
 
 
 ## Running
 
-Double click on the file `edisyn.3.jar`
+Double click on the file `edisyn.4.jar`
 
 Edisyn should launch and either present you with a window asking what MIDI interface you want to use, or tell
 you that there are no available MIDI interfaces, and that you'll need to work offline.

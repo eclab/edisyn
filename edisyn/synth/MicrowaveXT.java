@@ -62,7 +62,7 @@ public class MicrowaveXT extends Synth
 													"312", "315", "318", "321", "323", "326", "329", "332", "335", "338", "340", "343", "346", "349", "352", "354", "357"};
 	static final String[] CLIPPING = new String[] { "Saturate", "Overflow" };
 	static final String[] FILTER_2_TYPES = new String[] { "6dB LP", "6dB HP" };
-	static final String[] EFFECT_TYPES = new String[] { "Off", "Chorus", "Flanger 1", "Flanger 2", "AutoWahLP", "AutoWahBP", "Overdrive", "Amp. Mod", "Delay [XT/Xtk]", "Pan Delay [XT/Xtk]", "Mod Delay [XT/Xtk]", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35" };
+	static final String[] EFFECT_TYPES = new String[] { "Off", "Chorus", "Flanger 1", "Flanger 2", "AutoWahLP", "AutoWahBP", "Overdrive", "Amp. Mod", "Delay [XT/Xtk]", "Pan Delay [XT/Xtk]", "Mod Delay [XT/Xtk]" };
     static final String[] OSCILLATOR_GLIDE_TYPES = new String[] { "Portamento", "Glissando", "Fingered P", "Fingered G" };
     static final String[] OSCILLATOR_GLIDE_MODES = new String[] { "Exponential", "Linear" };
     static final String[] ARPEGGIATOR_ACTIVE = new String[] { "Off", "On", "Hold" };
@@ -1876,7 +1876,23 @@ JComponent extras[];
         if (key.equals("bank")) return new byte[0];  // this is not emittable
         if (key.equals("number")) return new byte[0];  // this is not emittable
         byte DEV = (byte)model.get("id", 0);
-        if (key.equals("osc1octave") || key.equals("osc2octave"))
+		
+		if (key.equals("effecttype"))
+            {
+            int index = ((Integer)(allParametersToIndex.get(key))).intValue();
+            byte HH = (byte)((index >> 7) & 127);
+            byte PP = (byte)(index & 127);
+            byte XX = (byte)model.get(key, 0);
+			// handle XT effects specially
+			if (XX == 8) // delay
+				XX = 32;
+			else if (XX == 9)  // pan delay
+				XX = 33;
+			else if (XX == 10)  // mod delay
+				XX = 34;
+            return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+           	}
+        else if (key.equals("osc1octave") || key.equals("osc2octave"))
             {
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
             byte HH = (byte)((index >> 7) & 127);
@@ -1996,6 +2012,17 @@ JComponent extras[];
                 {
                 bytes[i] = 0;
                 }
+		else if (key.equals("effecttype"))
+            {
+            bytes[i] = (byte)model.get(key, 0);
+            // handle XT effects specially
+			if (bytes[i] == 8) // delay
+				bytes[i] = (byte)32;
+			else if (bytes[i] == 9)  // pan delay
+				bytes[i] = (byte)33;
+			else if (bytes[i] == 10)  // mod delay
+				bytes[i] = (byte)34;
+           	}
     	else if (key.equals("osc1octave") || key.equals("osc2octave"))
                 {
                 bytes[i] = (byte)(16 + model.get(key, 0) * 12);
@@ -2170,6 +2197,16 @@ JComponent extras[];
 			{
 			// do nothing
 			}
+		else if (key.equals("effecttype"))
+            	{
+            	// handle XT effects specially
+            	if (b == 32) // delay
+            		b = 8;
+            	else if (b == 33)  // pan delay
+            		b = 9;
+            	else if (b == 34)  // mod delay
+            		b = 10;
+            	}
 		else if (key.equals("osc1octave") || key.equals("osc2octave"))
 			{
 			model.set(key, (b - 16) / 12);

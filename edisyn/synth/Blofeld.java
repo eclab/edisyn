@@ -1161,7 +1161,7 @@ public class Blofeld extends Synth
 			if (!(chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0])))
 				{
 				// maybe change just the label
-				chooser.setLabel("Sample Bank " + SAMPLE_BANKS[bank]);
+				//chooser.setLabel("Sample Bank " + SAMPLE_BANKS[bank]);
 				return;
 				}
 				
@@ -1171,7 +1171,8 @@ public class Blofeld extends Synth
 			String[] params = new String[128];
 			for(int i = 0; i < 128; i++)
 				params[i] = "" + (i + 1) + "              ";
-			chooser.setElements("Sample Bank " + SAMPLE_BANKS[bank], params);
+			//chooser.setElements("Sample Bank " + SAMPLE_BANKS[bank], params);
+			chooser.setElements("Sample", params);
 			
 			// restore old sample index
 			chooser.setIndex(samples[osc - 1]);
@@ -1201,25 +1202,33 @@ public class Blofeld extends Synth
         chooser.getCombo().setMinimumSize(d);
         chooser.getCombo().setMaximumSize(d);
         
+        
+        if (osc != 3)
+			{
+			params = SAMPLE_BANKS;
+            comp = new Chooser("Sample Bank [SL]", this, "osc" + osc + "samplebank", params);
+			
+			model.register("osc" + osc + "samplebank", new Updatable()
+				{
+   				public void update(String key, Model model)
+   					{
+   					int state = model.get(key, 0);
+   					buildWavetable(chooser, osc, state);
+   					// force an emit
+   					model.set("osc" + osc + "shape", model.get("osc" + osc + "shape", 0));
+   					}
+				});
+        	model.setImmutable("osc" + osc + "samplebank", true);
+
+            vbox.add(comp);
+            }
+
+
+        
         if (osc == 3)
             model.setSpecial("osc" + osc + "shape", 0);
         else
             model.setImmutable("osc" + osc + "shape", true);
-
-
-        if (osc != 3)
-            {
-            // 0 is ON for Limit WT, 1 is OFF.  It's flipped relative to other switches
-            comp = new CheckBox("Limit WT", this, "osc" + osc + "limitwt", true);
-            vbox.add(comp);
-          }
-            
-                
-        if (osc == 2)
-            {
-            comp = new CheckBox("Sync to Osc 3", this, "osc" + osc + "synctoosc3");
-            vbox.add(comp);
-            }
 
         hbox.add(vbox);
         vbox = new VBox();
@@ -1297,6 +1306,24 @@ public class Blofeld extends Synth
         ((LabelledDial)comp).setSecondLabel("Balance");
         hbox.add(comp);
 
+		vbox = new VBox();
+        if (osc != 3)
+            {
+            // 0 is ON for Limit WT, 1 is OFF.  It's flipped relative to other switches
+            comp = new CheckBox("Limit WT", this, "osc" + osc + "limitwt", true);
+            vbox.add(comp);
+          }
+            
+                
+        if (osc == 2)
+            {
+            comp = new CheckBox("Osc3 Sync", this, "osc" + osc + "synctoosc3");
+            ((CheckBox)comp).addToWidth(1);
+            vbox.add(comp);
+            }
+		hbox.add(vbox);
+
+/*
 		if (osc != 3)
 			{
             comp = new LabelledDial("Sample", this, "osc" + osc + "samplebank", color, 0, 12)
@@ -1323,6 +1350,7 @@ public class Blofeld extends Synth
 
             hbox.add(comp);
             }
+*/
 
         category.add(hbox, BorderLayout.CENTER);
         return category;

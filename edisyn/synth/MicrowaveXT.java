@@ -43,7 +43,7 @@ public class MicrowaveXT extends Synth
     static final String[] MOD_SOURCES = new String[/*32*/] {"Off", "LFO 1", "LFO1*MW", "LFO1*Press.", "LFO 2", "Filter Env", "Amp Env", "Wave Env", "Free Env", "Key Follow", "Keytrack", "Velocity", "Rel. Velo", "Pressure", "Poly Press", "Pitch Bend", "Mod Wheel", "Sustain", "Foot Ctrl", "Breath Ctrl", "Control W", "Control X", "Control Y", "Control Z", "Ctrl. Delay", "Modifier 1", "Modifier 2", "Modifier 3", "Modifier 4", "MIDI Clock", "Minimum", "Maximum" };
     static final String[] MOD_DESTINATIONS = new String[/*36*/] { "Pitch", "O1 Pitch", "O2 Pitch", "Wave 1 Pos", "Wave 2 Pos", "Mix Wave 1", "Mix Wave 2", "Mix Ringmod", "Mix Noise", "F1 Cutoff", "F1 Reson.", "F2 Cutoff", "Volume", "Panning", "FE Attack", "FE Decay", "FE Sustain", "FE Release", "AE Attack", "AE Decay", "AE Sustain", "AE Release", "WE Times", "WE Levels", "FE Times", "FE Levels", "LFO1 Rate", "LFO1 Level", "LFO2 Rate", "LFO2 Level", "M1 Amount", "M2 Amount", "M3 Amount", "M4 Amount", "FM Amount", "F1 Extra" };
     static final String[] MODIFIER_OPERATORS = new String[/*16*/] { "+", "-", "*", "/", "XOR", "OR", "AND", "S&H", "Ramp", "Switch", "Abs", "Min", "Max", "Lag", "Filter", "Diff"};
-    static final String[] FILTER_1_TYPES = new String[/*10*/] {  "24dB LP", "12dB LP", "24dB BP", "12dB BP", "12dB HP", "Sin -> 12dB LP", "12dB LP -> Wave", "Dual 12dB LP/BP", "12dB FM LP", "S&H -> 12dB LP" };   
+    static final String[] FILTER_1_TYPES = new String[/*10*/] {  "24dB LP", "12dB LP", "24dB BP", "12dB BP", "12dB HP", "Sin -> 12dB LP", "12dB LP -> Wave", "Dual 12dB LP/BP", "12dB FM LP", "S&H -> 12dB LP", "24dB Notch", "12dB Notch", "Band Stop" };   
 	static final String[] PLAY_PARAMETERS = new String[/*83*/] { "Osc 1 Octave", "Osc 1 Semitone", "Osc 1 Detune", "Osc 1 Pitchbend", "Osc 1 Keytrack", "Osc 2 Octave", "Osc 2 Semitone", "Osc 2 Detune", "Osc 2 Pitchbend", "Osc 2 Keytrack", "Wavetable", "Wave 1 Startwave", "Wave 1 Phase", "Wave 1 Env Amount", "Wave 1 Velocity", "Wave 1 Keytrack", "Wave 2 Startwave", "Wave 2 Phase", "Wave 2 Env Amount", "Wave 2 Velocity", "Wave 2 Keytrack", "Mix Wave 1", "Mix Wave 2", "Mix Ringmod", "Mix Noise", "Aliasing", "Quantize", "Clipping", "Filter 1 Cutoff", "Filter 1 Resonance", "Filter 1 Type", "Filter 1 Keytrack", "Filter 1 Env Emount", "Filter 1 Velocity", "Filter 2 Cutoff", "Filter 2 Type", "Filter 2 Keytrack", "Sound Volume", "Amp Env Velocity", "Amp Keytrack", "Chorus", "Panning", "Pan Keytrack", "Glide on/off", "Glide Type", "Arp On/Off/Hold", "Arp Tempo", "Arp Clock", "Arp Range", "Arp Pattern", "Arp Direction", "Arp Note Order", "Arp Velocity", "Allocation", "Assignment", "Filter Env Attack", "Filter Env Decay", "Filter Env Sustain", "Filter Env Release", "Amp Env Attack", "Amp Env Decay", "Amp Env Sustain", "Amp Env Release", "LFO1 Rate", "LFO1 Shape", "LFO1 Delay", "LFO1 Sync", "LFO1 Symmetry", "LFO1 Humanize", "LFO2 Rate", "LFO2 Shape", "LFO2 Delay", "LFO2 Sync", "LFO2 Symmetry", "LFO2 Humanize", "LFO2 Phase", "Osc 1 FM Amount", "Filter 1 Special", "Glide Time", "Control W", "Control X", "Control Y", "Control Z" };
 	static final String[] TRIGGERS = new String[] { "Normal", "Single", "Retrigger" };
 	static final String[] LFO_SHAPES = new String[] { "Sin", "Tri", "Sqr", "Saw", "Rand", "S&H" };
@@ -653,11 +653,45 @@ public class MicrowaveXT extends Synth
                 
         JComponent comp;
         String[] params;
-        HBox hbox = new HBox();
+        final HBox hbox = new HBox();
         VBox vbox = new VBox();
         
+        
+        extras = new JComponent[13];
+        
+        extras[6] = new LabelledDial("Wave", this, "filter1special", color, 0, 127);
+        extras[7] = new LabelledDial("BP Offset", this, "filter1special", color, 0, 127, 64);
+        extras[8] = new LabelledDial("Osc2 FM", this, "filter1special", color, 0, 127);
+        extras[9] = new LabelledDial("S&H Rate", this, "filter1special", color, 0, 127);
+		extras[12] = new LabelledDial("Bandwidth", this, "filter1special", color, 0, 127);
+		
+		JComponent strut = Strut.makeStrut(extras[7].getPreferredSize().width, extras[7].getPreferredSize().height);
+		extras[11] = strut;
+		extras[10] = strut;
+		extras[5] = strut;
+		extras[4] = strut;
+		extras[3] = strut;
+		extras[2] = strut;
+		extras[1] = strut;
+		extras[0] = strut;
+
+        hbox.addLast(extras[0]);
+ 
+
+        
         params = FILTER_1_TYPES;
-        comp = new Chooser("Type", this, "filter1type", params);
+        comp = new Chooser("Type", this, "filter1type", params)
+            {
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+				hbox.removeLast();
+				hbox.addLast(extras[model.get(key, 0)]);
+				hbox.revalidate();
+				hbox.repaint();
+                }
+            };
+            
         model.setImmutable("filter1type", true);
 		vbox.add(comp);
 		hbox.add(vbox);
@@ -685,12 +719,11 @@ public class MicrowaveXT extends Synth
         ((LabelledDial)comp).setSecondLabel("Velocity");
         hbox.add(comp);
         
-        comp = new LabelledDial("Extra", this, "filter1special", color, 0, 127);
-        hbox.add(comp);
- 
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
+
+JComponent extras[];
 
     /** Add a Filter2 category */
     

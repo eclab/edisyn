@@ -23,26 +23,25 @@ public class Strut
     {
     public static JComponent makeHorizontalStrut(final int space)
     	{
+    	return makeStrut(space, 0);
+		} 
+		
+    public static JComponent makeVerticalStrut(final int space)
+    	{
+    	return makeStrut(0, space);
+    	}
+
+    public static JComponent makeStrut(final int width, final int height)
+    	{
     	JPanel panel = new JPanel()
 			{
-			public Dimension getMinimumSize() { return new Dimension(space,0); }
-			public Dimension getPreferredSize() { return new Dimension(space,0); }
-			public Dimension getMaximumSize() { return new Dimension(space,0); }
+			public Dimension getMinimumSize() { return new Dimension(width, height); }
+			public Dimension getPreferredSize() { return new Dimension(width, height); }
+			public Dimension getMaximumSize() { return new Dimension(width, height); }
 			};
 		panel.setBackground(Style.BACKGROUND_COLOR);
 		return panel;
 		} 
 		
-    public static JComponent makeVerticalStrut(final int space)
-    	{
-    	JPanel panel = new JPanel()
-			{
-			public Dimension getMinimumSize() { return new Dimension(0,space); }
-			public Dimension getPreferredSize() { return new Dimension(0,space); }
-			public Dimension getMaximumSize() { return new Dimension(0,space); }
-			};
-		panel.setBackground(Style.BACKGROUND_COLOR);
-		return panel;
-		}               
 
     }

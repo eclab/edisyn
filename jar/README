@@ -1,9 +1,6 @@
 Edisyn's executable is entirely contained within the jar file
 
-	edisyn.4.jar
-
-You'll need to have installed the coremidi4j-1.0.jar file first (see the
-file libraries/README for instructions, they're easy).
+	edisyn.5.jar
 
 You also need to have Java installed on your computer.
 

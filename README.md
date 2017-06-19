@@ -1,5 +1,5 @@
 # edisyn
-Synthesizer Patch Editor (Version 4)
+Synthesizer Patch Editor (Version 5)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -14,22 +14,23 @@ Ctrlr, but it's designed to make the GUI pretty easy to write (well, for me anyw
 At present Edisyn *only runs on OS X* (well, I've only tried it on OS X, that's its target).  If you try running
 it elsewhere, you're on your own.  We have confirmation that it runs fine under Linux.
 
-This is Edisyn version 4, an early prerelease which doesn't feel very MacOS like yet, and which has lots of wires sticking out.  But it works!  Try it out on your synth!
+This is Edisyn version 5, an early prerelease which doesn't feel very MacOS like yet, and which has lots of wires sticking out.  But it works!  Try it out on your synth!
 
 
 
 ## Installation
 
-For the time being, to install Edisyn you need to do the following three things.
+For the time being, to install Edisyn you need to do the following two things.
 
 1. Install the Java JDK.
-2. Place the file `libraries/coremidi4j-1.0.jar` in the directory `/Library/Java/Extensions`
-3. Put file `jar/edisyn.4.jar` where you like (it's Edisyn's executable).
+2. Put the file `jar/edisyn.5.jar` where you like (it's Edisyn's executable).
 
 
-## Running
+## Running 
 
-Double click on the file `edisyn.4.jar`
+- *On OS X:* Double click on the file `edisyn.5.jar`
+- *On Windows:* I don't know.  Anyone?
+- *On Linux:* In Ubuntu, you'll first need to change the Properties of the jar file (see the "Open With" tab) to your Java VM.  Thereafter you can just double-click on the file.
 
 Edisyn should launch and either present you with a window asking what MIDI interface you want to use, or tell
 you that there are no available MIDI interfaces, and that you'll need to work offline.
@@ -38,14 +39,15 @@ you that there are no available MIDI interfaces, and that you'll need to work of
 ### The Editor Pane
 
 The editor pane should be self-explanatory.  There are four tabs which together cover all of the parameters of 
-the synthesizer.  The first tab, *Oscillators and Filters*, also contains an area called *Waldorf Blofeld* which
-lets you set the patch name and category, bank, number, and Blofeld ID.   The bank, number, and ID are mostly
-for saving out to sysex files: whenever you upload or download patch to/from the Blofeld, you'll be prompted
+the synthesizer.  The first tab, *Oscillators and Filters*, also contains an area called *Waldorf Blofeld* (or
+some other synth) which
+lets you set the patch name and category, bank, number, and Device ID.   The bank, number, and ID are mostly
+for saving out to sysex files: whenever you upload or download patch to/from the synth, you'll be prompted
 to revise those if necessary.
 
 ### The File Menu
 
-* *New* creates a new editor pane, set to the default (the Blofeld's Init patch setting).  Note that only the frontmost editor pane will receive MIDI.  So if you for
+* *New* creates a new editor pane, set to the default (the synth's Init patch setting).  Note that only the frontmost editor pane will receive MIDI.  So if you for
 some reason set up both editor panes with the same interface, then request MIDI from one pane, then quickly
 switch to the other pane, you could in theory get the MIDI sent to the other pane.  So don't do that.
 
@@ -56,7 +58,7 @@ doesn't open a new window.
 
 * *Save* and *Save As...* save to a sysex file.
 
-* *Reset to Default* resets the window to display the Blofeld's Init patch setting.
+* *Reset to Default* resets the window to display the synth's Init patch setting.
 
 * *Export Diff to Text...* saves out to a text file a line-by-line description of every parameter which is *different* 
 from the default Init patch setting, plus the current value it's set to.  The patch value is either a string (in the
@@ -112,8 +114,7 @@ channel of course.  This can be set to "Any" for any channel (Omni).
 If you change a widget in the editor, Edisyn will send the appropriate sysex command to the synthesizer to change it on
 the synth as well.  Additionally, if you change a parameter on the synthesizer and it forwards a *sysex* command to Edisyn,
 then Edisyn will update the appropriate widget in the editor.  At present Edisyn does't support CC commands from the
-synthesizer (maybe later).  So (for example) on the Blofeld you'll need to change the machine to *send sysex* -- not CC only --
-when changing parameters on the synth.
+synthesizer (maybe later).  So (for example) on the Blofeld you'll need to change the machine to *send sysex* -- not CC only -- when changing parameters on the synth.
 
 ## Blofeld Bugs
 

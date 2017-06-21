@@ -1152,7 +1152,6 @@ public class BlofeldMulti extends Synth
 			}
 		else if (key.startsWith("abits"))
 			{
-			System.err.println(part);
 			model.set("status" + part, (b >> 6) & 1);
 			model.set("local" + part, (b >> 2) & 1);
 			model.set("usb" + part, (b >> 1) & 1);

@@ -275,7 +275,7 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** Builds a receiver to attach to the current IN transmitter.  The receiver
         can handle merging and patch reception. */
-    Receiver buildInReceiver()
+    public Receiver buildInReceiver()
         {
         return new Receiver()
             {
@@ -286,6 +286,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void send(MidiMessage message, long timeStamp)
                 {
                 final byte[] data = message.getMessage();
+                
                 if (SwingUtilities.getRoot(Synth.this) == javax.swing.FocusManager.getCurrentManager().getActiveWindow() &&                
                     recognizeLocal(data))
                     {
@@ -413,6 +414,7 @@ public abstract class Synth extends JComponent implements Updatable
             tuple.dispose();
                         
         tuple = result;
+        
         setSendMIDI(true);
         updateTitle();
         return retval;
@@ -429,8 +431,8 @@ public abstract class Synth extends JComponent implements Updatable
             if (tuple.key != null && tuple.keyReceiver != null)
                 tuple.key.removeReceiver(tuple.keyReceiver);
             tuple.dispose();
-            tuple = null;
             }
+        tuple = null;
         setSendMIDI(true);
         updateTitle();
         }
@@ -462,11 +464,20 @@ public abstract class Synth extends JComponent implements Updatable
         synth has turned off the ability to send temporarily (3) the sysex message is not
         valid (4) an error occurred when the receiver tried to send the data.  */
     public boolean tryToSendSysex(byte[] data)
+    	{
+    	return tryToSendSysex(data, false);
+    	}
+    
+    /** Attempts to send MIDI sysex, possibly forcing sending MIDI even if getSendMIDI() is false. 
+    	Returns false if (1) the data was empty or null (2)
+        synth has turned off the ability to send temporarily (3) the sysex message is not
+        valid (4) an error occurred when the receiver tried to send the data.  */
+    public boolean tryToSendSysex(byte[] data, boolean forceSendMIDI)
         {
         if (data == null || data.length == 0) 
             return false;
 
-        if (getSendMIDI())
+        if (forceSendMIDI || getSendMIDI())
             {
             if (tuple == null) return false;
             Receiver receiver = tuple.out;
@@ -492,6 +503,11 @@ public abstract class Synth extends JComponent implements Updatable
 				frame.setVisible(true);
 				if (setupMIDI) 
 					synth.setupMIDI("Choose MIDI devices to send to and receive from.", tuple);
+
+				// we call this here even though it's already been called as a result of frame.setVisible(true)
+				// because it's *after* setupMidi(...) and so it gives synths a chance to send
+				// a MIDI sysex message in response to the window becoming front.
+				synth.windowBecameFront();				
 				}
 			return synth;
 			}
@@ -510,7 +526,7 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 	public static final Class[] synths = new Class[] { Blofeld.class, BlofeldMulti.class, MicrowaveXT.class, MicrowaveXTMulti.class };
-	public static final String[] synthNames = { "Waldorf Blofeld (Single)", "[Unfinished] Waldorf Blofeld (Multi)", "Waldorf Microwave II/XT/XTk (Single)", "[Unfinished] Waldorf Microwave II/XT/XTk (Multi)" };
+	public static final String[] synthNames = { "Waldorf Blofeld (Single)", "Waldorf Blofeld (Multi)", "Waldorf Microwave II/XT/XTk (Single)", "Waldorf Microwave II/XT/XTk (Multi)" };
           
     public JFrame sprout()
         {
@@ -852,10 +868,17 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 doCloseWindow();
                 }
+
+		    public void windowActivated(WindowEvent e)
+    			{
+   				windowBecameFront();
+	     	    }
+
             });
     
         updateTitle();
-        numOpenWindows++;
+        numOpenWindows++;        
+        
         return frame;
         }
     
@@ -1030,6 +1053,11 @@ public abstract class Synth extends JComponent implements Updatable
 
         updateTitle();
         }
+        
+    /** Override this as you see fit to do something special when your window becomes front. */
+    public void windowBecameFront()
+    	{
+    	}
 
     public void doCloseWindow()
         {
@@ -1037,12 +1065,15 @@ public abstract class Synth extends JComponent implements Updatable
             {
             if (tuple != null)
                 tuple.dispose();
+            tuple = null;
+            
             JFrame frame = (JFrame)(SwingUtilities.getRoot(this));
             if (frame != null)
                 {
                 frame.setVisible(false);
                 frame.dispose();
                 }
+            frame = null;
                                 
             numOpenWindows--;
             if (numOpenWindows <= 0)

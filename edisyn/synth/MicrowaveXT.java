@@ -202,10 +202,24 @@ public class MicrowaveXT extends Synth
                 
         model.set("name", "Init Sound V1.1 ");  // has to be 16 long
         
-        loadDefaults();
+        loadDefaults();        
         }
                 
-                
+     public void windowBecameFront() { updateMode(); }
+
+     public void updateMode()
+    	{
+        SwingUtilities.invokeLater(new Runnable() 
+        	{ 
+        	public void run() 
+        		{
+		        byte DEV = (byte)model.get("id", 0);
+		    	// we'll send a mode dump to change the mode to Single
+    		    tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x00, (byte)0xF7 }, true);
+    		    }
+    		});
+    	}
+               
     public String getDefaultResourceFileName() { return "MicrowaveXT.init"; }
 
     public boolean gatherInfo(String title, Model change)
@@ -2136,6 +2150,15 @@ public class MicrowaveXT extends Synth
         return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x00, BB, NN, (byte)((BB + NN)&127), (byte)0xF7 };
         }
         
+    public byte[] requestDump(int bank, int number, int id)
+        {
+        byte DEV = (byte)id;
+        byte BB = (byte)bank;
+        byte NN = (byte)number;
+        //(BB + NN)&127 is checksum
+        return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x00, BB, NN, (byte)((BB + NN)&127), (byte)0xF7 };
+        }
+        
     public byte[] requestCurrentDump(Model tempModel)
         {
         if (tempModel == null)
@@ -2147,10 +2170,12 @@ public class MicrowaveXT extends Synth
 
     public static boolean recognize(byte[] data)
         {
-        boolean v = (data[0] == (byte)0xF0 &&
+        boolean v = (
+        	data.length == EXPECTED_SYSEX_LENGTH &&
+        	data[0] == (byte)0xF0 &&
             data[1] == (byte)0x3E &&
             data[2] == (byte)0x0E &&
-            data.length == EXPECTED_SYSEX_LENGTH);
+            data[4] == (byte)0x10);
         return v;
         }
         
@@ -2323,6 +2348,7 @@ public class MicrowaveXT extends Synth
             setParameterByIndex(i, data[i + 7]);
             }
         revise();  
+		updateMode();
         return retval;     
         }
 

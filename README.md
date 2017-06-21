@@ -1,23 +1,25 @@
 # edisyn
-Synthesizer Patch Editor (Version 6)
+Synthesizer Patch Editor (Version 7)
 
 By Sean Luke (sean@cs.gmu.edu)
 
 
 ## About
 
-Edisyn is a synthesizer patch editor library written in pure Java.  It comes with two completed patch editors,
-for the *Waldorf Blofeld* and the *Waldorf Microwave II* series (including the XT and XTk), but will ultimately 
-have some more written for it as well as I get time.  Edisyn has no graphical interface editor system like 
+Edisyn is a synthesizer patch editor library written in pure Java.  
+
+Edisyn presently supports:
+
+* Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes)
+* Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
+
+Ultimately Edisyn will have some more written for it as well as I get time; and of course the patch
+editors I can write are restricted to the synths I own and can test on!  
+Edisyn has no graphical interface editor system like 
 Ctrlr, but it's designed to make the GUI pretty easy to write (well, for me anyway).
 
 At present Edisyn *only runs on OS X* (well, I've only tried it on OS X, that's its target).  If you try running
 it elsewhere, you're on your own.  We have confirmation that it runs fine under Linux.
-
-This is Edisyn version 6, an early prerelease which doesn't feel very MacOS like yet, and which has lots of wires sticking out.  But it works!  Try it out on your synth!
-
-<b><font color=red>Important Note</font></b> The Blofeld and Microwave Multi patch windows are not yet completed and will not work properly.  They're only included as a preview.
-
 
 
 ## Installation
@@ -25,12 +27,12 @@ This is Edisyn version 6, an early prerelease which doesn't feel very MacOS like
 For the time being, to install Edisyn you need to do the following two things.
 
 1. Install the Java JDK.
-2. Put the file `jar/edisyn.6.jar` where you like (it's Edisyn's executable).
+2. Put the file `jar/edisyn.7.jar` where you like (it's Edisyn's executable).
 
 
 ## Running 
 
-- *On OS X:* Double click on the file `edisyn.6.jar`
+- *On OS X:* Double click on the file `edisyn.7.jar`
 - *On Windows:* I don't know.  Anyone?
 - *On Linux:* In Ubuntu, you'll first need to change the Properties of the jar file (see the "Open With" tab) to your Java VM.  Thereafter you can just double-click on the file.
 

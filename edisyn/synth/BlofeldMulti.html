@@ -8,15 +8,15 @@
 <p><b>Communicating with Edisyn</b> Set your Blofeld to send <b>Sysex only</b>, not <b>Ctl</b> nor <b>Ctl+Sysex</b>.    Also make sure that <b>Ctrl Receive</b> is on.
 
 
-<p><b>Mute</b> Each Part has a button called <b>Mute</b>.  This is just the opposite of what the Blofeld calls <b>Status</b>: when Mute is off, Status is Enabled.
+<p><b>Play</b> Each Part has a button called <b>Play</b>.  This sets the status to "play" (versus "mute").
+
+<p><b>Show</b> Each Part has a button called <b>Show</b>.  This shows the given sound (bank and number) as a separate Blofeld Single editor panel.
 
 <p><b>Gotchas</b> Multimode on the Blofeld is a mess.
 
 <ul>
 <li>
 The Blofeld's Multimode sysex is entirely undocumented, and this patch editor is the result of reverse engineering.  There may be errors: please report them.  
-
-<p><li>At present I do not know how to dump to working memory. This means that when you reset, randomize, or send a patch, the patch isn't sent. You have to write a patch.
 
 <p><li>The Blofeld doesn't send or receive sysex for updating a single Multimode parameter, so you won't see changes on the Blofeld (or Edisyn) when tweaking a parameter on the other.
 

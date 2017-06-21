@@ -320,7 +320,7 @@ public class BlofeldMulti extends Synth
         }
 
 
-    public JComponent addInstrument(int inst, Color color)
+    public JComponent addInstrument(final int inst, Color color)
         {
         Category category = new Category("Part " + inst, color);
                 
@@ -349,16 +349,54 @@ public class BlofeldMulti extends Synth
         VBox main = new VBox();
         HBox hbox2 = new HBox();
         
-        comp = new CheckBox("Mute", this, "status" + inst);
+    	comp = new PushButton("Show")
+    		{
+    		public void perform()
+    			{
+    			final Blofeld synth = new Blofeld();
+    			synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+    			if (synth.tuple != null)
+    				{    	
+    				// This is a little tricky.  When the dump comes in from the synth,
+    				// Edisyn will only send it to the topmost panel.  So we first sprout
+    				// the panel and show it, and THEN send the dump request.  But this isn't
+    				// enough, because what setVisible(...) does is post an event on the
+    				// Swing Event Queue to build the window at a later time.  This later time
+    				// happens to be after the dump comes in, so it's ignored.  So what we
+    				// ALSO do is post the dump request to occur at the end of the Event Queue,
+    				// so by the time the dump request has been made, the window is shown and
+    				// frontmost.
+    						
+	    			synth.sprout();
+	 				JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+					frame.setVisible(true);
+
+					SwingUtilities.invokeLater(
+						new Runnable()
+							{
+							public void run() 
+								{ 
+								int bank = BlofeldMulti.this.model.get("bank" + inst, 0);
+								int number = BlofeldMulti.this.model.get("number" + inst, 0);
+   								int id = BlofeldMulti.this.model.get("id", 0);
+   								synth.tryToSendSysex(synth.requestDump(bank, number, id));
+   								}
+   							});
+					}
+    			}
+    		};
+    	hbox2.add(comp);
+    	
+        comp = new CheckBox("Play", this, "status" + inst, true);
     	hbox2.add(comp);    
 
-        comp = new CheckBox("Get Local", this, "local" + inst);
+        comp = new CheckBox("Local", this, "local" + inst);
     	hbox2.add(comp);    
 
-        comp = new CheckBox("Get MIDI", this, "midi" + inst);
+        comp = new CheckBox("MIDI", this, "midi" + inst);
     	hbox2.add(comp);    
     	
-        comp = new CheckBox("Get USB", this, "usb" + inst);
+        comp = new CheckBox("USB", this, "usb" + inst);
     	hbox2.add(comp);
     	
     	main.add(hbox2);
@@ -367,28 +405,28 @@ public class BlofeldMulti extends Synth
 		
     	vbox = new VBox();
     	
-        comp = new CheckBox("Get Pressure", this, "pressure" + inst);
+        comp = new CheckBox("Pressure", this, "pressure" + inst);
     	vbox.add(comp);    
 
-        comp = new CheckBox("Get Pitch Bend", this, "bend" + inst);
+        comp = new CheckBox("Pitch Bend", this, "bend" + inst);
     	vbox.add(comp);    
     	
     	hbox3.add(vbox);
     	vbox = new VBox();
 
-        comp = new CheckBox("Get Sustain", this, "sustain" + inst);
+        comp = new CheckBox("Sustain", this, "sustain" + inst);
     	vbox.add(comp);    
     	
-        comp = new CheckBox("Get Edits", this, "edits" + inst);
+        comp = new CheckBox("Edits", this, "edits" + inst);
     	vbox.add(comp);    
 
     	hbox3.add(vbox);
     	vbox = new VBox();
     	
-        comp = new CheckBox("Get Mod Wheel", this, "modwheel" + inst);
+        comp = new CheckBox("Mod Wheel", this, "modwheel" + inst);
     	vbox.add(comp);    
 
-		comp = new CheckBox("Get Prog Change", this, "progchange" + inst);
+		comp = new CheckBox("Prg Change", this, "progchange" + inst);
     	vbox.add(comp);    
 
         hbox3.add(vbox);
@@ -988,7 +1026,7 @@ public class BlofeldMulti extends Synth
         full[5] = BB;
         full[6] = NN;
         System.arraycopy(bytes, 0, full, 7, bytes.length);
-        full[423] = produceChecksum(BB, NN, bytes);
+        full[423] = produceChecksum(bytes);
         full[424] = (byte)0xF7;
 
         return full;
@@ -996,7 +1034,7 @@ public class BlofeldMulti extends Synth
 
 
     /** Generate a Waldorf checksum of the data bytes */
-    byte produceChecksum(byte bb, byte nn, byte[] bytes)
+    byte produceChecksum(byte[] bytes)
         {
         //      From the sysex document:
         //
@@ -1006,9 +1044,11 @@ public class BlofeldMulti extends Synth
         //  always accepted as valid.
         //  IMPORTANT: the MIDI status-bytes as well as the 
         //  ID's are not used for computing the checksum."
-                
-        byte b = bb;
-        b += nn;  // I *think* signed will work
+        
+        // NOTE: it appears that the Blofeld's sysex does NOT include
+        // the NN or DD data bytes.        
+        
+        byte b = 0;  // I *think* signed will work
         for(int i = 0; i < bytes.length; i++)
             b += bytes[i];
         
@@ -1040,10 +1080,12 @@ public class BlofeldMulti extends Synth
 
     public static boolean recognize(byte[] data)
         {
-        boolean v = (data[0] == (byte)0xF0 &&
+        boolean v = (
+        	data.length == EXPECTED_SYSEX_LENGTH &&
+        	data[0] == (byte)0xF0 &&
             data[1] == (byte)0x3E &&
             data[2] == (byte)0x13 &&
-            data.length == EXPECTED_SYSEX_LENGTH);
+            data[4] == (byte)0x11);
         return v;
         }
         
@@ -1110,6 +1152,7 @@ public class BlofeldMulti extends Synth
 			}
 		else if (key.startsWith("abits"))
 			{
+			System.err.println(part);
 			model.set("status" + part, (b >> 6) & 1);
 			model.set("local" + part, (b >> 2) & 1);
 			model.set("usb" + part, (b >> 1) & 1);

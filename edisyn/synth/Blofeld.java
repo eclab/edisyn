@@ -2196,6 +2196,14 @@ public class Blofeld extends Synth
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x00, BB, NN, 0x00, (byte)0xF7 };
         }
     
+    public byte[] requestDump(int bank, int number, int id)
+        {
+        byte DEV = (byte)id;
+        byte BB = (byte)bank;
+        byte NN = (byte)number;
+        return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x00, BB, NN, 0x00, (byte)0xF7 };
+        }
+        
     public byte[] requestCurrentDump(Model tempModel)
         {
         if (tempModel == null)
@@ -2207,12 +2215,13 @@ public class Blofeld extends Synth
     
     public static boolean recognize(byte[] data)
         {
-        return (data[0] == (byte)0xF0 &&
+        boolean v = (
+        		data.length == EXPECTED_SYSEX_LENGTH &&
+        		data[0] == (byte)0xF0 &&
            		data[1] == (byte)0x3E &&
             	data[2] == (byte)0x13 &&
-            	// presently I'm not filtering by device, so no data[3]
-            	data[4] == (byte)0x10 &&
-            	data.length == EXPECTED_SYSEX_LENGTH );
+            	data[4] == (byte)0x10);
+        return v;
         }
     
     public static final int EXPECTED_SYSEX_LENGTH = 392;

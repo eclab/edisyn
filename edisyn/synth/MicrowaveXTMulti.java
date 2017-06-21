@@ -48,6 +48,15 @@ public class MicrowaveXTMulti extends Synth
             {
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
+
+		for(int j = 1; j < 9; j++)
+			{
+	        for(int i = 0; i < allInstrumentParameters.length; i++)
+	            {
+	            allInstrumentParametersToIndex.put(allInstrumentParameters[i] + j, Integer.valueOf(i));
+	            }
+	        }
+
                 
         setSendsAllParametersInBulk(true);
         
@@ -96,10 +105,24 @@ public class MicrowaveXTMulti extends Synth
 
         model.set("name", "Init            ");  // has to be 16 long
         
-        //loadDefaults();
+        loadDefaults();
         }
-                
-                
+    
+    public void windowBecameFront() { updateMode(); }
+    
+     public void updateMode()
+    	{
+        SwingUtilities.invokeLater(new Runnable() 
+        	{ 
+        	public void run() 
+        		{ 
+		        byte DEV = (byte)model.get("id", 0);
+		    	// we'll send a mode dump to change the mode to Single
+    		    tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x01, (byte)0xF7 }, true);
+    		    }
+    		});
+    	}
+               
     public String getDefaultResourceFileName() { return "MicrowaveXTMulti.init"; }
 
     public boolean gatherInfo(String title, Model change)
@@ -257,7 +280,7 @@ public class MicrowaveXTMulti extends Synth
         }
 
 
-    public JComponent addInstrument(int inst, Color color)
+    public JComponent addInstrument(final int inst, Color color)
         {
         Category category = new Category("Instrument " + inst, color);
                 
@@ -285,9 +308,10 @@ public class MicrowaveXTMulti extends Synth
         
         hbox.add(vbox);
 
-       	params = PAN_MOD;
-       	vbox = new VBox();
 
+    	vbox = new VBox();
+
+       	params = PAN_MOD;
         comp = new Chooser("Pan Mod", this, "arpdirectionection", params);
         vbox.add(comp);
 
@@ -305,6 +329,47 @@ public class MicrowaveXTMulti extends Synth
     	vbox.add(comp);    
 
 		
+    	HBox hbox2 = new HBox();
+    	comp = new PushButton("Show")
+    		{
+    		public void perform()
+    			{
+    			final MicrowaveXT synth = new MicrowaveXT();
+    			synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+    			if (synth.tuple != null)
+    				{
+    				// This is a little tricky.  When the dump comes in from the synth,
+    				// Edisyn will only send it to the topmost panel.  So we first sprout
+    				// the panel and show it, and THEN send the dump request.  But this isn't
+    				// enough, because what setVisible(...) does is post an event on the
+    				// Swing Event Queue to build the window at a later time.  This later time
+    				// happens to be after the dump comes in, so it's ignored.  So what we
+    				// ALSO do is post the dump request to occur at the end of the Event Queue,
+    				// so by the time the dump request has been made, the window is shown and
+    				// frontmost.
+    						
+	    			synth.sprout();
+	 				JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+					frame.setVisible(true);					
+
+					SwingUtilities.invokeLater(
+						new Runnable()
+							{
+							public void run() 
+								{ 
+								int bank = MicrowaveXTMulti.this.model.get("bank" + inst, 0);
+								int number = MicrowaveXTMulti.this.model.get("number" + inst, 0);
+	   							int id = MicrowaveXTMulti.this.model.get("id", 0);
+	   							synth.tryToSendSysex(synth.requestDump(bank, number, id));
+	   							}
+    						});
+    				}
+    			}
+    		};
+    	hbox2.addLast(comp);
+		vbox.add(hbox2);
+
+
 		vbox = new VBox();
         params = ARPEGGIATOR_ACTIVE;
         comp = new Chooser("Arp Active", this, "arp" + inst, params);
@@ -326,7 +391,7 @@ public class MicrowaveXTMulti extends Synth
         
         
        	vbox = new VBox();
-        HBox hbox2 = new HBox();
+        hbox2 = new HBox();
 
         comp = new LabelledDial("Volume", this, "volume" + inst, color, 0, 127);
         hbox2.add(comp);
@@ -360,6 +425,20 @@ public class MicrowaveXTMulti extends Synth
                 }
     		};
         ((LabelledDial)comp).setSecondLabel("Key");
+        hbox2.add(comp);
+
+        comp = new LabelledDial("MIDI", this, "channel" + inst, color, 0, 17)
+			{
+            public String map(int val)
+                {
+                if (val == 0)
+                	return "Omni";
+                else if (val == 1)
+                	return "Global";
+                else return "" + (val - 1);
+                }
+        	};
+        ((LabelledDial)comp).setSecondLabel("Channel");
         hbox2.add(comp);
 
 		vbox.add(hbox2);
@@ -430,6 +509,43 @@ public class MicrowaveXTMulti extends Synth
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
+
+
+    /** Map of parameter -> index in the allInstrumentParameters array. */
+	HashMap allInstrumentParametersToIndex = new HashMap();
+
+	final static String[] allInstrumentParameters = new String[]
+		{
+		"bank",
+		"number",
+		"channel",
+		"volume",
+		"transpose",
+		"detune",
+		"output",
+		"status",
+		"panning",
+		"panmod",
+		"-",
+		"-",
+		"lowvel",
+		"hivel",
+		"lowkey",
+		"hikey",
+		"arp",
+		"arpclock",
+		"arprange",
+		"arppattern",
+		"arpdirection",
+		"arporder",
+		"arpvel",
+		"arpreset",
+		"arpnotesout",
+		"-",
+		"midisend",
+		"-"
+		};
+
 
 
 
@@ -741,12 +857,16 @@ public class MicrowaveXTMulti extends Synth
                 byte LL = 0x20;
                 if (index > 32)
                 	{
+                	// In Section 2.23 of sysex document, the locations are listed as going 1...7.
+                	// It's actually 0...7
+                
                 	LL = (byte)((index - 32) / 28);  // hope that's right
                 	}
                 	
                 // In Section 2.23 of sysex document, MULP is declared to be 0x20, but then in the
-                // format example, it's written as 0x21
-                byte[] b = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, LL, PP, XX, (byte)0xF7 };
+                // format example, it's written as 0x21.  It's actually 0x21.
+                
+                byte[] b = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x21, LL, PP, XX, (byte)0xF7 };
                 System.arraycopy(b, 0, bytes, i * 9, 9);
                 }
             return bytes;
@@ -754,14 +874,24 @@ public class MicrowaveXTMulti extends Synth
         else
             {
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
+
             byte PP = (byte)(index & 127);
+            if (index >= 32)  // uh oh, it's an instrument parameter, handle it specially
+            	{
+            	PP = (byte)(((Integer)(allInstrumentParametersToIndex.get(key))).intValue() & 127);
+            	}
+            	
             byte XX = (byte)model.get(key, 0);
 			byte LL = 0x20;
-			if (index > 32)
+			if (index >= 32)
 				{
 				LL = (byte)((index - 32) / 28);  // hope that's right
 				}
-           return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, LL, PP, XX, (byte)0xF7 };
+
+                // In Section 2.23 of sysex document, MULP is declared to be 0x20, but then in the
+                // format example, it's written as 0x21.  It's actually 0x21.
+                
+           return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x21, LL, PP, XX, (byte)0xF7 };
             }
         }
     
@@ -798,15 +928,16 @@ public class MicrowaveXTMulti extends Synth
 				}
 			}
 			
-		// In Section 2.23 of sysex document, MULD is declared to be 0x21, but then in the
-		// format example, it's written as 0x11
+                // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
+                // format example, it's written as 0x11.  It's actually 0x11.
+                
 		
         byte[] full = new byte[getExpectedSysexLength()];
         full[0] = (byte)0xF0;
         full[1] = 0x3E;
         full[2] = 0x0E;
         full[3] = DEV;
-        full[4] = 0x21;
+        full[4] = 0x11;
         full[5] = BB;
         full[6] = NN;
         // next comes the MDATA, followed by all 8 IDATA slots
@@ -843,30 +974,41 @@ public class MicrowaveXTMulti extends Synth
 
     public byte[] requestDump(Model tempModel)
         {
+                // In Section 2.21 of sysex document, MULR is declared to be 0x11, but then in the
+                // format example, it's written as 0x01.  It's actually 0x01.
+                
         if (tempModel == null)
             tempModel = getModel();
         byte DEV = (byte)tempModel.get("id", 0);
         byte BB = 0;  // only 1 bank
         byte NN = (byte)tempModel.get("number", 0);
         //(BB + NN)&127 is checksum
-        return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x11, BB, NN, (byte)((BB + NN)&127), (byte)0xF7 };
+        return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x01, BB, NN, (byte)((BB + NN)&127), (byte)0xF7 };
         }
         
     public byte[] requestCurrentDump(Model tempModel)
         {
+                // In Section 2.21 of sysex document, MULR is declared to be 0x11, but then in the
+                // format example, it's written as 0x01.  It's actually 0x01.
+                
         if (tempModel == null)
             tempModel = getModel();
         byte DEV = (byte)tempModel.get("id", 0);
         //(0x75 + 0x00)&127 is checksum
-        return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x11, 0x20, 0x00, (byte)((0x20 + 0x00)&127), (byte)0xF7 };
+        return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x01, 0x20, 0x00, (byte)((0x20 + 0x00)&127), (byte)0xF7 };
         }
 
     public static boolean recognize(byte[] data)
         {
-        boolean v = (data[0] == (byte)0xF0 &&
+                // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
+                // format example, it's written as 0x11.  It's actually 0x11.
+                
+        boolean v = (
+        	data.length == EXPECTED_SYSEX_LENGTH &&
+        	data[0] == (byte)0xF0 &&
             data[1] == (byte)0x3E &&
             data[2] == (byte)0x0E &&
-            data.length == EXPECTED_SYSEX_LENGTH);
+            data[4] == (byte)0x11);
         return v;
         }
         
@@ -975,6 +1117,9 @@ public class MicrowaveXTMulti extends Synth
 
     public boolean parse(byte[] data)
         {
+                // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
+                // format example, it's written as 0x11.  It's actually 0x11, though we don't check for it here.
+                
         boolean retval = true;
         model.set("id", data[3]);
         if (data[5] < 8)  // or < 1 ? Anyway, otherwise it's probably just local patch data.  Too bad they do this. :-(
@@ -992,6 +1137,7 @@ public class MicrowaveXTMulti extends Synth
             setParameterByIndex(i, data[i + 7]);
             }
         revise();  
+        updateMode();
         return retval;     
         }
 

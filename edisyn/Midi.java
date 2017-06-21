@@ -128,7 +128,7 @@ public class Midi
             return thru;
             }
                         
-        /** Returns a threadsafe Receiver. s*/
+        /** Returns a threadsafe Receiver.*/
         public Receiver getReceiver() 
             { 
             if (receiver == null) 
@@ -237,13 +237,39 @@ public class Midi
         public Receiver keyReceiver;
         /** The channel to receive voiced messages from on the keyboard/controller input. */
         public int keyChannel = KEYCHANNEL_OMNI;
-                
-        void dispose()
+           
+        int refcount = 1;
+    	
+    	public Tuple copy(Receiver inReceiver, Receiver keyReceiver)
+    		{ 
+    		refcount++; 
+    		
+            if (in != null)
+            	in.addReceiver(inReceiver);
+            	
+            if (key != null)
+            	key.addReceiver(keyReceiver);
+            	
+    		return this; 
+    		}
+    	
+        public void dispose()
             {
-            if (key != null && keyReceiver != null)
-                key.removeReceiver(keyReceiver);
-            if (in != null && inReceiver!= null)
-                in.removeReceiver(inReceiver);
+            refcount--;
+            if (refcount == 0)
+            	{
+	            if (key != null && keyReceiver != null)
+	                key.removeReceiver(keyReceiver);
+	            if (in != null && inReceiver!= null)
+	                in.removeReceiver(inReceiver);
+	            }
+	        if (refcount <= 0)
+	        	{
+	        	key = null;
+	        	keyReceiver = null;
+	        	in = null;
+	        	inReceiver = null;
+	        	}
             }       
         }
 

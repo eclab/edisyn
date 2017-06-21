@@ -509,8 +509,8 @@ public abstract class Synth extends JComponent implements Updatable
     	}    
 
 
-	public static final Class[] synths = new Class[] { Blofeld.class, MicrowaveXT.class };
-	public static final String[] synthNames = { "Waldorf Blofeld (Single)", "Waldorf Microwave II/XT/XTk (Single)" };
+	public static final Class[] synths = new Class[] { Blofeld.class, BlofeldMulti.class, MicrowaveXT.class, MicrowaveXTMulti.class };
+	public static final String[] synthNames = { "Waldorf Blofeld (Single)", "[Unfinished] Waldorf Blofeld (Multi)", "Waldorf Microwave II/XT/XTk (Single)", "[Unfinished] Waldorf Microwave II/XT/XTk (Multi)" };
           
     public JFrame sprout()
         {
@@ -597,6 +597,7 @@ public abstract class Synth extends JComponent implements Updatable
 
         menu.addSeparator();
 
+/*
         JMenuItem resetToDefault = new JMenuItem("Reset to Default");
         menu.add(resetToDefault);
         resetToDefault.addActionListener(new ActionListener()
@@ -606,6 +607,7 @@ public abstract class Synth extends JComponent implements Updatable
                 getModel().resetToDefaults();
                 }
             });
+*/
 
         JMenuItem exportTo = new JMenuItem("Export Diff To Text...");
         menu.add(exportTo);
@@ -737,6 +739,17 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
+        JMenuItem reset = new JMenuItem("Reset");
+        menu.add(reset);
+        reset.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				loadDefaults();
+                sendAllParameters();
+                }
+            });
+
 
         menu.addSeparator();
 
@@ -859,7 +872,13 @@ public abstract class Synth extends JComponent implements Updatable
 
     
     boolean sendsAllParametersInBulk = false;
+    
+    /** Sets whether the synth sends its patch dump (TRUE) as one single sysex dump or by
+    	sending multiple separate parameter change requests (FALSE).  By default this is FALSE. */
     public void setSendsAllParametersInBulk(boolean val) { sendsAllParametersInBulk = val; }
+
+    /** Returns whether the synth sends its patch dump (TRUE) as one single sysex dump or by
+    	sending multiple separate parameter change requests (FALSE).  By default this is FALSE. */
     public boolean getSendsAllParametersInBulk() { return sendsAllParametersInBulk; }
 
     /** Sends all the parameters in a patch to the synth.  

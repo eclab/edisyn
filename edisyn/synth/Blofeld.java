@@ -24,18 +24,6 @@ import java.io.*;
 
 public class Blofeld extends Synth
     {
-    // Tab pane for editor
-    JTabbedPane tabs;
-    // The sound (oscillator/filter) tab
-    JComponent soundPanel;
-    // The lfo/envelope tab
-    JComponent lfoEnvelopePanel;
-    // The modulation/modifier/effects tab
-    JComponent modulationPanel;
-    // The arpeggiator tab
-    JComponent arpeggiationPanel;
-        
-        
     /// Various collections of parameter names for pop-up menus
         
     static final String[] FM_SOURCES = new String[] { "Off", "Osc1", "Osc2", "Osc3", "Noise", "LFO 1", "LFO 2", "LFO 3", "Filter Env", "Amp Env", "Env 3", "Env 4" };
@@ -83,6 +71,9 @@ public class Blofeld extends Synth
     static final String[] OSCILLATOR_OCTAVES = new String[] { "128'", "64'", "32'", "16'", "8'", "4'", "2'", "1'", "1/2'" };
     static final String[] SAMPLE_BANKS = new String[] { "None", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L" };
             
+            
+    
+    
     public Blofeld()
         {
         for(int i = 0; i < allParameters.length; i++)
@@ -94,11 +85,11 @@ public class Blofeld extends Synth
         
         setLayout(new BorderLayout());
                 
-        tabs = new JTabbedPane();
+        JTabbedPane tabs = new JTabbedPane();
                 
         /// SOUND PANEL
                 
-        soundPanel = new SynthPanel();
+        JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
@@ -119,7 +110,7 @@ public class Blofeld extends Synth
                 
         // LFO and ENVELOPE PANEL
                 
-        lfoEnvelopePanel = new SynthPanel();
+        JComponent lfoEnvelopePanel = new SynthPanel();
         vbox = new VBox();
 
         hbox = new HBox();
@@ -142,7 +133,7 @@ public class Blofeld extends Synth
                 
         // MODULATION PANEL
                 
-        modulationPanel = new SynthPanel();
+        JComponent modulationPanel = new SynthPanel();
                 
         vbox = new VBox();
         vbox.add(addModulation(Style.COLOR_A));
@@ -155,7 +146,7 @@ public class Blofeld extends Synth
         tabs.addTab("Modulation and Effects", modulationPanel);
 
         // ARPEGGIATOR PANEL
-        arpeggiationPanel = new SynthPanel();
+        JComponent arpeggiationPanel = new SynthPanel();
         
         vbox = new VBox();
         vbox.add(addArpeggiatorGlobal(Style.COLOR_A));
@@ -165,6 +156,8 @@ public class Blofeld extends Synth
         tabs.addTab("Arpeggiator", arpeggiationPanel);
 
 
+		tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("Blofeld.html")));
+
         add(tabs, BorderLayout.CENTER);
                 
                 
@@ -173,7 +166,7 @@ public class Blofeld extends Synth
         loadDefaults();
         }
                 
-                
+    
     public String getDefaultResourceFileName() { return "Blofeld.init"; }
                 
     /// ARPEGGIATION
@@ -386,18 +379,6 @@ public class Blofeld extends Synth
 
     //// EFFECTS
         
-    // Effects are problematic because effect parameters are shared, and the same parameter
-    // doesn't necessarily have the same range from effect type to effect type, grrr.
-    // Additionally we have to remove and add various dials and other components depending
-    // on the current effect being displayed, so we need to know the components we can show
-    // and hide, and the boxes to put them in dynamically.
-
-    // The two HBoxes for each effect (#1, #2)
-    HBox[/*effect*/] parameters = new HBox[2];
-        
-    // The various JComponents for different effect parameters
-    JComponent[/*effect*/][/*effect type*/][/*parameters*/] parametersByEffect = new JComponent[2][9][];
-        
     // Various effect types
     public static final int BYPASS = 0;
     public static final int CHORUS = 1;
@@ -412,7 +393,7 @@ public class Blofeld extends Synth
 
     /** Discards existing parameter widgets and loads new ones according to the
         effect type on the given effect number. */
-    void setupEffect(int effect, int type)
+    void setupEffect(HBox[] parameters, JComponent[][][] parametersByEffect, int effect, int type)
         {
         if (parameters[effect - 1] == null) return;  // not ready yet
                 
@@ -429,7 +410,20 @@ public class Blofeld extends Synth
     /** Adds an Effect category.  */
     public JComponent addEffect(final int effect, Color color)
         {
-        // The first thing we have to do is build all the effect parameters for all the effect types
+     // Effects are problematic because effect parameters are shared, and the same parameter
+    // doesn't necessarily have the same range from effect type to effect type, grrr.
+    // Additionally we have to remove and add various dials and other components depending
+    // on the current effect being displayed, so we need to know the components we can show
+    // and hide, and the boxes to put them in dynamically.
+
+    // The two HBoxes for each effect (#1, #2)
+    final HBox[/*effect*/] parameters = new HBox[2];
+        
+    // The various JComponents for different effect parameters
+    final JComponent[/*effect*/][/*effect type*/][/*parameters*/] parametersByEffect = new JComponent[2][9][];
+        
+
+       // The first thing we have to do is build all the effect parameters for all the effect types
         // and associate them with each effect type.  This is a lot of tedious work.
                 
         parametersByEffect[effect - 1][BYPASS] = new JComponent[0];
@@ -569,7 +563,7 @@ public class Blofeld extends Synth
             public void update(String key, Model model)
                 {
                 super.update(key, model);
-                setupEffect(effect, getState());
+                setupEffect(parameters, parametersByEffect, effect, getState());
                 }
             };
         model.setSpecial("effect" + effect + "type", 0);
@@ -584,7 +578,7 @@ public class Blofeld extends Synth
 
         category.add(main, BorderLayout.WEST);
                 
-        setupEffect(effect, BYPASS);
+        setupEffect(parameters, parametersByEffect, effect, BYPASS);
         return category;
         }
 
@@ -706,12 +700,14 @@ public class Blofeld extends Synth
     public static final int FILTER_ENVELOPE = 1;
     public static final int AMPLIFIER_ENVELOPE = 2;
 
-    EnvelopeDisplay[/*Env Number */][/*Envelope Type */] envelopeDisplays = new EnvelopeDisplay[4][5];
-    HBox[/*Env Number*/] envelopeHBoxes = new HBox[4];
-        
     /** Add an Envelope category */
     public JComponent addEnvelope(final int envelope, Color color)
         {
+    final EnvelopeDisplay[/*Env Number */][/*Envelope Type */] envelopeDisplays = new EnvelopeDisplay[4][5];
+    final HBox[/*Env Number*/] envelopeHBoxes = new HBox[4];
+        
+
+
         Category category;
         if (envelope == FILTER_ENVELOPE)
             {
@@ -817,7 +813,7 @@ public class Blofeld extends Synth
         goAhead[0] = true;
         comp1.update("envelope" + envelope + "mode", getModel());
                 
-        category.add(hbox, BorderLayout.WEST);
+        category.add(hbox, BorderLayout.CENTER);
         return category;
         }
 
@@ -971,7 +967,7 @@ public class Blofeld extends Synth
         model.setImmutable("number", true);
         hbox.add(comp);
 
-        comp = new LabelledDial("Blofeld ID", this, "id", color, 0, 127)
+        comp = new LabelledDial("Device ID", this, "id", color, 0, 127)
         	{
             public String map(int val)
                 {
@@ -1125,7 +1121,10 @@ public class Blofeld extends Synth
 
 
 
+	// This array stores the previous selected index of the wave table for each wave
 	int waves[] = { 0, 0, 0 };  // we don't NEED 3, but it keeps me from special-casing osc 3 in buildWavetable
+
+	// This array stores the previous selected index of the sample for each wave
 	int samples[] = { 0, 0, 0 };  // we don't NEED 3, but it keeps me from special-casing osc 3 in buildWavetable
 	
 	// Changes the wavetable chooser to be either a list of wavetables or
@@ -1223,8 +1222,6 @@ public class Blofeld extends Synth
             vbox.add(comp);
             }
 
-
-        
         if (osc == 3)
             model.setSpecial("osc" + osc + "shape", 0);
         else
@@ -1322,35 +1319,6 @@ public class Blofeld extends Synth
             vbox.add(comp);
             }
 		hbox.add(vbox);
-
-/*
-		if (osc != 3)
-			{
-            comp = new LabelledDial("Sample", this, "osc" + osc + "samplebank", color, 0, 12)
-            	{
-            	public String map(int val)
-                	{
-                	String[] oct = SAMPLE_BANKS;
-                	return oct[val];
-                	}
-				};
-        	((LabelledDial)comp).setSecondLabel("Bank [SL]");
-			
-			model.register("osc" + osc + "samplebank", new Updatable()
-				{
-   				public void update(String key, Model model)
-   					{
-   					int state = model.get(key, 0);
-   					buildWavetable(chooser, osc, state);
-   					// force an emit
-   					model.set("osc" + osc + "shape", model.get("osc" + osc + "shape", 0));
-   					}
-				});
-        	model.setImmutable("osc" + osc + "samplebank", true);
-
-            hbox.add(comp);
-            }
-*/
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -1955,10 +1923,12 @@ public class Blofeld extends Synth
         else if (key.equals("name"))
             {
             byte[] bytes = new byte[16 * 10];
-            String name = model.get(key, "Init            ") + "                ";  // just to be safe, has to be 16 long
+            String name = model.get(key, "Init            ");  // just to be safe, has to be 16 long
             for(int i = 0; i < 16; i++)
                 {
-                byte c = (byte)(name.charAt(i));
+                byte c = 0x20;  // space
+                if (i < name.length())
+                	c = (byte)(name.charAt(i));
                 int index = i + 363;
                 byte HH = (byte)((index >> 7) & 127);
                 byte PP = (byte)(index & 127);
@@ -2043,7 +2013,10 @@ public class Blofeld extends Synth
                                 
         for(int i = 363; i < 379; i++)
             {
-            bytes[i] = (byte)(name.charAt(i - 363));
+            if (i - 363 >= name.length())
+            	bytes[i] = 0x20;  // space
+            else
+	            bytes[i] = (byte)(name.charAt(i - 363));
             }
                 
         bytes[379] = (byte)(model.get("category", 0));
@@ -2053,7 +2026,7 @@ public class Blofeld extends Synth
         bytes[382] = 0;
 
 
-        byte[] full = new byte[392];
+        byte[] full = new byte[getExpectedSysexLength() ];
         full[0] = (byte)0xF0;
         full[1] = 0x3E;
         full[2] = 0x13;
@@ -2117,8 +2090,10 @@ public class Blofeld extends Synth
 				{
 				String name = model.get("name", "Init            ");
 				byte[] str = name.getBytes("US-ASCII");
-				str[i - 363] = b;
-				model.set("name", new String(str, "US-ASCII"));
+				byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
+				System.arraycopy(str, 0, newstr, 0, 16);
+				newstr[i - 363] = b;
+				model.set("name", new String(newstr, "US-ASCII"));
 				}
 			catch (UnsupportedEncodingException e)
 				{
@@ -2237,11 +2212,11 @@ public class Blofeld extends Synth
             	data[2] == (byte)0x13 &&
             	// presently I'm not filtering by device, so no data[3]
             	data[4] == (byte)0x10 &&
-            	data.length == 392);
+            	data.length == EXPECTED_SYSEX_LENGTH );
         }
     
-        
-    public int getExpectedSysexLength() { return 392; }
+    public static final int EXPECTED_SYSEX_LENGTH = 392;
+    public int getExpectedSysexLength() { return EXPECTED_SYSEX_LENGTH; }
     
     
     
@@ -2262,8 +2237,8 @@ public class Blofeld extends Synth
                 
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number", "Blofeld ID" }, 
-                new JComponent[] { bank, number, id }, title, "Enter the Bank, Patch number, and Blofeld ID.");
+            boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number", "Device ID" }, 
+                new JComponent[] { bank, number, id }, title, "Enter the Bank, Patch number, and Device ID.");
                 
             if (result == false) 
                 return false;
@@ -2285,12 +2260,12 @@ public class Blofeld extends Synth
             try { i = Integer.parseInt(id.getText()); }
             catch (NumberFormatException e)
                 {
-                JOptionPane.showMessageDialog(null, "The Blofeld ID must be an integer 0 ... 127 ", title, JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "The Device ID must be an integer 0 ... 127 ", title, JOptionPane.ERROR_MESSAGE);
                 continue;
                 }
             if (i < 0 || i > 127)
                 {
-                JOptionPane.showMessageDialog(null, "The Blofeld ID  must be an integer 0 ... 127 ", title, JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "The Device ID must be an integer 0 ... 127 ", title, JOptionPane.ERROR_MESSAGE);
                 continue;
                 }
                         

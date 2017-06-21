@@ -1,0 +1,37 @@
+<html><head></head><body bgcolor='black'>
+<font color='white'>
+<h1>Waldorf Blofeld</h1> 
+<h2>Multi Patch Editor</h2>
+
+<p>This editor will work with the <b>Waldorf Blofeld,</b> the <b>Waldorf Blofeld with SL Option,</b> and the <b>Waldorf Blofeld Keyboard</b> (which automatically comes with the SL option).
+
+<p><b>Communicating with Edisyn</b> Set your Blofeld to send <b>Sysex only</b>, not <b>Ctl</b> nor <b>Ctl+Sysex</b>.    Also make sure that <b>Ctrl Receive</b> is on.
+
+
+<p><b>Mute</b> Each Part has a button called <b>Mute</b>.  This is just the opposite of what the Blofeld calls <b>Status</b>: when Mute is off, Status is Enabled.
+
+<p><b>Gotchas</b> Multimode on the Blofeld is a mess.
+
+<ul>
+<li>
+The Blofeld's Multimode sysex is entirely undocumented, and this patch editor is the result of reverse engineering.  There may be errors: please report them.  
+
+<p><li>At present I do not know how to dump to working memory. This means that when you reset, randomize, or send a patch, the patch isn't sent. You have to write a patch.
+
+<p><li>The Blofeld doesn't send or receive sysex for updating a single Multimode parameter, so you won't see changes on the Blofeld (or Edisyn) when tweaking a parameter on the other.
+
+<p><li>
+If you save a multimode patch on the Blofeld, it corrupts the first letter of the name of every patch!  This is not permanent (just reboot your Blofeld), but it's reported to Edisyn when Edisyn tries to load the patch from temporary memory again, so you'll see a corrupted patch name on receiving a patch.
+
+</ul>
+
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>June 2017
+</table>
+

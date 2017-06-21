@@ -1,5 +1,5 @@
 # edisyn
-Synthesizer Patch Editor (Version 5)
+Synthesizer Patch Editor (Version 6)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -14,7 +14,9 @@ Ctrlr, but it's designed to make the GUI pretty easy to write (well, for me anyw
 At present Edisyn *only runs on OS X* (well, I've only tried it on OS X, that's its target).  If you try running
 it elsewhere, you're on your own.  We have confirmation that it runs fine under Linux.
 
-This is Edisyn version 5, an early prerelease which doesn't feel very MacOS like yet, and which has lots of wires sticking out.  But it works!  Try it out on your synth!
+This is Edisyn version 6, an early prerelease which doesn't feel very MacOS like yet, and which has lots of wires sticking out.  But it works!  Try it out on your synth!
+
+<b><font color=red>Important Note</font></b> The Blofeld and Microwave Multi patch windows are not yet completed and will not work properly.  They're only included as a preview.
 
 
 
@@ -23,12 +25,12 @@ This is Edisyn version 5, an early prerelease which doesn't feel very MacOS like
 For the time being, to install Edisyn you need to do the following two things.
 
 1. Install the Java JDK.
-2. Put the file `jar/edisyn.5.jar` where you like (it's Edisyn's executable).
+2. Put the file `jar/edisyn.6.jar` where you like (it's Edisyn's executable).
 
 
 ## Running 
 
-- *On OS X:* Double click on the file `edisyn.5.jar`
+- *On OS X:* Double click on the file `edisyn.6.jar`
 - *On Windows:* I don't know.  Anyone?
 - *On Linux:* In Ubuntu, you'll first need to change the Properties of the jar file (see the "Open With" tab) to your Java VM.  Thereafter you can just double-click on the file.
 
@@ -58,8 +60,6 @@ doesn't open a new window.
 
 * *Save* and *Save As...* save to a sysex file.
 
-* *Reset to Default* resets the window to display the synth's Init patch setting.
-
 * *Export Diff to Text...* saves out to a text file a line-by-line description of every parameter which is *different* 
 from the default Init patch setting, plus the current value it's set to.  The patch value is either a string (in the
 case of the Patch name) or a number from 0...127: this may not be that useful to you, but the parameter names might
@@ -84,6 +84,8 @@ then the patch is *merged* with the existing patch, meaning that some *percentag
 patch are replaced with the old patch.  Then Edisyn will then send the patch to the synthesizer.
 
 * *Randomize* randomizes the editor's current patch, then sends it to the synthesizer.
+
+* *Reset* resets the editor's current patch to its initialized state, then sends it to the synthesizer.
 
 * *Send Patch* sends the current patch to the synthesizer.  This isn't actually used much since other commands
 send the patch automatically.
@@ -116,29 +118,9 @@ the synth as well.  Additionally, if you change a parameter on the synthesizer a
 then Edisyn will update the appropriate widget in the editor.  At present Edisyn does't support CC commands from the
 synthesizer (maybe later).  So (for example) on the Blofeld you'll need to change the machine to *send sysex* -- not CC only -- when changing parameters on the synth.
 
-## Blofeld Bugs
+### Per-Synth Specific Notes and Bugs
 
-These aren't Edisyn bugs: they're Waldorf synthesizer bugs that you should be aware of.
-
-1. When you request the current patch, the synthesizer doesn't indicate which patch number or bank it was :-(.  So at present Edisyn
-sets the default patch number and bank to A1.  Take note  of this before you accidentally overwrite your A1 patch with a write.
-
-
-## Waldorf II/XT/XTk Bugs
-
-These aren't Edisyn bugs: they're Waldorf synthesizer bugs that you should be aware of.
-
-1. When you request the current patch, the synthesizer doesn't indicate which patch number or bank it was :-(.  So at present Edisyn
-sets the default patch number and bank to A1.  Take note  of this before you accidentally overwrite your A1 patch with a write.
-
-2. The XT (and likely the XTk and II) does not respond to nor does it send parameter changes for effect type.  So changing it on
-the machine will not update Edisyn, and changing it in Edisyn will not update the machine (until you send or receive a patch).
-
-3. Changing the arpeggiation triggers in Edisyn don't update then on the synth's scren, though they're
-updated in memory internally.  Similarly, changing the name in Edisyn doesn't update the name in the
-name edit screen on the synth, though it's changed internally.
-
-4. The Overdrive Effect's Amp Drive parameter is weirdly biased towards "Stack" due to how it's encoded in Waldorf's sysex. 
+Gotchas and important things to know are contained in the <b>About</b> Tab in each synth editor window.  You should read it before using the editor for that synth.
 
 ## Caveats
 

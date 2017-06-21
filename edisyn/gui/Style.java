@@ -98,6 +98,11 @@ public class Style
     /** Thickness of effective top border above the Envelope Display. */
     public static final int ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS = 0;
     
+    /////// HTML DISPLAY CONSTANTS
+    
+    /** Base Fopnt */
+    public static final Font HTML_DISPLAY_BASE_FONT = MEDIUM_FONT;
+    public static final Insets HTML_DISPLAY_INSETS = new Insets(20, 20, 20, 20);
 
     private static String OS = System.getProperty("os.name").toLowerCase();
 

@@ -103,6 +103,8 @@ public class Model
     /** Adds a key with the given Integer value, or changes it to the given value. */        
     public void set(String key, int value)
         {
+        if (key.equals("name"))
+        	new Throwable().printStackTrace();
         storage.put(key, Integer.valueOf(value));
         ArrayList list = (ArrayList)(listeners.get(key));
         if (list != null)
@@ -208,7 +210,10 @@ public class Model
         if (d == null) return ifDoesntExist;
         else return d.intValue();
         }
-                
+              
+              
+    public Object get(String key) { return storage.get(key); }
+      
     /** Returns whether the key is associated with a String. 
         If there is no key stored in the Model, then FALSE is returned. */        
     public boolean isString(String key)

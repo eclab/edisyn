@@ -24,18 +24,10 @@ import java.io.*;
 
 public class MicrowaveXT extends Synth
     {
-    // Tab pane for editor
-    JTabbedPane tabs;
-    // The sound (oscillator/filter) tab
-    JComponent soundPanel;
-    // The lfo/envelope tab
-    JComponent envelopePanel;
-    // The modulation/modifier/effects tab
-    JComponent modulationPanel;
-    // The arpeggiator tab
-    JComponent otherPanel;
-        
-         
+    // NOTES:
+    // Test SetSendsAllPArametersInBulk
+    
+    
     /// Various collections of parameter names for pop-up menus
         
     static final String[] BANKS = new String[] { "A", "B" };
@@ -85,6 +77,8 @@ public class MicrowaveXT extends Synth
     static final String[] RATE = new String[] { "1/96", "1/48", "1/32", "1/16 T", "1/32 .", "1/16", "1/8T", "1/16 .", "1/8", "1/4 T", "1/8 .", "1/4", "1/2 T", "1/4 .", "1/2", "1/1 T", "1/2 .", "1", "1.5", "2", "2.5", "3", "3.5", "4", "5", "6", "7", "8", "9", "10", "12", "14", "16", "18", "20", "24", "28", "32", "36", "40", "48", "56", "64" };
     static final String[] ARP_CLOCK = new String[] { "1/1", "1/2 .", "1/2 T", "1/2", "1/4 .", "1/4 T", "1/4", "1/8 .", "1/8 T", "1/8", "1/16 .", "1/16 T", "1/16", "1/32 .", "1/32 T", "1/32"};
     
+    
+    
         
     public MicrowaveXT()
         {
@@ -93,13 +87,15 @@ public class MicrowaveXT extends Synth
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
                 
+        setSendsAllParametersInBulk(true);
+        
         setLayout(new BorderLayout());
                 
-        tabs = new JTabbedPane();
+        JTabbedPane tabs = new JTabbedPane();
                 
         /// SOUND PANEL
                 
-        soundPanel = new SynthPanel();
+        JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
@@ -138,9 +134,9 @@ public class MicrowaveXT extends Synth
         tabs.addTab("Oscillators and Filters", soundPanel);
                 
                 
-        // LFO and ENVELOPE PANEL
+        // ENVELOPE PANEL
                 
-        envelopePanel = new SynthPanel();
+        JComponent envelopePanel = new SynthPanel();
         vbox = new VBox();
 
         hbox = new HBox();
@@ -161,9 +157,11 @@ public class MicrowaveXT extends Synth
         envelopePanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Envelopes", envelopePanel);
 
+        
+        
         // MODULATION PANEL
                 
-        modulationPanel = new SynthPanel();
+        JComponent modulationPanel = new SynthPanel();
         
         vbox = new VBox();
         vbox.add(addModulation(Style.COLOR_A));
@@ -174,8 +172,8 @@ public class MicrowaveXT extends Synth
 
 
 
-        // ARPEGGIATOR PANEL
-        otherPanel = new SynthPanel();
+        // OTHER PANEL
+        JComponent otherPanel = new SynthPanel();
         
         vbox = new VBox();
 
@@ -197,11 +195,12 @@ public class MicrowaveXT extends Synth
         otherPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Other", otherPanel);
 
+		tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("MicrowaveXT.html")));
 
         add(tabs, BorderLayout.CENTER);
                 
                 
-        model.set("name", "Init            ");  // has to be 16 long
+        model.set("name", "Init Sound V1.1 ");  // has to be 16 long
         
         loadDefaults();
         }
@@ -222,8 +221,8 @@ public class MicrowaveXT extends Synth
                 
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number", "Blofeld ID" }, 
-                new JComponent[] { bank, number, id }, title, "Enter the Bank, Patch number, and Blofeld ID.");
+            boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number", "Device ID" }, 
+                new JComponent[] { bank, number, id }, title, "Enter the Bank, Patch number, and Device ID.");
                 
             if (result == false) 
                 return false;
@@ -245,12 +244,12 @@ public class MicrowaveXT extends Synth
             try { i = Integer.parseInt(id.getText()); }
             catch (NumberFormatException e)
                 {
-                JOptionPane.showMessageDialog(null, "The Blofeld ID must be an integer 0 ... 127", title, JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "The Device ID must be an integer 0 ... 127", title, JOptionPane.ERROR_MESSAGE);
                 continue;
                 }
             if (i < 0 || i > 127)
                 {
-                JOptionPane.showMessageDialog(null, "The Blofeld ID  must be an integer 0 ... 127", title, JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "The Device ID must be an integer 0 ... 127", title, JOptionPane.ERROR_MESSAGE);
                 continue;
                 }
                         
@@ -262,12 +261,10 @@ public class MicrowaveXT extends Synth
             }
         }
 
-    public Category globalCategory;
-
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
-        globalCategory = new Category("Waldorf Microwave II/XT/XTk", color);
+        Category globalCategory = new Category("Waldorf Microwave II/XT/XTk", color);
                 
         JComponent comp;
         String[] params;
@@ -356,8 +353,8 @@ public class MicrowaveXT extends Synth
         return category;
         }
 
-    /** Add the Quality category */
-    
+
+    /** Add the Quality category */    
     public JComponent addQuality(Color color)
         {
         Category category = new Category("Quality", color);
@@ -401,8 +398,8 @@ public class MicrowaveXT extends Synth
         return category;
         }
 
-    /** Add the Mixer category */
-    
+
+    /** Add the Mixer category */    
     public JComponent addMixer(Color color)
         {
         Category category = new Category("Mixer", color);
@@ -552,18 +549,6 @@ public class MicrowaveXT extends Synth
 		}
 
 
-   String phase(int val)
-		{
-		if (val == 0)
-			{
-			return "Free";
-			}
-		else
-			{
-			return "" + ((val * 2) + 1);
-			}
-		}
-
     /** Add an Oscillator category */
     public JComponent addWave(int wave, Color color)
         {
@@ -601,7 +586,14 @@ public class MicrowaveXT extends Synth
             {
             public String map(int val)
                 {
-                return phase(val);
+				if (val == 0)
+					{
+					return "Free";
+					}
+				else
+					{
+					return "" + ((val * 2) + 1);
+					}
                 }
             };
         hbox.add(comp);
@@ -645,7 +637,6 @@ public class MicrowaveXT extends Synth
 
 
     /** Add a Filter1 category */
-    
     public JComponent addFilter1(Color color)
         {
         Category category = new Category("Filter 1", color);
@@ -655,8 +646,7 @@ public class MicrowaveXT extends Synth
         final HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-        
-        extras = new JComponent[13];
+        final JComponent[] extras = new JComponent[13];
         
         extras[6] = new LabelledDial("Wave", this, "filter1special", color, 0, 127);
         extras[7] = new LabelledDial("BP Offset", this, "filter1special", color, 0, 127, 64);
@@ -676,8 +666,6 @@ public class MicrowaveXT extends Synth
 
         hbox.addLast(extras[0]);
  
-
-        
         params = FILTER_1_TYPES;
         comp = new Chooser("Type", this, "filter1type", params)
             {
@@ -722,10 +710,10 @@ public class MicrowaveXT extends Synth
         return category;
         }
 
-JComponent extras[];
+
+
 
     /** Add a Filter2 category */
-    
     public JComponent addFilter2(Color color)
         {
         Category category = new Category("Filter 2", color);
@@ -756,7 +744,8 @@ JComponent extras[];
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
-
+        
+    /** Add Play Parameter category */
     public JComponent addPlayParameters(Color color)
         {
         Category category = new Category("Play Parameters", color);
@@ -777,6 +766,7 @@ JComponent extras[];
         return category;
         }
 
+	/** Add Amplifier and Pan category */
     public JComponent addAmplifier(Color color)
         {
         Category category = new Category("Amplifier and Pan", color);
@@ -834,7 +824,7 @@ JComponent extras[];
         return category;
         }
 
-
+	/** Add Glid Category */
     public JComponent addGlide(Color color)
         {
         Category category = new Category("Glide", color);
@@ -865,7 +855,7 @@ JComponent extras[];
         return category;
         }
 
-
+	/** Add an LFO category */
     public JComponent addLFO(final int lfo, Color color)
         {
         Category category = new Category("LFO " + lfo, color);
@@ -948,6 +938,7 @@ JComponent extras[];
         return category;
         }
         
+	/** Add a "standard" envelope category */
     public JComponent addEnvelope(final int env, Color color)
         {
         Category category = new Category(env == 1 ? "Filter Envelope" : "Amplifier Envelope", color);
@@ -981,6 +972,7 @@ JComponent extras[];
         }
         
 
+	/** Add wave envelope category */
     public JComponent addWaveEnvelope(Color color)
         {
         Category category = new Category("Wave Envelope", color);
@@ -1036,6 +1028,7 @@ JComponent extras[];
         }
 
 
+	/** Add free envelope category */
     public JComponent addFreeEnvelope(Color color)
         {
         Category category = new Category("Free Envelope", color);
@@ -1078,6 +1071,7 @@ JComponent extras[];
         }
 
 
+	/** Add "standard" envelope display */
     public JComponent addEnvelopeDisplay(final int env, Color color)
         {
         Category category = new Category(env == 1 ? "Filter" : "Amplifier", color);
@@ -1094,11 +1088,12 @@ JComponent extras[];
             new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
         hbox.addLast(comp);
         
-        category.add(hbox, BorderLayout.WEST);
+        category.add(hbox, BorderLayout.CENTER);
         return category;
         }
 
 
+	/** Add free envelope display */
     public JComponent addFreeEnvelopeDisplay(Color color)
         {
         Category category = new Category("Free", color);
@@ -1116,13 +1111,14 @@ JComponent extras[];
         ((EnvelopeDisplay)comp).setAxis(64.0 / 127.0);
 		hbox.addLast(comp);    
         
-        category.add(hbox, BorderLayout.WEST);
+        category.add(hbox, BorderLayout.CENTER);
         return category;
         }
 
+	/** Add wave envelope display */
     public JComponent addWaveEnvelopeDisplay(Color color)
         {
-        Category category = new Category("Envelope Displays:  Wave", color);
+        Category category = new Category("Wave", color);
                 
         JComponent comp;
         String[] params;
@@ -1137,11 +1133,11 @@ JComponent extras[];
         ((EnvelopeDisplay)comp).setPreferredWidth(((EnvelopeDisplay)comp).getPreferredWidth() * 2);
         hbox.addLast(comp);
         
-        category.add(hbox, BorderLayout.WEST);
+        category.add(hbox, BorderLayout.CENTER);
         return category;
         }
 
-
+	/** Add allocation/assignment category */
     public JComponent addAllocation(Color color)
         {
         Category category = new Category("Allocation", color);
@@ -1299,13 +1295,13 @@ JComponent extras[];
         }
 
 
-	public CheckBox[] arpeggiation = new CheckBox[16];
-	
     /** Add the Modifiers category */
     public JComponent addArpeggiation(Color color)
         {
         Category category  = new Category("Arpeggiation", color);
                         
+		final CheckBox[] arpeggiation = new CheckBox[16];
+	
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -1964,10 +1960,12 @@ JComponent extras[];
         else if (key.equals("name"))
             {
             byte[] bytes = new byte[16 * 10];
-            String name = model.get(key, "Init            ") + "                ";  // just to be safe, has to be 16 long
+            String name = model.get(key, "Init Sound V1.1 ");  // just to be safe, has to be 16 long
             for(int i = 0; i < 16; i++)
                 {
-                byte c = (byte)(name.charAt(i));
+                byte c = 0x20;  // space
+                if (i < name.length())
+                	c = (byte)(name.charAt(i));
                 int index = i + 240;
                 byte HH = (byte)((index >> 7) & 127);
                 byte PP = (byte)(index & 127);
@@ -2082,10 +2080,13 @@ JComponent extras[];
                                 
         for(int i = 240; i < 256; i++)
             {
-            bytes[i] = (byte)(name.charAt(i - 240));
+            if (i - 240 >= name.length())
+            	bytes[i] = 0x20;  // space
+            else
+	            bytes[i] = (byte)(name.charAt(i - 240));
             }
                 
-        byte[] full = new byte[265];
+        byte[] full = new byte[getExpectedSysexLength()];
         full[0] = (byte)0xF0;
         full[1] = 0x3E;
         full[2] = 0x0E;
@@ -2149,11 +2150,12 @@ JComponent extras[];
         boolean v = (data[0] == (byte)0xF0 &&
             data[1] == (byte)0x3E &&
             data[2] == (byte)0x0E &&
-            data.length == 265);
+            data.length == EXPECTED_SYSEX_LENGTH);
         return v;
         }
         
-        
+
+	public static final int EXPECTED_SYSEX_LENGTH = 265;        
     public int getExpectedSysexLength() { return 265; }
         
         
@@ -2193,11 +2195,8 @@ JComponent extras[];
 	public void setParameterByIndex(int i, byte b)
 		{
 		String key = allParameters[i];
-		if (key.equals("-"))
-			{
-			// do nothing
-			}
-		else if (key.equals("effecttype"))
+		
+		if (key.equals("effecttype"))
             	{
             	// handle XT effects specially
             	if (b == 32) // delay
@@ -2207,6 +2206,12 @@ JComponent extras[];
             	else if (b == 34)  // mod delay
             		b = 10;
             	}
+
+
+		if (key.equals("-"))
+			{
+			// do nothing
+			}
 		else if (key.equals("osc1octave") || key.equals("osc2octave"))
 			{
 			model.set(key, (b - 16) / 12);
@@ -2249,10 +2254,12 @@ JComponent extras[];
 			{
 			try 
 				{
-				String name = model.get("name", "Init            ");
+				String name = model.get("name", "Init Sound V1.1 ");
 				byte[] str = name.getBytes("US-ASCII");
-				str[i - 240] = b;
-				model.set("name", new String(str, "US-ASCII"));
+				byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
+				System.arraycopy(str, 0, newstr, 0, 16);
+				newstr[i - 240] = b;
+				model.set("name", new String(newstr, "US-ASCII"));
 				}
 			catch (UnsupportedEncodingException e)
 				{
@@ -2263,8 +2270,6 @@ JComponent extras[];
 			{
 			model.set(key, b);
 			}
-
-        revise();       
 		}
 
         
@@ -2331,7 +2336,6 @@ JComponent extras[];
             if (keys[i].equals("number")) continue;
             if (keys[i].equals("bank")) continue;
             if (keys[i].equals("name")) continue;
-            if (keys[i].equals("category")) continue;
                 
             if (coinToss(probability))
                 {
@@ -2349,16 +2353,7 @@ JComponent extras[];
     
     public void immutableMutate(String key)
         {
-        /*
-        // we randomize these specially, taking care not to do the high waves
-        if (key.equals("osc1shape") || key.equals("osc2shape"))
-            {
-            if (coinToss(0.5))
-                model.set(key, 0);
-            else
-                model.set(key, random.nextInt(WAVES_LONG.length -1) + 1);
-            }
-        */
+        // for the time being we do nothing
         }
         
 

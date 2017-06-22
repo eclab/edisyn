@@ -8,7 +8,8 @@ package edisyn;
 import edisyn.gui.*;
 import edisyn.synth.*;
 import javax.swing.*;
-
+import com.apple.eawt.*;
+import com.apple.eawt.event.*;
 
 /**** 
       Top-level launcher class.  For the moment, run as 
@@ -21,16 +22,37 @@ public class Edisyn
     {
     public static void main(String[] args)
         {
-/*
-        //MicrowaveXT blofeld = new MicrowaveXT();
-        Blofeld blofeld = new Blofeld();
-        blofeld.sprout();
-        JFrame frame = ((JFrame)(SwingUtilities.getRoot(blofeld)));
-        frame.setVisible(true);
-        blofeld.setupMIDI("Choose MIDI devices to send to and receive from.");
-*/
-	if (Synth.doNewSynthPanel() == null)
+        try {
+    		System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            
+            // This no longer works as of Java 7
+            //System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Edisyn");
+            // This DOES work, but it's not necessary as the menu says "Edisyn" anyway
+            //System.setProperty("apple.awt.application.name", "Edisyn");
+            
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            }
+        catch(Exception e) { }
+
+//	OSXSetup();
+
+		if (Synth.doNewSynthPanel() == null)
 		System.exit(0);
         }
 
+/*
+public static void OSXSetup() {
+Application app = Application.getApplication();
+
+app.setAboutHandler(new AboutHandler()
+	 {
+    public void handleAbout(AppEvent.AboutEvent ae) 
+    	{
+    	System.err.println("Yo yo yo");
+		}
+	});
+
     }
+*/
+}

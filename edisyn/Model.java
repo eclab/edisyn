@@ -47,7 +47,7 @@ public class Model
     HashMap listeners = new HashMap();
     HashSet immutable = new HashSet();
     HashMap special = new HashMap();
-    HashMap defaults = new HashMap();
+    //HashMap defaults = new HashMap();
     
     String lastKey = null;
 
@@ -77,28 +77,28 @@ public class Model
     	}
     
     /** Add the given integer as a default for the key. */
-    public void addDefault(String key, int value)
-        {
-        defaults.put(key, Integer.valueOf(value));
-        }
+    //public void addDefault(String key, int value)
+    //    {
+    //    defaults.put(key, Integer.valueOf(value));
+    //    }
 
     /** Add the given String as a default for the key. */
-    public void addDefault(String key, String value)
-        {
-        defaults.put(key, value);
-        }
+    //public void addDefault(String key, String value)
+    //    {
+    //    defaults.put(key, value);
+    //    }
         
     /** Return the given default for the key (as an Integer or as a String), or null if there is none. */
-    public Object getDefault(String key)
-        {
-        return defaults.get(key);
-        }
+    //public Object getDefault(String key)
+    //    {
+    //    return defaults.get(key);
+    //    }
         
     /** Return whether a default has been entered for the given key. */
-    public boolean defaultExists(String key)
-        {
-        return (defaults.containsKey(key));
-        }
+    //public boolean defaultExists(String key)
+    //    {
+    //    return (defaults.containsKey(key));
+    //    }
         
     /** Adds a key with the given Integer value, or changes it to the given value. */        
     public void set(String key, int value)
@@ -149,6 +149,7 @@ public class Model
         lastKey = key;
         }
         
+    /*
     public void resetToDefaults()
         {
         String[] keys = getKeys();
@@ -168,6 +169,7 @@ public class Model
             }
         lastKey = null;
         }
+    */
                 
     /** Returns an array of integer values associated with this
         (Integer) key which have been declared SPECIAL, meaning that they
@@ -285,15 +287,18 @@ public class Model
         }
 
 	/** Print all the model parameters to stderr. */
+    /*
     public void print()
         {
         PrintWriter pw = new PrintWriter(System.err);
         print(pw, false);
         pw.flush();
         }
+    */
                 
 	/** Print the model parameters to the given writer.   If diffsOnly, then only the model parameters which
 		differ from the default will be printed. */
+    /*
     public void print(PrintWriter out, boolean diffsOnly)
         {
         String[] keys = getKeys();
@@ -316,4 +321,5 @@ public class Model
                 }
             }
         }
+    */
     }

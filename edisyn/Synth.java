@@ -48,7 +48,6 @@ public abstract class Synth extends JComponent implements Updatable
     double merging = 0.0;
 
     public Midi.Tuple tuple;
-
         
     /** Handles mutation (or not) of keys declared immutable in the Model.
         When the user is mutating (randomizing) a parameter, and it was declared
@@ -119,7 +118,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** Create your own Synth-specific class version of this static method.
         It will be called when the system wants to know if the given sysex patch dump
         is for your kind of synthesizer.  Return true if so, else false. */
-    public static boolean recognize(byte[] data)
+    private static boolean recognize(byte[] data)
         {
         return false;
         }
@@ -164,14 +163,6 @@ public abstract class Synth extends JComponent implements Updatable
 
     public Synth() 
         {
-        try {
-            System.setProperty("apple.laf.useScreenMenuBar", "true");
-            System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Test");
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            }
-        catch(Exception e) { }
-
-
         model = new Model();
         model.register(Model.ALL_KEYS, this);
         random = new Random(System.currentTimeMillis());
@@ -611,9 +602,9 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
+/*
         menu.addSeparator();
 
-/*
         JMenuItem resetToDefault = new JMenuItem("Reset to Default");
         menu.add(resetToDefault);
         resetToDefault.addActionListener(new ActionListener()
@@ -623,7 +614,6 @@ public abstract class Synth extends JComponent implements Updatable
                 getModel().resetToDefaults();
                 }
             });
-*/
 
         JMenuItem exportTo = new JMenuItem("Export Diff To Text...");
         menu.add(exportTo);
@@ -634,6 +624,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doExport(true);
                 }
             });
+*/
 
         menu = new JMenu("MIDI");
         menubar.add(menu);
@@ -942,15 +933,20 @@ public abstract class Synth extends JComponent implements Updatable
     public void doSaveAs()
         {
         FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save Patch to Sysex File...", FileDialog.SAVE);
-        if (file == null)
-            {
-            fd.setFile("Untitled.syx");
-            }
-        else
+
+        if (file != null)
             {
             fd.setFile(file.getName());
             fd.setDirectory(file.getParentFile().getPath());
             }
+        else
+            {
+            fd.setFile("Untitled.syx");
+        	String path = getLastDirectory();
+        	if (path != null)
+        		fd.setDirectory(path);
+            }            
+            
         fd.setVisible(true);
         File f = null; // make compiler happy
         FileOutputStream os = null;
@@ -962,6 +958,7 @@ public abstract class Synth extends JComponent implements Updatable
                 os.write(emit((Model)null, false));
                 os.close();
                 file = f;
+                setLastDirectory(fd.getDirectory());
                 } 
             catch (IOException e) // fail
                 {
@@ -1014,6 +1011,7 @@ public abstract class Synth extends JComponent implements Updatable
 
 
     /** Goes through the process of dumping to a text file. */
+    /*
     public void doExport(boolean doDiff)
         {
         FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Export Patch" + (doDiff ? " Difference" : "") + " As Text...", FileDialog.SAVE);
@@ -1053,6 +1051,7 @@ public abstract class Synth extends JComponent implements Updatable
 
         updateTitle();
         }
+    */
         
     /** Override this as you see fit to do something special when your window becomes front. */
     public void windowBecameFront()
@@ -1083,6 +1082,43 @@ public abstract class Synth extends JComponent implements Updatable
             }
                 
         }
+    
+    public static void setLastX(String path, String x, String synthName)
+    	{
+    	if (synthName != null)
+    		{
+    		java.util.prefs.Preferences app_p = Prefs.getAppPreferences(synthName, "Edisyn");
+    		app_p.put(x, path);
+	    	Prefs.save(app_p);
+	    	}
+    	java.util.prefs.Preferences global_p = Prefs.getGlobalPreferences("Data");
+    	global_p.put(x, path);
+    	Prefs.save(global_p);
+    	}
+    	
+    public static String getLastX(String x, String synthName)
+    	{
+    	String lastDir = null;
+    	if (synthName != null)
+    		{
+    		lastDir = Prefs.getAppPreferences(synthName, "Edisyn").get(x, null);
+    		}
+    	
+    	if (lastDir == null)
+    		{
+    		lastDir = Prefs.getGlobalPreferences("Data").get(x, null);
+    		}
+		
+		return lastDir;    	
+    	}
+    	
+    void setLastDirectory(String path) { setLastX(path, "LastDirectory", getSynthName()); }
+    String getLastDirectory() { return getLastX("LastDirectory", getSynthName()); }
+    
+    static void setLastSynth(String path) { setLastX(path, "Synth", null); }
+    static String getLastSynth() { return getLastX("Synth", null); }
+
+
                 
     /** Goes through the process of opening a file and loading it into this editor. 
         This does NOT open a new editor window -- it loads directly into this editor. */
@@ -1102,6 +1138,13 @@ public abstract class Synth extends JComponent implements Updatable
             fd.setFile(file.getName());
             fd.setDirectory(file.getParentFile().getPath());
             }
+        else
+        	{
+        	String path = getLastDirectory();
+        	if (path != null)
+        		fd.setDirectory(path);
+        	}
+        	
                 
         boolean failed = true;
                 
@@ -1119,18 +1162,23 @@ public abstract class Synth extends JComponent implements Updatable
                 int val = is.read(data, 0, getExpectedSysexLength());
                 is.close();
                 
-                if (val != getExpectedSysexLength())  // uh oh
-                    throw new RuntimeException("File too short");
-
-                setSendMIDI(false);
-                parse(data);
-                setSendMIDI(true);
-                                
-                file = f;
+				if (!recognizeLocal(data))
+                	JOptionPane.showMessageDialog(this, "File does not contain sysex data for the " + getSynthName(), "File Error", JOptionPane.ERROR_MESSAGE);
+				else if (val != getExpectedSysexLength())
+                	JOptionPane.showMessageDialog(this, "File data is not the right length for " + getSynthName(), "File Error", JOptionPane.ERROR_MESSAGE);
+				else
+					{
+	                setSendMIDI(false);
+	                parse(data);
+	                setSendMIDI(true);
+	                                
+	                file = f;
+	                setLastDirectory(fd.getDirectory());
+	                }
                 }        
             catch (Throwable e) // fail  -- could be an Error or an Exception
                 {
-                JOptionPane.showMessageDialog(this, "An error occurred while loading to the file " + f, "File Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "An error occurred while loading from the file.", "File Error", JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
                 }
             finally
@@ -1199,11 +1247,21 @@ public abstract class Synth extends JComponent implements Updatable
         p2.setLayout(new BorderLayout());
 		p2.add(p, BorderLayout.NORTH);
 		JComboBox combo = new JComboBox(synthNames);
+		
+		// Note: Java classdocs are wrong: if you set a selected item to null (or to something not in the list)
+		// it doesn't just not change the current selected item, it sets it to some blank item.
+		String synth = getLastSynth();
+		if (synth != null) combo.setSelectedItem(synth);
 		p2.add(combo, BorderLayout.CENTER);
-        
+		
         int result = JOptionPane.showOptionDialog(null, p2, "Edisyn", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Run", "Cancel", "Disconnected" }, "Run");
         if (result == 1) return null;
-        else return instantiate(synths[combo.getSelectedIndex()], synthNames[combo.getSelectedIndex()], false, (result == 0), null);
+        else 
+        	{
+        	System.err.println(combo.getSelectedItem());
+        	setLastSynth("" + combo.getSelectedItem());
+        	return instantiate(synths[combo.getSelectedIndex()], synthNames[combo.getSelectedIndex()], false, (result == 0), null);
+        	}
         }
     
     public abstract String getDefaultResourceFileName();

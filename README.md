@@ -51,7 +51,7 @@ Now you should be able to run Edisyn.  Please let me know if this works.
 I don't know.  But you may be able to download the jar file located in the "jar" directory and double-click on it.  Tell me if this works.
 
 
-# installation and Running on Linux
+## Installation and Running on Linux
 
 1. Install the Java tools if you don't have them (openjdk).
 

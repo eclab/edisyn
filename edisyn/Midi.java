@@ -147,6 +147,26 @@ public class Midi
         }
 
 
+	static Object findDevice(String name, ArrayList devices)
+		{
+		if (name == null) return null;
+		for(int i = 0; i < devices.size(); i++)
+			{
+			if (devices.get(i) instanceof String)
+				{
+				if (((String)devices.get(i)).equals(name))
+					return devices.get(i);
+				}
+			else
+	            {
+	            MidiDeviceWrapper mdn = (MidiDeviceWrapper)(devices.get(i));
+            	if (mdn.toString().equals(name))
+            		return mdn;
+            	}
+			}
+		return null;
+		}
+
     static ArrayList allDevices;
     static ArrayList inDevices;
     static ArrayList outDevices;
@@ -231,7 +251,7 @@ public class Midi
         /** The current keyboard/controller input */
         public Thru key;
         /** The current keyboard/controller input device's wrapper */
-        public MidiDeviceWrapper keyName;
+        public MidiDeviceWrapper keyWrap;
         /** The current receiver which is attached to the keyboard/controller input
             to perform its commands.  Typically generated with Synth.buildKeyReceiver() */
         public Receiver keyReceiver;
@@ -273,6 +293,45 @@ public class Midi
             }       
         }
 
+    static void setLastTupleIn(String path, Synth synth) { Synth.setLastX(path, "LastTupleIn", synth.getSynthName()); }
+    static String getLastTupleIn(Synth synth) { return Synth.getLastX("LastTupleIn", synth.getSynthName()); }
+    
+    static void setLastTupleOut(String path, Synth synth) { Synth.setLastX(path, "LastTupleOut", synth.getSynthName()); }
+    static String getLastTupleOut(Synth synth) { return Synth.getLastX("LastTupleOut", synth.getSynthName()); }
+    
+    static void setLastTupleKey(String path, Synth synth) { Synth.setLastX(path, "LastTupleKey", synth.getSynthName()); }
+    static String getLastTupleKey(Synth synth) { return Synth.getLastX("LastTupleKey", synth.getSynthName()); }
+    
+    static void setLastTupleOutChannel(int channel, Synth synth) { Synth.setLastX("" + channel, "LastTupleOutChannel", synth.getSynthName()); }
+    static int getLastTupleOutChannel(Synth synth) 
+    	{ 
+    	String val = Synth.getLastX("LastTupleOutChannel", synth.getSynthName()); 
+    	if (val == null) return -1;
+    	else 
+    		{
+    		try
+    			{ return Integer.parseInt(val); }
+    		catch (Exception e)
+    			{ e.printStackTrace(); return -1; }
+    		}
+    	}
+    
+    static void setLastTupleKeyChannel(int channel, Synth synth) { Synth.setLastX("" + channel, "LastTupleKeyChannel", synth.getSynthName()); }
+    static int getLastTupleKeyChannel(Synth synth) 
+    	{ 
+    	String val = Synth.getLastX("LastTupleKeyChannel", synth.getSynthName()); 
+    	if (val == null) return -1;
+    	else 
+    		{
+    		try
+    			{ return Integer.parseInt(val); }
+    		catch (Exception e)
+    			{ e.printStackTrace(); return -1; }
+    		}
+    	}
+    
+
+
     public static final Tuple CANCELLED = new Tuple();
     public static final Tuple FAILED = new Tuple();
         
@@ -280,7 +339,7 @@ public class Midi
         You may provide the old tuple for defaults or pass in null.  You also
         provide the inReceiver and keyReceiver to be attached to the input and keyboard/controller
         input.  You get these with Synth.buildKeyReceiver() and Synth.buildInReceiver() */ 
-    public static Tuple getNewTuple(Tuple old, JComponent root, String message, Receiver inReceiver, Receiver keyReceiver)
+    public static Tuple getNewTuple(Tuple old, Synth root, String message, Receiver inReceiver, Receiver keyReceiver)
         {
         if (inDevices.size() == 0)
             {
@@ -306,25 +365,35 @@ public class Midi
             JComboBox inCombo = new JComboBox(inDevices.toArray());
             if (old != null && old.inWrap != null && inDevices.indexOf(old.inWrap) != -1)
                 inCombo.setSelectedIndex(inDevices.indexOf(old.inWrap));
+            else if (findDevice(getLastTupleIn(root), inDevices) != null)
+            	inCombo.setSelectedItem(findDevice(getLastTupleIn(root), inDevices));
 
             JComboBox outCombo = new JComboBox(outDevices.toArray());
             if (old != null && old.outWrap != null && outDevices.indexOf(old.outWrap) != -1)
                 outCombo.setSelectedIndex(outDevices.indexOf(old.outWrap));
+            else if (findDevice(getLastTupleOut(root), outDevices) != null)
+            	outCombo.setSelectedItem(findDevice(getLastTupleOut(root), outDevices));
 
             JComboBox keyCombo = new JComboBox(keyDevices.toArray());
             keyCombo.setSelectedIndex(0);  // "none"
-            if (old != null && old.keyName != null && keyDevices.indexOf(old.keyName) != -1)
-                keyCombo.setSelectedIndex(keyDevices.indexOf(old.keyName));
+            if (old != null && old.keyWrap != null && keyDevices.indexOf(old.keyWrap) != -1)
+                keyCombo.setSelectedIndex(keyDevices.indexOf(old.keyWrap));
+            else if (findDevice(getLastTupleKey(root), keyDevices) != null)
+            	keyCombo.setSelectedItem(findDevice(getLastTupleKey(root), keyDevices));
 
             JComboBox outChannelsCombo = new JComboBox(rc);
             if (old != null)
                 outChannelsCombo.setSelectedIndex(old.outChannel - 1);
-                                
+            else if (getLastTupleOutChannel(root) > 0)
+            	outChannelsCombo.setSelectedIndex(getLastTupleOutChannel(root) - 1);
+            	                
             JComboBox keyChannelsCombo = new JComboBox(kc);
             if (old != null)
                 keyChannelsCombo.setSelectedIndex(old.keyChannel);
+            else if (getLastTupleKeyChannel(root) > 0)
+            	keyChannelsCombo.setSelectedIndex(getLastTupleKeyChannel(root));
 
-            boolean result = Synth.doMultiOption(root, new String[] { "Receive From", "Send To", "Send Channel", "Keyboard", "Keyboard Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
+            boolean result = Synth.doMultiOption(root, new String[] { "Receive From", "Send To", "Send Channel", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
 
             if (result)
                 {
@@ -359,23 +428,33 @@ public class Midi
 
                 if (keyCombo.getSelectedItem() instanceof String)
                     {
-                    tuple.keyName = null;
+                    tuple.keyWrap = null;
                     tuple.key = null;
                     }
                 else
                     {
-                    tuple.keyName = ((MidiDeviceWrapper)(keyCombo.getSelectedItem()));
-                    tuple.key = tuple.keyName.getThru(keyReceiver);
+                    tuple.keyWrap = ((MidiDeviceWrapper)(keyCombo.getSelectedItem()));
+                    tuple.key = tuple.keyWrap.getThru(keyReceiver);
                     if (tuple.key == null)
                         {
-                        JOptionPane.showOptionDialog(root, "An error occurred while connecting to the Key Controller MIDI Device.",  
+                        JOptionPane.showOptionDialog(root, "An error occurred while connecting to the Controller MIDI Device.",  
                             "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
                             JOptionPane.WARNING_MESSAGE, null,
-                            new String[] { "Run without Keyboard Controller" }, "Run without Keyboard Controller");
-                        tuple.keyName = null;
+                            new String[] { "Run without Controller" }, "Run without Controller");
+                        tuple.keyWrap = null;
                         tuple.key = null;
                         }
                     }
+                    
+				setLastTupleIn(tuple.inWrap.toString(), root);
+				setLastTupleOut(tuple.outWrap.toString(), root);
+				if (tuple.keyWrap == null)
+					setLastTupleKey("None", root);
+				else
+					setLastTupleKey(tuple.keyWrap.toString(), root);
+				setLastTupleOutChannel(tuple.outChannel, root);
+				setLastTupleKeyChannel(tuple.keyChannel, root);
+                
                 return tuple;
                 }
             else

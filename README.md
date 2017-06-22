@@ -42,7 +42,7 @@ If you're running Sierra, first you have to enable the ability to even *have the
 4. Enter your password and hit RETURN.
 5. Quit the Terminal Program
 
-Next, you can set the option in System Preferences.
+Now you can set the option in System Preferences.
 
 1. Run System Preferences
 2. Go to Security & Privacy

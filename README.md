@@ -37,7 +37,7 @@ Sierra has really locked down the ability to run an application that's not from 
 If you're running Sierra, first you have to enable the ability to even *have the option* to run non-secure apps if you so choose.
 
 1. Quit System Preferences
-2. Run the Terminal Program (in /Applications/Utilities/Terminal)
+2. Run the Terminal Program (in /Applications/Utilities/)
 3. Type the following command and hit RETURN: `   sudo sbctl --master-disable`
 4. Enter your password and hit RETURN.
 5. Quit the Terminal Program

@@ -8,8 +8,8 @@ package edisyn;
 import edisyn.gui.*;
 import edisyn.synth.*;
 import javax.swing.*;
-import com.apple.eawt.*;
-import com.apple.eawt.event.*;
+//import com.apple.eawt.*;
+//import com.apple.eawt.event.*;
 
 /**** 
       Top-level launcher class.  For the moment, run as 

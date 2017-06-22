@@ -28,12 +28,12 @@ Ultimately Edisyn will have some more written for it as well as I get time; and 
 [Parts 5-10](https://raw.githubusercontent.com/eclab/edisyn/master/pics/BlofeldMulti2.png), 
 [Parts 11-16](https://raw.githubusercontent.com/eclab/edisyn/master/pics/BlofeldMulti3.png)
 
-* II/XT/XTk Single: [Oscillators and Filters](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTSingle1.png), 
+* Microwave II/XT/XTk Single: [Oscillators and Filters](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTSingle1.png), 
 [Envelopes](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTSingle2.png), 
 [Modulation](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTSingle3.png), 
 [Other](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTSingle4.png)
 
-* II/XT/XTk Multi: [Multi and Instruments 1-2](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTMulti1.png), 
+* Microwave II/XT/XTk Multi: [Multi and Instruments 1-2](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTMulti1.png), 
 [Instruments 3-5](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTMulti2.png), 
 [Instruments 6-8](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTMulti3.png)
 

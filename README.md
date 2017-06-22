@@ -37,7 +37,7 @@ Sierra has really locked down the ability to run an application that's not from 
 Let's assume you stuck Edisyn in the /Application directory as usual.  Then:
 
 1. Run the Terminal Program (in /Applications/Utilities/)
-2. Type the following command and hit RETURN: `   sudo sbctl --add /Applications/Edisyn.app`
+2. Type the following command and hit RETURN: `   sudo spctl --add /Applications/Edisyn.app`
 4. Enter your password and hit RETURN.
 5. Quit the Terminal Program
 

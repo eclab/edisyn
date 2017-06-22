@@ -48,6 +48,9 @@ public abstract class Synth extends JComponent implements Updatable
     double merging = 0.0;
 
     public Midi.Tuple tuple;
+    
+    public CCMap ccmap;
+    public int lastCC = -1;
         
     /** Handles mutation (or not) of keys declared immutable in the Model.
         When the user is mutating (randomizing) a parameter, and it was declared
@@ -153,10 +156,19 @@ public abstract class Synth extends JComponent implements Updatable
         {
         JFrame frame = ((JFrame)(SwingUtilities.getRoot(this)));
         if (frame != null) 
-            frame.setTitle(getSynthName().trim() + "        " + 
-                getPatchName().trim() + 
-                (getFile() == null ? "" : "        " + getFile().getName()) +
-                ((tuple == null || tuple.in == null) ? "        (DISCONNECTED)" : ""));
+        	{
+        	String synthName = getSynthName().trim();
+        	String patchName = "        " + getPatchName().trim();
+        	String fileName = (getFile() == null ? "" : "        " + getFile().getName());
+        	String disconnectedWarning = ((tuple == null || tuple.in == null) ? "        DISCONNECTED" : "");
+        	String learningWarning = (learning ? "        LEARNING" +
+        		(model.getLastKey() != null ? " " + model.getLastKey() + 
+        			(model.getRange(model.getLastKey()) > 0 ? "[" + model.getRange(model.getLastKey()) + "]" : "") + 
+        			(ccmap.getCCForKey(model.getLastKey()) >= 0 ? "=" + ccmap.getCCForKey(model.getLastKey()) : "")
+        			: "") : "");
+        
+            frame.setTitle(synthName + patchName + fileName + disconnectedWarning + learningWarning);
+            }
         }
 
         
@@ -166,9 +178,10 @@ public abstract class Synth extends JComponent implements Updatable
         model = new Model();
         model.register(Model.ALL_KEYS, this);
         random = new Random(System.currentTimeMillis());
+		ccmap = new CCMap(Prefs.getAppPreferences(getSynthName(), "CC"));
         }
         
-        
+    
     /** Updates the graphics rendering hints before drawing.  */
     public static void prepareGraphics(Graphics g)
         {
@@ -257,6 +270,9 @@ public abstract class Synth extends JComponent implements Updatable
     /** Called by the model to update the synth whenever a parameter is changed. */
     public void update(String key, Model model)
         {
+        if (learning)
+        	updateTitle();
+        	
         if (getSendMIDI())
             {
             tryToSendSysex(emit(key));
@@ -353,8 +369,15 @@ public abstract class Synth extends JComponent implements Updatable
                                 newMessage = new ShortMessage(status, channel, data1, data2);
                             else
                                 newMessage = new ShortMessage(status, data1, data2);
-
-                            tryToSendMIDI(newMessage);
+							if (newMessage.getCommand() == ShortMessage.CONTROL_CHANGE)
+								{
+								// we intercept this
+								handleCC(newMessage);
+								}
+							else
+								{
+	                            tryToSendMIDI(newMessage);
+	                            }
                             }
                         catch (InvalidMidiDataException e)
                             {
@@ -848,6 +871,31 @@ public abstract class Synth extends JComponent implements Updatable
                     }
                 }
             });
+            
+        learningMenuItem = new JMenuItem("Map CC");
+        learningMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(learningMenuItem);
+        learningMenuItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                toggleLearning();
+                }
+            });
+                
+        JMenuItem clearAllCC = new JMenuItem("Clear all CCs");
+        menu.add(clearAllCC);
+        clearAllCC.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to clear all CCs?", "Clear CCs", 
+												JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null) == JOptionPane.OK_OPTION)
+					{
+					clearLearned();
+					}
+                }
+            });
                 
         frame.getContentPane().add(this);
         frame.pack();
@@ -1258,13 +1306,72 @@ public abstract class Synth extends JComponent implements Updatable
         if (result == 1) return null;
         else 
         	{
-        	System.err.println(combo.getSelectedItem());
         	setLastSynth("" + combo.getSelectedItem());
         	return instantiate(synths[combo.getSelectedIndex()], synthNames[combo.getSelectedIndex()], false, (result == 0), null);
         	}
         }
     
     public abstract String getDefaultResourceFileName();
+    
+    boolean learning = false;
+    
+    JMenuItem learningMenuItem;
+    
+    public void toggleLearning()
+    	{
+    	learning = !learning;
+    	model.clearLastKey();
+    	lastCC = -1;  // clear
+    	updateTitle();
+    	if (learning)
+    		{
+    		learningMenuItem.setText("End Map CC");
+    		}
+    	else
+    		{
+    		learningMenuItem.setText("Map CC");
+    		}
+    	}
+    
+    public void clearLearned()
+    	{
+    	ccmap.clear();
+    	learning = false;
+    	toggleLearning();
+    	toggleLearning();
+    	}
+    
+    
+    public void handleCC(ShortMessage message)
+    	{
+    	lastCC = message.getData1();
+    	if (learning)
+    		{
+    		String key = model.getLastKey();
+    		if (key != null)
+    			{
+    			ccmap.setKeyForCC(lastCC, key);
+    			toggleLearning();  // we're done
+    			}
+    		}
+    	else
+    		{
+    		String key = ccmap.getKeyForCC(lastCC);
+    		int val = message.getData2();
+    		if (key != null)
+    			{
+    			if (model.minExists(key))
+    				{
+    				val += model.getMin(key);
+    				}
+    			else if (model.maxExists(key))
+    				{
+    				val = val - 127 + model.getMax(key);
+    				}
+    			model.setBounded(key, val);
+    			}
+    		}
+    	}
     
     public void loadDefaults()
     	{

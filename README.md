@@ -152,6 +152,11 @@ send the patch automatically.
 
 * *Send Test Note* sends a 1/2 second test note to the primary channel.
 
+* *Map CC* (or *End Map CC*) toggles CC Mapping mode, which enables you to map a CC message from your controller keyboard to almost any Edisyn
+editor widget.  See "CC Mapping" below.
+
+* *Clear CCs* clears all mapped CCs.  See "CC Mapping" below.
+
 
 ### The MIDI Interface
 
@@ -173,6 +178,23 @@ synthesizer (maybe later).  So (for example) on the Blofeld you'll need to chang
 ### Per-Synth Specific Notes and Bugs
 
 Gotchas and important things to know are contained in the <b>About</b> Tab in each synth editor window.  You should read it before using the editor for that synth.
+
+### CC Mapping
+
+If you select *Map CC*, you can map a CC controller to a widget.  This is done as follows:
+
+1. Make sure you told Edisyn the correct MIDI device and channel for your controller.
+2. Choose *Map CC*
+3. Edisyn will change the window to say "LEARNING"
+4. Tweak the widget to change its value.  This informs Edisyn that it's the widget you want to map.
+5. Edisyn will change the window to say "LEARNING parameter[range]" where *parameter* is the name of the parameter the widget is controlling
+and *range* is the range of the parameter (if any).
+6. Send the CC message from your controller (turn a knob or press a button).
+7. It'd now be a good idea to set your controller to only send CC values within the provided range.  For example, if *range* was 7, you might set your controller
+to only send values from 0..6.  If *range* was 2, you'd set it to send values 0..1.  And so on.
+
+Different synthesizer editor panel types can have different collections of CCs.
+And mapped CCs are permanent until you clear all CCs for the synth by choosing *Clear CCs*.
 
 ## Caveats
 

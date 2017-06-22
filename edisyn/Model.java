@@ -71,6 +71,11 @@ public class Model
         return (String[])(storage.keySet().toArray(new String[0]));
         }
         
+    public void clearLastKey()
+    	{
+    	lastKey = null;
+    	}
+    	
     public String getLastKey()
     	{
     	return lastKey;
@@ -106,6 +111,7 @@ public class Model
         if (key.equals("name"))
         	new Throwable().printStackTrace();
         storage.put(key, Integer.valueOf(value));
+        lastKey = key;
         ArrayList list = (ArrayList)(listeners.get(key));
         if (list != null)
             {
@@ -122,8 +128,29 @@ public class Model
                 ((Updatable)(list.get(i))).update(key, this);
                 }
             }
-        lastKey = key;
         }
+        
+    public void setBounded(String key, int value)
+    	{
+    	if (isString(key))
+    		return;
+    		
+    	if (minExists(key))
+    		{
+    		int min = getMin(key);
+    		if (value < min)
+    			value = min;
+    		}
+    		
+    	if (maxExists(key))
+    		{
+    		int max = getMax(key);
+    		if (value > max)
+    			value = max;
+    		}
+    	
+    	set(key, value);
+    	}
         
 
     /** Adds a key with the given String value, or changes it to the given value. */        
@@ -131,6 +158,7 @@ public class Model
         {
         storage.put(key, value);
         ArrayList list = (ArrayList)(listeners.get(key));
+        lastKey = key;
         if (list != null)
             {
             for(int i = 0; i < list.size(); i++)
@@ -146,7 +174,6 @@ public class Model
                 ((Updatable)(list.get(i))).update(key, this);
                 }
             }
-        lastKey = key;
         }
         
     /*
@@ -225,6 +252,17 @@ public class Model
         else return (storage.get(key) instanceof String);
         }
     
+
+    /** Returns whether the key is associated with an integer. 
+        If there is no key stored in the Model, then FALSE is returned. */        
+    public boolean isInteger(String key)
+        {
+        if (!exists(key)) 
+            return false;
+        else return (storage.get(key) instanceof Integer);
+        }
+    
+
     /** Returns whether the key is stored in the model. */        
     public boolean exists(String key)
         {
@@ -286,20 +324,48 @@ public class Model
         else return d.intValue();
         }
 
-	/** Print all the model parameters to stderr. */
-    /*
-    public void print()
+	public int getRange(String key)
+		{
+		if (minExists(key) && maxExists(key))
+			{
+			return getMax(key) - getMin(key) + 1;
+			}
+		else return 0;
+		}
+
+	/** Print to the given writer those model parameters for which the provided "other" model
+		does not have identical values.
+	 */
+    public void printDiffs(PrintWriter out, Model other)
         {
-        PrintWriter pw = new PrintWriter(System.err);
-        print(pw, false);
-        pw.flush();
+        String[] keys = getKeys();
+        for(int i = 0; i < keys.length; i++)
+            {
+            if (isString(keys[i]))
+                {
+                if (other.isString(keys[i]) &&
+                	other.get(keys[i]).equals(get(keys[i])))  // they're the same
+                		continue;
+                String str =  get(keys[i], "");
+                out.println(keys[i] + ": \"" + get(keys[i], "") + "\"    ");
+                }
+            else if (isInteger(keys[i]))
+                {
+                if (other.isInteger(keys[i]) &&
+                	other.get(keys[i]).equals(get(keys[i])))  // they're the same
+                		continue;
+                int j = get(keys[i], 0);
+                out.println(keys[i] + ": " + j + "    ");
+                }
+            else
+            	{
+            	out.println(keys[i] + ": FOREIGN OBJECT " + get(keys[i]));
+            	}
+            }
         }
-    */
-                
 	/** Print the model parameters to the given writer.   If diffsOnly, then only the model parameters which
 		differ from the default will be printed. */
-    /*
-    public void print(PrintWriter out, boolean diffsOnly)
+    public void print(PrintWriter out)
         {
         String[] keys = getKeys();
         for(int i = 0; i < keys.length; i++)
@@ -307,19 +373,17 @@ public class Model
             if (isString(keys[i]))
                 {
                 String str =  get(keys[i], "");
-                if (diffsOnly && str.equals(getDefault(keys[i])))
-                    continue;
                 out.println(keys[i] + ": \"" + get(keys[i], "") + "\"    ");
                 }
-            else
+            else if (isInteger(keys[i]))
                 {
                 int j = get(keys[i], 0);
-                if (diffsOnly && getDefault(keys[i]) != null &&
-                    j == ((Integer)(getDefault(keys[i]))).intValue())
-                    continue;
                 out.println(keys[i] + ": " + j + "    ");
                 }
+            else
+            	{
+            	out.println(keys[i] + ": FOREIGN OBJECT " + get(keys[i]));
+            	}
             }
         }
-    */
     }

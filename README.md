@@ -33,7 +33,7 @@ First install Edisyn from the Edisyn.dmg file located in the "install" directory
 
 Sierra has really locked down the ability to run an application that's not from a paid Apple Developer.  And for the time being I'm not.  You will have to unlock some of this.
 
-If you're running Sierra, first you have to enable the ability to even *have the option* run non-secure apps if you so choose.
+If you're running Sierra, first you have to enable the ability to even *have the option* to run non-secure apps if you so choose.
 
 1. Close System Preferences
 2. Run the Terminal Program (in /Applications/Utilities/Terminal)

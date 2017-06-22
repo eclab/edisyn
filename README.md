@@ -1,4 +1,4 @@
-# edisyn
+# Edisyn
 Synthesizer Patch Editor (Version 7)
 
 By Sean Luke (sean@cs.gmu.edu)

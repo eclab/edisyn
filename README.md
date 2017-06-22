@@ -40,8 +40,7 @@ Ultimately Edisyn will have some more written for it as well as I get time; and 
 
 ## Install and Run Edisyn
 
-At present Edisyn *only runs on OS X* (well, I've only tried it on OS X, that's its target).  If you try running
-it elsewhere, you're on your own.  We have confirmation that it runs fine under Linux.
+Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux) but I am personally developing on and for OS X.  I'd appreciate feedback and screenshots of it running on Windows and Linux so I can tweak things.
 
 
 ### Installation and Running on OS X 

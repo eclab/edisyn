@@ -32,7 +32,7 @@ it elsewhere, you're on your own.  We have confirmation that it runs fine under 
 First install Edisyn from the Edisyn.dmg file located in the "install" directory.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
 
 
-Sierra has really locked down the ability to run an application that's not from a paid Apple Developer.  And for the time being I'm not.  You will have to get Sierra to permit Edisyn.
+Sierra has really locked down the ability to run an application that's not from a paid Apple Developer.  And for the time being I'm not.  You will have to get Sierra to permit Edisyn to run.
 
 Let's assume you stuck Edisyn in the /Application directory as usual.  Then:
 
@@ -51,13 +51,23 @@ I don't know.  But you may be able to download the jar file located in the "jar"
 
 ### Installation and Running on Linux
 
-1. Install the Java tools if you don't have them (openjdk).
+1. Install Java if you don't have them (openjdk).
 
 2. Download Edisyn's jar file located in the "jar" directory.
 
 3. In Ubuntu, you'll first need to change the Properties of the jar file (see the "Open With" tab) to your Java VM.  
 
 4. Thereafter you may be able to just double-click on the file to launch Edisyn.
+
+
+### Running from the command line (OS X, Windows, Linux)
+
+1. Make sure Java is installed.
+
+2. Dowload the edisyn.jar file (in the "jar" directory)
+
+3. Run Edisyn as:   `java -jar edisyn.jar`
+
 
 ##
 

@@ -22,22 +22,45 @@ At present Edisyn *only runs on OS X* (well, I've only tried it on OS X, that's 
 it elsewhere, you're on your own.  We have confirmation that it runs fine under Linux.
 
 
-## Installation
+## Installation and Running on OS X 
 
-For the time being, to install Edisyn you need to do the following two things.
+First install Edisyn from the Edisyn.dmg file located in the "install" directory.
 
-1. Install the Java JDK.
-2. Put the file `jar/edisyn.7.jar` where you like (it's Edisyn's executable).
+Sierra has really locked down the ability to run an application that's not from a paid Apple Developer.  And for the time being I'm not.  You will have to unlock some of this.
+
+If you're running Sierra, first you have to enable the ability to even *have the option* run non-secure apps if you so choose.
+
+1. Close System Preferences
+2. Run the Terminal Program (in /Applications/Utilities/Terminal)
+3. Type the following command and hit RETURN: `   sudo sbctl --master-disable`
+4. Enter your password and hit RETURN.
+5. Quit the Terminal Program
+
+Next, you can set the option in System Preferences.
+
+1. Run System Preferences
+2. Go to Security & Privacy
+3. Choose "Allow Apps Downloaded from: ANYWHERE"
+4. Quit System Preferences
+
+Now you should be able to run Edisyn.  Please let me know if this works. 
 
 
-## Running 
+## Installation and Running on Windows
 
-- *On OS X:* Double click on the file `edisyn.7.jar`
-- *On Windows:* I don't know.  Anyone?
-- *On Linux:* In Ubuntu, you'll first need to change the Properties of the jar file (see the "Open With" tab) to your Java VM.  Thereafter you can just double-click on the file.
+I don't know.  But you may be able to download the jar file located in the "jar" directory and double-click on it.  Tell me if this works.
 
-Edisyn should launch and either present you with a window asking what MIDI interface you want to use, or tell
-you that there are no available MIDI interfaces, and that you'll need to work offline.
+
+# installation and Running on Linux
+
+1. Install the Java tools if you don't have them (openjdk).
+
+2. Download Edisyn's jar file located in the "jar" directory.
+
+3. In Ubuntu, you'll first need to change the Properties of the jar file (see the "Open With" tab) to your Java VM.  
+
+4. Thereafter you may be able to just double-click on the file to launch Edisyn.
+
 
 
 ### The Editor Pane

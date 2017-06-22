@@ -13,12 +13,27 @@ Edisyn presently supports:
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes)
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
 
-Ultimately Edisyn will have some more written for it as well as I get time; and of course the patch
-editors I can write are restricted to the synths I own and can test on!  
-Edisyn has no graphical interface editor system like 
-Ctrlr, but it's designed to make the GUI pretty easy to write (well, for me anyway).
+Ultimately Edisyn will have some more written for it as well as I get time; and of course the patch editors I can write are restricted to the synths I own and can test on!  Edisyn has no graphical interface editor system like Ctrlr, but it's designed to make the GUI pretty easy to write (well, for me anyway).
 
+## Pictures!
 
+* Blofeld Single: [Oscillators and Filters](https://raw.githubusercontent.com/eclab/edisyn/master/pics/BlofeldSingle1.png), 
+[LFOs and Envelopes](https://raw.githubusercontent.com/eclab/edisyn/master/pics/BlofeldSingle2.png), 
+[Modulation and Effects](https://raw.githubusercontent.com/eclab/edisyn/master/pics/BlofeldSingle3.png), 
+[Arpeggiator](https://raw.githubusercontent.com/eclab/edisyn/master/pics/BlofeldSingle4.png)
+
+* Blofeld Multi: [Multi and Parts 1-4](https://raw.githubusercontent.com/eclab/edisyn/master/pics/BlofeldMulti1.png), 
+[Parts 5-10](https://raw.githubusercontent.com/eclab/edisyn/master/pics/BlofeldMulti2.png), 
+[Parts 11-16](https://raw.githubusercontent.com/eclab/edisyn/master/pics/BlofeldMulti3.png)
+
+* II/XT/XTk Single: [Oscillators and Filters](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTSingle1.png), 
+[Envelopes](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTSingle2.png), 
+[Modulation](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTSingle3.png), 
+[Other](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTSingle4.png)
+
+* II/XT/XTk Multi: [Multi and Instruments 1-2](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTMulti1.png), 
+[Instruments 3-5](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTMulti2.png), 
+[Instruments 6-8](https://raw.githubusercontent.com/eclab/edisyn/master/pics/XTMulti3.png)
 
 
 ## Install and Run Edisyn

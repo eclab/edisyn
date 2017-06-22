@@ -1,14 +1,6 @@
 INSTALLATION
 
-Edisyn requires coremidi4j installed.  By default coremidi4j is embedded in Edisyn's
-jar file.  But if that's not working, you can install this library instead.
-This is easy on the Mac: just copy the file
-
-	coremidi4j-1.0.jar
-
-... to the directory /Library/Java/Extensions/
-
-and you're done!
+Edisyn uses coremidi4j.  You don't need to install it, it's part of Edisyn's jar file and executable.
 
 
 

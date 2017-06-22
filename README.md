@@ -32,26 +32,16 @@ it elsewhere, you're on your own.  We have confirmation that it runs fine under 
 First install Edisyn from the Edisyn.dmg file located in the "install" directory.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
 
 
-Sierra has really locked down the ability to run an application that's not from a paid Apple Developer.  And for the time being I'm not.  You will have to unlock some of this.
+Sierra has really locked down the ability to run an application that's not from a paid Apple Developer.  And for the time being I'm not.  You will have to get Sierra to permit Edisyn.
 
-If you're running Sierra, first you have to enable the ability to even *have the option* to run non-secure apps if you so choose.
+Let's assume you stuck Edisyn in the /Application directory as usual.  Then:
 
-1. Quit System Preferences
-2. Run the Terminal Program (in /Applications/Utilities/)
-3. Type the following command and hit RETURN: `   sudo sbctl --master-disable`
+1. Run the Terminal Program (in /Applications/Utilities/)
+2. Type the following command and hit RETURN: `   sudo sbctl --add /Applications/Edisyn.app`
 4. Enter your password and hit RETURN.
 5. Quit the Terminal Program
 
-Now you can set the option in System Preferences.
-
-1. Run System Preferences
-2. Go to Security & Privacy
-3. Choose "Allow Apps Downloaded from: ANYWHERE"
-4. Quit System Preferences
-
-Now you should be able to run Edisyn.  If you ever feel uncomfortable with allowing arbitrary apps (don't), just change it in the System Preferences again.  
-
-Let me know if this all works.
+Now you should be able to run Edisyn.  Let me know if this all works.
 
 
 ### Installation and Running on Windows

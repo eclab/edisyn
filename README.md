@@ -1,4 +1,4 @@
-![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png | width=200)
+![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
 Synthesizer Patch Editor (Version 7)

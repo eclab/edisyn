@@ -48,7 +48,7 @@ Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux)
 First install Edisyn from the Edisyn.dmg file located in the "install" directory.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
 
 
-Sierra has really locked down the ability to run an application that's not from a paid Apple Developer.  And for the time being I'm not.  You will have to get Sierra to permit Edisyn to run.
+Sierra has really locked down the ability to run an application that's not from a paid-up Apple Developer.  And I'm not one.  So you will have to instruct Sierra to permit Edisyn to run.
 
 Let's assume you stuck Edisyn in the /Application directory as usual.  Then:
 
@@ -66,6 +66,8 @@ I don't know.  But you may be able to download the jar file located in the "jar"
 
 
 ### Installation and Running on Linux
+
+I'm told that this works on Ubuntu:
 
 1. Install Java if you don't have them (openjdk).
 
@@ -85,7 +87,8 @@ I don't know.  But you may be able to download the jar file located in the "jar"
 3. Run Edisyn as:   `java -jar edisyn.jar`
 
 
-##
+
+## Using Edisyn
 
 ### The Editor Pane
 

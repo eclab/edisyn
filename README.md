@@ -1,3 +1,5 @@
+![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.jpg)
+
 # Edisyn
 Synthesizer Patch Editor (Version 7)
 

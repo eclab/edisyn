@@ -18,11 +18,16 @@ editors I can write are restricted to the synths I own and can test on!
 Edisyn has no graphical interface editor system like 
 Ctrlr, but it's designed to make the GUI pretty easy to write (well, for me anyway).
 
+
+
+
+## Install and Run Edisyn
+
 At present Edisyn *only runs on OS X* (well, I've only tried it on OS X, that's its target).  If you try running
 it elsewhere, you're on your own.  We have confirmation that it runs fine under Linux.
 
 
-## Installation and Running on OS X 
+### Installation and Running on OS X 
 
 First install Edisyn from the Edisyn.dmg file located in the "install" directory.
 
@@ -43,15 +48,15 @@ Next, you can set the option in System Preferences.
 3. Choose "Allow Apps Downloaded from: ANYWHERE"
 4. Quit System Preferences
 
-Now you should be able to run Edisyn.  Please let me know if this works. 
+Now you should be able to run Edisyn.  Please let me know if this works.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-( 
 
 
-## Installation and Running on Windows
+### Installation and Running on Windows
 
 I don't know.  But you may be able to download the jar file located in the "jar" directory and double-click on it.  Tell me if this works.
 
 
-## Installation and Running on Linux
+### Installation and Running on Linux
 
 1. Install the Java tools if you don't have them (openjdk).
 
@@ -61,7 +66,7 @@ I don't know.  But you may be able to download the jar file located in the "jar"
 
 4. Thereafter you may be able to just double-click on the file to launch Edisyn.
 
-
+##
 
 ### The Editor Pane
 

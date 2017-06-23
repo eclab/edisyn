@@ -56,6 +56,8 @@ public class Style
     public static final Color COLOR_C = new Color(200, 200, 0); 
     /** Color for the category holding critical global stuff like patch name, patch number, etc. */
     public static final Color COLOR_GLOBAL = Color.white;
+	/** Actual inset distance in case a JLabel is the first item */
+    public static final int CATEGORY_INSET_DISTANCE = 8;
     
     
     /////// CHOOSER CONSTANTS
@@ -97,6 +99,13 @@ public class Style
     public static final int ENVELOPE_DISPLAY_BORDER_THICKNESS = 10;
     /** Thickness of effective top border above the Envelope Display. */
     public static final int ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS = 0;
+    
+    /////// CHECKBOX CONSTANTS
+    /** Border around arpeggiator checkboxes */
+    public static final Border highlightedBorder = BorderFactory.createCompoundBorder(
+    												BorderFactory.createEmptyBorder(2, 2, 2, 2),
+    												BorderFactory.createLineBorder(Color.red, 1, true));
+    public static final Border nonHighlightedBorder = BorderFactory.createEmptyBorder(3, 3, 3, 3);
     
     /////// HTML DISPLAY CONSTANTS
     

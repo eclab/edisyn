@@ -13,6 +13,7 @@ import java.awt.event.*;
 import java.net.*;
 import javax.swing.text.*;
 import javax.swing.text.html.*;
+import java.awt.*;
 
 /**
    HTMLBrowser is a simple web browser which lets the user click on links and which provides
@@ -113,7 +114,8 @@ public class HTMLBrowser extends JPanel
 		infoPane.setEditorKit(kit);
                
         infoPane.setEditable(false);
-        scroll = new JScrollPane(infoPane);        
+        scroll = new JScrollPane(infoPane);
+
         setLayout(new BorderLayout());
         add(scroll,BorderLayout.CENTER);
         // override a bug in JEditorPane which scrolls to the bottom on all subsequent Consoles

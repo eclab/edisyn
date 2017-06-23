@@ -171,7 +171,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
 
-        
+    public JTabbedPane tabs = new JTabbedPane();
 
     public Synth() 
         {
@@ -179,6 +179,8 @@ public abstract class Synth extends JComponent implements Updatable
         model.register(Model.ALL_KEYS, this);
         random = new Random(System.currentTimeMillis());
 		ccmap = new CCMap(Prefs.getAppPreferences(getSynthName(), "CC"));
+		setLayout(new BorderLayout());
+        add(tabs, BorderLayout.CENTER);
         }
         
     
@@ -889,14 +891,132 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-				if (JOptionPane.showConfirmDialog(null, "Are you sure you want to clear all CCs?", "Clear CCs", 
+				if (JOptionPane.showConfirmDialog(Synth.this, "Are you sure you want to clear all CCs?", "Clear CCs", 
 												JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null) == JOptionPane.OK_OPTION)
 					{
 					clearLearned();
 					}
                 }
             });
+            
+            
+        menu = new JMenu("Tabs");
+        menubar.add(menu);
                 
+                
+        JMenuItem prev = new JMenuItem("Previous Tab");
+        prev.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(prev);
+        prev.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				setCurrentTab(getCurrentTab() - 1);
+                }
+            });
+
+
+        JMenuItem next = new JMenuItem("Next Tab");
+        next.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(next);
+        next.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				setCurrentTab(getCurrentTab() + 1);
+                }
+            });
+
+
+        JMenuItem taba = new JMenuItem("Tab 1");
+        taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(taba);
+        taba.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				setCurrentTab(0);
+                }
+            });
+
+        taba = new JMenuItem("Tab 2");
+        taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(taba);
+        taba.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				setCurrentTab(1);
+                }
+            });
+
+        taba = new JMenuItem("Tab 3");
+        taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(taba);
+        taba.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				setCurrentTab(2);
+                }
+            });
+
+        taba = new JMenuItem("Tab 4");
+        taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(taba);
+        taba.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				setCurrentTab(3);
+                }
+            });
+
+        taba = new JMenuItem("Tab 5");
+        taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_5, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(taba);
+        taba.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				setCurrentTab(4);
+                }
+            });
+
+        taba = new JMenuItem("Tab 6");
+        taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_6, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(taba);
+        taba.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				setCurrentTab(5);
+                }
+            });
+
+        taba = new JMenuItem("Tab 7");
+        taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_7, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(taba);
+        taba.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				setCurrentTab(6);
+                }
+            });
+
+        taba = new JMenuItem("Tab 8");
+        taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(taba);
+        taba.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				setCurrentTab(7);
+                }
+            });
+
+
         frame.getContentPane().add(this);
         frame.pack();
                 
@@ -1340,8 +1460,22 @@ public abstract class Synth extends JComponent implements Updatable
     	toggleLearning();
     	toggleLearning();
     	}
-    
-    
+    	
+	public int getCurrentTab()
+		{
+		return tabs.getSelectedIndex();
+		}
+		
+	public void setCurrentTab(int tab)
+		{
+		int len = tabs.getTabCount();
+		if (tab >= tabs.getTabCount())
+			return;
+		if (tab < 0)
+			return;
+		tabs.setSelectedIndex(tab);
+		}
+        
     public void handleCC(ShortMessage message)
     	{
     	lastCC = message.getData1();
@@ -1350,13 +1484,13 @@ public abstract class Synth extends JComponent implements Updatable
     		String key = model.getLastKey();
     		if (key != null)
     			{
-    			ccmap.setKeyForCC(lastCC, key);
+    			ccmap.setKeyForCCPane(lastCC, getCurrentTab(), key);
     			toggleLearning();  // we're done
     			}
     		}
     	else
     		{
-    		String key = ccmap.getKeyForCC(lastCC);
+    		String key = ccmap.getKeyForCCPane(lastCC, getCurrentTab());
     		int val = message.getData2();
     		if (key != null)
     			{

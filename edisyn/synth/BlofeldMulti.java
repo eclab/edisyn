@@ -125,10 +125,6 @@ public class BlofeldMulti extends Synth
                 
         setSendsAllParametersInBulk(true);
         
-        setLayout(new BorderLayout());
-                
-        JTabbedPane tabs = new JTabbedPane();
-                
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         vbox.add(addNameGlobal(Style.COLOR_GLOBAL));
@@ -166,8 +162,6 @@ public class BlofeldMulti extends Synth
 		
 
 		tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("BlofeldMulti.html")));
-
-        add(tabs, BorderLayout.CENTER);
 
         model.set("name", "Init Multi      ");  // has to be 16 long
         

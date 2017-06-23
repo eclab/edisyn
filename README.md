@@ -153,6 +153,15 @@ editor widget.  See "CC Mapping" below.
 
 * *Clear CCs* clears all mapped CCs.  See "CC Mapping" below.
 
+### The Tabs Menu
+
+The Tabs menu lets you quickly move between tabs.
+
+* *Previous Tab* moves one tab to the left.
+
+* *Next Tab* moves one tab to the right.
+
+* *Tab 1* through *Tab 8* select the first through the eighth tab respectively.
 
 ### The MIDI Interface
 
@@ -189,8 +198,8 @@ and *cc* is the current CC assigned to that parameter (if any).
 7. It'd now be a good idea to set your controller to only send CC values within the provided range.  For example, if *range* was 7, you might set your controller
 to only send values from 0..6.  If *range* was 2, you'd set it to send values 0..1.  And so on.
 
-Different synthesizer editor panel types can have different collections of CCs.
-And mapped CCs are permanent until you clear all CCs for the synth by choosing *Clear CCs*.
+Every *Tab* on every *Synthesizer Panel type* has its own unique set of CCs.
+Mapped CCs for a given Synthesizer panel type are permanent until you clear all CCs for the synth by choosing *Clear CCs*, which clears them for all tabs for that Synthesizer.
 
 ### Per-Synth Specific Notes and Bugs
 

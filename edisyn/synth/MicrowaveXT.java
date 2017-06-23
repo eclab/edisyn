@@ -104,10 +104,6 @@ public class MicrowaveXT extends Synth
                 
         setSendsAllParametersInBulk(true);
         
-        setLayout(new BorderLayout());
-                
-        JTabbedPane tabs = new JTabbedPane();
-                
         /// SOUND PANEL
                 
         JComponent soundPanel = new SynthPanel();
@@ -209,9 +205,6 @@ public class MicrowaveXT extends Synth
 
 		tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("MicrowaveXT.html")));
 
-        add(tabs, BorderLayout.CENTER);
-                
-                
         model.set("name", "Init Sound V1.1 ");  // has to be 16 long
         
         loadDefaults();        

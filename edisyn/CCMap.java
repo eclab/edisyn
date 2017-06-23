@@ -20,26 +20,62 @@ public class CCMap
     
     Preferences prefs;
     
+    public Integer munge(int cc, int pane)
+    	{
+    	return Integer.valueOf((cc << 8) | pane);
+    	}
+    	
+    public int cc(Integer munge)
+    	{
+    	if (munge == null) return -1;
+    	else return munge.intValue() >> 8;
+    	}
+    	
+    public int pane(Integer munge)
+    	{
+    	if (munge == null) return -1;
+    	else return munge & 255;
+    	}
+    
+    public String getKeyForCCPane(int cc, int pane)
+    	{
+    	return getKeyForInteger(munge(cc, pane));
+    	}
+    	
     /** Returns the model key for the given CC value, or null if there is none. */
-	public String getKeyForCC(int cc)
+	public String getKeyForInteger(Integer munge)
 		{
-		return (String)map.get(Integer.valueOf(cc));
+		return (String)map.get(munge);
+		}
+	
+    /** Returns the model key for the given CC value, or null if there is none. */
+	public Integer getIntegerForKey(String key)
+		{
+		return (Integer)reverseMap.get(key);
 		}
 	
 	public int getCCForKey(String key)
 		{
-		Integer val = (Integer)(reverseMap.get(key));
-		if (val == null) return -1;
-		else return val.intValue();
+		return cc(getIntegerForKey(key));
+		}
+		
+	public int getPaneForKey(String key)
+		{
+		return pane(getIntegerForKey(key));
 		}
     
+    public void setKeyForCCPane(int cc, int pane, String key)
+    	{
+    	setKeyForInteger(munge(cc, pane), key);
+    	}
+    	
     /** Sets the model key for the given CC value, and syncs the Preferences (which isn't cheap). */
-	public void setKeyForCC(int cc, String key)
+	public void setKeyForInteger(Integer munge, String key)
 		{
-		map.put(Integer.valueOf(cc), key);
-		reverseMap.put(key, Integer.valueOf(cc));
+		map.put(munge, key);
+		reverseMap.put(key, munge);
 		
-		prefs.put("" + cc, key);
+		prefs.put("" + munge.intValue(), key);
         try 
             {
             prefs.sync();
@@ -62,14 +98,14 @@ public class CCMap
 	    		{
 	    		// each Key holds a CC INTEGER
 	    		
-	    		int cc = 0;
-	    		try { cc = Integer.parseInt(keys[i]); }
+	    		int munge = 0;
+	    		try { munge = Integer.parseInt(keys[i]); }
 	    		catch (Exception e) { e.printStackTrace(); }
 	    		
 	    		// each Value holds a MODEL KEY STRING
 	    		
-	    		map.put(Integer.valueOf(cc), prefs.get(keys[i], "-"));
-	    		reverseMap.put(prefs.get(keys[i], "-"), Integer.valueOf(cc));
+	    		map.put(Integer.valueOf(munge), prefs.get(keys[i], "-"));
+	    		reverseMap.put(prefs.get(keys[i], "-"), Integer.valueOf(munge));
 	    		}
 	    	}
 	    catch (Exception ex)

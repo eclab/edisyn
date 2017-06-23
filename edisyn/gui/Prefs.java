@@ -19,12 +19,12 @@ public class Prefs
 
     public static Preferences getGlobalPreferences(String namespace)
         {
-        return Preferences.userRoot().node(GLOBAL_PREFERENCES + "/" + namespace);
+        return Preferences.userRoot().node(GLOBAL_PREFERENCES + "/" + namespace.replace('.','/'));
         }
 
     public static Preferences getAppPreferences(String editor, String namespace)
         {
-        return Preferences.userRoot().node(EDITOR_PREFERENCES + "/" + editor + "/" + namespace); 
+        return Preferences.userRoot().node(EDITOR_PREFERENCES + "/" + editor.replace('.','/') + "/" + namespace.replace('.','/')); 
         }
         
     public static boolean removeGlobalPreferences(String namespace)

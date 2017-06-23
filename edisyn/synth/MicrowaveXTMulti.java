@@ -60,10 +60,6 @@ public class MicrowaveXTMulti extends Synth
                 
         setSendsAllParametersInBulk(true);
         
-        setLayout(new BorderLayout());
-                
-        JTabbedPane tabs = new JTabbedPane();
-                
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         vbox.add(addNameGlobal(Style.COLOR_GLOBAL));
@@ -100,8 +96,6 @@ public class MicrowaveXTMulti extends Synth
         tabs.addTab("Instruments 6 - 8", soundPanel);
 
 		tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("MicrowaveXTMulti.html")));
-
-        add(tabs, BorderLayout.CENTER);
 
         model.set("name", "Init            ");  // has to be 16 long
         

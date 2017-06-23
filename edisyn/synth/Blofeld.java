@@ -82,11 +82,7 @@ public class Blofeld extends Synth
             }
 
         setSendsAllParametersInBulk(true);
-        
-        setLayout(new BorderLayout());
-                
-        JTabbedPane tabs = new JTabbedPane();
-                
+                                
         /// SOUND PANEL
                 
         JComponent soundPanel = new SynthPanel();
@@ -158,8 +154,6 @@ public class Blofeld extends Synth
 
 		tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("Blofeld.html")));
 
-        add(tabs, BorderLayout.CENTER);
-                
                 
         model.set("name", "Init            ");  // has to be 16 long
         

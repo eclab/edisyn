@@ -157,11 +157,14 @@ editor widget.  See "CC Mapping" below.
 
 Edisyn makes up to three MIDI device connections.  The *Receiving Device* is the MIDI device from which we will accept
 patches.  This is usually your synthesizer.  The *Sending Device* is the MIDI device to which we will send 
-patches and parameter changes.  We'll also need a channel for the Sending Device so we can send test notes.
+patches and parameter changes.  We'll also need a *Channel* for the Sending Device so we can send test notes.
 
 Optionally you can route your controller keyboard through Edisyn to play the sounds directly if you wish.  To do this,
-the *Keyboard Device* is the MIDI Device of your controller keyboard.  You'll also specify an incoming keyboard
+the *Controller* is the MIDI Device of your controller keyboard.  You'll also specify an incoming *Controller Channel*
 channel of course.  This can be set to "Any" for any channel (Omni).
+
+Additionally, if you're sick of using your mouse, you can map *CC MIDI Commands* from your Controller Keyboard to 
+directly manipulate dials and other widgets in Edisyn.  See "CC Mapping" below.
 
 ### Sending and Recieving Parameters
 
@@ -169,10 +172,6 @@ If you change a widget in the editor, Edisyn will send the appropriate sysex com
 the synth as well.  Additionally, if you change a parameter on the synthesizer and it forwards a *sysex* command to Edisyn,
 then Edisyn will update the appropriate widget in the editor.  At present Edisyn does't support CC commands from the
 synthesizer (maybe later).  So (for example) on the Blofeld you'll need to change the machine to *send sysex* -- not CC only -- when changing parameters on the synth.
-
-### Per-Synth Specific Notes and Bugs
-
-Gotchas and important things to know are contained in the <b>About</b> Tab in each synth editor window.  You should read it before using the editor for that synth.
 
 ### CC Mapping
 
@@ -191,6 +190,10 @@ to only send values from 0..6.  If *range* was 2, you'd set it to send values 0.
 
 Different synthesizer editor panel types can have different collections of CCs.
 And mapped CCs are permanent until you clear all CCs for the synth by choosing *Clear CCs*.
+
+### Per-Synth Specific Notes and Bugs
+
+Gotchas and important things to know are contained in the <b>About</b> Tab in each synth editor window.  You should read it before using the editor for that synth.
 
 ## Caveats
 

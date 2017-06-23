@@ -77,8 +77,23 @@ public class MicrowaveXT extends Synth
     static final String[] RATE = new String[] { "1/96", "1/48", "1/32", "1/16 T", "1/32 .", "1/16", "1/8T", "1/16 .", "1/8", "1/4 T", "1/8 .", "1/4", "1/2 T", "1/4 .", "1/2", "1/1 T", "1/2 .", "1", "1.5", "2", "2.5", "3", "3.5", "4", "5", "6", "7", "8", "9", "10", "12", "14", "16", "18", "20", "24", "28", "32", "36", "40", "48", "56", "64" };
     static final String[] ARP_CLOCK = new String[] { "1/1", "1/2 .", "1/2 T", "1/2", "1/4 .", "1/4 T", "1/4", "1/8 .", "1/8 T", "1/8", "1/16 .", "1/16 T", "1/16", "1/32 .", "1/32 T", "1/32"};
     
-    
-    
+    static final int[][] ARP_PATTERNS = new int[][] {
+    	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    	{ 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1 },
+    	{ 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1 },
+    	{ 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1 },
+    	{ 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0 },
+    	{ 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1 },
+    	{ 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0 },
+    	{ 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1 },
+    	{ 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0 },
+	   	{ 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0 },
+  		{ 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0 },
+  		{ 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0 },
+  		{ 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0 },
+  		{ 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1 },
+  		{ 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1 },
+  		{ 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0 } };
         
     public MicrowaveXT()
         {
@@ -99,7 +114,6 @@ public class MicrowaveXT extends Synth
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.add(addAllocation(Style.COLOR_C));
         hbox.addLast(addWavetable(Style.COLOR_A));
                 
         vbox.add(hbox);
@@ -108,22 +122,17 @@ public class MicrowaveXT extends Synth
         VBox vbox2 = new VBox();
         vbox2.add(addOscillator(1, Style.COLOR_A));
         vbox2.add(addOscillator(2, Style.COLOR_A));
+        vbox2.add(addAmplifier(Style.COLOR_C));
         hbox.add(vbox2);
         
         vbox2 = new VBox();
         vbox2.add(addWave(1, Style.COLOR_A));
         vbox2.add(addWave(2, Style.COLOR_A));
+        vbox2.add(addMixer(Style.COLOR_C));
         hbox.addLast(vbox2);
         
 		vbox.add(hbox);
         
-        hbox = new HBox();
-        hbox.add(addMixer(Style.COLOR_C));
-        hbox.add(addQuality(Style.COLOR_C));
-		hbox.addLast(addGlide(Style.COLOR_C));
-        vbox.add(hbox);
-        
-
         hbox = new HBox();
         hbox.add(addFilter1(Style.COLOR_B));
         hbox.addLast(addFilter2(Style.COLOR_B));
@@ -185,11 +194,14 @@ public class MicrowaveXT extends Synth
         vbox.add(addArpeggiation(Style.COLOR_B));
 
         hbox = new HBox();
-        hbox.add(addAmplifier(Style.COLOR_C));
-		hbox.addLast(addEffect(Style.COLOR_C));
+        hbox.add(addAllocation(Style.COLOR_C));
+        hbox.add(addQuality(Style.COLOR_C));
+		hbox.addLast(addGlide(Style.COLOR_C));
         vbox.add(hbox);
-         		
+
         vbox.add(addPlayParameters(Style.COLOR_C));
+		vbox.add(addEffect(Style.COLOR_C));
+
 
         
         otherPanel.add(vbox, BorderLayout.CENTER);
@@ -790,12 +802,6 @@ public class MicrowaveXT extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-        comp = new CheckBox("Chorus", this, "chorus");
-        // irritating font metric bugs bite again
-        ((CheckBox)comp).addToWidth(1);
-        vbox.add(comp);
-		hbox.add(vbox);
-		
         comp = new LabelledDial("Volume", this, "amplifiervolume", color, 0, 127);
         hbox.add(comp);
 
@@ -834,7 +840,13 @@ public class MicrowaveXT extends Synth
         ((LabelledDial)comp).setSecondLabel("Keytrack");
         hbox.add(comp);
 
-        category.add(hbox, BorderLayout.WEST);
+         comp = new CheckBox("Chorus", this, "chorus");
+        // irritating font metric bugs bite again
+        ((CheckBox)comp).addToWidth(1);
+        vbox.add(comp);
+		hbox.add(vbox);
+		
+       category.add(hbox, BorderLayout.WEST);
         return category;
         }
 
@@ -1381,12 +1393,18 @@ public class MicrowaveXT extends Synth
 
     	comp = new LabelledDial("User Length", this, "arpuserlength", color, 0, 15, -1);
         hbox.add(comp);
+
+		VBox vbox2 = new VBox();
+        comp = new CheckBox("Reset on Start", this, "arpreset");
+        vbox2.add(comp);
+        hbox.add(vbox2);
         
         Updatable updateArp = new Updatable()
         	{
         	public void update(String key, Model model)
         		{
-        		if (model.get("arppattern", 0) == 1)
+				int pattern = model.get("arppattern", 0);
+        		if (pattern == 1)
 					{
 					int len = model.get("arpuserlength", 0) + 1;
 					for(int i = 0; i < len; i++)
@@ -1397,12 +1415,25 @@ public class MicrowaveXT extends Synth
 						{
 						arpeggiation[i].getCheckBox().setEnabled(false);
 						}
+					for(int i = 0; i < 16; i++)
+						{
+						arpeggiation[i].setBorder(Style.nonHighlightedBorder);
+						}
 					}
 				else
 					{
 					for(int i = 0; i < 16; i++)
 						{
 						arpeggiation[i].getCheckBox().setEnabled(false);
+						}
+					
+					if (pattern > 1)
+						pattern--;
+					
+					for(int i = 0; i < 16; i++)
+						{
+						arpeggiation[i].setBorder(ARP_PATTERNS[pattern][i] == 0 ?
+							Style.nonHighlightedBorder : Style.highlightedBorder);
 						}
 					}
 				}
@@ -1414,14 +1445,24 @@ public class MicrowaveXT extends Synth
         big.add(hbox);
 
 		hbox = new HBox();
-        comp = new CheckBox("Reset on Start     Pattern:", this, "arpreset");
-        hbox.add(comp);
-        
+		hbox.add(Strut.makeHorizontalStrut(Style.CATEGORY_INSET_DISTANCE));
+     	JLabel label = new JLabel("Pattern:     ");
+     	label.setFont(Style.SMALL_FONT);
+        label.setBackground(Style.TRANSPARENT);
+        label.setForeground(Style.TEXT_COLOR);
+        hbox.add(label);
+
+             
         for(int pattern = 0; pattern < 16; pattern++)
             {
 			arpeggiation[pattern] = new CheckBox("", this, "arpuser" + (pattern + 1));
 			arpeggiation[pattern].getCheckBox().setEnabled(false);  // because we start with arppattern not set to User
-        	hbox.add(arpeggiation[pattern]);
+     		arpeggiation[pattern].setBorder(Style.highlightedBorder);
+	   		hbox.add(arpeggiation[pattern]);
+	   		if (pattern % 4 == 3)
+	   			{
+	   			hbox.add(Strut.makeHorizontalStrut(20));
+	   			}
         	}
         big.add(hbox);
         

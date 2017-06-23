@@ -69,7 +69,7 @@ I don't know.  But you may be able to download the [jar file](https://github.com
 
 I'm told that this works on Ubuntu:
 
-1. Install Java if you don't have them (openjdk).
+1. Install Java if you don't have it yet (openjdk probably).
 
 2. Download [Edisyn's jar file](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar) located in the "jar" directory.
 

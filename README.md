@@ -45,7 +45,7 @@ Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux)
 
 ### Installation and Running on OS X 
 
-First install Edisyn from the Edisyn.dmg file located in the "install" directory.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
+First install Edisyn from the [Edisyn.dmg](https://github.com/eclab/edisyn/raw/master/install/Edisyn.dmg) file located in the "install" directory.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
 
 
 Sierra has really locked down the ability to run an application that's not from a paid-up Apple Developer.  And I'm not one.  So you will have to instruct Sierra to permit Edisyn to run.
@@ -62,7 +62,7 @@ Now you should be able to run Edisyn.  Let me know if this all works.
 
 ### Installation and Running on Windows
 
-I don't know.  But you may be able to download the jar file located in the "jar" directory and double-click on it.  Tell me if this works.
+I don't know.  But you may be able to download the [jar file](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar) located in the "jar" directory and double-click on it.  Tell me if this works.
 
 
 ### Installation and Running on Linux
@@ -71,7 +71,7 @@ I'm told that this works on Ubuntu:
 
 1. Install Java if you don't have them (openjdk).
 
-2. Download Edisyn's jar file located in the "jar" directory.
+2. Download [Edisyn's jar file](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar) located in the "jar" directory.
 
 3. In Ubuntu, you'll first need to change the Properties of the jar file (see the "Open With" tab) to your Java VM.  
 
@@ -82,7 +82,7 @@ I'm told that this works on Ubuntu:
 
 1. Make sure Java is installed.
 
-2. Dowload the edisyn.jar file (in the "jar" directory)
+2. Download [Edisyn's jar file](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar) located in the "jar" directory.
 
 3. Run Edisyn as:   `java -jar edisyn.jar`
 

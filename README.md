@@ -8,7 +8,7 @@ By Sean Luke (sean@cs.gmu.edu)
 
 ## About
 
-Edisyn is a synthesizer patch editor library written in pure Java.  
+Edisyn is a synthesizer patch editor library written in pure Java.   It runs on OS X, Linux, and (probably) Windows.  
 
 Edisyn presently supports:
 
@@ -112,11 +112,6 @@ doesn't open a new window.
 
 * *Save* and *Save As...* save to a sysex file.
 
-* *Export Diff to Text...* saves out to a text file a line-by-line description of every parameter which is *different* 
-from the default Init patch setting, plus the current value it's set to.  The patch value is either a string (in the
-case of the Patch name) or a number from 0...127: this may not be that useful to you, but the parameter names might
-be useful if you want to publish your patch on a sebsite and need to know which parameter settings to mention. 
-
 
 ### The MIDI Menu
 
@@ -187,8 +182,9 @@ If you select *Map CC*, you can map a CC controller to a widget.  This is done a
 2. Choose *Map CC*
 3. Edisyn will change the window to say "LEARNING"
 4. Tweak the widget to change its value.  This informs Edisyn that it's the widget you want to map.
-5. Edisyn will change the window to say "LEARNING parameter[range]" where *parameter* is the name of the parameter the widget is controlling
-and *range* is the range of the parameter (if any).
+5. Edisyn will change the window to say "LEARNING parameter[range]=cc" (*range* and *cc* might not show up)
+where *parameter* is the name of the parameter the widget is controlling, *range* is the range of the parameter (if any),
+and *cc* is the current CC assigned to that parameter (if any).
 6. Send the CC message from your controller (turn a knob or press a button).
 7. It'd now be a good idea to set your controller to only send CC values within the provided range.  For example, if *range* was 7, you might set your controller
 to only send values from 0..6.  If *range* was 2, you'd set it to send values 0..1.  And so on.

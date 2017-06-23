@@ -49,11 +49,11 @@ public class Style
     /** The category border. */
     public static final Border CATEGORY_BORDER = BorderFactory.createEmptyBorder(0, -2, 4, 4);
     /** Color of the first category on a page. */
-    public static final Color COLOR_A = new Color(0, 210, 0);
+    public static final Color COLOR_A = new Color(0, 210, 0); 
     /** Color of the second category on a page. */
-    public static final Color COLOR_B = new Color(150, 150, 255);
+    public static final Color COLOR_B = new Color(150, 150, 255); 
     /** Color of the third category on a page. */
-    public static final Color COLOR_C = new Color(200, 200, 0);
+    public static final Color COLOR_C = new Color(200, 200, 0); 
     /** Color for the category holding critical global stuff like patch name, patch number, etc. */
     public static final Color COLOR_GLOBAL = Color.white;
     

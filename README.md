@@ -73,9 +73,10 @@ I'm told that this works on Ubuntu:
 
 2. Download [Edisyn's jar file](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar) located in the "jar" directory.
 
-3. In Ubuntu, you'll first need to change the Properties of the jar file (see the "Open With" tab) to your Java VM.  
+3. Right-click on the jar file icon and choose "Properties".  Then select the "Open With" tab, and select your Java VM (for example "Open JDK Java 8 Runtime").  
+The press "Set as Default".  This makes the Java VM the default application to launch jar files.
 
-4. Thereafter you may be able to just double-click on the file to launch Edisyn.
+4. Thereafter you should be able to just double-click on the file to launch Edisyn.
 
 
 ### Running from the command line (OS X, Windows, Linux)

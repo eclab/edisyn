@@ -34,10 +34,20 @@ public class HBox extends JComponent
 
     public HBox()
         {
+        this(RIGHT_CONSUMES);
+        }
+    
+    public static final int LEFT_CONSUMES = 0;
+    public static final int RIGHT_CONSUMES = 1;
+    public HBox(int alternative)
+        {
         setLayout(new BorderLayout());
         setBackground(Style.BACKGROUND_COLOR);
         box = new Box(BoxLayout.X_AXIS);
-        add(box, BorderLayout.WEST);
+        if (alternative == LEFT_CONSUMES)
+        	add(box, BorderLayout.EAST);
+        else
+        	add(box, BorderLayout.WEST);        	
         panel.setLayout(new BorderLayout());
         panel.setBackground(Style.BACKGROUND_COLOR);
         add(panel, BorderLayout.CENTER);

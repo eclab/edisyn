@@ -42,6 +42,5 @@ public class Strut
 		panel.setBackground(Style.BACKGROUND_COLOR);
 		return panel;
 		} 
-		
 
     }

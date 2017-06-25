@@ -52,6 +52,23 @@ public abstract class Synth extends JComponent implements Updatable
     public CCMap ccmap;
     public int lastCC = -1;
         
+        
+    boolean synced = false;
+    
+    public void setSynced(boolean val)
+    	{
+    	synced = val;
+    	for(int i = 0; i < patchDisplays.size(); i++)
+    		((PatchDisplay)(patchDisplays.get(i))).update("whatever", getModel());
+    	}
+    public boolean isSynced() { return synced; }
+    	
+    ArrayList patchDisplays = new ArrayList();
+    public void addPatchDisplay(PatchDisplay display)
+    	{
+    	patchDisplays.add(display);
+    	}
+    
     /** Handles mutation (or not) of keys declared immutable in the Model.
         When the user is mutating (randomizing) a parameter, and it was declared
         immutable, this method is called instead to let you change the parameter
@@ -59,9 +76,8 @@ public abstract class Synth extends JComponent implements Updatable
     public abstract void immutableMutate(String key);
         
     /** Updates the model to reflect the following sysex patch dump for your synthesizer type. 
-    	If the patch is from current working memory and so doesn't need to be sent to the synth
-    	to update it, return FALSE, else return TRUE. */
-    public abstract boolean parse(byte[] data);
+    	If the patch contains information sufficient to sync, return TRUE, else return FALSE. */
+    public abstract boolean parse(byte[] data, boolean ignorePatch);
     
     /** Updates the model to reflect the following sysex or CC (or other!) message from your synthesizer. 
     	You are free to IGNORE this message entirely.  Patch dumps will generally not be sent this way; 
@@ -142,7 +158,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** Returns the name of the synthesizer */
     public abstract String getSynthName();
     
-    /** Returns the name of the current patch. */
+    /** Returns the name of the current patch, or null if there is no such thing. */
     public abstract String getPatchName();
     
     /** Return true if the window can be closed and disposed of. You should do some cleanup
@@ -158,7 +174,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (frame != null) 
         	{
         	String synthName = getSynthName().trim();
-        	String patchName = "        " + getPatchName().trim();
+        	String patchName = "        " + (getPatchName() == null ? "" : getPatchName().trim());
         	String fileName = (getFile() == null ? "" : "        " + getFile().getName());
         	String disconnectedWarning = ((tuple == null || tuple.in == null) ? "        DISCONNECTED" : "");
         	String learningWarning = (learning ? "        LEARNING" +
@@ -275,7 +291,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (learning)
         	updateTitle();
         	
-        if (getSendMIDI())
+        if (getSendMIDI() && isSynced())
             {
             tryToSendSysex(emit(key));
             }
@@ -309,7 +325,7 @@ public abstract class Synth extends JComponent implements Updatable
                                 merging = 0.0;
                                 setSendMIDI(false);
                                 Synth newSynth = instantiate(Synth.this.getClass(), getSynthName(), true, false, tuple);
-                                newSynth.parse(data);
+                                newSynth.parse(data, true);
                                 merge(newSynth.getModel(), 0.5);
                                 setSendMIDI(true);
                                 sendAllParameters();
@@ -317,11 +333,19 @@ public abstract class Synth extends JComponent implements Updatable
                                 }
                             else
                                 {
-                                sendMIDI = false;  // so we don't send out parameter updates in response to reading/changing parameters
-                                boolean sendParameters = parse(data);
-                                sendMIDI = true;
-                                if (sendParameters) 
-                                	sendAllParameters();
+                                // we turn off MIDI because parse() calls revise() which triggers setParameter() with its changes
+                                setSendMIDI(false);
+                                boolean canSync = parse(data, false);
+                                setSendMIDI(true);
+                                if (canSync)
+                                	{
+                                	changePatch(getModel());
+                                	setSynced(true);
+                                	}
+                                else 
+                                	{
+                                	setSynced(false);
+                                	}
                                 file = null;
                                 updateTitle();
                                 }
@@ -541,8 +565,8 @@ public abstract class Synth extends JComponent implements Updatable
     	}    
 
 
-	public static final Class[] synths = new Class[] { Blofeld.class, BlofeldMulti.class, MicrowaveXT.class, MicrowaveXTMulti.class };
-	public static final String[] synthNames = { "Waldorf Blofeld (Single)", "Waldorf Blofeld (Multi)", "Waldorf Microwave II/XT/XTk (Single)", "Waldorf Microwave II/XT/XTk (Multi)" };
+	public static final Class[] synths = new Class[] { Matrix1000.class, Blofeld.class, BlofeldMulti.class, MicrowaveXT.class, MicrowaveXTMulti.class };
+	public static final String[] synthNames = { "Oberheim Matrix 1000", "Waldorf Blofeld", "Waldorf Blofeld [Multi]", "Waldorf Microwave II/XT/XTk", "Waldorf Microwave II/XT/XTk [Multi]" };
           
     public JFrame sprout()
         {
@@ -627,30 +651,6 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-/*
-        menu.addSeparator();
-
-        JMenuItem resetToDefault = new JMenuItem("Reset to Default");
-        menu.add(resetToDefault);
-        resetToDefault.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                getModel().resetToDefaults();
-                }
-            });
-
-        JMenuItem exportTo = new JMenuItem("Export Diff To Text...");
-        menu.add(exportTo);
-        exportTo.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doExport(true);
-                }
-            });
-*/
-
         menu = new JMenu("MIDI");
         menubar.add(menu);
                 
@@ -666,6 +666,8 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
                         return;
+                    else
+                    	setSynced(false);
                     }
                 
                 tryToSendSysex(requestCurrentDump(null));
@@ -683,6 +685,8 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
                         return;
+                    else
+                    	setSynced(false);
                     }
                 
                 Model tempModel = new Model();
@@ -710,6 +714,8 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
                         return;
+                    else
+                    	setSynced(false);
                     }
                 
                 doMerge(0.25);
@@ -724,6 +730,8 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
                         return;
+                    else
+                    	setSynced(false);
                     }
                 
                 doMerge(0.50);
@@ -738,6 +746,8 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
                         return;
+                    else
+                    	setSynced(false);
                     }
                 
                 doMerge(0.75);
@@ -754,9 +764,44 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
                         return;
+                    else
+                    	setSynced(false);
                     }
                 
-                sendAllParameters();
+                if (isSynced())
+                	{
+	                sendAllParameters();
+                	}
+                else
+                	{
+                	if (gatherInfo("You aren't synced.  ", getModel()))
+	                    {
+	                    setSynced(true);
+                		sendAllParameters();
+        	            }
+        	        }
+                }
+            });
+
+        JMenuItem transmitTo = new JMenuItem("Send Patch To...");
+        menu.add(transmitTo);
+        transmitTo.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                if (tuple == null || tuple.out == null)
+                    {
+                    if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
+                        return;
+                    else
+                    	setSynced(false);
+                    }
+                
+				if (gatherInfo("Send Patch To...", getModel()))
+					{
+					setSynced(true);
+					sendAllParameters();
+					}
                 }
             });
                 
@@ -785,7 +830,7 @@ public abstract class Synth extends JComponent implements Updatable
 
         menu.addSeparator();
 
-        JMenuItem burn = new JMenuItem("Write Patch...");
+        JMenuItem burn = new JMenuItem("Write Patch To...");
         burn.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(burn);
         burn.addActionListener(new ActionListener()
@@ -796,12 +841,18 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
                         return;
+                    else
+                    	setSynced(false);
                     }
                 
-                if (gatherInfo("Write Patch", getModel()))
+                if (gatherInfo("Write Patch To...", getModel()))
                     {
-                    tryToSendSysex(emit(getModel(), false));
-                    }
+                    if (tryToSendSysex(emit(getModel(), false)))
+						 {
+						 changePatch(getModel());
+						 setSynced(true);
+						 }
+	                }
                 }
             });
                 
@@ -813,7 +864,10 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                setupMIDI("Choose MIDI devices to send to and receive from.");
+                if (!setupMIDI("Choose MIDI devices to send to and receive from."))
+                	return;
+                else
+                    setSynced(false);
                 }
             });
             
@@ -856,9 +910,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 try
                     {
-                    int channel = 1;
-                    if (tuple != null)
-                        channel = tuple.outChannel;
+                    int channel = getChannelOut();
                     tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel - 1, 60, 127));
                     Thread.currentThread().sleep(500);
                     tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel - 1, 60, 127));
@@ -1052,7 +1104,16 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
 
+	public int getChannelOut()
+		{
+		int channel = 1;
+		if (tuple != null)
+			channel = tuple.outChannel;
+		return channel;
+		}
     
+	public void changePatch(Model tempModel) { }
+
     boolean sendsAllParametersInBulk = false;
     
     /** Sets whether the synth sends its patch dump (TRUE) as one single sysex dump or by
@@ -1072,18 +1133,23 @@ public abstract class Synth extends JComponent implements Updatable
 	*/    
     public void sendAllParameters()
         {
-        if (sendsAllParametersInBulk)
+        if (isSynced())
         	{
-        	tryToSendSysex(emit(getModel(), true));
-        	}
-        else
-        	{
-	        String[] keys = getModel().getKeys();
-	        for(int i = 0; i < keys.length; i++)
-	            {
-	            tryToSendSysex(emit(keys[i]));
-	            }
-	        }
+			changePatch(getModel());
+		
+			if (sendsAllParametersInBulk)
+				{
+				tryToSendSysex(emit(getModel(), true));
+				}
+			else
+				{
+				String[] keys = getModel().getKeys();
+				for(int i = 0; i < keys.length; i++)
+					{
+					tryToSendSysex(emit(keys[i]));
+					}
+				}
+			}
         }
             
     /** Guarantee that the given filename ends with the given ending. */    
@@ -1094,7 +1160,6 @@ public abstract class Synth extends JComponent implements Updatable
             return filename;
         else return filename + ending;
         }
-                
                 
     /** Goes through the process of saving to a new sysex file and associating it with
         the editor. */
@@ -1109,7 +1174,10 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
-            fd.setFile("Untitled.syx");
+            if (getPatchName() != null)
+	            fd.setFile(getPatchName().trim() + ".syx");
+	        else
+	        	fd.setFile("Untitled.syx");
         	String path = getLastDirectory();
         	if (path != null)
         		fd.setDirectory(path);
@@ -1337,7 +1405,7 @@ public abstract class Synth extends JComponent implements Updatable
 				else
 					{
 	                setSendMIDI(false);
-	                parse(data);
+	                parse(data, false);
 	                setSendMIDI(true);
 	                                
 	                file = f;
@@ -1356,6 +1424,7 @@ public abstract class Synth extends JComponent implements Updatable
                     catch (IOException e) { }
                 }
                 
+        setSynced(false);
         updateTitle();
         }
 
@@ -1517,7 +1586,7 @@ public abstract class Synth extends JComponent implements Updatable
             	byte[] data = new byte[getExpectedSysexLength()];
 				int val = stream.read(data, 0, getExpectedSysexLength());
                 setSendMIDI(false);
-                parse(data);
+                parse(data, true);
                 setSendMIDI(true);
 				}
 			catch (Exception e)

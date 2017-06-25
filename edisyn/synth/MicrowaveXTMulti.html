@@ -21,7 +21,11 @@ Blofeld Single editor panel.
 
 <ul>
 <li>If you load the current patch, the Microwave does not tell Edisyn what the patch number.  Thus Edisyn resets the Number to <b>1</b>.   Beware of this, as you may more than once accidentally write the patch to 1.
+
+<li>Edisyn cannot tell the Microwave to switch to a given multi patch number.  So if you load a patch, after loading Edisyn will send it out to the temporary memory of the <i>current patch</i>.  This is only temporary, but it can be confusing!
+
 <p><li>Though the Microwave responds to individual parameter changes in Multimode, it does not send any parameter change sysex when you turn its knobs.
+
 <p><li>Also, when you make individual parameter changes, the Microwave's screen won't update to reflect those changes: but they've been made.  Try scrolling away and then back, and you'll see the changes magically appear.
 </ul>
 

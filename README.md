@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 7)
+Synthesizer Patch Editor (Version 8)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -93,12 +93,17 @@ The press "Set as Default".  This makes the Java VM the default application to l
 
 ### The Editor Pane
 
-The editor pane should be self-explanatory.  There are four tabs which together cover all of the parameters of 
-the synthesizer.  The first tab, *Oscillators and Filters*, also contains an area called *Waldorf Blofeld* (or
-some other synth) which
-lets you set the patch name and category, bank, number, and Device ID.   The bank, number, and ID are mostly
-for saving out to sysex files: whenever you upload or download patch to/from the synth, you'll be prompted
-to revise those if necessary.
+The editor pane should be self-explanatory.  There are multiple tabs which together cover all of the parameters of 
+the synthesizer.   The first tab also contains an area of the name of the Synthesizer ("Waldorf Blofeld", say).
+This area holds the name of the patch, the patch number etc., and the device ID if any.
+
+Edisyn tries hard to stay *in sync* with the synthesizer: that is, what you are editing in Edisyn 
+reflects what's getting edited in the synthesizer.  If Edisyn believes it is not in sync, the
+patch number and the device ID will turn RED.
+
+Various operations will cause Edisyn to drop out of sync; and if you're out of sync, Edisyn may ask you
+to specify a patch number etc. before continuing certain operations so it can get back in sync.
+
 
 ### The File Menu
 
@@ -120,23 +125,26 @@ Note that you can *send* a patch to the synthesizer and you can *write* a patch 
 just temporarily updates the synth's current patch memory so you can play it.  The latter actually writes the 
 patch to an address in the synth, replacing whatever is there.
 
-* *Request Current Patch* asks the synthesizer to load the current patch memory into the editor.  Note that on
-some machines (like the Waldorf Blofeld) when the patch is loaded, the bank and patch number are invalid and will
-be reset to some defaults, which might be confusing!
+* *Request Current Patch* asks the synthesizer to load the current patch memory into the editor.  On some machines,
+the patch information sent to Edisyn isn't enough for it to determine the patch number.  This will cause Edisyn
+to drop out of sync.
 
 * *Request Patch...* asks the synthesizer to load a specific patch into the editor.  If the synthesizer complies,
 once the patch is loaded, Edisyn will then send the patch to the synthesizer.
 
 * *Request Merge* asks the synthesizer to load a specific patch into the editor.  If the synthesizer complies,
 then the patch is *merged* with the existing patch, meaning that some *percentage* of parameters in the existing
-patch are replaced with the old patch.  Then Edisyn will then send the patch to the synthesizer.
+patch are replaced with the old patch.  Then Edisyn will then send the patch to the synthesizer if not out of sync.
 
-* *Randomize* randomizes the editor's current patch, then sends it to the synthesizer.
+* *Randomize* randomizes the editor's current patch, then sends it to the synthesizer if not out of sync.
 
-* *Reset* resets the editor's current patch to its initialized state, then sends it to the synthesizer.
+* *Reset* resets the editor's current patch to its initialized state, then sends it to the synthesizer if
+not out of sync.
 
-* *Send Patch* sends the current patch to the synthesizer.  This isn't actually used much since other commands
-send the patch automatically.
+* *Send Patch* sends the patch to the synthesizer.  
+
+* *Send Patch To...* sends the patch to the temporary memory of *some other location* on the synthesizer and
+moves to that location.
 
 * *Write Patch...* writes the patch to a given location in the synthesizer.
 

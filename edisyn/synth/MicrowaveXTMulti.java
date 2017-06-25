@@ -14,6 +14,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 import java.io.*;
+import javax.sound.midi.*;
 
 /**
    A patch editor for the Waldorf Microwave XT.  Does not deal with Multi mode, global parameters,
@@ -117,6 +118,11 @@ public class MicrowaveXTMulti extends Synth
     		});
     	}
                
+	public void changePatch(Model tempModel)
+		{
+		// Not possible in Multi Mode
+		}
+
     public String getDefaultResourceFileName() { return "MicrowaveXTMulti.init"; }
 
     public boolean gatherInfo(String title, Model change)
@@ -177,6 +183,18 @@ public class MicrowaveXTMulti extends Synth
         HBox hbox = new HBox();
                 
         VBox vbox = new VBox();
+        HBox hbox2 = new HBox();
+        comp = new PatchDisplay(this, "Patch: ", "bank", "number", 4)
+        	{
+        	public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
+        	public String bankString(int bank) { return BANKS[bank]; }
+        	};
+        hbox2.add(comp);
+        comp = new PatchDisplay(this, "  ID: ", "id", null, 3);
+        hbox2.add(comp);
+        vbox.add(hbox2);
+        hbox.add(vbox);
+        
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
             public boolean isValid(String val)
@@ -197,27 +215,8 @@ public class MicrowaveXTMulti extends Synth
                 }
             };
         model.setImmutable("name", true);
-        vbox.add(comp);
-        hbox.add(vbox);
+        hbox.add(comp);
                 
-        comp = new LabelledDial("Number", this, "number", color, 0, 127, -1);
-        model.setImmutable("number", true);
-        hbox.add(comp);
-
-        comp = new LabelledDial("Device ID", this, "id", color, 0, 127)
-        	{
-            public String map(int val)
-                {
-                if (val == 127)
-                	return "All";
-                else return "" + val;
-                }
-        	};
-        model.setImmutable("id", true);
-        hbox.add(comp);
-        
-        hbox.add(Strut.makeHorizontalStrut(17));
-
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
         }
@@ -954,13 +953,26 @@ public class MicrowaveXTMulti extends Synth
         //  always accepted as valid.
         //  IMPORTANT: the MIDI status-bytes as well as the 
         //  ID's are not used for computing the checksum."
-                
-        byte b = bb;
-        b += nn;  // I *think* signed will work
+
+        byte b = 0;
         for(int i = 0; i < bytes.length; i++)
             b += bytes[i];
+		//System.err.println("Checksum pre " + ((byte)(b & (byte)127)));
+
+
+        // Section 2.12 says that the checksum includes BB and NN.
+        // But this produces a checksum error on the Microwave XT!
+        // Additionally Section 1 says that the checksum is the
+        // "sum of all databytes", and in its format it's clear that
+        // BB and NN (location info) are NOT databytes.  Not including BB
+        // and NN below produces valid dumps.
+
+        //b += bb;
+        //b += nn;  // I *think* signed will work
+        
         
         b = (byte)(b & (byte)127);
+		//System.err.println("Checksum post " + b);
         
         return b;
         }
@@ -1109,23 +1121,23 @@ public class MicrowaveXTMulti extends Synth
 		}
         
 
-    public boolean parse(byte[] data)
+    public boolean parse(byte[] data, boolean ignorePatch)
         {
                 // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
                 // format example, it's written as 0x11.  It's actually 0x11, though we don't check for it here.
                 
         boolean retval = true;
-        model.set("id", data[3]);
-        if (data[5] < 8)  // or < 1 ? Anyway, otherwise it's probably just local patch data.  Too bad they do this. :-(
-        	{
-        	model.set("number", data[6]);
-        	}
-        else
-        	{
-        	model.set("number", 0);
-        	retval = false;
-        	}
-        
+		model.set("id", data[3]);
+		if (!ignorePatch && data[5] < 8)  // or < 1 ? Anyway, otherwise it's probably just local patch data.  Too bad they do this. :-(
+			{
+			model.set("number", data[6]);
+			}
+		else
+			{
+			model.set("number", 0);
+			retval = false;
+			}
+
         for(int i = 0; i < 255; i++)
             {
             setParameterByIndex(i, data[i + 7]);

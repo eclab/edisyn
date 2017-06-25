@@ -102,11 +102,17 @@ public class Style
     
     /////// CHECKBOX CONSTANTS
     /** Border around arpeggiator checkboxes */
-    public static final Border highlightedBorder = BorderFactory.createCompoundBorder(
+    public static final Border CHECKBOX_HIGHLIGHTED_BORDER = BorderFactory.createCompoundBorder(
     												BorderFactory.createEmptyBorder(2, 2, 2, 2),
     												BorderFactory.createLineBorder(Color.red, 1, true));
-    public static final Border nonHighlightedBorder = BorderFactory.createEmptyBorder(3, 3, 3, 3);
+    public static final Border CHECKBOX_NON_HIGHLIGHTED_BORDER = BorderFactory.createEmptyBorder(3, 3, 3, 3);
     
+
+    /////// PATCH CONSTANTS
+    public static final Color PATCH_UNSYNCED_TEXT_COLOR = Color.RED;
+    public static final Border PATCH_BORDER = BorderFactory.createEmptyBorder(4, 4, 6, 4);
+    
+
     /////// HTML DISPLAY CONSTANTS
     
     /** Base Fopnt */

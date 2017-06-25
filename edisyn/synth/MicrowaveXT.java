@@ -14,6 +14,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 import java.io.*;
+import javax.sound.midi.*;
 
 /**
    A patch editor for the Waldorf Microwave XT.  Does not deal with Multi mode, global parameters,
@@ -108,9 +109,9 @@ public class MicrowaveXT extends Synth
                 
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
-        HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.addLast(addWavetable(Style.COLOR_A));
+        HBox hbox = new HBox(HBox.LEFT_CONSUMES);
+        hbox.addLast(addNameGlobal(Style.COLOR_GLOBAL));
+        hbox.add(addWavetable(Style.COLOR_A));
                 
         vbox.add(hbox);
         
@@ -290,6 +291,18 @@ public class MicrowaveXT extends Synth
         HBox hbox = new HBox();
                 
         VBox vbox = new VBox();
+        HBox hbox2 = new HBox();
+        comp = new PatchDisplay(this, "Patch: ", "bank", "number", 4)
+        	{
+        	public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
+        	public String bankString(int bank) { return BANKS[bank]; }
+        	};
+        hbox2.add(comp);
+        comp = new PatchDisplay(this, "  ID: ", "id", null, 3);
+        hbox2.add(comp);
+        vbox.add(hbox2);
+        hbox.add(vbox);
+        
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
             public boolean isValid(String val)
@@ -310,37 +323,9 @@ public class MicrowaveXT extends Synth
                 }
             };
         model.setImmutable("name", true);
-        vbox.add(comp);
-        hbox.add(vbox);
-                
-        comp = new LabelledDial("Bank", this, "bank", color, 0, 1)
-            {
-            public String map(int val)
-                {
-                String[] vals = BANKS;
-                return vals[val];
-                }
-            };
-        model.setImmutable("bank", true);
         hbox.add(comp);
-
-        comp = new LabelledDial("Number", this, "number", color, 0, 127, -1);
-        model.setImmutable("number", true);
-        hbox.add(comp);
-
-        comp = new LabelledDial("Device ID", this, "id", color, 0, 127)
-        	{
-            public String map(int val)
-                {
-                if (val == 127)
-                	return "All";
-                else return "" + val;
-                }
-        	};
-        model.setImmutable("id", true);
-        hbox.add(comp);
-
-        globalCategory.add(hbox, BorderLayout.WEST);
+                        
+	    globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
         }
 
@@ -474,7 +459,13 @@ public class MicrowaveXT extends Synth
         HBox hbox = new HBox();
         
         
-        comp = new LabelledDial("Octave", this, "osc" + osc + "octave", color, 0, 8, 4);
+        comp = new LabelledDial("Octave", this, "osc" + osc + "octave", color, 0, 8, 4)
+        	{
+            public boolean isSymmetric()
+            	{
+            	return true;
+            	}
+        	};
         hbox.add(comp);
                 
         comp = new LabelledDial("Semitone", this, "osc" + osc + "semitone", color, 52, 76, 64);
@@ -490,7 +481,11 @@ public class MicrowaveXT extends Synth
                 {
                 return pitchKeytrack(val);
                 }
-            };
+		 	public double getStartAngle()
+		 		{
+		 		return 260;
+		 		}
+           };
         hbox.add(comp);
 	
         comp = new LabelledDial("Pitch Bend", this, "osc" + osc + "bendrange", color, 0, 122)
@@ -631,6 +626,10 @@ public class MicrowaveXT extends Synth
                 {
                 return keytrack(val);
                 }
+            public boolean isSymmetric()
+            	{
+            	return true;
+            	}
             };
             
         ((LabelledDial)comp).setSecondLabel("Amount");
@@ -714,14 +713,18 @@ public class MicrowaveXT extends Synth
                 {
                 return keytrack(val);
                 }
+            public boolean isSymmetric()
+            	{
+            	return true;
+            	}
             };
         hbox.add(comp);
 
-        comp = new LabelledDial("Envelope", this, "filter1envamount", color, 0, 127);
+        comp = new LabelledDial("Envelope", this, "filter1envamount", color, 0, 127, 64);
         ((LabelledDial)comp).setSecondLabel("Amount");
         hbox.add(comp);
 
-        comp = new LabelledDial("Envelope", this, "filter1envvelocity", color, 0, 127);
+        comp = new LabelledDial("Envelope", this, "filter1envvelocity", color, 0, 127, 64);
         ((LabelledDial)comp).setSecondLabel("Velocity");
         hbox.add(comp);
         
@@ -757,6 +760,10 @@ public class MicrowaveXT extends Synth
                 {
                 return keytrack(val);
                 }
+            public boolean isSymmetric()
+            	{
+            	return true;
+            	}
             };
         hbox.add(comp);
 
@@ -808,6 +815,10 @@ public class MicrowaveXT extends Synth
                 {
                 return keytrack(val);
                 }
+            public boolean isSymmetric()
+            	{
+            	return true;
+            	}
             };
         ((LabelledDial)comp).setSecondLabel("Keytrack");
         hbox.add(comp);
@@ -829,6 +840,10 @@ public class MicrowaveXT extends Synth
                 {
                 return keytrack(val);
                 }
+            public boolean isSymmetric()
+            	{
+            	return true;
+            	}
             };
         ((LabelledDial)comp).setSecondLabel("Keytrack");
         hbox.add(comp);
@@ -1410,7 +1425,7 @@ public class MicrowaveXT extends Synth
 						}
 					for(int i = 0; i < 16; i++)
 						{
-						arpeggiation[i].setBorder(Style.nonHighlightedBorder);
+						arpeggiation[i].setBorder(Style.CHECKBOX_NON_HIGHLIGHTED_BORDER);
 						}
 					}
 				else
@@ -1426,7 +1441,7 @@ public class MicrowaveXT extends Synth
 					for(int i = 0; i < 16; i++)
 						{
 						arpeggiation[i].setBorder(ARP_PATTERNS[pattern][i] == 0 ?
-							Style.nonHighlightedBorder : Style.highlightedBorder);
+							Style.CHECKBOX_NON_HIGHLIGHTED_BORDER : Style.CHECKBOX_HIGHLIGHTED_BORDER);
 						}
 					}
 				}
@@ -1450,7 +1465,7 @@ public class MicrowaveXT extends Synth
             {
 			arpeggiation[pattern] = new CheckBox("", this, "arpuser" + (pattern + 1));
 			arpeggiation[pattern].getCheckBox().setEnabled(false);  // because we start with arppattern not set to User
-     		arpeggiation[pattern].setBorder(Style.highlightedBorder);
+     		arpeggiation[pattern].setBorder(Style.CHECKBOX_HIGHLIGHTED_BORDER);
 	   		hbox.add(arpeggiation[pattern]);
 	   		if (pattern % 4 == 3)
 	   			{
@@ -2043,6 +2058,7 @@ public class MicrowaveXT extends Synth
         byte DEV = (byte) tempModel.get("id", 0);
         byte BB = (byte) tempModel.get("bank", 0);
         byte NN = (byte) tempModel.get("number", 0);
+        
         if (toWorkingMemory) { BB = 0x20; NN = 0x0; }
         
         byte[] bytes = new byte[256];
@@ -2161,17 +2177,42 @@ public class MicrowaveXT extends Synth
         //  always accepted as valid.
         //  IMPORTANT: the MIDI status-bytes as well as the 
         //  ID's are not used for computing the checksum."
-                
-        byte b = bb;
-        b += nn;  // I *think* signed will work
+
+        byte b = 0;
         for(int i = 0; i < bytes.length; i++)
             b += bytes[i];
+		//System.err.println("Checksum pre " + ((byte)(b & (byte)127)));
+
+
+        // Section 2.12 says that the checksum includes BB and NN.
+        // But this produces a checksum error on the Microwave XT!
+        // Additionally Section 1 says that the checksum is the
+        // "sum of all databytes", and in its format it's clear that
+        // BB and NN (location info) are NOT databytes.  Not including BB
+        // and NN below produces valid dumps.
+
+        //b += bb;
+        //b += nn;  // I *think* signed will work
+        
         
         b = (byte)(b & (byte)127);
+		//System.err.println("Checksum post " + b);
         
         return b;
         }
 
+	public void changePatch(Model tempModel)
+		{
+        byte BB = (byte)tempModel.get("bank", 0);
+        byte NN = (byte)tempModel.get("number", 0);
+       try {
+        // Bank change is CC 32
+        tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut() - 1, 32, BB));
+        // Number change is PC
+        tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut() - 1, NN, 0));
+        }
+        catch (Exception e) { e.printStackTrace(); }
+		}
 
     public byte[] requestDump(Model tempModel)
         {
@@ -2361,22 +2402,22 @@ public class MicrowaveXT extends Synth
 		}
         
 
-    public boolean parse(byte[] data)
+    public boolean parse(byte[] data, boolean ignorePatch)
         {
         boolean retval = true;
-        model.set("id", data[3]);
-        if (data[5] < 8)  // otherwise it's probably just local patch data.  Too bad they do this. :-(
-        	{
-       	 	model.set("bank", data[5]);
-        	model.set("number", data[6]);
-        	}
-        else
-        	{
-        	model.set("bank", 0);
-        	model.set("number", 0);
-        	retval = false;
-        	}
-        
+		model.set("id", data[3]);
+		if (!ignorePatch && data[5] < 8)  // otherwise it's probably just local patch data.  Too bad they do this. :-(
+			{
+			model.set("bank", data[5]);
+			model.set("number", data[6]);
+			}
+		else
+			{
+			model.set("bank", 0);
+			model.set("number", 0);
+			retval = false;
+			}
+
         for(int i = 0; i < 255; i++)
             {
             setParameterByIndex(i, data[i + 7]);

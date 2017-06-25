@@ -169,6 +169,11 @@ public class BlofeldMulti extends Synth
         }
                 
                 
+	public void changePatch(Model tempModel)
+		{
+		// Not possible in Multi Mode
+		}
+
     public String getDefaultResourceFileName() { return "BlofeldMulti.init"; }
 
     public boolean gatherInfo(String title, Model change)
@@ -229,6 +234,18 @@ public class BlofeldMulti extends Synth
         HBox hbox = new HBox();
                 
         VBox vbox = new VBox();
+        HBox hbox2 = new HBox();
+        comp = new PatchDisplay(this, "Patch: ", "bank", "number", 4)
+        	{
+        	public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
+        	};
+        hbox2.add(comp);
+        comp = new PatchDisplay(this, "  ID: ", "id", null, 3);
+        hbox2.add(comp);
+        vbox.add(hbox2);
+        hbox.add(vbox);
+        
+        vbox = new VBox();
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
             public boolean isValid(String val)
@@ -252,24 +269,6 @@ public class BlofeldMulti extends Synth
         vbox.add(comp);
         hbox.add(vbox);
                 
-        comp = new LabelledDial("Number", this, "number", color, 0, 127, -1);
-        model.setImmutable("number", true);
-        hbox.add(comp);
-
-        comp = new LabelledDial("Device ID", this, "id", color, 0, 127)
-        	{
-            public String map(int val)
-                {
-                if (val == 127)
-                	return "All";
-                else return "" + val;
-                }
-        	};
-        model.setImmutable("id", true);
-        hbox.add(comp);
-        
-        hbox.add(Strut.makeHorizontalStrut(17));
-
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
         }
@@ -1173,19 +1172,19 @@ public class BlofeldMulti extends Synth
 		}
         
 
-    public boolean parse(byte[] data)
+    public boolean parse(byte[] data, boolean ignorePatch)
         {
         boolean retval = true;
-        model.set("id", data[3]);
-        if (data[5] < 8)  // 8?  Maybe 1.  Anyway otherwise it's probably just local patch data.  Too bad they do this. :-(
-        	{
-        	model.set("number", data[6]);
-        	}
-        else
-        	{
-        	model.set("number", 0);
-        	retval = false;
-        	}
+        	model.set("id", data[3]);
+        	if (!ignorePatch && data[5] < 8)  // 8?  Maybe 1.  Anyway otherwise it's probably just local patch data.  Too bad they do this. :-(
+        		{
+        		model.set("number", data[6]);
+        		}
+        	else
+        		{
+        		model.set("number", 0);
+        		retval = false;
+        		}
         
         for(int i = 0; i < 416; i++)
             {
@@ -1236,7 +1235,7 @@ public class BlofeldMulti extends Synth
 
     public boolean requestCloseWindow() { return true; }
 
-    public String getSynthName() { return "Blofeld [Multi]"; }
+    public String getSynthName() { return "Waldorf Blofeld [Multi]"; }
     
     public String getPatchName() { return model.get("name", "Init Multi      "); }
     

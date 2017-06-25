@@ -100,7 +100,7 @@ public class StringComponent extends JComponent implements Updatable
             });
                 
         add(label, BorderLayout.NORTH);
-        add(change, BorderLayout.CENTER);
+        add(change, BorderLayout.SOUTH);
         }
 
     public void paintComponent(Graphics g)

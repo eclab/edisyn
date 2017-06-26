@@ -52,7 +52,12 @@ public abstract class Synth extends JComponent implements Updatable
     public CCMap ccmap;
     public int lastCC = -1;
         
-        
+	//public static final Class[] synths = new Class[] { Matrix1000.class, Blofeld.class, BlofeldMulti.class, MicrowaveXT.class, MicrowaveXTMulti.class };
+	//public static final String[] synthNames = { "Oberheim Matrix 1000", "Waldorf Blofeld", "Waldorf Blofeld [Multi]", "Waldorf Microwave II/XT/XTk", "Waldorf Microwave II/XT/XTk [Multi]" };
+
+	public static final Class[] synths = new Class[] { Blofeld.class, BlofeldMulti.class, MicrowaveXT.class, MicrowaveXTMulti.class };
+	public static final String[] synthNames = { "Waldorf Blofeld", "Waldorf Blofeld [Multi]", "Waldorf Microwave II/XT/XTk", "Waldorf Microwave II/XT/XTk [Multi]" };
+                  
     boolean synced = false;
     
     public void setSynced(boolean val)
@@ -529,8 +534,13 @@ public abstract class Synth extends JComponent implements Updatable
         else
             return false;
         }
-           
-           
+        
+    
+    /** Builds a synth of the given CLASS, with the given synth NAME.
+    	If THROWAWAY is true, then the window won't be sprouted and MIDI won't be set up.
+    	If SETUPMIDI is false, then IDI won't be set up.  The TUPLE provides the default
+    	MIDI devices. */
+    	
     static Synth instantiate(Class _class, String name, boolean throwaway, boolean setupMIDI, Midi.Tuple tuple)
     	{
 		try
@@ -565,9 +575,6 @@ public abstract class Synth extends JComponent implements Updatable
     	}    
 
 
-	public static final Class[] synths = new Class[] { Matrix1000.class, Blofeld.class, BlofeldMulti.class, MicrowaveXT.class, MicrowaveXTMulti.class };
-	public static final String[] synthNames = { "Oberheim Matrix 1000", "Waldorf Blofeld", "Waldorf Blofeld [Multi]", "Waldorf Microwave II/XT/XTk", "Waldorf Microwave II/XT/XTk [Multi]" };
-          
     public JFrame sprout()
         {
         JFrame frame = new JFrame();
@@ -587,7 +594,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        JMenu newSynth = new JMenu("New Synth...");
+        JMenu newSynth = new JMenu("New Synth");
         menu.add(newSynth);
         for(int i = 0; i < synths.length; i++)
         	{
@@ -603,6 +610,22 @@ public abstract class Synth extends JComponent implements Updatable
             newSynth.add(synthMenu);
         	}
         
+        JMenuItem _copy = new JMenuItem("Duplicate Synth");
+        _copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(_copy);
+        _copy.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                Synth newSynth = instantiate(Synth.this.getClass(), getSynthName(), false, true, tuple);
+                newSynth.setSendMIDI(false);
+                model.copyValuesTo(newSynth.model);
+                newSynth.setSynced(false);
+                newSynth.setSendMIDI(true);
+                }
+            });
+
+
                 
         JMenuItem open = new JMenuItem("Load...");
         open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -902,7 +925,7 @@ public abstract class Synth extends JComponent implements Updatable
             });
                 
         JMenuItem testNote = new JMenuItem("Send Test Note");
-        testNote.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        testNote.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(testNote);
         testNote.addActionListener(new ActionListener()
             {

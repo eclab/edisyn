@@ -104,12 +104,16 @@ patch number and the device ID will turn RED.
 Various operations will cause Edisyn to drop out of sync; and if you're out of sync, Edisyn may ask you
 to specify a patch number etc. before continuing certain operations so it can get back in sync.
 
+You can have multiple editor panes, but note that only the frontmost editor pane will receive MIDI.  So if you for some reason set up both editor panes with the same interface, then request MIDI from one pane, then quickly switch to the other pane, you could in theory get the MIDI sent to the other pane.  So don't do that.
+
 
 ### The File Menu
 
-* *New* creates a new editor pane, set to the default (the synth's Init patch setting).  Note that only the frontmost editor pane will receive MIDI.  So if you for
-some reason set up both editor panes with the same interface, then request MIDI from one pane, then quickly
-switch to the other pane, you could in theory get the MIDI sent to the other pane.  So don't do that.
+* *New [synth name]* creates a new editor pane of the same kind as your current synth editor pane, set to the default (the synth's Init patch setting).
+
+* *New Synth* creates an editor pane for the synthesizer of your choice, set to its init patch setting.
+
+* *Duplicate Synth* creates a new editor pane of the same kind as your current synth editor pane, with the same parameter settings.
 
 * *Load...* loads a sysex file into the existing editor pane.  It's called Load instead of Open because it 
 doesn't open a new window.

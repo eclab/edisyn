@@ -29,12 +29,6 @@ import java.io.*;
    values should be more often chosen through randomization than other values; one approach
    is to (with 50% probability) choose one of those values, else choose any value in the range
    between minimum and maximum inclusive.
-   
-   <p><b>Defaults</b> You can also add a DEFAULT value for each parameter.  This allows you
-   to reset all the parameters to default values, and to also print the parameters out which
-   deviate from those defaults.  Note that the default value is not necessarily the same
-   thing as the 'default' value that you provide when retrieve a parameter -- that is simply
-   the value returned to indicate that no parameter existed in the model.
         
    @author Sean Luke
 */
@@ -47,12 +41,22 @@ public class Model
     HashMap listeners = new HashMap();
     HashSet immutable = new HashSet();
     HashMap special = new HashMap();
-    //HashMap defaults = new HashMap();
     
     String lastKey = null;
 
     public static final String ALL_KEYS = "ALL_KEYS";
     
+    public void copyValuesTo(Model model)
+    	{
+    	model.storage.clear();
+    	model.storage.putAll(storage);
+    	String[] keys = getKeys();
+    	for(int i = 0; i < keys.length; i++)
+			{
+			model.updateListenersForKey(keys[i]);
+			}
+    	}
+    	
     /** Register a listener to be notified whenever the value associated with the
         given key is updated.  If the key is ALL_KEYS, then the listener will
         be notified whenever any key is updated. */
@@ -80,31 +84,7 @@ public class Model
     	{
     	return lastKey;
     	}
-    
-    /** Add the given integer as a default for the key. */
-    //public void addDefault(String key, int value)
-    //    {
-    //    defaults.put(key, Integer.valueOf(value));
-    //    }
-
-    /** Add the given String as a default for the key. */
-    //public void addDefault(String key, String value)
-    //    {
-    //    defaults.put(key, value);
-    //    }
-        
-    /** Return the given default for the key (as an Integer or as a String), or null if there is none. */
-    //public Object getDefault(String key)
-    //    {
-    //    return defaults.get(key);
-    //    }
-        
-    /** Return whether a default has been entered for the given key. */
-    //public boolean defaultExists(String key)
-    //    {
-    //    return (defaults.containsKey(key));
-    //    }
-        
+            
     /** Adds a key with the given Integer value, or changes it to the given value. */        
     public void set(String key, int value)
         {
@@ -112,22 +92,7 @@ public class Model
         	new Throwable().printStackTrace();
         storage.put(key, Integer.valueOf(value));
         lastKey = key;
-        ArrayList list = (ArrayList)(listeners.get(key));
-        if (list != null)
-            {
-            for(int i = 0; i < list.size(); i++)
-                {
-                ((Updatable)(list.get(i))).update(key, this);
-                }
-            }
-        list = (ArrayList)(listeners.get(ALL_KEYS));
-        if (list != null)
-            {
-            for(int i = 0; i < list.size(); i++)
-                {
-                ((Updatable)(list.get(i))).update(key, this);
-                }
-            }
+        updateListenersForKey(key);
         }
         
     public void setBounded(String key, int value)
@@ -151,14 +116,10 @@ public class Model
     	
     	set(key, value);
     	}
-        
-
-    /** Adds a key with the given String value, or changes it to the given value. */        
-    public void set(String key, String value)
-        {
-        storage.put(key, value);
+    
+    public void updateListenersForKey(String key)
+    	{
         ArrayList list = (ArrayList)(listeners.get(key));
-        lastKey = key;
         if (list != null)
             {
             for(int i = 0; i < list.size(); i++)
@@ -174,30 +135,16 @@ public class Model
                 ((Updatable)(list.get(i))).update(key, this);
                 }
             }
+    	}
+
+    /** Adds a key with the given String value, or changes it to the given value. */        
+    public void set(String key, String value)
+        {
+        storage.put(key, value);
+        lastKey = key;
+        updateListenersForKey(key);
         }
         
-    /*
-    public void resetToDefaults()
-        {
-        String[] keys = getKeys();
-        for(int i = 0; i < keys.length; i++)
-            {
-            if (defaultExists(keys[i]))
-                {
-                if (isString(keys[i]))
-                    {
-                    set(keys[i], (String)getDefault(keys[i]));
-                    }
-                else
-                    {
-                    set(keys[i], ((Integer)getDefault(keys[i])).intValue());
-                    }
-                }
-            }
-        lastKey = null;
-        }
-    */
-                
     /** Returns an array of integer values associated with this
         (Integer) key which have been declared SPECIAL, meaning that they
         should be more commonly mutated to than other values. */        

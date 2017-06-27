@@ -64,54 +64,54 @@ public class HTMLBrowser extends JPanel
         }
                 
     public static String readerToString(Reader reader)
-    	{
-    	BufferedReader buf = new BufferedReader(reader);
-    	StringBuffer buffer = new StringBuffer();
-		String text = null;
-		try
-			{
-			while((text = buf.readLine()) != null)
-			buffer.append(text);
-			}
-		catch (IOException e)
-			{
-			e.printStackTrace();
-			try { buf.close(); }
-			catch (IOException e2) { }
-			}
-		return (buffer.toString());
-		}
+        {
+        BufferedReader buf = new BufferedReader(reader);
+        StringBuffer buffer = new StringBuffer();
+        String text = null;
+        try
+            {
+            while((text = buf.readLine()) != null)
+                buffer.append(text);
+            }
+        catch (IOException e)
+            {
+            e.printStackTrace();
+            try { buf.close(); }
+            catch (IOException e2) { }
+            }
+        return (buffer.toString());
+        }
                 
     public HTMLBrowser(InputStream stream)
-    	{
-    	this(new InputStreamReader(stream));
-    	}
-    	            
+        {
+        this(new InputStreamReader(stream));
+        }
+                    
     public Dimension getPreferredSize() { return getMinimumSize(); }
     public HTMLBrowser(Reader reader)
-    	{
-    	this(readerToString(reader));
-	   	}
-    	            
+        {
+        this(readerToString(reader));
+        }
+                    
     /** Constructs an HTMLBrowser using either an HTML string or a URL */
     public HTMLBrowser(final Object HTMLTextOrURL)
         {
         infoPane = new JEditorPane()
-        	{
-			public Insets getInsets() { return Style.SYNTH_PANEL_INSETS; }
-        	};
-        	
+            {
+            public Insets getInsets() { return Style.SYNTH_PANEL_INSETS; }
+            };
+                
         // set the base font and force the HTML Browser to use it
         infoPane.setFont(Style.HTML_DISPLAY_BASE_FONT);
-		infoPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
-		infoPane.setBackground(Color.BLACK);
-		infoPane.setForeground(Color.WHITE);
-		
-		// Change the link color
-		HTMLEditorKit kit = new HTMLEditorKit();
-		StyleSheet styleSheet = kit.getStyleSheet();
-		styleSheet.addRule("A {color:red}"); //change links to red
-		infoPane.setEditorKit(kit);
+        infoPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
+        infoPane.setBackground(Color.BLACK);
+        infoPane.setForeground(Color.WHITE);
+                
+        // Change the link color
+        HTMLEditorKit kit = new HTMLEditorKit();
+        StyleSheet styleSheet = kit.getStyleSheet();
+        styleSheet.addRule("A {color:red}"); //change links to red
+        infoPane.setEditorKit(kit);
                
         infoPane.setEditable(false);
         scroll = new JScrollPane(infoPane);

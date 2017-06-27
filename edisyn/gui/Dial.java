@@ -113,15 +113,15 @@ public class Dial extends NumericalComponent
         field.setForeground(Style.TEXT_COLOR);
         
         addMouseWheelListener(new MouseWheelListener()
-        	{
-        	public void mouseWheelMoved(MouseWheelEvent e) 
-        	    {
-        	    int val = getState() - e.getWheelRotation();
-        	    if (val > getMax()) val = getMax();
-        	    if (val < getMin()) val = getMin();
-        	    setState(val);
-				}
-        	});
+            {
+            public void mouseWheelMoved(MouseWheelEvent e) 
+                {
+                int val = getState() - e.getWheelRotation();
+                if (val > getMax()) val = getMax();
+                if (val < getMin()) val = getMin();
+                setState(val);
+                }
+            });
         
         addMouseListener(new MouseAdapter()
             {
@@ -214,30 +214,30 @@ public class Dial extends NumericalComponent
             }
         }
 
-	public boolean isSymmetric() { if (map != null) return map.isSymmetric(); else return getCanonicalSymmetric(); } 
-	
-	public boolean getCanonicalSymmetric() { return subtractForDisplay == 64; }
-	
-	public double getCanonicalStartAngle()
-		{
-		if (isSymmetric())
-			{
-			return 90 + (270 / 2);
-			}
-		else
-			{
-			return 270;
-			}
-		}
-		
-	public double getStartAngle()
-		{
-		if (map != null)
-			return map.getStartAngle();
-		else return getCanonicalStartAngle();
-		}
-		
-	
+    public boolean isSymmetric() { if (map != null) return map.isSymmetric(); else return getCanonicalSymmetric(); } 
+        
+    public boolean getCanonicalSymmetric() { return subtractForDisplay == 64; }
+        
+    public double getCanonicalStartAngle()
+        {
+        if (isSymmetric())
+            {
+            return 90 + (270 / 2);
+            }
+        else
+            {
+            return 270;
+            }
+        }
+                
+    public double getStartAngle()
+        {
+        if (map != null)
+            return map.getStartAngle();
+        else return getCanonicalStartAngle();
+        }
+                
+        
     public void paintComponent(Graphics g)
         {
         int min = getMin();
@@ -298,7 +298,7 @@ public class Dial extends NumericalComponent
                 }
             }
 
-		arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, startAngle, interval, Arc2D.OPEN);            
+        arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, startAngle, interval, Arc2D.OPEN);            
         graphics.draw(arc);
         }
 

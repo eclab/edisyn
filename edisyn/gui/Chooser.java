@@ -37,8 +37,8 @@ public class Chooser extends NumericalComponent
         public Insets getInsets() { return new Insets(0, 0, 0, 0); }
         };
 
-	boolean callActionListener = true;
-	
+    boolean callActionListener = true;
+        
     public void update(String key, Model model) 
         { 
         if (combo == null) return;  // we're not ready yet
@@ -57,10 +57,10 @@ public class Chooser extends NumericalComponent
         for(int i = 0; i < vals.length; i++)
             if (vals[i] == state)
                 {
-        // This is due to a Java bug.
-        // Unlike other widgets (like JCheckBox), JComboBox calls
-        // the actionlistener even when you programmatically change
-        // its value.  OOPS.
+                // This is due to a Java bug.
+                // Unlike other widgets (like JCheckBox), JComboBox calls
+                // the actionlistener even when you programmatically change
+                // its value.  OOPS.
                 callActionListener = false;
                 combo.setSelectedIndex(i);
                 callActionListener = true;
@@ -69,11 +69,11 @@ public class Chooser extends NumericalComponent
         }
 
     public Insets getInsets() 
-    	{ 
-    	if (Style.CHOOSER_INSETS == null)
-    		return super.getInsets();
-    	else return Style.CHOOSER_INSETS; 
-    	}
+        { 
+        if (Style.CHOOSER_INSETS == null)
+            return super.getInsets();
+        else return Style.CHOOSER_INSETS; 
+        }
 
     /** Creates a JComboBox with the given label, modifying the given key in the Style.
         The elements in the box are given by elements, and their corresponding numerical
@@ -114,53 +114,53 @@ public class Chooser extends NumericalComponent
             {
             public void actionPerformed(ActionEvent e)
                 {
-        // This is due to a Java bug.
-        // Unlike other widgets (like JCheckBox), JComboBox calls
-        // the actionlistener even when you programmatically change
-        // its value.  OOPS.
+                // This is due to a Java bug.
+                // Unlike other widgets (like JCheckBox), JComboBox calls
+                // the actionlistener even when you programmatically change
+                // its value.  OOPS.
                 if (callActionListener)
-	                setState(combo.getSelectedIndex());
+                    setState(combo.getSelectedIndex());
                 }
             });
         }
     
     public JComboBox getCombo()
-    	{
-    	return combo;
-    	}
-    	
+        {
+        return combo;
+        }
+        
     public String getElement(int position)
-    	{
-    	return (String)(combo.getItemAt(position));
-    	}
-    	
+        {
+        return (String)(combo.getItemAt(position));
+        }
+        
     public int getNumElements()
-    	{
-    	return combo.getItemCount();
-    	}
-    	
+        {
+        return combo.getItemCount();
+        }
+        
     public int getIndex()
-    	{
-    	return combo.getSelectedIndex();
-    	}
-    	
+        {
+        return combo.getSelectedIndex();
+        }
+        
     public void setIndex(int index)
-    	{
-    	combo.setSelectedIndex(index);
-    	}
-    	
+        {
+        combo.setSelectedIndex(index);
+        }
+        
     public void setLabel(String _label)
-    	{
+        {
         label.setText("  " + _label);
-    	}
-    	
+        }
+        
     public void setElements(String _label, String[] elements)
-    	{
+        {
         label.setText("  " + _label);
         combo.removeAllItems();
         
         for(int i = 0; i < elements.length; i++)
-        	combo.addItem(elements[i]);
+            combo.addItem(elements[i]);
 
         vals = new int[elements.length];
         for(int i = 0; i < vals.length; i++) 
@@ -171,7 +171,7 @@ public class Chooser extends NumericalComponent
         
         combo.setSelectedIndex(0);
         setState(combo.getSelectedIndex());
-    	}
+        }
         
     public void paintComponent(Graphics g)
         {

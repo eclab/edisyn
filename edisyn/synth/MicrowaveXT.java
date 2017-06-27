@@ -37,35 +37,35 @@ public class MicrowaveXT extends Synth
     static final String[] MOD_DESTINATIONS = new String[/*36*/] { "Pitch", "O1 Pitch", "O2 Pitch", "Wave 1 Pos", "Wave 2 Pos", "Mix Wave 1", "Mix Wave 2", "Mix Ringmod", "Mix Noise", "F1 Cutoff", "F1 Reson.", "F2 Cutoff", "Volume", "Panning", "FE Attack", "FE Decay", "FE Sustain", "FE Release", "AE Attack", "AE Decay", "AE Sustain", "AE Release", "WE Times", "WE Levels", "FE Times", "FE Levels", "LFO1 Rate", "LFO1 Level", "LFO2 Rate", "LFO2 Level", "M1 Amount", "M2 Amount", "M3 Amount", "M4 Amount", "FM Amount", "F1 Extra" };
     static final String[] MODIFIER_OPERATORS = new String[/*16*/] { "+", "-", "*", "/", "XOR", "OR", "AND", "S&H", "Ramp", "Switch", "Abs", "Min", "Max", "Lag", "Filter", "Diff"};
     static final String[] FILTER_1_TYPES = new String[/*10*/] {  "24dB LP", "12dB LP", "24dB BP", "12dB BP", "12dB HP", "Sin -> 12dB LP", "12dB LP -> Wave", "Dual 12dB LP/BP", "12dB FM LP", "S&H -> 12dB LP", "24dB Notch", "12dB Notch", "Band Stop" };   
-	static final String[] PLAY_PARAMETERS = new String[/*83*/] { "Osc 1 Octave", "Osc 1 Semitone", "Osc 1 Detune", "Osc 1 Pitchbend", "Osc 1 Keytrack", "Osc 2 Octave", "Osc 2 Semitone", "Osc 2 Detune", "Osc 2 Pitchbend", "Osc 2 Keytrack", "Wavetable", "Wave 1 Startwave", "Wave 1 Phase", "Wave 1 Env Amount", "Wave 1 Velocity", "Wave 1 Keytrack", "Wave 2 Startwave", "Wave 2 Phase", "Wave 2 Env Amount", "Wave 2 Velocity", "Wave 2 Keytrack", "Mix Wave 1", "Mix Wave 2", "Mix Ringmod", "Mix Noise", "Aliasing", "Quantize", "Clipping", "Filter 1 Cutoff", "Filter 1 Resonance", "Filter 1 Type", "Filter 1 Keytrack", "Filter 1 Env Emount", "Filter 1 Velocity", "Filter 2 Cutoff", "Filter 2 Type", "Filter 2 Keytrack", "Sound Volume", "Amp Env Velocity", "Amp Keytrack", "Chorus", "Panning", "Pan Keytrack", "Glide on/off", "Glide Type", "Arp On/Off/Hold", "Arp Tempo", "Arp Clock", "Arp Range", "Arp Pattern", "Arp Direction", "Arp Note Order", "Arp Velocity", "Allocation", "Assignment", "Filter Env Attack", "Filter Env Decay", "Filter Env Sustain", "Filter Env Release", "Amp Env Attack", "Amp Env Decay", "Amp Env Sustain", "Amp Env Release", "LFO1 Rate", "LFO1 Shape", "LFO1 Delay", "LFO1 Sync", "LFO1 Symmetry", "LFO1 Humanize", "LFO2 Rate", "LFO2 Shape", "LFO2 Delay", "LFO2 Sync", "LFO2 Symmetry", "LFO2 Humanize", "LFO2 Phase", "Osc 1 FM Amount", "Filter 1 Special", "Glide Time", "Control W", "Control X", "Control Y", "Control Z" };
-	static final String[] TRIGGERS = new String[] { "Normal", "Single", "Retrigger" };
-	static final String[] LFO_SHAPES = new String[] { "Sin", "Tri", "Sqr", "Saw", "Rand", "S&H" };
-	static final String[] LFO_SYNC = new String[] { "Off", "On", "Clock" };
+    static final String[] PLAY_PARAMETERS = new String[/*83*/] { "Osc 1 Octave", "Osc 1 Semitone", "Osc 1 Detune", "Osc 1 Pitchbend", "Osc 1 Keytrack", "Osc 2 Octave", "Osc 2 Semitone", "Osc 2 Detune", "Osc 2 Pitchbend", "Osc 2 Keytrack", "Wavetable", "Wave 1 Startwave", "Wave 1 Phase", "Wave 1 Env Amount", "Wave 1 Velocity", "Wave 1 Keytrack", "Wave 2 Startwave", "Wave 2 Phase", "Wave 2 Env Amount", "Wave 2 Velocity", "Wave 2 Keytrack", "Mix Wave 1", "Mix Wave 2", "Mix Ringmod", "Mix Noise", "Aliasing", "Quantize", "Clipping", "Filter 1 Cutoff", "Filter 1 Resonance", "Filter 1 Type", "Filter 1 Keytrack", "Filter 1 Env Emount", "Filter 1 Velocity", "Filter 2 Cutoff", "Filter 2 Type", "Filter 2 Keytrack", "Sound Volume", "Amp Env Velocity", "Amp Keytrack", "Chorus", "Panning", "Pan Keytrack", "Glide on/off", "Glide Type", "Arp On/Off/Hold", "Arp Tempo", "Arp Clock", "Arp Range", "Arp Pattern", "Arp Direction", "Arp Note Order", "Arp Velocity", "Allocation", "Assignment", "Filter Env Attack", "Filter Env Decay", "Filter Env Sustain", "Filter Env Release", "Amp Env Attack", "Amp Env Decay", "Amp Env Sustain", "Amp Env Release", "LFO1 Rate", "LFO1 Shape", "LFO1 Delay", "LFO1 Sync", "LFO1 Symmetry", "LFO1 Humanize", "LFO2 Rate", "LFO2 Shape", "LFO2 Delay", "LFO2 Sync", "LFO2 Symmetry", "LFO2 Humanize", "LFO2 Phase", "Osc 1 FM Amount", "Filter 1 Special", "Glide Time", "Control W", "Control X", "Control Y", "Control Z" };
+    static final String[] TRIGGERS = new String[] { "Normal", "Single", "Retrigger" };
+    static final String[] LFO_SHAPES = new String[] { "Sin", "Tri", "Sqr", "Saw", "Rand", "S&H" };
+    static final String[] LFO_SYNC = new String[] { "Off", "On", "Clock" };
     static final String[] LFO_SPEEDS = new String[] {      "128", "96", "64", "48", "36", "32", "24", "18", 
                                                            "16", "12",  "9", "8", "6", "4", "3", "2", "1", 
                                                            "1/2 .", "1/2 T", "1/2", "1/4 .", "1/4 T", "1/4", "1/8 .", "1/8 T", 
                                                            "1/8", "1/16 .", "1/16 T", "1/16", "1/32 .", "1/32", "1/64" };
-	static final String[] LFO_PHASES = new String[] {"Free", "3", "6", "8", "11", "14", "17", "20", "23", "25", "28", "31", "34", "37", "39", "42", "45", "48", 
-													"51", "53", "56", "59", "62", "65", "68", "70", "73", "76", "79", "82", "84", "87", "90", "93", "96", "98", 
-													"101", "104", "107", "110", "113", "115", "118", "121", "124", "127", "129", "132", "135", "138", "141", 
-													"143", "146", "149", "152", "155", "158", "160", "163", "166", "169", "172", "174", "177", "180", "183", 
-													"186", "188", "191", "194", "197", "200", "203", "205", "208", "211", "214", "217", "219", "222", "225", 
-													"228", "231", "233", "236", "239", "242", "245", "248", "250", "253", "256", "259", "262", "264", "267", 
-													"270", "273", "276", "278", "281", "284", "287", "290", "293", "295", "298", "301", "304", "307", "309", 
-													"312", "315", "318", "321", "323", "326", "329", "332", "335", "338", "340", "343", "346", "349", "352", "354", "357"};
-	static final String[] CLIPPING = new String[] { "Saturate", "Overflow" };
-	static final String[] FILTER_2_TYPES = new String[] { "6dB LP", "6dB HP" };
-	static final String[] EFFECT_TYPES = new String[] { "Off", "Chorus", "Flanger 1", "Flanger 2", "AutoWahLP", "AutoWahBP", "Overdrive", "Amp. Mod", "Delay [XT/Xtk]", "Pan Delay [XT/Xtk]", "Mod Delay [XT/Xtk]" };
+    static final String[] LFO_PHASES = new String[] {"Free", "3", "6", "8", "11", "14", "17", "20", "23", "25", "28", "31", "34", "37", "39", "42", "45", "48", 
+                                                     "51", "53", "56", "59", "62", "65", "68", "70", "73", "76", "79", "82", "84", "87", "90", "93", "96", "98", 
+                                                     "101", "104", "107", "110", "113", "115", "118", "121", "124", "127", "129", "132", "135", "138", "141", 
+                                                     "143", "146", "149", "152", "155", "158", "160", "163", "166", "169", "172", "174", "177", "180", "183", 
+                                                     "186", "188", "191", "194", "197", "200", "203", "205", "208", "211", "214", "217", "219", "222", "225", 
+                                                     "228", "231", "233", "236", "239", "242", "245", "248", "250", "253", "256", "259", "262", "264", "267", 
+                                                     "270", "273", "276", "278", "281", "284", "287", "290", "293", "295", "298", "301", "304", "307", "309", 
+                                                     "312", "315", "318", "321", "323", "326", "329", "332", "335", "338", "340", "343", "346", "349", "352", "354", "357"};
+    static final String[] CLIPPING = new String[] { "Saturate", "Overflow" };
+    static final String[] FILTER_2_TYPES = new String[] { "6dB LP", "6dB HP" };
+    static final String[] EFFECT_TYPES = new String[] { "Off", "Chorus", "Flanger 1", "Flanger 2", "AutoWahLP", "AutoWahBP", "Overdrive", "Amp. Mod", "Delay [XT/Xtk]", "Pan Delay [XT/Xtk]", "Mod Delay [XT/Xtk]" };
     static final String[] OSCILLATOR_GLIDE_TYPES = new String[] { "Portamento", "Glissando", "Fingered P", "Fingered G" };
     static final String[] OSCILLATOR_GLIDE_MODES = new String[] { "Exponential", "Linear" };
     static final String[] ARPEGGIATOR_ACTIVE = new String[] { "Off", "On", "Hold" };
     static final String[] ARPEGGIATOR_DIRECTION = new String[] { "Up", "Down", "Alternating", "Random" };  // is it Alternating?
-	static final String[] ARPEGGIATOR_ORDER = new String[] { "By Note", "By Note Reversed", "As Played", "As Played Reversed" };
-	static final String[] ARPEGGIATOR_VELOCITY = new String[] { "Root Note", "Last Note" }; 
-	static final String[] ASSIGNMENT = new String[] { "Normal", "Dual", "Unisono" }; 
-	static final String[] OSCILLATOR_OCTAVES = new String[] { "128'", "64'", "32'", "16'", "8'", "4'", "2'", "1'", "1/2'" };
+    static final String[] ARPEGGIATOR_ORDER = new String[] { "By Note", "By Note Reversed", "As Played", "As Played Reversed" };
+    static final String[] ARPEGGIATOR_VELOCITY = new String[] { "Root Note", "Last Note" }; 
+    static final String[] ASSIGNMENT = new String[] { "Normal", "Dual", "Unisono" }; 
+    static final String[] OSCILLATOR_OCTAVES = new String[] { "128'", "64'", "32'", "16'", "8'", "4'", "2'", "1'", "1/2'" };
     static final String[] AMPLIFIER_TYPES = new String[] { "Direct", "Combo", "Medium", "Stack" };
-    static final String[] WAVES = new String[] {      	   "Resonant", "Resonant2", "MalletSyn", 
+    static final String[] WAVES = new String[] {           "Resonant", "Resonant2", "MalletSyn", 
                                                            "Sqr-Sweep", "Bellish", "Pul-Sweep", "Saw-Sweep", "MellowSaw", "Feedback", "Add Harm", "Reso 3 HP", 
                                                            "Wind Syn", "HighHarm", "Clipper", "OrganSyn", "SquareSaw", "Format1", "Polated", "Transient", 
                                                            "ElectricP", "Robotic", "StrongHrm", "PercOrgan", "ClipSweep", "ResoHarms", "2 Echoes", "Formant2", 
@@ -74,27 +74,27 @@ public class MicrowaveXT extends Synth
                                                            "Fuzz Wave", "Distorted", "HeavyFuzz", "Fuzz Sync", "K+Strong1", "K+Strong2", "K+Strong3", "1-2-3-4-5", 
                                                            "19/twenty", "Wavetrip1", "Wavetrip2", "Wavetrip3", "Wavetrip4", "MaleVoice", "Low Piano", "ResoSweep", 
                                                            "Xmas Bell", "FM Piano", "Fat Organ", "Vibes", "Chorus 2", "True PWM" };
-	// how to modify this?  Search for "notation" in manual
+    // how to modify this?  Search for "notation" in manual
     static final String[] RATE = new String[] { "1/96", "1/48", "1/32", "1/16 T", "1/32 .", "1/16", "1/8T", "1/16 .", "1/8", "1/4 T", "1/8 .", "1/4", "1/2 T", "1/4 .", "1/2", "1/1 T", "1/2 .", "1", "1.5", "2", "2.5", "3", "3.5", "4", "5", "6", "7", "8", "9", "10", "12", "14", "16", "18", "20", "24", "28", "32", "36", "40", "48", "56", "64" };
     static final String[] ARP_CLOCK = new String[] { "1/1", "1/2 .", "1/2 T", "1/2", "1/4 .", "1/4 T", "1/4", "1/8 .", "1/8 T", "1/8", "1/16 .", "1/16 T", "1/16", "1/32 .", "1/32 T", "1/32"};
     
     static final int[][] ARP_PATTERNS = new int[][] {
-    	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    	{ 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1 },
-    	{ 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1 },
-    	{ 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1 },
-    	{ 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0 },
-    	{ 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1 },
-    	{ 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0 },
-    	{ 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1 },
-    	{ 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0 },
-	   	{ 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0 },
-  		{ 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0 },
-  		{ 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0 },
-  		{ 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0 },
-  		{ 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1 },
-  		{ 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1 },
-  		{ 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0 } };
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1 },
+        { 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1 },
+        { 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1 },
+        { 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0 },
+        { 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1 },
+        { 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0 },
+        { 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1 },
+        { 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0 },
+        { 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0 },
+        { 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0 },
+        { 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0 },
+        { 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0 },
+        { 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1 },
+        { 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1 },
+        { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0 } };
         
     public MicrowaveXT()
         {
@@ -128,7 +128,7 @@ public class MicrowaveXT extends Synth
         vbox2.add(addMixer(Style.COLOR_C));
         hbox.addLast(vbox2);
         
-		vbox.add(hbox);
+        vbox.add(hbox);
         
         hbox = new HBox();
         hbox.add(addFilter1(Style.COLOR_B));
@@ -193,38 +193,38 @@ public class MicrowaveXT extends Synth
         hbox = new HBox();
         hbox.add(addAllocation(Style.COLOR_C));
         hbox.add(addQuality(Style.COLOR_C));
-		hbox.addLast(addGlide(Style.COLOR_C));
+        hbox.addLast(addGlide(Style.COLOR_C));
         vbox.add(hbox);
 
         vbox.add(addPlayParameters(Style.COLOR_C));
-		vbox.add(addEffect(Style.COLOR_C));
+        vbox.add(addEffect(Style.COLOR_C));
 
 
         
         otherPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Other", otherPanel);
 
-		tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("MicrowaveXT.html")));
+        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("MicrowaveXT.html")));
 
         model.set("name", "Init Sound V1.1 ");  // has to be 16 long
         
         loadDefaults();        
         }
                 
-     public void windowBecameFront() { updateMode(); }
+    public void windowBecameFront() { updateMode(); }
 
-     public void updateMode()
-    	{
+    public void updateMode()
+        {
         SwingUtilities.invokeLater(new Runnable() 
-        	{ 
-        	public void run() 
-        		{
-		        byte DEV = (byte)model.get("id", 0);
-		    	// we'll send a mode dump to change the mode to Single
-    		    tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x00, (byte)0xF7 }, true);
-    		    }
-    		});
-    	}
+            { 
+            public void run() 
+                {
+                byte DEV = (byte)model.get("id", 0);
+                // we'll send a mode dump to change the mode to Single
+                tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x00, (byte)0xF7 }, true);
+                }
+            });
+        }
                
     public String getDefaultResourceFileName() { return "MicrowaveXT.init"; }
 
@@ -293,10 +293,10 @@ public class MicrowaveXT extends Synth
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
         comp = new PatchDisplay(this, "Patch: ", "bank", "number", 4)
-        	{
-        	public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
-        	public String bankString(int bank) { return BANKS[bank]; }
-        	};
+            {
+            public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
+            public String bankString(int bank) { return BANKS[bank]; }
+            };
         hbox2.add(comp);
         comp = new PatchDisplay(this, "  ID: ", "id", null, 3);
         hbox2.add(comp);
@@ -325,7 +325,7 @@ public class MicrowaveXT extends Synth
         model.setImmutable("name", true);
         hbox.add(comp);
                         
-	    globalCategory.add(hbox, BorderLayout.WEST);
+        globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
         }
 
@@ -352,7 +352,7 @@ public class MicrowaveXT extends Synth
         model.setImmutable("wavetable", true);
         vbox.add(comp);
 
-		hbox.add(vbox);
+        hbox.add(vbox);
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
@@ -433,21 +433,21 @@ public class MicrowaveXT extends Synth
         return category;
         }
 
-	public String pitchKeytrack(int val)
-		{
-		if (val < 38)
-			{
-			return "" + ((val * 5) - 100);
-			}
-		else if (val > 58)
-			{
-			return "" + ((val - 59) * 5 + 115);
-			}
-		else // 38 .. 58 
-			{
-			return "" + ((val - 48) + 100);
+    public String pitchKeytrack(int val)
+        {
+        if (val < 38)
+            {
+            return "" + ((val * 5) - 100);
             }
-		}
+        else if (val > 58)
+            {
+            return "" + ((val - 59) * 5 + 115);
+            }
+        else // 38 .. 58 
+            {
+            return "" + ((val - 48) + 100);
+            }
+        }
 
     /** Add an Oscillator category */
     public JComponent addOscillator(int osc, Color color)
@@ -460,12 +460,12 @@ public class MicrowaveXT extends Synth
         
         
         comp = new LabelledDial("Octave", this, "osc" + osc + "octave", color, 0, 8, 4)
-        	{
+            {
             public boolean isSymmetric()
-            	{
-            	return true;
-            	}
-        	};
+                {
+                return true;
+                }
+            };
         hbox.add(comp);
                 
         comp = new LabelledDial("Semitone", this, "osc" + osc + "semitone", color, 52, 76, 64);
@@ -481,13 +481,13 @@ public class MicrowaveXT extends Synth
                 {
                 return pitchKeytrack(val);
                 }
-		 	public double getStartAngle()
-		 		{
-		 		return 260;
-		 		}
-           };
+            public double getStartAngle()
+                {
+                return 260;
+                }
+            };
         hbox.add(comp);
-	
+        
         comp = new LabelledDial("Pitch Bend", this, "osc" + osc + "bendrange", color, 0, 122)
             {
             public String map(int val)
@@ -502,26 +502,26 @@ public class MicrowaveXT extends Synth
         hbox.add(comp);
 
 
-		if (osc==1)
-			{
-	        comp = new LabelledDial("FM", this, "osc" + osc + "fmamount", color, 0, 127);
-	        ((LabelledDial)comp).setSecondLabel("Amount");
-	        hbox.add(comp);
-			}
-			
+        if (osc==1)
+            {
+            comp = new LabelledDial("FM", this, "osc" + osc + "fmamount", color, 0, 127);
+            ((LabelledDial)comp).setSecondLabel("Amount");
+            hbox.add(comp);
+            }
+                        
         if (osc==2)
-        	{
-	        VBox vbox = new VBox();
-	        // The Sync checkbox on OS X seems to collapse to slightly less than it's supposed to
-	        // even though preferred size is also minimum size.  Not sure what's causing this bug;
-	        // but the Link box is extended with a single space below in order to stretch things out
-	        // so the Sync box doesn't get packed as tight.
-    	    comp = new CheckBox("Sync", this, "osc" + osc + "sync");
-    	    vbox.add(comp);    
-        	comp = new CheckBox("Link ", this, "osc" + osc + "link");
-    	    vbox.add(comp);    
-       		hbox.add(vbox);
-        	}
+            {
+            VBox vbox = new VBox();
+            // The Sync checkbox on OS X seems to collapse to slightly less than it's supposed to
+            // even though preferred size is also minimum size.  Not sure what's causing this bug;
+            // but the Link box is extended with a single space below in order to stretch things out
+            // so the Sync box doesn't get packed as tight.
+            comp = new CheckBox("Sync", this, "osc" + osc + "sync");
+            vbox.add(comp);    
+            comp = new CheckBox("Link ", this, "osc" + osc + "link");
+            vbox.add(comp);    
+            hbox.add(vbox);
+            }
 
 
         category.add(hbox, BorderLayout.CENTER);
@@ -529,38 +529,38 @@ public class MicrowaveXT extends Synth
         }
         
 
-	// Note: this keytrack works for values which keytrack -200...197,
-	// but the osc keytracks are different and have to be handled on their own specially
-	String keytrack(int val)
-		{
-        	// there are 8 positive (and 8 negative) jumps of 4 rather than 3,
-        	// every 25.  Yuck :-(
-        	//9  ->13
-        	//34 ->38
-        	//59 ->63
-        	//84 ->88
-        	//109->113
-        	//134->138
-        	//159->163
-        	//184->188
-        	
-		val -= 64;
-		double jump = 0;
-		if (val > 3)
-			{
-			jump = (double)((val - 3) / 8.0);
-			if (jump != (int)jump)
-				jump = (int)jump + 1;
-			}
-		else if (val < -3)
-			{
-			jump = (double)((val + 3) / 8.0);
-			if (jump != (int)jump)
-				jump = (int)jump - 1;
-			}
-			
-		return "" + ((val * 3) + (int)jump);
-		}
+    // Note: this keytrack works for values which keytrack -200...197,
+    // but the osc keytracks are different and have to be handled on their own specially
+    String keytrack(int val)
+        {
+        // there are 8 positive (and 8 negative) jumps of 4 rather than 3,
+        // every 25.  Yuck :-(
+        //9  ->13
+        //34 ->38
+        //59 ->63
+        //84 ->88
+        //109->113
+        //134->138
+        //159->163
+        //184->188
+                
+        val -= 64;
+        double jump = 0;
+        if (val > 3)
+            {
+            jump = (double)((val - 3) / 8.0);
+            if (jump != (int)jump)
+                jump = (int)jump + 1;
+            }
+        else if (val < -3)
+            {
+            jump = (double)((val + 3) / 8.0);
+            if (jump != (int)jump)
+                jump = (int)jump - 1;
+            }
+                        
+        return "" + ((val * 3) + (int)jump);
+        }
 
 
     /** Add an Oscillator category */
@@ -577,21 +577,21 @@ public class MicrowaveXT extends Synth
             public String map(int val)
                 {
                 if (val < 61)
-                	{
-                	return "" + val;
-                	}
+                    {
+                    return "" + val;
+                    }
                 else if (val == 61)
-                	{
-                	return "Tri";
-                	}
+                    {
+                    return "Tri";
+                    }
                 else if (val == 62)
-                	{
-                	return "Square";
-                	}
+                    {
+                    return "Square";
+                    }
                 else // if (val == 63)
-                	{
-                	return "Saw";
-                	}
+                    {
+                    return "Saw";
+                    }
                 }
             };
         hbox.add(comp);
@@ -600,14 +600,14 @@ public class MicrowaveXT extends Synth
             {
             public String map(int val)
                 {
-				if (val == 0)
-					{
-					return "Free";
-					}
-				else
-					{
-					return "" + ((val * 2) + 1);
-					}
+                if (val == 0)
+                    {
+                    return "Free";
+                    }
+                else
+                    {
+                    return "" + ((val * 2) + 1);
+                    }
                 }
             };
         hbox.add(comp);
@@ -621,32 +621,32 @@ public class MicrowaveXT extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Keytrack", this, "wave" + wave + "keytrack", color, 0, 127)
-        	{
+            {
             public String map(int val)
                 {
                 return keytrack(val);
                 }
             public boolean isSymmetric()
-            	{
-            	return true;
-            	}
+                {
+                return true;
+                }
             };
             
         ((LabelledDial)comp).setSecondLabel("Amount");
         hbox.add(comp);
 
-	    VBox vbox = new VBox();
+        VBox vbox = new VBox();
 
         comp = new CheckBox("Limit", this, "wave" + wave + "limit");
         vbox.add(comp);
         
         if (wave==2)
-        	{
-        	comp = new CheckBox("Link", this, "wave2link");
-    	    vbox.add(comp);    
-        	}
+            {
+            comp = new CheckBox("Link", this, "wave2link");
+            vbox.add(comp);    
+            }
 
-       	hbox.add(vbox);
+        hbox.add(vbox);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -670,17 +670,17 @@ public class MicrowaveXT extends Synth
         extras[7] = new LabelledDial("BP Offset", this, "filter1special", color, 0, 127, 64);
         extras[8] = new LabelledDial("Osc2 FM", this, "filter1special", color, 0, 127);
         extras[9] = new LabelledDial("S&H Rate", this, "filter1special", color, 0, 127);
-		extras[12] = new LabelledDial("Bandwidth", this, "filter1special", color, 0, 127);
-		
-		JComponent strut = Strut.makeStrut(extras[7].getPreferredSize().width, extras[7].getPreferredSize().height);
-		extras[11] = strut;
-		extras[10] = strut;
-		extras[5] = strut;
-		extras[4] = strut;
-		extras[3] = strut;
-		extras[2] = strut;
-		extras[1] = strut;
-		extras[0] = strut;
+        extras[12] = new LabelledDial("Bandwidth", this, "filter1special", color, 0, 127);
+                
+        JComponent strut = Strut.makeStrut(extras[7].getPreferredSize().width, extras[7].getPreferredSize().height);
+        extras[11] = strut;
+        extras[10] = strut;
+        extras[5] = strut;
+        extras[4] = strut;
+        extras[3] = strut;
+        extras[2] = strut;
+        extras[1] = strut;
+        extras[0] = strut;
 
         hbox.addLast(extras[0]);
  
@@ -690,16 +690,16 @@ public class MicrowaveXT extends Synth
             public void update(String key, Model model)
                 {
                 super.update(key, model);
-				hbox.removeLast();
-				hbox.addLast(extras[model.get(key, 0)]);
-				hbox.revalidate();
-				hbox.repaint();
+                hbox.removeLast();
+                hbox.addLast(extras[model.get(key, 0)]);
+                hbox.revalidate();
+                hbox.repaint();
                 }
             };
             
         model.setImmutable("filter1type", true);
-		vbox.add(comp);
-		hbox.add(vbox);
+        vbox.add(comp);
+        hbox.add(vbox);
 
         comp = new LabelledDial("Cutoff", this, "filter1cutoff", color, 0, 127);
         hbox.add(comp);
@@ -708,15 +708,15 @@ public class MicrowaveXT extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Keytrack", this, "filter1keytrack", color, 0, 127)
-        	{
+            {
             public String map(int val)
                 {
                 return keytrack(val);
                 }
             public boolean isSymmetric()
-            	{
-            	return true;
-            	}
+                {
+                return true;
+                }
             };
         hbox.add(comp);
 
@@ -748,22 +748,22 @@ public class MicrowaveXT extends Synth
         params = FILTER_2_TYPES;
         comp = new Chooser("Type", this, "filter2type", params);
         model.setImmutable("filter2type", true);
-		vbox.add(comp);
-		hbox.add(vbox);
+        vbox.add(comp);
+        hbox.add(vbox);
 
         comp = new LabelledDial("Cutoff", this, "filter2cutoff", color, 0, 127);
         hbox.add(comp);
 
         comp = new LabelledDial("Keytrack", this, "filter2keytrack", color, 0, 127)
-        	{
+            {
             public String map(int val)
                 {
                 return keytrack(val);
                 }
             public boolean isSymmetric()
-            	{
-            	return true;
-            	}
+                {
+                return true;
+                }
             };
         hbox.add(comp);
 
@@ -782,17 +782,17 @@ public class MicrowaveXT extends Synth
         VBox vbox = new VBox();
         
         for(int i = 1; i < 5; i++)
-        	{
-	        comp = new Chooser("Play Parameter " + i, this, "playparam" + i, params);
-	        model.setImmutable("playparam" + i, true);
-			hbox.add(comp);
-			}
-			
+            {
+            comp = new Chooser("Play Parameter " + i, this, "playparam" + i, params);
+            model.setImmutable("playparam" + i, true);
+            hbox.add(comp);
+            }
+                        
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
 
-	/** Add Amplifier and Pan category */
+    /** Add Amplifier and Pan category */
     public JComponent addAmplifier(Color color)
         {
         Category category = new Category("Amplifier and Pan", color);
@@ -810,21 +810,21 @@ public class MicrowaveXT extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Volume", this, "amplifierkeytrack", color, 0, 127)
-        	{
+            {
             public String map(int val)
                 {
                 return keytrack(val);
                 }
             public boolean isSymmetric()
-            	{
-            	return true;
-            	}
+                {
+                return true;
+                }
             };
         ((LabelledDial)comp).setSecondLabel("Keytrack");
         hbox.add(comp);
 
         comp = new LabelledDial("Panning", this, "pan", color, 0, 127, 64)
-        	{
+            {
             public String map(int val)
                 {
                 if ((val - 64) < 0) return "L " + Math.abs(val - 64);
@@ -835,30 +835,30 @@ public class MicrowaveXT extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Panning", this, "pankeytrack", color, 0, 127)
-        	{
+            {
             public String map(int val)
                 {
                 return keytrack(val);
                 }
             public boolean isSymmetric()
-            	{
-            	return true;
-            	}
+                {
+                return true;
+                }
             };
         ((LabelledDial)comp).setSecondLabel("Keytrack");
         hbox.add(comp);
 
-         comp = new CheckBox("Chorus", this, "chorus");
+        comp = new CheckBox("Chorus", this, "chorus");
         // irritating font metric bugs bite again
         ((CheckBox)comp).addToWidth(1);
         vbox.add(comp);
-		hbox.add(vbox);
-		
-       category.add(hbox, BorderLayout.WEST);
+        hbox.add(vbox);
+                
+        category.add(hbox, BorderLayout.WEST);
         return category;
         }
 
-	/** Add Glid Category */
+    /** Add Glid Category */
     public JComponent addGlide(Color color)
         {
         Category category = new Category("Glide", color);
@@ -869,18 +869,18 @@ public class MicrowaveXT extends Synth
         VBox vbox = new VBox();
         
 
-		vbox = new VBox();
-		params = OSCILLATOR_GLIDE_TYPES;
+        vbox = new VBox();
+        params = OSCILLATOR_GLIDE_TYPES;
         comp = new Chooser("Type", this, "glidetype", params);
-		vbox.add(comp);
-		
-		HBox hbox2 = new HBox();
+        vbox.add(comp);
+                
+        HBox hbox2 = new HBox();
         comp = new CheckBox("Active", this, "glide");
         hbox2.add(comp);
         comp = new CheckBox("Linear", this, "glidemode");
-		hbox2.add(comp);
+        hbox2.add(comp);
         vbox.add(hbox2);
-		hbox.add(vbox);
+        hbox.add(vbox);
 
         comp = new LabelledDial("Time", this, "glidetime", color, 0, 127);
         hbox.add(comp);
@@ -889,7 +889,7 @@ public class MicrowaveXT extends Synth
         return category;
         }
 
-	/** Add an LFO category */
+    /** Add an LFO category */
     public JComponent addLFO(final int lfo, Color color)
         {
         Category category = new Category("LFO " + lfo, color);
@@ -900,17 +900,17 @@ public class MicrowaveXT extends Synth
         VBox vbox = new VBox();
         
 
-		vbox = new VBox();
-		params = LFO_SHAPES;
+        vbox = new VBox();
+        params = LFO_SHAPES;
         comp = new Chooser("Shape", this, "lfo" + lfo + "shape", params);
-		vbox.add(comp);
-		params = LFO_SYNC;
+        vbox.add(comp);
+        params = LFO_SYNC;
         comp = new Chooser("Sync", this, "lfo" + lfo + "sync", params);
-		vbox.add(comp);
-		hbox.add(vbox);
-		
+        vbox.add(comp);
+        hbox.add(vbox);
+                
         comp = new LabelledDial("Speed", this, "lfo" + lfo + "rate", color, 0, 127)
-        	{
+            {
             public String map(int val)
                 {
                 // we display this in two different ways depending on whether we're clocked or not
@@ -923,21 +923,21 @@ public class MicrowaveXT extends Synth
                     return vals[val];
                     }
                 }
-        	};
+            };
         model.register("lfo" + lfo + "sync", (LabelledDial)comp);  // so we get updated if clocked changes
         hbox.add(comp);
         
         comp = new LabelledDial("Delay", this, "lfo" + lfo + "delay", color, 0, 127)
-        	{
-			public String map(int val)
-				{
-				if (val == 0)
-					return "Off";
-				else if (val == 1)
-					return "Retrig.";
-				else return "" + (val - 1);
-				}
-        	};
+            {
+            public String map(int val)
+                {
+                if (val == 0)
+                    return "Off";
+                else if (val == 1)
+                    return "Retrig.";
+                else return "" + (val - 1);
+                }
+            };
         hbox.add(comp);
         
         comp = new LabelledDial("Symmetry", this, "lfo" + lfo + "symmetry", color, 0, 127, 64);
@@ -947,32 +947,32 @@ public class MicrowaveXT extends Synth
         hbox.add(comp);
 
         if (lfo == 2)
-        	{
-	        comp = new LabelledDial("Phase", this, "lfo" + lfo + "phase", color, 0, 127)
-	        	{
-				public String map(int val)
-					{
-					// This phase is complex.  Normally we go by 3.
-					// We start at 3, then at 6 we jump to 8.
-					// Why this is different from phase calculation elsewhere I have no idea
-					// Then at 23 we jump to 25.	// Note 23 is 17 from 6
-					// Then at 37 we jump to 39.	// Note 37 is 14 from 23
-					// Then at 51 we jump to 53		// Note 51 is 14 from 37
-					// Then at 68 we jump to 70.	// Note 68 is 17 from 51
-					// Then at 82 we jump to 84.	// Note 82 is 14 from 68
-					// For this reason I've just hard-coded the strings
-					return LFO_PHASES[val];
-					}
-	        	};
-	        	
-	        hbox.add(comp);
-        	}
+            {
+            comp = new LabelledDial("Phase", this, "lfo" + lfo + "phase", color, 0, 127)
+                {
+                public String map(int val)
+                    {
+                    // This phase is complex.  Normally we go by 3.
+                    // We start at 3, then at 6 we jump to 8.
+                    // Why this is different from phase calculation elsewhere I have no idea
+                    // Then at 23 we jump to 25.    // Note 23 is 17 from 6
+                    // Then at 37 we jump to 39.    // Note 37 is 14 from 23
+                    // Then at 51 we jump to 53             // Note 51 is 14 from 37
+                    // Then at 68 we jump to 70.    // Note 68 is 17 from 51
+                    // Then at 82 we jump to 84.    // Note 82 is 14 from 68
+                    // For this reason I've just hard-coded the strings
+                    return LFO_PHASES[val];
+                    }
+                };
+                        
+            hbox.add(comp);
+            }
         
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
         
-	/** Add a "standard" envelope category */
+    /** Add a "standard" envelope category */
     public JComponent addEnvelope(final int env, Color color)
         {
         Category category = new Category(env == 1 ? "Filter Envelope" : "Amplifier Envelope", color);
@@ -983,12 +983,12 @@ public class MicrowaveXT extends Synth
         VBox vbox = new VBox();
         
 
-		vbox = new VBox();
-		params = TRIGGERS;
+        vbox = new VBox();
+        params = TRIGGERS;
         comp = new Chooser("Trigger", this, "envelope" + env + "trigger", params);
-		vbox.add(comp);
-		hbox.add(vbox);
-		
+        vbox.add(comp);
+        hbox.add(vbox);
+                
         comp = new LabelledDial("Attack", this, "envelope" + env + "attack", color, 0, 127);
         hbox.add(comp);
         
@@ -1006,7 +1006,7 @@ public class MicrowaveXT extends Synth
         }
         
 
-	/** Add wave envelope category */
+    /** Add wave envelope category */
     public JComponent addWaveEnvelope(Color color)
         {
         Category category = new Category("Wave Envelope", color);
@@ -1016,53 +1016,53 @@ public class MicrowaveXT extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-		vbox = new VBox();
-		params = TRIGGERS;
+        vbox = new VBox();
+        params = TRIGGERS;
         comp = new Chooser("Trigger", this, "waveenvtrigger", params);
-		vbox.add(comp);
+        vbox.add(comp);
         comp = new CheckBox("Key On Loop", this, "waveenvkeyon");
         vbox.add(comp);
         comp = new CheckBox("Key Off Loop", this, "waveenvkeyoff");
         vbox.add(comp);
-		hbox.add(vbox);
-		
-		vbox = new VBox();
-	    comp = new LabelledDial("Key On", this, "waveenvkeyonstart", color, 0, 7, -1);
+        hbox.add(vbox);
+                
+        vbox = new VBox();
+        comp = new LabelledDial("Key On", this, "waveenvkeyonstart", color, 0, 7, -1);
         ((LabelledDial)comp).setSecondLabel("Loop Start");
         vbox.add(comp);
 
-	    comp = new LabelledDial("Key On", this, "waveenvkeyonend", color, 0, 7, -1);
+        comp = new LabelledDial("Key On", this, "waveenvkeyonend", color, 0, 7, -1);
         ((LabelledDial)comp).setSecondLabel(" Loop End ");  // additional space because OS X cuts off the "d"
         vbox.add(comp);
-		hbox.add(vbox);
-		
-		vbox = new VBox();
-	    comp = new LabelledDial("Key Off", this, "waveenvkeyoffstart", color, 0, 7, -1);
+        hbox.add(vbox);
+                
+        vbox = new VBox();
+        comp = new LabelledDial("Key Off", this, "waveenvkeyoffstart", color, 0, 7, -1);
         ((LabelledDial)comp).setSecondLabel("Loop Start");
         vbox.add(comp);
 
-	    comp = new LabelledDial("Key Off", this, "waveenvkeyoffend", color, 0, 7, -1);
+        comp = new LabelledDial("Key Off", this, "waveenvkeyoffend", color, 0, 7, -1);
         ((LabelledDial)comp).setSecondLabel(" Loop End ");  // additional space because OS X cuts off the "d"
         vbox.add(comp);
-		hbox.add(vbox);
-		
-		for(int i = 1; i < 9; i++)
-			{
-			vbox = new VBox();
-	        comp = new LabelledDial("Time " + i, this, "waveenvtime" + i, color, 0, 127);
-        	((LabelledDial)comp).setSecondLabel(" ");
-        	vbox.add(comp);
-	        comp = new LabelledDial("Level " + i, this, "waveenvlevel" + i, color, 0, 127);
-        	vbox.add(comp);
-        	hbox.add(vbox);
-        	}
+        hbox.add(vbox);
+                
+        for(int i = 1; i < 9; i++)
+            {
+            vbox = new VBox();
+            comp = new LabelledDial("Time " + i, this, "waveenvtime" + i, color, 0, 127);
+            ((LabelledDial)comp).setSecondLabel(" ");
+            vbox.add(comp);
+            comp = new LabelledDial("Level " + i, this, "waveenvlevel" + i, color, 0, 127);
+            vbox.add(comp);
+            hbox.add(vbox);
+            }
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
 
 
-	/** Add free envelope category */
+    /** Add free envelope category */
     public JComponent addFreeEnvelope(Color color)
         {
         Category category = new Category("Free Envelope", color);
@@ -1072,40 +1072,40 @@ public class MicrowaveXT extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-		vbox = new VBox();
-		params = TRIGGERS;
+        vbox = new VBox();
+        params = TRIGGERS;
         comp = new Chooser("Trigger", this, "freeenvtrigger", params);
-		vbox.add(comp);
-		hbox.add(vbox);
-		
+        vbox.add(comp);
+        hbox.add(vbox);
+                
         for(int i = 1; i < 4; i++)
-			{
-			//vbox = new VBox();
-	        comp = new LabelledDial("Time " + i, this, "freeenvtime" + i, color, 0, 127);
-			((LabelledDial)comp).setSecondLabel(" ");
-        	hbox.add(comp);
-	        comp = new LabelledDial("Level " + i, this, "freeenvlevel" + i, color, 0, 127, 64);
-			if (i==3)
-				((LabelledDial)comp).setSecondLabel("(Sustain)");
-        	hbox.add(comp);
-        	//hbox.add(vbox);
-        	}
+            {
+            //vbox = new VBox();
+            comp = new LabelledDial("Time " + i, this, "freeenvtime" + i, color, 0, 127);
+            ((LabelledDial)comp).setSecondLabel(" ");
+            hbox.add(comp);
+            comp = new LabelledDial("Level " + i, this, "freeenvlevel" + i, color, 0, 127, 64);
+            if (i==3)
+                ((LabelledDial)comp).setSecondLabel("(Sustain)");
+            hbox.add(comp);
+            //hbox.add(vbox);
+            }
 
-		//vbox = new VBox();
-		comp = new LabelledDial("Release", this, "freeenvreleasetime", color, 0, 127);
-		((LabelledDial)comp).setSecondLabel("Time");
-		hbox.add(comp);
-		comp = new LabelledDial("Release", this, "freeenvreleaselevel", color, 0, 127, 64);
-		((LabelledDial)comp).setSecondLabel("Level");
-		hbox.add(comp);
-		//hbox.add(vbox);
- 		           
+        //vbox = new VBox();
+        comp = new LabelledDial("Release", this, "freeenvreleasetime", color, 0, 127);
+        ((LabelledDial)comp).setSecondLabel("Time");
+        hbox.add(comp);
+        comp = new LabelledDial("Release", this, "freeenvreleaselevel", color, 0, 127, 64);
+        ((LabelledDial)comp).setSecondLabel("Level");
+        hbox.add(comp);
+        //hbox.add(vbox);
+                           
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
 
 
-	/** Add "standard" envelope display */
+    /** Add "standard" envelope display */
     public JComponent addEnvelopeDisplay(final int env, Color color)
         {
         Category category = new Category(env == 1 ? "Filter" : "Amplifier", color);
@@ -1115,7 +1115,7 @@ public class MicrowaveXT extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-    	comp = new EnvelopeDisplay(this, Color.red, 
+        comp = new EnvelopeDisplay(this, Color.red, 
             new String[] { null, "envelope" + env +  "attack", "envelope" + env +  "decay", null, "envelope" + env +  "release" },
             new String[] { null, null, "envelope" + env +  "sustain", "envelope" + env +  "sustain", null },
             new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
@@ -1127,7 +1127,7 @@ public class MicrowaveXT extends Synth
         }
 
 
-	/** Add free envelope display */
+    /** Add free envelope display */
     public JComponent addFreeEnvelopeDisplay(Color color)
         {
         Category category = new Category("Free", color);
@@ -1137,19 +1137,19 @@ public class MicrowaveXT extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
- 		comp = new EnvelopeDisplay(this, Color.red, 
+        comp = new EnvelopeDisplay(this, Color.red, 
             new String[] { null, "freeenvtime1", "freeenvtime2", "freeenvtime3", null, "freeenvreleasetime", null },
             new String[] { null, "freeenvlevel1", "freeenvlevel2", "freeenvlevel3", "freeenvlevel3", "freeenvreleaselevel", null },
             new double[] { 0, 0.2/127.0, 0.2 / 127.0,  0.2/127.0, 0.2, 0.2/127.0, 0},
             new double[] { 64.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 64.0/127.0 });
         ((EnvelopeDisplay)comp).setAxis(64.0 / 127.0);
-		hbox.addLast(comp);    
+        hbox.addLast(comp);    
         
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
 
-	/** Add wave envelope display */
+    /** Add wave envelope display */
     public JComponent addWaveEnvelopeDisplay(Color color)
         {
         Category category = new Category("Wave", color);
@@ -1159,7 +1159,7 @@ public class MicrowaveXT extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
- 		comp = new EnvelopeDisplay(this, Color.red, 
+        comp = new EnvelopeDisplay(this, Color.red, 
             new String[] { null, "waveenvtime1", "waveenvtime2", "waveenvtime3", "waveenvtime4", "waveenvtime5", "waveenvtime6", "waveenvtime7", "waveenvtime8", null },
             new String[] { null, "waveenvlevel1", "waveenvlevel2", "waveenvlevel3", "waveenvlevel4", "waveenvlevel5", "waveenvlevel6", "waveenvlevel7", "waveenvlevel8", null },
             new double[] { 0, 0.25/127.0/2.0, 0.25 / 127.0/2.0,  0.25/127.0/2.0, 0.25/127.0/2.0,  0.25/127.0/2.0, 0.25 / 127.0/2.0,  0.25/127.0/2.0, 0.25/127.0/2.0, 0},
@@ -1171,7 +1171,7 @@ public class MicrowaveXT extends Synth
         return category;
         }
 
-	/** Add allocation/assignment category */
+    /** Add allocation/assignment category */
     public JComponent addAllocation(Color color)
         {
         Category category = new Category("Allocation", color);
@@ -1181,18 +1181,18 @@ public class MicrowaveXT extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-		vbox = new VBox();
-		params = ASSIGNMENT;
+        vbox = new VBox();
+        params = ASSIGNMENT;
         comp = new Chooser("Assignment", this, "assignment", params);
-		vbox.add(comp);
-		comp = new CheckBox("Mono", this, "allocation");
-		vbox.add(comp);
-		hbox.add(vbox);
-		
-		comp = new LabelledDial("Detune", this, "detune", color, 0, 127);
-		hbox.add(comp);
-		comp = new LabelledDial("De-pan", this, "de-pan", color, 0, 127);
-		hbox.add(comp);
+        vbox.add(comp);
+        comp = new CheckBox("Mono", this, "allocation");
+        vbox.add(comp);
+        hbox.add(vbox);
+                
+        comp = new LabelledDial("Detune", this, "detune", color, 0, 127);
+        hbox.add(comp);
+        comp = new LabelledDial("De-pan", this, "de-pan", color, 0, 127);
+        hbox.add(comp);
 
         category.add(hbox, BorderLayout.WEST);
         return category;
@@ -1218,11 +1218,11 @@ public class MicrowaveXT extends Synth
                 {
                 vbox = new VBox();
 
-				// add some space
-				if (!first)  // not the first one
-					{
-					hbox.add(Strut.makeHorizontalStrut(10));
-					}
+                // add some space
+                if (!first)  // not the first one
+                    {
+                    hbox.add(Strut.makeHorizontalStrut(10));
+                    }
 
                 params = MOD_SOURCES;
                 comp = new Chooser("" + i + " Source", this, "modulation" + i + "source", params);
@@ -1237,14 +1237,14 @@ public class MicrowaveXT extends Synth
                 comp = new LabelledDial("" + i + " Level", this, "modulation" + i + "amount", color, 0, 127, 64);  // it's Level, not Amount, so we save some horizontal space
                 hbox.add(comp);
 
-				first = false;
+                first = false;
                 }
                         
-			// add some space
-			if (row > 1)  // not the first one
-				{
-				main.add(Strut.makeVerticalStrut(10));
-				}
+            // add some space
+            if (row > 1)  // not the first one
+                {
+                main.add(Strut.makeVerticalStrut(10));
+                }
 
             main.add(hbox);
             }
@@ -1263,67 +1263,67 @@ public class MicrowaveXT extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-		VBox vbox2 = new VBox();
+        VBox vbox2 = new VBox();
         params = MOD_SOURCES;
         comp = new Chooser("Delay Source", this, "modifierdelaysource", params);
         model.setSpecial("modifierdelaysource", 0);
         vbox2.add(comp);
 
-    	comp = new LabelledDial("Delay Time", this, "modifierdelaytime", color, 0, 127);
-		((LabelledDial)comp).setSecondLabel(" ");
+        comp = new LabelledDial("Delay Time", this, "modifierdelaytime", color, 0, 127);
+        ((LabelledDial)comp).setSecondLabel(" ");
         vbox2.add(comp);
         
         hbox.add(vbox2);
 
-		for(int i = 1; i < 5; i++)
-			{
-			vbox2 = new VBox();
-			params = MOD_SOURCES;
-			comp = new Chooser("" + i + " Source #1", this, "modifier" + i + "source1", params);
-			model.setSpecial("modifier" + i + "source1", 0);
-			vbox2.add(comp);
+        for(int i = 1; i < 5; i++)
+            {
+            vbox2 = new VBox();
+            params = MOD_SOURCES;
+            comp = new Chooser("" + i + " Source #1", this, "modifier" + i + "source1", params);
+            model.setSpecial("modifier" + i + "source1", 0);
+            vbox2.add(comp);
 
-			// gotta change the first one to "constant" from "off" if we're in Source B
-			params = new String[MOD_SOURCES.length];
-			System.arraycopy(MOD_SOURCES, 0, params, 0, MOD_SOURCES.length);
-			params[0] = "Constant";
+            // gotta change the first one to "constant" from "off" if we're in Source B
+            params = new String[MOD_SOURCES.length];
+            System.arraycopy(MOD_SOURCES, 0, params, 0, MOD_SOURCES.length);
+            params[0] = "Constant";
 
-			comp = new Chooser("" + i + " Source #2", this, "modifier" + i + "source2", params);
-			model.setSpecial("modifier" + i + "source1", 0);
-			vbox2.add(comp);
+            comp = new Chooser("" + i + " Source #2", this, "modifier" + i + "source2", params);
+            model.setSpecial("modifier" + i + "source1", 0);
+            vbox2.add(comp);
 
-			params = MODIFIER_OPERATORS;
-			comp = new Chooser("" + i + " Type", this, "modifier" + i + "type", params);
-			vbox2.add(comp);
-			hbox.add(vbox2);
-		
-			if (i == 1 || i == 3)
-				{
-				vbox2 = new VBox();
-				HBox hbox2 = new HBox();
-				comp = new LabelledDial("" + i + " Param", this, "modifier" + i + "param", color, 0, 127);
-				//((LabelledDial)comp).setSecondLabel(" ");
-				hbox2.add(comp);
-				hbox2.add(Strut.makeHorizontalStrut(20));
-				vbox2.add(hbox2);
-				
-				vbox2.add(Strut.makeVerticalStrut(5));
-				
-				hbox2 = new HBox();
-				hbox2.add(Strut.makeHorizontalStrut(20));
-				comp = new LabelledDial("" + (i + 1) + " Param", this, "modifier" + (i + 1) + "param", color, 0, 127);
-				hbox2.add(comp);
-				vbox2.add(hbox2);				
-				hbox.add(vbox2);
-				}
-					
-			if (i == 2)
-				{
-				hbox.add(Strut.makeHorizontalStrut(20));
-				}
-			}
+            params = MODIFIER_OPERATORS;
+            comp = new Chooser("" + i + " Type", this, "modifier" + i + "type", params);
+            vbox2.add(comp);
+            hbox.add(vbox2);
+                
+            if (i == 1 || i == 3)
+                {
+                vbox2 = new VBox();
+                HBox hbox2 = new HBox();
+                comp = new LabelledDial("" + i + " Param", this, "modifier" + i + "param", color, 0, 127);
+                //((LabelledDial)comp).setSecondLabel(" ");
+                hbox2.add(comp);
+                hbox2.add(Strut.makeHorizontalStrut(20));
+                vbox2.add(hbox2);
+                                
+                vbox2.add(Strut.makeVerticalStrut(5));
+                                
+                hbox2 = new HBox();
+                hbox2.add(Strut.makeHorizontalStrut(20));
+                comp = new LabelledDial("" + (i + 1) + " Param", this, "modifier" + (i + 1) + "param", color, 0, 127);
+                hbox2.add(comp);
+                vbox2.add(hbox2);                               
+                hbox.add(vbox2);
+                }
+                                        
+            if (i == 2)
+                {
+                hbox.add(Strut.makeHorizontalStrut(20));
+                }
+            }
 
-		vbox.add(hbox);
+        vbox.add(hbox);
         category.add(vbox, BorderLayout.WEST);
         return category;
         }
@@ -1334,8 +1334,8 @@ public class MicrowaveXT extends Synth
         {
         Category category  = new Category("Arpeggiation", color);
                         
-		final CheckBox[] arpeggiation = new CheckBox[16];
-	
+        final CheckBox[] arpeggiation = new CheckBox[16];
+        
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -1360,102 +1360,102 @@ public class MicrowaveXT extends Synth
         hbox.add(vbox);
         
         
-    	comp = new LabelledDial("Tempo", this, "arptempo", color, 1, 127)
-    		{
+        comp = new LabelledDial("Tempo", this, "arptempo", color, 1, 127)
+            {
             public String map(int val)
                 {
                 if (val == 1)
-                	return "Extern";
+                    return "Extern";
                 else
-                	{
-                	return "" + (50 + (val - 2) * 2);
-                	}
+                    {
+                    return "" + (50 + (val - 2) * 2);
+                    }
                 }
-    		};
+            };
         hbox.add(comp);
         
-    	comp = new LabelledDial("Clock", this, "arpclock", color, 0, 15)
-        	{
+        comp = new LabelledDial("Clock", this, "arpclock", color, 0, 15)
+            {
             public String map(int val)
                 {
                 return ARP_CLOCK[val];
                 }
-        	};
+            };
         hbox.add(comp);
 
-    	comp = new LabelledDial("Range", this, "arprange", color, 1, 10);
+        comp = new LabelledDial("Range", this, "arprange", color, 1, 10);
         hbox.add(comp);
 
-    	comp = new LabelledDial("Pattern", this, "arppattern", color, 0, 16)
-        	{
+        comp = new LabelledDial("Pattern", this, "arppattern", color, 0, 16)
+            {
             public String map(int val)
                 {
                 if (val == 0)
-                	return "Off";
+                    return "Off";
                 else if (val == 1)
-                	return "User";
+                    return "User";
                 else return "" + (val - 1);
                 }
-        	};
+            };
         hbox.add(comp);
 
-    	comp = new LabelledDial("User Length", this, "arpuserlength", color, 0, 15, -1);
+        comp = new LabelledDial("User Length", this, "arpuserlength", color, 0, 15, -1);
         hbox.add(comp);
 
-		VBox vbox2 = new VBox();
+        VBox vbox2 = new VBox();
         comp = new CheckBox("Reset on Start", this, "arpreset");
         vbox2.add(comp);
         hbox.add(vbox2);
         
         Updatable updateArp = new Updatable()
-        	{
-        	public void update(String key, Model model)
-        		{
-				int pattern = model.get("arppattern", 0);
-        		if (pattern == 1)
-					{
-					int len = model.get("arpuserlength", 0) + 1;
-					for(int i = 0; i < len; i++)
-						{
-						arpeggiation[i].getCheckBox().setEnabled(true);
-						}
-					for(int i = len; i < 16; i++)
-						{
-						arpeggiation[i].getCheckBox().setEnabled(false);
-						}
-					for(int i = 0; i < 16; i++)
-						{
-						arpeggiation[i].setBorder(Style.CHECKBOX_NON_HIGHLIGHTED_BORDER);
-						}
-					}
-				else
-					{
-					for(int i = 0; i < 16; i++)
-						{
-						arpeggiation[i].getCheckBox().setEnabled(false);
-						}
-					
-					if (pattern > 1)
-						pattern--;
-					
-					for(int i = 0; i < 16; i++)
-						{
-						arpeggiation[i].setBorder(ARP_PATTERNS[pattern][i] == 0 ?
-							Style.CHECKBOX_NON_HIGHLIGHTED_BORDER : Style.CHECKBOX_HIGHLIGHTED_BORDER);
-						}
-					}
-				}
-        	};
-        	
+            {
+            public void update(String key, Model model)
+                {
+                int pattern = model.get("arppattern", 0);
+                if (pattern == 1)
+                    {
+                    int len = model.get("arpuserlength", 0) + 1;
+                    for(int i = 0; i < len; i++)
+                        {
+                        arpeggiation[i].getCheckBox().setEnabled(true);
+                        }
+                    for(int i = len; i < 16; i++)
+                        {
+                        arpeggiation[i].getCheckBox().setEnabled(false);
+                        }
+                    for(int i = 0; i < 16; i++)
+                        {
+                        arpeggiation[i].setBorder(Style.CHECKBOX_NON_HIGHLIGHTED_BORDER);
+                        }
+                    }
+                else
+                    {
+                    for(int i = 0; i < 16; i++)
+                        {
+                        arpeggiation[i].getCheckBox().setEnabled(false);
+                        }
+                                        
+                    if (pattern > 1)
+                        pattern--;
+                                        
+                    for(int i = 0; i < 16; i++)
+                        {
+                        arpeggiation[i].setBorder(ARP_PATTERNS[pattern][i] == 0 ?
+                            Style.CHECKBOX_NON_HIGHLIGHTED_BORDER : Style.CHECKBOX_HIGHLIGHTED_BORDER);
+                        }
+                    }
+                }
+            };
+                
         model.register("arpuserlength", updateArp);
         model.register("arppattern", updateArp);
 
         big.add(hbox);
 
-		hbox = new HBox();
-		hbox.add(Strut.makeHorizontalStrut(Style.CATEGORY_INSET_DISTANCE));
-     	JLabel label = new JLabel("Pattern:     ");
-     	label.setFont(Style.SMALL_FONT);
+        hbox = new HBox();
+        hbox.add(Strut.makeHorizontalStrut(Style.CATEGORY_INSET_DISTANCE));
+        JLabel label = new JLabel("Pattern:     ");
+        label.setFont(Style.SMALL_FONT);
         label.setBackground(Style.TRANSPARENT);
         label.setForeground(Style.TEXT_COLOR);
         hbox.add(label);
@@ -1463,15 +1463,15 @@ public class MicrowaveXT extends Synth
              
         for(int pattern = 0; pattern < 16; pattern++)
             {
-			arpeggiation[pattern] = new CheckBox("", this, "arpuser" + (pattern + 1));
-			arpeggiation[pattern].getCheckBox().setEnabled(false);  // because we start with arppattern not set to User
-     		arpeggiation[pattern].setBorder(Style.CHECKBOX_HIGHLIGHTED_BORDER);
-	   		hbox.add(arpeggiation[pattern]);
-	   		if (pattern % 4 == 3)
-	   			{
-	   			hbox.add(Strut.makeHorizontalStrut(20));
-	   			}
-        	}
+            arpeggiation[pattern] = new CheckBox("", this, "arpuser" + (pattern + 1));
+            arpeggiation[pattern].getCheckBox().setEnabled(false);  // because we start with arppattern not set to User
+            arpeggiation[pattern].setBorder(Style.CHECKBOX_HIGHLIGHTED_BORDER);
+            hbox.add(arpeggiation[pattern]);
+            if (pattern % 4 == 3)
+                {
+                hbox.add(Strut.makeHorizontalStrut(20));
+                }
+            }
         big.add(hbox);
         
         category.add(big, BorderLayout.WEST);
@@ -1483,8 +1483,8 @@ public class MicrowaveXT extends Synth
 
 
 
-	// Holds the current effects parameters
-	HBox parameters;
+    // Holds the current effects parameters
+    HBox parameters;
         
     // The various JComponents for different effect parameters
     JComponent[/*effect type*/][/*parameters*/] parametersByEffect = new JComponent[11][3];
@@ -1508,15 +1508,15 @@ public class MicrowaveXT extends Synth
     void setupEffect(int type)
         {
         if (type < 10)
-        	{
-        if (parameters == null) return;  // not ready yet
-                
-        parameters.removeAll();
-        for(int i = 0; i < parametersByEffect[type].length; i++)
             {
-            parameters.add(parametersByEffect[type][i]);
+            if (parameters == null) return;  // not ready yet
+                
+            parameters.removeAll();
+            for(int i = 0; i < parametersByEffect[type].length; i++)
+                {
+                parameters.add(parametersByEffect[type][i]);
+                }
             }
-        }
         parameters.revalidate();
         repaint();
         }
@@ -1551,7 +1551,7 @@ public class MicrowaveXT extends Synth
         comp = new LabelledDial("Drive", this, "effectparam1", color, 0, 127);
         parametersByEffect[OVERDRIVE][0] = comp;
 
-		comp = new LabelledDial("Time", this, "effectparam1", color, 0, 127);
+        comp = new LabelledDial("Time", this, "effectparam1", color, 0, 127);
         parametersByEffect[DELAY][0] = comp;
         parametersByEffect[PAN_DELAY][0] = comp;
         parametersByEffect[MOD_DELAY][0] = comp;
@@ -1575,23 +1575,23 @@ public class MicrowaveXT extends Synth
         comp = new LabelledDial("Gain", this, "effectparam2", color, 0, 127);
         parametersByEffect[OVERDRIVE][1] = comp;
 
-		comp = new LabelledDial("Spread", this, "effectparam2", color, 0, 127);
+        comp = new LabelledDial("Spread", this, "effectparam2", color, 0, 127);
         parametersByEffect[AMP_MOD][1] = comp;
 
-		comp = new LabelledDial("Speed", this, "effectparam2", color, 0, 127);
+        comp = new LabelledDial("Speed", this, "effectparam2", color, 0, 127);
         parametersByEffect[MOD_DELAY][1] = comp;
 
 
         // parameter 2
 
-		// 64 so it's centered
+        // 64 so it's centered
         comp = new LabelledDial("Mix", this, "effectparam3", color, 0, 127, 64)
-        	{
+            {
             public String map(int val)
                 {
                 return "" + (127 - val) + ":" + val;
                 }
-        	};
+            };
         parametersByEffect[CHORUS][2] = comp;
         parametersByEffect[FLANGER_1][2] = comp;
         parametersByEffect[FLANGER_2][2] = comp;
@@ -1604,19 +1604,19 @@ public class MicrowaveXT extends Synth
         parametersByEffect[AUTO_WAH_BP][2] = comp;
 
         comp = new LabelledDial("Amp Type", this, "effectparam3", color, 0, 127)
-        	{
+            {
             public String map(int val)
-            	{
-            	if (val >= 24)
-            		return "Stack";
-            	else if (val >= 16)
-            		return "Medium";
-            	else if (val >= 8)
-            		return "Combo";
-            	else
-            		return "Direct";
+                {
+                if (val >= 24)
+                    return "Stack";
+                else if (val >= 16)
+                    return "Medium";
+                else if (val >= 8)
+                    return "Combo";
+                else
+                    return "Direct";
                 }
-        	};
+            };
         parametersByEffect[OVERDRIVE][2] = comp;
         
         comp = new LabelledDial("Depth", this, "effectparam3", color, 0, 127);
@@ -1669,7 +1669,7 @@ public class MicrowaveXT extends Synth
 
     final static String[] allParameters = new String[/*256*/] 
     {
-    "soundformatversion",				// always 1 **
+    "soundformatversion",                               // always 1 **
     "osc1octave",                   
     "osc1semitone",
     "osc1detune",
@@ -1720,7 +1720,7 @@ public class MicrowaveXT extends Synth
     "mixwave2",
     "mixringmod",       
     "mixnoise",
-    "mixexternal",					// xt only
+    "mixexternal",                                      // xt only
     "-",
     "aliasing",
     "timequant",
@@ -1771,10 +1771,10 @@ public class MicrowaveXT extends Synth
     "arpvelocity",
     "arpreset",
     "arpuserlength",
-    "arpuser1", //... "arpuser4"					//*
-    "arpuser5", //... "arpuser8"					//*
-    "arpuser9", //... "arpuser12"					//*
-    "arpuser13", //... "arpuser16"					//*
+    "arpuser1", //... "arpuser4"                                        //*
+    "arpuser5", //... "arpuser8"                                        //*
+    "arpuser9", //... "arpuser12"                                       //*
+    "arpuser13", //... "arpuser16"                                      //*
     "-",
     "-",
     "allocation",
@@ -1831,14 +1831,14 @@ public class MicrowaveXT extends Synth
     "lfo1rate",
     "lfo1shape",
     "lfo1delay",
-    "lfo1sync",							// *
+    "lfo1sync",                                                 // *
     "lfo1symmetry",
     "lfo1humanize",
     "-",
     "lfo2rate",
     "lfo2shape",
     "lfo2delay",
-    "lfo2sync",							// *
+    "lfo2sync",                                                 // *
     "lfo2symmetry",
     "lfo2humanize",
     "lfo2phase",
@@ -1935,22 +1935,22 @@ public class MicrowaveXT extends Synth
         if (key.equals("bank")) return new byte[0];  // this is not emittable
         if (key.equals("number")) return new byte[0];  // this is not emittable
         byte DEV = (byte)model.get("id", 0);
-		
-		if (key.equals("effecttype"))
+                
+        if (key.equals("effecttype"))
             {
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)model.get(key, 0);
-			// handle XT effects specially
-			if (XX == 8) // delay
-				XX = 32;
-			else if (XX == 9)  // pan delay
-				XX = 33;
-			else if (XX == 10)  // mod delay
-				XX = 34;
+            // handle XT effects specially
+            if (XX == 8) // delay
+                XX = 32;
+            else if (XX == 9)  // pan delay
+                XX = 33;
+            else if (XX == 10)  // mod delay
+                XX = 34;
             return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
-           	}
+            }
         else if (key.equals("osc1octave") || key.equals("osc2octave"))
             {
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
@@ -1960,14 +1960,14 @@ public class MicrowaveXT extends Synth
             return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
             }
         else if (key.equals("lfo1sync") || key.equals("lfo2sync"))
-        	{
+            {
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)model.get(key, 0);
             if (XX == 2) XX = 3;  // because it's of/on/on/Clock, I dunno why
             return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
-        	}
+            }
         else if (key.equals("arpuser1") || key.equals("arpuser2") || key.equals("arpuser3") || key.equals("arpuser4"))
             {
             int index = 102;
@@ -2028,7 +2028,7 @@ public class MicrowaveXT extends Synth
                 {
                 byte c = 0x20;  // space
                 if (i < name.length())
-                	c = (byte)(name.charAt(i));
+                    c = (byte)(name.charAt(i));
                 int index = i + 240;
                 byte HH = (byte)((index >> 7) & 127);
                 byte PP = (byte)(index & 127);
@@ -2067,87 +2067,87 @@ public class MicrowaveXT extends Synth
             {
             String key = allParameters[i];
             if (key.equals("soundformatversion"))
-            	{
-            	bytes[i] = 1;		// always
-            	}
-        if (key.equals("-"))
+                {
+                bytes[i] = 1;           // always
+                }
+            if (key.equals("-"))
                 {
                 bytes[i] = 0;
                 }
-		else if (key.equals("effecttype"))
-            {
-            bytes[i] = (byte)model.get(key, 0);
-            // handle XT effects specially
-			if (bytes[i] == 8) // delay
-				bytes[i] = (byte)32;
-			else if (bytes[i] == 9)  // pan delay
-				bytes[i] = (byte)33;
-			else if (bytes[i] == 10)  // mod delay
-				bytes[i] = (byte)34;
-           	}
-    	else if (key.equals("osc1octave") || key.equals("osc2octave"))
+            else if (key.equals("effecttype"))
+                {
+                bytes[i] = (byte)model.get(key, 0);
+                // handle XT effects specially
+                if (bytes[i] == 8) // delay
+                    bytes[i] = (byte)32;
+                else if (bytes[i] == 9)  // pan delay
+                    bytes[i] = (byte)33;
+                else if (bytes[i] == 10)  // mod delay
+                    bytes[i] = (byte)34;
+                }
+            else if (key.equals("osc1octave") || key.equals("osc2octave"))
                 {
                 bytes[i] = (byte)(16 + model.get(key, 0) * 12);
                 }
-	   	else if (key.equals("lfo1sync") || key.equals("lfo2sync"))
-        	{
-            bytes[i] = (byte)(model.get(key, 0));
-            if (bytes[i] == 2) bytes[i] = 3;  // because it's of/on/on/Clock, I dunno why
-        	}
-		else if (key.equals("arpuser1"))
-            {
-            int index = 102;
-            int arp1 = model.get("arpuser1", 0);
-            int arp2 = model.get("arpuser2", 0);
-            int arp3 = model.get("arpuser3", 0);
-            int arp4 = model.get("arpuser4", 0);
-            int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
-			bytes[i] = (byte)(total);
+            else if (key.equals("lfo1sync") || key.equals("lfo2sync"))
+                {
+                bytes[i] = (byte)(model.get(key, 0));
+                if (bytes[i] == 2) bytes[i] = 3;  // because it's of/on/on/Clock, I dunno why
+                }
+            else if (key.equals("arpuser1"))
+                {
+                int index = 102;
+                int arp1 = model.get("arpuser1", 0);
+                int arp2 = model.get("arpuser2", 0);
+                int arp3 = model.get("arpuser3", 0);
+                int arp4 = model.get("arpuser4", 0);
+                int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
+                bytes[i] = (byte)(total);
+                }
+            else if (key.equals("arpuser5"))
+                {
+                int index = 103;
+                int arp1 = model.get("arpuser5", 0);
+                int arp2 = model.get("arpuser6", 0);
+                int arp3 = model.get("arpuser7", 0);
+                int arp4 = model.get("arpuser8", 0);
+                int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
+                bytes[i] = (byte)(total);
+                }
+            else if (key.equals("arpuser9"))
+                {
+                int index = 104;
+                int arp1 = model.get("arpuser9", 0);
+                int arp2 = model.get("arpuser10", 0);
+                int arp3 = model.get("arpuser11", 0);
+                int arp4 = model.get("arpuser12", 0);
+                int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
+                bytes[i] = (byte)(total);
+                }
+            else if (key.equals("arpuser13"))
+                {
+                int index = 105;
+                int arp1 = model.get("arpuser13", 0);
+                int arp2 = model.get("arpuser14", 0);
+                int arp3 = model.get("arpuser15", 0);
+                int arp4 = model.get("arpuser16", 0);
+                int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
+                bytes[i] = (byte)(total);
+                }
+            else
+                {
+                bytes[i] = (byte)(model.get(key, 0));
+                }
             }
-        else if (key.equals("arpuser5"))
-            {
-            int index = 103;
-            int arp1 = model.get("arpuser5", 0);
-            int arp2 = model.get("arpuser6", 0);
-            int arp3 = model.get("arpuser7", 0);
-            int arp4 = model.get("arpuser8", 0);
-            int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
-			bytes[i] = (byte)(total);
-            }
-        else if (key.equals("arpuser9"))
-            {
-            int index = 104;
-            int arp1 = model.get("arpuser9", 0);
-            int arp2 = model.get("arpuser10", 0);
-            int arp3 = model.get("arpuser11", 0);
-            int arp4 = model.get("arpuser12", 0);
-            int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
-			bytes[i] = (byte)(total);
-            }
-        else if (key.equals("arpuser13"))
-            {
-            int index = 105;
-            int arp1 = model.get("arpuser13", 0);
-            int arp2 = model.get("arpuser14", 0);
-            int arp3 = model.get("arpuser15", 0);
-            int arp4 = model.get("arpuser16", 0);
-            int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
-			bytes[i] = (byte)(total);
-            }
-        else
-             {
-             bytes[i] = (byte)(model.get(key, 0));
-        	 }
-        }
 
         String name = model.get("name", "Init Sound V1.1 ");  // has to be 16 long
                                 
         for(int i = 240; i < 256; i++)
             {
             if (i - 240 >= name.length())
-            	bytes[i] = 0x20;  // space
+                bytes[i] = 0x20;  // space
             else
-	            bytes[i] = (byte)(name.charAt(i - 240));
+                bytes[i] = (byte)(name.charAt(i - 240));
             }
                 
         byte[] full = new byte[getExpectedSysexLength()];
@@ -2181,7 +2181,7 @@ public class MicrowaveXT extends Synth
         byte b = 0;
         for(int i = 0; i < bytes.length; i++)
             b += bytes[i];
-		//System.err.println("Checksum pre " + ((byte)(b & (byte)127)));
+        //System.err.println("Checksum pre " + ((byte)(b & (byte)127)));
 
 
         // Section 2.12 says that the checksum includes BB and NN.
@@ -2196,23 +2196,23 @@ public class MicrowaveXT extends Synth
         
         
         b = (byte)(b & (byte)127);
-		//System.err.println("Checksum post " + b);
+        //System.err.println("Checksum post " + b);
         
         return b;
         }
 
-	public void changePatch(Model tempModel)
-		{
+    public void changePatch(Model tempModel)
+        {
         byte BB = (byte)tempModel.get("bank", 0);
         byte NN = (byte)tempModel.get("number", 0);
-       try {
-        // Bank change is CC 32
-        tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut() - 1, 32, BB));
-        // Number change is PC
-        tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut() - 1, NN, 0));
-        }
+        try {
+            // Bank change is CC 32
+            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut() - 1, 32, BB));
+            // Number change is PC
+            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut() - 1, NN, 0));
+            }
         catch (Exception e) { e.printStackTrace(); }
-		}
+        }
 
     public byte[] requestDump(Model tempModel)
         {
@@ -2246,8 +2246,8 @@ public class MicrowaveXT extends Synth
     public static boolean recognize(byte[] data)
         {
         boolean v = (
-        	data.length == EXPECTED_SYSEX_LENGTH &&
-        	data[0] == (byte)0xF0 &&
+            data.length == EXPECTED_SYSEX_LENGTH &&
+            data[0] == (byte)0xF0 &&
             data[1] == (byte)0x3E &&
             data[2] == (byte)0x0E &&
             data[4] == (byte)0x10);
@@ -2255,7 +2255,7 @@ public class MicrowaveXT extends Synth
         }
         
 
-	public static final int EXPECTED_SYSEX_LENGTH = 265;        
+    public static final int EXPECTED_SYSEX_LENGTH = 265;        
     public int getExpectedSysexLength() { return 265; }
         
         
@@ -2292,98 +2292,98 @@ public class MicrowaveXT extends Synth
 
 
 
-	public void setParameterByIndex(int i, byte b)
-		{
-		String key = allParameters[i];
-		
-		if (key.equals("effecttype"))
-            	{
-            	// handle XT effects specially
-            	if (b == 32) // delay
-            		b = 8;
-            	else if (b == 33)  // pan delay
-            		b = 9;
-            	else if (b == 34)  // mod delay
-            		b = 10;
-            	}
+    public void setParameterByIndex(int i, byte b)
+        {
+        String key = allParameters[i];
+                
+        if (key.equals("effecttype"))
+            {
+            // handle XT effects specially
+            if (b == 32) // delay
+                b = 8;
+            else if (b == 33)  // pan delay
+                b = 9;
+            else if (b == 34)  // mod delay
+                b = 10;
+            }
 
 
-		if (key.equals("-"))
-			{
-			// do nothing
-			}
-		else if (key.equals("osc1octave") || key.equals("osc2octave"))
-			{
-			model.set(key, (b - 16) / 12);
-			}
-		else if (key.equals("lfo1sync") || key.equals("lfo2sync"))
-			{
-			if (b == 3)
-				b = 2;		// because it's of/on/on/Clock, I dunno why
-			model.set(key, b);
-			}
-		else if (key.equals("arpuser1"))
-			{
-			model.set("arpuser1", (b >> 3) & 1);			/// Do I have these backwards?
-			model.set("arpuser2", (b >> 2) & 1);
-			model.set("arpuser3", (b >> 1) & 1);
-			model.set("arpuser4", (b) & 1);
-			}
-		else if (key.equals("arpuser5"))
-			{
-			model.set("arpuser5", (b >> 3) & 1);			/// Do I have these backwards?
-			model.set("arpuser6", (b >> 2) & 1);
-			model.set("arpuser7", (b >> 1) & 1);
-			model.set("arpuser8", (b) & 1);
-			}
-		else if (key.equals("arpuser9"))
-			{
-			model.set("arpuser9", (b >> 3) & 1);			/// Do I have these backwards?
-			model.set("arpuser10", (b >> 2) & 1);
-			model.set("arpuser11", (b >> 1) & 1);
-			model.set("arpuser12", (b) & 1);
-			}
-		else if (key.equals("arpuser13"))
-			{
-			model.set("arpuser13", (b >> 3) & 1);			/// Do I have these backwards?
-			model.set("arpuser14", (b >> 2) & 1);
-			model.set("arpuser15", (b >> 1) & 1);
-			model.set("arpuser16", (b) & 1);
-			}
-		else if (i >= 240 && i < 240 + 16)  // name
-			{
-			try 
-				{
-				String name = model.get("name", "Init Sound V1.1 ");
-				while(name.length() < 16)
-					name = name + " ";
-				byte[] str = name.getBytes("US-ASCII");
-				byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
-				System.arraycopy(str, 0, newstr, 0, 16);
-				newstr[i - 240] = b;
-				model.set("name", new String(newstr, "US-ASCII"));
-				}
-			catch (UnsupportedEncodingException e)
-				{
-				e.printStackTrace();
-				}
-			}
-		else
-			{
-			model.set(key, b);
-			}
-		}
+        if (key.equals("-"))
+            {
+            // do nothing
+            }
+        else if (key.equals("osc1octave") || key.equals("osc2octave"))
+            {
+            model.set(key, (b - 16) / 12);
+            }
+        else if (key.equals("lfo1sync") || key.equals("lfo2sync"))
+            {
+            if (b == 3)
+                b = 2;          // because it's of/on/on/Clock, I dunno why
+            model.set(key, b);
+            }
+        else if (key.equals("arpuser1"))
+            {
+            model.set("arpuser1", (b >> 3) & 1);                    /// Do I have these backwards?
+            model.set("arpuser2", (b >> 2) & 1);
+            model.set("arpuser3", (b >> 1) & 1);
+            model.set("arpuser4", (b) & 1);
+            }
+        else if (key.equals("arpuser5"))
+            {
+            model.set("arpuser5", (b >> 3) & 1);                    /// Do I have these backwards?
+            model.set("arpuser6", (b >> 2) & 1);
+            model.set("arpuser7", (b >> 1) & 1);
+            model.set("arpuser8", (b) & 1);
+            }
+        else if (key.equals("arpuser9"))
+            {
+            model.set("arpuser9", (b >> 3) & 1);                    /// Do I have these backwards?
+            model.set("arpuser10", (b >> 2) & 1);
+            model.set("arpuser11", (b >> 1) & 1);
+            model.set("arpuser12", (b) & 1);
+            }
+        else if (key.equals("arpuser13"))
+            {
+            model.set("arpuser13", (b >> 3) & 1);                   /// Do I have these backwards?
+            model.set("arpuser14", (b >> 2) & 1);
+            model.set("arpuser15", (b >> 1) & 1);
+            model.set("arpuser16", (b) & 1);
+            }
+        else if (i >= 240 && i < 240 + 16)  // name
+            {
+            try 
+                {
+                String name = model.get("name", "Init Sound V1.1 ");
+                while(name.length() < 16)
+                    name = name + " ";
+                byte[] str = name.getBytes("US-ASCII");
+                byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
+                System.arraycopy(str, 0, newstr, 0, 16);
+                newstr[i - 240] = b;
+                model.set("name", new String(newstr, "US-ASCII"));
+                }
+            catch (UnsupportedEncodingException e)
+                {
+                e.printStackTrace();
+                }
+            }
+        else
+            {
+            model.set(key, b);
+            }
+        }
 
         
     public void parseParameter(byte[] data)
-		{
-		int index = -1;
-		byte b = 0;
-		
-		// is it a sysex parameter change?
+        {
+        int index = -1;
+        byte b = 0;
+                
+        // is it a sysex parameter change?
         if (data[0] == (byte)0xF0 &&
-           	data[1] == (byte)0x3E &&
-            data[2] == (byte)0x0E &&		// Microwave
+            data[1] == (byte)0x3E &&
+            data[2] == (byte)0x0E &&            // Microwave
             // filter by ID?  Presently I'm not
             data[4] == (byte)0x20 &&
             data[5] == 0x00 &&  // only Sound Mode Edit Bufer
@@ -2397,35 +2397,35 @@ public class MicrowaveXT extends Synth
             setParameterByIndex(index, b);
             }
         else
-        	{
-        	// we'll put CC here later
-        	}
+            {
+            // we'll put CC here later
+            }
         revise();
-		}
+        }
         
 
     public boolean parse(byte[] data, boolean ignorePatch)
         {
         boolean retval = true;
-		model.set("id", data[3]);
-		if (!ignorePatch && data[5] < 8)  // otherwise it's probably just local patch data.  Too bad they do this. :-(
-			{
-			model.set("bank", data[5]);
-			model.set("number", data[6]);
-			}
-		else
-			{
-			model.set("bank", 0);
-			model.set("number", 0);
-			retval = false;
-			}
+        model.set("id", data[3]);
+        if (!ignorePatch && data[5] < 8)  // otherwise it's probably just local patch data.  Too bad they do this. :-(
+            {
+            model.set("bank", data[5]);
+            model.set("number", data[6]);
+            }
+        else
+            {
+            model.set("bank", 0);
+            model.set("number", 0);
+            retval = false;
+            }
 
         for(int i = 0; i < 255; i++)
             {
             setParameterByIndex(i, data[i + 7]);
             }
         revise();  
-		updateMode();
+        updateMode();
         return retval;     
         }
 

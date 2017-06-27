@@ -38,7 +38,7 @@ public class PushButton extends JButton
         }
     
     public void perform()
-    	{
-    	// do nothing by default
-    	}
+        {
+        // do nothing by default
+        }
     }

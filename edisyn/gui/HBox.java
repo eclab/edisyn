@@ -45,9 +45,9 @@ public class HBox extends JComponent
         setBackground(Style.BACKGROUND_COLOR);
         box = new Box(BoxLayout.X_AXIS);
         if (alternative == LEFT_CONSUMES)
-        	add(box, BorderLayout.EAST);
+            add(box, BorderLayout.EAST);
         else
-        	add(box, BorderLayout.WEST);        	
+            add(box, BorderLayout.WEST);            
         panel.setLayout(new BorderLayout());
         panel.setBackground(Style.BACKGROUND_COLOR);
         add(panel, BorderLayout.CENTER);

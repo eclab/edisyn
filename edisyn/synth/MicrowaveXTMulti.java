@@ -39,8 +39,8 @@ public class MicrowaveXTMulti extends Synth
     static final String[] ARPEGGIATOR_ACTIVE = new String[] { "Off", "On", "Hold", "Sound Arp" };
     static final String[] ARP_CLOCK = new String[] { "1/1", "1/2 .", "1/2 T", "1/2", "1/4 .", "1/4 T", "1/4", "1/8 .", "1/8 T", "1/8", "1/16 .", "1/16 T", "1/16", "1/32 .", "1/32 T", "1/32"};
     static final String[] ARPEGGIATOR_DIRECTION = new String[] { "Up", "Down", "Alternating", "Random" };  // is it Alternating?
-	static final String[] ARPEGGIATOR_ORDER = new String[] { "By Note", "By Note Reversed", "As Played", "As Played Reversed" };
-	static final String[] ARPEGGIATOR_VELOCITY = new String[] { "Root Note", "Last Note" }; 
+    static final String[] ARPEGGIATOR_ORDER = new String[] { "By Note", "By Note Reversed", "As Played", "As Played Reversed" };
+    static final String[] ARPEGGIATOR_VELOCITY = new String[] { "Root Note", "Last Note" }; 
     static final String[] MIDI_SEND = new String[] { "Global", "Specific" };
         
     public MicrowaveXTMulti()
@@ -50,13 +50,13 @@ public class MicrowaveXTMulti extends Synth
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
 
-		for(int j = 1; j < 9; j++)
-			{
-	        for(int i = 0; i < allInstrumentParameters.length; i++)
-	            {
-	            allInstrumentParametersToIndex.put(allInstrumentParameters[i] + j, Integer.valueOf(i));
-	            }
-	        }
+        for(int j = 1; j < 9; j++)
+            {
+            for(int i = 0; i < allInstrumentParameters.length; i++)
+                {
+                allInstrumentParametersToIndex.put(allInstrumentParameters[i] + j, Integer.valueOf(i));
+                }
+            }
 
                 
         setSendsAllParametersInBulk(true);
@@ -66,10 +66,10 @@ public class MicrowaveXTMulti extends Synth
         vbox.add(addNameGlobal(Style.COLOR_GLOBAL));
         vbox.add(addMultiData(Style.COLOR_A));
 
-		for(int i = 1; i < 3; i++)
-			{
-			vbox.add(addInstrument(i, Style.COLOR_B));
-			}
+        for(int i = 1; i < 3; i++)
+            {
+            vbox.add(addInstrument(i, Style.COLOR_B));
+            }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Multi and Instruments 1 - 2", soundPanel);
@@ -77,10 +77,10 @@ public class MicrowaveXTMulti extends Synth
         soundPanel = new SynthPanel();
         vbox = new VBox();
 
-		for(int i = 3; i < 6; i++)
-			{
-			vbox.add(addInstrument(i, Style.COLOR_B));
-			}
+        for(int i = 3; i < 6; i++)
+            {
+            vbox.add(addInstrument(i, Style.COLOR_B));
+            }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Instruments 3 - 5", soundPanel);
@@ -88,15 +88,15 @@ public class MicrowaveXTMulti extends Synth
         soundPanel = new SynthPanel();
         vbox = new VBox();
 
-		for(int i = 6; i < 9; i++)
-			{
-			vbox.add(addInstrument(i, Style.COLOR_B));
-			}
+        for(int i = 6; i < 9; i++)
+            {
+            vbox.add(addInstrument(i, Style.COLOR_B));
+            }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Instruments 6 - 8", soundPanel);
 
-		tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("MicrowaveXTMulti.html")));
+        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("MicrowaveXTMulti.html")));
 
         model.set("name", "Init            ");  // has to be 16 long
         
@@ -105,23 +105,23 @@ public class MicrowaveXTMulti extends Synth
     
     public void windowBecameFront() { updateMode(); }
     
-     public void updateMode()
-    	{
+    public void updateMode()
+        {
         SwingUtilities.invokeLater(new Runnable() 
-        	{ 
-        	public void run() 
-        		{ 
-		        byte DEV = (byte)model.get("id", 0);
-		    	// we'll send a mode dump to change the mode to Single
-    		    tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x01, (byte)0xF7 }, true);
-    		    }
-    		});
-    	}
+            { 
+            public void run() 
+                { 
+                byte DEV = (byte)model.get("id", 0);
+                // we'll send a mode dump to change the mode to Single
+                tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x01, (byte)0xF7 }, true);
+                }
+            });
+        }
                
-	public void changePatch(Model tempModel)
-		{
-		// Not possible in Multi Mode
-		}
+    public void changePatch(Model tempModel)
+        {
+        // Not possible in Multi Mode
+        }
 
     public String getDefaultResourceFileName() { return "MicrowaveXTMulti.init"; }
 
@@ -185,10 +185,10 @@ public class MicrowaveXTMulti extends Synth
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
         comp = new PatchDisplay(this, "Patch: ", "bank", "number", 4)
-        	{
-        	public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
-        	public String bankString(int bank) { return BANKS[bank]; }
-        	};
+            {
+            public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
+            public String bankString(int bank) { return BANKS[bank]; }
+            };
         hbox2.add(comp);
         comp = new PatchDisplay(this, "  ID: ", "id", null, 3);
         hbox2.add(comp);
@@ -232,7 +232,7 @@ public class MicrowaveXTMulti extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
     
-    	params = MIDI_SEND;
+        params = MIDI_SEND;
         comp = new Chooser("MIDI Send [XTk]", this, "midisend", params);
         vbox.add(comp);
         hbox.add(vbox);
@@ -253,18 +253,18 @@ public class MicrowaveXTMulti extends Synth
         hbox.add(comp);
 
 
-    	comp = new LabelledDial("Arp Tempo", this, "arptempo", color, 1, 127)
-    		{
+        comp = new LabelledDial("Arp Tempo", this, "arptempo", color, 1, 127)
+            {
             public String map(int val)
                 {
                 if (val == 1)
-                	return "Extern";
+                    return "Extern";
                 else
-                	{
-                	return "" + (50 + (val - 2) * 2);
-                	}
+                    {
+                    return "" + (50 + (val - 2) * 2);
+                    }
                 }
-    		};
+            };
         //((LabelledDial)comp).setSecondLabel("Tempo");
         hbox.add(comp);
         
@@ -282,7 +282,7 @@ public class MicrowaveXTMulti extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
 
-       	comp = new LabelledDial("Bank", this, "bank" + inst, color, 0, 1)
+        comp = new LabelledDial("Bank", this, "bank" + inst, color, 0, 1)
             {
             public String map(int val)
                 {
@@ -302,68 +302,68 @@ public class MicrowaveXTMulti extends Synth
         hbox.add(vbox);
 
 
-    	vbox = new VBox();
+        vbox = new VBox();
 
-       	params = PAN_MOD;
+        params = PAN_MOD;
         comp = new Chooser("Pan Mod", this, "arpdirectionection", params);
         vbox.add(comp);
 
         comp = new CheckBox("Active", this, "status" + inst);
-    	vbox.add(comp);    
+        vbox.add(comp);    
 
-     	comp = new CheckBox("Sub Out", this, "output" + inst);
-    	vbox.add(comp);    
+        comp = new CheckBox("Sub Out", this, "output" + inst);
+        vbox.add(comp);    
 
         comp = new CheckBox("Reset Arp on Start", this, "arpreset" + inst);
         vbox.add(comp);
-		hbox.add(vbox);
-		
-    	comp = new CheckBox("MIDI Send [XTk]", this, "midisend");
-    	vbox.add(comp);    
+        hbox.add(vbox);
+                
+        comp = new CheckBox("MIDI Send [XTk]", this, "midisend");
+        vbox.add(comp);    
 
-		
-    	HBox hbox2 = new HBox();
-    	comp = new PushButton("Show")
-    		{
-    		public void perform()
-    			{
-    			final MicrowaveXT synth = new MicrowaveXT();
-    			synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
-    			if (synth.tuple != null)
-    				{
-    				// This is a little tricky.  When the dump comes in from the synth,
-    				// Edisyn will only send it to the topmost panel.  So we first sprout
-    				// the panel and show it, and THEN send the dump request.  But this isn't
-    				// enough, because what setVisible(...) does is post an event on the
-    				// Swing Event Queue to build the window at a later time.  This later time
-    				// happens to be after the dump comes in, so it's ignored.  So what we
-    				// ALSO do is post the dump request to occur at the end of the Event Queue,
-    				// so by the time the dump request has been made, the window is shown and
-    				// frontmost.
-    						
-	    			synth.sprout();
-	 				JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
-					frame.setVisible(true);					
+                
+        HBox hbox2 = new HBox();
+        comp = new PushButton("Show")
+            {
+            public void perform()
+                {
+                final MicrowaveXT synth = new MicrowaveXT();
+                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                if (synth.tuple != null)
+                    {
+                    // This is a little tricky.  When the dump comes in from the synth,
+                    // Edisyn will only send it to the topmost panel.  So we first sprout
+                    // the panel and show it, and THEN send the dump request.  But this isn't
+                    // enough, because what setVisible(...) does is post an event on the
+                    // Swing Event Queue to build the window at a later time.  This later time
+                    // happens to be after the dump comes in, so it's ignored.  So what we
+                    // ALSO do is post the dump request to occur at the end of the Event Queue,
+                    // so by the time the dump request has been made, the window is shown and
+                    // frontmost.
+                                                
+                    synth.sprout();
+                    JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                    frame.setVisible(true);                                 
 
-					SwingUtilities.invokeLater(
-						new Runnable()
-							{
-							public void run() 
-								{ 
-								int bank = MicrowaveXTMulti.this.model.get("bank" + inst, 0);
-								int number = MicrowaveXTMulti.this.model.get("number" + inst, 0);
-	   							int id = MicrowaveXTMulti.this.model.get("id", 0);
-	   							synth.tryToSendSysex(synth.requestDump(bank, number, id));
-	   							}
-    						});
-    				}
-    			}
-    		};
-    	hbox2.addLast(comp);
-		vbox.add(hbox2);
+                    SwingUtilities.invokeLater(
+                        new Runnable()
+                            {
+                            public void run() 
+                                { 
+                                int bank = MicrowaveXTMulti.this.model.get("bank" + inst, 0);
+                                int number = MicrowaveXTMulti.this.model.get("number" + inst, 0);
+                                int id = MicrowaveXTMulti.this.model.get("id", 0);
+                                synth.tryToSendSysex(synth.requestDump(bank, number, id));
+                                }
+                            });
+                    }
+                }
+            };
+        hbox2.addLast(comp);
+        vbox.add(hbox2);
 
 
-		vbox = new VBox();
+        vbox = new VBox();
         params = ARPEGGIATOR_ACTIVE;
         comp = new Chooser("Arp Active", this, "arp" + inst, params);
         vbox.add(comp);
@@ -383,7 +383,7 @@ public class MicrowaveXTMulti extends Synth
         hbox.add(vbox);
         
         
-       	vbox = new VBox();
+        vbox = new VBox();
         hbox2 = new HBox();
 
         comp = new LabelledDial("Volume", this, "volume" + inst, color, 0, 127);
@@ -396,7 +396,7 @@ public class MicrowaveXTMulti extends Synth
         hbox2.add(comp);
 
         comp = new LabelledDial("Panning", this, "panning"  + inst, color, 0, 127, 64)
-        	{
+            {
             public String map(int val)
                 {
                 if ((val - 64) < 0) return "L " + Math.abs(val - 64);
@@ -406,92 +406,92 @@ public class MicrowaveXTMulti extends Synth
             };
         hbox2.add(comp);
         
-    	comp = new LabelledDial("Highest", this, "hivel" + inst, color, 1, 127);
+        comp = new LabelledDial("Highest", this, "hivel" + inst, color, 1, 127);
         ((LabelledDial)comp).setSecondLabel("Velocity");
         hbox2.add(comp);
 
-    	comp = new LabelledDial("Highest", this, "hikey" + inst, color, 1, 127)
-    		{
+        comp = new LabelledDial("Highest", this, "hikey" + inst, color, 1, 127)
+            {
             public String map(int val)
                 {
                 return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
-    		};
+            };
         ((LabelledDial)comp).setSecondLabel("Key");
         hbox2.add(comp);
 
         comp = new LabelledDial("MIDI", this, "channel" + inst, color, 0, 17)
-			{
+            {
             public String map(int val)
                 {
                 if (val == 0)
-                	return "Omni";
+                    return "Omni";
                 else if (val == 1)
-                	return "Global";
+                    return "Global";
                 else return "" + (val - 1);
                 }
-        	};
+            };
         ((LabelledDial)comp).setSecondLabel("Channel");
         hbox2.add(comp);
 
-		vbox.add(hbox2);
-		hbox2 = new HBox();
-		
-    	comp = new LabelledDial("Arp", this, "arpclock" + inst, color, 0, 15)
-        	{
+        vbox.add(hbox2);
+        hbox2 = new HBox();
+                
+        comp = new LabelledDial("Arp", this, "arpclock" + inst, color, 0, 15)
+            {
             public String map(int val)
                 {
                 return ARP_CLOCK[val];
                 }
-        	};
+            };
         ((LabelledDial)comp).setSecondLabel("Clock");
         hbox2.add(comp);
 
-    	comp = new LabelledDial("Arp", this, "arprange" + inst, color, 1, 10);
+        comp = new LabelledDial("Arp", this, "arprange" + inst, color, 1, 10);
         ((LabelledDial)comp).setSecondLabel("Range");
         hbox2.add(comp);
 
         comp = new LabelledDial("Arp", this, "arppattern" + inst, color, 0, 16)
-        	{
+            {
             public String map(int val)
                 {
                 if (val == 0)
-                	return "Off";
+                    return "Off";
                 else if (val == 1)
-                	return "User";
+                    return "User";
                 else return "" + (val - 1);
                 }
-        	};
+            };
         ((LabelledDial)comp).setSecondLabel("Pattern");
         hbox2.add(comp);
 
-		comp = new LabelledDial("Arp", this, "arpnotesout" + inst, color, 0, 18)
-        	{
+        comp = new LabelledDial("Arp", this, "arpnotesout" + inst, color, 0, 18)
+            {
             public String map(int val)
                 {
                 if (val == 0)
-                	return "Off";
+                    return "Off";
                 else if (val == 17)
-                	return "Inst";
+                    return "Inst";
                 else if (val == 18)
-                	return "Global";
+                    return "Global";
                 else return "" + (val);
                 }
-        	};
+            };
         ((LabelledDial)comp).setSecondLabel("Notes Out");
         hbox2.add(comp);
         
-    	comp = new LabelledDial("Lowest", this, "lowvel" + inst, color, 1, 127);
+        comp = new LabelledDial("Lowest", this, "lowvel" + inst, color, 1, 127);
         ((LabelledDial)comp).setSecondLabel("Velocity");
         hbox2.add(comp);
 
-    	comp = new LabelledDial("Lowest", this, "lowkey" + inst, color, 1, 127)
-    		{
+        comp = new LabelledDial("Lowest", this, "lowkey" + inst, color, 1, 127)
+            {
             public String map(int val)
                 {
                 return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
-    		};
+            };
         ((LabelledDial)comp).setSecondLabel("Key");
         hbox2.add(comp);
 
@@ -505,39 +505,39 @@ public class MicrowaveXTMulti extends Synth
 
 
     /** Map of parameter -> index in the allInstrumentParameters array. */
-	HashMap allInstrumentParametersToIndex = new HashMap();
+    HashMap allInstrumentParametersToIndex = new HashMap();
 
-	final static String[] allInstrumentParameters = new String[]
-		{
-		"bank",
-		"number",
-		"channel",
-		"volume",
-		"transpose",
-		"detune",
-		"output",
-		"status",
-		"panning",
-		"panmod",
-		"-",
-		"-",
-		"lowvel",
-		"hivel",
-		"lowkey",
-		"hikey",
-		"arp",
-		"arpclock",
-		"arprange",
-		"arppattern",
-		"arpdirection",
-		"arporder",
-		"arpvel",
-		"arpreset",
-		"arpnotesout",
-		"-",
-		"midisend",
-		"-"
-		};
+    final static String[] allInstrumentParameters = new String[]
+    {
+    "bank",
+    "number",
+    "channel",
+    "volume",
+    "transpose",
+    "detune",
+    "output",
+    "status",
+    "panning",
+    "panmod",
+    "-",
+    "-",
+    "lowvel",
+    "hivel",
+    "lowkey",
+    "hikey",
+    "arp",
+    "arpclock",
+    "arprange",
+    "arppattern",
+    "arpdirection",
+    "arporder",
+    "arpvel",
+    "arpreset",
+    "arpnotesout",
+    "-",
+    "midisend",
+    "-"
+    };
 
 
 
@@ -783,8 +783,8 @@ public class MicrowaveXTMulti extends Synth
     "lowkey7",
     "hikey7",
     "arp7",
-     "arpclock7",
-   "arprange7",
+    "arpclock7",
+    "arprange7",
     "arppattern7",
     "arpdirection7",
     "arporder7",
@@ -834,8 +834,8 @@ public class MicrowaveXTMulti extends Synth
         if (key.equals("id")) return new byte[0];  // this is not emittable
         if (key.equals("number")) return new byte[0];  // this is not emittable
         byte DEV = (byte)model.get("id", 0);
-		
-		if (key.equals("name"))
+                
+        if (key.equals("name"))
             {
             byte[] bytes = new byte[16 * 9];
             String name = model.get(key, "Init            ");  // just to be safe, has to be 16 long
@@ -843,19 +843,19 @@ public class MicrowaveXTMulti extends Synth
                 {
                 byte c = 0x20;  // space
                 if (i < name.length())
-                	c = (byte)(name.charAt(i));
+                    c = (byte)(name.charAt(i));
                 int index = i;
                 byte PP = (byte)(index & 127);
                 byte XX = c;
                 byte LL = 0x20;
                 if (index > 32)
-                	{
-                	// In Section 2.23 of sysex document, the locations are listed as going 1...7.
-                	// It's actually 0...7
+                    {
+                    // In Section 2.23 of sysex document, the locations are listed as going 1...7.
+                    // It's actually 0...7
                 
-                	LL = (byte)((index - 32) / 28);  // hope that's right
-                	}
-                	
+                    LL = (byte)((index - 32) / 28);  // hope that's right
+                    }
+                        
                 // In Section 2.23 of sysex document, MULP is declared to be 0x20, but then in the
                 // format example, it's written as 0x21.  It's actually 0x21.
                 
@@ -870,21 +870,21 @@ public class MicrowaveXTMulti extends Synth
 
             byte PP = (byte)(index & 127);
             if (index >= 32)  // uh oh, it's an instrument parameter, handle it specially
-            	{
-            	PP = (byte)(((Integer)(allInstrumentParametersToIndex.get(key))).intValue() & 127);
-            	}
-            	
-            byte XX = (byte)model.get(key, 0);
-			byte LL = 0x20;
-			if (index >= 32)
-				{
-				LL = (byte)((index - 32) / 28);  // hope that's right
-				}
-
-                // In Section 2.23 of sysex document, MULP is declared to be 0x20, but then in the
-                // format example, it's written as 0x21.  It's actually 0x21.
+                {
+                PP = (byte)(((Integer)(allInstrumentParametersToIndex.get(key))).intValue() & 127);
+                }
                 
-           return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x21, LL, PP, XX, (byte)0xF7 };
+            byte XX = (byte)model.get(key, 0);
+            byte LL = 0x20;
+            if (index >= 32)
+                {
+                LL = (byte)((index - 32) / 28);  // hope that's right
+                }
+
+            // In Section 2.23 of sysex document, MULP is declared to be 0x20, but then in the
+            // format example, it's written as 0x21.  It's actually 0x21.
+                
+            return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x21, LL, PP, XX, (byte)0xF7 };
             }
         }
     
@@ -908,23 +908,23 @@ public class MicrowaveXTMulti extends Synth
             {
             String key = allParameters[i];
 
-			if (key.equals("name"))
-				{
-            	if (i - 16 >= name.length())
-            		bytes[i] = 0x20;  // space
-            	else
-	          	  	bytes[i] = (byte)(name.charAt(i - 16));
-				}
-			else
-				{
-				bytes[i] = (byte)(model.get(key, 0));
-				}
-			}
-			
-                // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
-                // format example, it's written as 0x11.  It's actually 0x11.
+            if (key.equals("name"))
+                {
+                if (i - 16 >= name.length())
+                    bytes[i] = 0x20;  // space
+                else
+                    bytes[i] = (byte)(name.charAt(i - 16));
+                }
+            else
+                {
+                bytes[i] = (byte)(model.get(key, 0));
+                }
+            }
+                        
+        // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
+        // format example, it's written as 0x11.  It's actually 0x11.
                 
-		
+                
         byte[] full = new byte[getExpectedSysexLength()];
         full[0] = (byte)0xF0;
         full[1] = 0x3E;
@@ -957,7 +957,7 @@ public class MicrowaveXTMulti extends Synth
         byte b = 0;
         for(int i = 0; i < bytes.length; i++)
             b += bytes[i];
-		//System.err.println("Checksum pre " + ((byte)(b & (byte)127)));
+        //System.err.println("Checksum pre " + ((byte)(b & (byte)127)));
 
 
         // Section 2.12 says that the checksum includes BB and NN.
@@ -972,7 +972,7 @@ public class MicrowaveXTMulti extends Synth
         
         
         b = (byte)(b & (byte)127);
-		//System.err.println("Checksum post " + b);
+        //System.err.println("Checksum post " + b);
         
         return b;
         }
@@ -980,8 +980,8 @@ public class MicrowaveXTMulti extends Synth
 
     public byte[] requestDump(Model tempModel)
         {
-                // In Section 2.21 of sysex document, MULR is declared to be 0x11, but then in the
-                // format example, it's written as 0x01.  It's actually 0x01.
+        // In Section 2.21 of sysex document, MULR is declared to be 0x11, but then in the
+        // format example, it's written as 0x01.  It's actually 0x01.
                 
         if (tempModel == null)
             tempModel = getModel();
@@ -994,8 +994,8 @@ public class MicrowaveXTMulti extends Synth
         
     public byte[] requestCurrentDump(Model tempModel)
         {
-                // In Section 2.21 of sysex document, MULR is declared to be 0x11, but then in the
-                // format example, it's written as 0x01.  It's actually 0x01.
+        // In Section 2.21 of sysex document, MULR is declared to be 0x11, but then in the
+        // format example, it's written as 0x01.  It's actually 0x01.
                 
         if (tempModel == null)
             tempModel = getModel();
@@ -1006,12 +1006,12 @@ public class MicrowaveXTMulti extends Synth
 
     public static boolean recognize(byte[] data)
         {
-                // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
-                // format example, it's written as 0x11.  It's actually 0x11.
+        // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
+        // format example, it's written as 0x11.  It's actually 0x11.
                 
         boolean v = (
-        	data.length == EXPECTED_SYSEX_LENGTH &&
-        	data[0] == (byte)0xF0 &&
+            data.length == EXPECTED_SYSEX_LENGTH &&
+            data[0] == (byte)0xF0 &&
             data[1] == (byte)0x3E &&
             data[2] == (byte)0x0E &&
             data[4] == (byte)0x11);
@@ -1056,53 +1056,53 @@ public class MicrowaveXTMulti extends Synth
 
 
 
-	public void setParameterByIndex(int i, byte b)
-		{
-		String key = allParameters[i];
-		if (key.equals("-"))
-			{
-			// do nothing
-			}
-		else if (i >= 16 && i < 32)  // name
-			{
-			try 
-				{
-				String name = model.get("name", "Init            ");
-				while(name.length() < 16)
-					name = name + " ";
-				byte[] str = name.getBytes("US-ASCII");
-				byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
-				System.arraycopy(str, 0, newstr, 0, 16);
-				newstr[i - 16] = b;
-				model.set("name", new String(newstr, "US-ASCII"));
-				}
-			catch (UnsupportedEncodingException e)
-				{
-				e.printStackTrace();
-				}
-			}
-		else
-			{
-			model.set(key, b);
-			}
-		}
+    public void setParameterByIndex(int i, byte b)
+        {
+        String key = allParameters[i];
+        if (key.equals("-"))
+            {
+            // do nothing
+            }
+        else if (i >= 16 && i < 32)  // name
+            {
+            try 
+                {
+                String name = model.get("name", "Init            ");
+                while(name.length() < 16)
+                    name = name + " ";
+                byte[] str = name.getBytes("US-ASCII");
+                byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
+                System.arraycopy(str, 0, newstr, 0, 16);
+                newstr[i - 16] = b;
+                model.set("name", new String(newstr, "US-ASCII"));
+                }
+            catch (UnsupportedEncodingException e)
+                {
+                e.printStackTrace();
+                }
+            }
+        else
+            {
+            model.set(key, b);
+            }
+        }
 
         
     public void parseParameter(byte[] data)
-		{
-		int index = -1;
-		byte b = 0;
-		
-                // In Section 2.23 of sysex document, MULP is declared to be 0x20, but then in the
-                // format example, it's written as 0x21
+        {
+        int index = -1;
+        byte b = 0;
                 
-                // Section 2.23 also has incorrect index labels in its format example (skipping index 6)
-                // There are thus only 9 bytes
+        // In Section 2.23 of sysex document, MULP is declared to be 0x20, but then in the
+        // format example, it's written as 0x21
+                
+        // Section 2.23 also has incorrect index labels in its format example (skipping index 6)
+        // There are thus only 9 bytes
 
-		// is it a sysex parameter change?
+        // is it a sysex parameter change?
         if (data[0] == (byte)0xF0 &&
-           	data[1] == (byte)0x3E &&
-            data[2] == (byte)0x0E &&		// Microwave
+            data[1] == (byte)0x3E &&
+            data[2] == (byte)0x0E &&            // Microwave
             // filter by ID?  Presently I'm not
             data[4] == (byte)0x20 &&
             data[5] == 0x00 &&  // only Sound Mode Edit Bufer
@@ -1116,29 +1116,29 @@ public class MicrowaveXTMulti extends Synth
             setParameterByIndex(index, b);
             }
         else
-        	{
-        	// we'll put CC here later
-        	}
+            {
+            // we'll put CC here later
+            }
         revise();
-		}
+        }
         
 
     public boolean parse(byte[] data, boolean ignorePatch)
         {
-                // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
-                // format example, it's written as 0x11.  It's actually 0x11, though we don't check for it here.
+        // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
+        // format example, it's written as 0x11.  It's actually 0x11, though we don't check for it here.
                 
         boolean retval = true;
-		model.set("id", data[3]);
-		if (!ignorePatch && data[5] < 8)  // or < 1 ? Anyway, otherwise it's probably just local patch data.  Too bad they do this. :-(
-			{
-			model.set("number", data[6]);
-			}
-		else
-			{
-			model.set("number", 0);
-			retval = false;
-			}
+        model.set("id", data[3]);
+        if (!ignorePatch && data[5] < 8)  // or < 1 ? Anyway, otherwise it's probably just local patch data.  Too bad they do this. :-(
+            {
+            model.set("number", data[6]);
+            }
+        else
+            {
+            model.set("number", 0);
+            retval = false;
+            }
 
         for(int i = 0; i < 255; i++)
             {
@@ -1178,12 +1178,12 @@ public class MicrowaveXTMulti extends Synth
         /*
         // we randomize these specially, taking care not to do the high waves
         if (key.equals("osc1shape") || key.equals("osc2shape"))
-            {
-            if (coinToss(0.5))
-                model.set(key, 0);
-            else
-                model.set(key, random.nextInt(WAVES_LONG.length -1) + 1);
-            }
+        {
+        if (coinToss(0.5))
+        model.set(key, 0);
+        else
+        model.set(key, random.nextInt(WAVES_LONG.length -1) + 1);
+        }
         */
         }
         

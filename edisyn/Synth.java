@@ -51,6 +51,7 @@ public abstract class Synth extends JComponent implements Updatable
     
     public JMenuItem transmit;
     public JMenuItem transmitTo;
+    public JMenuItem transmitCurrent;
     public JMenuItem receive;
     
     public Undo undo = new Undo();
@@ -832,6 +833,8 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
                 
+        menu.addSeparator();
+
         transmit = new JMenuItem("Send Patch");
         menu.add(transmit);
         transmit.addActionListener(new ActionListener()
@@ -861,7 +864,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        transmitTo = new JMenuItem("Send Patch To...");
+        transmitTo = new JMenuItem("Send To...");
         menu.add(transmitTo);
         transmitTo.addActionListener(new ActionListener()
             {
@@ -883,6 +886,24 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
                 
+        transmitCurrent = new JMenuItem("Send to Current Patch");
+        menu.add(transmitCurrent);
+        transmitCurrent.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                if (tuple == null || tuple.out == null)
+                    {
+                    if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
+                        return;
+                    else
+                        setSynced(false);
+                    }
+                
+                sendAllParameters(false);
+                }
+            });
+
         JMenuItem random = new JMenuItem("Randomize");
         menu.add(random);
         random.addActionListener(new ActionListener()
@@ -1012,6 +1033,8 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
             
+        menu.addSeparator();
+
         learningMenuItem = new JMenuItem("Map CC");
         learningMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(learningMenuItem);
@@ -1210,18 +1233,34 @@ public abstract class Synth extends JComponent implements Updatable
         sending multiple separate parameter change requests (FALSE).  By default this is FALSE. */
     public boolean getSendsAllParametersInBulk() { return sendsAllParametersInBulk; }
 
-    /** Sends all the parameters in a patch to the synth.  
-        If sendsAllParametersInBulk was set to TRUE, then this is done by sending
+    /** Switches to the current patch, then sends all the parameters in a patch to the synth.
+        If not synced, does nothing.
+
+		<p>If sendsAllParametersInBulk was set to TRUE, then this is done by sending
         a single patch write to working memory, which may not be supported by all synths.
         
         Otherwise this is done by sending each parameter separately, which isn't as fast.
         The default sends each parameter separately.
-    */    
-    public void sendAllParameters()
+    */   
+    public void sendAllParameters() { sendAllParameters(true); } 
+     
+    /** If changePatch is TRUE, switches to the current patch, then sends all the parameters in a patch to the synth;
+        if not synced, does nothing.
+
+    	If changePatch is FALSE, just sends the parameters to whatever is the current patch, even if not synced.
+    	
+        <P>If sendsAllParametersInBulk was set to TRUE, then this is done by sending
+        a single patch write to working memory, which may not be supported by all synths.
+        
+        Otherwise this is done by sending each parameter separately, which isn't as fast.
+        The default sends each parameter separately.
+    */   
+    public void sendAllParameters(boolean changePatch)
         {
-        if (isSynced())
+        if (isSynced() || !changePatch)		// if we're synced, or if we're not changing patches....
             {
-            changePatch(getModel());
+            if (changePatch)
+            	changePatch(getModel());	
                 
             if (sendsAllParametersInBulk)
                 {

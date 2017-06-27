@@ -20,9 +20,11 @@ Blofeld Single editor panel.
 <p><b>Gotchas</b> There are a few:
 
 <ul>
-<li>If you load the current patch, the Microwave does not tell Edisyn what the patch number.  Thus Edisyn resets the Number to <b>1</b>.   Beware of this, as you may more than once accidentally write the patch to 1.
 
-li>Edisyn cannot tell the Microwave to switch to a given multi patch number.  So if you send a patch to a patch number other than the current one, it'll get sent there but the Microwave won't switch to it.  Ugh.  So only send to the current patch (the one displayed on the Blofeld screen).
+<li>Edisyn cannot tell the Microwave to switch to a given multi patch number.  As a result, *Send Patch* and *Send Patch To...* are disabled, a
+nd the editor is *never* in sync (because we don't know what patch number is on the machine).  To get a patch, manually switch to the desired
+ patch number, then call *Request Current Patch* (or dump the patch manually to Edisyn).  To dump a patch to the Microwave, use *Write Patch...
+*. 
 
 <p><li>Though the Microwave responds to individual parameter changes in Multimode, it does not send any parameter change sysex when you turn its knobs.
 

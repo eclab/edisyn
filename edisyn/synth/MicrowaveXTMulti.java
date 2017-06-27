@@ -100,9 +100,19 @@ public class MicrowaveXTMulti extends Synth
 
         model.set("name", "Init            ");  // has to be 16 long
         
+		        
         loadDefaults();
         }
     
+    public JFrame sprout()
+    	{
+    	JFrame frame = super.sprout();
+        // multi-mode on the Microwave can't switch patches
+        transmit.setEnabled(false);
+		transmitTo.setEnabled(false);
+		return frame;
+    	}         
+
     public void windowBecameFront() { updateMode(); }
     
     public void updateMode()
@@ -1146,7 +1156,7 @@ public class MicrowaveXTMulti extends Synth
             }
         revise();  
         updateMode();
-        return retval;     
+        return false;  // we're never in sync because we can't move the patch number     
         }
 
         

@@ -37,6 +37,8 @@ public class Chooser extends NumericalComponent
         public Insets getInsets() { return new Insets(0, 0, 0, 0); }
         };
 
+	boolean callActionListener = true;
+	
     public void update(String key, Model model) 
         { 
         if (combo == null) return;  // we're not ready yet
@@ -55,7 +57,13 @@ public class Chooser extends NumericalComponent
         for(int i = 0; i < vals.length; i++)
             if (vals[i] == state)
                 {
+        // This is due to a Java bug.
+        // Unlike other widgets (like JCheckBox), JComboBox calls
+        // the actionlistener even when you programmatically change
+        // its value.  OOPS.
+                callActionListener = false;
                 combo.setSelectedIndex(i);
+                callActionListener = true;
                 return;
                 }
         }
@@ -102,18 +110,16 @@ public class Chooser extends NumericalComponent
         add(combo, BorderLayout.CENTER);
         add(label, BorderLayout.NORTH);
                 
-        // we don't use an actionlistener here because of a Java bug.
+        combo.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+        // This is due to a Java bug.
         // Unlike other widgets (like JCheckBox), JComboBox calls
         // the actionlistener even when you programmatically change
         // its value.  OOPS.
-        combo.addItemListener(new ItemListener()
-            {
-            public void itemStateChanged(ItemEvent e)
-                {
-                if (e.getStateChange() == ItemEvent.SELECTED)
-                    {
-                    setState(combo.getSelectedIndex());
-                    }
+                if (callActionListener)
+	                setState(combo.getSelectedIndex());
                 }
             });
         }

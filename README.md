@@ -152,10 +152,11 @@ patch are replaced with the old patch.  Then Edisyn will then send the patch to 
 * *Reset* resets the editor's current patch to its initialized state, then sends it to the synthesizer if
 not out of sync.
 
-* *Send Patch* sends the patch to the synthesizer.  
+* *Send Patch* sends the patch to the synthesizer at its patch location and moves to that location (if not already there).  
 
-* *Send Patch To...* sends the patch to the temporary memory of *some other location* on the synthesizer and
-moves to that location.
+* *Send Patch To...* sends the patch to *some other patch location* on the synthesizer and moves to that location.
+
+* *Send Current Patch* sends the patch to the synth's current patch setting, whatever that is.
 
 * *Write Patch...* writes the patch to a given location in the synthesizer.
 

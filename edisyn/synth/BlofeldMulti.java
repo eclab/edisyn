@@ -962,6 +962,7 @@ public class BlofeldMulti extends Synth
     
     public byte[] emit(Model tempModel, boolean toWorkingMemory)
         {
+        System.err.println("emit");
         if (tempModel == null)
             tempModel = getModel();
         byte DEV = (byte) tempModel.get("id", 0);

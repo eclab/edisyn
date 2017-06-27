@@ -99,7 +99,7 @@ This area holds the name of the patch, the patch number etc., and the device ID 
 
 Edisyn tries hard to stay *in sync* with the synthesizer: that is, what you are editing in Edisyn 
 reflects what's getting edited in the synthesizer.  If Edisyn believes it is not in sync, the
-patch number and the device ID will turn RED.
+patch number and the device ID will turn RED and the window will display "UNSYNCED".
 
 Various operations will cause Edisyn to drop out of sync; and if you're out of sync, Edisyn may ask you
 to specify a patch number etc. before continuing certain operations so it can get back in sync.
@@ -188,12 +188,15 @@ Edisyn makes up to three MIDI device connections.  The *Receiving Device* is the
 patches.  This is usually your synthesizer.  The *Sending Device* is the MIDI device to which we will send 
 patches and parameter changes.  We'll also need a *Channel* for the Sending Device so we can send test notes.
 
+If you opt not to connect to a receiving or sending device (you cancel), the editor pane title bar will display "DISCONNECTED".
+
 Optionally you can route your controller keyboard through Edisyn to play the sounds directly if you wish.  To do this,
 the *Controller* is the MIDI Device of your controller keyboard.  You'll also specify an incoming *Controller Channel*
 channel of course.  This can be set to "Any" for any channel (Omni).
 
 Additionally, if you're sick of using your mouse, you can map *CC MIDI Commands* from your Controller Keyboard to 
 directly manipulate dials and other widgets in Edisyn.  See "CC Mapping" below.
+
 
 ### Sending and Recieving Parameters
 

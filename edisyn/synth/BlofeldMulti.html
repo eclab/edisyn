@@ -18,7 +18,7 @@
 <li>
 The Blofeld's Multimode sysex is entirely undocumented, and this patch editor is the result of reverse engineering.  There may be errors: please report them.  
 
-<li>Edisyn cannot tell the Blofeld to switch to a given multi patch number.  So if you send a patch to a patch number other than the current one, it'll get sent there but the Blofeld won't switch to it.  Furthermore if you manually switch to it on the Blofeld, it resets the changed patch!  Ugh.  So only send to the current patch (the one displayed on the Blofeld screen).
+<li>Edisyn cannot tell the Blofeld to switch to a given multi patch number.  As a result, *Send Patch* and *Send Patch To...* are disabled, and the editor is *never* in sync (because we don't know what patch number is on the machine).  To get a patch, manually switch to the desired patch number, then call *Request Current Patch* (or dump the patch manually to Edisyn).  To dump a patch to the Blofeld, use *Write Patch...*
 
 <p><li>The Blofeld doesn't send or receive sysex for updating a single Multimode parameter, so you won't see changes on the Blofeld (or Edisyn) when tweaking a parameter on the other.
 

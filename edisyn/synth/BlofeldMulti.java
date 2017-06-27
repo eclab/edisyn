@@ -167,7 +167,15 @@ public class BlofeldMulti extends Synth
         
         loadDefaults();
         }
-                
+    
+    public JFrame sprout()
+    	{
+    	JFrame frame = super.sprout();
+        // multi-mode on the Blofeld can't switch patches
+        transmit.setEnabled(false);
+		transmitTo.setEnabled(false);    
+		return frame;	
+    	}         
                 
     public void changePatch(Model tempModel)
         {
@@ -1193,7 +1201,7 @@ public class BlofeldMulti extends Synth
             setParameterByIndex(i, data[i + 7]);
             }
         revise();  
-        return retval;     
+        return false;  // we're never in sync because we can't move the patch number     
         }
 
         

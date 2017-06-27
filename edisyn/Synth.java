@@ -49,6 +49,10 @@ public abstract class Synth extends JComponent implements Updatable
 
     public Midi.Tuple tuple;
     
+    public JMenuItem transmit;
+    public JMenuItem transmitTo;
+    public JMenuItem receive;
+    
     public Undo undo = new Undo();
     
     public CCMap ccmap;
@@ -748,7 +752,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        JMenuItem receive = new JMenuItem("Request Patch...");
+        receive = new JMenuItem("Request Patch...");
         //receive.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(receive);
         receive.addActionListener(new ActionListener()
@@ -828,7 +832,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
                 
-        JMenuItem transmit = new JMenuItem("Send Patch");
+        transmit = new JMenuItem("Send Patch");
         menu.add(transmit);
         transmit.addActionListener(new ActionListener()
             {
@@ -857,7 +861,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        JMenuItem transmitTo = new JMenuItem("Send Patch To...");
+        transmitTo = new JMenuItem("Send Patch To...");
         menu.add(transmitTo);
         transmitTo.addActionListener(new ActionListener()
             {

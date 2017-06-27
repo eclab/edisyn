@@ -34,18 +34,18 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     Color color;
     Color semiTransparent;
     Synth synth;
-	int width = 128;
-	
-	public void setPreferredWidth(int width)
-		{
-		this.width = width;
-		}
-		
-	public int getPreferredWidth()
-		{
-		return this.width;
-		}
-		
+    int width = 128;
+        
+    public void setPreferredWidth(int width)
+        {
+        this.width = width;
+        }
+                
+    public int getPreferredWidth()
+        {
+        return this.width;
+        }
+                
     public void update(String key, Model model)
         {
         repaint();
@@ -180,13 +180,13 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         graphics.draw(p);
         
         if (axis != 0)
-        	{
-        	graphics.setColor(color);
-        	double height = rect.height - (rect.height * axis);
-        	line = new Line2D.Double(rect.x, rect.y + height, rect.x + rect.width, rect.y + height);
-			graphics.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, new float[] { 4.0f }, 0.0f));
-			graphics.draw(line);
-        	}
+            {
+            graphics.setColor(color);
+            double height = rect.height - (rect.height * axis);
+            line = new Line2D.Double(rect.x, rect.y + height, rect.x + rect.width, rect.y + height);
+            graphics.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, new float[] { 4.0f }, 0.0f));
+            graphics.draw(line);
+            }
         }
         
     double axis = 0.0;

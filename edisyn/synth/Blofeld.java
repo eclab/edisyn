@@ -153,7 +153,7 @@ public class Blofeld extends Synth
         tabs.addTab("Arpeggiator", arpeggiationPanel);
 
 
-		tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("Blofeld.html")));
+        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("Blofeld.html")));
 
                 
         model.set("name", "Init            ");  // has to be 16 long
@@ -313,7 +313,7 @@ public class Blofeld extends Synth
 
                 comp = new LabelledDial("Accent " + i, this, "arp" + (i < 10 ? "0" : "") + i + "accent", color, 0, 7)
                     {
-					public double getStartAngle() { return 270 / 7 * 4 + 90; }
+                    public double getStartAngle() { return 270 / 7 * 4 + 90; }
                     public String map(int val)
                         {
                         // if 0, it's silent
@@ -323,12 +323,12 @@ public class Blofeld extends Synth
                         }
                     };
                 vbox.add(comp);
-				vbox.add(Strut.makeVerticalStrut(3));
-				
+                vbox.add(Strut.makeVerticalStrut(3));
+                                
                 // the little spaces cause Java to not slice off a bit of the last digit
                 comp = new LabelledDial(" Length " + i + " ", this, "arp" + (i < 10 ? "0" : "") + i + "length", color, 0, 7)
                     {
-					public double getStartAngle() { return 270 / 7 * 4 + 90; }
+                    public double getStartAngle() { return 270 / 7 * 4 + 90; }
                     public String map(int val)
                         {
                         // if 0, it's legato
@@ -338,12 +338,12 @@ public class Blofeld extends Synth
                         }
                     };
                 vbox.add(comp);
-				vbox.add(Strut.makeVerticalStrut(3));
-				                                
+                vbox.add(Strut.makeVerticalStrut(3));
+                                                                
                 // the little spaces cause Java to not slice off a bit of the last digit
                 comp = new LabelledDial(" Timing " + i + " ", this, "arp" + (i < 10 ? "0" : "") + i + "timing", color, 0, 7)
                     {
-					public double getStartAngle() { return 270 / 7 * 4 + 90; }
+                    public double getStartAngle() { return 270 / 7 * 4 + 90; }
                     public String map(int val)
                         {
                         // if 0, it's random
@@ -405,20 +405,20 @@ public class Blofeld extends Synth
     /** Adds an Effect category.  */
     public JComponent addEffect(final int effect, Color color)
         {
-     // Effects are problematic because effect parameters are shared, and the same parameter
-    // doesn't necessarily have the same range from effect type to effect type, grrr.
-    // Additionally we have to remove and add various dials and other components depending
-    // on the current effect being displayed, so we need to know the components we can show
-    // and hide, and the boxes to put them in dynamically.
+        // Effects are problematic because effect parameters are shared, and the same parameter
+        // doesn't necessarily have the same range from effect type to effect type, grrr.
+        // Additionally we have to remove and add various dials and other components depending
+        // on the current effect being displayed, so we need to know the components we can show
+        // and hide, and the boxes to put them in dynamically.
 
-    // The two HBoxes for each effect (#1, #2)
-    final HBox[/*effect*/] parameters = new HBox[2];
+        // The two HBoxes for each effect (#1, #2)
+        final HBox[/*effect*/] parameters = new HBox[2];
         
-    // The various JComponents for different effect parameters
-    final JComponent[/*effect*/][/*effect type*/][/*parameters*/] parametersByEffect = new JComponent[2][9][];
+        // The various JComponents for different effect parameters
+        final JComponent[/*effect*/][/*effect type*/][/*parameters*/] parametersByEffect = new JComponent[2][9][];
         
 
-       // The first thing we have to do is build all the effect parameters for all the effect types
+        // The first thing we have to do is build all the effect parameters for all the effect types
         // and associate them with each effect type.  This is a lot of tedious work.
                 
         parametersByEffect[effect - 1][BYPASS] = new JComponent[0];
@@ -581,7 +581,7 @@ public class Blofeld extends Synth
 
 
 
-	///// MODULATION
+    ///// MODULATION
 
 
     /** Add the Modulation category */
@@ -687,7 +687,7 @@ public class Blofeld extends Synth
 
 
 
-	///// ENVELOPES
+    ///// ENVELOPES
 
 
 
@@ -698,8 +698,8 @@ public class Blofeld extends Synth
     /** Add an Envelope category */
     public JComponent addEnvelope(final int envelope, Color color)
         {
-    final EnvelopeDisplay[/*Env Number */][/*Envelope Type */] envelopeDisplays = new EnvelopeDisplay[4][5];
-    final HBox[/*Env Number*/] envelopeHBoxes = new HBox[4];
+        final EnvelopeDisplay[/*Env Number */][/*Envelope Type */] envelopeDisplays = new EnvelopeDisplay[4][5];
+        final HBox[/*Env Number*/] envelopeHBoxes = new HBox[4];
         
 
 
@@ -816,7 +816,7 @@ public class Blofeld extends Synth
 
 
 
-	///// LFOS
+    ///// LFOS
 
 
 
@@ -901,9 +901,9 @@ public class Blofeld extends Synth
 
 
 
-	///// PATCH INFORMATION
-	
-	
+    ///// PATCH INFORMATION
+        
+        
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
@@ -916,10 +916,10 @@ public class Blofeld extends Synth
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
         comp = new PatchDisplay(this, "Patch: ", "bank", "number", 4)
-        	{
-        	public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
-        	public String bankString(int bank) { return BANKS[bank]; }
-        	};
+            {
+            public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
+            public String bankString(int bank) { return BANKS[bank]; }
+            };
         hbox2.add(comp);
         comp = new PatchDisplay(this, "  ID: ", "id", null, 3);
         hbox2.add(comp);
@@ -1008,7 +1008,7 @@ public class Blofeld extends Synth
 
 
 
-	///// OSCILLATORS
+    ///// OSCILLATORS
 
 
 
@@ -1102,63 +1102,63 @@ public class Blofeld extends Synth
 
 
 
-	// This array stores the previous selected index of the wave table for each wave
-	int waves[] = { 0, 0, 0 };  // we don't NEED 3, but it keeps me from special-casing osc 3 in buildWavetable
+    // This array stores the previous selected index of the wave table for each wave
+    int waves[] = { 0, 0, 0 };  // we don't NEED 3, but it keeps me from special-casing osc 3 in buildWavetable
 
-	// This array stores the previous selected index of the sample for each wave
-	int samples[] = { 0, 0, 0 };  // we don't NEED 3, but it keeps me from special-casing osc 3 in buildWavetable
-	
-	// Changes the wavetable chooser to be either a list of wavetables or
-	// a list of sample numbers
-	public void buildWavetable(Chooser chooser, int osc, int bank)
-		{
-		int index = chooser.getIndex();
-		
-		if (bank == 0)
-			{
-			if (chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0]))
-				return;
-				
-			// save old sample index
-			samples[osc - 1] = chooser.getIndex();
-			
-			// maybe we can't do this ... checking....
-			String[] params1 = WAVES_LONG;
-			String[] params = new String[125];
-			System.arraycopy(params1, 0, params, 0, 73);
-			for(int i = 73; i < 86; i++)
-				params[i] = "Reserved " + (i - 6);
-			for(int i = 86; i < 125; i++)
-				params[i] = "User " + (i - 6);
-			if (osc == 3) params = WAVES_SHORT;
-			chooser.setElements("Wave", params);
-			
-			// restore old wave index
-			chooser.setIndex(waves[osc - 1]);
-			}
-		else
-			{
-			if (!(chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0])))
-				{
-				// maybe change just the label
-				//chooser.setLabel("Sample Bank " + SAMPLE_BANKS[bank]);
-				return;
-				}
-				
-			// save old wave index
-			waves[osc - 1] = chooser.getIndex();
-			
-			String[] params = new String[128];
-			for(int i = 0; i < 128; i++)
-				params[i] = "" + (i + 1) + "              ";
-			//chooser.setElements("Sample Bank " + SAMPLE_BANKS[bank], params);
-			chooser.setElements("Sample", params);
-			
-			// restore old sample index
-			chooser.setIndex(samples[osc - 1]);
-			}
-		}
-	
+    // This array stores the previous selected index of the sample for each wave
+    int samples[] = { 0, 0, 0 };  // we don't NEED 3, but it keeps me from special-casing osc 3 in buildWavetable
+        
+    // Changes the wavetable chooser to be either a list of wavetables or
+    // a list of sample numbers
+    public void buildWavetable(Chooser chooser, int osc, int bank)
+        {
+        int index = chooser.getIndex();
+                
+        if (bank == 0)
+            {
+            if (chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0]))
+                return;
+                                
+            // save old sample index
+            samples[osc - 1] = chooser.getIndex();
+                        
+            // maybe we can't do this ... checking....
+            String[] params1 = WAVES_LONG;
+            String[] params = new String[125];
+            System.arraycopy(params1, 0, params, 0, 73);
+            for(int i = 73; i < 86; i++)
+                params[i] = "Reserved " + (i - 6);
+            for(int i = 86; i < 125; i++)
+                params[i] = "User " + (i - 6);
+            if (osc == 3) params = WAVES_SHORT;
+            chooser.setElements("Wave", params);
+                        
+            // restore old wave index
+            chooser.setIndex(waves[osc - 1]);
+            }
+        else
+            {
+            if (!(chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0])))
+                {
+                // maybe change just the label
+                //chooser.setLabel("Sample Bank " + SAMPLE_BANKS[bank]);
+                return;
+                }
+                                
+            // save old wave index
+            waves[osc - 1] = chooser.getIndex();
+                        
+            String[] params = new String[128];
+            for(int i = 0; i < 128; i++)
+                params[i] = "" + (i + 1) + "              ";
+            //chooser.setElements("Sample Bank " + SAMPLE_BANKS[bank], params);
+            chooser.setElements("Sample", params);
+                        
+            // restore old sample index
+            chooser.setIndex(samples[osc - 1]);
+            }
+        }
+        
 
     /** Add an Oscillator category */
     public JComponent addOscillator(final int osc, Color color)
@@ -1170,7 +1170,7 @@ public class Blofeld extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
                 
-		final Chooser chooser = new Chooser("Wave", this, "osc" + osc + "shape", new String[]{ "Yo Mama" });  // gotta have at least one item as a throwaway and it can't be WAVES_LONG[0]
+        final Chooser chooser = new Chooser("Wave", this, "osc" + osc + "shape", new String[]{ "Yo Mama" });  // gotta have at least one item as a throwaway and it can't be WAVES_LONG[0]
         comp = chooser;
         vbox.add(comp);
         buildWavetable(chooser, osc, 0);
@@ -1184,21 +1184,21 @@ public class Blofeld extends Synth
         
         
         if (osc != 3)
-			{
-			params = SAMPLE_BANKS;
+            {
+            params = SAMPLE_BANKS;
             comp = new Chooser("Sample Bank [SL]", this, "osc" + osc + "samplebank", params);
-			
-			model.register("osc" + osc + "samplebank", new Updatable()
-				{
-   				public void update(String key, Model model)
-   					{
-   					int state = model.get(key, 0);
-   					buildWavetable(chooser, osc, state);
-   					// force an emit
-   					model.set("osc" + osc + "shape", model.get("osc" + osc + "shape", 0));
-   					}
-				});
-        	model.setImmutable("osc" + osc + "samplebank", true);
+                        
+            model.register("osc" + osc + "samplebank", new Updatable()
+                {
+                public void update(String key, Model model)
+                    {
+                    int state = model.get(key, 0);
+                    buildWavetable(chooser, osc, state);
+                    // force an emit
+                    model.set("osc" + osc + "shape", model.get("osc" + osc + "shape", 0));
+                    }
+                });
+            model.setImmutable("osc" + osc + "samplebank", true);
 
             vbox.add(comp);
             }
@@ -1284,13 +1284,13 @@ public class Blofeld extends Synth
         ((LabelledDial)comp).setSecondLabel("Balance");
         hbox.add(comp);
 
-		vbox = new VBox();
+        vbox = new VBox();
         if (osc != 3)
             {
             // 0 is ON for Limit WT, 1 is OFF.  It's flipped relative to other switches
             comp = new CheckBox("Limit WT", this, "osc" + osc + "limitwt", true);
             vbox.add(comp);
-          }
+            }
             
                 
         if (osc == 2)
@@ -1299,7 +1299,7 @@ public class Blofeld extends Synth
             ((CheckBox)comp).addToWidth(1);
             vbox.add(comp);
             }
-		hbox.add(vbox);
+        hbox.add(vbox);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -1311,7 +1311,7 @@ public class Blofeld extends Synth
 
 
 
-	///// FILTERS
+    ///// FILTERS
 
 
     /** Add a Filter category */
@@ -1446,14 +1446,14 @@ public class Blofeld extends Synth
     "osc1keytrack",
     "osc1fmsource",
     "osc1fmamount",
-    "osc1shape",					// *
+    "osc1shape",                                        // *
     "osc1pulsewidth",
     "osc1pwmsource",
     "osc1pwmamount",
     "-",
     "-",
     "osc1limitwt",
-    "osc1samplebank",					// *
+    "osc1samplebank",                                   // *
     "osc1brilliance",
     "osc2octave",                   // *
     "osc2semitone",
@@ -1462,14 +1462,14 @@ public class Blofeld extends Synth
     "osc2keytrack",
     "osc2fmsource",
     "osc2fmamount",
-    "osc2shape",					// *
+    "osc2shape",                                        // *
     "osc2pulsewidth",
     "osc2pwmsource",
     "osc2pwmamount",
     "-",
     "-",
     "osc2limitwt",
-    "osc2samplebank",					// *
+    "osc2samplebank",                                   // *
     "osc2brilliance",
     "osc3octave",                   // *
     "osc3semitone",
@@ -1833,11 +1833,11 @@ public class Blofeld extends Synth
 
 
 
-	////////////// SYNTH ABSTRACT METHOD IMPLEMENTATIONS  //////////////////
+    ////////////// SYNTH ABSTRACT METHOD IMPLEMENTATIONS  //////////////////
 
 
 
-	// READING AND WRITING
+    // READING AND WRITING
 
     public byte[] emit(String key)
         {
@@ -1909,7 +1909,7 @@ public class Blofeld extends Synth
                 {
                 byte c = 0x20;  // space
                 if (i < name.length())
-                	c = (byte)(name.charAt(i));
+                    c = (byte)(name.charAt(i));
                 int index = i + 363;
                 byte HH = (byte)((index >> 7) & 127);
                 byte PP = (byte)(index & 127);
@@ -1995,9 +1995,9 @@ public class Blofeld extends Synth
         for(int i = 363; i < 379; i++)
             {
             if (i - 363 >= name.length())
-            	bytes[i] = 0x20;  // space
+                bytes[i] = 0x20;  // space
             else
-	            bytes[i] = (byte)(name.charAt(i - 363));
+                bytes[i] = (byte)(name.charAt(i - 363));
             }
                 
         bytes[379] = (byte)(model.get("category", 0));
@@ -2024,81 +2024,81 @@ public class Blofeld extends Synth
 
 
 
-	public void setParameterByIndex(int i, byte b)
-		{
-		String key = allParameters[i];
-		if (key.equals("-"))
-			{
-			// do nothing
-			}
-		else if (key.equals("osc1octave") || key.equals("osc2octave") || key.equals("osc3octave"))
-			{
-			model.set(key, (b - 16) / 12);
-			}
-		else if (key.equals("oscallocation, unisono"))
-			{
-			model.set("oscallocation", b >> 4);
-			model.set("unisono", b & 7);
-			}
-		else if (key.equals("envelope1mode, envelope1trigger") ||
-			key.equals("envelope2mode, envelope2trigger") ||
-			key.equals("envelope3mode, envelope3trigger") ||
-			key.equals("envelope4mode, envelope4trigger"))
-			{
-			try { 
-				int j = Integer.parseInt(key.substring(8, 9)); 
-				model.set("envelope" + j + "trigger", b >> 5);
-				model.set("envelope" + j + "mode", b & 7);  // even though it's supposed to be 5 bits, only 3 are used!
-				}
-			catch (Exception e) { e.printStackTrace(); }
-			}
-		else if (i >= 327 && i <= 342) // step/glide/accent
-			{
-			int j = i - 326;
-			model.set("arp" + (j < 10 ? "0" : "") + j + "step", b >> 4);
-			model.set("arp" + (j < 10 ? "0" : "") + j + "glide", (b >> 3) & 1);
-			model.set("arp" + (j < 10 ? "0" : "") + j + "accent", (b & 7));
-			}
-		else if (i >= 343 && i <= 358) // timing/length
-			{
-			int j = i - 342;
-			model.set("arp" + (j < 10 ? "0" : "") + j + "length", b >> 4);
-			model.set("arp" + (j < 10 ? "0" : "") + j + "timing", b & 7);
-			}
-		else if (i >= 363 && i < 363 + 16)  // name
-			{
-			try 
-				{
-				String name = model.get("name", "Init            ");
-				while(name.length() < 16)
-					name = name + " ";
-				byte[] str = name.getBytes("US-ASCII");
-				byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
-				System.arraycopy(str, 0, newstr, 0, 16);
-				newstr[i - 363] = b;
-				model.set("name", new String(newstr, "US-ASCII"));
-				}
-			catch (UnsupportedEncodingException e)
-				{
-				e.printStackTrace();
-				}
-			}
-		else
-			{
-			model.set(key, b);
-			}
-		}
+    public void setParameterByIndex(int i, byte b)
+        {
+        String key = allParameters[i];
+        if (key.equals("-"))
+            {
+            // do nothing
+            }
+        else if (key.equals("osc1octave") || key.equals("osc2octave") || key.equals("osc3octave"))
+            {
+            model.set(key, (b - 16) / 12);
+            }
+        else if (key.equals("oscallocation, unisono"))
+            {
+            model.set("oscallocation", b >> 4);
+            model.set("unisono", b & 7);
+            }
+        else if (key.equals("envelope1mode, envelope1trigger") ||
+            key.equals("envelope2mode, envelope2trigger") ||
+            key.equals("envelope3mode, envelope3trigger") ||
+            key.equals("envelope4mode, envelope4trigger"))
+            {
+            try { 
+                int j = Integer.parseInt(key.substring(8, 9)); 
+                model.set("envelope" + j + "trigger", b >> 5);
+                model.set("envelope" + j + "mode", b & 7);  // even though it's supposed to be 5 bits, only 3 are used!
+                }
+            catch (Exception e) { e.printStackTrace(); }
+            }
+        else if (i >= 327 && i <= 342) // step/glide/accent
+            {
+            int j = i - 326;
+            model.set("arp" + (j < 10 ? "0" : "") + j + "step", b >> 4);
+            model.set("arp" + (j < 10 ? "0" : "") + j + "glide", (b >> 3) & 1);
+            model.set("arp" + (j < 10 ? "0" : "") + j + "accent", (b & 7));
+            }
+        else if (i >= 343 && i <= 358) // timing/length
+            {
+            int j = i - 342;
+            model.set("arp" + (j < 10 ? "0" : "") + j + "length", b >> 4);
+            model.set("arp" + (j < 10 ? "0" : "") + j + "timing", b & 7);
+            }
+        else if (i >= 363 && i < 363 + 16)  // name
+            {
+            try 
+                {
+                String name = model.get("name", "Init            ");
+                while(name.length() < 16)
+                    name = name + " ";
+                byte[] str = name.getBytes("US-ASCII");
+                byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
+                System.arraycopy(str, 0, newstr, 0, 16);
+                newstr[i - 363] = b;
+                model.set("name", new String(newstr, "US-ASCII"));
+                }
+            catch (UnsupportedEncodingException e)
+                {
+                e.printStackTrace();
+                }
+            }
+        else
+            {
+            model.set(key, b);
+            }
+        }
 
 
 
     public void parseParameter(byte[] data)
-		{
-		int index = -1;
-		byte b = 0;
-		
-		// is it a sysex parameter change?
+        {
+        int index = -1;
+        byte b = 0;
+                
+        // is it a sysex parameter change?
         if (data[0] == (byte)0xF0 &&
-           	data[1] == (byte)0x3E &&
+            data[1] == (byte)0x3E &&
             data[2] == (byte)0x13 &&
             // filter by ID?  Presently I'm not
             data[4] == (byte)0x20 &&
@@ -2113,28 +2113,28 @@ public class Blofeld extends Synth
             setParameterByIndex(index, b);
             }
         else
-        	{
-        	// we'll put CC here later
-        	}
+            {
+            // we'll put CC here later
+            }
         revise();
-		}
+        }
         
     public boolean parse(byte[] data, boolean ignorePatch)
         {
         boolean retval = true;
-        	model.set("id", data[3]);
-        	if (!ignorePatch && data[5] < 8)  // otherwise it's probably just local patch data.  Too bad they do this. :-(
-        		{
-       		 	model.set("bank", data[5]);
-        		model.set("number", data[6]);
-        		}
-        	else
-        		{
-        		model.set("bank", 0);
-        		model.set("number", 0);
-        		retval = false;
-        		}
-        	
+        model.set("id", data[3]);
+        if (!ignorePatch && data[5] < 8)  // otherwise it's probably just local patch data.  Too bad they do this. :-(
+            {
+            model.set("bank", data[5]);
+            model.set("number", data[6]);
+            }
+        else
+            {
+            model.set("bank", 0);
+            model.set("number", 0);
+            retval = false;
+            }
+                
         for(int i = 0; i < 380; i++)
             {
             setParameterByIndex(i, data[i + 7]);
@@ -2169,18 +2169,18 @@ public class Blofeld extends Synth
         }
 
 
-	public void changePatch(Model tempModel)
-		{
+    public void changePatch(Model tempModel)
+        {
         byte BB = (byte)tempModel.get("bank", 0);
         byte NN = (byte)tempModel.get("number", 0);
-       try {
-        // Bank change is CC 32
-        tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut() - 1, 32, BB));
-        // Number change is PC
-        tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut() - 1, NN, 0));
-        }
+        try {
+            // Bank change is CC 32
+            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut() - 1, 32, BB));
+            // Number change is PC
+            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut() - 1, NN, 0));
+            }
         catch (Exception e) { e.printStackTrace(); }
-		}
+        }
 
     public byte[] requestDump(Model tempModel)
         {
@@ -2212,11 +2212,11 @@ public class Blofeld extends Synth
     public static boolean recognize(byte[] data)
         {
         boolean v = (
-        		data.length == EXPECTED_SYSEX_LENGTH &&
-        		data[0] == (byte)0xF0 &&
-           		data[1] == (byte)0x3E &&
-            	data[2] == (byte)0x13 &&
-            	data[4] == (byte)0x10);
+            data.length == EXPECTED_SYSEX_LENGTH &&
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x3E &&
+            data[2] == (byte)0x13 &&
+            data[4] == (byte)0x10);
         return v;
         }
     

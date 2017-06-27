@@ -9,7 +9,7 @@ package edisyn.gui;
 import java.util.prefs.*;
 
 /** 
-A simple cover class for Java's preferences system.
+    A simple cover class for Java's preferences system.
 */
 
 public class Prefs

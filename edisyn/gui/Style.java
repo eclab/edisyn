@@ -56,7 +56,7 @@ public class Style
     public static final Color COLOR_C = new Color(200, 200, 0); 
     /** Color for the category holding critical global stuff like patch name, patch number, etc. */
     public static final Color COLOR_GLOBAL = Color.white;
-	/** Actual inset distance in case a JLabel is the first item */
+    /** Actual inset distance in case a JLabel is the first item */
     public static final int CATEGORY_INSET_DISTANCE = 8;
     
     
@@ -103,8 +103,8 @@ public class Style
     /////// CHECKBOX CONSTANTS
     /** Border around arpeggiator checkboxes */
     public static final Border CHECKBOX_HIGHLIGHTED_BORDER = BorderFactory.createCompoundBorder(
-    												BorderFactory.createEmptyBorder(2, 2, 2, 2),
-    												BorderFactory.createLineBorder(Color.red, 1, true));
+        BorderFactory.createEmptyBorder(2, 2, 2, 2),
+        BorderFactory.createLineBorder(Color.red, 1, true));
     public static final Border CHECKBOX_NON_HIGHLIGHTED_BORDER = BorderFactory.createEmptyBorder(3, 3, 3, 3);
     
 
@@ -122,26 +122,26 @@ public class Style
     private static String OS = System.getProperty("os.name").toLowerCase();
 
     public static boolean isWindows() 
-    	{
+        {
         return (OS.indexOf("win") >= 0);
-	    }
+        }
 
     public static boolean isMac() 
-    	{
+        {
         return (OS.indexOf("mac") >= 0);
-	    }
+        }
 
     public static boolean isUnix() 
-    	{
+        {
         return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
-    	}
-    	
+        }
+        
     static
-    	{
-    	if (isUnix())
-    		{
-    		SMALL_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 9);
-    		CHOOSER_INSETS = new Insets(0, 0, 2, 4); 
-    		}
-    	}    
+        {
+        if (isUnix())
+            {
+            SMALL_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 9);
+            CHOOSER_INSETS = new Insets(0, 0, 2, 4); 
+            }
+        }    
     }

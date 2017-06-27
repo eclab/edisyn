@@ -23,7 +23,7 @@ public class Edisyn
     public static void main(String[] args)
         {
         try {
-    		System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
+            System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             
             // This no longer works as of Java 7
@@ -35,24 +35,24 @@ public class Edisyn
             }
         catch(Exception e) { }
 
-//	OSXSetup();
+//      OSXSetup();
 
-		if (Synth.doNewSynthPanel() == null)
-		System.exit(0);
+        if (Synth.doNewSynthPanel() == null)
+            System.exit(0);
         }
 
 /*
-public static void OSXSetup() {
-Application app = Application.getApplication();
+  public static void OSXSetup() {
+  Application app = Application.getApplication();
 
-app.setAboutHandler(new AboutHandler()
-	 {
-    public void handleAbout(AppEvent.AboutEvent ae) 
-    	{
-    	System.err.println("Yo yo yo");
-		}
-	});
+  app.setAboutHandler(new AboutHandler()
+  {
+  public void handleAbout(AppEvent.AboutEvent ae) 
+  {
+  System.err.println("Yo yo yo");
+  }
+  });
 
-    }
+  }
 */
-}
+    }

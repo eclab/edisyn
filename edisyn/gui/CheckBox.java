@@ -40,9 +40,9 @@ public class CheckBox extends NumericalComponent
         }
                 
     public void addToWidth(int val)
-    	{
-    	addToWidth = val;
-    	}
+        {
+        addToWidth = val;
+        }
               
     public JCheckBox getCheckBox() { return check; }
       
@@ -53,18 +53,18 @@ public class CheckBox extends NumericalComponent
         this.flipped = flipped;
                 
         check = new JCheckBox(label)
-        	{
-        	public Dimension getMinimumSize() 
-        		{
-        		return getPreferredSize(); 
-        		}
-        	public Dimension getPreferredSize()
-        		{
-				Dimension d = super.getPreferredSize();
-				d.width += addToWidth;
-				return d;
-        		}        		
-        	};
+            {
+            public Dimension getMinimumSize() 
+                {
+                return getPreferredSize(); 
+                }
+            public Dimension getPreferredSize()
+                {
+                Dimension d = super.getPreferredSize();
+                d.width += addToWidth;
+                return d;
+                }                       
+            };
         check.setFont(Style.SMALL_FONT);
         check.setBackground(Style.TRANSPARENT);
         check.setForeground(Style.TEXT_COLOR);

@@ -123,6 +123,13 @@ doesn't open a new window.
 * *Save* and *Save As...* save to a sysex file.
 
 
+### The Edit Menu
+
+* *Undo* Undoes the most recent change to a parameter, patch randomization, patch reset, patch loading, etc..  Note that if you made multipe changes to the *same* parameter in a row, Undo will undo all of them.  If you undo a change, Edisyn will assume that the model is now unsynced. There are infinite levels of Undo.
+
+* *Redo* Undoes the undo.  There are infinite levels of Redo.
+
+
 ### The MIDI Menu
 
 Note that you can *send* a patch to the synthesizer and you can *write* a patch to the synthesizer.  The former

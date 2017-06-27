@@ -49,6 +49,8 @@ public abstract class Synth extends JComponent implements Updatable
 
     public Midi.Tuple tuple;
     
+    public Undo undo = new Undo();
+    
     public CCMap ccmap;
     public int lastCC = -1;
         
@@ -65,6 +67,7 @@ public abstract class Synth extends JComponent implements Updatable
     	synced = val;
     	for(int i = 0; i < patchDisplays.size(); i++)
     		((PatchDisplay)(patchDisplays.get(i))).update("whatever", getModel());
+    	updateTitle();
     	}
     public boolean isSynced() { return synced; }
     	
@@ -180,15 +183,16 @@ public abstract class Synth extends JComponent implements Updatable
         	{
         	String synthName = getSynthName().trim();
         	String patchName = "        " + (getPatchName() == null ? "" : getPatchName().trim());
-        	String fileName = (getFile() == null ? "" : "        " + getFile().getName());
-        	String disconnectedWarning = ((tuple == null || tuple.in == null) ? "        DISCONNECTED" : "");
-        	String learningWarning = (learning ? "        LEARNING" +
+        	String fileName = (getFile() == null ? "        Untitled" : "        " + getFile().getName());
+        	String disconnectedWarning = ((tuple == null || tuple.in == null) ? "  DISCONNECTED" : "");
+        	String outOfSyncWarning = (isSynced() ? "" : "  UNSYNCED");
+        	String learningWarning = (learning ? "  LEARNING" +
         		(model.getLastKey() != null ? " " + model.getLastKey() + 
         			(model.getRange(model.getLastKey()) > 0 ? "[" + model.getRange(model.getLastKey()) + "]" : "") + 
         			(ccmap.getCCForKey(model.getLastKey()) >= 0 ? "=" + ccmap.getCCForKey(model.getLastKey()) : "")
         			: "") : "");
         
-            frame.setTitle(synthName + patchName + fileName + disconnectedWarning + learningWarning);
+            frame.setTitle(synthName + fileName + "        " + disconnectedWarning + outOfSyncWarning + learningWarning);
             }
         }
 
@@ -198,6 +202,8 @@ public abstract class Synth extends JComponent implements Updatable
         {
         model = new Model();
         model.register(Model.ALL_KEYS, this);
+        model.setUndoListener(undo);
+        undo.setWillPush(false);  // instantiate undoes this
         random = new Random(System.currentTimeMillis());
 		ccmap = new CCMap(Prefs.getAppPreferences(getSynthName(), "CC"));
 		setLayout(new BorderLayout());
@@ -259,6 +265,8 @@ public abstract class Synth extends JComponent implements Updatable
         instead to allow you to do what you wish with it. */
     public void mutate(double probability)
         {
+        undo.push(getModel());
+        undo.setWillPush(false);
         String[] keys = model.getKeys();
         for(int i = 0; i < keys.length; i++)
             {
@@ -288,6 +296,7 @@ public abstract class Synth extends JComponent implements Updatable
                     }
                 }
             }
+        undo.setWillPush(true);
         }
     
     /** Called by the model to update the synth whenever a parameter is changed. */
@@ -331,7 +340,12 @@ public abstract class Synth extends JComponent implements Updatable
                                 setSendMIDI(false);
                                 Synth newSynth = instantiate(Synth.this.getClass(), getSynthName(), true, false, tuple);
                                 newSynth.parse(data, true);
+								undo.setWillPush(false);
+                                Model backup = (Model)(model.clone());
                                 merge(newSynth.getModel(), 0.5);
+								undo.setWillPush(true);
+                                if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                                	undo.push(backup);
                                 setSendMIDI(true);
                                 sendAllParameters();
                                 updateTitle();
@@ -340,7 +354,12 @@ public abstract class Synth extends JComponent implements Updatable
                                 {
                                 // we turn off MIDI because parse() calls revise() which triggers setParameter() with its changes
                                 setSendMIDI(false);
+                                undo.setWillPush(false);
+                                Model backup = (Model)(model.clone());
                                 boolean canSync = parse(data, false);
+                                undo.setWillPush(true);
+                                if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                                	undo.push(backup);
                                 setSendMIDI(true);
                                 if (canSync)
                                 	{
@@ -545,7 +564,7 @@ public abstract class Synth extends JComponent implements Updatable
     	{
 		try
 			{
-			Synth synth = (Synth)(_class.newInstance());
+			Synth synth = (Synth)(_class.newInstance()); // this will setWillPush(false);
 			if (!throwaway)
 				{
 				synth.sprout();
@@ -559,6 +578,7 @@ public abstract class Synth extends JComponent implements Updatable
 				// a MIDI sysex message in response to the window becoming front.
 				synth.windowBecameFront();				
 				}
+			synth.undo.setWillPush(true);
 			return synth;
 			}
 		catch (IllegalAccessException e2)
@@ -674,6 +694,37 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
+        menu = new JMenu("Edit");
+        menubar.add(menu);
+                
+                
+        JMenuItem _undo = new JMenuItem("Undo");
+        _undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(_undo);
+        _undo.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                if (model.equals(undo.top()))
+                	model = undo.undo(null);  // don't push into the redo stack
+                model = undo.undo(model);
+	            model.updateAllListeners();
+	            setSynced(false);
+                }
+            });
+            
+        JMenuItem _redo = new JMenuItem("Redo");
+        _redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(_redo);
+        _redo.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                model = (Model)(undo.redo(getModel()));
+                model.updateAllListeners();
+                }
+            });            
+            
         menu = new JMenu("MIDI");
         menubar.add(menu);
                 
@@ -845,7 +896,15 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
+                // because loadDefaults isn't wrapped in an undo, we have to
+                // wrap it manually here
+                undo.setWillPush(false);
+				Model backup = (Model)(model.clone());
 				loadDefaults();
+				undo.setWillPush(true);
+				if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+					undo.push(backup);
+
                 sendAllParameters();
                 }
             });
@@ -1428,9 +1487,13 @@ public abstract class Synth extends JComponent implements Updatable
 				else
 					{
 	                setSendMIDI(false);
-	                parse(data, false);
+					undo.setWillPush(false);
+					Model backup = (Model)(model.clone());
+					parse(data, false);
+					undo.setWillPush(true);
+					if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+						undo.push(backup);
 	                setSendMIDI(true);
-	                                
 	                file = f;
 	                setLastDirectory(fd.getDirectory());
 	                }
@@ -1599,6 +1662,7 @@ public abstract class Synth extends JComponent implements Updatable
     		}
     	}
     
+    // Note that this isn't wrapped in undo, so we can block it at instantiation
     public void loadDefaults()
     	{
         InputStream stream = getClass().getResourceAsStream(getDefaultResourceFileName());
@@ -1609,8 +1673,9 @@ public abstract class Synth extends JComponent implements Updatable
             	byte[] data = new byte[getExpectedSysexLength()];
 				int val = stream.read(data, 0, getExpectedSysexLength());
                 setSendMIDI(false);
-                parse(data, true);
+				parse(data, true);
                 setSendMIDI(true);
+                model.setUndoListener(undo);	// okay, redundant, but that way the pattern stays the same
 				}
 			catch (Exception e)
 				{

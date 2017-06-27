@@ -7,6 +7,7 @@ package edisyn;
 
 import java.util.*;
 import java.io.*;
+import edisyn.gui.*;
 
 /**
    Storage for the various synthesizer parameters.  The parameters are each associated
@@ -33,7 +34,7 @@ import java.io.*;
    @author Sean Luke
 */
 
-public class Model
+public class Model implements Cloneable
     {
     LinkedHashMap storage = new LinkedHashMap();
     HashMap min = new HashMap();
@@ -41,20 +42,78 @@ public class Model
     HashMap listeners = new HashMap();
     HashSet immutable = new HashSet();
     HashMap special = new HashMap();
+    Undo undoListener = null;
     
     String lastKey = null;
 
     public static final String ALL_KEYS = "ALL_KEYS";
     
+    public Undo getUndoListener() { return undoListener; }
+    public void setUndoListener(Undo up) { undoListener = up; }
+    
+    
+    public Object clone()
+    	{
+    	Model model = null;
+    	try { model = (Model)(super.clone()); }
+    	catch (Exception e) { }
+    	model.storage = (LinkedHashMap)(storage.clone());
+    	model.min = (HashMap)(min.clone());
+    	model.max = (HashMap)(max.clone());
+    	model.listeners = (HashMap)(listeners.clone());
+    	model.immutable = (HashSet)(immutable.clone());
+    	model.special = (HashMap)(special.clone());
+    	model.lastKey = null;
+    	return model;
+    	}
+    
+    public boolean equals(Object other)
+    	{
+    	if (other == null || !(other instanceof Model))
+    		return false;
+    	Model model = (Model) other;
+    	if (!storage.equals(model.storage))
+    		return false;
+    	if (!min.equals(model.min))
+    		return false;
+    	if (!max.equals(model.max))
+    		return false;
+    	if (!listeners.equals(model.listeners))
+    		return false;
+    	if (!immutable.equals(model.immutable))
+    		return false;
+    	if (!special.equals(model.special))
+    		return false;
+    	if (!lastKey.equals(model.lastKey))
+    		return false;
+    	return true;
+    	}
+
+
+    public boolean keyEquals(Model other)
+    	{
+    	if (other == null)
+    		return false;
+    	if (!storage.equals(other.storage))
+    		return false;
+    	return true;
+    	}
+    
+    public void updateAllListeners()
+    	{
+     	String[] keys = getKeys();
+    	for(int i = 0; i < keys.length; i++)
+			{
+			updateListenersForKey(keys[i]);
+			}
+	   	}
+    
     public void copyValuesTo(Model model)
     	{
     	model.storage.clear();
     	model.storage.putAll(storage);
-    	String[] keys = getKeys();
-    	for(int i = 0; i < keys.length; i++)
-			{
-			model.updateListenersForKey(keys[i]);
-			}
+    	model.updateAllListeners();
+    	model.lastKey = null;
     	}
     	
     /** Register a listener to be notified whenever the value associated with the
@@ -88,8 +147,14 @@ public class Model
     /** Adds a key with the given Integer value, or changes it to the given value. */        
     public void set(String key, int value)
         {
-        if (key.equals("name"))
-        	new Throwable().printStackTrace();
+        // when do we push on the undo stack?
+        if (
+        	undoListener != null && 	// when we have an undo listener AND
+        	!key.equals(lastKey) &&		// when the key is not the lastKey AND
+        	(!exists(key) ||			// the key doesn't exist OR
+        	 !isInteger(key) ||			// the value isn't an integer OR
+        	 value != get(key, 0))) 	// the value doesn't match the current value 
+	        	undoListener.push(this);
         storage.put(key, Integer.valueOf(value));
         lastKey = key;
         updateListenersForKey(key);
@@ -140,6 +205,14 @@ public class Model
     /** Adds a key with the given String value, or changes it to the given value. */        
     public void set(String key, String value)
         {
+        // when do we push on the undo stack?
+        if (
+        	undoListener != null && 	// when we have an undo listener AND
+        	!key.equals(lastKey) &&		// when the key is not the lastKey AND
+        	(!exists(key) ||			// the key doesn't exist OR
+        	 !isString(key) ||			// the value isn't a string OR
+        	 !value.equals(get(key, null)))) // the value doesn't match the current value 
+	        	undoListener.push(this);
         storage.put(key, value);
         lastKey = key;
         updateListenersForKey(key);

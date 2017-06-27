@@ -1132,6 +1132,8 @@ public class BlofeldMulti extends Synth
 			try 
 				{
 				String name = model.get("name", "Init Multi      ");
+				while(name.length() < 16)
+					name = name + " ";
 				byte[] str = name.getBytes("US-ASCII");
 				byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
 				System.arraycopy(str, 0, newstr, 0, 16);

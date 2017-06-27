@@ -2070,6 +2070,8 @@ public class Blofeld extends Synth
 			try 
 				{
 				String name = model.get("name", "Init            ");
+				while(name.length() < 16)
+					name = name + " ";
 				byte[] str = name.getBytes("US-ASCII");
 				byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
 				System.arraycopy(str, 0, newstr, 0, 16);
@@ -2280,7 +2282,6 @@ public class Blofeld extends Synth
             }
         }
 
-    /** Verify that all the parameters are within valid values, and tweak them if not. */
     void revise()
         {
         for(int i = 0; i < allParameters.length; i++)

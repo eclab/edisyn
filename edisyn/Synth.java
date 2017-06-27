@@ -53,8 +53,10 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem transmitTo;
     public JMenuItem transmitCurrent;
     public JMenuItem receive;
+    public JMenuItem undoMenu;
+    public JMenuItem redoMenu;
     
-    public Undo undo = new Undo();
+    public Undo undo = new Undo(this);
     
     public CCMap ccmap;
     public int lastCC = -1;
@@ -75,7 +77,13 @@ public abstract class Synth extends JComponent implements Updatable
         updateTitle();
         }
     public boolean isSynced() { return synced; }
-        
+    
+    public void updateUndoMenus()
+    	{
+    	redoMenu.setEnabled(undo.shouldShowRedoMenu());
+    	undoMenu.setEnabled(undo.shouldShowUndoMenu());
+    	}
+    
     ArrayList patchDisplays = new ArrayList();
     public void addPatchDisplay(PatchDisplay display)
         {
@@ -703,10 +711,11 @@ public abstract class Synth extends JComponent implements Updatable
         menubar.add(menu);
                 
                 
-        JMenuItem _undo = new JMenuItem("Undo");
-        _undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        menu.add(_undo);
-        _undo.addActionListener(new ActionListener()
+        undoMenu = new JMenuItem("Undo");
+        undoMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(undoMenu);
+        undoMenu.setEnabled(false);
+        undoMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
@@ -718,10 +727,11 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
             
-        JMenuItem _redo = new JMenuItem("Redo");
-        _redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        menu.add(_redo);
-        _redo.addActionListener(new ActionListener()
+        redoMenu = new JMenuItem("Redo");
+        redoMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(redoMenu);
+        redoMenu.setEnabled(false);
+        redoMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
@@ -938,7 +948,7 @@ public abstract class Synth extends JComponent implements Updatable
         menu.addSeparator();
 
         JMenuItem burn = new JMenuItem("Write Patch To...");
-        burn.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        burn.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(burn);
         burn.addActionListener(new ActionListener()
             {
@@ -1606,7 +1616,7 @@ public abstract class Synth extends JComponent implements Updatable
         JPanel p = new JPanel();
         p.setLayout(new BorderLayout());
         p.add(new JLabel("    "), BorderLayout.NORTH);
-        p.add(new JLabel("Select a Synthesizer to Edit"), BorderLayout.CENTER);
+        p.add(new JLabel("Select a Synthesizer to Edit:"), BorderLayout.CENTER);
         p.add(new JLabel("    "), BorderLayout.SOUTH);
 
         JPanel p2 = new JPanel();

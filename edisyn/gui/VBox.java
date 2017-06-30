@@ -25,6 +25,7 @@ import java.awt.event.*;
 public class VBox extends JComponent
     {
     Box box;
+    JComponent bottom;
         
     public Insets getInsets() { return Style.VBOX_INSETS; }
 
@@ -39,15 +40,24 @@ public class VBox extends JComponent
     public void revalidate()
         {
         box.revalidate();
+        super.revalidate();
         }
                 
     public void removeAll()
         {
         box.removeAll();
+        if (bottom != null)
+        	remove(bottom);
         }               
                 
     public void add(JComponent component)
         {
         box.add(component);
         }
+    
+    public void addBottom(JComponent component)
+    	{
+    	bottom = component;
+    	add(bottom, BorderLayout.SOUTH);
+    	}
     }

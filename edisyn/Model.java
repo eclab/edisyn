@@ -20,16 +20,7 @@ import edisyn.gui.*;
    interface.  A listener can also be registered to be called whenever <i>any</i>
    value is updated.
    
-   <p><b>Mutation</b>  Sometimes you want to mutate or randomize parameters in some way.
-   The Model provides some support to indicate how or whether parameters should be
-   randomizable.  Specifically, parameters can be declared IMMUTABLE,
-   meaning that they wish to resist being mutated or randomized; such parameters should
-   be handled specially (via the Synth.immutableMutate() method) rather than simply
-   randomized automatically by your code when the time comes.  Integer Parameters can also 
-   have a list of VALUES that are declared SPECIAL.  This implies that these specific
-   values should be more often chosen through randomization than other values; one approach
-   is to (with 50% probability) choose one of those values, else choose any value in the range
-   between minimum and maximum inclusive.
+   <p><b>Mutation</b>.  To assist in mutating or crossing over parameters, the model
         
    @author Sean Luke
 */
@@ -40,8 +31,9 @@ public class Model implements Cloneable
     HashMap min = new HashMap();
     HashMap max = new HashMap();
     HashMap listeners = new HashMap();
+    HashMap metricMin = new HashMap();
+    HashMap metricMax = new HashMap();
     HashSet immutable = new HashSet();
-    HashMap special = new HashMap();
     Undo undoListener = null;
     
     String lastKey = null;
@@ -50,6 +42,207 @@ public class Model implements Cloneable
     
     public Undo getUndoListener() { return undoListener; }
     public void setUndoListener(Undo up) { undoListener = up; }
+    
+    /** Returns TRUE with the given probability. */
+    boolean coinToss(Random random, double probability)
+        {
+        if (probability==0.0) return false;     // fix half-open issues
+        else if (probability==1.0) return true; // fix half-open issues
+        else return random.nextDouble() < probability; 
+        }
+        
+    /** Produces a random value in the fully closed range [a, b]. */
+    int randomValueWithin(Random random, int a, int b)
+    	{
+    	if (a > b) { int swap = a; a = b; b = swap; }
+    	if (a == b) return a;
+    	int range = (b - a + 1);
+    	return a + random.nextInt(range);
+    	}
+
+    /** Produces a random value in the fully closed range [a, b],
+    	choosing from a uniform distribution of size +- weight * (a-b),
+    	centered at *center*, and rounded to the nearest integer. */
+    int randomValueWithin(Random random, int a, int b, int center, double weight)
+    	{
+    	if (a > b) { int swap = a; a = b; b = swap; }
+    	if (a == b) return a;
+    	
+    	double range = (b - a + 1);  // 0.5 on each side
+    	
+    	// pick a random number from -1...+1
+    	double delta = 0.0;
+    	while(true)
+    		{
+	    	delta = (random.nextDouble() * 2 - 1) * weight * range / 2.0;
+	    	if ((center + delta) > (a - 0.5) &&
+	    		(center + delta) < (b + 0.5))
+	    		break;
+	    	}
+	    int result = (int)(Math.round(center + delta));
+	    
+	    // slight tweak if we're at the same result
+	    if (result == center && coinToss(random, weight))
+	    	{
+	    	while(true)
+	    		{
+	    		int delta2 = (coinToss(random, 0.5) ? 1 : -1);
+	    		if ((center + delta2) >= a && 
+	    			(center + delta2) <= b)
+	    			{ result = center + delta2; break; }
+	    		}
+	    	}
+	    return result;
+    	}
+
+
+	/** Mutation works as follows.  For each key, we first see if we're permitted to mutate it
+		(no immutable, no strings).  If so, we divide the range into the METRIC and NON-METRIC
+		regions.  If it's all NON-METRIC, then with WEIGHT probability we will pick a new
+		value at random (else stay).  Else if we're in a non-metric region, with 0.5 chance we'll
+		pick a new random non-metric value with WEIGHT probability (else stay), and with 0.5 chance we'll 
+		pick a completely random metric value with WEIGHT probability (else stay). Else if we're in a metric 
+		region, with 0.5 chance we will pick a non-metric value with WEIGHT probability (else stay), and with 
+		0.5 chance we will do a METRIC MUTATION.
+		
+		<p>A metric mutation selects under a uniform rectangular distribution centered at the current value.
+		The rectangular distribution is the delta function when WEIGHT is 0.0 and is the full range from
+		metric min to metric max inclusive when WEIGHT is 1.0.  We repeat this selection until we get a value
+		within metric min and metric max.
+	*/
+	
+	public void mutate(Random random, double weight)
+		{
+    	String[] keys = getKeys();
+        for(int i = 0; i < keys.length; i++)
+            {
+            // return if the key is immutable, it's a string, or we fail the coin toss
+            if (isImmutable(keys[i])) continue;
+            if (isString(keys[i])) continue;
+
+            
+			boolean hasMetric = false;					// do we even HAVE a metric range?
+			boolean doMetric = false;					// are we in that range, and should mutate within it?
+			boolean pickRandomInMetric = false;			// are we NOT in that range, but should maybe go to a random value in it?
+			
+			if (metricMinExists(keys[i]) &&
+				metricMaxExists(keys[i]))
+				{
+				hasMetric = true;
+				if (getMetricMax(keys[i]) == getMax(keys[i]) &&
+					getMetricMin(keys[i]) == getMin(keys[i])) // has no non-metric
+						{
+						doMetric = true;
+						}
+				else if (get(keys[i], 0) >= getMetricMin(keys[i]) &&
+						 get(keys[i], 0) <= getMetricMax(keys[i]))		 // we're within metric range
+					{
+					if (coinToss(random, 0.5))
+						doMetric = true;				// we will stay in the metric range and mutate within it (versus jump out)
+					}
+				else	// we're outside the metric range
+					{
+					if (coinToss(random, 0.5))
+						pickRandomInMetric = true;		// we are out of the metric range but may go inside it (versus stay outside)
+					}
+				}
+			else	// there is no metric range
+				{
+				// do nothing.
+				}
+				
+			// now perform the operation
+		
+			if (doMetric)							// definitely do a metric mutation
+				{
+				int a = getMetricMin(keys[i]);
+				int b = getMetricMax(keys[i]);
+				set(keys[i], randomValueWithin(random, getMetricMin(keys[i]), getMetricMax(keys[i]), get(keys[i], 0), weight));
+				}
+			else if (pickRandomInMetric)			// MAYBE jump into metric
+				{
+				if (coinToss(random, weight))
+					{
+					set(keys[i], randomValueWithin(random, getMetricMin(keys[i]), getMetricMax(keys[i])));
+					}
+				}
+			else if (hasMetric)						// MAYBE choose a random new non-metric location
+				{
+				if (coinToss(random, weight))
+					{
+					int lowerRange = getMetricMin(keys[i]) - getMin(keys[i]);
+					int upperRange = getMax(keys[i]) - getMetricMax(keys[i]);
+					int delta = random.nextInt(lowerRange + upperRange);
+					if (delta < lowerRange)
+						{
+						set(keys[i], getMin(keys[i]) + delta);
+						}
+					else
+						{
+						set(keys[i], getMetricMax(keys[i]) + 1 + (delta - lowerRange));
+						}
+					}
+				}
+			else									// MAYBE choose a random new non-metric location (easiest because there is no metric location)
+				{
+				if (coinToss(random, weight))
+					{
+					set(keys[i], randomValueWithin(random, getMin(keys[i]), getMax(keys[i])));
+					}
+				}
+			}
+		}
+
+
+
+	/** Recombination works as follows.  For each key, we first see if we're permitted to mutate it
+		(no immutable, other model doesn't have the key).  Next with 1.0 - WEIGHT probability 
+		we don't recombine at all. Otherwise we recombine:
+		
+		<p>If the parameter is a string, with 0.5 probability we keep our value, else we adopt
+		   the other model's value.  If the parameter is an integer, and we have a metric range,
+		   and BOTH our value AND the other model's value are within that range, then we do 
+		   metric crossover: we pick a random new value between the two values inclusive.
+		   Otherwise with 0.5 probability we select our parameter, else the other model's parameter.
+	*/
+    public void recombine(Random random, Model model, double weight)
+    	{
+    	String[] keys = getKeys();
+        for(int i = 0; i < keys.length; i++)
+            {
+            // return if the key doesn't exist, is immutable, or we fail the coin toss
+            if (!model.exists(keys[i])) continue;
+            if (isImmutable(keys[i])) continue;
+            if (coinToss(random, 1.0 - weight)) continue;
+            
+            // is it a string?
+            if (isString(keys[i]))
+            	{ 
+				if (coinToss(random, 0.5))
+            		set(keys[i], model.get(keys[i], ""));
+            	}
+            else
+            	{
+            	// we cross over metrically if we're both within the metric range
+				if (metricMinExists(keys[i]) &&
+					metricMaxExists(keys[i]) &&
+					get(keys[i], 0) >= getMetricMin(keys[i]) &&
+					get(keys[i], 0) <= getMetricMax(keys[i]) &&
+					model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
+					model.get(keys[i], 0) <= getMetricMax(keys[i])) 
+					{
+					int a = get(keys[i], 0);
+					int b = model.get(keys[i], a);
+					set(keys[i], randomValueWithin(random, a, b));
+					}
+				else // we pick one or the other
+					{
+					if (coinToss(random, 0.5))
+						set(keys[i], model.get(keys[i], 0));
+					}
+				}
+			}
+    	}
     
     
     public Object clone()
@@ -62,7 +255,8 @@ public class Model implements Cloneable
         model.max = (HashMap)(max.clone());
         model.listeners = (HashMap)(listeners.clone());
         model.immutable = (HashSet)(immutable.clone());
-        model.special = (HashMap)(special.clone());
+        model.metricMin = (HashMap)(metricMin.clone());
+        model.metricMax = (HashMap)(metricMax.clone());
         model.lastKey = null;
         return model;
         }
@@ -82,8 +276,10 @@ public class Model implements Cloneable
             return false;
         if (!immutable.equals(model.immutable))
             return false;
-        if (!special.equals(model.special))
-            return false;
+        if (!metricMin.equals(model.metricMin))
+        	return false;
+        if (!metricMax.equals(model.metricMax))
+        	return false;
         if (!lastKey.equals(model.lastKey))
             return false;
         return true;
@@ -218,30 +414,6 @@ public class Model implements Cloneable
         updateListenersForKey(key);
         }
         
-    /** Returns an array of integer values associated with this
-        (Integer) key which have been declared SPECIAL, meaning that they
-        should be more commonly mutated to than other values. */        
-    public int[] getSpecial(String key)
-        {
-        return (int[])special.get(key);
-        }
-                
-    /** Sets an array of integer values associated with this
-        (Integer) key which have been declared SPECIAL, meaning that they
-        should be more commonly mutated to than other values. */        
-    public void setSpecial(String key, int[] stuff)
-        {
-        special.put(key, stuff);
-        }
-                
-    /** Sets a single value associated with this
-        (Integer) key which has been declared SPECIAL, meaning that they
-        it be more commonly mutated to than other values. */        
-    public void setSpecial(String key, int stuff)
-        {
-        special.put(key, new int[] { stuff });
-        }
-
     /** Returns the value associated with this
         (String) key, or ifDoesntExist if there is no such value. */        
     public String get(String key, String ifDoesntExist)
@@ -313,6 +485,36 @@ public class Model implements Cloneable
         max.put(key, Integer.valueOf(value));
         }
         
+    /** Returns whether a metric minimum is stored in the model for the key. */        
+    public boolean metricMinExists(String key)
+        {
+        return metricMin.containsKey(key);
+        }
+
+    /** Returns whether a metric maximum is stored in the model for the key. */        
+    public boolean metricMaxExists(String key)
+        {
+        return metricMax.containsKey(key);
+        }
+
+    /** Sets the metric minimum for a given key. */        
+    public void setMetricMin(String key, int value)
+        {
+        metricMin.put(key, Integer.valueOf(value));
+        }
+                
+    /** Sets the metric maximum for a given key. */        
+    public void setMetricMax(String key, int value)
+        {
+        metricMax.put(key, Integer.valueOf(value));
+        }
+    
+    public void removeMetricMinMax(String key)
+    	{
+    	metricMin.remove(key);
+    	metricMax.remove(key);
+    	}
+    	
     /** Sets whether a given key is declared immutable. */        
     public void setImmutable(String key, boolean val)
         {
@@ -332,7 +534,7 @@ public class Model implements Cloneable
     public int getMin(String key)
         {
         Integer d = (Integer) (min.get(key));
-        if (d == null) { System.err.println("Nonexistent min extracted for " + key); return 0; }
+        if (d == null) { System.err.println("Nonexistent min extracted for " + key); new Throwable().printStackTrace(); return 0; }
         else return d.intValue();
         }
                 
@@ -341,6 +543,22 @@ public class Model implements Cloneable
         {
         Integer d = (Integer) (max.get(key));
         if (d == null) { System.err.println("Nonexistent max extracted for " + key); return 0; }
+        else return d.intValue();
+        }
+
+    /** Returns the metric minimum for a given key, or 0 if no minimum is declared. */        
+    public int getMetricMin(String key)
+        {
+        Integer d = (Integer) (metricMin.get(key));
+        if (d == null) { System.err.println("Nonexistent metricMin extracted for " + key); return 0; }
+        else return d.intValue();
+        }
+                
+    /** Returns the metric maximum for a given key, or 0 if no maximum is declared. */        
+    public int getMetricMax(String key)
+        {
+        Integer d = (Integer) (metricMax.get(key));
+        if (d == null) { System.err.println("Nonexistent metricMax extracted for " + key); return 0; }
         else return d.intValue();
         }
 

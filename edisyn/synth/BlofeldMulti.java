@@ -134,6 +134,7 @@ public class BlofeldMulti extends Synth
             {
             vbox.add(addInstrument(i, Style.COLOR_B));
             }
+        
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Multi and Parts 1 - 4", soundPanel);
@@ -338,13 +339,13 @@ public class BlofeldMulti extends Synth
                 return vals[val];
                 }
             };
-        model.setImmutable("bank" + inst, true);
         ((LabelledDial)comp).setSecondLabel(" ");
+        model.removeMetricMinMax("bank" + inst);
         hbox.add(comp);
 
 
         comp = new LabelledDial("Number", this, "number" + inst, color, 0, 127, -1);
-        model.setImmutable("number" + inst, true);
+        model.removeMetricMinMax("number" + inst);
         hbox.add(comp);
         
         VBox main = new VBox();
@@ -389,15 +390,19 @@ public class BlofeldMulti extends Synth
         hbox2.add(comp);
         
         comp = new CheckBox("Play", this, "status" + inst, true);
+        model.setImmutable("status" + inst, true);
         hbox2.add(comp);    
 
         comp = new CheckBox("Local", this, "local" + inst);
+        model.setImmutable("local" + inst, true);
         hbox2.add(comp);    
 
         comp = new CheckBox("MIDI", this, "midi" + inst);
+        model.setImmutable("midi" + inst, true);
         hbox2.add(comp);    
         
         comp = new CheckBox("USB", this, "usb" + inst);
+        model.setImmutable("usb" + inst, true);
         hbox2.add(comp);
         
         main.add(hbox2);
@@ -433,7 +438,7 @@ public class BlofeldMulti extends Synth
         hbox3.add(vbox);
         main.add(hbox3);
         hbox.add(main);
-        
+
         comp = new LabelledDial("Volume", this, "volume" + inst, color, 0, 127);
         hbox.add(comp);
 
@@ -465,6 +470,7 @@ public class BlofeldMulti extends Synth
                 else return "" + (val - 1);
                 }
             };
+        model.setMetricMin( "channel" + inst, 2);
         ((LabelledDial)comp).setSecondLabel("Channel");
         hbox.add(comp);
 
@@ -962,7 +968,6 @@ public class BlofeldMulti extends Synth
     
     public byte[] emit(Model tempModel, boolean toWorkingMemory)
         {
-        System.err.println("emit");
         if (tempModel == null)
             tempModel = getModel();
         byte DEV = (byte) tempModel.get("id", 0);
@@ -1096,23 +1101,11 @@ public class BlofeldMulti extends Synth
         
         
     /** Verify that all the parameters are within valid values, and tweak them if not. */
-    void revise()
+    public void revise()
         {
-        for(int i = 0; i < allParameters.length; i++)
-            {
-            String key = allParameters[i];
-            if (!model.isString(key))
-                {
-                if (model.minExists(key) && model.maxExists(key))
-                    {
-                    int val = model.get(key, 0);
-                    if (val < model.getMin(key))
-                        { model.set(key, model.getMin(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key, 0));}
-                    if (val > model.getMax(key))
-                        { model.set(key, model.getMax(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key, 0));}
-                    }
-                }
-            }
+		// check the easy stuff -- out of range parameters
+        super.revise();
+
         // handle "name" specially
         StringBuffer name = new StringBuffer(model.get("name", "Init Multi      "));  // has to be 16 long
         for(int i = 0; i < name.length(); i++)
@@ -1131,7 +1124,7 @@ public class BlofeldMulti extends Synth
     public void setParameterByIndex(int i, byte b)
         {
         String key = allParameters[i];
-        int part = (i - 32) / 24;
+        int part = (i - 32) / 24 + 1;
         if (key.equals("-"))
             {
             // do nothing
@@ -1205,48 +1198,9 @@ public class BlofeldMulti extends Synth
         return false;  // we're never in sync because we can't move the patch number     
         }
 
-        
-    public void merge(Model otherModel, double probability)
-        {
-        String[] keys = getModel().getKeys();
-        for(int i = 0; i < keys.length; i++)
-            {
-            if (keys[i].equals("id")) continue;
-            if (keys[i].equals("number")) continue;
-            if (keys[i].equals("name")) continue;
-                
-            if (coinToss(probability))
-                {
-                if (otherModel.isString(keys[i]))
-                    {
-                    getModel().set(keys[i], otherModel.get(keys[i], getModel().get(keys[i], "")));
-                    }
-                else
-                    {
-                    getModel().set(keys[i], otherModel.get(keys[i], getModel().get(keys[i], 0)));
-                    }
-                }
-            }
-        }
-    
-    public void immutableMutate(String key)
-        {
-        /*
-        // we randomize these specially, taking care not to do the high waves
-        if (key.equals("osc1shape") || key.equals("osc2shape"))
-        {
-        if (coinToss(0.5))
-        model.set(key, 0);
-        else
-        model.set(key, random.nextInt(WAVES_LONG.length -1) + 1);
-        }
-        */
-        }
-        
-
     public boolean requestCloseWindow() { return true; }
 
-    public String getSynthName() { return "Waldorf Blofeld [Multi]"; }
+    public static String getSynthName() { return "Waldorf Blofeld [Multi]"; }
     
     public String getPatchName() { return model.get("name", "Init Multi      "); }
     

@@ -117,15 +117,9 @@ public class MicrowaveXTMulti extends Synth
     
     public void updateMode()
         {
-        SwingUtilities.invokeLater(new Runnable() 
-            { 
-            public void run() 
-                { 
-                byte DEV = (byte)model.get("id", 0);
-                // we'll send a mode dump to change the mode to Single
-                tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x01, (byte)0xF7 }, true);
-                }
-            });
+		byte DEV = (byte)model.get("id", 0);
+		// we'll send a mode dump to change the mode to Single
+		tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x01, (byte)0xF7 }, true);
         }
                
     public void changePatch(Model tempModel)
@@ -275,6 +269,7 @@ public class MicrowaveXTMulti extends Synth
                     }
                 }
             };
+       		model.setMetricMin( "arptempo", 2);
         //((LabelledDial)comp).setSecondLabel("Tempo");
         hbox.add(comp);
         
@@ -315,7 +310,7 @@ public class MicrowaveXTMulti extends Synth
         vbox = new VBox();
 
         params = PAN_MOD;
-        comp = new Chooser("Pan Mod", this, "arpdirectionection", params);
+        comp = new Chooser("Pan Mod", this, "panmod" + inst, params);
         vbox.add(comp);
 
         comp = new CheckBox("Active", this, "status" + inst);
@@ -328,7 +323,7 @@ public class MicrowaveXTMulti extends Synth
         vbox.add(comp);
         hbox.add(vbox);
                 
-        comp = new CheckBox("MIDI Send [XTk]", this, "midisend");
+        comp = new CheckBox("MIDI Send [XTk]", this, "midisend" + inst);
         vbox.add(comp);    
 
                 
@@ -383,11 +378,11 @@ public class MicrowaveXTMulti extends Synth
         vbox.add(comp);
         
         params = ARPEGGIATOR_ORDER;
-        comp = new Chooser("Arp Note Order", this, "arpnoteorder" + inst, params);
+        comp = new Chooser("Arp Note Order", this, "arporder" + inst, params);
         vbox.add(comp);
         
         params = ARPEGGIATOR_VELOCITY;
-        comp = new Chooser("Arp Velocity", this, "arpvelocity" + inst, params);
+        comp = new Chooser("Arp Velocity", this, "arpvel" + inst, params);
         vbox.add(comp);
 
         hbox.add(vbox);
@@ -420,7 +415,7 @@ public class MicrowaveXTMulti extends Synth
         ((LabelledDial)comp).setSecondLabel("Velocity");
         hbox2.add(comp);
 
-        comp = new LabelledDial("Highest", this, "hikey" + inst, color, 1, 127)
+        comp = new LabelledDial("Highest", this, "hikey" + inst, color, 0, 127)
             {
             public String map(int val)
                 {
@@ -441,6 +436,7 @@ public class MicrowaveXTMulti extends Synth
                 else return "" + (val - 1);
                 }
             };
+       	model.setMetricMin( "channel" + inst, 2);
         ((LabelledDial)comp).setSecondLabel("Channel");
         hbox2.add(comp);
 
@@ -472,6 +468,7 @@ public class MicrowaveXTMulti extends Synth
                 else return "" + (val - 1);
                 }
             };
+       	model.setMetricMin( "arppattern" + inst, 2);
         ((LabelledDial)comp).setSecondLabel("Pattern");
         hbox2.add(comp);
 
@@ -488,6 +485,7 @@ public class MicrowaveXTMulti extends Synth
                 else return "" + (val);
                 }
             };
+       	model.setMetricMax( "arpnotesout" + inst, 16);
         ((LabelledDial)comp).setSecondLabel("Notes Out");
         hbox2.add(comp);
         
@@ -495,7 +493,7 @@ public class MicrowaveXTMulti extends Synth
         ((LabelledDial)comp).setSecondLabel("Velocity");
         hbox2.add(comp);
 
-        comp = new LabelledDial("Lowest", this, "lowkey" + inst, color, 1, 127)
+        comp = new LabelledDial("Lowest", this, "lowkey" + inst, color, 0, 127)
             {
             public String map(int val)
                 {
@@ -1034,23 +1032,11 @@ public class MicrowaveXTMulti extends Synth
         
         
     /** Verify that all the parameters are within valid values, and tweak them if not. */
-    void revise()
+    public void revise()
         {
-        for(int i = 0; i < allParameters.length; i++)
-            {
-            String key = allParameters[i];
-            if (!model.isString(key))
-                {
-                if (model.minExists(key) && model.maxExists(key))
-                    {
-                    int val = model.get(key, 0);
-                    if (val < model.getMin(key))
-                        { model.set(key, model.getMin(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key, 0));}
-                    if (val > model.getMax(key))
-                        { model.set(key, model.getMax(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key, 0));}
-                    }
-                }
-            }
+		// check the easy stuff -- out of range parameters
+        super.revise();
+
         // handle "name" specially
         StringBuffer name = new StringBuffer(model.get("name", "Init Sound V1.1 "));  // has to be 16 long
         for(int i = 0; i < name.length(); i++)
@@ -1159,7 +1145,8 @@ public class MicrowaveXTMulti extends Synth
         return false;  // we're never in sync because we can't move the patch number     
         }
 
-        
+
+/*        
     public void merge(Model otherModel, double probability)
         {
         String[] keys = getModel().getKeys();
@@ -1185,22 +1172,12 @@ public class MicrowaveXTMulti extends Synth
     
     public void immutableMutate(String key)
         {
-        /*
-        // we randomize these specially, taking care not to do the high waves
-        if (key.equals("osc1shape") || key.equals("osc2shape"))
-        {
-        if (coinToss(0.5))
-        model.set(key, 0);
-        else
-        model.set(key, random.nextInt(WAVES_LONG.length -1) + 1);
         }
-        */
-        }
-        
+*/       
 
     public boolean requestCloseWindow() { return true; }
 
-    public String getSynthName() { return "Microwave II/XT/XTk [Multi]"; }
+    public static String getSynthName() { return "Microwave II/XT/XTk [Multi]"; }
     
     public String getPatchName() { return model.get("name", "Init Sound V1.1 "); }
     

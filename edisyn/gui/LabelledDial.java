@@ -97,6 +97,8 @@ public class LabelledDial extends NumericalComponent implements Dial.Map
         this(_label, synth, key, staticColor);
         setMin(min);
         setMax(max);
+        synth.getModel().setMetricMin(key, min);
+        synth.getModel().setMetricMax(key, max);
         }
 
     /** Makes a labelled dial for the given key parameter on the given synth, and with the given color.  No minimum or maximum is set. */

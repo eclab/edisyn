@@ -100,6 +100,8 @@ public class Dial extends NumericalComponent
         this(synth, key, staticColor);
         setMin(min);
         setMax(max);
+        synth.getModel().setMetricMin(key, min);
+        synth.getModel().setMetricMax(key, max);
         }
                 
     public Dial(Synth synth, String key, Color staticColor)

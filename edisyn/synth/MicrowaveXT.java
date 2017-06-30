@@ -207,6 +207,10 @@ public class MicrowaveXT extends Synth
         tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("MicrowaveXT.html")));
 
         model.set("name", "Init Sound V1.1 ");  // has to be 16 long
+
+		// make sure this never can be mutated
+        model.set("soundformatversion", 1);  // always
+        model.setImmutable("soundformatversion", true);
         
         loadDefaults();        
         }
@@ -215,15 +219,9 @@ public class MicrowaveXT extends Synth
 
     public void updateMode()
         {
-        SwingUtilities.invokeLater(new Runnable() 
-            { 
-            public void run() 
-                {
-                byte DEV = (byte)model.get("id", 0);
-                // we'll send a mode dump to change the mode to Single
-                tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x00, (byte)0xF7 }, true);
-                }
-            });
+		byte DEV = (byte)model.get("id", 0);
+		// we'll send a mode dump to change the mode to Single
+		tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x00, (byte)0xF7 }, true);
         }
                
     public String getDefaultResourceFileName() { return "MicrowaveXT.init"; }
@@ -349,7 +347,6 @@ public class MicrowaveXT extends Synth
         for(int i = 96; i < 128; i++)
             params[i] = "User " + (i - 96 + 1);
         comp = new Chooser("Wavetable", this, "wavetable", params);
-        model.setImmutable("wavetable", true);
         vbox.add(comp);
 
         hbox.add(vbox);
@@ -385,6 +382,7 @@ public class MicrowaveXT extends Synth
                 else return ("" + (val));
                 }
             };
+        model.setMetricMin( "aliasing", 1);
         hbox.add(comp);
 
         comp = new LabelledDial("Time", this, "timequant", color, 0, 5)
@@ -395,6 +393,7 @@ public class MicrowaveXT extends Synth
                 else return ("" + (val));
                 }
             };
+        model.setMetricMin( "timequant", 1);
         ((LabelledDial)comp).setSecondLabel("Quantization");
         hbox.add(comp);
 
@@ -497,7 +496,7 @@ public class MicrowaveXT extends Synth
                 else return ("" + val);
                 }
             };
-
+        model.setMetricMax("osc" + osc + "bendrange", 120);
         ((LabelledDial)comp).setSecondLabel("Range");
         hbox.add(comp);
 
@@ -594,6 +593,7 @@ public class MicrowaveXT extends Synth
                     }
                 }
             };
+        model.setMetricMax( "wave" + wave + "startwave", 60);
         hbox.add(comp);
 
         comp = new LabelledDial("Start Phase", this, "wave" + wave + "startphase", color, 0, 127)
@@ -610,6 +610,7 @@ public class MicrowaveXT extends Synth
                     }
                 }
             };
+        model.setMetricMin( "wave" + wave + "startphase", 1);
         hbox.add(comp);
 
         comp = new LabelledDial("Envelope", this, "wave" + wave + "envamount", color, 0, 127, 64);
@@ -697,7 +698,6 @@ public class MicrowaveXT extends Synth
                 }
             };
             
-        model.setImmutable("filter1type", true);
         vbox.add(comp);
         hbox.add(vbox);
 
@@ -747,7 +747,6 @@ public class MicrowaveXT extends Synth
         
         params = FILTER_2_TYPES;
         comp = new Chooser("Type", this, "filter2type", params);
-        model.setImmutable("filter2type", true);
         vbox.add(comp);
         hbox.add(vbox);
 
@@ -784,7 +783,6 @@ public class MicrowaveXT extends Synth
         for(int i = 1; i < 5; i++)
             {
             comp = new Chooser("Play Parameter " + i, this, "playparam" + i, params);
-            model.setImmutable("playparam" + i, true);
             hbox.add(comp);
             }
                         
@@ -938,6 +936,7 @@ public class MicrowaveXT extends Synth
                 else return "" + (val - 1);
                 }
             };
+        model.setMetricMin( "lfo" + lfo + "delay", 2);
         hbox.add(comp);
         
         comp = new LabelledDial("Symmetry", this, "lfo" + lfo + "symmetry", color, 0, 127, 64);
@@ -1226,7 +1225,7 @@ public class MicrowaveXT extends Synth
 
                 params = MOD_SOURCES;
                 comp = new Chooser("" + i + " Source", this, "modulation" + i + "source", params);
-                model.setSpecial("mod" + i + "source", 0);
+                // model.setSpecial("mod" + i + "source", 0);
                 vbox.add(comp);
 
                 params = MOD_DESTINATIONS;
@@ -1266,7 +1265,7 @@ public class MicrowaveXT extends Synth
         VBox vbox2 = new VBox();
         params = MOD_SOURCES;
         comp = new Chooser("Delay Source", this, "modifierdelaysource", params);
-        model.setSpecial("modifierdelaysource", 0);
+        // model.setSpecial("modifierdelaysource", 0);
         vbox2.add(comp);
 
         comp = new LabelledDial("Delay Time", this, "modifierdelaytime", color, 0, 127);
@@ -1280,7 +1279,7 @@ public class MicrowaveXT extends Synth
             vbox2 = new VBox();
             params = MOD_SOURCES;
             comp = new Chooser("" + i + " Source #1", this, "modifier" + i + "source1", params);
-            model.setSpecial("modifier" + i + "source1", 0);
+            // model.setSpecial("modifier" + i + "source1", 0);
             vbox2.add(comp);
 
             // gotta change the first one to "constant" from "off" if we're in Source B
@@ -1289,7 +1288,7 @@ public class MicrowaveXT extends Synth
             params[0] = "Constant";
 
             comp = new Chooser("" + i + " Source #2", this, "modifier" + i + "source2", params);
-            model.setSpecial("modifier" + i + "source1", 0);
+            // model.setSpecial("modifier" + i + "source1", 0);
             vbox2.add(comp);
 
             params = MODIFIER_OPERATORS;
@@ -1372,6 +1371,7 @@ public class MicrowaveXT extends Synth
                     }
                 }
             };
+        model.setMetricMin( "arptempo", 2);
         hbox.add(comp);
         
         comp = new LabelledDial("Clock", this, "arpclock", color, 0, 15)
@@ -1397,6 +1397,7 @@ public class MicrowaveXT extends Synth
                 else return "" + (val - 1);
                 }
             };
+        model.setMetricMin( "arppattern", 2);
         hbox.add(comp);
 
         comp = new LabelledDial("User Length", this, "arpuserlength", color, 0, 15, -1);
@@ -1639,7 +1640,7 @@ public class MicrowaveXT extends Synth
                 setupEffect(getState());
                 }
             };
-        model.setSpecial("effecttype", 0);
+        // model.setSpecial("effecttype", 0);
         vbox.add(comp);
         main.add(vbox);
 
@@ -2181,7 +2182,6 @@ public class MicrowaveXT extends Synth
         byte b = 0;
         for(int i = 0; i < bytes.length; i++)
             b += bytes[i];
-        //System.err.println("Checksum pre " + ((byte)(b & (byte)127)));
 
 
         // Section 2.12 says that the checksum includes BB and NN.
@@ -2196,7 +2196,6 @@ public class MicrowaveXT extends Synth
         
         
         b = (byte)(b & (byte)127);
-        //System.err.println("Checksum post " + b);
         
         return b;
         }
@@ -2260,23 +2259,11 @@ public class MicrowaveXT extends Synth
         
         
     /** Verify that all the parameters are within valid values, and tweak them if not. */
-    void revise()
+    public void revise()
         {
-        for(int i = 0; i < allParameters.length; i++)
-            {
-            String key = allParameters[i];
-            if (!model.isString(key))
-                {
-                if (model.minExists(key) && model.maxExists(key))
-                    {
-                    int val = model.get(key, 0);
-                    if (val < model.getMin(key))
-                        { model.set(key, model.getMin(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key, 0));}
-                    if (val > model.getMax(key))
-                        { model.set(key, model.getMax(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key, 0));}
-                    }
-                }
-            }
+		// check the easy stuff -- out of range parameters
+        super.revise();
+
         // handle "name" specially
         StringBuffer name = new StringBuffer(model.get("name", "Init Sound V1.1 "));  // has to be 16 long
         for(int i = 0; i < name.length(); i++)
@@ -2429,7 +2416,7 @@ public class MicrowaveXT extends Synth
         return retval;     
         }
 
-        
+    /*
     public void merge(Model otherModel, double probability)
         {
         String[] keys = getModel().getKeys();
@@ -2458,11 +2445,12 @@ public class MicrowaveXT extends Synth
         {
         // for the time being we do nothing
         }
+    */
         
 
     public boolean requestCloseWindow() { return true; }
 
-    public String getSynthName() { return "Microwave II/XT/XTk"; }
+    public static String getSynthName() { return "Microwave II/XT/XTk"; }
     
     public String getPatchName() { return model.get("name", "Init Sound V1.1 "); }
     

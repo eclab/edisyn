@@ -58,6 +58,8 @@ public class Scroller extends NumericalComponent
         bar.setVisibleAmount(0);  // this irritation causes no matter of problems
         setMin(getMin());
         setMax(getMax());
+        synth.getModel().setMetricMin(key, getMin());
+        synth.getModel().setMetricMax(key, getMax());
 
         label.setText(_label);
         label.setFont(Style.SMALL_FONT);

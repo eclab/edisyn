@@ -180,7 +180,7 @@ public class Blofeld extends Synth
                         
         params = ARPEGGIATOR_MODES;
         comp = new Chooser("Mode", this, "arpeggiatormode", params);
-        model.setSpecial("arpeggiatormode", 0);
+        // // model.setSpecial("arpeggiatormode", 0);
         vbox.add(comp);
 
         params = ARPEGGIATOR_DIRECTIONS;
@@ -225,7 +225,7 @@ public class Blofeld extends Synth
                 else return "" + (val - 1);
                 }
             };
-        model.setSpecial("arpeggiatorpattern", new int[] { 0, 1} );
+        model.setMetricMin( "arpeggiatorpattern", 2);
         hbox.add(comp);
 
         comp = new LabelledDial("Clock", this, "arpeggiatorclock", color, 0, 42)
@@ -323,6 +323,7 @@ public class Blofeld extends Synth
                         }
                     };
                 vbox.add(comp);
+        		model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "accent", 1);
                 vbox.add(Strut.makeVerticalStrut(3));
                                 
                 // the little spaces cause Java to not slice off a bit of the last digit
@@ -337,7 +338,8 @@ public class Blofeld extends Synth
                         else return "" + (val - 4);
                         }
                     };
-                vbox.add(comp);
+         		model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "length", 1);
+               vbox.add(comp);
                 vbox.add(Strut.makeVerticalStrut(3));
                                                                 
                 // the little spaces cause Java to not slice off a bit of the last digit
@@ -352,7 +354,8 @@ public class Blofeld extends Synth
                         else return "" + (val - 4);
                         }
                     };
-                        
+                model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "timing", 1);
+              
                 vbox.add(comp);
                 hbox.add(vbox);
                 }
@@ -540,8 +543,15 @@ public class Blofeld extends Synth
             };
         parametersByEffect[effect - 1][CLKDELAY][2] = comp;
 
-
-
+		// The Blofeld has effects parameters 11....14 even though they're not used.  We'll give them min/max values
+		for(int i = 11; i < 15; i++)
+			{
+			model.set("effect" + effect + "parameter" + i, 0);
+			model.setMin("effect" + effect + "parameter" + i, 0);
+			model.setMax("effect" + effect + "parameter" + i, 127);
+			model.setImmutable("effect" + effect + "parameter" + i, true);
+			}
+			
         // Now we can set up the category as usual.
                 
         Category category = new Category("Effect " + effect, color);
@@ -561,7 +571,7 @@ public class Blofeld extends Synth
                 setupEffect(parameters, parametersByEffect, effect, getState());
                 }
             };
-        model.setSpecial("effect" + effect + "type", 0);
+        // // model.setSpecial("effect" + effect + "type", 0);
         vbox.add(comp);
         main.add(vbox);
 
@@ -603,7 +613,7 @@ public class Blofeld extends Synth
                 vbox = new VBox();
                 params = MOD_SOURCES;
                 comp = new Chooser("Source " + i, this, "modulation" + i + "source", params);
-                model.setSpecial("mod" + i + "source", 0);
+                // // model.setSpecial("mod" + i + "source", 0);
                 vbox.add(comp);
 
                 params = MOD_DESTINATIONS;
@@ -642,7 +652,7 @@ public class Blofeld extends Synth
                         
             params = MOD_SOURCES;
             comp = new Chooser("A Source " + i, this, "modifier" + i + "sourcea", params);
-            model.setSpecial("modifier" + i + "sourcea", 0);
+            // // model.setSpecial("modifier" + i + "sourcea", 0);
             vbox.add(comp);
 
             // gotta change the first one to "constant" from "off" if we're in Source B
@@ -651,7 +661,7 @@ public class Blofeld extends Synth
             params[0] = "Constant";
 
             comp = new Chooser("B Source " + i, this, "modifier" + i + "sourceb", params);
-            model.setSpecial("modifier" + i + "sourceb", 0);
+            // // model.setSpecial("modifier" + i + "sourceb", 0);
             vbox.add(comp);
 
             params = MODIFIER_OPERATORS;
@@ -872,7 +882,7 @@ public class Blofeld extends Synth
                 else return "" + (int)(((val - 1) * 355.0) / 126.0); 
                 }
             };
-        model.setSpecial("lfo" + lfo + "startphase", 0);
+        model.setMetricMin( "lfo" + lfo + "startphase", 1);
         hbox.add(comp);
 
         comp = new LabelledDial("Delay", this, "lfo" + lfo + "delay", color, 0, 127);
@@ -924,9 +934,9 @@ public class Blofeld extends Synth
         comp = new PatchDisplay(this, "  ID: ", "id", null, 3);
         hbox2.add(comp);
         vbox.add(hbox2);
-        hbox.add(vbox);
         
-        vbox = new VBox();
+        //vbox.add(Strut.makeVerticalStrut(20));
+        
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
             public boolean isValid(String val)
@@ -947,16 +957,15 @@ public class Blofeld extends Synth
                 }
             };
         model.setImmutable("name", true);
-        vbox.add(comp);
+        vbox.addBottom(comp);  // doesn't work right :-(
+        hbox.add(vbox);
 
-        hbox2 = new HBox();
+        vbox = new VBox();
                                 
         params = CATEGORIES;
         comp = new Chooser("Category", this, "category", params);
         model.setImmutable("category", true);
-        hbox2.add(comp);
-
-        vbox.add(hbox2);
+		vbox.addBottom(comp);
                 
         hbox.add(vbox);
 
@@ -985,7 +994,7 @@ public class Blofeld extends Synth
                         
         params = MOD_SOURCES;
         comp = new Chooser("Mod Source", this, "amplifiermodsource", params);
-        model.setSpecial("amplifiermodsource", 0);
+        // // model.setSpecial("amplifiermodsource", 0);
         vbox.add(comp);
                 
         hbox.add(vbox);
@@ -1027,14 +1036,12 @@ public class Blofeld extends Synth
         comp = new Chooser("Glide Mode", this, "oscglidemode", params);
         vbox.add(comp);
 
-        comp = new CheckBox("Glide", this, "oscglide");
-        vbox.add(comp);
-
-        comp = new CheckBox("Mono", this, "oscallocation");
-        vbox.add(comp);
+        params = MOD_SOURCES;
+        comp = new Chooser("Pitch Mod Source", this, "oscpitchsource", params);
+        vbox.addBottom(comp);
 
         hbox.add(vbox);
-                
+
         comp = new LabelledDial("Glide Rate", this, "oscgliderate", color, 0, 127);
         hbox.add(comp);
 
@@ -1047,6 +1054,7 @@ public class Blofeld extends Synth
                 else return ("" + (val + 1));
                 }
             };
+        model.setMetricMin( "unisono", 2);
         hbox.add(comp);
 
         comp = new LabelledDial("Unisono", this, "unisonodetune", color, 0, 127);
@@ -1055,7 +1063,7 @@ public class Blofeld extends Synth
                 
         comp = new LabelledDial("Noise", this, "noiselevel", color, 0, 127);
         ((LabelledDial)comp).setSecondLabel("Level");
-        getModel().setSpecial("noiselevel", 0);
+        //getModel().setSpecial("noiselevel", 0);
         hbox.add(comp);
 
         comp = new LabelledDial("Noise", this, "noisebalance", color, 0, 127)
@@ -1079,7 +1087,7 @@ public class Blofeld extends Synth
 
         comp = new LabelledDial("Ringmod", this, "ringmodlevel", color, 0, 127);
         ((LabelledDial)comp).setSecondLabel("Level");
-        getModel().setSpecial("ringmodlevel", 0);
+        //getModel().setSpecial("ringmodlevel", 0);
         hbox.add(comp);
 
         comp = new LabelledDial("Ringmod", this, "ringmodbalance", color, 0, 127)
@@ -1095,6 +1103,20 @@ public class Blofeld extends Synth
             };
         ((LabelledDial)comp).setSecondLabel("Balance");
         hbox.add(comp);
+
+        comp = new LabelledDial("Pitch Mod", this, "oscpitchamount", color, 0, 127, 64);
+        ((LabelledDial)comp).setSecondLabel("Amount");
+        hbox.add(comp);
+
+		vbox = new VBox();
+        comp = new CheckBox("Glide", this, "oscglide");
+        vbox.add(comp);
+
+        comp = new CheckBox("Mono", this, "oscallocation");
+        vbox.add(comp);
+        hbox.add(vbox);
+
+                
 
         category.add(hbox, BorderLayout.WEST);
         return category;
@@ -1198,27 +1220,24 @@ public class Blofeld extends Synth
                     model.set("osc" + osc + "shape", model.get("osc" + osc + "shape", 0));
                     }
                 });
-            model.setImmutable("osc" + osc + "samplebank", true);
-
+            // We do this because it'd be confusing for non-SL people, but
+            // this has the side-effect of preventing invalid settings to the wave/sample chooser 
+            // during mutation/crossover because there are 128 samples but only, like 124 waves
+	        model.setImmutable("osc" + osc + "samplebank", true);
             vbox.add(comp);
             }
-
-        if (osc == 3)
-            model.setSpecial("osc" + osc + "shape", 0);
-        else
-            model.setImmutable("osc" + osc + "shape", true);
 
         hbox.add(vbox);
         vbox = new VBox();
                 
         params = FM_SOURCES;
         comp = new Chooser("FM Source", this, "osc" + osc + "fmsource", params);
-        model.setSpecial("osc" + osc + "fmsource", 0);
+        // // model.setSpecial("osc" + osc + "fmsource", 0);
         vbox.add(comp);
 
         params = MOD_SOURCES;
         comp = new Chooser("PWM Source", this, "osc" + osc + "pwmsource", params);
-        model.setSpecial("osc" + osc + "pwmsource", 0);
+        // // model.setSpecial("osc" + osc + "pwmsource", 0);
         vbox.add(comp);
 
         hbox.add(vbox);
@@ -1327,7 +1346,7 @@ public class Blofeld extends Synth
         params = FILTER_TYPES;
                 
         comp = new Chooser("Type", this, "filter" + filter + "type", params);
-        model.setSpecial("filter" + filter + "type", 0);
+        // // model.setSpecial("filter" + filter + "type", 0);
         vbox.add(comp);
                 
         params = DRIVE_CURVES;
@@ -1339,12 +1358,12 @@ public class Blofeld extends Synth
                 
         params = MOD_SOURCES;
         comp = new Chooser("Mod Source", this, "filter" + filter + "modsource", params);
-        model.setSpecial("filter" + filter + "modsource", 0);
+        // // model.setSpecial("filter" + filter + "modsource", 0);
         vbox.add(comp);
 
         params = MOD_SOURCES;
         comp = new Chooser("Pan Source", this, "filter" + filter + "pansource", params);
-        model.setSpecial("filter" + filter + "pansource", 0);
+        // // model.setSpecial("filter" + filter + "pansource", 0);
         vbox.add(comp);
 
         hbox.add(vbox);
@@ -1352,7 +1371,7 @@ public class Blofeld extends Synth
 
         params = FM_SOURCES;
         comp = new Chooser("FM Source", this, "filter" + filter + "fmsource", params);
-        model.setSpecial("filter" + filter + "fmsource", 0);
+        // // model.setSpecial("filter" + filter + "fmsource", 0);
         vbox.add(comp);
 
         if (filter == 2)
@@ -1859,7 +1878,7 @@ public class Blofeld extends Synth
             int index = 58;
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
-            byte XX = (byte)((model.get("oscallocation", 0) << 4) | (model.get("unisono", 0)));
+            byte XX = (byte)((model.get("unisono", 0) << 4) | (model.get("oscallocation", 0)));
             return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
             }
         else if (key.equals("envelope1mode") || key.equals("envelope1trigger") ||
@@ -1956,7 +1975,7 @@ public class Blofeld extends Synth
                 }
             else if (key.equals("oscallocation, unisono"))
                 {
-                bytes[i] = (byte)((model.get("oscallocation", 0) << 4) | (model.get("unisono", 0)));
+                bytes[i] = (byte)((model.get("unisono", 0) << 4) | (model.get("oscallocation", 0)));
                 }
             else if (key.equals("envelope1mode, envelope1trigger") ||
                 key.equals("envelope2mode, envelope2trigger") ||
@@ -2037,8 +2056,8 @@ public class Blofeld extends Synth
             }
         else if (key.equals("oscallocation, unisono"))
             {
-            model.set("oscallocation", b >> 4);
-            model.set("unisono", b & 7);
+            model.set("unisono", b >> 4);
+            model.set("oscallocation", b & 1);
             }
         else if (key.equals("envelope1mode, envelope1trigger") ||
             key.equals("envelope2mode, envelope2trigger") ||
@@ -2282,23 +2301,11 @@ public class Blofeld extends Synth
             }
         }
 
-    void revise()
+    public void revise()
         {
-        for(int i = 0; i < allParameters.length; i++)
-            {
-            String key = allParameters[i];
-            if (!model.isString(key))
-                {
-                if (model.minExists(key) && model.maxExists(key))
-                    {
-                    int val = model.get(key, 0);
-                    if (val < model.getMin(key))
-                        { model.set(key, model.getMin(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key, 0));}
-                    if (val > model.getMax(key))
-                        { model.set(key, model.getMax(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key, 0));}
-                    }
-                }
-            }
+		// check the easy stuff -- out of range parameters
+        super.revise();
+
         // handle "name" specially
         StringBuffer name = new StringBuffer(model.get("name", "Init            "));  // has to be 16 long
         for(int i = 0; i < name.length(); i++)
@@ -2310,49 +2317,9 @@ public class Blofeld extends Synth
         model.set("name", name.toString());
         }
         
-        
-    public void merge(Model otherModel, double probability)
-        {
-        String[] keys = getModel().getKeys();
-        for(int i = 0; i < keys.length; i++)
-            {
-            if (keys[i].equals("id")) continue;
-            if (keys[i].equals("number")) continue;
-            if (keys[i].equals("bank")) continue;
-            if (keys[i].equals("name")) continue;
-            if (keys[i].equals("category")) continue;
-                
-            if (coinToss(probability))
-                {
-                if (otherModel.isString(keys[i]))
-                    {
-                    getModel().set(keys[i], otherModel.get(keys[i], getModel().get(keys[i], "")));
-                    }
-                else
-                    {
-                    getModel().set(keys[i], otherModel.get(keys[i], getModel().get(keys[i], 0)));
-                    }
-                }
-            }
-        }
-    
-    
-    public void immutableMutate(String key)
-        {
-        // we randomize these specially, taking care not to do the high waves
-        if (key.equals("osc1shape") || key.equals("osc2shape"))
-            {
-            if (coinToss(0.5))
-                model.set(key, 0);
-            else
-                model.set(key, random.nextInt(WAVES_LONG.length -1) + 1);
-            }
-        }
-        
-
     public boolean requestCloseWindow() { return true; }
 
-    public String getSynthName() { return "Waldorf Blofeld"; }
+    public static String getSynthName() { return "Waldorf Blofeld"; }
     
     public String getPatchName() { return model.get("name", "Init            "); }
     

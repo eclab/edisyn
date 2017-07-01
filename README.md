@@ -143,11 +143,10 @@ to drop out of sync.
 * *Request Patch...* asks the synthesizer to load a specific patch into the editor.  If the synthesizer complies,
 once the patch is loaded, Edisyn will then send the patch to the synthesizer.
 
-* *Request Merge* asks the synthesizer to load a specific patch into the editor.  If the synthesizer complies,
-then the patch is *merged* with the existing patch, meaning that some *percentage* of parameters in the existing
-patch are replaced with the old patch.  Then Edisyn will then send the patch to the synthesizer if not out of sync.
+* *Request Merge* asks the synthesizer to load a specific patch into the editor.  If the synthesizer complies, then the patch is *merged* with the existing patch.  Then Edisyn will then send the patch to the synthesizer if not out of sync.
+Merging works like this: if a parameter is *metric* (numeric), then Edisyn sets it to some random value in-between the two patches.  If the parameter is non-metric (for example, a set of wavetables), then Edisyn will randomly set it to one or the other of the patch values.  The percentage indicates roughly the percentage of parameters which will get merged in (versus staying as they are).
 
-* *Randomize* randomizes the editor's current patch, then sends it to the synthesizer if not out of sync.
+* *Randomize* randomizes the editor's current patch by various amounts, then sends it to the synthesizer if not out of sync.  Randomization works as follows.  Every parameter gets a chance to be randomized.  If a parameter is *metric* (numeric), then Edisyn will mutate it -- larger percentages mean more extreme mutations.  If a parameter is non-metric (for example, a set of wavetables), then Edisyn will, with the given percentage probability, pick an entirely random new value for it.
 
 * *Reset* resets the editor's current patch to its initialized state, then sends it to the synthesizer if
 not out of sync.

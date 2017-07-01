@@ -15,6 +15,8 @@ Edisyn presently supports:
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes)
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
 
+Edisyn has infinite levels of undo, CC mapping and learning, offline modes, different amounts of randomization and patch merging/recombination, and other goodies.
+
 Ultimately Edisyn will have some more written for it as well as I get time; and of course the patch editors I can write are restricted to the synths I own and can test on!  Edisyn has no graphical interface editor system like Ctrlr, but it's designed to make the GUI pretty easy to write (well, for me anyway).
 
 ## Pictures!

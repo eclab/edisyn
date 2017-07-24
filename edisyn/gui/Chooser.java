@@ -28,9 +28,12 @@ import java.awt.event.*;
 public class Chooser extends NumericalComponent
     {
     JComboBox combo;
+    int addToWidth = 0;
 
     // The integers corresponding to each element in the JComboBox.
     int[] vals;
+    String[] labels;
+    ImageIcon[] icons;
 
     JLabel label = new JLabel("888", SwingConstants.LEFT)
         {
@@ -77,17 +80,16 @@ public class Chooser extends NumericalComponent
 
     /** Creates a JComboBox with the given label, modifying the given key in the Style.
         The elements in the box are given by elements, and their corresponding numerical
-        values in the model are given in vals. */
-    //public Chooser(String _label, Synth synth, String key, String[] elements, int[] vals)
-    //    {
-    //    this(_label, synth, key, elements);
-    //    System.arraycopy(vals, 0, this.vals, 0, vals.length);
-    //    }
-                
-    /** Creates a JComboBox with the given label, modifying the given key in the Style.
-        The elements in the box are given by elements, and their corresponding numerical
         values in the model 0...n. */
     public Chooser(String _label, Synth synth, String key, String[] elements)
+        {
+        this(_label, synth, key, elements, null);
+        }
+
+    /** Creates a JComboBox with the given label, modifying the given key in the Style.
+        The elements in the box are given by elements, with images in icons, and their corresponding numerical
+        values in the model 0...n.   Note that OS X won't behave properly with icons larger than about 34 high. */
+    public Chooser(String _label, Synth synth, String key, String[] elements, ImageIcon[] icons)
         {
         super(synth, key);
                 
@@ -96,13 +98,35 @@ public class Chooser extends NumericalComponent
         label.setForeground(Style.TEXT_COLOR);
         //label.setMaximumSize(label.getPreferredSize());
 
-        combo = new JComboBox(elements);
+        combo = new JComboBox(elements)
+            {
+            public Dimension getMinimumSize() 
+                {
+                return getPreferredSize(); 
+                }
+            public Dimension getPreferredSize()
+                {
+                Dimension d = super.getPreferredSize();
+                d.width += addToWidth;
+                return d;
+                }                       
+            };
+
         combo.putClientProperty("JComponent.sizeVariant", "small");
         combo.setEditable(false);
         combo.setFont(Style.SMALL_FONT);
         combo.setMaximumRowCount(32);
         
         setElements(_label, elements);
+
+        this.icons = icons;
+        this.labels = elements;
+        if (icons != null)
+            {
+            combo.setRenderer(new ComboBoxRenderer());
+            if (Style.isMac()) 
+                combo.putClientProperty("JComponent.sizeVariant", "regular");
+            }
 
         setState(getState());
                 
@@ -124,6 +148,11 @@ public class Chooser extends NumericalComponent
             });
         }
     
+    public void addToWidth(int val)
+        {
+        addToWidth = val;
+        }
+              
     public JComboBox getCombo()
         {
         return combo;
@@ -183,4 +212,50 @@ public class Chooser extends NumericalComponent
         graphics.setPaint(Style.BACKGROUND_COLOR);
         graphics.fill(rect);
         }
+
+
+    class ComboBoxRenderer extends JLabel implements ListCellRenderer 
+        {
+        public ComboBoxRenderer() 
+            {
+            setOpaque(true);
+            setHorizontalAlignment(CENTER);
+            setVerticalAlignment(CENTER);
+            }
+ 
+        /*
+         * This method finds the image and text corresponding
+         * to the selected value and returns the label, set up
+         * to display the text and image.
+         */
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) 
+            {
+            // Get the selected index. (The index param isn't always valid, so just use the value.)
+            //int selectedIndex = ((Integer)value).intValue();
+                        
+            if (index == -1) index = combo.getSelectedIndex();
+            if (index == -1) return this;
+                        
+            if (isSelected) 
+                {
+                setBackground(list.getSelectionBackground());
+                setForeground(list.getSelectionForeground());
+                } 
+            else 
+                {
+                setBackground(list.getBackground());
+                setForeground(list.getForeground());
+                }
+ 
+            // Set the icon and text.  If icon was null, say so.
+            ImageIcon icon = icons[index];
+            String label = labels[index];
+            setIcon(icon);
+            setText(label);
+            setFont(list.getFont());
+            return this;
+            }
+        }
+
+
     }

@@ -100,26 +100,29 @@ public class MicrowaveXTMulti extends Synth
 
         model.set("name", "Init            ");  // has to be 16 long
         
-		        
+                        
         loadDefaults();
         }
     
     public JFrame sprout()
-    	{
-    	JFrame frame = super.sprout();
+        {
+        JFrame frame = super.sprout();
         // multi-mode on the Microwave can't switch patches
         transmit.setEnabled(false);
-		transmitTo.setEnabled(false);
-		return frame;
-    	}         
+        transmitTo.setEnabled(false);
+        return frame;
+        }         
 
     public void windowBecameFront() { updateMode(); }
     
     public void updateMode()
         {
-		byte DEV = (byte)model.get("id", 0);
-		// we'll send a mode dump to change the mode to Single
-		tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x01, (byte)0xF7 }, true);
+        boolean send = getSendMIDI();
+        setSendMIDI(true);
+        byte DEV = (byte)model.get("id", 0);
+        // we'll send a mode dump to change the mode to Single
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x01, (byte)0xF7 });
+        setSendMIDI(send);
         }
                
     public void changePatch(Model tempModel)
@@ -129,7 +132,7 @@ public class MicrowaveXTMulti extends Synth
 
     public String getDefaultResourceFileName() { return "MicrowaveXTMulti.init"; }
 
-    public boolean gatherInfo(String title, Model change)
+    public boolean gatherInfo(String title, Model change, boolean writing)
         {
         JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
 
@@ -188,13 +191,13 @@ public class MicrowaveXTMulti extends Synth
                 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, "Patch: ", "bank", "number", 4)
+        comp = new PatchDisplay(this, "Patch", "bank", "number", 4)
             {
             public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
             public String bankString(int bank) { return BANKS[bank]; }
             };
         hbox2.add(comp);
-        comp = new PatchDisplay(this, "  ID: ", "id", null, 3);
+        comp = new PatchDisplay(this, "ID", "id", null, 3);
         hbox2.add(comp);
         vbox.add(hbox2);
         hbox.add(vbox);
@@ -269,7 +272,7 @@ public class MicrowaveXTMulti extends Synth
                     }
                 }
             };
-       		model.setMetricMin( "arptempo", 2);
+        model.setMetricMin( "arptempo", 2);
         //((LabelledDial)comp).setSecondLabel("Tempo");
         hbox.add(comp);
         
@@ -355,10 +358,11 @@ public class MicrowaveXTMulti extends Synth
                             {
                             public void run() 
                                 { 
-                                int bank = MicrowaveXTMulti.this.model.get("bank" + inst, 0);
-                                int number = MicrowaveXTMulti.this.model.get("number" + inst, 0);
-                                int id = MicrowaveXTMulti.this.model.get("id", 0);
-                                synth.tryToSendSysex(synth.requestDump(bank, number, id));
+                                Model tempModel = new Model();
+                                tempModel.set("bank", MicrowaveXTMulti.this.model.get("bank" + inst, 0));
+                                tempModel.set("number", MicrowaveXTMulti.this.model.get("number" + inst, 0));
+                                tempModel.set("id", MicrowaveXTMulti.this.model.get("id", 0));
+                                synth.tryToSendSysex(synth.requestDump(tempModel));
                                 }
                             });
                     }
@@ -436,7 +440,7 @@ public class MicrowaveXTMulti extends Synth
                 else return "" + (val - 1);
                 }
             };
-       	model.setMetricMin( "channel" + inst, 2);
+        model.setMetricMin( "channel" + inst, 2);
         ((LabelledDial)comp).setSecondLabel("Channel");
         hbox2.add(comp);
 
@@ -468,7 +472,7 @@ public class MicrowaveXTMulti extends Synth
                 else return "" + (val - 1);
                 }
             };
-       	model.setMetricMin( "arppattern" + inst, 2);
+        model.setMetricMin( "arppattern" + inst, 2);
         ((LabelledDial)comp).setSecondLabel("Pattern");
         hbox2.add(comp);
 
@@ -485,7 +489,7 @@ public class MicrowaveXTMulti extends Synth
                 else return "" + (val);
                 }
             };
-       	model.setMetricMax( "arpnotesout" + inst, 16);
+        model.setMetricMax( "arpnotesout" + inst, 16);
         ((LabelledDial)comp).setSecondLabel("Notes Out");
         hbox2.add(comp);
         
@@ -933,7 +937,7 @@ public class MicrowaveXTMulti extends Synth
         // format example, it's written as 0x11.  It's actually 0x11.
                 
                 
-        byte[] full = new byte[getExpectedSysexLength()];
+        byte[] full = new byte[EXPECTED_SYSEX_LENGTH];
         full[0] = (byte)0xF0;
         full[1] = 0x3E;
         full[2] = 0x0E;
@@ -1028,13 +1032,12 @@ public class MicrowaveXTMulti extends Synth
         
     
     public static final int EXPECTED_SYSEX_LENGTH = 265;
-    public int getExpectedSysexLength() { return 265; }
         
         
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
         {
-		// check the easy stuff -- out of range parameters
+        // check the easy stuff -- out of range parameters
         super.revise();
 
         // handle "name" specially
@@ -1132,7 +1135,7 @@ public class MicrowaveXTMulti extends Synth
             }
         else
             {
-            model.set("number", 0);
+            //model.set("number", 0);
             retval = false;
             }
 
@@ -1145,39 +1148,7 @@ public class MicrowaveXTMulti extends Synth
         return false;  // we're never in sync because we can't move the patch number     
         }
 
-
-/*        
-    public void merge(Model otherModel, double probability)
-        {
-        String[] keys = getModel().getKeys();
-        for(int i = 0; i < keys.length; i++)
-            {
-            if (keys[i].equals("id")) continue;
-            if (keys[i].equals("number")) continue;
-            if (keys[i].equals("name")) continue;
-                
-            if (coinToss(probability))
-                {
-                if (otherModel.isString(keys[i]))
-                    {
-                    getModel().set(keys[i], otherModel.get(keys[i], getModel().get(keys[i], "")));
-                    }
-                else
-                    {
-                    getModel().set(keys[i], otherModel.get(keys[i], getModel().get(keys[i], 0)));
-                    }
-                }
-            }
-        }
-    
-    public void immutableMutate(String key)
-        {
-        }
-*/       
-
-    public boolean requestCloseWindow() { return true; }
-
-    public static String getSynthName() { return "Microwave II/XT/XTk [Multi]"; }
+    public static String getSynthName() { return "Waldorf Microwave II/XT/XTk [Multi]"; }
     
     public String getPatchName() { return model.get("name", "Init Sound V1.1 "); }
     

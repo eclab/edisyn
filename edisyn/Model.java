@@ -53,67 +53,67 @@ public class Model implements Cloneable
         
     /** Produces a random value in the fully closed range [a, b]. */
     int randomValueWithin(Random random, int a, int b)
-    	{
-    	if (a > b) { int swap = a; a = b; b = swap; }
-    	if (a == b) return a;
-    	int range = (b - a + 1);
-    	return a + random.nextInt(range);
-    	}
+        {
+        if (a > b) { int swap = a; a = b; b = swap; }
+        if (a == b) return a;
+        int range = (b - a + 1);
+        return a + random.nextInt(range);
+        }
 
     /** Produces a random value in the fully closed range [a, b],
-    	choosing from a uniform distribution of size +- weight * (a-b),
-    	centered at *center*, and rounded to the nearest integer. */
+        choosing from a uniform distribution of size +- weight * (a-b),
+        centered at *center*, and rounded to the nearest integer. */
     int randomValueWithin(Random random, int a, int b, int center, double weight)
-    	{
-    	if (a > b) { int swap = a; a = b; b = swap; }
-    	if (a == b) return a;
-    	
-    	double range = (b - a + 1);  // 0.5 on each side
-    	
-    	// pick a random number from -1...+1
-    	double delta = 0.0;
-    	while(true)
-    		{
-	    	delta = (random.nextDouble() * 2 - 1) * weight * range / 2.0;
-	    	if ((center + delta) > (a - 0.5) &&
-	    		(center + delta) < (b + 0.5))
-	    		break;
-	    	}
-	    int result = (int)(Math.round(center + delta));
-	    
-	    // slight tweak if we're at the same result
-	    if (result == center && coinToss(random, weight))
-	    	{
-	    	while(true)
-	    		{
-	    		int delta2 = (coinToss(random, 0.5) ? 1 : -1);
-	    		if ((center + delta2) >= a && 
-	    			(center + delta2) <= b)
-	    			{ result = center + delta2; break; }
-	    		}
-	    	}
-	    return result;
-    	}
+        {
+        if (a > b) { int swap = a; a = b; b = swap; }
+        if (a == b) return a;
+        
+        double range = (b - a + 1);  // 0.5 on each side
+        
+        // pick a random number from -1...+1
+        double delta = 0.0;
+        while(true)
+            {
+            delta = (random.nextDouble() * 2 - 1) * weight * range / 2.0;
+            if ((center + delta) > (a - 0.5) &&
+                (center + delta) < (b + 0.5))
+                break;
+            }
+        int result = (int)(Math.round(center + delta));
+            
+        // slight tweak if we're at the same result
+        if (result == center && coinToss(random, weight))
+            {
+            while(true)
+                {
+                int delta2 = (coinToss(random, 0.5) ? 1 : -1);
+                if ((center + delta2) >= a && 
+                    (center + delta2) <= b)
+                    { result = center + delta2; break; }
+                }
+            }
+        return result;
+        }
 
 
-	/** Mutation works as follows.  For each key, we first see if we're permitted to mutate it
-		(no immutable, no strings).  If so, we divide the range into the METRIC and NON-METRIC
-		regions.  If it's all NON-METRIC, then with WEIGHT probability we will pick a new
-		value at random (else stay).  Else if we're in a non-metric region, with 0.5 chance we'll
-		pick a new random non-metric value with WEIGHT probability (else stay), and with 0.5 chance we'll 
-		pick a completely random metric value with WEIGHT probability (else stay). Else if we're in a metric 
-		region, with 0.5 chance we will pick a non-metric value with WEIGHT probability (else stay), and with 
-		0.5 chance we will do a METRIC MUTATION.
-		
-		<p>A metric mutation selects under a uniform rectangular distribution centered at the current value.
-		The rectangular distribution is the delta function when WEIGHT is 0.0 and is the full range from
-		metric min to metric max inclusive when WEIGHT is 1.0.  We repeat this selection until we get a value
-		within metric min and metric max.
-	*/
-	
-	public void mutate(Random random, double weight)
-		{
-    	String[] keys = getKeys();
+    /** Mutation works as follows.  For each key, we first see if we're permitted to mutate it
+        (no immutable, no strings).  If so, we divide the range into the METRIC and NON-METRIC
+        regions.  If it's all NON-METRIC, then with WEIGHT probability we will pick a new
+        value at random (else stay).  Else if we're in a non-metric region, with 0.5 chance we'll
+        pick a new random non-metric value with WEIGHT probability (else stay), and with 0.5 chance we'll 
+        pick a completely random metric value with WEIGHT probability (else stay). Else if we're in a metric 
+        region, with 0.5 chance we will pick a non-metric value with WEIGHT probability (else stay), and with 
+        0.5 chance we will do a METRIC MUTATION.
+                
+        <p>A metric mutation selects under a uniform rectangular distribution centered at the current value.
+        The rectangular distribution is the delta function when WEIGHT is 0.0 and is the full range from
+        metric min to metric max inclusive when WEIGHT is 1.0.  We repeat this selection until we get a value
+        within metric min and metric max.
+    */
+        
+    public void mutate(Random random, double weight)
+        {
+        String[] keys = getKeys();
         for(int i = 0; i < keys.length; i++)
             {
             // return if the key is immutable, it's a string, or we fail the coin toss
@@ -121,93 +121,93 @@ public class Model implements Cloneable
             if (isString(keys[i])) continue;
 
             
-			boolean hasMetric = false;					// do we even HAVE a metric range?
-			boolean doMetric = false;					// are we in that range, and should mutate within it?
-			boolean pickRandomInMetric = false;			// are we NOT in that range, but should maybe go to a random value in it?
-			
-			if (metricMinExists(keys[i]) &&
-				metricMaxExists(keys[i]))
-				{
-				hasMetric = true;
-				if (getMetricMax(keys[i]) == getMax(keys[i]) &&
-					getMetricMin(keys[i]) == getMin(keys[i])) // has no non-metric
-						{
-						doMetric = true;
-						}
-				else if (get(keys[i], 0) >= getMetricMin(keys[i]) &&
-						 get(keys[i], 0) <= getMetricMax(keys[i]))		 // we're within metric range
-					{
-					if (coinToss(random, 0.5))
-						doMetric = true;				// we will stay in the metric range and mutate within it (versus jump out)
-					}
-				else	// we're outside the metric range
-					{
-					if (coinToss(random, 0.5))
-						pickRandomInMetric = true;		// we are out of the metric range but may go inside it (versus stay outside)
-					}
-				}
-			else	// there is no metric range
-				{
-				// do nothing.
-				}
-				
-			// now perform the operation
-		
-			if (doMetric)							// definitely do a metric mutation
-				{
-				int a = getMetricMin(keys[i]);
-				int b = getMetricMax(keys[i]);
-				set(keys[i], randomValueWithin(random, getMetricMin(keys[i]), getMetricMax(keys[i]), get(keys[i], 0), weight));
-				}
-			else if (pickRandomInMetric)			// MAYBE jump into metric
-				{
-				if (coinToss(random, weight))
-					{
-					set(keys[i], randomValueWithin(random, getMetricMin(keys[i]), getMetricMax(keys[i])));
-					}
-				}
-			else if (hasMetric)						// MAYBE choose a random new non-metric location
-				{
-				if (coinToss(random, weight))
-					{
-					int lowerRange = getMetricMin(keys[i]) - getMin(keys[i]);
-					int upperRange = getMax(keys[i]) - getMetricMax(keys[i]);
-					int delta = random.nextInt(lowerRange + upperRange);
-					if (delta < lowerRange)
-						{
-						set(keys[i], getMin(keys[i]) + delta);
-						}
-					else
-						{
-						set(keys[i], getMetricMax(keys[i]) + 1 + (delta - lowerRange));
-						}
-					}
-				}
-			else									// MAYBE choose a random new non-metric location (easiest because there is no metric location)
-				{
-				if (coinToss(random, weight))
-					{
-					set(keys[i], randomValueWithin(random, getMin(keys[i]), getMax(keys[i])));
-					}
-				}
-			}
-		}
+            boolean hasMetric = false;                                      // do we even HAVE a metric range?
+            boolean doMetric = false;                                       // are we in that range, and should mutate within it?
+            boolean pickRandomInMetric = false;                     // are we NOT in that range, but should maybe go to a random value in it?
+                        
+            if (metricMinExists(keys[i]) &&
+                metricMaxExists(keys[i]))
+                {
+                hasMetric = true;
+                if (getMetricMax(keys[i]) == getMax(keys[i]) &&
+                    getMetricMin(keys[i]) == getMin(keys[i])) // has no non-metric
+                    {
+                    doMetric = true;
+                    }
+                else if (get(keys[i], 0) >= getMetricMin(keys[i]) &&
+                    get(keys[i], 0) <= getMetricMax(keys[i]))               // we're within metric range
+                    {
+                    if (coinToss(random, 0.5))
+                        doMetric = true;                                // we will stay in the metric range and mutate within it (versus jump out)
+                    }
+                else    // we're outside the metric range
+                    {
+                    if (coinToss(random, 0.5))
+                        pickRandomInMetric = true;              // we are out of the metric range but may go inside it (versus stay outside)
+                    }
+                }
+            else    // there is no metric range
+                {
+                // do nothing.
+                }
+                                
+            // now perform the operation
+                
+            if (doMetric)                                                   // definitely do a metric mutation
+                {
+                int a = getMetricMin(keys[i]);
+                int b = getMetricMax(keys[i]);
+                set(keys[i], randomValueWithin(random, getMetricMin(keys[i]), getMetricMax(keys[i]), get(keys[i], 0), weight));
+                }
+            else if (pickRandomInMetric)                    // MAYBE jump into metric
+                {
+                if (coinToss(random, weight))
+                    {
+                    set(keys[i], randomValueWithin(random, getMetricMin(keys[i]), getMetricMax(keys[i])));
+                    }
+                }
+            else if (hasMetric)                                             // MAYBE choose a random new non-metric location
+                {
+                if (coinToss(random, weight))
+                    {
+                    int lowerRange = getMetricMin(keys[i]) - getMin(keys[i]);
+                    int upperRange = getMax(keys[i]) - getMetricMax(keys[i]);
+                    int delta = random.nextInt(lowerRange + upperRange);
+                    if (delta < lowerRange)
+                        {
+                        set(keys[i], getMin(keys[i]) + delta);
+                        }
+                    else
+                        {
+                        set(keys[i], getMetricMax(keys[i]) + 1 + (delta - lowerRange));
+                        }
+                    }
+                }
+            else                                                                    // MAYBE choose a random new non-metric location (easiest because there is no metric location)
+                {
+                if (coinToss(random, weight))
+                    {
+                    set(keys[i], randomValueWithin(random, getMin(keys[i]), getMax(keys[i])));
+                    }
+                }
+            }
+        }
 
 
 
-	/** Recombination works as follows.  For each key, we first see if we're permitted to mutate it
-		(no immutable, other model doesn't have the key).  Next with 1.0 - WEIGHT probability 
-		we don't recombine at all. Otherwise we recombine:
-		
-		<p>If the parameter is a string, with 0.5 probability we keep our value, else we adopt
-		   the other model's value.  If the parameter is an integer, and we have a metric range,
-		   and BOTH our value AND the other model's value are within that range, then we do 
-		   metric crossover: we pick a random new value between the two values inclusive.
-		   Otherwise with 0.5 probability we select our parameter, else the other model's parameter.
-	*/
+    /** Recombination works as follows.  For each key, we first see if we're permitted to mutate it
+        (no immutable, other model doesn't have the key).  Next with 1.0 - WEIGHT probability 
+        we don't recombine at all. Otherwise we recombine:
+                
+        <p>If the parameter is a string, with 0.5 probability we keep our value, else we adopt
+        the other model's value.  If the parameter is an integer, and we have a metric range,
+        and BOTH our value AND the other model's value are within that range, then we do 
+        metric crossover: we pick a random new value between the two values inclusive.
+        Otherwise with 0.5 probability we select our parameter, else the other model's parameter.
+    */
     public void recombine(Random random, Model model, double weight)
-    	{
-    	String[] keys = getKeys();
+        {
+        String[] keys = getKeys();
         for(int i = 0; i < keys.length; i++)
             {
             // return if the key doesn't exist, is immutable, or we fail the coin toss
@@ -217,32 +217,32 @@ public class Model implements Cloneable
             
             // is it a string?
             if (isString(keys[i]))
-            	{ 
-				if (coinToss(random, 0.5))
-            		set(keys[i], model.get(keys[i], ""));
-            	}
+                { 
+                if (coinToss(random, 0.5))
+                    set(keys[i], model.get(keys[i], ""));
+                }
             else
-            	{
-            	// we cross over metrically if we're both within the metric range
-				if (metricMinExists(keys[i]) &&
-					metricMaxExists(keys[i]) &&
-					get(keys[i], 0) >= getMetricMin(keys[i]) &&
-					get(keys[i], 0) <= getMetricMax(keys[i]) &&
-					model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
-					model.get(keys[i], 0) <= getMetricMax(keys[i])) 
-					{
-					int a = get(keys[i], 0);
-					int b = model.get(keys[i], a);
-					set(keys[i], randomValueWithin(random, a, b));
-					}
-				else // we pick one or the other
-					{
-					if (coinToss(random, 0.5))
-						set(keys[i], model.get(keys[i], 0));
-					}
-				}
-			}
-    	}
+                {
+                // we cross over metrically if we're both within the metric range
+                if (metricMinExists(keys[i]) &&
+                    metricMaxExists(keys[i]) &&
+                    get(keys[i], 0) >= getMetricMin(keys[i]) &&
+                    get(keys[i], 0) <= getMetricMax(keys[i]) &&
+                    model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
+                    model.get(keys[i], 0) <= getMetricMax(keys[i])) 
+                    {
+                    int a = get(keys[i], 0);
+                    int b = model.get(keys[i], a);
+                    set(keys[i], randomValueWithin(random, a, b));
+                    }
+                else // we pick one or the other
+                    {
+                    if (coinToss(random, 0.5))
+                        set(keys[i], model.get(keys[i], 0));
+                    }
+                }
+            }
+        }
     
     
     public Object clone()
@@ -277,9 +277,9 @@ public class Model implements Cloneable
         if (!immutable.equals(model.immutable))
             return false;
         if (!metricMin.equals(model.metricMin))
-        	return false;
+            return false;
         if (!metricMax.equals(model.metricMax))
-        	return false;
+            return false;
         if (!lastKey.equals(model.lastKey))
             return false;
         return true;
@@ -510,11 +510,11 @@ public class Model implements Cloneable
         }
     
     public void removeMetricMinMax(String key)
-    	{
-    	metricMin.remove(key);
-    	metricMax.remove(key);
-    	}
-    	
+        {
+        metricMin.remove(key);
+        metricMax.remove(key);
+        }
+        
     /** Sets whether a given key is declared immutable. */        
     public void setImmutable(String key, boolean val)
         {

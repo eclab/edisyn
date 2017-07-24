@@ -208,7 +208,7 @@ public class MicrowaveXT extends Synth
 
         model.set("name", "Init Sound V1.1 ");  // has to be 16 long
 
-		// make sure this never can be mutated
+        // make sure this never can be mutated
         model.set("soundformatversion", 1);  // always
         model.setImmutable("soundformatversion", true);
         
@@ -219,14 +219,17 @@ public class MicrowaveXT extends Synth
 
     public void updateMode()
         {
-		byte DEV = (byte)model.get("id", 0);
-		// we'll send a mode dump to change the mode to Single
-		tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x00, (byte)0xF7 }, true);
+        boolean send = getSendMIDI();
+        setSendMIDI(true);
+        byte DEV = (byte)model.get("id", 0);
+        // we'll send a mode dump to change the mode to Single
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x00, (byte)0xF7 });
+        setSendMIDI(send);
         }
                
     public String getDefaultResourceFileName() { return "MicrowaveXT.init"; }
 
-    public boolean gatherInfo(String title, Model change)
+    public boolean gatherInfo(String title, Model change, boolean writing)
         {
         JComboBox bank = new JComboBox(BANKS);
         bank.setEditable(false);
@@ -290,13 +293,13 @@ public class MicrowaveXT extends Synth
                 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, "Patch: ", "bank", "number", 4)
+        comp = new PatchDisplay(this, "Patch", "bank", "number", 4)
             {
             public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
             public String bankString(int bank) { return BANKS[bank]; }
             };
         hbox2.add(comp);
-        comp = new PatchDisplay(this, "  ID: ", "id", null, 3);
+        comp = new PatchDisplay(this, "ID", "id", null, 3);
         hbox2.add(comp);
         vbox.add(hbox2);
         hbox.add(vbox);
@@ -1032,6 +1035,7 @@ public class MicrowaveXT extends Synth
 
         comp = new LabelledDial("Key On", this, "waveenvkeyonend", color, 0, 7, -1);
         ((LabelledDial)comp).setSecondLabel(" Loop End ");  // additional space because OS X cuts off the "d"
+        ((LabelledDial)comp).setSecondLabel("(Sustain Pos)");  // additional space because OS X cuts off the "d"
         vbox.add(comp);
         hbox.add(vbox);
                 
@@ -1042,6 +1046,7 @@ public class MicrowaveXT extends Synth
 
         comp = new LabelledDial("Key Off", this, "waveenvkeyoffend", color, 0, 7, -1);
         ((LabelledDial)comp).setSecondLabel(" Loop End ");  // additional space because OS X cuts off the "d"
+        ((LabelledDial)comp).setSecondLabel(" (End Pos) ");  // additional space because OS X cuts off the "d"
         vbox.add(comp);
         hbox.add(vbox);
                 
@@ -1136,12 +1141,14 @@ public class MicrowaveXT extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-        comp = new EnvelopeDisplay(this, Color.red, 
-            new String[] { null, "freeenvtime1", "freeenvtime2", "freeenvtime3", null, "freeenvreleasetime", null },
-            new String[] { null, "freeenvlevel1", "freeenvlevel2", "freeenvlevel3", "freeenvlevel3", "freeenvreleaselevel", null },
-            new double[] { 0, 0.2/127.0, 0.2 / 127.0,  0.2/127.0, 0.2, 0.2/127.0, 0},
-            new double[] { 64.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 64.0/127.0 });
-        ((EnvelopeDisplay)comp).setAxis(64.0 / 127.0);
+        EnvelopeDisplay disp = new EnvelopeDisplay(this, Color.red, 
+            new String[] { null, "freeenvtime1", "freeenvtime2", "freeenvtime3", null, "freeenvreleasetime"},   //, null },
+            new String[] { null, "freeenvlevel1", "freeenvlevel2", "freeenvlevel3", "freeenvlevel3", "freeenvreleaselevel"},            //, null },
+            new double[] { 0, 0.2/127.0, 0.2 / 127.0,  0.2/127.0, 0.2, 0.2/127.0},              //, 0},
+            new double[] { 64.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0}           //, 64.0/127.0 }
+            );
+        disp.setAxis(64.0 / 127.0);
+        comp = disp;
         hbox.addLast(comp);    
         
         category.add(hbox, BorderLayout.CENTER);
@@ -1158,12 +1165,24 @@ public class MicrowaveXT extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-        comp = new EnvelopeDisplay(this, Color.red, 
+        EnvelopeDisplay disp = new EnvelopeDisplay(this, Color.red, 
             new String[] { null, "waveenvtime1", "waveenvtime2", "waveenvtime3", "waveenvtime4", "waveenvtime5", "waveenvtime6", "waveenvtime7", "waveenvtime8", null },
             new String[] { null, "waveenvlevel1", "waveenvlevel2", "waveenvlevel3", "waveenvlevel4", "waveenvlevel5", "waveenvlevel6", "waveenvlevel7", "waveenvlevel8", null },
             new double[] { 0, 0.25/127.0/2.0, 0.25 / 127.0/2.0,  0.25/127.0/2.0, 0.25/127.0/2.0,  0.25/127.0/2.0, 0.25 / 127.0/2.0,  0.25/127.0/2.0, 0.25/127.0/2.0, 0},
-            new double[] { 0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 0 });
-        ((EnvelopeDisplay)comp).setPreferredWidth(((EnvelopeDisplay)comp).getPreferredWidth() * 2);
+            new double[] { 0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 0 })
+            	{
+			    public int postProcessLoopOrStageKey(String key, int val)
+    				{
+    				// they'll all be off by 1
+    				return val + 1;
+    				}
+            	};
+        disp.setPreferredWidth(disp.getPreferredWidth() * 2);
+        disp.setLoopKeys(0, "waveenvkeyonstart", "waveenvkeyonend");
+        disp.setLoopKeys(1, "waveenvkeyoffstart", "waveenvkeyoffend");
+        disp.setSustainStageKey("waveenvkeyonend");
+        disp.setFinalStageKey("waveenvkeyoffend");
+        comp = disp;
         hbox.addLast(comp);
         
         category.add(hbox, BorderLayout.CENTER);
@@ -2151,7 +2170,7 @@ public class MicrowaveXT extends Synth
                 bytes[i] = (byte)(name.charAt(i - 240));
             }
                 
-        byte[] full = new byte[getExpectedSysexLength()];
+        byte[] full = new byte[EXPECTED_SYSEX_LENGTH];
         full[0] = (byte)0xF0;
         full[1] = 0x3E;
         full[2] = 0x0E;
@@ -2255,13 +2274,12 @@ public class MicrowaveXT extends Synth
         
 
     public static final int EXPECTED_SYSEX_LENGTH = 265;        
-    public int getExpectedSysexLength() { return 265; }
         
         
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
         {
-		// check the easy stuff -- out of range parameters
+        // check the easy stuff -- out of range parameters
         super.revise();
 
         // handle "name" specially
@@ -2402,8 +2420,8 @@ public class MicrowaveXT extends Synth
             }
         else
             {
-            model.set("bank", 0);
-            model.set("number", 0);
+            //model.set("bank", 0);
+            //model.set("number", 0);
             retval = false;
             }
 
@@ -2416,41 +2434,7 @@ public class MicrowaveXT extends Synth
         return retval;     
         }
 
-    /*
-    public void merge(Model otherModel, double probability)
-        {
-        String[] keys = getModel().getKeys();
-        for(int i = 0; i < keys.length; i++)
-            {
-            if (keys[i].equals("id")) continue;
-            if (keys[i].equals("number")) continue;
-            if (keys[i].equals("bank")) continue;
-            if (keys[i].equals("name")) continue;
-                
-            if (coinToss(probability))
-                {
-                if (otherModel.isString(keys[i]))
-                    {
-                    getModel().set(keys[i], otherModel.get(keys[i], getModel().get(keys[i], "")));
-                    }
-                else
-                    {
-                    getModel().set(keys[i], otherModel.get(keys[i], getModel().get(keys[i], 0)));
-                    }
-                }
-            }
-        }
-    
-    public void immutableMutate(String key)
-        {
-        // for the time being we do nothing
-        }
-    */
-        
-
-    public boolean requestCloseWindow() { return true; }
-
-    public static String getSynthName() { return "Microwave II/XT/XTk"; }
+    public static String getSynthName() { return "Waldorf Microwave II/XT/XTk"; }
     
     public String getPatchName() { return model.get("name", "Init Sound V1.1 "); }
     

@@ -94,12 +94,16 @@ public class Style
     /////// ENVELOPE DISPLAY CONSTANTS
 
     /** Degree of Transparency of the fill region with respect to the stroked lines. */
-    public static final double ENVELOPE_DISPLAY_FILL_TRANSPARENCY = 0.25;
+    public static final double ENVELOPE_DISPLAY_FILL_TRANSPARENCY = 0.5;
     /** Thickness of effective border around the Envelope Display, except the top. */
     public static final int ENVELOPE_DISPLAY_BORDER_THICKNESS = 10;
     /** Thickness of effective top border above the Envelope Display. */
-    public static final int ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS = 0;
-    
+    public static final int ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS = 2;  // enough space for the dots
+    /** Thickness of the marker circles. */
+    public static final float ENVELOPE_DISPLAY_MARKER_WIDTH = 4;
+    /** Stroke for the X axis. */
+    public static final BasicStroke ENVELOPE_AXIS_STROKE = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, new float[] { 4.0f }, 0.0f);
+	    
     /////// CHECKBOX CONSTANTS
     /** Border around arpeggiator checkboxes */
     public static final Border CHECKBOX_HIGHLIGHTED_BORDER = BorderFactory.createCompoundBorder(
@@ -111,6 +115,14 @@ public class Style
     /////// PATCH CONSTANTS
     public static final Color PATCH_UNSYNCED_TEXT_COLOR = Color.RED;
     public static final Border PATCH_BORDER = BorderFactory.createEmptyBorder(4, 4, 6, 4);
+    
+    
+    /////// KEYBOARD CONSTANTS
+    public static final Color KEYBOARD_WHITE_COLOR = Color.WHITE;
+    public static final Color KEYBOARD_BLACK_COLOR = Color.BLACK;
+    public static final Color KEYBOARD_DYNAMIC_COLOR = DIAL_DYNAMIC_COLOR;
+    public static final int KEYBOARD_DEFAULT_WHITE_KEY_WIDTH = 16;
+    public static final int KEYBOARD_DEFAULT_WHITE_KEY_HEIGHT = 80;
     
 
     /////// HTML DISPLAY CONSTANTS
@@ -128,7 +140,7 @@ public class Style
 
     public static boolean isMac() 
         {
-        return (OS.indexOf("mac") >= 0);
+        return (OS.indexOf("mac") >= 0 || System.getProperty("mrj.version") != null);
         }
 
     public static boolean isUnix() 

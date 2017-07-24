@@ -86,6 +86,11 @@ public class HBox extends JComponent
         box.remove(component);
         }        
         
+    public void remove(JComponent component)
+        {
+        box.remove(component);
+        }        
+        
     public void add(JComponent component)
         {
         box.add(component);

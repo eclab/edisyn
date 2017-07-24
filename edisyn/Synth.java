@@ -33,8 +33,11 @@ import java.io.*;
 */
 
 public abstract class Synth extends JComponent implements Updatable
+
     {
-    public static int numOpenWindows = 0;
+    // Counter for total number of open windows.  When this drops to zero,
+    // the program will quit automatically.
+    static int numOpenWindows = 0;
     
     // The model proper
     protected Model model;
@@ -46,97 +49,198 @@ public abstract class Synth extends JComponent implements Updatable
     File file;
     // will the next load be a merge?  If 0, we're not merging.  Else it's the merge probability.
     double merging = 0.0;
+    
+    public JTabbedPane tabs = new JTabbedPane();
+
+    public static final int MAX_FILE_LENGTH = 64 * 1024;        // so we don't go on forever
 
     public Midi.Tuple tuple;
+    
+    public Midi midi = new Midi();
     
     public JMenuItem transmit;
     public JMenuItem transmitTo;
     public JMenuItem transmitCurrent;
-    public JMenuItem receive;
     public JMenuItem undoMenu;
     public JMenuItem redoMenu;
-    
-    public Undo undo = new Undo(this);
-    
+    public JMenuItem receiveCurrent;
+    public JCheckBoxMenuItem passThroughCCMenuItem;
+
     // counter for note-on messages so we don't have a million note-off messages in a row
-    public int noteOnTick;
+    int noteOnTick;
     
-    public CCMap ccmap;
-    public int lastCC = -1;
+    Undo undo = new Undo(this);
         
-    public static final Class[] synths = new Class[] { Blofeld.class, BlofeldMulti.class, MicrowaveXT.class, MicrowaveXTMulti.class };
+    CCMap ccmap;
+    int lastCC = -1;
+        
+    boolean passThroughCC;
+    public Object passThroughCCLock = new Object[0];
+    public boolean getPassThroughCC() { synchronized(passThroughCCLock) { return passThroughCC; } }
+    public void setPassThroughCC(final boolean val) 
+    	{ 
+    	synchronized(passThroughCCLock) 
+    		{ 
+    		passThroughCC = val; 
+    		setLastX("" + val, "PassThroughCC", getSynthNameLocal());
+			SwingUtilities.invokeLater(new Runnable()
+				{
+				public void run()
+					{
+					passThroughCCMenuItem.setState(val);
+					}
+				});
+			if (val == true && getLearningCC())
+				setLearningCC(false);
+    		} 
+    	}
+
+
+
+
+
+	//////// SYNTHESIZER EDIT PANES
+	
+	/** All synthesizer editor pane classes in Edisyn */
+    public static final Class[] synths = new Class[] { YamahaTX81Z.class, YamahaTX81ZMulti.class, KawaiK4.class, KawaiK4Multi.class, Blofeld.class, BlofeldMulti.class, MicrowaveXT.class, MicrowaveXTMulti.class, Matrix1000.class, PreenFM2.class };
     
-   	static String[] getSynthNames()
-    	{
-    	String[] synthNames = new String[synths.length];
-    	for(int i = 0; i < synths.length; i++)
-    		{
-    		try
-    			{
-    			synthNames[i] = "Synth with no getSynthName() method, oops";
-            	Method method = synths[i].getMethod("getSynthName", new Class[] { });
-            	synthNames[i] = (String)(method.invoke(null, new Object[] { } ));
-            	}
+    /** All synthesizer names in Edisyn, one per class in synths */
+    public static String[] getSynthNames()
+        {
+        String[] synthNames = new String[synths.length];
+        for(int i = 0; i < synths.length; i++)
+            {
+            try
+                {
+                synthNames[i] = "Synth with no getSynthName() method, oops";
+                Method method = synths[i].getMethod("getSynthName", new Class[] { });
+                synthNames[i] = (String)(method.invoke(null, new Object[] { } ));
+                }
             catch (Exception e)
-            	{
-            	e.printStackTrace();
-            	}
+                {
+                e.printStackTrace();
+                }
             }
         return synthNames;
-    	}
+        }
+                
+                
+                
+                
+    /////// SYNCING AND UNDO
                   
     boolean synced = false;
     
+    /** Set the synth to believe it is synced (or not). */
     public void setSynced(boolean val)
         {
         synced = val;
-        for(int i = 0; i < patchDisplays.size(); i++)
-            ((PatchDisplay)(patchDisplays.get(i))).update("whatever", getModel());
         updateTitle();
         }
+        
+    /** Returns whether the synth believes it is synced. */
     public boolean isSynced() { return synced; }
     
+    /** Update the Undo and Redo menus to be enabled or disabled. */
     public void updateUndoMenus()
-    	{
-    	if (undo == null)		// we could just be a scratch synth, not one with a window
-    		return;  
-    		
-    	if (redoMenu != null)
-    		redoMenu.setEnabled(
-    			undo.shouldShowRedoMenu());
-    	if (undoMenu != null)
-    		undoMenu.setEnabled(
-    			undo.shouldShowUndoMenu());
-    	}
-    
-    ArrayList patchDisplays = new ArrayList();
-    public void addPatchDisplay(PatchDisplay display)
         {
-        patchDisplays.add(display);
+        if (undo == null)               // we could just be a scratch synth, not one with a window
+            return;  
+                
+        if (redoMenu != null)
+            redoMenu.setEnabled(
+                undo.shouldShowRedoMenu());
+        if (undoMenu != null)
+            undoMenu.setEnabled(
+                undo.shouldShowUndoMenu());
         }
-    
-    /** Updates the model to reflect the following sysex patch dump for your synthesizer type. 
+
+
+
+
+
+
+
+
+
+
+	////// COMMUNICATION WITH THE SYNTHESIZER
+
+	/** Changes the patch and bank to reflect the information in tempModel. */
+    public void changePatch(Model tempModel) { }
+
+    /** Updates the model to reflect the following sysex patch dump for your synthesizer type.
+    	If ignorePatch is TRUE, then you should NOT attempt to change the patch number and bank
+    	to reflect new information, but should retain the old number and bank.
         If the patch contains information sufficient to sync, return TRUE, else return FALSE. */
-    public abstract boolean parse(byte[] data, boolean ignorePatch);
+    public boolean parse(byte[] data, boolean ignorePatch) { return false; }
     
     /** Updates the model to reflect the following sysex or CC (or other!) message from your synthesizer. 
         You are free to IGNORE this message entirely.  Patch dumps will generally not be sent this way; 
         and furthermore it is possible that this is crazy sysex from some other synth so you need to check for it.  */
-    public abstract void parseParameter(byte[] data);
+    public void parseParameter(byte[] data) { return; }
     
+    /** Produces a sysex patch dump suitable to send to a remote synthesizer as one
+        OR MORE sysex dumps or other MIDI messages.  Each sysex dump is a separate byte array,
+        and other midi messages are MIDI message objects.
+        If you return a zero-length array, nothing will be sent.  
+        If tempModel is non-null, then it should be used to extract meta-parameters
+        such as the bank and patch number (stuff that's specified by gatherInfo(...).
+        Otherwise the primary model should be used.  The primary model should be used
+        for all other parameters.  toWorkingMemory indicates whether the patch should
+        be directed to working memory of the synth or to the patch number in tempModel. 
+        
+        <p>It is assumed that the NON byte-array elements may be stripped out if this
+        emit is done to a file.
+        
+        <p>The default version of this method simply calls emit() and returns its
+        value as the first subarray.  If you have a synthesizer (like the TX81Z) which
+        dumps a single patch as multiple sysex dumps, override this to send the patch
+        properly.
+    */
+    public Object[] emitAll(Model tempModel, boolean toWorkingMemory)
+        {
+        byte[]result = emit(tempModel, toWorkingMemory);
+        if (result == null ||
+            result.length == 0)
+            return new Object[0];
+        else
+            return new Object[] { result };
+        }
+
     /** Produces a sysex patch dump suitable to send to a remote synthesizer. 
         If you return a zero-length byte array, nothing will be sent.  
         If tempModel is non-null, then it should be used to extract meta-parameters
         such as the bank and patch number (stuff that's specified by gatherInfo(...).
         Otherwise the primary model should be used.  The primary model should be used
         for all other parameters.  toWorkingMemory indicates whether the patch should
-        be directed to working memory of the synth or to the patch number in tempModel. */
-    public abstract byte[] emit(Model tempModel, boolean toWorkingMemory);
+        be directed to working memory of the synth or to the patch number in tempModel. 
+        
+        <p>Note that this method will only be called by emitAll(...).  So if you 
+        have overridden emitAll(...) you don't need to implement this method. */
+    public byte[] emit(Model tempModel, boolean toWorkingMemory) { return new byte[0]; }
     
-    /** Produces a sysex parameter change request for the given parameter.  
+    /** Produces one or more sysex parameter change requests for the given parameter as one
+        OR MORE sysex dumps or other MIDI messages.  Each sysex dump is a separate byte array,
+        and other midi messages are MIDI message objects.
+        
         If you return a zero-length byte array, nothing will be sent.  */
-    // TODO: maybe we should also permit CC and NRPN
-    public abstract byte[] emit(String key);
+    public Object[] emitAll(String key)
+        {
+        byte[] result = emit(key);
+        if (result == null ||
+            result.length == 0)
+            return new Object[0];
+        else
+            return new Object[] { result };
+        }
+
+    /** Produces a sysex parameter change request for the given parameter.  
+        If you return a zero-length byte array, nothing will be sent.
+        
+        <p>Note that this method will only be called by emitAll(...).  So if you 
+        have overridden emitAll(...) you don't need to implement this method. */        
+    public byte[] emit(String key) { return new byte[0]; }
     
     /** Produces a sysex message to send to a synthesizer to request it to initiate
         a patch dump to you.  If you return a zero-length byte array, nothing will be sent. 
@@ -145,7 +249,7 @@ public abstract class Synth extends JComponent implements Updatable
         Otherwise the primary model should be used.  The primary model should be used
         for all other parameters.  
     */
-    public abstract byte[] requestDump(Model tempModel);
+    public byte[] requestDump(Model tempModel) { return new byte[0]; }
     
     /** Produces a sysex message to send to a synthesizer to request it to initiate
         a patch dump to you for the CURRENT PATCH.  If you return a zero-length byte array, 
@@ -154,11 +258,24 @@ public abstract class Synth extends JComponent implements Updatable
         Otherwise the primary model should be used.  The primary model should be used
         for all other parameters.  
     */
-    public abstract byte[] requestCurrentDump(Model tempModel);
-    
-    /** Returns the expected length of a sysex patch dump for your type of synthesizer. */
-    public abstract int getExpectedSysexLength();
+    public byte[] requestCurrentDump() { return new byte[0]; }
 
+	/** Performs a request for a dump of the patch indicated in tempModel.
+		This method by default calls requestDump(...) and submits it to tryToSendSysex(...), 
+		but you can override it to do something more sophisticated. */    
+    public void performRequestDump(Model tempModel)
+        {
+        tryToSendSysex(requestDump(tempModel));
+        }
+    
+	/** Performs a request for a dump of the patch indicated in the current model.
+		This method by default calls requestCurrentDump(...) and submits it to tryToSendSysex(...), 
+		but you can override it to do something more sophisticated. */    
+    public void performRequestCurrentDump()
+    	{
+        tryToSendSysex(requestCurrentDump());
+    	}
+    
     /** Gathers meta-parameters from the user via a JOptionPane, such as 
         patch number and bank number, which are used to specify where a patch
         should be saved to or loaded from.  These are typically also stored in
@@ -167,8 +284,13 @@ public abstract class Synth extends JComponent implements Updatable
         revised to hold the new values; but rather they should be placed into tempModel.
         This method returns TRUE if the user provided the values, and FALSE
         if he cancelled.
+        
+        <p>If writing is TRUE, then the purpose of this info-gathering is to find
+        a place to write or send a patch TO.  Otherwise its purpose is to read a patch FROM
+        somewhere.  Some synths allow patches to be read from many locations but written only
+        to specific ones (because the others are read-only).
     */
-    public abstract boolean gatherInfo(String title, Model tempModel);
+    public abstract boolean gatherInfo(String title, Model tempModel, boolean writing);
 
     /** Create your own Synth-specific class version of this static method.
         It will be called when the system wants to know if the given sysex patch dump
@@ -177,7 +299,71 @@ public abstract class Synth extends JComponent implements Updatable
         {
         return false;
         }
-        
+
+
+	public Object[] buildNRPN(int channel, int parameter, int value)
+		{
+		try
+			{
+			int p_msb = (parameter >> 7);
+			int p_lsb = (parameter & 127);
+			int v_msb = (value >> 7);
+			int v_lsb = (value & 127);
+			return new Object[]
+				{
+				new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 99, (byte)p_msb),
+				new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 98, (byte)p_lsb),
+				new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 6, (byte)v_msb),
+				new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 38, (byte)v_lsb),
+				new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 101, (byte)127),
+				new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 100, (byte)127),
+				};
+			}
+		catch (InvalidMidiDataException e)
+			{
+			e.printStackTrace();
+			return new Object[0];
+			}
+		}
+
+	public Object[] buildLongCC(int channel, int parameter, int value)
+		{
+		try
+			{
+			int v_msb = (value >> 7);
+			int v_lsb = (value & 127);
+			return new Object[]
+				{
+				new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, parameter, (byte)v_msb),
+				new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, parameter + 32, (byte)v_lsb)
+				};
+			}
+		catch (InvalidMidiDataException e)
+			{
+			e.printStackTrace();
+			return new Object[0];
+			}
+		}
+
+	public Object[] buildPC(int channel, int program)
+		{
+		try
+			{
+			return new Object[]
+				{
+				new ShortMessage(ShortMessage.PROGRAM_CHANGE, channel, program)
+				};
+			}
+		catch (InvalidMidiDataException e)
+			{
+			e.printStackTrace();
+			return new Object[0];
+			}
+		}
+
+
+
+
     /** Returns the current file associated with this editor, or null if there is none. */
     public File getFile() { return file; }
         
@@ -192,34 +378,43 @@ public abstract class Synth extends JComponent implements Updatable
     public Model getModel() { return model; }
         
     /** Returns the name of the synthesizer.  You should make your own
-    	static version of this method in your synth panel subclass.  */
+        static version of this method in your synth panel subclass.  */
     public static String getSynthName() { return "Override Me"; }
     
     /** Returns the name of this synth, by calling getSynthName(). */
     public final String getSynthNameLocal()
-    	{
-    	// This code is basically a copy of getSynthNames().
-    	// But we can't easily merge them, one has to be static and the other non-static
-    	try
-    		{
-        	Method method = this.getClass().getMethod("getSynthName", new Class[] { });
-        	return (String)(method.invoke(null, new Object[] { } ));
+        {
+        // This code is basically a copy of getSynthNames().
+        // But we can't easily merge them, one has to be static and the other non-static
+        try
+            {
+            Method method = this.getClass().getMethod("getSynthName", new Class[] { });
+            return (String)(method.invoke(null, new Object[] { } ));
             }
         catch (Exception e)
-           	{
-           	e.printStackTrace();
-           	}
+            {
+            e.printStackTrace();
+            }
         return "Synth with no getSynthName() method, oops";
-    	}
+        }
     
     /** Returns the name of the current patch, or null if there is no such thing. */
     public abstract String getPatchName();
     
     /** Return true if the window can be closed and disposed of. You should do some cleanup
-        as necessary (the system will handle cleaning up the receiver and transmitters. */
-    public abstract boolean requestCloseWindow();
+        as necessary (the system will handle cleaning up the receiver and transmitters. 
+        By default this just returns true.  */
+    public boolean requestCloseWindow() { return true; }
     
         
+    String nameForCC(int cc)
+    	{
+    	if (cc < 256)
+    		return "CC " + cc;
+    	else return "NRPN " + (cc - 256);
+    	}
+    	
+    	
     /** Updates the JFrame title to reflect the synthesizer type, the patch information, and the filename
         if any.  See Blofeld.updateTitle() for inspiration. */
     public void updateTitle()
@@ -235,14 +430,12 @@ public abstract class Synth extends JComponent implements Updatable
             String learningWarning = (learning ? "  LEARNING" +
                     (model.getLastKey() != null ? " " + model.getLastKey() + 
                     (model.getRange(model.getLastKey()) > 0 ? "[" + model.getRange(model.getLastKey()) + "]" : "") + 
-                    (ccmap.getCCForKey(model.getLastKey()) >= 0 ? "=" + ccmap.getCCForKey(model.getLastKey()) : "")
+                    (ccmap.getCCForKey(model.getLastKey()) >= 0 ? "=" + nameForCC(ccmap.getCCForKey(model.getLastKey())) : "")
                     : "") : "");
         
             frame.setTitle(synthName + fileName + "        " + disconnectedWarning + outOfSyncWarning + learningWarning);
             }
         }
-
-    public JTabbedPane tabs = new JTabbedPane();
 
     public Synth() 
         {
@@ -318,64 +511,83 @@ public abstract class Synth extends JComponent implements Updatable
                                 
             public void send(MidiMessage message, long timeStamp)
                 {
-                final byte[] data = message.getMessage();
-                
-                if (SwingUtilities.getRoot(Synth.this) == javax.swing.FocusManager.getCurrentManager().getActiveWindow() &&                
-                    recognizeLocal(data))
-                    {
-                    // I'm doing this in the Swing event thread because I figure it's multithreaded
-                    SwingUtilities.invokeLater(new Runnable()
-                        {
-                        public void run()
-                            {
-                            if (merging != 0.0)
-                                {
-                                merge(data, merging);
-                                merging = 0.0;
-                                }
-                            else
-                                {
-                                // we turn off MIDI because parse() calls revise() which triggers setParameter() with its changes
-                                setSendMIDI(false);
-                                undo.setWillPush(false);
-                                Model backup = (Model)(model.clone());
-                                boolean canSync = parse(data, false);
-                                undo.setWillPush(true);
-                                if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-                                    undo.push(backup);
-                                setSendMIDI(true);
-                                if (canSync)
-                                    {
-                                    changePatch(getModel());
-                                    setSynced(true);
-                                    }
-                                else 
-                                    {
-                                    setSynced(false);
-                                    }
-                                file = null;
-                                }
+                if (message instanceof SysexMessage)
+                	{
+					final byte[] data = message.getMessage();
+				
+					if (SwingUtilities.getRoot(Synth.this) == javax.swing.FocusManager.getCurrentManager().getActiveWindow() &&                
+						recognizeLocal(data))
+						{
+						// I'm doing this in the Swing event thread because I figure it's multithreaded
+						SwingUtilities.invokeLater(new Runnable()
+							{
+							public void run()
+								{
+								if (merging != 0.0)
+									{
+									merge(data, merging);
+									merging = 0.0;
+									}
+								else
+									{
+									// we turn off MIDI because parse() calls revise() which triggers setParameter() with its changes
+									setSendMIDI(false);
+									undo.setWillPush(false);
+									Model backup = (Model)(model.clone());
+									boolean canSync = parse(data, false);
+									undo.setWillPush(true);
+									if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+										undo.push(backup);
+									setSendMIDI(true);
+									changePatch(getModel());
+								
+									if (canSync)
+										{
+										setSynced(true);
+										}
+									else 
+										{
+										setSynced(false);
+										}
+									file = null;
+									}
 
-							// this last statement fixes a mystery.  When I call Randomize or Reset on
-							// a Blofeld or on a Microwave, all of the widgets update simultaneously.
-							// But on a Blofeld Multi or Microwave Multi they update one at a time.
-							// I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-							// into the Blofeld, and it makes no difference!  For some reason the OS X
-							// repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-							repaint();
-                                
-                            updateTitle();
-                            }
-                        });
-                    }
-                else                                    // Maybe it's a local Parameter change in sysex or CC?
-                    {
-                    sendMIDI = false;  // so we don't send out parameter updates in response to reading/changing parameters
-                    parseParameter(data);
-                    sendMIDI = true;
-                    updateTitle();
-                    }
-                }
+								// this last statement fixes a mystery.  When I call Randomize or Reset on
+								// a Blofeld or on a Microwave, all of the widgets update simultaneously.
+								// But on a Blofeld Multi or Microwave Multi they update one at a time.
+								// I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+								// into the Blofeld, and it makes no difference!  For some reason the OS X
+								// repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+								repaint();
+								
+								updateTitle();
+								}
+							});
+						}
+					else	// Maybe it's a local Parameter change in sysex?
+						{
+						SwingUtilities.invokeLater(new Runnable()
+							{
+							public void run()
+								{
+								sendMIDI = false;  // so we don't send out parameter updates in response to reading/changing parameters
+								parseParameter(data);
+								sendMIDI = true;
+								updateTitle();
+								}
+							});
+						}
+					}
+				else if (message instanceof ShortMessage)
+					{
+					ShortMessage sm = (ShortMessage)message;
+					if (sm.getCommand() == ShortMessage.CONTROL_CHANGE)
+						{
+						// let's try parsing it
+						handleInRawCC(sm);
+						}
+					}
+				}
             };
         }
         
@@ -411,10 +623,10 @@ public abstract class Synth extends JComponent implements Updatable
                                 newMessage = new ShortMessage(status, channel, data1, data2);
                             else
                                 newMessage = new ShortMessage(status, data1, data2);
-                            if (newMessage.getCommand() == ShortMessage.CONTROL_CHANGE)
+                            if (!getPassThroughCC() && newMessage.getCommand() == ShortMessage.CONTROL_CHANGE)
                                 {
                                 // we intercept this
-                                handleCC(newMessage);
+                                handleKeyRawCC(newMessage);
                                 }
                             else
                                 {
@@ -436,17 +648,14 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
 
-    /** Same as setupMIDI(message, null); */
-    public boolean setupMIDI(String message)
-        {
-        return setupMIDI(message, null);
-        }
+    /** Same as setupMIDI(message, null), with a default "you are disconnected" message. */
+    public boolean setupMIDI() { return setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from.", null); }
         
     /** Lets the user set up the MIDI in/out/key devices.  The old devices are provided in oldTuple,
         or you may pass null in if there are no old devices.  Returns TRUE if a new tuple was set up. */
     public boolean setupMIDI(String message, Midi.Tuple oldTuple)
         {
-        Midi.Tuple result = Midi.getNewTuple(tuple, this, message, buildInReceiver(), buildKeyReceiver());
+        Midi.Tuple result = Midi.getNewTuple(oldTuple, this, message, buildInReceiver(), buildKeyReceiver());
         boolean retval = false;
                 
         if (result == Midi.FAILED)
@@ -455,7 +664,6 @@ public abstract class Synth extends JComponent implements Updatable
                 "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
                 JOptionPane.WARNING_MESSAGE, null,
                 new String[] { "Revert" }, "Revert");
-            result = oldTuple;
             }
         else if (result == Midi.CANCELLED)
             {
@@ -463,22 +671,20 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
+            if (tuple != null)
+                tuple.dispose();            
+            tuple = result;
             retval = true;
+            setSendMIDI(true);
+            updateTitle();
             }
                 
-        if (tuple != null)
-            tuple.dispose();
-                        
-        tuple = result;
-        
-        setSendMIDI(true);
-        updateTitle();
         return retval;
         }
 
 
     /** Removes the in/out/key devices. */
-    public void disconnectMIDI()
+    public void doDisconnectMIDI()
         {
         if (tuple != null)
             {
@@ -494,10 +700,15 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
 
+    /** Override this to slow down MIDI transmission via a thread sleep.  Returns ms. */
+    public int getPauseBetweenMIDISends() { return 0; }
+    
+    public long lastMIDISend = 0;
+    
     /** Attempts to send a NON-Sysex MIDI message. Returns false if (1) the data was empty or null (2)
         synth has turned off the ability to send temporarily (3) the sysex message is not
         valid (4) an error occurred when the receiver tried to send the data.  */
-    public boolean tryToSendMIDI(ShortMessage message)
+    public boolean tryToSendMIDI(MidiMessage message)
         {
         if (message == null) 
             return false;
@@ -507,7 +718,18 @@ public abstract class Synth extends JComponent implements Updatable
             if (tuple == null) return false;
             Receiver receiver = tuple.out;
             if (receiver == null) return false;
+            
+            // compute pause
+            long pauseSoFar = System.currentTimeMillis() - lastMIDISend;
+            long expectedPause = getPauseBetweenMIDISends();
+            if (pauseSoFar >= 0 && pauseSoFar < expectedPause)
+                {
+                try { Thread.currentThread().sleep(expectedPause - pauseSoFar); }
+                catch (Exception e) { e.printStackTrace(); }
+                }
+                        
             receiver.send(message, -1); 
+            lastMIDISend = System.currentTimeMillis();
             return true;
             }
         else
@@ -516,34 +738,63 @@ public abstract class Synth extends JComponent implements Updatable
                 
                         
 
-    /** Attempts to send MIDI sysex. Returns false if (1) the data was empty or null (2)
+    /** Attempts to send a single MIDI sysex message. Returns false if (1) the data was empty or null (2)
         synth has turned off the ability to send temporarily (3) the sysex message is not
         valid (4) an error occurred when the receiver tried to send the data.  */
     public boolean tryToSendSysex(byte[] data)
         {
-        return tryToSendSysex(data, false);
-        }
-    
-    /** Attempts to send MIDI sysex, possibly forcing sending MIDI even if getSendMIDI() is false. 
-        Returns false if (1) the data was empty or null (2)
-        synth has turned off the ability to send temporarily (3) the sysex message is not
-        valid (4) an error occurred when the receiver tried to send the data.  */
-    public boolean tryToSendSysex(byte[] data, boolean forceSendMIDI)
-        {
         if (data == null || data.length == 0) 
             return false;
 
-        if (forceSendMIDI || getSendMIDI())
+        if (getSendMIDI())
             {
             if (tuple == null) return false;
             Receiver receiver = tuple.out;
             if (receiver == null) return false;
-            try { SysexMessage m = new SysexMessage(data, data.length);
-                receiver.send(m, -1); return true; }
+
+            // compute pause
+            long pauseSoFar = System.currentTimeMillis() - lastMIDISend;
+            long expectedPause = getPauseBetweenMIDISends();
+            if (pauseSoFar >= 0 && pauseSoFar < expectedPause)
+                {
+                try { Thread.currentThread().sleep(expectedPause - pauseSoFar); }
+                catch (Exception e) { e.printStackTrace(); }
+                }
+                        
+            try { 
+                SysexMessage m = new SysexMessage(data, data.length);
+                receiver.send(m, -1); 
+                lastMIDISend = System.currentTimeMillis();
+                return true; 
+                }
             catch (InvalidMidiDataException e) { e.printStackTrace(); return false; }
             }
         else
             return false;
+        }
+    
+    /** Attempts to send several MIDI sysex or other kinds of messages. Returns false if (1) the data was empty or null (2)
+        synth has turned off the ability to send temporarily (3) the sysex message is not
+        valid (4) an error occurred when the receiver tried to send the data.  */
+    public boolean tryToSendSysex(Object[] data)
+        {
+        for(int i = 0; i < data.length; i++)
+            {
+            if (data[i] == null) return false;
+            else if (data[i] instanceof byte[])
+                {
+                byte[] sysex = (byte[])(data[i]);
+                if (!tryToSendSysex(sysex))
+                    return false;
+                }
+            else if (data[i] instanceof MidiMessage)
+                {
+                MidiMessage message = (MidiMessage)(data[i]);
+                if (!tryToSendMIDI(message))
+                    return false;
+                }
+            }
+        return true;
         }
         
     
@@ -573,12 +824,7 @@ public abstract class Synth extends JComponent implements Updatable
             synth.undo.setWillPush(true);
             return synth;
             }
-        catch (IllegalAccessException e2)
-            {
-            e2.printStackTrace();
-            JOptionPane.showMessageDialog(null, "An error occurred while creating the synth editor for \n" + name, "Creation Error", JOptionPane.ERROR_MESSAGE);
-            }
-        catch (InstantiationException e2)
+        catch (Exception e2)
             {
             e2.printStackTrace();
             JOptionPane.showMessageDialog(null, "An error occurred while creating the synth editor for \n" + name, "Creation Error", JOptionPane.ERROR_MESSAGE);
@@ -602,7 +848,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed(ActionEvent e)
                 {
-                instantiate(Synth.this.getClass(), getSynthNameLocal(), false, true, tuple);
+                doNew();
                 }
             });
 
@@ -617,7 +863,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 public void actionPerformed(ActionEvent e)
                     {
-                    instantiate(synths[_i], synthNames[_i], false, true, tuple);
+                    doNewSynth(_i);
                     }
                 });
             newSynth.add(synthMenu);
@@ -630,15 +876,9 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed(ActionEvent e)
                 {
-                Synth newSynth = instantiate(Synth.this.getClass(), getSynthNameLocal(), false, true, tuple);
-                newSynth.setSendMIDI(false);
-                model.copyValuesTo(newSynth.model);
-                newSynth.setSynced(false);
-                newSynth.setSendMIDI(true);
+                doDuplicateSynth();
                 }
             });
-
-
                 
         JMenuItem open = new JMenuItem("Load...");
         open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -690,7 +930,6 @@ public abstract class Synth extends JComponent implements Updatable
         menu = new JMenu("Edit");
         menubar.add(menu);
                 
-                
         undoMenu = new JMenuItem("Undo");
         undoMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(undoMenu);
@@ -699,11 +938,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (model.equals(undo.top()))
-                    model = undo.undo(null);  // don't push into the redo stack
-                model = undo.undo(model);
-                model.updateAllListeners();
-                setSynced(false);
+                doUndo();
                 }
             });
             
@@ -715,56 +950,33 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                model = (Model)(undo.redo(getModel()));
-                model.updateAllListeners();
+                doRedo();
                 }
             });            
             
         menu = new JMenu("MIDI");
         menubar.add(menu);
                 
-                
-        JMenuItem receiveCurrent = new JMenuItem("Request Current Patch");
+        
+     	receiveCurrent = new JMenuItem("Request Current Patch");
         receiveCurrent.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(receiveCurrent);
         receiveCurrent.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (tuple == null || tuple.out == null)
-                    {
-                    if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
-                        return;
-                    else
-                        setSynced(false);
-                    }
-                
-            	Synth.this.merging = 0.0;
-                tryToSendSysex(requestCurrentDump(null));
+                doRequestCurrentPatch();
                 }
             });
 
-        receive = new JMenuItem("Request Patch...");
+        JMenuItem receive = new JMenuItem("Request Patch...");
         //receive.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(receive);
         receive.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (tuple == null || tuple.out == null)
-                    {
-                    if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
-                        return;
-                    else
-                        setSynced(false);
-                    }
-                
-                Model tempModel = new Model();
-                if (gatherInfo("Request Patch", tempModel))
-                    {
-            		Synth.this.merging = 0.0;
-                    tryToSendSysex(requestDump(tempModel));
-                    }
+                doRequestPatch();
                 }
             });
                 
@@ -783,15 +995,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (tuple == null || tuple.out == null)
-                    {
-                    if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
-                        return;
-                    else
-                        setSynced(false);
-                    }
-                
-                doMerge(0.25);
+                doRequestMerge(0.25);
                 }
             });
 
@@ -799,15 +1003,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (tuple == null || tuple.out == null)
-                    {
-                    if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
-                        return;
-                    else
-                        setSynced(false);
-                    }
-                
-                doMerge(0.50);
+                doRequestMerge(0.50);
                 }
             });
 
@@ -815,15 +1011,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (tuple == null || tuple.out == null)
-                    {
-                    if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
-                        return;
-                    else
-                        setSynced(false);
-                    }
-                
-                doMerge(0.75);
+                doRequestMerge(0.75);
                 }
             });
 
@@ -831,15 +1019,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (tuple == null || tuple.out == null)
-                    {
-                    if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
-                        return;
-                    else
-                        setSynced(false);
-                    }
-                
-                doMerge(1.0);
+                doRequestMerge(1.0);
                 }
             });
                 
@@ -851,48 +1031,17 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (tuple == null || tuple.out == null)
-                    {
-                    if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
-                        return;
-                    else
-                        setSynced(false);
-                    }
-                
-                if (isSynced())
-                    {
-                    sendAllParameters();
-                    }
-                else
-                    {
-                    if (gatherInfo("You aren't synced.  ", getModel()))
-                        {
-                        setSynced(true);
-                        sendAllParameters();
-                        }
-                    }
+                doSendPatch();
                 }
             });
 
-        transmitTo = new JMenuItem("Send To...");
+        transmitTo = new JMenuItem("Send to Patch...");
         menu.add(transmitTo);
         transmitTo.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (tuple == null || tuple.out == null)
-                    {
-                    if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
-                        return;
-                    else
-                        setSynced(false);
-                    }
-                
-                if (gatherInfo("Send Patch To...", getModel()))
-                    {
-                    setSynced(true);
-                    sendAllParameters();
-                    }
+                doSendToPatch();
                 }
             });
                 
@@ -902,15 +1051,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (tuple == null || tuple.out == null)
-                    {
-                    if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
-                        return;
-                    else
-                        setSynced(false);
-                    }
-                
-                sendAllParameters(false);
+                doSendToCurrentPatch();
                 }
             });
 
@@ -931,7 +1072,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                mutate(0.05);
+                doMutate(0.05);
                 }
             });
 
@@ -939,7 +1080,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                mutate(0.1);
+                doMutate(0.1);
                 }
             });
 
@@ -947,7 +1088,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                mutate(0.25);
+                doMutate(0.25);
                 }
             });
 
@@ -955,7 +1096,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                mutate(0.5);
+                doMutate(0.5);
                 }
             });
 
@@ -963,7 +1104,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                mutate(1.0);
+                doMutate(1.0);
                 }
             });
 
@@ -974,54 +1115,21 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                setSendMIDI(false);
-                // because loadDefaults isn't wrapped in an undo, we have to
-                // wrap it manually here
-                undo.setWillPush(false);
-                Model backup = (Model)(model.clone());
-                loadDefaults();
-                undo.setWillPush(true);
-                if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-                    undo.push(backup);
-                setSendMIDI(true);
-                sendAllParameters();
-                
-                // this last statement fixes a mystery.  When I call Randomize or Reset on
-                // a Blofeld or on a Microwave, all of the widgets update simultaneously.
-                // But on a Blofeld Multi or Microwave Multi they update one at a time.
-                // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-                // into the Blofeld, and it makes no difference!  For some reason the OS X
-                // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-                repaint();
+                doReset();
                 }
             });
 
 
         menu.addSeparator();
 
-        JMenuItem burn = new JMenuItem("Write Patch To...");
+        JMenuItem burn = new JMenuItem("Write to Patch...");
         burn.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(burn);
         burn.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (tuple == null || tuple.out == null)
-                    {
-                    if (!setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from."))
-                        return;
-                    else
-                        setSynced(false);
-                    }
-                
-                if (gatherInfo("Write Patch To...", getModel()))
-                    {
-                    if (tryToSendSysex(emit(getModel(), false)))
-                        {
-                        changePatch(getModel());
-                        setSynced(true);
-                        }
-                    }
+                doWriteToPatch();
                 }
             });
                 
@@ -1033,10 +1141,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (!setupMIDI("Choose MIDI devices to send to and receive from."))
-                    return;
-                else
-                    setSynced(false);
+                doChangeMIDI();
                 }
             });
             
@@ -1046,7 +1151,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                disconnectMIDI();
+                doDisconnectMIDI();
                 }
             });
 
@@ -1058,15 +1163,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                try
-                    {
-                    for(int i = 0; i < 16; i++)
-                        tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
-                    }
-                catch (InvalidMidiDataException e2)
-                    {
-                    e2.printStackTrace();
-                    }
+                doSendAllSoundsOff();
                 }
             });
                 
@@ -1077,40 +1174,23 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                try
-                    {
-                    int channel = getChannelOut();
-                    tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel - 1, 60, 127));
-					
-					// schedule a note off
-					final int myNoteOnTick = ++noteOnTick;
-					javax.swing.Timer timer = new javax.swing.Timer(500,
-						new ActionListener()
-							{
-							public void actionPerformed(ActionEvent e)
-								{
-								if (noteOnTick == myNoteOnTick)  // no more note on messages
-									try
-										{
-										tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel - 1, 60, 127));
-										}
-									catch (Exception e3)
-										{
-										e3.printStackTrace();
-										}
-								}
-							});
-					timer.setRepeats(false);
-					timer.start();
-                    }
-                catch (Exception e2)
-                    {
-                    e2.printStackTrace();
-                    }
+                doSendTestNote();
                 }
             });
             
         menu.addSeparator();
+
+        passThroughCCMenuItem = new JCheckBoxMenuItem("Pass Through All CCs");
+        menu.add(passThroughCCMenuItem);
+        passThroughCCMenuItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doPassThroughCC(passThroughCCMenuItem.getState());
+                }
+            });
+       	String val = getLastX("PassThroughCC", getSynthNameLocal());
+       	setPassThroughCC(val != null && val.equalsIgnoreCase("true"));
 
         learningMenuItem = new JMenuItem("Map CC");
         learningMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -1119,7 +1199,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                toggleLearning();
+                doMapCC();
                 }
             });
                 
@@ -1129,11 +1209,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (JOptionPane.showConfirmDialog(Synth.this, "Are you sure you want to clear all CCs?", "Clear CCs", 
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null) == JOptionPane.OK_OPTION)
-                    {
-                    clearLearned();
-                    }
+                doClearAllCC();
                 }
             });
             
@@ -1149,7 +1225,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                setCurrentTab(getCurrentTab() - 1);
+                doPreviousTab();
                 }
             });
 
@@ -1161,7 +1237,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                setCurrentTab(getCurrentTab() + 1);
+                doNextTab();
                 }
             });
 
@@ -1173,7 +1249,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                setCurrentTab(0);
+                doTab(0);
                 }
             });
 
@@ -1184,7 +1260,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                setCurrentTab(1);
+                doTab(1);
                 }
             });
 
@@ -1195,7 +1271,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                setCurrentTab(2);
+                doTab(2);
                 }
             });
 
@@ -1206,7 +1282,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                setCurrentTab(3);
+                doTab(3);
                 }
             });
 
@@ -1217,7 +1293,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                setCurrentTab(4);
+                doTab(4);
                 }
             });
 
@@ -1228,7 +1304,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                setCurrentTab(5);
+                doTab(5);
                 }
             });
 
@@ -1239,7 +1315,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                setCurrentTab(6);
+                doTab(6);
                 }
             });
 
@@ -1250,10 +1326,29 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                setCurrentTab(7);
+                doTab(7);
                 }
             });
-
+        
+        
+        // Set up Windows  
+        if (Style.isWindows() || Style.isUnix())
+        	{
+        	JMenu help = new JMenu("Help");
+        	JMenu about = new JMenu("About Edisyn");
+        	about.addActionListener(new ActionListener()
+        		{
+        		public void actionPerformed(ActionEvent e)
+        			{
+        			doAbout();
+        			}
+        		});
+        	}
+        	
+        	//	-XDignore.symbol.file
+        	
+        // Set up Mac
+        Mac.setup(this);
 
         frame.getContentPane().add(this);
         frame.pack();
@@ -1279,88 +1374,93 @@ public abstract class Synth extends JComponent implements Updatable
         return frame;
         }
 
-	/** Only revises / issues warnings on out-of-bounds numerical parameters. 
-		You probably want to override this to check more stuff. */
-	public void revise()
-		{
-		String[] keys = model.getKeys();
+    /** Only revises / issues warnings on out-of-bounds numerical parameters. 
+        You probably want to override this to check more stuff. */
+    public void revise()
+        {
+        String[] keys = model.getKeys();
         for(int i = 0; i < keys.length; i++)
             {
-			String key = keys[i];
-			if (!model.isString(key) &&
-				model.minExists(key) && 
-				model.maxExists(key))
-					{
-					// verify
-					int val = model.get(key, 0);
-					if (val < model.getMin(key))
-						{ model.set(key, model.getMin(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key, 0));}
-					if (val > model.getMax(key))
-						{ model.set(key, model.getMax(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key, 0));}
-					}
+            String key = keys[i];
+            if (!model.isString(key) &&
+                model.minExists(key) && 
+                model.maxExists(key))
+                {
+                // verify
+                int val = model.get(key, 0);
+                if (val < model.getMin(key))
+                    { model.set(key, model.getMin(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key, 0));}
+                if (val > model.getMax(key))
+                    { model.set(key, model.getMax(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key, 0));}
+                }
             }
-		}
+        }
 
-	public void merge(byte[] data, double probability)
-		{
-		setSendMIDI(false);
-		undo.setWillPush(false);
-		Model backup = (Model)(model.clone());
+    public void merge(byte[] data, double probability)
+        {
+        setSendMIDI(false);
+        undo.setWillPush(false);
+        Model backup = (Model)(model.clone());
 
-		Synth newSynth = instantiate(Synth.this.getClass(), getSynthNameLocal(), true, false, tuple);
-		newSynth.parse(data, true);
-		model.recombine(random, newSynth.getModel(), probability);
-		revise();  // just in case
-		
-		undo.setWillPush(true);
-		if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-			undo.push(backup);
-		setSendMIDI(true);
-		sendAllParameters();
+        Synth newSynth = instantiate(Synth.this.getClass(), getSynthNameLocal(), true, false, tuple);
+        newSynth.parse(data, true);
+        model.recombine(random, newSynth.getModel(), probability);
+        revise();  // just in case
+                
+        undo.setWillPush(true);
+        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+            undo.push(backup);
+        setSendMIDI(true);
+        sendAllParameters();
 
-		// this last statement fixes a mystery.  When I call Randomize or Reset on
-		// a Blofeld or on a Microwave, all of the widgets update simultaneously.
-		// But on a Blofeld Multi or Microwave Multi they update one at a time.
-		// I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-		// into the Blofeld, and it makes no difference!  For some reason the OS X
-		// repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-		repaint();
-		}
+        // this last statement fixes a mystery.  When I call Randomize or Reset on
+        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+        // But on a Blofeld Multi or Microwave Multi they update one at a time.
+        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+        // into the Blofeld, and it makes no difference!  For some reason the OS X
+        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+        repaint();
+        }
 
-	public void mutate(double probability)
-		{
-		setSendMIDI(false);
-		undo.setWillPush(false);
-		Model backup = (Model)(model.clone());
-		
-		model.mutate(random, probability);
-		revise();  // just in case
-		
-		undo.setWillPush(true);
-		if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-			undo.push(backup);
-		setSendMIDI(true);
-		sendAllParameters();
+    public void doMutate(double probability)
+        {
+        setSendMIDI(false);
+        undo.setWillPush(false);
+        Model backup = (Model)(model.clone());
+                
+        model.mutate(random, probability);
+        revise();  // just in case
+                
+        undo.setWillPush(true);
+        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+            undo.push(backup);
+        setSendMIDI(true);
+        sendAllParameters();
 
-		// this last statement fixes a mystery.  When I call Randomize or Reset on
-		// a Blofeld or on a Microwave, all of the widgets update simultaneously.
-		// But on a Blofeld Multi or Microwave Multi they update one at a time.
-		// I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-		// into the Blofeld, and it makes no difference!  For some reason the OS X
-		// repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-		repaint();
-		}
+        // this last statement fixes a mystery.  When I call Randomize or Reset on
+        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+        // But on a Blofeld Multi or Microwave Multi they update one at a time.
+        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+        // into the Blofeld, and it makes no difference!  For some reason the OS X
+        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+        repaint();
+        }
 
     /** Perform a patch merge */
     void doMerge(double probability)
         {
         Model tempModel = new Model();
-        if (gatherInfo("Request Merge", tempModel))
+        if (gatherInfo("Request Merge", tempModel, false))
             {
             Synth.this.merging = probability;
-            tryToSendSysex(requestDump(tempModel));
+            performRequestDump(tempModel);
             }
         }
+
+	void doPassThroughCC(boolean val)
+		{
+		setPassThroughCC(val);
+		}
 
     public int getChannelOut()
         {
@@ -1370,8 +1470,6 @@ public abstract class Synth extends JComponent implements Updatable
         return channel;
         }
     
-    public void changePatch(Model tempModel) { }
-
     boolean sendsAllParametersInBulk = false;
     
     /** Sets whether the synth sends its patch dump (TRUE) as one single sysex dump or by
@@ -1385,7 +1483,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** Switches to the current patch, then sends all the parameters in a patch to the synth.
         If not synced, does nothing.
 
-		<p>If sendsAllParametersInBulk was set to TRUE, then this is done by sending
+        <p>If sendsAllParametersInBulk was set to TRUE, then this is done by sending
         a single patch write to working memory, which may not be supported by all synths.
         
         Otherwise this is done by sending each parameter separately, which isn't as fast.
@@ -1396,8 +1494,8 @@ public abstract class Synth extends JComponent implements Updatable
     /** If changePatch is TRUE, switches to the current patch, then sends all the parameters in a patch to the synth;
         if not synced, does nothing.
 
-    	If changePatch is FALSE, just sends the parameters to whatever is the current patch, even if not synced.
-    	
+        If changePatch is FALSE, just sends the parameters to whatever is the current patch, even if not synced.
+        
         <P>If sendsAllParametersInBulk was set to TRUE, then this is done by sending
         a single patch write to working memory, which may not be supported by all synths.
         
@@ -1406,14 +1504,14 @@ public abstract class Synth extends JComponent implements Updatable
     */   
     public void sendAllParameters(boolean changePatch)
         {
-        if (isSynced() || !changePatch)		// if we're synced, or if we're not changing patches....
+        if (isSynced() || !changePatch)         // if we're synced, or if we're not changing patches....
             {
             if (changePatch)
-            	changePatch(getModel());	
+                changePatch(getModel());        
                 
             if (sendsAllParametersInBulk)
                 {
-                tryToSendSysex(emit(getModel(), true));
+                tryToSendSysex(emitAll(getModel(), true));
                 }
             else
                 {
@@ -1465,7 +1563,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 f = new File(fd.getDirectory(), ensureFileEndsWith(fd.getFile(), ".syx"));
                 os = new FileOutputStream(f);
-                os.write(emit((Model)null, false));
+                os.write(flatten(emitAll((Model)null, false)));
                 os.close();
                 file = f;
                 setLastDirectory(fd.getDirectory());
@@ -1486,6 +1584,42 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
 
+    // Flattens a two-dimensional array to a one-dimensional array,
+    // stripping out the non-sysex elements
+    byte[] flatten(Object[] data)
+        {
+        if (data == null)
+            return null;
+        if (data.length == 0)
+            return new byte[0];
+        if (data.length == 1 && data[0] instanceof byte[])
+            return (byte[])(data[0]);
+                
+        // otherwise flatten
+                
+        int len = 1;
+        for(int i = 0; i < data.length; i++)
+            {
+            if (data[i] instanceof byte[])
+                {
+                len *= ((byte[])data[i]).length;
+                }
+            }
+                        
+        byte[] result = new byte[len];
+        int start = 0;
+        for(int i = 0; i < data.length; i++)
+            {
+            if (data[i] instanceof byte[])
+                {
+                byte[] b = (byte[])(data[i]);
+                System.arraycopy(b, 0, result, start, b.length);
+                start += b.length;
+                }
+            }
+        return result;
+        }
+
     /** Goes through the process of saving to an existing sysex file associated with
         the editor, else it calls doSaveAs(). */
     public void doSave()
@@ -1500,7 +1634,7 @@ public abstract class Synth extends JComponent implements Updatable
             try
                 {
                 os = new FileOutputStream(file);
-                os.write(emit((Model)null, false));
+                os.write(flatten(emitAll((Model)null, false)));
                 os.close();
                 }
             catch (Exception e) // fail
@@ -1572,18 +1706,18 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (requestCloseWindow())
             {
-			// send all sounds off
-			try
-				{
-				for(int i = 0; i < 16; i++)
-					tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
-				}
-			catch (Exception e)
-				{
-				e.printStackTrace();
-				}
-				
-			// get rid of MIDI connection
+            // send all sounds off
+            try
+                {
+                for(int i = 0; i < 16; i++)
+                    tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
+                }
+            catch (Exception e)
+                {
+                e.printStackTrace();
+                }
+                                
+            // get rid of MIDI connection
             if (tuple != null)
                 tuple.dispose();
             tuple = null;
@@ -1599,7 +1733,9 @@ public abstract class Synth extends JComponent implements Updatable
             numOpenWindows--;
             if (numOpenWindows <= 0)
                 {                    
-                System.exit(0);
+				Synth result = doNewSynthPanel();
+				if (result == null)
+					System.exit(0);
                 }
             }
         }
@@ -1678,35 +1814,38 @@ public abstract class Synth extends JComponent implements Updatable
                 f = new File(fd.getDirectory(), fd.getFile());
                 
                 is = new FileInputStream(f);
-                byte[] data = new byte[getExpectedSysexLength()];
-
-                int val = is.read(data, 0, getExpectedSysexLength());
-                is.close();
-                
-                if (!recognizeLocal(data))
-                    JOptionPane.showMessageDialog(this, "File does not contain sysex data for the " + getSynthNameLocal(), "File Error", JOptionPane.ERROR_MESSAGE);
-                else if (val != getExpectedSysexLength())
-                    JOptionPane.showMessageDialog(this, "File data is not the right length for " + getSynthNameLocal(), "File Error", JOptionPane.ERROR_MESSAGE);
+                if (f.length() > MAX_FILE_LENGTH)
+                    JOptionPane.showMessageDialog(this, "File is too long and cannot be loaded.", "File Error", JOptionPane.ERROR_MESSAGE);
                 else
                     {
-                    setSendMIDI(false);
-                    undo.setWillPush(false);
-                    Model backup = (Model)(model.clone());
-                    parse(data, false);
-                    undo.setWillPush(true);
-                    if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-                        undo.push(backup);
-                    setSendMIDI(true);
-                    file = f;
-                    setLastDirectory(fd.getDirectory());
+                    byte[] data = new byte[(int)f.length()];
 
-					// this last statement fixes a mystery.  When I call Randomize or Reset on
-					// a Blofeld or on a Microwave, all of the widgets update simultaneously.
-					// But on a Blofeld Multi or Microwave Multi they update one at a time.
-					// I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-					// into the Blofeld, and it makes no difference!  For some reason the OS X
-					// repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-					repaint();
+                    int val = is.read(data, 0, (int)f.length());
+                    is.close();
+                                
+                    if (!recognizeLocal(data))
+                        JOptionPane.showMessageDialog(this, "File does not contain proper sysex data for the " + getSynthNameLocal(), "File Error", JOptionPane.ERROR_MESSAGE);
+                    else
+                        {
+                        setSendMIDI(false);
+                        undo.setWillPush(false);
+                        Model backup = (Model)(model.clone());
+                        parse(data, true);
+                        undo.setWillPush(true);
+                        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                            undo.push(backup);
+                        setSendMIDI(true);
+                        file = f;
+                        setLastDirectory(fd.getDirectory());
+
+                        // this last statement fixes a mystery.  When I call Randomize or Reset on
+                        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+                        // But on a Blofeld Multi or Microwave Multi they update one at a time.
+                        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+                        // into the Blofeld, and it makes no difference!  For some reason the OS X
+                        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+                        repaint();
+                        }
                     }
                 }        
             catch (Throwable e) // fail  -- could be an Error or an Exception
@@ -1782,6 +1921,7 @@ public abstract class Synth extends JComponent implements Updatable
         p2.add(p, BorderLayout.NORTH);
         String[] synthNames = getSynthNames();
         JComboBox combo = new JComboBox(synthNames);
+        combo.setMaximumRowCount(32);
                 
         // Note: Java classdocs are wrong: if you set a selected item to null (or to something not in the list)
         // it doesn't just not change the current selected item, it sets it to some blank item.
@@ -1789,8 +1929,10 @@ public abstract class Synth extends JComponent implements Updatable
         if (synth != null) combo.setSelectedItem(synth);
         p2.add(combo, BorderLayout.CENTER);
                 
-        int result = JOptionPane.showOptionDialog(null, p2, "Edisyn", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Run", "Cancel", "Disconnected" }, "Run");
-        if (result == 1) return null;
+        int result = JOptionPane.showOptionDialog(null, p2, "Edisyn", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Run", "Quit", "Disconnected" }, "Run");
+        if (result == 1 || 	// cancel
+        	result < 0)		// window closed
+        	 return null;
         else 
             {
             setLastSynth("" + combo.getSelectedItem());
@@ -1804,9 +1946,11 @@ public abstract class Synth extends JComponent implements Updatable
     
     JMenuItem learningMenuItem;
     
-    public void toggleLearning()
+    public boolean getLearningCC() { return learning; }
+    
+    public void setLearningCC(boolean val)
         {
-        learning = !learning;
+        learning = val;
         model.clearLastKey();
         lastCC = -1;  // clear
         updateTitle();
@@ -1824,8 +1968,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         ccmap.clear();
         learning = false;
-        toggleLearning();
-        toggleLearning();
+        setLearningCC(false);
         }
         
     public int getCurrentTab()
@@ -1842,50 +1985,87 @@ public abstract class Synth extends JComponent implements Updatable
             return;
         tabs.setSelectedIndex(tab);
         }
-        
-    public void handleCC(ShortMessage message)
+    
+    public void handleSynthCCOrNRPN(Midi.CCData data)
+    	{
+    	// do nothing by default
+    	}
+    
+    void handleInRawCC(ShortMessage message)
+    	{
+        Midi.CCData ccdata = midi.synthParser.processCC(message, true, false);
+        if (ccdata != null)
+        	{
+        	handleSynthCCOrNRPN(ccdata);
+        	}
+    	}
+    	
+ 	void handleKeyRawCC(ShortMessage message)
         {
-        lastCC = message.getData1();
-        if (learning)
-            {
-            String key = model.getLastKey();
-            if (key != null)
-                {
-                ccmap.setKeyForCCPane(lastCC, getCurrentTab(), key);
-                toggleLearning();  // we're done
-                }
-            }
-        else
-            {
-            String key = ccmap.getKeyForCCPane(lastCC, getCurrentTab());
-            int val = message.getData2();
-            if (key != null)
-                {
-                if (model.minExists(key))
-                    {
-                    val += model.getMin(key);
-                    }
-                else if (model.maxExists(key))
-                    {
-                    val = val - 127 + model.getMax(key);
-                    }
-                model.setBounded(key, val);
-                }
-            }
+        Midi.CCData ccdata = midi.controlParser.processCC(message, true, false);
+        if (ccdata != null)
+        	{
+        	if (ccdata.type == Midi.CCDATA_TYPE_NRPN)
+        		ccdata.number += 256;
+			if (learning)
+				{
+				String key = model.getLastKey();
+				if (key != null)
+					{
+					ccmap.setKeyForCCPane(ccdata.number, getCurrentTab(), key);
+					setLearningCC(false);
+					}
+				}
+			else
+				{
+				String key = ccmap.getKeyForCCPane(ccdata.number, getCurrentTab());
+				if (key != null)
+					{
+					// handle increment/decrement
+					if (ccdata.increment)
+						{
+						ccdata.value = ccdata.value + model.get(key, 0);
+						}
+
+/*
+					if (model.minExists(key))
+						{
+						val += model.getMin(key);
+						}
+					else if (model.maxExists(key))
+						{
+						val = val - 127 + model.getMax(key);
+						}
+*/
+					model.setBounded(key, ccdata.value);
+					}
+				}
+			}
         }
     
     // Note that this isn't wrapped in undo, so we can block it at instantiation
     public void loadDefaults()
+    	{
+    	loadDefaults(false);
+    	}
+
+    public void loadDefaults(boolean ignorePatch)
         {
         InputStream stream = getClass().getResourceAsStream(getDefaultResourceFileName());
         if (stream != null)
             {
             try 
                 {
-                byte[] data = new byte[getExpectedSysexLength()];
-                int val = stream.read(data, 0, getExpectedSysexLength());
+                byte[] buffer = new byte[MAX_FILE_LENGTH];   // better not be longer than this
+                int size = stream.read(buffer, 0, MAX_FILE_LENGTH);
+
+                // now shorten
+                byte[] data = new byte[size];
+                System.arraycopy(buffer, 0, data, 0, size);
+
+                // parse                        
                 setSendMIDI(false);
-                parse(data, true);
+                parse(data, ignorePatch);
                 setSendMIDI(true);
                 model.setUndoListener(undo);    // okay, redundant, but that way the pattern stays the same
 
@@ -1909,7 +2089,293 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
-            System.err.println("Didn't Parse");
+            System.err.println("Warning: Didn't Parse");
+            }
+        }  
+
+        
+    public void doRequestCurrentPatch()
+        {
+        if (tuple == null || tuple.out == null)
+            {
+            if (!setupMIDI())
+                return;
+            else
+                setSynced(false);
+            }
+                
+        Synth.this.merging = 0.0;
+        performRequestCurrentDump();
+        }  
+    
+    public void doRequestPatch()
+        {
+        if (tuple == null || tuple.out == null)
+            {
+            if (!setupMIDI())
+                return;
+            else
+                setSynced(false);
+            }
+                
+        Model tempModel = new Model();
+        if (gatherInfo("Request Patch", tempModel, false))
+            {
+            Synth.this.merging = 0.0;
+            performRequestDump(tempModel);
+            }
+        } 
+        
+    public void doRequestMerge(double percentage)
+        {
+        if (tuple == null || tuple.out == null)
+            {
+            if (!setupMIDI())
+                return;
+            else
+                setSynced(false);
+            }
+                
+        doMerge(percentage);
+        }
+                
+    public void doSendPatch()
+        {
+        if (tuple == null || tuple.out == null)
+            {
+            if (!setupMIDI())
+                return;
+            else
+                setSynced(false);
+            }
+                
+        if (isSynced())
+            {
+            sendAllParameters();
+            }
+        else
+            {
+            if (gatherInfo("You aren't synced.  ", getModel(), true))
+                {
+                setSynced(true);
+                sendAllParameters();
+                }
+            }
+        }
+        
+    public void doSendToPatch()
+        {
+        if (tuple == null || tuple.out == null)
+            {
+            if (!setupMIDI())
+                return;
+            else
+                setSynced(false);
+            }
+                
+        if (gatherInfo("Send Patch To...", getModel(), true))
+            {
+            setSynced(true);
+            sendAllParameters();
             }
         }       
+                
+    public void doSendToCurrentPatch()
+        {
+        if (tuple == null || tuple.out == null)
+            {
+            if (!setupMIDI())
+                return;
+            else
+                setSynced(false);
+            }
+                
+        sendAllParameters(false);
+        }
+                
+    public void doReset()
+        {
+        setSendMIDI(false);
+        // because loadDefaults isn't wrapped in an undo, we have to
+        // wrap it manually here
+        undo.setWillPush(false);
+        Model backup = (Model)(model.clone());
+        loadDefaults(true);
+        undo.setWillPush(true);
+        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+            undo.push(backup);
+        setSendMIDI(true);
+        sendAllParameters();
+                
+        // this last statement fixes a mystery.  When I call Randomize or Reset on
+        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+        // But on a Blofeld Multi or Microwave Multi they update one at a time.
+        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+        // into the Blofeld, and it makes no difference!  For some reason the OS X
+        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+        repaint();
+        }
+                
+    public void doWriteToPatch()
+        {
+        if (tuple == null || tuple.out == null)
+            {
+            if (!setupMIDI())
+                return;
+            else
+                setSynced(false);
+            }
+                
+        if (gatherInfo("Write Patch To...", getModel(), true))
+            {
+            changePatch(getModel());
+            if (tryToSendSysex(emitAll(getModel(), false)))
+                {
+                setSynced(true);
+                }
+            }
+        }
+                
+    public void doChangeMIDI()
+        {
+        if (!setupMIDI("Choose new MIDI devices to send to and receive from.", tuple))
+            return;
+        else
+            setSynced(false);
+        }
+                
+    public void doSendAllSoundsOff()
+        {
+        try
+            {
+            for(int i = 0; i < 16; i++)
+                tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
+            }
+        catch (InvalidMidiDataException e2)
+            {
+            e2.printStackTrace();
+            }
+        }
+                
+    public void doSendTestNote()
+        {
+        try
+            {
+            int channel = getChannelOut();
+            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel - 1, 60, 127));
+                                        
+            // schedule a note off
+            final int myNoteOnTick = ++noteOnTick;
+            javax.swing.Timer timer = new javax.swing.Timer(500,
+                new ActionListener()
+                    {
+                    public void actionPerformed(ActionEvent e)
+                        {
+                        if (noteOnTick == myNoteOnTick)  // no more note on messages
+                            try
+                                {
+                                tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel - 1, 60, 127));
+                                }
+                            catch (Exception e3)
+                                {
+                                e3.printStackTrace();
+                                }
+                        }
+                    });
+            timer.setRepeats(false);
+            timer.start();
+            }
+        catch (Exception e2)
+            {
+            e2.printStackTrace();
+            }           
+        }
+
+    public void doMapCC()
+        {
+        // has to be done first because doPassThroughCC(false) may turn it off
+        setLearningCC(!getLearningCC());
+		doPassThroughCC(false);
+        }
+                
+    public void doClearAllCC()
+        {
+        if (JOptionPane.showConfirmDialog(Synth.this, "Are you sure you want to clear all CCs?", "Clear CCs", 
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null) == JOptionPane.OK_OPTION)
+            {
+            clearLearned();
+            }
+        }
+                
+    public void doPreviousTab()
+        {
+        setCurrentTab(getCurrentTab() - 1);
+        }
+                
+    public void doNextTab()
+        {
+        setCurrentTab(getCurrentTab() + 1);
+        }
+                
+    public void doTab(int tab)
+        {
+        setCurrentTab(tab);
+        }
+                
+    public void doNew()
+        {
+        instantiate(Synth.this.getClass(), getSynthNameLocal(), false, true, tuple);
+        }
+                
+    public void doNewSynth(int synth)
+        {
+        String[] synthNames = getSynthNames();
+        instantiate(synths[synth], synthNames[synth], false, true, tuple);
+        }
+                
+    public void doDuplicateSynth()
+        {
+        Synth newSynth = instantiate(Synth.this.getClass(), getSynthNameLocal(), false, true, tuple);
+        newSynth.setSendMIDI(false);
+        model.copyValuesTo(newSynth.model);
+        newSynth.setSynced(false);
+        newSynth.setSendMIDI(true);
+        }
+                
+    public void doUndo()
+        {
+        if (model.equals(undo.top()))
+            model = undo.undo(null);  // don't push into the redo stack
+        model = undo.undo(model);
+        model.updateAllListeners();
+        setSynced(false);
+        }
+                
+    public void doRedo()
+        {
+        model = (Model)(undo.redo(getModel()));
+        model.updateAllListeners();
+        }
+        
+    public void doQuit()
+    	{
+    	JOptionPane.showMessageDialog(null, 
+                                  "quit", 
+                                  "quit", 
+                                  JOptionPane.INFORMATION_MESSAGE);
+        System.exit(0);
+    	}
+    
+    public void doPrefs()
+    	{
+    	// do nothing
+    	}
+    
+    public void doAbout()
+    	{
+    	JOptionPane.showMessageDialog(null, 
+                                  "about", 
+                                  "about", 
+                                  JOptionPane.INFORMATION_MESSAGE);
+    	}   
     }

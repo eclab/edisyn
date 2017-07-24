@@ -57,7 +57,7 @@ public class LabelledDial extends NumericalComponent implements Dial.Map
 
     /** Adds a second (or third or fourth or more!) label to the dial, to allow
         for multiline labels. */
-    public void setSecondLabel(String _label)
+    public JLabel setSecondLabel(String _label)
         {
         JLabel label2 = new JLabel(_label);
                 
@@ -76,6 +76,7 @@ public class LabelledDial extends NumericalComponent implements Dial.Map
 
         revalidate();
         repaint();
+        return label2;
         }
                 
     /** Makes a labelled dial for the given key parameter on the given synth, and with the given color and

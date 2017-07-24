@@ -151,12 +151,14 @@ public class Dial extends NumericalComponent
                 //int x = e.getX() - startX;
                 int y = -(e.getY() - startY);
                 int range = (getMax() - getMin() + 1 );
-                int multiplicand = 1;
-                if (range < MAX_EXTENT)
-                    multiplicand = MAX_EXTENT / range;
+                double multiplicand = 1;
+                //if (range < MAX_EXTENT)
+                    multiplicand = MAX_EXTENT / (double) range;
+                //else
+                //	multiplicand = range / (double) MAX_EXTENT;
                                         
                 // at present we're just going to use y.  It's confusing to use either y or x.
-                setState(startState + y / multiplicand);
+                setState(startState + (int)(y / multiplicand));
                 field.setText(map(getState()));
                 repaint();
                 }
@@ -218,7 +220,7 @@ public class Dial extends NumericalComponent
 
     public boolean isSymmetric() { if (map != null) return map.isSymmetric(); else return getCanonicalSymmetric(); } 
         
-    public boolean getCanonicalSymmetric() { return subtractForDisplay == 64; }
+    public boolean getCanonicalSymmetric() { return subtractForDisplay == 64 || subtractForDisplay == 50; }
         
     public double getCanonicalStartAngle()
         {

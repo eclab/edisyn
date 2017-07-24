@@ -164,8 +164,9 @@ public class Blofeld extends Synth
     
     public String getDefaultResourceFileName() { return "Blofeld.init"; }
                 
+                
+                
     /// ARPEGGIATION
-
 
     // Adds the Global Arpeggiator category 
     public JComponent addArpeggiatorGlobal(Color color)
@@ -323,7 +324,7 @@ public class Blofeld extends Synth
                         }
                     };
                 vbox.add(comp);
-        		model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "accent", 1);
+                model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "accent", 1);
                 vbox.add(Strut.makeVerticalStrut(3));
                                 
                 // the little spaces cause Java to not slice off a bit of the last digit
@@ -338,8 +339,8 @@ public class Blofeld extends Synth
                         else return "" + (val - 4);
                         }
                     };
-         		model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "length", 1);
-               vbox.add(comp);
+                model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "length", 1);
+                vbox.add(comp);
                 vbox.add(Strut.makeVerticalStrut(3));
                                                                 
                 // the little spaces cause Java to not slice off a bit of the last digit
@@ -543,15 +544,15 @@ public class Blofeld extends Synth
             };
         parametersByEffect[effect - 1][CLKDELAY][2] = comp;
 
-		// The Blofeld has effects parameters 11....14 even though they're not used.  We'll give them min/max values
-		for(int i = 11; i < 15; i++)
-			{
-			model.set("effect" + effect + "parameter" + i, 0);
-			model.setMin("effect" + effect + "parameter" + i, 0);
-			model.setMax("effect" + effect + "parameter" + i, 127);
-			model.setImmutable("effect" + effect + "parameter" + i, true);
-			}
-			
+        // The Blofeld has effects parameters 11....14 even though they're not used.  We'll give them min/max values
+        for(int i = 11; i < 15; i++)
+            {
+            model.set("effect" + effect + "parameter" + i, 0);
+            model.setMin("effect" + effect + "parameter" + i, 0);
+            model.setMax("effect" + effect + "parameter" + i, 127);
+            model.setImmutable("effect" + effect + "parameter" + i, true);
+            }
+                        
         // Now we can set up the category as usual.
                 
         Category category = new Category("Effect " + effect, color);
@@ -787,27 +788,67 @@ public class Blofeld extends Synth
         envelopeDisplays[envelope - 1][0] = new EnvelopeDisplay(this, Color.red, 
             new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", null, "envelope" + envelope + "release" },
             new String[] { null, null, "envelope" + envelope + "sustain", "envelope" + envelope + "sustain", null },
+            new double[] { 0, 0.3333, 0.3333,  0.3333, 0.3333},
+            new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 },
+            new double[] { 0, (Math.PI/4/127),   (Math.PI/4/127), 0, (Math.PI/4/127)});
+        /*
+        envelopeDisplays[envelope - 1][0] = new EnvelopeDisplay(this, Color.red, 
+            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", null, "envelope" + envelope + "release" },
+            new String[] { null, null, "envelope" + envelope + "sustain", "envelope" + envelope + "sustain", null },
             new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
             new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
+        */
 
         // ADS1DS2R
         envelopeDisplays[envelope - 1][1] = new EnvelopeDisplay(this, Color.red, 
             new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", null, "envelope" + envelope + "release" },
             new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", "envelope" + envelope + "sustain2", null },
+            new double[] { 0, 0.2, 0.2,   0.2, 0.2, 0.2},
+            new double[] { 0, 1.0/127.0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 },
+            new double[] { 0, Math.PI/4/127,  Math.PI/4/127,  Math.PI/4/127, 0,  Math.PI/4/127 });
+
+        /*
+        envelopeDisplays[envelope - 1][1] = new EnvelopeDisplay(this, Color.red, 
+            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", null, "envelope" + envelope + "release" },
+            new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", "envelope" + envelope + "sustain2", null },
             new double[] { 0, 0.2/127.0, 0.2 / 127.0,   0.2/127.0, 0.2, 0.2/127.0},
             new double[] { 0, 1.0/127.0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 });
+        */
 
         // One Shot
-        envelopeDisplays[envelope - 1][2] = envelopeDisplays[envelope - 1][1];
+        envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Color.red, 
+            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "release" },
+            new String[] { null, null, "envelope" + envelope + "sustain", null },
+            new double[] { 0, 0.5, 0.5, 0.5},
+            new double[] { 0, 1.0, 1.0 / 127.0, 0 },
+            new double[] { 0, Math.PI/4/127, Math.PI/4/127, Math.PI/4/127 });
+
+		/*
+        envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Color.red, 
+            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "release" },
+            new String[] { null, null, "envelope" + envelope + "sustain", null },
+            new double[] { 0, 0.33333333/127.0, 0.33333333/ 127.0, 0.33333333/127.0},
+            new double[] { 0, 1.0, 1.0 / 127.0, 0 });
+        */
                         
         // Loop S1S2
+        
+        envelopeDisplays[envelope - 1][3] = new EnvelopeDisplay(this, Color.red, 
+            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", "envelope" + envelope + "release" },
+            new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", null },
+            new double[] { 0, 0.25, 0.25, 0.25, 0.25 },
+            new double[] { 0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 },
+            new double[] { 0, Math.PI/4/127, Math.PI/4/127, Math.PI/4/127, Math.PI/4/127});
+
+		/*
         envelopeDisplays[envelope - 1][3] = new EnvelopeDisplay(this, Color.red, 
             new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", "envelope" + envelope + "release" },
             new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", null },
             new double[] { 0, 0.25/127.0, 0.25 / 127.0, 0.25/127.0, 0.25/127.0 },
             new double[] { 0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 });
-
-        // Loop All
+		*/
+		
+        // Loop All is the same as Loop S1S2
         envelopeDisplays[envelope - 1][4] = envelopeDisplays[envelope - 1][3];
                 
         comp = envelopeDisplays[envelope - 1][0];  // placeholder
@@ -925,17 +966,22 @@ public class Blofeld extends Synth
                 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, "Patch: ", "bank", "number", 4)
+        comp = new PatchDisplay(this, "Patch", "bank", "number", 4)
             {
             public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
             public String bankString(int bank) { return BANKS[bank]; }
             };
         hbox2.add(comp);
-        comp = new PatchDisplay(this, "  ID: ", "id", null, 3);
+        comp = new PatchDisplay(this, "ID", "id", null, 3);
         hbox2.add(comp);
+
+        params = CATEGORIES;
+        comp = new Chooser("Category", this, "category", params);
+        model.setImmutable("category", true);
+        hbox2.add(comp);
+
         vbox.add(hbox2);
         
-        //vbox.add(Strut.makeVerticalStrut(20));
         
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
@@ -962,13 +1008,6 @@ public class Blofeld extends Synth
 
         vbox = new VBox();
                                 
-        params = CATEGORIES;
-        comp = new Chooser("Category", this, "category", params);
-        model.setImmutable("category", true);
-		vbox.addBottom(comp);
-                
-        hbox.add(vbox);
-
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
         }
@@ -1108,7 +1147,7 @@ public class Blofeld extends Synth
         ((LabelledDial)comp).setSecondLabel("Amount");
         hbox.add(comp);
 
-		vbox = new VBox();
+        vbox = new VBox();
         comp = new CheckBox("Glide", this, "oscglide");
         vbox.add(comp);
 
@@ -1223,7 +1262,7 @@ public class Blofeld extends Synth
             // We do this because it'd be confusing for non-SL people, but
             // this has the side-effect of preventing invalid settings to the wave/sample chooser 
             // during mutation/crossover because there are 128 samples but only, like 124 waves
-	        model.setImmutable("osc" + osc + "samplebank", true);
+            model.setImmutable("osc" + osc + "samplebank", true);
             vbox.add(comp);
             }
 
@@ -2026,7 +2065,7 @@ public class Blofeld extends Synth
         bytes[382] = 0;
 
 
-        byte[] full = new byte[getExpectedSysexLength() ];
+        byte[] full = new byte[EXPECTED_SYSEX_LENGTH];
         full[0] = (byte)0xF0;
         full[1] = 0x3E;
         full[2] = 0x13;
@@ -2149,8 +2188,8 @@ public class Blofeld extends Synth
             }
         else
             {
-            model.set("bank", 0);
-            model.set("number", 0);
+            //model.set("bank", 0);
+            //model.set("number", 0);
             retval = false;
             }
                 
@@ -2240,7 +2279,6 @@ public class Blofeld extends Synth
         }
     
     public static final int EXPECTED_SYSEX_LENGTH = 392;
-    public int getExpectedSysexLength() { return EXPECTED_SYSEX_LENGTH; }
     
     
     
@@ -2248,7 +2286,7 @@ public class Blofeld extends Synth
     
     /////// OTHER ABSTRACT METHODS
     
-    public boolean gatherInfo(String title, Model change)
+    public boolean gatherInfo(String title, Model change, boolean writing)
         {
         JComboBox bank = new JComboBox(BANKS);
         bank.setEditable(false);
@@ -2303,7 +2341,7 @@ public class Blofeld extends Synth
 
     public void revise()
         {
-		// check the easy stuff -- out of range parameters
+        // check the easy stuff -- out of range parameters
         super.revise();
 
         // handle "name" specially
@@ -2317,8 +2355,6 @@ public class Blofeld extends Synth
         model.set("name", name.toString());
         }
         
-    public boolean requestCloseWindow() { return true; }
-
     public static String getSynthName() { return "Waldorf Blofeld"; }
     
     public String getPatchName() { return model.get("name", "Init            "); }

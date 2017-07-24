@@ -47,7 +47,7 @@ public class VBox extends JComponent
         {
         box.removeAll();
         if (bottom != null)
-        	remove(bottom);
+            remove(bottom);
         }               
                 
     public void add(JComponent component)
@@ -56,8 +56,24 @@ public class VBox extends JComponent
         }
     
     public void addBottom(JComponent component)
-    	{
-    	bottom = component;
-    	add(bottom, BorderLayout.SOUTH);
-    	}
+        {
+        bottom = component;
+        add(bottom, BorderLayout.SOUTH);
+        }
+
+    public int getCount()
+        {
+        return box.getComponentCount();
+        }
+                
+    public void remove(int component)
+        {
+        box.remove(component);
+        }        
+        
+    public void remove(JComponent component)
+        {
+        box.remove(component);
+        }        
+        
     }

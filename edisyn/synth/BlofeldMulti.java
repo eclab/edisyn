@@ -112,8 +112,8 @@ public class BlofeldMulti extends Synth
     {
     /// Various collections of parameter names for pop-up menus
         
-    static final String[] BANKS = new String[] { "A", "B", "C", "D", "E", "F", "G", "H" };
-    static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+    public static final String[] BANKS = new String[] { "A", "B", "C", "D", "E", "F", "G", "H" };
+    public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
         
         
     public BlofeldMulti()
@@ -170,13 +170,13 @@ public class BlofeldMulti extends Synth
         }
     
     public JFrame sprout()
-    	{
-    	JFrame frame = super.sprout();
+        {
+        JFrame frame = super.sprout();
         // multi-mode on the Blofeld can't switch patches
         transmit.setEnabled(false);
-		transmitTo.setEnabled(false);    
-		return frame;	
-    	}         
+        transmitTo.setEnabled(false);    
+        return frame;   
+        }         
                 
     public void changePatch(Model tempModel)
         {
@@ -185,7 +185,7 @@ public class BlofeldMulti extends Synth
 
     public String getDefaultResourceFileName() { return "BlofeldMulti.init"; }
 
-    public boolean gatherInfo(String title, Model change)
+    public boolean gatherInfo(String title, Model change, boolean writing)
         {
         JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
 
@@ -378,10 +378,11 @@ public class BlofeldMulti extends Synth
                             {
                             public void run() 
                                 { 
-                                int bank = BlofeldMulti.this.model.get("bank" + inst, 0);
-                                int number = BlofeldMulti.this.model.get("number" + inst, 0);
-                                int id = BlofeldMulti.this.model.get("id", 0);
-                                synth.tryToSendSysex(synth.requestDump(bank, number, id));
+                                Model tempModel = new Model();
+                                tempModel.set("bank", BlofeldMulti.this.model.get("bank" + inst, 0));
+                                tempModel.set("number", BlofeldMulti.this.model.get("number" + inst, 0));
+                                tempModel.set("id", BlofeldMulti.this.model.get("id", 0));
+                                synth.tryToSendSysex(synth.requestDump(tempModel));
                                 }
                             });
                     }
@@ -1024,7 +1025,7 @@ public class BlofeldMulti extends Synth
                 bytes[i] = (byte)(name.charAt(i));
             }
                 
-        byte[] full = new byte[getExpectedSysexLength()];
+        byte[] full = new byte[EXPECTED_SYSEX_LENGTH];
         full[0] = (byte)0xF0;
         full[1] = 0x3E;
         full[2] = 0x13;
@@ -1097,13 +1098,12 @@ public class BlofeldMulti extends Synth
         }
         
     public static final int EXPECTED_SYSEX_LENGTH = 425;
-    public int getExpectedSysexLength() { return 425; }
         
         
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
         {
-		// check the easy stuff -- out of range parameters
+        // check the easy stuff -- out of range parameters
         super.revise();
 
         // handle "name" specially
@@ -1186,7 +1186,7 @@ public class BlofeldMulti extends Synth
             }
         else
             {
-            model.set("number", 0);
+            //model.set("number", 0);
             retval = false;
             }
         
@@ -1197,8 +1197,6 @@ public class BlofeldMulti extends Synth
         revise();  
         return false;  // we're never in sync because we can't move the patch number     
         }
-
-    public boolean requestCloseWindow() { return true; }
 
     public static String getSynthName() { return "Waldorf Blofeld [Multi]"; }
     

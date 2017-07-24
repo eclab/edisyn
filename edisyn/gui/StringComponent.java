@@ -56,6 +56,13 @@ public class StringComponent extends JComponent implements Updatable
         {
         return true;
         }
+      
+    /** Override this method to convert val prior to determining if it is valid, perhaps
+        to make it all-uppercase, for example. */  
+    public String convert(String val)
+        {
+        return val;
+        }
         
     public StringComponent(final String _label, final Synth synth, final String key, int maxLength, final String instructions)
         {
@@ -91,6 +98,8 @@ public class StringComponent extends JComponent implements Updatable
                     {
                     String val = synth.getModel().get(key, "").trim();
                     String result = (String)(JOptionPane.showInputDialog(StringComponent.this, message, title, JOptionPane.QUESTION_MESSAGE, null, null, val));
+                    if (result == null) return;
+                    result = convert(result);
                     if (result == null) return;
                     if (isValid(result))
                         { setText(result); return; }

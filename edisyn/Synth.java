@@ -1845,21 +1845,20 @@ public abstract class Synth extends JComponent implements Updatable
         
     public void handleCC(ShortMessage message)
         {
-    	boolean relcc = true; // fixed relative cc (x..64..y) usage - replace with information from GUI/model
+    	boolean relcc = true; // fixed relative cc (x..64..y) usage - replace with config information from GUI/model
         lastCC = message.getData1();
-        // System.out.println("cc message channel: "+message.getChannel());
         if (learning)
             {
             String key = model.getLastKey();
             if (key != null)
                 {
-                ccmap.setKeyForCCPane(lastCC, getCurrentTab(), key);
+                ccmap.setKeyForCCChannelPane(lastCC, message.getChannel(), getCurrentTab(), key);
                 toggleLearning();  // we're done
                 }
             }
         else
             {
-            String key = ccmap.getKeyForCCPane(lastCC, getCurrentTab());
+            String key = ccmap.getKeyForCCChannelPane(lastCC,  message.getChannel(), getCurrentTab());
             int val = message.getData2();
             if (key != null)
                 {

@@ -1845,31 +1845,43 @@ public abstract class Synth extends JComponent implements Updatable
         
     public void handleCC(ShortMessage message)
         {
+    	boolean relcc = true; // fixed relative cc (x..64..y) usage - replace with config information from GUI/model
         lastCC = message.getData1();
         if (learning)
             {
             String key = model.getLastKey();
             if (key != null)
                 {
-                ccmap.setKeyForCCPane(lastCC, getCurrentTab(), key);
+                ccmap.setKeyForCCChannelPane(lastCC, message.getChannel(), getCurrentTab(), key);
                 toggleLearning();  // we're done
                 }
             }
         else
             {
-            String key = ccmap.getKeyForCCPane(lastCC, getCurrentTab());
+            String key = ccmap.getKeyForCCChannelPane(lastCC,  message.getChannel(), getCurrentTab());
             int val = message.getData2();
             if (key != null)
                 {
-                if (model.minExists(key))
-                    {
-                    val += model.getMin(key);
-                    }
-                else if (model.maxExists(key))
-                    {
-                    val = val - 127 + model.getMax(key);
-                    }
-                model.setBounded(key, val);
+            	if (relcc) { // use relative values centered around CC=64
+	            	if (model.minExists(key))
+	                {
+	            		if (val < 64) { 
+	            		model.setRelative(key,-(64-val));
+	            		}
+	            		
+	            		if (val > 64) model.setRelative(key,val-64);
+	                }
+            	} else { // using absolute (0..127) values
+	                if (model.minExists(key))
+	                    {
+	                    val += model.getMin(key);
+	                    }
+	                else if (model.maxExists(key))
+	                    {
+	                    val = val - 127 + model.getMax(key);
+	                    }
+	                model.setBounded(key, val);
+	                }
                 }
             }
         }

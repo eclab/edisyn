@@ -378,6 +378,27 @@ public class Model implements Cloneable
         set(key, value);
         }
     
+    public void setRelative(String key, int relChange)
+        {
+    	int value = get(key,0)+relChange;
+            
+	    if (minExists(key))
+	        {
+	        int min = getMin(key);
+	        if (get(key,0)+relChange < min)
+	            value = min;
+	        }
+	            
+	    if (maxExists(key))
+	        {
+	        int max = getMax(key);
+	        if (get(key,0)+relChange  > max)
+	            value = max;
+	        }
+	    
+	    set(key, value);
+	    }
+
     public void updateListenersForKey(String key)
         {
         ArrayList list = (ArrayList)(listeners.get(key));

@@ -340,8 +340,13 @@ public class PreenFM2 extends Synth
 
         comp = new PatchDisplay(this, "Patch", "bank", "number", 4)
             {
-            public String numberString(int number) { return "Yo" + number; }
-            public String bankString(int bank) { return "Mama" + bank; }
+            public String numberString(int number) { return " : " + number; }
+            public String bankString(int bank) 
+            	{ 
+            	if (bank < 128) return "Bank " + bank;
+            	else if (bank < 256) return "Combo " + (bank - 128);
+            	else return ("DX7 " + (bank - 256));
+            	}
             };
         vbox.add(comp);
 
@@ -1187,6 +1192,11 @@ public void setSynced(boolean val) { super.setSynced(true); }
         
         tryToSendSysex(buildLongCC(channel, 0, bank));
         tryToSendSysex(buildPC(channel, program));
+        
+        // we assume that we successfully did it
+        model.set("number", program);
+        model.set("bank", bank);
+        model.set("channel", channel);
         }
 
     public void performRequestDump(Model tempModel)
@@ -1584,7 +1594,7 @@ public void setSynced(boolean val) { super.setSynced(true); }
 	
     public static boolean recognize(byte[] data)
         {
-        boolean val = (data.length == 458 &&
+        boolean val = (data.length == 466 &&
 			data[0] == (byte)0xF0 &&
 			data[1] == (byte)0x7D &&
 			data[2] == (byte)'P' &&
@@ -1604,6 +1614,10 @@ public void setSynced(boolean val) { super.setSynced(true); }
 // to our fake Sysex file and parse it back in.
 public String[] sysexKeys = 
 {
+"performanceparam1",
+"performanceparam2",
+"performanceparam3",
+"performanceparam4",
 "algorithm",
 "velocity",
 "glide",

@@ -271,6 +271,7 @@ public class MicrowaveXTMulti extends Synth
                     return "" + (50 + (val - 2) * 2);
                     }
                 }
+            public int getDefaultValue() { return 37; } // 120 BPM
             };
         model.setMetricMin( "arptempo", 2);
         //((LabelledDial)comp).setSecondLabel("Tempo");

@@ -340,7 +340,7 @@ public class Matrix1000 extends Synth
 
         hbox.add(vbox);
 
-        comp = new LabelledDial("Shape", this, "dco" + osc + "shape", color, 0, 31);
+        comp = new LabelledDial("Wave Shape", this, "dco" + osc + "shape", color, 0, 31);
         ((LabelledDial)comp).setSecondLabel("Saw <> Tri");
         hbox.add(comp);
 

@@ -314,6 +314,7 @@ public class BlofeldMulti extends Synth
                 else
                     return "" + (((val - 101) * 5) + 170);
                 }
+			public int getDefaultValue() { return 55; }		// 120 BPM
             };
         hbox.add(comp);
         

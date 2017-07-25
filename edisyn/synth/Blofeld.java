@@ -278,6 +278,7 @@ public class Blofeld extends Synth
                 else
                     return "" + (((val - 101) * 5) + 170);
                 }
+			public int getDefaultValue() { return 55; }		// 120 BPM?
             };
         hbox.add(comp);
 
@@ -322,6 +323,7 @@ public class Blofeld extends Synth
                         if (val == 0) return "Rest";
                         else return "" + (((val - 4) * 96) / 3);
                         }
+					public int getDefaultValue() { return 4; }
                     };
                 vbox.add(comp);
                 model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "accent", 1);
@@ -338,6 +340,7 @@ public class Blofeld extends Synth
                         if (val == 0) return "Legato";
                         else return "" + (val - 4);
                         }
+					public int getDefaultValue() { return 4; }
                     };
                 model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "length", 1);
                 vbox.add(comp);
@@ -354,6 +357,7 @@ public class Blofeld extends Synth
                         if (val == 0) return "Rand";
                         else return "" + (val - 4);
                         }
+					public int getDefaultValue() { return 4; }
                     };
                 model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "timing", 1);
               
@@ -1288,6 +1292,7 @@ public class Blofeld extends Synth
                 String[] oct = OSCILLATOR_OCTAVES;
                 return oct[val];
                 }
+			public int getDefaultValue() { return 4; }                
             };
         hbox.add(comp);
                 

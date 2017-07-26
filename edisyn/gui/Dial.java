@@ -31,12 +31,13 @@ public class Dial extends NumericalComponent
     int status = STATUS_STATIC;
     Color staticColor;
 
-    // The largest range that the dial can represent.  127 is reasonable
-    // for most synths but some synths (DSI ahem) will require more.
+    // The largest range that the dial can represent.
     public static final int MAX_EXTENT = 127;
+    // The typical range that the dial represents.  127 is reasonable
+    public static final int DEFAULT_EXTENT = 127;
         
     // Used to convert the number into text shown in the dial
-    Map map;
+    DialMap map;
         
     // The state when the mouse was pressed 
     int startState;
@@ -61,7 +62,7 @@ public class Dial extends NumericalComponent
     public void update(String key, Model model) { field.setText(map(getState())); repaint(); }
 
     /** Maps the stored number to a text string.
-        Override this as you see fit. By default it calls its Map object (typically provided by the LabelledDial).
+        Override this as you see fit. By default it calls its DialMap object (typically provided by the LabelledDial).
         Otherwise it subtracts
         the requested amount from the value and converts to a string directly. */
     public String map(int val) { if (map != null) return map.map(val); else return "" +  (val - subtractForDisplay); }
@@ -69,10 +70,10 @@ public class Dial extends NumericalComponent
     public Dimension getPreferredSize() { return new Dimension(55, 55); }
     public Dimension getMinimumSize() { return new Dimension(55, 55); }
         
-    /** Returns the current Map object, which maps numbers to strings. */
-    public Map getMap() { return map; }
-    /** Sets the current Map object, which maps numbers to strings. */
-    public void setMap(Map v) 
+    /** Returns the current DialMap object, which maps numbers to strings. */
+    public DialMap getDialMap() { return map; }
+    /** Sets the current DialMap object, which maps numbers to strings. */
+    public void setDialMap(DialMap v) 
         {
         map = v; 
         if (map != null) 
@@ -142,6 +143,14 @@ public class Dial extends NumericalComponent
                 status = STATUS_STATIC;
                 repaint();
                 }
+                
+            public void mouseClicked(MouseEvent e)
+            	{
+            	if (e.getClickCount() == 2)
+            		{
+            		setState(getDefaultValue());
+            		}
+            	}
             });
                         
         addMouseMotionListener(new MouseMotionAdapter()
@@ -152,10 +161,10 @@ public class Dial extends NumericalComponent
                 int y = -(e.getY() - startY);
                 int range = (getMax() - getMin() + 1 );
                 double multiplicand = 1;
-                //if (range < MAX_EXTENT)
+                if (range <= DEFAULT_EXTENT)
+                	multiplicand = DEFAULT_EXTENT / (double) range;
+                else
                     multiplicand = MAX_EXTENT / (double) range;
-                //else
-                //	multiplicand = range / (double) MAX_EXTENT;
                                         
                 // at present we're just going to use y.  It's confusing to use either y or x.
                 setState(startState + (int)(y / multiplicand));
@@ -217,6 +226,16 @@ public class Dial extends NumericalComponent
             return new Rectangle(x, y, w, h);
             }
         }
+
+	public int getDefaultValue()
+		{
+		if (map != null) return map.getDefaultValue();
+		else if (isSymmetric())
+			{
+			return (int)Math.ceil((getMin() + getMax()) / 2.0);		// we do ceiling so we push to 64 on 0...127
+			}
+		else return getMin();
+		}
 
     public boolean isSymmetric() { if (map != null) return map.isSymmetric(); else return getCanonicalSymmetric(); } 
         
@@ -305,16 +324,17 @@ public class Dial extends NumericalComponent
         arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, startAngle, interval, Arc2D.OPEN);            
         graphics.draw(arc);
         }
+    }
 
     /** Interface which converts integers into appropriate string values to display in the center of the dial. */
-    public interface Map
+    interface DialMap
         {
-        /** Maps an integer to an appropriate String value. */ 
+        /** DialMaps an integer to an appropriate String value. */ 
         public String map(int val); 
         public boolean isSymmetric(); 
         public double getStartAngle();
+        public int getDefaultValue();
         }
-    }
 
 
 

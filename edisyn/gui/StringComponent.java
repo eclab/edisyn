@@ -57,6 +57,14 @@ public class StringComponent extends JComponent implements Updatable
         return true;
         }
       
+    /** Override this method to replace the string with a valid one.  The default
+    	returns null, which instructs StringComponent to instead call isValid() and
+    	report to the user that the name is not valid. */
+    public String replace(String val)
+        {
+        return null;
+        }
+      
     /** Override this method to convert val prior to determining if it is valid, perhaps
         to make it all-uppercase, for example. */  
     public String convert(String val)
@@ -101,8 +109,20 @@ public class StringComponent extends JComponent implements Updatable
                     if (result == null) return;
                     result = convert(result);
                     if (result == null) return;
-                    if (isValid(result))
-                        { setText(result); return; }
+                    String str = replace(result);
+                    if (str == null)
+                    	{
+                    	if (isValid(result))
+                        	{ 
+                        	setText(result); 
+                        	return;
+                        	}
+                        }
+                    else
+                    	{
+                    	setText(str); 
+                    	return;
+                    	}
                     message = instructions;
                     }
                 }

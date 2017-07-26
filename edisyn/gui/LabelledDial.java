@@ -23,7 +23,7 @@ import java.awt.event.*;
    @author Sean Luke
 */
 
-public class LabelledDial extends NumericalComponent implements Dial.Map
+public class LabelledDial extends NumericalComponent implements DialMap
     {
     Dial dial;
     JLabel label;
@@ -40,6 +40,13 @@ public class LabelledDial extends NumericalComponent implements Dial.Map
     public void setState(int val) { dial.setState(val); }
     public void update(String key, Model model) { dial.update(key, model); }
         
+    public void setLabel(String text)
+    	{
+    	label.setText(text);
+    	label.revalidate();
+    	label.repaint();
+    	}
+    	
     // Turn off registration for LabelledDial.
     // That way we can call update()
     // manually on LabelledDial, but update() won't get called
@@ -108,7 +115,7 @@ public class LabelledDial extends NumericalComponent implements Dial.Map
         super(synth, key);
         setBackground(Style.BACKGROUND_COLOR);
         dial = new Dial(synth, key, staticColor);
-        dial.setMap(this);
+        dial.setDialMap(this);
 
         label = new JLabel(_label);
                 
@@ -134,4 +141,14 @@ public class LabelledDial extends NumericalComponent implements Dial.Map
         add(panel, BorderLayout.NORTH);
         setState(getState());
         }
+
+	public int getDefaultValue()
+		{
+		if (isSymmetric())
+			{
+			return (int)Math.ceil((getMin() + getMax()) / 2.0);		// we do ceiling so we push to 64 on 0...127
+			}
+		else return getMin();
+		}
+
     }

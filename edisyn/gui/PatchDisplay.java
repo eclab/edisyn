@@ -70,7 +70,6 @@ public class PatchDisplay extends JPanel implements Updatable
     public PatchDisplay(Synth synth, String label, String bankKey, String numberKey, int columns)
         {
         this.synth = synth;
-        //synth.addPatchDisplay(this);
         Model model = synth.getModel();
         setBackground(Style.BACKGROUND_COLOR);
         setLayout(new BorderLayout());
@@ -95,8 +94,19 @@ public class PatchDisplay extends JPanel implements Updatable
         text.setForeground(Style.PATCH_UNSYNCED_TEXT_COLOR);
         // lock the preferred size to max of columns
         dim[0] = text.getPreferredSize();
-        
     
+        if (bankKey != null)
+            {
+            model.register(this.bankKey = bankKey, this);
+            model.setImmutable(bankKey, true);
+            }
+        
+        if (numberKey != null)
+            {
+            model.register(this.numberKey = numberKey, this);
+            model.setImmutable(numberKey, true);
+            }
+
         text.setText(makeString(model));
         add(text, BorderLayout.CENTER);
         
@@ -108,18 +118,6 @@ public class PatchDisplay extends JPanel implements Updatable
         lab.setForeground(Style.TEXT_COLOR);
         //add(lab, BorderLayout.WEST);
         add(lab, BorderLayout.NORTH);
-
-        if (bankKey != null)
-            {
-            model.register(this.bankKey = bankKey, this);
-            model.setImmutable(bankKey, true);
-            }
-                
-        if (numberKey != null)
-            {
-            model.register(this.numberKey = numberKey, this);
-            model.setImmutable(numberKey, true);
-            }
         }
     
     public void update(String key, Model model)

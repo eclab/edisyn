@@ -744,6 +744,8 @@ public static class Parser
 	
 		public CCData handleNRPN(int controllerNumber, int controllerValueLSB, int controllerValueMSB)
 			{
+			if (controllerValueLSB < 0 || controllerValueMSB < 0)
+				System.err.println("WARNING, LSB or MSB < 0.  NRPN: " + controllerNumber + "   LSB: " + controllerValueMSB + "  MSB: " + controllerValueMSB);
 			return new CCData(CCDATA_TYPE_NRPN, controllerNumber, controllerValueLSB | (controllerValueMSB << 7), false);
 			}
 	

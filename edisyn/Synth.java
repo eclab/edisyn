@@ -61,6 +61,7 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem transmit;
     public JMenuItem transmitTo;
     public JMenuItem transmitCurrent;
+    public JMenuItem writeTo;
     public JMenuItem undoMenu;
     public JMenuItem redoMenu;
     public JMenuItem receiveCurrent;
@@ -315,8 +316,10 @@ public abstract class Synth extends JComponent implements Updatable
 				new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 98, (byte)p_lsb),
 				new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 6, (byte)v_msb),
 				new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 38, (byte)v_lsb),
-				new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 101, (byte)127),
-				new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 100, (byte)127),
+
+				// can't have these right now, it freaks out the PreenFM2
+				//new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 101, (byte)127),
+				//new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 100, (byte)127),
 				};
 			}
 		catch (InvalidMidiDataException e)
@@ -494,7 +497,7 @@ public abstract class Synth extends JComponent implements Updatable
                 
         if (getSendMIDI() && isSynced())
             {
-            tryToSendSysex(emit(key));
+            tryToSendSysex(emitAll(key));
             }
         }
 
@@ -583,8 +586,17 @@ public abstract class Synth extends JComponent implements Updatable
 					ShortMessage sm = (ShortMessage)message;
 					if (sm.getCommand() == ShortMessage.CONTROL_CHANGE)
 						{
-						// let's try parsing it
-						handleInRawCC(sm);
+						SwingUtilities.invokeLater(new Runnable()
+							{
+							public void run()
+								{
+								sendMIDI = false;  // so we don't send out parameter updates in response to reading/changing parameters
+								// let's try parsing it
+								handleInRawCC(sm);
+								sendMIDI = true;
+								updateTitle();
+								}
+							});
 						}
 					}
 				}
@@ -623,13 +635,21 @@ public abstract class Synth extends JComponent implements Updatable
                                 newMessage = new ShortMessage(status, channel, data1, data2);
                             else
                                 newMessage = new ShortMessage(status, data1, data2);
-                            if (!getPassThroughCC() && newMessage.getCommand() == ShortMessage.CONTROL_CHANGE)
+                                
+                            // we intercept a message if:
+                            // 1. It's a CC (maybe NRPN)
+                            // 2. We're not passing through CC
+                            // 3. It's the right channel OR our key channel is OMNI
+                            if (!getPassThroughCC() && 
+                            	newMessage.getCommand() == ShortMessage.CONTROL_CHANGE &&
+                            	(newMessage.getChannel() == tuple.keyChannel || tuple.keyChannel == tuple.KEYCHANNEL_OMNI))
                                 {
                                 // we intercept this
                                 handleKeyRawCC(newMessage);
                                 }
                             else
                                 {
+                                // pass it on!
                                 tryToSendMIDI(newMessage);
                                 }
                             }
@@ -1122,10 +1142,10 @@ public abstract class Synth extends JComponent implements Updatable
 
         menu.addSeparator();
 
-        JMenuItem burn = new JMenuItem("Write to Patch...");
-        burn.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        menu.add(burn);
-        burn.addActionListener(new ActionListener()
+        writeTo = new JMenuItem("Write to Patch...");
+        writeTo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(writeTo);
+        writeTo.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
@@ -1518,7 +1538,7 @@ public abstract class Synth extends JComponent implements Updatable
                 String[] keys = getModel().getKeys();
                 for(int i = 0; i < keys.length; i++)
                     {
-                    tryToSendSysex(emit(keys[i]));
+                    tryToSendSysex(emitAll(keys[i]));
                     }
                 }
             }
@@ -2027,16 +2047,38 @@ public abstract class Synth extends JComponent implements Updatable
 						ccdata.value = ccdata.value + model.get(key, 0);
 						}
 
-/*
-					if (model.minExists(key))
+					// handle the situation where the range is larger than the CC/NRPN message,
+					// else bump it to min
+					if (model.minExists(key) && model.maxExists(key))
 						{
-						val += model.getMin(key);
+						if (ccdata.type == Midi.CCDATA_TYPE_RAW_CC)
+							{
+							int min = model.getMin(key);
+							int max = model.getMax(key);
+							if (max - min + 1 > 127)  // uh oh
+								{
+								ccdata.value = (int)(((max - min + 1) / (double) 127) * ccdata.value);
+								}
+							else
+								{
+								ccdata.value = min + ccdata.value;
+								}
+							}
+						else if (ccdata.type == Midi.CCDATA_TYPE_NRPN)
+							{
+							int min = model.getMin(key);
+							int max = model.getMax(key);
+							if (max - min + 1 > 16383)  // uh oh, but very unlikely
+								{
+								ccdata.value = (int)(((max - min + 1) / (double) 16383) * ccdata.value);
+								}
+							else
+								{
+								ccdata.value = min + ccdata.value;
+								}
+							}
 						}
-					else if (model.maxExists(key))
-						{
-						val = val - 127 + model.getMax(key);
-						}
-*/
+
 					model.setBounded(key, ccdata.value);
 					}
 				}
@@ -2377,5 +2419,19 @@ public abstract class Synth extends JComponent implements Updatable
                                   "about", 
                                   "about", 
                                   JOptionPane.INFORMATION_MESSAGE);
-    	}   
+    	}
+
+	/** Function for tweaking a name to make it valid for display in the editor.
+		The default version just does a right-trim of whitespace on the name.  You
+		may wish to override this to also restrict the valid characters and the name
+		length. */
+    public String reviseName(String name)
+    	{
+    	// right-trim the name
+        int i = name.length()-1;
+        while (i >= 0 && Character.isWhitespace(name.charAt(i))) i--;
+        name = name.substring(0, i+1);
+        return name;
+    	}
+ 
     }

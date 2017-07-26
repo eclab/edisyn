@@ -72,6 +72,7 @@ public class PreenFM2 extends Synth
         new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen25.png")),
         new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen26.png")),
         new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen27.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen28.png")),
         };
 
 	public void sendAllParameters(boolean changePatch)
@@ -374,7 +375,7 @@ public class PreenFM2 extends Synth
         HBox hbox = new HBox();
         generalBox = hbox;
          
-		comp = new LabelledDial("Algorithm", this, "algorithm", color, 0, 26, -1);
+		comp = new LabelledDial("Algorithm", this, "algorithm", color, 0, 27, -1);
 		hbox.add(comp);
 		
         hbox.add(Strut.makeHorizontalStrut(10));

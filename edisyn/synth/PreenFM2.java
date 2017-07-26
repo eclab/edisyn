@@ -1185,6 +1185,8 @@ public void setSynced(boolean val) { super.setSynced(true); }
 
     public void changePatch(Model tempModel)
         {
+        return;
+        /*
         // Banks are:
         // 0..127			Bank
         // 128...255		Combo
@@ -1200,17 +1202,22 @@ public void setSynced(boolean val) { super.setSynced(true); }
         tryToSendSysex(buildPC(channel, program));
         
         // we assume that we successfully did it
+        setSendMIDI(false);
         model.set("number", program);
         model.set("bank", bank);
         model.set("channel", channel);
+        setSendMIDI(true);
+        */
         }
 
+	int lastTime = 0;
     public void performRequestDump(Model tempModel)
     	{
     	changePatch(tempModel);
-
+		lastTime = (1 - lastTime);
+		
 		// Send an NRPN with param = MSB127, LSB127, and a value of whatever (here, 0).
-        tryToSendSysex(buildNRPN(getModel().get("channel", 0), (127 << 7) | 127, 0));
+        tryToSendSysex(buildNRPN(getModel().get("channel", 0), (127 << 7) | 127, lastTime));
 
 		// it'll be synced soon enough
         setSynced(true);

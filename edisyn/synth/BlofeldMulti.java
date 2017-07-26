@@ -164,7 +164,7 @@ public class BlofeldMulti extends Synth
 
         tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("BlofeldMulti.html")));
 
-        model.set("name", "Init Multi      ");  // has to be 16 long
+        model.set("name", "Init Multi");  // has to be 16 long
         
         loadDefaults();
         }
@@ -257,6 +257,7 @@ public class BlofeldMulti extends Synth
         vbox = new VBox();
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
+            /*
             public boolean isValid(String val)
                 {
                 if (val.length() > 16) return false;
@@ -267,6 +268,12 @@ public class BlofeldMulti extends Synth
                     }
                 return true;
                 }
+            */
+            
+            public String replace(String val)
+            	{
+            	return reviseName(val);
+            	}
                                 
             public void update(String key, Model model)
                 {
@@ -1016,14 +1023,11 @@ public class BlofeldMulti extends Synth
                 }
             }
 
-        String name = model.get("name", "Init Sound V1.1 ");  // has to be 16 long
+        String name = model.get("name", "Init Multi") + "                ";  // has to be 16 long
                                 
         for(int i = 0; i < 16; i++)
             {
-            if (i >= name.length())
-                bytes[i] = 0x20;  // space
-            else
-                bytes[i] = (byte)(name.charAt(i));
+            bytes[i] = (byte)(name.charAt(i));
             }
                 
         byte[] full = new byte[EXPECTED_SYSEX_LENGTH];
@@ -1108,16 +1112,31 @@ public class BlofeldMulti extends Synth
         super.revise();
 
         // handle "name" specially
-        StringBuffer name = new StringBuffer(model.get("name", "Init Multi      "));  // has to be 16 long
-        for(int i = 0; i < name.length(); i++)
-            {
-            char c = name.charAt(i);
-            if (c < 32 || c > 127)
-                { name.setCharAt(i, (char)32); System.err.println("Warning: Revised name from \"" + model.get("name", "Init Multi      ") + "\" to \"" + name.toString() + "\"");}
-            }
-        model.set("name", name.toString());
+		String nm = model.get("name", "Init Multi");
+		String newnm = reviseName(nm);
+		if (!nm.equals(newnm))
+	        model.set("name", newnm);
         }
         
+
+
+    public static final int MAXIMUM_NAME_LENGTH = 16;
+    public String reviseName(String name)
+    	{
+    	name = super.reviseName(name);  // trim first time
+    	if (name.length() > MAXIMUM_NAME_LENGTH)
+	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
+    	
+        StringBuffer nameb = new StringBuffer(name);        			
+		for(int i = 0 ; i < nameb.length(); i++)
+			{
+			char c = nameb.charAt(i);
+            if (c < 32 || c > 127)
+				nameb.setCharAt(i, ' ');
+			}
+		name = nameb.toString();
+		return super.reviseName(name);  // trim again
+    	}
 
 
 
@@ -1134,9 +1153,7 @@ public class BlofeldMulti extends Synth
             {
             try 
                 {
-                String name = model.get("name", "Init Multi      ");
-                while(name.length() < 16)
-                    name = name + " ";
+                String name = model.get("name", "Init Multi") + "                ";
                 byte[] str = name.getBytes("US-ASCII");
                 byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
                 System.arraycopy(str, 0, newstr, 0, 16);
@@ -1201,7 +1218,7 @@ public class BlofeldMulti extends Synth
 
     public static String getSynthName() { return "Waldorf Blofeld [Multi]"; }
     
-    public String getPatchName() { return model.get("name", "Init Multi      "); }
+    public String getPatchName() { return model.get("name", "Init Multi"); }
     
 
                 

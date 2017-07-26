@@ -1,0 +1,34 @@
+<html><head></head><body bgcolor='black'>
+<font color='white'>
+
+
+
+
+<h1>PreenFM2</h1> 
+<h2>Single Patch Editor</h2>
+
+<p>This editor will work with the <b>PreenFM2</b>.  It probably won't work with the PreenFM.
+
+<p><b>Communicating with Edisyn</b> Set up your PreenFM to emit NRPN (not CC) and to receive NRPN (or CC+NRPN).  
+The PreenFM should also be set up to accept Program changes. 
+
+<p><b>Gotchas</b> The PreenFM2 has an unusual approach to upoading and downloading sounds which can be challenging to use with an editor.  Specifically, it doesn't upload or download via sysex.  Rather, Edisyn can send NRPN commands to it to change individual parameters, and there is a special NRPN command to cause the PreenFM2 to dump all its parameters to Edisyn via a deluge of NRPN commands.  There is no way to write a patch: you have to save patches manually on the synthesizer.  So:
+
+<ul>
+<li>When you request a specific Patch, Edisyn first changes to that patch, then loads it.
+
+<p><li>Similarly, when you send a specific Patch, Edisyn first changes to that patch, then sends it.
+
+<p><li>You cannot write patches.  Instead, send the patch, then manually save it on the PreenFM2.
+</ul>
+
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp; 
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>July 2017 
+</table>
+

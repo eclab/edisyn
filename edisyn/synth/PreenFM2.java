@@ -35,7 +35,7 @@ public class PreenFM2 extends Synth
     public static final String[] ARPEGGIATOR_PATTERNS = { "o.o.o.o.o.o.o.o.   (1)", "o.o.ooooo.o.oooo   (2)", "o.o.oo.oo.o.oo.o   (3)", "o.o.o.ooo.o.o.oo   (4)", "o.o.o.o.oo.o.o.o   (5)", "o.o.o.o.o..oo.o.   (6)", "o.o.o..oo.o.o..o   (7)", "o..o....o..o....   (8)", "o..o..o..o..o..o   (9)", "o..o..o..o..o.o.   (10)", "o..o..o.o..o..o.   (11)", "o..oo...o.o.o.oo   (12)", "oo.o.oo.oo.o.oo.   (13)", "oo.oo.o.oo.oo.o.   (14)", "ooo.ooo.ooo.ooo.   (15)", "ooo.oo.oo.oo.oo.   (16)", "ooo.o.o.ooo.o.o.   (17)", "oooo.oo.oooo.oo.   (18)", "ooooo.oo.oo.ooo.   (19)", "o...o...o..o.o.o   (20)", "o.....oooooo.oo.   (21)", "o.......o...o.oo   (22)", "User 1", "User 2", "User 3", "User 4" };
     public static final String[] ARPEGGIATOR_DIVISIONS = { "2/1", "3/2", "1/1", "3/4", "2/3", "1/2", "3/8", "1/3", "1/4", "1/6", "1/8", "1/12", "1/16", "1/24", "1/32", "1/48", "1/96" };
     public static final String[] MODULATION_SOURCES = { "Off", "LFO 1", "LFO 2", "LFO 3", "Env 1", "Env 2", "Seq 1", "Seq 2", "Mod Wheel", "Pitch Bend", "Aftertouch", "Velocity", "Note 1", "Perf 1", "Perf 2", "Perf 3", "Perf 4", "Note 2", "Breath" };
-	public static final String[] MODULATION_DESTINATIONS = { "Off", "Gate", "Modulation Index 1", "Modulation Index 2", "Modulation Index 3", "Modulation Index 4", "All Modulation Indices", "Mix 1", "Pan 1", "Mix 2", "Pan 2", "Mix 3", "Pan 3", "Mix 4", "Pan 4", "All Mixes", "All Pans", "Op 1 Frequency", "Op 2 Frequency", "Op 3 Frequency", "Op 4 Frequency", "Op 5 Frequency", "Op 6 Frequency", "All Op Frequencies", "Op 1 Attack", "Op 2 Attack", "Op 3 Attack", "Op 4 Attack", "Op 5 Attack", "Op 6 Attack", "All Op Attacks", "All Op Releases", "Matrix Multiplier 1", "Matrix Multiplier 2", "Matrix Multiplier 3", "Matrix Multiplier 4", "LFO 1 Frequency", "LFO 2 Frequency", "LFO 3 Frequency", "Envelope 2 Silence", "Step Sequencer 1 Gate", "Step Sequencer 2 Gate", "Filter Frequency", "o*Fh", "Dec*" };
+	public static final String[] MODULATION_DESTINATIONS = { "Off", "Gate Effect", "Modulation Index 1", "Modulation Index 2", "Modulation Index 3", "Modulation Index 4", "All Modulation Indices", "Mix 1", "Pan 1", "Mix 2", "Pan 2", "Mix 3", "Pan 3", "Mix 4", "Pan 4", "All Mixes", "All Pans", "Op 1 Frequency", "Op 2 Frequency", "Op 3 Frequency", "Op 4 Frequency", "Op 5 Frequency", "Op 6 Frequency", "All Op Frequencies", "Op 1 Attack", "Op 2 Attack", "Op 3 Attack", "Op 4 Attack", "Op 5 Attack", "Op 6 Attack", "All Op Attacks", "All Op Releases", "Matrix Multiplier 1", "Matrix Multiplier 2", "Matrix Multiplier 3", "Matrix Multiplier 4", "LFO 1 Frequency", "LFO 2 Frequency", "LFO 3 Frequency", "Envelope 2 Silence", "Step Sequencer 1 Gate", "Step Sequencer 2 Gate", "Filter Frequency", "All Op Harmonics", "All Op Decays" };
     public static final String[] LFO_SHAPES = { "Sine", "Saw Up", "Saw Down", "Square", "Random" };
 	public static final String[] LFO_CLOCKS = { "Clk/16", "Clk/8", "Clk/4", "Clk/2", "Clock", "Clk*2", "Clk*3", "Clk*4", "Clk*8" };
 	public static final String[] SEQUENCER_CLOCKS = { "Clk/4", "Clk/2", "Clock", "Clk*2", "Clk*4" };
@@ -184,7 +184,7 @@ public class PreenFM2 extends Synth
         
 		hbox = new HBox();
         hbox.add(addLFO(3, Style.COLOR_A));
-		hbox.add(addArpeggiator(Style.COLOR_B));
+		hbox.addLast(addArpeggiator(Style.COLOR_B));
 		vbox.add(hbox);
 		
         hbox = new HBox();
@@ -338,7 +338,8 @@ public class PreenFM2 extends Synth
         model.setImmutable("name", true);
         vbox.add(comp);
 
-        comp = new PatchDisplay(this, "Patch", "bank", "number", 4)
+		HBox hbox2 = new HBox();
+        comp = new PatchDisplay(this, "Patch", "bank", "number", 8)
             {
             public String numberString(int number) { return " : " + number; }
             public String bankString(int bank) 
@@ -348,8 +349,12 @@ public class PreenFM2 extends Synth
             	else return ("DX7 " + (bank - 256));
             	}
             };
-        vbox.add(comp);
+        hbox2.add(comp);
 
+        comp = new PatchDisplay(this, "Channel", "channel", null, 2);
+        hbox2.add(comp);
+		vbox.add(hbox2);
+		
         hbox.add(vbox);
                         
         globalCategory.add(hbox, BorderLayout.WEST);
@@ -369,7 +374,7 @@ public class PreenFM2 extends Synth
         HBox hbox = new HBox();
         generalBox = hbox;
          
-		comp = new LabelledDial("Algorithm", this, "algorithm", color, 0, 28, -1);
+		comp = new LabelledDial("Algorithm", this, "algorithm", color, 0, 26, -1);
 		hbox.add(comp);
 		
         hbox.add(Strut.makeHorizontalStrut(10));
@@ -734,7 +739,7 @@ public class PreenFM2 extends Synth
         model.register("op" + op + "freqtype", (LabelledDial)comp);
         hbox.add(comp);
 
-        comp = new LabelledDial("Attack", this, "op" + op + "envattack", color, 0, 100)
+        comp = new LabelledDial("Attack", this, "op" + op + "envattack", color, 0, 1600)
         	{
 			public String map(int val)
 				{
@@ -753,7 +758,7 @@ public class PreenFM2 extends Synth
         ((LabelledDial) comp).setSecondLabel("Level");
         hbox.add(comp);
 
-        comp = new LabelledDial("Decay", this, "op" + op + "envdecay", color, 0, 100)
+        comp = new LabelledDial("Decay", this, "op" + op + "envdecay", color, 0, 1600)
         	{
 			public String map(int val)
 				{
@@ -772,7 +777,7 @@ public class PreenFM2 extends Synth
         ((LabelledDial) comp).setSecondLabel("Level");
         hbox.add(comp);
 
-        comp = new LabelledDial("Sustain", this, "op" + op + "envsustain", color, 0, 100)
+        comp = new LabelledDial("Sustain", this, "op" + op + "envsustain", color, 0, 1600)
         	{
 			public String map(int val)
 				{
@@ -791,7 +796,7 @@ public class PreenFM2 extends Synth
         ((LabelledDial) comp).setSecondLabel("Level");
         hbox.add(comp);
 
-        comp = new LabelledDial("Release", this, "op" + op + "envrelease", color, 0, 100)
+        comp = new LabelledDial("Release", this, "op" + op + "envrelease", color, 0, 1600)
         	{
 			public String map(int val)
 				{
@@ -813,7 +818,7 @@ public class PreenFM2 extends Synth
         comp = new EnvelopeDisplay(this, Color.red, 
             new String[] { null, "op" + op + "envattack", "op" + op + "envdecay", "op" + op + "envsustain", null, "op" + op + "envrelease" },
             new String[] { null , "op" + op + "envattacklevel", "op" + op + "envdecaylevel", "op" + op + "envsustainlevel",  "op" + op + "envsustainlevel", "op" + op + "envreleaselevel" },
-            new double[] { 0, 0.2/100.0, 0.2/100.0,  0.2/100.0, 0.2, 0.2/100.0},
+            new double[] { 0, 0.2/1600.0, 0.2/1600.0,  0.2/1600.0, 0.2, 0.2/1600.0},
             new double[] { 0, 1/100.0, 1/100.0, 1/100.0, 1/100.0, 1/100.0 });
         hbox.addLast(comp);
 

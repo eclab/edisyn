@@ -75,56 +75,16 @@ public class PreenFM2 extends Synth
         new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen28.png")),
         };
 
-	public void sendAllParameters(boolean changePatch)
-		{
-		super.sendAllParameters(changePatch);
-		
-		// we don't write to a specific patch.  So we will
-		// ASSUME that we are synced after we have done a dump.
-		setSynced(true);
-		}
-
-	public void doSendToCurrentPatch()
-		{
-		super.doSendToCurrentPatch();
-		
-		// we don't write to a specific patch.  So we will
-		// ASSUME that we are synced after we have done a dump.
-		setSynced(true);
-		}
-
-	public void doRequestCurrentPatch()
-		{
-		super.doRequestCurrentPatch();
-		
-		// we don't get a sysex dump to parse, so there's no way
-		// for us to know we're synced.  So we will ASSUME that
-		// we are synced when we do the REQUEST.
-		setSynced(true);
-		}
-
-	public void doRequestPatch()
-		{
-		super.doRequestPatch();
-		
-		// we don't get a sysex dump to parse, so there's no way
-		// for us to know we're synced.  So we will ASSUME that
-		// we are synced when we do the REQUEST.
-		setSynced(true);
-		}
-
 	public JFrame sprout()
 		{
 		JFrame frame = super.sprout();
         writeTo.setEnabled(false);
+        transmitTo.setEnabled(false);
         return frame;
 		}
 
     public PreenFM2()
         {
-        setSynced(true);
-        
-        model.set("channel", 0);
         model.set("bank", 0);
         model.set("number", 0);
         
@@ -230,24 +190,28 @@ public class PreenFM2 extends Synth
 		int _bank = model.get("bank", 0);
 		if (_bank > 255 && writing)  // it's DX7
 			{
-			_bank = 0;
+			_bank = 0;		// cannot write to DX7
 			}
 		else if (_bank > 127 && _bank <= 255)  // It's combo, always disallow
 			{
-			_bank = 0;
+			_bank = 0;		// cannot read or write this at all
 			}
 		type.setSelectedIndex( _bank < 256 ? 0 : 1);
 		type.setEditable(false);
 		type.setMaximumRowCount(32);
+
+		if (_bank > 255 && !writing) // it's DX7 and we're reading
+			{
+			_bank -= 256;  
+			}
                 
         JTextField bank = new JTextField("" + _bank, 3);
         JTextField number = new JTextField("" + (model.get("number", 0)), 3);
-        JTextField channel = new JTextField("" + (model.get("channel", 0) + 1), 3);
                 
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Bank Type", "Bank", "Patch Number", "MIDI Channel" }, 
-                new JComponent[] { type, bank, number, channel }, title, "Enter the Bank Type, Bank, Patch number, and MIDI Channel.");
+            boolean result = doMultiOption(this, new String[] { "Bank Type", "Bank", "Patch Number" }, 
+                new JComponent[] { type, bank, number }, title, "Enter the Bank Type, Bank, and Patch Number.");
                 
             if (result == false) 
                 return false;
@@ -290,22 +254,8 @@ public class PreenFM2 extends Synth
                 continue;
                 }
                                 
-            int c;
-            try { c = Integer.parseInt(channel.getText()); }
-            catch (NumberFormatException e)
-                {
-                JOptionPane.showMessageDialog(null, "The Channel must be an integer 1 ... 16", title, JOptionPane.ERROR_MESSAGE);
-                continue;
-                }
-            if (c < 1 || c > 16)
-                {
-                JOptionPane.showMessageDialog(null, "The Channel must be an integer 1 ... 16", title, JOptionPane.ERROR_MESSAGE);
-                continue;
-                }
-                        
             change.set("bank", t == 0 ? b : b + 256);
             change.set("number", n);
-            change.set("channel", c - 1);
                         
             return true;
             }
@@ -323,7 +273,22 @@ public class PreenFM2 extends Synth
         HBox hbox = new HBox();
                 
         VBox vbox = new VBox();
-        comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 12 ASCII characters.")
+ 
+ 		HBox hbox2 = new HBox();
+        comp = new PatchDisplay(this, "Patch", "bank", "number", 8)
+            {
+            public String numberString(int number) { return " : " + number; }
+            public String bankString(int bank) 
+            	{ 
+            	if (bank < 128) return "Bank " + bank;
+            	else if (bank < 256) return "Combo " + (bank - 128);
+            	else return ("DX7 " + (bank - 256));
+            	}
+            };
+        hbox2.add(comp);
+		vbox.add(hbox2);
+
+	    comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 12 ASCII characters.")
             {
             public String replace(String val)
             	{
@@ -339,22 +304,6 @@ public class PreenFM2 extends Synth
         model.setImmutable("name", true);
         vbox.add(comp);
 
-		HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, "Patch", "bank", "number", 8)
-            {
-            public String numberString(int number) { return " : " + number; }
-            public String bankString(int bank) 
-            	{ 
-            	if (bank < 128) return "Bank " + bank;
-            	else if (bank < 256) return "Combo " + (bank - 128);
-            	else return ("DX7 " + (bank - 256));
-            	}
-            };
-        hbox2.add(comp);
-
-        comp = new PatchDisplay(this, "Channel", "channel", null, 2);
-        hbox2.add(comp);
-		vbox.add(hbox2);
 		
         hbox.add(vbox);
                         
@@ -990,10 +939,6 @@ public class PreenFM2 extends Synth
         }
 
 
-public void setSynced(boolean val) { super.setSynced(true); }
-
-
-
 
 
 
@@ -1185,8 +1130,6 @@ public void setSynced(boolean val) { super.setSynced(true); }
 
     public void changePatch(Model tempModel)
         {
-        return;
-        /*
         // Banks are:
         // 0..127			Bank
         // 128...255		Combo
@@ -1196,37 +1139,33 @@ public void setSynced(boolean val) { super.setSynced(true); }
         int lsb = (bank & 127);
         
         int program = tempModel.get("number", 0);
-        int channel = tempModel.get("channel", 0);
         
-        tryToSendSysex(buildLongCC(channel, 0, bank));
-        tryToSendSysex(buildPC(channel, program));
+        tryToSendSysex(buildLongCC(getChannelOut() - 1, 0, bank));
+        tryToSendSysex(buildPC(getChannelOut() - 1, program));
         
         // we assume that we successfully did it
         setSendMIDI(false);
         model.set("number", program);
         model.set("bank", bank);
-        model.set("channel", channel);
         setSendMIDI(true);
-        */
         }
 
-	int lastTime = 0;
-    public void performRequestDump(Model tempModel)
+
+    public void performRequestCurrentDump(Model tempModel)
     	{
-    	changePatch(tempModel);
-		lastTime = (1 - lastTime);
+		// Send an NRPN with param = MSB127, LSB127, and a value of whatever (here, 1).
+        tryToSendSysex(buildNRPN(getChannelOut() - 1, (127 << 7) | 127, 1));
+    	}
+
+    public void performRequestDump(Model tempModel, boolean changePatch)
+    	{
+    	// we always change patches, no matter what
+    	doChangePatch(tempModel);
 		
-		// Send an NRPN with param = MSB127, LSB127, and a value of whatever (here, 0).
-        tryToSendSysex(buildNRPN(getModel().get("channel", 0), (127 << 7) | 127, lastTime));
-
-		// it'll be synced soon enough
-        setSynced(true);
+		// Send an NRPN with param = MSB127, LSB127, and a value of whatever (here, 1).
+        tryToSendSysex(buildNRPN(getChannelOut() - 1, (127 << 7) | 127, 1));
     	}
-
-    public void performRequestCurrentDump()
-    	{
-    	performRequestDump(getModel());
-    	}
+    	
     
     public static final int MAXIMUM_NAME_LENGTH = 12;
     public static final String VALID_CHARACTERS = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789.,;:<>&*$";  // yes, space appears twice.  Weird.
@@ -1250,7 +1189,7 @@ public void setSynced(boolean val) { super.setSynced(true); }
     public Object[] emitAll(String key)
     	{
     	Model model = getModel();
-    	int channel = model.get("channel", 0);
+    	int channel = getChannelOut() - 1;
     	if (key.equals("name")) 
     		{
     		String value = model.get(key, "Init Sound");
@@ -1266,10 +1205,6 @@ public void setSynced(boolean val) { super.setSynced(true); }
     				list.add(objs[j]);
        			}
        		return list.toArray(new Object[0]);
-       		}
-       	else if (key.equals("channel"))
-       		{
-       		return new Object[0];
        		}
        	else if (key.equals("bank"))
        		{
@@ -1317,10 +1252,6 @@ public void setSynced(boolean val) { super.setSynced(true); }
 	    		vals[i-1] = (int)(value.charAt(i-1));
        			}
        		return vals;
-       		}
-       	else if (key.equals("channel"))
-       		{
-       		return new int[0];
        		}
        	else if (key.equals("bank"))
        		{

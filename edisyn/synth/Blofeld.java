@@ -994,8 +994,6 @@ public class Blofeld extends Synth
             public String bankString(int bank) { return BANKS[bank]; }
             };
         hbox2.add(comp);
-        comp = new PatchDisplay(this, "ID", "id", null, 3);
-        hbox2.add(comp);
 
         params = CATEGORIES;
         comp = new Chooser("Category", this, "category", params);
@@ -1007,19 +1005,6 @@ public class Blofeld extends Synth
         
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
-            /*
-            public boolean isValid(String val)
-                {
-                if (val.length() > 16) return false;
-                for(int i = 0 ; i < val.length(); i++)
-                    {
-                    char c = val.charAt(i);
-                    if (c < 32 || c > 127) return false;
-                    }
-                return true;
-                }
-            */
-            
             public String replace(String val)
             	{
             	return reviseName(val);
@@ -1930,10 +1915,9 @@ public class Blofeld extends Synth
     public byte[] emit(String key)
         {
         if (!getSendMIDI()) return new byte[0];  // MIDI turned off, don't bother
-        if (key.equals("id")) return new byte[0];  // this is not emittable
         if (key.equals("bank")) return new byte[0];  // this is not emittable
         if (key.equals("number")) return new byte[0];  // this is not emittable
-        byte DEV = (byte)model.get("id", 0);
+        byte DEV = (byte)(getID());
         if (key.equals("osc1octave") || key.equals("osc2octave") || key.equals("osc3octave"))
             {
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
@@ -2021,7 +2005,7 @@ public class Blofeld extends Synth
         {
         if (tempModel == null)
             tempModel = getModel();
-        byte DEV = (byte) tempModel.get("id", 0);
+        byte DEV = (byte)(getID());
         byte BB = (byte) tempModel.get("bank", 0);
         byte NN = (byte) tempModel.get("number", 0);
         if (toWorkingMemory) { BB = 0x7F; NN = 0x0; }
@@ -2202,7 +2186,6 @@ public class Blofeld extends Synth
     public boolean parse(byte[] data, boolean ignorePatch)
         {
         boolean retval = true;
-        model.set("id", data[3]);
         if (!ignorePatch && data[5] < 8)  // otherwise it's probably just local patch data.  Too bad they do this. :-(
             {
             model.set("bank", data[5]);
@@ -2248,6 +2231,8 @@ public class Blofeld extends Synth
         return b;
         }
 
+	// it looks like the Blofeld needs about 150ms after a change patch or it drops packets
+    public int getPauseAfterChangePatch() { return 200; }
 
     public void changePatch(Model tempModel)
         {
@@ -2266,7 +2251,7 @@ public class Blofeld extends Synth
         {
         if (tempModel == null)
             tempModel = getModel();
-        byte DEV = (byte)tempModel.get("id", 0);
+        byte DEV = (byte)(getID());
         byte BB = (byte)tempModel.get("bank", 0);
         byte NN = (byte)tempModel.get("number", 0);
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x00, BB, NN, 0x00, (byte)0xF7 };
@@ -2284,7 +2269,7 @@ public class Blofeld extends Synth
         {
         if (tempModel == null)
             tempModel = getModel();
-        byte DEV = (byte)tempModel.get("id", 0);
+        byte DEV = (byte)(getID());
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x00, 0x7F, 0x00, 0x00, (byte)0xF7 };
         }
     
@@ -2316,13 +2301,11 @@ public class Blofeld extends Synth
         bank.setSelectedIndex(model.get("bank", 0));
                 
         JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
-
-        JTextField id = new JTextField("" + model.get("id", 0), 3);
                 
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number", "Device ID" }, 
-                new JComponent[] { bank, number, id }, title, "Enter the Bank, Patch number, and Device ID.");
+            boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
                 
             if (result == false) 
                 return false;
@@ -2340,22 +2323,8 @@ public class Blofeld extends Synth
                 continue;
                 }
                                 
-            int i;
-            try { i = Integer.parseInt(id.getText()); }
-            catch (NumberFormatException e)
-                {
-                JOptionPane.showMessageDialog(null, "The Device ID must be an integer 0 ... 127 ", title, JOptionPane.ERROR_MESSAGE);
-                continue;
-                }
-            if (i < 0 || i > 127)
-                {
-                JOptionPane.showMessageDialog(null, "The Device ID must be an integer 0 ... 127 ", title, JOptionPane.ERROR_MESSAGE);
-                continue;
-                }
-                        
             change.set("bank", bank.getSelectedIndex());
             change.set("number", n - 1);
-            change.set("id", i);
                         
             return true;
             }
@@ -2376,5 +2345,28 @@ public class Blofeld extends Synth
     
     public String getPatchName() { return model.get("name", "Init"); }
     
+    public byte getID() 
+    	{ 
+    	try 
+    		{ 
+    		byte b = (byte)(Byte.parseByte(tuple.id));
+    		if (b >= 0) return b;
+    		}
+    	catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
+    	catch (NumberFormatException e) { e.printStackTrace(); }
+    	return 0;
+    	}
+    	
+    public String reviseID(String id)
+    	{
+    	try 
+    		{ 
+    		byte b =(byte)(Byte.parseByte(id)); 
+    		if (b >= 0) return "" + b;
+    		} 
+    	catch (NumberFormatException e) { }		// expected
+    	return "" + getID();
+    	}
+
     }
     

@@ -199,7 +199,6 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                 	{
                 	double yd = Math.abs(ys[i] - ys[i-1]);
                 	double xd = Math.abs(yd / Math.tan(Math.PI/2.0 - rates[i] * synth.getModel().get(xKeys[i], 0)));
-                	System.err.println(Math.tan(Math.PI/2.0 - rates[i] * synth.getModel().get(xKeys[i], 0)));
                 	xs[i] *= xd;
                 	}
 	            else

@@ -100,7 +100,7 @@ import java.io.*;
 
     *** I don't know what this is, it's not in the manual.
 
-    **** These values are defined by GOFTER, but I don't know what purpose they serve if any.
+    **** These values are defined by the GOFTER patch editor, but I don't know what purpose they serve if any.
     Also GOFTER has an option for the Free Button, but it doesn't seem to do anything.
 
 */
@@ -173,7 +173,6 @@ public class BlofeldMulti extends Synth
         {
         JFrame frame = super.sprout();
         // multi-mode on the Blofeld can't switch patches
-        transmit.setEnabled(false);
         transmitTo.setEnabled(false);    
         return frame;   
         }         
@@ -189,12 +188,10 @@ public class BlofeldMulti extends Synth
         {
         JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
 
-        JTextField id = new JTextField("" + model.get("id", 0), 3);
-                
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Patch Number", "Device ID" }, 
-                new JComponent[] { number, id }, title, "Enter the Patch number and Device ID.");
+            boolean result = doMultiOption(this, new String[] { "Patch Number" }, 
+                new JComponent[] { number }, title, "Enter the Patch number.");
                 
             if (result == false) 
                 return false;
@@ -212,21 +209,7 @@ public class BlofeldMulti extends Synth
                 continue;
                 }
                                 
-            int i;
-            try { i = Integer.parseInt(id.getText()); }
-            catch (NumberFormatException e)
-                {
-                JOptionPane.showMessageDialog(null, "The Device ID must be an integer 0 ... 127", title, JOptionPane.ERROR_MESSAGE);
-                continue;
-                }
-            if (i < 0 || i > 127)
-                {
-                JOptionPane.showMessageDialog(null, "The Device ID must be an integer 0 ... 127", title, JOptionPane.ERROR_MESSAGE);
-                continue;
-                }
-                        
             change.set("number", n - 1);
-            change.set("id", i);
                         
             return true;
             }
@@ -246,30 +229,15 @@ public class BlofeldMulti extends Synth
         HBox hbox2 = new HBox();
         comp = new PatchDisplay(this, "Patch: ", "bank", "number", 4)
             {
-            public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
+            public String numberString(int number) { number += 1; return "M" + ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
             };
-        hbox2.add(comp);
-        comp = new PatchDisplay(this, "  ID: ", "id", null, 3);
         hbox2.add(comp);
         vbox.add(hbox2);
         hbox.add(vbox);
         
         vbox = new VBox();
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
-            {
-            /*
-            public boolean isValid(String val)
-                {
-                if (val.length() > 16) return false;
-                for(int i = 0 ; i < val.length(); i++)
-                    {
-                    char c = val.charAt(i);
-                    if (c < 32 || c > 127) return false;
-                    }
-                return true;
-                }
-            */
-            
+            {            
             public String replace(String val)
             	{
             	return reviseName(val);
@@ -389,8 +357,7 @@ public class BlofeldMulti extends Synth
                                 Model tempModel = new Model();
                                 tempModel.set("bank", BlofeldMulti.this.model.get("bank" + inst, 0));
                                 tempModel.set("number", BlofeldMulti.this.model.get("number" + inst, 0));
-                                tempModel.set("id", BlofeldMulti.this.model.get("id", 0));
-                                synth.tryToSendSysex(synth.requestDump(tempModel));
+                                synth.performRequestDump(tempModel, false);
                                 }
                             });
                     }
@@ -979,7 +946,7 @@ public class BlofeldMulti extends Synth
         {
         if (tempModel == null)
             tempModel = getModel();
-        byte DEV = (byte) tempModel.get("id", 0);
+        byte DEV = (byte)(getID());
         byte BB = (byte) tempModel.get("bank", 0);
         byte NN = (byte) tempModel.get("number", 0);
         if (toWorkingMemory) { BB = 0x7F; NN = 0x0; }                   // don't know if this is right
@@ -1075,7 +1042,7 @@ public class BlofeldMulti extends Synth
         {
         if (tempModel == null)
             tempModel = getModel();
-        byte DEV = (byte)tempModel.get("id", 0);
+        byte DEV = (byte)(getID());
         byte BB = 0;  // only 1 bank
         byte NN = (byte)tempModel.get("number", 0);
 
@@ -1086,7 +1053,7 @@ public class BlofeldMulti extends Synth
         {
         if (tempModel == null)
             tempModel = getModel();
-        byte DEV = (byte)tempModel.get("id", 0);
+        byte DEV = (byte)(getID());
 
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x01, 0x7F, 0x00, (byte)0xF7 };
         }
@@ -1197,19 +1164,18 @@ public class BlofeldMulti extends Synth
     public boolean parse(byte[] data, boolean ignorePatch)
         {
         boolean retval = true;
-        model.set("id", data[3]);
         if (!ignorePatch && data[5] < 8)  // 8?  Maybe 1.  Anyway otherwise it's probably just local patch data.  Too bad they do this. :-(
             {
             model.set("number", data[6]);
             }
         else
             {
-            //model.set("number", 0);
             retval = false;
             }
         
         for(int i = 0; i < 416; i++)
             {
+            System.err.println(data[i + 7] + " " + (char)(data[i + 7]));
             setParameterByIndex(i, data[i + 7]);
             }
         revise();  
@@ -1220,6 +1186,26 @@ public class BlofeldMulti extends Synth
     
     public String getPatchName() { return model.get("name", "Init Multi"); }
     
-
-                
+    public byte getID() 
+    	{ 
+    	try 
+    		{ 
+    		byte b = (byte)(Byte.parseByte(tuple.id));
+    		if (b >= 0) return b;
+    		}
+    	catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
+    	catch (NumberFormatException e) { e.printStackTrace(); }
+    	return 0;
+    	}
+    	
+    public String reviseID(String id)
+    	{
+    	try 
+    		{ 
+    		byte b =(byte)(Byte.parseByte(id)); 
+    		if (b >= 0) return "" + b;
+    		} 
+    	catch (NumberFormatException e) { }		// expected
+    	return "" + getID();
+    	}
     }

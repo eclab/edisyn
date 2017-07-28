@@ -82,7 +82,7 @@ public class YamahaTX81ZMulti extends Synth
         
         tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("YamahaTX81ZMulti.html")));
 
-        model.set("name", "Init Sound V1.1 ");  // has to be 16 long
+        model.set("name", "INIT SOUND");
         
         //loadDefaults();        
         }
@@ -143,16 +143,10 @@ public class YamahaTX81ZMulti extends Synth
         
         comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 10 ASCII characters.")
             {
-            public boolean isValid(String val)
-                {
-                if (val.length() > 10) return false;
-                for(int i = 0 ; i < val.length(); i++)
-                    {
-                    char c = val.charAt(i);
-                    if (c < 32 || c > 127) return false;
-                    }
-                return true;
-                }
+            public String replace(String val)
+            	{
+            	return reviseName(val);
+            	}
                                 
             public void update(String key, Model model)
                 {
@@ -269,7 +263,7 @@ public class YamahaTX81ZMulti extends Synth
                                 Model tempModel = new Model();
                                 tempModel.set("bank", bank);
                                 tempModel.set("number", number);
-                                synth.performRequestDump(tempModel);
+                                synth.performRequestDump(tempModel, false);
                                 }
                             });
                     }
@@ -534,10 +528,7 @@ public class YamahaTX81ZMulti extends Synth
         // maybe we don't want to do this
         if (key.equals("name"))  // ugh
             {
-            String name = model.get("name", "foo");
-            while (name.length() < 10)
-                name = name + " ";
-
+            String name = model.get("name", "INIT SOUND") + "          ";
             byte[][] result = new byte[10][];                       
             for(int i = 0; i < 10; i++)
                 {
@@ -663,10 +654,7 @@ public class YamahaTX81ZMulti extends Synth
         data[8] = (byte)'A';
         data[9] = (byte)'E';
 		
-        String name = model.get("name", "foo");
-        while (name.length() < 10)
-            name = name + " ";
-
+        String name = model.get("name", "INIT SOUND") + "          ";
         // Next the PCED
         for(int i = 0; i < allParameters.length; i++)  // no name, no operatorenabled
             {
@@ -736,12 +724,11 @@ public class YamahaTX81ZMulti extends Synth
         }
 
 
-    public void performRequestDump(Model tempModel)
+    public void performRequestDump(Model tempModel, boolean requestPatch)
         {
         // instead of requesting a dump from a specific place, we switch there and do a current dump request
 
-        setSynced(false); // we're out of sync, we had to change the bank and number
-        changePatch(tempModel);
+        doChangePatch(tempModel);
         tryToSendSysex(requestCurrentDump(tempModel));
         }
         
@@ -779,26 +766,35 @@ public class YamahaTX81ZMulti extends Synth
         }
         
 
+    public static final int MAXIMUM_NAME_LENGTH = 10;
+    public String reviseName(String name)
+    	{
+    	name = super.reviseName(name);  // trim first time
+    	if (name.length() > MAXIMUM_NAME_LENGTH)
+	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
+    	
+        StringBuffer nameb = new StringBuffer(name);        			
+		for(int i = 0 ; i < nameb.length(); i++)
+			{
+			char c = nameb.charAt(i);
+            if (c < 32 || c > 127)
+				nameb.setCharAt(i, ' ');
+			}
+		name = nameb.toString();
+		return super.reviseName(name);  // trim again
+    	}        
+
+
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
         {
         // check the easy stuff -- out of range parameters
         super.revise();
 
-        // handle "name" specially
-        StringBuffer name = new StringBuffer(model.get("name", "INIT SOUND"));  // has to be 16 long
-        for(int i = 0; i < name.length(); i++)
-            {
-            char c = name.charAt(i);
-            if (c < 32 || c > 127)
-                { name.setCharAt(i, (char)32); System.err.println("Warning: Revised name from \"" + model.get("name", "INIT SOUND") + "\" to \"" + name.toString() + "\"");}
-            }
-        model.set("name", name.toString());
-        }
-        
-    public void parseParameter(byte[] data)
-        {
-        // ignored for now.  Dunno if the TX81Z even emits parameters
+		String nm = model.get("name", "Init");
+		String newnm = reviseName(nm);
+		if (!nm.equals(newnm))
+	        model.set("name", newnm);
         }
         
     public boolean requestCloseWindow() { return true; }

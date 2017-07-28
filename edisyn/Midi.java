@@ -257,6 +257,8 @@ public class Midi
         public Receiver keyReceiver;
         /** The channel to receive voiced messages from on the keyboard/controller input. */
         public int keyChannel = KEYCHANNEL_OMNI;
+        
+        public String id = "0";
            
         int refcount = 1;
         
@@ -339,11 +341,11 @@ public class Midi
         You may provide the old tuple for defaults or pass in null.  You also
         provide the inReceiver and keyReceiver to be attached to the input and keyboard/controller
         input.  You get these with Synth.buildKeyReceiver() and Synth.buildInReceiver() */ 
-    public static Tuple getNewTuple(Tuple old, Synth root, String message, Receiver inReceiver, Receiver keyReceiver)
+    public static Tuple getNewTuple(Tuple old, Synth synth, String message, Receiver inReceiver, Receiver keyReceiver)
         {
         if (inDevices.size() == 0)
             {
-            JOptionPane.showOptionDialog(root, "There are no MIDI devices available to receive from.",  
+            JOptionPane.showOptionDialog(synth, "There are no MIDI devices available to receive from.",  
                 "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
                 JOptionPane.WARNING_MESSAGE, null,
                 new String[] { "Run Disconnected" }, "Run Disconnected");
@@ -351,7 +353,7 @@ public class Midi
             }
         else if (outDevices.size() == 0)
             {
-            JOptionPane.showOptionDialog(root, "There are no MIDI devices available to send to.",  
+            JOptionPane.showOptionDialog(synth, "There are no MIDI devices available to send to.",  
                 "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
                 JOptionPane.WARNING_MESSAGE, null,
                 new String[] { "Run Disconnected" }, "Run Disconnected");
@@ -366,40 +368,50 @@ public class Midi
             inCombo.setMaximumRowCount(32);
             if (old != null && old.inWrap != null && inDevices.indexOf(old.inWrap) != -1)
                 inCombo.setSelectedIndex(inDevices.indexOf(old.inWrap));
-            else if (findDevice(getLastTupleIn(root), inDevices) != null)
-                inCombo.setSelectedItem(findDevice(getLastTupleIn(root), inDevices));
+            else if (findDevice(getLastTupleIn(synth), inDevices) != null)
+                inCombo.setSelectedItem(findDevice(getLastTupleIn(synth), inDevices));
 
             JComboBox outCombo = new JComboBox(outDevices.toArray());
             outCombo.setMaximumRowCount(32);
             if (old != null && old.outWrap != null && outDevices.indexOf(old.outWrap) != -1)
                 outCombo.setSelectedIndex(outDevices.indexOf(old.outWrap));
-            else if (findDevice(getLastTupleOut(root), outDevices) != null)
-                outCombo.setSelectedItem(findDevice(getLastTupleOut(root), outDevices));
+            else if (findDevice(getLastTupleOut(synth), outDevices) != null)
+                outCombo.setSelectedItem(findDevice(getLastTupleOut(synth), outDevices));
 
             JComboBox keyCombo = new JComboBox(keyDevices.toArray());
             keyCombo.setMaximumRowCount(32);
             keyCombo.setSelectedIndex(0);  // "none"
             if (old != null && old.keyWrap != null && keyDevices.indexOf(old.keyWrap) != -1)
                 keyCombo.setSelectedIndex(keyDevices.indexOf(old.keyWrap));
-            else if (findDevice(getLastTupleKey(root), keyDevices) != null)
-                keyCombo.setSelectedItem(findDevice(getLastTupleKey(root), keyDevices));
+            else if (findDevice(getLastTupleKey(synth), keyDevices) != null)
+                keyCombo.setSelectedItem(findDevice(getLastTupleKey(synth), keyDevices));
+
+			JTextField outID = null;
+			String initialID = synth.reviseID(null);
+			if (initialID != null)
+				outID = new JTextField(synth.reviseID(null));
 
             JComboBox outChannelsCombo = new JComboBox(rc);
             outChannelsCombo.setMaximumRowCount(17);
             if (old != null)
                 outChannelsCombo.setSelectedIndex(old.outChannel - 1);
-            else if (getLastTupleOutChannel(root) > 0)
-                outChannelsCombo.setSelectedIndex(getLastTupleOutChannel(root) - 1);
+            else if (getLastTupleOutChannel(synth) > 0)
+                outChannelsCombo.setSelectedIndex(getLastTupleOutChannel(synth) - 1);
                                 
             JComboBox keyChannelsCombo = new JComboBox(kc);
             keyChannelsCombo.setMaximumRowCount(17);
             if (old != null)
                 keyChannelsCombo.setSelectedIndex(old.keyChannel);
-            else if (getLastTupleKeyChannel(root) > 0)
-                keyChannelsCombo.setSelectedIndex(getLastTupleKeyChannel(root));
+            else if (getLastTupleKeyChannel(synth) > 0)
+                keyChannelsCombo.setSelectedIndex(getLastTupleKeyChannel(synth));
 
-            boolean result = Synth.doMultiOption(root, new String[] { "Receive From", "Send To", "Send Channel", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
-
+			
+            boolean result = false;
+            if (initialID != null)
+            	result = Synth.doMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Synth ID", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, outID, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
+			else
+				result = Synth.doMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
+				
             if (result)
                 {
                 // we need to build a tuple
@@ -408,12 +420,22 @@ public class Midi
                                 
                 tuple.keyChannel = keyChannelsCombo.getSelectedIndex();
                 tuple.outChannel = outChannelsCombo.getSelectedIndex() + 1;
+                
+                if (initialID != null)
+                	{
+	                String prospectiveID = outID.getText();
+	                tuple.id = synth.reviseID(prospectiveID);
+	                if (!tuple.id.equals(prospectiveID))
+	                	{
+	                    JOptionPane.showMessageDialog(synth, "The ID was revised to: " + tuple.id, "Device ID", JOptionPane.WARNING_MESSAGE);
+	                	}
+	                }
                                 
                 tuple.inWrap = ((MidiDeviceWrapper)(inCombo.getSelectedItem()));
                 tuple.in = tuple.inWrap.getThru(inReceiver);
                 if (tuple.in == null)
                     {
-                    JOptionPane.showOptionDialog(root, "An error occurred while connecting to the incoming MIDI Device.",  
+                    JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the incoming MIDI Device.",  
                         "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
                         JOptionPane.WARNING_MESSAGE, null,
                         new String[] { "Run Disconnected" }, "Run Disconnected");
@@ -424,7 +446,7 @@ public class Midi
                 tuple.out = tuple.outWrap.getReceiver();
                 if (tuple.out == null)
                     {
-                    JOptionPane.showOptionDialog(root, "An error occurred while connecting to the outgoing MIDI Device.",  
+                    JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the outgoing MIDI Device.",  
                         "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
                         JOptionPane.WARNING_MESSAGE, null,
                         new String[] { "Run Disconnected" }, "Run Disconnected");
@@ -442,7 +464,7 @@ public class Midi
                     tuple.key = tuple.keyWrap.getThru(keyReceiver);
                     if (tuple.key == null)
                         {
-                        JOptionPane.showOptionDialog(root, "An error occurred while connecting to the Controller MIDI Device.",  
+                        JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the Controller MIDI Device.",  
                             "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
                             JOptionPane.WARNING_MESSAGE, null,
                             new String[] { "Run without Controller" }, "Run without Controller");
@@ -451,14 +473,14 @@ public class Midi
                         }
                     }
                     
-                setLastTupleIn(tuple.inWrap.toString(), root);
-                setLastTupleOut(tuple.outWrap.toString(), root);
+                setLastTupleIn(tuple.inWrap.toString(), synth);
+                setLastTupleOut(tuple.outWrap.toString(), synth);
                 if (tuple.keyWrap == null)
-                    setLastTupleKey("None", root);
+                    setLastTupleKey("None", synth);
                 else
-                    setLastTupleKey(tuple.keyWrap.toString(), root);
-                setLastTupleOutChannel(tuple.outChannel, root);
-                setLastTupleKeyChannel(tuple.keyChannel, root);
+                    setLastTupleKey(tuple.keyWrap.toString(), synth);
+                setLastTupleOutChannel(tuple.outChannel, synth);
+                setLastTupleKeyChannel(tuple.keyChannel, synth);
                 
                 return tuple;
                 }

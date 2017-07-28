@@ -108,7 +108,6 @@ public class MicrowaveXTMulti extends Synth
         {
         JFrame frame = super.sprout();
         // multi-mode on the Microwave can't switch patches
-        transmit.setEnabled(false);
         transmitTo.setEnabled(false);
         return frame;
         }         
@@ -119,7 +118,7 @@ public class MicrowaveXTMulti extends Synth
         {
         boolean send = getSendMIDI();
         setSendMIDI(true);
-        byte DEV = (byte)model.get("id", 0);
+        byte DEV = (byte)(getID());
         // we'll send a mode dump to change the mode to Single
         tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x01, (byte)0xF7 });
         setSendMIDI(send);
@@ -135,13 +134,11 @@ public class MicrowaveXTMulti extends Synth
     public boolean gatherInfo(String title, Model change, boolean writing)
         {
         JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
-
-        JTextField id = new JTextField("" + model.get("id", 0), 3);
                 
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Patch Number", "Device ID" }, 
-                new JComponent[] { number, id }, title, "Enter the Patch number and Device ID.");
+            boolean result = doMultiOption(this, new String[] { "Patch Number" }, 
+                new JComponent[] { number }, title, "Enter the Patch Number");
                 
             if (result == false) 
                 return false;
@@ -159,21 +156,7 @@ public class MicrowaveXTMulti extends Synth
                 continue;
                 }
                                 
-            int i;
-            try { i = Integer.parseInt(id.getText()); }
-            catch (NumberFormatException e)
-                {
-                JOptionPane.showMessageDialog(null, "The Device ID must be an integer 0 ... 127", title, JOptionPane.ERROR_MESSAGE);
-                continue;
-                }
-            if (i < 0 || i > 127)
-                {
-                JOptionPane.showMessageDialog(null, "The Device ID must be an integer 0 ... 127", title, JOptionPane.ERROR_MESSAGE);
-                continue;
-                }
-                        
             change.set("number", n - 1);
-            change.set("id", i);
                         
             return true;
             }
@@ -197,23 +180,15 @@ public class MicrowaveXTMulti extends Synth
             public String bankString(int bank) { return BANKS[bank]; }
             };
         hbox2.add(comp);
-        comp = new PatchDisplay(this, "ID", "id", null, 3);
-        hbox2.add(comp);
         vbox.add(hbox2);
         hbox.add(vbox);
         
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
-            public boolean isValid(String val)
-                {
-                if (val.length() > 16) return false;
-                for(int i = 0 ; i < val.length(); i++)
-                    {
-                    char c = val.charAt(i);
-                    if (c < 32 || c > 127) return false;
-                    }
-                return true;
-                }
+            public String replace(String val)
+            	{
+            	return reviseName(val);
+            	}
                                 
             public void update(String key, Model model)
                 {
@@ -362,7 +337,6 @@ public class MicrowaveXTMulti extends Synth
                                 Model tempModel = new Model();
                                 tempModel.set("bank", MicrowaveXTMulti.this.model.get("bank" + inst, 0));
                                 tempModel.set("number", MicrowaveXTMulti.this.model.get("number" + inst, 0));
-                                tempModel.set("id", MicrowaveXTMulti.this.model.get("id", 0));
                                 synth.tryToSendSysex(synth.requestDump(tempModel));
                                 }
                             });
@@ -844,22 +818,17 @@ public class MicrowaveXTMulti extends Synth
 
     public byte[] emit(String key)
         {
-        if (key.equals("id")) return new byte[0];  // this is not emittable
         if (key.equals("number")) return new byte[0];  // this is not emittable
-        byte DEV = (byte)model.get("id", 0);
+        byte DEV = (byte)(getID());
                 
         if (key.equals("name"))
             {
             byte[] bytes = new byte[16 * 9];
-            String name = model.get(key, "Init            ");  // just to be safe, has to be 16 long
-            for(int i = 0; i < 16; i++)
+            String name = model.get(key, "Init            ") + "                ";            for(int i = 0; i < 16; i++)
                 {
-                byte c = 0x20;  // space
-                if (i < name.length())
-                    c = (byte)(name.charAt(i));
                 int index = i;
                 byte PP = (byte)(index & 127);
-                byte XX = c;
+                byte XX = (byte)(name.charAt(i));
                 byte LL = 0x20;
                 if (index > 32)
                     {
@@ -908,12 +877,12 @@ public class MicrowaveXTMulti extends Synth
         {
         if (tempModel == null)
             tempModel = getModel();
-        byte DEV = (byte) tempModel.get("id", 0);
+        byte DEV = (byte)(getID());
         byte NN = (byte) tempModel.get("number", 0);
         byte BB = 0x0;
         if (toWorkingMemory) { BB = 0x20; NN = 0x0; }
         
-        String name = model.get("name", "Init Sound V1.1 ");  // has to be 16 long
+        String name = model.get("name", "Init Sound V1.1 ") + "                ";  // has to be 16 long
                                 
         byte[] bytes = new byte[256];
         
@@ -923,10 +892,7 @@ public class MicrowaveXTMulti extends Synth
 
             if (key.equals("name"))
                 {
-                if (i - 16 >= name.length())
-                    bytes[i] = 0x20;  // space
-                else
-                    bytes[i] = (byte)(name.charAt(i - 16));
+                bytes[i] = (byte)(name.charAt(i - 16));
                 }
             else
                 {
@@ -998,7 +964,7 @@ public class MicrowaveXTMulti extends Synth
                 
         if (tempModel == null)
             tempModel = getModel();
-        byte DEV = (byte)tempModel.get("id", 0);
+        byte DEV = (byte)(getID());
         byte BB = 0;  // only 1 bank
         byte NN = (byte)tempModel.get("number", 0);
         //(BB + NN)&127 is checksum
@@ -1012,7 +978,7 @@ public class MicrowaveXTMulti extends Synth
                 
         if (tempModel == null)
             tempModel = getModel();
-        byte DEV = (byte)tempModel.get("id", 0);
+        byte DEV = (byte)(getID());
         //(0x75 + 0x00)&127 is checksum
         return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x01, 0x20, 0x00, (byte)((0x20 + 0x00)&127), (byte)0xF7 };
         }
@@ -1035,21 +1001,39 @@ public class MicrowaveXTMulti extends Synth
     public static final int EXPECTED_SYSEX_LENGTH = 265;
         
         
+
+
+    public static final int MAXIMUM_NAME_LENGTH = 16;
+    public String reviseName(String name)
+    	{
+    	name = super.reviseName(name);  // trim first time
+    	if (name.length() > MAXIMUM_NAME_LENGTH)
+	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
+    	
+        StringBuffer nameb = new StringBuffer(name);        			
+		for(int i = 0 ; i < nameb.length(); i++)
+			{
+			char c = nameb.charAt(i);
+            if (c < 32 || c > 127)
+				nameb.setCharAt(i, ' ');
+			}
+		name = nameb.toString();
+		return super.reviseName(name);  // trim again
+    	}
+
+        
+        
+
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
         {
         // check the easy stuff -- out of range parameters
         super.revise();
 
-        // handle "name" specially
-        StringBuffer name = new StringBuffer(model.get("name", "Init Sound V1.1 "));  // has to be 16 long
-        for(int i = 0; i < name.length(); i++)
-            {
-            char c = name.charAt(i);
-            if (c < 32 || c > 127)
-                { name.setCharAt(i, (char)32); System.err.println("Warning: Revised name from \"" + model.get("name", "Init Sound V1.1 ") + "\" to \"" + name.toString() + "\"");}
-            }
-        model.set("name", name.toString());
+		String nm = model.get("name", "Init");
+		String newnm = reviseName(nm);
+		if (!nm.equals(newnm))
+	        model.set("name", newnm);
         }
         
 
@@ -1067,9 +1051,7 @@ public class MicrowaveXTMulti extends Synth
             {
             try 
                 {
-                String name = model.get("name", "Init            ");
-                while(name.length() < 16)
-                    name = name + " ";
+                String name = model.get("name", "Init            ") + "                ";;
                 byte[] str = name.getBytes("US-ASCII");
                 byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
                 System.arraycopy(str, 0, newstr, 0, 16);
@@ -1129,7 +1111,6 @@ public class MicrowaveXTMulti extends Synth
         // format example, it's written as 0x11.  It's actually 0x11, though we don't check for it here.
                 
         boolean retval = true;
-        model.set("id", data[3]);
         if (!ignorePatch && data[5] < 8)  // or < 1 ? Anyway, otherwise it's probably just local patch data.  Too bad they do this. :-(
             {
             model.set("number", data[6]);
@@ -1152,7 +1133,28 @@ public class MicrowaveXTMulti extends Synth
     public static String getSynthName() { return "Waldorf Microwave II/XT/XTk [Multi]"; }
     
     public String getPatchName() { return model.get("name", "Init Sound V1.1 "); }
-    
 
+    public byte getID() 
+    	{ 
+    	try 
+    		{ 
+    		byte b = (byte)(Byte.parseByte(tuple.id));
+    		if (b >= 0) return b;
+    		}
+    	catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
+    	catch (NumberFormatException e) { e.printStackTrace(); }
+    	return 0;
+    	}
+    	
+    public String reviseID(String id)
+    	{
+    	try 
+    		{ 
+    		byte b =(byte)(Byte.parseByte(id)); 
+    		if (b >= 0) return "" + b;
+    		} 
+    	catch (NumberFormatException e) { }		// expected
+    	return "" + getID();
+    	}
                 
     }

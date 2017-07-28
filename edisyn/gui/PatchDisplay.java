@@ -25,10 +25,6 @@ public class PatchDisplay extends JPanel implements Updatable
     String numberKey;
     JLabel text;
     Synth synth;
-    boolean showsSync;
-    
-    public boolean getShowsSync() { return showsSync; }
-    public void setShowsSync( boolean val ) { showsSync = val; }
     
     public String numberString(int number)
         {
@@ -91,7 +87,7 @@ public class PatchDisplay extends JPanel implements Updatable
         text.setFont(Style.MEDIUM_FONT);
         text.setText(buildInitialString(columns));
         text.setBackground(Style.BACKGROUND_COLOR);
-        text.setForeground(Style.PATCH_UNSYNCED_TEXT_COLOR);
+        text.setForeground(Style.TEXT_COLOR);
         // lock the preferred size to max of columns
         dim[0] = text.getPreferredSize();
     
@@ -122,10 +118,6 @@ public class PatchDisplay extends JPanel implements Updatable
     
     public void update(String key, Model model)
         {
-        if (synth.isSynced() || showsSync )
-            text.setForeground(Style.TEXT_COLOR);
-        else
-            text.setForeground(Style.PATCH_UNSYNCED_TEXT_COLOR);
         text.setText(makeString(model));
         text.repaint(); 
         }

@@ -12,16 +12,17 @@
 <p><b>Communicating with Edisyn</b> Set up your PreenFM to emit NRPN (not CC) and to receive NRPN (or CC+NRPN).  
 The PreenFM should also be set up to accept Program changes. 
 
-<p><b>Gotchas</b> The PreenFM2 has an unusual approach to upoading and downloading sounds which can be challenging to use with an editor.  Specifically, it doesn't upload or download via sysex.  Rather, Edisyn can send NRPN commands to it to change individual parameters, and there is a special NRPN command to cause the PreenFM2 to dump all its parameters to Edisyn via a deluge of NRPN commands.  There is no way to write a patch: you have to save patches manually on the synthesizer.  So:
+<p><b>Gotchas</b> 
 
 <ul>
-<li>When you request a specific Patch, Edisyn first changes to that patch, then loads it.
+<li>
+The PreenFM2 has an unusual approach to upoading and downloading sounds which can be challenging to use with an editor.  Specifically, it doesn't upload or download via sysex.  Rather, Edisyn can send and receive NRPN commands to change individual parameters.  
 
-<p><li>Similarly, when you send a specific Patch, Edisyn first changes to that patch, then sends it.
+<p>
+<p>As a result, <b>You cannot write patches and you cannot send them to specific locations. </b> To write a patch, you should send the current patch (which sends it to Instrument 1), and then manually save the patch on the PreenFM2.
 
-<p><li>You cannot write patches.  Instead, send the patch, then manually save it on the PreenFM2.
+<p><li>I have seen problems with the PreenFM2 sending four times as much data as it should when asked to send a patch to Edisyn.  (I'm testing OS X).  If you're seeing strangely long load times (several seconds), try switching to 5-pin MIDI rather than USB: it seems to solve things.
 </ul>
-
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

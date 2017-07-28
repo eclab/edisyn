@@ -20,6 +20,8 @@ import javax.swing.*;
 
 public class Edisyn 
     {
+    public static final int VERSION = 10;
+    
     public static void main(String[] args)
         {
         try {
@@ -29,30 +31,13 @@ public class Edisyn
             // This no longer works as of Java 7
             //System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Edisyn");
             // This DOES work, but it's not necessary as the menu says "Edisyn" anyway
-            //System.setProperty("apple.awt.application.name", "Edisyn");
+            // System.setProperty("apple.awt.application.name", "Edisyn");
             
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             }
         catch(Exception e) { }
 
-//      OSXSetup();
-
         if (Synth.doNewSynthPanel() == null)
             System.exit(0);
         }
-
-/*
-  public static void OSXSetup() {
-  Application app = Application.getApplication();
-
-  app.setAboutHandler(new AboutHandler()
-  {
-  public void handleAbout(AppEvent.AboutEvent ae) 
-  {
-  System.err.println("Yo yo yo");
-  }
-  });
-
-  }
-*/
     }

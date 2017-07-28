@@ -9,8 +9,13 @@
 
 <p>This editor will work with the <b>PreenFM2</b>.  It probably won't work with the PreenFM.
 
-<p><b>Communicating with Edisyn</b> Set up your PreenFM to emit NRPN (not CC) and to receive NRPN (or CC+NRPN).  
-The PreenFM should also be set up to accept Program changes. 
+<p><b>Communicating with Edisyn</b> Set up your PreenFM2 to emit NRPN (not CC) and to receive NRPN (or CC+NRPN).  
+The PreenFM2 should also be set up to accept Program changes. 
+
+<p><b>About the Algorithm Diagrams</b>  The PreenFM2 has 28 algorithms.  Each algorithm contains <b>operators</b> 
+connected by <b>Modulation Indices</b>.  The <b>Output</b> of some of the operators is panned and then mixed to form a final sound.
+
+<p>Edisyn's diagrams represent <b>Operators</b> in little square boxes, each labelled with the operator number.  Operators are connected to other operators with lines whose numbers are the <b>Modulation Indices</b>.  Higher operators feed into lower operators.  Finally, some lines come out of Operators but are not connected to other Operators.  These are <b>Outputs</b>.  If an output line is unlabelled, then its output number is the same as the operator number.  If an output line is labelled (in parentheses), then that is its output number.
 
 <p><b>Gotchas</b> 
 
@@ -19,7 +24,7 @@ The PreenFM should also be set up to accept Program changes.
 The PreenFM2 has an unusual approach to upoading and downloading sounds which can be challenging to use with an editor.  Specifically, it doesn't upload or download via sysex.  Rather, Edisyn can send and receive NRPN commands to change individual parameters.  
 
 <p>
-<p>As a result, <b>You cannot write patches and you cannot send them to specific locations. </b> To write a patch, you should send the current patch (which sends it to Instrument 1), and then manually save the patch on the PreenFM2.
+<p>As a result, <b>you cannot write patches and you cannot send them to specific locations. </b> To write a patch, you should send the current patch (which sends it to Instrument 1), and then manually save the patch on the PreenFM2.
 
 <p><li>I have seen problems with the PreenFM2 sending four times as much data as it should when asked to send a patch to Edisyn.  (I'm testing OS X).  If you're seeing strangely long load times (several seconds), try switching to 5-pin MIDI rather than USB: it seems to solve things.
 </ul>

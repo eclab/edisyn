@@ -2326,10 +2326,35 @@ public abstract class Synth extends JComponent implements Updatable
     
     public void doAbout()
     	{
-    	JOptionPane.showMessageDialog(null, 
-                                  "about", 
-                                  "about", 
-                                  JOptionPane.INFORMATION_MESSAGE);
+    	ImageIcon icon = new ImageIcon(Synth.class.getResource("gui/About.jpg"));
+    	JLabel picture = new JLabel(icon);
+    	JFrame frame = new JFrame("About Edisyn");
+    	frame.getContentPane().setLayout(new BorderLayout());
+    	frame.getContentPane().setBackground(Color.BLACK);
+    	frame.getContentPane().add(new JLabel(icon), BorderLayout.CENTER);
+
+		JPanel pane = new JPanel()
+			{
+			public Insets getInsets() { return new Insets(10, 10, 10, 10); }
+			};
+		pane.setBackground(Color.GRAY);
+		pane.setLayout(new BorderLayout());
+
+		JLabel edisyn = new JLabel("Edisyn");
+		edisyn.setForeground(Color.BLACK);
+		edisyn.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 28));
+		pane.add(edisyn, BorderLayout.WEST);
+
+		JLabel about = new JLabel("Version " + Edisyn.VERSION + "      by Sean Luke      http://github.com/eclab/edisyn/");
+		about.setForeground(Color.BLACK);
+		about.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+		pane.add(about, BorderLayout.EAST);
+
+		frame.add(pane, BorderLayout.SOUTH);
+    	frame.pack();
+    	frame.setResizable(false);
+		frame.setLocationRelativeTo(null);
+    	frame.show();
     	}
 
 	/** Function for tweaking a name to make it valid for display in the editor.

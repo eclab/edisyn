@@ -241,12 +241,20 @@ public class YamahaTX81Z extends Synth
         String[] params;
         HBox hbox = new HBox();
         
-        VBox vbox = new VBox();
         
-        HBox hbox2 = new HBox();
         comp = new LabelledDial("Algorithm", this, "algorithm", color, 0, 7, -1);
-        hbox2.add(comp);
+        hbox.add(comp);
         
+        hbox.add(Strut.makeHorizontalStrut(10));
+
+        comp = new IconDisplay(null, ALGORITHM_ICONS, this, "algorithm");
+        hbox.add(comp);
+
+        hbox.add(Strut.makeHorizontalStrut(10));
+
+        VBox vbox = new VBox();
+
+		HBox hbox2 = new HBox();
         comp = new LabelledDial("Feedback", this, "feedback", color, 0, 7);
         hbox2.add(comp);
 
@@ -273,12 +281,6 @@ public class YamahaTX81Z extends Synth
         hbox2.add(comp);
         vbox.add(hbox2);
         hbox.add(vbox);
-
-        hbox.add(Strut.makeHorizontalStrut(10));
-
-        comp = new IconDisplay(null, ALGORITHM_ICONS, this, "algorithm");
-        hbox.add(comp);
-
 
         category.add(hbox, BorderLayout.CENTER);
         return category;

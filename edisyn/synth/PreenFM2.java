@@ -365,7 +365,7 @@ public class PreenFM2 extends Synth
 
     public JComponent addMix(Color color)
         {
-        Category globalCategory = new Category("Mix and Pan", color);
+        Category globalCategory = new Category("Outputs", color);
                 
         JComponent comp;
         String[] params;

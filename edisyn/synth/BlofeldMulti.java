@@ -1175,7 +1175,6 @@ public class BlofeldMulti extends Synth
         
         for(int i = 0; i < 416; i++)
             {
-            System.err.println(data[i + 7] + " " + (char)(data[i + 7]));
             setParameterByIndex(i, data[i + 7]);
             }
         revise();  

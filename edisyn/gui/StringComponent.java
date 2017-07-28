@@ -100,30 +100,43 @@ public class StringComponent extends JComponent implements Updatable
             {
             public void actionPerformed(ActionEvent e)
                 {
-                String message = "Enter " + _label;
-                String title = _label;
                 while(true)
                     {
                     String val = synth.getModel().get(key, "").trim();
-                    String result = (String)(JOptionPane.showInputDialog(StringComponent.this, message, title, JOptionPane.QUESTION_MESSAGE, null, null, val));
-                    if (result == null) return;
-                    result = convert(result);
-                    if (result == null) return;
-                    String str = replace(result);
-                    if (str == null)
+                    VBox vbox = new VBox();
+                    vbox.add(new JLabel("Enter " + _label));
+                    JTextField text = new JTextField(maxLength);
+                    vbox.add(text);
+                    int opt = JOptionPane.showOptionDialog(StringComponent.this, vbox, _label,
+                    				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Enter",  "Cancel", "Rules"}, "Enter");
+
+                    if (opt == JOptionPane.CANCEL_OPTION) 	// this is "Rules"
                     	{
-                    	if (isValid(result))
-                        	{ 
-                        	setText(result); 
-                        	return;
-                        	}
-                        }
+                    	JOptionPane.showMessageDialog(StringComponent.this, instructions, "Rules", JOptionPane.INFORMATION_MESSAGE);
+                    	}
+                    else if (opt == JOptionPane.NO_OPTION)  // this is "Cancel"
+                    	{ 
+                    	return; 
+                    	}
                     else
                     	{
-                    	setText(str); 
-                    	return;
-                    	}
-                    message = instructions;
+						String result = convert(text.getText());
+						if (result == null) return;
+						String str = replace(result);
+						if (str == null)
+							{
+							if (isValid(result))
+								{ 
+								setText(result); 
+								return;
+								}
+							}
+						else
+							{
+							setText(str); 
+							return;
+							}
+						}
                     }
                 }
             });

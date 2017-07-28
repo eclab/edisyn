@@ -14,6 +14,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 import java.io.*;
+import javax.sound.midi.*;
+
 
 /**
    A patch editor for the Kawai K4 [Multi mode].
@@ -25,7 +27,6 @@ public class KawaiK4Multi extends Synth
     {
     /// Various collections of parameter names for pop-up menus
         
-    public static final String[] CHANNELS = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
     public static final String[] BANKS = { "A", "B", "C", "D", "Ext. A", "Ext. B", "Ext. C", "Ext. D" };
     public static final String[] BANKS_SHORT = { "A", "B", "C", "D" };
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
@@ -89,10 +90,6 @@ public class KawaiK4Multi extends Synth
 
     public boolean gatherInfo(String title, Model change, boolean writing)
         {
-        JComboBox channel = new JComboBox(CHANNELS);
-        channel.setSelectedIndex(model.get("channel", 0));
-        
-
         JComboBox bank = new JComboBox(BANKS);
         bank.setSelectedIndex(model.get("bank", 0));
         
@@ -100,8 +97,8 @@ public class KawaiK4Multi extends Synth
 
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Channel", "Bank", "Patch Number"}, 
-                new JComponent[] { channel, bank, number }, title, "Enter the Channel, Bank, and Patch number");
+            boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number");
                 
             if (result == false) 
                 return false;
@@ -122,12 +119,10 @@ public class KawaiK4Multi extends Synth
             n--;
                                 
             int i = bank.getSelectedIndex();
-            int c = channel.getSelectedIndex();
                         
                         
             change.set("bank", i);
             change.set("number", n);
-            change.set("channel", c);
                         
             return true;
             }
@@ -150,25 +145,14 @@ public class KawaiK4Multi extends Synth
             public String bankString(int bank) { return BANKS[bank]; }
             };
         hbox2.add(comp);
-        comp = new PatchDisplay(this, "Channel", "channel", null, 3)
-            {
-            public String numberString(int number) { return "" + (number + 1); }
-            };
-        hbox2.add(comp);
         vbox.add(hbox2);
         
         comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 10 ASCII characters.")
             {
-            public boolean isValid(String val)
-                {
-                if (val.length() > 10) return false;
-                for(int i = 0 ; i < val.length(); i++)
-                    {
-                    char c = val.charAt(i);
-                    if (c < 32 || c > 127) return false;
-                    }
-                return true;
-                }
+            public String replace(String val)
+            	{
+            	return reviseName(val);
+            	}
                                 
             public void update(String key, Model model)
                 {
@@ -262,8 +246,7 @@ public class KawaiK4Multi extends Synth
                                 Model tempModel = new Model();
                                 tempModel.set("bank", KawaiK4Multi.this.model.get("instrument" + src + "bank", 0));
                                 tempModel.set("number", KawaiK4Multi.this.model.get("instrument" + src + "number", 0));
-                                tempModel.set("channel", KawaiK4Multi.this.model.get("instrument" + src + "channel", 0));
-                                synth.tryToSendSysex(synth.requestDump(tempModel));
+                                synth.performRequestDump(tempModel, false);
                                 }
                             });
                     }
@@ -851,21 +834,35 @@ public class KawaiK4Multi extends Synth
     public static final int EXPECTED_SYSEX_LENGTH = 265;        
         
         
+    public static final int MAXIMUM_NAME_LENGTH = 10;
+    public String reviseName(String name)
+    	{
+    	name = super.reviseName(name);  // trim first time
+    	if (name.length() > MAXIMUM_NAME_LENGTH)
+	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
+    	
+        StringBuffer nameb = new StringBuffer(name);        			
+		for(int i = 0 ; i < nameb.length(); i++)
+			{
+			char c = nameb.charAt(i);
+            if (c < 32 || c > 127)
+				nameb.setCharAt(i, ' ');
+			}
+		name = nameb.toString();
+		return super.reviseName(name);  // trim again
+    	}        
+
+        
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
         {
         // check the easy stuff -- out of range parameters
         super.revise();
 
-        // handle "name" specially
-        StringBuffer name = new StringBuffer(model.get("name", "Init Sound V1.1 "));  // has to be 16 long
-        for(int i = 0; i < name.length(); i++)
-            {
-            char c = name.charAt(i);
-            if (c < 32 || c > 127)
-                { name.setCharAt(i, (char)32); System.err.println("Warning: Revised name from \"" + model.get("name", "Init Sound V1.1 ") + "\" to \"" + name.toString() + "\"");}
-            }
-        model.set("name", name.toString());
+		String nm = model.get("name", "Init");
+		String newnm = reviseName(nm);
+		if (!nm.equals(newnm))
+	        model.set("name", newnm);
         }
         
 
@@ -934,7 +931,7 @@ public class KawaiK4Multi extends Synth
             {
             try 
                 {
-                String name = model.get("name", "Init Sound V1.1 ");
+                String name = model.get("name", "Init Sound V1.1 ") + "          ";
                 byte[] str = name.getBytes("US-ASCII");
                 byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
                 System.arraycopy(str, 0, newstr, 0, 16);
@@ -953,38 +950,6 @@ public class KawaiK4Multi extends Synth
         }
 
             
-
-/*
-  public void merge(Model otherModel, double probability)
-  {
-  String[] keys = getModel().getKeys();
-  for(int i = 0; i < keys.length; i++)
-  {
-  if (keys[i].equals("id")) continue;
-  if (keys[i].equals("number")) continue;
-  if (keys[i].equals("bank")) continue;
-  if (keys[i].equals("name")) continue;
-                
-  if (coinToss(probability))
-  {
-  if (otherModel.isString(keys[i]))
-  {
-  getModel().set(keys[i], otherModel.get(keys[i], getModel().get(keys[i], "")));
-  }
-  else
-  {
-  getModel().set(keys[i], otherModel.get(keys[i], getModel().get(keys[i], 0)));
-  }
-  }
-  }
-  }
-    
-  public void immutableMutate(String key)
-  {
-  // for the time being we do nothing
-  }
-*/      
-
     public boolean requestCloseWindow() { return true; }
 
     public static String getSynthName() { return "Kawai K4 [Multi]"; }
@@ -992,5 +957,31 @@ public class KawaiK4Multi extends Synth
     public String getPatchName() { return null; }
     
 
-                
+    public void changePatch(Model tempModel)
+    	{
+    	byte BB = (byte)tempModel.get("bank", 0);
+        byte NN = (byte)tempModel.get("number", 0);
+        
+        // first switch to internal or external
+        byte[] data = new byte[8];
+        data[0] = (byte)0xF0;
+        data[1] = (byte)0x40;
+        data[2] = (byte)getChannelOut();
+        data[3] = (byte)0x30;
+        data[4] = (byte)0x04;
+        data[5] = (byte)(BB < 4 ? 0x00 : 0x02);	// 0x00 is internal, 0x02 is external
+        data[7] = (byte)0xF7;
+        
+        tryToSendSysex(data);
+        
+        // Next do a PC
+        
+        if (BB > 4) BB -= 4;
+        int PC = (BB * 16 + NN) + 64;		// + 64 for "Multi"
+        try 
+        	{
+            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut() - 1, PC, 0));
+            }
+        catch (Exception e) { e.printStackTrace(); }
+    	}
     }

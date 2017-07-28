@@ -14,6 +14,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 import java.io.*;
+import javax.sound.midi.*;
 
 /**
    A patch editor for the Kawai K4.
@@ -25,7 +26,6 @@ public class KawaiK4 extends Synth
     {
     /// Various collections of parameter names for pop-up menus
         
-    public static final String[] CHANNELS = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
     public static final String[] BANKS = { "A", "B", "C", "D", "Ext. A", "Ext. B", "Ext. C", "Ext. D" };
     public static final String[] WAVES = { "Sin 1st", "Sin 2nd", "Sin 3rd", "Sin 4th", "Sin 5th", "Sin 6th", "Sin 7th", "Sin 8th", "Sin 9th", 
                                            "Saw 1", "Saw 2", "Saw 3", "Saw 4", "Saw 5", "Saw 6", "Saw 7", "Saws", 
@@ -161,10 +161,6 @@ public class KawaiK4 extends Synth
 
     public boolean gatherInfo(String title, Model change, boolean writing)
         {
-        JComboBox channel = new JComboBox(CHANNELS);
-        channel.setSelectedIndex(model.get("channel", 0));
-        
-
         JComboBox bank = new JComboBox(BANKS);
         bank.setSelectedIndex(model.get("bank", 0));
         
@@ -172,8 +168,8 @@ public class KawaiK4 extends Synth
 
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Channel", "Bank", "Patch Number"}, 
-                new JComponent[] { channel, bank, number }, title, "Enter the Channel, Bank, and Patch number");
+            boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number");
                 
             if (result == false) 
                 return false;
@@ -194,12 +190,10 @@ public class KawaiK4 extends Synth
             n--;
                                 
             int i = bank.getSelectedIndex();
-            int c = channel.getSelectedIndex();
                         
                         
             change.set("bank", i);
             change.set("number", n);
-            change.set("channel", c);
                         
             return true;
             }
@@ -222,25 +216,14 @@ public class KawaiK4 extends Synth
             public String bankString(int bank) { return BANKS[bank]; }
             };
         hbox2.add(comp);
-        comp = new PatchDisplay(this, "Channel", "channel", null, 3)
-            {
-            public String numberString(int number) { return "" + (number + 1); }
-            };
-        hbox2.add(comp);
         vbox.add(hbox2);
         
         comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 10 ASCII characters.")
             {
-            public boolean isValid(String val)
-                {
-                if (val.length() > 10) return false;
-                for(int i = 0 ; i < val.length(); i++)
-                    {
-                    char c = val.charAt(i);
-                    if (c < 32 || c > 127) return false;
-                    }
-                return true;
-                }
+            public String replace(String val)
+            	{
+            	return reviseName(val);
+            	}
                                 
             public void update(String key, Model model)
                 {
@@ -846,10 +829,7 @@ public class KawaiK4 extends Synth
 
 		if (key.equals("name"))
 			{
-			String name = model.get("key", "Untitled");
-			while(name.length() < 10)
-				name = name + " ";
-				
+			String name = model.get("key", "Untitled") + "          "; ;
 			byte[] b = new byte[10 * 10];
 			for(int i = 0; i < 10; i ++)
 				{
@@ -1089,9 +1069,7 @@ public class KawaiK4 extends Synth
         {
     	byte[] data = new byte[130];
     
-    	String name = model.get("name", "Untitled");
-		while(name.length() < 10)
-			name = name + " ";
+    	String name = model.get("name", "Untitled") + "          ";
     	
     	// The K4 is riddled with byte-mangling.  :-(
     	
@@ -1263,6 +1241,26 @@ public class KawaiK4 extends Synth
         
 
     public static final int EXPECTED_SYSEX_LENGTH = 140;        
+    
+    
+    public static final int MAXIMUM_NAME_LENGTH = 10;
+    public String reviseName(String name)
+    	{
+    	name = super.reviseName(name);  // trim first time
+    	if (name.length() > MAXIMUM_NAME_LENGTH)
+	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
+    	
+        StringBuffer nameb = new StringBuffer(name);        			
+		for(int i = 0 ; i < nameb.length(); i++)
+			{
+			char c = nameb.charAt(i);
+            if (c < 32 || c > 127)
+				nameb.setCharAt(i, ' ');
+			}
+		name = nameb.toString();
+		return super.reviseName(name);  // trim again
+    	}        
+
         
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
@@ -1270,20 +1268,43 @@ public class KawaiK4 extends Synth
         // check the easy stuff -- out of range parameters
         super.revise();
 
-        // handle "name" specially
-        StringBuffer name = new StringBuffer(model.get("name", "Untitled  "));  // has to be 10 long
-        for(int i = 0; i < name.length(); i++)
-            {
-            char c = name.charAt(i);
-            if (c < 32 || c > 127)
-                { name.setCharAt(i, (char)32); System.err.println("Warning: Revised name from \"" + model.get("name", "Untitled  ") + "\" to \"" + name.toString() + "\"");}
-            }
-        model.set("name", name.toString());
+		String nm = model.get("name", "Init");
+		String newnm = reviseName(nm);
+		if (!nm.equals(newnm))
+	        model.set("name", newnm);
         }
         
     public boolean requestCloseWindow() { return true; }
 
     public static String getSynthName() { return "Kawai K4"; }
     
-    public String getPatchName() { return model.get("name", "Untitled  "); }  // has to be 10 long
+    public String getPatchName() { return model.get("name", "Untitled  "); }
+
+    public void changePatch(Model tempModel)
+    	{
+    	byte BB = (byte)tempModel.get("bank", 0);
+        byte NN = (byte)tempModel.get("number", 0);
+        
+        // first switch to internal or external
+        byte[] data = new byte[8];
+        data[0] = (byte)0xF0;
+        data[1] = (byte)0x40;
+        data[2] = (byte)getChannelOut();
+        data[3] = (byte)0x30;
+        data[4] = (byte)0x04;
+        data[5] = (byte)(BB < 4 ? 0x00 : 0x02);	// 0x00 is internal, 0x02 is external
+        data[7] = (byte)0xF7;
+        
+        tryToSendSysex(data);
+        
+        // Next do a PC
+        
+        if (BB > 4) BB -= 4;
+        int PC = (BB * 16 + NN);
+        try 
+        	{
+            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut() - 1, PC, 0));
+            }
+        catch (Exception e) { e.printStackTrace(); }
+    	}
     }

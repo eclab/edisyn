@@ -117,7 +117,7 @@ public class Matrix1000 extends Synth
 
         tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("Matrix1000.html")));
 
-        model.set("name", "UNTITLED");  // has to be 8 long
+        model.set("name", "UNTITLED");
         
         loadDefaults();        
         }
@@ -219,21 +219,10 @@ public class Matrix1000 extends Synth
         
         comp = new StringComponent("Patch Name", this, "name", 8, "Name must be up to 8 letters, numbers, spaces, or !\"#$%&'()*+,-./:;<=>?[\\]^_.")
             {
-            public String convert(String val)
-                {
-                return val.toUpperCase();
-                }
-                
-            public boolean isValid(String val)
-                {
-                if (val.length() > 8) return false;
-                for(int i = 0 ; i < val.length(); i++)
-                    {
-                    char c = val.charAt(i);
-                    if (c < 32 || c > 95) return false;
-                    }
-                return true;
-                }
+            public String replace(String val)
+            	{
+            	return reviseName(val);
+            	}
                                 
             public void update(String key, Model model)
                 {
@@ -1236,27 +1225,20 @@ public class Matrix1000 extends Synth
         	}
         
         // update name just for fun, it may be gibberish
-                   try 
+        	try 
                 {
-        model.set("name", new String(name, "US-ASCII"));
+       			model.set("name", new String(name, "US-ASCII"));
                 }
             catch (UnsupportedEncodingException e)
             	{
             	e.printStackTrace();
             	}
- 
         
         revise();
         return true;            // change this as appropriate
         }
     
-    public byte[] emit(Model tempModel, boolean toWorkingMemory)
-    	{
-    	// we do emitAll instead
-        new RuntimeException("This should never be called").printStackTrace();
-        return new byte[0];
-    	}
-    	
+
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory)
         {
         // this stuff requires a checksum
@@ -1267,7 +1249,9 @@ public class Matrix1000 extends Synth
         // F0H 10H 06H 0EH PATCHNUMBER BANKNUMBER 0x0 F7H
 
 		byte[] data = new byte[268];
-		byte[] name = new byte[8];
+		String nm = model.get("name", "UNTITLED") + "        ";
+		byte[] name = null;
+		try { name = nm.getBytes("US-ASCII"); } catch (Exception e ) { }
 		int value;
 		int check = 0;
 		
@@ -1407,10 +1391,36 @@ public class Matrix1000 extends Synth
 			return completed;
 			}
         }
+        
+        
+        
+    public void changePatch(Model tempModel)
+    	{
+ 		// first change the bank
+		
+			// 0AH - SET BANK
+			// we write this store-command as a sysex command 
+			// so it gets stripped when we do a save to file
+			byte[] data2 = new byte[8];
+			data2[0] = (byte)0xF0;
+			data2[1] = (byte)0x10;
+			data2[2] = (byte)0x06;	
+			data2[3] = (byte)0x0A;
+			data2[5] = (byte)(tempModel.get("bank", 0));
+			data2[7] = (byte)0xF7;
+
+			tryToSendSysex(data2);
+			
+		// Next do a program change
+		
+        byte NN = (byte)tempModel.get("number", 0);
+        tryToSendSysex(buildPC(getChannelOut() - 1, NN));
+    	}
 
 
 	public void performRequestDump(Model tempModel)
 		{
+		/*
 		// first change the bank
 		
 			// 0AH - SET BANK
@@ -1425,10 +1435,8 @@ public class Matrix1000 extends Synth
 			data2[7] = (byte)0xF7;
 
 			tryToSendSysex(data2);
+		*/
 		
-		// put us out of sync -- we don't know if the dump will come in!
-		setSynced(false);
-			
 		// Next do a dump request
 		byte[] data = new byte[7];
         data[0] = (byte)0xF0;
@@ -1442,13 +1450,6 @@ public class Matrix1000 extends Synth
         tryToSendSysex(data);
 		}
 		
-    public byte[] requestDump(Model tempModel)
-        {
-        new RuntimeException("This should never be called").printStackTrace();
-        return new byte[0];
-        }
-        
-        
     public byte[] requestCurrentDump(Model tempModel)
         {
         // this is not available as far as I can tell
@@ -1473,18 +1474,40 @@ public class Matrix1000 extends Synth
         }
         
 
+    public static final int MAXIMUM_NAME_LENGTH = 8;
+    public String reviseName(String name)
+    	{
+    	name = super.reviseName(name);  // trim first time
+    	if (name.length() > MAXIMUM_NAME_LENGTH)
+	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
+    	
+        StringBuffer nameb = new StringBuffer(name);        			
+		for(int i = 0 ; i < nameb.length(); i++)
+			{
+			char c = nameb.charAt(i);
+            if (c < 32 || c > 127)
+				nameb.setCharAt(i, ' ');
+			}
+		name = nameb.toString();
+		return super.reviseName(name);  // trim again
+    	}
+
+
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
         {
         // check the easy stuff -- out of range parameters
         super.revise();
         
-        // we could double-check the name but meh
+		String nm = model.get("name", "UNTITLED");
+		String newnm = reviseName(nm);
+		if (!nm.equals(newnm))
+	        model.set("name", newnm);
         }
         
 
     public static String getSynthName() { return "Oberheim Matrix 1000"; }
     
-    public String getPatchName() { return null; }
+    public String getPatchName() { return model.get("name", "UNTITLED"); }
     
     }

@@ -534,7 +534,7 @@ public class Model implements Cloneable
     public int getMin(String key)
         {
         Integer d = (Integer) (min.get(key));
-        if (d == null) { System.err.println("Nonexistent min extracted for " + key); new Throwable().printStackTrace(); return 0; }
+        if (d == null) { System.err.println("Nonexistent min extracted for " + key); return 0; }
         else return d.intValue();
         }
                 

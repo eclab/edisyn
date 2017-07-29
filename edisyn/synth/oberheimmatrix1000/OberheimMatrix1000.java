@@ -3,7 +3,7 @@
     Licensed under the Apache License version 2.0
 */
 
-package edisyn.synth;
+package edisyn.synth.oberheimmatrix1000;
 
 import edisyn.*;
 import edisyn.gui.*;
@@ -22,7 +22,7 @@ import javax.sound.midi.*;
    @author Sean Luke
 */
 
-public class Matrix1000 extends Synth
+public class OberheimMatrix1000 extends Synth
     {
     /// Various collections of parameter names for pop-up menus
         
@@ -43,7 +43,7 @@ public class Matrix1000 extends Synth
     // I may need to say VCA rather than Amplifier elsewhere
     public static final String[] MODULATION_DESTINATIONS = new String[] { "DCO 1 Frequency", "DCO 1 Pulsewidth", "DCO 1 Wave Shape",  "DCO 2 Frequency", "DCO 2 Pulsewidth", "DCO 2 Wave Shape", "Mix Level", "Filter FM", "Filter Frequency", "Filter Resonance", "VCA 1 Level", "VCA 2 Level", "Env 1 Delay", "Env 1 Attack", "Env 1 Decay", "Env 1 Release", "Env 1 Amplitude", "Env 2 Delay", "Env 2 Attack", "Env 2 Decay", "Env 2 Release", "Env 2 Amplitude", "Env 3 Delay", "Env 3 Attack", "Env 3 Decay", "Env 3 Release", "Env 3 Amplitude", "LFO 1 Speed", "LFO 1 Amplitude", "LFO 2 Speed", "LFO 2 Amplitude", "Portamento Time" };
 
-    public Matrix1000()
+    public OberheimMatrix1000()
         {
         for(int i = 0; i < allParameters.length; i++)
             {
@@ -115,14 +115,14 @@ public class Matrix1000 extends Synth
         modulationPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Modulation", modulationPanel);
 
-        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("Matrix1000.html")));
+        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("OberheimMatrix1000.html")));
 
         model.set("name", "UNTITLED");
         
         loadDefaults();        
         }
                 
-    public String getDefaultResourceFileName() { return "Matrix1000.init"; }
+    public String getDefaultResourceFileName() { return "OberheimMatrix1000.init"; }
 
     public boolean gatherInfo(String title, Model change, boolean writing)
         {
@@ -1151,7 +1151,7 @@ public class Matrix1000 extends Synth
         
     public boolean parse(byte[] data, boolean ignorePatch)
         {
-        //  packing by two nibbles per byte (see http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-Matrix1000.html)
+        //  packing by two nibbles per byte (see http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-OberheimMatrix1000.html)
         
         byte[] name = new byte[8];
         
@@ -1242,7 +1242,7 @@ public class Matrix1000 extends Synth
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory)
         {
         // this stuff requires a checksum
-        // and required packing by two nibbles per byte (see http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-Matrix1000.html)
+        // and required packing by two nibbles per byte (see http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-OberheimMatrix1000.html)
         // also note that writes are probably always to working memory.
         // In order to STORE the working memory to the backing store
         // You do STORE EDIT BUFFER:

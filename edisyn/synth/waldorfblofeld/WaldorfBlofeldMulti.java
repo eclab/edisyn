@@ -3,7 +3,7 @@
     Licensed under the Apache License version 2.0
 */
 
-package edisyn.synth;
+package edisyn.synth.waldorfblofeld;
 
 import edisyn.*;
 import edisyn.gui.*;
@@ -108,7 +108,7 @@ import java.io.*;
 
 
 
-public class BlofeldMulti extends Synth
+public class WaldorfBlofeldMulti extends Synth
     {
     /// Various collections of parameter names for pop-up menus
         
@@ -116,7 +116,7 @@ public class BlofeldMulti extends Synth
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
         
         
-    public BlofeldMulti()
+    public WaldorfBlofeldMulti()
         {
         for(int i = 0; i < allParameters.length; i++)
             {
@@ -162,7 +162,7 @@ public class BlofeldMulti extends Synth
         tabs.addTab("Parts 11 - 16", soundPanel);
                 
 
-        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("BlofeldMulti.html")));
+        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("WaldorfBlofeldMulti.html")));
 
         model.set("name", "Init Multi");  // has to be 16 long
         
@@ -182,7 +182,7 @@ public class BlofeldMulti extends Synth
         // Not possible in Multi Mode
         }
 
-    public String getDefaultResourceFileName() { return "BlofeldMulti.init"; }
+    public String getDefaultResourceFileName() { return "WaldorfBlofeldMulti.init"; }
 
     public boolean gatherInfo(String title, Model change, boolean writing)
         {
@@ -331,7 +331,7 @@ public class BlofeldMulti extends Synth
             {
             public void perform()
                 {
-                final Blofeld synth = new Blofeld();
+                final WaldorfBlofeld synth = new WaldorfBlofeld();
                 synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
                 if (synth.tuple != null)
                     {       
@@ -355,8 +355,8 @@ public class BlofeldMulti extends Synth
                             public void run() 
                                 { 
                                 Model tempModel = new Model();
-                                tempModel.set("bank", BlofeldMulti.this.model.get("bank" + inst, 0));
-                                tempModel.set("number", BlofeldMulti.this.model.get("number" + inst, 0));
+                                tempModel.set("bank", WaldorfBlofeldMulti.this.model.get("bank" + inst, 0));
+                                tempModel.set("number", WaldorfBlofeldMulti.this.model.get("number" + inst, 0));
                                 synth.performRequestDump(tempModel, false);
                                 }
                             });

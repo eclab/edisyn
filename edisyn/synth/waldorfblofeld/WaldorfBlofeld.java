@@ -3,7 +3,7 @@
     Licensed under the Apache License version 2.0
 */
 
-package edisyn.synth;
+package edisyn.synth.waldorfblofeld;
 
 import edisyn.*;
 import edisyn.gui.*;
@@ -17,13 +17,13 @@ import java.io.*;
 import javax.sound.midi.*;
 
 /**
-   A patch editor for the Waldorf Blofeld.  Does not deal with Multi mode, global parameters,
+   A patch editor for the Waldorf WaldorfBlofeld.  Does not deal with Multi mode, global parameters,
    modifying wavetables, or uploading samples.  Only Single mode patches.
         
    @author Sean Luke
 */
 
-public class Blofeld extends Synth
+public class WaldorfBlofeld extends Synth
     {
     /// Various collections of parameter names for pop-up menus
         
@@ -75,7 +75,7 @@ public class Blofeld extends Synth
             
     
     
-    public Blofeld()
+    public WaldorfBlofeld()
         {
         for(int i = 0; i < allParameters.length; i++)
             {
@@ -153,7 +153,7 @@ public class Blofeld extends Synth
         tabs.addTab("Arpeggiator", arpeggiationPanel);
 
 
-        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("Blofeld.html")));
+        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("WaldorfBlofeld.html")));
 
                 
         model.set("name", "Init");
@@ -162,7 +162,7 @@ public class Blofeld extends Synth
         }
                 
     
-    public String getDefaultResourceFileName() { return "Blofeld.init"; }
+    public String getDefaultResourceFileName() { return "WaldorfBlofeld.init"; }
                 
                 
                 
@@ -539,7 +539,7 @@ public class Blofeld extends Synth
             {
             public String map(int val)
                 {
-                // it turns out that the Blofeld sends "127" when it doesn't have a setting yet for this
+                // it turns out that the WaldorfBlofeld sends "127" when it doesn't have a setting yet for this
                 // parameter.  Dumb dumb dumb.  So we have to check for that.
                 if (val > 29)
                     val = 0;
@@ -548,7 +548,7 @@ public class Blofeld extends Synth
             };
         parametersByEffect[effect - 1][CLKDELAY][2] = comp;
 
-        // The Blofeld has effects parameters 11....14 even though they're not used.  We'll give them min/max values
+        // The WaldorfBlofeld has effects parameters 11....14 even though they're not used.  We'll give them min/max values
         for(int i = 11; i < 15; i++)
             {
             model.set("effect" + effect + "parameter" + i, 0);
@@ -980,7 +980,7 @@ public class Blofeld extends Synth
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
-        Category globalCategory = new Category("Waldorf Blofeld", color);
+        Category globalCategory = new Category("Waldorf WaldorfBlofeld", color);
                 
         JComponent comp;
         String[] params;
@@ -2219,7 +2219,7 @@ public class Blofeld extends Synth
         //  IMPORTANT: the MIDI status-bytes as well as the 
         //  ID's are not used for computing the checksum."
         
-        // NOTE: it appears that the Blofeld's sysex does NOT include
+        // NOTE: it appears that the WaldorfBlofeld's sysex does NOT include
         // the NN or DD data bytes.        
         
         byte b = 0;  // I *think* signed will work
@@ -2231,7 +2231,7 @@ public class Blofeld extends Synth
         return b;
         }
 
-	// it looks like the Blofeld needs about 150ms after a change patch or it drops packets
+	// it looks like the WaldorfBlofeld needs about 150ms after a change patch or it drops packets
     public int getPauseAfterChangePatch() { return 200; }
 
     public void changePatch(Model tempModel)

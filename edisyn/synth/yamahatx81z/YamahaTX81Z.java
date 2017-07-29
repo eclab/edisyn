@@ -3,7 +3,7 @@
     Licensed under the Apache License version 2.0
 */
 
-package edisyn.synth;
+package edisyn.synth.yamahatx81z;
 
 import edisyn.*;
 import edisyn.gui.*;
@@ -32,14 +32,14 @@ public class YamahaTX81Z extends Synth
     public static final String[] WAVES = {"W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8"};
     public static final ImageIcon[] WAVE_ICONS = 
         {
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81Z_W1.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81Z_W2.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81Z_W3.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81Z_W4.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81Z_W5.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81Z_W6.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81Z_W7.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81Z_W8.png"))
+        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm1.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm2.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm3.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm4.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm5.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm6.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm7.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm8.png"))
         };
     public static final ImageIcon[] ALGORITHM_ICONS = 
         {

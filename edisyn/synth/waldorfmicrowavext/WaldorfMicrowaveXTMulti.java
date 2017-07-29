@@ -3,7 +3,7 @@
     Licensed under the Apache License version 2.0
 */
 
-package edisyn.synth;
+package edisyn.synth.waldorfmicrowavext;
 
 import edisyn.*;
 import edisyn.gui.*;
@@ -23,7 +23,7 @@ import javax.sound.midi.*;
    @author Sean Luke
 */
 
-public class MicrowaveXTMulti extends Synth
+public class WaldorfMicrowaveXTMulti extends Synth
     {
     // NOTES:
     // Sound Arp?
@@ -43,7 +43,7 @@ public class MicrowaveXTMulti extends Synth
     static final String[] ARPEGGIATOR_VELOCITY = new String[] { "Root Note", "Last Note" }; 
     static final String[] MIDI_SEND = new String[] { "Global", "Specific" };
         
-    public MicrowaveXTMulti()
+    public WaldorfMicrowaveXTMulti()
         {
         for(int i = 0; i < allParameters.length; i++)
             {
@@ -96,7 +96,7 @@ public class MicrowaveXTMulti extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Instruments 6 - 8", soundPanel);
 
-        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("MicrowaveXTMulti.html")));
+        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("WaldorfMicrowaveXTMulti.html")));
 
         model.set("name", "Init            ");  // has to be 16 long
         
@@ -129,7 +129,7 @@ public class MicrowaveXTMulti extends Synth
         // Not possible in Multi Mode
         }
 
-    public String getDefaultResourceFileName() { return "MicrowaveXTMulti.init"; }
+    public String getDefaultResourceFileName() { return "WaldorfMicrowaveXTMulti.init"; }
 
     public boolean gatherInfo(String title, Model change, boolean writing)
         {
@@ -311,7 +311,7 @@ public class MicrowaveXTMulti extends Synth
             {
             public void perform()
                 {
-                final MicrowaveXT synth = new MicrowaveXT();
+                final WaldorfMicrowaveXT synth = new WaldorfMicrowaveXT();
                 synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
                 if (synth.tuple != null)
                     {
@@ -335,8 +335,8 @@ public class MicrowaveXTMulti extends Synth
                             public void run() 
                                 { 
                                 Model tempModel = new Model();
-                                tempModel.set("bank", MicrowaveXTMulti.this.model.get("bank" + inst, 0));
-                                tempModel.set("number", MicrowaveXTMulti.this.model.get("number" + inst, 0));
+                                tempModel.set("bank", WaldorfMicrowaveXTMulti.this.model.get("bank" + inst, 0));
+                                tempModel.set("number", WaldorfMicrowaveXTMulti.this.model.get("number" + inst, 0));
                                 synth.tryToSendSysex(synth.requestDump(tempModel));
                                 }
                             });

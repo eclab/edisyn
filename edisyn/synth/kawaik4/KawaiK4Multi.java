@@ -107,12 +107,12 @@ public class KawaiK4Multi extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1...16", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer 1...16");
                 continue;
                 }
             if (n < 1 || n > 16)
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1...16", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer 1...16");
                 continue;
                 }
                 
@@ -221,7 +221,8 @@ public class KawaiK4Multi extends Synth
             public void perform()
                 {
                 final KawaiK4 synth = new KawaiK4();
-                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                if (tuple != null)
+	                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
                 if (synth.tuple != null)
                     {
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -250,6 +251,10 @@ public class KawaiK4Multi extends Synth
                                 }
                             });
                     }
+                else
+                	{
+                	doSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                	}
                 }
             };
         hbox2.addLast(comp);

@@ -200,12 +200,12 @@ public class WaldorfBlofeldMulti extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1 ... 128", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer 1 ... 128");
                 continue;
                 }
             if (n < 1 || n > 128)
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1 ... 128", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer 1 ... 128");
                 continue;
                 }
                                 
@@ -332,7 +332,8 @@ public class WaldorfBlofeldMulti extends Synth
             public void perform()
                 {
                 final WaldorfBlofeld synth = new WaldorfBlofeld();
-                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                if (tuple != null)
+	                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
                 if (synth.tuple != null)
                     {       
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -361,6 +362,10 @@ public class WaldorfBlofeldMulti extends Synth
                                 }
                             });
                     }
+                else
+                	{
+                	doSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                	}
                 }
             };
         hbox2.add(comp);

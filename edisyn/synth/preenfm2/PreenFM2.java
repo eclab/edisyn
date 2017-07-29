@@ -45,34 +45,34 @@ public class PreenFM2 extends Synth
 
     public static final ImageIcon[] ALGORITHM_ICONS = 
         {
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm1.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm2.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm3.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm4.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm5.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm6.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm7.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm8.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm9.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm10.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm11.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm12.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm13.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm14.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm15.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm16.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm17.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm18.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm19.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm20.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm21.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm22.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm23.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm24.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm25.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm26.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm27.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm28.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm1.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm2.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm3.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm4.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm5.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm6.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm7.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm8.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm9.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm10.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm11.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm12.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm13.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm14.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm15.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm16.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm17.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm18.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm19.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm20.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm21.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm22.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm23.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm24.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm25.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm26.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm27.png")),
+        new ImageIcon(PreenFM2.class.getResource("Algorithm28.png")),
         };
 
 	public JFrame sprout()
@@ -222,17 +222,17 @@ public class PreenFM2 extends Synth
             try { b = Integer.parseInt(bank.getText()); }
             catch (NumberFormatException e)
                 {
-                JOptionPane.showMessageDialog(null, "The Bank Number must be an integer", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Bank Number must be an integer");
                 continue;
                 }
             if ((t == 0) && (b < 0 || b > 63))
                 {
-                JOptionPane.showMessageDialog(null, "The Bank Number must be an integer  0...63 for this bank type", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Bank Number must be an integer  0...63 for this bank type");
                 continue;
                 }
             else if ((t == 1) && (b < 0 || b > 255))
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer  0...255 for this bank type", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Bank Number must be an integer  0...255 for this bank type");
                 continue;
                 }
 
@@ -240,17 +240,17 @@ public class PreenFM2 extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer");
                 continue;
                 }
             if ((t == 0) && (n < 0 || n > 127))
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer  0...127 for this bank type", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer  0...127 for this bank type");
                 continue;
                 }
             else if ((t == 1) && (n < 0 || n > 31))
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer  0...31 for this bank type", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer  0...31 for this bank type");
                 continue;
                 }
                                 

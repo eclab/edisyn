@@ -32,25 +32,25 @@ public class YamahaTX81Z extends Synth
     public static final String[] WAVES = {"W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8"};
     public static final ImageIcon[] WAVE_ICONS = 
         {
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm1.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm2.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm3.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm4.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm5.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm6.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm7.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm8.png"))
+        new ImageIcon(YamahaTX81Z.class.getResource("Wave1.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("Wave2.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("Wave3.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("Wave4.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("Wave5.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("Wave6.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("Wave7.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("Wave8.png"))
         };
     public static final ImageIcon[] ALGORITHM_ICONS = 
         {
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm1b.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm2b.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm3b.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm4b.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm5b.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm6b.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm7b.png")),
-        new ImageIcon(YamahaTX81Z.class.getResource("YamahaTX81Z/TX81ZAlgorithm8b.png"))
+        new ImageIcon(YamahaTX81Z.class.getResource("Algorithm1.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("Algorithm2.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("Algorithm3.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("Algorithm4.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("Algorithm5.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("Algorithm6.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("Algorithm7.png")),
+        new ImageIcon(YamahaTX81Z.class.getResource("Algorithm8.png"))
         };
     public static final String[] LFO_WAVES = { "Sawtooth", "Square", "Triangle", "Sample & Hold" };
     public static final String[] SHIFTS = { "96dB", "48dB", "24dB", "12dB" };
@@ -168,12 +168,12 @@ public class YamahaTX81Z extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1...32", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer 1...32");
                 continue;
                 }
             if (n < 1 || n > 32)
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1...32", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer 1...32");
                 continue;
                 }
                 

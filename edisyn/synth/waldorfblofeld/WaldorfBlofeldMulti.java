@@ -249,7 +249,6 @@ public class WaldorfBlofeldMulti extends Synth
                 updateTitle();
                 }
             };
-        model.setImmutable("name", true);
         vbox.add(comp);
         hbox.add(vbox);
                 
@@ -371,19 +370,15 @@ public class WaldorfBlofeldMulti extends Synth
         hbox2.add(comp);
         
         comp = new CheckBox("Play", this, "status" + inst, true);
-        model.setImmutable("status" + inst, true);
         hbox2.add(comp);    
 
         comp = new CheckBox("Local", this, "local" + inst);
-        model.setImmutable("local" + inst, true);
         hbox2.add(comp);    
 
         comp = new CheckBox("MIDI", this, "midi" + inst);
-        model.setImmutable("midi" + inst, true);
         hbox2.add(comp);    
         
         comp = new CheckBox("USB", this, "usb" + inst);
-        model.setImmutable("usb" + inst, true);
         hbox2.add(comp);
         
         main.add(hbox2);

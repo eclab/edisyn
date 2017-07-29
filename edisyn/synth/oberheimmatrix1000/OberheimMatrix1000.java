@@ -230,7 +230,6 @@ public class OberheimMatrix1000 extends Synth
                 updateTitle();
                 }
             };
-        model.setImmutable("name", true);
         vbox.add(comp);
         hbox.add(vbox);
 

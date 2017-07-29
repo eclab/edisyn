@@ -94,13 +94,13 @@ public class PatchDisplay extends JPanel implements Updatable
         if (bankKey != null)
             {
             model.register(this.bankKey = bankKey, this);
-            model.setImmutable(bankKey, true);
+            model.setStatus(bankKey, Model.STATUS_IMMUTABLE);
             }
         
         if (numberKey != null)
             {
             model.register(this.numberKey = numberKey, this);
-            model.setImmutable(numberKey, true);
+            model.setStatus(numberKey, Model.STATUS_IMMUTABLE);
             }
 
         text.setText(makeString(model));

@@ -231,7 +231,6 @@ public class KawaiK4 extends Synth
                 updateTitle();
                 }
             };
-        model.setImmutable("name", true);
         vbox.addBottom(comp);  // doesn't work right :-(
         hbox.add(vbox);
 

@@ -196,7 +196,6 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 updateTitle();
                 }
             };
-        model.setImmutable("name", true);
         hbox.add(comp);
                 
         globalCategory.add(hbox, BorderLayout.WEST);
@@ -274,13 +273,11 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 return vals[val];
                 }
             };
-        model.setImmutable("bank" + inst, true);
         ((LabelledDial)comp).setSecondLabel(" ");
         vbox.add(comp);
 
 
         comp = new LabelledDial("Number", this, "number" + inst, color, 0, 127, -1);
-        model.setImmutable("number" + inst, true);
         vbox.add(comp);
         
         hbox.add(vbox);

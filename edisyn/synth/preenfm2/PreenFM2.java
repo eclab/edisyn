@@ -42,6 +42,9 @@ public class PreenFM2 extends Synth
 	public static final String[] ENV_LOOPS = { "None", "Silence", "Attack" };
 	public static final String[] NOTE_SCALING = { "Flat", "+Linear", "+Linear x 8", "+Exp", "-Linear", "-Linear x 8", "-Exp"  };
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+    // These are the frequency ratios up to 16.00 (I added 16.00, it's not normally there.  I also added 033 and 025 for fun
+    public static final int[] YAMAHA_FREQUENCY_RATIOS = { 25, 33, 50, 71, 78, 87, 100, 141, 157, 173, 200, 282, 300, 314, 346, 400, 424, 471, 500, 519, 565, 600, 628, 692, 700, 707, 785, 800, 848, 865, 900, 942, 989, 1000, 1038, 1099, 1100, 1130, 1200, 1211, 1256, 1272, 1300, 1384, 1400, 1410, 1413, 1500, 1555, 1557, 1570, 1600 };
+
 
     public static final ImageIcon[] ALGORITHM_ICONS = 
         {
@@ -301,7 +304,6 @@ public class PreenFM2 extends Synth
                 updateTitle();
                 }
             };
-        model.setImmutable("name", true);
         vbox.add(comp);
 
 		
@@ -325,6 +327,7 @@ public class PreenFM2 extends Synth
         generalBox = hbox;
          
 		comp = new LabelledDial("Algorithm", this, "algorithm", color, 0, 27, -1);
+		model.removeMetricMinMax("algorithm");  // it's a set
 		hbox.add(comp);
 		
         hbox.add(Strut.makeHorizontalStrut(10));
@@ -541,6 +544,7 @@ public class PreenFM2 extends Synth
 				{
 				return "" + (val / 100.0);
 				}
+			public int getDefaultValue() { return 100; }
 			};
 		hbox.add(comp);
 
@@ -633,6 +637,16 @@ public class PreenFM2 extends Synth
         // there are really just 192 steps here, but apparently you can adjust this as you like.
         comp = new LabelledDial("Frequency", this, "op" + op + "frequency", color, 0, 1600)
         	{
+			public int reviseToAltValue(int val)
+				{
+                int fixed = model.get("op" + op + "freqtype", 0);
+                if (fixed == 0)
+                	{
+                	return findClosestValue(val, YAMAHA_FREQUENCY_RATIOS);
+                	}
+                else return val;
+				}
+				
             public String map(int val)
                 {
                 int fixed = model.get("op" + op + "freqtype", 0);
@@ -1154,7 +1168,7 @@ public class PreenFM2 extends Synth
     public void performRequestCurrentDump(Model tempModel)
     	{
 		// Send an NRPN with param = MSB127, LSB127, and a value of whatever (here, 1).
-        tryToSendSysex(buildNRPN(getChannelOut() - 1, (127 << 7) | 127, 1));
+        tryToSendSysex(buildNRPN(getChannelOut() - 1, (127 << 7) | 127, 0));
     	}
 
     public void performRequestDump(Model tempModel, boolean changePatch)
@@ -1163,7 +1177,7 @@ public class PreenFM2 extends Synth
     	doChangePatch(tempModel);
 		
 		// Send an NRPN with param = MSB127, LSB127, and a value of whatever (here, 1).
-        tryToSendSysex(buildNRPN(getChannelOut() - 1, (127 << 7) | 127, 1));
+        tryToSendSysex(buildNRPN(getChannelOut() - 1, (127 << 7) | 127, 0));
     	}
     	
     

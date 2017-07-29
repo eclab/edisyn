@@ -33,7 +33,7 @@ public class Model implements Cloneable
     HashMap listeners = new HashMap();
     HashMap metricMin = new HashMap();
     HashMap metricMax = new HashMap();
-    HashSet immutable = new HashSet();
+    HashMap status = new HashMap();
     Undo undoListener = null;
     
     String lastKey = null;
@@ -96,8 +96,9 @@ public class Model implements Cloneable
         }
 
 
-    /** Mutation works as follows.  For each key, we first see if we're permitted to mutate it
-        (no immutable, no strings).  If so, we divide the range into the METRIC and NON-METRIC
+    /** Mutates (potentially) all keys.
+    	Mutation works as follows.  For each key, we first see if we're permitted to mutate it
+        (no immutable status, no strings).  If so, we divide the range into the METRIC and NON-METRIC
         regions.  If it's all NON-METRIC, then with WEIGHT probability we will pick a new
         value at random (else stay).  Else if we're in a non-metric region, with 0.5 chance we'll
         pick a new random non-metric value with WEIGHT probability (else stay), and with 0.5 chance we'll 
@@ -110,15 +111,32 @@ public class Model implements Cloneable
         metric min to metric max inclusive when WEIGHT is 1.0.  We repeat this selection until we get a value
         within metric min and metric max.
     */
-        
     public void mutate(Random random, double weight)
+    	{
+		mutate(random, getKeys(), weight);
+    	}
+        
+    /** Mutates (potentially) the keys provided.
+    	Mutation works as follows.  For each key, we first see if we're permitted to mutate it
+        (no immutable status, no strings).  If so, we divide the range into the METRIC and NON-METRIC
+        regions.  If it's all NON-METRIC, then with WEIGHT probability we will pick a new
+        value at random (else stay).  Else if we're in a non-metric region, with 0.5 chance we'll
+        pick a new random non-metric value with WEIGHT probability (else stay), and with 0.5 chance we'll 
+        pick a completely random metric value with WEIGHT probability (else stay). Else if we're in a metric 
+        region, with 0.5 chance we will pick a non-metric value with WEIGHT probability (else stay), and with 
+        0.5 chance we will do a METRIC MUTATION.
+                
+        <p>A metric mutation selects under a uniform rectangular distribution centered at the current value.
+        The rectangular distribution is the delta function when WEIGHT is 0.0 and is the full range from
+        metric min to metric max inclusive when WEIGHT is 1.0.  We repeat this selection until we get a value
+        within metric min and metric max.
+    */
+    public void mutate(Random random, String[] keys, double weight)
         {
-        String[] keys = getKeys();
         for(int i = 0; i < keys.length; i++)
             {
-            // return if the key is immutable, it's a string, or we fail the coin toss
-            if (isImmutable(keys[i])) continue;
-            if (isString(keys[i])) continue;
+            // continue if the key is immutable, it's a string, or we fail the coin toss
+            if (getStatus(keys[i]) == STATUS_IMMUTABLE) continue;
 
             
             boolean hasMetric = false;                                      // do we even HAVE a metric range?
@@ -195,24 +213,40 @@ public class Model implements Cloneable
 
 
 
-    /** Recombination works as follows.  For each key, we first see if we're permitted to mutate it
-        (no immutable, other model doesn't have the key).  Next with 1.0 - WEIGHT probability 
+    /** Recombines (potentially) all keys.  
+    	Recombination works as follows.  For each key, we first see if we're permitted to mutate it
+        (no immutable status, other model doesn't have the key).  Next with 1.0 - WEIGHT probability 
         we don't recombine at all. Otherwise we recombine:
                 
-        <p>If the parameter is a string, with 0.5 probability we keep our value, else we adopt
-        the other model's value.  If the parameter is an integer, and we have a metric range,
+        <p>If the parameter is a string, we keep our value.  
+        If the parameter is an integer, and we have a metric range,
         and BOTH our value AND the other model's value are within that range, then we do 
         metric crossover: we pick a random new value between the two values inclusive.
         Otherwise with 0.5 probability we select our parameter, else the other model's parameter.
     */
     public void recombine(Random random, Model model, double weight)
+    	{
+    	recombine(random, model, getKeys(), weight);
+    	}
+
+    /** Recombines (potentially the keys provided.  
+    	Recombination works as follows.  For each key, we first see if we're permitted to mutate it
+        (no immutable status, other model doesn't have the key).  Next with 1.0 - WEIGHT probability 
+        we don't recombine at all. Otherwise we recombine:
+                
+        <p>If the parameter is a string, we keep our value.  
+        If the parameter is an integer, and we have a metric range,
+        and BOTH our value AND the other model's value are within that range, then we do 
+        metric crossover: we pick a random new value between the two values inclusive.
+        Otherwise with 0.5 probability we select our parameter, else the other model's parameter.
+    */
+    public void recombine(Random random, Model model, String[] keys, double weight)
         {
-        String[] keys = getKeys();
         for(int i = 0; i < keys.length; i++)
             {
-            // return if the key doesn't exist, is immutable, or we fail the coin toss
+            // return if the key doesn't exist, is immutable or is a string, or we fail the coin toss
             if (!model.exists(keys[i])) continue;
-            if (isImmutable(keys[i])) continue;
+            if (getStatus(keys[i]) == STATUS_IMMUTABLE) continue;
             if (coinToss(random, 1.0 - weight)) continue;
             
             // is it a string?
@@ -254,7 +288,7 @@ public class Model implements Cloneable
         model.min = (HashMap)(min.clone());
         model.max = (HashMap)(max.clone());
         model.listeners = (HashMap)(listeners.clone());
-        model.immutable = (HashSet)(immutable.clone());
+        model.status = (HashMap)(status.clone());
         model.metricMin = (HashMap)(metricMin.clone());
         model.metricMax = (HashMap)(metricMax.clone());
         model.lastKey = null;
@@ -274,7 +308,7 @@ public class Model implements Cloneable
             return false;
         if (!listeners.equals(model.listeners))
             return false;
-        if (!immutable.equals(model.immutable))
+        if (!status.equals(model.status))
             return false;
         if (!metricMin.equals(model.metricMin))
             return false;
@@ -509,25 +543,26 @@ public class Model implements Cloneable
         metricMax.put(key, Integer.valueOf(value));
         }
     
-    public void removeMetricMinMax(String key)
+    public static final int STATUS_FREE = 0;
+    public static final int STATUS_IMMUTABLE = 1;
+
+    /** Sets the status of a key.  The default is STATUS_FREE, except for strings, which are STATUS_IMMUTABLE. */        
+    public void setStatus(String key, int val)
         {
-        metricMin.remove(key);
-        metricMax.remove(key);
-        }
-        
-    /** Sets whether a given key is declared immutable. */        
-    public void setImmutable(String key, boolean val)
-        {
-        if (val)
-            immutable.add(key);
-        else
-            immutable.remove(key);
+        status.put(key, new Integer(val));
         }
                 
-    /** Returns whether a given key is declared immutable. */        
-    public boolean isImmutable(String key)
+    /** Returns whether a given key is declared immutable.  Strings are ALWAYS immutable and you don't need to set them. */        
+    public int getStatus(String key)
         {
-        return immutable.contains(key);
+        if (status.containsKey(key))
+        	return ((Integer)(status.get(key))).intValue();
+        else if (!exists(key))
+        	return STATUS_IMMUTABLE;
+        else if (isString(key))
+			return STATUS_IMMUTABLE;
+		else // it's a number
+			return STATUS_FREE;
         }
                 
     /** Returns the minimum for a given key, or 0 if no minimum is declared. */        
@@ -561,6 +596,13 @@ public class Model implements Cloneable
         if (d == null) { System.err.println("Nonexistent metricMax extracted for " + key); return 0; }
         else return d.intValue();
         }
+        
+    /** Deletes the metric min and max for a key */
+    public void removeMetricMinMax(String key)
+    	{
+    	metricMin.remove(key);
+    	metricMax.remove(key);
+    	}
 
     public int getRange(String key)
         {

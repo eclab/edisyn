@@ -122,6 +122,7 @@ public class Dial extends NumericalComponent
                 int val = getState() - e.getWheelRotation();
                 if (val > getMax()) val = getMax();
                 if (val < getMin()) val = getMin();
+
                 setState(val);
                 }
             });
@@ -165,9 +166,17 @@ public class Dial extends NumericalComponent
                 	multiplicand = DEFAULT_EXTENT / (double) range;
                 else
                     multiplicand = MAX_EXTENT / (double) range;
+                    
+                int proposedState = startState + (int)(y / multiplicand);
+
+			    if (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
+					((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK))
+					{
+			    	proposedState = reviseToAltValue(proposedState);
+			    	}
                                         
                 // at present we're just going to use y.  It's confusing to use either y or x.
-                setState(startState + (int)(y / multiplicand));
+                setState(proposedState);
                 field.setText(map(getState()));
                 repaint();
                 }
@@ -236,6 +245,8 @@ public class Dial extends NumericalComponent
 			}
 		else return getMin();
 		}
+		
+	public int reviseToAltValue(int val) { if (map != null) return map.reviseToAltValue(val); else return val; }
 
     public boolean isSymmetric() { if (map != null) return map.isSymmetric(); else return getCanonicalSymmetric(); } 
         
@@ -334,6 +345,7 @@ public class Dial extends NumericalComponent
         public boolean isSymmetric(); 
         public double getStartAngle();
         public int getDefaultValue();
+        public int reviseToAltValue(int val);
         }
 
 

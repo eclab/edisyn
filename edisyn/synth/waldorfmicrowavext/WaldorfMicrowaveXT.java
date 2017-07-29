@@ -210,7 +210,7 @@ public class WaldorfMicrowaveXT extends Synth
 
         // make sure this never can be mutated
         model.set("soundformatversion", 1);  // always
-        model.setImmutable("soundformatversion", true);
+        model.setStatus("soundformatversion", Model.STATUS_IMMUTABLE);
         
         loadDefaults();        
         }
@@ -299,7 +299,6 @@ public class WaldorfMicrowaveXT extends Synth
                 updateTitle();
                 }
             };
-        model.setImmutable("name", true);
         hbox.add(comp);
                         
         globalCategory.add(hbox, BorderLayout.WEST);

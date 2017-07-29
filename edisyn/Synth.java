@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
 import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.event.*;
 import java.util.*;
 import java.lang.reflect.*;
@@ -429,7 +430,14 @@ public abstract class Synth extends JComponent implements Updatable
     String nameForCC(int cc)
     	{
     	if (cc < 256)
-    		return "CC " + cc;
+    		{
+    		int type = ccmap.getTypeForCCPane(cc, getCurrentTab());
+    		if (type == CCMap.TYPE_RELATIVE_CC_64)
+    			return "CC [Rel 64] " + cc;
+    		else if (type == CCMap.TYPE_RELATIVE_CC_0)
+    			return "CC [Rel 0] " + cc;
+    		else return "CC " + cc;
+    		}
     	else return "NRPN " + (cc - 256);
     	}
     	
@@ -462,9 +470,18 @@ public abstract class Synth extends JComponent implements Updatable
         model.setUndoListener(undo);
         undo.setWillPush(false);  // instantiate undoes this
         random = new Random(System.currentTimeMillis());
-        ccmap = new CCMap(Prefs.getAppPreferences(getSynthNameLocal(), "CC"));
+        ccmap = new CCMap(Prefs.getAppPreferences(getSynthNameLocal(), "CCKey"),
+        				  Prefs.getAppPreferences(getSynthNameLocal(), "CCType"));
         setLayout(new BorderLayout());
         add(tabs, BorderLayout.CENTER);
+        tabs.addChangeListener(new ChangeListener()
+        	{
+        	public void stateChanged(ChangeEvent e)
+        		{
+        		// cancel learning
+				setLearningCC(false);
+        		}
+        	});
         }
         
     
@@ -1234,18 +1251,40 @@ public abstract class Synth extends JComponent implements Updatable
        	String val = getLastX("PassThroughCC", getSynthNameLocal());
        	setPassThroughCC(val != null && val.equalsIgnoreCase("true"));
 
-        learningMenuItem = new JMenuItem("Map CC");
+        learningMenuItem = new JMenuItem("Map Absolute CC / NRPN");
         learningMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(learningMenuItem);
         learningMenuItem.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doMapCC();
+                doMapCC(CCMap.TYPE_ABSOLUTE_CC);
                 }
             });
                 
-        JMenuItem clearAllCC = new JMenuItem("Clear all CCs");
+        learningMenuItem64 = new JMenuItem("Map Relative CC +/- 64");
+        learningMenuItem64.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(learningMenuItem64);
+        learningMenuItem64.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doMapCC(CCMap.TYPE_RELATIVE_CC_64);
+                }
+            });
+                
+        learningMenuItem0 = new JMenuItem("Map Relative CC +/- 0");
+        learningMenuItem0.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(learningMenuItem0);
+        learningMenuItem0.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doMapCC(CCMap.TYPE_RELATIVE_CC_0);
+                }
+            });
+                
+        JMenuItem clearAllCC = new JMenuItem("Clear all Mapped CCs");
         menu.add(clearAllCC);
         clearAllCC.addActionListener(new ActionListener()
             {
@@ -1919,8 +1958,11 @@ public abstract class Synth extends JComponent implements Updatable
     public abstract String getDefaultResourceFileName();
     
     boolean learning = false;
+    int learningType;
     
     JMenuItem learningMenuItem;
+    JMenuItem learningMenuItem0;
+    JMenuItem learningMenuItem64;
     
     public boolean getLearningCC() { return learning; }
     
@@ -1932,13 +1974,19 @@ public abstract class Synth extends JComponent implements Updatable
         updateTitle();
         if (learning)
             {
-            learningMenuItem.setText("End Map CC");
+            if (learningMenuItem != null) learningMenuItem.setText("Stop Mapping");
+            if (learningMenuItem0 != null) learningMenuItem0.setEnabled(false);
+            if (learningMenuItem64 != null) learningMenuItem64.setEnabled(false);
             }
         else
             {
-            learningMenuItem.setText("Map CC");
+            if (learningMenuItem != null) learningMenuItem.setText("Map CC / NRPN");
+            if (learningMenuItem0 != null) learningMenuItem0.setEnabled(true);
+            if (learningMenuItem64 != null) learningMenuItem64.setEnabled(true);
             }
         }
+        
+    public void setLearningType(int val) { learningType = val; }
     
     public void clearLearned()
         {
@@ -1982,13 +2030,19 @@ public abstract class Synth extends JComponent implements Updatable
         if (ccdata != null)
         	{
         	if (ccdata.type == Midi.CCDATA_TYPE_NRPN)
-        		ccdata.number += 256;
+        		{
+        		ccdata.number += CCMap.NRPN_OFFSET;
+        		}
 			if (learning)
 				{
 				String key = model.getLastKey();
 				if (key != null)
 					{
 					ccmap.setKeyForCCPane(ccdata.number, getCurrentTab(), key);
+        			if (ccdata.type == Midi.CCDATA_TYPE_NRPN)
+        				ccmap.setTypeForCCPane(ccdata.number, getCurrentTab(), CCMap.TYPE_NRPN);  // though it doesn't really matter
+        			else
+        				ccmap.setTypeForCCPane(ccdata.number, getCurrentTab(), learningType);
 					setLearningCC(false);
 					}
 				}
@@ -2009,15 +2063,36 @@ public abstract class Synth extends JComponent implements Updatable
 						{
 						if (ccdata.type == Midi.CCDATA_TYPE_RAW_CC)
 							{
+							int type = ccmap.getTypeForCCPane(ccdata.number, getCurrentTab());
 							int min = model.getMin(key);
 							int max = model.getMax(key);
-							if (max - min + 1 > 127)  // uh oh
+							int val = model.get(key, 0);
+							
+							if (type == CCMap.TYPE_ABSOLUTE_CC)
 								{
-								ccdata.value = (int)(((max - min + 1) / (double) 127) * ccdata.value);
+								if (max - min + 1 > 127)  // uh oh
+									{
+									ccdata.value = (int)(((max - min + 1) / (double) 127) * ccdata.value);
+									}
+								else
+									{
+									ccdata.value = min + ccdata.value;
+									}
+								}
+							else if (type == CCMap.TYPE_RELATIVE_CC_64)
+								{
+								ccdata.value = val + ccdata.value - 64;
+								}
+							else if (type == CCMap.TYPE_RELATIVE_CC_0)
+								{
+								if (ccdata.value < 64)
+									ccdata.value = val + ccdata.value;
+								else
+									ccdata.value = val + ccdata.value - 128;
 								}
 							else
 								{
-								ccdata.value = min + ccdata.value;
+								throw new RuntimeException("This Shouldn't Happen");
 								}
 							}
 						else if (ccdata.type == Midi.CCDATA_TYPE_NRPN)
@@ -2267,10 +2342,11 @@ public abstract class Synth extends JComponent implements Updatable
             }           
         }
 
-    public void doMapCC()
+    public void doMapCC(int type)
         {
         // has to be done first because doPassThroughCC(false) may turn it off
         setLearningCC(!getLearningCC());
+        setLearningType(type);
 		doPassThroughCC(false);
         }
                 

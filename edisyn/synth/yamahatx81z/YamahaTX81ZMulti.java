@@ -154,7 +154,6 @@ public class YamahaTX81ZMulti extends Synth
                 updateTitle();
                 }
             };
-        model.setImmutable("name", true);
         vbox.addBottom(comp);  // doesn't work right :-(
         hbox.add(vbox);
 

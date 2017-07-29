@@ -554,7 +554,7 @@ public class WaldorfBlofeld extends Synth
             model.set("effect" + effect + "parameter" + i, 0);
             model.setMin("effect" + effect + "parameter" + i, 0);
             model.setMax("effect" + effect + "parameter" + i, 127);
-            model.setImmutable("effect" + effect + "parameter" + i, true);
+            model.setStatus("effect" + effect + "parameter" + i, Model.STATUS_IMMUTABLE);
             }
                         
         // Now we can set up the category as usual.
@@ -997,7 +997,7 @@ public class WaldorfBlofeld extends Synth
 
         params = CATEGORIES;
         comp = new Chooser("Category", this, "category", params);
-        model.setImmutable("category", true);
+        model.setStatus("category", Model.STATUS_IMMUTABLE);
         hbox2.add(comp);
 
         vbox.add(hbox2);
@@ -1016,7 +1016,6 @@ public class WaldorfBlofeld extends Synth
                 updateTitle();
                 }
             };
-        model.setImmutable("name", true);
         vbox.addBottom(comp);  // doesn't work right :-(
         hbox.add(vbox);
 
@@ -1276,7 +1275,7 @@ public class WaldorfBlofeld extends Synth
             // We do this because it'd be confusing for non-SL people, but
             // this has the side-effect of preventing invalid settings to the wave/sample chooser 
             // during mutation/crossover because there are 128 samples but only, like 124 waves
-            model.setImmutable("osc" + osc + "samplebank", true);
+            model.setStatus("osc" + osc + "samplebank", Model.STATUS_IMMUTABLE);
             vbox.add(comp);
             }
 

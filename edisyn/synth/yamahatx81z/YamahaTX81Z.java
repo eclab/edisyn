@@ -221,7 +221,6 @@ public class YamahaTX81Z extends Synth
                 updateTitle();
                 }
             };
-        model.setImmutable("name", true);
         vbox.addBottom(comp);  // doesn't work right :-(
         hbox.add(vbox);
 
@@ -243,6 +242,7 @@ public class YamahaTX81Z extends Synth
         
         
         comp = new LabelledDial("Algorithm", this, "algorithm", color, 0, 7, -1);
+		model.removeMetricMinMax("algorithm");  // it's a set
         hbox.add(comp);
         
         hbox.add(Strut.makeHorizontalStrut(10));
@@ -423,13 +423,13 @@ public class YamahaTX81Z extends Synth
         int base = coarse * 4;
         
         // looks like the first region is shorter than the others...
-        if (base == 0)
+        if (coarse == 0)
             base = 8;
-        else if (base == 1)
+        else if (coarse == 1)
             base = 10;
-        else if (base == 2)
+        else if (coarse == 2)
             base = 12;
-        else if (base == 4)
+        else if (coarse == 3)
             base = 14;
         
         // I think you can't go over 255
@@ -465,13 +465,13 @@ public class YamahaTX81Z extends Synth
         int base = coarse * 4;
         
         // looks like the first region is shorter than the others...
-        if (base == 0)
+        if (coarse == 0)
             base = 8;
-        else if (base == 1)
+        else if (coarse == 1)
             base = 10;
-        else if (base == 2)
+        else if (coarse == 2)
             base = 12;
-        else if (base == 4)
+        else if (coarse == 3)
             base = 14;
                 
         base += fine;

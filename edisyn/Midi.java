@@ -778,7 +778,7 @@ public static class Parser
 
 		public CCData handleRawCC(int controllerNumber, int value)
 			{
-			return new CCData(CCDATA_TYPE_NRPN, controllerNumber, value, false);
+			return new CCData(CCDATA_TYPE_RAW_CC, controllerNumber, value, false);
 			}
 		}
 		

@@ -3,7 +3,7 @@
     Licensed under the Apache License version 2.0
 */
 
-package edisyn.synth;
+package edisyn.synth.waldorfmicrowavext;
 
 import edisyn.*;
 import edisyn.gui.*;
@@ -23,7 +23,7 @@ import javax.sound.midi.*;
    @author Sean Luke
 */
 
-public class MicrowaveXT extends Synth
+public class WaldorfMicrowaveXT extends Synth
     {
     // NOTES:
     // Test SetSendsAllPArametersInBulk
@@ -96,7 +96,7 @@ public class MicrowaveXT extends Synth
         { 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1 },
         { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0 } };
         
-    public MicrowaveXT()
+    public WaldorfMicrowaveXT()
         {
         for(int i = 0; i < allParameters.length; i++)
             {
@@ -204,7 +204,7 @@ public class MicrowaveXT extends Synth
         otherPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Other", otherPanel);
 
-        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("MicrowaveXT.html")));
+        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("WaldorfMicrowaveXT.html")));
 
         model.set("name", "Init Sound V1.1 ");
 
@@ -227,7 +227,7 @@ public class MicrowaveXT extends Synth
         setSendMIDI(send);
         }
                
-    public String getDefaultResourceFileName() { return "MicrowaveXT.init"; }
+    public String getDefaultResourceFileName() { return "WaldorfMicrowaveXT.init"; }
 
     public boolean gatherInfo(String title, Model change, boolean writing)
         {

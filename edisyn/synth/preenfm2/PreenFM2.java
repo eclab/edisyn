@@ -3,7 +3,7 @@
     Licensed under the Apache License version 2.0
 */
 
-package edisyn.synth;
+package edisyn.synth.preenfm2;
 
 import edisyn.*;
 import edisyn.gui.*;
@@ -45,34 +45,34 @@ public class PreenFM2 extends Synth
 
     public static final ImageIcon[] ALGORITHM_ICONS = 
         {
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen1.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen2.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen3.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen4.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen5.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen6.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen7.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen8.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen9.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen10.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen11.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen12.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen13.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen14.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen15.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen16.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen17.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen18.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen19.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen20.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen21.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen22.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen23.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen24.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen25.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen26.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen27.png")),
-        new ImageIcon(PreenFM2.class.getResource("PreenFM2/Preen28.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm1.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm2.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm3.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm4.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm5.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm6.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm7.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm8.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm9.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm10.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm11.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm12.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm13.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm14.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm15.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm16.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm17.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm18.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm19.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm20.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm21.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm22.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm23.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm24.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm25.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm26.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm27.png")),
+        new ImageIcon(PreenFM2.class.getResource("PreenFM2/PreenFM2Algorithm28.png")),
         };
 
 	public JFrame sprout()

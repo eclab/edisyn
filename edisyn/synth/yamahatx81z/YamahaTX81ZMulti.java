@@ -3,7 +3,7 @@
     Licensed under the Apache License version 2.0
 */
 
-package edisyn.synth;
+package edisyn.synth.yamahatx81z;
 
 import edisyn.*;
 import edisyn.gui.*;

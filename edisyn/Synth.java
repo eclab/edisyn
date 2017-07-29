@@ -433,9 +433,9 @@ public abstract class Synth extends JComponent implements Updatable
     		{
     		int type = ccmap.getTypeForCCPane(cc, getCurrentTab());
     		if (type == CCMap.TYPE_RELATIVE_CC_64)
-    			return "CC [Rel 64] " + cc;
+    			return "CC [64] " + cc;
     		else if (type == CCMap.TYPE_RELATIVE_CC_0)
-    			return "CC [Rel 0] " + cc;
+    			return "CC [0] " + cc;
     		else return "CC " + cc;
     		}
     	else return "NRPN " + (cc - 256);
@@ -1262,7 +1262,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
                 
-        learningMenuItem64 = new JMenuItem("Map Relative CC +/- 64");
+        learningMenuItem64 = new JMenuItem("Map Relative CC [64]");
         learningMenuItem64.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(learningMenuItem64);
         learningMenuItem64.addActionListener(new ActionListener()
@@ -1273,7 +1273,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
                 
-        learningMenuItem0 = new JMenuItem("Map Relative CC +/- 0");
+        learningMenuItem0 = new JMenuItem("Map Relative CC [0]");
         learningMenuItem0.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(learningMenuItem0);
         learningMenuItem0.addActionListener(new ActionListener()

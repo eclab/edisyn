@@ -105,12 +105,12 @@ public class YamahaTX81ZMulti extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1...24", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer 1...24");
                 continue;
                 }
             if (n < 1 || n > 24)
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1...24", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer 1...24");
                 continue;
                 }
                 
@@ -235,7 +235,8 @@ public class YamahaTX81ZMulti extends Synth
             public void perform()
                 {
                 final YamahaTX81Z synth = new YamahaTX81Z();
-                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                if (tuple != null)
+	                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
                 if (synth.tuple != null)
                     {
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -267,6 +268,10 @@ public class YamahaTX81ZMulti extends Synth
                                 }
                             });
                     }
+                else
+                	{
+                	doSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                	}
                 }
             };
         hbox2.addLast(comp);

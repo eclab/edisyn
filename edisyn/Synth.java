@@ -102,7 +102,19 @@ public abstract class Synth extends JComponent implements Updatable
 	//////// SYNTHESIZER EDIT PANES
 	
 	/** All synthesizer editor pane classes in Edisyn */
-    public static final Class[] synths = new Class[] { YamahaTX81Z.class, YamahaTX81ZMulti.class, KawaiK4.class, KawaiK4Multi.class, Blofeld.class, BlofeldMulti.class, MicrowaveXT.class, MicrowaveXTMulti.class, Matrix1000.class, PreenFM2.class };
+    public static final Class[] synths = new Class[] 
+    	{ 
+    	edisyn.synth.yamahatx81z.YamahaTX81Z.class, 
+    	edisyn.synth.yamahatx81z.YamahaTX81ZMulti.class, 
+    	edisyn.synth.kawaik4.KawaiK4.class, 
+    	edisyn.synth.kawaik4.KawaiK4Multi.class, 
+    	edisyn.synth.waldorfblofeld.WaldorfBlofeld.class, 
+    	edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti.class, 
+    	edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT.class, 
+    	edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti.class, 
+    	edisyn.synth.oberheimmatrix1000.OberheimMatrix1000.class, 
+    	edisyn.synth.preenfm2.PreenFM2.class 
+    	};
     
     /** All synthesizer names in Edisyn, one per class in synths */
     public static String[] getSynthNames()
@@ -1569,7 +1581,8 @@ public abstract class Synth extends JComponent implements Updatable
                 } 
             catch (IOException e) // fail
                 {
-                JOptionPane.showMessageDialog(this, "An error occurred while saving to the file " + (f == null ? " " : f.getName()), "File Error", JOptionPane.ERROR_MESSAGE);
+                //JOptionPane.showMessageDialog(this, "An error occurred while saving to the file " + (f == null ? " " : f.getName()), "File Error", JOptionPane.ERROR_MESSAGE);
+                doSimpleError("File Error", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
                 e.printStackTrace();
                 }
             finally
@@ -1638,7 +1651,8 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             catch (Exception e) // fail
                 {
-                JOptionPane.showMessageDialog(this, "An error occurred while saving to the file " + file, "File Error", JOptionPane.ERROR_MESSAGE);
+                doSimpleError("File Error", "An error occurred while saving to the file " + file);
+                //JOptionPane.showMessageDialog(this, "An error occurred while saving to the file " + file, "File Error", JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
                 }
             finally
@@ -1771,7 +1785,10 @@ public abstract class Synth extends JComponent implements Updatable
                 
                 is = new FileInputStream(f);
                 if (f.length() > MAX_FILE_LENGTH)
-                    JOptionPane.showMessageDialog(this, "File is too long and cannot be loaded.", "File Error", JOptionPane.ERROR_MESSAGE);
+                	{
+                	doSimpleError("File Error", "File is too long and cannot be loaded.");
+                    //JOptionPane.showMessageDialog(this, "File is too long and cannot be loaded.", "File Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 else
                     {
                     byte[] data = new byte[(int)f.length()];
@@ -1780,7 +1797,10 @@ public abstract class Synth extends JComponent implements Updatable
                     is.close();
                                 
                     if (!recognizeLocal(data))
-                        JOptionPane.showMessageDialog(this, "File does not contain proper sysex data for the " + getSynthNameLocal(), "File Error", JOptionPane.ERROR_MESSAGE);
+                    	{
+                    	doSimpleError("File Error", "File does not contain proper sysex data for the " + getSynthNameLocal());
+                        //JOptionPane.showMessageDialog(this, "File does not contain proper sysex data for the " + getSynthNameLocal(), "File Error", JOptionPane.ERROR_MESSAGE);
+                    	}
                     else
                         {
                         setSendMIDI(false);
@@ -1806,7 +1826,8 @@ public abstract class Synth extends JComponent implements Updatable
                 }        
             catch (Throwable e) // fail  -- could be an Error or an Exception
                 {
-                JOptionPane.showMessageDialog(this, "An error occurred while loading from the file.", "File Error", JOptionPane.ERROR_MESSAGE);
+                doSimpleError("File Error", "An error occurred while loading from the file.");
+                //JOptionPane.showMessageDialog(this, "An error occurred while loading from the file.", "File Error", JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
                 }
             finally
@@ -2377,4 +2398,9 @@ public abstract class Synth extends JComponent implements Updatable
     	return null;
     	}
  
+    public void doSimpleError(String title, String message)
+    	{
+    	JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+    	}
+    
     }

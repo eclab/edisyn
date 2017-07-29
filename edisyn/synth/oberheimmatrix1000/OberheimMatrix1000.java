@@ -141,12 +141,12 @@ public class OberheimMatrix1000 extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 0...99", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer 0...99");
                 continue;
                 }
             if (n < 0 || n > 99)
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 0..99", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer 0...99");
                 continue;
                 }
                                 
@@ -154,12 +154,12 @@ public class OberheimMatrix1000 extends Synth
             try { i = Integer.parseInt(bank.getText()); }
             catch (NumberFormatException e)
                 {
-                JOptionPane.showMessageDialog(null, "The Bank must be an integer 0 ... 9", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Bank must be an integer 0 ... 9");
                 continue;
                 }
             if (i < 0 || i > 9)
                 {
-                JOptionPane.showMessageDialog(null, "The Bank must be an integer 0 ... 9", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Bank must be an integer 0 ... 9");
                 continue;
                 }
                         

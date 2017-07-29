@@ -178,12 +178,12 @@ public class KawaiK4 extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1...16", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer 1...16");
                 continue;
                 }
             if (n < 1 || n > 16)
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1...16", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer 1...16");
                 continue;
                 }
                 
@@ -906,7 +906,7 @@ public class KawaiK4 extends Synth
 			else if (data[3] == 0x43)
 				error = "External Data Card is Not Inserted";
 			
-	        JOptionPane.showMessageDialog(this, error, "Write Failed", JOptionPane.ERROR_MESSAGE);
+            doSimpleError("Write Failed", error);
 			return true;
 			}
 		else 

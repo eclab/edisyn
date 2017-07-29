@@ -250,12 +250,12 @@ public class WaldorfMicrowaveXT extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1 ... 128", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer 1 ... 128");
                 continue;
                 }
             if (n < 1 || n > 128)
                 {
-                JOptionPane.showMessageDialog(null, "The Patch Number must be an integer 1 ... 128", title, JOptionPane.ERROR_MESSAGE);
+                doSimpleError(title, "The Patch Number must be an integer 1 ... 128");
                 continue;
                 }
                                                         

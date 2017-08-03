@@ -81,8 +81,6 @@ public class WaldorfBlofeld extends Synth
             {
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
-
-        setSendsAllParametersInBulk(true);
                                 
         /// SOUND PANEL
                 
@@ -151,10 +149,6 @@ public class WaldorfBlofeld extends Synth
 
         arpeggiationPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Arpeggiator", arpeggiationPanel);
-
-
-        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("WaldorfBlofeld.html")));
-
                 
         model.set("name", "Init");
         
@@ -163,6 +157,7 @@ public class WaldorfBlofeld extends Synth
                 
     
     public String getDefaultResourceFileName() { return "WaldorfBlofeld.init"; }
+	public String getHTMLResourceFileName() { return "WaldorfBlofeld.html"; }
                 
                 
                 
@@ -954,9 +949,9 @@ public class WaldorfBlofeld extends Synth
 
 
     public static final int MAXIMUM_NAME_LENGTH = 16;
-    public String reviseName(String name)
+    public String revisePatchName(String name)
     	{
-    	name = super.reviseName(name);  // trim first time
+    	name = super.revisePatchName(name);  // trim first time
     	if (name.length() > MAXIMUM_NAME_LENGTH)
 	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
     	
@@ -968,7 +963,7 @@ public class WaldorfBlofeld extends Synth
 				nameb.setCharAt(i, ' ');
 			}
 		name = nameb.toString();
-		return super.reviseName(name);  // trim again
+		return super.revisePatchName(name);  // trim again
     	}
 
 
@@ -1007,7 +1002,7 @@ public class WaldorfBlofeld extends Synth
             {
             public String replace(String val)
             	{
-            	return reviseName(val);
+            	return revisePatchName(val);
             	}
                                 
             public void update(String key, Model model)
@@ -1205,10 +1200,15 @@ public class WaldorfBlofeld extends Synth
             for(int i = 86; i < 125; i++)
                 params[i] = "User " + (i - 6);
             if (osc == 3) params = WAVES_SHORT;
+
+			// due to a bug, the chooser's gonna freak here, so we
+			// turn off its action listener
+			chooser.setCallActionListener(false);
             chooser.setElements("Wave", params);
                         
             // restore old wave index
             chooser.setIndex(waves[osc - 1]);
+            chooser.setCallActionListener(true);
             }
         else
             {
@@ -1226,10 +1226,15 @@ public class WaldorfBlofeld extends Synth
             for(int i = 0; i < 128; i++)
                 params[i] = "" + (i + 1) + "              ";
             //chooser.setElements("Sample Bank " + SAMPLE_BANKS[bank], params);
-            chooser.setElements("Sample", params);
+
+			// due to a bug, the chooser's gonna freak here, so we
+			// turn off its action listener
+			chooser.setCallActionListener(false);
+            chooser.setElements("Sample", params); 
                         
             // restore old sample index
             chooser.setIndex(samples[osc - 1]);
+            chooser.setCallActionListener(true);
             }
         }
         
@@ -2230,9 +2235,6 @@ public class WaldorfBlofeld extends Synth
         return b;
         }
 
-	// it looks like the WaldorfBlofeld needs about 150ms after a change patch or it drops packets
-    public int getPauseAfterChangePatch() { return 200; }
-
     public void changePatch(Model tempModel)
         {
         byte BB = (byte)tempModel.get("bank", 0);
@@ -2244,7 +2246,10 @@ public class WaldorfBlofeld extends Synth
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut() - 1, NN, 0));
             }
         catch (Exception e) { e.printStackTrace(); }
-        }
+ 
+	 	// it looks like the WaldorfBlofeld needs about 150ms after a change patch or it drops packets
+    	simplePause(200);
+       }
 
     public byte[] requestDump(Model tempModel)
         {
@@ -2264,10 +2269,8 @@ public class WaldorfBlofeld extends Synth
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x00, BB, NN, 0x00, (byte)0xF7 };
         }
         
-    public byte[] requestCurrentDump(Model tempModel)
+    public byte[] requestCurrentDump()
         {
-        if (tempModel == null)
-            tempModel = getModel();
         byte DEV = (byte)(getID());
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x00, 0x7F, 0x00, 0x00, (byte)0xF7 };
         }
@@ -2292,7 +2295,7 @@ public class WaldorfBlofeld extends Synth
     
     /////// OTHER ABSTRACT METHODS
     
-    public boolean gatherInfo(String title, Model change, boolean writing)
+    public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JComboBox bank = new JComboBox(BANKS);
         bank.setEditable(false);
@@ -2303,7 +2306,7 @@ public class WaldorfBlofeld extends Synth
                 
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
                 
             if (result == false) 
@@ -2313,12 +2316,12 @@ public class WaldorfBlofeld extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                doSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
                 continue;
                 }
             if (n < 1 || n > 128)
                 {
-                doSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
                 continue;
                 }
                                 
@@ -2335,7 +2338,7 @@ public class WaldorfBlofeld extends Synth
         super.revise();
 
 		String nm = model.get("name", "Init");
-		String newnm = reviseName(nm);
+		String newnm = revisePatchName(nm);
 		if (!nm.equals(newnm))
 	        model.set("name", newnm);
         }

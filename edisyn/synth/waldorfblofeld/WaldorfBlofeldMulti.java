@@ -122,9 +122,7 @@ public class WaldorfBlofeldMulti extends Synth
             {
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
-                
-        setSendsAllParametersInBulk(true);
-        
+                        
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         vbox.add(addNameGlobal(Style.COLOR_GLOBAL));
@@ -162,8 +160,6 @@ public class WaldorfBlofeldMulti extends Synth
         tabs.addTab("Parts 11 - 16", soundPanel);
                 
 
-        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("WaldorfBlofeldMulti.html")));
-
         model.set("name", "Init Multi");  // has to be 16 long
         
         loadDefaults();
@@ -183,14 +179,15 @@ public class WaldorfBlofeldMulti extends Synth
         }
 
     public String getDefaultResourceFileName() { return "WaldorfBlofeldMulti.init"; }
+	public String getHTMLResourceFileName() { return "WaldorfBlofeldMulti.html"; }
 
-    public boolean gatherInfo(String title, Model change, boolean writing)
+    public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
 
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Patch Number" }, 
+            boolean result = showMultiOption(this, new String[] { "Patch Number" }, 
                 new JComponent[] { number }, title, "Enter the Patch number.");
                 
             if (result == false) 
@@ -200,12 +197,12 @@ public class WaldorfBlofeldMulti extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                doSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
                 continue;
                 }
             if (n < 1 || n > 128)
                 {
-                doSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
                 continue;
                 }
                                 
@@ -240,7 +237,7 @@ public class WaldorfBlofeldMulti extends Synth
             {            
             public String replace(String val)
             	{
-            	return reviseName(val);
+            	return revisePatchName(val);
             	}
                                 
             public void update(String key, Model model)
@@ -363,7 +360,7 @@ public class WaldorfBlofeldMulti extends Synth
                     }
                 else
                 	{
-                	doSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                	showSimpleError("Disconnected", "You can't show a patch when disconnected.");
                 	}
                 }
             };
@@ -1049,10 +1046,8 @@ public class WaldorfBlofeldMulti extends Synth
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x01, BB, NN, (byte)0xF7 };
         }
         
-    public byte[] requestCurrentDump(Model tempModel)
+    public byte[] requestCurrentDump()
         {
-        if (tempModel == null)
-            tempModel = getModel();
         byte DEV = (byte)(getID());
 
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x01, 0x7F, 0x00, (byte)0xF7 };
@@ -1080,7 +1075,7 @@ public class WaldorfBlofeldMulti extends Synth
 
         // handle "name" specially
 		String nm = model.get("name", "Init Multi");
-		String newnm = reviseName(nm);
+		String newnm = revisePatchName(nm);
 		if (!nm.equals(newnm))
 	        model.set("name", newnm);
         }
@@ -1088,9 +1083,9 @@ public class WaldorfBlofeldMulti extends Synth
 
 
     public static final int MAXIMUM_NAME_LENGTH = 16;
-    public String reviseName(String name)
+    public String revisePatchName(String name)
     	{
-    	name = super.reviseName(name);  // trim first time
+    	name = super.revisePatchName(name);  // trim first time
     	if (name.length() > MAXIMUM_NAME_LENGTH)
 	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
     	
@@ -1102,7 +1097,7 @@ public class WaldorfBlofeldMulti extends Synth
 				nameb.setCharAt(i, ' ');
 			}
 		name = nameb.toString();
-		return super.reviseName(name);  // trim again
+		return super.revisePatchName(name);  // trim again
     	}
 
 

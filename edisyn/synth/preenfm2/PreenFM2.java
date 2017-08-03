@@ -24,7 +24,7 @@ import javax.sound.midi.*;
 
 public class PreenFM2 extends Synth
     {
-     public int getPauseBetweenMIDISends() { return 0; }
+     public int getPauseBetweenMIDISends() { return 1; }
        
     public static final String[] BANK_TYPES_IN = { "Bank", "DX7" };
     public static final String[] BANK_TYPES_OUT = { "Bank" };
@@ -83,6 +83,7 @@ public class PreenFM2 extends Synth
 		JFrame frame = super.sprout();
         writeTo.setEnabled(false);
         transmitTo.setEnabled(false);
+        merge.setEnabled(false);
         return frame;
 		}
 
@@ -90,9 +91,7 @@ public class PreenFM2 extends Synth
         {
         model.set("bank", 0);
         model.set("number", 0);
-        
-        setSendsAllParametersInBulk(false);
-        
+                
         /// SOUND PANEL
                 
         JComponent frontPanel = new SynthPanel();
@@ -166,8 +165,6 @@ public class PreenFM2 extends Synth
 
 
         
-        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("PreenFM2.html")));
-
         model.set("name", "Init Sound");  // has to be 12 long
 
         buildParameterMap();
@@ -176,8 +173,10 @@ public class PreenFM2 extends Synth
         }
                 
     public String getDefaultResourceFileName() { return "PreenFM2.init"; }
+	public String getHTMLResourceFileName() { return "PreenFM2.html"; }
+    public boolean getSendsAllParametersInBulk() { return false; }
 
-    public boolean gatherInfo(String title, Model change, boolean writing)
+    public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JComboBox type = null;
 
@@ -213,7 +212,7 @@ public class PreenFM2 extends Synth
                 
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Bank Type", "Bank", "Patch Number" }, 
+            boolean result = showMultiOption(this, new String[] { "Bank Type", "Bank", "Patch Number" }, 
                 new JComponent[] { type, bank, number }, title, "Enter the Bank Type, Bank, and Patch Number.");
                 
             if (result == false) 
@@ -225,17 +224,17 @@ public class PreenFM2 extends Synth
             try { b = Integer.parseInt(bank.getText()); }
             catch (NumberFormatException e)
                 {
-                doSimpleError(title, "The Bank Number must be an integer");
+                showSimpleError(title, "The Bank Number must be an integer");
                 continue;
                 }
             if ((t == 0) && (b < 0 || b > 63))
                 {
-                doSimpleError(title, "The Bank Number must be an integer  0...63 for this bank type");
+                showSimpleError(title, "The Bank Number must be an integer  0...63 for this bank type");
                 continue;
                 }
             else if ((t == 1) && (b < 0 || b > 255))
                 {
-                doSimpleError(title, "The Bank Number must be an integer  0...255 for this bank type");
+                showSimpleError(title, "The Bank Number must be an integer  0...255 for this bank type");
                 continue;
                 }
 
@@ -243,17 +242,17 @@ public class PreenFM2 extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                doSimpleError(title, "The Patch Number must be an integer");
+                showSimpleError(title, "The Patch Number must be an integer");
                 continue;
                 }
             if ((t == 0) && (n < 0 || n > 127))
                 {
-                doSimpleError(title, "The Patch Number must be an integer  0...127 for this bank type");
+                showSimpleError(title, "The Patch Number must be an integer  0...127 for this bank type");
                 continue;
                 }
             else if ((t == 1) && (n < 0 || n > 31))
                 {
-                doSimpleError(title, "The Patch Number must be an integer  0...31 for this bank type");
+                showSimpleError(title, "The Patch Number must be an integer  0...31 for this bank type");
                 continue;
                 }
                                 
@@ -295,7 +294,7 @@ public class PreenFM2 extends Synth
             {
             public String replace(String val)
             	{
-            	return reviseName(val);
+            	return revisePatchName(val);
             	}
             	
             public void update(String key, Model model)
@@ -360,6 +359,7 @@ public class PreenFM2 extends Synth
         		}
 			};
 		model.register("voice", ((LabelledDial)comp));
+		model.setStatus("voice", model.STATUS_IMMUTABLE);
 		hbox.add(comp);
 
         globalCategory.add(hbox, BorderLayout.WEST);
@@ -547,6 +547,7 @@ public class PreenFM2 extends Synth
 			public int getDefaultValue() { return 100; }
 			};
 		hbox.add(comp);
+		model.setStatus("filtergain", model.STATUS_IMMUTABLE);
 
 		hbox.addLast(parameterBox);
 		
@@ -873,6 +874,7 @@ public class PreenFM2 extends Synth
 				public boolean isSymmetric() { return true; }
 				};
 			hbox.add(comp);
+			model.setStatus("performanceparam" + p, model.STATUS_IMMUTABLE);
 			}
                                 
         category.add(hbox, BorderLayout.WEST);
@@ -957,7 +959,8 @@ public class PreenFM2 extends Synth
 
 
 
-        
+java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
+
     /** Add a "standard" envelope category */
     public JComponent addEnvelope(final int env, Color color)
         {
@@ -1003,7 +1006,8 @@ public class PreenFM2 extends Synth
 				{
 				public String map(int val)
 					{
-					return "" + (val / 1600.0);
+					// this one is different from the others.  :-(  Must be formatted.
+					return format.format(val / 1600.0);
 					}
 				};
 	        hbox.add(comp);
@@ -1154,8 +1158,8 @@ public class PreenFM2 extends Synth
         
         int program = tempModel.get("number", 0);
         
-        tryToSendSysex(buildLongCC(getChannelOut() - 1, 0, bank));
-        tryToSendSysex(buildPC(getChannelOut() - 1, program));
+        tryToSendMIDI(buildLongCC(getChannelOut() - 1, 0, bank));
+        tryToSendMIDI(buildPC(getChannelOut() - 1, program));
         
         // we assume that we successfully did it
         setSendMIDI(false);
@@ -1165,27 +1169,27 @@ public class PreenFM2 extends Synth
         }
 
 
-    public void performRequestCurrentDump(Model tempModel)
+    public void performRequestCurrentDump()
     	{
 		// Send an NRPN with param = MSB127, LSB127, and a value of whatever (here, 1).
-        tryToSendSysex(buildNRPN(getChannelOut() - 1, (127 << 7) | 127, 0));
+        tryToSendMIDI(buildNRPN(getChannelOut() - 1, (127 << 7) | 127, 0));
     	}
 
     public void performRequestDump(Model tempModel, boolean changePatch)
     	{
     	// we always change patches, no matter what
-    	doChangePatch(tempModel);
+    	changePatch(tempModel);
 		
 		// Send an NRPN with param = MSB127, LSB127, and a value of whatever (here, 1).
-        tryToSendSysex(buildNRPN(getChannelOut() - 1, (127 << 7) | 127, 0));
+        tryToSendMIDI(buildNRPN(getChannelOut() - 1, (127 << 7) | 127, 0));
     	}
     	
     
     public static final int MAXIMUM_NAME_LENGTH = 12;
     public static final String VALID_CHARACTERS = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789.,;:<>&*$";  // yes, space appears twice.  Weird.
-    public String reviseName(String name)
+    public String revisePatchName(String name)
     	{
-    	name = super.reviseName(name);  // trim first time
+    	name = super.revisePatchName(name);  // trim first time
     	if (name.length() > MAXIMUM_NAME_LENGTH)
 	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
     	
@@ -1197,7 +1201,7 @@ public class PreenFM2 extends Synth
 				nameb.setCharAt(i, ' ');
 			}
 		name = nameb.toString();
-		return super.reviseName(name);  // trim again
+		return super.revisePatchName(name);  // trim again
     	}
 
     public Object[] emitAll(String key)
@@ -1308,22 +1312,35 @@ public class PreenFM2 extends Synth
         super.revise();
 
 		String nm = model.get("name", "Init Sound");
-		String newnm = reviseName(nm);
+		String newnm = revisePatchName(nm);
 		if (!nm.equals(newnm))
 	        model.set("name", newnm);
         }
     
     
-    public void handleNRPNParse(String key, int val)
+    public void handleNRPNParse(String key, int val, boolean canPush)
     	{
 		if (key != null)
 			{
+			// First things first.  If it's "name1", then this is the very first thing
+			// sent when the PreenFM2 is dumping to us.  So assume we're getting a dump, and do an undo push.
+			if (key.equals("name1") && canPush)
+				{
+				boolean pushVal = undo.getWillPush();
+				undo.setWillPush(true);
+				undo.push(getModel());
+				undo.setWillPush(pushVal);
+				}
+				
+				
+			// okay on with our regularly scheduled program
 			if (key.startsWith("name"))
 				{
 				int index = (int)(Integer.parseInt(key.substring(4)));
+				
 				char[] name = (model.get("name", "Init Sound") + "            ").toCharArray();
 				name[index - 1] = (char)(val);  // I hope!
-				model.set("name", reviseName(new String(name)));
+				model.set("name", revisePatchName(new String(name)));
 				}
 			else if (key.startsWith("lfo1frequency") || key.startsWith("lfo2frequency") || key.startsWith("lfo3frequency"))
 				{
@@ -1332,15 +1349,15 @@ public class PreenFM2 extends Synth
 					value = (value - 2410) / 10 + 331;
 				else if (value >= 100)
 					value = ((value - 100) / 10) + 100;
-				model.set(key, value);
+				model.setBounded(key, value);
 				}
 			else if (key.startsWith("im"))
 				{
-				model.set(key, val / 10);
+				model.setBounded(key, val / 10);
 				}
 			else
 				{
-				model.set(key, val);
+				model.setBounded(key, val);
 				}
 			}
     	}
@@ -1350,7 +1367,7 @@ public class PreenFM2 extends Synth
 		if (data.type == Midi.CCDATA_TYPE_NRPN)
 			{
 			String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
-			handleNRPNParse(key, data.value);
+			handleNRPNParse(key, data.value, true);
 			}
 		}
         
@@ -1534,7 +1551,7 @@ public class PreenFM2 extends Synth
 			{
 			byte msb = data[1 + HEADER + i * 2];
 			byte lsb = data[1 + HEADER + i * 2 + 1];
-			handleNRPNParse(sysexKeys[i], (msb << 7) | lsb);
+			handleNRPNParse(sysexKeys[i], (msb << 7) | lsb, false);
 			}
 
 		// load the name
@@ -1543,7 +1560,7 @@ public class PreenFM2 extends Synth
 			{
 			byte msb = data[1 + HEADER + i * 2];
 			byte lsb = data[1 + HEADER + i * 2 + 1];
-			handleNRPNParse("name" + count, (msb << 7) | lsb); 
+			handleNRPNParse("name" + count, (msb << 7) | lsb, false); 
 			count++;
 			}
 		return true;

@@ -41,9 +41,7 @@ public class YamahaTX81ZMulti extends Synth
             {
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
-                
-        setSendsAllParametersInBulk(true);
-        
+                        
         /// SOUND PANEL
                 
         JComponent soundPanel = new SynthPanel();
@@ -80,22 +78,21 @@ public class YamahaTX81ZMulti extends Synth
         sourcePanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Instruments 6-8", sourcePanel);
         
-        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("YamahaTX81ZMulti.html")));
-
         model.set("name", "INIT SOUND");
         
         //loadDefaults();        
         }
                 
     public String getDefaultResourceFileName() { return "YamahaTX81ZMulti.init"; }
+	public String getHTMLResourceFileName() { return "YamahaTX81ZMulti.html"; }
 
-    public boolean gatherInfo(String title, Model change, boolean writing)
+    public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
 
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Patch Number"}, 
+            boolean result = showMultiOption(this, new String[] { "Patch Number"}, 
                 new JComponent[] { number }, title, "Enter the Patch number");
                 
             if (result == false) 
@@ -105,12 +102,12 @@ public class YamahaTX81ZMulti extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                doSimpleError(title, "The Patch Number must be an integer 1...24");
+                showSimpleError(title, "The Patch Number must be an integer 1...24");
                 continue;
                 }
             if (n < 1 || n > 24)
                 {
-                doSimpleError(title, "The Patch Number must be an integer 1...24");
+                showSimpleError(title, "The Patch Number must be an integer 1...24");
                 continue;
                 }
                 
@@ -145,7 +142,7 @@ public class YamahaTX81ZMulti extends Synth
             {
             public String replace(String val)
             	{
-            	return reviseName(val);
+            	return revisePatchName(val);
             	}
                                 
             public void update(String key, Model model)
@@ -269,7 +266,7 @@ public class YamahaTX81ZMulti extends Synth
                     }
                 else
                 	{
-                	doSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                	showSimpleError("Disconnected", "You can't show a patch when disconnected.");
                 	}
                 }
             };
@@ -728,15 +725,7 @@ public class YamahaTX81ZMulti extends Synth
         }
 
 
-    public void performRequestDump(Model tempModel, boolean requestPatch)
-        {
-        // instead of requesting a dump from a specific place, we switch there and do a current dump request
-
-        doChangePatch(tempModel);
-        tryToSendSysex(requestCurrentDump(tempModel));
-        }
-        
-    public byte[] requestCurrentDump(Model tempModel)
+    public byte[] requestCurrentDump()
         {
         // PCED
         byte channel = (byte)(32 + getChannelOut() - 1);
@@ -771,9 +760,9 @@ public class YamahaTX81ZMulti extends Synth
         
 
     public static final int MAXIMUM_NAME_LENGTH = 10;
-    public String reviseName(String name)
+    public String revisePatchName(String name)
     	{
-    	name = super.reviseName(name);  // trim first time
+    	name = super.revisePatchName(name);  // trim first time
     	if (name.length() > MAXIMUM_NAME_LENGTH)
 	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
     	
@@ -785,7 +774,7 @@ public class YamahaTX81ZMulti extends Synth
 				nameb.setCharAt(i, ' ');
 			}
 		name = nameb.toString();
-		return super.reviseName(name);  // trim again
+		return super.revisePatchName(name);  // trim again
     	}        
 
 
@@ -796,7 +785,7 @@ public class YamahaTX81ZMulti extends Synth
         super.revise();
 
 		String nm = model.get("name", "Init");
-		String newnm = reviseName(nm);
+		String newnm = revisePatchName(nm);
 		if (!nm.equals(newnm))
 	        model.set("name", newnm);
         }

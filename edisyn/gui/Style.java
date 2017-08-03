@@ -127,9 +127,26 @@ public class Style
 
     /////// HTML DISPLAY CONSTANTS
     
-    /** Base Fopnt */
+    /** Base Font */
     public static final Font HTML_DISPLAY_BASE_FONT = MEDIUM_FONT;
     public static final Insets HTML_DISPLAY_INSETS = new Insets(20, 20, 20, 20);
+
+
+
+
+	/////// GRAPHICS PREPARATION
+	
+    /** Updates the graphics rendering hints before drawing.  Called by a few widgets.  */
+    public static void prepareGraphics(Graphics g)
+        {
+        Graphics2D graphics = (Graphics2D) g;
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        }
+        
+
+	/////// OS DISTINGUISHING PROCEDURES
 
     private static String OS = System.getProperty("os.name").toLowerCase();
 

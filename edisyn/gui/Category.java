@@ -83,7 +83,7 @@ public class Category extends JComponent
         {
         Graphics2D graphics = (Graphics2D) g;
 
-        Synth.prepareGraphics(g);
+        Style.prepareGraphics(g);
 
         Rectangle rect = getBounds();
         rect.x = 0;

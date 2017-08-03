@@ -41,6 +41,11 @@ public class Chooser extends NumericalComponent
         };
 
     boolean callActionListener = true;
+    
+    public void setCallActionListener(boolean val)
+    	{
+    	callActionListener = val;
+    	}
         
     public void update(String key, Model model) 
         { 
@@ -64,9 +69,9 @@ public class Chooser extends NumericalComponent
                 // Unlike other widgets (like JCheckBox), JComboBox calls
                 // the actionlistener even when you programmatically change
                 // its value.  OOPS.
-                callActionListener = false;
+                setCallActionListener(false);
                 combo.setSelectedIndex(i);
-                callActionListener = true;
+                setCallActionListener(true);
                 return;
                 }
         }

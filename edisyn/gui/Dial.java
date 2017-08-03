@@ -277,7 +277,7 @@ public class Dial extends NumericalComponent
         int min = getMin();
         int max = getMax();
                 
-        Synth.prepareGraphics(g);
+        Style.prepareGraphics(g);
                 
         Graphics2D graphics = (Graphics2D) g;
                 

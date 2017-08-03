@@ -133,6 +133,12 @@ public class Model implements Cloneable
     */
     public void mutate(Random random, String[] keys, double weight)
         {
+        if (undoListener!= null)
+        	{
+        	undoListener.push(this);
+        	undoListener.setWillPush(false);
+        	}
+        	
         for(int i = 0; i < keys.length; i++)
             {
             // continue if the key is immutable, it's a string, or we fail the coin toss
@@ -209,6 +215,11 @@ public class Model implements Cloneable
                     }
                 }
             }
+
+        if (undoListener!= null)
+        	{
+        	undoListener.setWillPush(true);
+        	}
         }
 
 
@@ -242,6 +253,12 @@ public class Model implements Cloneable
     */
     public void recombine(Random random, Model model, String[] keys, double weight)
         {
+        if (undoListener!= null)
+        	{
+        	undoListener.push(this);
+        	undoListener.setWillPush(false);
+        	}
+        	
         for(int i = 0; i < keys.length; i++)
             {
             // return if the key doesn't exist, is immutable or is a string, or we fail the coin toss
@@ -276,6 +293,11 @@ public class Model implements Cloneable
                     }
                 }
             }
+
+        if (undoListener!= null)
+        	{
+        	undoListener.setWillPush(true);
+        	}
         }
     
     
@@ -314,8 +336,7 @@ public class Model implements Cloneable
             return false;
         if (!metricMax.equals(model.metricMax))
             return false;
-        if (!lastKey.equals(model.lastKey))
-            return false;
+        // don't care about lastKey
         return true;
         }
 
@@ -358,10 +379,15 @@ public class Model implements Cloneable
         listeners.put(key, list);
         }
 
-    /** Returns all the keys in the model as an array. */        
+    /** Returns all the keys in the model as an array, except the hidden ones. */        
     public String[] getKeys()
         {
-        return (String[])(storage.keySet().toArray(new String[0]));
+        String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
+        ArrayList revisedKeys = new ArrayList<String>();
+        for(int i = 0; i < keyset.length; i++)
+        	if (getStatus(keyset[i]) != STATUS_HIDDEN)
+        		revisedKeys.add(keyset[i]);
+        return (String[])(revisedKeys.toArray(new String[0]));
         }
         
     public void clearLastKey()
@@ -545,6 +571,8 @@ public class Model implements Cloneable
     
     public static final int STATUS_FREE = 0;
     public static final int STATUS_IMMUTABLE = 1;
+    public static final int STATUS_RESTRICTED = 2;
+    public static final int STATUS_HIDDEN = 3;
 
     /** Sets the status of a key.  The default is STATUS_FREE, except for strings, which are STATUS_IMMUTABLE. */        
     public void setStatus(String key, int val)

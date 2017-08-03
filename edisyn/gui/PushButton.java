@@ -19,22 +19,28 @@ import java.awt.event.*;
    @author Sean Luke
 */
 
-public class PushButton extends JButton
+public class PushButton extends JPanel
     {
+    JButton button;
+    
+    public Insets getInsets() { return new Insets(0,0,0,0); }
     public PushButton(final String text)
         {
-        super(text);
-        putClientProperty("JComponent.sizeVariant", "small");
-        setFont(Style.SMALL_FONT);
-        setHorizontalAlignment(SwingConstants.CENTER);
+		button = new JButton(text);
+        button.putClientProperty("JComponent.sizeVariant", "small");
+        button.setFont(Style.SMALL_FONT);
+        button.setHorizontalAlignment(SwingConstants.CENTER);
                 
-        addActionListener(new ActionListener()
+        button.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
                 perform();
                 }
             });
+        setBackground(Style.BACKGROUND_COLOR);
+        setLayout(new BorderLayout());
+        add(button, BorderLayout.CENTER);
         }
     
     public void perform()

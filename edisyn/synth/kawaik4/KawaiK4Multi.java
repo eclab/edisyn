@@ -34,15 +34,21 @@ public class KawaiK4Multi extends Synth
     public static final String[] PLAY_MODES = { "Keyboard", "MIDI", "Both" };
     public static final String[] SUBMIX_CHANNELS = { "A", "B", "C", "D", "E", "F", "G", "H" };
 
+    public JFrame sprout()
+        {
+        JFrame frame = super.sprout();
+        // We can't request the current working memory (don't ask why)
+        receiveCurrent.setEnabled(false);
+        return frame;
+        }         
+
     public KawaiK4Multi()
         {
         for(int i = 0; i < allParameters.length; i++)
             {
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
-                
-        setSendsAllParametersInBulk(true);
-        
+                        
         /// SOUND PANEL
                 
         JComponent soundPanel = new SynthPanel();
@@ -79,16 +85,15 @@ public class KawaiK4Multi extends Synth
         sourcePanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Sections 6-8", sourcePanel);
         
-        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("KawaiK4Multi.html")));
-
         model.set("name", "Init Sound V1.1 ");  // has to be 16 long
         
         //loadDefaults();        
         }
                 
     public String getDefaultResourceFileName() { return "KawaiK4Multi.init"; }
+	public String getHTMLResourceFileName() { return "KawaiK4Multi.html"; }
 
-    public boolean gatherInfo(String title, Model change, boolean writing)
+    public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JComboBox bank = new JComboBox(BANKS);
         bank.setSelectedIndex(model.get("bank", 0));
@@ -97,7 +102,7 @@ public class KawaiK4Multi extends Synth
 
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number");
                 
             if (result == false) 
@@ -107,12 +112,12 @@ public class KawaiK4Multi extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                doSimpleError(title, "The Patch Number must be an integer 1...16");
+                showSimpleError(title, "The Patch Number must be an integer 1...16");
                 continue;
                 }
             if (n < 1 || n > 16)
                 {
-                doSimpleError(title, "The Patch Number must be an integer 1...16");
+                showSimpleError(title, "The Patch Number must be an integer 1...16");
                 continue;
                 }
                 
@@ -151,7 +156,7 @@ public class KawaiK4Multi extends Synth
             {
             public String replace(String val)
             	{
-            	return reviseName(val);
+            	return revisePatchName(val);
             	}
                                 
             public void update(String key, Model model)
@@ -252,7 +257,7 @@ public class KawaiK4Multi extends Synth
                     }
                 else
                 	{
-                	doSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                	showSimpleError("Disconnected", "You can't show a patch when disconnected.");
                 	}
                 }
             };
@@ -813,16 +818,6 @@ public class KawaiK4Multi extends Synth
         return new byte[0];
         }
         
-    public byte[] requestCurrentDump(Model tempModel)
-        {
-        // There is no current dump command.  We probably should
-        // just do a requestDump on the model, assuming that the
-        // bank and number are right
-        if (tempModel == null)
-            tempModel = getModel();
-        return requestDump(tempModel);
-        }
-
     public static boolean recognize(byte[] data)
         {
         boolean v = (
@@ -839,9 +834,9 @@ public class KawaiK4Multi extends Synth
         
         
     public static final int MAXIMUM_NAME_LENGTH = 10;
-    public String reviseName(String name)
+    public String revisePatchName(String name)
     	{
-    	name = super.reviseName(name);  // trim first time
+    	name = super.revisePatchName(name);  // trim first time
     	if (name.length() > MAXIMUM_NAME_LENGTH)
 	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
     	
@@ -853,7 +848,7 @@ public class KawaiK4Multi extends Synth
 				nameb.setCharAt(i, ' ');
 			}
 		name = nameb.toString();
-		return super.reviseName(name);  // trim again
+		return super.revisePatchName(name);  // trim again
     	}        
 
         
@@ -864,7 +859,7 @@ public class KawaiK4Multi extends Synth
         super.revise();
 
 		String nm = model.get("name", "Init");
-		String newnm = reviseName(nm);
+		String newnm = revisePatchName(nm);
 		if (!nm.equals(newnm))
 	        model.set("name", newnm);
         }

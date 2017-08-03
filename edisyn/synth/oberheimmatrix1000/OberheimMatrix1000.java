@@ -54,9 +54,7 @@ public class OberheimMatrix1000 extends Synth
             {
             allMatrixParametersToIndex.put(allMatrixParameters[i], Integer.valueOf(i));
             }
-                
-        setSendsAllParametersInBulk(true);
-        
+                        
         /// SOUND PANEL
                 
         JComponent soundPanel = new SynthPanel();
@@ -115,23 +113,22 @@ public class OberheimMatrix1000 extends Synth
         modulationPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Modulation", modulationPanel);
 
-        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("OberheimMatrix1000.html")));
-
         model.set("name", "UNTITLED");
         
         loadDefaults();        
         }
                 
     public String getDefaultResourceFileName() { return "OberheimMatrix1000.init"; }
+	public String getHTMLResourceFileName() { return "OberheimMatrix1000.html"; }
 
-    public boolean gatherInfo(String title, Model change, boolean writing)
+    public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JTextField bank = new JTextField("" + (model.get("bank", 0)), 3);
         JTextField number = new JTextField("" + (model.get("number", 0)), 3);
 
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number");
                 
             if (result == false) 
@@ -141,12 +138,12 @@ public class OberheimMatrix1000 extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                doSimpleError(title, "The Patch Number must be an integer 0...99");
+                showSimpleError(title, "The Patch Number must be an integer 0...99");
                 continue;
                 }
             if (n < 0 || n > 99)
                 {
-                doSimpleError(title, "The Patch Number must be an integer 0...99");
+                showSimpleError(title, "The Patch Number must be an integer 0...99");
                 continue;
                 }
                                 
@@ -154,12 +151,12 @@ public class OberheimMatrix1000 extends Synth
             try { i = Integer.parseInt(bank.getText()); }
             catch (NumberFormatException e)
                 {
-                doSimpleError(title, "The Bank must be an integer 0 ... 9");
+                showSimpleError(title, "The Bank must be an integer 0 ... 9");
                 continue;
                 }
             if (i < 0 || i > 9)
                 {
-                doSimpleError(title, "The Bank must be an integer 0 ... 9");
+                showSimpleError(title, "The Bank must be an integer 0 ... 9");
                 continue;
                 }
                         
@@ -221,7 +218,7 @@ public class OberheimMatrix1000 extends Synth
             {
             public String replace(String val)
             	{
-            	return reviseName(val);
+            	return revisePatchName(val);
             	}
                                 
             public void update(String key, Model model)
@@ -1413,7 +1410,7 @@ public class OberheimMatrix1000 extends Synth
 		// Next do a program change
 		
         byte NN = (byte)tempModel.get("number", 0);
-        tryToSendSysex(buildPC(getChannelOut() - 1, NN));
+        tryToSendMIDI(buildPC(getChannelOut() - 1, NN));
     	}
 
 
@@ -1449,13 +1446,6 @@ public class OberheimMatrix1000 extends Synth
         tryToSendSysex(data);
 		}
 		
-    public byte[] requestCurrentDump(Model tempModel)
-        {
-        // this is not available as far as I can tell
-        new RuntimeException("This should never be called").printStackTrace();
-        return new byte[0];
-        }
-
     public static final int EXPECTED_SYSEX_LENGTH = 273;        
         
     public static boolean recognize(byte[] data)
@@ -1474,9 +1464,9 @@ public class OberheimMatrix1000 extends Synth
         
 
     public static final int MAXIMUM_NAME_LENGTH = 8;
-    public String reviseName(String name)
+    public String revisePatchName(String name)
     	{
-    	name = super.reviseName(name);  // trim first time
+    	name = super.revisePatchName(name);  // trim first time
     	if (name.length() > MAXIMUM_NAME_LENGTH)
 	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
     	
@@ -1488,7 +1478,7 @@ public class OberheimMatrix1000 extends Synth
 				nameb.setCharAt(i, ' ');
 			}
 		name = nameb.toString();
-		return super.reviseName(name);  // trim again
+		return super.revisePatchName(name);  // trim again
     	}
 
 
@@ -1499,7 +1489,7 @@ public class OberheimMatrix1000 extends Synth
         super.revise();
         
 		String nm = model.get("name", "UNTITLED");
-		String newnm = reviseName(nm);
+		String newnm = revisePatchName(nm);
 		if (!nm.equals(newnm))
 	        model.set("name", newnm);
         }

@@ -56,7 +56,7 @@ public class YamahaTX81Z extends Synth
     public static final String[] SHIFTS = { "96dB", "48dB", "24dB", "12dB" };
     public static final String[] FIX_RANGES = { "255Hz", "510Hz", "1KHz", "2KHz", "4KHz", "8KHz", "16KHz", "32KHz" };
     public static final int[] FIX_RANGE_VALS = { 8, 16, 32, 64, 128, 256, 512, 1024 };
-    public static final String[] FREQUENCY_RATIOS = { "0.50", "0.71", "0.78", "0.87", "1.00", "1.41", "1.57", "1.73", "2.00", "2.82", "3.00", "3.14", "3.46", "4.00", "4.24", "4.71", "5.00", "5.19", "5.65", "6.00", "6.28", "6.92", "7.00", "7.07", "7.85", "8.00", "8.48", "8.65", "9.00", "9.42", "9.89", "10.00", "10.38", "10.99", "11.00", "11.30", "12.00", "12.11", "12.56", "12.72", "13.00", "13.84", "14.00", "14.10", "14.13", "15.00", "15.55", "15.57", "15.70", "16.96", "17.27", "17.30", "18.37", "18.84", "19.03", "19.78", "20.41", "20.76", "21.20", "21.98", "22.49", "23.55", "24.22", "25.95" };
+    public static final double[] FREQUENCY_RATIOS = { 0.50, 0.71, 0.78, 0.87, 1.00, 1.41, 1.57, 1.73, 2.00, 2.82, 3.00, 3.14, 3.46, 4.00, 4.24, 4.71, 5.00, 5.19, 5.65, 6.00, 6.28, 6.92, 7.00, 7.07, 7.85, 8.00, 8.48, 8.65, 9.00, 9.42, 9.89, 10.00, 10.38, 10.99, 11.00, 11.30, 12.00, 12.11, 12.56, 12.72, 13.00, 13.84, 14.00, 14.10, 14.13, 15.00, 15.55, 15.57, 15.70, 16.96, 17.27, 17.30, 18.37, 18.84, 19.03, 19.78, 20.41, 20.76, 21.20, 21.98, 22.49, 23.55, 24.22, 25.95 };
     
     public static final String[] KS_CURVES = { "Linear", "Exponential", "Logarithmic", "Ramped", "Spit", "Triangle", "Late", "Early" };
     public static final String[] VELOCITY_CURVES = { "Linear", "Logarithmic", "Exponential", "Exponential Strong", "Linear Then Off", "Off Then Linear", "Slow Middle", "Fast Middle" };
@@ -80,8 +80,6 @@ public class YamahaTX81Z extends Synth
             allAdditionalParametersToIndex.put(allAdditionalParameters[i], Integer.valueOf(i));
             }
                 
-        setSendsAllParametersInBulk(false);
-        
         /// SOUND PANEL
                 
         JComponent soundPanel = new SynthPanel();
@@ -123,8 +121,6 @@ public class YamahaTX81Z extends Synth
         sourcePanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Operators 3-4", sourcePanel);
         
-        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("YamahaTX81Z.html")));
-
         model.set("name", "INIT SOUND");
         
         
@@ -140,8 +136,9 @@ public class YamahaTX81Z extends Synth
         }         
 
     public String getDefaultResourceFileName() { return "YamahaTX81Z.init"; }
+	public String getHTMLResourceFileName() { return "YamahaTX81Z.html"; }
 
-    public boolean gatherInfo(String title, Model change, boolean writing)
+    public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JComboBox bank = new JComboBox(BANKS);
         bank.setSelectedIndex(model.get("bank", 0));
@@ -158,7 +155,7 @@ public class YamahaTX81Z extends Synth
 
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number");
                 
             if (result == false) 
@@ -168,12 +165,12 @@ public class YamahaTX81Z extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                doSimpleError(title, "The Patch Number must be an integer 1...32");
+                showSimpleError(title, "The Patch Number must be an integer 1...32");
                 continue;
                 }
             if (n < 1 || n > 32)
                 {
-                doSimpleError(title, "The Patch Number must be an integer 1...32");
+                showSimpleError(title, "The Patch Number must be an integer 1...32");
                 continue;
                 }
                 
@@ -212,7 +209,7 @@ public class YamahaTX81Z extends Synth
             {
             public String replace(String val)
             	{
-            	return reviseName(val);
+            	return revisePatchName(val);
             	}
                                 
             public void update(String key, Model model)
@@ -375,13 +372,6 @@ public class YamahaTX81Z extends Synth
         ((LabelledDial)comp).setSecondLabel("Amplitude");
         hbox2.add(comp);
         
-        comp = new LabelledDial("Foot Ctrl.", this, "footcontrolvolume", color, 0, 99);
-        ((LabelledDial)comp).setSecondLabel("Volume");
-        hbox2.add(comp);
-        
-        vbox.add(hbox2);
-        hbox2 = new HBox();
-        
         comp = new LabelledDial("Mod Wheel", this, "modulationwheelpitch", color, 0, 99);
         ((LabelledDial)comp).setSecondLabel("Pitch");
         hbox2.add(comp);
@@ -389,6 +379,9 @@ public class YamahaTX81Z extends Synth
         comp = new LabelledDial("Mod Wheel", this, "modulationwheelamplitude", color, 0, 99);
         ((LabelledDial)comp).setSecondLabel("Amplitude");
         hbox2.add(comp);
+        
+        vbox.add(hbox2);
+        hbox2 = new HBox();
         
         comp = new LabelledDial("Breath Ctrl.", this, "breathcontrolpitch", color, 0, 99);
         ((LabelledDial)comp).setSecondLabel("Pitch");
@@ -413,6 +406,20 @@ public class YamahaTX81Z extends Synth
         return category;
         }
     
+    // From discussion with Matt Gregory (mgregory22@gmail.com),
+    // who runs the TX81Z website http://the-all.org/tx81z/
+	public double computeFineRatio(int coarse, int fine)
+	  {
+	  double c = FREQUENCY_RATIOS[coarse];
+	  if (coarse >= 8)                // ratio >= 2.0
+		return c + (1 / 16.0) * fine;
+	  else if (coarse >= 4)           // ratio >= 1.0
+		return c + (c / 16.0) * fine;
+	  else
+		return Math.min(c + (c / 8.0) * fine, 
+						c + (c / 8.0) * 7.0);
+	  }
+    
         
     // based on http://cd.textfiles.com/fredfish/v1.6/FF_Disks/571-600/FF_598/TX81z/TX81z.doc
     // in combination with the manual.
@@ -435,19 +442,6 @@ public class YamahaTX81Z extends Synth
         // I think you can't go over 255
         if (base > 255)
             base = 255;
-        
-        // the others are just multiples of it
-        for(int i = 0; i < range; i++)
-            base *= 2;
-        
-        return base;
-        }
-
-    // based on http://cd.textfiles.com/fredfish/v1.6/FF_Disks/571-600/FF_598/TX81z/TX81z.doc
-    // in combination with the manual.
-    public int computeFineFrequency(int range, int fine)
-        {
-        int base = fine;
         
         // the others are just multiples of it
         for(int i = 0; i < range; i++)
@@ -488,9 +482,10 @@ public class YamahaTX81Z extends Synth
         }
 
 
-    LabelledDial[] fineFrequencies = new LabelledDial[4];
     LabelledDial[] frequencyRanges = new LabelledDial[4];
     JLabel[] coarseFrequencyLabels = new JLabel[4];
+    JLabel[] fineFrequencyLabels = new JLabel[4];
+	java.text.DecimalFormat format = new java.text.DecimalFormat("0.0#");
 
     public JComponent addOperator(final int src, Color color)
         {
@@ -533,7 +528,7 @@ public class YamahaTX81Z extends Synth
         hbox.add(comp);
 
 
-        comp = new LabelledDial("Frequency", this, "operator" + src + "frequencycoarse", color, 0, 63)
+        comp = new LabelledDial("Frequency ", this, "operator" + src + "frequencycoarse", color, 0, 63)  // extra space because OS X cuts off the 'y'
             {
             public String map(int val)
                 {
@@ -549,19 +544,20 @@ public class YamahaTX81Z extends Synth
                     }
                 }               
             };
-        coarseFrequencyLabels[src - 1 ] = ((LabelledDial)comp).setSecondLabel("Coarse");
+        coarseFrequencyLabels[src - 1 ] = ((LabelledDial)comp).setSecondLabel("Fixed");
         model.register("operator" + src + "fixedfrequencyrange", (Updatable)comp);
         model.register("operator" + src + "fix", (Updatable)comp);              
         hbox.add(comp);
         
-        fineFrequencies[src - 1] = new LabelledDial("Frequency", this, "operator" + src + "frequencyfine", color, 0, 15)
+        comp = new LabelledDial("Frequency ", this, "operator" + src + "frequencyfine", color, 0, 15)  // extra space because OS X cuts off the 'y'
             {
             public String map(int val)
                 {
                 if (model.get("operator" + src + "fix", 0) == 0)  // not fixed
                     {
-                    // I don't know what to set it to, or even if fixed does anything
-                    return "<-";
+                    return format.format(computeFineRatio(
+                    	model.get("operator" + src + "frequencycoarse", 0), 
+                    	model.get("operator" + src + "frequencyfine", 0)));
                     }
                 else
                     {
@@ -572,12 +568,13 @@ public class YamahaTX81Z extends Synth
                     }
                 }               
             };
-        model.register("operator" + src + "fixedfrequencyrange", fineFrequencies[src - 1]);
-        model.register("operator" + src + "frequencycoarse", fineFrequencies[src - 1]);
-        model.register("operator" + src + "fix", fineFrequencies[src - 1]);
-        fineFrequencies[src - 1] .setSecondLabel("Fine");
+        fineFrequencyLabels[src - 1] = ((LabelledDial)comp).setSecondLabel("Fine");
+        model.register("operator" + src + "fixedfrequencyrange", (Updatable)comp);
+        model.register("operator" + src + "frequencycoarse", (Updatable)comp);
+        model.register("operator" + src + "fix", (Updatable)comp);
+        hbox.add(comp);
 
-        frequencyRanges[src - 1] = new LabelledDial("Fixed Freq.", this, "operator" + src + "fixedfrequencyrange", color, 0, 7)
+        frequencyRanges[src - 1] = new LabelledDial("Frequency", this, "operator" + src + "fixedfrequencyrange", color, 0, 7)
             {
             public String map(int val)
                 {
@@ -597,15 +594,15 @@ public class YamahaTX81Z extends Synth
                 super.update(key, model);
                 if (model.get(key, 0) == 0)
                     {
-                    hbox.remove(fineFrequencies[src - 1]);
                     hbox.remove(frequencyRanges[src - 1]);
                     coarseFrequencyLabels[src - 1].setText("Ratio");
+                    fineFrequencyLabels[src - 1].setText("Ratio Fine");
                     }
                 else
                     {
-                    hbox.add(fineFrequencies[src - 1]);
                     hbox.add(frequencyRanges[src - 1]);
-                    coarseFrequencyLabels[src - 1].setText("Coarse");
+                    coarseFrequencyLabels[src - 1].setText("Fixed");
+                    fineFrequencyLabels[src - 1].setText("Fixed Fine");
                     }
                 hbox.revalidate();
                 }
@@ -1178,15 +1175,7 @@ public class YamahaTX81Z extends Synth
         }
 
 
-    public void performRequestDump(Model tempModel, boolean requestPatch)
-        {
-        // instead of requesting a dump from a specific place, we always switch there and do a current dump request
-
-        doChangePatch(tempModel);
-        tryToSendSysex(requestCurrentDump(tempModel));
-        }
-
-    public byte[] requestCurrentDump(Model tempModel)
+    public byte[] requestCurrentDump()
         {
         // ACED + VCED
         byte channel = (byte)(32 + getChannelOut() - 1);
@@ -1244,9 +1233,9 @@ public class YamahaTX81Z extends Synth
         
     
     public static final int MAXIMUM_NAME_LENGTH = 10;
-    public String reviseName(String name)
+    public String revisePatchName(String name)
     	{
-    	name = super.reviseName(name);  // trim first time
+    	name = super.revisePatchName(name);  // trim first time
     	if (name.length() > MAXIMUM_NAME_LENGTH)
 	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
     	
@@ -1258,7 +1247,7 @@ public class YamahaTX81Z extends Synth
 				nameb.setCharAt(i, ' ');
 			}
 		name = nameb.toString();
-		return super.reviseName(name);  // trim again
+		return super.revisePatchName(name);  // trim again
     	}        
 
 
@@ -1269,7 +1258,7 @@ public class YamahaTX81Z extends Synth
         super.revise();
 
 		String nm = model.get("name", "Init");
-		String newnm = reviseName(nm);
+		String newnm = revisePatchName(nm);
 		if (!nm.equals(newnm))
 	        model.set("name", newnm);
         }

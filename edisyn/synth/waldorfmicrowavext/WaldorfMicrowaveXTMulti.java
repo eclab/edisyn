@@ -57,9 +57,6 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 allInstrumentParametersToIndex.put(allInstrumentParameters[i] + j, Integer.valueOf(i));
                 }
             }
-
-                
-        setSendsAllParametersInBulk(true);
         
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
@@ -96,8 +93,6 @@ public class WaldorfMicrowaveXTMulti extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Instruments 6 - 8", soundPanel);
 
-        tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream("WaldorfMicrowaveXTMulti.html")));
-
         model.set("name", "Init            ");  // has to be 16 long
         
                         
@@ -130,14 +125,15 @@ public class WaldorfMicrowaveXTMulti extends Synth
         }
 
     public String getDefaultResourceFileName() { return "WaldorfMicrowaveXTMulti.init"; }
+	public String getHTMLResourceFileName() { return "WaldorfMicrowaveXTMulti.html"; }
 
-    public boolean gatherInfo(String title, Model change, boolean writing)
+    public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
                 
         while(true)
             {
-            boolean result = doMultiOption(this, new String[] { "Patch Number" }, 
+            boolean result = showMultiOption(this, new String[] { "Patch Number" }, 
                 new JComponent[] { number }, title, "Enter the Patch Number");
                 
             if (result == false) 
@@ -147,12 +143,12 @@ public class WaldorfMicrowaveXTMulti extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                doSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
                 continue;
                 }
             if (n < 1 || n > 128)
                 {
-                doSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
                 continue;
                 }
                                 
@@ -187,7 +183,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
             {
             public String replace(String val)
             	{
-            	return reviseName(val);
+            	return revisePatchName(val);
             	}
                                 
             public void update(String key, Model model)
@@ -341,7 +337,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
                     }
                 else
                 	{
-                	doSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                	showSimpleError("Disconnected", "You can't show a patch when disconnected.");
                 	}
                 }
             };
@@ -973,13 +969,11 @@ public class WaldorfMicrowaveXTMulti extends Synth
         return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x01, BB, NN, (byte)((BB + NN)&127), (byte)0xF7 };
         }
         
-    public byte[] requestCurrentDump(Model tempModel)
+    public byte[] requestCurrentDump()
         {
         // In Section 2.21 of sysex document, MULR is declared to be 0x11, but then in the
         // format example, it's written as 0x01.  It's actually 0x01.
                 
-        if (tempModel == null)
-            tempModel = getModel();
         byte DEV = (byte)(getID());
         //(0x75 + 0x00)&127 is checksum
         return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x01, 0x20, 0x00, (byte)((0x20 + 0x00)&127), (byte)0xF7 };
@@ -1006,9 +1000,9 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
 
     public static final int MAXIMUM_NAME_LENGTH = 16;
-    public String reviseName(String name)
+    public String revisePatchName(String name)
     	{
-    	name = super.reviseName(name);  // trim first time
+    	name = super.revisePatchName(name);  // trim first time
     	if (name.length() > MAXIMUM_NAME_LENGTH)
 	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
     	
@@ -1020,7 +1014,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
 				nameb.setCharAt(i, ' ');
 			}
 		name = nameb.toString();
-		return super.reviseName(name);  // trim again
+		return super.revisePatchName(name);  // trim again
     	}
 
         
@@ -1033,7 +1027,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
         super.revise();
 
 		String nm = model.get("name", "Init");
-		String newnm = reviseName(nm);
+		String newnm = revisePatchName(nm);
 		if (!nm.equals(newnm))
 	        model.set("name", newnm);
         }

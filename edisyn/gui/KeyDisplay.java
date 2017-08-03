@@ -263,7 +263,7 @@ public class KeyDisplay extends NumericalComponent
 
 		public void paintComponent(Graphics g)
 			{
-			Synth.prepareGraphics(g);
+			Style.prepareGraphics(g);
 				
 			Graphics2D graphics = (Graphics2D) g;
 				

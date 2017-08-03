@@ -408,9 +408,9 @@ public class Midi
 			
             boolean result = false;
             if (initialID != null)
-            	result = Synth.doMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Synth ID", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, outID, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
+            	result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Synth ID", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, outID, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
 			else
-				result = Synth.doMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
+				result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
 				
             if (result)
                 {
@@ -503,9 +503,10 @@ public static class CCData
 	public int type;
 	public int number;
 	public int value;
+	public int channel;
 	public boolean increment;
-	public CCData(int type, int number, int value, boolean increment)
-		{ this.type = type; this.number = number; this.value = value; this.increment = increment; }
+	public CCData(int type, int number, int value, int channel, boolean increment)
+		{ this.type = type; this.number = number; this.value = value; this.increment = increment; this.channel = channel; }
 	}
 	
 
@@ -645,7 +646,7 @@ public static class Parser
   
   
 
-	CCData parseCC(int number, int value, boolean requireLSB, boolean requireMSB)
+	CCData parseCC(int channel, int number, int value, boolean requireLSB, boolean requireMSB)
 		{
 		// BEGIN PARSER
 
@@ -716,7 +717,7 @@ public static class Parser
 						controllerValueMSB = value;
 						if (requireLSB && controllerValueLSB == -1)
 							return null;
-						return handleNRPN(controllerNumber, controllerValueLSB == -1 ? 0 : controllerValueLSB, controllerValueMSB);
+						return handleNRPN(channel, controllerNumber, controllerValueLSB == -1 ? 0 : controllerValueLSB, controllerValueMSB);
 						}
 								
 					// Data Entry LSB for RPN, NRPN
@@ -725,7 +726,7 @@ public static class Parser
 						controllerValueLSB = value;
 						if (requireMSB && controllerValueMSB == -1)
 							return null;          
-						return handleNRPN(controllerNumber, controllerValueLSB, controllerValueMSB == -1 ? 0 : controllerValueMSB);
+						return handleNRPN(channel, controllerNumber, controllerValueLSB, controllerValueMSB == -1 ? 0 : controllerValueMSB);
 						}
 								
 					// Data Increment for RPN, NRPN
@@ -733,7 +734,7 @@ public static class Parser
 						{
 						if (value == 0)
 							value = 1;
-						return handleNRPNIncrement(controllerNumber, value);
+						return handleNRPNIncrement(channel, controllerNumber, value);
 						}
 
 					// Data Decrement for RPN, NRPN
@@ -741,7 +742,7 @@ public static class Parser
 						{
 						if (value == 0)
 							value = -1;
-						return handleNRPNIncrement(controllerNumber, -value);
+						return handleNRPNIncrement(channel, controllerNumber, -value);
 						}
 					}
 				else  // RPN probably
@@ -753,7 +754,7 @@ public static class Parser
 			else  // Some other CC
 				{
 				status = INVALID;
-				return handleRawCC(number, value);
+				return handleRawCC(channel, number, value);
 				}
 			}
 	
@@ -761,24 +762,25 @@ public static class Parser
 			{
 			int num = message.getData1();
 			int val = message.getData2();
-			return parseCC(num, val, requireLSB, requireMSB);
+			int channel = message.getChannel();
+			return parseCC(channel, num, val, requireLSB, requireMSB);
 			}
 	
-		public CCData handleNRPN(int controllerNumber, int controllerValueLSB, int controllerValueMSB)
+		public CCData handleNRPN(int channel, int controllerNumber, int controllerValueLSB, int controllerValueMSB)
 			{
 			if (controllerValueLSB < 0 || controllerValueMSB < 0)
 				System.err.println("WARNING, LSB or MSB < 0.  NRPN: " + controllerNumber + "   LSB: " + controllerValueMSB + "  MSB: " + controllerValueMSB);
-			return new CCData(CCDATA_TYPE_NRPN, controllerNumber, controllerValueLSB | (controllerValueMSB << 7), false);
+			return new CCData(CCDATA_TYPE_NRPN, controllerNumber, controllerValueLSB | (controllerValueMSB << 7), channel, false);
 			}
 	
-		public CCData handleNRPNIncrement(int controllerNumber, int delta)
+		public CCData handleNRPNIncrement(int channel, int controllerNumber, int delta)
 			{
-			return new CCData(CCDATA_TYPE_NRPN, controllerNumber, delta, true);
+			return new CCData(CCDATA_TYPE_NRPN, controllerNumber, delta, channel, true);
 			}
 
-		public CCData handleRawCC(int controllerNumber, int value)
+		public CCData handleRawCC(int channel, int controllerNumber, int value)
 			{
-			return new CCData(CCDATA_TYPE_RAW_CC, controllerNumber, value, false);
+			return new CCData(CCDATA_TYPE_RAW_CC, controllerNumber, value, channel, false);
 			}
 		}
 		

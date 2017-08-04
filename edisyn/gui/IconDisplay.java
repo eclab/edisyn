@@ -17,11 +17,13 @@ import java.awt.event.*;
    @author Sean Luke
 */
 
-public class IconDisplay extends NumericalComponent
+public class IconDisplay extends JComponent implements Updatable
     {
     JLabel label;
     JLabel icon;
     ImageIcon[] icons;
+    String key;
+    Synth synth;
 
     public void update(String key, Model model) 
         { 
@@ -31,7 +33,8 @@ public class IconDisplay extends NumericalComponent
 
     public IconDisplay(String label, ImageIcon[] icons, Synth synth, String key)
         {
-        super(synth, key);
+		this.synth = synth;
+		this.key = key;
         this.icons = icons;
         this.label = new JLabel(label);
         this.icon = new JLabel(icons[0]);
@@ -42,14 +45,12 @@ public class IconDisplay extends NumericalComponent
         setBackground(Style.TRANSPARENT);
         this.icon.setBackground(Style.TRANSPARENT);
 
-        setMax(icons.length - 1);
-        setMin(0);
-        setState(getState());
-                
         setLayout(new BorderLayout());
         add(this.icon, BorderLayout.CENTER);
         if (label != null)
             add(this.label, BorderLayout.NORTH);
-        icon.repaint();
+
+		synth.getModel().register(key, this);
+		update(key, synth.getModel());
         }
     }

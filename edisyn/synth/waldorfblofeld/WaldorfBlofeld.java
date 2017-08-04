@@ -17,7 +17,7 @@ import java.io.*;
 import javax.sound.midi.*;
 
 /**
-   A patch editor for the Waldorf WaldorfBlofeld.  Does not deal with Multi mode, global parameters,
+   A patch editor for the Waldorf Blofeld.  Does not deal with Multi mode, global parameters,
    modifying wavetables, or uploading samples.  Only Single mode patches.
         
    @author Sean Luke
@@ -166,7 +166,7 @@ public class WaldorfBlofeld extends Synth
     // Adds the Global Arpeggiator category 
     public JComponent addArpeggiatorGlobal(Color color)
         {
-        Category category = new Category("Arpeggiator", color);
+        Category category = new Category(this, "Arpeggiator", color);
                 
         JComponent comp;
         String[] params;
@@ -286,7 +286,7 @@ public class WaldorfBlofeld extends Synth
     // Adds the Arpeggiator Patterns category       
     public JComponent addArpeggiatorPatterns(Color color)
         {
-        Category category  = new Category("Patterns", color);
+        Category category  = new Category(this, "Patterns", color);
                         
         JComponent comp;
         String[] params;
@@ -554,7 +554,7 @@ public class WaldorfBlofeld extends Synth
                         
         // Now we can set up the category as usual.
                 
-        Category category = new Category("Effect " + effect, color);
+        Category category = new Category(this, "Effect " + effect, color);
                         
         HBox main = new HBox();
         vbox = new VBox();
@@ -597,7 +597,7 @@ public class WaldorfBlofeld extends Synth
     /** Add the Modulation category */
     public JComponent addModulation(Color color)
         {
-        Category category  = new Category("Modulation", color);
+        Category category  = new Category(this, "Modulation", color);
                         
         JComponent comp;
         String[] params;
@@ -638,7 +638,7 @@ public class WaldorfBlofeld extends Synth
     /** Add the Modifiers category */
     public JComponent addModifiers(Color color)
         {
-        Category category  = new Category("Modifiers", color);
+        Category category  = new Category(this, "Modifiers", color);
                         
         JComponent comp;
         String[] params;
@@ -671,14 +671,7 @@ public class WaldorfBlofeld extends Synth
             // add some space
             if (i > 1)  // not the first one
                 {
-                JPanel panel = new JPanel()
-                    {
-                    public Dimension getMinimumSize() { return new Dimension(20,0); }
-                    public Dimension getPreferredSize() { return new Dimension(20,0); }
-                    public Dimension getMaximumSize() { return new Dimension(20, 0); }
-                    };
-                panel.setBackground(Style.BACKGROUND_COLOR);                    
-                hbox.add(panel);
+                hbox.add(Strut.makeHorizontalStrut(20));
                 }
 
             hbox.add(vbox);
@@ -716,15 +709,15 @@ public class WaldorfBlofeld extends Synth
         Category category;
         if (envelope == FILTER_ENVELOPE)
             {
-            category = new Category("Filter Envelope", color);
+            category = new Category(this, "Filter Envelope", color);
             }
         else if (envelope == AMPLIFIER_ENVELOPE)
             {
-            category = new Category("Amplifier Envelope", color);
+            category = new Category(this, "Amplifier Envelope", color);
             }
         else 
             {
-            category = new Category("Envelope " + envelope, color);
+            category = new Category(this, "Envelope " + envelope, color);
             }
                         
         JComponent comp;
@@ -873,7 +866,7 @@ public class WaldorfBlofeld extends Synth
     /** Add an LFO category */
     public JComponent addLFO(final int lfo, Color color)
         {
-        Category category = new Category("LFO " + lfo, color);
+        Category category = new Category(this, "LFO " + lfo, color);
                 
         JComponent comp;
         String[] params;
@@ -975,7 +968,7 @@ public class WaldorfBlofeld extends Synth
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
-        Category globalCategory = new Category("Waldorf WaldorfBlofeld", color);
+        Category globalCategory = new Category(this, "Waldorf Blofeld", color);
                 
         JComponent comp;
         String[] params;
@@ -1031,7 +1024,7 @@ public class WaldorfBlofeld extends Synth
     /** Add the Amplifier category. */
     public JComponent addAmplifierGlobal(Color color)
         {
-        Category category = new Category("Amplifier", color);
+        Category category = new Category(this, "Amplifier", color);
                 
         JComponent comp;
         String[] params;
@@ -1071,7 +1064,7 @@ public class WaldorfBlofeld extends Synth
     /** Add the Global Oscillator category */
     public JComponent addOscillatorGlobal(Color color)
         {
-        Category category = new Category("Oscillators", color);
+        Category category = new Category(this, "Oscillators", color);
                 
         JComponent comp;
         String[] params;
@@ -1242,7 +1235,7 @@ public class WaldorfBlofeld extends Synth
     /** Add an Oscillator category */
     public JComponent addOscillator(final int osc, Color color)
         {
-        Category category = new Category("Oscillator " + osc, color);
+        Category category = new Category(this, "Oscillator " + osc, color);
 
         JComponent comp;
         String[] params;
@@ -1394,7 +1387,7 @@ public class WaldorfBlofeld extends Synth
     /** Add a Filter category */
     public JComponent addFilter(int filter, Color color)
         {
-        Category category = new Category("Filter " + filter, color);
+        Category category = new Category(this, "Filter " + filter, color);
 
         JComponent comp;
         String[] params;

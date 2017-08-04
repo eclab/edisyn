@@ -216,7 +216,7 @@ public class WaldorfBlofeldMulti extends Synth
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
-        Category globalCategory = new Category("Blofeld Multi", color);
+        Category globalCategory = new Category(this, "Waldorf Blofeld [Multi]", color);
                 
         JComponent comp;
         String[] params;
@@ -257,7 +257,7 @@ public class WaldorfBlofeldMulti extends Synth
 
     public JComponent addMultiData(Color color)
         {
-        Category category = new Category("General", color);
+        Category category = new Category(this, "General", color);
                 
         JComponent comp;
         String[] params;
@@ -296,7 +296,7 @@ public class WaldorfBlofeldMulti extends Synth
 
     public JComponent addInstrument(final int inst, Color color)
         {
-        Category category = new Category("Part " + inst, color);
+        Category category = new Category(this, "Part " + inst, color);
                 
         JComponent comp;
         String[] params;

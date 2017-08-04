@@ -31,13 +31,12 @@ public class Style
     /** Medium-sized font, used primarily in the center of a Dial. */
     public static final Font MEDIUM_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
     /** Large Font, primarily for category headers. */
-    public static final Font LARGE_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 18);
-
+    public static final Font LARGE_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 17);
     
-    /////// SYTH PANEL CONSTANTS
+    /////// SYNTH PANEL CONSTANTS
     
     /** The synth panel's insets */
-    public static final Insets SYNTH_PANEL_INSETS = new Insets(40, 40, 40, 40);
+    public static final Insets SYNTH_PANEL_INSETS = new Insets(4, 4, 8, 4);
 
 
     /////// CATEGORY CONSTANTS
@@ -56,13 +55,14 @@ public class Style
     public static final Color COLOR_C = new Color(200, 200, 0); 
     /** Color for the category holding critical global stuff like patch name, patch number, etc. */
     public static final Color COLOR_GLOBAL = Color.white;
-    /** Actual inset distance in case a JLabel is the first item */
+    /** Actual inset distance in case a JLabel is the first item.  Used to make a strut in Microwave. */
     public static final int CATEGORY_INSET_DISTANCE = 8;
+    public static final int CATEGORY_INSETS_BOTTOM_OFFSET = -2;
     
     
     /////// CHOOSER CONSTANTS
     
-    public static Insets CHOOSER_INSETS = null;  // no insets
+    public static Insets CHOOSER_INSETS = new Insets(-1, 0, -2, 0);  // no insets
     
 
     /////// VBOX AND HBOX CONSTANTS
@@ -88,7 +88,7 @@ public class Style
     /** Font used in the center of a dial. */
     public static final Font DIAL_FONT = MEDIUM_FONT;
     /** Insets for labelled dials to set them apart slightly from one another. */
-    public static final Insets LABELLED_DIAL_INSETS = new Insets(0, 3, 0, 3);
+    public static final Insets LABELLED_DIAL_INSETS = new Insets(1, 3, 1, 3);
 
 
     /////// ENVELOPE DISPLAY CONSTANTS
@@ -129,7 +129,7 @@ public class Style
     
     /** Base Font */
     public static final Font HTML_DISPLAY_BASE_FONT = MEDIUM_FONT;
-    public static final Insets HTML_DISPLAY_INSETS = new Insets(20, 20, 20, 20);
+    public static final Insets HTML_DISPLAY_INSETS = new Insets(20, 20, 20, 20);  // bottom compensates for SYNTH_PANEL_INSETS
 
 
 

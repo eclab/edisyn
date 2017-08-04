@@ -46,6 +46,15 @@ public class CheckBox extends NumericalComponent
               
     public JCheckBox getCheckBox() { return check; }
       
+    public void updateBorder()
+    	{
+    	super.updateBorder();
+    	if (synth.isShowingMutation())
+    		check.setEnabled(false);
+    	else
+    		check.setEnabled(true);
+    	}
+    	
     public CheckBox(String label, Synth synth, String key, boolean flipped)
         {
         super(synth, key);
@@ -66,7 +75,10 @@ public class CheckBox extends NumericalComponent
                 }                       
             };
         check.setFont(Style.SMALL_FONT);
-        check.setBackground(Style.TRANSPARENT);
+        check.setOpaque(false);
+//check.setContentAreaFilled(false);
+//check.setBorderPainted(false);
+		//check.setBackground(Style.TRANSPARENT);		// creates bugs in Windows
         check.setForeground(Style.TEXT_COLOR);
 
         setMax(1);
@@ -75,6 +87,20 @@ public class CheckBox extends NumericalComponent
                 
         setLayout(new BorderLayout());
         add(check, BorderLayout.CENTER);
+        
+        check.addMouseListener(new MouseAdapter()
+            {
+            public void mouseClicked(MouseEvent e)
+				{
+				if (synth.isShowingMutation())
+					{
+            		synth.mutationMap.setFree(key, !synth.mutationMap.isFree(key));
+            		// wrap the repaint in an invokelater because the dial isn't responding right
+    				SwingUtilities.invokeLater(new Runnable() { public void run() { repaint(); } });
+            		}
+            	}
+            });
+        
         
         check.addActionListener(new ActionListener()
             {

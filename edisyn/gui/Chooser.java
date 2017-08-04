@@ -47,6 +47,18 @@ public class Chooser extends NumericalComponent
     	callActionListener = val;
     	}
         
+    public void updateBorder()
+    	{
+    	super.updateBorder();
+    	if (combo != null)
+    		{
+    		if (synth.isShowingMutation())
+    			combo.setEnabled(false);
+    		else
+    			combo.setEnabled(true);
+    		}
+    	}
+
     public void update(String key, Model model) 
         { 
         if (combo == null) return;  // we're not ready yet
@@ -115,6 +127,20 @@ public class Chooser extends NumericalComponent
                 d.width += addToWidth;
                 return d;
                 }                       
+
+			protected void processMouseEvent(MouseEvent e)
+				{
+				super.processMouseEvent(e);
+				if (e.getID() == MouseEvent.MOUSE_CLICKED)
+					{
+					if (synth.isShowingMutation())
+						{
+						synth.mutationMap.setFree(key, !synth.mutationMap.isFree(key));
+						// wrap the repaint in an invokelater because the dial isn't responding right
+						SwingUtilities.invokeLater(new Runnable() { public void run() { repaint(); } });
+						}
+					}
+				}
             };
 
         combo.putClientProperty("JComponent.sizeVariant", "small");
@@ -207,6 +233,7 @@ public class Chooser extends NumericalComponent
         setState(combo.getSelectedIndex());
         }
         
+/*
     public void paintComponent(Graphics g)
         {
         Graphics2D graphics = (Graphics2D) g;
@@ -217,6 +244,7 @@ public class Chooser extends NumericalComponent
         graphics.setPaint(Style.BACKGROUND_COLOR);
         graphics.fill(rect);
         }
+*/
 
 
     class ComboBoxRenderer extends JLabel implements ListCellRenderer 

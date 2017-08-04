@@ -11,7 +11,7 @@ import java.awt.geom.*;
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
-
+import java.util.*;
 
 /**
    A pretty container for widgets to categorize them
@@ -19,16 +19,60 @@ import java.awt.event.*;
    @author Sean Luke
 */
 
-public class Category extends JComponent
+public class Category extends JComponent implements Gatherable
     {             
     Color color;
       
-    public Category(String label, Color color)
+    public Category(Synth synth, String label, Color color)
         {
         setLayout(new BorderLayout());
         this.color = color;     
         setName(label);
+
+        addMouseListener(new MouseAdapter()
+            {
+            public void mouseClicked(MouseEvent e)
+            	{
+                boolean inBorder = ( e.getPoint().y < getInsets().top);
+            	if (e.getClickCount() == 2 && inBorder)
+            		{
+            		boolean turnOn = true;
+					ArrayList comps = new ArrayList();
+					gatherAllComponents(comps);
+					for(int i = 0; i < comps.size(); i++)
+						{
+						if (comps.get(i) instanceof NumericalComponent)
+							{
+							NumericalComponent nc = (NumericalComponent)(comps.get(i));
+							String key = nc.getKey();
+							if (synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+								{ turnOn = false; break; }
+							}
+						}
+					
+					for(int i = 0; i < comps.size(); i++)
+						{
+						if (comps.get(i) instanceof NumericalComponent)
+							{
+							NumericalComponent nc = (NumericalComponent)(comps.get(i));
+							String key = nc.getKey();
+							if (synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+								synth.mutationMap.setFree(key, turnOn);
+							}
+						}
+					repaint();
+            		}
+            	}
+            });
+                        
         }
+    
+    public Insets getInsets() 
+    	{ 
+    	Insets insets = (Insets)(super.getInsets().clone());
+    	insets.bottom = 0;
+    	return insets;
+    	}
     
     public void setName(String label)
         {
@@ -59,7 +103,7 @@ public class Category extends JComponent
             };
         
         TitledBorder titledBorder = new TitledBorder(
-            matteBorder, //BorderFactory.createLineBorder(color, Style.CATEGORY_STROKE_WIDTH, true), 
+            matteBorder,
             " " + label + " ",
             TitledBorder.LEFT,
             TitledBorder.TOP,
@@ -78,6 +122,17 @@ public class Category extends JComponent
         setBorder(b);
         repaint();
         }
+    
+    public void gatherAllComponents(java.util.ArrayList list)
+    	{
+    	Component[] c = getComponents();
+    	for(int i = 0; i < c.length; i++)
+    		{
+    		list.add(c[i]);
+    		if (c[i] instanceof Gatherable)
+    			((Gatherable)c[i]).gatherAllComponents(list);
+			}    			
+    	}
     
     public void paintComponent(Graphics g)
         {

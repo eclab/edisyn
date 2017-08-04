@@ -189,7 +189,7 @@ public class YamahaTX81Z extends Synth
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
-        Category globalCategory = new Category(getSynthName(), color);
+        Category globalCategory = new Category(this, getSynthName(), color);
                 
         JComponent comp;
         String[] params;
@@ -231,7 +231,7 @@ public class YamahaTX81Z extends Synth
 
     public JComponent addGlobal( Color color)
         {
-        Category category = new Category("Global", color);
+        Category category = new Category(this, "Global", color);
 
         JComponent comp;
         String[] params;
@@ -289,7 +289,7 @@ public class YamahaTX81Z extends Synth
 
     public JComponent addLFO(Color color)
         {
-        Category category = new Category("LFO ", color);
+        Category category = new Category(this, "LFO ", color);
 
         JComponent comp;
         String[] params;
@@ -333,7 +333,7 @@ public class YamahaTX81Z extends Synth
     
     public JComponent addModulation(Color color)
         {
-        Category category = new Category("Controllers", color);
+        Category category = new Category(this, "Controllers", color);
 
         JComponent comp;
         String[] params;
@@ -489,7 +489,7 @@ public class YamahaTX81Z extends Synth
 
     public JComponent addOperator(final int src, Color color)
         {
-        final Category category = new Category("Operator " + src, color);
+        final Category category = new Category(this, "Operator " + src, color);
 
         JComponent comp;
         String[] params;
@@ -617,7 +617,7 @@ public class YamahaTX81Z extends Synth
                 
     public JComponent addEnvelope(int envelope, Color color)
         {
-        Category category = new Category("Operator Envelope " + envelope, color);
+        Category category = new Category(this, "Operator Envelope " + envelope, color);
 
         JComponent comp;
         String[] params;

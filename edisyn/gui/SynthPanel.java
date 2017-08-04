@@ -19,7 +19,7 @@ import java.awt.event.*;
    @author Sean Luke
 */
 
-public class SynthPanel extends JPanel
+public class SynthPanel extends JPanel implements Gatherable
     {             
     public SynthPanel()
         {
@@ -27,4 +27,17 @@ public class SynthPanel extends JPanel
         setBackground(Style.BACKGROUND_COLOR);
         setBorder(BorderFactory.createMatteBorder(2, 2, 0, 4, Color.black));
         }
+
+	public Insets getInsets() { return Style.SYNTH_PANEL_INSETS; }
+
+    public void gatherAllComponents(java.util.ArrayList list)
+    	{
+    	Component[] c = getComponents();
+    	for(int i = 0; i < c.length; i++)
+    		{
+    		list.add(c[i]);
+    		if (c[i] instanceof Gatherable)
+    			((Gatherable)c[i]).gatherAllComponents(list);
+			}    			
+    	}
     }

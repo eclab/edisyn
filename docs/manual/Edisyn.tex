@@ -180,10 +180,10 @@ The MIDI Dialog (Section \ref{startingedisyn}) also lets you choose a device and
 \item Control widgets in Edisyn
 \end{itemize}
 
-\subsection{Controlling your Synthesizer} 
+\subsection{Remote Controlling your Synthesizer} 
 If you play a note, do a pitch bend, etc., on your control surface, Edisyn will route all of those MIDI messages directly to your synthesizer (changing the messages' channel to the one that Edisyn is using to talk to the synthesizer).  You can also pass through Program Change messages, MIDI clock, etc.  Control Change (CC) messages from your control surface are passed through only if you have toggled {\bf Pass Through All CCs} in the {\bf Map} menu.
 
-\subsection{Controlling Edisyn} 
+\subsection{Remote Controlling Edisyn} 
 
 Edisyn is capable of {\it mapping} Control Change (CC) messages or NRPN messages from your control surface to specific parameters in your patch editor.  Each patch editor type can learn its own unique set of CC and NRPN mappings.
 
@@ -223,13 +223,13 @@ You turn on per-MIDI-channel CCs by toggling {\bf Do Per-Channel CCs} in the {\b
 
 Edisyn has a number of facilities to help you program your synthesizer, including tools to help you wander through the possible space of patches to hunt for the sound you want.  Here's what you can do:
 
-\paragraph{Undo}  Edisyn has infinite levels of undo and redo.  When you change a parameter or do a wholesale modification, this can be undone, as can patch dumps and merges from the synthesizer.  Individual parameter changes made manually on the synthesizer are not undoable even if they're reflected in Edisyn (it'd be too many).  Loading and saving patches is not undoable.  See the {\bf Edit} menu.
+\paragraph{Undo and Redo}  Edisyn has infinite levels of undo and redo.  When you change a parameter or do a wholesale modification, this can be undone, as can patch dumps and merges from the synthesizer.  Individual parameter changes made manually on the synthesizer are not undoable even if they're reflected in Edisyn (it'd be too many).  Loading and saving patches is not undoable.  See the {\bf Edit} menu.
 
-\paragraph{Reset}  You can reset the patch editor to its ``init patch''.  Just choose {\bf Reset} in the {\bf MIDI} menu.
+\paragraph{Reset}  You can reset the patch editor to its ``init patch''.  Just choose {\bf Reset} in the {\bf Edit} menu.
 
-\paragraph{Randomize (by some amount)}  You can add some randomness your patch parameters.  Try a small value: values \(\geq 50\%\) are essentially full randomization.  See the {\bf Randomize} submenu in the {\bf MIDI} menu.   Because it's so common to randomize, then undo and try again, you can also do undo-and-randomize-again as a single task: select {\bf Undo and Randomize Again} in the {\bf Randomize} submenu of the {\bf MIDI} menu.  See below for a discussion of how randomization (called {\bf mutation}) works in Edisyn.
+\paragraph{Randomize (by some amount)}  You can add some randomness your patch parameters.  Try a small value: values \(\geq 50\%\) are essentially full randomization.  See the {\bf Randomize} submenu in the {\bf Edit} menu.   Because it's so common to randomize, then undo and try again, you can also do undo-and-randomize-again as a single task: select {\bf Undo and Randomize Again} in the {\bf Randomize} submenu of the {\bf MIDI} menu.  See below for a discussion of how randomization (called {\bf mutation}) works in Edisyn.
 
-\paragraph{Nudge}  The nudge facility lets you push your patch to sound more and more like one of four other target patches you have chosen.  You can use this, plus randomize, to wander about in the patch space.  Before you can nudge, you have to first select patches to nudge towards.  You can pick up to four patches by first setting up or loading the patch in your patch editor, then selecting one of {\bf Set 1} ... {\bf Set 4} in the {\bf Nudge} submenu of the {\bf MIDI} menu.  You don't have to ultimately select all four. 
+\paragraph{Nudge}  The nudge facility lets you push your patch to sound more and more like one of four other target patches you have chosen.  You can use this, plus randomize, to wander about in the patch space.  Before you can nudge, you have to first select patches to nudge towards.  You can pick up to four patches by first setting up or loading the patch in your patch editor, then selecting one of {\bf Set 1} ... {\bf Set 4} in the {\bf Nudge} submenu of the {\bf Edit} menu.  You don't have to ultimately select all four. 
 
 Above the {\bf Set} options are four {\bf Towards} options, also in the {\bf Nudge} submenu of the {\bf MIDI} menu.  When you set a patch, its current name will appear in the equivalent Towards option.  The patch name is just a helpful reminder\,---\,it's entirely possible for four completely different patches to have the same name.
 
@@ -240,6 +240,25 @@ A hint.  It's a good idea to select target patches which don't have some radical
 \paragraph{Merge (by some amount)}  Merging is a lot like nudging.  But instead of nudging towards a predefined target patch, you are asking your synthesizer to load a given patch, which Edisyn will then directly {\bf recombine}  with your current patch to form a randomly merged patch.  You specify the degree as a percentage: see the options in the {\bf Request Merge} submenu of the {\bf MIDI} menu.
 
 Some patch editors may not be able to perform merges because the synthesizers can't load specific patches: if your synth can't do {\bf Request Patch...}, it probably can't do a merge either.  
+
+\subsection{Restricting Mutation and Recombination to Only Certain Parameters}
+
+\begin{wrapfigure}{r}{3in}
+\vspace{-2em}\includegraphics[scale=0.3]{5.png}
+\vspace{-1em}\caption{Editing Mutation Parameters}\label{mutationparameters}
+\end{wrapfigure}
+
+You can restrict Mutation (Randomize) and Recombination (Nudge and Merge) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutation Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutation Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
+
+You can change these of course: just click on them and you can remove them from being updated (or add the back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu, such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title.  The categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}.  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
+
+Some parameters, such as the patch name or certain other parameters, can't be mutated no matter what: these have been declared {\it immutable} by the patch editor.  They will never have a red frame no matter how much you click them.
+
+The parameters you have selected will be the only ones changed when you mutate (randomize) a patch.  But if you turn on {\bf Use Parameters for Nudge/Merge} in the {\bf Edit} menu, then recombination (nudging, merging) will be restricted to these parameters as well.
+
+Once you're done choosing parameters to mutate or recombine, just select {\bf Stop Editing Mutation Parameters} in the {\bf Edit} menu.
+
+Note that your parameter choices, as well as using them for recombination, are persistent: they're saved in the preferences.
 
 \subsection{How Recombination and Mutation Work}
 

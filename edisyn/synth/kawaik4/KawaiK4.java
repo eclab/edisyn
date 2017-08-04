@@ -199,7 +199,7 @@ public class KawaiK4 extends Synth
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
-        Category globalCategory = new Category(getSynthName(), color);
+        Category globalCategory = new Category(this, getSynthName(), color);
                 
         JComponent comp;
         String[] params;
@@ -238,7 +238,7 @@ public class KawaiK4 extends Synth
 
     public JComponent addSourceGlobal( Color color)
         {
-        Category category = new Category("Sources Global", color);
+        Category category = new Category(this, "Sources Global", color);
 
         JComponent comp;
         String[] params;
@@ -297,7 +297,7 @@ public class KawaiK4 extends Synth
 
     public JComponent addVibrato(Color color)
         {
-        Category category = new Category("Vibrato", color);
+        Category category = new Category(this, "Vibrato", color);
 
         JComponent comp;
         String[] params;
@@ -325,7 +325,7 @@ public class KawaiK4 extends Synth
 
     public JComponent addAutoBend(Color color)
         {
-        Category category = new Category("Auto Bend", color);
+        Category category = new Category(this, "Auto Bend", color);
 
         JComponent comp;
         String[] params;
@@ -351,7 +351,7 @@ public class KawaiK4 extends Synth
 
     public JComponent addLFO(Color color)
         {
-        Category category = new Category("LFO ", color);
+        Category category = new Category(this, "LFO ", color);
 
         JComponent comp;
         String[] params;
@@ -383,7 +383,7 @@ public class KawaiK4 extends Synth
 
     public JComponent addSource(int src, Color color)
         {
-        Category category = new Category("Source " + src, color);
+        Category category = new Category(this, "Source " + src, color);
 
         JComponent comp;
         String[] params;
@@ -454,7 +454,7 @@ public class KawaiK4 extends Synth
     /** Add add a DCA category */
     public JComponent addEnvelope(int envelope, Color color)
         {
-        Category category = new Category("Envelope " + envelope, color);
+        Category category = new Category(this, "Envelope " + envelope, color);
 
         JComponent comp;
         String[] params;
@@ -511,7 +511,7 @@ public class KawaiK4 extends Synth
 
     public JComponent addFilter(int filter, Color color)
         {
-        Category category = new Category("Filter " + filter, color);
+        Category category = new Category(this, "Filter " + filter, color);
                 
         JComponent comp;
         String[] params;
@@ -558,7 +558,7 @@ public class KawaiK4 extends Synth
 
     public JComponent addFilterEnvelope(int filterenv, Color color)
         {
-        Category category = new Category("Filter Envelope " + filterenv, color);
+        Category category = new Category(this, "Filter Envelope " + filterenv, color);
                 
         JComponent comp;
         String[] params;

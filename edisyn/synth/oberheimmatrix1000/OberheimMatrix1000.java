@@ -200,7 +200,7 @@ public class OberheimMatrix1000 extends Synth
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
-        Category globalCategory = new Category(getSynthName(), color);
+        Category globalCategory = new Category(this, getSynthName(), color);
                 
         JComponent comp;
         String[] params;
@@ -238,7 +238,7 @@ public class OberheimMatrix1000 extends Synth
 
     public JComponent addOscillatorGlobal(Color color)
         {
-        Category category = new Category("Keyboard", color);
+        Category category = new Category(this, "Keyboard", color);
 
         JComponent comp;
         String[] params;
@@ -282,7 +282,7 @@ public class OberheimMatrix1000 extends Synth
     /** Add an Oscillator category */
     public JComponent addOscillator(int osc, Color color)
         {
-        Category category = new Category("Oscillator " + osc, color);
+        Category category = new Category(this, "Oscillator " + osc, color);
 
         JComponent comp;
         String[] params;
@@ -369,7 +369,7 @@ public class OberheimMatrix1000 extends Synth
 
     public JComponent addFilter(Color color)
         {
-        Category category = new Category("Filter", color);
+        Category category = new Category(this, "Filter", color);
                 
         JComponent comp;
         String[] params;
@@ -428,7 +428,7 @@ public class OberheimMatrix1000 extends Synth
     /** Add Amplifier and Pan category */
     public JComponent addAmplifier(Color color)
         {
-        Category category = new Category("Amplifier", color);
+        Category category = new Category(this, "Amplifier", color);
                 
         JComponent comp;
         String[] params;
@@ -454,7 +454,7 @@ public class OberheimMatrix1000 extends Synth
     /** Add an LFO category */
     public JComponent addLFO(final int lfo, Color color)
         {
-        Category category = new Category("LFO " + lfo + 
+        Category category = new Category(this, "LFO " + lfo + 
             (lfo == 1 ? "   (Oscillator Frequency)" : "   (Oscillator Pulsewidth)"), color);
                 
         JComponent comp;
@@ -511,7 +511,7 @@ public class OberheimMatrix1000 extends Synth
     /** Add a "standard" envelope category */
     public JComponent addEnvelope(final int env, Color color)
         {
-        Category category = new Category("Envelope " + env + 
+        Category category = new Category(this, "Envelope " + env + 
                 (env == 1 ? "   (Filter Frequency)" :
                 (env == 2 ?  "   (Amplitude)" : "   (Filter FM)")), color);
                 
@@ -606,7 +606,7 @@ public class OberheimMatrix1000 extends Synth
     /** Add free envelope category */
     public JComponent addTracking(Color color)
         {
-        Category category = new Category("Tracking Generator", color);
+        Category category = new Category(this, "Tracking Generator", color);
                 
         JComponent comp;
         String[] params;
@@ -641,7 +641,7 @@ public class OberheimMatrix1000 extends Synth
     /** Add free envelope category */
     public JComponent addRamp(int ramp, Color color)
         {
-        Category category = new Category("Ramp " + ramp +
+        Category category = new Category(this, "Ramp " + ramp +
             (ramp == 1 ? "   (LFO 1 Amplitude)" : "   (LFO 2 Amplitude)"), color);
                 
         JComponent comp;
@@ -668,7 +668,7 @@ public class OberheimMatrix1000 extends Synth
     /** Add the Modulation category */
     public JComponent addModulation(Color color)
         {
-        Category category  = new Category("Modulation", color);
+        Category category  = new Category(this, "Modulation", color);
                         
         JComponent comp;
         String[] params;

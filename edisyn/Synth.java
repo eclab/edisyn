@@ -35,7 +35,6 @@ import edisyn.hillclimb.*;
 */
 
 public abstract class Synth extends JComponent implements Updatable
-
     {
     // Counter for total number of open windows.  When this drops to zero,
     // the program will quit automatically.
@@ -60,6 +59,8 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem redoMenu;
     public JMenuItem receiveCurrent;
     public JMenu merge;
+    public JMenuItem editMutationMenu;
+    public JCheckBoxMenuItem recombinationToggle;
     
     public HillClimbPanel hillclimbpanel;
     
@@ -75,10 +76,22 @@ public abstract class Synth extends JComponent implements Updatable
     /** Returns the model associated with this editor. */
     public Model getModel() { return model; }
 
-
-
-
-
+	boolean useMapForRecombination = true;
+	boolean showingMutation = false;
+	public boolean isShowingMutation() { return showingMutation; }
+	public void setShowingMutation(boolean val) { showingMutation = val; repaint(); }
+	public MutationMap mutationMap;
+	public String[] getMutationKeys()
+		{
+		String[] keys = getModel().getKeys();
+		ArrayList list = new ArrayList();
+		for(int i = 0; i < keys.length; i++)
+			{
+			if (mutationMap.isFree(keys[i]))
+				list.add(keys[i]);
+			}
+		return (String[])(list.toArray(new String[0]));
+		}
 
 	/////// CREATION AND CONSTRUCTION
 
@@ -87,11 +100,13 @@ public abstract class Synth extends JComponent implements Updatable
         model = new Model();
         model.register(Model.ALL_KEYS, this);
         model.setUndoListener(undo);
-        undo.setWillPush(false);  // instantiate undoes this
-        random = new Random(System.currentTimeMillis());
         ccmap = new CCMap(Prefs.getAppPreferences(getSynthNameLocal(), "CCKey"),
         				  Prefs.getAppPreferences(getSynthNameLocal(), "CCType"));
-        setLayout(new BorderLayout());
+ 		mutationMap = new MutationMap(Prefs.getAppPreferences(getSynthNameLocal(), "Mutation"));
+
+        undo.setWillPush(false);  // instantiate undoes this
+        random = new Random(System.currentTimeMillis());
+         setLayout(new BorderLayout());
         add(tabs, BorderLayout.CENTER);
         tabs.addChangeListener(new ChangeListener()
         	{
@@ -1199,7 +1214,7 @@ public abstract class Synth extends JComponent implements Updatable
 
         Synth newSynth = instantiate(Synth.this.getClass(), getSynthNameLocal(), true, false, tuple);
         newSynth.parse(data, true);
-        model.recombine(random, newSynth.getModel(), probability);
+        model.recombine(random, newSynth.getModel(), useMapForRecombination ? getMutationKeys() : model.getKeys(), probability);
         revise();  // just in case
                 
         undo.setWillPush(true);
@@ -1333,15 +1348,16 @@ public abstract class Synth extends JComponent implements Updatable
             String synthName = getSynthNameLocal().trim();
             String patchName = "        " + (getPatchName() == null ? "" : getPatchName().trim());
             String fileName = (file == null ? "        Untitled" : "        " + file.getName());
-            String disconnectedWarning = ((tuple == null || tuple.in == null) ? "  DISCONNECTED" : "");
-            String learningWarning = (learning ? "  LEARNING" +
+            String disconnectedWarning = ((tuple == null || tuple.in == null) ? "   DISCONNECTED" : "");
+            String learningWarning = (learning ? "   LEARNING" +
                     (model.getLastKey() != null ? " " + model.getLastKey() + 
                     (model.getRange(model.getLastKey()) > 0 ? "[" + model.getRange(model.getLastKey()) + "]" : "") + 
                     (ccmap.getCCForKey(model.getLastKey()) >= 0 ? "=" + nameForCC(ccmap.getCCForKey(model.getLastKey()),
                     													 ccmap.getPaneForKey(model.getLastKey())) : "")
                     : "") : "");
+            String restrictingWarning = (isShowingMutation() ? "   MUTATION PARAMETERS" : "");
         
-            frame.setTitle(synthName + fileName + "        " + disconnectedWarning + learningWarning);
+            frame.setTitle(synthName + fileName + "        " + disconnectedWarning + learningWarning + restrictingWarning);
             }
         }
                 
@@ -1459,7 +1475,8 @@ public abstract class Synth extends JComponent implements Updatable
                 
         return lastDir;         
         }
-        
+    
+    
     // sets the last directory used by load, save, or save as
     void setLastDirectory(String path) { setLastX(path, "LastDirectory", getSynthNameLocal()); }
     // sets the last directory used by load, save, or save as
@@ -1618,6 +1635,283 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });            
             
+        
+        menu.addSeparator();
+        
+        JMenuItem reset = new JMenuItem("Reset");
+        menu.add(reset);
+        reset.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doReset();
+                }
+            });
+
+        JMenu randomize = new JMenu("Randomize");
+        menu.add(randomize);
+        JMenuItem randomize1 = new JMenuItem("Randomize by 1%");
+        randomize.add(randomize1);
+        JMenuItem randomize5 = new JMenuItem("Randomize by 5%");
+        randomize.add(randomize5);
+        JMenuItem randomize10 = new JMenuItem("Randomize by 10%");
+        randomize.add(randomize10);
+        JMenuItem randomize25 = new JMenuItem("Randomize by 25%");
+        randomize.add(randomize25);
+        JMenuItem randomize50 = new JMenuItem("Randomize by 50%");
+        randomize.add(randomize50);
+        JMenuItem randomize100 = new JMenuItem("Randomize by 100%");
+        randomize.add(randomize100);
+        JMenuItem undoAndRandomize = new JMenuItem("Undo and Randomize Again");
+        randomize.add(undoAndRandomize);
+        JMenuItem hillclimb = new JMenuItem("Hill Climb");
+        randomize.add(hillclimb);
+        
+        hillclimb.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                { 
+                if (hillclimbpanel == null)
+                	hillclimbpanel = new HillClimbPanel(Synth.this);
+
+				hillclimbpanel.init();
+                hillclimbpanel.setVisible(true);
+                }
+            });
+        
+        randomize1.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doMutate(0.01);
+                }
+            });
+        randomize1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+
+        randomize5.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doMutate(0.05);
+                }
+            });
+        randomize5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+
+        randomize10.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doMutate(0.1);
+                }
+            });
+        randomize10.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+
+        randomize25.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doMutate(0.25);
+                }
+            });
+
+        randomize50.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doMutate(0.5);
+                }
+            });
+
+        randomize100.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doMutate(1.0);
+                }
+            });
+
+        undoAndRandomize.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                if (undo.shouldShowUndoMenu())
+                	{
+                	if (lastMutate > 0.0)
+                		{
+                		doUndo();
+	                	doMutate(lastMutate);
+	                	}
+	            	else
+	            		showSimpleError("Undo", "Can't Undo and Randomize Again: no previous randomize!");
+	                }
+	            else
+	            	showSimpleError("Undo", "Can't Undo and Randomize Again: nothing to undo!");
+                }
+            });
+        undoAndRandomize.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+
+
+        JMenu nudgemenu = new JMenu("Nudge");
+        menu.add(nudgemenu);
+        
+        nudgeTowards[0] = new JMenuItem("Towards 1");
+        nudgemenu.add(nudgeTowards[0]);
+        nudgeTowards[0].addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doNudge(0);
+                }
+            });
+                
+        nudgeTowards[1] = new JMenuItem("Towards 2");
+        nudgemenu.add(nudgeTowards[1]);
+        nudgeTowards[1].addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doNudge(1);
+                }
+            });
+                
+        nudgeTowards[2] = new JMenuItem("Towards 3");
+        nudgemenu.add(nudgeTowards[2]);
+        nudgeTowards[2].addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doNudge(2);
+                }
+            });
+                
+        nudgeTowards[3] = new JMenuItem("Towards 4");
+        nudgemenu.add(nudgeTowards[3]);
+        nudgeTowards[3].addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doNudge(3);
+                }
+            });
+        
+        JMenuItem undoAndNudge = new JMenuItem("Undo and Nudge Again");
+        nudgemenu.add(undoAndNudge);
+        undoAndNudge.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                if (undo.shouldShowUndoMenu())
+                	{
+                	if (lastNudge > -1)
+                		{
+	                	doUndo();
+		                doNudge(lastNudge);
+		                }
+	            	else
+	            		showSimpleError("Undo", "Can't Undo and Nudge Again: no previous nudge!");
+	                }
+	            else
+	            	showSimpleError("Undo", "Can't Undo and Nudge Again: nothing to undo!");
+                }
+            });
+
+        nudgemenu.addSeparator();
+        
+        JMenuItem nudgeSet1 = new JMenuItem("Set 1");
+        nudgemenu.add(nudgeSet1);
+        nudgeSet1.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doSetNudge(0);
+                }
+            });
+                
+        JMenuItem nudgeSet2 = new JMenuItem("Set 2");
+        nudgemenu.add(nudgeSet2);
+        nudgeSet2.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doSetNudge(1);
+                }
+            });
+                
+        JMenuItem nudgeSet3 = new JMenuItem("Set 3");
+        nudgemenu.add(nudgeSet3);
+        nudgeSet3.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doSetNudge(2);
+                }
+            });
+                
+        JMenuItem nudgeSet4 = new JMenuItem("Set 4");
+        nudgemenu.add(nudgeSet4);
+        nudgeSet4.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doSetNudge(3);
+                }
+            });
+        
+        for(int i = 0; i < nudge.length; i++)
+        	doSetNudge(i);
+                
+
+
+            
+        menu.addSeparator();
+        
+        editMutationMenu = new JMenuItem("Edit Mutation Parameters");
+        menu.add(editMutationMenu);
+        editMutationMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doToggleMutationMapEdit();
+                }
+            });
+
+        JMenuItem clearAllMutationRestrictions = new JMenuItem("Clear All Mutation Parameters");
+        menu.add(clearAllMutationRestrictions);
+        clearAllMutationRestrictions.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doSetAllMutationMap(false);
+                }
+            });
+                
+        JMenuItem setAllMutationRestrictions = new JMenuItem("Set All Mutation Parameters");
+        menu.add(setAllMutationRestrictions);
+        setAllMutationRestrictions.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doSetAllMutationMap(true);
+                }
+            });
+
+        recombinationToggle = new JCheckBoxMenuItem("Use Parameters for Nudge/Merge");
+        menu.add(recombinationToggle);
+        recombinationToggle.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				useMapForRecombination = !useMapForRecombination;
+				recombinationToggle.setSelected(useMapForRecombination);
+				setLastX("" + useMapForRecombination, "UseParametersForRecombination", getSynthNameLocal()); 
+                }
+            });
+		String recomb = getLastX("UseParametersForRecombination", getSynthNameLocal());
+		if (recomb == null) recomb = "true";
+		useMapForRecombination = Boolean.parseBoolean(recomb);
+		recombinationToggle.setSelected(useMapForRecombination);
+
+            
         menu = new JMenu("MIDI");
         menubar.add(menu);
                 
@@ -1709,200 +2003,6 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
                 
-        JMenu randomize = new JMenu("Randomize");
-        menu.add(randomize);
-        JMenuItem randomize1 = new JMenuItem("Randomize by 1%");
-        randomize.add(randomize1);
-        JMenuItem randomize5 = new JMenuItem("Randomize by 5%");
-        randomize.add(randomize5);
-        JMenuItem randomize10 = new JMenuItem("Randomize by 10%");
-        randomize.add(randomize10);
-        JMenuItem randomize25 = new JMenuItem("Randomize by 25%");
-        randomize.add(randomize25);
-        JMenuItem randomize50 = new JMenuItem("Randomize by 50%");
-        randomize.add(randomize50);
-        JMenuItem randomize100 = new JMenuItem("Randomize by 100%");
-        randomize.add(randomize100);
-        JMenuItem undoAndRandomize = new JMenuItem("Undo and Randomize Again");
-        randomize.add(undoAndRandomize);
-        JMenuItem hillclimb = new JMenuItem("Hill Climb");
-        randomize.add(hillclimb);
-        
-        hillclimb.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                { 
-                if (hillclimbpanel == null)
-                	hillclimbpanel = new HillClimbPanel(Synth.this);
-
-				hillclimbpanel.init();
-                hillclimbpanel.setVisible(true);
-                }
-            });
-        
-        randomize1.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doMutate(0.01);
-                }
-            });
-        randomize1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-
-        randomize5.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doMutate(0.05);
-                }
-            });
-        randomize5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-
-        randomize10.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doMutate(0.1);
-                }
-            });
-        randomize10.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-
-        randomize25.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doMutate(0.25);
-                }
-            });
-
-        randomize50.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doMutate(0.5);
-                }
-            });
-
-        randomize100.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doMutate(1.0);
-                }
-            });
-
-        undoAndRandomize.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doUndo();
-                doMutate(lastMutate);
-                }
-            });
-        undoAndRandomize.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-
-
-        JMenuItem reset = new JMenuItem("Reset");
-        menu.add(reset);
-        reset.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doReset();
-                }
-            });
-
-        JMenu nudgemenu = new JMenu("Nudge");
-        menu.add(nudgemenu);
-        
-        nudgeTowards[0] = new JMenuItem("Towards 1");
-        nudgemenu.add(nudgeTowards[0]);
-        nudgeTowards[0].addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doNudge(0);
-                }
-            });
-                
-        nudgeTowards[1] = new JMenuItem("Towards 2");
-        nudgemenu.add(nudgeTowards[1]);
-        nudgeTowards[1].addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doNudge(1);
-                }
-            });
-                
-        nudgeTowards[2] = new JMenuItem("Towards 3");
-        nudgemenu.add(nudgeTowards[2]);
-        nudgeTowards[2].addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doNudge(2);
-                }
-            });
-                
-        nudgeTowards[3] = new JMenuItem("Towards 4");
-        nudgemenu.add(nudgeTowards[3]);
-        nudgeTowards[3].addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doNudge(3);
-                }
-            });
-        
-        nudgemenu.addSeparator();
-        
-        JMenuItem nudgeSet1 = new JMenuItem("Set 1");
-        nudgemenu.add(nudgeSet1);
-        nudgeSet1.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doSetNudge(0);
-                }
-            });
-                
-        JMenuItem nudgeSet2 = new JMenuItem("Set 2");
-        nudgemenu.add(nudgeSet2);
-        nudgeSet2.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doSetNudge(1);
-                }
-            });
-                
-        JMenuItem nudgeSet3 = new JMenuItem("Set 3");
-        nudgemenu.add(nudgeSet3);
-        nudgeSet3.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doSetNudge(2);
-                }
-            });
-                
-        JMenuItem nudgeSet4 = new JMenuItem("Set 4");
-        nudgemenu.add(nudgeSet4);
-        nudgeSet4.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doSetNudge(3);
-                }
-            });
-        
-        for(int i = 0; i < nudge.length; i++)
-        	doSetNudge(i);
-                
-
-
-
         menu.addSeparator();
 
         writeTo = new JMenuItem("Write to Patch...");
@@ -2298,6 +2398,9 @@ public abstract class Synth extends JComponent implements Updatable
                 
     void doReset()
         {
+        if (!showSimpleConfirm("Reset", "Reset the parameters to initial values?"))
+        	return;
+        	
         setSendMIDI(false);
         // because loadDefaults isn't wrapped in an undo, we have to
         // wrap it manually here
@@ -2498,12 +2601,15 @@ javax.swing.Timer sendTestNotesTimer;
 		nudgeTowards[i].setText("Towards " + (i + 1) + ": " + getPatchName());
 		}
 
+	int lastNudge = -1;
+	
 	void doNudge(int towards)
 		{
+		if (towards == -1) return;
+		
         setSendMIDI(false);
         undo.push(model);
-        model.recombine(random, nudge[towards], 0.5);
-        //model.mutate(random, 0.01);
+        model.recombine(random, nudge[towards], useMapForRecombination ? getMutationKeys() : model.getKeys(), 0.5);
         revise();  // just in case
 
         setSendMIDI(true);
@@ -2516,17 +2622,22 @@ javax.swing.Timer sendTestNotesTimer;
         // into the Blofeld, and it makes no difference!  For some reason the OS X
         // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
         repaint();
+        
+        lastNudge = towards;
 		}
 
 double lastMutate = 0.0;
 
     void doMutate(double probability)
         {
+        if (probability == 0.0) 
+        	return;
+        	
         setSendMIDI(false);
         undo.setWillPush(false);
         Model backup = (Model)(model.clone());
                 
-        model.mutate(random, probability);
+        model.mutate(random, getMutationKeys(), probability);
         revise();  // just in case
                 
         undo.setWillPush(true);
@@ -2843,10 +2954,43 @@ double lastMutate = 0.0;
     	frame.setVisible(true);
     	}
     	
+    void doToggleMutationMapEdit()
+    	{
+    	setShowingMutation(!isShowingMutation());
+    	if (isShowingMutation())
+			{
+    		editMutationMenu.setText("Stop Editing Mutation Parameters");
+			}
+		else
+    		{
+    		editMutationMenu.setText("Edit Mutation Parameters");
+    		}
+    	repaint();
+    	updateTitle();
+    	}
     	
-    	
-    	
-    	
+    void doSetAllMutationMap(boolean val)
+    	{
+    	String title = "Clear All Mutation Parameters";
+    	String message = "Are you sure you want to make all parameters immutable?";
+			
+		if (val)
+			{
+	    	title = "Set All Mutation Parameters";
+	    	message = "Are you sure you want to make all parameters mutable?";
+	    	}
+	    	
+    	if (showSimpleConfirm(title, message))
+			{
+			String[] keys = getModel().getKeys();
+			for(int i = 0; i < keys.length; i++)
+				{
+				mutationMap.setFree(keys[i], val);
+				}
+			}
+			
+		repaint();
+    	}    	
     	
     	
     	

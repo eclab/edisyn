@@ -162,7 +162,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
-        Category globalCategory = new Category("Waldorf Microwave II/XT/XTk Multi", color);
+        Category globalCategory = new Category(this, "Waldorf Microwave II/XT/XTk [Multi]", color);
                 
         JComponent comp;
         String[] params;
@@ -202,7 +202,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
     public JComponent addMultiData(Color color)
         {
-        Category category = new Category("General", color);
+        Category category = new Category(this, "General", color);
                 
         JComponent comp;
         String[] params;
@@ -254,7 +254,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
     public JComponent addInstrument(final int inst, Color color)
         {
-        Category category = new Category("Instrument " + inst, color);
+        Category category = new Category(this, "Instrument " + inst, color);
                 
         JComponent comp;
         String[] params;

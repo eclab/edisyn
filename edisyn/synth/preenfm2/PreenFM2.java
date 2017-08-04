@@ -268,7 +268,7 @@ public class PreenFM2 extends Synth
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
-        Category globalCategory = new Category("PreenFM2", color);
+        Category globalCategory = new Category(this, "PreenFM2", color);
                 
         JComponent comp;
         String[] params;
@@ -318,7 +318,7 @@ public class PreenFM2 extends Synth
      
     public JComponent addGeneral(Color color)
         {
-        Category globalCategory = new Category("Instrument", color);
+        Category globalCategory = new Category(this, "Instrument", color);
                 
         JComponent comp;
         String[] params;
@@ -368,7 +368,7 @@ public class PreenFM2 extends Synth
 
     public JComponent addMix(Color color)
         {
-        Category globalCategory = new Category("Outputs", color);
+        Category globalCategory = new Category(this, "Outputs", color);
                 
         JComponent comp;
         String[] params;
@@ -410,7 +410,7 @@ public class PreenFM2 extends Synth
 
     public JComponent addModulationIndices(Color color)
         {
-        Category globalCategory = new Category("Operator Modulation Indices", color);
+        Category globalCategory = new Category(this, "Operator Modulation Indices", color);
                 
         JComponent comp;
         String[] params;
@@ -459,7 +459,7 @@ public class PreenFM2 extends Synth
 	
     public JComponent addFilter(Color color)
         {
-        Category globalCategory = new Category("Filter", color);
+        Category globalCategory = new Category(this, "Filter", color);
                 
         JComponent comp;
         String[] params;
@@ -560,7 +560,7 @@ public class PreenFM2 extends Synth
         
     public JComponent addArpeggiator(Color color)
         {
-        Category globalCategory = new Category("Arpeggiator", color);
+        Category globalCategory = new Category(this, "Arpeggiator", color);
                 
         JComponent comp;
         String[] params;
@@ -619,7 +619,7 @@ public class PreenFM2 extends Synth
 
     public JComponent addOperator(final int op, Color color)
         {
-        Category category = new Category("Operator " + op, color);
+        Category category = new Category(this, "Operator " + op, color);
                 
         JComponent comp;
         String[] params;
@@ -795,7 +795,7 @@ public class PreenFM2 extends Synth
     /** Add the Modulation category */
     public JComponent addModulation(Color color)
         {
-        Category category  = new Category("Modulation", color);
+        Category category  = new Category(this, "Modulation", color);
                         
         JComponent comp;
         String[] params;
@@ -857,7 +857,7 @@ public class PreenFM2 extends Synth
 
     public JComponent addPerformanceParameters(Color color)
         {
-        Category category  = new Category("Performance Parameters", color);
+        Category category  = new Category(this, "Performance Parameters", color);
                         
         JComponent comp;
         String[] params;
@@ -884,7 +884,7 @@ public class PreenFM2 extends Synth
 
     public JComponent addLFO(int lfo, Color color)
         {
-        Category category  = new Category("LFO " + lfo, color);
+        Category category  = new Category(this, "LFO " + lfo, color);
                         
         JComponent comp;
         String[] params;
@@ -964,7 +964,7 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
     /** Add a "standard" envelope category */
     public JComponent addEnvelope(final int env, Color color)
         {
-        Category category = new Category("Envelope " + env, color);
+        Category category = new Category(this, "Envelope " + env, color);
                 
         JComponent comp;
         String[] params;
@@ -1053,7 +1053,7 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
 
     public JComponent addStepSequencer(int seq, Color color)
         {
-        Category category  = new Category("Step Sequencer " + seq, color);
+        Category category  = new Category(this, "Step Sequencer " + seq, color);
                                 
         JComponent comp;
         String[] params;
@@ -1115,7 +1115,7 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
 
     public JComponent addNoteScaling(int note, Color color)
         {
-        Category category  = new Category("Note " + note + " MIDI Scaling", color);
+        Category category  = new Category(this, "Note " + note + " MIDI Scaling", color);
                                 
         JComponent comp;
         String[] params;

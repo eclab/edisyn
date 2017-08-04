@@ -136,7 +136,7 @@ public class KawaiK4Multi extends Synth
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
-        Category globalCategory = new Category(getSynthName(), color);
+        Category globalCategory = new Category(this, getSynthName(), color);
                 
         JComponent comp;
         String[] params;
@@ -178,7 +178,7 @@ public class KawaiK4Multi extends Synth
 
     public JComponent addGlobal( Color color)
         {
-        Category category = new Category("Global", color);
+        Category category = new Category(this, "Global", color);
 
         JComponent comp;
         String[] params;
@@ -198,7 +198,7 @@ public class KawaiK4Multi extends Synth
 
     public JComponent addSection(int src, Color color)
         {
-        Category category = new Category("Section " + src, color);
+        Category category = new Category(this, "Section " + src, color);
 
         JComponent comp;
         String[] params;

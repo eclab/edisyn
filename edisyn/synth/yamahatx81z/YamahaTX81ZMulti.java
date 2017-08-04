@@ -122,7 +122,7 @@ public class YamahaTX81ZMulti extends Synth
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
-        Category globalCategory = new Category(getSynthName(), color);
+        Category globalCategory = new Category(this, getSynthName(), color);
                 
         JComponent comp;
         String[] params;
@@ -164,7 +164,7 @@ public class YamahaTX81ZMulti extends Synth
 
     public JComponent addGlobal( Color color)
         {
-        Category category = new Category("Global", color);
+        Category category = new Category(this, "Global", color);
 
         JComponent comp;
         String[] params;
@@ -205,7 +205,7 @@ public class YamahaTX81ZMulti extends Synth
 
     public JComponent addInstrument(final int src, Color color)
         {
-        final Category category = new Category("Instrument " + src, color);
+        final Category category = new Category(this, "Instrument " + src, color);
 
         JComponent comp;
         String[] params;

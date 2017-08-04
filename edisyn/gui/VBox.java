@@ -22,7 +22,7 @@ import java.awt.event.*;
    @author Sean Luke
 */
 
-public class VBox extends JComponent
+public class VBox extends JComponent implements Gatherable
     {
     Box box;
     JComponent bottom;
@@ -74,6 +74,24 @@ public class VBox extends JComponent
     public void remove(JComponent component)
         {
         box.remove(component);
-        }        
+        }   
+        
+    public void gatherAllComponents(java.util.ArrayList list)
+    	{
+    	Component[] c = box.getComponents();
+    	for(int i = 0; i < c.length; i++)
+    		{
+    		list.add(c[i]);
+    		if (c[i] instanceof Gatherable)
+    			((Gatherable)c[i]).gatherAllComponents(list);
+			}  
+			
+		if (bottom != null)
+			{ 			
+			list.add(bottom);
+			if (bottom instanceof Gatherable)
+				((Gatherable)bottom).gatherAllComponents(list);
+			}		
+    	}
         
     }

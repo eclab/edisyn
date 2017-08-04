@@ -24,7 +24,7 @@ import java.awt.event.*;
    @author Sean Luke
 */
 
-public class HBox extends JComponent
+public class HBox extends JComponent implements Gatherable
     {
     Box box;
     JPanel panel = new JPanel();
@@ -95,4 +95,21 @@ public class HBox extends JComponent
         {
         box.add(component);
         }
+
+    public void gatherAllComponents(java.util.ArrayList list)
+    	{
+    	Component[] c = box.getComponents();
+    	for(int i = 0; i < c.length; i++)
+    		{
+    		list.add(c[i]);
+    		if (c[i] instanceof Gatherable)
+    			((Gatherable)c[i]).gatherAllComponents(list);
+			}    			
+    	if (lastComponent != null)
+    		{
+    		list.add(lastComponent);
+			if (lastComponent instanceof Gatherable)
+				((Gatherable)lastComponent).gatherAllComponents(list);
+			}  			
+    	}
     }

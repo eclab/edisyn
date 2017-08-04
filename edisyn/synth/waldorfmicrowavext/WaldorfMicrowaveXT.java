@@ -262,7 +262,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
-        Category globalCategory = new Category("Waldorf Microwave II/XT/XTk", color);
+        Category globalCategory = new Category(this, "Waldorf Microwave II/XT/XTk", color);
                 
         JComponent comp;
         String[] params;
@@ -303,7 +303,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add the Global Oscillator category */
     public JComponent addWavetable(Color color)
         {
-        Category category = new Category("Waves", color);
+        Category category = new Category(this, "Waves", color);
                 
         JComponent comp;
         String[] params;
@@ -329,7 +329,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add the Quality category */    
     public JComponent addQuality(Color color)
         {
-        Category category = new Category("Quality", color);
+        Category category = new Category(this, "Quality", color);
                 
         JComponent comp;
         String[] params;
@@ -376,7 +376,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add the Mixer category */    
     public JComponent addMixer(Color color)
         {
-        Category category = new Category("Mixer", color);
+        Category category = new Category(this, "Mixer", color);
                 
         JComponent comp;
         String[] params;
@@ -422,7 +422,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add an Oscillator category */
     public JComponent addOscillator(int osc, Color color)
         {
-        Category category = new Category("Oscillator " + osc, color);
+        Category category = new Category(this, "Oscillator " + osc, color);
 
         JComponent comp;
         String[] params;
@@ -536,7 +536,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add an Oscillator category */
     public JComponent addWave(int wave, Color color)
         {
-        Category category = new Category("Wave " + wave, color);
+        Category category = new Category(this, "Wave " + wave, color);
 
         JComponent comp;
         String[] params;
@@ -629,7 +629,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add a Filter1 category */
     public JComponent addFilter1(Color color)
         {
-        Category category = new Category("Filter 1", color);
+        Category category = new Category(this, "Filter 1", color);
                 
         JComponent comp;
         String[] params;
@@ -709,7 +709,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add a Filter2 category */
     public JComponent addFilter2(Color color)
         {
-        Category category = new Category("Filter 2", color);
+        Category category = new Category(this, "Filter 2", color);
                 
         JComponent comp;
         String[] params;
@@ -744,7 +744,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add Play Parameter category */
     public JComponent addPlayParameters(Color color)
         {
-        Category category = new Category("Play Parameters", color);
+        Category category = new Category(this, "Play Parameters", color);
                 
         JComponent comp;
         String[] params = PLAY_PARAMETERS;
@@ -764,7 +764,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add Amplifier and Pan category */
     public JComponent addAmplifier(Color color)
         {
-        Category category = new Category("Amplifier and Pan", color);
+        Category category = new Category(this, "Amplifier and Pan", color);
                 
         JComponent comp;
         String[] params;
@@ -830,7 +830,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add Glid Category */
     public JComponent addGlide(Color color)
         {
-        Category category = new Category("Glide", color);
+        Category category = new Category(this, "Glide", color);
                 
         JComponent comp;
         String[] params;
@@ -861,7 +861,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add an LFO category */
     public JComponent addLFO(final int lfo, Color color)
         {
-        Category category = new Category("LFO " + lfo, color);
+        Category category = new Category(this, "LFO " + lfo, color);
                 
         JComponent comp;
         String[] params;
@@ -945,7 +945,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add a "standard" envelope category */
     public JComponent addEnvelope(final int env, Color color)
         {
-        Category category = new Category(env == 1 ? "Filter Envelope" : "Amplifier Envelope", color);
+        Category category = new Category(this, env == 1 ? "Filter Envelope" : "Amplifier Envelope", color);
                 
         JComponent comp;
         String[] params;
@@ -979,7 +979,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add wave envelope category */
     public JComponent addWaveEnvelope(Color color)
         {
-        Category category = new Category("Wave Envelope", color);
+        Category category = new Category(this, "Wave Envelope", color);
                 
         JComponent comp;
         String[] params;
@@ -1037,7 +1037,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add free envelope category */
     public JComponent addFreeEnvelope(Color color)
         {
-        Category category = new Category("Free Envelope", color);
+        Category category = new Category(this, "Free Envelope", color);
                 
         JComponent comp;
         String[] params;
@@ -1080,7 +1080,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add "standard" envelope display */
     public JComponent addEnvelopeDisplay(final int env, Color color)
         {
-        Category category = new Category(env == 1 ? "Filter" : "Amplifier", color);
+        Category category = new Category(this, env == 1 ? "Filter" : "Amplifier", color);
                 
         JComponent comp;
         String[] params;
@@ -1102,7 +1102,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add free envelope display */
     public JComponent addFreeEnvelopeDisplay(Color color)
         {
-        Category category = new Category("Free", color);
+        Category category = new Category(this, "Free", color);
                 
         JComponent comp;
         String[] params;
@@ -1126,7 +1126,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add wave envelope display */
     public JComponent addWaveEnvelopeDisplay(Color color)
         {
-        Category category = new Category("Wave", color);
+        Category category = new Category(this, "Wave", color);
                 
         JComponent comp;
         String[] params;
@@ -1160,7 +1160,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add allocation/assignment category */
     public JComponent addAllocation(Color color)
         {
-        Category category = new Category("Allocation", color);
+        Category category = new Category(this, "Allocation", color);
                 
         JComponent comp;
         String[] params;
@@ -1188,7 +1188,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add the Modulation category */
     public JComponent addModulation(Color color)
         {
-        Category category  = new Category("Modulation", color);
+        Category category  = new Category(this, "Modulation", color);
                         
         JComponent comp;
         String[] params;
@@ -1242,7 +1242,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add the Modifiers category */
     public JComponent addModifiers(Color color)
         {
-        Category category  = new Category("Modifiers", color);
+        Category category  = new Category(this, "Modifiers", color);
                         
         JComponent comp;
         String[] params;
@@ -1318,7 +1318,7 @@ public class WaldorfMicrowaveXT extends Synth
     /** Add the Modifiers category */
     public JComponent addArpeggiation(Color color)
         {
-        Category category  = new Category("Arpeggiation", color);
+        Category category  = new Category(this, "Arpeggiation", color);
                         
         final CheckBox[] arpeggiation = new CheckBox[16];
         
@@ -1614,7 +1614,7 @@ public class WaldorfMicrowaveXT extends Synth
 
         // Now we can set up the category as usual.
                 
-        Category category = new Category("Effects", color);
+        Category category = new Category(this, "Effects", color);
                         
         HBox main = new HBox();
         VBox vbox = new VBox();

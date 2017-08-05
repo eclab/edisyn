@@ -702,7 +702,6 @@ public class YamahaTX81Z extends Synth
                         yVals[i] = 1 - yVals[i];
                         }
                     }
-                                                
                 }
             };
         model.register("operator" + envelope + "shift", (Updatable)comp);

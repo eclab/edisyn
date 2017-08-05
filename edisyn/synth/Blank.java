@@ -390,6 +390,16 @@ public class Blank extends Synth
     	return true; 
     	}
         
+    public int getPauseAfterChangePatch()
+    	{
+    	// Some synths cannot accept MIDI messages for a while after a patch-change.
+    	// For example, the Blofeld has to wait for about 200ms.
+    	// Here you can specify that Edisyn must pause at least so many
+    	// milliseconds before issuing another MIDI message after you have
+    	// changed the patch via changePatch().
+    	return 0;
+    	}
+
     public int getPauseBetweenMIDISends() 
     	{
     	// Some synths cannot accept MIDI messages at full speed.  
@@ -432,6 +442,14 @@ public class Blank extends Synth
 		return super.sprout();
 		}
 
+	public boolean getExpectsRawCCFromSynth() 
+		{
+		// If your synthesizer sends individual parameter data to Edisyn not as sysex,
+		// and not as cooked CC messages (such as NRPN), but rather as raw CC messages,
+		// then you should override this method to return TRUE.  Generally it's kept FALSE,
+		// the default.
+		return false;
+		}
 
 
     }

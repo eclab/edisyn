@@ -13,6 +13,8 @@
 \usepackage{array}
 \usepackage{color}
 
+\sloppy
+
 \newcommand\myfrac[2]{#1/#2}
 \begin{document}
 
@@ -291,6 +293,458 @@ When a patch {\bf A} is {\it mutated}, it is modified with some degree of random
 \item Occasional parameters are {\it immutable}: they will refuse to be mutated.  These are typically things like patch names.
 \end{itemize}
 
+\section{Writing a Patch Editor}
 
+So you want to write a patch editor?  They're not easy.  But they're fun!  Here are some hints.
+
+Let's say you're adding a single (non-multimode) patch editor for the Yamaha DX7.  Here's what you'd do.
+
+\subsection{Step One: Create Files}
+
+Make a directory called {\tt edisyn/synth/yamahadx7}.  This directory will store your patch editor and any auxiliary files.  Next copy the file {\tt edisyn/synth/Blank.java} to {\tt edisyn/synth/yamahadx7/YamahaDX7.java}.  That'll be your patch editor code.  Also copy the file {\tt edisyn/synth/Blank.html} to {\tt edisyn/synth/yamahadx7/YamahaDX7.html}.  This will be the ``About'' documentation for your file.  You'll eventually fill it out.
+
+Modify the {\tt YamahaDX7.java} file to have the proper class name and package.
+
+Edit the {\tt edisyn/Synth.java} file.  In that file there is an array called:
+
+\begin{verbatim}
+public static final Class[] synths
+\end{verbatim}
+
+Add to this array your class:
+
+\begin{verbatim}
+    edisyn.synth.yamahadx7.YamahaDX7.class,
+\end{verbatim}
+
+Now Edisyn knows about your (currently nonexistent) patch file.
+
+Finally, implement the {\tt getSynthName()} and {\tt getHTMLResourceFileName} methods in your class file, along these lines:
+
+\begin{verbatim}
+public static String getSynthName() { return "Yamaha DX7"; }
+public static String getHTMLResourceFileName() { return "YamahaDX7.html"; }
+\end{verbatim}
+
+
+\subsection{Step Two: Get the UI Working}
+
+This is mostly the constructor and subsidiary functions.  Typically you will create one {\tt SynthPanel} for each tab in your editor.  A SynthPanel is little more than a JPanel with a black background: you can lay it out however you like.  However Edisyn typically lays it out as follows:
+
+\begin{enumerate}
+\item At the top level we have a {\bf VBox}.  This is a vertical Box to which you can add elements conveniently.  You can also designate an element to be the {\bf bottom} of the box, meaning it will take up all the remaining vertical space.
+\item In the VBox we will place one or more {\bf Categories}.  These are the large colorful named regions in Edisyn (like ``LFO'' or ``Oscillator''. 
+\item Typically inside a Category we'd put an {\bf HBox}.  This is a horizontal box to which you can add elements.  You can also designate an element to be the {\bf last item} of the box, meaning it will take up all the remaining horizontal space.
+\item Inside the HBox you put your widgets.  You might lay them out with additional VBoxes and HBoxes as you see fit. It's particularly common to one or more small widgets (check boxes, choosers) in a VBox, which will cause them to be top-aligned rather than vertically centered as they would if they were stuck directly in the HBox.  It's helpful to look at existing patch editors to see how they did it.
+\item If you need multiple rows, you should put a VBox in the Category, and then put HBoxes inside of that.
+\item You might have multiple Categories on the same row.  To do this, just put them in an HBox.  Make sure the final Category is designated to be the Last Item of the HBox.  You'd put this HBox in the top-level VBox instead of the Categories themselves.
+\end{enumerate}
+
+The first category is the {\bf Synth Category}.  It is typically named the same as {\tt getSynthName()}, its color is {\tt edisyn.gui.Style.COLOR\_GLOBAL}, and contains the patch name and patch/bank information, and perhaps a bit more (for example, Waldorf synthesizers have the ``category'' there too).
+
+To the right of the first category is usually (but not always) various global categories.  They're usually {\tt edisyn.gui.Style.COLOR\_A}.
+
+If you have additional categories, you might distinguish them using {\tt edisyn.gui.Style.COLOR\_B}, and eventually {\tt edisyn.gui.Style.COLOR\_C}.
+
+You can lay out the rest of the categories as you see fit.
+
+\paragraph{Think about Parameters}
+
+Synthesizer parameter values will be stored in your Synth object's {\bf Model}.  These parameters will be stored in your synth's {\bf Model} object.  Each parameter has a {\bf Key}.  Edisyn traditionally names the keys all lower case, plus numbers, with no spaces or hyphens or underscores, and tries to keep the keys fairly similar to how your synth sysex manual calls them.  They're usually described with a category descriptor (such as {\tt op3} and then the parameter name proper (such as {\it envattack}), resulting in the final key name {\it op3envattack}.  Various global parameters are just the parameter name: for example, it's standard in Edisyn that the patch name be just called {\it name}, the patch number is called {\it number}, and the bank number is called {\it bank}.
+
+Often parameters (as set by widgets) are exactly the same as the various elements you send and receive to the synthesizer.  But sometimes they're not.  Many synthesizers pack multiple parameters (like LFO Speed \(+\) Latch) together into a single variable, which is very irritating.  You want to lay out what the {\it real} parameters of your synthesizer are, that the user would be modifying, not what you'd be packing and sending to the synth.
+
+Another issue is how your synthesizer interprets values sent over sysex or NRPN.  Consider BPM for a moment.  Perhaps your synthesizer has BPM values of 20...300, and there are missing values (for example, there's no 21).  The actual values are mapped to the numbers 0...127.  What values should you store?  In my patch editors, I store the values in the model as 0...127, which makes it easy to emit them.  But then I have to have an elaborate conversion function to map them to 20...300 for display on-screen.
+
+Also some synthesizers have holes in their ranges.  For example, they might permit the values 0...17 and the values 20...100, but do not permit 18 and 19.  What to do then?  You should always compact them to be contiguous between some min and max: for example, you might compact it to 0...98.  When displayed, use a custom displayer, and when emitting or parsing them, you'll have to map them to your internal representation accordingly. 
+
+In general: your internal parameters should have contiguous ranges and make sense from a user perspective and not the synthesizer's weird worldview.
+
+So how to set parameters?  You usually don't add the key yourself, though you could.  Instead, normally you tell the widget the name of the parameter it's modifying (the key), and it adds it to the model on its own.  Parameters are either {\bf strings} or are {\bf numbers}.   Numerical parameters all have a {\bf min} and a {\t max} value, inclusive: usually the widget will set those for you.  They also may have a {\bf MetricMin} and  {\bf MetricMax} value, and you may need to set those manually.  
+
+MetricMin and MetricMax work like this.  Some numerical parameters are {\bf metric}, meaning they're a range of numbers where the order matters, such as 0--127.  Other numerical parameters are {\bf categorical} (or ``non-metric''), meaning that the numbers just represent an ID for the parameter.  For example, a list of wavetables is categorical: it doesn't {\it really} matter that wavetable 0 is ``HighHarm3'': it's just where it's stored in your synth.  
+
+Edisyn is smart about mutating and recombining metric parameters, but for non-metric ones it just picks a new random setting.  Sometimes your parameters are {\it both} metric and non-metric.  For example, some MIDI channel parameter might have the values 1--16 plus the non-metric values ``off'' (0), ``omni'' (17), and ``multi'' (18), or whatever.  In this case, your min is 0 and your max is 18.  But your {\it metric min} is 1 and your {\it metric max} is 16.  This tells Edisyn that values outside the metric min / metric max range should be treated as non-metric.\footnote{What if your synth has metric values on the outside and non-metric value on the inside? Edisyn can't handle that.  Thankfully I've not seen it yet.}  If you have this situation, you'll need to set the Metric Min and Metric Max manually.
+
+Parameters can be declared {\bf immutable}, meaning Edisyn can't mutate them or cross them over at all.  Also, all string parameters are automatically immutable.  You'll need to declare the others.
+
+\paragraph{Common Widgets}
+
+Edisyn has a number of widgets available.  Most widgets are associated with a single parameter (a ``key'').  There is no reason you can't have multiple widgets associated with the same key: when that parameter is updated, all associated widgets are updated.
+
+The most common widgets are:
+
+\begin{itemize}
+\item {\bf StringComponent}\quad This is the only String widget.  It's used for patch names.  For a patch name, you typically implement it like this:
+\begin{verbatim}
+String key = "name";  // the key in the model
+String instructions = "Name must be up to 10 ASCII characters.";
+JComponent comp = new StringComponent("Patch Name", this, "name", maxLength, instructions)
+    {
+    public String replace(String val)
+        {
+        return revisePatchName(val);
+        }
+    public void update(String key, Model model)
+        {
+        super.update(key, model);
+        updateTitle();
+        }
+    };
+\end{verbatim}
+
+In conjunction with this, you will want to override the {\bf revisePatchName(...)} method in your Synth subclass.  This method modifies a provided name and returns a corrected version.  The default version, which you might call first (via super), removes trailing whitespace.  You can then revise incorrect characters, length, and so on.
+
+\item {\bf Chooser}\quad This is a pop-up menu or combo box, and it's a numerical component.  You provide it with an array of strings representing the parameter values 0...{\it n}.  For example, you might set up a wavetable chooser as:
+
+\begin{verbatim}
+String key = "wavetable";  // the key in the model
+String[] params = ARPEGGIATOR_CLOCK;  // this is an array of wavetable names elsewhere
+JComponent comp = new Chooser("Wave Table", this, key, params);
+\end{verbatim}
+
+There's an option to add images to the chooser's menu.  Look it up.  Also see below (in the {\bf IconDisplay} bullet) for suggestions about how to load the images.
+
+\item {\bf Checkbox}\quad This is a simple checkbox.  By default it's on, but there's a setting to have it by default be off.  On is 1 and Off is 0 as stored in the model.
+
+\begin{verbatim}
+String key = "arpeggiatorlatch";  // the key in the model
+JComponent comp = new CheckBox("Arpeggiator Latch", this, key);
+\end{verbatim}
+
+The's a bug in OS X which mis-measures the width of the string needed, so you might see ``Arpeggia...'' instead of ``Arpeggiator Latch'' on-screen.  To fix this, just add a tiny bit to the width: usually a single pixel is enough:
+
+\begin{verbatim}
+String key = "arpeggiatorlatch";  // the key in the model
+JComponent comp = new CheckBox("Arpeggiator Latch", this, key);
+((CheckBox)comp).addToWidth(1);
+\end{verbatim}
+
+\item {\bf LabelledDial}\quad This is a labelled dial representing a collection of numbers from some min to some max.
+
+\begin{verbatim}
+int min = 1;
+int max = 16;
+Color color = edisyn.gui.Style.COLOR_A;  // Make this the same color as the enclosing Category
+JComponent comp = new LabelledDial("MIDI Channel", this, "midichannel", color, min, max);
+\end{verbatim}
+
+It's common that you need more lines in your label.  Perhaps you might say:
+
+\begin{verbatim}
+int min = 1;
+int max = 16;
+Color color = edisyn.gui.Style.COLOR_A;  // Make this the same color as the enclosing Category
+JComponent comp = new LabelledDial("Incoming", this, "midichannel", color, min, max);
+((LabelledDial)comp).setSecondLabel("MIDI Channel");
+\end{verbatim}
+
+In fact, this method is poorly named.  You can add additional (third, fourth, ...) labels with it!
+
+It is very common that you need a custom string display for certain numbers in the center of the dial. You can do it like this:
+
+\begin{verbatim}
+int min = 0;
+int max = 17;
+Color color = edisyn.gui.Style.COLOR_A;  // Make this the same color as the enclosing Category
+JComponent comp = new LabelledDial("MIDI Channel", this, "midichannel", color, min, max)
+    {
+    public String map(int val)
+        {
+        if (val == 0) return "Off";
+        else if (val == 17) return "Omni";
+        else return "" + val;
+        }
+    };
+\end{verbatim}
+
+
+\item {\bf IconDisplay}\quad This displays a different icon for each value in your model.  You can't change the values by clicking or dragging on an IconDisplay: instead, use a separate LabelledDial or Chooser.
+
+\begin{verbatim}
+ImageIcon icons = MY_ALGORITHM_ICONS;
+JComponent comp = new IconDisplay("Algorithm Type", icons, this, "algorithmtype");
+\end{verbatim}
+
+Your images can be PNG or JPEG files: I suggest PNG.  You might create an instance variable like this:
+
+\begin{verbatim}
+public static final ImageIcon[] MY_ALGORITHM_ICONS = 
+    {
+    new ImageIcon(YamahaDX7.class.getResource("Algorithm1.png")),
+    new ImageIcon(YamahaDX7.class.getResource("Algorithm2.png")),
+    ... // and so on
+    };
+\end{verbatim}
+
+These PNG files would be stored in your {\tt edisyn/synth/yamahadx7/} directory.
+
+\item {\bf PushButton}\quad This doesn't maintain a parameter at all: it's just a convenience cover for JButton.  You see it in Multimode patches where pressing it will pop up an equivalent Single patch (it's usually called ``Show''):
+
+\begin{verbatim}
+JComponent comp = new PushButton("Show")
+    {
+    public void perform()
+        {
+        // do your stuff here
+        }
+    };
+\end{verbatim}
+
+Popping up new synth panels from a multimode panel is complex.  Take a look at how {\tt edisyn/synth/waldorfmicrowavext/WaldorfMicrowaveXTMulti.java} does it.
+
+\item {\bf PatchDisplay}\quad This displays your patch and bank in a pleasing manner.\footnote{{\it Why is PatchDisplay so elaborate?  Why not just use a JLabel or something?}\quad Originally PatchDisplay did other complex things like change color.  Now it doesn't.}
+
+\begin{verbatim}
+String numberKey = "number";  // typically or null if you have no patch numbers
+String bankKey = "bank";  // typically, or null if you have no bank numbers
+int numberOfColumns = 10;  // for example
+JComponent comp = new PatchDisplay(this, "Patch", bankKey, numberKey, numberOfColumns)
+    {
+    public String numberString(int number) { "" + number}  // format as you like
+    public String bankString(int bank) { "" + bank}  // format as you like
+    };
+\end{verbatim}
+
+\item {\bf EnvelopeDisplay}\quad This displays a wide variety of envelopes.  There are two main kinds of envelopes your synthesizer might display.  First, your synthesizer might define parameters (like attack) in terms of the {\it height} of the attack and also the {\it amount of time} necessary to reach that height.  This is intuitive to draw, but in fact many synthesizers don't do it that way.  Instead, some define it in terms of the {\it height} of the attack and the {\it rate of change} (or slope, or angle).  In the first case, the height of the attack has no bearing on how long it takes to reach it.  But in the second case, the amount of time to reach the attack depends on both the height and on the rate.  You will need to figure out what your synthesizer does exactly.  This is complicated by some synthesizers (like Yamaha's) which use rate, but compute it not in terms of angle, but in terms of (essentially) 90 degrees {\it minus} the angle.  Thus a steeper rate is a {\it lower number}.
+
+Envelopes are drawn as a series of points, and between every successive pair of points we draw a line.    You will provide the EnvelopeDisplay with several arrays defining the coordinates of those points.  
+
+Let's say your synth does the easy thing and computes stuff in terms of height and amount of time.  Then you set up an Envelope Display with four elements:
+
+\begin{itemize}
+\item An array of keys (some of which can be null) of the parameters which define the {\it height} for each segment.  If a key is null, the parameter value is assumed to be 1.0.
+\item An array of keys (some of which can be null) of the parameters which define the {\it amount of time} for each segment.  If a key is null, the parameter value is assumed to be 1.0.
+\item An array of constant doubles which will be multiplied against the time parameters.  You want these constants to be such that, when the time parameters are at their maximum length, their values, multiplied by these constants, will sum to  no more than 1.0
+\item An array of constant doubles which will be multiplied against the height parameters.  You want these constants to be such that, when the any given height parameter is maximum, when multiplied against the constant it will be no more than 1.0.
+\end{itemize}
+
+Here's how you'd make an Envelope Display for an ADSR envelope where each of the values varies 0...127:
+
+\begin{verbatim}
+String[] timeKeys = new String[] { null, "attack", "decay", null, "release" };
+String[] heightKeys = new String[] { null, "attackheight", "sustain", "sustain", null };
+double[] timeConstants = new double[] { 0.0, 0.25 / 127, 0.25 / 127, 0.25, 0.25 / 127 };
+double[] heightConstants = new double[] { 0.0, 1.0 / 127, 1.0 / 127, 1.0 / 127, 0.0 };
+JComponent comp = new EnvelopeDisplay(this, Color.red, "ADSR", 
+                timeKeys, heightKeys, timeConstants, heightConstants);
+\end{verbatim}
+
+Notice that {\tt "sustain"} is used twice: thus the line stays horizontal; and furthermore its time constant is fixed to 0.25 so it always takes up 1/4 of the envelope space.  Also notice that in this example the beginning and end of the ADSR envelope are fixed to 0.0 height.  That doesn't have to be the case.  And maybe you don't have an attack height: it's always full-on attack.  Then you'd say:
+
+\begin{verbatim}
+String[] heightKeys = new String[] { null, null, "sustain", "sustain", null };
+double[] heightConstants = new double[] { 0.0, 1.0, 1.0 / 127, 1.0 / 127, 0.0 };
+\end{verbatim}
+
+It's possible that your envelope isn't always positive: it can go negative.   The EnvelopeDisplay assumes that your parameters are all positive numbers (like 0--127), but it does allow to draw a line indicating where the X axis should be, via the {\bf setAxis(...)} method.  See the fourth example in Figure \ref{envelopedisplays}.
+
+You also can also tell the EnvelopeDisplay to draw a vertical line at some key position and a dotted line at another, using the methods {\bf setFinalStageKey(...)} and {\bf setSustainStageKey(...)} respectively (these are named after their use in the Waldorf Microwave XT).  These keys should specify the {\it stage number} (the point) where the line is drawn.  For example, if the sustain stage key's value is 4, then the line should be drawn through point number 4 (zero-indexed) in the envelope.  See the third example in Figure \ref{envelopedisplays}.
+
+You can also specify two intervals with start and stop keys respectively.  At present the EnvelopeDisplay supports two intervals.  These are set up with {\bf setLoopKeys(...)}.   These keys should specify the {\it stage number} (the point) where the intervals are marked.  For example, if the interval end's key value is 4, then the end should be marked exactly at point number 4 (zero-indexed) in the envelope.  Again, see the third example in Figure \ref{envelopedisplays}.
+
+You can also postprocess the sustain stage, final stage, or loop keys with {\bf postProcessLoopOrStageKey(...)}.  This function takes a key and its value, and returns a revised value, perhaps to add or subtract 1 from it.
+
+What if your synth uses angles/rates/slopes rather than time intervals?  For example, the Waldorf Blofeld does this.\footnote{Actually, while the Blofeld uses the slope mechanism, its internal envelope displays on-board the synthesizer [incorrectly!] use the earlier-discussed mechanism.  So Edisyn is describing the envelopes more accurately than the Blofeld itself is!}   To handle this situation, we add an additional array of double constants called {\it angles}.   It works like this.  The height keys and height constants are exactly as before.  And {\tt timeConstants[0]} still defines the x position of the first point in the envelope, as before.  But the other time constants work differently.
+
+Specifically, to compute the X coordinate of the next point, we take its key value and multiply it by the corresponding angle, and then take the absolute value.  This tells us the {\it positive angle} of the line.  Angles can never be negative: whether the line has a positive or negative slope is determined entirely by the relative position of the height keys.
+
+Since angles can and will create very strung-out horizontal lines, the remaining time constants tell us the {\it maximum length} of a line: these again should sum to 1.0.
+
+Below is the Waldorf Blofeld's code for an ADSR envelope.  All the values go 0...127.  See if this makes sense now:
+
+\begin{verbatim}
+String[] timeKeys = new String[] { null, "attack", "decay", null, "release" };
+String[] heightKeys = new String[] { null, null, "sustain", "sustain", null };
+double[] timeConstants = new double[] { 0, 0.3333, 0.3333,  0.3333, 0.3333};
+double[] heightConstants = new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 };
+double[] angles = new double[] { 0, (Math.PI/4/127),   (Math.PI/4/127), 0, (Math.PI/4/127) };
+JComponent comp = new EnvelopeDisplay(this, Color.red, "ADSR", 
+                timeKeys, heightKeys, timeConstants, heightConstants, rates);
+\end{verbatim}
+
+This {\it still} might not be flexible enough for you.  For example, the Yamaha TX81Z has, shall we say, an unusual approach to defining angles.  You can do further post processing on the \(\langle x,y\rangle\) coordinates of each of the points (where  both X and Y vary from 0...1) by overriding the {\bf postProcess(...)} method like this:
+
+\begin{verbatim}
+JComponent comp = new EnvelopeDisplay(this, Color.red, "ADSR", 
+                timeKeys, heightKeys, timeConstants, heightConstants, rates)
+    {
+    public void postProcess(double[] xVals, double[] yVals)
+        {
+        // modify xVals and yVals as you see fit.
+        }
+    };
+\end{verbatim}
+
+Envelopes generally stretch to fill all available space: they're particularly good to put as the ``last'' element in an HBox.  But you might want to fix them to a specific width. In this case, just call {\bf setPreferredWidth(...)}.
+
+\end{itemize}
+
+\paragraph{Spacing}
+
+Occasionally you might need to add some fixed space to separate widgets.  See the {\tt Strut} class for factory methods that can build some struts for you.
+
+\paragraph{Dynamically Changing Widgets}
+
+One gotcha which shows up in a number of synthesizers (particularly in effects sections) is that if you change (say) the effect type, the number of available parameters, and their names, will change as well.  Eventually Edisyn will have a widget that assists in this, but for now you'll have to manually add and remove widgets.
+
+Edisyn's patch editors usually do this by defining a bunch of HBoxes, one for each effect type, and then remove the current HBox and add the correct new one dynamically in response to the user changing types.  You can see a simple example of this in the Waldorf Microwave XT code, and a more elaborate version in the Blofeld code (where different effects actually share specific widgets).
+
+You'll have to manually remove and add these widgets or HBoxes.  But when should you do so?  That's pretty easy: when the effect type has been updated.  Typically the effect type is shown as a Chooser, and when it is updated, the Chooser's {\bf update(...)} method is called:
+
+\begin{verbatim}
+JComponent comp = new Chooser("Effect Type", this, "effecttype", types)
+    {
+    public void update(String key, Model model)
+        {
+        super.update(key, model);  // be sure to do this first
+        int newValue = model.get(key, 0);  // 0 is the default if the key doesn't exist, but it will.
+        
+        // now do something according to the value newValue
+        }
+    };
+\end{verbatim}
+
+You'll see various patch editors have implemented update(...) for various purposes.
+
+Hand in hand with this: in some cases you want the update(...) method to be called not only when the widget's key is updated, but when {\it some other key} is updated.  To do this, you can {\it register} a widget to be updated for that key as well.  This is done as follows:
+
+\begin{verbatim}
+model.register("keyname", widget);
+\end{verbatim}
+
+For example, in the Yamaha TX81Z, the operator frequency is computed as a combination of three widgets: and in the final widget (``Fine'') the final frequency is displayed.  To do this, we have registered the ``Fine'' widget to revise itself (via the map(...) method) whenever any of three different parameters is updated.
+
+\subsection{Step Three: Get Input from the Synth (and File Loading) Working}
+
+There are two ways the synth can send you information: as a bulk sysex patch dump and as individual parameters.  We'll start with the bulk sysex patch dump.
+
+\paragraph{Bulk Dumps}
+
+First, you need to implement the {\bf recognize(...)} method.  This method tells Edisyn that you recognize a sysex message.  You should verify the message length and the header to determine that it is in fact meant for your type of synthesizer {\it and} is probably correct.  This method will also be called when loading a sysex file from disk.
+
+Next, you need to implement the {\bf parse(...)} method.  In this method you will be given a data array and your job is to set the model parameters according to your parsing of this array.  You set parameters using the {\bf set(...)} methods in the model, like this:
+
+\begin{verbatim}
+getModel().set(numericalKey, 4.2);		// or whatever new value
+getModel().set(stringKey, "newValue");	// or whatever new value
+\end{verbatim}
+
+It is possible that the parse(...) method will actually contain multiple sysex messages, if you loaded from a file.  This is because when emit a patch to the synth, one option you have (you'll see it later) is to send a stream of sysex messages; and when you write to a file, these same messages will get compacted into the file.  So if you do something fancy with emit(...) later, you may need to revise your parse(...) implementation.
+
+You also need to implement the {\bf gatherPatchInfo(...)} method.  This method is nontrivial to implement.  Its function is to work with the user to determine the patch number, bank number, etc. necessary to ask the synthesizer for a given patch.  I suggest you take a look at existing patch editors to see how they have implemented it, and largely copy that.
+
+Additionally, you need to override methods which issue a dump request to the synth:
+
+\begin{itemize}
+\item {\bf performRequestDump(...)} or {\bf requestDump(...)}\quad Override {\it one} of these methods to request a dump from the synth of a specific patch.  requestDump(...) is simpler: you just return bytes corresponding to a sysex message to broadcast to the synth.  performRequestDump(...) lets you manually issue the proper commands.  
+
+In the second case, the edisyn.Midi class, instantiated in the {\bf midi} instance variable, has several methods for constructing MIDI messages: you can send them, or send sysex messages (as byte arrays) via the {\bf tryToSendMIDI()} or {\bf tryToSendSysex()} methods.  Also you'll have to handle changing the patch: see the information in Blank.java's documentation on this method for an example.
+
+Both of these methods take a Model called {\bf tempModel} which will hold information concerning the patch number and bank number that you should fetch.  This model was built by gatherPatchInfo(...).
+
+\item {\bf performRequestCurrentDump(...)} or {\bf requestCurrentDump(...)}\quad Override {\it one} of these methods to request a dump from the synth of the current patch being played.  These methods are basically just like performRequestDump(...) and requestDump(...), but they don't take a model (there's no patch number).
+\end{itemize}
+
+You will also need to implement {\bf changePatch(...)} to issue a patch change (it'll be called as part of performRequestDump(...)).    It's possible that your synthesizer must pause for a bit after a patch change (the Blofeld, for example, requires almost 200ms).  You may want to implement the {\bf getPauseAfterChangePatch()} method to slow Edisyn down.
+
+
+If your synth cannot load the current patch you can avoid implementing some of these methods by saying the following:
+
+\begin{verbatim}
+receiveCurrent.setEnabled(false);  // turns of the "Request Current Patch" menu option
+\end{verbatim}
+
+You should do this in an overridden version of the  {\bf sprout()} method (be absolutely sure to call super.sprout() first).
+
+You will also want to override some other methods.  First {\bf getPatchName()} should extract the patch name from the model (probably via {\tt getModel().get("name", "foo")}.  Second, you also will want to override the {\bf revisePatchName(...)} method if you've not already done so for the StringComponent widget.  This method modifies a provided name and returns a corrected version.  The default version, which you might call first (via super), removes trailing whitespace.  You can then revise incorrect characters, length, and so on.  Third, if your synthesizer uses an ID to distinguish itself from other synthesizers of the same type (the Waldorf synths do this for example), you should override the {\bf reviseID(...)} method to correct provided IDs.  If this method returns {\tt null} (the default), the  ID won't even appear as an option.
+
+Finally, you will probably want to override the {\bf revise()} method to verify that all the model parameters have valid values, and tweak them if not.  The default version, which you can call via super, does most of the heavy lifting: it bounds the values to between their min and max.  You might also verify that the patch name is correct here.  See the Waldorf Blofeld code as an example of what to do.
+
+See also the description of these methods in {\tt edisyn/synth/Blank.java}
+
+\paragraph{Individual Parameters}
+
+[If your synth doesn't send out individual parameters, or you don't want to be bothered right now in handling this, you can just ignore this section for now].  Individual parameters might come in as sysex messages, as CC messages, or as NRPN.  Here are your options:
+
+\begin{itemize}
+\item {\bf Sysex Messages}\quad Here, override the method {\bf parseParameter(...)}.  Note that the provided data might be something else sent via sysex besides just a parameter change.  You can test for that too (and handle it here if you like).
+\item {\bf NRPN or Cooked CC messages}\quad A cooked CC message is one which doesn't violate any of the RPN/NRPN rules (it's not 6, 38, 97, 98, 99, 100, or 101).  At present Edisyn does not recognize 14-bit CC.  If your messages are always cooked or are NRPN, then you can handle them via {\bf handleSynthCCOrNRPN(...)}, which takes a special {\bf MIDI.CCData} argument that tells you about the message (see the Midi.java class). 
+\item {\bf Raw CC}\quad A raw CC message is any message number 0...127 just sent out willy-nilly, not respecting things like RPN/NRPN or 14-bit CC.  If your synth sends out raw CC messages, you need to override {\bf getExpectsRawCCFromSynth()} to return {\bf true}.  Then you handle the messages via  {\bf handleSynthCCOrNRPN(...)} as discussed above.
+\end{itemize}
+
+Again, you update one or more parameters in response to these messages using one of:
+
+\begin{verbatim}
+getModel().set(numericalKey, 4.2);		// or whatever new value
+getModel().set(stringKey, "newValue");	// or whatever new value
+\end{verbatim}
+
+\paragraph{Note on File Loading}
+
+If your bulk dumps come in as sysex messages, then congratulations, you already have file loading working.  If not, you will need to {\it invent} a bulk sysex format and implement it in the {\bf parse(...)} method even if your synthesizer never sends stuff via sysex (such as is the case in the PreenFM2).  That way you can still load and save files.  
+
+\subsection{Step Four: Get Output to the Synth (and File Writing) Working}
+
+If you've gotten this far, writing is simpler than parsing and requesting, because you've already written a lot of the support code.  You can write out both bulk dumps and individual parameters (as you tweak widgets).
+
+\paragraph{Bulk Dumps}
+
+You will need to implement {\it one} of the following two methods: either {\bf emitAll(Model, ...)} or {\bf emit(Model, ...)}.  The emit(Model, ...) method is simpler: you just build data for a sysex message and return it.  In emitAll(Model, ...), you build an array consisting of {\it either} javax.sound.midi.SimpleMessage objects {\it or} byte[] arrays corresponding to sysex messages, or a mixture of the two.  These will be emitted one by one.  Most commonly you just override emit(Model, ...).
+
+Both emit(Model, ...) and emitAll(Model, ...) receive a temporary model.  This model will contain a small bit of data sufficient to inform you of the patch and bank number are that the patch is going to be emitted to (via Edisyn's ``write'' procedure).  Alternatively if the {\it toWorkingMemory} argument is TRUE, then you're supposed to emit to current working memory (Edisyn's ``send'' procedure).
+
+You may not be able to write, or you may not be able to send to a specific patch, or to the current patch, depending on your synthesizer.  If so, you can do any of:
+
+\begin{verbatim}
+transmitTo.setEnabled(false);  // turns of the "Send to Patch..." menu option
+transmitCurrent.setEnabled(false);  // turns of the "Send to Current Patch" menu option
+writeTo.setEnabled(false);  // turns of the "Write to Patch..." menu option
+\end{verbatim}
+
+Again, these should be set in an overridden version of the {\bf sprout()} method.  Be sure to call {\bf super.sprout()} or bad things will happen.
+
+Note that emit(Model, ...) and emitAll(Model, ...) are also used to write out files.  If you implemented emitAll(...), be aware that Edisyn will strip out all of the javax.sound.midi.SimpleMessage messages and just pack together then remaining sysex messages.
+
+\paragraph{Individual Parameters}
+
+In response to changing a widget, Edisyn will try to change a parameter on your synthesizer.  This is similar to the bulk dump.  Specifically, there are two methods, {\bf emit(String)} and {\bf emitAll(String)}, which work like their bulk counterparts, except that they are tasked to emit a {\it single parameter} to the synthesizer.  Implement only {\it one} of these methods.  If you don't want to do this, just don't implement these methods.
+
+If your synthesizer accepts NRPN (such as the PreenFM2), the Midi.java file has some utility methods for building NRPN messages easily.
+
+It's possible that your synthesizer can only accept messages at a certain rate.  You may want to implement the {\bf getPauseBetweenMIDISends()} method to slow Edisyn down.
+
+\paragraph{Bulk Dumps Via Individual Parameters}
+
+Some synthesizers, such as the PreenFM2, do not accept a bulk dump method at all.  Rather you send a ``bulk dump'' as a whole lot of individual parameter changes.  If your synthesizer is of this type, you should override the method {\bf getSendsAllParametersInBulk()} method to return {\bf false}.
+
+\paragraph{Note on File Writing}
+
+If your bulk dumps are emitted by you as sysex messages, then again congratulations, you already have file writing working.  If not, as discussed earlier, you will need to {\it invent} a bulk sysex format and implement it in the {\bf emit(...)} and {\bf parse(...)} methods.  That way you can still load and save files.  
+
+
+\subsection{Step Five: Create an Init File}
+
+Now that you've got everything coded and working (hah!) it's time to create an Init file.  To do this, either request an init patch from the synthesizer, or create an appropriate one yourself.  Then save it out as a sysex file.
+
+Next, move that file and rename it to {\tt edisyn/synth/yamahadx7/YamahaDX7.init}.  Edisyn will load this file to initialize your patch editor.  To do this, add to the very bottom of your constructor the following line:
+
+\begin{verbatim}
+loadDefaults();
+\end{verbatim}
+
+\subsection{Step Six: Other Niceties}
+You're almost done!  Two other niceties you might want to do.  First, whenever your patch editor becomes the front window, the method {\bf windowBecameFront()} will be called.  You could override this to send a special message to your synth to update it somehow.  For example, the Waldorf Microwave XT patch editors send a message to the Microwave XT to tell it to switch from single to multi-mode (or back) as appropriate.
+
+Finally when the user clicks on the close box, the method {\bf requestCloseWindow()} is called.  You can override this to query the user about saving the patch etc. first, and then finally return the appropriate value to inform Edisyn that the window should in fact be closed.  Though in fact currently no patch editors implement this method at all.
+
+\subsection{Step 7: Submit Your Patch Editor!}
+
+\begin{itemize}
+\item Clean up the editor code, make it really polished, well documented, and good looking.
+\item Test it well.
+\item Copyright your editor code at the top of the file.  License the editor code under Apache 2.0 (I don't accept anything else).
+\item Send the whole directory to me!  I'd love to include it.
+\end{itemize}
 
 \end{document}

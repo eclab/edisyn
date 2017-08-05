@@ -290,7 +290,7 @@ public class PreenFM2 extends Synth
         hbox2.add(comp);
 		vbox.add(hbox2);
 
-	    comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 12 ASCII characters.")
+	    comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 10 ASCII characters.")
             {
             public String replace(String val)
             	{

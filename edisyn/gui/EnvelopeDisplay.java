@@ -29,13 +29,13 @@ import java.awt.event.*;
 	Oberheim Matrix 1000.
 
 	<ul><li>
-	An array of XKEYS, YKEYS, XCONSTANTS, YCONSTANTS, and RATES.  The ykeys define
+	An array of XKEYS, YKEYS, XCONSTANTS, YCONSTANTS, and ANGLES.  The ykeys define
 	the y coordinates of each point in the envelope, including the endpoints.  xkey #0
 	defines the x coordinate of point 0 in the envelope; thereafter x coordinates are computed by taking
-	the RATES (angles between 0 and PI/2) and figuring the x distance needed for a line of the
-	given angle, starting at the previous y height, to reach the next y height.  Rates are always
+	the ANGLES (angles between 0 and PI/2) and figuring the x distance needed for a line of the
+	given angle, starting at the previous y height, to reach the next y height.  Angles are always
 	positive even if the resulting line has a negative slope.  You will probably have to scale
-	the rates by a certain amount so that the largest possible envelopes sum to 1.0.  I have found
+	the angles by a certain amount so that the largest possible envelopes sum to 1.0.  I have found
 	that if you have three slopes, you may need to scale by 0.314, and if you have four slopes,
 	you may need to scale by 0.25.  
 	
@@ -56,7 +56,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     {
     double xConstants[];
     double yConstants[];
-	double rates[];
+	double angles[];
     String xKeys[];
     String yKeys[];
     Color color;
@@ -125,7 +125,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     	this(synth, color, xKeys, yKeys, xConstants, yConstants, null);
     	}
 
-    public EnvelopeDisplay(Synth synth, Color color, String[] xKeys, String[] yKeys, double xConstants[], double yConstants[], double[] rates)
+    public EnvelopeDisplay(Synth synth, Color color, String[] xKeys, String[] yKeys, double xConstants[], double yConstants[], double[] angles)
         {
         super();
         this.synth = synth;
@@ -133,7 +133,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         semiTransparent = new Color(color.getRed(), color.getGreen(), 
             color.getBlue(), (int)(color.getAlpha() * Style.ENVELOPE_DISPLAY_FILL_TRANSPARENCY));
         int len = 0;
-        this.rates = rates;
+        this.angles = angles;
         
         if (xKeys != null)
             len = xKeys.length;
@@ -195,10 +195,10 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                 ys[i] *= synth.getModel().get(yKeys[i], 1);
             if (xKeys[i] != null)
                 {
-                if (rates != null && i > 0)			// we're doing angles
+                if (angles != null && i > 0)			// we're doing angles
                 	{
                 	double yd = Math.abs(ys[i] - ys[i-1]);
-                	double xd = Math.abs(yd / Math.tan(Math.PI/2.0 - rates[i] * synth.getModel().get(xKeys[i], 0)));
+                	double xd = Math.abs(yd / Math.tan(Math.PI/2.0 - angles[i] * synth.getModel().get(xKeys[i], 0)));
                 	xs[i] *= xd;
                 	}
 	            else

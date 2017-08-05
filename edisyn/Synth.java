@@ -288,15 +288,15 @@ public abstract class Synth extends JComponent implements Updatable
 	/** All synthesizer editor pane classes in Edisyn */
     public static final Class[] synths = new Class[] 
     	{ 
-    	edisyn.synth.yamahatx81z.YamahaTX81Z.class, 
-    	edisyn.synth.yamahatx81z.YamahaTX81ZMulti.class, 
     	edisyn.synth.kawaik4.KawaiK4.class, 
     	edisyn.synth.kawaik4.KawaiK4Multi.class, 
+    	edisyn.synth.oberheimmatrix1000.OberheimMatrix1000.class, 
     	edisyn.synth.waldorfblofeld.WaldorfBlofeld.class, 
     	edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti.class, 
     	edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT.class, 
     	edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti.class, 
-    	edisyn.synth.oberheimmatrix1000.OberheimMatrix1000.class, 
+    	edisyn.synth.yamahatx81z.YamahaTX81Z.class, 
+    	edisyn.synth.yamahatx81z.YamahaTX81ZMulti.class, 
     	edisyn.synth.preenfm2.PreenFM2.class 
     	};
     
@@ -440,6 +440,7 @@ public abstract class Synth extends JComponent implements Updatable
 	/// reviseID(id)		// tweak the id to be valid
 	/// revise()			// tweak all the keys to be within valid ranges.  There's a default form which you might wish to override.
 	/// getPauseBetweenMIDISends()	// return the pause (in ms) between MIDI messages if the synth needs them slower
+	/// getPauseAfterChangePatch() // return the pause after a PC
 	/// sprout()			// typically you override this (calling super of course) to disable certain menus
 	/// windowBecameFront()	// override this to be informed that your patch window became the front window (you might switch something on the synth)
 
@@ -664,7 +665,8 @@ public abstract class Synth extends JComponent implements Updatable
         sending multiple separate parameter change requests (FALSE).  By default this is TRUE. */
     public boolean getSendsAllParametersInBulk() { return true; }
 
-
+	/** Returns whether the synth sends raw CC or cooked CC (such as for NRPN) to update parameters.  The default is FALSE (cooked or nothing). */
+	public boolean getExpectsRawCCFromSynth() { return false; }
 
 
 
@@ -1100,11 +1102,18 @@ public abstract class Synth extends JComponent implements Updatable
 
     void handleInRawCC(ShortMessage message)
     	{
-        Midi.CCData ccdata = midi.synthParser.processCC(message, true, false);
-        if (ccdata != null)
-        	{
-        	handleSynthCCOrNRPN(ccdata);
-        	}
+    	if (getExpectsRawCCFromSynth())
+    		{
+    		handleSynthCCOrNRPN(midi.synthParser.handleRawCC(message.getChannel(), message.getData1(), message.getData2()));
+    		}
+    	else
+    		{
+	        Midi.CCData ccdata = midi.synthParser.processCC(message, true, false);
+	        if (ccdata != null)
+	        	{
+	        	handleSynthCCOrNRPN(ccdata);
+	        	}
+	        }
     	}
     	
  	void handleKeyRawCC(ShortMessage message)

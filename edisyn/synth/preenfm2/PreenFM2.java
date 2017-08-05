@@ -112,7 +112,7 @@ public class PreenFM2 extends Synth
         vbox.add(addModulation(Style.COLOR_C));
 
         frontPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Main", frontPanel);
+        addTab("Main", frontPanel);
                 
                 
         // OSCILLATOR PANEL
@@ -126,7 +126,7 @@ public class PreenFM2 extends Synth
         	}
 
         operatorPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Operators", operatorPanel);
+        addTab("Operators", operatorPanel);
 
         
         
@@ -161,7 +161,7 @@ public class PreenFM2 extends Synth
         vbox.add(hbox);
                                 
         lfoPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("LFO and Envelopes", lfoPanel);
+        addTab("LFO and Envelopes", lfoPanel);
 
 
         

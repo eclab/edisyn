@@ -100,7 +100,7 @@ public class WaldorfBlofeld extends Synth
         vbox.add(addFilter(2, Style.COLOR_B));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Oscillators and Filters", soundPanel);
+        addTab("Oscillators and Filters", soundPanel);
                 
                 
         // LFO and ENVELOPE PANEL
@@ -124,7 +124,7 @@ public class WaldorfBlofeld extends Synth
         vbox.add(addEnvelope(4, Style.COLOR_B));
                 
         lfoEnvelopePanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("LFOs and Envelopes", lfoEnvelopePanel);
+        addTab("LFOs and Envelopes", lfoEnvelopePanel);
                 
         // MODULATION PANEL
                 
@@ -138,7 +138,7 @@ public class WaldorfBlofeld extends Synth
         vbox.add(addEffect(2, Style.COLOR_C));
 
         modulationPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Modulation and Effects", modulationPanel);
+        addTab("Modulation and Effects", modulationPanel);
 
         // ARPEGGIATOR PANEL
         JComponent arpeggiationPanel = new SynthPanel();
@@ -148,7 +148,7 @@ public class WaldorfBlofeld extends Synth
         vbox.add(addArpeggiatorPatterns(Style.COLOR_B));
 
         arpeggiationPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Arpeggiator", arpeggiationPanel);
+        addTab("Arpeggiator", arpeggiationPanel);
                 
         model.set("name", "Init");
         

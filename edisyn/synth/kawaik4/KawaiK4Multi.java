@@ -62,7 +62,7 @@ public class KawaiK4Multi extends Synth
         vbox.add(addSection(2, Style.COLOR_A));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Global, Sections 1-2", soundPanel);
+        addTab("Global, Sections 1-2", soundPanel);
                 
 
         SynthPanel sourcePanel = new SynthPanel();
@@ -73,7 +73,7 @@ public class KawaiK4Multi extends Synth
         vbox.add(addSection(5, Style.COLOR_A));
             
         sourcePanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Sections 3-5", sourcePanel);
+        addTab("Sections 3-5", sourcePanel);
 
         sourcePanel = new SynthPanel();
         vbox = new VBox();
@@ -83,7 +83,7 @@ public class KawaiK4Multi extends Synth
         vbox.add(addSection(8, Style.COLOR_A));
 
         sourcePanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Sections 6-8", sourcePanel);
+        addTab("Sections 6-8", sourcePanel);
         
         model.set("name", "Init Sound V1.1 ");  // has to be 16 long
         

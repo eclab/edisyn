@@ -94,7 +94,7 @@ public class YamahaTX81Z extends Synth
         vbox.add(addModulation(Style.COLOR_C));
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Global", soundPanel);
+        addTab("Global", soundPanel);
                 
 
         JComponent sourcePanel = new SynthPanel();
@@ -107,7 +107,7 @@ public class YamahaTX81Z extends Synth
         vbox.add(addEnvelope(2, Style.COLOR_B));
 
         sourcePanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Operators 1-2", sourcePanel);
+        addTab("Operators 1-2", sourcePanel);
 
         sourcePanel = new SynthPanel();
         vbox = new VBox();
@@ -119,7 +119,7 @@ public class YamahaTX81Z extends Synth
         vbox.add(addEnvelope(4, Style.COLOR_B));
 
         sourcePanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Operators 3-4", sourcePanel);
+        addTab("Operators 3-4", sourcePanel);
         
         model.set("name", "INIT SOUND");
         

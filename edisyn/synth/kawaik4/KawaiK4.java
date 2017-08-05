@@ -99,7 +99,7 @@ public class KawaiK4 extends Synth
         vbox.add(hbox);
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Global", soundPanel);
+        addTab("Global", soundPanel);
                 
 
         JComponent sourcePanel = new SynthPanel();
@@ -112,7 +112,7 @@ public class KawaiK4 extends Synth
         vbox.add(addEnvelope(2, Style.COLOR_B));
 
         sourcePanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Sources 1-2", sourcePanel);
+        addTab("Sources 1-2", sourcePanel);
 
         sourcePanel = new SynthPanel();
         vbox = new VBox();
@@ -124,7 +124,7 @@ public class KawaiK4 extends Synth
         vbox.add(addEnvelope(4, Style.COLOR_B));
 
         sourcePanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Sources 3-4", sourcePanel);
+        addTab("Sources 3-4", sourcePanel);
         
 
         JComponent filterPanel = new SynthPanel();
@@ -137,7 +137,7 @@ public class KawaiK4 extends Synth
         vbox.add(addFilterEnvelope(2, Style.COLOR_B));
 
         filterPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Filters", filterPanel);
+        addTab("Filters", filterPanel);
 
         model.set("name", "Untitled  ");  // has to be 10 long
         

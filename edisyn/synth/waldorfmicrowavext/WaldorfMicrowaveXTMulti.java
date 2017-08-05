@@ -69,7 +69,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
             }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Multi and Instruments 1 - 2", soundPanel);
+        addTab("Multi and Instruments 1 - 2", soundPanel);
 
         soundPanel = new SynthPanel();
         vbox = new VBox();
@@ -80,7 +80,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
             }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Instruments 3 - 5", soundPanel);
+        addTab("Instruments 3 - 5", soundPanel);
 
         soundPanel = new SynthPanel();
         vbox = new VBox();
@@ -91,7 +91,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
             }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Instruments 6 - 8", soundPanel);
+        addTab("Instruments 6 - 8", soundPanel);
 
         model.set("name", "Init            ");  // has to be 16 long
         

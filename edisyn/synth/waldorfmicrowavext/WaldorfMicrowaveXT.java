@@ -131,7 +131,7 @@ public class WaldorfMicrowaveXT extends Synth
         vbox.add(hbox);
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Oscillators and Filters", soundPanel);
+        addTab("Oscillators and Filters", soundPanel);
                 
                 
         // ENVELOPE PANEL
@@ -155,7 +155,7 @@ public class WaldorfMicrowaveXT extends Synth
         vbox.add(hbox);
         
         envelopePanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Envelopes", envelopePanel);
+        addTab("Envelopes", envelopePanel);
 
         
         
@@ -168,7 +168,7 @@ public class WaldorfMicrowaveXT extends Synth
         vbox.add(addModifiers(Style.COLOR_B));
                                 
         modulationPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Modulation", modulationPanel);
+        addTab("Modulation", modulationPanel);
 
 
 
@@ -196,7 +196,7 @@ public class WaldorfMicrowaveXT extends Synth
 
         
         otherPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Other", otherPanel);
+        addTab("Other", otherPanel);
 
         model.set("name", "Init Sound V1.1 ");
 

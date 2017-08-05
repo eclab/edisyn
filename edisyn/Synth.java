@@ -1280,6 +1280,14 @@ public abstract class Synth extends JComponent implements Updatable
 	////////// GUI UTILITIES
 
 
+	public void addTab(String title, JComponent component)
+		{
+		JScrollPane pane = new JScrollPane(component, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+												JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		pane.setViewportBorder(null);
+		pane.setBorder(null);
+		tabs.addTab(title, pane);
+		}
 
 
 	/** Display a simple error message. */

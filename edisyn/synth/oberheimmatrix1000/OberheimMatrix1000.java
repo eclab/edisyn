@@ -57,7 +57,7 @@ public class OberheimMatrix1000 extends Synth
                         
         /// SOUND PANEL
                 
-        JComponent soundPanel = new SynthPanel();
+        SynthPanel soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
@@ -74,12 +74,12 @@ public class OberheimMatrix1000 extends Synth
         
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Oscillators and Filters", soundPanel);
+        addTab("Oscillators and Filters", soundPanel);
                 
                 
         // ENVELOPE PANEL
                 
-        JComponent envelopePanel = new SynthPanel();
+        SynthPanel envelopePanel = new SynthPanel();
         vbox = new VBox();
 
         hbox = new HBox();
@@ -97,13 +97,13 @@ public class OberheimMatrix1000 extends Synth
         vbox.add(addEnvelope(3,Style.COLOR_B));
         
         envelopePanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("LFOs and Envelopes", envelopePanel);
+        addTab("LFOs and Envelopes", envelopePanel);
 
         
         
         // MODULATION PANEL
                 
-        JComponent modulationPanel = new SynthPanel();
+        SynthPanel modulationPanel = new SynthPanel();
         
         vbox = new VBox();
         vbox.add(addModulation(Style.COLOR_A));
@@ -111,7 +111,7 @@ public class OberheimMatrix1000 extends Synth
                 
 
         modulationPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Modulation", modulationPanel);
+        addTab("Modulation", modulationPanel);
 
         model.set("name", "UNTITLED");
         

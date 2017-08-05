@@ -135,7 +135,7 @@ public class WaldorfBlofeldMulti extends Synth
         
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Multi and Parts 1 - 4", soundPanel);
+        addTab("Multi and Parts 1 - 4", soundPanel);
 
         soundPanel = new SynthPanel();
         vbox = new VBox();
@@ -146,7 +146,7 @@ public class WaldorfBlofeldMulti extends Synth
             }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Parts 5 - 10", soundPanel);
+        addTab("Parts 5 - 10", soundPanel);
 
         soundPanel = new SynthPanel();
         vbox = new VBox();
@@ -157,7 +157,7 @@ public class WaldorfBlofeldMulti extends Synth
             }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Parts 11 - 16", soundPanel);
+        addTab("Parts 11 - 16", soundPanel);
                 
 
         model.set("name", "Init Multi");  // has to be 16 long

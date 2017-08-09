@@ -17,7 +17,6 @@ import java.util.*;
 import java.lang.reflect.*;
 import javax.sound.midi.*;
 import java.io.*;
-import edisyn.hillclimb.*;
 
 
 /**** 
@@ -61,9 +60,7 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenu merge;
     public JMenuItem editMutationMenu;
     public JCheckBoxMenuItem recombinationToggle;
-    
-    public HillClimbPanel hillclimbpanel;
-    
+        
     Model[] nudge = new Model[4];
     JMenuItem[] nudgeTowards = new JMenuItem[4];
     
@@ -79,7 +76,22 @@ public abstract class Synth extends JComponent implements Updatable
 	boolean useMapForRecombination = true;
 	boolean showingMutation = false;
 	public boolean isShowingMutation() { return showingMutation; }
-	public void setShowingMutation(boolean val) { showingMutation = val; repaint(); }
+	public void setShowingMutation(boolean val) 
+		{ 
+		showingMutation = val; 
+		if (val == true) 
+			setLearningCC(false); 
+    	if (isShowingMutation())
+			{
+    		editMutationMenu.setText("Stop Editing Mutation Parameters");
+			}
+		else
+    		{
+    		editMutationMenu.setText("Edit Mutation Parameters");
+    		}
+		updateTitle(); 
+		repaint(); 
+		}
 	public MutationMap mutationMap;
 	public String[] getMutationKeys()
 		{
@@ -247,9 +259,9 @@ public abstract class Synth extends JComponent implements Updatable
         {
         learning = val;
         model.clearLastKey();
-        updateTitle();
         if (learning)
             {
+            setShowingMutation(false);
             if (learningMenuItem != null) learningMenuItem.setText("Stop Mapping");
             if (learningMenuItem0 != null) learningMenuItem0.setEnabled(false);
             if (learningMenuItem64 != null) learningMenuItem64.setEnabled(false);
@@ -260,6 +272,7 @@ public abstract class Synth extends JComponent implements Updatable
             if (learningMenuItem0 != null) learningMenuItem0.setEnabled(true);
             if (learningMenuItem64 != null) learningMenuItem64.setEnabled(true);
             }
+        updateTitle();
         }
         
     /** Clears all learned CCs, and turns off learning. */
@@ -290,6 +303,8 @@ public abstract class Synth extends JComponent implements Updatable
     	{ 
     	edisyn.synth.kawaik4.KawaiK4.class, 
     	edisyn.synth.kawaik4.KawaiK4Multi.class, 
+		edisyn.synth.kawaik4.KawaiK4Drum.class,
+		edisyn.synth.kawaik4.KawaiK4Effect.class,
     	edisyn.synth.oberheimmatrix1000.OberheimMatrix1000.class, 
     	edisyn.synth.waldorfblofeld.WaldorfBlofeld.class, 
     	edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti.class, 
@@ -392,7 +407,7 @@ public abstract class Synth extends JComponent implements Updatable
 	/// When a message is received from the synthesizser, Edisyn will do this:
 	/// If the message is a Sysex Message, then
 	/// 	Call recognize(message data).  If it returns true, then
-	///			Call parse(message data) [we presume it's a dump or a load from a file]
+	///			Call parse(message data, fromFile) [we presume it's a dump or a load from a file]
 	///		Else
 	///			Call parseParameter(message data) [we presume it's a parameter change, or maybe something else]
 	/// Else if the message is a complete CC or NRPN message
@@ -408,8 +423,8 @@ public abstract class Synth extends JComponent implements Updatable
 	/// Call gatherPatchInfo(...,tempModel,...)
 	/// If successful
 	///		Call changePatch(tempModel)
-	/// 	Call emitAll(tempModel, toWorkingMemory)
-	///			This calls emit(tempModel, toWorkingMemory)
+	/// 	Call emitAll(tempModel, toWorkingMemory, toFile)
+	///			This calls emit(tempModel, toWorkingMemory, toFile)
 	///
 	/// You could override either of these methods, but probably not both.
 	/// Note that saving strips out the non-sysex bytes from emitAll.
@@ -446,13 +461,14 @@ public abstract class Synth extends JComponent implements Updatable
 
 	/** Changes the patch and bank to reflect the information in tempModel.
 		You may need to call simplePause() if your synth requires a pause after a patch change. */
-    public abstract void changePatch(Model tempModel);
+    public void changePatch(Model tempModel) { }
 
     /** Updates the model to reflect the following sysex patch dump for your synthesizer type.
     	If ignorePatch is TRUE, then you should NOT attempt to change the patch number and bank
     	to reflect new information, but should retain the old number and bank.
-        If the parse was successful and valid, return TRUE. */
-    public abstract boolean parse(byte[] data, boolean ignorePatch);
+ 		FROMFILE indicates that the parse is from a sysex file.
+         If the parse was successful and valid, return TRUE. */
+    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile) { return false; }
     
     /** Updates the model to reflect the following sysex message from your synthesizer. 
         You are free to IGNORE this message entirely.  Patch dumps will generally not be sent this way; 
@@ -469,6 +485,8 @@ public abstract class Synth extends JComponent implements Updatable
         for all other parameters.  toWorkingMemory indicates whether the patch should
         be directed to working memory of the synth or to the patch number in tempModel. 
         
+        <p>If TOFILE is true, then we are emitting to a file, not to the synthesizer proper. 
+        
         <p>It is assumed that the NON byte-array elements may be stripped out if this
         emit is done to a file.
         
@@ -477,9 +495,9 @@ public abstract class Synth extends JComponent implements Updatable
         dumps a single patch as multiple sysex dumps, override this to send the patch
         properly.
     */
-    public Object[] emitAll(Model tempModel, boolean toWorkingMemory)
+    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-        byte[]result = emit(tempModel, toWorkingMemory);
+        byte[]result = emit(tempModel, toWorkingMemory, toFile);
         if (result == null ||
             result.length == 0)
             return new Object[0];
@@ -495,9 +513,11 @@ public abstract class Synth extends JComponent implements Updatable
         for all other parameters.  toWorkingMemory indicates whether the patch should
         be directed to working memory of the synth or to the patch number in tempModel. 
         
+        <p>If TOFILE is true, then we are emitting to a file, not to the synthesizer proper. 
+
         <p>Note that this method will only be called by emitAll(...).  So if you 
         have overridden emitAll(...) you don't need to implement this method. */
-    public byte[] emit(Model tempModel, boolean toWorkingMemory) { return new byte[0]; }
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile) { return new byte[0]; }
     
     /** Produces one or more sysex parameter change requests for the given parameter as one
         OR MORE sysex dumps or other MIDI messages.  Each sysex dump is a separate byte array,
@@ -575,7 +595,7 @@ public abstract class Synth extends JComponent implements Updatable
         somewhere.  Some synths allow patches to be read from many locations but written only
         to specific ones (because the others are read-only).
     */
-    public abstract boolean gatherPatchInfo(String title, Model tempModel, boolean writing);
+    public boolean gatherPatchInfo(String title, Model tempModel, boolean writing) { return false; }
 
     /** Create your own Synth-specific class version of this static method.
         It will be called when the system wants to know if the given sysex patch dump
@@ -796,7 +816,7 @@ public abstract class Synth extends JComponent implements Updatable
 									setSendMIDI(false);
 									undo.setWillPush(false);
 									Model backup = (Model)(model.clone());
-									parse(data, false);
+									parse(data, false, false);
 									undo.setWillPush(true);
 									if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
 										undo.push(backup);
@@ -1222,7 +1242,7 @@ public abstract class Synth extends JComponent implements Updatable
         Model backup = (Model)(model.clone());
 
         Synth newSynth = instantiate(Synth.this.getClass(), getSynthNameLocal(), true, false, tuple);
-        newSynth.parse(data, true);
+        newSynth.parse(data, true, false);
         model.recombine(random, newSynth.getModel(), useMapForRecombination ? getMutationKeys() : model.getKeys(), probability);
         revise();  // just in case
                 
@@ -1262,7 +1282,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
 		if (getSendsAllParametersInBulk())
 			{
-			tryToSendMIDI(emitAll(getModel(), true));
+			tryToSendMIDI(emitAll(getModel(), true, false));
 			}
 		else
 			{
@@ -1428,7 +1448,7 @@ public abstract class Synth extends JComponent implements Updatable
 
                 // parse                        
                 setSendMIDI(false);
-                parse(data, ignorePatch);
+                parse(data, ignorePatch, true);
                 setSendMIDI(true);
                 model.setUndoListener(undo);    // okay, redundant, but that way the pattern stays the same
 
@@ -1681,20 +1701,18 @@ public abstract class Synth extends JComponent implements Updatable
         randomize.add(randomize100);
         JMenuItem undoAndRandomize = new JMenuItem("Undo and Randomize Again");
         randomize.add(undoAndRandomize);
+
+/*
         JMenuItem hillclimb = new JMenuItem("Hill Climb");
-        randomize.add(hillclimb);
+       randomize.add(hillclimb);
         
         hillclimb.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 { 
-                if (hillclimbpanel == null)
-                	hillclimbpanel = new HillClimbPanel(Synth.this);
-
-				hillclimbpanel.init();
-                hillclimbpanel.setVisible(true);
                 }
             });
+*/
         
         randomize1.addActionListener(new ActionListener()
             {
@@ -2290,11 +2308,31 @@ public abstract class Synth extends JComponent implements Updatable
         			}
         		});
         	}
+        
+        //	-XDignore.symbol.file
         	
-        	//	-XDignore.symbol.file
-        	
-        // Set up Mac
-        Mac.setup(this);
+        // Set up Mac.  See Mac.java.
+        if (Style.isMac())
+        	Mac.setup(this);
+        
+        // Handle About menu for non-Macs
+        if (true) // Style.isWindows() || isUnix())
+        	{
+        	// right now the only thing under "Help" is
+        	// the About menu, so it doesn't exist on the Mac,
+        	// where the About menu is elsewhere.
+        	JMenu helpMenu = new JMenu("Help");
+        	JMenuItem aboutMenuItem = new JMenuItem("About Edisyn");
+			aboutMenuItem.addActionListener(new ActionListener()
+				{
+				public void actionPerformed( ActionEvent e)
+					{
+					doAbout();
+					}
+				});
+			helpMenu.add(aboutMenuItem);
+			menubar.add(helpMenu);
+        	}
 
         frame.getContentPane().add(this);
         frame.pack();
@@ -2450,7 +2488,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (gatherPatchInfo("Write Patch To...", getModel(), true))
             {
             changePatch(getModel());
-            tryToSendMIDI(emitAll(getModel(), false));
+            tryToSendMIDI(emitAll(getModel(), false, false));
             }
         }
                 
@@ -2709,7 +2747,7 @@ double lastMutate = 0.0;
                 {
                 f = new File(fd.getDirectory(), ensureFileEndsWith(fd.getFile(), ".syx"));
                 os = new FileOutputStream(f);
-                os.write(flatten(emitAll((Model)null, false)));
+                os.write(flatten(emitAll((Model)null, false, true)));
                 os.close();
                 file = f;
                 setLastDirectory(fd.getDirectory());
@@ -2745,7 +2783,7 @@ double lastMutate = 0.0;
             try
                 {
                 os = new FileOutputStream(file);
-                os.write(flatten(emitAll((Model)null, false)));
+                os.write(flatten(emitAll((Model)null, false, true)));
                 os.close();
                 }
             catch (Exception e) // fail
@@ -2864,7 +2902,7 @@ double lastMutate = 0.0;
                         setSendMIDI(false);
                         undo.setWillPush(false);
                         Model backup = (Model)(model.clone());
-                        parse(data, true);
+                        parse(data, true, true);
                         undo.setWillPush(true);
                         if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
                             undo.push(backup);
@@ -2974,16 +3012,6 @@ double lastMutate = 0.0;
     void doToggleMutationMapEdit()
     	{
     	setShowingMutation(!isShowingMutation());
-    	if (isShowingMutation())
-			{
-    		editMutationMenu.setText("Stop Editing Mutation Parameters");
-			}
-		else
-    		{
-    		editMutationMenu.setText("Edit Mutation Parameters");
-    		}
-    	repaint();
-    	updateTitle();
     	}
     	
     void doSetAllMutationMap(boolean val)

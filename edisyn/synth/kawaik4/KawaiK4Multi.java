@@ -18,7 +18,7 @@ import javax.sound.midi.*;
 
 
 /**
-   A patch editor for the Kawai K4 [Multi mode].
+   A patch editor for the Kawai K4/K4r [Multi mode].
         
    @author Sean Luke
 */
@@ -169,7 +169,7 @@ public class KawaiK4Multi extends Synth
         hbox.add(vbox);
 
         // Not enough space to show the title
-        hbox.addLast(Strut.makeHorizontalStrut(40));
+        hbox.addLast(Strut.makeHorizontalStrut(60));
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
@@ -187,8 +187,56 @@ public class KawaiK4Multi extends Synth
         comp = new LabelledDial("Volume", this, "volume", color, 0, 100);
         hbox.add(comp);
 
-        comp = new LabelledDial("Effect", this, "effect", color, 0, 31, -1);
+        comp = new LabelledDial("Effect [K4]", this, "effect", color, 0, 31, -1);
+    	((LabelledDial)comp).addAdditionalLabel("Output [K4r]");
+        model.removeMetricMinMax("effect");
         hbox.add(comp);
+
+
+		VBox vbox = new VBox();
+        comp = new PushButton("Show Effect/Ouput")
+            {
+            public void perform()
+                {
+                final KawaiK4Effect synth = new KawaiK4Effect();
+                if (tuple != null)
+	                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                if (synth.tuple != null)
+                    {
+                    // This is a little tricky.  When the dump comes in from the synth,
+                    // Edisyn will only send it to the topmost panel.  So we first sprout
+                    // the panel and show it, and THEN send the dump request.  But this isn't
+                    // enough, because what setVisible(...) does is post an event on the
+                    // Swing Event Queue to build the window at a later time.  This later time
+                    // happens to be after the dump comes in, so it's ignored.  So what we
+                    // ALSO do is post the dump request to occur at the end of the Event Queue,
+                    // so by the time the dump request has been made, the window is shown and
+                    // frontmost.
+                                                
+                    synth.sprout();
+                    JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                    frame.setVisible(true);                                 
+
+                    SwingUtilities.invokeLater(
+                        new Runnable()
+                            {
+                            public void run() 
+                                { 
+                                Model tempModel = new Model();
+                                tempModel.set("number", KawaiK4Multi.this.model.get("effect", 0));
+                                synth.performRequestDump(tempModel, false);
+                                }
+                            });
+                    }
+                else
+                	{
+                	showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                	}
+                }
+            };
+        vbox.add(comp);
+        hbox.add(vbox);
+
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -215,10 +263,6 @@ public class KawaiK4Multi extends Synth
         hbox.add(vbox);
         
         vbox = new VBox();
-        // Normally this is in global, but I think it makes more sense here
-        comp = new CheckBox("Mute", this, "section" + src + "mute", true);
-        vbox.add(comp);
-
         HBox hbox2 = new HBox();
         comp = new PushButton("Show")
             {
@@ -262,7 +306,12 @@ public class KawaiK4Multi extends Synth
                 }
             };
         hbox2.addLast(comp);
-        vbox.addBottom(hbox2);
+        vbox.add(hbox2);
+
+        // Normally this is in global, but I think it makes more sense here
+        comp = new CheckBox("Mute", this, "section" + src + "mute", true);
+        vbox.add(comp);
+
         hbox.add(vbox);
 
 
@@ -279,9 +328,11 @@ public class KawaiK4Multi extends Synth
                 return BANKS_SHORT[val];
                 }
             };
+        model.removeMetricMinMax("section" + src + "bank");
         hbox.add(comp);
         
         comp = new LabelledDial("Number", this, "section" + src + "number", color, 0, 16);
+        model.removeMetricMinMax("section" + src + "number");
         hbox.add(comp);
 
         comp = new LabelledDial("Lowest", this, "section" + src + "lowkey", color, 0, 127)
@@ -291,7 +342,7 @@ public class KawaiK4Multi extends Synth
                 return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Key");
+        ((LabelledDial)comp).addAdditionalLabel("Key");
         hbox.add(comp);
 
         comp = new LabelledDial("Highest", this, "section" + src + "highkey", color, 0, 127)
@@ -301,11 +352,12 @@ public class KawaiK4Multi extends Synth
                 return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Key");
+        ((LabelledDial)comp).addAdditionalLabel("Key");
         hbox.add(comp);
 
         comp = new LabelledDial("Receive", this, "section" + src + "channel", color, 0, 15, -1);
-        ((LabelledDial)comp).setSecondLabel("Channel");
+        ((LabelledDial)comp).addAdditionalLabel("Channel");
+        model.removeMetricMinMax("section" + src + "channel");
         hbox.add(comp);
 
         comp = new LabelledDial("Submix", this, "section" + src + "submix", color, 0, 7)
@@ -315,6 +367,7 @@ public class KawaiK4Multi extends Synth
                 return SUBMIX_CHANNELS[val];
                 }
             };
+        model.removeMetricMinMax("section" + src + "submix");
         hbox.add(comp);
 
         comp = new LabelledDial("Level", this, "section" + src + "level", color, 0, 100);
@@ -335,504 +388,249 @@ public class KawaiK4Multi extends Synth
         }
 
 
-    /** Map of parameter -> index in the allParameters array. */
-    HashMap allMatrixParametersToIndex = new HashMap();
+	HashMap allParametersToIndex = new HashMap();
+	
+	final static String[] allParameters = new String[]
+		{
+		"name1",
+		"name2",
+		"name3",
+		"name4",
+		"name5",
+		"name6",
+		"name7",
+		"name8",
+		"name9",
+		"name10",
+		"volume",
+		"effect",
+		
+		"section1singleno",			// *
+		"section1lowkey",
+		"section1highkey",
+		"section1rcvch_velosw_mute",	// *
+		"section1mode_outselect",	//*
+		"section1level",
+		"section1transpose",
+		"section1tune",
+		
+		"section2singleno",			// *
+		"section2lowkey",
+		"section2highkey",
+		"section2rcvch_velosw_mute",	// *
+		"section2mode_outselect",	//*
+		"section2level",
+		"section2transpose",
+		"section2tune",
 
+		"section3singleno",			// *
+		"section3lowkey",
+		"section3highkey",
+		"section3rcvch_velosw_mute",	// *
+		"section3mode_outselect",	//*
+		"section3level",
+		"section3transpose",
+		"section3tune",
 
-    /** List of all 100 internal Oberheim numerical parameters in order.  Note that this is DIFFERENT, ugh,
-        from the order of parameters in the sysex list, and is missing stuff like modulation and name. */
-                
-    final static String[] allMatrixParameters = new String[]
-    {
-    "dco1frequency", 
-    "dco1frequencymod", 
-    "dco1sync", 
-    "dco1pulsewidth", 
-    "dco1pulsewidthmod", 
-    "dco1shape", 
-    "dco1waveenable", 
-    "dco1fixedmods1", 
-    "dco1fixedmods2", 
-    "dco1click", 
-    "dco2frequency", 
-    "dco2frequencymod", 
-    "dco2detune", 
-    "dco2pulsewidth", 
-    "dco2pulsewidthmod", 
-    "dco2shape", 
-    "dco2waveenable", 
-    "dco2fixedmods1", 
-    "dco2fixedmods2", 
-    "dco2click", 
-    "mix", 
-    "vcffrequency", 
-    "vcffrequencymodenv", 
-    "vcffrequencymodpressure", 
-    "vcfresonance", 
-    "vcffixedmods1", 
-    "vcffixedmods2", 
-    "vca1", 
-    "vca1modvel", 
-    "vca2modenv2", 
-    "vcffm", 
-    "vcffmmodenv3", 
-    "vcffmmodpressure", 
-    "trackingsource", 
-    "trackingpoint1", 
-    "trackingpoint2", 
-    "trackingpoint3", 
-    "trackingpoint4", 
-    "trackingpoint5", 
-    "-", 
-    "ramp1rate", 
-    "ramp1mode", 
-    "ramp2rate", 
-    "ramp2mode", 
-    "portamento", 
-    "portamentomod", 
-    "portamentomode", 
-    "portamentolegato", 
-    "keyboardmode", 
-    "-", 
-    "env1delay", 
-    "env1attack", 
-    "env1decay", 
-    "env1sustain", 
-    "env1release", 
-    "env1amplitude", 
-    "envelope1amplitudemod", 
-    "env1triggermode", 
-    "env1mode", 
-    "env1lfotriggermode", 
-    "env2delay", 
-    "env2attack", 
-    "env2decay", 
-    "env2sustain", 
-    "env2release", 
-    "env2amplitude", 
-    "envelope2amplitudemod", 
-    "env2triggermode", 
-    "env2mode", 
-    "env2lfotriggermode", 
-    "env3delay", 
-    "env3attack", 
-    "env3decay", 
-    "env3sustain", 
-    "env3release", 
-    "env3amplitude", 
-    "envelope3amplitudemod", 
-    "env3triggermode", 
-    "env3mode", 
-    "env3lfotriggermode", 
-    "lfo1speed", 
-    "lfo1speedmod", 
-    "lfo1shape", 
-    "lfo1retrigger", 
-    "lfo1amplitude", 
-    "lfo1amplitudemod", 
-    "lfo1trigger", 
-    "lfo1lag", 
-    "lfo1source", 
-    "-", 
-    "lfo2speed", 
-    "lfo2speedmod", 
-    "lfo2shape", 
-    "lfo2retrigger", 
-    "lfo2amplitude", 
-    "lfo2amplitudemod", 
-    "lfo2trigger", 
-    "lfo2lag", 
-    "lfo2source", 
-    "-"
-    };
+		"section4singleno",			// *
+		"section4lowkey",
+		"section4highkey",
+		"section4rcvch_velosw_mute",	// *
+		"section4mode_outselect",	//*
+		"section4level",
+		"section4transpose",
+		"section4tune",
 
+		"section5singleno",			// *
+		"section5lowkey",
+		"section5highkey",
+		"section5rcvch_velosw_mute",	// *
+		"section5mode_outselect",	//*
+		"section5level",
+		"section5transpose",
+		"section5tune",
 
-    /** Map of parameter -> index in the allParameters array. */
-    HashMap allParametersToIndex = new HashMap();
+		"section6singleno",			// *
+		"section6lowkey",
+		"section6highkey",
+		"section6rcvch_velosw_mute",	// *
+		"section6mode_outselect",	//*
+		"section6level",
+		"section6transpose",
+		"section6tune",
 
+		"section7singleno",			// *
+		"section7lowkey",
+		"section7highkey",
+		"section7rcvch_velosw_mute",	// *
+		"section7mode_outselect",	//*
+		"section7level",
+		"section7transpose",
+		"section7tune",
 
-    /** List of all Oberheim Sysex parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
-
-    /// * indicates parameters which must be handled specially due to packing
-    /// that Waldorf decided to do.  :-(
-
-    final static String[] allParameters = new String[/*100 or so*/] 
-    {
-    "-",                // this is the name, but the Matrix 1000 doesn't recognize names
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "keyboardmode",                   
-    "dco1frequency",
-    "dco1shape",
-    "dco1pulsewidth",
-    "dco1fixedmods1",           // *
-    "dco1waveenable",           // *
-    "dco2frequency",
-    "dco2shape",
-    "dco2pulsewidth",
-    "dco2fixedmods1",           // *
-    "dco2waveenable",           // *
-    "dco2detune",
-    "mix",
-    "dco1fixedmods2",           // *
-    "dco1click",
-    "dco2fixedmods2",           // *
-    "dco2click",
-    "dco1sync",
-    "vcffrequency",
-    "vcfresonance",
-    "vcffixedmods1",                // *
-    "vcffixedmods2",                // *
-    "vcffm",
-    "vca1",
-    "portamento",
-    "portamentomode",               // *
-    "portamentolegato",
-    "lfo1speed",
-    "lfo1trigger",
-    "lfo1lag",
-    "lfo1shape",
-    "lfo1retrigger",
-    "lfo1source",
-    "lfo1amplitude",
-    "lfo2speed",
-    "lfo2trigger",
-    "lfo2lag",
-    "lfo2shape",
-    "lfo2retrigger",
-    "lfo2source",
-    "lfo2amplitude",
-    "env1triggermode",
-    "env1delay",
-    "env1attack",
-    "env1decay",
-    "env1sustain",
-    "env1release",
-    "env1amplitude",
-    "env1lfotriggermode",
-    "env1mode",
-    "env2triggermode",
-    "env2delay",
-    "env2attack",
-    "env2decay",
-    "env2sustain",
-    "env2release",
-    "env2amplitude",
-    "env2lfotriggermode",
-    "env2mode",
-    "env3triggermode",
-    "env3delay",
-    "env3attack",
-    "env3decay",
-    "env3sustain",
-    "env3release",
-    "env3amplitude",
-    "env3lfotriggermode",
-    "env3mode",
-    "trackingsource",
-    "trackingpoint1",
-    "trackingpoint2",
-    "trackingpoint3",
-    "trackingpoint4",
-    "trackingpoint5",
-    "ramp1rate",
-    "ramp1mode",
-    "ramp2rate",
-    "ramp2mode",
-    "dco1frequencymod",
-    "dco1pulsewidthmod",
-    "dco2frequencymod",
-    "dco2pulsewidthmod",
-    "vcffrequencymodenv1",
-    "vcffrequencymodpressure",
-    "vca1modvel",
-    "vca2modenv2",
-    "envelope1amplitudemod",
-    "envelope2amplitudemod",
-    "envelope3amplitudemod",
-    "lfo1amplitudemod",
-    "lfo2amplitudemod",
-    "portamentomod",
-    "vcffmmodenv3",
-    "vcffmmodpressure",
-    "lfo1speedmod",
-    "lfo2speedmod",
-    "mod1source",
-    "mod1destination",
-    "mod1amount",
-    "mod2source",
-    "mod2destination",
-    "mod2amount",
-    "mod3source",
-    "mod3destination",
-    "mod3amount",
-    "mod4source",
-    "mod4destination",
-    "mod4amount",
-    "mod5source",
-    "mod5destination",
-    "mod5amount",
-    "mod6source",
-    "mod6destination",
-    "mod6amount",
-    "mod7source",
-    "mod7destination",
-    "mod7amount",
-    "mod8source",
-    "mod8destination",
-    "mod8amount",
-    "mod9source",
-    "mod9destination",
-    "mod9amount",
-    "mod10source",
-    "mod10destination",
-    "mod10amount"
-    };
+		"section8singleno",			// *
+		"section8lowkey",
+		"section8highkey",
+		"section8rcvch_velosw_mute",	// *
+		"section8mode_outselect",	//*
+		"section8level",
+		"section8transpose",
+		"section8tune"
+		
+		};
 
 
 
-    public byte[] emit(String key)
+
+    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
-        if (key.equals("bank")) return new byte[0];  // this is not emittable
-        if (key.equals("number")) return new byte[0];  // this is not emittable
+		model.set("bank", ((data[7] - 64) / 16) + (data[6] == 0x00 ? 0 : 4));
+		model.set("number", (data[7] - 64) % 16);
+			
+		byte[] name = new byte[10];
 
-        int index = ((Integer)(allMatrixParametersToIndex.get(key))).intValue();
-        int value = model.get(key, 0);
+    	// The K4 is riddled with byte-mangling.  :-(
+    	
+    	for(int i = 0; i < 76; i++)
+    		{
+    		int section = (i - 12) / 8 + 1;
 
-        if (key.equals("dco1lever1") || key.equals("dco1vibrato"))
-            {
-            index = ((Integer)(allMatrixParametersToIndex.get("dco1fixedmods1"))).intValue();
-            value = model.get("dco1lever1", 0) |  (model.get("dco1vibrato", 0) << 1);
-            }
-        else if (key.equals("dco1portamento") || key.equals("dco1keytracking"))
-            {
-            index = ((Integer)(allMatrixParametersToIndex.get("dco1fixedmods2"))).intValue();
-            value = model.get("dco1portamento", 0) | (model.get("dco1keytracking", 0) << 1);
-            }
-        if (key.equals("dco2lever1") || key.equals("dco2vibrato"))
-            {
-            index = ((Integer)(allMatrixParametersToIndex.get("dco2fixedmods1"))).intValue();
-            value = model.get("dco2lever1", 0) | (model.get("dco2vibrato", 0) << 1);
-            }
-        else if (key.equals("dco2portamento") || key.equals("dco2keytracking"))
-            {
-            index = ((Integer)(allMatrixParametersToIndex.get("dco2fixedmods2"))).intValue();
-            value = model.get("dco2portamento", 0) | (model.get("dco2keytracking", 0) << 1);
-            }
-        else if (key.equals("dco1wave") || key.equals("dco1pulse"))
-            {
-            index = ((Integer)(allMatrixParametersToIndex.get("dco1waveenable"))).intValue();
-            value = model.get("dco1wave", 0) | (model.get("dco1pulse", 0) << 1);
-            }
-        else if (key.equals("dco2wave") || key.equals("dco2pulse") || key.equals("dco2noise"))
-            {
-            index = ((Integer)(allMatrixParametersToIndex.get("dco2waveenable"))).intValue();
-            value = model.get("dco2wave", 0) | (model.get("dco2pulse", 0) << 1) | (model.get("dco2noise", 0) << 2);
-            }
-        else if (key.equals("vcflever1") || key.equals("vcfvibrato"))
-            {
-            index = ((Integer)(allMatrixParametersToIndex.get("vcffixedmods1"))).intValue();
-            value = model.get("vcflever1", 0) | (model.get("vcfvibrato", 0) << 1);
-            }
-        else if (key.equals("vcfportamento") || key.equals("vcfkeytracking"))
-            {
-            index = ((Integer)(allMatrixParametersToIndex.get("vcffixedmods2"))).intValue();
-            value = model.get("vcfportamento", 0) | (model.get("vcfkeytracking", 0) << 1);
-            }
-        else if (key.startsWith("mod"))
-            {
-            int modnumber = (int)(key.charAt(3) - '0');
-            if (key.charAt(4) == '0') // it's 10
-                modnumber = 10;
+    		String key = allParameters[i];
+    		    		
+			if (i < 10)  // name
+				{
+				name[i] = data[i + 8];
+				}
+			else if (key.endsWith("singleno"))
+				{
+				model.set("section" + section + "bank", data[i + 8] / 16);
+				model.set("section" + section + "number", data[i + 8] % 16);
+				}
+			else if (key.endsWith("rcvch_velosw_mute"))
+				{
+				model.set("section" + section + "channel", data[i + 8] & 15);
+				model.set("section" + section + "velocitysw", (data[i + 8] >> 4) & 3);
+				model.set("section" + section + "mute", (data[i + 8] >> 7) & 1);
+				}
+			else if (key.equals("mode_outselect"))
+				{
+				model.set("section" + section + "submix", data[i + 8] & 7);
+				model.set("section" + section + "playmode", (data[i + 8] >> 3) & 3);
+				}
+			else
+				{
+				model.set(key, data[i + 8]);
+				}
+			}
 
-            int modsource = model.get("mod" + modnumber  + "source", 0);
-            int moddestination = model.get("mod" + modnumber  + "destination", 0) + 1;  // IMPORTANT it  goes 1--32, not 0--31
-            int modamount = model.get("mod" + modnumber  + "amount", 0);
-            modnumber--;
+			model.set("name", new String(name));
 
-            return new byte[] { (byte)0xF0, 0x10, 0x06, 0x0B, (byte)modnumber, (byte)modsource, (byte) modamount, (byte)moddestination, (byte)0xF7 };
-            }
-        // don't need to customize portamentomode though we'll have to do it on parse
-                
-        //else if (key.equals("portamentomode"))
-        //              {
-        //              // two things are both exponential
-        //              }
-
-        byte VV = (byte)(value);
-        byte PP = (byte)(index & 127);
-        return new byte[] { (byte)0xF0, 0x10, 0x06, PP, VV, (byte)0xF7 };
+	        revise();
+    	    return true;            // change this as appropriate
         }
     
+    /** Generate a K4 checksum of the data bytes */
+    byte produceChecksum(byte[] bytes)
+        {
+        //      The K4 manual says the checksum is the
+        //              "Sum of the A5H and s0~s129".
+        //		I believe this is A5 + sum(s0...s129) ignoring overflow, cut to 7 bits
 
+        int checksum = 0xA5;
+        for(int i = 0; i < bytes.length; i++)
+            checksum = (checksum + bytes[i]) & 255;
+        return (byte)(checksum & 127);
+        }
 
-    public void parseParameter(byte[] data)
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-        if (data[3] == 0x0B)            // remote modulation parameter edit
-            {
-            byte modulation = (byte)(data[4] + 1);  // stored as 1...10, not 0...9
-            byte source = data[5];
-            byte amount = data[6];
-            byte destination = data[7];
-                
-            model.set("mod" + modulation + "source", source);
-            model.set("mod" + modulation + "destination", destination);
-            model.set("mod" + modulation + "amount", amount);
-            }
-        else if (data[3] == 0x06)               // remote basic parameter edit
-            {
-            byte parameter = data[4];
-            byte value = data[5];
-                
-            String key = allMatrixParameters[parameter];
-            if (key.equals("dco1fixedmods1"))
-                {
-                model.set("dco1lever1", value & 1);
-                model.set("dco1vibrato", (value >> 1) & 1);
-                }
-            else if (key.equals("dco1fixedmods2"))
-                {
-                model.set("dco1portamento", value & 1);
-                model.set("dco1keytracking", (value >> 1) & 1);
-                }
-            if (key.equals("dco2fixedmods1"))
-                {
-                model.set("dco2lever1", value & 1);
-                model.set("dco2vibrato", (value >> 1) & 1);
-                }
-            else if (key.equals("dco2fixedmods2"))
-                {
-                model.set("dco2portamento", value & 1);
-                model.set("dco2keytracking", (value >> 1) & 1);
-                }
-            else if (key.equals("dco1waveenable"))
-                {
-                model.set("dco1wave", value & 1);
-                model.set("dco1pulse", (value >> 1) & 1);
-                }
-            else if (key.equals("dco2waveenable"))
-                {
-                model.set("dco2wave", value & 1);
-                model.set("dco2pulse", (value >> 1) & 1);
-                model.set("dco2noise", (value >> 2) & 1);
-                }
-            else if (key.equals("vcffixedmods1"))
-                {
-                model.set("vcflever1", value & 1);
-                model.set("vcfvibrato", (value >> 1) & 1);
-                }
-            else if (key.equals("vcffixedmods2"))
-                {
-                model.set("vcfportamento", value & 1);
-                model.set("vcfkeytracking", (value >> 1) & 1);
-                }
-            else if (key.equals("portamentomode"))
-                {
-                if (value == 4)
-                    value = (byte)3;  // get rid of extra exponential
-                model.set("portamentomode", value);
-                }
-            else
-                {
-                model.set(key, value);
-                }
-            }
-        else
-            {
-            // we'll put CC here later
-            }
-        revise();
-        }
-        
-    public boolean parse(byte[] data, boolean ignorePatch)
-        {
-        // this stuff requires a checksum
-        // and required packing by two nibbles per byte (see http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-KawaiK4.html)
-        revise();
-        return true;            // change this as appropriate
-        }
+    	byte[] data = new byte[76];
     
-    
-    public byte[] emit(Model tempModel, boolean toWorkingMemory)
-        {
-        // this stuff requires a checksum
-        // and required packing by two nibbles per byte (see http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-KawaiK4.html)
-        // also note that writes are probably always to working memory.
-        // In order to STORE the working memory to the backing store
-        // You do STORE EDIT BUFFER:
-        // F0H 10H 06H 0EH PATCHNUMBER BANKNUMBER 0x0 F7H
-        // At present we do NOT SUPPORT GROUP MODE (which is some kind of ID mechanism with retransmission)
-        return new byte[0];
+    	String name = model.get("name", "Untitled") + "          ";
+    	
+    	// The K4 is riddled with byte-mangling.  :-(
+    	
+    	for(int i = 0; i < 76; i++)
+    		{
+    		int section = (i - 12) / 8 + 1;
+	   		String key = allParameters[i];
+    		    		
+			if (i < 10)  // name
+				{
+				data[i] = (byte)name.charAt(i);
+				}
+			else if (key.endsWith("singleno"))
+				{
+				data[i] = (byte)(model.get("section" + section + "bank", 0) * 4 + model.get("section" + section + "number", 0));
+				}
+			else if (key.endsWith("rcvch_velosw_mute"))
+				{
+				data[i] = (byte)((model.get("section" + section + "mute", 0) << 7) | (model.get("section" + section + "velocitysw", 0) << 5) | (model.get("section" + section + "channel", 0)));
+				} 
+			else if (key.equals("mode_outselect"))
+				{
+				data[i] = (byte)((model.get("section" + section + "playmode", 0) << 3) | (model.get("section" + section + "submix", 0) << 7));
+				}
+			else
+				{
+				data[i] = (byte)(model.get(key, 0));
+				}
+			}
+
+		// Error in Section 4-1, see "Corrected MIDI Implementation"
+
+        boolean external = (model.get("bank", 0) > 4);
+		byte position = (byte)((model.get("bank", 0) % 2) * 16 + (model.get("number", 0)));  // 0...63 for A1 .... D16
+		byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
+		result[0] = (byte)0xF0;
+		result[1] = (byte)0x40;
+		result[2] = (byte)getChannelOut();
+		if (toWorkingMemory)
+			result[3] = (byte)0x23;
+		else
+			result[3] = (byte)0x20;
+		result[4] = (byte)0x00;
+		result[5] = (byte)0x04;
+		if (toWorkingMemory)
+			result[6] = 0x00;	// Error in Section 5-12: missing parameter value (should be 0 for toWorkingMemory)
+		else
+			result[6] = (byte)(external ? 0x02 : 0x00);
+		if (toWorkingMemory)
+			result[7] = (byte)(0x40);  // indicates multi.  Error in the manual, it should be 0x000000 not 000x0000
+		else
+			result[7] = (byte)position;
+		System.arraycopy(data, 0, result, 8, 76);
+		result[8 + data.length] = (byte)produceChecksum(data);
+		result[9 + data.length] = (byte)0xF7;
+		return result;
         }
 
 
     public byte[] requestDump(Model tempModel)
         {
-        // It is not clear what this format is.
-        // The 6R transmits 0xF0, 0x10, 0x06, 0x04,
-        // then transmits 0=ALL PATCHES, 1=SINGLE PATCH,
-        // 2=SPLIT PATCH, 3=MASTER DATA,
-        // then transmits PATCH NUMBER (or 0 if ALL PATCHES or MASTER DATA)
-        // See http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-Matrix6R.html
-        //
-        // This isn't enough for the Matrix 1000, where the patch
-        // number must be 1000 values.  
-        // The Matrix 1000 format is vague
-        // See http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-KawaiK4.html
-        // One possibility is: 0xF0, 0x10, 0x06, 0x04,
-        // then 0x01 (for single patch),
-        // then PATCH BANK
-        // then PATCH NUMBER
-        // but it's not clear, we have to do some testing
-        return new byte[0];
+        boolean external = (model.get("bank", 0) > 4);
+		byte position = (byte)((model.get("bank", 0) % 2) * 16 + (model.get("number", 0)) + 64);  // 64 for "multi", that is, 64...127 for A1 .... D16
+        return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x00, 0x00, 0x04, 
+        			(byte)(external ? 0x02 : 0x00),
+        			position, (byte)0xF7};
         }
-        
-    public byte[] requestDump(int bank, int number, int id)
-        {
-        // It is not clear what this format is.
-        // The 6R transmits 0xF0, 0x10, 0x06, 0x04,
-        // then transmits 0=ALL PATCHES, 1=SINGLE PATCH,
-        // 2=SPLIT PATCH, 3=MASTER DATA,
-        // then transmits PATCH NUMBER (or 0 if ALL PATCHES or MASTER DATA)
-        // See http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-Matrix6R.html
-        //
-        // This isn't enough for the Matrix 1000, where the patch
-        // number must be 1000 values.  
-        // The Matrix 1000 format is vague
-        // See http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-KawaiK4.html
-        // One possibility is: 0xF0, 0x10, 0x06, 0x04,
-        // then 0x01 (for single patch),
-        // then PATCH BANK
-        // then PATCH NUMBER
-        // Another more likely possibility is to SET THE BANK,
-        // with F0H 10H 06H 0AH BANKNUMBER F7H
-        // and then issue a PATCH REQUEST
-        // as  0xF0, 0x10, 0x06, 0x04,
-        // then 0x01 (for single patch),
-        // then PATCH NUMBER
-        return new byte[0];
-        }
-        
+                
     public static boolean recognize(byte[] data)
         {
-        boolean v = (
-            data.length == EXPECTED_SYSEX_LENGTH &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x3E &&
-            data[2] == (byte)0x0E &&
-            data[4] == (byte)0x10);
-        return v;
+        return (data.length == EXPECTED_SYSEX_LENGTH &&
+				data[0] == (byte)0xF0 &&
+				data[1] == (byte)0x40 &&
+				data[3] == (byte)0x20 &&
+				data[4] == (byte)0x00 &&
+				data[5] == (byte)0x04 &&
+				(data[6] == (byte)0x00 || data[6] == (byte)0x02) &&
+				data[7] >= 64);  // that is, it's multi, not single
         }
         
 
-    public static final int EXPECTED_SYSEX_LENGTH = 265;        
-        
-        
+    public static final int EXPECTED_SYSEX_LENGTH = 77 + 9;        
+    
+    
     public static final int MAXIMUM_NAME_LENGTH = 10;
     public String revisePatchName(String name)
     	{
@@ -864,97 +662,9 @@ public class KawaiK4Multi extends Synth
 	        model.set("name", newnm);
         }
         
-
-
-
-
-    public void setParameterByIndex(int i, byte b)
-        {
-        String key = allParameters[i];
-                
-        if (key.equals("effecttype"))
-            {
-            // handle XT effects specially
-            if (b == 32) // delay
-                b = 8;
-            else if (b == 33)  // pan delay
-                b = 9;
-            else if (b == 34)  // mod delay
-                b = 10;
-            }
-
-
-        if (key.equals("-"))
-            {
-            // do nothing
-            }
-        else if (key.equals("osc1octave") || key.equals("osc2octave"))
-            {
-            model.set(key, (b - 16) / 12);
-            }
-        else if (key.equals("lfo1sync") || key.equals("lfo2sync"))
-            {
-            if (b == 3)
-                b = 2;          // because it's of/on/on/Clock, I dunno why
-            model.set(key, b);
-            }
-        else if (key.equals("arpuser1"))
-            {
-            model.set("arpuser1", (b >> 3) & 1);                    /// Do I have these backwards?
-            model.set("arpuser2", (b >> 2) & 1);
-            model.set("arpuser3", (b >> 1) & 1);
-            model.set("arpuser4", (b) & 1);
-            }
-        else if (key.equals("arpuser5"))
-            {
-            model.set("arpuser5", (b >> 3) & 1);                    /// Do I have these backwards?
-            model.set("arpuser6", (b >> 2) & 1);
-            model.set("arpuser7", (b >> 1) & 1);
-            model.set("arpuser8", (b) & 1);
-            }
-        else if (key.equals("arpuser9"))
-            {
-            model.set("arpuser9", (b >> 3) & 1);                    /// Do I have these backwards?
-            model.set("arpuser10", (b >> 2) & 1);
-            model.set("arpuser11", (b >> 1) & 1);
-            model.set("arpuser12", (b) & 1);
-            }
-        else if (key.equals("arpuser13"))
-            {
-            model.set("arpuser13", (b >> 3) & 1);                   /// Do I have these backwards?
-            model.set("arpuser14", (b >> 2) & 1);
-            model.set("arpuser15", (b >> 1) & 1);
-            model.set("arpuser16", (b) & 1);
-            }
-        else if (i >= 240 && i < 240 + 16)  // name
-            {
-            try 
-                {
-                String name = model.get("name", "Init Sound V1.1 ") + "          ";
-                byte[] str = name.getBytes("US-ASCII");
-                byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
-                System.arraycopy(str, 0, newstr, 0, 16);
-                newstr[i - 240] = b;
-                model.set("name", new String(newstr, "US-ASCII"));
-                }
-            catch (UnsupportedEncodingException e)
-                {
-                e.printStackTrace();
-                }
-            }
-        else
-            {
-            model.set(key, b);
-            }
-        }
-
-            
-    public boolean requestCloseWindow() { return true; }
-
-    public static String getSynthName() { return "Kawai K4 [Multi]"; }
+    public static String getSynthName() { return "Kawai K4/K4r [Multi]"; }
     
-    public String getPatchName() { return null; }
-    
+    public String getPatchName() { return model.get("name", "Untitled  "); }
 
     public void changePatch(Model tempModel)
     	{
@@ -976,11 +686,14 @@ public class KawaiK4Multi extends Synth
         // Next do a PC
         
         if (BB > 4) BB -= 4;
-        int PC = (BB * 16 + NN) + 64;		// + 64 for "Multi"
+        int PC = (BB * 16 + NN) + 64;  // 64 for Multi
         try 
         	{
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut() - 1, PC, 0));
             }
         catch (Exception e) { e.printStackTrace(); }
-    	}
+		}
+
+
+
     }

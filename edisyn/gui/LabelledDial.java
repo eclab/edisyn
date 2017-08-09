@@ -23,7 +23,7 @@ import java.awt.event.*;
    @author Sean Luke
 */
 
-public class LabelledDial extends NumericalComponent implements DialMap
+public class LabelledDial extends NumericalComponent
     {
     Dial dial;
     JLabel label;
@@ -53,7 +53,7 @@ public class LabelledDial extends NumericalComponent implements DialMap
 
     /** Adds a second (or third or fourth or more!) label to the dial, to allow
         for multiline labels. */
-    public JLabel setSecondLabel(String _label)
+    public JLabel addAdditionalLabel(String _label)
         {
         JLabel label2 = new JLabel(_label);
                 
@@ -209,6 +209,8 @@ class Dial extends JPanel
             status = STATUS_STATIC;
             repaint();
             mouseDown = false;
+            if (releaseListener != null)
+            	Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
             }
         }
         
@@ -242,12 +244,33 @@ class Dial extends JPanel
                 startState = getState();
                 status = STATUS_DIAL_DYNAMIC;
                 repaint();
+
+                if (releaseListener != null)
+					Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
+
+				// This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
+				// same component that received mouseClicked.  What the ... ? Asinine.
+				// So we create a global event listener which checks for mouseReleased and
+				// calls our own private function.  EVERYONE is going to do this.
+				
+				Toolkit.getDefaultToolkit().addAWTEventListener( releaseListener = new AWTEventListener()
+					{
+					public void eventDispatched(AWTEvent e)
+						{
+						if (e instanceof MouseEvent && e.getID() == MouseEvent.MOUSE_RELEASED)
+							{
+							mouseReleased((MouseEvent)e);
+							}
+						}
+					}, AWTEvent.MOUSE_EVENT_MASK);
                 }
                         
             public void mouseReleased(MouseEvent e)
                 {
                 status = STATUS_STATIC;
                 repaint();
+                if (releaseListener != null)
+					Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
                 }
                 
             public void mouseClicked(MouseEvent e)
@@ -292,27 +315,12 @@ class Dial extends JPanel
                 }
             });
 
-        // This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
-        // same component that received mouseClicked.  What the ... ? Asinine.
-        // So we create a global event listener which checks for mouseReleased and
-        // calls our own private function.  EVERYONE is going to do this.
-        long eventMask = AWTEvent.MOUSE_EVENT_MASK;
-                
-        Toolkit.getDefaultToolkit().addAWTEventListener( new AWTEventListener()
-            {
-            public void eventDispatched(AWTEvent e)
-                {
-                if (e instanceof MouseEvent && e.getID() == MouseEvent.MOUSE_RELEASED)
-                    {
-                    mouseReleased((MouseEvent)e);
-                    }
-                }
-            }, eventMask);
-
         setLayout(new BorderLayout());
         add(field, BorderLayout.CENTER);
         repaint();
         }
+        
+    AWTEventListener releaseListener = null;
         
     /** Returns the actual square within which the Dial's circle
         is drawn. */

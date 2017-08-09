@@ -209,7 +209,7 @@ public class WaldorfBlofeld extends Synth
                 return "" + (val + 1);
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Length");
+        ((LabelledDial)comp).addAdditionalLabel("Length");
         hbox.add(comp);
 
         comp = new LabelledDial("Pattern", this, "arpeggiatorpattern", color, 0, 16)
@@ -240,6 +240,7 @@ public class WaldorfBlofeld extends Synth
                 return ARPEGGIATOR_LENGTHS[val];
                 }
             };
+        model.setMetricMax( "arpeggiatorlength", 42);
         hbox.add(comp);
 
         comp = new LabelledDial("Octave", this, "arpeggiatoroctave", color, 0, 9)
@@ -252,7 +253,7 @@ public class WaldorfBlofeld extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Timing", this, "arpeggiatortimingfactor", color, 0, 127);
-        ((LabelledDial)comp).setSecondLabel("Factor");
+        ((LabelledDial)comp).addAdditionalLabel("Factor");
         hbox.add(comp);
 
         comp = new LabelledDial("Tempo", this, "arpeggiatortempo", color, 0, 127)
@@ -757,7 +758,7 @@ public class WaldorfBlofeld extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Attack", this, "envelope" + envelope + "attacklevel", color, 0, 127);
-        ((LabelledDial)comp).setSecondLabel("Level");
+        ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
         comp = new LabelledDial("Decay", this, "envelope" + envelope + "decay", color, 0, 127);
@@ -1046,7 +1047,7 @@ public class WaldorfBlofeld extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Mod", this, "amplifiermodamount", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Amount");
+        ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.WEST);
@@ -1094,15 +1095,14 @@ public class WaldorfBlofeld extends Synth
                 else return ("" + (val + 1));
                 }
             };
-        model.setMetricMin( "unisono", 2);
         hbox.add(comp);
 
         comp = new LabelledDial("Unisono", this, "unisonodetune", color, 0, 127);
-        ((LabelledDial)comp).setSecondLabel("Detune");
+        ((LabelledDial)comp).addAdditionalLabel("Detune");
         hbox.add(comp);
                 
         comp = new LabelledDial("Noise", this, "noiselevel", color, 0, 127);
-        ((LabelledDial)comp).setSecondLabel("Level");
+        ((LabelledDial)comp).addAdditionalLabel("Level");
         //getModel().setSpecial("noiselevel", 0);
         hbox.add(comp);
 
@@ -1117,16 +1117,16 @@ public class WaldorfBlofeld extends Synth
                 else return "--";
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Balance");
+        ((LabelledDial)comp).addAdditionalLabel("Balance");
         hbox.add(comp);
 
         comp = new LabelledDial("Noise", this, "noisecolour", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Colour");
+        ((LabelledDial)comp).addAdditionalLabel("Colour");
         hbox.add(comp);
 
 
         comp = new LabelledDial("Ringmod", this, "ringmodlevel", color, 0, 127);
-        ((LabelledDial)comp).setSecondLabel("Level");
+        ((LabelledDial)comp).addAdditionalLabel("Level");
         //getModel().setSpecial("ringmodlevel", 0);
         hbox.add(comp);
 
@@ -1141,11 +1141,11 @@ public class WaldorfBlofeld extends Synth
                 else return "--";
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Balance");
+        ((LabelledDial)comp).addAdditionalLabel("Balance");
         hbox.add(comp);
 
         comp = new LabelledDial("Pitch Mod", this, "oscpitchamount", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Amount");
+        ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
 
         vbox = new VBox();
@@ -1310,7 +1310,7 @@ public class WaldorfBlofeld extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Bend", this, "osc" + osc + "bendrange", color, 40, 88, 64);
-        ((LabelledDial)comp).setSecondLabel("Range");
+        ((LabelledDial)comp).addAdditionalLabel("Range");
         hbox.add(comp);
 
         comp = new LabelledDial("Keytrack", this, "osc" + osc + "keytrack", color, 0, 127)
@@ -1320,18 +1320,19 @@ public class WaldorfBlofeld extends Synth
                 {
                 return "" + (int)((val - 64) / 64.0 * 200.0) + "%";
                 }
+            public int getDefaultValue() { return 96; } // +100%
             };
         hbox.add(comp);
 
         comp = new LabelledDial("FM", this, "osc" + osc + "fmamount", color, 0, 127);
-        ((LabelledDial)comp).setSecondLabel("Amount");
+        ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
 
         comp = new LabelledDial("Pulsewidth", this, "osc" + osc + "pulsewidth", color, 0, 127);
         hbox.add(comp);
 
         comp = new LabelledDial("PWM", this, "osc" + osc + "pwmamount", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Amount");
+        ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
                 
         comp = new LabelledDial("Brilliance", this, "osc" + osc + "brilliance", color, 0, 127);
@@ -1351,7 +1352,7 @@ public class WaldorfBlofeld extends Synth
                 else return "--";
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Balance");
+        ((LabelledDial)comp).addAdditionalLabel("Balance");
         hbox.add(comp);
 
         vbox = new VBox();
@@ -1449,23 +1450,24 @@ public class WaldorfBlofeld extends Synth
                 {
                 return "" + (int)((val - 64) / 64.0 * 200.0) + "%";
                 }
+            public int getDefaultValue() { return 96; } // +100%
             };
         hbox.add(comp);
 
         comp = new LabelledDial("Env", this, "filter" + filter + "envamount", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Amount");
+        ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
 
         comp = new LabelledDial("Env", this, "filter" + filter + "envvelocity", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Velocity");
+        ((LabelledDial)comp).addAdditionalLabel("Velocity");
         hbox.add(comp);
                 
         comp = new LabelledDial("Mod", this, "filter" + filter + "modamount", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Amount");
+        ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
                 
         comp = new LabelledDial("FM", this, "filter" + filter + "fmamount", color, 0, 127);
-        ((LabelledDial)comp).setSecondLabel("Amount");
+        ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
 
         comp = new LabelledDial("Pan", this, "filter" + filter + "pan", color, 0, 127)
@@ -1482,7 +1484,7 @@ public class WaldorfBlofeld extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Pan", this, "filter" + filter + "panamount", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Amount");
+        ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.WEST);
@@ -1998,7 +2000,7 @@ public class WaldorfBlofeld extends Synth
 
     
     
-    public byte[] emit(Model tempModel, boolean toWorkingMemory)
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         if (tempModel == null)
             tempModel = getModel();
@@ -2180,7 +2182,7 @@ public class WaldorfBlofeld extends Synth
         revise();
         }
         
-    public boolean parse(byte[] data, boolean ignorePatch)
+    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         boolean retval = true;
         if (!ignorePatch && data[5] < 8)  // otherwise it's probably just local patch data.  Too bad they do this. :-(

@@ -25,6 +25,17 @@ public class Blank extends Synth
 	
 	
 
+	public Blank()
+		{
+		// Here you set up your interface.   You can look at other patch editors
+		// to see how they were done.  At the very end you typically would say something like:
+		
+		
+		model.set("name", "InitName");  // or whatever, to set the initial name of your patch (assuming you use "name" as the key for the patch name)
+		loadDefaults(); 				// this tells Edisyn to load the ".init" sysex file you created.  If you haven't set that up, it won't bother
+		}
+	
+	
 	
 	
 	/////// SOME NOTES ABOUT RELATIONSHIPS BETWEEN CERTAIN METHODS
@@ -36,7 +47,7 @@ public class Blank extends Synth
 	/// When a message is received from the synthesizser, Edisyn will do this:
 	/// If the message is a Sysex Message, then
 	/// 	Call recognize(message data).  If it returns true, then
-	///			Call parse(message data) [we presume it's a dump or a load from a file]
+	///			Call parse(message data, fromfile) [we presume it's a dump or a load from a file]
 	///		Else
 	///			Call parseParameter(message data) [we presume it's a parameter change, or maybe something else]
 	/// Else if the message is a complete CC or NRPN message
@@ -53,8 +64,8 @@ public class Blank extends Synth
 	/// If successful
 	///		Call doChangePatch(tempModel)						[don't override this]
 	///			This calls changePatch(tempModel)				[override this]
-	/// 	Call emitAll(tempModel, toWorkingMemory)
-	///			This calls emit(tempModel, toWorkingMemory)
+	/// 	Call emitAll(tempModel, toWorkingMemory, toFile)
+	///			This calls emit(tempModel, toWorkingMemory, toFile)
 	///
 	/// You could override either of these methods, but probably not both.
 	/// Note that saving strips out the non-sysex bytes from emitAll.
@@ -106,13 +117,13 @@ public class Blank extends Synth
     	return false;
     	}
 
-    public boolean parse(byte[] data, boolean ignorePatch)
+    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
     	{ 
     	// This bulk patch data will come from a file or transmitted over sysex.
     	// You should parse it into the model and return TRUE if successful, else FALSE.
     	// IGNOREPATCH tells you whether you should ignore any patch access
     	// information (number, bank, etc.) embedded in the data or store it in the
-    	// model as well. 
+    	// model as well.   FROMFILE indicates that the parse is from a sysex file.
     	return false; 
     	}
     	
@@ -227,27 +238,29 @@ public class Blank extends Synth
 
 	////// YOU PROBABLY WANT TO OVERRIDE *ONE* OF THE FOLLOWING
 
-    public Object[] emitAll(Model tempModel, boolean toWorkingMemory)
+    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         // This does a write of your patch to sysex (to dump to the synth or to store
         // in a file).  TOWORKINGMEMORY indicates whether the dump will go to the synth's
         // working memory, or written to a specific patch store.  TEMPMODEL will hold
-        // data regarding the patch store location.
+        // data regarding the patch store location.  TOFILE indicates that the write will
+        // be to a sysex file.
         //
         // IMPORTANT NOTE: if writing to a file, any NON-sysex messages will be
         // stripped out by Edisyn, and the remainder will be concatenated together
         // into one stream.
         //
         // If you need to send more than just a simple sysex message, override this one.
-        return super.emitAll(tempModel, toWorkingMemory);
+        return super.emitAll(tempModel, toWorkingMemory, toFile);
         }
 
-    public byte[] emit(Model tempModel, boolean toWorkingMemory) 
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile) 
     	{ 
         // This does a write of your patch to sysex (to dump to the synth or to store
         // in a file).  TOWORKINGMEMORY indicates whether the dump will go to the synth's
         // working memory, or written to a specific patch store.  TEMPMODEL will hold
-        // data regarding the patch store location.
+        // data regarding the patch store location.  TOFILE indicates that the write will
+        // be to a sysex file.
         //
         // If you need to send just a simple sysex message, override this one.
     	return new byte[0]; 

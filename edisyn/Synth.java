@@ -2316,7 +2316,7 @@ public abstract class Synth extends JComponent implements Updatable
         	Mac.setup(this);
         
         // Handle About menu for non-Macs
-        if (true) // Style.isWindows() || isUnix())
+        if (Style.isWindows() || isUnix())
         	{
         	// right now the only thing under "Help" is
         	// the About menu, so it doesn't exist on the Mac,

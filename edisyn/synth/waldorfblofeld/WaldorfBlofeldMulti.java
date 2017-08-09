@@ -311,7 +311,7 @@ public class WaldorfBlofeldMulti extends Synth
                 return vals[val];
                 }
             };
-        ((LabelledDial)comp).setSecondLabel(" ");
+        ((LabelledDial)comp).addAdditionalLabel(" ");
         model.removeMetricMinMax("bank" + inst);
         hbox.add(comp);
 
@@ -443,16 +443,16 @@ public class WaldorfBlofeldMulti extends Synth
                 else return "" + (val - 1);
                 }
             };
-        model.setMetricMin( "channel" + inst, 2);
-        ((LabelledDial)comp).setSecondLabel("Channel");
+        model.removeMetricMinMax( "channel" + inst);
+        ((LabelledDial)comp).addAdditionalLabel("Channel");
         hbox.add(comp);
 
         comp = new LabelledDial("Lowest", this, "lowvel" + inst, color, 1, 127);
-        ((LabelledDial)comp).setSecondLabel("Velocity");
+        ((LabelledDial)comp).addAdditionalLabel("Velocity");
         hbox.add(comp);
 
         comp = new LabelledDial("Highest", this, "hivel" + inst, color, 1, 127);
-        ((LabelledDial)comp).setSecondLabel("Velocity");
+        ((LabelledDial)comp).addAdditionalLabel("Velocity");
         hbox.add(comp);
 
         comp = new LabelledDial("Lowest", this, "lowkey" + inst, color, 0, 127) 
@@ -462,7 +462,7 @@ public class WaldorfBlofeldMulti extends Synth
                 return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Key");
+        ((LabelledDial)comp).addAdditionalLabel("Key");
         hbox.add(comp);
 
         comp = new LabelledDial("Highest", this, "hikey" + inst, color, 0, 127)
@@ -472,7 +472,7 @@ public class WaldorfBlofeldMulti extends Synth
                 return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Key");
+        ((LabelledDial)comp).addAdditionalLabel("Key");
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.WEST);
@@ -930,16 +930,8 @@ public class WaldorfBlofeldMulti extends Synth
 
 
 
-    public byte[] emit(String key)
-        {
-        // do nothing, this doesn't work for multi mode on the Blofeld
-        return new byte[0];
-        }
     
-    
-    
-    
-    public byte[] emit(Model tempModel, boolean toWorkingMemory)
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         if (tempModel == null)
             tempModel = getModel();
@@ -1156,7 +1148,7 @@ public class WaldorfBlofeldMulti extends Synth
         }
         
 
-    public boolean parse(byte[] data, boolean ignorePatch)
+    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         boolean retval = true;
         if (!ignorePatch && data[5] < 8)  // 8?  Maybe 1.  Anyway otherwise it's probably just local patch data.  Too bad they do this. :-(

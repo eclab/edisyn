@@ -12,6 +12,7 @@
 \usepackage{amssymb}
 \usepackage{array}
 \usepackage{color}
+\usepackage{rotating}
 
 \sloppy
 
@@ -166,7 +167,7 @@ By selecting {\bf Request Current Patch}, you can also ask your synthesizer to s
 
 \vspace{1em}
 
-Note that various synthesizers cannot do one or another of these tasks: some cannot write to permanent memory (it must be done manually).  Others cannot send to the current patch, only to a given patch.  Still others cannot request a current patch.  Still others cannot update individual parameters, and so on.  When this happens, that feature will generally be disabled in the menu.  As always, read the About Tab to learn more about what's going on with that synthesizer model.
+Note that various synthesizers cannot do one or another of these tasks.   When this happens, that feature will generally be disabled in the menu.  As always, read the About Tab to learn more about what's going on with that synthesizer model.  See Section \ref{inconsistent} for some information and griping about all this.
 
 \vspace{1em}
 
@@ -293,11 +294,53 @@ When a patch {\bf A} is {\it mutated}, it is modified with some degree of random
 \item Occasional parameters are {\it immutable}: they will refuse to be mutated.  These are typically things like patch names.
 \end{itemize}
 
+\section{Synthesizers are Inconsistent}
+
+The dirty truth is that synthesizer companies don't really care about MIDI control, else they'd put more effort into it.  The Waldorf Blofeld's multimode is entirely undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but the are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  And of course the infamous Korg Microsampler is such a MIDI disaster that Edisyn may never release its patch editor.
+
+Below is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.  What a mess.
+
+\newcommand\samefootnote{\addtocounter{footnote}{-1}\footnotemark}
+\newcommand\backfootnote[1]{\addtocounter{footnote}{-#1}\footnotemark\addtocounter{footnote}{#1}\addtocounter{footnote}{-1}}
+\newcommand\cm{\checkmark}
+
+
+
+\begin{center}
+\begin{tabular}{rllllllllll}
+&
+\begin{sideways}Send Parameter\end{sideways}&
+\begin{sideways}Receive Parameter\end{sideways}&
+\begin{sideways}Request Specific Patch\end{sideways}&
+\begin{sideways}Request Current Patch\end{sideways}&
+\begin{sideways}Send to Current Patch\end{sideways}&
+\begin{sideways}Send to Specific Patch\end{sideways}&
+\begin{sideways}Write to Specific Patch\end{sideways}&
+\begin{sideways}Change Mode\end{sideways}&
+\begin{sideways}Receive Error\end{sideways}&
+\begin{sideways}Standard Sysex File\end{sideways}\\[0.5em]
+\hline\\[-0.5em]
+Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}\footnotemark&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}            \\
+Waldorf Blofeld&{\cm}\footnote{Not Multi}&{\cm}\samefootnote&{\cm}&{\cm}\backfootnote{2}&{\cm}&{\cm}&{\cm}& & & {\cm}            \\
+Kawai K4/K4r&{\cm}\backfootnote{1}& &{\cm}& &{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}            \\
+Yamaha TX81Z&{\cm}\backfootnote{1}& & &{\cm}&{\cm}& & &  & &{\cm}\footnotemark            \\
+PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &            \\
+Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}&{\cm}& & &{\cm}          \\
+Korg Microsampler&{\cm}\footnotemark&{\cm}\samefootnote& & & & & &  &  &         \\
+\end{tabular}
+\end{center}
+\addtocounter{footnote}{-3}
+\footnotetext{Incoming patch won't have patch number or bank information.}
+\addtocounter{footnote}{1}
+\footnotetext{Not in Multimode.}
+\addtocounter{footnote}{1}
+\footnotetext{File contains two concatenated sysex transmissions.}
+\addtocounter{footnote}{1}
+\footnotetext{A limited number of them only.}
+
 \section{Writing a Patch Editor}
 
-So you want to write a patch editor?  They're not easy.  But they're fun!  Here are some hints.
-
-Let's say you're adding a single (non-multimode) patch editor for the Yamaha DX7.  Here's what you'd do.
+So you want to write a patch editor?  They're not easy.  But they're fun!  Here are some hints.  Let's say you're adding a single (non-multimode) patch editor for the Yamaha DX7.  Here's what you'd do.
 
 \subsection{Step One: Create Files}
 
@@ -364,7 +407,7 @@ So how to set parameters?  You usually don't add the key yourself, though you co
 
 MetricMin and MetricMax work like this.  Some numerical parameters are {\bf metric}, meaning they're a range of numbers where the order matters, such as 0--127.  Other numerical parameters are {\bf categorical} (or ``non-metric''), meaning that the numbers just represent an ID for the parameter.  For example, a list of wavetables is categorical: it doesn't {\it really} matter that wavetable 0 is ``HighHarm3'': it's just where it's stored in your synth.  
 
-Edisyn is smart about mutating and recombining metric parameters, but for non-metric ones it just picks a new random setting.  Sometimes your parameters are {\it both} metric and non-metric.  For example, some MIDI channel parameter might have the values 1--16 plus the non-metric values ``off'' (0), ``omni'' (17), and ``multi'' (18), or whatever.  In this case, your min is 0 and your max is 18.  But your {\it metric min} is 1 and your {\it metric max} is 16.  This tells Edisyn that values outside the metric min / metric max range should be treated as non-metric.\footnote{What if your synth has metric values on the outside and non-metric value on the inside? Edisyn can't handle that.  Thankfully I've not seen it yet.}  If you have this situation, you'll need to set the Metric Min and Metric Max manually.
+Edisyn is smart about mutating and recombining metric parameters, but for non-metric ones it just picks a new random setting.  Sometimes your parameters are {\it both} metric and non-metric.  For example, some parameter might have the values 1--32 plus the non-metric values ``off'' (0), ``uniform'' (17), and ``multi'' (18), or whatever.  In this case, your min is 0 and your max is 18.  But your {\it metric min} is 1 and your {\it metric max} is 16.  This tells Edisyn that values outside the metric min / metric max range should be treated as non-metric.\footnote{What if your synth has metric values on the outside and non-metric value on the inside? Edisyn can't handle that.  Thankfully I've not seen it yet.}  If you have this situation, you'll need to set the Metric Min and Metric Max manually.
 
 Parameters can be declared {\bf immutable}, meaning Edisyn can't mutate them or cross them over at all.  Also, all string parameters are automatically immutable.  You'll need to declare the others.
 
@@ -398,12 +441,27 @@ In conjunction with this, you will want to override the {\bf revisePatchName(...
 \item {\bf Chooser}\quad This is a pop-up menu or combo box, and it's a numerical component.  You provide it with an array of strings representing the parameter values 0...{\it n}.  For example, you might set up a wavetable chooser as:
 
 \begin{verbatim}
-String key = "wavetable";  // the key in the model
-String[] params = ARPEGGIATOR_CLOCK;  // this is an array of wavetable names elsewhere
-JComponent comp = new Chooser("Wave Table", this, key, params);
+String key = "wave";  // the key in the model
+String[] params = WAVE_OPTIONS;  // this is an array of wave names elsewhere
+JComponent comp = new Chooser("Wave", this, key, params);
 \end{verbatim}
 
-There's an option to add images to the chooser's menu.  Look it up.  Also see below (in the {\bf IconDisplay} bullet) for suggestions about how to load the images.
+There's an option to add images to the chooser's menu:
+
+\begin{verbatim}
+public static final ImageIcon[] MY_WAVE_ICONS = 
+    {
+    new ImageIcon(YamahaDX7.class.getResource("Wave1.png")),
+    new ImageIcon(YamahaDX7.class.getResource("Wave2.png")),
+    ... // and so on
+    };
+String key = "wave";  // the key in the model
+String[] params = WAVE_OPTIONS;  // this is an array of wavetable names elsewhere
+JComponent comp = new Chooser("Wave", this, key, params, MY_WAVE_ICONS);
+\end{verbatim}
+
+These PNG files would be stored in your {\tt edisyn/synth/yamahadx7/} directory.  They should be no taller than 16 pixels high: OS X refuses to display comboboxes with icons taller than that.
+
 
 \item {\bf Checkbox}\quad This is a simple checkbox.  By default it's on, but there's a setting to have it by default be off.  On is 1 and Off is 0 as stored in the model.
 
@@ -436,12 +494,12 @@ int min = 1;
 int max = 16;
 Color color = edisyn.gui.Style.COLOR_A;  // Make this the same color as the enclosing Category
 JComponent comp = new LabelledDial("Incoming", this, "midichannel", color, min, max);
-((LabelledDial)comp).setSecondLabel("MIDI Channel");
+((LabelledDial)comp).addAdditionalLabel("MIDI Channel");
 \end{verbatim}
 
-In fact, this method is poorly named.  You can add additional (third, fourth, ...) labels with it!
+You can add additional (third, fourth, ...) labels with it!  Note that you can change the first label text later on (with {\bf setLabel(...)}) but you can't change the label text of additional labels.
 
-It is very common that you need a custom string display for certain numbers in the center of the dial. You can do it like this:
+It is very common to need a custom string display for certain numbers in the center of the dial. You can do it like this:
 
 \begin{verbatim}
 int min = 0;
@@ -456,6 +514,43 @@ JComponent comp = new LabelledDial("MIDI Channel", this, "midichannel", color, m
         else return "" + val;
         }
     };
+\end{verbatim}
+
+Note that if you're just trying to subtract a certain amount from the dial, for example, to display the values 0...127 as the values -64...63, then there's a constructor option on LabelledDial for this:
+
+\begin{verbatim}
+new LabelledDial("Pan", this, "pan", color, 0, 127, 64)  // subtracts 64 before displaying
+\end{verbatim}
+
+This brings us to the discussion of {\it symmetry}.  Sometimes you want the dial to be symmetric looking, and sometimes not.  Edisyn tries hard to see to it that, whenever possible, the ``zero'' position on the dial is vertically directly above or directly below the center of the dial.  For example, a symmetric dial going from \(-100\) to \(+100\) would have zero at the top: and a dial going from 0 to 127 would have zero at the bottom (this second case results in Edisyn's unusual ``C''-shaped dials).  The ``zero'' position doesn't always mean 0: it should be the notional identity for the dial.  For example, a Keytrack dial might have 100\% be the identity position.
+
+By default Edisyn's dials assume that the zero position is at the beginning of the dial, resulting in the ``C'' shape.  Because a great many synthesizers go from 0...127 or from 0...100, if you use the aforementioned constructor option to subtract either 64 or 50 from the dial, Edisyn will automatically make it look symmetric.
+
+\begin{minipage}{\linewidth}
+\begin{wrapfigure}{r}{0.5in}
+\vspace{-1em}\includegraphics[scale=0.5]{6.png}\\
+\includegraphics[scale=0.5]{7.png}
+\vspace{-1em}
+\end{wrapfigure}
+
+Sometimes you need to customize the orientation in order to keep the zero position vertically centered. For example Blofeld's Arpeggiator has a variety of dials which aren't {\it quite} symmetric, because there are some unusual options at the start, as shown on the top figure at right.  But even worse: the Kawai K4 Effects patch has a number of dials which look like a {\it reversed} ``C'' because of so many additional options loaded at the end of the dial, as shown on the bottom figure.
+
+\vspace{0.5em}You can customize the orientation in two ways.  First, if you override LabelledDial's {\bf isSymmetric()} method to return {\bf true}, then the dial will display itself as fully symmetric.  Second, you could override LabelledDial's {\bf getStartAngle()} method to return the desired angle of the start (leftmost) position of your curve.  The default is 270 (the ``C''), and when fully symmetric it's \mbox{90 + (270 / 2).}
+\end{minipage}
+
+\vspace{0.5em}When the user double-clicks on a LabelledDial, try to have the LabelledDial go to some default position.  This is often the ``zero'' position: but sometimes it's not.  At any rate, it's almost always most common position the user would want, whatever that is.  By default the ``default position'' is the first position if asymmetric, and the center position if symmetric.  You can change the default position by overriding LabelledDial's {\bf getDefaultValue()} method to return a different value.
+
+Last but not least!  If you have a mixture of metric and non-metric values (for example, 0=``Off'', 1...32 = 1...32, and 33=``Uniform''), you will need to modify the MetricMin and MetricMax declarations.  Normally LabelledDial declares MetricMin to be the same as Min and MetricMax to be the same as Max.  But in this example, your minimum metric value is 1 and your maximum metric value is 32.
+
+\begin{verbatim}
+getModel().setMetricMin("whateverkey", 1);
+getModel().setMetricMax("whateverkey", 32);
+\end{verbatim}
+
+It sometimes happens that {\it none} of the LabelledDial values should be thought of as metric.  For example, a previous code example, we were using the LabelledDial to select the MIDI Channel.  Now, channels aren't metric: they're just 16 unique labels for channels which happen to be numbers.  In this case, we should remove the metric min and max entirely, so Edisyn considers the entire range to be non-metric.  To do this, we say:
+
+\begin{verbatim}
+getModel().removeMetricMinMax("midichannel");
 \end{verbatim}
 
 
@@ -545,13 +640,15 @@ You can also specify two intervals with start and stop keys respectively.  At pr
 
 You can also postprocess the sustain stage, final stage, or loop keys with {\bf postProcessLoopOrStageKey(...)}.  This function takes a key and its value, and returns a revised value, perhaps to add or subtract 1 from it.
 
-What if your synth uses angles/rates/slopes rather than time intervals?  For example, the Waldorf Blofeld does this.\footnote{Actually, while the Blofeld uses the slope mechanism, its internal envelope displays on-board the synthesizer [incorrectly!] use the earlier-discussed mechanism.  So Edisyn is describing the envelopes more accurately than the Blofeld itself is!}   To handle this situation, we add an additional array of double constants called {\it angles}.   It works like this.  The height keys and height constants are exactly as before.  And {\tt timeConstants[0]} still defines the x position of the first point in the envelope, as before.  But the other time constants work differently.
+What if your synth uses angles/rates/slopes rather than time intervals?  For example, the Waldorf Blofeld does this. To handle this situation, we add an additional array of double constants called {\it angles}.   It works like this.  The height keys and height constants are exactly as before.  And {\tt timeConstants[0]} still defines the x position of the first point in the envelope, as before.  But the other time constants work differently.
 
 Specifically, to compute the X coordinate of the next point, we take its key value and multiply it by the corresponding angle, and then take the absolute value.  This tells us the {\it positive angle} of the line.  Angles can never be negative: whether the line has a positive or negative slope is determined entirely by the relative position of the height keys.
 
 Since angles can and will create very strung-out horizontal lines, the remaining time constants tell us the {\it maximum length} of a line: these again should sum to 1.0.
 
-Below is the Waldorf Blofeld's code for an ADSR envelope.  All the values go 0...127.  See if this makes sense now:
+Angles/rates create weird idiosyncracies you'll have to think about.  For example, below is the Waldorf Blofeld's code for an ADSR envelope.  Before we go on, goo to the Blofeld patch editor and play with the Attack, Decay, Sustain, and Release settings.  Notice that as the Sustain gets higher, the Release gets longer but the Decay gets shorter, because the synth is basing this envelope on {\it rate} and not {\it time}.\footnote{Actually, the envelope as displayed in the Blofeld synth itself is drawn as if the Blofeld uses length.  But it does not: it's an error.  Edisyn's patch editor is right and Waldorf's UI designers are wrong!}  One consequence of this is that the Decay and Release together are as long as the Attack, because if you're basing on rate, then the amount of time to go up is the same as the total amount of time to go {\it down}, and both Decay and Release go down.  Thus we have a {\it max width} of 1/3 for all four portions: but at any time they can only sum to 1/3 [attack] + 1/3 [sustain] + 1/3 [decay + release].
+
+In the Blofeld ADSR, all the values go 0...127, and the angles are displayed by Edisyn to go from vertical to \(\pi/4\) (we don't want them too flattened out).  See if the code below makes sense now:
 
 \begin{verbatim}
 String[] timeKeys = new String[] { null, "attack", "decay", null, "release" };
@@ -576,13 +673,12 @@ JComponent comp = new EnvelopeDisplay(this, Color.red, "ADSR",
     };
 \end{verbatim}
 
-Envelopes generally stretch to fill all available space: they're particularly good to put as the ``last'' element in an HBox.  But you might want to fix them to a specific width. In this case, just call {\bf setPreferredWidth(...)}.
+Envelopes generally stretch to fill all available space: they're particularly good to put as the ``last'' element in an HBox via addLast().  But you might want to add them elsewhere and fix them to a specific width. In this case, just call {\bf setPreferredWidth(...)}.
+
+
+\item{\bf Spacers}\quad Occasionally you might need to add some fixed space to separate widgets.  See the {\tt Strut} class for factory methods that can build some struts for you.
 
 \end{itemize}
-
-\paragraph{Spacing}
-
-Occasionally you might need to add some fixed space to separate widgets.  See the {\tt Strut} class for factory methods that can build some struts for you.
 
 \paragraph{Dynamically Changing Widgets}
 
@@ -621,7 +717,7 @@ There are two ways the synth can send you information: as a bulk sysex patch dum
 
 \paragraph{Bulk Dumps}
 
-First, you need to implement the {\bf recognize(...)} method.  This method tells Edisyn that you recognize a sysex message.  You should verify the message length and the header to determine that it is in fact meant for your type of synthesizer {\it and} is probably correct.  This method will also be called when loading a sysex file from disk.
+First, you need to implement the {\bf recognize(...)} method.  This method tells Edisyn that you recognize a bulk dump sysex message.  You should verify the message length and the header to determine that it's a bulk dump and in fact meant is for your type of synthesizer {\it and} is probably correct.  This method will also be called when loading a sysex file from disk.\footnote{In fact the primary purpose of this method is to recognize sysex data loaded from disk: and so other sysex messages don't have their own recognize(...) method.}
 
 Next, you need to implement the {\bf parse(...)} method.  In this method you will be given a data array and your job is to set the model parameters according to your parsing of this array.  You set parameters using the {\bf set(...)} methods in the model, like this:
 
@@ -630,9 +726,9 @@ getModel().set(numericalKey, 4.2);		// or whatever new value
 getModel().set(stringKey, "newValue");	// or whatever new value
 \end{verbatim}
 
-It is possible that the parse(...) method will actually contain multiple sysex messages, if you loaded from a file.  This is because when emit a patch to the synth, one option you have (you'll see it later) is to send a stream of sysex messages; and when you write to a file, these same messages will get compacted into the file.  So if you do something fancy with emit(...) later, you may need to revise your parse(...) implementation.
+It is possible that the parse(...) method will actually contain multiple sysex messages, if you loaded from a file. For example, the Yamaha TX81Z's patch isn't a single sysex messages, it's {\it two} messages, to be backward compatible with an unimportant earlier synthesizer for some ridiculous Yamaha reason.  When you receive a dump via the synth, it'll only be one or other other of these messages.  But if you receive a TX81Z dump from a file, it'll be both messages.  Thankfully, the parse() method will tell you whether you're receiving from a file or not.\footnote{Though in fact the TX81Z implementation\,---\,and in fact all Edisyn's parse editors to date\,---\,don't change their parse(...) behavior when receiving from a file.}  So if you do something fancy with emit(...) later, you may need to revise your parse(...) implementation.
 
-You also need to implement the {\bf gatherPatchInfo(...)} method.  This method is nontrivial to implement.  Its function is to work with the user to determine the patch number, bank number, etc. necessary to ask the synthesizer for a given patch.  I suggest you take a look at existing patch editors to see how they have implemented it, and largely copy that.
+You also need to implement the {\bf gatherPatchInfo(...)} method.  This method is nontrivial to implement.  Its function is to work with the user to determine the patch number, bank number, etc. necessary to ask the synthesizer for a given patch.  I suggest you take a look at existing patch editors to see how they have implemented it, and largely copy that.  You'll notice that patch-gathering code usually pops up a dialog box with a bunch of rows in it.  How is this done?  Edisyn's Synth.java class has a special method to make this easy: {\bf showMultiOption(...)}.
 
 Additionally, you need to override methods which issue a dump request to the synth:
 
@@ -646,7 +742,7 @@ Both of these methods take a Model called {\bf tempModel} which will hold inform
 \item {\bf performRequestCurrentDump(...)} or {\bf requestCurrentDump(...)}\quad Override {\it one} of these methods to request a dump from the synth of the current patch being played.  These methods are basically just like performRequestDump(...) and requestDump(...), but they don't take a model (there's no patch number).
 \end{itemize}
 
-You will also need to implement {\bf changePatch(...)} to issue a patch change (it'll be called as part of performRequestDump(...)).    It's possible that your synthesizer must pause for a bit after a patch change (the Blofeld, for example, requires almost 200ms).  You may want to implement the {\bf getPauseAfterChangePatch()} method to slow Edisyn down.
+You will also probably need to implement {\bf changePatch(...)} to issue a patch change (it'll be called as part of performRequestDump(...)).    It's possible that your synthesizer must pause for a bit after a patch change (the Blofeld, for example, requires almost 200ms).  You may want to implement the {\bf getPauseAfterChangePatch()} method to slow Edisyn down.  If your synth can't change patches to whatever you're editing, that's okay, but you'll need to handle the right behavior later on when you emit a patch to it.
 
 
 If your synth cannot load the current patch you can avoid implementing some of these methods by saying the following:
@@ -704,7 +800,7 @@ writeTo.setEnabled(false);  // turns of the "Write to Patch..." menu option
 
 Again, these should be set in an overridden version of the {\bf sprout()} method.  Be sure to call {\bf super.sprout()} or bad things will happen.
 
-Note that emit(Model, ...) and emitAll(Model, ...) are also used to write out files.  If you implemented emitAll(...), be aware that Edisyn will strip out all of the javax.sound.midi.SimpleMessage messages and just pack together then remaining sysex messages.
+Note that emit(Model, ...) and emitAll(Model, ...) are also used to write out files.  If you implemented emitAll(...), be aware that Edisyn will strip out all of the javax.sound.midi.SimpleMessage messages and just pack together then remaining sysex messages.  This is what will result in multiple sysex messages being read in in a single parse(...) dump, as discussed earlier.  
 
 \paragraph{Individual Parameters}
 

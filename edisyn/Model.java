@@ -399,10 +399,13 @@ public class Model implements Cloneable
         {
         return lastKey;
         }
-            
+    
+    boolean debugSet = true;
+    
     /** Adds a key with the given Integer value, or changes it to the given value. */        
     public void set(String key, int value)
         {
+        if (debugSet) System.err.println(key + " --> " + value);
         // when do we push on the undo stack?
         if (
             undoListener != null &&         // when we have an undo listener AND
@@ -461,6 +464,8 @@ public class Model implements Cloneable
     /** Adds a key with the given String value, or changes it to the given value. */        
     public void set(String key, String value)
         {
+        if (debugSet) System.err.println(key + " --> " + value);
+
         // when do we push on the undo stack?
         if (
             undoListener != null &&         // when we have an undo listener AND

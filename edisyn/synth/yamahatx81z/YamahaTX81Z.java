@@ -123,15 +123,14 @@ public class YamahaTX81Z extends Synth
         
         model.set("name", "INIT SOUND");
         
-        
-        //loadDefaults();        
+        loadDefaults();        
         }
                 
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
         transmitTo.setEnabled(false);
-        transmitCurrent.setEnabled(false);
+        writeTo.setEnabled(false);
         return frame;
         }         
 
@@ -146,7 +145,6 @@ public class YamahaTX81Z extends Synth
             {
             bank = new JComboBox(new String[] { "I" });
             bank.setSelectedIndex(0);
-            bank.setEnabled(false);
             }
                         
                         
@@ -312,19 +310,19 @@ public class YamahaTX81Z extends Synth
         hbox.add(comp);
         
         comp = new LabelledDial("Pitch Mod", this, "lfopitchmodulationsensitivity", color, 0, 7);
-        ((LabelledDial)comp).setSecondLabel("Sensitivity");
+        ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
         hbox.add(comp);
         
         comp = new LabelledDial("Pitch Mod", this, "lfopitchmodulationdepth", color, 0, 99);
-        ((LabelledDial)comp).setSecondLabel("Depth");
+        ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
         
         comp = new LabelledDial("Amplitude Mod", this, "lfoamplitudemodulationsensitivity", color, 0, 7);
-        ((LabelledDial)comp).setSecondLabel("Sensitivity");
+        ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
         hbox.add(comp);
         
         comp = new LabelledDial("Amplitude Mod", this, "lfoamplitudemodulationdepth", color, 0, 99);
-        ((LabelledDial)comp).setSecondLabel("Depth");
+        ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
         
         category.add(hbox, BorderLayout.CENTER);
@@ -353,50 +351,50 @@ public class YamahaTX81Z extends Synth
         HBox hbox2 = new HBox();
 
         comp = new LabelledDial("Portamento", this, "portamentotime", color, 0, 99);
-        ((LabelledDial)comp).setSecondLabel("Time");
+        ((LabelledDial)comp).addAdditionalLabel("Time");
         hbox2.add(comp);
         
         comp = new LabelledDial("Pitch Bend", this, "pitchbendrange", color, 0, 12);
-        ((LabelledDial)comp).setSecondLabel("Range");
+        ((LabelledDial)comp).addAdditionalLabel("Range");
         hbox2.add(comp);
 
         comp = new LabelledDial("Foot Ctrl.", this, "footcontrolvolume", color, 0, 99);
-        ((LabelledDial)comp).setSecondLabel("Volume");
+        ((LabelledDial)comp).addAdditionalLabel("Volume");
         hbox2.add(comp);
         
         comp = new LabelledDial("Foot Ctrl.", this, "footcontrolpitch", color, 0, 99);
-        ((LabelledDial)comp).setSecondLabel("Pitch");
+        ((LabelledDial)comp).addAdditionalLabel("Pitch");
         hbox2.add(comp);
         
         comp = new LabelledDial("Foot Ctrl.", this, "footcontrolamplitude", color, 0, 99);
-        ((LabelledDial)comp).setSecondLabel("Amplitude");
+        ((LabelledDial)comp).addAdditionalLabel("Amplitude");
         hbox2.add(comp);
         
         comp = new LabelledDial("Mod Wheel", this, "modulationwheelpitch", color, 0, 99);
-        ((LabelledDial)comp).setSecondLabel("Pitch");
+        ((LabelledDial)comp).addAdditionalLabel("Pitch");
         hbox2.add(comp);
         
         comp = new LabelledDial("Mod Wheel", this, "modulationwheelamplitude", color, 0, 99);
-        ((LabelledDial)comp).setSecondLabel("Amplitude");
+        ((LabelledDial)comp).addAdditionalLabel("Amplitude");
         hbox2.add(comp);
         
         vbox.add(hbox2);
         hbox2 = new HBox();
         
         comp = new LabelledDial("Breath Ctrl.", this, "breathcontrolpitch", color, 0, 99);
-        ((LabelledDial)comp).setSecondLabel("Pitch");
+        ((LabelledDial)comp).addAdditionalLabel("Pitch");
         hbox2.add(comp);
         
         comp = new LabelledDial("Breath Ctrl.", this, "breathcontrolamplitude", color, 0, 99);
-        ((LabelledDial)comp).setSecondLabel("Amplitude");
+        ((LabelledDial)comp).addAdditionalLabel("Amplitude");
         hbox2.add(comp);
         
         comp = new LabelledDial("Breath Ctrl.", this, "breathcontrolpitchbias", color, 0, 99, 50);
-        ((LabelledDial)comp).setSecondLabel("Pitch Bias");
+        ((LabelledDial)comp).addAdditionalLabel("Pitch Bias");
         hbox2.add(comp);
         
         comp = new LabelledDial("Breath Ctrl.", this, "breathcontrolenvelopbias", color, 0, 99);
-        ((LabelledDial)comp).setSecondLabel("Env. Bias");
+        ((LabelledDial)comp).addAdditionalLabel("Env. Bias");
         hbox2.add(comp);
 
         vbox.add(hbox2);
@@ -510,15 +508,15 @@ public class YamahaTX81Z extends Synth
         hbox.add(vbox);
 
         comp = new LabelledDial("Env. Bias", this, "operator" + src + "egbiassensitivity", color, 0, 7);
-        ((LabelledDial)comp).setSecondLabel("Sensitivity");
+        ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
         hbox.add(comp);
         
         comp = new LabelledDial("Key Velocity", this, "operator" + src + "keyvelocitysensitivity", color, 0, 7);
-        ((LabelledDial)comp).setSecondLabel("Sensitivity");
+        ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
         hbox.add(comp);
         
         comp = new LabelledDial("Output", this, "operator" + src + "outputlevel", color, 0, 99);
-        ((LabelledDial)comp).setSecondLabel("Level");
+        ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
         comp = new LabelledDial("Detune", this, "operator" + src + "detune", color, 0, 6, 3)
@@ -544,7 +542,7 @@ public class YamahaTX81Z extends Synth
                     }
                 }               
             };
-        coarseFrequencyLabels[src - 1 ] = ((LabelledDial)comp).setSecondLabel("Fixed");
+        coarseFrequencyLabels[src - 1 ] = ((LabelledDial)comp).addAdditionalLabel("Fixed");
         model.register("operator" + src + "fixedfrequencyrange", (Updatable)comp);
         model.register("operator" + src + "fix", (Updatable)comp);              
         hbox.add(comp);
@@ -568,7 +566,7 @@ public class YamahaTX81Z extends Synth
                     }
                 }               
             };
-        fineFrequencyLabels[src - 1] = ((LabelledDial)comp).setSecondLabel("Fine");
+        fineFrequencyLabels[src - 1] = ((LabelledDial)comp).addAdditionalLabel("Fine");
         model.register("operator" + src + "fixedfrequencyrange", (Updatable)comp);
         model.register("operator" + src + "frequencycoarse", (Updatable)comp);
         model.register("operator" + src + "fix", (Updatable)comp);
@@ -581,7 +579,7 @@ public class YamahaTX81Z extends Synth
                 return FIX_RANGES[val];
                 }               
             };
-        frequencyRanges[src - 1].setSecondLabel("Range");
+        frequencyRanges[src - 1].addAdditionalLabel("Range");
         hbox.add(frequencyRanges[src - 1]);
 
     
@@ -624,15 +622,15 @@ public class YamahaTX81Z extends Synth
         HBox hbox = new HBox();
                
         comp = new LabelledDial("Attack", this, "operator" + envelope + "attackrate", color, 0, 31);
-        ((LabelledDial)comp).setSecondLabel("Rate");
+        ((LabelledDial)comp).addAdditionalLabel("Rate");
         hbox.add(comp);
 
         comp = new LabelledDial("Decay 1", this, "operator" + envelope + "decay1rate", color, 0, 31);
-        ((LabelledDial)comp).setSecondLabel("Rate");
+        ((LabelledDial)comp).addAdditionalLabel("Rate");
         hbox.add(comp);
 
         comp = new LabelledDial("Decay 1", this, "operator" + envelope + "decay1level", color, 0, 15);
-        ((LabelledDial)comp).setSecondLabel("Level");
+        ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
         comp = new LabelledDial("Decay 2", this, "operator" + envelope + "decay2rate", color, 0, 31)
@@ -643,19 +641,20 @@ public class YamahaTX81Z extends Synth
                 else return "" + val;
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Rate");
+        ((LabelledDial)comp).addAdditionalLabel("Rate");
+		model.setMetricMin("operator" + envelope + "decay2rate", 1);
         hbox.add(comp);
 
         comp = new LabelledDial("Release", this, "operator" + envelope + "releaserate", color, 0, 14, -1);
-        ((LabelledDial)comp).setSecondLabel("Rate");
+        ((LabelledDial)comp).addAdditionalLabel("Rate");
         hbox.add(comp);
         
         comp = new LabelledDial("Level", this, "operator" + envelope + "levelscaling", color, 0, 99);
-        ((LabelledDial)comp).setSecondLabel("Scaling");
+        ((LabelledDial)comp).addAdditionalLabel("Scaling");
         hbox.add(comp);
         
         comp = new LabelledDial("Rate", this, "operator" + envelope + "ratescaling", color, 0, 3);
-        ((LabelledDial)comp).setSecondLabel("Scaling");
+        ((LabelledDial)comp).addAdditionalLabel("Scaling");
         hbox.add(comp);
     
         // TODO: Modify envelope display to show shift
@@ -924,10 +923,10 @@ public class YamahaTX81Z extends Synth
 
         else if (key.equals("operator1enabled") || key.equals("operator2enabled") || key.equals("operator3enabled") || key.equals("operator4enabled"))
             {
-            int v1 = ((Integer)(allParametersToIndex.get("operator1enabled"))).intValue();
-            int v2 = ((Integer)(allParametersToIndex.get("operator2enabled"))).intValue();
-            int v3 = ((Integer)(allParametersToIndex.get("operator3enabled"))).intValue();
-            int v4 = ((Integer)(allParametersToIndex.get("operator4enabled"))).intValue();
+        	int v1 = model.get("operator1enabled", 0);
+        	int v2 = model.get("operator2enabled", 0);
+        	int v3 = model.get("operator3enabled", 0);
+        	int v4 = model.get("operator4enabled", 0);
                         
             byte PP = (byte) 93;
             // don't know if I got this in the right order, see parse()
@@ -960,7 +959,7 @@ public class YamahaTX81Z extends Synth
         }
     
 
-    public boolean parse(byte[] data, boolean ignorePatch)
+    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         if (data.length == 41 + 101) // probably VCED + ACED, break up and call recursively
             {
@@ -968,12 +967,12 @@ public class YamahaTX81Z extends Synth
                 {
                 byte[] d = new byte[101];
                 System.arraycopy(data, 0, d, 0, 101);
-                boolean result = parse(d, ignorePatch);
+                boolean result = parse(d, ignorePatch, fromFile);
                 if (!result)
                     return false;
                 d = new byte[41];
                 System.arraycopy(data, 101, d, 0, 41); 
-                result = parse(d, ignorePatch);
+                result = parse(d, ignorePatch, fromFile);
                 if (!result)
                     return false;
                 return true;
@@ -982,12 +981,12 @@ public class YamahaTX81Z extends Synth
                 {
                 byte[] d = new byte[41];
                 System.arraycopy(data, 101, d, 0, 41); 
-                boolean result = parse(d, ignorePatch);
+                boolean result = parse(d, ignorePatch, fromFile);
                 if (!result)
                     return false;
                 d = new byte[101];
                 System.arraycopy(data, 0, d, 0, 101);
-                result = parse(d, ignorePatch);
+                result = parse(d, ignorePatch, fromFile);
                 if (!result)
                     return false;
                 return true;
@@ -1083,14 +1082,7 @@ public class YamahaTX81Z extends Synth
         }
             
     
-    public byte[] emit(Model tempModel, boolean toWorkingMemory)
-        {
-        // we override emitAll(...) instead
-        new RuntimeException("emit(model, toWorkingMemory) should never have been called").printStackTrace();
-        return new byte[0];
-        }
-
-    public Object[] emitAll(Model tempModel, boolean toWorkingMemory)
+    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         byte[][] result = new byte[2][];
         
@@ -1114,14 +1106,20 @@ public class YamahaTX81Z extends Synth
             data[i + 10] = (byte)(model.get(allAdditionalParameters[i], 0));
             }
 
+        result[0][0] = (byte)0xF0;
+        result[0][1] = 0x43;
+        result[0][2] = (byte)(32 + getChannelOut() - 1);
+        result[0][3] = (byte)0x7E;
+        result[0][4] = 0x00;
+        result[0][5] = 0x21;
         System.arraycopy(data, 0, result[0], 6, data.length);
-        result[0][16 + data.length] = produceChecksum(data);
-        result[0][16 + data.length + 1] = (byte)0xF7;
+        result[0][6 + data.length] = produceChecksum(data);
+        result[0][7 + data.length] = (byte)0xF7;
 
 
         // Next the VCED
-        result[1] = new byte[101];
-        data = new byte[93];
+        result[1] = new byte[102];
+        data = new byte[94];
         for(int i = 0; i < allParameters.length - 18; i++)  // no name, no operatorenabled
             {
             data[i] = (byte)(model.get(allParameters[i], 0));
@@ -1134,11 +1132,11 @@ public class YamahaTX81Z extends Synth
             data[allParameters.length - 18 + i] = (byte)(name.charAt(i));
             }
         
-        int v1 = ((Integer)(allParametersToIndex.get("operator1enabled"))).intValue();
-        int v2 = ((Integer)(allParametersToIndex.get("operator2enabled"))).intValue();
-        int v3 = ((Integer)(allParametersToIndex.get("operator3enabled"))).intValue();
-        int v4 = ((Integer)(allParametersToIndex.get("operator4enabled"))).intValue();
-                
+        int v1 = model.get("operator1enabled", 0);
+        int v2 = model.get("operator2enabled", 0);
+        int v3 = model.get("operator3enabled", 0);
+        int v4 = model.get("operator4enabled", 0);
+        
         byte VV = (byte) ((v4 << 3) | (v3 << 2) | (v2 << 1) | v1);
         
         data[allParameters.length - 1] = VV;
@@ -1151,7 +1149,7 @@ public class YamahaTX81Z extends Synth
         result[1][5] = 0x5D;
         System.arraycopy(data, 0, result[1], 6, data.length);
         result[1][6 + data.length] = produceChecksum(data);
-        result[1][6 + data.length + 1] = (byte)0xF7;
+        result[1][7 + data.length] = (byte)0xF7;
         
         return result;
         }
@@ -1280,20 +1278,17 @@ public class YamahaTX81Z extends Synth
         table[1] = (byte)0x43;
         table[2] = (byte)(32 + getChannelOut() - 1);
         table[3] = (byte)0x10;
-        table[4] = (byte)0xF7;  // really!
-        table[5] = (byte)0xF7;  // we're changing table position 127
+        table[4] = (byte)127;  // really!
+        table[5] = (byte)127;  // we're changing table position 127
         table[6] = hi;
         table[7] = lo;
         table[8] = (byte)0xF7;
         
         tryToSendSysex(table);
         
-        // Now let's do the PC
+        // Now let's do the program change to program 127
         
-        try {
-            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut() - 1, 0xF7, 0));
-            }
-        catch (Exception e) { e.printStackTrace(); }
+        tryToSendMIDI(buildPC(getChannelOut() - 1, 127));
         }
     
     public String getPatchName() { return model.get("name", "INIT SOUND"); }

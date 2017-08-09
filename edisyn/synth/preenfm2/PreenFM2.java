@@ -435,7 +435,7 @@ public class PreenFM2 extends Synth
         	        return "" + (val / 10.0);
         	        }
 	        	};
-	        ((LabelledDial)comp).setSecondLabel("Velocity");
+	        ((LabelledDial)comp).addAdditionalLabel("Velocity");
 	        vbox.add(comp);
 
 	        hbox.add(vbox);
@@ -720,7 +720,7 @@ public class PreenFM2 extends Synth
 				return "" + (val / 100.0);
 				}
         	};
-        ((LabelledDial) comp).setSecondLabel("Level");
+        ((LabelledDial) comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
         comp = new LabelledDial("Decay", this, "op" + op + "envdecay", color, 0, 1600)
@@ -739,7 +739,7 @@ public class PreenFM2 extends Synth
 				return "" + (val / 100.0);
 				}
         	};
-        ((LabelledDial) comp).setSecondLabel("Level");
+        ((LabelledDial) comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
         comp = new LabelledDial("Sustain", this, "op" + op + "envsustain", color, 0, 1600)
@@ -758,7 +758,7 @@ public class PreenFM2 extends Synth
 				return "" + (val / 100.0);
 				}
         	};
-        ((LabelledDial) comp).setSecondLabel("Level");
+        ((LabelledDial) comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
         comp = new LabelledDial("Release", this, "op" + op + "envrelease", color, 0, 1600)
@@ -777,7 +777,7 @@ public class PreenFM2 extends Synth
 				return "" + (val / 100.0);
 				}
         	};
-        ((LabelledDial) comp).setSecondLabel("Level");
+        ((LabelledDial) comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
         comp = new EnvelopeDisplay(this, Color.red, 
@@ -919,6 +919,7 @@ public class PreenFM2 extends Synth
                 	}
                 }
             };
+        model.setMetricMax("lfo" + lfo + "frequency", 330);
         hbox.add(comp);
         
         comp = new LabelledDial("Bias", this, "lfo" + lfo + "bias", color, 0, 200)
@@ -939,6 +940,7 @@ public class PreenFM2 extends Synth
                 else return "" + (val - 1) / 100.0;
                 }
             };
+        model.setMetricMax("lfo" + lfo + "keysync", 1);
         hbox.add(comp);
         
         comp = new LabelledDial("Phase", this, "lfo" + lfo + "phase", color, 0, 100)
@@ -1505,7 +1507,7 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
 		
 	/** The PreenFM2 doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
 		the purposes of writing to a file. */
-	public byte[] emit(Model tempModel, boolean toWorkingMemory)
+	public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
 		{
 		final int HEADER = 10;
 		int[] vals = new int[sysexKeys.length + 11];
@@ -1541,7 +1543,7 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
 
 	/** The PreenFM2 doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
 		the purposes of reading a file. */
-	public boolean parse(byte[] data, boolean ignorePatch)
+	public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
 		{
 		final int HEADER = 10;
 		

@@ -365,7 +365,7 @@ public class WaldorfMicrowaveXT extends Synth
                 }
             };
         model.setMetricMin( "timequant", 1);
-        ((LabelledDial)comp).setSecondLabel("Quantization");
+        ((LabelledDial)comp).addAdditionalLabel("Quantization");
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.WEST);
@@ -396,7 +396,7 @@ public class WaldorfMicrowaveXT extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("External", this, "mixexternal", color, 0, 127);
-        ((LabelledDial)comp).setSecondLabel(" [XT/XTk] ");
+        ((LabelledDial)comp).addAdditionalLabel(" [XT/XTk] ");
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.WEST);
@@ -455,6 +455,7 @@ public class WaldorfMicrowaveXT extends Synth
                 {
                 return 260;
                 }
+            public int getDefaultValue() { return 48; } // +100
             };
         hbox.add(comp);
         
@@ -468,14 +469,14 @@ public class WaldorfMicrowaveXT extends Synth
                 }
             };
         model.setMetricMax("osc" + osc + "bendrange", 120);
-        ((LabelledDial)comp).setSecondLabel("Range");
+        ((LabelledDial)comp).addAdditionalLabel("Range");
         hbox.add(comp);
 
 
         if (osc==1)
             {
             comp = new LabelledDial("FM", this, "osc" + osc + "fmamount", color, 0, 127);
-            ((LabelledDial)comp).setSecondLabel("Amount");
+            ((LabelledDial)comp).addAdditionalLabel("Amount");
             hbox.add(comp);
             }
                         
@@ -585,11 +586,11 @@ public class WaldorfMicrowaveXT extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Envelope", this, "wave" + wave + "envamount", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Amount");
+        ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
 
         comp = new LabelledDial("Envelope", this, "wave" + wave + "envvelocity", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Velocity");
+        ((LabelledDial)comp).addAdditionalLabel("Velocity");
         hbox.add(comp);
 
         comp = new LabelledDial("Keytrack", this, "wave" + wave + "keytrack", color, 0, 127)
@@ -604,7 +605,7 @@ public class WaldorfMicrowaveXT extends Synth
                 }
             };
             
-        ((LabelledDial)comp).setSecondLabel("Amount");
+        ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
 
         VBox vbox = new VBox();
@@ -692,11 +693,11 @@ public class WaldorfMicrowaveXT extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Envelope", this, "filter1envamount", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Amount");
+        ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
 
         comp = new LabelledDial("Envelope", this, "filter1envvelocity", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Velocity");
+        ((LabelledDial)comp).addAdditionalLabel("Velocity");
         hbox.add(comp);
         
         category.add(hbox, BorderLayout.WEST);
@@ -775,7 +776,7 @@ public class WaldorfMicrowaveXT extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Envelope", this, "amplifierenvvelocity", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Velocity");
+        ((LabelledDial)comp).addAdditionalLabel("Velocity");
         hbox.add(comp);
 
         comp = new LabelledDial("Volume", this, "amplifierkeytrack", color, 0, 127)
@@ -789,7 +790,7 @@ public class WaldorfMicrowaveXT extends Synth
                 return true;
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Keytrack");
+        ((LabelledDial)comp).addAdditionalLabel("Keytrack");
         hbox.add(comp);
 
         comp = new LabelledDial("Panning", this, "pan", color, 0, 127, 64)
@@ -814,7 +815,7 @@ public class WaldorfMicrowaveXT extends Synth
                 return true;
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Keytrack");
+        ((LabelledDial)comp).addAdditionalLabel("Keytrack");
         hbox.add(comp);
 
         comp = new CheckBox("Chorus", this, "chorus");
@@ -998,23 +999,23 @@ public class WaldorfMicrowaveXT extends Synth
                 
         vbox = new VBox();
         comp = new LabelledDial("Key On", this, "waveenvkeyonstart", color, 0, 7, -1);
-        ((LabelledDial)comp).setSecondLabel("Loop Start");
+        ((LabelledDial)comp).addAdditionalLabel("Loop Start");
         vbox.add(comp);
 
         comp = new LabelledDial("Key On", this, "waveenvkeyonend", color, 0, 7, -1);
-        ((LabelledDial)comp).setSecondLabel(" Loop End ");  // additional space because OS X cuts off the "d"
-        ((LabelledDial)comp).setSecondLabel("(Sustain Pos)");  // additional space because OS X cuts off the "d"
+        ((LabelledDial)comp).addAdditionalLabel(" Loop End ");  // additional space because OS X cuts off the "d"
+        ((LabelledDial)comp).addAdditionalLabel("(Sustain Pos)");  // additional space because OS X cuts off the "d"
         vbox.add(comp);
         hbox.add(vbox);
                 
         vbox = new VBox();
         comp = new LabelledDial("Key Off", this, "waveenvkeyoffstart", color, 0, 7, -1);
-        ((LabelledDial)comp).setSecondLabel("Loop Start");
+        ((LabelledDial)comp).addAdditionalLabel("Loop Start");
         vbox.add(comp);
 
         comp = new LabelledDial("Key Off", this, "waveenvkeyoffend", color, 0, 7, -1);
-        ((LabelledDial)comp).setSecondLabel(" Loop End ");  // additional space because OS X cuts off the "d"
-        ((LabelledDial)comp).setSecondLabel(" (End Pos) ");  // additional space because OS X cuts off the "d"
+        ((LabelledDial)comp).addAdditionalLabel(" Loop End ");  // additional space because OS X cuts off the "d"
+        ((LabelledDial)comp).addAdditionalLabel(" (End Pos) ");  // additional space because OS X cuts off the "d"
         vbox.add(comp);
         hbox.add(vbox);
                 
@@ -1022,7 +1023,7 @@ public class WaldorfMicrowaveXT extends Synth
             {
             vbox = new VBox();
             comp = new LabelledDial("Time " + i, this, "waveenvtime" + i, color, 0, 127);
-            ((LabelledDial)comp).setSecondLabel(" ");
+            ((LabelledDial)comp).addAdditionalLabel(" ");
             vbox.add(comp);
             comp = new LabelledDial("Level " + i, this, "waveenvlevel" + i, color, 0, 127);
             vbox.add(comp);
@@ -1054,21 +1055,21 @@ public class WaldorfMicrowaveXT extends Synth
             {
             //vbox = new VBox();
             comp = new LabelledDial("Time " + i, this, "freeenvtime" + i, color, 0, 127);
-            ((LabelledDial)comp).setSecondLabel(" ");
+            ((LabelledDial)comp).addAdditionalLabel(" ");
             hbox.add(comp);
             comp = new LabelledDial("Level " + i, this, "freeenvlevel" + i, color, 0, 127, 64);
             if (i==3)
-                ((LabelledDial)comp).setSecondLabel("(Sustain)");
+                ((LabelledDial)comp).addAdditionalLabel("(Sustain)");
             hbox.add(comp);
             //hbox.add(vbox);
             }
 
         //vbox = new VBox();
         comp = new LabelledDial("Release", this, "freeenvreleasetime", color, 0, 127);
-        ((LabelledDial)comp).setSecondLabel("Time");
+        ((LabelledDial)comp).addAdditionalLabel("Time");
         hbox.add(comp);
         comp = new LabelledDial("Release", this, "freeenvreleaselevel", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Level");
+        ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
         //hbox.add(vbox);
                            
@@ -1256,7 +1257,7 @@ public class WaldorfMicrowaveXT extends Synth
         vbox2.add(comp);
 
         comp = new LabelledDial("Delay Time", this, "modifierdelaytime", color, 0, 127);
-        ((LabelledDial)comp).setSecondLabel(" ");
+        ((LabelledDial)comp).addAdditionalLabel(" ");
         vbox2.add(comp);
         
         hbox.add(vbox2);
@@ -1288,7 +1289,7 @@ public class WaldorfMicrowaveXT extends Synth
                 vbox2 = new VBox();
                 HBox hbox2 = new HBox();
                 comp = new LabelledDial("" + i + " Param", this, "modifier" + i + "param", color, 0, 127);
-                //((LabelledDial)comp).setSecondLabel(" ");
+                //((LabelledDial)comp).addAdditionalLabel(" ");
                 hbox2.add(comp);
                 hbox2.add(Strut.makeHorizontalStrut(20));
                 vbox2.add(hbox2);
@@ -2036,7 +2037,7 @@ public class WaldorfMicrowaveXT extends Synth
     
     
     
-    public byte[] emit(Model tempModel, boolean toWorkingMemory)
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         if (tempModel == null)
             tempModel = getModel();
@@ -2384,7 +2385,7 @@ public class WaldorfMicrowaveXT extends Synth
         }
         
 
-    public boolean parse(byte[] data, boolean ignorePatch)
+    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         boolean retval = true;
         if (!ignorePatch && data[5] < 8)  // otherwise it's probably just local patch data.  Too bad they do this. :-(

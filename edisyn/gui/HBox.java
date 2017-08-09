@@ -68,7 +68,9 @@ public class HBox extends JComponent implements Gatherable
         
     public void revalidate()
         {
+        panel.revalidate();
         box.revalidate();
+        super.revalidate();
         }
                 
     public void removeAll()

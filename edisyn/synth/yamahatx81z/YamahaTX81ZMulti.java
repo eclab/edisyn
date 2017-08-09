@@ -80,9 +80,18 @@ public class YamahaTX81ZMulti extends Synth
         
         model.set("name", "INIT SOUND");
         
-        //loadDefaults();        
+        loadDefaults();        
         }
                 
+    public JFrame sprout()
+        {
+        JFrame frame = super.sprout();
+        transmitTo.setEnabled(false);
+        writeTo.setEnabled(false);
+        return frame;
+        }         
+
+
     public String getDefaultResourceFileName() { return "YamahaTX81ZMulti.init"; }
 	public String getHTMLResourceFileName() { return "YamahaTX81ZMulti.html"; }
 
@@ -187,7 +196,7 @@ public class YamahaTX81ZMulti extends Synth
                 return MICROTUNE_KEYS[val];
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Key");
+        ((LabelledDial)comp).addAdditionalLabel("Key");
         hbox.add(comp);
 
         vbox = new VBox();
@@ -282,7 +291,8 @@ public class YamahaTX81ZMulti extends Synth
                 return BANKS[val];
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Bank");
+        ((LabelledDial)comp).addAdditionalLabel("Bank");
+        model.removeMetricMinMax("instrument" + src + "voicebank");
         hbox.add(comp);
         
         comp = new LabelledDial("Voice", this, "instrument" + src + "voicenumber", color, 0, 31)
@@ -292,7 +302,8 @@ public class YamahaTX81ZMulti extends Synth
                 return "" + (val + 1);
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Number");
+        ((LabelledDial)comp).addAdditionalLabel("Number");
+        model.removeMetricMinMax("instrument" + src + "voicenumber");
         hbox.add(comp);
         
         comp = new LabelledDial("Receive", this, "instrument" + src + "channel", color, 0, 16)
@@ -303,7 +314,8 @@ public class YamahaTX81ZMulti extends Synth
                 else return "" + (val + 1);
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Channel");
+        ((LabelledDial)comp).addAdditionalLabel("Channel");
+        model.removeMetricMinMax("instrument" + src + "channel");
         hbox.add(comp);
         
         comp = new LabelledDial("Max Notes", this, "instrument" + src + "maxnotes", color, 0, 8);
@@ -316,7 +328,7 @@ public class YamahaTX81ZMulti extends Synth
                 return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Key");
+        ((LabelledDial)comp).addAdditionalLabel("Key");
         hbox.add(comp);
 
         comp = new LabelledDial("Highest", this, "instrument" + src + "highkey", color, 0, 127)
@@ -326,7 +338,7 @@ public class YamahaTX81ZMulti extends Synth
                 return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Key");
+        ((LabelledDial)comp).addAdditionalLabel("Key");
         hbox.add(comp);
         
 
@@ -570,7 +582,7 @@ public class YamahaTX81ZMulti extends Synth
         }
         
 
-    public boolean parse(byte[] data, boolean ignorePatch)
+    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         // data starts at byte 16
         
@@ -633,15 +645,7 @@ public class YamahaTX81ZMulti extends Synth
         return 50;
         }
 
-    public byte[] emit(String key)
-        {
-        // we override emitAll(...) instead
-        new RuntimeException("emit(key) should never have been called").printStackTrace();
-        return new byte[0];
-        }
-    
-
-    public byte[] emit(Model tempModel, boolean toWorkingMemory)
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         byte data[] = new byte[120];
         data[0] = (byte)'L';
@@ -685,7 +689,7 @@ public class YamahaTX81ZMulti extends Synth
 	            }
 	        else if (i >= 100)	// name
 	        	{
-	        	data[i + 10] = (byte)(name.charAt(i));
+	        	data[i + 10] = (byte)(name.charAt(i - 100));
 	        	}
 	        else
 	        	{
@@ -807,20 +811,17 @@ public class YamahaTX81ZMulti extends Synth
         table[1] = (byte)0x43;
         table[2] = (byte)(32 + getChannelOut() - 1);
         table[3] = (byte)0x10;
-        table[4] = (byte)0xF7;  // really!
-        table[5] = (byte)0xF7;  // we're changing table position 127
+        table[4] = (byte)127;  // really!
+        table[5] = (byte)127;  // we're changing table position 127
         table[6] = hi;
         table[7] = lo;
         table[8] = (byte)0xF7;
         
         tryToSendSysex(table);
         
-        // Now let's do the PC
+        // Now let's do the program change to program 127
         
-        try {
-            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut() - 1, 0xF7, 0));
-            }
-        catch (Exception e) { e.printStackTrace(); }
+        tryToSendMIDI(buildPC(getChannelOut() - 1, (byte)127));
         }
 
     public String getPatchName() { return null; }

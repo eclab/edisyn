@@ -17,7 +17,7 @@ import java.io.*;
 import javax.sound.midi.*;
 
 /**
-   A patch editor for the Kawai K4.
+   A patch editor for the Kawai K4/K4r.
         
    @author Sean Luke
 */
@@ -80,6 +80,11 @@ public class KawaiK4 extends Synth
         for(int i = 0; i < allParameters.length; i++)
             {
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            }
+
+        for(int i = 0; i < allK4Parameters.length; i++)
+            {
+            allK4ParametersToIndex.put(allK4Parameters[i], Integer.valueOf(i));
             }
                 
         /// SOUND PANEL
@@ -207,7 +212,7 @@ public class KawaiK4 extends Synth
                 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, "Patch", "bank", "number", 4)
+        comp = new PatchDisplay(this, "Patch", "bank", "number", 9)
             {
             public String numberString(int number) { number += 1; return (number > 9 ? "0" : "00") + number; }
             public String bankString(int bank) { return BANKS[bank]; }
@@ -270,7 +275,11 @@ public class KawaiK4 extends Synth
         comp = new LabelledDial("Volume", this, "volume", color, 0, 100);
         hbox.add(comp);
 
-        comp = new LabelledDial("Effect", this, "effect", color, 0, 31, -1);
+        comp = new LabelledDial("Pitch Bend", this, "pitchbend", color, 0, 12);
+        hbox.add(comp);
+
+        // this appears to be poorly named in the manual (page 36)
+        comp = new LabelledDial("Pressure", this, "pres>freq", color, 0, 100, 50);
         hbox.add(comp);
 
         comp = new LabelledDial("Out Select", this, "outselect", color, 0, 7)
@@ -280,14 +289,57 @@ public class KawaiK4 extends Synth
                 return OUT_SELECTS[val];
                 }
             };
+        model.removeMetricMinMax("outselect");
         hbox.add(comp);
 
-        comp = new LabelledDial("Pitch Bend", this, "pitchbend", color, 0, 12);
+        comp = new LabelledDial("Effect [K4] /", this, "effect", color, 0, 31, -1);
+    	((LabelledDial)comp).addAdditionalLabel("Output [K4r]");
+        model.removeMetricMinMax("effect");
         hbox.add(comp);
 
-        // this appears to be poorly named in the manual (page 36)
-        comp = new LabelledDial("Pressure", this, "pres>freq", color, 0, 100, 50);
-        hbox.add(comp);
+		vbox = new VBox();
+        comp = new PushButton("Show Effect/Ouput")
+            {
+            public void perform()
+                {
+                final KawaiK4Effect synth = new KawaiK4Effect();
+                if (tuple != null)
+	                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                if (synth.tuple != null)
+                    {
+                    // This is a little tricky.  When the dump comes in from the synth,
+                    // Edisyn will only send it to the topmost panel.  So we first sprout
+                    // the panel and show it, and THEN send the dump request.  But this isn't
+                    // enough, because what setVisible(...) does is post an event on the
+                    // Swing Event Queue to build the window at a later time.  This later time
+                    // happens to be after the dump comes in, so it's ignored.  So what we
+                    // ALSO do is post the dump request to occur at the end of the Event Queue,
+                    // so by the time the dump request has been made, the window is shown and
+                    // frontmost.
+                                                
+                    synth.sprout();
+                    JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                    frame.setVisible(true);                                 
+
+                    SwingUtilities.invokeLater(
+                        new Runnable()
+                            {
+                            public void run() 
+                                { 
+                                Model tempModel = new Model();
+                                tempModel.set("number", KawaiK4.this.model.get("effect", 0));
+                                synth.performRequestDump(tempModel, false);
+                                }
+                            });
+                    }
+                else
+                	{
+                	showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                	}
+                }
+            };
+        vbox.add(comp);
+        hbox.add(vbox);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -316,7 +368,7 @@ public class KawaiK4 extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Pressure", this, "vibprs>vib", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Depth Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
         hbox.add(comp);
         
         category.add(hbox, BorderLayout.CENTER);
@@ -338,11 +390,11 @@ public class KawaiK4 extends Synth
         hbox.add(comp);
         
         comp = new LabelledDial("Key Scaling", this, "autobendks>time", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Time Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Time Mod");
         hbox.add(comp);
         
         comp = new LabelledDial("Velocity", this, "autobendvel>dep", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Depth Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
         hbox.add(comp);
         
         category.add(hbox, BorderLayout.CENTER);
@@ -373,7 +425,7 @@ public class KawaiK4 extends Synth
         hbox.add(comp);
         
         comp = new LabelledDial("Pressure", this, "lfoprs>dep", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Depth Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
         hbox.add(comp);
         
         category.add(hbox, BorderLayout.CENTER);
@@ -473,27 +525,27 @@ public class KawaiK4 extends Synth
         hbox.add(comp);
         
         comp = new LabelledDial("Velocity", this, "s" + envelope + "levelmodvel", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Depth Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
         hbox.add(comp);
         
         comp = new LabelledDial("Pressure", this, "s" + envelope + "levelmodprs", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Depth Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
         hbox.add(comp);
         
         comp = new LabelledDial("Key Scaling", this, "s" + envelope + "levelmodks", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Depth Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
         hbox.add(comp);
         
         comp = new LabelledDial("Velocity", this, "s" + envelope + "timemodonvel", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Time Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Time Mod");
         hbox.add(comp);
         
         comp = new LabelledDial("Release Vel", this, "s" + envelope + "timemodoffvel", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Time Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Time Mod");
         hbox.add(comp);
 
         comp = new LabelledDial("Key Scaling", this, "s" + envelope + "timemodks", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Time Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Time Mod");
         hbox.add(comp);
 
         // ADSR
@@ -524,27 +576,27 @@ public class KawaiK4 extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Velocity", this,  "f" + filter + "cutoffmodks", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Cutoff Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Cutoff Mod");
         hbox.add(comp);
                 
         comp = new LabelledDial("Pressure", this,  "f" + filter + "cutoffmodprs", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Cutoff Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Cutoff Mod");
         hbox.add(comp);
                 
         comp = new LabelledDial("Key Scaling", this,  "f" + filter + "cutoffmodvel", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Cutoff Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Cutoff Mod");
         hbox.add(comp);
                   
         comp = new LabelledDial("Velocity", this, "f" + filter + "dcftimemodonvel", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Time Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Time Mod");
         hbox.add(comp);
         
         comp = new LabelledDial("Release Vel", this, "f" + filter + "dcftimemodoffvel", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Time Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Time Mod");
         hbox.add(comp);
 
         comp = new LabelledDial("Key Scaling", this, "f" + filter + "dcftimemodks", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Time Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Time Mod");
         hbox.add(comp);
         
         VBox vbox = new VBox();
@@ -580,7 +632,7 @@ public class KawaiK4 extends Synth
         hbox.add(comp);
                         
         comp = new LabelledDial("Velocity", this,  "f" + filterenv + "dcfenvveldep", color, 0, 100, 50);
-        ((LabelledDial)comp).setSecondLabel("Depth Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
         hbox.add(comp);
                 
         comp = new EnvelopeDisplay(this, Color.red, 
@@ -654,9 +706,10 @@ public class KawaiK4 extends Synth
 		"s:envelopesustain",
 		"s:enveloperelease",
 		"s:levelmodvel",
+		"s:levelmodprs",
 		"s:levelmodks",
 		"s:timemodonvel",
-		"s:timmodoffvel",
+		"s:timemodoffvel",
 		"s:timemodks",
 		"f:cutoff",
 		"f:resonance",
@@ -679,10 +732,9 @@ public class KawaiK4 extends Synth
     /** Map of parameter -> index in the allParameters array. */
     HashMap allParametersToIndex = new HashMap();
 
-    /** List of all Oberheim Sysex parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
+    /** List of all K4 parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
 
-    /// * indicates parameters which must be handled specially due to packing
-    /// that Waldorf decided to do.  :-(
+    /// * indicates parameters which must be handled specially
 
     final static String[] allParameters = new String[/*100 or so*/] 
     {
@@ -699,7 +751,7 @@ public class KawaiK4 extends Synth
     "volume",                   
     "effect",
     "outselect",
-    "sourcemode_polymod_ams1>s2_ams3>s4",		// *
+    "sourcemode_polymode_ams1>s2_ams3>s4",		// *
     "s1mute_s2mute_s3mute_s4mute_vibshape",     // *
     "pitchbend_wheelassign",     				// *
     "vibspeed",
@@ -804,6 +856,8 @@ public class KawaiK4 extends Synth
     "f2dcfenvveldep",
     "f1dcfenvattack",
     "f2dcfenvattack",
+    "f1dcfenvdecay",
+    "f2dcfenvdecay",
     "f1dcfenvsustain",
     "f2dcfenvsustain",
     "f1dcfenvrelease",
@@ -841,7 +895,11 @@ public class KawaiK4 extends Synth
 			byte msb = (byte)(model.get(key, 0) >> 7);		// particularly for "waveselect"
 			byte lsb = (byte)(model.get(key, 0) & 127);
 
-			if (key.startsWith("s1"))
+			if (key.equals("s1mute") || key.equals("s2mute") || key.equals("s3mute") || key.equals("s4mute"))
+				{
+				// leave as is
+				}
+			else if (key.startsWith("s1"))
 				{
 				source = 1;
 				newkey = "s:" + key.substring(2);
@@ -872,21 +930,27 @@ public class KawaiK4 extends Synth
 				newkey = "f:" + key.substring(2);
 				}
 				
-			int index = ((Integer)(allK4ParametersToIndex.get(newkey))).intValue();
-
+			int index = 0;
+			
+			// handle waveselect specially
+			if (newkey.equals("s:waveselect"))
+				{
+				index = 36;	 // this is waveselect's parameter
+				}
+			else
+				{
+				index = ((Integer)(allK4ParametersToIndex.get(newkey))).intValue();
+				}
+				
 			return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x04, (byte)index, (byte)((source << 1) | msb), (byte)lsb, (byte)0xF7 };
 			}
         }
     
 
 
+
     public void parseParameter(byte[] data)
-        {
-        // This doesn't happen
-        }
-        
-    public boolean parse(byte[] data, boolean ignorePatch)
-        {
+    	{
 		if (data.length == 7 &&			// write error report
 			data[0] == (byte)0xF0 &&
 			data[1] == (byte)0x40 &&
@@ -903,13 +967,12 @@ public class KawaiK4 extends Synth
 				error = "External Data Card is Not Inserted";
 			
             showSimpleError("Write Failed", error);
-			return true;
 			}
-		else 
-			{
-			if (data[7] > 64)  // it's multi, not sure how that happened
-				{ new RuntimeException("Multi provided to parse, which shouldn't happen").printStackTrace(); return false; }
-			
+    	}
+
+
+    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
+        {
 			model.set("bank", (data[7] / 16) + (data[6] == 0x00 ? 0 : 4));
 			model.set("number", data[7] % 16);
 			
@@ -925,7 +988,7 @@ public class KawaiK4 extends Synth
 				{
 				name[i] = data[i + 8];
 				}
-			else if (key.equals("sourcemode_polymod_ams1>s2_ams3>s4"))
+			else if (key.equals("sourcemode_polymode_ams1>s2_ams3>s4"))
 				{
 				model.set("sourcemode", data[i + 8] & 3);
 				model.set("polymode", (data[i + 8] >> 2) & 3);
@@ -1045,9 +1108,9 @@ public class KawaiK4 extends Synth
 
 	        revise();
     	    return true;            // change this as appropriate
-			}
         }
     
+        
     /** Generate a K4 checksum of the data bytes */
     byte produceChecksum(byte[] bytes)
         {
@@ -1061,7 +1124,7 @@ public class KawaiK4 extends Synth
         return (byte)(checksum & 127);
         }
 
-    public byte[] emit(Model tempModel, boolean toWorkingMemory)
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
     	byte[] data = new byte[130];
     
@@ -1071,13 +1134,13 @@ public class KawaiK4 extends Synth
     	
     	for(int i = 0; i < 130; i++)
     		{
-    		String key = allParameters[i];
+	   		String key = allParameters[i];
     		    		
 			if (i < 10)  // name
 				{
 				data[i] = (byte)name.charAt(i);
 				}
-			else if (key.equals("sourcemode_polymod_ams1>s2_ams3>s4"))
+			else if (key.equals("sourcemode_polymode_ams1>s2_ams3>s4"))
 				{
 				data[i] = (byte)(model.get("sourcemode", 0) | (model.get("polymode", 0) << 2) | (model.get("ams1>s2", 0) << 4) | (model.get("ams3>s4", 0) << 5));
 				}
@@ -1185,17 +1248,18 @@ public class KawaiK4 extends Synth
 			result[3] = (byte)0x20;
 		result[4] = (byte)0x00;
 		result[5] = (byte)0x04;
+		
 		if (toWorkingMemory)
-			result[6] = 0x00;
+			result[6] = 0x00;		// Error in Section 5-12: missing parameter value (should be 0 for toWorkingMemory)
 		else
 			result[6] = (byte)(external ? 0x02 : 0x00);
 		if (toWorkingMemory)
-			result[7] = (byte)(0x40);  // error in the manual, it should be 0x000000 not 000x0000
+			result[7] = (byte)(0x00);  // indicates single
 		else
 			result[7] = (byte)position;
-		System.arraycopy(data, 0, result, 0, 130);
-		result[8] = (byte)produceChecksum(data);
-		result[9] = (byte)0xF7;
+		System.arraycopy(data, 0, result, 8, 130);
+		result[8 + data.length] = (byte)produceChecksum(data);
+		result[9 + data.length] = (byte)0xF7;
 		return result;
         }
 
@@ -1211,22 +1275,14 @@ public class KawaiK4 extends Synth
                 
     public static boolean recognize(byte[] data)
         {
-        return ((
-            			data.length == EXPECTED_SYSEX_LENGTH &&
-            			data[0] == (byte)0xF0 &&
-            			data[1] == (byte)0x40 &&
-            			data[3] == (byte)0x21 &&
-            			data[4] == (byte)0x00 &&
-            			data[5] == (byte)0x04) ||
-            		(
-            			data.length == 7 &&			// write error report
-            			data[0] == (byte)0xF0 &&
-            			data[1] == (byte)0x40 &&
-            			data[3] >= (byte)0x41 &&
-            			data[3] <= (byte)0x43 &&
-            			data[4] == (byte)0x00 &&
-            			data[5] == (byte)0x04 &&
-            			data[7] <= 63));  // single patch
+        return (data.length == EXPECTED_SYSEX_LENGTH &&
+				data[0] == (byte)0xF0 &&
+				data[1] == (byte)0x40 &&
+				data[3] == (byte)0x20 &&
+				data[4] == (byte)0x00 &&
+				data[5] == (byte)0x04 &&
+				(data[6] == (byte)0x00 || data[6] == (byte)0x02) &&
+				data[7] < 64);  // that is, it's single, not multi
         }
         
 
@@ -1264,9 +1320,7 @@ public class KawaiK4 extends Synth
 	        model.set("name", newnm);
         }
         
-    public boolean requestCloseWindow() { return true; }
-
-    public static String getSynthName() { return "Kawai K4"; }
+    public static String getSynthName() { return "Kawai K4/K4r"; }
     
     public String getPatchName() { return model.get("name", "Untitled  "); }
 

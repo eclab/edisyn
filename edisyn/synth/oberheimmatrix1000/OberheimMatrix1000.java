@@ -263,15 +263,15 @@ public class OberheimMatrix1000 extends Synth
             {
             public boolean isSymmetric() { return true; }
             };
-        ((LabelledDial)comp).setSecondLabel("DCO 1 <> 2");
+        ((LabelledDial)comp).addAdditionalLabel("DCO 1 <> 2");
         hbox.add(comp);
 
         comp = new LabelledDial("Portamento", this, "portamento", color, 0, 63);
-        ((LabelledDial)comp).setSecondLabel("Rate");
+        ((LabelledDial)comp).addAdditionalLabel("Rate");
         hbox.add(comp);
 
         comp = new LabelledDial("Portamento", this, "portamentomod", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Vel Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Vel Mod");
         hbox.add(comp);
                 
 
@@ -326,21 +326,21 @@ public class OberheimMatrix1000 extends Synth
         hbox.add(vbox);
 
         comp = new LabelledDial("Wave Shape", this, "dco" + osc + "shape", color, 0, 31);
-        ((LabelledDial)comp).setSecondLabel("Saw <> Tri");
+        ((LabelledDial)comp).addAdditionalLabel("Saw <> Tri");
         hbox.add(comp);
 
         comp = new LabelledDial("Frequency", this, "dco" + osc + "frequency", color, 0, 63);
         hbox.add(comp);
                 
         comp = new LabelledDial("Frequency", this, "dco" + osc + "frequencymod", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("LFO 1 Mod");
+        ((LabelledDial)comp).addAdditionalLabel("LFO 1 Mod");
         hbox.add(comp);
 
         comp = new LabelledDial("Pulse Width", this, "dco" + osc + "pulsewidth", color, 0, 63);
         hbox.add(comp);
 
         comp = new LabelledDial("Pulse Width", this, "dco" + osc + "pulsewidthmod", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("LFO 2 Mod");
+        ((LabelledDial)comp).addAdditionalLabel("LFO 2 Mod");
         hbox.add(comp);
 
         if (osc==2)
@@ -394,11 +394,11 @@ public class OberheimMatrix1000 extends Synth
         hbox.add(comp);
                 
         comp = new LabelledDial("Frequency", this, "vcffrequencymodenv1", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Env 1 Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Env 1 Mod");
         hbox.add(comp);
                 
         comp = new LabelledDial("Frequency", this, "vcffrequencymodpressure", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Press Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Press Mod");
         hbox.add(comp);
         
         comp = new LabelledDial("Resonance", this, "vcfresonance", color, 0, 63);
@@ -408,11 +408,11 @@ public class OberheimMatrix1000 extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("FM", this, "vcffmmodenv3", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Env 3 Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Env 3 Mod");
         hbox.add(comp);
 
         comp = new LabelledDial("FM", this, "vcffmmodpressure", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Press Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Press Mod");
         hbox.add(comp);
                 
         category.add(hbox, BorderLayout.WEST);
@@ -439,11 +439,11 @@ public class OberheimMatrix1000 extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Volume", this, "vca1modvel", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Vel Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Vel Mod");
         hbox.add(comp);
                 
         comp = new LabelledDial("Volume", this, "vca2modenv2", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Env 2 Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Env 2 Mod");
         hbox.add(comp);
         
         category.add(hbox, BorderLayout.WEST);
@@ -483,21 +483,21 @@ public class OberheimMatrix1000 extends Synth
                 
         // The manual says this is 0...63, but the sysex website says this is 5-bit
         comp = new LabelledDial("Retrigger", this, "lfo" + lfo + "retrigger", color, 0, 31);
-        ((LabelledDial)comp).setSecondLabel("Point");
+        ((LabelledDial)comp).addAdditionalLabel("Point");
         hbox.add(comp);
                 
         comp = new LabelledDial("Amplitude", this, "lfo" + lfo + "amplitude", color, 0, 63);
         hbox.add(comp);
                 
         comp = new LabelledDial("Amplitude", this, "lfo" + lfo + "amplitudemod", color, 0, 63);
-        ((LabelledDial)comp).setSecondLabel("Ramp " + lfo + " Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Ramp " + lfo + " Mod");
         hbox.add(comp);
                 
         comp = new LabelledDial("Speed", this, "lfo" + lfo + "speed", color, 0, 63);
         hbox.add(comp);
 
         comp = new LabelledDial("Speed", this, "lfo" + lfo + "speedmod", color, 0, 63);
-        ((LabelledDial)comp).setSecondLabel(lfo == 1 ? "Press Mod" : "Key Mod");
+        ((LabelledDial)comp).addAdditionalLabel(lfo == 1 ? "Press Mod" : "Key Mod");
         hbox.add(comp);
                 
         category.add(hbox, BorderLayout.WEST);
@@ -587,7 +587,7 @@ public class OberheimMatrix1000 extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Amplitude", this, "env" + env + "amplitudemod", color, 0, 127, 64);
-        ((LabelledDial)comp).setSecondLabel("Vel Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Vel Mod");
         hbox.add(comp);
         
         hbox.addLast(envelopeBox[env - 1]);
@@ -1145,7 +1145,7 @@ public class OberheimMatrix1000 extends Synth
         revise();
         }
         
-    public boolean parse(byte[] data, boolean ignorePatch)
+    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         //  packing by two nibbles per byte (see http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-OberheimMatrix1000.html)
         
@@ -1235,7 +1235,7 @@ public class OberheimMatrix1000 extends Synth
         }
     
 
-    public Object[] emitAll(Model tempModel, boolean toWorkingMemory)
+    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         // this stuff requires a checksum
         // and required packing by two nibbles per byte (see http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-OberheimMatrix1000.html)
@@ -1331,7 +1331,7 @@ public class OberheimMatrix1000 extends Synth
     
         byte checksum = (byte)(check & 127);
 
-		if (toWorkingMemory)
+		if (toWorkingMemory || toFile)
 			{
 			// 0DH - SINGLE PATCH DATA TO EDIT BUFFER
 			byte[] d = new byte[275];

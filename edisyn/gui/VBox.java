@@ -25,6 +25,7 @@ import java.awt.event.*;
 public class VBox extends JComponent implements Gatherable
     {
     Box box;
+    JPanel panel = new JPanel();
     JComponent bottom;
         
     public Insets getInsets() { return Style.VBOX_INSETS; }
@@ -35,10 +36,27 @@ public class VBox extends JComponent implements Gatherable
         setBackground(Style.BACKGROUND_COLOR);
         box = new Box(BoxLayout.Y_AXIS);
         add(box, BorderLayout.NORTH);
+        panel.setLayout(new BorderLayout());
+        panel.setBackground(Style.BACKGROUND_COLOR);
+        add(panel, BorderLayout.CENTER);
         }
+        
+    public void addBottom(JComponent component)
+        {
+        bottom = component;
+        panel.add(bottom, BorderLayout.SOUTH);
+        }
+
+    public void removeBottom()
+    	{
+    	if (bottom != null)
+    		panel.remove(bottom);
+    	bottom = null;
+    	}
         
     public void revalidate()
         {
+        panel.revalidate();
         box.revalidate();
         super.revalidate();
         }
@@ -46,21 +64,8 @@ public class VBox extends JComponent implements Gatherable
     public void removeAll()
         {
         box.removeAll();
-        if (bottom != null)
-            remove(bottom);
         }               
                 
-    public void add(JComponent component)
-        {
-        box.add(component);
-        }
-    
-    public void addBottom(JComponent component)
-        {
-        bottom = component;
-        add(bottom, BorderLayout.SOUTH);
-        }
-
     public int getCount()
         {
         return box.getComponentCount();
@@ -76,6 +81,11 @@ public class VBox extends JComponent implements Gatherable
         box.remove(component);
         }   
         
+    public void add(JComponent component)
+        {
+        box.add(component);
+        }
+    
     public void gatherAllComponents(java.util.ArrayList list)
     	{
     	Component[] c = box.getComponents();

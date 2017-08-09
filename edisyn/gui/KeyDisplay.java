@@ -33,7 +33,7 @@ public class KeyDisplay extends NumericalComponent
     public void update(String key, Model model) 
     	{
     	redoTitle(getState());
-    	repaint(); 
+    	repaint();
     	}
 
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
@@ -43,7 +43,7 @@ public class KeyDisplay extends NumericalComponent
 		return KEYS[val % 12] + " " + (val / 12);
 		}
 		
-    public Dimension getPreferredSize() { return new Dimension(whiteKeyVals.length * Style.KEYBOARD_DEFAULT_WHITE_KEY_WIDTH, Style.KEYBOARD_DEFAULT_WHITE_KEY_HEIGHT); }
+    public Dimension getPreferredSize() { return new Dimension(whiteKeyVals.length * Style.KEYBOARD_DEFAULT_WHITE_KEY_WIDTH + 1, Style.KEYBOARD_DEFAULT_WHITE_KEY_HEIGHT); }
     public Dimension getMinimumSize() { return getPreferredSize(); }
     public Dimension getMaximumSize() { return getPreferredSize(); }
         
@@ -66,6 +66,7 @@ public class KeyDisplay extends NumericalComponent
     // you then drag elsewhere and RELEASE, the widget is never told.
     boolean mouseDown;
         
+    boolean dynamicUpdate;
     
     public int OCTAVES_BELOW_ZERO_YAMAHA = -2;
     public int OCTAVES_BELOW_ZERO_SPN = -1;
@@ -84,6 +85,8 @@ public class KeyDisplay extends NumericalComponent
             dynamicKey = -1;
             repaint();
             mouseDown = false;
+            if (releaseListener != null)
+            	Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
             }
         }
         
@@ -187,6 +190,8 @@ public class KeyDisplay extends NumericalComponent
     	return -1;
     	}
     
+    public boolean getDynamicUpdate() { return dynamicUpdate; }
+    public void setDynamicUpdate(boolean val) { dynamicUpdate = val; }
     
     boolean isWhiteKey(int key)
     	{
@@ -197,6 +202,8 @@ public class KeyDisplay extends NumericalComponent
 
 	Rectangle innerBounds;
 
+    AWTEventListener releaseListener = null;
+        
 	class Inner extends JComponent
 		{
 		public Inner()
@@ -210,6 +217,25 @@ public class KeyDisplay extends NumericalComponent
 					dynamicKey = findKey(e.getX(), e.getY());
 					redoTitle(dynamicKey);
 					repaint();
+
+					if (releaseListener != null)
+						Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
+
+					// This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
+					// same component that received mouseClicked.  What the ... ? Asinine.
+					// So we create a global event listener which checks for mouseReleased and
+					// calls our own private function.  EVERYONE is going to do this.
+				
+					Toolkit.getDefaultToolkit().addAWTEventListener( releaseListener = new AWTEventListener()
+						{
+						public void eventDispatched(AWTEvent e)
+							{
+							if (e instanceof MouseEvent && e.getID() == MouseEvent.MOUSE_RELEASED)
+								{
+								mouseReleased((MouseEvent)e);
+								}
+							}
+						}, AWTEvent.MOUSE_EVENT_MASK);
 					}
 						
 				public void mouseReleased(MouseEvent e)
@@ -219,6 +245,9 @@ public class KeyDisplay extends NumericalComponent
 						setState(dynamicKey + transpose);
 						dynamicKey = -1;
 						repaint();
+
+						if (releaseListener != null)
+							Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
 						}
 					}
 				});
@@ -230,6 +259,12 @@ public class KeyDisplay extends NumericalComponent
 					if (innerBounds.contains(e.getX(), e.getY()))
 						{
 						dynamicKey = findKey(e.getX(), e.getY());
+        
+        				if (dynamicUpdate)
+            				{
+            				setState(dynamicKey + transpose);
+							}
+
 						redoTitle(dynamicKey);
 						repaint();
 						}
@@ -241,23 +276,6 @@ public class KeyDisplay extends NumericalComponent
 						}				
 					}
 				});
-
-			// This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
-			// same component that received mouseClicked.  What the ... ? Asinine.
-			// So we create a global event listener which checks for mouseReleased and
-			// calls our own private function.  EVERYONE is going to do this.
-			long eventMask = AWTEvent.MOUSE_EVENT_MASK;
-				
-			Toolkit.getDefaultToolkit().addAWTEventListener( new AWTEventListener()
-				{
-				public void eventDispatched(AWTEvent e)
-					{
-					if (e instanceof MouseEvent && e.getID() == MouseEvent.MOUSE_RELEASED)
-						{
-						mouseReleased((MouseEvent)e);
-						}
-					}
-				}, eventMask);
 			}
 
 
@@ -286,26 +304,28 @@ public class KeyDisplay extends NumericalComponent
 					{
 					if (whiteKeyVals[i] == selectedKey)
 						{
-						int xpos = (int)(rect.width * whiteKeys[i].getX());
-						int xwidth = (int)(rect.width * whiteKeys[i].getWidth());
-						int yheight = (int)(rect.height * whiteKeys[i].getHeight());
+						int xpos = (int)Math.ceil(rect.width * whiteKeys[i].getX());
+						int xwidth = (int)Math.ceil(rect.width * whiteKeys[i].getWidth());
+						int yheight = (int)Math.ceil(rect.height * whiteKeys[i].getHeight());
 						Rectangle2D.Double r = new Rectangle2D.Double(xpos, 0, xwidth, yheight);
 						graphics.fill(r);
 						break;
 						}
 					}
 				}        
-
-			if (isWhiteKey(dynamicKey))	// otherwise don't bother with this
+			else if (isWhiteKey(dynamicKey))	// otherwise don't bother with this
 				{
-				graphics.setPaint(Style.KEYBOARD_DYNAMIC_COLOR);
+				if (dynamicUpdate) 
+					graphics.setPaint(staticColor);
+				else
+					graphics.setPaint(Style.KEYBOARD_DYNAMIC_COLOR);
 				for(int i = 0; i < whiteKeyVals.length; i++)
 					{
 					if (whiteKeyVals[i] == dynamicKey)
 						{
-						int xpos = (int)(rect.width * whiteKeys[i].getX());
-						int xwidth = (int)(rect.width * whiteKeys[i].getWidth());
-						int yheight = (int)(rect.height * whiteKeys[i].getHeight());
+						int xpos = (int)Math.ceil(rect.width * whiteKeys[i].getX());
+						int xwidth = (int)Math.ceil(rect.width * whiteKeys[i].getWidth());
+						int yheight = (int)Math.ceil(rect.height * whiteKeys[i].getHeight());
 						Rectangle2D.Double r = new Rectangle2D.Double(xpos, 0, xwidth, yheight);
 						graphics.fill(r);
 						break;
@@ -326,13 +346,16 @@ public class KeyDisplay extends NumericalComponent
 			// draw the black notes
 			for(int i = 0; i < blackKeys.length; i++)
 				{
-				double xpos = (rect.width * blackKeys[i].getX());
-				double xwidth = (rect.width * blackKeys[i].getWidth());
-				double yheight = (rect.height * blackKeys[i].getHeight());
+				double xpos = Math.ceil(rect.width * blackKeys[i].getX());
+				double xwidth = Math.ceil(rect.width * blackKeys[i].getWidth());
+				double yheight = Math.ceil(rect.height * blackKeys[i].getHeight());
 				Rectangle2D.Double r = new Rectangle2D.Double(xpos, 0, xwidth, yheight);
 				if (blackKeyVals[i] == dynamicKey)
 					{
-					graphics.setColor(Style.KEYBOARD_DYNAMIC_COLOR);
+					if (dynamicUpdate) 
+						graphics.setPaint(staticColor);
+					else
+						graphics.setColor(Style.KEYBOARD_DYNAMIC_COLOR);
 					graphics.fill(r);
 					graphics.setColor(Style.KEYBOARD_BLACK_COLOR);
 					graphics.draw(r);

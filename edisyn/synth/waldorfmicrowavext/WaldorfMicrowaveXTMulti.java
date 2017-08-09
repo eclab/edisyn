@@ -244,7 +244,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
             public int getDefaultValue() { return 37; } // 120 BPM
             };
         model.setMetricMin( "arptempo", 2);
-        //((LabelledDial)comp).setSecondLabel("Tempo");
+        //((LabelledDial)comp).addAdditionalLabel("Tempo");
         hbox.add(comp);
         
         category.add(hbox, BorderLayout.WEST);
@@ -269,11 +269,13 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 return vals[val];
                 }
             };
-        ((LabelledDial)comp).setSecondLabel(" ");
+        ((LabelledDial)comp).addAdditionalLabel(" ");
+        model.removeMetricMinMax("bank" + inst);
         vbox.add(comp);
 
 
         comp = new LabelledDial("Number", this, "number" + inst, color, 0, 127, -1);
+        model.removeMetricMinMax("number" + inst);
         vbox.add(comp);
         
         hbox.add(vbox);
@@ -389,7 +391,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
         hbox2.add(comp);
         
         comp = new LabelledDial("Highest", this, "hivel" + inst, color, 1, 127);
-        ((LabelledDial)comp).setSecondLabel("Velocity");
+        ((LabelledDial)comp).addAdditionalLabel("Velocity");
         hbox2.add(comp);
 
         comp = new LabelledDial("Highest", this, "hikey" + inst, color, 0, 127)
@@ -399,7 +401,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Key");
+        ((LabelledDial)comp).addAdditionalLabel("Key");
         hbox2.add(comp);
 
         comp = new LabelledDial("MIDI", this, "channel" + inst, color, 0, 17)
@@ -414,7 +416,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 }
             };
         model.setMetricMin( "channel" + inst, 2);
-        ((LabelledDial)comp).setSecondLabel("Channel");
+        ((LabelledDial)comp).addAdditionalLabel("Channel");
         hbox2.add(comp);
 
         vbox.add(hbox2);
@@ -427,11 +429,11 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 return ARP_CLOCK[val];
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Clock");
+        ((LabelledDial)comp).addAdditionalLabel("Clock");
         hbox2.add(comp);
 
         comp = new LabelledDial("Arp", this, "arprange" + inst, color, 1, 10);
-        ((LabelledDial)comp).setSecondLabel("Range");
+        ((LabelledDial)comp).addAdditionalLabel("Range");
         hbox2.add(comp);
 
         comp = new LabelledDial("Arp", this, "arppattern" + inst, color, 0, 16)
@@ -446,7 +448,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 }
             };
         model.setMetricMin( "arppattern" + inst, 2);
-        ((LabelledDial)comp).setSecondLabel("Pattern");
+        ((LabelledDial)comp).addAdditionalLabel("Pattern");
         hbox2.add(comp);
 
         comp = new LabelledDial("Arp", this, "arpnotesout" + inst, color, 0, 18)
@@ -463,11 +465,12 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 }
             };
         model.setMetricMax( "arpnotesout" + inst, 16);
-        ((LabelledDial)comp).setSecondLabel("Notes Out");
+        model.setMetricMin( "arpnotesout" + inst, 1);
+        ((LabelledDial)comp).addAdditionalLabel("Notes Out");
         hbox2.add(comp);
         
         comp = new LabelledDial("Lowest", this, "lowvel" + inst, color, 1, 127);
-        ((LabelledDial)comp).setSecondLabel("Velocity");
+        ((LabelledDial)comp).addAdditionalLabel("Velocity");
         hbox2.add(comp);
 
         comp = new LabelledDial("Lowest", this, "lowkey" + inst, color, 0, 127)
@@ -477,7 +480,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
-        ((LabelledDial)comp).setSecondLabel("Key");
+        ((LabelledDial)comp).addAdditionalLabel("Key");
         hbox2.add(comp);
 
 
@@ -871,7 +874,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
     
     
     
-    public byte[] emit(Model tempModel, boolean toWorkingMemory)
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         if (tempModel == null)
             tempModel = getModel();
@@ -1101,7 +1104,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
         }
         
 
-    public boolean parse(byte[] data, boolean ignorePatch)
+    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
         // format example, it's written as 0x11.  It's actually 0x11, though we don't check for it here.

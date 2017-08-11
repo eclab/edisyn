@@ -381,7 +381,7 @@ public class WaldorfMicrowaveXT extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
+//        VBox vbox = new VBox();
         
         comp = new LabelledDial("Wave 1", this, "mixwave1", color, 0, 127);
         hbox.add(comp);
@@ -520,7 +520,7 @@ public class WaldorfMicrowaveXT extends Synth
         if (val > 3)
             {
             jump = (double)((val - 3) / 8.0);
-            if (jump != (int)jump)
+            if (jump != (int)jump)  // will fail for NaN of course
                 jump = (int)jump + 1;
             }
         else if (val < -3)
@@ -750,7 +750,7 @@ public class WaldorfMicrowaveXT extends Synth
         JComponent comp;
         String[] params = PLAY_PARAMETERS;
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
+//        VBox vbox = new VBox();
         
         for(int i = 1; i < 5; i++)
             {
@@ -836,10 +836,10 @@ public class WaldorfMicrowaveXT extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
+//        VBox vbox = new VBox();
         
 
-        vbox = new VBox();
+        VBox vbox = new VBox();
         params = OSCILLATOR_GLIDE_TYPES;
         comp = new Chooser("Type", this, "glidetype", params);
         vbox.add(comp);
@@ -867,10 +867,10 @@ public class WaldorfMicrowaveXT extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
+//        VBox vbox = new VBox();
         
 
-        vbox = new VBox();
+        VBox vbox = new VBox();
         params = LFO_SHAPES;
         comp = new Chooser("Shape", this, "lfo" + lfo + "shape", params);
         vbox.add(comp);
@@ -951,10 +951,10 @@ public class WaldorfMicrowaveXT extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
+//        VBox vbox = new VBox();
         
 
-        vbox = new VBox();
+        VBox vbox = new VBox();
         params = TRIGGERS;
         comp = new Chooser("Trigger", this, "envelope" + env + "trigger", params);
         vbox.add(comp);
@@ -985,9 +985,9 @@ public class WaldorfMicrowaveXT extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
+//        VBox vbox = new VBox();
         
-        vbox = new VBox();
+        VBox vbox = new VBox();
         params = TRIGGERS;
         comp = new Chooser("Trigger", this, "waveenvtrigger", params);
         vbox.add(comp);
@@ -1043,9 +1043,9 @@ public class WaldorfMicrowaveXT extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
+//        VBox vbox = new VBox();
         
-        vbox = new VBox();
+        VBox vbox = new VBox();
         params = TRIGGERS;
         comp = new Chooser("Trigger", this, "freeenvtrigger", params);
         vbox.add(comp);
@@ -1086,7 +1086,7 @@ public class WaldorfMicrowaveXT extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
+//        VBox vbox = new VBox();
         
         comp = new EnvelopeDisplay(this, Color.red, 
             new String[] { null, "envelope" + env +  "attack", "envelope" + env +  "decay", null, "envelope" + env +  "release" },
@@ -1108,7 +1108,7 @@ public class WaldorfMicrowaveXT extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
+//        VBox vbox = new VBox();
         
         EnvelopeDisplay disp = new EnvelopeDisplay(this, Color.red, 
             new String[] { null, "freeenvtime1", "freeenvtime2", "freeenvtime3", null, "freeenvreleasetime"},   //, null },
@@ -1132,7 +1132,7 @@ public class WaldorfMicrowaveXT extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
+//        VBox vbox = new VBox();
         
         EnvelopeDisplay disp = new EnvelopeDisplay(this, Color.red, 
             new String[] { null, "waveenvtime1", "waveenvtime2", "waveenvtime3", "waveenvtime4", "waveenvtime5", "waveenvtime6", "waveenvtime7", "waveenvtime8", null },
@@ -1166,9 +1166,9 @@ public class WaldorfMicrowaveXT extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
+//        VBox vbox = new VBox();
         
-        vbox = new VBox();
+        VBox vbox = new VBox();
         params = ASSIGNMENT;
         comp = new Chooser("Assignment", this, "assignment", params);
         vbox.add(comp);

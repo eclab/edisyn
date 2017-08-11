@@ -433,6 +433,7 @@ public class Midi
                                 
                 tuple.inWrap = ((MidiDeviceWrapper)(inCombo.getSelectedItem()));
                 tuple.in = tuple.inWrap.getThru(inReceiver);
+                tuple.inReceiver = inReceiver;
                 if (tuple.in == null)
                     {
                     JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the incoming MIDI Device.",  
@@ -462,6 +463,7 @@ public class Midi
                     {
                     tuple.keyWrap = ((MidiDeviceWrapper)(keyCombo.getSelectedItem()));
                     tuple.key = tuple.keyWrap.getThru(keyReceiver);
+                    tuple.keyReceiver = keyReceiver;
                     if (tuple.key == null)
                         {
                         JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the Controller MIDI Device.",  

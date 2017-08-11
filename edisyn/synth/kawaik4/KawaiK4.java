@@ -82,9 +82,9 @@ public class KawaiK4 extends Synth
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
 
-        for(int i = 0; i < allK4Parameters.length; i++)
+        for(int i = 0; i < internalParameters.length; i++)
             {
-            allK4ParametersToIndex.put(allK4Parameters[i], Integer.valueOf(i));
+            internalParametersToIndex.put(internalParameters[i], Integer.valueOf(i));
             }
                 
         /// SOUND PANEL
@@ -647,9 +647,9 @@ public class KawaiK4 extends Synth
         }
 
 
-	HashMap allK4ParametersToIndex = new HashMap();
+	HashMap internalParametersToIndex = new HashMap();
 	
-	final static String[] allK4Parameters = new String[]
+	final static String[] internalParameters = new String[]
 		{
 		"name1",
 		"name2",
@@ -939,7 +939,7 @@ public class KawaiK4 extends Synth
 				}
 			else
 				{
-				index = ((Integer)(allK4ParametersToIndex.get(newkey))).intValue();
+				index = ((Integer)(internalParametersToIndex.get(newkey))).intValue();
 				}
 				
 			return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x04, (byte)index, (byte)((source << 1) | msb), (byte)lsb, (byte)0xF7 };
@@ -1104,7 +1104,8 @@ public class KawaiK4 extends Synth
 				}
 			}
 
-			model.set("name", new String(name));
+			try { model.set("name", new String(name, "US-ASCII")); }
+			catch (UnsupportedEncodingException e) { e.printStackTrace(); }
 
 	        revise();
     	    return true;            // change this as appropriate

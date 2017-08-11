@@ -262,7 +262,7 @@ public class WaldorfBlofeldMulti extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
+//        VBox vbox = new VBox();
     
         comp = new LabelledDial("Volume", this, "volume", color, 0, 127);
         hbox.add(comp);

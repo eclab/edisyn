@@ -71,9 +71,9 @@ public class KawaiK4Drum extends Synth
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
 
-        for(int i = 0; i < allDrumParameters.length; i++)
+        for(int i = 0; i < internalParameters.length; i++)
             {
-            allDrumParametersToIndex.put(allDrumParameters[i], Integer.valueOf(i));
+            internalParametersToIndex.put(internalParameters[i], Integer.valueOf(i));
             }
 
         JComponent soundPanel = new SynthPanel();
@@ -348,12 +348,12 @@ public class KawaiK4Drum extends Synth
 
     /** Map of parameter -> index in the allParameters array. */
     HashMap allParametersToIndex = new HashMap();
-    HashMap allDrumParametersToIndex = new HashMap();
+    HashMap internalParametersToIndex = new HashMap();
 
     /** List of all parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
 
     final static String[] allParameters = new String[682];
-    final static String[] allDrumParameters = new String[552];
+    final static String[] internalParameters = new String[552];
         
     static
 	    {
@@ -377,7 +377,7 @@ public class KawaiK4Drum extends Synth
 			"channel",
 			"volume",
 			"velocitydepth"
-			}, 0, allDrumParameters, 0, 3);
+			}, 0, internalParameters, 0, 3);
 	
 		for(int i = 0; i < 61; i++)
 			{
@@ -407,7 +407,7 @@ public class KawaiK4Drum extends Synth
 				"key" + i + "tune2",
 				"key" + i + "level1",
 				"key" + i + "level2",
-				}, 0, allDrumParameters, i * 9 + 3, 9);
+				}, 0, internalParameters, i * 9 + 3, 9);
 
 			}
 		}
@@ -421,7 +421,7 @@ public class KawaiK4Drum extends Synth
 		byte msb = (byte)(model.get(key, 0) >> 7);
 		byte lsb = (byte)(model.get(key, 0) & 127);
 
-		int index = ((Integer)(allDrumParametersToIndex.get(key))).intValue();
+		int index = ((Integer)(internalParametersToIndex.get(key))).intValue();
 		int note = 0;
 		if (index > 3)
 			note = (index - 3) / 61;
@@ -475,7 +475,7 @@ public class KawaiK4Drum extends Synth
 		// Error in Section 4-1, see "Corrected MIDI Implementation"
 
         boolean external = (model.get("bank", 0) > 4);
-		byte position = (byte)(model.get("number", 0));
+//		byte position = (byte)(model.get("number", 0));
 		byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
 		result[0] = (byte)0xF0;
 		result[1] = (byte)0x40;

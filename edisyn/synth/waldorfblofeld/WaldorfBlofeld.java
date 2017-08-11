@@ -1008,7 +1008,7 @@ public class WaldorfBlofeld extends Synth
         vbox.addBottom(comp);  // doesn't work right :-(
         hbox.add(vbox);
 
-        vbox = new VBox();
+//        vbox = new VBox();
                                 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
@@ -1174,7 +1174,7 @@ public class WaldorfBlofeld extends Synth
     // a list of sample numbers
     public void buildWavetable(Chooser chooser, int osc, int bank)
         {
-        int index = chooser.getIndex();
+//        int index = chooser.getIndex();
                 
         if (bank == 0)
             {

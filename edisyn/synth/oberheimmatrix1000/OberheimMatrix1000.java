@@ -50,9 +50,9 @@ public class OberheimMatrix1000 extends Synth
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
 
-        for(int i = 0; i < allMatrixParameters.length; i++)
+        for(int i = 0; i < internalParameters.length; i++)
             {
-            allMatrixParametersToIndex.put(allMatrixParameters[i], Integer.valueOf(i));
+            internalParametersToIndex.put(internalParameters[i], Integer.valueOf(i));
             }
                         
         /// SOUND PANEL
@@ -433,7 +433,7 @@ public class OberheimMatrix1000 extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
+//        VBox vbox = new VBox();
         
         comp = new LabelledDial("Volume", this, "vca1", color, 0, 63);
         hbox.add(comp);
@@ -518,11 +518,11 @@ public class OberheimMatrix1000 extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
+//        VBox vbox = new VBox();
 
 
         // separate CheckBoxes maybe?
-        vbox = new VBox();
+        VBox vbox = new VBox();
         params = ENV_TRIGGER_MODES;
         comp = new Chooser("Trigger Mode", this, "env" + env + "triggermode", params);
         vbox.add(comp);
@@ -720,13 +720,13 @@ public class OberheimMatrix1000 extends Synth
 
 
     /** Map of parameter -> index in the allParameters array. */
-    HashMap allMatrixParametersToIndex = new HashMap();
+    HashMap internalParametersToIndex = new HashMap();
 
 
     /** List of all 100 internal Oberheim numerical parameters in order.  Note that this is DIFFERENT, ugh,
         from the order of parameters in the sysex list, and is missing stuff like modulation and name. */
                 
-    final static String[] allMatrixParameters = new String[]
+    final static String[] internalParameters = new String[]
     {
     "dco1frequency", 
     "dco1frequencymod", 
@@ -997,42 +997,42 @@ public class OberheimMatrix1000 extends Synth
         	}
         if (key.equals("dco1lever1") || key.equals("dco1vibrato"))
             {
-            index = ((Integer)(allMatrixParametersToIndex.get("dco1fixedmods1"))).intValue();
+            index = ((Integer)(internalParametersToIndex.get("dco1fixedmods1"))).intValue();
             value = model.get("dco1lever1", 0) |  (model.get("dco1vibrato", 0) << 1);
             }
         else if (key.equals("dco1portamento") || key.equals("dco1keytracking"))
             {
-            index = ((Integer)(allMatrixParametersToIndex.get("dco1fixedmods2"))).intValue();
+            index = ((Integer)(internalParametersToIndex.get("dco1fixedmods2"))).intValue();
             value = model.get("dco1portamento", 0) | (model.get("dco1keytracking", 0) << 1);
             }
         else if (key.equals("dco2lever1") || key.equals("dco2vibrato"))
             {
-            index = ((Integer)(allMatrixParametersToIndex.get("dco2fixedmods1"))).intValue();
+            index = ((Integer)(internalParametersToIndex.get("dco2fixedmods1"))).intValue();
             value = model.get("dco2lever1", 0) | (model.get("dco2vibrato", 0) << 1);
             }
         else if (key.equals("dco2portamento") || key.equals("dco2keytracking"))
             {
-            index = ((Integer)(allMatrixParametersToIndex.get("dco2fixedmods2"))).intValue();
+            index = ((Integer)(internalParametersToIndex.get("dco2fixedmods2"))).intValue();
             value = model.get("dco2portamento", 0) | (model.get("dco2keytracking", 0) << 1);
             }
         else if (key.equals("dco1wave") || key.equals("dco1pulse"))
             {
-            index = ((Integer)(allMatrixParametersToIndex.get("dco1waveenable"))).intValue();
+            index = ((Integer)(internalParametersToIndex.get("dco1waveenable"))).intValue();
             value = model.get("dco1wave", 0) | (model.get("dco1pulse", 0) << 1);
             }
         else if (key.equals("dco2wave") || key.equals("dco2pulse") || key.equals("dco2noise"))
             {
-            index = ((Integer)(allMatrixParametersToIndex.get("dco2waveenable"))).intValue();
+            index = ((Integer)(internalParametersToIndex.get("dco2waveenable"))).intValue();
             value = model.get("dco2wave", 0) | (model.get("dco2pulse", 0) << 1) | (model.get("dco2noise", 0) << 2);
             }
         else if (key.equals("vcflever1") || key.equals("vcfvibrato"))
             {
-            index = ((Integer)(allMatrixParametersToIndex.get("vcffixedmods1"))).intValue();
+            index = ((Integer)(internalParametersToIndex.get("vcffixedmods1"))).intValue();
             value = model.get("vcflever1", 0) | (model.get("vcfvibrato", 0) << 1);
             }
         else if (key.equals("vcfportamento") || key.equals("vcfkeytracking"))
             {
-            index = ((Integer)(allMatrixParametersToIndex.get("vcffixedmods2"))).intValue();
+            index = ((Integer)(internalParametersToIndex.get("vcffixedmods2"))).intValue();
             value = model.get("vcfportamento", 0) | (model.get("vcfkeytracking", 0) << 1);
             }
         else if (key.startsWith("mod"))
@@ -1056,7 +1056,7 @@ public class OberheimMatrix1000 extends Synth
         //              }
         else
         	{
-         	index = ((Integer)(allMatrixParametersToIndex.get(key))).intValue();
+         	index = ((Integer)(internalParametersToIndex.get(key))).intValue();
         	value = model.get(key, 0);
         	}
 
@@ -1085,7 +1085,7 @@ public class OberheimMatrix1000 extends Synth
             byte parameter = data[4];
             byte value = data[5];
                 
-            String key = allMatrixParameters[parameter];
+            String key = internalParameters[parameter];
             if (key.equals("dco1fixedmods1"))
                 {
                 model.set("dco1lever1", value & 1);

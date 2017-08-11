@@ -154,6 +154,7 @@ public class LabelledDial extends NumericalComponent
 
         while (lo <= hi) 
         	{
+        	// this could obviously overflow if hi and lo are really big
             int mid = (hi + lo) / 2;
 
             if (value < a[mid]) 
@@ -295,6 +296,7 @@ class Dial extends JPanel
                 int y = -(e.getY() - startY);
                 int range = (getMax() - getMin() + 1 );
                 double multiplicand = 1;
+                // for the time being, these will do the same thing (as DEFAULT_EXTENT == MAX_EXTENT)
                 if (range <= DEFAULT_EXTENT)
                 	multiplicand = DEFAULT_EXTENT / (double) range;
                 else

@@ -523,7 +523,9 @@ public class KawaiK4Multi extends Synth
 				}
 			}
 
-			model.set("name", new String(name));
+			try { model.set("name", new String(name, "US-ASCII")); }
+			catch (UnsupportedEncodingException e) { e.printStackTrace(); }
+
 
 	        revise();
     	    return true;            // change this as appropriate

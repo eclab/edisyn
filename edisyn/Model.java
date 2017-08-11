@@ -305,7 +305,7 @@ public class Model implements Cloneable
         {
         Model model = null;
         try { model = (Model)(super.clone()); }
-        catch (Exception e) { }
+        catch (Exception e) { e.printStackTrace(); }  // never happens
         model.storage = (LinkedHashMap)(storage.clone());
         model.min = (HashMap)(min.clone());
         model.max = (HashMap)(max.clone());
@@ -582,7 +582,7 @@ public class Model implements Cloneable
     /** Sets the status of a key.  The default is STATUS_FREE, except for strings, which are STATUS_IMMUTABLE. */        
     public void setStatus(String key, int val)
         {
-        status.put(key, new Integer(val));
+        status.put(key, Integer.valueOf(val));
         }
                 
     /** Returns whether a given key is declared immutable.  Strings are ALWAYS immutable and you don't need to set them. */        

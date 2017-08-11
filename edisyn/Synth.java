@@ -602,6 +602,8 @@ public abstract class Synth extends JComponent implements Updatable
         is for your kind of synthesizer.  Return true if so, else false. */
     private static boolean recognize(byte[] data)
         {
+        // The Synth.java version of this method is obviously never called.
+        // But your subclass's version will be called.
         return false;
         }
 
@@ -906,7 +908,7 @@ public abstract class Synth extends JComponent implements Updatable
                         ShortMessage s = (ShortMessage)message;
                         int status = s.getStatus();
                         int channel = s.getChannel();
-                        int command = s.getCommand();
+//                        int command = s.getCommand();
                         int data1 = s.getData1();
                         int data2 = s.getData2();
                         boolean voiceMessage = ( status < 0xF0 );
@@ -1383,7 +1385,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (frame != null) 
             {
             String synthName = getSynthNameLocal().trim();
-            String patchName = "        " + (getPatchName() == null ? "" : getPatchName().trim());
+//            String patchName = "        " + (getPatchName() == null ? "" : getPatchName().trim());
             String fileName = (file == null ? "        Untitled" : "        " + file.getName());
             String disconnectedWarning = ((tuple == null || tuple.in == null) ? "   DISCONNECTED" : "");
             String learningWarning = (learning ? "   LEARNING" +
@@ -1405,7 +1407,7 @@ public abstract class Synth extends JComponent implements Updatable
                 
     public void setCurrentTab(int tab)
         {
-        int len = tabs.getTabCount();
+//        int len = tabs.getTabCount();
         if (tab >= tabs.getTabCount())
             return;
         if (tab < 0)
@@ -2298,7 +2300,7 @@ public abstract class Synth extends JComponent implements Updatable
         // Set up Windows  
         if (Style.isWindows() || Style.isUnix())
         	{
-        	JMenu help = new JMenu("Help");
+//        	JMenu help = new JMenu("Help");
         	JMenu about = new JMenu("About Edisyn");
         	about.addActionListener(new ActionListener()
         		{
@@ -2316,7 +2318,7 @@ public abstract class Synth extends JComponent implements Updatable
         	Mac.setup(this);
         
         // Handle About menu for non-Macs
-        if (Style.isWindows() || isUnix())
+        if (Style.isWindows() || Style.isUnix())
         	{
         	// right now the only thing under "Help" is
         	// the About menu, so it doesn't exist on the Mac,
@@ -2889,7 +2891,7 @@ double lastMutate = 0.0;
                     {
                     byte[] data = new byte[(int)f.length()];
 
-                    int val = is.read(data, 0, (int)f.length());
+//                    int val = is.read(data, 0, (int)f.length());
                     is.close();
                                 
                     if (!recognizeLocal(data))
@@ -2979,7 +2981,7 @@ double lastMutate = 0.0;
     void doAbout()
     	{
     	ImageIcon icon = new ImageIcon(Synth.class.getResource("gui/About.jpg"));
-    	JLabel picture = new JLabel(icon);
+//    	JLabel picture = new JLabel(icon);
     	JFrame frame = new JFrame("About Edisyn");
     	frame.getContentPane().setLayout(new BorderLayout());
     	frame.getContentPane().setBackground(Color.BLACK);

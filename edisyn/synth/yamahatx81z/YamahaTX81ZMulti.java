@@ -370,9 +370,6 @@ public class YamahaTX81ZMulti extends Synth
 
     /** List of all Sysex parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
 
-    /// * indicates parameters which must be handled specially due to packing
-    /// that Waldorf decided to do.  :-(
-
     final static String[] allParameters = new String[] 
     {
     "instrument1maxnotes",

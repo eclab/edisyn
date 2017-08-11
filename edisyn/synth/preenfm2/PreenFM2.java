@@ -529,6 +529,8 @@ public class PreenFM2 extends Synth
         				firstParameter.setLabel("Rate");
         				secondParameter.setLabel("Bits");
         				break;
+        			default:
+        				throw new RuntimeException("Unknown Filter Case");
         			}
         		parameterBox.revalidate();
         		parameterBox.repaint();
@@ -1121,7 +1123,7 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
                                 
         JComponent comp;
         String[] params;
-        HBox main = new HBox();
+//        HBox main = new HBox();
         HBox hbox = new HBox();
 
 
@@ -1155,8 +1157,8 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
         // 128...255		Combo
         // 256...256+255	DX7
         int bank = tempModel.get("bank", 0);
-        int msb = (bank >> 7);
-        int lsb = (bank & 127);
+//        int msb = (bank >> 7);
+//        int lsb = (bank & 127);
         
         int program = tempModel.get("number", 0);
         
@@ -1283,7 +1285,7 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
        		}
        	else 
        		{
-	    	int param = ((Integer)(parameterToIndex.get(key))).intValue();
+//	    	int param = ((Integer)(parameterToIndex.get(key))).intValue();
        		if (key.startsWith("lfo1frequency") || key.startsWith("lfo2frequency") || key.startsWith("lfo3frequency"))
        			{
 	    		int value = model.get(key, 0);
@@ -1383,7 +1385,7 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
 	public void addParameter(String name, int msb, int lsb)
 		{
 		Integer val = Integer.valueOf((msb << 7) | lsb);
-		parameterToIndex.put(name, Integer.valueOf(val));
+		parameterToIndex.put(name, val);
 		indexToParameter.put(val, name);
 		}
     
@@ -1547,7 +1549,7 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
 		{
 		final int HEADER = 10;
 		
-		int[] vals = new int[sysexKeys.length + 11];
+//		int[] vals = new int[sysexKeys.length + 11];
 		
 		for(int i = 0; i < sysexKeys.length - 1; i++)
 			{

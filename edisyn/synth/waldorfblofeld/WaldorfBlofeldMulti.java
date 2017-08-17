@@ -183,7 +183,7 @@ public class WaldorfBlofeldMulti extends Synth
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
-        JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
+        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
 
         while(true)
             {
@@ -352,8 +352,8 @@ public class WaldorfBlofeldMulti extends Synth
                             public void run() 
                                 { 
                                 Model tempModel = new Model();
-                                tempModel.set("bank", WaldorfBlofeldMulti.this.model.get("bank" + inst, 0));
-                                tempModel.set("number", WaldorfBlofeldMulti.this.model.get("number" + inst, 0));
+                                tempModel.set("bank", WaldorfBlofeldMulti.this.model.get("bank" + inst));
+                                tempModel.set("number", WaldorfBlofeldMulti.this.model.get("number" + inst));
                                 synth.performRequestDump(tempModel, false);
                                 }
                             });
@@ -936,8 +936,8 @@ public class WaldorfBlofeldMulti extends Synth
         if (tempModel == null)
             tempModel = getModel();
         byte DEV = (byte)(getID());
-        byte BB = (byte) tempModel.get("bank", 0);
-        byte NN = (byte) tempModel.get("number", 0);
+        byte BB = (byte) tempModel.get("bank");
+        byte NN = (byte) tempModel.get("number");
         if (toWorkingMemory) { BB = 0x7F; NN = 0x0; }                   // don't know if this is right
         
         byte[] bytes = new byte[416];
@@ -953,10 +953,10 @@ public class WaldorfBlofeldMulti extends Synth
                 {
                 int part = (int)(key.charAt(5) - '0');
                         
-                byte status = (byte)model.get("status" + part, 0);
-                byte local = (byte)model.get("local" + part, 0);
-                byte usb = (byte)model.get("usb" + part, 0);
-                byte midi = (byte)model.get("midi" + part, 0);
+                byte status = (byte)model.get("status" + part);
+                byte local = (byte)model.get("local" + part);
+                byte usb = (byte)model.get("usb" + part);
+                byte midi = (byte)model.get("midi" + part);
                         
                 bytes[i] = (byte)((status << 6) | (local << 2) | (usb << 1) | midi);
                 }
@@ -964,18 +964,18 @@ public class WaldorfBlofeldMulti extends Synth
                 {
                 int part = (int)(key.charAt(5) - '0');
                         
-                byte pressure = (byte)model.get("pressure" + part, 0);
-                byte bend = (byte)model.get("bend" + part, 0);
-                byte wheel = (byte)model.get("modwheel" + part, 0);
-                byte sustain = (byte)model.get("sustain" + part, 0);
-                byte edits = (byte)model.get("edits" + part, 0);
-                byte change = (byte)model.get("progchange" + part, 0);
+                byte pressure = (byte)model.get("pressure" + part);
+                byte bend = (byte)model.get("bend" + part);
+                byte wheel = (byte)model.get("modwheel" + part);
+                byte sustain = (byte)model.get("sustain" + part);
+                byte edits = (byte)model.get("edits" + part);
+                byte change = (byte)model.get("progchange" + part);
                         
                 bytes[i] = (byte)((change << 5) | (edits << 4) | (sustain << 3) | (pressure << 2) | (wheel << 1) | bend);
                 }
             else
                 {
-                bytes[i] = (byte)(model.get(key, 0));
+                bytes[i] = (byte)(model.get(key));
                 }
             }
 
@@ -1033,7 +1033,7 @@ public class WaldorfBlofeldMulti extends Synth
             tempModel = getModel();
         byte DEV = (byte)(getID());
         byte BB = 0;  // only 1 bank
-        byte NN = (byte)tempModel.get("number", 0);
+        byte NN = (byte)tempModel.get("number");
 
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x01, BB, NN, (byte)0xF7 };
         }

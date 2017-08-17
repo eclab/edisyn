@@ -129,7 +129,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
-        JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
+        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
                 
         while(true)
             {
@@ -331,8 +331,8 @@ public class WaldorfMicrowaveXTMulti extends Synth
                             public void run() 
                                 { 
                                 Model tempModel = new Model();
-                                tempModel.set("bank", WaldorfMicrowaveXTMulti.this.model.get("bank" + inst, 0));
-                                tempModel.set("number", WaldorfMicrowaveXTMulti.this.model.get("number" + inst, 0));
+                                tempModel.set("bank", WaldorfMicrowaveXTMulti.this.model.get("bank" + inst));
+                                tempModel.set("number", WaldorfMicrowaveXTMulti.this.model.get("number" + inst));
                                 synth.tryToSendSysex(synth.requestDump(tempModel));
                                 }
                             });
@@ -857,7 +857,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 PP = (byte)(((Integer)(allInstrumentParametersToIndex.get(key))).intValue() & 127);
                 }
                 
-            byte XX = (byte)model.get(key, 0);
+            byte XX = (byte)model.get(key);
             byte LL = 0x20;
             if (index >= 32)
                 {
@@ -879,7 +879,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
         if (tempModel == null)
             tempModel = getModel();
         byte DEV = (byte)(getID());
-        byte NN = (byte) tempModel.get("number", 0);
+        byte NN = (byte) tempModel.get("number");
         byte BB = 0x0;
         if (toWorkingMemory) { BB = 0x20; NN = 0x0; }
         
@@ -897,7 +897,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 }
             else
                 {
-                bytes[i] = (byte)(model.get(key, 0));
+                bytes[i] = (byte)(model.get(key));
                 }
             }
                         
@@ -967,7 +967,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
             tempModel = getModel();
         byte DEV = (byte)(getID());
         byte BB = 0;  // only 1 bank
-        byte NN = (byte)tempModel.get("number", 0);
+        byte NN = (byte)tempModel.get("number");
         //(BB + NN)&127 is checksum
         return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x01, BB, NN, (byte)((BB + NN)&127), (byte)0xF7 };
         }
@@ -1116,7 +1116,6 @@ public class WaldorfMicrowaveXTMulti extends Synth
             }
         else
             {
-            //model.set("number", 0);
             retval = false;
             }
 

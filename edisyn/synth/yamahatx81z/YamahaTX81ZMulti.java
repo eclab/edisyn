@@ -97,7 +97,7 @@ public class YamahaTX81ZMulti extends Synth
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
-        JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
+        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
 
         while(true)
             {
@@ -263,8 +263,8 @@ public class YamahaTX81ZMulti extends Synth
                             {
                             public void run() 
                                 { 
-                                int bank = YamahaTX81ZMulti.this.model.get("instrument" + src + "bank", 0);
-                                int number = YamahaTX81ZMulti.this.model.get("instrument" + src + "number", 0);
+                                int bank = YamahaTX81ZMulti.this.model.get("instrument" + src + "bank");
+                                int number = YamahaTX81ZMulti.this.model.get("instrument" + src + "number");
                                                                 
                                 Model tempModel = new Model();
                                 tempModel.set("bank", bank);
@@ -533,7 +533,7 @@ public class YamahaTX81ZMulti extends Synth
         {
         if (key.equals("number")) return new byte[0][0];  // this is not emittable
 
-        byte channel = (byte)(32 + getChannelOut() - 1);
+        byte channel = (byte)(32 + getChannelOut());
              
         // maybe we don't want to do this
         if (key.equals("name"))  // ugh
@@ -550,7 +550,7 @@ public class YamahaTX81ZMulti extends Synth
         	{
         	if (key.equals("operator" + i + "voicenumber"))
         		{
-        		int val = model.get(key, 0);
+        		int val = model.get(key);
         		byte lsb = (byte)(val & 127);
         		byte msb = (byte)((val >> 7) & 127);
 
@@ -565,7 +565,7 @@ public class YamahaTX81ZMulti extends Synth
         if (allParametersToIndex.containsKey(key))
             {
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
-            int value = model.get(key, 0);
+            int value = model.get(key);
 
             byte PP = (byte) index;
             byte VV = (byte) value;
@@ -670,7 +670,7 @@ public class YamahaTX81ZMulti extends Synth
             		allParameters[i].equals("instrument8voicenumbermsb"))
             	{
                 int instrument = (i / 12);
-            	data[i + 10] = (byte)(model.get("instrument" + i + "voicenumber", 0) >> 7);
+            	data[i + 10] = (byte)(model.get("instrument" + i + "voicenumber") >> 7);
             	}
             else if (allParameters[i].equals("instrument1voicenumberlsb") ||
             		allParameters[i].equals("instrument2voicenumberlsb") ||
@@ -682,7 +682,7 @@ public class YamahaTX81ZMulti extends Synth
             		allParameters[i].equals("instrument8voicenumberlsb"))
                 {
                 int instrument = (i / 12);
-            	data[i + 10] = (byte)(model.get("instrument" + i + "voicenumber", 0) & 127);
+            	data[i + 10] = (byte)(model.get("instrument" + i + "voicenumber") & 127);
 	            }
 	        else if (i >= 100)	// name
 	        	{
@@ -690,14 +690,14 @@ public class YamahaTX81ZMulti extends Synth
 	        	}
 	        else
 	        	{
-	        	data[i + 10] = (byte)(model.get(allParameters[i], 0));
+	        	data[i + 10] = (byte)(model.get(allParameters[i]));
 	        	}
 	        }
         
         byte[] result = new byte[128];
         result[0] = (byte)0xF0;
         result[1] = 0x43;
-        result[2] = (byte)(32 + getChannelOut() - 1);
+        result[2] = (byte)(32 + getChannelOut());
         result[3] = 0x7E;
         result[4] = 0x00;
         result[5] = 0x78;
@@ -729,7 +729,7 @@ public class YamahaTX81ZMulti extends Synth
     public byte[] requestCurrentDump()
         {
         // PCED
-        byte channel = (byte)(32 + getChannelOut() - 1);
+        byte channel = (byte)(32 + getChannelOut());
         return new byte[] { (byte)0xF0, 0x43, channel, 0x7E, 
             (byte)'L', (byte)'M', (byte)' ', (byte)' ',
             (byte)'8', (byte)'9', (byte)'7', (byte)'6',
@@ -797,7 +797,7 @@ public class YamahaTX81ZMulti extends Synth
     
     public void changePatch(Model tempModel) 
         {
-        int number = tempModel.get("number", 0);
+        int number = tempModel.get("number");
         // Performance numbers PF1 ... PF24, corresponding to 161 .. 184
         byte lo = (byte)((number + 160) & 127);
         byte hi = (byte)((number + 160) >> 7);
@@ -806,7 +806,7 @@ public class YamahaTX81ZMulti extends Synth
         byte[] table = new byte[9];
         table[0] = (byte)0xF0;
         table[1] = (byte)0x43;
-        table[2] = (byte)(32 + getChannelOut() - 1);
+        table[2] = (byte)(32 + getChannelOut());
         table[3] = (byte)0x10;
         table[4] = (byte)127;  // really!
         table[5] = (byte)127;  // we're changing table position 127
@@ -818,7 +818,7 @@ public class YamahaTX81ZMulti extends Synth
         
         // Now let's do the program change to program 127
         
-        tryToSendMIDI(buildPC(getChannelOut() - 1, (byte)127));
+        tryToSendMIDI(buildPC(getChannelOut(), (byte)127));
         }
 
     public String getPatchName() { return null; }

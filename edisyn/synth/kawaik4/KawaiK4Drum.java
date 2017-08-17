@@ -264,7 +264,7 @@ public class KawaiK4Drum extends Synth
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JComboBox bank = new JComboBox(BANKS);
-        bank.setSelectedIndex(model.get("bank", 0));
+        bank.setSelectedIndex(model.get("bank"));
         
         while(true)
             {
@@ -418,8 +418,8 @@ public class KawaiK4Drum extends Synth
         if (key.equals("note")) return new byte[0];  // this is not emittable
 		
 		int source = 0;
-		byte msb = (byte)(model.get(key, 0) >> 7);
-		byte lsb = (byte)(model.get(key, 0) & 127);
+		byte msb = (byte)(model.get(key) >> 7);
+		byte lsb = (byte)(model.get(key) & 127);
 
 		int index = ((Integer)(internalParametersToIndex.get(key))).intValue();
 		int note = 0;
@@ -468,14 +468,13 @@ public class KawaiK4Drum extends Synth
 	   		else if (key.equals("-"))
 	   			bytes[b] = (data[i] = (byte)0x0);
 	   		else
-				bytes[b] = (data[i] = (byte)(model.get(key, 0)));
+				bytes[b] = (data[i] = (byte)(model.get(key)));
 			b++;
 			}
 
 		// Error in Section 4-1, see "Corrected MIDI Implementation"
 
-        boolean external = (model.get("bank", 0) > 4);
-//		byte position = (byte)(model.get("number", 0));
+        boolean external = (tempModel.get("bank") > 4);
 		byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
 		result[0] = (byte)0xF0;
 		result[1] = (byte)0x40;
@@ -500,7 +499,7 @@ public class KawaiK4Drum extends Synth
 
     public byte[] requestDump(Model tempModel) 
     	{ 
-		boolean external = (tempModel.get("bank", 0) == 1);
+		boolean external = (tempModel.get("bank") == 1);
         return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x00, 0x00, 0x04, 
         			(byte)(external ? 0x03 : 0x01),
         			0x20, (byte)0xF7};

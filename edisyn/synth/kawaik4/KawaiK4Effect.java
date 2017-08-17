@@ -137,7 +137,7 @@ public class KawaiK4Effect extends Synth
 			public void update(String key, Model model)
 				{
 				super.update(key, model);
-				int effectType = model.get("type", 0);
+				int effectType = model.get("type");
 				updateEffects(effectType);
 				}
         	};
@@ -195,9 +195,9 @@ public class KawaiK4Effect extends Synth
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JComboBox bank = new JComboBox(BANKS);
-        bank.setSelectedIndex(model.get("bank", 0));
+        bank.setSelectedIndex(model.get("bank"));
         
-        JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
+        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
 
         while(true)
             {
@@ -288,7 +288,7 @@ public class KawaiK4Effect extends Synth
 
     public String getPatchName() 
     	{
-		return "Effect " + model.get("number", 0);
+		return "Effect " + model.get("number");
     	}
 
 
@@ -366,13 +366,13 @@ public class KawaiK4Effect extends Synth
 	   		if (key.equals("-"))
 	   			data[i] = (byte)0x0;
 	   		else
-				data[i] = (byte)(model.get(key, 0));
+				data[i] = (byte)(model.get(key));
 			}
 
 		// Error in Section 4-1, see "Corrected MIDI Implementation"
 
-        boolean external = (model.get("bank", 0) > 4);
-		byte position = (byte)(model.get("number", 0));
+        boolean external = (tempModel.get("bank") > 4);
+		byte position = (byte)(tempModel.get("number"));
 		byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
 		result[0] = (byte)0xF0;
 		result[1] = (byte)0x40;
@@ -407,8 +407,8 @@ public class KawaiK4Effect extends Synth
 		if (key.equals("-")) return new byte[0];  // hmmm
 		
 		int source = 0;
-		byte msb = (byte)(model.get(key, 0) >> 7);
-		byte lsb = (byte)(model.get(key, 0) & 127);
+		byte msb = (byte)(model.get(key) >> 7);
+		byte lsb = (byte)(model.get(key) & 127);
 
 
 		int index = ((Integer)(allParametersToIndex.get(key))).intValue();
@@ -430,8 +430,8 @@ public class KawaiK4Effect extends Synth
 
     public byte[] requestDump(Model tempModel) 
     	{ 
-		byte position = (byte)(model.get("number", 0));
-		boolean external = (tempModel.get("bank", 0) == 1);
+		byte position = (byte)(tempModel.get("number"));
+		boolean external = (tempModel.get("bank") == 1);
         return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x00, 0x00, 0x04, 
         			(byte)(external ? 0x03 : 0x01),
         			position, (byte)0xF7};

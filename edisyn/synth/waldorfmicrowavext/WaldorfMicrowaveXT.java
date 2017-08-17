@@ -227,9 +227,9 @@ public class WaldorfMicrowaveXT extends Synth
         JComboBox bank = new JComboBox(BANKS);
         bank.setEditable(false);
         bank.setMaximumRowCount(32);
-        bank.setSelectedIndex(model.get("bank", 0));
+        bank.setSelectedIndex(model.get("bank"));
                 
-        JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
+        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
 
         while(true)
             {
@@ -664,7 +664,7 @@ public class WaldorfMicrowaveXT extends Synth
                 {
                 super.update(key, model);
                 hbox.removeLast();
-                hbox.addLast(extras[model.get(key, 0)]);
+                hbox.addLast(extras[model.get(key)]);
                 hbox.revalidate();
                 hbox.repaint();
                 }
@@ -884,7 +884,7 @@ public class WaldorfMicrowaveXT extends Synth
             public String map(int val)
                 {
                 // we display this in two different ways depending on whether we're clocked or not
-                if (model.get("lfo" + lfo + "sync", 0) < 2)  // 3 is "clocked"
+                if (model.get("lfo" + lfo + "sync") < 2)  // 3 is "clocked"
                     return "" + val;
                 else
                     {
@@ -1213,7 +1213,6 @@ public class WaldorfMicrowaveXT extends Synth
 
                 params = MOD_SOURCES;
                 comp = new Chooser("" + i + " Source", this, "modulation" + i + "source", params);
-                // model.setSpecial("mod" + i + "source", 0);
                 vbox.add(comp);
 
                 params = MOD_DESTINATIONS;
@@ -1253,7 +1252,6 @@ public class WaldorfMicrowaveXT extends Synth
         VBox vbox2 = new VBox();
         params = MOD_SOURCES;
         comp = new Chooser("Delay Source", this, "modifierdelaysource", params);
-        // model.setSpecial("modifierdelaysource", 0);
         vbox2.add(comp);
 
         comp = new LabelledDial("Delay Time", this, "modifierdelaytime", color, 0, 127);
@@ -1267,7 +1265,6 @@ public class WaldorfMicrowaveXT extends Synth
             vbox2 = new VBox();
             params = MOD_SOURCES;
             comp = new Chooser("" + i + " Source #1", this, "modifier" + i + "source1", params);
-            // model.setSpecial("modifier" + i + "source1", 0);
             vbox2.add(comp);
 
             // gotta change the first one to "constant" from "off" if we're in Source B
@@ -1276,7 +1273,6 @@ public class WaldorfMicrowaveXT extends Synth
             params[0] = "Constant";
 
             comp = new Chooser("" + i + " Source #2", this, "modifier" + i + "source2", params);
-            // model.setSpecial("modifier" + i + "source1", 0);
             vbox2.add(comp);
 
             params = MODIFIER_OPERATORS;
@@ -1401,10 +1397,10 @@ public class WaldorfMicrowaveXT extends Synth
             {
             public void update(String key, Model model)
                 {
-                int pattern = model.get("arppattern", 0);
+                int pattern = model.get("arppattern");
                 if (pattern == 1)
                     {
-                    int len = model.get("arpuserlength", 0) + 1;
+                    int len = model.get("arpuserlength") + 1;
                     for(int i = 0; i < len; i++)
                         {
                         arpeggiation[i].getCheckBox().setEnabled(true);
@@ -1629,7 +1625,6 @@ public class WaldorfMicrowaveXT extends Synth
                 setupEffect(getState());
                 }
             };
-        // model.setSpecial("effecttype", 0);
         vbox.add(comp);
         main.add(vbox);
 
@@ -1930,7 +1925,7 @@ public class WaldorfMicrowaveXT extends Synth
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
-            byte XX = (byte)model.get(key, 0);
+            byte XX = (byte)model.get(key);
             // handle XT effects specially
             if (XX == 8) // delay
                 XX = 32;
@@ -1945,7 +1940,7 @@ public class WaldorfMicrowaveXT extends Synth
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
-            byte XX = (byte)(16 + model.get(key, 0) * 12);
+            byte XX = (byte)(16 + model.get(key) * 12);
             return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
             }
         else if (key.equals("lfo1sync") || key.equals("lfo2sync"))
@@ -1953,17 +1948,17 @@ public class WaldorfMicrowaveXT extends Synth
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
-            byte XX = (byte)model.get(key, 0);
+            byte XX = (byte)model.get(key);
             if (XX == 2) XX = 3;  // because it's of/on/on/Clock, I dunno why
             return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
             }
         else if (key.equals("arpuser1") || key.equals("arpuser2") || key.equals("arpuser3") || key.equals("arpuser4"))
             {
             int index = 102;
-            int arp1 = model.get("arpuser1", 0);
-            int arp2 = model.get("arpuser2", 0);
-            int arp3 = model.get("arpuser3", 0);
-            int arp4 = model.get("arpuser4", 0);
+            int arp1 = model.get("arpuser1");
+            int arp2 = model.get("arpuser2");
+            int arp3 = model.get("arpuser3");
+            int arp4 = model.get("arpuser4");
             int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
@@ -1973,10 +1968,10 @@ public class WaldorfMicrowaveXT extends Synth
         else if (key.equals("arpuser5") || key.equals("arpuser6") || key.equals("arpuser7") || key.equals("arpuser8"))
             {
             int index = 103;
-            int arp1 = model.get("arpuser5", 0);
-            int arp2 = model.get("arpuser6", 0);
-            int arp3 = model.get("arpuser7", 0);
-            int arp4 = model.get("arpuser8", 0);
+            int arp1 = model.get("arpuser5");
+            int arp2 = model.get("arpuser6");
+            int arp3 = model.get("arpuser7");
+            int arp4 = model.get("arpuser8");
             int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
@@ -1986,10 +1981,10 @@ public class WaldorfMicrowaveXT extends Synth
         else if (key.equals("arpuser9") || key.equals("arpuser10") || key.equals("arpuser11") || key.equals("arpuser12"))
             {
             int index = 104;
-            int arp1 = model.get("arpuser9", 0);
-            int arp2 = model.get("arpuser10", 0);
-            int arp3 = model.get("arpuser11", 0);
-            int arp4 = model.get("arpuser12", 0);
+            int arp1 = model.get("arpuser9");
+            int arp2 = model.get("arpuser10");
+            int arp3 = model.get("arpuser11");
+            int arp4 = model.get("arpuser12");
             int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
@@ -1999,10 +1994,10 @@ public class WaldorfMicrowaveXT extends Synth
         else if (key.equals("arpuser13") || key.equals("arpuser14") || key.equals("arpuser15") || key.equals("arpuser16"))
             {
             int index = 105;
-            int arp1 = model.get("arpuser13", 0);
-            int arp2 = model.get("arpuser14", 0);
-            int arp3 = model.get("arpuser15", 0);
-            int arp4 = model.get("arpuser16", 0);
+            int arp1 = model.get("arpuser13");
+            int arp2 = model.get("arpuser14");
+            int arp3 = model.get("arpuser15");
+            int arp4 = model.get("arpuser16");
             int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
@@ -2029,7 +2024,7 @@ public class WaldorfMicrowaveXT extends Synth
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
-            byte XX = (byte)model.get(key, 0);
+            byte XX = (byte)model.get(key);
             return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
             }
         }
@@ -2042,8 +2037,8 @@ public class WaldorfMicrowaveXT extends Synth
         if (tempModel == null)
             tempModel = getModel();
         byte DEV = (byte)(getID());
-        byte BB = (byte) tempModel.get("bank", 0);
-        byte NN = (byte) tempModel.get("number", 0);
+        byte BB = (byte) tempModel.get("bank");
+        byte NN = (byte) tempModel.get("number");
         
         if (toWorkingMemory) { BB = 0x20; NN = 0x0; }
         
@@ -2062,7 +2057,7 @@ public class WaldorfMicrowaveXT extends Synth
                 }
             else if (key.equals("effecttype"))
                 {
-                bytes[i] = (byte)model.get(key, 0);
+                bytes[i] = (byte)model.get(key);
                 // handle XT effects specially
                 if (bytes[i] == 8) // delay
                     bytes[i] = (byte)32;
@@ -2073,56 +2068,56 @@ public class WaldorfMicrowaveXT extends Synth
                 }
             else if (key.equals("osc1octave") || key.equals("osc2octave"))
                 {
-                bytes[i] = (byte)(16 + model.get(key, 0) * 12);
+                bytes[i] = (byte)(16 + model.get(key) * 12);
                 }
             else if (key.equals("lfo1sync") || key.equals("lfo2sync"))
                 {
-                bytes[i] = (byte)(model.get(key, 0));
+                bytes[i] = (byte)(model.get(key));
                 if (bytes[i] == 2) bytes[i] = 3;  // because it's of/on/on/Clock, I dunno why
                 }
             else if (key.equals("arpuser1"))
                 {
                 int index = 102;
-                int arp1 = model.get("arpuser1", 0);
-                int arp2 = model.get("arpuser2", 0);
-                int arp3 = model.get("arpuser3", 0);
-                int arp4 = model.get("arpuser4", 0);
+                int arp1 = model.get("arpuser1");
+                int arp2 = model.get("arpuser2");
+                int arp3 = model.get("arpuser3");
+                int arp4 = model.get("arpuser4");
                 int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
                 bytes[i] = (byte)(total);
                 }
             else if (key.equals("arpuser5"))
                 {
                 int index = 103;
-                int arp1 = model.get("arpuser5", 0);
-                int arp2 = model.get("arpuser6", 0);
-                int arp3 = model.get("arpuser7", 0);
-                int arp4 = model.get("arpuser8", 0);
+                int arp1 = model.get("arpuser5");
+                int arp2 = model.get("arpuser6");
+                int arp3 = model.get("arpuser7");
+                int arp4 = model.get("arpuser8");
                 int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
                 bytes[i] = (byte)(total);
                 }
             else if (key.equals("arpuser9"))
                 {
                 int index = 104;
-                int arp1 = model.get("arpuser9", 0);
-                int arp2 = model.get("arpuser10", 0);
-                int arp3 = model.get("arpuser11", 0);
-                int arp4 = model.get("arpuser12", 0);
+                int arp1 = model.get("arpuser9");
+                int arp2 = model.get("arpuser10");
+                int arp3 = model.get("arpuser11");
+                int arp4 = model.get("arpuser12");
                 int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
                 bytes[i] = (byte)(total);
                 }
             else if (key.equals("arpuser13"))
                 {
                 int index = 105;
-                int arp1 = model.get("arpuser13", 0);
-                int arp2 = model.get("arpuser14", 0);
-                int arp3 = model.get("arpuser15", 0);
-                int arp4 = model.get("arpuser16", 0);
+                int arp1 = model.get("arpuser13");
+                int arp2 = model.get("arpuser14");
+                int arp3 = model.get("arpuser15");
+                int arp4 = model.get("arpuser16");
                 int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
                 bytes[i] = (byte)(total);
                 }
             else
                 {
-                bytes[i] = (byte)(model.get(key, 0));
+                bytes[i] = (byte)(model.get(key));
                 }
             }
 
@@ -2184,13 +2179,13 @@ public class WaldorfMicrowaveXT extends Synth
 
     public void changePatch(Model tempModel)
         {
-        byte BB = (byte)tempModel.get("bank", 0);
-        byte NN = (byte)tempModel.get("number", 0);
+        byte BB = (byte)tempModel.get("bank");
+        byte NN = (byte)tempModel.get("number");
         try {
             // Bank change is CC 32
-            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut() - 1, 32, BB));
+            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, BB));
             // Number change is PC
-            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut() - 1, NN, 0));
+            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0));
             }
         catch (Exception e) { e.printStackTrace(); }
         }
@@ -2200,8 +2195,8 @@ public class WaldorfMicrowaveXT extends Synth
         if (tempModel == null)
             tempModel = getModel();
         byte DEV = (byte)(getID());
-        byte BB = (byte)tempModel.get("bank", 0);
-        byte NN = (byte)tempModel.get("number", 0);
+        byte BB = (byte)tempModel.get("bank");
+        byte NN = (byte)tempModel.get("number");
         //(BB + NN)&127 is checksum
         return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x00, BB, NN, (byte)((BB + NN)&127), (byte)0xF7 };
         }
@@ -2395,8 +2390,6 @@ public class WaldorfMicrowaveXT extends Synth
             }
         else
             {
-            //model.set("bank", 0);
-            //model.set("number", 0);
             retval = false;
             }
 

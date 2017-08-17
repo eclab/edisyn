@@ -176,7 +176,6 @@ public class WaldorfBlofeld extends Synth
                         
         params = ARPEGGIATOR_MODES;
         comp = new Chooser("Mode", this, "arpeggiatormode", params);
-        // // model.setSpecial("arpeggiatormode", 0);
         vbox.add(comp);
 
         params = ARPEGGIATOR_DIRECTIONS;
@@ -572,7 +571,6 @@ public class WaldorfBlofeld extends Synth
                 setupEffect(parameters, parametersByEffect, effect, getState());
                 }
             };
-        // // model.setSpecial("effect" + effect + "type", 0);
         vbox.add(comp);
         main.add(vbox);
 
@@ -614,7 +612,6 @@ public class WaldorfBlofeld extends Synth
                 vbox = new VBox();
                 params = MOD_SOURCES;
                 comp = new Chooser("Source " + i, this, "modulation" + i + "source", params);
-                // // model.setSpecial("mod" + i + "source", 0);
                 vbox.add(comp);
 
                 params = MOD_DESTINATIONS;
@@ -653,7 +650,6 @@ public class WaldorfBlofeld extends Synth
                         
             params = MOD_SOURCES;
             comp = new Chooser("A Source " + i, this, "modifier" + i + "sourcea", params);
-            // // model.setSpecial("modifier" + i + "sourcea", 0);
             vbox.add(comp);
 
             // gotta change the first one to "constant" from "off" if we're in Source B
@@ -662,7 +658,6 @@ public class WaldorfBlofeld extends Synth
             params[0] = "Constant";
 
             comp = new Chooser("B Source " + i, this, "modifier" + i + "sourceb", params);
-            // // model.setSpecial("modifier" + i + "sourceb", 0);
             vbox.add(comp);
 
             params = MODIFIER_OPERATORS;
@@ -741,7 +736,7 @@ public class WaldorfBlofeld extends Synth
                 if (goAhead[0])
                     {
                     envelopeHBoxes[envelope - 1].removeLast();
-                    envelopeHBoxes[envelope - 1].addLast(envelopeDisplays[envelope - 1][model.get(key, 0)]);
+                    envelopeHBoxes[envelope - 1].addLast(envelopeDisplays[envelope - 1][model.get(key)]);
                     envelopeHBoxes[envelope - 1].revalidate();
                     envelopeHBoxes[envelope - 1].repaint();
                     }
@@ -892,7 +887,7 @@ public class WaldorfBlofeld extends Synth
             public String map(int val)
                 {
                 // we display this in two different ways depending on whether we're clocked or not
-                if (model.get("lfo" + lfo + "clocked", 0) == 0)
+                if (model.get("lfo" + lfo + "clocked") == 0)
                     return "" + val;
                 else
                     {
@@ -1035,7 +1030,6 @@ public class WaldorfBlofeld extends Synth
                         
         params = MOD_SOURCES;
         comp = new Chooser("Mod Source", this, "amplifiermodsource", params);
-        // // model.setSpecial("amplifiermodsource", 0);
         vbox.add(comp);
                 
         hbox.add(vbox);
@@ -1103,7 +1097,6 @@ public class WaldorfBlofeld extends Synth
                 
         comp = new LabelledDial("Noise", this, "noiselevel", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Level");
-        //getModel().setSpecial("noiselevel", 0);
         hbox.add(comp);
 
         comp = new LabelledDial("Noise", this, "noisebalance", color, 0, 127)
@@ -1127,7 +1120,6 @@ public class WaldorfBlofeld extends Synth
 
         comp = new LabelledDial("Ringmod", this, "ringmodlevel", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Level");
-        //getModel().setSpecial("ringmodlevel", 0);
         hbox.add(comp);
 
         comp = new LabelledDial("Ringmod", this, "ringmodbalance", color, 0, 127)
@@ -1264,10 +1256,10 @@ public class WaldorfBlofeld extends Synth
                 {
                 public void update(String key, Model model)
                     {
-                    int state = model.get(key, 0);
+                    int state = model.get(key);
                     buildWavetable(chooser, osc, state);
                     // force an emit
-                    model.set("osc" + osc + "shape", model.get("osc" + osc + "shape", 0));
+                    model.set("osc" + osc + "shape", model.get("osc" + osc + "shape"));
                     }
                 });
             // We do this because it'd be confusing for non-SL people, but
@@ -1282,12 +1274,12 @@ public class WaldorfBlofeld extends Synth
                 
         params = FM_SOURCES;
         comp = new Chooser("FM Source", this, "osc" + osc + "fmsource", params);
-        // // model.setSpecial("osc" + osc + "fmsource", 0);
+        // // model.setSpecial("osc" + osc + "fmsource");
         vbox.add(comp);
 
         params = MOD_SOURCES;
         comp = new Chooser("PWM Source", this, "osc" + osc + "pwmsource", params);
-        // // model.setSpecial("osc" + osc + "pwmsource", 0);
+        // // model.setSpecial("osc" + osc + "pwmsource");
         vbox.add(comp);
 
         hbox.add(vbox);
@@ -1398,7 +1390,7 @@ public class WaldorfBlofeld extends Synth
         params = FILTER_TYPES;
                 
         comp = new Chooser("Type", this, "filter" + filter + "type", params);
-        // // model.setSpecial("filter" + filter + "type", 0);
+        // // model.setSpecial("filter" + filter + "type");
         vbox.add(comp);
                 
         params = DRIVE_CURVES;
@@ -1410,12 +1402,12 @@ public class WaldorfBlofeld extends Synth
                 
         params = MOD_SOURCES;
         comp = new Chooser("Mod Source", this, "filter" + filter + "modsource", params);
-        // // model.setSpecial("filter" + filter + "modsource", 0);
+        // // model.setSpecial("filter" + filter + "modsource");
         vbox.add(comp);
 
         params = MOD_SOURCES;
         comp = new Chooser("Pan Source", this, "filter" + filter + "pansource", params);
-        // // model.setSpecial("filter" + filter + "pansource", 0);
+        // // model.setSpecial("filter" + filter + "pansource");
         vbox.add(comp);
 
         hbox.add(vbox);
@@ -1423,7 +1415,7 @@ public class WaldorfBlofeld extends Synth
 
         params = FM_SOURCES;
         comp = new Chooser("FM Source", this, "filter" + filter + "fmsource", params);
-        // // model.setSpecial("filter" + filter + "fmsource", 0);
+        // // model.setSpecial("filter" + filter + "fmsource");
         vbox.add(comp);
 
         if (filter == 2)
@@ -1922,7 +1914,7 @@ public class WaldorfBlofeld extends Synth
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
-            byte XX = (byte)(16 + model.get(key, 0) * 12);
+            byte XX = (byte)(16 + model.get(key) * 12);
             return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
             }
         else if (key.equals("oscallocation") || key.equals("unisono"))
@@ -1930,7 +1922,7 @@ public class WaldorfBlofeld extends Synth
             int index = 58;
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
-            byte XX = (byte)((model.get("unisono", 0) << 4) | (model.get("oscallocation", 0)));
+            byte XX = (byte)((model.get("unisono") << 4) | (model.get("oscallocation")));
             return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
             }
         else if (key.equals("envelope1mode") || key.equals("envelope1trigger") ||
@@ -1944,7 +1936,7 @@ public class WaldorfBlofeld extends Synth
             int index = 196 + (i - 1) * 12;
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
-            byte XX = (byte)((model.get("envelope" + i + "trigger", 0) << 5) | (model.get("envelope" + i + "mode", 0)));
+            byte XX = (byte)((model.get("envelope" + i + "trigger") << 5) | (model.get("envelope" + i + "mode")));
             return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
             }
         else if (key.startsWith("arp") && !key.startsWith("arpegg"))
@@ -1957,8 +1949,8 @@ public class WaldorfBlofeld extends Synth
                 int index = i + 342;
                 byte HH = (byte)((index >> 7) & 127);
                 byte PP = (byte)(index & 127);
-                byte XX = (byte)((model.get("arp" + (i < 10 ? "0" : "") + i + "length", 0) << 4) | 
-                    (model.get("arp" + (i < 10 ? "0" : "") + i + "timing", 0)));
+                byte XX = (byte)((model.get("arp" + (i < 10 ? "0" : "") + i + "length") << 4) | 
+                    (model.get("arp" + (i < 10 ? "0" : "") + i + "timing")));
                 return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
                 }
             else
@@ -1966,9 +1958,9 @@ public class WaldorfBlofeld extends Synth
                 int index = i + 326;
                 byte HH = (byte)((index >> 7) & 127);
                 byte PP = (byte)(index & 127);
-                byte XX = (byte)((model.get("arp" + (i < 10 ? "0" : "") + i + "step", 0) << 4) |
-                    (model.get("arp" + (i < 10 ? "0" : "") + i + "glide", 0) << 3) |
-                    (model.get("arp" + (i < 10 ? "0" : "") + i + "accent", 0)));
+                byte XX = (byte)((model.get("arp" + (i < 10 ? "0" : "") + i + "step") << 4) |
+                    (model.get("arp" + (i < 10 ? "0" : "") + i + "glide") << 3) |
+                    (model.get("arp" + (i < 10 ? "0" : "") + i + "accent")));
                 return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
                 }
             }
@@ -1992,7 +1984,7 @@ public class WaldorfBlofeld extends Synth
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
-            byte XX = (byte)model.get(key, 0);
+            byte XX = (byte)model.get(key);
             return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
             }
         }
@@ -2005,8 +1997,8 @@ public class WaldorfBlofeld extends Synth
         if (tempModel == null)
             tempModel = getModel();
         byte DEV = (byte)(getID());
-        byte BB = (byte) tempModel.get("bank", 0);
-        byte NN = (byte) tempModel.get("number", 0);
+        byte BB = (byte) tempModel.get("bank");
+        byte NN = (byte) tempModel.get("number");
         if (toWorkingMemory) { BB = 0x7F; NN = 0x0; }
 
         byte[] bytes = new byte[383];
@@ -2020,11 +2012,11 @@ public class WaldorfBlofeld extends Synth
                 }
             else if (key.equals("osc1octave") || key.equals("osc2octave") || key.equals("osc3octave"))
                 {
-                bytes[i] = (byte)(16 + model.get(key, 0) * 12);
+                bytes[i] = (byte)(16 + model.get(key) * 12);
                 }
             else if (key.equals("oscallocation, unisono"))
                 {
-                bytes[i] = (byte)((model.get("unisono", 0) << 4) | (model.get("oscallocation", 0)));
+                bytes[i] = (byte)((model.get("unisono") << 4) | (model.get("oscallocation")));
                 }
             else if (key.equals("envelope1mode, envelope1trigger") ||
                 key.equals("envelope2mode, envelope2trigger") ||
@@ -2035,26 +2027,26 @@ public class WaldorfBlofeld extends Synth
                 bytes[i] = 0;  // or whatever
                 try { 
                     j = Integer.parseInt(key.substring(8, 9)); 
-                    bytes[i] = (byte)((model.get("envelope" + j + "trigger", 0) << 5) | (model.get("envelope" + j + "mode", 0)));
+                    bytes[i] = (byte)((model.get("envelope" + j + "trigger") << 5) | (model.get("envelope" + j + "mode")));
                     }
                 catch (Exception e) { e.printStackTrace(); }
                 }
             else if (i >= 327 && i <= 342) // step/glide/accent
                 {
                 int j = i - 326;
-                bytes[i] = (byte)((model.get("arp" + (j < 10 ? "0" : "") + j + "step", 0) << 4) |
-                    (model.get("arp" + (j < 10 ? "0" : "") + j + "glide", 0) << 3) |
-                    (model.get("arp" + (j < 10 ? "0" : "") + j + "accent", 0)));
+                bytes[i] = (byte)((model.get("arp" + (j < 10 ? "0" : "") + j + "step") << 4) |
+                    (model.get("arp" + (j < 10 ? "0" : "") + j + "glide") << 3) |
+                    (model.get("arp" + (j < 10 ? "0" : "") + j + "accent")));
                 }
             else if (i >= 343 && i <= 358) // timing/length
                 {
                 int j = i - 342;
-                bytes[i] = (byte)((model.get("arp" + (j < 10 ? "0" : "") + j + "length", 0) << 4) | 
-                    (model.get("arp" + (j < 10 ? "0" : "") + j + "timing", 0)));
+                bytes[i] = (byte)((model.get("arp" + (j < 10 ? "0" : "") + j + "length") << 4) | 
+                    (model.get("arp" + (j < 10 ? "0" : "") + j + "timing")));
                 }
             else
                 {
-                bytes[i] = (byte)(model.get(key, 0));
+                bytes[i] = (byte)(model.get(key));
                 }
             }
 
@@ -2065,7 +2057,7 @@ public class WaldorfBlofeld extends Synth
             bytes[i] = (byte)(name.charAt(i - 363));
             }
                 
-        bytes[379] = (byte)(model.get("category", 0));
+        bytes[379] = (byte)(model.get("category"));
                 
         bytes[380] = 0;
         bytes[381] = 0;
@@ -2192,8 +2184,6 @@ public class WaldorfBlofeld extends Synth
             }
         else
             {
-            //model.set("bank", 0);
-            //model.set("number", 0);
             retval = false;
             }
                 
@@ -2230,20 +2220,19 @@ public class WaldorfBlofeld extends Synth
         return b;
         }
 
+	public int getPauseAfterChangePatch() { return 200; }
+
     public void changePatch(Model tempModel)
         {
-        byte BB = (byte)tempModel.get("bank", 0);
-        byte NN = (byte)tempModel.get("number", 0);
+        byte BB = (byte)tempModel.get("bank");
+        byte NN = (byte)tempModel.get("number");
         try {
             // Bank change is CC 32
-            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut() - 1, 32, BB));
+            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, BB));
             // Number change is PC
-            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut() - 1, NN, 0));
+            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0));
             }
         catch (Exception e) { e.printStackTrace(); }
- 
-	 	// it looks like the WaldorfBlofeld needs about 150ms after a change patch or it drops packets
-    	simplePause(200);
        }
 
     public byte[] requestDump(Model tempModel)
@@ -2251,8 +2240,8 @@ public class WaldorfBlofeld extends Synth
         if (tempModel == null)
             tempModel = getModel();
         byte DEV = (byte)(getID());
-        byte BB = (byte)tempModel.get("bank", 0);
-        byte NN = (byte)tempModel.get("number", 0);
+        byte BB = (byte)tempModel.get("bank");
+        byte NN = (byte)tempModel.get("number");
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x00, BB, NN, 0x00, (byte)0xF7 };
         }
     
@@ -2295,9 +2284,9 @@ public class WaldorfBlofeld extends Synth
         JComboBox bank = new JComboBox(BANKS);
         bank.setEditable(false);
         bank.setMaximumRowCount(32);
-        bank.setSelectedIndex(model.get("bank", 0));
+        bank.setSelectedIndex(model.get("bank"));
                 
-        JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
+        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
                 
         while(true)
             {

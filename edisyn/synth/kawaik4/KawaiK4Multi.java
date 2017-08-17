@@ -96,9 +96,9 @@ public class KawaiK4Multi extends Synth
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JComboBox bank = new JComboBox(BANKS);
-        bank.setSelectedIndex(model.get("bank", 0));
+        bank.setSelectedIndex(model.get("bank"));
         
-        JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
+        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
 
         while(true)
             {
@@ -223,7 +223,7 @@ public class KawaiK4Multi extends Synth
                             public void run() 
                                 { 
                                 Model tempModel = new Model();
-                                tempModel.set("number", KawaiK4Multi.this.model.get("effect", 0));
+                                tempModel.set("number", KawaiK4Multi.this.model.get("effect"));
                                 synth.performRequestDump(tempModel, false);
                                 }
                             });
@@ -293,8 +293,8 @@ public class KawaiK4Multi extends Synth
                             public void run() 
                                 { 
                                 Model tempModel = new Model();
-                                tempModel.set("bank", KawaiK4Multi.this.model.get("instrument" + src + "bank", 0));
-                                tempModel.set("number", KawaiK4Multi.this.model.get("instrument" + src + "number", 0));
+                                tempModel.set("bank", KawaiK4Multi.this.model.get("instrument" + src + "bank"));
+                                tempModel.set("number", KawaiK4Multi.this.model.get("instrument" + src + "number"));
                                 synth.performRequestDump(tempModel, false);
                                 }
                             });
@@ -563,26 +563,26 @@ public class KawaiK4Multi extends Synth
 				}
 			else if (key.endsWith("singleno"))
 				{
-				data[i] = (byte)(model.get("section" + section + "bank", 0) * 4 + model.get("section" + section + "number", 0));
+				data[i] = (byte)(model.get("section" + section + "bank") * 4 + model.get("section" + section + "number"));
 				}
 			else if (key.endsWith("rcvch_velosw_mute"))
 				{
-				data[i] = (byte)((model.get("section" + section + "mute", 0) << 7) | (model.get("section" + section + "velocitysw", 0) << 5) | (model.get("section" + section + "channel", 0)));
+				data[i] = (byte)((model.get("section" + section + "mute") << 7) | (model.get("section" + section + "velocitysw") << 5) | (model.get("section" + section + "channel")));
 				} 
 			else if (key.equals("mode_outselect"))
 				{
-				data[i] = (byte)((model.get("section" + section + "playmode", 0) << 3) | (model.get("section" + section + "submix", 0) << 7));
+				data[i] = (byte)((model.get("section" + section + "playmode") << 3) | (model.get("section" + section + "submix") << 7));
 				}
 			else
 				{
-				data[i] = (byte)(model.get(key, 0));
+				data[i] = (byte)(model.get(key));
 				}
 			}
 
 		// Error in Section 4-1, see "Corrected MIDI Implementation"
 
-        boolean external = (model.get("bank", 0) > 4);
-		byte position = (byte)((model.get("bank", 0) % 2) * 16 + (model.get("number", 0)));  // 0...63 for A1 .... D16
+        boolean external = (tempModel.get("bank") > 3);
+		byte position = (byte)((tempModel.get("bank") & 3) * 16 + (tempModel.get("number")));  // 0...63 for A1 .... D16
 		byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
 		result[0] = (byte)0xF0;
 		result[1] = (byte)0x40;
@@ -610,8 +610,8 @@ public class KawaiK4Multi extends Synth
 
     public byte[] requestDump(Model tempModel)
         {
-        boolean external = (model.get("bank", 0) > 4);
-		byte position = (byte)((model.get("bank", 0) % 2) * 16 + (model.get("number", 0)) + 64);  // 64 for "multi", that is, 64...127 for A1 .... D16
+        boolean external = (tempModel.get("bank") > 3);
+		byte position = (byte)((tempModel.get("bank") & 3) * 16 + (tempModel.get("number")) + 64);  // 64 for "multi", that is, 64...127 for A1 .... D16
         return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x00, 0x00, 0x04, 
         			(byte)(external ? 0x02 : 0x00),
         			position, (byte)0xF7};
@@ -670,8 +670,8 @@ public class KawaiK4Multi extends Synth
 
     public void changePatch(Model tempModel)
     	{
-    	byte BB = (byte)tempModel.get("bank", 0);
-        byte NN = (byte)tempModel.get("number", 0);
+    	byte BB = (byte)tempModel.get("bank");
+        byte NN = (byte)tempModel.get("number");
         
         // first switch to internal or external
         byte[] data = new byte[8];
@@ -687,11 +687,11 @@ public class KawaiK4Multi extends Synth
         
         // Next do a PC
         
-        if (BB > 4) BB -= 4;
+        if (BB >= 4) BB -= 4;
         int PC = (BB * 16 + NN) + 64;  // 64 for Multi
         try 
         	{
-            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut() - 1, PC, 0));
+            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }
         catch (Exception e) { e.printStackTrace(); }
 		}

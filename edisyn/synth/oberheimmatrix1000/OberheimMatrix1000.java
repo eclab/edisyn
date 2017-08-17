@@ -123,8 +123,8 @@ public class OberheimMatrix1000 extends Synth
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
-        JTextField bank = new JTextField("" + (model.get("bank", 0)), 3);
-        JTextField number = new JTextField("" + (model.get("number", 0)), 3);
+        JTextField bank = new JTextField("" + (model.get("bank")), 3);
+        JTextField number = new JTextField("" + (model.get("number")), 3);
 
         while(true)
             {
@@ -518,7 +518,6 @@ public class OberheimMatrix1000 extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-//        VBox vbox = new VBox();
 
 
         // separate CheckBoxes maybe?
@@ -550,7 +549,7 @@ public class OberheimMatrix1000 extends Synth
                 {
                 super.update(key, model);
                 envelopeBox[env - 1].removeLast();
-                int val = model.get(key, 0);
+                int val = model.get(key);
                 if (val == 0 || val == 2)
                     envelopeBox[env - 1].addLast(dadsr[env - 1]);
                 else
@@ -689,7 +688,6 @@ public class OberheimMatrix1000 extends Synth
                 VBox vbox2 = new VBox();
                 params = MODULATION_SOURCES;
                 comp = new Chooser("" + i + " Source", this, "modulation" + i + "source", params);
-                // model.setSpecial("mod" + i + "source", 0);
                 vbox2.add(comp);
 
                 params = MODULATION_DESTINATIONS;
@@ -998,42 +996,42 @@ public class OberheimMatrix1000 extends Synth
         if (key.equals("dco1lever1") || key.equals("dco1vibrato"))
             {
             index = ((Integer)(internalParametersToIndex.get("dco1fixedmods1"))).intValue();
-            value = model.get("dco1lever1", 0) |  (model.get("dco1vibrato", 0) << 1);
+            value = model.get("dco1lever1") |  (model.get("dco1vibrato") << 1);
             }
         else if (key.equals("dco1portamento") || key.equals("dco1keytracking"))
             {
             index = ((Integer)(internalParametersToIndex.get("dco1fixedmods2"))).intValue();
-            value = model.get("dco1portamento", 0) | (model.get("dco1keytracking", 0) << 1);
+            value = model.get("dco1portamento") | (model.get("dco1keytracking") << 1);
             }
         else if (key.equals("dco2lever1") || key.equals("dco2vibrato"))
             {
             index = ((Integer)(internalParametersToIndex.get("dco2fixedmods1"))).intValue();
-            value = model.get("dco2lever1", 0) | (model.get("dco2vibrato", 0) << 1);
+            value = model.get("dco2lever1") | (model.get("dco2vibrato") << 1);
             }
         else if (key.equals("dco2portamento") || key.equals("dco2keytracking"))
             {
             index = ((Integer)(internalParametersToIndex.get("dco2fixedmods2"))).intValue();
-            value = model.get("dco2portamento", 0) | (model.get("dco2keytracking", 0) << 1);
+            value = model.get("dco2portamento") | (model.get("dco2keytracking") << 1);
             }
         else if (key.equals("dco1wave") || key.equals("dco1pulse"))
             {
             index = ((Integer)(internalParametersToIndex.get("dco1waveenable"))).intValue();
-            value = model.get("dco1wave", 0) | (model.get("dco1pulse", 0) << 1);
+            value = model.get("dco1wave") | (model.get("dco1pulse") << 1);
             }
         else if (key.equals("dco2wave") || key.equals("dco2pulse") || key.equals("dco2noise"))
             {
             index = ((Integer)(internalParametersToIndex.get("dco2waveenable"))).intValue();
-            value = model.get("dco2wave", 0) | (model.get("dco2pulse", 0) << 1) | (model.get("dco2noise", 0) << 2);
+            value = model.get("dco2wave") | (model.get("dco2pulse") << 1) | (model.get("dco2noise") << 2);
             }
         else if (key.equals("vcflever1") || key.equals("vcfvibrato"))
             {
             index = ((Integer)(internalParametersToIndex.get("vcffixedmods1"))).intValue();
-            value = model.get("vcflever1", 0) | (model.get("vcfvibrato", 0) << 1);
+            value = model.get("vcflever1") | (model.get("vcfvibrato") << 1);
             }
         else if (key.equals("vcfportamento") || key.equals("vcfkeytracking"))
             {
             index = ((Integer)(internalParametersToIndex.get("vcffixedmods2"))).intValue();
-            value = model.get("vcfportamento", 0) | (model.get("vcfkeytracking", 0) << 1);
+            value = model.get("vcfportamento") | (model.get("vcfkeytracking") << 1);
             }
         else if (key.startsWith("mod"))
             {
@@ -1041,9 +1039,9 @@ public class OberheimMatrix1000 extends Synth
             if (key.charAt(4) == '0') // it's 10
                 modnumber = 10;
 
-            int modsource = model.get("mod" + modnumber  + "source", 0);
-            int moddestination = model.get("mod" + modnumber  + "destination", 0) + 1;  // IMPORTANT it  goes 1--32, not 0--31
-            int modamount = model.get("mod" + modnumber  + "amount", 0);
+            int modsource = model.get("mod" + modnumber  + "source");
+            int moddestination = model.get("mod" + modnumber  + "destination") + 1;  // IMPORTANT it  goes 1--32, not 0--31
+            int modamount = model.get("mod" + modnumber  + "amount");
             modnumber--;
 
             return new byte[] { (byte)0xF0, 0x10, 0x06, 0x0B, (byte)modnumber, (byte)modsource, (byte) modamount, (byte)moddestination, (byte)0xF7 };
@@ -1057,7 +1055,7 @@ public class OberheimMatrix1000 extends Synth
         else
         	{
          	index = ((Integer)(internalParametersToIndex.get(key))).intValue();
-        	value = model.get(key, 0);
+        	value = model.get(key);
         	}
 
         byte VV = (byte)(value);
@@ -1259,44 +1257,44 @@ public class OberheimMatrix1000 extends Synth
         		value = packNameByte(name[i]);
         	else if (key.equals("dco1fixedmods1"))
         		{
-                value = (model.get("dco1vibrato", 0) << 1) |
-                		(model.get("dco1lever1", 0));
+                value = (model.get("dco1vibrato") << 1) |
+                		(model.get("dco1lever1"));
         		}
         	else if (key.equals("dco1fixedmods2"))
         		{
-                value = (model.get("dco1keytracking", 0) << 1) |
-                		(model.get("dco1portamento", 0));
+                value = (model.get("dco1keytracking") << 1) |
+                		(model.get("dco1portamento"));
         		}
         	else if (key.equals("dco2fixedmods1"))
         		{
-                value = (model.get("dco2vibrato", 0) << 1) |
-                		(model.get("dco2lever1", 0));
+                value = (model.get("dco2vibrato") << 1) |
+                		(model.get("dco2lever1"));
         		}
         	else if (key.equals("dco2fixedmods2"))
         		{
-                value = (model.get("dco2keytracking", 0) << 1) |
-                		(model.get("dco2portamento", 0));
+                value = (model.get("dco2keytracking") << 1) |
+                		(model.get("dco2portamento"));
         		}
         	else if (key.equals("dco1waveenable"))
         		{
-                value = (model.get("dco1pulse", 0) << 1) |
-                		(model.get("dco1wave", 0));
+                value = (model.get("dco1pulse") << 1) |
+                		(model.get("dco1wave"));
         		}
         	else if (key.equals("dco2waveenable"))
         		{
-                value = (model.get("dco2noise", 0) << 2) |
-                		(model.get("dco2pulse", 0) << 1) |
-                		(model.get("dco2wave", 0));
+                value = (model.get("dco2noise") << 2) |
+                		(model.get("dco2pulse") << 1) |
+                		(model.get("dco2wave"));
         		}
         	else if (key.equals("vcffixedmods1"))
         		{
-                value = (model.get("vcfvibrato", 0) << 1) |
-                		(model.get("vcflever1", 0));
+                value = (model.get("vcfvibrato") << 1) |
+                		(model.get("vcflever1"));
         		}
         	else if (key.equals("vcffixedmods2"))
         		{
-                value = (model.get("vcfkeytracking", 0) << 1) |
-                		(model.get("vcfportamento", 0));
+                value = (model.get("vcfkeytracking") << 1) |
+                		(model.get("vcfportamento"));
         		}
         	// no need to handle portamentomode specially, but we DO have to parse it specially
 /*        	else if (key.equals("portamentomode"))
@@ -1305,7 +1303,7 @@ public class OberheimMatrix1000 extends Synth
 */
         	else
         		{
-        		value = model.get(key, 0);
+        		value = model.get(key);
         		}
 
         	// pack to nybbles
@@ -1360,7 +1358,7 @@ public class OberheimMatrix1000 extends Synth
 			data2[1] = (byte)0x10;
 			data2[2] = (byte)0x06;	
 			data2[3] = (byte)0x0A;
-			data2[5] = (byte)(model.get("bank", 0));
+			data2[5] = (byte)(model.get("bank"));
 			data2[7] = (byte)0xF7;
 
 			try
@@ -1402,15 +1400,15 @@ public class OberheimMatrix1000 extends Synth
 			data2[1] = (byte)0x10;
 			data2[2] = (byte)0x06;	
 			data2[3] = (byte)0x0A;
-			data2[5] = (byte)(tempModel.get("bank", 0));
+			data2[5] = (byte)(tempModel.get("bank"));
 			data2[7] = (byte)0xF7;
 
 			tryToSendSysex(data2);
 			
 		// Next do a program change
 		
-        byte NN = (byte)tempModel.get("number", 0);
-        tryToSendMIDI(buildPC(getChannelOut() - 1, NN));
+        byte NN = (byte)tempModel.get("number");
+        tryToSendMIDI(buildPC(getChannelOut(), NN));
     	}
 
 
@@ -1427,7 +1425,7 @@ public class OberheimMatrix1000 extends Synth
 			data2[1] = (byte)0x10;
 			data2[2] = (byte)0x06;	
 			data2[3] = (byte)0x0A;
-			data2[5] = (byte)(tempModel.get("bank", 0));
+			data2[5] = (byte)(tempModel.get("bank"));
 			data2[7] = (byte)0xF7;
 
 			tryToSendSysex(data2);
@@ -1440,7 +1438,7 @@ public class OberheimMatrix1000 extends Synth
         data[2] = (byte)0x06;
         data[3] = (byte)0x04;
         data[4] = (byte)1;		// request single patch
-        data[5] = (byte)(tempModel.get("number", 0));
+        data[5] = (byte)(tempModel.get("number"));
         data[6] = (byte)0xF7;
         
         tryToSendSysex(data);

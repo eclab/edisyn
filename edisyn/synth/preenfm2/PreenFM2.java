@@ -189,7 +189,7 @@ public class PreenFM2 extends Synth
 	    	type = new JComboBox(BANK_TYPES_IN);
 	    	}
 
-		int _bank = model.get("bank", 0);
+		int _bank = model.get("bank");
 		if (_bank > 255 && writing)  // it's DX7
 			{
 			_bank = 0;		// cannot write to DX7
@@ -208,7 +208,7 @@ public class PreenFM2 extends Synth
 			}
                 
         JTextField bank = new JTextField("" + _bank, 3);
-        JTextField number = new JTextField("" + (model.get("number", 0)), 3);
+        JTextField number = new JTextField("" + (model.get("number")), 3);
                 
         while(true)
             {
@@ -349,7 +349,7 @@ public class PreenFM2 extends Synth
         	public void update(String key, Model model)
         		{
         		super.update(key, model);
-        		int voices = model.get(key, 0);
+        		int voices = model.get(key);
         		if (voices == 1)
         			generalBox.add(glide);
         		else
@@ -491,7 +491,7 @@ public class PreenFM2 extends Synth
         	public void update(String key, Model model)
         		{
         		super.update(key, model);
-        		int type = model.get(key, 0);
+        		int type = model.get(key);
         		parameterBox.add(firstParameter);
         		parameterBox.add(secondParameter);
         		parameterBox.remove(firstParameter);
@@ -642,7 +642,7 @@ public class PreenFM2 extends Synth
         	{
 			public int reviseToAltValue(int val)
 				{
-                int fixed = model.get("op" + op + "freqtype", 0);
+                int fixed = model.get("op" + op + "freqtype");
                 if (fixed == 0)
                 	{
                 	return findClosestValue(val, YAMAHA_FREQUENCY_RATIOS);
@@ -652,8 +652,8 @@ public class PreenFM2 extends Synth
 				
             public String map(int val)
                 {
-                int fixed = model.get("op" + op + "freqtype", 0);
-                int finetune = model.get("op" + op + "finetune", 0);
+                int fixed = model.get("op" + op + "freqtype");
+                int finetune = model.get("op" + op + "finetune");
                 if (fixed == 1)
                 	{
                 	int v = val * 10 + finetune - 100;
@@ -671,7 +671,7 @@ public class PreenFM2 extends Synth
 				else if (lo == 1) lo = 83;
 				else if (lo == 2) lo = 166;
 
-                int fixed = model.get("op" + op + "fixed", 0);
+                int fixed = model.get("op" + op + "fixed");
                 if (fixed == 1)
                 	{
                 	return "" + (hi * 250 + lo);
@@ -691,7 +691,7 @@ public class PreenFM2 extends Synth
         	{
             public String map(int val)
                 {
-                int fixed = model.get("op" + op + "freqtype", 0);
+                int fixed = model.get("op" + op + "freqtype");
                 if (fixed == 1)
                 	{
                 	return "" + (val - 100);
@@ -821,7 +821,6 @@ public class PreenFM2 extends Synth
 
                 params = MODULATION_SOURCES;
                 comp = new Chooser("" + i + " Source", this, "modulation" + i + "source", params);
-                // model.setSpecial("mod" + i + "source", 0);
                 vbox.add(comp);
 
                 params = MODULATION_DESTINATIONS;
@@ -1156,14 +1155,11 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
         // 0..127			Bank
         // 128...255		Combo
         // 256...256+255	DX7
-        int bank = tempModel.get("bank", 0);
-//        int msb = (bank >> 7);
-//        int lsb = (bank & 127);
+        int bank = tempModel.get("bank");
+        int program = tempModel.get("number");
         
-        int program = tempModel.get("number", 0);
-        
-        tryToSendMIDI(buildLongCC(getChannelOut() - 1, 0, bank));
-        tryToSendMIDI(buildPC(getChannelOut() - 1, program));
+        tryToSendMIDI(buildLongCC(getChannelOut(), 0, bank));
+        tryToSendMIDI(buildPC(getChannelOut(), program));
         
         // we assume that we successfully did it
         setSendMIDI(false);
@@ -1175,8 +1171,8 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
 
     public void performRequestCurrentDump()
     	{
-		// Send an NRPN with param = MSB127, LSB127, and a value of whatever (here, 1).
-        tryToSendMIDI(buildNRPN(getChannelOut() - 1, (127 << 7) | 127, 0));
+		// Send an NRPN with param = MSB127, LSB127. It appears that the PreenFM2 is buggy with regard to the value: 0 seems to work.
+        tryToSendMIDI(buildNRPN(getChannelOut(), (127 << 7) | 127, 0));
     	}
 
     public void performRequestDump(Model tempModel, boolean changePatch)
@@ -1184,8 +1180,8 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
     	// we always change patches, no matter what
     	changePatch(tempModel);
 		
-		// Send an NRPN with param = MSB127, LSB127, and a value of whatever (here, 1).
-        tryToSendMIDI(buildNRPN(getChannelOut() - 1, (127 << 7) | 127, 0));
+		// Send an NRPN with param = MSB127, LSB127. It appears that the PreenFM2 is buggy with regard to the value: 0 seems to work.
+		tryToSendMIDI(buildNRPN(getChannelOut(), (127 << 7) | 127, 0));
     	}
     	
     
@@ -1211,7 +1207,7 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
     public Object[] emitAll(String key)
     	{
     	Model model = getModel();
-    	int channel = getChannelOut() - 1;
+    	int channel = getChannelOut();
     	if (key.equals("name")) 
     		{
     		String value = model.get(key, "Init Sound");
@@ -1241,7 +1237,7 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
 	    	int param = ((Integer)(parameterToIndex.get(key))).intValue();
        		if (key.startsWith("lfo1frequency") || key.startsWith("lfo2frequency") || key.startsWith("lfo3frequency"))
        			{
-	    		int value = model.get(key, 0);
+	    		int value = model.get(key);
 	    		if (value >= 100)
 	    			value = (value - 100) * 10 + 100;
 	    		else if (value >= (100 + 231))
@@ -1250,12 +1246,12 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
        			}
 			else if (key.startsWith("im"))
 				{
-	    		int value = model.get(key, 0) * 10;
+	    		int value = model.get(key) * 10;
 	    		return buildNRPN(channel, param, value);
 				}
     		else
     			{
-	    		int value = model.get(key, 0);
+	    		int value = model.get(key);
 	    		return buildNRPN(channel, param, value);
 	    		}
 	    	}
@@ -1288,7 +1284,7 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
 //	    	int param = ((Integer)(parameterToIndex.get(key))).intValue();
        		if (key.startsWith("lfo1frequency") || key.startsWith("lfo2frequency") || key.startsWith("lfo3frequency"))
        			{
-	    		int value = model.get(key, 0);
+	    		int value = model.get(key);
 	    		if (value >= 100)
 	    			value = (value - 100) * 10 + 100;
 	    		else if (value >= (100 + 231))
@@ -1297,12 +1293,12 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
        			}
 			else if (key.startsWith("im"))
 				{
-	    		int value = model.get(key, 0) * 10;
+	    		int value = model.get(key) * 10;
 	    		return new int[] { value };
 				}
     		else
     			{
-	    		int value = model.get(key, 0);
+	    		int value = model.get(key);
 	    		return new int[] { value };
 	    		}
 	    	}

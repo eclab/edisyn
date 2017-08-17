@@ -140,7 +140,7 @@ public class YamahaTX81Z extends Synth
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JComboBox bank = new JComboBox(BANKS);
-        bank.setSelectedIndex(model.get("bank", 0));
+        bank.setSelectedIndex(model.get("bank"));
         if (writing)
             {
             bank = new JComboBox(new String[] { "I" });
@@ -149,7 +149,7 @@ public class YamahaTX81Z extends Synth
                         
                         
         
-        JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
+        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
 
         while(true)
             {
@@ -530,15 +530,15 @@ public class YamahaTX81Z extends Synth
             {
             public String map(int val)
                 {
-                if (model.get("operator" + src + "fix", 0) == 0)  // not fixed
+                if (model.get("operator" + src + "fix") == 0)  // not fixed
                     {
                     return "" + FREQUENCY_RATIOS[val];
                     }
                 else
                     {
                     return "" + computeCoarseFrequency(
-                        model.get("operator" + src + "fixedfrequencyrange", 0),
-                        model.get("operator" + src + "frequencycoarse", 0));
+                        model.get("operator" + src + "fixedfrequencyrange"),
+                        model.get("operator" + src + "frequencycoarse"));
                     }
                 }               
             };
@@ -551,18 +551,18 @@ public class YamahaTX81Z extends Synth
             {
             public String map(int val)
                 {
-                if (model.get("operator" + src + "fix", 0) == 0)  // not fixed
+                if (model.get("operator" + src + "fix") == 0)  // not fixed
                     {
                     return format.format(computeFineRatio(
-                    	model.get("operator" + src + "frequencycoarse", 0), 
-                    	model.get("operator" + src + "frequencyfine", 0)));
+                    	model.get("operator" + src + "frequencycoarse"), 
+                    	model.get("operator" + src + "frequencyfine")));
                     }
                 else
                     {
                     return "" + computeFrequency(
-                        model.get("operator" + src + "fixedfrequencyrange", 0),
-                        model.get("operator" + src + "frequencycoarse", 0),
-                        model.get("operator" + src + "frequencyfine", 0));
+                        model.get("operator" + src + "fixedfrequencyrange"),
+                        model.get("operator" + src + "frequencycoarse"),
+                        model.get("operator" + src + "frequencyfine"));
                     }
                 }               
             };
@@ -590,7 +590,7 @@ public class YamahaTX81Z extends Synth
             public void update(String key, Model model)
                 {
                 super.update(key, model);
-                if (model.get(key, 0) == 0)
+                if (model.get(key) == 0)
                     {
                     hbox.remove(frequencyRanges[src - 1]);
                     coarseFrequencyLabels[src - 1].setText("Ratio");
@@ -677,7 +677,7 @@ public class YamahaTX81Z extends Synth
             {
             public void postProcess(double[] xVals, double[] yVals)
                 {
-                if (model.get("operator" + envelope + "decay2rate", 0) == 0)
+                if (model.get("operator" + envelope + "decay2rate") == 0)
                     {
                     yVals[3] = yVals[2];
                     }
@@ -687,7 +687,7 @@ public class YamahaTX81Z extends Synth
                 xVals[3] = 0.25 - xVals[3];
                 xVals[4] = 0.25 - xVals[4];
                                         
-                int shift = model.get("operator" + envelope + "shift", 0);
+                int shift = model.get("operator" + envelope + "shift");
                                         
                 if (shift > 0)
                     {
@@ -904,7 +904,7 @@ public class YamahaTX81Z extends Synth
         if (key.equals("bank")) return new byte[0];  // this is not emittable
         if (key.equals("number")) return new byte[0];  // this is not emittable
 
-        byte channel = (byte)(32 + getChannelOut() - 1);
+        byte channel = (byte)(32 + getChannelOut());
              
          
         if (key.equals("name"))
@@ -923,10 +923,10 @@ public class YamahaTX81Z extends Synth
 
         else if (key.equals("operator1enabled") || key.equals("operator2enabled") || key.equals("operator3enabled") || key.equals("operator4enabled"))
             {
-        	int v1 = model.get("operator1enabled", 0);
-        	int v2 = model.get("operator2enabled", 0);
-        	int v3 = model.get("operator3enabled", 0);
-        	int v4 = model.get("operator4enabled", 0);
+        	int v1 = model.get("operator1enabled");
+        	int v2 = model.get("operator2enabled");
+        	int v3 = model.get("operator3enabled");
+        	int v4 = model.get("operator4enabled");
                         
             byte PP = (byte) 93;
             // don't know if I got this in the right order, see parse()
@@ -936,7 +936,7 @@ public class YamahaTX81Z extends Synth
         else if (allParametersToIndex.containsKey(key))
             {
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
-            int value = model.get(key, 0);
+            int value = model.get(key);
 
             byte PP = (byte) index;
             byte VV = (byte) value;
@@ -945,7 +945,7 @@ public class YamahaTX81Z extends Synth
         else if (allAdditionalParametersToIndex.containsKey(key))
             {
             int index = ((Integer)(allAdditionalParametersToIndex.get(key))).intValue();
-            int value = model.get(key, 0);
+            int value = model.get(key);
 
             byte PP = (byte) index;
             byte VV = (byte) value;
@@ -1103,12 +1103,12 @@ public class YamahaTX81Z extends Synth
         
         for(int i = 0; i < allAdditionalParameters.length; i++)  // no name, no operatorenabled
             {
-            data[i + 10] = (byte)(model.get(allAdditionalParameters[i], 0));
+            data[i + 10] = (byte)(model.get(allAdditionalParameters[i]));
             }
 
         result[0][0] = (byte)0xF0;
         result[0][1] = 0x43;
-        result[0][2] = (byte)(32 + getChannelOut() - 1);
+        result[0][2] = (byte)(32 + getChannelOut());
         result[0][3] = (byte)0x7E;
         result[0][4] = 0x00;
         result[0][5] = 0x21;
@@ -1122,7 +1122,7 @@ public class YamahaTX81Z extends Synth
         data = new byte[94];
         for(int i = 0; i < allParameters.length - 18; i++)  // no name, no operatorenabled
             {
-            data[i] = (byte)(model.get(allParameters[i], 0));
+            data[i] = (byte)(model.get(allParameters[i]));
             }
         
         String name = model.get("name", "INIT SOUND") + "          ";
@@ -1132,10 +1132,10 @@ public class YamahaTX81Z extends Synth
             data[allParameters.length - 18 + i] = (byte)(name.charAt(i));
             }
         
-        int v1 = model.get("operator1enabled", 0);
-        int v2 = model.get("operator2enabled", 0);
-        int v3 = model.get("operator3enabled", 0);
-        int v4 = model.get("operator4enabled", 0);
+        int v1 = model.get("operator1enabled");
+        int v2 = model.get("operator2enabled");
+        int v3 = model.get("operator3enabled");
+        int v4 = model.get("operator4enabled");
         
         byte VV = (byte) ((v4 << 3) | (v3 << 2) | (v2 << 1) | v1);
         
@@ -1143,7 +1143,7 @@ public class YamahaTX81Z extends Synth
         
         result[1][0] = (byte)0xF0;
         result[1][1] = 0x43;
-        result[1][2] = (byte)(32 + getChannelOut() - 1);
+        result[1][2] = (byte)(32 + getChannelOut());
         result[1][3] = 0x03;
         result[1][4] = 0x00;
         result[1][5] = 0x5D;
@@ -1175,7 +1175,7 @@ public class YamahaTX81Z extends Synth
     public byte[] requestCurrentDump()
         {
         // ACED + VCED
-        byte channel = (byte)(32 + getChannelOut() - 1);
+        byte channel = (byte)(32 + getChannelOut());
         return new byte[] { (byte)0xF0, 0x43, channel, 0x7E, 
             (byte)'L', (byte)'M', (byte)' ', (byte)' ',
             (byte)'8', (byte)'9', (byte)'7', (byte)'6',
@@ -1266,8 +1266,8 @@ public class YamahaTX81Z extends Synth
 
     public void changePatch(Model tempModel) 
         {
-        int bank = tempModel.get("bank", 0);
-        int number = tempModel.get("number", 0);
+        int bank = tempModel.get("bank");
+        int number = tempModel.get("number");
         int val = bank * 32 + number;
         byte lo = (byte)(val & 127);
         byte hi = (byte)(val >> 7);
@@ -1276,7 +1276,7 @@ public class YamahaTX81Z extends Synth
         byte[] table = new byte[9];
         table[0] = (byte)0xF0;
         table[1] = (byte)0x43;
-        table[2] = (byte)(32 + getChannelOut() - 1);
+        table[2] = (byte)(32 + getChannelOut());
         table[3] = (byte)0x10;
         table[4] = (byte)127;  // really!
         table[5] = (byte)127;  // we're changing table position 127
@@ -1288,7 +1288,7 @@ public class YamahaTX81Z extends Synth
         
         // Now let's do the program change to program 127
         
-        tryToSendMIDI(buildPC(getChannelOut() - 1, 127));
+        tryToSendMIDI(buildPC(getChannelOut(), 127));
         }
     
     public String getPatchName() { return model.get("name", "INIT SOUND"); }

@@ -28,7 +28,7 @@ public class KawaiK4 extends Synth
         
     public static final String[] BANKS = { "A", "B", "C", "D", "Ext. A", "Ext. B", "Ext. C", "Ext. D" };
     public static final String[] WAVES = { "Sin 1st", "Sin 2nd", "Sin 3rd", "Sin 4th", "Sin 5th", "Sin 6th", "Sin 7th", "Sin 8th", "Sin 9th", 
-                                           "Saw 1", "Saw 2", "Saw 3", "Saw 4", "Saw 5", "Saw 6", "Saw 7", "Saws", 
+                                           "Saw 1", "Saw 2", "Saw 3", "Saw 4", "Saw 5", "Saw 6", "Saw 7", "Saw 8", 
                                            "Pulse", "Triangle", "Square", "Rectangular 1", "Rectangular 2", "Rectangular 3", "Rectangular 4", "Rectangular 5", "Rectangular 6", 
                                            "Pure Horn L", "Punch Brass 1", "Oboe 1", "Oboe 2", "Classic Grand", 
                                            "Electric Piano 1", "Electric Piano 2", "Electric Piano 3", "Electric Organ 1", "Electric Organ 2", 
@@ -56,7 +56,7 @@ public class KawaiK4 extends Synth
                                            "Gut Guitar VR", "Gut Guitar 1-Shot", "Flute Normal", "Flute 1-Shot", "Bottle Blow Normal", 
                                            "Bottle Blow VR", "Sax Normal", "Sax VR 1", "Sax VR 2", "Sax 1-Shot", "Trumpet Normal", 
                                            "Trumpet VR 1", "Trumpet VR 2", "Trumpet 1-Shot", "Trombone Normal", "Trombone VR", 
-                                           "Trombone 1-Shot", "Voice", "Noise", "Piano 1", "Piano 2", "Piano 3", "Piano 4", "Pianos", 
+                                           "Trombone 1-Shot", "Voice", "Noise", "Piano 1", "Piano 2", "Piano 3", "Piano 4", "Piano 5", 
                                            "Cello 1", "Cello 2", "Cello 3", "Cello 4", "Cello 5", "Cello 6", "Strings 1", "Strings 2", 
                                            "Slap Bass L", "Slap Bass L 1-Shot", "Slap Bass H", "Slap Bass H 1-Shot", "Pick Bass 1", 
                                            "Pick Bass 2 1-Shot", "Pick Bass 3 1-Shot", "Electric Guitar Mute", "Electric Guitar Mute 1-Shot", 
@@ -65,15 +65,15 @@ public class KawaiK4 extends Synth
                                            "Sax 6 1-Shot", "Trumpet", "Trumpet 1-Shot", "Voice 1", "Voice 2", "Reverse 1", "Reverse 2", 
                                            "Reverse 3", "Reverse 4", "Reverse 5", "Reverse 6", "Reverse 7", "Reverse 8", "Reverse 9", 
                                            "Reverse 10", "Reverse 11", "Loop 1", "Loop 2", "Loop 3", "Loop 4", "Loop 5", "Loop 6", 
-                                           "Loop 7", "Loops", "Loop 9", "Loop 10", "Loop 11", "Loop 12"};
-    public static final String[] KS_CURVES = { "Linear", "Exponential", "Logarithmic", "Ramped", "Spit", "Triangle", "Late", "Early" };
+                                           "Loop 7", "Loop 8", "Loop 9", "Loop 10", "Loop 11", "Loop 12"};
+    public static final String[] KS_CURVES = { "Linear", "Exponential", "Logarithmic", "Ramped", "Split", "Triangle", "Late", "Early" };
     public static final String[] VELOCITY_CURVES = { "Linear", "Logarithmic", "Exponential", "Exponential Strong", "Linear Then Off", "Off Then Linear", "Slow Middle", "Fast Middle" };
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sawtooth", "Square", "Random" };
     public static final String[] SOURCE_MODES = new String[] { "Normal", "Twin", "Double" };
     public static final String[] POLY_MODES = new String[] { "Poly 1", "Poly 2", "Solo 1", "Solo 2" };
     public static final String[] OUT_SELECTS = new String[] { "A", "B", "C", "D", "E", "F", "G", "H" };
-    public static final String[] WHEEL_ASSIGNMENTS = new String[] { "Vibrato", "LFO", "Filter" };
+    public static final String[] WHEEL_ASSIGNMENTS = new String[] { "Vibrato LFO", "Filter LFO", "Filter" };
 
     public KawaiK4()
         {
@@ -145,7 +145,10 @@ public class KawaiK4 extends Synth
         addTab("Filters", filterPanel);
 
         model.set("name", "Untitled  ");  // has to be 10 long
-        
+
+        model.set("bank", 0);
+		model.set("number", 0);
+		        
         loadDefaults();        
         }
                 
@@ -164,9 +167,9 @@ public class KawaiK4 extends Synth
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JComboBox bank = new JComboBox(BANKS);
-        bank.setSelectedIndex(model.get("bank", 0));
+        bank.setSelectedIndex(model.get("bank"));
         
-        JTextField number = new JTextField("" + (model.get("number", 0) + 1), 3);
+        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
 
         while(true)
             {
@@ -192,7 +195,6 @@ public class KawaiK4 extends Synth
             n--;
                                 
             int i = bank.getSelectedIndex();
-                        
                         
             change.set("bank", i);
             change.set("number", n);
@@ -276,10 +278,16 @@ public class KawaiK4 extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Pitch Bend", this, "pitchbend", color, 0, 12);
+    	((LabelledDial)comp).addAdditionalLabel("Range");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Mod Wheel", this, "wheeldep", color, 0, 100, 50);
+    	((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
 
         // this appears to be poorly named in the manual (page 36)
         comp = new LabelledDial("Pressure", this, "pres>freq", color, 0, 100, 50);
+    	((LabelledDial)comp).addAdditionalLabel("Pitch Mod");
         hbox.add(comp);
 
         comp = new LabelledDial("Out Select", this, "outselect", color, 0, 7)
@@ -327,7 +335,7 @@ public class KawaiK4 extends Synth
                             public void run() 
                                 { 
                                 Model tempModel = new Model();
-                                tempModel.set("number", KawaiK4.this.model.get("effect", 0));
+                                tempModel.set("number", KawaiK4.this.model.get("effect"));
                                 synth.performRequestDump(tempModel, false);
                                 }
                             });
@@ -349,7 +357,7 @@ public class KawaiK4 extends Synth
 
     public JComponent addVibrato(Color color)
         {
-        Category category = new Category(this, "Vibrato", color);
+        Category category = new Category(this, "Vibrato LFO", color);
 
         JComponent comp;
         String[] params;
@@ -370,6 +378,9 @@ public class KawaiK4 extends Synth
         comp = new LabelledDial("Pressure", this, "vibprs>vib", color, 0, 100, 50);
         ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
         hbox.add(comp);
+        
+        // separate a bit from Auto Bend
+        hbox.add(Strut.makeHorizontalStrut(60));
         
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -403,7 +414,7 @@ public class KawaiK4 extends Synth
 
     public JComponent addLFO(Color color)
         {
-        Category category = new Category(this, "LFO ", color);
+        Category category = new Category(this, "LFO", color);
 
         JComponent comp;
         String[] params;
@@ -418,14 +429,14 @@ public class KawaiK4 extends Synth
         comp = new LabelledDial("Speed", this, "lfospeed", color, 0, 100);
         hbox.add(comp);
         
-        comp = new LabelledDial("Delay", this, "lfodelay", color, 0, 100);
-        hbox.add(comp);
-        
         comp = new LabelledDial("Depth", this, "lfodep", color, 0, 100, 50);
         hbox.add(comp);
         
         comp = new LabelledDial("Pressure", this, "lfoprs>dep", color, 0, 100, 50);
         ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
+        hbox.add(comp);
+        
+        comp = new LabelledDial("Delay", this, "lfodelay", color, 0, 100);
         hbox.add(comp);
         
         category.add(hbox, BorderLayout.CENTER);
@@ -475,18 +486,18 @@ public class KawaiK4 extends Synth
         comp = new LabelledDial("Delay", this, "s" + src + "delay", color, 0, 100);
         hbox.add(comp);
         
-        comp = new LabelledDial("Coarse", this, "s" + src + "coarse", color, 0, 48, 24)
-            {
-            public boolean isSymmetric() { return true; }
-            };
-        hbox.add(comp);
-
-        comp = new LabelledDial("Fix", this, "s" + src + "fix", color, 0, 115)
+        comp = new LabelledDial("Fixed Key", this, "s" + src + "fix", color, 0, 115)
             {
             public String map(int val)
                 {
                 return KEYS[val % 12] + (val / 12 + 1);  // note integer division
                 }
+            };
+        hbox.add(comp);
+
+        comp = new LabelledDial("Coarse", this, "s" + src + "coarse", color, 0, 48, 24)
+            {
+            public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
 
@@ -572,10 +583,10 @@ public class KawaiK4 extends Synth
         comp = new LabelledDial("Cutoff", this,  "f" + filter + "cutoff", color, 0, 100);
         hbox.add(comp);
                 
-        comp = new LabelledDial("Resonance", this,  "f" + filter + "resonance", color, 0, 7, -1);
+        comp = new LabelledDial("Resonance", this,  "f" + filter + "resonance", color, 0, 7);
         hbox.add(comp);
 
-        comp = new LabelledDial("Velocity", this,  "f" + filter + "cutoffmodks", color, 0, 100, 50);
+        comp = new LabelledDial("Velocity", this,  "f" + filter + "cutoffmodvel", color, 0, 100, 50);
         ((LabelledDial)comp).addAdditionalLabel("Cutoff Mod");
         hbox.add(comp);
                 
@@ -583,24 +594,12 @@ public class KawaiK4 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Cutoff Mod");
         hbox.add(comp);
                 
-        comp = new LabelledDial("Key Scaling", this,  "f" + filter + "cutoffmodvel", color, 0, 100, 50);
+        comp = new LabelledDial("Key Scaling", this,  "f" + filter + "cutoffmodks", color, 0, 100, 50);
         ((LabelledDial)comp).addAdditionalLabel("Cutoff Mod");
         hbox.add(comp);
                   
-        comp = new LabelledDial("Velocity", this, "f" + filter + "dcftimemodonvel", color, 0, 100, 50);
-        ((LabelledDial)comp).addAdditionalLabel("Time Mod");
-        hbox.add(comp);
-        
-        comp = new LabelledDial("Release Vel", this, "f" + filter + "dcftimemodoffvel", color, 0, 100, 50);
-        ((LabelledDial)comp).addAdditionalLabel("Time Mod");
-        hbox.add(comp);
-
-        comp = new LabelledDial("Key Scaling", this, "f" + filter + "dcftimemodks", color, 0, 100, 50);
-        ((LabelledDial)comp).addAdditionalLabel("Time Mod");
-        hbox.add(comp);
-        
         VBox vbox = new VBox();
-        comp = new CheckBox("LFO", this, "f" + filter + "lfosw");
+        comp = new CheckBox("LFO Cutoff Mod", this, "f" + filter + "lfosw");
         vbox.add(comp);
         hbox.add(vbox);
 
@@ -635,6 +634,18 @@ public class KawaiK4 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
         hbox.add(comp);
                 
+        comp = new LabelledDial("Velocity", this, "f" + filterenv + "dcftimemodonvel", color, 0, 100, 50);
+        ((LabelledDial)comp).addAdditionalLabel("Time Mod");
+        hbox.add(comp);
+        
+        comp = new LabelledDial("Release Vel", this, "f" + filterenv + "dcftimemodoffvel", color, 0, 100, 50);
+        ((LabelledDial)comp).addAdditionalLabel("Time Mod");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Key Scaling", this, "f" + filterenv + "dcftimemodks", color, 0, 100, 50);
+        ((LabelledDial)comp).addAdditionalLabel("Time Mod");
+        hbox.add(comp);
+        
         comp = new EnvelopeDisplay(this, Color.red, 
             new String[] { null, "f" + filterenv + "dcfenvattack", "f" + filterenv + "dcfenvdecay", null, "f" + filterenv + "dcfenvrelease" },
             new String[] { null, null, "f" + filterenv + "dcfenvsustain", "f" + filterenv + "dcfenvsustain", null },
@@ -668,10 +679,6 @@ public class KawaiK4 extends Synth
 		"polymode",
 		"ams1>s2",
 		"ams3>s4",
-		"s1mute",
-		"s2mute",
-		"s3mute",
-		"s4mute",
 		"vibshape",
 		"pitchbend",
 		"wheelassign",
@@ -690,9 +697,8 @@ public class KawaiK4 extends Synth
 		"lfoprs>dep",
 		"pres>freq",
 		"s:delay",
-		"s:waveselecthi",
 		"s:kscurve",
-		"s:waveselectlo",
+		"s:waveselect",			// *
 		"s:coarse",
 		"s:keytrack",
 		"s:fix",
@@ -791,7 +797,7 @@ public class KawaiK4 extends Synth
     "s1fine",
     "s2fine",
     "s3fine",
-    "s4fin3",
+    "s4fine",
     "s1prs>frqsw_vib/a.bendsw_velcurve",		//*
     "s2prs>frqsw_vib/a.bendsw_velcurve",		//*
     "s3prs>frqsw_vib/a.bendsw_velcurve",		//*
@@ -816,10 +822,10 @@ public class KawaiK4 extends Synth
     "s2enveloperelease",
     "s3enveloperelease",
     "s4enveloperelease",
-    "s1levelmodevel",
-    "s2levelmodevel",
-    "s3levelmodevel",
-    "s4levelmodevel",
+    "s1levelmodvel",
+    "s2levelmodvel",
+    "s3levelmodvel",
+    "s4levelmodvel",
     "s1levelmodprs",
     "s2levelmodprs",
     "s3levelmodprs",
@@ -841,7 +847,7 @@ public class KawaiK4 extends Synth
     "s3timemodks",
     "s4timemodks",
     "f1cutoff",
-    "f2cuttoff",
+    "f2cutoff",
     "f1resonance_lfosw",		// *
     "f2resonance_lfosw",		// *
     "f1cutoffmodvel",
@@ -891,57 +897,81 @@ public class KawaiK4 extends Synth
 		else 
 			{
 			int source = 0;
+			int index = 0;
 			String newkey = key;
-			byte msb = (byte)(model.get(key, 0) >> 7);		// particularly for "waveselect"
-			byte lsb = (byte)(model.get(key, 0) & 127);
+			byte msb = (byte)(model.get(key) >> 7);		// particularly for "waveselect"
+			byte lsb = (byte)(model.get(key) & 127);
 
+			// These CANNOT be set directly as parameters, but they can be simulated by turning the volume to 0.
 			if (key.equals("s1mute") || key.equals("s2mute") || key.equals("s3mute") || key.equals("s4mute"))
 				{
-				// leave as is
+				if (key.startsWith("s1"))
+					source = 0;
+				else if (key.startsWith("s2"))
+					source = 1;
+				else if (key.startsWith("s3"))
+					source = 2;
+				else source = 3;
+				
+				index = ((Integer)(internalParametersToIndex.get("s:envelopelevel")));
+				msb = (byte)0;
+				if (lsb == 1)  // mute is ON
+					lsb = 0;	// set level to 0
+				else			// mute is OFF
+					lsb = (byte)(model.get("s" + (source + 1) + "envelopelevel"));
 				}
 			else if (key.startsWith("s1"))
 				{
-				source = 1;
+				source = 0;
 				newkey = "s:" + key.substring(2);
 				}
 			else if (key.startsWith("s2"))
 				{
-				source = 2;
+				source = 1;
 				newkey = "s:" + key.substring(2);
 				}
 			else if (key.startsWith("s3"))
 				{
-				source = 3;
+				source = 2;
 				newkey = "s:" + key.substring(2);
 				}
 			else if (key.startsWith("s4"))
 				{
-				source = 4;
+				source = 3;
 				newkey = "s:" + key.substring(2);
 				}
 			else if (key.startsWith("f1"))
 				{
-				source = 1;
+				source = 0;
 				newkey = "f:" + key.substring(2);
 				}
 			else if (key.startsWith("f2"))
 				{
-				source = 2;
+				source = 1;
 				newkey = "f:" + key.substring(2);
 				}
 				
-			int index = 0;
-			
+			// handle envelopelevel specially due to mutes above
+			if (newkey.equals("s:envelopelevel"))
+				{
+				int mute = model.get("s" + (source + 1) + "mute");
+				if (mute == 1)  // mute is ON
+					lsb = 0;	// set level to 0
+				index = ((Integer)(internalParametersToIndex.get(newkey))).intValue();
+				}
 			// handle waveselect specially
-			if (newkey.equals("s:waveselect"))
+			else if (newkey.equals("s:waveselect"))
 				{
 				index = 36;	 // this is waveselect's parameter
+				}
+			else if (key.equals("s1mute") || key.equals("s2mute") || key.equals("s3mute") || key.equals("s4mute"))
+				{
+				// index already handled
 				}
 			else
 				{
 				index = ((Integer)(internalParametersToIndex.get(newkey))).intValue();
 				}
-				
 			return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x04, (byte)index, (byte)((source << 1) | msb), (byte)lsb, (byte)0xF7 };
 			}
         }
@@ -977,7 +1007,7 @@ public class KawaiK4 extends Synth
 			model.set("number", data[7] % 16);
 			
 			byte[] name = new byte[10];
-
+			
     	// The K4 is riddled with byte-mangling.  :-(
     	
     	for(int i = 0; i < 130; i++)
@@ -988,44 +1018,53 @@ public class KawaiK4 extends Synth
 				{
 				name[i] = data[i + 8];
 				}
+			else if (key.equals("effect"))
+				{
+				// it looks like the K4 can send junk in the upper bits :-(
+				model.set("effect", data[i + 8] & 31);
+				}
 			else if (key.equals("sourcemode_polymode_ams1>s2_ams3>s4"))
 				{
 				model.set("sourcemode", data[i + 8] & 3);
 				model.set("polymode", (data[i + 8] >> 2) & 3);
 				model.set("ams1>s2", (data[i + 8] >> 4) & 1);
-				model.set("ams3>s4", data[i + 8] >> 5);
+				// it looks like the K4 can send junk in the upper bits :-(
+				model.set("ams3>s4", (data[i + 8] >> 5) & 1);
 				}
 			else if (key.equals("s1mute_s2mute_s3mute_s4mute_vibshape"))
 				{
-				model.set("s1mute", data[i + 8] & 1);
-				model.set("s2mute", (data[i + 8] >> 1) & 1);
-				model.set("s3mute", (data[i + 8] >> 2) & 1);
-				model.set("s4mute", (data[i + 8] >> 3) & 1);
-				model.set("vibshape", data[i + 8] >> 4);
+				// Error in Section 6.  0 is mute OFF and 1 is mute ON. 
+				model.set("s1mute", (data[i + 8] & 1));
+				model.set("s2mute", ((data[i + 8] >> 1) & 1));
+				model.set("s3mute", ((data[i + 8] >> 2) & 1));
+				model.set("s4mute", ((data[i + 8] >> 3) & 1));
+				// it looks like the K4 can send junk in the upper bits :-(
+				model.set("vibshape", (data[i + 8] >> 4) & 3);
 				}
 			else if (key.equals("pitchbend_wheelassign"))
 				{
 				model.set("pitchbend", data[i + 8] & 31);
-				model.set("wheelassign", data[i + 8] >> 4);
+				// it looks like the K4 can send junk in the upper bits :-(
+				model.set("wheelassign", (data[i + 8] >> 4) & 3);
 				}
 			else if (key.equals("s1waveselecthi_kscurve"))
 				{
-				model.set("s1waveselect", (data[i + 8] << 7) | (data[i + 8 + 1]));		// hi and lo
+				model.set("s1waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 1]));		// hi and lo
 				model.set("s1kscurve", data[i + 8] >> 4);
 				}
 			else if (key.equals("s2waveselecthi_kscurve"))
 				{
-				model.set("s2waveselect", (data[i + 8] << 7) | (data[i + 8 + 1]));		// hi and lo
+				model.set("s2waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 1]));		// hi and lo
 				model.set("s2kscurve", data[i + 8] >> 4);
 				}
 			else if (key.equals("s3waveselecthi_kscurve"))
 				{
-				model.set("s3waveselect", (data[i + 8] << 7) | (data[i + 8 + 1]));		// hi and lo
+				model.set("s3waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 1]));		// hi and lo
 				model.set("s3kscurve", data[i + 8] >> 4);
 				}
 			else if (key.equals("s4waveselecthi_kscurve"))
 				{
-				model.set("s4waveselect", (data[i + 8] << 7) | (data[i + 8 + 1]));		// hi and lo
+				model.set("s4waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 1]));		// hi and lo
 				model.set("s4kscurve", data[i + 8] >> 4);
 				}
 			else if (key.equals("s1waveselectlo"))
@@ -1067,36 +1106,42 @@ public class KawaiK4 extends Synth
 			else if (key.equals("s1prs>frqsw_vib/a.bendsw_velcurve"))
 				{
 				model.set("s1prs>frqsw", data[i + 8] & 1);
-				model.set("s1vib/a.bend", (data[i + 8] >> 1) & 1);
-				model.set("s1velcurve", data[i + 8] >> 2);
+				model.set("s1vib/a.bendsw", (data[i + 8] >> 1) & 1);
+				// it looks like the K4 can send junk in the upper bits :-(
+				model.set("s1velcurve", (data[i + 8] >> 2) & 7);
 				}
 			else if (key.equals("s2prs>frqsw_vib/a.bendsw_velcurve"))
 				{
 				model.set("s2prs>frqsw", data[i + 8] & 1);
-				model.set("s2vib/a.bend", (data[i + 8] >> 1) & 1);
-				model.set("s2velcurve", data[i + 8] >> 2);
+				model.set("s2vib/a.bendsw", (data[i + 8] >> 1) & 1);
+				// it looks like the K4 can send junk in the upper bits :-(
+				model.set("s2velcurve", (data[i + 8] >> 2) & 7);
 				}
 			else if (key.equals("s3prs>frqsw_vib/a.bendsw_velcurve"))
 				{
 				model.set("s3prs>frqsw", data[i + 8] & 1);
-				model.set("s3vib/a.bend", (data[i + 8] >> 1) & 1);
-				model.set("s3velcurve", data[i + 8] >> 2);
+				model.set("s3vib/a.bendsw", (data[i + 8] >> 1) & 1);
+				// it looks like the K4 can send junk in the upper bits :-(
+				model.set("s3velcurve", (data[i + 8] >> 2) & 7);
 				}
 			else if (key.equals("s4prs>frqsw_vib/a.bendsw_velcurve"))
 				{
 				model.set("s4prs>frqsw", data[i + 8] & 1);
-				model.set("s4vib/a.bend", (data[i + 8] >> 1) & 1);
-				model.set("s4velcurve", data[i + 8] >> 2);
+				model.set("s4vib/a.bendsw", (data[i + 8] >> 1) & 1);
+				// it looks like the K4 can send junk in the upper bits :-(
+				model.set("s4velcurve", (data[i + 8] >> 2) & 7);
 				}
-			else if (key.equals("f1resonance_2fosw"))
+			else if (key.equals("f1resonance_lfosw"))
 				{
-				model.set("f1resonance", data[i + 8] & 1);
-				model.set("f1lfosw", data[i + 8] >> 3);
+				model.set("f1resonance", data[i + 8] & 7);
+				// it looks like the K4 can send junk in the upper bits :-(
+				model.set("f1lfosw", (data[i + 8] >> 3) & 1);
 				}
-			else if (key.equals("f1resonance_2fosw"))
+			else if (key.equals("f1resonance_lfosw"))
 				{
-				model.set("f2resonance", data[i + 8] & 1);
-				model.set("f2lfosw", data[i + 8] >> 3);
+				model.set("f2resonance", data[i + 8] & 7);
+				// it looks like the K4 can send junk in the upper bits :-(
+				model.set("f2lfosw", (data[i + 8] >> 3) & 1);
 				}
 			else
 				{
@@ -1125,6 +1170,7 @@ public class KawaiK4 extends Synth
         return (byte)(checksum & 127);
         }
 
+
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
     	byte[] data = new byte[130];
@@ -1143,102 +1189,145 @@ public class KawaiK4 extends Synth
 				}
 			else if (key.equals("sourcemode_polymode_ams1>s2_ams3>s4"))
 				{
-				data[i] = (byte)(model.get("sourcemode", 0) | (model.get("polymode", 0) << 2) | (model.get("ams1>s2", 0) << 4) | (model.get("ams3>s4", 0) << 5));
+				data[i] = (byte)(model.get("sourcemode") | (model.get("polymode") << 2) | (model.get("ams1>s2") << 4) | (model.get("ams3>s4") << 5));
 				}
 			else if (key.equals("s1mute_s2mute_s3mute_s4mute_vibshape"))
 				{
-				data[i] = (byte)(model.get("s1mute", 0) | (model.get("s2mute", 0) << 1) | (model.get("s3mute", 0) << 2) | (model.get("s4mute", 0) << 3) | (model.get("vibshape", 0) << 4));
+				// Error in Section 6.  0 is mute OFF and 1 is mute ON. 
+				// Perhaps our strategy should be to eliminate mute entirely and just turn the level down.
+				// That way when we load a patch that's got a mute in it, we're not confused.
+				data[i] = (byte)((model.get("vibshape") << 4));  // mutes are all zero (off)
+				//data[i] = (byte)((model.get("s1mute")) | ((model.get("s2mute")) << 1) | ((model.get("s3mute")) << 2) | ((model.get("s4mute")) << 3) | (model.get("vibshape") << 4));
+				}
+			else if (key.equals("s1envelopelevel"))
+				{
+				// Perhaps our strategy should be to eliminate mute entirely and just turn the level down.
+				// That way when we load a patch that's got a mute in it, we're not confused.
+				data[i] = (byte)((model.get("s1envelopelevel")));
+				if (model.get("s1mute") == 1)  // mute is on
+					data[i] = 0;  // turn level off
+				}
+			else if (key.equals("s2envelopelevel"))
+				{
+				// Perhaps our strategy should be to eliminate mute entirely and just turn the level down.
+				// That way when we load a patch that's got a mute in it, we're not confused.
+				data[i] = (byte)((model.get("s2envelopelevel")));
+				if (model.get("s2mute") == 1)  // mute is on
+					data[i] = 0;  // turn level off
+				}
+			else if (key.equals("s3envelopelevel"))
+				{
+				// Perhaps our strategy should be to eliminate mute entirely and just turn the level down.
+				// That way when we load a patch that's got a mute in it, we're not confused.
+				data[i] = (byte)((model.get("s3envelopelevel")));
+				if (model.get("s3mute") == 1)  // mute is on
+					data[i] = 0;  // turn level off
+				}
+			else if (key.equals("s4envelopelevel"))
+				{
+				// Perhaps our strategy should be to eliminate mute entirely and just turn the level down.
+				// That way when we load a patch that's got a mute in it, we're not confused.
+				data[i] = (byte)((model.get("s4envelopelevel")));
+				if (model.get("s4mute") == 1)  // mute is on
+					data[i] = 0;  // turn level off
 				}
 			else if (key.equals("pitchbend_wheelassign"))
 				{
-				data[i] = (byte)(model.get("pitchbend", 0) | (model.get("wheelassign", 0) << 4));
+				data[i] = (byte)(model.get("pitchbend") | (model.get("wheelassign") << 4));
 				}
 			else if (key.equals("s1waveselecthi_kscurve"))
 				{
-				data[i] = (byte)((model.get("s1waveselect", 0) >> 7) | 	// hi bit put in lo position
-							(model.get("s1kscurve", 0) << 4));
+				data[i] = (byte)((model.get("s1waveselect") >> 7) | 	// hi bit put in lo position
+							(model.get("s1kscurve") << 4));
 				}
 			else if (key.equals("s2waveselecthi_kscurve"))
 				{
-				data[i] = (byte)((model.get("s2waveselect", 0) >> 7) | 	// hi bit put in lo position
-							(model.get("s2kscurve", 0) << 4));
+				data[i] = (byte)((model.get("s2waveselect") >> 7) | 	// hi bit put in lo position
+							(model.get("s2kscurve") << 4));
 				}
 			else if (key.equals("s3waveselecthi_kscurve"))
 				{
-				data[i] = (byte)((model.get("s3waveselect", 0) >> 7) | 	// hi bit put in lo position
-							(model.get("s3kscurve", 0) << 4));
+				data[i] = (byte)((model.get("s3waveselect") >> 7) | 	// hi bit put in lo position
+							(model.get("s3kscurve") << 4));
 				}
 			else if (key.equals("s4waveselecthi_kscurve"))
 				{
-				data[i] = (byte)((model.get("s4waveselect", 0) >> 7) | 	// hi bit put in lo position
-							(model.get("s4kscurve", 0) << 4));
+				data[i] = (byte)((model.get("s4waveselect") >> 7) | 	// hi bit put in lo position
+							(model.get("s4kscurve") << 4));
 				}
 			else if (key.equals("s1waveselectlo"))
 				{
-				data[i] = (byte)(model.get("s1waveselect", 0) & 127);
+				data[i] = (byte)(model.get("s1waveselect") & 127);
 				}
 			else if (key.equals("s2waveselectlo"))
 				{
-				data[i] = (byte)(model.get("s2waveselect", 0) & 127);
+				data[i] = (byte)(model.get("s2waveselect") & 127);
 				}
 			else if (key.equals("s3waveselectlo"))
 				{
-				data[i] = (byte)(model.get("s3waveselect", 0) & 127);
+				data[i] = (byte)(model.get("s3waveselect") & 127);
 				}
 			else if (key.equals("s4waveselectlo"))
 				{
-				data[i] = (byte)(model.get("s4waveselect", 0) & 127);
+				data[i] = (byte)(model.get("s4waveselect") & 127);
 				}
 			else if (key.equals("s1coarse_keytrack"))
 				{
-				data[i] = (byte)(model.get("s1coarse", 0) | (model.get("s1keytrack", 0) << 6));
+				data[i] = (byte)(model.get("s1coarse") | (model.get("s1keytrack") << 6));
 				}
 			else if (key.equals("s2coarse_keytrack"))
 				{
-				data[i] = (byte)(model.get("s2coarse", 0) | (model.get("s2keytrack", 0) << 6));
+				data[i] = (byte)(model.get("s2coarse") | (model.get("s2keytrack") << 6));
 				}
 			else if (key.equals("s3coarse_keytrack"))
 				{
-				data[i] = (byte)(model.get("s3coarse", 0) | (model.get("s3keytrack", 0) << 6));
+				data[i] = (byte)(model.get("s3coarse") | (model.get("s3keytrack") << 6));
 				}
 			else if (key.equals("s4coarse_keytrack"))
 				{
-				data[i] = (byte)(model.get("s4coarse", 0) | (model.get("s4keytrack", 0) << 6));
+				data[i] = (byte)(model.get("s4coarse") | (model.get("s4keytrack") << 6));
 				}
 			else if (key.equals("s1prs>frqsw_vib/a.bendsw_velcurve"))
 				{
-				data[i] = (byte)(model.get("s1prs>frqsw", 0) | (model.get("s1vib/a.bend", 0) << 1) | (model.get("s1velcurve", 0) << 2));
+				data[i] = (byte)(model.get("s1prs>frqsw") | (model.get("s1vib/a.bendsw") << 1) | (model.get("s1velcurve") << 2));
 				}
 			else if (key.equals("s2prs>frqsw_vib/a.bendsw_velcurve"))
 				{
-				data[i] = (byte)(model.get("s2prs>frqsw", 0) | (model.get("s2vib/a.bend", 0) << 1) | (model.get("s2velcurve", 0) << 2));
+				data[i] = (byte)(model.get("s2prs>frqsw") | (model.get("s2vib/a.bendsw") << 1) | (model.get("s2velcurve") << 2));
 				}
 			else if (key.equals("s3prs>frqsw_vib/a.bendsw_velcurve"))
 				{
-				data[i] = (byte)(model.get("s3prs>frqsw", 0) | (model.get("s3vib/a.bend", 0) << 1) | (model.get("s3velcurve", 0) << 2));
+				data[i] = (byte)(model.get("s3prs>frqsw") | (model.get("s3vib/a.bendsw") << 1) | (model.get("s3velcurve") << 2));
 				}
 			else if (key.equals("s4prs>frqsw_vib/a.bendsw_velcurve"))
 				{
-				data[i] = (byte)(model.get("s4prs>frqsw", 0) | (model.get("s4vib/a.bend", 0) << 1) | (model.get("s4velcurve", 0) << 2));
+				data[i] = (byte)(model.get("s4prs>frqsw") | (model.get("s4vib/a.bendsw") << 1) | (model.get("s4velcurve") << 2));
 				}
 			else if (key.equals("f1resonance_lfosw"))
 				{
-				data[i] = (byte)(model.get("f1resonance", 0) | (model.get("f1lfosw", 0) << 3));
+				data[i] = (byte)(model.get("f1resonance") | (model.get("f1lfosw") << 3));
 				}
-			else if (key.equals("f2resonance_2fosw"))
+			else if (key.equals("f2resonance_lfosw"))
 				{
-				data[i] = (byte)(model.get("f2resonance", 0) | (model.get("f2lfosw", 0) << 3));
+				data[i] = (byte)(model.get("f2resonance") | (model.get("f2lfosw") << 3));
 				}
 			else
 				{
-				data[i] = (byte)(model.get(key, 0));
+				data[i] = (byte)(model.get(key));
 				}
 			}
 
 		// Error in Section 4-1, see "Corrected MIDI Implementation"
 
-        boolean external = (model.get("bank", 0) > 4);
-		byte position = (byte)((model.get("bank", 0) % 2) * 16 + (model.get("number", 0)));  // 0...63 for A1 .... D16
+		boolean external = false;
+		byte position = 0;
+		
+		if (tempModel != null)
+			{
+        	external = (tempModel.get("bank") > 3);
+			position = (byte)((tempModel.get("bank") % 3) * 16 + (tempModel.get("number")));  // 0...63 for A1 .... D16
+			}
+			
 		byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
 		result[0] = (byte)0xF0;
 		result[1] = (byte)0x40;
@@ -1267,23 +1356,23 @@ public class KawaiK4 extends Synth
 
     public byte[] requestDump(Model tempModel)
         {
-        boolean external = (model.get("bank", 0) > 4);
-		byte position = (byte)((model.get("bank", 0) % 2) * 16 + (model.get("number", 0)));  // 0...63 for A1 .... D16
+        boolean external = (tempModel.get("bank") > 3);
+		byte position = (byte)((tempModel.get("bank") & 3) * 16 + (tempModel.get("number")));  // 0...63 for A1 .... D16
         return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x00, 0x00, 0x04, 
         			(byte)(external ? 0x02 : 0x00),
         			position, (byte)0xF7};
         }
-                
+    
     public static boolean recognize(byte[] data)
         {
-        return (data.length == EXPECTED_SYSEX_LENGTH &&
-				data[0] == (byte)0xF0 &&
-				data[1] == (byte)0x40 &&
-				data[3] == (byte)0x20 &&
-				data[4] == (byte)0x00 &&
-				data[5] == (byte)0x04 &&
+        return ((data.length == EXPECTED_SYSEX_LENGTH) &&
+				(data[0] == (byte)0xF0) &&
+				(data[1] == (byte)0x40) &&
+				(data[3] == (byte)0x20) &&
+				(data[4] == (byte)0x00) &&
+				(data[5] == (byte)0x04) &&
 				(data[6] == (byte)0x00 || data[6] == (byte)0x02) &&
-				data[7] < 64);  // that is, it's single, not multi
+				(data[7] < (byte)64));  // that is, it's single, not multi
         }
         
 
@@ -1325,10 +1414,12 @@ public class KawaiK4 extends Synth
     
     public String getPatchName() { return model.get("name", "Untitled  "); }
 
+	public int getPauseAfterChangePatch() { return 200; }	// Seem to need about > 100ms
+
     public void changePatch(Model tempModel)
     	{
-    	byte BB = (byte)tempModel.get("bank", 0);
-        byte NN = (byte)tempModel.get("number", 0);
+    	byte BB = (byte)tempModel.get("bank");
+        byte NN = (byte)tempModel.get("number");
         
         // first switch to internal or external
         byte[] data = new byte[8];
@@ -1336,19 +1427,20 @@ public class KawaiK4 extends Synth
         data[1] = (byte)0x40;
         data[2] = (byte)getChannelOut();
         data[3] = (byte)0x30;
-        data[4] = (byte)0x04;
-        data[5] = (byte)(BB < 4 ? 0x00 : 0x02);	// 0x00 is internal, 0x02 is external
+        data[4] = (byte)0x00;
+        data[5] = (byte)0x04;
+        data[6] = (byte)(BB < 4 ? 0x00 : 0x02);	// 0x00 is internal, 0x02 is external
         data[7] = (byte)0xF7;
         
         tryToSendSysex(data);
         
         // Next do a PC
         
-        if (BB > 4) BB -= 4;
+        if (BB >= 4) BB -= 4;
         int PC = (BB * 16 + NN);
         try 
         	{
-            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut() - 1, PC, 0));
+            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }
         catch (Exception e) { e.printStackTrace(); }
     	}

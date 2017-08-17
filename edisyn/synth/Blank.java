@@ -47,7 +47,7 @@ public class Blank extends Synth
 	/// When a message is received from the synthesizser, Edisyn will do this:
 	/// If the message is a Sysex Message, then
 	/// 	Call recognize(message data).  If it returns true, then
-	///			Call parse(message data, fromfile) [we presume it's a dump or a load from a file]
+	///			Call parse(message data, fromFile) [we presume it's a dump or a load from a file]
 	///		Else
 	///			Call parseParameter(message data) [we presume it's a parameter change, or maybe something else]
 	/// Else if the message is a complete CC or NRPN message
@@ -62,24 +62,25 @@ public class Blank extends Synth
 	/// SENDING, WRITING, OR SAVING
 	/// Call gatherPatchInfo(...,tempModel,...)
 	/// If successful
-	///		Call doChangePatch(tempModel)						[don't override this]
-	///			This calls changePatch(tempModel)				[override this]
+	///		If not writing to a file
+	///			Call changePatch(tempModel)
 	/// 	Call emitAll(tempModel, toWorkingMemory, toFile)
 	///			This calls emit(tempModel, toWorkingMemory, toFile)
+	///		If not writing to a file, and not toWorkingMemory,
+	///			Call changePatch(tempModel) again [some synths require this to load into working memory what we just wrote]
 	///
-	/// You could override either of these methods, but probably not both.
+	/// You could override either of the emit methods, but probably not both.
 	/// Note that saving strips out the non-sysex bytes from emitAll.
 	
 	/// REQUESTING A PATCH 
 	/// If we're requesting the CURRENT patch
-	///		Call performRequestCurrentDump(tempModel)
-	///			this then calls requestCurrentDump(tempModel)
+	///		Call performRequestCurrentDump()
+	///			this then calls requestCurrentDump()
 	/// Else
 	/// 	Call gatherPatchInfo(...,tempModel,...)
 	///		If successful
 	///			Call performRequestDump(tempModel)
-	///				This calls doChangePatch(tempModel)			[don't override this]
-	///					This then calls changePatch(tempModel)	[override this]
+	///				This calls changePatch(tempModel)
 	///				Then it calls requestDump(tempModel)
 	///
 	/// You could override performRequestCurrentDump or requestCurrentDump, but probably not both.
@@ -313,7 +314,7 @@ public class Blank extends Synth
         // method.  The default form looks like this:
         
         // if (changePatch)
-		//		doChangePatch(tempModel); 
+		//		changePatch(tempModel); 
         // tryToSendSysex(requestDump(tempModel));
         
         super.performRequestDump(tempModel, changePatch);

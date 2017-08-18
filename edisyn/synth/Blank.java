@@ -43,7 +43,7 @@ public class Blank extends Synth
 
 	/// There are a lot of redundant methods here.  You only have to override some of them.
 
-	/// PARSING.
+	/// PARSING (LOADING OR RECEIVING)
 	/// When a message is received from the synthesizser, Edisyn will do this:
 	/// If the message is a Sysex Message, then
 	/// 	Call recognize(message data).  If it returns true, then
@@ -59,15 +59,46 @@ public class Blank extends Synth
 	///
 	/// You could override either of these methods, but probably not both.
 	
-	/// SENDING, WRITING, OR SAVING
+	/// SENDING TO CURRENT
+	/// Call sendAllParameters().  This does:
+	///		If getSendsAllParametersInBulk(), this calls:
+	///			emitAll(tempModel, toWorkingMemory = true, toFile)
+	///				This calls emit(tempModel, toWorkingMemory = true, toFile)
+	///		Else for every key it calls:
+	/// 		Call emitAll(key)
+	/// 			This calls emit(key)
+	///
+	/// You could override either of the emit...(tempModel...) methods, but probably not both.
+	/// You could override either of the emit...(key...) methods, but probably not both.
+
+	/// SENDING TO A PATCH
 	/// Call gatherPatchInfo(...,tempModel,...)
 	/// If successful
-	///		If not writing to a file
-	///			Call changePatch(tempModel)
-	/// 	Call emitAll(tempModel, toWorkingMemory, toFile)
-	///			This calls emit(tempModel, toWorkingMemory, toFile)
-	///		If not writing to a file, and not toWorkingMemory,
-	///			Call changePatch(tempModel) again [some synths require this to load into working memory what we just wrote]
+	///		Call changePatch(tempModel)
+	/// 	Call sendAllParameters().  This does:
+	///			If getSendsAllParametersInBulk(), this calls:
+	///				emitAll(tempModel, toWorkingMemory = true, toFile)
+	///					This calls emit(tempModel, toWorkingMemory = true, toFile)
+	///			Else for every key it calls:
+	/// 			Call emitAll(key)
+	/// 				This calls emit(key)
+	///	
+	/// You could override either of the emit...(tempModel...) methods, but probably not both.
+	/// You could override either of the emit...(key...) methods, but probably not both.
+	
+	/// WRITING OR SAVING
+	/// Call gatherPatchInfo(...,tempModel,...)
+	/// If successful
+	/// 	Call emitAll(tempModel, toWorkingMemory = false, toFile)
+	///			This calls emit(tempModel, toWorkingMemory = false, toFile)
+	///		Call changePatch(tempModel)
+	///
+	/// You could override either of the emit methods, but probably not both.
+	/// Note that saving strips out the non-sysex bytes from emitAll.
+	
+	/// SAVING
+	/// Call emitAll(tempModel, toWorkingMemory, toFile)
+	///		This calls emit(tempModel, toWorkingMemory, toFile)
 	///
 	/// You could override either of the emit methods, but probably not both.
 	/// Note that saving strips out the non-sysex bytes from emitAll.
@@ -424,6 +455,29 @@ public class Blank extends Synth
     	// This includes note on / note off etc., so don't expect musicality
     	// if you set this to >0.
     	return 0;
+    	}
+    	
+    public int getTestNote()
+    	{
+    	// It's possible that your synth has different sounds for different
+    	// notes, so you need to customize which note is played when the user
+    	// asks to send a test note.  Do so here.  The default is Middle C (60).
+    	return 60;
+    	}
+
+    public int getTestNoteVelocity()
+    	{
+    	// You might need to customize the velocity of the test note.
+    	// Do so here.  The default is full volume (127).
+    	return 127;
+    	}
+
+    public int getTestNoteChannel()
+    	{
+    	// It's possible that your synth has a special channel for this patch
+    	// (for example, a drum patch).  Override this to provide a custom
+    	// channel for the test note to be sent on.  The default is getChannelOut().
+    	return getChannelOut();
     	}
 
     public void windowBecameFront() 

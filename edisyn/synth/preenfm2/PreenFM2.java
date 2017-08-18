@@ -150,14 +150,14 @@ public class PreenFM2 extends Synth
 		hbox.addLast(addArpeggiator(Style.COLOR_B));
 		vbox.add(hbox);
 		
-        hbox = new HBox();
-        hbox.add(addStepSequencer(1, Style.COLOR_C));
-        hbox.addLast(addNoteScaling(1, Style.COLOR_C));
+        hbox = new HBox(HBox.LEFT_CONSUMES);
+        hbox.add(addNoteScaling(1, Style.COLOR_C));
+        hbox.addLast(addStepSequencer(1, Style.COLOR_C));
         vbox.add(hbox);
 
-        hbox = new HBox();
-        hbox.add(addStepSequencer(2, Style.COLOR_C));
-        hbox.addLast(addNoteScaling(2, Style.COLOR_C));
+        hbox = new HBox(HBox.LEFT_CONSUMES);
+        hbox.add(addNoteScaling(2, Style.COLOR_C));
+        hbox.addLast(addStepSequencer(2, Style.COLOR_C));
         vbox.add(hbox);
                                 
         lfoPanel.add(vbox, BorderLayout.CENTER);
@@ -637,6 +637,29 @@ public class PreenFM2 extends Synth
         ((CheckBox)comp).addToWidth(1);
         vbox.add(comp);
         
+        
+        // we define finetune first, but add it later.  That way it populates the model for
+        // downstream widgets.
+        LabelledDial finetunecomp = new LabelledDial("Fine Tune", this, "op" + op + "finetune", color, 0, 200)
+        	{
+            public String map(int val)
+                {
+                int fixed = model.get("op" + op + "freqtype");
+                if (fixed == 1)
+                	{
+                	return "" + (val - 100);
+                	}
+                else
+                	{
+                	return "" + (val - 100) / 100.0;
+                	}
+                }
+				public boolean isSymmetric() { return true; }
+        	};
+        model.register("op" + op + "freqtype", (LabelledDial)finetunecomp);
+        hbox.add(finetunecomp);
+
+
         // there are really just 192 steps here, but apparently you can adjust this as you like.
         comp = new LabelledDial("Frequency", this, "op" + op + "frequency", color, 0, 1600)
         	{
@@ -687,24 +710,11 @@ public class PreenFM2 extends Synth
         model.register("op" + op + "finetune", (LabelledDial)comp);
         hbox.add(comp);
 
-        comp = new LabelledDial("Fine Tune", this, "op" + op + "finetune", color, 0, 200)
-        	{
-            public String map(int val)
-                {
-                int fixed = model.get("op" + op + "freqtype");
-                if (fixed == 1)
-                	{
-                	return "" + (val - 100);
-                	}
-                else
-                	{
-                	return "" + (val - 100) / 100.0;
-                	}
-                }
-				public boolean isSymmetric() { return true; }
-        	};
-        model.register("op" + op + "freqtype", (LabelledDial)comp);
-        hbox.add(comp);
+
+		// we add finetune here
+        hbox.add(finetunecomp);
+
+
 
         comp = new LabelledDial("Attack", this, "op" + op + "envattack", color, 0, 1600)
         	{
@@ -1079,7 +1089,7 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
 					return SEQUENCER_CLOCKS[val - 241];
 				}
 			};
-		hbox.add(comp);
+		vbox.add(comp);
 
 		comp = new LabelledDial("Gate", this, "stepseq" + seq + "gate", color, 0, 100)
 			{
@@ -1088,9 +1098,10 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
 				return "" + (val / 100.0);
 				}
 			};
-		hbox.add(comp);
-		vbox.add(hbox);
+		vbox.add(comp);
+		
 		main.add(vbox);
+		main.add(Strut.makeHorizontalStrut(10));
 		
 		vbox = new VBox();
 		hbox = new HBox();
@@ -1110,8 +1121,19 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
 			}
 		vbox.add(hbox);
 		main.add(vbox);
+
+        String[] steps = new String[16];
+        for(int i = 0; i < 16; i++)
+        	steps[i] = "stepseq" + seq + "step" + (i + 1); 
 		
-        category.add(main, BorderLayout.WEST);
+        comp = new EnvelopeDisplay(this, Color.red, 
+            new String[] { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null },
+			steps,            
+            new double[] { 0, 1.0/15, 1.0/15, 1.0/15, 1.0/15,  1.0/15, 1.0/15, 1.0/15, 1.0/15,  1.0/15, 1.0/15, 1.0/15, 1.0/15,  1.0/15, 1.0/15, 1.0/15 },
+            new double[] { 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15 });
+        main.addLast(comp);
+
+        category.add(main, BorderLayout.CENTER);
         return category;
         }
 
@@ -1144,6 +1166,8 @@ java.text.DecimalFormat format = new java.text.DecimalFormat("0.0##");
                 }
 			};
 		hbox.add(comp);
+
+        hbox.add(Strut.makeHorizontalStrut(10));
 
         category.add(hbox, BorderLayout.WEST);
         return category;

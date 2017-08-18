@@ -85,9 +85,12 @@ public class KawaiK4Multi extends Synth
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("Sections 6-8", sourcePanel);
         
-        model.set("name", "Init Sound V1.1 ");  // has to be 16 long
+        model.set("name", "Init Patch");  // has to be 10 long
         
-        //loadDefaults();        
+    	model.set("number", 0);
+    	model.set("bank", 0);
+
+        loadDefaults();        
         }
                 
     public String getDefaultResourceFileName() { return "KawaiK4Multi.init"; }
@@ -293,8 +296,8 @@ public class KawaiK4Multi extends Synth
                             public void run() 
                                 { 
                                 Model tempModel = new Model();
-                                tempModel.set("bank", KawaiK4Multi.this.model.get("instrument" + src + "bank"));
-                                tempModel.set("number", KawaiK4Multi.this.model.get("instrument" + src + "number"));
+                                tempModel.set("bank", KawaiK4Multi.this.model.get("section" + src + "bank"));
+                                tempModel.set("number", KawaiK4Multi.this.model.get("section" + src + "number"));
                                 synth.performRequestDump(tempModel, false);
                                 }
                             });
@@ -331,7 +334,7 @@ public class KawaiK4Multi extends Synth
         model.removeMetricMinMax("section" + src + "bank");
         hbox.add(comp);
         
-        comp = new LabelledDial("Number", this, "section" + src + "number", color, 0, 16);
+        comp = new LabelledDial("Number", this, "section" + src + "number", color, 0, 16, -1);
         model.removeMetricMinMax("section" + src + "number");
         hbox.add(comp);
 
@@ -510,9 +513,9 @@ public class KawaiK4Multi extends Synth
 				{
 				model.set("section" + section + "channel", data[i + 8] & 15);
 				model.set("section" + section + "velocitysw", (data[i + 8] >> 4) & 3);
-				model.set("section" + section + "mute", (data[i + 8] >> 7) & 1);
+				model.set("section" + section + "mute", (data[i + 8] >> 6) & 1);
 				}
-			else if (key.equals("mode_outselect"))
+			else if (key.endsWith("mode_outselect"))
 				{
 				model.set("section" + section + "submix", data[i + 8] & 7);
 				model.set("section" + section + "playmode", (data[i + 8] >> 3) & 3);
@@ -563,15 +566,15 @@ public class KawaiK4Multi extends Synth
 				}
 			else if (key.endsWith("singleno"))
 				{
-				data[i] = (byte)(model.get("section" + section + "bank") * 4 + model.get("section" + section + "number"));
+				data[i] = (byte)(model.get("section" + section + "bank") * 16 + model.get("section" + section + "number"));
 				}
 			else if (key.endsWith("rcvch_velosw_mute"))
 				{
-				data[i] = (byte)((model.get("section" + section + "mute") << 7) | (model.get("section" + section + "velocitysw") << 5) | (model.get("section" + section + "channel")));
+				data[i] = (byte)((model.get("section" + section + "mute") << 6) | (model.get("section" + section + "velocitysw") << 4) | (model.get("section" + section + "channel")));
 				} 
-			else if (key.equals("mode_outselect"))
+			else if (key.endsWith("mode_outselect"))
 				{
-				data[i] = (byte)((model.get("section" + section + "playmode") << 3) | (model.get("section" + section + "submix") << 7));
+				data[i] = (byte)((model.get("section" + section + "playmode") << 3) | (model.get("section" + section + "submix")));
 				}
 			else
 				{
@@ -601,7 +604,7 @@ public class KawaiK4Multi extends Synth
 			result[7] = (byte)(0x40);  // indicates multi.  Error in the manual, it should be 0x000000 not 000x0000
 		else
 			result[7] = (byte)position;
-		System.arraycopy(data, 0, result, 8, 76);
+		System.arraycopy(data, 0, result, 8, data.length);
 		result[8 + data.length] = (byte)produceChecksum(data);
 		result[9 + data.length] = (byte)0xF7;
 		return result;
@@ -668,6 +671,8 @@ public class KawaiK4Multi extends Synth
     
     public String getPatchName() { return model.get("name", "Untitled  "); }
 
+	public int getPauseAfterChangePatch() { return 200; }	// Seem to need about > 100ms
+
     public void changePatch(Model tempModel)
     	{
     	byte BB = (byte)tempModel.get("bank");
@@ -679,8 +684,9 @@ public class KawaiK4Multi extends Synth
         data[1] = (byte)0x40;
         data[2] = (byte)getChannelOut();
         data[3] = (byte)0x30;
-        data[4] = (byte)0x04;
-        data[5] = (byte)(BB < 4 ? 0x00 : 0x02);	// 0x00 is internal, 0x02 is external
+        data[4] = (byte)0x00;
+        data[5] = (byte)0x04;
+        data[6] = (byte)(BB < 4 ? 0x00 : 0x02);	// 0x00 is internal, 0x02 is external
         data[7] = (byte)0xF7;
         
         tryToSendSysex(data);

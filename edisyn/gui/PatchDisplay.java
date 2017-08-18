@@ -40,14 +40,14 @@ public class PatchDisplay extends JPanel implements Updatable
         {
         String bank = null;
         String number = null;
-        if (model.isString(bankKey) && model.get(bankKey, null) != null)
+        if (model.isString(bankKey))
             bank = model.get(bankKey, null);
-        else if (model.isInteger(bankKey) && model.get(bankKey, -1) != -1)
-            bank = bankString(model.get(bankKey, 0));
-        if (model.isString(numberKey) && model.get(numberKey, null) != null)
+        else if (model.isInteger(bankKey))
+            bank = bankString(model.get(bankKey));
+        if (model.isString(numberKey))
             number = model.get(numberKey, null);
-        else if (model.isInteger(numberKey) && model.get(numberKey, -1) != -1)
-            number = numberString(model.get(numberKey, 0));
+        else if (model.isInteger(numberKey))
+            number = numberString(model.get(numberKey));
         String s = "";
         if (bank != null) s = s + bank;
         if (number != null) s = s + number;

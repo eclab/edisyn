@@ -496,9 +496,21 @@ public class Model implements Cloneable
         if (d == null) return ifDoesntExist;
         else return d.intValue();
         }
+    
+    /** Returns the value associated with this (Integer) key, or -1 if there is no such value. 
+    	If there is no such value, also prints (does not throw) a RuntimeError stacktrace.  */        
+    public int get(String key)
+    	{
+        Integer d = (Integer) (storage.get(key));
+        if (d == null)	
+        	{
+        	new RuntimeException("No Value stored for key " + key + ", returning -1, which is certainly wrong.").printStackTrace();
+            return -1;
+        	}
+        else return d.intValue();
+    	}
               
-              
-    public Object get(String key) { return storage.get(key); }
+    Object getValue(String key) { return storage.get(key); }
       
     /** Returns whether the key is associated with a String. 
         If there is no key stored in the Model, then FALSE is returned. */        
@@ -657,7 +669,7 @@ public class Model implements Cloneable
             if (isString(keys[i]))
                 {
                 if (other.isString(keys[i]) &&
-                    other.get(keys[i]).equals(get(keys[i])))  // they're the same
+                    other.getValue(keys[i]).equals(getValue(keys[i])))  // they're the same
                     continue;
                 String str =  get(keys[i], "");
                 out.println(keys[i] + ": \"" + get(keys[i], "") + "\"    ");
@@ -665,7 +677,7 @@ public class Model implements Cloneable
             else if (isInteger(keys[i]))
                 {
                 if (other.isInteger(keys[i]) &&
-                    other.get(keys[i]).equals(get(keys[i])))  // they're the same
+                    other.getValue(keys[i]).equals(getValue(keys[i])))  // they're the same
                     continue;
                 int j = get(keys[i], 0);
                 out.println(keys[i] + ": " + j + "    ");

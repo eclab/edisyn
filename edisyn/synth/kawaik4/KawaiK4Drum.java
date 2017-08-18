@@ -89,7 +89,11 @@ public class KawaiK4Drum extends Synth
 
         addTab("Drum", soundPanel);
         
-    	model.set("name", "Untitled  ");  // 10 long I think
+        model.set("name", "Init Patch");  // has to be 10 long
+
+    	model.set("number", 0);
+    	model.set("bank", 0);		// internal
+
     	loadDefaults();
     	}
     	
@@ -142,7 +146,10 @@ public class KawaiK4Drum extends Synth
         comp = new LabelledDial("Volume", this, "volume", color, 0, 100);
         hbox.add(comp);
 
-        comp = new LabelledDial("Velocity", this, "velocitydepth", color, 0, 100);
+		// Error in MIDI spec, Section 8.
+		// Velocity depth is actually -50...50
+		
+        comp = new LabelledDial("Velocity", this, "velocitydepth", color, 0, 100, 50);
         hbox.add(comp);
         ((LabelledDial)comp).addAdditionalLabel("Depth");
 
@@ -150,12 +157,13 @@ public class KawaiK4Drum extends Synth
         return category;
         }
 
-	public HBox buildKey(int key, Color color)
+	public HBox buildKey(final int key, Color color)
 		{
         JComponent comp;
         String[] params;
 		HBox hbox = new HBox();
 		
+		VBox vbox = new VBox();
         comp = new LabelledDial("Submix", this, "key" + key + "submix", color, 0, 7)
             {
             public String map(int val)
@@ -163,9 +171,25 @@ public class KawaiK4Drum extends Synth
                 return SUBMIX_CHANNELS[val];
                 }
             };
-        hbox.add(comp);
+        vbox.add(comp);
 
-		VBox vbox = new VBox();
+        comp = new PushButton("Apply to All")
+            {
+            public void perform()
+                {
+                int submix = model.get("key" + key + "submix");
+                for(int i = 1; i < 62; i++)
+                	{
+                	model.set("key" + i + "submix", submix);
+                	}
+                }
+            };
+        vbox.add(comp);
+        hbox.add(vbox);
+
+
+
+		vbox = new VBox();
 		
 		HBox hbox2 = new HBox();
         VBox vbox2 = new VBox();
@@ -180,7 +204,10 @@ public class KawaiK4Drum extends Synth
         comp = new LabelledDial("Tune 1", this, "key" + key + "tune1", color, 0, 100, 50);
         hbox2.add(comp);
 		
-        comp = new LabelledDial("Level 1", this, "key" + key + "level1", color, 0, 99);
+		// Error in MIDI spec, Section 8.
+		// Level actually goes 0...100, not 0...99
+		
+        comp = new LabelledDial("Level 1", this, "key" + key + "level1", color, 0, 100);
         hbox2.add(comp);
         vbox.add(hbox2);
 
@@ -197,7 +224,10 @@ public class KawaiK4Drum extends Synth
         comp = new LabelledDial("Tune 2", this, "key" + key + "tune2", color, 0, 100, 50);
         hbox2.add(comp);
 		
-        comp = new LabelledDial("Level 2", this, "key" + key + "level2", color, 0, 99, 50);
+		// Error in MIDI spec, Section 8.
+		// Level actually goes 0...100, not 0...99
+		
+        comp = new LabelledDial("Level 2", this, "key" + key + "level2", color, 0, 100);
         hbox2.add(comp);
         vbox.add(hbox2);
         
@@ -237,8 +267,7 @@ public class KawaiK4Drum extends Synth
         
         comp = new KeyDisplay("Note", this, "note", color, 36, 96, 0);
         ((KeyDisplay)comp).setDynamicUpdate(true);
-		hbox.add(comp);
-		vbox.add(hbox);
+		vbox.add(comp);
 				
 		vbox.add(Strut.makeVerticalStrut(20));
 		
@@ -252,11 +281,13 @@ public class KawaiK4Drum extends Synth
 		    	vbox.repaint();
 		    	}
 			});
+			
+		hbox.add(vbox);
 
 		// set it once			
 		model.set("note", model.get("note", 36));
 		
-        category.add(vbox, BorderLayout.CENTER);
+        category.add(hbox, BorderLayout.CENTER);
         return category;
         }
             	
@@ -284,16 +315,53 @@ public class KawaiK4Drum extends Synth
 
     public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
-			model.set("bank", data[6] == 0x01 ? 0 : 1);
-			model.set("number", data[7]);
+		model.set("bank", data[6] == 0x01 ? 0 : 1);
 			
-    	for(int i = 0; i < 34; i++)
+    	int b = 0;
+    	for(int i = 0; i < 682; i++)
     		{
     		String key = allParameters[i];
-    		if (key.equals("-"))
-    			continue;
+
+	   		int note = (i / 11);
+	   	
+	   		if (b == 10)  // sub-checksum
+	   			{
+	   			// do nothing
+	   			b = -1;
+	   			}
+    		else if (key.equals("-"))
+	   			{
+	   			// do nothing
+	   			}
+	   		else if (key.endsWith("submix_waveselectmsb1"))
+	   			{
+	   			model.set("key" + note + "submix", data[i + 8] >> 4);
+	   			model.set("key" + note + "waveselect1", ((data[i + 8] & 1) << 7) | (data[i + 8 + 2]));
+	   			}
+	   		else if (key.endsWith("waveselectmsb2"))
+	   			{
+	   			model.set("key" + note + "waveselect2", ((data[i + 8] & 1) << 7) | (data[i + 8 + 2]));
+	   			}
+	   		else if (key.endsWith("waveselectlsb1"))
+	   			{
+	   			// do nothing
+	   			}
+	   		else if (key.endsWith("waveselectlsb2"))
+	   			{
+	   			// do nothing
+	   			}
+			else if (key.equals("channel"))
+				{
+				// Kawai Bug: MIDI channel is not properly returned on parse: it always returns 9 (channel "10").
+				//
+				model.set("channel", getChannelOut());  // gotta do *something*
+				}
 			else
+				{
 				model.set(key, data[i + 8]);
+				}
+
+			b++;
 			}
 
 	        revise();
@@ -379,7 +447,7 @@ public class KawaiK4Drum extends Synth
 			"velocitydepth"
 			}, 0, internalParameters, 0, 3);
 	
-		for(int i = 0; i < 61; i++)
+		for(int i = 1; i < 62; i++)
 			{
 			System.arraycopy(new String[]
 				{
@@ -394,7 +462,7 @@ public class KawaiK4Drum extends Synth
 				"key" + i + "level1",
 				"key" + i + "level2",
 				"-",				// sub-checksum
-				}, 0, allParameters, i * 11 + 11, 11);
+				}, 0, allParameters, i * 11, 11);
 
 			System.arraycopy(new String[]
 				{
@@ -407,7 +475,7 @@ public class KawaiK4Drum extends Synth
 				"key" + i + "tune2",
 				"key" + i + "level1",
 				"key" + i + "level2",
-				}, 0, internalParameters, i * 9 + 3, 9);
+				}, 0, internalParameters, i * 9 - 6, 9);
 
 			}
 		}
@@ -459,14 +527,34 @@ public class KawaiK4Drum extends Synth
     	for(int i = 0; i < 682; i++)
     		{
 	   		String key = allParameters[i];
+	   		
+	   		int note = (i / 11);
 	   	
 	   		if (b == 10)  // sub-checksum 
 	   			{
 	   			data[i] = produceChecksum(bytes);
-	   			b = 0;
+	   			b = -1;
 	   			}
 	   		else if (key.equals("-"))
+	   			{
 	   			bytes[b] = (data[i] = (byte)0x0);
+	   			}
+	   		else if (key.endsWith("submix_waveselectmsb1"))
+	   			{
+	   			bytes[b] = (data[i] = (byte)((model.get("key" + note + "submix") << 4) | (model.get("key" + note + "waveselect1") >> 7)));
+	   			}
+	   		else if (key.endsWith("waveselectmsb2"))
+	   			{
+	   			bytes[b] = (data[i] = (byte)((model.get("key" + note + "waveselect2") >> 7)));
+	   			}
+	   		else if (key.endsWith("waveselectlsb1"))
+	   			{
+	   			bytes[b] = (data[i] = (byte)((model.get("key" + note + "waveselect1") & 127)));
+	   			}
+	   		else if (key.endsWith("waveselectlsb2"))
+	   			{
+	   			bytes[b] = (data[i] = (byte)((model.get("key" + note + "waveselect2") & 127)));
+	   			}
 	   		else
 				bytes[b] = (data[i] = (byte)(model.get(key)));
 			b++;
@@ -490,7 +578,7 @@ public class KawaiK4Drum extends Synth
 		else
 			result[6] = (byte)(external ? 0x03 : 0x01);
 		result[7] = (byte)(0x20);	// indicates drum
-		System.arraycopy(data, 0, result, 8, 34);
+		System.arraycopy(data, 0, result, 8, data.length);
 		result[8 + data.length] = (byte)0xF7;
 		return result;
         }
@@ -511,6 +599,8 @@ public class KawaiK4Drum extends Synth
 
     ////// YOU MAY WANT TO IMPLEMENT SOME OF THE FOLLOWING
 
+	public int getTestNote() { return model.get("note"); }
+	public int getTestNoteChannel() { return model.get("channel"); }
 
     public void parseParameter(byte[] data)
     	{

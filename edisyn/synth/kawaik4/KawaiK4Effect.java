@@ -72,7 +72,11 @@ public class KawaiK4Effect extends Synth
 
         addTab("Effect", soundPanel);
         
-    	model.set("name", "Untitled  ");  // 10 long I think
+        model.set("name", "Init Patch");  // has to be 10 long
+
+    	model.set("number", 0);
+    	model.set("bank", 0);		// internal
+    	
     	loadDefaults();
     	}
     	
@@ -127,7 +131,7 @@ public class KawaiK4Effect extends Synth
         param[0].addAdditionalLabel("[K4]");
         param[1] = new LabelledDial("Parameter 2", this, "param2", color, 0, 7);
         param[1].addAdditionalLabel("        [K4]        ");
-        param[2] = new LabelledDial("Parameter 3", this, "param3", color, 0, 7);
+        param[2] = new LabelledDial("Parameter 3", this, "param3", color, 0, 31);
         param[2].addAdditionalLabel("[K4]");
 
         params = EFFECT_TYPES;
@@ -211,12 +215,12 @@ public class KawaiK4Effect extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1...16");
+                showSimpleError(title, "The Patch Number must be an integer 1...32");
                 continue;
                 }
-            if (n < 1 || n > 16)
+            if (n < 1 || n > 32)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1...16");
+                showSimpleError(title, "The Patch Number must be an integer 1...32");
                 continue;
                 }
                 
@@ -261,7 +265,7 @@ public class KawaiK4Effect extends Synth
 				data[4] == (byte)0x00 &&
 				data[5] == (byte)0x04 &&
 				(data[6] == (byte)0x01 || data[6] == (byte)0x03) &&
-				data[7] < 32);
+				data[7] < (byte)32);
         }
 
     public static String getSynthName() { return "Kawai K4/K4r [Effect]"; }
@@ -391,7 +395,7 @@ public class KawaiK4Effect extends Synth
 			result[7] = (byte)(0x00);	// indicates effect
 		else
 			result[7] = (byte)position;
-		System.arraycopy(data, 0, result, 8, 34);
+		System.arraycopy(data, 0, result, 8, data.length);
 		result[8 + data.length] = (byte)produceChecksum(data);
 		result[9 + data.length] = (byte)0xF7;
 		return result;
@@ -413,12 +417,16 @@ public class KawaiK4Effect extends Synth
 
 		int index = ((Integer)(allParametersToIndex.get(key))).intValue();
 		int submix = 0;
-		if (index > 10)
+		
+		if (index >= 10)
+			{
 			submix = (index - 10) / 3;
-		if (index > 10)
-			index = index - 10 + 86;
+			index = (index - 10) % 3 + 86;
+			}
 		else
+			{
 			index = index + 82;
+			}
 			
 		return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x04, (byte)index, (byte)((submix << 1) | msb), (byte)lsb, (byte)0xF7 };
     	}

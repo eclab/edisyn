@@ -50,7 +50,8 @@ public class Chooser extends NumericalComponent
     public void updateBorder()
     	{
     	super.updateBorder();
-    	if (combo != null)
+    	if (combo != null && 
+    		combo.isEnabled() == synth.isShowingMutation())  // this part prevents us from repeatedly calling setEnabled()... which creates a repaint loop
     		{
     		if (synth.isShowingMutation())
     			combo.setEnabled(false);
@@ -233,20 +234,6 @@ public class Chooser extends NumericalComponent
         setState(combo.getSelectedIndex());
         }
         
-/*
-    public void paintComponent(Graphics g)
-        {
-        Graphics2D graphics = (Graphics2D) g;
-
-        Rectangle rect = getBounds();
-        rect.x = 0;
-        rect.y = 0;
-        graphics.setPaint(Style.BACKGROUND_COLOR);
-        graphics.fill(rect);
-        }
-*/
-
-
     class ComboBoxRenderer extends JLabel implements ListCellRenderer 
         {
         public ComboBoxRenderer() 

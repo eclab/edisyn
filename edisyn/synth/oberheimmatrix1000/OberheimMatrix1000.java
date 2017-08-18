@@ -32,8 +32,8 @@ public class OberheimMatrix1000 extends Synth
     public static final String[] PORTAMENTO_MODES = new String[] { "Constant Speed", "Constant Time", "Exponential" }; 
     public static final String[] LFO_SHAPES = new String[] { "Triangle", "Up Saw", "Down Saw", "Square", "Random", "Noise", "S&H" }; 
     public static final String[] LFO_TRIGGERS = new String[] { "None", "Single", "Multi", "External" }; 
-    public static final String[] MODULATION_SOURCES = new String[] { "None", "Env 1", "Env 2", "Env 3", "LFO 1", "LFO 2", "Vibrato", "Ramp 1", "Ramp 2", "Keyboard", "Portamento", "Tracking Generator", "Keyboard Gate", "Velocity", "Release Velocity", "Pressure", "Pedal 1", "Pedal 2", "Lever 1", "Lever 2", "Lever 3" };
-    public static final String[] TRACKING_GENERATOR_SOURCES = new String[] { "Env 1", "Env 2", "Env 3", "LFO 1", "LFO 2", "Vibrato", "Ramp 1", "Ramp 2", "Keyboard", "Portamento", "Tracking Generator", "Keyboard Gate", "Velocity", "Release Velocity", "Pressure", "Pedal 1", "Pedal 2", "Lever 1", "Lever 2", "Lever 3" };
+    public static final String[] MODULATION_SOURCES = new String[] { "None", "Env 1", "Env 2", "Env 3", "LFO 1", "LFO 2", "Vibrato", "Ramp 1", "Ramp 2", "Keyboard", "Portamento", "Tracking Generator", "Keyboard Gate", "Velocity", "Release Velocity", "Pressure", "Pedal 1", "Pedal 2", "Bend", "Mod Wheel", "Lever 3" };
+    public static final String[] TRACKING_GENERATOR_SOURCES = new String[] { "Env 1", "Env 2", "Env 3", "LFO 1", "LFO 2", "Vibrato", "Ramp 1", "Ramp 2", "Keyboard", "Portamento", "Tracking Generator", "Keyboard Gate", "Velocity", "Release Velocity", "Pressure", "Pedal 1", "Pedal 2", "Bend", "Mod Wheel", "Lever 3" };
     public static final String[] ENV_TRIGGER_MODES = new String[] { "Single", "Single Reset", "Multi", "Multi Reset", "External Single", "External Single Reset", "External Multi", "External Multi Reset" }; 
     public static final String[] ENV_MODES = new String[] { "Normal", "DADR", "Free Run", "DADR + Free Run" }; 
     // There are actually 2 bits here, so we're missing one
@@ -114,6 +114,8 @@ public class OberheimMatrix1000 extends Synth
         addTab("Modulation", modulationPanel);
 
         model.set("name", "UNTITLED");
+        model.set("bank", 0);
+        model.set("number", 0);
         
         loadDefaults();        
         }
@@ -209,7 +211,7 @@ public class OberheimMatrix1000 extends Synth
         VBox vbox = new VBox();
         comp = new PatchDisplay(this, "Patch", "bank", "number", 4)
             {
-            public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
+            public String numberString(int number) { return (number > 9 ? "" : "0") + number; }
             public String bankString(int bank) { return "" + bank; }
             };
         vbox.add(comp);
@@ -289,7 +291,7 @@ public class OberheimMatrix1000 extends Synth
         HBox hbox = new HBox();
                
         VBox vbox = new VBox();
-        comp = new CheckBox("Lever 1", this, "dco" + osc + "lever1");
+        comp = new CheckBox("Bend", this, "dco" + osc + "bend");
         vbox.add(comp);
        
         comp = new CheckBox("Vibrato", this, "dco" + osc + "vibrato");
@@ -377,7 +379,7 @@ public class OberheimMatrix1000 extends Synth
         VBox vbox = new VBox();
         
         
-        comp = new CheckBox("Lever 1", this, "vcflever1");
+        comp = new CheckBox("Bend", this, "vcfbend");
         vbox.add(comp);
        
         comp = new CheckBox("Vibrato", this, "vcfvibrato");
@@ -540,7 +542,7 @@ public class OberheimMatrix1000 extends Synth
             new String[] { null, null, null, "env" + env + "sustain", "env" + env + "sustain", null },
             new double[] { 0, 0.2/63.0, 0.2/63.0, 0.2 / 63.0,  0.2, 0.2/63.0},
             new double[] { 0, 0, 1.0, 1.0 / 63.0, 1.0/63.0, 0 });
-        envelopeBox[env - 1].addLast(comp);
+        envelopeBox[env - 1].addLast(dadsr[env - 1]);
 
         params = ENV_MODES;
         comp = new Chooser("Envelope Mode", this, "env" + env + "mode", params)
@@ -631,6 +633,14 @@ public class OberheimMatrix1000 extends Synth
 
         comp = new LabelledDial("Point 5", this, "trackingpoint5", color, 0, 63);
         hbox.add(comp);
+
+
+        comp = new EnvelopeDisplay(this, Color.red, 
+            new String[] { null, null, null, null, null },
+            new String[] { "trackingpoint1", "trackingpoint2", "trackingpoint3", "trackingpoint4", "trackingpoint5" },
+            new double[] { 0, 0.25, 0.25, 0.25, 0.25},
+            new double[] { 1.0/63, 1.0/63, 1.0/63, 1.0/63, 1.0/63 });
+        hbox.add(comp);
                            
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -687,14 +697,14 @@ public class OberheimMatrix1000 extends Synth
                                 
                 VBox vbox2 = new VBox();
                 params = MODULATION_SOURCES;
-                comp = new Chooser("" + i + " Source", this, "modulation" + i + "source", params);
+                comp = new Chooser("" + i + " Source", this, "mod" + i + "source", params);
                 vbox2.add(comp);
 
                 params = MODULATION_DESTINATIONS;
-                comp = new Chooser("" + i + " Destination", this, "modulation" + i + "destination", params);
+                comp = new Chooser("" + i + " Destination", this, "mod" + i + "destination", params);
                 vbox2.add(comp);
 
-                comp = new LabelledDial("" + i + " Amount", this, "modulation" + i + "amount", color, 0, 127, 64);  // it's Level, not Amount, so we save some horizontal space
+                comp = new LabelledDial("" + i + " Amount", this, "mod" + i + "amount", color, 0, 127, 64);  // it's Level, not Amount, so we save some horizontal space
                 vbox2.add(comp);
                 hbox.add(vbox2);
                 }
@@ -937,9 +947,9 @@ public class OberheimMatrix1000 extends Synth
     "vcffrequencymodpressure",
     "vca1modvel",
     "vca2modenv2",
-    "envelope1amplitudemod",
-    "envelope2amplitudemod",
-    "envelope3amplitudemod",
+    "env1amplitudemod",
+    "env2amplitudemod",
+    "env3amplitudemod",
     "lfo1amplitudemod",
     "lfo2amplitudemod",
     "portamentomod",
@@ -993,20 +1003,20 @@ public class OberheimMatrix1000 extends Synth
         	{
         	return new byte[0];  // ignore
         	}
-        if (key.equals("dco1lever1") || key.equals("dco1vibrato"))
+        if (key.equals("dco1bend") || key.equals("dco1vibrato"))
             {
             index = ((Integer)(internalParametersToIndex.get("dco1fixedmods1"))).intValue();
-            value = model.get("dco1lever1") |  (model.get("dco1vibrato") << 1);
+            value = model.get("dco1bend") |  (model.get("dco1vibrato") << 1);
             }
-        else if (key.equals("dco1portamento") || key.equals("dco1keytracking"))
+        else if (key.equals("dco1portamento"))
             {
             index = ((Integer)(internalParametersToIndex.get("dco1fixedmods2"))).intValue();
-            value = model.get("dco1portamento") | (model.get("dco1keytracking") << 1);
+            value = model.get("dco1portamento");
             }
-        else if (key.equals("dco2lever1") || key.equals("dco2vibrato"))
+        else if (key.equals("dco2bend") || key.equals("dco2vibrato"))
             {
             index = ((Integer)(internalParametersToIndex.get("dco2fixedmods1"))).intValue();
-            value = model.get("dco2lever1") | (model.get("dco2vibrato") << 1);
+            value = model.get("dco2bend") | (model.get("dco2vibrato") << 1);
             }
         else if (key.equals("dco2portamento") || key.equals("dco2keytracking"))
             {
@@ -1023,10 +1033,10 @@ public class OberheimMatrix1000 extends Synth
             index = ((Integer)(internalParametersToIndex.get("dco2waveenable"))).intValue();
             value = model.get("dco2wave") | (model.get("dco2pulse") << 1) | (model.get("dco2noise") << 2);
             }
-        else if (key.equals("vcflever1") || key.equals("vcfvibrato"))
+        else if (key.equals("vcfbend") || key.equals("vcfvibrato"))
             {
             index = ((Integer)(internalParametersToIndex.get("vcffixedmods1"))).intValue();
-            value = model.get("vcflever1") | (model.get("vcfvibrato") << 1);
+            value = model.get("vcfbend") | (model.get("vcfvibrato") << 1);
             }
         else if (key.equals("vcfportamento") || key.equals("vcfkeytracking"))
             {
@@ -1086,17 +1096,16 @@ public class OberheimMatrix1000 extends Synth
             String key = internalParameters[parameter];
             if (key.equals("dco1fixedmods1"))
                 {
-                model.set("dco1lever1", value & 1);
+                model.set("dco1bend", value & 1);
                 model.set("dco1vibrato", (value >> 1) & 1);
                 }
             else if (key.equals("dco1fixedmods2"))
                 {
                 model.set("dco1portamento", value & 1);
-                model.set("dco1keytracking", (value >> 1) & 1);
                 }
             else if (key.equals("dco2fixedmods1"))
                 {
-                model.set("dco2lever1", value & 1);
+                model.set("dco2bend", value & 1);
                 model.set("dco2vibrato", (value >> 1) & 1);
                 }
             else if (key.equals("dco2fixedmods2"))
@@ -1117,7 +1126,7 @@ public class OberheimMatrix1000 extends Synth
                 }
             else if (key.equals("vcffixedmods1"))
                 {
-                model.set("vcflever1", value & 1);
+                model.set("vcfbend", value & 1);
                 model.set("vcfvibrato", (value >> 1) & 1);
                 }
             else if (key.equals("vcffixedmods2"))
@@ -1167,17 +1176,16 @@ public class OberheimMatrix1000 extends Synth
         		name[i] = unpackNameByte(value);
         	else if (key.equals("dco1fixedmods1"))
         		{
-                model.set("dco1lever1", value & 1);
+                model.set("dco1bend", value & 1);
                 model.set("dco1vibrato", (value >> 1) & 1);
         		}
         	else if (key.equals("dco1fixedmods2"))
         		{
                 model.set("dco1portamento", value & 1);
-                model.set("dco1keytracking", (value >> 1) & 1);
         		}
         	else if (key.equals("dco2fixedmods1"))
         		{
-                model.set("dco2lever1", value & 1);
+                model.set("dco2bend", value & 1);
                 model.set("dco2vibrato", (value >> 1) & 1);
         		}
         	else if (key.equals("dco2fixedmods2"))
@@ -1198,7 +1206,7 @@ public class OberheimMatrix1000 extends Synth
         		}
         	else if (key.equals("vcffixedmods1"))
         		{
-                model.set("vcflever1", value & 1);
+                model.set("vcfbend", value & 1);
                 model.set("vcfvibrato", (value >> 1) & 1);
         		}
         	else if (key.equals("vcffixedmods2"))
@@ -1258,17 +1266,16 @@ public class OberheimMatrix1000 extends Synth
         	else if (key.equals("dco1fixedmods1"))
         		{
                 value = (model.get("dco1vibrato") << 1) |
-                		(model.get("dco1lever1"));
+                		(model.get("dco1bend"));
         		}
         	else if (key.equals("dco1fixedmods2"))
         		{
-                value = (model.get("dco1keytracking") << 1) |
-                		(model.get("dco1portamento"));
+                value = (model.get("dco1portamento"));
         		}
         	else if (key.equals("dco2fixedmods1"))
         		{
                 value = (model.get("dco2vibrato") << 1) |
-                		(model.get("dco2lever1"));
+                		(model.get("dco2bend"));
         		}
         	else if (key.equals("dco2fixedmods2"))
         		{
@@ -1289,7 +1296,7 @@ public class OberheimMatrix1000 extends Synth
         	else if (key.equals("vcffixedmods1"))
         		{
                 value = (model.get("vcfvibrato") << 1) |
-                		(model.get("vcflever1"));
+                		(model.get("vcfbend"));
         		}
         	else if (key.equals("vcffixedmods2"))
         		{

@@ -263,8 +263,8 @@ public class YamahaTX81ZMulti extends Synth
                             {
                             public void run() 
                                 { 
-                                int bank = YamahaTX81ZMulti.this.model.get("instrument" + src + "bank");
-                                int number = YamahaTX81ZMulti.this.model.get("instrument" + src + "number");
+                                int bank = YamahaTX81ZMulti.this.model.get("instrument" + src + "voicebank");
+                                int number = YamahaTX81ZMulti.this.model.get("instrument" + src + "voicenumber");
                                                                 
                                 Model tempModel = new Model();
                                 tempModel.set("bank", bank);

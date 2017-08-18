@@ -144,7 +144,7 @@ public class KawaiK4 extends Synth
         filterPanel.add(vbox, BorderLayout.CENTER);
         addTab("Filters", filterPanel);
 
-        model.set("name", "Untitled  ");  // has to be 10 long
+        model.set("name", "Init Patch");  // has to be 10 long
 
         model.set("bank", 0);
 		model.set("number", 0);
@@ -1049,22 +1049,22 @@ public class KawaiK4 extends Synth
 				}
 			else if (key.equals("s1waveselecthi_kscurve"))
 				{
-				model.set("s1waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 1]));		// hi and lo
+				model.set("s1waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 4]));		// hi and lo
 				model.set("s1kscurve", data[i + 8] >> 4);
 				}
 			else if (key.equals("s2waveselecthi_kscurve"))
 				{
-				model.set("s2waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 1]));		// hi and lo
+				model.set("s2waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 4]));		// hi and lo
 				model.set("s2kscurve", data[i + 8] >> 4);
 				}
 			else if (key.equals("s3waveselecthi_kscurve"))
 				{
-				model.set("s3waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 1]));		// hi and lo
+				model.set("s3waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 4]));		// hi and lo
 				model.set("s3kscurve", data[i + 8] >> 4);
 				}
 			else if (key.equals("s4waveselecthi_kscurve"))
 				{
-				model.set("s4waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 1]));		// hi and lo
+				model.set("s4waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 4]));		// hi and lo
 				model.set("s4kscurve", data[i + 8] >> 4);
 				}
 			else if (key.equals("s1waveselectlo"))
@@ -1347,7 +1347,7 @@ public class KawaiK4 extends Synth
 			result[7] = (byte)(0x00);  // indicates single
 		else
 			result[7] = (byte)position;
-		System.arraycopy(data, 0, result, 8, 130);
+		System.arraycopy(data, 0, result, 8, data.length);
 		result[8 + data.length] = (byte)produceChecksum(data);
 		result[9 + data.length] = (byte)0xF7;
 		return result;

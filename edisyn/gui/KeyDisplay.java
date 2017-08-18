@@ -106,7 +106,7 @@ public class KeyDisplay extends NumericalComponent
         label.setFont(Style.SMALL_FONT);
         label.setBackground(Style.TRANSPARENT);
         label.setForeground(Style.TEXT_COLOR);
-        add(label, BorderLayout.NORTH);    
+        add(label, BorderLayout.SOUTH);    
         add(new KeyDisplay.Inner(), BorderLayout.CENTER); 
         setBackground(Style.TRANSPARENT);
 

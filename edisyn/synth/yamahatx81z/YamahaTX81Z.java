@@ -526,6 +526,52 @@ public class YamahaTX81Z extends Synth
         hbox.add(comp);
 
 
+		// we define this first so that it populates the model for the other widgets  But we'll add it at the end.
+
+        frequencyRanges[src - 1] = new LabelledDial("Frequency", this, "operator" + src + "fixedfrequencyrange", color, 0, 7)
+            {
+            public String map(int val)
+                {
+                return FIX_RANGES[val];
+                }               
+            };
+        frequencyRanges[src - 1].addAdditionalLabel("Range");
+
+
+
+
+
+		// we define this next so that it populates the model for the other widgets  But we'll add it at the end.
+    
+        CheckBox fixcomp = new CheckBox("Fixed Frequency", this, "operator" + src + "fix")
+            {
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                if (model.get(key) == 0)
+                    {
+                    hbox.remove(frequencyRanges[src - 1]);
+                    if (coarseFrequencyLabels[src - 1] != null)				// won't be the case initially
+                    	coarseFrequencyLabels[src - 1].setText("Ratio");
+                    if (fineFrequencyLabels[src - 1] != null)				// won't be the case initially
+                    	fineFrequencyLabels[src - 1].setText("Ratio Fine");
+                    }
+                else
+                    {
+                    hbox.add(frequencyRanges[src - 1]);
+                    if (coarseFrequencyLabels[src - 1] != null)				// won't be the case initially
+                    	coarseFrequencyLabels[src - 1].setText("Fixed");
+                    if (fineFrequencyLabels[src - 1] != null)				// won't be the case initially
+                    	fineFrequencyLabels[src - 1].setText("Fixed Fine");
+                    }
+                hbox.revalidate();
+                }
+            };
+        ((CheckBox)fixcomp).addToWidth(1);
+
+
+
+
         comp = new LabelledDial("Frequency ", this, "operator" + src + "frequencycoarse", color, 0, 63)  // extra space because OS X cuts off the 'y'
             {
             public String map(int val)
@@ -572,41 +618,15 @@ public class YamahaTX81Z extends Synth
         model.register("operator" + src + "fix", (Updatable)comp);
         hbox.add(comp);
 
-        frequencyRanges[src - 1] = new LabelledDial("Frequency", this, "operator" + src + "fixedfrequencyrange", color, 0, 7)
-            {
-            public String map(int val)
-                {
-                return FIX_RANGES[val];
-                }               
-            };
-        frequencyRanges[src - 1].addAdditionalLabel("Range");
+
+		// now we add the frequency range
         hbox.add(frequencyRanges[src - 1]);
 
     
         // we put this last so that by the time it's updating, the fine frequency dials have been built
-    
-        comp = new CheckBox("Fixed Frequency", this, "operator" + src + "fix")
-            {
-            public void update(String key, Model model)
-                {
-                super.update(key, model);
-                if (model.get(key) == 0)
-                    {
-                    hbox.remove(frequencyRanges[src - 1]);
-                    coarseFrequencyLabels[src - 1].setText("Ratio");
-                    fineFrequencyLabels[src - 1].setText("Ratio Fine");
-                    }
-                else
-                    {
-                    hbox.add(frequencyRanges[src - 1]);
-                    coarseFrequencyLabels[src - 1].setText("Fixed");
-                    fineFrequencyLabels[src - 1].setText("Fixed Fine");
-                    }
-                hbox.revalidate();
-                }
-            };
-        ((CheckBox)comp).addToWidth(1);
-        vbox.add(comp);
+        vbox.add(fixcomp);
+		// update its labels just in case
+		fixcomp.update("operator" + src + "fix", model);
 
     
         category.add(hbox, BorderLayout.CENTER);

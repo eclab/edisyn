@@ -103,7 +103,7 @@ public class Style
     public static final float ENVELOPE_DISPLAY_MARKER_WIDTH = 4;
     /** Stroke for the X axis. */
     public static final BasicStroke ENVELOPE_AXIS_STROKE = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, new float[] { 4.0f }, 0.0f);
-	    
+            
     /////// CHECKBOX CONSTANTS
     /** Border around arpeggiator checkboxes */
     public static final Border CHECKBOX_HIGHLIGHTED_BORDER = BorderFactory.createCompoundBorder(
@@ -134,8 +134,8 @@ public class Style
 
 
 
-	/////// GRAPHICS PREPARATION
-	
+    /////// GRAPHICS PREPARATION
+        
     /** Updates the graphics rendering hints before drawing.  Called by a few widgets.  */
     public static void prepareGraphics(Graphics g)
         {
@@ -146,7 +146,7 @@ public class Style
         }
         
 
-	/////// OS DISTINGUISHING PROCEDURES
+    /////// OS DISTINGUISHING PROCEDURES
 
     private static String OS = System.getProperty("os.name").toLowerCase();
 

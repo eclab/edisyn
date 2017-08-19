@@ -99,19 +99,19 @@ public abstract class NumericalComponent extends JComponent implements Updatable
     public String getKey() { return key; }
     
     public void updateBorder()
-    	{
-    	// If we're supposed to show our mutation, and I'm free to mutate, but I'm not showing it, show it
-    	if (synth.isShowingMutation() && synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
-    		{
-    		borderColor = Color.RED;
-    		}
-    	// In all other situations, I should not be showing mutation.  If I am, stop it.
-    	else 
-    		{
-    		borderColor = Color.BLACK;
-    		}
-    	}
-    	
+        {
+        // If we're supposed to show our mutation, and I'm free to mutate, but I'm not showing it, show it
+        if (synth.isShowingMutation() && synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+            {
+            borderColor = Color.RED;
+            }
+        // In all other situations, I should not be showing mutation.  If I am, stop it.
+        else 
+            {
+            borderColor = Color.BLACK;
+            }
+        }
+        
     public Color borderColor;
     
     public NumericalComponent(Synth synth, String key)
@@ -122,29 +122,29 @@ public abstract class NumericalComponent extends JComponent implements Updatable
         register(key);
         setBackground(Style.BACKGROUND_COLOR);
         Border border = new LineBorder(Color.BLACK, 1)
-        	{
-			public void paintBorder(final Component c, final Graphics g, final int x, final int y, final int width, final int height) 
-				{
-    			super.lineColor = borderColor;
-		    	super.paintBorder(c, g, x, y, width, height);
-				}
-        	};
+            {
+            public void paintBorder(final Component c, final Graphics g, final int x, final int y, final int width, final int height) 
+                {
+                super.lineColor = borderColor;
+                super.paintBorder(c, g, x, y, width, height);
+                }
+            };
         setBorder(border);
         
         addMouseListener(new MouseAdapter()
             {
             public void mouseClicked(MouseEvent e)
-				{
-				if (synth.isShowingMutation() && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
-					{
-            		synth.mutationMap.setFree(key, !synth.mutationMap.isFree(key));
-            		// wrap the repaint in an invokelater because the dial isn't responding right
-    				SwingUtilities.invokeLater(new Runnable() { public void run() { repaint(); } });
-            		}
-            	}
+                {
+                if (synth.isShowingMutation() && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+                    {
+                    synth.mutationMap.setFree(key, !synth.mutationMap.isFree(key));
+                    // wrap the repaint in an invokelater because the dial isn't responding right
+                    SwingUtilities.invokeLater(new Runnable() { public void run() { repaint(); } });
+                    }
+                }
             });
         
-       }
+        }
 
     /** Mostly fills the background appropriately. */
     public void paintComponent(Graphics g)

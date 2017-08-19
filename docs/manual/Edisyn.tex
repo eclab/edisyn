@@ -578,6 +578,13 @@ public static final ImageIcon[] MY_ALGORITHM_ICONS =
 
 These PNG files would be stored in your {\tt edisyn/synth/yamahadx7/} directory.
 
+
+\item {\bf KeyDisplay}\quad This displays a keyboard.  You specify the min and max keys (which {\it must} be white keys), and a transposition (if any) between keys and the underlying MIDI notes actually generated.  When the user chooses a key, the KeyDisplay will update a value 0...127 corresponding to the equivalent MIDI note value.
+
+The KeyDisplay can update {\it dynamically} or {\it statically}.  When dynamic, then every time you scroll through the display and a note is highlighted, the model is updated.  When static, the model is only updated when a note is finally chosen and the user has released the mouse button.  To set this, use {\bf setDynamicUpdate(...)}.  
+
+You will probably want your KeyDisplay to update in concert with a LabelledDial.  This is easy: just set them to the same key in the model.  but synthesizers are inconsistent in how they describe notes, because MIDI didn't specify a notation.  For example, MIDI note 0 is ``C -2'' in Yamaha's notation (also adopted by Kawai and some others), or it is ``C -1'' in {\it Scientific Pitch Notation} (or SPN\footnote{... or {\it American Scientific Pitch Notation}(ASPN), or {\it International Pitch Notation} (IPN).  They're all pretentious names.}), or just play ``C 0'' in simple MIDI notation.  You can specify this by calling the method {\bf setOctavesBelowZero(...)}.
+
 \item {\bf PushButton}\quad This doesn't maintain a parameter at all: it's just a convenience cover for JButton.  You see it in Multimode patches where pressing it will pop up an equivalent Single patch (it's usually called ``Show''):
 
 \begin{verbatim}

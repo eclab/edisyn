@@ -121,7 +121,7 @@ public class OberheimMatrix1000 extends Synth
         }
                 
     public String getDefaultResourceFileName() { return "OberheimMatrix1000.init"; }
-	public String getHTMLResourceFileName() { return "OberheimMatrix1000.html"; }
+    public String getHTMLResourceFileName() { return "OberheimMatrix1000.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
@@ -172,7 +172,7 @@ public class OberheimMatrix1000 extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        receiveCurrent.setEnabled(false);		// can't receive current patch
+        receiveCurrent.setEnabled(false);               // can't receive current patch
         return frame;
         }         
 
@@ -183,26 +183,26 @@ public class OberheimMatrix1000 extends Synth
     // If the bytes start at 32, then this makes sense:  bytes 32...63 are stored as-is,
     // and bytes 64..95 get 64 subtracted from them, so they become 0...31.  Clever.
     
-	byte packNameByte(byte n)
-		{
-		/*
-		if (n < 32 || n > 95)
-			n = (byte)32;
-		if (n >= 64)
-			n -= 64;
-		*/
-		return n;
-		}
-		
-	byte unpackNameByte(byte n)
-		{
-		/*
-		n = (byte)(n & 63);
-		if (n < 32)
-			n = (byte)(n + 64);
-		*/
-		return n;
-		}
+    byte packNameByte(byte n)
+        {
+        /*
+          if (n < 32 || n > 95)
+          n = (byte)32;
+          if (n >= 64)
+          n -= 64;
+        */
+        return n;
+        }
+                
+    byte unpackNameByte(byte n)
+        {
+        /*
+          n = (byte)(n & 63);
+          if (n < 32)
+          n = (byte)(n + 64);
+        */
+        return n;
+        }
 
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
@@ -224,9 +224,9 @@ public class OberheimMatrix1000 extends Synth
         comp = new StringComponent("Patch Name", this, "name", 8, "Name must be up to 8 letters, numbers, spaces, or !\"#$%&'()*+,-./:;<=>?[\\]^_.")
             {
             public String replace(String val)
-            	{
-            	return revisePatchName(val);
-            	}
+                {
+                return revisePatchName(val);
+                }
                                 
             public void update(String key, Model model)
                 {
@@ -333,9 +333,9 @@ public class OberheimMatrix1000 extends Synth
         hbox.add(vbox);
 
 
-		//// Sysex documentation is inconsistent here, it's not clear if it's 5-bit or 6-bit.
-		//// But the Matrix 1000 is providing 6-bit values, so we're going with that (0...63)
-		
+        //// Sysex documentation is inconsistent here, it's not clear if it's 5-bit or 6-bit.
+        //// But the Matrix 1000 is providing 6-bit values, so we're going with that (0...63)
+                
         comp = new LabelledDial("Wave Shape", this, "dco" + osc + "shape", color, 0, 63);
         ((LabelledDial)comp).addAdditionalLabel("Saw <> Tri");
         hbox.add(comp);
@@ -727,11 +727,11 @@ public class OberheimMatrix1000 extends Synth
 
 
 
-	//// MATRIX PARAMETERS
-	////
-	//// These are the (roughly 100) Oberheim Matrix parameters by parameter number.
-	//// Note that this parameter number is not the same as the one in the sysex dump
-	//// (that one is specified in allParametersToIndex).
+    //// MATRIX PARAMETERS
+    ////
+    //// These are the (roughly 100) Oberheim Matrix parameters by parameter number.
+    //// Note that this parameter number is not the same as the one in the sysex dump
+    //// (that one is specified in allParametersToIndex).
 
 
 
@@ -855,14 +855,14 @@ public class OberheimMatrix1000 extends Synth
     HashMap allParametersToIndex = new HashMap();
 
 
-	/** The Matrix 1000 sign-extends into its 7th bit.  Basically this means 
-		that if the value is N bits, then remaining high bits should have the
-		value of the high (Nth) bit.  For example, the value 1011 should be
-		converted to (0) 111011.  We also may need to know signed or insigned
-		values.  So to do this, we have two arrays, bitmasks and signed.  We
-		compute them from the initial values stored in bitmasks (which are then
-		changed to actual bitmasks).  If the value below is negative, then the
-		parameter is expected to be signed. */
+    /** The Matrix 1000 sign-extends into its 7th bit.  Basically this means 
+        that if the value is N bits, then remaining high bits should have the
+        value of the high (Nth) bit.  For example, the value 1011 should be
+        converted to (0) 111011.  We also may need to know signed or insigned
+        values.  So to do this, we have two arrays, bitmasks and signed.  We
+        compute them from the initial values stored in bitmasks (which are then
+        changed to actual bitmasks).  If the value below is negative, then the
+        parameter is expected to be signed. */
 
     final static int[] bitmasks = new int[/*100 or so*/]
     {
@@ -874,152 +874,152 @@ public class OberheimMatrix1000 extends Synth
     7,
     7,
     7,
-	2,
-	6,
-	6,
-	6,
-	2,
-	2,
-	6,
-	6,
-	6,
-	2,
-	3,
-	-6,
-	6,
-	2,
-	1,
-	2,
-	1,
-	2,
-	7,
-	6,
-	2,
-	2,
-	6,
-	6,
-	6,
-	2,
-	1,
-	6,
-	2,
-	1,
-	3,
-	5,
-	5,
-	6,
-	6,
-	2,
-	1,
-	3,
-	5,
-	5,
-	6,
-	3,
-	6,
-	6,
-	6,
-	6,
-	6,
-	6,
-	2,
-	2,
-	3,
-	6,
-	6,
-	6,
-	6,
-	6,
-	6,
-	2,
-	2,
-	3,
-	6,
-	6,
-	6,
-	6,
-	6,
-	6,
-	2,
-	2,
-	5,
-	6,
-	6,
-	6,
-	6,
-	6,
-	6,
-	2,
-	6,
-	2,
-	-7,
-	-7,
-	-7,
-	-7,
-	-7,
-	-7,
-	-7,
-	-7,
-	-7,
-	-7,
-	-7,
-	-7,
-	-7,
-	-7,
-	-7,
-	-7,
-	-7,
-	-7,
-	5,
-	-7,
-	5,
-	5,
-	-7,
-	5,
-	5,
-	-7,
-	5,
-	5,
-	-7,
-	5,
-	5,
-	-7,
-	5,
-	5,
-	-7,
-	5,
-	5,
-	-7,
-	5,
-	5,
-	-7,
-	5,
-	5,
-	-7,
-	5,
-	5,
-	-7,
-	5
-	};
-	
-	final static boolean signed[] = new boolean[bitmasks.length];
-	
-	static
-		{
-		for(int i = 0; i < bitmasks.length; i++)
-			{
-			if (bitmasks[i] < 0)
-				{
-				bitmasks[i] = -bitmasks[i];
-				signed[i] = true;
-				}
-				
-			bitmasks[i] = (1 << bitmasks[i]) - 1;
-			}
-		}
-		
-	
-	
+    2,
+    6,
+    6,
+    6,
+    2,
+    2,
+    6,
+    6,
+    6,
+    2,
+    3,
+    -6,
+    6,
+    2,
+    1,
+    2,
+    1,
+    2,
+    7,
+    6,
+    2,
+    2,
+    6,
+    6,
+    6,
+    2,
+    1,
+    6,
+    2,
+    1,
+    3,
+    5,
+    5,
+    6,
+    6,
+    2,
+    1,
+    3,
+    5,
+    5,
+    6,
+    3,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    3,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    3,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    5,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    6,
+    2,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5
+    };
+        
+    final static boolean signed[] = new boolean[bitmasks.length];
+        
+    static
+        {
+        for(int i = 0; i < bitmasks.length; i++)
+            {
+            if (bitmasks[i] < 0)
+                {
+                bitmasks[i] = -bitmasks[i];
+                signed[i] = true;
+                }
+                                
+            bitmasks[i] = (1 << bitmasks[i]) - 1;
+            }
+        }
+                
+        
+        
     final static String[] allParameters = new String[/*100 or so*/] 
     {
     "-",                // this is the name, but the Matrix 1000 doesn't recognize names
@@ -1168,9 +1168,9 @@ public class OberheimMatrix1000 extends Synth
         int value;
         
         if (key.equals("name"))
-        	{
-        	return new byte[0];  // ignore
-        	}
+            {
+            return new byte[0];  // ignore
+            }
         if (key.equals("dco1bend") || key.equals("dco1vibrato"))
             {
             index = ((Integer)(internalParametersToIndex.get("dco1fixedmods1"))).intValue();
@@ -1211,16 +1211,16 @@ public class OberheimMatrix1000 extends Synth
             index = ((Integer)(internalParametersToIndex.get("vcffixedmods2"))).intValue();
             value = model.get("vcfportamento") | (model.get("vcfkeytracking") << 1);
             }
-		else if (key.equals("dco2detune"))
-			{
-         	index = ((Integer)(internalParametersToIndex.get(key))).intValue();
-        	value = convertToSixBitsSigned(model.get(key));
-			}
-		else if (key.endsWith("mod"))  // 7 bit signed
-			{
-         	index = ((Integer)(internalParametersToIndex.get(key))).intValue();
-        	value = convertToSevenBitsSigned(model.get(key));
-			}
+        else if (key.equals("dco2detune"))
+            {
+            index = ((Integer)(internalParametersToIndex.get(key))).intValue();
+            value = convertToSixBitsSigned(model.get(key));
+            }
+        else if (key.endsWith("mod"))  // 7 bit signed
+            {
+            index = ((Integer)(internalParametersToIndex.get(key))).intValue();
+            value = convertToSevenBitsSigned(model.get(key));
+            }
         else if (key.startsWith("mod"))
             {
             int modnumber = (int)(key.charAt(3) - '0');
@@ -1231,7 +1231,7 @@ public class OberheimMatrix1000 extends Synth
             int moddestination = model.get("mod" + modnumber  + "destination");
             int modamount = convertToSevenBitsSigned(model.get("mod" + modnumber  + "amount"));
 
-			// if one is "None", then the other must be as well            
+            // if one is "None", then the other must be as well            
             if (modsource == 0) moddestination = 0;
             else if (moddestination == 0) modsource = 0;
             
@@ -1246,10 +1246,10 @@ public class OberheimMatrix1000 extends Synth
         //              // two things are both exponential
         //              }
         else
-        	{
-         	index = ((Integer)(internalParametersToIndex.get(key))).intValue();
-        	value = model.get(key);
-        	}
+            {
+            index = ((Integer)(internalParametersToIndex.get(key))).intValue();
+            value = model.get(key);
+            }
         
         byte VV = (byte)(value);
         byte PP = (byte)(index & 127);
@@ -1257,72 +1257,158 @@ public class OberheimMatrix1000 extends Synth
         }
     
 
- 	byte convertFromSixBitsSigned(int val)
-		{
-		// strip old signed extension in bit 7
-		val = (val & 63);
-        	
-		val += 32;
-		if (val > 64)
-			val -= 64;
-		return (byte) val;
-		}
-
- 	byte convertToSixBitsSigned(int val)
-		{
-		val -= 32;
-		if (val < 0)
-			val += 64;
-
-		// do signed extension
-		if ((val & 32) == 32)  // 6th bit is set
-			val = val | 64;  // set the 7th bit
-		else
-			val = val & 63;  // clear the 7th bit
-
-		return (byte) val;
-		}
-
- 	byte convertFromSevenBitsSigned(int val)
-		{
-		val += 64;
-		if (val > 128)
-			val -= 128;
-		return (byte) val;
-		}
-
- 	byte convertToSevenBitsSigned(int val)
-		{
-		val -= 64;
-		if (val < 0)
-			val += 128;
-		return (byte) val;
-		}
-
-	/** 
-		// Maybe for Matrix 6?  Also this code needs to be updated with
-		// parameter conversions and other stuff.
-		
-    public void parseParameter(byte[] data)
+    byte convertFromSixBitsSigned(int val)
         {
-        if (data[3] == 0x0B)            // remote modulation parameter edit
-            {
-            byte modulation = (byte)(data[4] + 1);  // stored as 1...10, not 0...9
-            byte source = data[5];
-            byte amount = data[6];
-            byte destination = data[7];
+        // strip old signed extension in bit 7
+        val = (val & 63);
                 
-            model.set("mod" + modulation + "source", source);
-            model.set("mod" + modulation + "destination", destination);
-            model.set("mod" + modulation + "amount", amount);
-            }
-        else if (data[3] == 0x06)               // remote basic parameter edit
-            {
-            byte parameter = data[4];
-            byte value = data[5];
+        val += 32;
+        if (val > 64)
+            val -= 64;
+        return (byte) val;
+        }
+
+    byte convertToSixBitsSigned(int val)
+        {
+        val -= 32;
+        if (val < 0)
+            val += 64;
+
+        // do signed extension
+        if ((val & 32) == 32)  // 6th bit is set
+            val = val | 64;  // set the 7th bit
+        else
+            val = val & 63;  // clear the 7th bit
+
+        return (byte) val;
+        }
+
+    byte convertFromSevenBitsSigned(int val)
+        {
+        val += 64;
+        if (val > 128)
+            val -= 128;
+        return (byte) val;
+        }
+
+    byte convertToSevenBitsSigned(int val)
+        {
+        val -= 64;
+        if (val < 0)
+            val += 128;
+        return (byte) val;
+        }
+
+    /** 
+     // Maybe for Matrix 6?  Also this code needs to be updated with
+     // parameter conversions and other stuff.
                 
-            String key = internalParameters[parameter];
-            if (key.equals("dco1fixedmods1"))
+     public void parseParameter(byte[] data)
+     {
+     if (data[3] == 0x0B)            // remote modulation parameter edit
+     {
+     byte modulation = (byte)(data[4] + 1);  // stored as 1...10, not 0...9
+     byte source = data[5];
+     byte amount = data[6];
+     byte destination = data[7];
+                
+     model.set("mod" + modulation + "source", source);
+     model.set("mod" + modulation + "destination", destination);
+     model.set("mod" + modulation + "amount", amount);
+     }
+     else if (data[3] == 0x06)               // remote basic parameter edit
+     {
+     byte parameter = data[4];
+     byte value = data[5];
+                
+     String key = internalParameters[parameter];
+     if (key.equals("dco1fixedmods1"))
+     {
+     model.set("dco1bend", value & 1);
+     model.set("dco1vibrato", (value >> 1) & 1);
+     }
+     else if (key.equals("dco1fixedmods2"))
+     {
+     model.set("dco1portamento", value & 1);
+     }
+     else if (key.equals("dco2fixedmods1"))
+     {
+     model.set("dco2bend", value & 1);
+     model.set("dco2vibrato", (value >> 1) & 1);
+     }
+     else if (key.equals("dco2fixedmods2"))
+     {
+     model.set("dco2portamento", value & 1);
+     model.set("dco2keytracking", (value >> 1) & 1);
+     }
+     else if (key.equals("dco1waveenable"))
+     {
+     model.set("dco1wave", value & 1);
+     model.set("dco1pulse", (value >> 1) & 1);
+     }
+     else if (key.equals("dco2waveenable"))
+     {
+     model.set("dco2wave", value & 1);
+     model.set("dco2pulse", (value >> 1) & 1);
+     model.set("dco2noise", (value >> 2) & 1);
+     }
+     else if (key.equals("vcffixedmods1"))
+     {
+     model.set("vcfbend", value & 1);
+     model.set("vcfvibrato", (value >> 1) & 1);
+     }
+     else if (key.equals("vcffixedmods2"))
+     {
+     model.set("vcfportamento", value & 1);
+     model.set("vcfkeytracking", (value >> 1) & 1);
+     }
+     else if (key.equals("portamentomode"))
+     {
+     if (value == 4)
+     value = (byte)3;  // get rid of extra exponential
+     model.set("portamentomode", value);
+     }
+     else if (key.equals("dco2detune"))
+     {
+     value = convertFromSixBitsSigned(value);
+     model.set("dco2detune", value);
+     }
+     else
+     {
+     model.set(key, value);
+     }
+     }
+     else
+     {
+     // we'll put CC here later
+     }
+     revise();
+     }
+    */
+        
+    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
+        {
+        //  packing by two nibbles per byte (see http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-OberheimMatrix1000.html)
+        
+        byte[] name = new byte[8];
+        
+        // we don't know the bank, just the number.  :-(
+        int number = data[4];
+        if (!ignorePatch)
+            model.set("number", number);
+                        
+        for(int i = 0; i < 134; i++)
+            {
+            String key = allParameters[i];
+
+            // unpack from nybbles
+            byte lonybble = data[i * 2 + 5];
+            byte hinybble = data[i * 2 + 5 + 1];
+            byte value = (byte)(((hinybble << 4) | (lonybble & 15)) & 127);
+
+            if (i < 8)  // it's the name
+                name[i] = unpackNameByte(value);
+            else if (key.equals("dco1fixedmods1"))
                 {
                 model.set("dco1bend", value & 1);
                 model.set("dco1vibrato", (value >> 1) & 1);
@@ -1366,134 +1452,48 @@ public class OberheimMatrix1000 extends Synth
                 {
                 if (value == 4)
                     value = (byte)3;  // get rid of extra exponential
-                model.set("portamentomode", value);
+                model.set(key, value);
                 }
-        	else if (key.equals("dco2detune"))
-        		{
-        		value = convertFromSixBitsSigned(value);
-        		model.set("dco2detune", value);
-        		}
+                
+            // Note Bug in Matrix 1000 will fill in bit *8* with a 1 (this is possible because it's split into two nybbles).
+            // It's okay because convertFromSixBitsSigned(...) strips out both bits 7 and 8.  But it means that the dumps
+            // won't be the same.
+                        
+            else if (key.equals("dco2detune"))
+                {
+                value = convertFromSixBitsSigned(value);
+                model.set(key, value);
+                }
+            else if (key.endsWith("mod"))  // 7 bit signed
+                {
+                value = convertFromSevenBitsSigned(value);
+                model.set(key, value);
+                }
+            else if (key.startsWith("mod") && key.endsWith("amount"))
+                {
+                value = convertFromSevenBitsSigned(value);
+                model.set(key, value);
+                }
             else
                 {
                 model.set(key, value);
                 }
             }
-        else
-            {
-            // we'll put CC here later
-            }
-        revise();
-        }
-    */
-        
-    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
-        {
-        //  packing by two nibbles per byte (see http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-OberheimMatrix1000.html)
-        
-        byte[] name = new byte[8];
-        
-        // we don't know the bank, just the number.  :-(
-        int number = data[4];
-		if (!ignorePatch)
-			model.set("number", number);
-			
-        for(int i = 0; i < 134; i++)
-        	{
-        	String key = allParameters[i];
-
-        	// unpack from nybbles
-        	byte lonybble = data[i * 2 + 5];
-        	byte hinybble = data[i * 2 + 5 + 1];
-        	byte value = (byte)(((hinybble << 4) | (lonybble & 15)) & 127);
-
-        	if (i < 8)  // it's the name
-        		name[i] = unpackNameByte(value);
-        	else if (key.equals("dco1fixedmods1"))
-        		{
-                model.set("dco1bend", value & 1);
-                model.set("dco1vibrato", (value >> 1) & 1);
-        		}
-        	else if (key.equals("dco1fixedmods2"))
-        		{
-                model.set("dco1portamento", value & 1);
-        		}
-        	else if (key.equals("dco2fixedmods1"))
-        		{
-                model.set("dco2bend", value & 1);
-                model.set("dco2vibrato", (value >> 1) & 1);
-        		}
-        	else if (key.equals("dco2fixedmods2"))
-        		{
-                model.set("dco2portamento", value & 1);
-                model.set("dco2keytracking", (value >> 1) & 1);
-        		}
-        	else if (key.equals("dco1waveenable"))
-        		{
-                model.set("dco1wave", value & 1);
-                model.set("dco1pulse", (value >> 1) & 1);
-        		}
-        	else if (key.equals("dco2waveenable"))
-        		{
-                model.set("dco2wave", value & 1);
-                model.set("dco2pulse", (value >> 1) & 1);
-                model.set("dco2noise", (value >> 2) & 1);
-        		}
-        	else if (key.equals("vcffixedmods1"))
-        		{
-                model.set("vcfbend", value & 1);
-                model.set("vcfvibrato", (value >> 1) & 1);
-        		}
-        	else if (key.equals("vcffixedmods2"))
-        		{
-                model.set("vcfportamento", value & 1);
-                model.set("vcfkeytracking", (value >> 1) & 1);
-        		}
-        	else if (key.equals("portamentomode"))
-        		{
-                if (value == 4)
-                    value = (byte)3;  // get rid of extra exponential
-                model.set(key, value);
-        		}
-        	
-        	// Note Bug in Matrix 1000 will fill in bit *8* with a 1 (this is possible because it's split into two nybbles).
-        	// It's okay because convertFromSixBitsSigned(...) strips out both bits 7 and 8.  But it means that the dumps
-        	// won't be the same.
-        		
-        	else if (key.equals("dco2detune"))
-        		{
-        		value = convertFromSixBitsSigned(value);
-        		model.set(key, value);
-        		}
-			else if (key.endsWith("mod"))  // 7 bit signed
-				{
-        		value = convertFromSevenBitsSigned(value);
-        		model.set(key, value);
-				}
-        	else if (key.startsWith("mod") && key.endsWith("amount"))
-        		{
-        		value = convertFromSevenBitsSigned(value);
-        		model.set(key, value);
-        		}
-        	else
-        		{
-        		model.set(key, value);
-        		}
-        	}
         
         // update name just for fun, it may be gibberish
-        	try 
-                {
-       			model.set("name", new String(name, "US-ASCII"));
-                }
-            catch (UnsupportedEncodingException e)
-            	{
-            	e.printStackTrace();
-            	}
-            	
-		// to get the bank, we'll extract it from the name.  It appears to be the fourth character
-		int bank = name[3] - '0';
-		if (bank >= 0 && bank <= 9)  // we're okay
-			model.set("bank", bank);
+        try 
+            {
+            model.set("name", new String(name, "US-ASCII"));
+            }
+        catch (UnsupportedEncodingException e)
+            {
+            e.printStackTrace();
+            }
+                
+        // to get the bank, we'll extract it from the name.  It appears to be the fourth character
+        int bank = name[3] - '0';
+        if (bank >= 0 && bank <= 9)  // we're okay
+            model.set("bank", bank);
         
         
         revise();
@@ -1503,270 +1503,273 @@ public class OberheimMatrix1000 extends Synth
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-		byte[] data = new byte[268];
-		String nm = model.get("name", "UNTITLED") + "        ";
-		byte[] name = null;
-		try { name = nm.getBytes("US-ASCII"); } catch (Exception e ) { }
-		int value;
-		byte check = 0;
-		
+        if (tempModel == null)
+            tempModel = getModel();
+
+        byte[] data = new byte[268];
+        String nm = model.get("name", "UNTITLED") + "        ";
+        byte[] name = null;
+        try { name = nm.getBytes("US-ASCII"); } catch (Exception e ) { }
+        int value;
+        byte check = 0;
+                
         for(int i = 0; i < 134; i++)
-        	{
-        	String key = allParameters[i];
-        	
-        	if (i < 8)  // it's the name
-        		value = packNameByte(name[i]);
-        	else if (key.equals("dco1fixedmods1"))
-        		{
+            {
+            String key = allParameters[i];
+                
+            if (i < 8)  // it's the name
+                value = packNameByte(name[i]);
+            else if (key.equals("dco1fixedmods1"))
+                {
                 value = (model.get("dco1vibrato") << 1) |
-                		(model.get("dco1bend"));
-        		}
-        	else if (key.equals("dco1fixedmods2"))
-        		{
+                    (model.get("dco1bend"));
+                }
+            else if (key.equals("dco1fixedmods2"))
+                {
                 value = (model.get("dco1portamento"));
-        		}
-        	else if (key.equals("dco2fixedmods1"))
-        		{
+                }
+            else if (key.equals("dco2fixedmods1"))
+                {
                 value = (model.get("dco2vibrato") << 1) |
-                		(model.get("dco2bend"));
-        		}
-        	else if (key.equals("dco2fixedmods2"))
-        		{
+                    (model.get("dco2bend"));
+                }
+            else if (key.equals("dco2fixedmods2"))
+                {
                 value = (model.get("dco2keytracking") << 1) |
-                		(model.get("dco2portamento"));
-        		}
-        	else if (key.equals("dco1waveenable"))
-        		{
+                    (model.get("dco2portamento"));
+                }
+            else if (key.equals("dco1waveenable"))
+                {
                 value = (model.get("dco1pulse") << 1) |
-                		(model.get("dco1wave"));
-        		}
-        	else if (key.equals("dco2waveenable"))
-        		{
+                    (model.get("dco1wave"));
+                }
+            else if (key.equals("dco2waveenable"))
+                {
                 value = (model.get("dco2noise") << 2) |
-                		(model.get("dco2pulse") << 1) |
-                		(model.get("dco2wave"));
-        		}
-        	else if (key.equals("vcffixedmods1"))
-        		{
+                    (model.get("dco2pulse") << 1) |
+                    (model.get("dco2wave"));
+                }
+            else if (key.equals("vcffixedmods1"))
+                {
                 value = (model.get("vcfvibrato") << 1) |
-                		(model.get("vcfbend"));
-        		}
-        	else if (key.equals("vcffixedmods2"))
-        		{
+                    (model.get("vcfbend"));
+                }
+            else if (key.equals("vcffixedmods2"))
+                {
                 value = (model.get("vcfkeytracking") << 1) |
-                		(model.get("vcfportamento"));
-        		}
-        	else if (key.equals("dco2detune"))	// 6 bit signed
-        		{
-        		value = convertToSixBitsSigned(model.get(key));
-        		}
-			else if (key.endsWith("mod"))  // 7 bit signed
-				{
-        		value = convertToSevenBitsSigned(model.get(key));
-				}
-        	// Note: no need to handle portamentomode specially, but we DO have to parse it specially
-        		
-        	// Ugh, all this below is to deal with the source=destination=0 requirement.  Yuck.
-        	
-        	else if (key.equals("mod1source") || key.equals("mod1destination"))
-        		{
-        		value = model.get(key);
-        		if (model.get("mod1source") == 0 || model.get("mod1destination") == 0)
-        			value = 0;
-        		}
-        	else if (key.equals("mod2source") || key.equals("mod2destination"))
-        		{
-        		value = model.get(key);
-        		if (model.get("mod2source") == 0 || model.get("mod2destination") == 0)
-        			value = 0;
-        		}
-        	else if (key.equals("mod3source") || key.equals("mod3destination"))
-        		{
-        		value = model.get(key);
-        		if (model.get("mod3source") == 0 || model.get("mod3destination") == 0)
-        			value = 0;
-        		}
-        	else if (key.equals("mod4source") || key.equals("mod4destination"))
-        		{
-        		value = model.get(key);
-        		if (model.get("mod4source") == 0 || model.get("mod4destination") == 0)
-        			value = 0;
-        		}
-        	else if (key.equals("mod5source") || key.equals("mod5destination"))
-        		{
-        		value = model.get(key);
-        		if (model.get("mod5source") == 0 || model.get("mod5destination") == 0)
-        			value = 0;
-        		}
-        	else if (key.equals("mod6source") || key.equals("mod6destination"))
-        		{
-        		value = model.get(key);
-        		if (model.get("mod6source") == 0 || model.get("mod6destination") == 0)
-        			value = 0;
-        		}
-        	else if (key.equals("mod7source") || key.equals("mod7destination"))
-        		{
-        		value = model.get(key);
-        		if (model.get("mod7source") == 0 || model.get("mod7destination") == 0)
-        			value = 0;
-        		}
-        	else if (key.equals("mod8source") || key.equals("mod8destination"))
-        		{
-        		value = model.get(key);
-        		if (model.get("mod8source") == 0 || model.get("mod8destination") == 0)
-        			value = 0;
-        		}
-        	else if (key.equals("mod9source") || key.equals("mod9destination"))
-        		{
-        		value = model.get(key);
-        		if (model.get("mod9source") == 0 || model.get("mod9destination") == 0)
-        			value = 0;
-        		}
-        	else if (key.equals("mod10source") || key.equals("mod10destination"))
-        		{
-        		value = model.get(key);
-        		if (model.get("mod10source") == 0 || model.get("mod10destination") == 0)
-        			value = 0;
-        		}
-        	else if (key.startsWith("mod") && key.endsWith("amount"))	// 7 bits signed
-        		{
-        		value = convertToSevenBitsSigned(model.get(key));
-        		}
-        	else
-        		{
-        		value = model.get(key);
-        		}
-        		
-        	// pack to nybbles
-        	byte lonybble = (byte)(value & 15);
-        	byte hinybble = (byte)(value >> 4);
-        	
-        	// From here:  http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-Matrix6R.html
-        	// it says this about the checksum:
-        	//
+                    (model.get("vcfportamento"));
+                }
+            else if (key.equals("dco2detune"))      // 6 bit signed
+                {
+                value = convertToSixBitsSigned(model.get(key));
+                }
+            else if (key.endsWith("mod"))  // 7 bit signed
+                {
+                value = convertToSevenBitsSigned(model.get(key));
+                }
+            // Note: no need to handle portamentomode specially, but we DO have to parse it specially
+                        
+            // Ugh, all this below is to deal with the source=destination=0 requirement.  Yuck.
+                
+            else if (key.equals("mod1source") || key.equals("mod1destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod1source") == 0 || model.get("mod1destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod2source") || key.equals("mod2destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod2source") == 0 || model.get("mod2destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod3source") || key.equals("mod3destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod3source") == 0 || model.get("mod3destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod4source") || key.equals("mod4destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod4source") == 0 || model.get("mod4destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod5source") || key.equals("mod5destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod5source") == 0 || model.get("mod5destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod6source") || key.equals("mod6destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod6source") == 0 || model.get("mod6destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod7source") || key.equals("mod7destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod7source") == 0 || model.get("mod7destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod8source") || key.equals("mod8destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod8source") == 0 || model.get("mod8destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod9source") || key.equals("mod9destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod9source") == 0 || model.get("mod9destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod10source") || key.equals("mod10destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod10source") == 0 || model.get("mod10destination") == 0)
+                    value = 0;
+                }
+            else if (key.startsWith("mod") && key.endsWith("amount"))       // 7 bits signed
+                {
+                value = convertToSevenBitsSigned(model.get(key));
+                }
+            else
+                {
+                value = model.get(key);
+                }
+                        
+            // pack to nybbles
+            byte lonybble = (byte)(value & 15);
+            byte hinybble = (byte)(value >> 4);
+                
+            // From here:  http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-Matrix6R.html
+            // it says this about the checksum:
+            //
             // Checksum.
             // The original (not transmitted) data is summed in seven bits ignoring overflows
             //
             // I think this means to add into a byte, and then mask to 127.
             
-        	check += value;
-        	
-        	// write
-        	data[i * 2] = lonybble;
-        	data[i * 2 + 1] = hinybble;
-        	}
+            check += value;
+                
+            // write
+            data[i * 2] = lonybble;
+            data[i * 2 + 1] = hinybble;
+            }
     
         byte checksum = (byte)(check & 127);
-		byte[] d = new byte[275];
-			d[0] = (byte)0xF0;
-			d[1] = (byte)0x10;
-			d[2] = (byte)0x06;
+        byte[] d = new byte[275];
+        d[0] = (byte)0xF0;
+        d[1] = (byte)0x10;
+        d[2] = (byte)0x06;
 
-		if (toWorkingMemory || toFile)
-			{
-			// 0DH - SINGLE PATCH DATA TO EDIT BUFFER
-			d[3] = (byte)0x0D;
-			d[4] = (byte)0x00;
-			}
-		else
-			{
-			// 01H-SINGLE PATCH DATA
-			d[3] = (byte)0x01;
-			d[4] = (byte)model.get("number");
-			}
+        if (toWorkingMemory)
+            {
+            // 0DH - SINGLE PATCH DATA TO EDIT BUFFER
+            d[3] = (byte)0x0D;
+            d[4] = (byte)0x00;
+            }
+        else
+            {
+            // 01H-SINGLE PATCH DATA
+            d[3] = (byte)0x01;
+            d[4] = (byte)model.get("number");
+            }
 
-		System.arraycopy(data, 0, d, 5, 268);
-		d[273] = checksum;
-		d[274] = (byte)0xF7;
-		
-		return d;
+        System.arraycopy(data, 0, d, 5, 268);
+        d[273] = checksum;
+        d[274] = (byte)0xF7;
+                
+        return d;
         }
         
         
         
     public void changePatch(Model tempModel)
-    	{
- 		// first change the bank
-		
-			// 0AH - SET BANK
-			// we write this store-command as a sysex command 
-			// so it gets stripped when we do a save to file
-			byte[] data2 = new byte[6];
-			data2[0] = (byte)0xF0;
-			data2[1] = (byte)0x10;
-			data2[2] = (byte)0x06;	
-			data2[3] = (byte)0x0A;
-			data2[4] = (byte)(tempModel.get("bank"));
-			data2[5] = (byte)0xF7;
+        {
+        // first change the bank
+                
+        // 0AH - SET BANK
+        // we write this store-command as a sysex command 
+        // so it gets stripped when we do a save to file
+        byte[] data2 = new byte[6];
+        data2[0] = (byte)0xF0;
+        data2[1] = (byte)0x10;
+        data2[2] = (byte)0x06;  
+        data2[3] = (byte)0x0A;
+        data2[4] = (byte)(tempModel.get("bank"));
+        data2[5] = (byte)0xF7;
 
-			tryToSendSysex(data2);
+        tryToSendSysex(data2);
 
-			// 0CH - UNLOCK BANK
-			// we write this store-command as a sysex command 
-			// so it gets stripped when we do a save to file
-			// annoying that this gets re-locked by SET BANK
-			byte[] data = new byte[5];
-			data2[0] = (byte)0xF0;
-			data2[1] = (byte)0x10;
-			data2[2] = (byte)0x06;	
-			data2[3] = (byte)0x0C;
-			data2[4] = (byte)0xF7;
-			
-		// Next do a program change
-		
+        // 0CH - UNLOCK BANK
+        // we write this store-command as a sysex command 
+        // so it gets stripped when we do a save to file
+        // annoying that this gets re-locked by SET BANK
+        byte[] data = new byte[5];
+        data2[0] = (byte)0xF0;
+        data2[1] = (byte)0x10;
+        data2[2] = (byte)0x06;  
+        data2[3] = (byte)0x0C;
+        data2[4] = (byte)0xF7;
+                        
+        // Next do a program change
+                
         byte NN = (byte)tempModel.get("number");
         tryToSendMIDI(buildPC(getChannelOut(), NN));
-    	}
+        }
 
 
-	public byte[] requestDump(Model tempModel)
-		{		
-		// Next do a dump request
-		byte[] data = new byte[7];
+    public byte[] requestDump(Model tempModel)
+        {               
+        // Next do a dump request
+        byte[] data = new byte[7];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x10;
         data[2] = (byte)0x06;
         data[3] = (byte)0x04;
-        data[4] = (byte)0x01;		// request single patch
+        data[4] = (byte)0x01;           // request single patch
         data[5] = (byte)(tempModel.get("number"));
         data[6] = (byte)0xF7;
-    	return data;
-		}
-		
+        return data;
+        }
+                
     public static final int EXPECTED_SYSEX_LENGTH = 275;        
         
     public static boolean recognize(byte[] data)
         {
         boolean v = (
-        	// The Matrix 1000 doesn't transmit the checksum!
-        	// So it could be one of two lengths:
-            (data.length == EXPECTED_SYSEX_LENGTH ||
-             data.length == EXPECTED_SYSEX_LENGTH - 1) &&
+            // The Matrix 1000 doesn't transmit the checksum!
+            // So it could be one of two lengths:
+                (data.length == EXPECTED_SYSEX_LENGTH ||
+                data.length == EXPECTED_SYSEX_LENGTH - 1) &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x10 &&
             data[2] == (byte)0x06 &&
-            data[3] == (byte)0x01);
+            (data[3] == (byte)0x01 || data[3] == (byte)0x0d));
         return v;
         }
         
 
     public static final int MAXIMUM_NAME_LENGTH = 8;
     public String revisePatchName(String name)
-    	{
-    	name = super.revisePatchName(name);  // trim first time
-    	if (name.length() > MAXIMUM_NAME_LENGTH)
-	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
-    	
-        StringBuffer nameb = new StringBuffer(name);        			
-		for(int i = 0 ; i < nameb.length(); i++)
-			{
-			char c = nameb.charAt(i);
+        {
+        name = super.revisePatchName(name);  // trim first time
+        if (name.length() > MAXIMUM_NAME_LENGTH)
+            name = name.substring(0, MAXIMUM_NAME_LENGTH);
+        
+        StringBuffer nameb = new StringBuffer(name);                            
+        for(int i = 0 ; i < nameb.length(); i++)
+            {
+            char c = nameb.charAt(i);
             if (c < 32 || c > 127)
-				nameb.setCharAt(i, ' ');
-			}
-		name = nameb.toString();
-		return super.revisePatchName(name);  // trim again
-    	}
+                nameb.setCharAt(i, ' ');
+            }
+        name = nameb.toString();
+        return super.revisePatchName(name);  // trim again
+        }
 
 
     /** Verify that all the parameters are within valid values, and tweak them if not. */
@@ -1775,10 +1778,10 @@ public class OberheimMatrix1000 extends Synth
         // check the easy stuff -- out of range parameters
         super.revise();
         
-		String nm = model.get("name", "UNTITLED");
-		String newnm = revisePatchName(nm);
-		if (!nm.equals(newnm))
-	        model.set("name", newnm);
+        String nm = model.get("name", "UNTITLED");
+        String newnm = revisePatchName(nm);
+        if (!nm.equals(newnm))
+            model.set("name", newnm);
         }
         
     public int getPauseBetweenMIDISends() { return 50; }

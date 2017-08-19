@@ -157,7 +157,7 @@ public class WaldorfBlofeld extends Synth
                 
     
     public String getDefaultResourceFileName() { return "WaldorfBlofeld.init"; }
-	public String getHTMLResourceFileName() { return "WaldorfBlofeld.html"; }
+    public String getHTMLResourceFileName() { return "WaldorfBlofeld.html"; }
                 
                 
                 
@@ -273,7 +273,7 @@ public class WaldorfBlofeld extends Synth
                 else
                     return "" + (((val - 101) * 5) + 170);
                 }
-			public int getDefaultValue() { return 55; }		// 120 BPM?
+            public int getDefaultValue() { return 55; }             // 120 BPM?
             };
         hbox.add(comp);
 
@@ -318,7 +318,7 @@ public class WaldorfBlofeld extends Synth
                         if (val == 0) return "Rest";
                         else return "" + (((val - 4) * 96) / 3);
                         }
-					public int getDefaultValue() { return 4; }
+                    public int getDefaultValue() { return 4; }
                     };
                 vbox.add(comp);
                 model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "accent", 1);
@@ -335,7 +335,7 @@ public class WaldorfBlofeld extends Synth
                         if (val == 0) return "Legato";
                         else return "" + (val - 4);
                         }
-					public int getDefaultValue() { return 4; }
+                    public int getDefaultValue() { return 4; }
                     };
                 model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "length", 1);
                 vbox.add(comp);
@@ -352,7 +352,7 @@ public class WaldorfBlofeld extends Synth
                         if (val == 0) return "Rand";
                         else return "" + (val - 4);
                         }
-					public int getDefaultValue() { return 4; }
+                    public int getDefaultValue() { return 4; }
                     };
                 model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "timing", 1);
               
@@ -780,11 +780,11 @@ public class WaldorfBlofeld extends Synth
             new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 },
             new double[] { 0, (Math.PI/4/127),   (Math.PI/4/127), 0, (Math.PI/4/127)});
         /*
-        envelopeDisplays[envelope - 1][0] = new EnvelopeDisplay(this, Color.red, 
-            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", null, "envelope" + envelope + "release" },
-            new String[] { null, null, "envelope" + envelope + "sustain", "envelope" + envelope + "sustain", null },
-            new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
-            new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
+          envelopeDisplays[envelope - 1][0] = new EnvelopeDisplay(this, Color.red, 
+          new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", null, "envelope" + envelope + "release" },
+          new String[] { null, null, "envelope" + envelope + "sustain", "envelope" + envelope + "sustain", null },
+          new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
+          new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
         */
 
         // ADS1DS2R
@@ -796,11 +796,11 @@ public class WaldorfBlofeld extends Synth
             new double[] { 0, Math.PI/4/127,  Math.PI/4/127,  Math.PI/4/127, 0,  Math.PI/4/127 });
 
         /*
-        envelopeDisplays[envelope - 1][1] = new EnvelopeDisplay(this, Color.red, 
-            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", null, "envelope" + envelope + "release" },
-            new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", "envelope" + envelope + "sustain2", null },
-            new double[] { 0, 0.2/127.0, 0.2 / 127.0,   0.2/127.0, 0.2, 0.2/127.0},
-            new double[] { 0, 1.0/127.0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 });
+          envelopeDisplays[envelope - 1][1] = new EnvelopeDisplay(this, Color.red, 
+          new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", null, "envelope" + envelope + "release" },
+          new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", "envelope" + envelope + "sustain2", null },
+          new double[] { 0, 0.2/127.0, 0.2 / 127.0,   0.2/127.0, 0.2, 0.2/127.0},
+          new double[] { 0, 1.0/127.0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 });
         */
 
         // One Shot
@@ -811,12 +811,12 @@ public class WaldorfBlofeld extends Synth
             new double[] { 0, 1.0, 1.0 / 127.0, 0 },
             new double[] { 0, Math.PI/4/127, Math.PI/4/127, Math.PI/4/127 });
 
-		/*
-        envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Color.red, 
-            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "release" },
-            new String[] { null, null, "envelope" + envelope + "sustain", null },
-            new double[] { 0, 0.33333333/127.0, 0.33333333/ 127.0, 0.33333333/127.0},
-            new double[] { 0, 1.0, 1.0 / 127.0, 0 });
+        /*
+          envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Color.red, 
+          new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "release" },
+          new String[] { null, null, "envelope" + envelope + "sustain", null },
+          new double[] { 0, 0.33333333/127.0, 0.33333333/ 127.0, 0.33333333/127.0},
+          new double[] { 0, 1.0, 1.0 / 127.0, 0 });
         */
                         
         // Loop S1S2
@@ -828,14 +828,14 @@ public class WaldorfBlofeld extends Synth
             new double[] { 0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 },
             new double[] { 0, Math.PI/4/127, Math.PI/4/127, Math.PI/4/127, Math.PI/4/127});
 
-		/*
-        envelopeDisplays[envelope - 1][3] = new EnvelopeDisplay(this, Color.red, 
-            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", "envelope" + envelope + "release" },
-            new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", null },
-            new double[] { 0, 0.25/127.0, 0.25 / 127.0, 0.25/127.0, 0.25/127.0 },
-            new double[] { 0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 });
-		*/
-		
+        /*
+          envelopeDisplays[envelope - 1][3] = new EnvelopeDisplay(this, Color.red, 
+          new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", "envelope" + envelope + "release" },
+          new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", null },
+          new double[] { 0, 0.25/127.0, 0.25 / 127.0, 0.25/127.0, 0.25/127.0 },
+          new double[] { 0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 });
+        */
+                
         // Loop All is the same as Loop S1S2
         envelopeDisplays[envelope - 1][4] = envelopeDisplays[envelope - 1][3];
                 
@@ -939,21 +939,21 @@ public class WaldorfBlofeld extends Synth
 
     public static final int MAXIMUM_NAME_LENGTH = 16;
     public String revisePatchName(String name)
-    	{
-    	name = super.revisePatchName(name);  // trim first time
-    	if (name.length() > MAXIMUM_NAME_LENGTH)
-	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
-    	
-        StringBuffer nameb = new StringBuffer(name);        			
-		for(int i = 0 ; i < nameb.length(); i++)
-			{
-			char c = nameb.charAt(i);
+        {
+        name = super.revisePatchName(name);  // trim first time
+        if (name.length() > MAXIMUM_NAME_LENGTH)
+            name = name.substring(0, MAXIMUM_NAME_LENGTH);
+        
+        StringBuffer nameb = new StringBuffer(name);                            
+        for(int i = 0 ; i < nameb.length(); i++)
+            {
+            char c = nameb.charAt(i);
             if (c < 32 || c > 127)
-				nameb.setCharAt(i, ' ');
-			}
-		name = nameb.toString();
-		return super.revisePatchName(name);  // trim again
-    	}
+                nameb.setCharAt(i, ' ');
+            }
+        name = nameb.toString();
+        return super.revisePatchName(name);  // trim again
+        }
 
 
 
@@ -990,9 +990,9 @@ public class WaldorfBlofeld extends Synth
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
             public String replace(String val)
-            	{
-            	return revisePatchName(val);
-            	}
+                {
+                return revisePatchName(val);
+                }
                                 
             public void update(String key, Model model)
                 {
@@ -1186,9 +1186,9 @@ public class WaldorfBlofeld extends Synth
                 params[i] = "User " + (i - 6);
             if (osc == 3) params = WAVES_SHORT;
 
-			// due to a bug, the chooser's gonna freak here, so we
-			// turn off its action listener
-			chooser.setCallActionListener(false);
+            // due to a bug, the chooser's gonna freak here, so we
+            // turn off its action listener
+            chooser.setCallActionListener(false);
             chooser.setElements("Wave", params);
                         
             // restore old wave index
@@ -1212,9 +1212,9 @@ public class WaldorfBlofeld extends Synth
                 params[i] = "" + (i + 1) + "              ";
             //chooser.setElements("Sample Bank " + SAMPLE_BANKS[bank], params);
 
-			// due to a bug, the chooser's gonna freak here, so we
-			// turn off its action listener
-			chooser.setCallActionListener(false);
+            // due to a bug, the chooser's gonna freak here, so we
+            // turn off its action listener
+            chooser.setCallActionListener(false);
             chooser.setElements("Sample", params); 
                         
             // restore old sample index
@@ -1291,7 +1291,7 @@ public class WaldorfBlofeld extends Synth
                 String[] oct = OSCILLATOR_OCTAVES;
                 return oct[val];
                 }
-			public int getDefaultValue() { return 4; }                
+            public int getDefaultValue() { return 4; }                
             };
         hbox.add(comp);
                 
@@ -2220,7 +2220,7 @@ public class WaldorfBlofeld extends Synth
         return b;
         }
 
-	public int getPauseAfterChangePatch() { return 200; }
+    public int getPauseAfterChangePatch() { return 200; }
 
     public void changePatch(Model tempModel)
         {
@@ -2233,7 +2233,7 @@ public class WaldorfBlofeld extends Synth
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0));
             }
         catch (Exception e) { e.printStackTrace(); }
-       }
+        }
 
     public byte[] requestDump(Model tempModel)
         {
@@ -2321,10 +2321,10 @@ public class WaldorfBlofeld extends Synth
         // check the easy stuff -- out of range parameters
         super.revise();
 
-		String nm = model.get("name", "Init");
-		String newnm = revisePatchName(nm);
-		if (!nm.equals(newnm))
-	        model.set("name", newnm);
+        String nm = model.get("name", "Init");
+        String newnm = revisePatchName(nm);
+        if (!nm.equals(newnm))
+            model.set("name", newnm);
         }
         
     public static String getSynthName() { return "Waldorf Blofeld"; }
@@ -2332,27 +2332,27 @@ public class WaldorfBlofeld extends Synth
     public String getPatchName() { return model.get("name", "Init"); }
     
     public byte getID() 
-    	{ 
-    	try 
-    		{ 
-    		byte b = (byte)(Byte.parseByte(tuple.id));
-    		if (b >= 0) return b;
-    		}
-    	catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-    	catch (NumberFormatException e) { e.printStackTrace(); }
-    	return 0;
-    	}
-    	
+        { 
+        try 
+            { 
+            byte b = (byte)(Byte.parseByte(tuple.id));
+            if (b >= 0) return b;
+            }
+        catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
+        catch (NumberFormatException e) { e.printStackTrace(); }
+        return 0;
+        }
+        
     public String reviseID(String id)
-    	{
-    	try 
-    		{ 
-    		byte b =(byte)(Byte.parseByte(id)); 
-    		if (b >= 0) return "" + b;
-    		} 
-    	catch (NumberFormatException e) { }		// expected
-    	return "" + getID();
-    	}
+        {
+        try 
+            { 
+            byte b =(byte)(Byte.parseByte(id)); 
+            if (b >= 0) return "" + b;
+            } 
+        catch (NumberFormatException e) { }             // expected
+        return "" + getID();
+        }
 
     }
     

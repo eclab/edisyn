@@ -181,7 +181,7 @@ public class WaldorfBlofeldMulti extends Synth
         }
 
     public String getDefaultResourceFileName() { return "WaldorfBlofeldMulti.init"; }
-	public String getHTMLResourceFileName() { return "WaldorfBlofeldMulti.html"; }
+    public String getHTMLResourceFileName() { return "WaldorfBlofeldMulti.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
@@ -238,9 +238,9 @@ public class WaldorfBlofeldMulti extends Synth
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {            
             public String replace(String val)
-            	{
-            	return revisePatchName(val);
-            	}
+                {
+                return revisePatchName(val);
+                }
                                 
             public void update(String key, Model model)
                 {
@@ -287,7 +287,7 @@ public class WaldorfBlofeldMulti extends Synth
                 else
                     return "" + (((val - 101) * 5) + 170);
                 }
-			public int getDefaultValue() { return 55; }		// 120 BPM
+            public int getDefaultValue() { return 55; }             // 120 BPM
             };
         hbox.add(comp);
         
@@ -331,7 +331,7 @@ public class WaldorfBlofeldMulti extends Synth
                 {
                 final WaldorfBlofeld synth = new WaldorfBlofeld();
                 if (tuple != null)
-	                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
                 if (synth.tuple != null)
                     {       
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -361,9 +361,9 @@ public class WaldorfBlofeldMulti extends Synth
                             });
                     }
                 else
-                	{
-                	showSimpleError("Disconnected", "You can't show a patch when disconnected.");
-                	}
+                    {
+                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                    }
                 }
             };
         hbox2.add(comp);
@@ -938,7 +938,7 @@ public class WaldorfBlofeldMulti extends Synth
         if (tempModel == null)
             tempModel = getModel();
         byte DEV = (byte)(getID());
-        byte BB = (byte) tempModel.get("bank");
+        byte BB = (byte) 0x0;  // multis have only 1 bank
         byte NN = (byte) tempModel.get("number");
         if (toWorkingMemory) { BB = 0x7F; NN = 0x0; }                   // don't know if this is right
         
@@ -1068,31 +1068,31 @@ public class WaldorfBlofeldMulti extends Synth
         super.revise();
 
         // handle "name" specially
-		String nm = model.get("name", "Init Multi");
-		String newnm = revisePatchName(nm);
-		if (!nm.equals(newnm))
-	        model.set("name", newnm);
+        String nm = model.get("name", "Init Multi");
+        String newnm = revisePatchName(nm);
+        if (!nm.equals(newnm))
+            model.set("name", newnm);
         }
         
 
 
     public static final int MAXIMUM_NAME_LENGTH = 16;
     public String revisePatchName(String name)
-    	{
-    	name = super.revisePatchName(name);  // trim first time
-    	if (name.length() > MAXIMUM_NAME_LENGTH)
-	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
-    	
-        StringBuffer nameb = new StringBuffer(name);        			
-		for(int i = 0 ; i < nameb.length(); i++)
-			{
-			char c = nameb.charAt(i);
+        {
+        name = super.revisePatchName(name);  // trim first time
+        if (name.length() > MAXIMUM_NAME_LENGTH)
+            name = name.substring(0, MAXIMUM_NAME_LENGTH);
+        
+        StringBuffer nameb = new StringBuffer(name);                            
+        for(int i = 0 ; i < nameb.length(); i++)
+            {
+            char c = nameb.charAt(i);
             if (c < 32 || c > 127)
-				nameb.setCharAt(i, ' ');
-			}
-		name = nameb.toString();
-		return super.revisePatchName(name);  // trim again
-    	}
+                nameb.setCharAt(i, ' ');
+            }
+        name = nameb.toString();
+        return super.revisePatchName(name);  // trim again
+        }
 
 
 
@@ -1175,25 +1175,25 @@ public class WaldorfBlofeldMulti extends Synth
     public String getPatchName() { return model.get("name", "Init Multi"); }
     
     public byte getID() 
-    	{ 
-    	try 
-    		{ 
-    		byte b = (byte)(Byte.parseByte(tuple.id));
-    		if (b >= 0) return b;
-    		}
-    	catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-    	catch (NumberFormatException e) { e.printStackTrace(); }
-    	return 0;
-    	}
-    	
+        { 
+        try 
+            { 
+            byte b = (byte)(Byte.parseByte(tuple.id));
+            if (b >= 0) return b;
+            }
+        catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
+        catch (NumberFormatException e) { e.printStackTrace(); }
+        return 0;
+        }
+        
     public String reviseID(String id)
-    	{
-    	try 
-    		{ 
-    		byte b =(byte)(Byte.parseByte(id)); 
-    		if (b >= 0) return "" + b;
-    		} 
-    	catch (NumberFormatException e) { }		// expected
-    	return "" + getID();
-    	}
+        {
+        try 
+            { 
+            byte b =(byte)(Byte.parseByte(id)); 
+            if (b >= 0) return "" + b;
+            } 
+        catch (NumberFormatException e) { }             // expected
+        return "" + getID();
+        }
     }

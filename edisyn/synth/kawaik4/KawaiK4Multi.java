@@ -89,14 +89,14 @@ public class KawaiK4Multi extends Synth
         
         model.set("name", "Init Patch");  // has to be 10 long
         
-    	model.set("number", 0);
-    	model.set("bank", 0);
+        model.set("number", 0);
+        model.set("bank", 0);
 
         loadDefaults();        
         }
                 
     public String getDefaultResourceFileName() { return "KawaiK4Multi.init"; }
-	public String getHTMLResourceFileName() { return "KawaiK4Multi.html"; }
+    public String getHTMLResourceFileName() { return "KawaiK4Multi.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
@@ -160,9 +160,9 @@ public class KawaiK4Multi extends Synth
         comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 10 ASCII characters.")
             {
             public String replace(String val)
-            	{
-            	return revisePatchName(val);
-            	}
+                {
+                return revisePatchName(val);
+                }
                                 
             public void update(String key, Model model)
                 {
@@ -193,19 +193,19 @@ public class KawaiK4Multi extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Effect [K4]", this, "effect", color, 0, 31, -1);
-    	((LabelledDial)comp).addAdditionalLabel("Output [K4r]");
+        ((LabelledDial)comp).addAdditionalLabel("Output [K4r]");
         model.removeMetricMinMax("effect");
         hbox.add(comp);
 
 
-		VBox vbox = new VBox();
+        VBox vbox = new VBox();
         comp = new PushButton("Show Effect/Ouput")
             {
             public void perform()
                 {
                 final KawaiK4Effect synth = new KawaiK4Effect();
                 if (tuple != null)
-	                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
                 if (synth.tuple != null)
                     {
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -229,14 +229,15 @@ public class KawaiK4Multi extends Synth
                                 { 
                                 Model tempModel = new Model();
                                 tempModel.set("number", KawaiK4Multi.this.model.get("effect"));
+                                tempModel.set("bank", KawaiK4Multi.this.model.get("bank"));
                                 synth.performRequestDump(tempModel, false);
                                 }
                             });
                     }
                 else
-                	{
-                	showSimpleError("Disconnected", "You can't show a patch when disconnected.");
-                	}
+                    {
+                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                    }
                 }
             };
         vbox.add(comp);
@@ -275,7 +276,7 @@ public class KawaiK4Multi extends Synth
                 {
                 final KawaiK4 synth = new KawaiK4();
                 if (tuple != null)
-	                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
                 if (synth.tuple != null)
                     {
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -305,9 +306,9 @@ public class KawaiK4Multi extends Synth
                             });
                     }
                 else
-                	{
-                	showSimpleError("Disconnected", "You can't show a patch when disconnected.");
-                	}
+                    {
+                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                    }
                 }
             };
         hbox2.addLast(comp);
@@ -393,147 +394,147 @@ public class KawaiK4Multi extends Synth
         }
 
 
-	HashMap allParametersToIndex = new HashMap();
-	
-	final static String[] allParameters = new String[]
-		{
-		"name1",
-		"name2",
-		"name3",
-		"name4",
-		"name5",
-		"name6",
-		"name7",
-		"name8",
-		"name9",
-		"name10",
-		"volume",
-		"effect",
-		
-		"section1singleno",			// *
-		"section1lowkey",
-		"section1highkey",
-		"section1rcvch_velosw_mute",	// *
-		"section1mode_outselect",	//*
-		"section1level",
-		"section1transpose",
-		"section1tune",
-		
-		"section2singleno",			// *
-		"section2lowkey",
-		"section2highkey",
-		"section2rcvch_velosw_mute",	// *
-		"section2mode_outselect",	//*
-		"section2level",
-		"section2transpose",
-		"section2tune",
+    HashMap allParametersToIndex = new HashMap();
+        
+    final static String[] allParameters = new String[]
+    {
+    "name1",
+    "name2",
+    "name3",
+    "name4",
+    "name5",
+    "name6",
+    "name7",
+    "name8",
+    "name9",
+    "name10",
+    "volume",
+    "effect",
+                
+    "section1singleno",                     // *
+    "section1lowkey",
+    "section1highkey",
+    "section1rcvch_velosw_mute",    // *
+    "section1mode_outselect",       //*
+    "section1level",
+    "section1transpose",
+    "section1tune",
+                
+    "section2singleno",                     // *
+    "section2lowkey",
+    "section2highkey",
+    "section2rcvch_velosw_mute",    // *
+    "section2mode_outselect",       //*
+    "section2level",
+    "section2transpose",
+    "section2tune",
 
-		"section3singleno",			// *
-		"section3lowkey",
-		"section3highkey",
-		"section3rcvch_velosw_mute",	// *
-		"section3mode_outselect",	//*
-		"section3level",
-		"section3transpose",
-		"section3tune",
+    "section3singleno",                     // *
+    "section3lowkey",
+    "section3highkey",
+    "section3rcvch_velosw_mute",    // *
+    "section3mode_outselect",       //*
+    "section3level",
+    "section3transpose",
+    "section3tune",
 
-		"section4singleno",			// *
-		"section4lowkey",
-		"section4highkey",
-		"section4rcvch_velosw_mute",	// *
-		"section4mode_outselect",	//*
-		"section4level",
-		"section4transpose",
-		"section4tune",
+    "section4singleno",                     // *
+    "section4lowkey",
+    "section4highkey",
+    "section4rcvch_velosw_mute",    // *
+    "section4mode_outselect",       //*
+    "section4level",
+    "section4transpose",
+    "section4tune",
 
-		"section5singleno",			// *
-		"section5lowkey",
-		"section5highkey",
-		"section5rcvch_velosw_mute",	// *
-		"section5mode_outselect",	//*
-		"section5level",
-		"section5transpose",
-		"section5tune",
+    "section5singleno",                     // *
+    "section5lowkey",
+    "section5highkey",
+    "section5rcvch_velosw_mute",    // *
+    "section5mode_outselect",       //*
+    "section5level",
+    "section5transpose",
+    "section5tune",
 
-		"section6singleno",			// *
-		"section6lowkey",
-		"section6highkey",
-		"section6rcvch_velosw_mute",	// *
-		"section6mode_outselect",	//*
-		"section6level",
-		"section6transpose",
-		"section6tune",
+    "section6singleno",                     // *
+    "section6lowkey",
+    "section6highkey",
+    "section6rcvch_velosw_mute",    // *
+    "section6mode_outselect",       //*
+    "section6level",
+    "section6transpose",
+    "section6tune",
 
-		"section7singleno",			// *
-		"section7lowkey",
-		"section7highkey",
-		"section7rcvch_velosw_mute",	// *
-		"section7mode_outselect",	//*
-		"section7level",
-		"section7transpose",
-		"section7tune",
+    "section7singleno",                     // *
+    "section7lowkey",
+    "section7highkey",
+    "section7rcvch_velosw_mute",    // *
+    "section7mode_outselect",       //*
+    "section7level",
+    "section7transpose",
+    "section7tune",
 
-		"section8singleno",			// *
-		"section8lowkey",
-		"section8highkey",
-		"section8rcvch_velosw_mute",	// *
-		"section8mode_outselect",	//*
-		"section8level",
-		"section8transpose",
-		"section8tune"
-		
-		};
+    "section8singleno",                     // *
+    "section8lowkey",
+    "section8highkey",
+    "section8rcvch_velosw_mute",    // *
+    "section8mode_outselect",       //*
+    "section8level",
+    "section8transpose",
+    "section8tune"
+                
+    };
 
 
 
 
     public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
-		model.set("bank", ((data[7] - 64) / 16) + (data[6] == 0x00 ? 0 : 4));
-		model.set("number", (data[7] - 64) % 16);
-			
-		byte[] name = new byte[10];
+        model.set("bank", ((data[7] - 64) / 16) + (data[6] == 0x00 ? 0 : 4));
+        model.set("number", (data[7] - 64) % 16);
+                        
+        byte[] name = new byte[10];
 
-    	// The K4 is riddled with byte-mangling.  :-(
-    	
-    	for(int i = 0; i < 76; i++)
-    		{
-    		int section = (i - 12) / 8 + 1;
+        // The K4 is riddled with byte-mangling.  :-(
+        
+        for(int i = 0; i < 76; i++)
+            {
+            int section = (i - 12) / 8 + 1;
 
-    		String key = allParameters[i];
-    		    		
-			if (i < 10)  // name
-				{
-				name[i] = data[i + 8];
-				}
-			else if (key.endsWith("singleno"))
-				{
-				model.set("section" + section + "bank", data[i + 8] / 16);
-				model.set("section" + section + "number", data[i + 8] % 16);
-				}
-			else if (key.endsWith("rcvch_velosw_mute"))
-				{
-				model.set("section" + section + "channel", data[i + 8] & 15);
-				model.set("section" + section + "velocitysw", (data[i + 8] >> 4) & 3);
-				model.set("section" + section + "mute", (data[i + 8] >> 6) & 1);
-				}
-			else if (key.endsWith("mode_outselect"))
-				{
-				model.set("section" + section + "submix", data[i + 8] & 7);
-				model.set("section" + section + "playmode", (data[i + 8] >> 3) & 3);
-				}
-			else
-				{
-				model.set(key, data[i + 8]);
-				}
-			}
+            String key = allParameters[i];
+                                
+            if (i < 10)  // name
+                {
+                name[i] = data[i + 8];
+                }
+            else if (key.endsWith("singleno"))
+                {
+                model.set("section" + section + "bank", data[i + 8] / 16);
+                model.set("section" + section + "number", data[i + 8] % 16);
+                }
+            else if (key.endsWith("rcvch_velosw_mute"))
+                {
+                model.set("section" + section + "channel", data[i + 8] & 15);
+                model.set("section" + section + "velocitysw", (data[i + 8] >> 4) & 3);
+                model.set("section" + section + "mute", (data[i + 8] >> 6) & 1);
+                }
+            else if (key.endsWith("mode_outselect"))
+                {
+                model.set("section" + section + "submix", data[i + 8] & 7);
+                model.set("section" + section + "playmode", (data[i + 8] >> 3) & 3);
+                }
+            else
+                {
+                model.set(key, data[i + 8]);
+                }
+            }
 
-			try { model.set("name", new String(name, "US-ASCII")); }
-			catch (UnsupportedEncodingException e) { e.printStackTrace(); }
+        try { model.set("name", new String(name, "US-ASCII")); }
+        catch (UnsupportedEncodingException e) { e.printStackTrace(); }
 
 
-	        revise();
-    	    return true;            // change this as appropriate
+        revise();
+        return true;            // change this as appropriate
         }
     
     /** Generate a K4 checksum of the data bytes */
@@ -541,7 +542,7 @@ public class KawaiK4Multi extends Synth
         {
         //      The K4 manual says the checksum is the
         //              "Sum of the A5H and s0~s129".
-        //		I believe this is A5 + sum(s0...s129) ignoring overflow, cut to 7 bits
+        //              I believe this is A5 + sum(s0...s129) ignoring overflow, cut to 7 bits
 
         int checksum = 0xA5;
         for(int i = 0; i < bytes.length; i++)
@@ -551,99 +552,94 @@ public class KawaiK4Multi extends Synth
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-    	byte[] data = new byte[76];
-    
-    	String name = model.get("name", "Untitled") + "          ";
-    	
-    	// The K4 is riddled with byte-mangling.  :-(
-    	
-    	for(int i = 0; i < 76; i++)
-    		{
-    		int section = (i - 12) / 8 + 1;
-	   		String key = allParameters[i];
-    		    		
-			if (i < 10)  // name
-				{
-				data[i] = (byte)name.charAt(i);
-				}
-			else if (key.endsWith("singleno"))
-				{
-				data[i] = (byte)(model.get("section" + section + "bank") * 16 + model.get("section" + section + "number"));
-				}
-			else if (key.endsWith("rcvch_velosw_mute"))
-				{
-				data[i] = (byte)((model.get("section" + section + "mute") << 6) | (model.get("section" + section + "velocitysw") << 4) | (model.get("section" + section + "channel")));
-				} 
-			else if (key.endsWith("mode_outselect"))
-				{
-				data[i] = (byte)((model.get("section" + section + "playmode") << 3) | (model.get("section" + section + "submix")));
-				}
-			else
-				{
-				data[i] = (byte)(model.get(key));
-				}
-			}
+        if (tempModel == null)
+            tempModel = getModel();
 
-		// Error in Section 4-1, see "Corrected MIDI Implementation"
+        byte[] data = new byte[76];
+    
+        String name = model.get("name", "Untitled") + "          ";
+        
+        // The K4 is riddled with byte-mangling.  :-(
+        
+        for(int i = 0; i < 76; i++)
+            {
+            int section = (i - 12) / 8 + 1;
+            String key = allParameters[i];
+                                
+            if (i < 10)  // name
+                {
+                data[i] = (byte)name.charAt(i);
+                }
+            else if (key.endsWith("singleno"))
+                {
+                data[i] = (byte)(model.get("section" + section + "bank") * 16 + model.get("section" + section + "number"));
+                }
+            else if (key.endsWith("rcvch_velosw_mute"))
+                {
+                data[i] = (byte)((model.get("section" + section + "mute") << 6) | (model.get("section" + section + "velocitysw") << 4) | (model.get("section" + section + "channel")));
+                } 
+            else if (key.endsWith("mode_outselect"))
+                {
+                data[i] = (byte)((model.get("section" + section + "playmode") << 3) | (model.get("section" + section + "submix")));
+                }
+            else
+                {
+                data[i] = (byte)(model.get(key));
+                }
+            }
+
+        // Error in Section 4-1, see "Corrected MIDI Implementation"
 
         boolean external;
         byte position;
         
-		if (tempModel != null)
-			{
-        	external = (tempModel.get("bank") > 3);
-			position = (byte)((tempModel.get("bank") & 3) * 16 + (tempModel.get("number")) + 64);  // 0...63 for A1 .... D16
-			}
-		else
-			{
-        	external = (model.get("bank") > 3);
-			position = (byte)((model.get("bank") & 3) * 16 + (model.get("number")) + 64);  // 0...63 for A1 .... D16
-			}
-			
-		byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
-		result[0] = (byte)0xF0;
-		result[1] = (byte)0x40;
-		result[2] = (byte)getChannelOut();
-		if (toWorkingMemory)
-			result[3] = (byte)0x23;
-		else
-			result[3] = (byte)0x20;
-		result[4] = (byte)0x00;
-		result[5] = (byte)0x04;
-		if (toWorkingMemory)
-			result[6] = 0x00;	// Error in Section 5-12: missing parameter value (should be 0 for toWorkingMemory)
-		else
-			result[6] = (byte)(external ? 0x02 : 0x00);
-		if (toWorkingMemory)
-			result[7] = (byte)(0x40);  // indicates multi.  Error in the manual, it should be 0x000000 not 000x0000
-		else
-			result[7] = (byte)position;
-		System.arraycopy(data, 0, result, 8, data.length);
-		result[8 + data.length] = (byte)produceChecksum(data);
-		result[9 + data.length] = (byte)0xF7;
-		return result;
+        external = (tempModel.get("bank") > 3);
+        position = (byte)((tempModel.get("bank") & 3) * 16 + (tempModel.get("number")) + 64);  // 0...63 for A1 .... D16
+                        
+        byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
+        result[0] = (byte)0xF0;
+        result[1] = (byte)0x40;
+        result[2] = (byte)getChannelOut();
+        if (toWorkingMemory)
+            result[3] = (byte)0x23;
+        else
+            result[3] = (byte)0x20;
+        result[4] = (byte)0x00;
+        result[5] = (byte)0x04;
+        if (toWorkingMemory)
+            result[6] = 0x00;       // Error in Section 5-12: missing parameter value (should be 0 for toWorkingMemory)
+        else
+            result[6] = (byte)(external ? 0x02 : 0x00);
+        if (toWorkingMemory)
+            result[7] = (byte)(0x40);  // indicates multi.  Error in the manual, it should be 0x000000 not 000x0000
+        else
+            result[7] = (byte)position;
+        System.arraycopy(data, 0, result, 8, data.length);
+        result[8 + data.length] = (byte)produceChecksum(data);
+        result[9 + data.length] = (byte)0xF7;
+        return result;
         }
 
 
     public byte[] requestDump(Model tempModel)
         {
         boolean external = (tempModel.get("bank") > 3);
-		byte position = (byte)((tempModel.get("bank") & 3) * 16 + (tempModel.get("number")) + 64);  // 64 for "multi", that is, 64...127 for A1 .... D16
+        byte position = (byte)((tempModel.get("bank") & 3) * 16 + (tempModel.get("number")) + 64);  // 64 for "multi", that is, 64...127 for A1 .... D16
         return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x00, 0x00, 0x04, 
-        			(byte)(external ? 0x02 : 0x00),
-        			position, (byte)0xF7};
+            (byte)(external ? 0x02 : 0x00),
+            position, (byte)0xF7};
         }
                 
     public static boolean recognize(byte[] data)
         {
         return (data.length == EXPECTED_SYSEX_LENGTH &&
-				data[0] == (byte)0xF0 &&
-				data[1] == (byte)0x40 &&
-				data[3] == (byte)0x20 &&
-				data[4] == (byte)0x00 &&
-				data[5] == (byte)0x04 &&
-				(data[6] == (byte)0x00 || data[6] == (byte)0x02) &&
-				data[7] >= 64);  // that is, it's multi, not single
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x40 &&
+            data[3] == (byte)0x20 &&
+            data[4] == (byte)0x00 &&
+            data[5] == (byte)0x04 &&
+            (data[6] == (byte)0x00 || data[6] == (byte)0x02) &&
+            data[7] >= 64);  // that is, it's multi, not single
         }
         
 
@@ -652,21 +648,21 @@ public class KawaiK4Multi extends Synth
     
     public static final int MAXIMUM_NAME_LENGTH = 10;
     public String revisePatchName(String name)
-    	{
-    	name = super.revisePatchName(name);  // trim first time
-    	if (name.length() > MAXIMUM_NAME_LENGTH)
-	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
-    	
-        StringBuffer nameb = new StringBuffer(name);        			
-		for(int i = 0 ; i < nameb.length(); i++)
-			{
-			char c = nameb.charAt(i);
+        {
+        name = super.revisePatchName(name);  // trim first time
+        if (name.length() > MAXIMUM_NAME_LENGTH)
+            name = name.substring(0, MAXIMUM_NAME_LENGTH);
+        
+        StringBuffer nameb = new StringBuffer(name);                            
+        for(int i = 0 ; i < nameb.length(); i++)
+            {
+            char c = nameb.charAt(i);
             if (c < 32 || c > 127)
-				nameb.setCharAt(i, ' ');
-			}
-		name = nameb.toString();
-		return super.revisePatchName(name);  // trim again
-    	}        
+                nameb.setCharAt(i, ' ');
+            }
+        name = nameb.toString();
+        return super.revisePatchName(name);  // trim again
+        }        
 
         
     /** Verify that all the parameters are within valid values, and tweak them if not. */
@@ -675,21 +671,21 @@ public class KawaiK4Multi extends Synth
         // check the easy stuff -- out of range parameters
         super.revise();
 
-		String nm = model.get("name", "Init");
-		String newnm = revisePatchName(nm);
-		if (!nm.equals(newnm))
-	        model.set("name", newnm);
+        String nm = model.get("name", "Init");
+        String newnm = revisePatchName(nm);
+        if (!nm.equals(newnm))
+            model.set("name", newnm);
         }
         
     public static String getSynthName() { return "Kawai K4/K4r [Multi]"; }
     
     public String getPatchName() { return model.get("name", "Untitled  "); }
 
-	public int getPauseAfterChangePatch() { return 200; }	// Seem to need about > 100ms
+    public int getPauseAfterChangePatch() { return 200; }   // Seem to need about > 100ms
 
     public void changePatch(Model tempModel)
-    	{
-    	byte BB = (byte)tempModel.get("bank");
+        {
+        byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");
         
         // first switch to internal or external
@@ -700,7 +696,7 @@ public class KawaiK4Multi extends Synth
         data[3] = (byte)0x30;
         data[4] = (byte)0x00;
         data[5] = (byte)0x04;
-        data[6] = (byte)(BB < 4 ? 0x00 : 0x02);	// 0x00 is internal, 0x02 is external
+        data[6] = (byte)(BB < 4 ? 0x00 : 0x02); // 0x00 is internal, 0x02 is external
         data[7] = (byte)0xF7;
         
         tryToSendSysex(data);
@@ -710,11 +706,11 @@ public class KawaiK4Multi extends Synth
         if (BB >= 4) BB -= 4;
         int PC = (BB * 16 + NN) + 64;  // 64 for Multi
         try 
-        	{
+            {
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }
         catch (Exception e) { e.printStackTrace(); }
-		}
+        }
 
 
 

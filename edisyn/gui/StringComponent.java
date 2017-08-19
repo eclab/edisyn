@@ -58,8 +58,8 @@ public class StringComponent extends JComponent implements Updatable
         }
       
     /** Override this method to replace the string with a valid one.  The default
-    	returns null, which instructs StringComponent to instead call isValid() and
-    	report to the user that the name is not valid. */
+        returns null, which instructs StringComponent to instead call isValid() and
+        report to the user that the name is not valid. */
     public String replace(String val)
         {
         return null;
@@ -108,35 +108,35 @@ public class StringComponent extends JComponent implements Updatable
                     JTextField text = new JTextField(maxLength);
                     vbox.add(text);
                     int opt = JOptionPane.showOptionDialog(StringComponent.this, vbox, _label,
-                    				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Enter",  "Cancel", "Rules"}, "Enter");
+                        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Enter",  "Cancel", "Rules"}, "Enter");
 
-                    if (opt == JOptionPane.CANCEL_OPTION) 	// this is "Rules"
-                    	{
-                    	JOptionPane.showMessageDialog(StringComponent.this, instructions, "Rules", JOptionPane.INFORMATION_MESSAGE);
-                    	}
+                    if (opt == JOptionPane.CANCEL_OPTION)       // this is "Rules"
+                        {
+                        JOptionPane.showMessageDialog(StringComponent.this, instructions, "Rules", JOptionPane.INFORMATION_MESSAGE);
+                        }
                     else if (opt == JOptionPane.NO_OPTION)  // this is "Cancel"
-                    	{ 
-                    	return; 
-                    	}
+                        { 
+                        return; 
+                        }
                     else
-                    	{
-						String result = convert(text.getText());
-						if (result == null) return;
-						String str = replace(result);
-						if (str == null)
-							{
-							if (isValid(result))
-								{ 
-								setText(result); 
-								return;
-								}
-							}
-						else
-							{
-							setText(str); 
-							return;
-							}
-						}
+                        {
+                        String result = convert(text.getText());
+                        if (result == null) return;
+                        String str = replace(result);
+                        if (str == null)
+                            {
+                            if (isValid(result))
+                                { 
+                                setText(result); 
+                                return;
+                                }
+                            }
+                        else
+                            {
+                            setText(str); 
+                            return;
+                            }
+                        }
                     }
                 }
             });

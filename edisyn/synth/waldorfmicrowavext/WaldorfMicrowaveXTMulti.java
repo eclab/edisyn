@@ -125,7 +125,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
         }
 
     public String getDefaultResourceFileName() { return "WaldorfMicrowaveXTMulti.init"; }
-	public String getHTMLResourceFileName() { return "WaldorfMicrowaveXTMulti.html"; }
+    public String getHTMLResourceFileName() { return "WaldorfMicrowaveXTMulti.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
@@ -182,9 +182,9 @@ public class WaldorfMicrowaveXTMulti extends Synth
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
             public String replace(String val)
-            	{
-            	return revisePatchName(val);
-            	}
+                {
+                return revisePatchName(val);
+                }
                                 
             public void update(String key, Model model)
                 {
@@ -308,7 +308,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 {
                 final WaldorfMicrowaveXT synth = new WaldorfMicrowaveXT();
                 if (tuple != null)
-	                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
                 if (synth.tuple != null)
                     {
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -338,9 +338,9 @@ public class WaldorfMicrowaveXTMulti extends Synth
                             });
                     }
                 else
-                	{
-                	showSimpleError("Disconnected", "You can't show a patch when disconnected.");
-                	}
+                    {
+                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                    }
                 }
             };
         hbox2.addLast(comp);
@@ -821,30 +821,34 @@ public class WaldorfMicrowaveXTMulti extends Synth
         {
         if (key.equals("number")) return new byte[0];  // this is not emittable
         byte DEV = (byte)(getID());
-                
+             
+        if (key.equals("-"))
+            {
+            return new byte[0];
+            }   
         if (key.equals("name"))
             {
             byte[] bytes = new byte[16 * 9];
             String name = model.get(key, "Init            ") + "                ";            for(int i = 0; i < 16; i++)
-                {
-                int index = i;
-                byte PP = (byte)(index & 127);
-                byte XX = (byte)(name.charAt(i));
-                byte LL = 0x20;
-                if (index > 32)
-                    {
-                    // In Section 2.23 of sysex document, the locations are listed as going 1...7.
-                    // It's actually 0...7
+                                                                                                  {
+                                                                                                  int index = i;
+                                                                                                  byte PP = (byte)(index & 127);
+                                                                                                  byte XX = (byte)(name.charAt(i));
+                                                                                                  byte LL = 0x20;
+                                                                                                  if (index > 32)
+                                                                                                      {
+                                                                                                      // In Section 2.23 of sysex document, the locations are listed as going 1...7.
+                                                                                                      // It's actually 0...7
                 
-                    LL = (byte)((index - 32) / 28);  // hope that's right
-                    }
+                                                                                                      LL = (byte)((index - 32) / 28);  // hope that's right
+                                                                                                      }
                         
-                // In Section 2.23 of sysex document, MULP is declared to be 0x20, but then in the
-                // format example, it's written as 0x21.  It's actually 0x21.
+                                                                                                  // In Section 2.23 of sysex document, MULP is declared to be 0x20, but then in the
+                                                                                                  // format example, it's written as 0x21.  It's actually 0x21.
                 
-                byte[] b = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x21, LL, PP, XX, (byte)0xF7 };
-                System.arraycopy(b, 0, bytes, i * 9, 9);
-                }
+                                                                                                  byte[] b = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x21, LL, PP, XX, (byte)0xF7 };
+                                                                                                  System.arraycopy(b, 0, bytes, i * 9, 9);
+                                                                                                  }
             return bytes;
             }
         else
@@ -891,7 +895,11 @@ public class WaldorfMicrowaveXTMulti extends Synth
             {
             String key = allParameters[i];
 
-            if (key.equals("name"))
+            if (key.equals("-"))
+                {
+                bytes[i] = 0;
+                }
+            else if (key.equals("name"))
                 {
                 bytes[i] = (byte)(name.charAt(i - 16));
                 }
@@ -1004,21 +1012,21 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
     public static final int MAXIMUM_NAME_LENGTH = 16;
     public String revisePatchName(String name)
-    	{
-    	name = super.revisePatchName(name);  // trim first time
-    	if (name.length() > MAXIMUM_NAME_LENGTH)
-	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
-    	
-        StringBuffer nameb = new StringBuffer(name);        			
-		for(int i = 0 ; i < nameb.length(); i++)
-			{
-			char c = nameb.charAt(i);
+        {
+        name = super.revisePatchName(name);  // trim first time
+        if (name.length() > MAXIMUM_NAME_LENGTH)
+            name = name.substring(0, MAXIMUM_NAME_LENGTH);
+        
+        StringBuffer nameb = new StringBuffer(name);                            
+        for(int i = 0 ; i < nameb.length(); i++)
+            {
+            char c = nameb.charAt(i);
             if (c < 32 || c > 127)
-				nameb.setCharAt(i, ' ');
-			}
-		name = nameb.toString();
-		return super.revisePatchName(name);  // trim again
-    	}
+                nameb.setCharAt(i, ' ');
+            }
+        name = nameb.toString();
+        return super.revisePatchName(name);  // trim again
+        }
 
         
         
@@ -1029,10 +1037,10 @@ public class WaldorfMicrowaveXTMulti extends Synth
         // check the easy stuff -- out of range parameters
         super.revise();
 
-		String nm = model.get("name", "Init");
-		String newnm = revisePatchName(nm);
-		if (!nm.equals(newnm))
-	        model.set("name", newnm);
+        String nm = model.get("name", "Init");
+        String newnm = revisePatchName(nm);
+        if (!nm.equals(newnm))
+            model.set("name", newnm);
         }
         
 
@@ -1133,26 +1141,26 @@ public class WaldorfMicrowaveXTMulti extends Synth
     public String getPatchName() { return model.get("name", "Init Sound V1.1 "); }
 
     public byte getID() 
-    	{ 
-    	try 
-    		{ 
-    		byte b = (byte)(Byte.parseByte(tuple.id));
-    		if (b >= 0) return b;
-    		}
-    	catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-    	catch (NumberFormatException e) { e.printStackTrace(); }
-    	return 0;
-    	}
-    	
+        { 
+        try 
+            { 
+            byte b = (byte)(Byte.parseByte(tuple.id));
+            if (b >= 0) return b;
+            }
+        catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
+        catch (NumberFormatException e) { e.printStackTrace(); }
+        return 0;
+        }
+        
     public String reviseID(String id)
-    	{
-    	try 
-    		{ 
-    		byte b =(byte)(Byte.parseByte(id)); 
-    		if (b >= 0) return "" + b;
-    		} 
-    	catch (NumberFormatException e) { }		// expected
-    	return "" + getID();
-    	}
+        {
+        try 
+            { 
+            byte b =(byte)(Byte.parseByte(id)); 
+            if (b >= 0) return "" + b;
+            } 
+        catch (NumberFormatException e) { }             // expected
+        return "" + getID();
+        }
                 
     }

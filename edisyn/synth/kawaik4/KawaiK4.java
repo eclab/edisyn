@@ -1319,13 +1319,18 @@ public class KawaiK4 extends Synth
 
 		// Error in Section 4-1, see "Corrected MIDI Implementation"
 
-		boolean external = false;
-		byte position = 0;
+		boolean external;
+		byte position;
 		
 		if (tempModel != null)
 			{
         	external = (tempModel.get("bank") > 3);
 			position = (byte)((tempModel.get("bank") % 3) * 16 + (tempModel.get("number")));  // 0...63 for A1 .... D16
+			}
+		else
+			{
+        	external = (model.get("bank") > 3);
+			position = (byte)((model.get("bank") % 3) * 16 + (model.get("number")));  // 0...63 for A1 .... D16
 			}
 			
 		byte[] result = new byte[EXPECTED_SYSEX_LENGTH];

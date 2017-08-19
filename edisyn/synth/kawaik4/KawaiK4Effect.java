@@ -270,14 +270,11 @@ public class KawaiK4Effect extends Synth
 
     public static String getSynthName() { return "Kawai K4/K4r [Effect]"; }
     
-    public String getDefaultResourceFileName() 
-    	{
-    	return null; 
-    	}
+    public String getDefaultResourceFileName() { return "KawaiK4Effect.init"; }
 	
     public String getHTMLResourceFileName() 
     	{ 
-    	return "K4Effect.html";
+    	return "KawaiK4Effect.html";
     	}
 
     
@@ -292,7 +289,7 @@ public class KawaiK4Effect extends Synth
 
     public String getPatchName() 
     	{
-		return "Effect " + model.get("number");
+		return "Effect " + (model.get("number") + 1);
     	}
 
 
@@ -375,8 +372,20 @@ public class KawaiK4Effect extends Synth
 
 		// Error in Section 4-1, see "Corrected MIDI Implementation"
 
-        boolean external = (tempModel.get("bank") > 4);
-		byte position = (byte)(tempModel.get("number"));
+		boolean external;
+		byte position;
+		
+		if (tempModel != null)
+			{
+        	external = (tempModel.get("bank") > 4);
+			position = (byte)(tempModel.get("number"));
+			}
+		else
+			{
+        	external = (model.get("bank") > 4);
+			position = (byte)(model.get("number"));
+			}
+			
 		byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
 		result[0] = (byte)0xF0;
 		result[1] = (byte)0x40;

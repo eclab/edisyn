@@ -41,7 +41,7 @@ public class OberheimMatrix1000 extends Synth
     public static final String[] RAMP_TRIGGER_MODES = new String[] { "Single", "Multi", "External", "External Gated" };
     // VCA2 is not mentioned anywhere else
     // I may need to say VCA rather than Amplifier elsewhere
-    public static final String[] MODULATION_DESTINATIONS = new String[] { "DCO 1 Frequency", "DCO 1 Pulsewidth", "DCO 1 Wave Shape",  "DCO 2 Frequency", "DCO 2 Pulsewidth", "DCO 2 Wave Shape", "Mix Level", "Filter FM", "Filter Frequency", "Filter Resonance", "VCA 1 Level", "VCA 2 Level", "Env 1 Delay", "Env 1 Attack", "Env 1 Decay", "Env 1 Release", "Env 1 Amplitude", "Env 2 Delay", "Env 2 Attack", "Env 2 Decay", "Env 2 Release", "Env 2 Amplitude", "Env 3 Delay", "Env 3 Attack", "Env 3 Decay", "Env 3 Release", "Env 3 Amplitude", "LFO 1 Speed", "LFO 1 Amplitude", "LFO 2 Speed", "LFO 2 Amplitude", "Portamento Time" };
+    public static final String[] MODULATION_DESTINATIONS = new String[] { "None", "DCO 1 Frequency", "DCO 1 Pulsewidth", "DCO 1 Wave Shape",  "DCO 2 Frequency", "DCO 2 Pulsewidth", "DCO 2 Wave Shape", "Mix Level", "Filter FM", "Filter Frequency", "Filter Resonance", "VCA 1 Level", "VCA 2 Level", "Env 1 Delay", "Env 1 Attack", "Env 1 Decay", "Env 1 Release", "Env 1 Amplitude", "Env 2 Delay", "Env 2 Attack", "Env 2 Decay", "Env 2 Release", "Env 2 Amplitude", "Env 3 Delay", "Env 3 Attack", "Env 3 Decay", "Env 3 Release", "Env 3 Amplitude", "LFO 1 Speed", "LFO 1 Amplitude", "LFO 2 Speed", "LFO 2 Amplitude", "Portamento Time" };
 
     public OberheimMatrix1000()
         {
@@ -156,9 +156,9 @@ public class OberheimMatrix1000 extends Synth
                 showSimpleError(title, "The Bank must be an integer 0 ... 9");
                 continue;
                 }
-            if (i < 0 || i > 9)
+            if (i < 0 || (writing ? (i > 1) : (i > 9)))
                 {
-                showSimpleError(title, "The Bank must be an integer 0 ... 9");
+                showSimpleError(title, writing ? "The Bank must be either 0 or 1" : "The Bank must be an integer 0 ... 9");
                 continue;
                 }
                         
@@ -182,20 +182,25 @@ public class OberheimMatrix1000 extends Synth
     // is that names are stored with the "lower 6 bits of their ASCII representation".
     // If the bytes start at 32, then this makes sense:  bytes 32...63 are stored as-is,
     // and bytes 64..95 get 64 subtracted from them, so they become 0...31.  Clever.
-
+    
 	byte packNameByte(byte n)
 		{
+		/*
 		if (n < 32 || n > 95)
 			n = (byte)32;
-		n = (byte)(n & 63);
+		if (n >= 64)
+			n -= 64;
+		*/
 		return n;
 		}
 		
 	byte unpackNameByte(byte n)
 		{
+		/*
 		n = (byte)(n & 63);
 		if (n < 32)
 			n = (byte)(n + 64);
+		*/
 		return n;
 		}
 
@@ -265,14 +270,14 @@ public class OberheimMatrix1000 extends Synth
             {
             public boolean isSymmetric() { return true; }
             };
-        ((LabelledDial)comp).addAdditionalLabel("DCO 1 <> 2");
+        ((LabelledDial)comp).addAdditionalLabel("DCO 2 <> 1");
         hbox.add(comp);
 
         comp = new LabelledDial("Portamento", this, "portamento", color, 0, 63);
         ((LabelledDial)comp).addAdditionalLabel("Rate");
         hbox.add(comp);
 
-        comp = new LabelledDial("Portamento", this, "portamentomod", color, 0, 127, 64);
+        comp = new LabelledDial("Portamento", this, "portamentomod", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Vel Mod");
         hbox.add(comp);
                 
@@ -327,33 +332,36 @@ public class OberheimMatrix1000 extends Synth
 
         hbox.add(vbox);
 
-        comp = new LabelledDial("Wave Shape", this, "dco" + osc + "shape", color, 0, 31);
+
+		//// Sysex documentation is inconsistent here, it's not clear if it's 5-bit or 6-bit.
+		//// But the Matrix 1000 is providing 6-bit values, so we're going with that (0...63)
+		
+        comp = new LabelledDial("Wave Shape", this, "dco" + osc + "shape", color, 0, 63);
         ((LabelledDial)comp).addAdditionalLabel("Saw <> Tri");
         hbox.add(comp);
 
         comp = new LabelledDial("Frequency", this, "dco" + osc + "frequency", color, 0, 63);
         hbox.add(comp);
                 
-        comp = new LabelledDial("Frequency", this, "dco" + osc + "frequencymod", color, 0, 127, 64);
+        comp = new LabelledDial("Frequency", this, "dco" + osc + "frequencymod", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("LFO 1 Mod");
         hbox.add(comp);
 
         comp = new LabelledDial("Pulse Width", this, "dco" + osc + "pulsewidth", color, 0, 63);
         hbox.add(comp);
 
-        comp = new LabelledDial("Pulse Width", this, "dco" + osc + "pulsewidthmod", color, 0, 127, 64);
+        comp = new LabelledDial("Pulse Width", this, "dco" + osc + "pulsewidthmod", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("LFO 2 Mod");
         hbox.add(comp);
 
         if (osc==2)
             {
-            comp = new LabelledDial("Detune", this, "dco" + osc + "detune", color, 0, 62, 31)
+            comp = new LabelledDial("Detune", this, "dco" + osc + "detune", color, 1, 63, 31)
                 {
                 public boolean isSymmetric() { return true; }
                 };
             hbox.add(comp);
             }
-
 
         if (osc==1)
             {
@@ -395,11 +403,11 @@ public class OberheimMatrix1000 extends Synth
         comp = new LabelledDial("Frequency", this, "vcffrequency", color, 0, 127);
         hbox.add(comp);
                 
-        comp = new LabelledDial("Frequency", this, "vcffrequencymodenv1", color, 0, 127, 64);
+        comp = new LabelledDial("Frequency", this, "vcffrequencyenv1mod", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Env 1 Mod");
         hbox.add(comp);
                 
-        comp = new LabelledDial("Frequency", this, "vcffrequencymodpressure", color, 0, 127, 64);
+        comp = new LabelledDial("Frequency", this, "vcffrequencypressuremod", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Press Mod");
         hbox.add(comp);
         
@@ -409,11 +417,11 @@ public class OberheimMatrix1000 extends Synth
         comp = new LabelledDial("FM", this, "vcffm", color, 0, 63);
         hbox.add(comp);
 
-        comp = new LabelledDial("FM", this, "vcffmmodenv3", color, 0, 127, 64);
+        comp = new LabelledDial("FM", this, "vcffmenv3mod", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Env 3 Mod");
         hbox.add(comp);
 
-        comp = new LabelledDial("FM", this, "vcffmmodpressure", color, 0, 127, 64);
+        comp = new LabelledDial("FM", this, "vcffmpressuremod", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Press Mod");
         hbox.add(comp);
                 
@@ -435,16 +443,15 @@ public class OberheimMatrix1000 extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-//        VBox vbox = new VBox();
         
         comp = new LabelledDial("Volume", this, "vca1", color, 0, 63);
         hbox.add(comp);
 
-        comp = new LabelledDial("Volume", this, "vca1modvel", color, 0, 127, 64);
+        comp = new LabelledDial("Volume", this, "vca1velmod", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Vel Mod");
         hbox.add(comp);
                 
-        comp = new LabelledDial("Volume", this, "vca2modenv2", color, 0, 127, 64);
+        comp = new LabelledDial("Volume", this, "vca2env2mod", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Env 2 Mod");
         hbox.add(comp);
         
@@ -483,22 +490,24 @@ public class OberheimMatrix1000 extends Synth
         hbox.add(vbox);
 
                 
-        // The manual says this is 0...63, but the sysex website says this is 5-bit
-        comp = new LabelledDial("Retrigger", this, "lfo" + lfo + "retrigger", color, 0, 31);
+        // The manual says this is 0...63, but the sysex website says this is 5-bit.
+        // The Matrix 1000 is providing 6-bit values so we're going with that.
+        
+        comp = new LabelledDial("Retrigger", this, "lfo" + lfo + "retrigger", color, 0, 63);
         ((LabelledDial)comp).addAdditionalLabel("Point");
         hbox.add(comp);
                 
         comp = new LabelledDial("Amplitude", this, "lfo" + lfo + "amplitude", color, 0, 63);
         hbox.add(comp);
                 
-        comp = new LabelledDial("Amplitude", this, "lfo" + lfo + "amplitudemod", color, 0, 63);
+        comp = new LabelledDial("Amplitude", this, "lfo" + lfo + "amplitudemod", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Ramp " + lfo + " Mod");
         hbox.add(comp);
                 
         comp = new LabelledDial("Speed", this, "lfo" + lfo + "speed", color, 0, 63);
         hbox.add(comp);
 
-        comp = new LabelledDial("Speed", this, "lfo" + lfo + "speedmod", color, 0, 63);
+        comp = new LabelledDial("Speed", this, "lfo" + lfo + "speedmod", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel(lfo == 1 ? "Press Mod" : "Key Mod");
         hbox.add(comp);
                 
@@ -587,7 +596,7 @@ public class OberheimMatrix1000 extends Synth
         comp = new LabelledDial("Amplitude", this, "env" + env + "amplitude", color, 0, 63);
         hbox.add(comp);
 
-        comp = new LabelledDial("Amplitude", this, "env" + env + "amplitudemod", color, 0, 127, 64);
+        comp = new LabelledDial("Amplitude", this, "env" + env + "amplitudemod", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Vel Mod");
         hbox.add(comp);
         
@@ -704,7 +713,7 @@ public class OberheimMatrix1000 extends Synth
                 comp = new Chooser("" + i + " Destination", this, "mod" + i + "destination", params);
                 vbox2.add(comp);
 
-                comp = new LabelledDial("" + i + " Amount", this, "mod" + i + "amount", color, 0, 127, 64);  // it's Level, not Amount, so we save some horizontal space
+                comp = new LabelledDial("" + i + " Amount", this, "mod" + i + "amount", color, 1, 127, 64);  // it's Level, not Amount, so we save some horizontal space
                 vbox2.add(comp);
                 hbox.add(vbox2);
                 }
@@ -758,17 +767,17 @@ public class OberheimMatrix1000 extends Synth
     "dco2click", 
     "mix", 
     "vcffrequency", 
-    "vcffrequencymodenv1", 
-    "vcffrequencymodpressure", 
+    "vcffrequencyenv1mod", 
+    "vcffrequencypressuremod", 
     "vcfresonance", 
     "vcffixedmods1", 
     "vcffixedmods2", 
     "vca1", 
-    "vca1modvel", 
-    "vca2modenv2", 
+    "vca1velmod", 
+    "vca2env2mod", 
     "vcffm", 
-    "vcffmmodenv3", 
-    "vcffmmodpressure", 
+    "vcffmenv3mod", 
+    "vcffmpressuremod", 
     "trackingsource", 
     "trackingpoint1", 
     "trackingpoint2", 
@@ -846,11 +855,171 @@ public class OberheimMatrix1000 extends Synth
     HashMap allParametersToIndex = new HashMap();
 
 
-    /** List of all Oberheim Sysex parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
+	/** The Matrix 1000 sign-extends into its 7th bit.  Basically this means 
+		that if the value is N bits, then remaining high bits should have the
+		value of the high (Nth) bit.  For example, the value 1011 should be
+		converted to (0) 111011.  We also may need to know signed or insigned
+		values.  So to do this, we have two arrays, bitmasks and signed.  We
+		compute them from the initial values stored in bitmasks (which are then
+		changed to actual bitmasks).  If the value below is negative, then the
+		parameter is expected to be signed. */
 
-    /// * indicates parameters which must be handled specially due to packing
-    /// that Waldorf decided to do.  :-(
-
+    final static int[] bitmasks = new int[/*100 or so*/]
+    {
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+	2,
+	6,
+	6,
+	6,
+	2,
+	2,
+	6,
+	6,
+	6,
+	2,
+	3,
+	-6,
+	6,
+	2,
+	1,
+	2,
+	1,
+	2,
+	7,
+	6,
+	2,
+	2,
+	6,
+	6,
+	6,
+	2,
+	1,
+	6,
+	2,
+	1,
+	3,
+	5,
+	5,
+	6,
+	6,
+	2,
+	1,
+	3,
+	5,
+	5,
+	6,
+	3,
+	6,
+	6,
+	6,
+	6,
+	6,
+	6,
+	2,
+	2,
+	3,
+	6,
+	6,
+	6,
+	6,
+	6,
+	6,
+	2,
+	2,
+	3,
+	6,
+	6,
+	6,
+	6,
+	6,
+	6,
+	2,
+	2,
+	5,
+	6,
+	6,
+	6,
+	6,
+	6,
+	6,
+	2,
+	6,
+	2,
+	-7,
+	-7,
+	-7,
+	-7,
+	-7,
+	-7,
+	-7,
+	-7,
+	-7,
+	-7,
+	-7,
+	-7,
+	-7,
+	-7,
+	-7,
+	-7,
+	-7,
+	-7,
+	5,
+	-7,
+	5,
+	5,
+	-7,
+	5,
+	5,
+	-7,
+	5,
+	5,
+	-7,
+	5,
+	5,
+	-7,
+	5,
+	5,
+	-7,
+	5,
+	5,
+	-7,
+	5,
+	5,
+	-7,
+	5,
+	5,
+	-7,
+	5,
+	5,
+	-7,
+	5
+	};
+	
+	final static boolean signed[] = new boolean[bitmasks.length];
+	
+	static
+		{
+		for(int i = 0; i < bitmasks.length; i++)
+			{
+			if (bitmasks[i] < 0)
+				{
+				bitmasks[i] = -bitmasks[i];
+				signed[i] = true;
+				}
+				
+			bitmasks[i] = (1 << bitmasks[i]) - 1;
+			}
+		}
+		
+	
+	
     final static String[] allParameters = new String[/*100 or so*/] 
     {
     "-",                // this is the name, but the Matrix 1000 doesn't recognize names
@@ -943,52 +1112,51 @@ public class OberheimMatrix1000 extends Synth
     "dco1pulsewidthmod",
     "dco2frequencymod",
     "dco2pulsewidthmod",
-    "vcffrequencymodenv1",
-    "vcffrequencymodpressure",
-    "vca1modvel",
-    "vca2modenv2",
+    "vcffrequencyenv1mod",
+    "vcffrequencypressuremod",
+    "vca1velmod",
+    "vca2env2mod",
     "env1amplitudemod",
     "env2amplitudemod",
     "env3amplitudemod",
     "lfo1amplitudemod",
     "lfo2amplitudemod",
     "portamentomod",
-    "vcffmmodenv3",
-    "vcffmmodpressure",
+    "vcffmenv3mod",
+    "vcffmpressuremod",
     "lfo1speedmod",
     "lfo2speedmod",
     "mod1source",
-    "mod1destination",
     "mod1amount",
+    "mod1destination",
     "mod2source",
-    "mod2destination",
     "mod2amount",
+    "mod2destination",
     "mod3source",
-    "mod3destination",
     "mod3amount",
+    "mod3destination",
     "mod4source",
-    "mod4destination",
     "mod4amount",
+    "mod4destination",
     "mod5source",
-    "mod5destination",
     "mod5amount",
+    "mod5destination",
     "mod6source",
-    "mod6destination",
     "mod6amount",
+    "mod6destination",
     "mod7source",
-    "mod7destination",
     "mod7amount",
+    "mod7destination",
     "mod8source",
-    "mod8destination",
     "mod8amount",
+    "mod8destination",
     "mod9source",
-    "mod9destination",
     "mod9amount",
+    "mod9destination",
     "mod10source",
-    "mod10destination",
-    "mod10amount"
+    "mod10amount",
+    "mod10destination"
     };
-
 
 
     public byte[] emit(String key)
@@ -998,7 +1166,7 @@ public class OberheimMatrix1000 extends Synth
 
         int index;
         int value;
-
+        
         if (key.equals("name"))
         	{
         	return new byte[0];  // ignore
@@ -1043,6 +1211,16 @@ public class OberheimMatrix1000 extends Synth
             index = ((Integer)(internalParametersToIndex.get("vcffixedmods2"))).intValue();
             value = model.get("vcfportamento") | (model.get("vcfkeytracking") << 1);
             }
+		else if (key.equals("dco2detune"))
+			{
+         	index = ((Integer)(internalParametersToIndex.get(key))).intValue();
+        	value = convertToSixBitsSigned(model.get(key));
+			}
+		else if (key.endsWith("mod"))  // 7 bit signed
+			{
+         	index = ((Integer)(internalParametersToIndex.get(key))).intValue();
+        	value = convertToSevenBitsSigned(model.get(key));
+			}
         else if (key.startsWith("mod"))
             {
             int modnumber = (int)(key.charAt(3) - '0');
@@ -1050,8 +1228,13 @@ public class OberheimMatrix1000 extends Synth
                 modnumber = 10;
 
             int modsource = model.get("mod" + modnumber  + "source");
-            int moddestination = model.get("mod" + modnumber  + "destination") + 1;  // IMPORTANT it  goes 1--32, not 0--31
-            int modamount = model.get("mod" + modnumber  + "amount");
+            int moddestination = model.get("mod" + modnumber  + "destination");
+            int modamount = convertToSevenBitsSigned(model.get("mod" + modnumber  + "amount"));
+
+			// if one is "None", then the other must be as well            
+            if (modsource == 0) moddestination = 0;
+            else if (moddestination == 0) modsource = 0;
+            
             modnumber--;
 
             return new byte[] { (byte)0xF0, 0x10, 0x06, 0x0B, (byte)modnumber, (byte)modsource, (byte) modamount, (byte)moddestination, (byte)0xF7 };
@@ -1067,14 +1250,59 @@ public class OberheimMatrix1000 extends Synth
          	index = ((Integer)(internalParametersToIndex.get(key))).intValue();
         	value = model.get(key);
         	}
-
+        
         byte VV = (byte)(value);
         byte PP = (byte)(index & 127);
-        return new byte[] { (byte)0xF0, 0x10, 0x06, PP, VV, (byte)0xF7 };
+        return new byte[] { (byte)0xF0, 0x10, 0x06, 0x06, PP, VV, (byte)0xF7 };
         }
     
 
+ 	byte convertFromSixBitsSigned(int val)
+		{
+		// strip old signed extension in bit 7
+		val = (val & 63);
+        	
+		val += 32;
+		if (val > 64)
+			val -= 64;
+		return (byte) val;
+		}
 
+ 	byte convertToSixBitsSigned(int val)
+		{
+		val -= 32;
+		if (val < 0)
+			val += 64;
+
+		// do signed extension
+		if ((val & 32) == 32)  // 6th bit is set
+			val = val | 64;  // set the 7th bit
+		else
+			val = val & 63;  // clear the 7th bit
+
+		return (byte) val;
+		}
+
+ 	byte convertFromSevenBitsSigned(int val)
+		{
+		val += 64;
+		if (val > 128)
+			val -= 128;
+		return (byte) val;
+		}
+
+ 	byte convertToSevenBitsSigned(int val)
+		{
+		val -= 64;
+		if (val < 0)
+			val += 128;
+		return (byte) val;
+		}
+
+	/** 
+		// Maybe for Matrix 6?  Also this code needs to be updated with
+		// parameter conversions and other stuff.
+		
     public void parseParameter(byte[] data)
         {
         if (data[3] == 0x0B)            // remote modulation parameter edit
@@ -1140,6 +1368,11 @@ public class OberheimMatrix1000 extends Synth
                     value = (byte)3;  // get rid of extra exponential
                 model.set("portamentomode", value);
                 }
+        	else if (key.equals("dco2detune"))
+        		{
+        		value = convertFromSixBitsSigned(value);
+        		model.set("dco2detune", value);
+        		}
             else
                 {
                 model.set(key, value);
@@ -1151,6 +1384,7 @@ public class OberheimMatrix1000 extends Synth
             }
         revise();
         }
+    */
         
     public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
@@ -1165,13 +1399,13 @@ public class OberheimMatrix1000 extends Synth
 			
         for(int i = 0; i < 134; i++)
         	{
+        	String key = allParameters[i];
+
         	// unpack from nybbles
         	byte lonybble = data[i * 2 + 5];
         	byte hinybble = data[i * 2 + 5 + 1];
         	byte value = (byte)(((hinybble << 4) | (lonybble & 15)) & 127);
 
-        	String key = allParameters[i];
-        	
         	if (i < 8)  // it's the name
         		name[i] = unpackNameByte(value);
         	else if (key.equals("dco1fixedmods1"))
@@ -1218,7 +1452,27 @@ public class OberheimMatrix1000 extends Synth
         		{
                 if (value == 4)
                     value = (byte)3;  // get rid of extra exponential
-                model.set("portamentomode", value);
+                model.set(key, value);
+        		}
+        	
+        	// Note Bug in Matrix 1000 will fill in bit *8* with a 1 (this is possible because it's split into two nybbles).
+        	// It's okay because convertFromSixBitsSigned(...) strips out both bits 7 and 8.  But it means that the dumps
+        	// won't be the same.
+        		
+        	else if (key.equals("dco2detune"))
+        		{
+        		value = convertFromSixBitsSigned(value);
+        		model.set(key, value);
+        		}
+			else if (key.endsWith("mod"))  // 7 bit signed
+				{
+        		value = convertFromSevenBitsSigned(value);
+        		model.set(key, value);
+				}
+        	else if (key.startsWith("mod") && key.endsWith("amount"))
+        		{
+        		value = convertFromSevenBitsSigned(value);
+        		model.set(key, value);
         		}
         	else
         		{
@@ -1235,27 +1489,26 @@ public class OberheimMatrix1000 extends Synth
             	{
             	e.printStackTrace();
             	}
+            	
+		// to get the bank, we'll extract it from the name.  It appears to be the fourth character
+		int bank = name[3] - '0';
+		if (bank >= 0 && bank <= 9)  // we're okay
+			model.set("bank", bank);
+        
         
         revise();
         return true;            // change this as appropriate
         }
     
 
-    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-        // this stuff requires a checksum
-        // and required packing by two nibbles per byte (see http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-OberheimMatrix1000.html)
-        // also note that writes are probably always to working memory.
-        // In order to STORE the working memory to the backing store
-        // You do STORE EDIT BUFFER:
-        // F0H 10H 06H 0EH PATCHNUMBER BANKNUMBER 0x0 F7H
-
 		byte[] data = new byte[268];
 		String nm = model.get("name", "UNTITLED") + "        ";
 		byte[] name = null;
 		try { name = nm.getBytes("US-ASCII"); } catch (Exception e ) { }
 		int value;
-		int check = 0;
+		byte check = 0;
 		
         for(int i = 0; i < 134; i++)
         	{
@@ -1303,16 +1556,87 @@ public class OberheimMatrix1000 extends Synth
                 value = (model.get("vcfkeytracking") << 1) |
                 		(model.get("vcfportamento"));
         		}
-        	// no need to handle portamentomode specially, but we DO have to parse it specially
-/*        	else if (key.equals("portamentomode"))
+        	else if (key.equals("dco2detune"))	// 6 bit signed
         		{
+        		value = convertToSixBitsSigned(model.get(key));
         		}
-*/
+			else if (key.endsWith("mod"))  // 7 bit signed
+				{
+        		value = convertToSevenBitsSigned(model.get(key));
+				}
+        	// Note: no need to handle portamentomode specially, but we DO have to parse it specially
+        		
+        	// Ugh, all this below is to deal with the source=destination=0 requirement.  Yuck.
+        	
+        	else if (key.equals("mod1source") || key.equals("mod1destination"))
+        		{
+        		value = model.get(key);
+        		if (model.get("mod1source") == 0 || model.get("mod1destination") == 0)
+        			value = 0;
+        		}
+        	else if (key.equals("mod2source") || key.equals("mod2destination"))
+        		{
+        		value = model.get(key);
+        		if (model.get("mod2source") == 0 || model.get("mod2destination") == 0)
+        			value = 0;
+        		}
+        	else if (key.equals("mod3source") || key.equals("mod3destination"))
+        		{
+        		value = model.get(key);
+        		if (model.get("mod3source") == 0 || model.get("mod3destination") == 0)
+        			value = 0;
+        		}
+        	else if (key.equals("mod4source") || key.equals("mod4destination"))
+        		{
+        		value = model.get(key);
+        		if (model.get("mod4source") == 0 || model.get("mod4destination") == 0)
+        			value = 0;
+        		}
+        	else if (key.equals("mod5source") || key.equals("mod5destination"))
+        		{
+        		value = model.get(key);
+        		if (model.get("mod5source") == 0 || model.get("mod5destination") == 0)
+        			value = 0;
+        		}
+        	else if (key.equals("mod6source") || key.equals("mod6destination"))
+        		{
+        		value = model.get(key);
+        		if (model.get("mod6source") == 0 || model.get("mod6destination") == 0)
+        			value = 0;
+        		}
+        	else if (key.equals("mod7source") || key.equals("mod7destination"))
+        		{
+        		value = model.get(key);
+        		if (model.get("mod7source") == 0 || model.get("mod7destination") == 0)
+        			value = 0;
+        		}
+        	else if (key.equals("mod8source") || key.equals("mod8destination"))
+        		{
+        		value = model.get(key);
+        		if (model.get("mod8source") == 0 || model.get("mod8destination") == 0)
+        			value = 0;
+        		}
+        	else if (key.equals("mod9source") || key.equals("mod9destination"))
+        		{
+        		value = model.get(key);
+        		if (model.get("mod9source") == 0 || model.get("mod9destination") == 0)
+        			value = 0;
+        		}
+        	else if (key.equals("mod10source") || key.equals("mod10destination"))
+        		{
+        		value = model.get(key);
+        		if (model.get("mod10source") == 0 || model.get("mod10destination") == 0)
+        			value = 0;
+        		}
+        	else if (key.startsWith("mod") && key.endsWith("amount"))	// 7 bits signed
+        		{
+        		value = convertToSevenBitsSigned(model.get(key));
+        		}
         	else
         		{
         		value = model.get(key);
         		}
-
+        		
         	// pack to nybbles
         	byte lonybble = (byte)(value & 15);
         	byte hinybble = (byte)(value >> 4);
@@ -1323,74 +1647,39 @@ public class OberheimMatrix1000 extends Synth
             // Checksum.
             // The original (not transmitted) data is summed in seven bits ignoring overflows
             //
-            // From this I gather that we add into an int, not a byte, so we don't
-            // overflow at all.  Though it might be a byte instead, I'm not sure.
-            // Or maybe it doesn't make a difference?  It's late...  Anyway:
-
+            // I think this means to add into a byte, and then mask to 127.
+            
         	check += value;
         	
         	// write
         	data[i * 2] = lonybble;
-        	data[i * 2] = hinybble;
+        	data[i * 2 + 1] = hinybble;
         	}
     
         byte checksum = (byte)(check & 127);
+		byte[] d = new byte[275];
+			d[0] = (byte)0xF0;
+			d[1] = (byte)0x10;
+			d[2] = (byte)0x06;
 
 		if (toWorkingMemory || toFile)
 			{
 			// 0DH - SINGLE PATCH DATA TO EDIT BUFFER
-			byte[] d = new byte[275];
-			d[0] = (byte)0xF0;
-			d[1] = (byte)0x10;
-			d[2] = (byte)0x06;
 			d[3] = (byte)0x0D;
 			d[4] = (byte)0x00;
-			System.arraycopy(data, 0, d, 5, 268);
-			d[273] = checksum;
-			d[274] = (byte)0xF7;
-
-			Object[] completed = new Object[1];
-			completed[0] = d;
-			return completed;
 			}
 		else
 			{
-			Object[] completed = new Object[2];
-
-			// 0AH - SET BANK
-			// we write this store-command as a sysex command 
-			// so it gets stripped when we do a save to file
-			byte[] data2 = new byte[8];
-			data2[0] = (byte)0xF0;
-			data2[1] = (byte)0x10;
-			data2[2] = (byte)0x06;	
-			data2[3] = (byte)0x0A;
-			data2[5] = (byte)(model.get("bank"));
-			data2[7] = (byte)0xF7;
-
-			try
-				{
-				completed[0] = new SysexMessage(data2, 8);
-				}
-			catch (InvalidMidiDataException e) 
-				{
-				e.printStackTrace();
-				}
-
 			// 01H-SINGLE PATCH DATA
-
-			byte[] d = new byte[273];
-			d[0] = (byte)0xF0;
-			d[1] = (byte)0x10;
-			d[2] = (byte)0x06;
 			d[3] = (byte)0x01;
-			System.arraycopy(data, 0, d, 4, 268);
-			d[271] = checksum;
-			d[272] = (byte)0xF7;
-			
-			completed[1] = d;
-			return completed;
+			d[4] = (byte)model.get("number");
 			}
+
+		System.arraycopy(data, 0, d, 5, 268);
+		d[273] = checksum;
+		d[274] = (byte)0xF7;
+		
+		return d;
         }
         
         
@@ -1402,15 +1691,26 @@ public class OberheimMatrix1000 extends Synth
 			// 0AH - SET BANK
 			// we write this store-command as a sysex command 
 			// so it gets stripped when we do a save to file
-			byte[] data2 = new byte[8];
+			byte[] data2 = new byte[6];
 			data2[0] = (byte)0xF0;
 			data2[1] = (byte)0x10;
 			data2[2] = (byte)0x06;	
 			data2[3] = (byte)0x0A;
-			data2[5] = (byte)(tempModel.get("bank"));
-			data2[7] = (byte)0xF7;
+			data2[4] = (byte)(tempModel.get("bank"));
+			data2[5] = (byte)0xF7;
 
 			tryToSendSysex(data2);
+
+			// 0CH - UNLOCK BANK
+			// we write this store-command as a sysex command 
+			// so it gets stripped when we do a save to file
+			// annoying that this gets re-locked by SET BANK
+			byte[] data = new byte[5];
+			data2[0] = (byte)0xF0;
+			data2[1] = (byte)0x10;
+			data2[2] = (byte)0x06;	
+			data2[3] = (byte)0x0C;
+			data2[4] = (byte)0xF7;
 			
 		// Next do a program change
 		
@@ -1419,39 +1719,21 @@ public class OberheimMatrix1000 extends Synth
     	}
 
 
-	public void performRequestDump(Model tempModel)
-		{
-		/*
-		// first change the bank
-		
-			// 0AH - SET BANK
-			// we write this store-command as a sysex command 
-			// so it gets stripped when we do a save to file
-			byte[] data2 = new byte[8];
-			data2[0] = (byte)0xF0;
-			data2[1] = (byte)0x10;
-			data2[2] = (byte)0x06;	
-			data2[3] = (byte)0x0A;
-			data2[5] = (byte)(tempModel.get("bank"));
-			data2[7] = (byte)0xF7;
-
-			tryToSendSysex(data2);
-		*/
-		
+	public byte[] requestDump(Model tempModel)
+		{		
 		// Next do a dump request
 		byte[] data = new byte[7];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x10;
         data[2] = (byte)0x06;
         data[3] = (byte)0x04;
-        data[4] = (byte)1;		// request single patch
+        data[4] = (byte)0x01;		// request single patch
         data[5] = (byte)(tempModel.get("number"));
         data[6] = (byte)0xF7;
-        
-        tryToSendSysex(data);
+    	return data;
 		}
 		
-    public static final int EXPECTED_SYSEX_LENGTH = 273;        
+    public static final int EXPECTED_SYSEX_LENGTH = 275;        
         
     public static boolean recognize(byte[] data)
         {
@@ -1461,9 +1743,9 @@ public class OberheimMatrix1000 extends Synth
             (data.length == EXPECTED_SYSEX_LENGTH ||
              data.length == EXPECTED_SYSEX_LENGTH - 1) &&
             data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x3E &&
-            data[2] == (byte)0x0E &&
-            data[4] == (byte)0x10);
+            data[1] == (byte)0x10 &&
+            data[2] == (byte)0x06 &&
+            data[3] == (byte)0x01);
         return v;
         }
         
@@ -1499,6 +1781,7 @@ public class OberheimMatrix1000 extends Synth
 	        model.set("name", newnm);
         }
         
+    public int getPauseBetweenMIDISends() { return 50; }
 
     public static String getSynthName() { return "Oberheim Matrix 1000"; }
     

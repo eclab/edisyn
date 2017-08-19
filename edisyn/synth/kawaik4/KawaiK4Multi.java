@@ -39,6 +39,8 @@ public class KawaiK4Multi extends Synth
         JFrame frame = super.sprout();
         // We can't request the current working memory (don't ask why)
         receiveCurrent.setEnabled(false);
+        transmitParameters.setEnabled(false);
+        transmitParameters.setSelected(false);        
         return frame;
         }         
 
@@ -584,8 +586,20 @@ public class KawaiK4Multi extends Synth
 
 		// Error in Section 4-1, see "Corrected MIDI Implementation"
 
-        boolean external = (tempModel.get("bank") > 3);
-		byte position = (byte)((tempModel.get("bank") & 3) * 16 + (tempModel.get("number")));  // 0...63 for A1 .... D16
+        boolean external;
+        byte position;
+        
+		if (tempModel != null)
+			{
+        	external = (tempModel.get("bank") > 3);
+			position = (byte)((tempModel.get("bank") & 3) * 16 + (tempModel.get("number")) + 64);  // 0...63 for A1 .... D16
+			}
+		else
+			{
+        	external = (model.get("bank") > 3);
+			position = (byte)((model.get("bank") & 3) * 16 + (model.get("number")) + 64);  // 0...63 for A1 .... D16
+			}
+			
 		byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
 		result[0] = (byte)0xF0;
 		result[1] = (byte)0x40;

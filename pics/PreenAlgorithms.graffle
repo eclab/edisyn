@@ -34465,9 +34465,9 @@
 		<key>SidebarWidth</key>
 		<integer>120</integer>
 		<key>VisibleRegion</key>
-		<string>{{2.5024276e-39, 8.3188223e-39}, {0, 0}}</string>
+		<string>{{835, 1529}, {1942, 1448}}</string>
 		<key>Zoom</key>
-		<real>0.0</real>
+		<real>0.5</real>
 		<key>ZoomValues</key>
 		<array>
 			<array>

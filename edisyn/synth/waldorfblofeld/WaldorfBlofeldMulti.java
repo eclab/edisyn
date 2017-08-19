@@ -170,6 +170,8 @@ public class WaldorfBlofeldMulti extends Synth
         JFrame frame = super.sprout();
         // multi-mode on the Blofeld can't switch patches
         transmitTo.setEnabled(false);    
+        transmitParameters.setEnabled(false);
+        transmitParameters.setSelected(false);        
         return frame;   
         }         
                 

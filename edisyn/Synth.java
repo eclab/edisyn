@@ -311,8 +311,8 @@ public abstract class Synth extends JComponent implements Updatable
     edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti.class, 
     edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT.class, 
     edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti.class, 
-    edisyn.synth.yamahatx81z.YamahaTX81Z.class, 
-    edisyn.synth.yamahatx81z.YamahaTX81ZMulti.class, 
+    //edisyn.synth.yamahatx81z.YamahaTX81Z.class, 
+    //edisyn.synth.yamahatx81z.YamahaTX81ZMulti.class, 
     edisyn.synth.preenfm2.PreenFM2.class 
     };
     

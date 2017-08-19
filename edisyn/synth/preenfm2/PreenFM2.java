@@ -358,7 +358,7 @@ public class PreenFM2 extends Synth
         		generalBox.repaint();
         		}
 			};
-		model.register("voice", ((LabelledDial)comp));
+//		model.register("voice", ((LabelledDial)comp));
 		model.setStatus("voice", model.STATUS_IMMUTABLE);
 		hbox.add(comp);
 

@@ -57,6 +57,7 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem undoMenu;
     public JMenuItem redoMenu;
     public JMenuItem receiveCurrent;
+    public JCheckBoxMenuItem transmitParameters;
     public JMenu merge;
     public JMenuItem editMutationMenu;
     public JCheckBoxMenuItem recombinationToggle;
@@ -2115,6 +2116,22 @@ public abstract class Synth extends JComponent implements Updatable
                 doSendToPatch();
                 }
             });
+
+		transmitParameters = new JCheckBoxMenuItem("Sends Real Time Changes");
+        menu.add(transmitParameters);
+        transmitParameters.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doAllowParameterTransmit();
+                }
+            });
+
+		String sendInRealTime = getLastX("AllowTransmitParameters", getSynthNameLocal());
+		if (sendInRealTime == null) sendInRealTime = "true";
+		allowsTransmitsParameters = Boolean.parseBoolean(sendInRealTime);
+		transmitParameters.setSelected(allowsTransmitsParameters);
+
                 
         menu.addSeparator();
 
@@ -2569,8 +2586,9 @@ public abstract class Synth extends JComponent implements Updatable
                 
         if (gatherPatchInfo("Write Patch To...", getModel(), true))
             {
+            performChangePatch(getModel());	// we need to be at the start for the Oberheim Matrix 1000
             tryToSendMIDI(emitAll(getModel(), false, false));
-            performChangePatch(getModel());	// do it at the end here, as opposed to doSendtoPatch, which does it first
+            performChangePatch(getModel());	// do it at the end AND start here, as opposed to doSendtoPatch, which does it first.  We need to be at the end for the Kawai K4.
             }
         }
                 
@@ -2614,6 +2632,14 @@ javax.swing.Timer sendTestNotesTimer;
     		sendTestNotes = true;
 			}    	
     	}
+
+	boolean allowsTransmitsParameters;
+
+	void doAllowParameterTransmit()
+		{
+		allowsTransmitsParameters = transmitParameters.isSelected();
+    	setLastX("" + allowsTransmitsParameters, "AllowTransmitParameters", getSynthNameLocal());
+		}
     
     /** Override this to customize the pitch of the test note. */
     public int getTestNote() { return 60; }
@@ -2631,7 +2657,11 @@ javax.swing.Timer sendTestNotesTimer;
         final int velocity = getTestNoteVelocity();
         try
             {
-            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, testNote, velocity));
+            if (noteOnTick == 0)
+            	{
+            	// we only send a note-on if we're not playing already
+	            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, testNote, velocity));
+	            }
                                         
             // schedule a note off
             final int myNoteOnTick = ++noteOnTick;
@@ -2644,6 +2674,7 @@ javax.swing.Timer sendTestNotesTimer;
                             try
                                 {
                                 tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, testNote, velocity));
+                                noteOnTick = 0;
                                 }
                             catch (Exception e3)
                                 {
@@ -3147,7 +3178,7 @@ double lastMutate = 0.0;
         if (learning)
             updateTitle();
                 
-        if (getSendMIDI())
+        if (allowsTransmitsParameters && getSendMIDI())
             {
             tryToSendMIDI(emitAll(key));
             }

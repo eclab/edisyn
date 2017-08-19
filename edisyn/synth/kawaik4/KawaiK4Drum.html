@@ -1,28 +1,41 @@
 <html><head></head><body bgcolor='black'>
-
-Unfortunately drums don't have their own effects/output, nor submix channel: they will use whatever effect/output and submix channel the current single or multi patch is using.
-
-Bug in Kawai K4 -- it doesn't return the MIDI channel when it does a dump.
-
 <font color='white'>
-<h1>Waldorf Blofeld</h1> 
-<h2>Single Patch Editor</h2>
 
-<p>This editor will work with the <b>Waldorf Blofeld,</b> the <b>Waldorf Blofeld with SL Option,</b> and the <b>Waldorf Blofeld Keyboard</b> (which automatically comes with the SL option).
+<h1>Kawai K4</h1> 
+<h2>Drum Patch Editor</h2>
 
-<p><b>Communicating with Edisyn</b> Set your Blofeld to send <b>Sysex only</b>, not <b>Ctl</b> nor <b>Ctl+Sysex</b>.  Also make sure that <b>Ctrl Receive</b> is on.
+<p>This editor will work with the <b>Kawai K4</b> and the <b>Kawai K4r</b>.
 
-<p><b>SL Option</b> The SL option gives you the option of specifying a <b>sound sample</b> instead of a <b>wave</b> on Oscillators 1 and 2. This is turned on by choosing a <b>Sample Bank</b> in the editor: then the wave menu turns into a sample menu.  You turn it off by choosing <b>None</b> in the Sample Bank.  
+<p><b>Communicating with Edisyn</b> Set your K4 to receive Program Changes (RCV PGM) and Exclusive (RCV EXCL).  See pages 79 and 80 of the manual.  You'll also probably want your send channel and receive channel to be the same.  I wouldn't set the receive channel to OMNI, as this might conflict with drums.
 
-<p><b>Gotchas</b> Only two at present:
+<p><b>Hints</b>
 
 <ul>
 <li>
-If you load the current patch, the Blofeld does not tell Edisyn what bank or number the patch is.  Edisyn will leave synced mode.
-<p><li>
-If you send a patch, or modify its parameters, the Blofeld's patch screen does not indicate that it's been edited (as it usually does with a little inverted "E"), even though it has in fact been edited.
+The Kawai K4/K4r receives drum information on a separate MIDI channel.  You should change this MIDI channel in the patch editor so it's not the default MIDI channel you're using for your main sounds.  Otherwise when you play a note via Edisyn it'll get played both as a drum and as your main sound, and you don't want that.
+
+<p><li>When you play a note (via the <b>Send Test Note</b> menu option) the note played is the currently selected drum key.
+
+<p><li>You can select a drum key either via the dial or by the on-screen keyboard.  The widgets shown below reflect the settings for that particular key.
+
+<p><li>It's rare for you to want your drum keys to vary in their submix.  So when you change the submix, you can press <b>Apply to All</b> to set all the drum keys to that new value.
+
+<p><li>The following effect patches are not used by any standard single, multi, or drum patch:  3, 10, 11, 12, 14, 15, 21, 22, 23, 28
+<p><li>In all standard effect patches, Submix H is always "off".  
 </ul>
 
+
+<p><b>Gotchas</b>
+
+<ul>
+<li>
+Unfortunately drums don't have their own effects/output: they will use whatever effect/output the current single or multi patch is using.
+
+<p><li>
+Bug on the Kawai K4 -- it doesn't return the MIDI channel when it does a dump.  So if you request a patch, the MIDI channel will not be properly updated.
+
+<p><li>When you update a parameter, it's not reflected on the K4's LCD until you move to something else and back again.
+</ul>
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>
@@ -30,6 +43,6 @@ If you send a patch, or modify its parameters, the Blofeld's patch screen does n
 <td><b>Sean Luke</b>
 <tr>
 <td align=right>Date&nbsp;&nbsp;&nbsp;
-<td>June 2017
+<td>August 2017
 </table>
 

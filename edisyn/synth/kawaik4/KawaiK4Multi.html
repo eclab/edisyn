@@ -1,23 +1,28 @@
 <html><head></head><body bgcolor='black'>
 <font color='white'>
-<h1>Waldorf Blofeld</h1> 
-<h2>Single Patch Editor</h2>
 
-<p>This editor will work with the <b>Waldorf Blofeld,</b> the <b>Waldorf Blofeld with SL Option,</b> and the <b>Waldorf Blofeld Keyboard</b> (which automatically comes with the SL option).
+<h1>Kawai K4</h1> 
+<h2>Multi-Mode Patch Editor</h2>
 
-<p><b>Communicating with Edisyn</b> Set your Blofeld to send <b>Sysex only</b>, not <b>Ctl</b> nor <b>Ctl+Sysex</b>.  Also make sure that <b>Ctrl Receive</b> is on.
+<p>This editor will work with the <b>Kawai K4</b> and the <b>Kawai K4r</b>.
 
-<p><b>SL Option</b> The SL option gives you the option of specifying a <b>sound sample</b> instead of a <b>wave</b> on Oscillators 1 and 2. This is turned on by choosing a <b>Sample Bank</b> in the editor: then the wave menu turns into a sample menu.  You turn it off by choosing <b>None</b> in the Sample Bank.  
+<p><b>Communicating with Edisyn</b> Set your K4 to receive Program Changes (RCV PGM) and Exclusive (RCV EXCL).  See pages 79 and 80 of the manual.  You'll also probably want your send channel and receive channel to be the same.  I wouldn't set the receive channel to OMNI, as this might conflict with drums.
 
-<p><b>Gotchas</b> Only two at present:
+<p><b>Hints</b>
+<ul>
+<li>The following effect patches are not used by any standard single, multi, or drum patch:  3, 10, 11, 12, 14, 15, 21, 22, 23, 28
+<p><li>In all standard effect patches, Submix H is always "off".  
+</ul>
+
+<p><b>Gotchas</b>
 
 <ul>
 <li>
-If you load the current patch, the Blofeld does not tell Edisyn what bank or number the patch is.  Edisyn will leave synced mode.
-<p><li>
-If you send a patch, or modify its parameters, the Blofeld's patch screen does not indicate that it's been edited (as it usually does with a little inverted "E"), even though it has in fact been edited.
-</ul>
+You can't make parameter changes in real-time.
 
+<p><li>When you update a parameter, it's not reflected on the K4's LCD until you move to something else and back again.  Also when you send a patch, the name isn't updated: but the sound has in fact been changed.
+
+</ul>
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>
@@ -25,6 +30,6 @@ If you send a patch, or modify its parameters, the Blofeld's patch screen does n
 <td><b>Sean Luke</b>
 <tr>
 <td align=right>Date&nbsp;&nbsp;&nbsp;
-<td>June 2017
+<td>August 2017
 </table>
 

@@ -40,7 +40,7 @@ Edisyn at present has patch editors for the following synthesizers, which strang
 \item Preen FM2 (Single)
 \end{itemize}
 
-Edisyn does not support patches for global parameters, nor for wave or wavetable editing.
+Edisyn does not support patches for global parameters, nor for wave, sample, or wavetable editing etc.  Additionally Edisyn is at present {\bf not a librarian tool}.  You should use a good free librarian tool, such as SysEx Librarian on the Mac.
 
 
 \section{Starting Edisyn}
@@ -162,6 +162,8 @@ By selecting {\bf Request Current Patch}, you can also ask your synthesizer to s
 {\bf Send to Current Patch} will dump Edisyn's current patch to the synthesizer, instructing it to only update its local working memory, and not to store the patch in permanent memory.  This operation is not used all that often because most updates (changing widgets, doing bulk edits) do it automatically.  But you could use it to sync the synthesizer up.
 
 {\bf Send to Patch...} will ask the synthesizer to change to a new patch and bank which you specify, then dump Edisyn's current patch to the synthesizer in its working (not permanent) memory.  This also isn't used all that much: but some synthesizers (like the PreenFM2 or TX81Z) cannot be permanently written to remotely.  Instead you send to a patch, then store the patch manually on the synthesizer itself.
+
+{\bf Sends Real Time Changes} controls whether the Edisyn will send parameter changes to the synthesizer in real time in response to you changing widgets in the patch editor.  This isn't necessarily determined by the synth model.  For example, the default ROM for the Oberheim Matrix 1000 cannot handle real-time changes: but ROM versions 1.16 or 1.20 (later bug fixes by the Oberheim user community) allow real-time changes with no issue.  
 
 {\bf Write to Patch...} will ask the synthesizer to change to a new patch and bank which you specify, then dump Edisyn's current patch to the synthesizer to its permanent memory.  
 
@@ -317,22 +319,24 @@ Below is a little table of the current patch editors for Edisyn, and various Edi
 \begin{sideways}Send to Specific Patch\end{sideways}&
 \begin{sideways}Write to Specific Patch\end{sideways}&
 \begin{sideways}Change Mode\end{sideways}&
-\begin{sideways}Receive Error\end{sideways}&
+\begin{sideways}Receive Error or Ack\end{sideways}&
 \begin{sideways}Standard Sysex File\end{sideways}\\[0.5em]
 \hline\\[-0.5em]
 Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}\footnotemark&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}            \\
 Waldorf Blofeld&{\cm}\footnote{Not Multi}&{\cm}\samefootnote&{\cm}&{\cm}\backfootnote{2}&{\cm}&{\cm}&{\cm}& & & {\cm}            \\
-Kawai K4/K4r&{\cm}\backfootnote{1}& &{\cm}& &{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}            \\
-Yamaha TX81Z&{\cm}\backfootnote{1}& & &{\cm}&{\cm}& & &  & &{\cm}\footnotemark            \\
+Kawai K4/K4r&{\cm}\footnotemark& &{\cm}& &{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}            \\
+Yamaha TX81Z&{\cm}\backfootnote{2}& & &{\cm}&{\cm}& & &  & &{\cm}\footnotemark            \\
 PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &            \\
 Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}&{\cm}& & &{\cm}          \\
 Korg Microsampler&{\cm}\footnotemark&{\cm}\samefootnote& & & & & &  &  &         \\
 \end{tabular}
 \end{center}
-\addtocounter{footnote}{-3}
+\addtocounter{footnote}{-4}
 \footnotetext{Incoming patch won't have patch number or bank information.}
 \addtocounter{footnote}{1}
 \footnotetext{Not in Multimode.}
+\addtocounter{footnote}{1}
+\footnotetext{Not in Multimode.  Also, certain parameters cannot be set (source mutes).}
 \addtocounter{footnote}{1}
 \footnotetext{File contains two concatenated sysex transmissions.}
 \addtocounter{footnote}{1}
@@ -601,15 +605,15 @@ JComponent comp = new PatchDisplay(this, "Patch", bankKey, numberKey, numberOfCo
     };
 \end{verbatim}
 
-\item {\bf EnvelopeDisplay}\quad This displays a wide variety of envelopes.  There are two main kinds of envelopes your synthesizer might display.  First, your synthesizer might define parameters (like attack) in terms of the {\it height} of the attack and also the {\it amount of time} necessary to reach that height.  This is intuitive to draw, but in fact many synthesizers don't do it that way.  Instead, some define it in terms of the {\it height} of the attack and the {\it rate of change} (or slope, or angle).  In the first case, the height of the attack has no bearing on how long it takes to reach it.  But in the second case, the amount of time to reach the attack depends on both the height and on the rate.  You will need to figure out what your synthesizer does exactly.  This is complicated by some synthesizers (like Yamaha's) which use rate, but compute it not in terms of angle, but in terms of (essentially) 90 degrees {\it minus} the angle.  Thus a steeper rate is a {\it lower number}.
+\item {\bf EnvelopeDisplay}\quad This displays a wide variety of envelopes.  Envelopes are drawn as a series of points, and between every successive pair of points we draw a line.    You will provide the EnvelopeDisplay with several arrays defining the coordinates of those points.  
 
-Envelopes are drawn as a series of points, and between every successive pair of points we draw a line.    You will provide the EnvelopeDisplay with several arrays defining the coordinates of those points.  
+There are two main kinds of envelopes your synthesizer might employ.  First, your synthesizer might define parameters (like attack) in terms of the {\it height} of the attack and also the {\it amount of time} necessary to reach that height.  This is intuitive to draw, but in fact many synthesizers don't do it that way.  Instead, some define it in terms of the {\it height} of the attack and the {\it rate of change} (or slope, or angle).  In the first case, the height of the attack has no bearing on how long it takes to reach it.  But in the second case, the amount of time to reach the attack depends on both the height and on the rate.  This is even further complicated by some synthesizers (like Yamaha's) which use rate, but compute it not in terms of angle, but in terms of (essentially) 90 degrees {\it minus} the angle.  Thus a steeper rate is a {\it lower number}.  You will need to figure out what your synthesizer does exactly.  
 
 Let's say your synth does the easy thing and computes stuff in terms of height and amount of time.  Then you set up an Envelope Display with four elements:
 
 \begin{itemize}
-\item An array of keys (some of which can be null) of the parameters which define the {\it height} for each segment.  If a key is null, the parameter value is assumed to be 1.0.
 \item An array of keys (some of which can be null) of the parameters which define the {\it amount of time} for each segment.  If a key is null, the parameter value is assumed to be 1.0.
+\item An array of keys (some of which can be null) of the parameters which define the {\it height} for each segment.  If a key is null, the parameter value is assumed to be 1.0.
 \item An array of constant doubles which will be multiplied against the time parameters.  You want these constants to be such that, when the time parameters are at their maximum length, their values, multiplied by these constants, will sum to  no more than 1.0
 \item An array of constant doubles which will be multiplied against the height parameters.  You want these constants to be such that, when the any given height parameter is maximum, when multiplied against the constant it will be no more than 1.0.
 \end{itemize}
@@ -753,7 +757,7 @@ receiveCurrent.setEnabled(false);  // turns of the "Request Current Patch" menu 
 
 You should do this in an overridden version of the  {\bf sprout()} method (be absolutely sure to call super.sprout() first).
 
-You will also want to override some other methods.  First {\bf getPatchName()} should extract the patch name from the model (probably via {\tt getModel().get("name", "foo")}.  Second, you also will want to override the {\bf revisePatchName(...)} method if you've not already done so for the StringComponent widget.  This method modifies a provided name and returns a corrected version.  The default version, which you might call first (via super), removes trailing whitespace.  You can then revise incorrect characters, length, and so on.  Third, if your synthesizer uses an ID to distinguish itself from other synthesizers of the same type (the Waldorf synths do this for example), you should override the {\bf reviseID(...)} method to correct provided IDs.  If this method returns {\tt null} (the default), the  ID won't even appear as an option.
+You will also want to override some other methods.  First {\bf getPatchName()} should extract the patch name from the model (probably via {\tt getModel().get("name", "foo")}\ ).  Second, you also will want to override the {\bf revisePatchName(...)} method if you've not already done so for the StringComponent widget.  This method modifies a provided name and returns a corrected version.  The default version, which you might call first (via super), removes trailing whitespace.  You can then revise incorrect characters, length, and so on.  Third, if your synthesizer uses an ID to distinguish itself from other synthesizers of the same type (the Waldorf synths do this for example), you should override the {\bf reviseID(...)} method to correct provided IDs.  If this method returns {\tt null} (the default), the  ID won't even appear as an option.
 
 Finally, you will probably want to override the {\bf revise()} method to verify that all the model parameters have valid values, and tweak them if not.  The default version, which you can call via super, does most of the heavy lifting: it bounds the values to between their min and max.  You might also verify that the patch name is correct here.  See the Waldorf Blofeld code as an example of what to do.
 

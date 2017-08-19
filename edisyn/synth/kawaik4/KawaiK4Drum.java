@@ -384,10 +384,7 @@ public class KawaiK4Drum extends Synth
 
     public static String getSynthName() { return "Kawai K4/K4r [Drum]"; }
     
-    public String getDefaultResourceFileName() 
-    	{
-    	return null; 
-    	}
+    public String getDefaultResourceFileName() { return "KawaiK4Drum.init"; }
 	
     public String getHTMLResourceFileName() 
     	{ 
@@ -562,7 +559,17 @@ public class KawaiK4Drum extends Synth
 
 		// Error in Section 4-1, see "Corrected MIDI Implementation"
 
-        boolean external = (tempModel.get("bank") > 4);
+        boolean external;
+        
+		if (tempModel != null)
+			{
+         	external = (tempModel.get("bank") > 4);
+         	}
+         else
+         	{
+         	external = (model.get("bank") > 4);
+         	}
+         	
 		byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
 		result[0] = (byte)0xF0;
 		result[1] = (byte)0x40;

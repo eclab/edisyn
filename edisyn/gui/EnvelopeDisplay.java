@@ -14,40 +14,40 @@ import java.awt.event.*;
 
 
 /**
-	A tool to display envelopes.  You will provide one of two collections of items:
-	
-	<ul><li>
-	An array of XKEYS, YKEYS, XCONSTANTS, and YCONSTANTS.  The xkeys and ykeys define
-	the x and y coordinates of each point in the envelope, including the endpoints.  
-	They are multiplied by the xconstants and yconstants so that the y values stay within
-	the range [0...1] and the x values *summed together* will not exceed the range [0...1].
-	Individual XKEYS and YKEYS can be null: if an xkey is null, its value is 0.  If a ykey
-	is null, its value is 1.
-	
-	<p>This approach is useful for envelopes where the xkeys are related to the specific length of time
-	that a synth will take to reach a next stage.  An example of a synth in this category: the
-	Oberheim Matrix 1000.
+   A tool to display envelopes.  You will provide one of two collections of items:
+        
+   <ul><li>
+   An array of XKEYS, YKEYS, XCONSTANTS, and YCONSTANTS.  The xkeys and ykeys define
+   the x and y coordinates of each point in the envelope, including the endpoints.  
+   They are multiplied by the xconstants and yconstants so that the y values stay within
+   the range [0...1] and the x values *summed together* will not exceed the range [0...1].
+   Individual XKEYS and YKEYS can be null: if an xkey is null, its value is 0.  If a ykey
+   is null, its value is 1.
+        
+   <p>This approach is useful for envelopes where the xkeys are related to the specific length of time
+   that a synth will take to reach a next stage.  An example of a synth in this category: the
+   Oberheim Matrix 1000.
 
-	<ul><li>
-	An array of XKEYS, YKEYS, XCONSTANTS, YCONSTANTS, and ANGLES.  The ykeys define
-	the y coordinates of each point in the envelope, including the endpoints.  xkey #0
-	defines the x coordinate of point 0 in the envelope; thereafter x coordinates are computed by taking
-	the ANGLES (angles between 0 and PI/2) and figuring the x distance needed for a line of the
-	given angle, starting at the previous y height, to reach the next y height.  Angles are always
-	positive even if the resulting line has a negative slope.  You will probably have to scale
-	the angles by a certain amount so that the largest possible envelopes sum to 1.0.  I have found
-	that if you have three slopes, you may need to scale by 0.314, and if you have four slopes,
-	you may need to scale by 0.25.  
-	
-	The xconstants now simply define the *maximum* x distance that a sloped line will cover: they
-	should sum to 1.  The y constants again should be such that the y values, multiplied
-	by the y constants, stay within the range [0...1].
-	Individual XKEYS and YKEYS can be null: if an xkey is null, its value is 0.  If a ykey
-	is null, its value is 1.
-	
-	<p>This approach is useful for envelopes where the xkeys are related directly to the angle of attack of the 
-	sloped line.   An example of a synth in this category: the Waldorf Blofeld.
-	<li>
+   <ul><li>
+   An array of XKEYS, YKEYS, XCONSTANTS, YCONSTANTS, and ANGLES.  The ykeys define
+   the y coordinates of each point in the envelope, including the endpoints.  xkey #0
+   defines the x coordinate of point 0 in the envelope; thereafter x coordinates are computed by taking
+   the ANGLES (angles between 0 and PI/2) and figuring the x distance needed for a line of the
+   given angle, starting at the previous y height, to reach the next y height.  Angles are always
+   positive even if the resulting line has a negative slope.  You will probably have to scale
+   the angles by a certain amount so that the largest possible envelopes sum to 1.0.  I have found
+   that if you have three slopes, you may need to scale by 0.314, and if you have four slopes,
+   you may need to scale by 0.25.  
+        
+   The xconstants now simply define the *maximum* x distance that a sloped line will cover: they
+   should sum to 1.  The y constants again should be such that the y values, multiplied
+   by the y constants, stay within the range [0...1].
+   Individual XKEYS and YKEYS can be null: if an xkey is null, its value is 0.  If a ykey
+   is null, its value is 1.
+        
+   <p>This approach is useful for envelopes where the xkeys are related directly to the angle of attack of the 
+   sloped line.   An example of a synth in this category: the Waldorf Blofeld.
+   <li>
 
    @author Sean Luke
 */
@@ -56,7 +56,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     {
     double xConstants[];
     double yConstants[];
-	double angles[];
+    double angles[];
     String xKeys[];
     String yKeys[];
     Color color;
@@ -73,30 +73,30 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     String sustainStageKey;
     
     public void setFinalStageKey(String key)
-    	{
-    	finalStageKey = key;
-		synth.getModel().register(key, this);
-    	}
+        {
+        finalStageKey = key;
+        synth.getModel().register(key, this);
+        }
 
     public void setSustainStageKey(String key)
-    	{
-    	sustainStageKey = key;
-		synth.getModel().register(key, this);
-    	}
-    	
+        {
+        sustainStageKey = key;
+        synth.getModel().register(key, this);
+        }
+        
     public void setLoopKeys(int interval, String startKey, String endKey)
-    	{
-    	this.startKey[interval] = startKey;
-    	this.endKey[interval] = endKey;
-		synth.getModel().register(startKey, this);
-		synth.getModel().register(endKey, this);
-    	}
-    	
+        {
+        this.startKey[interval] = startKey;
+        this.endKey[interval] = endKey;
+        synth.getModel().register(startKey, this);
+        synth.getModel().register(endKey, this);
+        }
+        
     public int postProcessLoopOrStageKey(String key, int val)
-    	{
-    	return val;
-    	}
-    	        
+        {
+        return val;
+        }
+                
     public void setPreferredWidth(int width)
         {
         this.width = width;
@@ -121,9 +121,9 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     public Color getColor() { return color; }
     
     public EnvelopeDisplay(Synth synth, Color color, String[] xKeys, String[] yKeys, double xConstants[], double yConstants[])
-    	{
-    	this(synth, color, xKeys, yKeys, xConstants, yConstants, null);
-    	}
+        {
+        this(synth, color, xKeys, yKeys, xConstants, yConstants, null);
+        }
 
     public EnvelopeDisplay(Synth synth, Color color, String[] xKeys, String[] yKeys, double xConstants[], double yConstants[], double[] angles)
         {
@@ -180,8 +180,8 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         // count loop intervals
         int numLoops = 0;
         for(int i = 0; i < startKey.length; i++)
-        	if (startKey[i] != null)
-        		numLoops++;
+            if (startKey[i] != null)
+                numLoops++;
         
         double[] xs = new double[xKeys.length]; 
         double[] ys = new double[xKeys.length]; 
@@ -195,16 +195,16 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                 ys[i] *= synth.getModel().get(yKeys[i], 1);
             if (xKeys[i] != null)
                 {
-                if (angles != null && i > 0)			// we're doing angles
-                	{
-                	double yd = Math.abs(ys[i] - ys[i-1]);
-                	double xd = Math.abs(yd / Math.tan(Math.PI/2.0 - angles[i] * synth.getModel().get(xKeys[i], 0)));
-                	xs[i] *= xd;
-                	}
-	            else
-	            	{
-	            	xs[i] *= synth.getModel().get(xKeys[i], 1);
-	            	}
+                if (angles != null && i > 0)                    // we're doing angles
+                    {
+                    double yd = Math.abs(ys[i] - ys[i-1]);
+                    double xd = Math.abs(yd / Math.tan(Math.PI/2.0 - angles[i] * synth.getModel().get(xKeys[i], 0)));
+                    xs[i] *= xd;
+                    }
+                else
+                    {
+                    xs[i] *= synth.getModel().get(xKeys[i], 1);
+                    }
                 }
             }
         
@@ -237,7 +237,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             {
             xs[i] *= rect.width;
             double f = xs[i];
-	        xs[i] += xcurrent;
+            xs[i] += xcurrent;
             xcurrent = xcurrent + f;
             }
         for(int i = 0; i < ys.length; i++)
@@ -301,46 +301,46 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         // draw stage ends
 
         if (sustainStageKey != null)
-        	{
-        	int sustainStage = postProcessLoopOrStageKey(sustainStageKey, synth.getModel().get(sustainStageKey, 0));
-        	line = new Line2D.Double(rect.x + xs[sustainStage], rect.y,
-        							 rect.x + xs[sustainStage], rect.y + rect.height);
+            {
+            int sustainStage = postProcessLoopOrStageKey(sustainStageKey, synth.getModel().get(sustainStageKey, 0));
+            line = new Line2D.Double(rect.x + xs[sustainStage], rect.y,
+                rect.x + xs[sustainStage], rect.y + rect.height);
             graphics.setStroke(Style.ENVELOPE_AXIS_STROKE);
-        	graphics.draw(line);
-        	}
+            graphics.draw(line);
+            }
         
 
         if (finalStageKey != null)
-        	{
-        	int finalStage = postProcessLoopOrStageKey(finalStageKey, synth.getModel().get(finalStageKey, 0));
-        	line = new Line2D.Double(rect.x + xs[finalStage], rect.y,
-        							 rect.x + xs[finalStage], rect.y + rect.height);
-       		graphics.setStroke(new BasicStroke(1.0f));
-        	graphics.draw(line);
-        	}
+            {
+            int finalStage = postProcessLoopOrStageKey(finalStageKey, synth.getModel().get(finalStageKey, 0));
+            line = new Line2D.Double(rect.x + xs[finalStage], rect.y,
+                rect.x + xs[finalStage], rect.y + rect.height);
+            graphics.setStroke(new BasicStroke(1.0f));
+            graphics.draw(line);
+            }
         
             
         graphics.setStroke(new BasicStroke(1.0f));
         // draw intervals
-    	for(int i = 0; i < numLoops; i++)
-    		{
-    		double loopStart = rect.x + xs[postProcessLoopOrStageKey(startKey[i], synth.getModel().get(startKey[i], 0))];
-    		double loopEnd = rect.x + xs[postProcessLoopOrStageKey(endKey[i], synth.getModel().get(endKey[i], 0))];
-    		double loopHeight = rect.y + rect.height + 6 * (i + 1);
-    		line = new Line2D.Double(loopStart, loopHeight, loopEnd, loopHeight);
-    		graphics.draw(line);
-    		Ellipse2D.Double loopEndMarker = new Ellipse2D.Double( loopEnd - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0,
-    									  loopHeight - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0,
-    									 Style.ENVELOPE_DISPLAY_MARKER_WIDTH, Style.ENVELOPE_DISPLAY_MARKER_WIDTH);
-    		graphics.setColor(Style.BACKGROUND_COLOR);
-    		graphics.fill(loopEndMarker);
-    		graphics.setColor(color);
-    		graphics.draw(loopEndMarker);
-    		Ellipse2D.Double loopStartMarker = new Ellipse2D.Double( loopStart - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0,
-    									  loopHeight - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0,
-    									 Style.ENVELOPE_DISPLAY_MARKER_WIDTH, Style.ENVELOPE_DISPLAY_MARKER_WIDTH);
-    		graphics.fill(loopStartMarker);
-    		}
+        for(int i = 0; i < numLoops; i++)
+            {
+            double loopStart = rect.x + xs[postProcessLoopOrStageKey(startKey[i], synth.getModel().get(startKey[i], 0))];
+            double loopEnd = rect.x + xs[postProcessLoopOrStageKey(endKey[i], synth.getModel().get(endKey[i], 0))];
+            double loopHeight = rect.y + rect.height + 6 * (i + 1);
+            line = new Line2D.Double(loopStart, loopHeight, loopEnd, loopHeight);
+            graphics.draw(line);
+            Ellipse2D.Double loopEndMarker = new Ellipse2D.Double( loopEnd - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0,
+                loopHeight - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0,
+                Style.ENVELOPE_DISPLAY_MARKER_WIDTH, Style.ENVELOPE_DISPLAY_MARKER_WIDTH);
+            graphics.setColor(Style.BACKGROUND_COLOR);
+            graphics.fill(loopEndMarker);
+            graphics.setColor(color);
+            graphics.draw(loopEndMarker);
+            Ellipse2D.Double loopStartMarker = new Ellipse2D.Double( loopStart - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0,
+                loopHeight - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0,
+                Style.ENVELOPE_DISPLAY_MARKER_WIDTH, Style.ENVELOPE_DISPLAY_MARKER_WIDTH);
+            graphics.fill(loopStartMarker);
+            }
         }
         
     double axis = 0.0;

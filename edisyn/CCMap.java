@@ -47,12 +47,12 @@ public class CCMap
         }
         
     public int getTypeForCCPane(int cc, int pane)
-    	{
-    	Integer val = (Integer)(typeMap.get(munge(cc, pane)));
-    	if (val == null) return -1;
-    	else return (val.intValue());
-    	}
-    	
+        {
+        Integer val = (Integer)(typeMap.get(munge(cc, pane)));
+        if (val == null) return -1;
+        else return (val.intValue());
+        }
+        
     public String getKeyForCCPane(int cc, int pane)
         {
         return getKeyForInteger(munge(cc, pane));
@@ -86,9 +86,9 @@ public class CCMap
         }
         
     public void setTypeForCCPane(int cc, int pane, int type)
-    	{
-    	typeMap.put(munge(cc, pane), Integer.valueOf(type));
-    	typePrefs.put("" + munge(cc, pane).intValue(), "" + type);
+        {
+        typeMap.put(munge(cc, pane), Integer.valueOf(type));
+        typePrefs.put("" + munge(cc, pane).intValue(), "" + type);
         try 
             {
             typePrefs.sync();
@@ -97,7 +97,7 @@ public class CCMap
             {
             ex.printStackTrace();
             }
-    	}
+        }
     
     /** Sets the model key for the given CC value, and syncs the Preferences (which isn't cheap). */
     public void setKeyForInteger(Integer munge, String key)

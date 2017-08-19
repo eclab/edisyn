@@ -32,47 +32,47 @@ public class Category extends JComponent implements Gatherable
         addMouseListener(new MouseAdapter()
             {
             public void mouseClicked(MouseEvent e)
-            	{
+                {
                 boolean inBorder = ( e.getPoint().y < getInsets().top);
-            	if (e.getClickCount() == 2 && inBorder)
-            		{
-            		boolean turnOn = true;
-					ArrayList comps = new ArrayList();
-					gatherAllComponents(comps);
-					for(int i = 0; i < comps.size(); i++)
-						{
-						if (comps.get(i) instanceof NumericalComponent)
-							{
-							NumericalComponent nc = (NumericalComponent)(comps.get(i));
-							String key = nc.getKey();
-							if (synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
-								{ turnOn = false; break; }
-							}
-						}
-					
-					for(int i = 0; i < comps.size(); i++)
-						{
-						if (comps.get(i) instanceof NumericalComponent)
-							{
-							NumericalComponent nc = (NumericalComponent)(comps.get(i));
-							String key = nc.getKey();
-							if (synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
-								synth.mutationMap.setFree(key, turnOn);
-							}
-						}
-					repaint();
-            		}
-            	}
+                if (e.getClickCount() == 2 && inBorder)
+                    {
+                    boolean turnOn = true;
+                    ArrayList comps = new ArrayList();
+                    gatherAllComponents(comps);
+                    for(int i = 0; i < comps.size(); i++)
+                        {
+                        if (comps.get(i) instanceof NumericalComponent)
+                            {
+                            NumericalComponent nc = (NumericalComponent)(comps.get(i));
+                            String key = nc.getKey();
+                            if (synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+                                { turnOn = false; break; }
+                            }
+                        }
+                                        
+                    for(int i = 0; i < comps.size(); i++)
+                        {
+                        if (comps.get(i) instanceof NumericalComponent)
+                            {
+                            NumericalComponent nc = (NumericalComponent)(comps.get(i));
+                            String key = nc.getKey();
+                            if (synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+                                synth.mutationMap.setFree(key, turnOn);
+                            }
+                        }
+                    repaint();
+                    }
+                }
             });
                         
         }
     
     public Insets getInsets() 
-    	{ 
-    	Insets insets = (Insets)(super.getInsets().clone());
-    	insets.bottom = 0;
-    	return insets;
-    	}
+        { 
+        Insets insets = (Insets)(super.getInsets().clone());
+        insets.bottom = 0;
+        return insets;
+        }
     
     public void setName(String label)
         {
@@ -124,15 +124,15 @@ public class Category extends JComponent implements Gatherable
         }
     
     public void gatherAllComponents(java.util.ArrayList list)
-    	{
-    	Component[] c = getComponents();
-    	for(int i = 0; i < c.length; i++)
-    		{
-    		list.add(c[i]);
-    		if (c[i] instanceof Gatherable)
-    			((Gatherable)c[i]).gatherAllComponents(list);
-			}    			
-    	}
+        {
+        Component[] c = getComponents();
+        for(int i = 0; i < c.length; i++)
+            {
+            list.add(c[i]);
+            if (c[i] instanceof Gatherable)
+                ((Gatherable)c[i]).gatherAllComponents(list);
+            }                       
+        }
     
     public void paintComponent(Graphics g)
         {

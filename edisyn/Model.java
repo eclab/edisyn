@@ -97,7 +97,7 @@ public class Model implements Cloneable
 
 
     /** Mutates (potentially) all keys.
-    	Mutation works as follows.  For each key, we first see if we're permitted to mutate it
+        Mutation works as follows.  For each key, we first see if we're permitted to mutate it
         (no immutable status, no strings).  If so, we divide the range into the METRIC and NON-METRIC
         regions.  If it's all NON-METRIC, then with WEIGHT probability we will pick a new
         value at random (else stay).  Else if we're in a non-metric region, with 0.5 chance we'll
@@ -112,12 +112,12 @@ public class Model implements Cloneable
         within metric min and metric max.
     */
     public void mutate(Random random, double weight)
-    	{
-		mutate(random, getKeys(), weight);
-    	}
+        {
+        mutate(random, getKeys(), weight);
+        }
         
     /** Mutates (potentially) the keys provided.
-    	Mutation works as follows.  For each key, we first see if we're permitted to mutate it
+        Mutation works as follows.  For each key, we first see if we're permitted to mutate it
         (no immutable status, no strings).  If so, we divide the range into the METRIC and NON-METRIC
         regions.  If it's all NON-METRIC, then with WEIGHT probability we will pick a new
         value at random (else stay).  Else if we're in a non-metric region, with 0.5 chance we'll
@@ -134,11 +134,11 @@ public class Model implements Cloneable
     public void mutate(Random random, String[] keys, double weight)
         {
         if (undoListener!= null)
-        	{
-        	undoListener.push(this);
-        	undoListener.setWillPush(false);
-        	}
-        	
+            {
+            undoListener.push(this);
+            undoListener.setWillPush(false);
+            }
+                
         for(int i = 0; i < keys.length; i++)
             {
             // continue if the key is immutable, it's a string, or we fail the coin toss
@@ -217,15 +217,15 @@ public class Model implements Cloneable
             }
 
         if (undoListener!= null)
-        	{
-        	undoListener.setWillPush(true);
-        	}
+            {
+            undoListener.setWillPush(true);
+            }
         }
 
 
 
     /** Recombines (potentially) all keys.  
-    	Recombination works as follows.  For each key, we first see if we're permitted to mutate it
+        Recombination works as follows.  For each key, we first see if we're permitted to mutate it
         (no immutable status, other model doesn't have the key).  Next with 1.0 - WEIGHT probability 
         we don't recombine at all. Otherwise we recombine:
                 
@@ -236,12 +236,12 @@ public class Model implements Cloneable
         Otherwise with 0.5 probability we select our parameter, else the other model's parameter.
     */
     public void recombine(Random random, Model model, double weight)
-    	{
-    	recombine(random, model, getKeys(), weight);
-    	}
+        {
+        recombine(random, model, getKeys(), weight);
+        }
 
     /** Recombines (potentially the keys provided.  
-    	Recombination works as follows.  For each key, we first see if we're permitted to mutate it
+        Recombination works as follows.  For each key, we first see if we're permitted to mutate it
         (no immutable status, other model doesn't have the key).  Next with 1.0 - WEIGHT probability 
         we don't recombine at all. Otherwise we recombine:
                 
@@ -254,11 +254,11 @@ public class Model implements Cloneable
     public void recombine(Random random, Model model, String[] keys, double weight)
         {
         if (undoListener!= null)
-        	{
-        	undoListener.push(this);
-        	undoListener.setWillPush(false);
-        	}
-        	
+            {
+            undoListener.push(this);
+            undoListener.setWillPush(false);
+            }
+                
         for(int i = 0; i < keys.length; i++)
             {
             // return if the key doesn't exist, is immutable or is a string, or we fail the coin toss
@@ -295,9 +295,9 @@ public class Model implements Cloneable
             }
 
         if (undoListener!= null)
-        	{
-        	undoListener.setWillPush(true);
-        	}
+            {
+            undoListener.setWillPush(true);
+            }
         }
     
     
@@ -385,8 +385,8 @@ public class Model implements Cloneable
         String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
         ArrayList revisedKeys = new ArrayList<String>();
         for(int i = 0; i < keyset.length; i++)
-        	if (getStatus(keyset[i]) != STATUS_HIDDEN)
-        		revisedKeys.add(keyset[i]);
+            if (getStatus(keyset[i]) != STATUS_HIDDEN)
+                revisedKeys.add(keyset[i]);
         return (String[])(revisedKeys.toArray(new String[0]));
         }
         
@@ -498,17 +498,17 @@ public class Model implements Cloneable
         }
     
     /** Returns the value associated with this (Integer) key, or -1 if there is no such value. 
-    	If there is no such value, also prints (does not throw) a RuntimeError stacktrace.  */        
+        If there is no such value, also prints (does not throw) a RuntimeError stacktrace.  */        
     public int get(String key)
-    	{
+        {
         Integer d = (Integer) (storage.get(key));
-        if (d == null)	
-        	{
-        	new RuntimeException("No Value stored for key " + key + ", returning -1, which is certainly wrong.").printStackTrace();
+        if (d == null)  
+            {
+            new RuntimeException("No Value stored for key " + key + ", returning -1, which is certainly wrong.").printStackTrace();
             return -1;
-        	}
+            }
         else return d.intValue();
-    	}
+        }
               
     Object getValue(String key) { return storage.get(key); }
       
@@ -601,13 +601,13 @@ public class Model implements Cloneable
     public int getStatus(String key)
         {
         if (status.containsKey(key))
-        	return ((Integer)(status.get(key))).intValue();
+            return ((Integer)(status.get(key))).intValue();
         else if (!exists(key))
-        	return STATUS_IMMUTABLE;
+            return STATUS_IMMUTABLE;
         else if (isString(key))
-			return STATUS_IMMUTABLE;
-		else // it's a number
-			return STATUS_FREE;
+            return STATUS_IMMUTABLE;
+        else // it's a number
+            return STATUS_FREE;
         }
                 
     /** Returns the minimum for a given key, or 0 if no minimum is declared. */        
@@ -644,10 +644,10 @@ public class Model implements Cloneable
         
     /** Deletes the metric min and max for a key */
     public void removeMetricMinMax(String key)
-    	{
-    	metricMin.remove(key);
-    	metricMax.remove(key);
-    	}
+        {
+        metricMin.remove(key);
+        metricMax.remove(key);
+        }
 
     public int getRange(String key)
         {

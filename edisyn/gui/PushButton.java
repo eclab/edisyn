@@ -26,7 +26,7 @@ public class PushButton extends JPanel
     public Insets getInsets() { return new Insets(0,0,0,0); }
     public PushButton(final String text)
         {
-		button = new JButton(text);
+        button = new JButton(text);
         button.putClientProperty("JComponent.sizeVariant", "small");
         button.setFont(Style.SMALL_FONT);
         button.setHorizontalAlignment(SwingConstants.CENTER);

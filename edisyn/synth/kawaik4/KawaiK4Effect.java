@@ -20,32 +20,32 @@ public class KawaiK4Effect extends Synth
     {
     public static final String[] BANKS = { "Internal", "External" };
 
-	public static final String[][] EFFECT_PARAMETERS = new String[][] 
-		{
-		{ "Pre-Delay", "Time", "Tone" },
-		{ "Pre-Delay", "Time", "Tone" },
-		{ "Pre-Delay", "Time", "Tone" },
-		{ "Pre-Delay", "Time", "Tone" },
-		{ "Pre-Delay", "Time", "Tone" },
-		{ "Pre-Delay", "Time", "Tone" },
-		{ "Feedback", "Tone", "Delay" },
-		{ "Feedback", "L/R Delay", "Delay" },
-		{ "Width", "Feedback", "Rate" },
-		{ "Drive", "Flanger Type", "Balance" },
-		{ "Drive", "Delay Time", "Balance" },
-		{ "Drive", "Reverb Type", "Balance" },
-		{ "Delay 1", "Delay 2", "Balance" },
-		{ "Delay 1", "Delay 2", "Balance" },
-		{ "Chorus", "Delay", "Balance" },
-		{ "Chorus", "Delay", "Balance" } 
-		};
-		
-	public static final String[] EFFECT_TYPES = { "Reverb 1", "Reverb 2", "Reverb 3", "Reverb 4", "Gate Reverb", "Reverse Gate", "Normal Delay", "Stereo Panpot Delay", "Chorus", "Overdrive + Flanger", "Overdrive + Normal Delay", "Overdrive + Reverb", "Normal Delay + Normal Delay", "Normal Delay + Stereo Panpot Delay", "Chorus + Normal Delay", "Chorus + Stereo Panpot Delay" };
+    public static final String[][] EFFECT_PARAMETERS = new String[][] 
+    {
+    { "Pre-Delay", "Time", "Tone" },
+    { "Pre-Delay", "Time", "Tone" },
+    { "Pre-Delay", "Time", "Tone" },
+    { "Pre-Delay", "Time", "Tone" },
+    { "Pre-Delay", "Time", "Tone" },
+    { "Pre-Delay", "Time", "Tone" },
+    { "Feedback", "Tone", "Delay" },
+    { "Feedback", "L/R Delay", "Delay" },
+    { "Width", "Feedback", "Rate" },
+    { "Drive", "Flanger Type", "Balance" },
+    { "Drive", "Delay Time", "Balance" },
+    { "Drive", "Reverb Type", "Balance" },
+    { "Delay 1", "Delay 2", "Balance" },
+    { "Delay 1", "Delay 2", "Balance" },
+    { "Chorus", "Delay", "Balance" },
+    { "Chorus", "Delay", "Balance" } 
+    };
+                
+    public static final String[] EFFECT_TYPES = { "Reverb 1", "Reverb 2", "Reverb 3", "Reverb 4", "Gate Reverb", "Reverse Gate", "Normal Delay", "Stereo Panpot Delay", "Chorus", "Overdrive + Flanger", "Overdrive + Normal Delay", "Overdrive + Reverb", "Normal Delay + Normal Delay", "Normal Delay + Stereo Panpot Delay", "Chorus + Normal Delay", "Chorus + Stereo Panpot Delay" };
     
     public static final String[] SUBMIXES = { "A", "B", "C", "D", "E", "F", "G", "H" };
     
     public KawaiK4Effect()
-    	{
+        {
         for(int i = 0; i < allParameters.length; i++)
             {
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
@@ -59,27 +59,27 @@ public class KawaiK4Effect extends Synth
         vbox.add(hbox);
         
         for(int i = 0; i < 8; i+= 4)
-        	{
-			hbox = new HBox();
-			hbox.add(addSubmix(i + 1, Style.COLOR_B));
-			hbox.add(addSubmix(i + 2, Style.COLOR_B));
-			hbox.add(addSubmix(i + 3, Style.COLOR_B));
-			hbox.addLast(addSubmix(i + 4, Style.COLOR_B));
-			vbox.add(hbox);
-        	}
+            {
+            hbox = new HBox();
+            hbox.add(addSubmix(i + 1, Style.COLOR_B));
+            hbox.add(addSubmix(i + 2, Style.COLOR_B));
+            hbox.add(addSubmix(i + 3, Style.COLOR_B));
+            hbox.addLast(addSubmix(i + 4, Style.COLOR_B));
+            vbox.add(hbox);
+            }
 
-		soundPanel.add(vbox);
+        soundPanel.add(vbox);
 
         addTab("Effect", soundPanel);
         
         model.set("name", "Init Patch");  // has to be 10 long
 
-    	model.set("number", 0);
-    	model.set("bank", 0);		// internal
-    	
-    	loadDefaults();
-    	}
-    	
+        model.set("number", 0);
+        model.set("bank", 0);           // internal
+        
+        loadDefaults();
+        }
+        
 
 
     /** Add the global patch category (name, id, number, etc.) */
@@ -108,18 +108,18 @@ public class KawaiK4Effect extends Synth
         }
 
 
-	public LabelledDial[] param = new LabelledDial[3];
+    public LabelledDial[] param = new LabelledDial[3];
 
-	void updateEffects(int effectType)
-		{
-		for(int i = 0; i < param.length; i++)
-			{
-			param[i].setLabel(EFFECT_PARAMETERS[effectType][i]);
-			param[i].repaint();
-			}
-		}	
+    void updateEffects(int effectType)
+        {
+        for(int i = 0; i < param.length; i++)
+            {
+            param[i].setLabel(EFFECT_PARAMETERS[effectType][i]);
+            param[i].repaint();
+            }
+        }       
 
-     public JComponent addGlobal(Color color)
+    public JComponent addGlobal(Color color)
         {
         Category category = new Category(this, "Global", color);
 
@@ -129,7 +129,7 @@ public class KawaiK4Effect extends Synth
         
         param[0] = new LabelledDial("Parameter 1", this, "param1", color, 0, 7);
         param[0].addAdditionalLabel("[K4]");
-        param[1] = new LabelledDial("Parameter 2", this, "param2", color, 0, 7);
+        param[1] = new LabelledDial("Parameter 2", this, "param2", color, 0, 7);  // this is always 0...7, even for parameter #12
         param[1].addAdditionalLabel("        [K4]        ");
         param[2] = new LabelledDial("Parameter 3", this, "param3", color, 0, 31);
         param[2].addAdditionalLabel("[K4]");
@@ -137,26 +137,26 @@ public class KawaiK4Effect extends Synth
         params = EFFECT_TYPES;
         VBox vbox = new VBox();
         comp = new Chooser("Type [K4]", this, "type", params)
-        	{
-			public void update(String key, Model model)
-				{
-				super.update(key, model);
-				int effectType = model.get("type");
-				updateEffects(effectType);
-				}
-        	};
+            {
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                int effectType = model.get("type");
+                updateEffects(effectType);
+                }
+            };
         vbox.add(comp);
-		hbox.add(vbox);
+        hbox.add(vbox);
 
-		hbox.add(param[0]);
-		hbox.add(param[1]);
-		hbox.add(param[2]);
+        hbox.add(param[0]);
+        hbox.add(param[1]);
+        hbox.add(param[2]);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
 
-     public JComponent addSubmix(int sub, Color color)
+    public JComponent addSubmix(int sub, Color color)
         {
         Category category = new Category(this, "Submix " + SUBMIXES[sub - 1], color);
 
@@ -165,18 +165,18 @@ public class KawaiK4Effect extends Synth
         HBox hbox = new HBox();
         
         comp = new LabelledDial("Pan", this, "submix" + sub + "pan", color, 0, 21)
-        	{
-        	public String map(int val)
-        		{
-        		if (val < 15)
-        			return "" + (val - 7);
-        		else if (val == 15)  // unknown at this time
-        			return "??";
-        		else return "I" + (val - 15);
-        		}
-        	public int getDefaultValue() { return 7; }
-        	public double getStartAngle() { return 180; }
-        	};
+            {
+            public String map(int val)
+                {
+                if (val < 15)
+                    return "" + (val - 7);
+                else if (val == 15)  // unknown at this time
+                    return "??";
+                else return "I" + (val - 15);
+                }
+            public int getDefaultValue() { return 7; }
+            public double getStartAngle() { return 180; }
+            };
         getModel().setMetricMax("submix" + sub + "pan", 14);  // maybe this isn't even right.  Is it 15?  And how do we restrict the I1...I6???
         ((LabelledDial)comp).addAdditionalLabel("[K4r: I1-I6]");
         hbox.add(comp);
@@ -194,8 +194,8 @@ public class KawaiK4Effect extends Synth
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
-            	
-            	
+                
+                
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JComboBox bank = new JComboBox(BANKS);
@@ -238,20 +238,20 @@ public class KawaiK4Effect extends Synth
 
     public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
-			model.set("bank", data[6] == 0x01 ? 0 : 1);
-			model.set("number", data[7]);
-			
-    	for(int i = 0; i < 34; i++)
-    		{
-    		String key = allParameters[i];
-    		if (key.equals("-"))
-    			continue;
-			else
-				model.set(key, data[i + 8]);
-			}
+        model.set("bank", data[6] == 0x01 ? 0 : 1);
+        model.set("number", data[7]);
+                        
+        for(int i = 0; i < 34; i++)
+            {
+            String key = allParameters[i];
+            if (key.equals("-"))
+                continue;
+            else
+                model.set(key, data[i + 8]);
+            }
 
-	        revise();
-    	    return true;            // change this as appropriate
+        revise();
+        return true;            // change this as appropriate
         }
     
     public static final int EXPECTED_SYSEX_LENGTH = 34 + 10;
@@ -259,23 +259,23 @@ public class KawaiK4Effect extends Synth
     public static boolean recognize(byte[] data)
         {
         return (data.length == EXPECTED_SYSEX_LENGTH &&
-				data[0] == (byte)0xF0 &&
-				data[1] == (byte)0x40 &&
-				data[3] == (byte)0x20 &&
-				data[4] == (byte)0x00 &&
-				data[5] == (byte)0x04 &&
-				(data[6] == (byte)0x01 || data[6] == (byte)0x03) &&
-				data[7] < (byte)32);
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x40 &&
+            data[3] == (byte)0x20 &&
+            data[4] == (byte)0x00 &&
+            data[5] == (byte)0x04 &&
+            (data[6] == (byte)0x01 || data[6] == (byte)0x03) &&
+            data[7] < (byte)32);
         }
 
     public static String getSynthName() { return "Kawai K4/K4r [Effect]"; }
     
     public String getDefaultResourceFileName() { return "KawaiK4Effect.init"; }
-	
+        
     public String getHTMLResourceFileName() 
-    	{ 
-    	return "KawaiK4Effect.html";
-    	}
+        { 
+        return "KawaiK4Effect.html";
+        }
 
     
     
@@ -285,12 +285,12 @@ public class KawaiK4Effect extends Synth
     
     
 
-	// not even sure if I need this
+    // not even sure if I need this
 
     public String getPatchName() 
-    	{
-		return "Effect " + (model.get("number") + 1);
-    	}
+        {
+        return "Effect " + (model.get("number") + 1);
+        }
 
 
 
@@ -347,7 +347,7 @@ public class KawaiK4Effect extends Synth
         {
         //      The K4 manual says the checksum is the
         //              "Sum of the A5H and s0~s129".
-        //		I believe this is A5 + sum(s0...s129) ignoring overflow, cut to 7 bits
+        //              I believe this is A5 + sum(s0...s129) ignoring overflow, cut to 7 bits
 
         int checksum = 0xA5;
         for(int i = 0; i < bytes.length; i++)
@@ -359,86 +359,81 @@ public class KawaiK4Effect extends Synth
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-    	byte[] data = new byte[34];
+        if (tempModel == null)
+            tempModel = getModel();
+
+        byte[] data = new byte[34];
     
-    	for(int i = 0; i < 34; i++)
-    		{
-	   		String key = allParameters[i];
-	   		if (key.equals("-"))
-	   			data[i] = (byte)0x0;
-	   		else
-				data[i] = (byte)(model.get(key));
-			}
+        for(int i = 0; i < 34; i++)
+            {
+            String key = allParameters[i];
+            if (key.equals("-"))
+                data[i] = (byte)0x0;
+            else
+                data[i] = (byte)(model.get(key));
+            }
 
-		// Error in Section 4-1, see "Corrected MIDI Implementation"
+        // Error in Section 4-1, see "Corrected MIDI Implementation"
 
-		boolean external;
-		byte position;
-		
-		if (tempModel != null)
-			{
-        	external = (tempModel.get("bank") > 4);
-			position = (byte)(tempModel.get("number"));
-			}
-		else
-			{
-        	external = (model.get("bank") > 4);
-			position = (byte)(model.get("number"));
-			}
-			
-		byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
-		result[0] = (byte)0xF0;
-		result[1] = (byte)0x40;
-		result[2] = (byte)getChannelOut();
-		if (toWorkingMemory)
-			result[3] = (byte)0x23;
-		else
-			result[3] = (byte)0x20;
-		result[4] = (byte)0x00;
-		result[5] = (byte)0x04;
-		if (toWorkingMemory)
-			result[6] = 0x01;
-		else
-			result[6] = (byte)(external ? 0x03 : 0x01);
-		if (toWorkingMemory)
-			result[7] = (byte)(0x00);	// indicates effect
-		else
-			result[7] = (byte)position;
-		System.arraycopy(data, 0, result, 8, data.length);
-		result[8 + data.length] = (byte)produceChecksum(data);
-		result[9 + data.length] = (byte)0xF7;
-		return result;
+        boolean external;
+        byte position;
+                
+        external = (tempModel.get("bank") > 4);
+        position = (byte)(tempModel.get("number"));
+                        
+        byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
+        result[0] = (byte)0xF0;
+        result[1] = (byte)0x40;
+        result[2] = (byte)getChannelOut();
+        if (toWorkingMemory)
+            result[3] = (byte)0x23;
+        else
+            result[3] = (byte)0x20;
+        result[4] = (byte)0x00;
+        result[5] = (byte)0x04;
+        if (toWorkingMemory)
+            result[6] = 0x01;
+        else
+            result[6] = (byte)(external ? 0x03 : 0x01);
+        if (toWorkingMemory)
+            result[7] = (byte)(0x00);       // indicates effect
+        else
+            result[7] = (byte)position;
+        System.arraycopy(data, 0, result, 8, data.length);
+        result[8 + data.length] = (byte)produceChecksum(data);
+        result[9 + data.length] = (byte)0xF7;
+        return result;
         }
     
     
     
     
     public byte[] emit(String key) 
-    	{ 
+        { 
         if (key.equals("bank")) return new byte[0];  // this is not emittable
         if (key.equals("number")) return new byte[0];  // this is not emittable
-		if (key.equals("-")) return new byte[0];  // hmmm
-		
-		int source = 0;
-		byte msb = (byte)(model.get(key) >> 7);
-		byte lsb = (byte)(model.get(key) & 127);
+        if (key.equals("-")) return new byte[0];  // hmmm
+                
+        int source = 0;
+        byte msb = (byte)(model.get(key) >> 7);
+        byte lsb = (byte)(model.get(key) & 127);
 
 
-		int index = ((Integer)(allParametersToIndex.get(key))).intValue();
-		int submix = 0;
-		
-		if (index >= 10)
-			{
-			submix = (index - 10) / 3;
-			index = (index - 10) % 3 + 86;
-			}
-		else
-			{
-			index = index + 82;
-			}
-			
-		return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x04, (byte)index, (byte)((submix << 1) | msb), (byte)lsb, (byte)0xF7 };
-    	}
+        int index = ((Integer)(allParametersToIndex.get(key))).intValue();
+        int submix = 0;
+                
+        if (index >= 10)
+            {
+            submix = (index - 10) / 3;
+            index = (index - 10) % 3 + 86;
+            }
+        else
+            {
+            index = index + 82;
+            }
+                        
+        return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x04, (byte)index, (byte)((submix << 1) | msb), (byte)lsb, (byte)0xF7 };
+        }
 
 
 
@@ -446,13 +441,13 @@ public class KawaiK4Effect extends Synth
 
 
     public byte[] requestDump(Model tempModel) 
-    	{ 
-		byte position = (byte)(tempModel.get("number"));
-		boolean external = (tempModel.get("bank") == 1);
+        { 
+        byte position = (byte)(tempModel.get("number"));
+        boolean external = (tempModel.get("bank") == 1);
         return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x00, 0x00, 0x04, 
-        			(byte)(external ? 0x03 : 0x01),
-        			position, (byte)0xF7};
-    	}
+            (byte)(external ? 0x03 : 0x01),
+            position, (byte)0xF7};
+        }
     
     
     
@@ -462,33 +457,33 @@ public class KawaiK4Effect extends Synth
 
 
     public void parseParameter(byte[] data)
-    	{
-		if (data.length == 7 &&			// write error report
-			data[0] == (byte)0xF0 &&
-			data[1] == (byte)0x40 &&
-			data[3] >= (byte)0x41 &&
-			data[3] <= (byte)0x43 &&
-			data[4] == (byte)0x00 &&
-			data[5] == (byte)0x04)
-			{
-			String error = "Write Failed (Maybe Transmission Failure)";
-			// dump failed
-			if (data[3] == 0x42)
-				error = "Patch is Write-Protected";
-			else if (data[3] == 0x43)
-				error = "External Data Card is Not Inserted";
-			
+        {
+        if (data.length == 7 &&                 // write error report
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x40 &&
+            data[3] >= (byte)0x41 &&
+            data[3] <= (byte)0x43 &&
+            data[4] == (byte)0x00 &&
+            data[5] == (byte)0x04)
+            {
+            String error = "Write Failed (Maybe Transmission Failure)";
+            // dump failed
+            if (data[3] == 0x42)
+                error = "Patch is Write-Protected";
+            else if (data[3] == 0x43)
+                error = "External Data Card is Not Inserted";
+                        
             showSimpleError("Write Failed", error);
-			}
-    	}
+            }
+        }
     
     
-	public JFrame sprout()
-		{
-		JFrame frame = super.sprout();
+    public JFrame sprout()
+        {
+        JFrame frame = super.sprout();
         // We can't request the current working memory (don't ask why)
         receiveCurrent.setEnabled(false);
         return frame;
-		}
+        }
 
     }

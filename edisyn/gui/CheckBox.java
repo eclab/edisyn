@@ -46,15 +46,22 @@ public class CheckBox extends NumericalComponent
               
     public JCheckBox getCheckBox() { return check; }
       
+    boolean enabled = true;
+    public void setEnabled(boolean val)
+        {
+        enabled = val;
+        updateBorder();
+        }
+        
     public void updateBorder()
-    	{
-    	super.updateBorder();
-    	if (synth.isShowingMutation())
-    		check.setEnabled(false);
-    	else
-    		check.setEnabled(true);
-    	}
-    	
+        {
+        super.updateBorder();
+        if (synth.isShowingMutation())
+            check.setEnabled(false);
+        else
+            check.setEnabled(true && enabled);
+        }
+        
     public CheckBox(String label, Synth synth, String key, boolean flipped)
         {
         super(synth, key);
@@ -74,11 +81,12 @@ public class CheckBox extends NumericalComponent
                 return d;
                 }                       
             };
+            
         check.setFont(Style.SMALL_FONT);
         check.setOpaque(false);
 //check.setContentAreaFilled(false);
 //check.setBorderPainted(false);
-		//check.setBackground(Style.TRANSPARENT);		// creates bugs in Windows
+        //check.setBackground(Style.TRANSPARENT);               // creates bugs in Windows
         check.setForeground(Style.TEXT_COLOR);
 
         setMax(1);
@@ -91,14 +99,14 @@ public class CheckBox extends NumericalComponent
         check.addMouseListener(new MouseAdapter()
             {
             public void mouseClicked(MouseEvent e)
-				{
-				if (synth.isShowingMutation())
-					{
-            		synth.mutationMap.setFree(key, !synth.mutationMap.isFree(key));
-            		// wrap the repaint in an invokelater because the dial isn't responding right
-    				SwingUtilities.invokeLater(new Runnable() { public void run() { repaint(); } });
-            		}
-            	}
+                {
+                if (synth.isShowingMutation())
+                    {
+                    synth.mutationMap.setFree(key, !synth.mutationMap.isFree(key));
+                    // wrap the repaint in an invokelater because the dial isn't responding right
+                    SwingUtilities.invokeLater(new Runnable() { public void run() { repaint(); } });
+                    }
+                }
             });
         
         

@@ -386,10 +386,10 @@ public class Midi
             else if (findDevice(getLastTupleKey(synth), keyDevices) != null)
                 keyCombo.setSelectedItem(findDevice(getLastTupleKey(synth), keyDevices));
 
-			JTextField outID = null;
-			String initialID = synth.reviseID(null);
-			if (initialID != null)
-				outID = new JTextField(synth.reviseID(null));
+            JTextField outID = null;
+            String initialID = synth.reviseID(null);
+            if (initialID != null)
+                outID = new JTextField(synth.reviseID(null));
 
             JComboBox outChannelsCombo = new JComboBox(rc);
             outChannelsCombo.setMaximumRowCount(17);
@@ -405,13 +405,13 @@ public class Midi
             else if (getLastTupleKeyChannel(synth) > 0)
                 keyChannelsCombo.setSelectedIndex(getLastTupleKeyChannel(synth));
 
-			
+                        
             boolean result = false;
             if (initialID != null)
-            	result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Synth ID", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, outID, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
-			else
-				result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
-				
+                result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Synth ID", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, outID, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
+            else
+                result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
+                                
             if (result)
                 {
                 // we need to build a tuple
@@ -422,14 +422,14 @@ public class Midi
                 tuple.outChannel = outChannelsCombo.getSelectedIndex() + 1;
                 
                 if (initialID != null)
-                	{
-	                String prospectiveID = outID.getText();
-	                tuple.id = synth.reviseID(prospectiveID);
-	                if (!tuple.id.equals(prospectiveID))
-	                	{
-	                    JOptionPane.showMessageDialog(synth, "The ID was revised to: " + tuple.id, "Device ID", JOptionPane.WARNING_MESSAGE);
-	                	}
-	                }
+                    {
+                    String prospectiveID = outID.getText();
+                    tuple.id = synth.reviseID(prospectiveID);
+                    if (!tuple.id.equals(prospectiveID))
+                        {
+                        JOptionPane.showMessageDialog(synth, "The ID was revised to: " + tuple.id, "Device ID", JOptionPane.WARNING_MESSAGE);
+                        }
+                    }
                                 
                 tuple.inWrap = ((MidiDeviceWrapper)(inCombo.getSelectedItem()));
                 tuple.in = tuple.inWrap.getThru(inReceiver);
@@ -494,298 +494,298 @@ public class Midi
         }
 
 
-	public static final int CCDATA_TYPE_RAW_CC = 0;      
-	public static final int CCDATA_TYPE_NRPN = 1;      
+    public static final int CCDATA_TYPE_RAW_CC = 0;      
+    public static final int CCDATA_TYPE_NRPN = 1;      
 
 
 
 
-public static class CCData
-	{
-	public int type;
-	public int number;
-	public int value;
-	public int channel;
-	public boolean increment;
-	public CCData(int type, int number, int value, int channel, boolean increment)
-		{ this.type = type; this.number = number; this.value = value; this.increment = increment; this.channel = channel; }
-	}
-	
+    public static class CCData
+        {
+        public int type;
+        public int number;
+        public int value;
+        public int channel;
+        public boolean increment;
+        public CCData(int type, int number, int value, int channel, boolean increment)
+            { this.type = type; this.number = number; this.value = value; this.increment = increment; this.channel = channel; }
+        }
+        
 
         
         
-public static class Parser
-	{
+    public static class Parser
+        {
 
 
-	///// INTRODUCTION TO THE CC/RPN/NRPN PARSER
-	///// The parser is located in handleGeneralControlChange(...), which
-	///// can be set up to be the handler for CC messages by the MIDI library.
-	/////
-	///// CC messages take one of a great many forms, which we handle in the parser
-	/////
-	///// 7-bit CC messages:
-	///// 1. number >=64 and < 96 or >= 102 and < 120, with value
-	/////           -> handleControlChange(channel, number, value, VALUE_7_BIT_ONLY)
-	/////
-	///// Potentially 7-bit CC messages, with MSB:
-	///// 1. number >= 0 and < 32, other than 6, with value
-	/////           -> handleControlChange(channel, number, value * 128 + 0, VALUE_MSB_ONLY)
-	/////
-	///// Full 14-bit CC messages:
-	///// 1. number >= 0 and < 32, other than 6, with MSB
-	///// 2. same number + 32, with LSB
-	/////           -> handleControlChange(channel, number, MSB * 128 + LSB, VALUE)
-	/////    NOTE: this means that a 14-bit CC message will have TWO handleControlChange calls.
-	/////          There's not much we can do about this, as we simply don't know if the LSB will arrive.  
-	/////
-	///// Continuing 14-bit CC messages:
-	///// 1. number >= 32 and < 64, other than 38, with LSB, where number is 32 more than the last MSB.
-	/////           -> handleControlChange(channel, number, former MSB * 128 + LSB, VALUE)
-	/////
-	///// Lonely 14-bit CC messages (LSB only)
-	///// 1. number >= 32 and < 64, other than 38, with LSB, where number is NOT 32 more than the last MSB.
-	/////           -> handleControlChange(channel, number, 0 + LSB, VALUE)
-	/////           
-	/////
-	///// NRPN Messages:
-	///// All NRPN Messages start with:
-	///// 1. number == 99, with MSB of NRPN parameter
-	///// 2. number == 98, with LSB of NRPN parameter
-	/////           At this point NRPN MSB is set to 0
-	/////
-	///// NRPN Messages then may have any sequence of:
-	///// 3.1 number == 6, with value   (MSB)
-	/////           -> handleNRPN(channel, parameter, value * 128 + 0, VALUE_MSB_ONLY)
-	/////                           At this point we set the NRPN MSB
-	///// 3.2 number == 38, with value   (LSB)
-	/////           -> handleNRPN(channel, parameter, current NRPN MSB * 128 + value, VALUE_MSB_ONLY)
-	///// 3.3 number == 96, with value   (Increment)
-	/////       If value == 0
-	/////                   -> handleNRPN(channel, parameter, 1, INCREMENT)
-	/////       Else
-	/////                   -> handleNRPN(channel, parameter, value, INCREMENT)
-	/////       Also reset current NRPN MSB to 0
-	///// 3.4 number == 97, with value
-	/////       If value == 0
-	/////                   -> handleNRPN(channel, parameter, 1, DECREMENT)
-	/////       Else
-	/////                   -> handleNRPN(channel, parameter, value, DECREMENT)
-	/////       Also reset current NRPN MSB to 0
-	/////
-	/////
-	///// RPN Messages:
-	///// All RPN Messages start with:
-	///// 1. number == 99, with MSB of RPN parameter
-	///// 2. number == 98, with LSB of RPN parameter
-	/////           At this point RPN MSB is set to 0
-	/////
-	///// RPN Messages then may have any sequence of:
-	///// 3.1 number == 6, with value   (MSB)
-	/////           -> handleRPN(channel, parameter, value * 128 + 0, VALUE_MSB_ONLY)
-	/////                           At this point we set the RPN MSB
-	///// 3.2 number == 38, with value   (LSB)
-	/////           -> handleRPN(channel, parameter, current RPN MSB * 128 + value, VALUE_MSB_ONLY)
-	///// 3.3 number == 96, with value   (Increment)
-	/////       If value == 0
-	/////                   -> handleRPN(channel, parameter, 1, INCREMENT)
-	/////       Else
-	/////                   -> handleRPN(channel, parameter, value, INCREMENT)
-	/////       Also reset current RPN MSB to 0
-	///// 3.4 number == 97, with value
-	/////       If value == 0
-	/////                   -> handleRPN(channel, parameter, 1, DECREMENT)
-	/////       Else
-	/////                   -> handleRPN(channel, parameter, value, DECREMENT)
-	/////       Also reset current RPN MSB to 0
-	/////
+        ///// INTRODUCTION TO THE CC/RPN/NRPN PARSER
+        ///// The parser is located in handleGeneralControlChange(...), which
+        ///// can be set up to be the handler for CC messages by the MIDI library.
+        /////
+        ///// CC messages take one of a great many forms, which we handle in the parser
+        /////
+        ///// 7-bit CC messages:
+        ///// 1. number >=64 and < 96 or >= 102 and < 120, with value
+        /////           -> handleControlChange(channel, number, value, VALUE_7_BIT_ONLY)
+        /////
+        ///// Potentially 7-bit CC messages, with MSB:
+        ///// 1. number >= 0 and < 32, other than 6, with value
+        /////           -> handleControlChange(channel, number, value * 128 + 0, VALUE_MSB_ONLY)
+        /////
+        ///// Full 14-bit CC messages:
+        ///// 1. number >= 0 and < 32, other than 6, with MSB
+        ///// 2. same number + 32, with LSB
+        /////           -> handleControlChange(channel, number, MSB * 128 + LSB, VALUE)
+        /////    NOTE: this means that a 14-bit CC message will have TWO handleControlChange calls.
+        /////          There's not much we can do about this, as we simply don't know if the LSB will arrive.  
+        /////
+        ///// Continuing 14-bit CC messages:
+        ///// 1. number >= 32 and < 64, other than 38, with LSB, where number is 32 more than the last MSB.
+        /////           -> handleControlChange(channel, number, former MSB * 128 + LSB, VALUE)
+        /////
+        ///// Lonely 14-bit CC messages (LSB only)
+        ///// 1. number >= 32 and < 64, other than 38, with LSB, where number is NOT 32 more than the last MSB.
+        /////           -> handleControlChange(channel, number, 0 + LSB, VALUE)
+        /////           
+        /////
+        ///// NRPN Messages:
+        ///// All NRPN Messages start with:
+        ///// 1. number == 99, with MSB of NRPN parameter
+        ///// 2. number == 98, with LSB of NRPN parameter
+        /////           At this point NRPN MSB is set to 0
+        /////
+        ///// NRPN Messages then may have any sequence of:
+        ///// 3.1 number == 6, with value   (MSB)
+        /////           -> handleNRPN(channel, parameter, value * 128 + 0, VALUE_MSB_ONLY)
+        /////                           At this point we set the NRPN MSB
+        ///// 3.2 number == 38, with value   (LSB)
+        /////           -> handleNRPN(channel, parameter, current NRPN MSB * 128 + value, VALUE_MSB_ONLY)
+        ///// 3.3 number == 96, with value   (Increment)
+        /////       If value == 0
+        /////                   -> handleNRPN(channel, parameter, 1, INCREMENT)
+        /////       Else
+        /////                   -> handleNRPN(channel, parameter, value, INCREMENT)
+        /////       Also reset current NRPN MSB to 0
+        ///// 3.4 number == 97, with value
+        /////       If value == 0
+        /////                   -> handleNRPN(channel, parameter, 1, DECREMENT)
+        /////       Else
+        /////                   -> handleNRPN(channel, parameter, value, DECREMENT)
+        /////       Also reset current NRPN MSB to 0
+        /////
+        /////
+        ///// RPN Messages:
+        ///// All RPN Messages start with:
+        ///// 1. number == 99, with MSB of RPN parameter
+        ///// 2. number == 98, with LSB of RPN parameter
+        /////           At this point RPN MSB is set to 0
+        /////
+        ///// RPN Messages then may have any sequence of:
+        ///// 3.1 number == 6, with value   (MSB)
+        /////           -> handleRPN(channel, parameter, value * 128 + 0, VALUE_MSB_ONLY)
+        /////                           At this point we set the RPN MSB
+        ///// 3.2 number == 38, with value   (LSB)
+        /////           -> handleRPN(channel, parameter, current RPN MSB * 128 + value, VALUE_MSB_ONLY)
+        ///// 3.3 number == 96, with value   (Increment)
+        /////       If value == 0
+        /////                   -> handleRPN(channel, parameter, 1, INCREMENT)
+        /////       Else
+        /////                   -> handleRPN(channel, parameter, value, INCREMENT)
+        /////       Also reset current RPN MSB to 0
+        ///// 3.4 number == 97, with value
+        /////       If value == 0
+        /////                   -> handleRPN(channel, parameter, 1, DECREMENT)
+        /////       Else
+        /////                   -> handleRPN(channel, parameter, value, DECREMENT)
+        /////       Also reset current RPN MSB to 0
+        /////
 
-	///// NULL messages:            [RPN 127 with value of 127]
-	///// 1. number == 101, value = 127
-	///// 2. number == 100, value = 127
-	/////           [nothing happens, but parser resets]
-	/////
-	/////
-	///// The big problem we have is that the MIDI spec allows a bare MSB or LSB to arrive and that's it!
-	///// We don't know if another one is coming.  If a bare LSB arrives we're supposed to assume the MSB is 0.
-	///// But if the bare MSB comes we don't know if the LSB is next.  So we either have to ignore it when it
-	///// comes in (bad bad bad) or send two messages, one MSB-only and one MSB+LSB.  
-	///// This happens for CC, RPN, and NRPN.
-	/////
-	/////
-	///// Our parser maintains four bytes in a struct called ControlParser:
-	/////
-	///// 0. status.  This is one of:
-	/////             INVALID: the struct holds junk.  CC: the struct is building a CC.  
-	/////                     RPN_START, RPN_END: the struct is building an RPN.
-	/////                     NRPN_START, NRPN_END: the struct is building an NRPN.
-	///// 1. controllerNumberMSB.  In the low 7 bits.
-	///// 2. controllerNumberLSB.  In the low 7 bits.
-	///// 3. controllerValueMSB.  In the low 7 bits. This holds the previous MSB for potential "continuing" messages.
+        ///// NULL messages:            [RPN 127 with value of 127]
+        ///// 1. number == 101, value = 127
+        ///// 2. number == 100, value = 127
+        /////           [nothing happens, but parser resets]
+        /////
+        /////
+        ///// The big problem we have is that the MIDI spec allows a bare MSB or LSB to arrive and that's it!
+        ///// We don't know if another one is coming.  If a bare LSB arrives we're supposed to assume the MSB is 0.
+        ///// But if the bare MSB comes we don't know if the LSB is next.  So we either have to ignore it when it
+        ///// comes in (bad bad bad) or send two messages, one MSB-only and one MSB+LSB.  
+        ///// This happens for CC, RPN, and NRPN.
+        /////
+        /////
+        ///// Our parser maintains four bytes in a struct called ControlParser:
+        /////
+        ///// 0. status.  This is one of:
+        /////             INVALID: the struct holds junk.  CC: the struct is building a CC.  
+        /////                     RPN_START, RPN_END: the struct is building an RPN.
+        /////                     NRPN_START, NRPN_END: the struct is building an NRPN.
+        ///// 1. controllerNumberMSB.  In the low 7 bits.
+        ///// 2. controllerNumberLSB.  In the low 7 bits.
+        ///// 3. controllerValueMSB.  In the low 7 bits. This holds the previous MSB for potential "continuing" messages.
 
-	// Parser status values
-	public static final int  INVALID = 0;
-	public static final int  NRPN_START = 1;
-	public static final int  NRPN_END = 2;
-	public static final int  RPN_START = 2;
-	public static final int  RPN_END = 3;
+        // Parser status values
+        public static final int  INVALID = 0;
+        public static final int  NRPN_START = 1;
+        public static final int  NRPN_END = 2;
+        public static final int  RPN_START = 2;
+        public static final int  RPN_END = 3;
 
-		int status = INVALID;
-		
-		// The high bit of the controllerNumberMSB is either
-		// NEITHER_RPN_NOR_NRPN or it is RPN_OR_NRPN. 
-		int controllerNumberMSB;
-		
-		// The high bit of the controllerNumberLSB is either
-		// RPN or it is NRPN
-		int controllerNumberLSB;
-		
-		// The controllerValueMSB is either a valid MSB or it is (-1).
-		int controllerValueMSB;
+        int status = INVALID;
+                
+        // The high bit of the controllerNumberMSB is either
+        // NEITHER_RPN_NOR_NRPN or it is RPN_OR_NRPN. 
+        int controllerNumberMSB;
+                
+        // The high bit of the controllerNumberLSB is either
+        // RPN or it is NRPN
+        int controllerNumberLSB;
+                
+        // The controllerValueMSB is either a valid MSB or it is (-1).
+        int controllerValueMSB;
 
-		// The controllerValueLSB is either a valid LSB or it is  (-1).
-		int controllerValueLSB;
+        // The controllerValueLSB is either a valid LSB or it is  (-1).
+        int controllerValueLSB;
   
   
 
-	CCData parseCC(int channel, int number, int value, boolean requireLSB, boolean requireMSB)
-		{
-		// BEGIN PARSER
+        CCData parseCC(int channel, int number, int value, boolean requireLSB, boolean requireMSB)
+            {
+            // BEGIN PARSER
 
-		// Start of NRPN
-		if (number == 99)
-				{
-				status = NRPN_START;
-				controllerNumberMSB = value;
-				return null;
-				}
+            // Start of NRPN
+            if (number == 99)
+                {
+                status = NRPN_START;
+                controllerNumberMSB = value;
+                return null;
+                }
 
-		// End of NRPN
-			else if (number == 98)
-				{
-				controllerValueMSB = 0;
-				if (status == NRPN_START)
-					{
-					status = NRPN_END;
-					controllerNumberLSB = value;
-					controllerValueLSB  = -1;
-					controllerValueMSB  = -1;
-					}
-				else status = INVALID;
-				return null;
-				}
-		
-		// Start of RPN or NULL
-			else if (number == 101)
-				{
-				if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
-					{
-					status = INVALID;
-					}
-				else
-					{
-					status = RPN_START;
-					controllerNumberMSB = value;
-					}
-				return null;
-				}
+            // End of NRPN
+            else if (number == 98)
+                {
+                controllerValueMSB = 0;
+                if (status == NRPN_START)
+                    {
+                    status = NRPN_END;
+                    controllerNumberLSB = value;
+                    controllerValueLSB  = -1;
+                    controllerValueMSB  = -1;
+                    }
+                else status = INVALID;
+                return null;
+                }
+                
+            // Start of RPN or NULL
+            else if (number == 101)
+                {
+                if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
+                    {
+                    status = INVALID;
+                    }
+                else
+                    {
+                    status = RPN_START;
+                    controllerNumberMSB = value;
+                    }
+                return null;
+                }
 
-		// End of RPN or NULL
-			else if (number == 100)
-				{
-				controllerValueMSB = 0;
-				if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
-					{
-					status = INVALID;
-					}
-				else if (status == RPN_START)
-					{
-					status = RPN_END;
-					controllerNumberLSB = value;
-					controllerValueLSB  = -1;
-					controllerValueMSB  = -1;
-					}
-				return null;
-				}
+            // End of RPN or NULL
+            else if (number == 100)
+                {
+                controllerValueMSB = 0;
+                if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
+                    {
+                    status = INVALID;
+                    }
+                else if (status == RPN_START)
+                    {
+                    status = RPN_END;
+                    controllerNumberLSB = value;
+                    controllerValueLSB  = -1;
+                    controllerValueMSB  = -1;
+                    }
+                return null;
+                }
 
-			else if (number == 6 || number == 38 || number == 96 || number == 97)   // we're currently parsing NRPN or RPN
-				{
-				int controllerNumber =  (((int) controllerNumberMSB) << 7) | controllerNumberLSB ;
-			
-				if (status == NRPN_END)
-					{
-					if (number == 6)
-						{
-						controllerValueMSB = value;
-						if (requireLSB && controllerValueLSB == -1)
-							return null;
-						return handleNRPN(channel, controllerNumber, controllerValueLSB == -1 ? 0 : controllerValueLSB, controllerValueMSB);
-						}
-								
-					// Data Entry LSB for RPN, NRPN
-					else if (number == 38)
-						{
-						controllerValueLSB = value;
-						if (requireMSB && controllerValueMSB == -1)
-							return null;          
-						return handleNRPN(channel, controllerNumber, controllerValueLSB, controllerValueMSB == -1 ? 0 : controllerValueMSB);
-						}
-								
-					// Data Increment for RPN, NRPN
-					else if (number == 96)
-						{
-						if (value == 0)
-							value = 1;
-						return handleNRPNIncrement(channel, controllerNumber, value);
-						}
+            else if (number == 6 || number == 38 || number == 96 || number == 97)   // we're currently parsing NRPN or RPN
+                {
+                int controllerNumber =  (((int) controllerNumberMSB) << 7) | controllerNumberLSB ;
+                        
+                if (status == NRPN_END)
+                    {
+                    if (number == 6)
+                        {
+                        controllerValueMSB = value;
+                        if (requireLSB && controllerValueLSB == -1)
+                            return null;
+                        return handleNRPN(channel, controllerNumber, controllerValueLSB == -1 ? 0 : controllerValueLSB, controllerValueMSB);
+                        }
+                                                                
+                    // Data Entry LSB for RPN, NRPN
+                    else if (number == 38)
+                        {
+                        controllerValueLSB = value;
+                        if (requireMSB && controllerValueMSB == -1)
+                            return null;          
+                        return handleNRPN(channel, controllerNumber, controllerValueLSB, controllerValueMSB == -1 ? 0 : controllerValueMSB);
+                        }
+                                                                
+                    // Data Increment for RPN, NRPN
+                    else if (number == 96)
+                        {
+                        if (value == 0)
+                            value = 1;
+                        return handleNRPNIncrement(channel, controllerNumber, value);
+                        }
 
-					// Data Decrement for RPN, NRPN
-					else // if (number == 97)
-						{
-						if (value == 0)
-							value = -1;
-						return handleNRPNIncrement(channel, controllerNumber, -value);
-						}
-					}
-				else  // RPN probably
-					{
-					return null;
-					}
-				}
-			
-			else  // Some other CC
-				{
-				status = INVALID;
-				return handleRawCC(channel, number, value);
-				}
-			}
-	
-		public CCData processCC(ShortMessage message, boolean requireLSB, boolean requireMSB)
-			{
-			int num = message.getData1();
-			int val = message.getData2();
-			int channel = message.getChannel();
-			return parseCC(channel, num, val, requireLSB, requireMSB);
-			}
-	
-		public CCData handleNRPN(int channel, int controllerNumber, int controllerValueLSB, int controllerValueMSB)
-			{
-			if (controllerValueLSB < 0 || controllerValueMSB < 0)
-				System.err.println("WARNING, LSB or MSB < 0.  NRPN: " + controllerNumber + "   LSB: " + controllerValueMSB + "  MSB: " + controllerValueMSB);
-			return new CCData(CCDATA_TYPE_NRPN, controllerNumber, controllerValueLSB | (controllerValueMSB << 7), channel, false);
-			}
-	
-		public CCData handleNRPNIncrement(int channel, int controllerNumber, int delta)
-			{
-			return new CCData(CCDATA_TYPE_NRPN, controllerNumber, delta, channel, true);
-			}
+                    // Data Decrement for RPN, NRPN
+                    else // if (number == 97)
+                        {
+                        if (value == 0)
+                            value = -1;
+                        return handleNRPNIncrement(channel, controllerNumber, -value);
+                        }
+                    }
+                else  // RPN probably
+                    {
+                    return null;
+                    }
+                }
+                        
+            else  // Some other CC
+                {
+                status = INVALID;
+                return handleRawCC(channel, number, value);
+                }
+            }
+        
+        public CCData processCC(ShortMessage message, boolean requireLSB, boolean requireMSB)
+            {
+            int num = message.getData1();
+            int val = message.getData2();
+            int channel = message.getChannel();
+            return parseCC(channel, num, val, requireLSB, requireMSB);
+            }
+        
+        public CCData handleNRPN(int channel, int controllerNumber, int controllerValueLSB, int controllerValueMSB)
+            {
+            if (controllerValueLSB < 0 || controllerValueMSB < 0)
+                System.err.println("WARNING, LSB or MSB < 0.  NRPN: " + controllerNumber + "   LSB: " + controllerValueMSB + "  MSB: " + controllerValueMSB);
+            return new CCData(CCDATA_TYPE_NRPN, controllerNumber, controllerValueLSB | (controllerValueMSB << 7), channel, false);
+            }
+        
+        public CCData handleNRPNIncrement(int channel, int controllerNumber, int delta)
+            {
+            return new CCData(CCDATA_TYPE_NRPN, controllerNumber, delta, channel, true);
+            }
 
-		public CCData handleRawCC(int channel, int controllerNumber, int value)
-			{
-			return new CCData(CCDATA_TYPE_RAW_CC, controllerNumber, value, channel, false);
-			}
-		}
-		
-	public Parser controlParser = new Parser();
-	public Parser synthParser = new Parser();
+        public CCData handleRawCC(int channel, int controllerNumber, int value)
+            {
+            return new CCData(CCDATA_TYPE_RAW_CC, controllerNumber, value, channel, false);
+            }
+        }
+                
+    public Parser controlParser = new Parser();
+    public Parser synthParser = new Parser();
     }

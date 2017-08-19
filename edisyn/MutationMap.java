@@ -30,9 +30,9 @@ public class MutationMap
         }
 
     public void setFree(String key, boolean free)
-    	{
-    	if (!free) map.add(key);
-    	else map.remove(key);
+        {
+        if (!free) map.add(key);
+        else map.remove(key);
 
         prefs.put(key, "" + free);
         try 
@@ -43,7 +43,7 @@ public class MutationMap
             {
             ex.printStackTrace();
             }
-    	}
+        }
     
     public MutationMap(Preferences prefs)
         {        
@@ -59,9 +59,9 @@ public class MutationMap
                 // each Value holds a BOOLEAN
                 
                 if (prefs.get(keys[i], "true").equals("false"))
-                	{
-                	map.add(keys[i]);
-                	}
+                    {
+                    map.add(keys[i]);
+                    }
                 }
             }
         catch (Exception ex)

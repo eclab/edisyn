@@ -33,8 +33,8 @@ public class IconDisplay extends JComponent implements Updatable
 
     public IconDisplay(String label, ImageIcon[] icons, Synth synth, String key)
         {
-		this.synth = synth;
-		this.key = key;
+        this.synth = synth;
+        this.key = key;
         this.icons = icons;
         this.label = new JLabel(label);
         this.icon = new JLabel(icons[0]);
@@ -50,7 +50,7 @@ public class IconDisplay extends JComponent implements Updatable
         if (label != null)
             add(this.label, BorderLayout.NORTH);
 
-		synth.getModel().register(key, this);
-		update(key, synth.getModel());
+        synth.getModel().register(key, this);
+        update(key, synth.getModel());
         }
     }

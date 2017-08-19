@@ -220,7 +220,7 @@ public class WaldorfMicrowaveXT extends Synth
         }
                
     public String getDefaultResourceFileName() { return "WaldorfMicrowaveXT.init"; }
-	public String getHTMLResourceFileName() { return "WaldorfMicrowaveXT.html"; }
+    public String getHTMLResourceFileName() { return "WaldorfMicrowaveXT.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
@@ -282,9 +282,9 @@ public class WaldorfMicrowaveXT extends Synth
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
             public String replace(String val)
-            	{
-            	return revisePatchName(val);
-            	}
+                {
+                return revisePatchName(val);
+                }
                                 
             public void update(String key, Model model)
                 {
@@ -936,6 +936,7 @@ public class WaldorfMicrowaveXT extends Synth
                     }
                 };
                         
+            model.setMetricMin( "lfo" + lfo + "phase", 1);
             hbox.add(comp);
             }
         
@@ -1139,13 +1140,13 @@ public class WaldorfMicrowaveXT extends Synth
             new String[] { null, "waveenvlevel1", "waveenvlevel2", "waveenvlevel3", "waveenvlevel4", "waveenvlevel5", "waveenvlevel6", "waveenvlevel7", "waveenvlevel8", null },
             new double[] { 0, 0.25/127.0/2.0, 0.25 / 127.0/2.0,  0.25/127.0/2.0, 0.25/127.0/2.0,  0.25/127.0/2.0, 0.25 / 127.0/2.0,  0.25/127.0/2.0, 0.25/127.0/2.0, 0},
             new double[] { 0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 0 })
-            	{
-			    public int postProcessLoopOrStageKey(String key, int val)
-    				{
-    				// they'll all be off by 1
-    				return val + 1;
-    				}
-            	};
+            {
+            public int postProcessLoopOrStageKey(String key, int val)
+                {
+                // they'll all be off by 1
+                return val + 1;
+                }
+            };
         disp.setPreferredWidth(disp.getPreferredWidth() * 2);
         disp.setLoopKeys(0, "waveenvkeyonstart", "waveenvkeyonend");
         disp.setLoopKeys(1, "waveenvkeyoffstart", "waveenvkeyoffend");
@@ -1403,11 +1404,11 @@ public class WaldorfMicrowaveXT extends Synth
                     int len = model.get("arpuserlength") + 1;
                     for(int i = 0; i < len; i++)
                         {
-                        arpeggiation[i].getCheckBox().setEnabled(true);
+                        arpeggiation[i].setEnabled(true);
                         }
                     for(int i = len; i < 16; i++)
                         {
-                        arpeggiation[i].getCheckBox().setEnabled(false);
+                        arpeggiation[i].setEnabled(false);
                         }
                     for(int i = 0; i < 16; i++)
                         {
@@ -1418,7 +1419,7 @@ public class WaldorfMicrowaveXT extends Synth
                     {
                     for(int i = 0; i < 16; i++)
                         {
-                        arpeggiation[i].getCheckBox().setEnabled(false);
+                        arpeggiation[i].setEnabled(false);
                         }
                                         
                     if (pattern > 1)
@@ -1450,8 +1451,8 @@ public class WaldorfMicrowaveXT extends Synth
         for(int pattern = 0; pattern < 16; pattern++)
             {
             arpeggiation[pattern] = new CheckBox("", this, "arpuser" + (pattern + 1));
-            arpeggiation[pattern].getCheckBox().setEnabled(false);  // because we start with arppattern not set to User
             arpeggiation[pattern].setBorder(Style.CHECKBOX_HIGHLIGHTED_BORDER);
+            arpeggiation[pattern].setEnabled(false);  // because we start with arppattern not set to User
             hbox.add(arpeggiation[pattern]);
             if (pattern % 4 == 3)
                 {
@@ -2236,21 +2237,21 @@ public class WaldorfMicrowaveXT extends Synth
 
     public static final int MAXIMUM_NAME_LENGTH = 16;
     public String revisePatchName(String name)
-    	{
-    	name = super.revisePatchName(name);  // trim first time
-    	if (name.length() > MAXIMUM_NAME_LENGTH)
-	    	name = name.substring(0, MAXIMUM_NAME_LENGTH);
-    	
-        StringBuffer nameb = new StringBuffer(name);        			
-		for(int i = 0 ; i < nameb.length(); i++)
-			{
-			char c = nameb.charAt(i);
+        {
+        name = super.revisePatchName(name);  // trim first time
+        if (name.length() > MAXIMUM_NAME_LENGTH)
+            name = name.substring(0, MAXIMUM_NAME_LENGTH);
+        
+        StringBuffer nameb = new StringBuffer(name);                            
+        for(int i = 0 ; i < nameb.length(); i++)
+            {
+            char c = nameb.charAt(i);
             if (c < 32 || c > 127)
-				nameb.setCharAt(i, ' ');
-			}
-		name = nameb.toString();
-		return super.revisePatchName(name);  // trim again
-    	}
+                nameb.setCharAt(i, ' ');
+            }
+        name = nameb.toString();
+        return super.revisePatchName(name);  // trim again
+        }
 
         
         
@@ -2260,10 +2261,10 @@ public class WaldorfMicrowaveXT extends Synth
         // check the easy stuff -- out of range parameters
         super.revise();
 
-		String nm = model.get("name", "Init");
-		String newnm = revisePatchName(nm);
-		if (!nm.equals(newnm))
-	        model.set("name", newnm);
+        String nm = model.get("name", "Init");
+        String newnm = revisePatchName(nm);
+        if (!nm.equals(newnm))
+            model.set("name", newnm);
         }
         
 
@@ -2407,26 +2408,26 @@ public class WaldorfMicrowaveXT extends Synth
     public String getPatchName() { return model.get("name", "Init Sound V1.1 "); }
     
     public byte getID() 
-    	{ 
-    	try 
-    		{ 
-    		byte b = (byte)(Byte.parseByte(tuple.id));
-    		if (b >= 0) return b;
-    		}
-    	catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-    	catch (NumberFormatException e) { e.printStackTrace(); }
-    	return 0;
-    	}
-    	
+        { 
+        try 
+            { 
+            byte b = (byte)(Byte.parseByte(tuple.id));
+            if (b >= 0) return b;
+            }
+        catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
+        catch (NumberFormatException e) { e.printStackTrace(); }
+        return 0;
+        }
+        
     public String reviseID(String id)
-    	{
-    	try 
-    		{ 
-    		byte b =(byte)(Byte.parseByte(id)); 
-    		if (b >= 0) return "" + b;
-    		} 
-    	catch (NumberFormatException e) { }		// expected
-    	return "" + getID();
-    	}
+        {
+        try 
+            { 
+            byte b =(byte)(Byte.parseByte(id)); 
+            if (b >= 0) return "" + b;
+            } 
+        catch (NumberFormatException e) { }             // expected
+        return "" + getID();
+        }
                 
     }

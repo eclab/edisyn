@@ -43,22 +43,22 @@ public class Chooser extends NumericalComponent
     boolean callActionListener = true;
     
     public void setCallActionListener(boolean val)
-    	{
-    	callActionListener = val;
-    	}
+        {
+        callActionListener = val;
+        }
         
     public void updateBorder()
-    	{
-    	super.updateBorder();
-    	if (combo != null && 
-    		combo.isEnabled() == synth.isShowingMutation())  // this part prevents us from repeatedly calling setEnabled()... which creates a repaint loop
-    		{
-    		if (synth.isShowingMutation())
-    			combo.setEnabled(false);
-    		else
-    			combo.setEnabled(true);
-    		}
-    	}
+        {
+        super.updateBorder();
+        if (combo != null && 
+            combo.isEnabled() == synth.isShowingMutation())  // this part prevents us from repeatedly calling setEnabled()... which creates a repaint loop
+            {
+            if (synth.isShowingMutation())
+                combo.setEnabled(false);
+            else
+                combo.setEnabled(true);
+            }
+        }
 
     public void update(String key, Model model) 
         { 
@@ -129,25 +129,25 @@ public class Chooser extends NumericalComponent
                 return d;
                 }                       
 
-			protected void processMouseEvent(MouseEvent e)
-				{
-				super.processMouseEvent(e);
-				if (e.getID() == MouseEvent.MOUSE_CLICKED)
-					{
-					if (synth.isShowingMutation())
-						{
-						synth.mutationMap.setFree(key, !synth.mutationMap.isFree(key));
-						// wrap the repaint in an invokelater because the dial isn't responding right
-						SwingUtilities.invokeLater(new Runnable() { public void run() { repaint(); } });
-						}
-					}
-				}
+            protected void processMouseEvent(MouseEvent e)
+                {
+                super.processMouseEvent(e);
+                if (e.getID() == MouseEvent.MOUSE_CLICKED)
+                    {
+                    if (synth.isShowingMutation())
+                        {
+                        synth.mutationMap.setFree(key, !synth.mutationMap.isFree(key));
+                        // wrap the repaint in an invokelater because the dial isn't responding right
+                        SwingUtilities.invokeLater(new Runnable() { public void run() { repaint(); } });
+                        }
+                    }
+                }
             };
 
         combo.putClientProperty("JComponent.sizeVariant", "small");
         combo.setEditable(false);
         combo.setFont(Style.SMALL_FONT);
-        combo.setMaximumRowCount(33);		// 33, not 32, to accommodate modulation destinations for Matrix 1000
+        combo.setMaximumRowCount(33);           // 33, not 32, to accommodate modulation destinations for Matrix 1000
         
         setElements(_label, elements);
 

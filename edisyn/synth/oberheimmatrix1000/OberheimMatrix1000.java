@@ -262,10 +262,6 @@ public class OberheimMatrix1000 extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-        vbox = new VBox();
-        comp = new CheckBox("Legato Portamento", this, "portamentolegato");
-        vbox.add(comp);
-       
         comp = new LabelledDial("Mix", this, "mix", color, 0, 62, 31)
             {
             public boolean isSymmetric() { return true; }
@@ -281,7 +277,11 @@ public class OberheimMatrix1000 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Vel Mod");
         hbox.add(comp);
                 
-
+        vbox = new VBox();
+        comp = new CheckBox("Legato Portamento", this, "portamentolegato");
+        vbox.add(comp);
+        hbox.add(vbox);
+       
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }

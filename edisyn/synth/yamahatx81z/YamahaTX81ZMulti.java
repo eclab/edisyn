@@ -531,7 +531,7 @@ public class YamahaTX81ZMulti extends Synth
 
     public Object[] emitAll(String key)
         {
-        if (key.equals("number")) return new byte[0][0];  // this is not emittable
+        if (key.equals("number")) return new Object[0];  // this is not emittable
 
         byte channel = (byte)(32 + getChannelOut());
              
@@ -539,7 +539,7 @@ public class YamahaTX81ZMulti extends Synth
         if (key.equals("name"))  // ugh
             {
             String name = model.get("name", "INIT SOUND") + "          ";
-            byte[][] result = new byte[10][];                       
+            Object[] result = new Object[10];                       
             for(int i = 0; i < 10; i++)
                 {
                 result[i] = new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, (byte)(100 + i), (byte)(name.charAt(i)), (byte)0xF7 };
@@ -554,10 +554,10 @@ public class YamahaTX81ZMulti extends Synth
                 byte lsb = (byte)(val & 127);
                 byte msb = (byte)((val >> 7) & 127);
 
-                return new byte[][] 
+                return new Object[]
                     {
-                    { (byte)0xF0, 0x43, channel, PCED_GROUP, 1, msb, (byte)0xF7 },
-                    { (byte)0xF0, 0x43, channel, PCED_GROUP, 2, lsb, (byte)0xF7 },
+                    new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, 1, msb, (byte)0xF7 },
+                   	new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, 2, lsb, (byte)0xF7 },
                     };
                 }
             }        
@@ -569,12 +569,13 @@ public class YamahaTX81ZMulti extends Synth
 
             byte PP = (byte) index;
             byte VV = (byte) value;
-            return new byte[][] {{ (byte)0xF0, 0x43, channel, PCED_GROUP, PP, VV, (byte)0xF7 }};
+            byte[] data = new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, PP, VV, (byte)0xF7 };
+            return new Object[] { data };
             }
         else 
             {
             System.err.println("Can't emit key " + key);
-            return new byte[0][0];
+            return new Object[0];
             }
         }
         

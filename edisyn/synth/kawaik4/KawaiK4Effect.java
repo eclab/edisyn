@@ -72,8 +72,6 @@ public class KawaiK4Effect extends Synth
 
         addTab("Effect", soundPanel);
         
-        model.set("name", "Init Patch");  // has to be 10 long
-
         model.set("number", 0);
         model.set("bank", 0);           // internal
         

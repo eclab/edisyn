@@ -89,9 +89,6 @@ public class KawaiK4Drum extends Synth
 
         addTab("Drum", soundPanel);
         
-        model.set("name", "Init Patch");  // has to be 10 long
-
-        model.set("number", 0);
         model.set("bank", 0);           // internal
 
         loadDefaults();
@@ -489,11 +486,13 @@ public class KawaiK4Drum extends Synth
         byte lsb = (byte)(model.get(key) & 127);
 
         int index = ((Integer)(internalParametersToIndex.get(key))).intValue();
+
         int note = 0;
         if (index > 3)
-            note = (index - 3) / 61;
-        if (index > 3)
-            index = (index - 3) % 61 + 73;
+        	{
+            note = (index - 3) / 9;
+            index = (index - 3) % 9 + 73;
+            }
         else
             index = index + 70;
                         

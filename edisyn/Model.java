@@ -400,7 +400,7 @@ public class Model implements Cloneable
         return lastKey;
         }
     
-    boolean debugSet = false; // true;
+    boolean debugSet = false;
     
     /** Adds a key with the given Integer value, or changes it to the given value. */        
     public void set(String key, int value)

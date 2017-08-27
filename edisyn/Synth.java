@@ -833,99 +833,88 @@ public abstract class Synth extends JComponent implements Updatable
                                 
             public void send(MidiMessage message, long timeStamp)
                 {
-                Window activeWindow = javax.swing.FocusManager.getCurrentManager().getActiveWindow();
-                Component synthWindow = SwingUtilities.getRoot(Synth.this);
-                                        
-                // we want to be either the currently active window, or the parent of a dialog box which is the active window
-                if (synthWindow == activeWindow || (activeWindow != null && synthWindow == activeWindow.getOwner()))
-                    {
-                    if (message instanceof SysexMessage)
-                        {
-                        final byte[] data = message.getMessage();
+				// I'm doing this in the Swing event thread because I figure it's multithreaded
+				SwingUtilities.invokeLater(new Runnable()
+					{
+					public void run()
+						{
+						Window activeWindow = javax.swing.FocusManager.getCurrentManager().getActiveWindow();
+						Component synthWindow = SwingUtilities.getRoot(Synth.this);
+										
+						// we want to be either the currently active window, or the parent of a dialog box which is the active window
+						if (synthWindow == activeWindow || (activeWindow != null && synthWindow == activeWindow.getOwner()))
+							{
+							if (message instanceof SysexMessage)
+								{
+								final byte[] data = message.getMessage();
 
-                        if (recognizeLocal(data))
-                            {
-                            // I'm doing this in the Swing event thread because I figure it's multithreaded
-                            SwingUtilities.invokeLater(new Runnable()
-                                {
-                                public void run()
-                                    {
-                                    if (merging != 0.0)
-                                        {
-                                        merge(data, merging);
-                                        merging = 0.0;
-                                        }
-                                    else
-                                        {
-                                        // we turn off MIDI because parse() calls revise() which triggers setParameter() with its changes
-                                        setSendMIDI(false);
-                                        undo.setWillPush(false);
-                                        Model backup = (Model)(model.clone());
-                                        parse(data, false, false);
-                                        undo.setWillPush(true);
-                                        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-                                            undo.push(backup);
-                                        setSendMIDI(true);
-                                        file = null;
-                                        }
+								if (recognizeLocal(data))
+									{
+									if (merging != 0.0)
+										{
+										merge(data, merging);
+										merging = 0.0;
+										}
+									else
+										{
+										// we turn off MIDI because parse() calls revise() which triggers setParameter() with its changes
+										setSendMIDI(false);
+										undo.setWillPush(false);
+										Model backup = (Model)(model.clone());
+										parse(data, false, false);
+										undo.setWillPush(true);
+										if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+											undo.push(backup);
+										setSendMIDI(true);
+										file = null;
+										}
 
-                                    // this last statement fixes a mystery.  When I call Randomize or Reset on
-                                    // a Blofeld or on a Microwave, all of the widgets update simultaneously.
-                                    // But on a Blofeld Multi or Microwave Multi they update one at a time.
-                                    // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-                                    // into the Blofeld, and it makes no difference!  For some reason the OS X
-                                    // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-                                    repaint();
-                                                        
-                                    updateTitle();
-                                    }
-                                });
-                            }
-                        else    // Maybe it's a local Parameter change in sysex?
-                            {
-                            SwingUtilities.invokeLater(new Runnable()
-                                {
-                                public void run()
-                                    {
-                                    // we don't do undo here.  It's not great but PreenFM2 etc. would wreak havoc
-                                    boolean willPush = undo.getWillPush();
-                                    undo.setWillPush(false);
-                                                        
-                                    sendMIDI = false;  // so we don't send out parameter updates in response to reading/changing parameters
-                                    parseParameter(data);
-                                    sendMIDI = true;
-                                    updateTitle();
-                                                        
-                                    undo.setWillPush(willPush);
-                                    }
-                                });
-                            }
-                        }
-                    else if (message instanceof ShortMessage)
-                        {
-                        ShortMessage sm = (ShortMessage)message;
-                        if (sm.getCommand() == ShortMessage.CONTROL_CHANGE)
-                            {
-                            SwingUtilities.invokeLater(new Runnable()
-                                {
-                                public void run()
-                                    {
-                                    boolean willPush = undo.getWillPush();
-                                    undo.setWillPush(false);
-                                                                
-                                    // we don't do undo here.  It's not great but PreenFM2 etc. would wreak havoc
-                                    sendMIDI = false;  // so we don't send out parameter updates in response to reading/changing parameters
-                                    // let's try parsing it
-                                    handleInRawCC(sm);
-                                    sendMIDI = true;
-                                    updateTitle();
-                                                                
-                                    undo.setWillPush(willPush);
-                                    }
-                                });
-                            }
-                        }
-                    }
+									// this last statement fixes a mystery.  When I call Randomize or Reset on
+									// a Blofeld or on a Microwave, all of the widgets update simultaneously.
+									// But on a Blofeld Multi or Microwave Multi they update one at a time.
+									// I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+									// into the Blofeld, and it makes no difference!  For some reason the OS X
+									// repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+									repaint();
+												
+									updateTitle();
+									}
+								else    // Maybe it's a local Parameter change in sysex?
+									{
+									// we don't do undo here.  It's not great but PreenFM2 etc. would wreak havoc
+									boolean willPush = undo.getWillPush();
+									undo.setWillPush(false);
+											
+									sendMIDI = false;  // so we don't send out parameter updates in response to reading/changing parameters
+									parseParameter(data);
+									sendMIDI = true;
+									updateTitle();
+											
+									undo.setWillPush(willPush);
+									}
+								}
+							else if (message instanceof ShortMessage)
+								{
+								ShortMessage sm = (ShortMessage)message;
+								if (sm.getCommand() == ShortMessage.CONTROL_CHANGE)
+									{
+									boolean willPush = undo.getWillPush();
+									undo.setWillPush(false);
+														
+									// we don't do undo here.  It's not great but PreenFM2 etc. would wreak havoc
+									sendMIDI = false;  // so we don't send out parameter updates in response to reading/changing parameters
+									// let's try parsing it
+									handleInRawCC(sm);
+									sendMIDI = true;
+									updateTitle();
+														
+									undo.setWillPush(willPush);
+									}
+								}
+							}
+						}
+					});
+                
                 }
             };
         }
@@ -942,55 +931,62 @@ public abstract class Synth extends JComponent implements Updatable
                                 
             public void send(MidiMessage message, long timeStamp)
                 {
-                if (SwingUtilities.getRoot(Synth.this) == javax.swing.FocusManager.getCurrentManager().getActiveWindow() && sendMIDI)
-                    {
-                    if (message instanceof ShortMessage)
-                        {
-                        ShortMessage newMessage = null;
-                                                
-                        // stupidly, ShortMessage has no way of changing its channel, so we have to rebuild
-                        ShortMessage s = (ShortMessage)message;
-                        int status = s.getStatus();
-                        int channel = s.getChannel();
-//                        int command = s.getCommand();
-                        int data1 = s.getData1();
-                        int data2 = s.getData2();
-                        boolean voiceMessage = ( status < 0xF0 );
-                        try
-                            {
-                            if (voiceMessage)
-                                newMessage = new ShortMessage(status, channel, data1, data2);
-                            else
-                                newMessage = new ShortMessage(status, data1, data2);
-                                
-                            // we intercept a message if:
-                            // 1. It's a CC (maybe NRPN)
-                            // 2. We're not passing through CC
-                            // 3. It's the right channel OR our key channel is OMNI
-                            if (!getPassThroughCC() && 
-                                newMessage.getCommand() == ShortMessage.CONTROL_CHANGE &&
-                                (newMessage.getChannel() == tuple.keyChannel || tuple.keyChannel == tuple.KEYCHANNEL_OMNI))
-                                {
-                                // we intercept this
-                                handleKeyRawCC(newMessage);
-                                }
-                            else
-                                {
-                                // pass it on!
-                                tryToSendMIDI(newMessage);
-                                }
-                            }
-                        catch (InvalidMidiDataException e)
-                            {
-                            e.printStackTrace();
-                            }
-                        }
-                    else if (message instanceof SysexMessage)
-                        {
-                        tryToSendSysex(message.getMessage());
-                        }
-                    }
-                }
+				// I'm doing this in the Swing event thread because I figure it's multithreaded
+				SwingUtilities.invokeLater(new Runnable()
+					{
+					public void run()
+						{
+						if (SwingUtilities.getRoot(Synth.this) == javax.swing.FocusManager.getCurrentManager().getActiveWindow() && sendMIDI)
+							{
+							if (message instanceof ShortMessage)
+								{
+								ShortMessage newMessage = null;
+												
+								// stupidly, ShortMessage has no way of changing its channel, so we have to rebuild
+								ShortMessage s = (ShortMessage)message;
+								int status = s.getStatus();
+								int channel = s.getChannel();
+		//                        int command = s.getCommand();
+								int data1 = s.getData1();
+								int data2 = s.getData2();
+								boolean voiceMessage = ( status < 0xF0 );
+								try
+									{
+									if (voiceMessage)
+										newMessage = new ShortMessage(status, channel, data1, data2);
+									else
+										newMessage = new ShortMessage(status, data1, data2);
+								
+									// we intercept a message if:
+									// 1. It's a CC (maybe NRPN)
+									// 2. We're not passing through CC
+									// 3. It's the right channel OR our key channel is OMNI
+									if (!getPassThroughCC() && 
+										newMessage.getCommand() == ShortMessage.CONTROL_CHANGE &&
+										(newMessage.getChannel() == tuple.keyChannel || tuple.keyChannel == tuple.KEYCHANNEL_OMNI))
+										{
+										// we intercept this
+										handleKeyRawCC(newMessage);
+										}
+									else
+										{
+										// pass it on!
+										tryToSendMIDI(newMessage);
+										}
+									}
+								catch (InvalidMidiDataException e)
+									{
+									e.printStackTrace();
+									}
+								}
+							else if (message instanceof SysexMessage)
+								{
+								tryToSendSysex(message.getMessage());
+								}
+							}
+						}
+					});
+				}
             };
         }
 
@@ -1102,7 +1098,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (data == null || data.length == 0) 
             return false;
-                
+             
         for(int i = 1; i < data.length - 1; i++)
             {
             if (data[i] < 0)  // uh oh, high byte
@@ -1383,10 +1379,19 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
 
+    boolean inSimpleError;
+
     /** Display a simple error message. */
     public void showSimpleError(String title, String message)
         {
+        // A Bug in OS X (perhaps others?) Java causes multiple copies of the same Menu event to be issued
+        // if we're popping up a dialog box in response, and if the Menu event is caused by command-key which includes
+        // a modifier such as shift.  To get around it, we're just blocking multiple recursive message dialogs here.
+        
+        if (inSimpleError) return;
+        inSimpleError = true;
         JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+        inSimpleError = false;
         }
 
     /** Display a simple (OK / Cancel) confirmation message.  Return the result (ok = true, cancel = false). */
@@ -1740,7 +1745,7 @@ public abstract class Synth extends JComponent implements Updatable
             });
             
         redoMenu = new JMenuItem("Redo");
-        redoMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        redoMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
         menu.add(redoMenu);
         redoMenu.setEnabled(false);
         redoMenu.addActionListener(new ActionListener()
@@ -1856,10 +1861,14 @@ public abstract class Synth extends JComponent implements Updatable
                         doMutate(lastMutate);
                         }
                     else
+                    	{
                         showSimpleError("Undo", "Can't Undo and Randomize Again: no previous randomize!");
+                        }
                     }
                 else
-                    showSimpleError("Undo", "Can't Undo and Randomize Again: nothing to undo!");
+                	{
+                    showSimpleError("Undo", "Can't Undo and Randomize Again: no previous randomize!");
+                    }
                 }
             });
         undoAndRandomize.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -1877,6 +1886,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(0);
                 }
             });
+        nudgeTowards[0].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
                 
         nudgeTowards[1] = new JMenuItem("Towards 2");
         nudgemenu.add(nudgeTowards[1]);
@@ -1887,6 +1897,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(1);
                 }
             });
+        nudgeTowards[1].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
                 
         nudgeTowards[2] = new JMenuItem("Towards 3");
         nudgemenu.add(nudgeTowards[2]);
@@ -1897,6 +1908,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(2);
                 }
             });
+        nudgeTowards[2].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
                 
         nudgeTowards[3] = new JMenuItem("Towards 4");
         nudgemenu.add(nudgeTowards[3]);
@@ -1907,6 +1919,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(3);
                 }
             });
+        nudgeTowards[3].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
         
         JMenuItem undoAndNudge = new JMenuItem("Undo and Nudge Again");
         nudgemenu.add(undoAndNudge);
@@ -1922,12 +1935,17 @@ public abstract class Synth extends JComponent implements Updatable
                         doNudge(lastNudge);
                         }
                     else
+                    	{
                         showSimpleError("Undo", "Can't Undo and Nudge Again: no previous nudge!");
+                        }
                     }
                 else
-                    showSimpleError("Undo", "Can't Undo and Nudge Again: nothing to undo!");
+                	{
+                    showSimpleError("Undo", "Can't Undo and Nudge Again: no previous nudge!");
+                    }
                 }
             });
+        undoAndNudge.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         nudgemenu.addSeparator();
         

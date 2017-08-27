@@ -1915,10 +1915,10 @@ public class WaldorfMicrowaveXT extends Synth
 
 
 
-    public byte[] emit(String key)
+    public Object[] emitAll(String key)
         {
-        if (key.equals("bank")) return new byte[0];  // this is not emittable
-        if (key.equals("number")) return new byte[0];  // this is not emittable
+        if (key.equals("bank")) return new Object[0];  // this is not emittable
+        if (key.equals("number")) return new Object[0];  // this is not emittable
         byte DEV = (byte)(getID());
                 
         if (key.equals("effecttype"))
@@ -1934,7 +1934,8 @@ public class WaldorfMicrowaveXT extends Synth
                 XX = 33;
             else if (XX == 10)  // mod delay
                 XX = 34;
-            return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (key.equals("osc1octave") || key.equals("osc2octave"))
             {
@@ -1942,7 +1943,8 @@ public class WaldorfMicrowaveXT extends Synth
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)(16 + model.get(key) * 12);
-            return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (key.equals("lfo1sync") || key.equals("lfo2sync"))
             {
@@ -1951,7 +1953,8 @@ public class WaldorfMicrowaveXT extends Synth
             byte PP = (byte)(index & 127);
             byte XX = (byte)model.get(key);
             if (XX == 2) XX = 3;  // because it's of/on/on/Clock, I dunno why
-            return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (key.equals("arpuser1") || key.equals("arpuser2") || key.equals("arpuser3") || key.equals("arpuser4"))
             {
@@ -1964,7 +1967,8 @@ public class WaldorfMicrowaveXT extends Synth
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)(total);
-            return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (key.equals("arpuser5") || key.equals("arpuser6") || key.equals("arpuser7") || key.equals("arpuser8"))
             {
@@ -1977,7 +1981,8 @@ public class WaldorfMicrowaveXT extends Synth
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)(total);
-            return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (key.equals("arpuser9") || key.equals("arpuser10") || key.equals("arpuser11") || key.equals("arpuser12"))
             {
@@ -1990,7 +1995,8 @@ public class WaldorfMicrowaveXT extends Synth
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)(total);
-            return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (key.equals("arpuser13") || key.equals("arpuser14") || key.equals("arpuser15") || key.equals("arpuser16"))
             {
@@ -2003,11 +2009,12 @@ public class WaldorfMicrowaveXT extends Synth
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)(total);
-            return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (key.equals("name"))
             {
-            byte[] bytes = new byte[16 * 10];
+            Object[] data = new Object[16];
             String name = model.get(key, "Init Sound V1.1 ") + "                "; 
             for(int i = 0; i < 16; i++)
                 {
@@ -2016,9 +2023,9 @@ public class WaldorfMicrowaveXT extends Synth
                 byte PP = (byte)(index & 127);
                 byte XX = (byte)(name.charAt(i));
                 byte[] b = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
-                System.arraycopy(b, 0, bytes, 10 * i, 10);
+                data[i] = b;
                 }
-            return bytes;
+            return data;
             }
         else
             {
@@ -2026,7 +2033,8 @@ public class WaldorfMicrowaveXT extends Synth
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)model.get(key);
-            return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            return new Object[] { data };
             }
         }
     

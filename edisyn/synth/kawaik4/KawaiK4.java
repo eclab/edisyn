@@ -251,6 +251,7 @@ public class KawaiK4 extends Synth
         String[] params;
         HBox hbox = new HBox();
         
+        HBox hbox2 = new HBox();
         VBox vbox = new VBox();
         params = SOURCE_MODES;
         comp = new Chooser("Source Mode", this, "sourcemode", params);
@@ -258,54 +259,10 @@ public class KawaiK4 extends Synth
 
         params = POLY_MODES;
         comp = new Chooser("Poly Mode", this, "polymode", params);
-        vbox.add(comp);
-        hbox.add(vbox);
+        vbox.addBottom(comp);
+        hbox2.add(vbox);
         
-        vbox = new VBox();
-        params = WHEEL_ASSIGNMENTS;
-        comp = new Chooser("Mod Wheel", this, "wheelassign", params);
-        vbox.add(comp);
-
-        comp = new CheckBox("AM S1 -> S2", this, "ams1>s2");
-        ((CheckBox)comp).addToWidth(1);
-        vbox.add(comp);
-
-        comp = new CheckBox("AM S3 -> S4", this, "ams3>s4");
-        vbox.add(comp);
-        hbox.add(vbox);
-                
-        comp = new LabelledDial("Volume", this, "volume", color, 0, 100);
-        hbox.add(comp);
-
-        comp = new LabelledDial("Pitch Bend", this, "pitchbend", color, 0, 12);
-        ((LabelledDial)comp).addAdditionalLabel("Range");
-        hbox.add(comp);
-
-        comp = new LabelledDial("Mod Wheel", this, "wheeldep", color, 0, 100, 50);
-        ((LabelledDial)comp).addAdditionalLabel("Depth");
-        hbox.add(comp);
-
-        // this appears to be poorly named in the manual (page 36)
-        comp = new LabelledDial("Pressure", this, "pres>freq", color, 0, 100, 50);
-        ((LabelledDial)comp).addAdditionalLabel("Pitch Mod");
-        hbox.add(comp);
-
-        comp = new LabelledDial("Out Select", this, "outselect", color, 0, 7)
-            {
-            public String map(int val)
-                {
-                return OUT_SELECTS[val];
-                }
-            };
-        model.removeMetricMinMax("outselect");
-        hbox.add(comp);
-
-        comp = new LabelledDial("Effect [K4] /", this, "effect", color, 0, 31, -1);
-        ((LabelledDial)comp).addAdditionalLabel("Output [K4r]");
-        model.removeMetricMinMax("effect");
-        hbox.add(comp);
-
-        vbox = new VBox();
+        VBox vbox2 = new VBox();
         comp = new PushButton("Show Effect/Ouput")
             {
             public void perform()
@@ -347,8 +304,50 @@ public class KawaiK4 extends Synth
                     }
                 }
             };
-        vbox.add(comp);
+        vbox2.add(comp);
+
+        params = WHEEL_ASSIGNMENTS;
+        comp = new Chooser("Mod Wheel", this, "wheelassign", params);
+        vbox2.add(comp);  
+        
+        vbox = new VBox();
+        vbox.addBottom(vbox2);
+        hbox2.add(vbox);
+        
+        vbox = new VBox();
+        vbox.addBottom(hbox2);
         hbox.add(vbox);
+
+        comp = new LabelledDial("Effect [K4] /", this, "effect", color, 0, 31, -1);
+        ((LabelledDial)comp).addAdditionalLabel("Output [K4r]");
+        model.removeMetricMinMax("effect");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Out Select", this, "outselect", color, 0, 7)
+            {
+            public String map(int val)
+                {
+                return OUT_SELECTS[val];
+                }
+            };
+        model.removeMetricMinMax("outselect");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Pitch Bend", this, "pitchbend", color, 0, 12);
+        ((LabelledDial)comp).addAdditionalLabel("Range");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Mod Wheel", this, "wheeldep", color, 0, 100, 50);
+        ((LabelledDial)comp).addAdditionalLabel("Depth");
+        hbox.add(comp);
+
+        // this appears to be poorly named in the manual (page 36)
+        comp = new LabelledDial("Pressure", this, "pres>freq", color, 0, 100, 50);
+        ((LabelledDial)comp).addAdditionalLabel("Pitch Mod");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Volume", this, "volume", color, 0, 100);
+        hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -395,10 +394,10 @@ public class KawaiK4 extends Synth
         String[] params;
         HBox hbox = new HBox();
         
-        comp = new LabelledDial("Time", this, "autobendtime", color, 0, 100, 50);
+        comp = new LabelledDial("Time", this, "autobendtime", color, 0, 100);
         hbox.add(comp);
         
-        comp = new LabelledDial("Depth", this, "autobenddepth", color, 0, 100);
+        comp = new LabelledDial("Depth", this, "autobenddepth", color, 0, 100, 50);
         hbox.add(comp);
         
         comp = new LabelledDial("Key Scaling", this, "autobendks>time", color, 0, 100, 50);
@@ -408,6 +407,16 @@ public class KawaiK4 extends Synth
         comp = new LabelledDial("Velocity", this, "autobendvel>dep", color, 0, 100, 50);
         ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
         hbox.add(comp);
+                
+        EnvelopeDisplay disp = new EnvelopeDisplay(this, Color.red, 
+            new String[] { null, "autobendtime" }, 
+            new String[] { "autobenddepth", null  },
+            new double[] { 0, 1.0/100.0 },
+            new double[] { 1.0 / 100.0, 50 / 100.0}
+            );
+        disp.setAxis(50 / 100.0);
+        comp = disp;
+        hbox.addLast(comp);    
         
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -457,10 +466,25 @@ public class KawaiK4 extends Synth
         params = WAVES;
         comp = new Chooser("Wave", this, "s" + src + "waveselect", params);
         vbox.add(comp);
-                
+             
+        HBox hbox2 = new HBox();   
         // Normally this is in global, but I think it makes more sense here
         comp = new CheckBox("Mute", this, "s" + src + "mute");
-        vbox.add(comp);
+        hbox2.add(comp);
+        
+        if (src == 1)
+        	{
+        	comp = new CheckBox("AM S1 -> S2", this, "ams1>s2");
+	        ((CheckBox)comp).addToWidth(1);
+	        hbox2.add(comp);
+	    	}
+	    else if (src == 3)
+	    	{
+	        comp = new CheckBox("AM S3 -> S4", this, "ams3>s4");
+	        ((CheckBox)comp).addToWidth(1);
+	        hbox2.add(comp);
+	    	}
+		vbox.add(hbox2);        
         hbox.add(vbox);
 
         vbox = new VBox();
@@ -560,12 +584,12 @@ public class KawaiK4 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Time Mod");
         hbox.add(comp);
 
-        // ADSR
+        // DADSR
         comp = new EnvelopeDisplay(this, Color.red, 
-            new String[] { null, "s" + envelope + "envelopeattack", "s" + envelope + "envelopedecay", null, "s" + envelope + "enveloperelease" },
-            new String[] { null, null, "s" + envelope + "envelopesustain", "s" + envelope + "envelopesustain", null },
-            new double[] { 0, 0.25/100.0, 0.25 / 100.0,  0.25, 0.25/100.0},
-            new double[] { 0, 1.0, 1.0 / 100.0, 1.0/100.0, 0 });
+            new String[] { null, "s" + envelope + "delay", "s" + envelope + "envelopeattack", "s" + envelope + "envelopedecay", null, "s" + envelope + "enveloperelease" },
+            new String[] { null, null, null, "s" + envelope + "envelopesustain", "s" + envelope + "envelopesustain", null },
+            new double[] { 0, 0.2/100.0, 0.2/100.0, 0.2 / 100.0,  0.2, 0.2/100.0},
+            new double[] { 0, 0.0, 1.0, 1.0 / 100.0, 1.0/100.0, 0 });
         hbox.addLast(comp);
                 
         category.add(hbox, BorderLayout.CENTER);
@@ -879,21 +903,21 @@ public class KawaiK4 extends Synth
 
 
 
-    public byte[] emit(String key)
+    public Object[] emitAll(String key)
         {
-        if (key.equals("bank")) return new byte[0];  // this is not emittable
-        if (key.equals("number")) return new byte[0];  // this is not emittable
+        if (key.equals("bank")) return new Object[0];  // this is not emittable
+        if (key.equals("number")) return new Object[0];  // this is not emittable
 
         if (key.equals("name"))
             {
             String name = model.get("key", "Untitled") + "          "; ;
-            byte[] b = new byte[10 * 10];
+            Object[] data = new Object[10];
             for(int i = 0; i < 10; i ++)
                 {
-                byte[] data = { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x04, (byte)i, 0x0, (byte)(name.charAt(i)), (byte)0xF7 };
-                System.arraycopy(data, 0, b, 10 * i, 10);
+                byte[] b = { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x04, (byte)i, 0x0, (byte)(name.charAt(i)), (byte)0xF7 };
+                data[i] = b;
                 }
-            return b;
+            return data;
             }
         else 
             {
@@ -971,9 +995,12 @@ public class KawaiK4 extends Synth
                 }
             else
                 {
+                System.err.println(key);
+                System.err.println("--> " + newkey);
                 index = ((Integer)(internalParametersToIndex.get(newkey))).intValue();
                 }
-            return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x04, (byte)index, (byte)((source << 1) | msb), (byte)lsb, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x04, (byte)index, (byte)((source << 1) | msb), (byte)lsb, (byte)0xF7 };
+            return new Object[] { data };
             }
         }
     
@@ -1138,7 +1165,7 @@ public class KawaiK4 extends Synth
                 // it looks like the K4 can send junk in the upper bits :-(
                 model.set("f1lfosw", (data[i + 8] >> 3) & 1);
                 }
-            else if (key.equals("f1resonance_lfosw"))
+            else if (key.equals("f2resonance_lfosw"))
                 {
                 model.set("f2resonance", data[i + 8] & 7);
                 // it looks like the K4 can send junk in the upper bits :-(

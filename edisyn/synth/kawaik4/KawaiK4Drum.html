@@ -32,7 +32,7 @@ The Kawai K4/K4r receives drum information on a separate MIDI channel.  You shou
 Unfortunately drums don't have their own effects/output: they will use whatever effect/output the current single or multi patch is using.
 
 <p><li>
-Bug on the Kawai K4 -- it doesn't return the MIDI channel when it does a dump.  So if you request a patch, the MIDI channel will not be properly updated.
+If you request a patch, the MIDI channel will not be properly updated.  This is due to a Kawai K4 drum patch bug: it doesn't return the MIDI channel when it sends sysex data to Edisyn.
 
 <p><li>When you update a parameter, it's not reflected on the K4's LCD until you move to something else and back again.
 </ul>

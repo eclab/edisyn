@@ -919,10 +919,10 @@ public class YamahaTX81Z extends Synth
     public static final int ACED_GROUP = 3 + 16; // 00010011
     public static final int PCED_GROUP = 0 + 16; // 00010000        says 00010011 in the manual, wrong
 
-    public byte[] emit(String key)
+    public Object[] emitAll(String key)
         {
-        if (key.equals("bank")) return new byte[0];  // this is not emittable
-        if (key.equals("number")) return new byte[0];  // this is not emittable
+        if (key.equals("bank")) return new Object[0];  // this is not emittable
+        if (key.equals("number")) return new Object[0];  // this is not emittable
 
         byte channel = (byte)(32 + getChannelOut());
              
@@ -938,7 +938,7 @@ public class YamahaTX81Z extends Synth
                 byte[] b = new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, (byte)(77 + i), (byte)(name.charAt(i)), (byte)0xF7 };
                 System.arraycopy(b, 0, result, i * 7, 7);
                 }
-            return result;
+            return new Object[] { result };
             }
 
         else if (key.equals("operator1enabled") || key.equals("operator2enabled") || key.equals("operator3enabled") || key.equals("operator4enabled"))
@@ -951,7 +951,8 @@ public class YamahaTX81Z extends Synth
             byte PP = (byte) 93;
             // don't know if I got this in the right order, see parse()
             byte VV = (byte) ((v4 << 3) | (v3 << 2) | (v2 << 1) | v1);
-            return new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, PP, VV, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, PP, VV, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (allParametersToIndex.containsKey(key))
             {
@@ -960,7 +961,8 @@ public class YamahaTX81Z extends Synth
 
             byte PP = (byte) index;
             byte VV = (byte) value;
-            return new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, PP, VV, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, PP, VV, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (allAdditionalParametersToIndex.containsKey(key))
             {
@@ -969,12 +971,13 @@ public class YamahaTX81Z extends Synth
 
             byte PP = (byte) index;
             byte VV = (byte) value;
-            return new byte[] { (byte)0xF0, 0x43, channel, ACED_GROUP, PP, VV, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x43, channel, ACED_GROUP, PP, VV, (byte)0xF7 };
+            return new Object[] { data };
             }
         else 
             {
             System.err.println("Can't emit key " + key);
-            return new byte[0];
+            return new Object[0];
             }
         }
     

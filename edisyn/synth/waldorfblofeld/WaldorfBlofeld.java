@@ -543,8 +543,8 @@ public class WaldorfBlofeld extends Synth
             };
         parametersByEffect[effect - 1][CLKDELAY][2] = comp;
 
-        // The WaldorfBlofeld has effects parameters 11....14 even though they're not used.  We'll give them min/max values
-        for(int i = 11; i < 15; i++)
+        // The Waldorf Blofeld has effects parameters 11....13 even though they're not used.  We'll give them min/max values
+        for(int i = 11; i < 14; i++)
             {
             model.set("effect" + effect + "parameter" + i, 0);
             model.setMin("effect" + effect + "parameter" + i, 0);
@@ -1442,7 +1442,7 @@ public class WaldorfBlofeld extends Synth
                 {
                 return "" + (int)((val - 64) / 64.0 * 200.0) + "%";
                 }
-            public int getDefaultValue() { return 96; } // +100%
+            public int getDefaultValue() { return 64; }  // 0%
             };
         hbox.add(comp);
 
@@ -1903,11 +1903,11 @@ public class WaldorfBlofeld extends Synth
 
     // READING AND WRITING
 
-    public byte[] emit(String key)
+    public Object[] emitAll(String key)
         {
-        if (!getSendMIDI()) return new byte[0];  // MIDI turned off, don't bother
-        if (key.equals("bank")) return new byte[0];  // this is not emittable
-        if (key.equals("number")) return new byte[0];  // this is not emittable
+        if (!getSendMIDI()) return new Object[0];  // MIDI turned off, don't bother
+        if (key.equals("bank")) return new Object[0];  // this is not emittable
+        if (key.equals("number")) return new Object[0];  // this is not emittable
         byte DEV = (byte)(getID());
         if (key.equals("osc1octave") || key.equals("osc2octave") || key.equals("osc3octave"))
             {
@@ -1915,7 +1915,8 @@ public class WaldorfBlofeld extends Synth
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)(16 + model.get(key) * 12);
-            return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (key.equals("oscallocation") || key.equals("unisono"))
             {
@@ -1923,7 +1924,8 @@ public class WaldorfBlofeld extends Synth
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)((model.get("unisono") << 4) | (model.get("oscallocation")));
-            return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (key.equals("envelope1mode") || key.equals("envelope1trigger") ||
             key.equals("envelope2mode") || key.equals("envelope2trigger") ||
@@ -1932,18 +1934,19 @@ public class WaldorfBlofeld extends Synth
             {
             int i;
             try { i = Integer.parseInt(key.substring(8, 9)); }
-            catch (Exception e) { e.printStackTrace(); return new byte[0]; }
+            catch (Exception e) { e.printStackTrace(); return new Object[0]; }
             int index = 196 + (i - 1) * 12;
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)((model.get("envelope" + i + "trigger") << 5) | (model.get("envelope" + i + "mode")));
-            return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (key.startsWith("arp") && !key.startsWith("arpegg"))
             {
             int i;
             try { i = Integer.parseInt(key.substring(3, 5)); }
-            catch (Exception e) { e.printStackTrace(); return new byte[0]; }
+            catch (Exception e) { e.printStackTrace(); return new Object[0]; }
             if (key.endsWith("length") || key.endsWith("timing"))
                 {
                 int index = i + 342;
@@ -1951,7 +1954,8 @@ public class WaldorfBlofeld extends Synth
                 byte PP = (byte)(index & 127);
                 byte XX = (byte)((model.get("arp" + (i < 10 ? "0" : "") + i + "length") << 4) | 
                     (model.get("arp" + (i < 10 ? "0" : "") + i + "timing")));
-                return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+                byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            	return new Object[] { data };
                 }
             else
                 {
@@ -1961,12 +1965,13 @@ public class WaldorfBlofeld extends Synth
                 byte XX = (byte)((model.get("arp" + (i < 10 ? "0" : "") + i + "step") << 4) |
                     (model.get("arp" + (i < 10 ? "0" : "") + i + "glide") << 3) |
                     (model.get("arp" + (i < 10 ? "0" : "") + i + "accent")));
-                return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+                byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            	return new Object[] { data };
                 }
             }
         else if (key.equals("name"))
             {
-            byte[] bytes = new byte[16 * 10];
+            Object[] data = new Object[16];
             String name = model.get(key, "Init") + "                "; 
             for(int i = 0; i < 16; i++)
                 {
@@ -1975,9 +1980,9 @@ public class WaldorfBlofeld extends Synth
                 byte PP = (byte)(index & 127);
                 byte XX = (byte)(name.charAt(i));
                 byte[] b = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
-                System.arraycopy(b, 0, bytes, 10 * i, 10);
+                data[i] = b;
                 }
-            return bytes;
+            return data;
             }
         else
             {
@@ -1985,7 +1990,8 @@ public class WaldorfBlofeld extends Synth
             byte HH = (byte)((index >> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)model.get(key);
-            return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+            return new Object[] { data };
             }
         }
     

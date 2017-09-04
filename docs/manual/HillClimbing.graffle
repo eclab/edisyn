@@ -44,7 +44,7 @@
 	<key>Creator</key>
 	<string>Sean Luke</string>
 	<key>DisplayScale</key>
-	<string>1 0/72 in = 1 0/72 in</string>
+	<string>1 0/72 in = 1.0000 in</string>
 	<key>GraphDocumentVersion</key>
 	<integer>8</integer>
 	<key>GraphicsList</key>
@@ -93,7 +93,7 @@
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qr
 
 \f0\fs24 \cf0 Even Further Beyond A\
-From the Previous A}</string>
+From Z}</string>
 				<key>VerticalPad</key>
 				<integer>0</integer>
 			</dict>
@@ -102,7 +102,7 @@ From the Previous A}</string>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{66.25, 148}, {109, 28}}</string>
+			<string>{{123.25, 148}, {52, 28}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FitText</key>
@@ -144,7 +144,7 @@ From the Previous A}</string>
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qr
 
 \f0\fs24 \cf0 Beyond A\
-From the Previous A}</string>
+From Z}</string>
 				<key>VerticalPad</key>
 				<integer>0</integer>
 			</dict>
@@ -390,8 +390,8 @@ From the Previous A}</string>
 			<integer>59</integer>
 			<key>Points</key>
 			<array>
-				<string>{187.17552, 157.5034}</string>
-				<string>{188.81523, 115.49623}</string>
+				<string>{187.17633, 157.50343}</string>
+				<string>{188.82358, 115.49656}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -423,8 +423,8 @@ From the Previous A}</string>
 			<integer>56</integer>
 			<key>Points</key>
 			<array>
-				<string>{330.43884, 359.74826}</string>
-				<string>{238.56047, 288.75262}</string>
+				<string>{330.4389, 359.74823}</string>
+				<string>{238.56113, 288.75177}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -456,8 +456,8 @@ From the Previous A}</string>
 			<integer>55</integer>
 			<key>Points</key>
 			<array>
-				<string>{187.29756, 248.76921}</string>
-				<string>{231.44977, 283.23422}</string>
+				<string>{187.29774, 248.76897}</string>
+				<string>{231.45224, 283.23105}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -489,8 +489,8 @@ From the Previous A}</string>
 			<integer>54</integer>
 			<key>Points</key>
 			<array>
-				<string>{333.81836, 358.00363}</string>
-				<string>{328.18262, 218.49632}</string>
+				<string>{333.81833, 358.00363}</string>
+				<string>{328.18167, 218.49635}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -592,8 +592,8 @@ From the Previous A}</string>
 			<integer>51</integer>
 			<key>Points</key>
 			<array>
-				<string>{326.1235, 145.49832}</string>
-				<string>{327.88083, 209.50156}</string>
+				<string>{326.12326, 145.49834}</string>
+				<string>{327.87677, 209.50166}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -625,8 +625,8 @@ From the Previous A}</string>
 			<integer>64</integer>
 			<key>Points</key>
 			<array>
-				<string>{322.41837, 143.72511}</string>
-				<string>{237.58104, 208.27412}</string>
+				<string>{322.41837, 143.72516}</string>
+				<string>{237.5816, 208.27487}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -658,8 +658,8 @@ From the Previous A}</string>
 			<integer>65</integer>
 			<key>Points</key>
 			<array>
-				<string>{187.44299, 243.42743}</string>
-				<string>{230.30492, 213.56955}</string>
+				<string>{187.44313, 243.42767}</string>
+				<string>{230.30684, 213.57231}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -726,8 +726,8 @@ From the Previous A}</string>
 			<integer>47</integer>
 			<key>Points</key>
 			<array>
-				<string>{331.39697, 358.82849}</string>
-				<string>{252.59343, 247.6783}</string>
+				<string>{331.39725, 358.82828}</string>
+				<string>{252.60272, 247.67172}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -759,8 +759,8 @@ From the Previous A}</string>
 			<integer>46</integer>
 			<key>Points</key>
 			<array>
-				<string>{323.32745, 144.62112}</string>
-				<string>{252.66054, 240.37006}</string>
+				<string>{323.32788, 144.62141}</string>
+				<string>{252.6721, 240.37856}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -792,8 +792,8 @@ From the Previous A}</string>
 			<integer>44</integer>
 			<key>Points</key>
 			<array>
-				<string>{188.24797, 245.86401}</string>
-				<string>{245.50194, 244.13292}</string>
+				<string>{188.24797, 245.86421}</string>
+				<string>{245.50203, 244.13577}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -895,8 +895,8 @@ From the Previous A}</string>
 			<integer>40</integer>
 			<key>Points</key>
 			<array>
-				<string>{183.92415, 241.50336}</string>
-				<string>{186.82906, 166.49677}</string>
+				<string>{183.92398, 241.50333}</string>
+				<string>{186.82603, 166.49667}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -928,8 +928,8 @@ From the Previous A}</string>
 			<integer>38</integer>
 			<key>Points</key>
 			<array>
-				<string>{178.153, 410.50256}</string>
-				<string>{183.59625, 250.49739}</string>
+				<string>{178.15302, 410.50256}</string>
+				<string>{183.59698, 250.49742}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -953,7 +953,7 @@ From the Previous A}</string>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{242, 474}, {75, 14}}</string>
+			<string>{{45, 279}, {75, 14}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FitText</key>
@@ -1001,7 +1001,7 @@ From the Previous A}</string>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{324, 477}, {8, 8}}</string>
+			<string>{{127, 282}, {8, 8}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FontInfo</key>
@@ -1048,7 +1048,7 @@ From the Previous A}</string>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{112, 408}, {58, 14}}</string>
+			<string>{{137, 408}, {8, 14}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FitText</key>
@@ -1087,7 +1087,7 @@ From the Previous A}</string>
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
 
-\f0\fs24 \cf0 Previous A}</string>
+\f0\fs24 \cf0 Z}</string>
 				<key>VerticalPad</key>
 				<integer>0</integer>
 			</dict>
@@ -1426,7 +1426,7 @@ From the Previous A}</string>
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2017-08-30 15:31:49 +0000</string>
+	<string>2017-09-04 05:18:18 +0000</string>
 	<key>Modifier</key>
 	<string>Sean Luke</string>
 	<key>NotesVisible</key>
@@ -1463,16 +1463,6 @@ From the Previous A}</string>
 		<array>
 			<string>int</string>
 			<string>0</string>
-		</array>
-		<key>NSPrinter</key>
-		<array>
-			<string>coded</string>
-			<string>BAtzdHJlYW10eXBlZIHoA4QBQISEhAlOU1ByaW50ZXIAhIQITlNPYmplY3QAhZKEhIQITlNTdHJpbmcBlIQBKwlDUyBPZmZpY2WGhg==</string>
-		</array>
-		<key>NSPrinterName</key>
-		<array>
-			<string>string</string>
-			<string>CS Office</string>
 		</array>
 		<key>NSRightMargin</key>
 		<array>
@@ -1517,7 +1507,7 @@ From the Previous A}</string>
 			</dict>
 		</array>
 		<key>Frame</key>
-		<string>{{314, 6}, {710, 872}}</string>
+		<string>{{171, 6}, {710, 872}}</string>
 		<key>ListView</key>
 		<true/>
 		<key>OutlineWidth</key>

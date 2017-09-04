@@ -31,7 +31,17 @@ The PreenFM2 has an unusual approach to upoading and downloading sounds which ca
 
 <p>You also cannot <b>merge</b> with an existing patch because it doesn't come in as one sysex dump.
 
+<p><li>If you send a full parameter dump to the PreenFM2 at full MIDI speed, it bombs.  So Edisyn is forced to send at about 1/3 speed.  Oh well.
+
+<p><li>If you have the Arpeggiator Latch turned on, the PreenFM2 ignores All Sounds Off: the arpeggiator keeps on going.  To shut up the PreenFM2 in this context, press INST and MENU at the same time on the machine.
+
+<p><li>The Operator Frequency as displayed in the synth is often 0.01 off of what was provided it by Edisyn.  Similarly, the Fixed Operator Frequency (+/- fine tune) is 1 off of what was provided it by Edisyn about half the time.
+
+<p><li>Changing the Operator Fixed/Keyboard flag via NRPN does not refresh the screen for the frequency and fine tune.
+
 <p><li>I have seen problems with the PreenFM2 sending four times as much data as it should when asked to send a patch to Edisyn.  (I'm testing OS X).  If you're seeing strangely long load times (several seconds), try switching to 5-pin MIDI rather than USB: it seems to solve things.
+
+<p>
 </ul>
 
 <p><table border=0 cellpadding=0 cellspacing=5>

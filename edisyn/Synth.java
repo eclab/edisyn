@@ -61,7 +61,9 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenu merge;
     public JMenuItem editMutationMenu;
     public JCheckBoxMenuItem recombinationToggle;
-        
+    public JMenuItem hillClimbMenu;
+    public JCheckBoxMenuItem testNotes;
+    
     Model[] nudge = new Model[4];
     JMenuItem[] nudgeTowards = new JMenuItem[4];
     
@@ -136,10 +138,15 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed(ActionEvent e)
                 {
+                if (hillClimbing)
+                	hillClimb.updateSound();
                 doSendTestNote();
+                if (hillClimbing)
+                	hillClimb.postUpdateSound();
                 }
             });
         sendTestNotesTimer.setRepeats(true);
+        hillClimb = new HillClimb(this);
         }
         
         
@@ -206,7 +213,7 @@ public abstract class Synth extends JComponent implements Updatable
     // MenuItem for Absolute CC, so we can enable/diable it
     JMenuItem learningMenuItem;
     // MenuItem for RelativeCC0, so we can enable/diable it
-    JMenuItem learningMenuItem0;
+    //JMenuItem learningMenuItem0;
     // MenuItem for RelativeCC64, so we can enable/diable it
     JMenuItem learningMenuItem64;
     // MenuItem for Passing through CCs, so we can check it
@@ -244,7 +251,8 @@ public abstract class Synth extends JComponent implements Updatable
             {
             int type = ccmap.getTypeForCCPane(cc, getCurrentTab());
             if (type == CCMap.TYPE_RELATIVE_CC_64)
-                return "CC64(" + sub + ") " + cc;
+                //return "CC64(" + sub + ") " + cc;
+                return "RCC(" + sub + ") " + cc;
             else if (type == CCMap.TYPE_RELATIVE_CC_0)
                 return "CC0(" + sub + ") " + cc;
             else return "CC(" + sub + ") " + cc;
@@ -264,13 +272,13 @@ public abstract class Synth extends JComponent implements Updatable
             {
             setShowingMutation(false);
             if (learningMenuItem != null) learningMenuItem.setText("Stop Mapping");
-            if (learningMenuItem0 != null) learningMenuItem0.setEnabled(false);
+            //if (learningMenuItem0 != null) learningMenuItem0.setEnabled(false);
             if (learningMenuItem64 != null) learningMenuItem64.setEnabled(false);
             }
         else
             {
             if (learningMenuItem != null) learningMenuItem.setText("Map CC / NRPN");
-            if (learningMenuItem0 != null) learningMenuItem0.setEnabled(true);
+            //if (learningMenuItem0 != null) learningMenuItem0.setEnabled(true);
             if (learningMenuItem64 != null) learningMenuItem64.setEnabled(true);
             }
         updateTitle();
@@ -1023,10 +1031,10 @@ public abstract class Synth extends JComponent implements Updatable
             {
             if (tuple != null)
                 tuple.dispose();            
-            tuple = result;
-            retval = true;
+            tuple = result;		// update
             setSendMIDI(true);
             updateTitle();
+            retval = true;
             }
                 
         return retval;
@@ -1054,7 +1062,6 @@ public abstract class Synth extends JComponent implements Updatable
     // if that much time hasn't already transpired between midi sends
     void midiPause(int expectedPause)
         {
-                
         long pauseSoFar = System.currentTimeMillis() - lastMIDISend;
         if (pauseSoFar >= 0 && pauseSoFar < expectedPause)
             {
@@ -1082,7 +1089,24 @@ public abstract class Synth extends JComponent implements Updatable
             // compute pause
             midiPause(getPauseBetweenMIDISends());
                                         
-            synchronized(midiSendLock) { receiver.send(message, -1); }      
+            synchronized(midiSendLock) 
+            	{
+            	try
+            		{
+            		receiver.send(message, -1);
+            		}
+            	catch (IllegalStateException e)
+            		{
+            		// This happens when the device has closed itself and we're still trying to send to it.
+            		// For example if the user rips the USB cord for his device out of the laptop.  In this
+            		// case we'll also disconnect
+            		SwingUtilities.invokeLater(new Runnable()
+            			{
+            			public void run() { doDisconnectMIDI(); }
+            			});
+            		return false;
+            		}
+            	}      
             lastMIDISend = System.currentTimeMillis();
             return true;
             }
@@ -1119,11 +1143,24 @@ public abstract class Synth extends JComponent implements Updatable
                                         
             try { 
                 SysexMessage message = new SysexMessage(data, data.length);
-                synchronized(midiSendLock) { receiver.send(message, -1); }      
+                synchronized(midiSendLock)
+                	{ 
+                	receiver.send(message, -1); 
+                	}      
                 lastMIDISend = System.currentTimeMillis();
                 return true; 
                 }
             catch (InvalidMidiDataException e) { e.printStackTrace(); return false; }
+            catch (IllegalStateException e2)
+            	{
+				// This happens when the device has closed itself and we're still trying to send to it.
+				// For example if the user rips the USB cord for his device out of the laptop.
+				SwingUtilities.invokeLater(new Runnable()
+					{
+					public void run() { doDisconnectMIDI(); }
+					});
+				return false;
+            	}
             }
         else
             return false;
@@ -1369,13 +1406,14 @@ public abstract class Synth extends JComponent implements Updatable
     ////////// GUI UTILITIES
 
 
-    public void addTab(String title, JComponent component)
+    public JComponent addTab(String title, JComponent component)
         {
         JScrollPane pane = new JScrollPane(component, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
             JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         pane.setViewportBorder(null);
         pane.setBorder(null);
         tabs.addTab(title, pane);
+        return pane;
         }
 
 
@@ -1637,6 +1675,8 @@ public abstract class Synth extends JComponent implements Updatable
         if (html != null)
             tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream(html)));
 
+		//tabs.addTab("HillClimb", new HillClimb
+
         JFrame frame = new JFrame();
         JMenuBar menubar = new JMenuBar();
         frame.setJMenuBar(menubar);
@@ -1787,10 +1827,10 @@ public abstract class Synth extends JComponent implements Updatable
         randomize.add(undoAndRandomize);
 
 /*
-  JMenuItem hillclimb = new JMenuItem("Hill Climb");
-  randomize.add(hillclimb);
+  JMenuItem hillClimb = new JMenuItem("Hill Climb");
+  randomize.add(hillClimb);
         
-  hillclimb.addActionListener(new ActionListener()
+  hillClimb.addActionListener(new ActionListener()
   {
   public void actionPerformed( ActionEvent e)
   { 
@@ -1989,12 +2029,22 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
         
+        // reset the nudges now
         for(int i = 0; i < nudge.length; i++)
             doSetNudge(i);
                 
 
 
-            
+		hillClimbMenu = new JMenuItem("Hill-Climb");
+		menu.add(hillClimbMenu);
+		hillClimbMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doHillClimb();
+                }
+            });
+
         menu.addSeparator();
         
         editMutationMenu = new JMenuItem("Edit Mutation Parameters");
@@ -2209,7 +2259,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        JCheckBoxMenuItem testNotes = new JCheckBoxMenuItem("Send Test Notes");
+        testNotes = new JCheckBoxMenuItem("Send Test Notes");
         menu.add(testNotes);
         testNotes.addActionListener(new ActionListener()
             {
@@ -2233,7 +2283,8 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
                 
-        learningMenuItem64 = new JMenuItem("Map Relative CC [64]");
+//        learningMenuItem64 = new JMenuItem("Map Relative CC [64]");
+        learningMenuItem64 = new JMenuItem("Map Relative CC");
         learningMenuItem64.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(learningMenuItem64);
         learningMenuItem64.addActionListener(new ActionListener()
@@ -2244,6 +2295,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
                 
+/*
         learningMenuItem0 = new JMenuItem("Map Relative CC [0]");
         learningMenuItem0.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(learningMenuItem0);
@@ -2254,7 +2306,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMapCC(CCMap.TYPE_RELATIVE_CC_0);
                 }
             });
-        
+*/
         menu.addSeparator();
         
         JMenuItem clearAllCC = new JMenuItem("Clear all Mapped CCs");
@@ -2633,23 +2685,28 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
 
-    boolean sendTestNotes = false;   
+    boolean sendingTestNotes = false;   
     javax.swing.Timer sendTestNotesTimer;
                     
     void doSendTestNotes()
         {
-        if (sendTestNotes)
+        if (sendingTestNotes)
             {
             sendTestNotesTimer.stop();
             doSendAllSoundsOff();
-            sendTestNotes = false;
+            sendingTestNotes = false;
             }       
         else
             {
             sendTestNotesTimer.start();
-            sendTestNotes = true;
+            sendingTestNotes = true;
             }       
         }
+        
+    public boolean isSendingTestNotes()
+    	{
+    	return sendingTestNotes;
+    	}
 
     boolean allowsTransmitsParameters;
 
@@ -2784,13 +2841,8 @@ public abstract class Synth extends JComponent implements Updatable
     void doDisconnectMIDI()
         {
         if (tuple != null)
-            {
-            if (tuple.in != null && tuple.inReceiver != null)
-                tuple.in.removeReceiver(tuple.inReceiver);
-            if (tuple.key != null && tuple.keyReceiver != null)
-                tuple.key.removeReceiver(tuple.keyReceiver);
             tuple.dispose();
-            }
+
         tuple = null;
         setSendMIDI(true);
         updateTitle();
@@ -3180,7 +3232,32 @@ public abstract class Synth extends JComponent implements Updatable
             }
                         
         repaint();
-        }       
+        }     
+    
+    HillClimb hillClimb;
+    JComponent hillClimbPane;
+     
+    boolean hillClimbing = false;
+    void doHillClimb()
+    	{
+    	if (hillClimbing)
+    		{
+    		Component selected = tabs.getSelectedComponent();
+    		tabs.remove(hillClimbPane);
+    		hillClimbMenu.setText("Hill-Climb");
+    		if (selected == hillClimbPane)  // we were in the hill-climb pane when this menu was selected
+    			tabs.setSelectedIndex(0);
+    		hillClimbing = false;
+    		}
+    	else
+    		{
+    		hillClimb.initialize(getModel(), true);
+    		hillClimbPane = addTab("Hill-Climb", hillClimb);
+    		tabs.setSelectedComponent(hillClimbPane);
+    		hillClimbMenu.setText("Stop Hill-Climbing");
+    		hillClimbing = true;
+    		}
+    	}  
         
         
         
@@ -3261,11 +3338,5 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 
-
-
-
-    ////// EXPERIMENTAL
-        
-    public String[] getHillClimbKeys() { return model.getKeys(); }
 
     }

@@ -79,7 +79,8 @@ Edisyn will now build a patch editor for you and display it.  But unless you cho
 
 If you are not connected to MIDI, or if you cancel, then Edisyn will inform you that you must continue in {\bf Disconnected Mode}.
 
-\paragraph{Important Note}  At present, due to bugs in the MIDI library Edisyn relies on, if you connect a device to your computer {\it after} you have fired up Edisyn, Edisyn will not be able to see it.  You'll need to restart Edisyn if you want to use that device.  So connect your devices first.
+\paragraph{Important Note}  If your USB MIDI device is manually disconnected, Edisyn won't know until you ask Edisyn to send the synth something (perhaps changing a parameter or uploading a patch).  At that point, Edisyn will get a clue and the patch editor window will change to {\bf Disconnected Mode}.'
+
 
 \section{Edisyn Patch Editors}
 
@@ -209,8 +210,8 @@ Mapping a parameter is easy:
 
 \begin{itemize}
 \item {\bf Absolute CC}\quad  The value of the CC sent is exactly what the parameter will be set to (between 0...127).  To map, choose {\bf Map CC/NRPN} in the {\bf Map} menu.  This style is particularly useful for potentiometers or sliders.
-\item {\bf Relative CC ``64''}\quad  Here, the CC value you send indicates how much to {\it add to} or {\it subtract from} the existing parameter value.   In this form of Relative CC, 64 means 0 (add nothing), a value \(x<64\) means to subtract \(64-x\) from the current value, and a value \(x>64\) means to add \(x - 64\) to the current value.   This style is supported by a number of controllers and is useful for encoders.  To map, choose {\bf Map Relative CC[64]} in the {\bf Map} menu.
-\item {\bf Relative CC ``0''}\quad  Here, the CC value you send again indicates how much to {\it add to} or {\it subtract from} the existing parameter value.   In this form of Relative ŒCC, 0 means 0 (add nothing), a high value \(64<x<128\) means to subtract \(128-x\) from the current value, and a low value \(0>x\geq64\) means to add \(x\) to the current value.   This style is also supported by a number of controllers and is useful for encoders.  To map, choose {\bf Map Relative CC[0]} in the {\bf Map} menu.
+\item {\bf Relative CC}\quad  Here, the CC value you send indicates how much to {\it add to} or {\it subtract from} the existing parameter value.\footnote{Specifically, 64 means 0 (add nothing), a value \(x<64\) means to subtract \(64-x\) from the current value, and a value \(x>64\) means to add \(x - 64\) to the current value.}  This style is supported by a number of controllers and is useful for encoders.\footnote{You could also map a pair of pushbuttons to be up/down cursors using this method: set up the ``down'' pushbutton to send 63 and the ``up'' pushbutton to send 65.}   For example, the Novation controller series calls this ``REL1'' or ``REL2''\footnote{The difference being that in REL2 mode, if you spin the encoder rapidly, the amount added/subtracted is nonlinearly more than expected, whereas in REL1 the speed doesn't matter, all that matters is how far the encoder was turned.  Novation controllers also have a relative CC mode called ``APOT'', which is not supported.}, and the BeatStep calls this ``Relative 1''\footnote{The Beatstep also has relative CC modes called ``Relative 2'' and ``Relative 3'', which are not supported.}  To map, choose {\bf Map Relative CC} in the {\bf Map} menu.
+%\item {\bf Relative CC ``0''}\quad  Here, the CC value you send again indicates how much to {\it add to} or {\it subtract from} the existing parameter value.   In this form of Relative ŒCC, 0 means 0 (add nothing), a high value \(64<x<128\) means to subtract \(128-x\) from the current value, and a low value \(0>x\geq64\) means to add \(x\) to the current value.   This style is also supported by a number of controllers and is useful for encoders.  To map, choose {\bf Map Relative CC[0]} in the {\bf Map} menu.
 \item {\bf NRPN}\quad You are permitted to map any NRPN parameter at all.  The value of the CC sent is exactly what the parameter will be set to: all 14 bits.  If your controller can only send 7-bit NRPN, then you should configure it to send ``Fine'' or ``LSB-only''.  Edisyn also supports the NRPN Increment and Decrement options, though those are rare.  To  map, choose {\bf Map CC/NRPN} in the {\bf Map} menu.  
 \end{itemize}
 
@@ -297,6 +298,17 @@ When a patch {\bf A} is {\it mutated}, it is modified with some degree of random
 
 \item Occasional parameters are {\it immutable}: they will refuse to be mutated.  These are typically things like patch names.
 \end{itemize}
+
+\subsection{Hill-Climbing}
+
+Edisyn's {\it hill-climber} is another of its patch-exploration tools.  You select it by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  This will add a new tab to your patch editor labelled {\bf Hill-Climb}.  You get rid of the hill-climber by selecting {\bf Stop Hill-Climbing} in the {\bf Edit} menu.
+
+When you fire up the Hill-Climber, it 
+
+\begin{wrapfigure}{r}{3in}
+\includegraphics[width=3in]{HillClimbing.pdf}
+\caption{Directed Mutation in the Hill-Climber}
+\end{wrapfigure}
 
 \section{Synthesizers are Inconsistent}
 

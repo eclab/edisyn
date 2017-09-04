@@ -23,47 +23,52 @@ public class Category extends JComponent implements Gatherable
     {             
     Color color;
       
+    /** If synth is non-null, then double-clicking on the category will select or deselect all the
+    	components inside it for mutation purposes. */
     public Category(Synth synth, String label, Color color)
         {
         setLayout(new BorderLayout());
         this.color = color;     
         setName(label);
 
-        addMouseListener(new MouseAdapter()
-            {
-            public void mouseClicked(MouseEvent e)
-                {
-                boolean inBorder = ( e.getPoint().y < getInsets().top);
-                if (e.getClickCount() == 2 && inBorder)
-                    {
-                    boolean turnOn = true;
-                    ArrayList comps = new ArrayList();
-                    gatherAllComponents(comps);
-                    for(int i = 0; i < comps.size(); i++)
-                        {
-                        if (comps.get(i) instanceof NumericalComponent)
-                            {
-                            NumericalComponent nc = (NumericalComponent)(comps.get(i));
-                            String key = nc.getKey();
-                            if (synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
-                                { turnOn = false; break; }
-                            }
-                        }
-                                        
-                    for(int i = 0; i < comps.size(); i++)
-                        {
-                        if (comps.get(i) instanceof NumericalComponent)
-                            {
-                            NumericalComponent nc = (NumericalComponent)(comps.get(i));
-                            String key = nc.getKey();
-                            if (synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
-                                synth.mutationMap.setFree(key, turnOn);
-                            }
-                        }
-                    repaint();
-                    }
-                }
-            });
+		if (synth != null)
+			{
+			addMouseListener(new MouseAdapter()
+				{
+				public void mouseClicked(MouseEvent e)
+					{
+					boolean inBorder = ( e.getPoint().y < getInsets().top);
+					if (e.getClickCount() == 2 && inBorder)
+						{
+						boolean turnOn = true;
+						ArrayList comps = new ArrayList();
+						gatherAllComponents(comps);
+						for(int i = 0; i < comps.size(); i++)
+							{
+							if (comps.get(i) instanceof NumericalComponent)
+								{
+								NumericalComponent nc = (NumericalComponent)(comps.get(i));
+								String key = nc.getKey();
+								if (synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+									{ turnOn = false; break; }
+								}
+							}
+										
+						for(int i = 0; i < comps.size(); i++)
+							{
+							if (comps.get(i) instanceof NumericalComponent)
+								{
+								NumericalComponent nc = (NumericalComponent)(comps.get(i));
+								String key = nc.getKey();
+								if (synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+									synth.mutationMap.setFree(key, turnOn);
+								}
+							}
+						repaint();
+						}
+					}
+				});
+			}
                         
         }
     

@@ -167,16 +167,12 @@ public class Midi
         return null;
         }
 
-    static ArrayList allDevices;
-    static ArrayList inDevices;
-    static ArrayList outDevices;
-    static ArrayList keyDevices;
-        
-    static
-        {
+
+	static void updateDevices()
+		{
         MidiDevice.Info[] midiDevices = uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider.getMidiDeviceInfo();
 
-        allDevices = new ArrayList();
+        ArrayList allDevices = new ArrayList();
         for(int i = 0; i < midiDevices.length; i++)
             {
             try
@@ -193,6 +189,35 @@ public class Midi
                 }
             catch(Exception e) { }
             }
+            
+        // Do they hold the same exact devices?
+        if (Midi.allDevices != null && Midi.allDevices.size() == allDevices.size())
+        	{
+        	Set set = new HashSet();
+        	for(int i = 0; i < Midi.allDevices.size(); i++)
+        		{
+        		set.add(((MidiDeviceWrapper)(Midi.allDevices.get(i))).device);
+        		}
+        	
+        	boolean same = true;
+        	for(int i = 0; i < allDevices.size(); i++)
+        		{
+        		if (!set.contains(((MidiDeviceWrapper)(allDevices.get(i))).device))
+        			{
+        			same = false;  // something's different
+        			break;
+        			}
+        		}
+        	
+        	if (same)
+        		{
+        		return;  // they're identical
+        		}
+        	}
+        	
+        // at this point allDevices isn't the same as Midi.allDevices, so set it and update
+        Midi.allDevices = allDevices;
+
 
         inDevices = new ArrayList();
         keyDevices = new ArrayList();
@@ -224,9 +249,17 @@ public class Midi
                 }
             catch(Exception e) { }
             }
+		}
+
+    static ArrayList allDevices;
+    static ArrayList inDevices;
+    static ArrayList outDevices;
+    static ArrayList keyDevices;
+        
+    static
+        {
+        updateDevices();
         }
-
-
 
     public static class Tuple
         {
@@ -263,7 +296,10 @@ public class Midi
         int refcount = 1;
         
         public Tuple copy(Receiver inReceiver, Receiver keyReceiver)
-            { 
+            {
+            if (refcount < 1)
+            	throw new RuntimeException("Cannot copy a fully disposed Midi tuple");
+            	
             refcount++; 
                 
             if (in != null)
@@ -278,15 +314,19 @@ public class Midi
         public void dispose()
             {
             refcount--;
+            
             if (refcount == 0)
                 {
                 if (key != null && keyReceiver != null)
                     key.removeReceiver(keyReceiver);
                 if (in != null && inReceiver!= null)
                     in.removeReceiver(inReceiver);
-                }
-            if (refcount <= 0)
-                {
+
+				// We don't close() stuff because of prior MIDI bugs in coremidi4j which are getting fixed (I believe).
+				// At any rate, the only time we will see a closed Receiver or a Thru is if it closes itself, because we
+				// share them.  And when we quit, we just leak (probably can't help that anyway on a hard-quit).  
+				// Hope that's okay.
+
                 key = null;
                 keyReceiver = null;
                 in = null;
@@ -343,6 +383,8 @@ public class Midi
         input.  You get these with Synth.buildKeyReceiver() and Synth.buildInReceiver() */ 
     public static Tuple getNewTuple(Tuple old, Synth synth, String message, Receiver inReceiver, Receiver keyReceiver)
         {
+        updateDevices();
+        
         if (inDevices.size() == 0)
             {
             JOptionPane.showOptionDialog(synth, "There are no MIDI devices available to receive from.",  

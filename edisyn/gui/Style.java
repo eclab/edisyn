@@ -38,7 +38,6 @@ public class Style
     /** The synth panel's insets */
     public static final Insets SYNTH_PANEL_INSETS = new Insets(4, 4, 8, 4);
 
-
     /////// CATEGORY CONSTANTS
     
     /** Font for category borders. */

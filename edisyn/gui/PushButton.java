@@ -24,6 +24,9 @@ public class PushButton extends JPanel
     JButton button;
     
     public Insets getInsets() { return new Insets(0,0,0,0); }
+    
+    public JButton getButton() { return button; }
+    
     public PushButton(final String text)
         {
         button = new JButton(text);

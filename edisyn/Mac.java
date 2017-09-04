@@ -29,6 +29,13 @@ public class Mac
                     new AboutListener(synth));
 
                 app.getClass().getMethod("setAboutHandler", Class.forName("com.apple.eawt.AboutHandler")).invoke(app, al);
+
+             	al = Proxy.newProxyInstance(
+                    Class.forName("com.apple.eawt.QuitHandler").getClassLoader(),
+                    new Class[]{Class.forName("com.apple.eawt.QuitHandler")},
+                    new QuitListener(synth));
+
+                app.getClass().getMethod("setQuitHandler", Class.forName("com.apple.eawt.QuitHandler")).invoke(app, al);
                 }
             catch (Exception e) 
                 {
@@ -49,6 +56,21 @@ class AboutListener implements InvocationHandler
     public Object invoke(Object proxy, Method method, Object[] args) 
         {
         synth.doAbout();
+        return null;
+        }
+    }
+
+class QuitListener implements InvocationHandler 
+    {
+    Synth synth;
+    public QuitListener(Synth synth)
+        {
+        this.synth = synth;
+        }
+                
+    public Object invoke(Object proxy, Method method, Object[] args) 
+        {
+        synth.doQuit();
         return null;
         }
     }

@@ -995,8 +995,6 @@ public class KawaiK4 extends Synth
                 }
             else
                 {
-                System.err.println(key);
-                System.err.println("--> " + newkey);
                 index = ((Integer)(internalParametersToIndex.get(newkey))).intValue();
                 }
             byte[] data = new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x04, (byte)index, (byte)((source << 1) | msb), (byte)lsb, (byte)0xF7 };

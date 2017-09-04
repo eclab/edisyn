@@ -356,7 +356,7 @@ public class OberheimMatrix1000 extends Synth
 
         if (osc==2)
             {
-            comp = new LabelledDial("Detune", this, "dco" + osc + "detune", color, 1, 63, 31)
+            comp = new LabelledDial("Detune", this, "dco" + osc + "detune", color, 1, 63, 32)
                 {
                 public boolean isSymmetric() { return true; }
                 };

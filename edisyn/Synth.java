@@ -63,7 +63,8 @@ public abstract class Synth extends JComponent implements Updatable
     public JCheckBoxMenuItem recombinationToggle;
     public JMenuItem hillClimbMenu;
     public JCheckBoxMenuItem testNotes;
-    
+    public JComponent hillClimbPane;
+
     Model[] nudge = new Model[4];
     JMenuItem[] nudgeTowards = new JMenuItem[4];
     
@@ -129,6 +130,14 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 // cancel learning
                 setLearningCC(false);
+                if (tabs.getSelectedComponent() == hillClimbPane)
+                	{
+                	hillClimb.startup();
+                	}
+                else
+                	{
+                	hillClimb.shutdown();
+                	}
                 }
             });
                 
@@ -1826,18 +1835,6 @@ public abstract class Synth extends JComponent implements Updatable
         JMenuItem undoAndRandomize = new JMenuItem("Undo and Randomize Again");
         randomize.add(undoAndRandomize);
 
-/*
-  JMenuItem hillClimb = new JMenuItem("Hill Climb");
-  randomize.add(hillClimb);
-        
-  hillClimb.addActionListener(new ActionListener()
-  {
-  public void actionPerformed( ActionEvent e)
-  { 
-  }
-  });
-*/
-        
         randomize1.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
@@ -2268,6 +2265,83 @@ public abstract class Synth extends JComponent implements Updatable
                 doSendTestNotes();
                 }
             });
+
+		ButtonGroup testNoteGroup = new ButtonGroup();
+		
+        JMenu testNoteLength = new JMenu("Test Note Length");
+        menu.add(testNoteLength);
+        JRadioButtonMenuItem tn = new JRadioButtonMenuItem("1/8 Second");
+		testNoteLength.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNoteLength(125);
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = new JRadioButtonMenuItem("1/4 Second");
+		testNoteLength.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNoteLength(250);
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = new JRadioButtonMenuItem("1/2 Second");
+		testNoteLength.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNoteLength(500);
+                }
+            });
+        tn.setSelected(true);
+		testNoteGroup.add(tn);
+         tn = new JRadioButtonMenuItem("1 Second");
+		testNoteLength.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNoteLength(1000);
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = new JRadioButtonMenuItem("2 Seconds");
+		testNoteLength.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNoteLength(2000);
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = new JRadioButtonMenuItem("4 Seconds");
+		testNoteLength.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNoteLength(4000);
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = new JRadioButtonMenuItem("8 Seconds");
+		testNoteLength.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNoteLength(8000);
+                }
+            });
+		testNoteGroup.add(tn);
+        
             
         menu = new JMenu("Map");
         menubar.add(menu);
@@ -2668,7 +2742,7 @@ public abstract class Synth extends JComponent implements Updatable
             return;
         }
                 
-    void doSendAllSoundsOff()
+    public void doSendAllSoundsOff()
         {
         try
             {
@@ -2685,10 +2759,19 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
 
+
+	int testNoteLength = 500;
+	public void setTestNoteLength(int val)
+		{
+		int delay = (val <= 500 ? val * 2 : val + 500);
+		sendTestNotesTimer.setDelay(delay);
+		testNoteLength = val;
+		}
+
     boolean sendingTestNotes = false;   
     javax.swing.Timer sendTestNotesTimer;
                     
-    void doSendTestNotes()
+    public void doSendTestNotes()
         {
         if (sendingTestNotes)
             {
@@ -2740,7 +2823,7 @@ public abstract class Synth extends JComponent implements Updatable
                                         
             // schedule a note off
             final int myNoteOnTick = ++noteOnTick;
-            javax.swing.Timer timer = new javax.swing.Timer(500,
+            javax.swing.Timer timer = new javax.swing.Timer(testNoteLength,
                 new ActionListener()
                     {
                     public void actionPerformed(ActionEvent e)
@@ -2830,10 +2913,7 @@ public abstract class Synth extends JComponent implements Updatable
         
     void doQuit()
         {
-        JOptionPane.showMessageDialog(null, 
-            "quit", 
-            "quit", 
-            JOptionPane.INFORMATION_MESSAGE);
+		doSendAllSoundsOff();
         System.exit(0);
         }
     
@@ -3006,16 +3086,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (requestCloseWindow())
             {
-            // send all sounds off
-            try
-                {
-                for(int i = 0; i < 16; i++)
-                    tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
-                }
-            catch (Exception e)
-                {
-                e.printStackTrace();
-                }
+			doSendAllSoundsOff();
                                 
             // get rid of MIDI connection
             if (tuple != null)
@@ -3035,7 +3106,9 @@ public abstract class Synth extends JComponent implements Updatable
                 {                    
                 Synth result = doNewSynthPanel();
                 if (result == null)
+                	{
                     System.exit(0);
+                    }
                 }
             }
         }
@@ -3235,7 +3308,6 @@ public abstract class Synth extends JComponent implements Updatable
         }     
     
     HillClimb hillClimb;
-    JComponent hillClimbPane;
      
     boolean hillClimbing = false;
     void doHillClimb()
@@ -3243,6 +3315,7 @@ public abstract class Synth extends JComponent implements Updatable
     	if (hillClimbing)
     		{
     		Component selected = tabs.getSelectedComponent();
+    		hillClimb.shutdown();
     		tabs.remove(hillClimbPane);
     		hillClimbMenu.setText("Hill-Climb");
     		if (selected == hillClimbPane)  // we were in the hill-climb pane when this menu was selected
@@ -3252,6 +3325,7 @@ public abstract class Synth extends JComponent implements Updatable
     	else
     		{
     		hillClimb.initialize(getModel(), true);
+    		hillClimb.startup();
     		hillClimbPane = addTab("Hill-Climb", hillClimb);
     		tabs.setSelectedComponent(hillClimbPane);
     		hillClimbMenu.setText("Stop Hill-Climbing");

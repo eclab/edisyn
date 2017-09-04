@@ -318,6 +318,10 @@ public class WaldorfMicrowaveXT extends Synth
         for(int i = 96; i < 128; i++)
             params[i] = "User " + (i - 96 + 1);
         comp = new Chooser("Wavetable", this, "wavetable", params);
+
+        // only standard wavetables are permitted to be mutated
+        model.setValidMax("wavetable", 64);
+
         vbox.add(comp);
 
         hbox.add(vbox);

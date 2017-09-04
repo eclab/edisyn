@@ -1246,11 +1246,14 @@ public class WaldorfBlofeld extends Synth
         chooser.getCombo().setMinimumSize(d);
         chooser.getCombo().setMaximumSize(d);
         
+        // only standard wavetables are permitted to be mutated
+        model.setValidMax("osc" + osc + "shape", 67);
         
         if (osc != 3)
             {
             params = SAMPLE_BANKS;
             comp = new Chooser("Sample Bank [SL]", this, "osc" + osc + "samplebank", params);
+            model.setStatus("osc" + osc + "samplebank", Model.STATUS_IMMUTABLE);
                         
             model.register("osc" + osc + "samplebank", new Updatable()
                 {

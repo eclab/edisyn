@@ -347,11 +347,15 @@ public class OberheimMatrix1000 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("LFO 1 Mod");
         hbox.add(comp);
 
-        comp = new LabelledDial("Pulse Width", this, "dco" + osc + "pulsewidth", color, 0, 63);
+        comp = new LabelledDial("Pulse Width", this, "dco" + osc + "pulsewidth", color, 0, 63)
+			{
+			public boolean isSymmetric() { return true; }
+			public int getDefaultValue() { return 31; }
+			};
         hbox.add(comp);
 
         comp = new LabelledDial("Pulse Width", this, "dco" + osc + "pulsewidthmod", color, 1, 127, 64);
-        ((LabelledDial)comp).addAdditionalLabel("LFO 2 Mod");
+        ((LabelledDial)comp).addAdditionalLabel("LFO 2 Mod"); 
         hbox.add(comp);
 
         if (osc==2)

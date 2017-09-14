@@ -208,22 +208,63 @@ public class Blank extends Synth
         return null; 
         }
 
+	public String getPatchLocationName(Model model)
+		{
+		// Given the patch information (such as number of bank) stored in the provided model,
+		// return a simple and short string which describes the
+		// patch location.  For example, if your patch is number 72 of bank B, you might say
+		// "B72" or "B072" or whatnot.
+		//
+		// The name should ideally be free of spaces and punctuation (no
+		// parentheses, hyphens, backslashes, periods, commas, etc.)   This is because it'll be
+		// used in filenames, such as "B072.syx"  But it's not a hard-and-fast rule.
+		//
+		// The default implementation of this method returns null.  This tells Edisyn that
+		// you have not implemented this method, nor getNextPatchLocation(...), nor
+		// patchLocationEquals(...), and thus Edisyn should disable the Batch Downloads menu.
+		//
+		// This method is used for doing batch downloads.
+		return null;
+		}
     
-    
-    
-    
-    
-    
-    
+    public Model getNextPatchLocation(Model model)
+		{
+		// Given the provided model containing a patch location (bank, number, etc.), this should 
+		// return a model containing the NEXT patch location.  For example, if the
+		// model's location is B072, then perhaps the next model might be B073.  And if the model was
+		// B128, maybe the next model should be C001.  This should wrap around as well.  Let's say
+		// that the model is D128, the final location in the synthesizer.  Then the next model should
+		// be something like A001.
+		//
+		// And yes, if you only have one patch on your synthesizer, then it's always the next patch.
+		// Just return it.
+		//
+		// This method is used for doing batch downloads.
+		return null;
+		}
 
+    public boolean patchLocationEquals(Model patch1, Model patch2)
+    	{
+    	// This should return true if the patch locations stored in the given two patches are the same.
+    	// For example, they're both Bank B, Number 72.
+		//
+		// This method is used for doing batch downloads.
+    	return false;
+    	}
+    
+    
+    
+ 
+ 
     ////// YOU PROBABLY WANT TO OVERRIDE ALL OF THE FOLLOWING
 
-    public String getPatchName() 
+    public String getPatchName(Model model) 
         {
         // Here you'd look up the patch name in the model and return it. 
+        // If there is no patch name, you can just return null.
         return null; 
         }
-    
+
     public String revisePatchName(String name)
         {
         // Here you tweak the name to make sure it's a valid patch name.
@@ -457,6 +498,19 @@ public class Blank extends Synth
         return 0;
         }
         
+    public int getBulkDownloadWaitTime()
+    	{
+    	// Edisyn does bulk downloads by iteratively requesting a patch, then
+    	// waiting for it to load, then saving it.  Edisyn will wait for up to
+    	// getBulkDownloadWaitTime() milliseconds before it checks to see if the
+    	// patch has arrived and try to save it; else it will issue another request.
+    	//
+    	// The default value is 1000 (one second).  If your synth takes more (or less!)
+    	// time to respond and dump a patch to Edisyn, you may wish to change this value.
+    	// You'd like it as short as possible without missing dumps. 
+    	return 1000; 
+    	}
+
     public int getTestNote()
         {
         // It's possible that your synth has different sounds for different
@@ -519,5 +573,13 @@ public class Blank extends Synth
         return false;
         }
 
-
+	boolean getReceivesPatchesInBulk()
+		{
+		// Most synthesizers send patch dumps to Edisyn via a single sysex message which
+		// is handled using the parse(...) method.  But some synthesizers, such as the
+		// PreenFM2, send patch dumps as multiple separate NRPN or CC messages.  If this
+		// is the case, you should override this method to return FALSE so Edisyn can
+		// detect this during its batch patch-download process.
+		return true;
+		}
     }

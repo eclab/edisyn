@@ -400,7 +400,7 @@ public class KawaiK4Drum extends Synth
 
     // not even sure if I need this
 
-    public String getPatchName() 
+    public String getPatchName(Model model) 
         {
         return "Drum";
         }
@@ -636,4 +636,21 @@ public class KawaiK4Drum extends Synth
         return frame;
         }
 
+
+    public boolean patchLocationEquals(Model patch1, Model patch2)
+    	{
+    	return patch1.get("bank") == patch2.get("bank");
+    	}
+    	
+    public Model getNextPatchLocation(Model model)
+    	{
+    	Model newModel = buildModel();
+    	newModel.set("bank", 1 - model.get("bank"));
+    	return newModel;
+    	}
+
+    public String getPatchLocationName(Model model)
+    	{
+    	return BANKS[model.get("bank")];
+    	}
     }

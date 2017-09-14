@@ -94,7 +94,8 @@ public class Midi
             if (name.equals(""))
                 return desc; 
             else 
-                return desc + ": " + name; 
+                return name;
+                //desc + ": " + name; 
             }
                 
         Transmitter transmitter;

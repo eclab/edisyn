@@ -1438,7 +1438,7 @@ public class KawaiK4 extends Synth
         
     public static String getSynthName() { return "Kawai K4/K4r"; }
     
-    public String getPatchName() { return model.get("name", "Untitled  "); }
+    public String getPatchName(Model model) { return model.get("name", "Untitled  "); }
 
     public int getPauseAfterChangePatch() { return 200; }   // Seem to need about > 100ms
 
@@ -1470,4 +1470,38 @@ public class KawaiK4 extends Synth
             }
         catch (Exception e) { e.printStackTrace(); }
         }
+    
+    public boolean patchLocationEquals(Model patch1, Model patch2)
+    	{
+    	int bank1 = patch1.get("bank");
+    	int number1 = patch1.get("number");
+    	int bank2 = patch2.get("bank");
+    	int number2 = patch2.get("number");
+    	return (bank1 == bank2 && number1 == number2);
+    	}
+    	
+    public Model getNextPatchLocation(Model model)
+    	{
+    	int bank = model.get("bank");
+    	int number = model.get("number");
+    	
+    	number++;
+    	if (number >= 16)
+    		{
+    		bank++;
+    		number = 0;
+	    	if (bank >= 8)
+	    		bank = 0;
+	    	}
+	    	
+    	Model newModel = buildModel();
+    	newModel.set("bank", bank);
+    	newModel.set("number", number);
+		return newModel;
+    	}
+
+    public String getPatchLocationName(Model model)
+    	{
+    	return BANKS[model.get("bank")] + (model.get("number") + 1);
+    	}
     }

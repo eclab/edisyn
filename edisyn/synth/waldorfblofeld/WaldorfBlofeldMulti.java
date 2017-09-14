@@ -1167,12 +1167,12 @@ public class WaldorfBlofeldMulti extends Synth
             setParameterByIndex(i, data[i + 7]);
             }
         revise();  
-        return false;  // we're never in sync because we can't move the patch number     
+        return true;    
         }
 
     public static String getSynthName() { return "Waldorf Blofeld [Multi]"; }
     
-    public String getPatchName() { return model.get("name", "Init Multi"); }
+    public String getPatchName(Model model) { return model.get("name", "Init Multi"); }
     
     public byte getID() 
         { 
@@ -1196,4 +1196,36 @@ public class WaldorfBlofeldMulti extends Synth
         catch (NumberFormatException e) { }             // expected
         return "" + getID();
         }
+
+
+
+
+    public boolean patchLocationEquals(Model patch1, Model patch2)
+    	{
+    	int number1 = patch1.get("number");
+    	int number2 = patch2.get("number");
+    	return (number1 == number2);
+    	}
+    	
+    public Model getNextPatchLocation(Model model)
+    	{
+    	int number = model.get("number");
+    	
+    	number++;
+    	if (number >= 128)
+    		{
+    		number = 0;
+	    	}
+	    	
+    	Model newModel = buildModel();
+    	newModel.set("number", number);
+		return newModel;
+    	}
+
+    public String getPatchLocationName(Model model)
+    	{
+    	int number = model.get("number");
+    	return "M" + ( number > 99 ? "" : (number > 9 ? "0" : "00")) + (number + 1);
+    	}
+    	
     }

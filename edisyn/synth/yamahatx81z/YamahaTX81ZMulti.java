@@ -825,5 +825,5 @@ public class YamahaTX81ZMulti extends Synth
         tryToSendMIDI(buildPC(getChannelOut(), (byte)127));
         }
 
-    public String getPatchName() { return null; }
+    public String getPatchName(Model model) { return null; }
     }

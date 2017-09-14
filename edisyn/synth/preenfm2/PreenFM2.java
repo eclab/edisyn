@@ -84,6 +84,7 @@ public class PreenFM2 extends Synth
         writeTo.setEnabled(false);
         transmitTo.setEnabled(false);
         merge.setEnabled(false);
+		addPreenMenu();
         return frame;
         }
 
@@ -163,8 +164,6 @@ public class PreenFM2 extends Synth
         lfoPanel.add(vbox, BorderLayout.CENTER);
         addTab("LFO and Envelopes", lfoPanel);
 
-
-        
         model.set("name", "Init Sound");  // has to be 12 long
 
         buildParameterMap();
@@ -189,12 +188,17 @@ public class PreenFM2 extends Synth
             type = new JComboBox(BANK_TYPES_IN);
             }
 
+        // Banks are organized as
+        // 0..127               Bank	(actually, there are only 64)
+        // 128...255            Combo	(actually, there are only 8)
+        // 256...256+255        DX7		(there are exactly 256)
+
         int _bank = model.get("bank");
-        if (_bank > 255 && writing)  // it's DX7
+        if (_bank >= 256 && writing)  // it's DX7
             {
             _bank = 0;              // cannot write to DX7
             }
-        else if (_bank > 127 && _bank <= 255)  // It's combo, always disallow
+        else if (_bank > 64 && _bank < 256)  // It's combo or an invalid bank
             {
             _bank = 0;              // cannot read or write this at all
             }
@@ -202,7 +206,7 @@ public class PreenFM2 extends Synth
         type.setEditable(false);
         type.setMaximumRowCount(32);
 
-        if (_bank > 255 && !writing) // it's DX7 and we're reading
+        if (_bank >= 256 && !writing) // it's DX7 and we're reading
             {
             _bank -= 256;  
             }
@@ -263,6 +267,125 @@ public class PreenFM2 extends Synth
             }
         }
 
+
+	public static final int OFF = 0;
+	public static final int TX81Z = 1;
+	public static final int INTEGERS = 2;
+	
+	int mutationRestriction = OFF;
+	
+	public void addPreenMenu()
+		{
+		JMenu menu = new JMenu("PreenFM2");
+		menubar.add(menu);
+
+		JMenu restrictMutation = new JMenu("Restrict Mutated Frequency Ratios...");
+		menu.add(restrictMutation);
+		
+		String str = getLastX("MutationRestriction", getSynthName());
+		if (str == null)
+			mutationRestriction = OFF;
+		else if (str.equalsIgnoreCase("TX81Z"))
+			mutationRestriction = TX81Z;
+		else if (str.equalsIgnoreCase("INTEGERS"))
+			mutationRestriction = INTEGERS;
+		else mutationRestriction = OFF;
+
+		
+		ButtonGroup bg = new ButtonGroup();
+		JRadioButtonMenuItem off = new JRadioButtonMenuItem("Off");
+		off.addActionListener(new ActionListener()
+			{
+			public void actionPerformed(ActionEvent evt)
+				{
+				mutationRestriction = OFF;
+				setLastX("OFF", "MutationRestriction", getSynthName());
+				}
+			});
+		restrictMutation.add(off);
+		bg.add(off);
+		if (mutationRestriction == OFF) off.setSelected(true);
+		
+		JRadioButtonMenuItem tx81z = new JRadioButtonMenuItem("To TX81Z Values");
+		tx81z.addActionListener(new ActionListener()
+			{
+			public void actionPerformed(ActionEvent evt)
+				{
+				mutationRestriction = TX81Z;
+				setLastX("TX81Z", "MutationRestriction", getSynthName());
+				}
+			});
+		restrictMutation.add(tx81z);
+		bg.add(tx81z);
+		if (mutationRestriction == TX81Z) tx81z.setSelected(true);
+
+		JRadioButtonMenuItem integers = new JRadioButtonMenuItem("To Integers");
+		integers.addActionListener(new ActionListener()
+			{
+			public void actionPerformed(ActionEvent evt)
+				{
+				mutationRestriction = INTEGERS;
+				setLastX("INTEGERS", "MutationRestriction", getSynthName());
+				}
+			});
+		restrictMutation.add(integers);
+		bg.add(integers);
+		if (mutationRestriction == INTEGERS) integers.setSelected(true);
+		}
+		
+	public Model buildModel()
+		{
+		return new Model()
+			{
+    		public int reviseMutatedValue(String key, int old, int current)
+    			{
+    			if (mutationRestriction == OFF)
+    				return current;
+    			else if (key.startsWith("op") && key.endsWith("finetune"))
+    				{
+    				return 100;
+    				}
+				else if (key.startsWith("op") && key.endsWith("frequency"))
+					{
+					if (mutationRestriction == TX81Z)
+						return LabelledDial.findClosestValue(current, YAMAHA_FREQUENCY_RATIOS);
+					else if (mutationRestriction == INTEGERS)
+						{
+						if (current < 100)
+							{
+							// figure out who we're closest to: 25, 33, 50, or 100?
+							int oneThird = Math.abs(current - 33);
+							int oneHalf = Math.abs(current - 50);
+							int oneQuarter = Math.abs(current - 25);
+							int one = Math.abs(current - 100);
+							if (one < oneQuarter && one < oneThird && one < oneHalf)
+								return 100;
+							else if (oneHalf < oneThird && oneHalf < oneQuarter)
+								return 50;
+							else if (oneThird < oneQuarter)
+								return 33;
+							else
+								return 25;
+							}
+						else
+							{
+							int i = (int)(Math.round(current / 100.0)) * 100;
+							// these should never happen, but ...
+							if (i < 0) i = 0;
+							if (i > 1600) i = 1600;
+							return i;
+							}
+						}
+	    			else  // never happens
+	    				return current;
+					}
+	    		else
+	    			return current;
+    			}
+			};
+		}
+		
+	
 
         
     /** Add the global patch category (name, id, number, etc.) */
@@ -687,23 +810,6 @@ public class PreenFM2 extends Synth
                     {
                     return "" + val / 100.0;
                     }
-                /*
-                  int hi = (val / 3);
-                  int lo = (val % 64);
-                  if (lo == 0) lo = 0;  // duh
-                  else if (lo == 1) lo = 83;
-                  else if (lo == 2) lo = 166;
-
-                  int fixed = model.get("op" + op + "fixed");
-                  if (fixed == 1)
-                  {
-                  return "" + (hi * 250 + lo);
-                  }
-                  else
-                  {
-                  return "" + (hi * 250 + lo) / 1000.0;
-                  }
-                */
                 }
             };
         model.register("op" + op + "freqtype", (LabelledDial)comp);
@@ -1175,12 +1281,14 @@ public class PreenFM2 extends Synth
 
     public void changePatch(Model tempModel)
         {
-        // Banks are:
-        // 0..127                       Bank
-        // 128...255            Combo
-        // 256...256+255        DX7
+        // Banks are organized as
+        // 0..127               Bank	(actually, there are only 64)
+        // 128...255            Combo	(actually, there are only 8)
+        // 256...256+255        DX7		(there are exactly 256)
         int bank = tempModel.get("bank");
         int program = tempModel.get("number");
+        
+        if (bank < 256 && bank >= 64) { bank = 0; new RuntimeException("Attempt made to change to combo or invalid single bank " + bank).printStackTrace(); } // Uh oh, Combo, set to 0
         
         tryToSendMIDI(buildLongCC(getChannelOut(), 0, bank));
         tryToSendMIDI(buildPC(getChannelOut(), program));
@@ -1397,7 +1505,7 @@ public class PreenFM2 extends Synth
         
     public static String getSynthName() { return "PreenFM2"; }
     
-    public String getPatchName() { return model.get("name", "Init Sound"); }
+    public String getPatchName(Model model) { return model.get("name", "Init Sound"); }
     
     public HashMap parameterToIndex = new HashMap();
     public HashMap indexToParameter = new HashMap();
@@ -1833,5 +1941,62 @@ public class PreenFM2 extends Synth
         "note2break",
         "name"
         };
+
+    public boolean patchLocationEquals(Model patch1, Model patch2)
+    	{
+    	int bank1 = patch1.get("bank");
+    	int number1 = patch1.get("number");
+    	int bank2 = patch2.get("bank");
+    	int number2 = patch2.get("number");
+    	return (bank1 == bank2 && number1 == number2);
+    	}
+    	
+    public Model getNextPatchLocation(Model model)
+    	{
+    	int bank = model.get("bank");
+    	int number = model.get("number");
+    	
+    	if (bank < 256)
+    		{
+    		if (bank >= 64) // uh....
+    			{ new RuntimeException("Invalid Bank " + bank).printStackTrace(); bank = 0; }
+    		number++;
+    		if (number >= 127)
+    			{
+    			number = 0;
+    			bank++;
+    			if (bank >= 64)
+    				bank = 256;
+    			}
+    		}
+    	else
+    		{
+    		number++;
+    		if (number >= 32)
+    			{
+    			number = 0;
+    			bank++;
+    			if (bank >= 512)
+    				bank = 0;
+    			}
+    		}
+	    	
+    	Model newModel = buildModel();
+    	newModel.set("bank", bank);
+    	newModel.set("number", number);
+		return newModel;
+    	}
+    public int getBulkDownloadWaitTime() { return 1000; }
+
+    public String getPatchLocationName(Model model)
+    	{
+    	String s = "";
+    	int bank = model.get("bank");
+    	int number = model.get("number");
+    	if (bank > 256)
+    		return "DX7_" + (bank - 256) + "_" + number;
+    	else
+    		return "Bank_" + bank + "_" + number;
+    	}
 
     }

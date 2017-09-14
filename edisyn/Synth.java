@@ -51,6 +51,7 @@ public abstract class Synth extends JComponent implements Updatable
 
     public static final int MAX_FILE_LENGTH = 64 * 1024;        // so we don't go on forever
 
+	public JMenuBar menubar;
     public JMenuItem transmitTo;
     public JMenuItem transmitCurrent;
     public JMenuItem writeTo;
@@ -64,6 +65,7 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem hillClimbMenu;
     public JCheckBoxMenuItem testNotes;
     public JComponent hillClimbPane;
+    public JMenuItem getAll;
 
     Model[] nudge = new Model[4];
     JMenuItem[] nudgeTowards = new JMenuItem[4];
@@ -109,11 +111,13 @@ public abstract class Synth extends JComponent implements Updatable
         return (String[])(list.toArray(new String[0]));
         }
 
+	public Model buildModel() { return new Model(); }
+
     /////// CREATION AND CONSTRUCTION
 
     public Synth() 
         {
-        model = new Model();
+        model = buildModel();
         model.register(Model.ALL_KEYS, this);
         model.setUndoListener(undo);
         ccmap = new CCMap(Prefs.getAppPreferences(getSynthNameLocal(), "CCKey"),
@@ -400,9 +404,17 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 
+	public static Window lastActiveWindow = null;
 
-
-
+	public boolean amActiveSynth()
+		{
+		Window activeWindow = javax.swing.FocusManager.getCurrentManager().getActiveWindow();
+		Component synthWindow = SwingUtilities.getRoot(Synth.this);
+					
+		// we want to be either the currently active window, the parent of a dialog box which is the active window, or the last active window if the user is doing something else
+		return (synthWindow == activeWindow || (activeWindow != null && synthWindow == activeWindow.getOwner()) ||
+				 (activeWindow == null && lastActiveWindow == synthWindow));
+		}
 
 
 
@@ -498,7 +510,7 @@ public abstract class Synth extends JComponent implements Updatable
     /// ADDITIONAL COMMONLY OVERRIDEN METHODS
     ///
     /// getSynthName()              // you must override this
-    /// getPatchName()              // you ought to override this, it returns null by default
+    /// getPatchName(getModel())              // you ought to override this, it returns null by default
     /// getSendsAllParametersInBulk()       // override this to return FALSE if parameters must be sent one at a time rather than emitted as sysex
     /// getDefaultResourceFileName()        // return the filename of the default init file
     /// getHTMLResourceFileName()           // return the filename of the default HTML file
@@ -669,9 +681,30 @@ public abstract class Synth extends JComponent implements Updatable
         static version of this method in your synth panel subclass.  */
     public static String getSynthName() { return "Override Me"; }
     
+    /** Returns true if the two patches have the same location (bank, number, etc.) 
+    	The default implementaton always returns false. */
+    public boolean patchLocationEquals(Model patch1, Model patch2)
+    	{
+    	return false;
+    	}
     
-    /** Returns the name of the current patch, or null if there is no such thing. */
-    public String getPatchName() { return null; }
+    /** Returns a Model with the next patch location (bank, number, etc.) beyond the one provided in the given model.
+    	If the model provided contains the very last patch location, you should wrap around. */
+    public Model getNextPatchLocation(Model model)
+    	{
+    	return null;
+    	}
+    
+    /** Returns the patch location as a simple and short string, such as "B100" for "Bank B Number 100". 
+    	The default implementation returns null; if this method returns null,
+    	then bulk downloading will not be available. */
+    public String getPatchLocationName(Model model)
+    	{
+    	return null;
+    	}
+    
+    /** Returns the name of the patch in the given model, or null if there is no such thing. */
+    public String getPatchName(Model model) { return null; }
     
     /** Return true if the window can be closed and disposed of. You should do some cleanup
         as necessary (the system will handle cleaning up the receiver and transmitters. 
@@ -720,8 +753,11 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
 
-    /** Override this to make sure that at *least* the given time (in ms) has transpired between MIDI sends. */
+    /** Override this to make sure that at *least* the given time (in Milliseconds) has transpired between MIDI sends. */
     public int getPauseBetweenMIDISends() { return 0; }
+
+    /** Override this to make sure that at *least* the given time (in Microseconds) has transpired between MIDI sends. */
+    public long getNanoPauseBetweenMIDISends() { return getPauseBetweenMIDISends() * 1000000L; }
 
     /** Override this to make sure that the given additional time (in ms) has transpired between MIDI patch changes. */
     public int getPauseAfterChangePatch() { return 0; }
@@ -822,11 +858,6 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 
-
-
-
-
-
     //  MIDI INTERFACE
         
     /** The Synth's MIDI Tuple */
@@ -855,11 +886,7 @@ public abstract class Synth extends JComponent implements Updatable
 					{
 					public void run()
 						{
-						Window activeWindow = javax.swing.FocusManager.getCurrentManager().getActiveWindow();
-						Component synthWindow = SwingUtilities.getRoot(Synth.this);
-										
-						// we want to be either the currently active window, or the parent of a dialog box which is the active window
-						if (synthWindow == activeWindow || (activeWindow != null && synthWindow == activeWindow.getOwner()))
+						if (amActiveSynth())
 							{
 							if (message instanceof SysexMessage)
 								{
@@ -878,7 +905,7 @@ public abstract class Synth extends JComponent implements Updatable
 										setSendMIDI(false);
 										undo.setWillPush(false);
 										Model backup = (Model)(model.clone());
-										parse(data, false, false);
+										incomingPatch = parse(data, false, false);
 										undo.setWillPush(true);
 										if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
 											undo.push(backup);
@@ -922,6 +949,10 @@ public abstract class Synth extends JComponent implements Updatable
 									sendMIDI = false;  // so we don't send out parameter updates in response to reading/changing parameters
 									// let's try parsing it
 									handleInRawCC(sm);
+									if (getReceivesPatchesInBulk()) 
+										{
+										incomingPatch = true;
+										}
 									sendMIDI = true;
 									updateTitle();
 														
@@ -953,7 +984,7 @@ public abstract class Synth extends JComponent implements Updatable
 					{
 					public void run()
 						{
-						if (SwingUtilities.getRoot(Synth.this) == javax.swing.FocusManager.getCurrentManager().getActiveWindow() && sendMIDI)
+						if (amActiveSynth())
 							{
 							if (message instanceof ShortMessage)
 								{
@@ -1069,12 +1100,18 @@ public abstract class Synth extends JComponent implements Updatable
     long lastMIDISend = 0;
     // this is different from the simple pause in that it only pauses
     // if that much time hasn't already transpired between midi sends
-    void midiPause(int expectedPause)
+    void midiPause(long expectedPause)
         {
-        long pauseSoFar = System.currentTimeMillis() - lastMIDISend;
+        if (expectedPause == 0) return;
+        
+        long pauseSoFar = System.nanoTime() - lastMIDISend;
         if (pauseSoFar >= 0 && pauseSoFar < expectedPause)
             {
-            try { Thread.currentThread().sleep(expectedPause - pauseSoFar); }
+            long pause = expectedPause - pauseSoFar;
+            // verify that pause is rational
+            if (pause < 0L) pause = 0L;
+            if (pause > 10000000L) pause = 10000000L;  // 10ms, still within the int range and not so slow as to make the UI impossible
+            try { Thread.currentThread().sleep(((int)pause) / 1000000, ((int)pause) % 1000000); }
             catch (Exception e) { e.printStackTrace(); }
             }
         }
@@ -1089,6 +1126,8 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (message == null) 
             return false;
+        else if (!amActiveSynth())
+        	return false;
         else if (getSendMIDI())
             {
             if (tuple == null) return false;
@@ -1096,7 +1135,7 @@ public abstract class Synth extends JComponent implements Updatable
             if (receiver == null) return false;
                 
             // compute pause
-            midiPause(getPauseBetweenMIDISends());
+            midiPause(getNanoPauseBetweenMIDISends());
                                         
             synchronized(midiSendLock) 
             	{
@@ -1116,7 +1155,7 @@ public abstract class Synth extends JComponent implements Updatable
             		return false;
             		}
             	}      
-            lastMIDISend = System.currentTimeMillis();
+            lastMIDISend = System.nanoTime();
             return true;
             }
         else
@@ -1131,7 +1170,9 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (data == null || data.length == 0) 
             return false;
-             
+        else if (!amActiveSynth())
+        	return false;
+            
         for(int i = 1; i < data.length - 1; i++)
             {
             if (data[i] < 0)  // uh oh, high byte
@@ -1148,7 +1189,7 @@ public abstract class Synth extends JComponent implements Updatable
             if (receiver == null) return false;
 
             // compute pause
-            midiPause(getPauseBetweenMIDISends());
+            midiPause(getNanoPauseBetweenMIDISends());
                                         
             try { 
                 SysexMessage message = new SysexMessage(data, data.length);
@@ -1156,7 +1197,7 @@ public abstract class Synth extends JComponent implements Updatable
                 	{ 
                 	receiver.send(message, -1); 
                 	}      
-                lastMIDISend = System.currentTimeMillis();
+                lastMIDISend = System.nanoTime();
                 return true; 
                 }
             catch (InvalidMidiDataException e) { e.printStackTrace(); return false; }
@@ -1441,6 +1482,19 @@ public abstract class Synth extends JComponent implements Updatable
         inSimpleError = false;
         }
 
+    /** Display a simple error message. */
+    public void showSimpleMessage(String title, String message)
+        {
+        // A Bug in OS X (perhaps others?) Java causes multiple copies of the same Menu event to be issued
+        // if we're popping up a dialog box in response, and if the Menu event is caused by command-key which includes
+        // a modifier such as shift.  To get around it, we're just blocking multiple recursive message dialogs here.
+        
+        if (inSimpleError) return;
+        inSimpleError = true;
+        JOptionPane.showMessageDialog(this, message, title, JOptionPane.INFORMATION_MESSAGE);
+        inSimpleError = false;
+        }
+
     /** Display a simple (OK / Cancel) confirmation message.  Return the result (ok = true, cancel = false). */
     public boolean showSimpleConfirm(String title, String message)
         {
@@ -1499,9 +1553,9 @@ public abstract class Synth extends JComponent implements Updatable
         if (frame != null) 
             {
             String synthName = getSynthNameLocal().trim();
-//            String patchName = "        " + (getPatchName() == null ? "" : getPatchName().trim());
             String fileName = (file == null ? "        Untitled" : "        " + file.getName());
             String disconnectedWarning = ((tuple == null || tuple.in == null) ? "   DISCONNECTED" : "");
+            String downloadingWarning = (patchTimer != null ? "   DOWNLOADING" : "");
             String learningWarning = (learning ? "   LEARNING" +
                     (model.getLastKey() != null ? " " + model.getLastKey() + 
                     (model.getRange(model.getLastKey()) > 0 ? "[" + model.getRange(model.getLastKey()) + "]" : "") + 
@@ -1510,7 +1564,7 @@ public abstract class Synth extends JComponent implements Updatable
                     : "") : "");
             String restrictingWarning = (isShowingMutation() ? "   MUTATION PARAMETERS" : "");
         
-            frame.setTitle(synthName + fileName + "        " + disconnectedWarning + learningWarning + restrictingWarning);
+            frame.setTitle(synthName + fileName + "        " + disconnectedWarning + downloadingWarning + learningWarning + restrictingWarning);
             }
         }
                 
@@ -1684,10 +1738,8 @@ public abstract class Synth extends JComponent implements Updatable
         if (html != null)
             tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream(html)));
 
-		//tabs.addTab("HillClimb", new HillClimb
-
-        JFrame frame = new JFrame();
-        JMenuBar menubar = new JMenuBar();
+        final JFrame frame = new JFrame();
+        menubar = new JMenuBar();
         frame.setJMenuBar(menubar);
         JMenu menu = new JMenu("File");
         menubar.add(menu);
@@ -1741,7 +1793,6 @@ public abstract class Synth extends JComponent implements Updatable
                 doOpen();
                 }
             });
-
         menu.addSeparator();
 
         JMenuItem close = new JMenuItem("Close Window");
@@ -1777,6 +1828,24 @@ public abstract class Synth extends JComponent implements Updatable
                 doSaveAs();
                 }
             });
+
+        menu.addSeparator();
+
+        getAll = new JMenuItem("Batch Download...");
+        menu.add(getAll);
+        getAll.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doGetAllPatches();
+                }
+            });
+
+		if (getPatchLocationName(getModel()) == null)
+			{
+			// not implemented. :-(
+			getAll.setEnabled(false);
+			}
 
         menu = new JMenu("Edit");
         menubar.add(menu);
@@ -2587,6 +2656,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void windowActivated(WindowEvent e)
                 {
                 windowBecameFront();
+                lastActiveWindow = frame;
                 }
 
             });
@@ -2634,7 +2704,7 @@ public abstract class Synth extends JComponent implements Updatable
                 return;
             }
                 
-        Model tempModel = new Model();
+        Model tempModel = buildModel();
         if (gatherPatchInfo("Request Patch", tempModel, false))
             {
             Synth.this.merging = 0.0;
@@ -2650,7 +2720,7 @@ public abstract class Synth extends JComponent implements Updatable
                 return;
             }
                 
-        Model tempModel = new Model();
+        Model tempModel = buildModel();
         if (gatherPatchInfo("Request Merge", tempModel, false))
             {
             Synth.this.merging = percentage;
@@ -2778,11 +2848,13 @@ public abstract class Synth extends JComponent implements Updatable
             sendTestNotesTimer.stop();
             doSendAllSoundsOff();
             sendingTestNotes = false;
+            testNotes.setSelected(false);
             }       
         else
             {
             sendTestNotesTimer.start();
             sendingTestNotes = true;
+            testNotes.setSelected(true);
             }       
         }
         
@@ -2823,7 +2895,7 @@ public abstract class Synth extends JComponent implements Updatable
                                         
             // schedule a note off
             final int myNoteOnTick = ++noteOnTick;
-            javax.swing.Timer timer = new javax.swing.Timer(testNoteLength,
+            javax.swing.Timer noteTimer = new javax.swing.Timer(testNoteLength,
                 new ActionListener()
                     {
                     public void actionPerformed(ActionEvent e)
@@ -2840,8 +2912,8 @@ public abstract class Synth extends JComponent implements Updatable
                                 }
                         }
                     });
-            timer.setRepeats(false);
-            timer.start();
+            noteTimer.setRepeats(false);
+            noteTimer.start();
             }
         catch (Exception e2)
             {
@@ -2931,7 +3003,7 @@ public abstract class Synth extends JComponent implements Updatable
     void doSetNudge(int i)
         {
         nudge[i] = (Model)(getModel().clone());
-        nudgeTowards[i].setText("Towards " + (i + 1) + ": " + getPatchName());
+        nudgeTowards[i].setText("Towards " + (i + 1) + ": " + getPatchName(getModel()));
         }
 
     int lastNudge = -1;
@@ -3008,8 +3080,8 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
-            if (getPatchName() != null)
-                fd.setFile(getPatchName().trim() + ".syx");
+            if (getPatchName(getModel()) != null)
+                fd.setFile(getPatchName(getModel()).trim() + ".syx");
             else
                 fd.setFile("Untitled.syx");
             String path = getLastDirectory();
@@ -3032,7 +3104,6 @@ public abstract class Synth extends JComponent implements Updatable
                 } 
             catch (IOException e) // fail
                 {
-                //JOptionPane.showMessageDialog(this, "An error occurred while saving to the file " + (f == null ? " " : f.getName()), "File Error", JOptionPane.ERROR_MESSAGE);
                 showSimpleError("File Error", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
                 e.printStackTrace();
                 }
@@ -3067,7 +3138,6 @@ public abstract class Synth extends JComponent implements Updatable
             catch (Exception e) // fail
                 {
                 showSimpleError("File Error", "An error occurred while saving to the file " + file);
-                //JOptionPane.showMessageDialog(this, "An error occurred while saving to the file " + file, "File Error", JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
                 }
             finally
@@ -3165,7 +3235,6 @@ public abstract class Synth extends JComponent implements Updatable
                     if (!recognizeLocal(data))
                         {
                         showSimpleError("File Error", "File does not contain proper sysex data for the " + getSynthNameLocal());
-                        //JOptionPane.showMessageDialog(this, "File does not contain proper sysex data for the " + getSynthNameLocal(), "File Error", JOptionPane.ERROR_MESSAGE);
                         }
                     else
                         {
@@ -3193,7 +3262,6 @@ public abstract class Synth extends JComponent implements Updatable
             catch (Throwable e) // fail  -- could be an Error or an Exception
                 {
                 showSimpleError("File Error", "An error occurred while loading from the file.");
-                //JOptionPane.showMessageDialog(this, "An error occurred while loading from the file.", "File Error", JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
                 }
             finally
@@ -3307,9 +3375,18 @@ public abstract class Synth extends JComponent implements Updatable
         repaint();
         }     
     
+    
+    
+    
+    
+    
+    
+    
+    ////// HILL-CLIMBING
+    
     HillClimb hillClimb;
-     
     boolean hillClimbing = false;
+
     void doHillClimb()
     	{
     	if (hillClimbing)
@@ -3332,6 +3409,166 @@ public abstract class Synth extends JComponent implements Updatable
     		hillClimbing = true;
     		}
     	}  
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    //////// BULK DOWNLOADING
+    
+    boolean incomingPatch = false;
+    int patchCounter = 0;
+    Model currentPatch = null;
+    Model finalPatch = null;
+    File patchDirectory = null;
+    javax.swing.Timer patchTimer = null;
+        
+    public int getBulkDownloadWaitTime() { return 500; }
+    
+    void doGetAllPatches()
+    	{
+    	if (patchTimer != null)
+    		{
+			patchTimer.stop();
+			patchTimer = null;
+			getAll.setText("Download Batch...");
+			showSimpleMessage("Batch Download", "Batch download stopped." );
+    		}
+    	else
+    		{
+		    // turn off hill-climbing
+		    if (hillClimbing)
+    			doHillClimb();
+    			
+			JFileChooser chooser = new JFileChooser();
+			chooser.setDialogTitle("Select Directory for Patches");
+			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			chooser.setAcceptAllFileFilterUsed(false);
+
+			if (file != null)
+				{
+				chooser.setCurrentDirectory(new File(file.getParentFile().getPath()));
+				}
+			else
+				{
+				String path = getLastDirectory();
+				if (path != null)
+					chooser.setCurrentDirectory(new File(path));
+				}            
+			if (chooser.showOpenDialog((Frame)(SwingUtilities.getRoot(this))) != JFileChooser.APPROVE_OPTION)
+				{
+				currentPatch = null;
+				return;
+				}
+			patchDirectory = chooser.getSelectedFile();
+		
+			currentPatch = buildModel();
+			if (!gatherPatchInfo("Starting Patch", currentPatch, false))
+				{ currentPatch = null; return; }
+		
+			finalPatch = buildModel();
+			if (!gatherPatchInfo("Ending Patch", finalPatch, false))
+				{ currentPatch = null; return; }
+		
+			// request patch
+
+			getAll.setText("Stop Downloading Batch");
+			Synth.this.merging = 0.0;
+			performRequestDump(currentPatch, true);
+			incomingPatch = false;
+		
+			// set timer to request further patches		
+			patchTimer = new javax.swing.Timer(getBulkDownloadWaitTime(),
+				new ActionListener()
+					{
+					public void actionPerformed(ActionEvent e)
+						{
+						if (incomingPatch && patchLocationEquals(getModel(), currentPatch))
+							{
+							processCurrentPatch();
+							requestNextPatch();
+							}
+						else 
+							{
+							System.err.println("Download of " + getPatchLocationName(currentPatch) + " failed.  Trying again.");
+							Synth.this.merging = 0.0;
+							performRequestDump(currentPatch, true);
+							}
+						}
+					});
+			patchTimer.start();
+			}
+		}
+
+	void requestNextPatch()
+		{
+		if (patchLocationEquals(currentPatch, finalPatch))     // we're done
+			{
+			patchTimer.stop();
+			patchTimer = null;
+			getAll.setText("Download Batch...");
+			showSimpleMessage("Batch Download", "Batch download finished." );
+			}
+		else
+			{
+			currentPatch = getNextPatchLocation(currentPatch);
+			Synth.this.merging = 0.0;
+			performRequestDump(currentPatch, true);
+			incomingPatch = false;
+			}
+		}
+	
+	/** This tells Edisyn whether your synthesizer sends patches to Edisyn via a sysex patch dump
+		(as opposed to individual CC or NRPN messages as is done in synths such as the PreenFM2).
+		The default is TRUE, which is nearly always the case. */
+	boolean getReceivesPatchesInBulk() { return true; }
+		
+	void processCurrentPatch()
+		{			
+		// process current patch
+		byte[] data = flatten(emitAll((Model)null, false, true));
+		if (data != null && data.length > 0)
+			{
+			if (patchDirectory == null) { new RuntimeException("Nonexistent directory for handling dump patch loads").printStackTrace(); return; } // this shouldn't happen
+			String filename = getPatchLocationName(getModel());
+			if (filename == null) filename = "";
+			if (filename.length() > 0) filename = filename + ".";
+			String patchname = getPatchName(getModel());
+			if (patchname != null && patchname.length() > 0)
+				filename = filename + getPatchName(getModel());
+			if (filename.length() == 0)
+				filename = "Patch" + patchCounter + ".syx";
+			else
+				filename = filename + ".syx";
+			FileOutputStream os = null;
+			File f = null;
+			try
+				{
+			 	os = new FileOutputStream(f = new File(patchDirectory, filename));
+				os.write(data);
+				}
+			catch (IOException e) // fail
+                {
+			patchTimer.stop();
+			patchTimer = null;
+			getAll.setText("Download Batch...");
+                showSimpleError("Batch Download Failed.", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
+                e.printStackTrace();
+                }
+            finally
+                {
+                if (os != null)
+                    try { os.close(); }
+                    catch (IOException e) { }
+                }
+			}
+		}
+        
+        
+        
         
         
         

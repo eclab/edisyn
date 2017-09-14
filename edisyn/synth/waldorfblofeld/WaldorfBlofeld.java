@@ -2338,7 +2338,7 @@ public class WaldorfBlofeld extends Synth
         
     public static String getSynthName() { return "Waldorf Blofeld"; }
     
-    public String getPatchName() { return model.get("name", "Init"); }
+    public String getPatchName(Model model) { return model.get("name", "Init"); }
     
     public byte getID() 
         { 
@@ -2363,5 +2363,45 @@ public class WaldorfBlofeld extends Synth
         return "" + getID();
         }
 
+
+
+
+    public boolean patchLocationEquals(Model patch1, Model patch2)
+    	{
+    	int bank1 = patch1.get("bank");
+    	int number1 = patch1.get("number");
+    	int bank2 = patch2.get("bank");
+    	int number2 = patch2.get("number");
+    	return (bank1 == bank2 && number1 == number2);
+    	}
+    	
+    public Model getNextPatchLocation(Model model)
+    	{
+    	int bank = model.get("bank");
+    	int number = model.get("number");
+    	
+    	number++;
+    	if (number >= 128)
+    		{
+    		bank++;
+    		number = 0;
+	    	if (bank >= 8)
+	    		bank = 0;
+	    	}
+	    	
+    	Model newModel = buildModel();
+    	newModel.set("bank", bank);
+    	newModel.set("number", number);
+		return newModel;
+    	}
+
+    public String getPatchLocationName(Model model)
+    	{
+    	int number = model.get("number");
+    	return BANKS[model.get("bank")] + 
+    		(number > 99 ? "" : (number > 9 ? "0" : "00")) + 
+    		(number + 1);
+    	}
+    	
     }
     

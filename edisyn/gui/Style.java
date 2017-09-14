@@ -131,6 +131,9 @@ public class Style
     public static final Insets HTML_DISPLAY_INSETS = new Insets(20, 20, 20, 20);  // bottom compensates for SYNTH_PANEL_INSETS
 
 
+	/////// BATCH DOWNLOAD WINDOW
+	public static final int BATCH_WINDOW_BORDER = 16;
+
 
 
     /////// GRAPHICS PREPARATION

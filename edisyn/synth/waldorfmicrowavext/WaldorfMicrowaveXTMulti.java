@@ -1133,12 +1133,12 @@ public class WaldorfMicrowaveXTMulti extends Synth
             }
         revise();  
         updateMode();
-        return false;  // we're never in sync because we can't move the patch number     
+        return true;   
         }
 
     public static String getSynthName() { return "Waldorf Microwave II/XT/XTk [Multi]"; }
     
-    public String getPatchName() { return model.get("name", "Init Sound V1.1 "); }
+    public String getPatchName(Model model) { return model.get("name", "Init Sound V1.1 "); }
 
     public byte getID() 
         { 
@@ -1163,4 +1163,35 @@ public class WaldorfMicrowaveXTMulti extends Synth
         return "" + getID();
         }
                 
+
+    public boolean patchLocationEquals(Model patch1, Model patch2)
+    	{
+    	int number1 = patch1.get("number");
+    	int number2 = patch2.get("number");
+    	return (number1 == number2);
+    	}
+    	
+    public Model getNextPatchLocation(Model model)
+    	{
+    	int number = model.get("number");
+    	
+    	number++;
+    	if (number >= 128)
+    		{
+    		number = 0;
+	    	}
+	    	
+    	Model newModel = buildModel();
+    	newModel.set("number", number);
+		return newModel;
+    	}
+
+    public int getBulkDownloadWaitTime() { return 1000; }
+
+    public String getPatchLocationName(Model model)
+    	{
+    	int number = model.get("number");
+    	return "M" + ( number > 99 ? "" : (number > 9 ? "0" : "00")) + (number + 1);
+    	}
+
     }

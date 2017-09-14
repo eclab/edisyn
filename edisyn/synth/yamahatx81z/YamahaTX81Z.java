@@ -1314,5 +1314,46 @@ public class YamahaTX81Z extends Synth
         tryToSendMIDI(buildPC(getChannelOut(), 127));
         }
     
-    public String getPatchName() { return model.get("name", "INIT SOUND"); }
+    public String getPatchName(Model model) { return model.get("name", "INIT SOUND"); }
+
+
+
+    public boolean patchLocationEquals(Model patch1, Model patch2)
+    	{
+    	int bank1 = patch1.get("bank");
+    	int number1 = patch1.get("number");
+    	int bank2 = patch2.get("bank");
+    	int number2 = patch2.get("number");
+    	return (bank1 == bank2 && number1 == number2);
+    	}
+    	
+    public Model getNextPatchLocation(Model model)
+    	{
+    	int bank = model.get("bank");
+    	int number = model.get("number");
+    	
+    	number++;
+    	if (number >= 32)
+    		{
+    		bank++;
+    		number = 0;
+	    	if (bank >= 5)
+	    		bank = 0;
+	    	}
+	    	
+    	Model newModel = buildModel();
+    	newModel.set("bank", bank);
+    	newModel.set("number", number);
+		return newModel;
+    	}
+
+    public String getPatchLocationName(Model model)
+    	{
+    	int number = model.get("number");
+    	return BANKS[model.get("bank")] + 
+    		(number > 9 ? "" : "0") + 
+    		(number + 1);
+    	}
+    	
+
     }

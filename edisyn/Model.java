@@ -210,13 +210,15 @@ public class Model implements Cloneable
                 {
                 int a = getMetricMin(keys[i]);
                 int b = getMetricMax(keys[i]);
-                set(keys[i], randomValidValueWithin(keys[i], random, getMetricMin(keys[i]), getMetricMax(keys[i]), get(keys[i], 0), weight));
+                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0),
+                				randomValidValueWithin(keys[i], random, getMetricMin(keys[i]), getMetricMax(keys[i]), get(keys[i], 0), weight)));
                 }
             else if (pickRandomInMetric)                    // MAYBE jump into metric
                 {
                 if (coinToss(random, weight))
                     {
-                    set(keys[i], randomValidValueWithin(keys[i], random, getMetricMin(keys[i]), getMetricMax(keys[i])));
+                    set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+                    	randomValidValueWithin(keys[i], random, getMetricMin(keys[i]), getMetricMax(keys[i]))));
                     }
                 }
             else if (hasMetric)                                             // MAYBE choose a random new non-metric location
@@ -232,7 +234,8 @@ public class Model implements Cloneable
 							{
 							if (isValid(keys[i], getMin(keys[i]) + delta))
 								{
-								set(keys[i], getMin(keys[i]) + delta);
+								set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+									getMin(keys[i]) + delta));
 								break;
 								}
 							}
@@ -240,7 +243,8 @@ public class Model implements Cloneable
 							{
 							if (isValid(keys[i], getMetricMax(keys[i]) + 1 + (delta - lowerRange)))
 								{
-								set(keys[i], getMetricMax(keys[i]) + 1 + (delta - lowerRange));
+								set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+									getMetricMax(keys[i]) + 1 + (delta - lowerRange)));
 								break;
 								}
 							}
@@ -251,7 +255,8 @@ public class Model implements Cloneable
                 {
                 if (coinToss(random, weight))
                     {
-                    set(keys[i], randomValidValueWithin(keys[i], random, getMin(keys[i]), getMax(keys[i])));
+                    set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+                    	randomValidValueWithin(keys[i], random, getMin(keys[i]), getMax(keys[i]))));
                     }
                 }
             }
@@ -317,7 +322,8 @@ public class Model implements Cloneable
             	outer = getMetricMin(keys[i]);
             if (metricMaxExists(keys[i]) && outer > getMetricMax(keys[i]))
             	outer = getMetricMax(keys[i]);
-            set(keys[i], randomValidValueWithin(keys[i], random, a, outer));
+            set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+            	randomValidValueWithin(keys[i], random, a, outer)));
             }
 
         if (undoListener!= null)
@@ -377,7 +383,8 @@ public class Model implements Cloneable
             if (isString(keys[i]))
                 { 
                 if (coinToss(random, 0.5))
-                    set(keys[i], model.get(keys[i], ""));
+                    set(keys[i], reviseMutatedValue(keys[i], get(keys[i], ""), 
+                    	model.get(keys[i], "")));
                 }
             else
                 {
@@ -391,12 +398,14 @@ public class Model implements Cloneable
                     {
                     int a = get(keys[i], 0);
                     int b = model.get(keys[i], a);
-                    set(keys[i], randomValidValueWithin(keys[i], random, a, b));
+                    set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+                    	randomValidValueWithin(keys[i], random, a, b)));
                     }
                 else // we pick one or the other
                     {
                     if (coinToss(random, 0.5))
-                        set(keys[i], model.get(keys[i], 0));
+                        set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+                        	model.get(keys[i], 0)));
                     }
                 }
             }
@@ -889,4 +898,7 @@ public class Model implements Cloneable
                 }
             }
         }
+        
+    public int reviseMutatedValue(String key, int old, int current) { return current; }    
+    public String reviseMutatedValue(String key, String old, String current) { return current; }    
     }

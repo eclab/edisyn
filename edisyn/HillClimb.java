@@ -235,17 +235,20 @@ public class HillClimb extends SynthPanel
 				{
 				public void perform()
 					{
-    				synth.tabs.setSelectedIndex(0);
-					synth.setSendMIDI(false);
-					// push to undo if they're not the same
-					if (!currentModels[_i].keyEquals(synth.getModel()))
-						synth.undo.push(synth.getModel());
-				
-					// Load into the current model
-					currentModels[_i].copyValuesTo(synth.getModel());
-					synth.setSendMIDI(true);
-//					synth.doHillClimb();  // turn off hill-climbing
-					synth.sendAllParameters();
+					// Keep for sure?
+					if (synth.showSimpleConfirm("Keep Patch", "Load Patch into Editor?"))
+						{
+	    				synth.tabs.setSelectedIndex(0);
+						synth.setSendMIDI(false);
+						// push to undo if they're not the same
+						if (!currentModels[_i].keyEquals(synth.getModel()))
+							synth.undo.push(synth.getModel());
+					
+						// Load into the current model
+						currentModels[_i].copyValuesTo(synth.getModel());
+						synth.setSendMIDI(true);
+						synth.sendAllParameters();
+						}
 					}
 				});
 			hbox.add(vbox);

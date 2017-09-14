@@ -93,7 +93,7 @@ public class KawaiK4Effect extends Synth
         comp = new PatchDisplay(this, "Patch", "bank", "number", 8)
             {
             public String numberString(int number) { return "" + (number + 1); }
-            public String bankString(int bank) { return (bank == 0 ? "" : "Ext. "); }
+            public String bankString(int bank) { return (bank == 0 ? "Int. " : "Ext. "); }
             };
         vbox.add(comp);
         hbox.add(vbox);
@@ -285,7 +285,7 @@ public class KawaiK4Effect extends Synth
 
     // not even sure if I need this
 
-    public String getPatchName() 
+    public String getPatchName(Model model) 
         {
         return "Effect " + (model.get("number") + 1);
         }
@@ -484,4 +484,39 @@ public class KawaiK4Effect extends Synth
         return frame;
         }
 
+
+
+    public boolean patchLocationEquals(Model patch1, Model patch2)
+    	{
+    	int bank1 = patch1.get("bank");
+    	int number1 = patch1.get("number");
+    	int bank2 = patch2.get("bank");
+    	int number2 = patch2.get("number");
+    	return (bank1 == bank2 && number1 == number2);
+    	}
+    	
+    public Model getNextPatchLocation(Model model)
+    	{
+    	int bank = model.get("bank");
+    	int number = model.get("number");
+    	
+    	number++;
+    	if (number >= 32)
+    		{
+    		bank++;
+    		number = 0;
+	    	if (bank >= 2)
+	    		bank = 0;
+	    	}
+	    	
+    	Model newModel = buildModel();
+    	newModel.set("bank", bank);
+    	newModel.set("number", number);
+		return newModel;
+    	}
+
+    public String getPatchLocationName(Model model)
+    	{
+    	return BANKS[model.get("bank")] + (model.get("number") + 1);
+    	}
     }

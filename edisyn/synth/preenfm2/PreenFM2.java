@@ -24,7 +24,8 @@ import javax.sound.midi.*;
 
 public class PreenFM2 extends Synth
     {
-    public int getPauseBetweenMIDISends() { return 1; }
+    // This seems like it's long enough but we may need to bump it to 20000L.
+    public long getNanoPauseBetweenMIDISends() { return 10000L; }
        
     public static final String[] BANK_TYPES_IN = { "Bank", "DX7" };
     public static final String[] BANK_TYPES_OUT = { "Bank" };

@@ -153,7 +153,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 if (hillClimbing)
                 	hillClimb.updateSound();
-                doSendTestNote();
+                doSendTestNote(true);
                 if (hillClimbing)
                 	hillClimb.postUpdateSound();
                 }
@@ -1102,7 +1102,7 @@ public abstract class Synth extends JComponent implements Updatable
     // if that much time hasn't already transpired between midi sends
     void midiPause(long expectedPause)
         {
-        if (expectedPause == 0) return;
+        if (expectedPause <= 0) return;
         
         long pauseSoFar = System.nanoTime() - lastMIDISend;
         if (pauseSoFar >= 0 && pauseSoFar < expectedPause)
@@ -1135,7 +1135,11 @@ public abstract class Synth extends JComponent implements Updatable
             if (receiver == null) return false;
                 
             // compute pause
-            midiPause(getNanoPauseBetweenMIDISends());
+        	try { midiPause(getNanoPauseBetweenMIDISends()); }
+        	catch (Exception e)
+        		{
+        		e.printStackTrace();
+        		}
                                         
             synchronized(midiSendLock) 
             	{
@@ -2321,7 +2325,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doSendTestNote();
+                doSendTestNote(false);
                 }
             });
 
@@ -2424,21 +2428,21 @@ public abstract class Synth extends JComponent implements Updatable
 		switch(v)
 			{
 			case 125:
-				tns[0].setSelected(true); break;
+				tns[0].setSelected(true); setTestNoteLength(v); break;
 			case 250:
-				tns[1].setSelected(true); break;
+				tns[1].setSelected(true); setTestNoteLength(v); break;
 			case 500:
-				tns[2].setSelected(true); break;
+				tns[2].setSelected(true); setTestNoteLength(v); break;
 			case 1000:
-				tns[3].setSelected(true); break;
+				tns[3].setSelected(true); setTestNoteLength(v); break;
 			case 2000:
-				tns[4].setSelected(true); break;
+				tns[4].setSelected(true); setTestNoteLength(v); break;
 			case 4000:
-				tns[5].setSelected(true); break;
+				tns[5].setSelected(true); setTestNoteLength(v); break;
 			case 8000:
-				tns[6].setSelected(true); break;
+				tns[6].setSelected(true); setTestNoteLength(v); break;
 			default:
-				tns[0].setSelected(true); break;
+				tns[2].setSelected(true); setTestNoteLength(500); break;
 			}        
 
         JMenu testNotePitch = new JMenu("Test Note Pitch");
@@ -2531,21 +2535,21 @@ public abstract class Synth extends JComponent implements Updatable
 		switch(v)
 			{
 			case 96:
-				tns[0].setSelected(true); break;
+				tns[0].setSelected(true); setTestNotePitch(v); break;
 			case 84:
-				tns[1].setSelected(true); break;
+				tns[1].setSelected(true); setTestNotePitch(v); break;
 			case 72:
-				tns[2].setSelected(true); break;
+				tns[2].setSelected(true); setTestNotePitch(v); break;
 			case 60:
-				tns[3].setSelected(true); break;
+				tns[3].setSelected(true); setTestNotePitch(v); break;
 			case 48:
-				tns[4].setSelected(true); break;
+				tns[4].setSelected(true); setTestNotePitch(v); break;
 			case 36:
-				tns[5].setSelected(true); break;
+				tns[5].setSelected(true); setTestNotePitch(v); break;
 			case 24:
-				tns[6].setSelected(true); break;
+				tns[6].setSelected(true); setTestNotePitch(v); break;
 			default:
-				tns[0].setSelected(true); break;
+				tns[3].setSelected(true); setTestNotePitch(60); break;
 			}        
 
 
@@ -2617,17 +2621,17 @@ public abstract class Synth extends JComponent implements Updatable
 		switch(v)
 			{
 			case 127:
-				tns[0].setSelected(true); break;
+				tns[0].setSelected(true); setTestNoteVelocity(v); break;
 			case 64:
-				tns[1].setSelected(true); break;
+				tns[1].setSelected(true); setTestNoteVelocity(v); break;
 			case 32:
-				tns[2].setSelected(true); break;
+				tns[2].setSelected(true); setTestNoteVelocity(v); break;
 			case 16:
-				tns[3].setSelected(true); break;
+				tns[3].setSelected(true); setTestNoteVelocity(v); break;
 			case 8:
-				tns[4].setSelected(true); break;
+				tns[4].setSelected(true); setTestNoteVelocity(v); break;
 			default:
-				tns[0].setSelected(true); break;
+				tns[0].setSelected(true); setTestNoteVelocity(127); break;
 			}        
 
 
@@ -3107,19 +3111,18 @@ public abstract class Synth extends JComponent implements Updatable
 	void setTestNoteVelocity(int velocity) { testNoteVelocity = velocity; }
     int getTestNoteVelocity() { return testNoteVelocity; }
     
-    void doSendTestNote()
+    void doSendTestNote(boolean restartTestNotesTimer)
         {
         final int testNote = getTestNotePitch();
         final int channel = getTestNoteChannel();
         final int velocity = getTestNoteVelocity();
         try
             {
-            if (noteOnTick == 0)
-                {
-                // we only send a note-on if we're not playing already
-                tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, testNote, velocity));
-                }
-                                        
+			// turn off existing note
+			tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, testNote, velocity));
+			// play new note
+			tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, testNote, velocity));
+									
             // schedule a note off
             final int myNoteOnTick = ++noteOnTick;
             javax.swing.Timer noteTimer = new javax.swing.Timer(testNoteLength,
@@ -3145,7 +3148,19 @@ public abstract class Synth extends JComponent implements Updatable
         catch (Exception e2)
             {
             e2.printStackTrace();
-            }           
+            }     
+        
+        // the purpose of the code below is that when we're hill-climbing we often take longer than the full
+        // second of the test notes timer to just get the data out and play.  So here we submit our timer,
+        // then we tell the test notes timer to reset itself to exactly the same initial delay as our timer.
+        // This SHOULD put the test notes timer back in the queue AFTER our note-off timer so we have enough
+        // time to turn off the note before the test notes timer fires another note.
+                  
+		if (restartTestNotesTimer)
+			{
+			sendTestNotesTimer.setInitialDelay(testNoteLength);
+			sendTestNotesTimer.restart();
+			}
         }
 
     void doMapCC(int type)

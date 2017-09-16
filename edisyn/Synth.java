@@ -2335,83 +2335,302 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
+        menu.addSeparator();
+
 		ButtonGroup testNoteGroup = new ButtonGroup();
+		JRadioButtonMenuItem tns[] = new JRadioButtonMenuItem[7];
 		
         JMenu testNoteLength = new JMenu("Test Note Length");
         menu.add(testNoteLength);
-        JRadioButtonMenuItem tn = new JRadioButtonMenuItem("1/8 Second");
+        JRadioButtonMenuItem tn = tns[0] = new JRadioButtonMenuItem("1/8 Second");
 		testNoteLength.add(tn);
         tn.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteLength(125);
+                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal()); 
                 }
             });
 		testNoteGroup.add(tn);
-         tn = new JRadioButtonMenuItem("1/4 Second");
+         tn = tns[1] = new JRadioButtonMenuItem("1/4 Second");
 		testNoteLength.add(tn);
         tn.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteLength(250);
+                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal()); 
                 }
             });
 		testNoteGroup.add(tn);
-         tn = new JRadioButtonMenuItem("1/2 Second");
+         tn = tns[2] = new JRadioButtonMenuItem("1/2 Second");
 		testNoteLength.add(tn);
         tn.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteLength(500);
+                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal()); 
                 }
             });
-        tn.setSelected(true);
 		testNoteGroup.add(tn);
-         tn = new JRadioButtonMenuItem("1 Second");
+         tn = tns[3] = new JRadioButtonMenuItem("1 Second");
 		testNoteLength.add(tn);
         tn.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteLength(1000);
+                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal()); 
                 }
             });
 		testNoteGroup.add(tn);
-         tn = new JRadioButtonMenuItem("2 Seconds");
+         tn = tns[4] = new JRadioButtonMenuItem("2 Seconds");
 		testNoteLength.add(tn);
         tn.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteLength(2000);
+                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal()); 
                 }
             });
 		testNoteGroup.add(tn);
-         tn = new JRadioButtonMenuItem("4 Seconds");
+         tn = tns[5] = new JRadioButtonMenuItem("4 Seconds");
 		testNoteLength.add(tn);
         tn.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteLength(4000);
+                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal()); 
                 }
             });
 		testNoteGroup.add(tn);
-         tn = new JRadioButtonMenuItem("8 Seconds");
+         tn = tns[6] = new JRadioButtonMenuItem("8 Seconds");
 		testNoteLength.add(tn);
         tn.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteLength(8000);
+                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+
+		int v = getLastXAsInt("TestNoteLength", getSynthNameLocal(), 500);
+		switch(v)
+			{
+			case 125:
+				tns[0].setSelected(true); break;
+			case 250:
+				tns[1].setSelected(true); break;
+			case 500:
+				tns[2].setSelected(true); break;
+			case 1000:
+				tns[3].setSelected(true); break;
+			case 2000:
+				tns[4].setSelected(true); break;
+			case 4000:
+				tns[5].setSelected(true); break;
+			case 8000:
+				tns[6].setSelected(true); break;
+			default:
+				tns[0].setSelected(true); break;
+			}        
+
+        JMenu testNotePitch = new JMenu("Test Note Pitch");
+        menu.add(testNotePitch);
+        
+        tns = new JRadioButtonMenuItem[7];
+        
+ 		testNoteGroup = new ButtonGroup();
+        tn = tns[0] = new JRadioButtonMenuItem("3 Octaves Up");
+		testNotePitch.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePitch(96);
+                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[1] =new JRadioButtonMenuItem("2 Octaves Up");
+		testNotePitch.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePitch(84);
+                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[2] =new JRadioButtonMenuItem("1 Octave Up");
+		testNotePitch.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePitch(72);
+                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[3] =new JRadioButtonMenuItem("Middle C");
+        tn.setSelected(true);
+		testNotePitch.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePitch(60);
+                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[4] =new JRadioButtonMenuItem("One Octave Down");
+		testNotePitch.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePitch(48);
+                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[5] =new JRadioButtonMenuItem("Two Octaves Down");
+		testNotePitch.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePitch(36);
+                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal()); 
+               }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[6] =new JRadioButtonMenuItem("Three Octaves Down");
+		testNotePitch.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePitch(24);
+                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal()); 
                 }
             });
 		testNoteGroup.add(tn);
         
             
+		v = getLastXAsInt("TestNotePitch", getSynthNameLocal(), 60);
+		switch(v)
+			{
+			case 96:
+				tns[0].setSelected(true); break;
+			case 84:
+				tns[1].setSelected(true); break;
+			case 72:
+				tns[2].setSelected(true); break;
+			case 60:
+				tns[3].setSelected(true); break;
+			case 48:
+				tns[4].setSelected(true); break;
+			case 36:
+				tns[5].setSelected(true); break;
+			case 24:
+				tns[6].setSelected(true); break;
+			default:
+				tns[0].setSelected(true); break;
+			}        
+
+
+        JMenu testNoteVolume = new JMenu("Test Note Volume");
+        menu.add(testNoteVolume);
+        
+        tns = new JRadioButtonMenuItem[5];
+
+ 		testNoteGroup = new ButtonGroup();
+        tn = tns[0] = new JRadioButtonMenuItem("Full Volume");
+	    tn.setSelected(true);
+		testNoteVolume.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNoteVelocity(127);
+                setLastX("" + getTestNoteVelocity(), "TestNoteVelocity", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[1] = new JRadioButtonMenuItem("1/2 Volume");
+		testNoteVolume.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNoteVelocity(64);
+                setLastX("" + getTestNoteVelocity(), "TestNoteVelocity", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[2] = new JRadioButtonMenuItem("1/4 Volume");
+		testNoteVolume.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNoteVelocity(32);
+                setLastX("" + getTestNoteVelocity(), "TestNoteVelocity", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[3] = new JRadioButtonMenuItem("1/8 Volume");
+		testNoteVolume.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNoteVelocity(16);
+                setLastX("" + getTestNoteVelocity(), "TestNoteVelocity", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[4] = new JRadioButtonMenuItem("1/16 Volume");
+		testNoteVolume.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNoteVelocity(8);
+                setLastX("" + getTestNoteVelocity(), "TestNoteVelocity", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+
+
+		v = getLastXAsInt("TestNoteVelocity", getSynthNameLocal(), 127);
+		switch(v)
+			{
+			case 127:
+				tns[0].setSelected(true); break;
+			case 64:
+				tns[1].setSelected(true); break;
+			case 32:
+				tns[2].setSelected(true); break;
+			case 16:
+				tns[3].setSelected(true); break;
+			case 8:
+				tns[4].setSelected(true); break;
+			default:
+				tns[0].setSelected(true); break;
+			}        
+
+
         menu = new JMenu("Map");
         menubar.add(menu);
 
@@ -2831,12 +3050,18 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 	int testNoteLength = 500;
-	public void setTestNoteLength(int val)
+	void setTestNoteLength(int val)
 		{
 		int delay = (val <= 500 ? val * 2 : val + 500);
 		sendTestNotesTimer.setDelay(delay);
 		testNoteLength = val;
 		}
+
+	int getTestNoteLength()
+		{
+		return testNoteLength;
+		}
+
 
     boolean sendingTestNotes = false;   
     javax.swing.Timer sendTestNotesTimer;
@@ -2871,18 +3096,20 @@ public abstract class Synth extends JComponent implements Updatable
         setLastX("" + allowsTransmitsParameters, "AllowTransmitParameters", getSynthNameLocal());
         }
     
-    /** Override this to customize the pitch of the test note. */
-    public int getTestNote() { return 60; }
+    int testNote = 60;
+    void setTestNotePitch(int note) { testNote = note; }
+    int getTestNotePitch() { return testNote; }
     
     /** Override this to customize the MIDI channel of the test note. */
     public int getTestNoteChannel() { return getChannelOut(); }
-    
-    /** Override this to customize the volume of the test note. */
-    public int getTestNoteVelocity() { return 127; }
+
+	int testNoteVelocity = 127;    
+	void setTestNoteVelocity(int velocity) { testNoteVelocity = velocity; }
+    int getTestNoteVelocity() { return testNoteVelocity; }
     
     void doSendTestNote()
         {
-        final int testNote = getTestNote();
+        final int testNote = getTestNotePitch();
         final int channel = getTestNoteChannel();
         final int velocity = getTestNoteVelocity();
         try
@@ -3647,7 +3874,18 @@ public abstract class Synth extends JComponent implements Updatable
         return result;
         }
 
-
+	int getLastXAsInt(String slot, String synth, int defaultVal)
+		{
+        String tnls = getLastX(slot, synth);
+        try
+        	{
+       		return Integer.parseInt(tnls);
+       		}
+       	catch (NumberFormatException e)
+       		{
+       		return defaultVal;
+       		}
+		}
 
 
     }

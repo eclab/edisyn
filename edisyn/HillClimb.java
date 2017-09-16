@@ -81,7 +81,7 @@ public class HillClimb extends SynthPanel
             {
             public void perform()
             	{
-            	climb();
+            	climb(true);
             	resetCurrentPlay();
                 }
             };
@@ -352,7 +352,7 @@ public class HillClimb extends SynthPanel
 			bestModels[0] = (Model)(oldA.remove(oldA.size() - 1));
 			bestModels[1] = (Model)(oldB.remove(oldB.size() - 1));
 			bestModels[2] = (Model)(oldC.remove(oldC.size() - 1));
-			climb();
+			climb(false);
 			}
 		else
 			{
@@ -377,7 +377,7 @@ public class HillClimb extends SynthPanel
 			bestModels[0] = (Model)(oldA.remove(oldA.size() - 1));
 			bestModels[1] = (Model)(oldB.remove(oldB.size() - 1));
 			bestModels[2] = (Model)(oldC.remove(oldC.size() - 1));
-			climb();
+			climb(false);
 			}
 		else if (oldA.size() > 1)
 			{
@@ -454,22 +454,26 @@ public class HillClimb extends SynthPanel
 		}
 
 	
-	public void climb()
+	public void climb(boolean determineBest)
 		{
 		Random random = synth.random;
 		String[] keys = synth.getMutationKeys();
 		double recombination = recombinationRate.getValue() / 100.0;
 		double weight = mutationRate.getValue() / 100.0;
 		
-		// load the best models
-		for(int i = 0; i < 16; i++)
+		if (determineBest)
 			{
-			for(int j = 0; j < 3; j++)
+			// load the best models
+			for(int i = 0; i < 16; i++)
 				{
-				if (ratings[i][j].isSelected())
-					bestModels[j] = currentModels[i];
+				for(int j = 0; j < 3; j++)
+					{
+					if (ratings[i][j].isSelected())
+						bestModels[j] = currentModels[i];
+					}
 				}
 			}
+			
 		
 		// Standard Mutations and Recombinations
 	
@@ -514,9 +518,9 @@ Current Patch
 		// B + C
 		currentModels[12] = ((Model)(bestModels[1].clone())).recombine(random, bestModels[2], keys, recombination);
 		// Beyond A from Z
-		currentModels[13] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, 0.5);
+		currentModels[13] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, 0.75);
 		// Even further Beyond A from Z
-		currentModels[14] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, 1.0);
+		currentModels[14] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, 1.5);
 	
 		// Current patch
 		currentModels[15] = ((Model)(synth.getModel().clone()));

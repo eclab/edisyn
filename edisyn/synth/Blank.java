@@ -511,21 +511,6 @@ public class Blank extends Synth
     	return 1000; 
     	}
 
-    public int getTestNote()
-        {
-        // It's possible that your synth has different sounds for different
-        // notes, so you need to customize which note is played when the user
-        // asks to send a test note.  Do so here.  The default is Middle C (60).
-        return 60;
-        }
-
-    public int getTestNoteVelocity()
-        {
-        // You might need to customize the velocity of the test note.
-        // Do so here.  The default is full volume (127).
-        return 127;
-        }
-
     public int getTestNoteChannel()
         {
         // It's possible that your synth has a special channel for this patch

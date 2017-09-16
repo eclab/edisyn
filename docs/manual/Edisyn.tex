@@ -27,20 +27,20 @@ sean@cs.gmu.edu}\\[0.2em]
 
 
 
-\noindent Edisyn is a no-nonsense synthesizer patch editor designed to be extensible for many different kind of of synthesizers, and to have unusual programming assistance capabilities.  It is not skewmorphic and not skinnable: it's design is very no-nonsense and consistent.  Edisyn is free open source.
+\noindent Edisyn is a no-nonsense synthesizer patch editor designed to be extensible for many different kind of of synthesizers, and to have unusual programming assistance capabilities.  It is not skewmorphic and not skinnable: its design is plain and consistent.  Edisyn is free open source.
 
-Edisyn at present has patch editors for the following synthesizers, which strangely enough are the very ones that I own! 
+Edisyn at present has patch editors for the following synthesizers: the very ones that I own! 
 
 \begin{itemize}
 \item Kawai K4 and K4r (Single and Multimode)
 \item Waldorf Blofeld Desktop, Blofeld Desktop SL, and Blofeld Keyboard (Single and Multimode)
 \item Waldorf Microwave II, Microwave XT, and Microwave XTk (Single and Multimode)
-\item Yamaha TX81Z (Single and Multimode)
+%\item Yamaha TX81Z (Single and Multimode)
 \item Oberheim Matrix 1000 (Single)
 \item Preen FM2 (Single)
 \end{itemize}
 
-Edisyn does not support patches for global parameters, nor for wave, sample, or wavetable editing etc.  Additionally Edisyn is at present {\bf not a librarian tool}.  You should use a good free librarian tool, such as SysEx Librarian on the Mac.
+Edisyn does not support patches for global parameters, nor for wave, sample, or wavetable editing etc.  Additionally, though it can do bulk downloads and save them as individual patches, Edisyn is {\bf not a librarian tool}.  You should use a good free librarian software program, such as SysEx Librarian on the Mac.
 
 
 \section{Starting Edisyn}
@@ -58,14 +58,14 @@ You'll first be presented with the dialog at right, asking you to choose a synth
 \begin{wrapfigure}{r}{2.7in}
 \vspace{-2em}\includegraphics[scale=0.3]{1.png}
 \vspace{-1em}\caption{MIDI Dialog}\label{mididialog}
-\vspace{-5em}
+\vspace{3em}
 \end{wrapfigure}
 
 Edisyn will now build a patch editor for you and display it.  But unless you chose {\bf Disconnected Mode}, it'll first ask you to set up MIDI for this editor.  The dialog at right presents you with up to 6 fields (5 are shown here):
 
 \begin{itemize}
-\item The USB MIDI Device from which you will {\bf Receive} MIDI data sent by the synthesizer.  Here we are sending to a Tascam US-2x2 interface, which presents itself as a generic, nameless device.
-\item The USB MIDI Device to which you will {\bf Send} MIDI to ultimately be sent to the synthesizer.  Here we are sending to a Tascam US-2x2 interface, which presents itself as a generic, nameless device.
+\item The USB MIDI Device from which you will {\bf Receive} MIDI data sent by the synthesizer.  Here we are sending to a Tascam US-2x2 interface, which presents itself as a generic, nameless device. (BTW, if you're on a Mac and you don't like a generic name for your device, go to the Audio MIDI Setup application in the Utilities folder, double-click on the device, and change its name.)
+\item The USB MIDI Device to which you will {\bf Send} MIDI to ultimately be sent to the synthesizer.  Here again we are sending to the Tascam US-2x2 device.
 \end{itemize}
 
 \clearpage
@@ -94,7 +94,7 @@ If you are not connected to MIDI, or if you cancel, then Edisyn will inform you 
 An Edisyn patch editor is a single window with multiple tabbed panes.  You can switch tabs by clicking on them or via shortcuts (see the {\bf Tabs Menu}).  The far-right tab is the {\bf About Tab}.  It gives you information about the eccentricities of the synthesizer that require custom behavior in Edisyn (they all do!).  You should read it carefully to understand how Edisyn will interact with your synthesizer.  
 
 \paragraph{Categories}
-At right is a typical tab pane.  You'll note that various widgets are grouped together in regions (called {\bf Categories}).  There are four categories shown here.  Three are various random categories for this synthesizer: ``Global'', ``LFO'', and ``Controllers''.  They're in various colors to differentiate them.  Other categories will be found in other tab panes.  But one category is special: the {\bf Synthesizer Category}, always shown in white, here named ``Yamaha TX81Z''.  It normally contains the patch name and bank/patch number.
+At right is a typical tab pane.  You'll note that various widgets are grouped together in regions (called {\bf Categories}).  There are four categories shown here.  Three are arbitrary categories for this synthesizer: ``Global'', ``LFO'', and ``Controllers''.  They're in various colors to differentiate them.  Other categories will be found in other tab panes.  But one category is special: the {\bf Synthesizer Category}, always shown in white, here named ``Yamaha TX81Z''.  It normally contains the patch name and bank/patch number.
 
 \paragraph{Widgets}  Edisyn has a number of widgets.  Here are some:
 
@@ -108,7 +108,7 @@ At right is a typical tab pane.  You'll note that various widgets are grouped to
 
 \item Various {\bf Dials}.\footnote{Notably absent are {\bf Scrollers}.  Edisyn has software support for scrollers but to be honest they've not proven useful yet.}  These are semicircles in gray, partly in some other color, with a value in the center.  You change these values by clicking on the dial and dragging vertically.  You can also double-click on a dial to reset it to a default value (often zero).  Finally, you can two-finger drag (on the Mac), or spin the mouse wheel to change the dial more subtly.  
 
-Dials vary in orientation.  Most look sort of like a ``C'', with the zero point at the bottom center.  Other dials are symmetric, such as the ``Breath Ctrl. Pitch Bias'' dial (bottom row, second from right in the Figure), and have zero point at center top.  Occasionally dials have other orientations: the goal is to keep the zero point centered (at top of bottom).
+Dials vary in orientation.  Most look sort of like a ``C'', with the zero point at the bottom center.  Other dials are symmetric, such as the ``Breath Ctrl. Pitch Bias'' dial (bottom row, second from right in the Figure), and have zero point at center top.  Occasionally dials have other orientations: the goal is to keep the zero point centered (at top or bottom).
 
 \item Some {\bf Checkboxes} (such as ``Portamento'') and {\bf Pop-Up Choosers} or ComboBoxes (such as ``Wave'', set to ``Sawtooth'').  These are should be straightforward.
 
@@ -138,9 +138,9 @@ A patch editor is created by selecting one of the various {\bf New...} menu opti
 
 Whenever you create a new patch editor or duplicate one, you will once again be asked to set up MIDI as discussed in Section \ref{startingedisyn}, or to run in Disconnected Mode.
 
-\subsection{Persistence and Preferences}
+\subsection{Persistence}
 
-Now would be a good time to mention an Edisyn feature you may never notice: many things are {\bf persistent}.  For example, if you choose ``Arturia Beatstep'' as the controller for your Blofeld patch, the next time you call up a Blofeld patch editor, ``Arturia Beatstep'' will be presented as the default choice in the MIDI Devices window, assuming your Arturia Beatstep is plugged in.  This goes for everything in the MIDI Devices window.
+Now would be a good time to mention an Edisyn feature you may never notice otherwise: many things are {\bf persistent}.  For example, if you choose ``Arturia Beatstep'' as the controller for your Blofeld patch, the next time you call up a Blofeld patch editor, ``Arturia Beatstep'' will be presented as the default choice in the MIDI Devices window, assuming your Arturia Beatstep is plugged in.  This goes for everything in the MIDI Devices window.
 
 Furthermore if you pop a new patch editor for a synthesizer you have never edited before, the Arturia Beatstep will be the default option for that one too (until you change it one time).    And these options are per synthesizer type.
 
@@ -151,6 +151,15 @@ Persistence appears in other places too.  For example, the Initial Synthesizer d
 You can save your edited patch via the {\bf Save} and {\bf Save As...} options in the {\bf File} menu, and you can load a patch via the {\bf Load...} option.  This is called {\it Load} and not {\it Open} because you can only load a file into an existing patch editor: you cannot create a new patch editor automatically on opening a file.
 
 Most patch editor files are sysex dumps ending in the extension {\tt .syx}.  These files are usually exactly the same sysex data that you'd normally dump to your synthesizer using a patch librarian software program. There are exceptions however.  For example, some synthesizers, like the PreenFM2, have no sysex to speak of at all: they exchange parameters entirely over NRPN.  In this situation, Edisyn has invented a sysex file just for the PreenFM2.  It obviously won't work in your librarian software.
+
+\paragraph{Batch Downoads}
+Edisyn also has limited support for batch-downloading and saving patch files.  To do this, choose {\bf Batch Download...} from the {\bf File} menu.  You'll be asked to specify the directory in which to save patches, and also first patch and the final patch, and then downloading will commence.  Note that if your final patch is ``before'' the first patch, then Edisyn will wrap all the away around to get to the final patch.  For example, if your synth has ten patches 1....10, and you choose 8 as your first patch and 2 as your last patch, then Edisyn will download in this order: 8, 9, 10, 1, 2.
+
+If Edisyn can't download a particular patch (the synth isn't responding), it'll try again and again until successful.  So if it gets stuck, 
+you can always stop batch-downloading at any time by choosing {\bf Stop Downloading Batch} from the {\bf File} menu.  Note that you can still screw with knobs, etc. while Edisyn is busy downloading batches: but don't do that.  You're just messing up the batches getting saved.\footnote{I may change this in the future to something less fragile.}
+
+Also note that as a failsafe Edisyn only allows the frontmost window to receive data over MIDI.  This means that (for the moment) while you're batch-downloading, you can't go to some other window (read a web browser say).  The patch editor has to stay in front.\footnote{Yes, I agree it's a stupid restriction.  I'm working on it.}
+
 
 \section{Communicating with the Synthesizer}
 
@@ -176,7 +185,11 @@ Note that various synthesizers cannot do one or another of these tasks.   When t
 
 \vspace{1em}
 
-Finally, if you don't have a controller keyboard, you can send a test note to your synthesizer by choosing {\bf Send Test Note}.  You can also toggle whether Edisyn constantly sends a stream of test notes by choosing {\bf Send Test Notes}.  You can choose the length of the test notes you send in the {\bf Test Note Length} submenu.  And you can shut off all sound on the synthesizer with {\bf Send All Sounds Off}.
+\subsection{Test Notes}
+
+If you don't have a controller keyboard, you can send a test note to your synthesizer by choosing {\bf Send Test Note}.  You can also toggle whether Edisyn constantly sends a stream of test notes by choosing {\bf Send Test Notes}.  And you can shut off all sound on the synthesizer with {\bf Send All Sounds Off}.
+
+Edisyn gives you various options for adjusting the test note you send (though it's always a ``C'').  You can change the length of the test notes you send in the {\bf Test Note Length} submenu.  You can change the pitch with {\bf Test Note Pitch}.  And you can change the volume with {\bf Test Note Volume}.
 
 \section{Communicating with the Controller}
 
@@ -190,6 +203,7 @@ The MIDI Dialog (Section \ref{startingedisyn}) also lets you choose a device and
 
 \subsection{Remote Controlling your Synthesizer} 
 If you play a note, do a pitch bend, etc., on your control surface, Edisyn will route all of those MIDI messages directly to your synthesizer (changing the messages' channel to the one that Edisyn is using to talk to the synthesizer).  You can also pass through Program Change messages, MIDI clock, etc.  Control Change (CC) messages from your control surface are passed through only if you have toggled {\bf Pass Through All CCs} in the {\bf Map} menu.
+
 
 \subsection{Remote Controlling Edisyn} 
 
@@ -251,14 +265,15 @@ Some patch editors may not be able to perform merges because the synthesizers ca
 
 \subsection{Restricting Mutation and Recombination to Only Certain Parameters}
 
-\begin{wrapfigure}{r}{3in}
-\vspace{-2em}\includegraphics[scale=0.3]{5.png}
-\vspace{-1em}\caption{Editing Mutation Parameters}\label{mutationparameters}
-\end{wrapfigure}
-
 You can restrict Mutation (Randomize) and Recombination (Nudge and Merge) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutation Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutation Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
 
-You can change these of course: just click on them and you can remove them from being updated (or add the back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu, such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title.  The categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}.  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
+You can change these of course: just click on them and you can remove them from being updated (or add the back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title.  The categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}.  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
+
+\begin{wrapfigure}{r}{3in}
+\vspace{-1.5em}\includegraphics[scale=0.3]{5.png}
+\vspace{-3em}\caption{Editing Mutation Parameters}\label{mutationparameters}
+\vspace{-2em}
+\end{wrapfigure}
 
 Some parameters, such as the patch name or certain other parameters, can't be mutated no matter what: these have been declared {\it immutable} by the patch editor.  They will never have a red frame no matter how much you click them.
 
@@ -303,13 +318,6 @@ When a patch {\bf A} is {\it mutated}, it is modified with some degree of random
 
 {\small {\bf Important Note}\quad {\it The Hill Climber is a work in progress and as testing and research continues on it, it may change significantly.}}
 
-\begin{wrapfigure}{r}{2.5in}
-\vspace{-1em}
-\includegraphics[width=2.5in]{HillClimbing.pdf}
-\caption{Recombination and Mutation in the Hill-Climber}
-\label{hc}
-\end{wrapfigure}
-
 \vspace{1em}
 Edisyn's {\it hill-climber} is another of its patch-exploration tools.  You select it by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  This will add a new tab to your patch editor labelled {\bf Hill-Climb}.  You get rid of the hill-climber by selecting {\bf Stop Hill-Climbing} in the {\bf Edit} menu.  
 
@@ -330,10 +338,17 @@ Figure \ref{hc} illustrates the various recombination locations; the mutation no
 
 \begin{itemize}
 \item{1--4}: Four noisy versions of the current patch
-\item{5--8}: Four more noisy versions of the current patch
-\item{9--12}: Four very noisy versions of the current patch
+\item{5--8}: Four noisier versions of the current patch
+\item{9--12}: Four even noisier versions of the current patch
 \item{13--16}: Four extremely noisy versions of the current patch
 \end{itemize}
+
+\begin{wrapfigure}{r}{2.5in}
+\vspace{-1em}
+\includegraphics[width=2.5in]{HillClimbing.pdf}
+\caption{Recombination and Mutation in the Hill-Climber}
+\label{hc}
+\end{wrapfigure}
 
 The sixteen candidates appear in the {\bf Candidates} section.  Each has a button labelled {\bf Play}, which lets you play the candidate, and a button labelled {\bf Keep}, which closes the Hill-Climber and loads that candidate into the patch editor (presumably because you've found your ideal sound and want to {\it keep} it).  There are also three radio buttons, labelled 1, 2, and 3.  These are for you to select the sound as one of your top three choices, if you like it.
 
@@ -346,6 +361,7 @@ The degree of recombination can also be tweaked, but this requires a bit of expl
 Note that when you enter the Hill-Climber, it automatically turns on {\bf Send Test Notes}, and each time a new test note is played, it's a different candidate sound.  That way you can hear all the sounds easily.  The sound being played is shown by making its {\bf Play} button text red.  If you would like to reset the sequence to a different sound, just press its Play button.  When you leave the Hill-Climber to go to some other tab in your patch editor, Send Test Notes is turned off automatically.
 
 \section{Synthesizers are Inconsistent}
+\label{inconsistent}
 
 The dirty truth is that synthesizer companies don't really care about MIDI control, else they'd put more effort into it.  The Waldorf Blofeld's multimode is entirely undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but the are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  And of course the infamous Korg Microsampler is such a MIDI disaster that Edisyn may never release its patch editor.
 
@@ -425,12 +441,12 @@ public static String getHTMLResourceFileName() { return "YamahaDX7.html"; }
 
 \subsection{Step Two: Get the UI Working}
 
-This is mostly the constructor and subsidiary functions.  Typically you will create one {\tt SynthPanel} for each tab in your editor.  A SynthPanel is little more than a JPanel with a black background: you can lay it out however you like.  However Edisyn typically lays it out as follows:
+This is mostly writing the class constructor and subsidiary functions.  Typically you will create one {\tt SynthPanel} for each tab in your editor.  A SynthPanel is little more than a JPanel with a black background: you can lay it out however you like.  However Edisyn typically lays it out as follows:
 
 \begin{enumerate}
 \item At the top level we have a {\bf VBox}.  This is a vertical Box to which you can add elements conveniently.  You can also designate an element to be the {\bf bottom} of the box, meaning it will take up all the remaining vertical space.
-\item In the VBox we will place one or more {\bf Categories}.  These are the large colorful named regions in Edisyn (like ``LFO'' or ``Oscillator''. 
-\item Typically inside a Category we'd put an {\bf HBox}.  This is a horizontal box to which you can add elements.  You can also designate an element to be the {\bf last item} of the box, meaning it will take up all the remaining horizontal space.
+\item In the VBox we will place one or more {\bf Categories}.  These are the large colorful named regions in Edisyn (like ``LFO'' or ``Oscillator''). 
+\item Typically inside a Category we'd put an {\bf HBox}.  This is a horizontal box to which you can add elements.  You can also designate an element to be the {\bf last item} of the box, meaning it will take up all the remaining horizontal space.  By doing this, the Category's horizontal colored line nicely stretches the whole length of the window.
 \item Inside the HBox you put your widgets.  You might lay them out with additional VBoxes and HBoxes as you see fit. It's particularly common to one or more small widgets (check boxes, choosers) in a VBox, which will cause them to be top-aligned rather than vertically centered as they would if they were stuck directly in the HBox.  It's helpful to look at existing patch editors to see how they did it.
 \item If you need multiple rows, you should put a VBox in the Category, and then put HBoxes inside of that.
 \item You might have multiple Categories on the same row.  To do this, just put them in an HBox.  Make sure the final Category is designated to be the Last Item of the HBox.  You'd put this HBox in the top-level VBox instead of the Categories themselves.
@@ -454,7 +470,7 @@ Another issue is how your synthesizer interprets values sent over sysex or NRPN.
 
 Also some synthesizers have holes in their ranges.  For example, they might permit the values 0...17 and the values 20...100, but do not permit 18 and 19.  What to do then?  You should always compact them to be contiguous between some min and max: for example, you might compact it to 0...98.  When displayed, use a custom displayer, and when emitting or parsing them, you'll have to map them to your internal representation accordingly. 
 
-In general: your internal parameters should have contiguous ranges and make sense from a user perspective and not the synthesizer's weird worldview.
+In general: your internal parameters should have contiguous ranges and make sense from a user perspective and not the synthesizer's weird parsing perspective.
 
 So how to set parameters?  You usually don't add the key yourself, though you could.  Instead, normally you tell the widget the name of the parameter it's modifying (the key), and it adds it to the model on its own.  Parameters are either {\bf strings} or are {\bf numbers}.   Numerical parameters all have a {\bf min} and a {\t max} value, inclusive: usually the widget will set those for you.  They also may have a {\bf MetricMin} and  {\bf MetricMax} value, and you may need to set those manually.  
 
@@ -550,7 +566,7 @@ JComponent comp = new LabelledDial("Incoming", this, "midichannel", color, min, 
 ((LabelledDial)comp).addAdditionalLabel("MIDI Channel");
 \end{verbatim}
 
-You can add additional (third, fourth, ...) labels with it!  Note that you can change the first label text later on (with {\bf setLabel(...)}) but you can't change the label text of additional labels.
+You can add additional (third, fourth, ...) labels too.  Note that you can change the first label text later on (with {\bf setLabel(...)}) but you can't change the label text of additional labels.
 
 It is very common to need a custom string display for certain numbers in the center of the dial. You can do it like this:
 
@@ -706,7 +722,7 @@ Specifically, to compute the X coordinate of the next point, we take its key val
 
 Since angles can and will create very strung-out horizontal lines, the remaining time constants tell us the {\it maximum length} of a line: these again should sum to 1.0.
 
-Angles/rates create weird idiosyncracies you'll have to think about.  For example, below is the Waldorf Blofeld's code for an ADSR envelope.  Before we go on, goo to the Blofeld patch editor and play with the Attack, Decay, Sustain, and Release settings.  Notice that as the Sustain gets higher, the Release gets longer but the Decay gets shorter, because the synth is basing this envelope on {\it rate} and not {\it time}.\footnote{Actually, the envelope as displayed in the Blofeld synth itself is drawn as if the Blofeld uses length.  But it does not: it's an error.  Edisyn's patch editor is right and Waldorf's UI designers are wrong!}  One consequence of this is that the Decay and Release together are as long as the Attack, because if you're basing on rate, then the amount of time to go up is the same as the total amount of time to go {\it down}, and both Decay and Release go down.  Thus we have a {\it max width} of 1/3 for all four portions: but at any time they can only sum to 1/3 [attack] + 1/3 [sustain] + 1/3 [decay + release].
+Angles/rates create weird idiosyncracies you'll have to think about.  For example, below is the code for the Blofeld's ADSR envelope.  As the Sustain gets higher, the Release gets longer but the Decay gets shorter, because the synth is basing this envelope on {\it rate} and not {\it time}.\footnote{Edisyn no longer displays this way for the Blofeld, because although the Blofeld indeed follows angle/rate, for large values the Blofeld's functions start getting close to following time.  The problem is that while the Blofeld documentation acknowledges that it follows angle/rate, the Blofeld's {\it screen} incorrectly displays envelopes following time!  When I wrote this documentation I was using angle/rate for the Blofeld because it's the ``true'' underlying behavior, but I've since changed the patch editor back to displaying time because using something other than what's on the Blofeld screen would really confuse owners, and in the Blofeld's case it's a subtle difference.}  One consequence of this is that the Decay and Release together are as long as the Attack, because if you're basing on rate, then the amount of time to go up is the same as the total amount of time to go {\it down}, and both Decay and Release go down.  Thus we have a {\it max width} of 1/3 for all four portions: but at any time they can only sum to 1/3 [attack] + 1/3 [sustain] + 1/3 [decay + release].
 
 In the Blofeld ADSR, all the values go 0...127, and the angles are displayed by Edisyn to go from vertical to \(\pi/4\) (we don't want them too flattened out).  See if the code below makes sense now:
 
@@ -813,7 +829,7 @@ receiveCurrent.setEnabled(false);  // turns of the "Request Current Patch" menu 
 
 You should do this in an overridden version of the  {\bf sprout()} method (be absolutely sure to call super.sprout() first).
 
-You will also want to override some other methods.  First {\bf getPatchName()} should extract the patch name from the model (probably via {\tt getModel().get("name", "foo")}\ ).  Second, you also will want to override the {\bf revisePatchName(...)} method if you've not already done so for the StringComponent widget.  This method modifies a provided name and returns a corrected version.  The default version, which you might call first (via super), removes trailing whitespace.  You can then revise incorrect characters, length, and so on.  Third, if your synthesizer uses an ID to distinguish itself from other synthesizers of the same type (the Waldorf synths do this for example), you should override the {\bf reviseID(...)} method to correct provided IDs.  If this method returns {\tt null} (the default), the  ID won't even appear as an option.
+You will also want to override some other methods.  First {\bf getPatchName(model)} should extract the patch name from the provided model (probably via {\tt model.get("name", "foo")}\ ).  Second, you also will want to override the {\bf revisePatchName(...)} method if you've not already done so for the StringComponent widget.  This method modifies a provided name and returns a corrected version.  The default version, which you might call first (via super), removes trailing whitespace.  You can then revise incorrect characters, length, and so on.  Third, if your synthesizer uses an ID to distinguish itself from other synthesizers of the same type (the Waldorf synths do this for example), you should override the {\bf reviseID(...)} method to correct provided IDs.  If this method returns {\tt null} (the default), the  ID won't even appear as an option.
 
 Finally, you will probably want to override the {\bf revise()} method to verify that all the model parameters have valid values, and tweak them if not.  The default version, which you can call via super, does most of the heavy lifting: it bounds the values to between their min and max.  You might also verify that the patch name is correct here.  See the Waldorf Blofeld code as an example of what to do.
 
@@ -889,12 +905,21 @@ Next, move that file and rename it to {\tt edisyn/synth/yamahadx7/YamahaDX7.init
 loadDefaults();
 \end{verbatim}
 
-\subsection{Step Six: Other Niceties}
+\subsection{Step Six: Get Batch Downloads Working}
+
+Edisyn can download many patches at once.  To support this, you need to implement a few methods.\footnote{Until you implement {\bf getPatchLocationName(...)} to return something other than {\tt null}, Edisyn will keep the Batch Downloads menu disabled.  So when you implement this method, be sure to also implement the other methods here at the same time.} First, there's
+ {\bf getPatchLocationName(...)}, which returns as a String a short version of the patch address (bank, name) to be used in a saved filename.  Next, there's {\bf getNextPatchLocation(...)} which, given a Model containing a patch address, returns a model with the ``next'' patch address.  Finally you need to implement {\bf patchLocationEquals(...)}, which compares two patches to see if they contain the same patch address.
+ 
+A few synthesizers (notably the PreenFM2) don't send individual patches as single sysex patch dumps, but rather send them as multiple separate NRPN or CC messages.  Edisyn needs to know this so it can make a better guess at whether a patch dump has arrived and is ready to be saved.  To let Edisyn know that your patch editor is for a synthesizer of this type, override the method {\bf  getReceivesPatchesInBulk()} to return false.
+
+Compared to the other stuff, this step is easy.\footnote{Note that lots of synthesizers have sysex facilities to dump the entire patch memory, or dump an entire bank, etc.  Edisyn doesn't use these; it requests patches one by one.  It's somewhat slower but saves you a lot of coding and is consistent across synthesizers.  So you're welcome.}
+  
+\subsection{Step Seven: Other Niceties}
 You're almost done!  Two other niceties you might want to do.  First, whenever your patch editor becomes the front window, the method {\bf windowBecameFront()} will be called.  You could override this to send a special message to your synth to update it somehow.  For example, the Waldorf Microwave XT patch editors send a message to the Microwave XT to tell it to switch from single to multi-mode (or back) as appropriate.
 
 Finally when the user clicks on the close box, the method {\bf requestCloseWindow()} is called.  You can override this to query the user about saving the patch etc. first, and then finally return the appropriate value to inform Edisyn that the window should in fact be closed.  Though in fact currently no patch editors implement this method at all.
 
-\subsection{Step 7: Submit Your Patch Editor!}
+\subsection{Step Eight: Submit Your Patch Editor!}
 
 \begin{itemize}
 \item Clean up the editor code, make it really polished, well documented, and good looking.

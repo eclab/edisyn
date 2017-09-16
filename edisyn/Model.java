@@ -174,8 +174,8 @@ public class Model implements Cloneable
             if (getStatus(keys[i]) == STATUS_IMMUTABLE || getStatus(keys[i]) == STATUS_RESTRICTED) continue;
 
             
-            boolean hasMetric = false;                                      // do we even HAVE a metric range?
-            boolean doMetric = false;                                       // are we in that range, and should mutate within it?
+            boolean hasMetric = false;                              // do we even HAVE a metric range?
+            boolean doMetric = false;                               // are we in that range, and should mutate within it?
             boolean pickRandomInMetric = false;                     // are we NOT in that range, but should maybe go to a random value in it?
                         
             if (metricMinExists(keys[i]) &&
@@ -374,40 +374,32 @@ public class Model implements Cloneable
                 
         for(int i = 0; i < keys.length; i++)
             {
-            // return if the key doesn't exist, is immutable or is a string, or we fail the coin toss
+            // skip if the key doesn't exist, is immutable, is restricted, or is a string
             if (!model.exists(keys[i])) continue;
-            if (getStatus(keys[i]) == STATUS_IMMUTABLE || getStatus(keys[i]) == STATUS_RESTRICTED) continue;
+            if (getStatus(keys[i]) == STATUS_IMMUTABLE || isString(keys[i]) || getStatus(keys[i]) == STATUS_RESTRICTED) continue;
+
+			// skip if we fail a coin toss            
             if (coinToss(random, 1.0 - weight)) continue;
-            
-            // is it a string?
-            if (isString(keys[i]))
-                { 
-                if (coinToss(random, 0.5))
-                    set(keys[i], reviseMutatedValue(keys[i], get(keys[i], ""), 
-                    	model.get(keys[i], "")));
-                }
-            else
-                {
-                // we cross over metrically if we're both within the metric range
-                if (metricMinExists(keys[i]) &&
-                    metricMaxExists(keys[i]) &&
-                    get(keys[i], 0) >= getMetricMin(keys[i]) &&
-                    get(keys[i], 0) <= getMetricMax(keys[i]) &&
-                    model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
-                    model.get(keys[i], 0) <= getMetricMax(keys[i])) 
-                    {
-                    int a = get(keys[i], 0);
-                    int b = model.get(keys[i], a);
-                    set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
-                    	randomValidValueWithin(keys[i], random, a, b)));
-                    }
-                else // we pick one or the other
-                    {
-                    if (coinToss(random, 0.5))
-                        set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
-                        	model.get(keys[i], 0)));
-                    }
-                }
+
+			// we cross over metrically if we're both within the metric range
+			if (metricMinExists(keys[i]) &&
+				metricMaxExists(keys[i]) &&
+				get(keys[i], 0) >= getMetricMin(keys[i]) &&
+				get(keys[i], 0) <= getMetricMax(keys[i]) &&
+				model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
+				model.get(keys[i], 0) <= getMetricMax(keys[i])) 
+				{
+				int a = get(keys[i], 0);
+				int b = model.get(keys[i], a);
+				set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+					randomValidValueWithin(keys[i], random, a, b)));
+				}
+			else // we pick one or the other
+				{
+				if (coinToss(random, 0.5))
+					set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+						model.get(keys[i], 0)));
+				}
             }
 
         if (undoListener!= null)

@@ -190,7 +190,7 @@ public class HillClimb extends SynthPanel
 						Model backup = synth.model;
 						synth.model = currentModels[_i];
 						synth.sendAllParameters();
-						synth.doSendTestNote();
+						synth.doSendTestNote(false);
 						synth.model = backup;
 						}
 

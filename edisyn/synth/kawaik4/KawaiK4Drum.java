@@ -637,6 +637,10 @@ public class KawaiK4Drum extends Synth
         }
 
 
+    public int getPauseAfterChangePatch() { return 200; }   // Seem to need about > 100ms
+
+ 	public int getPauseAfterSendAllParameters() { return 100; } 
+ 
     public boolean patchLocationEquals(Model patch1, Model patch2)
     	{
     	return patch1.get("bank") == patch2.get("bank");

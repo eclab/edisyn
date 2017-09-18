@@ -80,6 +80,10 @@ public class KawaiK4Effect extends Synth
         
 
 
+    public int getPauseAfterChangePatch() { return 200; }   // Seem to need about > 100ms
+
+ 	public int getPauseAfterSendAllParameters() { return 100; } 
+ 
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {

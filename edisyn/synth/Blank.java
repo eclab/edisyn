@@ -498,6 +498,18 @@ public class Blank extends Synth
         return 0;
         }
         
+    public int getPauseAfterSendAllParameters() 
+        {
+        // Some synths need extra time after a parameter dump before
+        // they can do anything else, notably play notes properly.  
+        // For example, the Kawai K4 needs about 100ms after a parameter
+        // dump or else it'll play notes in a strange truncated way.
+        // Here you can specify that Edisyn must pause at least so many
+        // milliseconds before issuing another MIDI message after it has
+        // called sendAllParmeters().
+        return 0;
+        }
+        
     public int getBulkDownloadWaitTime()
     	{
     	// Edisyn does bulk downloads by iteratively requesting a patch, then

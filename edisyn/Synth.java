@@ -126,40 +126,8 @@ public abstract class Synth extends JComponent implements Updatable
 
         undo.setWillPush(false);  // instantiate undoes this
         random = new Random(System.currentTimeMillis());
-        setLayout(new BorderLayout());
-        add(tabs, BorderLayout.CENTER);
-        tabs.addChangeListener(new ChangeListener()
-            {
-            public void stateChanged(ChangeEvent e)
-                {
-                // cancel learning
-                setLearningCC(false);
-                if (tabs.getSelectedComponent() == hillClimbPane)
-                	{
-                	hillClimb.startup();
-                	}
-                else
-                	{
-                	hillClimb.shutdown();
-                	}
-                }
-            });
                 
         perChannelCCs = ("" + getLastX("PerChannelCC", getSynthNameLocal())).equalsIgnoreCase("true");                  
-
-        sendTestNotesTimer = new javax.swing.Timer(1000, new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                if (hillClimbing)
-                	hillClimb.updateSound();
-                doSendTestNote(true);
-                if (hillClimbing)
-                	hillClimb.postUpdateSound();
-                }
-            });
-        sendTestNotesTimer.setRepeats(true);
-        hillClimb = new HillClimb(this);
         }
         
         
@@ -761,6 +729,9 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** Override this to make sure that the given additional time (in ms) has transpired between MIDI patch changes. */
     public int getPauseAfterChangePatch() { return 0; }
+    
+    /** Override this to make sure that the given additional time (in ms) has transpired between sending all parameters and anything else (such as playing a note) */
+    public int getPauseAfterSendAllParameters() { return 0; }
     
     /** Override this to return TRUE if, after a patch write, we need to change to the patch *again* so as to load it into memory. */
     public boolean getShouldChangePatchAfterWrite() { return false; }
@@ -1443,6 +1414,7 @@ public abstract class Synth extends JComponent implements Updatable
                 tryToSendMIDI(emitAll(keys[i]));
                 }
             }
+        simplePause(getPauseAfterSendAllParameters());
         }
 
 
@@ -1738,6 +1710,26 @@ public abstract class Synth extends JComponent implements Updatable
 
     public JFrame sprout()
         {
+        setLayout(new BorderLayout());
+        add(tabs, BorderLayout.CENTER);
+        tabs.addChangeListener(new ChangeListener()
+            {
+            public void stateChanged(ChangeEvent e)
+                {
+                // cancel learning
+                setLearningCC(false);
+                if (tabs.getSelectedComponent() == hillClimbPane)
+                	{
+                	hillClimb.startup();
+                	}
+                else
+                	{
+                	hillClimb.shutdown();
+                	}
+                }
+            });
+        hillClimb = new HillClimb(this);
+
         String html = getHTMLResourceFileName();
         if (html != null)
             tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream(html)));
@@ -2341,6 +2333,19 @@ public abstract class Synth extends JComponent implements Updatable
 
         menu.addSeparator();
 
+        sendTestNotesTimer = new javax.swing.Timer(1000, new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                if (hillClimbing)
+                	hillClimb.updateSound();
+                doSendTestNote(hillClimbing);
+                if (hillClimbing)
+                	hillClimb.postUpdateSound();
+                }
+            });
+        sendTestNotesTimer.setRepeats(true);
+
 		ButtonGroup testNoteGroup = new ButtonGroup();
 		JRadioButtonMenuItem tns[] = new JRadioButtonMenuItem[7];
 		
@@ -2445,6 +2450,141 @@ public abstract class Synth extends JComponent implements Updatable
 				tns[2].setSelected(true); setTestNoteLength(500); break;
 			}        
 
+
+
+		testNoteGroup = new ButtonGroup();
+		tns = new JRadioButtonMenuItem[9];
+
+        JMenu TestNotePause = new JMenu("Pause Between Test Notes");
+        menu.add(TestNotePause);
+        tn = tns[0] = new JRadioButtonMenuItem("Default");
+		TestNotePause.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePause(TEST_NOTE_PAUSE_DEFAULT);
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[1] = new JRadioButtonMenuItem("0 Seconds");
+		TestNotePause.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePause(0);
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[2] = new JRadioButtonMenuItem("1/8 Second");
+		TestNotePause.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePause(125);
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[3] = new JRadioButtonMenuItem("1/4 Second");
+		TestNotePause.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePause(250);
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[4] = new JRadioButtonMenuItem("1/2 Second");
+		TestNotePause.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePause(500);
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[5] = new JRadioButtonMenuItem("1 Second");
+		TestNotePause.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePause(1000);
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[6] = new JRadioButtonMenuItem("2 Seconds");
+		TestNotePause.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePause(2000);
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+
+        tn = tns[7] = new JRadioButtonMenuItem("4 Seconds");
+		TestNotePause.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePause(4000);
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+         tn = tns[8] = new JRadioButtonMenuItem("8 Seconds");
+		TestNotePause.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNotePause(8000);
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                }
+            });
+		testNoteGroup.add(tn);
+
+
+		v = getLastXAsInt("TestNotePause", getSynthNameLocal(), -1);
+		switch(v)
+			{
+			case TEST_NOTE_PAUSE_DEFAULT:
+				tns[0].setSelected(true); setTestNotePause(v); break;
+			case 0:
+				tns[1].setSelected(true); setTestNotePause(v); break;
+			case 125:
+				tns[2].setSelected(true); setTestNotePause(v); break;
+			case 250:
+				tns[3].setSelected(true); setTestNotePause(v); break;
+			case 500:
+				tns[4].setSelected(true); setTestNotePause(v); break;
+			case 1000:
+				tns[5].setSelected(true); setTestNotePause(v); break;
+			case 2000:
+				tns[6].setSelected(true); setTestNotePause(v); break;
+			case 4000:
+				tns[7].setSelected(true); setTestNotePause(v); break;
+			case 8000:
+				tns[8].setSelected(true); setTestNotePause(v); break;
+			default:
+				tns[0].setSelected(true); setTestNotePause(TEST_NOTE_PAUSE_DEFAULT); break;
+			}        
+
+
         JMenu testNotePitch = new JMenu("Test Note Pitch");
         menu.add(testNotePitch);
         
@@ -2496,7 +2636,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 		testNoteGroup.add(tn);
-         tn = tns[4] =new JRadioButtonMenuItem("One Octave Down");
+         tn = tns[4] =new JRadioButtonMenuItem("1 Octave Down");
 		testNotePitch.add(tn);
         tn.addActionListener(new ActionListener()
             {
@@ -2507,7 +2647,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 		testNoteGroup.add(tn);
-         tn = tns[5] =new JRadioButtonMenuItem("Two Octaves Down");
+         tn = tns[5] =new JRadioButtonMenuItem("2 Octaves Down");
 		testNotePitch.add(tn);
         tn.addActionListener(new ActionListener()
             {
@@ -2518,7 +2658,7 @@ public abstract class Synth extends JComponent implements Updatable
                }
             });
 		testNoteGroup.add(tn);
-         tn = tns[6] =new JRadioButtonMenuItem("Three Octaves Down");
+         tn = tns[6] =new JRadioButtonMenuItem("3 Octaves Down");
 		testNotePitch.add(tn);
         tn.addActionListener(new ActionListener()
             {
@@ -3056,14 +3196,40 @@ public abstract class Synth extends JComponent implements Updatable
 	int testNoteLength = 500;
 	void setTestNoteLength(int val)
 		{
-		int delay = (val <= 500 ? val * 2 : val + 500);
-		sendTestNotesTimer.setDelay(delay);
 		testNoteLength = val;
+		setTestNotePause(getTestNotePause());  // update in case it's default
 		}
 
 	int getTestNoteLength()
 		{
 		return testNoteLength;
+		}
+
+	static final int TEST_NOTE_PAUSE_DEFAULT = -1;
+	int testNotePause = TEST_NOTE_PAUSE_DEFAULT;
+	void setTestNotePause(int val)
+		{
+		testNotePause = val;
+		sendTestNotesTimer.setDelay(getTestNoteTotalLength());
+		}
+
+	int getTestNoteTotalLength()
+		{
+		if (getTestNotePause() == TEST_NOTE_PAUSE_DEFAULT)
+			{
+			int len = getTestNoteLength();
+			int delay = (len <= 500 ? len * 2 : len + 500);
+			return delay;
+			}
+		else
+			{
+			return getTestNotePause() + getTestNoteLength();
+			}
+		}
+
+	int getTestNotePause()
+		{
+		return testNotePause;
 		}
 
 
@@ -3158,7 +3324,7 @@ public abstract class Synth extends JComponent implements Updatable
                   
 		if (restartTestNotesTimer)
 			{
-			sendTestNotesTimer.setInitialDelay(testNoteLength);
+			sendTestNotesTimer.setInitialDelay(getTestNoteTotalLength());
 			sendTestNotesTimer.restart();
 			}
         }
@@ -3213,16 +3379,22 @@ public abstract class Synth extends JComponent implements Updatable
                 
     void doUndo()
         {
+        setSendMIDI(false);
         if (model.equals(undo.top()))
             model = undo.undo(null);  // don't push into the redo stack
         model = undo.undo(model);
         model.updateAllListeners();
+        setSendMIDI(true);
+        sendAllParameters();
         }
                 
     void doRedo()
         {
+        setSendMIDI(false);
         model = (Model)(undo.redo(getModel()));
         model.updateAllListeners();
+        setSendMIDI(true);
+        sendAllParameters();
         }
         
     void doQuit()

@@ -683,6 +683,8 @@ public class KawaiK4Multi extends Synth
 
     public int getPauseAfterChangePatch() { return 200; }   // Seem to need about > 100ms
 
+ 	public int getPauseAfterSendAllParameters() { return 100; } 
+ 
     public void changePatch(Model tempModel)
         {
         byte BB = (byte)tempModel.get("bank");

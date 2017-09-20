@@ -1341,7 +1341,7 @@ public class OberheimMatrix1000 extends Synth
      if (key.equals("dco1fixedmods1"))
      {
      model.set("dco1bend", value & 1);
-     model.set("dco1vibrato", (value >> 1) & 1);
+     model.set("dco1vibrato", (value >>> 1) & 1);
      }
      else if (key.equals("dco1fixedmods2"))
      {
@@ -1350,33 +1350,33 @@ public class OberheimMatrix1000 extends Synth
      else if (key.equals("dco2fixedmods1"))
      {
      model.set("dco2bend", value & 1);
-     model.set("dco2vibrato", (value >> 1) & 1);
+     model.set("dco2vibrato", (value >>> 1) & 1);
      }
      else if (key.equals("dco2fixedmods2"))
      {
      model.set("dco2portamento", value & 1);
-     model.set("dco2keytracking", (value >> 1) & 1);
+     model.set("dco2keytracking", (value >>> 1) & 1);
      }
      else if (key.equals("dco1waveenable"))
      {
      model.set("dco1wave", value & 1);
-     model.set("dco1pulse", (value >> 1) & 1);
+     model.set("dco1pulse", (value >>> 1) & 1);
      }
      else if (key.equals("dco2waveenable"))
      {
      model.set("dco2wave", value & 1);
-     model.set("dco2pulse", (value >> 1) & 1);
-     model.set("dco2noise", (value >> 2) & 1);
+     model.set("dco2pulse", (value >>> 1) & 1);
+     model.set("dco2noise", (value >>> 2) & 1);
      }
      else if (key.equals("vcffixedmods1"))
      {
      model.set("vcfbend", value & 1);
-     model.set("vcfvibrato", (value >> 1) & 1);
+     model.set("vcfvibrato", (value >>> 1) & 1);
      }
      else if (key.equals("vcffixedmods2"))
      {
      model.set("vcfportamento", value & 1);
-     model.set("vcfkeytracking", (value >> 1) & 1);
+     model.set("vcfkeytracking", (value >>> 1) & 1);
      }
      else if (key.equals("portamentomode"))
      {
@@ -1427,7 +1427,7 @@ public class OberheimMatrix1000 extends Synth
             else if (key.equals("dco1fixedmods1"))
                 {
                 model.set("dco1bend", value & 1);
-                model.set("dco1vibrato", (value >> 1) & 1);
+                model.set("dco1vibrato", (value >>> 1) & 1);
                 }
             else if (key.equals("dco1fixedmods2"))
                 {
@@ -1436,33 +1436,33 @@ public class OberheimMatrix1000 extends Synth
             else if (key.equals("dco2fixedmods1"))
                 {
                 model.set("dco2bend", value & 1);
-                model.set("dco2vibrato", (value >> 1) & 1);
+                model.set("dco2vibrato", (value >>> 1) & 1);
                 }
             else if (key.equals("dco2fixedmods2"))
                 {
                 model.set("dco2portamento", value & 1);
-                model.set("dco2keytracking", (value >> 1) & 1);
+                model.set("dco2keytracking", (value >>> 1) & 1);
                 }
             else if (key.equals("dco1waveenable"))
                 {
                 model.set("dco1wave", value & 1);
-                model.set("dco1pulse", (value >> 1) & 1);
+                model.set("dco1pulse", (value >>> 1) & 1);
                 }
             else if (key.equals("dco2waveenable"))
                 {
                 model.set("dco2wave", value & 1);
-                model.set("dco2pulse", (value >> 1) & 1);
-                model.set("dco2noise", (value >> 2) & 1);
+                model.set("dco2pulse", (value >>> 1) & 1);
+                model.set("dco2noise", (value >>> 2) & 1);
                 }
             else if (key.equals("vcffixedmods1"))
                 {
                 model.set("vcfbend", value & 1);
-                model.set("vcfvibrato", (value >> 1) & 1);
+                model.set("vcfvibrato", (value >>> 1) & 1);
                 }
             else if (key.equals("vcffixedmods2"))
                 {
                 model.set("vcfportamento", value & 1);
-                model.set("vcfkeytracking", (value >> 1) & 1);
+                model.set("vcfkeytracking", (value >>> 1) & 1);
                 }
             else if (key.equals("portamentomode"))
                 {
@@ -1658,7 +1658,7 @@ public class OberheimMatrix1000 extends Synth
                         
             // pack to nybbles
             byte lonybble = (byte)(value & 15);
-            byte hinybble = (byte)(value >> 4);
+            byte hinybble = (byte)(value >>> 4);
                 
             // From here:  http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-Matrix6R.html
             // it says this about the checksum:

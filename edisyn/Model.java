@@ -76,8 +76,11 @@ public class Model implements Cloneable
     	}
 
     /** Produces a random value in the fully closed range [a, b],
-        choosing from a uniform distribution of size +- weight * (a-b),
-        centered at *center*, and rounded to the nearest integer. */
+        choosing from a uniform distribution of size +- weight * (b-a+1),
+        centered at *center*, and rounded to the nearest integer. 
+        If the result is the same as center, then we do a random walk
+        starting at center, increasing or decreasing by 1 each time 
+        a fair 50% coin comes up heads, and return the result. */
     int randomValueWithin(Random random, int a, int b, int center, double weight)
         {
         if (a > b) { int swap = a; a = b; b = swap; }
@@ -278,7 +281,7 @@ public class Model implements Cloneable
     */
     public Model opposite(Random random, Model model, double weight)
         {
-        return opposite(random, model, getKeys(), weight);
+        return opposite(random, model, getKeys(), weight, false);
         }
 
     /** Finds a point on the OPPOSITE side of the model from where the provided other MODEL is located,
@@ -288,7 +291,7 @@ public class Model implements Cloneable
     	We reduce this value Z (move it closer to X's value) by WEIGHT, bound Z to be within the metric
     	region, and then choose a new random value between X and Z inclusive.  
     */
-    public Model opposite(Random random, Model model, String[] keys, double weight)
+    public Model opposite(Random random, Model model, String[] keys, double weight, boolean randomizeNonMetricIfSame)
         {
         if (undoListener!= null)
             {
@@ -300,14 +303,26 @@ public class Model implements Cloneable
             {
             // return if the key doesn't exist, is immutable or is a string, or is non-metric for someone
             if (!model.exists(keys[i])) continue;
-            if (getStatus(keys[i]) == STATUS_IMMUTABLE || getStatus(keys[i]) == STATUS_RESTRICTED) continue;
+            if (getStatus(keys[i]) == STATUS_IMMUTABLE || getStatus(keys[i]) == STATUS_RESTRICTED || isString(keys[i])) continue;
             if (isString(keys[i])) continue;
             if (!(metricMinExists(keys[i]) &&
                   metricMaxExists(keys[i]) &&
             	  get(keys[i], 0) >= getMetricMin(keys[i]) &&
             	  get(keys[i], 0) <= getMetricMax(keys[i]) &&
                   model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
-                  model.get(keys[i], 0) <= getMetricMax(keys[i]))) continue;
+                  model.get(keys[i], 0) <= getMetricMax(keys[i])))
+                  {
+                  if (randomizeNonMetricIfSame && get(keys[i], 0) == model.get(keys[i]))
+                  	{
+                  	// They're both non-metric and identical.  Maybe randomize!
+                	if (coinToss(random, weight))
+                		{
+                    	set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+                    		randomValidValueWithin(keys[i], random, getMin(keys[i]), getMax(keys[i]))));
+                		}
+                  	}
+                  else continue;
+                  }
                     
 			// Okay, here we do an opposite recombination
 

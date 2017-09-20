@@ -1123,18 +1123,18 @@ public class WaldorfBlofeldMulti extends Synth
             }
         else if (key.startsWith("abits"))
             {
-            model.set("status" + part, (b >> 6) & 1);
-            model.set("local" + part, (b >> 2) & 1);
-            model.set("usb" + part, (b >> 1) & 1);
+            model.set("status" + part, (b >>> 6) & 1);
+            model.set("local" + part, (b >>> 2) & 1);
+            model.set("usb" + part, (b >>> 1) & 1);
             model.set("midi" + part, (b) & 1);
             }
         else if (key.startsWith("bbits"))
             {
-            model.set("progchange" + part, (b >> 5) & 1);
-            model.set("edits" + part, (b >> 4) & 1);
-            model.set("sustain" + part, (b >> 3) & 1);
-            model.set("pressure" + part, (b >> 2) & 1);
-            model.set("modwheel" + part, (b >> 1) & 1);
+            model.set("progchange" + part, (b >>> 5) & 1);
+            model.set("edits" + part, (b >>> 4) & 1);
+            model.set("sustain" + part, (b >>> 3) & 1);
+            model.set("pressure" + part, (b >>> 2) & 1);
+            model.set("modwheel" + part, (b >>> 1) & 1);
             model.set("bend" + part, (b) & 1);
             }
         else

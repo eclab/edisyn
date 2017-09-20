@@ -1928,7 +1928,7 @@ public class WaldorfMicrowaveXT extends Synth
         if (key.equals("effecttype"))
             {
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
-            byte HH = (byte)((index >> 7) & 127);
+            byte HH = (byte)((index >>> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)model.get(key);
             // handle XT effects specially
@@ -1944,7 +1944,7 @@ public class WaldorfMicrowaveXT extends Synth
         else if (key.equals("osc1octave") || key.equals("osc2octave"))
             {
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
-            byte HH = (byte)((index >> 7) & 127);
+            byte HH = (byte)((index >>> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)(16 + model.get(key) * 12);
             byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
@@ -1953,7 +1953,7 @@ public class WaldorfMicrowaveXT extends Synth
         else if (key.equals("lfo1sync") || key.equals("lfo2sync"))
             {
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
-            byte HH = (byte)((index >> 7) & 127);
+            byte HH = (byte)((index >>> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)model.get(key);
             if (XX == 2) XX = 3;  // because it's of/on/on/Clock, I dunno why
@@ -1968,7 +1968,7 @@ public class WaldorfMicrowaveXT extends Synth
             int arp3 = model.get("arpuser3");
             int arp4 = model.get("arpuser4");
             int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
-            byte HH = (byte)((index >> 7) & 127);
+            byte HH = (byte)((index >>> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)(total);
             byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
@@ -1982,7 +1982,7 @@ public class WaldorfMicrowaveXT extends Synth
             int arp3 = model.get("arpuser7");
             int arp4 = model.get("arpuser8");
             int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
-            byte HH = (byte)((index >> 7) & 127);
+            byte HH = (byte)((index >>> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)(total);
             byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
@@ -1996,7 +1996,7 @@ public class WaldorfMicrowaveXT extends Synth
             int arp3 = model.get("arpuser11");
             int arp4 = model.get("arpuser12");
             int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
-            byte HH = (byte)((index >> 7) & 127);
+            byte HH = (byte)((index >>> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)(total);
             byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
@@ -2010,7 +2010,7 @@ public class WaldorfMicrowaveXT extends Synth
             int arp3 = model.get("arpuser15");
             int arp4 = model.get("arpuser16");
             int total = (arp1 << 3) | (arp2 << 2) | (arp3 << 1) | (arp4);    /// Do I have these backwards?
-            byte HH = (byte)((index >> 7) & 127);
+            byte HH = (byte)((index >>> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)(total);
             byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
@@ -2023,7 +2023,7 @@ public class WaldorfMicrowaveXT extends Synth
             for(int i = 0; i < 16; i++)
                 {
                 int index = i + 240;
-                byte HH = (byte)((index >> 7) & 127);
+                byte HH = (byte)((index >>> 7) & 127);
                 byte PP = (byte)(index & 127);
                 byte XX = (byte)(name.charAt(i));
                 byte[] b = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
@@ -2034,7 +2034,7 @@ public class WaldorfMicrowaveXT extends Synth
         else
             {
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
-            byte HH = (byte)((index >> 7) & 127);
+            byte HH = (byte)((index >>> 7) & 127);
             byte PP = (byte)(index & 127);
             byte XX = (byte)model.get(key);
             byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
@@ -2315,30 +2315,30 @@ public class WaldorfMicrowaveXT extends Synth
             }
         else if (key.equals("arpuser1"))
             {
-            model.set("arpuser1", (b >> 3) & 1);                    /// Do I have these backwards?
-            model.set("arpuser2", (b >> 2) & 1);
-            model.set("arpuser3", (b >> 1) & 1);
+            model.set("arpuser1", (b >>> 3) & 1);                    /// Do I have these backwards?
+            model.set("arpuser2", (b >>> 2) & 1);
+            model.set("arpuser3", (b >>> 1) & 1);
             model.set("arpuser4", (b) & 1);
             }
         else if (key.equals("arpuser5"))
             {
-            model.set("arpuser5", (b >> 3) & 1);                    /// Do I have these backwards?
-            model.set("arpuser6", (b >> 2) & 1);
-            model.set("arpuser7", (b >> 1) & 1);
+            model.set("arpuser5", (b >>> 3) & 1);                    /// Do I have these backwards?
+            model.set("arpuser6", (b >>> 2) & 1);
+            model.set("arpuser7", (b >>> 1) & 1);
             model.set("arpuser8", (b) & 1);
             }
         else if (key.equals("arpuser9"))
             {
-            model.set("arpuser9", (b >> 3) & 1);                    /// Do I have these backwards?
-            model.set("arpuser10", (b >> 2) & 1);
-            model.set("arpuser11", (b >> 1) & 1);
+            model.set("arpuser9", (b >>> 3) & 1);                    /// Do I have these backwards?
+            model.set("arpuser10", (b >>> 2) & 1);
+            model.set("arpuser11", (b >>> 1) & 1);
             model.set("arpuser12", (b) & 1);
             }
         else if (key.equals("arpuser13"))
             {
-            model.set("arpuser13", (b >> 3) & 1);                   /// Do I have these backwards?
-            model.set("arpuser14", (b >> 2) & 1);
-            model.set("arpuser15", (b >> 1) & 1);
+            model.set("arpuser13", (b >>> 3) & 1);                   /// Do I have these backwards?
+            model.set("arpuser14", (b >>> 2) & 1);
+            model.set("arpuser15", (b >>> 1) & 1);
             model.set("arpuser16", (b) & 1);
             }
         else if (i >= 240 && i < 240 + 16)  // name

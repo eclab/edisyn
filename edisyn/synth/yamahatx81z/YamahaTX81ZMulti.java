@@ -552,7 +552,7 @@ public class YamahaTX81ZMulti extends Synth
                 {
                 int val = model.get(key);
                 byte lsb = (byte)(val & 127);
-                byte msb = (byte)((val >> 7) & 127);
+                byte msb = (byte)((val >>> 7) & 127);
 
                 return new Object[]
                     {
@@ -674,7 +674,7 @@ public class YamahaTX81ZMulti extends Synth
                 allParameters[i].equals("instrument8voicenumbermsb"))
                 {
                 int instrument = (i / 12);
-                data[i + 10] = (byte)(model.get("instrument" + i + "voicenumber") >> 7);
+                data[i + 10] = (byte)(model.get("instrument" + i + "voicenumber") >>> 7);
                 }
             else if (allParameters[i].equals("instrument1voicenumberlsb") ||
                 allParameters[i].equals("instrument2voicenumberlsb") ||
@@ -804,7 +804,7 @@ public class YamahaTX81ZMulti extends Synth
         int number = tempModel.get("number");
         // Performance numbers PF1 ... PF24, corresponding to 161 .. 184
         byte lo = (byte)((number + 160) & 127);
-        byte hi = (byte)((number + 160) >> 7);
+        byte hi = (byte)((number + 160) >>> 7);
 
         // Change program change table position 0 to what we want first
         byte[] table = new byte[9];

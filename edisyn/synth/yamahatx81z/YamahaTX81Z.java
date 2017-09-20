@@ -1076,9 +1076,9 @@ public class YamahaTX81Z extends Synth
             else if (params[i].equals("operatorenabled"))
                 {
                 model.set("operator" + 1 + "enabled", val & 1);
-                model.set("operator" + 2 + "enabled", (val >> 1) & 1);
-                model.set("operator" + 3 + "enabled", (val >> 2) & 1);
-                model.set("operator" + 4 + "enabled", (val >> 3) & 1);
+                model.set("operator" + 2 + "enabled", (val >>> 1) & 1);
+                model.set("operator" + 3 + "enabled", (val >>> 2) & 1);
+                model.set("operator" + 4 + "enabled", (val >>> 3) & 1);
                 }
             else
                 {
@@ -1293,7 +1293,7 @@ public class YamahaTX81Z extends Synth
         int number = tempModel.get("number");
         int val = bank * 32 + number;
         byte lo = (byte)(val & 127);
-        byte hi = (byte)(val >> 7);
+        byte hi = (byte)(val >>> 7);
 
         // Change program change table position 0 to what we want first
         byte[] table = new byte[9];

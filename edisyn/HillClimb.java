@@ -518,9 +518,9 @@ Current Patch
 		// B + C
 		currentModels[12] = ((Model)(bestModels[1].clone())).recombine(random, bestModels[2], keys, recombination);
 		// Beyond A from Z
-		currentModels[13] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, 0.75);
+		currentModels[13] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, recombination, false);
 		// Even further Beyond A from Z
-		currentModels[14] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, 1.5);
+		currentModels[14] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, 2.0 * recombination, false);
 	
 		// Current patch
 		currentModels[15] = ((Model)(synth.getModel().clone()));

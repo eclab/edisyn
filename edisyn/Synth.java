@@ -68,7 +68,7 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem getAll;
 
     Model[] nudge = new Model[4];
-    JMenuItem[] nudgeTowards = new JMenuItem[4];
+    JMenuItem[] nudgeTowards = new JMenuItem[8];
     
     // counter for note-on messages so we don't have a million note-off messages in a row
     int noteOnTick;
@@ -765,9 +765,9 @@ public abstract class Synth extends JComponent implements Updatable
         {
         try
             {
-            int p_msb = (parameter >> 7);
+            int p_msb = (parameter >>> 7);
             int p_lsb = (parameter & 127);
-            int v_msb = (value >> 7);
+            int v_msb = (value >>> 7);
             int v_lsb = (value & 127);
             return new Object[]
                 {
@@ -793,7 +793,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         try
             {
-            int v_msb = (value >> 7);
+            int v_msb = (value >>> 7);
             int v_lsb = (value & 127);
             return new Object[]
                 {
@@ -1885,8 +1885,8 @@ public abstract class Synth extends JComponent implements Updatable
 
         JMenu randomize = new JMenu("Randomize");
         menu.add(randomize);
-        JMenuItem randomize1 = new JMenuItem("Randomize by 1%");
-        randomize.add(randomize1);
+        JMenuItem randomize2 = new JMenuItem("Randomize by 2%");
+        randomize.add(randomize2);
         JMenuItem randomize5 = new JMenuItem("Randomize by 5%");
         randomize.add(randomize5);
         JMenuItem randomize10 = new JMenuItem("Randomize by 10%");
@@ -1900,14 +1900,14 @@ public abstract class Synth extends JComponent implements Updatable
         JMenuItem undoAndRandomize = new JMenuItem("Undo and Randomize Again");
         randomize.add(undoAndRandomize);
 
-        randomize1.addActionListener(new ActionListener()
+        randomize2.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doMutate(0.01);
+                doMutate(0.02);
                 }
             });
-        randomize1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        randomize2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize5.addActionListener(new ActionListener()
             {
@@ -1916,7 +1916,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(0.05);
                 }
             });
-        randomize5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        randomize5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize10.addActionListener(new ActionListener()
             {
@@ -1925,7 +1925,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(0.1);
                 }
             });
-        randomize10.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        randomize10.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize25.addActionListener(new ActionListener()
             {
@@ -1934,6 +1934,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(0.25);
                 }
             });
+        randomize25.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize50.addActionListener(new ActionListener()
             {
@@ -1942,6 +1943,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(0.5);
                 }
             });
+        randomize50.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_5, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize100.addActionListener(new ActionListener()
             {
@@ -1950,6 +1952,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(1.0);
                 }
             });
+        randomize100.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_6, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         undoAndRandomize.addActionListener(new ActionListener()
             {
@@ -1976,11 +1979,11 @@ public abstract class Synth extends JComponent implements Updatable
         undoAndRandomize.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
 
-        JMenu nudgemenu = new JMenu("Nudge");
-        menu.add(nudgemenu);
+        JMenu nudgeMenu = new JMenu("Nudge");
+        menu.add(nudgeMenu);
         
         nudgeTowards[0] = new JMenuItem("Towards 1");
-        nudgemenu.add(nudgeTowards[0]);
+        nudgeMenu.add(nudgeTowards[0]);
         nudgeTowards[0].addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
@@ -1988,10 +1991,10 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(0);
                 }
             });
-        nudgeTowards[0].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[0].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
                 
         nudgeTowards[1] = new JMenuItem("Towards 2");
-        nudgemenu.add(nudgeTowards[1]);
+        nudgeMenu.add(nudgeTowards[1]);
         nudgeTowards[1].addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
@@ -1999,10 +2002,10 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(1);
                 }
             });
-        nudgeTowards[1].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[1].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
                 
         nudgeTowards[2] = new JMenuItem("Towards 3");
-        nudgemenu.add(nudgeTowards[2]);
+        nudgeMenu.add(nudgeTowards[2]);
         nudgeTowards[2].addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
@@ -2010,10 +2013,10 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(2);
                 }
             });
-        nudgeTowards[2].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[2].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
                 
         nudgeTowards[3] = new JMenuItem("Towards 4");
-        nudgemenu.add(nudgeTowards[3]);
+        nudgeMenu.add(nudgeTowards[3]);
         nudgeTowards[3].addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
@@ -2021,10 +2024,54 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(3);
                 }
             });
-        nudgeTowards[3].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[3].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         
+        nudgeTowards[4] = new JMenuItem("Away from 1");
+        nudgeMenu.add(nudgeTowards[4]);
+        nudgeTowards[4].addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doNudge(4);
+                }
+            });
+        nudgeTowards[4].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+                
+        nudgeTowards[5] = new JMenuItem("Away from 2");
+        nudgeMenu.add(nudgeTowards[5]);
+        nudgeTowards[5].addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doNudge(5);
+                }
+            });
+        nudgeTowards[5].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+                
+        nudgeTowards[6] = new JMenuItem("Away from 3");
+        nudgeMenu.add(nudgeTowards[6]);
+        nudgeTowards[6].addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doNudge(6);
+                }
+            });
+        nudgeTowards[6].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+                
+        nudgeTowards[7] = new JMenuItem("Away from 4");
+        nudgeMenu.add(nudgeTowards[7]);
+        nudgeTowards[7].addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doNudge(7);
+                }
+            });
+        nudgeTowards[7].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+
         JMenuItem undoAndNudge = new JMenuItem("Undo and Nudge Again");
-        nudgemenu.add(undoAndNudge);
+        nudgeMenu.add(undoAndNudge);
         undoAndNudge.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
@@ -2049,10 +2096,10 @@ public abstract class Synth extends JComponent implements Updatable
             });
         undoAndNudge.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
-        nudgemenu.addSeparator();
+        nudgeMenu.addSeparator();
         
         JMenuItem nudgeSet1 = new JMenuItem("Set 1");
-        nudgemenu.add(nudgeSet1);
+        nudgeMenu.add(nudgeSet1);
         nudgeSet1.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
@@ -2062,7 +2109,7 @@ public abstract class Synth extends JComponent implements Updatable
             });
                 
         JMenuItem nudgeSet2 = new JMenuItem("Set 2");
-        nudgemenu.add(nudgeSet2);
+        nudgeMenu.add(nudgeSet2);
         nudgeSet2.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
@@ -2072,7 +2119,7 @@ public abstract class Synth extends JComponent implements Updatable
             });
                 
         JMenuItem nudgeSet3 = new JMenuItem("Set 3");
-        nudgemenu.add(nudgeSet3);
+        nudgeMenu.add(nudgeSet3);
         nudgeSet3.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
@@ -2082,7 +2129,7 @@ public abstract class Synth extends JComponent implements Updatable
             });
                 
         JMenuItem nudgeSet4 = new JMenuItem("Set 4");
-        nudgemenu.add(nudgeSet4);
+        nudgeMenu.add(nudgeSet4);
         nudgeSet4.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
@@ -2094,7 +2141,159 @@ public abstract class Synth extends JComponent implements Updatable
         // reset the nudges now
         for(int i = 0; i < nudge.length; i++)
             doSetNudge(i);
-                
+
+
+		
+        nudgeMenu.addSeparator();
+
+		ButtonGroup nudgeMutationButtonGroup = new ButtonGroup();
+        JMenu nudgeMutation = new JMenu("Set Nudge Mutation");
+        nudgeMenu.add(nudgeMutation);
+        JRadioButtonMenuItem nudgeMutation0 = new JRadioButtonMenuItem("0%");
+        nudgeMutation.add(nudgeMutation0);
+		nudgeMutationButtonGroup.add(nudgeMutation0);
+        JRadioButtonMenuItem nudgeMutation2 = new JRadioButtonMenuItem("2%");
+        nudgeMutation.add(nudgeMutation2);
+		nudgeMutationButtonGroup.add(nudgeMutation2);
+        JRadioButtonMenuItem nudgeMutation5 = new JRadioButtonMenuItem("5%");
+        nudgeMutation.add(nudgeMutation5);
+		nudgeMutationButtonGroup.add(nudgeMutation5);
+        JRadioButtonMenuItem nudgeMutation10 = new JRadioButtonMenuItem("10%");
+        nudgeMutation.add(nudgeMutation10);
+		nudgeMutationButtonGroup.add(nudgeMutation10);
+        JRadioButtonMenuItem nudgeMutation25 = new JRadioButtonMenuItem("25%");
+        nudgeMutation.add(nudgeMutation25);
+		nudgeMutationButtonGroup.add(nudgeMutation25);
+
+        nudgeMutation0.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				nudgeMutationWeight = 0.0;
+                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal()); 
+                }
+            });
+
+        nudgeMutation2.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				nudgeMutationWeight = 0.02;
+                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal()); 
+                }
+            });
+
+        nudgeMutation5.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				nudgeMutationWeight = 0.05;
+                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal()); 
+                }
+            });
+
+        nudgeMutation10.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				nudgeMutationWeight = 0.10;
+                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal()); 
+                }
+            });
+
+        nudgeMutation25.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				nudgeMutationWeight = 0.25;
+                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal()); 
+                }
+            });
+
+    	double nudgeVal = getLastXAsDouble("NudgeMutationWeight", getSynthNameLocal(), 0.0);
+    	if (nudgeVal < 0.02) { nudgeMutationWeight = 0.0; nudgeMutation0.setSelected(true); }
+    	else if (nudgeVal < 0.05) { nudgeMutationWeight = 0.02; nudgeMutation2.setSelected(true); }
+    	else if (nudgeVal < 0.10) { nudgeMutationWeight = 0.05; nudgeMutation5.setSelected(true); }
+    	else if (nudgeVal < 0.25) { nudgeMutationWeight = 0.10; nudgeMutation10.setSelected(true); }
+    	else { nudgeMutationWeight = 0.25; nudgeMutation25.setSelected(true); }
+
+
+
+
+		ButtonGroup nudgeRecombinationButtonGroup = new ButtonGroup();
+        JMenu nudgeRecombination = new JMenu("Set Nudge Recombination");
+        nudgeMenu.add(nudgeRecombination);
+        JRadioButtonMenuItem nudgeRecombination2 = new JRadioButtonMenuItem("2%");
+        nudgeRecombination.add(nudgeRecombination2);
+		nudgeRecombinationButtonGroup.add(nudgeRecombination2);
+        JRadioButtonMenuItem nudgeRecombination5 = new JRadioButtonMenuItem("5%");
+        nudgeRecombination.add(nudgeRecombination5);
+		nudgeRecombinationButtonGroup.add(nudgeRecombination5);
+        JRadioButtonMenuItem nudgeRecombination10 = new JRadioButtonMenuItem("10%");
+        nudgeRecombination.add(nudgeRecombination10);
+		nudgeRecombinationButtonGroup.add(nudgeRecombination10);
+        JRadioButtonMenuItem nudgeRecombination25 = new JRadioButtonMenuItem("25%");
+        nudgeRecombination.add(nudgeRecombination25);
+		nudgeRecombinationButtonGroup.add(nudgeRecombination25);
+        JRadioButtonMenuItem nudgeRecombination50 = new JRadioButtonMenuItem("50%");
+        nudgeRecombination.add(nudgeRecombination50);
+		nudgeRecombinationButtonGroup.add(nudgeRecombination50);
+
+        nudgeRecombination2.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				nudgeRecombinationWeight = 0.02;
+                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal()); 
+                }
+            });
+
+        nudgeRecombination5.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				nudgeRecombinationWeight = 0.05;
+                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal()); 
+                }
+            });
+
+        nudgeRecombination10.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				nudgeRecombinationWeight = 0.10;
+                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal()); 
+                }
+            });
+
+        nudgeRecombination25.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				nudgeRecombinationWeight = 0.25;
+                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal()); 
+                }
+            });
+
+        nudgeRecombination50.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				nudgeRecombinationWeight = 0.50;
+                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal()); 
+                }
+            });
+
+    	nudgeVal = getLastXAsDouble("NudgeRecombinationWeight", getSynthNameLocal(), 0.25);
+    	if (nudgeVal < 0.05) { nudgeRecombinationWeight = 0.02; nudgeRecombination2.setSelected(true); }
+    	else if (nudgeVal < 0.10) { nudgeRecombinationWeight = 0.05; nudgeRecombination5.setSelected(true); }
+    	else if (nudgeVal < 0.25) { nudgeRecombinationWeight = 0.10; nudgeRecombination10.setSelected(true); }
+    	else if (nudgeVal < 0.50) { nudgeRecombinationWeight = 0.25; nudgeRecombination25.setSelected(true); }
+    	else { nudgeRecombinationWeight = 0.50; nudgeRecombination50.setSelected(true); }
+
+
+
+
 
 
 		hillClimbMenu = new JMenuItem("Hill-Climb");
@@ -2943,6 +3142,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
+/*
         taba = new JMenuItem("Tab 7");
         taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_7, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(taba);
@@ -2964,7 +3164,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doTab(7);
                 }
             });
-        
+*/
         
         // Set up Windows  
         if (Style.isWindows() || Style.isUnix())
@@ -3418,17 +3618,30 @@ public abstract class Synth extends JComponent implements Updatable
         {
         nudge[i] = (Model)(getModel().clone());
         nudgeTowards[i].setText("Towards " + (i + 1) + ": " + getPatchName(getModel()));
+        nudgeTowards[i + 4].setText("Away from " + (i + 1) + ": " + getPatchName(getModel()));
         }
 
     int lastNudge = -1;
         
+    double nudgeRecombinationWeight = 0.25;
+    double nudgeMutationWeight = 0.10;
+    
     void doNudge(int towards)
         {
         if (towards == -1) return;
                 
         setSendMIDI(false);
         undo.push(model);
-        model.recombine(random, nudge[towards], useMapForRecombination ? getMutationKeys() : model.getKeys(), 0.5);
+        if (towards < 4)
+        	{
+	        if (nudgeRecombinationWeight > 0.0) model.recombine(random, nudge[towards], useMapForRecombination ? getMutationKeys() : model.getKeys(), 0.5);
+	        if (nudgeMutationWeight > 0.0) model.mutate(random, model.getKeys(), 0.5);
+	        }
+	    else
+	    	{
+	    	if (nudgeRecombinationWeight > 0.0) model.opposite(random, nudge[towards], useMapForRecombination ? getMutationKeys() : model.getKeys(), 0.5, true);
+	       	if (nudgeMutationWeight > 0.0) model.mutate(random, model.getKeys(), 0.5);
+	    	}
         revise();  // just in case
 
         setSendMIDI(true);
@@ -4072,7 +4285,27 @@ public abstract class Synth extends JComponent implements Updatable
        		{
        		return defaultVal;
        		}
+       	catch (NullPointerException e2)
+       		{
+       		return defaultVal;
+       		}
 		}
 
+	double getLastXAsDouble(String slot, String synth, double defaultVal)
+		{
+        String tnls = getLastX(slot, synth);
+        try
+        	{
+       		return Double.parseDouble(tnls);
+       		}
+       	catch (NumberFormatException e)
+       		{
+       		return defaultVal;
+       		}
+       	catch (NullPointerException e2)
+       		{
+       		return defaultVal;
+       		}
+		}
 
     }

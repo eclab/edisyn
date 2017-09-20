@@ -1665,7 +1665,7 @@ public class PreenFM2 extends Synth
         sysex[10] = (byte)0;            // sysex version
         for(int i = 0; i < (sysexKeys.length + 11) ; i++)
             {
-            byte msb = (byte)((vals[i] >> 7) & 127);
+            byte msb = (byte)((vals[i] >>> 7) & 127);
             byte lsb = (byte)(vals[i] & 127);
             sysex[1 + HEADER + i * 2] = msb;
             sysex[1 + HEADER + i * 2 + 1] = lsb;

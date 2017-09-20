@@ -515,13 +515,13 @@ public class KawaiK4Multi extends Synth
             else if (key.endsWith("rcvch_velosw_mute"))
                 {
                 model.set("section" + section + "channel", data[i + 8] & 15);
-                model.set("section" + section + "velocitysw", (data[i + 8] >> 4) & 3);
-                model.set("section" + section + "mute", (data[i + 8] >> 6) & 1);
+                model.set("section" + section + "velocitysw", (data[i + 8] >>> 4) & 3);
+                model.set("section" + section + "mute", (data[i + 8] >>> 6) & 1);
                 }
             else if (key.endsWith("mode_outselect"))
                 {
                 model.set("section" + section + "submix", data[i + 8] & 7);
-                model.set("section" + section + "playmode", (data[i + 8] >> 3) & 3);
+                model.set("section" + section + "playmode", (data[i + 8] >>> 3) & 3);
                 }
             else
                 {

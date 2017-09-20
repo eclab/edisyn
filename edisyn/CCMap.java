@@ -37,7 +37,7 @@ public class CCMap
     public int cc(Integer munge)
         {
         if (munge == null) return -1;
-        else return munge.intValue() >> 8;
+        else return munge.intValue() >>> 8;
         }
         
     public int pane(Integer munge)

@@ -417,7 +417,7 @@ public class KawaiK4Effect extends Synth
         if (key.equals("-")) return new byte[0];  // hmmm
                 
         int source = 0;
-        byte msb = (byte)(model.get(key) >> 7);
+        byte msb = (byte)(model.get(key) >>> 7);
         byte lsb = (byte)(model.get(key) & 127);
 
 

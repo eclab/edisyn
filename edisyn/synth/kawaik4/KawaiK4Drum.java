@@ -334,7 +334,7 @@ public class KawaiK4Drum extends Synth
                 }
             else if (key.endsWith("submix_waveselectmsb1"))
                 {
-                model.set("key" + note + "submix", data[i + 8] >> 4);
+                model.set("key" + note + "submix", data[i + 8] >>> 4);
                 model.set("key" + note + "waveselect1", ((data[i + 8] & 1) << 7) | (data[i + 8 + 2]));
                 }
             else if (key.endsWith("waveselectmsb2"))
@@ -482,7 +482,7 @@ public class KawaiK4Drum extends Synth
         if (key.equals("note")) return new byte[0];  // this is not emittable
                 
         int source = 0;
-        byte msb = (byte)(model.get(key) >> 7);
+        byte msb = (byte)(model.get(key) >>> 7);
         byte lsb = (byte)(model.get(key) & 127);
 
         int index = ((Integer)(internalParametersToIndex.get(key))).intValue();
@@ -542,11 +542,11 @@ public class KawaiK4Drum extends Synth
                 }
             else if (key.endsWith("submix_waveselectmsb1"))
                 {
-                bytes[b] = (data[i] = (byte)((model.get("key" + note + "submix") << 4) | (model.get("key" + note + "waveselect1") >> 7)));
+                bytes[b] = (data[i] = (byte)((model.get("key" + note + "submix") << 4) | (model.get("key" + note + "waveselect1") >>> 7)));
                 }
             else if (key.endsWith("waveselectmsb2"))
                 {
-                bytes[b] = (data[i] = (byte)((model.get("key" + note + "waveselect2") >> 7)));
+                bytes[b] = (data[i] = (byte)((model.get("key" + note + "waveselect2") >>> 7)));
                 }
             else if (key.endsWith("waveselectlsb1"))
                 {

@@ -924,7 +924,7 @@ public class KawaiK4 extends Synth
             int source = 0;
             int index = 0;
             String newkey = key;
-            byte msb = (byte)(model.get(key) >> 7);         // particularly for "waveselect"
+            byte msb = (byte)(model.get(key) >>> 7);         // particularly for "waveselect"
             byte lsb = (byte)(model.get(key) & 127);
 
             // These CANNOT be set directly as parameters, but they can be simulated by turning the volume to 0.
@@ -1052,46 +1052,46 @@ public class KawaiK4 extends Synth
             else if (key.equals("sourcemode_polymode_ams1>s2_ams3>s4"))
                 {
                 model.set("sourcemode", data[i + 8] & 3);
-                model.set("polymode", (data[i + 8] >> 2) & 3);
-                model.set("ams1>s2", (data[i + 8] >> 4) & 1);
+                model.set("polymode", (data[i + 8] >>> 2) & 3);
+                model.set("ams1>s2", (data[i + 8] >>> 4) & 1);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("ams3>s4", (data[i + 8] >> 5) & 1);
+                model.set("ams3>s4", (data[i + 8] >>> 5) & 1);
                 }
             else if (key.equals("s1mute_s2mute_s3mute_s4mute_vibshape"))
                 {
                 // Error in Section 6.  0 is mute OFF and 1 is mute ON. 
                 model.set("s1mute", (data[i + 8] & 1));
-                model.set("s2mute", ((data[i + 8] >> 1) & 1));
-                model.set("s3mute", ((data[i + 8] >> 2) & 1));
-                model.set("s4mute", ((data[i + 8] >> 3) & 1));
+                model.set("s2mute", ((data[i + 8] >>> 1) & 1));
+                model.set("s3mute", ((data[i + 8] >>> 2) & 1));
+                model.set("s4mute", ((data[i + 8] >>> 3) & 1));
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("vibshape", (data[i + 8] >> 4) & 3);
+                model.set("vibshape", (data[i + 8] >>> 4) & 3);
                 }
             else if (key.equals("pitchbend_wheelassign"))
                 {
                 model.set("pitchbend", data[i + 8] & 31);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("wheelassign", (data[i + 8] >> 4) & 3);
+                model.set("wheelassign", (data[i + 8] >>> 4) & 3);
                 }
             else if (key.equals("s1waveselecthi_kscurve"))
                 {
                 model.set("s1waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 4]));                // hi and lo
-                model.set("s1kscurve", data[i + 8] >> 4);
+                model.set("s1kscurve", data[i + 8] >>> 4);
                 }
             else if (key.equals("s2waveselecthi_kscurve"))
                 {
                 model.set("s2waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 4]));                // hi and lo
-                model.set("s2kscurve", data[i + 8] >> 4);
+                model.set("s2kscurve", data[i + 8] >>> 4);
                 }
             else if (key.equals("s3waveselecthi_kscurve"))
                 {
                 model.set("s3waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 4]));                // hi and lo
-                model.set("s3kscurve", data[i + 8] >> 4);
+                model.set("s3kscurve", data[i + 8] >>> 4);
                 }
             else if (key.equals("s4waveselecthi_kscurve"))
                 {
                 model.set("s4waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 4]));                // hi and lo
-                model.set("s4kscurve", data[i + 8] >> 4);
+                model.set("s4kscurve", data[i + 8] >>> 4);
                 }
             else if (key.equals("s1waveselectlo"))
                 {
@@ -1112,62 +1112,62 @@ public class KawaiK4 extends Synth
             else if (key.equals("s1coarse_keytrack"))
                 {
                 model.set("s1coarse", data[i + 8] & 63);
-                model.set("s1keytrack", data[i + 8] >> 6);
+                model.set("s1keytrack", data[i + 8] >>> 6);
                 }
             else if (key.equals("s2coarse_keytrack"))
                 {
                 model.set("s2coarse", data[i + 8] & 63);
-                model.set("s2keytrack", data[i + 8] >> 6);
+                model.set("s2keytrack", data[i + 8] >>> 6);
                 }
             else if (key.equals("s3coarse_keytrack"))
                 {
                 model.set("s3coarse", data[i + 8] & 63);
-                model.set("s3keytrack", data[i + 8] >> 6);
+                model.set("s3keytrack", data[i + 8] >>> 6);
                 }
             else if (key.equals("s4coarse_keytrack"))
                 {
                 model.set("s4coarse", data[i + 8] & 63);
-                model.set("s4keytrack", data[i + 8] >> 6);
+                model.set("s4keytrack", data[i + 8] >>> 6);
                 }
             else if (key.equals("s1prs>frqsw_vib/a.bendsw_velcurve"))
                 {
                 model.set("s1prs>frqsw", data[i + 8] & 1);
-                model.set("s1vib/a.bendsw", (data[i + 8] >> 1) & 1);
+                model.set("s1vib/a.bendsw", (data[i + 8] >>> 1) & 1);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("s1velcurve", (data[i + 8] >> 2) & 7);
+                model.set("s1velcurve", (data[i + 8] >>> 2) & 7);
                 }
             else if (key.equals("s2prs>frqsw_vib/a.bendsw_velcurve"))
                 {
                 model.set("s2prs>frqsw", data[i + 8] & 1);
-                model.set("s2vib/a.bendsw", (data[i + 8] >> 1) & 1);
+                model.set("s2vib/a.bendsw", (data[i + 8] >>> 1) & 1);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("s2velcurve", (data[i + 8] >> 2) & 7);
+                model.set("s2velcurve", (data[i + 8] >>> 2) & 7);
                 }
             else if (key.equals("s3prs>frqsw_vib/a.bendsw_velcurve"))
                 {
                 model.set("s3prs>frqsw", data[i + 8] & 1);
-                model.set("s3vib/a.bendsw", (data[i + 8] >> 1) & 1);
+                model.set("s3vib/a.bendsw", (data[i + 8] >>> 1) & 1);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("s3velcurve", (data[i + 8] >> 2) & 7);
+                model.set("s3velcurve", (data[i + 8] >>> 2) & 7);
                 }
             else if (key.equals("s4prs>frqsw_vib/a.bendsw_velcurve"))
                 {
                 model.set("s4prs>frqsw", data[i + 8] & 1);
-                model.set("s4vib/a.bendsw", (data[i + 8] >> 1) & 1);
+                model.set("s4vib/a.bendsw", (data[i + 8] >>> 1) & 1);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("s4velcurve", (data[i + 8] >> 2) & 7);
+                model.set("s4velcurve", (data[i + 8] >>> 2) & 7);
                 }
             else if (key.equals("f1resonance_lfosw"))
                 {
                 model.set("f1resonance", data[i + 8] & 7);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("f1lfosw", (data[i + 8] >> 3) & 1);
+                model.set("f1lfosw", (data[i + 8] >>> 3) & 1);
                 }
             else if (key.equals("f2resonance_lfosw"))
                 {
                 model.set("f2resonance", data[i + 8] & 7);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("f2lfosw", (data[i + 8] >> 3) & 1);
+                model.set("f2lfosw", (data[i + 8] >>> 3) & 1);
                 }
             else
                 {
@@ -1266,22 +1266,22 @@ public class KawaiK4 extends Synth
                 }
             else if (key.equals("s1waveselecthi_kscurve"))
                 {
-                data[i] = (byte)((model.get("s1waveselect") >> 7) |     // hi bit put in lo position
+                data[i] = (byte)((model.get("s1waveselect") >>> 7) |     // hi bit put in lo position
                     (model.get("s1kscurve") << 4));
                 }
             else if (key.equals("s2waveselecthi_kscurve"))
                 {
-                data[i] = (byte)((model.get("s2waveselect") >> 7) |     // hi bit put in lo position
+                data[i] = (byte)((model.get("s2waveselect") >>> 7) |     // hi bit put in lo position
                     (model.get("s2kscurve") << 4));
                 }
             else if (key.equals("s3waveselecthi_kscurve"))
                 {
-                data[i] = (byte)((model.get("s3waveselect") >> 7) |     // hi bit put in lo position
+                data[i] = (byte)((model.get("s3waveselect") >>> 7) |     // hi bit put in lo position
                     (model.get("s3kscurve") << 4));
                 }
             else if (key.equals("s4waveselecthi_kscurve"))
                 {
-                data[i] = (byte)((model.get("s4waveselect") >> 7) |     // hi bit put in lo position
+                data[i] = (byte)((model.get("s4waveselect") >>> 7) |     // hi bit put in lo position
                     (model.get("s4kscurve") << 4));
                 }
             else if (key.equals("s1waveselectlo"))

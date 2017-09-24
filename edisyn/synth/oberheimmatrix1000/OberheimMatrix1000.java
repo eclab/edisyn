@@ -1402,7 +1402,7 @@ public class OberheimMatrix1000 extends Synth
      }
     */
         
-    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         //  packing by two nibbles per byte (see http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-OberheimMatrix1000.html)
         
@@ -1513,7 +1513,7 @@ public class OberheimMatrix1000 extends Synth
         
         
         revise();
-        return true;            // change this as appropriate
+        return PARSE_SUCCEEDED;
         }
     
 
@@ -1839,6 +1839,11 @@ public class OberheimMatrix1000 extends Synth
 
     public String getPatchLocationName(Model model)
     	{
+    	// getPatchLocationName() is called from sprout() as a test to see if we should enable
+    	// batch downloading.  If we haven't yet created an .init file, then parameters won't exist
+    	// yet and this method will bomb badly.  So we return null in this case.
+    	if (!model.exists("number")) return null;
+    	
     	int number = model.get("number");
     	return ("" + model.get("bank")) + 
     		(number > 9 ? "" : "0") + 

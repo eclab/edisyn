@@ -488,7 +488,7 @@ public class KawaiK4Multi extends Synth
 
 
 
-    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         model.set("bank", ((data[7] - 64) / 16) + (data[6] == 0x00 ? 0 : 4));
         model.set("number", (data[7] - 64) % 16);
@@ -534,7 +534,7 @@ public class KawaiK4Multi extends Synth
 
 
         revise();
-        return true;            // change this as appropriate
+        return PARSE_SUCCEEDED;
         }
     
     /** Generate a K4 checksum of the data bytes */
@@ -746,6 +746,11 @@ public class KawaiK4Multi extends Synth
 
     public String getPatchLocationName(Model model)
     	{
+    	// getPatchLocationName() is called from sprout() as a test to see if we should enable
+    	// batch downloading.  If we haven't yet created an .init file, then parameters won't exist
+    	// yet and this method will bomb badly.  So we return null in this case.
+    	if (!model.exists("number")) return null;
+    	
     	return BANKS[model.get("bank")] + (model.get("number") + 1);
     	}
     }

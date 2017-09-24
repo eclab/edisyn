@@ -238,7 +238,7 @@ public class KawaiK4Effect extends Synth
             }
         }
 
-    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         model.set("bank", data[6] == 0x01 ? 0 : 1);
         model.set("number", data[7]);
@@ -253,7 +253,7 @@ public class KawaiK4Effect extends Synth
             }
 
         revise();
-        return true;            // change this as appropriate
+        return PARSE_SUCCEEDED;
         }
     
     public static final int EXPECTED_SYSEX_LENGTH = 34 + 10;
@@ -521,6 +521,11 @@ public class KawaiK4Effect extends Synth
 
     public String getPatchLocationName(Model model)
     	{
+    	// getPatchLocationName() is called from sprout() as a test to see if we should enable
+    	// batch downloading.  If we haven't yet created an .init file, then parameters won't exist
+    	// yet and this method will bomb badly.  So we return null in this case.
+    	if (!model.exists("number")) return null;
+    	
     	return BANKS[model.get("bank")] + (model.get("number") + 1);
     	}
     }

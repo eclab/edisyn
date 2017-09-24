@@ -130,6 +130,24 @@ public class Blank extends Synth
         {
         // Here you do stuff that changes patches on the synth.
         // You probably want to look at tryToSendSysex() and tryToSendMIDI()
+        //
+        // This method is used primariily to switch to a new patcgh prior to loading it
+        // from the synthesizer or emitting it to the synthesizer.  Some synthesizers do 
+        // not report their patch location information when emitting a dump to Edisyn.  
+        // If this is the case, you might want add some code at the end of this method which
+        // assumes that the patch change and subsequent parse were successful, so you can
+        // just change the patch information here in this method.  You should NOT do this when
+        // changing a patch for the purpose of merging.  So in this case (and ONLY in this case)
+        // you should end this method with something along the lines of:
+        //
+        //     // My synth doesn't report patch info in its parsed data, so here assume that we successfully did it
+		//     if (!isMerging())
+		//         {
+		//         setSendMIDI(false);
+	    //         model.set("number", number);
+	    //         model.set("bank", bank);
+	    //         setSendMIDI(true);
+	    //         }
         }
 
     public boolean gatherPatchInfo(String title, Model changeThis, boolean writing)     
@@ -149,14 +167,20 @@ public class Blank extends Synth
         return false;
         }
 
-    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
         { 
         // This bulk patch data will come from a file or transmitted over sysex.
-        // You should parse it into the model and return TRUE if successful, else FALSE.
+        // You should parse it into the model and return PARSE_SUCCEEDED if successful,
+        // PARSE_FAILED if the parse failed, and PARSE_INCOMPLETE if the parse was
+        // successful but not complete enough to assume that we have a full patch.
+        // For example, the Yamaha TX81Z needs two separate parses of dumps before a patch
+        // is complete -- you should only return PARSE_SUCCEEDED when the second one has come in.
         // IGNOREPATCH tells you whether you should ignore any patch access
         // information (number, bank, etc.) embedded in the data or store it in the
         // model as well.   FROMFILE indicates that the parse is from a sysex file.
-        return false; 
+        //
+        // If parse resulted in a successful and *complete* 
+        return PARSE_FAILED; 
         }
         
     public static boolean recognize(byte[] data)
@@ -224,6 +248,17 @@ public class Blank extends Synth
 		// patchLocationEquals(...), and thus Edisyn should disable the Batch Downloads menu.
 		//
 		// This method is used for doing batch downloads.
+		//
+		// IMPORTANT NOTE.  sprout() calls this method to determine if we should set up batch 
+		// downloading.  But if you have not yet set up an .init file, then you can't access
+		// any parameters at this point because the widgets haven't been created yet.  So you
+		// need to test for this and return null if so.  For example, you might start with
+		// a line like:
+		//
+    	// if (!model.exists("number")) return null;
+    	//
+    	// ... or some key your function would ordinarily need to extract from the model
+    	
 		return null;
 		}
     
@@ -389,6 +424,10 @@ public class Blank extends Synth
         //              changePatch(tempModel); 
         // tryToSendSysex(requestDump(tempModel));
         
+        // It is possible that it's impossible to request a dump without changing
+        // the patch regardless.  In this case you can ignore changePatch and just
+        // do a changePatch always.  You'd need to implement this.
+        
         super.performRequestDump(tempModel, changePatch);
         }
 
@@ -399,6 +438,12 @@ public class Blank extends Synth
         //
         // If you can let Edisyn call changePatch(), and then you just emit a single
         // sysex command as a patch request, implement this version.
+        //
+        // It is possible that requestDump and requestCurrentDump are identical.  This
+        // might happen if you always have to change the patch no matter what (see the
+        // description of performRequestDump above) in which case you could just have this
+        // method call performRequestDump().
+        
         return new byte[0]; 
         }
     
@@ -570,7 +615,7 @@ public class Blank extends Synth
         return false;
         }
 
-	boolean getReceivesPatchesInBulk()
+	public boolean getReceivesPatchesInBulk()
 		{
 		// Most synthesizers send patch dumps to Edisyn via a single sysex message which
 		// is handled using the parse(...) method.  But some synthesizers, such as the

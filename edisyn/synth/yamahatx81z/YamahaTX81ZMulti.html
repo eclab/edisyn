@@ -1,21 +1,17 @@
 <html><head></head><body bgcolor='black'>
 <font color='white'>
-<h1>Waldorf Blofeld</h1> 
+<h1>Yamaha TX81Z</h1> 
 <h2>Single Patch Editor</h2>
 
-<p>This editor will work with the <b>Waldorf Blofeld,</b> the <b>Waldorf Blofeld with SL Option,</b> and the <b>Waldorf Blofeld Keyboard</b> (which automatically comes with the SL option).
+<p><b>Communicating with Edisyn</b> Set your TX81Z's receive and transmit channel to the same thing (perhaps Channel 1).  Set the program change to be <b>Com</b> (Common).  Make sure that Sysex is turned <b>on</b>.
 
-<p><b>Communicating with Edisyn</b> Set your Blofeld to send <b>Sysex only</b>, not <b>Ctl</b> nor <b>Ctl+Sysex</b>.  Also make sure that <b>Ctrl Receive</b> is on.
-
-<p><b>SL Option</b> The SL option gives you the option of specifying a <b>sound sample</b> instead of a <b>wave</b> on Oscillators 1 and 2. This is turned on by choosing a <b>Sample Bank</b> in the editor: then the wave menu turns into a sample menu.  You turn it off by choosing <b>None</b> in the Sample Bank.  
-
-<p><b>Gotchas</b> Only two at present:
+<p><b>Gotchas</b>
 
 <ul>
-<li>
-If you load the current patch, the Blofeld does not tell Edisyn what bank or number the patch is.  Edisyn will leave synced mode.
+<li>The TX81Z is notorious for getting in corrupted states when receiving MIDI transmissions, either because of buffer overflows ("MIDI Buffer Full!") or just messing up.  Performance Mode seems to be the worst at this.  I'm working on minimizing these, but you'll still see them.  If this happens, or if Edisyn doesn't seem to be receiving data correctly or is displaying data wrong, press the Play/Performance button to go out into Single patch mode, move to another patch temporarily (press Right and then Left, say) to clear the performance data, and try again.  Let me know.
 <p><li>
-If you send a patch, or modify its parameters, the Blofeld's patch screen does not indicate that it's been edited (as it usually does with a little inverted "E"), even though it has in fact been edited.
+The TX81Z doesn't have a way to send or write patches from sysex.  Though Edisyn could manipulate its front buttons via sysex in order to write patches, it's a little dangerous.  So Edisyn doesn't provide it as an option.  To write a patch you have to send to the current patch from Edisyn, then manually save it to your desired patch from the front panel.
+<p><li>Similarly, changing patches is challenging: it requires a bit of manipulation of the front panel using the TX81Z's unusual "press buttons for me" sysex options.  It should work in general, but if strange things happen, let me know.
 </ul>
 
 
@@ -25,6 +21,6 @@ If you send a patch, or modify its parameters, the Blofeld's patch screen does n
 <td><b>Sean Luke</b>
 <tr>
 <td align=right>Date&nbsp;&nbsp;&nbsp;
-<td>June 2017
+<td>September 2017
 </table>
 

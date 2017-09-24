@@ -37,6 +37,8 @@ public class YamahaTX81ZMulti extends Synth
 
     public YamahaTX81ZMulti()
         {
+        model.set("number", 0);
+
         for(int i = 0; i < allParameters.length; i++)
             {
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
@@ -295,13 +297,7 @@ public class YamahaTX81ZMulti extends Synth
         model.removeMetricMinMax("instrument" + src + "voicebank");
         hbox.add(comp);
         
-        comp = new LabelledDial("Voice", this, "instrument" + src + "voicenumber", color, 0, 31)
-            {
-            public String map(int val)
-                {
-                return "" + (val + 1);
-                }
-            };
+        comp = new LabelledDial("Voice", this, "instrument" + src + "voicenumber", color, 0, 31, -1);
         ((LabelledDial)comp).addAdditionalLabel("Number");
         model.removeMetricMinMax("instrument" + src + "voicenumber");
         hbox.add(comp);
@@ -528,12 +524,13 @@ public class YamahaTX81ZMulti extends Synth
     public static final int VCED_GROUP = 2 + 16; // 00010010
     public static final int ACED_GROUP = 3 + 16; // 00010011
     public static final int PCED_GROUP = 0 + 16; // 00010000        says 00010011 in the manual, wrong
+    public static final int REMOTE_SWITCH_GROUP = 3 + 16; // 00010011        same as ACED_GROUP
 
     public Object[] emitAll(String key)
         {
         if (key.equals("number")) return new Object[0];  // this is not emittable
 
-        byte channel = (byte)(32 + getChannelOut());
+        byte channel = (byte)(16 + getChannelOut());
              
         // maybe we don't want to do this
         if (key.equals("name"))  // ugh
@@ -548,9 +545,9 @@ public class YamahaTX81ZMulti extends Synth
             }
         for(int i = 1; i < 9; i++)
             {
-            if (key.equals("operator" + i + "voicenumber"))
+            if (key.equals("instrument" + i + "voicenumber") || key.equals("instrument" + i + "voicebank"))
                 {
-                int val = model.get(key);
+                 int val = model.get("instrument" + i + "voicebank") * 32 + model.get("instrument" + i + "voicenumber");
                 byte lsb = (byte)(val & 127);
                 byte msb = (byte)((val >>> 7) & 127);
 
@@ -580,7 +577,7 @@ public class YamahaTX81ZMulti extends Synth
         }
         
 
-    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         // data starts at byte 16
         
@@ -590,9 +587,9 @@ public class YamahaTX81ZMulti extends Synth
             {
             byte val = data[i + 16];
                 
-            if (i >= 96) // name
+            if (i >= 100) // name
                 {
-                name[i - 96] = val;
+                name[i - 100] = val;
                 }
             else if (allParameters[i].equals("instrument1voicenumbermsb") ||
                 allParameters[i].equals("instrument2voicenumbermsb") ||
@@ -619,7 +616,8 @@ public class YamahaTX81ZMulti extends Synth
                 int lsb = data[16 + instrument * 12 + 2];
                 int combined = ((msb << 7) | lsb);
 
-                model.set("instrument" + instrument + "voicenumber", combined);
+                model.set("instrument" + (instrument + 1) + "voicenumber", combined % 32);
+                model.set("instrument" + (instrument + 1) + "voicebank", combined / 32);
                 }
             else
                 {
@@ -631,16 +629,27 @@ public class YamahaTX81ZMulti extends Synth
         catch (Exception e) { e.printStackTrace(); }
                 
         revise();
-        return true;
+        return PARSE_SUCCEEDED;
         }
     
+    public int getPauseAfterChangePatch()
+    	{ 
+    	return 100; 
+    	}
+    
+    public int getPauseAfterSendAllParameters() 
+    	{
+    	return 200; 
+    	}
+
+
     public int getPauseBetweenMIDISends()
         {
         // Wikipedia says that you have to have a 50ms wait-time between
         // sysex transmissions or the TX81Z has problems.  Maybe this might work?
         // Too crude?  Causes problems with real-time manipulation?
 
-        return 50;
+        return 100;  // seems to need more than single mode does
         }
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
@@ -674,7 +683,8 @@ public class YamahaTX81ZMulti extends Synth
                 allParameters[i].equals("instrument8voicenumbermsb"))
                 {
                 int instrument = (i / 12);
-                data[i + 10] = (byte)(model.get("instrument" + i + "voicenumber") >>> 7);
+                int num = model.get("instrument" + (instrument + 1) + "voicebank") * 32 + model.get("instrument" + (instrument + 1) + "voicenumber");
+                data[i + 10] = (byte)(num >>> 7);
                 }
             else if (allParameters[i].equals("instrument1voicenumberlsb") ||
                 allParameters[i].equals("instrument2voicenumberlsb") ||
@@ -686,7 +696,8 @@ public class YamahaTX81ZMulti extends Synth
                 allParameters[i].equals("instrument8voicenumberlsb"))
                 {
                 int instrument = (i / 12);
-                data[i + 10] = (byte)(model.get("instrument" + i + "voicenumber") & 127);
+                int num = model.get("instrument" + (instrument + 1) + "voicebank") * 32 + model.get("instrument" + (instrument + 1) + "voicenumber");
+                data[i + 10] = (byte)(num & 127);
                 }
             else if (i >= 100)      // name
                 {
@@ -701,7 +712,7 @@ public class YamahaTX81ZMulti extends Synth
         byte[] result = new byte[128];
         result[0] = (byte)0xF0;
         result[1] = 0x43;
-        result[2] = (byte)(32 + getChannelOut());
+        result[2] = (byte)getChannelOut();  //(byte)(32 + getChannelOut());
         result[3] = 0x7E;
         result[4] = 0x00;
         result[5] = 0x78;
@@ -730,6 +741,20 @@ public class YamahaTX81ZMulti extends Synth
         }
 
 
+    public void performRequestDump(Model tempModel, boolean changePatch)
+    	{
+    	// We ALWAYS change the patch no matter what.  We have to.
+    	changePatch(tempModel);
+    	tryToSendSysex(requestDump(tempModel));
+    	}
+
+	public byte[] requestDump(Model tempModel) 
+		{
+		// since performRequestDump ALWAYS changes the patch, we might
+		// as well just call requestCurrentDump() here 
+		return requestCurrentDump(); 
+		}
+	
     public byte[] requestCurrentDump()
         {
         // PCED
@@ -795,35 +820,93 @@ public class YamahaTX81ZMulti extends Synth
             model.set("name", newnm);
         }
         
-    public boolean requestCloseWindow() { return true; }
-
     public static String getSynthName() { return "Yamaha TX81Z [Multi]"; }
     
     public void changePatch(Model tempModel) 
         {
         int number = tempModel.get("number");
         // Performance numbers PF1 ... PF24, corresponding to 161 .. 184
-        byte lo = (byte)((number + 160) & 127);
-        byte hi = (byte)((number + 160) >>> 7);
+        byte lo = (byte)((number + 161) & 127);
+        byte hi = (byte)((number + 161) >>> 7);
 
-        // Change program change table position 0 to what we want first
+        // A program change in the TX81Z is a complicated affair.  We need to do three things:
+        //
+        // 1. Modify a slot in the program change table to the patch we want.  We'll modify slot 127.
+        //
+        // 2. At this point the TX81Z is in a strange "I got edited via MIDI" mode.  We need to get
+        //    out of that and into standard program mode.  We do this by using sysex commands to virtually press
+        //    the PLAY/PERFORM switch.
+        //
+        // 3. Now we're either in PLAY mode or we're in PERFORM mode.  At this point we send a PC 127, which
+        //    causes the system to look up slot 127 in its table, discover it's a program change (not
+        //    performance) value, and switch to that value, while also changing to PLAY mode.
+
+        // Change program change table position 127 to what we want first
         byte[] table = new byte[9];
         table[0] = (byte)0xF0;
         table[1] = (byte)0x43;
-        table[2] = (byte)(32 + getChannelOut());
+        table[2] = (byte)(16 + getChannelOut());
         table[3] = (byte)0x10;
         table[4] = (byte)127;  // really!
         table[5] = (byte)127;  // we're changing table position 127
         table[6] = hi;
         table[7] = lo;
         table[8] = (byte)0xF7;
-        
         tryToSendSysex(table);
         
-        // Now let's do the program change to program 127
-        
-        tryToSendMIDI(buildPC(getChannelOut(), (byte)127));
+		// Instruct the TX81Z to press its "PLAY/PERFORM" button
+        byte PP = (byte) 68;
+        byte VV = (byte) 0;
+        byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getChannelOut()), REMOTE_SWITCH_GROUP, PP, (byte)0x7F, (byte)0xF7 };
+        tryToSendSysex(data);
+
+        // Do the program change to program 127
+        tryToSendMIDI(buildPC(getChannelOut(), 127));
+
+		if (!isMerging())  // we're actually loading the patch, not merging with it
+			{
+	        // we assume that we successfully did it
+	        setSendMIDI(false);
+	        model.set("number", number);
+	        setSendMIDI(true);
+	        }
         }
 
     public String getPatchName(Model model) { return null; }
+
+    public boolean patchLocationEquals(Model patch1, Model patch2)
+    	{
+    	int number1 = patch1.get("number");
+    	int number2 = patch2.get("number");
+    	return (number1 == number2);
+    	}
+    	
+    public Model getNextPatchLocation(Model model)
+    	{
+    	int number = model.get("number");
+    	
+    	number++;
+    	if (number >= 24)
+    		{
+    		number = 0;
+	    	}
+	    	
+    	Model newModel = buildModel();
+    	newModel.set("number", number);
+		return newModel;
+    	}
+
+    public String getPatchLocationName(Model model)
+    	{
+    	// getPatchLocationName() is called from sprout() as a test to see if we should enable
+    	// batch downloading.  If we haven't yet created an .init file, then parameters won't exist
+    	// yet and this method will bomb badly.  So we return null in this case.
+    	if (!model.exists("number")) return null;
+    	
+    	int number = model.get("number");
+    	return "PF" + number;
+    	}
+    	
+
+    
     }

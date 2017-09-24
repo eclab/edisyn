@@ -175,6 +175,7 @@ public class PreenFM2 extends Synth
     public String getDefaultResourceFileName() { return "PreenFM2.init"; }
     public String getHTMLResourceFileName() { return "PreenFM2.html"; }
     public boolean getSendsAllParametersInBulk() { return false; }
+	public boolean getReceivesPatchesInBulk() { return false; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
@@ -283,7 +284,7 @@ public class PreenFM2 extends Synth
 		JMenu restrictMutation = new JMenu("Restrict Mutated Frequency Ratios...");
 		menu.add(restrictMutation);
 		
-		String str = getLastX("MutationRestriction", getSynthName());
+		String str = getLastX("MutationRestriction", getSynthName(), true);
 		if (str == null)
 			mutationRestriction = OFF;
 		else if (str.equalsIgnoreCase("TX81Z"))
@@ -300,7 +301,7 @@ public class PreenFM2 extends Synth
 			public void actionPerformed(ActionEvent evt)
 				{
 				mutationRestriction = OFF;
-				setLastX("OFF", "MutationRestriction", getSynthName());
+				setLastX("OFF", "MutationRestriction", getSynthName(), true);
 				}
 			});
 		restrictMutation.add(off);
@@ -313,7 +314,7 @@ public class PreenFM2 extends Synth
 			public void actionPerformed(ActionEvent evt)
 				{
 				mutationRestriction = TX81Z;
-				setLastX("TX81Z", "MutationRestriction", getSynthName());
+				setLastX("TX81Z", "MutationRestriction", getSynthName(), true);
 				}
 			});
 		restrictMutation.add(tx81z);
@@ -326,7 +327,7 @@ public class PreenFM2 extends Synth
 			public void actionPerformed(ActionEvent evt)
 				{
 				mutationRestriction = INTEGERS;
-				setLastX("INTEGERS", "MutationRestriction", getSynthName());
+				setLastX("INTEGERS", "MutationRestriction", getSynthName(), true);
 				}
 			});
 		restrictMutation.add(integers);
@@ -1295,10 +1296,13 @@ public class PreenFM2 extends Synth
         tryToSendMIDI(buildPC(getChannelOut(), program));
         
         // we assume that we successfully did it
-        setSendMIDI(false);
-        model.set("number", program);
-        model.set("bank", bank);
-        setSendMIDI(true);
+		if (!isMerging())  // we're actually loading the patch, not merging with it
+			{
+	        setSendMIDI(false);
+	        model.set("number", program);
+	        model.set("bank", bank);
+	        setSendMIDI(true);
+	        }
         }
 
 
@@ -1677,7 +1681,7 @@ public class PreenFM2 extends Synth
 
     /** The PreenFM2 doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
         the purposes of reading a file. */
-    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         final int HEADER = 10;
                 
@@ -1699,7 +1703,7 @@ public class PreenFM2 extends Synth
             handleNRPNParse("name" + count, (msb << 7) | lsb, false); 
             count++;
             }
-        return true;
+        return PARSE_SUCCEEDED;
         }
                 
         
@@ -1991,6 +1995,11 @@ public class PreenFM2 extends Synth
 
     public String getPatchLocationName(Model model)
     	{
+    	// getPatchLocationName() is called from sprout() as a test to see if we should enable
+    	// batch downloading.  If we haven't yet created an .init file, then parameters won't exist
+    	// yet and this method will bomb badly.  So we return null in this case.
+    	if (!model.exists("number")) return null;
+    	
     	String s = "";
     	int bank = model.get("bank");
     	int number = model.get("number");

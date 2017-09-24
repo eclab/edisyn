@@ -1112,7 +1112,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
         }
         
 
-    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
         // format example, it's written as 0x11.  It's actually 0x11, though we don't check for it here.
@@ -1133,7 +1133,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
             }
         revise();  
         updateMode();
-        return true;   
+        return PARSE_SUCCEEDED;   
         }
 
     public static String getSynthName() { return "Waldorf Microwave II/XT/XTk [Multi]"; }
@@ -1190,6 +1190,11 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
     public String getPatchLocationName(Model model)
     	{
+    	// getPatchLocationName() is called from sprout() as a test to see if we should enable
+    	// batch downloading.  If we haven't yet created an .init file, then parameters won't exist
+    	// yet and this method will bomb badly.  So we return null in this case.
+    	if (!model.exists("number")) return null;
+    	
     	int number = model.get("number");
     	return "M" + ( number > 99 ? "" : (number > 9 ? "0" : "00")) + (number + 1);
     	}

@@ -2183,7 +2183,7 @@ public class WaldorfBlofeld extends Synth
         revise();
         }
         
-    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         boolean retval = true;
         if (!ignorePatch && data[5] < 8)  // otherwise it's probably just local patch data.  Too bad they do this. :-(
@@ -2201,7 +2201,7 @@ public class WaldorfBlofeld extends Synth
             setParameterByIndex(i, data[i + 7]);
             }
         revise();       
-        return retval;     
+        return PARSE_SUCCEEDED;     
         }
         
 
@@ -2397,6 +2397,11 @@ public class WaldorfBlofeld extends Synth
 
     public String getPatchLocationName(Model model)
     	{
+    	// getPatchLocationName() is called from sprout() as a test to see if we should enable
+    	// batch downloading.  If we haven't yet created an .init file, then parameters won't exist
+    	// yet and this method will bomb badly.  So we return null in this case.
+    	if (!model.exists("number")) return null;
+    	
     	int number = model.get("number");
     	return BANKS[model.get("bank")] + 
     		(number > 99 ? "" : (number > 9 ? "0" : "00")) + 

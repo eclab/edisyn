@@ -171,7 +171,16 @@ public class Midi
 
 	static void updateDevices()
 		{
-        MidiDevice.Info[] midiDevices = uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider.getMidiDeviceInfo();
+        MidiDevice.Info[] midiDevices;
+        
+        try
+        	{
+        	midiDevices = uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider.getMidiDeviceInfo();
+        	}
+    	catch (Exception ex)
+    		{
+    		midiDevices = MidiSystem.getMidiDeviceInfo();
+    		}
 
         ArrayList allDevices = new ArrayList();
         for(int i = 0; i < midiDevices.length; i++)

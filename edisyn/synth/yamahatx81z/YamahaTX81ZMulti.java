@@ -290,7 +290,7 @@ public class YamahaTX81ZMulti extends Synth
             {
             public String map(int val)
                 {
-                return BANKS[val];
+                return BANKS[val % 4]; // we do this because we often get bad data here
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Bank");
@@ -547,14 +547,14 @@ public class YamahaTX81ZMulti extends Synth
             {
             if (key.equals("instrument" + i + "voicenumber") || key.equals("instrument" + i + "voicebank"))
                 {
-                 int val = model.get("instrument" + i + "voicebank") * 32 + model.get("instrument" + i + "voicenumber");
+                int val = model.get("instrument" + i + "voicebank") * 32 + model.get("instrument" + i + "voicenumber");
                 byte lsb = (byte)(val & 127);
                 byte msb = (byte)((val >>> 7) & 127);
 
                 return new Object[]
                     {
-                    new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, 1, msb, (byte)0xF7 },
-                   	new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, 2, lsb, (byte)0xF7 },
+                    new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, (byte)(i * 12 + 1), msb, (byte)0xF7 },
+                   	new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, (byte)(i * 12 + 2), lsb, (byte)0xF7 },
                     };
                 }
             }        
@@ -614,7 +614,19 @@ public class YamahaTX81ZMulti extends Synth
                 int instrument = (i / 12);
                 int msb = data[16 + instrument * 12 + 1];
                 int lsb = data[16 + instrument * 12 + 2];
-                int combined = ((msb << 7) | lsb);
+                                
+                // this data is often corrupted.  So we'll mask it just in case
+                
+                int combined = (((msb & 1) << 7) | (lsb & 127));
+                
+                // we'll also make sure it's in bounds
+                     
+                int oldcombined = combined;           
+                combined = combined % 160;
+
+                if (msb > 1 || lsb > 127 || oldcombined != combined)
+                	System.err.println("Corrupt voice number or bank in received data.");
+
 
                 model.set("instrument" + (instrument + 1) + "voicenumber", combined % 32);
                 model.set("instrument" + (instrument + 1) + "voicebank", combined / 32);
@@ -666,7 +678,7 @@ public class YamahaTX81ZMulti extends Synth
         data[5] = (byte)'9';
         data[6] = (byte)'7';
         data[7] = (byte)'6';
-        data[8] = (byte)'A';
+        data[8] = (byte)'P';
         data[9] = (byte)'E';
                 
         String name = model.get("name", "INIT SOUND") + "          ";
@@ -825,9 +837,14 @@ public class YamahaTX81ZMulti extends Synth
     public void changePatch(Model tempModel) 
         {
         int number = tempModel.get("number");
+        
+        /// NOTE: There is an error in the sysex document (page 68), where
+        // it says that PF1-F24 are slots 161-184 in the Program Change Table.
+        // Actually they are slots 160-183.  
+        
         // Performance numbers PF1 ... PF24, corresponding to 161 .. 184
-        byte lo = (byte)((number + 161) & 127);
-        byte hi = (byte)((number + 161) >>> 7);
+        byte lo = (byte)((number + 160) & 127);
+        byte hi = (byte)((number + 160) >>> 7);
 
         // A program change in the TX81Z is a complicated affair.  We need to do three things:
         //
@@ -872,7 +889,7 @@ public class YamahaTX81ZMulti extends Synth
 	        }
         }
 
-    public String getPatchName(Model model) { return null; }
+    public String getPatchName(Model model) { return model.get("name", "INIT VOICE"); }
 
     public boolean patchLocationEquals(Model patch1, Model patch2)
     	{
@@ -903,8 +920,8 @@ public class YamahaTX81ZMulti extends Synth
     	// yet and this method will bomb badly.  So we return null in this case.
     	if (!model.exists("number")) return null;
     	
-    	int number = model.get("number");
-    	return "PF" + number;
+    	int number = model.get("number") + 1;
+    	return "PF" + (number > 9 ? "" : "0") + number;
     	}
     	
 

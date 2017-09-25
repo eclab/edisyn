@@ -215,6 +215,7 @@ public class KeyDisplay extends NumericalComponent
                 public void mousePressed(MouseEvent e)
                     {
                     dynamicKey = findKey(e.getX(), e.getY());
+                    userPressed(dynamicKey);
                     redoTitle(dynamicKey);
                     repaint();
 
@@ -237,7 +238,7 @@ public class KeyDisplay extends NumericalComponent
                             }
                         }, AWTEvent.MOUSE_EVENT_MASK);
                     }
-                                                
+                   
                 public void mouseReleased(MouseEvent e)
                     {
                     if (dynamicKey != -1)
@@ -258,7 +259,10 @@ public class KeyDisplay extends NumericalComponent
                     {
                     if (innerBounds.contains(e.getX(), e.getY()))
                         {
+                        int oldDynamicKey = dynamicKey;
                         dynamicKey = findKey(e.getX(), e.getY());
+                        if (oldDynamicKey != dynamicKey)
+                        	userPressed(dynamicKey);
         
                         if (dynamicUpdate)
                             {
@@ -378,6 +382,13 @@ public class KeyDisplay extends NumericalComponent
             graphics.draw(rect);
             }
         }
+    
+    /** This method is called when the user clicks on a key.  Note that
+    	a key is not SELECTED until the user lets go of it or drags to it
+    	(if dynamic).  But clicking is needed if you want to provide
+    	a realistic sound in response to it.  Override this as you see fit.
+    	*/
+    public void userPressed(int key) { }
     }
 
 

@@ -264,7 +264,13 @@ public class KawaiK4Drum extends Synth
             };
         hbox.add(comp);
         
-        comp = new KeyDisplay("Note", this, "note", color, 36, 96, 0);
+        comp = new KeyDisplay("Note", this, "note", color, 36, 96, 0)
+        	{
+   			public void userPressed(int key)
+    			{
+    			doSendTestNote(key, true, false);
+    			}
+        	};
         ((KeyDisplay)comp).setDynamicUpdate(true);
         vbox.add(comp);
                                 

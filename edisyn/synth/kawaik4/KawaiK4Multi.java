@@ -714,6 +714,10 @@ public class KawaiK4Multi extends Synth
         catch (Exception e) { e.printStackTrace(); }
         }
 
+	public int getBulkDownloadWaitTime()
+		{
+		return 1000;
+		}
 
     public boolean patchLocationEquals(Model patch1, Model patch2)
     	{

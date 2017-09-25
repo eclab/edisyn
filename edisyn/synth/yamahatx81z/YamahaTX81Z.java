@@ -1505,10 +1505,8 @@ public class YamahaTX81Z extends Synth
     	// yet and this method will bomb badly.  So we return null in this case.
     	if (!model.exists("number")) return null;
     	
-    	int number = model.get("number");
-    	return BANKS[model.get("bank")] + 
-    		(number > 9 ? "" : "0") + 
-    		(number + 1);
+    	int number = model.get("number") + 1;
+    	return BANKS[model.get("bank")] + (number > 9 ? "" : "0") + number;
     	}
     	
 

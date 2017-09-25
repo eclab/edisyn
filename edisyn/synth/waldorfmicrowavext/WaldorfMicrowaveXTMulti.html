@@ -21,9 +21,7 @@ Blofeld Single editor panel.
 
 <ul>
 
-<li>Edisyn cannot tell the Microwave to switch to a given multi patch number.  As a result, *Send Patch* and *Send Patch To...* are disabled, a
-nd the editor is *never* in sync (because we don't know what patch number is on the machine).  To get a patch, manually switch to the desired
- patch number, then call *Request Current Patch* (or dump the patch manually to Edisyn).  To send a patch, set the patch location manually on your synthesizer, then use *Send Current Patch*.
+<li>Edisyn cannot tell the Microwave to switch to a given multi patch number via a program change.  As a result, when you request a patch, Edisyn will receive the patch but the Microwave will continue to play the old patch.  Solution: after receiving the patch, issue <b>Send To Current Patch</b> to update the Microwave.  For a similar reason, <b>Send To Patch</b> is disabled.
 
 <p><li>Though the Microwave responds to individual parameter changes in Multimode, it does not send any parameter change sysex when you turn its knobs.
 

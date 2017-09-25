@@ -1195,8 +1195,12 @@ public class WaldorfMicrowaveXTMulti extends Synth
     	// yet and this method will bomb badly.  So we return null in this case.
     	if (!model.exists("number")) return null;
     	
-    	int number = model.get("number");
-    	return "M" + ( number > 99 ? "" : (number > 9 ? "0" : "00")) + (number + 1);
+    	int number = model.get("number") + 1;
+    	return "M" + ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number;
     	}
 
+	public boolean getSendsParametersAfterNonMergeParse()
+		{
+		return true;
+		}
     }

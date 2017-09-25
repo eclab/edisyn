@@ -8,6 +8,8 @@
 
 <p><b>Communicating with Edisyn</b> Make sure that Memory Protect is off (see page 36 of the manual). 
 
+<p><b>Sending Parameters Bug</b> The Matrix 1000 has a command which receives a dump of parameters and stores them in working memory (Edisyn's "Send" procedure).  Unfortunately it seems to corrupt the working memory, so some parameters do not operate correctly.  But Edisyn still needs to Send!  Edisyn uses sending for hill-climbing, merging, mutation, undo/redo, etc.  So instead of sending to working memory, Edisyn will <b>write</b> to patch 199 and then read patch 199 into working memory.  This means that if you are editing a patch, patch 199 will be constantly overwritten.  So don't use it.  [If you're editing patch 199, it'll probably work fine, but that's an exception].
+
 <p><b>Suggestions</b>
 
 <ul>
@@ -40,4 +42,5 @@ The patch editor allows you to give patches a name.  This is backwards-compatibl
 <td align=right>Date&nbsp;&nbsp;&nbsp;
 <td>August 2017
 </table>
+
 

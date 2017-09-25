@@ -165,7 +165,7 @@ public class Model implements Cloneable
     */
     public Model mutate(Random random, String[] keys, double weight)
         {
-        if (undoListener!= null)
+       if (undoListener!= null)
             {
             undoListener.push(this);
             undoListener.setWillPush(false);
@@ -173,9 +173,9 @@ public class Model implements Cloneable
                 
         for(int i = 0; i < keys.length; i++)
             {
+            if (!exists(keys[i])) { continue; }
             // continue if the key is immutable, it's a string, or we fail the coin toss
-            if (getStatus(keys[i]) == STATUS_IMMUTABLE || getStatus(keys[i]) == STATUS_RESTRICTED) continue;
-
+            if (getStatus(keys[i]) == STATUS_IMMUTABLE || getStatus(keys[i]) == STATUS_RESTRICTED || isString(keys[i])) continue;
             
             boolean hasMetric = false;                              // do we even HAVE a metric range?
             boolean doMetric = false;                               // are we in that range, and should mutate within it?
@@ -302,9 +302,9 @@ public class Model implements Cloneable
         for(int i = 0; i < keys.length; i++)
             {
             // return if the key doesn't exist, is immutable or is a string, or is non-metric for someone
-            if (!model.exists(keys[i])) continue;
+            if (!model.exists(keys[i])) { continue; }
             if (getStatus(keys[i]) == STATUS_IMMUTABLE || getStatus(keys[i]) == STATUS_RESTRICTED || isString(keys[i])) continue;
-            if (isString(keys[i])) continue;
+
             if (!(metricMinExists(keys[i]) &&
                   metricMaxExists(keys[i]) &&
             	  get(keys[i], 0) >= getMetricMin(keys[i]) &&
@@ -390,7 +390,7 @@ public class Model implements Cloneable
         for(int i = 0; i < keys.length; i++)
             {
             // skip if the key doesn't exist, is immutable, is restricted, or is a string
-            if (!model.exists(keys[i])) continue;
+            if (!model.exists(keys[i])) { continue; }
             if (getStatus(keys[i]) == STATUS_IMMUTABLE || isString(keys[i]) || getStatus(keys[i]) == STATUS_RESTRICTED) continue;
 
 			// skip if we fail a coin toss            
@@ -494,7 +494,7 @@ public class Model implements Cloneable
             {
             updateListenersForKey(keys[i]);
             }
-        }
+         }
     
     public void copyValuesTo(Model model)
         {
@@ -761,13 +761,21 @@ public class Model implements Cloneable
     public int getStatus(String key)
         {
         if (status.containsKey(key))
+        	{
             return ((Integer)(status.get(key))).intValue();
+            }
         else if (!exists(key))
+        	{
             return STATUS_IMMUTABLE;
+            }
         else if (isString(key))
+        	{
             return STATUS_IMMUTABLE;
+            }
         else // it's a number
+        	{
             return STATUS_FREE;
+            }
         }
                 
     /** Returns the minimum for a given key, or 0 if no minimum is declared. */        

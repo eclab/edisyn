@@ -81,6 +81,8 @@ public abstract class Synth extends JComponent implements Updatable
 
     boolean useMapForRecombination = true;
     boolean showingMutation = false;
+    /** Returns true if we're currently trying to merge with another patch.  */
+    public boolean isMerging() { return merging != 0.0; }
     public boolean isShowingMutation() { return showingMutation; }
     public void setShowingMutation(boolean val) 
         { 
@@ -127,7 +129,7 @@ public abstract class Synth extends JComponent implements Updatable
         undo.setWillPush(false);  // instantiate undoes this
         random = new Random(System.currentTimeMillis());
                 
-        perChannelCCs = ("" + getLastX("PerChannelCC", getSynthNameLocal())).equalsIgnoreCase("true");                  
+        perChannelCCs = ("" + getLastX("PerChannelCC", getSynthNameLocal(), false)).equalsIgnoreCase("true");                  
         }
         
         
@@ -211,7 +213,7 @@ public abstract class Synth extends JComponent implements Updatable
         synchronized(passThroughCCLock) 
             { 
             passThroughCC = val; 
-            setLastX("" + val, "PassThroughCC", getSynthNameLocal());
+            setLastX("" + val, "PassThroughCC", getSynthNameLocal(), false);
             SwingUtilities.invokeLater(new Runnable()
                 {
                 public void run()
@@ -296,13 +298,13 @@ public abstract class Synth extends JComponent implements Updatable
     edisyn.synth.kawaik4.KawaiK4Drum.class,
     edisyn.synth.kawaik4.KawaiK4Effect.class,
     edisyn.synth.oberheimmatrix1000.OberheimMatrix1000.class, 
+    edisyn.synth.preenfm2.PreenFM2.class,
     edisyn.synth.waldorfblofeld.WaldorfBlofeld.class, 
     edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti.class, 
     edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT.class, 
     edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti.class, 
-    //edisyn.synth.yamahatx81z.YamahaTX81Z.class, 
-    //edisyn.synth.yamahatx81z.YamahaTX81ZMulti.class, 
-    edisyn.synth.preenfm2.PreenFM2.class 
+    edisyn.synth.yamahatx81z.YamahaTX81Z.class, 
+    edisyn.synth.yamahatx81z.YamahaTX81ZMulti.class
     };
     
     /** All synthesizer names in Edisyn, one per class in synths */
@@ -495,12 +497,19 @@ public abstract class Synth extends JComponent implements Updatable
         You may need to call simplePause() if your synth requires a pause after a patch change. */
     public void changePatch(Model tempModel) { }
 
+    
+    public static int PARSE_FAILED = 0;
+    public static int PARSE_INCOMPLETE = 1;
+    public static int PARSE_SUCCEEDED = 2;
+    
     /** Updates the model to reflect the following sysex patch dump for your synthesizer type.
         If ignorePatch is TRUE, then you should NOT attempt to change the patch number and bank
         to reflect new information, but should retain the old number and bank.
         FROMFILE indicates that the parse is from a sysex file.
-        If the parse was successful and valid, return TRUE. */
-    public boolean parse(byte[] data, boolean ignorePatch, boolean fromFile) { return false; }
+        If the parse failed, return PARSE_FAILED.  If the parse is incomplete return PARSE_INCOMPLETE
+        (for example, the Yamaha TX81Z needs two separate dumps before it has a full patch, so return PARSE_INCOMPLETE
+        on the first one).  Else return PARSE_SUCCEEDED. */
+    public int parse(byte[] data, boolean ignorePatch, boolean fromFile) { return PARSE_FAILED; }
     
     /** Updates the model to reflect the following sysex message from your synthesizer. 
         You are free to IGNORE this message entirely.  Patch dumps will generally not be sent this way; 
@@ -736,6 +745,12 @@ public abstract class Synth extends JComponent implements Updatable
     /** Override this to return TRUE if, after a patch write, we need to change to the patch *again* so as to load it into memory. */
     public boolean getShouldChangePatchAfterWrite() { return false; }
     
+    /** Override this to return TRUE if, after recieving a NON-MERGE patch from the synthesizer, we should turn around and sendAllParameters() to it.
+    	This commonly is needed in some synth multi-mode editors, where program changes have no effect (they don't switch to a new multi-mode synth),
+    	and so we'll receive the correct patch but the synthesizer won't switch to it.  We can turn around and emit changes to it to get the right
+    	sound in the edit buffer. */ 
+    public boolean getSendsParametersAfterNonMergeParse() { return false; }
+    
     /** Return the filename of your default sysex file (for example "MySynth.init"). Should be located right next to the synth's class file ("MySynth.class") */
     public String getDefaultResourceFileName() { return null; }
         
@@ -867,8 +882,10 @@ public abstract class Synth extends JComponent implements Updatable
 									{
 									if (merging != 0.0)
 										{
-										merge(data, merging);
-										merging = 0.0;
+										if (merge(data, merging))
+											{
+											merging = 0.0;
+											}
 										}
 									else
 										{
@@ -876,11 +893,13 @@ public abstract class Synth extends JComponent implements Updatable
 										setSendMIDI(false);
 										undo.setWillPush(false);
 										Model backup = (Model)(model.clone());
-										incomingPatch = parse(data, false, false);
+										incomingPatch = (parse(data, false, false) == PARSE_SUCCEEDED);
 										undo.setWillPush(true);
 										if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
 											undo.push(backup);
 										setSendMIDI(true);
+										if (getSendsParametersAfterNonMergeParse())
+											sendAllParameters();
 										file = null;
 										}
 
@@ -920,7 +939,7 @@ public abstract class Synth extends JComponent implements Updatable
 									sendMIDI = false;  // so we don't send out parameter updates in response to reading/changing parameters
 									// let's try parsing it
 									handleInRawCC(sm);
-									if (getReceivesPatchesInBulk()) 
+									if (!getReceivesPatchesInBulk()) 
 										{
 										incomingPatch = true;
 										}
@@ -1355,8 +1374,13 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
 
-    // merges in a dumped patch with the existing one
-    void merge(byte[] data, double probability)
+    /** Merges in a dumped patch with the existing one and returns TRUE.
+        In some rare cases, such as for the TX81Z, merging requires multiple
+        sysex dumps to come back.  In this case, if not all the dumps have
+        arrived (a merge call will be made for each one), return FALSE, until
+        you finally have collected enough data to do a merge, at which point
+        you should return super.merge(revisedData, probability). */
+    public boolean merge(byte[] data, double probability)
         {
         setSendMIDI(false);
         undo.setWillPush(false);
@@ -1380,6 +1404,7 @@ public abstract class Synth extends JComponent implements Updatable
         // into the Blofeld, and it makes no difference!  For some reason the OS X
         // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
         repaint();
+        return true;
         }
 
     /** Returns the current channel (0--15, NOT 1--16) with which we are using to 
@@ -1641,7 +1666,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** Given a preferences path X for a given synth, sets X to have the given value.. 
         Also sets the global path X to the value.  Typically this method is called by a
         a cover function (see for example setLastSynth(...) ) */
-    public static void setLastX(String value, String x, String synthName)
+    private static final void setLastX(String value, String x, String synthName)
         {
         if (synthName != null)
             {
@@ -1653,12 +1678,32 @@ public abstract class Synth extends JComponent implements Updatable
         global_p.put(x, value);
         Prefs.save(global_p);
         }
+
+    /** Given a preferences path X for a given synth, sets X to have the given value.. 
+        Also sets the global path X to the value.  Typically this method is called by a
+        a cover function (see for example setLastSynth(...) ) */
+    public static void setLastX(String value, String x, String synthName, boolean onlySetInSynth)
+        {
+        if (synthName != null)
+            {
+            java.util.prefs.Preferences app_p = Prefs.getAppPreferences(synthName, "Edisyn");
+            app_p.put(x, value);
+            Prefs.save(app_p);
+            }
+        if (!onlySetInSynth)
+        	{
+        	java.util.prefs.Preferences global_p = Prefs.getGlobalPreferences("Data");
+	        global_p.put(x, value);
+	        Prefs.save(global_p);
+	        }
+        }
+        
         
     /** Given a preferences path X for a given synth, returns the value stored in X.
         If there is no such value, then returns the value stored in X in the globals.
         If there again is no such value, returns null.  Typically this method is called by a
         a cover function (see for example getLastSynth(...) ) */
-    public static String getLastX(String x, String synthName)
+    private static final String getLastX(String x, String synthName)
         {
         String lastDir = null;
         if (synthName != null)
@@ -1674,16 +1719,36 @@ public abstract class Synth extends JComponent implements Updatable
         return lastDir;         
         }
     
-    
+    /** Given a preferences path X for a given synth, returns the value stored in X.
+        If there is no such value, then returns the value stored in X in the globals.
+        If there again is no such value, returns null.  Typically this method is called by a
+        a cover function (see for example getLastSynth(...) ) */
+    public static String getLastX(String x, String synthName, boolean onlyGetFromSynth)
+        {
+        String lastDir = null;
+        if (synthName != null)
+            {
+            lastDir = Prefs.getAppPreferences(synthName, "Edisyn").get(x, null);
+            }
+        
+        if (!onlyGetFromSynth && lastDir == null)
+            {
+            lastDir = Prefs.getGlobalPreferences("Data").get(x, null);
+            }
+                
+        return lastDir;         
+        }
+        
+   
     // sets the last directory used by load, save, or save as
-    void setLastDirectory(String path) { setLastX(path, "LastDirectory", getSynthNameLocal()); }
+    void setLastDirectory(String path) { setLastX(path, "LastDirectory", getSynthNameLocal(), false); }
     // sets the last directory used by load, save, or save as
-    String getLastDirectory() { return getLastX("LastDirectory", getSynthNameLocal()); }
+    String getLastDirectory() { return getLastX("LastDirectory", getSynthNameLocal(), false); }
     
     // sets the last synthesizer opened via the global window.
-    static void setLastSynth(String synth) { setLastX(synth, "Synth", null); }
+    static void setLastSynth(String synth) { setLastX(synth, "Synth", null, false); }
     // gets the last synthesizer opened via the global window.
-    static String getLastSynth() { return getLastX("Synth", null); }
+    static String getLastSynth() { return getLastX("Synth", null, false); }
 
 
                 
@@ -1897,6 +1962,9 @@ public abstract class Synth extends JComponent implements Updatable
         randomize.add(randomize50);
         JMenuItem randomize100 = new JMenuItem("Randomize by 100%");
         randomize.add(randomize100);
+
+        randomize.addSeparator();
+
         JMenuItem undoAndRandomize = new JMenuItem("Undo and Randomize Again");
         randomize.add(undoAndRandomize);
 
@@ -2026,6 +2094,8 @@ public abstract class Synth extends JComponent implements Updatable
             });
         nudgeTowards[3].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         
+        nudgeMenu.addSeparator();
+
         nudgeTowards[4] = new JMenuItem("Away from 1");
         nudgeMenu.add(nudgeTowards[4]);
         nudgeTowards[4].addActionListener(new ActionListener()
@@ -2069,6 +2139,8 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
         nudgeTowards[7].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+
+        nudgeMenu.addSeparator();
 
         JMenuItem undoAndNudge = new JMenuItem("Undo and Nudge Again");
         nudgeMenu.add(undoAndNudge);
@@ -2170,7 +2242,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
 				nudgeMutationWeight = 0.0;
-                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal()); 
+                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal(), false); 
                 }
             });
 
@@ -2179,7 +2251,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
 				nudgeMutationWeight = 0.02;
-                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal()); 
+                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal(), false); 
                 }
             });
 
@@ -2188,7 +2260,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
 				nudgeMutationWeight = 0.05;
-                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal()); 
+                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal(), false); 
                 }
             });
 
@@ -2197,7 +2269,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
 				nudgeMutationWeight = 0.10;
-                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal()); 
+                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal(), false); 
                 }
             });
 
@@ -2206,11 +2278,11 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
 				nudgeMutationWeight = 0.25;
-                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal()); 
+                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal(), false); 
                 }
             });
 
-    	double nudgeVal = getLastXAsDouble("NudgeMutationWeight", getSynthNameLocal(), 0.0);
+    	double nudgeVal = getLastXAsDouble("NudgeMutationWeight", getSynthNameLocal(), 0.0, false);
     	if (nudgeVal < 0.02) { nudgeMutationWeight = 0.0; nudgeMutation0.setSelected(true); }
     	else if (nudgeVal < 0.05) { nudgeMutationWeight = 0.02; nudgeMutation2.setSelected(true); }
     	else if (nudgeVal < 0.10) { nudgeMutationWeight = 0.05; nudgeMutation5.setSelected(true); }
@@ -2244,7 +2316,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
 				nudgeRecombinationWeight = 0.02;
-                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal()); 
+                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal(), false); 
                 }
             });
 
@@ -2253,7 +2325,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
 				nudgeRecombinationWeight = 0.05;
-                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal()); 
+                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal(), false); 
                 }
             });
 
@@ -2262,7 +2334,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
 				nudgeRecombinationWeight = 0.10;
-                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal()); 
+                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal(), false); 
                 }
             });
 
@@ -2271,7 +2343,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
 				nudgeRecombinationWeight = 0.25;
-                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal()); 
+                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal(), false); 
                 }
             });
 
@@ -2280,11 +2352,11 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
 				nudgeRecombinationWeight = 0.50;
-                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal()); 
+                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal(), false); 
                 }
             });
 
-    	nudgeVal = getLastXAsDouble("NudgeRecombinationWeight", getSynthNameLocal(), 0.25);
+    	nudgeVal = getLastXAsDouble("NudgeRecombinationWeight", getSynthNameLocal(), 0.25, false);
     	if (nudgeVal < 0.05) { nudgeRecombinationWeight = 0.02; nudgeRecombination2.setSelected(true); }
     	else if (nudgeVal < 0.10) { nudgeRecombinationWeight = 0.05; nudgeRecombination5.setSelected(true); }
     	else if (nudgeVal < 0.25) { nudgeRecombinationWeight = 0.10; nudgeRecombination10.setSelected(true); }
@@ -2346,10 +2418,10 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 useMapForRecombination = !useMapForRecombination;
                 recombinationToggle.setSelected(useMapForRecombination);
-                setLastX("" + useMapForRecombination, "UseParametersForRecombination", getSynthNameLocal()); 
+                setLastX("" + useMapForRecombination, "UseParametersForRecombination", getSynthNameLocal(), false); 
                 }
             });
-        String recomb = getLastX("UseParametersForRecombination", getSynthNameLocal());
+        String recomb = getLastX("UseParametersForRecombination", getSynthNameLocal(), false);
         if (recomb == null) recomb = "true";
         useMapForRecombination = Boolean.parseBoolean(recomb);
         recombinationToggle.setSelected(useMapForRecombination);
@@ -2456,7 +2528,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        String sendInRealTime = getLastX("AllowTransmitParameters", getSynthNameLocal());
+        String sendInRealTime = getLastX("AllowTransmitParameters", getSynthNameLocal(), false);
         if (sendInRealTime == null) sendInRealTime = "true";
         allowsTransmitsParameters = Boolean.parseBoolean(sendInRealTime);
         transmitParameters.setSelected(allowsTransmitsParameters);
@@ -2557,7 +2629,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteLength(125);
-                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal()); 
+                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2568,7 +2640,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteLength(250);
-                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal()); 
+                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2579,7 +2651,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteLength(500);
-                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal()); 
+                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2590,7 +2662,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteLength(1000);
-                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal()); 
+                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2601,7 +2673,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteLength(2000);
-                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal()); 
+                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2612,7 +2684,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteLength(4000);
-                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal()); 
+                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2623,12 +2695,12 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteLength(8000);
-                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal()); 
+                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
 
-		int v = getLastXAsInt("TestNoteLength", getSynthNameLocal(), 500);
+		int v = getLastXAsInt("TestNoteLength", getSynthNameLocal(), 500, false);
 		switch(v)
 			{
 			case 125:
@@ -2663,7 +2735,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePause(TEST_NOTE_PAUSE_DEFAULT);
-                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2674,7 +2746,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePause(0);
-                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2685,7 +2757,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePause(125);
-                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2696,7 +2768,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePause(250);
-                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2707,7 +2779,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePause(500);
-                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2718,7 +2790,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePause(1000);
-                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2729,7 +2801,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePause(2000);
-                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2741,7 +2813,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePause(4000);
-                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2752,13 +2824,13 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePause(8000);
-                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal()); 
+                setLastX("" + getTestNotePause(), "TestNotePause", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
 
 
-		v = getLastXAsInt("TestNotePause", getSynthNameLocal(), -1);
+		v = getLastXAsInt("TestNotePause", getSynthNameLocal(), -1, false);
 		switch(v)
 			{
 			case TEST_NOTE_PAUSE_DEFAULT:
@@ -2797,7 +2869,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePitch(96);
-                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal()); 
+                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2808,7 +2880,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePitch(84);
-                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal()); 
+                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2819,7 +2891,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePitch(72);
-                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal()); 
+                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2831,7 +2903,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePitch(60);
-                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal()); 
+                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2842,7 +2914,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePitch(48);
-                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal()); 
+                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2853,7 +2925,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePitch(36);
-                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal()); 
+                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal(), false); 
                }
             });
 		testNoteGroup.add(tn);
@@ -2864,13 +2936,13 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePitch(24);
-                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal()); 
+                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
         
             
-		v = getLastXAsInt("TestNotePitch", getSynthNameLocal(), 60);
+		v = getLastXAsInt("TestNotePitch", getSynthNameLocal(), 60, false);
 		switch(v)
 			{
 			case 96:
@@ -2906,7 +2978,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteVelocity(127);
-                setLastX("" + getTestNoteVelocity(), "TestNoteVelocity", getSynthNameLocal()); 
+                setLastX("" + getTestNoteVelocity(), "TestNoteVelocity", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2917,7 +2989,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteVelocity(64);
-                setLastX("" + getTestNoteVelocity(), "TestNoteVelocity", getSynthNameLocal()); 
+                setLastX("" + getTestNoteVelocity(), "TestNoteVelocity", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2928,7 +3000,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteVelocity(32);
-                setLastX("" + getTestNoteVelocity(), "TestNoteVelocity", getSynthNameLocal()); 
+                setLastX("" + getTestNoteVelocity(), "TestNoteVelocity", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2939,7 +3011,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteVelocity(16);
-                setLastX("" + getTestNoteVelocity(), "TestNoteVelocity", getSynthNameLocal()); 
+                setLastX("" + getTestNoteVelocity(), "TestNoteVelocity", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
@@ -2950,13 +3022,13 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNoteVelocity(8);
-                setLastX("" + getTestNoteVelocity(), "TestNoteVelocity", getSynthNameLocal()); 
+                setLastX("" + getTestNoteVelocity(), "TestNoteVelocity", getSynthNameLocal(), false); 
                 }
             });
 		testNoteGroup.add(tn);
 
 
-		v = getLastXAsInt("TestNoteVelocity", getSynthNameLocal(), 127);
+		v = getLastXAsInt("TestNoteVelocity", getSynthNameLocal(), 127, false);
 		switch(v)
 			{
 			case 127:
@@ -3044,7 +3116,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doPassThroughCC(passThroughCCMenuItem.getState());
                 }
             });
-        String val = getLastX("PassThroughCC", getSynthNameLocal());
+        String val = getLastX("PassThroughCC", getSynthNameLocal(), false);
         setPassThroughCC(val != null && val.equalsIgnoreCase("true"));
             
             
@@ -3237,7 +3309,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             clearLearned();
             perChannelCCs = val;
-            setLastX("" + perChannelCCs, "PerChannelCC", getSynthNameLocal());              
+            setLastX("" + perChannelCCs, "PerChannelCC", getSynthNameLocal(), false);              
             }
         }
 
@@ -3463,7 +3535,7 @@ public abstract class Synth extends JComponent implements Updatable
     void doAllowParameterTransmit()
         {
         allowsTransmitsParameters = transmitParameters.isSelected();
-        setLastX("" + allowsTransmitsParameters, "AllowTransmitParameters", getSynthNameLocal());
+        setLastX("" + allowsTransmitsParameters, "AllowTransmitParameters", getSynthNameLocal(), false);
         }
     
     int testNote = 60;
@@ -3478,8 +3550,12 @@ public abstract class Synth extends JComponent implements Updatable
     int getTestNoteVelocity() { return testNoteVelocity; }
     
     void doSendTestNote(boolean restartTestNotesTimer)
+    	{
+        doSendTestNote(getTestNotePitch(), false, restartTestNotesTimer);
+    	}
+
+    public void doSendTestNote(final int testNote, final boolean alwaysSendNoteOff, boolean restartTestNotesTimer)
         {
-        final int testNote = getTestNotePitch();
         final int channel = getTestNoteChannel();
         final int velocity = getTestNoteVelocity();
         try
@@ -3491,12 +3567,11 @@ public abstract class Synth extends JComponent implements Updatable
 									
             // schedule a note off
             final int myNoteOnTick = ++noteOnTick;
-            javax.swing.Timer noteTimer = new javax.swing.Timer(testNoteLength,
-                new ActionListener()
+            javax.swing.Timer noteTimer = new javax.swing.Timer(testNoteLength, new ActionListener()
                     {
                     public void actionPerformed(ActionEvent e)
                         {
-                        if (noteOnTick == myNoteOnTick)  // no more note on messages
+                        if (alwaysSendNoteOff || noteOnTick == myNoteOnTick)  // no more note on messages
                             try
                                 {
                                 tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, testNote, velocity));
@@ -3639,7 +3714,7 @@ public abstract class Synth extends JComponent implements Updatable
 	        }
 	    else
 	    	{
-	    	if (nudgeRecombinationWeight > 0.0) model.opposite(random, nudge[towards], useMapForRecombination ? getMutationKeys() : model.getKeys(), 0.5, true);
+	    	if (nudgeRecombinationWeight > 0.0) model.opposite(random, nudge[towards - 4], useMapForRecombination ? getMutationKeys() : model.getKeys(), 0.5, true);
 	       	if (nudgeMutationWeight > 0.0) model.mutate(random, model.getKeys(), 0.5);
 	    	}
         revise();  // just in case
@@ -4151,7 +4226,7 @@ public abstract class Synth extends JComponent implements Updatable
 	/** This tells Edisyn whether your synthesizer sends patches to Edisyn via a sysex patch dump
 		(as opposed to individual CC or NRPN messages as is done in synths such as the PreenFM2).
 		The default is TRUE, which is nearly always the case. */
-	boolean getReceivesPatchesInBulk() { return true; }
+	public boolean getReceivesPatchesInBulk() { return true; }
 		
 	void processCurrentPatch()
 		{			
@@ -4251,12 +4326,12 @@ public abstract class Synth extends JComponent implements Updatable
                 
         // otherwise flatten
                 
-        int len = 1;
+        int len = 0;
         for(int i = 0; i < data.length; i++)
             {
             if (data[i] instanceof byte[])
                 {
-                len *= ((byte[])data[i]).length;
+                len += ((byte[])data[i]).length;
                 }
             }
                         
@@ -4274,9 +4349,9 @@ public abstract class Synth extends JComponent implements Updatable
         return result;
         }
 
-	int getLastXAsInt(String slot, String synth, int defaultVal)
+	int getLastXAsInt(String slot, String synth, int defaultVal, boolean getFromSynthOnly)
 		{
-        String tnls = getLastX(slot, synth);
+        String tnls = getLastX(slot, synth, getFromSynthOnly);
         try
         	{
        		return Integer.parseInt(tnls);
@@ -4291,9 +4366,9 @@ public abstract class Synth extends JComponent implements Updatable
        		}
 		}
 
-	double getLastXAsDouble(String slot, String synth, double defaultVal)
+	double getLastXAsDouble(String slot, String synth, double defaultVal, boolean getFromSynthOnly)
 		{
-        String tnls = getLastX(slot, synth);
+        String tnls = getLastX(slot, synth, getFromSynthOnly);
         try
         	{
        		return Double.parseDouble(tnls);
@@ -4307,5 +4382,4 @@ public abstract class Synth extends JComponent implements Updatable
        		return defaultVal;
        		}
 		}
-
     }

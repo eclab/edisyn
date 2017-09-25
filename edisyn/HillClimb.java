@@ -497,7 +497,6 @@ Noisy(Noisy(A + (B + C)))
 Current Patch
 */
 	
-	
 		// A
 		currentModels[0] = ((Model)(bestModels[0].clone()));
 		// A + B
@@ -509,11 +508,15 @@ Current Patch
 
 		// Noisy versions of A, A + B, A + C, A + (B + C)
 		for(int i = 0; i < 4; i ++)
-			currentModels[i + 4] = ((Model)(currentModels[i].clone())).mutate(random, weight / 2.0);
+			{
+			currentModels[i + 4] = ((Model)(currentModels[i].clone())).mutate(random, keys, weight / 2.0);
+			}
 		
 		// Really noisy versions of A, A + B, A + C, A + (B + C)
 		for(int i = 0; i < 4; i ++)
-			currentModels[i + 8] = ((Model)(currentModels[i + 4].clone())).mutate(random, weight / 2.0);
+			{
+			currentModels[i + 8] = ((Model)(currentModels[i + 4].clone())).mutate(random, keys, weight / 2.0);
+			}
 
 		// B + C
 		currentModels[12] = ((Model)(bestModels[1].clone())).recombine(random, bestModels[2], keys, recombination);
@@ -521,7 +524,6 @@ Current Patch
 		currentModels[13] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, recombination, false);
 		// Even further Beyond A from Z
 		currentModels[14] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, 2.0 * recombination, false);
-	
 		// Current patch
 		currentModels[15] = ((Model)(synth.getModel().clone()));
 

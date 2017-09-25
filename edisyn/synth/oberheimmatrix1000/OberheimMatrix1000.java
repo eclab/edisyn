@@ -173,6 +173,8 @@ public class OberheimMatrix1000 extends Synth
         {
         JFrame frame = super.sprout();
         receiveCurrent.setEnabled(false);               // can't receive current patch
+        transmitTo.setEnabled(false);
+        //addOberheimMenu();
         return frame;
         }         
 
@@ -1655,7 +1657,7 @@ public class OberheimMatrix1000 extends Synth
                 {
                 value = model.get(key);
                 }
-                        
+            
             // pack to nybbles
             byte lonybble = (byte)(value & 15);
             byte hinybble = (byte)(value >>> 4);
@@ -1681,6 +1683,7 @@ public class OberheimMatrix1000 extends Synth
         d[1] = (byte)0x10;
         d[2] = (byte)0x06;
 
+/*
         if (toWorkingMemory)
             {
             // 0DH - SINGLE PATCH DATA TO EDIT BUFFER
@@ -1693,6 +1696,25 @@ public class OberheimMatrix1000 extends Synth
             d[3] = (byte)0x01;
             d[4] = (byte)model.get("number");
             }
+*/
+
+///// A bug in the Matrix 1000 means that SINGLE PATCH DATA TO EDIT BUFFER apparently sends
+///// corrupted data.  So we can't use it.  But we still need to send!  So we do this by 
+///// writing to slot 199 when toWorkingMemory is true
+
+        if (toWorkingMemory)
+            {
+            // 01H-SINGLE PATCH DATA
+            d[3] = (byte)0x01;
+            d[4] = (byte)SEND_MATRIX_NUMBER;
+            }
+        else
+            {
+            // 01H-SINGLE PATCH DATA
+            d[3] = (byte)0x01;
+            d[4] = (byte)model.get("number");
+            }
+
 
         System.arraycopy(data, 0, d, 5, 268);
         d[273] = checksum;
@@ -1705,6 +1727,12 @@ public class OberheimMatrix1000 extends Synth
         
     public void changePatch(Model tempModel)
         {
+        changePatch(tempModel.get("bank"), tempModel.get("number"));
+        }
+
+
+    public void changePatch(int bank, int number)
+        {
         // first change the bank
                 
         // 0AH - SET BANK
@@ -1715,7 +1743,7 @@ public class OberheimMatrix1000 extends Synth
         data2[1] = (byte)0x10;
         data2[2] = (byte)0x06;  
         data2[3] = (byte)0x0A;
-        data2[4] = (byte)(tempModel.get("bank"));
+        data2[4] = (byte)(bank);
         data2[5] = (byte)0xF7;
 
         tryToSendSysex(data2);
@@ -1733,9 +1761,10 @@ public class OberheimMatrix1000 extends Synth
                         
         // Next do a program change
                 
-        byte NN = (byte)tempModel.get("number");
+        byte NN = (byte)number;
         tryToSendMIDI(buildPC(getChannelOut(), NN));
         }
+
 
 
     public byte[] requestDump(Model tempModel)
@@ -1800,12 +1829,13 @@ public class OberheimMatrix1000 extends Synth
             model.set("name", newnm);
         }
         
-    public int getPauseBetweenMIDISends() { return 50; }
+    public int getPauseBetweenMIDISends() { return 75; }
 
     public static String getSynthName() { return "Oberheim Matrix 1000"; }
     
     public String getPatchName(Model model) { return model.get("name", "UNTITLED"); }
     
+    public int getPauseAfterSendAllParameters() { return 200; }
     
     
     public boolean patchLocationEquals(Model patch1, Model patch2)
@@ -1849,4 +1879,73 @@ public class OberheimMatrix1000 extends Synth
     		(number > 9 ? "" : "0") + 
     		(model.get("number"));
     	}
+
+///// A bug in the Matrix 1000 means that SINGLE PATCH DATA TO EDIT BUFFER apparently sends
+///// corrupted data.  So we can't use it.  But we still need to send!  So we do this by 
+///// writing to slot 199 when sending in bulk.  We have to modify sendAllParameters so that if
+///// we're sending in bulk, we change the patch to 199 first so that we always have the
+///// Matrix 1000 set up right.
+
+	public static final int SEND_MATRIX_NUMBER = 99;
+	public static final int SEND_MATRIX_BANK = 1;
+	public boolean sendMatrixParametersInBulk = true;  // always for now
+
+	public boolean getSendsAllParametersInBulk() { return sendMatrixParametersInBulk; }
+
+    public void sendAllParameters()
+        {
+        if (sendMatrixParametersInBulk)
+         	{
+         	// we need to ensure a changepatch to SEND_MATRIX_SLOT here
+         	changePatch(SEND_MATRIX_BANK, SEND_MATRIX_NUMBER);
+         	}
+        super.sendAllParameters();
+        }
+
+// we don't call this for the time being -- sending individual parameters is slow and fraught with problems
+	public void addOberheimMenu()
+		{
+		JMenu menu = new JMenu("Matrix 1000");
+		menubar.add(menu);
+
+		JMenu sendParameters = new JMenu("Send Parameters...");
+		menu.add(sendParameters);
+		
+		String str = getLastX("SendParameters", getSynthName(), true);
+		if (str == null)
+			sendMatrixParametersInBulk = true;
+		else if (str.equalsIgnoreCase("BULK"))
+			sendMatrixParametersInBulk = true;
+		else if (str.equalsIgnoreCase("INDIVIDUALLY"))
+			sendMatrixParametersInBulk = false;
+		else sendMatrixParametersInBulk = true;
+
+		ButtonGroup bg = new ButtonGroup();
+		JRadioButtonMenuItem bulk = new JRadioButtonMenuItem("In Bulk, using Patch 199");
+		bulk.addActionListener(new ActionListener()
+			{
+			public void actionPerformed(ActionEvent evt)
+				{
+				sendMatrixParametersInBulk = true;
+				setLastX("BULK", "SendParameters", getSynthName(), true);
+				}
+			});
+		sendParameters.add(bulk);
+		bg.add(bulk);
+		if (sendMatrixParametersInBulk == true) bulk.setSelected(true);
+		
+		JRadioButtonMenuItem separately = new JRadioButtonMenuItem("As Individual Parameters");
+		separately.addActionListener(new ActionListener()
+			{
+			public void actionPerformed(ActionEvent evt)
+				{
+				sendMatrixParametersInBulk = false;
+				setLastX("INDIVIDUALLY", "SendParameters", getSynthName(), true);
+				}
+			});
+		sendParameters.add(separately);
+		bg.add(separately);
+		if (sendMatrixParametersInBulk == false) separately.setSelected(true);
+		}
+        
     }

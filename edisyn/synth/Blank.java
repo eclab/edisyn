@@ -624,4 +624,15 @@ public class Blank extends Synth
 		// detect this during its batch patch-download process.
 		return true;
 		}
+	
+	public boolean getSendsParametersAfterNonMergeParse()
+		{
+		// Some synthesizers cannot change patches via program change when in multi-mode.
+		// So when you issue a patch request, they just give Edisyn the patch, but don't
+		// switch to playing it.  So this command issues a sendAllParameters() on receiving
+		// a (non-merge) parse from the synthesizer to keep it up to date.  Example synths
+		// with this issue: Waldorf Blofeld and Microwave.
+		return false;
+		}
+
     }

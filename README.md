@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 10)
+Synthesizer Patch Editor (Version 11)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -17,12 +17,9 @@ Edisyn presently supports:
 * Oberheim Matrix 1000
 * PreenFM2
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)
-
-Soon Edisyn will support:
-
 * Yamaha TX81Z (Single and Multi Modes)
 
-Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, randomization/merging/nudging with per-parameter customization, real-time parameter updates, test notes, etc.  Edisyn is particularly strong in sound exploration tools.
+Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, extensive parameter space exploration tools (randomization/merging/nudging/hill-climbing) with per-parameter customization, real-time parameter updates, test notes, etc.
 
 ## Manual
 
@@ -52,7 +49,7 @@ Now you should be able to run Edisyn.  Let me know if this all works.
 
 ### Installation and Running on Windows
 
-I don't know.  But you may be able to download the [jar file](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar) located in the "jar" directory and double-click on it.  Tell me if this works.
+I don't know for sure (I don't have Windows).  But you may be able to run it by first downloading and installing Java, then downloading the [jar file](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar) located in the "jar" directory, and finally just double-clicking on the jar file.  Tell me if this works.
 
 
 ### Installation and Running on Linux
@@ -63,8 +60,7 @@ I'm told that this works on Ubuntu:
 
 2. Download [Edisyn's jar file](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar) located in the "jar" directory.
 
-3. Right-click on the jar file icon and choose "Properties".  Then select the "Open With" tab, and select your Java VM (for example "Open JDK Java 8 Runtime").  
-The press "Set as Default".  This makes the Java VM the default application to launch jar files.
+3. Right-click on the jar file icon and choose "Properties".  Then select the "Open With" tab, and select your Java VM (for example "Open JDK Java 8 Runtime").  The press "Set as Default".  This makes the Java VM the default application to launch jar files.
 
 4. Thereafter you should be able to just double-click on the file to launch Edisyn.
 

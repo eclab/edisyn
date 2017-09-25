@@ -1,4 +1,4 @@
-%%%% Copyright 2016 by Sean Luke
+%%%% Copyright 2017 by Sean Luke
 %%%% Distributed Under the Apache 2.0 License
 
 
@@ -13,6 +13,7 @@
 \usepackage{array}
 \usepackage{color}
 \usepackage{rotating}
+\usepackage[nobottomtitles*]{titlesec}
 
 \sloppy
 
@@ -21,13 +22,17 @@
 
 \noindent {\Huge\bf Edisyn}\\[0.5em]
 {\large \bf A Java-based Synthesizer Patch Editor\\[0.2em]
-Version 10\\[0.2em]
+Version 11\\[0.2em]
 By Sean Luke\\[0.2em]
 sean@cs.gmu.edu}\\[0.2em]
 
+\setcounter{tocdepth}{1}
+\tableofcontents
 
+\vspace{1em}
+\section{About Edisyn}
 
-\noindent Edisyn is a no-nonsense synthesizer patch editor designed to be extensible for many different kind of of synthesizers, and to have unusual programming assistance capabilities.  It is not skewmorphic and not skinnable: its design is plain and consistent.  Edisyn is free open source.
+Edisyn is a no-nonsense synthesizer patch editor designed to be extensible for many different kind of of synthesizers, and to have unusual programming assistance capabilities.  It is not skewmorphic and not skinnable: its design is plain and consistent.  Edisyn is free open source.
 
 Edisyn at present has patch editors for the following synthesizers: the very ones that I own! 
 
@@ -47,8 +52,9 @@ Edisyn does not support patches for global parameters, nor for wave, sample, or 
 \label{startingedisyn}
 
 \begin{wrapfigure}{r}{2.2in}
-\vspace{-4em}\includegraphics[scale=0.3]{0.png}
+\vspace{-2em}\includegraphics[scale=0.3]{0.png}
 \vspace{-3em}\caption{Initial Synthesizer Dialog}\label{initialsynthpanel}
+\vspace{-1em}
 \end{wrapfigure}
 
 If you're on a Mac, Edisyn will look like a standard application, just double-click on it.  On other platforms, Edisyn comes as a single Java jar file.  Just double-click on the jar file (you'll have to have Java installed) and Edisyn should launch.
@@ -56,9 +62,9 @@ If you're on a Mac, Edisyn will look like a standard application, just double-cl
 You'll first be presented with the dialog at right, asking you to choose a synthesizer patch editor.  You can either connect to a synth then and there, or run in {\bf Disconnected Mode}, where you're not attached to MIDI.  You can also quit immediately.
 
 \begin{wrapfigure}{r}{2.7in}
-\vspace{-2em}\includegraphics[scale=0.3]{1.png}
+\includegraphics[scale=0.3]{1.png}
 \vspace{-1em}\caption{MIDI Dialog}\label{mididialog}
-\vspace{3em}
+\vspace{-3em}
 \end{wrapfigure}
 
 Edisyn will now build a patch editor for you and display it.  But unless you chose {\bf Disconnected Mode}, it'll first ask you to set up MIDI for this editor.  The dialog at right presents you with up to 6 fields (5 are shown here):
@@ -66,12 +72,10 @@ Edisyn will now build a patch editor for you and display it.  But unless you cho
 \begin{itemize}
 \item The USB MIDI Device from which you will {\bf Receive} MIDI data sent by the synthesizer.  Here we are sending to a Tascam US-2x2 interface, which presents itself as a generic, nameless device. (BTW, if you're on a Mac and you don't like a generic name for your device, go to the Audio MIDI Setup application in the Utilities folder, double-click on the device, and change its name.)
 \item The USB MIDI Device to which you will {\bf Send} MIDI to ultimately be sent to the synthesizer.  Here again we are sending to the Tascam US-2x2 device.
+\item The {\bf Channel} on which the synthesizer is listening.  (Here, 1).
 \end{itemize}
 
-\clearpage
-
 \begin{itemize}
-\item The {\bf Channel} on which the synthesizer is listening.  (Here, 1).
 \item (Not visible here) The optional {\bf ID} of the synthesizer.  Some synthesizers require a special ID embedded in their sysex so they can tell that the message is for them rather than another copy of the same synthesizer.  (The Yamaha TX81Z doesn't have an ID, so it's not displayed in this example).
 \item The USB MIDI Device from which you will receive MIDI data sent by a {\bf controller}.  This may be a controller keyboard to play test notes on the synthesizer, or it may be a control surface to send CC data to the synthesizer or to Edisyn itself.  Here we are receiving from an Arturia Beatstep.
 \item The {\bf Channel} over which you will receive MIDI data sent by a {\bf controller}.  This can be any specific MIDI channel, or (in this example) ``Any'', meaning any channel or OMNI.
@@ -140,11 +144,9 @@ Whenever you create a new patch editor or duplicate one, you will once again be 
 
 \subsection{Persistence}
 
-Now would be a good time to mention an Edisyn feature you may never notice otherwise: many things are {\bf persistent}.  For example, if you choose ``Arturia Beatstep'' as the controller for your Blofeld patch, the next time you call up a Blofeld patch editor, ``Arturia Beatstep'' will be presented as the default choice in the MIDI Devices window, assuming your Arturia Beatstep is plugged in.  This goes for everything in the MIDI Devices window.
+Now would be a good time to mention an Edisyn feature you may never notice otherwise: many things are {\bf persistent}.  For example, if you choose ``Arturia Beatstep'' as the controller for your Blofeld patch, the next time you call up a Blofeld patch editor, ``Arturia Beatstep'' will be presented as the default choice in the MIDI Devices window, assuming your Arturia Beatstep is plugged in.  This goes for everything in the MIDI Devices window.  Furthermore, if you pop a new patch editor for a synthesizer you have never edited before, the Arturia Beatstep will be the default option for that one too (until you change it one time).    And these options are per synthesizer type.
 
-Furthermore if you pop a new patch editor for a synthesizer you have never edited before, the Arturia Beatstep will be the default option for that one too (until you change it one time).    And these options are per synthesizer type.
-
-Persistence appears in other places too.  For example, the Initial Synthesizer dialog will default to the last synth you chose in that dialog.  And certain menu choices are persistent as well.
+Persistence appears in other places too.  For example, the Initial Synthesizer dialog will default to the last synth you chose in that dialog.  And certain many choices are persistent as well.
 
 \section{Loading and Saving Files}
 
@@ -191,6 +193,8 @@ If you don't have a controller keyboard, you can send a test note to your synthe
 
 Edisyn gives you various options for adjusting the test note you send (though it's always a ``C'').  You can change the length of the test notes you send in the {\bf Test Note Length} submenu.  You can change the pitch with {\bf Test Note Pitch}.  And you can change the volume with {\bf Test Note Volume}.
 
+Setting the {\bf Pause Between Test Notes} will change how long Edisyn waits, beyond the note length itself, before it plays the next note if you have {\bf Send Test Notes} on.  It doesn't affect how fast you can play test notes on your own.  One special setting is {\bf Default}: this is defined as an additional pause equal to the note length if the note length is less than 1/2 seconds; or a pause of 1/2 second if the note length is greater than this.
+
 \section{Communicating with the Controller}
 
 The MIDI Dialog (Section \ref{startingedisyn}) also lets you choose a device and MIDI channel for incoming messages from a control surface or controller keyboard.  Using this keyboard you can:
@@ -215,16 +219,16 @@ Mapping a parameter is easy:
 
 \begin{enumerate}
 \item Choose one of three MIDI mapping menu options discussed next.  The title bar will say ``LEARNING''.
-\item Select the widget you want to map, and modify it slightly.  The title bar will change to ``LEARNING {\it parameter}[{\it range}]'', where {\it parameter} is Edisyn's name for the synthesizer parameter in question.  The title bar might also tell you what the {\it previous} mapping was.
+\item Select the widget you want to map, and modify it slightly.  The title bar will change to ``LEARNING {\it parameter}[{\it range}]'', where {\it parameter} is Edisyn's name for the synthesizer parameter in question, and its values are in  \((0...\text{\it range}-1)\).  The title bar might also tell you what the {\it previous} mapping was.  If \(\text{\it range} > 127\) then you should think about mapping with 14-bit NRPN instead of CC. 
 \item Press or spin the knob/button on your controller.  You're now mapped!
 \item If you have chosen an absolute mapping, you'll want to change your controller's range to \((0...\text{\it range}-1)\).
 \end{enumerate}
 
-\noindent Edisyn accepts any of the following MIDI Control commands.  Note that you are not permitted to map CC numbers 6, 38, 98, 99, 100, or 101, or Edisyn will think you're sending NRPN.  So you only have 121 CCs to play with.
+\noindent Edisyn accepts any of the following MIDI Control commands.  
 
 \begin{itemize}
-\item {\bf Absolute CC}\quad  The value of the CC sent is exactly what the parameter will be set to (between 0...127).  To map, choose {\bf Map CC/NRPN} in the {\bf Map} menu.  This style is particularly useful for potentiometers or sliders.
-\item {\bf Relative CC}\quad  Here, the CC value you send indicates how much to {\it add to} or {\it subtract from} the existing parameter value.\footnote{Specifically, 64 means 0 (add nothing), a value \(x<64\) means to subtract \(64-x\) from the current value, and a value \(x>64\) means to add \(x - 64\) to the current value.}  This style is supported by a number of controllers and is useful for encoders.\footnote{You could also map a pair of pushbuttons to be up/down cursors using this method: set up the ``down'' pushbutton to send 63 and the ``up'' pushbutton to send 65.}   For example, the Novation controller series calls this ``REL1'' or ``REL2''\footnote{The difference being that in REL2 mode, if you spin the encoder rapidly, the amount added/subtracted is nonlinearly more than expected, whereas in REL1 the speed doesn't matter, all that matters is how far the encoder was turned.  Novation controllers also have a relative CC mode called ``APOT'', which is not supported.}, and the BeatStep calls this ``Relative 1''\footnote{The Beatstep also has relative CC modes called ``Relative 2'' and ``Relative 3'', which are not supported.}  To map, choose {\bf Map Relative CC} in the {\bf Map} menu.
+\item {\bf Absolute CC}\quad  The value of the CC sent is exactly what the parameter will be set to (between 0...127).  To map, choose {\bf Map CC/NRPN} in the {\bf Map} menu.  This style is particularly useful for potentiometers or sliders.  You are not permitted to map CC numbers 6, 38, 98, 99, 100, or 101, or Edisyn will think you're sending NRPN.  So you only have 121 CCs to play with.
+\item {\bf Relative CC}\quad  Here, the CC value you send indicates how much to {\it add to} or {\it subtract from} the existing parameter value.\footnote{Specifically, 64 means 0 (add nothing), a value \(x<64\) means to subtract \(64-x\) from the current value, and a value \(x>64\) means to add \(x - 64\) to the current value.}  This style is supported by a number of controllers and is useful for encoders.\footnote{You could also map a pair of pushbuttons to be up/down cursors using this method: set up the ``down'' pushbutton to send 63 and the ``up'' pushbutton to send 65.}   For example, the Novation controller series calls this ``REL1'' or ``REL2''\footnote{The difference being that in REL2 mode, if you spin the encoder rapidly, the amount added/subtracted is nonlinearly more than expected, whereas in REL1 the speed doesn't matter, all that matters is how far the encoder was turned.  Novation controllers also have a relative CC mode called ``APOT'', which is not supported.}, and the BeatStep calls this ``Relative 1''.\footnote{The Beatstep also has relative CC modes called ``Relative 2'' and ``Relative 3'', which are not supported.}  To map, choose {\bf Map Relative CC} in the {\bf Map} menu.  Again, you're not permitted to map CC numbers 6, 38, 98, 99, 100, or 101.
 %\item {\bf Relative CC ``0''}\quad  Here, the CC value you send again indicates how much to {\it add to} or {\it subtract from} the existing parameter value.   In this form of Relative ŒCC, 0 means 0 (add nothing), a high value \(64<x<128\) means to subtract \(128-x\) from the current value, and a low value \(0>x\geq64\) means to add \(x\) to the current value.   This style is also supported by a number of controllers and is useful for encoders.  To map, choose {\bf Map Relative CC[0]} in the {\bf Map} menu.
 \item {\bf NRPN}\quad You are permitted to map any NRPN parameter at all.  The value of the CC sent is exactly what the parameter will be set to: all 14 bits.  If your controller can only send 7-bit NRPN, then you should configure it to send ``Fine'' or ``LSB-only''.  Edisyn also supports the NRPN Increment and Decrement options, though those are rare.  To  map, choose {\bf Map CC/NRPN} in the {\bf Map} menu.  
 \end{itemize}
@@ -253,15 +257,17 @@ Edisyn has a number of facilities to help you program your synthesizer, includin
 
 \paragraph{Nudge}  The nudge facility lets you push your patch to sound more and more like one of four other target patches you have chosen.  You can use this, plus randomize, to wander about in the patch space.  Before you can nudge, you have to first select patches to nudge towards.  You can pick up to four patches by first setting up or loading the patch in your patch editor, then selecting one of {\bf Set 1} ... {\bf Set 4} in the {\bf Nudge} submenu of the {\bf Edit} menu.  You don't have to ultimately select all four. 
 
-Above the {\bf Set} options are four {\bf Towards} options, also in the {\bf Nudge} submenu of the {\bf MIDI} menu.  When you set a patch, its current name will appear in the equivalent Towards option.  The patch name is just a helpful reminder\,---\,it's entirely possible for four completely different patches to have the same name.
+Above the {\bf Set} options are four {\bf Towards} and four {\bf Away From} options, also in the {\bf Nudge} submenu of the {\bf MIDI} menu.  When you set a patch, its current name will appear in the equivalent Towards/Away From option.  The patch name is just a helpful reminder\,---\,it's entirely possible for four completely different patches to have the same name.
 
-Now when you chose any of {\bf Towards 1:...} through {\bf Towards 4:...}, your current patch will get {\bf recombined} with the target patch, currently by 50\%, to move it towards that target.  
+When you chose any of {\bf Towards 1:...} through {\bf Towards 4:...}, your current patch will get {\bf recombined} with the target patch, by default by 25\%, to move it towards that target.    Similarly, when you chose any of {\bf Away From 1:...} through {\bf Away From 4:...}, your current patch will get adjusted (through a form of recombination) to {\it move away from} the target patch, by default by 25\%.  You can change the degree of recombination under the {\bf Set Nudge Recombination} menu.  Additionally you can add some automatic mutation whenever you nudge: just set its amount under the {\bf Set Nudge Mutation} menu (by default it's 0\%). If you did a nudge and didn't like it, you can try a slightly different one with {\bf Undo and Nudge Again}.
 
 A hint.  It's a good idea to select target patches which don't have some radical difference creating a nonlinearity in the space between them: for example, if you were doing FM, I'd pick patches which all used the same operator Algorithm.  See below for a discussion of how recombination works in Edisyn.
 
 \paragraph{Merge (by some amount)}  Merging is a lot like nudging.  But instead of nudging towards a predefined target patch, you are asking your synthesizer to load a given patch, which Edisyn will then directly {\bf recombine}  with your current patch to form a randomly merged patch.  You specify the degree as a percentage: see the options in the {\bf Request Merge} submenu of the {\bf MIDI} menu.
 
 Some patch editors may not be able to perform merges because the synthesizers can't load specific patches: if your synth can't do {\bf Request Patch...}, it probably can't do a merge either.  
+
+\paragraph{Hill-Climb}  Hill-Climbing repeatedly presents you with sixteen sounds and asks you to choose your top three preferred ones.  Once you have selected the three best, it performs various recombinations and mutations on those sounds to prefer sixteen new ones and the process repeats again.  The idea is for your preferences to guide the hill-climber as it wanders through the space of synth parameters until it lands on something you really like.\footnote{If you're technically inclined, this is basically an evolution strategy (ES) with an elitism of 1 and a biased mutation procedure.  If you'd like to learn more about evolutionary computation methods, google for the free online book {\it Essentials of Metaheuristics} by me.}  For more on the Hill-Climber, see Section \ref{hillclimb}.
 
 \subsection{Restricting Mutation and Recombination to Only Certain Parameters}
 
@@ -282,6 +288,60 @@ The parameters you have selected will be the only ones changed when you mutate (
 Once you're done choosing parameters to mutate or recombine, just select {\bf Stop Editing Mutation Parameters} in the {\bf Edit} menu.
 
 Note that your parameter choices, as well as using them for recombination, are persistent: they're saved in the preferences.
+
+
+\vbox{
+\subsection{Hill-Climbing}
+\label{hillclimb}
+
+{\small {\bf Important Note}\quad {\it The Hill Climber is a work in progress and as testing and research continues on it, it may change significantly.}}
+
+\vspace{1em}
+Edisyn's {\it hill-climber} is another of its patch-exploration tools.  You select it by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  This will add a new tab to your patch editor labelled {\bf Hill-Climb}.  You get rid of the hill-climber by selecting {\bf Stop Hill-Climbing} in the {\bf Edit} menu.  
+}
+
+When you fire up the Hill-Climber, it appears as an additional tab after your {\bf About} tab.  Edisyn's Hill-Climber repeatedly offers you sixteen possible sounds and asks you to choose your top three preferences.  After you have chosen them, the Hill-Climber will try to build a new set of sounds whose parameters are similar to your choices in various ways.  You then choose three {\it new} top choices, and the process repeats.  If you're lucky, Edisyn will head towards regions of the synthesizer's parameter space which make sounds you like.
+
+The Hill-Climber builds new sounds by recombining your top three sound choices and adding some degree of noise (mutation) to them.  Let's say that your top three sounds were sounds {\bf A, B,} and {\bf C}, and that your {\it previous} ``A'' from last time is called {\bf Z}.  Then the 16 new sounds will be (``+'' means ``recombined with''):
+
+\vspace{1em}
+{
+\small
+\noindent\begin{tabular}{@{}rlrlrlrl@{}}
+1 & A & 2 & A + B & 3 & A + C & 4 & A + (B + C) \\
+4 & Mutated A & 6 & Mutated A + B & 7 & Mutated A + C & 8 & Mutated A + (B + C)  \\
+9 & Very Mutated A & 10 & Very Mutated A + B & 11 & Very Mutated A + C & 12 & Very Mutated A + (B + C) \\
+13 & B + C & 14 & Beyond A from Z & 15 & Even Further Beyond A from Z & 16 & Current Patch \\
+\end{tabular}
+}
+\vspace{1em}
+
+Figure \ref{hc} illustrates the various recombination locations; the mutation noise is added to those locations.\footnote{The idea behind the ``Beyond A from Z'' options is that if you made the choice for A, you might want to go even further in that direction, and rapidly.  And then there's the oddity of the Current Patch sitting in slot 16.  Let's say you don't like where you're going right now.  One option is to jump out of the Hill-Climber, load a patch from the synth and set it up the way you like, then go back to the Hill-Climber and select it as (say) your \#1 choice to get things moving in a different direction.}  When you fire up the Hill-Climber the first time, it doesn't have three candidates yet, nor does it have a Z.  So instead what it does is take your current patch and build sixteen sounds as follows:
+
+\begin{itemize}
+\item{1--4}: Four noisy versions of the current patch
+\item{5--8}: Four noisier versions of the current patch
+\item{9--12}: Four even noisier versions of the current patch
+\item{13--16}: Four extremely noisy versions of the current patch
+\end{itemize}
+
+\begin{wrapfigure}{r}{2.5in}
+\vspace{-8em}
+\includegraphics[width=2.5in]{HillClimbing.pdf}
+\caption{Recombination and Mutation in the Hill-Climber}
+\vspace{-1em}
+\label{hc}
+\end{wrapfigure}
+
+The sixteen candidates appear in the {\bf Candidates} section.  Each has a button labelled {\bf Play}, which lets you play the candidate, and a button labelled {\bf Keep}, which closes the Hill-Climber and loads that candidate into the patch editor (presumably because you've found your ideal sound and want to {\it keep} it).  There are also three radio buttons, labelled 1, 2, and 3.  These are for you to select the sound as one of your top three choices, if you like it.
+
+Once you have selected your top three options,\footnote{Yes, if you like fewer than three sounds, a sound can be more than one top-three option.} press {\bf Climb} to make the Hill-Climber build new sounds based on those options.  If you don't like any of the sounds, you can press {\bf Retry} to make the Hill-Climber try again, building sixteen new sounds (only the noisy sounds will change).  If you don't like where you're going, you can also back up to an earlier iteration by pressing {\bf Backup}.  And you can back up all the way to the very beginning again by pressing {\bf Reset}.
+
+The degree of mutation can be tweaked.  Initially it's set to a reasonable starting value: but if you're stuck in a rut, you might increase the mutation value to explore more; on the other hand if you're trying to finesse things, you might reduce it.
+
+The degree of recombination can also be tweaked, but this requires a bit of explanation.  When two patches X and Y are recombined as X + Y, the degree of recombination determines how much X dominates things.  If it's low, then the result will be very similar to X.  If it's high, then the result will be a uniform mixture of X and Y.  Again, if you're stuck in a rut, you might try making the recombination value higher.
+
+Note that when you enter the Hill-Climber, it automatically turns on {\bf Send Test Notes}, and each time a new test note is played, it's a different candidate sound.  That way you can hear all the sounds easily.  The sound being played is shown by making its {\bf Play} button text red.  If you would like to reset the sequence to a different sound, just press its Play button.  When you leave the Hill-Climber to go to some other tab in your patch editor, Send Test Notes is turned off automatically.
 
 \subsection{How Recombination and Mutation Work}
 
@@ -311,59 +371,20 @@ When a patch {\bf A} is {\it mutated}, it is modified with some degree of random
 
 \item If your parameter is has both metric and non-metric regions, then we first decide whether to jump the parameter value from metric to non-metric (or vice versa).  This is half of the percentage.  So if your percentage is 25\%, then this happens with a \(0.25 \times 0.5 = 0.125\) likelihood.  If the value jumps then we pick a totally new random value for it (in its new metric or non-metric region).  If the value doesn't jump, then it is mutated just like elements in its region (metric or non-metric) as above.
 
-\item Occasional parameters are {\it immutable}: they will refuse to be mutated.  These are typically things like patch names.
+\item A few parameters are {\it immutable}: they cannot be mutated.  These are typically things like patch names.
 \end{itemize}
 
-\subsection{Hill-Climbing}
 
-{\small {\bf Important Note}\quad {\it The Hill Climber is a work in progress and as testing and research continues on it, it may change significantly.}}
+\section{Writing a Patch Editor}
 
-\vspace{1em}
-Edisyn's {\it hill-climber} is another of its patch-exploration tools.  You select it by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  This will add a new tab to your patch editor labelled {\bf Hill-Climb}.  You get rid of the hill-climber by selecting {\bf Stop Hill-Climbing} in the {\bf Edit} menu.  
+So you want to write a patch editor?  They're not easy.  But they're fun!  Here are some hints. 
 
-When you fire up the Hill-Climber, it appears as an additional tab after your {\bf About} tab.  Edisyn's Hill-Climber repeatedly offers you sixteen possible sounds and asks you to choose your top three preferences.  After you have chosen them, the Hill-Climber will try to build a new set of sounds whose parameters are similar to your choices in various ways.  You then choose three {\it new} top choices, and the process repeats.  If you're lucky, Edisyn will head towards regions of the synthesizer's parameter space which make sounds you like.
-
-The Hill-Climber builds new sounds by recombining your top three sound choices and adding some degree of noise (mutation) to them.  Let's say that your top three sounds were sounds {\bf A, B,} and {\bf C}, and that you kept around your previous ``A'' (\#1 sound) from last time.   Then the 16 new sounds will be (``+'' means ``recombined with''):
-
-\vspace{1em}
-\noindent\begin{tabular}{@{}rlrlrlrl@{}}
-1 & A & 2 & A + B & 3 & A + C & 4 & A + (B + C) \\
-4 & Noisy A & 6 & Noisy A + B & 7 & Noisy A + C & 8 & Noisy A + (B + C)  \\
-9 & Very Noisy A & 10 & Very Noisy A + B & 11 & Very Noisy A + C & 12 & Very Noisy A + (B + C) \\
-13 & B + C & 14 & Beyond A from Z & 15 & Even Further Beyond A from Z & 16 & Current Patch \\
-\end{tabular}
-\vspace{1em}
-
-Figure \ref{hc} illustrates the various recombination locations; the mutation noise is added to those locations.\footnote{The idea behind the ``Beyond A from Z'' options is that if you made the choice for A, you might want to go even further in that direction, and rapidly.  And then there's the oddity of the Current Patch sitting in slot 16.  Let's say you don't like where you're going right now.  One option is to jump out of the Hill-Climber, load a patch from the synth and set it up the way you like, then go back to the Hill-Climber and select it as (say) your \#1 choice to get things moving in a different direction.}  When you fire up the Hill-Climber the first time, it doesn't have three candidates yet, nor does it have a Z.  So instead what it does is take your current patch and build sixteen sounds as follows:
-
-\begin{itemize}
-\item{1--4}: Four noisy versions of the current patch
-\item{5--8}: Four noisier versions of the current patch
-\item{9--12}: Four even noisier versions of the current patch
-\item{13--16}: Four extremely noisy versions of the current patch
-\end{itemize}
-
-\begin{wrapfigure}{r}{2.5in}
-\vspace{-1em}
-\includegraphics[width=2.5in]{HillClimbing.pdf}
-\caption{Recombination and Mutation in the Hill-Climber}
-\label{hc}
-\end{wrapfigure}
-
-The sixteen candidates appear in the {\bf Candidates} section.  Each has a button labelled {\bf Play}, which lets you play the candidate, and a button labelled {\bf Keep}, which closes the Hill-Climber and loads that candidate into the patch editor (presumably because you've found your ideal sound and want to {\it keep} it).  There are also three radio buttons, labelled 1, 2, and 3.  These are for you to select the sound as one of your top three choices, if you like it.
-
-Once you have selected your top three options,\footnote{Yes, if you like fewer than three sounds, a sound can be more than one top-three option.} press {\bf Climb} to make the Hill-Climber build new sounds based on those options.  If you don't like any of the sounds, you can press {\bf Retry} to make the Hill-Climber try again, building sixteen new sounds (only the noisy sounds will change).  If you don't like where you're going, you can also back up to an earlier iteration by pressing {\bf Backup}.  And you can back up all the way to the very beginning again by pressing {\bf Reset}.
-
-The degree of mutation can be tweaked.  Initially it's set to a reasonable starting value: but if you're stuck in a rut, you might increase the mutation value to explore more; on the other hand if you're trying to finesse things, you might reduce it.
-
-The degree of recombination can also be tweaked, but this requires a bit of explanation.  When two patches X and Y are recombined as X + Y, the degree of recombination determines how much X dominates things.  If it's low, then the result will be very similar to X.  If it's high, then the result will be a uniform mixture of X and Y.  Again, if you're stuck in a rut, you might try making the recombination value higher.
-
-Note that when you enter the Hill-Climber, it automatically turns on {\bf Send Test Notes}, and each time a new test note is played, it's a different candidate sound.  That way you can hear all the sounds easily.  The sound being played is shown by making its {\bf Play} button text red.  If you would like to reset the sequence to a different sound, just press its Play button.  When you leave the Hill-Climber to go to some other tab in your patch editor, Send Test Notes is turned off automatically.
-
-\section{Synthesizers are Inconsistent}
+\subsection{Step One: Understand What You're Getting Into}
 \label{inconsistent}
 
-The dirty truth is that synthesizer companies don't really care about MIDI control, else they'd put more effort into it.  The Waldorf Blofeld's multimode is entirely undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but the are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  And of course the infamous Korg Microsampler is such a MIDI disaster that Edisyn may never release its patch editor.
+Make sure you understand that Edisyn can only go so far to help you in writing a patch editor: but synthesizers are an inconsistent, buggy mess.  The dirty truth is that synthesizer companies don't really care about MIDI control, else they'd put more effort into it.  
+
+For example, the Waldorf Blofeld's multimode is entirely undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).   And it too bombs if you send it invalid data.  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  And of course the infamous Korg Microsampler is such a MIDI disaster that Edisyn may never release its patch editor.
 
 Below is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.  What a mess.
 
@@ -371,9 +392,8 @@ Below is a little table of the current patch editors for Edisyn, and various Edi
 \newcommand\backfootnote[1]{\addtocounter{footnote}{-#1}\footnotemark\addtocounter{footnote}{#1}\addtocounter{footnote}{-1}}
 \newcommand\cm{\checkmark}
 
-
-
 \begin{center}
+{\small
 \begin{tabular}{rllllllllll}
 &
 \begin{sideways}Send Parameter\end{sideways}&
@@ -392,11 +412,12 @@ Waldorf Blofeld&{\cm}\footnote{Not Multi}&{\cm}\samefootnote&{\cm}&{\cm}\backfoo
 Kawai K4/K4r&{\cm}\footnotemark& &{\cm}& &{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}            \\
 Yamaha TX81Z&{\cm}\backfootnote{2}& & &{\cm}&{\cm}& & &  & &{\cm}\footnotemark            \\
 PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &            \\
-Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}&{\cm}& & &{\cm}          \\
+Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}\footnotemark&{\cm}\samefootnote&{\cm}& & &{\cm}          \\
 Korg Microsampler&{\cm}\footnotemark&{\cm}\samefootnote& & & & & &  &  &         \\
 \end{tabular}
+}
 \end{center}
-\addtocounter{footnote}{-4}
+\addtocounter{footnote}{-5}
 \footnotetext{Incoming patch won't have patch number or bank information.}
 \addtocounter{footnote}{1}
 \footnotetext{Not in Multimode.}
@@ -405,13 +426,27 @@ Korg Microsampler&{\cm}\footnotemark&{\cm}\samefootnote& & & & & &  &  &        
 \addtocounter{footnote}{1}
 \footnotetext{File contains two concatenated sysex transmissions.}
 \addtocounter{footnote}{1}
+\footnotetext{Not usable: some patches wind up with bad data.}
+\addtocounter{footnote}{1}
 \footnotetext{A limited number of them only.}
 
-\section{Writing a Patch Editor}
+So you need to understand that you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.
 
-So you want to write a patch editor?  They're not easy.  But they're fun!  Here are some hints.  Let's say you're adding a single (non-multimode) patch editor for the Yamaha DX7.  Here's what you'd do.
+\subsection{Step Two: Set Up the Development Environment}
 
-\subsection{Step One: Create Files}
+Probably the easiest way to fire up Edisyn for purposes of testing is as a build directory.  You just need to add two items to your CLASSPATH:
+
+\begin{enumerate}
+\item The {\tt coremidi4j-1.1.jar} file, located in the {\tt libraries/} folder (you can move it where you like).  This jar file contains the CoreMidi4J library, which enables sysex to work properly on Macs (you'll need it for non-Macs too).
+\item The {\tt trunk} directory.  This parent directory holds the {\tt edisyn} package.  Or if you like, make some other directory {\tt foo} and move (or link) {\tt edisyn} into that directory, then add {\tt foo} to your CLASSPATH.
+\end{enumerate}
+
+Now you can compile Edisyn with\ \ \  {\tt javac~edisyn/*.java~edisyn/*/*.java~edisyn/*/*/*.java}\\
+You can then run Edisyn as\ \ \  {\tt java edisyn.Edisyn}
+
+\subsection{Step Three: Create Files}
+
+Still not scared away?  Okay, here's where we start.  Let's say you're adding a single (non-multimode) patch editor for the Yamaha DX7.
 
 Make a directory called {\tt edisyn/synth/yamahadx7}.  This directory will store your patch editor and any auxiliary files.  Next copy the file {\tt edisyn/synth/Blank.java} to {\tt edisyn/synth/yamahadx7/YamahaDX7.java}.  That'll be your patch editor code.  Also copy the file {\tt edisyn/synth/Blank.html} to {\tt edisyn/synth/yamahadx7/YamahaDX7.html}.  This will be the ``About'' documentation for your file.  You'll eventually fill it out.
 
@@ -439,7 +474,7 @@ public static String getHTMLResourceFileName() { return "YamahaDX7.html"; }
 \end{verbatim}
 
 
-\subsection{Step Two: Get the UI Working}
+\subsection{Step Four: Get the UI Working}
 
 This is mostly writing the class constructor and subsidiary functions.  Typically you will create one {\tt SynthPanel} for each tab in your editor.  A SynthPanel is little more than a JPanel with a black background: you can lay it out however you like.  However Edisyn typically lays it out as follows:
 
@@ -787,7 +822,7 @@ model.register("keyname", widget);
 
 For example, in the Yamaha TX81Z, the operator frequency is computed as a combination of three widgets: and in the final widget (``Fine'') the final frequency is displayed.  To do this, we have registered the ``Fine'' widget to revise itself (via the map(...) method) whenever any of three different parameters is updated.
 
-\subsection{Step Three: Get Input from the Synth (and File Loading) Working}
+\subsection{Step Five: Get Input from the Synth (and File Loading) Working}
 
 There are two ways the synth can send you information: as a bulk sysex patch dump and as individual parameters.  We'll start with the bulk sysex patch dump.
 
@@ -856,7 +891,7 @@ getModel().set(stringKey, "newValue");	// or whatever new value
 
 If your bulk dumps come in as sysex messages, then congratulations, you already have file loading working.  If not, you will need to {\it invent} a bulk sysex format and implement it in the {\bf parse(...)} method even if your synthesizer never sends stuff via sysex (such as is the case in the PreenFM2).  That way you can still load and save files.  
 
-\subsection{Step Four: Get Output to the Synth (and File Writing) Working}
+\subsection{Step Six: Get Output to the Synth (and File Writing) Working}
 
 If you've gotten this far, writing is simpler than parsing and requesting, because you've already written a lot of the support code.  You can write out both bulk dumps and individual parameters (as you tweak widgets).
 
@@ -878,6 +913,8 @@ Again, these should be set in an overridden version of the {\bf sprout()} method
 
 Note that emit(Model, ...) and emitAll(Model, ...) are also used to write out files.  If you implemented emitAll(...), be aware that Edisyn will strip out all of the javax.sound.midi.SimpleMessage messages and just pack together then remaining sysex messages.  This is what will result in multiple sysex messages being read in in a single parse(...) dump, as discussed earlier.  
 
+Some synthesizers need a bit of time to rest after receiving a dump before they can do anything else.  You can tell Edisyn to pause after a dump by overriding {\bf getPauseAfterSendAllParameters()}.
+
 \paragraph{Individual Parameters}
 
 In response to changing a widget, Edisyn will try to change a parameter on your synthesizer.  This is similar to the bulk dump.  Specifically, there are two methods, {\bf emit(String)} and {\bf emitAll(String)}, which work like their bulk counterparts, except that they are tasked to emit a {\it single parameter} to the synthesizer.  Implement only {\it one} of these methods.  If you don't want to do this, just don't implement these methods.
@@ -895,7 +932,7 @@ Some synthesizers, such as the PreenFM2, do not accept a bulk dump method at all
 If your bulk dumps are emitted by you as sysex messages, then again congratulations, you already have file writing working.  If not, as discussed earlier, you will need to {\it invent} a bulk sysex format and implement it in the {\bf emit(...)} and {\bf parse(...)} methods.  That way you can still load and save files.  
 
 
-\subsection{Step Five: Create an Init File}
+\subsection{Step Seven: Create an Init File}
 
 Now that you've got everything coded and working (hah!) it's time to create an Init file.  To do this, either request an init patch from the synthesizer, or create an appropriate one yourself.  Then save it out as a sysex file.
 
@@ -905,21 +942,21 @@ Next, move that file and rename it to {\tt edisyn/synth/yamahadx7/YamahaDX7.init
 loadDefaults();
 \end{verbatim}
 
-\subsection{Step Six: Get Batch Downloads Working}
+\subsection{Step Eight: Get Batch Downloads Working}
 
 Edisyn can download many patches at once.  To support this, you need to implement a few methods.\footnote{Until you implement {\bf getPatchLocationName(...)} to return something other than {\tt null}, Edisyn will keep the Batch Downloads menu disabled.  So when you implement this method, be sure to also implement the other methods here at the same time.} First, there's
- {\bf getPatchLocationName(...)}, which returns as a String a short version of the patch address (bank, name) to be used in a saved filename.  Next, there's {\bf getNextPatchLocation(...)} which, given a Model containing a patch address, returns a model with the ``next'' patch address.  Finally you need to implement {\bf patchLocationEquals(...)}, which compares two patches to see if they contain the same patch address.
+ {\bf getPatchLocationName(...)}, which returns as a String a short version of the patch address (bank, name) to be used in a saved filename.  Next, there's {\bf getNextPatchLocation(...)} which, given a Model containing a patch address, returns a model with the ``next'' patch address (wrapping around to the very first address if necessary).  Finally you need to implement {\bf patchLocationEquals(...)}, which compares two patches to see if they contain the same patch address.
  
 A few synthesizers (notably the PreenFM2) don't send individual patches as single sysex patch dumps, but rather send them as multiple separate NRPN or CC messages.  Edisyn needs to know this so it can make a better guess at whether a patch dump has arrived and is ready to be saved.  To let Edisyn know that your patch editor is for a synthesizer of this type, override the method {\bf  getReceivesPatchesInBulk()} to return false.
 
 Compared to the other stuff, this step is easy.\footnote{Note that lots of synthesizers have sysex facilities to dump the entire patch memory, or dump an entire bank, etc.  Edisyn doesn't use these; it requests patches one by one.  It's somewhat slower but saves you a lot of coding and is consistent across synthesizers.  So you're welcome.}
   
-\subsection{Step Seven: Other Niceties}
+\subsection{Step Nine: Other Niceties}
 You're almost done!  Two other niceties you might want to do.  First, whenever your patch editor becomes the front window, the method {\bf windowBecameFront()} will be called.  You could override this to send a special message to your synth to update it somehow.  For example, the Waldorf Microwave XT patch editors send a message to the Microwave XT to tell it to switch from single to multi-mode (or back) as appropriate.
 
 Finally when the user clicks on the close box, the method {\bf requestCloseWindow()} is called.  You can override this to query the user about saving the patch etc. first, and then finally return the appropriate value to inform Edisyn that the window should in fact be closed.  Though in fact currently no patch editors implement this method at all.
 
-\subsection{Step Eight: Submit Your Patch Editor!}
+\subsection{Step Ten: Submit Your Patch Editor!}
 
 \begin{itemize}
 \item Clean up the editor code, make it really polished, well documented, and good looking.

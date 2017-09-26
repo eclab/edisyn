@@ -511,9 +511,9 @@ Often parameters (as set by widgets) are exactly the same as the various element
 
 Another issue is how your synthesizer interprets values sent over sysex or NRPN.  Consider BPM for a moment.  Perhaps your synthesizer has BPM values of 20...300, and there are missing values (for example, there's no 21).  The actual values are mapped to the numbers 0...127.  What values should you store?  In my patch editors, I store the values in the model as 0...127, which makes it easy to emit them.  But then I have to have an elaborate conversion function to map them to 20...300 for display on-screen.
 
-Also some synthesizers have holes in their ranges.  For example, they might permit the values 0...17 and the values 20...100, but do not permit 18 and 19.  What to do then?  You should always compact them to be contiguous between some min and max: for example, you might compact it to 0...98.  When displayed, use a custom displayer, and when emitting or parsing them, you'll have to map them to your internal representation accordingly. 
+Also some synthesizers have holes in their ranges.  For example, they might permit the values 0...17 and the values 20...100, but do not permit 18 and 19.  What to do then?  You probably ought to compact them to be contiguous between some min and max: for example, you might compact it to 0...98.  When displayed, use a custom displayer, and when emitting or parsing them, you'll have to map them to your internal representation accordingly. 
 
-In general: your internal parameters should have contiguous ranges and make sense from a user perspective and not the synthesizer's weird parsing perspective.
+In summary: your internal parameters ought to have contiguous ranges and should make sense from the user's perspective and not the synthesizer's weird parsing perspective.
 
 So how to set parameters?  You usually don't add the key yourself, though you could.  Instead, normally you tell the widget the name of the parameter it's modifying (the key), and it adds it to the model on its own.  Parameters are either {\bf strings} or are {\bf numbers}.   Numerical parameters all have a {\bf min} and a {\t max} value, inclusive: usually the widget will set those for you.  They also may have a {\bf MetricMin} and  {\bf MetricMax} value, and you may need to set those manually.  
 
@@ -693,6 +693,9 @@ The KeyDisplay can update {\it dynamically} or {\it statically}.  When dynamic, 
 
 You will probably want your KeyDisplay to update in concert with a LabelledDial.  This is easy: just set them to the same key in the model.  but synthesizers are inconsistent in how they describe notes, because MIDI didn't specify a notation.  For example, MIDI note 0 is ``C -2'' in Yamaha's notation (also adopted by Kawai and some others), or it is ``C -1'' in {\it Scientific Pitch Notation} (or SPN\footnote{... or {\it American Scientific Pitch Notation}(ASPN), or {\it International Pitch Notation} (IPN).  They're all pretentious names.}), or just play ``C 0'' in simple MIDI notation.  You can specify this by calling the method {\bf setOctavesBelowZero(...)}.
 
+In some cases you might wish to be notified whenever the user {\it clicks} on a key, or drags to it, rather than when the key actually is updated (which might only happen on button release).  Typically this happens because you want to actually play the note so the user gets some feedback.  To be notified of this, just override the method {\bf userPressed(...)}.
+
+
 \item {\bf PushButton}\quad This doesn't maintain a parameter at all: it's just a convenience cover for JButton.  You see it in Multimode patches where pressing it will pop up an equivalent Single patch (it's usually called ``Show''):
 
 \begin{verbatim}
@@ -831,6 +834,7 @@ model.register("keyname", widget);
 For example, in the Yamaha TX81Z, the operator frequency is computed as a combination of three widgets: and in the final widget (``Fine'') the final frequency is displayed.  To do this, we have registered the ``Fine'' widget to revise itself (via the map(...) method) whenever any of three different parameters is updated.
 
 \subsection{Step Five: Get Input from the Synth (and File Loading) Working}
+\label{filereading}
 
 There are two ways the synth can send you information: as a bulk sysex patch dump and as individual parameters.  We'll start with the bulk sysex patch dump.
 
@@ -885,7 +889,7 @@ See also the description of these methods in {\tt edisyn/synth/Blank.java}
 \begin{itemize}
 \item {\bf Sysex Messages}\quad Here, override the method {\bf parseParameter(...)}.  Note that the provided data might be something else sent via sysex besides just a parameter change.  You can test for that too (and handle it here if you like).
 \item {\bf NRPN or Cooked CC messages}\quad A cooked CC message is one which doesn't violate any of the RPN/NRPN rules (it's not 6, 38, 97, 98, 99, 100, or 101).  At present Edisyn does not recognize 14-bit CC.  If your messages are always cooked or are NRPN, then you can handle them via {\bf handleSynthCCOrNRPN(...)}, which takes a special {\bf MIDI.CCData} argument that tells you about the message (see the Midi.java class). 
-\item {\bf Raw CC}\quad A raw CC message is any message number 0...127 just sent out willy-nilly, not respecting things like RPN/NRPN or 14-bit CC.  If your synth sends out raw CC messages, you need to override {\bf getExpectsRawCCFromSynth()} to return {\bf true}.  Then you handle the messages via  {\bf handleSynthCCOrNRPN(...)} as discussed above.
+\item {\bf Raw CC Messages}\quad A raw CC message is any message number 0...127 just sent out willy-nilly, not respecting things like RPN/NRPN or 14-bit CC.  If your synth sends out raw CC messages, you need to override {\bf getExpectsRawCCFromSynth()} to return {\bf true}.  Then you handle the messages via  {\bf handleSynthCCOrNRPN(...)} as discussed above.
 \end{itemize}
 
 Again, you update one or more parameters in response to these messages using one of:
@@ -897,7 +901,9 @@ getModel().set(stringKey, "newValue");	// or whatever new value
 
 \paragraph{Note on File Loading}
 
-If your bulk dumps come in as sysex messages, then congratulations, you already have file loading working.  If not, you will need to {\it invent} a bulk sysex format and implement it in the {\bf parse(...)} method even if your synthesizer never sends stuff via sysex (such as is the case in the PreenFM2).  That way you can still load and save files.  
+If your bulk dumps come in as sysex messages, then congratulations, you already have file loading working.  If not, you will need to {\it invent} a bulk sysex format and implement it in the {\bf parse(...)} (and later {\bf emit(...)} methods even if your synthesizer never sends stuff via sysex (such as is the case in the PreenFM2).  That way you can still load and save files.  
+
+You probably ought to use the ``educational use'' wildcard MIDI sysex ID (0x7D).  Edisyn's made-up sysex header for the PreenFM2 currently looks like this: {\tt 0xF0, 0x7D, P, R, E, E, N, F, M, 2, {\it version}.}  Presently {\it version}  is {\tt 0x0}.  You might do something similar.
 
 \subsection{Step Six: Get Output to the Synth (and File Writing) Working}
 
@@ -917,7 +923,7 @@ transmitCurrent.setEnabled(false);  // turns of the "Send to Current Patch" menu
 writeTo.setEnabled(false);  // turns of the "Write to Patch..." menu option
 \end{verbatim}
 
-Again, these should be set in an overridden version of the {\bf sprout()} method.  Be sure to call {\bf super.sprout()} or bad things will happen.
+Again, these should be set in an overridden version of the {\bf sprout()} method.  Be sure to call {\bf super.sprout()} first, or bad things will probably happen.
 
 Note that emit(Model, ...) and emitAll(Model, ...) are also used to write out files.  If you implemented emitAll(...), be aware that Edisyn will strip out all of the javax.sound.midi.SimpleMessage messages and just pack together then remaining sysex messages.  This is what will result in multiple sysex messages being read in in a single parse(...) dump, as discussed earlier.  
 
@@ -937,7 +943,7 @@ Some synthesizers, such as the PreenFM2, do not accept a bulk dump method at all
 
 \paragraph{Note on File Writing}
 
-If your bulk dumps are emitted by you as sysex messages, then again congratulations, you already have file writing working.  If not, as discussed earlier, you will need to {\it invent} a bulk sysex format and implement it in the {\bf emit(...)} and {\bf parse(...)} methods.  That way you can still load and save files.  
+See the earlier note at the end of Section \ref{filereading} about File Loading: as discussed there, if your synth doesn't read or write sysex, you'll still need to {\it invent} a bulk sysex format, and implement it in the {\bf emit(...)} and {\bf parse(...)} methods, so you can save and load files to disk.
 
 
 \subsection{Step Seven: Create an Init File}

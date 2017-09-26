@@ -8,7 +8,7 @@ By Sean Luke (sean@cs.gmu.edu)
 
 ## About
 
-Edisyn is a synthesizer patch editor library written in pure Java.   It runs on OS X, Linux, and (probably) Windows.  
+Edisyn is a synthesizer patch editor library written in pure Java.   It runs on OS X, Linux, and Windows.  
 
 Edisyn presently supports:
 
@@ -35,9 +35,9 @@ Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux)
 First install Edisyn from the [Edisyn.dmg](https://github.com/eclab/edisyn/raw/master/install/Edisyn.dmg) file located in the "install" directory.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
 
 
-Sierra has really locked down the ability to run an application that's not from a paid-up Apple Developer.  And I'm not one.  So you will have to instruct Sierra to permit Edisyn to run.
+Sierra has really locked down the ability to run an application that's not from a commercial, paying Apple Developer.  And I'm not one.  So you will have to instruct Sierra to permit Edisyn to run.
 
-Let's assume you stuck Edisyn in the /Application directory as usual.  Then:
+Let's assume you stuck Edisyn in the /Applications directory as usual.  Then:
 
 1. Run the Terminal Program (in /Applications/Utilities/)
 2. Type the following command and hit RETURN: `   sudo spctl --add /Applications/Edisyn.app`
@@ -49,7 +49,15 @@ Now you should be able to run Edisyn.  Let me know if this all works.
 
 ### Installation and Running on Windows
 
-I don't know for sure (I don't have Windows).  But you may be able to run it by first downloading and installing Java, then downloading the [jar file](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar) located in the "jar" directory, and finally just double-clicking on the jar file.  Tell me if this works.
+I believe that the following should work:
+
+1. [Download and install Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  The JRE should work fine.
+
+2. Download Edisyn's jar file, called [edisyn.jar](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar),presently located in the "jar" directory.
+
+3. Double-click on edisyn.jar
+
+Tell me if this works or not, and what version of Windows you're running.
 
 
 ### Installation and Running on Linux

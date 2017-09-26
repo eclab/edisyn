@@ -53,7 +53,7 @@ I believe that the following should work:
 
 1. [Download and install Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  The JRE should work fine.
 
-2. Download Edisyn's jar file, called [edisyn.jar](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar),presently located in the "jar" directory.
+2. Download Edisyn's jar file, called [edisyn.jar](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar), presently located in the "jar" directory.
 
 3. Double-click on edisyn.jar
 

@@ -87,15 +87,22 @@ public class Midi
         public String toString() 
             { 
             String desc = device.getDeviceInfo().getDescription().trim();
-                
+            String name = device.getDeviceInfo().getName();
+            if (name == null) 
+            	name = "";
+            if (desc == null || desc.equals("")) 
+            	desc = "MIDI Device";
+            
             // All CoreMIDI4J names begin with "CoreMIDI4J - "
-            String name = device.getDeviceInfo().getName().substring(13).trim();
+            if (name.startsWith("CoreMIDI4J - "))
+            	name = name.substring(13).trim();
+            else
+            	name = name.trim();
 
             if (name.equals(""))
-                return desc; 
+                return desc.trim(); 
             else 
                 return name;
-                //desc + ": " + name; 
             }
                 
         Transmitter transmitter;

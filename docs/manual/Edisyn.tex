@@ -43,9 +43,10 @@ Edisyn at present has patch editors for the following synthesizers: the very one
 %\item Yamaha TX81Z (Single and Multimode)
 \item Oberheim Matrix 1000 (Single)
 \item Preen FM2 (Single)
+\item Yamaha TX81Z (Single and Multimode)
 \end{itemize}
 
-Edisyn does not support patches for global parameters, nor for wave, sample, or wavetable editing etc.  Additionally, though it can do bulk downloads and save them as individual patches, Edisyn is {\bf not a librarian tool}.  You should use a good free librarian software program, such as SysEx Librarian on the Mac.
+Edisyn does not support patches for global parameters, nor for wave, sample, or wavetable editing etc.  Additionally, though it can do bulk downloads and save them as individual patches, Edisyn is {\bf not at present a librarian tool}.  You should use a good free librarian software program, such as SysEx Librarian on the Mac.
 
 
 \section{Starting Edisyn}
@@ -228,9 +229,9 @@ Mapping a parameter is easy:
 
 \begin{itemize}
 \item {\bf Absolute CC}\quad  The value of the CC sent is exactly what the parameter will be set to (between 0...127).  To map, choose {\bf Map CC/NRPN} in the {\bf Map} menu.  This style is particularly useful for potentiometers or sliders.  You are not permitted to map CC numbers 6, 38, 98, 99, 100, or 101, or Edisyn will think you're sending NRPN.  So you only have 121 CCs to play with.
-\item {\bf Relative CC}\quad  Here, the CC value you send indicates how much to {\it add to} or {\it subtract from} the existing parameter value.\footnote{Specifically, 64 means 0 (add nothing), a value \(x<64\) means to subtract \(64-x\) from the current value, and a value \(x>64\) means to add \(x - 64\) to the current value.}  This style is supported by a number of controllers and is useful for encoders.\footnote{You could also map a pair of pushbuttons to be up/down cursors using this method: set up the ``down'' pushbutton to send 63 and the ``up'' pushbutton to send 65.}   For example, the Novation controller series calls this ``REL1'' or ``REL2''\footnote{The difference being that in REL2 mode, if you spin the encoder rapidly, the amount added/subtracted is nonlinearly more than expected, whereas in REL1 the speed doesn't matter, all that matters is how far the encoder was turned.  Novation controllers also have a relative CC mode called ``APOT'', which is not supported.}, and the BeatStep calls this ``Relative 1''.\footnote{The Beatstep also has relative CC modes called ``Relative 2'' and ``Relative 3'', which are not supported.}  To map, choose {\bf Map Relative CC} in the {\bf Map} menu.  Again, you're not permitted to map CC numbers 6, 38, 98, 99, 100, or 101.
+\item {\bf Relative CC}\quad  Here, the CC value you send indicates how much to {\it add to} or {\it subtract from} the existing parameter value.\footnote{Specifically, a value \(x=64\) means 0 (add nothing), a value \(x<64\) means to subtract \(64-x\) from the current value, and a value \(x>64\) means to add \(x - 64\) to the current value.}  This style is supported by a number of controllers and is useful for encoders.\footnote{You could also map a pair of pushbuttons to be up/down cursors using this method: set up the ``down'' pushbutton to send 63 and the ``up'' pushbutton to send 65.}   For example, the Novation controller series calls this ``REL1'' or ``REL2''\footnote{The difference being that in REL2 mode, if you spin the encoder rapidly, the amount added/subtracted is nonlinearly more than expected, whereas in REL1 the speed doesn't matter, all that matters is how far the encoder was turned.  Novation controllers also have a relative CC mode called ``APOT'', which is not supported.}, and the BeatStep calls this ``Relative 1''.\footnote{The Beatstep also has relative CC modes called ``Relative 2'' and ``Relative 3'', which are not supported.}  To map, choose {\bf Map Relative CC} in the {\bf Map} menu.  Again, you're not permitted to map CC numbers 6, 38, 98, 99, 100, or 101.
 %\item {\bf Relative CC ``0''}\quad  Here, the CC value you send again indicates how much to {\it add to} or {\it subtract from} the existing parameter value.   In this form of Relative ŒCC, 0 means 0 (add nothing), a high value \(64<x<128\) means to subtract \(128-x\) from the current value, and a low value \(0>x\geq64\) means to add \(x\) to the current value.   This style is also supported by a number of controllers and is useful for encoders.  To map, choose {\bf Map Relative CC[0]} in the {\bf Map} menu.
-\item {\bf NRPN}\quad You are permitted to map any NRPN parameter at all.  The value of the CC sent is exactly what the parameter will be set to: all 14 bits.  If your controller can only send 7-bit NRPN, then you should configure it to send ``Fine'' or ``LSB-only''.  Edisyn also supports the NRPN Increment and Decrement options, though those are rare.  To  map, choose {\bf Map CC/NRPN} in the {\bf Map} menu.  
+\item {\bf NRPN}\quad You are permitted to map any NRPN parameter you like.  The value of the CC sent is exactly what the parameter will be set to: all 14 bits.  If your controller can only send 7-bit NRPN, then you should configure it to send ``Fine'' or ``LSB-only''.  Edisyn also supports the NRPN Increment and Decrement options, though those are rare.  To  map, choose {\bf Map CC/NRPN} in the {\bf Map} menu.  
 \end{itemize}
 
 \paragraph{Mapping by Panel or by MIDI Channel}
@@ -273,13 +274,12 @@ Some patch editors may not be able to perform merges because the synthesizers ca
 
 You can restrict Mutation (Randomize) and Recombination (Nudge and Merge) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutation Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutation Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
 
-You can change these of course: just click on them and you can remove them from being updated (or add the back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title.  The categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}.  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
-
 \begin{wrapfigure}{r}{3in}
 \vspace{-1.5em}\includegraphics[scale=0.3]{5.png}
 \vspace{-3em}\caption{Editing Mutation Parameters}\label{mutationparameters}
-\vspace{-2em}
 \end{wrapfigure}
+
+You can change these of course: just click on them and you can remove them from being updated (or add the back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title.  The categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}.  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
 
 Some parameters, such as the patch name or certain other parameters, can't be mutated no matter what: these have been declared {\it immutable} by the patch editor.  They will never have a red frame no matter how much you click them.
 
@@ -337,6 +337,13 @@ The sixteen candidates appear in the {\bf Candidates} section.  Each has a butto
 
 Once you have selected your top three options,\footnote{Yes, if you like fewer than three sounds, a sound can be more than one top-three option.} press {\bf Climb} to make the Hill-Climber build new sounds based on those options.  If you don't like any of the sounds, you can press {\bf Retry} to make the Hill-Climber try again, building sixteen new sounds (only the noisy sounds will change).  If you don't like where you're going, you can also back up to an earlier iteration by pressing {\bf Backup}.  And you can back up all the way to the very beginning again by pressing {\bf Reset}.
 
+\begin{wrapfigure}{r}{2.9in}
+\includegraphics[scale=0.3]{HillClimbPanel.png}
+\vspace{-2em}
+\caption{The Hill-Climber Panel}
+\label{hcpanel}
+\end{wrapfigure}
+
 The degree of mutation can be tweaked.  Initially it's set to a reasonable starting value: but if you're stuck in a rut, you might increase the mutation value to explore more; on the other hand if you're trying to finesse things, you might reduce it.
 
 The degree of recombination can also be tweaked, but this requires a bit of explanation.  When two patches X and Y are recombined as X + Y, the degree of recombination determines how much X dominates things.  If it's low, then the result will be very similar to X.  If it's high, then the result will be a uniform mixture of X and Y.  Again, if you're stuck in a rut, you might try making the recombination value higher.
@@ -382,11 +389,11 @@ So you want to write a patch editor?  They're not easy.  But they're fun!  Here 
 \subsection{Step One: Understand What You're Getting Into}
 \label{inconsistent}
 
-Make sure you understand that Edisyn can only go so far to help you in writing a patch editor: but synthesizers are an inconsistent, buggy mess.  The dirty truth is that synthesizer companies don't really care about MIDI control, else they'd put more effort into it.  
+Make sure you understand that Edisyn can only go so far to help you in writing a patch editor: but synthesizer sysex world is an inconsistent, buggy mess.
 
-For example, the Waldorf Blofeld's multimode is entirely undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).   And it too bombs if you send it invalid data.  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  And of course the infamous Korg Microsampler is such a MIDI disaster that Edisyn may never release its patch editor.
+For example, the Waldorf Blofeld's multimode sysex is undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).   And it too bombs if you send it invalid data.  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  And of course the infamous Korg Microsampler is such a MIDI disaster that I may never release its patch editor.
 
-Below is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.  What a mess.
+Below is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.
 
 \newcommand\samefootnote{\addtocounter{footnote}{-1}\footnotemark}
 \newcommand\backfootnote[1]{\addtocounter{footnote}{-#1}\footnotemark\addtocounter{footnote}{#1}\addtocounter{footnote}{-1}}
@@ -429,6 +436,7 @@ Korg Microsampler&{\cm}\footnotemark&{\cm}\samefootnote& & & & & &  &  &        
 \footnotetext{Not usable: some patches wind up with bad data.}
 \addtocounter{footnote}{1}
 \footnotetext{A limited number of them only.}
+\vspace{1em}
 
 So you need to understand that you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.
 

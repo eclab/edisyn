@@ -59,7 +59,7 @@ I believe that the following should work:
 
 #### Note
 
-Edisyn makes heavy use of Java preferences to store persistence information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows.  You might get a bunch of complaints, but Edisyn will work: it just won't have anything persistent.
+Edisyn makes heavy use of Java preferences to store persistence information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows.  You might get a bunch of complaints from the system, but Edisyn will work: it just won't have anything persistent.
 
 I'll try to get some information about how to get Java preferences working.  Rumor has it that this will be fixed anyway in Java 9.
 

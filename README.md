@@ -51,14 +51,17 @@ Now you should be able to run Edisyn.  Let me know if this all works.
 
 I believe that the following should work:
 
-1. [Download and install Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  The JRE should work fine.
+1. [Download and install Java 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  The JRE should work fine.
 
 2. Download Edisyn's jar file, called [edisyn.jar](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar), presently located in the "jar" directory.
 
 3. Double-click on edisyn.jar to launch Edisyn.
 
-Tell me if this works or not, and what version of Windows you're running.
+#### Note
 
+Edisyn makes heavy use of Java preferences to store persistence information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows.  You might get a bunch of complaints, but Edisyn will work: it just won't have anything persistent.
+
+I'll try to get some information about how to get Java preferences working.  Rumor has it that this will be fixed anyway in Java 9.
 
 ### Installation and Running on Linux
 

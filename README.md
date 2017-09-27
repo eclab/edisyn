@@ -62,15 +62,13 @@ Tell me if this works or not, and what version of Windows you're running.
 
 ### Installation and Running on Linux
 
-I'm told that this works on Ubuntu:
+I'm told that Edisyn works fine if you have installed *Java 8*.  After this:
 
-1. Install Java if you don't have it yet (openjdk probably).
+1. Download [Edisyn's jar file](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar) located in the "jar" directory.
 
-2. Download [Edisyn's jar file](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar) located in the "jar" directory.
+2. You'll need to figure out how to make it so that double-clicking on the jar file launches it in java.  In Ubuntu, here's what you do: right-click on the jar file icon and choose "Properties".  Then select the "Open With" tab, and select your Java VM (for example "Open JDK Java 8 Runtime").  The press "Set as Default".  This makes the Java VM the default application to launch jar files.
 
-3. Right-click on the jar file icon and choose "Properties".  Then select the "Open With" tab, and select your Java VM (for example "Open JDK Java 8 Runtime").  The press "Set as Default".  This makes the Java VM the default application to launch jar files.
-
-4. Thereafter you should be able to just double-click on the file to launch Edisyn.
+3. Thereafter you should be able to just double-click on the file to launch Edisyn.
 
 
 ### Running from the command line (OS X, Windows, Linux)

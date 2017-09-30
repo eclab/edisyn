@@ -732,7 +732,7 @@ public class Midi
                     controllerValueMSB[channel]  = -1;
                     }
                 else status[channel] = INVALID;
-                return null;
+               return null;
                 }
                 
             // Start of RPN or NULL

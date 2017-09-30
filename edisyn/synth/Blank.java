@@ -635,4 +635,14 @@ public class Blank extends Synth
 		return false;
 		}
 
+	public int getVoiceMessageRoutedChannel(int channel)
+		{
+		// Some synthesizers need to reroute voiced messages (messages with channels) from
+		// the controller to the synthesizer along some other channel.  For example, the KawaiK4
+		// needs to route drum notes to a special channel different from the standard K4
+		// input channel.  If you need to customize the channel that the Controller routes
+		// to, override this to return some other channel.
+		return channel;
+		}
+
     }

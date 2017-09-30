@@ -355,11 +355,12 @@ public class KawaiK4Drum extends Synth
                 {
                 // do nothing
                 }
-            else if (key.equals("channel"))
+            else if (key.equals("channel") && !fromFile)
                 {
                 // Kawai Bug: MIDI channel is not properly returned on parse: it always returns 9 (channel "10").
                 //
-                model.set("channel", getChannelOut());  // gotta do *something*
+                // model.set("channel", getChannelOut());  // gotta do *something*
+                // do nothing
                 }
             else
                 {
@@ -506,6 +507,10 @@ public class KawaiK4Drum extends Synth
         }
 
 
+	public int getVoiceMessageRoutedChannel(int channel)
+		{
+		return model.get("channel", channel);
+		}
 
     /** Generate a K4 checksum of the data bytes */
     byte produceChecksum(byte[] bytes)

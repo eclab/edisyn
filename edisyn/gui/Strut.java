@@ -42,5 +42,26 @@ public class Strut
         panel.setBackground(Style.BACKGROUND_COLOR);
         return panel;
         } 
+    
+    public static JComponent makeStrut(Component[] components)
+    	{
+    	int maxWidth = 0;
+    	int maxHeight = 0;
+    	for(int i = 0; i < components.length; i++)
+    		{
+    		components[i].validate();
+    		Dimension size = components[i].getPreferredSize();
+    		if (maxWidth < size.width)
+    			maxWidth = size.width;
+    		if (maxHeight < size.height)
+    			maxHeight = size.height;
+    		}
+    	return makeStrut(maxWidth, maxHeight);
+    	}
+    	
+    public static JComponent makeStrut(Component component)
+    	{
+    	return makeStrut(new Component[] { component });
+    	}
 
     }

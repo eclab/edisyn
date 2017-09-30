@@ -93,7 +93,10 @@ public class Chooser extends NumericalComponent
         { 
         if (Style.CHOOSER_INSETS == null)
             return super.getInsets();
-        else return Style.CHOOSER_INSETS; 
+        else if (Style.isWindows())
+        	return Style.CHOOSER_WINDOWS_INSETS;
+        else
+        	return Style.CHOOSER_INSETS; 
         }
 
     /** Creates a JComboBox with the given label, modifying the given key in the Style.

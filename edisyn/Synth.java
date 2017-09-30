@@ -293,6 +293,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** All synthesizer editor pane classes in Edisyn */
     public static final Class[] synths = new Class[] 
     { 
+//edisyn.synth.korgsg.KorgSG.class,
     edisyn.synth.kawaik4.KawaiK4.class, 
     edisyn.synth.kawaik4.KawaiK4Multi.class, 
     edisyn.synth.kawaik4.KawaiK4Drum.class,
@@ -978,37 +979,43 @@ public abstract class Synth extends JComponent implements Updatable
 							{
 							if (message instanceof ShortMessage)
 								{
-								ShortMessage newMessage = null;
-												
-								// stupidly, ShortMessage has no way of changing its channel, so we have to rebuild
-								ShortMessage s = (ShortMessage)message;
-								int status = s.getStatus();
-								int channel = s.getChannel();
-		//                        int command = s.getCommand();
-								int data1 = s.getData1();
-								int data2 = s.getData2();
-								boolean voiceMessage = ( status < 0xF0 );
+								ShortMessage shortMessage = (ShortMessage)message;
 								try
 									{
-									if (voiceMessage)
-										newMessage = new ShortMessage(status, channel, data1, data2);
-									else
-										newMessage = new ShortMessage(status, data1, data2);
-								
 									// we intercept a message if:
 									// 1. It's a CC (maybe NRPN)
 									// 2. We're not passing through CC
 									// 3. It's the right channel OR our key channel is OMNI
 									if (!getPassThroughCC() && 
-										newMessage.getCommand() == ShortMessage.CONTROL_CHANGE &&
-										(newMessage.getChannel() == tuple.keyChannel || tuple.keyChannel == tuple.KEYCHANNEL_OMNI))
+										shortMessage.getCommand() == ShortMessage.CONTROL_CHANGE &&
+										(shortMessage.getChannel() == tuple.keyChannel || tuple.keyChannel == tuple.KEYCHANNEL_OMNI))
 										{
 										// we intercept this
-										handleKeyRawCC(newMessage);
+										handleKeyRawCC(shortMessage);
 										}
 									else
 										{
 										// pass it on!
+										ShortMessage newMessage = null;
+										
+										// In order to pass on, we have to make a new one.  But 
+										// stupidly, ShortMessage has no way of changing its channel, so we have to rebuild
+										ShortMessage s = (ShortMessage)message;
+										int status = s.getStatus();
+										int channel = s.getChannel();
+										int data1 = s.getData1();
+										int data2 = s.getData2();
+										boolean voiceMessage = ( status < 0xF0 );
+
+										// should we attempt to reroute to the synth?
+										if (channel == tuple.keyChannel || tuple.keyChannel == tuple.KEYCHANNEL_OMNI)
+											channel = getVoiceMessageRoutedChannel(channel);
+
+										if (voiceMessage)
+											newMessage = new ShortMessage(status, channel, data1, data2);
+										else
+											newMessage = new ShortMessage(status, data1, data2);
+								
 										tryToSendMIDI(newMessage);
 										}
 									}
@@ -1028,6 +1035,8 @@ public abstract class Synth extends JComponent implements Updatable
             };
         }
 
+
+	public int getVoiceMessageRoutedChannel(int incomingChannel) { return incomingChannel; }
 
     /** Sets whether sysex parameter changes should be sent in response to changes to the model.
         You can set this to temporarily paralleize your editor when updating parameters. */
@@ -1268,7 +1277,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
-            Midi.CCData ccdata = midi.synthParser.processCC(message, true, false);
+            Midi.CCData ccdata = midi.synthParser.processCC(message, false, false);
             if (ccdata != null)
                 {
                 handleSynthCCOrNRPN(ccdata);
@@ -1278,7 +1287,7 @@ public abstract class Synth extends JComponent implements Updatable
         
     void handleKeyRawCC(ShortMessage message)
         {
-        Midi.CCData ccdata = midi.controlParser.processCC(message, true, false);
+        Midi.CCData ccdata = midi.controlParser.processCC(message, false, false);
         if (ccdata != null)
             {
             if (ccdata.type == Midi.CCDATA_TYPE_NRPN)
@@ -3311,6 +3320,11 @@ public abstract class Synth extends JComponent implements Updatable
             perChannelCCs = val;
             setLastX("" + perChannelCCs, "PerChannelCC", getSynthNameLocal(), false);              
             }
+        else
+        	{
+        	// reset
+            perChannelCCsMenuItem.setState(!perChannelCCsMenuItem.getState());
+        	}
         }
 
 
@@ -3446,9 +3460,15 @@ public abstract class Synth extends JComponent implements Updatable
         if (!setupMIDI("Choose new MIDI devices to send to and receive from.", tuple))
             return;
         }
-                
-    public void doSendAllSoundsOff()
+    
+	public void doSendAllSoundsOff() { doSendAllSoundsOff(false); }
+    void doSendAllSoundsOff(boolean fromAllSoundsOff)  // used to break infinite loop fights with doSendTestNotes()
         {
+        if (!fromAllSoundsOff && sendingTestNotes)
+            {
+            doSendTestNotes(); // turn off
+            }
+            
         try
             {
             // do an all sounds off
@@ -3513,7 +3533,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (sendingTestNotes)
             {
             sendTestNotesTimer.stop();
-            doSendAllSoundsOff();
+            doSendAllSoundsOff(true);
             sendingTestNotes = false;
             testNotes.setSelected(false);
             }       
@@ -3777,15 +3797,15 @@ public abstract class Synth extends JComponent implements Updatable
 
         if (file != null)
             {
-            fd.setFile(file.getName());
+            fd.setFile(reviseFileName(file.getName()));
             fd.setDirectory(file.getParentFile().getPath());
             }
         else
             {
             if (getPatchName(getModel()) != null)
-                fd.setFile(getPatchName(getModel()).trim() + ".syx");
+                fd.setFile(reviseFileName(getPatchName(getModel()).trim() + ".syx"));
             else
-                fd.setFile("Untitled.syx");
+                fd.setFile(reviseFileName("Untitled.syx"));
             String path = getLastDirectory();
             if (path != null)
                 fd.setDirectory(path);
@@ -4381,5 +4401,20 @@ public abstract class Synth extends JComponent implements Updatable
        		{
        		return defaultVal;
        		}
+		}
+		
+	static final char DEFAULT_SEPARATOR_REPLACEMENT = '_';
+	String reviseFileName(String name)
+		{
+		if (name == null) name = "";
+		char[] chars = name.toCharArray();
+		for(int i = 0; i < chars.length; i++)
+			{
+			if (chars[i] <= 32 || chars[i] >= 127 ||
+				chars[i] == java.io.File.pathSeparatorChar ||
+				chars[i] == java.io.File.separatorChar)
+				chars[i] = DEFAULT_SEPARATOR_REPLACEMENT;
+			}
+		return new String(chars);
 		}
     }

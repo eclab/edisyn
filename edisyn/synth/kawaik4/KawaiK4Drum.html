@@ -6,14 +6,13 @@
 
 <p>This editor will work with the <b>Kawai K4</b> and the <b>Kawai K4r</b>.
 
-<p><b>Communicating with Edisyn</b> Set your K4 to receive Program Changes (RCV PGM) and Exclusive (RCV EXCL).  See pages 79 and 80 of the manual.  You'll also probably want your send channel and receive channel to be the same.  I wouldn't set the receive channel to OMNI, as this might conflict with drums.
+<p><b>Communicating with Edisyn</b> Set your K4 to receive Program Changes (RCV PGM) and Exclusive (RCV EXCL).  See pages 79 and 80 of the manual.  Set the K4's MIDI RCV channel to the same as Edisyn's Send Channel.  Set the K4's Drum channel to be the same as the "MIDI Channel" knob in the Patch Editor panel; you can do this easily by just changing the knob to some appropriate value.  Note that the K4 Drum Channel shouldn't be set to the same thing as the K4 MIDI RCV channel: otherwise you'll hear both drums and keyboard notes.  And I wouldn't set either of them to OMNI.  Also see the important <b>First Gotcha</b> below, as it relates to the Drum Channel.
 
 <p><b>Hints</b>
 
 <ul>
 <li>
-The Kawai K4/K4r receives drum information on a separate MIDI channel.  You should change this MIDI channel in the patch editor so it's not the default MIDI channel you're using for your main sounds.  Otherwise when you play a note via Edisyn it'll get played both as a drum and as your main sound, and you don't want that.
-
+<p><li>Though Edisyn will use the K4's standard RCV Channel to send information, if you play a note on your controller (or other message that's passed through) Edisyn will route it to the Drum Channel.  That way you can play drums on the K4 even if your controller can't send MIDI data out 
 <p><li>When you play a note (via the <b>Send Test Note</b> menu option) the note played is the currently selected drum key.
 
 <p><li>You can select a drum key either via the dial or by the on-screen keyboard.  The widgets shown below reflect the settings for that particular key.
@@ -29,11 +28,10 @@ The Kawai K4/K4r receives drum information on a separate MIDI channel.  You shou
 <p><b>Gotchas</b>
 
 <ul>
-<li>
-Unfortunately drums don't have their own effects/output: they will use whatever effect/output the current single or multi patch is using.
+<li>Due to a bug, the Kawai K4/K4r does not properly tell Edisyn what the Drum MIDI Channel is when sending Edisyn a patch.  As a result the "MIDI Channel" knob will not change.  You'll need to set it manually in the patch panel: when you change the knob, it'll send a message to the K4/K4r to change the Drum Channel to match.
 
 <p><li>
-If you request a patch, the MIDI channel will not be properly updated.  This is due to a Kawai K4 drum patch bug: it doesn't return the MIDI channel when it sends sysex data to Edisyn.
+Unfortunately drums don't have their own effects/output: they will use whatever effect/output the current single or multi patch is using.
 
 <p><li>When you update a parameter, it's not reflected on the K4's LCD until you move to something else and back again.
 </ul>

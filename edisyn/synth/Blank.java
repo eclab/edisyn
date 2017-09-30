@@ -442,7 +442,7 @@ public class Blank extends Synth
         // It is possible that requestDump and requestCurrentDump are identical.  This
         // might happen if you always have to change the patch no matter what (see the
         // description of performRequestDump above) in which case you could just have this
-        // method call performRequestDump().
+        // method call requestCurrentDump().
         
         return new byte[0]; 
         }

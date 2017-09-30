@@ -62,6 +62,7 @@ public class Style
     /////// CHOOSER CONSTANTS
     
     public static Insets CHOOSER_INSETS = new Insets(-1, 0, -2, 0);  // no insets
+    public static Insets CHOOSER_WINDOWS_INSETS = new Insets(-1, 6, -2, 0);  // no insets
     
 
     /////// VBOX AND HBOX CONSTANTS

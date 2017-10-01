@@ -378,9 +378,6 @@ public class YamahaTX81Z extends Synth
         comp = new CheckBox("Mono", this, "mono");
         hbox2.add(comp);
 
-        comp = new CheckBox("Chorus", this, "chorus");
-        ((CheckBox)comp).addToWidth(1);
-        hbox2.add(comp);
         vbox.add(hbox2);
         hbox.add(vbox);
 
@@ -424,7 +421,7 @@ public class YamahaTX81Z extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
         
-        comp = new LabelledDial("Amplitude Mod", this, "lfoamplitudemodulationsensitivity", color, 0, 7);
+        comp = new LabelledDial("Amplitude Mod", this, "lfoamplitudemodulationsensitivity", color, 0, 3);
         ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
         hbox.add(comp);
         
@@ -449,7 +446,7 @@ public class YamahaTX81Z extends Synth
         vbox.add(comp);
         comp = new CheckBox("Portamento", this, "portamento");
         vbox.add(comp);
-        comp = new CheckBox("Full Time Portamento", this, "fulltimeportamentomode");
+        comp = new CheckBox("Full Time Portamento", this, "fulltimeportamentomode", true);
         vbox.add(comp);
 
         hbox.add(vbox);
@@ -1031,16 +1028,15 @@ public class YamahaTX81Z extends Synth
          
         if (key.equals("name"))
             {
-            byte[] result = new byte[10 * 7];
+            Object[] result = new Object[10];
             
             String name = model.get("name", "INIT VOICE") + "          ";
 
             for(int i = 0; i < 10; i++)
                 {
-                byte[] b = new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, (byte)(77 + i), (byte)(name.charAt(i)), (byte)0xF7 };
-                System.arraycopy(b, 0, result, i * 7, 7);
+                result[i] = new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, (byte)(77 + i), (byte)(name.charAt(i)), (byte)0xF7 };
                 }
-            return new Object[] { result };
+            return result;
             }
         else if (allParametersToIndex.containsKey(key))
             {

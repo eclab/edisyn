@@ -159,7 +159,7 @@ public class Chooser extends NumericalComponent
         if (icons != null)
             {
             combo.setRenderer(new ComboBoxRenderer());
-            if (Style.isMac()) 
+            //if (Style.isMac()) 
                 combo.putClientProperty("JComponent.sizeVariant", "regular");
             }
 

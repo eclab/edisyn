@@ -857,20 +857,6 @@ public class YamahaTX81Z extends Synth
     "operator4frequencycoarse",
     "operator4detune",
 
-    "operator3attackrate",
-    "operator3decay1rate",
-    "operator3decay2rate",
-    "operator3releaserate",
-    "operator3decay1level",
-    "operator3levelscaling",
-    "operator3ratescaling",
-    "operator3egbiassensitivity",
-    "operator3amplitudemodulationenable",                   
-    "operator3keyvelocitysensitivity",
-    "operator3outputlevel",
-    "operator3frequencycoarse",
-    "operator3detune",
-
     "operator2attackrate",
     "operator2decay1rate",
     "operator2decay2rate",
@@ -884,6 +870,20 @@ public class YamahaTX81Z extends Synth
     "operator2outputlevel",
     "operator2frequencycoarse",
     "operator2detune",
+
+    "operator3attackrate",
+    "operator3decay1rate",
+    "operator3decay2rate",
+    "operator3releaserate",
+    "operator3decay1level",
+    "operator3levelscaling",
+    "operator3ratescaling",
+    "operator3egbiassensitivity",
+    "operator3amplitudemodulationenable",                   
+    "operator3keyvelocitysensitivity",
+    "operator3outputlevel",
+    "operator3frequencycoarse",
+    "operator3detune",
 
     "operator1attackrate",
     "operator1decay1rate",
@@ -962,17 +962,17 @@ public class YamahaTX81Z extends Synth
     "operator4operatorwaveform",
     "operator4shift",
 
-    "operator3fix",
-    "operator3fixedfrequencyrange",
-    "operator3frequencyfine",
-    "operator3operatorwaveform",
-    "operator3shift",
-
     "operator2fix",
     "operator2fixedfrequencyrange",
     "operator2frequencyfine",
     "operator2operatorwaveform",
     "operator2shift",
+
+    "operator3fix",
+    "operator3fixedfrequencyrange",
+    "operator3frequencyfine",
+    "operator3operatorwaveform",
+    "operator3shift",
 
     "operator1fix",
     "operator1fixedfrequencyrange",
@@ -1020,6 +1020,7 @@ public class YamahaTX81Z extends Synth
 
     public Object[] emitAll(String key)
         {
+        System.err.println(key);
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
 
@@ -1045,6 +1046,8 @@ public class YamahaTX81Z extends Synth
 
             byte PP = (byte) index;
             byte VV = (byte) value;
+            System.err.println(PP);
+            System.err.println(VV);
             byte[] data = new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, PP, VV, (byte)0xF7 };
             return new Object[] { data };
             }
@@ -1055,6 +1058,8 @@ public class YamahaTX81Z extends Synth
 
             byte PP = (byte) index;
             byte VV = (byte) value;
+            System.err.println(PP);
+            System.err.println(VV);
             byte[] data = new byte[] { (byte)0xF0, 0x43, channel, ACED_GROUP, PP, VV, (byte)0xF7 };
             return new Object[] { data };
             }
@@ -1182,7 +1187,7 @@ public class YamahaTX81Z extends Synth
         // sysex transmissions or the TX81Z has problems.  Maybe this might work?
         // Too crude?  Causes problems with real-time manipulation?
 
-        return 50;
+        return 75;
         }
             
     

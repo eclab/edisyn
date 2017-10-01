@@ -62,7 +62,7 @@ public class CheckBox extends NumericalComponent
             check.setEnabled(true && enabled);
         }
         
-    public CheckBox(String label, Synth synth, String key, boolean flipped)
+    public CheckBox(String label, final Synth synth, final String key, boolean flipped)
         {
         super(synth, key);
 

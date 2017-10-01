@@ -110,7 +110,7 @@ public class Chooser extends NumericalComponent
     /** Creates a JComboBox with the given label, modifying the given key in the Style.
         The elements in the box are given by elements, with images in icons, and their corresponding numerical
         values in the model 0...n.   Note that OS X won't behave properly with icons larger than about 34 high. */
-    public Chooser(String _label, Synth synth, String key, String[] elements, ImageIcon[] icons)
+    public Chooser(String _label, final Synth synth, final String key, String[] elements, ImageIcon[] icons)
         {
         super(synth, key);
                 

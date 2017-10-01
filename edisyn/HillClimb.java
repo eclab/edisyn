@@ -56,7 +56,7 @@ public class HillClimb extends SynthPanel
 	Synth synth;
 	int currentPlay = 0;
 	
-	public HillClimb(Synth synth)
+	public HillClimb(final Synth synth)
 		{
 		this.synth = synth;
 	
@@ -113,7 +113,7 @@ public class HillClimb extends SynthPanel
         recombinationRateLabel.setFont(Style.SMALL_FONT);
 		recombinationRateLabel.setForeground(Style.TEXT_COLOR);
 		recombinationRateLabel.setOpaque(false);
-		JLabel recombinationRateVal = new JLabel("" + INITIAL_RECOMBINATION_RATE + "%");
+		final JLabel recombinationRateVal = new JLabel("" + INITIAL_RECOMBINATION_RATE + "%");
         recombinationRateVal.setFont(Style.SMALL_FONT);
 		recombinationRateVal.setForeground(Style.TEXT_COLOR);
 		recombinationRateVal.setOpaque(false);
@@ -137,7 +137,7 @@ public class HillClimb extends SynthPanel
         mutationRateLabel.setFont(Style.SMALL_FONT);
 		mutationRateLabel.setForeground(Style.TEXT_COLOR);
 		mutationRateLabel.setOpaque(false);
-		JLabel mutationRateVal = new JLabel("" + INITIAL_MUTATION_RATE + "%");
+		final JLabel mutationRateVal = new JLabel("" + INITIAL_MUTATION_RATE + "%");
         mutationRateVal.setFont(Style.SMALL_FONT);
 		mutationRateVal.setForeground(Style.TEXT_COLOR);
 		mutationRateVal.setOpaque(false);

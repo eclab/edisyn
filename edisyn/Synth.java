@@ -866,7 +866,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 }
                                 
-            public void send(MidiMessage message, long timeStamp)
+            public void send(final MidiMessage message, long timeStamp)
                 {
 				// I'm doing this in the Swing event thread because I figure it's multithreaded
 				SwingUtilities.invokeLater(new Runnable()
@@ -968,7 +968,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 }
                                 
-            public void send(MidiMessage message, long timeStamp)
+            public void send(final MidiMessage message, long timeStamp)
                 {
 				// I'm doing this in the Swing event thread because I figure it's multithreaded
 				SwingUtilities.invokeLater(new Runnable()

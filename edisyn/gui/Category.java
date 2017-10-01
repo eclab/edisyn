@@ -25,7 +25,7 @@ public class Category extends JComponent implements Gatherable
       
     /** If synth is non-null, then double-clicking on the category will select or deselect all the
     	components inside it for mutation purposes. */
-    public Category(Synth synth, String label, Color color)
+    public Category(final Synth synth, String label, Color color)
         {
         setLayout(new BorderLayout());
         this.color = color;     

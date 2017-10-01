@@ -72,7 +72,7 @@ public class StringComponent extends JComponent implements Updatable
         return val;
         }
         
-    public StringComponent(final String _label, final Synth synth, final String key, int maxLength, final String instructions)
+    public StringComponent(final String _label, final Synth synth, final String key, final int maxLength, final String instructions)
         {
         super();
         this.key = key;

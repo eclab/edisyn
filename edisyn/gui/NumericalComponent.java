@@ -114,7 +114,7 @@ public abstract class NumericalComponent extends JComponent implements Updatable
         
     public Color borderColor;
     
-    public NumericalComponent(Synth synth, String key)
+    public NumericalComponent(final Synth synth, final String key)
         {
         super();
         this.key = key;

@@ -250,7 +250,7 @@ public class KawaiK4Multi extends Synth
 
 
 
-    public JComponent addSection(int src, Color color)
+    public JComponent addSection(final int src, Color color)
         {
         Category category = new Category(this, "Section " + src, color);
 

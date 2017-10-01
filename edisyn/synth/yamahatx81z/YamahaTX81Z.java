@@ -735,7 +735,7 @@ public class YamahaTX81Z extends Synth
         return category;
         }
                 
-    public JComponent addEnvelope(int envelope, Color color)
+    public JComponent addEnvelope(final int envelope, Color color)
         {
         Category category = new Category(this, "Operator Envelope " + envelope, color);
 

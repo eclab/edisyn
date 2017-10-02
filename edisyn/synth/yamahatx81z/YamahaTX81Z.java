@@ -778,14 +778,29 @@ public class YamahaTX81Z extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Scaling");
         hbox.add(comp);
     
-        // TODO: Modify envelope display to show shift
-        comp = new LabelledDial("Shift", this, "operator" + envelope + "shift", color, 0, 3)
-            {
-            public String map(int val)
-                {
-                return SHIFTS[val];
-                }
-            };
+    	if (envelope == 1)  // operator 1 doesn't have EG Shift
+    		{
+	        comp = new LabelledDial("Shift", this, "operator" + envelope + "shift", color, 0, 3)
+	            {
+	            public String map(int val)
+	                {
+	                return SHIFTS[val];
+	                }
+	            };
+	        // we're not going to add it.  Instead we're just going to put a space in.
+	        comp = Strut.makeStrut(comp);
+    		}
+    	else
+    		{
+	        // TODO: Modify envelope display to show shift
+	        comp = new LabelledDial("Shift", this, "operator" + envelope + "shift", color, 0, 3)
+	            {
+	            public String map(int val)
+	                {
+	                return SHIFTS[val];
+	                }
+	            };
+	        }
         hbox.add(comp);
     
 

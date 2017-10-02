@@ -57,6 +57,7 @@ public class YamahaTX81Z extends Synth
     public static final String[] FIX_RANGES = { "255Hz", "510Hz", "1KHz", "2KHz", "4KHz", "8KHz", "16KHz", "32KHz" };
     public static final int[] FIX_RANGE_VALS = { 8, 16, 32, 64, 128, 256, 512, 1024 };
     public static final double[] FREQUENCY_RATIOS = { 0.50, 0.71, 0.78, 0.87, 1.00, 1.41, 1.57, 1.73, 2.00, 2.82, 3.00, 3.14, 3.46, 4.00, 4.24, 4.71, 5.00, 5.19, 5.65, 6.00, 6.28, 6.92, 7.00, 7.07, 7.85, 8.00, 8.48, 8.65, 9.00, 9.42, 9.89, 10.00, 10.38, 10.99, 11.00, 11.30, 12.00, 12.11, 12.56, 12.72, 13.00, 13.84, 14.00, 14.10, 14.13, 15.00, 15.55, 15.57, 15.70, 16.96, 17.27, 17.30, 18.37, 18.84, 19.03, 19.78, 20.41, 20.76, 21.20, 21.98, 22.49, 23.55, 24.22, 25.95 };
+    public static final double[] FREQUENCY_RATIOS_MAX = { 0.93, 1.32, 1.37, 1.62, 1.93, 2.73, 3.04, 3.35, 2.93, 4.14, 3.93, 4.61, 5.08, 4.93, 5.55, 6.18, 5.93, 6.81, 6.96, 6.93, 7.75, 8.54, 7.93, 8.37, 9.32, 8.93, 9.78, 10.27, 9.93, 10.89, 11.19, 10.93, 12.00, 12.46, 11.93, 12.60, 12.93, 13.73, 14.03, 14.01, 13.93, 15.46, 14.93, 15.42, 15.60, 15.93, 16.83, 17.19, 17.17, 18.24, 18.74, 18.92, 19.65, 20.31, 20.65, 21.06, 21.88, 22.38, 22.47, 23.45, 24.11, 25.02, 25.84, 27.57 };
     public static final double[] FREQUENCY_RATIO_NEAREST_INTS = { 0.50, 0.50, 1.00, 1.00, 1.00, 1.00, 2.00, 2.00, 2.00, 3.00, 3.00, 3.00, 3.00, 4.00, 4.00, 5.00, 5.00, 5.00, 6.00, 6.00, 6.00, 7.00, 7.00, 7.00, 8.00, 8.00, 8.00, 9.00, 9.00, 9.00, 10.00, 10.00, 10.00, 11.00, 11.00, 11.00, 12.00, 12.00, 13.00, 13.00, 13.00, 14.00, 14.00, 14.00, 14.00, 15.00, 15.00, 15.00, 15.00, 15.00, 15.00, 15.00, 15.00, 15.00, 15.00, 15.00, 15.00, 15.00, 15.00, 15.00, 15.00, 15.00, 15.00, 15.00 };
     
     public static final String[] KS_CURVES = { "Linear", "Exponential", "Logarithmic", "Ramped", "Spit", "Triangle", "Late", "Early" };
@@ -510,52 +511,51 @@ public class YamahaTX81Z extends Synth
     
     // From discussion with Matt Gregory (mgregory22@gmail.com),
     // who runs the TX81Z website http://the-all.org/tx81z/
-    public double computeFineRatio(int coarse, int fine)
-        {
-        double c = FREQUENCY_RATIOS[coarse];
-        if (coarse >= 8)                // ratio >= 2.0
-            return c + (1 / 16.0) * fine;
-        else if (coarse >= 4)           // ratio >= 1.0
-            return c + (c / 16.0) * fine;
-        else
-            return Math.min(c + (c / 8.0) * fine, 
-                c + (c / 8.0) * 7.0);
-        }
-    
-        
+	public double computeFineRatio(int coarse, int fine)
+	  {
+	  double min = FREQUENCY_RATIOS[coarse];
+	  double max = FREQUENCY_RATIOS_MAX[coarse];
+	  
+	  if (min < 1.0)
+	  	{
+	  	return Math.min(max, min + ((max - min) / 7.0) * fine);
+	  	}
+	  else
+	  	{
+	  	return min + ((max - min) / 15.0) * fine;
+	  	}
+ 	}
+
     // based on http://cd.textfiles.com/fredfish/v1.6/FF_Disks/571-600/FF_598/TX81z/TX81z.doc
     // in combination with the manual.
     public int computeCoarseFrequency(int range, int coarse)
         {
-        // compute the base for range = 255
-        
-        int base = coarse * 4;
-        
-        // looks like the first region is shorter than the others...
-        if (coarse == 0)
-            base = 8;
-        else if (coarse == 1)
-            base = 10;
-        else if (coarse == 2)
-            base = 12;
-        else if (coarse == 3)
-            base = 14;
-        
-        // I think you can't go over 255
-        if (base > 255)
-            base = 255;
-        
         // the others are just multiples of it
+        int base = 1;
         for(int i = 0; i < range; i++)
             base *= 2;
-        
-        return base;
+
+		if (coarse < 4) return 8 * base;
+		else return 16 * (coarse / 4) * base;
         }
 
     // based on http://cd.textfiles.com/fredfish/v1.6/FF_Disks/571-600/FF_598/TX81z/TX81z.doc
     // in combination with the manual.
     public int computeFrequency(int range, int coarse, int fine)
         {
+        // the others are just multiples of it
+        int base = 1;
+        for(int i = 0; i < range; i++)
+            base *= 2;
+
+		if (coarse < 4)
+			fine = Math.min(fine, 7);
+
+		if (coarse < 4) return (8 + fine) * base;
+		else return (16 * (coarse / 4) + fine) * base;
+
+/*
+
         // compute the base for range = 255
         
         int base = coarse * 4;
@@ -581,6 +581,7 @@ public class YamahaTX81Z extends Synth
             base *= 2;
         
         return base;
+*/
         }
 
 
@@ -692,6 +693,7 @@ public class YamahaTX81Z extends Synth
         model.register("operator" + src + "fix", (Updatable)comp);              
         hbox.add(comp);
         
+        format.setRoundingMode(java.math.RoundingMode.FLOOR);
         comp = new LabelledDial("Frequency ", this, "operator" + src + "frequencyfine", color, 0, 15)  // extra space because OS X cuts off the 'y'
             {
             public String map(int val)
@@ -1020,7 +1022,7 @@ public class YamahaTX81Z extends Synth
 
     public Object[] emitAll(String key)
         {
-        System.err.println(key);
+        simplePause(50);
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
 
@@ -1043,11 +1045,9 @@ public class YamahaTX81Z extends Synth
             {
             int index = ((Integer)(allParametersToIndex.get(key))).intValue();
             int value = model.get(key);
-
+            
             byte PP = (byte) index;
             byte VV = (byte) value;
-            System.err.println(PP);
-            System.err.println(VV);
             byte[] data = new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, PP, VV, (byte)0xF7 };
             return new Object[] { data };
             }
@@ -1056,10 +1056,17 @@ public class YamahaTX81Z extends Synth
             int index = ((Integer)(allAdditionalParametersToIndex.get(key))).intValue();
             int value = model.get(key);
 
+			for(int i = 0; i < 4; i++)
+				{
+				if (key.equals("operator" + i + "frequencyfine"))
+					{
+					if (model.get("operator" + i + "frequencycoarse") < 4)  // it's < 1.0
+						value = Math.min(value, 7);  //  only first 8 values are legal
+					}
+				}
+                            
             byte PP = (byte) index;
             byte VV = (byte) value;
-            System.err.println(PP);
-            System.err.println(VV);
             byte[] data = new byte[] { (byte)0xF0, 0x43, channel, ACED_GROUP, PP, VV, (byte)0xF7 };
             return new Object[] { data };
             }
@@ -1181,18 +1188,9 @@ public class YamahaTX81Z extends Synth
         }
  
     
-    public int getPauseBetweenMIDISends()
-        {
-        // Wikipedia says that you have to have a 50ms wait-time between
-        // sysex transmissions or the TX81Z has problems.  Maybe this might work?
-        // Too crude?  Causes problems with real-time manipulation?
-
-        return 75;
-        }
-            
-    
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
+        simplePause(50);
         byte[][] result = new byte[2][];
         
         // First the ACED
@@ -1213,6 +1211,16 @@ public class YamahaTX81Z extends Synth
         for(int i = 0; i < allAdditionalParameters.length; i++)
             {
             data[i + 10] = (byte)(model.get(allAdditionalParameters[i]));
+
+			// handle low fine ratio values
+			for(int j = 0; j < 4; j++)
+				{
+				if (allAdditionalParameters[i].equals("operator" + j + "frequencyfine"))
+					{
+					if (model.get("operator" + j + "frequencycoarse") < 4)  // it's < 1.0
+						data[i + 10] = (byte)(Math.min(data[i + 10] , 7));  //  only first 8 values are legal
+					}
+				}
             }
 
         result[0][0] = (byte)0xF0;

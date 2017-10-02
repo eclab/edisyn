@@ -528,6 +528,7 @@ public class YamahaTX81ZMulti extends Synth
 
     public Object[] emitAll(String key)
         {
+        simplePause(50);
         if (key.equals("number")) return new Object[0];  // this is not emittable
 
         byte channel = (byte)(16 + getChannelOut());
@@ -655,17 +656,9 @@ public class YamahaTX81ZMulti extends Synth
     	}
 
 
-    public int getPauseBetweenMIDISends()
-        {
-        // Wikipedia says that you have to have a 50ms wait-time between
-        // sysex transmissions or the TX81Z has problems.  Maybe this might work?
-        // Too crude?  Causes problems with real-time manipulation?
-
-        return 100;  // seems to need more than single mode does
-        }
-
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
+        simplePause(50);
         if (tempModel == null)
             tempModel = getModel();
 

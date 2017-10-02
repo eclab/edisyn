@@ -780,7 +780,7 @@ public class YamahaTX81Z extends Synth
     
     	if (envelope == 1)  // operator 1 doesn't have EG Shift
     		{
-	        comp = new LabelledDial("Shift", this, "operator" + envelope + "shift", color, 0, 3)
+	        comp = new LabelledDial("Shift", this, "operator" + envelope + "shift", color, 0, 0)  // fixed to 0
 	            {
 	            public String map(int val)
 	                {

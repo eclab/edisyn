@@ -1,0 +1,40 @@
+<html><head></head><body bgcolor='black'>
+<font color='white'>
+
+<h1>Kawai K4</h1> 
+<h2>Single Patch Editor</h2>
+
+<p>This editor will work with the <b>Kawai K4</b> and the <b>Kawai K4r</b>.
+
+<p><b>Communicating with Edisyn</b> Set your K4 to receive Program Changes (RCV PGM) and Exclusive (RCV EXCL).  See pages 79 and 80 of the manual.  You'll also probably want your send channel and receive channel to be the same.  I wouldn't set the receive channel to OMNI, as this might conflict with drums.
+
+<p><b>Hints</b>
+<ul>
+<li>The following effect patches are not used by any standard single, multi, or drum patch:  3, 10, 11, 12, 14, 15, 21, 22, 23, 28
+<p><li>In all standard effect patches, Submix H is always "off".
+</ul>
+
+
+<p><b>Gotchas</b>
+
+<ul>
+<li>
+You can't set mute as a parameter change.  So when you set mute, Edisyn will just tell the synth to turn the volume (VCA Envelope Level) to 0 for that source.  Further, if you write a patch with mute set, Edisyn will write the patch with the mute unset, but zero the volume.  
+
+<p><p>This strategy works fine if your patch didn't have mute already set on the synth when you loaded it into Edisyn.  But if mute is set on the synth, then Edisyn can't do anything about when you change the mute value: it'll still be muted on the synth until you send or write the patch.  Long story short: when loading a patch, make sure it's entirely unmuted to avoid confusion.
+
+<p><li>When you update a parameter, it's not reflected on the K4's LCD until you move to something else and back again.  Also when you send a patch, the name isn't updated: but the sound has in fact been changed.
+
+<p><li>When in Normal or Twin, resonance only goes 0...3.
+</ul>
+
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>August 2017
+</table>
+

@@ -176,6 +176,7 @@ public class Model implements Cloneable
             if (!exists(keys[i])) { continue; }
             // continue if the key is immutable, it's a string, or we fail the coin toss
             if (getStatus(keys[i]) == STATUS_IMMUTABLE || getStatus(keys[i]) == STATUS_RESTRICTED || isString(keys[i])) continue;
+            if (minExists(keys[i]) && maxExists(keys[i]) && getMin(keys[i]) >= getMax(keys[i]))  continue;  // no range
             
             boolean hasMetric = false;                              // do we even HAVE a metric range?
             boolean doMetric = false;                               // are we in that range, and should mutate within it?
@@ -304,6 +305,7 @@ public class Model implements Cloneable
             // return if the key doesn't exist, is immutable or is a string, or is non-metric for someone
             if (!model.exists(keys[i])) { continue; }
             if (getStatus(keys[i]) == STATUS_IMMUTABLE || getStatus(keys[i]) == STATUS_RESTRICTED || isString(keys[i])) continue;
+            if (minExists(keys[i]) && maxExists(keys[i]) && getMin(keys[i]) >= getMax(keys[i]))  continue;  // no range
 
             if (!(metricMinExists(keys[i]) &&
                   metricMaxExists(keys[i]) &&
@@ -392,6 +394,7 @@ public class Model implements Cloneable
             // skip if the key doesn't exist, is immutable, is restricted, or is a string
             if (!model.exists(keys[i])) { continue; }
             if (getStatus(keys[i]) == STATUS_IMMUTABLE || isString(keys[i]) || getStatus(keys[i]) == STATUS_RESTRICTED) continue;
+            if (minExists(keys[i]) && maxExists(keys[i]) && getMin(keys[i]) >= getMax(keys[i]))  continue;  // no range
 
 			// skip if we fail a coin toss            
             if (coinToss(random, 1.0 - weight)) continue;
@@ -782,7 +785,7 @@ public class Model implements Cloneable
     public int getMin(String key)
         {
         Integer d = (Integer) (min.get(key));
-        if (d == null) { System.err.println("Nonexistent min extracted for " + key); return 0; }
+        if (d == null) { System.err.println("Nonexistent min extracted for " + key); new Throwable().printStackTrace(); return 0; }
         else return d.intValue();
         }
                 

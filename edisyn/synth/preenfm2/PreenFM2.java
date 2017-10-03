@@ -415,7 +415,7 @@ public class PreenFM2 extends Synth
         hbox2.add(comp);
         vbox.add(hbox2);
 
-        comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 10 ASCII characters.")
+        comp = new StringComponent("Patch Name", this, "name", 12, "Name must be up to 12 ASCII characters.")
             {
             public String replace(String val)
                 {
@@ -1647,32 +1647,50 @@ public class PreenFM2 extends Synth
         if (tempModel == null)
             tempModel = getModel();
 
-        final int HEADER = 10;
-        int[] vals = new int[sysexKeys.length + 11];
+		// load all the data, including the name
+
+        int[] vals = new int[sysexKeys.length + 11];  // + 11 is enough space for the name (12 chars) plus the other keys
         for(int i = 0; i < sysexKeys.length - 1; i++)
             {
             vals[i] = emitValue(sysexKeys[i], getModel())[0];
             }
         int[] name = emitValue(sysexKeys[sysexKeys.length - 1], getModel());
         System.arraycopy(name, 0, vals, sysexKeys.length - 1, 12);
-        byte[] sysex = new byte[(sysexKeys.length + 11) * 2 + HEADER + 2];
+
+		// set up the sysex data.  Note that the original vals data is stored in 16 bit,
+		// so we need two bytes per.
+		
+		// Our header, which says 0xF0 0x7D "EDISYN PREENFM2" VERSIONBYTE=0,
+		// is 18 long.  We also have one byte for the footer 0xF7
+		
+        final int HEADER = 17;
+
+        byte[] sysex = new byte[(sysexKeys.length + 11) * 2 + HEADER + 1];
         sysex[0] = (byte)0xF0;
         sysex[1] = (byte)0x7D;
-        sysex[2] = (byte)'P';
-        sysex[3] = (byte)'R';
-        sysex[4] = (byte)'E';
-        sysex[5] = (byte)'E';
-        sysex[6] = (byte)'N';
-        sysex[7] = (byte)'F';
-        sysex[8] = (byte)'M';
-        sysex[9] = (byte)'2';
-        sysex[10] = (byte)0;            // sysex version
-        for(int i = 0; i < (sysexKeys.length + 11) ; i++)
+        sysex[2] = (byte)'E';
+        sysex[3] = (byte)'D';
+        sysex[4] = (byte)'I';
+        sysex[5] = (byte)'S';
+        sysex[6] = (byte)'Y';
+        sysex[7] = (byte)'N';
+        sysex[8] = (byte)' ';
+        sysex[9] = (byte)'P';
+        sysex[10] = (byte)'R';
+        sysex[11] = (byte)'E';
+        sysex[12] = (byte)'E';
+        sysex[13] = (byte)'N';
+        sysex[14] = (byte)'F';
+        sysex[15] = (byte)'M';
+        sysex[16] = (byte)'2';
+        sysex[17] = (byte)0;            // sysex version
+        
+        for(int i = 0; i < vals.length ; i++)
             {
             byte msb = (byte)((vals[i] >>> 7) & 127);
             byte lsb = (byte)(vals[i] & 127);
-            sysex[1 + HEADER + i * 2] = msb;
-            sysex[1 + HEADER + i * 2 + 1] = lsb;
+            sysex[HEADER + i * 2] = msb;
+            sysex[HEADER + i * 2 + 1] = lsb;
             }
         sysex[sysex.length - 1] = (byte)0xF7;
         return sysex;
@@ -1683,14 +1701,12 @@ public class PreenFM2 extends Synth
         the purposes of reading a file. */
     public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
-        final int HEADER = 10;
-                
-//              int[] vals = new int[sysexKeys.length + 11];
+        final int HEADER = 17;
                 
         for(int i = 0; i < sysexKeys.length - 1; i++)
             {
-            byte msb = data[1 + HEADER + i * 2];
-            byte lsb = data[1 + HEADER + i * 2 + 1];
+            byte msb = data[HEADER + i * 2];
+            byte lsb = data[HEADER + i * 2 + 1];
             handleNRPNParse(sysexKeys[i], (msb << 7) | lsb, false);
             }
 
@@ -1698,8 +1714,8 @@ public class PreenFM2 extends Synth
         int count = 1;
         for(int i = sysexKeys.length - 1; i < sysexKeys.length - 1 + 12; i++)
             {
-            byte msb = data[1 + HEADER + i * 2];
-            byte lsb = data[1 + HEADER + i * 2 + 1];
+            byte msb = data[HEADER + i * 2];
+            byte lsb = data[HEADER + i * 2 + 1];
             handleNRPNParse("name" + count, (msb << 7) | lsb, false); 
             count++;
             }
@@ -1709,18 +1725,25 @@ public class PreenFM2 extends Synth
         
     public static boolean recognize(byte[] data)
         {
-        boolean val = (data.length == 466 &&
+        boolean val = (data.length == 472 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x7D &&
-            data[2] == (byte)'P' &&
-            data[3] == (byte)'R' &&
-            data[4] == (byte)'E' &&
-            data[5] == (byte)'E' &&
-            data[6] == (byte)'N' &&
-            data[7] == (byte)'F' &&
-            data[8] == (byte)'M' &&
-            data[9] == (byte)'2' &&
-            data[10] == (byte)0);
+            data[2] == (byte)'E' &&
+            data[3] == (byte)'D' &&
+            data[4] == (byte)'I' &&
+            data[5] == (byte)'S' &&
+            data[6] == (byte)'Y' &&
+            data[7] == (byte)'N' &&
+            data[8] == (byte)' ' &&
+            data[9] == (byte)'P' &&
+            data[10] == (byte)'R' &&
+            data[11] == (byte)'E' &&
+            data[12] == (byte)'E' &&
+            data[13] == (byte)'N' &&
+            data[14] == (byte)'F' &&
+            data[15] == (byte)'M' &&
+            data[16] == (byte)'2' &&
+            data[17] == (byte)0);
         return val;
         }
 

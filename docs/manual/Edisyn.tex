@@ -38,11 +38,11 @@ Edisyn at present has patch editors for the following synthesizers: the very one
 
 \begin{itemize}
 \item Kawai K4 and K4r (Single and Multimode)
-\item Waldorf Blofeld Desktop, Blofeld Desktop SL, and Blofeld Keyboard (Single and Multimode)
-\item Waldorf Microwave II, Microwave XT, and Microwave XTk (Single and Multimode)
-%\item Yamaha TX81Z (Single and Multimode)
+\item Korg SG Rack (Single and Multimode) and SG Pro X (Single)
 \item Oberheim Matrix 1000 (Single)
 \item Preen FM2 (Single)
+\item Waldorf Blofeld Desktop, Blofeld Desktop SL, and Blofeld Keyboard (Single and Multimode)
+\item Waldorf Microwave II, Microwave XT, and Microwave XTk (Single and Multimode)
 \item Yamaha TX81Z (Single and Multimode)
 \end{itemize}
 
@@ -151,7 +151,7 @@ Persistence appears in other places too.  For example, the Initial Synthesizer d
 
 \section{Loading and Saving Files}
 
-You can save your edited patch via the {\bf Save} and {\bf Save As...} options in the {\bf File} menu, and you can load a patch via the {\bf Load...} option.  This is called {\it Load} and not {\it Open} because you can only load a file into an existing patch editor: you cannot create a new patch editor automatically on opening a file.
+You can save your edited patch via the {\bf Save} and {\bf Save As...} options in the {\bf File} menu, and you can load a patch via the {\bf Load...} option.  This is called {\it Load} and not {\it Open} because you can only load a file into an existing patch editor: you cannot create a new patch editor automatically on opening a file.  If the sysex file is not for your patch editor, but Edisyn still recognizes its data, it'll ask if you want to load for a different synthesizer.  If Edisyn doesn't recognize the data at all, it'll tell you that too.
 
 Most patch editor files are sysex dumps ending in the extension {\tt .syx}.  These files are usually exactly the same sysex data that you'd normally dump to your synthesizer using a patch librarian software program. There are exceptions however.  For example, some synthesizers, like the PreenFM2, have no sysex to speak of at all: they exchange parameters entirely over NRPN.  In this situation, Edisyn has invented a sysex file just for the PreenFM2.  It obviously won't work in your librarian software.
 
@@ -161,7 +161,7 @@ Edisyn also has limited support for batch-downloading and saving patch files.  T
 If Edisyn can't download a particular patch (the synth isn't responding), it'll try again and again until successful.  So if it gets stuck, 
 you can always stop batch-downloading at any time by choosing {\bf Stop Downloading Batch} from the {\bf File} menu.  Note that you can still screw with knobs, etc. while Edisyn is busy downloading batches: but don't do that.  You're just messing up the batches getting saved.\footnote{I may change this in the future to something less fragile.}
 
-Also note that as a failsafe Edisyn only allows the frontmost window to receive data over MIDI.  This means that (for the moment) while you're batch-downloading, you can't go to some other window (read a web browser say).  The patch editor has to stay in front.\footnote{Yes, I agree it's a stupid restriction.  I'm working on it.}
+Also note that as a failsafe Edisyn only allows the frontmost window to receive data over MIDI.  This means that while you're batch-downloading, you can't go to some other patch editor: the downloading patch editor must stay in front.  You can go to another application though (read a web browser say).
 
 
 \section{Communicating with the Synthesizer}

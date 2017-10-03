@@ -789,6 +789,7 @@ public class YamahaTX81Z extends Synth
 	            };
 	        // we're not going to add it.  Instead we're just going to put a space in.
 	        comp = Strut.makeStrut(comp);
+	        model.setStatus("operator" + envelope + "shift", Model.STATUS_IMMUTABLE);
     		}
     	else
     		{
@@ -935,7 +936,7 @@ public class YamahaTX81Z extends Synth
     "footcontrolvolume",
     "sustain",
     "portamento",    
-    "chorus",        
+    "chorus",			// unused as it turns out        
     "modulationwheelpitch",
     "modulationwheelamplitude",
     "breathcontrolpitch",

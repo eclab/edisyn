@@ -293,7 +293,8 @@ public abstract class Synth extends JComponent implements Updatable
     /** All synthesizer editor pane classes in Edisyn */
     public static final Class[] synths = new Class[] 
     { 
-//edisyn.synth.korgsg.KorgSG.class,
+	edisyn.synth.korgsg.KorgSG.class,
+	edisyn.synth.korgsg.KorgSGMulti.class,
     edisyn.synth.kawaik4.KawaiK4.class, 
     edisyn.synth.kawaik4.KawaiK4Multi.class, 
     edisyn.synth.kawaik4.KawaiK4Drum.class,
@@ -3906,6 +3907,18 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
 
+	int recognizeSynthForSysex(byte[] data)
+		{
+		// this could get arbitrarily large because we're loading all the classes
+		for(int i = 0; i < synths.length; i++)
+			{
+			if (recognize(synths[i],data))
+				return i;
+			}
+		return -1;
+		}
+		
+
     /** Goes through the process of opening a file and loading it into this editor. 
         This does NOT open a new editor window -- it loads directly into this editor. */
     void doOpen()
@@ -3945,8 +3958,7 @@ public abstract class Synth extends JComponent implements Updatable
                 is = new FileInputStream(f);
                 if (f.length() > MAX_FILE_LENGTH)
                     {
-                    showSimpleError("File Error", "File is too long and cannot be loaded.");
-                    //JOptionPane.showMessageDialog(this, "File is too long and cannot be loaded.", "File Error", JOptionPane.ERROR_MESSAGE);
+                    showSimpleError("File Error", "File is too large and cannot be loaded.");
                     }
                 else
                     {
@@ -3956,7 +3968,35 @@ public abstract class Synth extends JComponent implements Updatable
                                 
                     if (!recognizeLocal(data))
                         {
-                        showSimpleError("File Error", "File does not contain proper sysex data for the " + getSynthNameLocal());
+                        int rec = recognizeSynthForSysex(data);
+                        if (rec == -1)
+                        	{
+	                        showSimpleError("File Error", "File does not contain sysex data for the " + getSynthNameLocal() + ".\nEdisyn does not recognize the sysex data for any synth Edisyn knows.");
+	                        }
+	                    else
+	                    	{
+        					String[] synthNames = getSynthNames();
+	                    	if (showSimpleConfirm("Load Other Synth Patch Editor",
+	                    		"File doesn't contain sysex data for the " + getSynthNameLocal() + 
+	                    		".\nIt appears to contain data for the " + synthNames[rec] + 
+	                    		".\n\nLoad for the " + synthNames[rec] + " instead?"))
+								{
+								Synth otherSynth = instantiate(synths[rec], synthNames[rec], false, true, null);
+								otherSynth.setSendMIDI(false);
+								otherSynth.parse(data, true, true);
+								otherSynth.setSendMIDI(true);
+								otherSynth.file = f;
+								otherSynth.setLastDirectory(fd.getDirectory());
+
+								// this last statement fixes a mystery.  When I call Randomize or Reset on
+								// a Blofeld or on a Microwave, all of the widgets update simultaneously.
+								// But on a Blofeld Multi or Microwave Multi they update one at a time.
+								// I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+								// into the Blofeld, and it makes no difference!  For some reason the OS X
+								// repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+								otherSynth.repaint();
+								}
+	                    	}
                         }
                     else
                         {

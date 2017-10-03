@@ -264,7 +264,7 @@ public class HillClimb extends SynthPanel
 		panel.add(vr, BorderLayout.WEST);
 		top.add(panel);
 		
-		initialize(synth.getModel(), true);
+//		initialize(synth.getModel(), true);
 		}	
 		
 	public static final int UPDATE_SOUND_RATE = 1;

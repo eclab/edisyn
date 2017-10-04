@@ -20,6 +20,7 @@ Edisyn presently supports:
 * PreenFM2
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)
 * Yamaha TX81Z (Single and Multi Modes)
+* Korg SG Rack (Single and Multi Modes) and Korg SG Pro X (Single Mode)
 
 Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, extensive parameter space exploration tools (randomization/merging/nudging/hill-climbing) with per-parameter customization, real-time parameter updates, test notes, etc.
 

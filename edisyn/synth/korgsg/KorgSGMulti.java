@@ -152,8 +152,8 @@ public class KorgSGMulti extends Synth
         }
                 
     
-    public String getDefaultResourceFileName() { return "KorgSG.init"; }
-    public String getHTMLResourceFileName() { return "KorgSG.html"; }
+    public String getDefaultResourceFileName() { return "KorgSGMulti.init"; }
+    public String getHTMLResourceFileName() { return "KorgSGMulti.html"; }
                 
                 
               
@@ -222,12 +222,15 @@ public class KorgSGMulti extends Synth
         VBox vbox = new VBox();
         
         // it is not clear what "use" vs "pass" is here -- need to check
-        comp = new CheckBox("Timbre B Passes Through Effect 1", this, "timbbfxrout");
+        comp = new CheckBox("Timbre B Goes Through Effect 1", this, "timbbfxrout");
+        ((CheckBox)comp).addToWidth(2);  // requires two, not one!  A first I think.
         vbox.add(comp);
         
         comp = new CheckBox("Version 8", this, "filtdatatype");
         model.setStatus("filtdatatype", Model.STATUS_IMMUTABLE);
         vbox.add(comp);
+
+		hbox.add(vbox);
 
         comp = new LabelledDial("Aftertouch", this, "afttouchcurve", color, 0, 8)
         	{
@@ -263,7 +266,7 @@ public class KorgSGMulti extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Point (Soft)");
         hbox.add(comp);
 
-        comp = new LabelledDial("Velocity (f)", this, "velpointf", color, 1, 127);
+        comp = new LabelledDial("Velocity (f)", this, "velpointf", color, 1, 150);
         ((LabelledDial)comp).addAdditionalLabel(" Point (Loud) ");
         hbox.add(comp);
         
@@ -285,7 +288,8 @@ public class KorgSGMulti extends Synth
         comp = new Chooser("Program", this, "timbre" + val + "program", params);
         vbox.add(comp);
 
-        comp = new CheckBox("On", this, "timbre" + val + "switch");
+		// 0 is on, 1 is off.  That makes perfect sense.
+        comp = new CheckBox("On", this, "timbre" + val + "switch", true);
         vbox.add(comp);
 
 		hbox.add(vbox);
@@ -325,6 +329,7 @@ public class KorgSGMulti extends Synth
         			return "Prgm";
         		}
         	};
+        getModel().setMetricMax("timbre" + val + "lrpanpot", 127);
         hbox.add(comp);
         
         comp = new LabelledDial("Key Zone", this, "timbre" + val + "keyzonetop", color, 0, 127)
@@ -413,8 +418,8 @@ public class KorgSGMulti extends Synth
 
     int range(int a)
     	{
-    	while (a > 255) a -= 255;
-    	while (a < 0) a += 255;
+    	while (a > 255) a -= 256;
+    	while (a < 0) a += 256;
     	return a;
     	}
     	
@@ -480,26 +485,57 @@ public class KorgSGMulti extends Synth
         String name;
         for(int i = 0; i < 10; i++)
         	{
-        	namec[i] = (char)data[i + 5];
+        	namec[i] = (char)data[i];
         	}
         name = new String(namec);
         model.set("name", name);
         
         // this will have to be set entirely custom.  :-(  Stupid Korg.  Really bad sysex.
         
-        model.set("program", data[15]);
-        model.set("dampmode", data[16] & 1);
-        model.set("highnotesdamp", data[16] & 2);
-        model.set("brightness", data[17]);
-        model.set("level", data[18]);
-        model.set("attacktime", data[19]);
-        model.set("decaytime", data[20]);
-        model.set("releasetime", data[21]);
-        model.set("velocity", data[22]);
-        model.set("scaletype", data[23]);
-        model.set("scalekey", data[24]);
-        model.set("pitchbendrange", data[25]);
-        	
+        model.set("afttouchcurve", data[10]);
+        model.set("velocityfigure", data[11]);
+        model.set("velpointp", data[12]);
+        model.set("velpointf", range(data[13]));
+        model.set("timbfxrout", data[14]);
+        model.set("filtdatatype", data[15] & 1);
+        
+        // skip 16...95
+        
+        // timbres a and b
+        for(int i = 1; i < 3; i++)
+        	{
+        	int offset = (i == 1 ? 96 : 106);
+        	model.set("timbre" + i + "program", data[0 + offset] & 63);
+	        model.set("timbre" + i + "switch", (data[0 + offset] >>> 7) & 1);
+        	model.set("timbre" + i + "outputlevel", data[1 + offset]);
+        	model.set("timbre" + i + "transpose", data[2 + offset]);
+        	model.set("timbre" + i + "tune", data[3 + offset]);
+        	model.set("timbre" + i + "lrpanpot", range(data[4 + offset]));
+
+        	model.set("dampsostfilt", data[5 + offset] & 1);
+        	if (model.get("(filtdatatype", 0) == 0)  // old
+        		{
+        		model.set("controllerfilt", (data[5 + offset] >>> 1) & 1);
+        		}
+        	else // new
+        		{
+        		model.set("tonecharafilt", (data[5 + offset] >>> 1) & 1);
+        		model.set("pitchbendfilt", (data[5 + offset] >>> 2) & 1);
+        		model.set("modwheelfilt", (data[5 + offset] >>> 3) & 1);
+        		model.set("volumefilt", (data[5 + offset] >>> 4) & 1);
+        		model.set("expressionfilt", (data[5 + offset] >>> 5) & 1);
+        		model.set("aftertouchfilt", (data[5 + offset] >>> 6) & 1);
+        		model.set("panpotfilt", (data[5 + offset] >>> 7) & 1);
+        		}
+        		
+        	model.set("timbre" + i + "keyzonetop", data[6 + offset]);
+        	model.set("timbre" + i + "keyzonebottom", data[7 + offset]);
+        	model.set("timbre" + i + "velzonetop", data[8 + offset]);
+        	model.set("timbre" + i + "velzonebottom", data[9 + offset]);
+	        }
+        
+        // skip 116...243
+        
         revise();       
         return PARSE_SUCCEEDED;     
         }
@@ -522,7 +558,7 @@ public class KorgSGMulti extends Synth
         	d = new Object[2];
         	}
         
-        byte[] data = new byte[50];
+        byte[] data = new byte[244];
         
         // LOAD DATA HERE
         
@@ -532,24 +568,51 @@ public class KorgSGMulti extends Synth
         System.arraycopy(b, 0, namec, 0, b.length);
         for(int i = 0; i < 10; i++)
         	{
-        	data[i+5] = (byte)(namec[i] & 127);
+        	data[i] = (byte)(namec[i] & 127);
         	}
 
-		data[15] = (byte)model.get("program", 0);
-		data[16] = (byte)((model.get("dampmode", 0) & 1) | (model.get("highnotesdamp", 0) & 2));
-		data[17] = (byte)model.get("brightness", 0);
-		data[18] = (byte)model.get("level", 0);
-		data[19] = (byte)model.get("attacktime", 0);
-		data[20] = (byte)model.get("decaytime", 0);
-		data[21] = (byte)model.get("releasetime", 0);
-		data[22] = (byte)model.get("velocity", 0);
-		data[23] = (byte)model.get("scaletype", 0);
-		data[24] = (byte)model.get("scalekey", 0);
-		data[25] = (byte)model.get("pitchbendrange", 0);
-
-		data[32] = (byte)0x41;
-		data[33] = (byte)0x01;
-		data[34] = (byte)0x0F;
+		data[10] = (byte)model.get("afttouchcurve", 0);
+		data[11] = (byte)model.get("velocityfigure", 0);
+		data[12] = (byte)model.get("velpointp", 0);
+		data[13] = (byte)model.get("velpointf", 0);
+		data[14] = (byte)model.get("timbfxrout", 0);
+		data[15] = (byte)(model.get("filtdatatype", 0) & 1);
+		
+		// skip 16...95
+		
+        // timbres a and b
+        for(int i = 1; i < 3; i++)
+        	{
+        	int offset = (i == 1 ? 96 : 106);
+			data[0 + offset] = (byte)((model.get("timbre" + i + "program", 0) & 63) | ((model.get("timbre" + i + "switch", 0) & 1) << 7));
+			data[1 + offset] = (byte)model.get("timbre" + i + "outputlevel", 0);
+			data[2 + offset] = (byte)model.get("timbre" + i + "transpose", 0);
+			data[3 + offset] = (byte)model.get("timbre" + i + "tune", 0);
+			data[4 + offset] = (byte)model.get("timbre" + i + "lrpanpot", 0);
+			
+			data[5 + offset] = (byte)(model.get("timbre" + i + "dampsostfilt", 0) & 1);
+			if (model.get("(filtdatatype", 0) == 0)  // old
+				{
+				data[5 + offset] = (byte)(data[5 + offset] | ((model.get("timbre" + i + "controllerfilt", 0) & 1) << 1));
+				}
+			else
+				{
+				data[5 + offset] = (byte)(data[5 + offset] | ((model.get("timbre" + i + "tonecharafilt", 0) & 1) << 1));
+				data[5 + offset] = (byte)(data[5 + offset] | ((model.get("timbre" + i + "pitchbendfilt", 0) & 1) << 2));
+				data[5 + offset] = (byte)(data[5 + offset] | ((model.get("timbre" + i + "modwheelfilt", 0) & 1) << 3));
+				data[5 + offset] = (byte)(data[5 + offset] | ((model.get("timbre" + i + "volumefilt", 0) & 1) << 4));
+				data[5 + offset] = (byte)(data[5 + offset] | ((model.get("timbre" + i + "expressionfilt", 0) & 1) << 5));
+				data[5 + offset] = (byte)(data[5 + offset] | ((model.get("timbre" + i + "aftertouchfilt", 0) & 1) << 6));
+				data[5 + offset] = (byte)(data[5 + offset] | ((model.get("timbre" + i + "panpotfilt", 0) & 1) << 7));
+				}
+			
+			data[6 + offset] = (byte)model.get("timbre" + i + "keyzonetop", 0);
+			data[7 + offset] = (byte)model.get("timbre" + i + "keyzonebottom", 0);
+			data[8 + offset] = (byte)model.get("timbre" + i + "velzonetop", 0);
+			data[9 + offset] = (byte)model.get("timbre" + i + "velzonebottom", 0);
+			}
+			
+		// skip 116 .. 243
 	
         // Convert 
         
@@ -559,14 +622,14 @@ public class KorgSGMulti extends Synth
     	data[1] = (byte)0x42;
     	data[2] = (byte)(48 + getChannelOut());
         data[3] = (byte)0x4A;
-        data[4] = (byte)0x40;
+        data[4] = (byte)0x49;
         data[data.length - 1] = (byte)0xF7;
         System.arraycopy(data2, 0, data, 5, data2.length);
         d[0] = data;
         
         if (!toWorkingMemory && !toFile)
         	{
-        	data = new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x4A, (byte)0x11, (byte)0,
+        	data = new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x4A, (byte)0x1A, (byte)0,
         								(byte)(BB * 16 + NN), (byte)0xF7 };
         	d[1] = data;
         	}
@@ -605,8 +668,8 @@ public class KorgSGMulti extends Synth
 		changePatch(tempModel);
 
 		// enter performance edit mode, which loads the patch into edit buffer memory
-		tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x03, 0x0, (byte)0xF7 });
-        tryToSendSysex(requestCurrentDump());
+		tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x01, 0x0, (byte)0xF7 });
+    	tryToSendSysex(requestCurrentDump());
 		}
             
     public void performRequestCurrentDump()
@@ -625,7 +688,7 @@ public class KorgSGMulti extends Synth
         }
     
     
-    public static final int EXPECTED_SYSEX_LENGTH = 64;
+    public static final int EXPECTED_SYSEX_LENGTH = 285;
     public static boolean recognize(byte[] data)
         {
         boolean v = (

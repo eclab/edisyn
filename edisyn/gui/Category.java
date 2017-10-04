@@ -37,34 +37,37 @@ public class Category extends JComponent implements Gatherable
 				{
 				public void mouseClicked(MouseEvent e)
 					{
-					boolean inBorder = ( e.getPoint().y < getInsets().top);
-					if (e.getClickCount() == 2 && inBorder)
+					if (synth.isShowingMutation())
 						{
-						boolean turnOn = true;
-						ArrayList comps = new ArrayList();
-						gatherAllComponents(comps);
-						for(int i = 0; i < comps.size(); i++)
+						boolean inBorder = ( e.getPoint().y < getInsets().top);
+						if (e.getClickCount() == 2 && inBorder)
 							{
-							if (comps.get(i) instanceof NumericalComponent)
+							boolean turnOn = true;
+							ArrayList comps = new ArrayList();
+							gatherAllComponents(comps);
+							for(int i = 0; i < comps.size(); i++)
 								{
-								NumericalComponent nc = (NumericalComponent)(comps.get(i));
-								String key = nc.getKey();
-								if (synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
-									{ turnOn = false; break; }
+								if (comps.get(i) instanceof NumericalComponent)
+									{
+									NumericalComponent nc = (NumericalComponent)(comps.get(i));
+									String key = nc.getKey();
+									if (synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+										{ turnOn = false; break; }
+									}
 								}
-							}
-										
-						for(int i = 0; i < comps.size(); i++)
-							{
-							if (comps.get(i) instanceof NumericalComponent)
+									
+							for(int i = 0; i < comps.size(); i++)
 								{
-								NumericalComponent nc = (NumericalComponent)(comps.get(i));
-								String key = nc.getKey();
-								if (synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
-									synth.mutationMap.setFree(key, turnOn);
+								if (comps.get(i) instanceof NumericalComponent)
+									{
+									NumericalComponent nc = (NumericalComponent)(comps.get(i));
+									String key = nc.getKey();
+									if (synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+										synth.mutationMap.setFree(key, turnOn);
+									}
 								}
+							repaint();
 							}
-						repaint();
 						}
 					}
 				});

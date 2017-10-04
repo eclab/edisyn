@@ -5,6 +5,8 @@ Synthesizer Patch Editor (Version 11)
 
 By Sean Luke (sean@cs.gmu.edu)
 
+I've been asked where my Patreon page is.  So, sure, here's my <a href="https://www.patreon.com/SeanLuke">Patreon page</a>.
+
 
 ## About
 

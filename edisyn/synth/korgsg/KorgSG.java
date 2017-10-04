@@ -434,11 +434,25 @@ public class KorgSG extends Synth
         effects[EFFECT_STEREO_DELAY] = new HBox();
         addDepth(effect, color, effects[EFFECT_STEREO_DELAY]);
                                 
-        comp = new LabelledDial("Delay Time", this, "stereodelay" + effect + "delaytimeleft", color, 0, 500);
+        comp = new LabelledDial("Delay Time", this, "stereodelay" + effect + "delaytimeleft", color, 0, 500)
+        	{
+				public int reviseToAltValue(int val)
+					{
+					model.setBounded("stereodelay" + effect + "delaytimeright", val);
+					return val;
+					}
+        	};
 	    ((LabelledDial)comp).addAdditionalLabel("Left");
 		effects[EFFECT_STEREO_DELAY].add(comp);
 
-        comp = new LabelledDial("Delay Time", this, "stereodelay" + effect + "delaytimeright", color, 0, 500);
+        comp = new LabelledDial("Delay Time", this, "stereodelay" + effect + "delaytimeright", color, 0, 500)
+        	{
+				public int reviseToAltValue(int val)
+					{
+					model.setBounded("stereodelay" + effect + "delaytimeleft", val);
+					return val;
+					}
+        	};
 	    ((LabelledDial)comp).addAdditionalLabel("Right");
 		effects[EFFECT_STEREO_DELAY].add(comp);
 
@@ -799,6 +813,11 @@ public class KorgSG extends Synth
 					if (val == 0) return "Dry";
 					else return "Wet";
 					}
+				public int reviseToAltValue(int val)
+					{
+					model.setBounded("hyperenhancer" + effect + "rdepth", val);
+					return val;
+					}
 				};
 			((LabelledDial)comp).addAdditionalLabel("(Left)");
 			effects[HYPER_ENHANCER].add(comp);
@@ -809,6 +828,11 @@ public class KorgSG extends Synth
 					{
 					if (val == 0) return "Dry";
 					else return "Wet";
+					}
+				public int reviseToAltValue(int val)
+					{
+					model.setBounded("hyperenhancer" + effect + "ldepth", val);
+					return val;
 					}
 				};
 			((LabelledDial)comp).addAdditionalLabel("(Right)");
@@ -879,8 +903,8 @@ public class KorgSG extends Synth
     	    
     int range(int a)
     	{
-    	while (a > 255) a -= 255;
-    	while (a < 0) a += 255;
+    	while (a > 255) a -= 256;
+    	while (a < 0) a += 256;
     	return a;
     	}
     	

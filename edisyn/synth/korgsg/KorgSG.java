@@ -261,7 +261,21 @@ public class KorgSG extends Synth
             new String[] { null, "attacktime", "decaytime", null, "releasetime" },
             new String[] { null, "level", "level", "level", null },
             new double[] { 0, 0.25 / 198, 0.25 / 198, 0.25, 0.25 / 198 },
-            new double[] { 0, 1.0 / 198, 0.5 / 198, 0.5 / 198, 0 });
+            new double[] { 0, 1.0 / 198, 0.5 / 198, 0.5 / 198, 0 })
+            	{
+            	public void postProcess(double[] xs, double[] ys)
+            		{
+            		// because we use +/-99 for our envelope values just
+            		// like the SG, we need to postprocess this so that
+            		// we don't have negative envelope coordinates
+            		xs[1] += 0.125;
+            		xs[2] += 0.125;
+            		xs[4] += 0.125;
+					ys[1] += 0.5;            		
+					ys[2] += 0.25;            		
+					ys[3] += 0.25;            		
+            		}
+            	};
         hbox.addLast(comp);
         
         category.add(hbox);

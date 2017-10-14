@@ -58,6 +58,7 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem undoMenu;
     public JMenuItem redoMenu;
     public JMenuItem receiveCurrent;
+    public JMenuItem receivePatch;
     public JCheckBoxMenuItem transmitParameters;
     public JMenu merge;
     public JMenuItem editMutationMenu;
@@ -295,6 +296,7 @@ public abstract class Synth extends JComponent implements Updatable
     { 
 	edisyn.synth.korgsg.KorgSG.class,
 	edisyn.synth.korgsg.KorgSGMulti.class,
+	edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
     edisyn.synth.kawaik4.KawaiK4.class, 
     edisyn.synth.kawaik4.KawaiK4Multi.class, 
     edisyn.synth.kawaik4.KawaiK4Drum.class,
@@ -540,7 +542,7 @@ public abstract class Synth extends JComponent implements Updatable
     */
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-        byte[]result = emit(tempModel, toWorkingMemory, toFile);
+        byte[] result = emit(tempModel, toWorkingMemory, toFile);
         if (result == null ||
             result.length == 0)
             return new Object[0];
@@ -2452,9 +2454,9 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        JMenuItem receive = new JMenuItem("Request Patch...");
-        menu.add(receive);
-        receive.addActionListener(new ActionListener()
+        receivePatch = new JMenuItem("Request Patch...");
+        menu.add(receivePatch);
+        receivePatch.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
@@ -3971,7 +3973,21 @@ public abstract class Synth extends JComponent implements Updatable
                         int rec = recognizeSynthForSysex(data);
                         if (rec == -1)
                         	{
-	                        showSimpleError("File Error", "File does not contain sysex data for the " + getSynthNameLocal() + ".\nEdisyn does not recognize the sysex data for any synth Edisyn knows.");
+                        	if (data.length == 0 || data[0] != (byte)0xF0)
+                        		{
+                        		showSimpleError("File Error", "File does not appear to contain sysex data.");
+                        		}
+                        	else
+                        		{
+                        		String val = getManufacturerForSysex(data);
+                        		
+                        		if (val == null)
+                        			showSimpleError("File Error", "File might contain sysex data but has an invalid manufacturer ID.");
+                        		else
+	                        		showSimpleError("File Error", "File does not contain sysex data for any synth Edisyn knows.\n" +
+    	                    						"This appears to be data for the following manufacturer:\n" +
+    	                    						getManufacturerForSysex(data));
+                        		}
 	                        }
 	                    else
 	                    	{
@@ -3979,7 +3995,7 @@ public abstract class Synth extends JComponent implements Updatable
 	                    	if (showSimpleConfirm("Load Other Synth Patch Editor",
 	                    		"File doesn't contain sysex data for the " + getSynthNameLocal() + 
 	                    		".\nIt appears to contain data for the " + synthNames[rec] + 
-	                    		".\n\nLoad for the " + synthNames[rec] + " instead?"))
+	                    		".\nLoad for the " + synthNames[rec] + " instead?"))
 								{
 								Synth otherSynth = instantiate(synths[rec], synthNames[rec], false, true, null);
 								otherSynth.setSendMIDI(false);
@@ -4354,7 +4370,58 @@ public abstract class Synth extends JComponent implements Updatable
 
         
         
-        
+
+
+
+    ////////// UTILITIES
+    
+    static HashMap manufacturers = null;
+    
+	static HashMap getManufacturers()
+		{
+		if (manufacturers != null)
+			return manufacturers;
+			
+		manufacturers = new HashMap();
+		Scanner scan = new Scanner(Synth.class.getResourceAsStream("Manufacturers.txt"));
+		while(scan.hasNextLine())
+			{
+			String nextLine = scan.nextLine().trim();
+			if (nextLine.equals("")) continue;
+			if (nextLine.startsWith("#")) continue;
+			
+			int id = 0;
+			Scanner scan2 = new Scanner(nextLine);
+			int one = scan2.nextInt(16);  // in hex
+			if (one == 0x00)  // there are two more to read
+				{
+				id = id + (scan2.nextInt(16) << 8) + (scan2.nextInt(16) << 16);
+				}
+			else
+				{
+				id = one;
+				}
+			manufacturers.put(new Integer(id), scan.nextLine().trim());
+			}
+		return manufacturers;
+		}
+
+	public static String getManufacturerForSysex(byte[] data)
+		{
+		HashMap map = getManufacturers();
+		if (data[1] == 0x00)
+			{
+			return (String)(map.get(new Integer(
+				0x00 + 
+				((data[2] < 0 ? data[2] + 256 : data[2]) << 8) + 
+				((data[3] < 0 ? data[3] + 256 : data[3]) << 16))));
+			}
+		else
+			{
+			return (String)(map.get(new Integer(data[1])));
+			}
+		}
+
         
         
         

@@ -1644,9 +1644,6 @@ public class PreenFM2 extends Synth
         the purposes of writing to a file. */
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-        if (tempModel == null)
-            tempModel = getModel();
-
 		// load all the data, including the name
 
         int[] vals = new int[sysexKeys.length + 11];  // + 11 is enough space for the name (12 chars) plus the other keys

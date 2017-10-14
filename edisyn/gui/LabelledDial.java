@@ -96,10 +96,11 @@ public class LabelledDial extends NumericalComponent
         setMax(max);
         synth.getModel().setMetricMin(key, min);
         synth.getModel().setMetricMax(key, max);
+        setState(getState());
         }
 
     /** Makes a labelled dial for the given key parameter on the given synth, and with the given color.  No minimum or maximum is set. */
-    public LabelledDial(String _label, Synth synth, String key, Color staticColor)
+    LabelledDial(String _label, Synth synth, String key, Color staticColor)
         {
         super(synth, key);
         setBackground(Style.BACKGROUND_COLOR);
@@ -126,7 +127,6 @@ public class LabelledDial extends NumericalComponent
         
         setLayout(new BorderLayout());
         add(panel, BorderLayout.NORTH);
-        setState(getState());
         }
 
     public int reviseToAltValue(int val) { return val; }

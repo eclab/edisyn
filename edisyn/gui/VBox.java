@@ -76,14 +76,14 @@ public class VBox extends JComponent implements Gatherable
         box.remove(component);
         }        
         
-    public void remove(JComponent component)
+    public void remove(Component component)
         {
         box.remove(component);
         }   
         
-    public void add(JComponent component)
+    public Component add(Component component)
         {
-        box.add(component);
+        return box.add(component);
         }
     
     public void gatherAllComponents(java.util.ArrayList list)

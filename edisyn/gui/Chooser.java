@@ -210,7 +210,9 @@ public class Chooser extends NumericalComponent
         
     public void setIndex(int index)
         {
-        combo.setSelectedIndex(index);
+		setCallActionListener(false);
+		combo.setSelectedIndex(index);
+		setCallActionListener(true);
         }
         
     public void setLabel(String _label)
@@ -220,6 +222,7 @@ public class Chooser extends NumericalComponent
         
     public void setElements(String _label, String[] elements)
         {
+		setCallActionListener(false);
         label.setText("  " + _label);
         combo.removeAllItems();
         
@@ -232,9 +235,12 @@ public class Chooser extends NumericalComponent
                         
         setMin(0);
         setMax(elements.length - 1);
+		setCallActionListener(true);
         
         combo.setSelectedIndex(0);
         setState(combo.getSelectedIndex());
+        revalidate();
+        repaint();
         }
         
     class ComboBoxRenderer extends JLabel implements ListCellRenderer 

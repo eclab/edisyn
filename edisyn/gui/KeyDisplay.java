@@ -72,7 +72,9 @@ public class KeyDisplay extends NumericalComponent
     public int OCTAVES_BELOW_ZERO_SPN = -1;
     public int OCTAVES_BELOW_ZERO_MIDI = 0;
     int octavesBelowZero = OCTAVES_BELOW_ZERO_YAMAHA;               // Yamaha
-        
+    
+    public JLabel getLabel() { return label; }
+    public String getTitle() { return title; }
     
     public void setOctavesBelowZero(int val) { octavesBelowZero = val; }
     public int getOctavesBelowZero() { return octavesBelowZero; }

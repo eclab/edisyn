@@ -443,10 +443,12 @@ public class YamahaTX81Z extends Synth
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        comp = new CheckBox("Sustain", this, "sustain");
-        vbox.add(comp);
-        comp = new CheckBox("Portamento", this, "portamento");
-        vbox.add(comp);
+
+        //comp = new CheckBox("Sustain", this, "sustain");
+        //vbox.add(comp);
+        //comp = new CheckBox("Portamento", this, "portamento");
+        //vbox.add(comp);
+
         comp = new CheckBox("Full Time Portamento", this, "fulltimeportamentomode", true);
         vbox.add(comp);
 
@@ -934,8 +936,8 @@ public class YamahaTX81Z extends Synth
     "fulltimeportamentomode",
     "portamentotime",
     "footcontrolvolume",
-    "sustain",
-    "portamento",    
+    "sustain",			// unused as it turns out
+    "portamento",    	// unused as it turns out
     "chorus",			// unused as it turns out        
     "modulationwheelpitch",
     "modulationwheelamplitude",

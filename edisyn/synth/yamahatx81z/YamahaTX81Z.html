@@ -11,10 +11,12 @@
 
 <ul>
 <li>
-The TX81Z doesn't have a way to send or write patches from sysex.  Though Edisyn could manipulate its front buttons via sysex in order to write patches, it's a little dangerous.  So Edisyn doesn't provide it as an option.  To write a patch you have to send to the current patch from Edisyn, then manually save it to your desired patch from the front panel.
+The TX81Z doesn't have a way to send or write patches from sysex.  Though Edisyn could manipulate the TX81Z's front buttons via sysex in order to write patches, it's a little dangerous.  So Edisyn doesn't provide it as an option.  To write a patch you have to send to the current patch from Edisyn, then manually save it to your desired patch from the front panel.
 <p><li>Similarly, changing patches is challenging: it requires a bit of manipulation of the front panel using the TX81Z's unusual "press buttons for me" sysex options.  It should work in general, but if strange things happen, let me know.
 <p><li>The TX81Z is very unusual in that its patches aren't updated by a sysex bulk data command, but by <b>two of them in sequence</b>.  This is a backwards-compatibility thing with earlier 4-op synthesizers.  Thus when you save a patch to a file in Edisyn, you'll actually be saving <b>two</b> sysex commands concatenated together.  You should be aware of this in case you try sending it from librarian software and it doesn't like it (it shouldn't be a problem).
 </ul>
+
+<p>Thanks to Matt Gregory (mgregory22@gmail.com) for his considerable help in debugging this patch editor.  Thanks also to Jesse Guessford and the GMU School of Music.
 
 
 <p><table border=0 cellpadding=0 cellspacing=5>

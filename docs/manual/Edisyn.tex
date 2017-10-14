@@ -39,6 +39,7 @@ Edisyn at present has patch editors for the following synthesizers: the very one
 \begin{itemize}
 \item Kawai K4 and K4r (Single and Multimode)
 \item Korg SG Rack (Single and Multimode) and SG Pro X (Single)
+\item Korg Microsampler
 \item Oberheim Matrix 1000 (Single)
 \item Preen FM2 (Single)
 \item Waldorf Blofeld Desktop, Blofeld Desktop SL, and Blofeld Keyboard (Single and Multimode)
@@ -151,7 +152,7 @@ Persistence appears in other places too.  For example, the Initial Synthesizer d
 
 \section{Loading and Saving Files}
 
-You can save your edited patch via the {\bf Save} and {\bf Save As...} options in the {\bf File} menu, and you can load a patch via the {\bf Load...} option.  This is called {\it Load} and not {\it Open} because you can only load a file into an existing patch editor: you cannot create a new patch editor automatically on opening a file.  If the sysex file is not for your patch editor, but Edisyn still recognizes its data, it'll ask if you want to load for a different synthesizer.  If Edisyn doesn't recognize the data at all, it'll tell you that too.
+You can save your edited patch via the {\bf Save} and {\bf Save As...} options in the {\bf File} menu, and you can load a patch via the {\bf Load...} option.  This is called {\it Load} and not {\it Open} because you can only load a file into an existing patch editor: you cannot create a new patch editor automatically on opening a file.  If the sysex file is not for your patch editor, but Edisyn still recognizes its data, it'll ask if you want to load for a different synthesizer.  If Edisyn doesn't recognize the data at all, it'll tell you it's best guess as to the manufacturer of the device which produced it.\footnote{Thanks to the MIDI Association for updating their database to make this possible in Edisyn.}
 
 Most patch editor files are sysex dumps ending in the extension {\tt .syx}.  These files are usually exactly the same sysex data that you'd normally dump to your synthesizer using a patch librarian software program. There are exceptions however.  For example, some synthesizers, like the PreenFM2, have no sysex to speak of at all: they exchange parameters entirely over NRPN.  In this situation, Edisyn has invented a sysex file just for the PreenFM2.  It obviously won't work in your librarian software.
 
@@ -422,6 +423,7 @@ Yamaha TX81Z&{\cm}\backfootnote{2}& & &{\cm}&{\cm}& & &  & &{\cm}\footnotemark  
 PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &            \\
 Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}\footnotemark&{\cm}\samefootnote&{\cm}& & &{\cm}          \\
 Korg Microsampler&{\cm}\footnotemark&{\cm}\samefootnote& & & & & &  &  &         \\
+Korg SG&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}\\
 \end{tabular}
 }
 \end{center}
@@ -439,11 +441,11 @@ Korg Microsampler&{\cm}\footnotemark&{\cm}\samefootnote& & & & & &  &  &        
 \footnotetext{A limited number of them only.}
 \vspace{1em}
 
-So you need to understand that you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.
+I particularly love how the Korg Microsampler and the Korg SG are effectively disjoint in their abilities; yet they're from the same company.   Long story short, you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.
 
 \subsection{Step Two: Set Up the Development Environment}
 
-Probably the easiest way to fire up Edisyn for purposes of testing is as a build directory.  You just need to add two items to your CLASSPATH:
+Still not scared away?  Okay, we'll start by getting Edisyn set up for development.  Probably the easiest way to fire up Edisyn for purposes of testing is as a build directory.  You just need to add two items to your CLASSPATH:
 
 \begin{enumerate}
 \item The {\tt coremidi4j-1.1.jar} file, located in the {\tt libraries/} folder (you can move it where you like).  This jar file contains the CoreMidi4J library, which enables sysex to work properly on Macs (you'll need it for non-Macs too).
@@ -455,7 +457,7 @@ You can then run Edisyn as\ \ \  {\tt java edisyn.Edisyn}
 
 \subsection{Step Three: Create Files}
 
-Still not scared away?  Okay, here's where we start.  Let's say you're adding a single (non-multimode) patch editor for the Yamaha DX7.
+Let's say you're adding a single (non-multimode) patch editor for the Yamaha DX7.
 
 Make a directory called {\tt edisyn/synth/yamahadx7}.  This directory will store your patch editor and any auxiliary files.  Next copy the file {\tt edisyn/synth/Blank.java} to {\tt edisyn/synth/yamahadx7/YamahaDX7.java}.  That'll be your patch editor code.  Also copy the file {\tt edisyn/synth/Blank.html} to {\tt edisyn/synth/yamahadx7/YamahaDX7.html}.  This will be the ``About'' documentation for your file.  You'll eventually fill it out.
 

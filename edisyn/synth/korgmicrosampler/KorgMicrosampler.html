@@ -1,0 +1,39 @@
+<html><head></head><body bgcolor='black'>
+<font color='white'>
+
+<h1>Korg Microsampler</h1> 
+<h2>Editor</h2>
+
+<p>The Microsampler doesn't have patches per se.  It just has a limited assortment of things that can be edited via MIDI.
+  This editor gives you access to all of those things.  But you won't be able to save these settings, nor can you get them in bulk from the Microsampler.
+
+<p><b>Communicating with Edisyn</b> Set up your Microsampler's MIDI Routing to communicate properly with your computer: you probably will want "USB+MIDI".  Edisyn's Send To device should be "microSAMPLER SOUND", and Edisyn's Receive From device should be "microSAMPLER KBD/KNOB".  Set your Microsampler's <b>Global MIDI Channel</b> to the same as Edisyn's "Send Channel".  
+
+<p><b>Hints</b>
+<ul>
+<li> The "Sample Number" dial changes which sample the parameters are affecting (in the Sample section).  You can set values for all 36 samples if you like.  Similarly, the "Pattern Number" dial changes which pattern its parameters are affecting (in the Pattern section), and you can set values for all 16 patterns.  However the Effects parameters only affect a given effect type.
+
+<p><li>The "Current Sample" and "Current Pattern" dials just specify which pattern or sample is presently brought up on the Microsampler.  They do not determine which sample or pattern the other parameters affect
+</ul>
+
+<p><b>Gotchas</b>
+<ul>
+<li>The Microsampler's MIDI is a disaster.  Its pitch bend steps terribly.  It sends MIDI Clock without properly sending MIDI Start or MIDI Stop.  As soon as it receives a MIDI Start it starts the pattern sequencer whether you want it or not.  So don't expect much here.
+
+<p><li>There are a great many things on the Microsampler you cannot control remotely: most of the knobs and buttons, for example, as well as any commands which are triggers rather than settings.  Things like start point and end point are unavailable.  But theare a few items available, and Edisyn provides what's possible.
+
+<p><li>When you change the Effect, all of its settings will be reset on the Microsampler.  
+
+<p><li>Though the Microsampler can respond to volume changes (via CC or Universal System Exclusive) and pan (via CC), Edisyn doesn't send these: they are not reflected on-screen and could be quite confusing.
+
+</ul>
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>October 2017
+</table>
+

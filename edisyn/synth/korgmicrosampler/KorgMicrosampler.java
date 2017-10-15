@@ -151,14 +151,39 @@ public class KorgMicrosampler extends Synth
 	public static final double[] FX_DELAY_TIME_RATIO_SYNC = { 12.5, 16.7, 25.0, 33.3, 50.0, 66.6, 75.5, 100, 125, 133, 150, 200, 250, 300, 400 };
 	
 	public static final String[] FX_DELAY_DELAY_SYNC = { "1/64", "1/32", "1/24", "1/16", "1/12", "1/8", "1/6", "3/16", "1/4", "1/3", "3/8", "1/2", "3/4", "1/1" };
+
+	public static final int[][] FX_DEFAULT_SETTINGS = new int[][]
+		{
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },  // none
+			{ 0, 70, 19, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 2, 63, 0, 127, 0, 90, 1, 4, 8, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 127, 0, 12, 15, 18, 28, 25, 18, 35, 5, 18, 0, 0, 5, 18, 0, 0, 0, 0, 0 },
+			{ 50, 56, 0, 0, 20, 20, 0, 50, 30, 0, 55, 8, 0, 30, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 22, 8, 127, 0, 0, 19, 5, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 1, 19, 0, 10, 20, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 1, 60, 45, 45, 7, 5, 5, 90, 0, 127, 127, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 1, 60, 59, 79, 49, 7, 7, 8, 5, 100, 50, 100, 90, 127, 63, 0, 0, 0, 0, 0 },
+			{ 1, 60, 53, 45, 7, 5, 5, 90, 110, 0, 28, 3, 3, 0, 0, 0, 9, 10, 127, 0 },
+			{ 1, 60, 53, 45, 7, 7, 5, 90, 31, 0, 34, 18, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 60, 77, 61, 7, 7, 5, 100, 100, 85, 20, 20, 127, 50, 19, 0, 80, 127, 0, 0 },
+			{ 63, 28, 18, 53, 55, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 10, 63, 63, 0, 1, 28, 3, 3, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 30, 0, 70, 13, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 110, 40, 50, 0, 1, 30, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 127, 0, 52, 5, 3, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 1, 47, 0, 0, 2, 0, 0, 28, 8, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 60, 30, 7, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ -12, 0, 0, 60, 0, 7, 8, 0, 0, 2, 0, 127, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 1, 0, 2, 63, 0, 63, 127, 1, 28, 5, 3, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 7, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+		};
 	
-	
-/** DEFAULTS for each effect
+/** DEFAULT SETTINGS for each effect
 1 2 Wet	Mix	70 2.0 50
 1 2 Wet LPF12 63 0 127 0 90 on [syncnote: 1/4 lfofreq 0.5] tri 0 off [initphase 0]
 4 1 Wet 127 peak 80 2.0 0 560 3 0 1250 1 0 peak 6300 1 0 
 2 1 Wet 50 16 0.5 0 200 2.5 0 8.0 3.5 0 14.0 13 0 30 
-1 2 Wet off 0 12.0 12127 0 off [syncnote: 1/2 lfofreq 0.2] sine 0 off [initphase 0]
+1 2 Wet off 0 12.0 12 127 0 off [syncnote: 1/2 lfofreq 0.2] sine 0 off [initphase 0]
 1 0 90:10 SmithHall 2.0 10 20 0 63 
 1 2 70:30 stereo on [tr 100 l 1/8 r 1/8, tr 100 l 160 r 160] 90 0 127 127 
 1 2 70:30 on [tr 100 l 3/16 c 1/4 4 1/8, tr 100 l 300 c 500 r 200]100 50 100 90 127 63
@@ -170,7 +195,7 @@ public class KorgMicrosampler extends Synth
 2 1 Wet 30 off [syncnote: 1/16 lfofreq 6.0] sine 0 off [initphase 0] 10 
 4 3 50:50 blue 110 40 50 + on [syncnote: 1/1 lfofreq 0.67] tri 0 off [initphase 0] 0 0 
 2 1 Wet 127 on [syncnote: 1/2 lofreq: 3.25] sine 0 off [initphase 0] 180 
-1 0 Wet Fixed [fixedfreq 1.0, noteoffset 0 notefine 0] sine 0 off [syncnote: 1/4 lfofreq: 0.5] tri 0 off [initphase 0] 0 
+1 0 Wet Fixed [freq: 1.0 offset: 0 fine: 0] sine 0 off [syncnote: 1/4 lfofreq: 0.5] tri 0 off [initphase 0] 0 
 2 1 Wet off [tr 100 d 30, tr 100 d 1/64] off [syncnote: 1/8 lfofreq: 5.0] off [initphase 0]
 1 0 Wet -12 0 off [tr 100 d 0, tr 100 d 1/4] pre 0 fast 0 127 
 1 5 Wet center i a u 63 0 63 127 on [syncnote: 1/2 lfofreq: 0.5] sine 0 off [initphase 0]
@@ -255,13 +280,13 @@ public class KorgMicrosampler extends Synth
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addGlobal(Color color)
         {
-        Category globalCategory = new Category(this, "Bank", color);
+        Category globalCategory = new Category(this, "Global", color);
                 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
                 
-        comp = new LabelledDial("BPM", this, "bankbpm", color, 200, 3000)
+        comp = new LabelledDial("Bank", this, "bankbpm", color, 200, 3000)
             {
             public String map(int val)
                 {
@@ -269,6 +294,7 @@ public class KorgMicrosampler extends Synth
                 }
             public int getDefaultValue() { return 1200; }
             };
+        ((LabelledDial)comp).addSecondLabel("BPM");
         hbox.add(comp);
         
         comp = new LabelledDial("Current", this, "currentpattern", color, 1, 16);
@@ -637,7 +663,10 @@ public class KorgMicrosampler extends Synth
         comp = new LabelledDial("Trim", this, "fx" + i + "param4", color, 0, 127);
 		next.add(comp);
 
-        comp = new LabelledDial("Mod Depth", this, "fx" + i + "param5", color, -63, 63);
+        comp = new LabelledDial("Mod Depth", this, "fx" + i + "param5", color, -63, 63)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
 		next.add(comp);
 
         comp = new LabelledDial("Mod Response", this, "fx" + i + "param6", color, 0, 127);
@@ -680,7 +709,10 @@ public class KorgMicrosampler extends Synth
 		vbox.add(comp);
 		next.add(vbox);
 
-        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param11", color, -63, 63);   // Right mapping?
+        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param11", color, -63, 63)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
 		next.add(comp);
 
 		comp = new CheckBox("LFO Key Sync", this, "fx" + i + "param12");
@@ -744,6 +776,7 @@ public class KorgMicrosampler extends Synth
         comp = new LabelledDial("B1 Gain", this, "fx" + i + "param5", color, 0, 36)
         	{
         	public String map(int val) { return "" + ((val - 18) / 2.0); }
+        	public boolean isSymmetric() { return true; }
         	};
 		next.add(comp);
 
@@ -762,6 +795,7 @@ public class KorgMicrosampler extends Synth
         comp = new LabelledDial("B2 Gain", this, "fx" + i + "param8", color, 0,  36)
         	{
         	public String map(int val) { return "" + ((val - 18) / 2.0); }
+        	public boolean isSymmetric() { return true; }
         	};
 		next.add(comp);
 
@@ -783,6 +817,7 @@ public class KorgMicrosampler extends Synth
         comp = new LabelledDial("B3 Gain", this, "fx" + i + "param11", color, 0,  36)
         	{
         	public String map(int val) { return "" + ((val - 18) / 2.0); }
+        	public boolean isSymmetric() { return true; }
         	};
 		next.add(comp);
 
@@ -807,6 +842,7 @@ public class KorgMicrosampler extends Synth
         comp = new LabelledDial("B4 Gain", this, "fx" + i + "param15", color, 0, 36)
         	{
         	public String map(int val) { return "" + ((val - 18) / 2.0); }
+        	public boolean isSymmetric() { return true; }
         	};
 		next.add(comp);
 
@@ -968,7 +1004,10 @@ public class KorgMicrosampler extends Synth
         comp = new LabelledDial("Output Level", this, "fx" + i + "param5", color, 0, 127);
 		next.add(comp);
 
-        comp = new LabelledDial("FS Mod Intensity", this, "fx" + i + "param6", color, -63, 63);  // Right mapping?  Goes from -63...63
+        comp = new LabelledDial("FS Mod Intensity", this, "fx" + i + "param6", color, -63, 63)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
 		next.add(comp);
 
 		next = new HBox();
@@ -1006,7 +1045,10 @@ public class KorgMicrosampler extends Synth
 		vbox.add(comp);
 		next.add(vbox);
 
-        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param11", color, -63, 63);   // Right mapping?
+        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param11", color, -63, 63)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
 		next.add(comp);
 
 		comp = new CheckBox("LFO Key Sync", this, "fx" + i + "param12");
@@ -1558,7 +1600,10 @@ public class KorgMicrosampler extends Synth
 		vbox.add(comp);
 		next.add(vbox);
 
-        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param14", color, -63, 63);   // Right mapping?
+        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param14", color, -63, 63)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
 		next.add(comp);
 
 		comp = new CheckBox("LFO Key Sync", this, "fx" + i + "param15");
@@ -1574,6 +1619,7 @@ public class KorgMicrosampler extends Synth
         comp = new LabelledDial("LFO Spread", this, "fx" + i + "param17", color, -18, 18)
         	{
         	public String map(int val) { return "" + ((val) * 10); }
+        	public boolean isSymmetric() { return true; }
         	};
 		next.add(comp);
 
@@ -1622,7 +1668,7 @@ public class KorgMicrosampler extends Synth
         	{
 			public String map(int val) { return FX_DELAY_TIME_RATIO[val] + "%"; }
         	};
-		timehbox3.add(comp1d);
+		timehbox4.add(comp1d);
 		
         final JComponent comp2d = new LabelledDial("L Delay", this, "fx" + i + "param3", color, 0, 127)
         	{
@@ -1635,7 +1681,7 @@ public class KorgMicrosampler extends Synth
         		else return "" + (((val - 84) * 20) + 560) ;
         		}
         	};
-		timehbox3.add(comp2d);
+		timehbox4.add(comp2d);
 
         final JComponent comp3d = new LabelledDial("R Delay", this, "fx" + i + "param4", color, 0, 127)
         	{
@@ -1648,7 +1694,7 @@ public class KorgMicrosampler extends Synth
         		else return "" + (((val - 84) * 20) + 560) ;
         		}
         	};
-		timehbox3.add(comp3d);
+		timehbox4.add(comp3d);
 
         final JComponent comp4d = new LabelledDial("Time Ratio", this, "fx" + i + "param5", color, 0, 14)
         	{
@@ -1675,26 +1721,26 @@ public class KorgMicrosampler extends Synth
 			public void update(String key, Model model)
 				{
 				super.update(key, model);
-				timehbox3.removeAll();
+				timehbox4.removeAll();
 				if (model.get(key, 0) == 0)
 					{
-					timehbox3.add(comp1d);
-					timehbox3.add(comp2d);
-					timehbox3.add(comp3d);
+					timehbox4.add(comp1d);
+					timehbox4.add(comp2d);
+					timehbox4.add(comp3d);
 					}
 				else
 					{
-					timehbox3.add(comp4d);
-					timehbox3.add(comp5d);
-					timehbox3.add(comp6d);
+					timehbox4.add(comp4d);
+					timehbox4.add(comp5d);
+					timehbox4.add(comp6d);
 					}
-				timehbox3.revalidate();
-				timehbox3.repaint();
+				timehbox4.revalidate();
+				timehbox4.repaint();
 				}
 			};
 		next.add(comp);
 		
-		next.add(timehbox3);
+		next.add(timehbox4);
 
 
         comp = new LabelledDial("Feedback", this, "fx" + i + "param8", color, 0, 127);
@@ -1702,7 +1748,9 @@ public class KorgMicrosampler extends Synth
 
         comp = new LabelledDial("Mod Depth", this, "fx" + i + "param9", color, 0, 127);
 		next.add(comp);
-
+		levels.add(next);
+		
+		next = new HBox();
         comp = new LabelledDial(" LFO Frequency ", this, "fx" + i + "param11", color, 0, 127)
         	{
         	public String map(int val) { return "" + FX_FILTER_LFO_FREQUENCY[val]; }
@@ -1712,6 +1760,7 @@ public class KorgMicrosampler extends Synth
         comp = new LabelledDial("LFO Spread", this, "fx" + i + "param12", color, -18, 18)
         	{
         	public String map(int val) { return "" + ((val) * 10); }
+        	public boolean isSymmetric() { return true; }
         	};
 		next.add(comp);
 		
@@ -1753,7 +1802,7 @@ public class KorgMicrosampler extends Synth
         	{
 			public String map(int val) { return FX_DELAY_TIME_RATIO[val] + "%"; }
         	};
-		timehbox3.add(comp1e);
+		timehbox5.add(comp1e);
 		
         final JComponent comp2e = new LabelledDial("Tap 1 Delay", this, "fx" + i + "param3", color, 0, 127)
         	{
@@ -1766,7 +1815,7 @@ public class KorgMicrosampler extends Synth
         		else return "" + (((val - 84) * 20) + 560) ;
         		}
         	};
-		timehbox3.add(comp2e);
+		timehbox5.add(comp2e);
 
         final JComponent comp3e = new LabelledDial("Tap 2 Delay", this, "fx" + i + "param4", color, 0, 127)
         	{
@@ -1779,7 +1828,7 @@ public class KorgMicrosampler extends Synth
         		else return "" + (((val - 84) * 20) + 560) ;
         		}
         	};
-		timehbox3.add(comp3e);
+		timehbox5.add(comp3e);
 
         final JComponent comp4e = new LabelledDial("Time Ratio", this, "fx" + i + "param5", color, 0, 14)
         	{
@@ -1806,26 +1855,26 @@ public class KorgMicrosampler extends Synth
 			public void update(String key, Model model)
 				{
 				super.update(key, model);
-				timehbox3.removeAll();
+				timehbox5.removeAll();
 				if (model.get(key, 0) == 0)
 					{
-					timehbox3.add(comp1e);
-					timehbox3.add(comp2e);
-					timehbox3.add(comp3e);
+					timehbox5.add(comp1e);
+					timehbox5.add(comp2e);
+					timehbox5.add(comp3e);
 					}
 				else
 					{
-					timehbox3.add(comp4e);
-					timehbox3.add(comp5e);
-					timehbox3.add(comp6e);
+					timehbox5.add(comp4e);
+					timehbox5.add(comp5e);
+					timehbox5.add(comp6e);
 					}
-				timehbox3.revalidate();
-				timehbox3.repaint();
+				timehbox5.revalidate();
+				timehbox5.repaint();
 				}
 			};
 		next.add(comp);
 		
-		next.add(timehbox3);
+		next.add(timehbox5);
 
 
 
@@ -1909,6 +1958,7 @@ public class KorgMicrosampler extends Synth
         comp = new LabelledDial("LFO Spread", this, "fx" + i + "param3", color, -18, 18)
         	{
         	public String map(int val) { return "" + ((val) * 10); }
+        	public boolean isSymmetric() { return true; }
         	};
 		effects[i].add(comp);
 
@@ -1922,11 +1972,11 @@ public class KorgMicrosampler extends Synth
         	{
         	public String map(int val)
         		{
-        		if (val < 20) return "" + (val * 0.1);
-        		else if (val < 40) return "" + ((val - 20) * 0.2 + 2.0);
-        		else if (val < 60) return "" + ((val - 40) * 0.3 + 6.0);
-        		else if (val < 102) return "" + ((val - 60) * 0.5 + 12.0);
-        		else return "" + ((val - 102) + 33);
+        		if (val < 20) return String.format("%2.1f", (val * 0.1));
+        		else if (val < 40) return String.format("%2.1f", ((val - 20) * 0.2 + 2.0));
+        		else if (val < 60) return String.format("%2.1f", ((val - 40) * 0.3 + 6.0));
+        		else if (val < 102) return String.format("%2.1f", ((val - 60) * 0.5 + 12.0));
+        		else return String.format("%2.1f", ((val - 102) + 33));
         		}
         	};
 		effects[i].add(comp);
@@ -1935,11 +1985,11 @@ public class KorgMicrosampler extends Synth
         	{
         	public String map(int val)
         		{
-        		if (val < 20) return "" + (val * 0.1);
-        		else if (val < 40) return "" + ((val - 20) * 0.2 + 2.0);
-        		else if (val < 60) return "" + ((val - 40) * 0.3 + 6.0);
-        		else if (val < 102) return "" + ((val - 60) * 0.5 + 12.0);
-        		else return "" + ((val - 102) + 33);
+        		if (val < 20) return String.format("%2.1f", (val * 0.1));
+        		else if (val < 40) return String.format("%2.1f", ((val - 20) * 0.2 + 2.0));
+        		else if (val < 60) return String.format("%2.1f", ((val - 40) * 0.3 + 6.0));
+        		else if (val < 102) return String.format("%2.1f", ((val - 60) * 0.5 + 12.0));
+        		else return String.format("%2.1f", ((val - 102) + 33));
         		}
         	};
 		effects[i].add(comp);
@@ -1992,12 +2042,12 @@ public class KorgMicrosampler extends Synth
         	{
         	public String map(int val)
         		{
-        		if (val < 60) return "" + (val * 0.1);
-        		else if (val < 75) return "" + ((val - 60) * 0.2 + 2.0);
-        		else if (val < 100) return "" + ((val - 75) * 0.3 + 9.0);
-        		else if (val < 107) return "" + ((val - 100) * 0.5 + 16.5);
-        		else if (val < 109) return "" + (val - 107) + 20;
-        		else return "" + ((val - 109) * 2.0 + 22);
+        		if (val < 60) return String.format("%2.1f", (val * 0.1));
+        		else if (val < 75) return String.format("%2.1f", ((val - 60) * 0.2 + 2.0));
+        		else if (val < 100) return String.format("%2.1f", ((val - 75) * 0.3 + 9.0));
+        		else if (val < 107) return String.format("%2.1f", ((val - 100) * 0.5 + 16.5));
+        		else if (val < 109) return String.format("%2.1f", (val - 107) * 1.0 + 20.0);
+        		else return String.format("%2.1f", ((val - 109) * 2.0 + 22.0));
         		}
         	};
 		next.add(comp);
@@ -2051,7 +2101,10 @@ public class KorgMicrosampler extends Synth
 		vbox.add(comp);
 		next.add(vbox);
 
-        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param9", color, -63, 63);   // Right mapping?
+        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param9", color, -63, 63)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
 		next.add(comp);
 
 		comp = new CheckBox("LFO Key Sync", this, "fx" + i + "param10");
@@ -2067,6 +2120,7 @@ public class KorgMicrosampler extends Synth
         comp = new LabelledDial("LFO Spread", this, "fx" + i + "param12", color, -18, 18)
         	{
         	public String map(int val) { return "" + ((val) * 10); }
+        	public boolean isSymmetric() { return true; }
         	};
 		next.add(comp);
 
@@ -2146,7 +2200,10 @@ public class KorgMicrosampler extends Synth
 		vbox.add(comp);
 		next.add(vbox);
 
-        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param6", color, -63, 63);   // Right mapping?
+        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param6", color, -63, 63)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
 		next.add(comp);
 
 		comp = new CheckBox("LFO Key Sync", this, "fx" + i + "param7");
@@ -2162,6 +2219,7 @@ public class KorgMicrosampler extends Synth
         comp = new LabelledDial("LFO Spread", this, "fx" + i + "param9", color, -18, 18)
         	{
         	public String map(int val) { return "" + ((val) * 10); }
+        	public boolean isSymmetric() { return true; }
         	};
 		next.add(comp);
 
@@ -2250,7 +2308,10 @@ public class KorgMicrosampler extends Synth
 		vbox.add(comp);
 		next.add(vbox);
 
-        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param10", color, -63, 63);   // Right mapping?
+        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param10", color, -63, 63)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
 		next.add(comp);
 
 		comp = new CheckBox("LFO Key Sync", this, "fx" + i + "param11");
@@ -2266,6 +2327,7 @@ public class KorgMicrosampler extends Synth
         comp = new LabelledDial("LFO Spread", this, "fx" + i + "param13", color, -18, 18)
         	{
         	public String map(int val) { return "" + ((val) * 10); }
+        	public boolean isSymmetric() { return true; }
         	};
 		next.add(comp);
 
@@ -2346,7 +2408,10 @@ public class KorgMicrosampler extends Synth
 		vbox.add(comp);
 		next.add(vbox);
 
-        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param6", color, -63, 63);   // Right mapping?
+        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param6", color, -63, 63)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
 		next.add(comp);
 
 		comp = new CheckBox("LFO Key Sync", this, "fx" + i + "param7");
@@ -2362,6 +2427,7 @@ public class KorgMicrosampler extends Synth
         comp = new LabelledDial("LFO Spread", this, "fx" + i + "param9", color, -18, 18)
         	{
         	public String map(int val) { return "" + ((val) * 10); }
+        	public boolean isSymmetric() { return true; }
         	};
 		next.add(comp);
 
@@ -2395,23 +2461,79 @@ public class KorgMicrosampler extends Synth
         	};
         next.add(comp);
 
-		vbox = new VBox();
-        params = FX_RING_MODULATOR_OSC_MODE;
-	    comp = new Chooser("Osc Mode", this, "fx" + i + "param1", params);
-		vbox.add(comp);
-		next.add(vbox);
 
-        comp = new LabelledDial(" Fixed Frequency ", this, "fx" + i + "param2", color, 0, 127);
-		next.add(comp);
 
-        comp = new LabelledDial("Note Offset", this, "fx" + i + "param3", color, -48, 48);
-		next.add(comp);
+		final HBox oscbox = new HBox();
 
-        comp = new LabelledDial("Note Fine", this, "fx" + i + "param4", color, -50, 50)
+/*	 Yet another custom table
+0.00 to 0.008 	by 0.002		0-4		5
+0.010 to 0.025	by 0.005		5-8		4
+0.030 to 0.140	by 0.010		9-20	12
+0.150 to 0.430	by 0.020		21-35	15
+0.450 to 1.650	by 0.050		36-60	25
+1.700 to 4.500  by 0.100		61-89	29
+4.600 to 12.00	by 0.200		90-127	38
+*/
+        final Component fixedfreq = new LabelledDial(" Fixed Frequency ", this, "fx" + i + "param2", color, 0, 127)
+        	{
+        	public String map(int val)
+        		{
+        		if (val < 5)
+        			return String.format("%2.3f", ((val - 0) * 0.002 + 0.000));
+        		else if (val < 9)
+        			return String.format("%2.3f", ((val - 5) * 0.005 + 0.010));
+        		else if (val < 21)
+        			return String.format("%2.3f", ((val - 9) * 0.010 + 0.030));
+        		else if (val < 36)
+        			return String.format("%2.3f", ((val - 21) * 0.020 + 0.150));
+        		else if (val < 61)
+        			return String.format("%2.3f", ((val - 36) * 0.050 + 0.450));
+        		else if (val < 90)
+        			return String.format("%2.3f", ((val - 61) * 0.100 + 1.700));
+        		else
+        			return String.format("%2.3f", ((val - 90) * 0.200 + 4.600));
+        		}
+        	};
+		oscbox.add(comp);
+
+        final Component noteoffset = new LabelledDial("Note Offset", this, "fx" + i + "param3", color, -48, 48)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
+
+        final Component notefine = new LabelledDial("Note Fine", this, "fx" + i + "param4", color, -50, 50)
         	{
         	public String map(int val) { return "" + (val) * 2; } 
+        	public boolean isSymmetric() { return true; }
         	};
-		next.add(comp);
+
+
+
+		vbox = new VBox();
+        params = FX_RING_MODULATOR_OSC_MODE;
+	    comp = new Chooser("Osc Mode", this, "fx" + i + "param1", params)
+	    	{
+	    	public void update(String key, Model model)
+	    		{
+	    		super.update(key, model);
+	    		oscbox.removeAll();
+	    		if (model.get(key, 0) == 0)
+	    			{
+	    			oscbox.add(fixedfreq);
+	    			}
+				else
+					{
+	    			oscbox.add(noteoffset);
+	    			oscbox.add(notefine);
+					}
+				oscbox.revalidate();
+				oscbox.repaint();
+	    		}
+	    	};
+		vbox.add(comp);
+		next.add(vbox);
+		next.add(oscbox);
+
 
 		vbox = new VBox();
         params = FX_RING_MODULATOR_OSC_WAVE;
@@ -2422,7 +2544,10 @@ public class KorgMicrosampler extends Synth
 		next = new HBox();
 		levels.add(next);
 
-        comp = new LabelledDial("LFO Intensity", this, "fx" + i + "param6", color, -63, 63);
+        comp = new LabelledDial("LFO Intensity", this, "fx" + i + "param6", color, -63, 63)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
 		next.add(comp);
 
         final Component comps1 = new LabelledDial(" LFO Frequency ", this, "fx" + i + "param8", color, 0, 127)
@@ -2457,7 +2582,10 @@ public class KorgMicrosampler extends Synth
 		vbox.add(comp);
 		next.add(vbox);
 
-        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param11", color, -63, 63);   // Right mapping?
+        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param11", color, -63, 63)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
 		next.add(comp);
 
 		comp = new CheckBox("LFO Key Sync", this, "fx" + i + "param12");
@@ -2631,12 +2759,16 @@ public class KorgMicrosampler extends Synth
         	};
         next.add(comp);
 
-        comp = new LabelledDial("Pitch", this, "fx" + i + "param1", color, -24, 24);
+        comp = new LabelledDial("Pitch", this, "fx" + i + "param1", color, -24, 24)	
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
 		next.add(comp);
 
         comp = new LabelledDial("Pitch Fine", this, "fx" + i + "param2", color, -50, 50)
         	{
         	public String map(int val) { return "" + (val) * 2; } 
+        	public boolean isSymmetric() { return true; }
         	};
 		next.add(comp);
 
@@ -2797,7 +2929,10 @@ public class KorgMicrosampler extends Synth
         comp = new LabelledDial("Drive", this, "fx" + i + "param6", color, 0, 127);
 		next.add(comp);
 
-        comp = new LabelledDial("Mod Depth", this, "fx" + i + "param7", color, -63, 63);		// right mapping?
+        comp = new LabelledDial("Mod Depth", this, "fx" + i + "param7", color, -63, 63)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
 		next.add(comp);
 
         comp = new LabelledDial("Mod Response", this, "fx" + i + "param8", color, 0, 127);
@@ -2838,7 +2973,10 @@ public class KorgMicrosampler extends Synth
 		vbox.add(comp);
 		next.add(vbox);
 
-        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param13", color, -63, 63);   // Right mapping?
+        comp = new LabelledDial("LFO Shape", this, "fx" + i + "param13", color, -63, 63)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
 		next.add(comp);
 
 		comp = new CheckBox("LFO Key Sync", this, "fx" + i + "param14");
@@ -2901,41 +3039,41 @@ public class KorgMicrosampler extends Synth
         	public String map(int val)
         		{
         		if (val < 3)
-        			return "" + ( val * 0.1 + -1.0 );
+        			return String.format("%2.3f", ( val * 0.1 + -1.0 ));
         		else if (val < 9)
-        			return "" + ( (val - 3) * 0.05 + -0.7 );
+        			return String.format("%2.3f", ( (val - 3) * 0.05 + -0.7 ));
 				else if (val < 21)
-        			return "" + ( (val - 9 ) * 0.025  + -0.4  );
+        			return String.format("%2.3f", ( (val - 9 ) * 0.025  + -0.4  ));
 				else if (val < 41)
-        			return "" + ( (val - 21 ) * 0.01  + -0.1  );				
+        			return String.format("%2.3f", ( (val - 21 ) * 0.01  + -0.1  ));				
 				else if (val < 53)     			
-        			return "" + ( (val - 41 ) * 0.025  + 0.1 );
+        			return String.format("%2.3f", ( (val - 41 ) * 0.025  + 0.1 ));
 				else if (val < 59 )     			
-        			return "" + ( (val - 53 ) * 0.05  + 0.4  );
+        			return String.format("%2.3f", ( (val - 53 ) * 0.05  + 0.4  ));
 				else if (val < 62 )     			
-        			return "" + ( (val - 59 ) * 0.1  +  0.7 );
+        			return String.format("%2.3f", ( (val - 59 ) * 0.1  +  0.7 ));
 				else if (val < 66 )     			
-        			return "1.0";
+        			return "1.000";
 				else if (val < 72 )     			
-        			return "" + ( (val - 66 ) * 0.01 +  1.01 );
+        			return String.format("%2.3f", ( (val - 66 ) * 0.01 +  1.01 ));
 				else if (val < 83 )     			
-        			return "" + ( (val - 72 ) * 0.02  +  1.08 );
+        			return String.format("%2.3f", ( (val - 72 ) * 0.02  +  1.08 ));
 				else if (val < 91 )     			
-        			return "" + ( (val - 83 ) * 0.025  + 1.30  );
+        			return String.format("%2.3f", ( (val - 83 ) * 0.025  + 1.30  ));
 				else if (val < 101 )     			
-        			return "" + ( (val - 91 ) * 0.05  +  1.5 );
+        			return String.format("%2.3f", ( (val - 91 ) * 0.05  +  1.5 ));
 				else if (val < 106 )     			
-        			return "" + ( (val - 101 ) * 0.1  +  2.0 );
+        			return String.format("%2.3f", ( (val - 101 ) * 0.1  +  2.0 ));
 				else if (val < 110 )     			
-        			return "" + ( (val - 106 ) * 0.125  + 2.5  );
+        			return String.format("%2.3f", ( (val - 106 ) * 0.125  + 2.5  ));
 				else if (val < 114 )     			
-        			return "" + ( (val - 110 ) * 0.25  + 3.0  );
+        			return String.format("%2.3f", ( (val - 110 ) * 0.25  + 3.0  ));
 				else if (val < 122 )     			
-        			return "" + ( (val - 114 ) * 0.5  +  4.0 );
+        			return String.format("%2.3f", ( (val - 114 ) * 0.5  +  4.0 ));
 				else if (val < 124 )     			
-        			return "" + ( (val - 122 ) * 1.0  +  8.0 );
+        			return String.format("%2.3f", ( (val - 122 ) * 1.0  +  8.0 ));
         		else
-        			return "" + ( (val - 124 ) * 2.0  +  10.0 );
+        			return String.format("%2.3f", ( (val - 124 ) * 2.0  +  10.0 ));
         		}
         	};
 		next.add(comp);
@@ -2960,6 +3098,30 @@ public class KorgMicrosampler extends Synth
 	    		{
 	    		super.update(key, model);
 	    		int type = model.get(key, 0);
+
+/*
+				// dump
+				for(int j = 1; j < 22; j++)
+					{
+					System.err.print("{ ");
+					for(int i = 1; i < 21; i++)
+						{
+						if (i > 1) System.err.print(", ");
+						System.err.print(model.get("fx" + j + "param" + i, 0));
+						}
+					System.err.println(" },");
+					}
+*/
+
+				setSendMIDI(false);
+				// Reset default settings
+				//for(int fx = 1; fx < 22; fx++)
+				if (type != 0)  // we don't care about "none"
+					for(int param = 0; param < 20; param++)
+						{
+						model.set("fx" + type + "param" + (param + 1), FX_DEFAULT_SETTINGS[type][param]);
+						}
+				setSendMIDI(true);
 
 				// replace widgets
 	    		hbox.removeLast();
@@ -3274,7 +3436,7 @@ public class KorgMicrosampler extends Synth
 		data[757] = (byte)model.get("fxparametercontrol2", 0);
 		for(int i = 0; i < 20; i++)
 			{
-			data[758 + i] = (byte)getSigned("fx" + data[754] + "param" + i, 0);
+			data[758 + i] = (byte)getSigned("fx" + data[754] + "param" + (i + 1), 0);
 			}
 			
 		data[778] = (byte)0xF7;
@@ -3584,7 +3746,7 @@ public class KorgMicrosampler extends Synth
 			{
 			int sub = i;
 			int type = data[754];
-			String key = "fx" + type + "param" + sub;
+			String key = "fx" + type + "param" + (sub + 1);
 			int val = data[758 + i];
 
 			// here comes the fun bit again.  Custom signed

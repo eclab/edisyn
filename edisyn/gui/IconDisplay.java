@@ -18,7 +18,7 @@ import java.awt.event.*;
 */
 
 public class IconDisplay extends JComponent implements Updatable
-{
+    {
     JLabel label;
     JLabel icon;
     ImageIcon[] icons;
@@ -26,13 +26,13 @@ public class IconDisplay extends JComponent implements Updatable
     Synth synth;
 
     public void update(String key, Model model) 
-    { 
+        { 
         icon.setIcon(icons[model.get(key, 0)]);
         icon.repaint();
-    }
+        }
 
     public IconDisplay(String label, ImageIcon[] icons, Synth synth, String key)
-    {
+        {
         this.synth = synth;
         this.key = key;
         this.icons = icons;
@@ -52,5 +52,5 @@ public class IconDisplay extends JComponent implements Updatable
 
         synth.getModel().register(key, this);
         update(key, synth.getModel());
+        }
     }
-}

@@ -19,66 +19,66 @@ import java.awt.event.*;
 */
 
 public class CheckBox extends NumericalComponent
-{
+    {
     JCheckBox check;
     boolean flipped;
     int addToWidth = 0;
 
     public void update(String key, Model model) 
-    { 
+        { 
         // we don't compare against min or max here because they
         // could be used by other widgets.  See for example Blofeld parameter 8
         if (flipped)
             check.setSelected(getState() == 0);
         else
             check.setSelected(getState() != 0); 
-    }
+        }
 
     public CheckBox(String label, Synth synth, String key)
-    {
+        {
         this(label, synth, key, false);
-    }
+        }
                 
     public void addToWidth(int val)
-    {
+        {
         addToWidth = val;
-    }
+        }
               
     public JCheckBox getCheckBox() { return check; }
       
     boolean enabled = true;
     public void setEnabled(boolean val)
-    {
+        {
         enabled = val;
         updateBorder();
-    }
+        }
         
     public void updateBorder()
-    {
+        {
         super.updateBorder();
         if (synth.isShowingMutation())
             check.setEnabled(false);
         else
             check.setEnabled(true && enabled);
-    }
+        }
         
     public CheckBox(String label, final Synth synth, final String key, boolean flipped)
-    {
+        {
         super(synth, key);
 
         this.flipped = flipped;
                 
         check = new JCheckBox(label)
             {
-                public Dimension getMinimumSize() 
+            public Dimension getMinimumSize() 
                 {
-                    return getPreferredSize(); 
+                return getPreferredSize(); 
                 }
-                public Dimension getPreferredSize()
+            public Dimension getPreferredSize()
                 {
-                    Dimension d = super.getPreferredSize();
-                    d.width += addToWidth;
-                    return d;
+                Dimension d = super.getPreferredSize();
+                d.width += addToWidth;
+                return d;
                 }                       
             };
             
@@ -98,27 +98,27 @@ public class CheckBox extends NumericalComponent
         
         check.addMouseListener(new MouseAdapter()
             {
-                public void mouseClicked(MouseEvent e)
+            public void mouseClicked(MouseEvent e)
                 {
-                    if (synth.isShowingMutation())
-                        {
-                            synth.mutationMap.setFree(key, !synth.mutationMap.isFree(key));
-                            // wrap the repaint in an invokelater because the dial isn't responding right
-                            SwingUtilities.invokeLater(new Runnable() { public void run() { repaint(); } });
-                        }
+                if (synth.isShowingMutation())
+                    {
+                    synth.mutationMap.setFree(key, !synth.mutationMap.isFree(key));
+                    // wrap the repaint in an invokelater because the dial isn't responding right
+                    SwingUtilities.invokeLater(new Runnable() { public void run() { repaint(); } });
+                    }
                 }
             });
         
         
         check.addActionListener(new ActionListener()
             {
-                public void actionPerformed( ActionEvent e)
+            public void actionPerformed( ActionEvent e)
                 {
-                    if (CheckBox.this.flipped)
-                        setState(check.isSelected() ? getMin() : getMax());
-                    else
-                        setState(check.isSelected() ? getMax() : getMin());                             
+                if (CheckBox.this.flipped)
+                    setState(check.isSelected() ? getMin() : getMax());
+                else
+                    setState(check.isSelected() ? getMax() : getMin());                             
                 }
             });
+        }
     }
-}

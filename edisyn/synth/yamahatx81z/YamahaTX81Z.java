@@ -24,14 +24,14 @@ import javax.sound.midi.*;
 */
 
 public class YamahaTX81Z extends Synth
-{
+    {
     /// Various collections of parameter names for pop-up menus
         
     public static final String[] CHANNELS = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
     public static final String[] BANKS = { "I", "A", "B", "C", "D" };
     public static final String[] WAVES = {"W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8"};
     public static final ImageIcon[] WAVE_ICONS = 
-    {
+        {
         new ImageIcon(YamahaTX81Z.class.getResource("Wave1.png")),
         new ImageIcon(YamahaTX81Z.class.getResource("Wave2.png")),
         new ImageIcon(YamahaTX81Z.class.getResource("Wave3.png")),
@@ -40,9 +40,9 @@ public class YamahaTX81Z extends Synth
         new ImageIcon(YamahaTX81Z.class.getResource("Wave6.png")),
         new ImageIcon(YamahaTX81Z.class.getResource("Wave7.png")),
         new ImageIcon(YamahaTX81Z.class.getResource("Wave8.png"))
-    };
+        };
     public static final ImageIcon[] ALGORITHM_ICONS = 
-    {
+        {
         new ImageIcon(YamahaTX81Z.class.getResource("Algorithm1.png")),
         new ImageIcon(YamahaTX81Z.class.getResource("Algorithm2.png")),
         new ImageIcon(YamahaTX81Z.class.getResource("Algorithm3.png")),
@@ -51,7 +51,7 @@ public class YamahaTX81Z extends Synth
         new ImageIcon(YamahaTX81Z.class.getResource("Algorithm6.png")),
         new ImageIcon(YamahaTX81Z.class.getResource("Algorithm7.png")),
         new ImageIcon(YamahaTX81Z.class.getResource("Algorithm8.png"))
-    };
+        };
     public static final String[] LFO_WAVES = { "Sawtooth", "Square", "Triangle", "Sample & Hold" };
     public static final String[] SHIFTS = { "96dB", "48dB", "24dB", "12dB" };
     public static final String[] FIX_RANGES = { "255Hz", "510Hz", "1KHz", "2KHz", "4KHz", "8KHz", "16KHz", "32KHz" };
@@ -71,18 +71,18 @@ public class YamahaTX81Z extends Synth
 
 
     public YamahaTX81Z()
-    {
+        {
         model.set("bank", 0);
         model.set("number", 0);
                 
         for(int i = 0; i < allParameters.length; i++)
             {
-                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
                 
         for(int i = 0; i < allAdditionalParameters.length; i++)
             {
-                allAdditionalParametersToIndex.put(allAdditionalParameters[i], Integer.valueOf(i));
+            allAdditionalParametersToIndex.put(allAdditionalParameters[i], Integer.valueOf(i));
             }
                 
         /// SOUND PANEL
@@ -129,28 +129,28 @@ public class YamahaTX81Z extends Synth
         model.set("name", "INIT VOICE");
         
         loadDefaults();        
-    }
+        }
                 
     public JFrame sprout()
-    {
+        {
         JFrame frame = super.sprout();
         transmitTo.setEnabled(false);
         writeTo.setEnabled(false);
         addYamahaTX81ZMenu();
         return frame;
-    }         
+        }         
 
     public String getDefaultResourceFileName() { return "YamahaTX81Z.init"; }
     public String getHTMLResourceFileName() { return "YamahaTX81Z.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-    {
+        {
         JComboBox bank = new JComboBox(BANKS);
         bank.setSelectedIndex(model.get("bank"));
         if (writing)
             {
-                bank = new JComboBox(new String[] { "I" });
-                bank.setSelectedIndex(0);
+            bank = new JComboBox(new String[] { "I" });
+            bank.setSelectedIndex(0);
             }
                         
                         
@@ -159,36 +159,36 @@ public class YamahaTX81Z extends Synth
 
         while(true)
             {
-                boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                                                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number");
+            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number");
                 
-                if (result == false) 
-                    return false;
+            if (result == false) 
+                return false;
                                 
-                int n;
-                try { n = Integer.parseInt(number.getText()); }
-                catch (NumberFormatException e)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 1...32");
-                        continue;
-                    }
-                if (n < 1 || n > 32)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 1...32");
-                        continue;
-                    }
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1...32");
+                continue;
+                }
+            if (n < 1 || n > 32)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1...32");
+                continue;
+                }
                 
-                n--;
+            n--;
                                 
-                int i = bank.getSelectedIndex();
+            int i = bank.getSelectedIndex();
                         
                         
-                change.set("bank", i);
-                change.set("number", n);
+            change.set("bank", i);
+            change.set("number", n);
                         
-                return true;
+            return true;
             }
-    }
+        }
 
     public static final int OFF = 0;
     public static final int COARSE = 1;
@@ -197,7 +197,7 @@ public class YamahaTX81Z extends Synth
     int mutationRestriction = OFF;
         
     public void addYamahaTX81ZMenu()
-    {
+        {
         JMenu menu = new JMenu("TX81Z");
         menubar.add(menu);
 
@@ -217,10 +217,10 @@ public class YamahaTX81Z extends Synth
         JRadioButtonMenuItem off = new JRadioButtonMenuItem("Off");
         off.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
                 {
-                    mutationRestriction = OFF;
-                    setLastX("OFF", "MutationRestriction", getSynthName(), true);
+                mutationRestriction = OFF;
+                setLastX("OFF", "MutationRestriction", getSynthName(), true);
                 }
             });
         restrictMutation.add(off);
@@ -230,10 +230,10 @@ public class YamahaTX81Z extends Synth
         JRadioButtonMenuItem tx81z = new JRadioButtonMenuItem("To Coarse Values Only");
         tx81z.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
                 {
-                    mutationRestriction = COARSE;
-                    setLastX("COARSE", "MutationRestriction", getSynthName(), true);
+                mutationRestriction = COARSE;
+                setLastX("COARSE", "MutationRestriction", getSynthName(), true);
                 }
             });
         restrictMutation.add(tx81z);
@@ -243,58 +243,58 @@ public class YamahaTX81Z extends Synth
         JRadioButtonMenuItem integers = new JRadioButtonMenuItem("To Integer Coarse Values Only");
         integers.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
                 {
-                    mutationRestriction = INTEGERS;
-                    setLastX("INTEGERS", "MutationRestriction", getSynthName(), true);
+                mutationRestriction = INTEGERS;
+                setLastX("INTEGERS", "MutationRestriction", getSynthName(), true);
                 }
             });
         restrictMutation.add(integers);
         bg.add(integers);
         if (mutationRestriction == INTEGERS) integers.setSelected(true);
-    }
+        }
                 
 
     public Model buildModel()
-    {
+        {
         return new Model()
             {
-                public int reviseMutatedValue(String key, int old, int current)
+            public int reviseMutatedValue(String key, int old, int current)
                 {
-                    if (mutationRestriction == OFF)
+                if (mutationRestriction == OFF)
+                    return current;
+                else if (key.startsWith("operator") && key.endsWith("frequencyfine"))
+                    {
+                    return 0;
+                    }
+                else if (key.startsWith("operator") && key.endsWith("frequencycoarse"))
+                    {
+                    if (mutationRestriction == COARSE)
                         return current;
-                    else if (key.startsWith("operator") && key.endsWith("frequencyfine"))
+                    else if (mutationRestriction == INTEGERS)
                         {
-                            return 0;
-                        }
-                    else if (key.startsWith("operator") && key.endsWith("frequencycoarse"))
-                        {
-                            if (mutationRestriction == COARSE)
-                                return current;
-                            else if (mutationRestriction == INTEGERS)
-                                {
-                                    double val = FREQUENCY_RATIO_NEAREST_INTS[current];
-                                    for(int i = 0; i < FREQUENCY_RATIOS.length; i++)
-                                        {
-                                            if (FREQUENCY_RATIOS[i] == val)  // got it
-                                                return i;
-                                        }
-                                    // never happens
-                                    return current;
-                                }
-                            else  // never happens
-                                return current;
-                        }
-                    else
+                        double val = FREQUENCY_RATIO_NEAREST_INTS[current];
+                        for(int i = 0; i < FREQUENCY_RATIOS.length; i++)
+                            {
+                            if (FREQUENCY_RATIOS[i] == val)  // got it
+                                return i;
+                            }
+                        // never happens
                         return current;
+                        }
+                    else  // never happens
+                        return current;
+                    }
+                else
+                    return current;
                 }
-        };
-    }
+            };
+        }
                 
                                 
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-    {
+        {
         Category globalCategory = new Category(this, getSynthName(), color);
                 
         JComponent comp;
@@ -305,23 +305,23 @@ public class YamahaTX81Z extends Synth
         HBox hbox2 = new HBox();
         comp = new PatchDisplay(this, "Patch", "bank", "number", 4)
             {
-                public String numberString(int number) { number += 1; return (number > 9 ? "0" : "00") + number; }
-                public String bankString(int bank) { return BANKS[bank]; }
+            public String numberString(int number) { number += 1; return (number > 9 ? "0" : "00") + number; }
+            public String bankString(int bank) { return BANKS[bank]; }
             };
         hbox2.add(comp);
         vbox.add(hbox2);
         
         comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 10 ASCII characters.")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    return revisePatchName(val);
+                return revisePatchName(val);
                 }
                                 
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateTitle();
+                super.update(key, model);
+                updateTitle();
                 }
             };
         vbox.addBottom(comp);  // doesn't work right :-(
@@ -332,11 +332,11 @@ public class YamahaTX81Z extends Synth
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
 
     public JComponent addGlobal( Color color)
-    {
+        {
         Category category = new Category(this, "Global", color);
 
         JComponent comp;
@@ -366,7 +366,7 @@ public class YamahaTX81Z extends Synth
 
         comp = new LabelledDial("Transpose", this, "transpose", color, 0, 48, 24)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         hbox2.add(comp);
         
@@ -384,14 +384,14 @@ public class YamahaTX81Z extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
 
 
 
     public JComponent addLFO(Color color)
-    {
+        {
         Category category = new Category(this, "LFO ", color);
 
         JComponent comp;
@@ -432,10 +432,10 @@ public class YamahaTX81Z extends Synth
         
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
     
     public JComponent addModulation(Color color)
-    {
+        {
         Category category = new Category(this, "Controllers", color);
 
         JComponent comp;
@@ -509,29 +509,29 @@ public class YamahaTX81Z extends Synth
         hbox.add(vbox);        
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
     
     // From discussion with Matt Gregory (mgregory22@gmail.com),
     // who runs the TX81Z website http://the-all.org/tx81z/
     public double computeFineRatio(int coarse, int fine)
-    {
+        {
         double min = FREQUENCY_RATIOS[coarse];
         double max = FREQUENCY_RATIOS_MAX[coarse];
           
         if (min < 1.0)
             {
-                return Math.min(max, min + ((max - min) / 7.0) * fine);
+            return Math.min(max, min + ((max - min) / 7.0) * fine);
             }
         else
             {
-                return min + ((max - min) / 15.0) * fine;
+            return min + ((max - min) / 15.0) * fine;
             }
-    }
+        }
 
     // based on http://cd.textfiles.com/fredfish/v1.6/FF_Disks/571-600/FF_598/TX81z/TX81z.doc
     // in combination with the manual.
     public int computeCoarseFrequency(int range, int coarse)
-    {
+        {
         // the others are just multiples of it
         int base = 1;
         for(int i = 0; i < range; i++)
@@ -539,12 +539,12 @@ public class YamahaTX81Z extends Synth
 
         if (coarse < 4) return 8 * base;
         else return 16 * (coarse / 4) * base;
-    }
+        }
 
     // based on http://cd.textfiles.com/fredfish/v1.6/FF_Disks/571-600/FF_598/TX81z/TX81z.doc
     // in combination with the manual.
     public int computeFrequency(int range, int coarse, int fine)
-    {
+        {
         // the others are just multiples of it
         int base = 1;
         for(int i = 0; i < range; i++)
@@ -584,7 +584,7 @@ public class YamahaTX81Z extends Synth
         
         return base;
         */
-    }
+        }
 
 
     LabelledDial[] frequencyRanges = new LabelledDial[4];
@@ -593,7 +593,7 @@ public class YamahaTX81Z extends Synth
     java.text.DecimalFormat format = new java.text.DecimalFormat("0.0#");
 
     public JComponent addOperator(final int src, Color color)
-    {
+        {
         final Category category = new Category(this, "Operator " + src, color);
 
         JComponent comp;
@@ -623,7 +623,7 @@ public class YamahaTX81Z extends Synth
 
         comp = new LabelledDial("Detune", this, "operator" + src + "detune", color, 0, 6, 3)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
 
@@ -632,9 +632,9 @@ public class YamahaTX81Z extends Synth
 
         frequencyRanges[src - 1] = new LabelledDial("Frequency", this, "operator" + src + "fixedfrequencyrange", color, 0, 7)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return FIX_RANGES[val];
+                return FIX_RANGES[val];
                 }               
             };
         frequencyRanges[src - 1].addAdditionalLabel("Range");
@@ -647,26 +647,26 @@ public class YamahaTX81Z extends Synth
     
         CheckBox fixcomp = new CheckBox("Fixed Frequency", this, "operator" + src + "fix")
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    if (model.get(key) == 0)
-                        {
-                            hbox.remove(frequencyRanges[src - 1]);
-                            if (coarseFrequencyLabels[src - 1] != null)                         // won't be the case initially
-                                coarseFrequencyLabels[src - 1].setText("Ratio");
-                            if (fineFrequencyLabels[src - 1] != null)                           // won't be the case initially
-                                fineFrequencyLabels[src - 1].setText("Ratio Fine");
-                        }
-                    else
-                        {
-                            hbox.add(frequencyRanges[src - 1]);
-                            if (coarseFrequencyLabels[src - 1] != null)                         // won't be the case initially
-                                coarseFrequencyLabels[src - 1].setText("Fixed");
-                            if (fineFrequencyLabels[src - 1] != null)                           // won't be the case initially
-                                fineFrequencyLabels[src - 1].setText("Fixed Fine");
-                        }
-                    hbox.revalidate();
+                super.update(key, model);
+                if (model.get(key) == 0)
+                    {
+                    hbox.remove(frequencyRanges[src - 1]);
+                    if (coarseFrequencyLabels[src - 1] != null)                         // won't be the case initially
+                        coarseFrequencyLabels[src - 1].setText("Ratio");
+                    if (fineFrequencyLabels[src - 1] != null)                           // won't be the case initially
+                        fineFrequencyLabels[src - 1].setText("Ratio Fine");
+                    }
+                else
+                    {
+                    hbox.add(frequencyRanges[src - 1]);
+                    if (coarseFrequencyLabels[src - 1] != null)                         // won't be the case initially
+                        coarseFrequencyLabels[src - 1].setText("Fixed");
+                    if (fineFrequencyLabels[src - 1] != null)                           // won't be the case initially
+                        fineFrequencyLabels[src - 1].setText("Fixed Fine");
+                    }
+                hbox.revalidate();
                 }
             };
         ((CheckBox)fixcomp).addToWidth(1);
@@ -676,18 +676,18 @@ public class YamahaTX81Z extends Synth
 
         comp = new LabelledDial("Frequency ", this, "operator" + src + "frequencycoarse", color, 0, 63)  // extra space because OS X cuts off the 'y'
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (model.get("operator" + src + "fix") == 0)  // not fixed
-                        {
-                            return "" + FREQUENCY_RATIOS[val];
-                        }
-                    else
-                        {
-                            return "" + computeCoarseFrequency(
-                                                               model.get("operator" + src + "fixedfrequencyrange"),
-                                                               model.get("operator" + src + "frequencycoarse"));
-                        }
+                if (model.get("operator" + src + "fix") == 0)  // not fixed
+                    {
+                    return "" + FREQUENCY_RATIOS[val];
+                    }
+                else
+                    {
+                    return "" + computeCoarseFrequency(
+                        model.get("operator" + src + "fixedfrequencyrange"),
+                        model.get("operator" + src + "frequencycoarse"));
+                    }
                 }               
             };
         coarseFrequencyLabels[src - 1 ] = ((LabelledDial)comp).addAdditionalLabel("Fixed");
@@ -698,21 +698,21 @@ public class YamahaTX81Z extends Synth
         format.setRoundingMode(java.math.RoundingMode.FLOOR);
         comp = new LabelledDial("Frequency ", this, "operator" + src + "frequencyfine", color, 0, 15)  // extra space because OS X cuts off the 'y'
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (model.get("operator" + src + "fix") == 0)  // not fixed
-                        {
-                            return format.format(computeFineRatio(
-                                                                  model.get("operator" + src + "frequencycoarse"), 
-                                                                  model.get("operator" + src + "frequencyfine")));
-                        }
-                    else
-                        {
-                            return "" + computeFrequency(
-                                                         model.get("operator" + src + "fixedfrequencyrange"),
-                                                         model.get("operator" + src + "frequencycoarse"),
-                                                         model.get("operator" + src + "frequencyfine"));
-                        }
+                if (model.get("operator" + src + "fix") == 0)  // not fixed
+                    {
+                    return format.format(computeFineRatio(
+                            model.get("operator" + src + "frequencycoarse"), 
+                            model.get("operator" + src + "frequencyfine")));
+                    }
+                else
+                    {
+                    return "" + computeFrequency(
+                        model.get("operator" + src + "fixedfrequencyrange"),
+                        model.get("operator" + src + "frequencycoarse"),
+                        model.get("operator" + src + "frequencyfine"));
+                    }
                 }               
             };
         fineFrequencyLabels[src - 1] = ((LabelledDial)comp).addAdditionalLabel("Fine");
@@ -734,10 +734,10 @@ public class YamahaTX81Z extends Synth
     
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
                 
     public JComponent addEnvelope(final int envelope, Color color)
-    {
+        {
         Category category = new Category(this, "Operator Envelope " + envelope, color);
 
         JComponent comp;
@@ -758,10 +758,10 @@ public class YamahaTX81Z extends Synth
 
         comp = new LabelledDial("Decay 2", this, "operator" + envelope + "decay2rate", color, 0, 31)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 0) return "Sustain";
-                    else return "" + val;
+                if (val == 0) return "Sustain";
+                else return "" + val;
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Rate");
@@ -782,64 +782,64 @@ public class YamahaTX81Z extends Synth
     
         if (envelope == 1)  // operator 1 doesn't have EG Shift
             {
-                comp = new LabelledDial("Shift", this, "operator" + envelope + "shift", color, 0, 0)  // fixed to 0
+            comp = new LabelledDial("Shift", this, "operator" + envelope + "shift", color, 0, 0)  // fixed to 0
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return SHIFTS[val];
-                        }
-                    };
-                // we're not going to add it.  Instead we're just going to put a space in.
-                comp = Strut.makeStrut(comp);
-                model.setStatus("operator" + envelope + "shift", Model.STATUS_IMMUTABLE);
+                    return SHIFTS[val];
+                    }
+                };
+            // we're not going to add it.  Instead we're just going to put a space in.
+            comp = Strut.makeStrut(comp);
+            model.setStatus("operator" + envelope + "shift", Model.STATUS_IMMUTABLE);
             }
         else
             {
-                // TODO: Modify envelope display to show shift
-                comp = new LabelledDial("Shift", this, "operator" + envelope + "shift", color, 0, 3)
+            // TODO: Modify envelope display to show shift
+            comp = new LabelledDial("Shift", this, "operator" + envelope + "shift", color, 0, 3)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return SHIFTS[val];
-                        }
-                    };
+                    return SHIFTS[val];
+                    }
+                };
             }
         hbox.add(comp);
     
 
         // ADSR
         comp = new EnvelopeDisplay(this, Color.red, 
-                                   new String[] { null, "operator" + envelope + "attackrate", "operator" + envelope + "decay1rate", "operator" + envelope + "decay2rate", "operator" + envelope + "releaserate" },
-                                   new String[] { null, null, "operator" + envelope + "decay1level", "operator" + envelope + "decay1level", null },
-                                   new double[] { 0, 0.25/31.0, 0.25/ 31.0,  0.25/31.0, 0.25/15.0 },
-                                   new double[] { 0, 1.0,                1.0 / 15.0,    1.0 / 30.0, 0 })
+            new String[] { null, "operator" + envelope + "attackrate", "operator" + envelope + "decay1rate", "operator" + envelope + "decay2rate", "operator" + envelope + "releaserate" },
+            new String[] { null, null, "operator" + envelope + "decay1level", "operator" + envelope + "decay1level", null },
+            new double[] { 0, 0.25/31.0, 0.25/ 31.0,  0.25/31.0, 0.25/15.0 },
+            new double[] { 0, 1.0,                1.0 / 15.0,    1.0 / 30.0, 0 })
             {
-                public void postProcess(double[] xVals, double[] yVals)
+            public void postProcess(double[] xVals, double[] yVals)
                 {
-                    if (model.get("operator" + envelope + "decay2rate") == 0)
-                        {
-                            yVals[3] = yVals[2];
-                        }
+                if (model.get("operator" + envelope + "decay2rate") == 0)
+                    {
+                    yVals[3] = yVals[2];
+                    }
 
-                    xVals[1] = 0.25 - xVals[1];
-                    xVals[2] = 0.25 - xVals[2];
-                    xVals[3] = 0.25 - xVals[3];
-                    xVals[4] = 0.25 - xVals[4];
+                xVals[1] = 0.25 - xVals[1];
+                xVals[2] = 0.25 - xVals[2];
+                xVals[3] = 0.25 - xVals[3];
+                xVals[4] = 0.25 - xVals[4];
                                         
-                    int shift = model.get("operator" + envelope + "shift");
+                int shift = model.get("operator" + envelope + "shift");
                                         
-                    if (shift > 0)
+                if (shift > 0)
+                    {
+                    for(int i = 0; i < 5; i++)
                         {
-                            for(int i = 0; i < 5; i++)
-                                {
-                                    yVals[i] = 1 - yVals[i];
+                        yVals[i] = 1 - yVals[i];
                                                 
-                                    for(int j = 0; j < shift; j++)  
-                                        yVals[i] /= 2.0;
+                        for(int j = 0; j < shift; j++)  
+                            yVals[i] /= 2.0;
                                                                                                         
-                                    yVals[i] = 1 - yVals[i];
-                                }
+                        yVals[i] = 1 - yVals[i];
                         }
+                    }
                 }
             };
         model.register("operator" + envelope + "shift", (Updatable)comp);
@@ -847,7 +847,7 @@ public class YamahaTX81Z extends Synth
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
         
 
 
@@ -862,106 +862,106 @@ public class YamahaTX81Z extends Synth
     /// that Waldorf decided to do.  :-(
 
     final static String[] allParameters = new String[] 
-        {
-            "operator4attackrate",
-            "operator4decay1rate",
-            "operator4decay2rate",
-            "operator4releaserate",
-            "operator4decay1level",
-            "operator4levelscaling",
-            "operator4ratescaling",
-            "operator4egbiassensitivity",
-            "operator4amplitudemodulationenable",                   
-            "operator4keyvelocitysensitivity",
-            "operator4outputlevel",
-            "operator4frequencycoarse",
-            "operator4detune",
+    {
+    "operator4attackrate",
+    "operator4decay1rate",
+    "operator4decay2rate",
+    "operator4releaserate",
+    "operator4decay1level",
+    "operator4levelscaling",
+    "operator4ratescaling",
+    "operator4egbiassensitivity",
+    "operator4amplitudemodulationenable",                   
+    "operator4keyvelocitysensitivity",
+    "operator4outputlevel",
+    "operator4frequencycoarse",
+    "operator4detune",
 
-            "operator2attackrate",
-            "operator2decay1rate",
-            "operator2decay2rate",
-            "operator2releaserate",
-            "operator2decay1level",
-            "operator2levelscaling",
-            "operator2ratescaling",
-            "operator2egbiassensitivity",
-            "operator2amplitudemodulationenable",                   
-            "operator2keyvelocitysensitivity",
-            "operator2outputlevel",
-            "operator2frequencycoarse",
-            "operator2detune",
+    "operator2attackrate",
+    "operator2decay1rate",
+    "operator2decay2rate",
+    "operator2releaserate",
+    "operator2decay1level",
+    "operator2levelscaling",
+    "operator2ratescaling",
+    "operator2egbiassensitivity",
+    "operator2amplitudemodulationenable",                   
+    "operator2keyvelocitysensitivity",
+    "operator2outputlevel",
+    "operator2frequencycoarse",
+    "operator2detune",
 
-            "operator3attackrate",
-            "operator3decay1rate",
-            "operator3decay2rate",
-            "operator3releaserate",
-            "operator3decay1level",
-            "operator3levelscaling",
-            "operator3ratescaling",
-            "operator3egbiassensitivity",
-            "operator3amplitudemodulationenable",                   
-            "operator3keyvelocitysensitivity",
-            "operator3outputlevel",
-            "operator3frequencycoarse",
-            "operator3detune",
+    "operator3attackrate",
+    "operator3decay1rate",
+    "operator3decay2rate",
+    "operator3releaserate",
+    "operator3decay1level",
+    "operator3levelscaling",
+    "operator3ratescaling",
+    "operator3egbiassensitivity",
+    "operator3amplitudemodulationenable",                   
+    "operator3keyvelocitysensitivity",
+    "operator3outputlevel",
+    "operator3frequencycoarse",
+    "operator3detune",
 
-            "operator1attackrate",
-            "operator1decay1rate",
-            "operator1decay2rate",
-            "operator1releaserate",
-            "operator1decay1level",
-            "operator1levelscaling",
-            "operator1ratescaling",
-            "operator1egbiassensitivity",
-            "operator1amplitudemodulationenable",                   
-            "operator1keyvelocitysensitivity",
-            "operator1outputlevel",
-            "operator1frequencycoarse",
-            "operator1detune",
+    "operator1attackrate",
+    "operator1decay1rate",
+    "operator1decay2rate",
+    "operator1releaserate",
+    "operator1decay1level",
+    "operator1levelscaling",
+    "operator1ratescaling",
+    "operator1egbiassensitivity",
+    "operator1amplitudemodulationenable",                   
+    "operator1keyvelocitysensitivity",
+    "operator1outputlevel",
+    "operator1frequencycoarse",
+    "operator1detune",
     
-            "algorithm",
-            "feedback",         
-            "lfospeed",
-            "lfodelay",
-            "lfopitchmodulationdepth",
-            "lfoamplitudemodulationdepth",        
-            "lfosync",        
-            "lfowave",
-            "lfopitchmodulationsensitivity",
-            "lfoamplitudemodulationsensitivity",    
-            "transpose",
+    "algorithm",
+    "feedback",         
+    "lfospeed",
+    "lfodelay",
+    "lfopitchmodulationdepth",
+    "lfoamplitudemodulationdepth",        
+    "lfosync",        
+    "lfowave",
+    "lfopitchmodulationsensitivity",
+    "lfoamplitudemodulationsensitivity",    
+    "transpose",
     
-            "mono",
-            "pitchbendrange",  
-            "fulltimeportamentomode",
-            "portamentotime",
-            "footcontrolvolume",
-            "sustain",                  // unused as it turns out
-            "portamento",       // unused as it turns out
-            "chorus",                   // unused as it turns out        
-            "modulationwheelpitch",
-            "modulationwheelamplitude",
-            "breathcontrolpitch",
-            "breathcontrolamplitude",          
-            "breathcontrolpitchbias",
-            "breathcontrolenvelopbias",
-            "name1",
-            "name2",
-            "name3",
-            "name4",
-            "name5",
-            "name6",
-            "name7",
-            "name8",
-            "name9",
-            "name10",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-        };
+    "mono",
+    "pitchbendrange",  
+    "fulltimeportamentomode",
+    "portamentotime",
+    "footcontrolvolume",
+    "sustain",                  // unused as it turns out
+    "portamento",       // unused as it turns out
+    "chorus",                   // unused as it turns out        
+    "modulationwheelpitch",
+    "modulationwheelamplitude",
+    "breathcontrolpitch",
+    "breathcontrolamplitude",          
+    "breathcontrolpitchbias",
+    "breathcontrolenvelopbias",
+    "name1",
+    "name2",
+    "name3",
+    "name4",
+    "name5",
+    "name6",
+    "name7",
+    "name8",
+    "name9",
+    "name10",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    };
 
 
 
@@ -975,35 +975,35 @@ public class YamahaTX81Z extends Synth
     /// that Waldorf decided to do.  :-(
 
     final static String[] allAdditionalParameters = new String[] 
-        {
-            "operator4fix",
-            "operator4fixedfrequencyrange",
-            "operator4frequencyfine",
-            "operator4operatorwaveform",
-            "operator4shift",
+    {
+    "operator4fix",
+    "operator4fixedfrequencyrange",
+    "operator4frequencyfine",
+    "operator4operatorwaveform",
+    "operator4shift",
 
-            "operator2fix",
-            "operator2fixedfrequencyrange",
-            "operator2frequencyfine",
-            "operator2operatorwaveform",
-            "operator2shift",
+    "operator2fix",
+    "operator2fixedfrequencyrange",
+    "operator2frequencyfine",
+    "operator2operatorwaveform",
+    "operator2shift",
 
-            "operator3fix",
-            "operator3fixedfrequencyrange",
-            "operator3frequencyfine",
-            "operator3operatorwaveform",
-            "operator3shift",
+    "operator3fix",
+    "operator3fixedfrequencyrange",
+    "operator3frequencyfine",
+    "operator3operatorwaveform",
+    "operator3shift",
 
-            "operator1fix",
-            "operator1fixedfrequencyrange",
-            "operator1frequencyfine",
-            "operator1operatorwaveform",
-            "operator1shift",
+    "operator1fix",
+    "operator1fixedfrequencyrange",
+    "operator1frequencyfine",
+    "operator1operatorwaveform",
+    "operator1shift",
     
-            "reverbrate",
-            "footcontrolpitch",         
-            "footcontrolamplitude"
-        };
+    "reverbrate",
+    "footcontrolpitch",         
+    "footcontrolamplitude"
+    };
 
     /*
       From mgregory22@gmail.com:
@@ -1039,7 +1039,7 @@ public class YamahaTX81Z extends Synth
     public static final int REMOTE_SWITCH_GROUP = 3 + 16; // 00010011        same as ACED_GROUP
 
     public Object[] emitAll(String key)
-    {
+        {
         simplePause(50);
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
@@ -1049,51 +1049,51 @@ public class YamahaTX81Z extends Synth
          
         if (key.equals("name"))
             {
-                Object[] result = new Object[10];
+            Object[] result = new Object[10];
             
-                String name = model.get("name", "INIT VOICE") + "          ";
+            String name = model.get("name", "INIT VOICE") + "          ";
 
-                for(int i = 0; i < 10; i++)
-                    {
-                        result[i] = new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, (byte)(77 + i), (byte)(name.charAt(i)), (byte)0xF7 };
-                    }
-                return result;
+            for(int i = 0; i < 10; i++)
+                {
+                result[i] = new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, (byte)(77 + i), (byte)(name.charAt(i)), (byte)0xF7 };
+                }
+            return result;
             }
         else if (allParametersToIndex.containsKey(key))
             {
-                int index = ((Integer)(allParametersToIndex.get(key))).intValue();
-                int value = model.get(key);
+            int index = ((Integer)(allParametersToIndex.get(key))).intValue();
+            int value = model.get(key);
             
-                byte PP = (byte) index;
-                byte VV = (byte) value;
-                byte[] data = new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, PP, VV, (byte)0xF7 };
-                return new Object[] { data };
+            byte PP = (byte) index;
+            byte VV = (byte) value;
+            byte[] data = new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, PP, VV, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (allAdditionalParametersToIndex.containsKey(key))
             {
-                int index = ((Integer)(allAdditionalParametersToIndex.get(key))).intValue();
-                int value = model.get(key);
+            int index = ((Integer)(allAdditionalParametersToIndex.get(key))).intValue();
+            int value = model.get(key);
 
-                for(int i = 0; i < 4; i++)
+            for(int i = 0; i < 4; i++)
+                {
+                if (key.equals("operator" + i + "frequencyfine"))
                     {
-                        if (key.equals("operator" + i + "frequencyfine"))
-                            {
-                                if (model.get("operator" + i + "frequencycoarse") < 4)  // it's < 1.0
-                                    value = Math.min(value, 7);  //  only first 8 values are legal
-                            }
+                    if (model.get("operator" + i + "frequencycoarse") < 4)  // it's < 1.0
+                        value = Math.min(value, 7);  //  only first 8 values are legal
                     }
+                }
                             
-                byte PP = (byte) index;
-                byte VV = (byte) value;
-                byte[] data = new byte[] { (byte)0xF0, 0x43, channel, ACED_GROUP, PP, VV, (byte)0xF7 };
-                return new Object[] { data };
+            byte PP = (byte) index;
+            byte VV = (byte) value;
+            byte[] data = new byte[] { (byte)0xF0, 0x43, channel, ACED_GROUP, PP, VV, (byte)0xF7 };
+            return new Object[] { data };
             }
         else 
             {
-                System.err.println("Can't emit key " + key);
-                return new Object[0];
+            System.err.println("Can't emit key " + key);
+            return new Object[0];
             }
-    }
+        }
     
 
     // returns true if the parse was *successful*, not just complete
@@ -1102,7 +1102,7 @@ public class YamahaTX81Z extends Synth
     final static int ACED = 2;
         
     int subparse(byte[] data, boolean ignorePatch, boolean fromFile)
-    {
+        {
         // okay we're not recursing, let's parse
         
         boolean vced = true;
@@ -1112,36 +1112,36 @@ public class YamahaTX81Z extends Synth
             data[4] == 0x00 &&
             data[5] == 0x5D) // VCED?
             {
-                vced = true;
+            vced = true;
             }
         else if (data.length == 41 &&   // 23 + "LM  8976AE" + 8 byte wrapper
-                 data[3] == 0x7E &&
-                 data[4] == 0x00 &&
-                 data[5] == 0x21 &&
-                 // next it spits out the header "LM  8976AE"
-                 data[6] == 'L' &&
-                 data[7] == 'M' &&
-                 data[8] == ' ' &&
-                 data[9] == ' ' &&
-                 data[10] == '8' &&
-                 data[11] == '9' &&
-                 data[12] == '7' &&
-                 data[13] == '6' &&
-                 data[14] == 'A' &&
-                 data[15] == 'E')
+            data[3] == 0x7E &&
+            data[4] == 0x00 &&
+            data[5] == 0x21 &&
+            // next it spits out the header "LM  8976AE"
+            data[6] == 'L' &&
+            data[7] == 'M' &&
+            data[8] == ' ' &&
+            data[9] == ' ' &&
+            data[10] == '8' &&
+            data[11] == '9' &&
+            data[12] == '7' &&
+            data[13] == '6' &&
+            data[14] == 'A' &&
+            data[15] == 'E')
             {
-                vced = false;
+            vced = false;
             }
         else    
             {
-                System.err.println("Can't parse data (length " + data.length + ").  First bytes:");
-                int len = 16;
-                if (len > data.length) 
-                    len = data.length;
-                for(int i = 0; i < len; i++)
-                    System.err.print(" " + String.format("%02X", data[i]));
-                System.err.println();
-                return FAIL;
+            System.err.println("Can't parse data (length " + data.length + ").  First bytes:");
+            int len = 16;
+            if (len > data.length) 
+                len = data.length;
+            for(int i = 0; i < len; i++)
+                System.err.print(" " + String.format("%02X", data[i]));
+            System.err.println();
+            return FAIL;
             }
         
         String[] params = (vced ? allParameters : allAdditionalParameters);
@@ -1152,62 +1152,62 @@ public class YamahaTX81Z extends Synth
         
         for(int i = 0; i < params.length; i++)
             {
-                byte val = data[i + start];
+            byte val = data[i + start];
                 
-                if (params[i].equals("-"))
-                    continue;
-                else if (i >= 77 && i <= 86) // name
-                    {
-                        name[i - 77] = val;
-                    }
-                else
-                    {
-                        model.set(params[i], val);
-                    }
+            if (params[i].equals("-"))
+                continue;
+            else if (i >= 77 && i <= 86) // name
+                {
+                name[i - 77] = val;
+                }
+            else
+                {
+                model.set(params[i], val);
+                }
             }
                 
         if (vced)
             {
-                try { model.set("name", new String(name, "US-ASCII")); }
-                catch (Exception e) { e.printStackTrace(); }
-                revise();  // vced comes AFTER aced
+            try { model.set("name", new String(name, "US-ASCII")); }
+            catch (Exception e) { e.printStackTrace(); }
+            revise();  // vced comes AFTER aced
             }
         return (vced ? VCED : ACED);    
-    }
+        }
                 
 
     public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
-    {
+        {
         if (data.length == 41 + 101) // probably ACED + VCED, break up and call recursively
             {
-                byte[] d = new byte[41];
-                System.arraycopy(data, 0, d, 0, 41); 
-                int result = subparse(d, ignorePatch, fromFile);
-                if (result == FAIL)
-                    return PARSE_FAILED;
-                d = new byte[101];
-                System.arraycopy(data, 41, d, 0, 101);
-                result = subparse(d, ignorePatch, fromFile);
-                if (result == FAIL)
-                    return PARSE_FAILED;
-                return PARSE_SUCCEEDED;
+            byte[] d = new byte[41];
+            System.arraycopy(data, 0, d, 0, 41); 
+            int result = subparse(d, ignorePatch, fromFile);
+            if (result == FAIL)
+                return PARSE_FAILED;
+            d = new byte[101];
+            System.arraycopy(data, 41, d, 0, 101);
+            result = subparse(d, ignorePatch, fromFile);
+            if (result == FAIL)
+                return PARSE_FAILED;
+            return PARSE_SUCCEEDED;
             }
         else
             {
-                int result = subparse(data, ignorePatch, fromFile);
-                // we want to return *false* if this is ACED data, since it's not complete
-                if (result == FAIL)
-                    return PARSE_FAILED;
-                else if (result == ACED)
-                    return PARSE_INCOMPLETE;
-                else // if (result == VCED)
-                    return PARSE_SUCCEEDED;
+            int result = subparse(data, ignorePatch, fromFile);
+            // we want to return *false* if this is ACED data, since it's not complete
+            if (result == FAIL)
+                return PARSE_FAILED;
+            else if (result == ACED)
+                return PARSE_INCOMPLETE;
+            else // if (result == VCED)
+                return PARSE_SUCCEEDED;
             }
-    }
+        }
  
     
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    {
+        {
         simplePause(50);
         byte[][] result = new byte[2][];
         
@@ -1228,17 +1228,17 @@ public class YamahaTX81Z extends Synth
         
         for(int i = 0; i < allAdditionalParameters.length; i++)
             {
-                data[i + 10] = (byte)(model.get(allAdditionalParameters[i]));
+            data[i + 10] = (byte)(model.get(allAdditionalParameters[i]));
 
-                // handle low fine ratio values
-                for(int j = 0; j < 4; j++)
+            // handle low fine ratio values
+            for(int j = 0; j < 4; j++)
+                {
+                if (allAdditionalParameters[i].equals("operator" + j + "frequencyfine"))
                     {
-                        if (allAdditionalParameters[i].equals("operator" + j + "frequencyfine"))
-                            {
-                                if (model.get("operator" + j + "frequencycoarse") < 4)  // it's < 1.0
-                                    data[i + 10] = (byte)(Math.min(data[i + 10] , 7));  //  only first 8 values are legal
-                            }
+                    if (model.get("operator" + j + "frequencycoarse") < 4)  // it's < 1.0
+                        data[i + 10] = (byte)(Math.min(data[i + 10] , 7));  //  only first 8 values are legal
                     }
+                }
             }
 
         result[0][0] = (byte)0xF0;
@@ -1257,14 +1257,14 @@ public class YamahaTX81Z extends Synth
         data = new byte[93];
         for(int i = 0; i < allParameters.length - 16; i++)  // no name, no extra gunk
             {
-                data[i] = (byte)(model.get(allParameters[i]));
+            data[i] = (byte)(model.get(allParameters[i]));
             }
         
         String name = model.get("name", "INIT VOICE") + "          ";
                 
         for(int i = 0; i < 10; i++)
             {
-                data[allParameters.length - 16 + i] = (byte)(name.charAt(i));
+            data[allParameters.length - 16 + i] = (byte)(name.charAt(i));
             }
         
         result[1][0] = (byte)0xF0;
@@ -1278,11 +1278,11 @@ public class YamahaTX81Z extends Synth
         result[1][7 + data.length] = (byte)0xF7;
         
         return result;
-    }
+        }
 
     /** Generate a TX81Z checksum of the data bytes */
     byte produceChecksum(byte[] bytes)
-    {
+        {
         //      The TX81Z manual says the checksum is the
         //              "Twos complement of the lower 7 bits of the sum of all databytes".
         //
@@ -1295,34 +1295,34 @@ public class YamahaTX81Z extends Synth
         for(int i = 0; i < bytes.length; i++)
             checksum = (checksum + bytes[i]) & 255;
         return (byte)((256 - checksum) & 127);
-    }
+        }
 
     public void performRequestDump(Model tempModel, boolean changePatch)
-    {
+        {
         // We ALWAYS change the patch no matter what.  We have to.
         changePatch(tempModel);
         tryToSendSysex(requestDump(tempModel));
-    }
+        }
 
     public byte[] requestDump(Model tempModel) 
-    {
+        {
         // since performRequestDump ALWAYS changes the patch, we might
         // as well just call requestCurrentDump() here 
         return requestCurrentDump(); 
-    }
+        }
         
     public byte[] requestCurrentDump()
-    {
+        {
         // ACED + VCED
         byte channel = (byte)(32 + getChannelOut());
         return new byte[] { (byte)0xF0, 0x43, channel, 0x7E, 
-                            (byte)'L', (byte)'M', (byte)' ', (byte)' ',
-                            (byte)'8', (byte)'9', (byte)'7', (byte)'6',
-                            (byte)'A', (byte)'E', (byte)0xF7 }; 
-    }
+            (byte)'L', (byte)'M', (byte)' ', (byte)' ',
+            (byte)'8', (byte)'9', (byte)'7', (byte)'6',
+            (byte)'A', (byte)'E', (byte)0xF7 }; 
+        }
 
     public static boolean recognize(byte[] data)
-    {
+        {
         // VCED
         if (data.length == 101 &&
             data[0] == (byte)0xF0 &&
@@ -1335,23 +1335,23 @@ public class YamahaTX81Z extends Synth
 
         // *Probably* ACED + VCED
         else if (data.length == 41 + 101 &&
-                 data[0] == (byte)0xF0 &&
-                 data[1] == (byte)0x43 &&
-                 // don't care about 2, it's the channel
-                 data[3] == 0x7E &&
-                 data[4] == 0x00 &&
-                 data[5] == 0x21 &&
-                 // next it spits out the header "LM  8976AE"
-                 data[6] == 'L' &&
-                 data[7] == 'M' &&
-                 data[8] == ' ' &&
-                 data[9] == ' ' &&
-                 data[10] == '8' &&
-                 data[11] == '9' &&
-                 data[12] == '7' &&
-                 data[13] == '6' &&
-                 data[14] == 'A' &&
-                 data[15] == 'E')
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x43 &&
+            // don't care about 2, it's the channel
+            data[3] == 0x7E &&
+            data[4] == 0x00 &&
+            data[5] == 0x21 &&
+            // next it spits out the header "LM  8976AE"
+            data[6] == 'L' &&
+            data[7] == 'M' &&
+            data[8] == ' ' &&
+            data[9] == ' ' &&
+            data[10] == '8' &&
+            data[11] == '9' &&
+            data[12] == '7' &&
+            data[13] == '6' &&
+            data[14] == 'A' &&
+            data[15] == 'E')
             return true;
                 
         // ACED
@@ -1359,59 +1359,59 @@ public class YamahaTX81Z extends Synth
             return true;
         
         else return false;
-    }
+        }
         
     static boolean isACED(byte[] data)
-    {
+        {
         return (data.length == 41 &&        
-                data[0] == (byte)0xF0 &&
-                data[1] == (byte)0x43 &&
-                // don't care about 2, it's the channel
-                data[3] == 0x7E &&
-                data[4] == 0x00 &&
-                data[5] == 0x21 &&
-                // next it spits out the header "LM  8976AE"
-                data[6] == 'L' &&
-                data[7] == 'M' &&
-                data[8] == ' ' &&
-                data[9] == ' ' &&
-                data[10] == '8' &&
-                data[11] == '9' &&
-                data[12] == '7' &&
-                data[13] == '6' &&
-                data[14] == 'A' &&
-                data[15] == 'E');
-    }
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x43 &&
+            // don't care about 2, it's the channel
+            data[3] == 0x7E &&
+            data[4] == 0x00 &&
+            data[5] == 0x21 &&
+            // next it spits out the header "LM  8976AE"
+            data[6] == 'L' &&
+            data[7] == 'M' &&
+            data[8] == ' ' &&
+            data[9] == ' ' &&
+            data[10] == '8' &&
+            data[11] == '9' &&
+            data[12] == '7' &&
+            data[13] == '6' &&
+            data[14] == 'A' &&
+            data[15] == 'E');
+        }
     
     byte[] lastACED;
     // gotta get two merge results
     public boolean merge(byte[] data, double probability)
-    {
+        {
         if (isACED(data))
             { 
-                lastACED = (byte[]) data.clone(); 
-                return false;
+            lastACED = (byte[]) data.clone(); 
+            return false;
             }
         else
             {
-                if (lastACED == null)  // uh oh, didn't get it
-                    {
-                        return false;
-                    }
-                else
-                    {
-                        byte[] newData = new byte[lastACED.length + data.length];
-                        System.arraycopy(lastACED, 0, newData, 0, lastACED.length);
-                        System.arraycopy(data, 0, newData, lastACED.length, data.length);
-                        lastACED = null;
-                        return super.merge(newData, probability);
-                    }
+            if (lastACED == null)  // uh oh, didn't get it
+                {
+                return false;
+                }
+            else
+                {
+                byte[] newData = new byte[lastACED.length + data.length];
+                System.arraycopy(lastACED, 0, newData, 0, lastACED.length);
+                System.arraycopy(data, 0, newData, lastACED.length, data.length);
+                lastACED = null;
+                return super.merge(newData, probability);
+                }
             }
-    }
+        }
     
     public static final int MAXIMUM_NAME_LENGTH = 10;
     public String revisePatchName(String name)
-    {
+        {
         name = super.revisePatchName(name);  // trim first time
         if (name.length() > MAXIMUM_NAME_LENGTH)
             name = name.substring(0, MAXIMUM_NAME_LENGTH);
@@ -1419,18 +1419,18 @@ public class YamahaTX81Z extends Synth
         StringBuffer nameb = new StringBuffer(name);                            
         for(int i = 0 ; i < nameb.length(); i++)
             {
-                char c = nameb.charAt(i);
-                if (c < 32 || c > 127)
-                    nameb.setCharAt(i, ' ');
+            char c = nameb.charAt(i);
+            if (c < 32 || c > 127)
+                nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
-    }        
+        }        
 
 
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
-    {
+        {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -1438,12 +1438,12 @@ public class YamahaTX81Z extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-    }
+        }
         
     public static String getSynthName() { return "Yamaha TX81Z"; }
 
     public void changePatch(Model tempModel) 
-    {
+        {
         int bank = tempModel.get("bank");
         int number = tempModel.get("number");
         int val = bank * 32 + number;
@@ -1487,46 +1487,46 @@ public class YamahaTX81Z extends Synth
         // we assume that we successfully did it
         if (!isMerging())  // we're actually loading the patch, not merging with it
             {
-                setSendMIDI(false);
-                model.set("number", number);
-                model.set("bank", bank);
-                setSendMIDI(true);
+            setSendMIDI(false);
+            model.set("number", number);
+            model.set("bank", bank);
+            setSendMIDI(true);
             }
-    }
+        }
     
     public String getPatchName(Model model) { return model.get("name", "INIT VOICE"); }
 
     public boolean patchLocationEquals(Model patch1, Model patch2)
-    {
+        {
         int bank1 = patch1.get("bank");
         int number1 = patch1.get("number");
         int bank2 = patch2.get("bank");
         int number2 = patch2.get("number");
         return (bank1 == bank2 && number1 == number2);
-    }
+        }
         
     public Model getNextPatchLocation(Model model)
-    {
+        {
         int bank = model.get("bank");
         int number = model.get("number");
         
         number++;
         if (number >= 32)
             {
-                bank++;
-                number = 0;
-                if (bank >= 5)
-                    bank = 0;
+            bank++;
+            number = 0;
+            if (bank >= 5)
+                bank = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-    }
+        }
 
     public String getPatchLocationName(Model model)
-    {
+        {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -1534,7 +1534,7 @@ public class YamahaTX81Z extends Synth
         
         int number = model.get("number") + 1;
         return BANKS[model.get("bank")] + (number > 9 ? "" : "0") + number;
-    }
+        }
         
 
-}
+    }

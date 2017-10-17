@@ -27,7 +27,7 @@ import javax.swing.*;
 
 
 public class Midi
-{
+    {
         
     /** A MIDI pipe.  Thru is a Receiver which attaches to other
         Receivers.  when it gets a message, it forwards it to ALL
@@ -36,38 +36,38 @@ public class Midi
         the Thru, they won't have a race condition. */
                 
     public static class Thru implements Receiver
-    {
+        {
         ArrayList receivers = new ArrayList();
                 
         public void close()
-        {
+            {
             for(int i = 0; i < receivers.size(); i++)
                 {
-                    ((Receiver)(receivers.get(i))).close();
+                ((Receiver)(receivers.get(i))).close();
                 }
             receivers = new ArrayList();
-        }
+            }
                         
         public synchronized void send(MidiMessage message, long timeStamp)
-        {
+            {
             for(int i = 0; i < receivers.size(); i++)
                 {
-                    ((Receiver)(receivers.get(i))).send(message, timeStamp);
+                ((Receiver)(receivers.get(i))).send(message, timeStamp);
                 }
-        }
+            }
                         
         /** Add a receiver to get routed to. */
         public void addReceiver(Receiver receiver)
-        {
+            {
             receivers.add(receiver);
-        }
+            }
                         
         /** Remove a receiver that was routed to. */
         public void removeReceiver(Receiver receiver)
-        {
+            {
             receivers.remove(receiver);
+            }
         }
-    }
 
 
     /** A wrapper for a MIDI device which displays its name in a pleasing and
@@ -76,16 +76,16 @@ public class Midi
         it as needed) and also a Thru for the device's transmitter. */
                 
     static class MidiDeviceWrapper
-    {
+        {
         public MidiDevice device;
                 
         public MidiDeviceWrapper(MidiDevice device)
-        {
+            {
             this.device = device;
-        }
+            }
                         
         public String toString() 
-        { 
+            { 
             String desc = device.getDeviceInfo().getDescription().trim();
             String name = device.getDeviceInfo().getName();
             if (name == null) 
@@ -103,7 +103,7 @@ public class Midi
                 return desc.trim(); 
             else 
                 return name;
-        }
+            }
                 
         Transmitter transmitter;
         Receiver receiver;
@@ -116,120 +116,120 @@ public class Midi
             same Transmitter so we don't have to build multiple Transmitters (triggering bugs).
         */
         public Thru getThru(Receiver receiver) 
-        { 
+            { 
             if (thru == null) 
                 try
                     {
-                        // we use a thru here so we can add many receivers to it
-                        if (!device.isOpen()) 
-                            device.open();
-                        transmitter = device.getTransmitter();
-                        thru = new Thru();
-                        transmitter.setReceiver(thru);
+                    // we use a thru here so we can add many receivers to it
+                    if (!device.isOpen()) 
+                        device.open();
+                    transmitter = device.getTransmitter();
+                    thru = new Thru();
+                    transmitter.setReceiver(thru);
                     }
                 catch(Exception e) { e.printStackTrace(); }
                         
             if (thru != null)
                 {
-                    thru.addReceiver(receiver);
+                thru.addReceiver(receiver);
                 }
             return thru;
-        }
+            }
                         
         /** Returns a threadsafe Receiver.*/
         public Receiver getReceiver() 
-        { 
+            { 
             if (receiver == null) 
                 try
                     {
-                        // we use a secret Thru here so it's lockable
-                        if (!device.isOpen()) 
-                            device.open();
-                        Thru recv = new Thru();
-                        recv.addReceiver(device.getReceiver());
-                        receiver = recv;
+                    // we use a secret Thru here so it's lockable
+                    if (!device.isOpen()) 
+                        device.open();
+                    Thru recv = new Thru();
+                    recv.addReceiver(device.getReceiver());
+                    receiver = recv;
                     }
                 catch(Exception e) { e.printStackTrace(); }
             return receiver; 
+            }
         }
-    }
 
 
     static Object findDevice(String name, ArrayList devices)
-    {
+        {
         if (name == null) return null;
         for(int i = 0; i < devices.size(); i++)
             {
-                if (devices.get(i) instanceof String)
-                    {
-                        if (((String)devices.get(i)).equals(name))
-                            return devices.get(i);
-                    }
-                else
-                    {
-                        MidiDeviceWrapper mdn = (MidiDeviceWrapper)(devices.get(i));
-                        if (mdn.toString().equals(name))
-                            return mdn;
-                    }
+            if (devices.get(i) instanceof String)
+                {
+                if (((String)devices.get(i)).equals(name))
+                    return devices.get(i);
+                }
+            else
+                {
+                MidiDeviceWrapper mdn = (MidiDeviceWrapper)(devices.get(i));
+                if (mdn.toString().equals(name))
+                    return mdn;
+                }
             }
         return null;
-    }
+        }
 
 
     static void updateDevices()
-    {
+        {
         MidiDevice.Info[] midiDevices;
         
         try
             {
-                midiDevices = uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider.getMidiDeviceInfo();
+            midiDevices = uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider.getMidiDeviceInfo();
             }
         catch (Exception ex)
             {
-                midiDevices = MidiSystem.getMidiDeviceInfo();
+            midiDevices = MidiSystem.getMidiDeviceInfo();
             }
 
         ArrayList allDevices = new ArrayList();
         for(int i = 0; i < midiDevices.length; i++)
             {
-                try
+            try
+                {
+                MidiDevice d = MidiSystem.getMidiDevice(midiDevices[i]);
+                // get rid of java devices
+                if (d instanceof javax.sound.midi.Sequencer ||
+                    d instanceof javax.sound.midi.Synthesizer)
+                    continue;
+                if (d.getMaxTransmitters() != 0 || d.getMaxReceivers() != 0)
                     {
-                        MidiDevice d = MidiSystem.getMidiDevice(midiDevices[i]);
-                        // get rid of java devices
-                        if (d instanceof javax.sound.midi.Sequencer ||
-                            d instanceof javax.sound.midi.Synthesizer)
-                            continue;
-                        if (d.getMaxTransmitters() != 0 || d.getMaxReceivers() != 0)
-                            {
-                                allDevices.add(new MidiDeviceWrapper(d));
-                            }
+                    allDevices.add(new MidiDeviceWrapper(d));
                     }
-                catch(Exception e) { }
+                }
+            catch(Exception e) { }
             }
             
         // Do they hold the same exact devices?
         if (Midi.allDevices != null && Midi.allDevices.size() == allDevices.size())
             {
-                Set set = new HashSet();
-                for(int i = 0; i < Midi.allDevices.size(); i++)
-                    {
-                        set.add(((MidiDeviceWrapper)(Midi.allDevices.get(i))).device);
-                    }
+            Set set = new HashSet();
+            for(int i = 0; i < Midi.allDevices.size(); i++)
+                {
+                set.add(((MidiDeviceWrapper)(Midi.allDevices.get(i))).device);
+                }
                 
-                boolean same = true;
-                for(int i = 0; i < allDevices.size(); i++)
+            boolean same = true;
+            for(int i = 0; i < allDevices.size(); i++)
+                {
+                if (!set.contains(((MidiDeviceWrapper)(allDevices.get(i))).device))
                     {
-                        if (!set.contains(((MidiDeviceWrapper)(allDevices.get(i))).device))
-                            {
-                                same = false;  // something's different
-                                break;
-                            }
+                    same = false;  // something's different
+                    break;
                     }
+                }
                 
-                if (same)
-                    {
-                        return;  // they're identical
-                    }
+            if (same)
+                {
+                return;  // they're identical
+                }
             }
                 
         // at this point allDevices isn't the same as Midi.allDevices, so set it and update
@@ -241,32 +241,32 @@ public class Midi
         keyDevices.add("None");
         for(int i = 0; i < allDevices.size(); i++)
             {
-                try
+            try
+                {
+                MidiDeviceWrapper mdn = (MidiDeviceWrapper)(allDevices.get(i));
+                if (mdn.device.getMaxTransmitters() != 0)
                     {
-                        MidiDeviceWrapper mdn = (MidiDeviceWrapper)(allDevices.get(i));
-                        if (mdn.device.getMaxTransmitters() != 0)
-                            {
-                                inDevices.add(mdn);
-                                keyDevices.add(mdn);
-                            }
+                    inDevices.add(mdn);
+                    keyDevices.add(mdn);
                     }
-                catch(Exception e) { }
+                }
+            catch(Exception e) { }
             }
 
         outDevices = new ArrayList();
         for(int i = 0; i < allDevices.size(); i++)
             {
-                try
+            try
+                {
+                MidiDeviceWrapper mdn = (MidiDeviceWrapper)(allDevices.get(i));
+                if (mdn.device.getMaxReceivers() != 0)
                     {
-                        MidiDeviceWrapper mdn = (MidiDeviceWrapper)(allDevices.get(i));
-                        if (mdn.device.getMaxReceivers() != 0)
-                            {
-                                outDevices.add(mdn);
-                            }
+                    outDevices.add(mdn);
                     }
-                catch(Exception e) { }
+                }
+            catch(Exception e) { }
             }
-    }
+        }
 
     static ArrayList allDevices;
     static ArrayList inDevices;
@@ -274,12 +274,12 @@ public class Midi
     static ArrayList keyDevices;
         
     static
-    {
+        {
         updateDevices();
-    }
+        }
 
     public static class Tuple
-    {
+        {
         /** Represents "any channel" in the Tuple. */
         public static final int KEYCHANNEL_OMNI = 0;
 
@@ -313,7 +313,7 @@ public class Midi
         int refcount = 1;
         
         public Tuple copy(Receiver inReceiver, Receiver keyReceiver)
-        {
+            {
             if (refcount < 1)
                 throw new RuntimeException("Cannot copy a fully disposed Midi tuple");
                 
@@ -326,31 +326,31 @@ public class Midi
                 key.addReceiver(keyReceiver);
                 
             return this; 
-        }
+            }
         
         public void dispose()
-        {
+            {
             refcount--;
             
             if (refcount == 0)
                 {
-                    if (key != null && keyReceiver != null)
-                        key.removeReceiver(keyReceiver);
-                    if (in != null && inReceiver!= null)
-                        in.removeReceiver(inReceiver);
+                if (key != null && keyReceiver != null)
+                    key.removeReceiver(keyReceiver);
+                if (in != null && inReceiver!= null)
+                    in.removeReceiver(inReceiver);
 
-                    // We don't close() stuff because of prior MIDI bugs in coremidi4j which are getting fixed (I believe).
-                    // At any rate, the only time we will see a closed Receiver or a Thru is if it closes itself, because we
-                    // share them.  And when we quit, we just leak (probably can't help that anyway on a hard-quit).  
-                    // Hope that's okay.
+                // We don't close() stuff because of prior MIDI bugs in coremidi4j which are getting fixed (I believe).
+                // At any rate, the only time we will see a closed Receiver or a Thru is if it closes itself, because we
+                // share them.  And when we quit, we just leak (probably can't help that anyway on a hard-quit).  
+                // Hope that's okay.
 
-                    key = null;
-                    keyReceiver = null;
-                    in = null;
-                    inReceiver = null;
+                key = null;
+                keyReceiver = null;
+                in = null;
+                inReceiver = null;
                 }
-        }       
-    }
+            }       
+        }
 
     static void setLastTupleIn(String path, Synth synth) { Synth.setLastX(path, "LastTupleIn", synth.getSynthNameLocal(), false); }
     static String getLastTupleIn(Synth synth) { return Synth.getLastX("LastTupleIn", synth.getSynthNameLocal(), false); }
@@ -363,31 +363,31 @@ public class Midi
     
     static void setLastTupleOutChannel(int channel, Synth synth) { Synth.setLastX("" + channel, "LastTupleOutChannel", synth.getSynthNameLocal(), false); }
     static int getLastTupleOutChannel(Synth synth) 
-    { 
+        { 
         String val = Synth.getLastX("LastTupleOutChannel", synth.getSynthNameLocal(), false); 
         if (val == null) return -1;
         else 
             {
-                try
-                    { return Integer.parseInt(val); }
-                catch (Exception e)
-                    { e.printStackTrace(); return -1; }
+            try
+                { return Integer.parseInt(val); }
+            catch (Exception e)
+                { e.printStackTrace(); return -1; }
             }
-    }
+        }
     
     static void setLastTupleKeyChannel(int channel, Synth synth) { Synth.setLastX("" + channel, "LastTupleKeyChannel", synth.getSynthNameLocal(), false); }
     static int getLastTupleKeyChannel(Synth synth) 
-    { 
+        { 
         String val = Synth.getLastX("LastTupleKeyChannel", synth.getSynthNameLocal(), false); 
         if (val == null) return -1;
         else 
             {
-                try
-                    { return Integer.parseInt(val); }
-                catch (Exception e)
-                    { e.printStackTrace(); return -1; }
+            try
+                { return Integer.parseInt(val); }
+            catch (Exception e)
+                { e.printStackTrace(); return -1; }
             }
-    }
+        }
     
 
 
@@ -399,158 +399,158 @@ public class Midi
         provide the inReceiver and keyReceiver to be attached to the input and keyboard/controller
         input.  You get these with Synth.buildKeyReceiver() and Synth.buildInReceiver() */ 
     public static Tuple getNewTuple(Tuple old, Synth synth, String message, Receiver inReceiver, Receiver keyReceiver)
-    {
+        {
         updateDevices();
         
         if (inDevices.size() == 0)
             {
-                JOptionPane.showOptionDialog(synth, "There are no MIDI devices available to receive from.",  
-                                             "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                                             JOptionPane.WARNING_MESSAGE, null,
-                                             new String[] { "Run Disconnected" }, "Run Disconnected");
-                return CANCELLED;
+            JOptionPane.showOptionDialog(synth, "There are no MIDI devices available to receive from.",  
+                "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+                JOptionPane.WARNING_MESSAGE, null,
+                new String[] { "Run Disconnected" }, "Run Disconnected");
+            return CANCELLED;
             }
         else if (outDevices.size() == 0)
             {
-                JOptionPane.showOptionDialog(synth, "There are no MIDI devices available to send to.",  
-                                             "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                                             JOptionPane.WARNING_MESSAGE, null,
-                                             new String[] { "Run Disconnected" }, "Run Disconnected");
-                return CANCELLED;
+            JOptionPane.showOptionDialog(synth, "There are no MIDI devices available to send to.",  
+                "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+                JOptionPane.WARNING_MESSAGE, null,
+                new String[] { "Run Disconnected" }, "Run Disconnected");
+            return CANCELLED;
             }
         else
             {
-                String[] kc = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
-                String[] rc = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
+            String[] kc = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
+            String[] rc = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
 
-                JComboBox inCombo = new JComboBox(inDevices.toArray());
-                inCombo.setMaximumRowCount(32);
-                if (old != null && old.inWrap != null && inDevices.indexOf(old.inWrap) != -1)
-                    inCombo.setSelectedIndex(inDevices.indexOf(old.inWrap));
-                else if (findDevice(getLastTupleIn(synth), inDevices) != null)
-                    inCombo.setSelectedItem(findDevice(getLastTupleIn(synth), inDevices));
+            JComboBox inCombo = new JComboBox(inDevices.toArray());
+            inCombo.setMaximumRowCount(32);
+            if (old != null && old.inWrap != null && inDevices.indexOf(old.inWrap) != -1)
+                inCombo.setSelectedIndex(inDevices.indexOf(old.inWrap));
+            else if (findDevice(getLastTupleIn(synth), inDevices) != null)
+                inCombo.setSelectedItem(findDevice(getLastTupleIn(synth), inDevices));
 
-                JComboBox outCombo = new JComboBox(outDevices.toArray());
-                outCombo.setMaximumRowCount(32);
-                if (old != null && old.outWrap != null && outDevices.indexOf(old.outWrap) != -1)
-                    outCombo.setSelectedIndex(outDevices.indexOf(old.outWrap));
-                else if (findDevice(getLastTupleOut(synth), outDevices) != null)
-                    outCombo.setSelectedItem(findDevice(getLastTupleOut(synth), outDevices));
+            JComboBox outCombo = new JComboBox(outDevices.toArray());
+            outCombo.setMaximumRowCount(32);
+            if (old != null && old.outWrap != null && outDevices.indexOf(old.outWrap) != -1)
+                outCombo.setSelectedIndex(outDevices.indexOf(old.outWrap));
+            else if (findDevice(getLastTupleOut(synth), outDevices) != null)
+                outCombo.setSelectedItem(findDevice(getLastTupleOut(synth), outDevices));
 
-                JComboBox keyCombo = new JComboBox(keyDevices.toArray());
-                keyCombo.setMaximumRowCount(32);
-                keyCombo.setSelectedIndex(0);  // "none"
-                if (old != null && old.keyWrap != null && keyDevices.indexOf(old.keyWrap) != -1)
-                    keyCombo.setSelectedIndex(keyDevices.indexOf(old.keyWrap));
-                else if (findDevice(getLastTupleKey(synth), keyDevices) != null)
-                    keyCombo.setSelectedItem(findDevice(getLastTupleKey(synth), keyDevices));
+            JComboBox keyCombo = new JComboBox(keyDevices.toArray());
+            keyCombo.setMaximumRowCount(32);
+            keyCombo.setSelectedIndex(0);  // "none"
+            if (old != null && old.keyWrap != null && keyDevices.indexOf(old.keyWrap) != -1)
+                keyCombo.setSelectedIndex(keyDevices.indexOf(old.keyWrap));
+            else if (findDevice(getLastTupleKey(synth), keyDevices) != null)
+                keyCombo.setSelectedItem(findDevice(getLastTupleKey(synth), keyDevices));
 
-                JTextField outID = null;
-                String initialID = synth.reviseID(null);
-                if (initialID != null)
-                    outID = new JTextField(synth.reviseID(null));
+            JTextField outID = null;
+            String initialID = synth.reviseID(null);
+            if (initialID != null)
+                outID = new JTextField(synth.reviseID(null));
 
-                JComboBox outChannelsCombo = new JComboBox(rc);
-                outChannelsCombo.setMaximumRowCount(17);
-                if (old != null)
-                    outChannelsCombo.setSelectedIndex(old.outChannel - 1);
-                else if (getLastTupleOutChannel(synth) > 0)
-                    outChannelsCombo.setSelectedIndex(getLastTupleOutChannel(synth) - 1);
+            JComboBox outChannelsCombo = new JComboBox(rc);
+            outChannelsCombo.setMaximumRowCount(17);
+            if (old != null)
+                outChannelsCombo.setSelectedIndex(old.outChannel - 1);
+            else if (getLastTupleOutChannel(synth) > 0)
+                outChannelsCombo.setSelectedIndex(getLastTupleOutChannel(synth) - 1);
                                 
-                JComboBox keyChannelsCombo = new JComboBox(kc);
-                keyChannelsCombo.setMaximumRowCount(17);
-                if (old != null)
-                    keyChannelsCombo.setSelectedIndex(old.keyChannel);
-                else if (getLastTupleKeyChannel(synth) > 0)
-                    keyChannelsCombo.setSelectedIndex(getLastTupleKeyChannel(synth));
+            JComboBox keyChannelsCombo = new JComboBox(kc);
+            keyChannelsCombo.setMaximumRowCount(17);
+            if (old != null)
+                keyChannelsCombo.setSelectedIndex(old.keyChannel);
+            else if (getLastTupleKeyChannel(synth) > 0)
+                keyChannelsCombo.setSelectedIndex(getLastTupleKeyChannel(synth));
 
                         
-                boolean result = false;
+            boolean result = false;
+            if (initialID != null)
+                result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Synth ID", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, outID, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
+            else
+                result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
+                                
+            if (result)
+                {
+                // we need to build a tuple
+                                
+                Tuple tuple = new Tuple();
+                                
+                tuple.keyChannel = keyChannelsCombo.getSelectedIndex();
+                tuple.outChannel = outChannelsCombo.getSelectedIndex() + 1;
+                
                 if (initialID != null)
-                    result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Synth ID", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, outID, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
-                else
-                    result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
-                                
-                if (result)
                     {
-                        // we need to build a tuple
+                    String prospectiveID = outID.getText();
+                    tuple.id = synth.reviseID(prospectiveID);
+                    if (!tuple.id.equals(prospectiveID))
+                        {
+                        JOptionPane.showMessageDialog(synth, "The ID was revised to: " + tuple.id, "Device ID", JOptionPane.WARNING_MESSAGE);
+                        }
+                    }
                                 
-                        Tuple tuple = new Tuple();
-                                
-                        tuple.keyChannel = keyChannelsCombo.getSelectedIndex();
-                        tuple.outChannel = outChannelsCombo.getSelectedIndex() + 1;
-                
-                        if (initialID != null)
-                            {
-                                String prospectiveID = outID.getText();
-                                tuple.id = synth.reviseID(prospectiveID);
-                                if (!tuple.id.equals(prospectiveID))
-                                    {
-                                        JOptionPane.showMessageDialog(synth, "The ID was revised to: " + tuple.id, "Device ID", JOptionPane.WARNING_MESSAGE);
-                                    }
-                            }
-                                
-                        tuple.inWrap = ((MidiDeviceWrapper)(inCombo.getSelectedItem()));
-                        tuple.in = tuple.inWrap.getThru(inReceiver);
-                        tuple.inReceiver = inReceiver;
-                        if (tuple.in == null)
-                            {
-                                JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the incoming MIDI Device.",  
-                                                             "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                                                             JOptionPane.WARNING_MESSAGE, null,
-                                                             new String[] { "Run Disconnected" }, "Run Disconnected");
-                                return FAILED;
-                            }
+                tuple.inWrap = ((MidiDeviceWrapper)(inCombo.getSelectedItem()));
+                tuple.in = tuple.inWrap.getThru(inReceiver);
+                tuple.inReceiver = inReceiver;
+                if (tuple.in == null)
+                    {
+                    JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the incoming MIDI Device.",  
+                        "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+                        JOptionPane.WARNING_MESSAGE, null,
+                        new String[] { "Run Disconnected" }, "Run Disconnected");
+                    return FAILED;
+                    }
 
-                        tuple.outWrap = ((MidiDeviceWrapper)(outCombo.getSelectedItem()));
-                        tuple.out = tuple.outWrap.getReceiver();
-                        if (tuple.out == null)
-                            {
-                                JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the outgoing MIDI Device.",  
-                                                             "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                                                             JOptionPane.WARNING_MESSAGE, null,
-                                                             new String[] { "Run Disconnected" }, "Run Disconnected");
-                                return FAILED;
-                            }
+                tuple.outWrap = ((MidiDeviceWrapper)(outCombo.getSelectedItem()));
+                tuple.out = tuple.outWrap.getReceiver();
+                if (tuple.out == null)
+                    {
+                    JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the outgoing MIDI Device.",  
+                        "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+                        JOptionPane.WARNING_MESSAGE, null,
+                        new String[] { "Run Disconnected" }, "Run Disconnected");
+                    return FAILED;
+                    }
 
-                        if (keyCombo.getSelectedItem() instanceof String)
-                            {
-                                tuple.keyWrap = null;
-                                tuple.key = null;
-                            }
-                        else
-                            {
-                                tuple.keyWrap = ((MidiDeviceWrapper)(keyCombo.getSelectedItem()));
-                                tuple.key = tuple.keyWrap.getThru(keyReceiver);
-                                tuple.keyReceiver = keyReceiver;
-                                if (tuple.key == null)
-                                    {
-                                        JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the Controller MIDI Device.",  
-                                                                     "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                                                                     JOptionPane.WARNING_MESSAGE, null,
-                                                                     new String[] { "Run without Controller" }, "Run without Controller");
-                                        tuple.keyWrap = null;
-                                        tuple.key = null;
-                                    }
-                            }
+                if (keyCombo.getSelectedItem() instanceof String)
+                    {
+                    tuple.keyWrap = null;
+                    tuple.key = null;
+                    }
+                else
+                    {
+                    tuple.keyWrap = ((MidiDeviceWrapper)(keyCombo.getSelectedItem()));
+                    tuple.key = tuple.keyWrap.getThru(keyReceiver);
+                    tuple.keyReceiver = keyReceiver;
+                    if (tuple.key == null)
+                        {
+                        JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the Controller MIDI Device.",  
+                            "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+                            JOptionPane.WARNING_MESSAGE, null,
+                            new String[] { "Run without Controller" }, "Run without Controller");
+                        tuple.keyWrap = null;
+                        tuple.key = null;
+                        }
+                    }
                     
-                        setLastTupleIn(tuple.inWrap.toString(), synth);
-                        setLastTupleOut(tuple.outWrap.toString(), synth);
-                        if (tuple.keyWrap == null)
-                            setLastTupleKey("None", synth);
-                        else
-                            setLastTupleKey(tuple.keyWrap.toString(), synth);
-                        setLastTupleOutChannel(tuple.outChannel, synth);
-                        setLastTupleKeyChannel(tuple.keyChannel, synth);
-                
-                        return tuple;
-                    }
+                setLastTupleIn(tuple.inWrap.toString(), synth);
+                setLastTupleOut(tuple.outWrap.toString(), synth);
+                if (tuple.keyWrap == null)
+                    setLastTupleKey("None", synth);
                 else
-                    {
-                        return CANCELLED;
-                    }
+                    setLastTupleKey(tuple.keyWrap.toString(), synth);
+                setLastTupleOutChannel(tuple.outChannel, synth);
+                setLastTupleKeyChannel(tuple.keyChannel, synth);
+                
+                return tuple;
+                }
+            else
+                {
+                return CANCELLED;
+                }
             }       
-    }
+        }
 
 
     public static final int CCDATA_TYPE_RAW_CC = 0;      
@@ -561,21 +561,21 @@ public class Midi
 
 
     public static class CCData
-    {
+        {
         public int type;
         public int number;
         public int value;
         public int channel;
         public boolean increment;
         public CCData(int type, int number, int value, int channel, boolean increment)
-        { this.type = type; this.number = number; this.value = value; this.increment = increment; this.channel = channel; }
-    }
+            { this.type = type; this.number = number; this.value = value; this.increment = increment; this.channel = channel; }
+        }
         
 
         
         
     public static class Parser
-    {
+        {
 
 
         ///// INTRODUCTION TO THE CC/RPN/NRPN PARSER
@@ -709,161 +709,161 @@ public class Midi
 
         // we presume that the channel never changes
         CCData parseCC(int channel, int number, int value, boolean requireLSB, boolean requireMSB)
-        {
+            {
             // BEGIN PARSER
 
             // Start of NRPN
             if (number == 99)
                 {
-                    status[channel] = NRPN_START;
-                    controllerNumberMSB[channel] = value;
-                    return null;
+                status[channel] = NRPN_START;
+                controllerNumberMSB[channel] = value;
+                return null;
                 }
 
             // End of NRPN
             else if (number == 98)
                 {
-                    controllerValueMSB[channel] = 0;
-                    if (status[channel] == NRPN_START)
-                        {
-                            status[channel] = NRPN_END;
-                            controllerNumberLSB[channel] = value;
-                            controllerValueLSB[channel]  = -1;
-                            controllerValueMSB[channel]  = -1;
-                        }
-                    else status[channel] = INVALID;
-                    return null;
+                controllerValueMSB[channel] = 0;
+                if (status[channel] == NRPN_START)
+                    {
+                    status[channel] = NRPN_END;
+                    controllerNumberLSB[channel] = value;
+                    controllerValueLSB[channel]  = -1;
+                    controllerValueMSB[channel]  = -1;
+                    }
+                else status[channel] = INVALID;
+                return null;
                 }
                 
             // Start of RPN or NULL
             else if (number == 101)
                 {
-                    if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
-                        {
-                            status[channel] = INVALID;
-                        }
-                    else
-                        {
-                            status[channel] = RPN_START;
-                            controllerNumberMSB[channel] = value;
-                        }
-                    return null;
+                if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
+                    {
+                    status[channel] = INVALID;
+                    }
+                else
+                    {
+                    status[channel] = RPN_START;
+                    controllerNumberMSB[channel] = value;
+                    }
+                return null;
                 }
 
             // End of RPN or NULL
             else if (number == 100)
                 {
-                    controllerValueMSB[channel] = 0;
-                    if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
-                        {
-                            status[channel] = INVALID;
-                        }
-                    else if (status[channel] == RPN_START)
-                        {
-                            status[channel] = RPN_END;
-                            controllerNumberLSB[channel] = value;
-                            controllerValueLSB[channel]  = -1;
-                            controllerValueMSB[channel]  = -1;
-                        }
-                    return null;
+                controllerValueMSB[channel] = 0;
+                if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
+                    {
+                    status[channel] = INVALID;
+                    }
+                else if (status[channel] == RPN_START)
+                    {
+                    status[channel] = RPN_END;
+                    controllerNumberLSB[channel] = value;
+                    controllerValueLSB[channel]  = -1;
+                    controllerValueMSB[channel]  = -1;
+                    }
+                return null;
                 }
 
             else if ((number == 6 || number == 38 || number == 96 || number == 97) && (status[channel] == NRPN_END || status[channel] == RPN_END))  // we're currently parsing NRPN or RPN
                 {
-                    int controllerNumber =  (((int) controllerNumberMSB[channel]) << 7) | controllerNumberLSB[channel] ;
+                int controllerNumber =  (((int) controllerNumberMSB[channel]) << 7) | controllerNumberLSB[channel] ;
                         
-                    if (number == 6)
-                        {
-                            controllerValueMSB[channel] = value;
-                            if (requireLSB && controllerValueLSB[channel] == -1)
-                                return null;
-                            if (status[channel] == NRPN_END)
-                                return handleNRPN(channel, controllerNumber, controllerValueLSB[channel] == -1 ? 0 : controllerValueLSB[channel], controllerValueMSB[channel]);
-                            else
-                                return handleRPN(channel, controllerNumber, controllerValueLSB[channel] == -1 ? 0 : controllerValueLSB[channel], controllerValueMSB[channel]);
-                        }
+                if (number == 6)
+                    {
+                    controllerValueMSB[channel] = value;
+                    if (requireLSB && controllerValueLSB[channel] == -1)
+                        return null;
+                    if (status[channel] == NRPN_END)
+                        return handleNRPN(channel, controllerNumber, controllerValueLSB[channel] == -1 ? 0 : controllerValueLSB[channel], controllerValueMSB[channel]);
+                    else
+                        return handleRPN(channel, controllerNumber, controllerValueLSB[channel] == -1 ? 0 : controllerValueLSB[channel], controllerValueMSB[channel]);
+                    }
                                                                                                                         
-                    // Data Entry LSB for RPN, NRPN
-                    else if (number == 38)
-                        {
-                            controllerValueLSB[channel] = value;
-                            if (requireMSB && controllerValueMSB[channel] == -1)
-                                return null;          
-                            if (status[channel] == NRPN_END)
-                                return handleNRPN(channel, controllerNumber, controllerValueLSB[channel], controllerValueMSB[channel] == -1 ? 0 : controllerValueMSB[channel]);
-                            else
-                                return handleRPN(channel, controllerNumber, controllerValueLSB[channel], controllerValueMSB[channel] == -1 ? 0 : controllerValueMSB[channel]);
-                        }
+                // Data Entry LSB for RPN, NRPN
+                else if (number == 38)
+                    {
+                    controllerValueLSB[channel] = value;
+                    if (requireMSB && controllerValueMSB[channel] == -1)
+                        return null;          
+                    if (status[channel] == NRPN_END)
+                        return handleNRPN(channel, controllerNumber, controllerValueLSB[channel], controllerValueMSB[channel] == -1 ? 0 : controllerValueMSB[channel]);
+                    else
+                        return handleRPN(channel, controllerNumber, controllerValueLSB[channel], controllerValueMSB[channel] == -1 ? 0 : controllerValueMSB[channel]);
+                    }
                                                                                                                         
-                    // Data Increment for RPN, NRPN
-                    else if (number == 96)
-                        {
-                            if (value == 0)
-                                value = 1;
-                            if (status[channel] == NRPN_END)
-                                return handleNRPNIncrement(channel, controllerNumber, value);
-                            else
-                                return handleRPNIncrement(channel, controllerNumber, value);
-                        }
+                // Data Increment for RPN, NRPN
+                else if (number == 96)
+                    {
+                    if (value == 0)
+                        value = 1;
+                    if (status[channel] == NRPN_END)
+                        return handleNRPNIncrement(channel, controllerNumber, value);
+                    else
+                        return handleRPNIncrement(channel, controllerNumber, value);
+                    }
 
-                    // Data Decrement for RPN, NRPN
-                    else // if (number == 97)
-                        {
-                            if (value == 0)
-                                value = -1;
-                            if (status[channel] == NRPN_END)
-                                return handleNRPNIncrement(channel, controllerNumber, -value);
-                            else
-                                return handleRPNIncrement(channel, controllerNumber, -value);
-                        }
+                // Data Decrement for RPN, NRPN
+                else // if (number == 97)
+                    {
+                    if (value == 0)
+                        value = -1;
+                    if (status[channel] == NRPN_END)
+                        return handleNRPNIncrement(channel, controllerNumber, -value);
+                    else
+                        return handleRPNIncrement(channel, controllerNumber, -value);
+                    }
                                 
                 }
                         
             else  // Some other CC
                 {
-                    // status[channel] = INVALID;           // I think it's fine to send other CC in the middle of NRPN or RPN
-                    return handleRawCC(channel, number, value);
+                // status[channel] = INVALID;           // I think it's fine to send other CC in the middle of NRPN or RPN
+                return handleRawCC(channel, number, value);
                 }
-        }
+            }
         
         public CCData processCC(ShortMessage message, boolean requireLSB, boolean requireMSB)
-        {
+            {
             int num = message.getData1();
             int val = message.getData2();
             int channel = message.getChannel();
             return parseCC(channel, num, val, requireLSB, requireMSB);
-        }
+            }
         
         public CCData handleNRPN(int channel, int controllerNumber, int _controllerValueLSB, int _controllerValueMSB)
-        {
+            {
             if (_controllerValueLSB < 0 || _controllerValueMSB < 0)
                 System.err.println("WARNING, LSB or MSB < 0.  RPN: " + controllerNumber + "   LSB: " + _controllerValueLSB + "  MSB: " + _controllerValueMSB);
             return new CCData(CCDATA_TYPE_NRPN, controllerNumber, _controllerValueLSB | (_controllerValueMSB << 7), channel, false);
-        }
+            }
         
         public CCData handleNRPNIncrement(int channel, int controllerNumber, int delta)
-        {
+            {
             return new CCData(CCDATA_TYPE_NRPN, controllerNumber, delta, channel, true);
-        }
+            }
 
         public CCData handleRPN(int channel, int controllerNumber, int _controllerValueLSB, int _controllerValueMSB)
-        {
+            {
             if (_controllerValueLSB < 0 || _controllerValueMSB < 0)
                 System.err.println("WARNING, LSB or MSB < 0.  RPN: " + controllerNumber + "   LSB: " + _controllerValueLSB + "  MSB: " + _controllerValueMSB);
             return new CCData(CCDATA_TYPE_RPN, controllerNumber, _controllerValueLSB | (_controllerValueMSB << 7), channel, false);
-        }
+            }
         
         public CCData handleRPNIncrement(int channel, int controllerNumber, int delta)
-        {
+            {
             return new CCData(CCDATA_TYPE_RPN, controllerNumber, delta, channel, true);
-        }
+            }
 
         public CCData handleRawCC(int channel, int controllerNumber, int value)
-        {
+            {
             return new CCData(CCDATA_TYPE_RAW_CC, controllerNumber, value, channel, false);
+            }
         }
-    }
                 
     public Parser controlParser = new Parser();
     public Parser synthParser = new Parser();
-}
+    }

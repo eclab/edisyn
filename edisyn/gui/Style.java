@@ -16,7 +16,7 @@ import javax.swing.*;
 */
 
 public class Style
-{
+    {
     
     /////// GLOBAL CONSTANTS
     
@@ -107,8 +107,8 @@ public class Style
     /////// CHECKBOX CONSTANTS
     /** Border around arpeggiator checkboxes */
     public static final Border CHECKBOX_HIGHLIGHTED_BORDER = BorderFactory.createCompoundBorder(
-                                                                                                BorderFactory.createEmptyBorder(2, 2, 2, 2),
-                                                                                                BorderFactory.createLineBorder(Color.red, 1, true));
+        BorderFactory.createEmptyBorder(2, 2, 2, 2),
+        BorderFactory.createLineBorder(Color.red, 1, true));
     public static final Border CHECKBOX_NON_HIGHLIGHTED_BORDER = BorderFactory.createEmptyBorder(3, 3, 3, 3);
     
 
@@ -141,12 +141,12 @@ public class Style
         
     /** Updates the graphics rendering hints before drawing.  Called by a few widgets.  */
     public static void prepareGraphics(Graphics g)
-    {
+        {
         Graphics2D graphics = (Graphics2D) g;
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-    }
+        }
         
 
     /////// OS DISTINGUISHING PROCEDURES
@@ -154,26 +154,26 @@ public class Style
     private static String OS = System.getProperty("os.name").toLowerCase();
 
     public static boolean isWindows() 
-    {
+        {
         return (OS.indexOf("win") >= 0);
-    }
+        }
 
     public static boolean isMac() 
-    {
+        {
         return (OS.indexOf("mac") >= 0 || System.getProperty("mrj.version") != null);
-    }
+        }
 
     public static boolean isUnix() 
-    {
+        {
         return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
-    }
+        }
         
     static
-    {
+        {
         if (isUnix())
             {
-                SMALL_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 9);
-                CHOOSER_INSETS = new Insets(0, 0, 2, 4); 
+            SMALL_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 9);
+            CHOOSER_INSETS = new Insets(0, 0, 2, 4); 
             }
-    }    
-}
+        }    
+    }

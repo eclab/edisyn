@@ -23,7 +23,7 @@ import java.awt.event.*;
 */
 
 public class VBox extends JComponent implements Gatherable
-    {
+{
     Box box;
     JPanel panel = new JPanel();
     JComponent bottom;
@@ -31,7 +31,7 @@ public class VBox extends JComponent implements Gatherable
     public Insets getInsets() { return Style.VBOX_INSETS; }
 
     public VBox()
-        {
+    {
         setLayout(new BorderLayout());
         setBackground(Style.BACKGROUND_COLOR);
         box = new Box(BoxLayout.Y_AXIS);
@@ -39,69 +39,69 @@ public class VBox extends JComponent implements Gatherable
         panel.setLayout(new BorderLayout());
         panel.setBackground(Style.BACKGROUND_COLOR);
         add(panel, BorderLayout.CENTER);
-        }
+    }
         
     public void addBottom(JComponent component)
-        {
+    {
         bottom = component;
         panel.add(bottom, BorderLayout.SOUTH);
-        }
+    }
 
     public void removeBottom()
-        {
+    {
         if (bottom != null)
             panel.remove(bottom);
         bottom = null;
-        }
+    }
         
     public void revalidate()
-        {
+    {
         panel.revalidate();
         box.revalidate();
         super.revalidate();
-        }
+    }
                 
     public void removeAll()
-        {
+    {
         box.removeAll();
-        }               
+    }               
                 
     public int getCount()
-        {
+    {
         return box.getComponentCount();
-        }
+    }
                 
     public void remove(int component)
-        {
+    {
         box.remove(component);
-        }        
+    }        
         
     public void remove(Component component)
-        {
+    {
         box.remove(component);
-        }   
+    }   
         
     public Component add(Component component)
-        {
+    {
         return box.add(component);
-        }
+    }
     
     public void gatherAllComponents(java.util.ArrayList list)
-        {
+    {
         Component[] c = box.getComponents();
         for(int i = 0; i < c.length; i++)
             {
-            list.add(c[i]);
-            if (c[i] instanceof Gatherable)
-                ((Gatherable)c[i]).gatherAllComponents(list);
+                list.add(c[i]);
+                if (c[i] instanceof Gatherable)
+                    ((Gatherable)c[i]).gatherAllComponents(list);
             }  
                         
         if (bottom != null)
             {                       
-            list.add(bottom);
-            if (bottom instanceof Gatherable)
-                ((Gatherable)bottom).gatherAllComponents(list);
+                list.add(bottom);
+                if (bottom instanceof Gatherable)
+                    ((Gatherable)bottom).gatherAllComponents(list);
             }               
-        }
-        
     }
+        
+}

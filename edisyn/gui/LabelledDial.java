@@ -24,7 +24,7 @@ import java.awt.event.*;
 */
 
 public class LabelledDial extends NumericalComponent
-    {
+{
     Dial dial;
     JLabel label;
     Box labelBox;
@@ -33,17 +33,17 @@ public class LabelledDial extends NumericalComponent
     public Insets getInsets() { return Style.LABELLED_DIAL_INSETS; }
 
     public void update(String key, Model model) 
-        {
+    {
         dial.field.setText(map(getState()));
         dial.repaint(); 
-        }
+    }
         
     public void setLabel(String text)
-        {
+    {
         label.setText(text);
         label.revalidate();
         label.repaint();
-        }
+    }
         
     public String map(int val) { return "" + (val - dial.subtractForDisplay); }
 
@@ -54,7 +54,7 @@ public class LabelledDial extends NumericalComponent
     /** Adds a second (or third or fourth or more!) label to the dial, to allow
         for multiline labels. */
     public JLabel addAdditionalLabel(String _label)
-        {
+    {
         JLabel label2 = new JLabel(_label);
                 
         label2.setFont(Style.SMALL_FONT);
@@ -73,35 +73,35 @@ public class LabelledDial extends NumericalComponent
         revalidate();
         repaint();
         return label2;
-        }
+    }
                 
     /** Makes a labelled dial for the given key parameter on the given synth, and with the given color and
         minimum and maximum.  Prior to display, subtractForDisplay is 
         SUBTRACTED from the parameter value.  You can use this to convert 0...127 in the model
         to -64...63 on-screen, for example.  */
     public LabelledDial(String _label, Synth synth, String key, Color staticColor, int min, int max, int subtractForDisplay)
-        {
+    {
         this(_label, synth, key, staticColor, min, max);
         dial.subtractForDisplay = subtractForDisplay;
         update(key, synth.getModel());
         repaint();
-        }
+    }
 
     /** Makes a labelled dial for the given key parameter on the given synth, and with the given color and
         minimum and maximum. */
     public LabelledDial(String _label, Synth synth, String key, Color staticColor, int min, int max)
-        {
+    {
         this(_label, synth, key, staticColor);
         setMin(min);
         setMax(max);
         synth.getModel().setMetricMin(key, min);
         synth.getModel().setMetricMax(key, max);
         setState(getState());
-        }
+    }
 
     /** Makes a labelled dial for the given key parameter on the given synth, and with the given color.  No minimum or maximum is set. */
     LabelledDial(String _label, Synth synth, String key, Color staticColor)
-        {
+    {
         super(synth, key);
         setBackground(Style.BACKGROUND_COLOR);
         dial = new Dial(staticColor);
@@ -127,25 +127,25 @@ public class LabelledDial extends NumericalComponent
         
         setLayout(new BorderLayout());
         add(panel, BorderLayout.NORTH);
-        }
+    }
 
     public int reviseToAltValue(int val) { return val; }
 
     public int getDefaultValue()
-        {
+    {
         if (isSymmetric())
             {
-            return (int)Math.ceil((getMin() + getMax()) / 2.0);             // we do ceiling so we push to 64 on 0...127
+                return (int)Math.ceil((getMin() + getMax()) / 2.0);             // we do ceiling so we push to 64 on 0...127
             }
         else return getMin();
-        }
+    }
                 
     /** A useful utility function which returns the element in the sorted 
         (low to high) array A which is closest to VALUE.  You could use this
         to search arrays for alt values for rounding for example. */
                 
     public static int findClosestValue(int value, int[] a) 
-        {
+    {
         if (value < a[0]) { return a[0]; }
         if (value > a[a.length-1]) { return a[a.length-1]; }
 
@@ -154,23 +154,23 @@ public class LabelledDial extends NumericalComponent
 
         while (lo <= hi) 
             {
-            // this could obviously overflow if hi and lo are really big
-            int mid = (hi + lo) / 2;
+                // this could obviously overflow if hi and lo are really big
+                int mid = (hi + lo) / 2;
 
-            if (value < a[mid]) 
-                hi = mid - 1;
-            else if (value > a[mid]) 
-                lo = mid + 1;
-            else 
-                return a[mid];
+                if (value < a[mid]) 
+                    hi = mid - 1;
+                else if (value > a[mid]) 
+                    lo = mid + 1;
+                else 
+                    return a[mid];
             }
                 
         return (a[lo] - value) < (value - a[hi]) ? a[lo] : a[hi];
-        }
+    }
 
 
     class Dial extends JPanel
-        {
+    {
         // What's going on?  Is the user changing the dial?
         public static final int STATUS_STATIC = 0;
         public static final int STATUS_DIAL_DYNAMIC = 1;
@@ -204,19 +204,19 @@ public class LabelledDial extends NumericalComponent
         public Dimension getMinimumSize() { return new Dimension(55, 55); }
         
         void mouseReleased(MouseEvent e)
-            {                       
+        {                       
             if (mouseDown)
                 {
-                status = STATUS_STATIC;
-                repaint();
-                mouseDown = false;
-                if (releaseListener != null)
-                    Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
+                    status = STATUS_STATIC;
+                    repaint();
+                    mouseDown = false;
+                    if (releaseListener != null)
+                        Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
                 }
-            }
+        }
         
         public Dial(Color staticColor)
-            {
+        {
             this.staticColor = staticColor;
 
             field.setFont(Style.DIAL_FONT);
@@ -225,109 +225,109 @@ public class LabelledDial extends NumericalComponent
         
             addMouseWheelListener(new MouseWheelListener()
                 {
-                public void mouseWheelMoved(MouseWheelEvent e) 
+                    public void mouseWheelMoved(MouseWheelEvent e) 
                     {
-                    int val = getState() - e.getWheelRotation();
-                    if (val > getMax()) val = getMax();
-                    if (val < getMin()) val = getMin();
+                        int val = getState() - e.getWheelRotation();
+                        if (val > getMax()) val = getMax();
+                        if (val < getMin()) val = getMin();
 
-                    setState(val);
+                        setState(val);
                     }
                 });
         
             addMouseListener(new MouseAdapter()
                 {
-                public void mousePressed(MouseEvent e)
+                    public void mousePressed(MouseEvent e)
                     {
-                    mouseDown = true;
-                    startX = e.getX();
-                    startY = e.getY();
-                    startState = getState();
-                    status = STATUS_DIAL_DYNAMIC;
-                    repaint();
+                        mouseDown = true;
+                        startX = e.getX();
+                        startY = e.getY();
+                        startState = getState();
+                        status = STATUS_DIAL_DYNAMIC;
+                        repaint();
 
-                    if (releaseListener != null)
-                        Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
+                        if (releaseListener != null)
+                            Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
 
-                    // This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
-                    // same component that received mouseClicked.  What the ... ? Asinine.
-                    // So we create a global event listener which checks for mouseReleased and
-                    // calls our own private function.  EVERYONE is going to do this.
+                        // This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
+                        // same component that received mouseClicked.  What the ... ? Asinine.
+                        // So we create a global event listener which checks for mouseReleased and
+                        // calls our own private function.  EVERYONE is going to do this.
                                 
-                    Toolkit.getDefaultToolkit().addAWTEventListener( releaseListener = new AWTEventListener()
-                        {
-                        public void eventDispatched(AWTEvent e)
+                        Toolkit.getDefaultToolkit().addAWTEventListener( releaseListener = new AWTEventListener()
                             {
-                            if (e instanceof MouseEvent && e.getID() == MouseEvent.MOUSE_RELEASED)
+                                public void eventDispatched(AWTEvent e)
                                 {
-                                mouseReleased((MouseEvent)e);
+                                    if (e instanceof MouseEvent && e.getID() == MouseEvent.MOUSE_RELEASED)
+                                        {
+                                            mouseReleased((MouseEvent)e);
+                                        }
                                 }
-                            }
-                        }, AWTEvent.MOUSE_EVENT_MASK);
+                            }, AWTEvent.MOUSE_EVENT_MASK);
                     }
                         
-                public void mouseReleased(MouseEvent e)
+                    public void mouseReleased(MouseEvent e)
                     {
-                    status = STATUS_STATIC;
-                    repaint();
-                    if (releaseListener != null)
-                        Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
+                        status = STATUS_STATIC;
+                        repaint();
+                        if (releaseListener != null)
+                            Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
                     }
                 
-                public void mouseClicked(MouseEvent e)
+                    public void mouseClicked(MouseEvent e)
                     {
-                    if (synth.isShowingMutation())
-                        {
-                        synth.mutationMap.setFree(key, !synth.mutationMap.isFree(key));
-                        LabelledDial.this.repaint();
-                        }
-                    else if (e.getClickCount() == 2)
-                        {
-                        setState(getDefaultValue());
-                        }
+                        if (synth.isShowingMutation())
+                            {
+                                synth.mutationMap.setFree(key, !synth.mutationMap.isFree(key));
+                                LabelledDial.this.repaint();
+                            }
+                        else if (e.getClickCount() == 2)
+                            {
+                                setState(getDefaultValue());
+                            }
                     }
                 });
                         
             addMouseMotionListener(new MouseMotionAdapter()
                 {
-                public void mouseDragged(MouseEvent e)
+                    public void mouseDragged(MouseEvent e)
                     {
-                    //int x = e.getX() - startX;
-                    int y = -(e.getY() - startY);
-                    int range = (getMax() - getMin() + 1 );
-                    double multiplicand = 1;
-                    // for the time being, these will do the same thing (as DEFAULT_EXTENT == MAX_EXTENT)
-                    if (range <= DEFAULT_EXTENT)
-                        multiplicand = DEFAULT_EXTENT / (double) range;
-                    else
-                        multiplicand = MAX_EXTENT / (double) range;
+                        //int x = e.getX() - startX;
+                        int y = -(e.getY() - startY);
+                        int range = (getMax() - getMin() + 1 );
+                        double multiplicand = 1;
+                        // for the time being, these will do the same thing (as DEFAULT_EXTENT == MAX_EXTENT)
+                        if (range <= DEFAULT_EXTENT)
+                            multiplicand = DEFAULT_EXTENT / (double) range;
+                        else
+                            multiplicand = MAX_EXTENT / (double) range;
                     
-                    int proposedState = startState + (int)(y / multiplicand);
+                        int proposedState = startState + (int)(y / multiplicand);
 
-                    if (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
-                        ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK))
-                        {
-                        proposedState = reviseToAltValue(proposedState);
-                        }
+                        if (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
+                            ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK))
+                            {
+                                proposedState = reviseToAltValue(proposedState);
+                            }
                                         
-                    // at present we're just going to use y.  It's confusing to use either y or x.
-                    setState(proposedState);
-                    field.setText(map(getState()));
-                    repaint();
+                        // at present we're just going to use y.  It's confusing to use either y or x.
+                        setState(proposedState);
+                        field.setText(map(getState()));
+                        repaint();
                     }
                 });
 
             setLayout(new BorderLayout());
             add(field, BorderLayout.CENTER);
             repaint();
-            }
+        }
         
         AWTEventListener releaseListener = null;
         
         /** Returns the actual square within which the Dial's circle
             is drawn. */
         public Rectangle getDrawSquare()
-            {
+        {
             Insets insets = getInsets();
             Dimension size = getSize();
             int width = size.width - insets.left - insets.right;
@@ -336,40 +336,40 @@ public class LabelledDial extends NumericalComponent
             // How big do we draw our circle?
             if (width > height)
                 {
-                // base it on height
-                int h = height;
-                int w = h;
-                int y = insets.top;
-                int x = insets.left + (width - w) / 2;
-                return new Rectangle(x, y, w, h);
+                    // base it on height
+                    int h = height;
+                    int w = h;
+                    int y = insets.top;
+                    int x = insets.left + (width - w) / 2;
+                    return new Rectangle(x, y, w, h);
                 }
             else
                 {
-                // base it on width
-                int w = width;
-                int h = w;
-                int x = insets.left;
-                int y = insets.top + (height - h) / 2;
-                return new Rectangle(x, y, w, h);
+                    // base it on width
+                    int w = width;
+                    int h = w;
+                    int x = insets.left;
+                    int y = insets.top + (height - h) / 2;
+                    return new Rectangle(x, y, w, h);
                 }
-            }
+        }
         
         public boolean getCanonicalSymmetric() { return subtractForDisplay == 64 || subtractForDisplay == 50; }
         
         public double getCanonicalStartAngle()
-            {
+        {
             if (isSymmetric())
                 {
-                return 90 + (270 / 2);
+                    return 90 + (270 / 2);
                 }
             else
                 {
-                return 270;
+                    return 270;
                 }
-            }
+        }
                 
         public void paintComponent(Graphics g)
-            {
+        {
             super.paintComponent(g);
 
             int min = getMin();
@@ -403,41 +403,41 @@ public class LabelledDial extends NumericalComponent
 
             if (status == STATUS_DIAL_DYNAMIC)
                 {
-                graphics.setPaint(Style.DIAL_DYNAMIC_COLOR);
-                if (state == min)
-                    {
-                    interval = -5;
-                    // If we're basically at zero, we still want to show a little bit while the user is scrolling so
-                    // he gets some feedback. 
-                    //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270,  -5, Arc2D.OPEN);
-                    }
-                else
-                    {
-                    //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270,  -((state - min) / (double)(max - min) * 265) - 5, Arc2D.OPEN);
-                    }
+                    graphics.setPaint(Style.DIAL_DYNAMIC_COLOR);
+                    if (state == min)
+                        {
+                            interval = -5;
+                            // If we're basically at zero, we still want to show a little bit while the user is scrolling so
+                            // he gets some feedback. 
+                            //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270,  -5, Arc2D.OPEN);
+                        }
+                    else
+                        {
+                            //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270,  -((state - min) / (double)(max - min) * 265) - 5, Arc2D.OPEN);
+                        }
                 }
             else
                 {
-                graphics.setPaint(staticColor);
-                if (state == min)
-                    {
-                    interval = 0;
-                    // do nothing.  Here we'll literally draw a zero
-                    }
-                else
-                    {
-                    //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270,  -((state - min) / (double)(max - min) * 265) - 5, Arc2D.OPEN);
-                    }
+                    graphics.setPaint(staticColor);
+                    if (state == min)
+                        {
+                            interval = 0;
+                            // do nothing.  Here we'll literally draw a zero
+                        }
+                    else
+                        {
+                            //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270,  -((state - min) / (double)(max - min) * 265) - 5, Arc2D.OPEN);
+                        }
                 }
 
             arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, startAngle, interval, Arc2D.OPEN);            
             graphics.draw(arc);
-            }
         }
-
-
-
-
-
-
     }
+
+
+
+
+
+
+}

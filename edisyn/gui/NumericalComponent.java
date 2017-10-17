@@ -26,7 +26,7 @@ import java.awt.event.*;
 */
 
 public abstract class NumericalComponent extends JComponent implements Updatable
-    {
+{
     String key;
     Synth synth;
 
@@ -44,45 +44,45 @@ public abstract class NumericalComponent extends JComponent implements Updatable
         
     /** Returns the current value for the key in the model. */
     public int getState() 
-        {
+    {
         int _default = 0;
         if (minExists())
             _default = getMin();
         return (int) synth.getModel().get(key, _default); 
-        }
+    }
                 
     /** Sets the min value for the key in the model. */
     public void setMin(int val) 
-        { 
+    { 
         synth.getModel().setMin(key, val);  
         setState(getState()); 
-        }
+    }
                 
     /** Sets the max value for the key in the model. */
     public void setMax(int val) 
-        { 
+    { 
         synth.getModel().setMax(key, val);  
         setState(getState()); 
-        }
+    }
                 
     /** Sets the current value for the key in the model. */
     public void setState(int val) 
-        { 
+    { 
         if (maxExists() && minExists())  // we presume we're set up so we can do bounds checking
             {
-            int min = getMin();
-            int max = getMax();
-            if (val < min) val = min;
-            if (val > max) val = max;
+                int min = getMin();
+                int max = getMax();
+                if (val < min) val = min;
+                if (val > max) val = max;
             }
                 
         if (!synth.getModel().exists(key) || getState() != val)
             {
-            synth.getModel().set(key, val); 
-            update(key, synth.getModel());
-            repaint();
+                synth.getModel().set(key, val); 
+                update(key, synth.getModel());
+                repaint();
             }
-        }
+    }
         
     /** Registers the NumericalComponent as a listener for changes to the key in the model. */
     // this is here so we can override it in LabelledDial
@@ -90,32 +90,32 @@ public abstract class NumericalComponent extends JComponent implements Updatable
     // manually on LabelledDial, but update() won't get called
     // automatically on it.  See addLFO(...)
     public void register(String key)
-        {
+    {
         synth.getModel().register(key, this);
-        }
+    }
         
     public abstract void update(String key, Model model);
         
     public String getKey() { return key; }
     
     public void updateBorder()
-        {
+    {
         // If we're supposed to show our mutation, and I'm free to mutate, but I'm not showing it, show it
         if (synth.isShowingMutation() && synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
             {
-            borderColor = Color.RED;
+                borderColor = Color.RED;
             }
         // In all other situations, I should not be showing mutation.  If I am, stop it.
         else 
             {
-            borderColor = Color.BLACK;
+                borderColor = Color.BLACK;
             }
-        }
+    }
         
     public Color borderColor;
     
     public NumericalComponent(final Synth synth, final String key)
-        {
+    {
         super();
         this.key = key;
         this.synth = synth;
@@ -123,33 +123,33 @@ public abstract class NumericalComponent extends JComponent implements Updatable
         setBackground(Style.BACKGROUND_COLOR);
         Border border = new LineBorder(Color.BLACK, 1)
             {
-            public void paintBorder(final Component c, final Graphics g, final int x, final int y, final int width, final int height) 
+                public void paintBorder(final Component c, final Graphics g, final int x, final int y, final int width, final int height) 
                 {
-                super.lineColor = borderColor;
-                super.paintBorder(c, g, x, y, width, height);
+                    super.lineColor = borderColor;
+                    super.paintBorder(c, g, x, y, width, height);
                 }
             };
         setBorder(border);
         
         addMouseListener(new MouseAdapter()
             {
-            public void mouseClicked(MouseEvent e)
+                public void mouseClicked(MouseEvent e)
                 {
-                if (synth.isShowingMutation() && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
-                    {
-                    synth.mutationMap.setFree(key, !synth.mutationMap.isFree(key));
-                    // wrap the repaint in an invokelater because the dial isn't responding right
-                    SwingUtilities.invokeLater(new Runnable() { public void run() { repaint(); } });
-                    }
+                    if (synth.isShowingMutation() && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+                        {
+                            synth.mutationMap.setFree(key, !synth.mutationMap.isFree(key));
+                            // wrap the repaint in an invokelater because the dial isn't responding right
+                            SwingUtilities.invokeLater(new Runnable() { public void run() { repaint(); } });
+                        }
                 }
             });
         
-        }
+    }
 
     /** Mostly fills the background appropriately. */
     public void paintComponent(Graphics g)
-        {
+    {
         updateBorder();  // might require paintComponent to get called twice
         super.paintComponent(g);
-        }
     }
+}

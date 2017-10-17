@@ -24,7 +24,7 @@ import javax.sound.midi.*;
 */
 
 public class WaldorfBlofeld extends Synth
-    {
+{
     /// Various collections of parameter names for pop-up menus
         
     static final String[] FM_SOURCES = new String[] { "Off", "Osc1", "Osc2", "Osc3", "Noise", "LFO 1", "LFO 2", "LFO 3", "Filter Env", "Amp Env", "Env 3", "Env 4" };
@@ -76,10 +76,10 @@ public class WaldorfBlofeld extends Synth
     
     
     public WaldorfBlofeld()
-        {
+    {
         for(int i = 0; i < allParameters.length; i++)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
                                 
         /// SOUND PANEL
@@ -153,7 +153,7 @@ public class WaldorfBlofeld extends Synth
         model.set("name", "Init");
         
         loadDefaults();
-        }
+    }
                 
     
     public String getDefaultResourceFileName() { return "WaldorfBlofeld.init"; }
@@ -165,7 +165,7 @@ public class WaldorfBlofeld extends Synth
 
     // Adds the Global Arpeggiator category 
     public JComponent addArpeggiatorGlobal(Color color)
-        {
+    {
         Category category = new Category(this, "Arpeggiator", color);
                 
         JComponent comp;
@@ -203,9 +203,9 @@ public class WaldorfBlofeld extends Synth
                 
         comp = new LabelledDial("Pattern", this, "arpeggiatorpatternlength", color, 0, 16)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return "" + (val + 1);
+                    return "" + (val + 1);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Length");
@@ -213,11 +213,11 @@ public class WaldorfBlofeld extends Synth
 
         comp = new LabelledDial("Pattern", this, "arpeggiatorpattern", color, 0, 16)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val == 0) return "Off";
-                else if (val == 1) return "User";
-                else return "" + (val - 1);
+                    if (val == 0) return "Off";
+                    else if (val == 1) return "User";
+                    else return "" + (val - 1);
                 }
             };
         model.setMetricMin( "arpeggiatorpattern", 2);
@@ -225,18 +225,18 @@ public class WaldorfBlofeld extends Synth
 
         comp = new LabelledDial("Clock", this, "arpeggiatorclock", color, 0, 42)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return ARPEGGIATOR_SPEEDS[val];
+                    return ARPEGGIATOR_SPEEDS[val];
                 }
             };
         hbox.add(comp);
 
         comp = new LabelledDial("Length", this, "arpeggiatorlength", color, 0, 43)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return ARPEGGIATOR_LENGTHS[val];
+                    return ARPEGGIATOR_LENGTHS[val];
                 }
             };
         model.setMetricMax( "arpeggiatorlength", 42);
@@ -244,9 +244,9 @@ public class WaldorfBlofeld extends Synth
 
         comp = new LabelledDial("Octave", this, "arpeggiatoroctave", color, 0, 9)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return "" + (val + 1);
+                    return "" + (val + 1);
                 }
             };
         hbox.add(comp);
@@ -257,35 +257,35 @@ public class WaldorfBlofeld extends Synth
 
         comp = new LabelledDial("Tempo", this, "arpeggiatortempo", color, 0, 127)
             {
-            // 40...300
-            // BPM 165 and above we jump by 5
-            // BPM 90 and below we jump by 2
+                // 40...300
+                // BPM 165 and above we jump by 5
+                // BPM 90 and below we jump by 2
                         
-            // So 40...90 inclusive is 0...25
-            // 91 ... 165 is 26 ... 100
-            // 170 ... 300 is 101 ... 127
-            public String map(int val)
+                // So 40...90 inclusive is 0...25
+                // 91 ... 165 is 26 ... 100
+                // 170 ... 300 is 101 ... 127
+                public String map(int val)
                 {
-                if (val < 25)
-                    return "" + ((val * 2) + 40);
-                else if (val < 101)
-                    return "" + (val + 65);
-                else
-                    return "" + (((val - 101) * 5) + 170);
+                    if (val < 25)
+                        return "" + ((val * 2) + 40);
+                    else if (val < 101)
+                        return "" + (val + 65);
+                    else
+                        return "" + (((val - 101) * 5) + 170);
                 }
-            public int getDefaultValue() { return 55; }             // 120 BPM?
+                public int getDefaultValue() { return 55; }             // 120 BPM?
             };
         hbox.add(comp);
 
 
         category.add(hbox, BorderLayout.WEST);
         return category;
-        }
+    }
 
 
     // Adds the Arpeggiator Patterns category       
     public JComponent addArpeggiatorPatterns(Color color)
-        {
+    {
         Category category  = new Category(this, "Patterns", color);
                         
         JComponent comp;
@@ -297,76 +297,76 @@ public class WaldorfBlofeld extends Synth
         String[] steps = ARPEGGIATOR_PATTERN_STEPS;
         for(int row = 1; row < 17; row += 8)
             {
-            hbox = new HBox();
-            for(int i = row; i < row + 8; i++)
-                {
-                vbox = new VBox();
-                params = steps;
-                comp = new Chooser("Step " + i, this, "arp" + (i < 10 ? "0" : "") + i + "step", params);
-                vbox.add(comp);
-
-                comp = new CheckBox("Glide " + i, this, "arp" + (i < 10 ? "0" : "") + i + "glide");
-                vbox.add(comp);
-
-                comp = new LabelledDial("Accent " + i, this, "arp" + (i < 10 ? "0" : "") + i + "accent", color, 0, 7)
+                hbox = new HBox();
+                for(int i = row; i < row + 8; i++)
                     {
-                    public double getStartAngle() { return 270 / 7 * 4 + 90; }
-                    public String map(int val)
-                        {
-                        // if 0, it's silent
-                        // if >0 it's -96 ... +96 for 1...7
-                        if (val == 0) return "Rest";
-                        else return "" + (((val - 4) * 96) / 3);
-                        }
-                    public int getDefaultValue() { return 4; }
-                    };
-                vbox.add(comp);
-                model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "accent", 1);
-                vbox.add(Strut.makeVerticalStrut(3));
+                        vbox = new VBox();
+                        params = steps;
+                        comp = new Chooser("Step " + i, this, "arp" + (i < 10 ? "0" : "") + i + "step", params);
+                        vbox.add(comp);
+
+                        comp = new CheckBox("Glide " + i, this, "arp" + (i < 10 ? "0" : "") + i + "glide");
+                        vbox.add(comp);
+
+                        comp = new LabelledDial("Accent " + i, this, "arp" + (i < 10 ? "0" : "") + i + "accent", color, 0, 7)
+                            {
+                                public double getStartAngle() { return 270 / 7 * 4 + 90; }
+                                public String map(int val)
+                                {
+                                    // if 0, it's silent
+                                    // if >0 it's -96 ... +96 for 1...7
+                                    if (val == 0) return "Rest";
+                                    else return "" + (((val - 4) * 96) / 3);
+                                }
+                                public int getDefaultValue() { return 4; }
+                            };
+                        vbox.add(comp);
+                        model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "accent", 1);
+                        vbox.add(Strut.makeVerticalStrut(3));
                                 
-                // the little spaces cause Java to not slice off a bit of the last digit
-                comp = new LabelledDial(" Length " + i + " ", this, "arp" + (i < 10 ? "0" : "") + i + "length", color, 0, 7)
-                    {
-                    public double getStartAngle() { return 270 / 7 * 4 + 90; }
-                    public String map(int val)
-                        {
-                        // if 0, it's legato
-                        // if >0 it's -3 to +3 for 1...7
-                        if (val == 0) return "Legato";
-                        else return "" + (val - 4);
-                        }
-                    public int getDefaultValue() { return 4; }
-                    };
-                model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "length", 1);
-                vbox.add(comp);
-                vbox.add(Strut.makeVerticalStrut(3));
+                        // the little spaces cause Java to not slice off a bit of the last digit
+                        comp = new LabelledDial(" Length " + i + " ", this, "arp" + (i < 10 ? "0" : "") + i + "length", color, 0, 7)
+                            {
+                                public double getStartAngle() { return 270 / 7 * 4 + 90; }
+                                public String map(int val)
+                                {
+                                    // if 0, it's legato
+                                    // if >0 it's -3 to +3 for 1...7
+                                    if (val == 0) return "Legato";
+                                    else return "" + (val - 4);
+                                }
+                                public int getDefaultValue() { return 4; }
+                            };
+                        model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "length", 1);
+                        vbox.add(comp);
+                        vbox.add(Strut.makeVerticalStrut(3));
                                                                 
-                // the little spaces cause Java to not slice off a bit of the last digit
-                comp = new LabelledDial(" Timing " + i + " ", this, "arp" + (i < 10 ? "0" : "") + i + "timing", color, 0, 7)
-                    {
-                    public double getStartAngle() { return 270 / 7 * 4 + 90; }
-                    public String map(int val)
-                        {
-                        // if 0, it's random
-                        // if >0 it's -3 to +3 for 1...7
-                        if (val == 0) return "Rand";
-                        else return "" + (val - 4);
-                        }
-                    public int getDefaultValue() { return 4; }
-                    };
-                model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "timing", 1);
+                        // the little spaces cause Java to not slice off a bit of the last digit
+                        comp = new LabelledDial(" Timing " + i + " ", this, "arp" + (i < 10 ? "0" : "") + i + "timing", color, 0, 7)
+                            {
+                                public double getStartAngle() { return 270 / 7 * 4 + 90; }
+                                public String map(int val)
+                                {
+                                    // if 0, it's random
+                                    // if >0 it's -3 to +3 for 1...7
+                                    if (val == 0) return "Rand";
+                                    else return "" + (val - 4);
+                                }
+                                public int getDefaultValue() { return 4; }
+                            };
+                        model.setMetricMin( "arp" + (i < 10 ? "0" : "") + i + "timing", 1);
               
-                vbox.add(comp);
-                hbox.add(vbox);
-                }
+                        vbox.add(comp);
+                        hbox.add(vbox);
+                    }
 
-            main.add(hbox);
+                main.add(hbox);
             }
 
                 
         category.add(main, BorderLayout.WEST);
         return category;
-        }
+    }
 
 
 
@@ -392,22 +392,22 @@ public class WaldorfBlofeld extends Synth
     /** Discards existing parameter widgets and loads new ones according to the
         effect type on the given effect number. */
     void setupEffect(HBox[] parameters, JComponent[][][] parametersByEffect, int effect, int type)
-        {
+    {
         if (parameters[effect - 1] == null) return;  // not ready yet
                 
         parameters[effect - 1].removeAll();
         for(int i = 0; i < parametersByEffect[effect - 1][type].length; i++)
             {
-            parameters[effect - 1].add(parametersByEffect[effect - 1][type][i]);
+                parameters[effect - 1].add(parametersByEffect[effect - 1][type][i]);
             }
         parameters[effect-1].revalidate();
         repaint();
-        }
+    }
 
         
     /** Adds an Effect category.  */
     public JComponent addEffect(final int effect, Color color)
-        {
+    {
         // Effects are problematic because effect parameters are shared, and the same parameter
         // doesn't necessarily have the same range from effect type to effect type, grrr.
         // Additionally we have to remove and add various dials and other components depending
@@ -532,13 +532,13 @@ public class WaldorfBlofeld extends Synth
         System.arraycopy(ARPEGGIATOR_SPEEDS, 0, vals, 0, 30);  // just the first 30 
         comp = new LabelledDial("Length", this, "effect" + effect + "parameter10", color, 0, 29)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                // it turns out that the WaldorfBlofeld sends "127" when it doesn't have a setting yet for this
-                // parameter.  Dumb dumb dumb.  So we have to check for that.
-                if (val > 29)
-                    val = 0;
-                return vals[val];
+                    // it turns out that the WaldorfBlofeld sends "127" when it doesn't have a setting yet for this
+                    // parameter.  Dumb dumb dumb.  So we have to check for that.
+                    if (val > 29)
+                        val = 0;
+                    return vals[val];
                 }
             };
         parametersByEffect[effect - 1][CLKDELAY][2] = comp;
@@ -546,10 +546,10 @@ public class WaldorfBlofeld extends Synth
         // The Waldorf Blofeld has effects parameters 11....13 even though they're not used.  We'll give them min/max values
         for(int i = 11; i < 14; i++)
             {
-            model.set("effect" + effect + "parameter" + i, 0);
-            model.setMin("effect" + effect + "parameter" + i, 0);
-            model.setMax("effect" + effect + "parameter" + i, 127);
-            model.setStatus("effect" + effect + "parameter" + i, Model.STATUS_IMMUTABLE);
+                model.set("effect" + effect + "parameter" + i, 0);
+                model.setMin("effect" + effect + "parameter" + i, 0);
+                model.setMax("effect" + effect + "parameter" + i, 127);
+                model.setStatus("effect" + effect + "parameter" + i, Model.STATUS_IMMUTABLE);
             }
                         
         // Now we can set up the category as usual.
@@ -565,10 +565,10 @@ public class WaldorfBlofeld extends Synth
             params = EFFECTS_LONG;
         comp = new Chooser("Type", this, "effect" + effect + "type", params)
             {
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                setupEffect(parameters, parametersByEffect, effect, getState());
+                    super.update(key, model);
+                    setupEffect(parameters, parametersByEffect, effect, getState());
                 }
             };
         vbox.add(comp);
@@ -584,7 +584,7 @@ public class WaldorfBlofeld extends Synth
                 
         setupEffect(parameters, parametersByEffect, effect, BYPASS);
         return category;
-        }
+    }
 
 
 
@@ -595,7 +595,7 @@ public class WaldorfBlofeld extends Synth
 
     /** Add the Modulation category */
     public JComponent addModulation(Color color)
-        {
+    {
         Category category  = new Category(this, "Modulation", color);
                         
         JComponent comp;
@@ -606,36 +606,36 @@ public class WaldorfBlofeld extends Synth
         
         for(int row = 1; row < 17; row+= 8)
             {
-            hbox = new HBox();
-            for(int i = row; i < row + 8; i++)
-                {
-                vbox = new VBox();
-                params = MOD_SOURCES;
-                comp = new Chooser("Source " + i, this, "modulation" + i + "source", params);
-                vbox.add(comp);
+                hbox = new HBox();
+                for(int i = row; i < row + 8; i++)
+                    {
+                        vbox = new VBox();
+                        params = MOD_SOURCES;
+                        comp = new Chooser("Source " + i, this, "modulation" + i + "source", params);
+                        vbox.add(comp);
 
-                params = MOD_DESTINATIONS;
-                comp = new Chooser("Destination " + i, this, "modulation" + i + "destination", params);
-                vbox.add(comp);
+                        params = MOD_DESTINATIONS;
+                        comp = new Chooser("Destination " + i, this, "modulation" + i + "destination", params);
+                        vbox.add(comp);
 
-                comp = new LabelledDial("Level " + i, this, "modulation" + i + "amount", color, 0, 127, 64);  // it's Level, not Amount, so we save some horizontal space
-                vbox.add(comp);
+                        comp = new LabelledDial("Level " + i, this, "modulation" + i + "amount", color, 0, 127, 64);  // it's Level, not Amount, so we save some horizontal space
+                        vbox.add(comp);
 
-                hbox.add(vbox);
-                }
+                        hbox.add(vbox);
+                    }
                         
-            main.add(hbox);
+                main.add(hbox);
             }
                                 
         category.add(main, BorderLayout.WEST);
         return category;
-        }
+    }
 
 
 
     /** Add the Modifiers category */
     public JComponent addModifiers(Color color)
-        {
+    {
         Category category  = new Category(this, "Modifiers", color);
                         
         JComponent comp;
@@ -645,41 +645,41 @@ public class WaldorfBlofeld extends Synth
         
         for(int i = 1; i < 5; i++)
             {
-            vbox = new VBox();
+                vbox = new VBox();
                         
                         
-            params = MOD_SOURCES;
-            comp = new Chooser("A Source " + i, this, "modifier" + i + "sourcea", params);
-            vbox.add(comp);
+                params = MOD_SOURCES;
+                comp = new Chooser("A Source " + i, this, "modifier" + i + "sourcea", params);
+                vbox.add(comp);
 
-            // gotta change the first one to "constant" from "off" if we're in Source B
-            params = new String[MOD_SOURCES.length];
-            System.arraycopy(MOD_SOURCES, 0, params, 0, MOD_SOURCES.length);
-            params[0] = "Constant";
+                // gotta change the first one to "constant" from "off" if we're in Source B
+                params = new String[MOD_SOURCES.length];
+                System.arraycopy(MOD_SOURCES, 0, params, 0, MOD_SOURCES.length);
+                params[0] = "Constant";
 
-            comp = new Chooser("B Source " + i, this, "modifier" + i + "sourceb", params);
-            vbox.add(comp);
+                comp = new Chooser("B Source " + i, this, "modifier" + i + "sourceb", params);
+                vbox.add(comp);
 
-            params = MODIFIER_OPERATORS;
-            comp = new Chooser("Operation " + i, this, "modifier" + i + "operation", params);
-            vbox.add(comp);
+                params = MODIFIER_OPERATORS;
+                comp = new Chooser("Operation " + i, this, "modifier" + i + "operation", params);
+                vbox.add(comp);
 
-            // add some space
-            if (i > 1)  // not the first one
-                {
-                hbox.add(Strut.makeHorizontalStrut(20));
-                }
+                // add some space
+                if (i > 1)  // not the first one
+                    {
+                        hbox.add(Strut.makeHorizontalStrut(20));
+                    }
 
-            hbox.add(vbox);
+                hbox.add(vbox);
 
-            comp = new LabelledDial("Constant " + i, this, "modifier" + i + "constant", color, 0, 127, 64);
-            hbox.add(comp);
+                comp = new LabelledDial("Constant " + i, this, "modifier" + i + "constant", color, 0, 127, 64);
+                hbox.add(comp);
 
             }
                                         
         category.add(hbox, BorderLayout.WEST);
         return category;
-        }
+    }
 
 
 
@@ -696,7 +696,7 @@ public class WaldorfBlofeld extends Synth
 
     /** Add an Envelope category */
     public JComponent addEnvelope(final int envelope, Color color)
-        {
+    {
         final EnvelopeDisplay[/*Env Number */][/*Envelope Type */] envelopeDisplays = new EnvelopeDisplay[4][5];
         final HBox[/*Env Number*/] envelopeHBoxes = new HBox[4];
         
@@ -705,15 +705,15 @@ public class WaldorfBlofeld extends Synth
         Category category;
         if (envelope == FILTER_ENVELOPE)
             {
-            category = new Category(this, "Filter Envelope", color);
+                category = new Category(this, "Filter Envelope", color);
             }
         else if (envelope == AMPLIFIER_ENVELOPE)
             {
-            category = new Category(this, "Amplifier Envelope", color);
+                category = new Category(this, "Amplifier Envelope", color);
             }
         else 
             {
-            category = new Category(this, "Envelope " + envelope, color);
+                category = new Category(this, "Envelope " + envelope, color);
             }
                         
         JComponent comp;
@@ -730,16 +730,16 @@ public class WaldorfBlofeld extends Synth
         final boolean[] goAhead = new boolean[] { false };
         Chooser comp1 = new Chooser("Mode", this, "envelope" + envelope + "mode", params)
             {
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                if (goAhead[0])
-                    {
-                    envelopeHBoxes[envelope - 1].removeLast();
-                    envelopeHBoxes[envelope - 1].addLast(envelopeDisplays[envelope - 1][model.get(key)]);
-                    envelopeHBoxes[envelope - 1].revalidate();
-                    envelopeHBoxes[envelope - 1].repaint();
-                    }
+                    super.update(key, model);
+                    if (goAhead[0])
+                        {
+                            envelopeHBoxes[envelope - 1].removeLast();
+                            envelopeHBoxes[envelope - 1].addLast(envelopeDisplays[envelope - 1][model.get(key)]);
+                            envelopeHBoxes[envelope - 1].revalidate();
+                            envelopeHBoxes[envelope - 1].repaint();
+                        }
                 }
             };
         vbox.add(comp1);
@@ -774,11 +774,11 @@ public class WaldorfBlofeld extends Synth
 
         // ADSR
         envelopeDisplays[envelope - 1][0] = new EnvelopeDisplay(this, Color.red, 
-            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", null, "envelope" + envelope + "release" },
-            new String[] { null, null, "envelope" + envelope + "sustain", "envelope" + envelope + "sustain", null },
-            new double[] { 0, 0.3333, 0.3333,  0.3333, 0.3333},
-            new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 },
-            new double[] { 0, (Math.PI/4/127),   (Math.PI/4/127), 0, (Math.PI/4/127)});
+                                                                new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", null, "envelope" + envelope + "release" },
+                                                                new String[] { null, null, "envelope" + envelope + "sustain", "envelope" + envelope + "sustain", null },
+                                                                new double[] { 0, 0.3333, 0.3333,  0.3333, 0.3333},
+                                                                new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 },
+                                                                new double[] { 0, (Math.PI/4/127),   (Math.PI/4/127), 0, (Math.PI/4/127)});
         /*
           envelopeDisplays[envelope - 1][0] = new EnvelopeDisplay(this, Color.red, 
           new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", null, "envelope" + envelope + "release" },
@@ -789,11 +789,11 @@ public class WaldorfBlofeld extends Synth
 
         // ADS1DS2R
         envelopeDisplays[envelope - 1][1] = new EnvelopeDisplay(this, Color.red, 
-            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", null, "envelope" + envelope + "release" },
-            new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", "envelope" + envelope + "sustain2", null },
-            new double[] { 0, 0.2, 0.2,   0.2, 0.2, 0.2},
-            new double[] { 0, 1.0/127.0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 },
-            new double[] { 0, Math.PI/4/127,  Math.PI/4/127,  Math.PI/4/127, 0,  Math.PI/4/127 });
+                                                                new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", null, "envelope" + envelope + "release" },
+                                                                new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", "envelope" + envelope + "sustain2", null },
+                                                                new double[] { 0, 0.2, 0.2,   0.2, 0.2, 0.2},
+                                                                new double[] { 0, 1.0/127.0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 },
+                                                                new double[] { 0, Math.PI/4/127,  Math.PI/4/127,  Math.PI/4/127, 0,  Math.PI/4/127 });
 
         /*
           envelopeDisplays[envelope - 1][1] = new EnvelopeDisplay(this, Color.red, 
@@ -805,11 +805,11 @@ public class WaldorfBlofeld extends Synth
 
         // One Shot
         envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Color.red, 
-            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "release" },
-            new String[] { null, null, "envelope" + envelope + "sustain", null },
-            new double[] { 0, 0.5, 0.5, 0.5},
-            new double[] { 0, 1.0, 1.0 / 127.0, 0 },
-            new double[] { 0, Math.PI/4/127, Math.PI/4/127, Math.PI/4/127 });
+                                                                new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "release" },
+                                                                new String[] { null, null, "envelope" + envelope + "sustain", null },
+                                                                new double[] { 0, 0.5, 0.5, 0.5},
+                                                                new double[] { 0, 1.0, 1.0 / 127.0, 0 },
+                                                                new double[] { 0, Math.PI/4/127, Math.PI/4/127, Math.PI/4/127 });
 
         /*
           envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Color.red, 
@@ -822,11 +822,11 @@ public class WaldorfBlofeld extends Synth
         // Loop S1S2
         
         envelopeDisplays[envelope - 1][3] = new EnvelopeDisplay(this, Color.red, 
-            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", "envelope" + envelope + "release" },
-            new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", null },
-            new double[] { 0, 0.25, 0.25, 0.25, 0.25 },
-            new double[] { 0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 },
-            new double[] { 0, Math.PI/4/127, Math.PI/4/127, Math.PI/4/127, Math.PI/4/127});
+                                                                new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", "envelope" + envelope + "release" },
+                                                                new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", null },
+                                                                new double[] { 0, 0.25, 0.25, 0.25, 0.25 },
+                                                                new double[] { 0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 },
+                                                                new double[] { 0, Math.PI/4/127, Math.PI/4/127, Math.PI/4/127, Math.PI/4/127});
 
         /*
           envelopeDisplays[envelope - 1][3] = new EnvelopeDisplay(this, Color.red, 
@@ -849,7 +849,7 @@ public class WaldorfBlofeld extends Synth
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-        }
+    }
 
 
 
@@ -861,7 +861,7 @@ public class WaldorfBlofeld extends Synth
 
     /** Add an LFO category */
     public JComponent addLFO(final int lfo, Color color)
-        {
+    {
         Category category = new Category(this, "LFO " + lfo, color);
                 
         JComponent comp;
@@ -884,17 +884,17 @@ public class WaldorfBlofeld extends Synth
 
         comp = new LabelledDial("Speed", this, "lfo" + lfo + "speed", color, 0, 127)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                // we display this in two different ways depending on whether we're clocked or not
-                if (model.get("lfo" + lfo + "clocked") == 0)
-                    return "" + val;
-                else
-                    {
-                    val /= 2;  // we map to 0...63
-                    String[] vals = LFO_SPEEDS;
-                    return vals[val];
-                    }
+                    // we display this in two different ways depending on whether we're clocked or not
+                    if (model.get("lfo" + lfo + "clocked") == 0)
+                        return "" + val;
+                    else
+                        {
+                            val /= 2;  // we map to 0...63
+                            String[] vals = LFO_SPEEDS;
+                            return vals[val];
+                        }
                 }
             };
         model.register("lfo" + lfo + "clocked", (LabelledDial)comp);  // so we get updated if clocked changes
@@ -903,12 +903,12 @@ public class WaldorfBlofeld extends Synth
 
         comp = new LabelledDial("Start Phase", this, "lfo" + lfo + "startphase", color, 0, 127)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                // this one is complex.  LFO start phase is 0=off,
-                // and 1=0 degrees, and .... 127 = 355 degrees
-                if (val == 0) return "Free";
-                else return "" + (int)(((val - 1) * 355.0) / 126.0); 
+                    // this one is complex.  LFO start phase is 0=off,
+                    // and 1=0 degrees, and .... 127 = 355 degrees
+                    if (val == 0) return "Free";
+                    else return "" + (int)(((val - 1) * 355.0) / 126.0); 
                 }
             };
         model.setMetricMin( "lfo" + lfo + "startphase", 1);
@@ -922,10 +922,10 @@ public class WaldorfBlofeld extends Synth
 
         comp = new LabelledDial("Keytrack", this, "lfo" + lfo + "keytrack", color, 0, 127, 64)
             {
-            public boolean isSymmetric() { return true; } 
-            public String map(int val)
+                public boolean isSymmetric() { return true; } 
+                public String map(int val)
                 {
-                return "" + (int)((val - 64) / 64.0 * 200.0) + "%";
+                    return "" + (int)((val - 64) / 64.0 * 200.0) + "%";
                 }
             };
         hbox.add(comp);
@@ -933,13 +933,13 @@ public class WaldorfBlofeld extends Synth
 
         category.add(hbox, BorderLayout.WEST);
         return category;
-        }
+    }
 
 
 
     public static final int MAXIMUM_NAME_LENGTH = 16;
     public String revisePatchName(String name)
-        {
+    {
         name = super.revisePatchName(name);  // trim first time
         if (name.length() > MAXIMUM_NAME_LENGTH)
             name = name.substring(0, MAXIMUM_NAME_LENGTH);
@@ -947,13 +947,13 @@ public class WaldorfBlofeld extends Synth
         StringBuffer nameb = new StringBuffer(name);                            
         for(int i = 0 ; i < nameb.length(); i++)
             {
-            char c = nameb.charAt(i);
-            if (c < 32 || c > 127)
-                nameb.setCharAt(i, ' ');
+                char c = nameb.charAt(i);
+                if (c < 32 || c > 127)
+                    nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
-        }
+    }
 
 
 
@@ -963,7 +963,7 @@ public class WaldorfBlofeld extends Synth
         
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-        {
+    {
         Category globalCategory = new Category(this, "Waldorf Blofeld", color);
                 
         JComponent comp;
@@ -974,8 +974,8 @@ public class WaldorfBlofeld extends Synth
         HBox hbox2 = new HBox();
         comp = new PatchDisplay(this, "Patch", "bank", "number", 4)
             {
-            public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
-            public String bankString(int bank) { return BANKS[bank]; }
+                public String numberString(int number) { number += 1; return ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
+                public String bankString(int bank) { return BANKS[bank]; }
             };
         hbox2.add(comp);
 
@@ -989,25 +989,25 @@ public class WaldorfBlofeld extends Synth
         
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
-            public String replace(String val)
+                public String replace(String val)
                 {
-                return revisePatchName(val);
+                    return revisePatchName(val);
                 }
                                 
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                updateTitle();
+                    super.update(key, model);
+                    updateTitle();
                 }
             };
         vbox.addBottom(comp);  // doesn't work right :-(
         hbox.add(vbox);
 
-//        vbox = new VBox();
+        //        vbox = new VBox();
                                 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-        }
+    }
 
         
         
@@ -1019,7 +1019,7 @@ public class WaldorfBlofeld extends Synth
 
     /** Add the Amplifier category. */
     public JComponent addAmplifierGlobal(Color color)
-        {
+    {
         Category category = new Category(this, "Amplifier", color);
                 
         JComponent comp;
@@ -1046,7 +1046,7 @@ public class WaldorfBlofeld extends Synth
 
         category.add(hbox, BorderLayout.WEST);
         return category;
-        }
+    }
 
 
 
@@ -1058,7 +1058,7 @@ public class WaldorfBlofeld extends Synth
 
     /** Add the Global Oscillator category */
     public JComponent addOscillatorGlobal(Color color)
-        {
+    {
         Category category = new Category(this, "Oscillators", color);
                 
         JComponent comp;
@@ -1082,11 +1082,11 @@ public class WaldorfBlofeld extends Synth
 
         comp = new LabelledDial("Unisono", this, "unisono", color, 0, 5)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val == 0) return "Off";
-                else if (val == 1) return "Dual";
-                else return ("" + (val + 1));
+                    if (val == 0) return "Off";
+                    else if (val == 1) return "Dual";
+                    else return ("" + (val + 1));
                 }
             };
         hbox.add(comp);
@@ -1101,13 +1101,13 @@ public class WaldorfBlofeld extends Synth
 
         comp = new LabelledDial("Noise", this, "noisebalance", color, 0, 127)
             {
-            public boolean isSymmetric() { return true; } 
-            public String map(int val)
+                public boolean isSymmetric() { return true; } 
+                public String map(int val)
                 {
-                val -= 64;
-                if (val < 0) return "F1 " + Math.abs(val);
-                else if (val > 0) return "F2 " + val;
-                else return "--";
+                    val -= 64;
+                    if (val < 0) return "F1 " + Math.abs(val);
+                    else if (val > 0) return "F2 " + val;
+                    else return "--";
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Balance");
@@ -1124,13 +1124,13 @@ public class WaldorfBlofeld extends Synth
 
         comp = new LabelledDial("Ringmod", this, "ringmodbalance", color, 0, 127)
             {
-            public boolean isSymmetric() { return true; } 
-            public String map(int val)
+                public boolean isSymmetric() { return true; } 
+                public String map(int val)
                 {
-                val -= 64;
-                if (val < 0) return "F1 " + Math.abs(val);
-                else if (val > 0) return "F2 " + val;
-                else return "--";
+                    val -= 64;
+                    if (val < 0) return "F1 " + Math.abs(val);
+                    else if (val > 0) return "F2 " + val;
+                    else return "--";
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Balance");
@@ -1152,7 +1152,7 @@ public class WaldorfBlofeld extends Synth
 
         category.add(hbox, BorderLayout.WEST);
         return category;
-        }
+    }
 
 
 
@@ -1165,68 +1165,68 @@ public class WaldorfBlofeld extends Synth
     // Changes the wavetable chooser to be either a list of wavetables or
     // a list of sample numbers
     public void buildWavetable(Chooser chooser, int osc, int bank)
-        {
-//        int index = chooser.getIndex();
+    {
+        //        int index = chooser.getIndex();
                 
         if (bank == 0)
             {
-            if (chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0]))
-                return;
+                if (chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0]))
+                    return;
                                 
-            // save old sample index
-            samples[osc - 1] = chooser.getIndex();
+                // save old sample index
+                samples[osc - 1] = chooser.getIndex();
                         
-            // maybe we can't do this ... checking....
-            String[] params1 = WAVES_LONG;
-            String[] params = new String[125];
-            System.arraycopy(params1, 0, params, 0, 73);
-            for(int i = 73; i < 86; i++)
-                params[i] = "Reserved " + (i - 6);
-            for(int i = 86; i < 125; i++)
-                params[i] = "User " + (i - 6);
-            if (osc == 3) params = WAVES_SHORT;
+                // maybe we can't do this ... checking....
+                String[] params1 = WAVES_LONG;
+                String[] params = new String[125];
+                System.arraycopy(params1, 0, params, 0, 73);
+                for(int i = 73; i < 86; i++)
+                    params[i] = "Reserved " + (i - 6);
+                for(int i = 86; i < 125; i++)
+                    params[i] = "User " + (i - 6);
+                if (osc == 3) params = WAVES_SHORT;
 
-            // due to a bug, the chooser's gonna freak here, so we
-            // turn off its action listener
-            chooser.setCallActionListener(false);
-            chooser.setElements("Wave", params);
+                // due to a bug, the chooser's gonna freak here, so we
+                // turn off its action listener
+                chooser.setCallActionListener(false);
+                chooser.setElements("Wave", params);
                         
-            // restore old wave index
-            chooser.setIndex(waves[osc - 1]);
-            chooser.setCallActionListener(true);
+                // restore old wave index
+                chooser.setIndex(waves[osc - 1]);
+                chooser.setCallActionListener(true);
             }
         else
             {
-            if (!(chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0])))
-                {
-                // maybe change just the label
-                //chooser.setLabel("Sample Bank " + SAMPLE_BANKS[bank]);
-                return;
-                }
+                if (!(chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0])))
+                    {
+                        // maybe change just the label
+                        //chooser.setLabel("Sample Bank " + SAMPLE_BANKS[bank]);
+                        return;
+                    }
                                 
-            // save old wave index
-            waves[osc - 1] = chooser.getIndex();
+                // save old wave index
+                waves[osc - 1] = chooser.getIndex();
                         
-            String[] params = new String[128];
-            for(int i = 0; i < 128; i++)
-                params[i] = "" + (i + 1) + "              ";
-            //chooser.setElements("Sample Bank " + SAMPLE_BANKS[bank], params);
+                String[] params = new String[128];
+                for(int i = 0; i < 128; i++)
+                    params[i] = "" + (i + 1) + "              ";
+                //chooser.setElements("Sample Bank " + SAMPLE_BANKS[bank], params);
 
-            // due to a bug, the chooser's gonna freak here, so we
-            // turn off its action listener
-            chooser.setCallActionListener(false);
-            chooser.setElements("Sample", params); 
+                // due to a bug, the chooser's gonna freak here, so we
+                // turn off its action listener
+                chooser.setCallActionListener(false);
+                chooser.setElements("Sample", params); 
                         
-            // restore old sample index
-            chooser.setIndex(samples[osc - 1]);
-            chooser.setCallActionListener(true);
+                // restore old sample index
+                chooser.setIndex(samples[osc - 1]);
+                chooser.setCallActionListener(true);
             }
-        }
+    }
         
 
     /** Add an Oscillator category */
     public JComponent addOscillator(final int osc, Color color)
-        {
+    {
         Category category = new Category(this, "Oscillator " + osc, color);
 
         JComponent comp;
@@ -1251,25 +1251,25 @@ public class WaldorfBlofeld extends Synth
         
         if (osc != 3)
             {
-            params = SAMPLE_BANKS;
-            comp = new Chooser("Sample Bank [SL]", this, "osc" + osc + "samplebank", params);
-            model.setStatus("osc" + osc + "samplebank", Model.STATUS_IMMUTABLE);
+                params = SAMPLE_BANKS;
+                comp = new Chooser("Sample Bank [SL]", this, "osc" + osc + "samplebank", params);
+                model.setStatus("osc" + osc + "samplebank", Model.STATUS_IMMUTABLE);
                         
-            model.register("osc" + osc + "samplebank", new Updatable()
-                {
-                public void update(String key, Model model)
+                model.register("osc" + osc + "samplebank", new Updatable()
                     {
-                    int state = model.get(key);
-                    buildWavetable(chooser, osc, state);
-                    // force an emit
-                    model.set("osc" + osc + "shape", model.get("osc" + osc + "shape"));
-                    }
-                });
-            // We do this because it'd be confusing for non-SL people, but
-            // this has the side-effect of preventing invalid settings to the wave/sample chooser 
-            // during mutation/crossover because there are 128 samples but only, like 124 waves
-            model.setStatus("osc" + osc + "samplebank", Model.STATUS_IMMUTABLE);
-            vbox.add(comp);
+                        public void update(String key, Model model)
+                        {
+                            int state = model.get(key);
+                            buildWavetable(chooser, osc, state);
+                            // force an emit
+                            model.set("osc" + osc + "shape", model.get("osc" + osc + "shape"));
+                        }
+                    });
+                // We do this because it'd be confusing for non-SL people, but
+                // this has the side-effect of preventing invalid settings to the wave/sample chooser 
+                // during mutation/crossover because there are 128 samples but only, like 124 waves
+                model.setStatus("osc" + osc + "samplebank", Model.STATUS_IMMUTABLE);
+                vbox.add(comp);
             }
 
         hbox.add(vbox);
@@ -1289,12 +1289,12 @@ public class WaldorfBlofeld extends Synth
                 
         comp = new LabelledDial("Octave", this, "osc" + osc + "octave", color, 0, 8)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                String[] oct = OSCILLATOR_OCTAVES;
-                return oct[val];
+                    String[] oct = OSCILLATOR_OCTAVES;
+                    return oct[val];
                 }
-            public int getDefaultValue() { return 4; }                
+                public int getDefaultValue() { return 4; }                
             };
         hbox.add(comp);
                 
@@ -1310,12 +1310,12 @@ public class WaldorfBlofeld extends Synth
 
         comp = new LabelledDial("Keytrack", this, "osc" + osc + "keytrack", color, 0, 127)
             {
-            public boolean isSymmetric() { return true; } 
-            public String map(int val)
+                public boolean isSymmetric() { return true; } 
+                public String map(int val)
                 {
-                return "" + (int)((val - 64) / 64.0 * 200.0) + "%";
+                    return "" + (int)((val - 64) / 64.0 * 200.0) + "%";
                 }
-            public int getDefaultValue() { return 96; } // +100%
+                public int getDefaultValue() { return 96; } // +100%
             };
         hbox.add(comp);
 
@@ -1338,13 +1338,13 @@ public class WaldorfBlofeld extends Synth
 
         comp = new LabelledDial("Filter", this, "osc" + osc + "balance", color, 0, 127)
             {
-            public boolean isSymmetric() { return true; } 
-            public String map(int val)
+                public boolean isSymmetric() { return true; } 
+                public String map(int val)
                 {
-                val -= 64;
-                if (val < 0) return "F1 " + Math.abs(val);
-                else if (val > 0) return "F2 " + val;
-                else return "--";
+                    val -= 64;
+                    if (val < 0) return "F1 " + Math.abs(val);
+                    else if (val > 0) return "F2 " + val;
+                    else return "--";
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Balance");
@@ -1353,23 +1353,23 @@ public class WaldorfBlofeld extends Synth
         vbox = new VBox();
         if (osc != 3)
             {
-            // 0 is ON for Limit WT, 1 is OFF.  It's flipped relative to other switches
-            comp = new CheckBox("Limit WT", this, "osc" + osc + "limitwt", true);
-            vbox.add(comp);
+                // 0 is ON for Limit WT, 1 is OFF.  It's flipped relative to other switches
+                comp = new CheckBox("Limit WT", this, "osc" + osc + "limitwt", true);
+                vbox.add(comp);
             }
             
                 
         if (osc == 2)
             {
-            comp = new CheckBox("Osc3 Sync", this, "osc" + osc + "synctoosc3");
-            ((CheckBox)comp).addToWidth(1);
-            vbox.add(comp);
+                comp = new CheckBox("Osc3 Sync", this, "osc" + osc + "synctoosc3");
+                ((CheckBox)comp).addToWidth(1);
+                vbox.add(comp);
             }
         hbox.add(vbox);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-        }
+    }
         
 
 
@@ -1382,7 +1382,7 @@ public class WaldorfBlofeld extends Synth
 
     /** Add a Filter category */
     public JComponent addFilter(int filter, Color color)
-        {
+    {
         Category category = new Category(this, "Filter " + filter, color);
 
         JComponent comp;
@@ -1423,8 +1423,8 @@ public class WaldorfBlofeld extends Synth
 
         if (filter == 2)
             {
-            comp = new CheckBox("Serial", this, "filterrouting");
-            vbox.add(comp);
+                comp = new CheckBox("Serial", this, "filterrouting");
+                vbox.add(comp);
             }
 
         hbox.add(vbox);
@@ -1440,12 +1440,12 @@ public class WaldorfBlofeld extends Synth
 
         comp = new LabelledDial("Keytrack", this, "filter" + filter + "keytrack", color, 0, 127)
             {
-            public boolean isSymmetric() { return true; } 
-            public String map(int val)
+                public boolean isSymmetric() { return true; } 
+                public String map(int val)
                 {
-                return "" + (int)((val - 64) / 64.0 * 200.0) + "%";
+                    return "" + (int)((val - 64) / 64.0 * 200.0) + "%";
                 }
-            public int getDefaultValue() { return 64; }  // 0%
+                public int getDefaultValue() { return 64; }  // 0%
             };
         hbox.add(comp);
 
@@ -1467,13 +1467,13 @@ public class WaldorfBlofeld extends Synth
 
         comp = new LabelledDial("Pan", this, "filter" + filter + "pan", color, 0, 127)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val)
+                public boolean isSymmetric() { return true; }
+                public String map(int val)
                 {
-                val -= 64;
-                if (val < 0) return "L " + Math.abs(val);
-                else if (val > 0) return "R " + val;
-                else return "--";
+                    val -= 64;
+                    if (val < 0) return "L " + Math.abs(val);
+                    else if (val > 0) return "R " + val;
+                    else return "--";
                 }
             };
         hbox.add(comp);
@@ -1484,7 +1484,7 @@ public class WaldorfBlofeld extends Synth
 
         category.add(hbox, BorderLayout.WEST);
         return category;
-        }
+    }
                 
 
 
@@ -1504,395 +1504,395 @@ public class WaldorfBlofeld extends Synth
     /// that Waldorf decided to do.  :-(
 
     final static String[] allParameters = new String[] 
-    {
-    "-",
-    "osc1octave",                   // *
-    "osc1semitone",
-    "osc1detune",
-    "osc1bendrange",
-    "osc1keytrack",
-    "osc1fmsource",
-    "osc1fmamount",
-    "osc1shape",                                        // *
-    "osc1pulsewidth",
-    "osc1pwmsource",
-    "osc1pwmamount",
-    "-",
-    "-",
-    "osc1limitwt",
-    "osc1samplebank",                                   // *
-    "osc1brilliance",
-    "osc2octave",                   // *
-    "osc2semitone",
-    "osc2detune",
-    "osc2bendrange",
-    "osc2keytrack",
-    "osc2fmsource",
-    "osc2fmamount",
-    "osc2shape",                                        // *
-    "osc2pulsewidth",
-    "osc2pwmsource",
-    "osc2pwmamount",
-    "-",
-    "-",
-    "osc2limitwt",
-    "osc2samplebank",                                   // *
-    "osc2brilliance",
-    "osc3octave",                   // *
-    "osc3semitone",
-    "osc3detune",
-    "osc3bendrange",
-    "osc3keytrack",
-    "osc3fmsource",
-    "osc3fmamount",
-    "osc3shape",
-    "osc3pulsewidth",
-    "osc3pwmsource",
-    "osc3pwmamount",
-    "-",
-    "-",
-    "-",
-    "-",
-    "osc3brilliance",
-    "osc2synctoosc3",
-    "oscpitchsource",
-    "oscpitchamount",
-    "-",
-    "oscglide",
-    "-",
-    "-",
-    "oscglidemode",
-    "oscgliderate",
-    "oscallocation, unisono",       // *
-    "unisonodetune",
-    "-",
-    "osc1level",
-    "osc1balance",
-    "osc2level",
-    "osc2balance",
-    "osc3level",
-    "osc3balance",
-    "noiselevel",
-    "noisebalance",
-    "noisecolour",
-    "-",
-    "ringmodlevel",
-    "ringmodbalance",
-    "-",
-    "-",
-    "-",
-    "-",
-    "filter1type",
-    "filter1cutoff",
-    "-",
-    "filter1resonance",
-    "filter1drive",
-    "filter1drivecurve",
-    "-",
-    "-",
-    "-",
-    "filter1keytrack",
-    "filter1envamount",
-    "filter1envvelocity",
-    "filter1modsource",
-    "filter1modamount",
-    "filter1fmsource",
-    "filter1fmamount",
-    "filter1pan",
-    "filter1pansource",
-    "filter1panamount",
-    "-",
-    "filter2type",
-    "filter2cutoff",
-    "-",
-    "filter2resonance",
-    "filter2drive",
-    "filter2drivecurve",
-    "-",
-    "-",
-    "-",
-    "filter2keytrack",
-    "filter2envamount",
-    "filter2envvelocity",
-    "filter2modsource",
-    "filter2modamount",
-    "filter2fmsource",
-    "filter2fmamount",
-    "filter2pan",
-    "filter2pansource",
-    "filter2panamount",
-    "-",
-    "filterrouting",
-    "-",
-    "-",
-    "-",
-    "amplifiervolume",
-    "amplifiervelocity",
-    "amplifiermodsource",
-    "amplifiermodamount",
-    "-",
-    "-",
-    "-",
-    "effect1type",
-    "effect1mix",
+        {
+            "-",
+            "osc1octave",                   // *
+            "osc1semitone",
+            "osc1detune",
+            "osc1bendrange",
+            "osc1keytrack",
+            "osc1fmsource",
+            "osc1fmamount",
+            "osc1shape",                                        // *
+            "osc1pulsewidth",
+            "osc1pwmsource",
+            "osc1pwmamount",
+            "-",
+            "-",
+            "osc1limitwt",
+            "osc1samplebank",                                   // *
+            "osc1brilliance",
+            "osc2octave",                   // *
+            "osc2semitone",
+            "osc2detune",
+            "osc2bendrange",
+            "osc2keytrack",
+            "osc2fmsource",
+            "osc2fmamount",
+            "osc2shape",                                        // *
+            "osc2pulsewidth",
+            "osc2pwmsource",
+            "osc2pwmamount",
+            "-",
+            "-",
+            "osc2limitwt",
+            "osc2samplebank",                                   // *
+            "osc2brilliance",
+            "osc3octave",                   // *
+            "osc3semitone",
+            "osc3detune",
+            "osc3bendrange",
+            "osc3keytrack",
+            "osc3fmsource",
+            "osc3fmamount",
+            "osc3shape",
+            "osc3pulsewidth",
+            "osc3pwmsource",
+            "osc3pwmamount",
+            "-",
+            "-",
+            "-",
+            "-",
+            "osc3brilliance",
+            "osc2synctoosc3",
+            "oscpitchsource",
+            "oscpitchamount",
+            "-",
+            "oscglide",
+            "-",
+            "-",
+            "oscglidemode",
+            "oscgliderate",
+            "oscallocation, unisono",       // *
+            "unisonodetune",
+            "-",
+            "osc1level",
+            "osc1balance",
+            "osc2level",
+            "osc2balance",
+            "osc3level",
+            "osc3balance",
+            "noiselevel",
+            "noisebalance",
+            "noisecolour",
+            "-",
+            "ringmodlevel",
+            "ringmodbalance",
+            "-",
+            "-",
+            "-",
+            "-",
+            "filter1type",
+            "filter1cutoff",
+            "-",
+            "filter1resonance",
+            "filter1drive",
+            "filter1drivecurve",
+            "-",
+            "-",
+            "-",
+            "filter1keytrack",
+            "filter1envamount",
+            "filter1envvelocity",
+            "filter1modsource",
+            "filter1modamount",
+            "filter1fmsource",
+            "filter1fmamount",
+            "filter1pan",
+            "filter1pansource",
+            "filter1panamount",
+            "-",
+            "filter2type",
+            "filter2cutoff",
+            "-",
+            "filter2resonance",
+            "filter2drive",
+            "filter2drivecurve",
+            "-",
+            "-",
+            "-",
+            "filter2keytrack",
+            "filter2envamount",
+            "filter2envvelocity",
+            "filter2modsource",
+            "filter2modamount",
+            "filter2fmsource",
+            "filter2fmamount",
+            "filter2pan",
+            "filter2pansource",
+            "filter2panamount",
+            "-",
+            "filterrouting",
+            "-",
+            "-",
+            "-",
+            "amplifiervolume",
+            "amplifiervelocity",
+            "amplifiermodsource",
+            "amplifiermodamount",
+            "-",
+            "-",
+            "-",
+            "effect1type",
+            "effect1mix",
 
-    // Note that we start at 0 -- this makes things easier in the code
-    "effect1parameter0",
-    "effect1parameter1",
-    "effect1parameter2",
-    "effect1parameter3",
-    "effect1parameter4",
-    "effect1parameter5",
-    "effect1parameter6",
-    "effect1parameter7",
-    "effect1parameter8",
-    "effect1parameter9",
-    "effect1parameter10",
-    "effect1parameter11",
-    "effect1parameter12",
-    "effect1parameter13",
-    "effect2type",
-    "effect2mix",
+            // Note that we start at 0 -- this makes things easier in the code
+            "effect1parameter0",
+            "effect1parameter1",
+            "effect1parameter2",
+            "effect1parameter3",
+            "effect1parameter4",
+            "effect1parameter5",
+            "effect1parameter6",
+            "effect1parameter7",
+            "effect1parameter8",
+            "effect1parameter9",
+            "effect1parameter10",
+            "effect1parameter11",
+            "effect1parameter12",
+            "effect1parameter13",
+            "effect2type",
+            "effect2mix",
 
-    // Note that we start at 0 -- this makes things easier in the code
-    "effect2parameter0",
-    "effect2parameter1",
-    "effect2parameter2",
-    "effect2parameter3",
-    "effect2parameter4",
-    "effect2parameter5",
-    "effect2parameter6",
-    "effect2parameter7",
-    "effect2parameter8",
-    "effect2parameter9",
-    "effect2parameter10",
-    "effect2parameter11",
-    "effect2parameter12",
-    "effect2parameter13",
-    "lfo1shape",
-    "lfo1speed",
-    "-",
-    "lfo1sync",
-    "lfo1clocked",
-    "lfo1startphase",
-    "lfo1delay",
-    "lfo1fade",
-    "-",
-    "-",
-    "lfo1keytrack",
-    "-",
-    "lfo2shape",
-    "lfo2speed",
-    "-",
-    "lfo2sync",
-    "lfo2clocked",
-    "lfo2startphase",
-    "lfo2delay",
-    "lfo2fade",
-    "-",
-    "-",
-    "lfo2keytrack",
-    "-",
-    "lfo3shape",
-    "lfo3speed",
-    "-",
-    "lfo3sync",
-    "lfo3clocked",
-    "lfo3startphase",
-    "lfo3delay",
-    "lfo3fade",
-    "-",
-    "-",
-    "lfo3keytrack",
-    "-",
-    "envelope1mode, envelope1trigger",              // *
-    "-",
-    "-",
-    "envelope1attack",
-    "envelope1attacklevel",
-    "envelope1decay",
-    "envelope1sustain",
-    "envelope1decay2",
-    "envelope1sustain2",
-    "envelope1release",
-    "-",
-    "-",
-    "envelope2mode, envelope2trigger",              // *
-    "-",
-    "-",
-    "envelope2attack",
-    "envelope2attacklevel",
-    "envelope2decay",
-    "envelope2sustain",
-    "envelope2decay2",
-    "envelope2sustain2",
-    "envelope2release",
-    "-",
-    "-",
-    "envelope3mode, envelope3trigger",              // *
-    "-",
-    "-",
-    "envelope3attack",
-    "envelope3attacklevel",
-    "envelope3decay",
-    "envelope3sustain",
-    "envelope3decay2",
-    "envelope3sustain2",
-    "envelope3release",
-    "-",
-    "-",
-    "envelope4mode, envelope4trigger",              // *
-    "-",
-    "-",
-    "envelope4attack",
-    "envelope4attacklevel",
-    "envelope4decay",
-    "envelope4sustain",
-    "envelope4decay2",
-    "envelope4sustain2",
-    "envelope4release",
-    "-",
-    "-",
-    "-",
-    "modifier1sourcea",
-    "modifier1sourceb",
-    "modifier1operation",
-    "modifier1constant",
-    "modifier2sourcea",
-    "modifier2sourceb",
-    "modifier2operation",
-    "modifier2constant",
-    "modifier3sourcea",
-    "modifier3sourceb",
-    "modifier3operation",
-    "modifier3constant",
-    "modifier4sourcea",
-    "modifier4sourceb",
-    "modifier4operation",
-    "modifier4constant",
-    "modulation1source",
-    "modulation1destination",
-    "modulation1amount",
-    "modulation2source",
-    "modulation2destination",
-    "modulation2amount",
-    "modulation3source",
-    "modulation3destination",
-    "modulation3amount",
-    "modulation4source",
-    "modulation4destination",
-    "modulation4amount",
-    "modulation5source",
-    "modulation5destination",
-    "modulation5amount",
-    "modulation6source",
-    "modulation6destination",
-    "modulation6amount",
-    "modulation7source",
-    "modulation7destination",
-    "modulation7amount",
-    "modulation8source",
-    "modulation8destination",
-    "modulation8amount",
-    "modulation9source",
-    "modulation9destination",
-    "modulation9amount",
-    "modulation10source",
-    "modulation10destination",
-    "modulation10amount",
-    "modulation11source",
-    "modulation11destination",
-    "modulation11amount",
-    "modulation12source",
-    "modulation12destination",
-    "modulation12amount",
-    "modulation13source",
-    "modulation13destination",
-    "modulation13amount",
-    "modulation14source",
-    "modulation14destination",
-    "modulation14amount",
-    "modulation15source",
-    "modulation15destination",
-    "modulation15amount",
-    "modulation16source",
-    "modulation16destination",
-    "modulation16amount",
-    "-",
-    "-",
-    "arpeggiatormode",
-    "arpeggiatorpattern",
-    "-",
-    "arpeggiatorclock",
-    "arpeggiatorlength",
-    "arpeggiatoroctave",
-    "arpeggiatordirection",
-    "arpeggiatorsortorder",
-    "arpeggiatorvelocitymode",
-    "arpeggiatortimingfactor",
-    "-",
-    "arpeggiatorpatternreset",
-    "arpeggiatorpatternlength",
-    "-",
-    "-",
-    "arpeggiatortempo",
-    "arp01step, arp01glide, arp01accent",                   // *
-    "arp02step, arp02glide, arp02accent",                   // *
-    "arp03step, arp03glide, arp03accent",                   // *
-    "arp04step, arp04glide, arp04accent",                   // *
-    "arp05step, arp05glide, arp05accent",                   // *
-    "arp06step, arp06glide, arp06accent",                   // *
-    "arp07step, arp07glide, arp07accent",                   // *
-    "arp08step, arp08glide, arp08accent",                   // *
-    "arp09step, arp09glide, arp09accent",                   // *
-    "arp10step, arp10glide, arp10accent",                   // *
-    "arp11step, arp11glide, arp11accent",                   // *
-    "arp12step, arp12glide, arp12accent",                   // *
-    "arp13step, arp13glide, arp13accent",                   // *
-    "arp14step, arp14glide, arp14accent",                   // *
-    "arp15step, arp15glide, arp15accent",                   // *
-    "arp16step, arp16glide, arp16accent",                   // *
-    "arp01timing, arp01length",                     // *
-    "arp02timing, arp02length",                     // *
-    "arp03timing, arp03length",                     // *
-    "arp04timing, arp04length",                     // *
-    "arp05timing, arp05length",                     // *
-    "arp06timing, arp06length",                     // *
-    "arp07timing, arp07length",                     // *
-    "arp08timing, arp08length",                     // *
-    "arp09timing, arp09length",                     // *
-    "arp10timing, arp10length",                     // *
-    "arp11timing, arp11length",                     // *
-    "arp12timing, arp12length",                     // *
-    "arp13timing, arp13length",                     // *
-    "arp14timing, arp14length",                     // *
-    "arp15timing, arp15length",                     // *
-    "arp16timing, arp16length",                     // *
-    "-",
-    "-",
-    "-",
-    "-",
-    "name",         // *
-    "name",         // *
-    "name",         // *
-    "name",         // *
-    "name",         // *
-    "name",         // *
-    "name",         // *
-    "name",         // *
-    "name",         // *
-    "name",         // *
-    "name",         // *
-    "name",         // *
-    "name",         // *
-    "name",         // *
-    "name",         // *
-    "name",         // *
-    "category",
-    "-",
-    "-",
-    "-"
-    };
+            // Note that we start at 0 -- this makes things easier in the code
+            "effect2parameter0",
+            "effect2parameter1",
+            "effect2parameter2",
+            "effect2parameter3",
+            "effect2parameter4",
+            "effect2parameter5",
+            "effect2parameter6",
+            "effect2parameter7",
+            "effect2parameter8",
+            "effect2parameter9",
+            "effect2parameter10",
+            "effect2parameter11",
+            "effect2parameter12",
+            "effect2parameter13",
+            "lfo1shape",
+            "lfo1speed",
+            "-",
+            "lfo1sync",
+            "lfo1clocked",
+            "lfo1startphase",
+            "lfo1delay",
+            "lfo1fade",
+            "-",
+            "-",
+            "lfo1keytrack",
+            "-",
+            "lfo2shape",
+            "lfo2speed",
+            "-",
+            "lfo2sync",
+            "lfo2clocked",
+            "lfo2startphase",
+            "lfo2delay",
+            "lfo2fade",
+            "-",
+            "-",
+            "lfo2keytrack",
+            "-",
+            "lfo3shape",
+            "lfo3speed",
+            "-",
+            "lfo3sync",
+            "lfo3clocked",
+            "lfo3startphase",
+            "lfo3delay",
+            "lfo3fade",
+            "-",
+            "-",
+            "lfo3keytrack",
+            "-",
+            "envelope1mode, envelope1trigger",              // *
+            "-",
+            "-",
+            "envelope1attack",
+            "envelope1attacklevel",
+            "envelope1decay",
+            "envelope1sustain",
+            "envelope1decay2",
+            "envelope1sustain2",
+            "envelope1release",
+            "-",
+            "-",
+            "envelope2mode, envelope2trigger",              // *
+            "-",
+            "-",
+            "envelope2attack",
+            "envelope2attacklevel",
+            "envelope2decay",
+            "envelope2sustain",
+            "envelope2decay2",
+            "envelope2sustain2",
+            "envelope2release",
+            "-",
+            "-",
+            "envelope3mode, envelope3trigger",              // *
+            "-",
+            "-",
+            "envelope3attack",
+            "envelope3attacklevel",
+            "envelope3decay",
+            "envelope3sustain",
+            "envelope3decay2",
+            "envelope3sustain2",
+            "envelope3release",
+            "-",
+            "-",
+            "envelope4mode, envelope4trigger",              // *
+            "-",
+            "-",
+            "envelope4attack",
+            "envelope4attacklevel",
+            "envelope4decay",
+            "envelope4sustain",
+            "envelope4decay2",
+            "envelope4sustain2",
+            "envelope4release",
+            "-",
+            "-",
+            "-",
+            "modifier1sourcea",
+            "modifier1sourceb",
+            "modifier1operation",
+            "modifier1constant",
+            "modifier2sourcea",
+            "modifier2sourceb",
+            "modifier2operation",
+            "modifier2constant",
+            "modifier3sourcea",
+            "modifier3sourceb",
+            "modifier3operation",
+            "modifier3constant",
+            "modifier4sourcea",
+            "modifier4sourceb",
+            "modifier4operation",
+            "modifier4constant",
+            "modulation1source",
+            "modulation1destination",
+            "modulation1amount",
+            "modulation2source",
+            "modulation2destination",
+            "modulation2amount",
+            "modulation3source",
+            "modulation3destination",
+            "modulation3amount",
+            "modulation4source",
+            "modulation4destination",
+            "modulation4amount",
+            "modulation5source",
+            "modulation5destination",
+            "modulation5amount",
+            "modulation6source",
+            "modulation6destination",
+            "modulation6amount",
+            "modulation7source",
+            "modulation7destination",
+            "modulation7amount",
+            "modulation8source",
+            "modulation8destination",
+            "modulation8amount",
+            "modulation9source",
+            "modulation9destination",
+            "modulation9amount",
+            "modulation10source",
+            "modulation10destination",
+            "modulation10amount",
+            "modulation11source",
+            "modulation11destination",
+            "modulation11amount",
+            "modulation12source",
+            "modulation12destination",
+            "modulation12amount",
+            "modulation13source",
+            "modulation13destination",
+            "modulation13amount",
+            "modulation14source",
+            "modulation14destination",
+            "modulation14amount",
+            "modulation15source",
+            "modulation15destination",
+            "modulation15amount",
+            "modulation16source",
+            "modulation16destination",
+            "modulation16amount",
+            "-",
+            "-",
+            "arpeggiatormode",
+            "arpeggiatorpattern",
+            "-",
+            "arpeggiatorclock",
+            "arpeggiatorlength",
+            "arpeggiatoroctave",
+            "arpeggiatordirection",
+            "arpeggiatorsortorder",
+            "arpeggiatorvelocitymode",
+            "arpeggiatortimingfactor",
+            "-",
+            "arpeggiatorpatternreset",
+            "arpeggiatorpatternlength",
+            "-",
+            "-",
+            "arpeggiatortempo",
+            "arp01step, arp01glide, arp01accent",                   // *
+            "arp02step, arp02glide, arp02accent",                   // *
+            "arp03step, arp03glide, arp03accent",                   // *
+            "arp04step, arp04glide, arp04accent",                   // *
+            "arp05step, arp05glide, arp05accent",                   // *
+            "arp06step, arp06glide, arp06accent",                   // *
+            "arp07step, arp07glide, arp07accent",                   // *
+            "arp08step, arp08glide, arp08accent",                   // *
+            "arp09step, arp09glide, arp09accent",                   // *
+            "arp10step, arp10glide, arp10accent",                   // *
+            "arp11step, arp11glide, arp11accent",                   // *
+            "arp12step, arp12glide, arp12accent",                   // *
+            "arp13step, arp13glide, arp13accent",                   // *
+            "arp14step, arp14glide, arp14accent",                   // *
+            "arp15step, arp15glide, arp15accent",                   // *
+            "arp16step, arp16glide, arp16accent",                   // *
+            "arp01timing, arp01length",                     // *
+            "arp02timing, arp02length",                     // *
+            "arp03timing, arp03length",                     // *
+            "arp04timing, arp04length",                     // *
+            "arp05timing, arp05length",                     // *
+            "arp06timing, arp06length",                     // *
+            "arp07timing, arp07length",                     // *
+            "arp08timing, arp08length",                     // *
+            "arp09timing, arp09length",                     // *
+            "arp10timing, arp10length",                     // *
+            "arp11timing, arp11length",                     // *
+            "arp12timing, arp12length",                     // *
+            "arp13timing, arp13length",                     // *
+            "arp14timing, arp14length",                     // *
+            "arp15timing, arp15length",                     // *
+            "arp16timing, arp16length",                     // *
+            "-",
+            "-",
+            "-",
+            "-",
+            "name",         // *
+            "name",         // *
+            "name",         // *
+            "name",         // *
+            "name",         // *
+            "name",         // *
+            "name",         // *
+            "name",         // *
+            "name",         // *
+            "name",         // *
+            "name",         // *
+            "name",         // *
+            "name",         // *
+            "name",         // *
+            "name",         // *
+            "name",         // *
+            "category",
+            "-",
+            "-",
+            "-"
+        };
 
 
 
@@ -1907,102 +1907,102 @@ public class WaldorfBlofeld extends Synth
     // READING AND WRITING
 
     public Object[] emitAll(String key)
-        {
+    {
         if (!getSendMIDI()) return new Object[0];  // MIDI turned off, don't bother
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
         byte DEV = (byte)(getID());
         if (key.equals("osc1octave") || key.equals("osc2octave") || key.equals("osc3octave"))
             {
-            int index = ((Integer)(allParametersToIndex.get(key))).intValue();
-            byte HH = (byte)((index >>> 7) & 127);
-            byte PP = (byte)(index & 127);
-            byte XX = (byte)(16 + model.get(key) * 12);
-            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
-            return new Object[] { data };
+                int index = ((Integer)(allParametersToIndex.get(key))).intValue();
+                byte HH = (byte)((index >>> 7) & 127);
+                byte PP = (byte)(index & 127);
+                byte XX = (byte)(16 + model.get(key) * 12);
+                byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+                return new Object[] { data };
             }
         else if (key.equals("oscallocation") || key.equals("unisono"))
             {
-            int index = 58;
-            byte HH = (byte)((index >>> 7) & 127);
-            byte PP = (byte)(index & 127);
-            byte XX = (byte)((model.get("unisono") << 4) | (model.get("oscallocation")));
-            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
-            return new Object[] { data };
+                int index = 58;
+                byte HH = (byte)((index >>> 7) & 127);
+                byte PP = (byte)(index & 127);
+                byte XX = (byte)((model.get("unisono") << 4) | (model.get("oscallocation")));
+                byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+                return new Object[] { data };
             }
         else if (key.equals("envelope1mode") || key.equals("envelope1trigger") ||
-            key.equals("envelope2mode") || key.equals("envelope2trigger") ||
-            key.equals("envelope3mode") || key.equals("envelope3trigger") ||
-            key.equals("envelope4mode") || key.equals("envelope4trigger"))
+                 key.equals("envelope2mode") || key.equals("envelope2trigger") ||
+                 key.equals("envelope3mode") || key.equals("envelope3trigger") ||
+                 key.equals("envelope4mode") || key.equals("envelope4trigger"))
             {
-            int i;
-            try { i = Integer.parseInt(key.substring(8, 9)); }
-            catch (Exception e) { e.printStackTrace(); return new Object[0]; }
-            int index = 196 + (i - 1) * 12;
-            byte HH = (byte)((index >>> 7) & 127);
-            byte PP = (byte)(index & 127);
-            byte XX = (byte)((model.get("envelope" + i + "trigger") << 5) | (model.get("envelope" + i + "mode")));
-            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
-            return new Object[] { data };
+                int i;
+                try { i = Integer.parseInt(key.substring(8, 9)); }
+                catch (Exception e) { e.printStackTrace(); return new Object[0]; }
+                int index = 196 + (i - 1) * 12;
+                byte HH = (byte)((index >>> 7) & 127);
+                byte PP = (byte)(index & 127);
+                byte XX = (byte)((model.get("envelope" + i + "trigger") << 5) | (model.get("envelope" + i + "mode")));
+                byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+                return new Object[] { data };
             }
         else if (key.startsWith("arp") && !key.startsWith("arpegg"))
             {
-            int i;
-            try { i = Integer.parseInt(key.substring(3, 5)); }
-            catch (Exception e) { e.printStackTrace(); return new Object[0]; }
-            if (key.endsWith("length") || key.endsWith("timing"))
-                {
-                int index = i + 342;
-                byte HH = (byte)((index >>> 7) & 127);
-                byte PP = (byte)(index & 127);
-                byte XX = (byte)((model.get("arp" + (i < 10 ? "0" : "") + i + "length") << 4) | 
-                    (model.get("arp" + (i < 10 ? "0" : "") + i + "timing")));
-                byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
-            	return new Object[] { data };
-                }
-            else
-                {
-                int index = i + 326;
-                byte HH = (byte)((index >>> 7) & 127);
-                byte PP = (byte)(index & 127);
-                byte XX = (byte)((model.get("arp" + (i < 10 ? "0" : "") + i + "step") << 4) |
-                    (model.get("arp" + (i < 10 ? "0" : "") + i + "glide") << 3) |
-                    (model.get("arp" + (i < 10 ? "0" : "") + i + "accent")));
-                byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
-            	return new Object[] { data };
-                }
+                int i;
+                try { i = Integer.parseInt(key.substring(3, 5)); }
+                catch (Exception e) { e.printStackTrace(); return new Object[0]; }
+                if (key.endsWith("length") || key.endsWith("timing"))
+                    {
+                        int index = i + 342;
+                        byte HH = (byte)((index >>> 7) & 127);
+                        byte PP = (byte)(index & 127);
+                        byte XX = (byte)((model.get("arp" + (i < 10 ? "0" : "") + i + "length") << 4) | 
+                                         (model.get("arp" + (i < 10 ? "0" : "") + i + "timing")));
+                        byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+                        return new Object[] { data };
+                    }
+                else
+                    {
+                        int index = i + 326;
+                        byte HH = (byte)((index >>> 7) & 127);
+                        byte PP = (byte)(index & 127);
+                        byte XX = (byte)((model.get("arp" + (i < 10 ? "0" : "") + i + "step") << 4) |
+                                         (model.get("arp" + (i < 10 ? "0" : "") + i + "glide") << 3) |
+                                         (model.get("arp" + (i < 10 ? "0" : "") + i + "accent")));
+                        byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+                        return new Object[] { data };
+                    }
             }
         else if (key.equals("name"))
             {
-            Object[] data = new Object[16];
-            String name = model.get(key, "Init") + "                "; 
-            for(int i = 0; i < 16; i++)
-                {
-                int index = i + 363;
-                byte HH = (byte)((index >>> 7) & 127);
-                byte PP = (byte)(index & 127);
-                byte XX = (byte)(name.charAt(i));
-                byte[] b = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
-                data[i] = b;
-                }
-            return data;
+                Object[] data = new Object[16];
+                String name = model.get(key, "Init") + "                "; 
+                for(int i = 0; i < 16; i++)
+                    {
+                        int index = i + 363;
+                        byte HH = (byte)((index >>> 7) & 127);
+                        byte PP = (byte)(index & 127);
+                        byte XX = (byte)(name.charAt(i));
+                        byte[] b = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+                        data[i] = b;
+                    }
+                return data;
             }
         else
             {
-            int index = ((Integer)(allParametersToIndex.get(key))).intValue();
-            byte HH = (byte)((index >>> 7) & 127);
-            byte PP = (byte)(index & 127);
-            byte XX = (byte)model.get(key);
-            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
-            return new Object[] { data };
+                int index = ((Integer)(allParametersToIndex.get(key))).intValue();
+                byte HH = (byte)((index >>> 7) & 127);
+                byte PP = (byte)(index & 127);
+                byte XX = (byte)model.get(key);
+                byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x20, 0x00, HH, PP, XX, (byte)0xF7 };
+                return new Object[] { data };
             }
-        }
+    }
     
 
     
     
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-        {
+    {
         if (tempModel == null)
             tempModel = getModel();
         byte DEV = (byte)(getID());
@@ -2014,56 +2014,56 @@ public class WaldorfBlofeld extends Synth
         
         for(int i = 0; i < 363; i++)
             {
-            String key = allParameters[i];
-            if (key.equals("-"))
-                {
-                bytes[i] = 0;
-                }
-            else if (key.equals("osc1octave") || key.equals("osc2octave") || key.equals("osc3octave"))
-                {
-                bytes[i] = (byte)(16 + model.get(key) * 12);
-                }
-            else if (key.equals("oscallocation, unisono"))
-                {
-                bytes[i] = (byte)((model.get("unisono") << 4) | (model.get("oscallocation")));
-                }
-            else if (key.equals("envelope1mode, envelope1trigger") ||
-                key.equals("envelope2mode, envelope2trigger") ||
-                key.equals("envelope3mode, envelope3trigger") ||
-                key.equals("envelope4mode, envelope4trigger"))
-                {
-                int j;
-                bytes[i] = 0;  // or whatever
-                try { 
-                    j = Integer.parseInt(key.substring(8, 9)); 
-                    bytes[i] = (byte)((model.get("envelope" + j + "trigger") << 5) | (model.get("envelope" + j + "mode")));
+                String key = allParameters[i];
+                if (key.equals("-"))
+                    {
+                        bytes[i] = 0;
                     }
-                catch (Exception e) { e.printStackTrace(); }
-                }
-            else if (i >= 327 && i <= 342) // step/glide/accent
-                {
-                int j = i - 326;
-                bytes[i] = (byte)((model.get("arp" + (j < 10 ? "0" : "") + j + "step") << 4) |
-                    (model.get("arp" + (j < 10 ? "0" : "") + j + "glide") << 3) |
-                    (model.get("arp" + (j < 10 ? "0" : "") + j + "accent")));
-                }
-            else if (i >= 343 && i <= 358) // timing/length
-                {
-                int j = i - 342;
-                bytes[i] = (byte)((model.get("arp" + (j < 10 ? "0" : "") + j + "length") << 4) | 
-                    (model.get("arp" + (j < 10 ? "0" : "") + j + "timing")));
-                }
-            else
-                {
-                bytes[i] = (byte)(model.get(key));
-                }
+                else if (key.equals("osc1octave") || key.equals("osc2octave") || key.equals("osc3octave"))
+                    {
+                        bytes[i] = (byte)(16 + model.get(key) * 12);
+                    }
+                else if (key.equals("oscallocation, unisono"))
+                    {
+                        bytes[i] = (byte)((model.get("unisono") << 4) | (model.get("oscallocation")));
+                    }
+                else if (key.equals("envelope1mode, envelope1trigger") ||
+                         key.equals("envelope2mode, envelope2trigger") ||
+                         key.equals("envelope3mode, envelope3trigger") ||
+                         key.equals("envelope4mode, envelope4trigger"))
+                    {
+                        int j;
+                        bytes[i] = 0;  // or whatever
+                        try { 
+                            j = Integer.parseInt(key.substring(8, 9)); 
+                            bytes[i] = (byte)((model.get("envelope" + j + "trigger") << 5) | (model.get("envelope" + j + "mode")));
+                        }
+                        catch (Exception e) { e.printStackTrace(); }
+                    }
+                else if (i >= 327 && i <= 342) // step/glide/accent
+                    {
+                        int j = i - 326;
+                        bytes[i] = (byte)((model.get("arp" + (j < 10 ? "0" : "") + j + "step") << 4) |
+                                          (model.get("arp" + (j < 10 ? "0" : "") + j + "glide") << 3) |
+                                          (model.get("arp" + (j < 10 ? "0" : "") + j + "accent")));
+                    }
+                else if (i >= 343 && i <= 358) // timing/length
+                    {
+                        int j = i - 342;
+                        bytes[i] = (byte)((model.get("arp" + (j < 10 ? "0" : "") + j + "length") << 4) | 
+                                          (model.get("arp" + (j < 10 ? "0" : "") + j + "timing")));
+                    }
+                else
+                    {
+                        bytes[i] = (byte)(model.get(key));
+                    }
             }
 
         String name = model.get("name", "Init") + "                ";  // has to be 16 long
                                 
         for(int i = 363; i < 379; i++)
             {
-            bytes[i] = (byte)(name.charAt(i - 363));
+                bytes[i] = (byte)(name.charAt(i - 363));
             }
                 
         bytes[379] = (byte)(model.get("category"));
@@ -2086,77 +2086,77 @@ public class WaldorfBlofeld extends Synth
         full[391] = (byte)0xF7;
 
         return full;
-        }
+    }
 
 
 
     public void setParameterByIndex(int i, byte b)
-        {
+    {
         String key = allParameters[i];
         if (key.equals("-"))
             {
-            // do nothing
+                // do nothing
             }
         else if (key.equals("osc1octave") || key.equals("osc2octave") || key.equals("osc3octave"))
             {
-            model.set(key, (b - 16) / 12);
+                model.set(key, (b - 16) / 12);
             }
         else if (key.equals("oscallocation, unisono"))
             {
-            model.set("unisono", b >>> 4);
-            model.set("oscallocation", b & 1);
+                model.set("unisono", b >>> 4);
+                model.set("oscallocation", b & 1);
             }
         else if (key.equals("envelope1mode, envelope1trigger") ||
-            key.equals("envelope2mode, envelope2trigger") ||
-            key.equals("envelope3mode, envelope3trigger") ||
-            key.equals("envelope4mode, envelope4trigger"))
+                 key.equals("envelope2mode, envelope2trigger") ||
+                 key.equals("envelope3mode, envelope3trigger") ||
+                 key.equals("envelope4mode, envelope4trigger"))
             {
-            try { 
-                int j = Integer.parseInt(key.substring(8, 9)); 
-                model.set("envelope" + j + "trigger", b >>> 5);
-                model.set("envelope" + j + "mode", b & 7);  // even though it's supposed to be 5 bits, only 3 are used!
+                try { 
+                    int j = Integer.parseInt(key.substring(8, 9)); 
+                    model.set("envelope" + j + "trigger", b >>> 5);
+                    model.set("envelope" + j + "mode", b & 7);  // even though it's supposed to be 5 bits, only 3 are used!
                 }
-            catch (Exception e) { e.printStackTrace(); }
+                catch (Exception e) { e.printStackTrace(); }
             }
         else if (i >= 327 && i <= 342) // step/glide/accent
             {
-            int j = i - 326;
-            model.set("arp" + (j < 10 ? "0" : "") + j + "step", b >>> 4);
-            model.set("arp" + (j < 10 ? "0" : "") + j + "glide", (b >>> 3) & 1);
-            model.set("arp" + (j < 10 ? "0" : "") + j + "accent", (b & 7));
+                int j = i - 326;
+                model.set("arp" + (j < 10 ? "0" : "") + j + "step", b >>> 4);
+                model.set("arp" + (j < 10 ? "0" : "") + j + "glide", (b >>> 3) & 1);
+                model.set("arp" + (j < 10 ? "0" : "") + j + "accent", (b & 7));
             }
         else if (i >= 343 && i <= 358) // timing/length
             {
-            int j = i - 342;
-            model.set("arp" + (j < 10 ? "0" : "") + j + "length", b >>> 4);
-            model.set("arp" + (j < 10 ? "0" : "") + j + "timing", b & 7);
+                int j = i - 342;
+                model.set("arp" + (j < 10 ? "0" : "") + j + "length", b >>> 4);
+                model.set("arp" + (j < 10 ? "0" : "") + j + "timing", b & 7);
             }
         else if (i >= 363 && i < 363 + 16)  // name
             {
-            try 
-                {
-                String name = model.get("name", "Init") + "                ";
-                byte[] str = name.getBytes("US-ASCII");
-                byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
-                System.arraycopy(str, 0, newstr, 0, 16);
-                newstr[i - 363] = b;
-                model.set("name", new String(newstr, "US-ASCII"));
-                }
-            catch (UnsupportedEncodingException e)
-                {
-                e.printStackTrace();
-                }
+                try 
+                    {
+                        String name = model.get("name", "Init") + "                ";
+                        byte[] str = name.getBytes("US-ASCII");
+                        byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
+                        System.arraycopy(str, 0, newstr, 0, 16);
+                        newstr[i - 363] = b;
+                        model.set("name", new String(newstr, "US-ASCII"));
+                    }
+                catch (UnsupportedEncodingException e)
+                    {
+                        e.printStackTrace();
+                    }
             }
         else
             {
-            model.set(key, b);
+                model.set(key, b);
             }
-        }
+    }
 
 
 
     public void parseParameter(byte[] data)
-        {
+    {
         int index = -1;
         byte b = 0;
                 
@@ -2169,45 +2169,45 @@ public class WaldorfBlofeld extends Synth
             data[5] == 0x00 &&  // only Sound Mode Edit Bufer
             data.length == 10)
             {
-            int hi = (int)(data[6] & 127);
-            int lo = (int)(data[7] & 127);
+                int hi = (int)(data[6] & 127);
+                int lo = (int)(data[7] & 127);
              
-            index = (hi << 7) | (lo);
-            b = (byte)(data[8] & 127);
-            setParameterByIndex(index, b);
+                index = (hi << 7) | (lo);
+                b = (byte)(data[8] & 127);
+                setParameterByIndex(index, b);
             }
         else
             {
-            // we'll put CC here later
+                // we'll put CC here later
             }
         revise();
-        }
+    }
         
     public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
-        {
+    {
         boolean retval = true;
         if (!ignorePatch && data[5] < 8)  // otherwise it's probably just local patch data.  Too bad they do this. :-(
             {
-            model.set("bank", data[5]);
-            model.set("number", data[6]);
+                model.set("bank", data[5]);
+                model.set("number", data[6]);
             }
         else
             {
-            retval = false;
+                retval = false;
             }
                 
         for(int i = 0; i < 380; i++)
             {
-            setParameterByIndex(i, data[i + 7]);
+                setParameterByIndex(i, data[i + 7]);
             }
         revise();       
         return PARSE_SUCCEEDED;     
-        }
+    }
         
 
     /** Generate a Waldorf checksum of the data bytes */
     byte produceChecksum(byte[] bytes)
-        {
+    {
         //      From the sysex document:
         //
         //      "Sum of all databytes truncated to 7 bits.
@@ -2227,12 +2227,12 @@ public class WaldorfBlofeld extends Synth
         b = (byte)(b & (byte)127);
         
         return b;
-        }
+    }
 
     public int getPauseAfterChangePatch() { return 200; }
 
     public void changePatch(Model tempModel)
-        {
+    {
         byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");
         try {
@@ -2240,45 +2240,45 @@ public class WaldorfBlofeld extends Synth
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, BB));
             // Number change is PC
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0));
-            }
-        catch (Exception e) { e.printStackTrace(); }
         }
+        catch (Exception e) { e.printStackTrace(); }
+    }
 
     public byte[] requestDump(Model tempModel)
-        {
+    {
         if (tempModel == null)
             tempModel = getModel();
         byte DEV = (byte)(getID());
         byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x00, BB, NN, 0x00, (byte)0xF7 };
-        }
+    }
     
     public byte[] requestDump(int bank, int number, int id)
-        {
+    {
         byte DEV = (byte)id;
         byte BB = (byte)bank;
         byte NN = (byte)number;
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x00, BB, NN, 0x00, (byte)0xF7 };
-        }
+    }
         
     public byte[] requestCurrentDump()
-        {
+    {
         byte DEV = (byte)(getID());
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x00, 0x7F, 0x00, 0x00, (byte)0xF7 };
-        }
+    }
     
     
     public static boolean recognize(byte[] data)
-        {
+    {
         boolean v = (
-            data.length == EXPECTED_SYSEX_LENGTH &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x3E &&
-            data[2] == (byte)0x13 &&
-            data[4] == (byte)0x10);
+                     data.length == EXPECTED_SYSEX_LENGTH &&
+                     data[0] == (byte)0xF0 &&
+                     data[1] == (byte)0x3E &&
+                     data[2] == (byte)0x13 &&
+                     data[4] == (byte)0x10);
         return v;
-        }
+    }
     
     public static final int EXPECTED_SYSEX_LENGTH = 392;
     
@@ -2289,7 +2289,7 @@ public class WaldorfBlofeld extends Synth
     /////// OTHER ABSTRACT METHODS
     
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-        {
+    {
         JComboBox bank = new JComboBox(BANKS);
         bank.setEditable(false);
         bank.setMaximumRowCount(32);
@@ -2299,34 +2299,34 @@ public class WaldorfBlofeld extends Synth
                 
         while(true)
             {
-            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
+                boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                                                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
                 
-            if (result == false) 
-                return false;
+                if (result == false) 
+                    return false;
                                 
-            int n;
-            try { n = Integer.parseInt(number.getText()); }
-            catch (NumberFormatException e)
-                {
-                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
-                continue;
-                }
-            if (n < 1 || n > 128)
-                {
-                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
-                continue;
-                }
+                int n;
+                try { n = Integer.parseInt(number.getText()); }
+                catch (NumberFormatException e)
+                    {
+                        showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                        continue;
+                    }
+                if (n < 1 || n > 128)
+                    {
+                        showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                        continue;
+                    }
                                 
-            change.set("bank", bank.getSelectedIndex());
-            change.set("number", n - 1);
+                change.set("bank", bank.getSelectedIndex());
+                change.set("number", n - 1);
                         
-            return true;
+                return true;
             }
-        }
+    }
 
     public void revise()
-        {
+    {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -2334,78 +2334,78 @@ public class WaldorfBlofeld extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-        }
+    }
         
     public static String getSynthName() { return "Waldorf Blofeld"; }
     
     public String getPatchName(Model model) { return model.get("name", "Init"); }
     
     public byte getID() 
-        { 
+    { 
         try 
             { 
-            byte b = (byte)(Byte.parseByte(tuple.id));
-            if (b >= 0) return b;
+                byte b = (byte)(Byte.parseByte(tuple.id));
+                if (b >= 0) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
         catch (NumberFormatException e) { e.printStackTrace(); }
         return 0;
-        }
+    }
         
     public String reviseID(String id)
-        {
+    {
         try 
             { 
-            byte b =(byte)(Byte.parseByte(id)); 
-            if (b >= 0) return "" + b;
+                byte b =(byte)(Byte.parseByte(id)); 
+                if (b >= 0) return "" + b;
             } 
         catch (NumberFormatException e) { }             // expected
         return "" + getID();
-        }
+    }
 
 
 
 
     public boolean patchLocationEquals(Model patch1, Model patch2)
-    	{
-    	int bank1 = patch1.get("bank");
-    	int number1 = patch1.get("number");
-    	int bank2 = patch2.get("bank");
-    	int number2 = patch2.get("number");
-    	return (bank1 == bank2 && number1 == number2);
-    	}
-    	
+    {
+        int bank1 = patch1.get("bank");
+        int number1 = patch1.get("number");
+        int bank2 = patch2.get("bank");
+        int number2 = patch2.get("number");
+        return (bank1 == bank2 && number1 == number2);
+    }
+        
     public Model getNextPatchLocation(Model model)
-    	{
-    	int bank = model.get("bank");
-    	int number = model.get("number");
-    	
-    	number++;
-    	if (number >= 128)
-    		{
-    		bank++;
-    		number = 0;
-	    	if (bank >= 8)
-	    		bank = 0;
-	    	}
-	    	
-    	Model newModel = buildModel();
-    	newModel.set("bank", bank);
-    	newModel.set("number", number);
-		return newModel;
-    	}
+    {
+        int bank = model.get("bank");
+        int number = model.get("number");
+        
+        number++;
+        if (number >= 128)
+            {
+                bank++;
+                number = 0;
+                if (bank >= 8)
+                    bank = 0;
+            }
+                
+        Model newModel = buildModel();
+        newModel.set("bank", bank);
+        newModel.set("number", number);
+        return newModel;
+    }
 
     public String getPatchLocationName(Model model)
-    	{
-    	// getPatchLocationName() is called from sprout() as a test to see if we should enable
-    	// batch downloading.  If we haven't yet created an .init file, then parameters won't exist
-    	// yet and this method will bomb badly.  So we return null in this case.
-    	if (!model.exists("number")) return null;
-    	
-    	int number = model.get("number") + 1;
-    	return BANKS[model.get("bank")] + 
-    		(number > 99 ? "" : (number > 9 ? "0" : "00")) + number;
-    	}
-    	
+    {
+        // getPatchLocationName() is called from sprout() as a test to see if we should enable
+        // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
+        // yet and this method will bomb badly.  So we return null in this case.
+        if (!model.exists("number")) return null;
+        
+        int number = model.get("number") + 1;
+        return BANKS[model.get("bank")] + 
+            (number > 99 ? "" : (number > 9 ? "0" : "00")) + number;
     }
+        
+}
     

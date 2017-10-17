@@ -12,9 +12,9 @@ package edisyn;
 */
 
 public interface Updatable
-    {
+{
     /** Updates the object in response to a change to the following key in the model. */
         
     public void update(String key, Model model);
-    }
+}
         

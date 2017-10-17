@@ -20,7 +20,7 @@ import java.awt.event.*;
 */
 
 public class PushButton extends JPanel
-    {
+{
     JButton button;
     
     public Insets getInsets() { return new Insets(0,0,0,0); }
@@ -28,7 +28,7 @@ public class PushButton extends JPanel
     public JButton getButton() { return button; }
     
     public PushButton(final String text)
-        {
+    {
         button = new JButton(text);
         button.putClientProperty("JComponent.sizeVariant", "small");
         button.setFont(Style.SMALL_FONT);
@@ -36,18 +36,18 @@ public class PushButton extends JPanel
                 
         button.addActionListener(new ActionListener()
             {
-            public void actionPerformed(ActionEvent e)
+                public void actionPerformed(ActionEvent e)
                 {
-                perform();
+                    perform();
                 }
             });
         setBackground(Style.BACKGROUND_COLOR);
         setLayout(new BorderLayout());
         add(button, BorderLayout.CENTER);
-        }
+    }
     
     public void perform()
-        {
+    {
         // do nothing by default
-        }
     }
+}

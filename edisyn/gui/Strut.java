@@ -20,48 +20,48 @@ import java.awt.event.*;
 */
 
 public class Strut
-    {
+{
     public static JComponent makeHorizontalStrut(final int space)
-        {
+    {
         return makeStrut(space, 0);
-        } 
+    } 
                 
     public static JComponent makeVerticalStrut(final int space)
-        {
+    {
         return makeStrut(0, space);
-        }
+    }
 
     public static JComponent makeStrut(final int width, final int height)
-        {
+    {
         JPanel panel = new JPanel()
             {
-            public Dimension getMinimumSize() { return new Dimension(width, height); }
-            public Dimension getPreferredSize() { return new Dimension(width, height); }
-            public Dimension getMaximumSize() { return new Dimension(width, height); }
+                public Dimension getMinimumSize() { return new Dimension(width, height); }
+                public Dimension getPreferredSize() { return new Dimension(width, height); }
+                public Dimension getMaximumSize() { return new Dimension(width, height); }
             };
         panel.setBackground(Style.BACKGROUND_COLOR);
         return panel;
-        } 
+    } 
     
     public static JComponent makeStrut(Component[] components)
-    	{
-    	int maxWidth = 0;
-    	int maxHeight = 0;
-    	for(int i = 0; i < components.length; i++)
-    		{
-    		components[i].validate();
-    		Dimension size = components[i].getPreferredSize();
-    		if (maxWidth < size.width)
-    			maxWidth = size.width;
-    		if (maxHeight < size.height)
-    			maxHeight = size.height;
-    		}
-    	return makeStrut(maxWidth, maxHeight);
-    	}
-    	
-    public static JComponent makeStrut(Component component)
-    	{
-    	return makeStrut(new Component[] { component });
-    	}
-
+    {
+        int maxWidth = 0;
+        int maxHeight = 0;
+        for(int i = 0; i < components.length; i++)
+            {
+                components[i].validate();
+                Dimension size = components[i].getPreferredSize();
+                if (maxWidth < size.width)
+                    maxWidth = size.width;
+                if (maxHeight < size.height)
+                    maxHeight = size.height;
+            }
+        return makeStrut(maxWidth, maxHeight);
     }
+        
+    public static JComponent makeStrut(Component component)
+    {
+        return makeStrut(new Component[] { component });
+    }
+
+}

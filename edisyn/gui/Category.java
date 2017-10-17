@@ -20,70 +20,70 @@ import java.util.*;
 */
 
 public class Category extends JComponent implements Gatherable
-    {             
+{             
     Color color;
       
     /** If synth is non-null, then double-clicking on the category will select or deselect all the
-    	components inside it for mutation purposes. */
+        components inside it for mutation purposes. */
     public Category(final Synth synth, String label, Color color)
-        {
+    {
         setLayout(new BorderLayout());
         this.color = color;     
         setName(label);
 
-		if (synth != null)
-			{
-			addMouseListener(new MouseAdapter()
-				{
-				public void mouseClicked(MouseEvent e)
-					{
-					if (synth.isShowingMutation())
-						{
-						boolean inBorder = ( e.getPoint().y < getInsets().top);
-						if (e.getClickCount() == 2 && inBorder)
-							{
-							boolean turnOn = true;
-							ArrayList comps = new ArrayList();
-							gatherAllComponents(comps);
-							for(int i = 0; i < comps.size(); i++)
-								{
-								if (comps.get(i) instanceof NumericalComponent)
-									{
-									NumericalComponent nc = (NumericalComponent)(comps.get(i));
-									String key = nc.getKey();
-									if (synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
-										{ turnOn = false; break; }
-									}
-								}
-									
-							for(int i = 0; i < comps.size(); i++)
-								{
-								if (comps.get(i) instanceof NumericalComponent)
-									{
-									NumericalComponent nc = (NumericalComponent)(comps.get(i));
-									String key = nc.getKey();
-									if (synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
-										synth.mutationMap.setFree(key, turnOn);
-									}
-								}
-							repaint();
-							}
-						}
-					}
-				});
-			}
+        if (synth != null)
+            {
+                addMouseListener(new MouseAdapter()
+                    {
+                        public void mouseClicked(MouseEvent e)
+                        {
+                            if (synth.isShowingMutation())
+                                {
+                                    boolean inBorder = ( e.getPoint().y < getInsets().top);
+                                    if (e.getClickCount() == 2 && inBorder)
+                                        {
+                                            boolean turnOn = true;
+                                            ArrayList comps = new ArrayList();
+                                            gatherAllComponents(comps);
+                                            for(int i = 0; i < comps.size(); i++)
+                                                {
+                                                    if (comps.get(i) instanceof NumericalComponent)
+                                                        {
+                                                            NumericalComponent nc = (NumericalComponent)(comps.get(i));
+                                                            String key = nc.getKey();
+                                                            if (synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+                                                                { turnOn = false; break; }
+                                                        }
+                                                }
+                                                                        
+                                            for(int i = 0; i < comps.size(); i++)
+                                                {
+                                                    if (comps.get(i) instanceof NumericalComponent)
+                                                        {
+                                                            NumericalComponent nc = (NumericalComponent)(comps.get(i));
+                                                            String key = nc.getKey();
+                                                            if (synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+                                                                synth.mutationMap.setFree(key, turnOn);
+                                                        }
+                                                }
+                                            repaint();
+                                        }
+                                }
+                        }
+                    });
+            }
                         
-        }
+    }
     
     public Insets getInsets() 
-        { 
+    { 
         Insets insets = (Insets)(super.getInsets().clone());
         insets.bottom = 0;
         return insets;
-        }
+    }
     
     public void setName(String label)
-        {
+    {
         
         // here we're going to do a little hack.  TitledBorder doesn't put the title
         // on the FAR LEFT of the line, so when we draw the border we get a little square
@@ -101,49 +101,49 @@ public class Category extends JComponent implements Gatherable
         
         final MatteBorder matteBorder = new MatteBorder(Style.CATEGORY_STROKE_WIDTH, 0, 0, 0, color)
             {
-            public Insets getBorderInsets(Component c, Insets insets)
+                public Insets getBorderInsets(Component c, Insets insets)
                 {
-                Insets ins = super.getBorderInsets(c, insets);
-                if (paintingBorder[0]) 
-                    ins.left = -5;
-                return ins;
+                    Insets ins = super.getBorderInsets(c, insets);
+                    if (paintingBorder[0]) 
+                        ins.left = -5;
+                    return ins;
                 }
             };
         
         TitledBorder titledBorder = new TitledBorder(
-            matteBorder,
-            " " + label + " ",
-            TitledBorder.LEFT,
-            TitledBorder.TOP,
-            Style.CATEGORY_FONT,
-            color)
+                                                     matteBorder,
+                                                     " " + label + " ",
+                                                     TitledBorder.LEFT,
+                                                     TitledBorder.TOP,
+                                                     Style.CATEGORY_FONT,
+                                                     color)
             {
-            public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) 
+                public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) 
                 {
-                paintingBorder[0] = true;
-                super.paintBorder(c, g, x, y, width, height);
-                paintingBorder[0] = false;
+                    paintingBorder[0] = true;
+                    super.paintBorder(c, g, x, y, width, height);
+                    paintingBorder[0] = false;
                 }
             };
                 
         Border b = BorderFactory.createCompoundBorder(Style.CATEGORY_BORDER, titledBorder);
         setBorder(b);
         repaint();
-        }
+    }
     
     public void gatherAllComponents(java.util.ArrayList list)
-        {
+    {
         Component[] c = getComponents();
         for(int i = 0; i < c.length; i++)
             {
-            list.add(c[i]);
-            if (c[i] instanceof Gatherable)
-                ((Gatherable)c[i]).gatherAllComponents(list);
+                list.add(c[i]);
+                if (c[i] instanceof Gatherable)
+                    ((Gatherable)c[i]).gatherAllComponents(list);
             }                       
-        }
+    }
     
     public void paintComponent(Graphics g)
-        {
+    {
         Graphics2D graphics = (Graphics2D) g;
 
         Style.prepareGraphics(g);
@@ -153,5 +153,5 @@ public class Category extends JComponent implements Gatherable
         rect.y = 0;
         graphics.setPaint(Style.BACKGROUND_COLOR);
         graphics.fill(rect);
-        }
     }
+}

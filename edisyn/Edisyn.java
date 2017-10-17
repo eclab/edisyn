@@ -19,11 +19,11 @@ import javax.swing.*;
 */
 
 public class Edisyn 
-    {
-    public static final int VERSION = 11;
+{
+    public static final int VERSION = 12;
     
     public static void main(String[] args)
-        {
+    {
         try {
             System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
             System.setProperty("apple.laf.useScreenMenuBar", "true");
@@ -34,10 +34,10 @@ public class Edisyn
             // System.setProperty("apple.awt.application.name", "Edisyn");
             
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            }
+        }
         catch(Exception e) { }
 
         if (Synth.doNewSynthPanel() == null)
             System.exit(0);
-        }
     }
+}

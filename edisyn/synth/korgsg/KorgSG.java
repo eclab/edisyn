@@ -23,50 +23,50 @@ import javax.sound.midi.*;
 */
 
 public class KorgSG extends Synth
-    {
+{
     /// Various collections of parameter names for pop-up menus
     
     
     // It seems to me that the right ordering of these would be COLUMN order, not ROW order
     /*
-    Concert, Studio, DancePiano, Dyna-Stage, Wurly EP, FM EP 1, Piano & EP, Funkamatic, SGX Organ, R&B Organ, Clav, Vibraphone, TheStrings, WhisperVox, SynthFlute, Acoustic,
-    Bright, Rock Piano, Chorused, Classic EP, Dyno Bell, Wave EP 1, PF&Strings, FM&Analog, Velo \"B\", CX-3 Organ, PhaserClav, Bellphonic, Symphonic, Slow Waves, SynthBrass, Fretless,
-    Classic, Jazz Piano, Mix Piano, Stage Bell, FM EP 2, Motion EP, MIDI Grant, EP&Strings, Perc Organ, Gospel Org, Mutronics, Crystaline, PadStrings, BreathyVox, Synth Air, FingerBass,
-    Dynamic, Ballad, StagePiano, Stage Time, FM EP 3, Wave EP 2, Power Keys, EP Magic, Full Organ, Pipe Organ, Clavitar, BellString, StringsL&R, Voices, Synth Horn, Synth Bass
+      Concert, Studio, DancePiano, Dyna-Stage, Wurly EP, FM EP 1, Piano & EP, Funkamatic, SGX Organ, R&B Organ, Clav, Vibraphone, TheStrings, WhisperVox, SynthFlute, Acoustic,
+      Bright, Rock Piano, Chorused, Classic EP, Dyno Bell, Wave EP 1, PF&Strings, FM&Analog, Velo \"B\", CX-3 Organ, PhaserClav, Bellphonic, Symphonic, Slow Waves, SynthBrass, Fretless,
+      Classic, Jazz Piano, Mix Piano, Stage Bell, FM EP 2, Motion EP, MIDI Grant, EP&Strings, Perc Organ, Gospel Org, Mutronics, Crystaline, PadStrings, BreathyVox, Synth Air, FingerBass,
+      Dynamic, Ballad, StagePiano, Stage Time, FM EP 3, Wave EP 2, Power Keys, EP Magic, Full Organ, Pipe Organ, Clavitar, BellString, StringsL&R, Voices, Synth Horn, Synth Bass
     */
     
     static final String[] PROGRAMS = new String[] { "Concert", "Studio", "DancePiano", "Dyna-Stage", "Wurly EP", "FM EP 1", "Piano & EP", "Funkamatic", "SGX Organ", "R&B Organ", "Clav", "Vibraphone", "TheStrings", "WhisperVox", "SynthFlute", "Acoustic",
-    												"Bright", "Rock Piano", "Chorused", "Classic EP", "Dyno Bell", "Wave EP 1", "PF&Strings", "FM&Analog", "Velo \"B\"", "CX-3 Organ", "PhaserClav", "Bellphonic", "Symphonic", "Slow Waves", "SynthBrass", "Fretless",
-    												"Classic", "Jazz Piano", "Mix Piano", "Stage Bell", "FM EP 2", "Motion EP", "MIDI Grant", "EP&Strings", "Perc Organ", "Gospel Org", "Mutronics", "Crystaline", "PadStrings", "BreathyVox", "Synth Air", "FingerBass",
-    												"Dynamic", "Ballad", "StagePiano", "Stage Time", "FM EP 3", "Wave EP 2", "Power Keys", "EP Magic", "Full Organ", "Pipe Organ", "Clavitar", "BellString", "StringsL&R", "Voices", "Synth Horn", "Synth Bass" };
-   	static final String[] BANKS = new String[] { "A", "B", "C", "D" };
-   	static final String[] SCALE_TYPES = new String[] { "Equal Temperment", "Pure Major", "Pure Minor", "Pythagoras", "Werckmeister", "Kirnberger", "Stretch" };
-   	static final String[] EFFECT_TYPES_1 = new String[] { "None", "Reverb", "Early Reflection", "Stereo Delay", "Stereo Chorus", "Stereo Flanger", "Overdrive", "Stereo Phaser", "Rotary Speaker", "Auto Pan", "Wah", "Flanger-Delay", "Hyper Enhancer" };
-   	static final String[] EFFECT_TYPES_2 = new String[] { "None", "Reverb", "Early Reflection", "Stereo Delay", "Stereo Chorus", "Stereo Flanger", "Overdrive", "Stereo Phaser", "Rotary Speaker", "Auto Pan", "Wah", "Flanger-Delay" };
-   	static final String[] SCALE_KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
-   	static final String[] CHORUS_LFO_TYPES = new String[] { "Sine", "Triangle" };
-   	static final String[] ROTARY_MOD_SOURCES = new String[] { "None", "[ProX] Wheel 1", "[ProX] Wheel 2", "[ProX] Slider 1", "[ProX] Slider 2", "[ProX] Slider 3", "[ProX] Slider 4", "[ProX] Pedal", "[ProX] Pedal SW", "Damper", "Ctrl #12", "[Rack] Ctrl #13", "[Rack] JS(+Y) #01", "[Rack] JS(-Y) #02", "[Rack] Aftertouch"};
-   	
-   	static final String[] PROGRAMS_REARRANGED;
-   	static
-   		{
-   		int x = 0;
-   		String[] pg = new String[PROGRAMS.length];
-   		for(int i = 0; i < PROGRAMS.length / 4; i++)
-   			{
-   			for(int j = 0; j < 4; j++)
-   				{
-   				int _i = i + 1;
-   				pg[x++] = BANKS[j] + (_i < 9 ? "0" + _i : _i)  + ": " + PROGRAMS[j * PROGRAMS.length/4 + i];
-   				}
-   			}
-   		PROGRAMS_REARRANGED = pg;
-   		}
+                                                    "Bright", "Rock Piano", "Chorused", "Classic EP", "Dyno Bell", "Wave EP 1", "PF&Strings", "FM&Analog", "Velo \"B\"", "CX-3 Organ", "PhaserClav", "Bellphonic", "Symphonic", "Slow Waves", "SynthBrass", "Fretless",
+                                                    "Classic", "Jazz Piano", "Mix Piano", "Stage Bell", "FM EP 2", "Motion EP", "MIDI Grant", "EP&Strings", "Perc Organ", "Gospel Org", "Mutronics", "Crystaline", "PadStrings", "BreathyVox", "Synth Air", "FingerBass",
+                                                    "Dynamic", "Ballad", "StagePiano", "Stage Time", "FM EP 3", "Wave EP 2", "Power Keys", "EP Magic", "Full Organ", "Pipe Organ", "Clavitar", "BellString", "StringsL&R", "Voices", "Synth Horn", "Synth Bass" };
+    static final String[] BANKS = new String[] { "A", "B", "C", "D" };
+    static final String[] SCALE_TYPES = new String[] { "Equal Temperment", "Pure Major", "Pure Minor", "Pythagoras", "Werckmeister", "Kirnberger", "Stretch" };
+    static final String[] EFFECT_TYPES_1 = new String[] { "None", "Reverb", "Early Reflection", "Stereo Delay", "Stereo Chorus", "Stereo Flanger", "Overdrive", "Stereo Phaser", "Rotary Speaker", "Auto Pan", "Wah", "Flanger-Delay", "Hyper Enhancer" };
+    static final String[] EFFECT_TYPES_2 = new String[] { "None", "Reverb", "Early Reflection", "Stereo Delay", "Stereo Chorus", "Stereo Flanger", "Overdrive", "Stereo Phaser", "Rotary Speaker", "Auto Pan", "Wah", "Flanger-Delay" };
+    static final String[] SCALE_KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+    static final String[] CHORUS_LFO_TYPES = new String[] { "Sine", "Triangle" };
+    static final String[] ROTARY_MOD_SOURCES = new String[] { "None", "[ProX] Wheel 1", "[ProX] Wheel 2", "[ProX] Slider 1", "[ProX] Slider 2", "[ProX] Slider 3", "[ProX] Slider 4", "[ProX] Pedal", "[ProX] Pedal SW", "Damper", "Ctrl #12", "[Rack] Ctrl #13", "[Rack] JS(+Y) #01", "[Rack] JS(-Y) #02", "[Rack] Aftertouch"};
+        
+    static final String[] PROGRAMS_REARRANGED;
+    static
+    {
+        int x = 0;
+        String[] pg = new String[PROGRAMS.length];
+        for(int i = 0; i < PROGRAMS.length / 4; i++)
+            {
+                for(int j = 0; j < 4; j++)
+                    {
+                        int _i = i + 1;
+                        pg[x++] = BANKS[j] + (_i < 9 ? "0" + _i : _i)  + ": " + PROGRAMS[j * PROGRAMS.length/4 + i];
+                    }
+            }
+        PROGRAMS_REARRANGED = pg;
+    }
             
 
 
     public KorgSG()
-        {
+    {
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
@@ -88,7 +88,7 @@ public class KorgSG extends Synth
         model.set("bank", 0);
         
         loadDefaults();
-        }
+    }
                 
     
     public String getDefaultResourceFileName() { return "KorgSG.init"; }
@@ -98,7 +98,7 @@ public class KorgSG extends Synth
               
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-        {
+    {
         Category globalCategory = new Category(this, getSynthName(), color);
                 
         JComponent comp;
@@ -109,23 +109,23 @@ public class KorgSG extends Synth
         HBox hbox2 = new HBox();
         comp = new PatchDisplay(this, "Patch", "bank", "number", 9)
             {
-            public String numberString(int number) { number += 1; return (number > 9 ? "" : "0") + number; }
-            public String bankString(int bank) { return BANKS[bank]; }
+                public String numberString(int number) { number += 1; return (number > 9 ? "" : "0") + number; }
+                public String bankString(int bank) { return BANKS[bank]; }
             };
         hbox2.add(comp);
         vbox.add(hbox2);
         
         comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 10 ASCII characters.")
             {
-            public String replace(String val)
+                public String replace(String val)
                 {
-                return revisePatchName(val);
+                    return revisePatchName(val);
                 }
                                 
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                updateTitle();
+                    super.update(key, model);
+                    updateTitle();
                 }
             };
         vbox.addBottom(comp);  // doesn't work right :-(
@@ -135,24 +135,24 @@ public class KorgSG extends Synth
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-        }
+    }
         
     public String revisePatchName(String name)
-    	{
-    	name = super.revisePatchName(name);
-		if (name == null) name = "";
-		char[] chars = name.toCharArray();
-		for(int i = 0; i < chars.length; i++)
-			{
-			if (chars[i] < 32 || chars[i] > 127)
-				chars[i] = ' ';
-			}
-		return new String(chars);
-    	}
+    {
+        name = super.revisePatchName(name);
+        if (name == null) name = "";
+        char[] chars = name.toCharArray();
+        for(int i = 0; i < chars.length; i++)
+            {
+                if (chars[i] < 32 || chars[i] > 127)
+                    chars[i] = ' ';
+            }
+        return new String(chars);
+    }
 
               
-	public JComponent addMain(Color color)
-        {
+    public JComponent addMain(Color color)
+    {
         Category category  = new Category(this, "Main", color);
                         
         JComponent comp;
@@ -163,8 +163,8 @@ public class KorgSG extends Synth
         // I honestly have no idea what this is.  It appears to have no effect.  So I am hiding it.
         params = PROGRAMS_REARRANGED;
         comp = new Chooser("Original Program", this, "program", params);
-//        vbox.add(comp);
-		model.setStatus("program", Model.STATUS_IMMUTABLE);
+        //        vbox.add(comp);
+        model.setStatus("program", Model.STATUS_IMMUTABLE);
 
         comp = new CheckBox("Piano-Style Damp", this, "dampmode");
         vbox.add(comp);
@@ -176,38 +176,38 @@ public class KorgSG extends Synth
         hbox.add(vbox);
 
         comp = new LabelledDial("Brightness", this, "brightness", color, -99, 99)
-        	{
-        	public int getDefaultValue() { return 99; }
-        	};
+            {
+                public int getDefaultValue() { return 99; }
+            };
         hbox.add(comp);
 
         comp = new LabelledDial("Key Touch", this, "velocity", color, -99, 99)
-        	{
-        	public int getDefaultValue() { return 99; }
-        	};
+            {
+                public int getDefaultValue() { return 99; }
+            };
         ((LabelledDial)comp).addAdditionalLabel("(Velocity)");
         hbox.add(comp);
 
         comp = new LabelledDial("Pitch Bend", this, "pitchbendrange", color, -12, 12)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	};
+            {
+                public boolean isSymmetric() { return true; }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Range");
         hbox.add(comp);
 
-		// we need to add a big spacer here so were as wide as the widest effect (Flanger-Delay)
-		// otherwise we get scrollbars.  Three dials wide should be enough.
-		
-		hbox.add(Strut.makeStrut(comp));
-		hbox.add(Strut.makeStrut(comp));
-		hbox.addLast(Strut.makeStrut(comp));
+        // we need to add a big spacer here so were as wide as the widest effect (Flanger-Delay)
+        // otherwise we get scrollbars.  Three dials wide should be enough.
+                
+        hbox.add(Strut.makeStrut(comp));
+        hbox.add(Strut.makeStrut(comp));
+        hbox.addLast(Strut.makeStrut(comp));
 
         category.add(hbox);
         return category;
-        }
+    }
         
     public JComponent addScale(Color color)
-    	{
+    {
         Category category  = new Category(this, "Scale", color);
                         
         JComponent comp;
@@ -222,21 +222,21 @@ public class KorgSG extends Synth
         hbox.add(vbox);
 
         comp = new LabelledDial("Scale Key", this, "scalekey", color, 0, 11)
-        	{
-        	public String map(int val)
-        		{
-        		return SCALE_KEYS[val];
-        		}
-        	};
+            {
+                public String map(int val)
+                {
+                    return SCALE_KEYS[val];
+                }
+            };
         hbox.add(comp);
 
         category.add(hbox);
         return category;
-    	}
-    	
+    }
+        
 
-	public JComponent addEnvelope(Color color)
-        {
+    public JComponent addEnvelope(Color color)
+    {
         Category category  = new Category(this, "Envelope", color);
                         
         JComponent comp;
@@ -258,29 +258,29 @@ public class KorgSG extends Synth
 
         // AD[S]R
         comp = new EnvelopeDisplay(this, Color.red, 
-            new String[] { null, "attacktime", "decaytime", null, "releasetime" },
-            new String[] { null, "level", "level", "level", null },
-            new double[] { 0, 0.25 / 198, 0.25 / 198, 0.25, 0.25 / 198 },
-            new double[] { 0, 1.0 / 198, 0.5 / 198, 0.5 / 198, 0 })
-            	{
-            	public void postProcess(double[] xs, double[] ys)
-            		{
-            		// because we use +/-99 for our envelope values just
-            		// like the SG, we need to postprocess this so that
-            		// we don't have negative envelope coordinates
-            		xs[1] += 0.125;
-            		xs[2] += 0.125;
-            		xs[4] += 0.125;
-					ys[1] += 0.5;            		
-					ys[2] += 0.25;            		
-					ys[3] += 0.25;            		
-            		}
-            	};
+                                   new String[] { null, "attacktime", "decaytime", null, "releasetime" },
+                                   new String[] { null, "level", "level", "level", null },
+                                   new double[] { 0, 0.25 / 198, 0.25 / 198, 0.25, 0.25 / 198 },
+                                   new double[] { 0, 1.0 / 198, 0.5 / 198, 0.5 / 198, 0 })
+            {
+                public void postProcess(double[] xs, double[] ys)
+                {
+                    // because we use +/-99 for our envelope values just
+                    // like the SG, we need to postprocess this so that
+                    // we don't have negative envelope coordinates
+                    xs[1] += 0.125;
+                    xs[2] += 0.125;
+                    xs[4] += 0.125;
+                    ys[1] += 0.5;                           
+                    ys[2] += 0.25;                          
+                    ys[3] += 0.25;                          
+                }
+            };
         hbox.addLast(comp);
         
         category.add(hbox);
         return category;
-        }
+    }
 
 
     //// EFFECTS
@@ -306,48 +306,48 @@ public class KorgSG extends Synth
 
 
 
-	public void addDepth(final int effect, Color color, HBox hbox)
-		{
-		JComponent comp = new LabelledDial("Depth", this, "effect" + effect + "ldepth", color, 0, 100)
-			{
-			public String map(int val)	
-				{
-				if (val == 0) return "Dry";
-				else if (val == 100) return "Wet";
-				else return "" + val + "%";
-				}
-				
-    		public int reviseToAltValue(int val)
-    			{
-    			model.setBounded("effect" + effect + "rdepth", val);
-    			return val;
-    			}
-			};
-		((LabelledDial)comp).addAdditionalLabel("(Left)");
-		// not sure why, but later effects aren't updating the first time.  So I force it here
-		((LabelledDial)comp).update("effect" + effect + "ldepth", model);
-		hbox.add(comp);
+    public void addDepth(final int effect, Color color, HBox hbox)
+    {
+        JComponent comp = new LabelledDial("Depth", this, "effect" + effect + "ldepth", color, 0, 100)
+            {
+                public String map(int val)      
+                {
+                    if (val == 0) return "Dry";
+                    else if (val == 100) return "Wet";
+                    else return "" + val + "%";
+                }
+                                
+                public int reviseToAltValue(int val)
+                {
+                    model.setBounded("effect" + effect + "rdepth", val);
+                    return val;
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("(Left)");
+        // not sure why, but later effects aren't updating the first time.  So I force it here
+        ((LabelledDial)comp).update("effect" + effect + "ldepth", model);
+        hbox.add(comp);
 
-		comp = new LabelledDial("Depth", this, "effect" + effect + "rdepth", color, 0, 100)
-			{
-			public String map(int val)	
-				{
-				if (val == 0) return "Dry";
-				else if (val == 100) return "Wet";
-				else return "" + val + "%";
-				}
+        comp = new LabelledDial("Depth", this, "effect" + effect + "rdepth", color, 0, 100)
+            {
+                public String map(int val)      
+                {
+                    if (val == 0) return "Dry";
+                    else if (val == 100) return "Wet";
+                    else return "" + val + "%";
+                }
 
-    		public int reviseToAltValue(int val)
-    			{
-    			model.setBounded("effect" + effect + "ldepth", val);
-    			return val;
-    			}
-			};
-		((LabelledDial)comp).addAdditionalLabel("(Right)");
-		// not sure why, but later effects aren't updating the first time.  So I force it here
-		((LabelledDial)comp).update("effect" + effect + "rdepth", model);
-		hbox.add(comp);
-		}
+                public int reviseToAltValue(int val)
+                {
+                    model.setBounded("effect" + effect + "ldepth", val);
+                    return val;
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("(Right)");
+        // not sure why, but later effects aren't updating the first time.  So I force it here
+        ((LabelledDial)comp).update("effect" + effect + "rdepth", model);
+        hbox.add(comp);
+    }
 
     public static final int EFFECT_NONE = 0;
     public static final int EFFECT_REVERB = 1;
@@ -364,12 +364,12 @@ public class KorgSG extends Synth
     public static final int EFFECT_HYPER_ENHANCER = 12;
 
     public JComponent addEffect(int effect, Color color)
-        {
+    {
         JComponent comp;
         String[] params;
         
-		final HBox[] effects = new HBox[effect == 1 ? 13 : 12];
-	
+        final HBox[] effects = new HBox[effect == 1 ? 13 : 12];
+        
         // NONE
         effects[EFFECT_NONE] = new HBox();
         
@@ -378,526 +378,526 @@ public class KorgSG extends Synth
         addDepth(effect, color, effects[REVERB]);
                                 
         comp = new LabelledDial("Reverb Time", this, "reverb" + effect + "reverbtime", color, 0, 97)
-        	{
-        	public String map(int val)
-        		{
-        		return String.format("%3.1f", val / 10.0);
-        		}
-        	};
-		effects[REVERB].add(comp);
+            {
+                public String map(int val)
+                {
+                    return String.format("%3.1f", val / 10.0);
+                }
+            };
+        effects[REVERB].add(comp);
 
         comp = new LabelledDial("High", this, "reverb" + effect + "highdamp", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("Damp");
-		effects[REVERB].add(comp);
+        effects[REVERB].add(comp);
 
         comp = new LabelledDial("Pre Delay", this, "reverb" + effect + "predelay", color, 0, 200);
-		effects[REVERB].add(comp);
+        effects[REVERB].add(comp);
 
         comp = new LabelledDial("Early Reflection", this, "reverb" + effect + "erlevel", color, 0, 99);
-		effects[REVERB].add(comp);
+        effects[REVERB].add(comp);
 
         comp = new LabelledDial(" EQ High ", this, "reverb" + effect + "eqhigh", color, -12, 12)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "dB"; }
-        	};
-		effects[REVERB].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
+            };
+        effects[REVERB].add(comp);
 
         comp = new LabelledDial(" EQ Low ", this, "reverb" + effect + "eqlow", color, -12, 12)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "dB"; }
-        	};
-		effects[REVERB].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
+            };
+        effects[REVERB].add(comp);
 
 
-		// EARLY REFLECTION
+        // EARLY REFLECTION
         effects[EFFECT_EARLY_RELFECTION] = new HBox();
         addDepth(effect, color, effects[EFFECT_EARLY_RELFECTION]);
                                 
         comp = new LabelledDial("Early Reflection", this, "earlyreflection" + effect + "ertime", color, 0, 70)
-        	{
-        	public String map(int val)
-        		{
-        		return "" + (val * 10 + 100);
-        		}
-        	};
+            {
+                public String map(int val)
+                {
+                    return "" + (val * 10 + 100);
+                }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Time");
-		effects[EFFECT_EARLY_RELFECTION].add(comp);
+        effects[EFFECT_EARLY_RELFECTION].add(comp);
 
         comp = new LabelledDial("Pre Delay", this, "earlyreflection" + effect + "predelay", color, 0, 200);
-		effects[EFFECT_EARLY_RELFECTION].add(comp);
+        effects[EFFECT_EARLY_RELFECTION].add(comp);
 
         comp = new LabelledDial(" EQ High ", this, "earlyreflection" + effect + "eqhigh", color, -12, 12)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "dB"; }
-        	};
-		effects[EFFECT_EARLY_RELFECTION].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
+            };
+        effects[EFFECT_EARLY_RELFECTION].add(comp);
 
         comp = new LabelledDial(" EQ Low ", this, "earlyreflection" + effect + "eqlow", color, -12, 12)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "dB"; }
-        	};
-		effects[EFFECT_EARLY_RELFECTION].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
+            };
+        effects[EFFECT_EARLY_RELFECTION].add(comp);
 
 
 
-		// STEREO DELAY
+        // STEREO DELAY
         effects[EFFECT_STEREO_DELAY] = new HBox();
         addDepth(effect, color, effects[EFFECT_STEREO_DELAY]);
                                 
         comp = new LabelledDial("Delay Time", this, "stereodelay" + effect + "delaytimeleft", color, 0, 500)
-        	{
-				public int reviseToAltValue(int val)
-					{
-					model.setBounded("stereodelay" + effect + "delaytimeright", val);
-					return val;
-					}
-        	};
-	    ((LabelledDial)comp).addAdditionalLabel("Left");
-		effects[EFFECT_STEREO_DELAY].add(comp);
+            {
+                public int reviseToAltValue(int val)
+                {
+                    model.setBounded("stereodelay" + effect + "delaytimeright", val);
+                    return val;
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Left");
+        effects[EFFECT_STEREO_DELAY].add(comp);
 
         comp = new LabelledDial("Delay Time", this, "stereodelay" + effect + "delaytimeright", color, 0, 500)
-        	{
-				public int reviseToAltValue(int val)
-					{
-					model.setBounded("stereodelay" + effect + "delaytimeleft", val);
-					return val;
-					}
-        	};
-	    ((LabelledDial)comp).addAdditionalLabel("Right");
-		effects[EFFECT_STEREO_DELAY].add(comp);
+            {
+                public int reviseToAltValue(int val)
+                {
+                    model.setBounded("stereodelay" + effect + "delaytimeleft", val);
+                    return val;
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Right");
+        effects[EFFECT_STEREO_DELAY].add(comp);
 
         comp = new LabelledDial("Feedback", this, "stereodelay" + effect + "feedback", color, -99, 99)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "%"; }
-        	};
-		effects[EFFECT_STEREO_DELAY].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "%"; }
+            };
+        effects[EFFECT_STEREO_DELAY].add(comp);
 
         comp = new LabelledDial("High", this, "stereodelay" + effect + "highdamp", color, 0, 99);
-	    ((LabelledDial)comp).addAdditionalLabel("Damp");
-		effects[EFFECT_STEREO_DELAY].add(comp);
+        ((LabelledDial)comp).addAdditionalLabel("Damp");
+        effects[EFFECT_STEREO_DELAY].add(comp);
 
         comp = new LabelledDial(" EQ High ", this, "stereodelay" + effect + "eqhigh", color, -12, 12)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "dB"; }
-        	};
-		effects[EFFECT_STEREO_DELAY].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
+            };
+        effects[EFFECT_STEREO_DELAY].add(comp);
 
         comp = new LabelledDial(" EQ Low ", this, "stereodelay" + effect + "eqlow", color, -12, 12)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "dB"; }
-        	};
-		effects[EFFECT_STEREO_DELAY].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
+            };
+        effects[EFFECT_STEREO_DELAY].add(comp);
 
 
 
-		// STEREO CHORUS
+        // STEREO CHORUS
         effects[EFFECT_STEREO_CHORUS] = new HBox();
         addDepth(effect, color, effects[EFFECT_STEREO_CHORUS]);
                                 
         comp = new LabelledDial("Mod Depth", this, "stereochorus" + effect + "moddepth", color, 0, 99);
-	    ((LabelledDial)comp).addAdditionalLabel("");
-		effects[EFFECT_STEREO_CHORUS].add(comp);
+        ((LabelledDial)comp).addAdditionalLabel("");
+        effects[EFFECT_STEREO_CHORUS].add(comp);
 
         comp = new LabelledDial("Mod Speed", this, "stereochorus" + effect + "modspeed", color, 0, 216)
-        	{
-        	public String map(int val)
-        		{
-        		if (val < 100)
-        			return String.format("%4.2f", ( val / 100.0 * 3 + 0.03));
-        		else if (val < 200)
-        			return String.format("%3.1f", ((val - 100) * 0.1 + 3.1));
-        		else 
-        			return String.format("%4.1f", ((val - 200) + 14));
-        		}
-        	};
-		effects[EFFECT_STEREO_CHORUS].add(comp);
+            {
+                public String map(int val)
+                {
+                    if (val < 100)
+                        return String.format("%4.2f", ( val / 100.0 * 3 + 0.03));
+                    else if (val < 200)
+                        return String.format("%3.1f", ((val - 100) * 0.1 + 3.1));
+                    else 
+                        return String.format("%4.1f", ((val - 200) + 14));
+                }
+            };
+        effects[EFFECT_STEREO_CHORUS].add(comp);
 
 
         comp = new LabelledDial("Delay Time", this, "stereochorus" + effect + "delaytime", color, 0, 200);
-	    ((LabelledDial)comp).addAdditionalLabel("");
-		effects[EFFECT_STEREO_CHORUS].add(comp);
+        ((LabelledDial)comp).addAdditionalLabel("");
+        effects[EFFECT_STEREO_CHORUS].add(comp);
 
         comp = new LabelledDial(" EQ High ", this, "stereochorus" + effect + "eqhigh", color, -12, 12)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "dB"; }
-        	};
-		effects[EFFECT_STEREO_CHORUS].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
+            };
+        effects[EFFECT_STEREO_CHORUS].add(comp);
 
         comp = new LabelledDial(" EQ Low ", this, "stereochorus" + effect + "eqlow", color, -12, 12)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "dB"; }
-        	};
-		effects[EFFECT_STEREO_CHORUS].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
+            };
+        effects[EFFECT_STEREO_CHORUS].add(comp);
 
-	/// Note: the actual values are, for some reason, 2 and 3, not 0 and 1
+        /// Note: the actual values are, for some reason, 2 and 3, not 0 and 1
         params = CHORUS_LFO_TYPES;
         comp = new Chooser("LFO", this, "stereochorus" + effect + "mgshape", params);
-		VBox vbox = new VBox();
-		vbox.add(comp);
-		effects[EFFECT_STEREO_CHORUS].add(vbox);
+        VBox vbox = new VBox();
+        vbox.add(comp);
+        effects[EFFECT_STEREO_CHORUS].add(vbox);
 
 
-		// STEREO FLANGER
+        // STEREO FLANGER
         effects[EFFECT_FLANGER] = new HBox();
         addDepth(effect, color, effects[EFFECT_FLANGER]);
                                 
         comp = new LabelledDial("Delay Time", this, "stereoflanger" + effect + "delaytime", color, 0, 200)
-        	{
-        	public String map(int val)
-        		{
-        		return String.format("%3.1f", val / 10.0);
-        		}
-        	};
-		effects[EFFECT_FLANGER].add(comp);
+            {
+                public String map(int val)
+                {
+                    return String.format("%3.1f", val / 10.0);
+                }
+            };
+        effects[EFFECT_FLANGER].add(comp);
 
         comp = new LabelledDial("Mod Depth", this, "stereoflanger" + effect + "moddepth", color, 0, 99);
-		effects[EFFECT_FLANGER].add(comp);
+        effects[EFFECT_FLANGER].add(comp);
 
         comp = new LabelledDial("Mod Speed", this, "stereoflanger" + effect + "modspeed", color, 1, 99);
-		effects[EFFECT_FLANGER].add(comp);
+        effects[EFFECT_FLANGER].add(comp);
 
         comp = new LabelledDial("Resonance", this, "stereoflanger" + effect + "resonance", color, -99, 99)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "%"; }
-        	};
-		effects[EFFECT_FLANGER].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "%"; }
+            };
+        effects[EFFECT_FLANGER].add(comp);
 
         comp = new LabelledDial(" EQ High ", this, "stereoflanger" + effect + "eqhigh", color, -12, 12)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "dB"; }
-        	};
-		effects[EFFECT_FLANGER].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
+            };
+        effects[EFFECT_FLANGER].add(comp);
 
         comp = new LabelledDial(" EQ Low ", this, "stereoflanger" + effect + "eqlow", color, -12, 12)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "dB"; }
-        	};
-	    ((LabelledDial)comp).addAdditionalLabel(" ");  // So we're the same height as the others
-		effects[EFFECT_FLANGER].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
+            };
+        ((LabelledDial)comp).addAdditionalLabel(" ");  // So we're the same height as the others
+        effects[EFFECT_FLANGER].add(comp);
 
 
-		// OVERDRIVE
+        // OVERDRIVE
         effects[OVERDRIVE] = new HBox();
         addDepth(effect, color, effects[OVERDRIVE]);
                                 
         comp = new LabelledDial("Drive", this, "overdrive" + effect + "drive", color, 1, 111);
-		effects[OVERDRIVE].add(comp);
+        effects[OVERDRIVE].add(comp);
 
         comp = new LabelledDial("Hot Spot", this, "overdrive" + effect + "hotspot", color, 0, 99);
-		effects[OVERDRIVE].add(comp);
+        effects[OVERDRIVE].add(comp);
 
         comp = new LabelledDial("Resonance", this, "overdrive" + effect + "resonance", color, 0, 99);
-		effects[OVERDRIVE].add(comp);
+        effects[OVERDRIVE].add(comp);
 
         comp = new LabelledDial("Out Level", this, "overdrive" + effect + "outlevel", color, 0, 99);
-		effects[OVERDRIVE].add(comp);
+        effects[OVERDRIVE].add(comp);
 
         comp = new LabelledDial(" EQ High ", this, "overdrive" + effect + "eqhigh", color, -12, 12)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "dB"; }
-        	};
-		effects[OVERDRIVE].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
+            };
+        effects[OVERDRIVE].add(comp);
 
         comp = new LabelledDial(" EQ Low ", this, "overdrive" + effect + "eqlow", color, -12, 12)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "dB"; }
-        	};
-	    ((LabelledDial)comp).addAdditionalLabel(" ");  // So we're the same height as the others
-		effects[OVERDRIVE].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
+            };
+        ((LabelledDial)comp).addAdditionalLabel(" ");  // So we're the same height as the others
+        effects[OVERDRIVE].add(comp);
 
 
-		// STEREO PHASER
+        // STEREO PHASER
         effects[STEREO_PHASER] = new HBox();
         addDepth(effect, color, effects[STEREO_PHASER]);
                                 
         comp = new LabelledDial("Mod Depth", this, "stereophaser" + effect + "moddepth", color, 0, 99);
-	    ((LabelledDial)comp).addAdditionalLabel("");
-		effects[STEREO_PHASER].add(comp);
+        ((LabelledDial)comp).addAdditionalLabel("");
+        effects[STEREO_PHASER].add(comp);
 
         comp = new LabelledDial("Mod Speed", this, "stereophaser" + effect + "modspeed", color, 0, 216)
-        	{
-        	public String map(int val)
-        		{
-        		if (val < 100)
-        			return String.format("%4.2f", ( val / 100.0 * 3 + 0.03));
-        		else if (val < 200)
-        			return String.format("%3.1f", ((val - 100) * 0.1 + 3.1));
-        		else 
-        			return String.format("%4.1f", ((val - 200) + 14));
-        		}
-        	};
-		effects[STEREO_PHASER].add(comp);
+            {
+                public String map(int val)
+                {
+                    if (val < 100)
+                        return String.format("%4.2f", ( val / 100.0 * 3 + 0.03));
+                    else if (val < 200)
+                        return String.format("%3.1f", ((val - 100) * 0.1 + 3.1));
+                    else 
+                        return String.format("%4.1f", ((val - 200) + 14));
+                }
+            };
+        effects[STEREO_PHASER].add(comp);
 
         comp = new LabelledDial("Feedback", this, "stereophaser" + effect + "feedback", color, -99, 99)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "%"; }
-        	};
-		effects[STEREO_PHASER].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "%"; }
+            };
+        effects[STEREO_PHASER].add(comp);
 
         comp = new LabelledDial("Manual", this, "stereophaser" + effect + "manual", color, 0, 99);
-		effects[STEREO_PHASER].add(comp);
+        effects[STEREO_PHASER].add(comp);
 
-	/// Note: the actual values are, for some reason, 2 and 3, not 0 and 1
+        /// Note: the actual values are, for some reason, 2 and 3, not 0 and 1
         params = CHORUS_LFO_TYPES;
         comp = new Chooser("LFO", this, "stereophaser" + effect + "mgshape", params);
-		vbox = new VBox();
-		vbox.add(comp);
-		effects[STEREO_PHASER].add(vbox);
+        vbox = new VBox();
+        vbox.add(comp);
+        effects[STEREO_PHASER].add(vbox);
 
 
-		// ROTARY SPEAKER
+        // ROTARY SPEAKER
         effects[ROTARY_SPEAKER] = new HBox();
         addDepth(effect, color, effects[ROTARY_SPEAKER]);
                                 
         comp = new LabelledDial("Vibrato", this, "rotaryspeaker" + effect + "vibratodepth", color, 0, 15);
-	    ((LabelledDial)comp).addAdditionalLabel("Depth");
-		effects[ROTARY_SPEAKER].add(comp);
+        ((LabelledDial)comp).addAdditionalLabel("Depth");
+        effects[ROTARY_SPEAKER].add(comp);
 
         comp = new LabelledDial("Acceleration", this, "rotaryspeaker" + effect + "acceleration", color, 1, 15);
-		effects[ROTARY_SPEAKER].add(comp);
+        effects[ROTARY_SPEAKER].add(comp);
 
         comp = new LabelledDial("Slow Speed", this, "rotaryspeaker" + effect + "slowspeed", color, 1, 99);
-		effects[ROTARY_SPEAKER].add(comp);
+        effects[ROTARY_SPEAKER].add(comp);
 
         comp = new LabelledDial("Fast Speed", this, "rotaryspeaker" + effect + "fastspeed", color, 1, 99);
-	    ((LabelledDial)comp).addAdditionalLabel(" ");  // So we're the same height as the others
-		effects[ROTARY_SPEAKER].add(comp);
+        ((LabelledDial)comp).addAdditionalLabel(" ");  // So we're the same height as the others
+        effects[ROTARY_SPEAKER].add(comp);
 
         params = ROTARY_MOD_SOURCES;
         comp = new Chooser("Dynamic Mod Source", this, "rotaryspeaker" + effect + "dynamicmodsource", params);
-		vbox = new VBox();
-		vbox.add(comp);
-		effects[ROTARY_SPEAKER].add(vbox);
+        vbox = new VBox();
+        vbox.add(comp);
+        effects[ROTARY_SPEAKER].add(vbox);
 
 
-		// AUTO PAN
+        // AUTO PAN
         effects[AUTO_PAN] = new HBox();
         addDepth(effect, color, effects[AUTO_PAN]);
                                 
         comp = new LabelledDial("Depth", this, "autopan" + effect + "depth", color, 0, 99);
-	    ((LabelledDial)comp).addAdditionalLabel(" ");  // So we're the same height as the others
-		effects[AUTO_PAN].add(comp);
+        ((LabelledDial)comp).addAdditionalLabel(" ");  // So we're the same height as the others
+        effects[AUTO_PAN].add(comp);
 
         comp = new LabelledDial("Speed", this, "autopan" + effect + "speed", color, 0, 216)
-        	{
-        	public String map(int val)
-        		{
-        		if (val < 100)
-        			return String.format("%4.2f", ( val / 100.0 * 3 + 0.03));
-        		else if (val < 200)
-        			return String.format("%3.1f", ((val - 100) * 0.1 + 3.1));
-        		else 
-        			return String.format("%4.1f", ((val - 200) + 14));
-        		}
-        	};
-		effects[AUTO_PAN].add(comp);
+            {
+                public String map(int val)
+                {
+                    if (val < 100)
+                        return String.format("%4.2f", ( val / 100.0 * 3 + 0.03));
+                    else if (val < 200)
+                        return String.format("%3.1f", ((val - 100) * 0.1 + 3.1));
+                    else 
+                        return String.format("%4.1f", ((val - 200) + 14));
+                }
+            };
+        effects[AUTO_PAN].add(comp);
 
         comp = new LabelledDial("Mod Shape", this, "autopan" + effect + "shape", color, -99, 99)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "%"; }
-        	};
-		effects[AUTO_PAN].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "%"; }
+            };
+        effects[AUTO_PAN].add(comp);
 
         comp = new LabelledDial(" EQ High ", this, "autopan" + effect + "eqhigh", color, -12, 12)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "dB"; }
-        	};
-		effects[AUTO_PAN].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
+            };
+        effects[AUTO_PAN].add(comp);
 
         comp = new LabelledDial(" EQ Low ", this, "autopan" + effect + "eqlow", color, -12, 12)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "dB"; }
-        	};
-		effects[AUTO_PAN].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
+            };
+        effects[AUTO_PAN].add(comp);
 
-	/// Note: the actual values are, for some reason, 2 and 3, not 0 and 1
+        /// Note: the actual values are, for some reason, 2 and 3, not 0 and 1
         params = CHORUS_LFO_TYPES;
         comp = new Chooser("LFO", this, "autopan" + effect + "mgshape", params);
-		vbox = new VBox();
-		vbox.add(comp);
-		effects[AUTO_PAN].add(vbox);
+        vbox = new VBox();
+        vbox.add(comp);
+        effects[AUTO_PAN].add(vbox);
 
 
-		// WAH
+        // WAH
         effects[WAH] = new HBox();
         addDepth(effect, color, effects[WAH]);
                                 
         comp = new LabelledDial("Frequency", this, "wah" + effect + "frequency", color, 0, 99);
-		effects[WAH].add(comp);
+        effects[WAH].add(comp);
 
         comp = new LabelledDial("Peak Gain", this, "wah" + effect + "peakgain", color, -12, 12)
 
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "dB"; }
-        	};
-		effects[WAH].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
+            };
+        effects[WAH].add(comp);
 
         comp = new LabelledDial("Peak Width", this, "wah" + effect + "peakwidth", color, 0, 99);
-		effects[WAH].add(comp);
+        effects[WAH].add(comp);
 
-       	comp = new LabelledDial("Intensity", this, "wah" + effect + "dynamicmodint", color, -15, 15)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	};
-		effects[WAH].add(comp);
+        comp = new LabelledDial("Intensity", this, "wah" + effect + "dynamicmodint", color, -15, 15)
+            {
+                public boolean isSymmetric() { return true; }
+            };
+        effects[WAH].add(comp);
 
-         params = ROTARY_MOD_SOURCES;
+        params = ROTARY_MOD_SOURCES;
         comp = new Chooser("Source", this, "wah" + effect + "dynamicmodsource", params);
-		vbox = new VBox();
-		vbox.add(comp);
-		effects[WAH].add(vbox);
+        vbox = new VBox();
+        vbox.add(comp);
+        effects[WAH].add(vbox);
 
 
- 		// FLANGER-DELAY
+        // FLANGER-DELAY
         effects[FLANGER_DELAY] = new HBox();
         addDepth(effect, color, effects[FLANGER_DELAY]);
                                 
         comp = new LabelledDial("Flanger", this, "flangerdelay" + effect + "flangerdelaytime", color, 0, 200)
-        	{
-        	public String map(int val)
-        		{
-        		return String.format("%3.1f", val / 10.0);
-        		}
-        	};
-	    ((LabelledDial)comp).addAdditionalLabel("Delay Time");
-		effects[FLANGER_DELAY].add(comp);
+            {
+                public String map(int val)
+                {
+                    return String.format("%3.1f", val / 10.0);
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Delay Time");
+        effects[FLANGER_DELAY].add(comp);
 
         comp = new LabelledDial("Flanger", this, "flangerdelay" + effect + "flangermoddepth", color, 0, 99);
-	    ((LabelledDial)comp).addAdditionalLabel("Mod Depth");
-		effects[FLANGER_DELAY].add(comp);
+        ((LabelledDial)comp).addAdditionalLabel("Mod Depth");
+        effects[FLANGER_DELAY].add(comp);
 
         comp = new LabelledDial("Flanger", this, "flangerdelay" + effect + "flangermodspeed", color, 1, 99);
-	    ((LabelledDial)comp).addAdditionalLabel("Mod Speed");
-		effects[FLANGER_DELAY].add(comp);
+        ((LabelledDial)comp).addAdditionalLabel("Mod Speed");
+        effects[FLANGER_DELAY].add(comp);
 
         comp = new LabelledDial("Flanger", this, "flangerdelay" + effect + "flangerfeedback", color, -99, 99)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "%"; }
-        	};
-	    ((LabelledDial)comp).addAdditionalLabel("Feedback");
-		effects[FLANGER_DELAY].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "%"; }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Feedback");
+        effects[FLANGER_DELAY].add(comp);
 
         comp = new LabelledDial("Delay", this, "flangerdelay" + effect + "delaytime", color, 0, 450);
-	    ((LabelledDial)comp).addAdditionalLabel("Time");
-		effects[FLANGER_DELAY].add(comp);
+        ((LabelledDial)comp).addAdditionalLabel("Time");
+        effects[FLANGER_DELAY].add(comp);
 
         comp = new LabelledDial("Delay", this, "flangerdelay" + effect + "delayfeedback", color, -99, 99)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val) { return "" + val + "%"; }
-        	};
-	    ((LabelledDial)comp).addAdditionalLabel("Feedback");
-		effects[FLANGER_DELAY].add(comp);
+            {
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "%"; }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Feedback");
+        effects[FLANGER_DELAY].add(comp);
 
         comp = new LabelledDial("Delay", this, "flangerdelay" + effect + "delaylevel", color, 0, 99);
-	    ((LabelledDial)comp).addAdditionalLabel("Level");
-		effects[FLANGER_DELAY].add(comp);
+        ((LabelledDial)comp).addAdditionalLabel("Level");
+        effects[FLANGER_DELAY].add(comp);
 
 
 
-		// HYPER ENHANCER
-		if (effect == 1)
-			{
-			effects[HYPER_ENHANCER] = new HBox();
-								
-			comp = new LabelledDial("Depth", this, "hyperenhancer" + effect + "ldepth", color, 0, 1)
-				{
-				public String map(int val)	
-					{
-					if (val == 0) return "Dry";
-					else return "Wet";
-					}
-				public int reviseToAltValue(int val)
-					{
-					model.setBounded("hyperenhancer" + effect + "rdepth", val);
-					return val;
-					}
-				};
-			((LabelledDial)comp).addAdditionalLabel("(Left)");
-			effects[HYPER_ENHANCER].add(comp);
+        // HYPER ENHANCER
+        if (effect == 1)
+            {
+                effects[HYPER_ENHANCER] = new HBox();
+                                                                
+                comp = new LabelledDial("Depth", this, "hyperenhancer" + effect + "ldepth", color, 0, 1)
+                    {
+                        public String map(int val)      
+                        {
+                            if (val == 0) return "Dry";
+                            else return "Wet";
+                        }
+                        public int reviseToAltValue(int val)
+                        {
+                            model.setBounded("hyperenhancer" + effect + "rdepth", val);
+                            return val;
+                        }
+                    };
+                ((LabelledDial)comp).addAdditionalLabel("(Left)");
+                effects[HYPER_ENHANCER].add(comp);
 
-			comp = new LabelledDial("Depth", this, "hyperenhancer" + effect + "rdepth", color, 0, 1)
-				{
-				public String map(int val)	
-					{
-					if (val == 0) return "Dry";
-					else return "Wet";
-					}
-				public int reviseToAltValue(int val)
-					{
-					model.setBounded("hyperenhancer" + effect + "ldepth", val);
-					return val;
-					}
-				};
-			((LabelledDial)comp).addAdditionalLabel("(Right)");
-			effects[HYPER_ENHANCER].add(comp);
+                comp = new LabelledDial("Depth", this, "hyperenhancer" + effect + "rdepth", color, 0, 1)
+                    {
+                        public String map(int val)      
+                        {
+                            if (val == 0) return "Dry";
+                            else return "Wet";
+                        }
+                        public int reviseToAltValue(int val)
+                        {
+                            model.setBounded("hyperenhancer" + effect + "ldepth", val);
+                            return val;
+                        }
+                    };
+                ((LabelledDial)comp).addAdditionalLabel("(Right)");
+                effects[HYPER_ENHANCER].add(comp);
 
-			comp = new LabelledDial("Trim", this, "hyperenhancer" + effect + "trim", color, 0, 100);
-			effects[HYPER_ENHANCER].add(comp);
+                comp = new LabelledDial("Trim", this, "hyperenhancer" + effect + "trim", color, 0, 100);
+                effects[HYPER_ENHANCER].add(comp);
 
-			comp = new LabelledDial("Low", this, "hyperenhancer" + effect + "lowfrequency", color, 1, 70);
-			((LabelledDial)comp).addAdditionalLabel("Frequency");
-			effects[HYPER_ENHANCER].add(comp);
+                comp = new LabelledDial("Low", this, "hyperenhancer" + effect + "lowfrequency", color, 1, 70);
+                ((LabelledDial)comp).addAdditionalLabel("Frequency");
+                effects[HYPER_ENHANCER].add(comp);
 
-			comp = new LabelledDial("Low", this, "hyperenhancer" + effect + "lowblend", color, 0, 100);
-			((LabelledDial)comp).addAdditionalLabel("Blend");
-			effects[HYPER_ENHANCER].add(comp);
+                comp = new LabelledDial("Low", this, "hyperenhancer" + effect + "lowblend", color, 0, 100);
+                ((LabelledDial)comp).addAdditionalLabel("Blend");
+                effects[HYPER_ENHANCER].add(comp);
 
-			comp = new LabelledDial("High", this, "hyperenhancer" + effect + "highfrequency", color, 1, 40);
-			((LabelledDial)comp).addAdditionalLabel("Frequency");
-			effects[HYPER_ENHANCER].add(comp);
+                comp = new LabelledDial("High", this, "hyperenhancer" + effect + "highfrequency", color, 1, 40);
+                ((LabelledDial)comp).addAdditionalLabel("Frequency");
+                effects[HYPER_ENHANCER].add(comp);
 
-			comp = new LabelledDial("High", this, "hyperenhancer" + effect + "highblend", color, 0, 100);
-			((LabelledDial)comp).addAdditionalLabel("Blend");
-			effects[HYPER_ENHANCER].add(comp);
-			}
+                comp = new LabelledDial("High", this, "hyperenhancer" + effect + "highblend", color, 0, 100);
+                ((LabelledDial)comp).addAdditionalLabel("Blend");
+                effects[HYPER_ENHANCER].add(comp);
+            }
 
-	// Force empty to be the same size
+        // Force empty to be the same size
         effects[EFFECT_NONE].addLast(Strut.makeStrut(effects));
 
 
-		final HBox main = new HBox();
+        final HBox main = new HBox();
         params = (effect == 1 ? EFFECT_TYPES_1 : EFFECT_TYPES_2);
         comp = new Chooser("Type", this, "effect" + effect + "type", params)
-        	{
-        	public void update(String key, Model model)
-        		{
-        		super.update(key, model);
-        		main.removeLast();
-        		main.addLast(effects[model.get(key, 0)]);
-        		main.revalidate();
-        		main.repaint();
-        		}
-        	};
+            {
+                public void update(String key, Model model)
+                {
+                    super.update(key, model);
+                    main.removeLast();
+                    main.addLast(effects[model.get(key, 0)]);
+                    main.revalidate();
+                    main.repaint();
+                }
+            };
         vbox = new VBox();
         vbox.add(comp);
-		main.add(vbox);
-		
-		Category category = new Category(this, "Effect " + effect, color);
-       	category.add(main, BorderLayout.CENTER);
+        main.add(vbox);
+                
+        Category category = new Category(this, "Effect " + effect, color);
+        category.add(main, BorderLayout.CENTER);
                 
         return category;
-        }
+    }
 
 
 
@@ -905,76 +905,76 @@ public class KorgSG extends Synth
     
 
 
-	public byte EFFECT_TYPE_BYTES[] = new byte[] { 0x00, 0x01, 0x0A, 0x0D, 0x13, 0x19, 0x1F, 0x20, 0x22, 0x23, 0x25, 0x27, 0x30 };
+    public byte EFFECT_TYPE_BYTES[] = new byte[] { 0x00, 0x01, 0x0A, 0x0D, 0x13, 0x19, 0x1F, 0x20, 0x22, 0x23, 0x25, 0x27, 0x30 };
     public int findEffectType(byte b)
-    	{
-    	for(int i = 0; i < EFFECT_TYPE_BYTES.length; i++)
-    		if (EFFECT_TYPE_BYTES[i] == b) 
-    			return i;
-    	System.err.println("Warning, unknown effect type byte " + b);
-    	return 0;
-    	}
-    	    
+    {
+        for(int i = 0; i < EFFECT_TYPE_BYTES.length; i++)
+            if (EFFECT_TYPE_BYTES[i] == b) 
+                return i;
+        System.err.println("Warning, unknown effect type byte " + b);
+        return 0;
+    }
+            
     int range(int a)
-    	{
-    	while (a > 255) a -= 256;
-    	while (a < 0) a += 256;
-    	return a;
-    	}
-    	
+    {
+        while (a > 255) a -= 256;
+        while (a < 0) a += 256;
+        return a;
+    }
+        
     // converts all but last byte (F7)
     byte[] convertTo8Bit(byte[] data, int offset)
-    	{
-    	// How big?
-    	int size = (data.length - offset - 1) / 8 * 7;
-    	if ((data.length - offset - 1) % 8 > 0)
-    		size += ((data.length - offset - 1) % 8 - 1);    	
-    	byte[] newd = new byte[size];
-    	
-    	int j = 0;
-    	for(int i = offset; i < data.length; i += 8)
-    		{
-    		for(int x = 0; x < 7; x++)
-    			{
-    			if (j + x < newd.length)
-    				newd[j + x] = (byte)(data[i + x + 1] | (byte)(((data[i] >>> x) & 0x1) << 7));
-    			}
-    		j += 7;
-    		}
-    	return newd;
-    	}
-    	
+    {
+        // How big?
+        int size = (data.length - offset - 1) / 8 * 7;
+        if ((data.length - offset - 1) % 8 > 0)
+            size += ((data.length - offset - 1) % 8 - 1);           
+        byte[] newd = new byte[size];
+        
+        int j = 0;
+        for(int i = offset; i < data.length; i += 8)
+            {
+                for(int x = 0; x < 7; x++)
+                    {
+                        if (j + x < newd.length)
+                            newd[j + x] = (byte)(data[i + x + 1] | (byte)(((data[i] >>> x) & 0x1) << 7));
+                    }
+                j += 7;
+            }
+        return newd;
+    }
+        
     // converts all bytes
     byte[] convertTo7Bit(byte[] data)
-    	{
-    	// How big?
-    	int size = (data.length) / 7 * 8;
-    	if (data.length % 7 > 0)
-    		size += (1 + data.length % 7);
-    	byte[] newd = new byte[size];
-    	
-    	int j = 0;
-    	for(int i = 0; i < data.length; i+=7)
-    		{
-    		for(int x = 0; x < 7; x++)
-    			{
-    			if (j + x + 1 < newd.length)
-    				{
-    				newd[j + x + 1] = (byte)(data[i + x] & 127);
-    				// Note that I have do to & 1 because data[i + x] is promoted to an int
-    				// first, and then shifted, and that makes a BIG NUMBER which requires
-    				// me to mask out the 1.  I hope this isn't the case for other stuff (which
-    				// is typically 7-bit).
-    				newd[j] = (byte)(newd[j] | (((data[i + x] >>> 7) & 1) << x));
-    				}
-    			}
-    		j += 8;
-    		}
-    	return newd;
-    	}
-    	
+    {
+        // How big?
+        int size = (data.length) / 7 * 8;
+        if (data.length % 7 > 0)
+            size += (1 + data.length % 7);
+        byte[] newd = new byte[size];
+        
+        int j = 0;
+        for(int i = 0; i < data.length; i+=7)
+            {
+                for(int x = 0; x < 7; x++)
+                    {
+                        if (j + x + 1 < newd.length)
+                            {
+                                newd[j + x + 1] = (byte)(data[i + x] & 127);
+                                // Note that I have do to & 1 because data[i + x] is promoted to an int
+                                // first, and then shifted, and that makes a BIG NUMBER which requires
+                                // me to mask out the 1.  I hope this isn't the case for other stuff (which
+                                // is typically 7-bit).
+                                newd[j] = (byte)(newd[j] | (((data[i + x] >>> 7) & 1) << x));
+                            }
+                    }
+                j += 8;
+            }
+        return newd;
+    }
+        
     public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
-        {
+    {
         // The data is F0, 42, 3[CHANNEL], 4A, 40, ... DATA ..., F7
         
         data = convertTo8Bit(data, 5);
@@ -982,9 +982,9 @@ public class KorgSG extends Synth
         char[] namec = new char[10];
         String name;
         for(int i = 0; i < 10; i++)
-        	{
-        	namec[i] = (char)data[i];
-        	}
+            {
+                namec[i] = (char)data[i];
+            }
         name = new String(namec);
         model.set("name", name);
         
@@ -1002,267 +1002,267 @@ public class KorgSG extends Synth
         model.set("scaletype", data[18]);
         model.set("scalekey", data[19]);
         model.set("pitchbendrange", data[20]);
-        model.set("effect1type", findEffectType(data[21]));		// what a mess
-        model.set("effect2type", findEffectType(data[22]));		// what a mess
+        model.set("effect1type", findEffectType(data[21]));             // what a mess
+        model.set("effect2type", findEffectType(data[22]));             // what a mess
         
         if (model.get("effect1type", 0) == 12)  // hyperenhancer has a custom effect depth, grrrrrrrr
-        	{
-        	model.set("hyperenhancer1ldepth", data[23] == 0 ? 0 : 100);
-        	model.set("hyperenhancer1rdepth", data[24] == 0 ? 0 : 100);
-        	model.set("effect1ldepth", 0);
-        	model.set("effect1rdepth", 0);
-        	}
+            {
+                model.set("hyperenhancer1ldepth", data[23] == 0 ? 0 : 100);
+                model.set("hyperenhancer1rdepth", data[24] == 0 ? 0 : 100);
+                model.set("effect1ldepth", 0);
+                model.set("effect1rdepth", 0);
+            }
         else
-        	{
-        	model.set("effect1ldepth", data[23]);
-        	model.set("effect1rdepth", data[24]);
-        	model.set("hyperenhancer1ldepth", 0);
-        	model.set("hyperenhancer1rdepth", 0);
-        	}
-        	
-		model.set("effect2ldepth", data[25]);
-		model.set("effect2rdepth", data[26]);
-        	
-		// skip data slots 32, 33, 34, then...
-		
-		parseEffects(data, 1, model.get("effect1type", 0));
-		parseEffects(data, 2, model.get("effect2type", 0));
+            {
+                model.set("effect1ldepth", data[23]);
+                model.set("effect1rdepth", data[24]);
+                model.set("hyperenhancer1ldepth", 0);
+                model.set("hyperenhancer1rdepth", 0);
+            }
+                
+        model.set("effect2ldepth", data[25]);
+        model.set("effect2rdepth", data[26]);
+                
+        // skip data slots 32, 33, 34, then...
+                
+        parseEffects(data, 1, model.get("effect1type", 0));
+        parseEffects(data, 2, model.get("effect2type", 0));
 
         revise();       
         return PARSE_SUCCEEDED;     
-        }
+    }
     
     void parseEffects(byte[] data, int effect, int effectType)
-    	{
-    	int offset = (effect == 1 ? 30 : 40);
-    	
-    	// all custom, gagh
-    	switch (effectType)
-    		{
-    		case EFFECT_NONE:
-    			break;
-    		case EFFECT_REVERB:
-    			model.set("reverb" + effect + "reverbtime", data[offset + 0]);
-    			model.set("reverb" + effect + "highdamp", data[offset + 2]);
-    			model.set("reverb" + effect + "predelay", range(data[offset + 3]));
-    			model.set("reverb" + effect + "erlevel", data[offset + 4]);
-    			model.set("reverb" + effect + "eqhigh", data[offset + 6]);
-    			model.set("reverb" + effect + "eqlow", data[offset + 7]);
-    			break;
-    		case EFFECT_EARLY_RELFECTION:
-    			model.set("earlyreflection" + effect + "ertime", data[offset + 0]);
-    			model.set("earlyreflection" + effect + "predelay", range(data[offset + 1]));
-    			model.set("earlyreflection" + effect + "eqhigh", data[offset + 6]);
-    			model.set("earlyreflection" + effect + "eqlow", data[offset + 7]);
-    			break;
-    		case EFFECT_STEREO_DELAY:
-    			model.set("stereodelay" + effect + "delaytimel", (data[offset + 1] << 8) | data[offset + 0]);
-    			model.set("stereodelay" + effect + "feedback", data[offset + 2]);
-    			model.set("stereodelay" + effect + "highdamp", data[offset + 3]);
-    			model.set("stereodelay" + effect + "delaytimer", (data[offset + 5] << 8) | data[offset + 4]);
-    			model.set("stereodelay" + effect + "eqhigh", data[offset + 6]);
-    			model.set("stereodelay" + effect + "eqlow", data[offset + 7]);
-    			break;
-    		case EFFECT_STEREO_CHORUS:
-     			model.set("stereochorus" + effect + "moddepth", data[offset + 0]);
-    			model.set("stereochorus" + effect + "modspeed", range(data[offset + 1]));
-    			model.set("stereochorus" + effect + "mgshape", (data[offset + 2] == 2 ? 0 : 1));  // is either 02 or 03
-    			model.set("stereochorus" + effect + "delaytime", data[offset + 4]);
-    			model.set("stereochorus" + effect + "eqhigh", data[offset + 6]);
-    			model.set("stereochorus" + effect + "eqlow", data[offset + 7]);
-   			break;
-    		case EFFECT_FLANGER:
-    			model.set("stereoflanger" + effect + "delaytime", data[offset + 0]);
-     			model.set("stereoflanger" + effect + "moddepth", data[offset + 1]);
-    			model.set("stereoflanger" + effect + "modspeed", data[offset + 2]);
-    			model.set("stereoflanger" + effect + "resonance", data[offset + 3]);
-    			model.set("stereoflanger" + effect + "eqhigh", data[offset + 6]);
-    			model.set("stereoflanger" + effect + "eqlow", data[offset + 7]);
-    			break;
-    		case EFFECT_OVERDRIVE:
-    			model.set("overdrive" + effect + "drive", data[offset + 0]);
-     			model.set("overdrive" + effect + "hotspot", data[offset + 1]);
-    			model.set("overdrive" + effect + "resonance", data[offset + 2]);
-    			model.set("overdrive" + effect + "outlevel", data[offset + 3]);
-    			model.set("overdrive" + effect + "eqhigh", data[offset + 6]);
-    			model.set("overdrive" + effect + "eqlow", data[offset + 7]);
-    			break;
-    		case EFFECT_STEREO_PHASER:
-    			model.set("stereophaser" + effect + "moddepth", data[offset + 0]);
-     			model.set("stereophaser" + effect + "modspeed", range(data[offset + 1]));
-    			model.set("stereophaser" + effect + "mgshape", (data[offset + 2] == 2 ? 0 : 1));  // is either 02 or 03
-    			model.set("stereophaser" + effect + "feedback", data[offset + 3]);
-    			model.set("stereophaser" + effect + "manual", data[offset + 4]);
-    			break;
-    		case EFFECT_ROTARY_SPEAKER:
-    			model.set("rotaryspeaker" + effect + "vibratodepth", data[offset + 0]);
-     			model.set("rotaryspeaker" + effect + "acceleration", data[offset + 1]);
-    			model.set("rotaryspeaker" + effect + "slowspeed", data[offset + 2]);
-    			model.set("rotaryspeaker" + effect + "fastspeed", data[offset + 3]);
-    			model.set("rotaryspeaker" + effect + "dynamicmodsource", data[offset + 8]);
-    			break;
-    		case EFFECT_AUTO_PAN:
-    			model.set("autopan" + effect + "depth", data[offset + 0]);
-     			model.set("autopan" + effect + "speed", range(data[offset + 1]));
-    			model.set("autopan" + effect + "mgshape", (data[offset + 2] == 2 ? 0 : 1));  // is either 02 or 03
-    			model.set("autopan" + effect + "shape", data[offset + 3]);
-    			model.set("autopan" + effect + "eqhigh", data[offset + 6]);
-    			model.set("autopan" + effect + "eqlow", data[offset + 7]);
-    			break;
-    		case EFFECT_WAH:
-    			model.set("wah" + effect + "frequency", data[offset + 2]);
-     			model.set("wah" + effect + "peakgain", data[offset + 3]);
-    			model.set("wah" + effect + "peakwidth", data[offset + 4]);
-    			model.set("wah" + effect + "dynamicmodsource", data[offset + 8]);
-    			model.set("wah" + effect + "dynamicmodint", data[offset + 9]);
-    			break;
-    		case EFFECT_FLANGER_DELAY:
-    			model.set("flangerdelay" + effect + "flangerdelaytime", data[offset + 0]);
-     			model.set("flangerdelay" + effect + "flangermodspeed", data[offset + 1]);
-    			model.set("flangerdelay" + effect + "flangermoddepth", data[offset + 2]);
-    			model.set("flangerdelay" + effect + "flangerfeedback", data[offset + 3]);
-    			model.set("flangerdelay" + effect + "delaytime", range(data[offset + 4]));
-    			model.set("flangerdelay" + effect + "delayfeedback", data[offset + 5]);
-    			model.set("flangerdelay" + effect + "delaylevel", data[offset + 6]);
-    			break;
-    		case EFFECT_HYPER_ENHANCER:
-    			if (effect != 1)
-    				System.err.println("Warning: Effect " + effect + " included hyper enhancer.");
-    			model.set("hyperenhancer" + effect + "trim", data[offset + 0]);
-     			model.set("hyperenhancer" + effect + "lowfreq", data[offset + 1]);
-    			model.set("hyperenhancer" + effect + "lowblend", data[offset + 2]);
-    			model.set("hyperenhancer" + effect + "highfreq", data[offset + 3]);
-    			model.set("hyperenhancer" + effect + "highblend", data[offset + 4]);
-    			break;
-    		default: 
-    			System.err.println("Warning: Effect " + effect + " has an invalid effect type " + effectType);
-    			break;
-    		}
-    	}
-    	
+    {
+        int offset = (effect == 1 ? 30 : 40);
+        
+        // all custom, gagh
+        switch (effectType)
+            {
+            case EFFECT_NONE:
+                break;
+            case EFFECT_REVERB:
+                model.set("reverb" + effect + "reverbtime", data[offset + 0]);
+                model.set("reverb" + effect + "highdamp", data[offset + 2]);
+                model.set("reverb" + effect + "predelay", range(data[offset + 3]));
+                model.set("reverb" + effect + "erlevel", data[offset + 4]);
+                model.set("reverb" + effect + "eqhigh", data[offset + 6]);
+                model.set("reverb" + effect + "eqlow", data[offset + 7]);
+                break;
+            case EFFECT_EARLY_RELFECTION:
+                model.set("earlyreflection" + effect + "ertime", data[offset + 0]);
+                model.set("earlyreflection" + effect + "predelay", range(data[offset + 1]));
+                model.set("earlyreflection" + effect + "eqhigh", data[offset + 6]);
+                model.set("earlyreflection" + effect + "eqlow", data[offset + 7]);
+                break;
+            case EFFECT_STEREO_DELAY:
+                model.set("stereodelay" + effect + "delaytimel", (data[offset + 1] << 8) | data[offset + 0]);
+                model.set("stereodelay" + effect + "feedback", data[offset + 2]);
+                model.set("stereodelay" + effect + "highdamp", data[offset + 3]);
+                model.set("stereodelay" + effect + "delaytimer", (data[offset + 5] << 8) | data[offset + 4]);
+                model.set("stereodelay" + effect + "eqhigh", data[offset + 6]);
+                model.set("stereodelay" + effect + "eqlow", data[offset + 7]);
+                break;
+            case EFFECT_STEREO_CHORUS:
+                model.set("stereochorus" + effect + "moddepth", data[offset + 0]);
+                model.set("stereochorus" + effect + "modspeed", range(data[offset + 1]));
+                model.set("stereochorus" + effect + "mgshape", (data[offset + 2] == 2 ? 0 : 1));  // is either 02 or 03
+                model.set("stereochorus" + effect + "delaytime", data[offset + 4]);
+                model.set("stereochorus" + effect + "eqhigh", data[offset + 6]);
+                model.set("stereochorus" + effect + "eqlow", data[offset + 7]);
+                break;
+            case EFFECT_FLANGER:
+                model.set("stereoflanger" + effect + "delaytime", data[offset + 0]);
+                model.set("stereoflanger" + effect + "moddepth", data[offset + 1]);
+                model.set("stereoflanger" + effect + "modspeed", data[offset + 2]);
+                model.set("stereoflanger" + effect + "resonance", data[offset + 3]);
+                model.set("stereoflanger" + effect + "eqhigh", data[offset + 6]);
+                model.set("stereoflanger" + effect + "eqlow", data[offset + 7]);
+                break;
+            case EFFECT_OVERDRIVE:
+                model.set("overdrive" + effect + "drive", data[offset + 0]);
+                model.set("overdrive" + effect + "hotspot", data[offset + 1]);
+                model.set("overdrive" + effect + "resonance", data[offset + 2]);
+                model.set("overdrive" + effect + "outlevel", data[offset + 3]);
+                model.set("overdrive" + effect + "eqhigh", data[offset + 6]);
+                model.set("overdrive" + effect + "eqlow", data[offset + 7]);
+                break;
+            case EFFECT_STEREO_PHASER:
+                model.set("stereophaser" + effect + "moddepth", data[offset + 0]);
+                model.set("stereophaser" + effect + "modspeed", range(data[offset + 1]));
+                model.set("stereophaser" + effect + "mgshape", (data[offset + 2] == 2 ? 0 : 1));  // is either 02 or 03
+                model.set("stereophaser" + effect + "feedback", data[offset + 3]);
+                model.set("stereophaser" + effect + "manual", data[offset + 4]);
+                break;
+            case EFFECT_ROTARY_SPEAKER:
+                model.set("rotaryspeaker" + effect + "vibratodepth", data[offset + 0]);
+                model.set("rotaryspeaker" + effect + "acceleration", data[offset + 1]);
+                model.set("rotaryspeaker" + effect + "slowspeed", data[offset + 2]);
+                model.set("rotaryspeaker" + effect + "fastspeed", data[offset + 3]);
+                model.set("rotaryspeaker" + effect + "dynamicmodsource", data[offset + 8]);
+                break;
+            case EFFECT_AUTO_PAN:
+                model.set("autopan" + effect + "depth", data[offset + 0]);
+                model.set("autopan" + effect + "speed", range(data[offset + 1]));
+                model.set("autopan" + effect + "mgshape", (data[offset + 2] == 2 ? 0 : 1));  // is either 02 or 03
+                model.set("autopan" + effect + "shape", data[offset + 3]);
+                model.set("autopan" + effect + "eqhigh", data[offset + 6]);
+                model.set("autopan" + effect + "eqlow", data[offset + 7]);
+                break;
+            case EFFECT_WAH:
+                model.set("wah" + effect + "frequency", data[offset + 2]);
+                model.set("wah" + effect + "peakgain", data[offset + 3]);
+                model.set("wah" + effect + "peakwidth", data[offset + 4]);
+                model.set("wah" + effect + "dynamicmodsource", data[offset + 8]);
+                model.set("wah" + effect + "dynamicmodint", data[offset + 9]);
+                break;
+            case EFFECT_FLANGER_DELAY:
+                model.set("flangerdelay" + effect + "flangerdelaytime", data[offset + 0]);
+                model.set("flangerdelay" + effect + "flangermodspeed", data[offset + 1]);
+                model.set("flangerdelay" + effect + "flangermoddepth", data[offset + 2]);
+                model.set("flangerdelay" + effect + "flangerfeedback", data[offset + 3]);
+                model.set("flangerdelay" + effect + "delaytime", range(data[offset + 4]));
+                model.set("flangerdelay" + effect + "delayfeedback", data[offset + 5]);
+                model.set("flangerdelay" + effect + "delaylevel", data[offset + 6]);
+                break;
+            case EFFECT_HYPER_ENHANCER:
+                if (effect != 1)
+                    System.err.println("Warning: Effect " + effect + " included hyper enhancer.");
+                model.set("hyperenhancer" + effect + "trim", data[offset + 0]);
+                model.set("hyperenhancer" + effect + "lowfreq", data[offset + 1]);
+                model.set("hyperenhancer" + effect + "lowblend", data[offset + 2]);
+                model.set("hyperenhancer" + effect + "highfreq", data[offset + 3]);
+                model.set("hyperenhancer" + effect + "highblend", data[offset + 4]);
+                break;
+            default: 
+                System.err.println("Warning: Effect " + effect + " has an invalid effect type " + effectType);
+                break;
+            }
+    }
+        
     void emitEffects(byte[] data, int effect, int effectType)
-    	{
-    	int offset = (effect == 1 ? 30 : 40);
-    	
-    	// all custom, gagh
-    	switch (effectType)
-    		{
-    		case EFFECT_NONE:
-    			break;
-    		case EFFECT_REVERB:
-    			data[offset + 0] = (byte)model.get("reverb" + effect + "reverbtime", 0);
-    			data[offset + 2] = (byte)model.get("reverb" + effect + "highdamp", 0);
-    			data[offset + 3] = (byte)model.get("reverb" + effect + "predelay", 0);
-    			data[offset + 4] = (byte)model.get("reverb" + effect + "erlevel", 0);
-    			data[offset + 6] = (byte)model.get("reverb" + effect + "eqhigh", 0);
-    			data[offset + 7] = (byte)model.get("reverb" + effect + "eqlow", 0);
-    			break;
-    		case EFFECT_EARLY_RELFECTION:
-    			data[offset + 0] = (byte)model.get("earlyreflection" + effect + "ertime");
-    			data[offset + 1] = (byte)model.get("earlyreflection" + effect + "predelay");
-    			data[offset + 6] = (byte)model.get("earlyreflection" + effect + "eqhigh");
-    			data[offset + 7] = (byte)model.get("earlyreflection" + effect + "eqlow");
-    			break;
-    		case EFFECT_STEREO_DELAY:
-    			data[offset + 0] = (byte)(model.get("stereodelay" + effect + "delaytimel") & 255);
-    			data[offset + 1] = (byte)(model.get("stereodelay" + effect + "delaytimel") >>> 8);
-    			data[offset + 2] = (byte)model.get("stereodelay" + effect + "feedback");
-    			data[offset + 3] = (byte)model.get("stereodelay" + effect + "highdamp");
-    			data[offset + 4] = (byte)(model.get("stereodelay" + effect + "delaytimer") & 255);
-    			data[offset + 5] = (byte)(model.get("stereodelay" + effect + "delaytimer") >>> 8);
-    			data[offset + 6] = (byte)model.get("stereodelay" + effect + "eqhigh");
-    			data[offset + 7] = (byte)model.get("stereodelay" + effect + "eqlow");
-    			break;
-    		case EFFECT_STEREO_CHORUS:
-     			data[offset + 0] = (byte)model.get("stereochorus" + effect + "moddepth");
-    			data[offset + 1] = (byte)model.get("stereochorus" + effect + "modspeed");
-    			data[offset + 2] = (byte)(model.get("stereochorus" + effect + "mgshape") == 0 ? 2 : 3);
-    			data[offset + 4] = (byte)model.get("stereochorus" + effect + "delaytime");
-    			data[offset + 6] = (byte)model.get("stereochorus" + effect + "eqhigh");
-    			data[offset + 7] = (byte)model.get("stereochorus" + effect + "eqlow");
-   			break;
-    		case EFFECT_FLANGER:
-    			data[offset + 0] = (byte)model.get("stereoflanger" + effect + "delaytime");
-     			data[offset + 1] = (byte)model.get("stereoflanger" + effect + "moddepth");
-    			data[offset + 2] = (byte)model.get("stereoflanger" + effect + "modspeed");
-    			data[offset + 3] = (byte)model.get("stereoflanger" + effect + "resonance");
-    			data[offset + 6] = (byte)model.get("stereoflanger" + effect + "eqhigh");
-    			data[offset + 7] = (byte)model.get("stereoflanger" + effect + "eqlow");
-    			break;
-    		case EFFECT_OVERDRIVE:
-    			data[offset + 0] = (byte)model.get("overdrive" + effect + "drive");
-     			data[offset + 1] = (byte)model.get("overdrive" + effect + "hotspot");
-    			data[offset + 2] = (byte)model.get("overdrive" + effect + "resonance");
-    			data[offset + 3] = (byte)model.get("overdrive" + effect + "outlevel");
-    			data[offset + 6] = (byte)model.get("overdrive" + effect + "eqhigh");
-    			data[offset + 7] = (byte)model.get("overdrive" + effect + "eqlow");
-    			break;
-    		case EFFECT_STEREO_PHASER:
-    			data[offset + 0] = (byte)model.get("stereophaser" + effect + "moddepth");
-     			data[offset + 1] = (byte)model.get("stereophaser" + effect + "modspeed");
-    			data[offset + 2] = (byte)(model.get("stereophaser" + effect + "mgshape") == 0 ? 2 : 3);
-    			data[offset + 3] = (byte)model.get("stereophaser" + effect + "feedback");
-    			data[offset + 4] = (byte)model.get("stereophaser" + effect + "manual");
-    			break;
-    		case EFFECT_ROTARY_SPEAKER:
-    			data[offset + 0] = (byte)model.get("rotaryspeaker" + effect + "vibratodepth");
-     			data[offset + 1] = (byte)model.get("rotaryspeaker" + effect + "acceleration");
-    			data[offset + 2] = (byte)model.get("rotaryspeaker" + effect + "slowspeed");
-    			data[offset + 3] = (byte)model.get("rotaryspeaker" + effect + "fastspeed");
-    			data[offset + 8] = (byte)model.get("rotaryspeaker" + effect + "dynamicmodsource");
-    			break;
-    		case EFFECT_AUTO_PAN:
-    			data[offset + 0] = (byte)model.get("autopan" + effect + "depth");
-     			data[offset + 1] = (byte)model.get("autopan" + effect + "speed");
-    			data[offset + 2] = (byte)(model.get("autopan" + effect + "mgshape") == 0 ? 2 : 3);
-    			data[offset + 3] = (byte)model.get("autopan" + effect + "shape");
-    			data[offset + 6] = (byte)model.get("autopan" + effect + "eqhigh");
-    			data[offset + 7] = (byte)model.get("autopan" + effect + "eqlow");
-    			break;
-    		case EFFECT_WAH:
-    			data[offset + 2] = (byte)model.get("wah" + effect + "frequency");
-     			data[offset + 3] = (byte)model.get("wah" + effect + "peakgain");
-    			data[offset + 4] = (byte)model.get("wah" + effect + "peakwidth");
-    			data[offset + 8] = (byte)model.get("wah" + effect + "dynamicmodsource");
-    			data[offset + 9] = (byte)model.get("wah" + effect + "dynamicmodint");
-    			break;
-    		case EFFECT_FLANGER_DELAY:
-    			data[offset + 0] = (byte)model.get("flangerdelay" + effect + "flangerdelaytime");
-     			data[offset + 1] = (byte)model.get("flangerdelay" + effect + "flangermodspeed");
-    			data[offset + 2] = (byte)model.get("flangerdelay" + effect + "flangermoddepth");
-    			data[offset + 3] = (byte)model.get("flangerdelay" + effect + "flangerfeedback");
-    			data[offset + 4] = (byte)model.get("flangerdelay" + effect + "delaytime");
-    			data[offset + 5] = (byte)model.get("flangerdelay" + effect + "delayfeedback");
-    			data[offset + 6] = (byte)model.get("flangerdelay" + effect + "delaylevel");
-    			break;
-    		case EFFECT_HYPER_ENHANCER:
-    			if (effect != 1)
-    				System.err.println("Warning: Effect " + effect + " included hyper enhancer.");
-    			data[offset + 0] = (byte)model.get("hyperenhancer" + effect + "trim");
-     			data[offset + 1] = (byte)model.get("hyperenhancer" + effect + "lowfreq");
-    			data[offset + 2] = (byte)model.get("hyperenhancer" + effect + "lowblend");
-    			data[offset + 3] = (byte)model.get("hyperenhancer" + effect + "highfreq");
-    			data[offset + 4] = (byte)model.get("hyperenhancer" + effect + "highblend");
-    			break;
-    		default: 
-    			System.err.println("Warning: Effect " + effect + " has an invalid effect type " + effectType);
-    			break;
-    		}
-    	}
+    {
+        int offset = (effect == 1 ? 30 : 40);
+        
+        // all custom, gagh
+        switch (effectType)
+            {
+            case EFFECT_NONE:
+                break;
+            case EFFECT_REVERB:
+                data[offset + 0] = (byte)model.get("reverb" + effect + "reverbtime", 0);
+                data[offset + 2] = (byte)model.get("reverb" + effect + "highdamp", 0);
+                data[offset + 3] = (byte)model.get("reverb" + effect + "predelay", 0);
+                data[offset + 4] = (byte)model.get("reverb" + effect + "erlevel", 0);
+                data[offset + 6] = (byte)model.get("reverb" + effect + "eqhigh", 0);
+                data[offset + 7] = (byte)model.get("reverb" + effect + "eqlow", 0);
+                break;
+            case EFFECT_EARLY_RELFECTION:
+                data[offset + 0] = (byte)model.get("earlyreflection" + effect + "ertime");
+                data[offset + 1] = (byte)model.get("earlyreflection" + effect + "predelay");
+                data[offset + 6] = (byte)model.get("earlyreflection" + effect + "eqhigh");
+                data[offset + 7] = (byte)model.get("earlyreflection" + effect + "eqlow");
+                break;
+            case EFFECT_STEREO_DELAY:
+                data[offset + 0] = (byte)(model.get("stereodelay" + effect + "delaytimel") & 255);
+                data[offset + 1] = (byte)(model.get("stereodelay" + effect + "delaytimel") >>> 8);
+                data[offset + 2] = (byte)model.get("stereodelay" + effect + "feedback");
+                data[offset + 3] = (byte)model.get("stereodelay" + effect + "highdamp");
+                data[offset + 4] = (byte)(model.get("stereodelay" + effect + "delaytimer") & 255);
+                data[offset + 5] = (byte)(model.get("stereodelay" + effect + "delaytimer") >>> 8);
+                data[offset + 6] = (byte)model.get("stereodelay" + effect + "eqhigh");
+                data[offset + 7] = (byte)model.get("stereodelay" + effect + "eqlow");
+                break;
+            case EFFECT_STEREO_CHORUS:
+                data[offset + 0] = (byte)model.get("stereochorus" + effect + "moddepth");
+                data[offset + 1] = (byte)model.get("stereochorus" + effect + "modspeed");
+                data[offset + 2] = (byte)(model.get("stereochorus" + effect + "mgshape") == 0 ? 2 : 3);
+                data[offset + 4] = (byte)model.get("stereochorus" + effect + "delaytime");
+                data[offset + 6] = (byte)model.get("stereochorus" + effect + "eqhigh");
+                data[offset + 7] = (byte)model.get("stereochorus" + effect + "eqlow");
+                break;
+            case EFFECT_FLANGER:
+                data[offset + 0] = (byte)model.get("stereoflanger" + effect + "delaytime");
+                data[offset + 1] = (byte)model.get("stereoflanger" + effect + "moddepth");
+                data[offset + 2] = (byte)model.get("stereoflanger" + effect + "modspeed");
+                data[offset + 3] = (byte)model.get("stereoflanger" + effect + "resonance");
+                data[offset + 6] = (byte)model.get("stereoflanger" + effect + "eqhigh");
+                data[offset + 7] = (byte)model.get("stereoflanger" + effect + "eqlow");
+                break;
+            case EFFECT_OVERDRIVE:
+                data[offset + 0] = (byte)model.get("overdrive" + effect + "drive");
+                data[offset + 1] = (byte)model.get("overdrive" + effect + "hotspot");
+                data[offset + 2] = (byte)model.get("overdrive" + effect + "resonance");
+                data[offset + 3] = (byte)model.get("overdrive" + effect + "outlevel");
+                data[offset + 6] = (byte)model.get("overdrive" + effect + "eqhigh");
+                data[offset + 7] = (byte)model.get("overdrive" + effect + "eqlow");
+                break;
+            case EFFECT_STEREO_PHASER:
+                data[offset + 0] = (byte)model.get("stereophaser" + effect + "moddepth");
+                data[offset + 1] = (byte)model.get("stereophaser" + effect + "modspeed");
+                data[offset + 2] = (byte)(model.get("stereophaser" + effect + "mgshape") == 0 ? 2 : 3);
+                data[offset + 3] = (byte)model.get("stereophaser" + effect + "feedback");
+                data[offset + 4] = (byte)model.get("stereophaser" + effect + "manual");
+                break;
+            case EFFECT_ROTARY_SPEAKER:
+                data[offset + 0] = (byte)model.get("rotaryspeaker" + effect + "vibratodepth");
+                data[offset + 1] = (byte)model.get("rotaryspeaker" + effect + "acceleration");
+                data[offset + 2] = (byte)model.get("rotaryspeaker" + effect + "slowspeed");
+                data[offset + 3] = (byte)model.get("rotaryspeaker" + effect + "fastspeed");
+                data[offset + 8] = (byte)model.get("rotaryspeaker" + effect + "dynamicmodsource");
+                break;
+            case EFFECT_AUTO_PAN:
+                data[offset + 0] = (byte)model.get("autopan" + effect + "depth");
+                data[offset + 1] = (byte)model.get("autopan" + effect + "speed");
+                data[offset + 2] = (byte)(model.get("autopan" + effect + "mgshape") == 0 ? 2 : 3);
+                data[offset + 3] = (byte)model.get("autopan" + effect + "shape");
+                data[offset + 6] = (byte)model.get("autopan" + effect + "eqhigh");
+                data[offset + 7] = (byte)model.get("autopan" + effect + "eqlow");
+                break;
+            case EFFECT_WAH:
+                data[offset + 2] = (byte)model.get("wah" + effect + "frequency");
+                data[offset + 3] = (byte)model.get("wah" + effect + "peakgain");
+                data[offset + 4] = (byte)model.get("wah" + effect + "peakwidth");
+                data[offset + 8] = (byte)model.get("wah" + effect + "dynamicmodsource");
+                data[offset + 9] = (byte)model.get("wah" + effect + "dynamicmodint");
+                break;
+            case EFFECT_FLANGER_DELAY:
+                data[offset + 0] = (byte)model.get("flangerdelay" + effect + "flangerdelaytime");
+                data[offset + 1] = (byte)model.get("flangerdelay" + effect + "flangermodspeed");
+                data[offset + 2] = (byte)model.get("flangerdelay" + effect + "flangermoddepth");
+                data[offset + 3] = (byte)model.get("flangerdelay" + effect + "flangerfeedback");
+                data[offset + 4] = (byte)model.get("flangerdelay" + effect + "delaytime");
+                data[offset + 5] = (byte)model.get("flangerdelay" + effect + "delayfeedback");
+                data[offset + 6] = (byte)model.get("flangerdelay" + effect + "delaylevel");
+                break;
+            case EFFECT_HYPER_ENHANCER:
+                if (effect != 1)
+                    System.err.println("Warning: Effect " + effect + " included hyper enhancer.");
+                data[offset + 0] = (byte)model.get("hyperenhancer" + effect + "trim");
+                data[offset + 1] = (byte)model.get("hyperenhancer" + effect + "lowfreq");
+                data[offset + 2] = (byte)model.get("hyperenhancer" + effect + "lowblend");
+                data[offset + 3] = (byte)model.get("hyperenhancer" + effect + "highfreq");
+                data[offset + 4] = (byte)model.get("hyperenhancer" + effect + "highblend");
+                break;
+            default: 
+                System.err.println("Warning: Effect " + effect + " has an invalid effect type " + effectType);
+                break;
+            }
+    }
 
 
 
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
-        {
+    {
         if (tempModel == null)
             tempModel = getModel();
             
         Object[] d = new Object[1];
         if (!toWorkingMemory && !toFile)
-        	{
-        	// we also have to write it out with a transfer.
-        	d = new Object[2];
-        	}
+            {
+                // we also have to write it out with a transfer.
+                d = new Object[2];
+            }
         
         byte[] data = new byte[50];
         
@@ -1273,54 +1273,54 @@ public class KorgSG extends Synth
         char[] b = name.toCharArray();
         System.arraycopy(b, 0, namec, 0, b.length);
         for(int i = 0; i < 10; i++)
-        	{
-        	data[i] = (byte)(namec[i] & 127);
-        	}
+            {
+                data[i] = (byte)(namec[i] & 127);
+            }
 
-		data[10] = (byte)model.get("program", 0);
-		data[11] = (byte)((model.get("dampmode", 0) & 1) | ((model.get("highnotesdamp", 0) << 1) & 2));
-		data[12] = (byte)model.get("brightness", 0);
-		data[13] = (byte)model.get("level", 0);
-		data[14] = (byte)model.get("attacktime", 0);
-		data[15] = (byte)model.get("decaytime", 0);
-		data[16] = (byte)model.get("releasetime", 0);
-		data[17] = (byte)model.get("velocity", 0);
-		data[18] = (byte)model.get("scaletype", 0);
-		data[19] = (byte)model.get("scalekey", 0);
-		data[20] = (byte)model.get("pitchbendrange", 0);
-		data[21] = EFFECT_TYPE_BYTES[model.get("effect1type", 0)];
-		data[22] = EFFECT_TYPE_BYTES[model.get("effect2type", 0)];
-		
+        data[10] = (byte)model.get("program", 0);
+        data[11] = (byte)((model.get("dampmode", 0) & 1) | ((model.get("highnotesdamp", 0) << 1) & 2));
+        data[12] = (byte)model.get("brightness", 0);
+        data[13] = (byte)model.get("level", 0);
+        data[14] = (byte)model.get("attacktime", 0);
+        data[15] = (byte)model.get("decaytime", 0);
+        data[16] = (byte)model.get("releasetime", 0);
+        data[17] = (byte)model.get("velocity", 0);
+        data[18] = (byte)model.get("scaletype", 0);
+        data[19] = (byte)model.get("scalekey", 0);
+        data[20] = (byte)model.get("pitchbendrange", 0);
+        data[21] = EFFECT_TYPE_BYTES[model.get("effect1type", 0)];
+        data[22] = EFFECT_TYPE_BYTES[model.get("effect2type", 0)];
+                
         if (model.get("effect1type", 0) == 12)  // hyperenhancer has a custom effect depth, grrrrrrrr
-        	{
-        	data[23] = (byte)model.get("hyperenhancer1ldepth", 0);
-        	data[24] = (byte)model.get("hyperenhancer1rdepth", 0);
-        	}
+            {
+                data[23] = (byte)model.get("hyperenhancer1ldepth", 0);
+                data[24] = (byte)model.get("hyperenhancer1rdepth", 0);
+            }
         else
-        	{
-        	data[23] = (byte)model.get("effect1ldepth", 0);
-        	data[24] = (byte)model.get("effect1rdepth", 0);
-        	}
+            {
+                data[23] = (byte)model.get("effect1ldepth", 0);
+                data[24] = (byte)model.get("effect1rdepth", 0);
+            }
 
-		data[25] = (byte)model.get("effect2ldepth", 0);
-		data[26] = (byte)model.get("effect2rdepth", 0);
+        data[25] = (byte)model.get("effect2ldepth", 0);
+        data[26] = (byte)model.get("effect2rdepth", 0);
 
-		data[27] = (byte)0x41;
-		data[28] = (byte)0x01;
-		data[29] = (byte)0x0F;
-	
-		// skip data slots 32, 33, 34, then...
-		
-		emitEffects(data, 1, model.get("effect1type", 0));
-		emitEffects(data, 2, model.get("effect2type", 0));
+        data[27] = (byte)0x41;
+        data[28] = (byte)0x01;
+        data[29] = (byte)0x0F;
+        
+        // skip data slots 32, 33, 34, then...
+                
+        emitEffects(data, 1, model.get("effect1type", 0));
+        emitEffects(data, 2, model.get("effect2type", 0));
         
         // Convert 
         
         byte[] data2 = convertTo7Bit(data);
-    	data = new byte[6 + data2.length];  // resetting data to new value
-    	data[0] = (byte)0xF0;
-    	data[1] = (byte)0x42;
-    	data[2] = (byte)(48 + getChannelOut());
+        data = new byte[6 + data2.length];  // resetting data to new value
+        data[0] = (byte)0xF0;
+        data[1] = (byte)0x42;
+        data[2] = (byte)(48 + getChannelOut());
         data[3] = (byte)0x4A;
         data[4] = (byte)0x40;
         data[data.length - 1] = (byte)0xF7;
@@ -1328,23 +1328,23 @@ public class KorgSG extends Synth
         d[0] = data;
         
         if (!toWorkingMemory && !toFile)
-        	{
-	        // The SG cannot write to a patch directly.  We have to emit to current memory, then save
-	        // to a patch, so we'll tack some extra sysex on in that situation
-	            
-	        byte BB = (byte) tempModel.get("bank");
-	        byte NN = (byte) tempModel.get("number");
+            {
+                // The SG cannot write to a patch directly.  We have to emit to current memory, then save
+                // to a patch, so we'll tack some extra sysex on in that situation
+                    
+                byte BB = (byte) tempModel.get("bank");
+                byte NN = (byte) tempModel.get("number");
         
-        	data = new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x4A, (byte)0x11, (byte)0,
-        								(byte)(BB * 16 + NN), (byte)0xF7 };
-        	d[1] = data;
-        	}
-		return d;
-        }
+                data = new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x4A, (byte)0x11, (byte)0,
+                                    (byte)(BB * 16 + NN), (byte)0xF7 };
+                d[1] = data;
+            }
+        return d;
+    }
 
         
     public void parseParameter(byte[] data)
-        {
+    {
         if (data.length == 6 &&                 // write error report
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x42 &&
@@ -1352,84 +1352,84 @@ public class KorgSG extends Synth
             data[4] == (byte)0x24 &&
             data[5] == (byte)0xF7)
             {
-            showSimpleError("Write/Send Error", "Send or Write Failed (Not Sure Why)");
+                showSimpleError("Write/Send Error", "Send or Write Failed (Not Sure Why)");
             }
         else if (data.length == 6 &&                 // write error report
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x42 &&
-            data[3] == (byte)0x4A &&
-            data[4] == (byte)0x22 &&
-            data[5] == (byte)0xF7)
-			{
-			showSimpleError("Write/Send Error", "Write Failed (Probably Write-Protect Is On?)");
-			}
-        }
+                 data[0] == (byte)0xF0 &&
+                 data[1] == (byte)0x42 &&
+                 data[3] == (byte)0x4A &&
+                 data[4] == (byte)0x22 &&
+                 data[5] == (byte)0xF7)
+            {
+                showSimpleError("Write/Send Error", "Write Failed (Probably Write-Protect Is On?)");
+            }
+    }
 
 
     public int getPauseAfterChangePatch() { return 200; }
 
     public void changePatch(Model tempModel)
-        {
-		// enter program mode, which goes back out
-		tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x02, 0x0, (byte)0xF7 });
+    {
+        // enter program mode, which goes back out
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x02, 0x0, (byte)0xF7 });
 
         byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");
         try {
             // Number change is PC
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), BB * 16 + NN, 0));
-            }
+        }
         catch (Exception e) { e.printStackTrace(); }
 
         // we assume that we successfully did it
-		if (!isMerging())  // we're actually loading the patch, not merging with it
-			{
-	        setSendMIDI(false);
-	        model.set("number", tempModel.get("number"));
-	        model.set("bank", tempModel.get("bank"));
-	        setSendMIDI(true);
-	        }
-        }
+        if (!isMerging())  // we're actually loading the patch, not merging with it
+            {
+                setSendMIDI(false);
+                model.set("number", tempModel.get("number"));
+                model.set("bank", tempModel.get("bank"));
+                setSendMIDI(true);
+            }
+    }
 
-	public void performRequestDump(Model tempModel, boolean changePatch)
-		{
-		// we always change the patch no matter what
-		changePatch(tempModel);
+    public void performRequestDump(Model tempModel, boolean changePatch)
+    {
+        // we always change the patch no matter what
+        changePatch(tempModel);
 
-		// enter program edit mode, which loads the patch into edit buffer memory
-		tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x03, 0x0, (byte)0xF7 });
+        // enter program edit mode, which loads the patch into edit buffer memory
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x03, 0x0, (byte)0xF7 });
         tryToSendSysex(requestCurrentDump());
-		}
+    }
             
     public void performRequestCurrentDump()
-		{
-		// enter program mode, which goes back out
-		tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x02, 0x0, (byte)0xF7 });
+    {
+        // enter program mode, which goes back out
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x02, 0x0, (byte)0xF7 });
 
-		// enter program edit mode, which loads the patch into edit buffer memory
-		tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x03, 0x0, (byte)0xF7 });
+        // enter program edit mode, which loads the patch into edit buffer memory
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x03, 0x0, (byte)0xF7 });
         tryToSendSysex(requestCurrentDump());
-		}
+    }
             
     public byte[] requestCurrentDump()
-        {
+    {
         return new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x10, (byte)0xF7 };
-        }
+    }
     
     
     public static final int EXPECTED_SYSEX_LENGTH = 64;
     public static boolean recognize(byte[] data)
-        {
+    {
         boolean v = (
-            data.length == EXPECTED_SYSEX_LENGTH &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x42 &&
-            // don't care
-            //data[2] == (byte)(48 + getChannelOut()) &&
-            data[3] == (byte)0x4A &&
-            data[4] == (byte)0x40);
+                     data.length == EXPECTED_SYSEX_LENGTH &&
+                     data[0] == (byte)0xF0 &&
+                     data[1] == (byte)0x42 &&
+                     // don't care
+                     //data[2] == (byte)(48 + getChannelOut()) &&
+                     data[3] == (byte)0x4A &&
+                     data[4] == (byte)0x40);
         return v;
-        }
+    }
     
     
     
@@ -1437,7 +1437,7 @@ public class KorgSG extends Synth
     /////// OTHER ABSTRACT METHODS
     
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-        {
+    {
         JComboBox bank = new JComboBox(BANKS);
         bank.setEditable(false);
         bank.setMaximumRowCount(32);
@@ -1447,35 +1447,35 @@ public class KorgSG extends Synth
                 
         while(true)
             {
-            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
+                boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                                                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
                 
-            if (result == false) 
-                return false;
+                if (result == false) 
+                    return false;
                                 
-            int n;
-            try { n = Integer.parseInt(number.getText()); }
-            catch (NumberFormatException e)
-                {
-                showSimpleError(title, "The Patch Number must be an integer 1 ... 16");
-                continue;
-                }
-            if (n < 1 || n > 16)
-                {
-                showSimpleError(title, "The Patch Number must be an integer 1 ... 16");
-                continue;
-                }
+                int n;
+                try { n = Integer.parseInt(number.getText()); }
+                catch (NumberFormatException e)
+                    {
+                        showSimpleError(title, "The Patch Number must be an integer 1 ... 16");
+                        continue;
+                    }
+                if (n < 1 || n > 16)
+                    {
+                        showSimpleError(title, "The Patch Number must be an integer 1 ... 16");
+                        continue;
+                    }
                                 
-            change.set("bank", bank.getSelectedIndex());
-            change.set("number", n - 1);
+                change.set("bank", bank.getSelectedIndex());
+                change.set("number", n - 1);
                         
-            return true;
+                return true;
             }
-        }
+    }
         
 
     public void revise()
-        {
+    {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -1483,7 +1483,7 @@ public class KorgSG extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-        }
+    }
         
     public static String getSynthName() { return "Korg SG Rack/ProX"; }
     
@@ -1491,44 +1491,44 @@ public class KorgSG extends Synth
     
 
     public boolean patchLocationEquals(Model patch1, Model patch2)
-    	{
-    	int bank1 = patch1.get("bank");
-    	int number1 = patch1.get("number");
-    	int bank2 = patch2.get("bank");
-    	int number2 = patch2.get("number");
-    	return (bank1 == bank2 && number1 == number2);
-    	}
-    	
+    {
+        int bank1 = patch1.get("bank");
+        int number1 = patch1.get("number");
+        int bank2 = patch2.get("bank");
+        int number2 = patch2.get("number");
+        return (bank1 == bank2 && number1 == number2);
+    }
+        
     public Model getNextPatchLocation(Model model)
-    	{
-    	int bank = model.get("bank");
-    	int number = model.get("number");
-    	
-    	number++;
-    	if (number >= 16)
-    		{
-    		bank++;
-    		number = 0;
-	    	if (bank >= 4)
-	    		bank = 0;
-	    	}
-	    	
-    	Model newModel = buildModel();
-    	newModel.set("bank", bank);
-    	newModel.set("number", number);
-		return newModel;
-    	}
+    {
+        int bank = model.get("bank");
+        int number = model.get("number");
+        
+        number++;
+        if (number >= 16)
+            {
+                bank++;
+                number = 0;
+                if (bank >= 4)
+                    bank = 0;
+            }
+                
+        Model newModel = buildModel();
+        newModel.set("bank", bank);
+        newModel.set("number", number);
+        return newModel;
+    }
 
     public String getPatchLocationName(Model model)
-    	{
-    	// getPatchLocationName() is called from sprout() as a test to see if we should enable
-    	// batch downloading.  If we haven't yet created an .init file, then parameters won't exist
-    	// yet and this method will bomb badly.  So we return null in this case.
-    	if (!model.exists("number")) return null;
-    	
-    	int number = model.get("number") + 1;
-    	return BANKS[model.get("bank")] + (number > 9 ? "" : "0") + number;
-    	}
-    	
+    {
+        // getPatchLocationName() is called from sprout() as a test to see if we should enable
+        // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
+        // yet and this method will bomb badly.  So we return null in this case.
+        if (!model.exists("number")) return null;
+        
+        int number = model.get("number") + 1;
+        return BANKS[model.get("bank")] + (number > 9 ? "" : "0") + number;
     }
+        
+}
     

@@ -23,7 +23,7 @@ import javax.sound.midi.*;
 */
 
 public class YamahaTX81ZMulti extends Synth
-    {
+{
     /// Various collections of parameter names for pop-up menus
         
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
@@ -36,12 +36,12 @@ public class YamahaTX81ZMulti extends Synth
     public static final String[] OUT_ASSIGN = { "Off", "I", "II", "I and II" };
 
     public YamahaTX81ZMulti()
-        {
+    {
         model.set("number", 0);
 
         for(int i = 0; i < allParameters.length; i++)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
                         
         /// SOUND PANEL
@@ -83,56 +83,56 @@ public class YamahaTX81ZMulti extends Synth
         model.set("name", "INIT SOUND");
         
         loadDefaults();        
-        }
+    }
                 
     public JFrame sprout()
-        {
+    {
         JFrame frame = super.sprout();
         transmitTo.setEnabled(false);
         writeTo.setEnabled(false);
         return frame;
-        }         
+    }         
 
 
     public String getDefaultResourceFileName() { return "YamahaTX81ZMulti.init"; }
     public String getHTMLResourceFileName() { return "YamahaTX81ZMulti.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-        {
+    {
         JTextField number = new JTextField("" + (model.get("number") + 1), 3);
 
         while(true)
             {
-            boolean result = showMultiOption(this, new String[] { "Patch Number"}, 
-                new JComponent[] { number }, title, "Enter the Patch number");
+                boolean result = showMultiOption(this, new String[] { "Patch Number"}, 
+                                                 new JComponent[] { number }, title, "Enter the Patch number");
                 
-            if (result == false) 
-                return false;
+                if (result == false) 
+                    return false;
                                 
-            int n;
-            try { n = Integer.parseInt(number.getText()); }
-            catch (NumberFormatException e)
-                {
-                showSimpleError(title, "The Patch Number must be an integer 1...24");
-                continue;
-                }
-            if (n < 1 || n > 24)
-                {
-                showSimpleError(title, "The Patch Number must be an integer 1...24");
-                continue;
-                }
+                int n;
+                try { n = Integer.parseInt(number.getText()); }
+                catch (NumberFormatException e)
+                    {
+                        showSimpleError(title, "The Patch Number must be an integer 1...24");
+                        continue;
+                    }
+                if (n < 1 || n > 24)
+                    {
+                        showSimpleError(title, "The Patch Number must be an integer 1...24");
+                        continue;
+                    }
                 
-            n--;
+                n--;
                                 
-            change.set("number", n);
+                change.set("number", n);
                         
-            return true;
+                return true;
             }
-        }
+    }
 
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-        {
+    {
         Category globalCategory = new Category(this, getSynthName(), color);
                 
         JComponent comp;
@@ -143,23 +143,23 @@ public class YamahaTX81ZMulti extends Synth
         HBox hbox2 = new HBox();
         comp = new PatchDisplay(this, "Patch", null, "number", 4)
             {
-            public String numberString(int number) { number += 1; return (number > 9 ? "0" : "00") + number; }
-            public String bankString(int bank) { return ""; }
+                public String numberString(int number) { number += 1; return (number > 9 ? "0" : "00") + number; }
+                public String bankString(int bank) { return ""; }
             };
         hbox2.add(comp);
         vbox.add(hbox2);
         
         comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 10 ASCII characters.")
             {
-            public String replace(String val)
+                public String replace(String val)
                 {
-                return revisePatchName(val);
+                    return revisePatchName(val);
                 }
                                 
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                updateTitle();
+                    super.update(key, model);
+                    updateTitle();
                 }
             };
         vbox.addBottom(comp);  // doesn't work right :-(
@@ -170,11 +170,11 @@ public class YamahaTX81ZMulti extends Synth
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-        }
+    }
 
 
     public JComponent addGlobal( Color color)
-        {
+    {
         Category category = new Category(this, "Global", color);
 
         JComponent comp;
@@ -193,9 +193,9 @@ public class YamahaTX81ZMulti extends Synth
 
         comp = new LabelledDial("Microtune", this, "microtunekey", color, 0, 11)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return MICROTUNE_KEYS[val];
+                    return MICROTUNE_KEYS[val];
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Key");
@@ -210,12 +210,12 @@ public class YamahaTX81ZMulti extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-        }
+    }
 
 
 
     public JComponent addInstrument(final int src, Color color)
-        {
+    {
         final Category category = new Category(this, "Instrument " + src, color);
 
         JComponent comp;
@@ -239,46 +239,46 @@ public class YamahaTX81ZMulti extends Synth
         HBox hbox2 = new HBox();
         comp = new PushButton("Show")
             {
-            public void perform()
+                public void perform()
                 {
-                final YamahaTX81Z synth = new YamahaTX81Z();
-                if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
-                if (synth.tuple != null)
-                    {
-                    // This is a little tricky.  When the dump comes in from the synth,
-                    // Edisyn will only send it to the topmost panel.  So we first sprout
-                    // the panel and show it, and THEN send the dump request.  But this isn't
-                    // enough, because what setVisible(...) does is post an event on the
-                    // Swing Event Queue to build the window at a later time.  This later time
-                    // happens to be after the dump comes in, so it's ignored.  So what we
-                    // ALSO do is post the dump request to occur at the end of the Event Queue,
-                    // so by the time the dump request has been made, the window is shown and
-                    // frontmost.
+                    final YamahaTX81Z synth = new YamahaTX81Z();
+                    if (tuple != null)
+                        synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                    if (synth.tuple != null)
+                        {
+                            // This is a little tricky.  When the dump comes in from the synth,
+                            // Edisyn will only send it to the topmost panel.  So we first sprout
+                            // the panel and show it, and THEN send the dump request.  But this isn't
+                            // enough, because what setVisible(...) does is post an event on the
+                            // Swing Event Queue to build the window at a later time.  This later time
+                            // happens to be after the dump comes in, so it's ignored.  So what we
+                            // ALSO do is post the dump request to occur at the end of the Event Queue,
+                            // so by the time the dump request has been made, the window is shown and
+                            // frontmost.
                                                 
-                    synth.sprout();
-                    JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
-                    frame.setVisible(true);                                 
+                            synth.sprout();
+                            JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                            frame.setVisible(true);                                 
 
-                    SwingUtilities.invokeLater(
-                        new Runnable()
-                            {
-                            public void run() 
-                                { 
-                                int bank = YamahaTX81ZMulti.this.model.get("instrument" + src + "voicebank");
-                                int number = YamahaTX81ZMulti.this.model.get("instrument" + src + "voicenumber");
+                            SwingUtilities.invokeLater(
+                                                       new Runnable()
+                                                       {
+                                                           public void run() 
+                                                           { 
+                                                               int bank = YamahaTX81ZMulti.this.model.get("instrument" + src + "voicebank");
+                                                               int number = YamahaTX81ZMulti.this.model.get("instrument" + src + "voicenumber");
                                                                 
-                                Model tempModel = new Model();
-                                tempModel.set("bank", bank);
-                                tempModel.set("number", number);
-                                synth.performRequestDump(tempModel, false);
-                                }
-                            });
-                    }
-                else
-                    {
-                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
-                    }
+                                                               Model tempModel = new Model();
+                                                               tempModel.set("bank", bank);
+                                                               tempModel.set("number", number);
+                                                               synth.performRequestDump(tempModel, false);
+                                                           }
+                                                       });
+                        }
+                    else
+                        {
+                            showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                        }
                 }
             };
         hbox2.addLast(comp);
@@ -288,9 +288,9 @@ public class YamahaTX81ZMulti extends Synth
 
         comp = new LabelledDial("Voice", this, "instrument" + src + "voicebank", color, 0, 4)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return BANKS[val % 4]; // we do this because we often get bad data here
+                    return BANKS[val % 4]; // we do this because we often get bad data here
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Bank");
@@ -304,10 +304,10 @@ public class YamahaTX81ZMulti extends Synth
         
         comp = new LabelledDial("Receive", this, "instrument" + src + "channel", color, 0, 16)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val == 16) return "Omni";
-                else return "" + (val + 1);
+                    if (val == 16) return "Omni";
+                    else return "" + (val + 1);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Channel");
@@ -319,9 +319,9 @@ public class YamahaTX81ZMulti extends Synth
         
         comp = new LabelledDial("Lowest", this, "instrument" + src + "lowkey", color, 0, 127)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return KEYS[val % 12] + (val / 12 - 2);  // note integer division
+                    return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Key");
@@ -329,9 +329,9 @@ public class YamahaTX81ZMulti extends Synth
 
         comp = new LabelledDial("Highest", this, "instrument" + src + "highkey", color, 0, 127)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return KEYS[val % 12] + (val / 12 - 2);  // note integer division
+                    return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Key");
@@ -340,13 +340,13 @@ public class YamahaTX81ZMulti extends Synth
 
         comp = new LabelledDial("Detune", this, "instrument" + src + "detune", color, 0, 14, 7)
             {
-            public boolean isSymmetric() { return true; }
+                public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
 
         comp = new LabelledDial("Note Shift", this, "instrument" + src + "noteshift", color, 0, 48, 24)
             {
-            public boolean isSymmetric() { return true; }
+                public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
         
@@ -355,7 +355,7 @@ public class YamahaTX81ZMulti extends Synth
     
         category.add(hbox, BorderLayout.CENTER);
         return category;
-        }
+    }
                 
 
 
@@ -367,159 +367,159 @@ public class YamahaTX81ZMulti extends Synth
     /** List of all Sysex parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
 
     final static String[] allParameters = new String[] 
-    {
-    "instrument1maxnotes",
-    "instrument1voicenumbermsb",
-    "instrument1voicenumberlsb",
-    "instrument1channel",
-    "instrument1lowkey",
-    "instrument1highkey",
-    "instrument1detune",
-    "instrument1noteshift",
-    "instrument1volume",
-    "instrument1outassign",
-    "instrument1lfoselect",
-    "instrument1microtuneanbled",
+        {
+            "instrument1maxnotes",
+            "instrument1voicenumbermsb",
+            "instrument1voicenumberlsb",
+            "instrument1channel",
+            "instrument1lowkey",
+            "instrument1highkey",
+            "instrument1detune",
+            "instrument1noteshift",
+            "instrument1volume",
+            "instrument1outassign",
+            "instrument1lfoselect",
+            "instrument1microtuneanbled",
 
-    "instrument2maxnotes",
-    "instrument2voicenumbermsb",
-    "instrument2voicenumberlsb",
-    "instrument2channel",
-    "instrument2lowkey",
-    "instrument2highkey",
-    "instrument2detune",
-    "instrument2noteshift",
-    "instrument2volume",
-    "instrument2outassign",
-    "instrument2lfoselect",
-    "instrument2microtuneanbled",
+            "instrument2maxnotes",
+            "instrument2voicenumbermsb",
+            "instrument2voicenumberlsb",
+            "instrument2channel",
+            "instrument2lowkey",
+            "instrument2highkey",
+            "instrument2detune",
+            "instrument2noteshift",
+            "instrument2volume",
+            "instrument2outassign",
+            "instrument2lfoselect",
+            "instrument2microtuneanbled",
 
-    "instrument3maxnotes",
-    "instrument3voicenumbermsb",
-    "instrument3voicenumberlsb",
-    "instrument3channel",
-    "instrument3lowkey",
-    "instrument3highkey",
-    "instrument3detune",
-    "instrument3noteshift",
-    "instrument3volume",
-    "instrument3outassign",
-    "instrument3lfoselect",
-    "instrument3microtuneanbled",
+            "instrument3maxnotes",
+            "instrument3voicenumbermsb",
+            "instrument3voicenumberlsb",
+            "instrument3channel",
+            "instrument3lowkey",
+            "instrument3highkey",
+            "instrument3detune",
+            "instrument3noteshift",
+            "instrument3volume",
+            "instrument3outassign",
+            "instrument3lfoselect",
+            "instrument3microtuneanbled",
 
-    "instrument4maxnotes",
-    "instrument4voicenumbermsb",
-    "instrument4voicenumberlsb",
-    "instrument4channel",
-    "instrument4lowkey",
-    "instrument4highkey",
-    "instrument4detune",
-    "instrument4noteshift",
-    "instrument4volume",
-    "instrument4outassign",
-    "instrument4lfoselect",
-    "instrument4microtuneanbled",
+            "instrument4maxnotes",
+            "instrument4voicenumbermsb",
+            "instrument4voicenumberlsb",
+            "instrument4channel",
+            "instrument4lowkey",
+            "instrument4highkey",
+            "instrument4detune",
+            "instrument4noteshift",
+            "instrument4volume",
+            "instrument4outassign",
+            "instrument4lfoselect",
+            "instrument4microtuneanbled",
 
-    "instrument5maxnotes",
-    "instrument5voicenumbermsb",
-    "instrument5voicenumberlsb",
-    "instrument5channel",
-    "instrument5lowkey",
-    "instrument5highkey",
-    "instrument5detune",
-    "instrument5noteshift",
-    "instrument5volume",
-    "instrument5outassign",
-    "instrument5lfoselect",
-    "instrument5microtuneanbled",
+            "instrument5maxnotes",
+            "instrument5voicenumbermsb",
+            "instrument5voicenumberlsb",
+            "instrument5channel",
+            "instrument5lowkey",
+            "instrument5highkey",
+            "instrument5detune",
+            "instrument5noteshift",
+            "instrument5volume",
+            "instrument5outassign",
+            "instrument5lfoselect",
+            "instrument5microtuneanbled",
 
-    "instrument6maxnotes",
-    "instrument6voicenumbermsb",
-    "instrument6voicenumberlsb",
-    "instrument6channel",
-    "instrument6lowkey",
-    "instrument6highkey",
-    "instrument6detune",
-    "instrument6noteshift",
-    "instrument6volume",
-    "instrument6outassign",
-    "instrument6lfoselect",
-    "instrument6microtuneanbled",
+            "instrument6maxnotes",
+            "instrument6voicenumbermsb",
+            "instrument6voicenumberlsb",
+            "instrument6channel",
+            "instrument6lowkey",
+            "instrument6highkey",
+            "instrument6detune",
+            "instrument6noteshift",
+            "instrument6volume",
+            "instrument6outassign",
+            "instrument6lfoselect",
+            "instrument6microtuneanbled",
 
-    "instrument7maxnotes",
-    "instrument7voicenumbermsb",
-    "instrument7voicenumberlsb",
-    "instrument7channel",
-    "instrument7lowkey",
-    "instrument7highkey",
-    "instrument7detune",
-    "instrument7noteshift",
-    "instrument7volume",
-    "instrument7outassign",
-    "instrument7lfoselect",
-    "instrument7microtuneanbled",
+            "instrument7maxnotes",
+            "instrument7voicenumbermsb",
+            "instrument7voicenumberlsb",
+            "instrument7channel",
+            "instrument7lowkey",
+            "instrument7highkey",
+            "instrument7detune",
+            "instrument7noteshift",
+            "instrument7volume",
+            "instrument7outassign",
+            "instrument7lfoselect",
+            "instrument7microtuneanbled",
 
-    "instrument8maxnotes",
-    "instrument8voicenumbermsb",
-    "instrument8voicenumberlsb",
-    "instrument8channel",
-    "instrument8lowkey",
-    "instrument8highkey",
-    "instrument8detune",
-    "instrument8noteshift",
-    "instrument8volume",
-    "instrument8outassign",
-    "instrument8lfoselect",
-    "instrument8microtuneanbled",
+            "instrument8maxnotes",
+            "instrument8voicenumbermsb",
+            "instrument8voicenumberlsb",
+            "instrument8channel",
+            "instrument8lowkey",
+            "instrument8highkey",
+            "instrument8detune",
+            "instrument8noteshift",
+            "instrument8volume",
+            "instrument8outassign",
+            "instrument8lfoselect",
+            "instrument8microtuneanbled",
 
-    "microtunetable",
-    "assignmode",
-    "effect",
-    "microtunekey",
+            "microtunetable",
+            "assignmode",
+            "effect",
+            "microtunekey",
 
-    // name
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
+            // name
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
 
-    };
+        };
 
 
 
-/*
-  From mgregory22@gmail.com:
+    /*
+      From mgregory22@gmail.com:
 
-  I wrote an editor for the TX81Z awhile back.  Yeah, I think there are a couple bugs in the manual if I remember correctly. I see you wrote Gizmo in C++, and I worked out all the MIDI bugs in my editor, so I'm going to refer to that.
+      I wrote an editor for the TX81Z awhile back.  Yeah, I think there are a couple bugs in the manual if I remember correctly. I see you wrote Gizmo in C++, and I worked out all the MIDI bugs in my editor, so I'm going to refer to that.
 
-  Here is a file of constants with subgroup numbers on line 173:
-  https://github.com/mgregory22/tx81z-programmer/blob/master/src/tx81z.h#L173
+      Here is a file of constants with subgroup numbers on line 173:
+      https://github.com/mgregory22/tx81z-programmer/blob/master/src/tx81z.h#L173
 
-  So, the PCED has a subgroup of 0.
+      So, the PCED has a subgroup of 0.
 
-  There's also this file, which describes the different dump types in the TX81Z:
-  https://github.com/mgregory22/tx81z-programmer/blob/master/src/tx81z_meta.c
+      There's also this file, which describes the different dump types in the TX81Z:
+      https://github.com/mgregory22/tx81z-programmer/blob/master/src/tx81z_meta.c
 
-  reqStr is a request string, and dumpHdr is the header of the received dump.
+      reqStr is a request string, and dumpHdr is the header of the received dump.
 
-  Here's the code to interface with the TX81Z.  I implemented it as a window that sends messages, so I wouldn't have to write threading code, so it might be kind of confusing in places, but I think you'll be able to get it:
-  https://github.com/mgregory22/tx81z-programmer/blob/master/src/tx81z.c
+      Here's the code to interface with the TX81Z.  I implemented it as a window that sends messages, so I wouldn't have to write threading code, so it might be kind of confusing in places, but I think you'll be able to get it:
+      https://github.com/mgregory22/tx81z-programmer/blob/master/src/tx81z.c
 
-  TX81Z_SendParamChange() is probably what you're interested in, if you want to know how I did things:
-  https://github.com/mgregory22/tx81z-programmer/blob/master/src/tx81z.c#L507
+      TX81Z_SendParamChange() is probably what you're interested in, if you want to know how I did things:
+      https://github.com/mgregory22/tx81z-programmer/blob/master/src/tx81z.c#L507
 
-  I haven't worked on it in a long time, so I can't remember all that much about it, but if you have any questions, let me know and I'll try to answer them.
+      I haven't worked on it in a long time, so I can't remember all that much about it, but if you have any questions, let me know and I'll try to answer them.
 
-  Hope that helps,
-  Matt
+      Hope that helps,
+      Matt
 
-*/
+    */
 
     public static final int VCED_GROUP = 2 + 16; // 00010010
     public static final int ACED_GROUP = 3 + 16; // 00010011
@@ -527,7 +527,7 @@ public class YamahaTX81ZMulti extends Synth
     public static final int REMOTE_SWITCH_GROUP = 3 + 16; // 00010011        same as ACED_GROUP
 
     public Object[] emitAll(String key)
-        {
+    {
         simplePause(50);
         if (key.equals("number")) return new Object[0];  // this is not emittable
 
@@ -536,106 +536,106 @@ public class YamahaTX81ZMulti extends Synth
         // maybe we don't want to do this
         if (key.equals("name"))  // ugh
             {
-            String name = model.get("name", "INIT SOUND") + "          ";
-            Object[] result = new Object[10];                       
-            for(int i = 0; i < 10; i++)
-                {
-                result[i] = new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, (byte)(100 + i), (byte)(name.charAt(i)), (byte)0xF7 };
-                }
-            return result;
+                String name = model.get("name", "INIT SOUND") + "          ";
+                Object[] result = new Object[10];                       
+                for(int i = 0; i < 10; i++)
+                    {
+                        result[i] = new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, (byte)(100 + i), (byte)(name.charAt(i)), (byte)0xF7 };
+                    }
+                return result;
             }
         for(int i = 1; i < 9; i++)
             {
-            if (key.equals("instrument" + i + "voicenumber") || key.equals("instrument" + i + "voicebank"))
-                {
-                int val = model.get("instrument" + i + "voicebank") * 32 + model.get("instrument" + i + "voicenumber");
-                byte lsb = (byte)(val & 127);
-                byte msb = (byte)((val >>> 7) & 127);
-
-                return new Object[]
+                if (key.equals("instrument" + i + "voicenumber") || key.equals("instrument" + i + "voicebank"))
                     {
-                    new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, (byte)(i * 12 + 1), msb, (byte)0xF7 },
-                   	new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, (byte)(i * 12 + 2), lsb, (byte)0xF7 },
-                    };
-                }
+                        int val = model.get("instrument" + i + "voicebank") * 32 + model.get("instrument" + i + "voicenumber");
+                        byte lsb = (byte)(val & 127);
+                        byte msb = (byte)((val >>> 7) & 127);
+
+                        return new Object[]
+                            {
+                                new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, (byte)(i * 12 + 1), msb, (byte)0xF7 },
+                                new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, (byte)(i * 12 + 2), lsb, (byte)0xF7 },
+                            };
+                    }
             }        
         
         if (allParametersToIndex.containsKey(key))
             {
-            int index = ((Integer)(allParametersToIndex.get(key))).intValue();
-            int value = model.get(key);
+                int index = ((Integer)(allParametersToIndex.get(key))).intValue();
+                int value = model.get(key);
 
-            byte PP = (byte) index;
-            byte VV = (byte) value;
-            byte[] data = new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, PP, VV, (byte)0xF7 };
-            return new Object[] { data };
+                byte PP = (byte) index;
+                byte VV = (byte) value;
+                byte[] data = new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, PP, VV, (byte)0xF7 };
+                return new Object[] { data };
             }
         else 
             {
-            System.err.println("Can't emit key " + key);
-            return new Object[0];
+                System.err.println("Can't emit key " + key);
+                return new Object[0];
             }
-        }
+    }
         
 
     public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
-        {
+    {
         // data starts at byte 16
         
         byte name[] = new byte[10];
         
         for(int i = 0; i < allParameters.length; i++)
             {
-            byte val = data[i + 16];
+                byte val = data[i + 16];
                 
-            if (i >= 100) // name
-                {
-                name[i - 100] = val;
-                }
-            else if (allParameters[i].equals("instrument1voicenumbermsb") ||
-                allParameters[i].equals("instrument2voicenumbermsb") ||
-                allParameters[i].equals("instrument3voicenumbermsb") ||
-                allParameters[i].equals("instrument4voicenumbermsb") ||
-                allParameters[i].equals("instrument5voicenumbermsb") ||
-                allParameters[i].equals("instrument6voicenumbermsb") ||
-                allParameters[i].equals("instrument7voicenumbermsb") ||
-                allParameters[i].equals("instrument8voicenumbermsb"))
-                {
-                // ignore, we handle in lsb
-                }
-            else if (allParameters[i].equals("instrument1voicenumberlsb") ||
-                allParameters[i].equals("instrument2voicenumberlsb") ||
-                allParameters[i].equals("instrument3voicenumberlsb") ||
-                allParameters[i].equals("instrument4voicenumberlsb") ||
-                allParameters[i].equals("instrument5voicenumberlsb") ||
-                allParameters[i].equals("instrument6voicenumberlsb") ||
-                allParameters[i].equals("instrument7voicenumberlsb") ||
-                allParameters[i].equals("instrument8voicenumberlsb"))
-                {
-                int instrument = (i / 12);
-                int msb = data[16 + instrument * 12 + 1];
-                int lsb = data[16 + instrument * 12 + 2];
+                if (i >= 100) // name
+                    {
+                        name[i - 100] = val;
+                    }
+                else if (allParameters[i].equals("instrument1voicenumbermsb") ||
+                         allParameters[i].equals("instrument2voicenumbermsb") ||
+                         allParameters[i].equals("instrument3voicenumbermsb") ||
+                         allParameters[i].equals("instrument4voicenumbermsb") ||
+                         allParameters[i].equals("instrument5voicenumbermsb") ||
+                         allParameters[i].equals("instrument6voicenumbermsb") ||
+                         allParameters[i].equals("instrument7voicenumbermsb") ||
+                         allParameters[i].equals("instrument8voicenumbermsb"))
+                    {
+                        // ignore, we handle in lsb
+                    }
+                else if (allParameters[i].equals("instrument1voicenumberlsb") ||
+                         allParameters[i].equals("instrument2voicenumberlsb") ||
+                         allParameters[i].equals("instrument3voicenumberlsb") ||
+                         allParameters[i].equals("instrument4voicenumberlsb") ||
+                         allParameters[i].equals("instrument5voicenumberlsb") ||
+                         allParameters[i].equals("instrument6voicenumberlsb") ||
+                         allParameters[i].equals("instrument7voicenumberlsb") ||
+                         allParameters[i].equals("instrument8voicenumberlsb"))
+                    {
+                        int instrument = (i / 12);
+                        int msb = data[16 + instrument * 12 + 1];
+                        int lsb = data[16 + instrument * 12 + 2];
                                 
-                // this data is often corrupted.  So we'll mask it just in case
+                        // this data is often corrupted.  So we'll mask it just in case
                 
-                int combined = (((msb & 1) << 7) | (lsb & 127));
+                        int combined = (((msb & 1) << 7) | (lsb & 127));
                 
-                // we'll also make sure it's in bounds
+                        // we'll also make sure it's in bounds
                      
-                int oldcombined = combined;           
-                combined = combined % 160;
+                        int oldcombined = combined;           
+                        combined = combined % 160;
 
-                if (msb > 1 || lsb > 127 || oldcombined != combined)
-                	System.err.println("Corrupt voice number or bank in received data.");
+                        if (msb > 1 || lsb > 127 || oldcombined != combined)
+                            System.err.println("Corrupt voice number or bank in received data.");
 
 
-                model.set("instrument" + (instrument + 1) + "voicenumber", combined % 32);
-                model.set("instrument" + (instrument + 1) + "voicebank", combined / 32);
-                }
-            else
-                {
-                model.set(allParameters[i], val);
-                }
+                        model.set("instrument" + (instrument + 1) + "voicenumber", combined % 32);
+                        model.set("instrument" + (instrument + 1) + "voicebank", combined / 32);
+                    }
+                else
+                    {
+                        model.set(allParameters[i], val);
+                    }
             }
                 
         try { model.set("name", new String(name, "US-ASCII")); }
@@ -643,21 +643,21 @@ public class YamahaTX81ZMulti extends Synth
                 
         revise();
         return PARSE_SUCCEEDED;
-        }
+    }
     
     public int getPauseAfterChangePatch()
-    	{ 
-    	return 100; 
-    	}
+    { 
+        return 100; 
+    }
     
     public int getPauseAfterSendAllParameters() 
-    	{
-    	return 200; 
-    	}
+    {
+        return 200; 
+    }
 
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-        {
+    {
         simplePause(50);
         if (tempModel == null)
             tempModel = getModel();
@@ -678,40 +678,40 @@ public class YamahaTX81ZMulti extends Synth
         // Next the PCED
         for(int i = 0; i < allParameters.length; i++)  // no name, no operatorenabled
             {
-            if (allParameters[i].equals("instrument1voicenumbermsb") ||
-                allParameters[i].equals("instrument2voicenumbermsb") ||
-                allParameters[i].equals("instrument3voicenumbermsb") ||
-                allParameters[i].equals("instrument4voicenumbermsb") ||
-                allParameters[i].equals("instrument5voicenumbermsb") ||
-                allParameters[i].equals("instrument6voicenumbermsb") ||
-                allParameters[i].equals("instrument7voicenumbermsb") ||
-                allParameters[i].equals("instrument8voicenumbermsb"))
-                {
-                int instrument = (i / 12);
-                int num = model.get("instrument" + (instrument + 1) + "voicebank") * 32 + model.get("instrument" + (instrument + 1) + "voicenumber");
-                data[i + 10] = (byte)(num >>> 7);
-                }
-            else if (allParameters[i].equals("instrument1voicenumberlsb") ||
-                allParameters[i].equals("instrument2voicenumberlsb") ||
-                allParameters[i].equals("instrument3voicenumberlsb") ||
-                allParameters[i].equals("instrument4voicenumberlsb") ||
-                allParameters[i].equals("instrument5voicenumberlsb") ||
-                allParameters[i].equals("instrument6voicenumberlsb") ||
-                allParameters[i].equals("instrument7voicenumberlsb") ||
-                allParameters[i].equals("instrument8voicenumberlsb"))
-                {
-                int instrument = (i / 12);
-                int num = model.get("instrument" + (instrument + 1) + "voicebank") * 32 + model.get("instrument" + (instrument + 1) + "voicenumber");
-                data[i + 10] = (byte)(num & 127);
-                }
-            else if (i >= 100)      // name
-                {
-                data[i + 10] = (byte)(name.charAt(i - 100));
-                }
-            else
-                {
-                data[i + 10] = (byte)(model.get(allParameters[i]));
-                }
+                if (allParameters[i].equals("instrument1voicenumbermsb") ||
+                    allParameters[i].equals("instrument2voicenumbermsb") ||
+                    allParameters[i].equals("instrument3voicenumbermsb") ||
+                    allParameters[i].equals("instrument4voicenumbermsb") ||
+                    allParameters[i].equals("instrument5voicenumbermsb") ||
+                    allParameters[i].equals("instrument6voicenumbermsb") ||
+                    allParameters[i].equals("instrument7voicenumbermsb") ||
+                    allParameters[i].equals("instrument8voicenumbermsb"))
+                    {
+                        int instrument = (i / 12);
+                        int num = model.get("instrument" + (instrument + 1) + "voicebank") * 32 + model.get("instrument" + (instrument + 1) + "voicenumber");
+                        data[i + 10] = (byte)(num >>> 7);
+                    }
+                else if (allParameters[i].equals("instrument1voicenumberlsb") ||
+                         allParameters[i].equals("instrument2voicenumberlsb") ||
+                         allParameters[i].equals("instrument3voicenumberlsb") ||
+                         allParameters[i].equals("instrument4voicenumberlsb") ||
+                         allParameters[i].equals("instrument5voicenumberlsb") ||
+                         allParameters[i].equals("instrument6voicenumberlsb") ||
+                         allParameters[i].equals("instrument7voicenumberlsb") ||
+                         allParameters[i].equals("instrument8voicenumberlsb"))
+                    {
+                        int instrument = (i / 12);
+                        int num = model.get("instrument" + (instrument + 1) + "voicebank") * 32 + model.get("instrument" + (instrument + 1) + "voicenumber");
+                        data[i + 10] = (byte)(num & 127);
+                    }
+                else if (i >= 100)      // name
+                    {
+                        data[i + 10] = (byte)(name.charAt(i - 100));
+                    }
+                else
+                    {
+                        data[i + 10] = (byte)(model.get(allParameters[i]));
+                    }
             }
         
         byte[] result = new byte[128];
@@ -726,11 +726,11 @@ public class YamahaTX81ZMulti extends Synth
         result[6 + data.length + 1] = (byte)0xF7;
         
         return result;
-        }
+    }
 
     /** Generate a TX81Z checksum of the data bytes */
     byte produceChecksum(byte[] bytes)
-        {
+    {
         //      The TX81Z manual says the checksum is the
         //              "Twos complement of the lower 7 bits of the sum of all databytes".
         //
@@ -743,60 +743,60 @@ public class YamahaTX81ZMulti extends Synth
         for(int i = 0; i < bytes.length; i++)
             checksum = (checksum + bytes[i]) & 255;
         return (byte)((256 - checksum) & 127);
-        }
+    }
 
 
     public void performRequestDump(Model tempModel, boolean changePatch)
-    	{
-    	// We ALWAYS change the patch no matter what.  We have to.
-    	changePatch(tempModel);
-    	tryToSendSysex(requestDump(tempModel));
-    	}
+    {
+        // We ALWAYS change the patch no matter what.  We have to.
+        changePatch(tempModel);
+        tryToSendSysex(requestDump(tempModel));
+    }
 
-	public byte[] requestDump(Model tempModel) 
-		{
-		// since performRequestDump ALWAYS changes the patch, we might
-		// as well just call requestCurrentDump() here 
-		return requestCurrentDump(); 
-		}
-	
+    public byte[] requestDump(Model tempModel) 
+    {
+        // since performRequestDump ALWAYS changes the patch, we might
+        // as well just call requestCurrentDump() here 
+        return requestCurrentDump(); 
+    }
+        
     public byte[] requestCurrentDump()
-        {
+    {
         // PCED
         byte channel = (byte)(32 + getChannelOut());
         return new byte[] { (byte)0xF0, 0x43, channel, 0x7E, 
-            (byte)'L', (byte)'M', (byte)' ', (byte)' ',
-            (byte)'8', (byte)'9', (byte)'7', (byte)'6',
-            (byte)'P', (byte)'E', (byte)0xF7 }; 
-        }
+                            (byte)'L', (byte)'M', (byte)' ', (byte)' ',
+                            (byte)'8', (byte)'9', (byte)'7', (byte)'6',
+                            (byte)'P', (byte)'E', (byte)0xF7 }; 
+    }
 
     public static boolean recognize(byte[] data)
-        {
+    {
         // PCED
         return (data.length == 128 &&        
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x43 &&
-            // don't care about 2, it's the channel
-            data[3] == 0x7E &&
-            data[4] == 0x00 &&
-            data[5] == 0x78 &&
-            // next it spits out the header "LM  8976PE"
-            data[6] == 'L' &&
-            data[7] == 'M' &&
-            data[8] == ' ' &&
-            data[9] == ' ' &&
-            data[10] == '8' &&
-            data[11] == '9' &&
-            data[12] == '7' &&
-            data[13] == '6' &&
-            data[14] == 'P' &&
-            data[15] == 'E');
-        }
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte)0x43 &&
+                // don't care about 2, it's the channel
+                data[3] == 0x7E &&
+                data[4] == 0x00 &&
+                data[5] == 0x78 &&
+                // next it spits out the header "LM  8976PE"
+                data[6] == 'L' &&
+                data[7] == 'M' &&
+                data[8] == ' ' &&
+                data[9] == ' ' &&
+                data[10] == '8' &&
+                data[11] == '9' &&
+                data[12] == '7' &&
+                data[13] == '6' &&
+                data[14] == 'P' &&
+                data[15] == 'E');
+    }
         
 
     public static final int MAXIMUM_NAME_LENGTH = 10;
     public String revisePatchName(String name)
-        {
+    {
         name = super.revisePatchName(name);  // trim first time
         if (name.length() > MAXIMUM_NAME_LENGTH)
             name = name.substring(0, MAXIMUM_NAME_LENGTH);
@@ -804,18 +804,18 @@ public class YamahaTX81ZMulti extends Synth
         StringBuffer nameb = new StringBuffer(name);                            
         for(int i = 0 ; i < nameb.length(); i++)
             {
-            char c = nameb.charAt(i);
-            if (c < 32 || c > 127)
-                nameb.setCharAt(i, ' ');
+                char c = nameb.charAt(i);
+                if (c < 32 || c > 127)
+                    nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
-        }        
+    }        
 
 
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
-        {
+    {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -823,12 +823,12 @@ public class YamahaTX81ZMulti extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-        }
+    }
         
     public static String getSynthName() { return "Yamaha TX81Z [Multi]"; }
     
     public void changePatch(Model tempModel) 
-        {
+    {
         int number = tempModel.get("number");
         
         /// NOTE: There is an error in the sysex document (page 68), where
@@ -864,7 +864,7 @@ public class YamahaTX81ZMulti extends Synth
         table[8] = (byte)0xF7;
         tryToSendSysex(table);
         
-		// Instruct the TX81Z to press its "PLAY/PERFORM" button
+        // Instruct the TX81Z to press its "PLAY/PERFORM" button
         byte PP = (byte) 68;
         byte VV = (byte) 0;
         byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getChannelOut()), REMOTE_SWITCH_GROUP, PP, (byte)0x7F, (byte)0xF7 };
@@ -873,50 +873,50 @@ public class YamahaTX81ZMulti extends Synth
         // Do the program change to program 127
         tryToSendMIDI(buildPC(getChannelOut(), 127));
 
-		if (!isMerging())  // we're actually loading the patch, not merging with it
-			{
-	        // we assume that we successfully did it
-	        setSendMIDI(false);
-	        model.set("number", number);
-	        setSendMIDI(true);
-	        }
-        }
+        if (!isMerging())  // we're actually loading the patch, not merging with it
+            {
+                // we assume that we successfully did it
+                setSendMIDI(false);
+                model.set("number", number);
+                setSendMIDI(true);
+            }
+    }
 
     public String getPatchName(Model model) { return model.get("name", "INIT VOICE"); }
 
     public boolean patchLocationEquals(Model patch1, Model patch2)
-    	{
-    	int number1 = patch1.get("number");
-    	int number2 = patch2.get("number");
-    	return (number1 == number2);
-    	}
-    	
+    {
+        int number1 = patch1.get("number");
+        int number2 = patch2.get("number");
+        return (number1 == number2);
+    }
+        
     public Model getNextPatchLocation(Model model)
-    	{
-    	int number = model.get("number");
-    	
-    	number++;
-    	if (number >= 24)
-    		{
-    		number = 0;
-	    	}
-	    	
-    	Model newModel = buildModel();
-    	newModel.set("number", number);
-		return newModel;
-    	}
+    {
+        int number = model.get("number");
+        
+        number++;
+        if (number >= 24)
+            {
+                number = 0;
+            }
+                
+        Model newModel = buildModel();
+        newModel.set("number", number);
+        return newModel;
+    }
 
     public String getPatchLocationName(Model model)
-    	{
-    	// getPatchLocationName() is called from sprout() as a test to see if we should enable
-    	// batch downloading.  If we haven't yet created an .init file, then parameters won't exist
-    	// yet and this method will bomb badly.  So we return null in this case.
-    	if (!model.exists("number")) return null;
-    	
-    	int number = model.get("number") + 1;
-    	return "PF" + (number > 9 ? "" : "0") + number;
-    	}
-    	
+    {
+        // getPatchLocationName() is called from sprout() as a test to see if we should enable
+        // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
+        // yet and this method will bomb badly.  So we return null in this case.
+        if (!model.exists("number")) return null;
+        
+        int number = model.get("number") + 1;
+        return "PF" + (number > 9 ? "" : "0") + number;
+    }
+        
 
     
-    }
+}

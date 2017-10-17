@@ -9,6 +9,6 @@ import java.util.*;
 
 
 public interface Gatherable
-    {
+{
     public void gatherAllComponents(ArrayList list);
-    }
+}

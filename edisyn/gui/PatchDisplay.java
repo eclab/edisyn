@@ -20,24 +20,24 @@ import java.awt.event.*;
 */
 
 public class PatchDisplay extends JPanel implements Updatable
-    {
+{
     String bankKey;
     String numberKey;
     JLabel text;
     Synth synth;
     
     public String numberString(int number)
-        {
+    {
         return "" + number;
-        }
+    }
     
     public String bankString(int bank)
-        {
+    {
         return "" + bank;
-        }
+    }
         
     public String makeString(Model model)
-        {
+    {
         String bank = null;
         String number = null;
         if (model.isString(bankKey))
@@ -52,19 +52,19 @@ public class PatchDisplay extends JPanel implements Updatable
         if (bank != null) s = s + bank;
         if (number != null) s = s + number;
         return s;
-        }
+    }
     
     static String buildInitialString(int columns)
-        {
+    {
         String s = "";
         for(int i = 0; i < columns; i++)
             s = s + "M";
         return s;
-        }
+    }
         
     
     public PatchDisplay(Synth synth, String label, String bankKey, String numberKey, int columns)
-        {
+    {
         this.synth = synth;
         Model model = synth.getModel();
         setBackground(Style.BACKGROUND_COLOR);
@@ -74,13 +74,13 @@ public class PatchDisplay extends JPanel implements Updatable
         final Dimension[] dim = new Dimension[1];
         text = new JLabel(buildInitialString(columns))
             {
-            public Dimension getMinimumSize() { return getPreferredSize(); }
-            public Dimension getMaximumSize() { return getPreferredSize(); }
-            public Dimension getPreferredSize() 
+                public Dimension getMinimumSize() { return getPreferredSize(); }
+                public Dimension getMaximumSize() { return getPreferredSize(); }
+                public Dimension getPreferredSize() 
                 { if (dim[0] == null) 
-                    { return super.getPreferredSize(); }
-                else
-                    { return dim[0]; }
+                        { return super.getPreferredSize(); }
+                    else
+                        { return dim[0]; }
                 }
             };
                 
@@ -93,14 +93,14 @@ public class PatchDisplay extends JPanel implements Updatable
     
         if (bankKey != null)
             {
-            model.register(this.bankKey = bankKey, this);
-            model.setStatus(bankKey, Model.STATUS_IMMUTABLE);
+                model.register(this.bankKey = bankKey, this);
+                model.setStatus(bankKey, Model.STATUS_IMMUTABLE);
             }
         
         if (numberKey != null)
             {
-            model.register(this.numberKey = numberKey, this);
-            model.setStatus(numberKey, Model.STATUS_IMMUTABLE);
+                model.register(this.numberKey = numberKey, this);
+                model.setStatus(numberKey, Model.STATUS_IMMUTABLE);
             }
 
         text.setText(makeString(model));
@@ -114,12 +114,12 @@ public class PatchDisplay extends JPanel implements Updatable
         lab.setForeground(Style.TEXT_COLOR);
         //add(lab, BorderLayout.WEST);
         add(lab, BorderLayout.NORTH);
-        }
+    }
     
     public void update(String key, Model model)
-        {
+    {
         text.setText(makeString(model));
         text.repaint(); 
-        }
-
     }
+
+}

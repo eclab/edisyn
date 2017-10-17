@@ -277,7 +277,7 @@ Some patch editors may not be able to perform merges because the synthesizers ca
 You can restrict Mutation (Randomize) and Recombination (Nudge and Merge) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutation Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutation Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
 
 \begin{wrapfigure}{r}{3in}
-\vspace{-1.5em}\includegraphics[scale=0.3]{5.png}
+\vspace{-2em}\includegraphics[scale=0.3]{5.png}
 \vspace{-3em}\caption{Editing Mutation Parameters}\label{mutationparameters}
 \end{wrapfigure}
 
@@ -292,15 +292,18 @@ Once you're done choosing parameters to mutate or recombine, just select {\bf St
 Note that your parameter choices, as well as using them for recombination, are persistent: they're saved in the preferences.
 
 
-\vbox{
 \subsection{Hill-Climbing}
 \label{hillclimb}
 
-{\small {\bf Important Note}\quad {\it The Hill Climber is a work in progress and as testing and research continues on it, it may change significantly.}}
+\begin{wrapfigure}{r}{2.5in}
+\vspace{-1em}
+\includegraphics[width=2.5in]{HillClimbing.pdf}
+\caption{Recombination and Mutation in the Hill-Climber}
+%\vspace{-5em}
+\label{hc}
+\end{wrapfigure}
 
-\vspace{1em}
-Edisyn's {\it hill-climber} is another of its patch-exploration tools.  You select it by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  This will add a new tab to your patch editor labelled {\bf Hill-Climb}.  You get rid of the hill-climber by selecting {\bf Stop Hill-Climbing} in the {\bf Edit} menu.  
-}
+Edisyn's {\it hill-climber}\footnote{Important Note.  The Hill Climber is a work in progress and as testing and research continues on it, it may change significantly} is another of its patch-exploration tools.  You select it by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  This will add a new tab to your patch editor labelled {\bf Hill-Climb}.  You get rid of the hill-climber by selecting {\bf Stop Hill-Climbing} in the {\bf Edit} menu.  
 
 When you fire up the Hill-Climber, it appears as an additional tab after your {\bf About} tab.  Edisyn's Hill-Climber repeatedly offers you sixteen possible sounds and asks you to choose your top three preferences.  After you have chosen them, the Hill-Climber will try to build a new set of sounds whose parameters are similar to your choices in various ways.  You then choose three {\it new} top choices, and the process repeats.  If you're lucky, Edisyn will head towards regions of the synthesizer's parameter space which make sounds you like.
 
@@ -326,14 +329,6 @@ Figure \ref{hc} illustrates the various recombination locations; the mutation no
 \item{9--12}: Four even noisier versions of the current patch
 \item{13--16}: Four extremely noisy versions of the current patch
 \end{itemize}
-
-\begin{wrapfigure}{r}{2.5in}
-\vspace{-8em}
-\includegraphics[width=2.5in]{HillClimbing.pdf}
-\caption{Recombination and Mutation in the Hill-Climber}
-\vspace{-1em}
-\label{hc}
-\end{wrapfigure}
 
 The sixteen candidates appear in the {\bf Candidates} section.  Each has a button labelled {\bf Play}, which lets you play the candidate, and a button labelled {\bf Keep}, which closes the Hill-Climber and loads that candidate into the patch editor (presumably because you've found your ideal sound and want to {\it keep} it).  There are also three radio buttons, labelled 1, 2, and 3.  These are for you to select the sound as one of your top three choices, if you like it.
 
@@ -585,7 +580,7 @@ String key = "arpeggiatorlatch";  // the key in the model
 JComponent comp = new CheckBox("Arpeggiator Latch", this, key);
 \end{verbatim}
 
-The's a bug in OS X which mis-measures the width of the string needed, so you might see ``Arpeggia...'' instead of ``Arpeggiator Latch'' on-screen.  To fix this, just add a tiny bit to the width: usually a single pixel is enough:
+The's a bug in OS X which mis-measures the width of the string needed, so you might see ``Arpeggia...'' instead of ``Arpeggiator Latch'' on-screen.  To fix this, just add a tiny bit to the width: usually one or two pixels are enough:
 
 \begin{verbatim}
 String key = "arpeggiatorlatch";  // the key in the model
@@ -966,10 +961,12 @@ Edisyn can download many patches at once.  To support this, you need to implemen
  
 A few synthesizers (notably the PreenFM2) don't send individual patches as single sysex patch dumps, but rather send them as multiple separate NRPN or CC messages.  Edisyn needs to know this so it can make a better guess at whether a patch dump has arrived and is ready to be saved.  To let Edisyn know that your patch editor is for a synthesizer of this type, override the method {\bf  getReceivesPatchesInBulk()} to return false.
 
-Compared to the other stuff, this step is easy.\footnote{Note that lots of synthesizers have sysex facilities to dump the entire patch memory, or dump an entire bank, etc.  Edisyn doesn't use these; it requests patches one by one.  It's somewhat slower but saves you a lot of coding and is consistent across synthesizers.  So you're welcome.}
+Compared to the other stuff, this step is easy.\footnote{Note that lots of synthesizers have sysex facilities to dump the entire patch memory, or dump an entire bank, etc.  Edisyn doesn't use these; it requests patches one by one.  This is slower but saves you a lot of coding and is consistent across synthesizers.  So you're welcome.}
   
-\subsection{Step Nine: Other Niceties}
-You're almost done!  Two other niceties you might want to do.  First, whenever your patch editor becomes the front window, the method {\bf windowBecameFront()} will be called.  You could override this to send a special message to your synth to update it somehow.  For example, the Waldorf Microwave XT patch editors send a message to the Microwave XT to tell it to switch from single to multi-mode (or back) as appropriate.
+\subsection{Step Nine: Other Stuff}
+You're almost done!  Some other items you might want to do.  First, you may need to tweak the mutability of parameters.  No string parameters are mutable, but by default all numerical ones are (including checkboxes and choosers).  Occasionally you'd want to make some of those immutable so they will not be modified during merge, hill-climbing, etc.  To do this, you can call {\bf setStatus(..., Model.STATUS\_IMMUTABLE)} on the model.
+
+Second, whenever your patch editor becomes the front window, the method {\bf windowBecameFront()} will be called.  You could override this to send a special message to your synth to update it somehow.  For example, the Waldorf Microwave XT patch editors send a message to the Microwave XT to tell it to switch from single to multi-mode (or back) as appropriate.
 
 Finally when the user clicks on the close box, the method {\bf requestCloseWindow()} is called.  You can override this to query the user about saving the patch etc. first, and then finally return the appropriate value to inform Edisyn that the window should in fact be closed.  Though in fact currently no patch editors implement this method at all.
 

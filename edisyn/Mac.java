@@ -14,63 +14,63 @@ import java.lang.reflect.*;
 // I used the reflection version so it compiles cleanly on linux and windows as well.
 
 public class Mac
-    {
+{
     public static void setup(Synth synth)
-        {
+    {
         if (System.getProperty("os.name").contains("Mac")) 
             {
-            try 
-                {
-                Object app = Class.forName("com.apple.eawt.Application").getMethod("getApplication").invoke(null);
+                try 
+                    {
+                        Object app = Class.forName("com.apple.eawt.Application").getMethod("getApplication").invoke(null);
 
-                Object al = Proxy.newProxyInstance(
-                    Class.forName("com.apple.eawt.AboutHandler").getClassLoader(),
-                    new Class[]{Class.forName("com.apple.eawt.AboutHandler")},
-                    new AboutListener(synth));
+                        Object al = Proxy.newProxyInstance(
+                                                           Class.forName("com.apple.eawt.AboutHandler").getClassLoader(),
+                                                           new Class[]{Class.forName("com.apple.eawt.AboutHandler")},
+                                                           new AboutListener(synth));
 
-                app.getClass().getMethod("setAboutHandler", Class.forName("com.apple.eawt.AboutHandler")).invoke(app, al);
+                        app.getClass().getMethod("setAboutHandler", Class.forName("com.apple.eawt.AboutHandler")).invoke(app, al);
 
-             	al = Proxy.newProxyInstance(
-                    Class.forName("com.apple.eawt.QuitHandler").getClassLoader(),
-                    new Class[]{Class.forName("com.apple.eawt.QuitHandler")},
-                    new QuitListener(synth));
+                        al = Proxy.newProxyInstance(
+                                                    Class.forName("com.apple.eawt.QuitHandler").getClassLoader(),
+                                                    new Class[]{Class.forName("com.apple.eawt.QuitHandler")},
+                                                    new QuitListener(synth));
 
-                app.getClass().getMethod("setQuitHandler", Class.forName("com.apple.eawt.QuitHandler")).invoke(app, al);
-                }
-            catch (Exception e) 
-                {
-                //fail quietly
-                }
+                        app.getClass().getMethod("setQuitHandler", Class.forName("com.apple.eawt.QuitHandler")).invoke(app, al);
+                    }
+                catch (Exception e) 
+                    {
+                        //fail quietly
+                    }
             }       
-        }
     }
+}
         
 class AboutListener implements InvocationHandler 
-    {
+{
     Synth synth;
     public AboutListener(Synth synth)
-        {
+    {
         this.synth = synth;
-        }
+    }
                 
     public Object invoke(Object proxy, Method method, Object[] args) 
-        {
+    {
         synth.doAbout();
         return null;
-        }
     }
+}
 
 class QuitListener implements InvocationHandler 
-    {
+{
     Synth synth;
     public QuitListener(Synth synth)
-        {
+    {
         this.synth = synth;
-        }
+    }
                 
     public Object invoke(Object proxy, Method method, Object[] args) 
-        {
+    {
         synth.doQuit();
         return null;
-        }
     }
+}

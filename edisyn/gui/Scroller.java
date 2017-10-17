@@ -21,38 +21,38 @@ import java.awt.event.*;
 */
 
 public class Scroller extends NumericalComponent
-{
+    {
     JScrollBar bar = new JScrollBar(JScrollBar.HORIZONTAL);
     JLabel label = new JLabel("888", SwingConstants.LEFT);
     JLabel field = new JLabel("888", SwingConstants.RIGHT);
 
     public void update(String key, Model model) 
-    { 
+        { 
         if (bar.getValue() != getState())
             bar.setValue(getState()); 
         field.setText("" + getState());
-    }
+        }
 
     public void setMin(int val) 
-    { 
+        { 
         super.setMin(val); 
         bar.setMinimum(getMin());
         Dimension d = new Dimension((int)bar.getMinimumSize().getWidth() + (int)(1.5 * (getMax() - getMin() + 1)), (int)bar.getPreferredSize().getHeight());
         bar.setMinimumSize(d); 
         bar.setPreferredSize(d); 
-    }
+        }
                 
     public void setMax(int val) 
-    { 
+        { 
         super.setMax(val); 
         bar.setMaximum(getMax());
         Dimension d = new Dimension((int)bar.getMinimumSize().getWidth() + (int)(1.5 * (getMax() - getMin() + 1)), (int)bar.getPreferredSize().getHeight());
         bar.setMinimumSize(d); 
         bar.setPreferredSize(d); 
-    }
+        }
 
     public Scroller(String _label, Synth synth, String key)
-    {
+        {
         super(synth, key);
                 
         bar.setVisibleAmount(0);  // this irritation causes no matter of problems
@@ -86,10 +86,10 @@ public class Scroller extends NumericalComponent
                 
         bar.addAdjustmentListener(new AdjustmentListener()
             {
-                public void adjustmentValueChanged( AdjustmentEvent e)
+            public void adjustmentValueChanged( AdjustmentEvent e)
                 {
-                    setState(bar.getValue());
+                setState(bar.getValue());
                 }
             });
+        }
     }
-}

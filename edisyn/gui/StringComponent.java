@@ -24,7 +24,7 @@ import java.awt.event.*;
 */
 
 public class StringComponent extends JComponent implements Updatable
-{
+    {
     JLabel label;
     JButton change;
         
@@ -36,44 +36,44 @@ public class StringComponent extends JComponent implements Updatable
         
     /** Sets the current value for the key in the model. */
     public void setText(String val) 
-    { 
+        { 
         String state = getText(); 
         if (state == null || !val.equals(state)) 
             {
-                synth.getModel().set(key, val); 
-                update(key, synth.getModel());
-                repaint();
+            synth.getModel().set(key, val); 
+            update(key, synth.getModel());
+            repaint();
             }
-    }
+        }
         
     public void update(String key, Model model)
-    {
+        {
         change.setText(getText().trim());
-    }
+        }
         
     /** Override this method to verify whether the string is a valid one to store. */
     public boolean isValid(String val)
-    {
+        {
         return true;
-    }
+        }
       
     /** Override this method to replace the string with a valid one.  The default
         returns null, which instructs StringComponent to instead call isValid() and
         report to the user that the name is not valid. */
     public String replace(String val)
-    {
+        {
         return null;
-    }
+        }
       
     /** Override this method to convert val prior to determining if it is valid, perhaps
         to make it all-uppercase, for example. */  
     public String convert(String val)
-    {
+        {
         return val;
-    }
+        }
         
     public StringComponent(final String _label, final Synth synth, final String key, final int maxLength, final String instructions)
-    {
+        {
         super();
         this.key = key;
         this.synth = synth;
@@ -98,55 +98,55 @@ public class StringComponent extends JComponent implements Updatable
                 
         change.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    while(true)
-                        {
-                            String val = synth.getModel().get(key, "").trim();
-                            VBox vbox = new VBox();
-                            vbox.add(new JLabel("Enter " + _label));
-                            JTextField text = new JTextField(maxLength);
-                            vbox.add(text);
-                            int opt = JOptionPane.showOptionDialog(StringComponent.this, vbox, _label,
-                                                                   JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Enter",  "Cancel", "Rules"}, "Enter");
+                while(true)
+                    {
+                    String val = synth.getModel().get(key, "").trim();
+                    VBox vbox = new VBox();
+                    vbox.add(new JLabel("Enter " + _label));
+                    JTextField text = new JTextField(maxLength);
+                    vbox.add(text);
+                    int opt = JOptionPane.showOptionDialog(StringComponent.this, vbox, _label,
+                        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Enter",  "Cancel", "Rules"}, "Enter");
 
-                            if (opt == JOptionPane.CANCEL_OPTION)       // this is "Rules"
-                                {
-                                    JOptionPane.showMessageDialog(StringComponent.this, instructions, "Rules", JOptionPane.INFORMATION_MESSAGE);
-                                }
-                            else if (opt == JOptionPane.NO_OPTION)  // this is "Cancel"
-                                { 
-                                    return; 
-                                }
-                            else
-                                {
-                                    String result = convert(text.getText());
-                                    if (result == null) return;
-                                    String str = replace(result);
-                                    if (str == null)
-                                        {
-                                            if (isValid(result))
-                                                { 
-                                                    setText(result); 
-                                                    return;
-                                                }
-                                        }
-                                    else
-                                        {
-                                            setText(str); 
-                                            return;
-                                        }
-                                }
+                    if (opt == JOptionPane.CANCEL_OPTION)       // this is "Rules"
+                        {
+                        JOptionPane.showMessageDialog(StringComponent.this, instructions, "Rules", JOptionPane.INFORMATION_MESSAGE);
                         }
+                    else if (opt == JOptionPane.NO_OPTION)  // this is "Cancel"
+                        { 
+                        return; 
+                        }
+                    else
+                        {
+                        String result = convert(text.getText());
+                        if (result == null) return;
+                        String str = replace(result);
+                        if (str == null)
+                            {
+                            if (isValid(result))
+                                { 
+                                setText(result); 
+                                return;
+                                }
+                            }
+                        else
+                            {
+                            setText(str); 
+                            return;
+                            }
+                        }
+                    }
                 }
             });
                 
         add(label, BorderLayout.NORTH);
         add(change, BorderLayout.SOUTH);
-    }
+        }
 
     public void paintComponent(Graphics g)
-    {
+        {
         Graphics2D graphics = (Graphics2D) g;
 
         Rectangle rect = getBounds();
@@ -154,5 +154,5 @@ public class StringComponent extends JComponent implements Updatable
         rect.y = 0;
         graphics.setPaint(Style.BACKGROUND_COLOR);
         graphics.fill(rect);
+        }
     }
-}

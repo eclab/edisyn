@@ -329,17 +329,6 @@ public class KorgMicrosampler extends Synth
             };
         vbox.add(comp);
 
-        comp = new PushButton("PC 5")
-            {
-            public void perform()
-                {
-                // Microsampler is MSB-only
-                Object[] nrpn = buildPC(getChannelOut(), 5);
-                tryToSendMIDI(nrpn);
-                }
-            };
-        vbox.add(comp);
-
         comp = new PushButton("Push Sampling Button")
             {
             public void perform()

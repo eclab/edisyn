@@ -310,7 +310,7 @@ public class KorgMicrosampler extends Synth
                 }
             public int getDefaultValue() { return 1200; }
             };
-        ((LabelledDial)comp).addSecondLabel("BPM");
+        ((LabelledDial)comp).addAdditionalLabel("BPM");
         hbox.add(comp);
         
         comp = new LabelledDial("Current", this, "currentpattern", color, 1, 16);
@@ -329,6 +329,17 @@ public class KorgMicrosampler extends Synth
             };
         vbox.add(comp);
 
+        comp = new PushButton("PC 5")
+            {
+            public void perform()
+                {
+                // Microsampler is MSB-only
+                Object[] nrpn = buildPC(getChannelOut(), 5);
+                tryToSendMIDI(nrpn);
+                }
+            };
+        vbox.add(comp);
+
         comp = new PushButton("Push Sampling Button")
             {
             public void perform()
@@ -339,6 +350,7 @@ public class KorgMicrosampler extends Synth
                 }
             };
         vbox.add(comp);
+
         hbox.add(vbox);
 
         vbox = new VBox();

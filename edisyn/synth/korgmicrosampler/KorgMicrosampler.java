@@ -37,9 +37,30 @@ public class KorgMicrosampler extends Synth
     ///// in the form of a switch statment.  Korg should be highly embarassed by the low
     ///// quality of its awful sysex.
 
-    ;
+	public static final int FX_NONE = 0;
+	public static final int FX_COMPRESSOR = 1;
+	public static final int FX_FILTER = 2;
+	public static final int FX_EQ = 3;
+	public static final int FX_DISTORTION = 4;
+	public static final int FX_DECIMATOR = 5;
+	public static final int FX_REVERB = 6;
+	public static final int FX_DELAY = 7;
+	public static final int FX_LCRDELAY = 8;
+	public static final int FX_PANDELAY = 9;
+	public static final int FX_MODDELAY = 10;
+	public static final int FX_TAPEECHO = 11;
+	public static final int FX_CHORUS = 12;
+	public static final int FX_FLANGER = 13;
+	public static final int FX_VIBRATO = 14;
+	public static final int FX_PHASER = 15;
+	public static final int FX_TREMOLO = 16;
+	public static final int FX_RINGMOD = 17;
+	public static final int FX_GRAINSHIFTER = 18;
+	public static final int FX_PITCHSHIFTER = 19;
+	public static final int FX_TALKMOD = 20;
+	public static final int FX_LOOPER = 21;
 	
-    public static int[][] FX_PARAMETER_CONTROL_DEFAULT = new int[][] 
+    public static final int[][] FX_PARAMETER_CONTROL_DEFAULT = new int[][] 
     {
     { 0, 1, 1, 4, 2, 1, 1, 1, 1, 1, 1, 1, 2, 4, 2, 4, 2, 1, 2, 1, 1, 1 },
     { 0, 2, 2, 1, 1, 2, 0, 2, 2, 2, 2, 4, 1, 3, 1, 3, 1, 0, 1, 0, 5, 0 }
@@ -241,7 +262,7 @@ public class KorgMicrosampler extends Synth
         for(int i = 1; i < 37; i ++)
             model.set("sample" + i + "name", "Untitled");
                         
-        //loadDefaults();        
+        loadDefaults();        
         }
           
     public String getHTMLResourceFileName() { return "KorgMicrosampler.html"; }      
@@ -460,7 +481,12 @@ public class KorgMicrosampler extends Synth
             comp = new LabelledDial("Release", this, "sample" + i + "release", color, 0, 127);
             samples[i - 1].add(comp);
                 
-                
+            comp = new LabelledDial("Semitone", this, "sample" + i + "semitone", color, -24, 24)
+            	{
+                public boolean isSymmetric() { return true; }
+            	};
+            samples[i - 1].add(comp);
+
             //-99                           0 ... 2                 // asymmetric note
             //-95...-50 by 5        3 ... 12
             //-49...-1 by 1         13 ... 61
@@ -469,7 +495,7 @@ public class KorgMicrosampler extends Synth
             //50...95 by 5          116 ... 125
             //99                            126 ... 127
 
-            comp = new LabelledDial("Semitone", this, "sample" + i + "semitone", color, -24, 24)    
+            comp = new LabelledDial("Tune", this, "sample" + i + "tune", color, 1, 127, 64)
                 {
                 public String map(int val)
                     {
@@ -489,12 +515,6 @@ public class KorgMicrosampler extends Synth
                         return "99";
                     }
                 public boolean isSymmetric() { return true; }   // ALMOST symmetric
-                };
-            samples[i - 1].add(comp);
-
-            comp = new LabelledDial("Tune", this, "sample" + i + "tune", color, 1, 127, 64)
-                {
-                public boolean isSymmetric() { return true; }
                 };
             samples[i - 1].add(comp);
 
@@ -527,7 +547,7 @@ public class KorgMicrosampler extends Synth
             samples[i - 1].add(comp);
 
             // THIS WILL REQUIRE CUSTOM EMITTING
-            comp = new LabelledDial("Velocity", this, "pattern" + i + "velint", color, -63, 63)
+            comp = new LabelledDial("Velocity", this, "sample" + i + "velint", color, -63, 63)
                 {
                 public boolean isSymmetric() { return true; }
                 };
@@ -790,11 +810,8 @@ public class KorgMicrosampler extends Synth
             };
         next.add(comp);
 
-        comp = new LabelledDial("B1 Gain", this, "fx" + i + "param5", color, 0, 36)
-            {
-            public String map(int val) { return "" + ((val - 18) / 2.0); }
-            public boolean isSymmetric() { return true; }
-            };
+		// irritating that these gains are positive only, but distortion's gains are +/-
+        comp = new LabelledDial("B1 Gain", this, "fx" + i + "param5", color, 0, 36);
         next.add(comp);
 
         comp = new LabelledDial("B2 Frequency", this, "fx" + i + "param6", color, 0, 58)
@@ -809,11 +826,7 @@ public class KorgMicrosampler extends Synth
             };
         next.add(comp);
 
-        comp = new LabelledDial("B2 Gain", this, "fx" + i + "param8", color, 0,  36)
-            {
-            public String map(int val) { return "" + ((val - 18) / 2.0); }
-            public boolean isSymmetric() { return true; }
-            };
+        comp = new LabelledDial("B2 Gain", this, "fx" + i + "param8", color, 0,  36);
         next.add(comp);
 
         next = new HBox();
@@ -831,11 +844,7 @@ public class KorgMicrosampler extends Synth
             };
         next.add(comp);
 
-        comp = new LabelledDial("B3 Gain", this, "fx" + i + "param11", color, 0,  36)
-            {
-            public String map(int val) { return "" + ((val - 18) / 2.0); }
-            public boolean isSymmetric() { return true; }
-            };
+        comp = new LabelledDial("B3 Gain", this, "fx" + i + "param11", color, 0,  36);
         next.add(comp);
 
         vbox = new VBox();
@@ -856,11 +865,7 @@ public class KorgMicrosampler extends Synth
             };
         next.add(comp);
 
-        comp = new LabelledDial("B4 Gain", this, "fx" + i + "param15", color, 0, 36)
-            {
-            public String map(int val) { return "" + ((val - 18) / 2.0); }
-            public boolean isSymmetric() { return true; }
-            };
+        comp = new LabelledDial("B4 Gain", this, "fx" + i + "param15", color, 0, 36);
         next.add(comp);
 
 
@@ -3305,7 +3310,7 @@ public class KorgMicrosampler extends Synth
                             }
                         else if (key.equals("sample" + i + "semitone"))
                             {
-                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i+15), 0x00, 0x1B, 0x00, (byte)(getSigned(key, 0)), 0x00, (byte)0xF7 };
+                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i+15), 0x00, 0x1B, 0x00, (byte)(getSigned(key, 0)), (byte)(model.get(key, 0) >= 0 ? 0 : 0x7F), (byte)0xF7 };
                             }
                         else if (key.equals("sample" + i + "tune"))
                             {
@@ -3317,7 +3322,7 @@ public class KorgMicrosampler extends Synth
                             }
                         else if (key.equals("sample" + i + "velint"))
                             {
-                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i+15), 0x00, 0x1D, 0x00, (byte)(getSigned(key, 0)), 0x00, (byte)0xF7 };
+                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i+15), 0x00, 0x1D, 0x00, (byte)(getSigned(key, 0)), (byte)(model.get(key, 0) >= 0 ? 0 : 0x7F), (byte)0xF7 };
                             }
                         else if (key.equals("sample" + i + "pan"))
                             {
@@ -3357,7 +3362,7 @@ public class KorgMicrosampler extends Synth
                         try
                             {
                             int index = Integer.parseInt(key.substring(prefix.length()));
-                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, 0x50, 0x00, (byte)(index + 16), 0x00, (byte)(getSigned(key, 0)), 0x00, (byte)0xF7 };
+                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, 0x50, 0x00, (byte)(index + 16), 0x00, (byte)(getSigned(key, 0)), (byte)(model.get(key, 0) >= 0 ? 0 : 0x7F), (byte)0xF7 };
                             }
                         catch (NumberFormatException ex) { ex.printStackTrace(); }
                         }
@@ -3371,7 +3376,7 @@ public class KorgMicrosampler extends Synth
     
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile) 
         {
-        byte[] data = new byte[779];
+        byte[] data = new byte[780];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x7D;
         data[2] = (byte)'E';
@@ -3447,23 +3452,24 @@ public class KorgMicrosampler extends Synth
             data[72 + i * 19 + 18] = (byte)model.get("sample" + (i + 1) + "fxsw", 0);
             }
                 
-        // Emit FX data
-        data[754] = (byte)model.get("fxtype", 0);
-        data[755] = (byte)model.get("fxparametercontrol1", 0);
-        data[757] = (byte)model.get("fxparametercontrol2", 0);
-        for(int i = 0; i < 20; i++)
-            {
-            data[758 + i] = (byte)getSigned("fx" + data[754] + "param" + (i + 1), 0);
-            }
+        	// Emit FX data
+        	data[756] = (byte)model.get("fxtype", 0);
+        	data[757] = (byte)model.get("fxparametercontrol1", 0);
+        	data[758] = (byte)model.get("fxparametercontrol2", 0);
+        	for(int i = 0; i < 20; i++)
+        	    {
+        	    int sub = i;
+        	    data[759 + i] = (byte)getSigned("fx" + data[756] + "param" + sub, 0);
+        	    }
                         
-        data[778] = (byte)0xF7;
+        data[779] = (byte)0xF7;
                 
         return data;
         }
 
     public static boolean recognize(byte[] data)
         {
-        boolean val = (data.length == 779 &&
+        boolean val = (data.length == 780 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x7D &&
             data[2] == (byte)'E' &&
@@ -3730,8 +3736,7 @@ public class KorgMicrosampler extends Synth
         for(int i = 0; i < 16; i++)
             {
             model.set("pattern" + (i + 1) + "length", data[40 + i * 2]);
-            data[40] = (byte)model.get("pattern" + (i + 1) + "length", 0);
-            data[40 + i * 2 + 1] = (byte)model.get("pattern" + (i + 1) + "keyboardsample", 0);
+            model.set("pattern" + (i + 1) + "keyboardsample", data[40 + i * 2 + 1]);
             }
                 
         // Sample Data
@@ -3756,109 +3761,113 @@ public class KorgMicrosampler extends Synth
             }
                         
         // FX Data
-        model.set("fxtype", data[754]);
-        model.set("fxparametercontrol1", data[755]);
-        model.set("fxparametercontrol2", data[756]);
+        model.set("fxtype", data[756]);
+        model.set("fxparametercontrol1", data[757]);
+        model.set("fxparametercontrol2", data[758]);
         for(int i = 0; i < 20; i++)
             {
             int sub = i;
-            int type = data[754];
-            String key = "fx" + type + "param" + (sub + 1);
-            int val = data[758 + i];
+            int type = data[756];
+            String key = "fx" + type + "param" + sub;
+            int val = data[759 + i];
 
             // here comes the fun bit again.  Custom signed
             model.set(key, val);
-            if (type == 1)
+            if (type == FX_NONE)
+            	{
+            	new RuntimeException("FX for type 'none' spotted: fx" + type + "param" + sub);
+            	}
+            if (type == FX_COMPRESSOR)
                 {
                 }
-            else if (type == 2)
+            else if (type == FX_FILTER)
                 {
                 if (sub == 5 || sub == 11)
                     setSigned(key, val);
                 }
-            else if (type == 3)
+            else if (type == FX_EQ)
                 {
                 if (sub == 5 || sub == 8 || sub == 11 || sub == 15)
                     setSigned(key, val);
                 }
-            else if (type == 4)
+            else if (type == FX_DISTORTION)
                 {
                 if (sub == 4 || sub == 7 || sub == 10 || sub == 13)
                     setSigned(key, val);
                 }
-            else if (type == 5)
+            else if (type == FX_DECIMATOR)
                 {
                 if (sub == 6 || sub == 11)
                     setSigned(key, val);
                 }
-            else if (type == 6)
+            else if (type == FX_REVERB)
                 {
                 }
-            else if (type == 7)
+            else if (type == FX_DELAY)
                 {
                 }
-            else if (type == 8)
+            else if (type == FX_LCRDELAY)
                 {
                 }
-            else if (type == 9)
+            else if (type == FX_PANDELAY)
                 {
                 if (sub == 14 || sub == 17)
                     setSigned(key, val);
                 }
-            else if (type == 10)
+            else if (type == FX_MODDELAY)
                 {
                 if (sub == 11)
                     setSigned(key, val);
                 }
             else if (type == 11)
                 {
-                if (sub == 11)
+                if (sub == FX_TAPEECHO)
                     setSigned(key, val);
                 }
-            else if (type == 12)
+            else if (type == FX_CHORUS)
                 {
                 if (sub == 3 || sub == 7)
                     setSigned(key, val);
                 }
-            else if (type == 13)
+            else if (type == FX_FLANGER)
                 {
                 if (sub == 9 || sub == 12)
                     setSigned(key, val);
                 }
-            else if (type == 14)
+            else if (type == FX_VIBRATO)
                 {
                 if (sub == 6 || sub == 9)
                     setSigned(key, val);
                 }
-            else if (type == 15)
+            else if (type == FX_PHASER)
                 {
                 if (sub == 10 || sub == 13)
                     setSigned(key, val);
                 }
-            else if (type == 16)
+            else if (type == FX_TREMOLO)
                 {
                 if (sub == 6 || sub == 9)
                     setSigned(key, val);
                 }
-            else if (type == 17)
+            else if (type == FX_RINGMOD)
                 {
                 if (sub == 3 || sub == 4 || sub == 6 || sub == 11)
                     setSigned(key, val);
                 }
-            else if (type == 18)
+            else if (type == FX_GRAINSHIFTER)
                 {
                 }
-            else if (type == 19)
+            else if (type == FX_PITCHSHIFTER)
                 {
                 if (sub == 1 || sub == 2 )
                     setSigned(key, val);
                 }
-            else if (type == 20)
+            else if (type == FX_TALKMOD)
                 {
                 if (sub == 1 || sub == 7 || sub == 13 )
                     setSigned(key, val);
                 }
-            else if (type == 21)
+            else if (type == FX_LOOPER)
                 {
                 if (sub == 1 || sub == 7 || sub == 13 )
                     setSigned(key, val);

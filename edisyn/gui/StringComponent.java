@@ -71,7 +71,11 @@ public class StringComponent extends JComponent implements Updatable
         {
         return val;
         }
-        
+    
+    public JButton getButton() { return change; }
+    public String getTitle() { return label.getText().trim(); }
+    public String getCommand() { return "Enter " + getTitle(); }
+    
     public StringComponent(final String _label, final Synth synth, final String key, final int maxLength, final String instructions)
         {
         super();
@@ -83,10 +87,14 @@ public class StringComponent extends JComponent implements Updatable
         setLayout(new BorderLayout());
                 
         label = new JLabel("  " + _label);
-        label.setFont(Style.SMALL_FONT);
-        label.setBackground(Style.TRANSPARENT);
-        label.setForeground(Style.TEXT_COLOR);
-                
+        if (_label != null)
+        	{
+	        label.setFont(Style.SMALL_FONT);
+	        label.setBackground(Style.TRANSPARENT);
+	        label.setForeground(Style.TEXT_COLOR);
+            add(label, BorderLayout.NORTH);
+            }
+ 
         String txt = "";
         for(int i = 0; i < maxLength; i++)
             txt = txt + "m";
@@ -94,7 +102,7 @@ public class StringComponent extends JComponent implements Updatable
         change.putClientProperty("JComponent.sizeVariant", "small");
         change.setFont(Style.SMALL_FONT);
         change.setPreferredSize(change.getPreferredSize());
-        change.setHorizontalAlignment(SwingConstants.LEFT);
+        change.setHorizontalAlignment(SwingConstants.CENTER);
                 
         change.addActionListener(new ActionListener()
             {
@@ -104,10 +112,26 @@ public class StringComponent extends JComponent implements Updatable
                     {
                     String val = synth.getModel().get(key, "").trim();
                     VBox vbox = new VBox();
-                    vbox.add(new JLabel("Enter " + _label));
+                    vbox.add(new JLabel(getCommand()));
                     JTextField text = new JTextField(maxLength);
+                    text.setText(synth.getModel().get(key, ""));
+                    
+                    // The following hack is inspired by https://tips4java.wordpress.com/2010/03/14/dialog-focus/
+                    // and results in the text field being selected (which is what should have happened in the first place) 
+                    
+					text.addAncestorListener(new javax.swing.event.AncestorListener()
+						{
+						public void ancestorAdded(javax.swing.event.AncestorEvent e) 	
+								{ 
+								JComponent component = e.getComponent();
+								component.requestFocusInWindow();
+								text.selectAll(); 
+								}
+						public void ancestorMoved(javax.swing.event.AncestorEvent e) {}
+						public void ancestorRemoved(javax.swing.event.AncestorEvent e) {}
+						});
                     vbox.add(text);
-                    int opt = JOptionPane.showOptionDialog(StringComponent.this, vbox, _label,
+                    int opt = JOptionPane.showOptionDialog(StringComponent.this, vbox, getTitle(),
                         JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Enter",  "Cancel", "Rules"}, "Enter");
 
                     if (opt == JOptionPane.CANCEL_OPTION)       // this is "Rules"
@@ -141,7 +165,6 @@ public class StringComponent extends JComponent implements Updatable
                 }
             });
                 
-        add(label, BorderLayout.NORTH);
         add(change, BorderLayout.SOUTH);
         }
 

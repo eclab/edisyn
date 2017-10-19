@@ -106,24 +106,27 @@ public class LabelledDial extends NumericalComponent
         setBackground(Style.BACKGROUND_COLOR);
         dial = new Dial(staticColor);
 
-        label = new JLabel(_label);
-        label.setFont(Style.SMALL_FONT);
-        label.setBackground(Style.TRANSPARENT);
-        label.setForeground(Style.TEXT_COLOR);
-
-        labelBox = new Box(BoxLayout.Y_AXIS);
-        Box box = new Box(BoxLayout.X_AXIS);
-        box.add(Box.createGlue());
-        box.add(label);
-        box.add(Box.createGlue());
-        labelBox.add(box);
-        labelBox.add(glue = Box.createGlue());
-
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.setBackground(Style.BACKGROUND_COLOR);
         panel.add(dial, BorderLayout.CENTER);
-        panel.add(labelBox, BorderLayout.SOUTH);
+
+	    label = new JLabel(_label);
+		if (_label != null)
+			{
+	        label.setFont(Style.SMALL_FONT);
+	        label.setBackground(Style.TRANSPARENT);
+	        label.setForeground(Style.TEXT_COLOR);
+
+	        labelBox = new Box(BoxLayout.Y_AXIS);
+	        Box box = new Box(BoxLayout.X_AXIS);
+	        box.add(Box.createGlue());
+	        box.add(label);
+	        box.add(Box.createGlue());
+	        labelBox.add(box);
+	        labelBox.add(glue = Box.createGlue());
+			panel.add(labelBox, BorderLayout.SOUTH);
+			}
         
         setLayout(new BorderLayout());
         add(panel, BorderLayout.NORTH);
@@ -370,6 +373,11 @@ public class LabelledDial extends NumericalComponent
                 
         public void paintComponent(Graphics g)
             {
+            // revise label if needed
+            String val = map(getState());
+            if (!(val.equals(dial.field.getText())))
+            	dial.field.setText(val);
+
             super.paintComponent(g);
 
             int min = getMin();

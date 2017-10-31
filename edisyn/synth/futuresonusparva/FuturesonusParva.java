@@ -715,7 +715,7 @@ final static String[] allParameters = new String[/*217 or so*/]
 	"-",
 	"-",
 	"-",
-	"foo",
+	"-",
 	};
 
     public boolean getSendsAllParametersInBulk() { return false; }
@@ -829,14 +829,15 @@ final static String[] allParameters = new String[/*217 or so*/]
     	{
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
+        if (key.equals("name")) return new Object[0];  // this is not emittable
 
         int index = ((Integer)(allParametersToIndex.get(key))).intValue();
         int value = model.get(key);
         
         if (index < 128)  // it's a CC
-        	return new Object[] { buildCC(getChannelOut(), index, value) };
+        	return buildCC(getChannelOut(), index, value);
         else	// it's NRPN.  We're sending MSB first, which is what the Parva expects
-        	return new Object[] { buildNRPN(getChannelOut(), index - 128, value) };
+        	return buildNRPN(getChannelOut(), index - 128, value);
     	}
 
     public void handleSynthCCOrNRPN(Midi.CCData data)
@@ -873,15 +874,6 @@ final static String[] allParameters = new String[/*217 or so*/]
             tryToSendMIDI(buildPC(getChannelOut(), NN));
             }
         catch (Exception e) { e.printStackTrace(); }
-
-        // we assume that we successfully did it
-        if (!isMerging())  // we're actually loading the patch, not merging with it
-            {
-            setSendMIDI(false);
-            model.set("number", tempModel.get("number"));
-            model.set("bank", tempModel.get("bank"));
-            setSendMIDI(true);
-            }
         }
 
     public byte[] requestDump(Model tempModel)

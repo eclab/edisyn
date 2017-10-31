@@ -26,7 +26,7 @@ public class FuturesonusParva extends Synth
     {
     static final String[] BANKS = new String[] { "A", "B", "C", "D", "E", "F" };
     static final String[] VOICE_CONFIGURATIONS = new String[] { "Poly", "Unison", "Mono" };
-    static final String[] CURVES = new String[] { "Exponential         ", "Linear" };
+    static final String[] CURVES = new String[] { "Exponential         ", "Linear" };  // note the extra space after Exponential, so the menu is big enough to maintain consistency in its column
     static final String[] GLIDE_MODES = new String[] { "Off", "Rate", "Time" };
     static final String[] LFO_WAVES = new String[] { "Triangle", "Sawtooth", "Ramp", "Square", "Sample & Hold" };
     static final String[] VCF_TYPE = new String[] { "24dB LP", "12dB LP", "24dB HP", "12dB HP", "12dB BP" };
@@ -113,7 +113,7 @@ public class FuturesonusParva extends Synth
         }
                 
     
-//    public String getDefaultResourceFileName() { return "KorgMicroKorg.init"; }
+    public String getDefaultResourceFileName() { return "FuturesonusParva.init"; }
     public String getHTMLResourceFileName() { return "FuturesonusParva.html"; }
                 
                 

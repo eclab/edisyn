@@ -937,7 +937,7 @@ final static String[] allParameters = new String[/*217 or so*/]
                 showSimpleError(title, "The Patch Number must be an integer 0 ... 63");
                 continue;
                 }
-            if (n < 0 || n > 16)
+            if (n < 0 || n > 63)
                 {
                 showSimpleError(title, "The Patch Number must be an integer 0 ... 63");
                 continue;

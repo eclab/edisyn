@@ -53,7 +53,7 @@ public class FuturesonusParva extends Synth
             {
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
-
+    	
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
@@ -218,11 +218,11 @@ public class FuturesonusParva extends Synth
         
         hbox.add(vbox);
 
-        //comp = new CheckBox("Legato", this, "legato");
-        //vbox.add(comp);
-
         comp = new CheckBox("Clean Oscillators", this, "cleanosc");
         vbox.add(comp);
+
+        comp = new LabelledDial("Pan", this, "pan", color, 0, 127, 64);
+        hbox.add(comp);        
 
         comp = new LabelledDial("Spread", this, "spread", color, 0, 127);
         hbox.add(comp);        
@@ -348,7 +348,7 @@ public class FuturesonusParva extends Synth
             };
         hbox.add(comp);        
 
-        comp = new LabelledDial("Velocity", this, "env" + env + "velamt", color, 0, 127);
+        comp = new LabelledDial("Velocity", this, "env" + env + "velocity", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
         hbox.add(comp);        
 
@@ -382,7 +382,7 @@ public class FuturesonusParva extends Synth
         comp = new CheckBox("Unipolar", this, "lfo" + lfo + "polar");
         vbox.add(comp);
 
-        comp = new CheckBox("Key Sync", this, "lfo" + lfo + "keysnc");
+        comp = new CheckBox("Key Sync", this, "lfo" + lfo + "keysync");
         vbox.add(comp);
 
         hbox.add(vbox);
@@ -468,15 +468,15 @@ public class FuturesonusParva extends Synth
                 {
                 vbox = new VBox();
                 params = MOD_SOURCES;
-                comp = new Chooser("Source " + i, this, "modulation" + i + "source", params);
+                comp = new Chooser("Source " + i, this, "mod" + i + "source", params);
                 vbox.add(comp);
 
                 params = MOD_DESTINATIONS;
-                comp = new Chooser("Destination " + i, this, "modulation" + i + "destination", params);
+                comp = new Chooser("Destination " + i, this, "mod" + i + "destination", params);
                 vbox.add(comp);
                 hbox.add(vbox);
 
-                comp = new LabelledDial("Amount " + i, this, "modulation" + i + "amount", color, 0, 127, 64)
+                comp = new LabelledDial("Amount " + i, this, "mod" + i + "amount", color, 0, 127, 64)
                     {
                     public boolean isSymmetric() { return true; }
                     };
@@ -540,24 +540,24 @@ final static String[] allParameters = new String[/*217 or so*/]
 	"-",
 	"lfo1rate",                   
 	"lfo1wave",
-	"lfo1level",
+	"lfo1depth",
 	"lfo1moddst",
-	"lfo1sync",           
+	"lfo1keysync",           
 	"lfo2rate",                   
 	"lfo2wave",
-	"lfo2level",
+	"lfo2depth",
 	"lfo2moddst",
-	"lfo2sync",         
+	"lfo2keysync",         
 	"lfo3rate",                   
 	"lfo3wave",
-	"lfo3level",
+	"lfo3depth",
 	"lfo3moddst",
-	"lfo3sync",        
+	"lfo3keysync",        
 	"lfo4rate",                   
 	"lfo4wave",
-	"lfo4level",
+	"lfo4depth",
 	"lfo4moddst",
-	"lfo4sync",       
+	"lfo4keysync",       
 	"-",                                // VCA Init      
 	"range",                    // (global osc range)     
 	"-",       
@@ -715,7 +715,7 @@ final static String[] allParameters = new String[/*217 or so*/]
 	"-",
 	"-",
 	"-",
-	"-",
+	"foo",
 	};
 
     public boolean getSendsAllParametersInBulk() { return false; }

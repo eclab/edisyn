@@ -294,6 +294,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** All synthesizer editor pane classes in Edisyn */
     public static final Class[] synths = new Class[] 
     { 
+    edisyn.synth.futuresonusparva.FuturesonusParva.class,
     edisyn.synth.korgsg.KorgSG.class,
     edisyn.synth.korgsg.KorgSGMulti.class,
     edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
@@ -807,6 +808,24 @@ public abstract class Synth extends JComponent implements Updatable
             return new Object[0];
             }
         }
+
+    /** Builds a short (7-bit) CC. */
+    public Object[] buildCC(int channel, int parameter, int value)
+        {
+        try
+            {
+            return new Object[]
+                {
+                new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, parameter, (byte)(value & 127))
+                };
+            }
+        catch (InvalidMidiDataException e)
+            {
+            e.printStackTrace();
+            return new Object[0];
+            }
+        }
+
 
     /** Builds a sequence of CCs for a 14-bit CC message.  The parameter must be 0...31. */
     public Object[] buildLongCC(int channel, int parameter, int value)

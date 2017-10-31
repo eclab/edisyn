@@ -777,14 +777,14 @@ double[] timeConstants = new double[] { 0, 0.3333, 0.3333,  0.3333, 0.3333};
 double[] heightConstants = new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 };
 double[] angles = new double[] { 0, (Math.PI/4/127),   (Math.PI/4/127), 0, (Math.PI/4/127) };
 JComponent comp = new EnvelopeDisplay(this, Color.red, "ADSR", 
-                timeKeys, heightKeys, timeConstants, heightConstants, rates);
+                timeKeys, heightKeys, timeConstants, heightConstants, angles);
 \end{verbatim}
 
 This {\it still} might not be flexible enough for you.  For example, the Yamaha TX81Z has, shall we say, an unusual approach to defining angles.  You can do further post processing on the \(\langle x,y\rangle\) coordinates of each of the points (where  both X and Y vary from 0...1) by overriding the {\bf postProcess(...)} method like this:
 
 \begin{verbatim}
 JComponent comp = new EnvelopeDisplay(this, Color.red, "ADSR", 
-                timeKeys, heightKeys, timeConstants, heightConstants, rates)
+                timeKeys, heightKeys, timeConstants, heightConstants, angles)
     {
     public void postProcess(double[] xVals, double[] yVals)
         {

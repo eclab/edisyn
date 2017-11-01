@@ -737,10 +737,8 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
     /** Override this to make sure that at *least* the given time (in Milliseconds) has transpired between MIDI sends. */
-    public int getPauseBetweenMIDISends() { return 0; }
-
-    /** Override this to make sure that at *least* the given time (in Microseconds) has transpired between MIDI sends. */
-    public long getNanoPauseBetweenMIDISends() { return getPauseBetweenMIDISends() * 1000000L; }
+    public double getPauseBetweenMIDISends() { return 0; }
+    long getNanoPauseBetweenMIDISends() { return (long)(getPauseBetweenMIDISends() * 1000000.0); }
 
     /** Override this to make sure that the given additional time (in ms) has transpired between MIDI patch changes. */
     public int getPauseAfterChangePatch() { return 0; }

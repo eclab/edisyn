@@ -531,7 +531,7 @@ public class Blank extends Synth
         return 0;
         }
 
-    public int getPauseBetweenMIDISends() 
+    public double getPauseBetweenMIDISends() 
         {
         // Some synths cannot accept MIDI messages at full speed.  
         // For example, the Yamaha TX81Z has problems with sysex messages
@@ -540,7 +540,7 @@ public class Blank extends Synth
         // milliseconds before issuing another MIDI message of *any* kind.
         // This includes note on / note off etc., so don't expect musicality
         // if you set this to >0.
-        return 0;
+        return 0.0;
         }
         
     public int getPauseAfterSendAllParameters() 

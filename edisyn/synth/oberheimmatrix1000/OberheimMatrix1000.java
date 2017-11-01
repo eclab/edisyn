@@ -1829,7 +1829,7 @@ public class OberheimMatrix1000 extends Synth
             model.set("name", newnm);
         }
         
-    public int getPauseBetweenMIDISends() { return 75; }
+    public double getPauseBetweenMIDISends() { return 75; }
 
     public static String getSynthName() { return "Oberheim Matrix 1000"; }
     

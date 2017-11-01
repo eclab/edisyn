@@ -164,7 +164,7 @@ public class FuturesonusParva extends Synth
         char[] chars = name.toCharArray();
         for(int i = 0; i < chars.length; i++)
             {
-            if (chars[i] < 32 || chars[i] > 127)
+            if (chars[i] < 32 || chars[i] > 126)	// DEL is not permitted
                 chars[i] = ' ';
             }
         return new String(chars);
@@ -870,6 +870,7 @@ final static String[] allParameters = new String[/*217 or so*/]
         try {
             // Bank change is CC 0
             tryToSendMIDI(buildCC(getChannelOut(), 0, BB));
+            simplePause(getPauseAfterBankChange());
             // Number change is PC
             tryToSendMIDI(buildPC(getChannelOut(), NN));
             }
@@ -997,6 +998,32 @@ final static String[] allParameters = new String[/*217 or so*/]
         int number = model.get("number");
         return BANKS[model.get("bank")] + (number > 9 ? "" : "0") + number;
         }
-        
+
+
+
+
+
+	// The patch editor does a bank change first, then a PC.
+	// Override this to pause after the bank change
+	public int getPauseAfterBankChange()
+		{
+		return 0;  // in ms
+		}
+
+	// override this to pause after the PC
+    public int getPauseAfterChangePatch()
+        {
+        return 0; // in ms
+        }
+
+	// Override this to pause after every NRPN or CC message
+	// So as to slow down bulk transmission.  We want to slow it down
+	// to JUST BARELY slow enough that the Parva can handle it.
+	// Note it's a double, we can pause for less than 1ms
+    public double getPauseBetweenMIDISends() 
+        {
+        return 0.0;  // in ms
+        }
+
     }
     

@@ -118,11 +118,6 @@ public class WaldorfBlofeldMulti extends Synth
         
     public WaldorfBlofeldMulti()
         {
-        for(int i = 0; i < allParameters.length; i++)
-            {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
-            }
-                        
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         vbox.add(addNameGlobal(Style.COLOR_GLOBAL));
@@ -219,6 +214,7 @@ public class WaldorfBlofeldMulti extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "Waldorf Blofeld [Multi]", color);
+        globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -299,13 +295,14 @@ public class WaldorfBlofeldMulti extends Synth
     public JComponent addInstrument(final int inst, Color color)
         {
         Category category = new Category(this, "Part " + inst, color);
+        category.makePasteable("inst");
                 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         VBox vbox = new VBox();
 
-        comp = new LabelledDial("Bank", this, "bank" + inst, color, 0, 7)
+        comp = new LabelledDial("Bank", this, "inst" + inst + "bank", color, 0, 7)
             {
             public String map(int val)
                 {
@@ -314,12 +311,12 @@ public class WaldorfBlofeldMulti extends Synth
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel(" ");
-        model.removeMetricMinMax("bank" + inst);
+        model.removeMetricMinMax("inst" + inst + "bank");
         hbox.add(comp);
 
 
-        comp = new LabelledDial("Number", this, "number" + inst, color, 0, 127, -1);
-        model.removeMetricMinMax("number" + inst);
+        comp = new LabelledDial("Number", this, "inst" + inst + "number", color, 0, 127, -1);
+        model.removeMetricMinMax("inst" + inst + "number");
         hbox.add(comp);
         
         VBox main = new VBox();
@@ -354,8 +351,8 @@ public class WaldorfBlofeldMulti extends Synth
                             public void run() 
                                 { 
                                 Model tempModel = new Model();
-                                tempModel.set("bank", WaldorfBlofeldMulti.this.model.get("bank" + inst));
-                                tempModel.set("number", WaldorfBlofeldMulti.this.model.get("number" + inst));
+                                tempModel.set("bank", WaldorfBlofeldMulti.this.model.get("inst" + inst + "bank"));
+                                tempModel.set("number", WaldorfBlofeldMulti.this.model.get("inst" + inst + "number"));
                                 synth.performRequestDump(tempModel, false);
                                 }
                             });
@@ -368,16 +365,16 @@ public class WaldorfBlofeldMulti extends Synth
             };
         hbox2.add(comp);
         
-        comp = new CheckBox("Play", this, "status" + inst, true);
+        comp = new CheckBox("Play", this, "inst" + inst + "status", true);
         hbox2.add(comp);    
 
-        comp = new CheckBox("Local", this, "local" + inst);
+        comp = new CheckBox("Local", this, "inst" + inst + "local");
         hbox2.add(comp);    
 
-        comp = new CheckBox("MIDI", this, "midi" + inst);
+        comp = new CheckBox("MIDI", this, "inst" + inst + "midi");
         hbox2.add(comp);    
         
-        comp = new CheckBox("USB", this, "usb" + inst);
+        comp = new CheckBox("USB", this, "inst" + inst + "usb");
         hbox2.add(comp);
         
         main.add(hbox2);
@@ -386,38 +383,38 @@ public class WaldorfBlofeldMulti extends Synth
                 
         vbox = new VBox();
         
-        comp = new CheckBox("Pressure", this, "pressure" + inst);
+        comp = new CheckBox("Pressure", this, "inst" + inst + "pressure");
         vbox.add(comp);    
 
-        comp = new CheckBox("Pitch Bend", this, "bend" + inst);
+        comp = new CheckBox("Pitch Bend", this, "inst" + inst + "bend");
         vbox.add(comp);    
         
         hbox3.add(vbox);
         vbox = new VBox();
 
-        comp = new CheckBox("Sustain", this, "sustain" + inst);
+        comp = new CheckBox("Sustain", this, "inst" + inst + "sustain");
         vbox.add(comp);    
         
-        comp = new CheckBox("Edits", this, "edits" + inst);
+        comp = new CheckBox("Edits", this, "inst" + inst + "edits");
         vbox.add(comp);    
 
         hbox3.add(vbox);
         vbox = new VBox();
         
-        comp = new CheckBox("Mod Wheel", this, "modwheel" + inst);
+        comp = new CheckBox("Mod Wheel", this, "inst" + inst + "modwheel");
         vbox.add(comp);    
 
-        comp = new CheckBox("Prg Change", this, "progchange" + inst);
+        comp = new CheckBox("Prg Change", this, "inst" + inst + "progchange");
         vbox.add(comp);    
 
         hbox3.add(vbox);
         main.add(hbox3);
         hbox.add(main);
 
-        comp = new LabelledDial("Volume", this, "volume" + inst, color, 0, 127);
+        comp = new LabelledDial("Volume", this, "inst" + inst + "volume", color, 0, 127);
         hbox.add(comp);
 
-        comp = new LabelledDial("Panning", this, "panning"  + inst, color, 0, 127, 64)
+        comp = new LabelledDial("Panning", this, "inst" + inst + "panning", color, 0, 127, 64)
             {
             public String map(int val)
                 {
@@ -428,13 +425,13 @@ public class WaldorfBlofeldMulti extends Synth
             };
         hbox.add(comp);
 
-        comp = new LabelledDial("Transpose", this, "transpose" + inst, color, 16, 112, 64);
+        comp = new LabelledDial("Transpose", this, "inst" + inst + "transpose", color, 16, 112, 64);
         hbox.add(comp);
 
-        comp = new LabelledDial("Detune", this, "detune" + inst, color, 0, 127, 64);
+        comp = new LabelledDial("Detune", this, "inst" + inst + "detune", color, 0, 127, 64);
         hbox.add(comp);
 
-        comp = new LabelledDial("MIDI", this, "channel" + inst, color, 0, 17)
+        comp = new LabelledDial("MIDI", this, "inst" + inst + "channel", color, 0, 17)
             {
             public String map(int val)
                 {
@@ -445,19 +442,19 @@ public class WaldorfBlofeldMulti extends Synth
                 else return "" + (val - 1);
                 }
             };
-        model.removeMetricMinMax( "channel" + inst);
+        model.removeMetricMinMax( "inst" + inst + "channel");
         ((LabelledDial)comp).addAdditionalLabel("Channel");
         hbox.add(comp);
 
-        comp = new LabelledDial("Lowest", this, "lowvel" + inst, color, 1, 127);
+        comp = new LabelledDial("Lowest", this, "inst" + inst + "lowvel", color, 1, 127);
         ((LabelledDial)comp).addAdditionalLabel("Velocity");
         hbox.add(comp);
 
-        comp = new LabelledDial("Highest", this, "hivel" + inst, color, 1, 127);
+        comp = new LabelledDial("Highest", this, "inst" + inst + "hivel", color, 1, 127);
         ((LabelledDial)comp).addAdditionalLabel("Velocity");
         hbox.add(comp);
 
-        comp = new LabelledDial("Lowest", this, "lowkey" + inst, color, 0, 127) 
+        comp = new LabelledDial("Lowest", this, "inst" + inst + "lowkey", color, 0, 127) 
             {
             public String map(int val)
                 {
@@ -467,7 +464,7 @@ public class WaldorfBlofeldMulti extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Key");
         hbox.add(comp);
 
-        comp = new LabelledDial("Highest", this, "hikey" + inst, color, 0, 127)
+        comp = new LabelledDial("Highest", this, "inst" + inst + "hikey", color, 0, 127)
             {
             public String map(int val)
                 {
@@ -480,11 +477,6 @@ public class WaldorfBlofeldMulti extends Synth
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
-
-
-
-    /** Map of parameter -> index in the allParameters array. */
-    HashMap allParametersToIndex = new HashMap();
 
 
     /** List of all Waldorf parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
@@ -527,45 +519,20 @@ public class WaldorfBlofeldMulti extends Synth
     "-",
     "-",
     
-    "bank1",
-    "number1",
-    "volume1",
-    "panning1",
+    "inst1bank",
+    "inst1number",
+    "inst1volume",
+    "inst1panning",
     "-",
-    "transpose1",
-    "detune1",
-    "channel1",
-    "lowkey1",
-    "hikey1",
-    "lowvel1",
-    "hivel1",
-    "abits1",
-    "bbits1",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-
-    "bank2",
-    "number2",
-    "volume2",
-    "panning2",
-    "-",
-    "transpose2",
-    "detune2",
-    "channel2",
-    "lowkey2",
-    "hikey2",
-    "lowvel2",
-    "hivel2",
-    "abits2",
-    "bbits2",
+    "inst1transpose",
+    "inst1detune",
+    "inst1channel",
+    "inst1lowkey",
+    "inst1hikey",
+    "inst1lowvel",
+    "inst1hivel",
+    "inst1abits",
+    "inst1bbits",
     "-",
     "-",
     "-",
@@ -577,45 +544,20 @@ public class WaldorfBlofeldMulti extends Synth
     "-",
     "-",
 
-    "bank3",
-    "number3",
-    "volume3",
-    "panning3",
+    "inst2bank",
+    "inst2number",
+    "inst2volume",
+    "inst2panning",
     "-",
-    "transpose3",
-    "detune3",
-    "channel3",
-    "lowkey3",
-    "hikey3",
-    "lowvel3",
-    "hivel3",
-    "abits3",
-    "bbits3",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-
-    "bank4",
-    "number4",
-    "volume4",
-    "panning4",
-    "-",
-    "transpose4",
-    "detune4",
-    "channel4",
-    "lowkey4",
-    "hikey4",
-    "lowvel4",
-    "hivel4",
-    "abits4",
-    "bbits4",
+    "inst2transpose",
+    "inst2detune",
+    "inst2channel",
+    "inst2lowkey",
+    "inst2hikey",
+    "inst2lowvel",
+    "inst2hivel",
+    "inst2abits",
+    "inst2bbits",
     "-",
     "-",
     "-",
@@ -627,45 +569,20 @@ public class WaldorfBlofeldMulti extends Synth
     "-",
     "-",
 
-    "bank5",
-    "number5",
-    "volume5",
-    "panning5",
+    "inst3bank",
+    "inst3number",
+    "inst3volume",
+    "inst3panning",
     "-",
-    "transpose5",
-    "detune5",
-    "channel5",
-    "lowkey5",
-    "hikey5",
-    "lowvel5",
-    "hivel5",
-    "abits5",
-    "bbits5",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-
-    "bank6",
-    "number6",
-    "volume6",
-    "panning6",
-    "-",
-    "transpose6",
-    "detune6",
-    "channel6",
-    "lowkey6",
-    "hikey6",
-    "lowvel6",
-    "hivel6",
-    "abits6",
-    "bbits6",
+    "inst3transpose",
+    "inst3detune",
+    "inst3channel",
+    "inst3lowkey",
+    "inst3hikey",
+    "inst3lowvel",
+    "inst3hivel",
+    "inst3abits",
+    "inst3bbits",
     "-",
     "-",
     "-",
@@ -677,45 +594,20 @@ public class WaldorfBlofeldMulti extends Synth
     "-",
     "-",
 
-    "bank7",
-    "number7",
-    "volume7",
-    "panning7",
+    "inst4bank",
+    "inst4number",
+    "inst4volume",
+    "inst4panning",
     "-",
-    "transpose7",
-    "detune7",
-    "channel7",
-    "lowkey7",
-    "hikey7",
-    "lowvel7",
-    "hivel7",
-    "abits7",
-    "bbits7",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-
-    "bank8",
-    "number8",
-    "volume8",
-    "panning8",
-    "-",
-    "transpose8",
-    "detune8",
-    "channel8",
-    "lowkey8",
-    "hikey8",
-    "lowvel8",
-    "hivel8",
-    "abits8",
-    "bbits8",
+    "inst4transpose",
+    "inst4detune",
+    "inst4channel",
+    "inst4lowkey",
+    "inst4hikey",
+    "inst4lowvel",
+    "inst4hivel",
+    "inst4abits",
+    "inst4bbits",
     "-",
     "-",
     "-",
@@ -727,45 +619,20 @@ public class WaldorfBlofeldMulti extends Synth
     "-",
     "-",
 
-    "bank9",
-    "number9",
-    "volume9",
-    "panning9",
+    "inst5bank",
+    "inst5number",
+    "inst5volume",
+    "inst5panning",
     "-",
-    "transpose9",
-    "detune9",
-    "channel9",
-    "lowkey9",
-    "hikey9",
-    "lowvel9",
-    "hivel9",
-    "abits9",
-    "bbits9",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-
-    "bank10",
-    "number10",
-    "volume10",
-    "panning10",
-    "-",
-    "transpose10",
-    "detune10",
-    "channel10",
-    "lowkey10",
-    "hikey10",
-    "lowvel10",
-    "hivel10",
-    "abits10",
-    "bbits10",
+    "inst5transpose",
+    "inst5detune",
+    "inst5channel",
+    "inst5lowkey",
+    "inst5hikey",
+    "inst5lowvel",
+    "inst5hivel",
+    "inst5abits",
+    "inst5bbits",
     "-",
     "-",
     "-",
@@ -777,45 +644,20 @@ public class WaldorfBlofeldMulti extends Synth
     "-",
     "-",
 
-    "bank11",
-    "number11",
-    "volume11",
-    "panning11",
+    "inst6bank",
+    "inst6number",
+    "inst6volume",
+    "inst6panning",
     "-",
-    "transpose11",
-    "detune11",
-    "channel11",
-    "lowkey11",
-    "hikey11",
-    "lowvel11",
-    "hivel11",
-    "abits11",
-    "bbits11",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-
-    "bank12",
-    "number12",
-    "volume12",
-    "panning12",
-    "-",
-    "transpose12",
-    "detune12",
-    "channel12",
-    "lowkey12",
-    "hikey12",
-    "lowvel12",
-    "hivel12",
-    "abits12",
-    "bbits12",
+    "inst6transpose",
+    "inst6detune",
+    "inst6channel",
+    "inst6lowkey",
+    "inst6hikey",
+    "inst6lowvel",
+    "inst6hivel",
+    "inst6abits",
+    "inst6bbits",
     "-",
     "-",
     "-",
@@ -827,45 +669,20 @@ public class WaldorfBlofeldMulti extends Synth
     "-",
     "-",
 
-    "bank13",
-    "number13",
-    "volume13",
-    "panning13",
+    "inst7bank",
+    "inst7number",
+    "inst7volume",
+    "inst7panning",
     "-",
-    "transpose13",
-    "detune13",
-    "channel13",
-    "lowkey13",
-    "hikey13",
-    "lowvel13",
-    "hivel13",
-    "abits13",
-    "bbits13",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-
-    "bank14",
-    "number14",
-    "volume14",
-    "panning14",
-    "-",
-    "transpose14",
-    "detune14",
-    "channel14",
-    "lowkey14",
-    "hikey14",
-    "lowvel14",
-    "hivel14",
-    "abits14",
-    "bbits14",
+    "inst7transpose",
+    "inst7detune",
+    "inst7channel",
+    "inst7lowkey",
+    "inst7hikey",
+    "inst7lowvel",
+    "inst7hivel",
+    "inst7abits",
+    "inst7bbits",
     "-",
     "-",
     "-",
@@ -877,20 +694,20 @@ public class WaldorfBlofeldMulti extends Synth
     "-",
     "-",
 
-    "bank15",
-    "number15",
-    "volume15",
-    "panning15",
+    "inst8bank",
+    "inst8number",
+    "inst8volume",
+    "inst8panning",
     "-",
-    "transpose15",
-    "detune15",
-    "channel15",
-    "lowkey15",
-    "hikey15",
-    "lowvel15",
-    "hivel15",
-    "abits15",
-    "bbits15",
+    "inst8transpose",
+    "inst8detune",
+    "inst8channel",
+    "inst8lowkey",
+    "inst8hikey",
+    "inst8lowvel",
+    "inst8hivel",
+    "inst8abits",
+    "inst8bbits",
     "-",
     "-",
     "-",
@@ -902,20 +719,195 @@ public class WaldorfBlofeldMulti extends Synth
     "-",
     "-",
 
-    "bank16",
-    "number16",
-    "volume16",
-    "panning16",
+    "inst9bank",
+    "inst9number",
+    "inst9volume",
+    "inst9panning",
     "-",
-    "transpose16",
-    "detune16",
-    "channel16",
-    "lowkey16",
-    "hikey16",
-    "lowvel16",
-    "hivel16",
-    "abits16",
-    "bbits16",
+    "inst9transpose",
+    "inst9detune",
+    "inst9channel",
+    "inst9lowkey",
+    "inst9hikey",
+    "inst9lowvel",
+    "inst9hivel",
+    "inst9abits",
+    "inst9bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+
+    "inst10bank",
+    "inst10number",
+    "inst10volume",
+    "inst10panning",
+    "-",
+    "inst10transpose",
+    "inst10detune",
+    "inst10channel",
+    "inst10lowkey",
+    "inst10hikey",
+    "inst10lowvel",
+    "inst10hivel",
+    "inst10abits",
+    "inst10bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+
+    "inst11bank",
+    "inst11number",
+    "inst11volume",
+    "inst11panning",
+    "-",
+    "inst11transpose",
+    "inst11detune",
+    "inst11channel",
+    "inst11lowkey",
+    "inst11hikey",
+    "inst11lowvel",
+    "inst11hivel",
+    "inst11abits",
+    "inst11bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+
+    "inst12bank",
+    "inst12number",
+    "inst12volume",
+    "inst12panning",
+    "-",
+    "inst12transpose",
+    "inst12detune",
+    "inst12channel",
+    "inst12lowkey",
+    "inst12hikey",
+    "inst12lowvel",
+    "inst12hivel",
+    "inst12abits",
+    "inst12bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+
+    "inst13bank",
+    "inst13number",
+    "inst13volume",
+    "inst13panning",
+    "-",
+    "inst13transpose",
+    "inst13detune",
+    "inst13channel",
+    "inst13lowkey",
+    "inst13hikey",
+    "inst13lowvel",
+    "inst13hivel",
+    "inst13abits",
+    "inst13bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+
+    "inst14bank",
+    "inst14number",
+    "inst14volume",
+    "inst14panning",
+    "-",
+    "inst14transpose",
+    "inst14detune",
+    "inst14channel",
+    "inst14lowkey",
+    "inst14hikey",
+    "inst14lowvel",
+    "inst14hivel",
+    "inst14abits",
+    "inst14bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+
+    "inst15bank",
+    "inst15number",
+    "inst15volume",
+    "inst15panning",
+    "-",
+    "inst15transpose",
+    "inst15detune",
+    "inst15channel",
+    "inst15lowkey",
+    "inst15hikey",
+    "inst15lowvel",
+    "inst15hivel",
+    "inst15abits",
+    "inst15bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+
+    "inst16bank",
+    "inst16number",
+    "inst16volume",
+    "inst16panning",
+    "-",
+    "inst16transpose",
+    "inst16detune",
+    "inst16channel",
+    "inst16lowkey",
+    "inst16hikey",
+    "inst16lowvel",
+    "inst16hivel",
+    "inst16abits",
+    "inst16bbits",
     "-",
     "-",
     "-",
@@ -931,6 +923,17 @@ public class WaldorfBlofeldMulti extends Synth
     };
 
 
+	// extracts a 1 or 2-digit integer starting at 'start'
+	int extractInteger(String str, int start)
+		{
+		int val = (int)(str.charAt(start) - '0');
+        int val2 = (int)(str.charAt(start + 1) - '0');
+        if (val2 >= 0 && val2 <= 9)
+        	{
+        	val = val * 10 + val2;
+        	}
+        return val;
+		}
 
     
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
@@ -951,33 +954,33 @@ public class WaldorfBlofeldMulti extends Synth
                 {
                 bytes[i] = 0;
                 }
-            else if (key.startsWith("abits"))
+            else if (key.endsWith("abits"))
                 {
-                int part = (int)(key.charAt(5) - '0');
+                int part = extractInteger(key, 4);
                         
-                byte status = (byte)model.get("status" + part);
-                byte local = (byte)model.get("local" + part);
-                byte usb = (byte)model.get("usb" + part);
-                byte midi = (byte)model.get("midi" + part);
+                byte status = (byte)model.get("inst" + part + "status");
+                byte local = (byte)model.get("inst" + part + "local");
+                byte usb = (byte)model.get("inst" + part + "usb");
+                byte midi = (byte)model.get("inst" + part + "midi");
                         
                 bytes[i] = (byte)((status << 6) | (local << 2) | (usb << 1) | midi);
                 }
-            else if (key.startsWith("bbits"))
+            else if (key.endsWith("bbits"))
                 {
-                int part = (int)(key.charAt(5) - '0');
+                int part = extractInteger(key, 4);
                         
-                byte pressure = (byte)model.get("pressure" + part);
-                byte bend = (byte)model.get("bend" + part);
-                byte wheel = (byte)model.get("modwheel" + part);
-                byte sustain = (byte)model.get("sustain" + part);
-                byte edits = (byte)model.get("edits" + part);
-                byte change = (byte)model.get("progchange" + part);
+                byte pressure = (byte)model.get("inst" + part + "pressure");
+                byte bend = (byte)model.get("inst" + part + "bend");
+                byte wheel = (byte)model.get("inst" + part + "modwheel");
+                byte sustain = (byte)model.get("inst" + part + "sustain");
+                byte edits = (byte)model.get("inst" + part + "edits");
+                byte change = (byte)model.get("inst" + part + "progchange");
                         
                 bytes[i] = (byte)((change << 5) | (edits << 4) | (sustain << 3) | (pressure << 2) | (wheel << 1) | bend);
                 }
             else
                 {
-                bytes[i] = (byte)(model.get(key));
+               bytes[i] = (byte)(model.get(key));
                 }
             }
 
@@ -1121,21 +1124,21 @@ public class WaldorfBlofeldMulti extends Synth
                 e.printStackTrace();
                 }
             }
-        else if (key.startsWith("abits"))
+        else if (key.endsWith("abits"))
             {
-            model.set("status" + part, (b >>> 6) & 1);
-            model.set("local" + part, (b >>> 2) & 1);
-            model.set("usb" + part, (b >>> 1) & 1);
-            model.set("midi" + part, (b) & 1);
+            model.set("inst" + part + "status", (b >>> 6) & 1);
+            model.set("inst" + part + "local", (b >>> 2) & 1);
+            model.set("inst" + part + "usb", (b >>> 1) & 1);
+            model.set("inst" + part + "midi", (b) & 1);
             }
-        else if (key.startsWith("bbits"))
+        else if (key.endsWith("bbits"))
             {
-            model.set("progchange" + part, (b >>> 5) & 1);
-            model.set("edits" + part, (b >>> 4) & 1);
-            model.set("sustain" + part, (b >>> 3) & 1);
-            model.set("pressure" + part, (b >>> 2) & 1);
-            model.set("modwheel" + part, (b >>> 1) & 1);
-            model.set("bend" + part, (b) & 1);
+            model.set("inst" + part + "progchange", (b >>> 5) & 1);
+            model.set("inst" + part + "edits", (b >>> 4) & 1);
+            model.set("inst" + part + "sustain", (b >>> 3) & 1);
+            model.set("inst" + part + "pressure", (b >>> 2) & 1);
+            model.set("inst" + part + "modwheel", (b >>> 1) & 1);
+            model.set("inst" + part + "bend", (b) & 1);
             }
         else
             {

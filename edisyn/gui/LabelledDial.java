@@ -203,8 +203,8 @@ public class LabelledDial extends NumericalComponent
         // Field in the center of the dial
         JLabel field = new JLabel("88888", SwingConstants.CENTER);
 
-        public Dimension getPreferredSize() { return new Dimension(55, 55); }
-        public Dimension getMinimumSize() { return new Dimension(55, 55); }
+        public Dimension getPreferredSize() { return new Dimension(Style.LABELLED_DIAL_WIDTH, Style.LABELLED_DIAL_WIDTH); }
+        public Dimension getMinimumSize() { return new Dimension(Style.LABELLED_DIAL_WIDTH, Style.LABELLED_DIAL_WIDTH); }
         
         void mouseReleased(MouseEvent e)
             {                       

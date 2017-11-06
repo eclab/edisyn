@@ -88,6 +88,7 @@ public class KawaiK4Effect extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, getSynthName(), color);
+        globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -161,6 +162,7 @@ public class KawaiK4Effect extends Synth
     public JComponent addSubmix(int sub, Color color)
         {
         Category category = new Category(this, "Submix " + SUBMIXES[sub - 1], color);
+        category.makePasteable("submix");
 
         JComponent comp;
         String[] params;

@@ -207,6 +207,7 @@ public class KawaiK4 extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, getSynthName(), color);
+        globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -358,6 +359,7 @@ public class KawaiK4 extends Synth
     public JComponent addVibrato(Color color)
         {
         Category category = new Category(this, "Vibrato LFO", color);
+        category.makePasteable("lfo");
 
         JComponent comp;
         String[] params;
@@ -365,17 +367,17 @@ public class KawaiK4 extends Synth
         
         VBox vbox = new VBox();
         params = LFO_SHAPES;  // also vibrato
-        comp = new Chooser("Shape", this, "vibshape", params);
+        comp = new Chooser("Shape", this, "lfo2shape", params);
         vbox.add(comp);
         hbox.add(vbox);
                 
-        comp = new LabelledDial("Speed", this, "vibspeed", color, 0, 100);
+        comp = new LabelledDial("Speed", this, "lfo2speed", color, 0, 100);
         hbox.add(comp);
         
-        comp = new LabelledDial("Depth", this, "vibratodep", color, 0, 100, 50);
+        comp = new LabelledDial("Depth", this, "lfo2dep", color, 0, 100, 50);
         hbox.add(comp);
 
-        comp = new LabelledDial("Pressure", this, "vibprs>vib", color, 0, 100, 50);
+        comp = new LabelledDial("Pressure", this, "lfo2prs>dep", color, 0, 100, 50);
         ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
         hbox.add(comp);
         
@@ -425,6 +427,7 @@ public class KawaiK4 extends Synth
     public JComponent addLFO(Color color)
         {
         Category category = new Category(this, "LFO", color);
+        category.makePasteable("lfo");
 
         JComponent comp;
         String[] params;
@@ -432,21 +435,21 @@ public class KawaiK4 extends Synth
         
         VBox vbox = new VBox();
         params = LFO_SHAPES;
-        comp = new Chooser("Shape", this, "lfoshape", params);
+        comp = new Chooser("Shape", this, "lfo1shape", params);
         vbox.add(comp);
         hbox.add(vbox);
 
-        comp = new LabelledDial("Speed", this, "lfospeed", color, 0, 100);
+        comp = new LabelledDial("Speed", this, "lfo1speed", color, 0, 100);
         hbox.add(comp);
         
-        comp = new LabelledDial("Depth", this, "lfodep", color, 0, 100, 50);
+        comp = new LabelledDial("Depth", this, "lfo1dep", color, 0, 100, 50);
         hbox.add(comp);
         
-        comp = new LabelledDial("Pressure", this, "lfoprs>dep", color, 0, 100, 50);
+        comp = new LabelledDial("Pressure", this, "lfo1prs>dep", color, 0, 100, 50);
         ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
         hbox.add(comp);
         
-        comp = new LabelledDial("Delay", this, "lfodelay", color, 0, 100);
+        comp = new LabelledDial("Delay", this, "lfo1delay", color, 0, 100);
         hbox.add(comp);
         
         category.add(hbox, BorderLayout.CENTER);
@@ -457,6 +460,7 @@ public class KawaiK4 extends Synth
     public JComponent addSource(int src, Color color)
         {
         Category category = new Category(this, "Source " + src, color);
+        category.makePasteable("s");
 
         JComponent comp;
         String[] params;
@@ -474,13 +478,13 @@ public class KawaiK4 extends Synth
         
         if (src == 1)
             {
-            comp = new CheckBox("AM S1 -> S2", this, "ams1>s2");
+            comp = new CheckBox("AM S1 -> S2", this, "s1ams1>s2");
             ((CheckBox)comp).addToWidth(1);
             hbox2.add(comp);
             }
         else if (src == 3)
             {
-            comp = new CheckBox("AM S3 -> S4", this, "ams3>s4");
+            comp = new CheckBox("AM S3 -> S4", this, "s3ams3>s4");
             ((CheckBox)comp).addToWidth(1);
             hbox2.add(comp);
             }
@@ -543,6 +547,7 @@ public class KawaiK4 extends Synth
     public JComponent addEnvelope(int envelope, Color color)
         {
         Category category = new Category(this, "Envelope " + envelope, color);
+        category.makePasteable("s");
 
         JComponent comp;
         String[] params;
@@ -600,6 +605,7 @@ public class KawaiK4 extends Synth
     public JComponent addFilter(int filter, Color color)
         {
         Category category = new Category(this, "Filter " + filter, color);
+        category.makePasteable("f");
                 
         JComponent comp;
         String[] params;
@@ -635,6 +641,7 @@ public class KawaiK4 extends Synth
     public JComponent addFilterEnvelope(int filterenv, Color color)
         {
         Category category = new Category(this, "Filter Envelope " + filterenv, color);
+        category.makePasteable("f");
                 
         JComponent comp;
         String[] params;
@@ -702,24 +709,24 @@ public class KawaiK4 extends Synth
     "outselect",
     "sourcemode",
     "polymode",
-    "ams1>s2",
-    "ams3>s4",
-    "vibshape",
+    "s1ams1>s2",
+    "s3ams3>s4",
+    "lfo2shape",
     "pitchbend",
     "wheelassign",
-    "vibspeed",
+    "lfo2speed",
     "wheeldep",
     "autobendtime",
     "autobenddepth",
     "autobendks>time",
     "autobendvel>dep",
-    "vibprs>vib",
-    "vibratodep",
-    "lfoshape",
-    "lfospeed",
-    "lfodelay",
-    "lfodep",
-    "lfoprs>dep",
+    "lfo2prs>dep",
+    "lfo2dep",
+    "lfo1shape",
+    "lfo1speed",
+    "lfo1delay",
+    "lfo1dep",
+    "lfo1prs>dep",
     "pres>freq",
     "s:delay",
     "s:kscurve",
@@ -782,22 +789,22 @@ public class KawaiK4 extends Synth
     "volume",                   
     "effect",
     "outselect",
-    "sourcemode_polymode_ams1>s2_ams3>s4",              // *
-    "s1mute_s2mute_s3mute_s4mute_vibshape",     // *
+    "sourcemode_polymode_s1ams1>s2_s3ams3>s4",              // *
+    "s1mute_s2mute_s3mute_s4mute_lfo2shape",     // *
     "pitchbend_wheelassign",                                    // *
-    "vibspeed",
+    "lfo2speed",
     "wheeldep",
     "autobendtime",
     "autobenddepth",           
     "autobendks>time",        
     "autobendvel>dep",
-    "vibprs>vib",
-    "vibratodep",           
-    "lfoshape",
-    "lfospeed",           
-    "lfodelay",
-    "lfodep",
-    "lfoprs>dep",
+    "lfo2prs>dep",
+    "lfo2dep",           
+    "lfo1shape",
+    "lfo1speed",           
+    "lfo1delay",
+    "lfo1dep",
+    "lfo1prs>dep",
     "pres>freq",
     "s1delay",                
     "s2delay",                
@@ -1049,15 +1056,15 @@ public class KawaiK4 extends Synth
                 // it looks like the K4 can send junk in the upper bits :-(
                 model.set("effect", data[i + 8] & 31);
                 }
-            else if (key.equals("sourcemode_polymode_ams1>s2_ams3>s4"))
+            else if (key.equals("sourcemode_polymode_s1ams1>s2_s3ams3>s4"))
                 {
                 model.set("sourcemode", data[i + 8] & 3);
                 model.set("polymode", (data[i + 8] >>> 2) & 3);
-                model.set("ams1>s2", (data[i + 8] >>> 4) & 1);
+                model.set("s1ams1>s2", (data[i + 8] >>> 4) & 1);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("ams3>s4", (data[i + 8] >>> 5) & 1);
+                model.set("s3ams3>s4", (data[i + 8] >>> 5) & 1);
                 }
-            else if (key.equals("s1mute_s2mute_s3mute_s4mute_vibshape"))
+            else if (key.equals("s1mute_s2mute_s3mute_s4mute_lfo2shape"))
                 {
                 // Error in Section 6.  0 is mute OFF and 1 is mute ON. 
                 model.set("s1mute", (data[i + 8] & 1));
@@ -1065,7 +1072,7 @@ public class KawaiK4 extends Synth
                 model.set("s3mute", ((data[i + 8] >>> 2) & 1));
                 model.set("s4mute", ((data[i + 8] >>> 3) & 1));
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("vibshape", (data[i + 8] >>> 4) & 3);
+                model.set("lfo2shape", (data[i + 8] >>> 4) & 3);
                 }
             else if (key.equals("pitchbend_wheelassign"))
                 {
@@ -1216,17 +1223,17 @@ public class KawaiK4 extends Synth
                 {
                 data[i] = (byte)name.charAt(i);
                 }
-            else if (key.equals("sourcemode_polymode_ams1>s2_ams3>s4"))
+            else if (key.equals("sourcemode_polymode_s1ams1>s2_s3ams3>s4"))
                 {
-                data[i] = (byte)(model.get("sourcemode") | (model.get("polymode") << 2) | (model.get("ams1>s2") << 4) | (model.get("ams3>s4") << 5));
+                data[i] = (byte)(model.get("sourcemode") | (model.get("polymode") << 2) | (model.get("s1ams1>s2") << 4) | (model.get("s3ams3>s4") << 5));
                 }
-            else if (key.equals("s1mute_s2mute_s3mute_s4mute_vibshape"))
+            else if (key.equals("s1mute_s2mute_s3mute_s4mute_lfo2shape"))
                 {
                 // Error in Section 6.  0 is mute OFF and 1 is mute ON. 
                 // Perhaps our strategy should be to eliminate mute entirely and just turn the level down.
                 // That way when we load a patch that's got a mute in it, we're not confused.
-                data[i] = (byte)((model.get("vibshape") << 4));  // mutes are all zero (off)
-                //data[i] = (byte)((model.get("s1mute")) | ((model.get("s2mute")) << 1) | ((model.get("s3mute")) << 2) | ((model.get("s4mute")) << 3) | (model.get("vibshape") << 4));
+                data[i] = (byte)((model.get("lfo2shape") << 4));  // mutes are all zero (off)
+                //data[i] = (byte)((model.get("s1mute")) | ((model.get("s2mute")) << 1) | ((model.get("s3mute")) << 2) | ((model.get("s4mute")) << 3) | (model.get("lfo2shape") << 4));
                 }
             else if (key.equals("s1envelopelevel"))
                 {

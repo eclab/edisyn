@@ -25,11 +25,11 @@ import java.awt.event.*;
    @author Sean Luke
 */
 
-public abstract class NumericalComponent extends JComponent implements Updatable
+public abstract class NumericalComponent extends JComponent implements Updatable, HasKey
     {
     String key;
     Synth synth;
-
+    
     /** Returns the min value for the key in the model. */
     public int getMin() { return (int) synth.getModel().getMin(key); }
         
@@ -143,7 +143,6 @@ public abstract class NumericalComponent extends JComponent implements Updatable
                     }
                 }
             });
-        
         }
 
     /** Mostly fills the background appropriately. */

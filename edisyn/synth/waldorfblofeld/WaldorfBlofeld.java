@@ -167,7 +167,7 @@ public class WaldorfBlofeld extends Synth
     public JComponent addArpeggiatorGlobal(Color color)
         {
         Category category = new Category(this, "Arpeggiator", color);
-                
+
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -287,6 +287,7 @@ public class WaldorfBlofeld extends Synth
     public JComponent addArpeggiatorPatterns(Color color)
         {
         Category category  = new Category(this, "Patterns", color);
+        category.makeDistributable("arp");
                         
         JComponent comp;
         String[] params;
@@ -581,6 +582,7 @@ public class WaldorfBlofeld extends Synth
         main.add(parameters[effect - 1]);
 
         category.add(main, BorderLayout.WEST);
+        category.makePasteable("effect");
                 
         setupEffect(parameters, parametersByEffect, effect, BYPASS);
         return category;
@@ -597,6 +599,7 @@ public class WaldorfBlofeld extends Synth
     public JComponent addModulation(Color color)
         {
         Category category  = new Category(this, "Modulation", color);
+        category.makeDistributable("modulation");
                         
         JComponent comp;
         String[] params;
@@ -637,6 +640,7 @@ public class WaldorfBlofeld extends Synth
     public JComponent addModifiers(Color color)
         {
         Category category  = new Category(this, "Modifiers", color);
+        category.makeDistributable("modifier");
                         
         JComponent comp;
         String[] params;
@@ -700,8 +704,6 @@ public class WaldorfBlofeld extends Synth
         final EnvelopeDisplay[/*Env Number */][/*Envelope Type */] envelopeDisplays = new EnvelopeDisplay[4][5];
         final HBox[/*Env Number*/] envelopeHBoxes = new HBox[4];
         
-
-
         Category category;
         if (envelope == FILTER_ENVELOPE)
             {
@@ -716,6 +718,9 @@ public class WaldorfBlofeld extends Synth
             category = new Category(this, "Envelope " + envelope, color);
             }
                         
+        category.makePasteable("envelope");
+
+
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -863,6 +868,7 @@ public class WaldorfBlofeld extends Synth
     public JComponent addLFO(final int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
+        category.makePasteable("lfo");
                 
         JComponent comp;
         String[] params;
@@ -965,6 +971,7 @@ public class WaldorfBlofeld extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "Waldorf Blofeld", color);
+        globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -1228,6 +1235,7 @@ public class WaldorfBlofeld extends Synth
     public JComponent addOscillator(final int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
+        category.makePasteable("osc");
 
         JComponent comp;
         String[] params;
@@ -1384,6 +1392,7 @@ public class WaldorfBlofeld extends Synth
     public JComponent addFilter(int filter, Color color)
         {
         Category category = new Category(this, "Filter " + filter, color);
+        category.makePasteable("filter");
 
         JComponent comp;
         String[] params;

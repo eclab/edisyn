@@ -134,7 +134,8 @@ public class YamahaTX81ZMulti extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, getSynthName(), color);
-                
+        globalCategory.makeUnresettable();
+
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -217,6 +218,7 @@ public class YamahaTX81ZMulti extends Synth
     public JComponent addInstrument(final int src, Color color)
         {
         final Category category = new Category(this, "Instrument " + src, color);
+        category.makePasteable("instrument");
 
         JComponent comp;
         String[] params;

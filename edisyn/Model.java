@@ -308,11 +308,11 @@ public class Model implements Cloneable
             if (minExists(keys[i]) && maxExists(keys[i]) && getMin(keys[i]) >= getMax(keys[i]))  continue;  // no range
 
             if (!(metricMinExists(keys[i]) &&
-                    metricMaxExists(keys[i]) &&
-                    get(keys[i], 0) >= getMetricMin(keys[i]) &&
-                    get(keys[i], 0) <= getMetricMax(keys[i]) &&
-                    model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
-                    model.get(keys[i], 0) <= getMetricMax(keys[i])))
+                  metricMaxExists(keys[i]) &&
+                  get(keys[i], 0) >= getMetricMin(keys[i]) &&
+                  get(keys[i], 0) <= getMetricMax(keys[i]) &&
+                  model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
+                  model.get(keys[i], 0) <= getMetricMax(keys[i])))
                 {
                 if (randomizeNonMetricIfSame && get(keys[i], 0) == model.get(keys[i]))
                     {
@@ -323,7 +323,8 @@ public class Model implements Cloneable
                                 randomValidValueWithin(keys[i], random, getMin(keys[i]), getMax(keys[i]))));
                         }
                     }
-                else continue;
+                // regardless...
+                continue;
                 }
                     
             // Okay, here we do an opposite recombination
@@ -793,7 +794,7 @@ public class Model implements Cloneable
     public int getMax(String key)
         {
         Integer d = (Integer) (max.get(key));
-        if (d == null) { System.err.println("Nonexistent max extracted for " + key); return 0; }
+        if (d == null) { System.err.println("Nonexistent max extracted for " + key); new Throwable().printStackTrace(); return 0; }
         else return d.intValue();
         }
 

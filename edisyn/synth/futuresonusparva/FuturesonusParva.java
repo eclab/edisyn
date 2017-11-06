@@ -122,7 +122,8 @@ public class FuturesonusParva extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, getSynthName(), color);
-                
+        globalCategory.makeUnresettable();
+
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -244,6 +245,7 @@ public class FuturesonusParva extends Synth
     public JComponent addOscillator(int osc, Color color)
         {
         Category category  = new Category(this, "Oscillator " + osc, color);
+        category.makePasteable("osc");
                         
         JComponent comp;
         String[] params;
@@ -305,6 +307,7 @@ public class FuturesonusParva extends Synth
         Category category  = new Category(this, "Envelope " + env + 
                 (env == 1 ? " (Amplitude)" : 
                 (env == 2 ? " (Filter Cutoff)" : "")), color);
+        category.makePasteable("env");
                         
         JComponent comp;
         String[] params;
@@ -369,6 +372,7 @@ public class FuturesonusParva extends Synth
     public JComponent addLFO(int lfo, Color color)
         {
         Category category  = new Category(this, "LFO " + lfo, color);
+        category.makePasteable("lfo");
                         
         JComponent comp;
         String[] params;
@@ -454,6 +458,7 @@ public class FuturesonusParva extends Synth
     public JComponent addModulation(Color color)
         {
         Category category  = new Category(this, "Modulation", color);
+        category.makeDistributable("mod");
                         
         JComponent comp;
         String[] params;

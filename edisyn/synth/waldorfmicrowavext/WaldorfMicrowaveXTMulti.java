@@ -54,7 +54,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
             {
             for(int i = 0; i < allInstrumentParameters.length; i++)
                 {
-                allInstrumentParametersToIndex.put(allInstrumentParameters[i] + j, Integer.valueOf(i));
+                allInstrumentParametersToIndex.put("inst" + j + allInstrumentParameters[i], Integer.valueOf(i));
                 }
             }
         
@@ -163,6 +163,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "Waldorf Microwave II/XT/XTk [Multi]", color);
+        globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -255,13 +256,14 @@ public class WaldorfMicrowaveXTMulti extends Synth
     public JComponent addInstrument(final int inst, Color color)
         {
         Category category = new Category(this, "Instrument " + inst, color);
+        category.makePasteable("inst");
                 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         VBox vbox = new VBox();
 
-        comp = new LabelledDial("Bank", this, "bank" + inst, color, 0, 1)
+        comp = new LabelledDial("Bank", this, "inst" + inst + "bank", color, 0, 1)
             {
             public String map(int val)
                 {
@@ -274,8 +276,8 @@ public class WaldorfMicrowaveXTMulti extends Synth
         vbox.add(comp);
 
 
-        comp = new LabelledDial("Number", this, "number" + inst, color, 0, 127, -1);
-        model.removeMetricMinMax("number" + inst);
+        comp = new LabelledDial("Number", this, "inst" + inst + "number", color, 0, 127, -1);
+        model.removeMetricMinMax("inst" + inst + "number");
         vbox.add(comp);
         
         hbox.add(vbox);
@@ -284,20 +286,20 @@ public class WaldorfMicrowaveXTMulti extends Synth
         vbox = new VBox();
 
         params = PAN_MOD;
-        comp = new Chooser("Pan Mod", this, "panmod" + inst, params);
+        comp = new Chooser("Pan Mod", this, "inst" + inst + "panmod", params);
         vbox.add(comp);
 
-        comp = new CheckBox("Active", this, "status" + inst);
+        comp = new CheckBox("Active", this, "inst" + inst + "status");
         vbox.add(comp);    
 
-        comp = new CheckBox("Sub Out", this, "output" + inst);
+        comp = new CheckBox("Sub Out", this, "inst" + inst + "output");
         vbox.add(comp);    
 
-        comp = new CheckBox("Reset Arp on Start", this, "arpreset" + inst);
+        comp = new CheckBox("Reset Arp on Start", this, "inst" + inst + "arpreset");
         vbox.add(comp);
         hbox.add(vbox);
                 
-        comp = new CheckBox("MIDI Send [XTk]", this, "midisend" + inst);
+        comp = new CheckBox("MIDI Send [XTk]", this, "inst" + inst + "midisend");
         vbox.add(comp);    
 
                 
@@ -331,8 +333,8 @@ public class WaldorfMicrowaveXTMulti extends Synth
                             public void run() 
                                 { 
                                 Model tempModel = new Model();
-                                tempModel.set("bank", WaldorfMicrowaveXTMulti.this.model.get("bank" + inst));
-                                tempModel.set("number", WaldorfMicrowaveXTMulti.this.model.get("number" + inst));
+                                tempModel.set("bank", WaldorfMicrowaveXTMulti.this.model.get("inst" + inst + "bank"));
+                                tempModel.set("number", WaldorfMicrowaveXTMulti.this.model.get("inst" + inst + "number"));
                                 synth.tryToSendSysex(synth.requestDump(tempModel));
                                 }
                             });
@@ -349,19 +351,19 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         vbox = new VBox();
         params = ARPEGGIATOR_ACTIVE;
-        comp = new Chooser("Arp Active", this, "arp" + inst, params);
+        comp = new Chooser("Arp Active", this, "inst" + inst + "arp", params);
         vbox.add(comp);
         
         params = ARPEGGIATOR_DIRECTION;
-        comp = new Chooser("Arp Direction", this, "arpdirection" + inst, params);
+        comp = new Chooser("Arp Direction", this, "inst" + inst + "arpdirection", params);
         vbox.add(comp);
         
         params = ARPEGGIATOR_ORDER;
-        comp = new Chooser("Arp Note Order", this, "arporder" + inst, params);
+        comp = new Chooser("Arp Note Order", this, "inst" + inst + "arporder", params);
         vbox.add(comp);
         
         params = ARPEGGIATOR_VELOCITY;
-        comp = new Chooser("Arp Velocity", this, "arpvel" + inst, params);
+        comp = new Chooser("Arp Velocity", this, "inst" + inst + "arpvel", params);
         vbox.add(comp);
 
         hbox.add(vbox);
@@ -370,16 +372,16 @@ public class WaldorfMicrowaveXTMulti extends Synth
         vbox = new VBox();
         hbox2 = new HBox();
 
-        comp = new LabelledDial("Volume", this, "volume" + inst, color, 0, 127);
+        comp = new LabelledDial("Volume", this, "inst" + inst + "volume", color, 0, 127);
         hbox2.add(comp);
 
-        comp = new LabelledDial("Transpose", this, "transpose" + inst, color, 16, 112, 64);
+        comp = new LabelledDial("Transpose", this, "inst" + inst + "transpose", color, 16, 112, 64);
         hbox2.add(comp);
 
-        comp = new LabelledDial("Detune", this, "detune" + inst, color, 0, 127, 64);
+        comp = new LabelledDial("Detune", this, "inst" + inst + "detune", color, 0, 127, 64);
         hbox2.add(comp);
 
-        comp = new LabelledDial("Panning", this, "panning"  + inst, color, 0, 127, 64)
+        comp = new LabelledDial("Panning", this, "inst" + inst + "panning", color, 0, 127, 64)
             {
             public String map(int val)
                 {
@@ -390,11 +392,11 @@ public class WaldorfMicrowaveXTMulti extends Synth
             };
         hbox2.add(comp);
         
-        comp = new LabelledDial("Highest", this, "hivel" + inst, color, 1, 127);
+        comp = new LabelledDial("Highest", this, "inst" + inst + "hivel", color, 1, 127);
         ((LabelledDial)comp).addAdditionalLabel("Velocity");
         hbox2.add(comp);
 
-        comp = new LabelledDial("Highest", this, "hikey" + inst, color, 0, 127)
+        comp = new LabelledDial("Highest", this, "inst" + inst + "hikey", color, 0, 127)
             {
             public String map(int val)
                 {
@@ -404,7 +406,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Key");
         hbox2.add(comp);
 
-        comp = new LabelledDial("MIDI", this, "channel" + inst, color, 0, 17)
+        comp = new LabelledDial("MIDI", this, "inst" + inst + "channel", color, 0, 17)
             {
             public String map(int val)
                 {
@@ -415,14 +417,14 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 else return "" + (val - 1);
                 }
             };
-        model.setMetricMin( "channel" + inst, 2);
+        model.setMetricMin( "inst" + inst + "channel", 2);
         ((LabelledDial)comp).addAdditionalLabel("Channel");
         hbox2.add(comp);
 
         vbox.add(hbox2);
         hbox2 = new HBox();
                 
-        comp = new LabelledDial("Arp", this, "arpclock" + inst, color, 0, 15)
+        comp = new LabelledDial("Arp", this, "inst" + inst + "arpclock", color, 0, 15)
             {
             public String map(int val)
                 {
@@ -432,11 +434,11 @@ public class WaldorfMicrowaveXTMulti extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Clock");
         hbox2.add(comp);
 
-        comp = new LabelledDial("Arp", this, "arprange" + inst, color, 1, 10);
+        comp = new LabelledDial("Arp", this, "inst" + inst + "arprange", color, 1, 10);
         ((LabelledDial)comp).addAdditionalLabel("Range");
         hbox2.add(comp);
 
-        comp = new LabelledDial("Arp", this, "arppattern" + inst, color, 0, 16)
+        comp = new LabelledDial("Arp", this, "inst" + inst + "arppattern", color, 0, 16)
             {
             public String map(int val)
                 {
@@ -447,11 +449,11 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 else return "" + (val - 1);
                 }
             };
-        model.setMetricMin( "arppattern" + inst, 2);
+        model.setMetricMin( "inst" + inst + "arppattern", 2);
         ((LabelledDial)comp).addAdditionalLabel("Pattern");
         hbox2.add(comp);
 
-        comp = new LabelledDial("Arp", this, "arpnotesout" + inst, color, 0, 18)
+        comp = new LabelledDial("Arp", this, "inst" + inst + "arpnotesout", color, 0, 18)
             {
             public String map(int val)
                 {
@@ -464,16 +466,16 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 else return "" + (val);
                 }
             };
-        model.setMetricMax( "arpnotesout" + inst, 16);
-        model.setMetricMin( "arpnotesout" + inst, 1);
+        model.setMetricMax( "inst" + inst + "arpnotesout", 16);
+        model.setMetricMin( "inst" + inst + "arpnotesout", 1);
         ((LabelledDial)comp).addAdditionalLabel("Notes Out");
         hbox2.add(comp);
         
-        comp = new LabelledDial("Lowest", this, "lowvel" + inst, color, 1, 127);
+        comp = new LabelledDial("Lowest", this, "inst" + inst + "lowvel", color, 1, 127);
         ((LabelledDial)comp).addAdditionalLabel("Velocity");
         hbox2.add(comp);
 
-        comp = new LabelledDial("Lowest", this, "lowkey" + inst, color, 0, 127)
+        comp = new LabelledDial("Lowest", this, "inst" + inst + "lowkey", color, 0, 127)
             {
             public String map(int val)
                 {
@@ -575,242 +577,242 @@ public class WaldorfMicrowaveXTMulti extends Synth
     "name",         // *
     
     
-    "bank1",
-    "number1",
-    "channel1",
-    "volume1",
-    "transpose1",
-    "detune1",
-    "output1",
-    "status1",
-    "panning1",
-    "panmod1",
+    "inst1bank",
+    "inst1number",
+    "inst1channel",
+    "inst1volume",
+    "inst1transpose",
+    "inst1detune",
+    "inst1output",
+    "inst1status",
+    "inst1panning",
+    "inst1panmod",
     "-",
     "-",
-    "lowvel1",
-    "hivel1",
-    "lowkey1",
-    "hikey1",
-    "arp1",
-    "arpclock1",
-    "arprange1",
-    "arppattern1",
-    "arpdirection1",
-    "arporder1",
-    "arpvel1",
-    "arpreset1",
-    "arpnotesout1",
+    "inst1lowvel",
+    "inst1hivel",
+    "inst1lowkey",
+    "inst1hikey",
+    "inst1arp",
+    "inst1arpclock",
+    "inst1arprange",
+    "inst1arppattern",
+    "inst1arpdirection",
+    "inst1arporder",
+    "inst1arpvel",
+    "inst1arpreset",
+    "inst1arpnotesout",
     "-",
-    "midisend1",
-    "-",
-
-    "bank2",
-    "number2",
-    "channel2",
-    "volume2",
-    "transpose2",
-    "detune2",
-    "output2",
-    "status2",
-    "panning2",
-    "panmod2",
-    "-",
-    "-",
-    "lowvel2",
-    "hivel2",
-    "lowkey2",
-    "hikey2",
-    "arp2",
-    "arpclock2",
-    "arprange2",
-    "arppattern2",
-    "arpdirection2",
-    "arporder2",
-    "arpvel2",
-    "arpreset2",
-    "arpnotesout2",
-    "-",
-    "midisend2",
+    "inst1midisend",
     "-",
 
-
-    "bank3",
-    "number3",
-    "channel3",
-    "volume3",
-    "transpose3",
-    "detune3",
-    "output3",
-    "status3",
-    "panning3",
-    "panmod3",
+    "inst2bank",
+    "inst2number",
+    "inst2channel",
+    "inst2volume",
+    "inst2transpose",
+    "inst2detune",
+    "inst2output",
+    "inst2status",
+    "inst2panning",
+    "inst2panmod",
     "-",
     "-",
-    "lowvel3",
-    "hivel3",
-    "lowkey3",
-    "hikey3",
-    "arp3",
-    "arpclock3",
-    "arprange3",
-    "arppattern3",
-    "arpdirection3",
-    "arporder3",
-    "arpvel3",
-    "arpreset3",
-    "arpnotesout3",
+    "inst2lowvel",
+    "inst2hivel",
+    "inst2lowkey",
+    "inst2hikey",
+    "inst2arp",
+    "inst2arpclock",
+    "inst2arprange",
+    "inst2arppattern",
+    "inst2arpdirection",
+    "inst2arporder",
+    "inst2arpvel",
+    "inst2arpreset",
+    "inst2arpnotesout",
     "-",
-    "midisend3",
+    "inst2midisend",
     "-",
 
 
-    "bank4",
-    "number4",
-    "channel4",
-    "volume4",
-    "transpose4",
-    "detune4",
-    "output4",
-    "status4",
-    "panning4",
-    "panmod4",
+    "inst3bank",
+    "inst3number",
+    "inst3channel",
+    "inst3volume",
+    "inst3transpose",
+    "inst3detune",
+    "inst3output",
+    "inst3status",
+    "inst3panning",
+    "inst3panmod",
     "-",
     "-",
-    "lowvel4",
-    "hivel4",
-    "lowkey4",
-    "hikey4",
-    "arp4",
-    "arpclock4",
-    "arprange4",
-    "arppattern4",
-    "arpdirection4",
-    "arporder4",
-    "arpvel4",
-    "arpreset4",
-    "arpnotesout4",
+    "inst3lowvel",
+    "inst3hivel",
+    "inst3lowkey",
+    "inst3hikey",
+    "inst3arp",
+    "inst3arpclock",
+    "inst3arprange",
+    "inst3arppattern",
+    "inst3arpdirection",
+    "inst3arporder",
+    "inst3arpvel",
+    "inst3arpreset",
+    "inst3arpnotesout",
     "-",
-    "midisend4",
-    "-",
-
-
-    "bank5",
-    "number5",
-    "channel5",
-    "volume5",
-    "transpose5",
-    "detune5",
-    "output5",
-    "status5",
-    "panning5",
-    "panmod5",
-    "-",
-    "-",
-    "lowvel5",
-    "hivel5",
-    "lowkey5",
-    "hikey5",
-    "arp5",
-    "arpclock5",
-    "arprange5",
-    "arppattern5",
-    "arpdirection5",
-    "arporder5",
-    "arpvel5",
-    "arpreset5",
-    "arpnotesout5",
-    "-",
-    "midisend5",
+    "inst3midisend",
     "-",
 
 
-    "bank6",
-    "number6",
-    "channel6",
-    "volume6",
-    "transpose6",
-    "detune6",
-    "output6",
-    "status6",
-    "panning6",
-    "panmod6",
+    "inst4bank",
+    "inst4number",
+    "inst4channel",
+    "inst4volume",
+    "inst4transpose",
+    "inst4detune",
+    "inst4output",
+    "inst4status",
+    "inst4panning",
+    "inst4panmod",
     "-",
     "-",
-    "lowvel6",
-    "hivel6",
-    "lowkey6",
-    "hikey6",
-    "arp6",
-    "arpclock6",
-    "arprange6",
-    "arppattern6",
-    "arpdirection6",
-    "arporder6",
-    "arpvel6",
-    "arpreset6",
-    "arpnotesout6",
+    "inst4lowvel",
+    "inst4hivel",
+    "inst4lowkey",
+    "inst4hikey",
+    "inst4arp",
+    "inst4arpclock",
+    "inst4arprange",
+    "inst4arppattern",
+    "inst4arpdirection",
+    "inst4arporder",
+    "inst4arpvel",
+    "inst4arpreset",
+    "inst4arpnotesout",
     "-",
-    "midisend6",
-    "-",
-
-
-    "bank7",
-    "number7",
-    "channel7",
-    "volume7",
-    "transpose7",
-    "detune7",
-    "output7",
-    "status7",
-    "panning7",
-    "panmod7",
-    "-",
-    "-",
-    "lowvel7",
-    "hivel7",
-    "lowkey7",
-    "hikey7",
-    "arp7",
-    "arpclock7",
-    "arprange7",
-    "arppattern7",
-    "arpdirection7",
-    "arporder7",
-    "arpvel7",
-    "arpreset7",
-    "arpnotesout7",
-    "-",
-    "midisend7",
+    "inst4midisend",
     "-",
 
 
-    "bank8",
-    "number8",
-    "channel8",
-    "volume8",
-    "transpose8",
-    "detune8",
-    "output8",
-    "status8",
-    "panning8",
-    "panmod8",
+    "inst5bank",
+    "inst5number",
+    "inst5channel",
+    "inst5volume",
+    "inst5transpose",
+    "inst5detune",
+    "inst5output",
+    "inst5status",
+    "inst5panning",
+    "inst5panmod",
     "-",
     "-",
-    "lowvel8",
-    "hivel8",
-    "lowkey8",
-    "hikey8",
-    "arp8",
-    "arpclock8",
-    "arprange8",
-    "arppattern8",
-    "arpdirection8",
-    "arporder8",
-    "arpvel8",
-    "arpreset8",
-    "arpnotesout8",
+    "inst5lowvel",
+    "inst5hivel",
+    "inst5lowkey",
+    "inst5hikey",
+    "inst5arp",
+    "inst5arpclock",
+    "inst5arprange",
+    "inst5arppattern",
+    "inst5arpdirection",
+    "inst5arporder",
+    "inst5arpvel",
+    "inst5arpreset",
+    "inst5arpnotesout",
     "-",
-    "midisend8",
+    "inst5midisend",
+    "-",
+
+
+    "inst6bank",
+    "inst6number",
+    "inst6channel",
+    "inst6volume",
+    "inst6transpose",
+    "inst6detune",
+    "inst6output",
+    "inst6status",
+    "inst6panning",
+    "inst6panmod",
+    "-",
+    "-",
+    "inst6lowvel",
+    "inst6hivel",
+    "inst6lowkey",
+    "inst6hikey",
+    "inst6arp",
+    "inst6arpclock",
+    "inst6arprange",
+    "inst6arppattern",
+    "inst6arpdirection",
+    "inst6arporder",
+    "inst6arpvel",
+    "inst6arpreset",
+    "inst6arpnotesout",
+    "-",
+    "inst6midisend",
+    "-",
+
+
+    "inst7bank",
+    "inst7number",
+    "inst7channel",
+    "inst7volume",
+    "inst7transpose",
+    "inst7detune",
+    "inst7output",
+    "inst7status",
+    "inst7panning",
+    "inst7panmod",
+    "-",
+    "-",
+    "inst7lowvel",
+    "inst7hivel",
+    "inst7lowkey",
+    "inst7hikey",
+    "inst7arp",
+    "inst7arpclock",
+    "inst7arprange",
+    "inst7arppattern",
+    "inst7arpdirection",
+    "inst7arporder",
+    "inst7arpvel",
+    "inst7arpreset",
+    "inst7arpnotesout",
+    "-",
+    "inst7midisend",
+    "-",
+
+
+    "inst8bank",
+    "inst8number",
+    "inst8channel",
+    "inst8volume",
+    "inst8transpose",
+    "inst8detune",
+    "inst8output",
+    "inst8status",
+    "inst8panning",
+    "inst8panmod",
+    "-",
+    "-",
+    "inst8lowvel",
+    "inst8hivel",
+    "inst8lowkey",
+    "inst8hikey",
+    "inst8arp",
+    "inst8arpclock",
+    "inst8arprange",
+    "inst8arppattern",
+    "inst8arpdirection",
+    "inst8arporder",
+    "inst8arpvel",
+    "inst8arpreset",
+    "inst8arpnotesout",
+    "-",
+    "inst8midisend",
     "-"
 
     };

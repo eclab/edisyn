@@ -210,6 +210,7 @@ public class OberheimMatrix1000 extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, getSynthName(), color);
+        globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -304,6 +305,7 @@ public class OberheimMatrix1000 extends Synth
     public JComponent addOscillator(int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
+        category.makePasteable("dco");
 
         JComponent comp;
         String[] params;
@@ -483,6 +485,7 @@ public class OberheimMatrix1000 extends Synth
         {
         Category category = new Category(this, "LFO " + lfo + 
             (lfo == 1 ? "   (Oscillator Frequency)" : "   (Oscillator Pulsewidth)"), color);
+        category.makePasteable("lfo");
                 
         JComponent comp;
         String[] params;
@@ -543,6 +546,7 @@ public class OberheimMatrix1000 extends Synth
         Category category = new Category(this, "Envelope " + env + 
                 (env == 1 ? "   (Filter Frequency)" :
                 (env == 2 ?  "   (Amplitude)" : "   (Filter FM)")), color);
+        category.makePasteable("env");
                 
         JComponent comp;
         String[] params;
@@ -635,6 +639,7 @@ public class OberheimMatrix1000 extends Synth
     public JComponent addTracking(Color color)
         {
         Category category = new Category(this, "Tracking Generator", color);
+        category.makeDistributable("trackingpoint");
                 
         JComponent comp;
         String[] params;
@@ -679,6 +684,7 @@ public class OberheimMatrix1000 extends Synth
         {
         Category category = new Category(this, "Ramp " + ramp +
             (ramp == 1 ? "   (LFO 1 Amplitude)" : "   (LFO 2 Amplitude)"), color);
+        category.makePasteable("ramp");
                 
         JComponent comp;
         String[] params;
@@ -705,6 +711,7 @@ public class OberheimMatrix1000 extends Synth
     public JComponent addModulation(Color color)
         {
         Category category  = new Category(this, "Modulation", color);
+        category.makeDistributable("mod");
                         
         JComponent comp;
         String[] params;

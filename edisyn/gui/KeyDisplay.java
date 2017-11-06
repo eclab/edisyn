@@ -59,7 +59,7 @@ public class KeyDisplay extends NumericalComponent
     Rectangle2D whiteKeys[];
     int whiteKeyVals[];
         
-    int dynamicKey;
+    int dynamicKey = -1;
          
     // Is the mouse pressed?  This is part of a mechanism for dealing with
     // a stupidity in Java: if you PRESS in a widget, it'll be told. But if
@@ -361,16 +361,16 @@ public class KeyDisplay extends NumericalComponent
                     if (dynamicUpdate) 
                         graphics.setPaint(staticColor);
                     else
-                        graphics.setColor(Style.KEYBOARD_DYNAMIC_COLOR);
+                        graphics.setPaint(Style.KEYBOARD_DYNAMIC_COLOR);
                     graphics.fill(r);
-                    graphics.setColor(Style.KEYBOARD_BLACK_COLOR);
+                    graphics.setPaint(Style.KEYBOARD_BLACK_COLOR);
                     graphics.draw(r);
                     }
                 else if (blackKeyVals[i] == selectedKey)
                     {
-                    graphics.setColor(staticColor);
+                    graphics.setPaint(staticColor);
                     graphics.fill(r);
-                    graphics.setColor(Style.KEYBOARD_BLACK_COLOR);
+                    graphics.setPaint(Style.KEYBOARD_BLACK_COLOR);
                     graphics.draw(r);
                     }
                 else

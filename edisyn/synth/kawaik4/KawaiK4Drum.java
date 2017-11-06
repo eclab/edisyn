@@ -100,6 +100,7 @@ public class KawaiK4Drum extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, getSynthName(), color);
+        globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -241,6 +242,8 @@ public class KawaiK4Drum extends Synth
     public JComponent addKeys(Color color)
         {
         Category category = new Category(this, "Drum Key", color);
+        category.makePasteable("key");
+        category.makeDistributable("key");
 
         JComponent comp;
         String[] params;
@@ -614,7 +617,7 @@ public class KawaiK4Drum extends Synth
 
     ////// YOU MAY WANT TO IMPLEMENT SOME OF THE FOLLOWING
 
-    public int getTestNote() { return model.get("note"); }
+    public int getTestNotePitch() { return model.get("note"); }
     public int getTestNoteChannel() { return model.get("channel"); }
 
     public void parseParameter(byte[] data)

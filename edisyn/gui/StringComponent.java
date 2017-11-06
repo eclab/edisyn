@@ -23,13 +23,15 @@ import java.awt.event.*;
    @author Sean Luke
 */
 
-public class StringComponent extends JComponent implements Updatable
+public class StringComponent extends JComponent implements Updatable, HasKey
     {
     JLabel label;
     JButton change;
         
     String key;
     Synth synth;
+    
+    public String getKey() { return key; }
 
     /** Returns the current value for the key in the model. */
     public String getText() { return synth.getModel().get(key, ""); }

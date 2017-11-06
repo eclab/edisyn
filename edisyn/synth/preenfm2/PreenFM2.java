@@ -395,6 +395,7 @@ public class PreenFM2 extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "PreenFM2", color);
+        globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -445,7 +446,7 @@ public class PreenFM2 extends Synth
     public JComponent addGeneral(Color color)
         {
         Category globalCategory = new Category(this, "Instrument", color);
-                
+    	
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -495,6 +496,7 @@ public class PreenFM2 extends Synth
     public JComponent addMix(Color color)
         {
         Category globalCategory = new Category(this, "Outputs", color);
+        globalCategory.makeDistributable("output");
                 
         JComponent comp;
         String[] params;
@@ -503,7 +505,7 @@ public class PreenFM2 extends Synth
         for(int i = 1; i < 7; i++)
             {
             VBox vbox = new VBox();
-            comp = new LabelledDial("Mix " + i, this, "mix" + i, color, 0, 100)
+            comp = new LabelledDial("Mix " + i, this, "output" + i + "mix", color, 0, 100)
                 {
                 public String map(int val)
                     {
@@ -512,7 +514,7 @@ public class PreenFM2 extends Synth
                 };
             vbox.add(comp);
 
-            comp = new LabelledDial("Pan " + i, this, "pan" + i, color, 0, 200)
+            comp = new LabelledDial("Pan " + i, this, "output" + i + "pan", color, 0, 200)
                 {
                 public String map(int val)
                     {
@@ -537,6 +539,7 @@ public class PreenFM2 extends Synth
     public JComponent addModulationIndices(Color color)
         {
         Category globalCategory = new Category(this, "Operator Modulation Indices", color);
+        globalCategory.makeDistributable("im");
                 
         JComponent comp;
         String[] params;
@@ -748,6 +751,7 @@ public class PreenFM2 extends Synth
     public JComponent addOperator(final int op, Color color)
         {
         Category category = new Category(this, "Operator " + op, color);
+        category.makePasteable("op");
                 
         JComponent comp;
         String[] params;
@@ -917,7 +921,8 @@ public class PreenFM2 extends Synth
     public JComponent addModulation(Color color)
         {
         Category category  = new Category(this, "Modulation", color);
-                        
+         category.makeDistributable("modulation");
+                       
         JComponent comp;
         String[] params;
         VBox main = new VBox();
@@ -978,6 +983,7 @@ public class PreenFM2 extends Synth
     public JComponent addPerformanceParameters(Color color)
         {
         Category category  = new Category(this, "Performance Parameters", color);
+        category.makeDistributable("performanceparam");
                         
         JComponent comp;
         String[] params;
@@ -1005,6 +1011,7 @@ public class PreenFM2 extends Synth
     public JComponent addLFO(int lfo, Color color)
         {
         Category category  = new Category(this, "LFO " + lfo, color);
+        category.makePasteable("lfo");
                         
         JComponent comp;
         String[] params;
@@ -1087,6 +1094,7 @@ public class PreenFM2 extends Synth
     public JComponent addEnvelope(final int env, Color color)
         {
         Category category = new Category(this, "Envelope " + env, color);
+        category.makePasteable("freenv");
                 
         JComponent comp;
         String[] params;
@@ -1176,6 +1184,8 @@ public class PreenFM2 extends Synth
     public JComponent addStepSequencer(int seq, Color color)
         {
         Category category  = new Category(this, "Step Sequencer " + seq, color);
+        category.makePasteable("stepseq");
+        category.makeDistributable("stepseq");
                                 
         JComponent comp;
         String[] params;
@@ -1250,6 +1260,7 @@ public class PreenFM2 extends Synth
     public JComponent addNoteScaling(int note, Color color)
         {
         Category category  = new Category(this, "Note " + note + " MIDI Scaling", color);
+        category.makePasteable("note");
                                 
         JComponent comp;
         String[] params;
@@ -1534,9 +1545,9 @@ public class PreenFM2 extends Synth
         for(int i = 1; i < 6; i++)
             addParameter("im" + i + "velocity", 0, 5 + (i-1)*2);
         for(int i = 1; i < 7; i++)
-            addParameter("mix" + i, 0, 16 + (i-1)*2);
+            addParameter("output" + i + "mix", 0, 16 + (i-1)*2);
         for(int i = 1; i < 7; i++)
-            addParameter("pan" + i, 0, 17 + (i-1)*2);
+            addParameter("output" + i + "pan", 0, 17 + (i-1)*2);
         addParameter("arpeggiatorclock", 0, 28);
         addParameter("arpeggiatorbpm", 0, 29);
         addParameter("arpeggiatordirection", 0, 30);
@@ -1768,18 +1779,18 @@ public class PreenFM2 extends Synth
         "im4velocity",
         "im5",
         "im5velocity",
-        "mix1",
-        "pan1",
-        "mix2",
-        "pan2",
-        "mix3",
-        "pan3",
-        "mix4",
-        "pan4",
-        "mix5",
-        "pan5",
-        "mix6",
-        "pan6",
+        "output1mix",
+        "output1pan",
+        "output2mix",
+        "output2pan",
+        "output3mix",
+        "output3pan",
+        "output4mix",
+        "output4pan",
+        "output5mix",
+        "output5pan",
+        "output6mix",
+        "output6pan",
         "filterparam1",
         "filterparam2",
         "filtertype",

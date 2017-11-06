@@ -34,9 +34,10 @@ sean@cs.gmu.edu}\\[0.2em]
 
 Edisyn is a no-nonsense synthesizer patch editor designed to be extensible for many different kind of of synthesizers, and to have unusual programming assistance capabilities.  It is not skewmorphic and not skinnable: its design is plain and consistent.  Edisyn is free open source.
 
-Edisyn at present has patch editors for the following synthesizers: the very ones that I own! 
+Edisyn at present has patch editors for the following synthesizers:
 
 \begin{itemize}
+\item Futuresonus Parva
 \item Kawai K4 and K4r (Single and Multimode)
 \item Korg SG Rack (Single and Multimode) and SG Pro X (Single)
 \item Korg Microsampler
@@ -248,7 +249,7 @@ You turn on per-MIDI-channel CCs by toggling {\bf Do Per-Channel CCs} in the {\b
 
 
 
-\section{Creative Programming}
+\section{Editing and Creative Programming}
 
 Edisyn has a number of facilities to help you program your synthesizer, including tools to help you wander through the possible space of patches to hunt for the sound you want.  Here's what you can do:
 
@@ -256,7 +257,19 @@ Edisyn has a number of facilities to help you program your synthesizer, includin
 
 \paragraph{Reset}  You can reset the patch editor to its ``init patch''.  Just choose {\bf Reset} in the {\bf Edit} menu.
 
+\paragraph{Category Cut/Paste, Distribution, and Reset}  Each category has a pop-up menu you get when you right-click or shift-click (or two-finger click on a Mac trackpad) on the category name. You can:
+
+\vbox{
+\begin{itemize}
+\item {\bf Copy Category}\quad Marks the category to be pasted into other compatible categories.
+\item {\bf Paste Category}\quad   Copies over all the parameters from the ``copy'' category, if it is compatible.
+\item {\bf Distribute}\quad  Copies the last-modified parameter to all similar parameters in the category.  For example, if you modified a step sequencer step, this might copy its value to all 15 other steps.
+\item You can also restrict your {\bf Copy, Paste,} or {\bf Distribution} to mutation parameters only.
+\item {\bf Reset} \quad  This resets all the parameters in the category to their defaults.
+\end{itemize}
+
 \paragraph{Randomize (by some amount)}  You can add some randomness your patch parameters.  Try a small value: values \(\geq 50\%\) are essentially full randomization.  See the {\bf Randomize} submenu in the {\bf Edit} menu.   Because it's so common to randomize, then undo and try again, you can also do undo-and-randomize-again as a single task: select {\bf Undo and Randomize Again} in the {\bf Randomize} submenu of the {\bf MIDI} menu.  See below for a discussion of how randomization (called {\bf mutation}) works in Edisyn.
+}
 
 \paragraph{Nudge}  The nudge facility lets you push your patch to sound more and more like one of four other target patches you have chosen.  You can use this, plus randomize, to wander about in the patch space.  Before you can nudge, you have to first select patches to nudge towards.  You can pick up to four patches by first setting up or loading the patch in your patch editor, then selecting one of {\bf Set 1} ... {\bf Set 4} in the {\bf Nudge} submenu of the {\bf Edit} menu.  You don't have to ultimately select all four. 
 
@@ -276,12 +289,12 @@ Some patch editors may not be able to perform merges because the synthesizers ca
 
 You can restrict Mutation (Randomize) and Recombination (Nudge and Merge) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutation Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutation Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
 
+You can change these of course: just click on them and you can remove them from being updated (or add them back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title.  The categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}.  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
+
 \begin{wrapfigure}{r}{3in}
-\vspace{-2em}\includegraphics[scale=0.3]{5.png}
+\vspace{-1em}\includegraphics[scale=0.3]{5.png}
 \vspace{-3em}\caption{Editing Mutation Parameters}\label{mutationparameters}
 \end{wrapfigure}
-
-You can change these of course: just click on them and you can remove them from being updated (or add the back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title.  The categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}.  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
 
 Some parameters, such as the patch name or certain other parameters, can't be mutated no matter what: these have been declared {\it immutable} by the patch editor.  They will never have a red frame no matter how much you click them.
 
@@ -388,7 +401,7 @@ So you want to write a patch editor?  They're not easy.  But they're fun!  Here 
 
 Make sure you understand that Edisyn can only go so far to help you in writing a patch editor: but synthesizer sysex world is an inconsistent, buggy mess.
 
-For example, the Waldorf Blofeld's multimode sysex is undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).   And it too bombs if you send it invalid data.  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  And of course the infamous Korg Microsampler is such a MIDI disaster that I may never release its patch editor.
+For example, the Waldorf Blofeld's multimode sysex is undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).   And it too bombs if you send it invalid data.  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  There are multiple different strategies for packing data of size 8 bits and up.  Some synths, like the Futuresonus Parva, are highly regular in their format, while others, like the infamous Korg Microsampler, require custom tables for nearly every parameter.
 
 Below is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.
 
@@ -411,6 +424,7 @@ Below is a little table of the current patch editors for Edisyn, and various Edi
 \begin{sideways}Receive Error or Ack\end{sideways}&
 \begin{sideways}Standard Sysex File\end{sideways}\\[0.5em]
 \hline\\[-0.5em]
+Futuresonus Parva&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}&&&\\
 Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}\footnotemark&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}            \\
 Waldorf Blofeld&{\cm}\footnote{Not Multi}&{\cm}\samefootnote&{\cm}&{\cm}\backfootnote{2}&{\cm}&{\cm}&{\cm}& & & {\cm}            \\
 Kawai K4/K4r&{\cm}\footnotemark& &{\cm}& &{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}            \\
@@ -436,7 +450,7 @@ Korg SG&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}\\
 \footnotetext{A limited number of them only.}
 \vspace{1em}
 
-I particularly love how the Korg Microsampler and the Korg SG are effectively disjoint in their abilities; yet they're from the same company.   Long story short, you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.
+I particularly love how the Korg Microsampler and the Korg SG are disjoint in their abilities; yet they're from the same company.   Long story short, you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.
 
 \subsection{Step Two: Set Up the Development Environment}
 
@@ -520,6 +534,16 @@ MetricMin and MetricMax work like this.  Some numerical parameters are {\bf metr
 Edisyn is smart about mutating and recombining metric parameters, but for non-metric ones it just picks a new random setting.  Sometimes your parameters are {\it both} metric and non-metric.  For example, some parameter might have the values 1--32 plus the non-metric values ``off'' (0), ``uniform'' (17), and ``multi'' (18), or whatever.  In this case, your min is 0 and your max is 18.  But your {\it metric min} is 1 and your {\it metric max} is 16.  This tells Edisyn that values outside the metric min / metric max range should be treated as non-metric.\footnote{What if your synth has metric values on the outside and non-metric value on the inside? Edisyn can't handle that.  Thankfully I've not seen it yet.}  If you have this situation, you'll need to set the Metric Min and Metric Max manually.
 
 Parameters can be declared {\bf immutable}, meaning Edisyn can't mutate them or cross them over at all.  Also, all string parameters are automatically immutable.  You'll need to declare the others.
+
+\paragraph{Copying and Distributing Parameters}
+
+If your synth has multiple copies of the same category (for example, multiple LFOs), you can {\it copy} parameters wholesale from one category to another.  To do this, parameters must obey a certain convention.  Specifically, parameters in a category must all start with the same {\it preamble}, which must contain no digits, followed by a {\it category number}, which must be all digits.  After that, you can have whatever you like.  For example, {\tt lfo1rate} or {\tt osc14attack}.  If you have four LFO categories, their category numbers might be 1...4, say.  After you have set up your parameters appropriately, you can turn on copy and paste in a given category by calling {\bf makePasteable(\textit{preamble})}, passing in the preamble (not the category number).
+
+Categories also often contain multiple instances of a given parameter.  For example, a step sequencer category might contain 16 steps.  You can {\it distribute} values to all such parameters if you follow the a similar convention, specifically, parameters should start with a {\it preamble}, and then the first string of digits will refer to the index of the parameter.  For example, if your step sequencer had {\tt seq} as its preamble, perhaps you might have {\tt seqstep1} through {\tt seqstep16}.  You an have additional text, such as {\tt seqstep1attack} or whatnot.   After you have set up your parmaters, you can turn on distribution by calling {\bf makeDistributable(\textit{preamble})}, passing in the preamble.
+
+Your category can also do both of these things.  In this case, all parameter names should obey the copy/paste convention, and distributable parameters should have a {\it second} string of digits somewhere later in the parameter name which refers to the parameter index.  For example, you might have {\tt seq1step1} through {\tt seq1step16} for sequencer 1, and {\tt seq2step1} through {\tt seq2step16} for sequencer 2.
+
+Finally, by default categories can be {\it reset}.  It's probably wise to turn this off in the global category.  This is done by calling {\bf makeUnresttable()}.
 
 \paragraph{Common Widgets}
 

@@ -296,6 +296,7 @@ public class YamahaTX81Z extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, getSynthName(), color);
+        globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -595,6 +596,7 @@ public class YamahaTX81Z extends Synth
     public JComponent addOperator(final int src, Color color)
         {
         final Category category = new Category(this, "Operator " + src, color);
+        category.makePasteable("operator");
 
         JComponent comp;
         String[] params;
@@ -739,6 +741,7 @@ public class YamahaTX81Z extends Synth
     public JComponent addEnvelope(final int envelope, Color color)
         {
         Category category = new Category(this, "Operator Envelope " + envelope, color);
+        category.makePasteable("operator");
 
         JComponent comp;
         String[] params;

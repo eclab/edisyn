@@ -142,6 +142,7 @@ public class KawaiK4Multi extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, getSynthName(), color);
+        globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -253,6 +254,7 @@ public class KawaiK4Multi extends Synth
     public JComponent addSection(final int src, Color color)
         {
         Category category = new Category(this, "Section " + src, color);
+        category.makePasteable("section");
 
         JComponent comp;
         String[] params;
@@ -315,7 +317,7 @@ public class KawaiK4Multi extends Synth
         vbox.add(hbox2);
 
         // Normally this is in global, but I think it makes more sense here
-        comp = new CheckBox("Mute", this, "section" + src + "mute", true);
+        comp = new CheckBox("Mute", this, "section" + src + "mute");
         vbox.add(comp);
 
         hbox.add(vbox);

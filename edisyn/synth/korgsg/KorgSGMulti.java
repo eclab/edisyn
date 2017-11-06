@@ -161,6 +161,7 @@ public class KorgSGMulti extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, getSynthName(), color);
+        globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -222,7 +223,7 @@ public class KorgSGMulti extends Synth
         VBox vbox = new VBox();
         
         // it is not clear what "use" vs "pass" is here -- need to check
-        comp = new CheckBox("Timbre B Goes Through Effect 1", this, "timbbfxrout");
+        comp = new CheckBox("Timbre B Goes Through Effect 1", this, "timbfxrout");
         ((CheckBox)comp).addToWidth(2);  // requires two, not one!  A first I think.
         vbox.add(comp);
         
@@ -277,6 +278,7 @@ public class KorgSGMulti extends Synth
     public JComponent addTimbre(int val, Color color)
         {
         Category category  = new Category(this, "Timbre " + (val == 1 ? "A" : "B"), color);
+        category.makePasteable("timbre");
                         
         JComponent comp;
         String[] params;
@@ -397,9 +399,16 @@ public class KorgSGMulti extends Synth
         hbox.add(vbox);
         vbox = new VBox();
                 
+        comp = new CheckBox("Expression [v8]", this, "timbre" + val + "expressionfilt");
+        ((CheckBox)comp).addToWidth(2);
+        vbox.add(comp);
+
         comp = new CheckBox("Aftertouch [v8]", this, "timbre" + val + "aftertouchfilt");
         ((CheckBox)comp).addToWidth(1);
         vbox.add(comp);
+
+        hbox.add(vbox);
+        vbox = new VBox();
 
         comp = new CheckBox("Pan [v8]", this, "timbre" + val + "panpotfilt");
         vbox.add(comp);
@@ -512,20 +521,20 @@ public class KorgSGMulti extends Synth
             model.set("timbre" + i + "tune", data[3 + offset]);
             model.set("timbre" + i + "lrpanpot", range(data[4 + offset]));
 
-            model.set("dampsostfilt", data[5 + offset] & 1);
-            if (model.get("(filtdatatype", 0) == 0)  // old
+            model.set("timbre" + i + "dampsostfilt", data[5 + offset] & 1);
+            if (model.get("filtdatatype", 0) == 0)  // old
                 {
-                model.set("controllerfilt", (data[5 + offset] >>> 1) & 1);
+                model.set("timbre" + i + "controllerfilt", (data[5 + offset] >>> 1) & 1);
                 }
             else // new
                 {
-                model.set("tonecharafilt", (data[5 + offset] >>> 1) & 1);
-                model.set("pitchbendfilt", (data[5 + offset] >>> 2) & 1);
-                model.set("modwheelfilt", (data[5 + offset] >>> 3) & 1);
-                model.set("volumefilt", (data[5 + offset] >>> 4) & 1);
-                model.set("expressionfilt", (data[5 + offset] >>> 5) & 1);
-                model.set("aftertouchfilt", (data[5 + offset] >>> 6) & 1);
-                model.set("panpotfilt", (data[5 + offset] >>> 7) & 1);
+                model.set("timbre" + i + "tonecharafilt", (data[5 + offset] >>> 1) & 1);
+                model.set("timbre" + i + "pitchbendfilt", (data[5 + offset] >>> 2) & 1);
+                model.set("timbre" + i + "modwheelfilt", (data[5 + offset] >>> 3) & 1);
+                model.set("timbre" + i + "volumefilt", (data[5 + offset] >>> 4) & 1);
+                model.set("timbre" + i + "expressionfilt", (data[5 + offset] >>> 5) & 1);
+                model.set("timbre" + i + "aftertouchfilt", (data[5 + offset] >>> 6) & 1);
+                model.set("timbre" + i + "panpotfilt", (data[5 + offset] >>> 7) & 1);
                 }
                         
             model.set("timbre" + i + "keyzonetop", data[6 + offset]);
@@ -591,7 +600,7 @@ public class KorgSGMulti extends Synth
             data[4 + offset] = (byte)model.get("timbre" + i + "lrpanpot", 0);
                         
             data[5 + offset] = (byte)(model.get("timbre" + i + "dampsostfilt", 0) & 1);
-            if (model.get("(filtdatatype", 0) == 0)  // old
+            if (model.get("filtdatatype", 0) == 0)  // old
                 {
                 data[5 + offset] = (byte)(data[5 + offset] | ((model.get("timbre" + i + "controllerfilt", 0) & 1) << 1));
                 }

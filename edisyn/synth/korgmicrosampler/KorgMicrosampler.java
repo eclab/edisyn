@@ -278,7 +278,8 @@ public class KorgMicrosampler extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "Korg Microsampler", color);
-                
+        globalCategory.makeUnresettable();
+
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -385,7 +386,8 @@ public class KorgMicrosampler extends Synth
     public JComponent addPattern(Color color)
         {
         Category category = new Category(this, "Pattern", color);
-                
+        category.makePasteable("pattern");
+
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -425,6 +427,7 @@ public class KorgMicrosampler extends Synth
     public JComponent addSample(Color color)
         {
         Category category = new Category(this, "Sample", color);
+        category.makePasteable("sample");
                 
         JComponent comp;
         String[] params;

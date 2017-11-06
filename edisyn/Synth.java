@@ -75,7 +75,15 @@ public abstract class Synth extends JComponent implements Updatable
     int noteOnTick;
     
     protected Undo undo = new Undo(this);
+    public Undo getUndo() { return undo; }
         
+    String copyPreamble;
+    public String getCopyPreamble() { return copyPreamble; }
+    public void setCopyPreamble(String preamble) { copyPreamble = preamble; }
+    
+    ArrayList copyKeys;
+    public ArrayList getCopyKeys() { return copyKeys; }
+    public void setCopyKeys(ArrayList keys) { copyKeys = keys; }
 
     /** Returns the model associated with this editor. */
     public Model getModel() { return model; }
@@ -295,6 +303,7 @@ public abstract class Synth extends JComponent implements Updatable
     public static final Class[] synths = new Class[] 
     { 
     edisyn.synth.futuresonusparva.FuturesonusParva.class,
+    edisyn.synth.generic.Generic.class,
     edisyn.synth.korgsg.KorgSG.class,
     edisyn.synth.korgsg.KorgSGMulti.class,
     edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
@@ -2899,7 +2908,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setTestNotePitch(96);
-                setLastX("" + getTestNotePitch(), "TestNotePitch", getSynthNameLocal(), false); 
+                setLastX("" + 96, "TestNotePitch", getSynthNameLocal(), false); 
                 }
             });
         testNoteGroup.add(tn);
@@ -2990,7 +2999,8 @@ public abstract class Synth extends JComponent implements Updatable
             case 24:
                 tns[6].setSelected(true); setTestNotePitch(v); break;
             default:
-                tns[3].setSelected(true); setTestNotePitch(60); break;
+                //tns[3].setSelected(true); setTestNotePitch(60); break;
+                break;
             }        
 
 
@@ -3492,7 +3502,7 @@ public abstract class Synth extends JComponent implements Updatable
             
         try
             {
-            // do an all sounds off
+            // do an all sounds off (some synths don't properly respond to all notes off)
             for(int i = 0; i < 16; i++)
                 tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
             // do an all notes off (some synths don't properly respond to all sounds off)
@@ -3581,14 +3591,14 @@ public abstract class Synth extends JComponent implements Updatable
     
     int testNote = 60;
     void setTestNotePitch(int note) { testNote = note; }
-    int getTestNotePitch() { return testNote; }
+    public int getTestNotePitch() { return testNote; }
     
     /** Override this to customize the MIDI channel of the test note. */
     public int getTestNoteChannel() { return getChannelOut(); }
 
     int testNoteVelocity = 127;    
     void setTestNoteVelocity(int velocity) { testNoteVelocity = velocity; }
-    int getTestNoteVelocity() { return testNoteVelocity; }
+    public int getTestNoteVelocity() { return testNoteVelocity; }
     
     void doSendTestNote(boolean restartTestNotesTimer)
         {

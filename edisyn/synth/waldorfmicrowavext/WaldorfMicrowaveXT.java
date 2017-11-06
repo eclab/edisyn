@@ -263,7 +263,8 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "Waldorf Microwave II/XT/XTk", color);
-                
+        globalCategory.makeUnresettable();
+
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -427,6 +428,7 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addOscillator(int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
+        category.makePasteable("osc");
 
         JComponent comp;
         String[] params;
@@ -542,6 +544,7 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addWave(int wave, Color color)
         {
         Category category = new Category(this, "Wave " + wave, color);
+        category.makePasteable("wave");
 
         JComponent comp;
         String[] params;
@@ -750,6 +753,7 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addPlayParameters(Color color)
         {
         Category category = new Category(this, "Play Parameters", color);
+        category.makeDistributable("playparam");
                 
         JComponent comp;
         String[] params = PLAY_PARAMETERS;
@@ -867,6 +871,7 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addLFO(final int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
+        category.makePasteable("lfo");
                 
         JComponent comp;
         String[] params;
@@ -952,6 +957,7 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addEnvelope(final int env, Color color)
         {
         Category category = new Category(this, env == 1 ? "Filter Envelope" : "Amplifier Envelope", color);
+        category.makePasteable("envelope");
                 
         JComponent comp;
         String[] params;
@@ -986,6 +992,7 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addWaveEnvelope(Color color)
         {
         Category category = new Category(this, "Wave Envelope", color);
+        category.makeDistributable("waveenv");
                 
         JComponent comp;
         String[] params;
@@ -1044,7 +1051,8 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addFreeEnvelope(Color color)
         {
         Category category = new Category(this, "Free Envelope", color);
-                
+        category.makeDistributable("freeenv");
+
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -1070,10 +1078,10 @@ public class WaldorfMicrowaveXT extends Synth
             }
 
         //vbox = new VBox();
-        comp = new LabelledDial("Release", this, "freeenvreleasetime", color, 0, 127);
+        comp = new LabelledDial("Release", this, "freeenvtime4", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Time");
         hbox.add(comp);
-        comp = new LabelledDial("Release", this, "freeenvreleaselevel", color, 0, 127, 64);
+        comp = new LabelledDial("Release", this, "freeenvlevel4", color, 0, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
         //hbox.add(vbox);
@@ -1116,8 +1124,8 @@ public class WaldorfMicrowaveXT extends Synth
         //        VBox vbox = new VBox();
         
         EnvelopeDisplay disp = new EnvelopeDisplay(this, Color.red, 
-            new String[] { null, "freeenvtime1", "freeenvtime2", "freeenvtime3", null, "freeenvreleasetime"},   //, null },
-            new String[] { null, "freeenvlevel1", "freeenvlevel2", "freeenvlevel3", "freeenvlevel3", "freeenvreleaselevel"},            //, null },
+            new String[] { null, "freeenvtime1", "freeenvtime2", "freeenvtime3", null, "freeenvtime4"},   //, null },
+            new String[] { null, "freeenvlevel1", "freeenvlevel2", "freeenvlevel3", "freeenvlevel3", "freeenvlevel4"},            //, null },
             new double[] { 0, 0.2/127.0, 0.2 / 127.0,  0.2/127.0, 0.2, 0.2/127.0},              //, 0},
             new double[] { 64.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0, 1.0/127.0}           //, 64.0/127.0 }
             );
@@ -1195,6 +1203,7 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addModulation(Color color)
         {
         Category category  = new Category(this, "Modulation", color);
+        category.makeDistributable("modulation");
                         
         JComponent comp;
         String[] params;
@@ -1248,6 +1257,7 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addModifiers(Color color)
         {
         Category category  = new Category(this, "Modifiers", color);
+        category.makeDistributable("modifier");
                         
         JComponent comp;
         String[] params;
@@ -1814,8 +1824,8 @@ public class WaldorfMicrowaveXT extends Synth
     "freeenvlevel2",
     "freeenvtime3",
     "freeenvlevel3",
-    "freeenvreleasetime",
-    "freeenvreleaselevel",
+    "freeenvtime4",
+    "freeenvlevel4",
     "freeenvtrigger",
     "-",
     "lfo1rate",
@@ -2189,6 +2199,12 @@ public class WaldorfMicrowaveXT extends Synth
         
         return b;
         }
+        
+    public int getPauseAfterChangePatch()
+    	{
+    	// perhaps just a smidgen?
+    	return 50;
+    	}
 
     public void changePatch(Model tempModel)
         {
@@ -2197,6 +2213,7 @@ public class WaldorfMicrowaveXT extends Synth
         try {
             // Bank change is CC 32
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, BB));
+            simplePause(getPauseAfterChangePatch());
             // Number change is PC
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0));
             }

@@ -89,7 +89,8 @@ public class Style
     public static final Font DIAL_FONT = MEDIUM_FONT;
     /** Insets for labelled dials to set them apart slightly from one another. */
     public static final Insets LABELLED_DIAL_INSETS = new Insets(1, 3, 1, 3);
-
+	/** Width of the dial **/
+	public static final int LABELLED_DIAL_WIDTH = 55;
 
     /////// ENVELOPE DISPLAY CONSTANTS
 
@@ -124,6 +125,8 @@ public class Style
     public static final int KEYBOARD_DEFAULT_WHITE_KEY_WIDTH = 16;
     public static final int KEYBOARD_DEFAULT_WHITE_KEY_HEIGHT = 80;
     
+    /////// JOYSTICK CONSTANTS
+    public static final int JOYSTICK_WIDTH = 20;
 
     /////// HTML DISPLAY CONSTANTS
     

@@ -809,12 +809,21 @@ public class WaldorfBlofeld extends Synth
         */
 
         // One Shot
+
+        envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Color.red, 
+            new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", "envelope" + envelope + "release" },
+            new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", null },
+            new double[] { 0, 0.25, 0.25, 0.25, 0.25},
+            new double[] { 0, 1.0/127.0, 1.0 / 127.0, 1.0 / 127.0, 0 },
+            new double[] { 0, Math.PI/4/127,  Math.PI/4/127,  Math.PI/4/127, Math.PI/4/127 });
+        /*
         envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Color.red, 
             new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "release" },
             new String[] { null, null, "envelope" + envelope + "sustain", null },
             new double[] { 0, 0.5, 0.5, 0.5},
             new double[] { 0, 1.0, 1.0 / 127.0, 0 },
             new double[] { 0, Math.PI/4/127, Math.PI/4/127, Math.PI/4/127 });
+        */
 
         /*
           envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Color.red, 

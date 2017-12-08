@@ -1307,7 +1307,7 @@ public class KorgSG extends Synth
         data[25] = (byte)model.get("effect2ldepth", 0);
         data[26] = (byte)model.get("effect2rdepth", 0);
 
-        data[27] = (byte)0x41;
+        data[27] = (byte)0x41;		// It would appear that although Korg says this is always 0x41, in fact the SG always returns 0x65.  Appears to not matter.
         data[28] = (byte)0x01;
         data[29] = (byte)0x0F;
         
@@ -1487,7 +1487,7 @@ public class KorgSG extends Synth
             model.set("name", newnm);
         }
         
-    public static String getSynthName() { return "Korg SG Rack/ProX"; }
+    public static String getSynthName() { return "Korg SG Rack"; }
     
     public String getPatchName(Model model) { return model.get("name", "Init"); }
     

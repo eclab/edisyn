@@ -191,6 +191,7 @@ public abstract class Synth extends JComponent implements Updatable
         
     // Are we passing through CCs?        
     boolean passThroughCC;
+    boolean passThroughController;
     Object passThroughCCLock = new Object[0];
 
     // Are we doing per-channel CCs or per-Panel CCs?
@@ -213,6 +214,27 @@ public abstract class Synth extends JComponent implements Updatable
     // MenuItem for Passing through CCs, so we can check it
     JCheckBoxMenuItem perChannelCCsMenuItem;
     
+    // MenuItem for Passing through Controller Values, so we can check it    
+	JCheckBoxMenuItem passThroughControllerMenuItem;
+    
+    /** Returns whether we are passing through CC */
+    public boolean getPassThroughController() { synchronized(passThroughCCLock) { return passThroughController; } }
+    public void setPassThroughController(final boolean val)
+    	{
+        synchronized(passThroughCCLock) 
+            { 
+            passThroughController = val; 
+            setLastX("" + val, "PassThroughController", getSynthNameLocal(), false);
+            SwingUtilities.invokeLater(new Runnable()
+                {
+                public void run()
+                    {
+                    passThroughControllerMenuItem.setState(val);
+                    }
+                });
+            } 
+    	}
+
     /** Returns whether we are passing through CC */
     public boolean getPassThroughCC() { synchronized(passThroughCCLock) { return passThroughCC; } }
 
@@ -307,6 +329,8 @@ public abstract class Synth extends JComponent implements Updatable
     edisyn.synth.korgsg.KorgSG.class,
     edisyn.synth.korgsg.KorgSGMulti.class,
     edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
+    edisyn.synth.kawaik1.KawaiK1.class, 
+    edisyn.synth.kawaik1.KawaiK1Multi.class, 
     edisyn.synth.kawaik4.KawaiK4.class, 
     edisyn.synth.kawaik4.KawaiK4Multi.class, 
     edisyn.synth.kawaik4.KawaiK4Drum.class,
@@ -1015,15 +1039,19 @@ public abstract class Synth extends JComponent implements Updatable
                                     // we intercept a message if:
                                     // 1. It's a CC (maybe NRPN)
                                     // 2. We're not passing through CC
-                                    // 3. It's the right channel OR our key channel is OMNI
+                                    // 3. It's the right channel OR our key channel is OMNI OR we're doing per-channel CCs
                                     if (!getPassThroughCC() && 
                                         shortMessage.getCommand() == ShortMessage.CONTROL_CHANGE &&
-                                        (shortMessage.getChannel() == tuple.keyChannel || tuple.keyChannel == tuple.KEYCHANNEL_OMNI))
+                                        (shortMessage.getChannel() == tuple.keyChannel || tuple.keyChannel == tuple.KEYCHANNEL_OMNI || perChannelCCs))
                                         {
                                         // we intercept this
                                         handleKeyRawCC(shortMessage);
                                         }
-                                    else
+                                        
+                                    // We send the message to the synth if:
+                                    // 1. We didn't intercept it
+                                    // 2. We pass through data to the synth
+                                    else if (getPassThroughController())
                                         {
                                         // pass it on!
                                         ShortMessage newMessage = null;
@@ -1054,7 +1082,7 @@ public abstract class Synth extends JComponent implements Updatable
                                     e.printStackTrace();
                                     }
                                 }
-                            else if (message instanceof SysexMessage)
+                            else if (message instanceof SysexMessage && passThroughController)
                                 {
                                 tryToSendSysex(message.getMessage());
                                 }
@@ -1139,8 +1167,8 @@ public abstract class Synth extends JComponent implements Updatable
             long pause = expectedPause - pauseSoFar;
             // verify that pause is rational
             if (pause < 0L) pause = 0L;
-            if (pause > 10000000L) pause = 10000000L;  // 10ms, still within the int range and not so slow as to make the UI impossible
-            try { Thread.currentThread().sleep(((int)pause) / 1000000, ((int)pause) % 1000000); }
+            if (pause > 100000000L) pause = 100000000L;  // 10ms, still within the int range and not so slow as to make the UI impossible
+            try { Thread.currentThread().sleep((int)(pause / 1000000), (int)(pause % 1000000)); }
             catch (Exception e) { e.printStackTrace(); }
             }
         }
@@ -1194,7 +1222,17 @@ public abstract class Synth extends JComponent implements Updatable
         else
             return false;
         }
-                
+           
+    /** If you are sending a sysex message as fragments with pauses in-between them,
+    	what is the length of the pause?  By default this is 0 (no pause). */
+    public int getPauseBetweenSysexFragments() { return 0; }
+
+	/** Indicates that sysex messages are not sent as fragments. */
+    public static int NO_SYSEX_FRAGMENT_SIZE = 0;
+    
+    /** If you are sending a sysex message as fragments with pauses in-between them,
+    	how large are the fragments? By default, this is NO_SYSEX_FRAGMENT_SIZE. */
+    public int getSysexFragmentSize() { return NO_SYSEX_FRAGMENT_SIZE; }    
                         
     /** Attempts to send a single MIDI sysex message. Returns false if (1) the data was empty or null (2)
         synth has turned off the ability to send temporarily (3) the sysex message is not
@@ -1227,8 +1265,21 @@ public abstract class Synth extends JComponent implements Updatable
             try { 
                 SysexMessage message = new SysexMessage(data, data.length);
                 synchronized(midiSendLock)
-                    { 
-                    receiver.send(message, -1); 
+                    {
+                    int fragmentSize = getSysexFragmentSize();
+                    if (fragmentSize <= NO_SYSEX_FRAGMENT_SIZE)
+                    	{
+						receiver.send(message, -1); 
+                    	}
+                    else
+                    	{
+                    	MidiMessage[] messages = Midi.DividedSysex.divide(message, 16);
+                    	for(int i = 0; i < messages.length; i++)
+                    		{
+                    		if (i > 0) simplePause(getPauseBetweenSysexFragments());
+                    		receiver.send(messages[i], -1);
+                    		}
+                    	}
                     }      
                 lastMIDISend = System.nanoTime();
                 return true; 
@@ -3147,6 +3198,8 @@ public abstract class Synth extends JComponent implements Updatable
             });
         perChannelCCsMenuItem.setSelected(perChannelCCs);
 
+		menu.addSeparator(); 
+
         passThroughCCMenuItem = new JCheckBoxMenuItem("Pass Through All CCs");
         menu.add(passThroughCCMenuItem);
         passThroughCCMenuItem.addActionListener(new ActionListener()
@@ -3158,6 +3211,19 @@ public abstract class Synth extends JComponent implements Updatable
             });
         String val = getLastX("PassThroughCC", getSynthNameLocal(), false);
         setPassThroughCC(val != null && val.equalsIgnoreCase("true"));
+            
+            
+        passThroughControllerMenuItem = new JCheckBoxMenuItem("Pass Through Controller MIDI");
+        menu.add(passThroughControllerMenuItem);
+        passThroughControllerMenuItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doPassThroughController(passThroughControllerMenuItem.getState());
+                }
+            });
+        val = getLastX("PassThroughController", getSynthNameLocal(), true);
+        setPassThroughController(val == null || val.equalsIgnoreCase("true"));
             
             
         menu = new JMenu("Tabs");
@@ -3492,27 +3558,33 @@ public abstract class Synth extends JComponent implements Updatable
             return;
         }
     
+    boolean sendingAllSoundsOff = false;
     public void doSendAllSoundsOff() { doSendAllSoundsOff(false); }
-    void doSendAllSoundsOff(boolean fromAllSoundsOff)  // used to break infinite loop fights with doSendTestNotes()
+    void doSendAllSoundsOff(boolean fromDoSendTestNotes)  // used to break infinite loop fights with doSendTestNotes()
         {
-        if (!fromAllSoundsOff && sendingTestNotes)
+        if (!fromDoSendTestNotes && sendingTestNotes)
             {
+            sendingAllSoundsOff = true;
             doSendTestNotes(); // turn off
+            sendingAllSoundsOff = false;
             }
-            
-        try
-            {
-            // do an all sounds off (some synths don't properly respond to all notes off)
-            for(int i = 0; i < 16; i++)
-                tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
-            // do an all notes off (some synths don't properly respond to all sounds off)
-            for(int i = 0; i < 16; i++)
-                tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
-            }
-        catch (InvalidMidiDataException e2)
-            {
-            e2.printStackTrace();
-            }
+        
+        if (!sendingAllSoundsOff)
+	        {
+	        try
+            	{
+            	// do an all sounds off (some synths don't properly respond to all notes off)
+            	for(int i = 0; i < 16; i++)
+            	    tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
+            	// do an all notes off (some synths don't properly respond to all sounds off)
+            	for(int i = 0; i < 16; i++)
+            	    tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
+            	}
+        	catch (InvalidMidiDataException e2)
+        	    {
+        	    e2.printStackTrace();
+        	    }
+        	}
         }
 
 
@@ -3760,13 +3832,13 @@ public abstract class Synth extends JComponent implements Updatable
         undo.push(model);
         if (towards < 4)
             {
-            if (nudgeRecombinationWeight > 0.0) model.recombine(random, nudge[towards], useMapForRecombination ? getMutationKeys() : model.getKeys(), 0.5);
-            if (nudgeMutationWeight > 0.0) model.mutate(random, model.getKeys(), 0.5);
+            if (nudgeRecombinationWeight > 0.0) model.recombine(random, nudge[towards], useMapForRecombination ? getMutationKeys() : model.getKeys(), nudgeRecombinationWeight);
+            if (nudgeMutationWeight > 0.0) model.mutate(random, model.getKeys(), nudgeMutationWeight);
             }
         else
             {
-            if (nudgeRecombinationWeight > 0.0) model.opposite(random, nudge[towards - 4], useMapForRecombination ? getMutationKeys() : model.getKeys(), 0.5, true);
-            if (nudgeMutationWeight > 0.0) model.mutate(random, model.getKeys(), 0.5);
+            if (nudgeRecombinationWeight > 0.0) model.opposite(random, nudge[towards - 4], useMapForRecombination ? getMutationKeys() : model.getKeys(), nudgeRecombinationWeight, true);
+            if (nudgeMutationWeight > 0.0) model.mutate(random, model.getKeys(), nudgeMutationWeight);
             }
         revise();  // just in case
 
@@ -3818,6 +3890,11 @@ public abstract class Synth extends JComponent implements Updatable
     void doPassThroughCC(boolean val)
         {
         setPassThroughCC(val);
+        }
+
+    void doPassThroughController(boolean val)
+        {
+        setPassThroughController(val);
         }
 
     /** Goes through the process of saving to a new sysex file and associating it with
@@ -4295,6 +4372,13 @@ public abstract class Synth extends JComponent implements Updatable
                         if (incomingPatch && patchLocationEquals(getModel(), currentPatch))
                             {
                             processCurrentPatch();
+                            /*
+                            doSendTestNote(false);
+                            simplePause(testNoteLength);
+                            try { tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, getTestNoteChannel(), testNote, getTestNoteVelocity())); }
+                            catch (InvalidMidiDataException ex) { }
+                            simplePause(testNotePause);             
+                            */              
                             requestNextPatch();
                             }
                         else 
@@ -4349,6 +4433,10 @@ public abstract class Synth extends JComponent implements Updatable
                 filename = "Patch" + patchCounter + ".syx";
             else
                 filename = filename + ".syx";
+            
+            // substitute separators
+            filename = filename.replace('/', '-').replace('\\', '-');
+            
             FileOutputStream os = null;
             File f = null;
             try

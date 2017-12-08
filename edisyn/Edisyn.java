@@ -36,6 +36,8 @@ public class Edisyn
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             }
         catch(Exception e) { }
+        
+        
 
         if (Synth.doNewSynthPanel() == null)
             System.exit(0);

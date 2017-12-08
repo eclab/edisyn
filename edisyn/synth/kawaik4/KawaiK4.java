@@ -496,7 +496,7 @@ public class KawaiK4 extends Synth
         comp = new Chooser("Key Scaling Curve", this, "s" + src + "kscurve", params);
         vbox.add(comp);
 
-        params = KS_CURVES;
+        params = VELOCITY_CURVES;
         comp = new Chooser("Velocity Curve", this, "s" + src + "velcurve", params);
         vbox.add(comp);
         hbox.add(vbox);
@@ -508,13 +508,10 @@ public class KawaiK4 extends Synth
         comp = new CheckBox("Pressure -> Pitch", this, "s" + src + "prs>frqsw");
         vbox.add(comp);
 
-        comp = new CheckBox("Vibrato/Auto Bend -> Pitch", this, "s" + src + "vib/a.bendsw");
+        comp = new CheckBox("Vibrato/Auto Bend", this, "s" + src + "vib/a.bendsw");
         vbox.add(comp);
         hbox.add(vbox);
                 
-        comp = new LabelledDial("Delay", this, "s" + src + "delay", color, 0, 100);
-        hbox.add(comp);
-        
         comp = new LabelledDial("Fixed Key", this, "s" + src + "fix", color, 0, 115)
             {
             public String map(int val)
@@ -553,6 +550,9 @@ public class KawaiK4 extends Synth
         String[] params;
         HBox hbox = new HBox();
                
+        comp = new LabelledDial("Delay", this, "s" + envelope + "delay", color, 0, 100);
+        hbox.add(comp);
+        
         comp = new LabelledDial("Attack", this, "s" + envelope + "envelopeattack", color, 0, 100);
         hbox.add(comp);
 
@@ -566,15 +566,15 @@ public class KawaiK4 extends Synth
         hbox.add(comp);
         
         comp = new LabelledDial("Velocity", this, "s" + envelope + "levelmodvel", color, 0, 100, 50);
-        ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Level Mod");
         hbox.add(comp);
         
         comp = new LabelledDial("Pressure", this, "s" + envelope + "levelmodprs", color, 0, 100, 50);
-        ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Level Mod");
         hbox.add(comp);
         
         comp = new LabelledDial("Key Scaling", this, "s" + envelope + "levelmodks", color, 0, 100, 50);
-        ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
+        ((LabelledDial)comp).addAdditionalLabel("Level Mod");
         hbox.add(comp);
         
         comp = new LabelledDial("Velocity", this, "s" + envelope + "timemodonvel", color, 0, 100, 50);
@@ -992,10 +992,12 @@ public class KawaiK4 extends Synth
                 index = ((Integer)(internalParametersToIndex.get(newkey))).intValue();
                 }
             // handle waveselect specially
+           /*
             else if (newkey.equals("s:waveselect"))
                 {
                 index = 36;      // this is waveselect's parameter
                 }
+            */
             else if (key.equals("s1mute") || key.equals("s2mute") || key.equals("s3mute") || key.equals("s4mute"))
                 {
                 // index already handled

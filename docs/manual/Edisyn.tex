@@ -198,7 +198,7 @@ Edisyn gives you various options for adjusting the test note you send (though it
 
 Setting the {\bf Pause Between Test Notes} will change how long Edisyn waits, beyond the note length itself, before it plays the next note if you have {\bf Send Test Notes} on.  It doesn't affect how fast you can play test notes on your own.  One special setting is {\bf Default}: this is defined as an additional pause equal to the note length if the note length is less than 1/2 seconds; or a pause of 1/2 second if the note length is greater than this.
 
-\section{Communicating with the Controller}
+\section{Communicating with a Controller or DAW}
 
 The MIDI Dialog (Section \ref{startingedisyn}) also lets you choose a device and MIDI channel for incoming messages from a control surface or controller keyboard.  Using this keyboard you can:
 
@@ -208,12 +208,21 @@ The MIDI Dialog (Section \ref{startingedisyn}) also lets you choose a device and
 \item Control widgets in Edisyn
 \end{itemize}
 
-\subsection{Remote Controlling your Synthesizer} 
-If you play a note, do a pitch bend, etc., on your control surface, Edisyn will usually route all of those MIDI messages directly to your synthesizer (changing the messages' channel to the one that Edisyn is using to talk to the synthesizer).  You can also pass through Program Change messages, MIDI clock, etc.  Control Change (CC) messages from your control surface are passed through only if you have toggled {\bf Pass Through All CCs} in the {\bf Map} menu.
+\subsection{Connecting to a Digital Audio Workstation (DAW)}
+
+Connecting a controller is easy: just choose it in Edisyn's MIDI Dialog.  But what if you want to send and receive CC messages from your DAW?   The problem is that both Edisyn and your DAW are both USB MIDI {\it client applications}, not {\it devices}.  But USB MIDI is designed to connect client applications to devices, not to each other.  You will need some application or driver that allows both Edisyn and your DAW to talk to one another, each pretending that the other is a USB MIDI Device.  
+
+I can't say how to do this on Windows or Linux, but here's how you do it on the Mac.  First, open the application \textsf{/Applications/Utilities/Audio MIDI Setup}.  Next, click on the ``IAC Driver'' icon to open the ``IAC Driver Properties'' window.  Delete all the existing Ports.  Add three new ports, named ``Controller To Edisyn'', ``Synth To Edisyn'' and ``Edisyn to Synth'' .  Check the box ``Device is Online''.  
+
+Now you can hook Edisyn up to your DAW.  For example, you might set ``Controller to Edisyn'' as Edisyn's Controller (input) device, and then attach your DAW to output CC data to the ``Controller to Edisyn'' device: it'll get routed into Edisyn.   See the end of Section~\ref{remotecontrolofedisyn} for a useful example. Or if you wanted to use Edisyn to dump CC data to your DAW, for example, you could set ``Edisyn to Synth'' as Edisyn's Send To (output) device, and then set up your DAW to input from the ``Edisyn to Synth'' device.
+
+\subsection{Remote Control of your Synthesizer} 
+If you play a note, do a pitch bend, etc., on your control surface, and {\bf Pass Through Controller Data} is set, then Edisyn will route all of those MIDI messages directly to your synthesizer (changing the messages' channel to the one that Edisyn is using to talk to the synthesizer).  Control Change (CC) and NRPN messages from your control surface are passed through only if you have {\it also} toggled {\bf Pass Through All CCs} in the {\bf Map} menu.  Otherwise they {\it might} used to control Edisyn' via its parameter mapping (see the end of Section~\ref{remotecontrolofedisyn}).
 
 If your controller is sending these messages on Edisyn's Controller Channel, Edisyn usually just routes them through unchanged, but it {\it might} route those messages to some other channel instead.  This only happens in certain patch editors where it's appropriate.  For example, the Kawai K4/Kr4 [Drum] Patch Editor needs to forward note messages like these to the Kawai K4's ``Drum'' channel to hear them.  The ``Drum'' channel is different from the Kawai's primary MIDI communication channel (which is what Edisyn's Send Channel is set to).  
 
-\subsection{Remote Controlling Edisyn} 
+\subsection{Remote Control of Edisyn} 
+\label{remotecontrolofedisyn}
 
 Edisyn is capable of {\it mapping} Control Change (CC) messages or NRPN messages from your control surface to specific parameters in your patch editor.  Each patch editor type can learn its own unique set of CC and NRPN mappings.
 
@@ -239,15 +248,19 @@ Mapping a parameter is easy:
 
 \paragraph{Mapping by Panel or by MIDI Channel}
 
-In Edisyn, each tab in a patch editor can have its own unique set of mappings: for example, the Oscillators tab might use CC\#1 to change the Start Wave parameter, but the Envelopes tab might use CC\#1 to change the attack of Envelope 1.  CCs on MIDI channels which do not match Edisyn's controller channel are passed through to the synthesizer.
+By default, Edisyn only maps and responds to CCs (or NRPN etc.) if they are on Edisyn's controller channel.   Each tab in a patch editor can have its own unique set of mappings: for example, the Oscillators tab might use CC\#1 to change the Start Wave parameter, but the Envelopes tab might use CC\#1 to change the attack of Envelope 1.  The mapping being used at the moment depends on which tab is being displayed.  
 
-Alternatively you can turn off this behavior and instead send all CCs to Edisyn regardless of MIDI Channel: now two panels can both use CC\#1 only if it's on different MIDI channels.  This is a common mapping approach used in DAWs.  For example, CC\#1 on MIDI Channel 1 might change the Start Wave parameter , while CC\#1 on MIDI Channel 2 changes the Detune parameter (in the same tab!) and CC\#1 on MIDI Channel 3 changes the Envelope 1 Attack (in the Envelope panel).
+Alternatively, if you toggle {\bf Do Per-Channel CCs}, you can ask Edisyn to instead remember the channel of mapped CCs (or NRPN).  Then you can map CC\#1, on (say) channel 4, to the Start Wave parameter on the Oscillators tab, and map CC\#1 on channel 7 to the attack of Envelope 1 on the Envelopes tab.  If CC\#1 arrives on channel 4, the Start Wave parameter will be adjusted even if the Oscillators tab isn't being shown; similarly if CC\#1 arrives on channel 7, then the attack of Envelope 1 will be adjusted even if the Envelopes tab isn't being shown.
 
 If your controller can only send a few CCs (it only has a few knobs and buttons) I would use the first option (per-panel mapping).  If your controller can send a vast number of CCs, or you're comfortable with it from experience with your DAW, you might use the second option.
 
-You turn on per-MIDI-channel CCs by toggling {\bf Do Per-Channel CCs} in the {\bf Map} menu (and conversely choose per-Panel CCs by toggling it off).
+\paragraph{Where Data Goes}  
 
+Whether Edisyn will pass through data to your synth, or block it, or intercept it in order to map it, is as follows.  If the data is CC/NRPN, then Edisyn must decide whether to {\it intercept and map} it.  If you have selected {\bf Pass Through All CCs}, Edisyn isn't permitted to intercept any CC/NRPN data at all.  Otherwise Edisyn will intercept the CC/NRPN data if it is on your Controller Channel, or if the Controller Channel is OMNI, or if you have selected {\bf Do Per-Channel CCs}.
 
+If Edisyn isn't intercepting and mapping the data, or the data is something other than CC/NRPN, then Edisyn must then decide whether to {\it block} the data or {\it pass it through} to your synth.  This is easy: the data is passed through only if {\bf Pass Through Controller MIDI} is selected.
+
+There are many situations where these combinations are useful.  Here's a fun example.  Suppose your synth doesn't respond to CC (only NRPN or Sysex) but you'd like to control it from your DAW, which {\it only} does CC, as is the case for many bad DAWs.  You could set up the DAW as your Edisyn controller and map CCs to various synth parameters.  Then you'd pass through non-CC data via Edisyn to the synth, but intercept CC data from the DAW to update parameters via Edisyn.
 
 \section{Editing and Creative Programming}
 
@@ -289,12 +302,12 @@ Some patch editors may not be able to perform merges because the synthesizers ca
 
 You can restrict Mutation (Randomize) and Recombination (Nudge and Merge) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutation Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutation Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
 
-You can change these of course: just click on them and you can remove them from being updated (or add them back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title.  The categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}.  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
-
 \begin{wrapfigure}{r}{3in}
 \vspace{-1em}\includegraphics[scale=0.3]{5.png}
 \vspace{-3em}\caption{Editing Mutation Parameters}\label{mutationparameters}
 \end{wrapfigure}
+
+You can change these of course: just click on them and you can remove them from being updated (or add them back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title.  The categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}.  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
 
 Some parameters, such as the patch name or certain other parameters, can't be mutated no matter what: these have been declared {\it immutable} by the patch editor.  They will never have a red frame no matter how much you click them.
 
@@ -432,7 +445,7 @@ Yamaha TX81Z&{\cm}\backfootnote{2}& & &{\cm}&{\cm}& & &  & &{\cm}\footnotemark  
 PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &            \\
 Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}\footnotemark&{\cm}\samefootnote&{\cm}& & &{\cm}          \\
 Korg Microsampler&{\cm}\footnotemark&{\cm}\samefootnote& & & & & &  &  &         \\
-Korg SG&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}\\
+Korg SG Rack&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}\\
 \end{tabular}
 }
 \end{center}

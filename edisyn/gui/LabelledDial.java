@@ -234,7 +234,7 @@ public class LabelledDial extends NumericalComponent
                     if (val > getMax()) val = getMax();
                     if (val < getMin()) val = getMin();
 
-                    setState(val);
+	                setState(val);
                     }
                 });
         
@@ -314,9 +314,12 @@ public class LabelledDial extends NumericalComponent
                         }
                                         
                     // at present we're just going to use y.  It's confusing to use either y or x.
-                    setState(proposedState);
-                    field.setText(map(getState()));
-                    repaint();
+                    if (getState() != proposedState)
+                    	{
+                    	setState(proposedState);
+                    	//field.setText(map(getState()));
+                    	//repaint();
+                    	}
                     }
                 });
 

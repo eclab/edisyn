@@ -866,4 +866,43 @@ public class Midi
                 
     public Parser controlParser = new Parser();
     public Parser synthParser = new Parser();
+    
+    
+    /** A DividedSysex message is a Sysex MidiMessage which has been broken into chunks.
+    	This allows us to send the Sysex as multiple messages, with pauses in-between each
+    	message, so as not to overflow a MIDI buffer in machines such as a Kawai K1 whose
+    	processors are not powerful enough to keep up with a large sysex dump. 
+    	
+    	<p>The critical method is the factory method divide(), which creates the array
+    	of divided sysex chunks. 
+    */
+    	
+    public static class DividedSysex extends MidiMessage
+    	{
+    	public Object clone()
+    		{
+    		return new DividedSysex(getMessage());
+    		}
+    	public int getStatus() { return 0xF0; }   // not that this really matters
+    	public DividedSysex(byte[] data)
+    		{
+    		super(data);
+    		}
+    	public static DividedSysex[] divide(MidiMessage sysex, int chunksize)
+    		{
+    		byte[] data = sysex.getMessage();
+    		int extra = 0;
+    		if ((data.length / chunksize) * chunksize != data.length)
+    			extra = 1;
+    		DividedSysex[] m = new DividedSysex[data.length / chunksize + extra];
+    		for(int i = 0, chunk = 0; i < m.length; i++, chunk += chunksize)
+    			{
+    			byte[] d = new byte[Math.min(data.length - chunk, chunksize)];
+    			System.arraycopy(data, chunk, d, 0, d.length);
+    			m[i] = new DividedSysex(d);
+    			}
+    		return m;
+    		}
+    	}
+    	
     }

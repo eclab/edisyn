@@ -555,6 +555,30 @@ public class Blank extends Synth
         return 0;
         }
         
+    public int getPauseBetweenSysexFragments() 
+        {
+        // Some synths have small MIDI buffers and are so slow that you
+        // cannot send large messages (that is, sysex) to them at full
+        // speed without them dying.  The Kawai K1 is an example of this.
+        // The methods getPauseBetweenSysexFragments() and
+        // getSysexFragmentSize() allow you to break large sysex messages
+        // into multiple fragments, each with a pause between, in order
+        // to send a message successfully.
+        return 0;
+        }
+        
+    public int getSysexFragmentSize() 
+        {
+        // Some synths have small MIDI buffers and are so slow that you
+        // cannot send large messages (that is, sysex) to them at full
+        // speed without them dying.  The Kawai K1 is an example of this.
+        // The methods getPauseBetweenSysexFragments() and
+        // getSysexFragmentSize() allow you to break large sysex messages
+        // into multiple fragments, each with a pause between, in order
+        // to send a message successfully.
+        return NO_SYSEX_FRAGMENT_SIZE;
+        }
+        
     public int getBulkDownloadWaitTime()
         {
         // Edisyn does bulk downloads by iteratively requesting a patch, then

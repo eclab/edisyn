@@ -298,6 +298,9 @@ public class FuturesonusParva extends Synth
         comp = new LabelledDial("Glide", this, "osc" + osc + "glide", color, 0, 127);
         hbox.add(comp);        
 
+		if (osc == 1)  // add some extra space to make room for "All Oscillators
+			hbox.add(Strut.makeStrut(comp));  // one labelled dial's worth of space
+			
         category.add(hbox);
         return category;
         }

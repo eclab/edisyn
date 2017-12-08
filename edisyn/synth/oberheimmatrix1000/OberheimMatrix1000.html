@@ -8,7 +8,13 @@
 
 <p><b>Communicating with Edisyn</b> Make sure that Memory Protect is off (see page 36 of the manual). 
 
-<p><b>Sending Parameters Bug</b> The Matrix 1000 has a command which receives a dump of parameters and stores them in working memory (Edisyn's "Send" procedure).  Unfortunately it seems to corrupt the working memory, so some parameters do not operate correctly.  But Edisyn still needs to Send!  Edisyn uses sending for hill-climbing, merging, mutation, undo/redo, etc.  So instead of sending to working memory, Edisyn will <b>write</b> to patch 199 and then read patch 199 into working memory.  This means that if you are editing a patch, patch 199 will be constantly overwritten.  So don't use it.  [If you're editing patch 199, it'll probably work fine, but that's an exception].
+<p><b>Important: Use of Patch 199</b> The Matrix 1000's sysex command which stores a patch dump in working memory has a bug which corrupts patches.  Unfortunately, this command is important for Edisyn's sends, hill-climbing, merging, mutation, undo/redo, etc.  The normal alternative would be to send each parameter one by one, which on the Matrix 1000 is too slow.  Instead, to "send" a patch to working memory, Edisyn will <b>write</b> it to patch 199 and then copy patch 199 into working memory.  This means that while you are editing patches, patch 199 will be constantly overwritten.  So don't use it.  [If you're editing patch 199, it'll probably work fine, but that's an exception].
+
+<p><b>About the Matrix 1000 Menu</b>
+
+<p><b>The Matrix 1000 does not store patch names.  Normally when it sends Edisyn a patch, the patch name will look something like <b>BNK4:&nbsp;72</b>, indicating the bank and patch number.  Edisyn can instead display the patch name from the Oberheim Matrix 1000 documentation: just select <b>Use Classic Patch Names</b>.
+
+<p>Similarly, if you would like to load a patch from memory, you can look it up by patch name in the Matrix 1000 menu.
 
 <p><b>Suggestions</b>
 

@@ -3236,7 +3236,7 @@ public class KorgMicrosampler extends Synth
                 byte[][] d = new byte[8][12];
                 for(int i = 0; i < 8; i++)
                     {
-                    d[i] = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, 0x00, 0x00, (byte)i, 0x00, i < name.length ? name[i] : 0x20, 0x00, (byte)0xF7 };
+                    d[i] = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, 0x00, 0x00, (byte)i, 0x00, i < name.length ? name[i] : 0x20, 0x00, (byte)0xF7 };
                     }
                 return (Object[]) d;
                 }
@@ -3245,11 +3245,11 @@ public class KorgMicrosampler extends Synth
                 int val = model.get(key, 0);
                 byte msb = (byte)((val >>> 7) & 127);
                 byte lsb = (byte)(val & 127);
-                data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, 0x00, 0x00, 0x10, 0x00, lsb, msb, (byte)0xF7 };
+                data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, 0x00, 0x00, 0x10, 0x00, lsb, msb, (byte)0xF7 };
                 }
             else if (key.equals("bankaudioinfxsw"))
                 {
-                data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, 0x00, 0x00, 0x12, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
+                data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, 0x00, 0x00, 0x12, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
                 }
                 
             // PATTERNS
@@ -3260,12 +3260,12 @@ public class KorgMicrosampler extends Synth
                     {
                     if (key.equals("pattern" + i + "length"))
                         {
-                        data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, 0x62, 0x00, (byte)i, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
+                        data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, 0x62, 0x00, (byte)i, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
                         break;
                         }
                     else if (key.equals("pattern" + i + "keyboardsample"))
                         {
-                        data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, 0x62, 0x00, (byte)(i + 16), 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
+                        data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, 0x62, 0x00, (byte)(i + 16), 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
                         break;
                         }
                     }
@@ -3287,53 +3287,53 @@ public class KorgMicrosampler extends Synth
                             byte[][] d = new byte[8][12];
                             for(int j = 0; j < 8; j++)
                                 {
-                                d[j] = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i + 15), 0x00, (byte)j, 0x00, j < name.length ? name[j] : 0x20, 0x00, (byte)0xF7 };
+                                d[j] = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, (byte)(i + 15), 0x00, (byte)j, 0x00, j < name.length ? name[j] : 0x20, 0x00, (byte)0xF7 };
                                 }
                             return (Object[]) d;
                             }
                         else if (key.equals("sample" + i + "loop"))
                             {
-                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i+15), 0x00, 0x10, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
+                            data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, (byte)(i+15), 0x00, 0x10, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
                             }
                         else if (key.equals("sample" + i + "bpmsync"))
                             {
-                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i+15), 0x00, 0x11, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
+                            data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, (byte)(i+15), 0x00, 0x11, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
                             }
                         else if (key.equals("sample" + i + "reverse"))
                             {
-                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i+15), 0x00, 0x12, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
+                            data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, (byte)(i+15), 0x00, 0x12, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
                             }
                         else if (key.equals("sample" + i + "decay"))
                             {
-                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i+15), 0x00, 0x15, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
+                            data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, (byte)(i+15), 0x00, 0x15, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
                             }
                         else if (key.equals("sample" + i + "release"))
                             {
-                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i+15), 0x00, 0x16, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
+                            data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, (byte)(i+15), 0x00, 0x16, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
                             }
                         else if (key.equals("sample" + i + "semitone"))
                             {
-                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i+15), 0x00, 0x1B, 0x00, (byte)(getSigned(key, 0)), (byte)(model.get(key, 0) >= 0 ? 0 : 0x7F), (byte)0xF7 };
+                            data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, (byte)(i+15), 0x00, 0x1B, 0x00, (byte)(getSigned(key, 0)), (byte)(model.get(key, 0) >= 0 ? 0 : 0x7F), (byte)0xF7 };
                             }
                         else if (key.equals("sample" + i + "tune"))
                             {
-                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i+15), 0x00, 0x1C, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
+                            data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, (byte)(i+15), 0x00, 0x1C, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
                             }
                         else if (key.equals("sample" + i + "level"))
                             {
-                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i+15), 0x00, 0x18, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
+                            data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, (byte)(i+15), 0x00, 0x18, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
                             }
                         else if (key.equals("sample" + i + "velint"))
                             {
-                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i+15), 0x00, 0x1D, 0x00, (byte)(getSigned(key, 0)), (byte)(model.get(key, 0) >= 0 ? 0 : 0x7F), (byte)0xF7 };
+                            data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, (byte)(i+15), 0x00, 0x1D, 0x00, (byte)(getSigned(key, 0)), (byte)(model.get(key, 0) >= 0 ? 0 : 0x7F), (byte)0xF7 };
                             }
                         else if (key.equals("sample" + i + "pan"))
                             {
-                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i+15), 0x00, 0x19, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
+                            data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, (byte)(i+15), 0x00, 0x19, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
                             }
                         else if (key.equals("sample" + i + "fxsw"))
                             {
-                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, (byte)(i+15), 0x00, 0x1A, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
+                            data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, (byte)(i+15), 0x00, 0x1A, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
                             }
                                                                                                         
                         break;
@@ -3345,15 +3345,15 @@ public class KorgMicrosampler extends Synth
                 {
                 if (key.equals("fxtype"))
                     {
-                    data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, 0x50, 0x00, 0x01, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
+                    data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, 0x50, 0x00, 0x01, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
                     }
                 else if (key.equals("fxparametercontrol1"))
                     {
-                    data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, 0x50, 0x00, 0x02, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
+                    data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, 0x50, 0x00, 0x02, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
                     }
                 else if (key.equals("fxparametercontrol2"))
                     {
-                    data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, 0x50, 0x00, 0x03, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
+                    data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, 0x50, 0x00, 0x03, 0x00, (byte)(model.get(key, 0)), 0x00, (byte)0xF7 };
                     }
                 else
                     {
@@ -3365,7 +3365,7 @@ public class KorgMicrosampler extends Synth
                         try
                             {
                             int index = Integer.parseInt(key.substring(prefix.length()));
-                            data = new byte[] { (byte)0xF0, 0x42, 0x32, 0x7F, 0x41, 0x50, 0x00, (byte)(index + 16), 0x00, (byte)(getSigned(key, 0)), (byte)(model.get(key, 0) >= 0 ? 0 : 0x7F), (byte)0xF7 };
+                            data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, 0x50, 0x00, (byte)(index + 16), 0x00, (byte)(getSigned(key, 0)), (byte)(model.get(key, 0) >= 0 ? 0 : 0x7F), (byte)0xF7 };
                             }
                         catch (NumberFormatException ex) { ex.printStackTrace(); }
                         }
@@ -3505,7 +3505,11 @@ public class KorgMicrosampler extends Synth
         
     public void parseParameter(byte[] data)
         {
-        if (data[5] == 0x0)  // BANK AND GLOBAL
+        if (data.length < 8)
+        	{
+        	System.err.println("Invalid sysex message received");
+        	}
+        else if (data[5] == 0x0)  // BANK AND GLOBAL
             {
             if (data[7] <= 0x07)  // Name
                 {

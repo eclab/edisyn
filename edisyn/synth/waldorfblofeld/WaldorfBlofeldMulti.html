@@ -18,14 +18,16 @@
 <li>
 The Blofeld's Multimode sysex is entirely undocumented, and this patch editor is the result of reverse engineering.  There may be errors: please report them.  
 
-<li>Edisyn cannot tell the Blofeld to switch to a given multi patch number.  As a result, *Send Patch* and *Send Patch To...* are disabled, and the editor is *never* in sync (because we don't know what patch number is on the machine).  To get a patch, manually switch to the desired patch number, then call *Request Current Patch* (or dump the patch manually to Edisyn).  To send a patch, set the patch location manually on your synthesizer, then use *Send Current Patch*.
+<p><li>Edisyn cannot tell the Blofeld to switch to a given multi patch number.  As a result, *Send Patch* and *Send Patch To...* are disabled.  To send a patch, set the patch location manually on your synthesizer, then use *Send Current Patch*.  To get a patch, manually switch to the desired patch number, then call *Request Current Patch* (or dump the patch manually to Edisyn).  
 
-<p><li>The Blofeld doesn't send or receive sysex for updating a single Multimode parameter, so you won't see changes on the Blofeld (or Edisyn) when tweaking a parameter on the other.
+<p><li>The Blofeld doesn't send or receive sysex for updating individual Multimode parameters, so you won't see changes on the Blofeld (or Edisyn) when tweaking a parameter on the other.
 
 <p><li>
 If you save a multimode patch on the Blofeld, it corrupts the first letter of the name of every patch!  This is not permanent (just reboot your Blofeld), but it's reported to Edisyn when Edisyn tries to load the patch from temporary memory again, so you'll see a corrupted patch name on receiving a patch.
 
 <p><li>(On purpose) you can't mutate or merge the Play, Local, MIDI, or USB options as they turn on or off the ability to test playing a note at all.
+
+<p><li>Effects work strangely in Multimode.  Part 1's Effect 2 settings are applied to <b>all parts</b> regardless of their own settings.  Also, Parts 1 through 4 can have their own independent settings for Effect 1, but Parts 5 through 16 do not have Effect 1 at all (it's just turned off).  In either case, you set the mix level of the Effect in question for each Part in its own program patch, not in the multimode patch.
 </ul>
 
 

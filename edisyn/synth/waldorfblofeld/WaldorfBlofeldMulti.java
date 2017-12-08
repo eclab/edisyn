@@ -16,78 +16,88 @@ import java.util.*;
 import java.io.*;
 
 /**
-   A patch editor for the Waldorf Microwave XT.  Does not deal with Multi mode, global parameters,
-   modifying wavetables, or uploading samples.  Only Single mode patches.
+   A patch editor for the Waldorf Blofeld in Multimode.
         
    @author Sean Luke
 */
 
 
 /**
-   I am *guessing* that the MULTI REQUEST format is as follows.
+	Multi-mode sysex is entirely undocumented.  Here's my best shot at it, which is working
+	well in Edisyn (https://github.com/eclab/edisyn/)
+	
+		-- Sean Luke sean@cs.gmu.edu
+	
+PARAMETER CHANGE
+
+	There is no parameter change in Multimode so far as I can tell.  If in multimode you
+	have set certain patches to receive parameter changes via (for example) CC, then that
+	will occur to their individual programs. 
+	
+MULTI DUMP REQUEST
 
    F0
    3E              Waldorf ID
    13              Blofeld ID
    DD              Device ID
-   01              Message ID      [Multi Request]
-   HH**    Location High Byte
-   LL**    Location Low Byte
+   01              Message ID      		[Multi Request]
+   HH**    		   Location High Byte	[Bank]
+   LL**    		   Location Low Byte	[Number]
    F7
 
    ** Where HH is (this is stolen from the Microwave XT Manual):
 
    00 00 .. 00 7F          Locations M1 ... M128
-   40 00                           All Multis
-   7F 00                           Multi Mode Edit Buffer?  On the Microwave it's 20 FF
+   40 00                   All Multis
+   7F 00                   Multi Mode Edit Buffer?  On the Microwave it's 20 FF
 
-   I think there may be no checksum, since there's no checksum on a single sound request.
-   However on the Microwave II/XT/XTk Multi Request, there *is* a checksum.
-
-*/
+   I think there is no checksum, since there's no checksum on a single sound request.
+   However on the Microwave II/XT/XTk's Multi Request, there *is* a checksum, so go figure.
 
 
-
-/** 
-    From my experiments, I believe the MULTI DUMP format is as follows.
+MULTI DUMP
 
     F0
     3E              Waldorf ID
     13              Blofeld ID
     00              Device ID
     11              Message ID      [Multi Dump]
-    HH**    Location High Byte
-    LL**    Location Low Byte
-    name    [16 bytes]
+    HH**    		Location High Byte	[Bank]
+    LL**    		Location Low Byte	[Number]
+    
+    --- CHECKSUM STARTS HERE ---
+    name    		[16 bytes]
     00              [reserved]
-    0-127   Multi Volume
-    0-127           Tempo [same format as Arpegiator Tempo]
-    01***           [reserved, probably "Transmit Keyboard: global / multi", which I don't know what that is]
+    0-127   		Multi Volume
+    0-127           Tempo [same format as Arpeggiator Tempo]
+    01***           ["Transmit Keyboard: global / multi": I don't know what that is.  Help?]
     00              [reserved]
-    02****  [reserved, probably CONTROL W, dunno why this is here]
-    04****  [reserved, probably CONTROL X, dunno why this is here]
-    0B****  reserved, probably CONTROL Y, dunno why this is here]
-    0C****  [reserved, probably CONTROL Z, dunno why this is here]
+    02****  		[maybe CONTROL W, don't know why this is here, help is welcome]
+    04****  		[maybe CONTROL X, don't know why this is here, help is welcome]
+    0B****  		[maybe CONTROL Y, don't know why this is here, help is welcome]
+    0C****  		[maybe CONTROL Z, don't know why this is here, help is welcome]
     00              [7 times]
 
     Then the following 16 times:
-    0-7     Bank
-    0-127   Number
-    0-127   Volume
-    0-127   Pan                     [in -64 .. 63 as L64 ... R63]
+    0-7     		Bank
+    0-127   		Number
+    0-127   		Volume
+    0-127   		Pan                     [in -64 .. 63 as L64 ... R63]
     00              [reserved]
-    0-127   Transpose       [in -64 .. 63]
-    16-112  Detune          [in -48 .. 48]
-    0-17    MIDI Channel [Global = 0, Omni = 1, otherwise Channel + 1]
-    0-127   Low Key
-    0-127   Hi Key
-    1-127   Low Vel
-    1-127   Hi Vel
-    XXX*    Local/Midi/USB/Status{0=play, 1=mute}           0S00 0LUM
-    XXX*    Pressure/Bend/Wheel/Sustain/Edits/Change        00CE SPWB
+    0-127   		Transpose       [in -64 .. 63]
+    16-112  		Detune          [in -48 .. 48]
+    0-17    		MIDI Channel [Global = 0, Omni = 1, otherwise Channel + 1]
+    0-127   		Low Key
+    0-127   		Hi Key
+    1-127   		Low Vel
+    1-127   		Hi Vel
+    bits 0S000LUM*  Bits: Local/Midi/USB/Status {for Status: play=0, mute=1}
+    bits 00CESPWB*  Bits: Pressure/Bend/Wheel/Sustain/Edits/Change
     01              [reserved?]
     3F              [reserved?]
     00              [8 times]
+    
+    --- CHECKSUM ENDS HERE ---
 
     Then finally:
     CHECKSUM
@@ -98,11 +108,11 @@ import java.io.*;
     ** Multi Instrument Buffer is HH=7F LL = 00.  I don't know about other
     stuff, since there's no bank.  Maybe HH=00 LL=n?
 
-    *** I don't know what this is, it's not in the manual.
+    *** In GOFTER I don't know what this is, it's not in the manual.
 
-    **** These values are defined by the GOFTER patch editor, but I don't know what purpose they serve if any.
-    Also GOFTER has an option for the Free Button, but it doesn't seem to do anything.
-
+    **** These values are defined by the GOFTER patch editor, but I don't know what 
+    purpose they serve if any. Also GOFTER has an option for the Free Button, but it 
+    doesn't seem to do anything.
 */
 
 
@@ -956,7 +966,7 @@ public class WaldorfBlofeldMulti extends Synth
                 }
             else if (key.endsWith("abits"))
                 {
-                int part = extractInteger(key, 4);
+                int part = extractInteger(key, 4);  // starts with "inst"
                         
                 byte status = (byte)model.get("inst" + part + "status");
                 byte local = (byte)model.get("inst" + part + "local");
@@ -967,7 +977,7 @@ public class WaldorfBlofeldMulti extends Synth
                 }
             else if (key.endsWith("bbits"))
                 {
-                int part = extractInteger(key, 4);
+                int part = extractInteger(key, 4);  // starts with "inst"
                         
                 byte pressure = (byte)model.get("inst" + part + "pressure");
                 byte bend = (byte)model.get("inst" + part + "bend");

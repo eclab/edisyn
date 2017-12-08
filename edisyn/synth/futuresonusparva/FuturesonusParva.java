@@ -66,15 +66,34 @@ public class FuturesonusParva extends Synth
         hbox.addLast(addOscillators(Style.COLOR_A));
         vbox.add(hbox);
         
-        vbox.add(addOscillator(2, Style.COLOR_A));
+        hbox = new HBox();
+        hbox.addLast(addOscillator(2, Style.COLOR_A));
+        vbox.add(hbox);
         
         hbox = new HBox();
-        hbox.add(addOscillator(3, Style.COLOR_A));
-        hbox.addLast(addFilter(Style.COLOR_B));
+        hbox.addLast(addOscillator(3, Style.COLOR_A));
         vbox.add(hbox);
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Sound", soundPanel);
+
+        soundPanel = new SynthPanel();
+        vbox = new VBox();
+
+        vbox.add(addFilter(Style.COLOR_B));
+        
+        hbox = new HBox();
+        hbox.add(addLFO(1, Style.COLOR_A));
+        hbox.add(addLFO(2, Style.COLOR_A));
+        vbox.add(hbox);
+        
+        hbox = new HBox();
+        hbox.add(addLFO(3, Style.COLOR_A));
+        hbox.add(addLFO(4, Style.COLOR_A));
+        vbox.add(hbox);
+
+        soundPanel.add(vbox, BorderLayout.CENTER);
+        addTab("Filter and LFOs", soundPanel);
 
         soundPanel = new SynthPanel();
         vbox = new VBox();
@@ -87,16 +106,6 @@ public class FuturesonusParva extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Envelopes", soundPanel);
 
-        soundPanel = new SynthPanel();
-        vbox = new VBox();
-        
-        vbox.add(addLFO(1, Style.COLOR_A));
-        vbox.add(addLFO(2, Style.COLOR_A));
-        vbox.add(addLFO(3, Style.COLOR_A));
-        vbox.add(addLFO(4, Style.COLOR_A));
-
-        soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("LFOs", soundPanel);
 
         soundPanel = new SynthPanel();
         vbox = new VBox();
@@ -418,7 +427,8 @@ public class FuturesonusParva extends Synth
         comp = new LabelledDial("Depth", this, "lfo" + lfo + "depth", color, 0, 127);
         hbox.add(comp);
 
-        hbox.add(Strut.makeHorizontalStrut(20));
+        if (lfo == 1 || lfo == 3)
+        	hbox.add(Strut.makeHorizontalStrut(20));
 
         category.add(hbox);
         return category;
@@ -426,7 +436,7 @@ public class FuturesonusParva extends Synth
 
     public JComponent addFilter(Color color)
         {
-        Category category  = new Category(this, "VCF", color);
+        Category category  = new Category(this, "Filter", color);
                         
         JComponent comp;
         String[] params;
@@ -436,6 +446,7 @@ public class FuturesonusParva extends Synth
         params = VCF_TYPE;
         comp = new Chooser("Type", this, "vcftype", params);
         vbox.add(comp);
+        hbox.add(vbox);
 
         comp = new LabelledDial("Cutoff", this, "vcfcutoff", color, 0, 127);
         hbox.add(comp);

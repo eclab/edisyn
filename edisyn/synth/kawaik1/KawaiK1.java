@@ -137,7 +137,7 @@ public class KawaiK1 extends Synth
         return frame;
         }         
 
-   // public String getDefaultResourceFileName() { return "KawaiK1.init"; }
+    public String getDefaultResourceFileName() { return "KawaiK1.init"; }
     public String getHTMLResourceFileName() { return "KawaiK1.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
@@ -179,7 +179,7 @@ public class KawaiK1 extends Synth
             }
         }
 
-	boolean sendKawaiParametersInBulk = false;
+	boolean sendKawaiParametersInBulk = true;
 	
     public void addKawaiK1Menu()
         {
@@ -193,12 +193,12 @@ public class KawaiK1 extends Synth
                 
         String str = getLastX("SendParameters", getSynthName(), true);
         if (str == null)
-            sendKawaiParametersInBulk = false;
+            sendKawaiParametersInBulk = true;
         else if (str.equalsIgnoreCase("BULK"))
             sendKawaiParametersInBulk = true;
         else if (str.equalsIgnoreCase("INDIVIDUALLY"))
             sendKawaiParametersInBulk = false;
-        else sendKawaiParametersInBulk = false;
+        else sendKawaiParametersInBulk = true;
 
         ButtonGroup bg = new ButtonGroup();
 
@@ -313,7 +313,7 @@ public class KawaiK1 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Pitch Mod");
         hbox.add(comp);
 
-        comp = new LabelledDial("Volume", this, "volume", color, 0, 99);
+        comp = new LabelledDial("Volume", this, "volume", color, 0, 99, -1);
         hbox.add(comp);
 
         vbox = new VBox();
@@ -1005,7 +1005,7 @@ public class KawaiK1 extends Synth
         
     public int getPauseBetweenSysexFragments()
     	{
-    	return 50;
+    	return 70;
     	}
     	
     public void sendAllParameters()
@@ -1160,7 +1160,7 @@ public class KawaiK1 extends Synth
         result[3] = (byte)0x20;
         result[4] = (byte)0x00;
         result[5] = (byte)0x03;
-        result[6] = (byte)(external ? 0x02 : 0x00);
+        result[6] = (byte)(external ? 0x01 : 0x00);
         
         if (toWorkingMemory && sendKawaiParametersInBulk)
         	result[7] = (byte)63;

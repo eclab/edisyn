@@ -1,29 +1,28 @@
 <html><head></head><body bgcolor='black'>
 <font color='white'>
 
-<h1>Kawai K4</h1> 
-<h2>Multi-Mode Patch Editor</h2>
+<h1>Kawai K1</h1> 
+<h2>Multimode Patch Editor</h2>
 
-<p>This editor will work with the <b>Kawai K4</b> and the <b>Kawai K4r</b>.
+<p>This editor will work with the <b>Kawai K1</b>, the <b>Kawai K1m</b>, and the <b>Kawai K1r</b>.
 
-<p><b>Communicating with Edisyn</b> Set your K4 to receive Program Changes (RCV PGM) and Exclusive (RCV EXCL).  See pages 79 and 80 of the manual.  You'll also probably want your send channel and receive channel to be the same.  I wouldn't set the receive channel to OMNI, as this might conflict with drums.
+<p><b>Communicating with Edisyn</b> Turn of INT PROTCT and CARD PROTECT.  Set your K1 to receive Program Changes (set RCV PGM to NORM) and Exclusive (RCV EXCL).  See pages 38, 41, and 42 of the manual.  You'll also probably want your send channel and receive channel to be the same. 
 
-<p><b>Hints</b>
-<ul>
-<li>The following effect patches are not used by any standard single, multi, or drum patch:  3, 10, 11, 12, 14, 15, 21, 22, 23, 28
+<p><b>Important Note</b> The Kawai K1 has no sysex command which would enable Edisyn to send a patch to its temporary memory.  However this is important to enable merging, nudging, hill-climbing, randomization, etc.  Edisyn simulates a "send" to temporary memory by actually <b>writing</b> to patch number MID-8 (the very last one) or MED-8 (if you're working on the external card).  This will erase and overwrite this patch and basically treat it as a scratch area.
 
-<p><li>In all standard effect patches, Submix H is always "off".  
-</ul>
+<p>If you have been paying attention, you'ld know that the K1 <b>Single</b> patch editor gave you the option of writing to iD-8 or writing every single parameter individually (and slowly).  That's not an option here: you can't write individual parameters in multimode on the K1.
 
 <p><b>Gotchas</b>
 
 <ul>
-<li>
-You can't make parameter changes in real-time.
+<p><li>Because the K1 has no easy way to send patches to temporary working memory (see menu options above), the <b>Send to Patch...</b> option has been disabled.
 
-<p><li>When you send a patch, the name isn't updated: but the sound has in fact been changed.
+<p><li>When you update a parameter, it's not reflected on the K1's LCD until you move to something else and back again.  Also when you send a patch, the name isn't updated: but the sound has in fact been changed.
+
+<p><li>It might interest you that the K1's multimode sysex document is what we in the business call "insanely wrong".  It is bizarrely, utterly wrong.  See the source code for a discussion of the matter.
 
 </ul>
+
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>
@@ -31,6 +30,6 @@ You can't make parameter changes in real-time.
 <td><b>Sean Luke</b>
 <tr>
 <td align=right>Date&nbsp;&nbsp;&nbsp;
-<td>August 2017
+<td>December 2017
 </table>
 

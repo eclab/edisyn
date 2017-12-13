@@ -67,6 +67,8 @@ public abstract class Synth extends JComponent implements Updatable
     public JCheckBoxMenuItem testNotes;
     public JComponent hillClimbPane;
     public JMenuItem getAll;
+    public JMenuItem testIncomingController;
+    public JMenuItem testIncomingSynth;
 
     Model[] nudge = new Model[4];
     JMenuItem[] nudgeTowards = new JMenuItem[8];
@@ -87,6 +89,9 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** Returns the model associated with this editor. */
     public Model getModel() { return model; }
+
+	boolean testIncomingControllerMIDI;
+	boolean testIncomingSynthMIDI;
 
     boolean useMapForRecombination = true;
     boolean showingMutation = false;
@@ -325,7 +330,7 @@ public abstract class Synth extends JComponent implements Updatable
     public static final Class[] synths = new Class[] 
     { 
     edisyn.synth.futuresonusparva.FuturesonusParva.class,
-    edisyn.synth.generic.Generic.class,
+    //edisyn.synth.generic.Generic.class,
     edisyn.synth.korgsg.KorgSG.class,
     edisyn.synth.korgsg.KorgSGMulti.class,
     edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
@@ -343,7 +348,6 @@ public abstract class Synth extends JComponent implements Updatable
     edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti.class, 
     edisyn.synth.yamahatx81z.YamahaTX81Z.class, 
     edisyn.synth.yamahatx81z.YamahaTX81ZMulti.class,
-    //edisyn.synth.generic.Generic.class
     };
     
     /** All synthesizer names in Edisyn, one per class in synths */
@@ -1005,6 +1009,12 @@ public abstract class Synth extends JComponent implements Updatable
                                     }
                                 }
                             }
+                    	if (testIncomingSynthMIDI) 
+                    		{
+                    		showSimpleMessage("Incoming MIDI from Synthesizer", "A MIDI message has arrived from the Synthesizer:\n" + Midi.format(message) + "\nTime: " + timeStamp); 
+                    		testIncomingSynthMIDI = false; 
+                			testIncomingSynth.setText("Report Next Synth MIDI");
+                    		} 
                         }
                     });
                 
@@ -1087,6 +1097,12 @@ public abstract class Synth extends JComponent implements Updatable
                                 tryToSendSysex(message.getMessage());
                                 }
                             }
+                    	if (testIncomingControllerMIDI) 
+                    		{ 
+                    		showSimpleMessage("Incoming MIDI from Controller", "A MIDI message has arrived from the Controller:\n" + Midi.format(message) + "\nTime: " + timeStamp); 
+                    		testIncomingControllerMIDI = false; 
+                			testIncomingController.setText("Report Next Controller MIDI");
+                    		} 
                         }
                     });
                 }
@@ -1192,7 +1208,7 @@ public abstract class Synth extends JComponent implements Updatable
             if (receiver == null) return false;
                 
             // compute pause
-            try { midiPause(getNanoPauseBetweenMIDISends()); }
+            try { if (!noMIDIPause) midiPause(getNanoPauseBetweenMIDISends()); }
             catch (Exception e)
                 {
                 e.printStackTrace();
@@ -1267,7 +1283,7 @@ public abstract class Synth extends JComponent implements Updatable
                 synchronized(midiSendLock)
                     {
                     int fragmentSize = getSysexFragmentSize();
-                    if (fragmentSize <= NO_SYSEX_FRAGMENT_SIZE)
+                    if (fragmentSize <= NO_SYSEX_FRAGMENT_SIZE || message.getLength() <= fragmentSize)
                     	{
 						receiver.send(message, -1); 
                     	}
@@ -2658,6 +2674,36 @@ public abstract class Synth extends JComponent implements Updatable
                 doDisconnectMIDI();
                 }
             });
+            
+        menu.addSeparator();
+
+        testIncomingSynth = new JMenuItem("Report Next Synth MIDI");
+        menu.add(testIncomingSynth);
+        testIncomingSynth.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                testIncomingSynthMIDI = !testIncomingSynthMIDI;
+                if (testIncomingSynthMIDI)
+	                testIncomingSynth.setText("Stop Reporting Synth MIDI");
+	            else
+	                testIncomingSynth.setText("Report Next Synth MIDI");	            	
+                }
+            });
+
+        testIncomingController = new JMenuItem("Report Next Controller MIDI");
+        menu.add(testIncomingController);
+        testIncomingController.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                testIncomingControllerMIDI = !testIncomingControllerMIDI;
+                if (testIncomingControllerMIDI)
+                	testIncomingController.setText("Stop Reporting Controller MIDI");
+                else
+                	testIncomingController.setText("Report Next Controller MIDI");
+                }
+            });
 
         menu.addSeparator();
 
@@ -3403,7 +3449,7 @@ public abstract class Synth extends JComponent implements Updatable
             });
     
         updateTitle();
-        numOpenWindows++;        
+        numOpenWindows++;  
         
         return frame;
         }
@@ -3558,6 +3604,7 @@ public abstract class Synth extends JComponent implements Updatable
             return;
         }
     
+    boolean noMIDIPause = false;
     boolean sendingAllSoundsOff = false;
     public void doSendAllSoundsOff() { doSendAllSoundsOff(false); }
     void doSendAllSoundsOff(boolean fromDoSendTestNotes)  // used to break infinite loop fights with doSendTestNotes()
@@ -3571,6 +3618,7 @@ public abstract class Synth extends JComponent implements Updatable
         
         if (!sendingAllSoundsOff)
 	        {
+	        noMIDIPause = true;
 	        try
             	{
             	// do an all sounds off (some synths don't properly respond to all notes off)
@@ -3584,6 +3632,7 @@ public abstract class Synth extends JComponent implements Updatable
         	    {
         	    e2.printStackTrace();
         	    }
+        	noMIDIPause = false;
         	}
         }
 
@@ -3984,7 +4033,10 @@ public abstract class Synth extends JComponent implements Updatable
 
     void doCloseWindow()
         {
-        if (requestCloseWindow())
+        JFrame frame = (JFrame)(SwingUtilities.getRoot(this));
+        if (frame == null || !frame.isDisplayable()) return;  // we clicked multiple times on the close button
+        
+        else if (requestCloseWindow())
             {
             doSendAllSoundsOff();
                                 
@@ -3993,13 +4045,8 @@ public abstract class Synth extends JComponent implements Updatable
                 tuple.dispose();
             tuple = null;
             
-            JFrame frame = (JFrame)(SwingUtilities.getRoot(this));
-            if (frame != null)
-                {
-                frame.setVisible(false);
-                frame.dispose();
-                }
-            frame = null;
+            frame.setVisible(false);
+            frame.dispose();
                                 
             numOpenWindows--;
             if (numOpenWindows <= 0)
@@ -4035,7 +4082,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public boolean accept(File dir, String name)
                 {
-                return ensureFileEndsWith(name, ".syx").equals(name);
+                return ensureFileEndsWith(name, ".syx").equals(name) || ensureFileEndsWith(name, ".SYX").equals(name) || ensureFileEndsWith(name, ".sysex").equals(name);
                 }
             });
 
@@ -4084,14 +4131,14 @@ public abstract class Synth extends JComponent implements Updatable
                                 }
                             else
                                 {
-                                String val = getManufacturerForSysex(data);
+                                String val = Midi.getManufacturerForSysex(data);
                                         
                                 if (val == null)
                                     showSimpleError("File Error", "File might contain sysex data but has an invalid manufacturer ID.");
                                 else
                                     showSimpleError("File Error", "File does not contain sysex data for any synth Edisyn knows.\n" +
                                         "This appears to be data for the following manufacturer:\n" +
-                                        getManufacturerForSysex(data));
+                                        Midi.getManufacturerForSysex(data));
                                 }
                             }
                         else
@@ -4488,59 +4535,6 @@ public abstract class Synth extends JComponent implements Updatable
         
 
 
-
-    ////////// UTILITIES
-    
-    static HashMap manufacturers = null;
-    
-    static HashMap getManufacturers()
-        {
-        if (manufacturers != null)
-            return manufacturers;
-                        
-        manufacturers = new HashMap();
-        Scanner scan = new Scanner(Synth.class.getResourceAsStream("Manufacturers.txt"));
-        while(scan.hasNextLine())
-            {
-            String nextLine = scan.nextLine().trim();
-            if (nextLine.equals("")) continue;
-            if (nextLine.startsWith("#")) continue;
-                        
-            int id = 0;
-            Scanner scan2 = new Scanner(nextLine);
-            int one = scan2.nextInt(16);  // in hex
-            if (one == 0x00)  // there are two more to read
-                {
-                id = id + (scan2.nextInt(16) << 8) + (scan2.nextInt(16) << 16);
-                }
-            else
-                {
-                id = one;
-                }
-            manufacturers.put(new Integer(id), scan.nextLine().trim());
-            }
-        return manufacturers;
-        }
-
-    public static String getManufacturerForSysex(byte[] data)
-        {
-        HashMap map = getManufacturers();
-        if (data[1] == 0x00)
-            {
-            return (String)(map.get(new Integer(
-                        0x00 + 
-                        ((data[2] < 0 ? data[2] + 256 : data[2]) << 8) + 
-                        ((data[3] < 0 ? data[3] + 256 : data[3]) << 16))));
-            }
-        else
-            {
-            return (String)(map.get(new Integer(data[1])));
-            }
-        }
-
-        
-        
-        
 
     ////////// UTILITIES
 

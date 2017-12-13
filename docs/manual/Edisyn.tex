@@ -199,6 +199,10 @@ Edisyn gives you various options for adjusting the test note you send (though it
 
 Setting the {\bf Pause Between Test Notes} will change how long Edisyn waits, beyond the note length itself, before it plays the next note if you have {\bf Send Test Notes} on.  It doesn't affect how fast you can play test notes on your own.  One special setting is {\bf Default}: this is defined as an additional pause equal to the note length if the note length is less than 1/2 seconds; or a pause of 1/2 second if the note length is greater than this.
 
+\subsection{Testing the Incoming Connection}
+
+If you're not sure if you have MIDI data coming to Edisyn from your synthesizer, select {\bf Report Next Synth MIDI} from the {\bf MIDI} menu.  Then have your synth send any kind of MIDI message to Edisyn\,---\,a note, a sysex message, whatever.  For example, you could have Edisyn request a sysex dump from the synth.  At any rate, if Edisyn pops up a window telling you the message, then you have a live connection.  
+
 \section{Communicating with a Controller or DAW}
 
 The MIDI Dialog (Section \ref{startingedisyn}) also lets you choose a device and MIDI channel for incoming messages from a control surface or controller keyboard.  Using this keyboard you can:
@@ -208,6 +212,10 @@ The MIDI Dialog (Section \ref{startingedisyn}) also lets you choose a device and
 \item Control the synthesizer (CC and Program Change messages, etc.)
 \item Control widgets in Edisyn
 \end{itemize}
+
+\subsection{Testing the Incoming Connection}
+
+If you're not sure if you have MIDI data coming to Edisyn from your controller, select {\bf Report Next Controller MIDI} from the {\bf MIDI} menu.  Then have your controller send any kind of MIDI message to Edisyn\,---\,for example, play a note.  If Edisyn pops up a window telling you the message, then you have a live connection.  
 
 \subsection{Connecting to a Digital Audio Workstation (DAW)}
 
@@ -225,7 +233,7 @@ If your controller is sending these messages on Edisyn's Controller Channel, Edi
 \subsection{Remote Control of Edisyn} 
 \label{remotecontrolofedisyn}
 
-Edisyn is capable of {\it mapping} Control Change (CC) messages or NRPN messages from your control surface to specific parameters in your patch editor.  Each patch editor type can learn its own unique set of CC and NRPN mappings.
+Edisyn is capable of {\it mapping} Control Change (CC) messages or NRPN messages from your control surface to parameters in your patch editor.  Each patch editor type can learn its own set of CC and NRPN mappings.
 
 \paragraph{Mapping a Parameter}
 

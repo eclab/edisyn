@@ -905,4 +905,105 @@ public class Midi
     		}
     	}
     	
+    public static String format(MidiMessage message)
+    	{
+    	if (message instanceof DividedSysex)
+    		{
+    		return "A Special Edisyn message (shouldn't happen)";
+    		}
+    	else if (message instanceof MetaMessage)
+    		{
+    		return "A MIDI File MetaMessage (shouldn't happen)";
+    		}
+    	else if (message instanceof SysexMessage)
+    		{
+    		return "Sysex (" + getManufacturerForSysex(((SysexMessage)message).getData()) + ")";
+    		}
+    	else // ShortMessage
+    		{
+    		ShortMessage s = (ShortMessage) message;
+    		int c = s.getChannel();
+    		String type = "Unknown";
+    		switch(s.getStatus())
+    			{
+    			case ShortMessage.ACTIVE_SENSING: type = "Active Sensing"; c = -1; break;
+    			case ShortMessage.CHANNEL_PRESSURE: type = "Channel Pressure"; break;
+    			case ShortMessage.CONTINUE: type = "Continue"; c = -1; break;
+    			case ShortMessage.CONTROL_CHANGE: type = "Control Change"; break;
+    			case ShortMessage.END_OF_EXCLUSIVE: type = "End of Sysex Marker"; c = -1; break;
+    			case ShortMessage.MIDI_TIME_CODE: type = "Midi Time Code"; c = -1; break;
+    			case ShortMessage.NOTE_OFF: type = "Note Off"; break;
+    			case ShortMessage.NOTE_ON: type = "Note On"; break;
+    			case ShortMessage.PITCH_BEND: type = "Pitch Bend"; break;
+    			case ShortMessage.POLY_PRESSURE: type = "Poly Pressure"; break;
+    			case ShortMessage.PROGRAM_CHANGE: type = "Program Change"; break;
+    			case ShortMessage.SONG_POSITION_POINTER: type = "Song Position Pointer"; c = -1; break;
+    			case ShortMessage.SONG_SELECT: type = "Song Select"; c = -1; break;
+    			case ShortMessage.START: type = "Start"; c = -1; break;
+    			case ShortMessage.STOP: type = "Stop"; c = -1; break;
+    			case ShortMessage.SYSTEM_RESET: type = "System Reset"; c = -1; break;
+    			case ShortMessage.TIMING_CLOCK: type = "Timing Clock"; c = -1; break;
+    			case ShortMessage.TUNE_REQUEST: type = "Tune Request"; c = -1; break;
+    			}
+    		return type + (c == -1 ? "" : (" (Channel " + c + ")"));
+    		}
+    	}
+
+
+
+    static HashMap manufacturers = null;
+    
+    static HashMap getManufacturers()
+        {
+        if (manufacturers != null)
+            return manufacturers;
+                        
+        manufacturers = new HashMap();
+        Scanner scan = new Scanner(Midi.class.getResourceAsStream("Manufacturers.txt"));
+        while(scan.hasNextLine())
+            {
+            String nextLine = scan.nextLine().trim();
+            if (nextLine.equals("")) continue;
+            if (nextLine.startsWith("#")) continue;
+                        
+            int id = 0;
+            Scanner scan2 = new Scanner(nextLine);
+            int one = scan2.nextInt(16);  // in hex
+            if (one == 0x00)  // there are two more to read
+                {
+                id = id + (scan2.nextInt(16) << 8) + (scan2.nextInt(16) << 16);
+                }
+            else
+                {
+                id = one;
+                }
+            manufacturers.put(new Integer(id), scan.nextLine().trim());
+            }
+        return manufacturers;
+        }
+
+	/** This works with or without F0 as the first data byte */
+    public static String getManufacturerForSysex(byte[] data)
+        {
+        int offset = 0;
+        if (data[0] == 0xF0)
+        	offset = 1;
+        HashMap map = getManufacturers();
+        if (data[0 + offset] == 0x00)
+            {
+            return (String)(map.get(new Integer(
+                        0x00 + 
+                        ((data[1 + offset] < 0 ? data[1 + offset] + 256 : data[1 + offset]) << 8) + 
+                        ((data[2 + offset] < 0 ? data[2 + offset] + 256 : data[2 + offset]) << 16))));
+            }
+        else
+            {
+            return (String)(map.get(new Integer(data[0 + offset])));
+            }
+        }
+
+        
+        
+        
+
     }

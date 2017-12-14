@@ -85,7 +85,7 @@ public class PreenFM2 extends Synth
         JFrame frame = super.sprout();
         writeTo.setEnabled(false);
         transmitTo.setEnabled(false);
-        merge.setEnabled(false);
+//        merge.setEnabled(false);
         addPreenMenu();
         return frame;
         }
@@ -1465,9 +1465,13 @@ public class PreenFM2 extends Synth
         if (!nm.equals(newnm))
             model.set("name", newnm);
         }
-    
-    
+
     public void handleNRPNParse(String key, int val, boolean canPush)
+		{
+		handleNRPNParse(getModel(), key, val, canPush);
+		}    
+    
+    public void handleNRPNParse(Model model, String key, int val, boolean canPush)
         {
         if (key != null)
             {
@@ -1477,7 +1481,7 @@ public class PreenFM2 extends Synth
                 {
                 boolean pushVal = undo.getWillPush();
                 undo.setWillPush(true);
-                undo.push(getModel());
+                undo.push(model);
                 undo.setWillPush(pushVal);
                 }
                                 
@@ -1510,13 +1514,46 @@ public class PreenFM2 extends Synth
                 }
             }
         }
+        
+    Model mergeModel;
+    public static final int LAST_MERGE_NUMBER = 399;
 
     public void handleSynthCCOrNRPN(Midi.CCData data)
         {
         if (data.type == Midi.CCDATA_TYPE_NRPN)
             {
-            String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
-            handleNRPNParse(key, data.value, true);
+            if (isMerging())
+            	{
+            	// build a model if we haven't yet
+            	if (mergeModel == null)
+            		mergeModel = new Model();
+            		
+            	// Load the key, they come in one at a time
+	            String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
+            	setSendMIDI(false);
+	            handleNRPNParse(mergeModel, key, data.value, true);
+            	setSendMIDI(true);
+
+				// if it's the last key, do the merge
+            	if (data.number == LAST_MERGE_NUMBER)
+            		{
+            		setSendMIDI(false);
+                    Model backup = (Model)(model.clone());
+        			model.recombine(random, mergeModel, getUsesMapForRecombination() ? getMutationKeys() : model.getKeys(), getMergeProbability());
+                    if (!backup.keyEquals(getModel()))
+                    	undo.push(backup);
+            		setSendMIDI(true);
+            		sendAllParameters();
+            		setMergeProbability(0.0);
+            		mergeModel = null;
+            		}
+            	}
+            else
+            	{
+            	mergeModel = null;
+	            String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
+	            handleNRPNParse(key, data.value, true);
+	            }
             }
         }
         

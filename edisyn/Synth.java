@@ -334,6 +334,7 @@ public abstract class Synth extends JComponent implements Updatable
     edisyn.synth.korgsg.KorgSG.class,
     edisyn.synth.korgsg.KorgSGMulti.class,
     edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
+    edisyn.synth.korgmicrokorg.KorgMicroKorg.class,
     edisyn.synth.kawaik1.KawaiK1.class, 
     edisyn.synth.kawaik1.KawaiK1Multi.class, 
     edisyn.synth.kawaik4.KawaiK4.class, 
@@ -913,6 +914,30 @@ public abstract class Synth extends JComponent implements Updatable
 
     // flag for whether we send midi when requested
     boolean sendMIDI = false;
+
+	/** Returns the current merge probability.  If the value is 0.0,
+		then merging is not occurring. */
+	public double getMergeProbability()
+		{
+		return merging;
+		}
+
+	/** Returns the current merge probability.  If the value is 0.0,
+		then merging is not occurring. */
+	public void setMergeProbability(double val)
+		{
+		if (val < 0) val = 0; 
+		if (val > 1) val = 1;
+		merging = val;
+		}
+
+
+	/** Returns whether the mutation map should be used for recombination. */
+	public boolean getUsesMapForRecombination()
+		{
+		return useMapForRecombination;
+		}
+
 
     /** Builds a receiver to attach to the current IN transmitter.  The receiver
         can handle merging and patch reception. */

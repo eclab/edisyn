@@ -29,6 +29,8 @@ public class Style
     /** Small font, primarily for labels, button and combo box text. */
     public static Font SMALL_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 10);
     /** Medium-sized font, used primarily in the center of a Dial. */
+    public static final Font SEMI_MEDIUM_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
+    /** Medium-sized font, used primarily in the center of a Dial. */
     public static final Font MEDIUM_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
     /** Large Font, primarily for category headers. */
     public static final Font LARGE_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 17);

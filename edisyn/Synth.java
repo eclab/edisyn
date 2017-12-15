@@ -334,7 +334,7 @@ public abstract class Synth extends JComponent implements Updatable
     edisyn.synth.korgsg.KorgSG.class,
     edisyn.synth.korgsg.KorgSGMulti.class,
     edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
-    edisyn.synth.korgmicrokorg.KorgMicroKorg.class,
+    //edisyn.synth.korgmicrokorg.KorgMicroKorg.class,
     edisyn.synth.kawaik1.KawaiK1.class, 
     edisyn.synth.kawaik1.KawaiK1Multi.class, 
     edisyn.synth.kawaik4.KawaiK4.class, 

@@ -384,7 +384,6 @@ public class Model implements Cloneable
     */
     public Model recombine(Random random, Model model, String[] keys, double weight)
         {
-        System.err.println(weight);
         if (undoListener!= null)
             {
             undoListener.push(this);

@@ -74,7 +74,14 @@ public class LabelledDial extends NumericalComponent
         repaint();
         return label2;
         }
-                
+    
+    public void setLabelFont(Font font)
+    	{
+    	dial.field.setFont(font);
+    	dial.revalidate();
+    	dial.repaint();
+    	}
+    	
     /** Makes a labelled dial for the given key parameter on the given synth, and with the given color and
         minimum and maximum.  Prior to display, subtractForDisplay is 
         SUBTRACTED from the parameter value.  You can use this to convert 0...127 in the model

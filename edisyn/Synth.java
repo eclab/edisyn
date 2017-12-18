@@ -334,7 +334,8 @@ public abstract class Synth extends JComponent implements Updatable
     edisyn.synth.korgsg.KorgSG.class,
     edisyn.synth.korgsg.KorgSGMulti.class,
     edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
-    //edisyn.synth.korgmicrokorg.KorgMicroKorg.class,
+    edisyn.synth.korgmicrokorg.KorgMicroKorg.class,
+    edisyn.synth.korgmicrokorg.KorgMicroKorgVocoder.class,
     edisyn.synth.kawaik1.KawaiK1.class, 
     edisyn.synth.kawaik1.KawaiK1Multi.class, 
     edisyn.synth.kawaik4.KawaiK4.class, 
@@ -702,13 +703,6 @@ public abstract class Synth extends JComponent implements Updatable
         static version of this method in your synth panel subclass.  */
     public static String getSynthName() { return "Override Me"; }
     
-    /** Returns true if the two patches have the same location (bank, number, etc.) 
-        The default implementaton always returns false. */
-    public boolean patchLocationEquals(Model patch1, Model patch2)
-        {
-        return false;
-        }
-    
     /** Returns a Model with the next patch location (bank, number, etc.) beyond the one provided in the given model.
         If the model provided contains the very last patch location, you should wrap around. */
     public Model getNextPatchLocation(Model model)
@@ -772,6 +766,7 @@ public abstract class Synth extends JComponent implements Updatable
                     { model.set(key, model.getMax(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key));}
                 }
             }
+            
         }
 
     /** Override this to make sure that at *least* the given time (in Milliseconds) has transpired between MIDI sends. */
@@ -1588,6 +1583,21 @@ public abstract class Synth extends JComponent implements Updatable
     ////////// GUI UTILITIES
 
 
+	public int getNumTabs()
+		{
+		return tabs.getTabCount();
+		}
+		
+    public JComponent insertTab(String title, JComponent component, int index)
+        {
+        JScrollPane pane = new JScrollPane(component, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+            JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        pane.setViewportBorder(null);
+        pane.setBorder(null);
+        tabs.insertTab(title, null, pane, null, index);
+        return pane;
+        }
+
     public JComponent addTab(String title, JComponent component)
         {
         JScrollPane pane = new JScrollPane(component, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -1596,6 +1606,13 @@ public abstract class Synth extends JComponent implements Updatable
         pane.setBorder(null);
         tabs.addTab(title, pane);
         return pane;
+        }
+
+    public void removeTab(String title)
+        {
+        int idx = tabs.indexOfTab(title);
+        if (idx != -1)
+        	tabs.remove(idx);
         }
 
 
@@ -4534,7 +4551,20 @@ public abstract class Synth extends JComponent implements Updatable
         }
         
         
-        
+    /** By default this method says two patches are the same if they have the same
+    	"bank" and "number": if both are missing the "bank" (or the "number") then the
+    	"bank" (or "number") is assumed to be the same.  You should not use 
+    	Integer.MIN_VALUE as either a bank or a number.
+    	Override this if you need further customization. */
+     public boolean patchLocationEquals(Model patch1, Model patch2)
+        {
+        int bank1 = patch1.get("bank", Integer.MIN_VALUE);
+        int number1 = patch1.get("number", Integer.MIN_VALUE);
+        int bank2 = patch2.get("bank", Integer.MIN_VALUE);
+        int number2 = patch2.get("number", Integer.MIN_VALUE);
+        return (bank1 == bank2 && number1 == number2);
+        }
+       
         
         
         

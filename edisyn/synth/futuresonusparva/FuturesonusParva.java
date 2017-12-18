@@ -139,11 +139,7 @@ public class FuturesonusParva extends Synth
                 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, "Patch", "bank", "number", 9)
-            {
-            public String numberString(int number) { return (number > 9 ? "" : "0") + number; }
-            public String bankString(int bank) { return BANKS[bank]; }
-            };
+        comp = new PatchDisplay(this, 9);
         hbox2.add(comp);
         vbox.add(hbox2);
         
@@ -859,21 +855,77 @@ final static String[] allParameters = new String[/*217 or so*/]
         	return buildNRPN(getChannelOut(), index - 128, value);
     	}
 
+    Model mergeModel;
+
     public void handleSynthCCOrNRPN(Midi.CCData data)
         {
+        final int LAST_MERGE_NUMBER = allParameters.length - 1;
+        
         if (data.type == Midi.CCDATA_TYPE_RAW_CC)
         	{
-        	if (!(allParameters[data.number].equals("-")))
+        	if (isMerging())
         		{
-        		model.set(allParameters[data.number], data.value);
+            	// build a model if we haven't yet
+            	if (mergeModel == null)
+            		mergeModel = new Model();
+            		
+            	// Load the key, they come in one at a time
+            	setSendMIDI(false);
+				if (!(allParameters[data.number].equals("-")))
+					{
+					mergeModel.set(allParameters[data.number], data.value);
+					}
+            	setSendMIDI(true);
         		}
+        	else
+        		{
+	        	if (!(allParameters[data.number].equals("-")))
+	        		{
+            		setSendMIDI(false);
+	        		model.set(allParameters[data.number], data.value);
+            		setSendMIDI(true);
+	        		}
+	        	}
         	}
         else if (data.type == Midi.CCDATA_TYPE_NRPN)
         	{
-        	if (!(allParameters[data.number + 128].equals("-")))
+        	if (isMerging())
         		{
-        		model.set(allParameters[data.number + 128], data.value);
+            	// build a model if we haven't yet
+            	if (mergeModel == null)
+            		mergeModel = new Model();
+            		
+            	// Load the key, they come in one at a time
+            	setSendMIDI(false);
+				if (!(allParameters[data.number + 128].equals("-")))
+					{
+					mergeModel.set(allParameters[data.number + 128], data.value);
+					}
+            	setSendMIDI(true);
+
+				// if it's the last key, do the merge
+            	if (data.number + 128 == LAST_MERGE_NUMBER)
+            		{
+            		setSendMIDI(false);
+                    Model backup = (Model)(model.clone());
+        			model.recombine(random, mergeModel, getUsesMapForRecombination() ? getMutationKeys() : model.getKeys(), getMergeProbability());
+                    if (!backup.keyEquals(getModel()))
+                    	undo.push(backup);
+            		setSendMIDI(true);
+            		sendAllParameters();
+            		setMergeProbability(0.0);
+            		mergeModel = null;
+            		}
         		}
+        	else
+        		{
+	        	if (!(allParameters[data.number + 128].equals("-")))
+	        		{
+            		setSendMIDI(false);
+    	    		model.set(allParameters[data.number + 128], data.value);
+            		setSendMIDI(true);
+    	    		}
+    	    	}
         	}
         else // RPN
         	{
@@ -978,15 +1030,6 @@ final static String[] allParameters = new String[/*217 or so*/]
     
     public String getPatchName(Model model) { return model.get("name", "Init"); }
 
-    public boolean patchLocationEquals(Model patch1, Model patch2)
-        {
-        int bank1 = patch1.get("bank");
-        int number1 = patch1.get("number");
-        int bank2 = patch2.get("bank");
-        int number2 = patch2.get("number");
-        return (bank1 == bank2 && number1 == number2);
-        }
-        
     public Model getNextPatchLocation(Model model)
         {
         int bank = model.get("bank");

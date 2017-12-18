@@ -107,11 +107,7 @@ public class KawaiK4Drum extends Synth
         HBox hbox = new HBox();
                 
         VBox vbox = new VBox();
-        comp = new PatchDisplay(this, "Patch", "bank", null, 8)
-            {
-            public String numberString(int number) { return ""; }
-            public String bankString(int bank) { return (bank == 0 ? "Internal" : "External"); }
-            };
+        comp = new PatchDisplay(this, 8);
         vbox.add(comp);
         hbox.add(vbox);
 
@@ -655,11 +651,6 @@ public class KawaiK4Drum extends Synth
 
     public int getPauseAfterSendAllParameters() { return 100; } 
  
-    public boolean patchLocationEquals(Model patch1, Model patch2)
-        {
-        return patch1.get("bank") == patch2.get("bank");
-        }
-        
     public Model getNextPatchLocation(Model model)
         {
         Model newModel = buildModel();

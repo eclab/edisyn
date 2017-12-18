@@ -79,7 +79,7 @@ public abstract class NumericalComponent extends JComponent implements Updatable
         if (!synth.getModel().exists(key) || getState() != val)
             {
             synth.getModel().set(key, val); 
-            update(key, synth.getModel());
+            //update(key, synth.getModel());
             repaint();
             }
         }

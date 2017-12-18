@@ -95,11 +95,7 @@ public class KawaiK4Effect extends Synth
         HBox hbox = new HBox();
                 
         VBox vbox = new VBox();
-        comp = new PatchDisplay(this, "Patch", "bank", "number", 8)
-            {
-            public String numberString(int number) { return "" + (number + 1); }
-            public String bankString(int bank) { return (bank == 0 ? "Int. " : "Ext. "); }
-            };
+        comp = new PatchDisplay(this, 8);
         vbox.add(comp);
         hbox.add(vbox);
 
@@ -492,15 +488,6 @@ public class KawaiK4Effect extends Synth
 
 
 
-    public boolean patchLocationEquals(Model patch1, Model patch2)
-        {
-        int bank1 = patch1.get("bank");
-        int number1 = patch1.get("number");
-        int bank2 = patch2.get("bank");
-        int number2 = patch2.get("number");
-        return (bank1 == bank2 && number1 == number2);
-        }
-        
     public Model getNextPatchLocation(Model model)
         {
         int bank = model.get("bank");
@@ -528,6 +515,6 @@ public class KawaiK4Effect extends Synth
         // yet and this method will bomb badly.  So we return null in this case.
         if (!model.exists("number")) return null;
         
-        return BANKS[model.get("bank")] + (model.get("number") + 1);
+        return BANKS[model.get("bank")] + (model.get("number") + 1 < 10 ? "0" : "") + ((model.get("number") + 1));
         }
     }

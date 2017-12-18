@@ -217,11 +217,7 @@ public class OberheimMatrix1000 extends Synth
         HBox hbox = new HBox();
                                 
         VBox vbox = new VBox();
-        comp = new PatchDisplay(this, "Patch", "bank", "number", 4)
-            {
-            public String numberString(int number) { return (number > 9 ? "" : "0") + number; }
-            public String bankString(int bank) { return "" + bank; }
-            };
+        comp = new PatchDisplay(this, 4);
         vbox.add(comp);
         
         comp = new StringComponent("Patch Name", this, "name", 8, "Name must be up to 8 letters, numbers, spaces, or !\"#$%&'()*+,-./:;<=>?[\\]^_.")
@@ -1886,15 +1882,6 @@ public class OberheimMatrix1000 extends Synth
     public int getPauseAfterSendAllParameters() { return 200; }
     
     
-    public boolean patchLocationEquals(Model patch1, Model patch2)
-        {
-        int bank1 = patch1.get("bank");
-        int number1 = patch1.get("number");
-        int bank2 = patch2.get("bank");
-        int number2 = patch2.get("number");
-        return (bank1 == bank2 && number1 == number2);
-        }
-        
     public Model getNextPatchLocation(Model model)
         {
         int bank = model.get("bank");

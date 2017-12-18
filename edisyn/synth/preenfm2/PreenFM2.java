@@ -404,16 +404,7 @@ public class PreenFM2 extends Synth
         VBox vbox = new VBox();
  
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, "Patch", "bank", "number", 8)
-            {
-            public String numberString(int number) { return " : " + number; }
-            public String bankString(int bank) 
-                { 
-                if (bank < 128) return "Bank " + bank;
-                else if (bank < 256) return "Combo " + (bank - 128);
-                else return ("DX7 " + (bank - 256));
-                }
-            };
+        comp = new PatchDisplay(this, 8);
         hbox2.add(comp);
         vbox.add(hbox2);
 
@@ -1550,9 +1541,11 @@ public class PreenFM2 extends Synth
             	}
             else
             	{
+            	setSendMIDI(false);
             	mergeModel = null;
 	            String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
 	            handleNRPNParse(key, data.value, true);
+            	setSendMIDI(true);
 	            }
             }
         }
@@ -2016,15 +2009,6 @@ public class PreenFM2 extends Synth
         "name"
         };
 
-    public boolean patchLocationEquals(Model patch1, Model patch2)
-        {
-        int bank1 = patch1.get("bank");
-        int number1 = patch1.get("number");
-        int bank2 = patch2.get("bank");
-        int number2 = patch2.get("number");
-        return (bank1 == bank2 && number1 == number2);
-        }
-        
     public Model getNextPatchLocation(Model model)
         {
         int bank = model.get("bank");
@@ -2073,9 +2057,9 @@ public class PreenFM2 extends Synth
         int bank = model.get("bank");
         int number = model.get("number");
         if (bank > 256)
-            return "DX7_" + (bank - 256) + "_" + number;
+            return "DX7 " + (bank - 256) + " " + number;
         else
-            return "Bank_" + bank + "_" + number;
+            return "Bank " + bank + " " + number;
         }
 
     }

@@ -154,11 +154,7 @@ public class KawaiK1Multi extends Synth
                 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, "Patch", "bank", "number", 4)
-            {
-            public String numberString(int number) { number += 1; return (number > 9 ? "" : "0") + number; }
-            public String bankString(int bank) { return BANKS[bank]; }
-            };
+        comp = new PatchDisplay(this, 4);
         hbox2.add(comp);
         vbox.add(hbox2);
         
@@ -716,15 +712,6 @@ public class KawaiK1Multi extends Synth
         catch (Exception e) { e.printStackTrace(); }
         }
 
-    public boolean patchLocationEquals(Model patch1, Model patch2)
-        {
-        int bank1 = patch1.get("bank");
-        int number1 = patch1.get("number");
-        int bank2 = patch2.get("bank");
-        int number2 = patch2.get("number");
-        return (bank1 == bank2 && number1 == number2);
-        }
-        
     public Model getNextPatchLocation(Model model)
         {
         int bank = model.get("bank");
@@ -752,6 +739,6 @@ public class KawaiK1Multi extends Synth
         // yet and this method will bomb badly.  So we return null in this case.
         if (!model.exists("number")) return null;
         
-        return BANKS[model.get("bank")] + (model.get("number") + 1);
+        return BANKS[model.get("bank")] + (model.get("number") + 1 < 10 ? "0" : "") + ((model.get("number") + 1));
         }
     }

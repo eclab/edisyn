@@ -232,10 +232,7 @@ public class WaldorfBlofeldMulti extends Synth
                 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, "Patch: ", "bank", "number", 4)
-            {
-            public String numberString(int number) { number += 1; return "M" + ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number; }
-            };
+        comp = new PatchDisplay(this, 4);
         hbox2.add(comp);
         vbox.add(hbox2);
         hbox.add(vbox);
@@ -1213,13 +1210,6 @@ public class WaldorfBlofeldMulti extends Synth
 
 
 
-    public boolean patchLocationEquals(Model patch1, Model patch2)
-        {
-        int number1 = patch1.get("number");
-        int number2 = patch2.get("number");
-        return (number1 == number2);
-        }
-        
     public Model getNextPatchLocation(Model model)
         {
         int number = model.get("number");

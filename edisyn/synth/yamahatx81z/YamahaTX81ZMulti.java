@@ -142,11 +142,7 @@ public class YamahaTX81ZMulti extends Synth
                 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, "Patch", null, "number", 4)
-            {
-            public String numberString(int number) { number += 1; return (number > 9 ? "0" : "00") + number; }
-            public String bankString(int bank) { return ""; }
-            };
+        comp = new PatchDisplay(this, 4);
         hbox2.add(comp);
         vbox.add(hbox2);
         
@@ -886,13 +882,6 @@ public class YamahaTX81ZMulti extends Synth
 
     public String getPatchName(Model model) { return model.get("name", "INIT VOICE"); }
 
-    public boolean patchLocationEquals(Model patch1, Model patch2)
-        {
-        int number1 = patch1.get("number");
-        int number2 = patch2.get("number");
-        return (number1 == number2);
-        }
-        
     public Model getNextPatchLocation(Model model)
         {
         int number = model.get("number");

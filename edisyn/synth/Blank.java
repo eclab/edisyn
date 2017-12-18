@@ -284,7 +284,7 @@ public class Blank extends Synth
         // For example, they're both Bank B, Number 72.
         //
         // This method is used for doing batch downloads.
-        return false;
+        return super.patchLocationEquals(patch1, patch2);
         }
     
     

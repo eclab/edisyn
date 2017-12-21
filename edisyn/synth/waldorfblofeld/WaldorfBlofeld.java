@@ -151,6 +151,8 @@ public class WaldorfBlofeld extends Synth
         addTab("Arpeggiator", arpeggiationPanel);
                 
         model.set("name", "Init");
+        model.set("number", 0);
+        model.set("bank", 0);
         
         loadDefaults();
         }
@@ -2405,6 +2407,7 @@ public class WaldorfBlofeld extends Synth
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
         if (!model.exists("number")) return null;
+        if (!model.exists("bank")) return null;
         
         int number = model.get("number") + 1;
         return BANKS[model.get("bank")] + 

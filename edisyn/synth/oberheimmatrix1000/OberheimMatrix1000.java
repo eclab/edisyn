@@ -1908,6 +1908,7 @@ public class OberheimMatrix1000 extends Synth
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
         if (!model.exists("number")) return null;
+        if (!model.exists("bank")) return null;
         
         int number = model.get("number");
         return ("" + model.get("bank")) + 

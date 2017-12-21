@@ -200,6 +200,9 @@ public class WaldorfMicrowaveXT extends Synth
 
         model.set("name", "Init Sound V1.1 ");
 
+        model.set("number", 0);
+        model.set("bank", 0);
+
         // make sure this never can be mutated
         model.set("soundformatversion", 1);  // always
         model.setStatus("soundformatversion", Model.STATUS_IMMUTABLE);
@@ -2483,6 +2486,7 @@ public class WaldorfMicrowaveXT extends Synth
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
         if (!model.exists("number")) return null;
+        if (!model.exists("bank")) return null;
         
         int number = model.get("number") + 1;
         return BANKS[model.get("bank")] +  (number > 99 ? "" : (number > 9 ? "0" : "00")) + number;

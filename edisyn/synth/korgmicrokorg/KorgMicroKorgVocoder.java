@@ -24,6 +24,12 @@ import javax.sound.midi.*;
 
 public class KorgMicroKorgVocoder extends KorgMicroKorg
     {
+	public KorgMicroKorgVocoder()
+		{
+		super();
+        model.set("number", 56);
+		}
+		
 	void setVoiceMode()
     	{
     	model.set("voicemode", 3);
@@ -48,9 +54,13 @@ public class KorgMicroKorgVocoder extends KorgMicroKorg
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x42 &&
             data[3] == (byte)0x58 &&
-            data[4] == (byte)0x40)&&
-            (((data[5 + 16] >>> 4) & 3) >= 3);   // voice mode is vocoder
-        return v;
+            data[4] == (byte)0x40);
+        if (v == false) return false;
+        
+        // now decode.  Are we synth or vocoder?
+        data = convertTo8Bit(data, 5);
+        int voicemode = (data[16] >>> 4) & 3;
+		return (voicemode == 3);  // vocoder
         }
 
     /** Add the global patch category (name, id, number, etc.) */
@@ -100,7 +110,8 @@ public class KorgMicroKorgVocoder extends KorgMicroKorg
         bank.setMaximumRowCount(32);
         bank.setSelectedIndex(model.get("bank"));
                 
-        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+        int numberv = model.get("number");
+        JTextField number = new JTextField("" + (numberv / 8 + 1) + "" + (numberv % 8 + 1), 3);
                 
         while(true)
             {

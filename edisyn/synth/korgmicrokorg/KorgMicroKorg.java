@@ -343,8 +343,9 @@ public class KorgMicroKorg extends Synth
         	};
         hbox.add(comp);        
 
-        comp = new LabelledDial("Swing", this, "arpswing", color, 0, 100)
+        comp = new LabelledDial("Swing", this, "arpswing", color, -100, 100)
         	{
+        	public boolean isSymmetric() { return true; }
         	public String map(int val)
         		{
         		return "" + val + "%";
@@ -1049,7 +1050,9 @@ public class KorgMicroKorg extends Synth
         model.set("arprange", (data[33] >>> 4) & 3);
         model.set("arpgate", data[34]);
         model.set("arpresolution", data[35]);
-        model.set("arpswing", data[36]);
+        int swing = data[36];
+        if (swing >= 128) swing -= 256;  // don't think this is necessary
+        model.set("arpswing", swing);
         model.set("octave", data[37]);
         
         if (voicemode == 0 || voicemode == 1)		// timbre 1 and timbre 2
@@ -1282,7 +1285,7 @@ public class KorgMicroKorg extends Synth
         data[33] = (byte)((model.get("arptype")) | (model.get("arprange") << 4));
         data[34] = (byte)model.get("arpgate");
         data[35] = (byte)model.get("arpresolution");
-        data[36] = (byte)model.get("arpswing");
+        data[36] = (byte)model.get("arpswing");		// this is signed, but it should be okay
         data[37] = (byte)model.get("octave");
         
         int voicemode = (byte)model.get("voicemode");

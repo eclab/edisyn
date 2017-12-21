@@ -329,7 +329,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** All synthesizer editor pane classes in Edisyn */
     public static final Class[] synths = new Class[] 
     { 
-    edisyn.synth.futuresonusparva.FuturesonusParva.class,
+    //edisyn.synth.futuresonusparva.FuturesonusParva.class,
     //edisyn.synth.generic.Generic.class,
     edisyn.synth.korgsg.KorgSG.class,
     edisyn.synth.korgsg.KorgSGMulti.class,

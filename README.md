@@ -18,10 +18,12 @@ Edisyn presently supports:
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
 * Oberheim Matrix 1000
 * PreenFM2
+* Kawai K1, Kawai K1m, and Kawai K1r (Singl and Multi Modes)
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)
 * Yamaha TX81Z (Single and Multi Modes)
 * Korg SG Rack (Single and Multi Modes) and Korg SG Pro X (Single Mode)
 * Korg Microsampler
+* Korg MicroKorg
 
 Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, extensive parameter space exploration tools (randomization/merging/nudging/hill-climbing) with per-parameter customization, real-time parameter updates, test notes, etc.
 

@@ -1504,6 +1504,7 @@ public class KawaiK4 extends Synth
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
         if (!model.exists("number")) return null;
+        if (!model.exists("bank")) return null;
         
         return BANKS[model.get("bank")] + (model.get("number") + 1 < 10 ? "0" : "") + ((model.get("number") + 1));
         }

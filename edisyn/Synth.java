@@ -2123,7 +2123,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(0.02);
                 }
             });
-        randomize2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        randomize2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize5.addActionListener(new ActionListener()
             {
@@ -2132,7 +2132,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(0.05);
                 }
             });
-        randomize5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        randomize5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize10.addActionListener(new ActionListener()
             {
@@ -2141,7 +2141,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(0.1);
                 }
             });
-        randomize10.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        randomize10.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize25.addActionListener(new ActionListener()
             {
@@ -2150,7 +2150,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(0.25);
                 }
             });
-        randomize25.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        randomize25.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize50.addActionListener(new ActionListener()
             {
@@ -2159,7 +2159,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(0.5);
                 }
             });
-        randomize50.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_5, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        randomize50.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize100.addActionListener(new ActionListener()
             {
@@ -2168,7 +2168,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(1.0);
                 }
             });
-        randomize100.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_6, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        randomize100.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         undoAndRandomize.addActionListener(new ActionListener()
             {

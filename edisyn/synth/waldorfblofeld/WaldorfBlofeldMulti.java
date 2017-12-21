@@ -164,6 +164,7 @@ public class WaldorfBlofeldMulti extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Parts 11 - 16", soundPanel);
                 
+        model.set("number", 0);
 
         model.set("name", "Init Multi");  // has to be 16 long
         

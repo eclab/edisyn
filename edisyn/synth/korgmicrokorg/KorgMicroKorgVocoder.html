@@ -1,27 +1,23 @@
 <html><head></head><body bgcolor='black'>
 <font color='white'>
 
-<h1>Korg SG</h1> 
-<h2>Single Patch Editor</h2>
+<h1>Korg MicroKorg</h1> 
+<h2>Vocoder Patch Editor</h2>
 
-<p>This editor will work with the <b>Korg SG Rack</b> and the <b>Korg SG Pro X</b>.
+<p>This editor will work with the <b>Korg MicroKorg</b>.  It probably won't work with the MS2000 family, though with some elbow grease a derivative of it should be easily made to work with them.
 
-<p>Note that though this editor will work with the Pro X, the [Multi] version of this patch editor will not: it only works with the Rack.
-
-<p><b>Communicating with Edisyn</b> Set your SG to have sysex enabled ("MIDI Exclusive: ENA").
+<p><b>Communicating with Edisyn</b> Set WRITE PROTECT to OFF, and set the MIDI FILTER "System Exclusive" setting to ENABLE (E-E).
 
 <p><b>Hints</b>
 <ul>
-<li>Edisyn can set the Depth of various effects individually ("left" or "right") -- you can't do this from the SG's front panel.  You can set both left and right at the same time: just shift-drag (or right-mouse-button-drag, or click with two fingers and drag on the Mac) one of the two Depth dials, and the other will change as well.  This also goes for the Stereo Delay's Delay Time (left and right).
+<li>Confused by how the Hold Levels text fields work?  It's easy.  If you type a new number in the field, it turns bright red to indicate that the number has been typed but not yet entered into Edisyn.  Simply press RETURN or TAB, or click on another text field, or click on another tab, and it'll get automatically entered.  You can cancel what you typed by pressing ESCAPE.
 </ul>
 
 <p><b>Gotchas</b>
 
 <ul>
 <li>
-The SG doesn't receive individual parameter changes: you'll have to make changes, then send or write the patch.
-
-<p><li>The Hyper Enhancer effect type is only available for Effect 1, and its left and right Depth is only "Dry" or "Wet" (nothing in-between).
+The MicroKorg neither sends nor receives individual parameters over sysex.  Only a limited number of items is transmitted over CC or NRPN, so Edisn doesn't implement them to avoid confusion.  You'll have to send your patch to see how the changes you made sound.
 </ul>
 
 
@@ -31,6 +27,6 @@ The SG doesn't receive individual parameter changes: you'll have to make changes
 <td><b>Sean Luke</b>
 <tr>
 <td align=right>Date&nbsp;&nbsp;&nbsp;
-<td>September 2017
+<td>December 2017
 </table>
 

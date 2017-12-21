@@ -1521,6 +1521,7 @@ public class YamahaTX81Z extends Synth
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
         if (!model.exists("number")) return null;
+        if (!model.exists("bank")) return null;
         
         int number = model.get("number") + 1;
         return BANKS[model.get("bank")] + (number > 9 ? "" : "0") + number;

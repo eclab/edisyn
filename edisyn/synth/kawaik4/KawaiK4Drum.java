@@ -663,7 +663,7 @@ public class KawaiK4Drum extends Synth
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
-        if (!model.exists("number")) return null;
+        if (!model.exists("bank")) return null;
         
         return BANKS[model.get("bank")];
         }

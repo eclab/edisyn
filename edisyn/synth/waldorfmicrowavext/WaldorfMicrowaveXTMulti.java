@@ -95,6 +95,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         model.set("name", "Init            ");  // has to be 16 long
         
+        model.set("number", 0);
                         
         loadDefaults();
         }
@@ -268,7 +269,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel(" ");
-        model.removeMetricMinMax("bank" + inst);
+        model.removeMetricMinMax("inst" + inst + "bank");
         vbox.add(comp);
 
 

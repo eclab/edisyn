@@ -4518,6 +4518,7 @@ public abstract class Synth extends JComponent implements Updatable
             String patchname = getPatchName(getModel());
             if (patchname != null && patchname.length() > 0)
                 filename = filename + getPatchName(getModel());
+            filename = filename.trim();
             if (filename.length() == 0)
                 filename = "Patch" + patchCounter + ".syx";
             else

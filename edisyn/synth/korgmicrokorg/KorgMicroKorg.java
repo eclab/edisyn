@@ -84,15 +84,8 @@ public class KorgMicroKorg extends Synth
 			hbox.addLast(addOsc2(timbre, Style.COLOR_A));
 			vbox.add(hbox);
 			hbox = new HBox();
-			if (timbre != 3)
-				{
-				hbox.add(addFilter(timbre, Style.COLOR_B));
-				hbox.addLast(addEnvelope(timbre, 1, Style.COLOR_B));
-				}
-			else
-				{
-				hbox.addLast(addFilter(timbre, Style.COLOR_B));
-				}
+			hbox.add(addFilter(timbre, Style.COLOR_B));
+			hbox.addLast(addEnvelope(timbre, 1, Style.COLOR_B));
 			vbox.add(hbox);
 
 			hbox = new HBox();
@@ -136,7 +129,15 @@ public class KorgMicroKorg extends Synth
 		
         loadDefaults();
         }
-        
+    
+    public JFrame sprout()
+    	{
+    	JFrame frame = super.sprout();
+	    transmitParameters.setSelected(false);
+	    transmitParameters.setEnabled(false);
+	    return frame;
+    	}
+    
     void setVoiceMode()
     	{
        	model.set("voicemode", model.get("voicemode", 0));
@@ -245,7 +246,10 @@ public class KorgMicroKorg extends Synth
 		}
         
         // obviously this may need to be handled specially
-        comp = new LabelledDial("Keyboard", this, "octave", color, -3, 3);
+        comp = new LabelledDial("Keyboard", this, "octave", color, -3, 3)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
         ((LabelledDial)comp).addAdditionalLabel("Octave");
         hbox.add(comp);        
 
@@ -661,7 +665,10 @@ public class KorgMicroKorg extends Synth
 			vbox.add(comp);
 			hbox.add(vbox);
 
-			comp = new LabelledDial("Shift", this, "timbre" + timbre + "filtershift", color, 0, 4, 2);
+			comp = new LabelledDial("Shift", this, "timbre" + timbre + "filtershift", color, 0, 4, 2)
+	        	{
+	        	public boolean isSymmetric() { return true; }
+	        	};
 			hbox.add(comp);
 
 			comp = new LabelledDial("Cutoff", this, "timbre" + timbre + "filtercutoff", color, 64-63, 64+63, 64);
@@ -737,7 +744,7 @@ public class KorgMicroKorg extends Synth
 
 		if (timbre == 3)
 			{
-        	comp = new LabelledDial("Direct", this, "timbre" + timbre + "directlevel", color, 0, 127);
+        	comp = new LabelledDial("Direct", this, "timbre" + timbre + "ampdirectlevel", color, 0, 127);
         	((LabelledDial)comp).addAdditionalLabel("Level");
         	hbox.add(comp);
 			}
@@ -777,24 +784,30 @@ public class KorgMicroKorg extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-        comp = new LabelledDial("Attack", this, "timbreenv" + timbre + "" + envelope + "attack", color, 0, 127);
-        hbox.add(comp);
+        if (timbre != 3 || envelope != 1)
+        	{
+        	comp = new LabelledDial("Attack", this, "timbreenv" + timbre + "" + envelope + "attack", color, 0, 127);
+	        hbox.add(comp);
 
-        comp = new LabelledDial("Decay", this, "timbreenv" + timbre + "" + envelope + "decay", color, 0, 127);
-        hbox.add(comp);
+    	    comp = new LabelledDial("Decay", this, "timbreenv" + timbre + "" + envelope + "decay", color, 0, 127);
+        	hbox.add(comp);
+        	}
 
         comp = new LabelledDial("Sustain", this, "timbreenv" + timbre + "" + envelope + "sustain", color, 0, 127);
         hbox.add(comp);
 
-        comp = new LabelledDial("Release", this, "timbreenv" + timbre + "" + envelope + "release", color, 0, 127);
-        hbox.add(comp);
+		if (timbre != 3 || envelope != 1)
+			{
+			comp = new LabelledDial("Release", this, "timbreenv" + timbre + "" + envelope + "release", color, 0, 127);
+			hbox.add(comp);
 
-        comp = new EnvelopeDisplay(this, Color.red, 
-            new String[] { null, "timbreenv" + timbre + "" + envelope + "attack", "timbreenv" + timbre + "" + envelope + "decay", null,"timbreenv" + timbre + "" + envelope + "release" },
-            new String[] { null, null, "timbreenv" + timbre + "" + envelope + "sustain", "timbreenv" + timbre + "" + envelope + "sustain", null },
-            new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
-            new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
-        hbox.addLast(comp);
+			comp = new EnvelopeDisplay(this, Color.red, 
+				new String[] { null, "timbreenv" + timbre + "" + envelope + "attack", "timbreenv" + timbre + "" + envelope + "decay", null,"timbreenv" + timbre + "" + envelope + "release" },
+				new String[] { null, null, "timbreenv" + timbre + "" + envelope + "sustain", "timbreenv" + timbre + "" + envelope + "sustain", null },
+				new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
+				new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
+			hbox.addLast(comp);
+			}
                 
         category.add(hbox);
         return category;
@@ -1153,8 +1166,7 @@ public class KorgMicroKorg extends Synth
 			model.set("timbre" + i + "amplevel", data[offset + 27]);
 			model.set("timbre" + i + "ampdirectlevel", data[offset + 28]);
 			model.set("timbre" + i + "ampdistortion", data[offset + 29] & 1);
-			model.set("timbre" + i + "ampvelsense", data[offset + 30]);
-			model.set("timbre" + i + "ampkeytrack", data[offset + 31]);
+			model.set("timbre" + i + "ampkeyboardtrack", data[offset + 31]);
 			model.set("timbreenv" + i + "1" + "sustain", data[offset + 34]);
 			model.set("timbreenv" + i + "2" + "attack", data[offset + 36]);
 			model.set("timbreenv" + i + "2" + "decay", data[offset + 37]);
@@ -1286,7 +1298,7 @@ public class KorgMicroKorg extends Synth
         data[34] = (byte)model.get("arpgate");
         data[35] = (byte)model.get("arpresolution");
         data[36] = (byte)model.get("arpswing");		// this is signed, but it should be okay
-        data[37] = (byte)model.get("octave");
+        data[37] = (byte)model.get("octave");		// this is signed, but it should be okay
         
         int voicemode = (byte)model.get("voicemode");
         if (voicemode == 0 || voicemode == 1)		// timbre 1 and timbre 2
@@ -1396,9 +1408,8 @@ public class KorgMicroKorg extends Synth
 			data[offset + 27] = (byte)model.get("timbre" + i + "amplevel");
 			data[offset + 28] = (byte)model.get("timbre" + i + "ampdirectlevel");
 			data[offset + 29] = (byte)model.get("timbre" + i + "ampdistortion");
-			data[offset + 30] = (byte)model.get("timbre" + i + "ampvelsense");
-			data[offset + 31] = (byte)model.get("timbre" + i + "ampkeytrack");
-			data[offset + 31] = (byte)model.get("timbre" + i + "ampkeytrack");
+			data[offset + 30] = (byte)64;
+			data[offset + 31] = (byte)model.get("timbre" + i + "ampkeyboardtrack");
 			data[offset + 32] = data[offset + 33] = 0;
 			data[offset + 34] = (byte)model.get("timbreenv" + i + "1" + "sustain");
 			data[offset + 35] = 0;

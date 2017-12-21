@@ -28,6 +28,7 @@ public class KorgMicroKorgVocoder extends KorgMicroKorg
 		{
 		super();
         model.set("number", 56);
+		model.set("arptarget", 0); // set it to something
 		}
 		
 	void setVoiceMode()

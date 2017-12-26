@@ -32,6 +32,11 @@ import java.awt.event.*;
     1. Iterate
     2. Rate
     3. Backup
+    
+    
+    Hill-Climbing variations
+    
+    
 
 ***/
 
@@ -478,6 +483,27 @@ public class HillClimb extends SynthPanel
         // Standard Mutations and Recombinations
         
         /**
+        	The original sound is Z.
+        	The user chooses A, B, and C.
+        	The mutations are:
+        	
+        	Noisy A + B
+        	Noisy A + C
+        	Noisy B + C
+        	Noisy A + (B + C)
+        	Noisy Beyond A
+        	Noisy Beyond B
+        	Noisy Beyond C
+			Noisy Beyond Beyond A
+        	Noisy A
+        	Noisy Noisy A
+        	Noisy Noisy Noisy A
+        	Noisy B
+        	Noisy Beyond B from A
+        	Noisy C
+        	Noisy Beyond C from A
+        	Current Patch
+        	
            The Mutations are
            A
            A + B
@@ -497,6 +523,40 @@ public class HillClimb extends SynthPanel
            Current Patch
         */
         
+        // Noisy A + B
+        currentModels[0] = ((Model)(bestModels[0].clone())).recombine(random, bestModels[1], keys, recombination).mutate(random, keys, weight / 2.0);
+        // Noisy A + C
+        currentModels[1] = ((Model)(bestModels[0].clone())).recombine(random, bestModels[2], keys, recombination).mutate(random, keys, weight / 2.0);
+        // Noisy B + C
+        currentModels[2] = ((Model)(bestModels[1].clone())).recombine(random, bestModels[2], keys, recombination).mutate(random, keys, weight / 2.0);
+        // Noisy A + (B + C)
+        currentModels[3] = ((Model)(bestModels[0].clone())).recombine(random, ((Model)(bestModels[1].clone())).recombine(random, bestModels[2], keys, recombination), keys, recombination).mutate(random, keys, weight / 2.0);
+        // Noisy Beyond A from Z
+        currentModels[4] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, recombination, false).mutate(random, keys, weight / 2.0);
+        // Noisy Beyond B from Z
+        currentModels[5] = ((Model)(bestModels[1].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, recombination, false).mutate(random, keys, weight / 2.0);
+        // Noisy Beyond C from Z
+        currentModels[6] = ((Model)(bestModels[1].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, recombination, false).mutate(random, keys, weight / 2.0);
+        // Noisy Even further Beyond A from Z
+        currentModels[7] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, 2.0 * recombination, false).mutate(random, keys, weight / 2.0);
+        // Noisy A
+        currentModels[8] = ((Model)(bestModels[0].clone())).mutate(random, keys, weight / 2.0);
+        // Noisy Noisy A
+        currentModels[9] = ((Model)(bestModels[0].clone())).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0);
+        // Noisy Noisy Noisy A
+        currentModels[10] = ((Model)(bestModels[0].clone())).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0);
+        // Noisy B
+        currentModels[11] = ((Model)(bestModels[1].clone())).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0);
+        // Noisy Noisy B
+        currentModels[12] = ((Model)(bestModels[1].clone())).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0);
+        // Noisy C
+        currentModels[13] = ((Model)(bestModels[2].clone())).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0);
+        // Noisy Noisy C
+        currentModels[14] = ((Model)(bestModels[2].clone())).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0);
+        // Current patch
+        currentModels[15] = ((Model)(synth.getModel().clone()));
+        
+        /*
         // A
         currentModels[0] = ((Model)(bestModels[0].clone()));
         // A + B
@@ -526,6 +586,7 @@ public class HillClimb extends SynthPanel
         currentModels[14] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, 2.0 * recombination, false);
         // Current patch
         currentModels[15] = ((Model)(synth.getModel().clone()));
+        */
 
 
         oldA.add(bestModels[0]);

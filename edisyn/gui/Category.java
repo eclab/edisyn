@@ -517,7 +517,7 @@ public class Category extends JComponent implements Gatherable
         
         final boolean[] paintingBorder = new boolean[1];
         
-        final MatteBorder matteBorder = new MatteBorder(Style.CATEGORY_STROKE_WIDTH, 0, 0, 0, color)
+        final MatteBorder matteBorder = new MatteBorder(Style.CATEGORY_STROKE_WIDTH(), 0, 0, 0, color)
             {
             public Insets getBorderInsets(Component c, Insets insets)
                 {
@@ -533,7 +533,7 @@ public class Category extends JComponent implements Gatherable
             " " + label + " ",
             TitledBorder.LEFT,
             TitledBorder.TOP,
-            Style.CATEGORY_FONT,
+            Style.CATEGORY_FONT(),
             color)
             {
             public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) 
@@ -544,7 +544,7 @@ public class Category extends JComponent implements Gatherable
                 }
             };
                 
-        Border b = BorderFactory.createCompoundBorder(Style.CATEGORY_BORDER, titledBorder);
+        Border b = BorderFactory.createCompoundBorder(Style.CATEGORY_BORDER(), titledBorder);
         setBorder(b);
         repaint();
         }
@@ -569,7 +569,7 @@ public class Category extends JComponent implements Gatherable
         Rectangle rect = getBounds();
         rect.x = 0;
         rect.y = 0;
-        graphics.setPaint(Style.BACKGROUND_COLOR);
+        graphics.setPaint(Style.BACKGROUND_COLOR());
         graphics.fill(rect);
         }
     }

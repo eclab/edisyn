@@ -668,5 +668,16 @@ public class Blank extends Synth
         // to, override this to return some other channel.
         return channel;
         }
+        
+     public void messageFromController(MidiMessage message, boolean interceptedForInternalUse, boolean routedToSynth)
+     	{ 
+     	// Whenever a message from the controller arrives, this message is called.  It is possible
+     	// for both of these parameters to be FALSE, if there was an error in reconstructing the
+     	// message to send it out, or (much more likely) if the user turned off routing.  It is
+     	// presently NOT possible for both of these values to be true; though this might be the case
+     	// in the future.
+     	return; 
+     	}
+
 
     }

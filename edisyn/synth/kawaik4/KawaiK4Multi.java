@@ -56,12 +56,12 @@ public class KawaiK4Multi extends Synth
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.addLast(addGlobal(Style.COLOR_B));
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.addLast(addGlobal(Style.COLOR_B()));
         vbox.add(hbox);
         
-        vbox.add(addSection(1, Style.COLOR_A));
-        vbox.add(addSection(2, Style.COLOR_A));
+        vbox.add(addSection(1, Style.COLOR_A()));
+        vbox.add(addSection(2, Style.COLOR_A()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Global, Sections 1-2", soundPanel);
@@ -70,9 +70,9 @@ public class KawaiK4Multi extends Synth
         SynthPanel sourcePanel = new SynthPanel();
         vbox = new VBox();
         
-        vbox.add(addSection(3, Style.COLOR_A));
-        vbox.add(addSection(4, Style.COLOR_A));
-        vbox.add(addSection(5, Style.COLOR_A));
+        vbox.add(addSection(3, Style.COLOR_A()));
+        vbox.add(addSection(4, Style.COLOR_A()));
+        vbox.add(addSection(5, Style.COLOR_A()));
             
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("Sections 3-5", sourcePanel);
@@ -80,9 +80,9 @@ public class KawaiK4Multi extends Synth
         sourcePanel = new SynthPanel();
         vbox = new VBox();
         
-        vbox.add(addSection(6, Style.COLOR_A));
-        vbox.add(addSection(7, Style.COLOR_A));
-        vbox.add(addSection(8, Style.COLOR_A));
+        vbox.add(addSection(6, Style.COLOR_A()));
+        vbox.add(addSection(7, Style.COLOR_A()));
+        vbox.add(addSection(8, Style.COLOR_A()));
 
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("Sections 6-8", sourcePanel);

@@ -91,12 +91,12 @@ public class Chooser extends NumericalComponent
 
     public Insets getInsets() 
         { 
-        if (Style.CHOOSER_INSETS == null)
+        if (Style.CHOOSER_INSETS() == null)
             return super.getInsets();
         else if (Style.isWindows())
-            return Style.CHOOSER_WINDOWS_INSETS;
+            return Style.CHOOSER_WINDOWS_INSETS();
         else
-            return Style.CHOOSER_INSETS; 
+            return Style.CHOOSER_INSETS(); 
         }
 
     /** Creates a JComboBox with the given label, modifying the given key in the Style.
@@ -114,9 +114,9 @@ public class Chooser extends NumericalComponent
         {
         super(synth, key);
                 
-        label.setFont(Style.SMALL_FONT);
-        label.setBackground(Style.TRANSPARENT);
-        label.setForeground(Style.TEXT_COLOR);
+        label.setFont(Style.SMALL_FONT());
+        label.setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
+        label.setForeground(Style.TEXT_COLOR());
         //label.setMaximumSize(label.getPreferredSize());
 
         combo = new JComboBox(elements)
@@ -149,7 +149,7 @@ public class Chooser extends NumericalComponent
 
         combo.putClientProperty("JComponent.sizeVariant", "small");
         combo.setEditable(false);
-        combo.setFont(Style.SMALL_FONT);
+        combo.setFont(Style.SMALL_FONT());
         combo.setMaximumRowCount(33);           // 33, not 32, to accommodate modulation destinations for Matrix 1000
         
         setElements(_label, elements);

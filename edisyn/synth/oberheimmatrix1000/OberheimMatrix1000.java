@@ -60,16 +60,16 @@ public class OberheimMatrix1000 extends Synth
         SynthPanel soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.addLast(addOscillatorGlobal(Style.COLOR_A));
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.addLast(addOscillatorGlobal(Style.COLOR_A()));
         vbox.add(hbox);
         
-        vbox.add(addOscillator(1, Style.COLOR_A));
-        vbox.add(addOscillator(2, Style.COLOR_A));
+        vbox.add(addOscillator(1, Style.COLOR_A()));
+        vbox.add(addOscillator(2, Style.COLOR_A()));
         
         hbox = new HBox();
-        hbox.add(addFilter(Style.COLOR_C));
-        hbox.addLast(addAmplifier(Style.COLOR_C));
+        hbox.add(addFilter(Style.COLOR_C()));
+        hbox.addLast(addAmplifier(Style.COLOR_C()));
         vbox.add(hbox);
         
 
@@ -83,18 +83,18 @@ public class OberheimMatrix1000 extends Synth
         vbox = new VBox();
 
         hbox = new HBox();
-        hbox.add(addLFO(1, Style.COLOR_A));
-        hbox.addLast(addRamp(1, Style.COLOR_A));
+        hbox.add(addLFO(1, Style.COLOR_A()));
+        hbox.addLast(addRamp(1, Style.COLOR_A()));
         vbox.add(hbox);
                 
         hbox = new HBox();
-        hbox.add(addLFO(2, Style.COLOR_A));
-        hbox.addLast(addRamp(2, Style.COLOR_A));
+        hbox.add(addLFO(2, Style.COLOR_A()));
+        hbox.addLast(addRamp(2, Style.COLOR_A()));
         vbox.add(hbox);
                         
-        vbox.add(addEnvelope(1,Style.COLOR_B));
-        vbox.add(addEnvelope(2,Style.COLOR_B));
-        vbox.add(addEnvelope(3,Style.COLOR_B));
+        vbox.add(addEnvelope(1,Style.COLOR_B()));
+        vbox.add(addEnvelope(2,Style.COLOR_B()));
+        vbox.add(addEnvelope(3,Style.COLOR_B()));
         
         envelopePanel.add(vbox, BorderLayout.CENTER);
         addTab("LFOs and Envelopes", envelopePanel);
@@ -106,8 +106,8 @@ public class OberheimMatrix1000 extends Synth
         SynthPanel modulationPanel = new SynthPanel();
         
         vbox = new VBox();
-        vbox.add(addModulation(Style.COLOR_A));
-        vbox.add(addTracking(Style.COLOR_B));
+        vbox.add(addModulation(Style.COLOR_A()));
+        vbox.add(addTracking(Style.COLOR_B()));
                 
 
         modulationPanel.add(vbox, BorderLayout.CENTER);

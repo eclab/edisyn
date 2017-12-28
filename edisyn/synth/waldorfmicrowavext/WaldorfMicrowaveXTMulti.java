@@ -60,12 +60,12 @@ public class WaldorfMicrowaveXTMulti extends Synth
         
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
-        vbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        vbox.add(addMultiData(Style.COLOR_A));
+        vbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        vbox.add(addMultiData(Style.COLOR_A()));
 
         for(int i = 1; i < 3; i++)
             {
-            vbox.add(addInstrument(i, Style.COLOR_B));
+            vbox.add(addInstrument(i, Style.COLOR_B()));
             }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -76,7 +76,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         for(int i = 3; i < 6; i++)
             {
-            vbox.add(addInstrument(i, Style.COLOR_B));
+            vbox.add(addInstrument(i, Style.COLOR_B()));
             }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -87,7 +87,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         for(int i = 6; i < 9; i++)
             {
-            vbox.add(addInstrument(i, Style.COLOR_B));
+            vbox.add(addInstrument(i, Style.COLOR_B()));
             }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);

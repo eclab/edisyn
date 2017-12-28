@@ -77,13 +77,13 @@ public class KawaiK1 extends Synth
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.addLast(addSourceGlobal(Style.COLOR_A));
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.addLast(addSourceGlobal(Style.COLOR_A()));
         vbox.add(hbox);
         
         hbox = new HBox();
-        hbox.add(addVibrato(Style.COLOR_C));
-        hbox.addLast(addAutoBend(Style.COLOR_C));
+        hbox.add(addVibrato(Style.COLOR_C()));
+        hbox.addLast(addAutoBend(Style.COLOR_C()));
         vbox.add(hbox);
         
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -93,11 +93,11 @@ public class KawaiK1 extends Synth
         JComponent sourcePanel = new SynthPanel();
         vbox = new VBox();
         
-        vbox.add(addSource(1, Style.COLOR_A));
-        vbox.add(addEnvelope(1, Style.COLOR_B));
+        vbox.add(addSource(1, Style.COLOR_A()));
+        vbox.add(addEnvelope(1, Style.COLOR_B()));
 
-        vbox.add(addSource(2, Style.COLOR_A));
-        vbox.add(addEnvelope(2, Style.COLOR_B));
+        vbox.add(addSource(2, Style.COLOR_A()));
+        vbox.add(addEnvelope(2, Style.COLOR_B()));
 
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("Sources 1-2", sourcePanel);
@@ -105,11 +105,11 @@ public class KawaiK1 extends Synth
         sourcePanel = new SynthPanel();
         vbox = new VBox();
         
-        vbox.add(addSource(3, Style.COLOR_A));
-        vbox.add(addEnvelope(3, Style.COLOR_B));
+        vbox.add(addSource(3, Style.COLOR_A()));
+        vbox.add(addEnvelope(3, Style.COLOR_B()));
 
-        vbox.add(addSource(4, Style.COLOR_A));
-        vbox.add(addEnvelope(4, Style.COLOR_B));
+        vbox.add(addSource(4, Style.COLOR_A()));
+        vbox.add(addEnvelope(4, Style.COLOR_B()));
 
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("Sources 3-4", sourcePanel);

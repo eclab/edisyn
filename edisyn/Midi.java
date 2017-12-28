@@ -986,10 +986,15 @@ public class Midi
     public static String getManufacturerForSysex(byte[] data)
         {
         int offset = 0;
-        if (data[0] == 0xF0)
+        if (data[0] == (byte)0xF0)
         	offset = 1;
         HashMap map = getManufacturers();
-        if (data[0 + offset] == 0x00)
+        if (data[0 + offset] == (byte)0x7D)		// educational use
+        	{
+            return (String)(map.get(new Integer(data[0 + offset]))) + 
+            	"\n\nNote that unregistered manufacturers or developers typically\n use this system exclusive region.";
+        	}
+        else if (data[0 + offset] == (byte)0x00)
             {
             return (String)(map.get(new Integer(
                         0x00 + 

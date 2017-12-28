@@ -85,15 +85,15 @@ public class StringComponent extends JComponent implements Updatable, HasKey
         this.synth = synth;
         synth.getModel().register(key, this);
                 
-        setBackground(Style.BACKGROUND_COLOR);
+        setBackground(Style.BACKGROUND_COLOR());
         setLayout(new BorderLayout());
                 
         label = new JLabel("  " + _label);
         if (_label != null)
         	{
-	        label.setFont(Style.SMALL_FONT);
-	        label.setBackground(Style.TRANSPARENT);
-	        label.setForeground(Style.TEXT_COLOR);
+	        label.setFont(Style.SMALL_FONT());
+	        label.setBackground(Style.BACKGROUND_COLOR());  // Style.TRANSPARENT);
+	        label.setForeground(Style.TEXT_COLOR());
             add(label, BorderLayout.NORTH);
             }
  
@@ -102,7 +102,7 @@ public class StringComponent extends JComponent implements Updatable, HasKey
             txt = txt + "m";
         change = new JButton(txt);
         change.putClientProperty("JComponent.sizeVariant", "small");
-        change.setFont(Style.SMALL_FONT);
+        change.setFont(Style.SMALL_FONT());
         change.setPreferredSize(change.getPreferredSize());
         change.setHorizontalAlignment(SwingConstants.CENTER);
                 
@@ -177,7 +177,7 @@ public class StringComponent extends JComponent implements Updatable, HasKey
         Rectangle rect = getBounds();
         rect.x = 0;
         rect.y = 0;
-        graphics.setPaint(Style.BACKGROUND_COLOR);
+        graphics.setPaint(Style.BACKGROUND_COLOR());
         graphics.fill(rect);
         }
     }

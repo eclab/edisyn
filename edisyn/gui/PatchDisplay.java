@@ -35,9 +35,9 @@ public class PatchDisplay extends JPanel implements Updatable
         {
         this.synth = synth;
         Model model = synth.getModel();
-        setBackground(Style.BACKGROUND_COLOR);
+        setBackground(Style.BACKGROUND_COLOR());
         setLayout(new BorderLayout());
-        setBorder(Style.PATCH_BORDER);        
+        setBorder(Style.PATCH_BORDER());        
                 
         final Dimension[] dim = new Dimension[1];
         text = new JLabel(buildInitialString(columns))
@@ -52,10 +52,10 @@ public class PatchDisplay extends JPanel implements Updatable
                 }
             };
                 
-        text.setFont(Style.MEDIUM_FONT);
+        text.setFont(Style.MEDIUM_FONT());
         text.setText(buildInitialString(columns));
-        text.setBackground(Style.BACKGROUND_COLOR);
-        text.setForeground(Style.TEXT_COLOR);
+        text.setBackground(Style.BACKGROUND_COLOR());
+        text.setForeground(Style.TEXT_COLOR());
         // lock the preferred size to max of columns
         dim[0] = text.getPreferredSize();
     
@@ -66,9 +66,9 @@ public class PatchDisplay extends JPanel implements Updatable
         add(text, BorderLayout.CENTER);
         
         JLabel lab = new JLabel(label, SwingConstants.LEFT);
-        lab.setFont(Style.SMALL_FONT);
-        lab.setBackground(Style.BACKGROUND_COLOR);
-        lab.setForeground(Style.TEXT_COLOR);
+        lab.setFont(Style.SMALL_FONT());
+        lab.setBackground(Style.BACKGROUND_COLOR());
+        lab.setForeground(Style.TEXT_COLOR());
         add(lab, BorderLayout.NORTH);
 
         if (bankKey != null)

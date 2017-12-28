@@ -31,7 +31,7 @@ public class PushButton extends JPanel
         {
         button = new JButton(text);
         button.putClientProperty("JComponent.sizeVariant", "small");
-        button.setFont(Style.SMALL_FONT);
+        button.setFont(Style.SMALL_FONT());
         button.setHorizontalAlignment(SwingConstants.CENTER);
                 
         button.addActionListener(new ActionListener()
@@ -41,7 +41,7 @@ public class PushButton extends JPanel
                 perform();
                 }
             });
-        setBackground(Style.BACKGROUND_COLOR);
+        setBackground(Style.BACKGROUND_COLOR());
         setLayout(new BorderLayout());
         add(button, BorderLayout.CENTER);
         }

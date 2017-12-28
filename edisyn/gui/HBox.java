@@ -30,7 +30,7 @@ public class HBox extends JComponent implements Gatherable
     JPanel panel = new JPanel();
     JComponent lastComponent;
         
-    public Insets getInsets() { return Style.HBOX_INSETS; }
+    public Insets getInsets() { return Style.HBOX_INSETS(); }
 
     public HBox()
         {
@@ -42,14 +42,14 @@ public class HBox extends JComponent implements Gatherable
     public HBox(int alternative)
         {
         setLayout(new BorderLayout());
-        setBackground(Style.BACKGROUND_COLOR);
+        setBackground(Style.BACKGROUND_COLOR());
         box = new Box(BoxLayout.X_AXIS);
         if (alternative == LEFT_CONSUMES)
             add(box, BorderLayout.EAST);
         else
             add(box, BorderLayout.WEST);            
         panel.setLayout(new BorderLayout());
-        panel.setBackground(Style.BACKGROUND_COLOR);
+        panel.setBackground(Style.BACKGROUND_COLOR());
         add(panel, BorderLayout.CENTER);
         }
     

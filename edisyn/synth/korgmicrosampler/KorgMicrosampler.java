@@ -246,14 +246,14 @@ public class KorgMicrosampler extends Synth
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.add(addGlobal(Style.COLOR_A));
-        hbox.addLast(addPattern(Style.COLOR_B));
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.add(addGlobal(Style.COLOR_A()));
+        hbox.addLast(addPattern(Style.COLOR_B()));
         vbox.add(hbox);
         
-        vbox.add(addSample(Style.COLOR_B));
+        vbox.add(addSample(Style.COLOR_B()));
                 
-        vbox.add(addFX(Style.COLOR_C));
+        vbox.add(addFX(Style.COLOR_C()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("MicroSampler", soundPanel);

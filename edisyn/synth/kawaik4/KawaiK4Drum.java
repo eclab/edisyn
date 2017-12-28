@@ -79,11 +79,11 @@ public class KawaiK4Drum extends Synth
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.addLast(addGlobal(Style.COLOR_A));
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.addLast(addGlobal(Style.COLOR_A()));
         vbox.add(hbox);
         
-        vbox.add(addKeys(Style.COLOR_B));
+        vbox.add(addKeys(Style.COLOR_B()));
 
         soundPanel.add(vbox);
 
@@ -505,6 +505,26 @@ public class KawaiK4Drum extends Synth
         return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x04, (byte)index, (byte)((note << 1) | msb), (byte)lsb, (byte)0xF7 };
         }
 
+
+    public void messageFromController(MidiMessage message, boolean interceptedForInternalUse, boolean routedToSynth)
+    	{ 
+    	if (message instanceof ShortMessage)
+    		{
+            ShortMessage s = (ShortMessage)message;
+            int status = s.getStatus();
+            
+            // NOTE_ON has a status from 0x90 to 0x9F (for all 16 channels)
+            // and also cannot be velocity=0, since that would be equivalent to a NOTE OFF
+            if (status >= ShortMessage.NOTE_ON && status <= ShortMessage.NOTE_ON + 15 && s.getData2() > 0)  // 0x90 to 0x9F
+            	{
+                                        int key = s.getData1();
+                if (key >= 36 && key <= 96)
+                	{
+                	model.set("note", key);
+                	}           
+                }
+            }
+    	}
 
     public int getVoiceMessageRoutedChannel(int channel)
         {

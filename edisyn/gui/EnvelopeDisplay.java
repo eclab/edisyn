@@ -131,7 +131,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         this.synth = synth;
         this.color = color;     
         semiTransparent = new Color(color.getRed(), color.getGreen(), 
-            color.getBlue(), (int)(color.getAlpha() * Style.ENVELOPE_DISPLAY_FILL_TRANSPARENCY));
+            color.getBlue(), (int)(color.getAlpha() * Style.ENVELOPE_DISPLAY_FILL_TRANSPARENCY()));
         int len = 0;
         this.angles = angles;
         
@@ -169,7 +169,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             if (yKeys[i] != null)
                 synth.getModel().register(yKeys[i], this);
                         
-        setBackground(Style.BACKGROUND_COLOR);
+        setBackground(Style.BACKGROUND_COLOR());
         }
 
     /** Mostly fills the background appropriately. */
@@ -214,19 +214,19 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         rect.x = 0;
         rect.y = 0;
 
-        graphics.setPaint(Style.BACKGROUND_COLOR);
+        graphics.setPaint(Style.BACKGROUND_COLOR());
         graphics.fill(rect);
         
         // revise
         
         graphics.setColor(color);
 
-        rect.width -= Style.ENVELOPE_DISPLAY_BORDER_THICKNESS * 2;
-        rect.height -= Style.ENVELOPE_DISPLAY_BORDER_THICKNESS * 2;
+        rect.width -= Style.ENVELOPE_DISPLAY_BORDER_THICKNESS() * 2;
+        rect.height -= Style.ENVELOPE_DISPLAY_BORDER_THICKNESS() * 2;
         //rect.height -= spaceForLoopInterval * numLoops;
 
-        rect.x += Style.ENVELOPE_DISPLAY_BORDER_THICKNESS;
-        rect.y += Style.ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS;
+        rect.x += Style.ENVELOPE_DISPLAY_BORDER_THICKNESS();
+        rect.y += Style.ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS();
         Line2D.Double line = new Line2D.Double(rect.x, rect.y, rect.x + rect.width, rect.y);
         graphics.draw(line);
         line = new Line2D.Double(rect.x, rect.y + rect.height, rect.x + rect.width, rect.y + rect.height);
@@ -258,17 +258,17 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         
         p.moveTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
         fillp.lineTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
-        marker[0] = new Ellipse2D.Double((rect.x + xs[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0),
-            (rect.y + rect.height - ys[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0),
-            Style.ENVELOPE_DISPLAY_MARKER_WIDTH, Style.ENVELOPE_DISPLAY_MARKER_WIDTH);
+        marker[0] = new Ellipse2D.Double((rect.x + xs[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+            (rect.y + rect.height - ys[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+            Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
         
         for(int i = 1; i < xs.length; i++)
             {
             p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
             fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
-            marker[i] = new Ellipse2D.Double((rect.x + xs[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0),
-                (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0),
-                Style.ENVELOPE_DISPLAY_MARKER_WIDTH, Style.ENVELOPE_DISPLAY_MARKER_WIDTH);
+            marker[i] = new Ellipse2D.Double((rect.x + xs[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
             } 
         
         int end = xs.length - 1;
@@ -294,7 +294,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             {
             graphics.setColor(color);
             line = new Line2D.Double(rect.x, rect.y + startHeight, rect.x + rect.width, rect.y + startHeight);
-            graphics.setStroke(Style.ENVELOPE_AXIS_STROKE);
+            graphics.setStroke(Style.ENVELOPE_AXIS_STROKE());
             graphics.draw(line);
             }
             
@@ -305,7 +305,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             int sustainStage = postProcessLoopOrStageKey(sustainStageKey, synth.getModel().get(sustainStageKey, 0));
             line = new Line2D.Double(rect.x + xs[sustainStage], rect.y,
                 rect.x + xs[sustainStage], rect.y + rect.height);
-            graphics.setStroke(Style.ENVELOPE_AXIS_STROKE);
+            graphics.setStroke(Style.ENVELOPE_AXIS_STROKE());
             graphics.draw(line);
             }
         
@@ -329,16 +329,16 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             double loopHeight = rect.y + rect.height + 6 * (i + 1);
             line = new Line2D.Double(loopStart, loopHeight, loopEnd, loopHeight);
             graphics.draw(line);
-            Ellipse2D.Double loopEndMarker = new Ellipse2D.Double( loopEnd - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0,
-                loopHeight - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0,
-                Style.ENVELOPE_DISPLAY_MARKER_WIDTH, Style.ENVELOPE_DISPLAY_MARKER_WIDTH);
-            graphics.setColor(Style.BACKGROUND_COLOR);
+            Ellipse2D.Double loopEndMarker = new Ellipse2D.Double( loopEnd - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                loopHeight - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+            graphics.setColor(Style.BACKGROUND_COLOR());
             graphics.fill(loopEndMarker);
             graphics.setColor(color);
             graphics.draw(loopEndMarker);
-            Ellipse2D.Double loopStartMarker = new Ellipse2D.Double( loopStart - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0,
-                loopHeight - Style.ENVELOPE_DISPLAY_MARKER_WIDTH/2.0,
-                Style.ENVELOPE_DISPLAY_MARKER_WIDTH, Style.ENVELOPE_DISPLAY_MARKER_WIDTH);
+            Ellipse2D.Double loopStartMarker = new Ellipse2D.Double( loopStart - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                loopHeight - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
             graphics.fill(loopStartMarker);
             }
         }

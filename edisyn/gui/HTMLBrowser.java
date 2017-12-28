@@ -98,11 +98,11 @@ public class HTMLBrowser extends JPanel
         {
         infoPane = new JEditorPane()
             {
-            public Insets getInsets() { return Style.HTML_DISPLAY_INSETS; }
+            public Insets getInsets() { return Style.HTML_DISPLAY_INSETS(); }
             };
                 
         // set the base font and force the HTML Browser to use it
-        infoPane.setFont(Style.HTML_DISPLAY_BASE_FONT);
+        infoPane.setFont(Style.HTML_DISPLAY_BASE_FONT());
         infoPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
         infoPane.setBackground(Color.BLACK);
         infoPane.setForeground(Color.WHITE);

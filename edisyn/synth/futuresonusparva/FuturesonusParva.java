@@ -57,21 +57,21 @@ public class FuturesonusParva extends Synth
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.addLast(addVoice(Style.COLOR_C));
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.addLast(addVoice(Style.COLOR_C()));
         vbox.add(hbox);
         
         hbox = new HBox();
-        hbox.add(addOscillator(1, Style.COLOR_A));
-        hbox.addLast(addOscillators(Style.COLOR_A));
+        hbox.add(addOscillator(1, Style.COLOR_A()));
+        hbox.addLast(addOscillators(Style.COLOR_A()));
         vbox.add(hbox);
         
         hbox = new HBox();
-        hbox.addLast(addOscillator(2, Style.COLOR_A));
+        hbox.addLast(addOscillator(2, Style.COLOR_A()));
         vbox.add(hbox);
         
         hbox = new HBox();
-        hbox.addLast(addOscillator(3, Style.COLOR_A));
+        hbox.addLast(addOscillator(3, Style.COLOR_A()));
         vbox.add(hbox);
 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -80,16 +80,16 @@ public class FuturesonusParva extends Synth
         soundPanel = new SynthPanel();
         vbox = new VBox();
 
-        vbox.add(addFilter(Style.COLOR_B));
+        vbox.add(addFilter(Style.COLOR_B()));
         
         hbox = new HBox();
-        hbox.add(addLFO(1, Style.COLOR_A));
-        hbox.add(addLFO(2, Style.COLOR_A));
+        hbox.add(addLFO(1, Style.COLOR_A()));
+        hbox.add(addLFO(2, Style.COLOR_A()));
         vbox.add(hbox);
         
         hbox = new HBox();
-        hbox.add(addLFO(3, Style.COLOR_A));
-        hbox.add(addLFO(4, Style.COLOR_A));
+        hbox.add(addLFO(3, Style.COLOR_A()));
+        hbox.add(addLFO(4, Style.COLOR_A()));
         vbox.add(hbox);
 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -98,10 +98,10 @@ public class FuturesonusParva extends Synth
         soundPanel = new SynthPanel();
         vbox = new VBox();
         
-        vbox.add(addEnvelope(1, Style.COLOR_B));
-        vbox.add(addEnvelope(2, Style.COLOR_B));
-        vbox.add(addEnvelope(3, Style.COLOR_B));
-        vbox.add(addEnvelope(4, Style.COLOR_B));
+        vbox.add(addEnvelope(1, Style.COLOR_B()));
+        vbox.add(addEnvelope(2, Style.COLOR_B()));
+        vbox.add(addEnvelope(3, Style.COLOR_B()));
+        vbox.add(addEnvelope(4, Style.COLOR_B()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Envelopes", soundPanel);
@@ -109,7 +109,7 @@ public class FuturesonusParva extends Synth
 
         soundPanel = new SynthPanel();
         vbox = new VBox();
-        vbox.add(addModulation(Style.COLOR_A));
+        vbox.add(addModulation(Style.COLOR_A()));
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Modulation", soundPanel);

@@ -43,7 +43,7 @@ public class KeyDisplay extends NumericalComponent
         return KEYS[val % 12] + " " + (val / 12);
         }
                 
-    public Dimension getPreferredSize() { return new Dimension(whiteKeyVals.length * Style.KEYBOARD_DEFAULT_WHITE_KEY_WIDTH + 1, Style.KEYBOARD_DEFAULT_WHITE_KEY_HEIGHT); }
+    public Dimension getPreferredSize() { return new Dimension(whiteKeyVals.length * Style.KEYBOARD_DEFAULT_WHITE_KEY_WIDTH() + 1, Style.KEYBOARD_DEFAULT_WHITE_KEY_HEIGHT()); }
     public Dimension getMinimumSize() { return getPreferredSize(); }
     public Dimension getMaximumSize() { return getPreferredSize(); }
         
@@ -105,12 +105,12 @@ public class KeyDisplay extends NumericalComponent
         
         setLayout(new BorderLayout());
         label = new JLabel(title);
-        label.setFont(Style.SMALL_FONT);
-        label.setBackground(Style.TRANSPARENT);
-        label.setForeground(Style.TEXT_COLOR);
+        label.setFont(Style.SMALL_FONT());
+        label.setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
+        label.setForeground(Style.TEXT_COLOR());
         add(label, BorderLayout.SOUTH);    
         add(new KeyDisplay.Inner(), BorderLayout.CENTER); 
-        setBackground(Style.TRANSPARENT);
+        setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
 
         // count the keys
         
@@ -210,7 +210,7 @@ public class KeyDisplay extends NumericalComponent
         {
         public Inner()
             {
-            setBackground(Style.TRANSPARENT);
+            setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
                         
             addMouseListener(new MouseAdapter()
                 {
@@ -298,7 +298,7 @@ public class KeyDisplay extends NumericalComponent
             innerBounds = rect;
                 
             // draw the white notes
-            graphics.setPaint(Style.KEYBOARD_WHITE_COLOR);
+            graphics.setPaint(Style.KEYBOARD_WHITE_COLOR());
             graphics.fill(rect);
 
             int selectedKey = getState() - transpose;
@@ -324,7 +324,7 @@ public class KeyDisplay extends NumericalComponent
                 if (dynamicUpdate) 
                     graphics.setPaint(staticColor);
                 else
-                    graphics.setPaint(Style.KEYBOARD_DYNAMIC_COLOR);
+                    graphics.setPaint(Style.KEYBOARD_DYNAMIC_COLOR());
                 for(int i = 0; i < whiteKeyVals.length; i++)
                     {
                     if (whiteKeyVals[i] == dynamicKey)
@@ -340,7 +340,7 @@ public class KeyDisplay extends NumericalComponent
                 }        
                 
             // draw the cracks between the white notes
-            graphics.setPaint(Style.KEYBOARD_BLACK_COLOR);
+            graphics.setPaint(Style.KEYBOARD_BLACK_COLOR());
             graphics.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, null, 0.0f));
             for(int i = 1; i < whiteKeys.length; i++)
                 {
@@ -361,16 +361,16 @@ public class KeyDisplay extends NumericalComponent
                     if (dynamicUpdate) 
                         graphics.setPaint(staticColor);
                     else
-                        graphics.setPaint(Style.KEYBOARD_DYNAMIC_COLOR);
+                        graphics.setPaint(Style.KEYBOARD_DYNAMIC_COLOR());
                     graphics.fill(r);
-                    graphics.setPaint(Style.KEYBOARD_BLACK_COLOR);
+                    graphics.setPaint(Style.KEYBOARD_BLACK_COLOR());
                     graphics.draw(r);
                     }
                 else if (blackKeyVals[i] == selectedKey)
                     {
                     graphics.setPaint(staticColor);
                     graphics.fill(r);
-                    graphics.setPaint(Style.KEYBOARD_BLACK_COLOR);
+                    graphics.setPaint(Style.KEYBOARD_BLACK_COLOR());
                     graphics.draw(r);
                     }
                 else
@@ -380,7 +380,7 @@ public class KeyDisplay extends NumericalComponent
                 }
                         
             // draw a border of white
-            graphics.setPaint(Style.KEYBOARD_WHITE_COLOR);
+            graphics.setPaint(Style.KEYBOARD_WHITE_COLOR());
             graphics.draw(rect);
             }
         }

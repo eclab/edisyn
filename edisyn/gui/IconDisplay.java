@@ -39,11 +39,11 @@ public class IconDisplay extends JComponent implements Updatable
         this.label = new JLabel(label);
         this.icon = new JLabel(icons[0]);
 
-        this.label.setFont(Style.SMALL_FONT);
-        this.label.setBackground(Style.TRANSPARENT);
-        this.label.setForeground(Style.TEXT_COLOR);
-        setBackground(Style.TRANSPARENT);
-        this.icon.setBackground(Style.TRANSPARENT);
+        this.label.setFont(Style.SMALL_FONT());
+        this.label.setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
+        this.label.setForeground(Style.TEXT_COLOR());
+        setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
+        this.icon.setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
 
         setLayout(new BorderLayout());
         add(this.icon, BorderLayout.CENTER);

@@ -103,12 +103,12 @@ public abstract class NumericalComponent extends JComponent implements Updatable
         // If we're supposed to show our mutation, and I'm free to mutate, but I'm not showing it, show it
         if (synth.isShowingMutation() && synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
             {
-            borderColor = Color.RED;
+            borderColor = Style.DYNAMIC_COLOR();
             }
         // In all other situations, I should not be showing mutation.  If I am, stop it.
         else 
             {
-            borderColor = Color.BLACK;
+            borderColor = Style.BACKGROUND_COLOR();
             }
         }
         
@@ -120,8 +120,8 @@ public abstract class NumericalComponent extends JComponent implements Updatable
         this.key = key;
         this.synth = synth;
         register(key);
-        setBackground(Style.BACKGROUND_COLOR);
-        Border border = new LineBorder(Color.BLACK, 1)
+        setBackground(Style.BACKGROUND_COLOR());
+        Border border = new LineBorder(Style.BACKGROUND_COLOR(), 1)
             {
             public void paintBorder(final Component c, final Graphics g, final int x, final int y, final int width, final int height) 
                 {

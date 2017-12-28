@@ -82,12 +82,12 @@ public class CheckBox extends NumericalComponent
                 }                       
             };
             
-        check.setFont(Style.SMALL_FONT);
+        check.setFont(Style.SMALL_FONT());
         check.setOpaque(false);
         //check.setContentAreaFilled(false);
         //check.setBorderPainted(false);
         //check.setBackground(Style.TRANSPARENT);               // creates bugs in Windows
-        check.setForeground(Style.TEXT_COLOR);
+        check.setForeground(Style.TEXT_COLOR());
 
         setMax(1);
         setMin(0);

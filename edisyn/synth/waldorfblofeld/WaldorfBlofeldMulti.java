@@ -130,12 +130,12 @@ public class WaldorfBlofeldMulti extends Synth
         {
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
-        vbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        vbox.add(addMultiData(Style.COLOR_A));
+        vbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        vbox.add(addMultiData(Style.COLOR_A()));
 
         for(int i = 1; i < 5; i++)
             {
-            vbox.add(addInstrument(i, Style.COLOR_B));
+            vbox.add(addInstrument(i, Style.COLOR_B()));
             }
         
                 
@@ -147,7 +147,7 @@ public class WaldorfBlofeldMulti extends Synth
 
         for(int i = 5; i < 11; i++)
             {
-            vbox.add(addInstrument(i, Style.COLOR_B));
+            vbox.add(addInstrument(i, Style.COLOR_B()));
             }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -158,7 +158,7 @@ public class WaldorfBlofeldMulti extends Synth
 
         for(int i = 11; i < 17; i++)
             {
-            vbox.add(addInstrument(i, Style.COLOR_B));
+            vbox.add(addInstrument(i, Style.COLOR_B()));
             }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);

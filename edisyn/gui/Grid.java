@@ -15,12 +15,12 @@ import java.awt.event.*;
 
 public class Grid extends JComponent implements Gatherable
     {
-    public Insets getInsets() { return Style.HBOX_INSETS; }
+    public Insets getInsets() { return Style.HBOX_INSETS(); }
 
     public Grid(int x, int y)
         {
         setLayout(new GridLayout(y, x));  // gridlayout is backwards!
-        setBackground(Style.BACKGROUND_COLOR);
+        setBackground(Style.BACKGROUND_COLOR());
         }
 
     public void gatherAllComponents(java.util.ArrayList list)

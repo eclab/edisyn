@@ -1076,6 +1076,7 @@ public abstract class Synth extends JComponent implements Updatable
                                         {
                                         // we intercept this
                                         handleKeyRawCC(shortMessage);
+                                        messageFromController(message, true, false);
                                         }
                                         
                                     // We send the message to the synth if:
@@ -1105,16 +1106,23 @@ public abstract class Synth extends JComponent implements Updatable
                                             newMessage = new ShortMessage(status, data1, data2);
                                                                 
                                         tryToSendMIDI(newMessage);
+                                        messageFromController(newMessage, false, true);
                                         }
+                                    else
+                                    	{
+                                        messageFromController(message, false, false);
+                                    	}
                                     }
                                 catch (InvalidMidiDataException e)
                                     {
                                     e.printStackTrace();
-                                    }
+                                    messageFromController(message, false, false);
+		                            }
                                 }
                             else if (message instanceof SysexMessage && passThroughController)
                                 {
                                 tryToSendSysex(message.getMessage());
+                                messageFromController(message, false, true);
                                 }
                             }
                     	if (testIncomingControllerMIDI) 
@@ -1128,7 +1136,8 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             };
         }
-
+    
+    public void messageFromController(MidiMessage message, boolean interceptedForInternalUse, boolean routedToSynth) { return; }
 
     public int getVoiceMessageRoutedChannel(int incomingChannel) { return incomingChannel; }
 
@@ -1172,6 +1181,57 @@ public abstract class Synth extends JComponent implements Updatable
                 
         return retval;
         }
+        
+        public void resetColors()
+        	{
+			setLastColor("background-color", Style.DEFAULT_BACKGROUND_COLOR);
+			setLastColor("text-color", Style.DEFAULT_TEXT_COLOR);
+			setLastColor("a-color", Style.DEFAULT_COLOR_A);
+			setLastColor("b-color", Style.DEFAULT_COLOR_B);
+			setLastColor("c-color", Style.DEFAULT_COLOR_C);
+			setLastColor("dynamic-color", Style.DEFAULT_DYNAMIC_COLOR);
+			setLastColor("unset-color", Style.DEFAULT_UNSET_COLOR);
+			Style.updateColors();
+        	}
+        	
+        public void setupColors()
+			{
+			Color backgroundColor = getLastColor("background-color", Style.DEFAULT_BACKGROUND_COLOR);
+			Color textColor = getLastColor("text-color", Style.DEFAULT_TEXT_COLOR);
+			Color aColor = getLastColor("a-color", Style.DEFAULT_COLOR_A);
+			Color bColor = getLastColor("b-color", Style.DEFAULT_COLOR_B);
+			Color cColor = getLastColor("c-color", Style.DEFAULT_COLOR_C);
+			Color dynamicColor = getLastColor("dynamic-color", Style.DEFAULT_DYNAMIC_COLOR);
+			Color dialColor = getLastColor("unset-color", Style.DEFAULT_UNSET_COLOR);
+			
+			ColorWell background = new ColorWell(backgroundColor);
+			ColorWell text = new ColorWell(textColor);
+			ColorWell a = new ColorWell(aColor);
+			ColorWell b = new ColorWell(bColor);
+			ColorWell c = new ColorWell(cColor);
+			ColorWell dynamic = new ColorWell(dynamicColor);
+			ColorWell dial = new ColorWell(dialColor);
+		
+			boolean result = Synth.showMultiOption(this, 
+				new String[] { "Background  ", "Text  ", "Color A  ", "Color B  ", "Color C  ", "Highlights  ", "Dials  " },  
+				new JComponent[] { background, text, a, b, c, dynamic, dial }, 
+				"Update Colors", 
+				"\n\n(Note: Currently-Open Windows Will Look Scrambled)");
+				
+			if (result)
+				{
+				setLastColor("background-color", background.getColor());
+				setLastColor("text-color", text.getColor());
+				setLastColor("a-color", a.getColor());
+				setLastColor("b-color", b.getColor());
+				setLastColor("c-color", c.getColor());
+				setLastColor("dynamic-color", dynamic.getColor());
+				setLastColor("unset-color", dial.getColor());
+				Style.updateColors();
+				}
+			
+			}
+
 
     void performChangePatch(Model tempModel)
         {
@@ -1816,15 +1876,7 @@ public abstract class Synth extends JComponent implements Updatable
         a cover function (see for example setLastSynth(...) ) */
     private static final void setLastX(String value, String x, String synthName)
         {
-        if (synthName != null)
-            {
-            java.util.prefs.Preferences app_p = Prefs.getAppPreferences(synthName, "Edisyn");
-            app_p.put(x, value);
-            Prefs.save(app_p);
-            }
-        java.util.prefs.Preferences global_p = Prefs.getGlobalPreferences("Data");
-        global_p.put(x, value);
-        Prefs.save(global_p);
+        setLastX(value, x, synthName, false);
         }
 
     /** Given a preferences path X for a given synth, sets X to have the given value.. 
@@ -1840,12 +1892,19 @@ public abstract class Synth extends JComponent implements Updatable
             }
         if (!onlySetInSynth)
             {
-            java.util.prefs.Preferences global_p = Prefs.getGlobalPreferences("Data");
-            global_p.put(x, value);
-            Prefs.save(global_p);
+        	setLastX(value, x);
             }
         }
         
+    /** Given a preferences path X for a given synth, sets X to have the given value.. 
+        Also sets the global path X to the value.  Typically this method is called by a
+        a cover function (see for example setLastSynth(...) ) */
+    private static final void setLastX(String value, String x)
+        {
+        java.util.prefs.Preferences global_p = Prefs.getGlobalPreferences("Data");
+        global_p.put(x, value);
+        Prefs.save(global_p);
+        }
         
     /** Given a preferences path X for a given synth, returns the value stored in X.
         If there is no such value, then returns the value stored in X in the globals.
@@ -1853,18 +1912,7 @@ public abstract class Synth extends JComponent implements Updatable
         a cover function (see for example getLastSynth(...) ) */
     private static final String getLastX(String x, String synthName)
         {
-        String lastDir = null;
-        if (synthName != null)
-            {
-            lastDir = Prefs.getAppPreferences(synthName, "Edisyn").get(x, null);
-            }
-        
-        if (lastDir == null)
-            {
-            lastDir = Prefs.getGlobalPreferences("Data").get(x, null);
-            }
-                
-        return lastDir;         
+        return getLastX(x, synthName, false);
         }
     
     /** Given a preferences path X for a given synth, returns the value stored in X.
@@ -1881,12 +1929,17 @@ public abstract class Synth extends JComponent implements Updatable
         
         if (!onlyGetFromSynth && lastDir == null)
             {
-            lastDir = Prefs.getGlobalPreferences("Data").get(x, null);
+            getLastX(x);
             }
                 
         return lastDir;         
         }
         
+    private static final String getLastX(String x)
+    	{
+        return Prefs.getGlobalPreferences("Data").get(x, null);
+    	}
+
    
     // sets the last directory used by load, save, or save as
     void setLastDirectory(String path) { setLastX(path, "LastDirectory", getSynthNameLocal(), false); }
@@ -1898,9 +1951,27 @@ public abstract class Synth extends JComponent implements Updatable
     // gets the last synthesizer opened via the global window.
     static String getLastSynth() { return getLastX("Synth", null, false); }
 
-
+	public static Color getLastColor(String key, Color defaultColor)
+		{
+		String val = getLastX(key);
+		if (val == null) { return defaultColor; }
+		Scanner scan = new Scanner(val);
+		if (!scan.hasNextInt()) { return defaultColor; }
+		int red = scan.nextInt();
+		if (!scan.hasNextInt()) { return defaultColor; }
+		int green = scan.nextInt();
+		if (!scan.hasNextInt()) { return defaultColor; }
+		int blue = scan.nextInt();
+		if (red < 0 || green < 0 || blue < 0 || red > 255 || green > 255 || blue > 255) { return defaultColor; }
+		return new Color(red, green, blue);
+		}
                 
- 
+ 	static void setLastColor(String key, Color color)
+ 		{
+ 		if (color == null) return;
+ 		String val = "" + color.getRed() + " " + color.getGreen() + " " + color.getBlue();
+ 		setLastX(val, key);
+ 		}
  
  
  
@@ -3314,6 +3385,29 @@ public abstract class Synth extends JComponent implements Updatable
         setPassThroughController(val == null || val.equalsIgnoreCase("true"));
             
             
+        menu.addSeparator();
+        JMenuItem colorMenu = new JMenuItem("Change Color Scheme");
+        menu.add(colorMenu);
+        colorMenu.addActionListener(new ActionListener()
+          {
+          public void actionPerformed( ActionEvent e)
+          {
+          setupColors();
+          }
+          });
+
+        JMenuItem resetColorMenu = new JMenuItem("Reset Color Scheme");
+        menu.add(resetColorMenu);
+        resetColorMenu.addActionListener(new ActionListener()
+          {
+          public void actionPerformed( ActionEvent e)
+          {
+    		if (showSimpleConfirm("Reset Colors", "Reset Color Scheme to Defaults?\n\n(Note: Currently-Open Windows Will Look Scrambled)"))
+          		resetColors();
+          }
+          });
+
+
         menu = new JMenu("Tabs");
         menubar.add(menu);
                 

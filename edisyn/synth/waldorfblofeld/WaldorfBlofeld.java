@@ -87,17 +87,17 @@ public class WaldorfBlofeld extends Synth
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.addLast(addOscillatorGlobal(Style.COLOR_A));
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.addLast(addOscillatorGlobal(Style.COLOR_A()));
                 
         vbox.add(hbox);
 
 
-        vbox.add(addOscillator(1, Style.COLOR_A));
-        vbox.add(addOscillator(2, Style.COLOR_A));
-        vbox.add(addOscillator(3, Style.COLOR_A));
-        vbox.add(addFilter(1, Style.COLOR_B));
-        vbox.add(addFilter(2, Style.COLOR_B));
+        vbox.add(addOscillator(1, Style.COLOR_A()));
+        vbox.add(addOscillator(2, Style.COLOR_A()));
+        vbox.add(addOscillator(3, Style.COLOR_A()));
+        vbox.add(addFilter(1, Style.COLOR_B()));
+        vbox.add(addFilter(2, Style.COLOR_B()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Oscillators and Filters", soundPanel);
@@ -109,19 +109,19 @@ public class WaldorfBlofeld extends Synth
         vbox = new VBox();
 
         hbox = new HBox();
-        hbox.add(addLFO(1, Style.COLOR_A));
-        hbox.addLast(addLFO(3, Style.COLOR_A));
+        hbox.add(addLFO(1, Style.COLOR_A()));
+        hbox.addLast(addLFO(3, Style.COLOR_A()));
         vbox.add(hbox);
         
         hbox = new HBox();
-        hbox.add(addLFO(2, Style.COLOR_A));
-        hbox.addLast(addAmplifierGlobal(Style.COLOR_C));
+        hbox.add(addLFO(2, Style.COLOR_A()));
+        hbox.addLast(addAmplifierGlobal(Style.COLOR_C()));
         vbox.add(hbox);
 
-        vbox.add(addEnvelope(1, Style.COLOR_B));
-        vbox.add(addEnvelope(2, Style.COLOR_B));
-        vbox.add(addEnvelope(3, Style.COLOR_B));
-        vbox.add(addEnvelope(4, Style.COLOR_B));
+        vbox.add(addEnvelope(1, Style.COLOR_B()));
+        vbox.add(addEnvelope(2, Style.COLOR_B()));
+        vbox.add(addEnvelope(3, Style.COLOR_B()));
+        vbox.add(addEnvelope(4, Style.COLOR_B()));
                 
         lfoEnvelopePanel.add(vbox, BorderLayout.CENTER);
         addTab("LFOs and Envelopes", lfoEnvelopePanel);
@@ -131,11 +131,11 @@ public class WaldorfBlofeld extends Synth
         JComponent modulationPanel = new SynthPanel();
                 
         vbox = new VBox();
-        vbox.add(addModulation(Style.COLOR_A));
-        vbox.add(addModifiers(Style.COLOR_B));
+        vbox.add(addModulation(Style.COLOR_A()));
+        vbox.add(addModifiers(Style.COLOR_B()));
                                 
-        vbox.add(addEffect(1, Style.COLOR_C));
-        vbox.add(addEffect(2, Style.COLOR_C));
+        vbox.add(addEffect(1, Style.COLOR_C()));
+        vbox.add(addEffect(2, Style.COLOR_C()));
 
         modulationPanel.add(vbox, BorderLayout.CENTER);
         addTab("Modulation and Effects", modulationPanel);
@@ -144,8 +144,8 @@ public class WaldorfBlofeld extends Synth
         JComponent arpeggiationPanel = new SynthPanel();
         
         vbox = new VBox();
-        vbox.add(addArpeggiatorGlobal(Style.COLOR_A));
-        vbox.add(addArpeggiatorPatterns(Style.COLOR_B));
+        vbox.add(addArpeggiatorGlobal(Style.COLOR_A()));
+        vbox.add(addArpeggiatorPatterns(Style.COLOR_B()));
 
         arpeggiationPanel.add(vbox, BorderLayout.CENTER);
         addTab("Arpeggiator", arpeggiationPanel);

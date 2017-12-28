@@ -24,11 +24,11 @@ public class SynthPanel extends JPanel implements Gatherable
     public SynthPanel()
         {
         setLayout(new BorderLayout());
-        setBackground(Style.BACKGROUND_COLOR);
-        setBorder(BorderFactory.createMatteBorder(2, 2, 0, 4, Color.black));
+        setBackground(Style.BACKGROUND_COLOR());
+        setBorder(BorderFactory.createMatteBorder(2, 2, 0, 4, Style.BACKGROUND_COLOR()));
         }
 
-    public Insets getInsets() { return Style.SYNTH_PANEL_INSETS; }
+    public Insets getInsets() { return Style.SYNTH_PANEL_INSETS(); }
 
 // I thought maybe I'd make little dots which lit up when MIDI came in, but
 // have changed my mind.

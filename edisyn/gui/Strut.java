@@ -39,7 +39,7 @@ public class Strut
             public Dimension getPreferredSize() { return new Dimension(width, height); }
             public Dimension getMaximumSize() { return new Dimension(width, height); }
             };
-        panel.setBackground(Style.BACKGROUND_COLOR);
+        panel.setBackground(Style.BACKGROUND_COLOR());
         return panel;
         } 
     

@@ -134,11 +134,11 @@ public class KorgSGMulti extends Synth
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.addLast(addMain(Style.COLOR_A));
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.addLast(addMain(Style.COLOR_A()));
         vbox.add(hbox);
-        vbox.add(addTimbre(1, Style.COLOR_B));
-        vbox.add(addTimbre(2, Style.COLOR_B));
+        vbox.add(addTimbre(1, Style.COLOR_B()));
+        vbox.add(addTimbre(2, Style.COLOR_B()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Performance", soundPanel);

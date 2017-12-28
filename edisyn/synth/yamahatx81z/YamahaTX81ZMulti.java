@@ -49,12 +49,12 @@ public class YamahaTX81ZMulti extends Synth
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.addLast(addGlobal(Style.COLOR_B));
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.addLast(addGlobal(Style.COLOR_B()));
         vbox.add(hbox);
         
-        vbox.add(addInstrument(1, Style.COLOR_A));
-        vbox.add(addInstrument(2, Style.COLOR_A));
+        vbox.add(addInstrument(1, Style.COLOR_A()));
+        vbox.add(addInstrument(2, Style.COLOR_A()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Global, Instruments 1-2", soundPanel);
@@ -63,9 +63,9 @@ public class YamahaTX81ZMulti extends Synth
         SynthPanel sourcePanel = new SynthPanel();
         vbox = new VBox();
         
-        vbox.add(addInstrument(3, Style.COLOR_A));
-        vbox.add(addInstrument(4, Style.COLOR_A));
-        vbox.add(addInstrument(5, Style.COLOR_A));
+        vbox.add(addInstrument(3, Style.COLOR_A()));
+        vbox.add(addInstrument(4, Style.COLOR_A()));
+        vbox.add(addInstrument(5, Style.COLOR_A()));
             
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("Instruments 3-5", sourcePanel);
@@ -73,9 +73,9 @@ public class YamahaTX81ZMulti extends Synth
         sourcePanel = new SynthPanel();
         vbox = new VBox();
         
-        vbox.add(addInstrument(6, Style.COLOR_A));
-        vbox.add(addInstrument(7, Style.COLOR_A));
-        vbox.add(addInstrument(8, Style.COLOR_A));
+        vbox.add(addInstrument(6, Style.COLOR_A()));
+        vbox.add(addInstrument(7, Style.COLOR_A()));
+        vbox.add(addInstrument(8, Style.COLOR_A()));
 
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("Instruments 6-8", sourcePanel);

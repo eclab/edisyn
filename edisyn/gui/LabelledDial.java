@@ -30,7 +30,7 @@ public class LabelledDial extends NumericalComponent
     Box labelBox;
     Component glue;
         
-    public Insets getInsets() { return Style.LABELLED_DIAL_INSETS; }
+    public Insets getInsets() { return Style.LABELLED_DIAL_INSETS(); }
 
     public void update(String key, Model model) 
         {
@@ -57,9 +57,9 @@ public class LabelledDial extends NumericalComponent
         {
         JLabel label2 = new JLabel(_label);
                 
-        label2.setFont(Style.SMALL_FONT);
-        label2.setBackground(Style.TRANSPARENT);
-        label2.setForeground(Style.TEXT_COLOR);
+        label2.setFont(Style.SMALL_FONT());
+        label2.setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
+        label2.setForeground(Style.TEXT_COLOR());
 
         Box box = new Box(BoxLayout.X_AXIS);
         box.add(Box.createGlue());
@@ -110,20 +110,20 @@ public class LabelledDial extends NumericalComponent
     LabelledDial(String _label, Synth synth, String key, Color staticColor)
         {
         super(synth, key);
-        setBackground(Style.BACKGROUND_COLOR);
+        setBackground(Style.BACKGROUND_COLOR());
         dial = new Dial(staticColor);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.setBackground(Style.BACKGROUND_COLOR);
+        panel.setBackground(Style.BACKGROUND_COLOR());
         panel.add(dial, BorderLayout.CENTER);
 
 	    label = new JLabel(_label);
 		if (_label != null)
 			{
-	        label.setFont(Style.SMALL_FONT);
-	        label.setBackground(Style.TRANSPARENT);
-	        label.setForeground(Style.TEXT_COLOR);
+	        label.setFont(Style.SMALL_FONT());
+	        label.setBackground(Style.BACKGROUND_COLOR());  // TRANSPARENT);
+	        label.setForeground(Style.TEXT_COLOR());
 
 	        labelBox = new Box(BoxLayout.Y_AXIS);
 	        Box box = new Box(BoxLayout.X_AXIS);
@@ -210,8 +210,8 @@ public class LabelledDial extends NumericalComponent
         // Field in the center of the dial
         JLabel field = new JLabel("88888", SwingConstants.CENTER);
 
-        public Dimension getPreferredSize() { return new Dimension(Style.LABELLED_DIAL_WIDTH, Style.LABELLED_DIAL_WIDTH); }
-        public Dimension getMinimumSize() { return new Dimension(Style.LABELLED_DIAL_WIDTH, Style.LABELLED_DIAL_WIDTH); }
+        public Dimension getPreferredSize() { return new Dimension(Style.LABELLED_DIAL_WIDTH(), Style.LABELLED_DIAL_WIDTH()); }
+        public Dimension getMinimumSize() { return new Dimension(Style.LABELLED_DIAL_WIDTH(), Style.LABELLED_DIAL_WIDTH()); }
         
         void mouseReleased(MouseEvent e)
             {                       
@@ -229,9 +229,9 @@ public class LabelledDial extends NumericalComponent
             {
             this.staticColor = staticColor;
 
-            field.setFont(Style.DIAL_FONT);
-            field.setBackground(Style.TRANSPARENT);
-            field.setForeground(Style.TEXT_COLOR);
+            field.setFont(Style.DIAL_FONT());
+            field.setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
+            field.setForeground(Style.TEXT_COLOR());
         
             addMouseWheelListener(new MouseWheelListener()
                 {
@@ -400,20 +400,20 @@ public class LabelledDial extends NumericalComponent
             Rectangle rect = getBounds();
             rect.x = 0;
             rect.y = 0;
-            graphics.setPaint(Style.BACKGROUND_COLOR);
+            graphics.setPaint(Style.BACKGROUND_COLOR());
             graphics.fill(rect);
             rect = getDrawSquare();
-            graphics.setPaint(Style.DIAL_UNSET_COLOR);
-            graphics.setStroke(Style.DIAL_THIN_STROKE);
+            graphics.setPaint(Style.DIAL_UNSET_COLOR());
+            graphics.setStroke(Style.DIAL_THIN_STROKE());
             Arc2D.Double arc = new Arc2D.Double();
         
             double startAngle = getStartAngle();
             double interval = -270;
                 
-            arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, startAngle, interval, Arc2D.OPEN);
+            arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH() / 2, rect.getY() + Style.DIAL_STROKE_WIDTH()/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH(), rect.getHeight() - Style.DIAL_STROKE_WIDTH(), startAngle, interval, Arc2D.OPEN);
 
             graphics.draw(arc);
-            graphics.setStroke(Style.DIAL_THICK_STROKE);
+            graphics.setStroke(Style.DIAL_THICK_STROKE());
             arc = new Arc2D.Double();
                 
             int state = getState();
@@ -421,17 +421,17 @@ public class LabelledDial extends NumericalComponent
 
             if (status == STATUS_DIAL_DYNAMIC)
                 {
-                graphics.setPaint(Style.DIAL_DYNAMIC_COLOR);
+                graphics.setPaint(Style.DIAL_DYNAMIC_COLOR());
                 if (state == min)
                     {
                     interval = -5;
                     // If we're basically at zero, we still want to show a little bit while the user is scrolling so
                     // he gets some feedback. 
-                    //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270,  -5, Arc2D.OPEN);
+                    //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH() / 2, rect.getY() + Style.DIAL_STROKE_WIDTH()/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH(), rect.getHeight() - Style.DIAL_STROKE_WIDTH(), 270,  -5, Arc2D.OPEN);
                     }
                 else
                     {
-                    //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270,  -((state - min) / (double)(max - min) * 265) - 5, Arc2D.OPEN);
+                    //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH() / 2, rect.getY() + Style.DIAL_STROKE_WIDTH()/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH(), rect.getHeight() - Style.DIAL_STROKE_WIDTH(), 270,  -((state - min) / (double)(max - min) * 265) - 5, Arc2D.OPEN);
                     }
                 }
             else
@@ -444,11 +444,11 @@ public class LabelledDial extends NumericalComponent
                     }
                 else
                     {
-                    //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, 270,  -((state - min) / (double)(max - min) * 265) - 5, Arc2D.OPEN);
+                    //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH() / 2, rect.getY() + Style.DIAL_STROKE_WIDTH()/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH(), rect.getHeight() - Style.DIAL_STROKE_WIDTH(), 270,  -((state - min) / (double)(max - min) * 265) - 5, Arc2D.OPEN);
                     }
                 }
 
-            arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH / 2, rect.getY() + Style.DIAL_STROKE_WIDTH/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH, rect.getHeight() - Style.DIAL_STROKE_WIDTH, startAngle, interval, Arc2D.OPEN);            
+            arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH() / 2, rect.getY() + Style.DIAL_STROKE_WIDTH()/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH(), rect.getHeight() - Style.DIAL_STROKE_WIDTH(), startAngle, interval, Arc2D.OPEN);            
             graphics.draw(arc);
             }
         }

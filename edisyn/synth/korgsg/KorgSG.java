@@ -70,15 +70,15 @@ public class KorgSG extends Synth
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.addLast(addMain(Style.COLOR_A));
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.addLast(addMain(Style.COLOR_A()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addScale(Style.COLOR_A));
-        hbox.addLast(addEnvelope(Style.COLOR_A));
+        hbox.add(addScale(Style.COLOR_A()));
+        hbox.addLast(addEnvelope(Style.COLOR_A()));
         vbox.add(hbox);
-        vbox.add(addEffect(1, Style.COLOR_B));
-        vbox.add(addEffect(2, Style.COLOR_B));
+        vbox.add(addEffect(1, Style.COLOR_B()));
+        vbox.add(addEffect(2, Style.COLOR_B()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Program", soundPanel);

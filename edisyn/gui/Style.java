@@ -17,128 +17,147 @@ import javax.swing.*;
 
 public class Style
     {
-    
     /////// GLOBAL CONSTANTS
     
     /** Background color */
-    public static final Color BACKGROUND_COLOR = Color.BLACK;
+    public final static Color DEFAULT_BACKGROUND_COLOR = Color.BLACK;
+    static Color BACKGROUND_COLOR = DEFAULT_BACKGROUND_COLOR;
+    public static Color BACKGROUND_COLOR() { return BACKGROUND_COLOR; }
     /** Text color */
-    public static final Color TEXT_COLOR = Color.WHITE;
-    /** Transparent color. */
-    public static final Color TRANSPARENT = new Color(0,0,0,0);
+    public final static Color DEFAULT_TEXT_COLOR = Color.WHITE;
+    static Color TEXT_COLOR = DEFAULT_TEXT_COLOR;
+    public static Color TEXT_COLOR() { return TEXT_COLOR; }
     /** Small font, primarily for labels, button and combo box text. */
-    public static Font SMALL_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 10);
+    public static Font SMALL_FONT() { return new Font(Font.SANS_SERIF, Font.PLAIN, isUnix() ? 9 : 10); }
     /** Medium-sized font, used primarily in the center of a Dial. */
-    public static final Font SEMI_MEDIUM_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
+    public static Font SEMI_MEDIUM_FONT() { return new Font(Font.SANS_SERIF, Font.PLAIN, 12); }
     /** Medium-sized font, used primarily in the center of a Dial. */
-    public static final Font MEDIUM_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
+    public static Font MEDIUM_FONT() { return new Font(Font.SANS_SERIF, Font.PLAIN, 14); }
     /** Large Font, primarily for category headers. */
-    public static final Font LARGE_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 17);
+    public static Font LARGE_FONT() { return new Font(Font.SANS_SERIF, Font.PLAIN, 17); }
+    public static Color DEFAULT_DYNAMIC_COLOR = Color.RED;
+    static Color DYNAMIC_COLOR = DEFAULT_DYNAMIC_COLOR;
+    public static Color DYNAMIC_COLOR() { return DYNAMIC_COLOR; }
     
     /////// SYNTH PANEL CONSTANTS
     
     /** The synth panel's insets */
-    public static final Insets SYNTH_PANEL_INSETS = new Insets(4, 4, 8, 4);
+    public static Insets SYNTH_PANEL_INSETS() { return new Insets(4, 4, 8, 4); }
 
     /////// CATEGORY CONSTANTS
     
     /** Font for category borders. */
-    public static final Font CATEGORY_FONT = LARGE_FONT;
+    public static Font CATEGORY_FONT() { return LARGE_FONT(); }
     /** Stroke width for category borders. */
-    public static final int CATEGORY_STROKE_WIDTH = 3;
+    public static int CATEGORY_STROKE_WIDTH() { return 3; }
     /** The category border. */
-    public static final Border CATEGORY_BORDER = BorderFactory.createEmptyBorder(0, -2, 4, 4);
+    public static Border CATEGORY_BORDER() { return BorderFactory.createEmptyBorder(0, -2, 4, 4); }
     /** Color of the first category on a page. */
-    public static final Color COLOR_A = new Color(0, 210, 0); 
+    public final static Color DEFAULT_COLOR_A = new Color(0, 210, 0);
+    static Color COLOR_A = DEFAULT_COLOR_A;
+    public static Color COLOR_A() { return COLOR_A; } 
     /** Color of the second category on a page. */
-    public static final Color COLOR_B = new Color(150, 150, 255); 
+    public final static Color DEFAULT_COLOR_B = new Color(150, 150, 255);
+    static Color COLOR_B = DEFAULT_COLOR_B;
+    public static Color COLOR_B() { return COLOR_B; } 
     /** Color of the third category on a page. */
-    public static final Color COLOR_C = new Color(200, 200, 0); 
+    public final static Color DEFAULT_COLOR_C = new Color(200, 200, 0);
+    static Color COLOR_C = DEFAULT_COLOR_C;
+    public static Color COLOR_C() { return COLOR_C; } 
     /** Color for the category holding critical global stuff like patch name, patch number, etc. */
-    public static final Color COLOR_GLOBAL = Color.white;
+    public static Color COLOR_GLOBAL() { return TEXT_COLOR(); }
     /** Actual inset distance in case a JLabel is the first item.  Used to make a strut in Microwave. */
-    public static final int CATEGORY_INSET_DISTANCE = 8;
-    public static final int CATEGORY_INSETS_BOTTOM_OFFSET = -2;
+    public static int CATEGORY_INSET_DISTANCE() { return 8; }
+    public static int CATEGORY_INSETS_BOTTOM_OFFSET() { return -2; }
     
     
     /////// CHOOSER CONSTANTS
     
-    public static Insets CHOOSER_INSETS = new Insets(-1, 0, -2, 0);  // no insets
-    public static Insets CHOOSER_WINDOWS_INSETS = new Insets(-1, 6, -2, 0);  // no insets
+    public static Insets CHOOSER_INSETS() 
+    	{ 
+    		if (isUnix())
+    			return new Insets(0, 0, 2, 4); 
+    		else
+    			return new Insets(-1, 0, -2, 0);  // no insets
+    	}
+    public static Insets CHOOSER_WINDOWS_INSETS() { return new Insets(-1, 6, -2, 0); }  // no insets
     
 
     /////// VBOX AND HBOX CONSTANTS
 
     /** Insets for VBoxes, by default zero. */
-    public static final Insets VBOX_INSETS = new Insets(0, 0, 0, 0);
+    public static Insets VBOX_INSETS() { return new Insets(0, 0, 0, 0); }
     /** Insets for HBoxes, by default zero. */
-    public static final Insets HBOX_INSETS = new Insets(0, 0, 0, 0);
+    public static Insets HBOX_INSETS() { return new Insets(0, 0, 0, 0); }
 
 
     /////// DIAL CONSTANTS
 
     /** Color of the unset region in Dials etc. */ 
-    public static final Color DIAL_UNSET_COLOR = Color.GRAY;
+    public final static Color DEFAULT_UNSET_COLOR = Color.GRAY; 
+    static Color UNSET_COLOR = DEFAULT_UNSET_COLOR; 
+    public static Color DIAL_UNSET_COLOR() { return UNSET_COLOR; }
     /** Color of the set region in Dials etc. when being updated. */
-    public static final Color DIAL_DYNAMIC_COLOR = Color.RED;
+    public static Color DIAL_DYNAMIC_COLOR() { return DYNAMIC_COLOR(); }
     /** Width of the set region in Dials etc.  */
-    public static final float DIAL_STROKE_WIDTH = 4.0f;
+    public static float DIAL_STROKE_WIDTH() { return 4.0f; }
     /** The stroke for the set region in Dials etc. */
-    public static final BasicStroke DIAL_THIN_STROKE = new BasicStroke(DIAL_STROKE_WIDTH / 2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
+    public static BasicStroke DIAL_THIN_STROKE() { return new BasicStroke(DIAL_STROKE_WIDTH() / 2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL); }
     /** The stroke for the unset region in Dials etc. */
-    public static final BasicStroke DIAL_THICK_STROKE = new BasicStroke(DIAL_STROKE_WIDTH, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
+    public static BasicStroke DIAL_THICK_STROKE() { return new BasicStroke(DIAL_STROKE_WIDTH(), BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL); }
     /** Font used in the center of a dial. */
-    public static final Font DIAL_FONT = MEDIUM_FONT;
+    public static Font DIAL_FONT() { return MEDIUM_FONT(); }
     /** Insets for labelled dials to set them apart slightly from one another. */
-    public static final Insets LABELLED_DIAL_INSETS = new Insets(1, 3, 1, 3);
+    public static Insets LABELLED_DIAL_INSETS() { return new Insets(1, 3, 1, 3); }
 	/** Width of the dial **/
-	public static final int LABELLED_DIAL_WIDTH = 55;
+	public static int LABELLED_DIAL_WIDTH() { return 55; }
 
     /////// ENVELOPE DISPLAY CONSTANTS
 
     /** Degree of Transparency of the fill region with respect to the stroked lines. */
-    public static final double ENVELOPE_DISPLAY_FILL_TRANSPARENCY = 0.5;
+    public static double ENVELOPE_DISPLAY_FILL_TRANSPARENCY() { return 0.5; }
     /** Thickness of effective border around the Envelope Display, except the top. */
-    public static final int ENVELOPE_DISPLAY_BORDER_THICKNESS = 10;
+    public static int ENVELOPE_DISPLAY_BORDER_THICKNESS() { return 10; }
     /** Thickness of effective top border above the Envelope Display. */
-    public static final int ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS = 2;  // enough space for the dots
+    public static int ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS() { return 2; }  // enough space for the dots
     /** Thickness of the marker circles. */
-    public static final float ENVELOPE_DISPLAY_MARKER_WIDTH = 4;
+    public static float ENVELOPE_DISPLAY_MARKER_WIDTH() { return 4; }
     /** Stroke for the X axis. */
-    public static final BasicStroke ENVELOPE_AXIS_STROKE = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, new float[] { 4.0f }, 0.0f);
+    public static BasicStroke ENVELOPE_AXIS_STROKE() { return new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, new float[] { 4.0f }, 0.0f); }
             
     /////// CHECKBOX CONSTANTS
     /** Border around arpeggiator checkboxes */
-    public static final Border CHECKBOX_HIGHLIGHTED_BORDER = BorderFactory.createCompoundBorder(
+    public static Border CHECKBOX_HIGHLIGHTED_BORDER() { return BorderFactory.createCompoundBorder(
         BorderFactory.createEmptyBorder(2, 2, 2, 2),
-        BorderFactory.createLineBorder(Color.red, 1, true));
-    public static final Border CHECKBOX_NON_HIGHLIGHTED_BORDER = BorderFactory.createEmptyBorder(3, 3, 3, 3);
+        BorderFactory.createLineBorder(DYNAMIC_COLOR(), 1, true)); }
+    public static Border CHECKBOX_NON_HIGHLIGHTED_BORDER() { return BorderFactory.createEmptyBorder(3, 3, 3, 3); }
     
 
+
     /////// PATCH CONSTANTS
-    public static final Color PATCH_UNSYNCED_TEXT_COLOR = Color.RED;
-    public static final Border PATCH_BORDER = BorderFactory.createEmptyBorder(4, 4, 6, 4);
+    //public static Color PATCH_UNSYNCED_TEXT_COLOR() { return DYNAMIC_COLOR() ; }
+    public static Border PATCH_BORDER() { return BorderFactory.createEmptyBorder(4, 4, 6, 4); }
     
     
     /////// KEYBOARD CONSTANTS
-    public static final Color KEYBOARD_WHITE_COLOR = Color.WHITE;
-    public static final Color KEYBOARD_BLACK_COLOR = Color.BLACK;
-    public static final Color KEYBOARD_DYNAMIC_COLOR = DIAL_DYNAMIC_COLOR;
-    public static final int KEYBOARD_DEFAULT_WHITE_KEY_WIDTH = 16;
-    public static final int KEYBOARD_DEFAULT_WHITE_KEY_HEIGHT = 80;
+    public static Color KEYBOARD_WHITE_COLOR() { return Color.WHITE; }
+    public static Color KEYBOARD_BLACK_COLOR() { return Color.BLACK; }
+    public static Color KEYBOARD_DYNAMIC_COLOR() { return DYNAMIC_COLOR(); }
+    public static int KEYBOARD_DEFAULT_WHITE_KEY_WIDTH() { return 16; }
+    public static int KEYBOARD_DEFAULT_WHITE_KEY_HEIGHT() { return 80; }
     
     /////// JOYSTICK CONSTANTS
-    public static final int JOYSTICK_WIDTH = 20;
+    public static int JOYSTICK_WIDTH() { return 20; }
 
     /////// HTML DISPLAY CONSTANTS
     
     /** Base Font */
-    public static final Font HTML_DISPLAY_BASE_FONT = MEDIUM_FONT;
-    public static final Insets HTML_DISPLAY_INSETS = new Insets(20, 20, 20, 20);  // bottom compensates for SYNTH_PANEL_INSETS
+    public static Font HTML_DISPLAY_BASE_FONT() { return MEDIUM_FONT(); }
+    public static Insets HTML_DISPLAY_INSETS() { return new Insets(20, 20, 20, 20); }  // bottom compensates for SYNTH_PANEL_INSETS
 
 
     /////// BATCH DOWNLOAD WINDOW
-    public static final int BATCH_WINDOW_BORDER = 16;
+    public static int BATCH_WINDOW_BORDER() { return 16; }
 
 
 
@@ -153,32 +172,38 @@ public class Style
         graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
         }
         
+    static
+    	{
+    	updateColors();
+    	}
+    	 
+    public static void updateColors()
+    	{
+    	BACKGROUND_COLOR = Synth.getLastColor("background-color", DEFAULT_BACKGROUND_COLOR);
+    	TEXT_COLOR = Synth.getLastColor("text-color", DEFAULT_TEXT_COLOR);
+    	COLOR_A = Synth.getLastColor("a-color", DEFAULT_COLOR_A);
+    	COLOR_B = Synth.getLastColor("b-color", DEFAULT_COLOR_B);
+    	COLOR_C = Synth.getLastColor("c-color", DEFAULT_COLOR_C);
+    	DYNAMIC_COLOR = Synth.getLastColor("dynamic-color", DEFAULT_DYNAMIC_COLOR);
+    	UNSET_COLOR = Synth.getLastColor("unset-color", DEFAULT_UNSET_COLOR);
+    	}
 
     /////// OS DISTINGUISHING PROCEDURES
 
-    private static String OS = System.getProperty("os.name").toLowerCase();
+    private static String OS() { return System.getProperty("os.name").toLowerCase(); }
 
     public static boolean isWindows() 
         {
-        return (OS.indexOf("win") >= 0);
+        return (OS().indexOf("win") >= 0);
         }
 
     public static boolean isMac() 
         {
-        return (OS.indexOf("mac") >= 0 || System.getProperty("mrj.version") != null);
+        return (OS().indexOf("mac") >= 0 || System.getProperty("mrj.version") != null);
         }
 
     public static boolean isUnix() 
         {
-        return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
+        return (OS().indexOf("nix") >= 0 || OS().indexOf("nux") >= 0 || OS().indexOf("aix") > 0 );
         }
-        
-    static
-        {
-        if (isUnix())
-            {
-            SMALL_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 9);
-            CHOOSER_INSETS = new Insets(0, 0, 2, 4); 
-            }
-        }    
     }

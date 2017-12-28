@@ -13,6 +13,7 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import edisyn.synth.*;
 
 /***
 
@@ -54,8 +55,9 @@ public class HillClimb extends SynthPanel
     PushButton[] plays = new PushButton[16];
     public static final int INITIAL_MUTATION_RATE = 20;
     public static final int INITIAL_RECOMBINATION_RATE = 75;
-    JSlider mutationRate = new JSlider(JSlider.HORIZONTAL, 0, 100, INITIAL_MUTATION_RATE);
-    JSlider recombinationRate = new JSlider(JSlider.HORIZONTAL, 0, 100, INITIAL_RECOMBINATION_RATE);
+    //JSlider mutationRate = new JSlider(JSlider.HORIZONTAL, 0, 100, INITIAL_MUTATION_RATE);
+    //JSlider recombinationRate = new JSlider(JSlider.HORIZONTAL, 0, 100, INITIAL_RECOMBINATION_RATE);
+    Blank blank;
     Category iterations;
         
     Synth synth;
@@ -70,7 +72,7 @@ public class HillClimb extends SynthPanel
 
         // add globals
 
-        Category panel = new Category(null, "Iteration 1", Style.COLOR_A);
+        Category panel = new Category(null, "Iteration 1", Style.COLOR_A());
         iterations = panel;
                 
         PushButton backup = new PushButton("Backup")
@@ -113,16 +115,48 @@ public class HillClimb extends SynthPanel
         retry.getButton().setPreferredSize(backup.getButton().getPreferredSize());
                 
         VBox vbox = new VBox();
-                
+        
+        
+		VBox buttonVBox = new VBox();
+        HBox buttonBox = new HBox();
+        buttonBox.add(climb);
+        buttonBox.add(retry);
+		buttonVBox.add(buttonBox);
+        buttonBox = new HBox();
+        buttonBox.add(backup);
+        buttonBox.add(reset);
+		buttonVBox.add(buttonBox);
+		
+
+        blank = new Blank();
+		HBox ratebox = new HBox();
+		ratebox.add(buttonVBox);
+        LabelledDial recombinationRate = new LabelledDial("Recombination", blank, "recombinationrate", Style.COLOR_A(), 0, 100);
+        blank.getModel().set("recombinationrate", INITIAL_RECOMBINATION_RATE);
+        recombinationRate.addAdditionalLabel("Rate");
+        ratebox.add(recombinationRate);
+
+        LabelledDial mutationRate = new LabelledDial("Mutation", blank, "mutationrate", Style.COLOR_A(), 0, 100);
+        mutationRate.addAdditionalLabel("Rate");
+        blank.getModel().set("mutationrate", INITIAL_MUTATION_RATE);
+        ratebox.add(mutationRate);
+		vbox.add(ratebox);
+
+
+
+        
+        /*
         JLabel recombinationRateLabel = new JLabel("Recombination Rate", SwingConstants.RIGHT);
-        recombinationRateLabel.setFont(Style.SMALL_FONT);
-        recombinationRateLabel.setForeground(Style.TEXT_COLOR);
+        recombinationRateLabel.setFont(Style.SMALL_FONT());
+        recombinationRateLabel.setForeground(Style.TEXT_COLOR());
         recombinationRateLabel.setOpaque(false);
         final JLabel recombinationRateVal = new JLabel("" + INITIAL_RECOMBINATION_RATE + "%");
-        recombinationRateVal.setFont(Style.SMALL_FONT);
-        recombinationRateVal.setForeground(Style.TEXT_COLOR);
+        recombinationRateVal.setFont(Style.SMALL_FONT());
+        recombinationRateVal.setForeground(Style.TEXT_COLOR());
         recombinationRateVal.setOpaque(false);
         recombinationRate.setOpaque(false);
+        UIManager.getDefaults().put("Slider.tickColor", Color.RED);
+        UIManager.getDefaults().put("Slider.shadow", Color.BLUE);
         recombinationRate.addChangeListener(new ChangeListener()
             {
             public void stateChanged(ChangeEvent e) { recombinationRateVal.setText("" + recombinationRate.getValue() + "%"); }
@@ -139,12 +173,12 @@ public class HillClimb extends SynthPanel
 
         JLabel mutationRateLabel = new JLabel("Mutation Rate", SwingConstants.RIGHT);
         mutationRateLabel.setPreferredSize(recombinationRateLabel.getPreferredSize());
-        mutationRateLabel.setFont(Style.SMALL_FONT);
-        mutationRateLabel.setForeground(Style.TEXT_COLOR);
+        mutationRateLabel.setFont(Style.SMALL_FONT());
+        mutationRateLabel.setForeground(Style.TEXT_COLOR());
         mutationRateLabel.setOpaque(false);
         final JLabel mutationRateVal = new JLabel("" + INITIAL_MUTATION_RATE + "%");
-        mutationRateVal.setFont(Style.SMALL_FONT);
-        mutationRateVal.setForeground(Style.TEXT_COLOR);
+        mutationRateVal.setFont(Style.SMALL_FONT());
+        mutationRateVal.setForeground(Style.TEXT_COLOR());
         mutationRateVal.setOpaque(false);
         mutationRate.setOpaque(false);
         mutationRate.addChangeListener(new ChangeListener()
@@ -159,6 +193,7 @@ public class HillClimb extends SynthPanel
         ratebox.add(mutationRate);
         ratebox.add(mutationRateVal);
         vbox.add(ratebox);
+        */
                                 
         panel.add(vbox, BorderLayout.WEST);
         top.add(panel);
@@ -166,7 +201,7 @@ public class HillClimb extends SynthPanel
         
         // Add Candidates
 
-        panel =  new Category(null, "Candidates", Style.COLOR_B);
+        panel =  new Category(null, "Candidates", Style.COLOR_B());
 
         HBox hbox = new HBox();
                 
@@ -204,31 +239,31 @@ public class HillClimb extends SynthPanel
             vbox.add(plays[i]);
 
             Box b = new Box(BoxLayout.X_AXIS);
-            b.setBackground(Style.BACKGROUND_COLOR);
+            b.setBackground(Style.BACKGROUND_COLOR());
             b.add(Box.createGlue());
             b.add(ratings[i][0] = new JRadioButton("1"));
-            ratings[i][0].setForeground(Style.TEXT_COLOR);
-            ratings[i][0].setFont(Style.SMALL_FONT);
+            ratings[i][0].setForeground(Style.TEXT_COLOR());
+            ratings[i][0].setFont(Style.SMALL_FONT());
             ratings[i][0].putClientProperty("JComponent.sizeVariant", "small");
             b.add(Box.createGlue());
             vbox.add(b);
                         
             b = new Box(BoxLayout.X_AXIS);
-            b.setBackground(Style.BACKGROUND_COLOR);
+            b.setBackground(Style.BACKGROUND_COLOR());
             b.add(Box.createGlue());
             b.add(ratings[i][1] = new JRadioButton("2"));
-            ratings[i][1].setForeground(Style.TEXT_COLOR);
-            ratings[i][1].setFont(Style.SMALL_FONT);
+            ratings[i][1].setForeground(Style.TEXT_COLOR());
+            ratings[i][1].setFont(Style.SMALL_FONT());
             ratings[i][1].putClientProperty("JComponent.sizeVariant", "small");
             b.add(Box.createGlue());
             vbox.add(b);
                         
             b = new Box(BoxLayout.X_AXIS);
-            b.setBackground(Style.BACKGROUND_COLOR);
+            b.setBackground(Style.BACKGROUND_COLOR());
             b.add(Box.createGlue());
             b.add(ratings[i][2] = new JRadioButton("3"));
-            ratings[i][2].setForeground(Style.TEXT_COLOR);
-            ratings[i][2].setFont(Style.SMALL_FONT);
+            ratings[i][2].setForeground(Style.TEXT_COLOR());
+            ratings[i][2].setFont(Style.SMALL_FONT());
             ratings[i][2].putClientProperty("JComponent.sizeVariant", "small");
             b.add(Box.createGlue());
             vbox.add(b);
@@ -425,7 +460,7 @@ public class HillClimb extends SynthPanel
                 
         Random random = synth.random;
         String[] keys = synth.getMutationKeys();
-        double weight = mutationRate.getValue() / 100.0;
+        double weight = blank.getModel().get("mutationrate", 0) / 100.0; //mutationRate.getValue() / 100.0;
                 
         for(int i = 0; i < 4; i++)
             {
@@ -463,8 +498,8 @@ public class HillClimb extends SynthPanel
         {
         Random random = synth.random;
         String[] keys = synth.getMutationKeys();
-        double recombination = recombinationRate.getValue() / 100.0;
-        double weight = mutationRate.getValue() / 100.0;
+        double recombination = blank.getModel().get("recombinationrate", 0) / 100.0; //recombinationRate.getValue() / 100.0;
+        double weight = blank.getModel().get("mutationrate", 0) / 100.0; //mutationRate.getValue() / 100.0;
                 
         if (determineBest)
             {
@@ -491,10 +526,20 @@ public class HillClimb extends SynthPanel
         	Noisy A + C
         	Noisy B + C
         	Noisy A + (B + C)
+			Noisy Noisy A
         	Noisy Beyond A
         	Noisy Beyond B
         	Noisy Beyond C
 			Noisy Beyond Beyond A
+			Noisy Beyond B from A
+			Noisy Beyond A from B
+			Noisy Beyond C from A
+			Noisy Beyond A from C
+			Noisy Beyond B from C
+			Noisy Beyond C from B
+			Current Patch
+
+
         	Noisy A
         	Noisy Noisy A
         	Noisy Noisy Noisy A
@@ -502,8 +547,7 @@ public class HillClimb extends SynthPanel
         	Noisy Beyond B from A
         	Noisy C
         	Noisy Beyond C from A
-        	Current Patch
-        	
+        	        	
            The Mutations are
            A
            A + B

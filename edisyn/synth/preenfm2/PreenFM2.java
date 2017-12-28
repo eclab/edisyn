@@ -101,18 +101,18 @@ public class PreenFM2 extends Synth
         VBox vbox = new VBox();
         
         HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.add(addPerformanceParameters(Style.COLOR_A));
-        hbox.addLast(addGeneral(Style.COLOR_A));
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.add(addPerformanceParameters(Style.COLOR_A()));
+        hbox.addLast(addGeneral(Style.COLOR_A()));
         vbox.add(hbox);
  
         hbox = new HBox();
-        hbox.add(addModulationIndices(Style.COLOR_B));
-        hbox.add(addMix(Style.COLOR_B));
-        hbox.addLast(addFilter(Style.COLOR_B));
+        hbox.add(addModulationIndices(Style.COLOR_B()));
+        hbox.add(addMix(Style.COLOR_B()));
+        hbox.addLast(addFilter(Style.COLOR_B()));
         vbox.add(hbox);
               
-        vbox.add(addModulation(Style.COLOR_C));
+        vbox.add(addModulation(Style.COLOR_C()));
 
         frontPanel.add(vbox, BorderLayout.CENTER);
         addTab("Main", frontPanel);
@@ -125,7 +125,7 @@ public class PreenFM2 extends Synth
         
         for(int i = 1; i < 7; i++)
             {
-            vbox.add(addOperator(i, Style.COLOR_A));
+            vbox.add(addOperator(i, Style.COLOR_A()));
             }
 
         operatorPanel.add(vbox, BorderLayout.CENTER);
@@ -139,28 +139,28 @@ public class PreenFM2 extends Synth
         
         vbox = new VBox();
         hbox = new HBox();
-        hbox.add(addLFO(1, Style.COLOR_A));
-        hbox.addLast(addEnvelope(1, Style.COLOR_B));
+        hbox.add(addLFO(1, Style.COLOR_A()));
+        hbox.addLast(addEnvelope(1, Style.COLOR_B()));
         vbox.add(hbox);
         
         hbox = new HBox();
-        hbox.add(addLFO(2, Style.COLOR_A));
-        hbox.addLast(addEnvelope(2, Style.COLOR_B));
+        hbox.add(addLFO(2, Style.COLOR_A()));
+        hbox.addLast(addEnvelope(2, Style.COLOR_B()));
         vbox.add(hbox);
         
         hbox = new HBox();
-        hbox.add(addLFO(3, Style.COLOR_A));
-        hbox.addLast(addArpeggiator(Style.COLOR_B));
+        hbox.add(addLFO(3, Style.COLOR_A()));
+        hbox.addLast(addArpeggiator(Style.COLOR_B()));
         vbox.add(hbox);
                 
         hbox = new HBox(HBox.LEFT_CONSUMES);
-        hbox.add(addNoteScaling(1, Style.COLOR_C));
-        hbox.addLast(addStepSequencer(1, Style.COLOR_C));
+        hbox.add(addNoteScaling(1, Style.COLOR_C()));
+        hbox.addLast(addStepSequencer(1, Style.COLOR_C()));
         vbox.add(hbox);
 
         hbox = new HBox(HBox.LEFT_CONSUMES);
-        hbox.add(addNoteScaling(2, Style.COLOR_C));
-        hbox.addLast(addStepSequencer(2, Style.COLOR_C));
+        hbox.add(addNoteScaling(2, Style.COLOR_C()));
+        hbox.addLast(addStepSequencer(2, Style.COLOR_C()));
         vbox.add(hbox);
                                 
         lfoPanel.add(vbox, BorderLayout.CENTER);

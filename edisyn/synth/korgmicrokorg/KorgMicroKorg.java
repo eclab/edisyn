@@ -56,16 +56,16 @@ public class KorgMicroKorg extends Synth
         VBox vbox = new VBox();
         HBox hbox = new HBox();
     
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.addLast(addGeneral(false, Style.COLOR_A));
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.addLast(addGeneral(false, Style.COLOR_A()));
         vbox.add(hbox);
-        vbox.add(addArpeggiation(Style.COLOR_A));
+        vbox.add(addArpeggiation(Style.COLOR_A()));
 
         hbox = new HBox();
-        hbox.add(addMod(Style.COLOR_B));
-        hbox.addLast(addEQ(Style.COLOR_B));
+        hbox.add(addMod(Style.COLOR_B()));
+        hbox.addLast(addEQ(Style.COLOR_B()));
         vbox.add(hbox);
-        vbox.add(addDelay(Style.COLOR_B));
+        vbox.add(addDelay(Style.COLOR_B()));
         
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("General", soundPanel);
@@ -75,32 +75,32 @@ public class KorgMicroKorg extends Synth
 			soundPanel = panels[timbre - 1] = new SynthPanel();
 			vbox = new VBox();
 			hbox = new HBox();
-			hbox.add(addTimbreGeneral(timbre, Style.COLOR_A));
-			hbox.add(addPitch(timbre, Style.COLOR_A));
-			hbox.addLast(addMixer(timbre, Style.COLOR_A));
+			hbox.add(addTimbreGeneral(timbre, Style.COLOR_A()));
+			hbox.add(addPitch(timbre, Style.COLOR_A()));
+			hbox.addLast(addMixer(timbre, Style.COLOR_A()));
 			vbox.add(hbox);
 			hbox = new HBox();
-			hbox.add(addOsc1(timbre, Style.COLOR_A));
-			hbox.addLast(addOsc2(timbre, Style.COLOR_A));
+			hbox.add(addOsc1(timbre, Style.COLOR_A()));
+			hbox.addLast(addOsc2(timbre, Style.COLOR_A()));
 			vbox.add(hbox);
 			hbox = new HBox();
-			hbox.add(addFilter(timbre, Style.COLOR_B));
-			hbox.addLast(addEnvelope(timbre, 1, Style.COLOR_B));
+			hbox.add(addFilter(timbre, Style.COLOR_B()));
+			hbox.addLast(addEnvelope(timbre, 1, Style.COLOR_B()));
 			vbox.add(hbox);
 
 			hbox = new HBox();
-			hbox.add(addAmplifier(timbre, Style.COLOR_B));
-			hbox.addLast(addEnvelope(timbre, 2, Style.COLOR_B));
+			hbox.add(addAmplifier(timbre, Style.COLOR_B()));
+			hbox.addLast(addEnvelope(timbre, 2, Style.COLOR_B()));
 			vbox.add(hbox);
 			
 			hbox = new HBox();
-			hbox.add(addLFO(timbre, 1, Style.COLOR_C));
-			hbox.addLast(addLFO(timbre, 2, Style.COLOR_C));
+			hbox.add(addLFO(timbre, 1, Style.COLOR_C()));
+			hbox.addLast(addLFO(timbre, 2, Style.COLOR_C()));
 			vbox.add(hbox);
 			
 			if (timbre != 3)
 				{
-				vbox.add(addPatch(timbre, Style.COLOR_C));
+				vbox.add(addPatch(timbre, Style.COLOR_C()));
 				}
 				
         	soundPanel.add(vbox, BorderLayout.CENTER);
@@ -109,8 +109,8 @@ public class KorgMicroKorg extends Synth
 			
 		soundPanel = panels[3] = new SynthPanel();
 		vbox = new VBox();
-		vbox.add(addChannels(Style.COLOR_A));
-		vbox.add(addHold(Style.COLOR_B));
+		vbox.add(addChannels(Style.COLOR_A()));
+		vbox.add(addHold(Style.COLOR_B()));
         soundPanel.add(vbox, BorderLayout.CENTER);
        	addTab("Channels", soundPanel);
 

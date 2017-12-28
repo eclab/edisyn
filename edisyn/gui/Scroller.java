@@ -62,15 +62,15 @@ public class Scroller extends NumericalComponent
         synth.getModel().setMetricMax(key, getMax());
 
         label.setText(_label);
-        label.setFont(Style.SMALL_FONT);
-        label.setBackground(Style.TRANSPARENT);
-        label.setForeground(Style.TEXT_COLOR);
-        label.setBorder(BorderFactory.createLineBorder(Style.TRANSPARENT));
+        label.setFont(Style.SMALL_FONT());
+        label.setBackground(Style.BACKGROUND_COLOR()); // Style.TRANSPARENT);
+        label.setForeground(Style.TEXT_COLOR());
+        label.setBorder(BorderFactory.createLineBorder(Style.BACKGROUND_COLOR())); // Style.TRANSPARENT));
 
-        field.setFont(Style.MEDIUM_FONT);
-        field.setBackground(Style.TRANSPARENT);
-        field.setForeground(Style.TEXT_COLOR);
-        field.setBorder(BorderFactory.createLineBorder(Style.TRANSPARENT));
+        field.setFont(Style.MEDIUM_FONT());
+        field.setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
+        field.setForeground(Style.TEXT_COLOR());
+        field.setBorder(BorderFactory.createLineBorder(Style.BACKGROUND_COLOR())); // TRANSPARENT));
                 
         // lock the size
         Dimension pref = field.getPreferredSize();

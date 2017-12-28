@@ -104,29 +104,29 @@ public class WaldorfMicrowaveXT extends Synth
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox(HBox.LEFT_CONSUMES);
-        hbox.addLast(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.add(addWavetable(Style.COLOR_A));
+        hbox.addLast(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.add(addWavetable(Style.COLOR_A()));
                 
         vbox.add(hbox);
         
         hbox = new HBox();
         VBox vbox2 = new VBox();
-        vbox2.add(addOscillator(1, Style.COLOR_A));
-        vbox2.add(addOscillator(2, Style.COLOR_A));
-        vbox2.add(addAmplifier(Style.COLOR_C));
+        vbox2.add(addOscillator(1, Style.COLOR_A()));
+        vbox2.add(addOscillator(2, Style.COLOR_A()));
+        vbox2.add(addAmplifier(Style.COLOR_C()));
         hbox.add(vbox2);
         
         vbox2 = new VBox();
-        vbox2.add(addWave(1, Style.COLOR_A));
-        vbox2.add(addWave(2, Style.COLOR_A));
-        vbox2.add(addMixer(Style.COLOR_C));
+        vbox2.add(addWave(1, Style.COLOR_A()));
+        vbox2.add(addWave(2, Style.COLOR_A()));
+        vbox2.add(addMixer(Style.COLOR_C()));
         hbox.addLast(vbox2);
         
         vbox.add(hbox);
         
         hbox = new HBox();
-        hbox.add(addFilter1(Style.COLOR_B));
-        hbox.addLast(addFilter2(Style.COLOR_B));
+        hbox.add(addFilter1(Style.COLOR_B()));
+        hbox.addLast(addFilter2(Style.COLOR_B()));
 
         vbox.add(hbox);
 
@@ -140,18 +140,18 @@ public class WaldorfMicrowaveXT extends Synth
         vbox = new VBox();
 
         hbox = new HBox();
-        hbox.add(addEnvelope(1, Style.COLOR_A));
-        hbox.addLast(addEnvelope(2, Style.COLOR_A));
+        hbox.add(addEnvelope(1, Style.COLOR_A()));
+        hbox.addLast(addEnvelope(2, Style.COLOR_A()));
         vbox.add(hbox);
         
-        vbox.add(addWaveEnvelope(Style.COLOR_A));
-        vbox.add(addFreeEnvelope(Style.COLOR_A));
+        vbox.add(addWaveEnvelope(Style.COLOR_A()));
+        vbox.add(addFreeEnvelope(Style.COLOR_A()));
         
         hbox = new HBox();
-        hbox.add(addEnvelopeDisplay(1,Style.COLOR_B));
-        hbox.add(addEnvelopeDisplay(2,Style.COLOR_B));
-        hbox.add(addWaveEnvelopeDisplay(Style.COLOR_B));
-        hbox.addLast(addFreeEnvelopeDisplay(Style.COLOR_B));
+        hbox.add(addEnvelopeDisplay(1,Style.COLOR_B()));
+        hbox.add(addEnvelopeDisplay(2,Style.COLOR_B()));
+        hbox.add(addWaveEnvelopeDisplay(Style.COLOR_B()));
+        hbox.addLast(addFreeEnvelopeDisplay(Style.COLOR_B()));
         vbox.add(hbox);
         
         envelopePanel.add(vbox, BorderLayout.CENTER);
@@ -164,8 +164,8 @@ public class WaldorfMicrowaveXT extends Synth
         JComponent modulationPanel = new SynthPanel();
         
         vbox = new VBox();
-        vbox.add(addModulation(Style.COLOR_A));
-        vbox.add(addModifiers(Style.COLOR_B));
+        vbox.add(addModulation(Style.COLOR_A()));
+        vbox.add(addModifiers(Style.COLOR_B()));
                                 
         modulationPanel.add(vbox, BorderLayout.CENTER);
         addTab("Modulation", modulationPanel);
@@ -178,20 +178,20 @@ public class WaldorfMicrowaveXT extends Synth
         vbox = new VBox();
 
         hbox = new HBox();
-        hbox.add(addLFO(1, Style.COLOR_A));
-        hbox.addLast(addLFO(2, Style.COLOR_A));
+        hbox.add(addLFO(1, Style.COLOR_A()));
+        hbox.addLast(addLFO(2, Style.COLOR_A()));
         vbox.add(hbox);
 
-        vbox.add(addArpeggiation(Style.COLOR_B));
+        vbox.add(addArpeggiation(Style.COLOR_B()));
 
         hbox = new HBox();
-        hbox.add(addAllocation(Style.COLOR_C));
-        hbox.add(addQuality(Style.COLOR_C));
-        hbox.addLast(addGlide(Style.COLOR_C));
+        hbox.add(addAllocation(Style.COLOR_C()));
+        hbox.add(addQuality(Style.COLOR_C()));
+        hbox.addLast(addGlide(Style.COLOR_C()));
         vbox.add(hbox);
 
-        vbox.add(addPlayParameters(Style.COLOR_C));
-        vbox.add(addEffect(Style.COLOR_C));
+        vbox.add(addPlayParameters(Style.COLOR_C()));
+        vbox.add(addEffect(Style.COLOR_C()));
 
 
         
@@ -1425,7 +1425,7 @@ public class WaldorfMicrowaveXT extends Synth
                         }
                     for(int i = 0; i < 16; i++)
                         {
-                        arpeggiation[i].setBorder(Style.CHECKBOX_NON_HIGHLIGHTED_BORDER);
+                        arpeggiation[i].setBorder(Style.CHECKBOX_NON_HIGHLIGHTED_BORDER());
                         }
                     }
                 else
@@ -1441,7 +1441,7 @@ public class WaldorfMicrowaveXT extends Synth
                     for(int i = 0; i < 16; i++)
                         {
                         arpeggiation[i].setBorder(ARP_PATTERNS[pattern][i] == 0 ?
-                            Style.CHECKBOX_NON_HIGHLIGHTED_BORDER : Style.CHECKBOX_HIGHLIGHTED_BORDER);
+                            Style.CHECKBOX_NON_HIGHLIGHTED_BORDER() : Style.CHECKBOX_HIGHLIGHTED_BORDER());
                         }
                     }
                 }
@@ -1453,18 +1453,14 @@ public class WaldorfMicrowaveXT extends Synth
         big.add(hbox);
 
         hbox = new HBox();
-        hbox.add(Strut.makeHorizontalStrut(Style.CATEGORY_INSET_DISTANCE));
-        JLabel label = new JLabel("Pattern:     ");
-        label.setFont(Style.SMALL_FONT);
-        label.setBackground(Style.TRANSPARENT);
-        label.setForeground(Style.TEXT_COLOR);
-        hbox.add(label);
+        hbox.add(Strut.makeHorizontalStrut(Style.CATEGORY_INSET_DISTANCE()));
+        hbox.add(new TextLabel("Pattern:     "));
 
              
         for(int pattern = 0; pattern < 16; pattern++)
             {
             arpeggiation[pattern] = new CheckBox("", this, "arpuser" + (pattern + 1));
-            arpeggiation[pattern].setBorder(Style.CHECKBOX_HIGHLIGHTED_BORDER);
+            arpeggiation[pattern].setBorder(Style.CHECKBOX_HIGHLIGHTED_BORDER());
             arpeggiation[pattern].setEnabled(false);  // because we start with arppattern not set to User
             hbox.add(arpeggiation[pattern]);
             if (pattern % 4 == 3)

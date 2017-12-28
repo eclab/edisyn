@@ -28,16 +28,16 @@ public class VBox extends JComponent implements Gatherable
     JPanel panel = new JPanel();
     JComponent bottom;
         
-    public Insets getInsets() { return Style.VBOX_INSETS; }
+    public Insets getInsets() { return Style.VBOX_INSETS(); }
 
     public VBox()
         {
         setLayout(new BorderLayout());
-        setBackground(Style.BACKGROUND_COLOR);
+        setBackground(Style.BACKGROUND_COLOR());
         box = new Box(BoxLayout.Y_AXIS);
         add(box, BorderLayout.NORTH);
         panel.setLayout(new BorderLayout());
-        panel.setBackground(Style.BACKGROUND_COLOR);
+        panel.setBackground(Style.BACKGROUND_COLOR());
         add(panel, BorderLayout.CENTER);
         }
         

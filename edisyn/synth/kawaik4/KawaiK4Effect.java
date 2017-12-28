@@ -54,17 +54,17 @@ public class KawaiK4Effect extends Synth
         JComponent soundPanel = new SynthPanel();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL));
-        hbox.addLast(addGlobal(Style.COLOR_A));
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.addLast(addGlobal(Style.COLOR_A()));
         vbox.add(hbox);
         
         for(int i = 0; i < 8; i+= 4)
             {
             hbox = new HBox();
-            hbox.add(addSubmix(i + 1, Style.COLOR_B));
-            hbox.add(addSubmix(i + 2, Style.COLOR_B));
-            hbox.add(addSubmix(i + 3, Style.COLOR_B));
-            hbox.addLast(addSubmix(i + 4, Style.COLOR_B));
+            hbox.add(addSubmix(i + 1, Style.COLOR_B()));
+            hbox.add(addSubmix(i + 2, Style.COLOR_B()));
+            hbox.add(addSubmix(i + 3, Style.COLOR_B()));
+            hbox.addLast(addSubmix(i + 4, Style.COLOR_B()));
             vbox.add(hbox);
             }
 

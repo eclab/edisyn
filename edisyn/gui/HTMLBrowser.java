@@ -28,7 +28,7 @@ public class HTMLBrowser extends JPanel
         
     public void setText(Object HTMLTextOrURL)
         {
-        if (HTMLTextOrURL == null) HTMLTextOrURL = "<html><body bgcolor='black'></body></html>";
+        if (HTMLTextOrURL == null) HTMLTextOrURL = "<html></body></html>";
         stack = new java.util.Stack();
         // delete any notion of a URL.  What a pain -- this is so backwards!
         // This is because JEditorPane's setText doesn't eliminate the
@@ -104,17 +104,19 @@ public class HTMLBrowser extends JPanel
         // set the base font and force the HTML Browser to use it
         infoPane.setFont(Style.HTML_DISPLAY_BASE_FONT());
         infoPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
-        infoPane.setBackground(Color.BLACK);
-        infoPane.setForeground(Color.WHITE);
+        infoPane.setBackground(Style.BACKGROUND_COLOR());
+        infoPane.setForeground(Style.TEXT_COLOR());
                 
         // Change the link color
         HTMLEditorKit kit = new HTMLEditorKit();
         StyleSheet styleSheet = kit.getStyleSheet();
-        styleSheet.addRule("A {color:red}"); //change links to red
+        styleSheet.addRule("body {background-color:transparent;}\n"); //change links to red
         infoPane.setEditorKit(kit);
                
         infoPane.setEditable(false);
         scroll = new JScrollPane(infoPane);
+        scroll.setViewportBorder(null);
+        scroll.setBorder(null);
 
         setLayout(new BorderLayout());
         add(scroll,BorderLayout.CENTER);

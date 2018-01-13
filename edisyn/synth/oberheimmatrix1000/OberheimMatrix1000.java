@@ -1296,6 +1296,17 @@ public class OberheimMatrix1000 extends Synth
         }
     
 
+	/// ERRORS IN YOUNGMONKEY SYSEX DESCRIPTION
+	///
+	/// All signed values are actually stored (in the bulk patch) as signed 8-bit 2's complement.
+	/// Thus the six-bit and 7-bit values are sign-extended to the eighth bit.
+	/// The functions below convert to and from these values.  convertFrom... will go from
+	/// the sysex value to the actual byte value (signed).  convertTo... will do the opposite.
+	///
+	/// Note however that when sending INDIVIDUAL PARAMETERS, the sysex value is masked to 7 bits.
+	/// But this is NOT the case in bulk patches -- it stays 8 bits and gets nybblized that way.
+	/// The checksum doesn't bother with the 8th bit anyway.  
+
     byte convertFromSixBitsSigned(int val)
         {
         val += 32;
@@ -1309,7 +1320,7 @@ public class OberheimMatrix1000 extends Synth
         val -= 32;
         if (val < 0)
         	val += 256;  // sign-extend to last bit
-        return val;
+        return (byte) val;
         }
 
     byte convertFromSevenBitsSigned(int val)

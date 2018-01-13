@@ -366,7 +366,13 @@ public class OberheimMatrix1000 extends Synth
             };
         hbox.add(comp);
 
-        comp = new LabelledDial("Pulse Width", this, "dco" + osc + "pulsewidthmod", color, 1, 127, 64);
+        comp = new LabelledDial("Pulse Width", this, "dco" + osc + "pulsewidthmod", color, 1, 127, 64)
+        	{
+            public void update(String key, Model model)
+            	{
+            	super.update(key, model);
+            	}
+        	};
         ((LabelledDial)comp).addAdditionalLabel("LFO 2 Mod"); 
         hbox.add(comp);
 
@@ -1242,12 +1248,12 @@ public class OberheimMatrix1000 extends Synth
         else if (key.equals("dco2detune"))
             {
             index = ((Integer)(internalParametersToIndex.get(key))).intValue();
-            value = convertToSixBitsSigned(model.get(key));
+            value = (convertToSixBitsSigned(model.get(key)) & 127);
             }
         else if (key.endsWith("mod"))  // 7 bit signed
             {
             index = ((Integer)(internalParametersToIndex.get(key))).intValue();
-            value = convertToSevenBitsSigned(model.get(key));
+            value = (convertToSevenBitsSigned(model.get(key)) & 127);
             }
         else if (key.startsWith("mod"))
             {
@@ -1257,7 +1263,7 @@ public class OberheimMatrix1000 extends Synth
 
             int modsource = model.get("mod" + modnumber  + "source");
             int moddestination = model.get("mod" + modnumber  + "destination");
-            int modamount = convertToSevenBitsSigned(model.get("mod" + modnumber  + "amount"));
+            int modamount = (convertToSevenBitsSigned(model.get("mod" + modnumber  + "amount")) & 127);
 
             // if one is "None", then the other must be as well            
             if (modsource == 0) moddestination = 0;
@@ -1292,44 +1298,34 @@ public class OberheimMatrix1000 extends Synth
 
     byte convertFromSixBitsSigned(int val)
         {
-        // strip old signed extension in bit 7
-        val = (val & 63);
-                
         val += 32;
-        if (val > 64)
-            val -= 64;
+        if (val >= 256)
+            val -= 256;
         return (byte) val;
         }
 
-    byte convertToSixBitsSigned(int val)
+    int convertToSixBitsSigned(int val)
         {
         val -= 32;
         if (val < 0)
-            val += 64;
-
-        // do signed extension
-        if ((val & 32) == 32)  // 6th bit is set
-            val = val | 64;  // set the 7th bit
-        else
-            val = val & 63;  // clear the 7th bit
-
-        return (byte) val;
+        	val += 256;  // sign-extend to last bit
+        return val;
         }
 
     byte convertFromSevenBitsSigned(int val)
         {
         val += 64;
-        if (val > 128)
-            val -= 128;
+        if (val >= 256)
+            val -= 256;
         return (byte) val;
         }
 
-    byte convertToSevenBitsSigned(int val)
+    int convertToSevenBitsSigned(int val)
         {
         val -= 64;
         if (val < 0)
-            val += 128;
-        return (byte) val;
+            val += 256;  // sign-extend to last bit
+        return val;
         }
 
     /** 
@@ -1437,7 +1433,7 @@ public class OberheimMatrix1000 extends Synth
             // unpack from nybbles
             byte lonybble = data[i * 2 + 5];
             byte hinybble = data[i * 2 + 5 + 1];
-            byte value = (byte)(((hinybble << 4) | (lonybble & 15)) & 127);
+            byte value = (byte)(((hinybble << 4) | (lonybble & 15)));
 
             if (i < 8)  // it's the name
                 name[i] = unpackNameByte(value);
@@ -1705,6 +1701,11 @@ public class OberheimMatrix1000 extends Synth
             // pack to nybbles
             byte lonybble = (byte)(value & 15);
             byte hinybble = (byte)(value >>> 4);
+            
+            if (lonybble > 15 || lonybble < 0)
+            	System.err.println("LO " + lonybble);
+            if (hinybble > 15 || hinybble < 0)
+            	System.err.println("HI " + hinybble + " " + value + " " + key);
                 
             // From here:  http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-Matrix6R.html
             // it says this about the checksum:
@@ -1727,7 +1728,6 @@ public class OberheimMatrix1000 extends Synth
         d[1] = (byte)0x10;
         d[2] = (byte)0x06;
 
-        /*
           if (toWorkingMemory)
           {
           // 0DH - SINGLE PATCH DATA TO EDIT BUFFER
@@ -1740,8 +1740,8 @@ public class OberheimMatrix1000 extends Synth
           d[3] = (byte)0x01;
           d[4] = (byte)model.get("number");
           }
-        */
 
+/*
         ///// A bug in the Matrix 1000 means that SINGLE PATCH DATA TO EDIT BUFFER apparently sends
         ///// corrupted data.  So we can't use it.  But we still need to send!  So we do this by 
         ///// writing to slot 199 when toWorkingMemory is true
@@ -1758,7 +1758,7 @@ public class OberheimMatrix1000 extends Synth
             d[3] = (byte)0x01;
             d[4] = (byte)model.get("number");
             }
-
+*/
 
         System.arraycopy(data, 0, d, 5, 268);
         d[273] = checksum;
@@ -1873,7 +1873,8 @@ public class OberheimMatrix1000 extends Synth
             model.set("name", newnm);
         }
         
-    public double getPauseBetweenMIDISends() { return 75; }
+    boolean sendingMatrix100Parameters = false;
+    public double getPauseBetweenMIDISends() { if (sendingMatrix100Parameters) return 75; else return 0; }
 
     public static String getSynthName() { return "Oberheim Matrix 1000"; }
     
@@ -1930,12 +1931,18 @@ public class OberheimMatrix1000 extends Synth
 
     public void sendAllParameters()
         {
+        // in case we send parameters individually, we'll add a pause between sending parameters here.
+		sendingMatrix100Parameters = true;
+		/*
         if (sendMatrixParametersInBulk)
             {
             // we need to ensure a changepatch to SEND_MATRIX_SLOT here
             changePatch(SEND_MATRIX_BANK, SEND_MATRIX_NUMBER);
             }
+        */
         super.sendAllParameters();
+        // now we turn off the pause
+		sendingMatrix100Parameters = false;
         }
 
 	public boolean useClassicPatchNames = true;

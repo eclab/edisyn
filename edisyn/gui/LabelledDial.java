@@ -367,7 +367,10 @@ public class LabelledDial extends NumericalComponent
                 }
             }
         
-        public boolean getCanonicalSymmetric() { return subtractForDisplay == 64 || subtractForDisplay == 50; }
+        public boolean getCanonicalSymmetric() 
+        	{ 
+        	return subtractForDisplay == 64 || subtractForDisplay == 50 || getMax() == (0 - getMin());        	
+        	}
         
         public double getCanonicalStartAngle()
             {

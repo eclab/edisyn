@@ -526,9 +526,9 @@ public class KawaiK4Drum extends Synth
             }
     	}
 
-    public int getVoiceMessageRoutedChannel(int channel)
+    public int getVoiceMessageRoutedChannel(int incomingChannel, int synthChannel)
         {
-        return model.get("channel", channel);
+        return model.get("channel", incomingChannel);
         }
 
     /** Generate a K4 checksum of the data bytes */

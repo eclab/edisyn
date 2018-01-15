@@ -330,12 +330,14 @@ public abstract class Synth extends JComponent implements Updatable
     public static final Class[] synths = new Class[] 
     { 
     //edisyn.synth.futuresonusparva.FuturesonusParva.class,
-    //edisyn.synth.generic.Generic.class,
+    edisyn.synth.generic.Generic.class,
     edisyn.synth.korgsg.KorgSG.class,
     edisyn.synth.korgsg.KorgSGMulti.class,
     edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
     edisyn.synth.korgmicrokorg.KorgMicroKorg.class,
     edisyn.synth.korgmicrokorg.KorgMicroKorgVocoder.class,
+    edisyn.synth.korgwavestation.KorgWavestationPerformance.class,
+    edisyn.synth.korgwavestation.KorgWavestationPatch.class,
     edisyn.synth.kawaik1.KawaiK1.class, 
     edisyn.synth.kawaik1.KawaiK1Multi.class, 
     edisyn.synth.kawaik4.KawaiK4.class, 
@@ -1098,7 +1100,9 @@ public abstract class Synth extends JComponent implements Updatable
 
                                         // should we attempt to reroute to the synth?
                                         if (channel == tuple.keyChannel || tuple.keyChannel == tuple.KEYCHANNEL_OMNI)
-                                            channel = getVoiceMessageRoutedChannel(channel);
+                                        	{
+                                            channel = getVoiceMessageRoutedChannel(channel, getChannelOut());
+                                            }
 
                                         if (voiceMessage)
                                             newMessage = new ShortMessage(status, channel, data1, data2);
@@ -1139,7 +1143,7 @@ public abstract class Synth extends JComponent implements Updatable
     
     public void messageFromController(MidiMessage message, boolean interceptedForInternalUse, boolean routedToSynth) { return; }
 
-    public int getVoiceMessageRoutedChannel(int incomingChannel) { return incomingChannel; }
+    public int getVoiceMessageRoutedChannel(int incomingChannel, int synthChannel) { return synthChannel; }
 
     /** Sets whether sysex parameter changes should be sent in response to changes to the model.
         You can set this to temporarily paralleize your editor when updating parameters. */
@@ -1216,7 +1220,7 @@ public abstract class Synth extends JComponent implements Updatable
 				new String[] { "Background  ", "Text  ", "Color A  ", "Color B  ", "Color C  ", "Highlights  ", "Dials  " },  
 				new JComponent[] { background, text, a, b, c, dynamic, dial }, 
 				"Update Colors", 
-				"\n\n(Note: Currently-Open Windows Will Look Scrambled)");
+				"\n\n(Note: Currently-Open Windows May Look Scrambled)");
 				
 			if (result)
 				{
@@ -1929,7 +1933,7 @@ public abstract class Synth extends JComponent implements Updatable
         
         if (!onlyGetFromSynth && lastDir == null)
             {
-            getLastX(x);
+            lastDir = getLastX(x);
             }
                 
         return lastDir;         
@@ -3402,7 +3406,7 @@ public abstract class Synth extends JComponent implements Updatable
           {
           public void actionPerformed( ActionEvent e)
           {
-    		if (showSimpleConfirm("Reset Colors", "Reset Color Scheme to Defaults?\n\n(Note: Currently-Open Windows Will Look Scrambled)"))
+    		if (showSimpleConfirm("Reset Colors", "Reset Color Scheme to Defaults?\n\n(Note: Currently-Open Windows May Look Scrambled)"))
           		resetColors();
           }
           });

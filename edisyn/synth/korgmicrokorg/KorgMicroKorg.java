@@ -52,7 +52,7 @@ public class KorgMicroKorg extends Synth
 	
     public KorgMicroKorg()
         {
-        JComponent soundPanel = new SynthPanel();
+        JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
     
@@ -72,7 +72,7 @@ public class KorgMicroKorg extends Synth
 
 		for(int timbre = 1; timbre < 4; timbre++)
 			{
-			soundPanel = panels[timbre - 1] = new SynthPanel();
+			soundPanel = panels[timbre - 1] = new SynthPanel(this);
 			vbox = new VBox();
 			hbox = new HBox();
 			hbox.add(addTimbreGeneral(timbre, Style.COLOR_A()));
@@ -107,7 +107,7 @@ public class KorgMicroKorg extends Synth
        		addTab(timbre == 3 ? "Vocoder" : "Timbre " + timbre, soundPanel);
 			}
 			
-		soundPanel = panels[3] = new SynthPanel();
+		soundPanel = panels[3] = new SynthPanel(this);
 		vbox = new VBox();
 		vbox.add(addChannels(Style.COLOR_A()));
 		vbox.add(addHold(Style.COLOR_B()));
@@ -801,7 +801,7 @@ public class KorgMicroKorg extends Synth
 			comp = new LabelledDial("Release", this, "timbreenv" + timbre + "" + envelope + "release", color, 0, 127);
 			hbox.add(comp);
 
-			comp = new EnvelopeDisplay(this, Color.red, 
+			comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
 				new String[] { null, "timbreenv" + timbre + "" + envelope + "attack", "timbreenv" + timbre + "" + envelope + "decay", null,"timbreenv" + timbre + "" + envelope + "release" },
 				new String[] { null, null, "timbreenv" + timbre + "" + envelope + "sustain", "timbreenv" + timbre + "" + envelope + "sustain", null },
 				new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
@@ -905,7 +905,7 @@ public class KorgMicroKorg extends Synth
 			HBox hbox = new HBox();
 			for(int j = i; j < i + 4; j++)
 				{
-				comp = new NumberTextField("Hold " + j, this, 10, Color.RED, "channel" + j + "hold");
+				comp = new NumberTextField("Hold " + j, this, 10, Style.ENVELOPE_COLOR(), "channel" + j + "hold");
 				((NumberTextField)comp).setMin(0);
 				((NumberTextField)comp).setMax(2147483392);
 				hbox.add(comp);

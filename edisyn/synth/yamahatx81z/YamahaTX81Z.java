@@ -87,7 +87,7 @@ public class YamahaTX81Z extends Synth
                 
         /// SOUND PANEL
                 
-        JComponent soundPanel = new SynthPanel();
+        JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
@@ -102,7 +102,7 @@ public class YamahaTX81Z extends Synth
         addTab("Global", soundPanel);
                 
 
-        JComponent sourcePanel = new SynthPanel();
+        JComponent sourcePanel = new SynthPanel(this);
         vbox = new VBox();
         
         vbox.add(addOperator(1, Style.COLOR_A()));
@@ -114,7 +114,7 @@ public class YamahaTX81Z extends Synth
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("Operators 1-2", sourcePanel);
 
-        sourcePanel = new SynthPanel();
+        sourcePanel = new SynthPanel(this);
         vbox = new VBox();
         
         vbox.add(addOperator(3, Style.COLOR_A()));
@@ -807,7 +807,7 @@ public class YamahaTX81Z extends Synth
     
 
         // ADSR
-        comp = new EnvelopeDisplay(this, Color.red, 
+        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "operator" + envelope + "attackrate", "operator" + envelope + "decay1rate", "operator" + envelope + "decay2rate", "operator" + envelope + "releaserate" },
             new String[] { null, null, "operator" + envelope + "decay1level", "operator" + envelope + "decay1level", null },
             new double[] { 0, 0.25/31.0, 0.25/ 31.0,  0.25/31.0, 0.25/15.0 },

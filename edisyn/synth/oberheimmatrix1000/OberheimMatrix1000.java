@@ -57,7 +57,7 @@ public class OberheimMatrix1000 extends Synth
                         
         /// SOUND PANEL
                 
-        SynthPanel soundPanel = new SynthPanel();
+        SynthPanel soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
@@ -79,7 +79,7 @@ public class OberheimMatrix1000 extends Synth
                 
         // ENVELOPE PANEL
                 
-        SynthPanel envelopePanel = new SynthPanel();
+        SynthPanel envelopePanel = new SynthPanel(this);
         vbox = new VBox();
 
         hbox = new HBox();
@@ -103,7 +103,7 @@ public class OberheimMatrix1000 extends Synth
         
         // MODULATION PANEL
                 
-        SynthPanel modulationPanel = new SynthPanel();
+        SynthPanel modulationPanel = new SynthPanel(this);
         
         vbox = new VBox();
         vbox.add(addModulation(Style.COLOR_A()));
@@ -551,14 +551,14 @@ public class OberheimMatrix1000 extends Synth
 
         envelopeBox[env - 1] = new HBox();
         // DADR
-        dadr[env - 1] = new EnvelopeDisplay(this, Color.red, 
+        dadr[env - 1] = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "env" + env + "delay", "env" + env + "attack", "env" + env + "decay", "env" + env + "release" },
             new String[] { null, null, null, "env" + env + "sustain", null },
             new double[] { 0, 0.25/63.0, 0.25/63.0, 0.25 / 63.0, 0.25/63.0},
             new double[] { 0, 0, 1.0, 1.0 / 63.0, 0 });
 
         // DADSR
-        dadsr[env - 1] = new EnvelopeDisplay(this, Color.red, 
+        dadsr[env - 1] = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "env" + env + "delay", "env" + env + "attack", "env" + env + "decay", null, "env" + env + "release" },
             new String[] { null, null, null, "env" + env + "sustain", "env" + env + "sustain", null },
             new double[] { 0, 0.2/63.0, 0.2/63.0, 0.2 / 63.0,  0.2, 0.2/63.0},
@@ -657,7 +657,7 @@ public class OberheimMatrix1000 extends Synth
         hbox.add(comp);
 
 
-        comp = new EnvelopeDisplay(this, Color.red, 
+        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, null, null, null, null },
             new String[] { "trackingpoint1", "trackingpoint2", "trackingpoint3", "trackingpoint4", "trackingpoint5" },
             new double[] { 0, 0.25, 0.25, 0.25, 0.25},

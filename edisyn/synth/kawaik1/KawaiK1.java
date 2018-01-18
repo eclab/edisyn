@@ -74,7 +74,7 @@ public class KawaiK1 extends Synth
                 
         /// SOUND PANEL
                 
-        JComponent soundPanel = new SynthPanel();
+        JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
@@ -90,7 +90,7 @@ public class KawaiK1 extends Synth
         addTab("Global", soundPanel);
                 
 
-        JComponent sourcePanel = new SynthPanel();
+        JComponent sourcePanel = new SynthPanel(this);
         vbox = new VBox();
         
         vbox.add(addSource(1, Style.COLOR_A()));
@@ -102,7 +102,7 @@ public class KawaiK1 extends Synth
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("Sources 1-2", sourcePanel);
 
-        sourcePanel = new SynthPanel();
+        sourcePanel = new SynthPanel(this);
         vbox = new VBox();
         
         vbox.add(addSource(3, Style.COLOR_A()));
@@ -376,7 +376,7 @@ public class KawaiK1 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Depth Mod");
         hbox.add(comp);
                 
-        EnvelopeDisplay disp = new EnvelopeDisplay(this, Color.red, 
+        EnvelopeDisplay disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "autobendtime" }, 
             new String[] { "autobenddepth", null  },
             new double[] { 0, 1.0/100.0 },
@@ -520,7 +520,7 @@ public class KawaiK1 extends Synth
         hbox.add(comp);
 
 
-        comp = new EnvelopeDisplay(this, Color.red, 
+        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "s" + envelope + "delay", "s" + envelope + "envelopeattack", "s" + envelope + "envelopedecay", null, "s" + envelope + "enveloperelease" },
             new String[] { null, null, null, "s" + envelope + "envelopesustain", "s" + envelope + "envelopesustain", null },
             new double[] { 0, 0.2/100.0, 0.2/100.0, 0.2 / 100.0,  0.2, 0.2/100.0},

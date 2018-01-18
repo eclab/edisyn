@@ -128,7 +128,7 @@ public class WaldorfBlofeldMulti extends Synth
         
     public WaldorfBlofeldMulti()
         {
-        JComponent soundPanel = new SynthPanel();
+        JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         vbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
         vbox.add(addMultiData(Style.COLOR_A()));
@@ -142,7 +142,7 @@ public class WaldorfBlofeldMulti extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Multi and Parts 1 - 4", soundPanel);
 
-        soundPanel = new SynthPanel();
+        soundPanel = new SynthPanel(this);
         vbox = new VBox();
 
         for(int i = 5; i < 11; i++)
@@ -153,7 +153,7 @@ public class WaldorfBlofeldMulti extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Parts 5 - 10", soundPanel);
 
-        soundPanel = new SynthPanel();
+        soundPanel = new SynthPanel(this);
         vbox = new VBox();
 
         for(int i = 11; i < 17; i++)

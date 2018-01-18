@@ -57,7 +57,7 @@ public class KawaiK1Multi extends Synth
                         
         /// SOUND PANEL
                 
-        JComponent soundPanel = new SynthPanel();
+        JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
@@ -71,7 +71,7 @@ public class KawaiK1Multi extends Synth
         addTab("Global, Sections 1-2", soundPanel);
                 
 
-        SynthPanel sourcePanel = new SynthPanel();
+        SynthPanel sourcePanel = new SynthPanel(this);
         vbox = new VBox();
         
         vbox.add(addSection(3, Style.COLOR_A()));
@@ -81,7 +81,7 @@ public class KawaiK1Multi extends Synth
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("Sections 3-5", sourcePanel);
 
-        sourcePanel = new SynthPanel();
+        sourcePanel = new SynthPanel(this);
         vbox = new VBox();
         
         vbox.add(addSection(6, Style.COLOR_B()));

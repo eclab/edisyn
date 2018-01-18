@@ -124,7 +124,8 @@ public class Style
     public static float ENVELOPE_DISPLAY_MARKER_WIDTH() { return 4; }
     /** Stroke for the X axis. */
     public static BasicStroke ENVELOPE_AXIS_STROKE() { return new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, new float[] { 4.0f }, 0.0f); }
-            
+	public static Color ENVELOPE_COLOR() { return DYNAMIC_COLOR(); }
+
     /////// CHECKBOX CONSTANTS
     /** Border around arpeggiator checkboxes */
     public static Border CHECKBOX_HIGHLIGHTED_BORDER() { return BorderFactory.createCompoundBorder(

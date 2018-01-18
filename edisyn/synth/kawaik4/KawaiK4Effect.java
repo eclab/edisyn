@@ -51,7 +51,7 @@ public class KawaiK4Effect extends Synth
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
 
-        JComponent soundPanel = new SynthPanel();
+        JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));

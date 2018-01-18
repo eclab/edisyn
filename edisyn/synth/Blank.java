@@ -629,6 +629,13 @@ public class Blank extends Synth
         // first.
         return super.sprout();
         }
+        
+    public void tabChanged()
+    	{
+    	// This method is called whenever the tabs are changed in case you need to do something
+    	// like update a menu item in response to it etc.  Be sure to call super.tabChanged();
+    	super.tabChanged();
+    	}
 
     public boolean getExpectsRawCCFromSynth() 
         {

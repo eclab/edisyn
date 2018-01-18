@@ -54,7 +54,7 @@ public class FuturesonusParva extends Synth
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
     	
-        JComponent soundPanel = new SynthPanel();
+        JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
@@ -77,7 +77,7 @@ public class FuturesonusParva extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Sound", soundPanel);
 
-        soundPanel = new SynthPanel();
+        soundPanel = new SynthPanel(this);
         vbox = new VBox();
 
         vbox.add(addFilter(Style.COLOR_B()));
@@ -95,7 +95,7 @@ public class FuturesonusParva extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Filter and LFOs", soundPanel);
 
-        soundPanel = new SynthPanel();
+        soundPanel = new SynthPanel(this);
         vbox = new VBox();
         
         vbox.add(addEnvelope(1, Style.COLOR_B()));
@@ -107,7 +107,7 @@ public class FuturesonusParva extends Synth
         addTab("Envelopes", soundPanel);
 
 
-        soundPanel = new SynthPanel();
+        soundPanel = new SynthPanel(this);
         vbox = new VBox();
         vbox.add(addModulation(Style.COLOR_A()));
                 
@@ -364,7 +364,7 @@ public class FuturesonusParva extends Synth
         hbox.add(comp);        
 
         // ADSR
-        comp = new EnvelopeDisplay(this, Color.red, 
+        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "env" + env + "attack", "env" + env + "decay", null, "env" + env + "release" },
             new String[] { null, null, "env" + env + "sustain", "env" + env + "sustain", null },
             new double[] { 0, 0.3333, 0.3333, 0.3333, 0.3333 },

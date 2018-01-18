@@ -187,10 +187,10 @@ public class LabelledDial extends NumericalComponent
         int status = STATUS_STATIC;
         Color staticColor;
 
-        // The largest range that the dial can represent.
-        public static final int MAX_EXTENT = 127;
-        // The typical range that the dial represents.  127 is reasonable
-        public static final int DEFAULT_EXTENT = 127;
+        // The largest vertical range that a dial ought to go.
+        public static final int MAX_EXTENT = 512;
+        // The typical vertical range that the dial goes.  128 is reasonable
+        public static final int MIN_EXTENT = 128;
         
         // The state when the mouse was pressed 
         int startState;
@@ -237,7 +237,7 @@ public class LabelledDial extends NumericalComponent
                 {
                 public void mouseWheelMoved(MouseWheelEvent e) 
                     {
-                    int val = getState() - e.getWheelRotation();
+                    int val = getState() - e.getWheelRotation() / 2;
                     if (val > getMax()) val = getMax();
                     if (val < getMin()) val = getMin();
 
@@ -306,11 +306,12 @@ public class LabelledDial extends NumericalComponent
                     int y = -(e.getY() - startY);
                     int range = (getMax() - getMin() + 1 );
                     double multiplicand = 1;
-                    // for the time being, these will do the same thing (as DEFAULT_EXTENT == MAX_EXTENT)
-                    if (range <= DEFAULT_EXTENT)
-                        multiplicand = DEFAULT_EXTENT / (double) range;
-                    else
-                        multiplicand = MAX_EXTENT / (double) range;
+                    
+                    double extent = range;
+                    if (extent < MIN_EXTENT) extent = MIN_EXTENT;
+                    if (extent > MAX_EXTENT) extent = MAX_EXTENT;
+                    
+                    multiplicand = extent / (double) range;
                     
                     int proposedState = startState + (int)(y / multiplicand);
 

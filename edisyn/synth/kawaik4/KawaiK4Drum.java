@@ -76,7 +76,7 @@ public class KawaiK4Drum extends Synth
             internalParametersToIndex.put(internalParameters[i], Integer.valueOf(i));
             }
 
-        JComponent soundPanel = new SynthPanel();
+        JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));

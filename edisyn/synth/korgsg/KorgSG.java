@@ -67,7 +67,7 @@ public class KorgSG extends Synth
 
     public KorgSG()
         {
-        JComponent soundPanel = new SynthPanel();
+        JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
@@ -254,7 +254,7 @@ public class KorgSG extends Synth
         hbox.add(comp);
 
         // AD[S]R
-        comp = new EnvelopeDisplay(this, Color.red, 
+        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "attacktime", "decaytime", null, "releasetime" },
             new String[] { null, "level", "level", "level", null },
             new double[] { 0, 0.25 / 198, 0.25 / 198, 0.25, 0.25 / 198 },

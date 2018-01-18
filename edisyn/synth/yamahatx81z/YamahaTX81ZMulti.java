@@ -46,7 +46,7 @@ public class YamahaTX81ZMulti extends Synth
                         
         /// SOUND PANEL
                 
-        JComponent soundPanel = new SynthPanel();
+        JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
@@ -60,7 +60,7 @@ public class YamahaTX81ZMulti extends Synth
         addTab("Global, Instruments 1-2", soundPanel);
                 
 
-        SynthPanel sourcePanel = new SynthPanel();
+        SynthPanel sourcePanel = new SynthPanel(this);
         vbox = new VBox();
         
         vbox.add(addInstrument(3, Style.COLOR_A()));
@@ -70,7 +70,7 @@ public class YamahaTX81ZMulti extends Synth
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("Instruments 3-5", sourcePanel);
 
-        sourcePanel = new SynthPanel();
+        sourcePanel = new SynthPanel(this);
         vbox = new VBox();
         
         vbox.add(addInstrument(6, Style.COLOR_A()));

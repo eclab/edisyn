@@ -30,6 +30,12 @@ public abstract class NumericalComponent extends JComponent implements Updatable
     String key;
     Synth synth;
     
+    /** Sets the component's key.  Does not update. */
+    public void setKey(String key) { this.key = key; }
+    
+    /** Sets the component's key.  Does not update. */
+    public String getKey() { return key; }
+    
     /** Returns the min value for the key in the model. */
     public int getMin() { return (int) synth.getModel().getMin(key); }
         
@@ -96,8 +102,6 @@ public abstract class NumericalComponent extends JComponent implements Updatable
         
     public abstract void update(String key, Model model);
         
-    public String getKey() { return key; }
-    
     public void updateBorder()
         {
         // If we're supposed to show our mutation, and I'm free to mutate, but I'm not showing it, show it

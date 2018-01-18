@@ -338,6 +338,7 @@ public abstract class Synth extends JComponent implements Updatable
     edisyn.synth.korgmicrokorg.KorgMicroKorgVocoder.class,
     edisyn.synth.korgwavestation.KorgWavestationPerformance.class,
     edisyn.synth.korgwavestation.KorgWavestationPatch.class,
+    edisyn.synth.korgwavestation.KorgWavestationSequence.class,
     edisyn.synth.kawaik1.KawaiK1.class, 
     edisyn.synth.kawaik1.KawaiK1Multi.class, 
     edisyn.synth.kawaik4.KawaiK4.class, 
@@ -1651,6 +1652,21 @@ public abstract class Synth extends JComponent implements Updatable
 		{
 		return tabs.getTabCount();
 		}
+	
+	public int getSelectedTabIndex()
+		{
+		return tabs.getSelectedIndex();
+		}
+	
+	public JComponent getSelectedTab()
+		{
+		return (JComponent)(tabs.getSelectedComponent());
+		}
+		
+	public String getSelectedTabTitle()
+		{
+		return tabs.getTitleAt(tabs.getSelectedIndex());
+		}
 		
     public JComponent insertTab(String title, JComponent component, int index)
         {
@@ -1994,6 +2010,19 @@ public abstract class Synth extends JComponent implements Updatable
     ///////////    SPROUT AND MENU HANDLING
 
 
+	public void tabChanged()
+		{
+		// cancel learning
+		setLearningCC(false);
+		if (tabs.getSelectedComponent() == hillClimbPane)
+			{
+			hillClimb.startup();
+			}
+		else
+			{
+			hillClimb.shutdown();
+			}
+		}
 
 
     public JFrame sprout()
@@ -2004,16 +2033,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void stateChanged(ChangeEvent e)
                 {
-                // cancel learning
-                setLearningCC(false);
-                if (tabs.getSelectedComponent() == hillClimbPane)
-                    {
-                    hillClimb.startup();
-                    }
-                else
-                    {
-                    hillClimb.shutdown();
-                    }
+                tabChanged();
                 }
             });
         hillClimb = new HillClimb(this);

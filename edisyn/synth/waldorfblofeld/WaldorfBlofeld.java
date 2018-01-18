@@ -84,7 +84,7 @@ public class WaldorfBlofeld extends Synth
                                 
         /// SOUND PANEL
                 
-        JComponent soundPanel = new SynthPanel();
+        JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
@@ -105,7 +105,7 @@ public class WaldorfBlofeld extends Synth
                 
         // LFO and ENVELOPE PANEL
                 
-        JComponent lfoEnvelopePanel = new SynthPanel();
+        JComponent lfoEnvelopePanel = new SynthPanel(this);
         vbox = new VBox();
 
         hbox = new HBox();
@@ -128,7 +128,7 @@ public class WaldorfBlofeld extends Synth
                 
         // MODULATION PANEL
                 
-        JComponent modulationPanel = new SynthPanel();
+        JComponent modulationPanel = new SynthPanel(this);
                 
         vbox = new VBox();
         vbox.add(addModulation(Style.COLOR_A()));
@@ -141,7 +141,7 @@ public class WaldorfBlofeld extends Synth
         addTab("Modulation and Effects", modulationPanel);
 
         // ARPEGGIATOR PANEL
-        JComponent arpeggiationPanel = new SynthPanel();
+        JComponent arpeggiationPanel = new SynthPanel(this);
         
         vbox = new VBox();
         vbox.add(addArpeggiatorGlobal(Style.COLOR_A()));
@@ -780,14 +780,14 @@ public class WaldorfBlofeld extends Synth
         
 
         // ADSR
-        envelopeDisplays[envelope - 1][0] = new EnvelopeDisplay(this, Color.red, 
+        envelopeDisplays[envelope - 1][0] = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", null, "envelope" + envelope + "release" },
             new String[] { null, null, "envelope" + envelope + "sustain", "envelope" + envelope + "sustain", null },
             new double[] { 0, 0.3333, 0.3333,  0.3333, 0.3333},
             new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 },
             new double[] { 0, (Math.PI/4/127),   (Math.PI/4/127), 0, (Math.PI/4/127)});
         /*
-          envelopeDisplays[envelope - 1][0] = new EnvelopeDisplay(this, Color.red, 
+          envelopeDisplays[envelope - 1][0] = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
           new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", null, "envelope" + envelope + "release" },
           new String[] { null, null, "envelope" + envelope + "sustain", "envelope" + envelope + "sustain", null },
           new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
@@ -795,7 +795,7 @@ public class WaldorfBlofeld extends Synth
         */
 
         // ADS1DS2R
-        envelopeDisplays[envelope - 1][1] = new EnvelopeDisplay(this, Color.red, 
+        envelopeDisplays[envelope - 1][1] = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", null, "envelope" + envelope + "release" },
             new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", "envelope" + envelope + "sustain2", null },
             new double[] { 0, 0.2, 0.2,   0.2, 0.2, 0.2},
@@ -803,7 +803,7 @@ public class WaldorfBlofeld extends Synth
             new double[] { 0, Math.PI/4/127,  Math.PI/4/127,  Math.PI/4/127, 0,  Math.PI/4/127 });
 
         /*
-          envelopeDisplays[envelope - 1][1] = new EnvelopeDisplay(this, Color.red, 
+          envelopeDisplays[envelope - 1][1] = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
           new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", null, "envelope" + envelope + "release" },
           new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", "envelope" + envelope + "sustain2", null },
           new double[] { 0, 0.2/127.0, 0.2 / 127.0,   0.2/127.0, 0.2, 0.2/127.0},
@@ -812,14 +812,14 @@ public class WaldorfBlofeld extends Synth
 
         // One Shot
 
-        envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Color.red, 
+        envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", "envelope" + envelope + "release" },
             new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", null },
             new double[] { 0, 0.25, 0.25, 0.25, 0.25},
             new double[] { 0, 1.0/127.0, 1.0 / 127.0, 1.0 / 127.0, 0 },
             new double[] { 0, Math.PI/4/127,  Math.PI/4/127,  Math.PI/4/127, Math.PI/4/127 });
         /*
-        envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Color.red, 
+        envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "release" },
             new String[] { null, null, "envelope" + envelope + "sustain", null },
             new double[] { 0, 0.5, 0.5, 0.5},
@@ -828,7 +828,7 @@ public class WaldorfBlofeld extends Synth
         */
 
         /*
-          envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Color.red, 
+          envelopeDisplays[envelope - 1][2] = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
           new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "release" },
           new String[] { null, null, "envelope" + envelope + "sustain", null },
           new double[] { 0, 0.33333333/127.0, 0.33333333/ 127.0, 0.33333333/127.0},
@@ -837,7 +837,7 @@ public class WaldorfBlofeld extends Synth
                         
         // Loop S1S2
         
-        envelopeDisplays[envelope - 1][3] = new EnvelopeDisplay(this, Color.red, 
+        envelopeDisplays[envelope - 1][3] = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", "envelope" + envelope + "release" },
             new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", null },
             new double[] { 0, 0.25, 0.25, 0.25, 0.25 },
@@ -845,7 +845,7 @@ public class WaldorfBlofeld extends Synth
             new double[] { 0, Math.PI/4/127, Math.PI/4/127, Math.PI/4/127, Math.PI/4/127});
 
         /*
-          envelopeDisplays[envelope - 1][3] = new EnvelopeDisplay(this, Color.red, 
+          envelopeDisplays[envelope - 1][3] = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
           new String[] { null, "envelope" + envelope + "attack", "envelope" + envelope + "decay", "envelope" + envelope + "decay2", "envelope" + envelope + "release" },
           new String[] { null, "envelope" + envelope + "attacklevel", "envelope" + envelope + "sustain", "envelope" + envelope + "sustain2", null },
           new double[] { 0, 0.25/127.0, 0.25 / 127.0, 0.25/127.0, 0.25/127.0 },

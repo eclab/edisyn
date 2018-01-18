@@ -44,30 +44,32 @@ import edisyn.synth.*;
 
 public class HillClimb extends SynthPanel
     {
-    public static final int NUM_MODELS = 16;
+    public static final int NUM_MODELS = 17;
 
     ArrayList oldA = new ArrayList();
     ArrayList oldB = new ArrayList();
     ArrayList oldC = new ArrayList();
     Model[] currentModels = new Model[NUM_MODELS];
     Model[] bestModels = new Model[3];
-    JRadioButton[][] ratings = new JRadioButton[16][3];
-    PushButton[] plays = new PushButton[16];
+    JRadioButton[][] ratings = new JRadioButton[NUM_MODELS + 1][3];
+    PushButton[] plays = new PushButton[NUM_MODELS];
     public static final int INITIAL_MUTATION_RATE = 20;
     public static final int INITIAL_RECOMBINATION_RATE = 75;
-    //JSlider mutationRate = new JSlider(JSlider.HORIZONTAL, 0, 100, INITIAL_MUTATION_RATE);
-    //JSlider recombinationRate = new JSlider(JSlider.HORIZONTAL, 0, 100, INITIAL_RECOMBINATION_RATE);
     Blank blank;
     Category iterations;
         
-    Synth synth;
     int currentPlay = 0;
         
-    public HillClimb(final Synth synth)
+    public HillClimb(Synth synth)
         {
-        this.synth = synth;
+		super(synth);
         
-        VBox top = new VBox();
+         ButtonGroup one = new ButtonGroup();
+        ButtonGroup two = new ButtonGroup();
+        ButtonGroup three = new ButtonGroup();
+                
+       VBox top = new VBox();
+        HBox toprow = new HBox();
         add(top, BorderLayout.CENTER);
 
         // add globals
@@ -142,72 +144,121 @@ public class HillClimb extends SynthPanel
         ratebox.add(mutationRate);
 		vbox.add(ratebox);
 
-
-
-        
-        /*
-        JLabel recombinationRateLabel = new JLabel("Recombination Rate", SwingConstants.RIGHT);
-        recombinationRateLabel.setFont(Style.SMALL_FONT());
-        recombinationRateLabel.setForeground(Style.TEXT_COLOR());
-        recombinationRateLabel.setOpaque(false);
-        final JLabel recombinationRateVal = new JLabel("" + INITIAL_RECOMBINATION_RATE + "%");
-        recombinationRateVal.setFont(Style.SMALL_FONT());
-        recombinationRateVal.setForeground(Style.TEXT_COLOR());
-        recombinationRateVal.setOpaque(false);
-        recombinationRate.setOpaque(false);
-        UIManager.getDefaults().put("Slider.tickColor", Color.RED);
-        UIManager.getDefaults().put("Slider.shadow", Color.BLUE);
-        recombinationRate.addChangeListener(new ChangeListener()
-            {
-            public void stateChanged(ChangeEvent e) { recombinationRateVal.setText("" + recombinationRate.getValue() + "%"); }
-            });
-        HBox ratebox = new HBox();
-        ratebox.add(climb);
-        ratebox.add(retry);
-        ratebox.add(Strut.makeHorizontalStrut(30));
-        ratebox.add(recombinationRateLabel);
-        ratebox.add(recombinationRate);
-        ratebox.add(recombinationRateVal);
-        vbox.add(ratebox);
-
-
-        JLabel mutationRateLabel = new JLabel("Mutation Rate", SwingConstants.RIGHT);
-        mutationRateLabel.setPreferredSize(recombinationRateLabel.getPreferredSize());
-        mutationRateLabel.setFont(Style.SMALL_FONT());
-        mutationRateLabel.setForeground(Style.TEXT_COLOR());
-        mutationRateLabel.setOpaque(false);
-        final JLabel mutationRateVal = new JLabel("" + INITIAL_MUTATION_RATE + "%");
-        mutationRateVal.setFont(Style.SMALL_FONT());
-        mutationRateVal.setForeground(Style.TEXT_COLOR());
-        mutationRateVal.setOpaque(false);
-        mutationRate.setOpaque(false);
-        mutationRate.addChangeListener(new ChangeListener()
-            {
-            public void stateChanged(ChangeEvent e) { mutationRateVal.setText("" + mutationRate.getValue() + "%"); }
-            });
-        ratebox = new HBox();
-        ratebox.add(backup);
-        ratebox.add(reset);
-        ratebox.add(Strut.makeHorizontalStrut(30));
-        ratebox.add(mutationRateLabel);
-        ratebox.add(mutationRate);
-        ratebox.add(mutationRateVal);
-        vbox.add(ratebox);
-        */
                                 
         panel.add(vbox, BorderLayout.WEST);
-        top.add(panel);
+        toprow.add(panel);
         
+        // Add None
+        panel = new Category(null, "None", Style.COLOR_B());
         
+        vbox = new VBox();
+            Box b = new Box(BoxLayout.X_AXIS);
+            b.setBackground(Style.BACKGROUND_COLOR());
+            b.add(Box.createGlue());
+            b.add(ratings[NUM_MODELS][0] = new JRadioButton("1"));
+            ratings[NUM_MODELS][0].setForeground(Style.TEXT_COLOR());
+            ratings[NUM_MODELS][0].setFont(Style.SMALL_FONT());
+            ratings[NUM_MODELS][0].putClientProperty("JComponent.sizeVariant", "small");
+            b.add(Box.createGlue());
+            vbox.add(b);
+                        
+            b = new Box(BoxLayout.X_AXIS);
+            b.setBackground(Style.BACKGROUND_COLOR());
+            b.add(Box.createGlue());
+            b.add(ratings[NUM_MODELS][1] = new JRadioButton("2"));
+            ratings[NUM_MODELS][1].setForeground(Style.TEXT_COLOR());
+            ratings[NUM_MODELS][1].setFont(Style.SMALL_FONT());
+            ratings[NUM_MODELS][1].putClientProperty("JComponent.sizeVariant", "small");
+            b.add(Box.createGlue());
+            vbox.add(b);
+                        
+            b = new Box(BoxLayout.X_AXIS);
+            b.setBackground(Style.BACKGROUND_COLOR());
+            b.add(Box.createGlue());
+            b.add(ratings[NUM_MODELS][2] = new JRadioButton("3"));
+            ratings[NUM_MODELS][2].setForeground(Style.TEXT_COLOR());
+            ratings[NUM_MODELS][2].setFont(Style.SMALL_FONT());
+            ratings[NUM_MODELS][2].putClientProperty("JComponent.sizeVariant", "small");
+            b.add(Box.createGlue());
+            vbox.add(b);
+        VBox bar = new VBox();
+        bar.addBottom(vbox);
+        HBox foo = new HBox();
+        foo.add(bar);
+        foo.add(Strut.makeHorizontalStrut(40));
+		panel.add(foo);
+		toprow.add(panel);
+		
+        // Add Current 
+        panel = new Category(null, "Current", Style.COLOR_B());
+        
+        vbox = new VBox();
+ 
+             vbox = new VBox();
+            plays[NUM_MODELS - 1] = new PushButton("Play")
+                {
+                public void perform()
+                    {
+                    if (synth.isSendingTestNotes())
+                        {
+                        currentPlay = NUM_MODELS - 1;
+                        }
+                    else
+                        {
+                        // change the model, send all parameters, maybe play a note,
+                        // and then restore the model.
+                        Model backup = synth.model;
+                        synth.model = currentModels[NUM_MODELS - 1];
+                        synth.sendAllParameters();
+                        synth.doSendTestNote(false);
+                        synth.model = backup;
+                        }
+
+                    }
+                };
+            vbox.add(plays[NUM_MODELS - 1]);
+
+         b = new Box(BoxLayout.X_AXIS);
+            b.setBackground(Style.BACKGROUND_COLOR());
+            b.add(Box.createGlue());
+            b.add(ratings[NUM_MODELS - 1][0] = new JRadioButton("1"));
+            ratings[NUM_MODELS - 1][0].setForeground(Style.TEXT_COLOR());
+            ratings[NUM_MODELS - 1][0].setFont(Style.SMALL_FONT());
+            ratings[NUM_MODELS - 1][0].putClientProperty("JComponent.sizeVariant", "small");
+            b.add(Box.createGlue());
+            vbox.add(b);
+                        
+            b = new Box(BoxLayout.X_AXIS);
+            b.setBackground(Style.BACKGROUND_COLOR());
+            b.add(Box.createGlue());
+            b.add(ratings[NUM_MODELS - 1][1] = new JRadioButton("2"));
+            ratings[NUM_MODELS - 1][1].setForeground(Style.TEXT_COLOR());
+            ratings[NUM_MODELS - 1][1].setFont(Style.SMALL_FONT());
+            ratings[NUM_MODELS - 1][1].putClientProperty("JComponent.sizeVariant", "small");
+            b.add(Box.createGlue());
+            vbox.add(b);
+                        
+            b = new Box(BoxLayout.X_AXIS);
+            b.setBackground(Style.BACKGROUND_COLOR());
+            b.add(Box.createGlue());
+            b.add(ratings[NUM_MODELS - 1][2] = new JRadioButton("3"));
+            ratings[NUM_MODELS - 1][2].setForeground(Style.TEXT_COLOR());
+            ratings[NUM_MODELS - 1][2].setFont(Style.SMALL_FONT());
+            ratings[NUM_MODELS - 1][2].putClientProperty("JComponent.sizeVariant", "small");
+            b.add(Box.createGlue());
+            vbox.add(b);
+        foo = new HBox();
+        foo.add(vbox);
+		panel.add(foo);
+		
+		toprow.addLast(panel);
+		top.add(toprow);
+
         // Add Candidates
 
         panel =  new Category(null, "Candidates", Style.COLOR_B());
 
         HBox hbox = new HBox();
-                
-        ButtonGroup one = new ButtonGroup();
-        ButtonGroup two = new ButtonGroup();
-        ButtonGroup three = new ButtonGroup();
                 
         VBox vr = new VBox();
         for(int i = 0; i < 16; i++)
@@ -238,7 +289,7 @@ public class HillClimb extends SynthPanel
                 };
             vbox.add(plays[i]);
 
-            Box b = new Box(BoxLayout.X_AXIS);
+            b = new Box(BoxLayout.X_AXIS);
             b.setBackground(Style.BACKGROUND_COLOR());
             b.add(Box.createGlue());
             b.add(ratings[i][0] = new JRadioButton("1"));
@@ -268,9 +319,6 @@ public class HillClimb extends SynthPanel
             b.add(Box.createGlue());
             vbox.add(b);
 
-            one.add(ratings[i][0]);
-            two.add(ratings[i][1]);
-            three.add(ratings[i][2]);
             vbox.add(new PushButton("Keep")
                 {
                 public void perform()
@@ -303,8 +351,13 @@ public class HillClimb extends SynthPanel
 
         panel.add(vr, BorderLayout.WEST);
         top.add(panel);
-                
-        //              initialize(synth.getModel(), true);
+        
+    	for(int i = 0; i < ratings.length; i++)
+    		{
+    		one.add(ratings[i][0]);
+    		two.add(ratings[i][1]);
+    		three.add(ratings[i][2]);
+    		}                
         }       
                 
     public static final int UPDATE_SOUND_RATE = 1;
@@ -402,6 +455,10 @@ public class HillClimb extends SynthPanel
             oldC.remove(oldC.size() - 1);
             initialize(seed, true);
             }
+
+		ratings[NUM_MODELS][0].setSelected(true);
+		ratings[NUM_MODELS][1].setSelected(true);
+		ratings[NUM_MODELS][2].setSelected(true);
         }
         
     public void pop()
@@ -443,6 +500,10 @@ public class HillClimb extends SynthPanel
                 
         iterations.setName("Iteration " + oldA.size());
         repaint();
+
+		ratings[NUM_MODELS][0].setSelected(true);
+		ratings[NUM_MODELS][1].setSelected(true);
+		ratings[NUM_MODELS][2].setSelected(true);
         }
                 
     public void initialize(Model seed, boolean clear)
@@ -488,11 +549,85 @@ public class HillClimb extends SynthPanel
         iterations.setName("Iteration " + oldA.size());
         repaint();
 
-        ratings[0][0].setSelected(true);
-        ratings[1][1].setSelected(true);
-        ratings[2][2].setSelected(true);
+        ratings[NUM_MODELS][0].setSelected(true);
+        ratings[NUM_MODELS][1].setSelected(true);
+        ratings[NUM_MODELS][2].setSelected(true);
         }
 
+	 void shuffle(Random random, Model[] array, int len)
+		{
+    	for (int i = len - 1; i > 0; i--)
+    		{
+    	    int index = random.nextInt(i + 1);
+    	    Model temp = array[index];
+    	    array[index] = array[i];
+    	    array[i] = temp;
+    		}
+		}
+
+	public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA)
+		{
+        currentModels[0] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight);
+        currentModels[1] = ((Model)(a.clone())).recombine(random, c, keys, recombination).mutate(random, keys, weight);
+        currentModels[2] = ((Model)(a.clone())).recombine(random, ((Model)(b.clone())).recombine(random, b, keys, recombination), keys, recombination).mutate(random, keys, weight);
+        currentModels[3] = ((Model)(a.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight);
+        currentModels[4] = ((Model)(b.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight);
+        currentModels[5] = ((Model)(a.clone())).opposite(random, c, keys, recombination, false).mutate(random, keys, weight);
+        currentModels[6] = ((Model)(c.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight);
+        currentModels[7] = ((Model)(b.clone())).opposite(random, c, keys, recombination, false).mutate(random, keys, weight);
+        currentModels[8] = ((Model)(c.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight);
+        currentModels[9] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight);
+        currentModels[10] = ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight);
+        currentModels[11] = ((Model)(c.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight);
+        currentModels[12] = ((Model)(a.clone())).opposite(random, oldA, keys, 2.0 * recombination, false).mutate(random, keys, weight);
+        currentModels[13] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[14] = ((Model)(b.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[15] = ((Model)(c.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
+        shuffle(random, currentModels, NUM_MODELS - 1);
+		}
+	
+	public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA)
+		{
+        currentModels[0] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight);
+        currentModels[1] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[2] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[3] = ((Model)(a.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight);
+        currentModels[4] = ((Model)(a.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[5] = ((Model)(b.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight);
+        currentModels[6] = ((Model)(b.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[7] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight);
+        currentModels[8] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[9] = ((Model)(a.clone())).opposite(random, oldA, keys, 2.0 * recombination, false).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[10] = ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight);
+        currentModels[11] = ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[12] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[13] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[14] = ((Model)(b.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[15] = ((Model)(b.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
+        shuffle(random, currentModels, NUM_MODELS - 1);
+		}
+		
+	public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA)
+		{
+        currentModels[0] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[1] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[2] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[3] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[4] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[5] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[6] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[7] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[8] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[9] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[10] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[11] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[12] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[13] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight);
+        currentModels[14] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight).mutate(random, keys, weight);
+        currentModels[15] = ((Model)(a.clone())).opposite(random, oldA, keys, 2.0 * recombination, false).mutate(random, keys, weight).mutate(random, keys, weight);
+        shuffle(random, currentModels, NUM_MODELS - 1);
+		}
+		
         
     public void climb(boolean determineBest)
         {
@@ -503,6 +638,9 @@ public class HillClimb extends SynthPanel
                 
         if (determineBest)
             {
+            for(int j = 0; j < 3; j++)
+            	bestModels[j] = null;
+            	
             // load the best models
             for(int i = 0; i < 16; i++)
                 {
@@ -513,135 +651,56 @@ public class HillClimb extends SynthPanel
                     }
                 }
             }
-                        
-                
-        // Standard Mutations and Recombinations
         
-        /**
-        	The original sound is Z.
-        	The user chooses A, B, and C.
-        	The mutations are:
-        	
-        	Noisy A + B
-        	Noisy A + C
-        	Noisy B + C
-        	Noisy A + (B + C)
-			Noisy Noisy A
-        	Noisy Beyond A
-        	Noisy Beyond B
-        	Noisy Beyond C
-			Noisy Beyond Beyond A
-			Noisy Beyond B from A
-			Noisy Beyond A from B
-			Noisy Beyond C from A
-			Noisy Beyond A from C
-			Noisy Beyond B from C
-			Noisy Beyond C from B
-			Current Patch
-
-
-        	Noisy A
-        	Noisy Noisy A
-        	Noisy Noisy Noisy A
-        	Noisy B
-        	Noisy Beyond B from A
-        	Noisy C
-        	Noisy Beyond C from A
-        	        	
-           The Mutations are
-           A
-           A + B
-           A + C
-           A + (B + C)
-           B + C
-           Beyond A from Z
-           Even Further Beyond A from Z
-           Noisy(A)
-           Noisy(A + B)
-           Noisy(A + C)
-           Noisy(A + (B + C))
-           Noisy(Noisy(A))
-           Noisy(Noisy(A + B))
-           Noisy(Noisy(A + C))
-           Noisy(Noisy(A + (B + C)))
-           Current Patch
-        */
+        if (bestModels[0] == null)
+        	{
+        	bestModels[0] = bestModels[1];
+        	bestModels[1] = bestModels[2];
+        	bestModels[2] = null;
+        	}
+        if (bestModels[0] == null)
+        	{
+        	bestModels[0] = bestModels[1];
+        	bestModels[1] = bestModels[2];
+        	bestModels[2] = null;
+        	}
+        if (bestModels[1] == null)
+        	{
+        	bestModels[1] = bestModels[2];
+        	bestModels[2] = null;
+        	}
         
-        // Noisy A + B
-        currentModels[0] = ((Model)(bestModels[0].clone())).recombine(random, bestModels[1], keys, recombination).mutate(random, keys, weight / 2.0);
-        // Noisy A + C
-        currentModels[1] = ((Model)(bestModels[0].clone())).recombine(random, bestModels[2], keys, recombination).mutate(random, keys, weight / 2.0);
-        // Noisy B + C
-        currentModels[2] = ((Model)(bestModels[1].clone())).recombine(random, bestModels[2], keys, recombination).mutate(random, keys, weight / 2.0);
-        // Noisy A + (B + C)
-        currentModels[3] = ((Model)(bestModels[0].clone())).recombine(random, ((Model)(bestModels[1].clone())).recombine(random, bestModels[2], keys, recombination), keys, recombination).mutate(random, keys, weight / 2.0);
-        // Noisy Beyond A from Z
-        currentModels[4] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, recombination, false).mutate(random, keys, weight / 2.0);
-        // Noisy Beyond B from Z
-        currentModels[5] = ((Model)(bestModels[1].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, recombination, false).mutate(random, keys, weight / 2.0);
-        // Noisy Beyond C from Z
-        currentModels[6] = ((Model)(bestModels[1].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, recombination, false).mutate(random, keys, weight / 2.0);
-        // Noisy Even further Beyond A from Z
-        currentModels[7] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, 2.0 * recombination, false).mutate(random, keys, weight / 2.0);
-        // Noisy A
-        currentModels[8] = ((Model)(bestModels[0].clone())).mutate(random, keys, weight / 2.0);
-        // Noisy Noisy A
-        currentModels[9] = ((Model)(bestModels[0].clone())).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0);
-        // Noisy Noisy Noisy A
-        currentModels[10] = ((Model)(bestModels[0].clone())).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0);
-        // Noisy B
-        currentModels[11] = ((Model)(bestModels[1].clone())).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0);
-        // Noisy Noisy B
-        currentModels[12] = ((Model)(bestModels[1].clone())).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0);
-        // Noisy C
-        currentModels[13] = ((Model)(bestModels[2].clone())).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0);
-        // Noisy Noisy C
-        currentModels[14] = ((Model)(bestModels[2].clone())).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0).mutate(random, keys, weight / 2.0);
-        // Current patch
-        currentModels[15] = ((Model)(synth.getModel().clone()));
+        boolean zeroModels = false;	
+        if (bestModels[0] == null)
+        	{
+        	again();
+        	zeroModels = true;
+        	}
+        else if (bestModels[1] == null)
+        	{
+        	produce(random, keys, recombination, weight, bestModels[0], (Model)(oldA.get(0)));
+        	}
+        else if (bestModels[2] == null)
+        	{
+        	produce(random, keys, recombination, weight, bestModels[0], bestModels[1], (Model)(oldA.get(0)));
+        	}
+        else
+        	{
+        	produce(random, keys, recombination, weight, bestModels[0], bestModels[1], bestModels[2], (Model)(oldA.get(0)));
+        	}
         
-        /*
-        // A
-        currentModels[0] = ((Model)(bestModels[0].clone()));
-        // A + B
-        currentModels[1] = ((Model)(bestModels[0].clone())).recombine(random, bestModels[1], keys, recombination);
-        // A + C
-        currentModels[2] = ((Model)(bestModels[0].clone())).recombine(random, bestModels[2], keys, recombination);
-        // A + (B + C)
-        currentModels[3] = ((Model)(bestModels[0].clone())).recombine(random, ((Model)(bestModels[1].clone())).recombine(random, bestModels[2], keys, recombination), keys, recombination);
-
-        // Noisy versions of A, A + B, A + C, A + (B + C)
-        for(int i = 0; i < 4; i ++)
-            {
-            currentModels[i + 4] = ((Model)(currentModels[i].clone())).mutate(random, keys, weight / 2.0);
-            }
-                
-        // Really noisy versions of A, A + B, A + C, A + (B + C)
-        for(int i = 0; i < 4; i ++)
-            {
-            currentModels[i + 8] = ((Model)(currentModels[i + 4].clone())).mutate(random, keys, weight / 2.0);
-            }
-
-        // B + C
-        currentModels[12] = ((Model)(bestModels[1].clone())).recombine(random, bestModels[2], keys, recombination);
-        // Beyond A from Z
-        currentModels[13] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, recombination, false);
-        // Even further Beyond A from Z
-        currentModels[14] = ((Model)(bestModels[0].clone())).opposite(random, (Model)(oldA.get(oldA.size() - 1)), keys, 2.0 * recombination, false);
-        // Current patch
-        currentModels[15] = ((Model)(synth.getModel().clone()));
-        */
-
-
-        oldA.add(bestModels[0]);
-        oldB.add(bestModels[1]);
-        oldC.add(bestModels[2]);
-        iterations.setName("Iteration " + oldA.size());
-        repaint();
-
-        ratings[0][0].setSelected(true);
-        ratings[1][1].setSelected(true);
-        ratings[2][2].setSelected(true);
+        if (!zeroModels)
+        	{
+        	oldA.add(bestModels[0]);
+        	oldB.add(bestModels[1]);
+        	oldC.add(bestModels[2]);
+        	iterations.setName("Iteration " + oldA.size());
+        	repaint();
+	
+	        ratings[NUM_MODELS][0].setSelected(true);
+  		 	ratings[NUM_MODELS][1].setSelected(true);
+   	 		ratings[NUM_MODELS][2].setSelected(true);
+   	 		}
         }
     }
         

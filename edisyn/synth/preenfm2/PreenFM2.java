@@ -97,7 +97,7 @@ public class PreenFM2 extends Synth
                 
         /// SOUND PANEL
                 
-        JComponent frontPanel = new SynthPanel();
+        JComponent frontPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         
         HBox hbox = new HBox();
@@ -120,7 +120,7 @@ public class PreenFM2 extends Synth
                 
         // OSCILLATOR PANEL
                 
-        JComponent operatorPanel = new SynthPanel();
+        JComponent operatorPanel = new SynthPanel(this);
         vbox = new VBox();
         
         for(int i = 1; i < 7; i++)
@@ -135,7 +135,7 @@ public class PreenFM2 extends Synth
         
         // LFOS PANEL
                 
-        JComponent lfoPanel = new SynthPanel();
+        JComponent lfoPanel = new SynthPanel(this);
         
         vbox = new VBox();
         hbox = new HBox();
@@ -896,7 +896,7 @@ public class PreenFM2 extends Synth
         ((LabelledDial) comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
-        comp = new EnvelopeDisplay(this, Color.red, 
+        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "op" + op + "envattack", "op" + op + "envdecay", "op" + op + "envsustain", null, "op" + op + "envrelease" },
             new String[] { null , "op" + op + "envattacklevel", "op" + op + "envdecaylevel", "op" + op + "envsustainlevel",  "op" + op + "envsustainlevel", "op" + op + "envreleaselevel" },
             new double[] { 0, 0.2/1600.0, 0.2/1600.0,  0.2/1600.0, 0.2, 0.2/1600.0},
@@ -1142,7 +1142,7 @@ public class PreenFM2 extends Synth
                 };
             hbox.add(comp);
 
-            comp = new EnvelopeDisplay(this, Color.red, 
+            comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
                 new String[] { null, "freeenv" + env + "attack", "freeenv" + env + "decay", null, "freeenv" + env + "release" },
                 new String[] { null, null, "freeenv" + env + "sustain", "freeenv" + env + "sustain", null },
                 new double[] { 0, 0.25/1600, 0.25/1600,  0.25, 0.25/1600},
@@ -1157,7 +1157,7 @@ public class PreenFM2 extends Synth
             vbox.add(comp);
             hbox.add(vbox);
 
-            comp = new EnvelopeDisplay(this, Color.red, 
+            comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
                 new String[] { null, "freeenv" + env + "silence", "freeenv" + env + "attack", "freeenv" + env + "decay" },
                 new String[] { null, null, null, null },
                 new double[] { 0, 0.33333/1600, 0.33333/1600, 0.33333/1600},
@@ -1236,7 +1236,7 @@ public class PreenFM2 extends Synth
         for(int i = 0; i < 16; i++)
             steps[i] = "stepseq" + seq + "step" + (i + 1); 
                 
-        comp = new EnvelopeDisplay(this, Color.red, 
+        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null },
             steps,            
             new double[] { 0, 1.0/15, 1.0/15, 1.0/15, 1.0/15,  1.0/15, 1.0/15, 1.0/15, 1.0/15,  1.0/15, 1.0/15, 1.0/15, 1.0/15,  1.0/15, 1.0/15, 1.0/15 },

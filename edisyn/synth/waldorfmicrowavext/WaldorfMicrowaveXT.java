@@ -101,7 +101,7 @@ public class WaldorfMicrowaveXT extends Synth
         
         /// SOUND PANEL
                 
-        JComponent soundPanel = new SynthPanel();
+        JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox(HBox.LEFT_CONSUMES);
         hbox.addLast(addNameGlobal(Style.COLOR_GLOBAL()));
@@ -136,7 +136,7 @@ public class WaldorfMicrowaveXT extends Synth
                 
         // ENVELOPE PANEL
                 
-        JComponent envelopePanel = new SynthPanel();
+        JComponent envelopePanel = new SynthPanel(this);
         vbox = new VBox();
 
         hbox = new HBox();
@@ -161,7 +161,7 @@ public class WaldorfMicrowaveXT extends Synth
         
         // MODULATION PANEL
                 
-        JComponent modulationPanel = new SynthPanel();
+        JComponent modulationPanel = new SynthPanel(this);
         
         vbox = new VBox();
         vbox.add(addModulation(Style.COLOR_A()));
@@ -173,7 +173,7 @@ public class WaldorfMicrowaveXT extends Synth
 
 
         // OTHER PANEL
-        JComponent otherPanel = new SynthPanel();
+        JComponent otherPanel = new SynthPanel(this);
         
         vbox = new VBox();
 
@@ -1100,7 +1100,7 @@ public class WaldorfMicrowaveXT extends Synth
         HBox hbox = new HBox();
         //        VBox vbox = new VBox();
         
-        comp = new EnvelopeDisplay(this, Color.red, 
+        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "envelope" + env +  "attack", "envelope" + env +  "decay", null, "envelope" + env +  "release" },
             new String[] { null, null, "envelope" + env +  "sustain", "envelope" + env +  "sustain", null },
             new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
@@ -1122,7 +1122,7 @@ public class WaldorfMicrowaveXT extends Synth
         HBox hbox = new HBox();
         //        VBox vbox = new VBox();
         
-        EnvelopeDisplay disp = new EnvelopeDisplay(this, Color.red, 
+        EnvelopeDisplay disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "freeenvtime1", "freeenvtime2", "freeenvtime3", null, "freeenvtime4"},   //, null },
             new String[] { null, "freeenvlevel1", "freeenvlevel2", "freeenvlevel3", "freeenvlevel3", "freeenvlevel4"},            //, null },
             new double[] { 0, 0.2/127.0, 0.2 / 127.0,  0.2/127.0, 0.2, 0.2/127.0},              //, 0},
@@ -1146,7 +1146,7 @@ public class WaldorfMicrowaveXT extends Synth
         HBox hbox = new HBox();
         //        VBox vbox = new VBox();
         
-        EnvelopeDisplay disp = new EnvelopeDisplay(this, Color.red, 
+        EnvelopeDisplay disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "waveenvtime1", "waveenvtime2", "waveenvtime3", "waveenvtime4", "waveenvtime5", "waveenvtime6", "waveenvtime7", "waveenvtime8", null },
             new String[] { null, "waveenvlevel1", "waveenvlevel2", "waveenvlevel3", "waveenvlevel4", "waveenvlevel5", "waveenvlevel6", "waveenvlevel7", "waveenvlevel8", null },
             new double[] { 0, 0.25/127.0/2.0, 0.25 / 127.0/2.0,  0.25/127.0/2.0, 0.25/127.0/2.0,  0.25/127.0/2.0, 0.25 / 127.0/2.0,  0.25/127.0/2.0, 0.25/127.0/2.0, 0},

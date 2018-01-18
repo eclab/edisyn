@@ -330,7 +330,7 @@ public abstract class Synth extends JComponent implements Updatable
     public static final Class[] synths = new Class[] 
     { 
     //edisyn.synth.futuresonusparva.FuturesonusParva.class,
-    edisyn.synth.generic.Generic.class,
+//    edisyn.synth.generic.Generic.class,
     edisyn.synth.korgsg.KorgSG.class,
     edisyn.synth.korgsg.KorgSGMulti.class,
     edisyn.synth.korgmicrosampler.KorgMicrosampler.class,

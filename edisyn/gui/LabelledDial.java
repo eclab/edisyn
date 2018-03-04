@@ -29,6 +29,8 @@ public class LabelledDial extends NumericalComponent
     JLabel label;
     Box labelBox;
     Component glue;
+    boolean updatesDynamically = true;
+    boolean updatingDynamically = false;
         
     public Insets getInsets() { return Style.LABELLED_DIAL_INSETS(); }
 
@@ -45,6 +47,15 @@ public class LabelledDial extends NumericalComponent
         label.repaint();
         }
         
+    public JLabel getJLabel()
+        {
+        return label;
+        }
+        
+    public boolean getUpdatesDyamically() { return updatesDynamically; }
+    public void setUpdatesDynamically(boolean val) { updatesDynamically = val; }
+    public boolean isUpdatingDynamically() { return updatingDynamically; }
+    
     public String map(int val) { return "" + (val - dial.subtractForDisplay); }
 
     public boolean isSymmetric() { return dial.getCanonicalSymmetric(); }
@@ -76,12 +87,12 @@ public class LabelledDial extends NumericalComponent
         }
     
     public void setLabelFont(Font font)
-    	{
-    	dial.field.setFont(font);
-    	dial.revalidate();
-    	dial.repaint();
-    	}
-    	
+        {
+        dial.field.setFont(font);
+        dial.revalidate();
+        dial.repaint();
+        }
+        
     /** Makes a labelled dial for the given key parameter on the given synth, and with the given color and
         minimum and maximum.  Prior to display, subtractForDisplay is 
         SUBTRACTED from the parameter value.  You can use this to convert 0...127 in the model
@@ -118,22 +129,22 @@ public class LabelledDial extends NumericalComponent
         panel.setBackground(Style.BACKGROUND_COLOR());
         panel.add(dial, BorderLayout.CENTER);
 
-	    label = new JLabel(_label);
-		if (_label != null)
-			{
-	        label.setFont(Style.SMALL_FONT());
-	        label.setBackground(Style.BACKGROUND_COLOR());  // TRANSPARENT);
-	        label.setForeground(Style.TEXT_COLOR());
+        label = new JLabel(_label);
+        if (_label != null)
+            {
+            label.setFont(Style.SMALL_FONT());
+            label.setBackground(Style.BACKGROUND_COLOR());  // TRANSPARENT);
+            label.setForeground(Style.TEXT_COLOR());
 
-	        labelBox = new Box(BoxLayout.Y_AXIS);
-	        Box box = new Box(BoxLayout.X_AXIS);
-	        box.add(Box.createGlue());
-	        box.add(label);
-	        box.add(Box.createGlue());
-	        labelBox.add(box);
-	        labelBox.add(glue = Box.createGlue());
-			panel.add(labelBox, BorderLayout.SOUTH);
-			}
+            labelBox = new Box(BoxLayout.Y_AXIS);
+            Box box = new Box(BoxLayout.X_AXIS);
+            box.add(Box.createGlue());
+            box.add(label);
+            box.add(Box.createGlue());
+            labelBox.add(box);
+            labelBox.add(glue = Box.createGlue());
+            panel.add(labelBox, BorderLayout.SOUTH);
+            }
         
         setLayout(new BorderLayout());
         add(panel, BorderLayout.NORTH);
@@ -241,7 +252,7 @@ public class LabelledDial extends NumericalComponent
                     if (val > getMax()) val = getMax();
                     if (val < getMin()) val = getMin();
 
-	                setState(val);
+                    setState(val);
                     }
                 });
         
@@ -276,12 +287,45 @@ public class LabelledDial extends NumericalComponent
                         }, AWTEvent.MOUSE_EVENT_MASK);
                     }
                         
+                MouseEvent lastRelease;
                 public void mouseReleased(MouseEvent e)
                     {
+                    if (e == lastRelease) // we just had this event because we're in the AWT Event Listener.  So we ignore it
+                        return;
+                    
+                    if (!updatesDynamically)
+                        {
+                        //int x = e.getX() - startX;
+                        int y = -(e.getY() - startY);
+                        int range = (getMax() - getMin() + 1 );
+                        double multiplicand = 1;
+                                        
+                        double extent = range;
+                        if (extent < MIN_EXTENT) extent = MIN_EXTENT;
+                        if (extent > MAX_EXTENT) extent = MAX_EXTENT;
+                                        
+                        multiplicand = extent / (double) range;
+                                        
+                        int proposedState = startState + (int)(y / multiplicand);
+
+                        if (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
+                            ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK))
+                            {
+                            proposedState = reviseToAltValue(proposedState);
+                            }
+                                                                                
+                        // at present we're just going to use y.  It's confusing to use either y or x.
+                        if (startState != proposedState)
+                            {
+                            setState(proposedState);
+                            }
+                        }
+                        
                     status = STATUS_STATIC;
                     repaint();
                     if (releaseListener != null)
                         Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
+                    lastRelease = e;
                     }
                 
                 public void mouseClicked(MouseEvent e)
@@ -323,11 +367,15 @@ public class LabelledDial extends NumericalComponent
                                         
                     // at present we're just going to use y.  It's confusing to use either y or x.
                     if (getState() != proposedState)
-                    	{
-                    	setState(proposedState);
-                    	//field.setText(map(getState()));
-                    	//repaint();
-                    	}
+                        {
+                        if (!updatesDynamically)
+                            synth.setSendMIDI(false);
+                        updatingDynamically = true;
+                        setState(proposedState);
+                        updatingDynamically = false;
+                        if (!updatesDynamically)
+                            synth.setSendMIDI(true);
+                        }
                     }
                 });
 
@@ -369,9 +417,9 @@ public class LabelledDial extends NumericalComponent
             }
         
         public boolean getCanonicalSymmetric() 
-        	{ 
-        	return subtractForDisplay == 64 || subtractForDisplay == 50 || getMax() == (0 - getMin());        	
-        	}
+            { 
+            return subtractForDisplay == 64 || subtractForDisplay == 50 || getMax() == (0 - getMin());              
+            }
         
         public double getCanonicalStartAngle()
             {
@@ -390,7 +438,7 @@ public class LabelledDial extends NumericalComponent
             // revise label if needed
             String val = map(getState());
             if (!(val.equals(dial.field.getText())))
-            	dial.field.setText(val);
+                dial.field.setText(val);
 
             super.paintComponent(g);
 

@@ -24,30 +24,30 @@ import javax.sound.midi.*;
 
 public class KorgMicroKorgVocoder extends KorgMicroKorg
     {
-	public KorgMicroKorgVocoder()
-		{
-		super();
+    public KorgMicroKorgVocoder()
+        {
+        super();
         model.set("number", 56);
-		model.set("arptarget", 0); // set it to something
-		}
-		
-	void setVoiceMode()
-    	{
-    	model.set("voicemode", 3);
-					removeTab("Timbre 1");
-					removeTab("Timbre 2");
-    	super.setVoiceMode();
-    	}
+        model.set("arptarget", 0); // set it to something
+        }
+                
+    void setVoiceMode()
+        {
+        model.set("voicemode", 3);
+        removeTab("Timbre 1");
+        removeTab("Timbre 2");
+        super.setVoiceMode();
+        }
 
     public static String getSynthName() { return "Korg MicroKorg [Vocoder]"; }
     public String getDefaultResourceFileName() { return "KorgMicroKorgVocoder.init"; }
     public String getHTMLResourceFileName() { return "KorgMicroKorgVocoder.html"; }
     
-     public JComponent addGeneral(boolean vocoder, Color color)
-     	{
-     	return super.addGeneral(true, color);
-     	}
-     	
+    public JComponent addGeneral(boolean vocoder, Color color)
+        {
+        return super.addGeneral(true, color);
+        }
+        
     public static boolean recognize(byte[] data)
         {
         boolean v = (
@@ -61,7 +61,7 @@ public class KorgMicroKorgVocoder extends KorgMicroKorg
         // now decode.  Are we synth or vocoder?
         data = convertTo8Bit(data, 5);
         int voicemode = (data[16] >>> 4) & 3;
-		return (voicemode == 3);  // vocoder
+        return (voicemode == 3);  // vocoder
         }
 
     /** Add the global patch category (name, id, number, etc.) */

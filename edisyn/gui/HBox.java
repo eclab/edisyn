@@ -58,7 +58,7 @@ public class HBox extends JComponent implements Gatherable
         lastComponent = component;
         panel.add(lastComponent, BorderLayout.CENTER);
         }
-        
+
     public void removeLast()
         {
         if (lastComponent != null)

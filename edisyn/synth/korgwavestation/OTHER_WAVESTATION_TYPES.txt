@@ -1,0 +1,61 @@
+Interested in getting an editor for a Wavestation original, EX, or A/D?
+Converting this code to handle other Wavestation types (or more likely,
+subclassing it and making new files) will pose some challenges.  Here are
+a few things you'll need to do:
+
+1. The A/D has a few more parameters (reading in from analog) which need
+   to be implemented.  The widgets are commented out in the code here but
+   other stuff will have to be written in too.
+
+2. Other Wavestations have different bank configurations, and this will
+   impact on the bank choice options, as well as the list of default
+   wave sequence and wave names, and also any list of default patch or
+   performance names.
+
+3. Other Wavestations have less complex sysex, particularly for bulk dumps.
+
+4. Other Wavestations will allow you to do patch writes.  The SR does not
+   and so that feature is turned off and workarounds were installed.  You'll
+   need to turn it back on and remove the workarounds.
+
+5. THE BIG ONE.  There is no way to emit a single Wave Sequence.  The SR
+   has special commands (implemented as individual parameters) which allow
+   the patch editor to "emit" a Wave Sequence by first erasing the existing
+   sequence, then inserting one wave after another.  This involves SR
+   parameter options which are not available in the other synthesizers and
+   I do not know if there is any way to do a similar trick in them.  Your only
+   alternative may be to load the entire block of waves sequences, untangle
+   them, modify the wave sequence in question, and re-write the block.  YUCK!
+   In addition to this being a lot of work, it also involves a process which
+   doesn't work well with Edisyn's workflow.  Specifically, Edisyn is designed
+   to send requests for dumps, and if a dump arrives, Edisyn will automatically
+   update to it.  However here Edisyn will need to send a request for a dump,
+   then be cognizant of the fact that the next dump that arrives is not meant
+   to be updated to, but rather to be untangled, modified, and then sent back
+   out to the synth.  If the dump doesn't come in (a sysex error say), then
+   Edisyn needs to at some point realize that new dumps are in fact incoming
+   reads that should be updated to again.  The state machine for that will
+   be complicated to wire up.  You can contact me if you reach this point and
+   need some advice.
+
+6. Other Wavestations likely have fewer effects.  You'll need to modify the
+   effects emitting and parsing.
+
+7. Other Wavestations have fewer parameter options.  You'll have to check to
+   see if Edisyn is implementing any parameter options that they can't do.
+   Particularly note #5 above.
+
+8. The SR can update its mix envelope dimensions to any value -127...127.
+   But other Wavestations may not be able to do this and you might have to
+   pre-bound values.
+
+There's more than this no doubt.   But it's enough to get you started.
+
+Sean Luke
+sean@cs.gmu.edu
+
+
+
+
+
+

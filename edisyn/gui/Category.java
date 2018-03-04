@@ -25,6 +25,7 @@ public class Category extends JComponent implements Gatherable
     Synth synth;
     
     String preamble;
+    boolean reduceAllDigits = false;
     boolean pasteable = false;
     boolean distributable = false;
     
@@ -36,8 +37,10 @@ public class Category extends JComponent implements Gatherable
     MenuItem distributeToMutable = new MenuItem("Distribute (Mutation Parameters Only)");
     MenuItem reset = new MenuItem("Reset Category");
     
-    public void makePasteable(String preamble) { copy.setEnabled(true); copyFromMutable.setEnabled(true); paste.setEnabled(true); pasteToMutable.setEnabled(true); pasteable = true; this.preamble = preamble; }
-    public void makeDistributable(String preamble) { distribute.setEnabled(true); distributeToMutable.setEnabled(true); distributable = true; this.preamble = preamble; }
+    public void makePasteable(String preamble) { makePasteable(preamble, false); }
+    public void makePasteable(String preamble, boolean reduceAllDigits) { this.reduceAllDigits = reduceAllDigits; copy.setEnabled(true); copyFromMutable.setEnabled(true); paste.setEnabled(true); pasteToMutable.setEnabled(true); pasteable = true; this.preamble = preamble; }
+    public void makeDistributable(String preamble) { makeDistributable(preamble, false);}
+    public void makeDistributable(String preamble, boolean reduceAllDigits) { this.reduceAllDigits = reduceAllDigits; distribute.setEnabled(true); distributeToMutable.setEnabled(true); distributable = true; this.preamble = preamble; }
     public void makeUnresettable() { reset.setEnabled(false); }
     
 	PopupMenu pop = new PopupMenu();
@@ -137,7 +140,9 @@ public class Category extends JComponent implements Gatherable
 				if (components.get(i) instanceof HasKey)
 					{
 					String key = (String)(((HasKey)(components.get(i))).getKey());
-					String reduced = reduceFirstDigitsAfterPreamble(key, preamble);
+					String reduced = (reduceAllDigits ? 
+									reduceAllDigitsAfterPreamble(key, preamble) : 
+									reduceFirstDigitsAfterPreamble(key, preamble));
 					keys.put(reduced, key);
 					}    
 				}		
@@ -150,7 +155,9 @@ public class Category extends JComponent implements Gatherable
 			for(int i = 0; i < copyKeys.size(); i++)
 				{
 				String key = (String)(copyKeys.get(i));
-				String reduced = reduceFirstDigitsAfterPreamble(key, synth.getCopyPreamble());
+				String reduced = (reduceAllDigits ? 
+									reduceAllDigitsAfterPreamble(key, synth.getCopyPreamble()) : 
+									reduceFirstDigitsAfterPreamble(key, synth.getCopyPreamble()));
 				String mapped = (String)(keys.get(reduced));
 				if (mapped != null)
 					{
@@ -181,7 +188,11 @@ public class Category extends JComponent implements Gatherable
 
     	if (lastKey != null)
     		{
-    		String lastReduced = (pasteable ? reduceSecondDigitsAfterPreamble(lastKey, preamble) : reduceFirstDigitsAfterPreamble(lastKey, preamble));
+			String lastReduced = (reduceAllDigits ? 
+									reduceAllDigitsAfterPreamble(lastKey, preamble) : 
+									(pasteable ? 
+										reduceSecondDigitsAfterPreamble(lastKey, preamble) : 
+										reduceFirstDigitsAfterPreamble(lastKey, preamble)));
 
     		String[] mutationKeys = synth.getMutationKeys();
 			if (mutationKeys == null) mutationKeys = new String[0];
@@ -196,7 +207,11 @@ public class Category extends JComponent implements Gatherable
 					{
 					HasKey nc = (HasKey)(components.get(i));
 					String key = nc.getKey();
-    				String reduced = (pasteable ? reduceSecondDigitsAfterPreamble(key, preamble) : reduceFirstDigitsAfterPreamble(key, preamble));
+					String reduced = (reduceAllDigits ? 
+										reduceAllDigitsAfterPreamble(key, preamble) : 
+										(pasteable ? 
+											reduceSecondDigitsAfterPreamble(key, preamble) : 
+											reduceFirstDigitsAfterPreamble(key, preamble)));
     				
     				if (reduced.equals(lastReduced))
     					{
@@ -225,6 +240,42 @@ public class Category extends JComponent implements Gatherable
 	final static int STATE_FIRST_STRING = 1;
 	final static int STATE_NUMBER = 2;
 	final static int STATE_FINISHED = 3;
+
+	
+     static String reduceAllDigitsAfterPreamble(String name, String preamble)
+     	{
+    	char[] n = name.toCharArray();
+	    StringBuilder sb = new StringBuilder();
+
+		for(int i = 0; i < preamble.length(); i++)
+			{
+			sb.append(n[i]);
+			}
+			
+    	int state = STATE_FIRST_STRING;
+		for(int i = preamble.length(); i < n.length; i++)
+			{
+			if (state == STATE_FIRST_STRING)
+				{
+				if (Character.isDigit(n[i]))
+					{
+					state = STATE_FINISHED;
+					}
+				else
+					{
+					sb.append(n[i]);
+					}
+				}
+			else if (state == STATE_FINISHED)
+				{
+				if (!Character.isDigit(n[i]))
+					{
+					sb.append(n[i]);
+					}
+				}
+			}
+		return sb.toString();
+     	}
 
     /** This function removes the FIRST string of digits in a name after a preamble, returns the resulting name. */
      static String reduceFirstDigitsAfterPreamble(String name, String preamble)
@@ -347,7 +398,12 @@ public class Category extends JComponent implements Gatherable
                         pasteToMutable.setEnabled(pasteable && isPasteCompatibleCategory());
                         distribute.setEnabled(distributable && canDistributeKey());
                         distributeToMutable.setEnabled(distributable && canDistributeKey());
-                        pop.show(Category.this, e.getX(), e.getY());
+                        
+                        // we add, then remove the popup because I've discovered (in the Korg Wavestation SR Sequence Editor)
+                        // that if the popup is pre-added, then it takes quite a while to dynamically add or remove categories.
+                        Category.this.add(pop);
+                        pop.show(e.getComponent(), e.getX(), e.getY());
+                        Category.this.remove(pop);
                         }
                     }
                 public void mouseClicked(MouseEvent e)
@@ -490,7 +546,7 @@ public class Category extends JComponent implements Gatherable
 		distributeToMutable.setEnabled(false);
 		reset.setEnabled(true);
 		
-		Category.this.add(pop);
+		//Category.this.add(pop);
         }
     
     public Insets getInsets() 

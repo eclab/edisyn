@@ -507,24 +507,24 @@ public class KawaiK4Drum extends Synth
 
 
     public void messageFromController(MidiMessage message, boolean interceptedForInternalUse, boolean routedToSynth)
-    	{ 
-    	if (message instanceof ShortMessage)
-    		{
+        { 
+        if (message instanceof ShortMessage)
+            {
             ShortMessage s = (ShortMessage)message;
             int status = s.getStatus();
             
             // NOTE_ON has a status from 0x90 to 0x9F (for all 16 channels)
             // and also cannot be velocity=0, since that would be equivalent to a NOTE OFF
             if (status >= ShortMessage.NOTE_ON && status <= ShortMessage.NOTE_ON + 15 && s.getData2() > 0)  // 0x90 to 0x9F
-            	{
-                                        int key = s.getData1();
+                {
+                int key = s.getData1();
                 if (key >= 36 && key <= 96)
-                	{
-                	model.set("note", key);
-                	}           
+                    {
+                    model.set("note", key);
+                    }           
                 }
             }
-    	}
+        }
 
     public int getVoiceMessageRoutedChannel(int incomingChannel, int synthChannel)
         {

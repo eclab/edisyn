@@ -90,10 +90,10 @@ public class StringComponent extends JComponent implements Updatable, HasKey
                 
         label = new JLabel("  " + _label);
         if (_label != null)
-        	{
-	        label.setFont(Style.SMALL_FONT());
-	        label.setBackground(Style.BACKGROUND_COLOR());  // Style.TRANSPARENT);
-	        label.setForeground(Style.TEXT_COLOR());
+            {
+            label.setFont(Style.SMALL_FONT());
+            label.setBackground(Style.BACKGROUND_COLOR());  // Style.TRANSPARENT);
+            label.setForeground(Style.TEXT_COLOR());
             add(label, BorderLayout.NORTH);
             }
  
@@ -121,17 +121,17 @@ public class StringComponent extends JComponent implements Updatable, HasKey
                     // The following hack is inspired by https://tips4java.wordpress.com/2010/03/14/dialog-focus/
                     // and results in the text field being selected (which is what should have happened in the first place) 
                     
-					text.addAncestorListener(new javax.swing.event.AncestorListener()
-						{
-						public void ancestorAdded(javax.swing.event.AncestorEvent e) 	
-								{ 
-								JComponent component = e.getComponent();
-								component.requestFocusInWindow();
-								text.selectAll(); 
-								}
-						public void ancestorMoved(javax.swing.event.AncestorEvent e) {}
-						public void ancestorRemoved(javax.swing.event.AncestorEvent e) {}
-						});
+                    text.addAncestorListener(new javax.swing.event.AncestorListener()
+                        {
+                        public void ancestorAdded(javax.swing.event.AncestorEvent e)    
+                            { 
+                            JComponent component = e.getComponent();
+                            component.requestFocusInWindow();
+                            text.selectAll(); 
+                            }
+                        public void ancestorMoved(javax.swing.event.AncestorEvent e) {}
+                        public void ancestorRemoved(javax.swing.event.AncestorEvent e) {}
+                        });
                     vbox.add(text);
                     int opt = JOptionPane.showOptionDialog(StringComponent.this, vbox, getTitle(),
                         JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Enter",  "Cancel", "Rules"}, "Enter");

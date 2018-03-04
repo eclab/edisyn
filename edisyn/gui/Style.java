@@ -74,12 +74,12 @@ public class Style
     /////// CHOOSER CONSTANTS
     
     public static Insets CHOOSER_INSETS() 
-    	{ 
-    		if (isUnix())
-    			return new Insets(0, 0, 2, 4); 
-    		else
-    			return new Insets(-1, 0, -2, 0);  // no insets
-    	}
+        { 
+        if (isUnix())
+            return new Insets(0, 0, 2, 4); 
+        else
+            return new Insets(-1, 0, -2, 0);  // no insets
+        }
     public static Insets CHOOSER_WINDOWS_INSETS() { return new Insets(-1, 6, -2, 0); }  // no insets
     
 
@@ -99,7 +99,7 @@ public class Style
     public static Color DIAL_UNSET_COLOR() { return UNSET_COLOR; }
     /** Color of the set region in Dials etc. when being updated. */
     public static Color DIAL_DYNAMIC_COLOR() { return DYNAMIC_COLOR(); }
-    /** Width of the set region in Dials etc.  */
+    /** Width of the set region in Dials etc.  Should be a multiple of 2, ideally 4*/
     public static float DIAL_STROKE_WIDTH() { return 4.0f; }
     /** The stroke for the set region in Dials etc. */
     public static BasicStroke DIAL_THIN_STROKE() { return new BasicStroke(DIAL_STROKE_WIDTH() / 2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL); }
@@ -109,8 +109,8 @@ public class Style
     public static Font DIAL_FONT() { return MEDIUM_FONT(); }
     /** Insets for labelled dials to set them apart slightly from one another. */
     public static Insets LABELLED_DIAL_INSETS() { return new Insets(1, 3, 1, 3); }
-	/** Width of the dial **/
-	public static int LABELLED_DIAL_WIDTH() { return 55; }
+    /** Width of the dial **/
+    public static int LABELLED_DIAL_WIDTH() { return 55; }
 
     /////// ENVELOPE DISPLAY CONSTANTS
 
@@ -124,13 +124,13 @@ public class Style
     public static float ENVELOPE_DISPLAY_MARKER_WIDTH() { return 4; }
     /** Stroke for the X axis. */
     public static BasicStroke ENVELOPE_AXIS_STROKE() { return new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, new float[] { 4.0f }, 0.0f); }
-	public static Color ENVELOPE_COLOR() { return DYNAMIC_COLOR(); }
+    public static Color ENVELOPE_COLOR() { return DYNAMIC_COLOR(); }
 
     /////// CHECKBOX CONSTANTS
     /** Border around arpeggiator checkboxes */
     public static Border CHECKBOX_HIGHLIGHTED_BORDER() { return BorderFactory.createCompoundBorder(
-        BorderFactory.createEmptyBorder(2, 2, 2, 2),
-        BorderFactory.createLineBorder(DYNAMIC_COLOR(), 1, true)); }
+            BorderFactory.createEmptyBorder(2, 2, 2, 2),
+            BorderFactory.createLineBorder(DYNAMIC_COLOR(), 1, true)); }
     public static Border CHECKBOX_NON_HIGHLIGHTED_BORDER() { return BorderFactory.createEmptyBorder(3, 3, 3, 3); }
     
 
@@ -174,20 +174,20 @@ public class Style
         }
         
     static
-    	{
-    	updateColors();
-    	}
-    	 
+        {
+        updateColors();
+        }
+         
     public static void updateColors()
-    	{
-    	BACKGROUND_COLOR = Synth.getLastColor("background-color", DEFAULT_BACKGROUND_COLOR);
-    	TEXT_COLOR = Synth.getLastColor("text-color", DEFAULT_TEXT_COLOR);
-    	COLOR_A = Synth.getLastColor("a-color", DEFAULT_COLOR_A);
-    	COLOR_B = Synth.getLastColor("b-color", DEFAULT_COLOR_B);
-    	COLOR_C = Synth.getLastColor("c-color", DEFAULT_COLOR_C);
-    	DYNAMIC_COLOR = Synth.getLastColor("dynamic-color", DEFAULT_DYNAMIC_COLOR);
-    	UNSET_COLOR = Synth.getLastColor("unset-color", DEFAULT_UNSET_COLOR);
-    	}
+        {
+        BACKGROUND_COLOR = Synth.getLastColor("background-color", DEFAULT_BACKGROUND_COLOR);
+        TEXT_COLOR = Synth.getLastColor("text-color", DEFAULT_TEXT_COLOR);
+        COLOR_A = Synth.getLastColor("a-color", DEFAULT_COLOR_A);
+        COLOR_B = Synth.getLastColor("b-color", DEFAULT_COLOR_B);
+        COLOR_C = Synth.getLastColor("c-color", DEFAULT_COLOR_C);
+        DYNAMIC_COLOR = Synth.getLastColor("dynamic-color", DEFAULT_DYNAMIC_COLOR);
+        UNSET_COLOR = Synth.getLastColor("unset-color", DEFAULT_UNSET_COLOR);
+        }
 
     /////// OS DISTINGUISHING PROCEDURES
 

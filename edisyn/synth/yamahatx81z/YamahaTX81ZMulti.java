@@ -552,8 +552,8 @@ public class YamahaTX81ZMulti extends Synth
 
                 return new Object[]
                     {
-                    new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, (byte)(i * 12 + 1), msb, (byte)0xF7 },
-                    new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, (byte)(i * 12 + 2), lsb, (byte)0xF7 },
+                    new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, (byte)((i - 1) * 12 + 1), msb, (byte)0xF7 },
+                    new byte[] { (byte)0xF0, 0x43, channel, PCED_GROUP, (byte)((i - 1) * 12 + 2), lsb, (byte)0xF7 },
                     };
                 }
             }        

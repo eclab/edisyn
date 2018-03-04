@@ -43,8 +43,16 @@ public class VBox extends JComponent implements Gatherable
         
     public void addBottom(JComponent component)
         {
+        addBottom(component, false);
+        }
+        
+    public void addBottom(JComponent component, boolean stretch)
+        {
         bottom = component;
-        panel.add(bottom, BorderLayout.SOUTH);
+        if (stretch)
+            panel.add(bottom, BorderLayout.CENTER);
+        else
+            panel.add(bottom, BorderLayout.CENTER);
         }
 
     public void removeBottom()

@@ -75,11 +75,11 @@ public class NumberTextField extends NumericalComponent
         }
     
     public void update(String key, Model model)
-    	{
+        {
         valField.setText(""+getValue());
         setEdited(false);
-    	}
-    	
+        }
+        
     KeyListener listener = new KeyListener()
         {
         public void keyReleased(KeyEvent keyEvent) { }
@@ -128,8 +128,8 @@ public class NumberTextField extends NumericalComponent
     /** Creates a NumberTextField which does not display the belly button or arrows. */
     public NumberTextField(String _label, final Synth synth, int columns, final Color editedColor, final String key)
         {
-		super(synth, key);
-		        
+        super(synth, key);
+                        
         setBackground(Style.BACKGROUND_COLOR());
         setLayout(new BorderLayout());
 
@@ -139,7 +139,7 @@ public class NumberTextField extends NumericalComponent
         label.setText(_label);
         add(label, BorderLayout.NORTH);
 
-		valField = new JTextField("", columns);
+        valField = new JTextField("", columns);
         valField.putClientProperty("JComponent.sizeVariant", "small");
         valField.addKeyListener(listener);
         valField.addFocusListener(focusAdapter);
@@ -155,13 +155,13 @@ public class NumberTextField extends NumericalComponent
         The return value should be the value you want the display to show 
         instead. */
     public int newValue(int newValue)
-    	{
-    	if (newValue < getMin())
-    		newValue = getMin();
-    	if (newValue > getMax())
-    		newValue = getMax();
-    	return newValue;
-    	}
+        {
+        if (newValue < getMin())
+            newValue = getMin();
+        if (newValue > getMax())
+            newValue = getMax();
+        return newValue;
+        }
     
     /** Only call this to access the value field directly */
     public void setText(String val)

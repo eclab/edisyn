@@ -89,9 +89,11 @@ public class Blank extends Synth
     /// WRITING OR SAVING
     /// Call gatherPatchInfo(...,tempModel,...)
     /// If successful
-    ///     Call emitAll(tempModel, toWorkingMemory = false, toFile)
+    ///     Call writeAllParameters(tempModel).  This does:
+    ///         Call changePatch(tempModel)
+    ///                 Call emitAll(tempModel, toWorkingMemory = false, toFile)
     ///                     This calls emit(tempModel, toWorkingMemory = false, toFile)
-    ///             Call changePatch(tempModel)
+    ///         Call changePatch(tempModel)
     ///
     /// You could override either of the emit methods, but probably not both.
     /// Note that saving strips out the non-sysex bytes from emitAll.
@@ -555,6 +557,15 @@ public class Blank extends Synth
         return 0;
         }
         
+    public int getPauseAfterSendOneParameter() 
+        {
+        // Some synths need extra time after each parameter send before another
+        // send can be made.  Here you can specify that Edisyn must pause at least so many
+        // milliseconds before issuing another MIDI message after it has
+        // sent a single parameter via emitAll(key, status).
+        return 0;
+        }       
+        
     public int getPauseBetweenSysexFragments() 
         {
         // Some synths have small MIDI buffers and are so slow that you
@@ -631,11 +642,11 @@ public class Blank extends Synth
         }
         
     public void tabChanged()
-    	{
-    	// This method is called whenever the tabs are changed in case you need to do something
-    	// like update a menu item in response to it etc.  Be sure to call super.tabChanged();
-    	super.tabChanged();
-    	}
+        {
+        // This method is called whenever the tabs are changed in case you need to do something
+        // like update a menu item in response to it etc.  Be sure to call super.tabChanged();
+        super.tabChanged();
+        }
 
     public boolean getExpectsRawCCFromSynth() 
         {
@@ -676,15 +687,15 @@ public class Blank extends Synth
         return synthChannel;
         }
         
-     public void messageFromController(MidiMessage message, boolean interceptedForInternalUse, boolean routedToSynth)
-     	{ 
-     	// Whenever a message from the controller arrives, this message is called.  It is possible
-     	// for both of these parameters to be FALSE, if there was an error in reconstructing the
-     	// message to send it out, or (much more likely) if the user turned off routing.  It is
-     	// presently NOT possible for both of these values to be true; though this might be the case
-     	// in the future.
-     	return; 
-     	}
+    public void messageFromController(MidiMessage message, boolean interceptedForInternalUse, boolean routedToSynth)
+        { 
+        // Whenever a message from the controller arrives, this message is called.  It is possible
+        // for both of these parameters to be FALSE, if there was an error in reconstructing the
+        // message to send it out, or (much more likely) if the user turned off routing.  It is
+        // presently NOT possible for both of these values to be true; though this might be the case
+        // in the future.
+        return; 
+        }
 
 
     }

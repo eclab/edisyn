@@ -437,7 +437,7 @@ public class PreenFM2 extends Synth
     public JComponent addGeneral(Color color)
         {
         Category globalCategory = new Category(this, "Instrument", color);
-    	
+        
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -912,7 +912,7 @@ public class PreenFM2 extends Synth
     public JComponent addModulation(Color color)
         {
         Category category  = new Category(this, "Modulation", color);
-         category.makeDistributable("modulation");
+        category.makeDistributable("modulation");
                        
         JComponent comp;
         String[] params;
@@ -1458,9 +1458,9 @@ public class PreenFM2 extends Synth
         }
 
     public void handleNRPNParse(String key, int val, boolean canPush)
-		{
-		handleNRPNParse(getModel(), key, val, canPush);
-		}    
+        {
+        handleNRPNParse(getModel(), key, val, canPush);
+        }    
     
     public void handleNRPNParse(Model model, String key, int val, boolean canPush)
         {
@@ -1514,39 +1514,39 @@ public class PreenFM2 extends Synth
         if (data.type == Midi.CCDATA_TYPE_NRPN)
             {
             if (isMerging())
-            	{
-            	// build a model if we haven't yet
-            	if (mergeModel == null)
-            		mergeModel = new Model();
-            		
-            	// Load the key, they come in one at a time
-	            String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
-            	setSendMIDI(false);
-	            handleNRPNParse(mergeModel, key, data.value, true);
-            	setSendMIDI(true);
+                {
+                // build a model if we haven't yet
+                if (mergeModel == null)
+                    mergeModel = new Model();
+                        
+                // Load the key, they come in one at a time
+                String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
+                setSendMIDI(false);
+                handleNRPNParse(mergeModel, key, data.value, true);
+                setSendMIDI(true);
 
-				// if it's the last key, do the merge
-            	if (data.number == LAST_MERGE_NUMBER)
-            		{
-            		setSendMIDI(false);
+                // if it's the last key, do the merge
+                if (data.number == LAST_MERGE_NUMBER)
+                    {
+                    setSendMIDI(false);
                     Model backup = (Model)(model.clone());
-        			model.recombine(random, mergeModel, getUsesMapForRecombination() ? getMutationKeys() : model.getKeys(), getMergeProbability());
+                    model.recombine(random, mergeModel, getUsesMapForRecombination() ? getMutationKeys() : model.getKeys(), getMergeProbability());
                     if (!backup.keyEquals(getModel()))
-                    	undo.push(backup);
-            		setSendMIDI(true);
-            		sendAllParameters();
-            		setMergeProbability(0.0);
-            		mergeModel = null;
-            		}
-            	}
+                        undo.push(backup);
+                    setSendMIDI(true);
+                    sendAllParameters();
+                    setMergeProbability(0.0);
+                    mergeModel = null;
+                    }
+                }
             else
-            	{
-            	setSendMIDI(false);
-            	mergeModel = null;
-	            String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
-	            handleNRPNParse(key, data.value, true);
-            	setSendMIDI(true);
-	            }
+                {
+                setSendMIDI(false);
+                mergeModel = null;
+                String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
+                handleNRPNParse(key, data.value, true);
+                setSendMIDI(true);
+                }
             }
         }
         

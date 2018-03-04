@@ -988,11 +988,11 @@ public class KawaiK4 extends Synth
                 index = ((Integer)(internalParametersToIndex.get(newkey))).intValue();
                 }
             // handle waveselect specially
-           /*
-            else if (newkey.equals("s:waveselect"))
-                {
-                index = 36;      // this is waveselect's parameter
-                }
+            /*
+              else if (newkey.equals("s:waveselect"))
+              {
+              index = 36;      // this is waveselect's parameter
+              }
             */
             else if (key.equals("s1mute") || key.equals("s2mute") || key.equals("s3mute") || key.equals("s4mute"))
                 {

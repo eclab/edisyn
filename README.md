@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 13)
+Synthesizer Patch Editor (Version 14)
  
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -24,6 +24,7 @@ Edisyn presently supports:
 * Korg SG Rack (Single and Multi Modes) and Korg SG Pro X (Single Mode)
 * Korg Microsampler
 * Korg MicroKorg
+* Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
 
 Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, extensive parameter space exploration tools (randomization/merging/nudging/hill-climbing) with per-parameter customization, real-time parameter updates, test notes, etc.
 

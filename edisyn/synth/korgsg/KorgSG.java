@@ -1303,7 +1303,7 @@ public class KorgSG extends Synth
         data[25] = (byte)model.get("effect2ldepth", 0);
         data[26] = (byte)model.get("effect2rdepth", 0);
 
-        data[27] = (byte)0x41;		// It would appear that although Korg says this is always 0x41, in fact the SG always returns 0x65.  Appears to not matter.
+        data[27] = (byte)0x41;          // It would appear that although Korg says this is always 0x41, in fact the SG always returns 0x65.  Appears to not matter.
         data[28] = (byte)0x01;
         data[29] = (byte)0x0F;
         

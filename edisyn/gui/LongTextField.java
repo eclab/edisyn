@@ -14,13 +14,13 @@ import javax.swing.*;
 import java.awt.event.*;
 
 
-/** A simple class that lets you specify a label and validate a numerical value.  NumberTextField assumes access
+/** A simple class that lets you specify a label and validate a numerical value.  LongTextField assumes access
     to several image files for the widgets to the right of the text field: a left-arrow button, a right-arrow button, 
     and a "belly button".  The left-arrow button decreases the numerical value, the right-arrow button increases it, 
     and the belly button resets it to its initial default value.  You can also change the value in the text field proper.  
     Why use this class instead of a slider?  Because it is not ranged: the numbers can be any value.
 
-    <p>NumberTextField lets users increase values according to a provided formula of the form
+    <p>LongTextField lets users increase values according to a provided formula of the form
     value = value * M + A, and similarly decrease values as value = (value - A) / M. You specify the
     values of M and A and the initial default value.  This gives you some control on how values should change:
     linearly or geometrically.
@@ -29,11 +29,15 @@ import java.awt.event.*;
     filters all newly user-set values and "corrects" them.  Programmatically set values (by calling setValue(...)) 
     are not filtered through newValue by default.  If you need to filter, you should do setValue(newValue(val));
 
-    <p>NumberTextFields can also be provided with an optional label.
+    <p>LongTextFields can also be provided with an optional label.
 */
 
-public class NumberTextField extends NumericalComponent
+public abstract class LongTextField extends JComponent implements Updatable
     {
+    String msb;
+    String lsb;
+    Synth synth;
+    
     JTextField valField;
     JLabel label = new JLabel("888", SwingConstants.LEFT)
         {
@@ -64,10 +68,10 @@ public class NumberTextField extends NumericalComponent
         {
         if (edited)
             {
-            int val;
+            long val;
             try
                 {
-                val = Integer.parseInt(valField.getText());
+                val = Long.parseLong(valField.getText());
                 }
             catch (NumberFormatException e) { val = getValue(); }
             setValue(newValue(val));
@@ -76,8 +80,7 @@ public class NumberTextField extends NumericalComponent
     
     public void update(String key, Model model)
         {
-        valField.setText(""+getValue());
-        setEdited(false);
+        setValue(getValue());
         }
         
     KeyListener listener = new KeyListener()
@@ -109,27 +112,28 @@ public class NumberTextField extends NumericalComponent
         };
 
     /** Sets the value without filtering first. */
-    public void setValue(int val)
+    public void setValue(long val)
         {
         valField.setText(""+val);
         setEdited(false);
-        synth.getModel().set(key, val);
         }
 
     
     /** Returns the most recently set value. */
-    public int getValue()
+    public long getValue()
         {
-        return synth.getModel().get(key, 0);
+        return ((long)(synth.getModel().get(msb, 0)) << 32) | (long)synth.getModel().get(lsb, 0);
         }
         
     public JTextField getField() { return valField; }
             
-    /** Creates a NumberTextField which does not display the belly button or arrows. */
-    public NumberTextField(String _label, final Synth synth, int columns, final Color editedColor, final String key)
+    /** Creates a LongTextField which does not display the belly button or arrows. */
+    public LongTextField(String _label, final Synth synth, int columns, final Color editedColor, final String msb, final String lsb)
         {
-        super(synth, key);
-                        
+        this.msb = msb;
+        this.lsb = lsb;
+        this.synth = synth;
+        
         setBackground(Style.BACKGROUND_COLOR());
         setLayout(new BorderLayout());
 
@@ -154,14 +158,7 @@ public class NumberTextField extends NumericalComponent
     /** Override this to be informed when a new value has been set.
         The return value should be the value you want the display to show 
         instead. */
-    public int newValue(int newValue)
-        {
-        if (newValue < getMin())
-            newValue = getMin();
-        if (newValue > getMax())
-            newValue = getMax();
-        return newValue;
-        }
+    public abstract long newValue(long newValue);
     
     /** Only call this to access the value field directly */
     public void setText(String val)

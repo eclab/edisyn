@@ -277,9 +277,9 @@ public class KawaiK1Multi extends Synth
                 {
                 int multibank = model.get("bank", 0);
                 if (multibank < 4)
-	                return INTERNAL_BANKS[val];
-	            else
-	            	return EXTERNAL_BANKS[val];
+                    return INTERNAL_BANKS[val];
+                else
+                    return EXTERNAL_BANKS[val];
                 }
             };
         model.removeMetricMinMax("section" + src + "bank");
@@ -290,14 +290,14 @@ public class KawaiK1Multi extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Poly", this, "section" + src + "poly", color, 0, 9)
-        	{
+            {
             public String map(int val)
                 {
                 if (val == 0)
-                	return "VR";
+                    return "VR";
                 else return "" + (val - 1);
                 }
-        	};
+            };
         hbox.add(comp);
 
         comp = new LabelledDial("Level", this, "section" + src + "level", color, 0, 100);
@@ -345,44 +345,44 @@ public class KawaiK1Multi extends Synth
 
     HashMap allParametersToIndex = new HashMap();
         
-        // The K1r multimode sysex description is dead wrong.  It states that
-        // the parameters are:
-        //
-        // name1
-        // ...
-        // name10
-        // volume
-        //
-        // Voice 1 Parameter A
-        // Voice 1 Parameter B
-        // ...
-        // Voice 1 Parameter H
-        //
-        // Voice 2 Parameter A
-        // Voice 2 Parameter B
-        // ...
-        // Voice 2 Parameter H
-        //
-        //
-        //
-        // ... and so on.  However this is false.  It is in fact:
-		//
-        // name1
-        // ...
-        // name10
-        // volume
-        //
-        // Voice 1 Parameter A
-        // Voice 2 Parameter A
-        // ...
-        // Voice 8 Parameter A
-        //
-        // Voice 1 Parameter B
-        // Voice 2 Parameter B
-        // ...
-        // Voice 2 Parameter B
-        //
-        // ...etc.
+    // The K1r multimode sysex description is dead wrong.  It states that
+    // the parameters are:
+    //
+    // name1
+    // ...
+    // name10
+    // volume
+    //
+    // Voice 1 Parameter A
+    // Voice 1 Parameter B
+    // ...
+    // Voice 1 Parameter H
+    //
+    // Voice 2 Parameter A
+    // Voice 2 Parameter B
+    // ...
+    // Voice 2 Parameter H
+    //
+    //
+    //
+    // ... and so on.  However this is false.  It is in fact:
+    //
+    // name1
+    // ...
+    // name10
+    // volume
+    //
+    // Voice 1 Parameter A
+    // Voice 2 Parameter A
+    // ...
+    // Voice 8 Parameter A
+    //
+    // Voice 1 Parameter B
+    // Voice 2 Parameter B
+    // ...
+    // Voice 2 Parameter B
+    //
+    // ...etc.
                 
                 
     final static String[] allParameters = new String[]
@@ -505,8 +505,8 @@ public class KawaiK1Multi extends Synth
                 model.set("section" + section + "poly", data[i + 8] & 15);
                 model.set("section" + section + "output", (data[i + 8] >>> 4) & 3);
                 model.set("section" + section + "playmode", 
-                	(((data[i + 8 + NEXT_SECTION] >>> 6) & 1) << 1) | 	/// next byte sequence
-                	((data[i + 8] >>> 6) & 1));
+                    (((data[i + 8 + NEXT_SECTION] >>> 6) & 1) << 1) |       /// next byte sequence
+                    ((data[i + 8] >>> 6) & 1));
                 }
             else if (key.endsWith("channel_velocitysw_playmode2"))
                 {
@@ -548,26 +548,26 @@ public class KawaiK1Multi extends Synth
         }
         
     public int getPauseBetweenSysexFragments()
-    	{
-    	return 70;
-    	}
-    	
-   // ALWAYS sent in bulk via patch iD-8
-   boolean sendKawaiParametersInBulk = true;
+        {
+        return 70;
+        }
+        
+    // ALWAYS sent in bulk via patch iD-8
+    boolean sendKawaiParametersInBulk = true;
 
-   public void sendAllParameters()
-    	{
-    	super.sendAllParameters();
-    	
-    	// we change patch to #63 if we're sending in bulk.
-    	if (sendKawaiParametersInBulk)
-    		{
-	    	Model tempModel = new Model();
-	    	tempModel.set("bank", 7);
-	    	tempModel.set("number", 7);
-	    	changePatch(tempModel);
-	    	}
-    	}
+    public void sendAllParameters()
+        {
+        super.sendAllParameters();
+        
+        // we change patch to #63 if we're sending in bulk.
+        if (sendKawaiParametersInBulk)
+            {
+            Model tempModel = new Model();
+            tempModel.set("bank", 7);
+            tempModel.set("number", 7);
+            changePatch(tempModel);
+            }
+        }
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
@@ -622,9 +622,9 @@ public class KawaiK1Multi extends Synth
         result[6] = (byte)(external ? 0x01 : 0x00);
         
         if (toWorkingMemory && sendKawaiParametersInBulk)
-        	result[7] = (byte)95;
+            result[7] = (byte)95;
         else
-	        result[7] = (byte)position;
+            result[7] = (byte)position;
         
         System.arraycopy(data, 0, result, 8, data.length);
         result[8 + data.length] = (byte)produceChecksum(data);
@@ -694,15 +694,15 @@ public class KawaiK1Multi extends Synth
     public String getPatchName(Model model) { return model.get("name", "Untitled  "); }
 
     public int getPauseAfterChangePatch() { return 500; } // 150; }   // Seem to need about > 100ms
- 	public double getPauseBetweenMIDISends() { return 50;  }  // :-(  :-(
+    public double getPauseBetweenMIDISends() { return 50;  }  // :-(  :-(
   
     public void changePatch(Model tempModel)
         {
- 		byte BB = (byte)tempModel.get("bank");
+        byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");
         
         /// The K1 cannot change patches to and from internal or external I believe.  :-(
- 		/// So I'm not sure what to do here.        
+        /// So I'm not sure what to do here.        
         if (BB >= 8) BB -= 8;
         int PC = (BB * 8 + NN) + 64;
         try 

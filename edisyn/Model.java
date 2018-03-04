@@ -308,11 +308,11 @@ public class Model implements Cloneable
             if (minExists(keys[i]) && maxExists(keys[i]) && getMin(keys[i]) >= getMax(keys[i]))  continue;  // no range
 
             if (!(metricMinExists(keys[i]) &&
-                  metricMaxExists(keys[i]) &&
-                  get(keys[i], 0) >= getMetricMin(keys[i]) &&
-                  get(keys[i], 0) <= getMetricMax(keys[i]) &&
-                  model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
-                  model.get(keys[i], 0) <= getMetricMax(keys[i])))
+                    metricMaxExists(keys[i]) &&
+                    get(keys[i], 0) >= getMetricMin(keys[i]) &&
+                    get(keys[i], 0) <= getMetricMax(keys[i]) &&
+                    model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
+                    model.get(keys[i], 0) <= getMetricMax(keys[i])))
                 {
                 if (randomizeNonMetricIfSame && get(keys[i], 0) == model.get(keys[i]))
                     {
@@ -559,6 +559,7 @@ public class Model implements Cloneable
         lastKey = key;
         updateListenersForKey(key);
         }
+
         
     public void setBounded(String key, int value)
         {
@@ -582,8 +583,13 @@ public class Model implements Cloneable
         set(key, value);
         }
     
+    boolean updateListeners = true;
+    public void setUpdateListeners(boolean val) { updateListeners = val; }
+    
     public void updateListenersForKey(String key)
         {
+        if (!updateListeners) return;
+        
         ArrayList list = (ArrayList)(listeners.get(key));
         if (list != null)
             {

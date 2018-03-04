@@ -37,29 +37,29 @@ public class KorgMicrosampler extends Synth
     ///// in the form of a switch statment.  Korg should be highly embarassed by the low
     ///// quality of its awful sysex.
 
-	public static final int FX_NONE = 0;
-	public static final int FX_COMPRESSOR = 1;
-	public static final int FX_FILTER = 2;
-	public static final int FX_EQ = 3;
-	public static final int FX_DISTORTION = 4;
-	public static final int FX_DECIMATOR = 5;
-	public static final int FX_REVERB = 6;
-	public static final int FX_DELAY = 7;
-	public static final int FX_LCRDELAY = 8;
-	public static final int FX_PANDELAY = 9;
-	public static final int FX_MODDELAY = 10;
-	public static final int FX_TAPEECHO = 11;
-	public static final int FX_CHORUS = 12;
-	public static final int FX_FLANGER = 13;
-	public static final int FX_VIBRATO = 14;
-	public static final int FX_PHASER = 15;
-	public static final int FX_TREMOLO = 16;
-	public static final int FX_RINGMOD = 17;
-	public static final int FX_GRAINSHIFTER = 18;
-	public static final int FX_PITCHSHIFTER = 19;
-	public static final int FX_TALKMOD = 20;
-	public static final int FX_LOOPER = 21;
-	
+    public static final int FX_NONE = 0;
+    public static final int FX_COMPRESSOR = 1;
+    public static final int FX_FILTER = 2;
+    public static final int FX_EQ = 3;
+    public static final int FX_DISTORTION = 4;
+    public static final int FX_DECIMATOR = 5;
+    public static final int FX_REVERB = 6;
+    public static final int FX_DELAY = 7;
+    public static final int FX_LCRDELAY = 8;
+    public static final int FX_PANDELAY = 9;
+    public static final int FX_MODDELAY = 10;
+    public static final int FX_TAPEECHO = 11;
+    public static final int FX_CHORUS = 12;
+    public static final int FX_FLANGER = 13;
+    public static final int FX_VIBRATO = 14;
+    public static final int FX_PHASER = 15;
+    public static final int FX_TREMOLO = 16;
+    public static final int FX_RINGMOD = 17;
+    public static final int FX_GRAINSHIFTER = 18;
+    public static final int FX_PITCHSHIFTER = 19;
+    public static final int FX_TALKMOD = 20;
+    public static final int FX_LOOPER = 21;
+        
     public static final int[][] FX_PARAMETER_CONTROL_DEFAULT = new int[][] 
     {
     { 0, 1, 1, 4, 2, 1, 1, 1, 1, 1, 1, 1, 2, 4, 2, 4, 2, 1, 2, 1, 1, 1 },
@@ -109,7 +109,7 @@ public class KorgMicrosampler extends Synth
         };
     public static final int[][] FX_PARAMETER_CONTROL_VAL =
         {
-	{ },
+        { },
         { 0, 2, 3 },
         { 0, 2, 3, 5, 6, 9 },
         { 0, 5, 8, 11, 15 },
@@ -192,27 +192,27 @@ public class KorgMicrosampler extends Synth
     public static final int[][] FX_DEFAULT_SETTINGS = new int[][]
     {
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },  // none
-    { 0, 70, 19, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 2, 63, 0, 127, 0, 90, 1, 4, 8, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 127, 0, 12, 15, 18, 28, 25, 18, 35, 5, 18, 0, 0, 5, 18, 0, 0, 0, 0, 0 },
-    { 50, 56, 0, 0, 20, 20, 0, 50, 30, 0, 55, 8, 0, 30, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 22, 8, 127, 0, 0, 19, 5, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 1, 19, 0, 10, 20, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 1, 60, 45, 45, 7, 5, 5, 90, 0, 127, 127, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 1, 60, 59, 79, 49, 7, 7, 8, 5, 100, 50, 100, 90, 127, 63, 0, 0, 0, 0, 0 },
-    { 1, 60, 53, 45, 7, 5, 5, 90, 110, 0, 28, 3, 3, 0, 0, 0, 9, 10, 127, 0 },
-    { 1, 60, 53, 45, 7, 7, 5, 90, 31, 0, 34, 18, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 60, 77, 61, 7, 7, 5, 100, 100, 85, 20, 20, 127, 50, 19, 0, 80, 127, 0, 0 },
-    { 63, 28, 18, 53, 55, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 10, 63, 63, 0, 1, 28, 3, 3, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 30, 0, 70, 13, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 110, 40, 50, 0, 1, 30, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 127, 0, 52, 5, 3, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 1, 47, 0, 0, 2, 0, 0, 28, 8, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 60, 30, 7, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { -12, 0, 0, 60, 0, 7, 8, 0, 0, 2, 0, 127, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 1, 0, 2, 63, 0, 63, 127, 1, 28, 5, 3, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 7, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+    { 100, 0, 70, 19, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 100, 2, 63, 0, 127, 0, 90, 1, 4, 8, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 100, 127, 0, 12, 15, 18, 28, 25, 18, 35, 5, 18, 0, 0, 5, 18, 0, 0, 0, 0 },
+    { 100, 50, 56, 0, 0, 20, 20, 0, 50, 30, 0, 55, 8, 0, 30, 0, 0, 0, 0, 0 },
+    { 100, 0, 0, 22, 8, 127, 0, 0, 19, 5, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 90, 1, 19, 0, 10, 20, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 70, 0, 1, 60, 45, 45, 7, 5, 5, 90, 0, 127, 127, 0, 0, 0, 0, 0, 0, 0 },
+    { 70, 1, 60, 59, 79, 49, 7, 7, 8, 5, 100, 50, 100, 90, 127, 63, 0, 0, 0, 0 },
+    { 30, 1, 60, 53, 45, 7, 5, 5, 90, 110, 0, 28, 3, 3, 0, 0, 0, 9, 10, 127 },
+    { 70, 1, 60, 53, 45, 7, 7, 5, 90, 31, 0, 34, 18, 0, 0, 0, 0, 0, 0, 0 },
+    { 70, 0, 60, 77, 61, 7, 7, 5, 100, 100, 85, 20, 20, 127, 50, 19, 0, 80, 127, 0 },
+    { 50, 63, 28, 18, 53, 55, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 50, 10, 63, 63, 0, 1, 28, 3, 3, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0 },
+    { 100, 30, 0, 70, 13, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 50, 110, 40, 50, 0, 1, 30, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 100, 127, 0, 52, 5, 3, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 100, 1, 47, 0, 0, 2, 0, 0, 28, 8, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 100, 0, 60, 30, 7, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 100, -12, 0, 0, 60, 0, 7, 8, 0, 0, 2, 0, 127, 0, 0, 0, 0, 0, 0, 0 },
+    { 100, 0, 1, 0, 2, 63, 0, 63, 127, 1, 28, 5, 3, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 7, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
     };
         
     /** DEFAULT SETTINGS for each effect
@@ -241,6 +241,16 @@ public class KorgMicrosampler extends Synth
         
     public KorgMicrosampler()
         {
+
+        // set default parameters for fx
+        for(int type = 0; type < FX_TYPE.length; type++)
+            for(int param = 0; param < 20; param++)
+                {
+                model.set("fx" + type + "param" + param, FX_DEFAULT_SETTINGS[type][param]);
+                model.setMin("fx" + type + "param" + param, 0);
+                model.setMax("fx" + type + "param" + param, 0);
+                }
+
         /// SOUND PANEL
                 
         JComponent soundPanel = new SynthPanel(this);
@@ -485,9 +495,9 @@ public class KorgMicrosampler extends Synth
             samples[i - 1].add(comp);
                 
             comp = new LabelledDial("Semitone", this, "sample" + i + "semitone", color, -24, 24)
-            	{
+                {
                 public boolean isSymmetric() { return true; }
-            	};
+                };
             samples[i - 1].add(comp);
 
             //-99                           0 ... 2                 // asymmetric note
@@ -813,7 +823,7 @@ public class KorgMicrosampler extends Synth
             };
         next.add(comp);
 
-		// irritating that these gains are positive only, but distortion's gains are +/-
+        // irritating that these gains are positive only, but distortion's gains are +/-
         comp = new LabelledDial("B1 Gain", this, "fx" + i + "param5", color, 0, 36);
         next.add(comp);
 
@@ -3140,12 +3150,10 @@ public class KorgMicrosampler extends Synth
 
                 setSendMIDI(false);
                 // Reset default settings
-                //for(int fx = 1; fx < 22; fx++)
-                if (type != 0)  // we don't care about "none"
-                    for(int param = 0; param < 20; param++)
-                        {
-                        model.set("fx" + type + "param" + (param + 1), FX_DEFAULT_SETTINGS[type][param]);
-                        }
+                for(int param = 0; param < 20; param++)
+                    {
+                    model.set("fx" + type + "param" + param, FX_DEFAULT_SETTINGS[type][param]);
+                    }
                 setSendMIDI(true);
 
                 // replace widgets
@@ -3455,15 +3463,15 @@ public class KorgMicrosampler extends Synth
             data[72 + i * 19 + 18] = (byte)model.get("sample" + (i + 1) + "fxsw", 0);
             }
                 
-        	// Emit FX data
-        	data[756] = (byte)model.get("fxtype", 0);
-        	data[757] = (byte)model.get("fxparametercontrol1", 0);
-        	data[758] = (byte)model.get("fxparametercontrol2", 0);
-        	for(int i = 0; i < 20; i++)
-        	    {
-        	    int sub = i;
-        	    data[759 + i] = (byte)getSigned("fx" + data[756] + "param" + sub, 0);
-        	    }
+        // Emit FX data
+        data[756] = (byte)model.get("fxtype", 0);
+        data[757] = (byte)model.get("fxparametercontrol1", 0);
+        data[758] = (byte)model.get("fxparametercontrol2", 0);
+        for(int i = 0; i < 20; i++)
+            {
+            int sub = i;
+            data[759 + i] = (byte)getSigned("fx" + data[756] + "param" + sub, 0);
+            }
                         
         data[779] = (byte)0xF7;
                 
@@ -3506,9 +3514,9 @@ public class KorgMicrosampler extends Synth
     public void parseParameter(byte[] data)
         {
         if (data.length < 8)
-        	{
-        	System.err.println("Invalid sysex message received");
-        	}
+            {
+            System.err.println("Invalid sysex message received");
+            }
         else if (data[5] == 0x0)  // BANK AND GLOBAL
             {
             if (data[7] <= 0x07)  // Name
@@ -3781,9 +3789,9 @@ public class KorgMicrosampler extends Synth
             // here comes the fun bit again.  Custom signed
             model.set(key, val);
             if (type == FX_NONE)
-            	{
-            	new RuntimeException("FX for type 'none' spotted: fx" + type + "param" + sub);
-            	}
+                {
+                new RuntimeException("FX for type 'none' spotted: fx" + type + "param" + sub);
+                }
             if (type == FX_COMPRESSOR)
                 {
                 }

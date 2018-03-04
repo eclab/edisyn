@@ -2196,10 +2196,10 @@ public class WaldorfMicrowaveXT extends Synth
         }
         
     public int getPauseAfterChangePatch()
-    	{
-    	// perhaps just a smidgen?
-    	return 50;
-    	}
+        {
+        // perhaps just a smidgen?
+        return 50;
+        }
 
     public void changePatch(Model tempModel)
         {

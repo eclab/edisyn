@@ -51,6 +51,10 @@ public abstract class Synth extends JComponent implements Updatable
 
     public static final int MAX_FILE_LENGTH = 64 * 1024;        // so we don't go on forever
 
+    public static final int STATUS_SENDING_ALL_PARAMETERS = 0;
+    public static final int STATUS_UPDATING_ONE_PARAMETER = 1;
+
+
     public JMenuBar menubar;
     public JMenuItem transmitTo;
     public JMenuItem transmitCurrent;
@@ -82,6 +86,10 @@ public abstract class Synth extends JComponent implements Updatable
     String copyPreamble;
     public String getCopyPreamble() { return copyPreamble; }
     public void setCopyPreamble(String preamble) { copyPreamble = preamble; }
+
+    String copyType;
+    public String getCopyType() { return copyType; }
+    public void setCopyType(String type) { copyType = type; }
     
     ArrayList copyKeys;
     public ArrayList getCopyKeys() { return copyKeys; }
@@ -90,8 +98,12 @@ public abstract class Synth extends JComponent implements Updatable
     /** Returns the model associated with this editor. */
     public Model getModel() { return model; }
 
-	boolean testIncomingControllerMIDI;
-	boolean testIncomingSynthMIDI;
+    boolean testIncomingControllerMIDI;
+    boolean testIncomingSynthMIDI;
+
+	boolean parsingForMerge = false;
+	/** Indicates that we are a sacrificial synth which is parsing an incoming sysex dump and then will be merged with the main synth. */
+	public boolean isParsingForMerge() { return parsingForMerge; }
 
     boolean useMapForRecombination = true;
     boolean showingMutation = false;
@@ -220,12 +232,12 @@ public abstract class Synth extends JComponent implements Updatable
     JCheckBoxMenuItem perChannelCCsMenuItem;
     
     // MenuItem for Passing through Controller Values, so we can check it    
-	JCheckBoxMenuItem passThroughControllerMenuItem;
+    JCheckBoxMenuItem passThroughControllerMenuItem;
     
     /** Returns whether we are passing through CC */
     public boolean getPassThroughController() { synchronized(passThroughCCLock) { return passThroughController; } }
     public void setPassThroughController(final boolean val)
-    	{
+        {
         synchronized(passThroughCCLock) 
             { 
             passThroughController = val; 
@@ -238,7 +250,7 @@ public abstract class Synth extends JComponent implements Updatable
                     }
                 });
             } 
-    	}
+        }
 
     /** Returns whether we are passing through CC */
     public boolean getPassThroughCC() { synchronized(passThroughCCLock) { return passThroughCC; } }
@@ -336,15 +348,16 @@ public abstract class Synth extends JComponent implements Updatable
     edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
     edisyn.synth.korgmicrokorg.KorgMicroKorg.class,
     edisyn.synth.korgmicrokorg.KorgMicroKorgVocoder.class,
-//    edisyn.synth.korgwavestation.KorgWavestationPerformance.class,
-//    edisyn.synth.korgwavestation.KorgWavestationPatch.class,
-//    edisyn.synth.korgwavestation.KorgWavestationSequence.class,
+    edisyn.synth.korgwavestation.KorgWavestationPerformance.class,
+    edisyn.synth.korgwavestation.KorgWavestationPatch.class,
+    edisyn.synth.korgwavestation.KorgWavestationSequence.class,
     edisyn.synth.kawaik1.KawaiK1.class, 
     edisyn.synth.kawaik1.KawaiK1Multi.class, 
     edisyn.synth.kawaik4.KawaiK4.class, 
     edisyn.synth.kawaik4.KawaiK4Multi.class, 
     edisyn.synth.kawaik4.KawaiK4Drum.class,
     edisyn.synth.kawaik4.KawaiK4Effect.class,
+    //edisyn.synth.kawaik5.KawaiK5.class,
     edisyn.synth.oberheimmatrix1000.OberheimMatrix1000.class, 
     edisyn.synth.preenfm2.PreenFM2.class,
     edisyn.synth.waldorfblofeld.WaldorfBlofeld.class, 
@@ -462,8 +475,9 @@ public abstract class Synth extends JComponent implements Updatable
     ///             Call handleSynthCCOrNRPN(message) [it's some CC or NRPN that your synth is sending us, maybe a parameter change?]
         
     /// SENDING A SINGLE PARAMETER OF KEY key
-    /// Call emitAll(key)
-    ///     This calls emit(key)
+    /// Call emitAll(key, status)
+    ///         This calls emitAll(key)
+    ///             This calls emit(key)
     ///
     /// You could override either of these methods, but probably not both.
         
@@ -473,7 +487,7 @@ public abstract class Synth extends JComponent implements Updatable
     ///                     emitAll(tempModel, toWorkingMemory = true, toFile)
     ///                             This calls emit(tempModel, toWorkingMemory = true, toFile)
     ///             Else for every key it calls:
-    ///             Call emitAll(key)
+    ///             	Call emitAll(key)
     ///                     This calls emit(key)
     ///
     /// You could override either of the emit...(tempModel...) methods, but probably not both.
@@ -482,13 +496,13 @@ public abstract class Synth extends JComponent implements Updatable
     /// SENDING TO A PATCH
     /// Call gatherPatchInfo(...,tempModel,...)
     /// If successful
-    ///             Call changePatch(tempModel)
+    ///     Call changePatch(tempModel)
     ///     Call sendAllParameters().  This does:
     ///                     If getSendsAllParametersInBulk(), this calls:
     ///                             emitAll(tempModel, toWorkingMemory = true, toFile)
     ///                                     This calls emit(tempModel, toWorkingMemory = true, toFile)
     ///                     Else for every key it calls:
-    ///                     Call emitAll(key)
+    ///                     	Call emitAll(key)
     ///                             This calls emit(key)
     ///     
     /// You could override either of the emit...(tempModel...) methods, but probably not both.
@@ -608,6 +622,18 @@ public abstract class Synth extends JComponent implements Updatable
         have overridden emitAll(...) you don't need to implement this method. */
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile) { return new byte[0]; }
     
+    /** Produces one or more sysex parameter change requests for the given parameter as one
+        OR MORE sysex dumps or other MIDI messages.  Each sysex dump is a separate byte array,
+        and other midi messages are MIDI message objects.  The status integer indicates under
+        what condition emitAll(...) is being called, such as STATUS_SENDING_ALL_PARAMETERS
+        or STATUS_UPDATING_ONE_PARAMETER.  By default, this calls emitAll(key);
+        
+        If you return a zero-length byte array, nothing will be sent.  */
+    public Object[] emitAll(String key, int status)
+        {
+        return emitAll(key);
+        }
+
     /** Produces one or more sysex parameter change requests for the given parameter as one
         OR MORE sysex dumps or other MIDI messages.  Each sysex dump is a separate byte array,
         and other midi messages are MIDI message objects.
@@ -782,6 +808,9 @@ public abstract class Synth extends JComponent implements Updatable
     /** Override this to make sure that the given additional time (in ms) has transpired between sending all parameters and anything else (such as playing a note) */
     public int getPauseAfterSendAllParameters() { return 0; }
     
+    /** Override this to make sure that the given additional time (in ms) has transpired between sending each parameter via emitAll(key). */
+    public int getPauseAfterSendOneParameter() { return 0; }
+
     /** Override this to return TRUE if, after a patch write, we need to change to the patch *again* so as to load it into memory. */
     public boolean getShouldChangePatchAfterWrite() { return false; }
     
@@ -910,31 +939,31 @@ public abstract class Synth extends JComponent implements Updatable
     // The synth's MIDI interface
     Midi midi = new Midi();
 
-    // flag for whether we send midi when requested
-    boolean sendMIDI = false;
+    // flag for whether sending MIDI is temporarily turned off or not
+    boolean sendMIDI = true;  // we can send MIDI 
 
-	/** Returns the current merge probability.  If the value is 0.0,
-		then merging is not occurring. */
-	public double getMergeProbability()
-		{
-		return merging;
-		}
+    /** Returns the current merge probability.  If the value is 0.0,
+        then merging is not occurring. */
+    public double getMergeProbability()
+        {
+        return merging;
+        }
 
-	/** Returns the current merge probability.  If the value is 0.0,
-		then merging is not occurring. */
-	public void setMergeProbability(double val)
-		{
-		if (val < 0) val = 0; 
-		if (val > 1) val = 1;
-		merging = val;
-		}
+    /** Returns the current merge probability.  If the value is 0.0,
+        then merging is not occurring. */
+    public void setMergeProbability(double val)
+        {
+        if (val < 0) val = 0; 
+        if (val > 1) val = 1;
+        merging = val;
+        }
 
 
-	/** Returns whether the mutation map should be used for recombination. */
-	public boolean getUsesMapForRecombination()
-		{
-		return useMapForRecombination;
-		}
+    /** Returns whether the mutation map should be used for recombination. */
+    public boolean getUsesMapForRecombination()
+        {
+        return useMapForRecombination;
+        }
 
 
     /** Builds a receiver to attach to the current IN transmitter.  The receiver
@@ -1032,12 +1061,12 @@ public abstract class Synth extends JComponent implements Updatable
                                     }
                                 }
                             }
-                    	if (testIncomingSynthMIDI) 
-                    		{
-                    		showSimpleMessage("Incoming MIDI from Synthesizer", "A MIDI message has arrived from the Synthesizer:\n" + Midi.format(message) + "\nTime: " + timeStamp); 
-                    		testIncomingSynthMIDI = false; 
-                			testIncomingSynth.setText("Report Next Synth MIDI");
-                    		} 
+                        if (testIncomingSynthMIDI) 
+                            {
+                            showSimpleMessage("Incoming MIDI from Synthesizer", "A MIDI message has arrived from the Synthesizer:\n" + Midi.format(message) + "\nTime: " + timeStamp); 
+                            testIncomingSynthMIDI = false; 
+                            testIncomingSynth.setText("Report Next Synth MIDI");
+                            } 
                         }
                     });
                 
@@ -1101,7 +1130,7 @@ public abstract class Synth extends JComponent implements Updatable
 
                                         // should we attempt to reroute to the synth?
                                         if (channel == tuple.keyChannel || tuple.keyChannel == tuple.KEYCHANNEL_OMNI)
-                                        	{
+                                            {
                                             channel = getVoiceMessageRoutedChannel(channel, getChannelOut());
                                             }
 
@@ -1114,15 +1143,15 @@ public abstract class Synth extends JComponent implements Updatable
                                         messageFromController(newMessage, false, true);
                                         }
                                     else
-                                    	{
+                                        {
                                         messageFromController(message, false, false);
-                                    	}
+                                        }
                                     }
                                 catch (InvalidMidiDataException e)
                                     {
                                     e.printStackTrace();
                                     messageFromController(message, false, false);
-		                            }
+                                    }
                                 }
                             else if (message instanceof SysexMessage && passThroughController)
                                 {
@@ -1130,12 +1159,12 @@ public abstract class Synth extends JComponent implements Updatable
                                 messageFromController(message, false, true);
                                 }
                             }
-                    	if (testIncomingControllerMIDI) 
-                    		{ 
-                    		showSimpleMessage("Incoming MIDI from Controller", "A MIDI message has arrived from the Controller:\n" + Midi.format(message) + "\nTime: " + timeStamp); 
-                    		testIncomingControllerMIDI = false; 
-                			testIncomingController.setText("Report Next Controller MIDI");
-                    		} 
+                        if (testIncomingControllerMIDI) 
+                            { 
+                            showSimpleMessage("Incoming MIDI from Controller", "A MIDI message has arrived from the Controller:\n" + Midi.format(message) + "\nTime: " + timeStamp); 
+                            testIncomingControllerMIDI = false; 
+                            testIncomingController.setText("Report Next Controller MIDI");
+                            } 
                         }
                     });
                 }
@@ -1156,7 +1185,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** Same as setupMIDI(message, null), with a default "you are disconnected" message. */
     public boolean setupMIDI() { return setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from.", null); }
         
-    /** Lets the user set up the MIDI in/out/key devices.  The old devices are provided in oldTuple,
+    /** Lets the user set up the MIDI in/out/key devices.  TheMIDI old devices are provided in oldTuple,
         or you may pass null in if there are no old devices.  Returns TRUE if a new tuple was set up. */
     public boolean setupMIDI(String message, Midi.Tuple oldTuple)
         {
@@ -1187,58 +1216,58 @@ public abstract class Synth extends JComponent implements Updatable
         return retval;
         }
         
-        public void resetColors()
-        	{
-			setLastColor("background-color", Style.DEFAULT_BACKGROUND_COLOR);
-			setLastColor("text-color", Style.DEFAULT_TEXT_COLOR);
-			setLastColor("a-color", Style.DEFAULT_COLOR_A);
-			setLastColor("b-color", Style.DEFAULT_COLOR_B);
-			setLastColor("c-color", Style.DEFAULT_COLOR_C);
-			setLastColor("dynamic-color", Style.DEFAULT_DYNAMIC_COLOR);
-			setLastColor("unset-color", Style.DEFAULT_UNSET_COLOR);
-			Style.updateColors();
-        	}
-        	
-        public void setupColors()
-			{
-			Color backgroundColor = getLastColor("background-color", Style.DEFAULT_BACKGROUND_COLOR);
-			Color textColor = getLastColor("text-color", Style.DEFAULT_TEXT_COLOR);
-			Color aColor = getLastColor("a-color", Style.DEFAULT_COLOR_A);
-			Color bColor = getLastColor("b-color", Style.DEFAULT_COLOR_B);
-			Color cColor = getLastColor("c-color", Style.DEFAULT_COLOR_C);
-			Color dynamicColor = getLastColor("dynamic-color", Style.DEFAULT_DYNAMIC_COLOR);
-			Color dialColor = getLastColor("unset-color", Style.DEFAULT_UNSET_COLOR);
-			
-			ColorWell background = new ColorWell(backgroundColor);
-			ColorWell text = new ColorWell(textColor);
-			ColorWell a = new ColorWell(aColor);
-			ColorWell b = new ColorWell(bColor);
-			ColorWell c = new ColorWell(cColor);
-			ColorWell dynamic = new ColorWell(dynamicColor);
-			ColorWell dial = new ColorWell(dialColor);
-		
-			boolean result = Synth.showMultiOption(this, 
-				new String[] { "Background  ", "Text  ", "Color A  ", "Color B  ", "Color C  ", "Highlights  ", "Dials  " },  
-				new JComponent[] { background, text, a, b, c, dynamic, dial }, 
-				"Update Colors", 
-				"\n\n(Note: Currently-Open Windows May Look Scrambled)");
-				
-			if (result)
-				{
-				setLastColor("background-color", background.getColor());
-				setLastColor("text-color", text.getColor());
-				setLastColor("a-color", a.getColor());
-				setLastColor("b-color", b.getColor());
-				setLastColor("c-color", c.getColor());
-				setLastColor("dynamic-color", dynamic.getColor());
-				setLastColor("unset-color", dial.getColor());
-				Style.updateColors();
-				}
-			
-			}
+    public void resetColors()
+        {
+        setLastColor("background-color", Style.DEFAULT_BACKGROUND_COLOR);
+        setLastColor("text-color", Style.DEFAULT_TEXT_COLOR);
+        setLastColor("a-color", Style.DEFAULT_COLOR_A);
+        setLastColor("b-color", Style.DEFAULT_COLOR_B);
+        setLastColor("c-color", Style.DEFAULT_COLOR_C);
+        setLastColor("dynamic-color", Style.DEFAULT_DYNAMIC_COLOR);
+        setLastColor("unset-color", Style.DEFAULT_UNSET_COLOR);
+        Style.updateColors();
+        }
+                
+    public void setupColors()
+        {
+        Color backgroundColor = getLastColor("background-color", Style.DEFAULT_BACKGROUND_COLOR);
+        Color textColor = getLastColor("text-color", Style.DEFAULT_TEXT_COLOR);
+        Color aColor = getLastColor("a-color", Style.DEFAULT_COLOR_A);
+        Color bColor = getLastColor("b-color", Style.DEFAULT_COLOR_B);
+        Color cColor = getLastColor("c-color", Style.DEFAULT_COLOR_C);
+        Color dynamicColor = getLastColor("dynamic-color", Style.DEFAULT_DYNAMIC_COLOR);
+        Color dialColor = getLastColor("unset-color", Style.DEFAULT_UNSET_COLOR);
+                        
+        ColorWell background = new ColorWell(backgroundColor);
+        ColorWell text = new ColorWell(textColor);
+        ColorWell a = new ColorWell(aColor);
+        ColorWell b = new ColorWell(bColor);
+        ColorWell c = new ColorWell(cColor);
+        ColorWell dynamic = new ColorWell(dynamicColor);
+        ColorWell dial = new ColorWell(dialColor);
+                
+        boolean result = Synth.showMultiOption(this, 
+            new String[] { "Background  ", "Text  ", "Color A  ", "Color B  ", "Color C  ", "Highlights  ", "Dials  " },  
+            new JComponent[] { background, text, a, b, c, dynamic, dial }, 
+            "Update Colors", 
+            "\n\n(Note: Currently-Open Windows May Look Scrambled)");
+                                
+        if (result)
+            {
+            setLastColor("background-color", background.getColor());
+            setLastColor("text-color", text.getColor());
+            setLastColor("a-color", a.getColor());
+            setLastColor("b-color", b.getColor());
+            setLastColor("c-color", c.getColor());
+            setLastColor("dynamic-color", dynamic.getColor());
+            setLastColor("unset-color", dial.getColor());
+            Style.updateColors();
+            }
+                        
+        }
 
 
-    void performChangePatch(Model tempModel)
+    public void performChangePatch(Model tempModel)
         {
         changePatch(tempModel);
         int p = getPauseAfterChangePatch();
@@ -1250,7 +1279,7 @@ public abstract class Synth extends JComponent implements Updatable
     public void simplePause(int ms)
         {
         if (ms == 0) return;
-        try { Thread.currentThread().sleep(ms); }
+        try { long l = System.currentTimeMillis(); Thread.currentThread().sleep(ms);}
         catch (Exception e) { e.printStackTrace(); }
         }
 
@@ -1325,14 +1354,14 @@ public abstract class Synth extends JComponent implements Updatable
         }
            
     /** If you are sending a sysex message as fragments with pauses in-between them,
-    	what is the length of the pause?  By default this is 0 (no pause). */
+        what is the length of the pause?  By default this is 0 (no pause). */
     public int getPauseBetweenSysexFragments() { return 0; }
 
-	/** Indicates that sysex messages are not sent as fragments. */
+    /** Indicates that sysex messages are not sent as fragments. */
     public static int NO_SYSEX_FRAGMENT_SIZE = 0;
     
     /** If you are sending a sysex message as fragments with pauses in-between them,
-    	how large are the fragments? By default, this is NO_SYSEX_FRAGMENT_SIZE. */
+        how large are the fragments? By default, this is NO_SYSEX_FRAGMENT_SIZE. */
     public int getSysexFragmentSize() { return NO_SYSEX_FRAGMENT_SIZE; }    
                         
     /** Attempts to send a single MIDI sysex message. Returns false if (1) the data was empty or null (2)
@@ -1369,18 +1398,18 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     int fragmentSize = getSysexFragmentSize();
                     if (fragmentSize <= NO_SYSEX_FRAGMENT_SIZE || message.getLength() <= fragmentSize)
-                    	{
-						receiver.send(message, -1); 
-                    	}
+                        {
+                        receiver.send(message, -1); 
+                        }
                     else
-                    	{
-                    	MidiMessage[] messages = Midi.DividedSysex.divide(message, 16);
-                    	for(int i = 0; i < messages.length; i++)
-                    		{
-                    		if (i > 0) simplePause(getPauseBetweenSysexFragments());
-                    		receiver.send(messages[i], -1);
-                    		}
-                    	}
+                        {
+                        MidiMessage[] messages = Midi.DividedSysex.divide(message, 16);
+                        for(int i = 0; i < messages.length; i++)
+                            {
+                            if (i > 0) simplePause(getPauseBetweenSysexFragments());
+                            receiver.send(messages[i], -1);
+                            }
+                        }
                     }      
                 lastMIDISend = System.nanoTime();
                 return true; 
@@ -1401,6 +1430,9 @@ public abstract class Synth extends JComponent implements Updatable
             return false;
         }
     
+    /** If you get a index=0, outOf=0, we're done */
+    public void sentMIDI(Object datum, int index, int outOf) { }
+        
     /** Attempts to send several MIDI sysex or other kinds of messages. Returns false if (1) the data was empty or null (2)
         synth has turned off the ability to send temporarily (3) the sysex message is not
         valid (4) an error occurred when the receiver tried to send the data.  */
@@ -1413,15 +1445,17 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 byte[] sysex = (byte[])(data[i]);
                 if (!tryToSendSysex(sysex))
-                    return false;
+                    { sentMIDI(null, 0, 0); return false; }
                 }
             else if (data[i] instanceof MidiMessage)
                 {
                 MidiMessage message = (MidiMessage)(data[i]);
                 if (!tryToSendMIDI(message))
-                    return false;
+                    { sentMIDI(null, 0, 0); return false; }
                 }
+            sentMIDI(data[i], i, data.length);
             }
+        sentMIDI(null, 0, 0);
         return true;
         }
         
@@ -1578,10 +1612,14 @@ public abstract class Synth extends JComponent implements Updatable
         Model backup = (Model)(model.clone());
 
         Synth newSynth = instantiate(Synth.this.getClass(), getSynthNameLocal(), true, false, tuple);
+        newSynth.setSendMIDI(false);
+        newSynth.parsingForMerge = true;
         newSynth.parse(data, true, false);
+        newSynth.parsingForMerge = false;
         model.recombine(random, newSynth.getModel(), useMapForRecombination ? getMutationKeys() : model.getKeys(), probability);
+        newSynth.setSendMIDI(true);
         revise();  // just in case
-                
+                        
         undo.setWillPush(true);
         if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
             undo.push(backup);
@@ -1618,19 +1656,24 @@ public abstract class Synth extends JComponent implements Updatable
     */     
     public void sendAllParameters()
         {
+        if (!getSendMIDI())
+            return;  // don't bother!  MIDI is off
+
+		boolean sent = true;
         if (getSendsAllParametersInBulk())
             {
-            tryToSendMIDI(emitAll(getModel(), true, false));
+            sent = sent || tryToSendMIDI(emitAll(getModel(), true, false));
             }
         else
             {
             String[] keys = getModel().getKeys();
             for(int i = 0; i < keys.length; i++)
                 {
-                tryToSendMIDI(emitAll(keys[i]));
+                if (sent = sent || tryToSendMIDI(emitAll(keys[i], STATUS_SENDING_ALL_PARAMETERS)))
+	                simplePause(getPauseAfterSendOneParameter());
                 }
             }
-        simplePause(getPauseAfterSendAllParameters());
+        if (sent) simplePause(getPauseAfterSendAllParameters());
         }
 
 
@@ -1648,26 +1691,51 @@ public abstract class Synth extends JComponent implements Updatable
     ////////// GUI UTILITIES
 
 
-	public int getNumTabs()
-		{
-		return tabs.getTabCount();
-		}
-	
-	public int getSelectedTabIndex()
-		{
-		return tabs.getSelectedIndex();
-		}
-	
-	public JComponent getSelectedTab()
-		{
-		return (JComponent)(tabs.getSelectedComponent());
-		}
-		
-	public String getSelectedTabTitle()
-		{
-		return tabs.getTitleAt(tabs.getSelectedIndex());
-		}
-		
+    public int getNumTabs()
+        {
+        return tabs.getTabCount();
+        }
+        
+    public int getSelectedTabIndex()
+        {
+        return tabs.getSelectedIndex();
+        }
+        
+    /** Returns -1 if there is no such tab. */
+    public int getIndexOfTabTitle(String title)
+        {
+        for(int i = 0; i < getNumTabs(); i++)
+            {
+            if (tabs.getTitleAt(i).equals(title))
+                return i;
+            }
+        return -1;
+        }
+                        
+    /** Returns FALSE if the tab could not be selected */
+    public boolean setSelectedTabIndex(int index)
+        {
+        try
+            {
+            tabs.setSelectedIndex(index);
+            return true;
+            }
+        catch (Exception e)
+            {
+            return false;
+            }
+        }
+                
+    public JComponent getSelectedTab()
+        {
+        return (JComponent)(tabs.getSelectedComponent());
+        }
+                
+    public String getSelectedTabTitle()
+        {
+        return tabs.getTitleAt(tabs.getSelectedIndex());
+        }
+                
     public JComponent insertTab(String title, JComponent component, int index)
         {
         JScrollPane pane = new JScrollPane(component, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -1692,7 +1760,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         int idx = tabs.indexOfTab(title);
         if (idx != -1)
-        	tabs.remove(idx);
+            tabs.remove(idx);
         }
 
 
@@ -1912,7 +1980,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         if (!onlySetInSynth)
             {
-        	setLastX(value, x);
+            setLastX(value, x);
             }
         }
         
@@ -1956,9 +2024,9 @@ public abstract class Synth extends JComponent implements Updatable
         }
         
     private static final String getLastX(String x)
-    	{
+        {
         return Prefs.getGlobalPreferences("Data").get(x, null);
-    	}
+        }
 
    
     // sets the last directory used by load, save, or save as
@@ -1971,27 +2039,27 @@ public abstract class Synth extends JComponent implements Updatable
     // gets the last synthesizer opened via the global window.
     static String getLastSynth() { return getLastX("Synth", null, false); }
 
-	public static Color getLastColor(String key, Color defaultColor)
-		{
-		String val = getLastX(key);
-		if (val == null) { return defaultColor; }
-		Scanner scan = new Scanner(val);
-		if (!scan.hasNextInt()) { return defaultColor; }
-		int red = scan.nextInt();
-		if (!scan.hasNextInt()) { return defaultColor; }
-		int green = scan.nextInt();
-		if (!scan.hasNextInt()) { return defaultColor; }
-		int blue = scan.nextInt();
-		if (red < 0 || green < 0 || blue < 0 || red > 255 || green > 255 || blue > 255) { return defaultColor; }
-		return new Color(red, green, blue);
-		}
+    public static Color getLastColor(String key, Color defaultColor)
+        {
+        String val = getLastX(key);
+        if (val == null) { return defaultColor; }
+        Scanner scan = new Scanner(val);
+        if (!scan.hasNextInt()) { return defaultColor; }
+        int red = scan.nextInt();
+        if (!scan.hasNextInt()) { return defaultColor; }
+        int green = scan.nextInt();
+        if (!scan.hasNextInt()) { return defaultColor; }
+        int blue = scan.nextInt();
+        if (red < 0 || green < 0 || blue < 0 || red > 255 || green > 255 || blue > 255) { return defaultColor; }
+        return new Color(red, green, blue);
+        }
                 
- 	static void setLastColor(String key, Color color)
- 		{
- 		if (color == null) return;
- 		String val = "" + color.getRed() + " " + color.getGreen() + " " + color.getBlue();
- 		setLastX(val, key);
- 		}
+    static void setLastColor(String key, Color color)
+        {
+        if (color == null) return;
+        String val = "" + color.getRed() + " " + color.getGreen() + " " + color.getBlue();
+        setLastX(val, key);
+        }
  
  
  
@@ -2010,19 +2078,19 @@ public abstract class Synth extends JComponent implements Updatable
     ///////////    SPROUT AND MENU HANDLING
 
 
-	public void tabChanged()
-		{
-		// cancel learning
-		setLearningCC(false);
-		if (tabs.getSelectedComponent() == hillClimbPane)
-			{
-			hillClimb.startup();
-			}
-		else
-			{
-			hillClimb.shutdown();
-			}
-		}
+    public void tabChanged()
+        {
+        // cancel learning
+        setLearningCC(false);
+        if (tabs.getSelectedComponent() == hillClimbPane)
+            {
+            hillClimb.startup();
+            }
+        else
+            {
+            hillClimb.shutdown();
+            }
+        }
 
 
     public JFrame sprout()
@@ -2822,9 +2890,9 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 testIncomingSynthMIDI = !testIncomingSynthMIDI;
                 if (testIncomingSynthMIDI)
-	                testIncomingSynth.setText("Stop Reporting Synth MIDI");
-	            else
-	                testIncomingSynth.setText("Report Next Synth MIDI");	            	
+                    testIncomingSynth.setText("Stop Reporting Synth MIDI");
+                else
+                    testIncomingSynth.setText("Report Next Synth MIDI");                    
                 }
             });
 
@@ -2836,9 +2904,9 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 testIncomingControllerMIDI = !testIncomingControllerMIDI;
                 if (testIncomingControllerMIDI)
-                	testIncomingController.setText("Stop Reporting Controller MIDI");
+                    testIncomingController.setText("Stop Reporting Controller MIDI");
                 else
-                	testIncomingController.setText("Report Next Controller MIDI");
+                    testIncomingController.setText("Report Next Controller MIDI");
                 }
             });
 
@@ -3381,7 +3449,7 @@ public abstract class Synth extends JComponent implements Updatable
             });
         perChannelCCsMenuItem.setSelected(perChannelCCs);
 
-		menu.addSeparator(); 
+        menu.addSeparator(); 
 
         passThroughCCMenuItem = new JCheckBoxMenuItem("Pass Through All CCs");
         menu.add(passThroughCCMenuItem);
@@ -3413,23 +3481,23 @@ public abstract class Synth extends JComponent implements Updatable
         JMenuItem colorMenu = new JMenuItem("Change Color Scheme");
         menu.add(colorMenu);
         colorMenu.addActionListener(new ActionListener()
-          {
-          public void actionPerformed( ActionEvent e)
-          {
-          setupColors();
-          }
-          });
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setupColors();
+                }
+            });
 
         JMenuItem resetColorMenu = new JMenuItem("Reset Color Scheme");
         menu.add(resetColorMenu);
         resetColorMenu.addActionListener(new ActionListener()
-          {
-          public void actionPerformed( ActionEvent e)
-          {
-    		if (showSimpleConfirm("Reset Colors", "Reset Color Scheme to Defaults?\n\n(Note: Currently-Open Windows May Look Scrambled)"))
-          		resetColors();
-          }
-          });
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                if (showSimpleConfirm("Reset Colors", "Reset Color Scheme to Defaults?\n\n(Note: Currently-Open Windows May Look Scrambled)"))
+                    resetColors();
+                }
+            });
 
 
         menu = new JMenu("Tabs");
@@ -3752,10 +3820,15 @@ public abstract class Synth extends JComponent implements Updatable
                 
         if (gatherPatchInfo("Write Patch To...", getModel(), true))
             {
-            performChangePatch(getModel());     // we need to be at the start for the Oberheim Matrix 1000
-            tryToSendMIDI(emitAll(getModel(), false, false));
-            performChangePatch(getModel());     // do it at the end AND start here, as opposed to doSendtoPatch, which does it first.  We need to be at the end for the Kawai K4.
+            writeAllParameters(getModel());
             }
+        }
+        
+    public void writeAllParameters(Model model)
+        {
+        performChangePatch(model);     // we need to be at the start for the Oberheim Matrix 1000
+        tryToSendMIDI(emitAll(model, false, false));
+        performChangePatch(model);     // do it at the end AND start here, as opposed to doSendtoPatch, which does it first.  We need to be at the end for the Kawai K4.
         }
                 
     void doChangeMIDI()
@@ -3777,23 +3850,23 @@ public abstract class Synth extends JComponent implements Updatable
             }
         
         if (!sendingAllSoundsOff)
-	        {
-	        noMIDIPause = true;
-	        try
-            	{
-            	// do an all sounds off (some synths don't properly respond to all notes off)
-            	for(int i = 0; i < 16; i++)
-            	    tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
-            	// do an all notes off (some synths don't properly respond to all sounds off)
-            	for(int i = 0; i < 16; i++)
-            	    tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
-            	}
-        	catch (InvalidMidiDataException e2)
-        	    {
-        	    e2.printStackTrace();
-        	    }
-        	noMIDIPause = false;
-        	}
+            {
+            noMIDIPause = true;
+            try
+                {
+                // do an all sounds off (some synths don't properly respond to all notes off)
+                for(int i = 0; i < 16; i++)
+                    tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
+                // do an all notes off (some synths don't properly respond to all sounds off)
+                for(int i = 0; i < 16; i++)
+                    tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
+                }
+            catch (InvalidMidiDataException e2)
+                {
+                e2.printStackTrace();
+                }
+            noMIDIPause = false;
+            }
         }
 
 
@@ -3863,6 +3936,11 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
     boolean allowsTransmitsParameters;
+    
+    public boolean getAllowsTransmitsParameters()
+        {
+        return allowsTransmitsParameters;
+        }
 
     void doAllowParameterTransmit()
         {
@@ -4580,11 +4658,11 @@ public abstract class Synth extends JComponent implements Updatable
                             {
                             processCurrentPatch();
                             /*
-                            doSendTestNote(false);
-                            simplePause(testNoteLength);
-                            try { tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, getTestNoteChannel(), testNote, getTestNoteVelocity())); }
-                            catch (InvalidMidiDataException ex) { }
-                            simplePause(testNotePause);             
+                              doSendTestNote(false);
+                              simplePause(testNoteLength);
+                              try { tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, getTestNoteChannel(), testNote, getTestNoteVelocity())); }
+                              catch (InvalidMidiDataException ex) { }
+                              simplePause(testNotePause);             
                             */              
                             requestNextPatch();
                             }
@@ -4671,11 +4749,11 @@ public abstract class Synth extends JComponent implements Updatable
         
         
     /** By default this method says two patches are the same if they have the same
-    	"bank" and "number": if both are missing the "bank" (or the "number") then the
-    	"bank" (or "number") is assumed to be the same.  You should not use 
-    	Integer.MIN_VALUE as either a bank or a number.
-    	Override this if you need further customization. */
-     public boolean patchLocationEquals(Model patch1, Model patch2)
+        "bank" and "number": if both are missing the "bank" (or the "number") then the
+        "bank" (or "number") is assumed to be the same.  You should not use 
+        Integer.MIN_VALUE as either a bank or a number.
+        Override this if you need further customization. */
+    public boolean patchLocationEquals(Model patch1, Model patch2)
         {
         int bank1 = patch1.get("bank", Integer.MIN_VALUE);
         int number1 = patch1.get("number", Integer.MIN_VALUE);
@@ -4698,10 +4776,11 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (learning)
             updateTitle();
-                
+
         if (allowsTransmitsParameters && getSendMIDI())
             {
-            tryToSendMIDI(emitAll(key));
+            if (tryToSendMIDI(emitAll(key, STATUS_UPDATING_ONE_PARAMETER)))
+	            simplePause(getPauseAfterSendOneParameter());
             }
         }
 

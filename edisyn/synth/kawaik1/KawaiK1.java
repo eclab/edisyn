@@ -28,27 +28,27 @@ public class KawaiK1 extends Synth
         
     public static final String[] BANKS = { "IA", "IB", "IC", "ID", "iA", "iB", "iC", "iD", "EA", "EB", "EC", "ED", "eA", "eB", "eC", "eD"};
     public static final String[] WAVES = { "Sine 1st", "Sine 2nd", "Sine 3rd", "Sine 4th", "Sine 5th", "Sine 6th", "Sine 7th", "Sine 8th", "Sine 9th", "Sine 10th", "Sine 11th", "Sine 12th", "Sine 16th", 
-										   "Saw 1", "Saw 2", "Saw 3", "Saw 4", "Saw 5", "Saw 6", "Saw 7", "Saw 8", "Saw 9", "Saw 10", "Saw 11", "Saw 12", "Saw 13", "Saw 14", "Saw 15", "Saw 16", "Saw 17", "Saw 18", "Saw 19", 
-										   "Square 1", "Square 2", "Square 3", "Square 4", "Square 5", "Inverse", "Triangle", "Random", 
-										   "French Horn", "String 1", "String 2", "String Pad", "Piano 1", "El Grand 1", "El Piano 1", "El Piano 2", "El Piano 3", "Clavinet 1", "Vibe 1", 
-										   "A Guitar 1", "F Guitar 1", "F Guitar 2", "Ac Bass 1", "Ac Bass 2", "Digi Bass 1", "Pick Bass 1", "Digi Bass 2", "Round Bass 1", "Fretless 1", "Fretless 2", 
-										   "Flute 1", "PanFlute", "Harmonica 1", "Glocken", "Tine 1", "Harp 1", "Marimba 1", "El TomTom 1", "Log Drum", "Jazz Organ 1", "Mello Pad", "Synth Solo 1", "Synth 2", 
-										   "French Horn", "French Horn", "Brass 1", "Brass 2", "Brass 3", "Brass 4", "Trumpet 1", "Trumpet 2", "Violin", "String 3", 
-										   "Piano 2", "Piano 3", "Piano 4", "Piano 5", "Piano 6", "Piano 7", "Piano 8", "El Grand 2", "El Piano 4", "El Piano 5", "El Piano 6", "Clavinet 2", "Harpsicrd 1", "Vibe 2", 
-										   "A Guitar 2", "F Guitar 3", "Strat 1", "Strat 2", "Ac Bass", "Pull Bass", "Pull Bass 2", "Round Bass 2", "Slap Bass", "Slap Bass 2", "Slap Bass 3", "Fretless 3", "Fretless 4", 
-										   "Synth Bass 1", "Synth Bass 2", "Harmonica 2", "Clarinet 1", "Clarinet 2", "Oboe 1", "Oboe 2", "ShakuHachi", "Orient Bell 1", "Orient Bell 2", "Bell", "Koto 1", "Sitar", 
-										   "El TomTom 2", "Log Drum 1", "Log Drum 2", "Steel Drum 1", "Steel Drum 2", "Voice 1", "Voice 2", 
-										   "Accordion 1", "Accordion 2", "Jazz Organ 2", "Rock Organ 1", "Draw Bar 1", "Draw Bar 2", "Pipe Organ 1", "Pipe Organ 2", "Rock Organ 2", 
-										   "Synth Solo 2", "Synth Solo 3", "Synth 2", "Synth 3", "Synth 4", "Brass", "Brass 2", "Orchestra", 
-										   "Piano 9", "Piano 10", "El Piano 7", "El Piano 8", "El Piano 9", "El Piano 10", "Clavinet 3", "Harpsichd 2", "Harpsichd 3", "Vibe 3", "Digi Bass 3", "Digi Bass 4", "Digi Bass 5", "Pick Bass 2", 
-										   "Glocken", "Glocken 2", "Tine 2", "Tine 3", "Tine 4", "Tube Bell 1", "Tube Bell 2", "Tube Bell 3", "Xylophone 1", "Xylophone 2", "Harp 2", "Koto 2", "Sitar 2", "Sitar 3", 
-										   "Kalimba 1", "Kalimba 2", "Kalimba 3", "Log Drum", "Steel Drum", "Pipe Organ 3", "Pipe Organ 4", "Synth 5", "Synth 6", "Synth 7", "Synth 8", "Synth 9", "Synth 10", "Clavinet 4", 
-										   "Digi Bass 6", "Digi Bass 7", "Pick Bass 3", "Pick Bass 4", "Round Bass 3", "Round Bass 4", "Harmonica 3", "Harmonica 4", "Harp 3", "Koto 3", "Sitar 1", 
-										   "Marimba 2", "Synth 11", "Bass Drum", "Ac Snare", "Tight Snare", "E. Snare", "Rim", "Ac Tom", "High Hat", "Crash", "Ride", "Strat Guitar", "Fuzz Mute", "A Guitar 3", "F Guitar 4", "Guitar Harmonic", "Pull Bass", "Bass Harmonic", 
-										   "Bowed String", "String Attack", "String Sustain", "Pizzacato", "Piano PCM", "Electric Grand", "Piano Noise", "Trumpet", "Shakuhachi Attack", "Shakuhachi Sustain", "Pan Flute attack", "Pan Flute sustain", "Voice 3", "White Noise", 
-										   "String Loop", "Shakuhachi Loop", "Pan Flute Loop", "Voice Loop", "White Noise Loop", "Ac Snare Loop", "F. Guitar loop", "Pull Bass Loop", 
-										   "Omnibus Loop 1", "Omnibus Loop 2", "Omnibus Loop 3", "Omnibus Loop 4", "Omnibus Loop 5", "Omnibus Loop 6", "Omnibus Loop 7", "Omnibus Loop 8", 
-										   "Ac Snare Reverse", "Ac Tom Reverse", "F Guitar Reverse", "High Hat Alternate", "Crash Alternate", "Piano Noise Alternate" };
+                                           "Saw 1", "Saw 2", "Saw 3", "Saw 4", "Saw 5", "Saw 6", "Saw 7", "Saw 8", "Saw 9", "Saw 10", "Saw 11", "Saw 12", "Saw 13", "Saw 14", "Saw 15", "Saw 16", "Saw 17", "Saw 18", "Saw 19", 
+                                           "Square 1", "Square 2", "Square 3", "Square 4", "Square 5", "Inverse", "Triangle", "Random", 
+                                           "French Horn", "String 1", "String 2", "String Pad", "Piano 1", "El Grand 1", "El Piano 1", "El Piano 2", "El Piano 3", "Clavinet 1", "Vibe 1", 
+                                           "A Guitar 1", "F Guitar 1", "F Guitar 2", "Ac Bass 1", "Ac Bass 2", "Digi Bass 1", "Pick Bass 1", "Digi Bass 2", "Round Bass 1", "Fretless 1", "Fretless 2", 
+                                           "Flute 1", "PanFlute", "Harmonica 1", "Glocken", "Tine 1", "Harp 1", "Marimba 1", "El TomTom 1", "Log Drum", "Jazz Organ 1", "Mello Pad", "Synth Solo 1", "Synth 2", 
+                                           "French Horn", "French Horn", "Brass 1", "Brass 2", "Brass 3", "Brass 4", "Trumpet 1", "Trumpet 2", "Violin", "String 3", 
+                                           "Piano 2", "Piano 3", "Piano 4", "Piano 5", "Piano 6", "Piano 7", "Piano 8", "El Grand 2", "El Piano 4", "El Piano 5", "El Piano 6", "Clavinet 2", "Harpsicrd 1", "Vibe 2", 
+                                           "A Guitar 2", "F Guitar 3", "Strat 1", "Strat 2", "Ac Bass", "Pull Bass", "Pull Bass 2", "Round Bass 2", "Slap Bass", "Slap Bass 2", "Slap Bass 3", "Fretless 3", "Fretless 4", 
+                                           "Synth Bass 1", "Synth Bass 2", "Harmonica 2", "Clarinet 1", "Clarinet 2", "Oboe 1", "Oboe 2", "ShakuHachi", "Orient Bell 1", "Orient Bell 2", "Bell", "Koto 1", "Sitar", 
+                                           "El TomTom 2", "Log Drum 1", "Log Drum 2", "Steel Drum 1", "Steel Drum 2", "Voice 1", "Voice 2", 
+                                           "Accordion 1", "Accordion 2", "Jazz Organ 2", "Rock Organ 1", "Draw Bar 1", "Draw Bar 2", "Pipe Organ 1", "Pipe Organ 2", "Rock Organ 2", 
+                                           "Synth Solo 2", "Synth Solo 3", "Synth 2", "Synth 3", "Synth 4", "Brass", "Brass 2", "Orchestra", 
+                                           "Piano 9", "Piano 10", "El Piano 7", "El Piano 8", "El Piano 9", "El Piano 10", "Clavinet 3", "Harpsichd 2", "Harpsichd 3", "Vibe 3", "Digi Bass 3", "Digi Bass 4", "Digi Bass 5", "Pick Bass 2", 
+                                           "Glocken", "Glocken 2", "Tine 2", "Tine 3", "Tine 4", "Tube Bell 1", "Tube Bell 2", "Tube Bell 3", "Xylophone 1", "Xylophone 2", "Harp 2", "Koto 2", "Sitar 2", "Sitar 3", 
+                                           "Kalimba 1", "Kalimba 2", "Kalimba 3", "Log Drum", "Steel Drum", "Pipe Organ 3", "Pipe Organ 4", "Synth 5", "Synth 6", "Synth 7", "Synth 8", "Synth 9", "Synth 10", "Clavinet 4", 
+                                           "Digi Bass 6", "Digi Bass 7", "Pick Bass 3", "Pick Bass 4", "Round Bass 3", "Round Bass 4", "Harmonica 3", "Harmonica 4", "Harp 3", "Koto 3", "Sitar 1", 
+                                           "Marimba 2", "Synth 11", "Bass Drum", "Ac Snare", "Tight Snare", "E. Snare", "Rim", "Ac Tom", "High Hat", "Crash", "Ride", "Strat Guitar", "Fuzz Mute", "A Guitar 3", "F Guitar 4", "Guitar Harmonic", "Pull Bass", "Bass Harmonic", 
+                                           "Bowed String", "String Attack", "String Sustain", "Pizzacato", "Piano PCM", "Electric Grand", "Piano Noise", "Trumpet", "Shakuhachi Attack", "Shakuhachi Sustain", "Pan Flute attack", "Pan Flute sustain", "Voice 3", "White Noise", 
+                                           "String Loop", "Shakuhachi Loop", "Pan Flute Loop", "Voice Loop", "White Noise Loop", "Ac Snare Loop", "F. Guitar loop", "Pull Bass Loop", 
+                                           "Omnibus Loop 1", "Omnibus Loop 2", "Omnibus Loop 3", "Omnibus Loop 4", "Omnibus Loop 5", "Omnibus Loop 6", "Omnibus Loop 7", "Omnibus Loop 8", 
+                                           "Ac Snare Reverse", "Ac Tom Reverse", "F Guitar Reverse", "High Hat Alternate", "Crash Alternate", "Piano Noise Alternate" };
     public static final String[] KS_CURVES = { "Linear", "Exponential", "Logarithmic", "Ramped", "Split" };
     public static final String[] VELOCITY_CURVES = { "Linear", "Logarithmic", "Exponential", "Exponential Strong", "Off Then Linear", "Fast Middle", "Slow Middle", "Off Then Linear Down" };
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
@@ -57,8 +57,8 @@ public class KawaiK1 extends Synth
     public static final String[] POLY_MODES = new String[] { "Poly 1", "Poly 2", "Solo" };
     public static final String[] OUT_SELECTS = new String[] { "A", "B", "C", "D", "E", "F", "G", "H" };
     public static final String[] WHEEL_ASSIGNMENTS = new String[] { "Vibrato Depth", "Vibrato Speed" };
-	public static final String[] AM_S1_S2 = new String[] { "Off", "AM S1 -> S2", "AM S2 -> S1" };
-	public static final String[] AM_S3_S4 = new String[] { "Off", "AM S3 -> S4", "AM S4 -> S3" };
+    public static final String[] AM_S1_S2 = new String[] { "Off", "AM S1 -> S2", "AM S2 -> S1" };
+    public static final String[] AM_S3_S4 = new String[] { "Off", "AM S3 -> S4", "AM S4 -> S3" };
 
     public KawaiK1()
         {
@@ -130,8 +130,8 @@ public class KawaiK1 extends Synth
         // We can't request the current working memory (don't ask why)
         receiveCurrent.setEnabled(false);
 
-		// We can't reasonably send to patches if we send in bulk.
-		transmitTo.setEnabled(false);
+        // We can't reasonably send to patches if we send in bulk.
+        transmitTo.setEnabled(false);
 
         addKawaiK1Menu();
         return frame;
@@ -179,15 +179,15 @@ public class KawaiK1 extends Synth
             }
         }
 
-	boolean sendKawaiParametersInBulk = true;
-	
+    boolean sendKawaiParametersInBulk = true;
+        
     public void addKawaiK1Menu()
         {
         JMenu menu = new JMenu("Kawai K1");
         menubar.add(menu);
 
-		// classic patch names
-		
+        // classic patch names
+                
         JMenu sendParameters = new JMenu("Send Parameters");
         menu.add(sendParameters);
                 
@@ -214,7 +214,7 @@ public class KawaiK1 extends Synth
         sendParameters.add(separately);
         bg.add(separately);
         if (sendKawaiParametersInBulk == false) 
-        	separately.setSelected(true);
+            separately.setSelected(true);
 
         JRadioButtonMenuItem bulk = new JRadioButtonMenuItem("In Bulk, Overwriting Patch iD-8");
         bulk.addActionListener(new ActionListener()
@@ -228,7 +228,7 @@ public class KawaiK1 extends Synth
         sendParameters.add(bulk);
         bg.add(bulk);
         if (sendKawaiParametersInBulk == true) 
-        	bulk.setSelected(true);
+            bulk.setSelected(true);
                 
         }
         
@@ -412,13 +412,13 @@ public class KawaiK1 extends Synth
         vbox = new VBox();
         if (src == 1)
             {
-        	params = AM_S1_S2;
+            params = AM_S1_S2;
             comp = new Chooser("AM (Ring Modulation)", this, "s1ams1>s2", params);
             vbox.add(comp);
             }
         else if (src == 3)
             {
-        	params = AM_S3_S4;
+            params = AM_S3_S4;
             comp = new Chooser("AM (Ring Modulation)", this, "s3ams3>s4", params);
             vbox.add(comp);
             }
@@ -618,28 +618,28 @@ public class KawaiK1 extends Synth
     "lfo1prs>dep",
     "pitchbend",
     "lfo1speed",
-    "lfo1shape_kscurve_wheelassign",          		// * 
+    "lfo1shape_kscurve_wheelassign",                    // * 
     "autobenddepth",
     "autobendtime",           
     "autobendvel>dep",
     "autobendks>time",           
-    "s1mute_s2mute_s3mute_s4mute",		// *
+    "s1mute_s2mute_s3mute_s4mute",              // *
     "s1fine",
     "s2fine",
     "s3fine",
     "s4fine",
-    "s1coarsefix",			// *
-    "s2coarsefix",			// *
-    "s3coarsefix",			// *
-    "s4coarsefix",			// *
+    "s1coarsefix",                      // *
+    "s2coarsefix",                      // *
+    "s3coarsefix",                      // *
+    "s4coarsefix",                      // *
     "s1waveselectlo",                
     "s2waveselectlo",                
     "s3waveselectlo",                
     "s4waveselectlo",                
-    "s1waveselecthi_keytrack_vib/a.bendsw_prs>frqsw_velcurve",		//*
-    "s2waveselecthi_keytrack_vib/a.bendsw_prs>frqsw_velcurve",		//*
-    "s3waveselecthi_keytrack_vib/a.bendsw_prs>frqsw_velcurve",		//*
-    "s4waveselecthi_keytrack_vib/a.bendsw_prs>frqsw_velcurve",		//*
+    "s1waveselecthi_keytrack_vib/a.bendsw_prs>frqsw_velcurve",          //*
+    "s2waveselecthi_keytrack_vib/a.bendsw_prs>frqsw_velcurve",          //*
+    "s3waveselecthi_keytrack_vib/a.bendsw_prs>frqsw_velcurve",          //*
+    "s4waveselecthi_keytrack_vib/a.bendsw_prs>frqsw_velcurve",          //*
     "s1envelopelevel",     
     "s2envelopelevel",     
     "s3envelopelevel",     
@@ -691,15 +691,15 @@ public class KawaiK1 extends Synth
     };
 
 
-	// The K1 can't send to temporary memory
+    // The K1 can't send to temporary memory
     public boolean getSendsAllParametersInBulk() { return sendKawaiParametersInBulk; }
 
     public Object[] emitAll(String key)
         {
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
-		if (key.equals("-")) return new Object[0];  // uh...
-		
+        if (key.equals("-")) return new Object[0];  // uh...
+                
         if (key.equals("name"))
             {
             // you can't emit a name as a parameter: it's ignored
@@ -765,7 +765,7 @@ public class KawaiK1 extends Synth
                 source = 1;
                 newkey = "f:" + key.substring(2);
                 }
-        	
+                
             // handle envelopelevel specially due to mutes above
             if (newkey.equals("s:envelopelevel"))
                 {
@@ -831,21 +831,21 @@ public class KawaiK1 extends Synth
                 name[i] = data[i + 8];
                 }
             else if (key.equals("s1coarsefix"))
-            	{
-            	coarsefix[0] = data[i + 8];
-            	}
+                {
+                coarsefix[0] = data[i + 8];
+                }
             else if (key.equals("s2coarsefix"))
-            	{
-            	coarsefix[1] = data[i + 8];
-            	}
+                {
+                coarsefix[1] = data[i + 8];
+                }
             else if (key.equals("s3coarsefix"))
-            	{
-            	coarsefix[2] = data[i + 8];
-            	}
+                {
+                coarsefix[2] = data[i + 8];
+                }
             else if (key.equals("s4coarsefix"))
-            	{
-            	coarsefix[3] = data[i + 8];
-            	}
+                {
+                coarsefix[3] = data[i + 8];
+                }
             else if (key.equals("polymode_sources_s1ams1>s2_s3ams3>s4"))
                 {
                 model.set("polymode", data[i + 8] & 3);
@@ -876,17 +876,17 @@ public class KawaiK1 extends Synth
                 model.set("s1prs>frqsw", (data[i + 8] >>> 3) & 1);
                 model.set("s1velcurve", (data[i + 8] >>> 4) & 7);
                 
-            	// now that we know keytrack, we can compute coarsefix
-            	if (model.get("s1keytrack", 0) == 0)
-            		{
-            		model.set("s1fix", coarsefix[0]);
-            		model.set("s1coarse", 84);  // centered
-            		}
-            	else
-            		{
-            		model.set("s1fix", 0);
-            		model.set("s1coarse", coarsefix[0]);
-            		}
+                // now that we know keytrack, we can compute coarsefix
+                if (model.get("s1keytrack", 0) == 0)
+                    {
+                    model.set("s1fix", coarsefix[0]);
+                    model.set("s1coarse", 84);  // centered
+                    }
+                else
+                    {
+                    model.set("s1fix", 0);
+                    model.set("s1coarse", coarsefix[0]);
+                    }
                 }
             else if (key.equals("s2waveselecthi_keytrack_vib/a.bendsw_prs>frqsw_velcurve"))
                 {
@@ -896,17 +896,17 @@ public class KawaiK1 extends Synth
                 model.set("s2prs>frqsw", (data[i + 8] >>> 3) & 1);
                 model.set("s2velcurve", (data[i + 8] >>> 4) & 7);
 
-            	// now that we know keytrack, we can compute coarsefix
-            	if (model.get("s2keytrack", 0) == 0)
-            		{
-            		model.set("s2fix", coarsefix[1]);
-            		model.set("s2coarse", 84);  // centered
-            		}
-            	else
-            		{
-            		model.set("s2fix", 0);
-            		model.set("s2coarse", coarsefix[1]);
-            		}
+                // now that we know keytrack, we can compute coarsefix
+                if (model.get("s2keytrack", 0) == 0)
+                    {
+                    model.set("s2fix", coarsefix[1]);
+                    model.set("s2coarse", 84);  // centered
+                    }
+                else
+                    {
+                    model.set("s2fix", 0);
+                    model.set("s2coarse", coarsefix[1]);
+                    }
                 }
             else if (key.equals("s3waveselecthi_keytrack_vib/a.bendsw_prs>frqsw_velcurve"))
                 {
@@ -916,17 +916,17 @@ public class KawaiK1 extends Synth
                 model.set("s3prs>frqsw", (data[i + 8] >>> 3) & 1);
                 model.set("s3velcurve", (data[i + 8] >>> 4) & 7);
 
-            	// now that we know keytrack, we can compute coarsefix
-            	if (model.get("s3keytrack", 0) == 0)
-            		{
-            		model.set("s3fix", coarsefix[2]);
-            		model.set("s3coarse", 84);  // centered
-            		}
-            	else
-            		{
-            		model.set("s3fix", 0);
-            		model.set("s3coarse", coarsefix[2]);
-            		}
+                // now that we know keytrack, we can compute coarsefix
+                if (model.get("s3keytrack", 0) == 0)
+                    {
+                    model.set("s3fix", coarsefix[2]);
+                    model.set("s3coarse", 84);  // centered
+                    }
+                else
+                    {
+                    model.set("s3fix", 0);
+                    model.set("s3coarse", coarsefix[2]);
+                    }
                 }
             else if (key.equals("s4waveselecthi_keytrack_vib/a.bendsw_prs>frqsw_velcurve"))
                 {
@@ -936,17 +936,17 @@ public class KawaiK1 extends Synth
                 model.set("s4prs>frqsw", (data[i + 8] >>> 3) & 1);
                 model.set("s4velcurve", (data[i + 8] >>> 4) & 7);
 
-            	// now that we know keytrack, we can compute coarsefix
-            	if (model.get("s4keytrack", 0) == 0)
-            		{
-            		model.set("s4fix", coarsefix[3]);
-            		model.set("s4coarse", 84);  // centered
-            		}
-            	else
-            		{
-            		model.set("s4fix", 0);
-            		model.set("s4coarse", coarsefix[3]);
-            		}
+                // now that we know keytrack, we can compute coarsefix
+                if (model.get("s4keytrack", 0) == 0)
+                    {
+                    model.set("s4fix", coarsefix[3]);
+                    model.set("s4coarse", 84);  // centered
+                    }
+                else
+                    {
+                    model.set("s4fix", 0);
+                    model.set("s4coarse", coarsefix[3]);
+                    }
                 }
             else if (key.equals("s1waveselectlo"))
                 {
@@ -999,23 +999,23 @@ public class KawaiK1 extends Synth
         }
         
     public int getPauseBetweenSysexFragments()
-    	{
-    	return 70;
-    	}
-    	
+        {
+        return 70;
+        }
+        
     public void sendAllParameters()
-    	{
-    	super.sendAllParameters();
-    	
-    	// we change patch to #63 if we're sending in bulk.
-    	if (sendKawaiParametersInBulk)
-    		{
-	    	Model tempModel = new Model();
-	    	tempModel.set("bank", 7);
-	    	tempModel.set("number", 7);
-	    	changePatch(tempModel);
-	    	}
-    	}
+        {
+        super.sendAllParameters();
+        
+        // we change patch to #63 if we're sending in bulk.
+        if (sendKawaiParametersInBulk)
+            {
+            Model tempModel = new Model();
+            tempModel.set("bank", 7);
+            tempModel.set("number", 7);
+            changePatch(tempModel);
+            }
+        }
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
@@ -1037,21 +1037,21 @@ public class KawaiK1 extends Synth
                 data[i] = (byte)name.charAt(i);
                 }
             else if (key.equals("s1coarsefix"))
-            	{
-            	data[i] = (byte)(model.get("s1keytrack", 0) == 0 ? model.get("s1fix") : model.get("s1coarse"));
-            	}
+                {
+                data[i] = (byte)(model.get("s1keytrack", 0) == 0 ? model.get("s1fix") : model.get("s1coarse"));
+                }
             else if (key.equals("s2coarsefix"))
-            	{
-            	data[i] = (byte)(model.get("s2keytrack", 0) == 0 ? model.get("s2fix") : model.get("s2coarse"));
-            	}
+                {
+                data[i] = (byte)(model.get("s2keytrack", 0) == 0 ? model.get("s2fix") : model.get("s2coarse"));
+                }
             else if (key.equals("s3coarsefix"))
-            	{
-            	data[i] = (byte)(model.get("s3keytrack", 0) == 0 ? model.get("s3fix") : model.get("s3coarse"));
-            	}
+                {
+                data[i] = (byte)(model.get("s3keytrack", 0) == 0 ? model.get("s3fix") : model.get("s3coarse"));
+                }
             else if (key.equals("s4coarsefix"))
-            	{
-            	data[i] = (byte)(model.get("s4keytrack", 0) == 0 ? model.get("s4fix") : model.get("s4coarse"));
-            	}
+                {
+                data[i] = (byte)(model.get("s4keytrack", 0) == 0 ? model.get("s4fix") : model.get("s4coarse"));
+                }
             else if (key.equals("polymode_sources_s1ams1>s2_s3ams3>s4"))
                 {
                 data[i] = (byte)(model.get("polymode") | (model.get("sources") << 2) | (model.get("s1ams1>s2") << 3) | (model.get("s3ams3>s4") << 5));
@@ -1158,9 +1158,9 @@ public class KawaiK1 extends Synth
         result[6] = (byte)(external ? 0x01 : 0x00);
         
         if (toWorkingMemory && sendKawaiParametersInBulk)
-        	result[7] = (byte)63;
+            result[7] = (byte)63;
         else
-	        result[7] = (byte)position;
+            result[7] = (byte)position;
         
         System.arraycopy(data, 0, result, 8, data.length);
         result[8 + data.length] = (byte)produceChecksum(data);
@@ -1230,15 +1230,15 @@ public class KawaiK1 extends Synth
     public String getPatchName(Model model) { return model.get("name", "Untitled  "); }
 
     public int getPauseAfterChangePatch() { return 150; }   // Seem to need about > 100ms
- 	public double getPauseBetweenMIDISends() { return 50;  }  // :-(  :-(
+    public double getPauseBetweenMIDISends() { return 50;  }  // :-(  :-(
  
     public void changePatch(Model tempModel)
         {
- 		byte BB = (byte)tempModel.get("bank");
+        byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");
         
         /// The K1 cannot change patches to and from internal or external I believe.  :-(
- 		/// So I'm not sure what to do here.        
+        /// So I'm not sure what to do here.        
         if (BB >= 8) BB -= 8;
         int PC = (BB * 8 + NN);
         try 

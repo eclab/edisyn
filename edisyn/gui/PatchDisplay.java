@@ -19,9 +19,9 @@ public class PatchDisplay extends JPanel implements Updatable
     Synth synth;
     
     public PatchDisplay(Synth synth, int columns)
-    	{
-    	this(synth, "Patch", "bank", "number", columns);
-    	}
+        {
+        this(synth, "Patch", "bank", "number", columns);
+        }
 
     static String buildInitialString(int columns)
         {

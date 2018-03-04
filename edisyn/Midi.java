@@ -869,85 +869,85 @@ public class Midi
     
     
     /** A DividedSysex message is a Sysex MidiMessage which has been broken into chunks.
-    	This allows us to send the Sysex as multiple messages, with pauses in-between each
-    	message, so as not to overflow a MIDI buffer in machines such as a Kawai K1 whose
-    	processors are not powerful enough to keep up with a large sysex dump. 
-    	
-    	<p>The critical method is the factory method divide(), which creates the array
-    	of divided sysex chunks. 
+        This allows us to send the Sysex as multiple messages, with pauses in-between each
+        message, so as not to overflow a MIDI buffer in machines such as a Kawai K1 whose
+        processors are not powerful enough to keep up with a large sysex dump. 
+        
+        <p>The critical method is the factory method divide(), which creates the array
+        of divided sysex chunks. 
     */
-    	
+        
     public static class DividedSysex extends MidiMessage
-    	{
-    	public Object clone()
-    		{
-    		return new DividedSysex(getMessage());
-    		}
-    	public int getStatus() { return 0xF0; }   // not that this really matters
-    	public DividedSysex(byte[] data)
-    		{
-    		super(data);
-    		}
-    	public static DividedSysex[] divide(MidiMessage sysex, int chunksize)
-    		{
-    		byte[] data = sysex.getMessage();
-    		int extra = 0;
-    		if ((data.length / chunksize) * chunksize != data.length)
-    			extra = 1;
-    		DividedSysex[] m = new DividedSysex[data.length / chunksize + extra];
-    		for(int i = 0, chunk = 0; i < m.length; i++, chunk += chunksize)
-    			{
-    			byte[] d = new byte[Math.min(data.length - chunk, chunksize)];
-    			System.arraycopy(data, chunk, d, 0, d.length);
-    			m[i] = new DividedSysex(d);
-    			}
-    		return m;
-    		}
-    	}
-    	
+        {
+        public Object clone()
+            {
+            return new DividedSysex(getMessage());
+            }
+        public int getStatus() { return 0xF0; }   // not that this really matters
+        public DividedSysex(byte[] data)
+            {
+            super(data);
+            }
+        public static DividedSysex[] divide(MidiMessage sysex, int chunksize)
+            {
+            byte[] data = sysex.getMessage();
+            int extra = 0;
+            if ((data.length / chunksize) * chunksize != data.length)
+                extra = 1;
+            DividedSysex[] m = new DividedSysex[data.length / chunksize + extra];
+            for(int i = 0, chunk = 0; i < m.length; i++, chunk += chunksize)
+                {
+                byte[] d = new byte[Math.min(data.length - chunk, chunksize)];
+                System.arraycopy(data, chunk, d, 0, d.length);
+                m[i] = new DividedSysex(d);
+                }
+            return m;
+            }
+        }
+        
     public static String format(MidiMessage message)
-    	{
-    	if (message instanceof DividedSysex)
-    		{
-    		return "A Special Edisyn message (shouldn't happen)";
-    		}
-    	else if (message instanceof MetaMessage)
-    		{
-    		return "A MIDI File MetaMessage (shouldn't happen)";
-    		}
-    	else if (message instanceof SysexMessage)
-    		{
-    		return "Sysex (" + getManufacturerForSysex(((SysexMessage)message).getData()) + ")";
-    		}
-    	else // ShortMessage
-    		{
-    		ShortMessage s = (ShortMessage) message;
-    		int c = s.getChannel();
-    		String type = "Unknown";
-    		switch(s.getStatus())
-    			{
-    			case ShortMessage.ACTIVE_SENSING: type = "Active Sensing"; c = -1; break;
-    			case ShortMessage.CHANNEL_PRESSURE: type = "Channel Pressure"; break;
-    			case ShortMessage.CONTINUE: type = "Continue"; c = -1; break;
-    			case ShortMessage.CONTROL_CHANGE: type = "Control Change"; break;
-    			case ShortMessage.END_OF_EXCLUSIVE: type = "End of Sysex Marker"; c = -1; break;
-    			case ShortMessage.MIDI_TIME_CODE: type = "Midi Time Code"; c = -1; break;
-    			case ShortMessage.NOTE_OFF: type = "Note Off"; break;
-    			case ShortMessage.NOTE_ON: type = "Note On"; break;
-    			case ShortMessage.PITCH_BEND: type = "Pitch Bend"; break;
-    			case ShortMessage.POLY_PRESSURE: type = "Poly Pressure"; break;
-    			case ShortMessage.PROGRAM_CHANGE: type = "Program Change"; break;
-    			case ShortMessage.SONG_POSITION_POINTER: type = "Song Position Pointer"; c = -1; break;
-    			case ShortMessage.SONG_SELECT: type = "Song Select"; c = -1; break;
-    			case ShortMessage.START: type = "Start"; c = -1; break;
-    			case ShortMessage.STOP: type = "Stop"; c = -1; break;
-    			case ShortMessage.SYSTEM_RESET: type = "System Reset"; c = -1; break;
-    			case ShortMessage.TIMING_CLOCK: type = "Timing Clock"; c = -1; break;
-    			case ShortMessage.TUNE_REQUEST: type = "Tune Request"; c = -1; break;
-    			}
-    		return type + (c == -1 ? "" : (" (Channel " + c + ")"));
-    		}
-    	}
+        {
+        if (message instanceof DividedSysex)
+            {
+            return "A Special Edisyn message (shouldn't happen)";
+            }
+        else if (message instanceof MetaMessage)
+            {
+            return "A MIDI File MetaMessage (shouldn't happen)";
+            }
+        else if (message instanceof SysexMessage)
+            {
+            return "Sysex (" + getManufacturerForSysex(((SysexMessage)message).getData()) + ")";
+            }
+        else // ShortMessage
+            {
+            ShortMessage s = (ShortMessage) message;
+            int c = s.getChannel();
+            String type = "Unknown";
+            switch(s.getStatus())
+                {
+                case ShortMessage.ACTIVE_SENSING: type = "Active Sensing"; c = -1; break;
+                case ShortMessage.CHANNEL_PRESSURE: type = "Channel Pressure"; break;
+                case ShortMessage.CONTINUE: type = "Continue"; c = -1; break;
+                case ShortMessage.CONTROL_CHANGE: type = "Control Change"; break;
+                case ShortMessage.END_OF_EXCLUSIVE: type = "End of Sysex Marker"; c = -1; break;
+                case ShortMessage.MIDI_TIME_CODE: type = "Midi Time Code"; c = -1; break;
+                case ShortMessage.NOTE_OFF: type = "Note Off"; break;
+                case ShortMessage.NOTE_ON: type = "Note On"; break;
+                case ShortMessage.PITCH_BEND: type = "Pitch Bend"; break;
+                case ShortMessage.POLY_PRESSURE: type = "Poly Pressure"; break;
+                case ShortMessage.PROGRAM_CHANGE: type = "Program Change"; break;
+                case ShortMessage.SONG_POSITION_POINTER: type = "Song Position Pointer"; c = -1; break;
+                case ShortMessage.SONG_SELECT: type = "Song Select"; c = -1; break;
+                case ShortMessage.START: type = "Start"; c = -1; break;
+                case ShortMessage.STOP: type = "Stop"; c = -1; break;
+                case ShortMessage.SYSTEM_RESET: type = "System Reset"; c = -1; break;
+                case ShortMessage.TIMING_CLOCK: type = "Timing Clock"; c = -1; break;
+                case ShortMessage.TUNE_REQUEST: type = "Tune Request"; c = -1; break;
+                }
+            return type + (c == -1 ? "" : (" (Channel " + c + ")"));
+            }
+        }
 
 
 
@@ -982,18 +982,18 @@ public class Midi
         return manufacturers;
         }
 
-	/** This works with or without F0 as the first data byte */
+    /** This works with or without F0 as the first data byte */
     public static String getManufacturerForSysex(byte[] data)
         {
         int offset = 0;
         if (data[0] == (byte)0xF0)
-        	offset = 1;
+            offset = 1;
         HashMap map = getManufacturers();
-        if (data[0 + offset] == (byte)0x7D)		// educational use
-        	{
+        if (data[0 + offset] == (byte)0x7D)             // educational use
+            {
             return (String)(map.get(new Integer(data[0 + offset]))) + 
-            	"\n\nNote that unregistered manufacturers or developers typically\n use this system exclusive region.";
-        	}
+                "\n\nNote that unregistered manufacturers or developers typically\n use this system exclusive region.";
+            }
         else if (data[0 + offset] == (byte)0x00)
             {
             return (String)(map.get(new Integer(

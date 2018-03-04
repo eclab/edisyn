@@ -74,18 +74,22 @@ public abstract class NumericalComponent extends JComponent implements Updatable
     /** Sets the current value for the key in the model. */
     public void setState(int val) 
         { 
-        if (maxExists() && minExists())  // we presume we're set up so we can do bounds checking
+        if (maxExists())  // we presume we're set up so we can do bounds checking
             {
-            int min = getMin();
             int max = getMax();
-            if (val < min) val = min;
             if (val > max) val = max;
             }
+
+        if (minExists())  // we presume we're set up so we can do bounds checking
+            {
+            int min = getMin();
+            if (val < min) val = min;
+            }
                 
-        if (!synth.getModel().exists(key) || getState() != val)
+        // we don't check for duplicates any more so LabelledDial can do non-dynamic updates
+        //if (!synth.getModel().exists(key) || getState() != val)
             {
             synth.getModel().set(key, val); 
-            //update(key, synth.getModel());
             repaint();
             }
         }

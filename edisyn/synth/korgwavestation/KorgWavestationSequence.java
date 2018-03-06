@@ -1617,13 +1617,14 @@ return pos;
 
     public void sendTestPerformance()
         {
-        if (!setupMIDI())
-            return;
+        if (tuple == null)
+			if (!setupMIDI(tuple))
+				return;
 
-        final KorgWavestationPerformance synth = new KorgWavestationPerformance();
         if (tuple != null)
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
             {
+	        final KorgWavestationPerformance synth = new KorgWavestationPerformance();
+            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
             if (synth.tuple != null)
                 {
                 synth.loadDefaults();
@@ -1634,10 +1635,10 @@ return pos;
                 }
             }
                         
-        final KorgWavestationPatch synth2 = new KorgWavestationPatch();
         if (tuple != null)
-            synth2.tuple = tuple.copy(synth2.buildInReceiver(), synth2.buildKeyReceiver());
             {
+        	final KorgWavestationPatch synth2 = new KorgWavestationPatch();
+            synth2.tuple = tuple.copy(synth2.buildInReceiver(), synth2.buildKeyReceiver());
             if (synth2.tuple != null)
                 {
                 synth2.loadDefaults();

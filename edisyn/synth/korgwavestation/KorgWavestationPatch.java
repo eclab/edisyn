@@ -584,6 +584,29 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         HBox hbox2 = new HBox();
         hbox2.add(waves);
+        
+        comp = new PushButton("Mute Others")
+            {
+            public void perform()
+                {
+                setSolo();
+                }
+            };
+        Marginalizer marg = new Marginalizer();
+        marg.addBottom(comp);
+        hbox2.add(marg);
+
+        comp = new PushButton("Unmute All")
+            {
+            public void perform()
+                {
+                resetSolo();
+                }
+            };
+        marg = new Marginalizer();
+        marg.addBottom(comp);
+        hbox2.add(marg);
+                
         vbox.add(hbox2);
 
         hbox2 = new HBox();
@@ -2480,10 +2503,6 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
             else
                 patch.waves[i].lfo2Inc = (0x7FFFFFL * (long)patch.waves[i].lfo2Amt) / (RATE_TAB[patch.waves[i].lfo2Fade] * 127);
 
-
-
- 
-
 // Now I need to compute patch.bankExp and patch.waves[i].waveBank
             patch.waves[i].waveBank = edisynToWSBank[model.get(osc + "wavebank")] % 4;
             }
@@ -2523,14 +2542,31 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
     public int getPauseAfterChangePatch() { return 300; }  // looks like 300 is about the minimum for a standard PC (see Performance.java); may be too much here.
 
+	/// WAVE_MUTE seems to be based on bits:
+	/// Bits DCBA (that is, values 0...15)
+	/// ... are set to 1 to represent which waves are muted
+
+	public static final int[] MUTES = new int[]{ 2 + 4 + 8, 1 + 4 + 8, 1 + 2 + 8, 1 + 2 + 4 };
+	public void setSolo()
+		{
+		byte[] midi_mesg = paramBytes(WAVE_MUTE, MUTES[getSelectedTabIndex() - 1]);
+		tryToSendSysex(midi_mesg);
+		}
+		
+	public void resetSolo()
+		{
+		byte[] midi_mesg = paramBytes(WAVE_MUTE, 0);
+		tryToSendSysex(midi_mesg);
+		}
+	
     public void changePatch(Model tempModel)
         {
-        // Make sure we're in performance mode
         byte[] midi_mesg = paramBytes(MIDI_MODE, MULTISET_MIDI_MODE);
         tryToSendSysex(midi_mesg);
         
         byte[] midi_mesg_2 = paramBytes(MIDI_MODE, PERFORMANCE_MIDI_MODE);
         tryToSendSysex(midi_mesg_2);
+        
         
         //// FIXME -- I modified this, is it still okay?
         
@@ -2661,13 +2697,14 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
     public void sendTestPerformance()
         {
-        if (!setupMIDI())
-            return;
+        if (tuple == null)
+			if (!setupMIDI(tuple))
+				return;
 
-        final KorgWavestationPerformance synth = new KorgWavestationPerformance();
         if (tuple != null)
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
             {
+        	final KorgWavestationPerformance synth = new KorgWavestationPerformance();
+            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
             if (synth.tuple != null)
                 {
                 synth.loadDefaults();
@@ -2684,3 +2721,133 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         }
     }
     
+    
+/**
+From
+	https://web.archive.org/web/20121116105637/http://www.ex5tech.com/ex5ubb_cgi/ultimatebb.cgi?ubb=get_topic&f=23&t=000004
+	
+These are the PUBLISHED VS waveform names
+
+01 Sine
+02 Sawtooth
+03 Square
+14 Pulse var1
+15 Pulse var2
+25 3rd and 5th harmonics *fundamental absent
+27 Heavy 7th harmonics
+29 BASSBELL 14th and 28th harmonics
+44 VOCAL1 *Detune oscillators using either waveform to bring out the vocal quality
+45 VOCAL2 *Detune oscillators using either waveform to bring out the vocal quality
+82 Bell Partials1
+84 Sawtooth 3rd and 5th
+85 Sine 5ths *2 sines an octave and a 5th apart
+86 Sine 2 Octave *2 sines, 2 octaves apart
+87 Sine 4 Octave *2 sines, 4 Ocataves apart
+88 Sawtooth 5ths *2 saws, an octave and a 5th apart
+89 Sawtooth 2-Octaves *2 saws, 2 octaves apart
+90 Square 5ths *2 squares, a 5th apart
+91 Square Octave+5th *2 squares, an octave and a 5th apart
+92 Square 2-Octaves *2 squares, 2 octaves apart
+94 Bell Partials2
+95 Blank Wave
+
+
+These are the *supposed* unpublisheed VS waveform names, though the original designer says he really
+didn't have names for any of them
+
+1 Sine
+2 Saw
+3 Sqr
+4 WmBell
+5 RdBell
+6 R2Bell
+7 W2Bell
+8 FmtBell
+9 FzReed
+10 FmtAOh
+11 FmtAhh
+12 TriPlus
+13 DisBel
+14 Pulse1
+15 Pulse2
+16 SqrReed
+17 Oohh
+18 49. Eehh
+19 FeedBack
+20 Piano1
+21 E.Pno
+22 M.Harm
+23 HiTop
+24 WmReed
+25 3rd and 5th harmonics *fundamental absent
+26 Hollow
+27 Hvy7
+28 BelOrg
+29 BASSBELL *14th and 28th harmonics
+30 Tine1
+31 PhSQR
+32 Orient
+33 HiPipe
+34 Mass
+35 ReedOrg
+36 OrgAhh
+37 MelOrg
+38 FmtOrg
+39 Clar
+40 AhhFem
+41 AhhHom
+42 AhhBass
+43 RegVox
+44 VOCAL1 *Detune oscs using either wave to bring out the vocal
+45 VOCAL2 *Detune oscs using either wave to bring out the vocal 
+46 HiAhh
+47 Bass
+48 Guitar
+49 Nice
+50 WWind
+51 Oboe
+52 Harp
+53 Pipe
+54 Hack1
+55 Hack2
+56 Hack3
+57 Pinch
+58 BellHrm
+59 BellVox
+60 Hi Harm
+61 Hi Reed
+62 BellReed
+63 WmWhstl
+64 Wood
+65 Pure
+66 Med Pure
+67 HiHarm
+68 FullBell
+69 Bell
+70 Pinch
+71 Clustr
+72 M.Pinch
+73 VoxPnch
+74 OrgPnch
+75 AhhPnch
+76 PnoOrg
+77 BrReed
+78 NoFund
+79 ReedHrm
+80 LiteFund
+81 MelOrg
+82 Bell
+83 Bell
+84 Sawtooth 3rd and 5th
+85 Sine 5ths *2 sines an octave and a 5th apart
+86 Sine 2 Octave *2 sines, 2 octaves apart
+87 Sine 4 Octave *2 sines, 4 Ocataves apart
+88 Sawtooth 5ths *2 saws, an octave and a 5th apart
+89 Sawtooth 2-Octaves *2 saws, 2 octaves apart
+90 Square 5ths *2 squares, a 5th apart
+91 Square Octave+5th *2 squares, an octave and a 5th apart
+92 Square 2-Octaves *2 squares, 2 octaves apart
+94 Bell Partials2
+95 Null Wave
+96+ User Waves (Editor someone?!)
+**/

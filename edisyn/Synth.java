@@ -1185,6 +1185,9 @@ public abstract class Synth extends JComponent implements Updatable
     /** Same as setupMIDI(message, null), with a default "you are disconnected" message. */
     public boolean setupMIDI() { return setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from.", null); }
         
+    /** Same as setupMIDI(message, oldTuple), with a default "you are disconnected" message. */
+    public boolean setupMIDI(Midi.Tuple oldTuple) { return setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from.", oldTuple); }
+        
     /** Lets the user set up the MIDI in/out/key devices.  TheMIDI old devices are provided in oldTuple,
         or you may pass null in if there are no old devices.  Returns TRUE if a new tuple was set up. */
     public boolean setupMIDI(String message, Midi.Tuple oldTuple)
@@ -1659,21 +1662,24 @@ public abstract class Synth extends JComponent implements Updatable
         if (!getSendMIDI())
             return;  // don't bother!  MIDI is off
 
-		boolean sent = true;
         if (getSendsAllParametersInBulk())
             {
-            sent = sent || tryToSendMIDI(emitAll(getModel(), true, false));
+            boolean sent = tryToSendMIDI(emitAll(getModel(), true, false));
+			if (sent)
+				simplePause(getPauseAfterSendAllParameters());
             }
         else
             {
+            boolean sent = false;
             String[] keys = getModel().getKeys();
             for(int i = 0; i < keys.length; i++)
                 {
-                if (sent = sent || tryToSendMIDI(emitAll(keys[i], STATUS_SENDING_ALL_PARAMETERS)))
+                if (sent = tryToSendMIDI(emitAll(keys[i], STATUS_SENDING_ALL_PARAMETERS)) || sent)
 	                simplePause(getPauseAfterSendOneParameter());
                 }
+            if (sent)
+				simplePause(getPauseAfterSendAllParameters());
             }
-        if (sent) simplePause(getPauseAfterSendAllParameters());
         }
 
 

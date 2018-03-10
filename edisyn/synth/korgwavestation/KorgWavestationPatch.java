@@ -107,9 +107,6 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         model.set("number", 0);
         model.set("bank", 0);
 
-        model.set("number", 0);
-        model.set("bank", 0);
-
         model.set("numoscillators", 0); // one oscillator
 
         loadDefaults();
@@ -2291,6 +2288,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         {
         if (tempModel == null)
             tempModel = getModel();
+
+		System.err.println(model);
             
         byte[] d = new byte[EXPECTED_SYSEX_LENGTH];
         d[0] = (byte)0xF0;
@@ -2719,6 +2718,12 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                 }
             }
         }
+
+    public int getPauseBetweenHillClimbPlays()
+    	{
+    	return 1100;
+    	}
+
     }
     
     

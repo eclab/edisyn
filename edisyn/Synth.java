@@ -342,7 +342,7 @@ public abstract class Synth extends JComponent implements Updatable
     public static final Class[] synths = new Class[] 
     { 
     //edisyn.synth.futuresonusparva.FuturesonusParva.class,
-//    edisyn.synth.generic.Generic.class,
+	//edisyn.synth.generic.Generic.class,
     edisyn.synth.korgsg.KorgSG.class,
     edisyn.synth.korgsg.KorgSGMulti.class,
     edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
@@ -357,7 +357,7 @@ public abstract class Synth extends JComponent implements Updatable
     edisyn.synth.kawaik4.KawaiK4Multi.class, 
     edisyn.synth.kawaik4.KawaiK4Drum.class,
     edisyn.synth.kawaik4.KawaiK4Effect.class,
-    //edisyn.synth.kawaik5.KawaiK5.class,
+    edisyn.synth.kawaik5.KawaiK5.class,
     edisyn.synth.oberheimmatrix1000.OberheimMatrix1000.class, 
     edisyn.synth.preenfm2.PreenFM2.class,
     edisyn.synth.waldorfblofeld.WaldorfBlofeld.class, 
@@ -4015,7 +4015,7 @@ public abstract class Synth extends JComponent implements Updatable
                   
         if (restartTestNotesTimer)
             {
-            sendTestNotesTimer.setInitialDelay(getTestNoteTotalLength());
+            sendTestNotesTimer.setInitialDelay(getTestNoteTotalLength() + getPauseBetweenHillClimbPlays());
             sendTestNotesTimer.restart();
             }
         }
@@ -4893,4 +4893,11 @@ public abstract class Synth extends JComponent implements Updatable
             }
         return new String(chars);
         }
+        
+    /** Return an extra pause (beyond the pause after sending all parameters) after playing a test sound while hill-climbing. */
+    public int getPauseBetweenHillClimbPlays()
+    	{
+    	return 0;
+    	}
+    	
     }

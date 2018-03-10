@@ -45,8 +45,7 @@ import edisyn.synth.*;
 public class HillClimb extends SynthPanel
     {
     public static final int NUM_CANDIDATES = 16;
-    public static final int NUM_STORAGE = 8;
-    public static final int NUM_MODELS = NUM_CANDIDATES + NUM_STORAGE + 1;
+    public static final int NUM_MODELS = NUM_CANDIDATES + 1;
 
     ArrayList oldA = new ArrayList();
     ArrayList oldB = new ArrayList();
@@ -79,7 +78,7 @@ public class HillClimb extends SynthPanel
         Category panel = new Category(null, "Iteration 1", Style.COLOR_A());
         iterations = panel;
                 
-        PushButton backup = new PushButton("Backup")
+        PushButton backup = new PushButton("Back Up")
             {
             public void perform()
                 {
@@ -527,22 +526,22 @@ public class HillClimb extends SynthPanel
                 
         for(int i = 0; i < 4; i++)
             {
-            currentModels[i] = ((Model)(newSeed.clone())).mutate(random, keys, weight / 2.0);
+            currentModels[i] = ((Model)(newSeed.clone())).mutate(random, keys, weight * MUTATION_WEIGHT);
             }
 
         for(int i = 0; i < 4; i++)
             {
-            currentModels[i + 4] = ((Model)(currentModels[i].clone())).mutate(random, keys, weight / 2.0);
+            currentModels[i + 4] = ((Model)(currentModels[i].clone())).mutate(random, keys, weight * MUTATION_WEIGHT);
             }
 
         for(int i = 0; i < 4; i++)
             {
-            currentModels[i + 8] = ((Model)(currentModels[i + 4].clone())).mutate(random, keys, weight / 2.0);
+            currentModels[i + 8] = ((Model)(currentModels[i + 4].clone())).mutate(random, keys, weight * MUTATION_WEIGHT);
             }
 
         for(int i = 0; i < 4; i++)
             {
-            currentModels[i + 12] = ((Model)(currentModels[i + 8].clone())).mutate(random, keys, weight / 2.0);
+            currentModels[i + 12] = ((Model)(currentModels[i + 8].clone())).mutate(random, keys, weight * MUTATION_WEIGHT);
             }
 
         oldA.add(newSeed);
@@ -567,66 +566,105 @@ public class HillClimb extends SynthPanel
             }
         }
 
+	public static double MUTATION_WEIGHT = 0.5;
+	
     public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA)
         {
-        currentModels[0] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight / 2.0);
-        currentModels[1] = ((Model)(a.clone())).recombine(random, c, keys, recombination).mutate(random, keys, weight / 2.0);
-        currentModels[2] = ((Model)(a.clone())).recombine(random, ((Model)(b.clone())).recombine(random, b, keys, recombination), keys, recombination).mutate(random, keys, weight / 2.0);
-        currentModels[3] = ((Model)(a.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight / 2.0);
-        currentModels[4] = ((Model)(b.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight / 2.0);
-        currentModels[5] = ((Model)(a.clone())).opposite(random, c, keys, recombination, false).mutate(random, keys, weight / 2.0);
-        currentModels[6] = ((Model)(c.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight / 2.0);
-        currentModels[7] = ((Model)(b.clone())).opposite(random, c, keys, recombination, false).mutate(random, keys, weight / 2.0);
-        currentModels[8] = ((Model)(c.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight / 2.0);
-        currentModels[9] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight / 2.0);
-        currentModels[10] = ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight / 2.0);
-        currentModels[11] = ((Model)(c.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight / 2.0);
-        currentModels[12] = ((Model)(a.clone())).opposite(random, oldA, keys, 2.0 * recombination, false).mutate(random, keys, weight / 2.0);
-        currentModels[13] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[14] = ((Model)(b.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[15] = ((Model)(c.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
+        // A + B
+        currentModels[0] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        // A + C
+        currentModels[1] = ((Model)(a.clone())).recombine(random, c, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        // B + C
+        currentModels[2] = ((Model)(b.clone())).recombine(random, c, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        // A + (B + C)
+        currentModels[3] = ((Model)(a.clone())).recombine(random, ((Model)(b.clone())).recombine(random, c, keys, recombination), keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        // A - B
+        currentModels[4] = ((Model)(a.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+		// B - A
+        currentModels[5] = ((Model)(b.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        // A - C
+        currentModels[6] = ((Model)(a.clone())).opposite(random, c, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        // C - A
+        currentModels[7] = ((Model)(c.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        // B - C
+        currentModels[8] = ((Model)(b.clone())).opposite(random, c, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        // C - B
+        currentModels[9] = ((Model)(c.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        // A - Z
+        currentModels[10] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        // B - Z
+        currentModels[11] = ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        // C - Z
+        currentModels[12] = ((Model)(c.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        // A
+        currentModels[13] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        // B
+        currentModels[14] = ((Model)(b.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        // C
+        currentModels[15] = ((Model)(c.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        
         shuffle(random, currentModels, NUM_MODELS - 1);
         }
         
     public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA)
         {
-        currentModels[0] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight / 2.0);
-        currentModels[1] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight / 2.0).mutate(random, keys, weight);
-        currentModels[2] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight / 2.0).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[3] = ((Model)(a.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight / 2.0);
-        currentModels[4] = ((Model)(a.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight / 2.0).mutate(random, keys, weight);
-        currentModels[5] = ((Model)(b.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight / 2.0);
-        currentModels[6] = ((Model)(b.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight / 2.0).mutate(random, keys, weight);
-        currentModels[7] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight / 2.0);
-        currentModels[8] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight / 2.0).mutate(random, keys, weight);
-        currentModels[9] = ((Model)(a.clone())).opposite(random, oldA, keys, 2.0 * recombination, false).mutate(random, keys, weight / 2.0).mutate(random, keys, weight);
-        currentModels[10] = ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight / 2.0);
-        currentModels[11] = ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight / 2.0).mutate(random, keys, weight);
-        currentModels[12] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[13] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[14] = ((Model)(b.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[15] = ((Model)(b.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
+        // A + B
+        currentModels[0] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[1] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[2] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        
+        // A - B
+        currentModels[3] = ((Model)(a.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[4] = ((Model)(a.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        
+        // B - A
+        currentModels[5] = ((Model)(b.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[6] = ((Model)(b.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        
+        // A - Z
+        currentModels[7] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[8] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        
+        // B - Z
+        currentModels[9] = ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[10] = ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+
+		// (A - Z) + (B - Z)
+        currentModels[11] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).recombine(random, 
+        		((Model)(b.clone())).opposite(random, oldA, keys, recombination, false), keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+
+		// A
+        currentModels[12] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[13] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        
+        // B
+        currentModels[14] = ((Model)(b.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[15] = ((Model)(b.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        
         shuffle(random, currentModels, NUM_MODELS - 1);
         }
                 
     public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA)
         {
-        currentModels[0] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight / 2.0);
-        currentModels[1] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight / 2.0);
-        currentModels[2] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight / 2.0);
-        currentModels[3] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[4] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[5] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[6] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[7] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[8] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[9] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[10] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[11] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[12] = ((Model)(a.clone())).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight).mutate(random, keys, weight);
-        currentModels[13] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight / 2.0);
-        currentModels[14] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight / 2.0).mutate(random, keys, weight);
-        currentModels[15] = ((Model)(a.clone())).opposite(random, oldA, keys, 2.0 * recombination, false).mutate(random, keys, weight / 2.0).mutate(random, keys, weight);
+        // A
+        currentModels[0] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[1] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[2] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[3] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[4] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[5] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[6] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[7] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[8] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[9] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[10] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[11] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[12] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        
+        // A - Z
+        currentModels[13] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[14] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[15] = ((Model)(a.clone())).opposite(random, oldA, keys, 2.0 * recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
         shuffle(random, currentModels, NUM_MODELS - 1);
         }
                 

@@ -64,6 +64,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     Synth synth;
     int width = 128;
     int behavior[] = null;
+    double yOffset = 0.0;
     
     public static final int NUM_INTERVALS = 2;
     String[] startKey = new String[NUM_INTERVALS];
@@ -101,6 +102,9 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         {
         this.width = width;
         }
+    
+    public double getYOffset() { return yOffset; }
+    public void setYOffset(double val) { yOffset = val; }
                 
     public int getPreferredWidth()
         {
@@ -193,6 +197,8 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             {
             if (yKeys[i] != null)
                 ys[i] *= synth.getModel().get(yKeys[i], 1);
+        	ys[i] += yOffset;
+        	
             if (xKeys[i] != null)
                 {
                 if (angles != null && i > 0)                    // we're doing angles

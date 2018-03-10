@@ -4662,7 +4662,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                                 
                 if (index == -1)  // unused (typically says "reserved for future use")
                     {
-                    System.err.println("PCL List entry not found: " + fxtype + ":" + paramnum + " (⿓⿓reserved').");
+                    System.err.println("PCL List entry not found: " + fxtype + ":" + paramnum + " (probably reserved').");
                     }
                 else
                     {
@@ -5039,5 +5039,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         int number = model.get("number");
         return BANKS[model.get("bank")] + " " + (number > 9 ? "" : "0") + number;
         }
+
+    public int getPauseBetweenHillClimbPlays()
+    	{
+    	return 1100;
+    	}
     }
     

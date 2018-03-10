@@ -578,6 +578,14 @@ public class Blank extends Synth
         return 0;
         }
         
+    public int getPauseBetweenHillClimbPlays()
+    	{
+    	// Some synths, such as the Korg Wavestation SR, need extra time
+    	// to recover from changing patches before they can turn around
+    	// and do again immediately.  Here you can specify that pause in milliseconds.
+    	return 0;
+    	}
+        
     public int getSysexFragmentSize() 
         {
         // Some synths have small MIDI buffers and are so slow that you

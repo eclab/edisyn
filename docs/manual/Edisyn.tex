@@ -325,48 +325,102 @@ Once you're done choosing parameters to mutate or recombine, just select {\bf St
 
 Note that your parameter choices, as well as using them for recombination, are persistent: they're saved in the preferences.
 
-
 \subsection{Hill-Climbing}
 \label{hillclimb}
 
-\begin{wrapfigure}{r}{2.5in}
-\vspace{-1em}
-\includegraphics[width=2.5in]{HillClimbing.pdf}
-\caption{Recombination and Mutation in the Hill-Climber}
-%\vspace{-5em}
-\label{hc}
-\end{wrapfigure}
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=6in]{HillClimbing.pdf}
+\end{center}
+\caption{Recombination and Mutation in the Hill-Climber. Shown are (left to right) basic operations performed when the user has made three (A, B, C), two (A, B), or only one (A) selections.  Z is the top selection the previous iteration (the previous iteration's A).  Beyond the given operations, various degrees of mutation are applied to each new child: see Figure \ref{hctable}.}
+\label{hcfigure}
+\end{figure}
 
 Edisyn's {\it hill-climber}\footnote{Important Note.  The Hill Climber is a work in progress and as testing and research continues on it, it may change significantly} is another of its patch-exploration tools.  You select it by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  This will add a new tab to your patch editor labelled {\bf Hill-Climb}.  You get rid of the hill-climber by selecting {\bf Stop Hill-Climbing} in the {\bf Edit} menu.  
 
-When you fire up the Hill-Climber, it appears as an additional tab after your {\bf About} tab.  Edisyn's Hill-Climber repeatedly offers you sixteen possible sounds and asks you to choose your top three preferences.  After you have chosen them, the Hill-Climber will try to build a new set of sounds whose parameters are similar to your choices in various ways.  You then choose three {\it new} top choices, and the process repeats.  If you're lucky, Edisyn will head towards regions of the synthesizer's parameter space which make sounds you like.
+When you fire up the Hill-Climber, it appears as an additional tab after your {\bf About} tab.  Edisyn's Hill-Climber repeatedly offers you sixteen new versions of patches and asks you to choose your top three preferences: you can also indicate preference for your current working patch or for nothing.  After you have chosen them, the Hill-Climber will try to build a new set of sounds whose parameters are similar to your choices in various ways.  If you're lucky, Edisyn will head towards regions of the synthesizer's parameter space which make sounds you like.
 
-The Hill-Climber builds new sounds by recombining your top three sound choices and adding some degree of noise (mutation) to them.  Let's say that your top three sounds were sounds {\bf A, B,} and {\bf C}, and that your {\it previous} ``A'' from last time is called {\bf Z}.  Then the 16 new sounds will be (``+'' means ``recombined with''):
+The Hill-Climber builds new sounds by recombining your top three sound choices and adding some degree of noise (mutation) to them.  Let's say that your top three sounds were sounds {\bf A, B,} and {\bf C}, and that your {\it previous} ``A'' from last time is called {\bf Z}.  Figures \ref{hcfigure} and \ref{hctable} explain the mechanism by which the 16 new patches are generated.  The hill-climber tries to balance coming up with mixtures of your selections as well as things well outside the searched space (balancing so-called {\it exploration} and {\it exploitation}). You can also select only two top choices (A and B), a single choice (A), or no choices at all\,---\,in which case Edisyn just generates 16 mutated replacements for the existing ones.
 
-\vspace{1em}
-{
+\begin{figure}[t]
+\begin{center}
 \small
-\noindent\begin{tabular}{@{}rlrlrlrl@{}}
-1 & A & 2 & A + B & 3 & A + C & 4 & A + (B + C) \\
-4 & Mutated A & 6 & Mutated A + B & 7 & Mutated A + C & 8 & Mutated A + (B + C)  \\
-9 & Very Mutated A & 10 & Very Mutated A + B & 11 & Very Mutated A + C & 12 & Very Mutated A + (B + C) \\
-13 & B + C & 14 & Beyond A from Z & 15 & Even Further Beyond A from Z & 16 & Current Patch \\
+\begin{tabular}{@{}ll@{}}
+\multicolumn{2}{c}{\bf A, B, and C}\\
+\hline
+\bf Operation&\bf Mutation\\
+A $+$ B& 1x\\
+A $+$ C& 1x\\
+B $+$ C& 1x\\
+A $+$ (B $+$ C)& 1x\\
+A $-$ B& 1x\\
+B $-$ A& 1x\\
+A $-$ C& 1x\\
+C $-$ A& 1x\\
+B $-$ C& 1x\\
+C $-$ B& 1x\\
+A $-$ Z& 1x\\
+B $-$ Z& 1x\\
+C $-$ Z& 1x\\
+A& 3x\\
+B& 3x\\
+C& 3x\\
+\end{tabular}\hspace{\fill}
+\begin{tabular}{@{}ll@{}}
+\multicolumn{2}{c}{\bf A, and B}\\
+\hline
+\bf Operation&\bf Mutation\\
+A $+$ B& 1x\\
+A $+$ B& 2x\\
+A $+$ B& 3x\\
+A $-$ B& 1x\\
+A $-$ B& 2x\\
+B $-$ A& 1x\\
+B $-$ A& 2x\\
+A $-$ Z& 1x\\
+A $-$ Z& 2x\\
+B $-$ Z& 1x\\
+B $-$ Z& 2x\\
+(A $-$ Z) $+$ (B $-$ Z)& 1x\\
+A& 1x\\
+A& 2x\\
+B& 1x\\
+B& 2x\\
+\end{tabular}\hspace{\fill}
+\begin{tabular}{@{}ll@{}}
+\multicolumn{2}{c}{\bf A Only}\\
+\hline
+\bf Operation&\bf Mutation\\
+A& 2x\\
+A& 2x\\ 
+A& 2x\\ 
+A& 2x\\
+A& 2x\\
+A& 2x\\
+A& 3x\\
+A& 3x\\
+A& 3x\\
+A& 4x\\
+A& 4x\\
+A& 5x\\
+A& 5x\\
+A $-$ Z& 1x\\
+A $-$ Z& 2x\\
+(A $-$ Z) $-$ Z& 2x\\
 \end{tabular}
-}
-\vspace{1em}
+\end{center}
+\caption{Operations producing the sixteen new children each hill-climbing step.  The operations performed depend on whether the user has made  one, two, or three selections.    Each operation is followed by a certain degree of mutation.  A, B, and C are the (up to) three selections, A being most preferred and C being least.  Z is the most preferred selection the {\it previous} iteration.  The operation \(X + Y\) means to recombine X with Y, with somewhat of a bias towards X.  The operation \(X - Y\) means to find a point on the opposite side of X from Y.  See Figure \ref{hcfigure}.}
+\label{hctable}
+\end{figure}
 
-Figure \ref{hc} illustrates the various recombination locations; the mutation noise is added to those locations.\footnote{The idea behind the ``Beyond A from Z'' options is that if you made the choice for A, you might want to go even further in that direction, and rapidly.  And then there's the oddity of the Current Patch sitting in slot 16.  Let's say you don't like where you're going right now.  One option is to jump out of the Hill-Climber, load a patch from the synth and set it up the way you like, then go back to the Hill-Climber and select it as (say) your \#1 choice to get things moving in a different direction.}  When you fire up the Hill-Climber the first time, it doesn't have three candidates yet, nor does it have a Z.  So instead what it does is take your current patch and build sixteen sounds as follows:
+When you fire up the Hill-Climber the first time, it doesn't have three candidates yet, nor does it have a Z.  So instead what it does is take your current patch and build sixteen sounds as follows:
 
 \begin{itemize}
-\item{1--4}: Four noisy versions of the current patch
-\item{5--8}: Four noisier versions of the current patch
-\item{9--12}: Four even noisier versions of the current patch
-\item{13--16}: Four extremely noisy versions of the current patch
+\item{1--4}: Four 1x mutated versions of the current patch
+\item{5--8}: Four 2x mutated versions of the current patch
+\item{9--12}: Four 3x mutated versions of the current patch
+\item{13--16}: Four 4x mutated versions of the current patch
 \end{itemize}
-
-The sixteen candidates appear in the {\bf Candidates} section.  Each has a button labelled {\bf Play}, which lets you play the candidate, and a button labelled {\bf Keep}, which closes the Hill-Climber and loads that candidate into the patch editor (presumably because you've found your ideal sound and want to {\it keep} it).  There are also three radio buttons, labelled 1, 2, and 3.  These are for you to select the sound as one of your top three choices, if you like it.
-
-Once you have selected your top three options,\footnote{Yes, if you like fewer than three sounds, a sound can be more than one top-three option.} press {\bf Climb} to make the Hill-Climber build new sounds based on those options.  If you don't like any of the sounds, you can press {\bf Retry} to make the Hill-Climber try again, building sixteen new sounds (only the noisy sounds will change).  If you don't like where you're going, you can also back up to an earlier iteration by pressing {\bf Backup}.  And you can back up all the way to the very beginning again by pressing {\bf Reset}.
 
 \begin{wrapfigure}{r}{2.9in}
 \includegraphics[scale=0.3]{HillClimbPanel.png}
@@ -374,6 +428,11 @@ Once you have selected your top three options,\footnote{Yes, if you like fewer t
 \caption{The Hill-Climber Panel}
 \label{hcpanel}
 \end{wrapfigure}
+
+The sixteen candidates appear in the {\bf Candidates} section.  The option of choosing your current patch is in the {\bf Current} section, and the option of choosing no patch is in the {\bf None} section.  Each option (except None) has a button labelled {\bf Play}, which lets you play the candidate, and each Candidate has a button labelled {\bf Keep}, which closes the Hill-Climber and loads that candidate into the patch editor (presumably because you've found your ideal sound and want to {\it keep} it).  There are also three radio buttons, labelled 1, 2, and 3.  These are for you to select the sound as one of your top three choices, if you like it.
+
+Once you have selected your top three options,\footnote{Yes, if you like fewer than three sounds, a sound can be more than one top-three option.} press {\bf Climb} to make the Hill-Climber build new sounds based on those options.  If you don't like any of the sounds, you can press {\bf Retry} to make the Hill-Climber try again, building sixteen new sounds (only the noisy sounds will change).  If you don't like where you're going, you can also back up to an earlier iteration by pressing {\bf Backup}.  And you can back up all the way to the very beginning again by pressing {\bf Reset}.
+
 
 The degree of mutation can be tweaked.  Initially it's set to a reasonable starting value: but if you're stuck in a rut, you might increase the mutation value to explore more; on the other hand if you're trying to finesse things, you might reduce it.
 
@@ -454,7 +513,7 @@ PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &            \\
 Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}\footnotemark&{\cm}\samefootnote&{\cm}& & &{\cm}          \\
 Korg Microsampler&{\cm}\footnotemark&{\cm}\samefootnote& & & & & &  &  &         \\
 Korg SG Rack&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}\\
-Korg Wavestation&{\cm}&&{\cm}&{\cm}\footnote&{\cm}\samefootnote&{\cm}&{\cm}&\&{\cm}\samefootnote\\
+Korg Wavestation&{\cm}&&{\cm}&{\cm}\footnote&{\cm}\samefootnote&{\cm}&{\cm}&{\cm}\samefootnote&&{\cm}\\
 \end{tabular}
 }
 \end{center}
@@ -471,7 +530,7 @@ Korg Wavestation&{\cm}&&{\cm}&{\cm}\footnote&{\cm}\samefootnote&{\cm}&{\cm}&\&{\
 \addtocounter{footnote}{1}
 \footnotetext{A limited number of them only.}
 \addtocounter{footnote}{1}
-\footnotetext{Wave Sequence Patches do things bizarrely.}
+\footnotetext{In some situations.}
 \vspace{1em}
 
 I particularly love how the Korg Microsampler and the Korg SG are disjoint in their abilities; yet they're from the same company.   Long story short, you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.
@@ -1026,5 +1085,6 @@ Finally when the user clicks on the close box, the method {\bf requestCloseWindo
 \item Copyright your editor code at the top of the file.  License the editor code under Apache 2.0 (I don't accept anything else).
 \item Send the whole directory to me!  I'd love to include it.
 \end{itemize}
+
 
 \end{document}

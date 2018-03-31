@@ -1381,7 +1381,10 @@ public abstract class Synth extends JComponent implements Updatable
             {
             if (data[i] < 0)  // uh oh, high byte
                 {
-                new RuntimeException("High byte in sysex found.  First example is byte #" + i).printStackTrace();
+                String s = "";
+                for(int j = 0; j <= i; j++)
+                	s = s + (data[j] < 0 ? data[j] + 255 : data[j]) + " ";
+                new RuntimeException("High byte in sysex found.  First example is byte #" + i + "\n" + s).printStackTrace();
                 break;
                 }
             }
@@ -1436,14 +1439,19 @@ public abstract class Synth extends JComponent implements Updatable
     /** If you get a index=0, outOf=0, we're done */
     public void sentMIDI(Object datum, int index, int outOf) { }
         
-    /** Attempts to send several MIDI sysex or other kinds of messages. Returns false if (1) the data was empty or null (2)
+    /** Attempts to send several MIDI sysex or other kinds of messages.   Data elements can be null, which is
+    	essentially a no-op.  Returns false if (1) the data was empty or null (2)
         synth has turned off the ability to send temporarily (3) the sysex message is not
         valid (4) an error occurred when the receiver tried to send the data.  */
     public boolean tryToSendMIDI(Object[] data)
         {
+        if (data == null) return false;
         for(int i = 0; i < data.length; i++)
             {
-            if (data[i] == null) return false;
+            if (data[i] == null)
+            	{
+            	continue;
+            	}
             else if (data[i] instanceof byte[])
                 {
                 byte[] sysex = (byte[])(data[i]);
@@ -3780,6 +3788,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }       
                 
+                
     void doSendToCurrentPatch()
         {
         if (tuple == null || tuple.out == null)
@@ -3866,6 +3875,10 @@ public abstract class Synth extends JComponent implements Updatable
                 // do an all notes off (some synths don't properly respond to all sounds off)
                 for(int i = 0; i < 16; i++)
                     tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
+				// for some synths that respond to neither <ahem Korg Wavestation>, maybe we can turn off the current note,
+				// assuming the user hasn't changed it.            
+                for(int i = 0; i < 16; i++)
+					tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, i, getTestNotePitch(), 0));
                 }
             catch (InvalidMidiDataException e2)
                 {

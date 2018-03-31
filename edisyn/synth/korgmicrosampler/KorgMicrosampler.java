@@ -590,7 +590,7 @@ public class KorgMicrosampler extends Synth
             public void update(String key, Model model)
                 {
                 super.update(key, model);
-                v.removeBottom();
+                v.removeLast();
                 v.addBottom(samples[model.get(key, 1) - 1]);
                 v.revalidate();
                 v.repaint();

@@ -160,7 +160,7 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
                 {
                 super.update(key, model);
                 revise();
-                outer.removeBottom();
+                outer.removeLast();
                 if (model.get(key, 0) != 0)
                     {
                     outer.addBottom(stepAndDisplay);
@@ -905,6 +905,8 @@ return pos;
         return PARSE_SUCCEEDED;     
         }
     
+    
+    
     public Object[] emitAll(String key, int status)
         {
         if (key.equals("bank")) return new Object[0];  // this is not emittable
@@ -914,19 +916,29 @@ return pos;
         int index = 0;
         int value = 0;
         sendingLength = false;
+        
+        byte[] bankmesg = null;
+        if (status == STATUS_UPDATING_ONE_PARAMETER)
+        	{
+        	bankmesg = paramBytes(WAVE_SEQ_BANK, edisynToWSBank[model.get("bank")]);
+        	}
+        
+        byte[] nummesg = null;
+        if (status == STATUS_UPDATING_ONE_PARAMETER)
+        	{
+        	nummesg = paramBytes(WAVE_SEQ_NUM, edisynToWSBank[model.get("number")]);
+			}
                 
-        //byte[] bankmesg = new byte[] { };
-        //byte[] nummesg = new byte[] { };
-
         if (key.equals("step"))         // we'll use this to just change the current step, not that it matters because the screen doesn't change unless the user presses a button...
             {
             byte[] mesg = paramBytes(WAVE_SEQ_STEP, model.get(key));
-            return new byte[][] { mesg };
+            return new byte[][] { bankmesg, nummesg, mesg };
             }
         else if (key.equals("name"))
             {
-            byte[] mesg = paramBytes(WAVE_SEQ_NAME, model.get(key, "").toCharArray());
-            return new byte[][] { /*bankmesg, nummesg,*/ mesg };
+            // Why isn't this WAVE_SEQ_NAME?
+            byte[] mesg = paramBytes(SAVE_SOURCE_NAME, model.get(key, "").toCharArray());
+            return new byte[][] { bankmesg, nummesg, mesg };
             }
         else if (key.startsWith("step"))
             {
@@ -962,7 +974,7 @@ return pos;
                                                 
                     byte[] step_mesg = paramBytes(WAVE_SEQ_STEP, step);
                     byte[] mesg = paramBytes(index, val);
-                    return new byte[][] { /*bankmesg, nummesg,*/ step_mesg, mesg };
+                    return new byte[][] { bankmesg, nummesg, step_mesg, mesg };
                     }
                 else
                     return new Object[0];
@@ -980,18 +992,22 @@ return pos;
                         
                 int length = model.get("length", 0);
                 
-                byte[][] obj = new byte[2][];
+                byte[][] obj = new byte[4][];
                 if (length == 0)
                     {
-                    obj[0] = paramBytes(EXECUTE_WAVESEQ_INIT, 1);
+                    obj[0] = bankmesg;
+                    obj[1] = nummesg; 
+                    obj[2] = paramBytes(EXECUTE_WAVESEQ_INIT, 1);
                     // now we're at 1 step.  So we delete one.  This is a rare need, but...
-                    obj[1] = paramBytes(EXECUTE_DELETE_WS_STEP, 1);
+                    obj[3] = paramBytes(EXECUTE_DELETE_WS_STEP, 1);
                     }
                 else
                     {
-                    obj = new byte[1 + (length) * 2 + length * 8][];
+                    obj = new byte[1 + (length) * 2 + length * 8 + 2][];
+                    obj[0] = bankmesg;
+                    obj[1] = nummesg; 
                                 
-                    int pos = 0;
+                    int pos = 2;
                                 
                     // first clear the sequence
                     obj[pos++] = paramBytes(EXECUTE_WAVESEQ_INIT, 1);
@@ -1038,38 +1054,38 @@ return pos;
         else if (key.equals("start"))
             {
             byte[] mesg = paramBytes(WAVE_SEQ_START_STEP, model.get(key, 0));
-            return new byte[][] { /*bankmesg, nummesg,*/ mesg };
+            return new byte[][] { bankmesg, nummesg, mesg };
             }
 
         else if (key.equals("loopbackandforth"))
             {
             byte[] mesg = paramBytes(WAVE_SEQ_LOOP_DIR, model.get(key, 0));
-            return new byte[][] { /*bankmesg, nummesg,*/ mesg };
+            return new byte[][] { bankmesg, nummesg, mesg };
             }
         else if (key.equals("looprepeats"))
             {
             byte[] mesg = paramBytes(WAVE_SEQ_REPEATS, model.get(key, 0));
-            return new byte[][] { /*bankmesg, nummesg,*/ mesg };
+            return new byte[][] { bankmesg, nummesg, mesg };
             }
         else if (key.equals("loopstart"))
             {
             byte[] mesg = paramBytes(WAVE_SEQ_LOOP_START, model.get(key, 0));
-            return new byte[][] { /*bankmesg, nummesg,*/ mesg };
+            return new byte[][] { bankmesg, nummesg, mesg };
             }
         else if (key.equals("loopend"))
             {
             byte[] mesg = paramBytes(WAVE_SEQ_LOOP_END, model.get(key, 0));
-            return new byte[][] { /*bankmesg, nummesg,*/ mesg };
+            return new byte[][] { bankmesg, nummesg, mesg };
             }
         else if (key.equals("modulationamount"))
             {
             byte[] mesg = paramBytes(WAVE_SEQ_MOD_AMT, model.get(key, 0));
-            return new byte[][] { /*bankmesg, nummesg,*/ mesg };
+            return new byte[][] { bankmesg, nummesg, mesg };
             }
         else if (key.equals("modsource"))
             {
             byte[] mesg = paramBytes(WAVE_SEQ_MOD_SRC, model.get(key, 0));
-            return new byte[][] { /*bankmesg, nummesg,*/ mesg };
+            return new byte[][] { bankmesg, nummesg, mesg };
             }
         else
             {
@@ -1085,43 +1101,63 @@ return pos;
     int stepPos = 0;
     boolean sendingLength = false;
     public static final int MINIMUM_SENT_ELEMENTS_FOR_DISPLAY_CHANGE = 20;
-     
+    
+    // This complicated function is meant to add some additional pauses at select locations when we do
+    // bulk downloads of patches.  There's a bit of pause we have to do after initialization,
+    // as well as some O(n^2) pauses we have to do after insertion (MS_PER_STEP_BY_INDEX and MS_PER_STEP),
+    // plus some pauses we have to do to fill in the data (MS_PER_STEP_DATA).
+    // Note that when we do a single parameter send we emit bank and number information, so we only
+    // do a pause after ALL the parameter send data. 
+    
     public void sentMIDI(Object datum, int index, int outOf)
-        {
-        if (totalParameters >= MINIMUM_SENT_ELEMENTS_FOR_DISPLAY_CHANGE && outOf != 0)
-            {
-            sequenceGlobalCategory.setName("Sequence Sent: " + currentParameter + " / " + totalParameters);
-            paintImmediately(sequenceGlobalCategory.getParent().getBounds());
-            }               
+        { 
+        if (outOf == 0)	// end of a MIDI sequence
+        	return;
+        
+        if (!sendingAllParameters)  // we're not doing a bulk send, it's just one parameter
+        	{
+        	// only pause at the end
+			if (index == outOf - 1)
+            	{
+            	if (getSendMIDI()) simplePause(MS_PER_STEP_DATA);  // for typical parameters
+            	}
+        	}
+        else		// bulk
+        	{
+			if (totalParameters >= MINIMUM_SENT_ELEMENTS_FOR_DISPLAY_CHANGE)
+				{
+				sequenceGlobalCategory.setName("Sequence Sent: " + currentParameter + " / " + totalParameters);
+				paintImmediately(sequenceGlobalCategory.getParent().getBounds());
+				}               
 
-        //// IMPORTANT NOTE -- the order here is based on code in emitAll(String[]) above.
-                
-        if (datum == null)
-            sendingLength = false;
-        else if (!sendingLength)
-            {
-            if (getSendMIDI()) simplePause(MS_PER_STEP_DATA);  // for typical parameters
-            }
-        else if (sendingLength)
-            {
-            // My initial tests suggest that these values will work but I don't know if they'll
-            // work in general for any memory configuration.
-                
-            if (index == 0)                         // this is erasure
-                { 
-                if (getSendMIDI()) simplePause(MS_PER_INITIALIZATION);             // the minimum appears to be about 850ms
-                }
-            else if (index >= stepPos)      // these are step data, we don't pause here
-                { 
-                if (getSendMIDI()) simplePause(MS_PER_STEP_DATA); 
-                }
-            else if (index % 2 == 0)                // step insertion is at 2, 4, ...
-                { 
-                if (getSendMIDI()) simplePause(index * MS_PER_STEP_BY_INDEX + MS_PER_STEP); 
-                }
-            }
-        if (outOf != 0)
-            currentParameter++;
+			//// IMPORTANT NOTE -- the order here is based on code in emitAll(String[]) above.
+				
+			if (datum == null)
+				sendingLength = false;
+			else if (!sendingLength)
+				{
+				if (getSendMIDI()) simplePause(MS_PER_STEP_DATA);  // for typical parameters
+				}
+			else if (sendingLength)
+				{
+				// My initial tests suggest that these values will work but I don't know if they'll
+				// work in general for any memory configuration.
+				
+				if (index == 0)                         // this is erasure
+					{ 
+					if (getSendMIDI()) simplePause(MS_PER_INITIALIZATION);             // the minimum appears to be about 850ms
+					}
+				else if (index >= stepPos)      // these are step data, we don't pause here
+					{ 
+					if (getSendMIDI()) simplePause(MS_PER_STEP_DATA); 
+					}
+				else if (index % 2 == 0)                // step insertion is at 2, 4, ...
+					{ 
+					if (getSendMIDI()) simplePause(index * MS_PER_STEP_BY_INDEX + MS_PER_STEP); 
+					}
+				}
+			currentParameter++;
+			}
         }
         
     public static String[] MAIN_KEYS = new String[]
@@ -1141,12 +1177,20 @@ return pos;
     int offsetParameters = 0;
     int totalParameters = 0;
     int currentParameter = 0;
+    boolean sendingAllParameters = false;
     public void sendAllParameters()
         {
+        if (!getSendMIDI())
+        	return;
+        	
+        sendingAllParameters = true;
         totalParameters = offsetParameters + 14 * getModel().get("length") + 7;
         currentParameter = offsetParameters;
         
-        super.sendAllParameters();
+		// we have a hack here to send patch information first so we write it to the right place.
+		tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_BANK, edisynToWSBank[model.get("bank")]) });
+		tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_NUM, edisynToWSBank[model.get("number")]) });
+		super.sendAllParameters();    	
         
         currentParameter = 0;
         offsetParameters = 0;
@@ -1154,21 +1198,26 @@ return pos;
 
         sequenceGlobalCategory.setName("Sequence");
         paintImmediately(sequenceGlobalCategory.getParent().getBounds());
+        sendingAllParameters = false;
         }
     
-    public void writeAllParameters()
+    public void writeAllParameters(Model model)
         {
         if (!getSendMIDI())
             return;         
 
-        if (verifyLengthChange(getModel().get("length")))
+        if (verifyLengthChange(model.get("length")))
             {
+			// we have a hack here to send patch information first so we write it to the right place.
+			tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_BANK, edisynToWSBank[model.get("bank")]) });
+			tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_NUM, edisynToWSBank[model.get("number")]) });
+
             // send length first.  Note it doesn't send the wave parameters, those will get
             // sent in the next step automatically.
             sendingLength = true;  // this is set anyway, but whatever...
             Object[] obj = emitAll("length", STATUS_KORG_WS_SEQUENCE_WRITING);
             offsetParameters = obj.length;
-            totalParameters = offsetParameters + 7 * getModel().get("length") + 7;
+            totalParameters = offsetParameters + 7 * model.get("length") + 7;
             tryToSendMIDI(obj);
             sendingLength = false;
                         
@@ -1254,15 +1303,6 @@ return pos;
         byte[] midi_mesg_2 = paramBytes(MIDI_MODE, PERFORMANCE_MIDI_MODE);
         tryToSendSysex(midi_mesg_2);
         
-/*
-  byte[] part_mesg = paramBytes(CURRENT_PART, DEFAULT_PART);
-  tryToSendSysex(part_mesg);
-
-  byte[] wave_mesg = paramBytes(CURRENT_WAVE, DEFAULT_WAVE);
-  tryToSendSysex(wave_mesg);
-*/
-        // Should we do a WAVE_MUTE?  (#336)
-
         byte[] wave_bank_mesg = paramBytes(WAVE_BANK, edisynToWSBank[tempModel.get("bank", 0)]);
         tryToSendSysex(wave_bank_mesg);
 

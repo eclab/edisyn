@@ -637,18 +637,18 @@ public abstract class KorgWavestationAbstract extends Synth
     // as if they were functions, for example: edisynToWSBank[5] -> 7
     // 
     //      Bank Name    Edisyn Bank        WS Bank (Params)        WS Bank (Bank_Exp)
-    //      RAM1         0                          0                                       0
-    //      RAM2         1                          1                                       1
-    //      RAM3         2                          4                                       6
-    //      ROM4         3                          5                                       4
-    //      ROM5         4                          6                                       5
-    //      ROM6         5                          7                                       7
-    //      ROM7         6                          8                                       8
-    //      ROM8         7                          9                                       9
-    //      ROM9         8                          10                                      10
-    //      ROM10        9                          11                                      11
-    //      ROM11        10                         2                                       2
-    //      CARD         11                         3                                       3
+    //      RAM1         0                          0                       0
+    //      RAM2         1                          1                       1
+    //      RAM3         2                          4                       6
+    //      ROM4         3                          5                       4
+    //      ROM5         4                          6                       5
+    //      ROM6         5                          7                       7
+    //      ROM7         6                          8                       8
+    //      ROM8         7                          9                       9
+    //      ROM9         8                          10                      10
+    //      ROM10        9                          11                      11
+    //      ROM11        10                         2                       2
+    //      CARD         11                         3                       3
 
     public static final int[] edisynToWSBank = new int[] { 0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 2, 3 };
     public static final int[] wsToEdisynBank = new int[] { 0, 1, 10, 11, 2, 3, 4, 5, 6, 7, 8, 9 };

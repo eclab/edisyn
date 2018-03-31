@@ -2274,7 +2274,12 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         vbox.addBottom(comp);  // doesn't work right :-(
         hbox.add(vbox);
         
-        hbox.add(Strut.makeHorizontalStrut(140));
+        /*
+        LabelledDial delay = new LabelledDial("Delay", this, "hillclimbdelay", Style.COLOR_A(), 0, 5000);                
+		hbox.add(delay);
+		*/
+		
+        hbox.add(Strut.makeHorizontalStrut(130));
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
@@ -4247,6 +4252,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
+//        if (key.equals("hillclimbdelay")) return new Object[0];  // this is not emittable
                 
         /*
           byte[] bank_mesg = paramBytes(CURRENT_BANK, edisynToWSBank[model.get("bank", 0)]);
@@ -5042,6 +5048,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
     public int getPauseBetweenHillClimbPlays()
     	{
+//    	return model.get("hillclimbdelay");
     	return 1100;
     	}
     }

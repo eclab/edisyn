@@ -5,7 +5,7 @@
 
 <p>This editor is designed work with the <b>Korg Wavestation SR</b>.  It will <b>not</b> work with any other Wavestation models (the original Wavestation, the Wavestation EX, or the Wavestation A/D).
 
-<p><b>Communicating with Edisyn</b> Set your SR to receive sysex parameters, and also to receive program change and bank select commands.  Turn off memory protect (including for your card if you need to).  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.
+<p><b>Communicating with Edisyn</b> Set your SR to receive sysex parameters, and also to receive program change and bank select commands, as well as All Notes Off.  Turn off memory protect (including for your card if you need to).  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.
 
 <p>It is <b>very important</b> that you read the <b>Gotchas</b> below to understand Edisyn's strategy for building wave sequences, and why things can be slow.
 
@@ -40,7 +40,7 @@
 
 <p><li>Updating individual parameters is a little pokey.  This is because Edisyn must insert a significant delay between successive parameter updates or they'll get dropped by the SR.
 
-<p><li>The SR does not respond to All Notes Off or to All Sounds Off.  So selecting "Send All Sounds Off" will have no effect.  
+<p><li>Due to an apparent bug, the SR doesn't let you change the name of a wave sequence using parameters.  You can only change it by saving out the whole wave sequence block (which Edisyn doesn't do).  So at present Edisyn can't change wave sequence names; you'll have to do it manually (when in the wave sequence editing pages, press Write, change the name, and press Write again).
 
 </ul>
 

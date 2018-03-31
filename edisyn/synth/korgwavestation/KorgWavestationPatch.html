@@ -5,7 +5,7 @@
 
 <p>This editor is designed work with the <b>Korg Wavestation SR</b>.  It will <b>not</b> work with any other Wavestation models (the original Wavestation, the Wavestation EX, or the Wavestation A/D).
 
-<p><b>Communicating with Edisyn</b> Set your SR to receive sysex parameters, and also to receive program change and bank select commands.  Turn off memory protect (including for your card if you need to).  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.
+<p><b>Communicating with Edisyn</b> Set your SR to receive sysex parameters, and also to receive program change and bank select commands, as well as All Notes Off.  Turn off memory protect (including for your card if you need to).  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.
 
 <p><b>Hints</b>
 <ul>
@@ -31,7 +31,6 @@
 <p><li>Due to an unfortunate bug, the Wavestation SR cannot write patches.  Instead, you will have to write the patch yourself.  To do this, first <b>Send to Patch...</b> to the desired bank and patch number.  Then press the <b>Edit Button</b> on the SR twice, which should get you to this patch.  Finally, press the <b>Write/Compare</b> button (which should be lit).  When it asks you if you want to write to the patch, press the <b>Write Compare</b> button again.
 <p><li>Changes to parameters aren't displayed on the Wavestation SR unless that parameter is currently specifically selected on the Wavestation's screen.
 <p><li>Updating individual parameters is a little pokey.  This is because Edisyn must insert a significant delay between successive parameter updates or they'll get dropped by the SR.
-<p><li>The SR does not respond to All Notes Off or to All Sounds Off.  So selecting "Send All Sounds Off" will have no effect.  </ul>
 
 <p><b>Notes</b>
 <p>For the time being, I have elected to not have the patch editor update itself in response to manual parameter changes made directly on the synth.  The SR is just too complex a beast

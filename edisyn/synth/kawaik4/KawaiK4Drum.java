@@ -279,7 +279,7 @@ public class KawaiK4Drum extends Synth
             {
             public void update(String key, Model model)
                 {
-                vbox.removeBottom();
+                vbox.removeLast();
                 vbox.addBottom(keys[model.get(key, 36) - 36]);
                 vbox.revalidate();
                 vbox.repaint();

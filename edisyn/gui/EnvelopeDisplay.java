@@ -11,6 +11,7 @@ import java.awt.geom.*;
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.*;
 
 
 /**
@@ -54,6 +55,8 @@ import java.awt.event.*;
 
 public class EnvelopeDisplay extends JComponent implements Updatable
     {
+    ArrayList verticalDividers = new ArrayList();
+    
     double xConstants[];
     double yConstants[];
     double angles[];
@@ -63,6 +66,8 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     Color semiTransparent;
     Synth synth;
     int width = 128;
+    int minWidth = 84;
+    int height = 84;
     int behavior[] = null;
     double yOffset = 0.0;
     
@@ -73,6 +78,11 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     String finalStageKey;
     String sustainStageKey;
     
+    public void addVerticalDivider(double location)
+    	{
+    	verticalDividers.add(Double.valueOf(location));
+    	}
+    	
     public void setFinalStageKey(String key)
         {
         finalStageKey = key;
@@ -118,11 +128,19 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         
     public void postProcess(double[] xVals, double[] yVals) { }
     
-    public Dimension getPreferredSize() { return new Dimension(width, 84); }
-    public Dimension getMinimiumSize() { return new Dimension(84, 84); }
+    public int getPreferredHeight() { return height; }
+    public void setPreferredHeight(int height) { this.height = height; }
+    
+    public Dimension getPreferredSize() { return new Dimension(width, height); }
+    public Dimension getMinimiumSize() { return new Dimension(minWidth, height); }
     public Dimension getMaximumSize() { return new Dimension(100000, 100000); }
     
     public Color getColor() { return color; }
+    
+    boolean horizontalBorder = true;
+    
+    public void setHorizontalBorder(boolean val) { horizontalBorder = val; }
+    public boolean getHorizontalBorder() { return horizontalBorder; }
     
     public EnvelopeDisplay(Synth synth, Color color, String[] xKeys, String[] yKeys, double xConstants[], double yConstants[])
         {
@@ -174,7 +192,87 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                 synth.getModel().register(yKeys[i], this);
                         
         setBackground(Style.BACKGROUND_COLOR());
+        
+        
+        MouseAdapter ma = new MouseAdapter()
+        	{
+			public void mouseDragged(MouseEvent e)
+				{
+				highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
+				updateFromMouse(mouseToX(e.getX()), mouseToY(e.getY()), true);
+				updateHighlightIndex(highlightIndex);
+				repaint();
+				}
+				
+			public void mouseEntered(MouseEvent e)
+				{
+				highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
+				updateHighlightIndex(highlightIndex);
+				repaint();
+				}
+				
+			public void mouseExited(MouseEvent e)
+				{
+				highlightIndex = NO_HIGHLIGHT;
+				updateHighlightIndex(highlightIndex);
+				repaint();
+				}
+				
+			public void mouseMoved(MouseEvent e)
+				{
+				highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
+				updateHighlightIndex(highlightIndex);
+				repaint();
+				}
+				
+			public void mousePressed(MouseEvent e)
+				{
+				highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
+				updateFromMouse(mouseToX(e.getX()), mouseToY(e.getY()), false);
+				updateHighlightIndex(highlightIndex);
+				repaint();
+				}
+				
+			public void mouseReleased(MouseEvent e)
+				{
+				highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
+				updateHighlightIndex(highlightIndex);
+				repaint();
+				}
+        	};
+        	
+        addMouseListener(ma);
+        addMouseMotionListener(ma);
         }
+
+	int highlightIndex = NO_HIGHLIGHT;
+
+	public static final int NO_HIGHLIGHT = -1;
+	public int highlightIndex(double x, double y, boolean continuation)
+		{
+		return NO_HIGHLIGHT;
+		}
+		
+	public void updateHighlightIndex(int index) { }
+	
+	double mouseToX(double x)
+		{
+		return (x - (horizontalBorder ? Style.ENVELOPE_DISPLAY_BORDER_THICKNESS() : 0)) / 
+					(double)(getWidth() - (horizontalBorder ? Style.ENVELOPE_DISPLAY_BORDER_THICKNESS() * 2 : 0));
+		}
+	
+	double mouseToY(double y)
+		{
+		// I'm pretty sure this is wrong -- it should just be y - Style.ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS(),
+		// but it looks more correct this way
+		return 1.0 - (y - verticalBorderThickness() + Style.ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS()) /
+						(double)(getHeight() - verticalBorderThickness() * 2);
+		}
+
+        
+    public void updateFromMouse(double x, double y, boolean continuation)
+    	{
+    	}
 
     /** Mostly fills the background appropriately. */
     public void paintComponent(Graphics g)
@@ -227,11 +325,11 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         
         graphics.setColor(color);
 
-        rect.width -= Style.ENVELOPE_DISPLAY_BORDER_THICKNESS() * 2;
-        rect.height -= Style.ENVELOPE_DISPLAY_BORDER_THICKNESS() * 2;
+        if (horizontalBorder) rect.width -= Style.ENVELOPE_DISPLAY_BORDER_THICKNESS() * 2;
+        rect.height -= verticalBorderThickness() * 2;
         //rect.height -= spaceForLoopInterval * numLoops;
 
-        rect.x += Style.ENVELOPE_DISPLAY_BORDER_THICKNESS();
+        if (horizontalBorder) rect.x += Style.ENVELOPE_DISPLAY_BORDER_THICKNESS();
         rect.y += Style.ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS();
         Line2D.Double line = new Line2D.Double(rect.x, rect.y, rect.x + rect.width, rect.y);
         graphics.draw(line);
@@ -258,7 +356,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                 
         Path2D.Double fillp = new Path2D.Double();
         Path2D.Double p = new Path2D.Double();
-        Ellipse2D marker[] = new Ellipse2D[xs.length];
+        Ellipse2D.Double marker[] = new Ellipse2D.Double[xs.length];
 
         fillp.moveTo(rect.x + xs[0], rect.y + startHeight); 
         
@@ -289,9 +387,31 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         graphics.setColor(color);
         graphics.draw(p);
         
+        // draw dividers
+        if (verticalDividers.size() > 0)
+        	{
+            graphics.setStroke(Style.ENVELOPE_AXIS_STROKE());
+        	graphics.setColor(color);
+        	for(int i = 0; i < verticalDividers.size(); i++)
+        		{
+        		double pos = (Double)(verticalDividers.get(i));
+        		double x = rect.x + rect.width * pos;
+            	line = new Line2D.Double(x, rect.y, x, rect.y + rect.height);
+            	graphics.draw(line);
+        		}
+        	}
+        
         // draw markers
+        Color unset = Style.ENVELOPE_UNSET_COLOR();
         for(int i = 0; i < marker.length; i++)
             {
+            if (!constrainTo(i))
+            	graphics.setColor(unset);
+            else if (highlightIndex != NO_HIGHLIGHT && highlightIndex == highlightIndex(mouseToX(marker[i].x + marker[i].width / 2.0),
+            					mouseToY(marker[i].y + marker[i].height / 2.0), false))
+            	graphics.setColor(Style.TEXT_COLOR());
+            else
+            	graphics.setColor(color);
             graphics.fill(marker[i]);
             }
         
@@ -352,6 +472,10 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     double axis = 0.0;
     public void setAxis(double val) { if (val >= 0.0 && val < 1.0) axis = val; }
     public double getAxis() { return axis; } 
+    
+	public boolean constrainTo(int index) { return true; }
+	
+	public int verticalBorderThickness() { return Style.ENVELOPE_DISPLAY_BORDER_THICKNESS(); }
     }
 
 

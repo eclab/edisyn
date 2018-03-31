@@ -26,40 +26,47 @@ public class VBox extends JComponent implements Gatherable
     {
     Box box;
     JPanel panel = new JPanel();
-    JComponent bottom;
+    JComponent lastComponent;
         
     public Insets getInsets() { return Style.VBOX_INSETS(); }
 
-    public VBox()
+    public static final int TOP_CONSUMES = 0;
+    public static final int BOTTOM_CONSUMES = 1;
+    public VBox(int alternative)
         {
         setLayout(new BorderLayout());
         setBackground(Style.BACKGROUND_COLOR());
         box = new Box(BoxLayout.Y_AXIS);
-        add(box, BorderLayout.NORTH);
+        if (alternative == TOP_CONSUMES)
+            add(box, BorderLayout.SOUTH);
+        else
+            add(box, BorderLayout.NORTH);            
         panel.setLayout(new BorderLayout());
         panel.setBackground(Style.BACKGROUND_COLOR());
         add(panel, BorderLayout.CENTER);
         }
         
+    public VBox()
+    	{
+    	this(BOTTOM_CONSUMES);
+    	}
+    	
     public void addBottom(JComponent component)
         {
-        addBottom(component, false);
+		addLast(component);
         }
         
-    public void addBottom(JComponent component, boolean stretch)
+    public void addLast(JComponent component)
         {
-        bottom = component;
-        if (stretch)
-            panel.add(bottom, BorderLayout.CENTER);
-        else
-            panel.add(bottom, BorderLayout.CENTER);
+        lastComponent = component;
+        panel.add(lastComponent, BorderLayout.CENTER);
         }
-
-    public void removeBottom()
+        
+    public void removeLast()
         {
-        if (bottom != null)
-            panel.remove(bottom);
-        bottom = null;
+        if (lastComponent != null)
+            panel.remove(lastComponent);
+        lastComponent = null;
         }
         
     public void revalidate()
@@ -104,11 +111,11 @@ public class VBox extends JComponent implements Gatherable
                 ((Gatherable)c[i]).gatherAllComponents(list);
             }  
                         
-        if (bottom != null)
+        if (lastComponent != null)
             {                       
-            list.add(bottom);
-            if (bottom instanceof Gatherable)
-                ((Gatherable)bottom).gatherAllComponents(list);
+            list.add(lastComponent);
+            if (lastComponent instanceof Gatherable)
+                ((Gatherable)lastComponent).gatherAllComponents(list);
             }               
         }
         

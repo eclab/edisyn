@@ -167,7 +167,10 @@ public class Chooser extends NumericalComponent
                 
         setLayout(new BorderLayout());
         add(combo, BorderLayout.CENTER);
-        add(label, BorderLayout.NORTH);
+        if (isLabelToLeft())
+        	add(label, BorderLayout.WEST);
+        else
+        	add(label, BorderLayout.NORTH);
                 
         combo.addActionListener(new ActionListener()
             {
@@ -182,6 +185,8 @@ public class Chooser extends NumericalComponent
                 }
             });
         }
+    
+    public boolean isLabelToLeft() { return false; }
     
     public void addToWidth(int val)
         {

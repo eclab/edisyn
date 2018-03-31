@@ -51,7 +51,10 @@ public class LabelledDial extends NumericalComponent
         {
         return label;
         }
-        
+    
+    public Color getTextColor() { return dial.field.getForeground(); }
+    public void setTextColor(Color color) { dial.field.setForeground(color); dial.repaint(); }
+    
     public boolean getUpdatesDyamically() { return updatesDynamically; }
     public void setUpdatesDynamically(boolean val) { updatesDynamically = val; }
     public boolean isUpdatingDynamically() { return updatingDynamically; }

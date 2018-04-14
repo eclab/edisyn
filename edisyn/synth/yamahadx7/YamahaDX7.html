@@ -1,0 +1,29 @@
+<html><head></head>
+<body>
+
+<h1>Yamaha DX7 Family</h1> 
+<h2>Single Patch Editor</h2>
+
+<p>This patch editor ought to work properly with the DX7-compatible family (DX7, TX816/TX216, TX7, and perhaps other models such as the DX7 II or Korg Volca FM).  However it has only been tested on the Yamaha TX216.  Please let me know of any discrepancies you discover.
+
+<p><b>Communicating with Edisyn</b> The precise instructions here vary depending on the DX7 family synth you own.  But in general: Set your synthesizer to receive and transmit on the same channel (perhaps Channel 1), and turn off memory protection.  Turn on reception of sysex and program change (PC) messages.  Turn on transmission of sysex messages.
+
+<p><b>Loading Bank Patches</b> Perhaps because it can store only 32 patches, the DX7 is unusual among synths in that essentially all patches available on the web are grouped in 32-patch bank format rather than individually.  As a result, Edisyn knows how to load (but not save) bank sysex.  When Edisyn receives a bank sysex, either from the synth or loaded from a file, it will give you three options: (1) write the entire bank to the synthesizer, (2) save the bank as a sysex file, or (3) extract and edit a single patch from the bank.
+
+<p><b>Gotchas</b>
+
+<ul>
+<li>
+Some DX7 family synths (such as the TX816/TX216) can respond to a request for them to dump a patch to Edisyn.  Others (such as the DX7) cannot -- you will have to dump patches manually from the synth itself.  If you ask Edisyn to make a request for a dump or a merge, it'll do so but your DX7 won't understand it and you'll have to make the DX7 do it manually.
+<p><li>There is no way to write a patch to the DX7 family.  Instead, Edisyn will send the patch to working memory on the synth, and from there you need to manually write it to the patch location of your choice.
+</ul>
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>April 2018
+</table>
+

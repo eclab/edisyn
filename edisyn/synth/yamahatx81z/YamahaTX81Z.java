@@ -1044,7 +1044,6 @@ public class YamahaTX81Z extends Synth
         if (key.equals("number")) return new Object[0];  // this is not emittable
 
         byte channel = (byte)(16 + getChannelOut());
-             
          
         if (key.equals("name"))
             {

@@ -1190,7 +1190,7 @@ public class KorgMicroKorg extends Synth
                 // should be exactly the same.
                 model.set("channel" + j + "level", data[offset + ((j-1) * 2) + 46]);
                 if (data[offset + ((j-1) * 2) + 46] != data[offset + ((j-1) * 2) + 47])
-                    System.err.println("channel" + j + "level inconsistent in pair: " + data[offset + ((j-1) * 2) + 47]);
+                    System.err.println("Channel" + j + "level inconsistent in pair: " + data[offset + ((j-1) * 2) + 47]);
                 }
             for(int j = 1; j <= 8; j++)
                 {
@@ -1198,7 +1198,7 @@ public class KorgMicroKorg extends Synth
                 // should be exactly the same.
                 model.set("channel" + j + "pan", data[offset + ((j-1) * 2) + 62]);
                 if (data[offset + ((j-1) * 2) + 62] != data[offset + ((j-1) * 2) + 63])
-                    System.err.println("channel" + j + "pan inconsistent in pair: " + data[offset + ((j-1) * 2) + 63]);
+                    System.err.println("Channel" + j + "pan inconsistent in pair: " + data[offset + ((j-1) * 2) + 63]);
                 }
             for(int j = 1; j <= 16; j++)
                 {

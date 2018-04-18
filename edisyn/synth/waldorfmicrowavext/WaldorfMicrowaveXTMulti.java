@@ -944,7 +944,6 @@ public class WaldorfMicrowaveXTMulti extends Synth
         byte b = 0;
         for(int i = 0; i < bytes.length; i++)
             b += bytes[i];
-        //System.err.println("Checksum pre " + ((byte)(b & (byte)127)));
 
 
         // Section 2.12 says that the checksum includes BB and NN.
@@ -959,7 +958,6 @@ public class WaldorfMicrowaveXTMulti extends Synth
         
         
         b = (byte)(b & (byte)127);
-        //System.err.println("Checksum post " + b);
         
         return b;
         }

@@ -173,15 +173,17 @@ public class Blank extends Synth
         { 
         // This bulk patch data will come from a file or transmitted over sysex.
         // You should parse it into the model and return PARSE_SUCCEEDED if successful,
-        // PARSE_FAILED if the parse failed, and PARSE_INCOMPLETE if the parse was
+        // PARSE_FAILED if the parse failed -- and we assume this means that the editor
+        // data was *not* modified -- and PARSE_INCOMPLETE if the parse was
         // successful but not complete enough to assume that we have a full patch.
         // For example, the Yamaha TX81Z needs two separate parses of dumps before a patch
         // is complete -- you should only return PARSE_SUCCEEDED when the second one has come in.
+        // Additionally, PARSE_SUCCEEDED_UNTITLED should be returned if we don't want the
+        // patch's filename to be updated to reflect the loaded file, but otherwise the
+        // parse succeeded.
         // IGNOREPATCH tells you whether you should ignore any patch access
         // information (number, bank, etc.) embedded in the data or store it in the
         // model as well.   FROMFILE indicates that the parse is from a sysex file.
-        //
-        // If parse resulted in a successful and *complete* 
         return PARSE_FAILED; 
         }
         

@@ -26,7 +26,7 @@ public class KawaiK5 extends Synth
     {
     /// Various collections of parameter names for pop-up menus
         
-    public static final String[] BANKS = { "IA", "IB", "IC", "ID", "EA", "EB", "EC", "ED" };
+    public static final String[] BANKS = { "SIA", "SIB", "SIC", "SID", "SEA", "SEB", "SEC", "SED" };
     public static final String[] WHEEL_ASSIGNMENTS = new String[] { "Vibrato Depth", "Vibrato Speed" };
     public static final String[] DHG_SELECT = {"Live", "Die", "All"};
     public static final String[] ANGLES = {"-", "0", "+"};
@@ -72,7 +72,7 @@ public class KawaiK5 extends Synth
         {
         for(int i = 0; i < parameters.length; i++)
             {
-            System.err.println("" + parameters[i] + " " + Integer.valueOf(paramNumbers[i]));
+//            System.err.println("" + parameters[i] + " " + Integer.valueOf(paramNumbers[i]));
             parametersToIndex.put(parameters[i], Integer.valueOf(paramNumbers[i]));
             }
 
@@ -2313,10 +2313,10 @@ public class KawaiK5 extends Synth
         byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");
         
-        /// The K5 cannot change patches to and from internal or external I believe.  :-(
-        /// So I'm not sure what to do here.        
-        if (BB >= 8) BB -= 8;
-        int PC = (BB * 8 + NN);
+        /// NOTE: the K5 can't change to multi-mode with a program change, you have to send a special
+        /// sysex command.  But since we're doing single-mode here we're okay.
+        
+        int PC = (BB * 12 + NN);
         try 
             {
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
@@ -2330,11 +2330,11 @@ public class KawaiK5 extends Synth
         int number = model.get("number");
         
         number++;
-        if (number >= 8)
+        if (number >= 12)
             {
             bank++;
             number = 0;
-            if (bank >= 16)
+            if (bank >= 4)
                 bank = 0;
             }
                 
@@ -2352,7 +2352,7 @@ public class KawaiK5 extends Synth
         if (!model.exists("number")) return null;
         if (!model.exists("bank")) return null;
         
-        return BANKS[model.get("bank")] + (model.get("number") + 1 < 10 ? "0" : "") + ((model.get("number") + 1));
+        return BANKS[model.get("bank")] + "-" +  (model.get("number") + 1);
         }
         
 
@@ -3583,7 +3583,7 @@ public int loadDataUnified(byte[] data, int pos, int start, int end, int[] bit, 
 	{
 	for(int i = start; i < end; i++)
 		{
-		System.err.println("" + pos +  "(" + data[pos] + "): 0 - 7");
+//		System.err.println("" + pos +  "(" + data[pos] + "): 0 - 7");
 		model.set(parameters[i], data[pos++]);
 		}
 	return pos;
@@ -3596,7 +3596,7 @@ public int unloadData(byte[] data, int pos, int start, int end, int[] bit, int[]
 		{
 		for(int b = 0; b < bit.length; b++)
 			{
-			System.err.println("" + pos + "(" + data[pos] + "): " + bit[b] + " - " + (bit[b] + len[b]));
+//			System.err.println("" + pos + "(" + data[pos] + "): " + bit[b] + " - " + (bit[b] + len[b]));
 			model.set(parameters[i], (data[pos] >>> bit[b]) & (255 >>> (8 - len[b])));
 			i++;
 			}
@@ -3625,7 +3625,7 @@ public int unloadDataUnified(byte[] data, int pos, int start, int end, int[] bit
 			
 		for(int b = 0; b < bit.length; b++)
 			{
-			System.err.println("" + pos + "(" + data[pos] + "): " + bit[b] + " - " + (bit[b] + len[b]));
+//			System.err.println("" + pos + "(" + data[pos] + "): " + bit[b] + " - " + (bit[b] + len[b]));
 			int val = (data[pos] >>> bit[b]) & (255 >>> (8 - len[b]));
 			if (b == 0)
 				{

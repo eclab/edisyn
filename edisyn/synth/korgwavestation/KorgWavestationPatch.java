@@ -2111,6 +2111,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         
     public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
+        System.err.println("Merging " + isParsingForMerge());
         model.set("bank", wsToEdisynBank[data[5]]);
         model.set("number", data[6]);
                 
@@ -2278,18 +2279,10 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
     public static final int[] RATE_TAB = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 83, 85, 90, 95, 100, 110, 120, 130, 140, 150, 180, 210, 240, 270, 300, 400, 500, 600, 700 };
 
-/*
-  public boolean getSendsAllParametersInBulk()
-  {
-  return sendWavestationParametersInBulk;
-  }
-*/
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         if (tempModel == null)
             tempModel = getModel();
-
-		System.err.println(model);
             
         byte[] d = new byte[EXPECTED_SYSEX_LENGTH];
         d[0] = (byte)0xF0;
@@ -2659,7 +2652,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         
     public static String getSynthName() { return "Korg Wavestation SR [Patch]"; }
     
-    public String getname(Model model) { return model.get("name", "Init"); }
+    public String getPatchName(Model model) { return model.get("name", "Init"); }
     
 
     public Model getNextPatchLocation(Model model)

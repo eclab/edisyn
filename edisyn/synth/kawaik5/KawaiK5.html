@@ -2,30 +2,53 @@
 <body>
 
 
-<h1>Kawai K1</h1> 
+<h1>Kawai K5</h1> 
 <h2>Single Patch Editor</h2>
 
-<p>This editor will work with the <b>Kawai K1</b>, the <b>Kawai K1m</b>, and the <b>Kawai K1r</b>.
+<p>This editor will work with the <b>Kawai K5</b> and <b>Kawai K5m</b>.
 
-<p><b>Communicating with Edisyn</b> Turn of INT PROTCT and CARD PROTECT.  Set your K1 to receive Program Changes (set RCV PGM to NORM) and Exclusive (RCV EXCL).  See pages 38, 41, and 42 of the manual.  You'll also probably want your send channel and receive channel to be the same. 
+<p><b>Communicating with Edisyn</b> Turn of memory protect.  Set your K5 to transmit and receive &lt;SYSTEM&gt; MIDI on the
+same channel as you've set up Edisyn (perhaps channel 1?), and likewise to transmit and receive &lt;EXCLUSIVE&tg; MIDI on that
+same channel.
 
-<p><b>About the Menu</b> The Kawai K1 has no sysex command which would enable Edisyn to send a patch to its temporary memory.  However this is important to enable merging, nudging, hill-climbing, randomization, etc.  One way to get around this is to send individual parameters one by one.  However the K1 needs about 50ms after each and every parameter change.As a result, this approach (the menu option <b>"Send Parameters: Individually"</b>) takes several seconds, which is unacceptably slow for many things, particularly hill-climbing.
+<p><b>About the Menu</b> The Kawai K5 has no sysex command which would enable Edisyn to send a patch to its temporary memory.  
+However this is important to enable merging, nudging, hill-climbing, randomization, etc.  One way to get around this is to 
+send individual parameters one by one.  However the K5 has a great deal of parameters, so this approach (the menu option 
+<b>"Send Parameters: Individually"</b>) takes about a third of a second, which is pretty slow.
 
-<p>Edisyn offers an alternative: instead of sending a patch to temporary memory, you can <b>write</b> the patch to patch number iD-8 (the very last one) or eD-8 (if you're working on the external card).  This will erase and overwrite this patch and basically treat it as a scratch area: but it's fairly fast.  You can choose this option (and I suggest you do) with <b>"Send Parameters: In Bulk, Overwriting Patch iD-8"</b>.  You might want to back up that patch first.  If you messed up, or you need to restore iD-8 ("Rim+Snare"), you can find it in Edisyn's source distribution, under the Resources directory. 
+<p>Edisyn offers an alternative: instead of sending a patch to temporary memory, you can <b>write</b> the patch to 
+patch number SID-12 (the very last one).  This will erase and overwrite this patch and basically treat it as a 
+scratch area: but it's fairly fast.  You can choose this option (and I suggest you do) with 
+<b>"Send Parameters: In Bulk, Overwriting Patch iD-8"</b>.  You might want to back up that patch first.  
+
+<p><b>About the Harmonics Display</b>  Each Harmonics tab has a display.  This display is not like other displays in 
+Edisyn: you can edit it by clicking and dragging in it.  Note that as you hover over the display, the harmonic you'd be
+editing is highlighted in white, and the corresponding level dial has its number shown in red.  
+
+<P>The display has two parts: the lower part shows the harmonics level,
+and the upper part shows the choice of envelope (there are five choices: 0="off", 1, 2, 3, and 4).  If you are in <b>Full Mode</b>
+(see the Global tab), then the harmonics from <b>both voices</b> are shown together with a little divider line.  Otherwise only
+the harmonics from the displayed voice are shown.
+
+<p>You can constrain which harmonics will be affected by your editing.  For example, if you constrain the harmonics to "Odd",
+then only the odd harmonics will be edited when you drag your mouse over them.  The other harmonics will be drawn in gray
+to indicate that they are unaffected by you.  Note that there are several more harmonics options available to you than in the 
+K5's own editor.
+
+<p>You can also constrain which envelope will be set when you edit -- this is useful because it can be hard to precisely set
+the envelope using the display.  If you constrain the envelope to "3" for example, the the only options you'll be able to set
+will be 3 and OFF.
+
+<p>Last, you can set the harmonics to one of several <b>presets</b> such as sawtooth or square waves.
 
 <p><b>Gotchas</b>
 
 <ul>
-<li>The Kawai K1's sysex is <b>slow</b>: individual parameter changes can only occur once every 50ms.  Indeed Edisyn's patch editor has been set up so that every single MIDI event takes 50ms just in case.  See the discussion about menu options above.
-
-<p><li>Because the K1 has no easy way to send patches to temporary working memory (see menu options above), the <b>Send to Patch...</b> option has been disabled.
-
-<p><li>
-You can't set mute as a parameter change.  So when you set mute, Edisyn will just tell the synth to turn the volume (VCA Envelope Level) to 0 for that source.  Further, if you write a patch with mute set, Edisyn will write the patch with the mute unset, but zero the volume.  
-
-<p><p>This strategy works fine if your patch didn't have mute already set on the synth when you loaded it into Edisyn.  But if mute is set on the synth, then Edisyn can't do anything about when you change the mute value: it'll still be muted on the synth until you send or write the patch.  Long story short: when loading a patch, make sure it's entirely unmuted to avoid confusion.
-
-<p><li>When you update a parameter, it's not reflected on the K1's LCD until you move to something else and back again.  Also when you send a patch, the name isn't updated: but the sound has in fact been changed.
+<li>Every Kawai K5 harmonic is accompanied by an option to set an <b>envelope</b> and whether or not your selected envelope will have
+any effect (the <b>mod</b> parameter).  To save space these two parameters are joined in the same pop-up menu: the menu
+allows you to select OFF ("-"), 1, 2, 3, or 4.  However in the Harmonics (DHG) Envelopes Global category, there are similar
+options broken out: for example, the "All Env" option has a menu and a separate Mod parameter.  This is meant to be
+maximally confusing.  :-)
 
 </ul>
 
@@ -36,6 +59,6 @@ You can't set mute as a parameter change.  So when you set mute, Edisyn will jus
 <td><b>Sean Luke</b>
 <tr>
 <td align=right>Date&nbsp;&nbsp;&nbsp;
-<td>December 2017
+<td>April 2018
 </table>
 

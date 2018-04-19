@@ -299,7 +299,7 @@ public class KawaiK5 extends Synth
         if (sendKawaiParametersInBulk == false) 
             separately.setSelected(true);
 
-        JRadioButtonMenuItem bulk = new JRadioButtonMenuItem("In Bulk, Overwriting Patch iD-8");
+        JRadioButtonMenuItem bulk = new JRadioButtonMenuItem("In Bulk, Overwriting Patch SID-12");
         bulk.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt)
@@ -726,11 +726,11 @@ public class KawaiK5 extends Synth
  
     void setHarmonic(int index, double val)
         {
-		if (index < 63)
+		if (index >= 0 && index < 63)
 			{
 			model.set("dhgs" + 1 + "harm" + (index + 1) + "level", (int)(val * 99));
 			}
-		else if (index > 63)
+		else if (index > 63 && index < 127)
 			{
 			model.set("dhgs" + 2 + "harm" + (index + 1 - 64) + "level", (int)(val * 99));
 			}
@@ -770,45 +770,59 @@ public class KawaiK5 extends Synth
             {
             public void perform(int i)
                 {
+                int start = 0;
+                int end = 127;
+                if (getModel().get("mode", 0) == 0)
+                	{
+                	if (source == 1)
+                		{ start = 0; end = 63; }
+                	else
+                		{ start = 64; end = 127; }
+                	}
+                
+                int initial = 0;
                 switch (i)
                     {
                     case SAWTOOTH:
                         {
-                        for(int h = 0; h < 128; h++)
+                        for(int h = start; h < end; h++)
                             {
-                            setHarmonic(h, 1.0 / (h + 1));
+                            setHarmonic(h, 1.0 / (initial + 1));
+                            initial++;
                             }
                         }
                     break;
                     case SQUARE:
                         {
-                        for(int h = 1; h < 128; h += 2)
+                        for(int h = start; h < end; h += 2)
                             {
                             setHarmonic(h, 0);
                             }
 
-                        for(int h = 0; h < 128; h += 2)
+                        for(int h = start; h < end; h += 2)
                             {
-                            setHarmonic(h, 1.0 / (h + 1));
+                            setHarmonic(h, 1.0 / (initial + 1));
+                            initial++;
                             }
                         }
                     break;
                     case PSEUDO_TRIANGLE:
                         {
-                        for(int h = 0; h < 128; h++)
+                        for(int h = start; h < end; h++)
                             {
                             setHarmonic(h, 0);
                             }
 
-                        for(int h = 0; h < 128; h += 4)
+                        for(int h = start; h < end; h += 4)
                             {
-                            setHarmonic(h, 1.0 / ((h + 1) * (h + 1)));
+                            setHarmonic(h, 1.0 / ((initial + 1) * (initial + 1)));
+                            initial++;
                             }
                         }
                     break;
                     case ALL_OFF:
                         {
-                        for(int h = 0; h < 128; h++)
+                        for(int h = start; h < end; h++)
                             {
                             setHarmonic(h, 0.0);
                             }
@@ -816,7 +830,7 @@ public class KawaiK5 extends Synth
                     break;
                     case ALL_ON:
                         {
-                        for(int h = 0; h < 128; h++)
+                        for(int h = start; h < end; h++)
                             {
                             setHarmonic(h, 1.0);
                             }
@@ -1355,6 +1369,8 @@ public class KawaiK5 extends Synth
   model.setStatus("dhgs" + source + "select", Model.STATUS_IMMUTABLE);
         model.set("dhgs" + source + "angle", 0);
   model.setStatus("dhgs" + source + "angle", Model.STATUS_IMMUTABLE);
+        model.set("dhgs" + source + "harmsel", 0);
+  model.setStatus("dhgs" + source + "harmsel", Model.STATUS_IMMUTABLE);
 
 
 /*
@@ -1555,7 +1571,7 @@ public class KawaiK5 extends Synth
         
         VBox vbox = new VBox();
         params = MAX_SEGMENTS;
-        comp = new Chooser("Max Segment", this, "ddfs" + source + "maxsegonoff", params);
+        comp = new Chooser("Max Segment", this, "ddfs" + source + "envmaxsegonoff", params);
         vbox.add(comp);
 		hbox.add(vbox);
 		
@@ -1678,14 +1694,14 @@ public class KawaiK5 extends Synth
         
         VBox vbox = new VBox();
         params = MAX_SEGMENTS;
-        comp = new Chooser("Max Segment", this, "ddas" + source + "maxsegonoff", params);
+        comp = new Chooser("Max Segment", this, "ddas" + source + "envmaxsegonoff", params);
         vbox.add(comp);
 		hbox.add(vbox);
 
         vbox = new VBox();
         comp = new LabelledDial("Rate 1", this, "ddas" + source + "envseg1rate", color, 0, 31);
         vbox.add(comp);
-        comp = new CheckBox("Mod", this, "ddas" + source + "envseg1modonoff", true);
+        comp = new CheckBox("Mod", this, "ddas" + source + "envseg1modonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);
         vbox = new VBox();
@@ -1696,7 +1712,7 @@ public class KawaiK5 extends Synth
                 
         comp = new LabelledDial("Rate 2", this, "ddas" + source + "envseg2rate", color, 0, 31);
         vbox.add(comp);
-        comp = new CheckBox("Mod", this, "ddas" + source + "envseg2modonoff", true);
+        comp = new CheckBox("Mod", this, "ddas" + source + "envseg2modonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);
         vbox = new VBox();
@@ -1707,7 +1723,7 @@ public class KawaiK5 extends Synth
 
         comp = new LabelledDial("Rate 3", this, "ddas" + source + "envseg3rate", color, 0, 31);
         vbox.add(comp);
-        comp = new CheckBox("Mod", this, "ddas" + source + "envseg3modonoff", true);
+        comp = new CheckBox("Mod", this, "ddas" + source + "envseg3modonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);
         vbox = new VBox();
@@ -1718,7 +1734,7 @@ public class KawaiK5 extends Synth
 
         comp = new LabelledDial("Rate 4", this, "ddas" + source + "envseg4rate", color, 0, 31);
         vbox.add(comp);
-        comp = new CheckBox("Mod", this, "ddas" + source + "envseg4modonoff", true);
+        comp = new CheckBox("Mod", this, "ddas" + source + "envseg4modonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);
         vbox = new VBox();
@@ -1729,7 +1745,7 @@ public class KawaiK5 extends Synth
 
         comp = new LabelledDial("Rate 5", this, "ddas" + source + "envseg5rate", color, 0, 31);
         vbox.add(comp); 
-        comp = new CheckBox("Mod", this, "ddas" + source + "envseg5modonoff", true);
+        comp = new CheckBox("Mod", this, "ddas" + source + "envseg5modonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);
         vbox = new VBox();
@@ -1741,7 +1757,7 @@ public class KawaiK5 extends Synth
 
         comp = new LabelledDial("Rate 6", this, "ddas" + source + "envseg6rate", color, 0, 31);
         vbox.add(comp);
-        comp = new CheckBox("Mod", this, "ddas" + source + "envseg6modonoff", true);
+        comp = new CheckBox("Mod", this, "ddas" + source + "envseg6modonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);
         vbox = new VBox();
@@ -1752,7 +1768,7 @@ public class KawaiK5 extends Synth
 
         comp = new LabelledDial("Rate 7", this, "ddas" + source + "envseg7rate", color, 0, 31);
         vbox.add(comp);
-        comp = new CheckBox("Mod", this, "ddas" + source + "envseg7modonoff", true);
+        comp = new CheckBox("Mod", this, "ddas" + source + "envseg7modonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);
         vbox = new VBox();
@@ -1783,8 +1799,7 @@ public class KawaiK5 extends Synth
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
-                
-
+    
     // The K5 can't send to temporary memory
     public boolean getSendsAllParametersInBulk() { return sendKawaiParametersInBulk; }
 
@@ -1793,6 +1808,23 @@ public class KawaiK5 extends Synth
         // we have to check for these or else they'll trigger later
         if (key.equals("dhgs1harm")) return new Object[0];
         if (key.equals("dhgs2harm")) return new Object[0];
+        if (key.equals("dhgs1odd") ||
+        	key.equals("dhgs1even") ||
+        	key.equals("dhgs1octave") ||
+        	key.equals("dhgs1fifth") ||
+        	key.equals("dhgs1select") ||
+        	key.equals("dhgs1all") ||
+        	key.equals("dhgs2odd") ||
+        	key.equals("dhgs2even") ||
+        	key.equals("dhgs2octave") ||
+        	key.equals("dhgs2fifth") ||
+        	key.equals("dhgs2select") ||
+        	key.equals("dhgs2all")) return new Object[0];
+        if (key.equals("constrainharmonics") || 
+        	key.equals("constrainmodharmonics")) return new Object[0];
+        if (key.equals("bank")) return new Object[0];
+        if (key.equals("number")) return new Object[0];
+	
         
         // WE don't bother with bank,  number, and a few others.
         // Also we don't presently emit 181, 182, 183, 183, or 185 (inc/dec the odd/even/oct/5th/all options), see Note 6-4)
@@ -1803,11 +1835,11 @@ public class KawaiK5 extends Synth
         int source = 0;  // doesn't matter
         if (key.startsWith("basics"))
         	{
-        	source = (key.charAt(6) == 1 ? 0 : 1);
+        	source = (key.charAt(6) == '1' ? 0 : 1);
         	}
         else if (key.startsWith("kss"))
         	{
-        	source = (key.charAt(3) == 1 ? 0 : 1);
+        	source = (key.charAt(3) == '1' ? 0 : 1);
         	}
         else if (key.startsWith("dhgs") || 
 	        	key.startsWith("ddas") || 
@@ -1815,19 +1847,22 @@ public class KawaiK5 extends Synth
         		key.startsWith("dhgs") || 
         		key.startsWith("dfgs"))
         	{
-        	source = (key.charAt(4) == 1 ? 0 : 1);
-        	}
-        
+        	source = (key.charAt(4) == '1' ? 0 : 1);
+        	}        
 
         if (key.equals("name"))
         	{
         	String name = model.get(key, "        ") + "        ";
-        	data = new Object[8];
-        	for(int i = 0; i < data.length; i++)
+        	data = new Object[15];
+        	for(int i = 0; i < data.length; i += 2)
         		{
-        		byte c = (byte)(name.charAt(i));
-          		int paramNum = (byte)(200 + i);
-      			data[i] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
+        		byte c = (byte)(name.charAt(i/2));
+          		int paramNum = (byte)(200 + i/2);
+      			data[i] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, 
+      							(byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), 
+      							(byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
+      			if (i + 1 < data.length) 
+      				data[i + 1] = Integer.valueOf(30);
         		}
         	return data;
         	}
@@ -1852,35 +1887,45 @@ public class KawaiK5 extends Synth
         	data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127),(byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
         	return data;
         	}
-        else if (key.startsWith("dhgs1harm") || key.startsWith("dhgs2harm"))  // harmonics
+        else if ((key.startsWith("dhgs1harm") || key.startsWith("dhgs2harm")) && !(key.equals("dhgs1harmsel") || key.equals("dhgs2harmsel")))  // harmonics
         	{
 			String[] numbers = key.split("[\\D]+");
+			//System.err.println(key);
+			//for(int i = 0; i < numbers.length; i++)
+			//	System.err.println(numbers[i]);
 			int harmonic = Integer.parseInt(numbers[2]);
         	
         	if (key.endsWith("envselmodyn"))
         		{
         		int c = model.get(key, 0);
         		int mod = (c == 0 ? 0 : 1);
-        		int env = (c == 0 ? model.get(key + "-env", 0) : c - 1);  // use the default if need be
+        		int env = (c == 0 ? model.get(key + "-env", 0) + 1 : c);  // use the default if need be.  Note that it's 1...4, not 0...3.  Don't ask.
 
-				data = new Object[3];
+				data = new Object[5];
 				int paramNum = 40;
 				data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((harmonic >>> 4) & 0xF), (byte)(harmonic & 0xF), (byte)0xF7 };
+				data[1] = Integer.valueOf(30);
 				paramNum = 42;
-				data[1] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((env >>> 4) & 0xF), (byte)(env & 0xF), (byte)0xF7 };
+				data[2] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((env >>> 4) & 0xF), (byte)(env & 0xF), (byte)0xF7 };
+				data[3] = Integer.valueOf(30);
 				paramNum = 43;
-				data[2] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((mod >>> 4) & 0xF), (byte)(mod & 0xF), (byte)0xF7 };
+				data[4] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((mod >>> 4) & 0xF), (byte)(mod & 0xF), (byte)0xF7 };
         		}
         	else if(key.endsWith("level"))
         		{
-        		data = new Object[2];
+        		data = new Object[3];
         		int level = model.get(key, 0);
         		int paramNum = 40;
         		data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((harmonic >>> 4) & 0xF), (byte)(harmonic & 0xF), (byte)0xF7 };
+				data[1] = Integer.valueOf(30);
         		paramNum = 41;
-        		data[1] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((level >>> 4) & 0xF), (byte)(level & 0xF), (byte)0xF7 };
+        		data[2] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((level >>> 4) & 0xF), (byte)(level & 0xF), (byte)0xF7 };
         		}
-        	else System.err.println("Dunno what's that Key " + key);
+        	else 
+        		{
+        		// all the -env stuff will go here
+        		return new Object[0];
+        		}
         		
 			return data;        	
         	}
@@ -2035,8 +2080,8 @@ public class KawaiK5 extends Synth
         pos = unloadDataUnified(data, pos, dhgs1env1maxseg1onoff, dhgs1env1seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 }, new int[] { dhgs1shadowonoff, dhgs2shadowonoff } );
                 
         // handle shadow specially
-        model.set("s1envshadowonoff", (data[shadowpos] & 255) >>> 7);
-        model.set("s2envshadowonoff", (data[shadowpos + 1] & 255) >>> 7);
+        model.set("dhgs1shadowonoff", (data[shadowpos] & 255) >>> 7);
+        model.set("dhgs2shadowonoff", (data[shadowpos + 1] & 255) >>> 7);
         
         pos = unloadData(data, pos, dhgs1env1seg1rate, dhgs1env2maxseg1onoff);
         pos = unloadDataUnified(data, pos, dhgs1env2maxseg1onoff, dhgs1env2seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 } );
@@ -2070,17 +2115,24 @@ public class KawaiK5 extends Synth
         
     public void sendAllParameters()
         {
-        super.sendAllParameters();
-        
-        // we change patch to #63 if we're sending in bulk.
+        super.sendAllParameters();        
+
+       // we change patch to SID-12 if we're sending in bulk.
         if (sendKawaiParametersInBulk)
             {
-            Model tempModel = new Model();
-            tempModel.set("bank", 7);
-            tempModel.set("number", 7);
+ 			// for some insane reason, we must pause somewhat AFTER we have written the patch but 
+ 			// BEFORE we change the patch to SID-12 or else it won't get
+ 			// properly loaded into the patch.  I cannot explain it.  And it's a lot!
+ 			
+ 			simplePause(400);  // think this is the right amount -- 300 won't cut it
+
+           Model tempModel = new Model();
+            tempModel.set("bank", 3);
+            tempModel.set("number", 11);
             changePatch(tempModel);
-            }
-        }
+  			simplePause(getPauseAfterChangePatch());
+           }
+         }
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
@@ -2159,8 +2211,8 @@ public class KawaiK5 extends Synth
         pos = loadDataUnified(data, pos, dhgs1env1maxseg1onoff, dhgs1env1seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 }, new int[] { dhgs1shadowonoff, dhgs2shadowonoff } );
         
         // handle shadow specially
-        data[shadowpos] = (byte)(data[shadowpos] | (model.get("s1envshadowonoff", 0) << 7));
-        data[shadowpos + 1] = (byte)(data[shadowpos + 1] | (model.get("s2envshadowonoff", 0) << 7));
+        data[shadowpos] = (byte)(data[shadowpos] | (model.get("dhgs1shadowonoff", 0) << 7));
+        data[shadowpos + 1] = (byte)(data[shadowpos + 1] | (model.get("dhgs2shadowonoff", 0) << 7));
         
         pos = loadData(data, pos, dhgs1env1seg1rate, dhgs1env2maxseg1onoff);
         pos = loadDataUnified(data, pos, dhgs1env2maxseg1onoff, dhgs1env2seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 } );
@@ -2215,11 +2267,15 @@ public class KawaiK5 extends Synth
         result[5] = (byte)0x02;
         result[6] = (byte)0x00;
         result[7] = (byte)(tempModel.get("bank") * 12 + (tempModel.get("number")));
+        
+        if (toWorkingMemory) // we're gonna write to SID-12 instead
+        	result[7] = (byte)(47);
+        	
         int v = 8;
         for(int i = 0; i < pos; i++)
         	{
         	result[v++] = (byte)((data[i] & 0xFF) >>> 4);
-        	System.err.println("" + (i + 8) + " " + data[i]);
+//        	System.err.println("" + (i + 8) + " " + data[i]);
         	result[v++] = (byte)(data[i] & 0xF);
         	}
         result[v] = (byte)0xF7;
@@ -2305,8 +2361,8 @@ public class KawaiK5 extends Synth
     
     public String getPatchName(Model model) { return model.get("name", "INIT    "); }
 
-    public int getPauseAfterChangePatch() { return 150; }   // Seem to need about > 100ms
-//    public double getPauseBetweenMIDISends() { return 50;  }  // :-(  :-(
+    public int getPauseAfterChangePatch() { return 10; }
+    public int getPauseAfterSendOneParameter() { return 30; }  // Sad, needs 30ms
  
     public void changePatch(Model tempModel)
         {

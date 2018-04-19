@@ -8,6 +8,8 @@ import java.util.*;
 
 public class Undo
     {
+    public static final boolean debug = false;
+    
     public ArrayDeque<Model> undo = new ArrayDeque();
     public ArrayDeque<Model> redo = new ArrayDeque();
     public Synth synth;        
@@ -28,10 +30,14 @@ public class Undo
     public void push(Model obj)
         {
         if (!willPush)
+            {
+            if (debug) System.err.println("Did not push " + obj);
             return;
+            }
         undo.push((Model)(obj.clone()));
         redo.clear();
         synth.updateUndoMenus();
+        if (debug) System.err.println("Pushed " + obj);
         }
         
     public Model top()
@@ -45,13 +51,18 @@ public class Undo
         {
         if (undo.isEmpty())
             {
+            if (debug) System.err.println("Empty Undo" + current);
             synth.updateUndoMenus();
             return current;
             }
         if (current != null)
+            {
+            if (debug) System.err.println("Pushing on Redo" + current);
             redo.push((Model)(current.clone()));
+            }
         Model model = undo.pop();
         synth.updateUndoMenus();
+        if (debug) System.err.println("Undo " + current + " to " + model + " Left: " + undo.size());
         return model;        
         }
                 
@@ -59,13 +70,18 @@ public class Undo
         {
         if (redo.isEmpty())
             {
+            if (debug) System.err.println("Empty Redo " + current);
             synth.updateUndoMenus();
             return current;
             }
         if (current != null)
+            {
+            if (debug) System.err.println("Pushing on Undo" + current);
             undo.push((Model)(current.clone()));
+            }
         Model model = redo.pop();
         synth.updateUndoMenus();
+        if (debug) System.err.println("Redo " + current + " to " + model + " Left: " + redo.size());
         return model;
         }
     }

@@ -102,7 +102,7 @@ public class CrossfadeEnvelopeDisplay extends JComponent implements Updatable
         model.register(seqIndexKey, this);
         model.register(seqLenKey, this);
         if (magnifyKey != null)
-        	model.register(magnifyKey, this);
+            model.register(magnifyKey, this);
                         
         setBackground(Style.BACKGROUND_COLOR());
         }
@@ -122,7 +122,7 @@ public class CrossfadeEnvelopeDisplay extends JComponent implements Updatable
 
         int magnify = 1;
         if (magnifyKey != null)
-        	magnify = model.get(magnifyKey, 1);
+            magnify = model.get(magnifyKey, 1);
         
         rect.width -= Style.ENVELOPE_DISPLAY_BORDER_THICKNESS() * 2;
         rect.height -= Style.ENVELOPE_DISPLAY_BORDER_THICKNESS() * 2;
@@ -133,10 +133,10 @@ public class CrossfadeEnvelopeDisplay extends JComponent implements Updatable
         int seqLen = model.get(seqLenKey, 0);
         int seqIndex = model.get(seqIndexKey, 0) - model.getMin(seqIndexKey);
         int start = seqIndex;
-       /* if (start > 0)
-            start --; */
+        /* if (start > 0)
+           start --; */
         if (start < 0)
-        	start = 0;
+            start = 0;
         else if (start > 0)
             start --;
                         

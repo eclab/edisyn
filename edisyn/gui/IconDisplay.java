@@ -31,7 +31,22 @@ public class IconDisplay extends JComponent implements Updatable
         icon.repaint();
         }
 
+    public IconDisplay(String label, ImageIcon[] icons, Synth synth, String key, int width, int height)
+        {
+        for(int i = 0; i < icons.length; i++)
+            {
+            icons[i] = new ImageIcon(icons[i].getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH));
+            }
+        buildIconDisplay(label, icons, synth, key);
+        }
+
+
     public IconDisplay(String label, ImageIcon[] icons, Synth synth, String key)
+        {
+        buildIconDisplay(label, icons, synth, key);
+        }
+
+    public void buildIconDisplay(String label, ImageIcon[] icons, Synth synth, String key)
         {
         this.synth = synth;
         this.key = key;

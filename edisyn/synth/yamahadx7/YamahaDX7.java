@@ -77,7 +77,7 @@ public class YamahaDX7 extends Synth
     public static final int POSLINEAR = 3;
     
     public static final String[] KS_CURVES = { "- Linear", "- Exp", "+ Exp", "+ Linear" };
-	public static final String[] NOTES = {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#" };
+    public static final String[] NOTES = {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#" };
 
 
     public JFrame sprout()
@@ -119,14 +119,14 @@ public class YamahaDX7 extends Synth
         
         hbox = new HBox();
         hbox.add(addOperator(1, Style.COLOR_A()));
-    	hbox.add(addKeyScaling(1, Style.COLOR_A()));
-    	vbox.add(hbox);
+        hbox.add(addKeyScaling(1, Style.COLOR_A()));
+        vbox.add(hbox);
         vbox.add(addEnvelope(1, Style.COLOR_B()));
 
         hbox = new HBox();
         hbox.add(addOperator(2, Style.COLOR_A()));
-    	hbox.add(addKeyScaling(2, Style.COLOR_A()));
-    	vbox.add(hbox);
+        hbox.add(addKeyScaling(2, Style.COLOR_A()));
+        vbox.add(hbox);
         vbox.add(addEnvelope(2, Style.COLOR_B()));
 
         sourcePanel.add(vbox, BorderLayout.CENTER);
@@ -137,14 +137,14 @@ public class YamahaDX7 extends Synth
         
         hbox = new HBox();
         hbox.add(addOperator(3, Style.COLOR_A()));
-    	hbox.add(addKeyScaling(3, Style.COLOR_A()));
-    	vbox.add(hbox);
+        hbox.add(addKeyScaling(3, Style.COLOR_A()));
+        vbox.add(hbox);
         vbox.add(addEnvelope(3, Style.COLOR_B()));
 
         hbox = new HBox();
         hbox.add(addOperator(4, Style.COLOR_A()));
-    	hbox.add(addKeyScaling(4, Style.COLOR_A()));
-    	vbox.add(hbox);
+        hbox.add(addKeyScaling(4, Style.COLOR_A()));
+        vbox.add(hbox);
         vbox.add(addEnvelope(4, Style.COLOR_B()));
 
         sourcePanel.add(vbox, BorderLayout.CENTER);
@@ -155,14 +155,14 @@ public class YamahaDX7 extends Synth
         
         hbox = new HBox();
         hbox.add(addOperator(5, Style.COLOR_A()));
-    	hbox.add(addKeyScaling(5, Style.COLOR_A()));
-    	vbox.add(hbox);
+        hbox.add(addKeyScaling(5, Style.COLOR_A()));
+        vbox.add(hbox);
         vbox.add(addEnvelope(5, Style.COLOR_B()));
 
         hbox = new HBox();
         hbox.add(addOperator(6, Style.COLOR_A()));
-    	hbox.add(addKeyScaling(6, Style.COLOR_A()));
-    	vbox.add(hbox);
+        hbox.add(addKeyScaling(6, Style.COLOR_A()));
+        vbox.add(hbox);
         vbox.add(addEnvelope(6, Style.COLOR_B()));
 
         sourcePanel.add(vbox, BorderLayout.CENTER);
@@ -173,7 +173,7 @@ public class YamahaDX7 extends Synth
         loadDefaults();        
         }
                 
-   public String getDefaultResourceFileName() { return "YamahaDX7.init"; }
+    public String getDefaultResourceFileName() { return "YamahaDX7.init"; }
     public String getHTMLResourceFileName() { return "YamahaDX7.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
@@ -346,8 +346,8 @@ public class YamahaDX7 extends Synth
     public JComponent addPitchEnvelope(Color color)
         {
         Category category = new Category(this, "Pitch Envelope", color);
-		category.makeDistributable("pitcheg");
-		
+        category.makeDistributable("pitcheg");
+                
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -357,30 +357,30 @@ public class YamahaDX7 extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Level 1", this,  "pitcheglevel1", color, 0, 99)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public int getDefaultValue() { return 50; }
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public int getDefaultValue() { return 50; }
+            };
         hbox.add(comp);
 
         comp = new LabelledDial("Rate 2", this,  "pitchegrate2", color, 0, 99);
         hbox.add(comp);
 
         comp = new LabelledDial("Level 2", this,  "pitcheglevel2", color, 0, 99)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public int getDefaultValue() { return 50; }
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public int getDefaultValue() { return 50; }
+            };
         hbox.add(comp);
 
         comp = new LabelledDial("Rate 3", this,  "pitchegrate3", color, 0, 99);
         hbox.add(comp);
 
         comp = new LabelledDial("Level 3", this,  "pitcheglevel3", color, 0, 99)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public int getDefaultValue() { return 50; }
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public int getDefaultValue() { return 50; }
+            };
         hbox.add(comp);
 
 
@@ -388,10 +388,10 @@ public class YamahaDX7 extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Level 4", this,  "pitcheglevel4", color, 0, 99)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public int getDefaultValue() { return 50; }
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public int getDefaultValue() { return 50; }
+            };
         ((LabelledDial)comp).addAdditionalLabel("(Start/End) ");
         hbox.add(comp);
 
@@ -401,14 +401,14 @@ public class YamahaDX7 extends Synth
             new String[] {   "pitcheglevel4",   "pitcheglevel1",   "pitcheglevel2",   "pitcheglevel3",   "pitcheglevel4" },
             new double[] { 0, 0.25/99, 0.25/99, 0.25/99, 0.25/99 },
             new double[] { 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99 })
-            	{
-    			public void postProcess(double[] xVals, double[] yVals)
-    				{
-    				// The DX7 uses 99 for SHORT and 0 for LONG, weird
-    				for(int i = 1; i < 5; i++)
-    					xVals[i] = 0.25 - xVals[i];
-    				}
-            	};
+            {
+            public void postProcess(double[] xVals, double[] yVals)
+                {
+                // The DX7 uses 99 for SHORT and 0 for LONG, weird
+                for(int i = 1; i < 5; i++)
+                    xVals[i] = 0.25 - xVals[i];
+                }
+            };
         ((EnvelopeDisplay)comp).setAxis(50.0 / 99.0);  // it seems 50 is the standard midpoint
         hbox.addLast(comp);
                 
@@ -437,16 +437,16 @@ public class YamahaDX7 extends Synth
         hbox.add(vbox);
 
         comp = new LabelledDial("Breakpoint", this, "operator" + src + "keyboardlevelscalingbreakpoint", color, 0, 99)
-        	{
-        	public String map(int val)
-        		{
-        		int oct = (val - 3) / 12;
-        		return NOTES[val % 12] + oct;
-        		}
-        	public boolean isSymmetric() { return true; }
-        	public int getDefaultValue() { return 50; }
-        	
-        	};
+            {
+            public String map(int val)
+                {
+                int oct = (val - 3) / 12;
+                return NOTES[val % 12] + oct;
+                }
+            public boolean isSymmetric() { return true; }
+            public int getDefaultValue() { return 50; }
+                
+            };
         hbox.add(comp);
         
         comp = new LabelledDial("Left Depth", this, "operator" + src + "keyboardlevelscalingleftdepth", color, 0, 99);
@@ -455,13 +455,13 @@ public class YamahaDX7 extends Synth
         comp = new LabelledDial("Right Depth", this, "operator" + src + "keyboardlevelscalingrightdepth", color, 0, 99);
         hbox.add(comp);
         
-		hbox.add(new YamahaDX7Curve(this, 
-			"operator" + src + "keyboardlevelscalingbreakpoint",
-			"operator" + src + "keyboardlevelscalingleftcurve",
-			"operator" + src + "keyboardlevelscalingrightcurve",
-			"operator" + src + "keyboardlevelscalingleftdepth",
-			"operator" + src + "keyboardlevelscalingrightdepth"
-			));
+        hbox.add(new YamahaDX7Curve(this, 
+                "operator" + src + "keyboardlevelscalingbreakpoint",
+                "operator" + src + "keyboardlevelscalingleftcurve",
+                "operator" + src + "keyboardlevelscalingrightcurve",
+                "operator" + src + "keyboardlevelscalingleftdepth",
+                "operator" + src + "keyboardlevelscalingrightdepth"
+                ));
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -482,7 +482,7 @@ public class YamahaDX7 extends Synth
         VBox vbox = new VBox();
         comp = new CheckBox("Fixed", this, "operator" + src + "oscillatormode");
         vbox.add(comp);
-		hbox.add(vbox);
+        hbox.add(vbox);
 
         comp = new LabelledDial("Amp. Mod", this, "operator" + src + "amplitudemodulationsensitivity", color, 0, 3);
         ((LabelledDial)comp).addAdditionalLabel("Sensivity");
@@ -507,13 +507,13 @@ public class YamahaDX7 extends Synth
             public String map(int val)
                 {
                 if (model.get("operator" + src + "oscillatormode", 0) == 0)
-                	{
-                	return RATIO_COARSE[val];
-                	}
+                    {
+                    return RATIO_COARSE[val];
+                    }
                 else
-                	{
-                	return FIXED_COARSE[val];
-                	}
+                    {
+                    return FIXED_COARSE[val];
+                    }
                 }               
             };
         ((LabelledDial)comp).addAdditionalLabel("Coarse");
@@ -525,13 +525,13 @@ public class YamahaDX7 extends Synth
             public String map(int val)
                 {
                 if (model.get("operator" + src + "oscillatormode", 0) == 0)
-                	{
-                	return RATIO_FINE[val];
-                	}
+                    {
+                    return RATIO_FINE[val];
+                    }
                 else
-                	{
-                	return FIXED_FINE[val];
-                	}
+                    {
+                    return FIXED_FINE[val];
+                    }
                 }               
             };
         ((LabelledDial)comp).addAdditionalLabel("Fine");
@@ -547,7 +547,7 @@ public class YamahaDX7 extends Synth
         {
         Category category = new Category(this, "Operator Envelope " + envelope, color);
         category.makePasteable("operator");
-		category.makeDistributable("operator", true);
+        category.makeDistributable("operator", true);
 
         JComponent comp;
         String[] params;
@@ -557,7 +557,7 @@ public class YamahaDX7 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
         
-    	hbox.add(Strut.makeHorizontalStrut(30));
+        hbox.add(Strut.makeHorizontalStrut(30));
     
         comp = new LabelledDial("Rate 1", this, "operator" + envelope + "rate1", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("(Attack)");
@@ -594,14 +594,14 @@ public class YamahaDX7 extends Synth
             new String[] { "operator" + envelope + "level4", "operator" + envelope + "level1", "operator" + envelope + "level2", "operator" + envelope + "level3",  "operator" + envelope + "level3", "operator" + envelope + "level4" },
             new double[] { 0, 0.2/99, 0.2/99, 0.2/99, 0.0, 0.2/99 },
             new double[] { 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99 })
-            	{
-    			public void postProcess(double[] xVals, double[] yVals)
-    				{
-    				// The DX7 uses 99 for SHORT and 0 for LONG, weird
-    				for(int i = 1; i < 6; i++)
-    					xVals[i] = 0.2 - xVals[i];
-    				}
-            	};
+            {
+            public void postProcess(double[] xVals, double[] yVals)
+                {
+                // The DX7 uses 99 for SHORT and 0 for LONG, weird
+                for(int i = 1; i < 6; i++)
+                    xVals[i] = 0.2 - xVals[i];
+                }
+            };
         hbox.addLast(comp);
                 
         category.add(hbox, BorderLayout.CENTER);
@@ -835,13 +835,13 @@ public class YamahaDX7 extends Synth
         {
         FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save Bank to Sysex File...", FileDialog.SAVE);
 
-		if (getPatchName(getModel()) != null)
-			fd.setFile(reviseFileName(getPatchName(getModel()).trim() + ".syx"));
-		else
-			fd.setFile(reviseFileName("Untitled.syx"));
-		String path = getLastDirectory();
-		if (path != null)
-			fd.setDirectory(path);
+        if (getPatchName(getModel()) != null)
+            fd.setFile(reviseFileName(getPatchName(getModel()).trim() + ".syx"));
+        else
+            fd.setFile(reviseFileName("Untitled.syx"));
+        String path = getLastDirectory();
+        if (path != null)
+            fd.setDirectory(path);
             
         fd.setVisible(true);
         File f = null; // make compiler happy
@@ -875,191 +875,191 @@ public class YamahaDX7 extends Synth
     public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         if (data[3] == 0)  // 1 single
-        	{
-	        // yay for DX7 simplicity
-	        for(int i = 0; i < allParameters.length - 10; i++)
-	    		{
-	    		model.set(allParameters[i], data[i + 6]);
-	    		}
-	    	
-	    	char[] name = new char[10];
-	    	for(int i = 0; i < 10; i ++)
-	    		{
-	    		name[i] = (char)(data[allParameters.length - 10 + i + 6] & 127);
-	    		}
-	    	model.set("name", new String(name));
-	    	
-	    	revise();
-	    	return PARSE_SUCCEEDED;
-	    	}
-	    else			// bulk
-	    	{
-	    	// extract names
-	    	char[][] names = new char[32][10];
-	    	for(int i = 0; i < 32; i++)
-	    		{
-	    		for (int j = 0; j < 10; j++)
-	    			{
-	    			names[i][j] = (char)(data[6 + (i * 128) + 118 + j] & 127);
-	    			}
-	    		}
-	    		
-	    	String[] n = new String[32];
-	    	for(int i = 0; i < 32; i++)
-	    		{
-	    		n[i] = "" + (i + 1) + "   " + new String(names[i]);
-	    		}
-	    		
-			while(true)
-				{
-				Color color = new JPanel().getBackground();
-				HBox hbox = new HBox();
-				hbox.setBackground(color);
-				VBox vbox = new VBox();
-				vbox.setBackground(color);
-				vbox.add(new JLabel("   "));
-				vbox.add(new JLabel("<html>A Bank Sysex has been received.  You can <b>save</b> the sysex to a file,</html>"));
-				vbox.add(new JLabel("<html><b>write</b> the sysex to the synth, or <b>edit</b> a patch from the list below.</html>"));
-				vbox.add(new JLabel("   "));
-				hbox.addLast(vbox);
-				vbox = new VBox();
-				vbox.setBackground(color);
-				vbox.add(hbox);
-				JComboBox box = new JComboBox(n);
-				vbox.add(box);
-				
-				int result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Edit Patch", "Save", "Write", "Cancel" }, "Edit Patch");
-			
-				if (result == 3 || result < 0)  // cancel?
-					{
-					return PARSE_FAILED;
-					}
-				else if (result == 2)	// write
-					{
-					if (showSimpleConfirm("Write Bank", "Are you sure you want to write\nthe whole bank to the synth?"))
-						{
-						if (tuple == null || tuple.out == null)
-            				{
-            				if (!setupMIDI())
-                				continue;
-            				}
-						data[2] = (byte) getChannelOut();
-						boolean send = getSendMIDI();
-						setSendMIDI(true);
-						tryToSendSysex(data);
-						setSendMIDI(send);	
-						return PARSE_FAILED;
-						}
-					}
-				else if (result == 1)  // save
-					{
-					if (saveBank(data))
-						return PARSE_FAILED;
-					}
-				else if (result == 0) // edit patch
-					{
-				int pos = 0;	    	
-	    		int patch = box.getSelectedIndex() * 128;
-	    		
-	    		for(int op = 0; op < 6; op++)
-	    			{
-	    			// operatorNrate1 ... operatorNkeyboardlevelscalingrightdepth
-					for(int i = 0; i < 11; i++)
-						{
-						model.set(allParameters[pos++], data[patch + op * 17 + i + 6]);
-						}
-					
-					// scaling left curve
-					model.set(allParameters[pos++], data[patch + op * 17 + 11 + 6] & 3);
-					// scaling right curve
-					model.set(allParameters[pos++], (data[patch + op * 17 + 11 + 6] >>> 2) & 3);
-				
-					// rate scaling
-					model.set(allParameters[pos++], data[patch + op * 17 + 12 + 6] & 7);
-				
-					// amp mod sensitivity
-					model.set(allParameters[pos++], data[patch + op * 17 + 13 + 6] & 3);
-					// key velocity
-					model.set(allParameters[pos++], (data[patch + op * 17 + 13 + 6] >>> 2) & 7);
+            {
+            // yay for DX7 simplicity
+            for(int i = 0; i < allParameters.length - 10; i++)
+                {
+                model.set(allParameters[i], data[i + 6]);
+                }
+                
+            char[] name = new char[10];
+            for(int i = 0; i < 10; i ++)
+                {
+                name[i] = (char)(data[allParameters.length - 10 + i + 6] & 127);
+                }
+            model.set("name", new String(name));
+                
+            revise();
+            return PARSE_SUCCEEDED;
+            }
+        else                        // bulk
+            {
+            // extract names
+            char[][] names = new char[32][10];
+            for(int i = 0; i < 32; i++)
+                {
+                for (int j = 0; j < 10; j++)
+                    {
+                    names[i][j] = (char)(data[6 + (i * 128) + 118 + j] & 127);
+                    }
+                }
+                        
+            String[] n = new String[32];
+            for(int i = 0; i < 32; i++)
+                {
+                n[i] = "" + (i + 1) + "   " + new String(names[i]);
+                }
+                        
+            while(true)
+                {
+                Color color = new JPanel().getBackground();
+                HBox hbox = new HBox();
+                hbox.setBackground(color);
+                VBox vbox = new VBox();
+                vbox.setBackground(color);
+                vbox.add(new JLabel("   "));
+                vbox.add(new JLabel("<html>A Bank Sysex has been received.  You can <b>save</b> the sysex to a file,</html>"));
+                vbox.add(new JLabel("<html><b>write</b> the sysex to the synth, or <b>edit</b> a patch from the list below.</html>"));
+                vbox.add(new JLabel("   "));
+                hbox.addLast(vbox);
+                vbox = new VBox();
+                vbox.setBackground(color);
+                vbox.add(hbox);
+                JComboBox box = new JComboBox(n);
+                vbox.add(box);
+                                
+                int result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Edit Patch", "Save", "Write", "Cancel" }, "Edit Patch");
+                        
+                if (result == 3 || result < 0)  // cancel?
+                    {
+                    return PARSE_FAILED;
+                    }
+                else if (result == 2)   // write
+                    {
+                    if (showSimpleConfirm("Write Bank", "Are you sure you want to write\nthe whole bank to the synth?"))
+                        {
+                        if (tuple == null || tuple.out == null)
+                            {
+                            if (!setupMIDI())
+                                continue;
+                            }
+                        data[2] = (byte) getChannelOut();
+                        boolean send = getSendMIDI();
+                        setSendMIDI(true);
+                        tryToSendSysex(data);
+                        setSendMIDI(send);      
+                        return PARSE_FAILED;
+                        }
+                    }
+                else if (result == 1)  // save
+                    {
+                    if (saveBank(data))
+                        return PARSE_FAILED;
+                    }
+                else if (result == 0) // edit patch
+                    {
+                    int pos = 0;            
+                    int patch = box.getSelectedIndex() * 128;
+                        
+                    for(int op = 0; op < 6; op++)
+                        {
+                        // operatorNrate1 ... operatorNkeyboardlevelscalingrightdepth
+                        for(int i = 0; i < 11; i++)
+                            {
+                            model.set(allParameters[pos++], data[patch + op * 17 + i + 6]);
+                            }
+                                        
+                        // scaling left curve
+                        model.set(allParameters[pos++], data[patch + op * 17 + 11 + 6] & 3);
+                        // scaling right curve
+                        model.set(allParameters[pos++], (data[patch + op * 17 + 11 + 6] >>> 2) & 3);
+                                
+                        // rate scaling
+                        model.set(allParameters[pos++], data[patch + op * 17 + 12 + 6] & 7);
+                                
+                        // amp mod sensitivity
+                        model.set(allParameters[pos++], data[patch + op * 17 + 13 + 6] & 3);
+                        // key velocity
+                        model.set(allParameters[pos++], (data[patch + op * 17 + 13 + 6] >>> 2) & 7);
 
-					// output level
-					model.set(allParameters[pos++], data[patch + op * 17 + 14 + 6]);
-					
-					// osc mode
-					model.set(allParameters[pos++], data[patch + op * 17 + 15 + 6] & 1);
-					// freq coarse
-					model.set(allParameters[pos++], (data[patch + op * 17 + 15 + 6] >>> 1) & 31);
-					// freq fine
-					model.set(allParameters[pos++], data[patch + op * 17 + 16 + 6]);
-					// detune  [note this one is out of position, why Yamaha why?]
-					model.set(allParameters[pos++], (data[patch + op * 17 + 12 + 6] >>> 3) & 15);
-	    			}
-	    		
-	    		// pitchegrate1 ... pitcheglevel4
-				for(int i = 102; i < 110; i++)
-					{
-					model.set(allParameters[pos++], data[patch + i + 6]);
-					}
-				
-				// algorithm select
-				model.set(allParameters[pos++], data[patch + 110 + 6] & 31);
-	    		// feedback
-	    		model.set(allParameters[pos++], data[patch + 111 + 6] & 7);
-	    		// osc key sync
-	    		model.set(allParameters[pos++], (data[patch + 111 + 6] >>> 3) & 1);
+                        // output level
+                        model.set(allParameters[pos++], data[patch + op * 17 + 14 + 6]);
+                                        
+                        // osc mode
+                        model.set(allParameters[pos++], data[patch + op * 17 + 15 + 6] & 1);
+                        // freq coarse
+                        model.set(allParameters[pos++], (data[patch + op * 17 + 15 + 6] >>> 1) & 31);
+                        // freq fine
+                        model.set(allParameters[pos++], data[patch + op * 17 + 16 + 6]);
+                        // detune  [note this one is out of position, why Yamaha why?]
+                        model.set(allParameters[pos++], (data[patch + op * 17 + 12 + 6] >>> 3) & 15);
+                        }
+                        
+                    // pitchegrate1 ... pitcheglevel4
+                    for(int i = 102; i < 110; i++)
+                        {
+                        model.set(allParameters[pos++], data[patch + i + 6]);
+                        }
+                                
+                    // algorithm select
+                    model.set(allParameters[pos++], data[patch + 110 + 6] & 31);
+                    // feedback
+                    model.set(allParameters[pos++], data[patch + 111 + 6] & 7);
+                    // osc key sync
+                    model.set(allParameters[pos++], (data[patch + 111 + 6] >>> 3) & 1);
 
-				// lfospeed ... lfoamplitudemodulationdepth
-	    		for(int i = 112; i < 116; i++)
-	    			{
-	    			model.set(allParameters[pos++], data[patch + i + 6]);
-	    			}
-	    			
-	    		// key sync
-	    		model.set(allParameters[pos++], data[patch + 116 + 6] & 1);
-	    		// wave
-	    		model.set(allParameters[pos++], (data[patch + 116 + 6] >>> 1) & 7);
-	    		// lfo pitch mod sens
-	    		model.set(allParameters[pos++], (data[patch + 116 + 6] >>> 4) & 7);
-				// transpose
-	    		model.set(allParameters[pos++], (data[patch + 117 + 6]) & 63);
-	    			
-	    		model.set("name", new String(names[box.getSelectedIndex()]));
-	    	
-	    		model.set("number", box.getSelectedIndex());
+                    // lfospeed ... lfoamplitudemodulationdepth
+                    for(int i = 112; i < 116; i++)
+                        {
+                        model.set(allParameters[pos++], data[patch + i + 6]);
+                        }
+                                
+                    // key sync
+                    model.set(allParameters[pos++], data[patch + 116 + 6] & 1);
+                    // wave
+                    model.set(allParameters[pos++], (data[patch + 116 + 6] >>> 1) & 7);
+                    // lfo pitch mod sens
+                    model.set(allParameters[pos++], (data[patch + 116 + 6] >>> 4) & 7);
+                    // transpose
+                    model.set(allParameters[pos++], (data[patch + 117 + 6]) & 63);
+                                
+                    model.set("name", new String(names[box.getSelectedIndex()]));
+                
+                    model.set("number", box.getSelectedIndex());
 
-				revise();
-	    		return PARSE_SUCCEEDED_UNTITLED;
-	    		}
-	    	}
-	    }
+                    revise();
+                    return PARSE_SUCCEEDED_UNTITLED;
+                    }
+                }
+            }
         }
  
     
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-        simplePause(50);		// dunno if I need it, it was needed for the TX81Z
+        simplePause(50);                // dunno if I need it, it was needed for the TX81Z
         
-		byte[] data = new byte[163];
-		data[0] = (byte)0xF0;
-		data[1] = (byte)0x43;
-		data[2] = (byte)(getChannelOut());
-		data[3] = (byte)0x00;
-		data[4] = (byte)0x01;
-		data[5] = (byte)0x1B;
-				
+        byte[] data = new byte[163];
+        data[0] = (byte)0xF0;
+        data[1] = (byte)0x43;
+        data[2] = (byte)(getChannelOut());
+        data[3] = (byte)0x00;
+        data[4] = (byte)0x01;
+        data[5] = (byte)0x1B;
+                                
         // yay for DX7 simplicity
         for(int i = 0; i < allParameters.length - 10; i++)
-    		{
-    		data[i + 6] = (byte)(model.get(allParameters[i], 0));
-    		}
+            {
+            data[i + 6] = (byte)(model.get(allParameters[i], 0));
+            }
 
-		for(int i = 0; i < 10; i ++)
-			{
-			data[allParameters.length - 10 + i + 6] = (byte)((model.get("name", "          ") + "          ").charAt(i));
-	    	}
-	    	
-    	data[161] = produceChecksum(data, 6);
-    	data[162] = (byte)0xF7;
+        for(int i = 0; i < 10; i ++)
+            {
+            data[allParameters.length - 10 + i + 6] = (byte)((model.get("name", "          ") + "          ").charAt(i));
+            }
+                
+        data[161] = produceChecksum(data, 6);
+        data[162] = (byte)0xF7;
         
         return data;
         }
@@ -1067,9 +1067,9 @@ public class YamahaDX7 extends Synth
     byte produceChecksum(byte[] bytes, int start)
         {
         //      The TX816 owner's manual (p. 54) says the checksum is:
-        //				"the least significant 7 bits of the 2's complement sum of 155 data bytes.
-        //				 0eeeeeee must be determined so that the least significant 7 bits of the
-        //				sum of the 155 data bytes and checksum equal zero."
+        //                              "the least significant 7 bits of the 2's complement sum of 155 data bytes.
+        //                               0eeeeeee must be determined so that the least significant 7 bits of the
+        //                              sum of the 155 data bytes and checksum equal zero."
 
         int checksum = 0;
         for(int i = start; i < bytes.length; i++)
@@ -1100,25 +1100,25 @@ public class YamahaDX7 extends Synth
     public static boolean recognize(byte[] data)
         {
         return (
-        	// 1 single
-        	
-        	(data.length == 163 &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x43 &&
-            // don't care about 2, it's the channel
-            data[3] == (byte)0x00 &&
-            data[4] == (byte)0x01 &&
-            data[5] == (byte)0x1B) ||
+            // 1 single
+                
+                (data.length == 163 &&
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte)0x43 &&
+                // don't care about 2, it's the channel
+                data[3] == (byte)0x00 &&
+                data[4] == (byte)0x01 &&
+                data[5] == (byte)0x1B) ||
             
             // 32 bulk
             
-            (data.length == 4104 &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x43 &&
-            // don't care about 2, it's the channel
-            data[3] == (byte)0x09 &&
-            data[4] == (byte)0x20 &&
-            data[5] == (byte)0x00));
+                (data.length == 4104 &&
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte)0x43 &&
+                // don't care about 2, it's the channel
+                data[3] == (byte)0x09 &&
+                data[4] == (byte)0x20 &&
+                data[5] == (byte)0x00));
         }
         
     public static final int MAXIMUM_NAME_LENGTH = 10;

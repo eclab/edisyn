@@ -43,338 +43,338 @@ public class Category extends JComponent implements Gatherable
     public void makeDistributable(String preamble, boolean reduceAllDigits) { this.reduceAllDigits = reduceAllDigits; distribute.setEnabled(true); distributeToMutable.setEnabled(true); distributable = true; this.preamble = preamble; }
     public void makeUnresettable() { reset.setEnabled(false); }
     
-	PopupMenu pop = new PopupMenu();
+    PopupMenu pop = new PopupMenu();
       
     boolean isPasteCompatibleCategory()
-    	{
-    	return (pasteable &&
-    			preamble != null &&
-    			synth.getCopyPreamble() != null &&
-    			synth.getCopyPreamble().equals(preamble));
-    	}
-    	
-   boolean canDistributeKey()	
-		{
-		String lastKey = synth.getModel().getLastKey();
-		if (lastKey == null) return false;
-		
-		ArrayList components = new ArrayList();
-		gatherAllComponents(components);
-		for(int i = 0; i < components.size(); i++)
-			{
-			if (components.get(i) instanceof HasKey)
-				{
-				HasKey nc = (HasKey)(components.get(i));
-				String key = nc.getKey();
-				if (key.equals(lastKey))
-					return true;
-				}
-			}
-		return false;
-		}
+        {
+        return (pasteable &&
+            preamble != null &&
+            synth.getCopyPreamble() != null &&
+            synth.getCopyPreamble().equals(preamble));
+        }
+        
+    boolean canDistributeKey()   
+        {
+        String lastKey = synth.getModel().getLastKey();
+        if (lastKey == null) return false;
+                
+        ArrayList components = new ArrayList();
+        gatherAllComponents(components);
+        for(int i = 0; i < components.size(); i++)
+            {
+            if (components.get(i) instanceof HasKey)
+                {
+                HasKey nc = (HasKey)(components.get(i));
+                String key = nc.getKey();
+                if (key.equals(lastKey))
+                    return true;
+                }
+            }
+        return false;
+        }
       
-     void resetCategory()
-    	{
+    void resetCategory()
+        {
         Synth other = Synth.instantiate(synth.getClass(), synth.getSynthNameLocal(), true, true, synth.tuple);
-		ArrayList components = new ArrayList();
-		gatherAllComponents(components);
-		for(int i = 0; i < components.size(); i++)
-			{
-			if (components.get(i) instanceof HasKey)
-				{
-				HasKey nc = (HasKey)(components.get(i));
-				String key = nc.getKey();
-				if (synth.getModel().exists(key) && other.getModel().exists(key))
-					{
-					if (synth.getModel().isString(key))
-						{
-						synth.getModel().set(key, other.getModel().get(key, ""));
-						}
-					else
-						{
-						synth.getModel().set(key, other.getModel().get(key, 0));
-						}
-					}
-				else
-					System.err.println("key missing in model : " + key);
-				}
-			}    		
-    	}
-    	
-     void copyCategory(boolean includeImmutable)
-    	{
-		String[] mutationKeys = synth.getMutationKeys();
-		if (mutationKeys == null) mutationKeys = new String[0];
-		HashSet mutationSet = new HashSet(Arrays.asList(mutationKeys));
-    		
-    	ArrayList keys = new ArrayList();
-		ArrayList components = new ArrayList();
-		gatherAllComponents(components);
-		for(int i = 0; i < components.size(); i++)
-			{
-			if (components.get(i) instanceof HasKey)
-				{
-				HasKey nc = (HasKey)(components.get(i));
-				String key = nc.getKey();
-				if (mutationSet.contains(key) || includeImmutable)
-					keys.add(key);
-				}
-			} 
-		synth.setCopyKeys(keys);   
-		synth.setCopyPreamble(preamble);		
-    	}
-    	
-    	
-     void pasteCategory(boolean includeImmutable)
-    	{
-    	ArrayList copyKeys = synth.getCopyKeys();
-    	if (copyKeys == null || copyKeys.size() == 0)
-    		return;  // oops
-    	
-    		// First we need to map OUR keys
-    		HashMap keys = new HashMap();
-    		ArrayList components = new ArrayList();
-    		gatherAllComponents(components);
-			for(int i = 0; i < components.size(); i++)
-				{
-				if (components.get(i) instanceof HasKey)
-					{
-					String key = (String)(((HasKey)(components.get(i))).getKey());
-					String reduced = (reduceAllDigits ? 
-									reduceAllDigitsAfterPreamble(key, preamble) : 
-									reduceFirstDigitsAfterPreamble(key, preamble));
-					keys.put(reduced, key);
-					}    
-				}		
-    		
-    		String[] mutationKeys = synth.getMutationKeys();
-			if (mutationKeys == null) mutationKeys = new String[0];
-    		HashSet mutationSet = new HashSet(Arrays.asList(mutationKeys));
-    		
-			// Now we change keys as appropriate
-			for(int i = 0; i < copyKeys.size(); i++)
-				{
-				String key = (String)(copyKeys.get(i));
-				String reduced = (reduceAllDigits ? 
-									reduceAllDigitsAfterPreamble(key, synth.getCopyPreamble()) : 
-									reduceFirstDigitsAfterPreamble(key, synth.getCopyPreamble()));
-				String mapped = (String)(keys.get(reduced));
-				if (mapped != null)
-					{
-					Model model = synth.getModel();
-					if (model.exists(mapped) && (mutationSet.contains(mapped) || includeImmutable))
-						{
-						if (model.isString(mapped))
-							{
-							model.set(mapped, model.get(key, model.get(mapped, "")));
-							}
-						else
-							{
-							model.set(mapped, model.get(key, model.get(mapped, 0)));
-							}
-						}
-					else
-						System.err.println("Key didn't exist " + mapped);
-					}
-				else
-					System.err.println("Null mapping for " + key + " (reduced to " + reduced + ")");					
-				}
-    		}
-    	
-     void distributeCategory(boolean includeImmutable)
-    	{
-    	Model model = synth.getModel();
-    	String lastKey = model.getLastKey();
+        ArrayList components = new ArrayList();
+        gatherAllComponents(components);
+        for(int i = 0; i < components.size(); i++)
+            {
+            if (components.get(i) instanceof HasKey)
+                {
+                HasKey nc = (HasKey)(components.get(i));
+                String key = nc.getKey();
+                if (synth.getModel().exists(key) && other.getModel().exists(key))
+                    {
+                    if (synth.getModel().isString(key))
+                        {
+                        synth.getModel().set(key, other.getModel().get(key, ""));
+                        }
+                    else
+                        {
+                        synth.getModel().set(key, other.getModel().get(key, 0));
+                        }
+                    }
+                else
+                    System.err.println("Key missing in model : " + key);
+                }
+            }               
+        }
+        
+    void copyCategory(boolean includeImmutable)
+        {
+        String[] mutationKeys = synth.getMutationKeys();
+        if (mutationKeys == null) mutationKeys = new String[0];
+        HashSet mutationSet = new HashSet(Arrays.asList(mutationKeys));
+                
+        ArrayList keys = new ArrayList();
+        ArrayList components = new ArrayList();
+        gatherAllComponents(components);
+        for(int i = 0; i < components.size(); i++)
+            {
+            if (components.get(i) instanceof HasKey)
+                {
+                HasKey nc = (HasKey)(components.get(i));
+                String key = nc.getKey();
+                if (mutationSet.contains(key) || includeImmutable)
+                    keys.add(key);
+                }
+            } 
+        synth.setCopyKeys(keys);   
+        synth.setCopyPreamble(preamble);                
+        }
+        
+        
+    void pasteCategory(boolean includeImmutable)
+        {
+        ArrayList copyKeys = synth.getCopyKeys();
+        if (copyKeys == null || copyKeys.size() == 0)
+            return;  // oops
+        
+        // First we need to map OUR keys
+        HashMap keys = new HashMap();
+        ArrayList components = new ArrayList();
+        gatherAllComponents(components);
+        for(int i = 0; i < components.size(); i++)
+            {
+            if (components.get(i) instanceof HasKey)
+                {
+                String key = (String)(((HasKey)(components.get(i))).getKey());
+                String reduced = (reduceAllDigits ? 
+                    reduceAllDigitsAfterPreamble(key, preamble) : 
+                    reduceFirstDigitsAfterPreamble(key, preamble));
+                keys.put(reduced, key);
+                }    
+            }               
+                
+        String[] mutationKeys = synth.getMutationKeys();
+        if (mutationKeys == null) mutationKeys = new String[0];
+        HashSet mutationSet = new HashSet(Arrays.asList(mutationKeys));
+                
+        // Now we change keys as appropriate
+        for(int i = 0; i < copyKeys.size(); i++)
+            {
+            String key = (String)(copyKeys.get(i));
+            String reduced = (reduceAllDigits ? 
+                reduceAllDigitsAfterPreamble(key, synth.getCopyPreamble()) : 
+                reduceFirstDigitsAfterPreamble(key, synth.getCopyPreamble()));
+            String mapped = (String)(keys.get(reduced));
+            if (mapped != null)
+                {
+                Model model = synth.getModel();
+                if (model.exists(mapped) && (mutationSet.contains(mapped) || includeImmutable))
+                    {
+                    if (model.isString(mapped))
+                        {
+                        model.set(mapped, model.get(key, model.get(mapped, "")));
+                        }
+                    else
+                        {
+                        model.set(mapped, model.get(key, model.get(mapped, 0)));
+                        }
+                    }
+                else
+                    System.err.println("Key didn't exist " + mapped);
+                }
+            else
+                System.err.println("Null mapping for " + key + " (reduced to " + reduced + ")");                                        
+            }
+        }
+        
+    void distributeCategory(boolean includeImmutable)
+        {
+        Model model = synth.getModel();
+        String lastKey = model.getLastKey();
 
-    	if (lastKey != null)
-    		{
-			String lastReduced = (reduceAllDigits ? 
-									reduceAllDigitsAfterPreamble(lastKey, preamble) : 
-									(pasteable ? 
-										reduceSecondDigitsAfterPreamble(lastKey, preamble) : 
-										reduceFirstDigitsAfterPreamble(lastKey, preamble)));
+        if (lastKey != null)
+            {
+            String lastReduced = (reduceAllDigits ? 
+                reduceAllDigitsAfterPreamble(lastKey, preamble) : 
+                    (pasteable ? 
+                    reduceSecondDigitsAfterPreamble(lastKey, preamble) : 
+                    reduceFirstDigitsAfterPreamble(lastKey, preamble)));
 
-    		String[] mutationKeys = synth.getMutationKeys();
-			if (mutationKeys == null) mutationKeys = new String[0];
-    		HashSet mutationSet = new HashSet(Arrays.asList(mutationKeys));
+            String[] mutationKeys = synth.getMutationKeys();
+            if (mutationKeys == null) mutationKeys = new String[0];
+            HashSet mutationSet = new HashSet(Arrays.asList(mutationKeys));
 
-    		// Now we change keys as appropriate
-    		ArrayList components = new ArrayList();
-    		gatherAllComponents(components);
-			for(int i = 0; i < components.size(); i++)
-				{
-				if (components.get(i) instanceof HasKey)
-					{
-					HasKey nc = (HasKey)(components.get(i));
-					String key = nc.getKey();
-					String reduced = (reduceAllDigits ? 
-										reduceAllDigitsAfterPreamble(key, preamble) : 
-										(pasteable ? 
-											reduceSecondDigitsAfterPreamble(key, preamble) : 
-											reduceFirstDigitsAfterPreamble(key, preamble)));
-    				
-    				if (reduced.equals(lastReduced))
-    					{
-						if (model.exists(key) && (mutationSet.contains(key) || includeImmutable))
-							{
-							if (model.isString(key))
-								{
-								model.set(key, model.get(lastKey, model.get(key, "")));
-								}
-							else
-								{
-								model.set(key, model.get(lastKey, model.get(key, 0)));
-								}
-							}
-						else
-							System.err.println("Key didn't exist " + key);
-						}
-					else
-						System.err.println("Null mapping for " + key + " (reduced to " + reduced + ")");					
-					}
-				}
-    		}
-    	}
+            // Now we change keys as appropriate
+            ArrayList components = new ArrayList();
+            gatherAllComponents(components);
+            for(int i = 0; i < components.size(); i++)
+                {
+                if (components.get(i) instanceof HasKey)
+                    {
+                    HasKey nc = (HasKey)(components.get(i));
+                    String key = nc.getKey();
+                    String reduced = (reduceAllDigits ? 
+                        reduceAllDigitsAfterPreamble(key, preamble) : 
+                            (pasteable ? 
+                            reduceSecondDigitsAfterPreamble(key, preamble) : 
+                            reduceFirstDigitsAfterPreamble(key, preamble)));
+                                
+                    if (reduced.equals(lastReduced))
+                        {
+                        if (model.exists(key) && (mutationSet.contains(key) || includeImmutable))
+                            {
+                            if (model.isString(key))
+                                {
+                                model.set(key, model.get(lastKey, model.get(key, "")));
+                                }
+                            else
+                                {
+                                model.set(key, model.get(lastKey, model.get(key, 0)));
+                                }
+                            }
+                        else
+                            System.err.println("Key didn't exist " + key);
+                        }
+                    else
+                        System.err.println("Null mapping for " + key + " (reduced to " + reduced + ")");                                        
+                    }
+                }
+            }
+        }
     
     final static int STATE_FIRST_NUMBER = 0;
-	final static int STATE_FIRST_STRING = 1;
-	final static int STATE_NUMBER = 2;
-	final static int STATE_FINISHED = 3;
+    final static int STATE_FIRST_STRING = 1;
+    final static int STATE_NUMBER = 2;
+    final static int STATE_FINISHED = 3;
 
-	
-     static String reduceAllDigitsAfterPreamble(String name, String preamble)
-     	{
-    	char[] n = name.toCharArray();
-	    StringBuilder sb = new StringBuilder();
+        
+    static String reduceAllDigitsAfterPreamble(String name, String preamble)
+        {
+        char[] n = name.toCharArray();
+        StringBuilder sb = new StringBuilder();
 
-		for(int i = 0; i < preamble.length(); i++)
-			{
-			sb.append(n[i]);
-			}
-			
-    	int state = STATE_FIRST_STRING;
-		for(int i = preamble.length(); i < n.length; i++)
-			{
-			if (state == STATE_FIRST_STRING)
-				{
-				if (Character.isDigit(n[i]))
-					{
-					state = STATE_FINISHED;
-					}
-				else
-					{
-					sb.append(n[i]);
-					}
-				}
-			else if (state == STATE_FINISHED)
-				{
-				if (!Character.isDigit(n[i]))
-					{
-					sb.append(n[i]);
-					}
-				}
-			}
-		return sb.toString();
-     	}
+        for(int i = 0; i < preamble.length(); i++)
+            {
+            sb.append(n[i]);
+            }
+                        
+        int state = STATE_FIRST_STRING;
+        for(int i = preamble.length(); i < n.length; i++)
+            {
+            if (state == STATE_FIRST_STRING)
+                {
+                if (Character.isDigit(n[i]))
+                    {
+                    state = STATE_FINISHED;
+                    }
+                else
+                    {
+                    sb.append(n[i]);
+                    }
+                }
+            else if (state == STATE_FINISHED)
+                {
+                if (!Character.isDigit(n[i]))
+                    {
+                    sb.append(n[i]);
+                    }
+                }
+            }
+        return sb.toString();
+        }
 
     /** This function removes the FIRST string of digits in a name after a preamble, returns the resulting name. */
-     static String reduceFirstDigitsAfterPreamble(String name, String preamble)
-    	{
-    	char[] n = name.toCharArray();
-	    StringBuilder sb = new StringBuilder();
+    static String reduceFirstDigitsAfterPreamble(String name, String preamble)
+        {
+        char[] n = name.toCharArray();
+        StringBuilder sb = new StringBuilder();
 
-		for(int i = 0; i < preamble.length(); i++)
-			{
-			sb.append(n[i]);
-			}
-			
-    	int state = STATE_FIRST_STRING;
-		for(int i = preamble.length(); i < n.length; i++)
-			{
-			if (state == STATE_FIRST_STRING)
-				{
-				if (Character.isDigit(n[i]))
-					{
-					state = STATE_NUMBER;
-					}
-				else
-					{
-					sb.append(n[i]);
-					}
-				}
-			else if (state == STATE_NUMBER)
-				{
-				if (!Character.isDigit(n[i]))
-					{
-					sb.append(n[i]);
-					state = STATE_FINISHED;
-					}
-				}
-			else // state == STATE_FINISHED
-				{
-				sb.append(n[i]);
-				}
-			}
-		return sb.toString();
-    	}
+        for(int i = 0; i < preamble.length(); i++)
+            {
+            sb.append(n[i]);
+            }
+                        
+        int state = STATE_FIRST_STRING;
+        for(int i = preamble.length(); i < n.length; i++)
+            {
+            if (state == STATE_FIRST_STRING)
+                {
+                if (Character.isDigit(n[i]))
+                    {
+                    state = STATE_NUMBER;
+                    }
+                else
+                    {
+                    sb.append(n[i]);
+                    }
+                }
+            else if (state == STATE_NUMBER)
+                {
+                if (!Character.isDigit(n[i]))
+                    {
+                    sb.append(n[i]);
+                    state = STATE_FINISHED;
+                    }
+                }
+            else // state == STATE_FINISHED
+                {
+                sb.append(n[i]);
+                }
+            }
+        return sb.toString();
+        }
 
     /** This function removes the SECOND string of digits in a name after a preamble, returns the resulting name. */
-     static String reduceSecondDigitsAfterPreamble(String name, String preamble)
-    	{
-    	char[] n = name.toCharArray();
-	    StringBuilder sb = new StringBuilder();
+    static String reduceSecondDigitsAfterPreamble(String name, String preamble)
+        {
+        char[] n = name.toCharArray();
+        StringBuilder sb = new StringBuilder();
 
-		for(int i = 0; i < preamble.length(); i++)
-			{
-			sb.append(n[i]);
-			}
-			
-    	int state = STATE_FIRST_NUMBER;
-		for(int i = preamble.length(); i < n.length; i++)
-			{
-			if (state == STATE_FIRST_NUMBER)
-				{
-				if (!Character.isDigit(n[i]))
-					{
-					// add it and jump to next state
-					sb.append(n[i]);
-					state = STATE_FIRST_STRING;
-					}
-				else
-					{
-					sb.append(n[i]);
-					}
-				}
-			else if (state == STATE_FIRST_STRING)
-				{
-				if (Character.isDigit(n[i]))
-					{
-					// skip it and jump to next state
-					state = STATE_NUMBER;
-					}
-				else
-					{
-					sb.append(n[i]);
-					}
-				}
-			else if (state == STATE_NUMBER)
-				{
-				if (!Character.isDigit(n[i]))
-					{
-					// add it and jump to next state
-					sb.append(n[i]);
-					state = STATE_FINISHED;
-					}
-				}
-			else  // state == STATE_FINISHED
-				{
-				sb.append(n[i]);
-				}
-			}
-		return sb.toString();
-    	}
+        for(int i = 0; i < preamble.length(); i++)
+            {
+            sb.append(n[i]);
+            }
+                        
+        int state = STATE_FIRST_NUMBER;
+        for(int i = preamble.length(); i < n.length; i++)
+            {
+            if (state == STATE_FIRST_NUMBER)
+                {
+                if (!Character.isDigit(n[i]))
+                    {
+                    // add it and jump to next state
+                    sb.append(n[i]);
+                    state = STATE_FIRST_STRING;
+                    }
+                else
+                    {
+                    sb.append(n[i]);
+                    }
+                }
+            else if (state == STATE_FIRST_STRING)
+                {
+                if (Character.isDigit(n[i]))
+                    {
+                    // skip it and jump to next state
+                    state = STATE_NUMBER;
+                    }
+                else
+                    {
+                    sb.append(n[i]);
+                    }
+                }
+            else if (state == STATE_NUMBER)
+                {
+                if (!Character.isDigit(n[i]))
+                    {
+                    // add it and jump to next state
+                    sb.append(n[i]);
+                    state = STATE_FINISHED;
+                    }
+                }
+            else  // state == STATE_FINISHED
+                {
+                sb.append(n[i]);
+                }
+            }
+        return sb.toString();
+        }
 
-    	    
+            
     /** If synth is non-null, then double-clicking on the category will select or deselect all the
         components inside it for mutation purposes. */
     public Category(final Synth synth, String label, Color color)
@@ -389,10 +389,10 @@ public class Category extends JComponent implements Gatherable
             addMouseListener(new MouseAdapter()
                 {
                 public void mousePressed(MouseEvent e)
-                	{
-					if (e.getY() < 20 &&
-						(((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
-                         ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK)))
+                    {
+                    if (e.getY() < 20 &&
+                            (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
+                            ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK)))
                         {
                         paste.setEnabled(pasteable && isPasteCompatibleCategory());
                         pasteToMutable.setEnabled(pasteable && isPasteCompatibleCategory());
@@ -444,8 +444,8 @@ public class Category extends JComponent implements Gatherable
                 });
             }
                         
-		pop.add(copy);
-		copy.addActionListener(new ActionListener()
+        pop.add(copy);
+        copy.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
@@ -453,8 +453,8 @@ public class Category extends JComponent implements Gatherable
                 }
             });
 
-		pop.add(paste);
-		paste.addActionListener(new ActionListener()
+        pop.add(paste);
+        paste.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
@@ -471,8 +471,8 @@ public class Category extends JComponent implements Gatherable
                 }
             });
 
-		pop.add(distribute);
-		distribute.addActionListener(new ActionListener()
+        pop.add(distribute);
+        distribute.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
@@ -485,8 +485,8 @@ public class Category extends JComponent implements Gatherable
             
         pop.addSeparator();
 
-		pop.add(copyFromMutable);
-		copyFromMutable.addActionListener(new ActionListener()
+        pop.add(copyFromMutable);
+        copyFromMutable.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
@@ -494,8 +494,8 @@ public class Category extends JComponent implements Gatherable
                 }
             });
 
-		pop.add(pasteToMutable);
-		pasteToMutable.addActionListener(new ActionListener()
+        pop.add(pasteToMutable);
+        pasteToMutable.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
@@ -512,8 +512,8 @@ public class Category extends JComponent implements Gatherable
                 }
             });
 
-		pop.add(distributeToMutable);
-		distributeToMutable.addActionListener(new ActionListener()
+        pop.add(distributeToMutable);
+        distributeToMutable.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
@@ -526,8 +526,8 @@ public class Category extends JComponent implements Gatherable
 
         pop.addSeparator();
 
-		pop.add(reset);
-		reset.addActionListener(new ActionListener()
+        pop.add(reset);
+        reset.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
@@ -537,16 +537,16 @@ public class Category extends JComponent implements Gatherable
                 synth.getUndo().setWillPush(true);
                 }
             });
-		
-		copy.setEnabled(false);
-		copyFromMutable.setEnabled(false);
-		paste.setEnabled(false);
-		pasteToMutable.setEnabled(false);
-		distribute.setEnabled(false);
-		distributeToMutable.setEnabled(false);
-		reset.setEnabled(true);
-		
-		//Category.this.add(pop);
+                
+        copy.setEnabled(false);
+        copyFromMutable.setEnabled(false);
+        paste.setEnabled(false);
+        pasteToMutable.setEnabled(false);
+        distribute.setEnabled(false);
+        distributeToMutable.setEnabled(false);
+        reset.setEnabled(true);
+                
+        //Category.this.add(pop);
         }
     
     public Insets getInsets() 

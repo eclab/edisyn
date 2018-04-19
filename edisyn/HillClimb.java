@@ -566,8 +566,8 @@ public class HillClimb extends SynthPanel
             }
         }
 
-	public static double MUTATION_WEIGHT = 0.5;
-	
+    public static double MUTATION_WEIGHT = 0.5;
+        
     public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA)
         {
         // A + B
@@ -580,7 +580,7 @@ public class HillClimb extends SynthPanel
         currentModels[3] = ((Model)(a.clone())).recombine(random, ((Model)(b.clone())).recombine(random, c, keys, recombination), keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
         // A - B
         currentModels[4] = ((Model)(a.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
-		// B - A
+        // B - A
         currentModels[5] = ((Model)(b.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
         // A - C
         currentModels[6] = ((Model)(a.clone())).opposite(random, c, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
@@ -629,11 +629,11 @@ public class HillClimb extends SynthPanel
         currentModels[9] = ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
         currentModels[10] = ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
 
-		// (A - Z) + (B - Z)
+        // (A - Z) + (B - Z)
         currentModels[11] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).recombine(random, 
-        		((Model)(b.clone())).opposite(random, oldA, keys, recombination, false), keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+            ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false), keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
 
-		// A
+        // A
         currentModels[12] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
         currentModels[13] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
         

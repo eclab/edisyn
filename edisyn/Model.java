@@ -541,12 +541,12 @@ public class Model implements Cloneable
         return lastKey;
         }
     
-    boolean debugSet = false;
+    public static final boolean debug = false;
     
     /** Adds a key with the given Integer value, or changes it to the given value. */        
     public void set(String key, int value)
         {
-        if (debugSet) System.err.println(key + " --> " + value);
+        if (debug) System.err.println(key + " --> " + value + " [" + getMin(key) + " - " + getMax(key) + "]" );
         // when do we push on the undo stack?
         if (
             undoListener != null &&         // when we have an undo listener AND
@@ -611,7 +611,7 @@ public class Model implements Cloneable
     /** Adds a key with the given String value, or changes it to the given value. */        
     public void set(String key, String value)
         {
-        if (debugSet) System.err.println(key + " --> " + value);
+        if (debug) System.err.println(key + " --> " + value);
 
         // when do we push on the undo stack?
         if (
@@ -792,7 +792,7 @@ public class Model implements Cloneable
     public int getMin(String key)
         {
         Integer d = (Integer) (min.get(key));
-        if (d == null) { System.err.println("Nonexistent min extracted for " + key); new Throwable().printStackTrace(); return 0; }
+        if (d == null) { System.err.println("Nonexistent min extracted for " + key); return 0; }
         else return d.intValue();
         }
                 
@@ -800,7 +800,7 @@ public class Model implements Cloneable
     public int getMax(String key)
         {
         Integer d = (Integer) (max.get(key));
-        if (d == null) { System.err.println("Nonexistent max extracted for " + key); new Throwable().printStackTrace(); return 0; }
+        if (d == null) { System.err.println("Nonexistent max extracted for " + key); return 0; }
         else return d.intValue();
         }
 

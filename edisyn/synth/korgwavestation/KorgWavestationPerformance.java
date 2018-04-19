@@ -2275,10 +2275,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         hbox.add(vbox);
         
         /*
-        LabelledDial delay = new LabelledDial("Delay", this, "hillclimbdelay", Style.COLOR_A(), 0, 5000);                
-		hbox.add(delay);
-		*/
-		
+          LabelledDial delay = new LabelledDial("Delay", this, "hillclimbdelay", Style.COLOR_A(), 0, 5000);                
+          hbox.add(delay);
+        */
+                
         hbox.add(Strut.makeHorizontalStrut(130));
 
         globalCategory.add(hbox, BorderLayout.WEST);
@@ -5047,9 +5047,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         }
 
     public int getPauseBetweenHillClimbPlays()
-    	{
-//    	return model.get("hillclimbdelay");
-    	return 1100;
-    	}
+        {
+//      return model.get("hillclimbdelay");
+        return 1100;
+        }
     }
     

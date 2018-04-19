@@ -919,15 +919,15 @@ return pos;
         
         byte[] bankmesg = null;
         if (status == STATUS_UPDATING_ONE_PARAMETER)
-        	{
-        	bankmesg = paramBytes(WAVE_SEQ_BANK, edisynToWSBank[model.get("bank")]);
-        	}
+            {
+            bankmesg = paramBytes(WAVE_SEQ_BANK, edisynToWSBank[model.get("bank")]);
+            }
         
         byte[] nummesg = null;
         if (status == STATUS_UPDATING_ONE_PARAMETER)
-        	{
-        	nummesg = paramBytes(WAVE_SEQ_NUM, edisynToWSBank[model.get("number")]);
-			}
+            {
+            nummesg = paramBytes(WAVE_SEQ_NUM, edisynToWSBank[model.get("number")]);
+            }
                 
         if (key.equals("step"))         // we'll use this to just change the current step, not that it matters because the screen doesn't change unless the user presses a button...
             {
@@ -1111,53 +1111,53 @@ return pos;
     
     public void sentMIDI(Object datum, int index, int outOf)
         { 
-        if (outOf == 0)	// end of a MIDI sequence
-        	return;
+        if (outOf == 0) // end of a MIDI sequence
+            return;
         
         if (!sendingAllParameters)  // we're not doing a bulk send, it's just one parameter
-        	{
-        	// only pause at the end
-			if (index == outOf - 1)
-            	{
-            	if (getSendMIDI()) simplePause(MS_PER_STEP_DATA);  // for typical parameters
-            	}
-        	}
-        else		// bulk
-        	{
-			if (totalParameters >= MINIMUM_SENT_ELEMENTS_FOR_DISPLAY_CHANGE)
-				{
-				sequenceGlobalCategory.setName("Sequence Sent: " + currentParameter + " / " + totalParameters);
-				paintImmediately(sequenceGlobalCategory.getParent().getBounds());
-				}               
+            {
+            // only pause at the end
+            if (index == outOf - 1)
+                {
+                if (getSendMIDI()) simplePause(MS_PER_STEP_DATA);  // for typical parameters
+                }
+            }
+        else            // bulk
+            {
+            if (totalParameters >= MINIMUM_SENT_ELEMENTS_FOR_DISPLAY_CHANGE)
+                {
+                sequenceGlobalCategory.setName("Sequence Sent: " + currentParameter + " / " + totalParameters);
+                paintImmediately(sequenceGlobalCategory.getParent().getBounds());
+                }               
 
-			//// IMPORTANT NOTE -- the order here is based on code in emitAll(String[]) above.
-				
-			if (datum == null)
-				sendingLength = false;
-			else if (!sendingLength)
-				{
-				if (getSendMIDI()) simplePause(MS_PER_STEP_DATA);  // for typical parameters
-				}
-			else if (sendingLength)
-				{
-				// My initial tests suggest that these values will work but I don't know if they'll
-				// work in general for any memory configuration.
-				
-				if (index == 0)                         // this is erasure
-					{ 
-					if (getSendMIDI()) simplePause(MS_PER_INITIALIZATION);             // the minimum appears to be about 850ms
-					}
-				else if (index >= stepPos)      // these are step data, we don't pause here
-					{ 
-					if (getSendMIDI()) simplePause(MS_PER_STEP_DATA); 
-					}
-				else if (index % 2 == 0)                // step insertion is at 2, 4, ...
-					{ 
-					if (getSendMIDI()) simplePause(index * MS_PER_STEP_BY_INDEX + MS_PER_STEP); 
-					}
-				}
-			currentParameter++;
-			}
+            //// IMPORTANT NOTE -- the order here is based on code in emitAll(String[]) above.
+                                
+            if (datum == null)
+                sendingLength = false;
+            else if (!sendingLength)
+                {
+                if (getSendMIDI()) simplePause(MS_PER_STEP_DATA);  // for typical parameters
+                }
+            else if (sendingLength)
+                {
+                // My initial tests suggest that these values will work but I don't know if they'll
+                // work in general for any memory configuration.
+                                
+                if (index == 0)                         // this is erasure
+                    { 
+                    if (getSendMIDI()) simplePause(MS_PER_INITIALIZATION);             // the minimum appears to be about 850ms
+                    }
+                else if (index >= stepPos)      // these are step data, we don't pause here
+                    { 
+                    if (getSendMIDI()) simplePause(MS_PER_STEP_DATA); 
+                    }
+                else if (index % 2 == 0)                // step insertion is at 2, 4, ...
+                    { 
+                    if (getSendMIDI()) simplePause(index * MS_PER_STEP_BY_INDEX + MS_PER_STEP); 
+                    }
+                }
+            currentParameter++;
+            }
         }
         
     public static String[] MAIN_KEYS = new String[]
@@ -1181,16 +1181,16 @@ return pos;
     public void sendAllParameters()
         {
         if (!getSendMIDI())
-        	return;
-        	
+            return;
+                
         sendingAllParameters = true;
         totalParameters = offsetParameters + 14 * getModel().get("length") + 7;
         currentParameter = offsetParameters;
         
-		// we have a hack here to send patch information first so we write it to the right place.
-		tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_BANK, edisynToWSBank[model.get("bank")]) });
-		tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_NUM, edisynToWSBank[model.get("number")]) });
-		super.sendAllParameters();    	
+        // we have a hack here to send patch information first so we write it to the right place.
+        tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_BANK, edisynToWSBank[model.get("bank")]) });
+        tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_NUM, edisynToWSBank[model.get("number")]) });
+        super.sendAllParameters();      
         
         currentParameter = 0;
         offsetParameters = 0;
@@ -1208,9 +1208,9 @@ return pos;
 
         if (verifyLengthChange(model.get("length")))
             {
-			// we have a hack here to send patch information first so we write it to the right place.
-			tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_BANK, edisynToWSBank[model.get("bank")]) });
-			tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_NUM, edisynToWSBank[model.get("number")]) });
+            // we have a hack here to send patch information first so we write it to the right place.
+            tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_BANK, edisynToWSBank[model.get("bank")]) });
+            tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_NUM, edisynToWSBank[model.get("number")]) });
 
             // send length first.  Note it doesn't send the wave parameters, those will get
             // sent in the next step automatically.
@@ -1658,12 +1658,12 @@ return pos;
     public void sendTestPerformance()
         {
         if (tuple == null)
-			if (!setupMIDI(tuple))
-				return;
+            if (!setupMIDI(tuple))
+                return;
 
         if (tuple != null)
             {
-	        final KorgWavestationPerformance synth = new KorgWavestationPerformance();
+            final KorgWavestationPerformance synth = new KorgWavestationPerformance();
             synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
             if (synth.tuple != null)
                 {
@@ -1677,7 +1677,7 @@ return pos;
                         
         if (tuple != null)
             {
-        	final KorgWavestationPatch synth2 = new KorgWavestationPatch();
+            final KorgWavestationPatch synth2 = new KorgWavestationPatch();
             synth2.tuple = tuple.copy(synth2.buildInReceiver(), synth2.buildKeyReceiver());
             if (synth2.tuple != null)
                 {

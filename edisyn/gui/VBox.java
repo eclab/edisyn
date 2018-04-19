@@ -35,25 +35,30 @@ public class VBox extends JComponent implements Gatherable
     public VBox(int alternative)
         {
         setLayout(new BorderLayout());
-        setBackground(Style.BACKGROUND_COLOR());
         box = new Box(BoxLayout.Y_AXIS);
         if (alternative == TOP_CONSUMES)
             add(box, BorderLayout.SOUTH);
         else
             add(box, BorderLayout.NORTH);            
         panel.setLayout(new BorderLayout());
-        panel.setBackground(Style.BACKGROUND_COLOR());
         add(panel, BorderLayout.CENTER);
+        setBackground(Style.BACKGROUND_COLOR());
+        }
+    
+    public void setBackground(Color color)
+        {
+        panel.setBackground(color);
+        super.setBackground(color);
         }
         
     public VBox()
-    	{
-    	this(BOTTOM_CONSUMES);
-    	}
-    	
+        {
+        this(BOTTOM_CONSUMES);
+        }
+        
     public void addBottom(JComponent component)
         {
-		addLast(component);
+        addLast(component);
         }
         
     public void addLast(JComponent component)

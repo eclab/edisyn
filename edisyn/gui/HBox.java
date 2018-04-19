@@ -53,6 +53,12 @@ public class HBox extends JComponent implements Gatherable
         add(panel, BorderLayout.CENTER);
         }
     
+    public void setBackground(Color color)
+        {
+        panel.setBackground(color);
+        super.setBackground(color);
+        }
+        
     public void addLast(JComponent component)
         {
         lastComponent = component;

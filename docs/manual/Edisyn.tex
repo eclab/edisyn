@@ -21,30 +21,31 @@
 \begin{document}
 
 \noindent {\Huge\bf Edisyn}\\[0.5em]
-{\large \bf A Java-based Synthesizer Patch Editor, Version 14\\[0.2em]
-By Sean Luke\\[0.2em]
-sean@cs.gmu.edu}\\[0.2em]
+{\large \bf A Java-based Synthesizer Patch Editor, Version 15\\[0.2em]
+By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 
 \vspace{-1em}
 \setcounter{tocdepth}{1}
 \tableofcontents
 
-\vspace{0.5em}
+%\vspace{0.5em}
 \section{About Edisyn}
 
-Edisyn is a no-nonsense synthesizer patch editor designed to be extensible for many different kind of of synthesizers, and to have unusual programming assistance capabilities.  It is not skewmorphic or skinnable: its design is plain and consistent.  Edisyn is free open source.  Edisyn supports the following synthesizers:
+Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter exploration of a variety of synthesizers.  It is not skewmorphic or skinnable: its design is plain and consistent.  Edisyn is free open source.  Edisyn currently supports the following synthesizers:
 
 \begin{itemize}
-\item Futuresonus Parva
-\item Kawai K1, K1m, and K4r (Single and Multimode)
+%\item Futuresonus Parva
+\item Kawai K1, K1m, and K1r (Single and Multimode)
 \item Kawai K4 and K4r (Single and Multimode)
+\item Kawai K5 and K5m (Single)
 \item Korg SG Rack (Single and Multimode)
 \item Korg Microsampler
 \item Korg Wavestation SR (Performance, Patch, and Wave Sequence)
 \item Oberheim Matrix 1000 (Single)
-\item Preen FM2 (Single)
+\item PreenFM2 (Single)
 \item Waldorf Blofeld Desktop, Blofeld Desktop SL, and Blofeld Keyboard (Single and Multimode)
 \item Waldorf Microwave II, Microwave XT, and Microwave XTk (Single and Multimode)
+\item Yamaha DX7 Family (DX7, TX7, TX216/816, etc.) (Single)
 \item Yamaha TX81Z (Single and Multimode)
 \end{itemize}
 
@@ -481,7 +482,7 @@ So you want to write a patch editor?  They're not easy.  But they're fun!  Here 
 
 Make sure you understand that Edisyn can only go so far to help you in writing a patch editor: but synthesizer sysex world is an inconsistent, buggy mess.
 
-For example, the Waldorf Blofeld's multimode sysex is undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).   And it too bombs if you send it invalid data.  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  There are multiple different strategies for packing data of size 8 bits and up.  Some synths, like the Futuresonus Parva, are highly regular in their format, while others, like the infamous Korg Microsampler, require custom tables for nearly every parameter.
+For example, the Waldorf Blofeld's multimode sysex is undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).   And it too bombs if you send it invalid data.  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  There are multiple different strategies for packing data of size 8 bits and up.  Some synths, like the Futuresonus Parva, and Yamaha DX7, are highly regular in their format, while others, like the infamous Korg Microsampler, require custom tables for nearly every parameter.
 
 Below is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.
 
@@ -505,32 +506,23 @@ Below is a little table of the current patch editors for Edisyn, and various Edi
 \begin{sideways}Standard Sysex File\end{sideways}\\[0.5em]
 \hline\\[-0.5em]
 Futuresonus Parva&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}&&&\\
-Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}\footnotemark&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}            \\
-Waldorf Blofeld&{\cm}\footnote{Not Multi}&{\cm}\samefootnote&{\cm}&{\cm}\backfootnote{2}&{\cm}&{\cm}&{\cm}& & & {\cm}            \\
-Kawai K4/K4r&{\cm}\footnotemark& &{\cm}& &{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}            \\
-Yamaha TX81Z&{\cm}\backfootnote{2}& & &{\cm}&{\cm}& & &  & &{\cm}\footnotemark            \\
+Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}            \\
+Waldorf Blofeld&{\cm}*&{\cm}*&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}& & & {\cm}            \\
+Kawai K1/K1r/K1m&{\cm}*& &{\cm}& & & &{\cm}& &{\cm}&{\cm}            \\
+Kawai K4/K4r&{\cm}*& &{\cm}& &{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}            \\
+Kawai K5/K5m&{\cm}&{\cm}&{\cm}& & &{\cm}&{\cm}& &{\cm}&{\cm}            \\
+Yamaha DX7&{\cm}&{\cm}& & & & {\cm}& &  & &{\cm}*            \\
+Yamaha TX81Z&{\cm}*& & &{\cm}&{\cm}& & &  & &{\cm}            \\
 PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &            \\
-Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}\footnotemark&{\cm}\samefootnote&{\cm}& & &{\cm}          \\
-Korg Microsampler&{\cm}\footnotemark&{\cm}\samefootnote& & & & & &  &  &         \\
+Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}*&{\cm}*&{\cm}& & &{\cm}          \\
+Korg Microsampler&{\cm}*&{\cm}*& & & & & &  &  &         \\
 Korg SG Rack&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}\\
-Korg Wavestation&{\cm}&&{\cm}&{\cm}\footnote&{\cm}\samefootnote&{\cm}&{\cm}&{\cm}\samefootnote&&{\cm}\\
+Korg Wavestation&{\cm}&&{\cm}&{\cm}*&{\cm}*&{\cm}&{\cm}&{\cm}*&&{\cm}\\
 \end{tabular}
 }
+\\[1em]
+* {\it With significant caveats or restrictions}
 \end{center}
-\addtocounter{footnote}{-5}
-\footnotetext{Incoming patch won't have patch number or bank information.}
-\addtocounter{footnote}{1}
-\footnotetext{Not in Multimode.}
-\addtocounter{footnote}{1}
-\footnotetext{Not in Multimode.  Also, certain parameters cannot be set (source mutes).}
-\addtocounter{footnote}{1}
-\footnotetext{File contains two concatenated sysex transmissions.}
-\addtocounter{footnote}{1}
-\footnotetext{Not usable: some patches wind up with bad data.}
-\addtocounter{footnote}{1}
-\footnotetext{A limited number of them only.}
-\addtocounter{footnote}{1}
-\footnotetext{In some situations.}
 \vspace{1em}
 
 I particularly love how the Korg Microsampler and the Korg SG are disjoint in their abilities; yet they're from the same company.   Long story short, you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.

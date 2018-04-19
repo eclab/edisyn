@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 14)
+Synthesizer Patch Editor (Version 15)
  
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -20,6 +20,7 @@ Edisyn presently supports:
 * PreenFM2
 * Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)
+* Kawai K5 and K5m
 * Yamaha TX81Z (Single and Multi Modes)
 * Korg SG Rack (Single and Multi Modes) and Korg SG Pro X (Single Mode)
 * Korg Microsampler

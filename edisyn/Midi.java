@@ -1006,9 +1006,4 @@ public class Midi
             return (String)(map.get(new Integer(data[0 + offset])));
             }
         }
-
-        
-        
-        
-
     }

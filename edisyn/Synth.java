@@ -101,9 +101,9 @@ public abstract class Synth extends JComponent implements Updatable
     boolean testIncomingControllerMIDI;
     boolean testIncomingSynthMIDI;
 
-	boolean parsingForMerge = false;
-	/** Indicates that we are a sacrificial synth which is parsing an incoming sysex dump and then will be merged with the main synth. */
-	public boolean isParsingForMerge() { return parsingForMerge; }
+    boolean parsingForMerge = false;
+    /** Indicates that we are a sacrificial synth which is parsing an incoming sysex dump and then will be merged with the main synth. */
+    public boolean isParsingForMerge() { return parsingForMerge; }
 
     boolean useMapForRecombination = true;
     boolean showingMutation = false;
@@ -342,7 +342,7 @@ public abstract class Synth extends JComponent implements Updatable
     public static final Class[] synths = new Class[] 
     { 
     //edisyn.synth.futuresonusparva.FuturesonusParva.class,
-	//edisyn.synth.generic.Generic.class,
+    //edisyn.synth.generic.Generic.class,
     edisyn.synth.korgsg.KorgSG.class,
     edisyn.synth.korgsg.KorgSGMulti.class,
     edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
@@ -364,6 +364,7 @@ public abstract class Synth extends JComponent implements Updatable
     edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti.class, 
     edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT.class, 
     edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti.class, 
+    edisyn.synth.yamahadx7.YamahaDX7.class, 
     edisyn.synth.yamahatx81z.YamahaTX81Z.class, 
     edisyn.synth.yamahatx81z.YamahaTX81ZMulti.class,
     };
@@ -487,7 +488,7 @@ public abstract class Synth extends JComponent implements Updatable
     ///                     emitAll(tempModel, toWorkingMemory = true, toFile)
     ///                             This calls emit(tempModel, toWorkingMemory = true, toFile)
     ///             Else for every key it calls:
-    ///             	Call emitAll(key)
+    ///                 Call emitAll(key)
     ///                     This calls emit(key)
     ///
     /// You could override either of the emit...(tempModel...) methods, but probably not both.
@@ -502,7 +503,7 @@ public abstract class Synth extends JComponent implements Updatable
     ///                             emitAll(tempModel, toWorkingMemory = true, toFile)
     ///                                     This calls emit(tempModel, toWorkingMemory = true, toFile)
     ///                     Else for every key it calls:
-    ///                     	Call emitAll(key)
+    ///                         Call emitAll(key)
     ///                             This calls emit(key)
     ///     
     /// You could override either of the emit...(tempModel...) methods, but probably not both.
@@ -563,14 +564,23 @@ public abstract class Synth extends JComponent implements Updatable
     public static int PARSE_FAILED = 0;
     public static int PARSE_INCOMPLETE = 1;
     public static int PARSE_SUCCEEDED = 2;
+    public static int PARSE_SUCCEEDED_UNTITLED = 3;
     
     /** Updates the model to reflect the following sysex patch dump for your synthesizer type.
         If ignorePatch is TRUE, then you should NOT attempt to change the patch number and bank
         to reflect new information, but should retain the old number and bank.
         FROMFILE indicates that the parse is from a sysex file.
-        If the parse failed, return PARSE_FAILED.  If the parse is incomplete return PARSE_INCOMPLETE
-        (for example, the Yamaha TX81Z needs two separate dumps before it has a full patch, so return PARSE_INCOMPLETE
-        on the first one).  Else return PARSE_SUCCEEDED. */
+        There are several possible things you can return:
+        - PARSE_FAILED indicates that the parse was not successful and the editor data was not changed.
+        - PARSE_INCOMPLETE indicates that the parse was not fully performed -- for example,
+        the Yamaha TX81Z needs two separate dumps before it has a full patch, so we return 
+        PARSE_INCOMPLETE on the first one, and PARSE_SUCCEEDED only on the last one).
+        - PARSE_SUCCEEDED indicates that the parse was completed and the patch is fully modified.
+        - PARSE SUCCEEDED_UNTITLED indicates the same, except that assuming the patch was read
+        from a file, an alternative version of the patch has been substituted, and so the patch
+        filename should be untitled.  For example, the DX7 can alternatively load bank-sysex
+        patches and extract a patch from the bank; in this case the patch filename should not
+        be the bank sysex filename.  */
     public int parse(byte[] data, boolean ignorePatch, boolean fromFile) { return PARSE_FAILED; }
     
     /** Updates the model to reflect the following sysex message from your synthesizer. 
@@ -1004,7 +1014,7 @@ public abstract class Synth extends JComponent implements Updatable
                                         setSendMIDI(false);
                                         undo.setWillPush(false);
                                         Model backup = (Model)(model.clone());
-                                        incomingPatch = (parse(data, false, false) == PARSE_SUCCEEDED);
+                                        incomingPatch = (parse(data, false, false) >= PARSE_SUCCEEDED);
                                         undo.setWillPush(true);
                                         if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
                                             undo.push(backup);
@@ -1102,7 +1112,8 @@ public abstract class Synth extends JComponent implements Updatable
                                     // 1. It's a CC (maybe NRPN)
                                     // 2. We're not passing through CC
                                     // 3. It's the right channel OR our key channel is OMNI OR we're doing per-channel CCs
-                                    if (!getPassThroughCC() && 
+                                    if (tuple != null &&
+                                        !getPassThroughCC() && 
                                         shortMessage.getCommand() == ShortMessage.CONTROL_CHANGE &&
                                         (shortMessage.getChannel() == tuple.keyChannel || tuple.keyChannel == tuple.KEYCHANNEL_OMNI || perChannelCCs))
                                         {
@@ -1114,7 +1125,7 @@ public abstract class Synth extends JComponent implements Updatable
                                     // We send the message to the synth if:
                                     // 1. We didn't intercept it
                                     // 2. We pass through data to the synth
-                                    else if (getPassThroughController())
+                                    else if (tuple != null && getPassThroughController())
                                         {
                                         // pass it on!
                                         ShortMessage newMessage = null;
@@ -1278,7 +1289,9 @@ public abstract class Synth extends JComponent implements Updatable
             simplePause(p);
         }
 
-    /** Does a basic sleep for the given ms. */
+    /** Does a basic sleep for the given ms.  You should only call this if you can't
+        achieve the same thing by overriding one of the getPause methods, such as
+        getPauseAfterChangePatch()... */
     public void simplePause(int ms)
         {
         if (ms == 0) return;
@@ -1383,7 +1396,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 String s = "";
                 for(int j = 0; j <= i; j++)
-                	s = s + (data[j] < 0 ? data[j] + 255 : data[j]) + " ";
+                    s = s + (data[j] < 0 ? data[j] + 255 : data[j]) + " ";
                 new RuntimeException("High byte in sysex found.  First example is byte #" + i + "\n" + s).printStackTrace();
                 break;
                 }
@@ -1439,19 +1452,33 @@ public abstract class Synth extends JComponent implements Updatable
     /** If you get a index=0, outOf=0, we're done */
     public void sentMIDI(Object datum, int index, int outOf) { }
         
-    /** Attempts to send several MIDI sysex or other kinds of messages.   Data elements can be null, which is
-    	essentially a no-op.  Returns false if (1) the data was empty or null (2)
-        synth has turned off the ability to send temporarily (3) the sysex message is not
-        valid (4) an error occurred when the receiver tried to send the data.  */
+    /** Attempts to send several MIDI sysex or other kinds of messages.   Data elements can be
+        one of four things: (1) null, which is essentially a no-op (2) a byte[], which indicates
+        a sysex message (3) a fully constructed and populated MidiMessage (possibly including
+        sysex messages), and (4) an Integer, which will be used to indicate a pause for that
+        many milliseconds before sending the next message.  
+        
+        <p>Returns false if 
+        (1) the data was empty or null 
+        (2) the synth has turned off the ability to send temporarily
+        (3) a message was not valid
+        (4) an error occurred when the receiver tried to send the data.  
+    */
     public boolean tryToSendMIDI(Object[] data)
         {
         if (data == null) return false;
+        if (data.length == 0) return false;
         for(int i = 0; i < data.length; i++)
             {
             if (data[i] == null)
-            	{
-            	continue;
-            	}
+                {
+                continue;
+                }
+            else if (data[i] instanceof Integer)
+                {
+                simplePause(((Integer)data[i]).intValue());
+                continue;
+                }
             else if (data[i] instanceof byte[])
                 {
                 byte[] sysex = (byte[])(data[i]);
@@ -1673,8 +1700,8 @@ public abstract class Synth extends JComponent implements Updatable
         if (getSendsAllParametersInBulk())
             {
             boolean sent = tryToSendMIDI(emitAll(getModel(), true, false));
-			if (sent)
-				simplePause(getPauseAfterSendAllParameters());
+            if (sent)
+                simplePause(getPauseAfterSendAllParameters());
             }
         else
             {
@@ -1683,10 +1710,10 @@ public abstract class Synth extends JComponent implements Updatable
             for(int i = 0; i < keys.length; i++)
                 {
                 if (sent = tryToSendMIDI(emitAll(keys[i], STATUS_SENDING_ALL_PARAMETERS)) || sent)
-	                simplePause(getPauseAfterSendOneParameter());
+                    simplePause(getPauseAfterSendOneParameter());
                 }
             if (sent)
-				simplePause(getPauseAfterSendAllParameters());
+                simplePause(getPauseAfterSendAllParameters());
             }
         }
 
@@ -1812,6 +1839,7 @@ public abstract class Synth extends JComponent implements Updatable
         return (JOptionPane.showConfirmDialog(Synth.this, message, title,
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null) == JOptionPane.OK_OPTION);
         }
+
 
 
     /** Perform a JOptionPane confirm dialog with MUTLIPLE widgets that the user can select.  The widgets are provided
@@ -2044,9 +2072,9 @@ public abstract class Synth extends JComponent implements Updatable
 
    
     // sets the last directory used by load, save, or save as
-    void setLastDirectory(String path) { setLastX(path, "LastDirectory", getSynthNameLocal(), false); }
+    public void setLastDirectory(String path) { setLastX(path, "LastDirectory", getSynthNameLocal(), false); }
     // sets the last directory used by load, save, or save as
-    String getLastDirectory() { return getLastX("LastDirectory", getSynthNameLocal(), false); }
+    public String getLastDirectory() { return getLastX("LastDirectory", getSynthNameLocal(), false); }
     
     // sets the last synthesizer opened via the global window.
     static void setLastSynth(String synth) { setLastX(synth, "Synth", null, false); }
@@ -3875,10 +3903,10 @@ public abstract class Synth extends JComponent implements Updatable
                 // do an all notes off (some synths don't properly respond to all sounds off)
                 for(int i = 0; i < 16; i++)
                     tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
-				// for some synths that respond to neither <ahem Korg Wavestation>, maybe we can turn off the current note,
-				// assuming the user hasn't changed it.            
+                // for some synths that respond to neither <ahem Korg Wavestation>, maybe we can turn off the current note,
+                // assuming the user hasn't changed it.            
                 for(int i = 0; i < 16; i++)
-					tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, i, getTestNotePitch(), 0));
+                    tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, i, getTestNotePitch(), 0));
                 }
             catch (InvalidMidiDataException e2)
                 {
@@ -4077,7 +4105,10 @@ public abstract class Synth extends JComponent implements Updatable
         {
         Synth newSynth = instantiate(Synth.this.getClass(), getSynthNameLocal(), false, true, tuple);
         newSynth.setSendMIDI(false);
+        boolean currentPush = newSynth.undo.getWillPush();
+        newSynth.undo.setWillPush(false);
         model.copyValuesTo(newSynth.model);
+        newSynth.undo.setWillPush(currentPush);
         newSynth.setSendMIDI(true);
         }
                 
@@ -4087,7 +4118,10 @@ public abstract class Synth extends JComponent implements Updatable
         if (model.equals(undo.top()))
             model = undo.undo(null);  // don't push into the redo stack
         model = undo.undo(model);
+        boolean currentPush = undo.getWillPush();
+        undo.setWillPush(false);
         model.updateAllListeners();
+        undo.setWillPush(currentPush);
         setSendMIDI(true);
         sendAllParameters();
         }
@@ -4096,7 +4130,10 @@ public abstract class Synth extends JComponent implements Updatable
         {
         setSendMIDI(false);
         model = (Model)(undo.redo(getModel()));
+        boolean currentPush = undo.getWillPush();
+        undo.setWillPush(false);
         model.updateAllListeners();
+        undo.setWillPush(currentPush);
         setSendMIDI(true);
         sendAllParameters();
         }
@@ -4428,12 +4465,15 @@ public abstract class Synth extends JComponent implements Updatable
                         setSendMIDI(false);
                         undo.setWillPush(false);
                         Model backup = (Model)(model.clone());
-                        parse(data, true, true);
+                        int result = parse(data, true, true);
                         undo.setWillPush(true);
                         if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
                             undo.push(backup);
                         setSendMIDI(true);
-                        file = f;
+                        if (result == PARSE_SUCCEEDED)
+                            {
+                            file = f;
+                            }
                         setLastDirectory(fd.getDirectory());
 
                         // this last statement fixes a mystery.  When I call Randomize or Reset on
@@ -4799,7 +4839,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (allowsTransmitsParameters && getSendMIDI())
             {
             if (tryToSendMIDI(emitAll(key, STATUS_UPDATING_ONE_PARAMETER)))
-	            simplePause(getPauseAfterSendOneParameter());
+                simplePause(getPauseAfterSendOneParameter());
             }
         }
 
@@ -4814,7 +4854,7 @@ public abstract class Synth extends JComponent implements Updatable
 
             
     // Guarantee that the given filename ends with the given ending.    
-    static String ensureFileEndsWith(String filename, String ending)
+    public static String ensureFileEndsWith(String filename, String ending)
         {
         // do we end with the string?
         if (filename.regionMatches(false,filename.length()-ending.length(),ending,0,ending.length()))
@@ -4893,7 +4933,7 @@ public abstract class Synth extends JComponent implements Updatable
         }
                 
     static final char DEFAULT_SEPARATOR_REPLACEMENT = '_';
-    String reviseFileName(String name)
+    public String reviseFileName(String name)
         {
         if (name == null) name = "";
         char[] chars = name.toCharArray();
@@ -4909,8 +4949,8 @@ public abstract class Synth extends JComponent implements Updatable
         
     /** Return an extra pause (beyond the pause after sending all parameters) after playing a test sound while hill-climbing. */
     public int getPauseBetweenHillClimbPlays()
-    	{
-    	return 0;
-    	}
-    	
+        {
+        return 0;
+        }
+        
     }

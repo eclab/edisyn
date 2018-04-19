@@ -79,10 +79,10 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     String sustainStageKey;
     
     public void addVerticalDivider(double location)
-    	{
-    	verticalDividers.add(Double.valueOf(location));
-    	}
-    	
+        {
+        verticalDividers.add(Double.valueOf(location));
+        }
+        
     public void setFinalStageKey(String key)
         {
         finalStageKey = key;
@@ -195,84 +195,84 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         
         
         MouseAdapter ma = new MouseAdapter()
-        	{
-			public void mouseDragged(MouseEvent e)
-				{
-				highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
-				updateFromMouse(mouseToX(e.getX()), mouseToY(e.getY()), true);
-				updateHighlightIndex(highlightIndex);
-				repaint();
-				}
-				
-			public void mouseEntered(MouseEvent e)
-				{
-				highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
-				updateHighlightIndex(highlightIndex);
-				repaint();
-				}
-				
-			public void mouseExited(MouseEvent e)
-				{
-				highlightIndex = NO_HIGHLIGHT;
-				updateHighlightIndex(highlightIndex);
-				repaint();
-				}
-				
-			public void mouseMoved(MouseEvent e)
-				{
-				highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
-				updateHighlightIndex(highlightIndex);
-				repaint();
-				}
-				
-			public void mousePressed(MouseEvent e)
-				{
-				highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
-				updateFromMouse(mouseToX(e.getX()), mouseToY(e.getY()), false);
-				updateHighlightIndex(highlightIndex);
-				repaint();
-				}
-				
-			public void mouseReleased(MouseEvent e)
-				{
-				highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
-				updateHighlightIndex(highlightIndex);
-				repaint();
-				}
-        	};
-        	
+            {
+            public void mouseDragged(MouseEvent e)
+                {
+                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
+                updateFromMouse(mouseToX(e.getX()), mouseToY(e.getY()), true);
+                updateHighlightIndex(highlightIndex);
+                repaint();
+                }
+                                
+            public void mouseEntered(MouseEvent e)
+                {
+                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
+                updateHighlightIndex(highlightIndex);
+                repaint();
+                }
+                                
+            public void mouseExited(MouseEvent e)
+                {
+                highlightIndex = NO_HIGHLIGHT;
+                updateHighlightIndex(highlightIndex);
+                repaint();
+                }
+                                
+            public void mouseMoved(MouseEvent e)
+                {
+                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
+                updateHighlightIndex(highlightIndex);
+                repaint();
+                }
+                                
+            public void mousePressed(MouseEvent e)
+                {
+                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
+                updateFromMouse(mouseToX(e.getX()), mouseToY(e.getY()), false);
+                updateHighlightIndex(highlightIndex);
+                repaint();
+                }
+                                
+            public void mouseReleased(MouseEvent e)
+                {
+                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
+                updateHighlightIndex(highlightIndex);
+                repaint();
+                }
+            };
+                
         addMouseListener(ma);
         addMouseMotionListener(ma);
         }
 
-	int highlightIndex = NO_HIGHLIGHT;
+    int highlightIndex = NO_HIGHLIGHT;
 
-	public static final int NO_HIGHLIGHT = -1;
-	public int highlightIndex(double x, double y, boolean continuation)
-		{
-		return NO_HIGHLIGHT;
-		}
-		
-	public void updateHighlightIndex(int index) { }
-	
-	double mouseToX(double x)
-		{
-		return (x - (horizontalBorder ? Style.ENVELOPE_DISPLAY_BORDER_THICKNESS() : 0)) / 
-					(double)(getWidth() - (horizontalBorder ? Style.ENVELOPE_DISPLAY_BORDER_THICKNESS() * 2 : 0));
-		}
-	
-	double mouseToY(double y)
-		{
-		// I'm pretty sure this is wrong -- it should just be y - Style.ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS(),
-		// but it looks more correct this way
-		return 1.0 - (y - verticalBorderThickness() + Style.ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS()) /
-						(double)(getHeight() - verticalBorderThickness() * 2);
-		}
+    public static final int NO_HIGHLIGHT = -1;
+    public int highlightIndex(double x, double y, boolean continuation)
+        {
+        return NO_HIGHLIGHT;
+        }
+                
+    public void updateHighlightIndex(int index) { }
+        
+    double mouseToX(double x)
+        {
+        return (x - (horizontalBorder ? Style.ENVELOPE_DISPLAY_BORDER_THICKNESS() : 0)) / 
+            (double)(getWidth() - (horizontalBorder ? Style.ENVELOPE_DISPLAY_BORDER_THICKNESS() * 2 : 0));
+        }
+        
+    double mouseToY(double y)
+        {
+        // I'm pretty sure this is wrong -- it should just be y - Style.ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS(),
+        // but it looks more correct this way
+        return 1.0 - (y - verticalBorderThickness() + Style.ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS()) /
+            (double)(getHeight() - verticalBorderThickness() * 2);
+        }
 
         
     public void updateFromMouse(double x, double y, boolean continuation)
-    	{
-    	}
+        {
+        }
 
     /** Mostly fills the background appropriately. */
     public void paintComponent(Graphics g)
@@ -295,8 +295,8 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             {
             if (yKeys[i] != null)
                 ys[i] *= synth.getModel().get(yKeys[i], 1);
-        	ys[i] += yOffset;
-        	
+            ys[i] += yOffset;
+                
             if (xKeys[i] != null)
                 {
                 if (angles != null && i > 0)                    // we're doing angles
@@ -389,29 +389,29 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         
         // draw dividers
         if (verticalDividers.size() > 0)
-        	{
+            {
             graphics.setStroke(Style.ENVELOPE_AXIS_STROKE());
-        	graphics.setColor(color);
-        	for(int i = 0; i < verticalDividers.size(); i++)
-        		{
-        		double pos = (Double)(verticalDividers.get(i));
-        		double x = rect.x + rect.width * pos;
-            	line = new Line2D.Double(x, rect.y, x, rect.y + rect.height);
-            	graphics.draw(line);
-        		}
-        	}
+            graphics.setColor(color);
+            for(int i = 0; i < verticalDividers.size(); i++)
+                {
+                double pos = (Double)(verticalDividers.get(i));
+                double x = rect.x + rect.width * pos;
+                line = new Line2D.Double(x, rect.y, x, rect.y + rect.height);
+                graphics.draw(line);
+                }
+            }
         
         // draw markers
         Color unset = Style.ENVELOPE_UNSET_COLOR();
         for(int i = 0; i < marker.length; i++)
             {
             if (!constrainTo(i))
-            	graphics.setColor(unset);
+                graphics.setColor(unset);
             else if (highlightIndex != NO_HIGHLIGHT && highlightIndex == highlightIndex(mouseToX(marker[i].x + marker[i].width / 2.0),
-            					mouseToY(marker[i].y + marker[i].height / 2.0), false))
-            	graphics.setColor(Style.TEXT_COLOR());
+                    mouseToY(marker[i].y + marker[i].height / 2.0), false))
+                graphics.setColor(Style.TEXT_COLOR());
             else
-            	graphics.setColor(color);
+                graphics.setColor(color);
             graphics.fill(marker[i]);
             }
         
@@ -473,9 +473,9 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     public void setAxis(double val) { if (val >= 0.0 && val < 1.0) axis = val; }
     public double getAxis() { return axis; } 
     
-	public boolean constrainTo(int index) { return true; }
-	
-	public int verticalBorderThickness() { return Style.ENVELOPE_DISPLAY_BORDER_THICKNESS(); }
+    public boolean constrainTo(int index) { return true; }
+        
+    public int verticalBorderThickness() { return Style.ENVELOPE_DISPLAY_BORDER_THICKNESS(); }
     }
 
 

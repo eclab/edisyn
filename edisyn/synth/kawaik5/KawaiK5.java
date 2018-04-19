@@ -39,9 +39,9 @@ public class KawaiK5 extends Synth
     public static final String[] HARMONIC_CONSTRAINTS = { "All", "Odd", "Even", "First Third", "Second Third", "Third Third", "Octaves", "Fifths", "Major Thirds", "Minor Sevenths", "Major Seconds" };
     public static final String[] HARMONIC_MOD_CONSTRAINTS = { "None", "1", "2", "3", "4" };
     public static final String[] DISPLAY_PRESETS = { "Sawtooth Wave", "Square Wave", "Pseudo-Triangle", "All Off", "All On" };
-	public static final char[] LEGAL_CHARACTERS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '-', ':', '/', '*', '?', '!', '#', '*', '(', ')', '\"', '+', '.', '=', ' '};
+    public static final char[] LEGAL_CHARACTERS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '-', ':', '/', '*', '?', '!', '#', '*', '(', ')', '\"', '+', '.', '=', ' '};
 
-	// Harmonic Constraints
+    // Harmonic Constraints
     public static final int ALL = 0;
     public static final int ODD = 1;
     public static final int EVEN = 2;
@@ -63,7 +63,7 @@ public class KawaiK5 extends Synth
     
     // Various harmonics
     public static final int[] OCTAVE_HARMONICS = { 1, 2, 4, 8, 16, 32, 64 };
-    public static final int[] FIFTH_HARMONICS = { 3, 6, 12, 24, 48, 96 };		// -1 because we're in the 64..127 
+    public static final int[] FIFTH_HARMONICS = { 3, 6, 12, 24, 48, 96 };               // -1 because we're in the 64..127 
     public static final int[] MAJOR_THIRD_HARMONICS = { 5, 10, 20, 40, 80 };
     public static final int[] MINOR_SEVENTH_HARMONICS = { 7, 14, 28, 56 };
     public static final int[] MAJOR_SECOND_HARMONICS = { 9, 18, 36, 72 };
@@ -726,14 +726,14 @@ public class KawaiK5 extends Synth
  
     void setHarmonic(int index, double val)
         {
-		if (index >= 0 && index < 63)
-			{
-			model.set("dhgs" + 1 + "harm" + (index + 1) + "level", (int)(val * 99));
-			}
-		else if (index > 63 && index < 127)
-			{
-			model.set("dhgs" + 2 + "harm" + (index + 1 - 64) + "level", (int)(val * 99));
-			}
+        if (index >= 0 && index < 63)
+            {
+            model.set("dhgs" + 1 + "harm" + (index + 1) + "level", (int)(val * 99));
+            }
+        else if (index > 63 && index < 127)
+            {
+            model.set("dhgs" + 2 + "harm" + (index + 1 - 64) + "level", (int)(val * 99));
+            }
         }
                 
     // source can be "0", meaning "both"
@@ -773,12 +773,12 @@ public class KawaiK5 extends Synth
                 int start = 0;
                 int end = 127;
                 if (getModel().get("mode", 0) == 0)
-                	{
-                	if (source == 1)
-                		{ start = 0; end = 63; }
-                	else
-                		{ start = 64; end = 127; }
-                	}
+                    {
+                    if (source == 1)
+                        { start = 0; end = 63; }
+                    else
+                        { start = 64; end = 127; }
+                    }
                 
                 int initial = 0;
                 switch (i)
@@ -1205,8 +1205,8 @@ public class KawaiK5 extends Synth
         params = MAX_SEGMENTS;
         comp = new Chooser("Max Segment", this, "dhgs" + source + "env" + envelope + "maxsegonoff", params);
         vbox.add(comp);
-		hbox.add(vbox);
-		
+        hbox.add(vbox);
+                
         comp = new CheckBox("Active", this, "dhgs" + source + "env" + envelope + "onoff", true);
         vbox.add(comp); 
         hbox.add(vbox);   
@@ -1352,25 +1352,25 @@ public class KawaiK5 extends Synth
         // we don't display these
                 
         model.set("dhgs" + source + "all", 0);
-  model.setStatus("dhgs" + source + "all", Model.STATUS_IMMUTABLE);
+        model.setStatus("dhgs" + source + "all", Model.STATUS_IMMUTABLE);
         model.set("dhgs" + source + "odd", 0);
-  model.setStatus("dhgs" + source + "odd", Model.STATUS_IMMUTABLE);
+        model.setStatus("dhgs" + source + "odd", Model.STATUS_IMMUTABLE);
         model.set("dhgs" + source + "even", 0);
-  model.setStatus("dhgs" + source + "even", Model.STATUS_IMMUTABLE);
+        model.setStatus("dhgs" + source + "even", Model.STATUS_IMMUTABLE);
         model.set("dhgs" + source + "octave", 0);
-  model.setStatus("dhgs" + source + "octave", Model.STATUS_IMMUTABLE);
+        model.setStatus("dhgs" + source + "octave", Model.STATUS_IMMUTABLE);
         model.set("dhgs" + source + "fifth", 0);
-  model.setStatus("dhgs" + source + "fifth", Model.STATUS_IMMUTABLE);
+        model.setStatus("dhgs" + source + "fifth", Model.STATUS_IMMUTABLE);
         model.set("dhgs" + source + "rangefrom", 0);
-  model.setStatus("dhgs" + source + "rangefrom", Model.STATUS_IMMUTABLE);
+        model.setStatus("dhgs" + source + "rangefrom", Model.STATUS_IMMUTABLE);
         model.set("dhgs" + source + "rangeto", 0);
-  model.setStatus("dhgs" + source + "rangeto", Model.STATUS_IMMUTABLE);
+        model.setStatus("dhgs" + source + "rangeto", Model.STATUS_IMMUTABLE);
         model.set("dhgs" + source + "select", 0);
-  model.setStatus("dhgs" + source + "select", Model.STATUS_IMMUTABLE);
+        model.setStatus("dhgs" + source + "select", Model.STATUS_IMMUTABLE);
         model.set("dhgs" + source + "angle", 0);
-  model.setStatus("dhgs" + source + "angle", Model.STATUS_IMMUTABLE);
+        model.setStatus("dhgs" + source + "angle", Model.STATUS_IMMUTABLE);
         model.set("dhgs" + source + "harmsel", 0);
-  model.setStatus("dhgs" + source + "harmsel", Model.STATUS_IMMUTABLE);
+        model.setStatus("dhgs" + source + "harmsel", Model.STATUS_IMMUTABLE);
 
 
 /*
@@ -1421,9 +1421,9 @@ public class KawaiK5 extends Synth
         // These four we don't have widgets for
         
         model.set("dhgs1harm", 1);
-  		model.setStatus("dhgs1harm", Model.STATUS_IMMUTABLE);
+        model.setStatus("dhgs1harm", Model.STATUS_IMMUTABLE);
         model.set("dhgs2harm", 1);
-  		model.setStatus("dhgs2harm", Model.STATUS_IMMUTABLE);
+        model.setStatus("dhgs2harm", Model.STATUS_IMMUTABLE);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -1573,8 +1573,8 @@ public class KawaiK5 extends Synth
         params = MAX_SEGMENTS;
         comp = new Chooser("Max Segment", this, "ddfs" + source + "envmaxsegonoff", params);
         vbox.add(comp);
-		hbox.add(vbox);
-		
+        hbox.add(vbox);
+                
         comp = new LabelledDial("Rate 1", this, "ddfs" + source + "envseg1rate", color, 0, 31);
         hbox.add(comp);
 
@@ -1696,7 +1696,7 @@ public class KawaiK5 extends Synth
         params = MAX_SEGMENTS;
         comp = new Chooser("Max Segment", this, "ddas" + source + "envmaxsegonoff", params);
         vbox.add(comp);
-		hbox.add(vbox);
+        hbox.add(vbox);
 
         vbox = new VBox();
         comp = new LabelledDial("Rate 1", this, "ddas" + source + "envseg1rate", color, 0, 31);
@@ -1809,143 +1809,143 @@ public class KawaiK5 extends Synth
         if (key.equals("dhgs1harm")) return new Object[0];
         if (key.equals("dhgs2harm")) return new Object[0];
         if (key.equals("dhgs1odd") ||
-        	key.equals("dhgs1even") ||
-        	key.equals("dhgs1octave") ||
-        	key.equals("dhgs1fifth") ||
-        	key.equals("dhgs1select") ||
-        	key.equals("dhgs1all") ||
-        	key.equals("dhgs2odd") ||
-        	key.equals("dhgs2even") ||
-        	key.equals("dhgs2octave") ||
-        	key.equals("dhgs2fifth") ||
-        	key.equals("dhgs2select") ||
-        	key.equals("dhgs2all")) return new Object[0];
+            key.equals("dhgs1even") ||
+            key.equals("dhgs1octave") ||
+            key.equals("dhgs1fifth") ||
+            key.equals("dhgs1select") ||
+            key.equals("dhgs1all") ||
+            key.equals("dhgs2odd") ||
+            key.equals("dhgs2even") ||
+            key.equals("dhgs2octave") ||
+            key.equals("dhgs2fifth") ||
+            key.equals("dhgs2select") ||
+            key.equals("dhgs2all")) return new Object[0];
         if (key.equals("constrainharmonics") || 
-        	key.equals("constrainmodharmonics")) return new Object[0];
+            key.equals("constrainmodharmonics")) return new Object[0];
         if (key.equals("bank")) return new Object[0];
         if (key.equals("number")) return new Object[0];
-	
+        
         
         // WE don't bother with bank,  number, and a few others.
         // Also we don't presently emit 181, 182, 183, 183, or 185 (inc/dec the odd/even/oct/5th/all options), see Note 6-4)
         
-         Object[] data = new Object[1];
+        Object[] data = new Object[1];
 
         // determine source
         int source = 0;  // doesn't matter
         if (key.startsWith("basics"))
-        	{
-        	source = (key.charAt(6) == '1' ? 0 : 1);
-        	}
+            {
+            source = (key.charAt(6) == '1' ? 0 : 1);
+            }
         else if (key.startsWith("kss"))
-        	{
-        	source = (key.charAt(3) == '1' ? 0 : 1);
-        	}
+            {
+            source = (key.charAt(3) == '1' ? 0 : 1);
+            }
         else if (key.startsWith("dhgs") || 
-	        	key.startsWith("ddas") || 
-        		key.startsWith("ddfs") ||
-        		key.startsWith("dhgs") || 
-        		key.startsWith("dfgs"))
-        	{
-        	source = (key.charAt(4) == '1' ? 0 : 1);
-        	}        
+            key.startsWith("ddas") || 
+            key.startsWith("ddfs") ||
+            key.startsWith("dhgs") || 
+            key.startsWith("dfgs"))
+            {
+            source = (key.charAt(4) == '1' ? 0 : 1);
+            }        
 
         if (key.equals("name"))
-        	{
-        	String name = model.get(key, "        ") + "        ";
-        	data = new Object[15];
-        	for(int i = 0; i < data.length; i += 2)
-        		{
-        		byte c = (byte)(name.charAt(i/2));
-          		int paramNum = (byte)(200 + i/2);
-      			data[i] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, 
-      							(byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), 
-      							(byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
-      			if (i + 1 < data.length) 
-      				data[i + 1] = Integer.valueOf(30);
-        		}
-        	return data;
-        	}
+            {
+            String name = model.get(key, "        ") + "        ";
+            data = new Object[15];
+            for(int i = 0; i < data.length; i += 2)
+                {
+                byte c = (byte)(name.charAt(i/2));
+                int paramNum = (byte)(200 + i/2);
+                data[i] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, 
+                    (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), 
+                    (byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
+                if (i + 1 < data.length) 
+                    data[i + 1] = Integer.valueOf(30);
+                }
+            return data;
+            }
         else if (key.startsWith("dhgs") && key.endsWith("maxsegonoff") ||
-        		 key.startsWith("ddfs") && key.endsWith("maxsegonoff") ||
-        		 key.startsWith("ddas") && key.endsWith("maxsegonoff"))
-        	{
-        	int paramNum = 0;
-        	if (key.startsWith("ddf")) paramNum = 131;
-        	else if (key.startsWith("dda")) paramNum = 161;
-        	else if (key.startsWith("dhgs1env1") ||
-        			 key.startsWith("dhgs2env1")) paramNum = 52;
-        	else if (key.startsWith("dhgs1env2") ||
-        			 key.startsWith("dhgs2env2")) paramNum = 53;
-        	else if (key.startsWith("dhgs1env3") ||
-        			 key.startsWith("dhgs2env3")) paramNum = 54;
-        	else if (key.startsWith("dhgs1env4") ||
-        			 key.startsWith("dhgs2env4")) paramNum = 55;
-        	else System.err.println("Weird Key? " + key);
-        	
-        	int c = model.get(key, 0);
-        	data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127),(byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
-        	return data;
-        	}
+            key.startsWith("ddfs") && key.endsWith("maxsegonoff") ||
+            key.startsWith("ddas") && key.endsWith("maxsegonoff"))
+            {
+            int paramNum = 0;
+            if (key.startsWith("ddf")) paramNum = 131;
+            else if (key.startsWith("dda")) paramNum = 161;
+            else if (key.startsWith("dhgs1env1") ||
+                key.startsWith("dhgs2env1")) paramNum = 52;
+            else if (key.startsWith("dhgs1env2") ||
+                key.startsWith("dhgs2env2")) paramNum = 53;
+            else if (key.startsWith("dhgs1env3") ||
+                key.startsWith("dhgs2env3")) paramNum = 54;
+            else if (key.startsWith("dhgs1env4") ||
+                key.startsWith("dhgs2env4")) paramNum = 55;
+            else System.err.println("Weird Key? " + key);
+                
+            int c = model.get(key, 0);
+            data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127),(byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
+            return data;
+            }
         else if ((key.startsWith("dhgs1harm") || key.startsWith("dhgs2harm")) && !(key.equals("dhgs1harmsel") || key.equals("dhgs2harmsel")))  // harmonics
-        	{
-			String[] numbers = key.split("[\\D]+");
-			//System.err.println(key);
-			//for(int i = 0; i < numbers.length; i++)
-			//	System.err.println(numbers[i]);
-			int harmonic = Integer.parseInt(numbers[2]);
-        	
-        	if (key.endsWith("envselmodyn"))
-        		{
-        		int c = model.get(key, 0);
-        		int mod = (c == 0 ? 0 : 1);
-        		int env = (c == 0 ? model.get(key + "-env", 0) + 1 : c);  // use the default if need be.  Note that it's 1...4, not 0...3.  Don't ask.
+            {
+            String[] numbers = key.split("[\\D]+");
+            //System.err.println(key);
+            //for(int i = 0; i < numbers.length; i++)
+            //      System.err.println(numbers[i]);
+            int harmonic = Integer.parseInt(numbers[2]);
+                
+            if (key.endsWith("envselmodyn"))
+                {
+                int c = model.get(key, 0);
+                int mod = (c == 0 ? 0 : 1);
+                int env = (c == 0 ? model.get(key + "-env", 0) + 1 : c);  // use the default if need be.  Note that it's 1...4, not 0...3.  Don't ask.
 
-				data = new Object[5];
-				int paramNum = 40;
-				data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((harmonic >>> 4) & 0xF), (byte)(harmonic & 0xF), (byte)0xF7 };
-				data[1] = Integer.valueOf(30);
-				paramNum = 42;
-				data[2] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((env >>> 4) & 0xF), (byte)(env & 0xF), (byte)0xF7 };
-				data[3] = Integer.valueOf(30);
-				paramNum = 43;
-				data[4] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((mod >>> 4) & 0xF), (byte)(mod & 0xF), (byte)0xF7 };
-        		}
-        	else if(key.endsWith("level"))
-        		{
-        		data = new Object[3];
-        		int level = model.get(key, 0);
-        		int paramNum = 40;
-        		data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((harmonic >>> 4) & 0xF), (byte)(harmonic & 0xF), (byte)0xF7 };
-				data[1] = Integer.valueOf(30);
-        		paramNum = 41;
-        		data[2] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((level >>> 4) & 0xF), (byte)(level & 0xF), (byte)0xF7 };
-        		}
-        	else 
-        		{
-        		// all the -env stuff will go here
-        		return new Object[0];
-        		}
-        		
-			return data;        	
-        	}
+                data = new Object[5];
+                int paramNum = 40;
+                data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((harmonic >>> 4) & 0xF), (byte)(harmonic & 0xF), (byte)0xF7 };
+                data[1] = Integer.valueOf(30);
+                paramNum = 42;
+                data[2] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((env >>> 4) & 0xF), (byte)(env & 0xF), (byte)0xF7 };
+                data[3] = Integer.valueOf(30);
+                paramNum = 43;
+                data[4] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((mod >>> 4) & 0xF), (byte)(mod & 0xF), (byte)0xF7 };
+                }
+            else if(key.endsWith("level"))
+                {
+                data = new Object[3];
+                int level = model.get(key, 0);
+                int paramNum = 40;
+                data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((harmonic >>> 4) & 0xF), (byte)(harmonic & 0xF), (byte)0xF7 };
+                data[1] = Integer.valueOf(30);
+                paramNum = 41;
+                data[2] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((level >>> 4) & 0xF), (byte)(level & 0xF), (byte)0xF7 };
+                }
+            else 
+                {
+                // all the -env stuff will go here
+                return new Object[0];
+                }
+                        
+            return data;            
+            }
         else if (parametersToIndex.containsKey(key))
-        		{
-				int c = model.get(key, 0);
-				
-				// handle lfoshape specially, it has to go out as 1--6 rather than 0--5
-				if (key.equals("lfoshape"))
-					c++;
-					
-				int paramNum = ((Integer)(parametersToIndex.get(key))).intValue();
-				data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
-        		return data;
-        		}
+            {
+            int c = model.get(key, 0);
+                                
+            // handle lfoshape specially, it has to go out as 1--6 rather than 0--5
+            if (key.equals("lfoshape"))
+                c++;
+                                        
+            int paramNum = ((Integer)(parametersToIndex.get(key))).intValue();
+            data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
+            return data;
+            }
         else 
-        	{
-        	System.err.println("Unknown Key " + key);
-        	return new Object[0];
-        	}
+            {
+            System.err.println("Unknown Key " + key);
+            return new Object[0];
+            }
         }
     
 
@@ -1973,26 +1973,26 @@ public class KawaiK5 extends Synth
 
     public int parse(byte[] result, boolean ignorePatch, boolean fromFile)
         {
-		model.set("bank", result[7] / 12);
-		model.set("number", result[7] % 12);
+        model.set("bank", result[7] / 12);
+        model.set("number", result[7] % 12);
 
-		// denybblize
-		byte[] data = new byte[492];
+        // denybblize
+        byte[] data = new byte[492];
 
         int v = 8;
-		for(int i = 0; i < data.length; i++)
-			{
-			data[i] = (byte)(((result[v++] & 0xF) << 4) | (result[v++] & 0xF));
-//			System.err.println("" + i + " " + data[i]);
-			}
+        for(int i = 0; i < data.length; i++)
+            {
+            data[i] = (byte)(((result[v++] & 0xF) << 4) | (result[v++] & 0xF));
+//                      System.err.println("" + i + " " + data[i]);
+            }
 
         // Name ...
         
         try
-        	{
-	        model.set("name", new String(data, 0, 8, "US-ASCII"));
-			}
-		catch (UnsupportedEncodingException ex) { } // won't happen
+            {
+            model.set("name", new String(data, 0, 8, "US-ASCII"));
+            }
+        catch (UnsupportedEncodingException ex) { } // won't happen
         
         int pos = 8;
         
@@ -2008,63 +2008,63 @@ public class KawaiK5 extends Synth
         pos = unloadData(data, pos, dfgs1envloop, dfgs1envrateseg1, new int[] { 7, 0 }, new int[] { 1, 7 } );
         pos = unloadData(data, pos, dfgs1envrateseg1, dhgs1velodep);  // in fact it just goes to the harmonics
         
-		// Harmonics levels...
-		
-		int x = 0;
-		for( ; x < 63 * 2; x++)
-			{
-			model.set(HARMONICS_PARAMETERS[x], data[pos++] );
-			}
-		
-		// Harmonics mod and env sel...
-		
-		for( ; x < 63 * 2 + 62 * 2; x += 2)
-			{
-			int mod2 = (data[pos] >>> 7) & 1;
-			int env2 = (data[pos] >>> 4) & 3;
-			int mod1 = (data[pos] >>> 3) & 1;
-			int env1 = (data[pos] >>> 0) & 3;
-			
-			if (mod2 == 1)
-				model.set(HARMONICS_PARAMETERS[x + 0], env2 + 1);
-			else
-				model.set(HARMONICS_PARAMETERS[x + 0], 0);
-				
-			model.set(HARMONICS_PARAMETERS[x + 0] + "-env", env2);
-			
-			if (mod1 == 1)
-				model.set(HARMONICS_PARAMETERS[x + 1], env1 + 1);
-			else
-				model.set(HARMONICS_PARAMETERS[x + 1], 0);
+        // Harmonics levels...
+                
+        int x = 0;
+        for( ; x < 63 * 2; x++)
+            {
+            model.set(HARMONICS_PARAMETERS[x], data[pos++] );
+            }
+                
+        // Harmonics mod and env sel...
+                
+        for( ; x < 63 * 2 + 62 * 2; x += 2)
+            {
+            int mod2 = (data[pos] >>> 7) & 1;
+            int env2 = (data[pos] >>> 4) & 3;
+            int mod1 = (data[pos] >>> 3) & 1;
+            int env1 = (data[pos] >>> 0) & 3;
+                        
+            if (mod2 == 1)
+                model.set(HARMONICS_PARAMETERS[x + 0], env2 + 1);
+            else
+                model.set(HARMONICS_PARAMETERS[x + 0], 0);
+                                
+            model.set(HARMONICS_PARAMETERS[x + 0] + "-env", env2);
+                        
+            if (mod1 == 1)
+                model.set(HARMONICS_PARAMETERS[x + 1], env1 + 1);
+            else
+                model.set(HARMONICS_PARAMETERS[x + 1], 0);
 
-			model.set(HARMONICS_PARAMETERS[x + 1] + "-env", env1);
-			pos++;
-			}
+            model.set(HARMONICS_PARAMETERS[x + 1] + "-env", env1);
+            pos++;
+            }
 
-			int mod2 = (data[pos] >>> 3) & 1;
-			int env2 = (data[pos] >>> 0) & 3;
-		pos++;
+        int mod2 = (data[pos] >>> 3) & 1;
+        int env2 = (data[pos] >>> 0) & 3;
+        pos++;
 
-			int mod1 = (data[pos] >>> 3) & 1;
-			int env1 = (data[pos] >>> 0) & 3;
+        int mod1 = (data[pos] >>> 3) & 1;
+        int env1 = (data[pos] >>> 0) & 3;
 
-		pos++;
-				
-			if (mod2 == 1)
-				model.set(HARMONICS_PARAMETERS[x + 0], env2 + 1);
-			else
-				model.set(HARMONICS_PARAMETERS[x + 0], 0);
-			
-			model.set(HARMONICS_PARAMETERS[x + 0] + "-env", env2);
+        pos++;
+                                
+        if (mod2 == 1)
+            model.set(HARMONICS_PARAMETERS[x + 0], env2 + 1);
+        else
+            model.set(HARMONICS_PARAMETERS[x + 0], 0);
+                        
+        model.set(HARMONICS_PARAMETERS[x + 0] + "-env", env2);
 
-			if (mod1 == 1)
-				model.set(HARMONICS_PARAMETERS[x + 1], env1 + 1);
-			else
-				model.set(HARMONICS_PARAMETERS[x + 1], 0);
+        if (mod1 == 1)
+            model.set(HARMONICS_PARAMETERS[x + 1], env1 + 1);
+        else
+            model.set(HARMONICS_PARAMETERS[x + 1], 0);
 
-			model.set(HARMONICS_PARAMETERS[x + 1] + "-env", env1);
+        model.set(HARMONICS_PARAMETERS[x + 1] + "-env", env1);
 
-		
+                
         // DHG and Post-DHG parameters...
         
         pos = unloadData(data, pos, dhgs1velodep, dhgs1env1onoff);
@@ -2098,16 +2098,16 @@ public class KawaiK5 extends Synth
         pos = unloadData(data, pos, ddas1attackvelrate, ddas1envseg1modonoff);
         pos = unloadData(data, pos, ddas1envseg1modonoff, ddas1envmaxseg1onoff, new int[] { 6, 0 }, new int[] { 1, 6 } );
         pos = unloadDataUnified(data, pos, ddas1envmaxseg1onoff, lfoshape, new int[] { 6, 0 }, new int[] { 1, 6 } );
-		pos++;
-		pos++;
-		
-		// handle lfoshape specially -- it comes in 1--6, we need to change to 0...5
-		data[pos]--; 
-		
-		pos = unloadData(data, pos, lfoshape, dftonoff);
+        pos++;
+        pos++;
+                
+        // handle lfoshape specially -- it comes in 1--6, we need to change to 0...5
+        data[pos]--; 
+                
+        pos = unloadData(data, pos, lfoshape, dftonoff);
         pos = unloadData(data, pos, dftonoff, dftc0level, new int[] { 7, 0 }, new int[] { 1, 7 } );
         pos = unloadData(data, pos, dftc0level, dftc0level + 10);
-		pos++;
+        pos++;
 
         return PARSE_SUCCEEDED;
         }
@@ -2117,30 +2117,30 @@ public class KawaiK5 extends Synth
         {
         super.sendAllParameters();        
 
-       // we change patch to SID-12 if we're sending in bulk.
+        // we change patch to SID-12 if we're sending in bulk.
         if (sendKawaiParametersInBulk)
             {
- 			// for some insane reason, we must pause somewhat AFTER we have written the patch but 
- 			// BEFORE we change the patch to SID-12 or else it won't get
- 			// properly loaded into the patch.  I cannot explain it.  And it's a lot!
- 			
- 			simplePause(400);  // think this is the right amount -- 300 won't cut it
+            // for some insane reason, we must pause somewhat AFTER we have written the patch but 
+            // BEFORE we change the patch to SID-12 or else it won't get
+            // properly loaded into the patch.  I cannot explain it.  And it's a lot!
+                        
+            simplePause(400);  // think this is the right amount -- 300 won't cut it
 
-           Model tempModel = new Model();
+            Model tempModel = new Model();
             tempModel.set("bank", 3);
             tempModel.set("number", 11);
             changePatch(tempModel);
-  			simplePause(getPauseAfterChangePatch());
-           }
-         }
+            simplePause(getPauseAfterChangePatch());
+            }
+        }
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         if (tempModel == null)
             tempModel = getModel();
 
-		byte[] data = new byte[492];
-		
+        byte[] data = new byte[492];
+                
         String name = model.get("name", "INIT    ") + "          ";
 
         // The K5 is riddled with byte-mangling.  :-(
@@ -2148,7 +2148,7 @@ public class KawaiK5 extends Synth
         // Name ...
         
         for(int i = 0; i < 8; i++)
-        	data[i] = (byte)(name.charAt(i));
+            data[i] = (byte)(name.charAt(i));
         
         int pos = 8;
         
@@ -2164,38 +2164,38 @@ public class KawaiK5 extends Synth
         pos = loadData(data, pos, dfgs1envloop, dfgs1envrateseg1, new int[] { 7, 0 }, new int[] { 1, 7 } );
         pos = loadData(data, pos, dfgs1envrateseg1, dhgs1velodep);  // in fact it just goes to the harmonics
         
-		// Harmonics levels...
-		
-		int x = 0;
-		for( ; x < 63 * 2; x++)
-			{
-			data[pos++] = (byte)model.get(HARMONICS_PARAMETERS[x], 0);
-			}
-		
-		// Harmonics mod and env sel...
-		
-		for( ; x < 63 * 2 + 62 * 2; x += 2)
-			{
-			int defaultenv2 = model.get(HARMONICS_PARAMETERS[x + 0] + "-env", 0);
-			int mod2 = model.get(HARMONICS_PARAMETERS[x + 0], 0) == 0 ? 0 : 1;
-			int env2 = model.get(HARMONICS_PARAMETERS[x + 0], 0) == 0 ? defaultenv2 : (model.get(HARMONICS_PARAMETERS[x + 0], 0) - 1);
-			int defaultenv1 = model.get(HARMONICS_PARAMETERS[x + 1] + "-env", 0);
-			int mod1 = model.get(HARMONICS_PARAMETERS[x + 1], 0) == 0 ? 0 : 1;
-			int env1 = model.get(HARMONICS_PARAMETERS[x + 1], 0) == 0 ? defaultenv1 : (model.get(HARMONICS_PARAMETERS[x + 1], 0) - 1);
-			
-			data[pos++] = (byte)((mod2 << 7) | (env2 << 4) | (mod1 << 3) | (env1 << 0) );
-			}
+        // Harmonics levels...
+                
+        int x = 0;
+        for( ; x < 63 * 2; x++)
+            {
+            data[pos++] = (byte)model.get(HARMONICS_PARAMETERS[x], 0);
+            }
+                
+        // Harmonics mod and env sel...
+                
+        for( ; x < 63 * 2 + 62 * 2; x += 2)
+            {
+            int defaultenv2 = model.get(HARMONICS_PARAMETERS[x + 0] + "-env", 0);
+            int mod2 = model.get(HARMONICS_PARAMETERS[x + 0], 0) == 0 ? 0 : 1;
+            int env2 = model.get(HARMONICS_PARAMETERS[x + 0], 0) == 0 ? defaultenv2 : (model.get(HARMONICS_PARAMETERS[x + 0], 0) - 1);
+            int defaultenv1 = model.get(HARMONICS_PARAMETERS[x + 1] + "-env", 0);
+            int mod1 = model.get(HARMONICS_PARAMETERS[x + 1], 0) == 0 ? 0 : 1;
+            int env1 = model.get(HARMONICS_PARAMETERS[x + 1], 0) == 0 ? defaultenv1 : (model.get(HARMONICS_PARAMETERS[x + 1], 0) - 1);
+                        
+            data[pos++] = (byte)((mod2 << 7) | (env2 << 4) | (mod1 << 3) | (env1 << 0) );
+            }
 
-		int defaultenv2 = model.get(HARMONICS_PARAMETERS[x + 0] + "-env", 0);
-		int mod2 = model.get(HARMONICS_PARAMETERS[x + 0], 0) == 0 ? 0 : 1;
-		int env2 = model.get(HARMONICS_PARAMETERS[x + 0], 0) == 0 ? defaultenv2 : (model.get(HARMONICS_PARAMETERS[x + 0], 0) - 1);
-		int defaultenv1 = model.get(HARMONICS_PARAMETERS[x + 1] + "-env", 0);
-		int mod1 = model.get(HARMONICS_PARAMETERS[x + 1], 0) == 0 ? 0 : 1;
-		int env1 = model.get(HARMONICS_PARAMETERS[x + 1], 0) == 0 ? defaultenv1 : (model.get(HARMONICS_PARAMETERS[x + 1], 0) - 1);
+        int defaultenv2 = model.get(HARMONICS_PARAMETERS[x + 0] + "-env", 0);
+        int mod2 = model.get(HARMONICS_PARAMETERS[x + 0], 0) == 0 ? 0 : 1;
+        int env2 = model.get(HARMONICS_PARAMETERS[x + 0], 0) == 0 ? defaultenv2 : (model.get(HARMONICS_PARAMETERS[x + 0], 0) - 1);
+        int defaultenv1 = model.get(HARMONICS_PARAMETERS[x + 1] + "-env", 0);
+        int mod1 = model.get(HARMONICS_PARAMETERS[x + 1], 0) == 0 ? 0 : 1;
+        int env1 = model.get(HARMONICS_PARAMETERS[x + 1], 0) == 0 ? defaultenv1 : (model.get(HARMONICS_PARAMETERS[x + 1], 0) - 1);
 
-		data[pos++] = (byte)( (mod2 << 3) | (env2 << 0) | 48);	// the 48 is because for no reason 48 is added by the K5
-		data[pos++] = (byte)( (mod1 << 3) | (env1 << 0) | 48);	// the 48 is because for no reason 48 is added by the K5
-		
+        data[pos++] = (byte)( (mod2 << 3) | (env2 << 0) | 48);  // the 48 is because for no reason 48 is added by the K5
+        data[pos++] = (byte)( (mod1 << 3) | (env1 << 0) | 48);  // the 48 is because for no reason 48 is added by the K5
+                
         // DHG and Post-DHG parameters...
         
         pos = loadData(data, pos, dhgs1velodep, dhgs1env1onoff);
@@ -2229,34 +2229,34 @@ public class KawaiK5 extends Synth
         pos = loadData(data, pos, ddas1attackvelrate, ddas1envseg1modonoff);
         pos = loadData(data, pos, ddas1envseg1modonoff, ddas1envmaxseg1onoff, new int[] { 6, 0 }, new int[] { 1, 6 } );
         pos = loadDataUnified(data, pos, ddas1envmaxseg1onoff, lfoshape, new int[] { 6, 0 }, new int[] { 1, 6 } );
-		data[pos++] = 0;
-		data[pos++] = 0;
+        data[pos++] = 0;
+        data[pos++] = 0;
 
-		int lfopos = pos;
+        int lfopos = pos;
         pos = loadData(data, pos, lfoshape, dftonoff);
 
-		// handle lfoshape specially -- it's store as 0...5, we need to change to 1...6
-		data[lfopos]++; 
-		
+        // handle lfoshape specially -- it's store as 0...5, we need to change to 1...6
+        data[lfopos]++; 
+                
         pos = loadData(data, pos, dftonoff, dftc0level, new int[] { 7, 0 }, new int[] { 1, 7 } );
         pos = loadData(data, pos, dftc0level, dftc0level + 10);
-		data[pos++] = 0;
-		
-		/// Compute Kawai's crazy Checksum
-		
-		int sum = 0;
-		for(int i = 0; i < data.length; i += 2)
-			{
-			sum += (((data[i + 1] & 0xFF) << 8) | (data[i] & 0xFF));
-			}
-		
-		sum = sum & 0xFFFF;
-		sum = (0x5A3C - sum) & 0xFFFF;
+        data[pos++] = 0;
+                
+        /// Compute Kawai's crazy Checksum
+                
+        int sum = 0;
+        for(int i = 0; i < data.length; i += 2)
+            {
+            sum += (((data[i + 1] & 0xFF) << 8) | (data[i] & 0xFF));
+            }
+                
+        sum = sum & 0xFFFF;
+        sum = (0x5A3C - sum) & 0xFFFF;
 
-		data[pos++] = (byte)(sum & 0xFF);
-		data[pos++] = (byte)((sum >>> 8) & 0xFF);
-		
-		// Load payload
+        data[pos++] = (byte)(sum & 0xFF);
+        data[pos++] = (byte)((sum >>> 8) & 0xFF);
+                
+        // Load payload
 
         byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
         result[0] = (byte)0xF0;
@@ -2269,15 +2269,15 @@ public class KawaiK5 extends Synth
         result[7] = (byte)(tempModel.get("bank") * 12 + (tempModel.get("number")));
         
         if (toWorkingMemory) // we're gonna write to SID-12 instead
-        	result[7] = (byte)(47);
-        	
+            result[7] = (byte)(47);
+                
         int v = 8;
         for(int i = 0; i < pos; i++)
-        	{
-        	result[v++] = (byte)((data[i] & 0xFF) >>> 4);
-//        	System.err.println("" + (i + 8) + " " + data[i]);
-        	result[v++] = (byte)(data[i] & 0xF);
-        	}
+            {
+            result[v++] = (byte)((data[i] & 0xFF) >>> 4);
+//              System.err.println("" + (i + 8) + " " + data[i]);
+            result[v++] = (byte)(data[i] & 0xF);
+            }
         result[v] = (byte)0xF7;
         
         return result;
@@ -2287,17 +2287,17 @@ public class KawaiK5 extends Synth
     public byte[] requestDump(Model tempModel)
         {
         return new byte[] 
-        	{ 
-        	(byte)0xF0, 
-        	(byte)0x40, 
-        	(byte)getChannelOut(), 
-        	(byte)0x00, 
-        	(byte)0x00, 
-        	(byte)0x02,
-        	(byte)0x00,  // single
-        	(byte)(tempModel.get("bank") * 12 + (tempModel.get("number"))),
-        	(byte)0xF7
-        	};
+            { 
+            (byte)0xF0, 
+            (byte)0x40, 
+            (byte)getChannelOut(), 
+            (byte)0x00, 
+            (byte)0x00, 
+            (byte)0x02,
+            (byte)0x00,  // single
+            (byte)(tempModel.get("bank") * 12 + (tempModel.get("number"))),
+            (byte)0xF7
+            };
         }
     
     public static boolean recognize(byte[] data)
@@ -2316,14 +2316,14 @@ public class KawaiK5 extends Synth
     
     
     boolean isLegalCharacter(char c)
-    	{
-		 for(int i = 0; i < LEGAL_CHARACTERS.length; i++)
-			{
-			if (c == LEGAL_CHARACTERS[i])
-				return true;
-			}
-		return false;
-		}
+        {
+        for(int i = 0; i < LEGAL_CHARACTERS.length; i++)
+            {
+            if (c == LEGAL_CHARACTERS[i])
+                return true;
+            }
+        return false;
+        }
     
     public static final int MAXIMUM_NAME_LENGTH = 8;
     public String revisePatchName(String name)
@@ -2338,7 +2338,7 @@ public class KawaiK5 extends Synth
         for(int i = 0 ; i < nameb.length(); i++)
             {
             if (!isLegalCharacter(nameb.charAt(i)))
-            	nameb.setCharAt(i, ' ');
+                nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
@@ -2412,1295 +2412,1295 @@ public class KawaiK5 extends Synth
         }
         
 
-	HashMap parametersToIndex = new HashMap();
+    HashMap parametersToIndex = new HashMap();
 
-	public static final String[] parameters = new String[]
-		{
+    public static final String[] parameters = new String[]
+    {
 /// BASIC
-"name1",					// 0
-"name2",
-"name3",
-"name4",
-"name5",
-"name6",
-"name7",
-"name8",
-"volume",
-"balance",
-"basics1delay",				// 10
-"basics2delay",
-"basics1pedaldep",
-"basics2pedaldep",
-"basics1wheeldep",
-"basics2wheeldep",
-"basics1pedalassign",
-"basics1wheelassign",
-"basics2pedalassign",
-"basics2wheelassign",
-"portamentosw",				// 20
-"portamentospeed",
-"mode",
-"picmode",
-	
+    "name1",                                        // 0
+    "name2",
+    "name3",
+    "name4",
+    "name5",
+    "name6",
+    "name7",
+    "name8",
+    "volume",
+    "balance",
+    "basics1delay",                         // 10
+    "basics2delay",
+    "basics1pedaldep",
+    "basics2pedaldep",
+    "basics1wheeldep",
+    "basics2wheeldep",
+    "basics1pedalassign",
+    "basics1wheelassign",
+    "basics2pedalassign",
+    "basics2wheelassign",
+    "portamentosw",                         // 20
+    "portamentospeed",
+    "mode",
+    "picmode",
+        
 /// DFG
-	
-"dfgs1coarse",
-"dfgs2coarse",
-"dfgs1fine",
-"dfgs2fine",
-"dfgs1key",
-"dfgs1fixno",
-"dfgs2key",					// 30
-"dfgs2fixno",
-"dfgs1envdep",
-"dfgs2envdep",
-"dfgs1prsdep",
-"dfgs2prsdep",
-"dfgs1benderdep",
-"dfgs2benderdep",
-"dfgs1veloenvdep",
-"dfgs2veloenvdep",
-"dfgs1lfodep",				// 40
-"dfgs2lfodep",
-"dfgs1preslfodep",
-"dfgs2preslfodep",
-"dfgs1envloop",
-"dfgs1envrateseg1",
-"dfgs2envloop",
-"dfgs2envrateseg1",
-"dfgs1envrateseg2",
-"dfgs2envrateseg2",
-"dfgs1envrateseg3",				// 50
-"dfgs2envrateseg3",
-"dfgs1envrateseg4",
-"dfgs2envrateseg4",
-"dfgs1envrateseg5",
-"dfgs2envrateseg5",
-"dfgs1envrateseg6",
-"dfgs2envrateseg6",
-"dfgs1envlevelseg1",
-"dfgs2envlevelseg1",
-"dfgs1envlevelseg2",			// 60
-"dfgs2envlevelseg2",
-"dfgs1envlevelseg3",
-"dfgs2envlevelseg3",
-"dfgs1envlevelseg4",
-"dfgs2envlevelseg4",
-"dfgs1envlevelseg5",
-"dfgs2envlevelseg5",
-"dfgs1envlevelseg6",
-"dfgs2envlevelseg6",
-	
+        
+    "dfgs1coarse",
+    "dfgs2coarse",
+    "dfgs1fine",
+    "dfgs2fine",
+    "dfgs1key",
+    "dfgs1fixno",
+    "dfgs2key",                                     // 30
+    "dfgs2fixno",
+    "dfgs1envdep",
+    "dfgs2envdep",
+    "dfgs1prsdep",
+    "dfgs2prsdep",
+    "dfgs1benderdep",
+    "dfgs2benderdep",
+    "dfgs1veloenvdep",
+    "dfgs2veloenvdep",
+    "dfgs1lfodep",                          // 40
+    "dfgs2lfodep",
+    "dfgs1preslfodep",
+    "dfgs2preslfodep",
+    "dfgs1envloop",
+    "dfgs1envrateseg1",
+    "dfgs2envloop",
+    "dfgs2envrateseg1",
+    "dfgs1envrateseg2",
+    "dfgs2envrateseg2",
+    "dfgs1envrateseg3",                             // 50
+    "dfgs2envrateseg3",
+    "dfgs1envrateseg4",
+    "dfgs2envrateseg4",
+    "dfgs1envrateseg5",
+    "dfgs2envrateseg5",
+    "dfgs1envrateseg6",
+    "dfgs2envrateseg6",
+    "dfgs1envlevelseg1",
+    "dfgs2envlevelseg1",
+    "dfgs1envlevelseg2",                    // 60
+    "dfgs2envlevelseg2",
+    "dfgs1envlevelseg3",
+    "dfgs2envlevelseg3",
+    "dfgs1envlevelseg4",
+    "dfgs2envlevelseg4",
+    "dfgs1envlevelseg5",
+    "dfgs2envlevelseg5",
+    "dfgs1envlevelseg6",
+    "dfgs2envlevelseg6",
+        
 /// DHG
 /// Harmonics not listed, but then...
-	
-"dhgs1velodep",					// 70
-"dhgs2velodep",
-"dhgs1presdep",
-"dhgs2presdep",
-"dhgs1ksdep",
-"dhgs2ksdep",
-"dhgs1lfodep",
-"dhgs2lfodep",
-"dhgs1env1onoff",				// 80
-"dhgs1env1moddepth",	// mistake,
-"dhgs2env1onoff",
-"dhgs2env1moddepth",	// mistake,
-"dhgs1env2onoff",
-"dhgs1env2moddepth",	// mistake,
-"dhgs2env2onoff",
-"dhgs2env2moddepth",	// mistake,
-"dhgs1env3onoff",
-"dhgs1env3moddepth",	// mistake,
-"dhgs2env3onoff",
-"dhgs2env3moddepth",	// mistake,
-"dhgs1env4onoff",				// 90
-"dhgs1env4moddepth",	// mistake,
-"dhgs2env4onoff",
-"dhgs2env4moddepth",	// mistake,
-"dhgs1modonoff",
-"dhgs1harmsel",
-"dhgs2modonoff",
-"dhgs2harmsel",
-"dhgs1rangefrom",
-"dhgs2rangefrom",
-"dhgs1rangeto",				// 100
-"dhgs2rangeto",
-"dhgs1oddmodonoff",
-"dhgs1oddenv",
-"dhgs1evenmodonoff",	// this must be an error -- was 
-"dhgs1evenenv",
-"dhgs2oddmodonoff",
-"dhgs2oddenv",
-"dhgs2evenmodonoff",	// this must be an error -- was 
-"dhgs2evenenv",
-"dhgs1octavemodonoff",			// 110
-"dhgs1octaveenv",
-"dhgs1fifthmodonoff",
-"dhgs1fifthenv",
-"dhgs2octavemodonoff",
-"dhgs2octaveenv",
-"dhgs2fifthmodonoff",
-"dhgs2fifthenv",
-"dhgs1allmodonoff",
-"dhgs1allenv",				// 120
-"dhgs2allmodonoff",
-"dhgs2allenv",
-"dhgs1angle",
-"dhgs2angle",
-"dhgs1harm",
-"dhgs2harm",
-"dhgs1shadowonoff",	// mistake,
-"dhgs1env1maxsegonoff",	// mistake,
-"dhgs1env1seg1level",
-"dhgs2shadowonoff",	// mistake,
-"dhgs2env1maxsegonoff",	// mistake,			130
-"dhgs2env1seg1level",
-"dhgs1env1maxsegonoff",	// mistake,
-"dhgs1env1seg2level",
-"dhgs2env1maxsegonoff",	// mistake,
-"dhgs2env1seg2level",
-"dhgs1env1maxsegonoff",	// mistake,
-"dhgs1env1seg3level",
-"dhgs2env1maxsegonoff",	// mistake,
-"dhgs2env1seg3level",
-"dhgs1env1maxsegonoff",	// mistake,			140
-"dhgs1env1seg4level",
-"dhgs2env1maxsegonoff",	// mistake,
-"dhgs2env1seg4level",
-"dhgs1env1maxsegonoff",	// mistake,
-"dhgs1env1seg5level",
-"dhgs2env1maxsegonoff",	// mistake,
-"dhgs2env1seg5level",
-"dhgs1env1maxsegonoff",	// mistake,
-"dhgs1env1seg6level",
-"dhgs2env1maxsegonoff",	// mistake,			// 150
-"dhgs2env1seg6level",
-"dhgs1env1seg1rate",					
-"dhgs2env1seg1rate",
-"dhgs1env1seg2rate",
-"dhgs2env1seg2rate",
-"dhgs1env1seg3rate",
-"dhgs2env1seg3rate",
-"dhgs1env1seg4rate",
-"dhgs2env1seg4rate",
-"dhgs1env1seg5rate",					// 160
-"dhgs2env1seg5rate",
-"dhgs1env1seg6rate",
-"dhgs2env1seg6rate",
-"dhgs1env2maxsegonoff",	// mistake,
-"dhgs1env2seg1level",
-"dhgs2env2maxsegonoff",	// mistake,
-"dhgs2env2seg1level",
-"dhgs1env2maxsegonoff",	// mistake,
-"dhgs1env2seg2level",
-"dhgs2env2maxsegonoff",	// mistake,		// 170
-"dhgs2env2seg2level",
-"dhgs1env2maxsegonoff",	// mistake,
-"dhgs1env2seg3level",
-"dhgs2env2maxsegonoff",	// mistake,
-"dhgs2env2seg3level",
-"dhgs1env2maxsegonoff",	// mistake,
-"dhgs1env2seg4level",
-"dhgs2env2maxsegonoff",	// mistake,
-"dhgs2env2seg4level",
-"dhgs1env2maxsegonoff",	// mistake,		// 180
-"dhgs1env2seg5level",
-"dhgs2env2maxsegonoff",	// mistake,
-"dhgs2env2seg5level",
-"dhgs1env2maxsegonoff",	// mistake,
-"dhgs1env2seg6level",
-"dhgs2env2maxsegonoff",	// mistake,
-"dhgs2env2seg6level",
-"dhgs1env2seg1rate",
-"dhgs2env2seg1rate",
-"dhgs1env2seg2rate",					// 190
-"dhgs2env2seg2rate",
-"dhgs1env2seg3rate",
-"dhgs2env2seg3rate",
-"dhgs1env2seg4rate",
-"dhgs2env2seg4rate",
-"dhgs1env2seg5rate",
-"dhgs2env2seg5rate",
-"dhgs1env2seg6rate",
-"dhgs2env2seg6rate",
-"dhgs1env3maxsegonoff",	// mistake,		// 200
-"dhgs1env3seg1level",
-"dhgs2env3maxsegonoff",	// mistake,
-"dhgs2env3seg1level",
-"dhgs1env3maxsegonoff",	// mistake,
-"dhgs1env3seg2level",
-"dhgs2env3maxsegonoff",	// mistake,
-"dhgs2env3seg2level",
-"dhgs1env3maxsegonoff",	// mistake,
-"dhgs1env3seg3level",
-"dhgs2env3maxsegonoff",	// mistake,			// 210
-"dhgs2env3seg3level",
-"dhgs1env3maxsegonoff",	// mistake,
-"dhgs1env3seg4level",
-"dhgs2env3maxsegonoff",	// mistake,
-"dhgs2env3seg4level",
-"dhgs1env3maxsegonoff",	// mistake,
-"dhgs1env3seg5level",
-"dhgs2env3maxsegonoff",	// mistake,
-"dhgs2env3seg5level",
-"dhgs1env3maxsegonoff",	// mistake,			// 220
-"dhgs1env3seg6level",
-"dhgs2env3maxsegonoff",	// mistake,
-"dhgs2env3seg6level",
-"dhgs1env3seg1rate",
-"dhgs2env3seg1rate",
-"dhgs1env3seg2rate",
-"dhgs2env3seg2rate",
-"dhgs1env3seg3rate",
-"dhgs2env3seg3rate",
-"dhgs1env3seg4rate",				// 230
-"dhgs2env3seg4rate",
-"dhgs1env3seg5rate",
-"dhgs2env3seg5rate",
-"dhgs1env3seg6rate",
-"dhgs2env3seg6rate",
-"dhgs1env4maxsegonoff",	// mistake,
-"dhgs1env4seg1level",
-"dhgs2env4maxsegonoff",	// mistake,
-"dhgs2env4seg1level",
-"dhgs1env4maxsegonoff",	// mistake,		// 240
-"dhgs1env4seg2level",
-"dhgs2env4maxsegonoff",	// mistake,
-"dhgs2env4seg2level",
-"dhgs1env4maxsegonoff",	// mistake,
-"dhgs1env4seg3level",
-"dhgs2env4maxsegonoff",	// mistake,
-"dhgs2env4seg3level",
-"dhgs1env4maxsegonoff",	// mistake,
-"dhgs1env4seg4level",
-"dhgs2env4maxsegonoff",	// mistake,		// 250
-"dhgs2env4seg4level",
-"dhgs1env4maxsegonoff",	// mistake,
-"dhgs1env4seg5level",
-"dhgs2env4maxsegonoff",	// mistake,
-"dhgs2env4seg5level",
-"dhgs1env4maxsegonoff",	// mistake,
-"dhgs1env4seg6level",
-"dhgs2env4maxsegonoff",	// mistake,
-"dhgs2env4seg6level",
-"dhgs1env4seg1rate",						// 260
-"dhgs2env4seg1rate",
-"dhgs1env4seg2rate",
-"dhgs2env4seg2rate",
-"dhgs1env4seg3rate",
-"dhgs2env4seg3rate",
-"dhgs1env4seg4rate",
-"dhgs2env4seg4rate",
-"dhgs1env4seg5rate",
-"dhgs2env4seg5rate",
-"dhgs1env4seg6rate",						// 270
-"dhgs2env4seg6rate",
-	
+        
+    "dhgs1velodep",                                 // 70
+    "dhgs2velodep",
+    "dhgs1presdep",
+    "dhgs2presdep",
+    "dhgs1ksdep",
+    "dhgs2ksdep",
+    "dhgs1lfodep",
+    "dhgs2lfodep",
+    "dhgs1env1onoff",                               // 80
+    "dhgs1env1moddepth",    // mistake,
+    "dhgs2env1onoff",
+    "dhgs2env1moddepth",    // mistake,
+    "dhgs1env2onoff",
+    "dhgs1env2moddepth",    // mistake,
+    "dhgs2env2onoff",
+    "dhgs2env2moddepth",    // mistake,
+    "dhgs1env3onoff",
+    "dhgs1env3moddepth",    // mistake,
+    "dhgs2env3onoff",
+    "dhgs2env3moddepth",    // mistake,
+    "dhgs1env4onoff",                               // 90
+    "dhgs1env4moddepth",    // mistake,
+    "dhgs2env4onoff",
+    "dhgs2env4moddepth",    // mistake,
+    "dhgs1modonoff",
+    "dhgs1harmsel",
+    "dhgs2modonoff",
+    "dhgs2harmsel",
+    "dhgs1rangefrom",
+    "dhgs2rangefrom",
+    "dhgs1rangeto",                         // 100
+    "dhgs2rangeto",
+    "dhgs1oddmodonoff",
+    "dhgs1oddenv",
+    "dhgs1evenmodonoff",    // this must be an error -- was 
+    "dhgs1evenenv",
+    "dhgs2oddmodonoff",
+    "dhgs2oddenv",
+    "dhgs2evenmodonoff",    // this must be an error -- was 
+    "dhgs2evenenv",
+    "dhgs1octavemodonoff",                  // 110
+    "dhgs1octaveenv",
+    "dhgs1fifthmodonoff",
+    "dhgs1fifthenv",
+    "dhgs2octavemodonoff",
+    "dhgs2octaveenv",
+    "dhgs2fifthmodonoff",
+    "dhgs2fifthenv",
+    "dhgs1allmodonoff",
+    "dhgs1allenv",                          // 120
+    "dhgs2allmodonoff",
+    "dhgs2allenv",
+    "dhgs1angle",
+    "dhgs2angle",
+    "dhgs1harm",
+    "dhgs2harm",
+    "dhgs1shadowonoff",     // mistake,
+    "dhgs1env1maxsegonoff", // mistake,
+    "dhgs1env1seg1level",
+    "dhgs2shadowonoff",     // mistake,
+    "dhgs2env1maxsegonoff", // mistake,                     130
+    "dhgs2env1seg1level",
+    "dhgs1env1maxsegonoff", // mistake,
+    "dhgs1env1seg2level",
+    "dhgs2env1maxsegonoff", // mistake,
+    "dhgs2env1seg2level",
+    "dhgs1env1maxsegonoff", // mistake,
+    "dhgs1env1seg3level",
+    "dhgs2env1maxsegonoff", // mistake,
+    "dhgs2env1seg3level",
+    "dhgs1env1maxsegonoff", // mistake,                     140
+    "dhgs1env1seg4level",
+    "dhgs2env1maxsegonoff", // mistake,
+    "dhgs2env1seg4level",
+    "dhgs1env1maxsegonoff", // mistake,
+    "dhgs1env1seg5level",
+    "dhgs2env1maxsegonoff", // mistake,
+    "dhgs2env1seg5level",
+    "dhgs1env1maxsegonoff", // mistake,
+    "dhgs1env1seg6level",
+    "dhgs2env1maxsegonoff", // mistake,                     // 150
+    "dhgs2env1seg6level",
+    "dhgs1env1seg1rate",                                    
+    "dhgs2env1seg1rate",
+    "dhgs1env1seg2rate",
+    "dhgs2env1seg2rate",
+    "dhgs1env1seg3rate",
+    "dhgs2env1seg3rate",
+    "dhgs1env1seg4rate",
+    "dhgs2env1seg4rate",
+    "dhgs1env1seg5rate",                                    // 160
+    "dhgs2env1seg5rate",
+    "dhgs1env1seg6rate",
+    "dhgs2env1seg6rate",
+    "dhgs1env2maxsegonoff", // mistake,
+    "dhgs1env2seg1level",
+    "dhgs2env2maxsegonoff", // mistake,
+    "dhgs2env2seg1level",
+    "dhgs1env2maxsegonoff", // mistake,
+    "dhgs1env2seg2level",
+    "dhgs2env2maxsegonoff", // mistake,             // 170
+    "dhgs2env2seg2level",
+    "dhgs1env2maxsegonoff", // mistake,
+    "dhgs1env2seg3level",
+    "dhgs2env2maxsegonoff", // mistake,
+    "dhgs2env2seg3level",
+    "dhgs1env2maxsegonoff", // mistake,
+    "dhgs1env2seg4level",
+    "dhgs2env2maxsegonoff", // mistake,
+    "dhgs2env2seg4level",
+    "dhgs1env2maxsegonoff", // mistake,             // 180
+    "dhgs1env2seg5level",
+    "dhgs2env2maxsegonoff", // mistake,
+    "dhgs2env2seg5level",
+    "dhgs1env2maxsegonoff", // mistake,
+    "dhgs1env2seg6level",
+    "dhgs2env2maxsegonoff", // mistake,
+    "dhgs2env2seg6level",
+    "dhgs1env2seg1rate",
+    "dhgs2env2seg1rate",
+    "dhgs1env2seg2rate",                                    // 190
+    "dhgs2env2seg2rate",
+    "dhgs1env2seg3rate",
+    "dhgs2env2seg3rate",
+    "dhgs1env2seg4rate",
+    "dhgs2env2seg4rate",
+    "dhgs1env2seg5rate",
+    "dhgs2env2seg5rate",
+    "dhgs1env2seg6rate",
+    "dhgs2env2seg6rate",
+    "dhgs1env3maxsegonoff", // mistake,             // 200
+    "dhgs1env3seg1level",
+    "dhgs2env3maxsegonoff", // mistake,
+    "dhgs2env3seg1level",
+    "dhgs1env3maxsegonoff", // mistake,
+    "dhgs1env3seg2level",
+    "dhgs2env3maxsegonoff", // mistake,
+    "dhgs2env3seg2level",
+    "dhgs1env3maxsegonoff", // mistake,
+    "dhgs1env3seg3level",
+    "dhgs2env3maxsegonoff", // mistake,                     // 210
+    "dhgs2env3seg3level",
+    "dhgs1env3maxsegonoff", // mistake,
+    "dhgs1env3seg4level",
+    "dhgs2env3maxsegonoff", // mistake,
+    "dhgs2env3seg4level",
+    "dhgs1env3maxsegonoff", // mistake,
+    "dhgs1env3seg5level",
+    "dhgs2env3maxsegonoff", // mistake,
+    "dhgs2env3seg5level",
+    "dhgs1env3maxsegonoff", // mistake,                     // 220
+    "dhgs1env3seg6level",
+    "dhgs2env3maxsegonoff", // mistake,
+    "dhgs2env3seg6level",
+    "dhgs1env3seg1rate",
+    "dhgs2env3seg1rate",
+    "dhgs1env3seg2rate",
+    "dhgs2env3seg2rate",
+    "dhgs1env3seg3rate",
+    "dhgs2env3seg3rate",
+    "dhgs1env3seg4rate",                            // 230
+    "dhgs2env3seg4rate",
+    "dhgs1env3seg5rate",
+    "dhgs2env3seg5rate",
+    "dhgs1env3seg6rate",
+    "dhgs2env3seg6rate",
+    "dhgs1env4maxsegonoff", // mistake,
+    "dhgs1env4seg1level",
+    "dhgs2env4maxsegonoff", // mistake,
+    "dhgs2env4seg1level",
+    "dhgs1env4maxsegonoff", // mistake,             // 240
+    "dhgs1env4seg2level",
+    "dhgs2env4maxsegonoff", // mistake,
+    "dhgs2env4seg2level",
+    "dhgs1env4maxsegonoff", // mistake,
+    "dhgs1env4seg3level",
+    "dhgs2env4maxsegonoff", // mistake,
+    "dhgs2env4seg3level",
+    "dhgs1env4maxsegonoff", // mistake,
+    "dhgs1env4seg4level",
+    "dhgs2env4maxsegonoff", // mistake,             // 250
+    "dhgs2env4seg4level",
+    "dhgs1env4maxsegonoff", // mistake,
+    "dhgs1env4seg5level",
+    "dhgs2env4maxsegonoff", // mistake,
+    "dhgs2env4seg5level",
+    "dhgs1env4maxsegonoff", // mistake,
+    "dhgs1env4seg6level",
+    "dhgs2env4maxsegonoff", // mistake,
+    "dhgs2env4seg6level",
+    "dhgs1env4seg1rate",                                            // 260
+    "dhgs2env4seg1rate",
+    "dhgs1env4seg2rate",
+    "dhgs2env4seg2rate",
+    "dhgs1env4seg3rate",
+    "dhgs2env4seg3rate",
+    "dhgs1env4seg4rate",
+    "dhgs2env4seg4rate",
+    "dhgs1env4seg5rate",
+    "dhgs2env4seg5rate",
+    "dhgs1env4seg6rate",                                            // 270
+    "dhgs2env4seg6rate",
+        
 /// DDF
-	
-"ddfs1cutoff",
-"ddfs2cutoff",
-"ddfs1cutoffmod",
-"ddfs2cutoffmod",
-"ddfs1slope",
-"ddfs2slope",
-"ddfs1slopemod",
-"ddfs2slopemod",
-"ddfs1flatlevel",					// 280
-"ddfs2flatlevel",
-"ddfs1velodep",
-"ddfs2velodep",
-"ddfs1presdep",
-"ddfs2presdep",
-"ddfs1ksdep",
-"ddfs2ksdep",
-"ddfs1envdep",
-"ddfs2envdep",
-"ddfs1veloenvdep",				// 290
-"ddfs2veloenvdep",
-"ddfs1ddfonoff",
-"ddfs1ddfmodonoff",
-"ddfs1lfodep",
-"ddfs2ddfonoff",
-"ddfs2ddfmodonoff",
-"ddfs2lfodep",
-"ddfs1envseg1rate",
-"ddfs2envseg1rate",
-"ddfs1envseg2rate",				// 300
-"ddfs2envseg2rate",
-"ddfs1envseg3rate",
-"ddfs2envseg3rate",
-"ddfs1envseg4rate",
-"ddfs2envseg4rate",
-"ddfs1envseg5rate",
-"ddfs2envseg5rate",
-"ddfs1envseg6rate",
-"ddfs2envseg6rate",
-"ddfs1envmaxsegonoff",	// mistake,			// 310
-"ddfs1envseg1level",
-"ddfs2envmaxsegonoff",	// mistake,
-"ddfs2envseg1level",
-"ddfs1envmaxsegonoff",	// mistake,
-"ddfs1envseg2level",
-"ddfs2envmaxsegonoff",	// mistake,
-"ddfs2envseg2level",
-"ddfs1envmaxsegonoff",	// mistake,
-"ddfs1envseg3level",
-"ddfs2envmaxsegonoff",	// mistake,			// 320
-"ddfs2envseg3level",
-"ddfs1envmaxsegonoff",	// mistake,
-"ddfs1envseg4level",
-"ddfs2envmaxsegonoff",	// mistake,
-"ddfs2envseg4level",
-"ddfs1envmaxsegonoff",	// mistake,
-"ddfs1envseg5level",
-"ddfs2envmaxsegonoff",	// mistake,
-"ddfs2envseg5level",
-"ddfs1envmaxsegonoff",	// mistake,			// 330	
-"ddfs1envseg6level",
-"ddfs2envmaxsegonoff",	// mistake,
-"ddfs2envseg6level",
-	
+        
+    "ddfs1cutoff",
+    "ddfs2cutoff",
+    "ddfs1cutoffmod",
+    "ddfs2cutoffmod",
+    "ddfs1slope",
+    "ddfs2slope",
+    "ddfs1slopemod",
+    "ddfs2slopemod",
+    "ddfs1flatlevel",                                       // 280
+    "ddfs2flatlevel",
+    "ddfs1velodep",
+    "ddfs2velodep",
+    "ddfs1presdep",
+    "ddfs2presdep",
+    "ddfs1ksdep",
+    "ddfs2ksdep",
+    "ddfs1envdep",
+    "ddfs2envdep",
+    "ddfs1veloenvdep",                              // 290
+    "ddfs2veloenvdep",
+    "ddfs1ddfonoff",
+    "ddfs1ddfmodonoff",
+    "ddfs1lfodep",
+    "ddfs2ddfonoff",
+    "ddfs2ddfmodonoff",
+    "ddfs2lfodep",
+    "ddfs1envseg1rate",
+    "ddfs2envseg1rate",
+    "ddfs1envseg2rate",                             // 300
+    "ddfs2envseg2rate",
+    "ddfs1envseg3rate",
+    "ddfs2envseg3rate",
+    "ddfs1envseg4rate",
+    "ddfs2envseg4rate",
+    "ddfs1envseg5rate",
+    "ddfs2envseg5rate",
+    "ddfs1envseg6rate",
+    "ddfs2envseg6rate",
+    "ddfs1envmaxsegonoff",  // mistake,                     // 310
+    "ddfs1envseg1level",
+    "ddfs2envmaxsegonoff",  // mistake,
+    "ddfs2envseg1level",
+    "ddfs1envmaxsegonoff",  // mistake,
+    "ddfs1envseg2level",
+    "ddfs2envmaxsegonoff",  // mistake,
+    "ddfs2envseg2level",
+    "ddfs1envmaxsegonoff",  // mistake,
+    "ddfs1envseg3level",
+    "ddfs2envmaxsegonoff",  // mistake,                     // 320
+    "ddfs2envseg3level",
+    "ddfs1envmaxsegonoff",  // mistake,
+    "ddfs1envseg4level",
+    "ddfs2envmaxsegonoff",  // mistake,
+    "ddfs2envseg4level",
+    "ddfs1envmaxsegonoff",  // mistake,
+    "ddfs1envseg5level",
+    "ddfs2envmaxsegonoff",  // mistake,
+    "ddfs2envseg5level",
+    "ddfs1envmaxsegonoff",  // mistake,                     // 330  
+    "ddfs1envseg6level",
+    "ddfs2envmaxsegonoff",  // mistake,
+    "ddfs2envseg6level",
+        
 /// DDA
-	
-"ddas1attackvelodep",	// mistake,
-"ddas2attackvelodep",	// mistake,
-"ddas1presdep",
-"ddas2presdep",
-"ddas1ksdep",
-"ddas2ksdep",
-"ddas1ddaonoff",							// 340
-"ddas1lfodep",
-"ddas2ddaonoff",
-"ddas2lfodep",
-"ddas1attackvelrate",	// mistake,
-"ddas2attackvelrate",	// mistake,
-"ddas1releasevelrate",
-"ddas2releasevelrate",
-"ddas1ksrate",
-"ddas2ksrate",
-"ddas1envseg1modonoff",						// 350
-"ddas1envseg1rate",
-"ddas2envseg1modonoff",
-"ddas2envseg1rate",
-"ddas1envseg2modonoff",
-"ddas1envseg2rate",
-"ddas2envseg2modonoff",
-"ddas2envseg2rate",
-"ddas1envseg3modonoff",
-"ddas1envseg3rate",
-"ddas2envseg3modonoff",						// 360
-"ddas2envseg3rate",
-"ddas1envseg4modonoff",
-"ddas1envseg4rate",
-"ddas2envseg4modonoff",
-"ddas2envseg4rate",
-"ddas1envseg5modonoff",
-"ddas1envseg5rate",
-"ddas2envseg5modonoff",
-"ddas2envseg5rate",
-"ddas1envseg6modonoff",						// 370
-"ddas1envseg6rate",
-"ddas2envseg6modonoff",
-"ddas2envseg6rate",
-"ddas1envseg7modonoff",
-"ddas1envseg7rate",
-"ddas2envseg7modonoff",
-"ddas2envseg7rate",
-"ddas1envmaxsegonoff",	// mistake,
-"ddas1envseg1level",
-"ddas2envmaxsegonoff",	// mistake,			// 380
-"ddas2envseg1level",
-"ddas1envmaxsegonoff",	// mistake,
-"ddas1envseg2level",
-"ddas2envmaxsegonoff",	// mistake,
-"ddas2envseg2level",
-"ddas1envmaxsegonoff",	// mistake,
-"ddas1envseg3level",
-"ddas2envmaxsegonoff",	// mistake,
-"ddas2envseg3level",
-"ddas1envmaxsegonoff",	// mistake,			// 390
-"ddas1envseg4level",
-"ddas2envmaxsegonoff",	// mistake,
-"ddas2envseg4level",
-"ddas1envmaxsegonoff",	// mistake,
-"ddas1envseg5level",
-"ddas2envmaxsegonoff",	// mistake,
-"ddas2envseg5level",
-"ddas1envmaxsegonoff",	// mistake,
-"ddas1envseg6level",
-"ddas2envmaxsegonoff",	// mistake,
-"ddas2envseg6level",
-	
+        
+    "ddas1attackvelodep",   // mistake,
+    "ddas2attackvelodep",   // mistake,
+    "ddas1presdep",
+    "ddas2presdep",
+    "ddas1ksdep",
+    "ddas2ksdep",
+    "ddas1ddaonoff",                                                        // 340
+    "ddas1lfodep",
+    "ddas2ddaonoff",
+    "ddas2lfodep",
+    "ddas1attackvelrate",   // mistake,
+    "ddas2attackvelrate",   // mistake,
+    "ddas1releasevelrate",
+    "ddas2releasevelrate",
+    "ddas1ksrate",
+    "ddas2ksrate",
+    "ddas1envseg1modonoff",                                         // 350
+    "ddas1envseg1rate",
+    "ddas2envseg1modonoff",
+    "ddas2envseg1rate",
+    "ddas1envseg2modonoff",
+    "ddas1envseg2rate",
+    "ddas2envseg2modonoff",
+    "ddas2envseg2rate",
+    "ddas1envseg3modonoff",
+    "ddas1envseg3rate",
+    "ddas2envseg3modonoff",                                         // 360
+    "ddas2envseg3rate",
+    "ddas1envseg4modonoff",
+    "ddas1envseg4rate",
+    "ddas2envseg4modonoff",
+    "ddas2envseg4rate",
+    "ddas1envseg5modonoff",
+    "ddas1envseg5rate",
+    "ddas2envseg5modonoff",
+    "ddas2envseg5rate",
+    "ddas1envseg6modonoff",                                         // 370
+    "ddas1envseg6rate",
+    "ddas2envseg6modonoff",
+    "ddas2envseg6rate",
+    "ddas1envseg7modonoff",
+    "ddas1envseg7rate",
+    "ddas2envseg7modonoff",
+    "ddas2envseg7rate",
+    "ddas1envmaxsegonoff",  // mistake,
+    "ddas1envseg1level",
+    "ddas2envmaxsegonoff",  // mistake,                     // 380
+    "ddas2envseg1level",
+    "ddas1envmaxsegonoff",  // mistake,
+    "ddas1envseg2level",
+    "ddas2envmaxsegonoff",  // mistake,
+    "ddas2envseg2level",
+    "ddas1envmaxsegonoff",  // mistake,
+    "ddas1envseg3level",
+    "ddas2envmaxsegonoff",  // mistake,
+    "ddas2envseg3level",
+    "ddas1envmaxsegonoff",  // mistake,                     // 390
+    "ddas1envseg4level",
+    "ddas2envmaxsegonoff",  // mistake,
+    "ddas2envseg4level",
+    "ddas1envmaxsegonoff",  // mistake,
+    "ddas1envseg5level",
+    "ddas2envmaxsegonoff",  // mistake,
+    "ddas2envseg5level",
+    "ddas1envmaxsegonoff",  // mistake,
+    "ddas1envseg6level",
+    "ddas2envmaxsegonoff",  // mistake,
+    "ddas2envseg6level",
+        
 /// LFO
-	
-"lfoshape",
-"lfospeed",
-"lfodelay",
-"lfotrend",
-	
+        
+    "lfoshape",
+    "lfospeed",
+    "lfodelay",
+    "lfotrend",
+        
 /// KS
-	
-"kss1right",
-"kss2right",
-"kss1left",
-"kss2left",
-"kss1breakpoint",							// 410
-"kss2breakpoint",
-	
+        
+    "kss1right",
+    "kss2right",
+    "kss1left",
+    "kss2left",
+    "kss1breakpoint",                                                       // 410
+    "kss2breakpoint",
+        
 /// DFT
-	
-"dftonoff",
-"dftcneg1level",	// mistake,
-"dftc0level",
-"dftc1level",
-"dftc2level",
-"dftc3level",
-"dftc4level",
-"dftc5level",
-"dftc6level",								// 420
-"dftc7level",
-"dftc8level",
-"dftc9level",
-		};
+        
+    "dftonoff",
+    "dftcneg1level",        // mistake,
+    "dftc0level",
+    "dftc1level",
+    "dftc2level",
+    "dftc3level",
+    "dftc4level",
+    "dftc5level",
+    "dftc6level",                                                           // 420
+    "dftc7level",
+    "dftc8level",
+    "dftc9level",
+    };
 
-public static final int[] paramNumbers = new int[]
-	{
+    public static final int[] paramNumbers = new int[]
+    {
 /// BASIC,
-	
-200,
-201,
-202,
-203,
-204,
-205,
-206,
-207,
-210,
-211,
-215,
-218,
-214,
-217,
-232,
-233,
-213,
-230,
-216,
-231,
-234,
-235,
-208,
-236,
-	
+        
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    210,
+    211,
+    215,
+    218,
+    214,
+    217,
+    232,
+    233,
+    213,
+    230,
+    216,
+    231,
+    234,
+    235,
+    208,
+    236,
+        
 /// DFG,
-	
-0,
-0,
-1,
-1,
-2,
-3,
-2,
-3,
-4,
-4,
-5,
-5,
-6,
-6,
-8,
-8,
-10,
-10,
-12,
-12,
-26,
-14,
-26,
-14,
-15,
-15,
-16,
-16,
-17,
-17,
-18,
-18,
-19,
-19,
-20,
-20,
-21,
-21,
-22,
-22,
-23,
-23,
-24,
-24,
-25,
-25,
-	
+        
+    0,
+    0,
+    1,
+    1,
+    2,
+    3,
+    2,
+    3,
+    4,
+    4,
+    5,
+    5,
+    6,
+    6,
+    8,
+    8,
+    10,
+    10,
+    12,
+    12,
+    26,
+    14,
+    26,
+    14,
+    15,
+    15,
+    16,
+    16,
+    17,
+    17,
+    18,
+    18,
+    19,
+    19,
+    20,
+    20,
+    21,
+    21,
+    22,
+    22,
+    23,
+    23,
+    24,
+    24,
+    25,
+    25,
+        
 /// DHG,
 /// Harmonics not listed, but then...,
-	
-44,
-44,
-45,
-45,
-46,
-46,
-47,
-47,
-48,
-188,
-48,
-188,
-49,
-189,
-49,
-189,
-50,
-190,
-50,
-190,
-51,
-191,
-51,
-191,
-27,
-28,
-27,
-28,
-29,
-29,
-30,
-30,
-32,
-31,
-34,	// the text says this is parameter 33 but I think it may be wrong
-33,	// the text says this is parameter 35 but I think it may be wrong
-32,
-31,
-34,	// the text says this is parameter 33 but I think it may be wrong
-33,	// the text says this is parameter 35 but I think it may be wrong
-36,
-35,
-38,
-37,
-36,
-35,
-38,
-37,
-187,
-186,
-187,
-186,
-39,
-39,
-40,
-40,
-56,
-52,
-63,
-56,
-52,
-63,
-52,
-64,
-52,
-64,
-52,
-65,
-52,
-65,
-52,
-66,
-52,
-66,
-52,
-67,
-52,
-67,
-52,
-68,
-52,
-68,
-57,
-57,
-58,
-58,
-59,
-59,
-60,
-60,
-61,
-61,
-62,
-62,
-53,
-75,
-53,
-75,
-53,
-76,
-53,
-76,
-53,
-77,
-53,
-77,
-53,
-78,
-53,
-78,
-53,
-79,
-53,
-79,
-53,
-80,
-53,
-80,
-69,
-69,
-70,
-70,
-71,
-71,
-72,
-72,
-73,
-73,
-74,
-74,
-54,
-87,
-54,
-87,
-54,
-88,
-54,
-88,
-54,
-89,
-54,
-89,
-54,
-90,
-54,
-90,
-54,
-91,
-54,
-91,
-54,
-92,
-54,
-92,
-81,
-81,
-82,
-82,
-83,
-83,
-84,
-84,
-85,
-85,
-86,
-86,
-55,
-99,
-55,
-99,
-55,
-100,
-55,
-100,
-55,
-101,
-55,
-101,
-55,
-102,
-55,
-102,
-55,
-103,
-55,
-103,
-55,
-104,
-55,
-104,
-93,
-93,
-94,
-94,
-95,
-95,
-96,
-96,
-97,
-97,
-98,
-98,
-	
+        
+    44,
+    44,
+    45,
+    45,
+    46,
+    46,
+    47,
+    47,
+    48,
+    188,
+    48,
+    188,
+    49,
+    189,
+    49,
+    189,
+    50,
+    190,
+    50,
+    190,
+    51,
+    191,
+    51,
+    191,
+    27,
+    28,
+    27,
+    28,
+    29,
+    29,
+    30,
+    30,
+    32,
+    31,
+    34,     // the text says this is parameter 33 but I think it may be wrong
+    33,     // the text says this is parameter 35 but I think it may be wrong
+    32,
+    31,
+    34,     // the text says this is parameter 33 but I think it may be wrong
+    33,     // the text says this is parameter 35 but I think it may be wrong
+    36,
+    35,
+    38,
+    37,
+    36,
+    35,
+    38,
+    37,
+    187,
+    186,
+    187,
+    186,
+    39,
+    39,
+    40,
+    40,
+    56,
+    52,
+    63,
+    56,
+    52,
+    63,
+    52,
+    64,
+    52,
+    64,
+    52,
+    65,
+    52,
+    65,
+    52,
+    66,
+    52,
+    66,
+    52,
+    67,
+    52,
+    67,
+    52,
+    68,
+    52,
+    68,
+    57,
+    57,
+    58,
+    58,
+    59,
+    59,
+    60,
+    60,
+    61,
+    61,
+    62,
+    62,
+    53,
+    75,
+    53,
+    75,
+    53,
+    76,
+    53,
+    76,
+    53,
+    77,
+    53,
+    77,
+    53,
+    78,
+    53,
+    78,
+    53,
+    79,
+    53,
+    79,
+    53,
+    80,
+    53,
+    80,
+    69,
+    69,
+    70,
+    70,
+    71,
+    71,
+    72,
+    72,
+    73,
+    73,
+    74,
+    74,
+    54,
+    87,
+    54,
+    87,
+    54,
+    88,
+    54,
+    88,
+    54,
+    89,
+    54,
+    89,
+    54,
+    90,
+    54,
+    90,
+    54,
+    91,
+    54,
+    91,
+    54,
+    92,
+    54,
+    92,
+    81,
+    81,
+    82,
+    82,
+    83,
+    83,
+    84,
+    84,
+    85,
+    85,
+    86,
+    86,
+    55,
+    99,
+    55,
+    99,
+    55,
+    100,
+    55,
+    100,
+    55,
+    101,
+    55,
+    101,
+    55,
+    102,
+    55,
+    102,
+    55,
+    103,
+    55,
+    103,
+    55,
+    104,
+    55,
+    104,
+    93,
+    93,
+    94,
+    94,
+    95,
+    95,
+    96,
+    96,
+    97,
+    97,
+    98,
+    98,
+        
 /// DDF,
-	
-107,
-107,
-111,
-111,
-108,
-108,
-112,
-112,
-109,
-109,
-113,
-113,
-114,
-114,
-115,
-115,
-116,
-116,
-118,
-118,
-105,
-106,
-117,
-105,
-106,
-117,
-119,
-119,
-120,
-120,
-121,
-121,
-122,
-122,
-123,
-123,
-124,
-124,
-131,
-125,
-131,
-125,
-131,
-126,
-131,
-126,
-131,
-127,
-131,
-127,
-131,
-128,
-131,
-128,
-131,
-129,
-131,
-129,
-131,
-130,
-131,
-130,
-	
+        
+    107,
+    107,
+    111,
+    111,
+    108,
+    108,
+    112,
+    112,
+    109,
+    109,
+    113,
+    113,
+    114,
+    114,
+    115,
+    115,
+    116,
+    116,
+    118,
+    118,
+    105,
+    106,
+    117,
+    105,
+    106,
+    117,
+    119,
+    119,
+    120,
+    120,
+    121,
+    121,
+    122,
+    122,
+    123,
+    123,
+    124,
+    124,
+    131,
+    125,
+    131,
+    125,
+    131,
+    126,
+    131,
+    126,
+    131,
+    127,
+    131,
+    127,
+    131,
+    128,
+    131,
+    128,
+    131,
+    129,
+    131,
+    129,
+    131,
+    130,
+    131,
+    130,
+        
 /// DDA,
-	
-133,
-133,
-134,
-134,
-135,
-135,
-132,
-136,
-132,
-136,
-137,
-137,
-138,
-138,
-139,
-139,
-140,
-147,
-140,
-147,
-141,
-148,
-141,
-148,
-142,
-149,
-142,
-149,
-143,
-150,
-143,
-150,
-144,
-151,
-144,
-151,
-145,
-152,
-145,
-152,
-146,
-153,
-146,
-153,
-161,
-154,
-161,
-154,
-161,
-155,
-161,
-155,
-161,
-156,
-161,
-156,
-161,
-157,
-161,
-157,
-161,
-158,
-161,
-158,
-161,
-159,
-161,
-159,
-	
+        
+    133,
+    133,
+    134,
+    134,
+    135,
+    135,
+    132,
+    136,
+    132,
+    136,
+    137,
+    137,
+    138,
+    138,
+    139,
+    139,
+    140,
+    147,
+    140,
+    147,
+    141,
+    148,
+    141,
+    148,
+    142,
+    149,
+    142,
+    149,
+    143,
+    150,
+    143,
+    150,
+    144,
+    151,
+    144,
+    151,
+    145,
+    152,
+    145,
+    152,
+    146,
+    153,
+    146,
+    153,
+    161,
+    154,
+    161,
+    154,
+    161,
+    155,
+    161,
+    155,
+    161,
+    156,
+    161,
+    156,
+    161,
+    157,
+    161,
+    157,
+    161,
+    158,
+    161,
+    158,
+    161,
+    159,
+    161,
+    159,
+        
 /// LFO,
-	
-174,
-175,
-176,
-177,
-	
+        
+    174,
+    175,
+    176,
+    177,
+        
 /// KS,
-	
-180,
-180,
-178,
-178,
-179,
-179,
-	
+        
+    180,
+    180,
+    178,
+    178,
+    179,
+    179,
+        
 /// DFT,
-	
-162,
-163,
-164,
-165,
-166,
-167,
-168,
-169,
-170,
-171,
-172,
-173,
-	};
+        
+    162,
+    163,
+    164,
+    165,
+    166,
+    167,
+    168,
+    169,
+    170,
+    171,
+    172,
+    173,
+    };
 
 
-public static final String[] HARMONICS_PARAMETERS = new String[]
-	{
-"dhgs1harm1level",
-"dhgs2harm1level",
-"dhgs1harm2level",
-"dhgs2harm2level",
-"dhgs1harm3level",
-"dhgs2harm3level",
-"dhgs1harm4level",
-"dhgs2harm4level",
-"dhgs1harm5level",
-"dhgs2harm5level",
-"dhgs1harm6level",
-"dhgs2harm6level",
-"dhgs1harm7level",
-"dhgs2harm7level",
-"dhgs1harm8level",
-"dhgs2harm8level",
-"dhgs1harm9level",
-"dhgs2harm9level",
-"dhgs1harm10level",
-"dhgs2harm10level",
-"dhgs1harm11level",
-"dhgs2harm11level",
-"dhgs1harm12level",
-"dhgs2harm12level",
-"dhgs1harm13level",
-"dhgs2harm13level",
-"dhgs1harm14level",
-"dhgs2harm14level",
-"dhgs1harm15level",
-"dhgs2harm15level",
-"dhgs1harm16level",
-"dhgs2harm16level",
-"dhgs1harm17level",
-"dhgs2harm17level",
-"dhgs1harm18level",
-"dhgs2harm18level",
-"dhgs1harm19level",
-"dhgs2harm19level",
-"dhgs1harm20level",
-"dhgs2harm20level",
-"dhgs1harm21level",
-"dhgs2harm21level",
-"dhgs1harm22level",
-"dhgs2harm22level",
-"dhgs1harm23level",
-"dhgs2harm23level",
-"dhgs1harm24level",
-"dhgs2harm24level",
-"dhgs1harm25level",
-"dhgs2harm25level",
-"dhgs1harm26level",
-"dhgs2harm26level",
-"dhgs1harm27level",
-"dhgs2harm27level",
-"dhgs1harm28level",
-"dhgs2harm28level",
-"dhgs1harm29level",
-"dhgs2harm29level",
-"dhgs1harm30level",
-"dhgs2harm30level",
-"dhgs1harm31level",
-"dhgs2harm31level",
-"dhgs1harm32level",
-"dhgs2harm32level",
-"dhgs1harm33level",
-"dhgs2harm33level",
-"dhgs1harm34level",
-"dhgs2harm34level",
-"dhgs1harm35level",
-"dhgs2harm35level",
-"dhgs1harm36level",
-"dhgs2harm36level",
-"dhgs1harm37level",
-"dhgs2harm37level",
-"dhgs1harm38level",
-"dhgs2harm38level",
-"dhgs1harm39level",
-"dhgs2harm39level",
-"dhgs1harm40level",
-"dhgs2harm40level",
-"dhgs1harm41level",
-"dhgs2harm41level",
-"dhgs1harm42level",
-"dhgs2harm42level",
-"dhgs1harm43level",
-"dhgs2harm43level",
-"dhgs1harm44level",
-"dhgs2harm44level",
-"dhgs1harm45level",
-"dhgs2harm45level",
-"dhgs1harm46level",
-"dhgs2harm46level",
-"dhgs1harm47level",
-"dhgs2harm47level",
-"dhgs1harm48level",
-"dhgs2harm48level",
-"dhgs1harm49level",
-"dhgs2harm49level",
-"dhgs1harm50level",
-"dhgs2harm50level",
-"dhgs1harm51level",
-"dhgs2harm51level",
-"dhgs1harm52level",
-"dhgs2harm52level",
-"dhgs1harm53level",
-"dhgs2harm53level",
-"dhgs1harm54level",
-"dhgs2harm54level",
-"dhgs1harm55level",
-"dhgs2harm55level",
-"dhgs1harm56level",
-"dhgs2harm56level",
-"dhgs1harm57level",
-"dhgs2harm57level",
-"dhgs1harm58level",
-"dhgs2harm58level",
-"dhgs1harm59level",
-"dhgs2harm59level",
-"dhgs1harm60level",
-"dhgs2harm60level",
-"dhgs1harm61level",
-"dhgs2harm61level",
-"dhgs1harm62level",
-"dhgs2harm62level",
-"dhgs1harm63level",
-"dhgs2harm63level",
-"dhgs1harm2envselmodyn",
-"dhgs1harm1envselmodyn",
-"dhgs2harm2envselmodyn",
-"dhgs2harm1envselmodyn",
-"dhgs1harm4envselmodyn",
-"dhgs1harm3envselmodyn",
-"dhgs2harm4envselmodyn",
-"dhgs2harm3envselmodyn",
-"dhgs1harm6envselmodyn",
-"dhgs1harm5envselmodyn",
-"dhgs2harm6envselmodyn",
-"dhgs2harm5envselmodyn",
-"dhgs1harm8envselmodyn",
-"dhgs1harm7envselmodyn",
-"dhgs2harm8envselmodyn",
-"dhgs2harm7envselmodyn",
-"dhgs1harm10envselmodyn",
-"dhgs1harm9envselmodyn",
-"dhgs2harm10envselmodyn",
-"dhgs2harm9envselmodyn",
-"dhgs1harm12envselmodyn",
-"dhgs1harm11envselmodyn",
-"dhgs2harm12envselmodyn",
-"dhgs2harm11envselmodyn",
-"dhgs1harm14envselmodyn",
-"dhgs1harm13envselmodyn",
-"dhgs2harm14envselmodyn",
-"dhgs2harm13envselmodyn",
-"dhgs1harm16envselmodyn",
-"dhgs1harm15envselmodyn",
-"dhgs2harm16envselmodyn",
-"dhgs2harm15envselmodyn",
-"dhgs1harm18envselmodyn",
-"dhgs1harm17envselmodyn",
-"dhgs2harm18envselmodyn",
-"dhgs2harm17envselmodyn",
-"dhgs1harm20envselmodyn",
-"dhgs1harm19envselmodyn",
-"dhgs2harm20envselmodyn",
-"dhgs2harm19envselmodyn",
-"dhgs1harm22envselmodyn",
-"dhgs1harm21envselmodyn",
-"dhgs2harm22envselmodyn",
-"dhgs2harm21envselmodyn",
-"dhgs1harm24envselmodyn",
-"dhgs1harm23envselmodyn",
-"dhgs2harm24envselmodyn",
-"dhgs2harm23envselmodyn",
-"dhgs1harm26envselmodyn",
-"dhgs1harm25envselmodyn",
-"dhgs2harm26envselmodyn",
-"dhgs2harm25envselmodyn",
-"dhgs1harm28envselmodyn",
-"dhgs1harm27envselmodyn",
-"dhgs2harm28envselmodyn",
-"dhgs2harm27envselmodyn",
-"dhgs1harm30envselmodyn",
-"dhgs1harm29envselmodyn",
-"dhgs2harm30envselmodyn",
-"dhgs2harm29envselmodyn",
-"dhgs1harm32envselmodyn",
-"dhgs1harm31envselmodyn",
-"dhgs2harm32envselmodyn",
-"dhgs2harm31envselmodyn",
-"dhgs1harm34envselmodyn",
-"dhgs1harm33envselmodyn",
-"dhgs2harm34envselmodyn",
-"dhgs2harm33envselmodyn",
-"dhgs1harm36envselmodyn",
-"dhgs1harm35envselmodyn",
-"dhgs2harm36envselmodyn",
-"dhgs2harm35envselmodyn",
-"dhgs1harm38envselmodyn",
-"dhgs1harm37envselmodyn",
-"dhgs2harm38envselmodyn",
-"dhgs2harm37envselmodyn",
-"dhgs1harm40envselmodyn",
-"dhgs1harm39envselmodyn",
-"dhgs2harm40envselmodyn",
-"dhgs2harm39envselmodyn",
-"dhgs1harm42envselmodyn",
-"dhgs1harm41envselmodyn",
-"dhgs2harm42envselmodyn",
-"dhgs2harm41envselmodyn",
-"dhgs1harm44envselmodyn",
-"dhgs1harm43envselmodyn",
-"dhgs2harm44envselmodyn",
-"dhgs2harm43envselmodyn",
-"dhgs1harm46envselmodyn",
-"dhgs1harm45envselmodyn",
-"dhgs2harm46envselmodyn",
-"dhgs2harm45envselmodyn",
-"dhgs1harm48envselmodyn",
-"dhgs1harm47envselmodyn",
-"dhgs2harm48envselmodyn",
-"dhgs2harm47envselmodyn",
-"dhgs1harm50envselmodyn",
-"dhgs1harm49envselmodyn",
-"dhgs2harm50envselmodyn",
-"dhgs2harm49envselmodyn",
-"dhgs1harm52envselmodyn",
-"dhgs1harm51envselmodyn",
-"dhgs2harm52envselmodyn",
-"dhgs2harm51envselmodyn",
-"dhgs1harm54envselmodyn",
-"dhgs1harm53envselmodyn",
-"dhgs2harm54envselmodyn",
-"dhgs2harm53envselmodyn",
-"dhgs1harm56envselmodyn",
-"dhgs1harm55envselmodyn",
-"dhgs2harm56envselmodyn",
-"dhgs2harm55envselmodyn",
-"dhgs1harm58envselmodyn",
-"dhgs1harm57envselmodyn",
-"dhgs2harm58envselmodyn",
-"dhgs2harm57envselmodyn",
-"dhgs1harm60envselmodyn",
-"dhgs1harm59envselmodyn",
-"dhgs2harm60envselmodyn",
-"dhgs2harm59envselmodyn",
-"dhgs1harm62envselmodyn",
-"dhgs1harm61envselmodyn",
-"dhgs2harm62envselmodyn",
-"dhgs2harm61envselmodyn",
-"dhgs1harm63envselmodyn",
-"dhgs2harm63envselmodyn",
-"dhgs2harm63envselmodyn"
-	};
+    public static final String[] HARMONICS_PARAMETERS = new String[]
+    {
+    "dhgs1harm1level",
+    "dhgs2harm1level",
+    "dhgs1harm2level",
+    "dhgs2harm2level",
+    "dhgs1harm3level",
+    "dhgs2harm3level",
+    "dhgs1harm4level",
+    "dhgs2harm4level",
+    "dhgs1harm5level",
+    "dhgs2harm5level",
+    "dhgs1harm6level",
+    "dhgs2harm6level",
+    "dhgs1harm7level",
+    "dhgs2harm7level",
+    "dhgs1harm8level",
+    "dhgs2harm8level",
+    "dhgs1harm9level",
+    "dhgs2harm9level",
+    "dhgs1harm10level",
+    "dhgs2harm10level",
+    "dhgs1harm11level",
+    "dhgs2harm11level",
+    "dhgs1harm12level",
+    "dhgs2harm12level",
+    "dhgs1harm13level",
+    "dhgs2harm13level",
+    "dhgs1harm14level",
+    "dhgs2harm14level",
+    "dhgs1harm15level",
+    "dhgs2harm15level",
+    "dhgs1harm16level",
+    "dhgs2harm16level",
+    "dhgs1harm17level",
+    "dhgs2harm17level",
+    "dhgs1harm18level",
+    "dhgs2harm18level",
+    "dhgs1harm19level",
+    "dhgs2harm19level",
+    "dhgs1harm20level",
+    "dhgs2harm20level",
+    "dhgs1harm21level",
+    "dhgs2harm21level",
+    "dhgs1harm22level",
+    "dhgs2harm22level",
+    "dhgs1harm23level",
+    "dhgs2harm23level",
+    "dhgs1harm24level",
+    "dhgs2harm24level",
+    "dhgs1harm25level",
+    "dhgs2harm25level",
+    "dhgs1harm26level",
+    "dhgs2harm26level",
+    "dhgs1harm27level",
+    "dhgs2harm27level",
+    "dhgs1harm28level",
+    "dhgs2harm28level",
+    "dhgs1harm29level",
+    "dhgs2harm29level",
+    "dhgs1harm30level",
+    "dhgs2harm30level",
+    "dhgs1harm31level",
+    "dhgs2harm31level",
+    "dhgs1harm32level",
+    "dhgs2harm32level",
+    "dhgs1harm33level",
+    "dhgs2harm33level",
+    "dhgs1harm34level",
+    "dhgs2harm34level",
+    "dhgs1harm35level",
+    "dhgs2harm35level",
+    "dhgs1harm36level",
+    "dhgs2harm36level",
+    "dhgs1harm37level",
+    "dhgs2harm37level",
+    "dhgs1harm38level",
+    "dhgs2harm38level",
+    "dhgs1harm39level",
+    "dhgs2harm39level",
+    "dhgs1harm40level",
+    "dhgs2harm40level",
+    "dhgs1harm41level",
+    "dhgs2harm41level",
+    "dhgs1harm42level",
+    "dhgs2harm42level",
+    "dhgs1harm43level",
+    "dhgs2harm43level",
+    "dhgs1harm44level",
+    "dhgs2harm44level",
+    "dhgs1harm45level",
+    "dhgs2harm45level",
+    "dhgs1harm46level",
+    "dhgs2harm46level",
+    "dhgs1harm47level",
+    "dhgs2harm47level",
+    "dhgs1harm48level",
+    "dhgs2harm48level",
+    "dhgs1harm49level",
+    "dhgs2harm49level",
+    "dhgs1harm50level",
+    "dhgs2harm50level",
+    "dhgs1harm51level",
+    "dhgs2harm51level",
+    "dhgs1harm52level",
+    "dhgs2harm52level",
+    "dhgs1harm53level",
+    "dhgs2harm53level",
+    "dhgs1harm54level",
+    "dhgs2harm54level",
+    "dhgs1harm55level",
+    "dhgs2harm55level",
+    "dhgs1harm56level",
+    "dhgs2harm56level",
+    "dhgs1harm57level",
+    "dhgs2harm57level",
+    "dhgs1harm58level",
+    "dhgs2harm58level",
+    "dhgs1harm59level",
+    "dhgs2harm59level",
+    "dhgs1harm60level",
+    "dhgs2harm60level",
+    "dhgs1harm61level",
+    "dhgs2harm61level",
+    "dhgs1harm62level",
+    "dhgs2harm62level",
+    "dhgs1harm63level",
+    "dhgs2harm63level",
+    "dhgs1harm2envselmodyn",
+    "dhgs1harm1envselmodyn",
+    "dhgs2harm2envselmodyn",
+    "dhgs2harm1envselmodyn",
+    "dhgs1harm4envselmodyn",
+    "dhgs1harm3envselmodyn",
+    "dhgs2harm4envselmodyn",
+    "dhgs2harm3envselmodyn",
+    "dhgs1harm6envselmodyn",
+    "dhgs1harm5envselmodyn",
+    "dhgs2harm6envselmodyn",
+    "dhgs2harm5envselmodyn",
+    "dhgs1harm8envselmodyn",
+    "dhgs1harm7envselmodyn",
+    "dhgs2harm8envselmodyn",
+    "dhgs2harm7envselmodyn",
+    "dhgs1harm10envselmodyn",
+    "dhgs1harm9envselmodyn",
+    "dhgs2harm10envselmodyn",
+    "dhgs2harm9envselmodyn",
+    "dhgs1harm12envselmodyn",
+    "dhgs1harm11envselmodyn",
+    "dhgs2harm12envselmodyn",
+    "dhgs2harm11envselmodyn",
+    "dhgs1harm14envselmodyn",
+    "dhgs1harm13envselmodyn",
+    "dhgs2harm14envselmodyn",
+    "dhgs2harm13envselmodyn",
+    "dhgs1harm16envselmodyn",
+    "dhgs1harm15envselmodyn",
+    "dhgs2harm16envselmodyn",
+    "dhgs2harm15envselmodyn",
+    "dhgs1harm18envselmodyn",
+    "dhgs1harm17envselmodyn",
+    "dhgs2harm18envselmodyn",
+    "dhgs2harm17envselmodyn",
+    "dhgs1harm20envselmodyn",
+    "dhgs1harm19envselmodyn",
+    "dhgs2harm20envselmodyn",
+    "dhgs2harm19envselmodyn",
+    "dhgs1harm22envselmodyn",
+    "dhgs1harm21envselmodyn",
+    "dhgs2harm22envselmodyn",
+    "dhgs2harm21envselmodyn",
+    "dhgs1harm24envselmodyn",
+    "dhgs1harm23envselmodyn",
+    "dhgs2harm24envselmodyn",
+    "dhgs2harm23envselmodyn",
+    "dhgs1harm26envselmodyn",
+    "dhgs1harm25envselmodyn",
+    "dhgs2harm26envselmodyn",
+    "dhgs2harm25envselmodyn",
+    "dhgs1harm28envselmodyn",
+    "dhgs1harm27envselmodyn",
+    "dhgs2harm28envselmodyn",
+    "dhgs2harm27envselmodyn",
+    "dhgs1harm30envselmodyn",
+    "dhgs1harm29envselmodyn",
+    "dhgs2harm30envselmodyn",
+    "dhgs2harm29envselmodyn",
+    "dhgs1harm32envselmodyn",
+    "dhgs1harm31envselmodyn",
+    "dhgs2harm32envselmodyn",
+    "dhgs2harm31envselmodyn",
+    "dhgs1harm34envselmodyn",
+    "dhgs1harm33envselmodyn",
+    "dhgs2harm34envselmodyn",
+    "dhgs2harm33envselmodyn",
+    "dhgs1harm36envselmodyn",
+    "dhgs1harm35envselmodyn",
+    "dhgs2harm36envselmodyn",
+    "dhgs2harm35envselmodyn",
+    "dhgs1harm38envselmodyn",
+    "dhgs1harm37envselmodyn",
+    "dhgs2harm38envselmodyn",
+    "dhgs2harm37envselmodyn",
+    "dhgs1harm40envselmodyn",
+    "dhgs1harm39envselmodyn",
+    "dhgs2harm40envselmodyn",
+    "dhgs2harm39envselmodyn",
+    "dhgs1harm42envselmodyn",
+    "dhgs1harm41envselmodyn",
+    "dhgs2harm42envselmodyn",
+    "dhgs2harm41envselmodyn",
+    "dhgs1harm44envselmodyn",
+    "dhgs1harm43envselmodyn",
+    "dhgs2harm44envselmodyn",
+    "dhgs2harm43envselmodyn",
+    "dhgs1harm46envselmodyn",
+    "dhgs1harm45envselmodyn",
+    "dhgs2harm46envselmodyn",
+    "dhgs2harm45envselmodyn",
+    "dhgs1harm48envselmodyn",
+    "dhgs1harm47envselmodyn",
+    "dhgs2harm48envselmodyn",
+    "dhgs2harm47envselmodyn",
+    "dhgs1harm50envselmodyn",
+    "dhgs1harm49envselmodyn",
+    "dhgs2harm50envselmodyn",
+    "dhgs2harm49envselmodyn",
+    "dhgs1harm52envselmodyn",
+    "dhgs1harm51envselmodyn",
+    "dhgs2harm52envselmodyn",
+    "dhgs2harm51envselmodyn",
+    "dhgs1harm54envselmodyn",
+    "dhgs1harm53envselmodyn",
+    "dhgs2harm54envselmodyn",
+    "dhgs2harm53envselmodyn",
+    "dhgs1harm56envselmodyn",
+    "dhgs1harm55envselmodyn",
+    "dhgs2harm56envselmodyn",
+    "dhgs2harm55envselmodyn",
+    "dhgs1harm58envselmodyn",
+    "dhgs1harm57envselmodyn",
+    "dhgs2harm58envselmodyn",
+    "dhgs2harm57envselmodyn",
+    "dhgs1harm60envselmodyn",
+    "dhgs1harm59envselmodyn",
+    "dhgs2harm60envselmodyn",
+    "dhgs2harm59envselmodyn",
+    "dhgs1harm62envselmodyn",
+    "dhgs1harm61envselmodyn",
+    "dhgs2harm62envselmodyn",
+    "dhgs2harm61envselmodyn",
+    "dhgs1harm63envselmodyn",
+    "dhgs2harm63envselmodyn",
+    "dhgs2harm63envselmodyn"
+    };
 
-public int loadData(byte[] data, int pos, int start, int end)
-	{
-	for(int i = start; i < end; i++)
-		data[pos++] = (byte)model.get(parameters[i], 0); 
-	return pos;
-	}
+    public int loadData(byte[] data, int pos, int start, int end)
+        {
+        for(int i = start; i < end; i++)
+            data[pos++] = (byte)model.get(parameters[i], 0); 
+        return pos;
+        }
 
-public int loadData(byte[] data, int pos, int start, int end, int[] bit, int[] len)
-	{
-	int i = start;
-	while(i < end)
-		{
-		data[pos] = 0;
-		for(int b = 0; b < bit.length; b++)
-			{
-			int result = model.get(parameters[i], 0);
-			int stub = (result & (255 >>> (8 - len[b])));
-			data[pos] = (byte)(data[pos] | (stub << bit[b]));
-			i++;
-			}
-		pos++;
-		}
-	return pos;
-	}
+    public int loadData(byte[] data, int pos, int start, int end, int[] bit, int[] len)
+        {
+        int i = start;
+        while(i < end)
+            {
+            data[pos] = 0;
+            for(int b = 0; b < bit.length; b++)
+                {
+                int result = model.get(parameters[i], 0);
+                int stub = (result & (255 >>> (8 - len[b])));
+                data[pos] = (byte)(data[pos] | (stub << bit[b]));
+                i++;
+                }
+            pos++;
+            }
+        return pos;
+        }
 
-public int loadDataUnified(byte[] data, int pos, int start, int end, int[] bit, int[] len)
-	{
-	return loadDataUnified(data, pos, start, end, bit, len, new int[0]);
-	}
+    public int loadDataUnified(byte[] data, int pos, int start, int end, int[] bit, int[] len)
+        {
+        return loadDataUnified(data, pos, start, end, bit, len, new int[0]);
+        }
 
-public int loadDataUnified(byte[] data, int pos, int start, int end, int[] bit, int[] len, int[] skip)
-	{
-	int count = 0;
-	int i = start;
-	while(i < end)
-		{
-		boolean cont = false;
-		for(int j = 0; j < skip.length; j++)
-			{
-			if (i == skip[j]) { cont = true; break; }
-			}
-		if (cont) { i++; continue; }
+    public int loadDataUnified(byte[] data, int pos, int start, int end, int[] bit, int[] len, int[] skip)
+        {
+        int count = 0;
+        int i = start;
+        while(i < end)
+            {
+            boolean cont = false;
+            for(int j = 0; j < skip.length; j++)
+                {
+                if (i == skip[j]) { cont = true; break; }
+                }
+            if (cont) { i++; continue; }
 
-		data[pos] = 0;
-		for(int b = 0; b < bit.length; b++)
-			{
-			int result = (b == 0 ? 
-				(model.get(parameters[i], 0) == (count / 2 + 1) ? 1 : 0) :		// the + 1 is beacause maxsegon/off is 0 if "no one is on"
-				(model.get(parameters[i], 0)));
-			int stub = (result & (255 >>> (8 - len[b])));
-			data[pos] = (byte)(data[pos] | (stub << bit[b]));
-			i++;
-			}
-		count++;
-		pos++;
-		}
-	return pos;
-	}
+            data[pos] = 0;
+            for(int b = 0; b < bit.length; b++)
+                {
+                int result = (b == 0 ? 
+                    (model.get(parameters[i], 0) == (count / 2 + 1) ? 1 : 0) :              // the + 1 is beacause maxsegon/off is 0 if "no one is on"
+                    (model.get(parameters[i], 0)));
+                int stub = (result & (255 >>> (8 - len[b])));
+                data[pos] = (byte)(data[pos] | (stub << bit[b]));
+                i++;
+                }
+            count++;
+            pos++;
+            }
+        return pos;
+        }
  
  
- public int unloadData(byte[] data, int pos, int start, int end)
-	{
-	for(int i = start; i < end; i++)
-		{
-//		System.err.println("" + pos +  "(" + data[pos] + "): 0 - 7");
-		model.set(parameters[i], data[pos++]);
-		}
-	return pos;
-	}
+    public int unloadData(byte[] data, int pos, int start, int end)
+        {
+        for(int i = start; i < end; i++)
+            {
+//              System.err.println("" + pos +  "(" + data[pos] + "): 0 - 7");
+            model.set(parameters[i], data[pos++]);
+            }
+        return pos;
+        }
 
-public int unloadData(byte[] data, int pos, int start, int end, int[] bit, int[] len)
-	{
-	int i = start;
-	while(i < end)
-		{
-		for(int b = 0; b < bit.length; b++)
-			{
-//			System.err.println("" + pos + "(" + data[pos] + "): " + bit[b] + " - " + (bit[b] + len[b]));
-			model.set(parameters[i], (data[pos] >>> bit[b]) & (255 >>> (8 - len[b])));
-			i++;
-			}
-		pos++;
-		}
-	return pos;
-	}
+    public int unloadData(byte[] data, int pos, int start, int end, int[] bit, int[] len)
+        {
+        int i = start;
+        while(i < end)
+            {
+            for(int b = 0; b < bit.length; b++)
+                {
+//                      System.err.println("" + pos + "(" + data[pos] + "): " + bit[b] + " - " + (bit[b] + len[b]));
+                model.set(parameters[i], (data[pos] >>> bit[b]) & (255 >>> (8 - len[b])));
+                i++;
+                }
+            pos++;
+            }
+        return pos;
+        }
 
-public int unloadDataUnified(byte[] data, int pos, int start, int end, int[] bit, int[] len)
-	{
-	return unloadDataUnified(data, pos, start, end, bit, len, new int[0]);
-	}
+    public int unloadDataUnified(byte[] data, int pos, int start, int end, int[] bit, int[] len)
+        {
+        return unloadDataUnified(data, pos, start, end, bit, len, new int[0]);
+        }
 
-public int unloadDataUnified(byte[] data, int pos, int start, int end, int[] bit, int[] len, int[] skip)
-	{
-	int count = 0;
-	int i = start;
-	while(i < end)
-		{
-		boolean cont = false;
-		for(int j = 0; j < skip.length; j++)
-			{
-			if (i == skip[j]) { cont = true; break; }
-			}
-		if (cont) { i++; continue; }
-			
-		for(int b = 0; b < bit.length; b++)
-			{
-//			System.err.println("" + pos + "(" + data[pos] + "): " + bit[b] + " - " + (bit[b] + len[b]));
-			int val = (data[pos] >>> bit[b]) & (255 >>> (8 - len[b]));
-			if (b == 0)
-				{
-				if (val == 1)
-					{
-					model.set(parameters[i], count/2 + 1);
-					}
-				}
-			else
-				{
-				model.set(parameters[i], val);
-				}
-			i++;
-			}
-		count++;
-		pos++;
-		}
-	return pos;
-	}
+    public int unloadDataUnified(byte[] data, int pos, int start, int end, int[] bit, int[] len, int[] skip)
+        {
+        int count = 0;
+        int i = start;
+        while(i < end)
+            {
+            boolean cont = false;
+            for(int j = 0; j < skip.length; j++)
+                {
+                if (i == skip[j]) { cont = true; break; }
+                }
+            if (cont) { i++; continue; }
+                        
+            for(int b = 0; b < bit.length; b++)
+                {
+//                      System.err.println("" + pos + "(" + data[pos] + "): " + bit[b] + " - " + (bit[b] + len[b]));
+                int val = (data[pos] >>> bit[b]) & (255 >>> (8 - len[b]));
+                if (b == 0)
+                    {
+                    if (val == 1)
+                        {
+                        model.set(parameters[i], count/2 + 1);
+                        }
+                    }
+                else
+                    {
+                    model.set(parameters[i], val);
+                    }
+                i++;
+                }
+            count++;
+            pos++;
+            }
+        return pos;
+        }
 
 
 
@@ -3708,51 +3708,51 @@ public int unloadDataUnified(byte[] data, int pos, int start, int end, int[] bit
 ///// These are certain offsets into the sysex data which start groups
 ///// of data that all have the same pattern to which we can apply loadData and unloadData.
 
-public static final int volume = 8;
-public static final int basics1pedalassign = 16;
-public static final int portamentosw = 20;
-public static final int mode = 22;
-public static final int dfgs1coarse = 24;
-public static final int dfgs1key = 28;
-public static final int dfgs1envdep = 32;
-public static final int dfgs1envloop = 44;
-public static final int dfgs1envrateseg1 = 48;
+    public static final int volume = 8;
+    public static final int basics1pedalassign = 16;
+    public static final int portamentosw = 20;
+    public static final int mode = 22;
+    public static final int dfgs1coarse = 24;
+    public static final int dfgs1key = 28;
+    public static final int dfgs1envdep = 32;
+    public static final int dfgs1envloop = 44;
+    public static final int dfgs1envrateseg1 = 48;
 
 // harmonics go here -- we handle them specially
 
-public static final int dhgs1velodep = 70;
-public static final int dhgs1env1onoff = 78;
-public static final int dhgs1modonoff = 94;
-public static final int dhgs1rangefrom = 98;
-public static final int dhgs1oddmodonoff = 102;
-public static final int dhgs1allmodonoff = 118;
-public static final int dhgs1angle = 122;
-public static final int dhgs1shadowonoff = 126;
-public static final int dhgs1env1maxseg1onoff = 127;
-public static final int dhgs2shadowonoff = 129;
-public static final int dhgs2env1maxseg1onoff = 130;
-public static final int dhgs1env1maxseg2onoff = 132;
-public static final int dhgs1env1seg1rate = 152;
-public static final int dhgs1env2maxseg1onoff = 164;
-public static final int dhgs1env2seg1rate = 188;
-public static final int dhgs1env3maxseg1onoff = 200;
-public static final int dhgs1env3seg1rate = 224;
-public static final int dhgs1env4maxseg1onoff = 236;
-public static final int dhgs1env4seg1rate = 260;
-public static final int ddfs1ddfonoff = 292;
-public static final int ddfs1envseg1rate = 298;
-public static final int ddfs1envmaxseg1onoff = 310;
-public static final int ddas1attackvelodep = 334;
-public static final int ddas1ddaonoff = 340;
-public static final int ddas1attackvelrate = 344;
-public static final int ddas1envseg1modonoff = 350;
-public static final int ddas1envmaxseg1onoff = 378;
+    public static final int dhgs1velodep = 70;
+    public static final int dhgs1env1onoff = 78;
+    public static final int dhgs1modonoff = 94;
+    public static final int dhgs1rangefrom = 98;
+    public static final int dhgs1oddmodonoff = 102;
+    public static final int dhgs1allmodonoff = 118;
+    public static final int dhgs1angle = 122;
+    public static final int dhgs1shadowonoff = 126;
+    public static final int dhgs1env1maxseg1onoff = 127;
+    public static final int dhgs2shadowonoff = 129;
+    public static final int dhgs2env1maxseg1onoff = 130;
+    public static final int dhgs1env1maxseg2onoff = 132;
+    public static final int dhgs1env1seg1rate = 152;
+    public static final int dhgs1env2maxseg1onoff = 164;
+    public static final int dhgs1env2seg1rate = 188;
+    public static final int dhgs1env3maxseg1onoff = 200;
+    public static final int dhgs1env3seg1rate = 224;
+    public static final int dhgs1env4maxseg1onoff = 236;
+    public static final int dhgs1env4seg1rate = 260;
+    public static final int ddfs1ddfonoff = 292;
+    public static final int ddfs1envseg1rate = 298;
+    public static final int ddfs1envmaxseg1onoff = 310;
+    public static final int ddas1attackvelodep = 334;
+    public static final int ddas1ddaonoff = 340;
+    public static final int ddas1attackvelrate = 344;
+    public static final int ddas1envseg1modonoff = 350;
+    public static final int ddas1envmaxseg1onoff = 378;
 
 // some zeros go here!
 
-public static final int lfoshape = 402;
-public static final int dftonoff = 412;
-public static final int dftc0level = 414;
+    public static final int lfoshape = 402;
+    public static final int dftonoff = 412;
+    public static final int dftc0level = 414;
 
 // a zero goes here! 
     

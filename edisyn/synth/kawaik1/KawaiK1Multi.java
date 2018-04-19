@@ -566,6 +566,7 @@ public class KawaiK1Multi extends Synth
             tempModel.set("bank", 7);
             tempModel.set("number", 7);
             changePatch(tempModel);
+            simplePause(getPauseAfterChangePatch());
             }
         }
 

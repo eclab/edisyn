@@ -14,6 +14,8 @@
 \usepackage{color}
 \usepackage{rotating}
 \usepackage[nobottomtitles*]{titlesec}
+\usepackage[noend]{algorithmic}
+\usepackage{algorithm}
 
 \sloppy
 
@@ -124,7 +126,7 @@ Dials vary in orientation.  Most look sort of like a ``C'', with the zero point 
 
 \item Various {\bf Envelope Displays}.  Edisyn can draw envelopes using a variety of procedures.  Consider the Waldorf Microwave envelopes in Figure \ref{envelopedisplays} above, for example.  The first two envelopes are ADSR envelopes, but the third is the Microwave's famous ``Wave Envelope'', an eight-stage envelope with two different looping intervals (shown below it), and with two special end times marked with vertical lines (here, the dashed line is where optional sustain occurs, and the solid line is the end of the wave).    The last envelope is the Microwave's ``Free Envelope'', a four-stage envelope unusual in that it can have both positive and negative values: the dashed line is the axis.
 
-At present Edisyn can only draw envelopes: you can't drag the dots.
+Mose Edisyn envelope displays are read-only -- you can't draw the dots.  But that's not always the case: for example the Kawai K5 harmonics display can be extensively edited by mouse.
 
 \item {\bf Action Buttons}.  Some patch editors have buttons on them which perform actions rather than edit or display values.  For example many multimode-patch editors have buttons that pop up single patch editors for the various individual patches.
 
@@ -308,6 +310,7 @@ Some patch editors may not be able to perform merges because the synthesizers ca
 \paragraph{Hill-Climb}  Hill-Climbing repeatedly presents you with sixteen sounds and asks you to choose your top three preferred ones.  Once you have selected the three best, it performs various recombinations and mutations on those sounds to prefer sixteen new ones and the process repeats again.  The idea is for your preferences to guide the hill-climber as it wanders through the space of synth parameters until it lands on something you really like.\footnote{If you're technically inclined, this is basically an evolution strategy (ES) with an elitism of 1 and a biased mutation procedure.  If you'd like to learn more about evolutionary computation methods, google for the free online book {\it Essentials of Metaheuristics} by me.}  For more on the Hill-Climber, see Section \ref{hillclimb}.
 
 \subsection{Restricting Mutation and Recombination to Only Certain Parameters}
+\label{restriction} 
 
 You can restrict Mutation (Randomize) and Recombination (Nudge and Merge) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutation Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutation Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
 
@@ -333,13 +336,20 @@ Note that your parameter choices, as well as using them for recombination, are p
 \begin{center}
 \includegraphics[width=6in]{HillClimbing.pdf}
 \end{center}
-\caption{Recombination and Mutation in the Hill-Climber. Shown are (left to right) basic operations performed when the user has made three (A, B, C), two (A, B), or only one (A) selections.  Z is the top selection the previous iteration (the previous iteration's A).  Beyond the given operations, various degrees of mutation are applied to each new child: see Figure \ref{hctable}.}
+\caption{Recombination and Opposite-Recombination in the Hill-Climber. Shown are (left to right) basic operations performed when the user has made three (A, B, C), two (A, B), or only one (A) selections.  Z is the top selection the previous iteration (the previous iteration's A).  Beyond the given operations, various degrees of mutation are applied to each new child: see Figure \ref{hctable}.}
 \label{hcfigure}
 \end{figure}
 
-Edisyn's {\it hill-climber}\footnote{Important Note.  The Hill Climber is a work in progress and as testing and research continues on it, it may change significantly} is another of its patch-exploration tools.  You select it by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  This will add a new tab to your patch editor labelled {\bf Hill-Climb}.  You get rid of the hill-climber by selecting {\bf Stop Hill-Climbing} in the {\bf Edit} menu.  
+\begin{wrapfigure}{r}{2.9in}
+\vspace{-2em}\includegraphics[scale=0.27]{HillClimbPanel.png}
+\vspace{-2em}
+\caption{The Hill-Climber Panel}
+\label{hcpanel}
+\end{wrapfigure}
 
-When you fire up the Hill-Climber, it appears as an additional tab after your {\bf About} tab.  Edisyn's Hill-Climber repeatedly offers you sixteen new versions of patches and asks you to choose your top three preferences: you can also indicate preference for your current working patch or for nothing.  After you have chosen them, the Hill-Climber will try to build a new set of sounds whose parameters are similar to your choices in various ways.  If you're lucky, Edisyn will head towards regions of the synthesizer's parameter space which make sounds you like.  {\bf Hint:  You will have more success with the hill-climber if you restrict the parameters being mutated to just those you want to explore.}  Different kinds of synthesizers will also benefit from different amounts of exploration (mutation and recombination) rates.  You'll need to tweak those as necessary.
+Edisyn's {\it hill-climber}\footnote{Important Note.  The Hill Climber is a work in progress and as testing and research continues on it, it may change significantly} is another of its patch-exploration tools.  You select it by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  This will add a new tab to your patch editor labelled {\bf Hill-Climb}.   When you fire up the Hill-Climber, it appears as an additional tab after your {\bf About} tab.  Whenever you select a tab other than the hill-climber tab, the hill-climber will pause; when you go back to the hill-climber tab it will resume.  You get rid of the hill-climber by selecting {\bf Stop Hill-Climbing} in the {\bf Edit} menu. 
+
+Edisyn's Hill-Climber repeatedly offers you sixteen new versions of patches and asks you to choose your top three preferences: you can also indicate preference for your current working patch or for nothing.  After you have chosen them, the Hill-Climber will try to build a new set of sounds whose parameters are similar to your choices in various ways.  If you're lucky, Edisyn will head towards regions of the synthesizer's parameter space which make sounds you like.  {\bf Hint:  You will have more success with the hill-climber if you restrict the parameters being mutated to just those you want to explore.}  Different kinds of synthesizers will also benefit from different amounts of exploration (mutation and recombination) rates.  You'll need to tweak those as necessary.
 
 The Hill-Climber builds new sounds by recombining your top three sound choices and adding some degree of noise (mutation) to them.  Let's say that your top three sounds were sounds {\bf A, B,} and {\bf C}, and that your {\it previous} ``A'' from last time is called {\bf Z}.  Figures \ref{hcfigure} and \ref{hctable} explain the mechanism by which the 16 new patches are generated.  The hill-climber tries to balance coming up with mixtures of your selections as well as things well outside the searched space (balancing so-called {\it exploration} and {\it exploitation}). You can also select only two top choices (A and B), a single choice (A), or no choices at all\,---\,in which case Edisyn just generates 16 mutated replacements for the existing ones.
 
@@ -410,7 +420,7 @@ A $-$ Z& 2x\\
 (A $-$ Z) $-$ Z& 2x\\
 \end{tabular}
 \end{center}
-\caption{Operations producing the sixteen new children each hill-climbing step.  The operations performed depend on whether the user has made  one, two, or three selections.    Each operation is followed by a certain degree of mutation.  A, B, and C are the (up to) three selections, A being most preferred and C being least.  Z is the most preferred selection the {\it previous} iteration.  The operation \(X + Y\) means to recombine X with Y, with somewhat of a bias towards X.  The operation \(X - Y\) means to find a point on the opposite side of X from Y.  See Figure \ref{hcfigure}.}
+\caption{Operations producing the sixteen new children each hill-climbing step.  The operations performed depend on whether the user has made  one, two, or three selections.    Each operation is followed by a certain degree of mutation.  A, B, and C are the (up to) three selections, A being most preferred and C being least.  Z is the most preferred selection the {\it previous} iteration.  The operation \(X + Y\) means to recombine X with Y, with somewhat of a bias towards X.  The operation \(X - Y\) means to find a point on the opposite side of X from Y.  The values 2x, 3x etc. aren't {\it stronger} mutation; but rather they are {\it repeated mutation operations}.  That is, 3x means to mutate, then mutate again, then mutate again.  See Figure \ref{hcfigure}.}
 \label{hctable}
 \end{figure}
 
@@ -423,14 +433,7 @@ When you fire up the Hill-Climber the first time, it doesn't have three candidat
 \item{13--16}: Four 4x mutated versions of the current patch
 \end{itemize}
 
-\begin{wrapfigure}{r}{2.9in}
-\includegraphics[scale=0.3]{HillClimbPanel.png}
-\vspace{-2em}
-\caption{The Hill-Climber Panel}
-\label{hcpanel}
-\end{wrapfigure}
-
-The sixteen candidates appear in the {\bf Candidates} section.  The option of choosing your current patch is in the {\bf Current} section, and the option of choosing no patch is in the {\bf None} section.  Each option (except None) has a button labelled {\bf Play}, which lets you play the candidate, and each Candidate has a button labelled {\bf Keep}, which closes the Hill-Climber and loads that candidate into the patch editor (presumably because you've found your ideal sound and want to {\it keep} it).  There are also three radio buttons, labelled 1, 2, and 3.  These are for you to select the sound as one of your top three choices, if you like it.
+The sixteen candidates appear in the {\bf Candidates} section.  The option of choosing your current patch is in the {\bf Current} section, and the option of choosing no patch is in the {\bf None} section.  Each option (except None) has a button labelled {\bf Play}, which lets you play the candidate, and each Candidate has a button labelled {\bf Options}, which presents so additional options).  There are also three radio buttons, labelled 1, 2, and 3.  These are for you to select the sound as one of your top three choices, if you like it.
 
 Once you have selected your top three options,\footnote{Yes, if you like fewer than three sounds, a sound can be more than one top-three option.} press {\bf Climb} to make the Hill-Climber build new sounds based on those options.  If you don't like any of the sounds, you can press {\bf Retry} to make the Hill-Climber try again, building sixteen new sounds (only the noisy sounds will change).  If you don't like where you're going, you can also back up to an earlier iteration by pressing {\bf Backup}.  And you can back up all the way to the very beginning again by pressing {\bf Reset}.
 
@@ -441,37 +444,175 @@ The degree of recombination can also be tweaked, but this requires a bit of expl
 
 Note that when you enter the Hill-Climber, it automatically turns on {\bf Send Test Notes}, and each time a new test note is played, it's a different candidate sound.  That way you can hear all the sounds easily.  The sound being played is shown by making its {\bf Play} button text red.  If you would like to reset the sequence to a different sound, just press its Play button.  When you leave the Hill-Climber to go to some other tab in your patch editor, Send Test Notes is turned off automatically.
 
-\subsection{How Recombination and Mutation Work}
+\paragraph{Nudging in the Hill-Climber}
 
-One unusual feature of Edisyn is its support for various ways to recombine (merge) and mutate (partially randomize) patches.  These are used in a variety of tools designed to help you hunt for new and unusual sounds.  Many systems let you randomize sounds, but Edisyn goes a lot further.  Just so you know, here are the recombination and mutation procedures:
+If you have loaded patches to nudge (typically via {\bf Nudge:Set ...} in the {\bf Edit} menu) they become available in the hill-climber.  When you select the nudge target (1, 2, 3, or 4 or the Current Patch), and then press {\bf Nudge To:}, then {\bf all of the candidates} will get nudged towards the target.  The amount of nudging that occurs is set by the standard nudge recombination and mutation amounts (see the {\bf Nudge:Set Nudge Mutation} or {\bf Nudge:Set Nudge Recombination} under the {\bf Edit} menu).
 
-\paragraph{Recombination}
-When your current patch {\bf A} is recombined with another patch {\bf B}, you produce a patch which is somewhat in-between the two.  You will specify the degree to which this should be done  as a percentage 0...100\%.  This number specifies what percentage of parameters in {\bf A} may (randomly) get merged with their compatriots in {\bf B}.  Different kinds of parameters merge in different ways.
+By pressing {\bf Go to:} you can also reset all of the candidates with patches formed by essentially reinitializing from the nudge target just as pressing the Reset button would reinitialize from the current patch.  
+
+Note that neither Go to: nor Nudge To: reset the the stack nor increase the iteration: they just change the candidate sounds.  Thus if you afterwards press ``Retry'', the current iteration is retried once again; or if you press ``Back Up", the iteration is backed up as normal.
+
+\paragraph{Candidate Options}
+
+If you press the {\bf Options} button on a candidate, a menu pops up with a variety of options:
 
 \begin{itemize}
-\item A {\it metric parameter}, such as a number range from 0...127, will merge with another by picking a random number somewhere between the two.  Many dials are metric parameters, for example.  
-\item A {\it non-metric parameter} is just a set of arbitrary values, such as the Filter types HP, LP, BP, and Bit Crush.  A non-metric parameter will merge with another by choosing one or the other of them with a 50/50 chance.   Choosers and checkboxes are generally non-metric parameters.  
-\item Some parameters have both metric and non-metric regions: for example, a MIDI Channel dial might have the values 1...16, plus {\it off} and {\it omni}.  Here the values 1...16 are metric, and off and omni are non-metric.  If both {\bf A} and {\bf B} have parameter values which are in the metric region, then they are merged in the metric way.  If they're both non-metric, or one is metric and the other is not, then one or the other value is selected.
-\item Occasional parameters are {\it immutable}: they will refuse to be merged.  These are typically things like patch names.
+\item {\bf Keep Patch}\quad Loads the candidate into the current patch in your patch editor.
+\item {\bf Edit Patch}\quad Creates a new patch editor and loads the candidate into that.  Note that if you edit the patch in the patch editor, the {\it changes you make will be automatically reflected in the candidate}.  If you update the candidate (by hill-climbing or nudging or backing up etc.) then this connection will be broken
+\item {\bf Save to File}\quad Saves the candidate to a file.
+\item {\bf Load from File}\quad Changes the candidate to a patch loaded from a file. 
+\item {\bf Set... }\quad Copies the candidate into one of the nudge targets.
+\item {\bf Load...}\quad Changes the candidate into a copy of one of the nudge targets. 
 \end{itemize}
 
-\noindent  0\% recombination means nothing changes in patch {\bf A}.  100\% recombination means that every parameter is recombined: but this doesn't imply that patch {\bf A} is entirely replaced by patch {\bf B}: just that the two are fully merged together.
- 
+Note again that, as was the case in nudging above, neither Load from File nor Load... reset the the stack nor increase the iteration: they just change the candidate sounds.  Thus if you afterwards press ``Retry'', the current iteration is retried once again; or if you press ``Back Up", the iteration is backed up as normal.
+
+
+\subsection{How Recombination and Mutation Work}
+
+Edisyn's patch merging, patch mutation (randomization), nudging, and hill-climber all rely on certain low-level patch manipulation operations to do their magic.    These operations are {\bf mutation}, {\bf recombination}, and {\bf opposite-recombination}.  
+
+All three of these operations take a {\bf weight} (a value between 0.0 and 1.0) which specifies how strong an effect the operation will have.  Sometimes this weight specified the {\it probability} that a patch parameter will change.  Other times the weight influences the {\it amount} the patch parameter will change by.
+
+Patches are lists of parameters.   Each parameter takes one of several forms:
+
+\begin{itemize}
+\item A {\it metric parameter} can take on a value from number range, such as from 0...127.
+\item A {\it non-metric} parameter can take on a value from a set of unordered elements: for example, a set of waves, or a set of filter types.
+\item A {\it boolean} parameter can take on only two values (0/1, or on/off, of triangle/saw, etc.).  Boolean parameters are assumed to be non-metric parameters.
+\item A {\it semi-metric} parameter has both a metric range and a non-metric range.  For example, a MIDI Channel parameter might have the metric values 1...16 plus the non-metric options OMNI and OFF.
+\item Some parameters are {\it immutable}: they will refuse to be modified.  These are typically things like patch names.  You can make other parameters immutable by turning whether they can be edited on or off (see Section \ref{restriction}).
+\end{itemize}
+
+\begin{figure}[t]
+\begin{minipage}{\linewidth}
+\begin{minipage}[t]{0.49\linewidth}%
+\begin{algorithm}[H]
+   \caption{MetricMutate}
+   \label{alg:example}
+\begin{algorithmic}
+   \STATE {\bfseries Input:} Parameter \(P\) with current value \(v\); {\it weight}
+   \STATE \(q \leftarrow \text{\it weight} \times\)
+   \STATE \hspace{\fill}\((\text{metric max of \(P\)} - (1 + \text{metric min of \(P\)}))\)
+   \STATE \(u \leftarrow\) uniform random selection from
+   \STATE \hspace{\fill}\([v-q/2, v+q/2]\)
+   \IF{\(u=v\)}
+   	\IF{coin flip of probability 0.5}
+		\REPEAT
+			\STATE \(u \leftarrow u + (\text{either 1 or \(-1\) at random})\)
+			\STATE \(u \leftarrow\) round \(u\) to nearest metric value in \(P\)
+		\UNTIL{coin flip of probability 0.5}
+	\ENDIF
+   \ENDIF 
+   \STATE {\bfseries return} \(u\)
+  \end{algorithmic}
+\end{algorithm}
+\end{minipage}%
+\hspace{0.01\linewidth}
+\begin{minipage}[t]{0.49\linewidth}
+\begin{algorithm}[H]
+   \caption{Mutate}
+   \label{alg:example}
+\begin{algorithmic}
+   \STATE {\bfseries Input:} Parameter \(P\), with current value \(v\), {\it weight}
+    \IF{\(P\) is fully metric}
+    \STATE {\bfseries return } MetricMutate(\(P, v\), {\it weight})
+    \ELSIF{\(P\) is semi-metric and \(v\) inside metric region}
+   	\IF{coin flip of probability 0.5}
+   		 \STATE {\bfseries return } MetricMutate(\(P, v\), {\it weight})
+	\ELSIF{coin flip of probability {\it weight}}
+		\STATE {\bfseries return} a random non-metric value from \(P\)
+	\ENDIF
+    \ELSIF{\(P\) is semi-metric and \(v\) outside metric region}
+		\IF{coin flip of probability {\it weight}}
+		   	\IF{coin flip of probability 0.5}
+				\STATE {\bfseries return} a random metric value from \(P\)
+		    	\ELSE
+	    			\STATE {\bfseries return} a random non-metric value from \(P\)
+    			\ENDIF
+		\ENDIF
+    \ELSIF{coin flip of probability {\it weight}}
+			\STATE {\bfseries return} a random metric value from \(P\)
+    \ENDIF
+    \STATE {\bfseries return} \(v\)
+  \end{algorithmic}
+\end{algorithm}
+\end{minipage}
+\end{minipage}
+\caption{The {\bf Mutate} function, which calls the {\bf MetricMutate} sub-function as necessary for metric parameters or semi-metric parameters in the metric range.  The ``metric min'' and ``metric max'' are the maximum and minimum values in the metric range of parameter \(P\). }
+\label{mutate}
+\end{figure}
+
 \paragraph{Mutation}
-When a patch {\bf A} is {\it mutated}, it is modified with some degree of random noise.  Again, you specify a percentage 0...100\%, but this means something different than in recombination.  Every single parameter will potentially get mutated, but percentage specifies the {\it degree} to which noise will impact on a parameter.  Specifically:
+When a patch {\bf A} is {\it mutated}, each of its parameters is modified with some degree of random noise, or with some probability.  Figure~\ref{mutate} shows the procedure for mutating a single parameter \(P\) in a patch.  The parameter has the current value \(v\) and the user-specified {\it weight}.  The new parameter value is returned.  Mutation is used in patch randomization in nudging, and in Hill-Climbing.
 
-\begin{itemize} 
-\item If your parameter is {\it metric}, then the percentage specifies the width of a uniform distribution centered at the current value.  For example, if your parameter range is 0...127 (and so has size 128), and your current value is 30, and your percentage is 25\%, then we will select a new random value within the region \([30 - 128 \times 0.25, 30 + 128 \times 0.25]\), which reduces to \([-2, 62]\).  Obviously, -1 and -2 are not valid, so if we choose them, we try again repeatedly until we get a valid number.
+Notice that if \(v\) is a metric value, and the algorithm has decided it will stay a metric value, then it uses a special sub-procedure, {\it MetricMutate}, to mutate the value to something relatively near to the original; the distance is determined by the weight.  Otherwise generally new (metric, non-metric) values are chosen completely at random with a certain probability based on the weight.
 
-0\% mutation means none at all.  100\% mutation is guaranteed to be complete randomization over the entire range.  But other values may be counterintuitive: for example, 25\% sounds small but it's not: it's potentially selecting numbers over half of the range.  Generally if you intuitively want to do a mutation of D\%, cut your D down by half.
 
-\item If your parameter is {\it non-metric}, the percentage simply specifies the probability that it will be entirely randomized to a new value.
+\begin{figure}[t]
+\begin{minipage}{\linewidth}
+\begin{minipage}[t]{0.49\linewidth}%
+\begin{algorithm}[H]
+   \caption{Recombine}
+   \label{alg:example}
+\begin{algorithmic}
+   \STATE {\bfseries Input:} Parameter \(P\) with current values \(v, w\); {\it weight}
+	\IF{coin flip of probability {\it weight}}
+	    	\IF{\(v\) and \(w\) are both in metric region in \(P\)}
+			\STATE  {\bfseries return } a random selection from \([v, w]\) 
+		\ELSIF{coin flip of probability 0.5}
+				\STATE {\bfseries return \(w\)}
+		\ENDIF
+	\ENDIF
+    \STATE {\bfseries return} \(v\)
+  \end{algorithmic}
+\end{algorithm}
+\end{minipage}%
+\hspace{0.01\linewidth}
+\begin{minipage}[t]{0.49\linewidth}
+\begin{algorithm}[H]
+   \caption{Opposite}
+   \label{alg:example}
+\begin{algorithmic}
+   \STATE {\bfseries Input:} \hspace{-0.04em}Parameter \(P\) with current values \(v, w\);
+   \STATE \hspace{\fill}{\it weight}, {\it flee}
+ 	\IF{\(v=w\) and {\it flee}\(=\){true}}
+		\IF{\(v\) is non-metric}
+			\IF{coin flip of probability {\it weight}}
+    				\STATE {\bfseries return } a random non-metric value from 
+				\STATE \hspace{\fill} \(P - \{w\}\)
+			\ENDIF
+		\ELSIF{\(v=\) metric max of \(P\)}
+			\STATE {\bfseries return } \(v - 1\)
+		\ELSIF{\(v=\) metric min of \(P\)} 
+			\STATE {\bfseries return } \(v + 1\)
+		\ELSE
+			\STATE {\bfseries return } \(v\ +\) or \(- 1\) at random
+		\ENDIF
+    \ELSIF{both \(v\) and \(w\) are metric values in \(P\)}
+    	\STATE \(q \leftarrow v + \text{\it weight} \times (v - w)\)
+    	\STATE \(q \leftarrow \text{min}(\text{max}(q, \text{metric min of \(P\)}), \text{metric max of \(P\)})\)
+    	\STATE {\bfseries return} a random selection from \([v, q]\) 
+    \ELSE
+        \STATE {\bfseries return} \(v\)
+     \ENDIF
+  \end{algorithmic}
+\end{algorithm}
+\end{minipage}
+\end{minipage}
+\caption{The {\bf Recombine} and {\bf Opposite} functions.  Each take a parameter with {\it two} values \(v\) and \(w\) (one from each patch being recombined), plus a user-specified {\it weight}.  Additionally the Opposite function takes a boolean argument, {\it flee}, which indicates whether Opposite is being presently used to flee away from \(w\).   The ``metric min'' and ``metric max'' are the maximum and minimum values in the metric range of parameter \(P\).}
+\label{recombine}
+\end{figure}
 
-\item If your parameter is has both metric and non-metric regions, then we first decide whether to jump the parameter value from metric to non-metric (or vice versa).  This is half of the percentage.  So if your percentage is 25\%, then this happens with a \(0.25 \times 0.5 = 0.125\) likelihood.  If the value jumps then we pick a totally new random value for it (in its new metric or non-metric region).  If the value doesn't jump, then it is mutated just like elements in its region (metric or non-metric) as above.
+% this little dance is because \paragraph won't work right here and I'm not sure why
+\vspace{1em}\noindent{\bf Recombination}\quad
+This takes two values \(v\) and \(w\) for a given parameter \(P\) and returns a new value for \(v\).  If both values are metric, then a value is selected between them with a certain probability.  Else \(v\) either stays as \(v\) or changes to \(w\) with a certain probability.  See Figure \ref{recombine}.  Recombination is used in the patch-merge operation, as well as forming the ``plus'' operation in the Hill-Climbing procedure (see Figure~\ref{hcfigure} and Table~\ref{hctable}). 
 
-\item A few parameters are {\it immutable}: they cannot be mutated.  These are typically things like patch names.
-\end{itemize}
+% this little dance is because \paragraph won't work right here and I'm not sure why
+\vspace{1em}\noindent{\bf Opposite Recombination}\quad
+This is used to find a new patch \(Q\) which is on the {\it other side} of patch \(P\) from where patch \(S\) is.  There are two reasons you might want to do this.  One obvious reason is because you want to essentially move \(P\) away from \(S\) (so \(P\) becomes \(Q\)).  This is called {\it fleeing}: it's used in Edisyn for {\it nudging away} from a target patch.
 
+The other reason is because you have recently moved from \(S\) to \(P\), and now you'd like to move \(P\) even {\it further} in that direction.  This is the ``minus'' operation  done the Hill-Climbing procedure (see Figure~\ref{hcfigure} and Table~\ref{hctable}).  You'll note from Figure \ref{recombine} that the Opposite procedure takes a {\it flee} argument to distinguish between your two reasons.   This largely influences what will happen if the two parameter values are the same.\footnote{Note that we assume that all metric parameters are integers, not real-valued}.
 
 \section{Writing a Patch Editor}
 

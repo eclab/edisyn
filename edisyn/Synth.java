@@ -105,7 +105,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** Indicates that we are a sacrificial synth which is parsing an incoming sysex dump and then will be merged with the main synth. */
     public boolean isParsingForMerge() { return parsingForMerge; }
 
-    boolean useMapForRecombination = true;
+    //boolean useMapForRecombination = true;
     boolean showingMutation = false;
     /** Returns true if we're currently trying to merge with another patch.  */
     public boolean isMerging() { return merging != 0.0; }
@@ -180,6 +180,7 @@ public abstract class Synth extends JComponent implements Updatable
                 // we call this here even though it's already been called as a result of frame.setVisible(true)
                 // because it's *after* setupMidi(...) and so it gives synths a chance to send
                 // a MIDI sysex message in response to the window becoming front.
+                synth.sendAllSoundsOff();  // not doSendAllSoundsOff(), because we don't want to stop the test notes per se
                 synth.windowBecameFront();                              
                 }
             synth.undo.setWillPush(true);
@@ -785,9 +786,14 @@ public abstract class Synth extends JComponent implements Updatable
         return null;
         }
     
+    public void revise()
+    	{
+    	revise(model);
+    	}
+    	
     /** Only revises / issues warnings on out-of-bounds numerical parameters. 
         You probably want to override this to check more stuff. */
-    public void revise()
+    public void revise(Model model)
         {
         String[] keys = model.getKeys();
         for(int i = 0; i < keys.length; i++)
@@ -970,10 +976,12 @@ public abstract class Synth extends JComponent implements Updatable
 
 
     /** Returns whether the mutation map should be used for recombination. */
+    /*
     public boolean getUsesMapForRecombination()
         {
         return useMapForRecombination;
         }
+    */
 
 
     /** Builds a receiver to attach to the current IN transmitter.  The receiver
@@ -1654,7 +1662,8 @@ public abstract class Synth extends JComponent implements Updatable
         newSynth.parsingForMerge = true;
         newSynth.parse(data, true, false);
         newSynth.parsingForMerge = false;
-        model.recombine(random, newSynth.getModel(), useMapForRecombination ? getMutationKeys() : model.getKeys(), probability);
+        model.recombine(random, newSynth.getModel(), getMutationKeys(), //useMapForRecombination ? getMutationKeys() : model.getKeys(), 
+        	probability);
         newSynth.setSendMIDI(true);
         revise();  // just in case
                         
@@ -2204,7 +2213,8 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doOpen();
+            	if (doOpen())
+            		sendAllParameters();
                 }
             });
         menu.addSeparator();
@@ -2303,6 +2313,8 @@ public abstract class Synth extends JComponent implements Updatable
 
         JMenu randomize = new JMenu("Randomize");
         menu.add(randomize);
+        JMenuItem randomize1 = new JMenuItem("Randomize by 1%");
+        randomize.add(randomize1);
         JMenuItem randomize2 = new JMenuItem("Randomize by 2%");
         randomize.add(randomize2);
         JMenuItem randomize5 = new JMenuItem("Randomize by 5%");
@@ -2321,6 +2333,15 @@ public abstract class Synth extends JComponent implements Updatable
         JMenuItem undoAndRandomize = new JMenuItem("Undo and Randomize Again");
         randomize.add(undoAndRandomize);
 
+        randomize1.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doMutate(0.01);
+                }
+            });
+//        randomize1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+
         randomize2.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
@@ -2328,7 +2349,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(0.02);
                 }
             });
-        randomize2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+//        randomize2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize5.addActionListener(new ActionListener()
             {
@@ -2337,7 +2358,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(0.05);
                 }
             });
-        randomize5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+//        randomize5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize10.addActionListener(new ActionListener()
             {
@@ -2346,7 +2367,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(0.1);
                 }
             });
-        randomize10.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+//        randomize10.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize25.addActionListener(new ActionListener()
             {
@@ -2355,7 +2376,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(0.25);
                 }
             });
-        randomize25.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+ //       randomize25.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize50.addActionListener(new ActionListener()
             {
@@ -2364,7 +2385,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(0.5);
                 }
             });
-        randomize50.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+//        randomize50.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize100.addActionListener(new ActionListener()
             {
@@ -2373,7 +2394,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(1.0);
                 }
             });
-        randomize100.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+//        randomize100.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         undoAndRandomize.addActionListener(new ActionListener()
             {
@@ -2412,7 +2433,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(0);
                 }
             });
-        nudgeTowards[0].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        nudgeTowards[0].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
                 
         nudgeTowards[1] = new JMenuItem("Towards 2");
         nudgeMenu.add(nudgeTowards[1]);
@@ -2423,7 +2444,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(1);
                 }
             });
-        nudgeTowards[1].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        nudgeTowards[1].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
                 
         nudgeTowards[2] = new JMenuItem("Towards 3");
         nudgeMenu.add(nudgeTowards[2]);
@@ -2434,7 +2455,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(2);
                 }
             });
-        nudgeTowards[2].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        nudgeTowards[2].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
                 
         nudgeTowards[3] = new JMenuItem("Towards 4");
         nudgeMenu.add(nudgeTowards[3]);
@@ -2445,7 +2466,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(3);
                 }
             });
-        nudgeTowards[3].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        nudgeTowards[3].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
         
         nudgeMenu.addSeparator();
 
@@ -2458,7 +2479,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(4);
                 }
             });
-        nudgeTowards[4].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[4].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_5, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
                 
         nudgeTowards[5] = new JMenuItem("Away from 2");
         nudgeMenu.add(nudgeTowards[5]);
@@ -2469,7 +2490,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(5);
                 }
             });
-        nudgeTowards[5].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[5].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_6, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
                 
         nudgeTowards[6] = new JMenuItem("Away from 3");
         nudgeMenu.add(nudgeTowards[6]);
@@ -2480,7 +2501,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(6);
                 }
             });
-        nudgeTowards[6].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[6].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_7, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
                 
         nudgeTowards[7] = new JMenuItem("Away from 4");
         nudgeMenu.add(nudgeTowards[7]);
@@ -2491,7 +2512,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(7);
                 }
             });
-        nudgeTowards[7].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[7].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         nudgeMenu.addSeparator();
 
@@ -2577,6 +2598,9 @@ public abstract class Synth extends JComponent implements Updatable
         JRadioButtonMenuItem nudgeMutation0 = new JRadioButtonMenuItem("0%");
         nudgeMutation.add(nudgeMutation0);
         nudgeMutationButtonGroup.add(nudgeMutation0);
+        JRadioButtonMenuItem nudgeMutation1 = new JRadioButtonMenuItem("1%");
+        nudgeMutation.add(nudgeMutation1);
+        nudgeMutationButtonGroup.add(nudgeMutation1);
         JRadioButtonMenuItem nudgeMutation2 = new JRadioButtonMenuItem("2%");
         nudgeMutation.add(nudgeMutation2);
         nudgeMutationButtonGroup.add(nudgeMutation2);
@@ -2586,15 +2610,26 @@ public abstract class Synth extends JComponent implements Updatable
         JRadioButtonMenuItem nudgeMutation10 = new JRadioButtonMenuItem("10%");
         nudgeMutation.add(nudgeMutation10);
         nudgeMutationButtonGroup.add(nudgeMutation10);
+        /*
         JRadioButtonMenuItem nudgeMutation25 = new JRadioButtonMenuItem("25%");
         nudgeMutation.add(nudgeMutation25);
         nudgeMutationButtonGroup.add(nudgeMutation25);
+    	*/
 
         nudgeMutation0.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
                 nudgeMutationWeight = 0.0;
+                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal(), false); 
+                }
+            });
+
+        nudgeMutation1.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                nudgeMutationWeight = 0.01;
                 setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal(), false); 
                 }
             });
@@ -2626,6 +2661,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
+/*
         nudgeMutation25.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
@@ -2634,13 +2670,15 @@ public abstract class Synth extends JComponent implements Updatable
                 setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal(), false); 
                 }
             });
-
+*/
         double nudgeVal = getLastXAsDouble("NudgeMutationWeight", getSynthNameLocal(), 0.0, false);
-        if (nudgeVal < 0.02) { nudgeMutationWeight = 0.0; nudgeMutation0.setSelected(true); }
+        if (nudgeVal < 0.01) { nudgeMutationWeight = 0.0; nudgeMutation0.setSelected(true); }
+        else if (nudgeVal < 0.02) { nudgeMutationWeight = 0.01; nudgeMutation0.setSelected(true); }
         else if (nudgeVal < 0.05) { nudgeMutationWeight = 0.02; nudgeMutation2.setSelected(true); }
         else if (nudgeVal < 0.10) { nudgeMutationWeight = 0.05; nudgeMutation5.setSelected(true); }
-        else if (nudgeVal < 0.25) { nudgeMutationWeight = 0.10; nudgeMutation10.setSelected(true); }
-        else { nudgeMutationWeight = 0.25; nudgeMutation25.setSelected(true); }
+        else { nudgeMutationWeight = 0.10; nudgeMutation10.setSelected(true); }
+//        else if (nudgeVal < 0.25) { nudgeMutationWeight = 0.10; nudgeMutation10.setSelected(true); }
+//        else { nudgeMutationWeight = 0.25; nudgeMutation25.setSelected(true); }
 
 
 
@@ -2663,6 +2701,9 @@ public abstract class Synth extends JComponent implements Updatable
         JRadioButtonMenuItem nudgeRecombination50 = new JRadioButtonMenuItem("50%");
         nudgeRecombination.add(nudgeRecombination50);
         nudgeRecombinationButtonGroup.add(nudgeRecombination50);
+        JRadioButtonMenuItem nudgeRecombination100 = new JRadioButtonMenuItem("100%");
+        nudgeRecombination.add(nudgeRecombination100);
+        nudgeRecombinationButtonGroup.add(nudgeRecombination100);
 
         nudgeRecombination2.addActionListener(new ActionListener()
             {
@@ -2709,12 +2750,22 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
+        nudgeRecombination100.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                nudgeRecombinationWeight = 1.0;
+                setLastX("" + nudgeRecombinationWeight, "NudgeRecombinationWeight", getSynthNameLocal(), false); 
+                }
+            });
+
         nudgeVal = getLastXAsDouble("NudgeRecombinationWeight", getSynthNameLocal(), 0.25, false);
         if (nudgeVal < 0.05) { nudgeRecombinationWeight = 0.02; nudgeRecombination2.setSelected(true); }
         else if (nudgeVal < 0.10) { nudgeRecombinationWeight = 0.05; nudgeRecombination5.setSelected(true); }
         else if (nudgeVal < 0.25) { nudgeRecombinationWeight = 0.10; nudgeRecombination10.setSelected(true); }
         else if (nudgeVal < 0.50) { nudgeRecombinationWeight = 0.25; nudgeRecombination25.setSelected(true); }
-        else { nudgeRecombinationWeight = 0.50; nudgeRecombination50.setSelected(true); }
+        else if (nudgeVal < 1.00) { nudgeRecombinationWeight = 0.50; nudgeRecombination50.setSelected(true); }
+        else { nudgeRecombinationWeight = 1.00; nudgeRecombination100.setSelected(true); }
 
 
 
@@ -2763,6 +2814,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
+/*
         recombinationToggle = new JCheckBoxMenuItem("Use Parameters for Nudge/Merge");
         menu.add(recombinationToggle);
         recombinationToggle.addActionListener(new ActionListener()
@@ -2778,7 +2830,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (recomb == null) recomb = "true";
         useMapForRecombination = Boolean.parseBoolean(recomb);
         recombinationToggle.setSelected(useMapForRecombination);
-
+*/
             
         menu = new JMenu("MIDI");
         menubar.add(menu);
@@ -2976,6 +3028,7 @@ public abstract class Synth extends JComponent implements Updatable
             });
 
         testNotes = new JCheckBoxMenuItem("Send Test Notes");
+        testNotes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() |  InputEvent.SHIFT_MASK));
         menu.add(testNotes);
         testNotes.addActionListener(new ActionListener()
             {
@@ -3636,7 +3689,6 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        /*
           taba = new JMenuItem("Tab 7");
           taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_7, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
           menu.add(taba);
@@ -3658,7 +3710,6 @@ public abstract class Synth extends JComponent implements Updatable
           doTab(7);
           }
           });
-        */
         
         // Set up Windows  
         if (Style.isWindows() || Style.isUnix())
@@ -3712,6 +3763,7 @@ public abstract class Synth extends JComponent implements Updatable
 
             public void windowActivated(WindowEvent e)
                 {
+                sendAllSoundsOff(); // not doSendAllSoundsOff because we don't want to turn off the test notes
                 windowBecameFront();
                 lastActiveWindow = frame;
                 }
@@ -3894,27 +3946,33 @@ public abstract class Synth extends JComponent implements Updatable
         
         if (!sendingAllSoundsOff)
             {
-            noMIDIPause = true;
-            try
-                {
-                // do an all sounds off (some synths don't properly respond to all notes off)
-                for(int i = 0; i < 16; i++)
-                    tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
-                // do an all notes off (some synths don't properly respond to all sounds off)
-                for(int i = 0; i < 16; i++)
-                    tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
-                // for some synths that respond to neither <ahem Korg Wavestation>, maybe we can turn off the current note,
-                // assuming the user hasn't changed it.            
-                for(int i = 0; i < 16; i++)
-                    tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, i, getTestNotePitch(), 0));
-                }
-            catch (InvalidMidiDataException e2)
-                {
-                e2.printStackTrace();
-                }
-            noMIDIPause = false;
+            sendAllSoundsOff();
             }
         }
+        
+        
+    void sendAllSoundsOff()
+    	{
+		noMIDIPause = true;
+		try
+			{
+			// do an all sounds off (some synths don't properly respond to all notes off)
+			for(int i = 0; i < 16; i++)
+				tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
+			// do an all notes off (some synths don't properly respond to all sounds off)
+			for(int i = 0; i < 16; i++)
+				tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
+			// for some synths that respond to neither <ahem Korg Wavestation>, maybe we can turn off the current note,
+			// assuming the user hasn't changed it.            
+			for(int i = 0; i < 16; i++)
+				tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, i, getTestNotePitch(), 0));
+			}
+		catch (InvalidMidiDataException e2)
+			{
+			e2.printStackTrace();
+			}
+		noMIDIPause = false;
+    	}
 
 
     int testNoteLength = 500;
@@ -4019,6 +4077,10 @@ public abstract class Synth extends JComponent implements Updatable
             {
             // turn off existing note
             tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, testNote, velocity));
+            
+            // clear all notes -- often synthesizers like FM synths will have crazy long decays
+			sendAllSoundsOff();
+			
             // play new note
             tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, testNote, velocity));
                                                                         
@@ -4101,7 +4163,7 @@ public abstract class Synth extends JComponent implements Updatable
         instantiate(synths[synth], synthNames[synth], false, true, tuple);
         }
                 
-    void doDuplicateSynth()
+    Synth doDuplicateSynth()
         {
         Synth newSynth = instantiate(Synth.this.getClass(), getSynthNameLocal(), false, true, tuple);
         newSynth.setSendMIDI(false);
@@ -4110,6 +4172,7 @@ public abstract class Synth extends JComponent implements Updatable
         model.copyValuesTo(newSynth.model);
         newSynth.undo.setWillPush(currentPush);
         newSynth.setSendMIDI(true);
+        return newSynth;
         }
                 
     void doUndo()
@@ -4140,7 +4203,8 @@ public abstract class Synth extends JComponent implements Updatable
         
     void doQuit()
         {
-        doSendAllSoundsOff();
+        sendAllSoundsOff();
+        simplePause(50);	// maybe enough time to flush out the all sounds off notes?  dunno
         System.exit(0);
         }
     
@@ -4155,12 +4219,22 @@ public abstract class Synth extends JComponent implements Updatable
         updateTitle();
         }
 
+    void doSetNudge(int i, Model model, String name)
+        {
+        nudge[i] = (Model)(model.clone());
+        nudgeTowards[i].setText("Towards " + (i + 1) + ": " + name);
+        nudgeTowards[i + 4].setText("Away from " + (i + 1) + ": " + name);
+        }
+
     void doSetNudge(int i)
         {
-        nudge[i] = (Model)(getModel().clone());
-        nudgeTowards[i].setText("Towards " + (i + 1) + ": " + getPatchName(getModel()));
-        nudgeTowards[i + 4].setText("Away from " + (i + 1) + ": " + getPatchName(getModel()));
+        doSetNudge(i, getModel(), getPatchName(getModel()));
         }
+
+	Model getNudge(int i)
+		{
+		return nudge[i];
+		}
 
     int lastNudge = -1;
         
@@ -4175,13 +4249,15 @@ public abstract class Synth extends JComponent implements Updatable
         undo.push(model);
         if (towards < 4)
             {
-            if (nudgeRecombinationWeight > 0.0) model.recombine(random, nudge[towards], useMapForRecombination ? getMutationKeys() : model.getKeys(), nudgeRecombinationWeight);
-            if (nudgeMutationWeight > 0.0) model.mutate(random, model.getKeys(), nudgeMutationWeight);
+            if (nudgeRecombinationWeight > 0.0) model.recombine(random, nudge[towards], getMutationKeys(),  //useMapForRecombination ? getMutationKeys() : model.getKeys(), 
+            	nudgeRecombinationWeight);
+            if (nudgeMutationWeight > 0.0) model.mutate(random, getMutationKeys(), nudgeMutationWeight);
             }
         else
             {
-            if (nudgeRecombinationWeight > 0.0) model.opposite(random, nudge[towards - 4], useMapForRecombination ? getMutationKeys() : model.getKeys(), nudgeRecombinationWeight, true);
-            if (nudgeMutationWeight > 0.0) model.mutate(random, model.getKeys(), nudgeMutationWeight);
+            if (nudgeRecombinationWeight > 0.0) model.opposite(random, nudge[towards - 4], getMutationKeys(), //useMapForRecombination ? getMutationKeys() : model.getKeys(), 
+            	nudgeRecombinationWeight, true);
+            if (nudgeMutationWeight > 0.0) model.mutate(random, getMutationKeys(), nudgeMutationWeight);
             }
         revise();  // just in case
 
@@ -4369,8 +4445,10 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** Goes through the process of opening a file and loading it into this editor. 
         This does NOT open a new editor window -- it loads directly into this editor. */
-    void doOpen()
+    boolean doOpen()
         {
+        boolean succeeded = false;
+        
         FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Load Sysex Patch File...", FileDialog.LOAD);
         fd.setFilenameFilter(new FilenameFilter()
             {
@@ -4391,9 +4469,6 @@ public abstract class Synth extends JComponent implements Updatable
             if (path != null)
                 fd.setDirectory(path);
             }
-                
-                
-        boolean failed = true;
                 
         fd.setVisible(true);
         File f = null; // make compiler happy
@@ -4476,6 +4551,11 @@ public abstract class Synth extends JComponent implements Updatable
                             }
                         setLastDirectory(fd.getDirectory());
 
+						if (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED)
+							{
+                            succeeded = true;
+							}
+							
                         // this last statement fixes a mystery.  When I call Randomize or Reset on
                         // a Blofeld or on a Microwave, all of the widgets update simultaneously.
                         // But on a Blofeld Multi or Microwave Multi they update one at a time.
@@ -4499,8 +4579,8 @@ public abstract class Synth extends JComponent implements Updatable
                 }
                 
         updateTitle();
-        }
-
+        return succeeded;
+		}
                 
 
     /** Pops up at the start of the program to ask the user what synth he wants. */

@@ -46,6 +46,14 @@ public class HillClimb extends SynthPanel
     {
     public static final int NUM_CANDIDATES = 16;
     public static final int NUM_MODELS = NUM_CANDIDATES + 1;
+    
+    // When the nudge buttons are being REQUESTED to play, then currentNudgeButton
+    // is set to the nudge button values.  When a nudge button is PRESENTLY playing,
+    // then currentNudgeButton is set to this value + NUDGE_PLAYING_DELTA.  When 
+    // no nudge button is playing, then currentNudgeButton is set to -1.  This allows
+    // us to eventualliy turn off the nudge button when it's time to play something else
+    // but still properly highlight it when it's playing.
+    public static final int NUDGE_PLAYING_DELTA = 100;
 
     ArrayList oldA = new ArrayList();
     ArrayList oldB = new ArrayList();
@@ -53,13 +61,16 @@ public class HillClimb extends SynthPanel
     Model[] currentModels = new Model[NUM_MODELS];
     Model[] bestModels = new Model[3];
     JRadioButton[][] ratings = new JRadioButton[NUM_MODELS + 1][3];
+    ButtonGroup nudgeGroup = new ButtonGroup();
+    JRadioButton[] nudge = new JRadioButton[5];
     PushButton[] plays = new PushButton[NUM_MODELS];
-    public static final int INITIAL_MUTATION_RATE = 10;
+    public static final int INITIAL_MUTATION_RATE = 5;
     public static final int INITIAL_RECOMBINATION_RATE = 75;
     Blank blank;
     Category iterations;
-        
+    int currentNudgeButton = -1;
     int currentPlay = 0;
+    HBox nudgeBox;
         
     public HillClimb(Synth synth)
         {
@@ -101,8 +112,11 @@ public class HillClimb extends SynthPanel
             {
             public void perform()
                 {
-                initialize((Model)(synth.getModel().clone()), true);
-                resetCurrentPlay();
+                if (synth.showSimpleConfirm("Reset", "Are you sure you want to reset the Hill-Climber?"))
+                	{
+	                initialize((Model)(synth.getModel().clone()), true);
+	                resetCurrentPlay();
+	                }
                 }
             };
         reset.getButton().setPreferredSize(backup.getButton().getPreferredSize());
@@ -116,7 +130,78 @@ public class HillClimb extends SynthPanel
                 }
             };
         retry.getButton().setPreferredSize(backup.getButton().getPreferredSize());
-                
+           
+           
+     	nudgeBox = new HBox();
+
+        PushButton nudgeButton = new PushButton("Nudge To:")
+            {
+            public void perform()
+                {
+                int nudged = 0;
+                for(int i = 1; i < 4; i++)
+                	{ if (nudge[i].isSelected()) { nudged = i; break; } }
+                nudge(nudged);
+                resetCurrentPlay();
+                }
+            };
+        nudgeButton.getButton().setPreferredSize(backup.getButton().getPreferredSize());
+        nudgeBox.add(nudgeButton);
+
+        for(int i = 0; i < 5; i++)
+        	{
+        	if (i == 4)
+        		{
+        		nudge[i] = new JRadioButton("Current Patch");
+        		nudge[i].setSelected(true);
+        		}
+        	else
+        		nudge[i] = new JRadioButton("" + (i + 1));
+            nudge[i].setForeground(Style.TEXT_COLOR());
+            nudge[i].setFont(Style.SMALL_FONT());
+            nudge[i].putClientProperty("JComponent.sizeVariant", "small");
+            nudgeGroup.add(nudge[i]);
+			}
+		
+		for(int i = 0; i < 5; i++)
+			{
+			final int _i = i;
+	        nudge[i].addActionListener(new ActionListener()
+				{
+				public void actionPerformed(ActionEvent e)
+					{
+					if (synth.isSendingTestNotes())
+						{
+						currentNudgeButton = _i;
+						}
+					else
+						{
+						synth.sendAllParameters();
+						synth.doSendTestNote(false);
+						}
+					}
+				});
+
+			 Border border = new LineBorder(Style.BACKGROUND_COLOR(), 1)
+				{
+				public void paintBorder(final Component c, final Graphics g, final int x, final int y, final int width, final int height) 
+					{
+					if (currentNudgeButton == _i || currentNudgeButton == _i + NUDGE_PLAYING_DELTA)
+						super.lineColor = Style.DYNAMIC_COLOR();
+					else
+						super.lineColor = Style.BACKGROUND_COLOR();
+					super.paintBorder(c, g, x, y, width, height);
+					}
+				};
+
+			JPanel pan = new JPanel();
+			pan.setLayout(new BorderLayout());
+			pan.add(nudge[i], BorderLayout.CENTER);
+			pan.setBorder(border);
+        	pan.setBackground(Style.BACKGROUND_COLOR());
+            nudgeBox.add(pan);
+			}
+		                
         VBox vbox = new VBox();
         
         
@@ -124,12 +209,31 @@ public class HillClimb extends SynthPanel
         HBox buttonBox = new HBox();
         buttonBox.add(climb);
         buttonBox.add(retry);
-        buttonVBox.add(buttonBox);
-        buttonBox = new HBox();
+       // buttonVBox.add(buttonBox);
+        //buttonBox = new HBox();
         buttonBox.add(backup);
         buttonBox.add(reset);
         buttonVBox.add(buttonBox);
-                
+    	buttonVBox.add(nudgeBox);
+
+        PushButton pushToButton = new PushButton("Go To:")
+            {
+            public void perform()
+                {
+                int nudged = 0;
+                for(int i = 1; i < 4; i++)
+                	{ if (nudge[i].isSelected()) { nudged = i; break; } }
+				Model model = (nudged == 4 ? synth.getModel() : synth.getNudge(nudged));
+                initialize((Model)(model.clone()), false);
+                resetCurrentPlay();
+                }
+            };
+        pushToButton.getButton().setPreferredSize(backup.getButton().getPreferredSize());
+
+        HBox gotoHBox = new HBox();
+        gotoHBox.add(pushToButton);
+        gotoHBox.addLast(Stretch.makeHorizontalStretch());
+        buttonVBox.add(gotoHBox);
 
         blank = new Blank();
         HBox ratebox = new HBox();
@@ -202,17 +306,12 @@ public class HillClimb extends SynthPanel
                 {
                 if (synth.isSendingTestNotes())
                     {
-                    currentPlay = NUM_MODELS - 1;
+                    currentPlay = NUM_MODELS - 1;  // so it'll be NUM_MODELS when we update, and trigger playing it specially
                     }
                 else
                     {
-                    // change the model, send all parameters, maybe play a note,
-                    // and then restore the model.
-                    Model backup = synth.model;
-                    synth.model = currentModels[NUM_MODELS - 1];
                     synth.sendAllParameters();
                     synth.doSendTestNote(false);
-                    synth.model = backup;
                     }
 
                 }
@@ -262,7 +361,7 @@ public class HillClimb extends SynthPanel
         HBox hbox = new HBox();
                 
         VBox vr = new VBox();
-        for(int i = 0; i < 16; i++)
+        for(int i = 0; i < NUM_CANDIDATES; i++)
             {
             final int _i = i;
 
@@ -319,11 +418,14 @@ public class HillClimb extends SynthPanel
             ratings[i][2].putClientProperty("JComponent.sizeVariant", "small");
             b.add(Box.createGlue());
             vbox.add(b);
-
-            vbox.add(new PushButton("Keep")
-                {
-                public void perform()
-                    {
+            
+            
+            JMenuItem[] doItems = new JMenuItem[14];
+            doItems[0] = new JMenuItem("Keep Patch");
+            doItems[0].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
                     // Keep for sure?
                     if (synth.showSimpleConfirm("Keep Patch", "Load Patch into Editor?"))
                         {
@@ -338,9 +440,135 @@ public class HillClimb extends SynthPanel
                         synth.setSendMIDI(true);
                         synth.sendAllParameters();
                         }
-                    }
-                });
+            		}
+            	});
+
+            doItems[1] = new JMenuItem("Edit Patch");
+            doItems[1].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		Synth newSynth = synth.doDuplicateSynth();
+            		// Copy the parameters forward into the synth, then
+            		// link the synth's model back to currentModels[_i].
+            		// We do this because the new synth's widgets are registered
+            		// with its model, so we can't just replace the model.
+            		// But we can certainly replace currentModels[_i]!
+                    newSynth.setSendMIDI(false);
+                    currentModels[_i].copyValuesTo(newSynth.getModel());
+                    newSynth.setSendMIDI(true);
+            		currentModels[_i] = newSynth.getModel();
+            		newSynth.sendAllParameters();
+            		}
+            	});
+
+            doItems[2] = new JMenuItem("Save to File");
+            doItems[2].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		Model backup = synth.model;
+	                synth.model = currentModels[_i];
+	                synth.doSaveAs();
+	                synth.model = backup;
+	                synth.updateTitle();
+	                }
+            	});
+
+            doItems[3] = new JMenuItem("Load from File");
+            doItems[3].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		Model backup = synth.model;
+	                synth.model = currentModels[_i];
+	                synth.doOpen();
+	                currentModels[_i] = synth.model;
+	                synth.model = backup;
+	                synth.updateTitle();
+            		}
+            	});
+            
+            doItems[4] = null;
+            
+            doItems[5] = new JMenuItem("Set 1");
+            doItems[5].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		synth.doSetNudge(0, currentModels[_i], "Hill-Climb " + _i);
+            		}
+            	});
+
+            doItems[6] = new JMenuItem("Set 2");
+            doItems[6].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		synth.doSetNudge(1, currentModels[_i], "Hill-Climb " + _i);
+            		}
+            	});
+
+            doItems[7] = new JMenuItem("Set 3");
+            doItems[7].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		synth.doSetNudge(2, currentModels[_i], "Hill-Climb " + _i);
+            		}
+            	});
+
+            doItems[8] = new JMenuItem("Set 4");
+            doItems[8].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		synth.doSetNudge(3, currentModels[_i], "Hill-Climb " + _i);
+            		}
+            	});
+            	
+            doItems[9] = null;
+            
+            doItems[10] = new JMenuItem("Load 1");
+            doItems[10].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		currentModels[_i] = (Model)(synth.getNudge(0).clone());
+            		}
+            	});
+
+            doItems[11] = new JMenuItem("Load 2");
+            doItems[11].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		currentModels[_i] = (Model)(synth.getNudge(1).clone());
+            		}
+            	});
+
+            doItems[12] = new JMenuItem("Load 3");
+            doItems[12].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		currentModels[_i] = (Model)(synth.getNudge(2).clone());
+            		}
+            	});
+
+            doItems[13] = new JMenuItem("Load 4");
+            doItems[13].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		currentModels[_i] = (Model)(synth.getNudge(3).clone());
+            		}
+            	});
+            	
+
+            vbox.add(new PushButton("Options", doItems));
             hbox.add(vbox);
+            
             if (i == 7)
                 {
                 vr.add(hbox);
@@ -380,24 +608,48 @@ public class HillClimb extends SynthPanel
             {
             if (isShowingPane())
                 {
-                for(int i = 0; i < NUM_CANDIDATES; i++)                             
+                for(int i = 0; i < NUM_MODELS; i++)                             
                     plays[i].getButton().setForeground(new JButton().getForeground());
-                currentPlay++;
-                if (currentPlay >= NUM_CANDIDATES)
-                    currentPlay = 0;
-                plays[currentPlay].getButton().setForeground(Color.RED);
-
-                // change the model, send all parameters, maybe play a note,
-                // and then restore the model.
-                backup = synth.model;
-                synth.model = currentModels[currentPlay];
-                synth.sendAllParameters();
+                if (currentNudgeButton >= 0 && currentNudgeButton < NUDGE_PLAYING_DELTA)
+                	{
+					backup = synth.model;
+					if (currentNudgeButton != 4)
+						synth.model = synth.getNudge(currentNudgeButton);
+    				nudge[currentNudgeButton].repaint();
+					synth.sendAllParameters();
+					currentNudgeButton += NUDGE_PLAYING_DELTA;
+                	}
+                else
+                	{
+					currentPlay++;
+					currentNudgeButton = -1;
+					if (currentPlay == NUM_MODELS || currentPlay == NUM_MODELS + 5)  // user asked to play the current patch
+						{
+						plays[NUM_MODELS - 1].getButton().setForeground(Color.RED);
+	
+						backup = synth.model;
+						synth.sendAllParameters();
+						}
+					else
+						{
+						if (currentPlay >= NUM_CANDIDATES)
+							currentPlay = 0;
+						plays[currentPlay].getButton().setForeground(Color.RED);
+	
+						// change the model, send all parameters, maybe play a note,
+						// and then restore the model.
+						backup = synth.model;
+						synth.model = currentModels[currentPlay];
+						synth.sendAllParameters();
+						}
+					}
                 }
             }
         }
                 
     public void postUpdateSound()
         {
+    	repaint();
         if (backup!= null)
             synth.model = backup;
         backup = null;
@@ -438,20 +690,27 @@ public class HillClimb extends SynthPanel
         currentPlay = 15;
         }
                         
+    Model copy(Model model)
+    	{
+    	if (model != null)
+    		return model.copy();
+    	else return null;
+    	}
+    	
     public void again()
         {
         if (oldA.size() > 1)
             {
             // rebuild
-            bestModels[0] = (Model)(oldA.remove(oldA.size() - 1));
-            bestModels[1] = (Model)(oldB.remove(oldB.size() - 1));
-            bestModels[2] = (Model)(oldC.remove(oldC.size() - 1));
+            bestModels[0] = copy(((Model)(oldA.remove(oldA.size() - 1))));
+            bestModels[1] = copy(((Model)(oldB.remove(oldB.size() - 1))));
+            bestModels[2] = copy(((Model)(oldC.remove(oldC.size() - 1))));
             climb(false);
             }
         else
             {
             // Just rebuild
-            Model seed = (Model)(oldA.remove(oldA.size() - 1));
+            Model seed = copy(((Model)(oldA.remove(oldA.size() - 1))));
             oldB.remove(oldB.size() - 1);
             oldC.remove(oldC.size() - 1);
             initialize(seed, true);
@@ -472,9 +731,9 @@ public class HillClimb extends SynthPanel
             oldC.remove(oldC.size() - 1);
                         
             // back up to the previous old stuff and rebuild
-            bestModels[0] = (Model)(oldA.remove(oldA.size() - 1));
-            bestModels[1] = (Model)(oldB.remove(oldB.size() - 1));
-            bestModels[2] = (Model)(oldC.remove(oldC.size() - 1));
+            bestModels[0] = copy(((Model)(oldA.remove(oldA.size() - 1))));
+            bestModels[1] = copy(((Model)(oldB.remove(oldB.size() - 1))));
+            bestModels[2] = copy(((Model)(oldC.remove(oldC.size() - 1))));
             climb(false);
             }
         else if (oldA.size() > 1)
@@ -485,7 +744,7 @@ public class HillClimb extends SynthPanel
             oldC.remove(oldC.size() - 1);
                         
             // back up to the previous old stuff and rebuild
-            Model seed = (Model)(oldA.remove(oldA.size() - 1));
+            Model seed = copy(((Model)(oldA.remove(oldA.size() - 1))));
             oldB.remove(oldB.size() - 1);
             oldC.remove(oldC.size() - 1);
             initialize(seed, true);
@@ -493,7 +752,7 @@ public class HillClimb extends SynthPanel
         else
             {
             // Just rebuild
-            Model seed = (Model)(oldA.remove(oldA.size() - 1));
+            Model seed = copy(((Model)(oldA.remove(oldA.size() - 1))));
             oldB.remove(oldB.size() - 1);
             oldC.remove(oldC.size() - 1);
             initialize(seed, true);
@@ -510,8 +769,7 @@ public class HillClimb extends SynthPanel
     public void initialize(Model seed, boolean clear)
         {
         // we need a model with NO callbacks
-        Model newSeed = (Model)(seed.clone());
-        newSeed.clearListeners();
+        Model newSeed = seed.copy();
                 
         if (clear)
             {
@@ -522,26 +780,26 @@ public class HillClimb extends SynthPanel
                 
         Random random = synth.random;
         String[] keys = synth.getMutationKeys();
-        double weight = blank.getModel().get("mutationrate", 0) / 100.0; //mutationRate.getValue() / 100.0;
+        double weight = blank.getModel().get("mutationrate", 0) / 100.0;
                 
         for(int i = 0; i < 4; i++)
             {
-            currentModels[i] = ((Model)(newSeed.clone())).mutate(random, keys, weight * MUTATION_WEIGHT);
+            currentModels[i] = newSeed.copy().mutate(random, keys, weight * MUTATION_WEIGHT);
             }
 
         for(int i = 0; i < 4; i++)
             {
-            currentModels[i + 4] = ((Model)(currentModels[i].clone())).mutate(random, keys, weight * MUTATION_WEIGHT);
+            currentModels[i + 4] = currentModels[i].copy().mutate(random, keys, weight * MUTATION_WEIGHT);
             }
 
         for(int i = 0; i < 4; i++)
             {
-            currentModels[i + 8] = ((Model)(currentModels[i + 4].clone())).mutate(random, keys, weight * MUTATION_WEIGHT);
+            currentModels[i + 8] = currentModels[i + 4].copy().mutate(random, keys, weight * MUTATION_WEIGHT);
             }
 
         for(int i = 0; i < 4; i++)
             {
-            currentModels[i + 12] = ((Model)(currentModels[i + 8].clone())).mutate(random, keys, weight * MUTATION_WEIGHT);
+            currentModels[i + 12] = currentModels[i + 8].copy().mutate(random, keys, weight * MUTATION_WEIGHT);
             }
 
         oldA.add(newSeed);
@@ -566,42 +824,42 @@ public class HillClimb extends SynthPanel
             }
         }
 
-    public static double MUTATION_WEIGHT = 0.5;
+    public static double MUTATION_WEIGHT = 1.0;
         
     public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA)
         {
         // A + B
-        currentModels[0] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[0] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
         // A + C
-        currentModels[1] = ((Model)(a.clone())).recombine(random, c, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[1] = a.copy().recombine(random, c, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
         // B + C
-        currentModels[2] = ((Model)(b.clone())).recombine(random, c, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[2] = b.copy().recombine(random, c, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
         // A + (B + C)
-        currentModels[3] = ((Model)(a.clone())).recombine(random, ((Model)(b.clone())).recombine(random, c, keys, recombination), keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[3] = a.copy().recombine(random, b.copy().recombine(random, c, keys, recombination), keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
         // A - B
-        currentModels[4] = ((Model)(a.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[4] = a.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
         // B - A
-        currentModels[5] = ((Model)(b.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[5] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
         // A - C
-        currentModels[6] = ((Model)(a.clone())).opposite(random, c, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[6] = a.copy().opposite(random, c, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
         // C - A
-        currentModels[7] = ((Model)(c.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[7] = c.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
         // B - C
-        currentModels[8] = ((Model)(b.clone())).opposite(random, c, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[8] = b.copy().opposite(random, c, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
         // C - B
-        currentModels[9] = ((Model)(c.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[9] = c.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
         // A - Z
-        currentModels[10] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[10] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
         // B - Z
-        currentModels[11] = ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[11] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
         // C - Z
-        currentModels[12] = ((Model)(c.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[12] = c.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
         // A
-        currentModels[13] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[13] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
         // B
-        currentModels[14] = ((Model)(b.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[14] = b.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
         // C
-        currentModels[15] = ((Model)(c.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[15] = c.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
         
         shuffle(random, currentModels, NUM_MODELS - 1);
         }
@@ -609,37 +867,37 @@ public class HillClimb extends SynthPanel
     public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA)
         {
         // A + B
-        currentModels[0] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[1] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[2] = ((Model)(a.clone())).recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[0] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[1] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[2] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
         
         // A - B
-        currentModels[3] = ((Model)(a.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[4] = ((Model)(a.clone())).opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[3] = a.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[4] = a.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
         
         // B - A
-        currentModels[5] = ((Model)(b.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[6] = ((Model)(b.clone())).opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[5] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[6] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
         
         // A - Z
-        currentModels[7] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[8] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[7] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[8] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
         
         // B - Z
-        currentModels[9] = ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[10] = ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[9] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[10] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
 
         // (A - Z) + (B - Z)
-        currentModels[11] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).recombine(random, 
-            ((Model)(b.clone())).opposite(random, oldA, keys, recombination, false), keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[11] = a.copy().opposite(random, oldA, keys, recombination, false).recombine(random, 
+            b.copy().opposite(random, oldA, keys, recombination, false), keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
 
         // A
-        currentModels[12] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[13] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[12] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[13] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
         
         // B
-        currentModels[14] = ((Model)(b.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[15] = ((Model)(b.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[14] = b.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[15] = b.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
         
         shuffle(random, currentModels, NUM_MODELS - 1);
         }
@@ -647,42 +905,59 @@ public class HillClimb extends SynthPanel
     public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA)
         {
         // A
-        currentModels[0] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[1] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[2] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[3] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[4] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[5] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[6] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[7] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[8] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[9] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[10] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[11] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[12] = ((Model)(a.clone())).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[0] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[1] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[2] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[3] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[4] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[5] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[6] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[7] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[8] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[9] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[10] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[11] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[12] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
         
         // A - Z
-        currentModels[13] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[14] = ((Model)(a.clone())).opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[15] = ((Model)(a.clone())).opposite(random, oldA, keys, 2.0 * recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[13] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[14] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[15] = a.copy().opposite(random, oldA, keys, 2.0 * recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
         shuffle(random, currentModels, NUM_MODELS - 1);
         }
-                
+             
+	public void nudge(int towards)
+		{
+        Random random = synth.random;
+        String[] keys = synth.getMutationKeys();
+		for(int i = 0; i < NUM_CANDIDATES; i++)
+			{
+			currentModels[i] =  currentModels[i].copy().recombine(
+							random, 
+							towards == 4 ? synth.getModel() : synth.getNudge(towards), 
+							synth.getMutationKeys(),
+									synth.nudgeRecombinationWeight);
+            if (synth.nudgeMutationWeight > 0.0) currentModels[i].mutate(random, synth.getMutationKeys(), 
+            						synth.nudgeMutationWeight);
+            }
+		}   
         
     public void climb(boolean determineBest)
         {
         Random random = synth.random;
         String[] keys = synth.getMutationKeys();
-        double recombination = blank.getModel().get("recombinationrate", 0) / 100.0; //recombinationRate.getValue() / 100.0;
-        double weight = blank.getModel().get("mutationrate", 0) / 100.0; //mutationRate.getValue() / 100.0;
-                
+        double recombination = blank.getModel().get("recombinationrate", 0) / 100.0;
+        double weight = blank.getModel().get("mutationrate", 0) / 100.0;
+        
+        currentModels[NUM_MODELS - 1] = synth.getModel();
+        
         if (determineBest)
             {
             for(int j = 0; j < 3; j++)
                 bestModels[j] = null;
                 
             // load the best models
-            for(int i = 0; i < 16; i++)
+            for(int i = 0; i < NUM_CANDIDATES; i++)
                 {
                 for(int j = 0; j < 3; j++)
                     {

@@ -63,16 +63,23 @@ public class PushButton extends JPanel
         pop = new JPopupMenu();
         for(int i = 0; i < options.length; i++)
             {
-            JMenuItem menu = new JMenuItem(options[i]);
-            final int _i = i;
-            menu.addActionListener(new ActionListener()
-                {
-                public void actionPerformed(ActionEvent e)
-                    {
-                    perform(_i);
-                    }
-                });
-            pop.add(menu);
+            if (options[i] == null)
+            	{
+            	pop.addSeparator();
+            	}
+            else
+            	{
+	            JMenuItem menu = new JMenuItem(options[i]);
+	            final int _i = i;
+	            menu.addActionListener(new ActionListener()
+	                {
+	                public void actionPerformed(ActionEvent e)	
+                    	{
+                   	 	perform(_i);
+                    	}	
+                	});	
+	            pop.add(menu);
+	        	}
             }
         }
     
@@ -82,7 +89,10 @@ public class PushButton extends JPanel
         pop = new JPopupMenu();
         for(int i = 0; i < menuItems.length; i++)
             {
-            pop.add(menuItems[i]);
+            if (menuItems[i] == null)
+            	pop.addSeparator();
+            else
+	            pop.add(menuItems[i]);
             }
         }
     

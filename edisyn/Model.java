@@ -86,7 +86,7 @@ public class Model implements Cloneable
         if (a > b) { int swap = a; a = b; b = swap; }
         if (a == b) return a;
         
-        double range = (b - a + 1);  // 0.5 on each side
+        double range = (b - a) * 2 + 1; //(b - a + 1);  // 0.5 on each side
         
         // pick a random number from -1...+1
         double delta = 0.0;
@@ -99,6 +99,7 @@ public class Model implements Cloneable
             }
         int result = (int)(Math.round(center + delta));
             
+        /*
         // slight tweak if we're at the same result
         if (result == center && coinToss(random, weight))
             {
@@ -110,6 +111,8 @@ public class Model implements Cloneable
                     { result = center + delta2; break; }
                 }
             }
+        */
+        
         return result;
         }
 
@@ -273,6 +276,14 @@ public class Model implements Cloneable
         return this;
         }
 
+	void setIfValid(String key, int value)
+		{
+		if (isValid(key, value))
+			set(key, value);
+		else
+			System.err.println("Invalid opposite value for " + key + ": " + value);
+		}
+
     /** Finds a point on the OPPOSITE side of the model from where the provided other MODEL is located.
         Let's call the current model X and the provided model Y.
         Changes all (and only) the METRIC parameters for which both X and Y are currently in metric regions.
@@ -292,8 +303,8 @@ public class Model implements Cloneable
         We reduce this value Z (move it closer to X's value) by WEIGHT, bound Z to be within the metric
         region, and then choose a new random value between X and Z inclusive.  
     */
-    public Model opposite(Random random, Model model, String[] keys, double weight, boolean randomizeNonMetricIfSame)
-        {
+    public Model opposite(Random random, Model model, String[] keys, double weight, boolean fleeIfSame)
+        {        
         if (undoListener!= null)
             {
             undoListener.push(this);
@@ -307,41 +318,73 @@ public class Model implements Cloneable
             if (getStatus(keys[i]) == STATUS_IMMUTABLE || getStatus(keys[i]) == STATUS_RESTRICTED || isString(keys[i])) continue;
             if (minExists(keys[i]) && maxExists(keys[i]) && getMin(keys[i]) >= getMax(keys[i]))  continue;  // no range
 
-            if (!(metricMinExists(keys[i]) &&
+			if ((get(keys[i], 0) == model.get(keys[i])) && fleeIfSame)
+				{
+				// need to flee.  First: are we metric?
+	            if (metricMinExists(keys[i]) &&
                     metricMaxExists(keys[i]) &&
                     get(keys[i], 0) >= getMetricMin(keys[i]) &&
-                    get(keys[i], 0) <= getMetricMax(keys[i]) &&
-                    model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
-                    model.get(keys[i], 0) <= getMetricMax(keys[i])))
-                {
-                if (randomizeNonMetricIfSame && get(keys[i], 0) == model.get(keys[i]))
+                    get(keys[i], 0) <= getMetricMax(keys[i]))
                     {
-                    // They're both non-metric and identical.  Maybe randomize!
+                    // since we're the same, the best we can do here is do a LITTLE
+                    // mutation (mutating by 1) while staying metric, so that NEXT
+                    // time if we continue to flee, we'll keep on fleeing in that
+                    // direction
+                	if (getMetricMin(keys[i]) == getMetricMax(keys[i])) // uh oh
+                		{ } // don't set anything
+                    else if (get(keys[i], 0) == getMetricMax(keys[i]))
+                    	setIfValid(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+                    		get(keys[i], 0) - 1));
+                    else if (get(keys[i], 0) == getMetricMin(keys[i]))
+                    	setIfValid(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+                    		get(keys[i], 0) + 1));
+                    else
+                    	setIfValid(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+                    		get(keys[i], 0) + (random.nextBoolean() ? 1 : -1)));
+                    }
+				else
+					{
                     if (coinToss(random, weight))
                         {
-                        set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
-                                randomValidValueWithin(keys[i], random, getMin(keys[i]), getMax(keys[i]))));
+                        int val;
+                        for(int i = 0; i < 10; i++)  // we'll try ten times to find something new
+                        	{
+                        	val = randomValidValueWithin(keys[i], random, getMin(keys[i]), getMax(keys[i]));
+                        	if (val != get(keys[i], 0)) // we want to be different
+                        		break;
+                        	}
+                        set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), val));
                         }
-                    }
-                // regardless...
-                continue;
-                }
-                    
-            // Okay, here we do an opposite recombination
+					}
+				}
+			else if (metricMinExists(keys[i]) &&
+                     metricMaxExists(keys[i]) &&
+                     get(keys[i], 0) >= getMetricMin(keys[i]) &&
+                     get(keys[i], 0) <= getMetricMax(keys[i]) &&
+                     model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
+                     model.get(keys[i], 0) <= getMetricMax(keys[i]))
+                {
+                // different but both metric.  
 
-            int a = get(keys[i], 0);
-            int b = model.get(keys[i], a);
-            
-            // determine range
-            int outer = (int)Math.round(a + weight * (a - b));
-            
-            // bound
-            if (metricMinExists(keys[i]) && outer < getMetricMin(keys[i]))
-                outer = getMetricMin(keys[i]);
-            if (metricMaxExists(keys[i]) && outer > getMetricMax(keys[i]))
-                outer = getMetricMax(keys[i]);
-            set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+	            int a = get(keys[i], 0);
+	            int b = model.get(keys[i], a);
+	            
+	            // determine range
+	            int outer = (int)Math.round(a + weight * (a - b));
+	            
+	            // bound
+	            if (metricMinExists(keys[i]) && outer < getMetricMin(keys[i]))
+	                outer = getMetricMin(keys[i]);
+   		         if (metricMaxExists(keys[i]) && outer > getMetricMax(keys[i]))
+   		             outer = getMetricMax(keys[i]);
+   		         set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
                     randomValidValueWithin(keys[i], random, a, outer)));
+                }
+            else
+            	{
+            	// different but someone is non-metric.  Don't change.
+            	continue;
+            	}
             }
 
         if (undoListener!= null)
@@ -499,6 +542,14 @@ public class Model implements Cloneable
             updateListenersForKey(keys[i]);
             }
         }
+    
+    /** Does a clone except for the various listeners */
+    public Model copy()
+    	{
+    	Model m =((Model)clone());
+    	m.clearListeners();
+    	return m;
+    	}
     
     public void copyValuesTo(Model model)
         {

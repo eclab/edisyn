@@ -62,7 +62,7 @@ public class YamahaDX7 extends Synth
         new ImageIcon(YamahaDX7.class.getResource("Algorithm31.png")),
         new ImageIcon(YamahaDX7.class.getResource("Algorithm32.png")),
         };
-    public static final String[] LFO_WAVES = { "Sawtooth", "Square", "Triangle", "Sample & Hold" };
+    public static final String[] LFO_WAVES = { "Triangle", "Saw Down", "Saw Up", "Square", "Sine", "Sample & Hold" };
 
     // These four are from https://github.com/kroger/csound-instruments/blob/master/dx7/dx72csnd.c
     public static final String[] RATIO_COARSE = { "0.5", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" };

@@ -346,8 +346,8 @@ public class Model implements Cloneable
 					{
                     if (coinToss(random, weight))
                         {
-                        int val;
-                        for(int i = 0; i < 10; i++)  // we'll try ten times to find something new
+                        int val = 0;
+                        for(int j = 0; j < 10; j++)  // we'll try ten times to find something new
                         	{
                         	val = randomValidValueWithin(keys[i], random, getMin(keys[i]), getMax(keys[i]));
                         	if (val != get(keys[i], 0)) // we want to be different

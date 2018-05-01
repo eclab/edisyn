@@ -482,7 +482,7 @@ public class HillClimb extends SynthPanel
             		{
             		Model backup = synth.model;
 	                synth.model = currentModels[_i];
-	                synth.doOpen();
+	                synth.doOpen(false);
 	                currentModels[_i] = synth.model;
 	                synth.model = backup;
 	                synth.updateTitle();

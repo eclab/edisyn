@@ -1662,8 +1662,7 @@ public abstract class Synth extends JComponent implements Updatable
         newSynth.parsingForMerge = true;
         newSynth.parse(data, true, false);
         newSynth.parsingForMerge = false;
-        model.recombine(random, newSynth.getModel(), getMutationKeys(), //useMapForRecombination ? getMutationKeys() : model.getKeys(), 
-        	probability);
+        model.recombine(random, newSynth.getModel(), getMutationKeys(), probability); //useMapForRecombination ? getMutationKeys() : model.getKeys()
         newSynth.setSendMIDI(true);
         revise();  // just in case
                         
@@ -2213,8 +2212,21 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-            	if (doOpen())
+            	if (doOpen(false))
             		sendAllParameters();
+                }
+            });
+
+        JMenuItem openAndMerge = new JMenuItem("Load and Merge...");
+        menu.add(openAndMerge);
+        openAndMerge.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                merging = 1.0;
+            	if (doOpen(true))
+            		sendAllParameters();
+            	merging = 0.0;
                 }
             });
         menu.addSeparator();
@@ -4445,7 +4457,7 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** Goes through the process of opening a file and loading it into this editor. 
         This does NOT open a new editor window -- it loads directly into this editor. */
-    boolean doOpen()
+    boolean doOpen(boolean merge)
         {
         boolean succeeded = false;
         
@@ -4540,20 +4552,31 @@ public abstract class Synth extends JComponent implements Updatable
                         setSendMIDI(false);
                         undo.setWillPush(false);
                         Model backup = (Model)(model.clone());
-                        int result = parse(data, true, true);
-                        undo.setWillPush(true);
-                        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-                            undo.push(backup);
-                        setSendMIDI(true);
-                        if (result == PARSE_SUCCEEDED)
-                            {
-                            file = f;
-                            }
-                        setLastDirectory(fd.getDirectory());
-
-						if (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED)
+						if (merge)
 							{
-                            succeeded = true;
+				    		succeeded = merge(data, getMergeProbability());
+							undo.setWillPush(true);
+							if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+								undo.push(backup);
+							setSendMIDI(true);
+				    		}
+						else
+							{
+							int result = parse(data, true, true);
+							undo.setWillPush(true);
+							if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+								undo.push(backup);
+							setSendMIDI(true);
+							if (result == PARSE_SUCCEEDED)
+								{
+								file = f;
+								}
+							setLastDirectory(fd.getDirectory());
+
+							if (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED)
+								{
+								succeeded = true;
+								}
 							}
 							
                         // this last statement fixes a mystery.  When I call Randomize or Reset on

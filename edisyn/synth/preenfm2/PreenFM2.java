@@ -1529,7 +1529,7 @@ public class PreenFM2 extends Synth
                     {
                     setSendMIDI(false);
                     Model backup = (Model)(model.clone());
-                    model.recombine(random, mergeModel, getUsesMapForRecombination() ? getMutationKeys() : model.getKeys(), getMergeProbability());
+                    model.recombine(random, mergeModel, getMutationKeys(), getMergeProbability());
                     if (!backup.keyEquals(getModel()))
                         undo.push(backup);
                     setSendMIDI(true);

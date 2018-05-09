@@ -75,26 +75,31 @@ public class Model implements Cloneable
         return get(key, 0);  // return original
         }
 
+/*
+import edisyn.*;   
+m = new Model();
+r = new Random(1000);
+show();
+m.randomValueWithin(r, 5, 10, 7, 1.0);
+*/
+
     /** Produces a random value in the fully closed range [a, b],
-        choosing from a uniform distribution of size +- weight * (b-a+1),
-        centered at *center*, and rounded to the nearest integer. 
-        If the result is the same as center, then we do a random walk
-        starting at center, increasing or decreasing by 1 each time 
-        a fair 50% coin comes up heads, and return the result. */
-    int randomValueWithin(Random random, int a, int b, int center, double weight)
+        choosing from a uniform distribution of size +- 2 * weight * (b-a+1),
+        centered at *center*, and rounded to the nearest integer. */
+    public int randomValueWithin(Random random, int a, int b, int center, double weight)
         {
         if (a > b) { int swap = a; a = b; b = swap; }
         if (a == b) return a;
         
-        double range = (b - a) * 2 + 1; //(b - a + 1);  // 0.5 on each side
+        double range = b - a + 1;  // 0.5 extra on each side
         
         // pick a random number from -1...+1
         double delta = 0.0;
         while(true)
             {
-            delta = (random.nextDouble() * 2 - 1) * weight * range / 2.0;
-            if ((center + delta) > (a - 0.5) &&
-                (center + delta) < (b + 0.5))
+            delta = Math.ceil((random.nextDouble() * 2 - 1) * weight * range);
+            if ((center + delta) >= a &&
+                (center + delta) <= b)
                 break;
             }
         int result = (int)(Math.round(center + delta));
@@ -370,7 +375,7 @@ public class Model implements Cloneable
 	            int b = model.get(keys[i], a);
 	            
 	            // determine range
-	            int outer = (int)Math.round(a + weight * (a - b));
+	            int outer = (int)Math.ceil(a + weight * (a - b));
 	            
 	            // bound
 	            if (metricMinExists(keys[i]) && outer < getMetricMin(keys[i]))

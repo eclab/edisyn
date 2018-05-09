@@ -44,7 +44,7 @@ import edisyn.synth.*;
 
 public class HillClimb extends SynthPanel
     {
-    public static final int NUM_CANDIDATES = 16;
+    public static final int NUM_CANDIDATES = 24;
     public static final int NUM_MODELS = NUM_CANDIDATES + 1;
     
     // When the nudge buttons are being REQUESTED to play, then currentNudgeButton
@@ -569,7 +569,7 @@ public class HillClimb extends SynthPanel
             vbox.add(new PushButton("Options", doItems));
             hbox.add(vbox);
             
-            if (i == 7)
+            if (i % 8 == 7)
                 {
                 vr.add(hbox);
                 vr.add(Strut.makeVerticalStrut(20));
@@ -765,7 +765,8 @@ public class HillClimb extends SynthPanel
         ratings[NUM_MODELS][1].setSelected(true);
         ratings[NUM_MODELS][2].setSelected(true);
         }
-                
+    
+    
     public void initialize(Model seed, boolean clear)
         {
         // we need a model with NO callbacks
@@ -781,25 +782,20 @@ public class HillClimb extends SynthPanel
         Random random = synth.random;
         String[] keys = synth.getMutationKeys();
         double weight = blank.getModel().get("mutationrate", 0) / 100.0;
-                
+        
+        double mutationWeight = weight * MUTATION_WEIGHT;
+        
         for(int i = 0; i < 4; i++)
             {
-            currentModels[i] = newSeed.copy().mutate(random, keys, weight * MUTATION_WEIGHT);
+            currentModels[i] = newSeed.copy().mutate(random, keys, mutationWeight);
             }
 
-        for(int i = 0; i < 4; i++)
-            {
-            currentModels[i + 4] = currentModels[i].copy().mutate(random, keys, weight * MUTATION_WEIGHT);
-            }
-
-        for(int i = 0; i < 4; i++)
-            {
-            currentModels[i + 8] = currentModels[i + 4].copy().mutate(random, keys, weight * MUTATION_WEIGHT);
-            }
-
-        for(int i = 0; i < 4; i++)
-            {
-            currentModels[i + 12] = currentModels[i + 8].copy().mutate(random, keys, weight * MUTATION_WEIGHT);
+        for(int j = 4; j < NUM_CANDIDATES; j+= 4)
+        	{
+			for(int i = 0; i < 4; i++)
+				{
+				currentModels[j + i] = currentModels[j + i - 4].copy().mutate(random, keys, mutationWeight);
+				}
             }
 
         oldA.add(newSeed);
@@ -825,104 +821,153 @@ public class HillClimb extends SynthPanel
         }
 
     public static double MUTATION_WEIGHT = 1.0;
-        
+    
     public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA)
+    	{
+    	int numStages = NUM_CANDIDATES / 16;
+    	
+    	for(int i = 0; i < numStages; i++)
+    		{
+    		produce(random, keys, recombination, weight, a, b, c, oldA, i);
+    		}
+    	}
+        
+    public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA, int stage)
         {
+        double mutationWeight = stage * MUTATION_WEIGHT * weight;
+        
         // A + B
-        currentModels[0] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 0] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, mutationWeight);
         // A + C
-        currentModels[1] = a.copy().recombine(random, c, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 1] = a.copy().recombine(random, c, keys, recombination).mutate(random, keys, mutationWeight);
         // B + C
-        currentModels[2] = b.copy().recombine(random, c, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 2] = b.copy().recombine(random, c, keys, recombination).mutate(random, keys, mutationWeight);
         // A + (B + C)
-        currentModels[3] = a.copy().recombine(random, b.copy().recombine(random, c, keys, recombination), keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 3] = a.copy().recombine(random, b.copy().recombine(random, c, keys, recombination), keys, recombination).mutate(random, keys, mutationWeight);
         // A - B
-        currentModels[4] = a.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 4] = a.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, mutationWeight);
         // B - A
-        currentModels[5] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 5] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight);
         // A - C
-        currentModels[6] = a.copy().opposite(random, c, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 6] = a.copy().opposite(random, c, keys, recombination, false).mutate(random, keys, mutationWeight);
         // C - A
-        currentModels[7] = c.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 7] = c.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight);
+        
+        if ((stage + 8) < currentModels.length)
+        {
         // B - C
-        currentModels[8] = b.copy().opposite(random, c, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 8] = b.copy().opposite(random, c, keys, recombination, false).mutate(random, keys, mutationWeight);
         // C - B
-        currentModels[9] = c.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 9] = c.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, mutationWeight);
         // A - Z
-        currentModels[10] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 10] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
         // B - Z
-        currentModels[11] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 11] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
         // C - Z
-        currentModels[12] = c.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 12] = c.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
         // A
-        currentModels[13] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 13] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         // B
-        currentModels[14] = b.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 14] = b.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         // C
-        currentModels[15] = c.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 15] = c.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        }
         
         shuffle(random, currentModels, NUM_MODELS - 1);
         }
         
     public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA)
+    	{
+    	int numStages = NUM_CANDIDATES / 16;
+    	
+    	for(int i = 0; i < numStages; i++)
+    		{
+    		produce(random, keys, recombination, weight, a, b, oldA, i);
+    		}
+    	}
+        
+    public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA, int stage)
         {
+        double mutationWeight = stage * MUTATION_WEIGHT * weight;
+        
         // A + B
-        currentModels[0] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[1] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[2] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 0] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, mutationWeight);
+        currentModels[stage + 1] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 2] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         
         // A - B
-        currentModels[3] = a.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[4] = a.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 3] = a.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, mutationWeight);
+        currentModels[stage + 4] = a.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         
         // B - A
-        currentModels[5] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[6] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 5] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight);
+        currentModels[stage + 6] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         
         // A - Z
-        currentModels[7] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[8] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 7] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
+
+        if ((stage + 8) < currentModels.length)
+        {
+        currentModels[stage + 8] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         
         // B - Z
-        currentModels[9] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[10] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 9] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
+        currentModels[stage + 10] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
 
         // (A - Z) + (B - Z)
-        currentModels[11] = a.copy().opposite(random, oldA, keys, recombination, false).recombine(random, 
-            b.copy().opposite(random, oldA, keys, recombination, false), keys, recombination).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 11] = a.copy().opposite(random, oldA, keys, recombination, false).recombine(random, 
+            b.copy().opposite(random, oldA, keys, recombination, false), keys, recombination).mutate(random, keys, mutationWeight);
 
         // A
-        currentModels[12] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[13] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 12] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 13] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         
         // B
-        currentModels[14] = b.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[15] = b.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 14] = b.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 15] = b.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        }
         
         shuffle(random, currentModels, NUM_MODELS - 1);
         }
                 
     public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA)
+    	{
+    	int numStages = NUM_CANDIDATES / 16;
+    	
+    	for(int i = 0; i < numStages; i++)
+    		{
+    		produce(random, keys, recombination, weight, a, oldA, i);
+    		}
+    	}
+        
+    public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA, int stage)
         {
+        double mutationWeight = stage * MUTATION_WEIGHT * weight;
+        
         // A
-        currentModels[0] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[1] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[2] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[3] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[4] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[5] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[6] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[7] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[8] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[9] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[10] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[11] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[12] = a.copy().mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 0] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 1] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 2] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 3] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 4] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 5] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 6] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 7] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        
+                if ((stage + 8) < currentModels.length)
+        {
+		currentModels[stage + 8] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 9] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 10] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 11] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 12] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         
         // A - Z
-        currentModels[13] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[14] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
-        currentModels[15] = a.copy().opposite(random, oldA, keys, 2.0 * recombination, false).mutate(random, keys, weight * MUTATION_WEIGHT).mutate(random, keys, weight * MUTATION_WEIGHT);
+        currentModels[stage + 13] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
+        currentModels[stage + 14] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 15] = a.copy().opposite(random, oldA, keys, 2.0 * recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        }
+        
         shuffle(random, currentModels, NUM_MODELS - 1);
         }
              

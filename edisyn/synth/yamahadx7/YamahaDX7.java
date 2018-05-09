@@ -918,8 +918,15 @@ public class YamahaDX7 extends Synth
                 VBox vbox = new VBox();
                 vbox.setBackground(color);
                 vbox.add(new JLabel("   "));
-                vbox.add(new JLabel("<html>A Bank Sysex has been received.  You can <b>save</b> the sysex to a file,</html>"));
-                vbox.add(new JLabel("<html><b>write</b> the sysex to the synth, or <b>edit</b> a patch from the list below.</html>"));
+                if (isParsingForMerge())
+                	{
+                	vbox.add(new JLabel("<html>A Bank Sysex has been received.</html>"));
+                	}
+                else
+                	{
+	                vbox.add(new JLabel("<html>A Bank Sysex has been received.  You can <b>save</b> the sysex to a file,</html>"));
+	                vbox.add(new JLabel("<html><b>write</b> the sysex to the synth, or <b>edit</b> a patch from the list below.</html>"));
+	                }
                 vbox.add(new JLabel("   "));
                 hbox.addLast(vbox);
                 vbox = new VBox();
@@ -927,8 +934,14 @@ public class YamahaDX7 extends Synth
                 vbox.add(hbox);
                 JComboBox box = new JComboBox(n);
                 vbox.add(box);
-                                
-                int result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Edit Patch", "Save", "Write", "Cancel" }, "Edit Patch");
+                  
+                int result = 0;
+                if (isParsingForMerge())
+                	{
+        			result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Merge Patch", "Cancel" }, "Merge Patch");
+                	if (result > 0) result = 3;  // make it a "cancel"
+                	}
+        		else result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Edit Patch" , "Save Bank", "Write Bank", "Cancel" }, "Edit Patch");
                         
                 if (result == 3 || result < 0)  // cancel?
                     {
@@ -956,7 +969,7 @@ public class YamahaDX7 extends Synth
                     if (saveBank(data))
                         return PARSE_FAILED;
                     }
-                else if (result == 0) // edit patch
+                else if (result == 0) // edit or merge patch
                     {
                     int pos = 0;            
                     int patch = box.getSelectedIndex() * 128;

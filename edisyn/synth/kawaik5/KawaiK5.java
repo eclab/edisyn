@@ -68,6 +68,8 @@ public class KawaiK5 extends Synth
     public static final int[] MINOR_SEVENTH_HARMONICS = { 7, 14, 28, 56 };
     public static final int[] MAJOR_SECOND_HARMONICS = { 9, 18, 36, 72 };
         
+	SynthPanel[] synthPanels = new SynthPanel[6];
+
     public KawaiK5()
         {
         for(int i = 0; i < parameters.length; i++)
@@ -92,51 +94,45 @@ public class KawaiK5 extends Synth
         
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-        hbox = new HBox();
-        hbox.add(addFilter(1, Style.COLOR_A()));
-        hbox.addLast(addBasic(1, Style.COLOR_C()));
-        vbox.add(hbox);
-        vbox.add(addFilterEnvelope(1, Style.COLOR_A()));
-
         
         hbox = new HBox();
+        hbox.add(addDDA(1, Style.COLOR_B()));
+        hbox.addLast(addBasic(1, Style.COLOR_C()));
         vbox.add(hbox);
         vbox.add(addDDAEnvelope(1, Style.COLOR_B()));
 
-    
-        hbox = new HBox();
-        hbox.add(addDDA(1, Style.COLOR_B()));
-        hbox.addLast(addPitch(1, Style.COLOR_C()));
-        vbox.add(hbox);
+        vbox.add(addFilter(1, Style.COLOR_A()));
+        vbox.add(addFilterEnvelope(1, Style.COLOR_A()));
+
+
+        vbox.add(addPitch(1, Style.COLOR_C()));
         vbox.add(addPitchEnvelope(1, Style.COLOR_C()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("General 1", soundPanel);
+        addTab("General 1", synthPanels[0] = (SynthPanel)soundPanel);
                 
         
-        soundPanel = new SynthPanel(this);
+         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-        hbox = new HBox();
-        hbox.add(addFilter(2, Style.COLOR_A()));
-        hbox.addLast(addBasic(2, Style.COLOR_C()));
-        vbox.add(hbox);
-        vbox.add(addFilterEnvelope(2, Style.COLOR_A()));
-
         
         hbox = new HBox();
+        hbox.add(addDDA(2, Style.COLOR_B()));
+        hbox.addLast(addBasic(2, Style.COLOR_C()));
         vbox.add(hbox);
         vbox.add(addDDAEnvelope(2, Style.COLOR_B()));
 
-    
-        hbox = new HBox();
-        hbox.add(addDDA(2, Style.COLOR_B()));
-        hbox.addLast(addPitch(2, Style.COLOR_C()));
-        vbox.add(hbox);
+        vbox.add(addFilter(2, Style.COLOR_A()));
+        vbox.add(addFilterEnvelope(2, Style.COLOR_A()));
+
+
+        vbox.add(addPitch(2, Style.COLOR_C()));
         vbox.add(addPitchEnvelope(2, Style.COLOR_C()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("General 2", soundPanel);
+        addTab("General 2", synthPanels[1] = (SynthPanel)soundPanel);
                 
+        
+               
         harmonicsSources[0] = addDHGDisplay(0, Style.COLOR_B());
         harmonicsSources[1] = addDHGDisplay(0, Style.COLOR_B());
         harmonicsSources[2] = addDHGDisplay(1, Style.COLOR_B());
@@ -153,7 +149,7 @@ public class KawaiK5 extends Synth
         vbox.add(hbox);
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Harmonics 1", soundPanel);
+        addTab("Harmonics 1", synthPanels[2] = (SynthPanel)soundPanel);
                 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
@@ -166,7 +162,7 @@ public class KawaiK5 extends Synth
         vbox.add(hbox);
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Harmonics 2", soundPanel);
+        addTab("Harmonics 2", synthPanels[3] = (SynthPanel)soundPanel);
                 
 
         soundPanel = new SynthPanel(this);
@@ -181,7 +177,7 @@ public class KawaiK5 extends Synth
         vbox.add(addDHGEnvelope(1, 4, Style.COLOR_A()));
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Envelopes/KS 1", soundPanel);
+        addTab("Envelopes/KS 1", synthPanels[4] = (SynthPanel)soundPanel);
                 
 
         soundPanel = new SynthPanel(this);
@@ -196,7 +192,7 @@ public class KawaiK5 extends Synth
         vbox.add(addDHGEnvelope(2, 4, Style.COLOR_A()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Envelopes/KS 2", soundPanel);
+        addTab("Envelopes/KS 2", synthPanels[5] = (SynthPanel)soundPanel);
 
         model.set("name", "INIT");  // has to be 10 long
 
@@ -262,13 +258,14 @@ public class KawaiK5 extends Synth
             }
         }
 
-    boolean sendKawaiParametersInBulk = true;
+    //boolean sendKawaiParametersInBulk = true;
         
     public void addKawaiK5Menu()
         {
         JMenu menu = new JMenu("Kawai K5");
         menubar.add(menu);
 
+/*
         // classic patch names
                 
         JMenu sendParameters = new JMenu("Send Parameters");
@@ -312,7 +309,86 @@ public class KawaiK5 extends Synth
         bg.add(bulk);
         if (sendKawaiParametersInBulk == true) 
             bulk.setSelected(true);
-                
+*/
+
+        menu.add(copy);
+        copy.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                SynthPanel p = findPanel();
+                if (p != null) p.copyPanel(true);
+                }
+            });
+        menu.add(paste);
+        paste.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                SynthPanel p = findPanel();
+                if (p != null) p.pastePanel(true);
+                }
+            });
+        menu.addSeparator();
+        menu.add(copyMutable);
+        copyMutable.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                SynthPanel p = findPanel();
+                if (p != null) p.copyPanel(false);
+                }
+            });
+        menu.add(pasteMutable);
+        pasteMutable.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                SynthPanel p = findPanel();
+                if (p != null) p.pastePanel(false);
+                }
+            });
+        menu.addSeparator();
+        reset.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                SynthPanel p = findPanel();
+                if (p != null) p.resetPanel();
+                }
+            });
+        menu.add(reset);
+        }
+
+    public void tabChanged()
+        {
+        super.tabChanged();
+        boolean isOscillator = (getSelectedTabTitle().startsWith("General") ||
+        						getSelectedTabTitle().startsWith("Harmonics") ||
+        						getSelectedTabTitle().startsWith("Envelopes") );
+        copy.setEnabled(isOscillator);
+        paste.setEnabled(isOscillator);
+        copyMutable.setEnabled(isOscillator);
+        pasteMutable.setEnabled(isOscillator);
+        reset.setEnabled(isOscillator);
+        }
+    
+    public SynthPanel findPanel()
+        {
+        String title = getSelectedTabTitle();
+        if (title.equals("General 1"))
+            return synthPanels[0];
+        else if (title.equals("General 2"))
+            return synthPanels[1];
+        else if (title.equals("Harmonics 1"))
+            return synthPanels[2];
+        else if (title.equals("Harmonics 1"))
+            return synthPanels[3];
+        else if (title.equals("Envelopes/KS 1"))
+            return synthPanels[4];
+        else if (title.equals("Envelopes/KS 2"))
+            return synthPanels[5];
+        else return null;
         }
         
         
@@ -405,6 +481,7 @@ public class KawaiK5 extends Synth
     public JComponent addBasic(int source, Color color)
         {
         Category category = new Category(this, "Basic Edit", color);
+        category.makePasteable("basics");
 
         JComponent comp;
         String[] params;
@@ -438,6 +515,7 @@ public class KawaiK5 extends Synth
     public JComponent addKSCurve(int source, Color color)
         {
         Category category = new Category(this, "Key Scaling Curve", color);
+        category.makePasteable("kss");
 
         JComponent comp;
         String[] params;
@@ -466,6 +544,7 @@ public class KawaiK5 extends Synth
     public JComponent addPitch(int source, Color color)
         {
         Category category = new Category(this, "Pitch (DFG)", color);
+        category.makePasteable("dfgs");
 
         JComponent comp;
         String[] params;
@@ -520,6 +599,8 @@ public class KawaiK5 extends Synth
     public JComponent addPitchEnvelope(int source, Color color)
         {
         Category category = new Category(this, "Pitch (DFG) Envelope", color);
+        category.makePasteable("dfgs");
+        category.makeDistributable("dfgs");
 
         JComponent comp;
         String[] params;
@@ -613,6 +694,7 @@ public class KawaiK5 extends Synth
         params = LFO_SHAPES;
         comp = new Chooser("Shape", this, "lfoshape", params);
         vbox.add(comp);
+        hbox.add(vbox);
 
         comp = new LabelledDial("Speed", this, "lfospeed", color,  0, 99);
         hbox.add(comp);
@@ -633,6 +715,8 @@ public class KawaiK5 extends Synth
     public JComponent addDHG(int source, Color color)
         {
         Category category = new Category(this, "Harmonics (DHG)", color);
+        category.makePasteable("dhgs");
+        category.makeDistributable("dhgs");
 
         JComponent comp;
         String[] params;
@@ -672,7 +756,7 @@ public class KawaiK5 extends Synth
                 }
             vbox.add(hbox);
             //if (j < 3)
-            vbox.add(Strut.makeVerticalStrut(10));
+            vbox.add(Strut.makeVerticalStrut(20));
             }
 
         category.add(vbox, BorderLayout.CENTER);
@@ -712,10 +796,10 @@ public class KawaiK5 extends Synth
                 }
             vbox.add(hbox);
             //if (j < 3)
-            vbox.add(Strut.makeVerticalStrut(10));
+            vbox.add(Strut.makeVerticalStrut(20));
             }
 
-        comp = new CheckBox("Mod", this, "dhgs" + source + "modonoff", true);
+        comp = new CheckBox("Mod", this, "dhgs" + source + "modonoff", false);
         hbox.addLast(comp);
                 
         return vbox;
@@ -937,7 +1021,7 @@ public class KawaiK5 extends Synth
                 public int verticalBorderThickness() { return 4; }
                 };
             ((EnvelopeDisplay)comp).addVerticalDivider(0.5);
-            ((EnvelopeDisplay)comp).setPreferredHeight(24);
+            ((EnvelopeDisplay)comp).setPreferredHeight(40);
             vbox2.add(comp);
 
             comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), new String[63 * 2], levels, widths, heights)
@@ -1196,6 +1280,8 @@ public class KawaiK5 extends Synth
     public JComponent addDHGEnvelope(int source, int envelope, Color color)
         {
         Category category = new Category(this, "Harmonics (DHG) Envelope " + envelope, color);
+        category.makePasteable("dhgs");
+        category.makeDistributable("dhgs");
 
         JComponent comp;
         String[] params;
@@ -1207,7 +1293,7 @@ public class KawaiK5 extends Synth
         vbox.add(comp);
         hbox.add(vbox);
                 
-        comp = new CheckBox("Active", this, "dhgs" + source + "env" + envelope + "onoff", true);
+        comp = new CheckBox("Active", this, "dhgs" + source + "env" + envelope + "onoff", false);
         vbox.add(comp); 
         hbox.add(vbox);   
 
@@ -1287,6 +1373,7 @@ public class KawaiK5 extends Synth
     public JComponent addDHGEnvelopeGlobal(int source, Color color)
         {
         Category category = new Category(this, "Harmonics (DHG) Envelope Global", color);
+        category.makePasteable("dhgs");
 
         JComponent comp;
         String[] params;
@@ -1436,13 +1523,14 @@ public class KawaiK5 extends Synth
     public JComponent addEqualizer(Color color)
         {
         Category category = new Category(this, "Formant Equalizer (DFT)", color);
+        category.makeDistributable("dft");
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        comp = new CheckBox("Active", this, "dftonoff", true);
+        comp = new CheckBox("Active", this, "dftonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);   
 
@@ -1507,16 +1595,17 @@ public class KawaiK5 extends Synth
     public JComponent addFilter(int source, Color color)
         {
         Category category = new Category(this, "Filter (DDF)", color);
+        category.makePasteable("ddfs");
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        comp = new CheckBox("Active", this, "ddfs" + source + "ddfonoff", true);
+        comp = new CheckBox("Active", this, "ddfs" + source + "ddfonoff", false);
         vbox.add(comp); 
 
-        comp = new CheckBox("Global Mod", this, "ddfs" + source + "ddfmodonoff", true);
+        comp = new CheckBox("Global Mod", this, "ddfs" + source + "ddfmodonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);   
 
@@ -1539,6 +1628,10 @@ public class KawaiK5 extends Synth
 
         comp = new LabelledDial("Envelope", this, "ddfs" + source + "envdep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Velocity", this, "ddfs" + source + "veloenvdep", color, -31, 31);
+        ((LabelledDial)comp).addAdditionalLabel("Env Mod");
         hbox.add(comp);
 
         comp = new LabelledDial("Velocity", this, "ddfs" + source + "velodep", color, -31, 31);
@@ -1564,6 +1657,8 @@ public class KawaiK5 extends Synth
     public JComponent addFilterEnvelope(int source, Color color)
         {
         Category category = new Category(this, "Filter (DDF) Envelope", color);
+        category.makePasteable("ddfs");
+        category.makeDistributable("ddfs");
 
         JComponent comp;
         String[] params;
@@ -1597,7 +1692,7 @@ public class KawaiK5 extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Level 4", this, "ddfs" + source + "envseg4level", color, 0, 31);
-        ((LabelledDial)comp).addAdditionalLabel("(Sustain)");
+       ((LabelledDial)comp).addAdditionalLabel("(Sustain)");
         hbox.add(comp);
 
         comp = new LabelledDial("Rate 5", this, "ddfs" + source + "envseg5rate", color, 0, 31);
@@ -1610,10 +1705,6 @@ public class KawaiK5 extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Level 6", this, "ddfs" + source + "envseg6level", color, 0, 31);
-        hbox.add(comp);
-
-        comp = new LabelledDial("Velocity", this, "ddfs" + source + "veloenvdep", color, -31, 31);
-        ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
@@ -1643,15 +1734,17 @@ public class KawaiK5 extends Synth
     public JComponent addDDA(int source, Color color)
         {
         Category category = new Category(this, "Amplifier (DDA)", color);
+        category.makePasteable("ddas");
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        comp = new CheckBox("Active", this, "ddas" + source + "ddaonoff", true);
+        comp = new CheckBox("Active", this, "ddas" + source + "ddaonoff", false);
         vbox.add(comp); 
-
+		hbox.add(vbox);
+		
         comp = new LabelledDial("Velocity", this, "ddas" + source + "attackvelodep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);
@@ -1687,6 +1780,8 @@ public class KawaiK5 extends Synth
     public JComponent addDDAEnvelope(int source, Color color)
         {
         Category category = new Category(this, "Amplifier (DDA) Envelope", color);
+        category.makePasteable("ddas");
+        category.makeDistributable("ddas");
 
         JComponent comp;
         String[] params;
@@ -1800,8 +1895,8 @@ public class KawaiK5 extends Synth
         return category;
         }
     
-    // The K5 can't send to temporary memory
-    public boolean getSendsAllParametersInBulk() { return sendKawaiParametersInBulk; }
+    // The K5 can't send to temporary memory, so we write to SID-12
+    public boolean getSendsAllParametersInBulk() { return true; } // sendKawaiParametersInBulk; }
 
     public Object[] emitAll(String key)
         {
@@ -1947,6 +2042,14 @@ public class KawaiK5 extends Synth
             return new Object[0];
             }
         }
+
+
+    public JMenuItem copy = new JMenuItem("Copy Tab");
+    public JMenuItem paste = new JMenuItem("Paste Tab");
+    public JMenuItem copyMutable = new JMenuItem("Copy Tab (Mutation Parameters Only)");
+    public JMenuItem pasteMutable = new JMenuItem("Paste Tab (Mutation Parameters Only)");
+    public JMenuItem reset = new JMenuItem("Reset Tab");
+    
     
 
     public void parseParameter(byte[] data)
@@ -2118,7 +2221,7 @@ public class KawaiK5 extends Synth
         super.sendAllParameters();        
 
         // we change patch to SID-12 if we're sending in bulk.
-        if (sendKawaiParametersInBulk)
+        //if (sendKawaiParametersInBulk)
             {
             // for some insane reason, we must pause somewhat AFTER we have written the patch but 
             // BEFORE we change the patch to SID-12 or else it won't get

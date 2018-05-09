@@ -222,8 +222,13 @@ m.randomValueWithin(r, 5, 10, 7, 1.0);
                 {
                 int a = getMetricMin(keys[i]);
                 int b = getMetricMax(keys[i]);
-                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0),
-                        randomValidValueWithin(keys[i], random, getMetricMin(keys[i]), getMetricMax(keys[i]), get(keys[i], 0), weight)));
+                double mutWeight = Math.sqrt(weight);
+                double mutProb = mutWeight;
+                if (random.nextDouble() < mutProb)
+                	{
+	                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0),
+	                        randomValidValueWithin(keys[i], random, getMetricMin(keys[i]), getMetricMax(keys[i]), get(keys[i], 0), mutWeight)));
+	                }
                 }
             else if (pickRandomInMetric)                    // MAYBE jump into metric
                 {

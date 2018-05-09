@@ -834,7 +834,7 @@ public class HillClimb extends SynthPanel
         
     public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA, int stage)
         {
-        double mutationWeight = stage * MUTATION_WEIGHT * weight;
+        double mutationWeight = (stage + 1) * MUTATION_WEIGHT * weight;
         
         // A + B
         currentModels[stage + 0] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, mutationWeight);
@@ -888,7 +888,7 @@ public class HillClimb extends SynthPanel
         
     public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA, int stage)
         {
-        double mutationWeight = stage * MUTATION_WEIGHT * weight;
+        double mutationWeight = (stage + 1) * MUTATION_WEIGHT * weight;
         
         // A + B
         currentModels[stage + 0] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, mutationWeight);
@@ -942,7 +942,7 @@ public class HillClimb extends SynthPanel
         
     public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA, int stage)
         {
-        double mutationWeight = stage * MUTATION_WEIGHT * weight;
+        double mutationWeight = (stage + 1) * MUTATION_WEIGHT * weight;
         
         // A
         currentModels[stage + 0] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);

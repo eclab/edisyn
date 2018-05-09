@@ -44,7 +44,7 @@ import edisyn.synth.*;
 
 public class HillClimb extends SynthPanel
     {
-    public static final int NUM_CANDIDATES = 24;
+    public static final int NUM_CANDIDATES = 16;
     public static final int NUM_MODELS = NUM_CANDIDATES + 1;
     
     // When the nudge buttons are being REQUESTED to play, then currentNudgeButton

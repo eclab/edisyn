@@ -439,8 +439,14 @@ public abstract class Synth extends JComponent implements Updatable
 
     public static Window lastActiveWindow = null;
 
+	/** Temporarily sets me to be the active synth. */
+	protected void setActiveSynth(boolean val) { activeSynth = val; }
+	boolean activeSynth = false;
+	
     public boolean amActiveSynth()
         {
+        if (activeSynth) return true;
+        
         Window activeWindow = javax.swing.FocusManager.getCurrentManager().getActiveWindow();
         Component synthWindow = SwingUtilities.getRoot(Synth.this);
                                         
@@ -1336,22 +1342,23 @@ public abstract class Synth extends JComponent implements Updatable
     public boolean tryToSendMIDI(MidiMessage message)
         {
         if (message == null) 
-            return false;
+            { return false; }
         else if (!amActiveSynth())
-            return false;
+            { return false; }
         else if (getSendMIDI())
             {
             if (tuple == null) return false;
+            
             Receiver receiver = tuple.out;
             if (receiver == null) return false;
-                
+            
             // compute pause
             try { if (!noMIDIPause) midiPause(getNanoPauseBetweenMIDISends()); }
             catch (Exception e)
                 {
                 e.printStackTrace();
                 }
-                                        
+                                   
             synchronized(midiSendLock) 
                 {
                 try
@@ -1396,7 +1403,9 @@ public abstract class Synth extends JComponent implements Updatable
         if (data == null || data.length == 0) 
             return false;
         else if (!amActiveSynth())
+        	{
             return false;
+            }
             
         for(int i = 1; i < data.length - 1; i++)
             {
@@ -2212,8 +2221,10 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
+                setActiveSynth(true);
             	if (doOpen(false))
             		sendAllParameters();
+                setActiveSynth(false);
                 }
             });
 
@@ -2223,10 +2234,12 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                merging = 1.0;
+                Synth.this.merging = 1.0;
+                setActiveSynth(true);
             	if (doOpen(true))
             		sendAllParameters();
-            	merging = 0.0;
+                setActiveSynth(false);
+            	Synth.this.merging = 0.0;
                 }
             });
         menu.addSeparator();
@@ -4088,13 +4101,13 @@ public abstract class Synth extends JComponent implements Updatable
         try
             {
             // turn off existing note
-            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, testNote, velocity));
+            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, getTestNotePitch(), velocity));
             
             // clear all notes -- often synthesizers like FM synths will have crazy long decays
 			sendAllSoundsOff();
 			
             // play new note
-            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, testNote, velocity));
+            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, getTestNotePitch(), velocity));
                                                                         
             // schedule a note off
             final int myNoteOnTick = ++noteOnTick;
@@ -4105,7 +4118,7 @@ public abstract class Synth extends JComponent implements Updatable
                     if (alwaysSendNoteOff || noteOnTick == myNoteOnTick)  // no more note on messages
                         try
                             {
-                            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, testNote, velocity));
+                            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, getTestNotePitch(), velocity));
                             noteOnTick = 0;
                             }
                         catch (Exception e3)

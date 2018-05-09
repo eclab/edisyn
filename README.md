@@ -91,4 +91,12 @@ I'm told that Edisyn works fine if you have installed *Java 8*.  After this:
 
 3. Run Edisyn as:   `java -jar edisyn.jar`
 
+### Setting up midi loopback to control other programs
+
+In order to get edisyn to talk to other programs that need midi on linux, you'll need to set up some midi loopback devices. 
+
+In most flavors of Linux, you just need to do `sudo modprobe snd-virmidi`, but if you're using something like Gentoo or any other distro that does not come with this kernel module, you'll need to custom compile your kernel to get it. 
+
+This will create a bunch of virtual devices with names like `VirMIDI [hw:2,0,0]` and `VirMIDI [hw:2,1,8]`. Set Edisyn to receive from one of the major channels (`VirMIDI [hw:<x>,0,0]` or `VirMIDI [hw:<x>,1,0]`, not `VirMIDI [hw:<x>,1,1]`) and send to a different major channel, then configure the other piece of software to listen on the same device that you told Edisyn to send to. If all goes well, you should be able to play a test note in edisyn and hear the software respond.
+
 

@@ -42,8 +42,16 @@ import edisyn.synth.*;
 ***/
 
 
+
 public class HillClimb extends SynthPanel
     {
+	class State
+		{
+		Model[] parents;
+		Model[] children;
+		}
+	public ArrayList stack = new ArrayList();
+	
     public static final int NUM_CANDIDATES = 16;
     public static final int NUM_MODELS = NUM_CANDIDATES + 1;
     
@@ -55,11 +63,9 @@ public class HillClimb extends SynthPanel
     // but still properly highlight it when it's playing.
     public static final int NUDGE_PLAYING_DELTA = 100;
 
-    ArrayList oldA = new ArrayList();
-    ArrayList oldB = new ArrayList();
-    ArrayList oldC = new ArrayList();
+	// models currently being played and displayed
     Model[] currentModels = new Model[NUM_MODELS];
-    Model[] bestModels = new Model[3];
+
     JRadioButton[][] ratings = new JRadioButton[NUM_MODELS + 1][3];
     ButtonGroup nudgeGroup = new ButtonGroup();
     JRadioButton[] nudge = new JRadioButton[5];
@@ -71,6 +77,53 @@ public class HillClimb extends SynthPanel
     int currentNudgeButton = -1;
     int currentPlay = 0;
     HBox nudgeBox;
+    
+    
+    public State popStack()	
+    	{
+    	if (stack.size() == 0) 
+    		return null;
+    	else
+    		return (State)(stack.remove(stack.size() - 1));
+    	}
+    	
+    public void pushStack(Model[] parents, Model[] children)
+    	{
+    	State state = new State();
+    	state.parents = new Model[parents.length];
+    	for(int i = 0; i < parents.length; i++)
+    		{
+    		state.parents[i] = copy(parents[i]);
+    		}
+    	
+    	state.children = new Model[children.length];
+    	for(int i = 0; i < children.length; i++)
+    		{
+    		state.children[i] = copy(children[i]);
+    		}
+    		
+    	stack.add(state);
+    	}
+    	
+    public State topStack()
+    	{
+    	if (stack.size() == 0) 
+    		return null;
+    	else
+    		return (State)(stack.get(stack.size() - 1));
+    	}
+    	
+    public boolean stackEmpty()
+    	{
+    	return (stack.size() == 0);
+    	}
+    	
+    public boolean stackInitial()
+    	{
+    	return (stack.size() == 1);
+    	}
+    	
+    	
         
     public HillClimb(Synth synth)
         {
@@ -699,22 +752,21 @@ public class HillClimb extends SynthPanel
     	
     public void again()
         {
-        if (oldA.size() > 1)
-            {
-            // rebuild
-            bestModels[0] = copy(((Model)(oldA.remove(oldA.size() - 1))));
-            bestModels[1] = copy(((Model)(oldB.remove(oldB.size() - 1))));
-            bestModels[2] = copy(((Model)(oldC.remove(oldC.size() - 1))));
-            climb(false);
-            }
+        if (stackEmpty())
+        	{
+        	// uh oh...
+        	System.err.println("EMPTY STACK!");
+        	return;
+        	}
+        else if (stackInitial())
+        	{
+        	initialize(topStack().parents[0], true);
+        	}
         else
-            {
-            // Just rebuild
-            Model seed = copy(((Model)(oldA.remove(oldA.size() - 1))));
-            oldB.remove(oldB.size() - 1);
-            oldC.remove(oldC.size() - 1);
-            initialize(seed, true);
-            }
+        	{
+        	popStack();
+        	climb(false);
+        	}
 
         ratings[NUM_MODELS][0].setSelected(true);
         ratings[NUM_MODELS][1].setSelected(true);
@@ -723,49 +775,29 @@ public class HillClimb extends SynthPanel
         
     public void pop()
         {
-        if (oldA.size() > 2)
-            {
-            // remove the current old stuff
-            oldA.remove(oldA.size() - 1);
-            oldB.remove(oldB.size() - 1);
-            oldC.remove(oldC.size() - 1);
-                        
-            // back up to the previous old stuff and rebuild
-            bestModels[0] = copy(((Model)(oldA.remove(oldA.size() - 1))));
-            bestModels[1] = copy(((Model)(oldB.remove(oldB.size() - 1))));
-            bestModels[2] = copy(((Model)(oldC.remove(oldC.size() - 1))));
-            climb(false);
-            }
-        else if (oldA.size() > 1)
-            {
-            // remove the current old stuff
-            oldA.remove(oldA.size() - 1);
-            oldB.remove(oldB.size() - 1);
-            oldC.remove(oldC.size() - 1);
-                        
-            // back up to the previous old stuff and rebuild
-            Model seed = copy(((Model)(oldA.remove(oldA.size() - 1))));
-            oldB.remove(oldB.size() - 1);
-            oldC.remove(oldC.size() - 1);
-            initialize(seed, true);
-            }
+        if (stackEmpty())
+        	{
+        	// uh oh...
+        	System.err.println("EMPTY STACK!");
+        	return;
+        	}
+        else if (stackInitial())
+        	{
+        	// do nothing
+        	}
         else
-            {
-            // Just rebuild
-            Model seed = copy(((Model)(oldA.remove(oldA.size() - 1))));
-            oldB.remove(oldB.size() - 1);
-            oldC.remove(oldC.size() - 1);
-            initialize(seed, true);
-            }
+        	{
+        	State state = popStack();
+        	System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
+        	}
                 
-        iterations.setName("Iteration " + oldA.size());
+        iterations.setName("Iteration " + stack.size());
         repaint();
 
         ratings[NUM_MODELS][0].setSelected(true);
         ratings[NUM_MODELS][1].setSelected(true);
         ratings[NUM_MODELS][2].setSelected(true);
         }
-    
     
     public void initialize(Model seed, boolean clear)
         {
@@ -774,9 +806,7 @@ public class HillClimb extends SynthPanel
                 
         if (clear)
             {
-            oldA.clear();
-            oldB.clear();
-            oldC.clear();
+            stack.clear();
             }
                 
         Random random = synth.random;
@@ -798,10 +828,8 @@ public class HillClimb extends SynthPanel
 				}
             }
 
-        oldA.add(newSeed);
-        oldB.add(newSeed);
-        oldC.add(newSeed);
-        iterations.setName("Iteration " + oldA.size());
+		pushStack(new Model[] { newSeed, newSeed, newSeed}, currentModels);
+        iterations.setName("Iteration " + stack.size());
         repaint();
 
         ratings[NUM_MODELS][0].setSelected(true);
@@ -994,6 +1022,8 @@ public class HillClimb extends SynthPanel
         double recombination = blank.getModel().get("recombinationrate", 0) / 100.0;
         double weight = blank.getModel().get("mutationrate", 0) / 100.0;
         
+        Model[] bestModels = new Model[3];
+        
         currentModels[NUM_MODELS - 1] = synth.getModel();
         
         if (determineBest)
@@ -1031,6 +1061,8 @@ public class HillClimb extends SynthPanel
             }
         
         boolean zeroModels = false;     
+        Model oldA = topStack().parents[0];
+        
         if (bestModels[0] == null)
             {
             again();
@@ -1038,23 +1070,23 @@ public class HillClimb extends SynthPanel
             }
         else if (bestModels[1] == null)
             {
-            produce(random, keys, recombination, weight, bestModels[0], (Model)(oldA.get(0)));
+            pushStack(bestModels, currentModels);
+            produce(random, keys, recombination, weight, bestModels[0], oldA);
             }
         else if (bestModels[2] == null)
             {
-            produce(random, keys, recombination, weight, bestModels[0], bestModels[1], (Model)(oldA.get(0)));
+            pushStack(bestModels, currentModels);
+            produce(random, keys, recombination, weight, bestModels[0], bestModels[1], oldA);
             }
         else
             {
-            produce(random, keys, recombination, weight, bestModels[0], bestModels[1], bestModels[2], (Model)(oldA.get(0)));
+            pushStack(bestModels, currentModels);
+            produce(random, keys, recombination, weight, bestModels[0], bestModels[1], bestModels[2], oldA);
             }
         
         if (!zeroModels)
             {
-            oldA.add(bestModels[0]);
-            oldB.add(bestModels[1]);
-            oldC.add(bestModels[2]);
-            iterations.setName("Iteration " + oldA.size());
+            iterations.setName("Iteration " + stack.size());
             repaint();
         
             ratings[NUM_MODELS][0].setSelected(true);

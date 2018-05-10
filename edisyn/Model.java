@@ -83,10 +83,38 @@ show();
 m.randomValueWithin(r, 5, 10, 7, 1.0);
 */
 
+static final double STDDEV_CUT = 1.0/5.0;
+
+    public int randomValueWithin(Random random, int a, int b, int center, double weight)
+        {
+        if (a > b) { int swap = a; a = b; b = swap; }
+        if (a == b) return a;
+        if (weight == 0)
+        	return center;
+        else if (weight == 1)
+        	return randomValueWithin(random, a, b);
+        else
+        	{
+	        double stddev = (1.0 / (1.0 - weight)) - 1.0;
+	        double delta = 0.0;
+	        
+	        while(true)
+	        	{
+	        	double rand = (random.nextGaussian() * stddev * STDDEV_CUT) % 2.0;
+	        	System.err.println(rand);
+		        delta = rand * (b - a);
+            	if ((center + delta) > a - 0.5 &&
+            	    (center + delta) < b + 0.5)
+            	    break;
+            	}
+        	return (int)(Math.round(center + delta));
+			}        
+        }
+
     /** Produces a random value in the fully closed range [a, b],
         choosing from a uniform distribution of size +- 2 * weight * (b-a+1),
         centered at *center*, and rounded to the nearest integer. */
-    public int randomValueWithin(Random random, int a, int b, int center, double weight)
+    public int randomValueWithin2(Random random, int a, int b, int center, double weight)
         {
         if (a > b) { int swap = a; a = b; b = swap; }
         if (a == b) return a;
@@ -102,23 +130,7 @@ m.randomValueWithin(r, 5, 10, 7, 1.0);
                 (center + delta) <= b)
                 break;
             }
-        int result = (int)(Math.round(center + delta));
-            
-        /*
-        // slight tweak if we're at the same result
-        if (result == center && coinToss(random, weight))
-            {
-            while(true)
-                {
-                int delta2 = (coinToss(random, 0.5) ? 1 : -1);
-                if ((center + delta2) >= a && 
-                    (center + delta2) <= b)
-                    { result = center + delta2; break; }
-                }
-            }
-        */
-        
-        return result;
+        return (int)(Math.round(center + delta));
         }
 
     /** Produces a random valid value in the fully closed range [a, b],
@@ -218,7 +230,7 @@ m.randomValueWithin(r, 5, 10, 7, 1.0);
                                 
             // now perform the operation
                 
-            if (doMetric)                                                   // definitely do a metric mutation
+            if (doMetric)  // definitely do a metric mutation
                 {
                 int a = getMetricMin(keys[i]);
                 int b = getMetricMax(keys[i]);
@@ -238,7 +250,7 @@ m.randomValueWithin(r, 5, 10, 7, 1.0);
                             randomValidValueWithin(keys[i], random, getMetricMin(keys[i]), getMetricMax(keys[i]))));
                     }
                 }
-            else if (hasMetric)                                             // MAYBE choose a random new non-metric location
+            else if (hasMetric)  // MAYBE choose a random new non-metric location
                 {
                 if (coinToss(random, weight))
                     {
@@ -251,8 +263,7 @@ m.randomValueWithin(r, 5, 10, 7, 1.0);
                             {
                             if (isValid(keys[i], getMin(keys[i]) + delta))
                                 {
-                                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
-                                        getMin(keys[i]) + delta));
+                                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), getMin(keys[i]) + delta));
                                 break;
                                 }
                             }
@@ -260,8 +271,7 @@ m.randomValueWithin(r, 5, 10, 7, 1.0);
                             {
                             if (isValid(keys[i], getMetricMax(keys[i]) + 1 + (delta - lowerRange)))
                                 {
-                                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
-                                        getMetricMax(keys[i]) + 1 + (delta - lowerRange)));
+                                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), getMetricMax(keys[i]) + 1 + (delta - lowerRange)));
                                 break;
                                 }
                             }

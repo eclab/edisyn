@@ -54,7 +54,7 @@ public class Model implements Cloneable
         }
         
     /** Produces a random value in the fully closed range [a, b]. */
-    int randomValueWithin(Random random, int a, int b)
+    static int randomValueWithin(Random random, int a, int b)
         {
         if (a > b) { int swap = a; a = b; b = swap; }
         if (a == b) return a;
@@ -80,12 +80,12 @@ import edisyn.*;
 m = new Model();
 r = new Random(1000);
 show();
-m.randomValueWithin(r, 5, 10, 7, 1.0);
+for(int i = 0; i < 10000; i++) m.randomValueWithin(r, 5, 10, 7, 0.05);
 */
 
-static final double STDDEV_CUT = 1.0/5.0;
+static final double STDDEV_CUT = 1.0/2.0;
 
-    public int randomValueWithin(Random random, int a, int b, int center, double weight)
+    public static int randomValueWithin(Random random, int a, int b, int center, double weight)
         {
         if (a > b) { int swap = a; a = b; b = swap; }
         if (a == b) return a;
@@ -101,7 +101,6 @@ static final double STDDEV_CUT = 1.0/5.0;
 	        while(true)
 	        	{
 	        	double rand = (random.nextGaussian() * stddev * STDDEV_CUT) % 2.0;
-	        	System.err.println(rand);
 		        delta = rand * (b - a);
             	if ((center + delta) > a - 0.5 &&
             	    (center + delta) < b + 0.5)

@@ -389,15 +389,21 @@ static final double STDDEV_CUT = 1.0/2.0;
 	            int b = model.get(keys[i], a);
 	            
 	            // determine range
-	            int outer = (int)Math.ceil(a + weight * (a - b));
-	            
+                double qq = a + weight * (a - b);
+                int q = 0;
+                
+                // round away from b
+                if (b > a)
+                	q = (int)Math.floor(qq);
+                else
+                	q = (int)Math.ceil(qq);
+                
 	            // bound
-	            if (metricMinExists(keys[i]) && outer < getMetricMin(keys[i]))
-	                outer = getMetricMin(keys[i]);
-   		         if (metricMaxExists(keys[i]) && outer > getMetricMax(keys[i]))
-   		             outer = getMetricMax(keys[i]);
-   		         set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
-                    randomValidValueWithin(keys[i], random, a, outer)));
+	            if (metricMinExists(keys[i]) && q < getMetricMin(keys[i]))
+	                q = getMetricMin(keys[i]);
+   		         if (metricMaxExists(keys[i]) && q > getMetricMax(keys[i]))
+   		             q = getMetricMax(keys[i]);
+   		         set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), randomValidValueWithin(keys[i], random, a, q)));
                 }
             else
             	{
@@ -444,7 +450,7 @@ static final double STDDEV_CUT = 1.0/2.0;
         metric crossover: we pick a random new value between the two values inclusive.
         Otherwise with 0.5 probability we select our parameter, else the other model's parameter.
     */
-    public Model recombine(Random random, Model model, String[] keys, double weight)
+    public Model recombine2(Random random, Model model, String[] keys, double weight)
         {
         if (undoListener!= null)
             {
@@ -491,7 +497,69 @@ static final double STDDEV_CUT = 1.0/2.0;
         return this;
         }
     
-    
+  
+      /** Recombines (potentially the keys provided.  
+        Recombination works as follows.  For each key, we first see if we're permitted to mutate it
+        (no immutable status, other model doesn't have the key).  Next with 1.0 - WEIGHT probability 
+        we don't recombine at all. Otherwise we recombine:
+                
+        <p>If the parameter is a string, we keep our value.  
+        If the parameter is an integer, and we have a metric range,
+        and BOTH our value AND the other model's value are within that range, then we do 
+        metric crossover: we pick a random new value between the two values inclusive.
+        Otherwise with 0.5 probability we select our parameter, else the other model's parameter.
+    */
+    public Model recombine(Random random, Model model, String[] keys, double weight)
+        {
+        if (undoListener!= null)
+            {
+            undoListener.push(this);
+            undoListener.setWillPush(false);
+            }
+                
+        for(int i = 0; i < keys.length; i++)
+            {
+            // skip if the key doesn't exist, is immutable, is restricted, or is a string
+            if (!model.exists(keys[i])) { continue; }
+            if (getStatus(keys[i]) == STATUS_IMMUTABLE || isString(keys[i]) || getStatus(keys[i]) == STATUS_RESTRICTED) continue;
+            if (minExists(keys[i]) && maxExists(keys[i]) && getMin(keys[i]) >= getMax(keys[i]))  continue;  // no range
+
+            // we cross over metrically if we're both within the metric range
+            if (metricMinExists(keys[i]) &&
+                metricMaxExists(keys[i]) &&
+                get(keys[i], 0) >= getMetricMin(keys[i]) &&
+                get(keys[i], 0) <= getMetricMax(keys[i]) &&
+                model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
+                model.get(keys[i], 0) <= getMetricMax(keys[i])) 
+                {
+                int a = get(keys[i], 0);
+                int b = model.get(keys[i], a);
+                double qq = a - weight * (a - b);
+                int q = 0;
+                
+                // round towards b
+                if (b > a)
+                	q = (int)Math.ceil(qq);
+                else
+                	q = (int)Math.floor(qq);
+                
+                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), randomValidValueWithin(keys[i], random, a, q)));
+                }
+            else if (coinToss(random, weight))
+                {
+                if (coinToss(random, 0.5))
+                    set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), model.get(keys[i], 0)));
+                }
+            }
+
+        if (undoListener!= null)
+            {
+            undoListener.setWillPush(true);
+            }
+            
+        return this;
+        }
+  
     public void clearListeners()
         {
         listeners = new HashMap();

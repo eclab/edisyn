@@ -821,18 +821,18 @@ public class HillClimb extends SynthPanel
         
         double mutationWeight = weight * MUTATION_WEIGHT;
         
-        for(int i = 0; i < 4; i++)
-            {
-            currentModels[i] = newSeed.copy().mutate(random, keys, mutationWeight);
-            }
-
-        for(int j = 4; j < NUM_CANDIDATES; j+= 4)
+        int numMutations = 1;
+        
+        for(int i = 0; i < NUM_CANDIDATES; i++)
         	{
-			for(int i = 0; i < 4; i++)
-				{
-				currentModels[j + i] = currentModels[j + i - 4].copy().mutate(random, keys, mutationWeight);
-				}
-            }
+        	currentModels[i] = newSeed.copy();
+        	for(int j = 0; j < numMutations; j++)
+        		{
+        		currentModels[i] = currentModels[i].mutate(random, keys, mutationWeight);
+        		}
+        	if (i % 4 == 3)
+        		numMutations++;
+        	}
 
 		pushStack(new Model[] { newSeed, newSeed, newSeed}, currentModels);
         iterations.setName("Iteration " + stack.size());
@@ -874,37 +874,37 @@ public class HillClimb extends SynthPanel
         currentModels[stage + 0] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, mutationWeight);
         // A + C
         currentModels[stage + 1] = a.copy().recombine(random, c, keys, recombination).mutate(random, keys, mutationWeight);
-        // B + C
-        currentModels[stage + 2] = b.copy().recombine(random, c, keys, recombination).mutate(random, keys, mutationWeight);
         // A + (B + C)
-        currentModels[stage + 3] = a.copy().recombine(random, b.copy().recombine(random, c, keys, recombination), keys, recombination).mutate(random, keys, mutationWeight);
+        currentModels[stage + 2] = a.copy().recombine(random, b.copy().recombine(random, c, keys, recombination), keys, recombination).mutate(random, keys, mutationWeight);
         // A - B
-        currentModels[stage + 4] = a.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, mutationWeight);
-        // B - A
-        currentModels[stage + 5] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight);
+        currentModels[stage + 3] = a.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         // A - C
-        currentModels[stage + 6] = a.copy().opposite(random, c, keys, recombination, false).mutate(random, keys, mutationWeight);
-        // C - A
-        currentModels[stage + 7] = c.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight);
-        
+        currentModels[stage + 4] = a.copy().opposite(random, c, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        // A
+        currentModels[stage + 5] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        // B
+        currentModels[stage + 6] = b.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        // C
+        currentModels[stage + 7] = c.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+
         if ((stage + 8) < currentModels.length)
         {
-        // B - C
-        currentModels[stage + 8] = b.copy().opposite(random, c, keys, recombination, false).mutate(random, keys, mutationWeight);
-        // C - B
-        currentModels[stage + 9] = c.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, mutationWeight);
         // A - Z
-        currentModels[stage + 10] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
+        currentModels[stage + 8] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
+        // B - A
+        currentModels[stage + 9] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        // C - A
+        currentModels[stage + 10] = c.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        // B - C
+        currentModels[stage + 11] = b.copy().opposite(random, c, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        // C - B
+        currentModels[stage + 12] = c.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         // B - Z
-        currentModels[stage + 11] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
+        currentModels[stage + 13] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
         // C - Z
-        currentModels[stage + 12] = c.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
-        // A
-        currentModels[stage + 13] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        // B
-        currentModels[stage + 14] = b.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        // C
-        currentModels[stage + 15] = c.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 14] = c.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
+        // B + C
+        currentModels[stage + 15] = b.copy().recombine(random, c, keys, recombination).mutate(random, keys, mutationWeight);
         }
         
         shuffle(random, currentModels, NUM_MODELS - 1);
@@ -930,12 +930,12 @@ public class HillClimb extends SynthPanel
         currentModels[stage + 2] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         
         // A - B
-        currentModels[stage + 3] = a.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, mutationWeight);
-        currentModels[stage + 4] = a.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 3] = a.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 4] = a.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         
         // B - A
-        currentModels[stage + 5] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight);
-        currentModels[stage + 6] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 5] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 6] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         
         // A - Z
         currentModels[stage + 7] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
@@ -979,8 +979,8 @@ public class HillClimb extends SynthPanel
         double mutationWeight = (stage + 1) * MUTATION_WEIGHT * weight;
         
         // A
-        currentModels[stage + 0] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        currentModels[stage + 1] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 0] = a.copy().mutate(random, keys, mutationWeight);
+        currentModels[stage + 1] = a.copy().mutate(random, keys, mutationWeight);
         currentModels[stage + 2] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         currentModels[stage + 3] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         currentModels[stage + 4] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
@@ -988,7 +988,7 @@ public class HillClimb extends SynthPanel
         currentModels[stage + 6] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         currentModels[stage + 7] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         
-                if ((stage + 8) < currentModels.length)
+        if ((stage + 8) < currentModels.length)
         {
 		currentModels[stage + 8] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         currentModels[stage + 9] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);

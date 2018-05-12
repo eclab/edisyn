@@ -52,14 +52,15 @@ public class HillClimb extends SynthPanel
 		Model[] parents;
 		Model[] children;
 		}
-	public ArrayList stack = new ArrayList();
+	 ArrayList stack = new ArrayList();
 	
 	
 	/// NUMBER OF CANDIDATE SOLUTIONS
 	
     public static final int NUM_CANDIDATES = 16;
+    public static final int ARCHIVE_SIZE = 6;
 	// There are more models than candidates: #17 is the current Model
-    public static final int NUM_MODELS = NUM_CANDIDATES + 1;
+    public static final int NUM_MODELS = NUM_CANDIDATES + ARCHIVE_SIZE + 1;
     
     // When the nudge buttons are being REQUESTED to play, then currentNudgeButton
     // is set to the nudge button values.  When a nudge button is PRESENTLY playing,
@@ -82,10 +83,11 @@ public class HillClimb extends SynthPanel
     Category iterations;
     int currentNudgeButton = -1;
     int currentPlay = 0;
+    int temporaryPlay = -1;
     HBox nudgeBox;
     
     
-    public State popStack()	
+     State popStack()	
     	{
     	if (stack.size() == 0) 
     		return null;
@@ -93,7 +95,7 @@ public class HillClimb extends SynthPanel
     		return (State)(stack.remove(stack.size() - 1));
     	}
     	
-    public void pushStack(Model[] parents, Model[] children)
+     void pushStack(Model[] parents, Model[] children)
     	{
     	State state = new State();
     	state.parents = new Model[parents.length];
@@ -111,7 +113,7 @@ public class HillClimb extends SynthPanel
     	stack.add(state);
     	}
     	
-    public State topStack()
+     State topStack()
     	{
     	if (stack.size() == 0) 
     		return null;
@@ -119,16 +121,230 @@ public class HillClimb extends SynthPanel
     		return (State)(stack.get(stack.size() - 1));
     	}
     	
-    public boolean stackEmpty()
+     boolean stackEmpty()
     	{
     	return (stack.size() == 0);
     	}
     	
-    public boolean stackInitial()
+     boolean stackInitial()
     	{
     	return (stack.size() == 1);
     	}
     	
+    
+    VBox buildCandidate(int i)
+    	{
+            final int _i = i;
+
+            VBox vbox = new VBox();
+            plays[i] = new PushButton("Play")
+                {
+                public void perform()
+                    {
+                    if (synth.isSendingTestNotes())
+                        {
+                        temporaryPlay = i;
+                        }
+                    else
+                        {
+                        // change the model, send all parameters, maybe play a note,
+                        // and then restore the model.
+                        Model backup = synth.model;
+                        synth.model = currentModels[_i];
+                        synth.sendAllParameters();
+                        synth.doSendTestNote(false);
+                        synth.model = backup;
+                        }
+
+                    }
+                };
+            vbox.add(plays[i]);
+
+            Box b = new Box(BoxLayout.X_AXIS);
+            b.setBackground(Style.BACKGROUND_COLOR());
+            b.add(Box.createGlue());
+            b.add(ratings[i][0] = new JRadioButton("1"));
+            ratings[i][0].setForeground(Style.TEXT_COLOR());
+            ratings[i][0].setFont(Style.SMALL_FONT());
+            ratings[i][0].putClientProperty("JComponent.sizeVariant", "small");
+            b.add(Box.createGlue());
+            vbox.add(b);
+                        
+            b = new Box(BoxLayout.X_AXIS);
+            b.setBackground(Style.BACKGROUND_COLOR());
+            b.add(Box.createGlue());
+            b.add(ratings[i][1] = new JRadioButton("2"));
+            ratings[i][1].setForeground(Style.TEXT_COLOR());
+            ratings[i][1].setFont(Style.SMALL_FONT());
+            ratings[i][1].putClientProperty("JComponent.sizeVariant", "small");
+            b.add(Box.createGlue());
+            vbox.add(b);
+                        
+            b = new Box(BoxLayout.X_AXIS);
+            b.setBackground(Style.BACKGROUND_COLOR());
+            b.add(Box.createGlue());
+            b.add(ratings[i][2] = new JRadioButton("3"));
+            ratings[i][2].setForeground(Style.TEXT_COLOR());
+            ratings[i][2].setFont(Style.SMALL_FONT());
+            ratings[i][2].putClientProperty("JComponent.sizeVariant", "small");
+            b.add(Box.createGlue());
+            vbox.add(b);
+            
+            
+            JMenuItem[] doItems = new JMenuItem[12];
+            doItems[0] = new JMenuItem("Keep Patch");
+            doItems[0].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+                    // Keep for sure?
+                    if (synth.showSimpleConfirm("Keep Patch", "Load Patch into Editor?"))
+                        {
+                        synth.tabs.setSelectedIndex(0);
+                        synth.setSendMIDI(false);
+                        // push to undo if they're not the same
+                        if (!currentModels[_i].keyEquals(synth.getModel()))
+                            synth.undo.push(synth.getModel());
+                                        
+                        // Load into the current model
+                        currentModels[_i].copyValuesTo(synth.getModel());
+                        synth.setSendMIDI(true);
+                        synth.sendAllParameters();
+                        }
+            		}
+            	});
+            if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
+            	doItems[0].setEnabled(false);
+
+            doItems[1] = new JMenuItem("Edit Patch");
+            doItems[1].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		Synth newSynth = synth.doDuplicateSynth();
+            		// Copy the parameters forward into the synth, then
+            		// link the synth's model back to currentModels[_i].
+            		// We do this because the new synth's widgets are registered
+            		// with its model, so we can't just replace the model.
+            		// But we can certainly replace currentModels[_i]!
+                    newSynth.setSendMIDI(false);
+                    currentModels[_i].copyValuesTo(newSynth.getModel());
+                    newSynth.setSendMIDI(true);
+            		currentModels[_i] = newSynth.getModel();
+            		newSynth.sendAllParameters();
+            		}
+            	});
+            if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
+            	doItems[1].setEnabled(false);
+
+            doItems[2] = new JMenuItem("Save to File");
+            doItems[2].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		Model backup = synth.model;
+	                synth.model = currentModels[_i];
+	                synth.doSaveAs();
+	                synth.model = backup;
+	                synth.updateTitle();
+	                }
+            	});
+            if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
+            	doItems[2].setEnabled(false);
+
+            doItems[3] = new JMenuItem("Load from File");
+            doItems[3].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		Model backup = synth.model;
+	                synth.model = currentModels[_i];
+	                synth.doOpen(false);
+	                currentModels[_i] = synth.model;
+	                synth.model = backup;
+	                synth.updateTitle();
+            		}
+            	});
+            if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
+            	doItems[3].setEnabled(false);
+            
+            doItems[4] = new JMenuItem("Nudge Candidates to Me");
+            doItems[4].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+			        Random random = synth.random;
+        			String[] keys = synth.getMutationKeys();
+        			double recombination = blank.getModel().get("recombinationrate", 0) / 100.0;
+
+            		for(int i = 0; i < NUM_CANDIDATES; i++)
+            			{
+            			if (i == _i) continue;
+	            		currentModels[i].recombine(random, currentModels[_i], keys, synth.nudgeRecombinationWeight).mutate(random, keys, synth.nudgeMutationWeight);
+	            		}
+            		}
+            	});
+
+           doItems[5] = null;
+
+            doItems[6] = new JMenuItem("Archive 1");
+            doItems[6].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		currentModels[NUM_CANDIDATES + 0] = (Model)(currentModels[_i].clone());
+            		}
+            	});
+
+            doItems[7] = new JMenuItem("Archive 2");
+            doItems[7].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		currentModels[NUM_CANDIDATES + 1] = (Model)(currentModels[_i].clone());
+            		}
+            	});
+
+            doItems[8] = new JMenuItem("Archive 3");
+            doItems[8].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		currentModels[NUM_CANDIDATES + 2] = (Model)(currentModels[_i].clone());
+            		}
+            	});
+
+            doItems[9] = new JMenuItem("Archive 4");
+            doItems[9].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		currentModels[NUM_CANDIDATES + 3] = (Model)(currentModels[_i].clone());
+            		}
+            	});
+            	
+            doItems[10] = new JMenuItem("Archive 5");
+            doItems[10].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		currentModels[NUM_CANDIDATES + 4] = (Model)(currentModels[_i].clone());
+            		}
+            	});
+            	
+            doItems[11] = new JMenuItem("Archive 6");
+            doItems[11].addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed(ActionEvent e)
+            		{
+            		currentModels[NUM_CANDIDATES + 5] = (Model)(currentModels[_i].clone());
+            		}
+            	});
+            	
+            vbox.add(new PushButton("Options", doItems));
+        
+        	return vbox;
+        	}
     	
         
     public HillClimb(Synth synth)
@@ -145,7 +361,7 @@ public class HillClimb extends SynthPanel
 
         // add globals
 
-        Category panel = new Category(null, "Iteration 1", Style.COLOR_A());
+        Category panel = new Category(null, "Iteration 1", Style.COLOR_GLOBAL());
         iterations = panel;
                 
         PushButton backup = new PushButton("Back Up")
@@ -189,131 +405,78 @@ public class HillClimb extends SynthPanel
                 }
             };
         retry.getButton().setPreferredSize(backup.getButton().getPreferredSize());
-           
-           
-     	nudgeBox = new HBox();
 
-        PushButton nudgeButton = new PushButton("Nudge To:")
-            {
-            public void perform()
-                {
-                int nudged = 0;
-                for(int i = 1; i < 4; i++)
-                	{ if (nudge[i].isSelected()) { nudged = i; break; } }
-                nudge(nudged);
-                resetCurrentPlay();
-                }
-            };
-        nudgeButton.getButton().setPreferredSize(backup.getButton().getPreferredSize());
-        nudgeBox.add(nudgeButton);
-
-        for(int i = 0; i < 5; i++)
-        	{
-        	if (i == 4)
-        		{
-        		nudge[i] = new JRadioButton("Current Patch");
-        		nudge[i].setSelected(true);
-        		}
-        	else
-        		nudge[i] = new JRadioButton("" + (i + 1));
-            nudge[i].setForeground(Style.TEXT_COLOR());
-            nudge[i].setFont(Style.SMALL_FONT());
-            nudge[i].putClientProperty("JComponent.sizeVariant", "small");
-            nudgeGroup.add(nudge[i]);
-			}
-		
-		for(int i = 0; i < 5; i++)
-			{
-			final int _i = i;
-	        nudge[i].addActionListener(new ActionListener()
-				{
-				public void actionPerformed(ActionEvent e)
-					{
-					if (synth.isSendingTestNotes())
-						{
-						currentNudgeButton = _i;
-						}
-					else
-						{
-						synth.sendAllParameters();
-						synth.doSendTestNote(false);
-						}
-					}
-				});
-
-			 Border border = new LineBorder(Style.BACKGROUND_COLOR(), 1)
-				{
-				public void paintBorder(final Component c, final Graphics g, final int x, final int y, final int width, final int height) 
-					{
-					if (currentNudgeButton == _i || currentNudgeButton == _i + NUDGE_PLAYING_DELTA)
-						super.lineColor = Style.DYNAMIC_COLOR();
-					else
-						super.lineColor = Style.BACKGROUND_COLOR();
-					super.paintBorder(c, g, x, y, width, height);
-					}
-				};
-
-			JPanel pan = new JPanel();
-			pan.setLayout(new BorderLayout());
-			pan.add(nudge[i], BorderLayout.CENTER);
-			pan.setBorder(border);
-        	pan.setBackground(Style.BACKGROUND_COLOR());
-            nudgeBox.add(pan);
-			}
-		                
         VBox vbox = new VBox();
+        vbox.add(climb);
+        vbox.add(retry);
+        vbox.add(backup);
+        vbox.add(reset);
         
-        
-        VBox buttonVBox = new VBox();
-        HBox buttonBox = new HBox();
-        buttonBox.add(climb);
-        buttonBox.add(retry);
-       // buttonVBox.add(buttonBox);
-        //buttonBox = new HBox();
-        buttonBox.add(backup);
-        buttonBox.add(reset);
-        buttonVBox.add(buttonBox);
-    	buttonVBox.add(nudgeBox);
-
-        PushButton pushToButton = new PushButton("Go To:")
-            {
-            public void perform()
-                {
-                int nudged = 0;
-                for(int i = 1; i < 4; i++)
-                	{ if (nudge[i].isSelected()) { nudged = i; break; } }
-				Model model = (nudged == 4 ? synth.getModel() : synth.getNudge(nudged));
-                initialize((Model)(model.clone()), false);
-                resetCurrentPlay();
-                }
-            };
-        pushToButton.getButton().setPreferredSize(backup.getButton().getPreferredSize());
-
-        HBox gotoHBox = new HBox();
-        gotoHBox.add(pushToButton);
-        gotoHBox.addLast(Stretch.makeHorizontalStretch());
-        buttonVBox.add(gotoHBox);
+		HBox iterationsBox = new HBox();
+        iterationsBox.add(vbox);
 
         blank = new Blank();
-        HBox ratebox = new HBox();
-        ratebox.add(buttonVBox);
-        LabelledDial recombinationRate = new LabelledDial("Recombination", blank, "recombinationrate", Style.COLOR_A(), 0, 100);
-        blank.getModel().set("recombinationrate", INITIAL_RECOMBINATION_RATE);
-        recombinationRate.addAdditionalLabel("Rate");
-        ratebox.add(recombinationRate);
 
-        LabelledDial mutationRate = new LabelledDial("Mutation", blank, "mutationrate", Style.COLOR_A(), 0, 100);
+        blank.getModel().set("recombinationrate", INITIAL_RECOMBINATION_RATE);
+
+        LabelledDial mutationRate = new LabelledDial("Mutation", blank, "mutationrate", Style.COLOR_GLOBAL(), 0, 100);
         mutationRate.addAdditionalLabel("Rate");
         blank.getModel().set("mutationrate", INITIAL_MUTATION_RATE);
-        ratebox.add(mutationRate);
-        vbox.add(ratebox);
-
-                                
-        panel.add(vbox, BorderLayout.WEST);
+        iterationsBox.add(mutationRate);
+        
+        panel.add(iterationsBox, BorderLayout.WEST);
         toprow.add(panel);
         
+        panel = new Category(null, "Archive", Style.COLOR_A());
+        HBox hbox = new HBox();
+        panel.add(hbox);
+        for(int i = 0; i < ARCHIVE_SIZE; i++)
+        	{
+        	vbox = buildCandidate(NUM_CANDIDATES + i);
+        	hbox.add(vbox);
+        	}
+        toprow.add(panel);
+        
+        // Add Current 
+        panel = new Category(null, "Current", Style.COLOR_C());
+        
+        vbox = buildCandidate(NUM_MODELS - 1);
+        HBox curr = new HBox();
+        curr.add(vbox);
+        panel.add(curr);
+        toprow.addLast(panel);
+        top.add(toprow);
+
+        // Add Candidates
+
+        panel =  new Category(null, "Candidates", Style.COLOR_B());
+
+        hbox = new HBox();
+                
+        VBox vr = new VBox();
+        for(int i = 0; i < NUM_CANDIDATES; i++)
+            {
+			vbox = buildCandidate(i);
+			hbox.add(vbox);
+
+            if (i % 8 == 7)
+                {
+                vr.add(hbox);
+                if (i != NUM_CANDIDATES - 1)
+                	vr.add(Strut.makeVerticalStrut(20));
+                hbox = new HBox();
+                }
+            }
+        vr.add(hbox);
+
+        panel.add(vr, BorderLayout.WEST);
+        
+        HBox hb = new HBox();
+        hb.add(panel);
+
+
         // Add None
-        panel = new Category(null, "None", Style.COLOR_B());
+        panel = new Category(null, "None", Style.COLOR_C());
         
         vbox = new VBox();
         Box b = new Box(BoxLayout.X_AXIS);
@@ -351,294 +514,11 @@ public class HillClimb extends SynthPanel
         foo.add(bar);
         foo.add(Strut.makeHorizontalStrut(40));
         panel.add(foo);
-        toprow.add(panel);
-                
-        // Add Current 
-        panel = new Category(null, "Current", Style.COLOR_B());
         
-        vbox = new VBox();
- 
-        vbox = new VBox();
-        plays[NUM_MODELS - 1] = new PushButton("Play")
-            {
-            public void perform()
-                {
-                if (synth.isSendingTestNotes())
-                    {
-                    currentPlay = NUM_MODELS - 1;  // so it'll be NUM_MODELS when we update, and trigger playing it specially
-                    }
-                else
-                    {
-                    synth.sendAllParameters();
-                    synth.doSendTestNote(false);
-                    }
+        
+        hb.addLast(panel);
 
-                }
-            };
-        vbox.add(plays[NUM_MODELS - 1]);
-
-        b = new Box(BoxLayout.X_AXIS);
-        b.setBackground(Style.BACKGROUND_COLOR());
-        b.add(Box.createGlue());
-        b.add(ratings[NUM_MODELS - 1][0] = new JRadioButton("1"));
-        ratings[NUM_MODELS - 1][0].setForeground(Style.TEXT_COLOR());
-        ratings[NUM_MODELS - 1][0].setFont(Style.SMALL_FONT());
-        ratings[NUM_MODELS - 1][0].putClientProperty("JComponent.sizeVariant", "small");
-        b.add(Box.createGlue());
-        vbox.add(b);
-                        
-        b = new Box(BoxLayout.X_AXIS);
-        b.setBackground(Style.BACKGROUND_COLOR());
-        b.add(Box.createGlue());
-        b.add(ratings[NUM_MODELS - 1][1] = new JRadioButton("2"));
-        ratings[NUM_MODELS - 1][1].setForeground(Style.TEXT_COLOR());
-        ratings[NUM_MODELS - 1][1].setFont(Style.SMALL_FONT());
-        ratings[NUM_MODELS - 1][1].putClientProperty("JComponent.sizeVariant", "small");
-        b.add(Box.createGlue());
-        vbox.add(b);
-                        
-        b = new Box(BoxLayout.X_AXIS);
-        b.setBackground(Style.BACKGROUND_COLOR());
-        b.add(Box.createGlue());
-        b.add(ratings[NUM_MODELS - 1][2] = new JRadioButton("3"));
-        ratings[NUM_MODELS - 1][2].setForeground(Style.TEXT_COLOR());
-        ratings[NUM_MODELS - 1][2].setFont(Style.SMALL_FONT());
-        ratings[NUM_MODELS - 1][2].putClientProperty("JComponent.sizeVariant", "small");
-        b.add(Box.createGlue());
-        vbox.add(b);
-        foo = new HBox();
-        foo.add(vbox);
-        panel.add(foo);
-                
-        toprow.addLast(panel);
-        top.add(toprow);
-
-        // Add Candidates
-
-        panel =  new Category(null, "Candidates", Style.COLOR_B());
-
-        HBox hbox = new HBox();
-                
-        VBox vr = new VBox();
-        for(int i = 0; i < NUM_CANDIDATES; i++)
-            {
-            final int _i = i;
-
-            vbox = new VBox();
-            plays[i] = new PushButton("Play")
-                {
-                public void perform()
-                    {
-                    if (synth.isSendingTestNotes())
-                        {
-                        currentPlay = _i - 1;
-                        }
-                    else
-                        {
-                        // change the model, send all parameters, maybe play a note,
-                        // and then restore the model.
-                        Model backup = synth.model;
-                        synth.model = currentModels[_i];
-                        synth.sendAllParameters();
-                        synth.doSendTestNote(false);
-                        synth.model = backup;
-                        }
-
-                    }
-                };
-            vbox.add(plays[i]);
-
-            b = new Box(BoxLayout.X_AXIS);
-            b.setBackground(Style.BACKGROUND_COLOR());
-            b.add(Box.createGlue());
-            b.add(ratings[i][0] = new JRadioButton("1"));
-            ratings[i][0].setForeground(Style.TEXT_COLOR());
-            ratings[i][0].setFont(Style.SMALL_FONT());
-            ratings[i][0].putClientProperty("JComponent.sizeVariant", "small");
-            b.add(Box.createGlue());
-            vbox.add(b);
-                        
-            b = new Box(BoxLayout.X_AXIS);
-            b.setBackground(Style.BACKGROUND_COLOR());
-            b.add(Box.createGlue());
-            b.add(ratings[i][1] = new JRadioButton("2"));
-            ratings[i][1].setForeground(Style.TEXT_COLOR());
-            ratings[i][1].setFont(Style.SMALL_FONT());
-            ratings[i][1].putClientProperty("JComponent.sizeVariant", "small");
-            b.add(Box.createGlue());
-            vbox.add(b);
-                        
-            b = new Box(BoxLayout.X_AXIS);
-            b.setBackground(Style.BACKGROUND_COLOR());
-            b.add(Box.createGlue());
-            b.add(ratings[i][2] = new JRadioButton("3"));
-            ratings[i][2].setForeground(Style.TEXT_COLOR());
-            ratings[i][2].setFont(Style.SMALL_FONT());
-            ratings[i][2].putClientProperty("JComponent.sizeVariant", "small");
-            b.add(Box.createGlue());
-            vbox.add(b);
-            
-            
-            JMenuItem[] doItems = new JMenuItem[14];
-            doItems[0] = new JMenuItem("Keep Patch");
-            doItems[0].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-                    // Keep for sure?
-                    if (synth.showSimpleConfirm("Keep Patch", "Load Patch into Editor?"))
-                        {
-                        synth.tabs.setSelectedIndex(0);
-                        synth.setSendMIDI(false);
-                        // push to undo if they're not the same
-                        if (!currentModels[_i].keyEquals(synth.getModel()))
-                            synth.undo.push(synth.getModel());
-                                        
-                        // Load into the current model
-                        currentModels[_i].copyValuesTo(synth.getModel());
-                        synth.setSendMIDI(true);
-                        synth.sendAllParameters();
-                        }
-            		}
-            	});
-
-            doItems[1] = new JMenuItem("Edit Patch");
-            doItems[1].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		Synth newSynth = synth.doDuplicateSynth();
-            		// Copy the parameters forward into the synth, then
-            		// link the synth's model back to currentModels[_i].
-            		// We do this because the new synth's widgets are registered
-            		// with its model, so we can't just replace the model.
-            		// But we can certainly replace currentModels[_i]!
-                    newSynth.setSendMIDI(false);
-                    currentModels[_i].copyValuesTo(newSynth.getModel());
-                    newSynth.setSendMIDI(true);
-            		currentModels[_i] = newSynth.getModel();
-            		newSynth.sendAllParameters();
-            		}
-            	});
-
-            doItems[2] = new JMenuItem("Save to File");
-            doItems[2].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		Model backup = synth.model;
-	                synth.model = currentModels[_i];
-	                synth.doSaveAs();
-	                synth.model = backup;
-	                synth.updateTitle();
-	                }
-            	});
-
-            doItems[3] = new JMenuItem("Load from File");
-            doItems[3].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		Model backup = synth.model;
-	                synth.model = currentModels[_i];
-	                synth.doOpen(false);
-	                currentModels[_i] = synth.model;
-	                synth.model = backup;
-	                synth.updateTitle();
-            		}
-            	});
-            
-            doItems[4] = null;
-            
-            doItems[5] = new JMenuItem("Set 1");
-            doItems[5].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		synth.doSetNudge(0, currentModels[_i], "Hill-Climb " + _i);
-            		}
-            	});
-
-            doItems[6] = new JMenuItem("Set 2");
-            doItems[6].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		synth.doSetNudge(1, currentModels[_i], "Hill-Climb " + _i);
-            		}
-            	});
-
-            doItems[7] = new JMenuItem("Set 3");
-            doItems[7].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		synth.doSetNudge(2, currentModels[_i], "Hill-Climb " + _i);
-            		}
-            	});
-
-            doItems[8] = new JMenuItem("Set 4");
-            doItems[8].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		synth.doSetNudge(3, currentModels[_i], "Hill-Climb " + _i);
-            		}
-            	});
-            	
-            doItems[9] = null;
-            
-            doItems[10] = new JMenuItem("Load 1");
-            doItems[10].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		currentModels[_i] = (Model)(synth.getNudge(0).clone());
-            		}
-            	});
-
-            doItems[11] = new JMenuItem("Load 2");
-            doItems[11].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		currentModels[_i] = (Model)(synth.getNudge(1).clone());
-            		}
-            	});
-
-            doItems[12] = new JMenuItem("Load 3");
-            doItems[12].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		currentModels[_i] = (Model)(synth.getNudge(2).clone());
-            		}
-            	});
-
-            doItems[13] = new JMenuItem("Load 4");
-            doItems[13].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		currentModels[_i] = (Model)(synth.getNudge(3).clone());
-            		}
-            	});
-            	
-
-            vbox.add(new PushButton("Options", doItems));
-            hbox.add(vbox);
-            
-            if (i % 8 == 7)
-                {
-                vr.add(hbox);
-                vr.add(Strut.makeVerticalStrut(20));
-                hbox = new HBox();
-                }
-            }
-        vr.add(hbox);
-
-        panel.add(vr, BorderLayout.WEST);
-        top.add(panel);
+        top.add(hb);
         
         for(int i = 0; i < ratings.length; i++)
             {
@@ -646,7 +526,15 @@ public class HillClimb extends SynthPanel
             two.add(ratings[i][1]);
             three.add(ratings[i][2]);
             }                
-        }       
+    
+    	for(int i = NUM_CANDIDATES; i < NUM_CANDIDATES + ARCHIVE_SIZE; i++)
+    		{
+    		currentModels[i] = (Model)(synth.getModel().clone());
+    		}
+    	currentModels[NUM_CANDIDATES + ARCHIVE_SIZE] = synth.getModel();
+        }
+        
+    
                 
     public static final int UPDATE_SOUND_RATE = 1;
     int updateSoundTick = 0;
@@ -667,40 +555,33 @@ public class HillClimb extends SynthPanel
             {
             if (isShowingPane())
                 {
-                for(int i = 0; i < NUM_MODELS; i++)                             
+                for(int i = 0; i < NUM_MODELS; i++)       
+                    {
                     plays[i].getButton().setForeground(new JButton().getForeground());
-                if (currentNudgeButton >= 0 && currentNudgeButton < NUDGE_PLAYING_DELTA)
-                	{
+					plays[i].getButton().setText("Play");
+                    }
+				if (temporaryPlay >= 0)
+					{
+					plays[temporaryPlay].getButton().setForeground(Color.RED);
+					plays[temporaryPlay].getButton().setText("<HTML><B>Play</b></HTML>");
 					backup = synth.model;
-					if (currentNudgeButton != 4)
-						synth.model = synth.getNudge(currentNudgeButton);
-    				nudge[currentNudgeButton].repaint();
+					synth.model = currentModels[temporaryPlay];
 					synth.sendAllParameters();
-					currentNudgeButton += NUDGE_PLAYING_DELTA;
-                	}
-                else
-                	{
+					temporaryPlay = -1;
+					}
+				else
+					{
 					currentPlay++;
-					currentNudgeButton = -1;
-					if (currentPlay == NUM_MODELS || currentPlay == NUM_MODELS + 5)  // user asked to play the current patch
-						{
-						plays[NUM_MODELS - 1].getButton().setForeground(Color.RED);
-	
-						backup = synth.model;
-						synth.sendAllParameters();
-						}
-					else
-						{
-						if (currentPlay >= NUM_CANDIDATES)
-							currentPlay = 0;
-						plays[currentPlay].getButton().setForeground(Color.RED);
-	
-						// change the model, send all parameters, maybe play a note,
-						// and then restore the model.
-						backup = synth.model;
-						synth.model = currentModels[currentPlay];
-						synth.sendAllParameters();
-						}
+					if (currentPlay >= NUM_CANDIDATES)
+						currentPlay = 0;
+					plays[currentPlay].getButton().setForeground(Color.RED);
+					plays[currentPlay].getButton().setText("<HTML><B>Play</b></HTML>");
+
+					// change the model, send all parameters, maybe play a note,
+					// and then restore the model.
+					backup = synth.model;
+					synth.model = currentModels[currentPlay];
+					synth.sendAllParameters();
 					}
                 }
             }
@@ -747,6 +628,7 @@ public class HillClimb extends SynthPanel
     public void resetCurrentPlay()
         {
         currentPlay = NUM_CANDIDATES - 1;
+        temporaryPlay = -1;
         }
                         
     Model copy(Model model)
@@ -756,7 +638,7 @@ public class HillClimb extends SynthPanel
     	else return null;
     	}
     	
-    public void again()
+     void again()
         {
         if (stackEmpty())
         	{
@@ -779,7 +661,7 @@ public class HillClimb extends SynthPanel
         ratings[NUM_MODELS][2].setSelected(true);
         }
         
-    public void pop()
+     void pop()
         {
         if (stackEmpty())
         	{
@@ -805,7 +687,18 @@ public class HillClimb extends SynthPanel
         ratings[NUM_MODELS][2].setSelected(true);
         }
     
-    public void initialize(Model seed, boolean clear)
+    public void startHillClimbing()
+    	{
+    	for(int i = NUM_CANDIDATES; i < NUM_CANDIDATES + ARCHIVE_SIZE; i++)
+    		{
+    		currentModels[i] = (Model)(synth.getModel().clone());
+    		}	
+    	currentModels[NUM_CANDIDATES + ARCHIVE_SIZE] = synth.getModel();
+    	
+    	initialize(synth.getModel(), true);
+    	}
+    
+ 	void initialize(Model seed, boolean clear)
         {
         // we need a model with NO callbacks
         Model newSeed = seed.copy();
@@ -854,9 +747,9 @@ public class HillClimb extends SynthPanel
             }
         }
 
-    public static double MUTATION_WEIGHT = 1.0;
+    public static final double MUTATION_WEIGHT = 1.0;
     
-    public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA)
+ void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA)
     	{
     	int numStages = NUM_CANDIDATES / 16;
     	
@@ -866,7 +759,7 @@ public class HillClimb extends SynthPanel
     		}
     	}
         
-    public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA, int stage)
+ void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA, int stage)
         {
         double mutationWeight = (stage + 1) * MUTATION_WEIGHT * weight;
         
@@ -910,7 +803,7 @@ public class HillClimb extends SynthPanel
         shuffle(random, currentModels, NUM_MODELS - 1);
         }
         
-    public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA)
+     void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA)
     	{
     	int numStages = NUM_CANDIDATES / 16;
     	
@@ -920,7 +813,7 @@ public class HillClimb extends SynthPanel
     		}
     	}
         
-    public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA, int stage)
+     void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA, int stage)
         {
         double mutationWeight = (stage + 1) * MUTATION_WEIGHT * weight;
         
@@ -964,7 +857,7 @@ public class HillClimb extends SynthPanel
         shuffle(random, currentModels, NUM_MODELS - 1);
         }
                 
-    public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA)
+     void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA)
     	{
     	int numStages = NUM_CANDIDATES / 16;
     	
@@ -974,7 +867,7 @@ public class HillClimb extends SynthPanel
     		}
     	}
         
-    public void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA, int stage)
+     void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA, int stage)
         {
         double mutationWeight = (stage + 1) * MUTATION_WEIGHT * weight;
         
@@ -1005,23 +898,7 @@ public class HillClimb extends SynthPanel
         shuffle(random, currentModels, NUM_MODELS - 1);
         }
              
-	public void nudge(int towards)
-		{
-        Random random = synth.random;
-        String[] keys = synth.getMutationKeys();
-		for(int i = 0; i < NUM_CANDIDATES; i++)
-			{
-			currentModels[i] =  currentModels[i].copy().recombine(
-							random, 
-							towards == 4 ? synth.getModel() : synth.getNudge(towards), 
-							synth.getMutationKeys(),
-									synth.nudgeRecombinationWeight);
-            if (synth.nudgeMutationWeight > 0.0) currentModels[i].mutate(random, synth.getMutationKeys(), 
-            						synth.nudgeMutationWeight);
-            }
-		}   
-        
-    public void climb(boolean determineBest)
+     void climb(boolean determineBest)
         {
         Random random = synth.random;
         String[] keys = synth.getMutationKeys();
@@ -1038,7 +915,7 @@ public class HillClimb extends SynthPanel
                 bestModels[j] = null;
                 
             // load the best models
-            for(int i = 0; i < NUM_CANDIDATES; i++)
+            for(int i = 0; i < NUM_MODELS; i++)
                 {
                 for(int j = 0; j < 3; j++)
                     {

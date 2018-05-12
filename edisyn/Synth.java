@@ -4744,7 +4744,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
-            hillClimb.initialize(getModel(), true);
+            hillClimb.startHillClimbing();
             hillClimb.startup();
             hillClimbPane = addTab("Hill-Climb", hillClimb);
             tabs.setSelectedComponent(hillClimbPane);

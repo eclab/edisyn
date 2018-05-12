@@ -184,6 +184,9 @@ static final double STDDEV_CUT = 1.0/2.0;
     */
     public Model mutate(Random random, String[] keys, double weight)
         {
+        //// This makes the weight more sensitive.
+        // weight = weight * weight;
+        
         if (undoListener!= null)
             {
             undoListener.push(this);

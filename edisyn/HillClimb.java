@@ -191,7 +191,7 @@ public class HillClimb extends SynthPanel
             vbox.add(b);
             
             
-            JMenuItem[] doItems = new JMenuItem[12];
+            JMenuItem[] doItems = new JMenuItem[13];
             doItems[0] = new JMenuItem("Keep Patch");
             doItems[0].addActionListener(new ActionListener()
             	{
@@ -244,7 +244,9 @@ public class HillClimb extends SynthPanel
             		{
             		Model backup = synth.model;
 	                synth.model = currentModels[_i];
-	                synth.doSaveAs();
+	                synth.doSaveAs("" + stack.size() + "." + 
+	                	(_i < NUM_CANDIDATES ? (_i + 1) : ("A" + (_i - NUM_CANDIDATES + 1))) +
+	                 	"." + synth.getPatchName(synth.getModel()) + ".syx");
 	                synth.model = backup;
 	                synth.updateTitle();
 	                }
@@ -268,8 +270,10 @@ public class HillClimb extends SynthPanel
             if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
             	doItems[3].setEnabled(false);
             
-            doItems[4] = new JMenuItem("Nudge Candidates to Me");
-            doItems[4].addActionListener(new ActionListener()
+            doItems[4] = null;
+            
+            doItems[5] = new JMenuItem("Nudge Candidates to Me");
+            doItems[5].addActionListener(new ActionListener()
             	{
             	public void actionPerformed(ActionEvent e)
             		{
@@ -285,10 +289,10 @@ public class HillClimb extends SynthPanel
             		}
             	});
 
-           doItems[5] = null;
+           doItems[6] = null;
 
-            doItems[6] = new JMenuItem("Archive 1");
-            doItems[6].addActionListener(new ActionListener()
+            doItems[7] = new JMenuItem("Archive 1");
+            doItems[7].addActionListener(new ActionListener()
             	{
             	public void actionPerformed(ActionEvent e)
             		{
@@ -296,8 +300,8 @@ public class HillClimb extends SynthPanel
             		}
             	});
 
-            doItems[7] = new JMenuItem("Archive 2");
-            doItems[7].addActionListener(new ActionListener()
+            doItems[8] = new JMenuItem("Archive 2");
+            doItems[8].addActionListener(new ActionListener()
             	{
             	public void actionPerformed(ActionEvent e)
             		{
@@ -305,8 +309,8 @@ public class HillClimb extends SynthPanel
             		}
             	});
 
-            doItems[8] = new JMenuItem("Archive 3");
-            doItems[8].addActionListener(new ActionListener()
+            doItems[9] = new JMenuItem("Archive 3");
+            doItems[9].addActionListener(new ActionListener()
             	{
             	public void actionPerformed(ActionEvent e)
             		{
@@ -314,8 +318,8 @@ public class HillClimb extends SynthPanel
             		}
             	});
 
-            doItems[9] = new JMenuItem("Archive 4");
-            doItems[9].addActionListener(new ActionListener()
+            doItems[10] = new JMenuItem("Archive 4");
+            doItems[10].addActionListener(new ActionListener()
             	{
             	public void actionPerformed(ActionEvent e)
             		{
@@ -323,8 +327,8 @@ public class HillClimb extends SynthPanel
             		}
             	});
             	
-            doItems[10] = new JMenuItem("Archive 5");
-            doItems[10].addActionListener(new ActionListener()
+            doItems[11] = new JMenuItem("Archive 5");
+            doItems[11].addActionListener(new ActionListener()
             	{
             	public void actionPerformed(ActionEvent e)
             		{
@@ -332,8 +336,8 @@ public class HillClimb extends SynthPanel
             		}
             	});
             	
-            doItems[11] = new JMenuItem("Archive 6");
-            doItems[11].addActionListener(new ActionListener()
+            doItems[12] = new JMenuItem("Archive 6");
+            doItems[12].addActionListener(new ActionListener()
             	{
             	public void actionPerformed(ActionEvent e)
             		{

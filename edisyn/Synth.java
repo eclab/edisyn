@@ -4344,10 +4344,24 @@ public abstract class Synth extends JComponent implements Updatable
     /** Goes through the process of saving to a new sysex file and associating it with
         the editor. */
     void doSaveAs()
+    	{
+    	doSaveAs(null);
+    	}
+    	
+    /** Goes through the process of saving to a new sysex file and associating it with
+        the editor. */
+    void doSaveAs(String filename)
         {
         FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save Patch to Sysex File...", FileDialog.SAVE);
-
-        if (file != null)
+		
+		if (filename != null)
+			{
+            fd.setFile(reviseFileName(filename));
+            String path = getLastDirectory();
+            if (path != null)
+                fd.setDirectory(path);
+			}
+        else if (file != null)
             {
             fd.setFile(reviseFileName(file.getName()));
             fd.setDirectory(file.getParentFile().getPath());

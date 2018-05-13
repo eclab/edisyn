@@ -400,12 +400,13 @@ static final double STDDEV_CUT = 1.0/2.0;
                 	q = (int)Math.floor(qq);
                 else
                 	q = (int)Math.ceil(qq);
-                
+
 	            // bound
 	            if (metricMinExists(keys[i]) && q < getMetricMin(keys[i]))
 	                q = getMetricMin(keys[i]);
    		         if (metricMaxExists(keys[i]) && q > getMetricMax(keys[i]))
    		             q = getMetricMax(keys[i]);
+
    		         set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), randomValidValueWithin(keys[i], random, a, q)));
                 }
             else

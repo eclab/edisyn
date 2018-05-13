@@ -50,6 +50,7 @@ public class HillClimb extends SynthPanel
 	class State
 		{
 		Model[] parents;
+		int[] parentIndices;
 		Model[] children;
 		}
 	 ArrayList stack = new ArrayList();
@@ -95,13 +96,16 @@ public class HillClimb extends SynthPanel
     		return (State)(stack.remove(stack.size() - 1));
     	}
     	
-     void pushStack(Model[] parents, Model[] children)
+     void pushStack(int[] parentIndices, Model[] parents, Model[] children)
     	{
     	State state = new State();
     	state.parents = new Model[parents.length];
+    	state.parentIndices = new int[parents.length];
+    	
     	for(int i = 0; i < parents.length; i++)
     		{
     		state.parents[i] = copy(parents[i]);
+    		state.parentIndices[i] = parentIndices[i];
     		}
     	
     	state.children = new Model[children.length];
@@ -653,16 +657,28 @@ public class HillClimb extends SynthPanel
         else if (stackInitial())
         	{
         	initialize(topStack().parents[0], true);
+			ratings[NUM_MODELS][0].setSelected(true);
+			ratings[NUM_MODELS][1].setSelected(true);
+			ratings[NUM_MODELS][2].setSelected(true);
         	}
         else
         	{
-        	popStack();
+        	State state = popStack();
+        	System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
+
+			ratings[NUM_MODELS][0].setSelected(true);
+			ratings[NUM_MODELS][1].setSelected(true);
+			ratings[NUM_MODELS][2].setSelected(true);
+
+			for(int j = 0; j < state.parentIndices.length; j++)
+				{
+				if (state.parentIndices[j] != -1)
+					ratings[state.parentIndices[j]][j].setSelected(true);
+				}
+        
         	climb(false);
         	}
 
-        ratings[NUM_MODELS][0].setSelected(true);
-        ratings[NUM_MODELS][1].setSelected(true);
-        ratings[NUM_MODELS][2].setSelected(true);
         }
         
      void pop()
@@ -681,14 +697,16 @@ public class HillClimb extends SynthPanel
         	{
         	State state = popStack();
         	System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
-        	}
+
+			for(int j = 0; j < state.parentIndices.length; j++)
+				{
+				if (state.parentIndices[j] != -1)
+					ratings[state.parentIndices[j]][j].setSelected(true);
+				}
+			}        
                 
         iterations.setName("Iteration " + stack.size());
         repaint();
-
-        ratings[NUM_MODELS][0].setSelected(true);
-        ratings[NUM_MODELS][1].setSelected(true);
-        ratings[NUM_MODELS][2].setSelected(true);
         }
     
     public void startHillClimbing()
@@ -731,7 +749,7 @@ public class HillClimb extends SynthPanel
         		numMutations++;
         	}
 
-		pushStack(new Model[] { newSeed, newSeed, newSeed}, currentModels);
+		pushStack(new int[] {-1, -1, -1}, new Model[] { newSeed, newSeed, newSeed}, currentModels);
         iterations.setName("Iteration " + stack.size());
         repaint();
 
@@ -896,7 +914,7 @@ public class HillClimb extends SynthPanel
         // A - Z
         currentModels[stage + 13] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
         currentModels[stage + 14] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        currentModels[stage + 15] = a.copy().opposite(random, oldA, keys, 2.0 * recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+        currentModels[stage + 15] = a.copy().opposite(random, oldA, keys, recombination, false).opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         }
         
         shuffle(random, currentModels, NUM_MODELS - 1);
@@ -909,14 +927,14 @@ public class HillClimb extends SynthPanel
         double recombination = blank.getModel().get("recombinationrate", 0) / 100.0;
         double weight = blank.getModel().get("mutationrate", 0) / 100.0;
         
-        Model[] bestModels = new Model[3];
+        int[] bestModels = new int[3];
         
         currentModels[NUM_MODELS - 1] = synth.getModel();
         
         if (determineBest)
             {
             for(int j = 0; j < 3; j++)
-                bestModels[j] = null;
+                bestModels[j] = -1;
                 
             // load the best models
             for(int i = 0; i < NUM_MODELS; i++)
@@ -924,51 +942,51 @@ public class HillClimb extends SynthPanel
                 for(int j = 0; j < 3; j++)
                     {
                     if (ratings[i][j].isSelected())
-                        bestModels[j] = currentModels[i];
+                        bestModels[j] = i;
                     }
                 }
             }
         
-        if (bestModels[0] == null)
+        if (bestModels[0] == -1)
             {
             bestModels[0] = bestModels[1];
             bestModels[1] = bestModels[2];
-            bestModels[2] = null;
+            bestModels[2] = -1;
             }
-        if (bestModels[0] == null)
+        if (bestModels[0] == -1)
             {
             bestModels[0] = bestModels[1];
             bestModels[1] = bestModels[2];
-            bestModels[2] = null;
+            bestModels[2] = -1;
             }
-        if (bestModels[1] == null)
+        if (bestModels[1] == -1)
             {
             bestModels[1] = bestModels[2];
-            bestModels[2] = null;
+            bestModels[2] = -1;
             }
         
         boolean zeroModels = false;     
         Model oldA = topStack().parents[0];
         
-        if (bestModels[0] == null)
+        if (bestModels[0] == -1)
             {
             again();
             zeroModels = true;
             }
-        else if (bestModels[1] == null)
+        else if (bestModels[1] == -1)
             {
-            pushStack(bestModels, currentModels);
-            produce(random, keys, recombination, weight, bestModels[0], oldA);
+            pushStack(bestModels, new Model[] { currentModels[bestModels[0]], null, null }, currentModels);
+            produce(random, keys, recombination, weight, currentModels[bestModels[0]], oldA);
             }
-        else if (bestModels[2] == null)
+        else if (bestModels[2] == -1)
             {
-            pushStack(bestModels, currentModels);
-            produce(random, keys, recombination, weight, bestModels[0], bestModels[1], oldA);
+            pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], null }, currentModels);
+            produce(random, keys, recombination, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], oldA);
             }
         else
             {
-            pushStack(bestModels, currentModels);
-            produce(random, keys, recombination, weight, bestModels[0], bestModels[1], bestModels[2], oldA);
+            pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]] }, currentModels);
+            produce(random, keys, recombination, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]], oldA);
             }
         
         if (!zeroModels)

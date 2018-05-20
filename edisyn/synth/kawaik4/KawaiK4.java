@@ -948,7 +948,7 @@ public class KawaiK4 extends Synth
                 else                    // mute is OFF
                     lsb = (byte)(model.get("s" + (source + 1) + "envelopelevel"));
                 }
-            else if (key.startsWith("s1"))
+            else if (key.startsWith("s1") && !key.equals("s1ams1>s2"))
                 {
                 source = 0;
                 newkey = "s:" + key.substring(2);
@@ -958,7 +958,7 @@ public class KawaiK4 extends Synth
                 source = 1;
                 newkey = "s:" + key.substring(2);
                 }
-            else if (key.startsWith("s3"))
+            else if (key.startsWith("s3") && !key.equals("s3ams3>s4"))
                 {
                 source = 2;
                 newkey = "s:" + key.substring(2);

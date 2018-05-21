@@ -68,7 +68,7 @@ public class KawaiK5 extends Synth
     public static final int[] MINOR_SEVENTH_HARMONICS = { 7, 14, 28, 56 };
     public static final int[] MAJOR_SECOND_HARMONICS = { 9, 18, 36, 72 };
         
-	SynthPanel[] synthPanels = new SynthPanel[6];
+    SynthPanel[] synthPanels = new SynthPanel[6];
 
     public KawaiK5()
         {
@@ -112,7 +112,7 @@ public class KawaiK5 extends Synth
         addTab("General 1", synthPanels[0] = (SynthPanel)soundPanel);
                 
         
-         soundPanel = new SynthPanel(this);
+        soundPanel = new SynthPanel(this);
         vbox = new VBox();
         
         hbox = new HBox();
@@ -266,49 +266,49 @@ public class KawaiK5 extends Synth
         menubar.add(menu);
 
 /*
-        // classic patch names
+// classic patch names
                 
-        JMenu sendParameters = new JMenu("Send Parameters");
-        menu.add(sendParameters);
+JMenu sendParameters = new JMenu("Send Parameters");
+menu.add(sendParameters);
                 
-        String str = getLastX("SendParameters", getSynthName(), true);
-        if (str == null)
-            sendKawaiParametersInBulk = true;
-        else if (str.equalsIgnoreCase("BULK"))
-            sendKawaiParametersInBulk = true;
-        else if (str.equalsIgnoreCase("INDIVIDUALLY"))
-            sendKawaiParametersInBulk = false;
-        else sendKawaiParametersInBulk = true;
+String str = getLastX("SendParameters", getSynthName(), true);
+if (str == null)
+sendKawaiParametersInBulk = true;
+else if (str.equalsIgnoreCase("BULK"))
+sendKawaiParametersInBulk = true;
+else if (str.equalsIgnoreCase("INDIVIDUALLY"))
+sendKawaiParametersInBulk = false;
+else sendKawaiParametersInBulk = true;
 
-        ButtonGroup bg = new ButtonGroup();
+ButtonGroup bg = new ButtonGroup();
 
-        JRadioButtonMenuItem separately = new JRadioButtonMenuItem("Individually");
-        separately.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent evt)
-                {
-                sendKawaiParametersInBulk = false;
-                setLastX("INDIVIDUALLY", "SendParameters", getSynthName(), true);
-                }
-            });
-        sendParameters.add(separately);
-        bg.add(separately);
-        if (sendKawaiParametersInBulk == false) 
-            separately.setSelected(true);
+JRadioButtonMenuItem separately = new JRadioButtonMenuItem("Individually");
+separately.addActionListener(new ActionListener()
+{
+public void actionPerformed(ActionEvent evt)
+{
+sendKawaiParametersInBulk = false;
+setLastX("INDIVIDUALLY", "SendParameters", getSynthName(), true);
+}
+});
+sendParameters.add(separately);
+bg.add(separately);
+if (sendKawaiParametersInBulk == false) 
+separately.setSelected(true);
 
-        JRadioButtonMenuItem bulk = new JRadioButtonMenuItem("In Bulk, Overwriting Patch SID-12");
-        bulk.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent evt)
-                {
-                sendKawaiParametersInBulk = true;
-                setLastX("BULK", "SendParameters", getSynthName(), true);
-                }
-            });
-        sendParameters.add(bulk);
-        bg.add(bulk);
-        if (sendKawaiParametersInBulk == true) 
-            bulk.setSelected(true);
+JRadioButtonMenuItem bulk = new JRadioButtonMenuItem("In Bulk, Overwriting Patch SID-12");
+bulk.addActionListener(new ActionListener()
+{
+public void actionPerformed(ActionEvent evt)
+{
+sendKawaiParametersInBulk = true;
+setLastX("BULK", "SendParameters", getSynthName(), true);
+}
+});
+sendParameters.add(bulk);
+bg.add(bulk);
+if (sendKawaiParametersInBulk == true) 
+bulk.setSelected(true);
 */
 
         menu.add(copy);
@@ -364,8 +364,8 @@ public class KawaiK5 extends Synth
         {
         super.tabChanged();
         boolean isOscillator = (getSelectedTabTitle().startsWith("General") ||
-        						getSelectedTabTitle().startsWith("Harmonics") ||
-        						getSelectedTabTitle().startsWith("Envelopes") );
+            getSelectedTabTitle().startsWith("Harmonics") ||
+            getSelectedTabTitle().startsWith("Envelopes") );
         copy.setEnabled(isOscillator);
         paste.setEnabled(isOscillator);
         copyMutable.setEnabled(isOscillator);
@@ -1692,7 +1692,7 @@ public class KawaiK5 extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Level 4", this, "ddfs" + source + "envseg4level", color, 0, 31);
-       ((LabelledDial)comp).addAdditionalLabel("(Sustain)");
+        ((LabelledDial)comp).addAdditionalLabel("(Sustain)");
         hbox.add(comp);
 
         comp = new LabelledDial("Rate 5", this, "ddfs" + source + "envseg5rate", color, 0, 31);
@@ -1743,8 +1743,8 @@ public class KawaiK5 extends Synth
         VBox vbox = new VBox();
         comp = new CheckBox("Active", this, "ddas" + source + "ddaonoff", false);
         vbox.add(comp); 
-		hbox.add(vbox);
-		
+        hbox.add(vbox);
+                
         comp = new LabelledDial("Velocity", this, "ddas" + source + "attackvelodep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);

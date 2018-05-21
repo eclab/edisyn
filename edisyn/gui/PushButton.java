@@ -64,22 +64,22 @@ public class PushButton extends JPanel
         for(int i = 0; i < options.length; i++)
             {
             if (options[i] == null)
-            	{
-            	pop.addSeparator();
-            	}
+                {
+                pop.addSeparator();
+                }
             else
-            	{
-	            JMenuItem menu = new JMenuItem(options[i]);
-	            final int _i = i;
-	            menu.addActionListener(new ActionListener()
-	                {
-	                public void actionPerformed(ActionEvent e)	
-                    	{
-                   	 	perform(_i);
-                    	}	
-                	});	
-	            pop.add(menu);
-	        	}
+                {
+                JMenuItem menu = new JMenuItem(options[i]);
+                final int _i = i;
+                menu.addActionListener(new ActionListener()
+                    {
+                    public void actionPerformed(ActionEvent e)      
+                        {
+                        perform(_i);
+                        }       
+                    });     
+                pop.add(menu);
+                }
             }
         }
     
@@ -90,9 +90,9 @@ public class PushButton extends JPanel
         for(int i = 0; i < menuItems.length; i++)
             {
             if (menuItems[i] == null)
-            	pop.addSeparator();
+                pop.addSeparator();
             else
-	            pop.add(menuItems[i]);
+                pop.add(menuItems[i]);
             }
         }
     

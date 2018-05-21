@@ -47,23 +47,23 @@ public class HillClimb extends SynthPanel
     {
     /// HILL CLIMBING STACK
     
-	class State
-		{
-		Model[] parents;
-		int[] parentIndices;
-		Model[] children;
-		}
-	 ArrayList stack = new ArrayList();
-	
-	
-	/// NUMBER OF CANDIDATE SOLUTIONS
-	
+    class State
+        {
+        Model[] parents;
+        int[] parentIndices;
+        Model[] children;
+        }
+    ArrayList stack = new ArrayList();
+        
+        
+    /// NUMBER OF CANDIDATE SOLUTIONS
+        
     public static final int NUM_CANDIDATES = 32;
     public static final int ARCHIVE_SIZE = 6;
-	// There are more models than candidates: #17 is the current Model
+    // There are more models than candidates: #17 is the current Model
     public static final int NUM_MODELS = NUM_CANDIDATES + ARCHIVE_SIZE + 1;
     
-	// models currently being played and displayed
+    // models currently being played and displayed
     Model[] currentModels = new Model[NUM_MODELS];
 
     JRadioButton[][] ratings = new JRadioButton[NUM_MODELS + 1][3];
@@ -85,404 +85,404 @@ public class HillClimb extends SynthPanel
     VBox extraCandidates1;
     VBox extraCandidates2;
         
-     State popStack()	
-    	{
-    	if (stack.size() == 0) 
-    		return null;
-    	else
-    		return (State)(stack.remove(stack.size() - 1));
-    	}
-    	
-     void pushStack(int[] parentIndices, Model[] parents, Model[] children)
-    	{
-    	State state = new State();
-    	state.parents = new Model[parents.length];
-    	state.parentIndices = new int[parents.length];
-    	
-    	for(int i = 0; i < parents.length; i++)
-    		{
-    		state.parents[i] = copy(parents[i]);
-    		state.parentIndices[i] = parentIndices[i];
-    		}
-    	
-    	state.children = new Model[children.length];
-    	for(int i = 0; i < children.length; i++)
-    		{
-    		state.children[i] = copy(children[i]);
-    		}
-    		
-    	stack.add(state);
-    	}
-    	
-     State topStack()
-    	{
-    	if (stack.size() == 0) 
-    		return null;
-    	else
-    		return (State)(stack.get(stack.size() - 1));
-    	}
-    	
-     boolean stackEmpty()
-    	{
-    	return (stack.size() == 0);
-    	}
-    	
-     boolean stackInitial()
-    	{
-    	return (stack.size() == 1);
-    	}
+    State popStack()   
+        {
+        if (stack.size() == 0) 
+            return null;
+        else
+            return (State)(stack.remove(stack.size() - 1));
+        }
+        
+    void pushStack(int[] parentIndices, Model[] parents, Model[] children)
+        {
+        State state = new State();
+        state.parents = new Model[parents.length];
+        state.parentIndices = new int[parents.length];
+        
+        for(int i = 0; i < parents.length; i++)
+            {
+            state.parents[i] = copy(parents[i]);
+            state.parentIndices[i] = parentIndices[i];
+            }
+        
+        state.children = new Model[children.length];
+        for(int i = 0; i < children.length; i++)
+            {
+            state.children[i] = copy(children[i]);
+            }
+                
+        stack.add(state);
+        }
+        
+    State topStack()
+        {
+        if (stack.size() == 0) 
+            return null;
+        else
+            return (State)(stack.get(stack.size() - 1));
+        }
+        
+    boolean stackEmpty()
+        {
+        return (stack.size() == 0);
+        }
+        
+    boolean stackInitial()
+        {
+        return (stack.size() == 1);
+        }
     
     String titleForButton(int _i)
-    	{
-    	return "Play " + (_i < 16 ? 
-            		(char)('a' + _i) :
-            		(_i < NUM_CANDIDATES ? 
-            			(char)('A' + (_i - 16)) :
-            			(_i < NUM_MODELS - 1 ?
-            				(char)('q' + (_i - NUM_CANDIDATES)) :
-            					'z')));
-    	}
+        {
+        return "Play " + (_i < 16 ? 
+            (char)('a' + _i) :
+                (_i < NUM_CANDIDATES ? 
+                (char)('A' + (_i - 16)) :
+                    (_i < NUM_MODELS - 1 ?
+                    (char)('q' + (_i - NUM_CANDIDATES)) :
+                    'z')));
+        }
     
     VBox buildCandidate(int i)
-    	{
-            final int _i = i;
+        {
+        final int _i = i;
 
-            VBox vbox = new VBox();
-            plays[_i] = new PushButton(titleForButton(i))
+        VBox vbox = new VBox();
+        plays[_i] = new PushButton(titleForButton(i))
+            {
+            public void perform()
                 {
-                public void perform()
+                if (synth.isSendingTestNotes())
                     {
-                    if (synth.isSendingTestNotes())
-                        {
-                        temporaryPlay = i;
-                        }
-                    else
-                        {
-						for(int j = 0; j < NUM_MODELS; j++)       
-							{
-							plays[j].getButton().setForeground(new JButton().getForeground());
-							plays[j].getButton().setText(titleForButton(i));
-							}
-						plays[_i].getButton().setForeground(Color.RED);
-						plays[_i].getButton().setText("<HTML><B>" + titleForButton(i) + "</b></HTML>");
-
-                        // change the model, send all parameters, maybe play a note,
-                        // and then restore the model.
-                        Model backup = synth.model;
-                        synth.model = currentModels[_i];
-                        synth.sendAllParameters();
-                        synth.doSendTestNote(false);
-                        synth.model = backup;
-                        temporaryPlay = i;
-                        }
-
+                    temporaryPlay = i;
                     }
-                };
-        	plays[i].getButton().setFocusable(false);
-            vbox.add(plays[i]);
+                else
+                    {
+                    for(int j = 0; j < NUM_MODELS; j++)       
+                        {
+                        plays[j].getButton().setForeground(new JButton().getForeground());
+                        plays[j].getButton().setText(titleForButton(i));
+                        }
+                    plays[_i].getButton().setForeground(Color.RED);
+                    plays[_i].getButton().setText("<HTML><B>" + titleForButton(i) + "</b></HTML>");
+
+                    // change the model, send all parameters, maybe play a note,
+                    // and then restore the model.
+                    Model backup = synth.model;
+                    synth.model = currentModels[_i];
+                    synth.sendAllParameters();
+                    synth.doSendTestNote(false);
+                    synth.model = backup;
+                    temporaryPlay = i;
+                    }
+
+                }
+            };
+        plays[i].getButton().setFocusable(false);
+        vbox.add(plays[i]);
 
 
 /*
-           Box b = new Box(BoxLayout.X_AXIS);
-            b.setBackground(Style.BACKGROUND_COLOR());
-            b.add(Box.createGlue());
-            b.add(ratings[i][0] = new JRadioButton("1"));
-        	ratings[i][0].setFocusable(false);
-            ratings[i][0].setForeground(Style.TEXT_COLOR());
-            ratings[i][0].setFont(Style.SMALL_FONT());
-            ratings[i][0].putClientProperty("JComponent.sizeVariant", "small");
-            ratings[i][0].setHorizontalTextPosition(SwingConstants.CENTER);
-			ratings[i][0].setVerticalTextPosition(JRadioButton.TOP);
+  Box b = new Box(BoxLayout.X_AXIS);
+  b.setBackground(Style.BACKGROUND_COLOR());
+  b.add(Box.createGlue());
+  b.add(ratings[i][0] = new JRadioButton("1"));
+  ratings[i][0].setFocusable(false);
+  ratings[i][0].setForeground(Style.TEXT_COLOR());
+  ratings[i][0].setFont(Style.SMALL_FONT());
+  ratings[i][0].putClientProperty("JComponent.sizeVariant", "small");
+  ratings[i][0].setHorizontalTextPosition(SwingConstants.CENTER);
+  ratings[i][0].setVerticalTextPosition(JRadioButton.TOP);
 
-            b.add(ratings[i][1] = new JRadioButton("2"));
-        	ratings[i][1].setFocusable(false);
-            ratings[i][1].setForeground(Style.TEXT_COLOR());
-            ratings[i][1].setFont(Style.SMALL_FONT());
-            ratings[i][1].putClientProperty("JComponent.sizeVariant", "small");
-            ratings[i][1].setHorizontalTextPosition(SwingConstants.CENTER);
-			ratings[i][1].setVerticalTextPosition(JRadioButton.TOP);
+  b.add(ratings[i][1] = new JRadioButton("2"));
+  ratings[i][1].setFocusable(false);
+  ratings[i][1].setForeground(Style.TEXT_COLOR());
+  ratings[i][1].setFont(Style.SMALL_FONT());
+  ratings[i][1].putClientProperty("JComponent.sizeVariant", "small");
+  ratings[i][1].setHorizontalTextPosition(SwingConstants.CENTER);
+  ratings[i][1].setVerticalTextPosition(JRadioButton.TOP);
 
-            b.add(ratings[i][2] = new JRadioButton("3"));
-        	ratings[i][2].setFocusable(false);
-            ratings[i][2].setForeground(Style.TEXT_COLOR());
-            ratings[i][2].setFont(Style.SMALL_FONT());
-            ratings[i][2].putClientProperty("JComponent.sizeVariant", "small");
-            ratings[i][2].setHorizontalTextPosition(SwingConstants.CENTER);
-			ratings[i][2].setVerticalTextPosition(JRadioButton.TOP);
-            b.add(Box.createGlue());
-            vbox.add(b);
+  b.add(ratings[i][2] = new JRadioButton("3"));
+  ratings[i][2].setFocusable(false);
+  ratings[i][2].setForeground(Style.TEXT_COLOR());
+  ratings[i][2].setFont(Style.SMALL_FONT());
+  ratings[i][2].putClientProperty("JComponent.sizeVariant", "small");
+  ratings[i][2].setHorizontalTextPosition(SwingConstants.CENTER);
+  ratings[i][2].setVerticalTextPosition(JRadioButton.TOP);
+  b.add(Box.createGlue());
+  vbox.add(b);
 */            
 
 
-            Box b = new Box(BoxLayout.X_AXIS);
-            b.setBackground(Style.BACKGROUND_COLOR());
-            b.add(Box.createGlue());
-            b.add(ratings[i][0] = new JRadioButton("1"));
-        	ratings[i][0].setFocusable(false);
-            ratings[i][0].setForeground(Style.TEXT_COLOR());
-            ratings[i][0].setFont(Style.SMALL_FONT());
-            ratings[i][0].putClientProperty("JComponent.sizeVariant", "small");
-            b.add(Box.createGlue());
-            vbox.add(b);
+        Box b = new Box(BoxLayout.X_AXIS);
+        b.setBackground(Style.BACKGROUND_COLOR());
+        b.add(Box.createGlue());
+        b.add(ratings[i][0] = new JRadioButton("1"));
+        ratings[i][0].setFocusable(false);
+        ratings[i][0].setForeground(Style.TEXT_COLOR());
+        ratings[i][0].setFont(Style.SMALL_FONT());
+        ratings[i][0].putClientProperty("JComponent.sizeVariant", "small");
+        b.add(Box.createGlue());
+        vbox.add(b);
                         
-            b = new Box(BoxLayout.X_AXIS);
-            b.setBackground(Style.BACKGROUND_COLOR());
-            b.add(Box.createGlue());
-            b.add(ratings[i][1] = new JRadioButton("2"));
-        	ratings[i][1].setFocusable(false);
-            ratings[i][1].setForeground(Style.TEXT_COLOR());
-            ratings[i][1].setFont(Style.SMALL_FONT());
-            ratings[i][1].putClientProperty("JComponent.sizeVariant", "small");
-            b.add(Box.createGlue());
-            vbox.add(b);
+        b = new Box(BoxLayout.X_AXIS);
+        b.setBackground(Style.BACKGROUND_COLOR());
+        b.add(Box.createGlue());
+        b.add(ratings[i][1] = new JRadioButton("2"));
+        ratings[i][1].setFocusable(false);
+        ratings[i][1].setForeground(Style.TEXT_COLOR());
+        ratings[i][1].setFont(Style.SMALL_FONT());
+        ratings[i][1].putClientProperty("JComponent.sizeVariant", "small");
+        b.add(Box.createGlue());
+        vbox.add(b);
                         
-            b = new Box(BoxLayout.X_AXIS);
-            b.setBackground(Style.BACKGROUND_COLOR());
-            b.add(Box.createGlue());
-            b.add(ratings[i][2] = new JRadioButton("3"));
-        	ratings[i][2].setFocusable(false);
-            ratings[i][2].setForeground(Style.TEXT_COLOR());
-            ratings[i][2].setFont(Style.SMALL_FONT());
-            ratings[i][2].putClientProperty("JComponent.sizeVariant", "small");
-            b.add(Box.createGlue());
-            vbox.add(b);
+        b = new Box(BoxLayout.X_AXIS);
+        b.setBackground(Style.BACKGROUND_COLOR());
+        b.add(Box.createGlue());
+        b.add(ratings[i][2] = new JRadioButton("3"));
+        ratings[i][2].setFocusable(false);
+        ratings[i][2].setForeground(Style.TEXT_COLOR());
+        ratings[i][2].setFont(Style.SMALL_FONT());
+        ratings[i][2].putClientProperty("JComponent.sizeVariant", "small");
+        b.add(Box.createGlue());
+        vbox.add(b);
 /* */          
             
-            JMenuItem[] doItems = new JMenuItem[13];
-            doItems[0] = new JMenuItem("Keep Patch");
-            doItems[0].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-                    // Keep for sure?
-                    if (synth.showSimpleConfirm("Keep Patch", "Load Patch into Editor?"))
-                        {
-                        synth.tabs.setSelectedIndex(0);
-                        synth.setSendMIDI(false);
-                        // push to undo if they're not the same
-                        if (!currentModels[_i].keyEquals(synth.getModel()))
-                            synth.undo.push(synth.getModel());
+        JMenuItem[] doItems = new JMenuItem[13];
+        doItems[0] = new JMenuItem("Keep Patch");
+        doItems[0].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                // Keep for sure?
+                if (synth.showSimpleConfirm("Keep Patch", "Load Patch into Editor?"))
+                    {
+                    synth.tabs.setSelectedIndex(0);
+                    synth.setSendMIDI(false);
+                    // push to undo if they're not the same
+                    if (!currentModels[_i].keyEquals(synth.getModel()))
+                        synth.undo.push(synth.getModel());
                                         
-                        // Load into the current model
-                        currentModels[_i].copyValuesTo(synth.getModel());
-                        synth.setSendMIDI(true);
-                        synth.sendAllParameters();
-                        }
-            		}
-            	});
-            if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
-            	doItems[0].setEnabled(false);
+                    // Load into the current model
+                    currentModels[_i].copyValuesTo(synth.getModel());
+                    synth.setSendMIDI(true);
+                    synth.sendAllParameters();
+                    }
+                }
+            });
+        if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
+            doItems[0].setEnabled(false);
 
-            doItems[1] = new JMenuItem("Edit Patch");
-            doItems[1].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		Synth newSynth = synth.doDuplicateSynth();
-            		// Copy the parameters forward into the synth, then
-            		// link the synth's model back to currentModels[_i].
-            		// We do this because the new synth's widgets are registered
-            		// with its model, so we can't just replace the model.
-            		// But we can certainly replace currentModels[_i]!
-                    newSynth.setSendMIDI(false);
-                    currentModels[_i].copyValuesTo(newSynth.getModel());
-                    newSynth.setSendMIDI(true);
-            		currentModels[_i] = newSynth.getModel();
-            		newSynth.sendAllParameters();
-            		}
-            	});
-            if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
-            	doItems[1].setEnabled(false);
+        doItems[1] = new JMenuItem("Edit Patch");
+        doItems[1].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                Synth newSynth = synth.doDuplicateSynth();
+                // Copy the parameters forward into the synth, then
+                // link the synth's model back to currentModels[_i].
+                // We do this because the new synth's widgets are registered
+                // with its model, so we can't just replace the model.
+                // But we can certainly replace currentModels[_i]!
+                newSynth.setSendMIDI(false);
+                currentModels[_i].copyValuesTo(newSynth.getModel());
+                newSynth.setSendMIDI(true);
+                currentModels[_i] = newSynth.getModel();
+                newSynth.sendAllParameters();
+                }
+            });
+        if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
+            doItems[1].setEnabled(false);
 
-            doItems[2] = new JMenuItem("Save to File");
-            doItems[2].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		Model backup = synth.model;
-	                synth.model = currentModels[_i];
-	                synth.doSaveAs("" + stack.size() + "." + 
-	                	(_i < NUM_CANDIDATES ? (_i + 1) : ("A" + (_i - NUM_CANDIDATES + 1))) +
-	                 	"." + synth.getPatchName(synth.getModel()) + ".syx");
-	                synth.model = backup;
-	                synth.updateTitle();
-	                }
-            	});
-            if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
-            	doItems[2].setEnabled(false);
+        doItems[2] = new JMenuItem("Save to File");
+        doItems[2].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                Model backup = synth.model;
+                synth.model = currentModels[_i];
+                synth.doSaveAs("" + stack.size() + "." + 
+                    (_i < NUM_CANDIDATES ? (_i + 1) : ("A" + (_i - NUM_CANDIDATES + 1))) +
+                    "." + synth.getPatchName(synth.getModel()) + ".syx");
+                synth.model = backup;
+                synth.updateTitle();
+                }
+            });
+        if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
+            doItems[2].setEnabled(false);
 
-            doItems[3] = new JMenuItem("Load from File");
-            doItems[3].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		Model backup = synth.model;
-	                synth.model = currentModels[_i];
-	                synth.doOpen(false);
-	                currentModels[_i] = synth.model;
-	                synth.model = backup;
-	                synth.updateTitle();
-            		}
-            	});
-            if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
-            	doItems[3].setEnabled(false);
+        doItems[3] = new JMenuItem("Load from File");
+        doItems[3].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                Model backup = synth.model;
+                synth.model = currentModels[_i];
+                synth.doOpen(false);
+                currentModels[_i] = synth.model;
+                synth.model = backup;
+                synth.updateTitle();
+                }
+            });
+        if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
+            doItems[3].setEnabled(false);
             
-            doItems[4] = null;
+        doItems[4] = null;
             
-            doItems[5] = new JMenuItem("Nudge Candidates to Me");
-            doItems[5].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-			        Random random = synth.random;
-        			String[] keys = synth.getMutationKeys();
-        			double recombination = blank.getModel().get("recombinationrate", 0) / 100.0;
+        doItems[5] = new JMenuItem("Nudge Candidates to Me");
+        doItems[5].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                Random random = synth.random;
+                String[] keys = synth.getMutationKeys();
+                double recombination = blank.getModel().get("recombinationrate", 0) / 100.0;
 
-            		for(int i = 0; i < NUM_CANDIDATES; i++)
-            			{
-            			if (i == _i) continue;
-	            		currentModels[i].recombine(random, currentModels[_i], keys, synth.nudgeRecombinationWeight).mutate(random, keys, synth.nudgeMutationWeight);
-	            		}
-            		}
-            	});
+                for(int i = 0; i < NUM_CANDIDATES; i++)
+                    {
+                    if (i == _i) continue;
+                    currentModels[i].recombine(random, currentModels[_i], keys, synth.nudgeRecombinationWeight).mutate(random, keys, synth.nudgeMutationWeight);
+                    }
+                }
+            });
 
-           doItems[6] = null;
+        doItems[6] = null;
 
-            doItems[7] = new JMenuItem("Archive 1");
-            doItems[7].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		currentModels[NUM_CANDIDATES + 0] = (Model)(currentModels[_i].clone());
-            		}
-            	});
+        doItems[7] = new JMenuItem("Archive 1");
+        doItems[7].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                currentModels[NUM_CANDIDATES + 0] = (Model)(currentModels[_i].clone());
+                }
+            });
 
-            doItems[8] = new JMenuItem("Archive 2");
-            doItems[8].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		currentModels[NUM_CANDIDATES + 1] = (Model)(currentModels[_i].clone());
-            		}
-            	});
+        doItems[8] = new JMenuItem("Archive 2");
+        doItems[8].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                currentModels[NUM_CANDIDATES + 1] = (Model)(currentModels[_i].clone());
+                }
+            });
 
-            doItems[9] = new JMenuItem("Archive 3");
-            doItems[9].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		currentModels[NUM_CANDIDATES + 2] = (Model)(currentModels[_i].clone());
-            		}
-            	});
+        doItems[9] = new JMenuItem("Archive 3");
+        doItems[9].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                currentModels[NUM_CANDIDATES + 2] = (Model)(currentModels[_i].clone());
+                }
+            });
 
-            doItems[10] = new JMenuItem("Archive 4");
-            doItems[10].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		currentModels[NUM_CANDIDATES + 3] = (Model)(currentModels[_i].clone());
-            		}
-            	});
-            	
-            doItems[11] = new JMenuItem("Archive 5");
-            doItems[11].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		currentModels[NUM_CANDIDATES + 4] = (Model)(currentModels[_i].clone());
-            		}
-            	});
-            	
-            doItems[12] = new JMenuItem("Archive 6");
-            doItems[12].addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed(ActionEvent e)
-            		{
-            		currentModels[NUM_CANDIDATES + 5] = (Model)(currentModels[_i].clone());
-            		}
-            	});
+        doItems[10] = new JMenuItem("Archive 4");
+        doItems[10].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                currentModels[NUM_CANDIDATES + 3] = (Model)(currentModels[_i].clone());
+                }
+            });
+                
+        doItems[11] = new JMenuItem("Archive 5");
+        doItems[11].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                currentModels[NUM_CANDIDATES + 4] = (Model)(currentModels[_i].clone());
+                }
+            });
+                
+        doItems[12] = new JMenuItem("Archive 6");
+        doItems[12].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                currentModels[NUM_CANDIDATES + 5] = (Model)(currentModels[_i].clone());
+                }
+            });
             
-            PushButton options = new PushButton("Options", doItems);
-        	options.getButton().setFocusable(false);
-            vbox.add(options);
+        PushButton options = new PushButton("Options", doItems);
+        options.getButton().setFocusable(false);
+        vbox.add(options);
         
-        	return vbox;
-        	}
-    	
+        return vbox;
+        }
+        
         
     public HillClimb(Synth synth)
         {
         super(synth);
         
-    addAncestorListener ( new AncestorListener ()
-    {
-        public void ancestorAdded ( AncestorEvent event )
-        {
-		requestFocusInWindow();
-        }
+        addAncestorListener ( new AncestorListener ()
+            {
+            public void ancestorAdded ( AncestorEvent event )
+                {
+                requestFocusInWindow();
+                }
 
-        public void ancestorRemoved ( AncestorEvent event )
-        {
-        // will get removed
-        }
+            public void ancestorRemoved ( AncestorEvent event )
+                {
+                // will get removed
+                }
 
-        public void ancestorMoved ( AncestorEvent event )
-        {
-        // don't care
-        }
-    } );
-    setFocusable(true);
+            public void ancestorMoved ( AncestorEvent event )
+                {
+                // don't care
+                }
+            } );
+        setFocusable(true);
     
-    addKeyListener(new KeyListener()
-    	{
-    	public void keyPressed(KeyEvent e)
-    		{
-    		}
-    	public void keyReleased(KeyEvent e)
-    		{
-    		}
-    	public void keyTyped(KeyEvent e)
-    		{
-			char c = e.getKeyChar();
-			
-			if (c >= 'a' && c <= 'p')
-				{
-				int p = (int)(c - 'a');
-				plays[p].perform();
-				}
-			else if (c >= 'A' && c <= 'P' && NUM_CANDIDATES == 32)
-				{
-				int p = (int)(c - 'A' + 16);
-				plays[p].perform();
-				}
-			else if ((c >= 'q' && c <= 'v'))
-				{
-				int p = (int)(c - 'q' + NUM_CANDIDATES);
-				plays[p].perform();				
-				}
-			else if (c =='z')
-				{
-				int p = (int)(NUM_MODELS - 1);
-				plays[p].perform();				
-				}
-			else if (c == ' ')
-				{
-				climb.perform();
-				}
-			else if (c == KeyEvent.VK_BACK_SPACE)
-				{
-				back.perform();
-				}
-			else if (c == KeyEvent.VK_ENTER)
-				{
-				retry.perform();
-				}
-			else if (c >= '1' && c <= '3')
-				{
-				ratings[lastPlayedSound()][(int)(c - '1')].setSelected(true);
-				}
-    		}
-    	});
+        addKeyListener(new KeyListener()
+            {
+            public void keyPressed(KeyEvent e)
+                {
+                }
+            public void keyReleased(KeyEvent e)
+                {
+                }
+            public void keyTyped(KeyEvent e)
+                {
+                char c = e.getKeyChar();
+                        
+                if (c >= 'a' && c <= 'p')
+                    {
+                    int p = (int)(c - 'a');
+                    plays[p].perform();
+                    }
+                else if (c >= 'A' && c <= 'P' && NUM_CANDIDATES == 32)
+                    {
+                    int p = (int)(c - 'A' + 16);
+                    plays[p].perform();
+                    }
+                else if ((c >= 'q' && c <= 'v'))
+                    {
+                    int p = (int)(c - 'q' + NUM_CANDIDATES);
+                    plays[p].perform();                             
+                    }
+                else if (c =='z')
+                    {
+                    int p = (int)(NUM_MODELS - 1);
+                    plays[p].perform();                             
+                    }
+                else if (c == ' ')
+                    {
+                    climb.perform();
+                    }
+                else if (c == KeyEvent.VK_BACK_SPACE)
+                    {
+                    back.perform();
+                    }
+                else if (c == KeyEvent.VK_ENTER)
+                    {
+                    retry.perform();
+                    }
+                else if (c >= '1' && c <= '3')
+                    {
+                    ratings[lastPlayedSound()][(int)(c - '1')].setSelected(true);
+                    }
+                }
+            });
     
         ButtonGroup one = new ButtonGroup();
         ButtonGroup two = new ButtonGroup();
@@ -518,15 +518,15 @@ public class HillClimb extends SynthPanel
         climb.getButton().setPreferredSize(back.getButton().getPreferredSize());
         climb.getButton().setFocusable(false);
                 
-     	reset = new PushButton("Reset")
+        reset = new PushButton("Reset")
             {
             public void perform()
                 {
                 if (synth.showSimpleConfirm("Reset", "Are you sure you want to reset the Hill-Climber?"))
-                	{
-	                initialize((Model)(synth.getModel().clone()), true);
-	                resetCurrentPlay();
-	                }
+                    {
+                    initialize((Model)(synth.getModel().clone()), true);
+                    resetCurrentPlay();
+                    }
                 }
             };
         reset.getButton().setPreferredSize(back.getButton().getPreferredSize());
@@ -549,34 +549,34 @@ public class HillClimb extends SynthPanel
         vbox.add(back);
         vbox.add(reset);
         
-		HBox iterationsBox = new HBox();
+        HBox iterationsBox = new HBox();
         iterationsBox.add(vbox);
 
         blank = new Blank();
         blank.getModel().set("recombinationrate", INITIAL_RECOMBINATION_RATE);
 
-		vbox = new VBox();
-		
-		bigger = new JCheckBox("Bigger");
+        vbox = new VBox();
+                
+        bigger = new JCheckBox("Bigger");
         bigger.setFocusable(false);
         bigger.setForeground(Style.TEXT_COLOR());
         bigger.setFont(Style.SMALL_FONT());
         bigger.putClientProperty("JComponent.sizeVariant", "small");
         
-		bigger.addActionListener(new ActionListener()
-			{
-			public void actionPerformed(ActionEvent e)
-				{
-				candidates.remove(extraCandidates1);
-				candidates.remove(extraCandidates2);
-				if (bigger.isSelected())
-					{
-					candidates.add(extraCandidates1);
-					candidates.add(extraCandidates2);
-					}
-				candidates.revalidate();
-				candidates.repaint();
-				}
+        bigger.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                candidates.remove(extraCandidates1);
+                candidates.remove(extraCandidates2);
+                if (bigger.isSelected())
+                    {
+                    candidates.add(extraCandidates1);
+                    candidates.add(extraCandidates2);
+                    }
+                candidates.revalidate();
+                candidates.repaint();
+                }
             });
         bigger.setSelected(false);
         HBox eb = new HBox();
@@ -597,10 +597,10 @@ public class HillClimb extends SynthPanel
         HBox hbox = new HBox();
         panel.add(hbox);
         for(int i = 0; i < ARCHIVE_SIZE; i++)
-        	{
-        	vbox = buildCandidate(NUM_CANDIDATES + i);
-        	hbox.add(vbox);
-        	}
+            {
+            vbox = buildCandidate(NUM_CANDIDATES + i);
+            hbox.add(vbox);
+            }
         toprow.add(panel);
         
         // Add Current 
@@ -622,23 +622,23 @@ public class HillClimb extends SynthPanel
         candidates = new VBox();
         for(int i = 0; i < NUM_CANDIDATES; i++)
             {
-			vbox = buildCandidate(i);
-			hbox.add(vbox);
+            vbox = buildCandidate(i);
+            hbox.add(vbox);
 
             if (i % 8 == 7)
                 {
                 VBox vv = new VBox();
                 if (i != 7)
-	                vv.add(Strut.makeVerticalStrut(20));
+                    vv.add(Strut.makeVerticalStrut(20));
                 vv.add(hbox);
                 hbox = new HBox();
-			
- 			if (i == 23)
-				extraCandidates1 = vv;
-			else if (i == 31)
-				extraCandidates2 = vv;
-			else
-				candidates.add(vv);
+                        
+                if (i == 23)
+                    extraCandidates1 = vv;
+                else if (i == 31)
+                    extraCandidates2 = vv;
+                else
+                    candidates.add(vv);
                 }
             }
 
@@ -703,11 +703,11 @@ public class HillClimb extends SynthPanel
             three.add(ratings[i][2]);
             }                
     
-    	for(int i = NUM_CANDIDATES; i < NUM_CANDIDATES + ARCHIVE_SIZE; i++)
-    		{
-    		currentModels[i] = (Model)(synth.getModel().clone());
-    		}
-    	currentModels[NUM_CANDIDATES + ARCHIVE_SIZE] = synth.getModel();
+        for(int i = NUM_CANDIDATES; i < NUM_CANDIDATES + ARCHIVE_SIZE; i++)
+            {
+            currentModels[i] = (Model)(synth.getModel().clone());
+            }
+        currentModels[NUM_CANDIDATES + ARCHIVE_SIZE] = synth.getModel();
         }
         
     
@@ -734,46 +734,46 @@ public class HillClimb extends SynthPanel
                 for(int i = 0; i < NUM_MODELS; i++)       
                     {
                     plays[i].getButton().setForeground(new JButton().getForeground());
-					plays[i].getButton().setText(titleForButton(i));
+                    plays[i].getButton().setText(titleForButton(i));
                     }
-				if (temporaryPlay >= 0)
-					{
-					plays[temporaryPlay].getButton().setForeground(Color.RED);
-					plays[temporaryPlay].getButton().setText("<HTML><B>" + titleForButton(temporaryPlay) + "</b></HTML>");
-					backup = synth.model;
-					synth.model = currentModels[temporaryPlay];
-					synth.sendAllParameters();
-					temporaryPlay = -1;
-					}
-				else
-					{
-					currentPlay++;
-					if (currentPlay >= NUM_CANDIDATES ||
-						currentPlay >= 16 && !bigger.isSelected())
-						currentPlay = 0;
-					plays[currentPlay].getButton().setForeground(Color.RED);
-					plays[currentPlay].getButton().setText("<HTML><B>" + titleForButton(currentPlay) + "</b></HTML>");
+                if (temporaryPlay >= 0)
+                    {
+                    plays[temporaryPlay].getButton().setForeground(Color.RED);
+                    plays[temporaryPlay].getButton().setText("<HTML><B>" + titleForButton(temporaryPlay) + "</b></HTML>");
+                    backup = synth.model;
+                    synth.model = currentModels[temporaryPlay];
+                    synth.sendAllParameters();
+                    temporaryPlay = -1;
+                    }
+                else
+                    {
+                    currentPlay++;
+                    if (currentPlay >= NUM_CANDIDATES ||
+                        currentPlay >= 16 && !bigger.isSelected())
+                        currentPlay = 0;
+                    plays[currentPlay].getButton().setForeground(Color.RED);
+                    plays[currentPlay].getButton().setText("<HTML><B>" + titleForButton(currentPlay) + "</b></HTML>");
 
-					// change the model, send all parameters, maybe play a note,
-					// and then restore the model.
-					backup = synth.model;
-					synth.model = currentModels[currentPlay];
-					synth.sendAllParameters();
-					}
+                    // change the model, send all parameters, maybe play a note,
+                    // and then restore the model.
+                    backup = synth.model;
+                    synth.model = currentModels[currentPlay];
+                    synth.sendAllParameters();
+                    }
                 }
             }
         }
       
     int lastPlayedSound()
-    	{
-    	if (temporaryPlay >=0)
-    		return temporaryPlay;
-    	else return currentPlay;
-    	} 
+        {
+        if (temporaryPlay >=0)
+            return temporaryPlay;
+        else return currentPlay;
+        } 
                 
     public void postUpdateSound()
         {
-    	repaint();
+        repaint();
         if (backup!= null)
             synth.model = backup;
         backup = null;
@@ -816,87 +816,87 @@ public class HillClimb extends SynthPanel
         }
                         
     Model copy(Model model)
-    	{
-    	if (model != null)
-    		return model.copy();
-    	else return null;
-    	}
-    	
-     void again()
+        {
+        if (model != null)
+            return model.copy();
+        else return null;
+        }
+        
+    void again()
         {
         if (stackEmpty())
-        	{
-        	// uh oh...
-        	System.err.println("EMPTY STACK!");
-        	return;
-        	}
+            {
+            // uh oh...
+            System.err.println("EMPTY STACK!");
+            return;
+            }
         else if (stackInitial())
-        	{
-        	initialize(topStack().parents[0], true);
-			ratings[NUM_MODELS][0].setSelected(true);
-			ratings[NUM_MODELS][1].setSelected(true);
-			ratings[NUM_MODELS][2].setSelected(true);
-        	}
+            {
+            initialize(topStack().parents[0], true);
+            ratings[NUM_MODELS][0].setSelected(true);
+            ratings[NUM_MODELS][1].setSelected(true);
+            ratings[NUM_MODELS][2].setSelected(true);
+            }
         else
-        	{
-        	State state = popStack();
-        	System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
+            {
+            State state = popStack();
+            System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
 
-			ratings[NUM_MODELS][0].setSelected(true);
-			ratings[NUM_MODELS][1].setSelected(true);
-			ratings[NUM_MODELS][2].setSelected(true);
+            ratings[NUM_MODELS][0].setSelected(true);
+            ratings[NUM_MODELS][1].setSelected(true);
+            ratings[NUM_MODELS][2].setSelected(true);
 
-			for(int j = 0; j < state.parentIndices.length; j++)
-				{
-				if (state.parentIndices[j] != -1)
-					ratings[state.parentIndices[j]][j].setSelected(true);
-				}
+            for(int j = 0; j < state.parentIndices.length; j++)
+                {
+                if (state.parentIndices[j] != -1)
+                    ratings[state.parentIndices[j]][j].setSelected(true);
+                }
         
-        	climb(false);
-        	}
+            climb(false);
+            }
 
         }
         
-     void pop()
+    void pop()
         {
         if (stackEmpty())
-        	{
-        	// uh oh...
-        	System.err.println("EMPTY STACK!");
-        	return;
-        	}
+            {
+            // uh oh...
+            System.err.println("EMPTY STACK!");
+            return;
+            }
         else if (stackInitial())
-        	{
-        	// do nothing
-        	}
+            {
+            // do nothing
+            }
         else
-        	{
-        	State state = popStack();
-        	System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
+            {
+            State state = popStack();
+            System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
 
-			for(int j = 0; j < state.parentIndices.length; j++)
-				{
-				if (state.parentIndices[j] != -1)
-					ratings[state.parentIndices[j]][j].setSelected(true);
-				}
-			}        
+            for(int j = 0; j < state.parentIndices.length; j++)
+                {
+                if (state.parentIndices[j] != -1)
+                    ratings[state.parentIndices[j]][j].setSelected(true);
+                }
+            }        
                 
         iterations.setName("Iteration " + stack.size());
         repaint();
         }
     
     public void startHillClimbing()
-    	{
-    	for(int i = NUM_CANDIDATES; i < NUM_CANDIDATES + ARCHIVE_SIZE; i++)
-    		{
-    		currentModels[i] = (Model)(synth.getModel().clone());
-    		}	
-    	currentModels[NUM_CANDIDATES + ARCHIVE_SIZE] = synth.getModel();
-    	
-    	initialize(synth.getModel(), true);
-    	}
+        {
+        for(int i = NUM_CANDIDATES; i < NUM_CANDIDATES + ARCHIVE_SIZE; i++)
+            {
+            currentModels[i] = (Model)(synth.getModel().clone());
+            }       
+        currentModels[NUM_CANDIDATES + ARCHIVE_SIZE] = synth.getModel();
+        
+        initialize(synth.getModel(), true);
+        }
     
- 	void initialize(Model seed, boolean clear)
+    void initialize(Model seed, boolean clear)
         {
         // we need a model with NO callbacks
         Model newSeed = seed.copy();
@@ -915,17 +915,17 @@ public class HillClimb extends SynthPanel
         int numMutations = 1;
         
         for(int i = 0; i < NUM_CANDIDATES; i++)
-        	{
-        	currentModels[i] = newSeed.copy();
-        	for(int j = 0; j < numMutations; j++)
-        		{
-        		currentModels[i] = currentModels[i].mutate(random, keys, mutationWeight);
-        		}
-        	if (i % 4 == 3)
-        		numMutations++;
-        	}
+            {
+            currentModels[i] = newSeed.copy();
+            for(int j = 0; j < numMutations; j++)
+                {
+                currentModels[i] = currentModels[i].mutate(random, keys, mutationWeight);
+                }
+            if (i % 4 == 3)
+                numMutations++;
+            }
 
-		pushStack(new int[] {-1, -1, -1}, new Model[] { newSeed, newSeed, newSeed}, currentModels);
+        pushStack(new int[] {-1, -1, -1}, new Model[] { newSeed, newSeed, newSeed}, currentModels);
         iterations.setName("Iteration " + stack.size());
         repaint();
 
@@ -947,17 +947,17 @@ public class HillClimb extends SynthPanel
 
     public static final double MUTATION_WEIGHT = 1.0;
     
- void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA)
-    	{
-    	int numStages = NUM_CANDIDATES / 16;
-    	
-    	for(int i = 0; i < numStages; i++)
-    		{
-    		produce(random, keys, recombination, weight, a, b, c, oldA, i);
-    		}
-    	}
+    void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA)
+        {
+        int numStages = NUM_CANDIDATES / 16;
         
- void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA, int stage)
+        for(int i = 0; i < numStages; i++)
+            {
+            produce(random, keys, recombination, weight, a, b, c, oldA, i);
+            }
+        }
+        
+    void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA, int stage)
         {
         double mutationWeight = (stage + 1) * MUTATION_WEIGHT * weight;
         
@@ -979,39 +979,39 @@ public class HillClimb extends SynthPanel
         currentModels[stage + 7] = c.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
 
         if ((stage + 8) < currentModels.length)
-        {
-        // A - Z
-        currentModels[stage + 8] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
-        // B - A
-        currentModels[stage + 9] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        // C - A
-        currentModels[stage + 10] = c.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        // B - C
-        currentModels[stage + 11] = b.copy().opposite(random, c, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        // C - B
-        currentModels[stage + 12] = c.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        // B - Z
-        currentModels[stage + 13] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
-        // C - Z
-        currentModels[stage + 14] = c.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
-        // B + C
-        currentModels[stage + 15] = b.copy().recombine(random, c, keys, recombination).mutate(random, keys, mutationWeight);
-        }
+            {
+            // A - Z
+            currentModels[stage + 8] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
+            // B - A
+            currentModels[stage + 9] = b.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            // C - A
+            currentModels[stage + 10] = c.copy().opposite(random, a, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            // B - C
+            currentModels[stage + 11] = b.copy().opposite(random, c, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            // C - B
+            currentModels[stage + 12] = c.copy().opposite(random, b, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            // B - Z
+            currentModels[stage + 13] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
+            // C - Z
+            currentModels[stage + 14] = c.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
+            // B + C
+            currentModels[stage + 15] = b.copy().recombine(random, c, keys, recombination).mutate(random, keys, mutationWeight);
+            }
         
         shuffle(random, currentModels, NUM_MODELS - 1);
         }
         
-     void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA)
-    	{
-    	int numStages = NUM_CANDIDATES / 16;
-    	
-    	for(int i = 0; i < numStages; i++)
-    		{
-    		produce(random, keys, recombination, weight, a, b, oldA, i);
-    		}
-    	}
+    void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA)
+        {
+        int numStages = NUM_CANDIDATES / 16;
         
-     void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA, int stage)
+        for(int i = 0; i < numStages; i++)
+            {
+            produce(random, keys, recombination, weight, a, b, oldA, i);
+            }
+        }
+        
+    void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA, int stage)
         {
         double mutationWeight = (stage + 1) * MUTATION_WEIGHT * weight;
         
@@ -1032,40 +1032,40 @@ public class HillClimb extends SynthPanel
         currentModels[stage + 7] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
 
         if ((stage + 8) < currentModels.length)
-        {
-        currentModels[stage + 8] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            {
+            currentModels[stage + 8] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         
-        // B - Z
-        currentModels[stage + 9] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
-        currentModels[stage + 10] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            // B - Z
+            currentModels[stage + 9] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
+            currentModels[stage + 10] = b.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
 
-        // (A - Z) + (B - Z)
-        currentModels[stage + 11] = a.copy().opposite(random, oldA, keys, recombination, false).recombine(random, 
-            b.copy().opposite(random, oldA, keys, recombination, false), keys, recombination).mutate(random, keys, mutationWeight);
+            // (A - Z) + (B - Z)
+            currentModels[stage + 11] = a.copy().opposite(random, oldA, keys, recombination, false).recombine(random, 
+                b.copy().opposite(random, oldA, keys, recombination, false), keys, recombination).mutate(random, keys, mutationWeight);
 
-        // A
-        currentModels[stage + 12] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        currentModels[stage + 13] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            // A
+            currentModels[stage + 12] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            currentModels[stage + 13] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         
-        // B
-        currentModels[stage + 14] = b.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        currentModels[stage + 15] = b.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        }
+            // B
+            currentModels[stage + 14] = b.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            currentModels[stage + 15] = b.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            }
         
         shuffle(random, currentModels, NUM_MODELS - 1);
         }
                 
-     void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA)
-    	{
-    	int numStages = NUM_CANDIDATES / 16;
-    	
-    	for(int i = 0; i < numStages; i++)
-    		{
-    		produce(random, keys, recombination, weight, a, oldA, i);
-    		}
-    	}
+    void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA)
+        {
+        int numStages = NUM_CANDIDATES / 16;
         
-     void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA, int stage)
+        for(int i = 0; i < numStages; i++)
+            {
+            produce(random, keys, recombination, weight, a, oldA, i);
+            }
+        }
+        
+    void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA, int stage)
         {
         double mutationWeight = (stage + 1) * MUTATION_WEIGHT * weight;
         
@@ -1080,23 +1080,23 @@ public class HillClimb extends SynthPanel
         currentModels[stage + 7] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         
         if ((stage + 8) < currentModels.length)
-        {
-		currentModels[stage + 8] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        currentModels[stage + 9] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        currentModels[stage + 10] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        currentModels[stage + 11] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        currentModels[stage + 12] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            {
+            currentModels[stage + 8] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            currentModels[stage + 9] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            currentModels[stage + 10] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            currentModels[stage + 11] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            currentModels[stage + 12] = a.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
         
-        // A - Z
-        currentModels[stage + 13] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
-        currentModels[stage + 14] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        currentModels[stage + 15] = a.copy().opposite(random, oldA, keys, recombination, false).opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
-        }
+            // A - Z
+            currentModels[stage + 13] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight);
+            currentModels[stage + 14] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            currentModels[stage + 15] = a.copy().opposite(random, oldA, keys, recombination, false).opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
+            }
         
         shuffle(random, currentModels, NUM_MODELS - 1);
         }
              
-     void climb(boolean determineBest)
+    void climb(boolean determineBest)
         {
         Random random = synth.random;
         String[] keys = synth.getMutationKeys();

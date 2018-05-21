@@ -919,14 +919,14 @@ public class YamahaDX7 extends Synth
                 vbox.setBackground(color);
                 vbox.add(new JLabel("   "));
                 if (isParsingForMerge())
-                	{
-                	vbox.add(new JLabel("<html>A Bank Sysex has been received.</html>"));
-                	}
+                    {
+                    vbox.add(new JLabel("<html>A Bank Sysex has been received.</html>"));
+                    }
                 else
-                	{
-	                vbox.add(new JLabel("<html>A Bank Sysex has been received.  You can <b>save</b> the sysex to a file,</html>"));
-	                vbox.add(new JLabel("<html><b>write</b> the sysex to the synth, or <b>edit</b> a patch from the list below.</html>"));
-	                }
+                    {
+                    vbox.add(new JLabel("<html>A Bank Sysex has been received.  You can <b>save</b> the sysex to a file,</html>"));
+                    vbox.add(new JLabel("<html><b>write</b> the sysex to the synth, or <b>edit</b> a patch from the list below.</html>"));
+                    }
                 vbox.add(new JLabel("   "));
                 hbox.addLast(vbox);
                 vbox = new VBox();
@@ -937,11 +937,11 @@ public class YamahaDX7 extends Synth
                   
                 int result = 0;
                 if (isParsingForMerge())
-                	{
-        			result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Merge Patch", "Cancel" }, "Merge Patch");
-                	if (result > 0) result = 3;  // make it a "cancel"
-                	}
-        		else result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Edit Patch" , "Save Bank", "Write Bank", "Cancel" }, "Edit Patch");
+                    {
+                    result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Merge Patch", "Cancel" }, "Merge Patch");
+                    if (result > 0) result = 3;  // make it a "cancel"
+                    }
+                else result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Edit Patch" , "Save Bank", "Write Bank", "Cancel" }, "Edit Patch");
                         
                 if (result == 3 || result < 0)  // cancel?
                     {

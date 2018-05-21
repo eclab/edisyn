@@ -439,10 +439,10 @@ public abstract class Synth extends JComponent implements Updatable
 
     public static Window lastActiveWindow = null;
 
-	/** Temporarily sets me to be the active synth. */
-	protected void setActiveSynth(boolean val) { activeSynth = val; }
-	boolean activeSynth = false;
-	
+    /** Temporarily sets me to be the active synth. */
+    protected void setActiveSynth(boolean val) { activeSynth = val; }
+    boolean activeSynth = false;
+        
     public boolean amActiveSynth()
         {
         if (activeSynth) return true;
@@ -793,10 +793,10 @@ public abstract class Synth extends JComponent implements Updatable
         }
     
     public void revise()
-    	{
-    	revise(model);
-    	}
-    	
+        {
+        revise(model);
+        }
+        
     /** Only revises / issues warnings on out-of-bounds numerical parameters. 
         You probably want to override this to check more stuff. */
     public void revise(Model model)
@@ -983,10 +983,10 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** Returns whether the mutation map should be used for recombination. */
     /*
-    public boolean getUsesMapForRecombination()
-        {
-        return useMapForRecombination;
-        }
+      public boolean getUsesMapForRecombination()
+      {
+      return useMapForRecombination;
+      }
     */
 
 
@@ -1403,7 +1403,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (data == null || data.length == 0) 
             return false;
         else if (!amActiveSynth())
-        	{
+            {
             return false;
             }
             
@@ -2222,8 +2222,8 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 setActiveSynth(true);
-            	if (doOpen(false))
-            		sendAllParameters();
+                if (doOpen(false))
+                    sendAllParameters();
                 setActiveSynth(false);
                 }
             });
@@ -2236,10 +2236,10 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 Synth.this.merging = 1.0;
                 setActiveSynth(true);
-            	if (doOpen(true))
-            		sendAllParameters();
+                if (doOpen(true))
+                    sendAllParameters();
                 setActiveSynth(false);
-            	Synth.this.merging = 0.0;
+                Synth.this.merging = 0.0;
                 }
             });
         menu.addSeparator();
@@ -2401,7 +2401,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doMutate(0.25);
                 }
             });
- //       randomize25.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        //       randomize25.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
         randomize50.addActionListener(new ActionListener()
             {
@@ -2636,10 +2636,10 @@ public abstract class Synth extends JComponent implements Updatable
         nudgeMutation.add(nudgeMutation10);
         nudgeMutationButtonGroup.add(nudgeMutation10);
         /*
-        JRadioButtonMenuItem nudgeMutation25 = new JRadioButtonMenuItem("25%");
-        nudgeMutation.add(nudgeMutation25);
-        nudgeMutationButtonGroup.add(nudgeMutation25);
-    	*/
+          JRadioButtonMenuItem nudgeMutation25 = new JRadioButtonMenuItem("25%");
+          nudgeMutation.add(nudgeMutation25);
+          nudgeMutationButtonGroup.add(nudgeMutation25);
+        */
 
         nudgeMutation0.addActionListener(new ActionListener()
             {
@@ -2687,14 +2687,14 @@ public abstract class Synth extends JComponent implements Updatable
             });
 
 /*
-        nudgeMutation25.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                nudgeMutationWeight = 0.25;
-                setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal(), false); 
-                }
-            });
+  nudgeMutation25.addActionListener(new ActionListener()
+  {
+  public void actionPerformed( ActionEvent e)
+  {
+  nudgeMutationWeight = 0.25;
+  setLastX("" + nudgeMutationWeight, "NudgeMutationWeight", getSynthNameLocal(), false); 
+  }
+  });
 */
         double nudgeVal = getLastXAsDouble("NudgeMutationWeight", getSynthNameLocal(), 0.0, false);
         if (nudgeVal < 0.01) { nudgeMutationWeight = 0.0; nudgeMutation0.setSelected(true); }
@@ -2840,21 +2840,21 @@ public abstract class Synth extends JComponent implements Updatable
             });
 
 /*
-        recombinationToggle = new JCheckBoxMenuItem("Use Parameters for Nudge/Merge");
-        menu.add(recombinationToggle);
-        recombinationToggle.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                useMapForRecombination = !useMapForRecombination;
-                recombinationToggle.setSelected(useMapForRecombination);
-                setLastX("" + useMapForRecombination, "UseParametersForRecombination", getSynthNameLocal(), false); 
-                }
-            });
-        String recomb = getLastX("UseParametersForRecombination", getSynthNameLocal(), false);
-        if (recomb == null) recomb = "true";
-        useMapForRecombination = Boolean.parseBoolean(recomb);
-        recombinationToggle.setSelected(useMapForRecombination);
+  recombinationToggle = new JCheckBoxMenuItem("Use Parameters for Nudge/Merge");
+  menu.add(recombinationToggle);
+  recombinationToggle.addActionListener(new ActionListener()
+  {
+  public void actionPerformed( ActionEvent e)
+  {
+  useMapForRecombination = !useMapForRecombination;
+  recombinationToggle.setSelected(useMapForRecombination);
+  setLastX("" + useMapForRecombination, "UseParametersForRecombination", getSynthNameLocal(), false); 
+  }
+  });
+  String recomb = getLastX("UseParametersForRecombination", getSynthNameLocal(), false);
+  if (recomb == null) recomb = "true";
+  useMapForRecombination = Boolean.parseBoolean(recomb);
+  recombinationToggle.setSelected(useMapForRecombination);
 */
             
         menu = new JMenu("MIDI");
@@ -3714,27 +3714,27 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-          taba = new JMenuItem("Tab 7");
-          taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_7, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-          menu.add(taba);
-          taba.addActionListener(new ActionListener()
-          {
-          public void actionPerformed( ActionEvent e)
-          {
-          doTab(6);
-          }
-          });
+        taba = new JMenuItem("Tab 7");
+        taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_7, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(taba);
+        taba.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doTab(6);
+                }
+            });
 
-          taba = new JMenuItem("Tab 8");
-          taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-          menu.add(taba);
-          taba.addActionListener(new ActionListener()
-          {
-          public void actionPerformed( ActionEvent e)
-          {
-          doTab(7);
-          }
-          });
+        taba = new JMenuItem("Tab 8");
+        taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(taba);
+        taba.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doTab(7);
+                }
+            });
         
         // Set up Windows  
         if (Style.isWindows() || Style.isUnix())
@@ -3977,27 +3977,27 @@ public abstract class Synth extends JComponent implements Updatable
         
         
     void sendAllSoundsOff()
-    	{
-		noMIDIPause = true;
-		try
-			{
-			// do an all sounds off (some synths don't properly respond to all notes off)
-			for(int i = 0; i < 16; i++)
-				tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
-			// do an all notes off (some synths don't properly respond to all sounds off)
-			for(int i = 0; i < 16; i++)
-				tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
-			// for some synths that respond to neither <ahem Korg Wavestation>, maybe we can turn off the current note,
-			// assuming the user hasn't changed it.            
-			for(int i = 0; i < 16; i++)
-				tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, i, getTestNotePitch(), 0));
-			}
-		catch (InvalidMidiDataException e2)
-			{
-			e2.printStackTrace();
-			}
-		noMIDIPause = false;
-    	}
+        {
+        noMIDIPause = true;
+        try
+            {
+            // do an all sounds off (some synths don't properly respond to all notes off)
+            for(int i = 0; i < 16; i++)
+                tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
+            // do an all notes off (some synths don't properly respond to all sounds off)
+            for(int i = 0; i < 16; i++)
+                tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
+            // for some synths that respond to neither <ahem Korg Wavestation>, maybe we can turn off the current note,
+            // assuming the user hasn't changed it.            
+            for(int i = 0; i < 16; i++)
+                tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, i, getTestNotePitch(), 0));
+            }
+        catch (InvalidMidiDataException e2)
+            {
+            e2.printStackTrace();
+            }
+        noMIDIPause = false;
+        }
 
 
     int testNoteLength = 500;
@@ -4104,8 +4104,8 @@ public abstract class Synth extends JComponent implements Updatable
             tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, getTestNotePitch(), velocity));
             
             // clear all notes -- often synthesizers like FM synths will have crazy long decays
-			sendAllSoundsOff();
-			
+            sendAllSoundsOff();
+                        
             // play new note
             tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, getTestNotePitch(), velocity));
                                                                         
@@ -4229,7 +4229,7 @@ public abstract class Synth extends JComponent implements Updatable
     void doQuit()
         {
         sendAllSoundsOff();
-        simplePause(50);	// maybe enough time to flush out the all sounds off notes?  dunno
+        simplePause(50);        // maybe enough time to flush out the all sounds off notes?  dunno
         System.exit(0);
         }
     
@@ -4256,10 +4256,10 @@ public abstract class Synth extends JComponent implements Updatable
         doSetNudge(i, getModel(), getPatchName(getModel()));
         }
 
-	Model getNudge(int i)
-		{
-		return nudge[i];
-		}
+    Model getNudge(int i)
+        {
+        return nudge[i];
+        }
 
     int lastNudge = -1;
         
@@ -4275,13 +4275,13 @@ public abstract class Synth extends JComponent implements Updatable
         if (towards < 4)
             {
             if (nudgeRecombinationWeight > 0.0) model.recombine(random, nudge[towards], getMutationKeys(),  //useMapForRecombination ? getMutationKeys() : model.getKeys(), 
-            	nudgeRecombinationWeight);
+                nudgeRecombinationWeight);
             if (nudgeMutationWeight > 0.0) model.mutate(random, getMutationKeys(), nudgeMutationWeight);
             }
         else
             {
             if (nudgeRecombinationWeight > 0.0) model.opposite(random, nudge[towards - 4], getMutationKeys(), //useMapForRecombination ? getMutationKeys() : model.getKeys(), 
-            	nudgeRecombinationWeight, true);
+                nudgeRecombinationWeight, true);
             if (nudgeMutationWeight > 0.0) model.mutate(random, getMutationKeys(), nudgeMutationWeight);
             }
         revise();  // just in case
@@ -4344,23 +4344,23 @@ public abstract class Synth extends JComponent implements Updatable
     /** Goes through the process of saving to a new sysex file and associating it with
         the editor. */
     void doSaveAs()
-    	{
-    	doSaveAs(null);
-    	}
-    	
+        {
+        doSaveAs(null);
+        }
+        
     /** Goes through the process of saving to a new sysex file and associating it with
         the editor. */
     void doSaveAs(String filename)
         {
         FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save Patch to Sysex File...", FileDialog.SAVE);
-		
-		if (filename != null)
-			{
+                
+        if (filename != null)
+            {
             fd.setFile(reviseFileName(filename));
             String path = getLastDirectory();
             if (path != null)
                 fd.setDirectory(path);
-			}
+            }
         else if (file != null)
             {
             fd.setFile(reviseFileName(file.getName()));
@@ -4579,33 +4579,33 @@ public abstract class Synth extends JComponent implements Updatable
                         setSendMIDI(false);
                         undo.setWillPush(false);
                         Model backup = (Model)(model.clone());
-						if (merge)
-							{
-				    		succeeded = merge(data, getMergeProbability());
-							undo.setWillPush(true);
-							if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-								undo.push(backup);
-							setSendMIDI(true);
-				    		}
-						else
-							{
-							int result = parse(data, true, true);
-							undo.setWillPush(true);
-							if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-								undo.push(backup);
-							setSendMIDI(true);
-							if (result == PARSE_SUCCEEDED)
-								{
-								file = f;
-								}
-							setLastDirectory(fd.getDirectory());
+                        if (merge)
+                            {
+                            succeeded = merge(data, getMergeProbability());
+                            undo.setWillPush(true);
+                            if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                                undo.push(backup);
+                            setSendMIDI(true);
+                            }
+                        else
+                            {
+                            int result = parse(data, true, true);
+                            undo.setWillPush(true);
+                            if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                                undo.push(backup);
+                            setSendMIDI(true);
+                            if (result == PARSE_SUCCEEDED)
+                                {
+                                file = f;
+                                }
+                            setLastDirectory(fd.getDirectory());
 
-							if (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED)
-								{
-								succeeded = true;
-								}
-							}
-							
+                            if (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED)
+                                {
+                                succeeded = true;
+                                }
+                            }
+                                                        
                         // this last statement fixes a mystery.  When I call Randomize or Reset on
                         // a Blofeld or on a Microwave, all of the widgets update simultaneously.
                         // But on a Blofeld Multi or Microwave Multi they update one at a time.
@@ -4630,7 +4630,7 @@ public abstract class Synth extends JComponent implements Updatable
                 
         updateTitle();
         return succeeded;
-		}
+        }
                 
 
     /** Pops up at the start of the program to ask the user what synth he wants. */

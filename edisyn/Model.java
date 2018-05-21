@@ -76,38 +76,38 @@ public class Model implements Cloneable
         }
 
 /*
-import edisyn.*;   
-m = new Model();
-r = new Random(1000);
-show();
-for(int i = 0; i < 10000; i++) m.randomValueWithin(r, 5, 10, 7, 0.05);
+  import edisyn.*;   
+  m = new Model();
+  r = new Random(1000);
+  show();
+  for(int i = 0; i < 10000; i++) m.randomValueWithin(r, 5, 10, 7, 0.05);
 */
 
-static final double STDDEV_CUT = 1.0/2.0;
+    static final double STDDEV_CUT = 1.0/2.0;
 
     public static int randomValueWithin(Random random, int a, int b, int center, double weight)
         {
         if (a > b) { int swap = a; a = b; b = swap; }
         if (a == b) return a;
         if (weight == 0)
-        	return center;
+            return center;
         else if (weight == 1)
-        	return randomValueWithin(random, a, b);
+            return randomValueWithin(random, a, b);
         else
-        	{
-	        double stddev = (1.0 / (1.0 - weight)) - 1.0;
-	        double delta = 0.0;
-	        
-	        while(true)
-	        	{
-	        	double rand = (random.nextGaussian() * stddev * STDDEV_CUT) % 2.0;
-		        delta = rand * (b - a);
-            	if ((center + delta) > a - 0.5 &&
-            	    (center + delta) < b + 0.5)
-            	    break;
-            	}
-        	return (int)(Math.round(center + delta));
-			}        
+            {
+            double stddev = (1.0 / (1.0 - weight)) - 1.0;
+            double delta = 0.0;
+                
+            while(true)
+                {
+                double rand = (random.nextGaussian() * stddev * STDDEV_CUT) % 2.0;
+                delta = rand * (b - a);
+                if ((center + delta) > a - 0.5 &&
+                    (center + delta) < b + 0.5)
+                    break;
+                }
+            return (int)(Math.round(center + delta));
+            }        
         }
 
     /** Produces a random value in the fully closed range [a, b],
@@ -239,10 +239,10 @@ static final double STDDEV_CUT = 1.0/2.0;
                 double mutWeight = Math.sqrt(weight);
                 double mutProb = mutWeight;
                 if (random.nextDouble() < mutProb)
-                	{
-	                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0),
-	                        randomValidValueWithin(keys[i], random, getMetricMin(keys[i]), getMetricMax(keys[i]), get(keys[i], 0), mutWeight)));
-	                }
+                    {
+                    set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0),
+                            randomValidValueWithin(keys[i], random, getMetricMin(keys[i]), getMetricMax(keys[i]), get(keys[i], 0), mutWeight)));
+                    }
                 }
             else if (pickRandomInMetric)                    // MAYBE jump into metric
                 {
@@ -298,13 +298,13 @@ static final double STDDEV_CUT = 1.0/2.0;
         return this;
         }
 
-	void setIfValid(String key, int value)
-		{
-		if (isValid(key, value))
-			set(key, value);
-		else
-			System.err.println("Invalid opposite value for " + key + ": " + value);
-		}
+    void setIfValid(String key, int value)
+        {
+        if (isValid(key, value))
+            set(key, value);
+        else
+            System.err.println("Invalid opposite value for " + key + ": " + value);
+        }
 
     /** Finds a point on the OPPOSITE side of the model from where the provided other MODEL is located.
         Let's call the current model X and the provided model Y.
@@ -340,10 +340,10 @@ static final double STDDEV_CUT = 1.0/2.0;
             if (getStatus(keys[i]) == STATUS_IMMUTABLE || getStatus(keys[i]) == STATUS_RESTRICTED || isString(keys[i])) continue;
             if (minExists(keys[i]) && maxExists(keys[i]) && getMin(keys[i]) >= getMax(keys[i]))  continue;  // no range
 
-			if ((get(keys[i], 0) == model.get(keys[i])) && fleeIfSame)
-				{
-				// need to flee.  First: are we metric?
-	            if (metricMinExists(keys[i]) &&
+            if ((get(keys[i], 0) == model.get(keys[i])) && fleeIfSame)
+                {
+                // need to flee.  First: are we metric?
+                if (metricMinExists(keys[i]) &&
                     metricMaxExists(keys[i]) &&
                     get(keys[i], 0) >= getMetricMin(keys[i]) &&
                     get(keys[i], 0) <= getMetricMax(keys[i]))
@@ -352,68 +352,68 @@ static final double STDDEV_CUT = 1.0/2.0;
                     // mutation (mutating by 1) while staying metric, so that NEXT
                     // time if we continue to flee, we'll keep on fleeing in that
                     // direction
-                	if (getMetricMin(keys[i]) == getMetricMax(keys[i])) // uh oh
-                		{ } // don't set anything
+                    if (getMetricMin(keys[i]) == getMetricMax(keys[i])) // uh oh
+                        { } // don't set anything
                     else if (get(keys[i], 0) == getMetricMax(keys[i]))
-                    	setIfValid(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
-                    		get(keys[i], 0) - 1));
+                        setIfValid(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+                                get(keys[i], 0) - 1));
                     else if (get(keys[i], 0) == getMetricMin(keys[i]))
-                    	setIfValid(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
-                    		get(keys[i], 0) + 1));
+                        setIfValid(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+                                get(keys[i], 0) + 1));
                     else
-                    	setIfValid(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
-                    		get(keys[i], 0) + (random.nextBoolean() ? 1 : -1)));
+                        setIfValid(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+                                get(keys[i], 0) + (random.nextBoolean() ? 1 : -1)));
                     }
-				else
-					{
+                else
+                    {
                     if (coinToss(random, weight))
                         {
                         int val = 0;
                         for(int j = 0; j < 10; j++)  // we'll try ten times to find something new
-                        	{
-                        	val = randomValidValueWithin(keys[i], random, getMin(keys[i]), getMax(keys[i]));
-                        	if (val != get(keys[i], 0)) // we want to be different
-                        		break;
-                        	}
+                            {
+                            val = randomValidValueWithin(keys[i], random, getMin(keys[i]), getMax(keys[i]));
+                            if (val != get(keys[i], 0)) // we want to be different
+                                break;
+                            }
                         set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), val));
                         }
-					}
-				}
-			else if (metricMinExists(keys[i]) &&
-                     metricMaxExists(keys[i]) &&
-                     get(keys[i], 0) >= getMetricMin(keys[i]) &&
-                     get(keys[i], 0) <= getMetricMax(keys[i]) &&
-                     model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
-                     model.get(keys[i], 0) <= getMetricMax(keys[i]))
+                    }
+                }
+            else if (metricMinExists(keys[i]) &&
+                metricMaxExists(keys[i]) &&
+                get(keys[i], 0) >= getMetricMin(keys[i]) &&
+                get(keys[i], 0) <= getMetricMax(keys[i]) &&
+                model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
+                model.get(keys[i], 0) <= getMetricMax(keys[i]))
                 {
                 // different but both metric.  
 
-	            int a = get(keys[i], 0);
-	            int b = model.get(keys[i], a);
-	            
-	            // determine range
+                int a = get(keys[i], 0);
+                int b = model.get(keys[i], a);
+                    
+                // determine range
                 double qq = a + weight * (a - b);
                 int q = 0;
                 
                 // round away from b
                 if (b > a)
-                	q = (int)Math.floor(qq);
+                    q = (int)Math.floor(qq);
                 else
-                	q = (int)Math.ceil(qq);
+                    q = (int)Math.ceil(qq);
 
-	            // bound
-	            if (metricMinExists(keys[i]) && q < getMetricMin(keys[i]))
-	                q = getMetricMin(keys[i]);
-   		         if (metricMaxExists(keys[i]) && q > getMetricMax(keys[i]))
-   		             q = getMetricMax(keys[i]);
+                // bound
+                if (metricMinExists(keys[i]) && q < getMetricMin(keys[i]))
+                    q = getMetricMin(keys[i]);
+                if (metricMaxExists(keys[i]) && q > getMetricMax(keys[i]))
+                    q = getMetricMax(keys[i]);
 
-   		         set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), randomValidValueWithin(keys[i], random, a, q)));
+                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), randomValidValueWithin(keys[i], random, a, q)));
                 }
             else
-            	{
-            	// different but someone is non-metric.  Don't change.
-            	continue;
-            	}
+                {
+                // different but someone is non-metric.  Don't change.
+                continue;
+                }
             }
 
         if (undoListener!= null)
@@ -502,7 +502,7 @@ static final double STDDEV_CUT = 1.0/2.0;
         }
     
   
-      /** Recombines (potentially the keys provided.  
+    /** Recombines (potentially the keys provided.  
         Recombination works as follows.  For each key, we first see if we're permitted to mutate it
         (no immutable status, other model doesn't have the key).  Next with 1.0 - WEIGHT probability 
         we don't recombine at all. Otherwise we recombine:
@@ -543,9 +543,9 @@ static final double STDDEV_CUT = 1.0/2.0;
                 
                 // round towards b
                 if (b > a)
-                	q = (int)Math.ceil(qq);
+                    q = (int)Math.ceil(qq);
                 else
-                	q = (int)Math.floor(qq);
+                    q = (int)Math.floor(qq);
                 
                 set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), randomValidValueWithin(keys[i], random, a, q)));
                 }
@@ -636,11 +636,11 @@ static final double STDDEV_CUT = 1.0/2.0;
     
     /** Does a clone except for the various listeners */
     public Model copy()
-    	{
-    	Model m =((Model)clone());
-    	m.clearListeners();
-    	return m;
-    	}
+        {
+        Model m =((Model)clone());
+        m.clearListeners();
+        return m;
+        }
     
     public void copyValuesTo(Model model)
         {

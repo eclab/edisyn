@@ -1273,7 +1273,7 @@ public class OberheimMatrix1000 extends Synth
             value = model.get(key);
             }
         
-        byte VV = (byte)(value);
+        byte VV = (byte)(value & 127);
         byte PP = (byte)(index & 127);
         return new byte[] { (byte)0xF0, 0x10, 0x06, 0x06, PP, VV, (byte)0xF7 };
         }

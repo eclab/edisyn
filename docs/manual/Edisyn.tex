@@ -385,6 +385,10 @@ The amount of mutation noise used when generating new patches is specified by th
 \item {\bf Nudge Candidates to Me}\quad Nudges all the candidates towards the given patch. 
 \end{itemize}
 
+\paragraph{More Keystroke Options}
+
+All the patches can be played by pressing their associated letter.  But additionally you can (at present) {\bf Climb} by pressing the Space Bar, {\bf Retry} by pressing the Return/Enter key, and {\bf Back Up} by pressing Backspace.
+
 \subsection{How the Hill-Climber Makes New Sounds}
 
 The Hill-Climber builds new sounds by recombining your top three sound choices and adding some degree of noise (mutation) to them.  Let's say that your top three sounds were sounds {\bf A, B,} and {\bf C}, and that your {\it previous} ``A'' from last time is called {\bf Z}.      You can also select only two top choices (A and B), or  single choice (A).   Figure \ref{hcfigure} explains the mechanism by which the 16 new patches are generated through various recombination and mutation mechanisms for the first 16 patches.  If you have chosen to use 32 candidate patches, then the second 16 are done exactly like the first 16, except with twice the mutation rate.

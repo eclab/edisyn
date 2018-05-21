@@ -58,36 +58,33 @@ public class HillClimb extends SynthPanel
 	
 	/// NUMBER OF CANDIDATE SOLUTIONS
 	
-    public static final int NUM_CANDIDATES = 16;
+    public static final int NUM_CANDIDATES = 32;
     public static final int ARCHIVE_SIZE = 6;
 	// There are more models than candidates: #17 is the current Model
     public static final int NUM_MODELS = NUM_CANDIDATES + ARCHIVE_SIZE + 1;
     
-    // When the nudge buttons are being REQUESTED to play, then currentNudgeButton
-    // is set to the nudge button values.  When a nudge button is PRESENTLY playing,
-    // then currentNudgeButton is set to this value + NUDGE_PLAYING_DELTA.  When 
-    // no nudge button is playing, then currentNudgeButton is set to -1.  This allows
-    // us to eventualliy turn off the nudge button when it's time to play something else
-    // but still properly highlight it when it's playing.
-    public static final int NUDGE_PLAYING_DELTA = 100;
-
 	// models currently being played and displayed
     Model[] currentModels = new Model[NUM_MODELS];
 
     JRadioButton[][] ratings = new JRadioButton[NUM_MODELS + 1][3];
-    ButtonGroup nudgeGroup = new ButtonGroup();
-    JRadioButton[] nudge = new JRadioButton[5];
     PushButton[] plays = new PushButton[NUM_MODELS];
     public static final int INITIAL_MUTATION_RATE = 5;
     public static final int INITIAL_RECOMBINATION_RATE = 75;
     Blank blank;
     Category iterations;
-    int currentNudgeButton = -1;
     int currentPlay = 0;
     int temporaryPlay = -1;
     HBox nudgeBox;
+    PushButton retry;
+    PushButton climb;
+    PushButton reset;
+    PushButton back;
+    JCheckBox bigger;
     
-    
+    VBox candidates;
+    VBox extraCandidates1;
+    VBox extraCandidates2;
+        
      State popStack()	
     	{
     	if (stack.size() == 0) 
@@ -134,14 +131,24 @@ public class HillClimb extends SynthPanel
     	{
     	return (stack.size() == 1);
     	}
-    	
+    
+    String titleForButton(int _i)
+    	{
+    	return "Play " + (_i < 16 ? 
+            		(char)('a' + _i) :
+            		(_i < NUM_CANDIDATES ? 
+            			(char)('A' + (_i - 16)) :
+            			(_i < NUM_MODELS - 1 ?
+            				(char)('q' + (_i - NUM_CANDIDATES)) :
+            					'z')));
+    	}
     
     VBox buildCandidate(int i)
     	{
             final int _i = i;
 
             VBox vbox = new VBox();
-            plays[i] = new PushButton("Play")
+            plays[_i] = new PushButton(titleForButton(i))
                 {
                 public void perform()
                     {
@@ -151,6 +158,14 @@ public class HillClimb extends SynthPanel
                         }
                     else
                         {
+						for(int j = 0; j < NUM_MODELS; j++)       
+							{
+							plays[j].getButton().setForeground(new JButton().getForeground());
+							plays[j].getButton().setText(titleForButton(i));
+							}
+						plays[_i].getButton().setForeground(Color.RED);
+						plays[_i].getButton().setText("<HTML><B>" + titleForButton(i) + "</b></HTML>");
+
                         // change the model, send all parameters, maybe play a note,
                         // and then restore the model.
                         Model backup = synth.model;
@@ -158,16 +173,52 @@ public class HillClimb extends SynthPanel
                         synth.sendAllParameters();
                         synth.doSendTestNote(false);
                         synth.model = backup;
+                        temporaryPlay = i;
                         }
 
                     }
                 };
+        	plays[i].getButton().setFocusable(false);
             vbox.add(plays[i]);
+
+
+/*
+           Box b = new Box(BoxLayout.X_AXIS);
+            b.setBackground(Style.BACKGROUND_COLOR());
+            b.add(Box.createGlue());
+            b.add(ratings[i][0] = new JRadioButton("1"));
+        	ratings[i][0].setFocusable(false);
+            ratings[i][0].setForeground(Style.TEXT_COLOR());
+            ratings[i][0].setFont(Style.SMALL_FONT());
+            ratings[i][0].putClientProperty("JComponent.sizeVariant", "small");
+            ratings[i][0].setHorizontalTextPosition(SwingConstants.CENTER);
+			ratings[i][0].setVerticalTextPosition(JRadioButton.TOP);
+
+            b.add(ratings[i][1] = new JRadioButton("2"));
+        	ratings[i][1].setFocusable(false);
+            ratings[i][1].setForeground(Style.TEXT_COLOR());
+            ratings[i][1].setFont(Style.SMALL_FONT());
+            ratings[i][1].putClientProperty("JComponent.sizeVariant", "small");
+            ratings[i][1].setHorizontalTextPosition(SwingConstants.CENTER);
+			ratings[i][1].setVerticalTextPosition(JRadioButton.TOP);
+
+            b.add(ratings[i][2] = new JRadioButton("3"));
+        	ratings[i][2].setFocusable(false);
+            ratings[i][2].setForeground(Style.TEXT_COLOR());
+            ratings[i][2].setFont(Style.SMALL_FONT());
+            ratings[i][2].putClientProperty("JComponent.sizeVariant", "small");
+            ratings[i][2].setHorizontalTextPosition(SwingConstants.CENTER);
+			ratings[i][2].setVerticalTextPosition(JRadioButton.TOP);
+            b.add(Box.createGlue());
+            vbox.add(b);
+*/            
+
 
             Box b = new Box(BoxLayout.X_AXIS);
             b.setBackground(Style.BACKGROUND_COLOR());
             b.add(Box.createGlue());
             b.add(ratings[i][0] = new JRadioButton("1"));
+        	ratings[i][0].setFocusable(false);
             ratings[i][0].setForeground(Style.TEXT_COLOR());
             ratings[i][0].setFont(Style.SMALL_FONT());
             ratings[i][0].putClientProperty("JComponent.sizeVariant", "small");
@@ -178,6 +229,7 @@ public class HillClimb extends SynthPanel
             b.setBackground(Style.BACKGROUND_COLOR());
             b.add(Box.createGlue());
             b.add(ratings[i][1] = new JRadioButton("2"));
+        	ratings[i][1].setFocusable(false);
             ratings[i][1].setForeground(Style.TEXT_COLOR());
             ratings[i][1].setFont(Style.SMALL_FONT());
             ratings[i][1].putClientProperty("JComponent.sizeVariant", "small");
@@ -188,12 +240,13 @@ public class HillClimb extends SynthPanel
             b.setBackground(Style.BACKGROUND_COLOR());
             b.add(Box.createGlue());
             b.add(ratings[i][2] = new JRadioButton("3"));
+        	ratings[i][2].setFocusable(false);
             ratings[i][2].setForeground(Style.TEXT_COLOR());
             ratings[i][2].setFont(Style.SMALL_FONT());
             ratings[i][2].putClientProperty("JComponent.sizeVariant", "small");
             b.add(Box.createGlue());
             vbox.add(b);
-            
+/* */          
             
             JMenuItem[] doItems = new JMenuItem[13];
             doItems[0] = new JMenuItem("Keep Patch");
@@ -348,8 +401,10 @@ public class HillClimb extends SynthPanel
             		currentModels[NUM_CANDIDATES + 5] = (Model)(currentModels[_i].clone());
             		}
             	});
-            	
-            vbox.add(new PushButton("Options", doItems));
+            
+            PushButton options = new PushButton("Options", doItems);
+        	options.getButton().setFocusable(false);
+            vbox.add(options);
         
         	return vbox;
         	}
@@ -359,6 +414,76 @@ public class HillClimb extends SynthPanel
         {
         super(synth);
         
+    addAncestorListener ( new AncestorListener ()
+    {
+        public void ancestorAdded ( AncestorEvent event )
+        {
+		requestFocusInWindow();
+        }
+
+        public void ancestorRemoved ( AncestorEvent event )
+        {
+        // will get removed
+        }
+
+        public void ancestorMoved ( AncestorEvent event )
+        {
+        // don't care
+        }
+    } );
+    setFocusable(true);
+    
+    addKeyListener(new KeyListener()
+    	{
+    	public void keyPressed(KeyEvent e)
+    		{
+    		}
+    	public void keyReleased(KeyEvent e)
+    		{
+    		}
+    	public void keyTyped(KeyEvent e)
+    		{
+			char c = e.getKeyChar();
+			
+			if (c >= 'a' && c <= 'p')
+				{
+				int p = (int)(c - 'a');
+				plays[p].perform();
+				}
+			else if (c >= 'A' && c <= 'P' && NUM_CANDIDATES == 32)
+				{
+				int p = (int)(c - 'A' + 16);
+				plays[p].perform();
+				}
+			else if ((c >= 'q' && c <= 'v'))
+				{
+				int p = (int)(c - 'q' + NUM_CANDIDATES);
+				plays[p].perform();				
+				}
+			else if (c =='z')
+				{
+				int p = (int)(NUM_MODELS - 1);
+				plays[p].perform();				
+				}
+			else if (c == ' ')
+				{
+				climb.perform();
+				}
+			else if (c == KeyEvent.VK_BACK_SPACE)
+				{
+				back.perform();
+				}
+			else if (c == KeyEvent.VK_ENTER)
+				{
+				retry.perform();
+				}
+			else if (c >= '1' && c <= '3')
+				{
+				ratings[lastPlayedSound()][(int)(c - '1')].setSelected(true);
+				}
+    		}
+    	});
+    
         ButtonGroup one = new ButtonGroup();
         ButtonGroup two = new ButtonGroup();
         ButtonGroup three = new ButtonGroup();
@@ -372,7 +497,7 @@ public class HillClimb extends SynthPanel
         Category panel = new Category(null, "Iteration 1", Style.COLOR_GLOBAL());
         iterations = panel;
                 
-        PushButton backup = new PushButton("Back Up")
+        back = new PushButton("Back Up")
             {
             public void perform()
                 {
@@ -380,8 +505,9 @@ public class HillClimb extends SynthPanel
                 resetCurrentPlay();
                 }
             };
+        back.getButton().setFocusable(false);
             
-        PushButton climb = new PushButton("Climb")
+        climb = new PushButton("Climb")
             {
             public void perform()
                 {
@@ -389,9 +515,10 @@ public class HillClimb extends SynthPanel
                 resetCurrentPlay();
                 }
             };
-        climb.getButton().setPreferredSize(backup.getButton().getPreferredSize());
+        climb.getButton().setPreferredSize(back.getButton().getPreferredSize());
+        climb.getButton().setFocusable(false);
                 
-        PushButton reset = new PushButton("Reset")
+     	reset = new PushButton("Reset")
             {
             public void perform()
                 {
@@ -402,9 +529,10 @@ public class HillClimb extends SynthPanel
 	                }
                 }
             };
-        reset.getButton().setPreferredSize(backup.getButton().getPreferredSize());
+        reset.getButton().setPreferredSize(back.getButton().getPreferredSize());
+        reset.getButton().setFocusable(false);
                 
-        PushButton retry = new PushButton("Retry")
+        retry = new PushButton("Retry")
             {
             public void perform()
                 {
@@ -412,25 +540,55 @@ public class HillClimb extends SynthPanel
                 resetCurrentPlay();
                 }
             };
-        retry.getButton().setPreferredSize(backup.getButton().getPreferredSize());
+        retry.getButton().setPreferredSize(back.getButton().getPreferredSize());
+        retry.getButton().setFocusable(false);
 
         VBox vbox = new VBox();
         vbox.add(climb);
         vbox.add(retry);
-        vbox.add(backup);
+        vbox.add(back);
         vbox.add(reset);
         
 		HBox iterationsBox = new HBox();
         iterationsBox.add(vbox);
 
         blank = new Blank();
-
         blank.getModel().set("recombinationrate", INITIAL_RECOMBINATION_RATE);
+
+		vbox = new VBox();
+		
+		bigger = new JCheckBox("Bigger");
+        bigger.setFocusable(false);
+        bigger.setForeground(Style.TEXT_COLOR());
+        bigger.setFont(Style.SMALL_FONT());
+        bigger.putClientProperty("JComponent.sizeVariant", "small");
+        
+		bigger.addActionListener(new ActionListener()
+			{
+			public void actionPerformed(ActionEvent e)
+				{
+				candidates.remove(extraCandidates1);
+				candidates.remove(extraCandidates2);
+				if (bigger.isSelected())
+					{
+					candidates.add(extraCandidates1);
+					candidates.add(extraCandidates2);
+					}
+				candidates.revalidate();
+				candidates.repaint();
+				}
+            });
+        bigger.setSelected(false);
+        HBox eb = new HBox();
+        eb.addLast(bigger);
+        vbox.add(eb);
 
         LabelledDial mutationRate = new LabelledDial("Mutation", blank, "mutationrate", Style.COLOR_GLOBAL(), 0, 100);
         mutationRate.addAdditionalLabel("Rate");
         blank.getModel().set("mutationrate", INITIAL_MUTATION_RATE);
-        iterationsBox.add(mutationRate);
+        vbox.add(mutationRate);
+        
+        iterationsBox.add(vbox);
         
         panel.add(iterationsBox, BorderLayout.WEST);
         toprow.add(panel);
@@ -461,7 +619,7 @@ public class HillClimb extends SynthPanel
 
         hbox = new HBox();
                 
-        VBox vr = new VBox();
+        candidates = new VBox();
         for(int i = 0; i < NUM_CANDIDATES; i++)
             {
 			vbox = buildCandidate(i);
@@ -469,15 +627,22 @@ public class HillClimb extends SynthPanel
 
             if (i % 8 == 7)
                 {
-                vr.add(hbox);
-                if (i != NUM_CANDIDATES - 1)
-                	vr.add(Strut.makeVerticalStrut(20));
+                VBox vv = new VBox();
+                if (i != 7)
+	                vv.add(Strut.makeVerticalStrut(20));
+                vv.add(hbox);
                 hbox = new HBox();
+			
+ 			if (i == 23)
+				extraCandidates1 = vv;
+			else if (i == 31)
+				extraCandidates2 = vv;
+			else
+				candidates.add(vv);
                 }
             }
-        vr.add(hbox);
 
-        panel.add(vr, BorderLayout.WEST);
+        panel.add(candidates, BorderLayout.WEST);
         
         HBox hb = new HBox();
         hb.add(panel);
@@ -491,6 +656,7 @@ public class HillClimb extends SynthPanel
         b.setBackground(Style.BACKGROUND_COLOR());
         b.add(Box.createGlue());
         b.add(ratings[NUM_MODELS][0] = new JRadioButton("1"));
+        ratings[NUM_MODELS][0].setFocusable(false);
         ratings[NUM_MODELS][0].setForeground(Style.TEXT_COLOR());
         ratings[NUM_MODELS][0].setFont(Style.SMALL_FONT());
         ratings[NUM_MODELS][0].putClientProperty("JComponent.sizeVariant", "small");
@@ -501,6 +667,7 @@ public class HillClimb extends SynthPanel
         b.setBackground(Style.BACKGROUND_COLOR());
         b.add(Box.createGlue());
         b.add(ratings[NUM_MODELS][1] = new JRadioButton("2"));
+        ratings[NUM_MODELS][1].setFocusable(false);
         ratings[NUM_MODELS][1].setForeground(Style.TEXT_COLOR());
         ratings[NUM_MODELS][1].setFont(Style.SMALL_FONT());
         ratings[NUM_MODELS][1].putClientProperty("JComponent.sizeVariant", "small");
@@ -511,6 +678,7 @@ public class HillClimb extends SynthPanel
         b.setBackground(Style.BACKGROUND_COLOR());
         b.add(Box.createGlue());
         b.add(ratings[NUM_MODELS][2] = new JRadioButton("3"));
+        ratings[NUM_MODELS][2].setFocusable(false);
         ratings[NUM_MODELS][2].setForeground(Style.TEXT_COLOR());
         ratings[NUM_MODELS][2].setFont(Style.SMALL_FONT());
         ratings[NUM_MODELS][2].putClientProperty("JComponent.sizeVariant", "small");
@@ -566,12 +734,12 @@ public class HillClimb extends SynthPanel
                 for(int i = 0; i < NUM_MODELS; i++)       
                     {
                     plays[i].getButton().setForeground(new JButton().getForeground());
-					plays[i].getButton().setText("Play");
+					plays[i].getButton().setText(titleForButton(i));
                     }
 				if (temporaryPlay >= 0)
 					{
 					plays[temporaryPlay].getButton().setForeground(Color.RED);
-					plays[temporaryPlay].getButton().setText("<HTML><B>Play</b></HTML>");
+					plays[temporaryPlay].getButton().setText("<HTML><B>" + titleForButton(temporaryPlay) + "</b></HTML>");
 					backup = synth.model;
 					synth.model = currentModels[temporaryPlay];
 					synth.sendAllParameters();
@@ -580,10 +748,11 @@ public class HillClimb extends SynthPanel
 				else
 					{
 					currentPlay++;
-					if (currentPlay >= NUM_CANDIDATES)
+					if (currentPlay >= NUM_CANDIDATES ||
+						currentPlay >= 16 && !bigger.isSelected())
 						currentPlay = 0;
 					plays[currentPlay].getButton().setForeground(Color.RED);
-					plays[currentPlay].getButton().setText("<HTML><B>Play</b></HTML>");
+					plays[currentPlay].getButton().setText("<HTML><B>" + titleForButton(currentPlay) + "</b></HTML>");
 
 					// change the model, send all parameters, maybe play a note,
 					// and then restore the model.
@@ -594,6 +763,13 @@ public class HillClimb extends SynthPanel
                 }
             }
         }
+      
+    int lastPlayedSound()
+    	{
+    	if (temporaryPlay >=0)
+    		return temporaryPlay;
+    	else return currentPlay;
+    	} 
                 
     public void postUpdateSound()
         {

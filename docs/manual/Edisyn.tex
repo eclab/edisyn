@@ -169,7 +169,7 @@ you can always stop batch-downloading at any time by choosing {\bf Stop Download
 Also note that as a failsafe Edisyn only allows the frontmost window to receive data over MIDI.  This means that while you're batch-downloading, you can't go to some other patch editor: the downloading patch editor must stay in front.  You can go to another application though (read a web browser say).
 
 
-\section{Communicating with the Synthesizer}
+\section{Communicating with a Synthesizer}
 
 First things first: if you're working in Disconnected mode, you'll need to set up MIDI before you can communicate with your synthesizer.  This is done by selecting {\bf Change MIDI} in the {\bf MIDI} menu.   (By the way, you can go Disconnected by selecting {\bf Disconnect MIDI} in the {\bf MIDI} menu as well).  Remember that you have to connect USB devices to your computer {\it before} starting up Edisyn, or it won't see them, due to a bug in the MIDI subsystem.
 
@@ -205,7 +205,7 @@ Setting the {\bf Pause Between Test Notes} will change how long Edisyn waits, be
 
 If you're not sure if you have MIDI data coming to Edisyn from your synthesizer, select {\bf Report Next Synth MIDI} from the {\bf MIDI} menu.  Then have your synth send any kind of MIDI message to Edisyn\,---\,a note, a sysex message, whatever.  For example, you could have Edisyn request a sysex dump from the synth.  At any rate, if Edisyn pops up a window telling you the message, then you have a live connection.  
 
-\section{Communicating with a Controller or DAW}
+\section{Communicating with a Controller}
 
 The MIDI Dialog (Section \ref{startingedisyn}) also lets you choose a device and MIDI channel for incoming messages from a control surface or controller keyboard.  Using this keyboard you can:
 
@@ -218,14 +218,6 @@ The MIDI Dialog (Section \ref{startingedisyn}) also lets you choose a device and
 \subsection{Testing the Incoming Connection}
 
 If you're not sure if you have MIDI data coming to Edisyn from your controller, select {\bf Report Next Controller MIDI} from the {\bf MIDI} menu.  Then have your controller send any kind of MIDI message to Edisyn\,---\,for example, play a note.  If Edisyn pops up a window telling you the message, then you have a live connection.  
-
-\subsection{Connecting to a Digital Audio Workstation (DAW)}
-
-Connecting a controller is easy: just choose it in Edisyn's MIDI Dialog.  But what if you want to send and receive CC messages from your DAW?   The problem is that both Edisyn and your DAW are both USB MIDI {\it client applications}, not {\it devices}.  But USB MIDI is designed to connect client applications to devices, not to each other.  You will need some application or driver that allows both Edisyn and your DAW to talk to one another, each pretending that the other is a USB MIDI Device.  
-
-I can't say how to do this on Windows or Linux, but here's how you do it on the Mac.  First, open the application \textsf{/Applications/Utilities/Audio MIDI Setup}.  Next, click on the ``IAC Driver'' icon to open the ``IAC Driver Properties'' window.  Delete all the existing Ports.  Add three new ports, named ``Controller To Edisyn'', ``Synth To Edisyn'' and ``Edisyn to Synth'' .  Check the box ``Device is Online''.  
-
-Now you can hook Edisyn up to your DAW.  For example, you might set ``Controller to Edisyn'' as Edisyn's Controller (input) device, and then attach your DAW to output CC data to the ``Controller to Edisyn'' device: it'll get routed into Edisyn.   See the end of Section~\ref{remotecontrolofedisyn} for a useful example. Or if you wanted to use Edisyn to dump CC data to your DAW, for example, you could set ``Edisyn to Synth'' as Edisyn's Send To (output) device, and then set up your DAW to input from the ``Edisyn to Synth'' device.
 
 \subsection{Remote Control of your Synthesizer} 
 If you play a note, do a pitch bend, etc., on your control surface, and {\bf Pass Through Controller Data} is set, then Edisyn will route all of those MIDI messages directly to your synthesizer (changing the messages' channel to the one that Edisyn is using to talk to the synthesizer).  Control Change (CC) and NRPN messages from your control surface are passed through only if you have {\it also} toggled {\bf Pass Through All CCs} in the {\bf Map} menu.  Otherwise they {\it might} used to control Edisyn' via its parameter mapping (see the end of Section~\ref{remotecontrolofedisyn}).
@@ -273,7 +265,35 @@ If Edisyn isn't intercepting and mapping the data, or the data is something othe
 
 There are many situations where these combinations are useful.  Here's a fun example.  Suppose your synth doesn't respond to CC (only NRPN or Sysex) but you'd like to control it from your DAW, which {\it only} does CC, as is the case for many bad DAWs.  You could set up the DAW as your Edisyn controller and map CCs to various synth parameters.  Then you'd pass through non-CC data via Edisyn to the synth, but intercept CC data from the DAW to update parameters via Edisyn.
 
-\section{Editing and Creative Programming}
+\section{Communicating with a Software Synth or Digital Audio Workstation}
+
+In some situations you might wish to get Edisyn to communicate with a software synth: for example Dexed\footnote{https:/\!/asb2m10.github.io/dexed/} is a nice DX7 emulator and works well with Edisyn.  Or perhaps you might want to use Edisyn to translate CC messages from your DAW into Edisyn parameter changes, which then get forwarded to a synthesizer as sysex (see Section \ref{remotecontrolofedisyn} to learn how to map CC messages to parameter changes).
+
+You'd think it'd be easy to connect directly to another piece of software on your computer.  But you'd be wrong!  The problem is that Edisyn, because it's written in Java, can only connect to {\it MIDI devices}, and your software synthesizer or DAW has probably not registered itself as a device\,---\,it likewise probably is designed only to connect to MIDI devices.
+
+\begin{wrapfigure}{r}{3in}
+\begin{center}\vspace{-1em}\includegraphics[width=3in]{Loopback.pdf}\end{center}
+\vspace{-1em}
+\caption{A MIDI loopback connecting Edisyn with a software synthesizer via a virtual device.}\label{loopback}
+\end{wrapfigure}
+
+To get around this, you need to make a {\it MIDI loopback}.  This is where you create two {\it virtual devices} which are connected to one another.  Edisyn and your software synth can see these devices.  Consider Figure \ref{loopback}.  If Edisyn outputs to Virtual Device X (say) and your software synth is set up to {\it input} from Virtual Device X, then it will receive what Edisyn outputs.
+
+Similarly, if you need your software synth to respond to Edisyn, you need to make a {\it second} loopback and hook it up in the reverse order.
+
+\paragraph{Making a Loopback Device}  This varies depending on your operating system.
+
+\begin{itemize}
+\item {\bf On the Mac}\quad First, open the application \textsf{/Applications/Utilities/Audio MIDI Setup}.  Next, click on the ``IAC Driver'' icon to open the ``IAC Driver Properties'' window.  Add a new port, named whatever you like.  Check the box ``Device is Online''.  This new port will be appear to Edisyn and to your software synth as the loopback device.   You can add more ports to create more loopbacks.  A loopback is only one-way: if you want Edisyn to send to {\it and} receive from a software synthesizer, you'll need to make two ports.
+
+\item {\bf On Windows}\quad There is no way to do this in Windows directly: instead you'll need to run a program which provides this service.  Programs include {\sf loopMIDI},  {\sf loopBe1}, MIDIOx's {\sf MidiYoke}, and so on.  Googling for ``loopback MIDI Windows'' will get you there. 
+
+\item {\bf On Linux}\quad In most flavors of Linux, to get virtual devices running you'll first need to type the command \hbox{\tt sudo modprobe snd-virmidi} and then type in your password.  \quad If you're using something like Gentoo or any other distro that does not come with this kernel module, you'll need to custom compile your kernel to get it. 
+
+This procedure will create a bunch of of virtual devices with names like {\tt VirMIDI [hw:2,0,0]} or {\tt VirMIDI [hw:2,1,8]}.  Select a device whose third number is 0 (such as {\tt VirMIDI [hw:2,0,0]} or {\tt VirMIDI [hw:3,1,0]}, but not {\tt VirMIDI [hw:2,1,1]}).  Have Edisyn send to this device and have the software synthesizer listen from the same device.  If you want to hook Edisyn and your synth up the other direction (so Edisyn receives from the synthesizer), you'll need to select a second virtual device.
+\end{itemize}
+
+\section{Editing and Exploratory Patch Creation}
 
 Edisyn has a number of facilities to help you program your synthesizer, including tools to help you wander through the possible space of patches to hunt for the sound you want.  Here's what you can do:
 
@@ -307,6 +327,8 @@ A hint.  It's a good idea to select target patches which don't have some radical
 
 Some patch editors may not be able to perform merges because the synthesizers can't load specific patches: if your synth can't do {\bf Request Patch...}, it probably can't do a merge either.  
 
+\paragraph{Load and Merge}  This option, in the {\bf File} menu, allows you to load a file and merge it with your current patch in more or less the same way that {\bf Merge} works.  The merge percentage is always 100\% (that is, half-half).
+
 \paragraph{Hill-Climb}  Hill-Climbing repeatedly presents you with sixteen sounds and asks you to choose your top three preferred ones.  Once you have selected the three best, it performs various recombinations and mutations on those sounds to prefer sixteen new ones and the process repeats again.  The idea is for your preferences to guide the hill-climber as it wanders through the space of synth parameters until it lands on something you really like.\footnote{If you're technically inclined, this is basically an evolution strategy (ES) with an elitism of 1 and a biased mutation procedure.  If you'd like to learn more about evolutionary computation methods, google for the free online book {\it Essentials of Metaheuristics} by me.}  For more on the Hill-Climber, see Section \ref{hillclimb}.
 
 \subsection{Restricting Mutation and Recombination to Only Certain Parameters}
@@ -332,14 +354,6 @@ Note that your parameter choices, as well as using them for recombination, are p
 \subsection{Hill-Climbing}
 \label{hillclimb}
 
-\begin{figure}[t]
-\begin{center}
-\includegraphics[width=6in]{HillClimbing.pdf}
-\end{center}
-\caption{Recombination and Opposite-Recombination in the Hill-Climber. Shown are (left to right) basic operations performed when the user has made three (A, B, C), two (A, B), or only one (A) selections.  Z is the top selection the previous iteration (the previous iteration's A).  Beyond the given operations, various degrees of mutation are applied to each new child: see Figure \ref{hctable}.}
-\label{hcfigure}
-\end{figure}
-
 \begin{wrapfigure}{r}{2.9in}
 \vspace{-2em}\includegraphics[scale=0.27]{HillClimbPanel.png}
 \vspace{-2em}
@@ -349,124 +363,125 @@ Note that your parameter choices, as well as using them for recombination, are p
 
 Edisyn's {\it hill-climber}\footnote{Important Note.  The Hill Climber is a work in progress and as testing and research continues on it, it may change significantly} is another of its patch-exploration tools.  You select it by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  This will add a new tab to your patch editor labelled {\bf Hill-Climb}.   When you fire up the Hill-Climber, it appears as an additional tab after your {\bf About} tab.  Whenever you select a tab other than the hill-climber tab, the hill-climber will pause; when you go back to the hill-climber tab it will resume.  You get rid of the hill-climber by selecting {\bf Stop Hill-Climbing} in the {\bf Edit} menu. 
 
-Edisyn's Hill-Climber repeatedly offers you sixteen new versions of patches and asks you to choose your top three preferences: you can also indicate preference for your current working patch or for nothing.  After you have chosen them, the Hill-Climber will try to build a new set of sounds whose parameters are similar to your choices in various ways.  If you're lucky, Edisyn will head towards regions of the synthesizer's parameter space which make sounds you like.  {\bf Hint:  You will have more success with the hill-climber if you restrict the parameters being mutated to just those you want to explore.}  Different kinds of synthesizers will also benefit from different amounts of exploration (mutation and recombination) rates.  You'll need to tweak those as necessary.
+Edisyn's Hill-Climber repeatedly offers you sixteen new versions of patches and asks you to choose your top three preferences.  After you have chosen them, the Hill-Climber will try to build a new set of sounds whose parameters are similar to your choices in various ways.  The Hill-Climber builds new sounds by recombining your top three sound choices in certain ways and adding some degree of noise (mutation) to them.   If you're lucky, Edisyn will head towards regions of the synthesizer's parameter space which make sounds you like.  {\bf Hint:  You will have more success with the hill-climber if you restrict the parameters being mutated to just those you want to explore.}  Different kinds of synthesizers will also benefit from different amounts of exploration (mutation and recombination) rates.  You'll need to tweak those as necessary.
 
-The Hill-Climber builds new sounds by recombining your top three sound choices and adding some degree of noise (mutation) to them.  Let's say that your top three sounds were sounds {\bf A, B,} and {\bf C}, and that your {\it previous} ``A'' from last time is called {\bf Z}.  Figures \ref{hcfigure} and \ref{hctable} explain the mechanism by which the 16 new patches are generated.  The hill-climber tries to balance coming up with mixtures of your selections as well as things well outside the searched space (balancing so-called {\it exploration} and {\it exploitation}). You can also select only two top choices (A and B), a single choice (A), or no choices at all\,---\,in which case Edisyn just generates 16 mutated replacements for the existing ones.
+\paragraph{Candidates} This region holds the current candidate patches. When you start up the Hill-Climber, it will begin playing each candidate patch in turn.  If you don't want Edisyn to play automatically, you can turn it off by choosing {\bf Send Test Notes...} in the {\bf MIDI} menu.  Either way, you can manually play a patch by pressing its {\bf Play} button, or by typing the key located on that button.   You can of course also choose which three patches you like the most (in order).
+
+\paragraph{Iterations} After you have selected your preferred patches, you can build a new set of patches from them by pressing the {\bf Climb} button.  This will also increment the iteration number.  If you don't like the patches that were built, you can try again by pressing the {\bf Retry} button.  If you'd like to back up to a previous iteration, press {\bf Back Up}.  Finally, to reset back to the very first iteration, press {\bf Reset}.
+
+The amount of mutation noise used when generating new patches is specified by the {\bf Mutation Rate} dial.  Typically you'd select something around 5--10.  Additionally, by default the Hill-Climber lets you select from 16 candidates.  But if you press {\bf Bigger}, this set will expand to 32 candidates.
+
+\paragraph{Archive} If you like a patch and you'd like to hold onto it even after hill-climbing to the next iteration, you can place it in the {\it archive}.  The archive consists of six patch locations: to copy a patch to a given archive location, click on its {\bf Options} button and select one of {\bf Archive 1} through {\bf Archive 6}.  Archived patches can also be selected to participate in hill-climbing: just pick a number under a given patch.
+
+\paragraph{Current and None} The {\it Current} category holds the patch currently being edited in your editor, and it too can be selected to participate in hill-climbing at any time.  Finally, if you select a number in the {\it None} category (number 2, say) then no patch is selected for number 2 at this time.
+
+\paragraph{Additional Options} The {\bf Options} button holds some additional features besides just copying to the archive.  
+
+\begin{itemize}
+\item {\bf Keep Patch}\quad Loads the patch into the current patch in your patch editor.
+\item {\bf Edit Patch}\quad Creates a new patch editor and loads the patch into that.  Note that if you edit the patch in its editor, the {\it changes you make will be automatically reflected here}.
+\item {\bf Save to File}\quad Saves the patch to a file.
+\item {\bf Load from File}\quad Changes the patch to one loaded from a file. 
+\item {\bf Nudge Candidates to Me}\quad Nudges all the candidates towards the given patch. 
+\end{itemize}
+
+\subsection{How the Hill-Climber Makes New Sounds}
+
+The Hill-Climber builds new sounds by recombining your top three sound choices and adding some degree of noise (mutation) to them.  Let's say that your top three sounds were sounds {\bf A, B,} and {\bf C}, and that your {\it previous} ``A'' from last time is called {\bf Z}.      You can also select only two top choices (A and B), or  single choice (A).   Figure \ref{hcfigure} explains the mechanism by which the 16 new patches are generated through various recombination and mutation mechanisms for the first 16 patches.  If you have chosen to use 32 candidate patches, then the second 16 are done exactly like the first 16, except with twice the mutation rate.
+
+The hill-climber tries to balance coming up with mixtures of your selections as well as things well outside the searched space (balancing so-called {\it exploration} and {\it exploitation}). It also attempts to move further in the direction you had just moved, in the hopes that you'll like even more of what you had selected.
+
+
+%    \begin{figure}[t]
+%    \begin{center}
+%    \small
+%    \begin{tabular}{@{}ll@{}}
+%    \multicolumn{2}{c}{\bf A, B, and C}\\
+%    \hline
+%    \bf Operation&\bf Mutation\\
+%    A $+$ B& 1x\\
+%    A $+$ C& 1x\\
+%    B $+$ C& 1x\\
+%    A $+$ (B $+$ C)& 1x\\
+%    A $-$ B& 1x\\
+%    B $-$ A& 1x\\
+%    A $-$ C& 1x\\
+%    C $-$ A& 1x\\
+%    B $-$ C& 1x\\
+%    C $-$ B& 1x\\
+%    A $-$ Z& 1x\\
+%    B $-$ Z& 1x\\
+%    C $-$ Z& 1x\\
+%    A& 3x\\
+%    B& 3x\\
+%    C& 3x\\
+%    \end{tabular}\hspace{\fill}
+%    \begin{tabular}{@{}ll@{}}
+%    \multicolumn{2}{c}{\bf A, and B}\\
+%    \hline
+%    \bf Operation&\bf Mutation\\
+%    A $+$ B& 1x\\
+%    A $+$ B& 2x\\
+%    A $+$ B& 3x\\
+%    A $-$ B& 1x\\
+%    A $-$ B& 2x\\
+%    B $-$ A& 1x\\
+%    B $-$ A& 2x\\
+%    A $-$ Z& 1x\\
+%    A $-$ Z& 2x\\
+%    B $-$ Z& 1x\\
+%    B $-$ Z& 2x\\
+%    (A $-$ Z) $+$ (B $-$ Z)& 1x\\
+%    A& 1x\\
+%    A& 2x\\
+%    B& 1x\\
+%    B& 2x\\
+%    \end{tabular}\hspace{\fill}
+%    \begin{tabular}{@{}ll@{}}
+%    \multicolumn{2}{c}{\bf A Only}\\
+%    \hline
+%    \bf Operation&\bf Mutation\\
+%    A& 2x\\
+%    A& 2x\\ 
+%    A& 2x\\ 
+%    A& 2x\\
+%    A& 2x\\
+%    A& 2x\\
+%    A& 3x\\
+%    A& 3x\\
+%    A& 3x\\
+%    A& 4x\\
+%    A& 4x\\
+%    A& 5x\\
+%    A& 5x\\
+%    A $-$ Z& 1x\\
+%    A $-$ Z& 2x\\
+%    (A $-$ Z) $-$ Z& 2x\\
+%    \end{tabular}
+%    \end{center}
+%    \caption{Operations producing the sixteen new children each hill-climbing step.  The operations performed depend on whether the user has made  one, two, or three selections.    Each operation is followed by a certain degree of mutation.  A, B, and C are the (up to) three selections, A being most preferred and C being least.  Z is the most preferred selection the {\it previous} iteration.  The operation \(X + Y\) means to recombine X with Y, with somewhat of a bias towards X.  The operation \(X - Y\) means to find a point on the opposite side of X from Y.  The values 2x, 3x etc. aren't {\it stronger} mutation; but rather they are {\it repeated mutation operations}.  That is, 3x means to mutate, then mutate again, then mutate again.  See Figure \ref{hcfigure}.}
+%    \label{hctable}
+%    \end{figure}
+   
 
 \begin{figure}[t]
 \begin{center}
-\small
-\begin{tabular}{@{}ll@{}}
-\multicolumn{2}{c}{\bf A, B, and C}\\
-\hline
-\bf Operation&\bf Mutation\\
-A $+$ B& 1x\\
-A $+$ C& 1x\\
-B $+$ C& 1x\\
-A $+$ (B $+$ C)& 1x\\
-A $-$ B& 1x\\
-B $-$ A& 1x\\
-A $-$ C& 1x\\
-C $-$ A& 1x\\
-B $-$ C& 1x\\
-C $-$ B& 1x\\
-A $-$ Z& 1x\\
-B $-$ Z& 1x\\
-C $-$ Z& 1x\\
-A& 3x\\
-B& 3x\\
-C& 3x\\
-\end{tabular}\hspace{\fill}
-\begin{tabular}{@{}ll@{}}
-\multicolumn{2}{c}{\bf A, and B}\\
-\hline
-\bf Operation&\bf Mutation\\
-A $+$ B& 1x\\
-A $+$ B& 2x\\
-A $+$ B& 3x\\
-A $-$ B& 1x\\
-A $-$ B& 2x\\
-B $-$ A& 1x\\
-B $-$ A& 2x\\
-A $-$ Z& 1x\\
-A $-$ Z& 2x\\
-B $-$ Z& 1x\\
-B $-$ Z& 2x\\
-(A $-$ Z) $+$ (B $-$ Z)& 1x\\
-A& 1x\\
-A& 2x\\
-B& 1x\\
-B& 2x\\
-\end{tabular}\hspace{\fill}
-\begin{tabular}{@{}ll@{}}
-\multicolumn{2}{c}{\bf A Only}\\
-\hline
-\bf Operation&\bf Mutation\\
-A& 2x\\
-A& 2x\\ 
-A& 2x\\ 
-A& 2x\\
-A& 2x\\
-A& 2x\\
-A& 3x\\
-A& 3x\\
-A& 3x\\
-A& 4x\\
-A& 4x\\
-A& 5x\\
-A& 5x\\
-A $-$ Z& 1x\\
-A $-$ Z& 2x\\
-(A $-$ Z) $-$ Z& 2x\\
-\end{tabular}
+\includegraphics[width=5in]{HillClimbingBig.pdf}
 \end{center}
-\caption{Operations producing the sixteen new children each hill-climbing step.  The operations performed depend on whether the user has made  one, two, or three selections.    Each operation is followed by a certain degree of mutation.  A, B, and C are the (up to) three selections, A being most preferred and C being least.  Z is the most preferred selection the {\it previous} iteration.  The operation \(X + Y\) means to recombine X with Y, with somewhat of a bias towards X.  The operation \(X - Y\) means to find a point on the opposite side of X from Y.  The values 2x, 3x etc. aren't {\it stronger} mutation; but rather they are {\it repeated mutation operations}.  That is, 3x means to mutate, then mutate again, then mutate again.  See Figure \ref{hcfigure}.}
-\label{hctable}
+\caption{Recombination and Opposite-Recombination in the Hill-Climber. Shown are (left to right) basic operations performed when the user has made three (A, B, C), two (A, B), or only one (A) selections.  Z is the top selection the previous iteration (the previous iteration's A). Operations are combinations of basic Edisyn recombination procedures.  Specifically, \(A + B\) means ordinary recombination between \(A\) and \(B\), weighted towards \(A\).  Whereas \(A - B\) means opposite-recombination, finding a point on the other side of \(A\) from the location of \(B\).   Each operation is accompanied by numbers in brackets, such as [2, 3].  In this example, this means that two children will be produced using this particular operation: one (2) will be then mutated twice, and the other (3) three times.  Recombination and Opposite-Recombination are always done with a weight of 0.75; but mutation is done with a weight specified by the user on the panel.}
+\label{hcfigure}
 \end{figure}
 
 When you fire up the Hill-Climber the first time, it doesn't have three candidates yet, nor does it have a Z.  So instead what it does is take your current patch and build sixteen sounds as follows:
 
 \begin{itemize}
-\item{1--4}: Four 1x mutated versions of the current patch
-\item{5--8}: Four 2x mutated versions of the current patch
-\item{9--12}: Four 3x mutated versions of the current patch
+\item{1--4}: Four mutated versions of the current patch
+\item{5--8}: Four twice-mutated versions of the current patch
+\item{9--12}: Four thrice-mutated versions of the current patch
 \item{13--16}: Four 4x mutated versions of the current patch
 \end{itemize}
 
-The sixteen candidates appear in the {\bf Candidates} section.  The option of choosing your current patch is in the {\bf Current} section, and the option of choosing no patch is in the {\bf None} section.  Each option (except None) has a button labelled {\bf Play}, which lets you play the candidate, and each Candidate has a button labelled {\bf Options}, which presents so additional options).  There are also three radio buttons, labelled 1, 2, and 3.  These are for you to select the sound as one of your top three choices, if you like it.
-
-Once you have selected your top three options,\footnote{Yes, if you like fewer than three sounds, a sound can be more than one top-three option.} press {\bf Climb} to make the Hill-Climber build new sounds based on those options.  If you don't like any of the sounds, you can press {\bf Retry} to make the Hill-Climber try again, building sixteen new sounds (only the noisy sounds will change).  If you don't like where you're going, you can also back up to an earlier iteration by pressing {\bf Backup}.  And you can back up all the way to the very beginning again by pressing {\bf Reset}.
-
-
-The degree of mutation can be tweaked.  Initially it's set to a reasonable starting value: but if you're stuck in a rut, you might increase the mutation value to explore more; on the other hand if you're trying to finesse things, you might reduce it.
-
-The degree of recombination can also be tweaked, but this requires a bit of explanation.  When two patches X and Y are recombined as X + Y, the degree of recombination determines how much X dominates things.  If it's low, then the result will be very similar to X.  If it's high, then the result will be a uniform mixture of X and Y.  Again, if you're stuck in a rut, you might try making the recombination value higher.
-
-Note that when you enter the Hill-Climber, it automatically turns on {\bf Send Test Notes}, and each time a new test note is played, it's a different candidate sound.  That way you can hear all the sounds easily.  The sound being played is shown by making its {\bf Play} button text red.  If you would like to reset the sequence to a different sound, just press its Play button.  When you leave the Hill-Climber to go to some other tab in your patch editor, Send Test Notes is turned off automatically.
-
-\paragraph{Nudging in the Hill-Climber}
-
-If you have loaded patches to nudge (typically via {\bf Nudge:Set ...} in the {\bf Edit} menu) they become available in the hill-climber.  When you select the nudge target (1, 2, 3, or 4 or the Current Patch), and then press {\bf Nudge To:}, then {\bf all of the candidates} will get nudged towards the target.  The amount of nudging that occurs is set by the standard nudge recombination and mutation amounts (see the {\bf Nudge:Set Nudge Mutation} or {\bf Nudge:Set Nudge Recombination} under the {\bf Edit} menu).
-
-By pressing {\bf Go to:} you can also reset all of the candidates with patches formed by essentially reinitializing from the nudge target just as pressing the Reset button would reinitialize from the current patch.  
-
-Note that neither Go to: nor Nudge To: reset the the stack nor increase the iteration: they just change the candidate sounds.  Thus if you afterwards press ``Retry'', the current iteration is retried once again; or if you press ``Back Up", the iteration is backed up as normal.
-
-\paragraph{Candidate Options}
-
-If you press the {\bf Options} button on a candidate, a menu pops up with a variety of options:
-
-\begin{itemize}
-\item {\bf Keep Patch}\quad Loads the candidate into the current patch in your patch editor.
-\item {\bf Edit Patch}\quad Creates a new patch editor and loads the candidate into that.  Note that if you edit the patch in the patch editor, the {\it changes you make will be automatically reflected in the candidate}.  If you update the candidate (by hill-climbing or nudging or backing up etc.) then this connection will be broken
-\item {\bf Save to File}\quad Saves the candidate to a file.
-\item {\bf Load from File}\quad Changes the candidate to a patch loaded from a file. 
-\item {\bf Set... }\quad Copies the candidate into one of the nudge targets.
-\item {\bf Load...}\quad Changes the candidate into a copy of one of the nudge targets. 
-\end{itemize}
-
-Note again that, as was the case in nudging above, neither Load from File nor Load... reset the the stack nor increase the iteration: they just change the candidate sounds.  Thus if you afterwards press ``Retry'', the current iteration is retried once again; or if you press ``Back Up", the iteration is backed up as normal.
-
+Again, if you have chosen to do 32 patches rather than 16, then the second 16 are done in the same way, but with twice the mutation rate.
 
 \subsection{How Recombination and Mutation Work}
 
@@ -486,53 +501,46 @@ Patches are lists of parameters.   Each parameter takes one of several forms:
 
 \begin{figure}[t]
 \begin{minipage}{\linewidth}
-\begin{minipage}[t]{0.49\linewidth}%
+\begin{minipage}[t]{\linewidth}%
 \begin{algorithm}[H]
-   \caption{MetricMutate}
+   \caption{~MutateM(Parameter \(P\) with value \(v\); {\it weight})}
    \label{alg:example}
 \begin{algorithmic}
-   \STATE {\bfseries Input:} Parameter \(P\) with current value \(v\); {\it weight}
-   \STATE \(q \leftarrow \text{\it weight} \times\)
-   \STATE \hspace{\fill}\((\text{metric max of \(P\)} - (1 + \text{metric min of \(P\)}))\)
-   \STATE \(u \leftarrow\) uniform random selection from
-   \STATE \hspace{\fill}\([v-q/2, v+q/2]\)
-   \IF{\(u=v\)}
-   	\IF{coin flip of probability 0.5}
-		\REPEAT
-			\STATE \(u \leftarrow u + (\text{either 1 or \(-1\) at random})\)
-			\STATE \(u \leftarrow\) round \(u\) to nearest metric value in \(P\)
-		\UNTIL{coin flip of probability 0.5}
-	\ENDIF
-   \ENDIF 
-   \STATE {\bfseries return} \(u\)
+\STATE \(l, h \leftarrow\) metric min and metric max of \(P\), respectively
+\REPEAT
+\STATE \(\delta \leftarrow N(0,\, 0.5 \times (\frac{1}{1 - \text{\it weight}} - 1)) \times (h - l) \mod 2\)\hspace{\fill}{\it \(N(\mu, \sigma)\): Normal{\hspace{-0.2em}}}
+\UNTIL{\(l - 0.5 < v + \delta < h + 0.5\)}
+	\STATE{{\bfseries return}  \(v + \delta\) rounded to the nearest integer}
+ %  \STATE \(q \leftarrow \text{\it weight} \times (1 + \text{metric max of \(P\)} - \text{metric min of \(P\)})\)
+ %  \STATE \(l \leftarrow \max( v- \lfloor q\rfloor, \text{ metric min of \(P\)})\)
+%   \STATE \(h \leftarrow \min(v + \lceil q\rceil, \text{ metric max of \(P\)})\)
+%\STATE {\bfseries return} a uniform random selection from \([l, h]\)
   \end{algorithmic}
 \end{algorithm}
-\end{minipage}%
-\hspace{0.01\linewidth}
-\begin{minipage}[t]{0.49\linewidth}
+\end{minipage}\\
+\begin{minipage}[t]{\linewidth}
 \begin{algorithm}[H]
-   \caption{Mutate}
-   \label{alg:example}
+   \caption{~Mutate(Parameter \(P\) with value \(v\); {\it weight})}
+   \label{alg:mutate}
 \begin{algorithmic}
-   \STATE {\bfseries Input:} Parameter \(P\), with current value \(v\), {\it weight}
-    \IF{\(P\) is fully metric}
-    \STATE {\bfseries return } MetricMutate(\(P, v\), {\it weight})
-    \ELSIF{\(P\) is semi-metric and \(v\) inside metric region}
-   	\IF{coin flip of probability 0.5}
-   		 \STATE {\bfseries return } MetricMutate(\(P, v\), {\it weight})
-	\ELSIF{coin flip of probability {\it weight}}
-		\STATE {\bfseries return} a random non-metric value from \(P\)
+    \IF{\(P\) is metric}
+   \STATE{\bfseries return } MutateM(\(P, v\), {\it weight})
+    \ELSIF{\(P\) is semi-metric and \(v\) is a metric value}
+   	\IF{probability 0.5}
+   		\STATE {\bfseries return } MutateM(\(P, v\), {\it weight})
+	\ELSIF{probability {\it weight}}
+		\STATE {\bfseries return} a random  \(p_{\text{non-metric}} \in P\)
 	\ENDIF
-    \ELSIF{\(P\) is semi-metric and \(v\) outside metric region}
-		\IF{coin flip of probability {\it weight}}
-		   	\IF{coin flip of probability 0.5}
-				\STATE {\bfseries return} a random metric value from \(P\)
+    \ELSIF{\(P\) is semi-metric and \(v\) is not a metric value}
+		\IF{probability {\it weight}}
+		   	\IF{probability 0.5}
+				\STATE{\bfseries return} a random \(p_{\text{metric}} \in P\)
 		    	\ELSE
-	    			\STATE {\bfseries return} a random non-metric value from \(P\)
+	    			\STATE {\bfseries return} a random  \(p_{\text{non-metric}} \in P\)
     			\ENDIF
 		\ENDIF
-    \ELSIF{coin flip of probability {\it weight}}
-			\STATE {\bfseries return} a random metric value from \(P\)
+    \ELSIF{probability {\it weight}}
+			\STATE {\bfseries return} random \(p_{\text{metric}}\!\in P\)
     \ENDIF
     \STATE {\bfseries return} \(v\)
   \end{algorithmic}
@@ -551,51 +559,41 @@ Notice that if \(v\) is a metric value, and the algorithm has decided it will st
 
 \begin{figure}[t]
 \begin{minipage}{\linewidth}
-\begin{minipage}[t]{0.49\linewidth}%
+\begin{minipage}[t]{\linewidth}%
 \begin{algorithm}[H]
-   \caption{Recombine}
-   \label{alg:example}
+   \caption{~Recombine(Param \(P\) with values \(v, w\); {\it weight})}
+   \label{alg:recombine}
 \begin{algorithmic}
-   \STATE {\bfseries Input:} Parameter \(P\) with current values \(v, w\); {\it weight}
-	\IF{coin flip of probability {\it weight}}
-	    	\IF{\(v\) and \(w\) are both in metric region in \(P\)}
-			\STATE  {\bfseries return } a random selection from \([v, w]\) 
-		\ELSIF{coin flip of probability 0.5}
-				\STATE {\bfseries return \(w\)}
-		\ENDIF
-	\ENDIF
-    \STATE {\bfseries return} \(v\)
+    \IF{both \(v\) and \(w\) are metric values in \(P\)}
+    	\STATE \(q \leftarrow v - \text{\it weight} \times (v - w),\)\quad rounded towards \(w\)
+    	\STATE {\bfseries return} a random uniform selection from \([v, q ]\)
+    \ELSIF{probability {\it weight}}
+\STATE  {\bfseries return} \(w\)
+     \ENDIF
+	\STATE {\bfseries return} \(v\)
+
+%    	\IF{probability {\it weight}}
+%    	    	\IF{\(v\) and \(w\) are both metric values in \(P\)}
+%    			\STATE  {\bfseries return } a uniform random selection from \([v, w]\) 
+%    		\ELSIF{probability 0.5}
+%    				\vspace{-1.2em}\STATE\hspace{9.5em}~~{\bfseries return \(w\)}
+%    		\ENDIF
+%    	\ENDIF
+%        \STATE {\bfseries return} \(v\)
   \end{algorithmic}
 \end{algorithm}
-\end{minipage}%
-\hspace{0.01\linewidth}
-\begin{minipage}[t]{0.49\linewidth}
+\end{minipage}\\
+\begin{minipage}[t]{\linewidth}
 \begin{algorithm}[H]
-   \caption{Opposite}
-   \label{alg:example}
+   \caption{~Opposite(Param \(P\) with values \(v, w\); {\it weight})}
+   \label{alg:opposite}
 \begin{algorithmic}
-   \STATE {\bfseries Input:} \hspace{-0.04em}Parameter \(P\) with current values \(v, w\);
-   \STATE \hspace{\fill}{\it weight}, {\it flee}
- 	\IF{\(v=w\) and {\it flee}\(=\){true}}
-		\IF{\(v\) is non-metric}
-			\IF{coin flip of probability {\it weight}}
-    				\STATE {\bfseries return } a random non-metric value from 
-				\STATE \hspace{\fill} \(P - \{w\}\)
-			\ENDIF
-		\ELSIF{\(v=\) metric max of \(P\)}
-			\STATE {\bfseries return } \(v - 1\)
-		\ELSIF{\(v=\) metric min of \(P\)} 
-			\STATE {\bfseries return } \(v + 1\)
-		\ELSE
-			\STATE {\bfseries return } \(v\ +\) or \(- 1\) at random
-		\ENDIF
-    \ELSIF{both \(v\) and \(w\) are metric values in \(P\)}
-    	\STATE \(q \leftarrow v + \text{\it weight} \times (v - w)\)
-    	\STATE \(q \leftarrow \text{min}(\text{max}(q, \text{metric min of \(P\)}), \text{metric max of \(P\)})\)
-    	\STATE {\bfseries return} a random selection from \([v, q]\) 
-    \ELSE
+    \IF{both \(v\) and \(w\) are metric values in \(P\)}
+    	\STATE \(q \leftarrow v + \text{\it weight} \times (v - w),\)\quad rounded away from \(w\)
+    	\STATE \(q \leftarrow \text{min}(\text{max}(q, \text{ metric min of \(P\)}), \text{ metric max of \(P\)})\)
+    	\STATE {\bfseries return} a random uniform selection from \([v, q]\) 
+ \ENDIF
         \STATE {\bfseries return} \(v\)
-     \ENDIF
   \end{algorithmic}
 \end{algorithm}
 \end{minipage}
@@ -612,7 +610,7 @@ This takes two values \(v\) and \(w\) for a given parameter \(P\) and returns a 
 \vspace{1em}\noindent{\bf Opposite Recombination}\quad
 This is used to find a new patch \(Q\) which is on the {\it other side} of patch \(P\) from where patch \(S\) is.  There are two reasons you might want to do this.  One obvious reason is because you want to essentially move \(P\) away from \(S\) (so \(P\) becomes \(Q\)).  This is called {\it fleeing}: it's used in Edisyn for {\it nudging away} from a target patch.
 
-The other reason is because you have recently moved from \(S\) to \(P\), and now you'd like to move \(P\) even {\it further} in that direction.  This is the ``minus'' operation  done the Hill-Climbing procedure (see Figure~\ref{hcfigure} and Table~\ref{hctable}).  You'll note from Figure \ref{recombine} that the Opposite procedure takes a {\it flee} argument to distinguish between your two reasons.   This largely influences what will happen if the two parameter values are the same.\footnote{Note that we assume that all metric parameters are integers, not real-valued}.
+The other reason is because you have recently moved from \(S\) to \(P\), and now you'd like to move \(P\) even {\it further} in that direction.  This is the ``minus'' operation  done the Hill-Climbing procedure (see Figure~\ref{hcfigure}).  You'll note from Figure \ref{recombine} that the Opposite procedure takes a {\it flee} argument to distinguish between your two reasons.   This largely influences what will happen if the two parameter values are the same.\footnote{Note that we assume that all metric parameters are integers, not real-valued}.
 
 \section{Writing a Patch Editor}
 
@@ -646,7 +644,7 @@ Below is a little table of the current patch editors for Edisyn, and various Edi
 \begin{sideways}Receive Error or Ack\end{sideways}&
 \begin{sideways}Standard Sysex File\end{sideways}\\[0.5em]
 \hline\\[-0.5em]
-Futuresonus Parva&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}&&&\\
+%Futuresonus Parva&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}&&&\\
 Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}            \\
 Waldorf Blofeld&{\cm}*&{\cm}*&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}& & & {\cm}            \\
 Kawai K1/K1r/K1m&{\cm}*& &{\cm}& & & &{\cm}& &{\cm}&{\cm}            \\

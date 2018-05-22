@@ -161,7 +161,7 @@ public class HillClimb extends SynthPanel
                     for(int j = 0; j < NUM_MODELS; j++)       
                         {
                         plays[j].getButton().setForeground(new JButton().getForeground());
-                        plays[j].getButton().setText(titleForButton(i));
+                        plays[j].getButton().setText(titleForButton(j));
                         }
                     plays[_i].getButton().setForeground(Color.RED);
                     plays[_i].getButton().setText("<HTML><B>" + titleForButton(i) + "</b></HTML>");
@@ -348,7 +348,7 @@ public class HillClimb extends SynthPanel
 
         doItems[6] = null;
 
-        doItems[7] = new JMenuItem("Archive 1");
+        doItems[7] = new JMenuItem("Archive to q");
         doItems[7].addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -357,7 +357,7 @@ public class HillClimb extends SynthPanel
                 }
             });
 
-        doItems[8] = new JMenuItem("Archive 2");
+        doItems[8] = new JMenuItem("Archive to r");
         doItems[8].addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -366,7 +366,7 @@ public class HillClimb extends SynthPanel
                 }
             });
 
-        doItems[9] = new JMenuItem("Archive 3");
+        doItems[9] = new JMenuItem("Archive to s");
         doItems[9].addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -375,7 +375,7 @@ public class HillClimb extends SynthPanel
                 }
             });
 
-        doItems[10] = new JMenuItem("Archive 4");
+        doItems[10] = new JMenuItem("Archive to t");
         doItems[10].addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -384,7 +384,7 @@ public class HillClimb extends SynthPanel
                 }
             });
                 
-        doItems[11] = new JMenuItem("Archive 5");
+        doItems[11] = new JMenuItem("Archive to u");
         doItems[11].addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -393,7 +393,7 @@ public class HillClimb extends SynthPanel
                 }
             });
                 
-        doItems[12] = new JMenuItem("Archive 6");
+        doItems[12] = new JMenuItem("Archive to v");
         doItems[12].addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)

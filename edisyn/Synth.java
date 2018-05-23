@@ -1278,7 +1278,7 @@ public abstract class Synth extends JComponent implements Updatable
             new String[] { "Background  ", "Text  ", "Color A  ", "Color B  ", "Color C  ", "Highlights  ", "Dials  " },  
             new JComponent[] { background, text, a, b, c, dynamic, dial }, 
             "Update Colors", 
-            "\n\n(Note: Currently-Open Windows May Look Scrambled)");
+            "<html><font size='-1'>Note: after changing colors, currently<br>open windows may look scrambled,<br>but new windows will look correct.</font></html>");
                                 
         if (result)
             {
@@ -3614,7 +3614,8 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                if (showSimpleConfirm("Reset Colors", "Reset Color Scheme to Defaults?\n\n(Note: Currently-Open Windows May Look Scrambled)"))
+                if (showSimpleConfirm("Reset Colors",
+                            "<html>Reset Color Scheme to Defaults?<br><br><font size='-1'>Note: after resetting colors, currently<br>open windows may look scrambled,<br>but new windows will look correct.</font></html>"))
                     resetColors();
                 }
             });

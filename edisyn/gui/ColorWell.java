@@ -28,7 +28,7 @@ public class ColorWell extends JPanel
             {
             public void mouseReleased(MouseEvent e)
                 {
-                Color col = JColorChooser.showDialog(null, "Choose Color", getBackground());
+                Color col = JColorChooser.showDialog(null, "Choose Color", color);
                 setColor(col);
                 }
             });

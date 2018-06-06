@@ -1836,6 +1836,7 @@ bulk.setSelected(true);
 
 
         comp = new LabelledDial("Level 4", this, "ddas" + source + "envseg4level", color, 0, 31);
+        ((LabelledDial)comp).addAdditionalLabel("(Sustain)");
         hbox.add(comp);
 
         comp = new LabelledDial("Rate 5", this, "ddas" + source + "envseg5rate", color, 0, 31);
@@ -1847,7 +1848,6 @@ bulk.setSelected(true);
 
 
         comp = new LabelledDial("Level 5", this, "ddas" + source + "envseg5level", color, 0, 31);
-        ((LabelledDial)comp).addAdditionalLabel("(Sustain)");
         hbox.add(comp);
 
         comp = new LabelledDial("Rate 6", this, "ddas" + source + "envseg6rate", color, 0, 31);

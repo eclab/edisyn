@@ -2576,6 +2576,12 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
   byte[] solo_mesg = paramBytes(EXECUTE_SOLO_PART, 1);
   tryToSendSysex(solo_mesg);
 */
+
+		// for some reason changing the patch changes the mode to OMNI.  We need to turn that off.
+        byte[] patch_poly_mesg = paramBytes(MIDI_MODE, 1);
+        tryToSendSysex(patch_poly_mesg);
+        patch_poly_mesg = paramBytes(PERF_MIDI_MODE, 1);
+        tryToSendSysex(patch_poly_mesg);
         }
 
     public byte[] requestDump(Model tempModel)
@@ -2707,7 +2713,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
                 // load me into the patch location
                 performChangePatch(getModel());
-                tryToSendMIDI(emitAll(getModel(), true, false));                                
+                tryToSendMIDI(emitAll(getModel(), true, false));       
                 }
             }
         }
@@ -2750,8 +2756,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
    95 Blank Wave
 
 
-   These are the *supposed* unpublisheed VS waveform names, though the original designer says he really
-   didn't have names for any of them
+   These are the *supposed* unpublished VS waveform names, though the original designer says he really didn't have names for any of them
 
    1 Sine
    2 Saw

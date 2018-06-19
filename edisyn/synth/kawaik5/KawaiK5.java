@@ -878,7 +878,7 @@ bulk.setSelected(true);
                     break;
                     case SQUARE:
                         {
-                        for(int h = start; h < end; h += 2)
+                        for(int h = start + 1; h < end; h += 2)
                             {
                             setHarmonic(h, 0);
                             }

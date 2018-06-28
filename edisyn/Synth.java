@@ -2148,19 +2148,19 @@ public abstract class Synth extends JComponent implements Updatable
     ///////////    SPROUT AND MENU HANDLING
 
 
-	public SynthPanel findPanel()
-		{
+    public SynthPanel findPanel()
+        {
         Component tab = tabs.getSelectedComponent();
-    	if (tab instanceof JScrollPane)
-    		{
-    		Component inner = ((JScrollPane)tab).getViewport().getView();
-    		if (inner instanceof SynthPanel)
-    			{
-    			return (SynthPanel) inner;
-    			}
-    		}
-    	return null;
-		}
+        if (tab instanceof JScrollPane)
+            {
+            Component inner = ((JScrollPane)tab).getViewport().getView();
+            if (inner instanceof SynthPanel)
+                {
+                return (SynthPanel) inner;
+                }
+            }
+        return null;
+        }
 
     public void tabChanged()
         {
@@ -2184,23 +2184,23 @@ public abstract class Synth extends JComponent implements Updatable
         resetTab.setEnabled(false);
         
         SynthPanel panel = findPanel();
-    	if (panel != null)
-    		{
-			if (panel.isPasteable())
-				{
-				copyTab.setEnabled(true);
-				copyMutableTab.setEnabled(true);
-				}
-			if (!panel.isUnresettable())
-				{
-				resetTab.setEnabled(true);
-				}
-			if (panel.isPasteCompatible(getCopyPreamble()))
-				{
-				pasteTab.setEnabled(true);
-				pasteMutableTab.setEnabled(true);
-				}
-    		}
+        if (panel != null)
+            {
+            if (panel.isPasteable())
+                {
+                copyTab.setEnabled(true);
+                copyMutableTab.setEnabled(true);
+                }
+            if (!panel.isUnresettable())
+                {
+                resetTab.setEnabled(true);
+                }
+            if (panel.isPasteCompatible(getCopyPreamble()))
+                {
+                pasteTab.setEnabled(true);
+                pasteMutableTab.setEnabled(true);
+                }
+            }
         }
 
 
@@ -2877,18 +2877,18 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 SynthPanel p = findPanel();
                 if (p != null) 
-                	{
-                	getUndo().push(getModel());
-                	getUndo().setWillPush(false);
-                	setSendMIDI(false);
-                	p.pastePanel(true);
-                	setSendMIDI(true);
-                	// We do this TWICE because for some synthesizers, updating a parameter
-                	// will reveal other parameters which also must be updated but aren't yet
-                	// in the mapping.
-                	p.pastePanel(true);
-                	getUndo().setWillPush(true);
-                	}
+                    {
+                    getUndo().push(getModel());
+                    getUndo().setWillPush(false);
+                    setSendMIDI(false);
+                    p.pastePanel(true);
+                    setSendMIDI(true);
+                    // We do this TWICE because for some synthesizers, updating a parameter
+                    // will reveal other parameters which also must be updated but aren't yet
+                    // in the mapping.
+                    p.pastePanel(true);
+                    getUndo().setWillPush(true);
+                    }
                 }
             });
         menu.add(copyMutableTab);
@@ -2907,18 +2907,18 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 SynthPanel p = findPanel();
                 if (p != null) 
-                	{
-                	getUndo().push(getModel());
-                	getUndo().setWillPush(false);
-                	setSendMIDI(false);
-                	p.pastePanel(false);
-                	setSendMIDI(true);
-                	// We do this TWICE because for some synthesizers, updating a parameter
-                	// will reveal other parameters which also must be updated but aren't yet
-                	// in the mapping.
-                	p.pastePanel(false);
-                	getUndo().setWillPush(true);
-                	}
+                    {
+                    getUndo().push(getModel());
+                    getUndo().setWillPush(false);
+                    setSendMIDI(false);
+                    p.pastePanel(false);
+                    setSendMIDI(true);
+                    // We do this TWICE because for some synthesizers, updating a parameter
+                    // will reveal other parameters which also must be updated but aren't yet
+                    // in the mapping.
+                    p.pastePanel(false);
+                    getUndo().setWillPush(true);
+                    }
                 }
             });
         resetTab.addActionListener(new ActionListener()
@@ -2927,12 +2927,12 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 SynthPanel p = findPanel();
                 if (p != null) 
-                	{
-                	getUndo().push(getModel());
-                	getUndo().setWillPush(false);
-                	p.resetPanel();
-                	getUndo().setWillPush(true);
-                	}
+                    {
+                    getUndo().push(getModel());
+                    getUndo().setWillPush(false);
+                    p.resetPanel();
+                    getUndo().setWillPush(true);
+                    }
                 }
             });
         menu.add(resetTab);
@@ -3746,7 +3746,7 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 if (showSimpleConfirm("Reset Colors",
-                            "<html>Reset Color Scheme to Defaults?<br><br><font size='-1'>Note: after resetting colors, currently<br>open windows may look scrambled,<br>but new windows will look correct.</font></html>"))
+                        "<html>Reset Color Scheme to Defaults?<br><br><font size='-1'>Note: after resetting colors, currently<br>open windows may look scrambled,<br>but new windows will look correct.</font></html>"))
                     resetColors();
                 }
             });
@@ -3930,7 +3930,7 @@ public abstract class Synth extends JComponent implements Updatable
         updateTitle();
         numOpenWindows++;  
  
-    	tabChanged();	// so we reset the copy tab etc. menus
+        tabChanged();   // so we reset the copy tab etc. menus
        
         return frame;
         }

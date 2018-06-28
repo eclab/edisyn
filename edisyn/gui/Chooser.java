@@ -184,27 +184,27 @@ public class Chooser extends NumericalComponent
                 // the actionlistener even when you programmatically change
                 // its value.  OOPS.
                 if (callActionListener)
-                	{
+                    {
                     setState(combo.getSelectedIndex());
                     }
                 }
             });
 
 /*
-        combo.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                // This is due to a Java bug.
-                // Unlike other widgets (like JCheckBox), JComboBox calls
-                // the actionlistener even when you programmatically change
-                // its value.  OOPS.
-                if (callActionListener)
-                	{
-                    setState(combo.getSelectedIndex());
-                    }
-                }
-            });
+  combo.addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  // This is due to a Java bug.
+  // Unlike other widgets (like JCheckBox), JComboBox calls
+  // the actionlistener even when you programmatically change
+  // its value.  OOPS.
+  if (callActionListener)
+  {
+  setState(combo.getSelectedIndex());
+  }
+  }
+  });
 */
         }
     

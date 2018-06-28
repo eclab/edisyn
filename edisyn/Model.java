@@ -689,11 +689,11 @@ public class Model implements Cloneable
     public void set(String key, int value)
         {
         if (debug)
-        	{
-			System.err.println("Debug (Model):" + key + " --> " + value + " [" + getMin(key) + " - " + getMax(key) + "]" );
-			if (!exists(key))
-				System.err.println("Debug (Model): " + "Key " + key + " was NEW");
-        	}
+            {
+            System.err.println("Debug (Model):" + key + " --> " + value + " [" + getMin(key) + " - " + getMax(key) + "]" );
+            if (!exists(key))
+                System.err.println("Debug (Model): " + "Key " + key + " was NEW");
+            }
         // when do we push on the undo stack?
         if (
             undoListener != null &&         // when we have an undo listener AND
@@ -759,11 +759,11 @@ public class Model implements Cloneable
     public void set(String key, String value)
         {
         if (debug)
-        	{
-        	if (debug) System.err.println("Debug (Model): " + key + " --> " + value);
-			if (!exists(key))
-				System.err.println("Debug (Model): " + "Key " + key + " was NEW");
-        	}
+            {
+            if (debug) System.err.println("Debug (Model): " + key + " --> " + value);
+            if (!exists(key))
+                System.err.println("Debug (Model): " + "Key " + key + " was NEW");
+            }
 
         // when do we push on the undo stack?
         if (
@@ -783,10 +783,10 @@ public class Model implements Cloneable
     public String get(String key, String ifDoesntExist)
         {
         if (debug)
-        	{
-			if (!exists(key))
-				System.err.println("Debug (Model): " + "Key " + key + " does not exist");
-        	}
+            {
+            if (!exists(key))
+                System.err.println("Debug (Model): " + "Key " + key + " does not exist");
+            }
         String d = (String) (storage.get(key));
         if (d == null) return ifDoesntExist;
         else return d;
@@ -797,10 +797,10 @@ public class Model implements Cloneable
     public int get(String key, int ifDoesntExist)
         {
         if (debug)
-        	{
-			if (!exists(key))
-				System.err.println("Debug (Model): " + "Key " + key + " does not exist");
-        	}
+            {
+            if (!exists(key))
+                System.err.println("Debug (Model): " + "Key " + key + " does not exist");
+            }
         Integer d = (Integer) (storage.get(key));
         if (d == null) return ifDoesntExist;
         else return d.intValue();
@@ -811,10 +811,10 @@ public class Model implements Cloneable
     public int get(String key)
         {
         if (debug)
-        	{
-			if (!exists(key))
-				System.err.println("Debug (Model): " + "Key " + key + " does not exist");
-        	}
+            {
+            if (!exists(key))
+                System.err.println("Debug (Model): " + "Key " + key + " does not exist");
+            }
         Integer d = (Integer) (storage.get(key));
         if (d == null)  
             {
@@ -1041,10 +1041,10 @@ public class Model implements Cloneable
         does not have identical values.
     */
     public void printDiffs(Model other)
-    	{
-    	printDiffs(new PrintWriter(new OutputStreamWriter(System.err)), other);
-    	}
-    	
+        {
+        printDiffs(new PrintWriter(new OutputStreamWriter(System.err)), other);
+        }
+        
 
     /** Print to the given writer those model parameters for which the provided "other" model
         does not have identical values.
@@ -1080,10 +1080,10 @@ public class Model implements Cloneable
     /** Print the model parameters to stderr.   If diffsOnly, then only the model parameters which
         differ from the default will be printed. */
     public void print()
-    	{
-    	print(new PrintWriter(new OutputStreamWriter(System.err)));
-    	}
-    	
+        {
+        print(new PrintWriter(new OutputStreamWriter(System.err)));
+        }
+        
     /** Print the model parameters to the given writer.   If diffsOnly, then only the model parameters which
         differ from the default will be printed. */
     public void print(PrintWriter out)

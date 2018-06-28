@@ -50,8 +50,8 @@ public class Category extends JComponent implements Gatherable
         if (copyPreamble == null) return false;
         if (myPreamble == null) return false;
 
-		return (pasteable && 
-			reduceAllDigitsAfterPreamble(copyPreamble, "").equals(reduceAllDigitsAfterPreamble(myPreamble, "")));
+        return (pasteable && 
+            reduceAllDigitsAfterPreamble(copyPreamble, "").equals(reduceAllDigitsAfterPreamble(myPreamble, "")));
         }
         
     boolean canDistributeKey()   
@@ -229,8 +229,8 @@ public class Category extends JComponent implements Gatherable
                     }
                 }
             }
-         synth.revise();               
-       }
+        synth.revise();               
+        }
     
     final static int STATE_FIRST_NUMBER = 0;
     final static int STATE_FIRST_STRING = 1;
@@ -238,15 +238,15 @@ public class Category extends JComponent implements Gatherable
     final static int STATE_FINISHED = 3;
         
     public static String reducePreamble(String name, String preamble)
-    	{
-    	if (!name.startsWith(preamble)) 
-    		{
-    		System.err.println("Warning (Category): Key " + name + " doesn't start with " + preamble);
-    		return name;
-    		}
-    	return reduceAllDigitsAfterPreamble(preamble, "") + name.substring(preamble.length());
-    	}
-    	
+        {
+        if (!name.startsWith(preamble)) 
+            {
+            System.err.println("Warning (Category): Key " + name + " doesn't start with " + preamble);
+            return name;
+            }
+        return reduceAllDigitsAfterPreamble(preamble, "") + name.substring(preamble.length());
+        }
+        
     public static String reduceAllDigitsAfterPreamble(String name, String preamble)
         {
         char[] n = name.toCharArray();

@@ -423,7 +423,7 @@ public class KorgMicrosampler extends Synth
                 hbox.addLast(patterns[model.get(key, 0) - 1]);
                 hbox.revalidate();
                 hbox.repaint();
-        		category.makePasteable("pattern" + model.get(key, 1));
+                category.makePasteable("pattern" + model.get(key, 1));
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel(" Number ");
@@ -595,7 +595,7 @@ public class KorgMicrosampler extends Synth
                 v.addBottom(samples[model.get(key, 1) - 1]);
                 v.revalidate();
                 v.repaint();
-        		category.makePasteable("sample" + model.get(key, 1));
+                category.makePasteable("sample" + model.get(key, 1));
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel(" Number ");

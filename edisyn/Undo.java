@@ -49,22 +49,22 @@ public class Undo
         }
              
     void printStacks()
-    	{
-    	System.err.println("Debug (Undo):\nUNDO");
-    	Object[] o = undo.toArray();
-    	for(int i = 0; i < o.length; i++)
-    		{
-    		System.err.println("" + i + " " + o[i]);
-    		}
-    	System.err.println("\nREDO");
-    	o = redo.toArray();
-    	for(int i = 0; i < o.length; i++)
-    		{
-    		System.err.println("" + i + " " + o[i]);
-    		}
-    		
-    	}
-    	   
+        {
+        System.err.println("Debug (Undo):\nUNDO");
+        Object[] o = undo.toArray();
+        for(int i = 0; i < o.length; i++)
+            {
+            System.err.println("" + i + " " + o[i]);
+            }
+        System.err.println("\nREDO");
+        o = redo.toArray();
+        for(int i = 0; i < o.length; i++)
+            {
+            System.err.println("" + i + " " + o[i]);
+            }
+                
+        }
+           
     public Model undo(Model current)
         {
         if (undo.isEmpty())
@@ -82,8 +82,8 @@ public class Undo
         synth.updateUndoMenus();
         if (debug) System.err.println("Debug (Undo): Undo " + current + " to " + model + " Left: " + undo.size());
  
-         if (debug) printStacks();
-       return model;        
+        if (debug) printStacks();
+        return model;        
         }
                 
     public Model redo(Model current)

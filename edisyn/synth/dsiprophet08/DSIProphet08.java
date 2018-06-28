@@ -81,9 +81,9 @@ public class DSIProphet08 extends Synth
         VBox vbox2 = new VBox(VBox.TOP_CONSUMES);
         vbox2.addLast(addFilter(1, Style.COLOR_B()));
         vbox2.add(addAmplifier(1, Style.COLOR_C()));
-		hbox.add(vbox2);
-		
-		vbox2 = new VBox(VBox.TOP_CONSUMES);
+        hbox.add(vbox2);
+                
+        vbox2 = new VBox(VBox.TOP_CONSUMES);
         vbox2.addLast(addEnvelope(1, FILTER_ENVELOPE, Style.COLOR_B()));
         vbox2.add(addEnvelope(1, AMPLIFIER_ENVELOPE, Style.COLOR_C()));
         hbox.addLast(vbox2);
@@ -97,8 +97,8 @@ public class DSIProphet08 extends Synth
                 
         soundPanel = new SynthPanel(this);
         synthPanels[panel++] = soundPanel;
-         vbox = new VBox();
-         hbox = new HBox();
+        vbox = new VBox();
+        hbox = new HBox();
         hbox.add(Strut.makeHorizontalStrut(nameGlobal.getPreferredSize().width));
         hbox.addLast(addGlobal(2, Style.COLOR_B()));
         vbox.add(hbox);
@@ -113,9 +113,9 @@ public class DSIProphet08 extends Synth
         vbox2 = new VBox(VBox.TOP_CONSUMES);
         vbox2.addLast(addFilter(2, Style.COLOR_B()));
         vbox2.add(addAmplifier(2, Style.COLOR_C()));
-		hbox.add(vbox2);
-		
-		vbox2 = new VBox(VBox.TOP_CONSUMES);
+        hbox.add(vbox2);
+                
+        vbox2 = new VBox(VBox.TOP_CONSUMES);
         vbox2.addLast(addEnvelope(2, FILTER_ENVELOPE, Style.COLOR_B()));
         vbox2.add(addEnvelope(2, AMPLIFIER_ENVELOPE, Style.COLOR_C()));
         hbox.addLast(vbox2);
@@ -137,24 +137,24 @@ public class DSIProphet08 extends Synth
         hbox = new HBox();
         hbox.add(addExternalModulation(1, "Velocity", "velocity", Style.COLOR_C()));
         hbox.addLast(addEnvelope(1, THIRD_ENVELOPE, Style.COLOR_C()));
-    	vbox.add(hbox);
-    	
+        vbox.add(hbox);
+        
         hbox = new HBox();
         hbox.add(addExternalModulation(1, "Aftertouch", "pressure", Style.COLOR_C()));
         hbox.add(addExternalModulation(1, "Mod Wheel", "wheel", Style.COLOR_C()));
         hbox.add(addExternalModulation(1, "Breath", "breath", Style.COLOR_C()));
         hbox.addLast(addExternalModulation(1, "Foot Control", "foot", Style.COLOR_C()));
-		vbox.add(hbox);
-		
-       for(int i = 1; i <= 4; i+=2)
-        	{
-			hbox = new HBox();
-			hbox.add(addModulation(1, i, Style.COLOR_A()));
-			hbox.add(addModulation(1, i+1, Style.COLOR_A()));
-			hbox.add(addLFO(1, i, Style.COLOR_B()));
-			hbox.addLast(addLFO(1, i+1, Style.COLOR_B()));
-			vbox.add(hbox);
-			}
+        vbox.add(hbox);
+                
+        for(int i = 1; i <= 4; i+=2)
+            {
+            hbox = new HBox();
+            hbox.add(addModulation(1, i, Style.COLOR_A()));
+            hbox.add(addModulation(1, i+1, Style.COLOR_A()));
+            hbox.add(addLFO(1, i, Style.COLOR_B()));
+            hbox.addLast(addLFO(1, i+1, Style.COLOR_B()));
+            vbox.add(hbox);
+            }
 
         modulationPanel.add(vbox, BorderLayout.CENTER);
         modulationPanel.makePasteable("layer1");
@@ -162,7 +162,7 @@ public class DSIProphet08 extends Synth
 
 
 
-     	modulationPanel = new SynthPanel(this);
+        modulationPanel = new SynthPanel(this);
         synthPanels[panel++] = modulationPanel;
         
         vbox = new VBox();
@@ -170,30 +170,30 @@ public class DSIProphet08 extends Synth
         hbox = new HBox();
         hbox.add(addExternalModulation(2, "Velocity", "velocity", Style.COLOR_C()));
         hbox.addLast(addEnvelope(2, THIRD_ENVELOPE, Style.COLOR_C()));
-    	vbox.add(hbox);
-    	
+        vbox.add(hbox);
+        
         hbox = new HBox();
         hbox.add(addExternalModulation(2, "Aftertouch", "pressure", Style.COLOR_C()));
         hbox.add(addExternalModulation(2, "Mod Wheel", "wheel", Style.COLOR_C()));
         hbox.add(addExternalModulation(2, "Breath", "breath", Style.COLOR_C()));
         hbox.addLast(addExternalModulation(2, "Foot Control", "foot", Style.COLOR_C()));
-		vbox.add(hbox);
-		
-       for(int i = 1; i <= 4; i+=2)
-        	{
-			hbox = new HBox();
-			hbox.add(addModulation(2, i, Style.COLOR_A()));
-			hbox.add(addModulation(2, i+1, Style.COLOR_A()));
-			hbox.add(addLFO(2, i, Style.COLOR_B()));
-			hbox.addLast(addLFO(2, i+1, Style.COLOR_B()));
-			vbox.add(hbox);
-			}
+        vbox.add(hbox);
+                
+        for(int i = 1; i <= 4; i+=2)
+            {
+            hbox = new HBox();
+            hbox.add(addModulation(2, i, Style.COLOR_A()));
+            hbox.add(addModulation(2, i+1, Style.COLOR_A()));
+            hbox.add(addLFO(2, i, Style.COLOR_B()));
+            hbox.addLast(addLFO(2, i+1, Style.COLOR_B()));
+            vbox.add(hbox);
+            }
 
         modulationPanel.add(vbox, BorderLayout.CENTER);
         modulationPanel.makePasteable("layer2");
         addTab("Modulation B", modulationPanel);
 
-       // SEQUENCE PANEL
+        // SEQUENCE PANEL
                 
         SynthPanel sequence = new SynthPanel(this);
         synthPanels[panel++] = sequence;
@@ -228,7 +228,7 @@ public class DSIProphet08 extends Synth
         model.set("name", "Untitled");
         model.set("bank", 0);
         model.set("number", 0);
-		
+                
         loadDefaults();        
         }
                 
@@ -303,14 +303,14 @@ public class DSIProphet08 extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-		vbox = new VBox();
+        vbox = new VBox();
         params = KEYBOARD_MODES;
         comp = new Chooser("Keyboard Mode", this, "keyboardmode", params);
         vbox.add(comp);
         hbox.add(vbox);
 
         comp = new LabelledDial("Split Point", this, "splitpoint", color, 0, 127)
-        	{
+            {
             public String map(int val)
                 {
                 return (NOTES[val % 12] + " " + (val / 12));
@@ -337,9 +337,9 @@ public class DSIProphet08 extends Synth
         
         VBox vbox = new VBox();
 
-		HBox hbox2 = new HBox();
+        HBox hbox2 = new HBox();
 
-    	JComponent c1 = comp = new CheckBox("Arpeggiator", this, "layer" + layer + "arpeggiator");
+        JComponent c1 = comp = new CheckBox("Arpeggiator", this, "layer" + layer + "arpeggiator");
         hbox2.add(comp);
         
         params = ARPEGGIATOR_MODES;
@@ -352,8 +352,8 @@ public class DSIProphet08 extends Synth
 
         vbox.add(hbox2);
 
-		hbox2 = new HBox();
-		
+        hbox2 = new HBox();
+                
         comp = new CheckBox("Unison", this, "layer" + layer + "unison");
         comp.setPreferredSize(c1.getPreferredSize());
         hbox2.add(comp);
@@ -408,8 +408,8 @@ public class DSIProphet08 extends Synth
         comp = new LabelledDial("Slop", this, "layer" + layer + "slop", color, 0, 5);
         hbox.add(comp);
 
-    	comp = new LabelledDial("Mix", this, "layer" + layer + "mix", color, 0, 127)
-    		{
+        comp = new LabelledDial("Mix", this, "layer" + layer + "mix", color, 0, 127)
+            {
             public String map(int val)
                 {
                 // is this right?
@@ -454,9 +454,9 @@ public class DSIProphet08 extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Fine Tune", this, "layer" + layer + "dco" + osc + "finetune", color, 0, 100, 50)
-			{
-			public boolean isSymmetric() { return true; }
-			};
+            {
+            public boolean isSymmetric() { return true; }
+            };
         hbox.add(comp);
                 
         comp = new LabelledDial("Shape", this, "layer" + layer + "dco" + osc + "shape", color, 0, 103)
@@ -493,7 +493,7 @@ public class DSIProphet08 extends Synth
         
         comp = new CheckBox("4-Pole", this, "layer" + layer + "vcfpoles");
         vbox.add(comp);
-       	hbox.add(vbox);
+        hbox.add(vbox);
        
         comp = new LabelledDial("Frequency", this, "layer" + layer + "vcffrequency", color, 0, 164);
         hbox.add(comp);
@@ -516,8 +516,8 @@ public class DSIProphet08 extends Synth
     public JComponent addEnvelope(int layer, int env, Color color)
         {
         Category category = new Category(this, 
-        	(env == FILTER_ENVELOPE ? "Filter Envelope" : 
-        		(env == AMPLIFIER_ENVELOPE ? "Amplifier Envelope" : "Envelope 3")), color);
+                (env == FILTER_ENVELOPE ? "Filter Envelope" : 
+                (env == AMPLIFIER_ENVELOPE ? "Amplifier Envelope" : "Envelope 3")), color);
         category.makePasteable("layer" + layer + "env" + env);
                 
         JComponent comp;
@@ -526,16 +526,16 @@ public class DSIProphet08 extends Synth
         VBox vbox = new VBox();
         
         if (env == THIRD_ENVELOPE)
-        	{
-        	params = MODULATION_DESTINATIONS;
-        	comp = new Chooser("Mod Destination", this, "layer" + layer + "env" + env + "moddestination", params);
-        	vbox.add(comp);
+            {
+            params = MODULATION_DESTINATIONS;
+            comp = new Chooser("Mod Destination", this, "layer" + layer + "env" + env + "moddestination", params);
+            vbox.add(comp);
 
-	        comp = new CheckBox("Repeat", this, "layer" + layer + "env" + env + "repeat");
-	        vbox.add(comp);
-	       	hbox.add(vbox);
-	       	}
-       	
+            comp = new CheckBox("Repeat", this, "layer" + layer + "env" + env + "repeat");
+            vbox.add(comp);
+            hbox.add(vbox);
+            }
+        
         comp = new LabelledDial("Delay", this, "layer" + layer + "env" + env + "delay", color, 0, 127);
         hbox.add(comp);
                 
@@ -552,11 +552,11 @@ public class DSIProphet08 extends Synth
         hbox.add(comp);
  
         comp = new LabelledDial("Envelope", this, "layer" + layer + "env" + env + "amount", color, 
-        	0, (env == AMPLIFIER_ENVELOPE ? 127 : 254), (env == AMPLIFIER_ENVELOPE ? 0 : 127))
-			{
-			public boolean isSymmetric() { return env != AMPLIFIER_ENVELOPE; }
-			};        
-		((LabelledDial)comp).addAdditionalLabel("Amount");
+            0, (env == AMPLIFIER_ENVELOPE ? 127 : 254), (env == AMPLIFIER_ENVELOPE ? 0 : 127))
+            {
+            public boolean isSymmetric() { return env != AMPLIFIER_ENVELOPE; }
+            };        
+        ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
                                 
         comp = new LabelledDial("Envelope", this, "layer" + layer + "env" + env + "velocityamount", color, 0, 127);
@@ -612,16 +612,16 @@ public class DSIProphet08 extends Synth
         final HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-		params = MODULATION_DESTINATIONS;
-		comp = new Chooser("Destination", this, "layer" + layer + key + "destination", params);
-		vbox.add(comp);
-		hbox.add(vbox);
+        params = MODULATION_DESTINATIONS;
+        comp = new Chooser("Destination", this, "layer" + layer + key + "destination", params);
+        vbox.add(comp);
+        hbox.add(vbox);
 
-		comp = new LabelledDial("Amount", this, "layer" + layer + key + "amount", color, 0, 254, 127)
-			{
-			public boolean isSymmetric() { return true; }
-			};
-		hbox.add(comp);
+        comp = new LabelledDial("Amount", this, "layer" + layer + key + "amount", color, 0, 254, 127)
+            {
+            public boolean isSymmetric() { return true; }
+            };
+        hbox.add(comp);
 
         category.add(hbox, BorderLayout.WEST);
         return category;
@@ -640,30 +640,30 @@ public class DSIProphet08 extends Synth
         VBox vbox = new VBox();
         
         for(int i = 1; i <= 16; i++)
-        	{
-        	comp = new LabelledDial("" + i, this, "layer" + layer + "track" + track + "note" + i, color, 0, (track == 1 ? 127 : 126))
-        		{
-				public String map(int val)
-					{
-					if (val <= 125)
-						{
-						String key = "layer" + layer + "track" + track + "destination";
-						int type = model.get(key, 0);
-						if (type == 1 || type == 2 || type == 3)  // oscillator frequencies
-							{
-               				return (NOTES[val % 12] + " " + (val / 12 ));
-							}
-						else									  // other stuff
-							{
- 							return "" + val;
- 							}
- 						}
- 					else if (val == 126) return "Reset";
-					else return "Rest";
-					}
-        		};
-        	hbox.add(comp);
-        	}
+            {
+            comp = new LabelledDial("" + i, this, "layer" + layer + "track" + track + "note" + i, color, 0, (track == 1 ? 127 : 126))
+                {
+                public String map(int val)
+                    {
+                    if (val <= 125)
+                        {
+                        String key = "layer" + layer + "track" + track + "destination";
+                        int type = model.get(key, 0);
+                        if (type == 1 || type == 2 || type == 3)  // oscillator frequencies
+                            {
+                            return (NOTES[val % 12] + " " + (val / 12 ));
+                            }
+                        else                                                                      // other stuff
+                            {
+                            return "" + val;
+                            }
+                        }
+                    else if (val == 126) return "Reset";
+                    else return "Rest";
+                    }
+                };
+            hbox.add(comp);
+            }
         
         category.add(hbox, BorderLayout.WEST);
         return category;
@@ -696,13 +696,13 @@ public class DSIProphet08 extends Synth
         hbox.add(vbox);
 
         comp = new LabelledDial("Frequency", this, "layer" + layer + "lfo" + lfo + "frequency", color, 0, 166)
-        	{
+            {
             public String map(int val)
                 {
                 if (val <= 150) return "" + val;
                 else return LFO_FREQUENCIES[val - 151];
                 }
-        	};
+            };
         hbox.add(comp);
                 
         comp = new LabelledDial("Amount", this, "layer" + layer + "lfo" + lfo + "amount", color, 0, 127);
@@ -723,22 +723,22 @@ public class DSIProphet08 extends Synth
         String[] params;
         HBox hbox = new HBox();
         
-		VBox vbox = new VBox();
+        VBox vbox = new VBox();
 
-		params = MODULATION_SOURCES;
-		comp = new Chooser("Source", this, "layer" + layer + "mod" + mod + "source", params);
-		vbox.add(comp);
+        params = MODULATION_SOURCES;
+        comp = new Chooser("Source", this, "layer" + layer + "mod" + mod + "source", params);
+        vbox.add(comp);
 
-		params = MODULATION_DESTINATIONS;
-		comp = new Chooser("Destination", this, "layer" + layer + "mod" + mod + "destination", params);
-		vbox.add(comp);
-		hbox.add(vbox);
+        params = MODULATION_DESTINATIONS;
+        comp = new Chooser("Destination", this, "layer" + layer + "mod" + mod + "destination", params);
+        vbox.add(comp);
+        hbox.add(vbox);
 
-		comp = new LabelledDial("Amount", this, "layer" + layer + "mod" + mod + "amount", color, 0, 254, 127)
-			{
-			public boolean isSymmetric() { return true; }
-			};		
-		hbox.add(comp);
+        comp = new LabelledDial("Amount", this, "layer" + layer + "mod" + mod + "amount", color, 0, 254, 127)
+            {
+            public boolean isSymmetric() { return true; }
+            };              
+        hbox.add(comp);
                                     
         category.add(hbox, BorderLayout.WEST);
         return category;
@@ -753,7 +753,7 @@ public class DSIProphet08 extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();        
-		VBox vbox = new VBox();
+        VBox vbox = new VBox();
 
         comp = new CheckBox("On", this, "layer" + layer + "sequencer");
         hbox.add(comp);
@@ -762,23 +762,23 @@ public class DSIProphet08 extends Synth
         comp = new Chooser("Trigger", this, "layer" + layer + "sequencertrigger", params);
         hbox.add(comp);
 
-		for(int i = 1; i <= 4; i++)
-			{
-			vbox = new VBox();
-			params = MODULATION_DESTINATIONS;
-			comp = new Chooser("Track " + i + " Destination", this, "layer" + layer + "track" + i + "destination", params)
-				{
-				public void update(String key, Model model)
-					{
-					super.update(key, model);
-					Component component = SwingUtilities.getRoot(category);
-					if (component != null) 
-						component.repaint();
-					}
-				};
-			vbox.add(comp);
-			hbox.add(vbox);
-			}
+        for(int i = 1; i <= 4; i++)
+            {
+            vbox = new VBox();
+            params = MODULATION_DESTINATIONS;
+            comp = new Chooser("Track " + i + " Destination", this, "layer" + layer + "track" + i + "destination", params)
+                {
+                public void update(String key, Model model)
+                    {
+                    super.update(key, model);
+                    Component component = SwingUtilities.getRoot(category);
+                    if (component != null) 
+                        component.repaint();
+                    }
+                };
+            vbox.add(comp);
+            hbox.add(vbox);
+            }
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -796,455 +796,455 @@ public class DSIProphet08 extends Synth
                 
     final static String[] parameters = new String[]
     {
-"layer1dco1frequency",    
-"layer1dco1finetune",    
-"layer1dco1shape",    
-"layer1dco1glide",    
-"layer1dco1key",    
-"layer1dco2frequency",    
-"layer1dco2finetune",    
-"layer1dco2shape",    
-"layer1dco2glide",    
-"layer1dco2key",    
+    "layer1dco1frequency",    
+    "layer1dco1finetune",    
+    "layer1dco1shape",    
+    "layer1dco1glide",    
+    "layer1dco1key",    
+    "layer1dco2frequency",    
+    "layer1dco2finetune",    
+    "layer1dco2shape",    
+    "layer1dco2glide",    
+    "layer1dco2key",    
 
-"layer1sync",    
-"layer1glidemode",    
-"layer1slop",    
-"layer1mix",    
-"layer1noise",    
+    "layer1sync",    
+    "layer1glidemode",    
+    "layer1slop",    
+    "layer1mix",    
+    "layer1noise",    
 
-"layer1vcffrequency",    
-"layer1vcfresonance",    
-"layer1vcfkeyboardamount",    
-"layer1vcfaudiomodulation",    
-"layer1vcfpoles",    
+    "layer1vcffrequency",    
+    "layer1vcfresonance",    
+    "layer1vcfkeyboardamount",    
+    "layer1vcfaudiomodulation",    
+    "layer1vcfpoles",    
 
-"layer1env1amount",    
-"layer1env1velocityamount",    
-"layer1env1delay",    
-"layer1env1attack",    
-"layer1env1decay",    
-"layer1env1sustain",    
-"layer1env1release",    
+    "layer1env1amount",    
+    "layer1env1velocityamount",    
+    "layer1env1delay",    
+    "layer1env1attack",    
+    "layer1env1decay",    
+    "layer1env1sustain",    
+    "layer1env1release",    
 
-"layer1vcainitiallevel",    
-"layer1vcaoutputspread",    
-"layer1vcavoicevolume",    
+    "layer1vcainitiallevel",    
+    "layer1vcaoutputspread",    
+    "layer1vcavoicevolume",    
 
-"layer1env2amount",    
-"layer1env2velocityamount",    
-"layer1env2delay",    
-"layer1env2attack",    
-"layer1env2decay",    
-"layer1env2sustain",    
-"layer1env2release",    
-
-
-"layer1lfo1frequency",    
-"layer1lfo1shape",    
-"layer1lfo1amount",    
-"layer1lfo1moddestination",    
-"layer1lfo1keysync",    
-
-"layer1lfo2frequency",    
-"layer1lfo2shape",    
-"layer1lfo2amount",    
-"layer1lfo2moddestination",    
-"layer1lfo2keysync",    
-
-"layer1lfo3frequency",    
-"layer1lfo3shape",    
-"layer1lfo3amount",    
-"layer1lfo3moddestination",    
-"layer1lfo3keysync",    
-
-"layer1lfo4frequency",    
-"layer1lfo4shape",    
-"layer1lfo4amount",    
-"layer1lfo4moddestination",    
-"layer1lfo4keysync",
-
-"layer1env3moddestination",    
-"layer1env3amount",    
-"layer1env3velocityamount",    
-"layer1env3delay",    
-"layer1env3attack",    
-"layer1env3decay",    
-"layer1env3sustain",    
-"layer1env3release",  
-
-"layer1mod1source",    
-"layer1mod1amount",    
-"layer1mod1destination",    
-
-"layer1mod2source",    
-"layer1mod2amount",    
-"layer1mod2destination",    
-
-"layer1mod3source",    
-"layer1mod3amount",    
-"layer1mod3destination",    
-
-"layer1mod4source",    
-"layer1mod4amount",    
-"layer1mod4destination",    
-
-"layer1track1destination",    
-"layer1track2destination",    
-"layer1track3destination",    
-"layer1track4destination",    
-
-"layer1wheelamount",    
-"layer1wheeldestination",    
-"layer1pressureamount",    
-"layer1pressuredestination",    
-"layer1breathamount",    
-"layer1breathdestination",    
-"layer1velocityamount",    
-"layer1velocitydestination",    
-"layer1footamount",    
-"layer1footdestination",    
-
-"layer1tempo",    
-"layer1clockdivide",    
-"layer1pitchbendrange",    
-"layer1sequencertrigger",    
-"layer1unisonmode",    
-"layer1unisonkeymode",    
-"layer1arpeggiatormode",    
-
-"layer1env3repeat",    
-"layer1unison",    
-"layer1arpeggiator",    
-"layer1sequencer",    
-
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-
-"splitpoint",
-"keyboardmode",
-
-"layer1track1note1",    
-"layer1track1note2",    
-"layer1track1note3",    
-"layer1track1note4",    
-"layer1track1note5",    
-"layer1track1note6",    
-"layer1track1note7",    
-"layer1track1note8",    
-"layer1track1note9",    
-"layer1track1note10",    
-"layer1track1note11",    
-"layer1track1note12",    
-"layer1track1note13",    
-"layer1track1note14",    
-"layer1track1note15",    
-"layer1track1note16",    
-"layer1track2note1",    
-"layer1track2note2",    
-"layer1track2note3",    
-"layer1track2note4",    
-"layer1track2note5",    
-"layer1track2note6",    
-"layer1track2note7",    
-"layer1track2note8",    
-"layer1track2note9",    
-"layer1track2note10",    
-"layer1track2note11",    
-"layer1track2note12",    
-"layer1track2note13",    
-"layer1track2note14",    
-"layer1track2note15",    
-"layer1track2note16",    
-"layer1track3note1",    
-"layer1track3note2",    
-"layer1track3note3",    
-"layer1track3note4",    
-"layer1track3note5",    
-"layer1track3note6",    
-"layer1track3note7",    
-"layer1track3note8",    
-"layer1track3note9",    
-"layer1track3note10",    
-"layer1track3note11",    
-"layer1track3note12",    
-"layer1track3note13",    
-"layer1track3note14",    
-"layer1track3note15",    
-"layer1track3note16",    
-"layer1track4note1",    
-"layer1track4note2",    
-"layer1track4note3",    
-"layer1track4note4",    
-"layer1track4note5",    
-"layer1track4note6",    
-"layer1track4note7",    
-"layer1track4note8",    
-"layer1track4note9",    
-"layer1track4note10",    
-"layer1track4note11",    
-"layer1track4note12",    
-"layer1track4note13",    
-"layer1track4note14",    
-"layer1track4note15",    
-"layer1track4note16",    
-
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-
-"layer2dco1frequency",    
-"layer2dco1finetune",    
-"layer2dco1shape",    
-"layer2dco1glide",    
-"layer2dco1key",    
-"layer2dco2frequency",    
-"layer2dco2finetune",    
-"layer2dco2shape",    
-"layer2dco2glide",    
-"layer2dco2key",    
-
-"layer2sync",    
-"layer2glidemode",    
-"layer2slop",    
-"layer2mix",    
-"layer2noise",    
-
-"layer2vcffrequency",    
-"layer2vcfresonance",    
-"layer2vcfkeyboardamount",    
-"layer2vcfaudiomodulation",    
-"layer2vcfpoles",    
-
-"layer2env1amount",    
-"layer2env1velocityamount",    
-"layer2env1delay",    
-"layer2env1attack",    
-"layer2env1decay",    
-"layer2env1sustain",    
-"layer2env1release",    
-
-"layer2vcainitiallevel",    
-"layer2vcaoutputspread",    
-"layer2vcavoicevolume",    
-
-"layer2env2amount",    
-"layer2env2velocityamount",    
-"layer2env2delay",    
-"layer2env2attack",    
-"layer2env2decay",    
-"layer2env2sustain",    
-"layer2env2release",    
+    "layer1env2amount",    
+    "layer1env2velocityamount",    
+    "layer1env2delay",    
+    "layer1env2attack",    
+    "layer1env2decay",    
+    "layer1env2sustain",    
+    "layer1env2release",    
 
 
-"layer2lfo1frequency",    
-"layer2lfo1shape",    
-"layer2lfo1amount",    
-"layer2lfo1moddestination",    
-"layer2lfo1keysync",    
+    "layer1lfo1frequency",    
+    "layer1lfo1shape",    
+    "layer1lfo1amount",    
+    "layer1lfo1moddestination",    
+    "layer1lfo1keysync",    
 
-"layer2lfo2frequency",    
-"layer2lfo2shape",    
-"layer2lfo2amount",    
-"layer2lfo2moddestination",    
-"layer2lfo2keysync",    
+    "layer1lfo2frequency",    
+    "layer1lfo2shape",    
+    "layer1lfo2amount",    
+    "layer1lfo2moddestination",    
+    "layer1lfo2keysync",    
 
-"layer2lfo3frequency",    
-"layer2lfo3shape",    
-"layer2lfo3amount",    
-"layer2lfo3moddestination",    
-"layer2lfo3keysync",    
+    "layer1lfo3frequency",    
+    "layer1lfo3shape",    
+    "layer1lfo3amount",    
+    "layer1lfo3moddestination",    
+    "layer1lfo3keysync",    
 
-"layer2lfo4frequency",    
-"layer2lfo4shape",    
-"layer2lfo4amount",    
-"layer2lfo4moddestination",    
-"layer2lfo4keysync",
+    "layer1lfo4frequency",    
+    "layer1lfo4shape",    
+    "layer1lfo4amount",    
+    "layer1lfo4moddestination",    
+    "layer1lfo4keysync",
 
-"layer2env3moddestination",    
-"layer2env3amount",    
-"layer2env3velocityamount",    
-"layer2env3delay",    
-"layer2env3attack",    
-"layer2env3decay",    
-"layer2env3sustain",    
-"layer2env3release",  
+    "layer1env3moddestination",    
+    "layer1env3amount",    
+    "layer1env3velocityamount",    
+    "layer1env3delay",    
+    "layer1env3attack",    
+    "layer1env3decay",    
+    "layer1env3sustain",    
+    "layer1env3release",  
+
+    "layer1mod1source",    
+    "layer1mod1amount",    
+    "layer1mod1destination",    
+
+    "layer1mod2source",    
+    "layer1mod2amount",    
+    "layer1mod2destination",    
+
+    "layer1mod3source",    
+    "layer1mod3amount",    
+    "layer1mod3destination",    
+
+    "layer1mod4source",    
+    "layer1mod4amount",    
+    "layer1mod4destination",    
+
+    "layer1track1destination",    
+    "layer1track2destination",    
+    "layer1track3destination",    
+    "layer1track4destination",    
+
+    "layer1wheelamount",    
+    "layer1wheeldestination",    
+    "layer1pressureamount",    
+    "layer1pressuredestination",    
+    "layer1breathamount",    
+    "layer1breathdestination",    
+    "layer1velocityamount",    
+    "layer1velocitydestination",    
+    "layer1footamount",    
+    "layer1footdestination",    
+
+    "layer1tempo",    
+    "layer1clockdivide",    
+    "layer1pitchbendrange",    
+    "layer1sequencertrigger",    
+    "layer1unisonmode",    
+    "layer1unisonkeymode",    
+    "layer1arpeggiatormode",    
+
+    "layer1env3repeat",    
+    "layer1unison",    
+    "layer1arpeggiator",    
+    "layer1sequencer",    
+
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+
+    "splitpoint",
+    "keyboardmode",
+
+    "layer1track1note1",    
+    "layer1track1note2",    
+    "layer1track1note3",    
+    "layer1track1note4",    
+    "layer1track1note5",    
+    "layer1track1note6",    
+    "layer1track1note7",    
+    "layer1track1note8",    
+    "layer1track1note9",    
+    "layer1track1note10",    
+    "layer1track1note11",    
+    "layer1track1note12",    
+    "layer1track1note13",    
+    "layer1track1note14",    
+    "layer1track1note15",    
+    "layer1track1note16",    
+    "layer1track2note1",    
+    "layer1track2note2",    
+    "layer1track2note3",    
+    "layer1track2note4",    
+    "layer1track2note5",    
+    "layer1track2note6",    
+    "layer1track2note7",    
+    "layer1track2note8",    
+    "layer1track2note9",    
+    "layer1track2note10",    
+    "layer1track2note11",    
+    "layer1track2note12",    
+    "layer1track2note13",    
+    "layer1track2note14",    
+    "layer1track2note15",    
+    "layer1track2note16",    
+    "layer1track3note1",    
+    "layer1track3note2",    
+    "layer1track3note3",    
+    "layer1track3note4",    
+    "layer1track3note5",    
+    "layer1track3note6",    
+    "layer1track3note7",    
+    "layer1track3note8",    
+    "layer1track3note9",    
+    "layer1track3note10",    
+    "layer1track3note11",    
+    "layer1track3note12",    
+    "layer1track3note13",    
+    "layer1track3note14",    
+    "layer1track3note15",    
+    "layer1track3note16",    
+    "layer1track4note1",    
+    "layer1track4note2",    
+    "layer1track4note3",    
+    "layer1track4note4",    
+    "layer1track4note5",    
+    "layer1track4note6",    
+    "layer1track4note7",    
+    "layer1track4note8",    
+    "layer1track4note9",    
+    "layer1track4note10",    
+    "layer1track4note11",    
+    "layer1track4note12",    
+    "layer1track4note13",    
+    "layer1track4note14",    
+    "layer1track4note15",    
+    "layer1track4note16",    
+
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+
+    "layer2dco1frequency",    
+    "layer2dco1finetune",    
+    "layer2dco1shape",    
+    "layer2dco1glide",    
+    "layer2dco1key",    
+    "layer2dco2frequency",    
+    "layer2dco2finetune",    
+    "layer2dco2shape",    
+    "layer2dco2glide",    
+    "layer2dco2key",    
+
+    "layer2sync",    
+    "layer2glidemode",    
+    "layer2slop",    
+    "layer2mix",    
+    "layer2noise",    
+
+    "layer2vcffrequency",    
+    "layer2vcfresonance",    
+    "layer2vcfkeyboardamount",    
+    "layer2vcfaudiomodulation",    
+    "layer2vcfpoles",    
+
+    "layer2env1amount",    
+    "layer2env1velocityamount",    
+    "layer2env1delay",    
+    "layer2env1attack",    
+    "layer2env1decay",    
+    "layer2env1sustain",    
+    "layer2env1release",    
+
+    "layer2vcainitiallevel",    
+    "layer2vcaoutputspread",    
+    "layer2vcavoicevolume",    
+
+    "layer2env2amount",    
+    "layer2env2velocityamount",    
+    "layer2env2delay",    
+    "layer2env2attack",    
+    "layer2env2decay",    
+    "layer2env2sustain",    
+    "layer2env2release",    
 
 
-"layer2mod1source",    
-"layer2mod1amount",    
-"layer2mod1destination",    
+    "layer2lfo1frequency",    
+    "layer2lfo1shape",    
+    "layer2lfo1amount",    
+    "layer2lfo1moddestination",    
+    "layer2lfo1keysync",    
 
-"layer2mod2source",    
-"layer2mod2amount",    
-"layer2mod2destination",    
+    "layer2lfo2frequency",    
+    "layer2lfo2shape",    
+    "layer2lfo2amount",    
+    "layer2lfo2moddestination",    
+    "layer2lfo2keysync",    
 
-"layer2mod3source",    
-"layer2mod3amount",    
-"layer2mod3destination",    
+    "layer2lfo3frequency",    
+    "layer2lfo3shape",    
+    "layer2lfo3amount",    
+    "layer2lfo3moddestination",    
+    "layer2lfo3keysync",    
 
-"layer2mod4source",    
-"layer2mod4amount",    
-"layer2mod4destination",    
+    "layer2lfo4frequency",    
+    "layer2lfo4shape",    
+    "layer2lfo4amount",    
+    "layer2lfo4moddestination",    
+    "layer2lfo4keysync",
 
-"layer2track1destination",    
-"layer2track2destination",    
-"layer2track3destination",    
-"layer2track4destination",    
+    "layer2env3moddestination",    
+    "layer2env3amount",    
+    "layer2env3velocityamount",    
+    "layer2env3delay",    
+    "layer2env3attack",    
+    "layer2env3decay",    
+    "layer2env3sustain",    
+    "layer2env3release",  
 
 
-"layer2wheelamount",    
-"layer2wheeldestination",    
-"layer2pressureamount",    
-"layer2pressuredestination",    
-"layer2breathamount",    
-"layer2breathdestination",    
-"layer2velocityamount",    
-"layer2velocitydestination",    
-"layer2footamount",    
-"layer2footdestination",    
+    "layer2mod1source",    
+    "layer2mod1amount",    
+    "layer2mod1destination",    
 
-"layer2tempo",    
-"layer2clockdivide",    
-"layer2pitchbendrange",    
-"layer2sequencertrigger",    
-"layer2unisonmode",    
-"layer2unisonkeymode",    
-"layer2arpeggiatormode",    
+    "layer2mod2source",    
+    "layer2mod2amount",    
+    "layer2mod2destination",    
 
-"layer2env3repeat",    
-"layer2unison",    
-"layer2arpeggiator",    
-"layer2sequencer",    
+    "layer2mod3source",    
+    "layer2mod3amount",    
+    "layer2mod3destination",    
 
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
+    "layer2mod4source",    
+    "layer2mod4amount",    
+    "layer2mod4destination",    
 
-"---",
-"---",
+    "layer2track1destination",    
+    "layer2track2destination",    
+    "layer2track3destination",    
+    "layer2track4destination",    
 
-"layer2track1note1",    
-"layer2track1note2",    
-"layer2track1note3",    
-"layer2track1note4",    
-"layer2track1note5",    
-"layer2track1note6",    
-"layer2track1note7",    
-"layer2track1note8",    
-"layer2track1note9",    
-"layer2track1note10",    
-"layer2track1note11",    
-"layer2track1note12",    
-"layer2track1note13",    
-"layer2track1note14",    
-"layer2track1note15",    
-"layer2track1note16",    
-"layer2track2note1",    
-"layer2track2note2",    
-"layer2track2note3",    
-"layer2track2note4",    
-"layer2track2note5",    
-"layer2track2note6",    
-"layer2track2note7",    
-"layer2track2note8",    
-"layer2track2note9",    
-"layer2track2note10",    
-"layer2track2note11",    
-"layer2track2note12",    
-"layer2track2note13",    
-"layer2track2note14",    
-"layer2track2note15",    
-"layer2track2note16",    
-"layer2track3note1",    
-"layer2track3note2",    
-"layer2track3note3",    
-"layer2track3note4",    
-"layer2track3note5",    
-"layer2track3note6",    
-"layer2track3note7",    
-"layer2track3note8",    
-"layer2track3note9",    
-"layer2track3note10",    
-"layer2track3note11",    
-"layer2track3note12",    
-"layer2track3note13",    
-"layer2track3note14",    
-"layer2track3note15",    
-"layer2track3note16",    
-"layer2track4note1",    
-"layer2track4note2",    
-"layer2track4note3",    
-"layer2track4note4",    
-"layer2track4note5",    
-"layer2track4note6",    
-"layer2track4note7",    
-"layer2track4note8",    
-"layer2track4note9",    
-"layer2track4note10",    
-"layer2track4note11",    
-"layer2track4note12",    
-"layer2track4note13",    
-"layer2track4note14",    
-"layer2track4note15",    
-"layer2track4note16",    
 
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---",
-"---"
+    "layer2wheelamount",    
+    "layer2wheeldestination",    
+    "layer2pressureamount",    
+    "layer2pressuredestination",    
+    "layer2breathamount",    
+    "layer2breathdestination",    
+    "layer2velocityamount",    
+    "layer2velocitydestination",    
+    "layer2footamount",    
+    "layer2footdestination",    
+
+    "layer2tempo",    
+    "layer2clockdivide",    
+    "layer2pitchbendrange",    
+    "layer2sequencertrigger",    
+    "layer2unisonmode",    
+    "layer2unisonkeymode",    
+    "layer2arpeggiatormode",    
+
+    "layer2env3repeat",    
+    "layer2unison",    
+    "layer2arpeggiator",    
+    "layer2sequencer",    
+
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+
+    "---",
+    "---",
+
+    "layer2track1note1",    
+    "layer2track1note2",    
+    "layer2track1note3",    
+    "layer2track1note4",    
+    "layer2track1note5",    
+    "layer2track1note6",    
+    "layer2track1note7",    
+    "layer2track1note8",    
+    "layer2track1note9",    
+    "layer2track1note10",    
+    "layer2track1note11",    
+    "layer2track1note12",    
+    "layer2track1note13",    
+    "layer2track1note14",    
+    "layer2track1note15",    
+    "layer2track1note16",    
+    "layer2track2note1",    
+    "layer2track2note2",    
+    "layer2track2note3",    
+    "layer2track2note4",    
+    "layer2track2note5",    
+    "layer2track2note6",    
+    "layer2track2note7",    
+    "layer2track2note8",    
+    "layer2track2note9",    
+    "layer2track2note10",    
+    "layer2track2note11",    
+    "layer2track2note12",    
+    "layer2track2note13",    
+    "layer2track2note14",    
+    "layer2track2note15",    
+    "layer2track2note16",    
+    "layer2track3note1",    
+    "layer2track3note2",    
+    "layer2track3note3",    
+    "layer2track3note4",    
+    "layer2track3note5",    
+    "layer2track3note6",    
+    "layer2track3note7",    
+    "layer2track3note8",    
+    "layer2track3note9",    
+    "layer2track3note10",    
+    "layer2track3note11",    
+    "layer2track3note12",    
+    "layer2track3note13",    
+    "layer2track3note14",    
+    "layer2track3note15",    
+    "layer2track3note16",    
+    "layer2track4note1",    
+    "layer2track4note2",    
+    "layer2track4note3",    
+    "layer2track4note4",    
+    "layer2track4note5",    
+    "layer2track4note6",    
+    "layer2track4note7",    
+    "layer2track4note8",    
+    "layer2track4note9",    
+    "layer2track4note10",    
+    "layer2track4note11",    
+    "layer2track4note12",    
+    "layer2track4note13",    
+    "layer2track4note14",    
+    "layer2track4note15",    
+    "layer2track4note16",    
+
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---"
     };
     
     
@@ -1260,115 +1260,115 @@ public class DSIProphet08 extends Synth
         if (key.equals("name"))
             {
             Object[] ret = new Object[4 * 16];
-			char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
+            char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
             for(int i = 0; i < 16; i++)
-            	{
-            	Object[] nrpn = buildNRPN(getChannelOut(), i + 184, name[i]);
-        		System.arraycopy(nrpn, 0, ret, i * 4, 4);
-        		}
+                {
+                Object[] nrpn = buildNRPN(getChannelOut(), i + 184, name[i]);
+                System.arraycopy(nrpn, 0, ret, i * 4, 4);
+                }
             return ret;
             }
         else 
-        	{
-        	return buildNRPN(
-        		getChannelOut(),
-        		((Integer)(parametersToIndex.get(key))).intValue(),
-        		model.get(key, 0));
-        	}
+            {
+            return buildNRPN(
+                getChannelOut(),
+                ((Integer)(parametersToIndex.get(key))).intValue(),
+                model.get(key, 0));
+            }
         }
 
 /*
-	public static int[] CC_PARAM_STARTS = new int[] { 14, 20, 75, 85, 102 };
-    public static String[][] CC_PARAMS = 
-    	new String[][]
-    	 {
-		"layer1tempo",    
-		"layer1clockdivide",    
-		},
-		{
-    	"layer1dco1frequency", 
- "layer1dco1finetune",    
-"layer1dco1shape",    
-"layer1dco1glide",    
-"layer1dco2frequency",    
-"layer1dco2finetune",    
-"layer1dco2shape",    
-"layer1dco2glide",    
-"layer1mix",    
-"layer1noise",    
-		},
-		{
-"layer1env2sustain",    
-"layer1env2release",    
-"layer1env3sustain",    
-"layer1env3release",  
-		},
-		{
-"layer1env3moddestination",    
-"layer1env3amount",    
-"layer1env3velocityamount",    
-"layer1env3delay",    
-"layer1env3attack",    
-"layer1env3decay",    
-		},
-		{
-"layer1vcffrequency",    
-"layer1vcfresonance",    
-"layer1vcfkeyboardamount",    
-"layer1vcfaudiomodulation",    
-"layer1env1amount",    
-"layer1env1velocityamount",    
-"layer1env1delay",    
-"layer1env1attack",    
-"layer1env1decay",    
-"layer1env1sustain",    
-"layer1env1release",    
-"layer1vcainitiallevel",    
-"layer1vcaoutputspread",    
-"layer1env2amount",    
-"layer1env2velocityamount",    
-"layer1env2delay",    
-"layer1env2attack",    
-"layer1env2decay",   
-		}
-		};
-*/	
+  public static int[] CC_PARAM_STARTS = new int[] { 14, 20, 75, 85, 102 };
+  public static String[][] CC_PARAMS = 
+  new String[][]
+  {
+  "layer1tempo",    
+  "layer1clockdivide",    
+  },
+  {
+  "layer1dco1frequency", 
+  "layer1dco1finetune",    
+  "layer1dco1shape",    
+  "layer1dco1glide",    
+  "layer1dco2frequency",    
+  "layer1dco2finetune",    
+  "layer1dco2shape",    
+  "layer1dco2glide",    
+  "layer1mix",    
+  "layer1noise",    
+  },
+  {
+  "layer1env2sustain",    
+  "layer1env2release",    
+  "layer1env3sustain",    
+  "layer1env3release",  
+  },
+  {
+  "layer1env3moddestination",    
+  "layer1env3amount",    
+  "layer1env3velocityamount",    
+  "layer1env3delay",    
+  "layer1env3attack",    
+  "layer1env3decay",    
+  },
+  {
+  "layer1vcffrequency",    
+  "layer1vcfresonance",    
+  "layer1vcfkeyboardamount",    
+  "layer1vcfaudiomodulation",    
+  "layer1env1amount",    
+  "layer1env1velocityamount",    
+  "layer1env1delay",    
+  "layer1env1attack",    
+  "layer1env1decay",    
+  "layer1env1sustain",    
+  "layer1env1release",    
+  "layer1vcainitiallevel",    
+  "layer1vcaoutputspread",    
+  "layer1env2amount",    
+  "layer1env2velocityamount",    
+  "layer1env2delay",    
+  "layer1env2attack",    
+  "layer1env2decay",   
+  }
+  };
+*/      
 
-   public void handleSynthCCOrNRPN(Midi.CCData data)
-    	{
-    	/*
-    	// Handle incoming CC
-    	if (data.type == CCDATA_TYPE_RAW_CC)
-    		{
-    		for(int i = 0; i < CC_PARAM_STARTS.length; i++)
-    			{
-    			if (data.number >= CC_PARAM_STARTS[i] &&
-    				data.number < CC_PARAM_STARTS[i] + CC_PARAM_STARTS.length)
-    				{
-    				model.set(CC_PARAMS[i][data.number - CC_PARAM_STARTS[i]], data.value);
-    				break;
-    				}
-    			}
-    		}  
-    	else*/
-    	if (data.type == Midi.CCDATA_TYPE_NRPN && data.number <= 383)
-    		{
-    		if (data.number >= 184 && data.number <= 199)  // Name
-    			{
-				char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
-				name[data.number - 184] = (char)(data.value);
-    			model.set("name", new String(name));
-    			}
-    		else
-    			{
-	    		String key = parameters[data.number];
-	    		if (key == "---")
-	    			return;
-	    		else
-	    			model.set(key, data.value);
-	    		} 
-    		}  		
-    	}
+    public void handleSynthCCOrNRPN(Midi.CCData data)
+        {
+        /*
+        // Handle incoming CC
+        if (data.type == CCDATA_TYPE_RAW_CC)
+        {
+        for(int i = 0; i < CC_PARAM_STARTS.length; i++)
+        {
+        if (data.number >= CC_PARAM_STARTS[i] &&
+        data.number < CC_PARAM_STARTS[i] + CC_PARAM_STARTS.length)
+        {
+        model.set(CC_PARAMS[i][data.number - CC_PARAM_STARTS[i]], data.value);
+        break;
+        }
+        }
+        }  
+        else*/
+        if (data.type == Midi.CCDATA_TYPE_NRPN && data.number <= 383)
+            {
+            if (data.number >= 184 && data.number <= 199)  // Name
+                {
+                char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
+                name[data.number - 184] = (char)(data.value);
+                model.set("name", new String(name));
+                }
+            else
+                {
+                String key = parameters[data.number];
+                if (key == "---")
+                    return;
+                else
+                    model.set(key, data.value);
+                } 
+            }               
+        }
     
     // converts all but last byte (F7)
     byte[] convertTo8Bit(byte[] data, int offset)
@@ -1422,77 +1422,77 @@ public class DSIProphet08 extends Synth
         }
 
 /*
-	int[] highBit = new int[]
-		{
-		15, 215,		// Filter Frequency
-		20, 220,		// Filter Envelope Amount
-		37, 237,		// LFO1 Frequency
-		42, 242,		// LFO2 Frequency
-		47, 247,		// LFO3 Frequency
-		52, 252,		// LFO4 Frequency
-		58, 258,		// ENV3 Amount
-		66, 266,		// Mod1 Amount
-		69, 269,		// Mod2 Amount
-		72, 272,		// Mod3 Amount
-		75, 275,		// Mod4 Amount
-		81, 281,		// Mod Wheel Amount
-		83, 283,		// Pressure Amount
-		85, 285,		// Breath Amount
-		87, 287,		// Velocity Amount
-		89, 289,		// Foot Control Amount
-		91, 291,		// BPM Tempo
-		};
+  int[] highBit = new int[]
+  {
+  15, 215,                // Filter Frequency
+  20, 220,                // Filter Envelope Amount
+  37, 237,                // LFO1 Frequency
+  42, 242,                // LFO2 Frequency
+  47, 247,                // LFO3 Frequency
+  52, 252,                // LFO4 Frequency
+  58, 258,                // ENV3 Amount
+  66, 266,                // Mod1 Amount
+  69, 269,                // Mod2 Amount
+  72, 272,                // Mod3 Amount
+  75, 275,                // Mod4 Amount
+  81, 281,                // Mod Wheel Amount
+  83, 283,                // Pressure Amount
+  85, 285,                // Breath Amount
+  87, 287,                // Velocity Amount
+  89, 289,                // Foot Control Amount
+  91, 291,                // BPM Tempo
+  };
 
-	// yeah, yeah, O(n)
-	boolean isHighBit(int number)
-		{
-		for(int i = 0; i < highBit.length; i++)
-			if (highBit[i] == number) 
-				return true;
-		return false;
-		}		
-*/	
+  // yeah, yeah, O(n)
+  boolean isHighBit(int number)
+  {
+  for(int i = 0; i < highBit.length; i++)
+  if (highBit[i] == number) 
+  return true;
+  return false;
+  }               
+*/      
     public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
         // unfortunately, the Prophet '08 doesn't provide number/bank info
         // with its edit buffer data dump.  :-(
         
         if (!ignorePatch && data[3] == 0x02)  // program data only, not (0x03) edit buffer
-        	{
+            {
             model.set("bank", data[4]);
             model.set("number", data[5]);
             }
 
         byte[] d = null;
         if (data[3] == 0x02)
-        	d = convertTo8Bit(data, 6);
+            d = convertTo8Bit(data, 6);
         else if (data[3] == 0x03)
-        	d = convertTo8Bit(data, 4);
+            d = convertTo8Bit(data, 4);
         else
-        	System.err.println("Warning (DSIProphet08): Unknown program data format " + data[3]);
+            System.err.println("Warning (DSIProphet08): Unknown program data format " + data[3]);
         
-		for(int i = 0; i < 384; i++)
-			{
-			if (!parameters[i].equals("---"))
-				{
-				// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
-				int q = d[i];
-				if (q < 0) q += 256;  // push to unsigned (not 2's complement)
-				model.set(parameters[i], q);
-				}
-			}
+        for(int i = 0; i < 384; i++)
+            {
+            if (!parameters[i].equals("---"))
+                {
+                // Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
+                int q = d[i];
+                if (q < 0) q += 256;  // push to unsigned (not 2's complement)
+                model.set(parameters[i], q);
+                }
+            }
         
         // handle name specially
         byte[] name = new byte[16];
         System.arraycopy(d, 184, name, 0, 16);
         try
-        	{
-	        model.set("name", new String(name, "US-ASCII"));
-	        }
-		catch (UnsupportedEncodingException e)
-			{
-			e.printStackTrace();
-			}
+            {
+            model.set("name", new String(name, "US-ASCII"));
+            }
+        catch (UnsupportedEncodingException e)
+            {
+            e.printStackTrace();
+            }
                 
         revise();
         return PARSE_SUCCEEDED;
@@ -1505,23 +1505,23 @@ public class DSIProphet08 extends Synth
             tempModel = getModel();
 
         byte[] d = new byte[384];
-		for(int i = 0; i < 384; i++)
-			{
-			if (!parameters[i].equals("---"))
-				{
-				// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
-				int q = model.get(parameters[i], 0);
-				if (q > 127) q -= 256;  // push to signed (not 2's complement)
-				d[i] = (byte)q;
-				}
-			}
-			
-		// handle name specially
+        for(int i = 0; i < 384; i++)
+            {
+            if (!parameters[i].equals("---"))
+                {
+                // Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
+                int q = model.get(parameters[i], 0);
+                if (q > 127) q -= 256;  // push to signed (not 2's complement)
+                d[i] = (byte)q;
+                }
+            }
+                        
+        // handle name specially
         char[] name = (model.get("name", "Untitled") + "                " ).toCharArray();
         for(int i = 0; i < 16; i++)
-        	d[184 + i] = (byte)(name[i] & 127);
+            d[184 + i] = (byte)(name[i] & 127);
         
-		byte[] data = convertTo7Bit(d);        
+        byte[] data = convertTo7Bit(d);        
         
         if (toWorkingMemory)
             {
@@ -1578,8 +1578,8 @@ public class DSIProphet08 extends Synth
         {
         byte[] data = new byte[5];
         data[0] = (byte)0xF0;
-        data[1] = (byte)0x01;	// DSI
-        data[2] = (byte)0x23;	// Prophet '08
+        data[1] = (byte)0x01;   // DSI
+        data[2] = (byte)0x23;   // Prophet '08
         data[3] = (byte)0x06;
         data[4] = (byte)0xF7;
         return data;
@@ -1589,8 +1589,8 @@ public class DSIProphet08 extends Synth
         {
         byte[] data = new byte[7];
         data[0] = (byte)0xF0;
-        data[1] = (byte)0x01;	// DSI
-        data[2] = (byte)0x23;	// Prophet '08
+        data[1] = (byte)0x01;   // DSI
+        data[2] = (byte)0x23;   // Prophet '08
         data[3] = (byte)0x05;
         data[4] = (byte)(tempModel.get("bank", 0));
         data[5] = (byte)(tempModel.get("number", 0));
@@ -1601,15 +1601,15 @@ public class DSIProphet08 extends Synth
     public static boolean recognize(byte[] data)
         {
         return ((data.length == 446 &&
-            	data[0] == (byte)0xF0 &&
-        		data[1] == (byte) 0x01 &&	// DSI
-        		data[2] == (byte) 0x23 &&	// Prophet 08
-        		data[3] == (byte) 0x02) ||	// Program Data Dump
-        		(data.length == 444 &&
-            	data[0] == (byte)0xF0 &&
-        		data[1] == (byte) 0x01 &&	// DSI
-        		data[2] == (byte) 0x23 &&	// Prophet 08
-        		data[3] == (byte) 0x03));	// Edit Buffer Data Dump
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte) 0x01 &&       // DSI
+                data[2] == (byte) 0x23 &&       // Prophet 08
+                data[3] == (byte) 0x02) ||      // Program Data Dump
+                (data.length == 444 &&
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte) 0x01 &&       // DSI
+                data[2] == (byte) 0x23 &&       // Prophet 08
+                data[3] == (byte) 0x03));       // Edit Buffer Data Dump
         }
         
     public static final int MAXIMUM_NAME_LENGTH = 16;
@@ -1676,4 +1676,4 @@ public class DSIProphet08 extends Synth
         int number = (model.get("number") + 1);
         return ("" + (model.get("bank") + 1) + "-" + (number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
         }
-	}
+    }

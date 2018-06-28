@@ -37,6 +37,7 @@ Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter e
 
 \begin{itemize}
 %\item Futuresonus Parva
+\item Dave Smith Instruments Prophet '08 (Single)
 \item Kawai K1, K1m, and K1r (Single and Multimode)
 \item Kawai K4 and K4r (Single and Multimode)
 \item Kawai K5 and K5m (Single)
@@ -303,17 +304,25 @@ Edisyn has a number of facilities to help you program your synthesizer, includin
 
 \paragraph{Category Cut/Paste, Distribution, and Reset}  Each category has a pop-up menu you get when you right-click or shift-click (or two-finger click on a Mac trackpad) on the category name. You can:
 
-\vbox{
 \begin{itemize}
 \item {\bf Copy Category}\quad Marks the category to be pasted into other compatible categories.
 \item {\bf Paste Category}\quad   Copies over all the parameters from the ``copy'' category, if it is compatible.
-\item {\bf Distribute}\quad  Copies the last-modified parameter to all similar parameters in the category.  For example, if you modified a step sequencer step, this might copy its value to all 15 other steps.
-\item You can also restrict your {\bf Copy, Paste,} or {\bf Distribution} to mutation parameters only.
+\item {\bf Distribute}\quad  Copies the last-modified parameter to all similar parameters in the category.  For example, if you modified a step sequencer step, this might copy its value to all 15 other steps.  {\bf Note} that you won't be able to select this option until you have actually {\it modified}, even slightly, some parameter inside the Category\,---\,perhaps a dial, say.
+\item You can also restrict your {\bf Copy, Paste,} or {\bf Distribute} to mutation parameters only.
 \item {\bf Reset} \quad  This resets all the parameters in the category to their defaults.
 \end{itemize}
 
+\paragraph{Tab Cut/Paste and Reset}  For some synths, you can also cut/paste entire tabs.  Choose these menu options under the {\bf Edit} menu:
+
+\begin{itemize}
+\item {\bf Copy Tab}\quad Marks the tab to be pasted into other compatible categories.
+\item {\bf Paste Tab}\quad   Copies over all the parameters from the ``copy'' tab, if it is compatible.
+\item {\bf Copy Tab (Mutation Parameters only)}\quad Marks the tab to be pasted into other compatible tabs, but only from the mutation parameters you have set.
+\item {\bf Paste Tab (Mutation Parameters only)}\quad   Copies over all the parameters from the ``copy'' tab, but only to the mutation parameters you have set.
+\item {\bf Reset} \quad  This resets all the parameters in the tab to their defaults.
+\end{itemize}
+
 \paragraph{Randomize (by some amount)}  You can add some randomness your patch parameters.  Try a small value: values \(\geq 50\%\) are essentially full randomization.  See the {\bf Randomize} submenu in the {\bf Edit} menu.   Because it's so common to randomize, then undo and try again, you can also do undo-and-randomize-again as a single task: select {\bf Undo and Randomize Again} in the {\bf Randomize} submenu of the {\bf MIDI} menu.  See below for a discussion of how randomization (called {\bf mutation}) works in Edisyn.
-}
 
 \paragraph{Nudge}  The nudge facility lets you push your patch to sound more and more like one of four other target patches you have chosen.  You can use this, plus randomize, to wander about in the patch space.  Before you can nudge, you have to first select patches to nudge towards.  You can pick up to four patches by first setting up or loading the patch in your patch editor, then selecting one of {\bf Set 1} ... {\bf Set 4} in the {\bf Nudge} submenu of the {\bf Edit} menu.  You don't have to ultimately select all four. 
 
@@ -625,7 +634,7 @@ So you want to write a patch editor?  They're not easy.  But they're fun!  Here 
 
 Make sure you understand that Edisyn can only go so far to help you in writing a patch editor: but synthesizer sysex world is an inconsistent, buggy mess.
 
-For example, the Waldorf Blofeld's multimode sysex is undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).   And it too bombs if you send it invalid data.  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  There are multiple different strategies for packing data of size 8 bits and up.  Some synths, like the Futuresonus Parva, and Yamaha DX7, are highly regular in their format, while others, like the infamous Korg Microsampler, require custom tables for nearly every parameter.
+For example, the Waldorf Blofeld's multimode sysex is undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).   And it too bombs if you send it invalid data.  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  There are multiple different strategies for packing data of size 8 bits and up.  Some synths, like the Futuresonus Parva, DSI Prophet '08, and Yamaha DX7, are highly regular in their format, while others, like the infamous Korg Microsampler, require custom tables for nearly every parameter.
 
 Below is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.
 
@@ -649,6 +658,7 @@ Below is a little table of the current patch editors for Edisyn, and various Edi
 \begin{sideways}Standard Sysex File\end{sideways}\\[0.5em]
 \hline\\[-0.5em]
 %Futuresonus Parva&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}&&&\\
+DSI Prophet '08&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
 Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}            \\
 Waldorf Blofeld&{\cm}*&{\cm}*&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}& & & {\cm}            \\
 Kawai K1/K1r/K1m&{\cm}*& &{\cm}& & & &{\cm}& &{\cm}&{\cm}            \\

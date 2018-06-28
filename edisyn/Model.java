@@ -303,7 +303,7 @@ public class Model implements Cloneable
         if (isValid(key, value))
             set(key, value);
         else
-            System.err.println("Invalid opposite value for " + key + ": " + value);
+            System.err.println("Warning (Model): " + "Invalid opposite value for " + key + ": " + value);
         }
 
     /** Finds a point on the OPPOSITE side of the model from where the provided other MODEL is located.
@@ -688,7 +688,12 @@ public class Model implements Cloneable
     /** Adds a key with the given Integer value, or changes it to the given value. */        
     public void set(String key, int value)
         {
-        if (debug) System.err.println(key + " --> " + value + " [" + getMin(key) + " - " + getMax(key) + "]" );
+        if (debug)
+        	{
+			System.err.println("Debug (Model):" + key + " --> " + value + " [" + getMin(key) + " - " + getMax(key) + "]" );
+			if (!exists(key))
+				System.err.println("Debug (Model): " + "Key " + key + " was NEW");
+        	}
         // when do we push on the undo stack?
         if (
             undoListener != null &&         // when we have an undo listener AND
@@ -753,7 +758,12 @@ public class Model implements Cloneable
     /** Adds a key with the given String value, or changes it to the given value. */        
     public void set(String key, String value)
         {
-        if (debug) System.err.println(key + " --> " + value);
+        if (debug)
+        	{
+        	if (debug) System.err.println("Debug (Model): " + key + " --> " + value);
+			if (!exists(key))
+				System.err.println("Debug (Model): " + "Key " + key + " was NEW");
+        	}
 
         // when do we push on the undo stack?
         if (
@@ -772,6 +782,11 @@ public class Model implements Cloneable
         (String) key, or ifDoesntExist if there is no such value. */        
     public String get(String key, String ifDoesntExist)
         {
+        if (debug)
+        	{
+			if (!exists(key))
+				System.err.println("Debug (Model): " + "Key " + key + " does not exist");
+        	}
         String d = (String) (storage.get(key));
         if (d == null) return ifDoesntExist;
         else return d;
@@ -781,6 +796,11 @@ public class Model implements Cloneable
         (Integer) key, or ifDoesntExist if there is no such value. */        
     public int get(String key, int ifDoesntExist)
         {
+        if (debug)
+        	{
+			if (!exists(key))
+				System.err.println("Debug (Model): " + "Key " + key + " does not exist");
+        	}
         Integer d = (Integer) (storage.get(key));
         if (d == null) return ifDoesntExist;
         else return d.intValue();
@@ -790,10 +810,15 @@ public class Model implements Cloneable
         If there is no such value, also prints (does not throw) a RuntimeError stacktrace.  */        
     public int get(String key)
         {
+        if (debug)
+        	{
+			if (!exists(key))
+				System.err.println("Debug (Model): " + "Key " + key + " does not exist");
+        	}
         Integer d = (Integer) (storage.get(key));
         if (d == null)  
             {
-            new RuntimeException("No Value stored for key " + key + ", returning -1, which is certainly wrong.").printStackTrace();
+            new RuntimeException("Debug (Model): " + "No Value stored for key " + key + ", returning -1, which is certainly wrong.").printStackTrace();
             return -1;
             }
         else return d.intValue();
@@ -934,7 +959,7 @@ public class Model implements Cloneable
     public int getMin(String key)
         {
         Integer d = (Integer) (min.get(key));
-        if (d == null) { System.err.println("Nonexistent min extracted for " + key); return 0; }
+        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent min extracted for " + key); return 0; }
         else return d.intValue();
         }
                 
@@ -942,7 +967,7 @@ public class Model implements Cloneable
     public int getMax(String key)
         {
         Integer d = (Integer) (max.get(key));
-        if (d == null) { System.err.println("Nonexistent max extracted for " + key); return 0; }
+        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent max extracted for " + key); return 0; }
         else return d.intValue();
         }
 
@@ -950,7 +975,7 @@ public class Model implements Cloneable
     public int getMetricMin(String key)
         {
         Integer d = (Integer) (metricMin.get(key));
-        if (d == null) { System.err.println("Nonexistent metricMin extracted for " + key); return 0; }
+        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent metricMin extracted for " + key); return 0; }
         else return d.intValue();
         }
                 
@@ -958,7 +983,7 @@ public class Model implements Cloneable
     public int getMetricMax(String key)
         {
         Integer d = (Integer) (metricMax.get(key));
-        if (d == null) { System.err.println("Nonexistent metricMax extracted for " + key); return 0; }
+        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent metricMax extracted for " + key); return 0; }
         else return d.intValue();
         }
         
@@ -966,7 +991,7 @@ public class Model implements Cloneable
     public int getValidMin(String key)
         {
         Integer d = (Integer) (validMin.get(key));
-        if (d == null) { System.err.println("Nonexistent validMin extracted for " + key); return 0; }
+        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent validMin extracted for " + key); return 0; }
         else return d.intValue();
         }
                 
@@ -974,7 +999,7 @@ public class Model implements Cloneable
     public int getValidMax(String key)
         {
         Integer d = (Integer) (validMax.get(key));
-        if (d == null) { System.err.println("Nonexistent validMax extracted for " + key); return 0; }
+        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent validMax extracted for " + key); return 0; }
         else return d.intValue();
         }
     
@@ -1012,6 +1037,15 @@ public class Model implements Cloneable
         else return 0;
         }
 
+    /** Print to stderr those model parameters for which the provided "other" model
+        does not have identical values.
+    */
+    public void printDiffs(Model other)
+    	{
+    	printDiffs(new PrintWriter(new OutputStreamWriter(System.err)), other);
+    	}
+    	
+
     /** Print to the given writer those model parameters for which the provided "other" model
         does not have identical values.
     */
@@ -1042,6 +1076,14 @@ public class Model implements Cloneable
                 }
             }
         }
+        
+    /** Print the model parameters to stderr.   If diffsOnly, then only the model parameters which
+        differ from the default will be printed. */
+    public void print()
+    	{
+    	print(new PrintWriter(new OutputStreamWriter(System.err)));
+    	}
+    	
     /** Print the model parameters to the given writer.   If diffsOnly, then only the model parameters which
         differ from the default will be printed. */
     public void print(PrintWriter out)

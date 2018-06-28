@@ -892,7 +892,7 @@ public class KorgSG extends Synth
                 
         Category category = new Category(this, "Effect " + effect, color);
         category.add(main, BorderLayout.CENTER);
-        category.makePasteable("effect");
+        category.makePasteable("effect" + effect);
                 
         return category;
         }
@@ -909,7 +909,7 @@ public class KorgSG extends Synth
         for(int i = 0; i < EFFECT_TYPE_BYTES.length; i++)
             if (EFFECT_TYPE_BYTES[i] == b) 
                 return i;
-        System.err.println("Warning, unknown effect type byte " + b);
+        System.err.println("Warning (KorgSG): unknown effect type byte " + b);
         return 0;
         }
             
@@ -1125,7 +1125,7 @@ public class KorgSG extends Synth
                 break;
             case EFFECT_HYPER_ENHANCER:
                 if (effect != 1)
-                    System.err.println("Warning: Effect " + effect + " included hyper enhancer.");
+                    System.err.println("Warning (KorgSG) 2: Effect " + effect + " included hyper enhancer.");
                 model.set("effect" + effect + "hyperenhancer" + "trim", data[offset + 0]);
                 model.set("effect" + effect + "hyperenhancer" + "lowfreq", data[offset + 1]);
                 model.set("effect" + effect + "hyperenhancer" + "lowblend", data[offset + 2]);
@@ -1133,7 +1133,7 @@ public class KorgSG extends Synth
                 model.set("effect" + effect + "hyperenhancer" + "highblend", data[offset + 4]);
                 break;
             default: 
-                System.err.println("Warning: Effect " + effect + " has an invalid effect type " + effectType);
+                System.err.println("Warning (KorgSG) 2: Effect " + effect + " has an invalid effect type " + effectType);
                 break;
             }
         }
@@ -1235,7 +1235,7 @@ public class KorgSG extends Synth
                 break;
             case EFFECT_HYPER_ENHANCER:
                 if (effect != 1)
-                    System.err.println("Warning: Effect " + effect + " included hyper enhancer.");
+                    System.err.println("Warning (KorgSG): Effect " + effect + " included hyper enhancer.");
                 data[offset + 0] = (byte)model.get("effect" + effect + "hyperenhancer" + "trim");
                 data[offset + 1] = (byte)model.get("effect" + effect + "hyperenhancer" + "lowfreq");
                 data[offset + 2] = (byte)model.get("effect" + effect + "hyperenhancer" + "lowblend");
@@ -1243,7 +1243,7 @@ public class KorgSG extends Synth
                 data[offset + 4] = (byte)model.get("effect" + effect + "hyperenhancer" + "highblend");
                 break;
             default: 
-                System.err.println("Warning: Effect " + effect + " has an invalid effect type " + effectType);
+                System.err.println("Warning (KorgSG): Effect " + effect + " has an invalid effect type " + effectType);
                 break;
             }
         }

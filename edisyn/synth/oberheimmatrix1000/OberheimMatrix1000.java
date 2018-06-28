@@ -286,7 +286,7 @@ public class OberheimMatrix1000 extends Synth
     public JComponent addOscillator(int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
-        category.makePasteable("dco");
+        category.makePasteable("dco" + osc);
 
         JComponent comp;
         String[] params;
@@ -475,7 +475,7 @@ public class OberheimMatrix1000 extends Synth
         {
         Category category = new Category(this, "LFO " + lfo + 
             (lfo == 1 ? "   (Oscillator Frequency)" : "   (Oscillator Pulsewidth)"), color);
-        category.makePasteable("lfo");
+        category.makePasteable("lfo" + lfo);
                 
         JComponent comp;
         String[] params;
@@ -536,7 +536,7 @@ public class OberheimMatrix1000 extends Synth
         Category category = new Category(this, "Envelope " + env + 
                 (env == 1 ? "   (Filter Frequency)" :
                 (env == 2 ?  "   (Amplitude)" : "   (Filter FM)")), color);
-        category.makePasteable("env");
+        category.makePasteable("env" + env);
                 
         JComponent comp;
         String[] params;
@@ -674,7 +674,7 @@ public class OberheimMatrix1000 extends Synth
         {
         Category category = new Category(this, "Ramp " + ramp +
             (ramp == 1 ? "   (LFO 1 Amplitude)" : "   (LFO 2 Amplitude)"), color);
-        category.makePasteable("ramp");
+        category.makePasteable("ramp" + ramp);
                 
         JComponent comp;
         String[] params;
@@ -1369,7 +1369,7 @@ public class OberheimMatrix1000 extends Synth
                 if (value > 0)  // Some Matrix 1000 patches have the source set to 0 even though it's not supposed to be!
                     model.set(key, (value - 1));  // tracking source has no "none"
                 else
-                    System.err.println("Warning: Tracking Source was incorrectly 0.  Setting to 1.");
+                    System.err.println("Warning (OberheimMatrix1000): Tracking Source was incorrectly 0.  Setting to 1.");
                 }
             else
                 {
@@ -1581,25 +1581,6 @@ public class OberheimMatrix1000 extends Synth
             d[3] = (byte)0x01;
             d[4] = (byte)model.get("number");
             }
-
-/*
-///// A bug in the Matrix 1000 means that SINGLE PATCH DATA TO EDIT BUFFER apparently sends
-///// corrupted data.  So we can't use it.  But we still need to send!  So we do this by 
-///// writing to slot 199 when toWorkingMemory is true
-
-if (toWorkingMemory)
-{
-// 01H-SINGLE PATCH DATA
-d[3] = (byte)0x01;
-d[4] = (byte)SEND_MATRIX_NUMBER;
-}
-else
-{
-// 01H-SINGLE PATCH DATA
-d[3] = (byte)0x01;
-d[4] = (byte)model.get("number");
-}
-*/
 
         System.arraycopy(data, 0, d, 5, 268);
         d[273] = checksum;

@@ -820,7 +820,7 @@ public abstract class KorgWavestationAbstract extends Synth
         {
         byte[] data = new byte[(nybbles.length - offset - 2) / 2];
         if (data.length * 2 + 2 + offset != nybbles.length)
-            System.err.println("Warning: denybblizing an odd array");
+            System.err.println("Warning (KorgWavestationAbstract): denybblizing an odd array");
         for(int i = 0; i < data.length; i++)
             {
             data[i] = (byte)(nybbles[i * 2 + offset] | (nybbles[i * 2 + offset + 1] << 4));

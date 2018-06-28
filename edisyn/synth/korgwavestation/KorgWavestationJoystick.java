@@ -109,7 +109,7 @@ public class KorgWavestationJoystick extends Joystick implements Updatable
 
 // forces a square.  Stolen and modified from
 // https://stackoverflow.com/questions/3489641/forcing-a-jcomponent-to-be-square-when-being-resized
-    public void reshape(int x, int y, int width, int height) {
+    public void setBounds(int x, int y, int width, int height) {
         int currentWidth = getWidth();
         int currentHeight = getHeight();
         if (currentWidth!=width || currentHeight!=height) {
@@ -125,7 +125,7 @@ public class KorgWavestationJoystick extends Joystick implements Updatable
             else // currentHeight==height
                 height = width;
             }
-        super.reshape(x, y, width, height);
+        super.setBounds(x, y, width, height);
         }
 
 

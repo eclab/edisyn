@@ -31,13 +31,14 @@ public class Undo
         {
         if (!willPush)
             {
-            if (debug) System.err.println("Did not push " + obj);
             return;
             }
         undo.push((Model)(obj.clone()));
         redo.clear();
         synth.updateUndoMenus();
-        if (debug) System.err.println("Pushed " + obj);
+        if (debug) System.err.println("Debug (Undo): Pushed " + obj);
+
+        if (debug) printStacks();
         }
         
     public Model top()
@@ -46,42 +47,63 @@ public class Undo
             return null;
         else return undo.peekFirst();
         }
-                
+             
+    void printStacks()
+    	{
+    	System.err.println("Debug (Undo):\nUNDO");
+    	Object[] o = undo.toArray();
+    	for(int i = 0; i < o.length; i++)
+    		{
+    		System.err.println("" + i + " " + o[i]);
+    		}
+    	System.err.println("\nREDO");
+    	o = redo.toArray();
+    	for(int i = 0; i < o.length; i++)
+    		{
+    		System.err.println("" + i + " " + o[i]);
+    		}
+    		
+    	}
+    	   
     public Model undo(Model current)
         {
         if (undo.isEmpty())
             {
-            if (debug) System.err.println("Empty Undo" + current);
+            if (debug) System.err.println("Debug (Undo): Empty Undo" + current);
             synth.updateUndoMenus();
             return current;
             }
         if (current != null)
             {
-            if (debug) System.err.println("Pushing on Redo" + current);
+            if (debug) System.err.println("Debug (Undo): Pushing on Redo" + current);
             redo.push((Model)(current.clone()));
             }
         Model model = undo.pop();
         synth.updateUndoMenus();
-        if (debug) System.err.println("Undo " + current + " to " + model + " Left: " + undo.size());
-        return model;        
+        if (debug) System.err.println("Debug (Undo): Undo " + current + " to " + model + " Left: " + undo.size());
+ 
+         if (debug) printStacks();
+       return model;        
         }
                 
     public Model redo(Model current)
         {
         if (redo.isEmpty())
             {
-            if (debug) System.err.println("Empty Redo " + current);
+            if (debug) System.err.println("Debug (Undo): Empty Redo " + current);
             synth.updateUndoMenus();
             return current;
             }
         if (current != null)
             {
-            if (debug) System.err.println("Pushing on Undo" + current);
+            if (debug) System.err.println("Debug (Undo): Pushing on Undo" + current);
             undo.push((Model)(current.clone()));
             }
         Model model = redo.pop();
         synth.updateUndoMenus();
-        if (debug) System.err.println("Redo " + current + " to " + model + " Left: " + redo.size());
+        if (debug) System.err.println("Debug (Undo): Redo " + current + " to " + model + " Left: " + redo.size());
+        if (debug) printStacks();
+
         return model;
         }
     }

@@ -126,12 +126,12 @@ public class KorgMicroKorgVocoder extends KorgMicroKorg
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 81 ... 88, with no zero or nine digits");
+                showSimpleError(title, "The Patch Number must be an integer 81 ... 88, with no zero or nine digits\n(11...78 are reserved for Synthesizer Patches)");
                 continue;
                 }
             if (n < 81 || n > 88 || n % 10 == 0 || n % 10 == 9)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 81 ... 88, with no zero or nine digits");
+                showSimpleError(title, "The Patch Number must be an integer 81 ... 88, with no zero or nine digits\n(11...78 are reserved for Synthesizer Patches)");
                 continue;
                 }
                                 

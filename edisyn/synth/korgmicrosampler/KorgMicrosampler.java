@@ -396,7 +396,7 @@ public class KorgMicrosampler extends Synth
     public JComponent addPattern(Color color)
         {
         Category category = new Category(this, "Pattern", color);
-        category.makePasteable("pattern");
+        category.makePasteable("pattern1");
 
         JComponent comp;
         String[] params;
@@ -423,6 +423,7 @@ public class KorgMicrosampler extends Synth
                 hbox.addLast(patterns[model.get(key, 0) - 1]);
                 hbox.revalidate();
                 hbox.repaint();
+        		category.makePasteable("pattern" + model.get(key, 1));
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel(" Number ");
@@ -437,7 +438,7 @@ public class KorgMicrosampler extends Synth
     public JComponent addSample(Color color)
         {
         Category category = new Category(this, "Sample", color);
-        category.makePasteable("sample");
+        category.makePasteable("sample1");
                 
         JComponent comp;
         String[] params;
@@ -594,6 +595,7 @@ public class KorgMicrosampler extends Synth
                 v.addBottom(samples[model.get(key, 1) - 1]);
                 v.revalidate();
                 v.repaint();
+        		category.makePasteable("sample" + model.get(key, 1));
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel(" Number ");
@@ -2011,7 +2013,7 @@ public class KorgMicrosampler extends Synth
                 else if (val < 40) return String.format("%2.1f", ((val - 20) * 0.2 + 2.0));
                 else if (val < 60) return String.format("%2.1f", ((val - 40) * 0.3 + 6.0));
                 else if (val < 102) return String.format("%2.1f", ((val - 60) * 0.5 + 12.0));
-                else return String.format("%2.1f", ((val - 102) + 33));
+                else return String.format("%2.1f", ((val - 102) + 33) * 1.0);
                 }
             };
         effects[i].add(comp);
@@ -2024,7 +2026,7 @@ public class KorgMicrosampler extends Synth
                 else if (val < 40) return String.format("%2.1f", ((val - 20) * 0.2 + 2.0));
                 else if (val < 60) return String.format("%2.1f", ((val - 40) * 0.3 + 6.0));
                 else if (val < 102) return String.format("%2.1f", ((val - 60) * 0.5 + 12.0));
-                else return String.format("%2.1f", ((val - 102) + 33));
+                else return String.format("%2.1f", ((val - 102) + 33) * 1.0);
                 }
             };
         effects[i].add(comp);
@@ -2082,7 +2084,7 @@ public class KorgMicrosampler extends Synth
                 else if (val < 100) return String.format("%2.1f", ((val - 75) * 0.3 + 9.0));
                 else if (val < 107) return String.format("%2.1f", ((val - 100) * 0.5 + 16.5));
                 else if (val < 109) return String.format("%2.1f", (val - 107) * 1.0 + 20.0);
-                else return String.format("%2.1f", ((val - 109) * 2.0 + 22.0));
+                else return String.format("%2.1f", ((val - 109) * 2.0 + 22.0) * 1.0);
                 }
             };
         next.add(comp);
@@ -3134,20 +3136,6 @@ public class KorgMicrosampler extends Synth
                 super.update(key, model);
                 int type = model.get(key, 0);
 
-                /*
-                // dump
-                for(int j = 1; j < 22; j++)
-                {
-                System.err.print("{ ");
-                for(int i = 1; i < 21; i++)
-                {
-                if (i > 1) System.err.print(", ");
-                System.err.print(model.get("fx" + j + "param" + i, 0));
-                }
-                System.err.println(" },");
-                }
-                */
-
                 setSendMIDI(false);
                 // Reset default settings
                 for(int param = 0; param < 20; param++)
@@ -3515,7 +3503,7 @@ public class KorgMicrosampler extends Synth
         {
         if (data.length < 8)
             {
-            System.err.println("Invalid sysex message received");
+            System.err.println("Warning (KorgMicrosampler): Invalid sysex message received");
             }
         else if (data[5] == 0x0)  // BANK AND GLOBAL
             {

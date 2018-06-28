@@ -289,7 +289,7 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
     public Category addStep(int num, Color color)
         {
         Category category = new Category(this, "" + num, color);
-        category.makePasteable("step");
+        category.makePasteable("step" + num);
         
         JComponent comp;
         String[] params;
@@ -615,7 +615,7 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
             else
                 {
                 // unusual high byte.
-                System.err.println("Warning: Unusual high byte " + high);
+                System.err.println("Warning (KorgWavestationSequence): Unusual high byte " + high);
                 }
 
             coarse = readByte(data, pos);
@@ -1089,7 +1089,7 @@ return pos;
             }
         else
             {
-            System.err.println("Unknown Key " + key);
+            System.err.println("Warning (KorgWavestationSequence): Unknown Key " + key);
             return new Object[0];
             }
         }

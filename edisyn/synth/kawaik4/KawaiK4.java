@@ -355,7 +355,7 @@ public class KawaiK4 extends Synth
     public JComponent addVibrato(Color color)
         {
         Category category = new Category(this, "Vibrato LFO", color);
-        category.makePasteable("lfo");
+        category.makePasteable("lfo2");
 
         JComponent comp;
         String[] params;
@@ -423,7 +423,7 @@ public class KawaiK4 extends Synth
     public JComponent addLFO(Color color)
         {
         Category category = new Category(this, "LFO", color);
-        category.makePasteable("lfo");
+        category.makePasteable("lfo1");
 
         JComponent comp;
         String[] params;
@@ -456,7 +456,7 @@ public class KawaiK4 extends Synth
     public JComponent addSource(int src, Color color)
         {
         Category category = new Category(this, "Source " + src, color);
-        category.makePasteable("s");
+        category.makePasteable("s" + src);
 
         JComponent comp;
         String[] params;
@@ -540,7 +540,7 @@ public class KawaiK4 extends Synth
     public JComponent addEnvelope(int envelope, Color color)
         {
         Category category = new Category(this, "Envelope " + envelope, color);
-        category.makePasteable("s");
+        category.makePasteable("s" + envelope);
 
         JComponent comp;
         String[] params;
@@ -601,7 +601,7 @@ public class KawaiK4 extends Synth
     public JComponent addFilter(int filter, Color color)
         {
         Category category = new Category(this, "Filter " + filter, color);
-        category.makePasteable("f");
+        category.makePasteable("f" + filter);
                 
         JComponent comp;
         String[] params;
@@ -637,7 +637,7 @@ public class KawaiK4 extends Synth
     public JComponent addFilterEnvelope(int filterenv, Color color)
         {
         Category category = new Category(this, "Filter Envelope " + filterenv, color);
-        category.makePasteable("f");
+        category.makePasteable("f" + filterenv);
                 
         JComponent comp;
         String[] params;

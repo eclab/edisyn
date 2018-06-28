@@ -592,7 +592,7 @@ public class YamahaTX81Z extends Synth
     public JComponent addOperator(final int src, Color color)
         {
         final Category category = new Category(this, "Operator " + src, color);
-        category.makePasteable("operator");
+        category.makePasteable("operator" + src);
 
         JComponent comp;
         String[] params;
@@ -737,7 +737,7 @@ public class YamahaTX81Z extends Synth
     public JComponent addEnvelope(final int envelope, Color color)
         {
         Category category = new Category(this, "Operator Envelope " + envelope, color);
-        category.makePasteable("operator");
+        category.makePasteable("operator" + envelope);
 
         JComponent comp;
         String[] params;
@@ -1088,7 +1088,7 @@ public class YamahaTX81Z extends Synth
             }
         else 
             {
-            System.err.println("Can't emit key " + key);
+            System.err.println("Warning (YamahaTX81Z): Can't emit key " + key);
             return new Object[0];
             }
         }
@@ -1132,7 +1132,7 @@ public class YamahaTX81Z extends Synth
             }
         else    
             {
-            System.err.println("Can't parse data (length " + data.length + ").  First bytes:");
+            System.err.println("Warning (YamahaTX81Z): Can't parse data (length " + data.length + ").  First bytes:");
             int len = 16;
             if (len > data.length) 
                 len = data.length;

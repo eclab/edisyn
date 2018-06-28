@@ -158,7 +158,7 @@ public class KawaiK4Effect extends Synth
     public JComponent addSubmix(int sub, Color color)
         {
         Category category = new Category(this, "Submix " + SUBMIXES[sub - 1], color);
-        category.makePasteable("submix");
+        category.makePasteable("submix" + sub);
 
         JComponent comp;
         String[] params;

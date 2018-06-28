@@ -59,7 +59,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
         hbox.addLast(addPatch(Style.COLOR_A()));
         vbox.add(hbox);
-        vbox.add(add2DMixer(Style.COLOR_B()));
+        vbox.addLast(add2DMixer(Style.COLOR_B()));
         
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Global", soundPanel);
@@ -67,7 +67,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         for(int i = 1; i <= 4; i++)
             {
             soundPanel = panels[i - 1] = new SynthPanel(this);
-            panels[i - 1].makePasteable("osc");
+            panels[i - 1].makePasteable("osc" + i);
                         
             vbox = new VBox();
             hbox = new HBox();
@@ -122,30 +122,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         return frame;
         }
 
-    public JMenuItem copy = new JMenuItem("Copy Wave");
-    public JMenuItem paste = new JMenuItem("Paste Wave");
-    public JMenuItem copyMutable = new JMenuItem("Copy Wave (Mutation Parameters Only)");
-    public JMenuItem pasteMutable = new JMenuItem("Paste Wave (Mutation Parameters Only)");
-    public JMenuItem reset = new JMenuItem("Reset Wave");
-    
-    public SynthPanel findPanel()
-        {
-        String title = getSelectedTabTitle();
-        if (title.equals("Wave A"))
-            return panels[0];
-        else if (title.equals("Wave B"))
-            return panels[1];
-        else if (title.equals("Wave C"))
-            return panels[2];
-        else if (title.equals("Wave D"))
-            return panels[3];
-        else return null;
-        }
-    
     public void addWavestationMenu(JMenu menu)
         {
-        //super.addWavestationMenu(menu);
-        
         JMenuItem sendTestPerformanceMenu = new JMenuItem("Set up Test Performance in RAM 1 Slot 0");
         sendTestPerformanceMenu.addActionListener(new ActionListener()
             {
@@ -155,69 +133,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                 }
             });
         menu.add(sendTestPerformanceMenu);
-                     
-        menu.addSeparator();
-
-        menu.add(copy);
-        copy.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                SynthPanel p = findPanel();
-                if (p != null) p.copyPanel(true);
-                }
-            });
-        menu.add(paste);
-        paste.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                SynthPanel p = findPanel();
-                if (p != null) p.pastePanel(true);
-                }
-            });
-        menu.addSeparator();
-        menu.add(copyMutable);
-        copyMutable.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                SynthPanel p = findPanel();
-                if (p != null) p.copyPanel(false);
-                }
-            });
-        menu.add(pasteMutable);
-        pasteMutable.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                SynthPanel p = findPanel();
-                if (p != null) p.pastePanel(false);
-                }
-            });
-        menu.addSeparator();
-        reset.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                SynthPanel p = findPanel();
-                if (p != null) p.resetPanel();
-                }
-            });
-        menu.add(reset);
         }
-        
-    public void tabChanged()
-        {
-        super.tabChanged();
-        boolean isOscillator = (getSelectedTabTitle().startsWith("Wave"));
-        copy.setEnabled(isOscillator);
-        paste.setEnabled(isOscillator);
-        copyMutable.setEnabled(isOscillator);
-        pasteMutable.setEnabled(isOscillator);
-        reset.setEnabled(isOscillator);
-        }
-    
+            
     public String getDefaultResourceFileName() { return "KorgWavestationPatch.init"; }
     public String getHTMLResourceFileName() { return "KorgWavestationPatch.html"; }
                 
@@ -504,6 +421,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         hbox.add(comp);
         main.add(hbox);
         mainH.add(main);
+        mainH.add(Strut.makeHorizontalStrut(40));
+        mainH.add(Stretch.makeVerticalStretch());
                 
         final KorgWavestationJoystick joy = new KorgWavestationJoystick(this, 
             new String[] { "mixx0", "mixx1", "mixx2", "mixx3", "mixx4" },
@@ -512,8 +431,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         joy.updateAll();
         joy.setDrawsUnpressedCursor(false);
         mainH.addLast(joy);
-                
-        mainH.add(Strut.makeHorizontalStrut(40));
+        
         category.add(mainH, BorderLayout.CENTER);
         return category;
         }
@@ -524,7 +442,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addOscillatorMain(final int osc, Color color)
         {
         Category category  = new Category(this, "Wave " + OSCILLATORS[osc - 1], color);
-        category.makePasteable("osc");
+        category.makePasteable("osc" + osc);
                         
         JComponent comp;
         String[] params;
@@ -682,7 +600,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addLFO(int osc, int lfo, Color color)
         {
         Category category  = new Category(this, "LFO " + lfo, color);
-        category.makePasteable("osc", true);
+        category.makePasteable("osc" + osc + "lfo" + lfo);
                         
         JComponent comp;
         String[] params;
@@ -744,7 +662,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addEnvelope(int osc, int env, Color color)
         {
         Category category  = new Category(this, (env == 1 ? "Envelope 1" : "Amplitude Envelope"), color);
-        category.makePasteable("osc", true);
+        category.makePasteable("osc" + osc + "env" + env);
                         
         JComponent comp;
         String[] params;
@@ -871,7 +789,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addFilter(int osc, Color color)
         {
         Category category  = new Category(this, "Filter", color);
-        category.makePasteable("osc", true);
+        category.makePasteable("osc" + osc);
                         
         JComponent comp;
         String[] params;
@@ -915,7 +833,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addAmplifier(int osc, Color color)
         {
         Category category  = new Category(this, "Amplifier", color);
-        category.makePasteable("osc", true);
+        category.makePasteable("osc" + osc);
                         
         JComponent comp;
         String[] params;
@@ -952,7 +870,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addPan(int osc, Color color)
         {
         Category category  = new Category(this, "Pan", color);
-        category.makePasteable("osc");
+        category.makePasteable("osc" + osc);
                         
         JComponent comp;
         String[] params;
@@ -973,7 +891,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addTuning(int osc, Color color)
         {
         Category category  = new Category(this, "Tuning", color);
-        category.makePasteable("osc");
+        category.makePasteable("osc" + osc);
                         
         JComponent comp;
         String[] params;
@@ -1012,7 +930,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addPitch(int osc, Color color)
         {
         Category category  = new Category(this, "Pitch", color);
-        category.makePasteable("osc");
+        category.makePasteable("osc" + osc);
                         
         JComponent comp;
         String[] params;
@@ -1440,7 +1358,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
             }
 
         // uh oh
-        System.err.println("Unknown Key " + key);
+        System.err.println("Warning (KorgWavestationPatch): Unknown Key " + key);
         return new Object[0];
         }
 
@@ -2111,7 +2029,6 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         
     public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
         {
-        System.err.println("Merging " + isParsingForMerge());
         model.set("bank", wsToEdisynBank[data[5]]);
         model.set("number", data[6]);
                 

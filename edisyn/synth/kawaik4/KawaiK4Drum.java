@@ -237,9 +237,9 @@ public class KawaiK4Drum extends Synth
 
     public JComponent addKeys(Color color)
         {
-        Category category = new Category(this, "Drum Key", color);
-        category.makePasteable("key");
-        category.makeDistributable("key");
+        final Category category = new Category(this, "Drum Key", color);
+        category.makePasteable("key1");
+        category.makeDistributable("key1");  // pretty useless
 
         JComponent comp;
         String[] params;
@@ -283,6 +283,7 @@ public class KawaiK4Drum extends Synth
                 vbox.addBottom(keys[model.get(key, 36) - 36]);
                 vbox.revalidate();
                 vbox.repaint();
+        		category.makePasteable("key" + (model.get(key, 36) - 35));  // so we reset the preamble
                 }
             });
                         

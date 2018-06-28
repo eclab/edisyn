@@ -393,7 +393,7 @@ public class KawaiK1 extends Synth
     public JComponent addSource(int src, Color color)
         {
         Category category = new Category(this, "Source " + src, color);
-        category.makePasteable("s");
+        category.makePasteable("s" + src);
 
         JComponent comp;
         String[] params;
@@ -478,7 +478,7 @@ public class KawaiK1 extends Synth
     public JComponent addEnvelope(int envelope, Color color)
         {
         Category category = new Category(this, "Envelope " + envelope, color);
-        category.makePasteable("s");
+        category.makePasteable("s" + envelope);
 
         JComponent comp;
         String[] params;

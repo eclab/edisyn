@@ -741,7 +741,7 @@ public class PreenFM2 extends Synth
     public JComponent addOperator(final int op, Color color)
         {
         Category category = new Category(this, "Operator " + op, color);
-        category.makePasteable("op");
+        category.makePasteable("op" + op);
                 
         JComponent comp;
         String[] params;
@@ -1001,7 +1001,7 @@ public class PreenFM2 extends Synth
     public JComponent addLFO(int lfo, Color color)
         {
         Category category  = new Category(this, "LFO " + lfo, color);
-        category.makePasteable("lfo");
+        category.makePasteable("lfo" + lfo);
                         
         JComponent comp;
         String[] params;
@@ -1084,7 +1084,7 @@ public class PreenFM2 extends Synth
     public JComponent addEnvelope(final int env, Color color)
         {
         Category category = new Category(this, "Envelope " + env, color);
-        category.makePasteable("freenv");
+        category.makePasteable("freeenv" + env);
                 
         JComponent comp;
         String[] params;
@@ -1174,8 +1174,8 @@ public class PreenFM2 extends Synth
     public JComponent addStepSequencer(int seq, Color color)
         {
         Category category  = new Category(this, "Step Sequencer " + seq, color);
-        category.makePasteable("stepseq");
-        category.makeDistributable("stepseq");
+        category.makePasteable("stepseq" + seq);
+        category.makeDistributable("stepseq" + seq);
                                 
         JComponent comp;
         String[] params;
@@ -1250,7 +1250,7 @@ public class PreenFM2 extends Synth
     public JComponent addNoteScaling(int note, Color color)
         {
         Category category  = new Category(this, "Note " + note + " MIDI Scaling", color);
-        category.makePasteable("note");
+        category.makePasteable("note" + note);
                                 
         JComponent comp;
         String[] params;
@@ -1661,26 +1661,8 @@ public class PreenFM2 extends Synth
             addParameter("stepseq1step" + i, 2, i - 1);     // I wonder if this is right
         for(int i = 1; i < 17; i++)
             addParameter("stepseq2step" + i, 3, i - 1);     // I wonder if this is right
-                
-        /*
-        // Let's do a little verificaton here
-                
-        String[] keys = (String[])(parameterToIndex.keySet().toArray(new String[0]));
-        for(int i = 0; i < keys.length; i++)
-        {
-        if (!model.exists((String)(keys[i])))
-        System.err.println(keys[i] + "  missing from model");
         }
-                        
-        keys = model.getKeys();
-        for(int i = 0; i < keys.length; i++)
-        {
-        if (!parameterToIndex.containsKey(keys[i]))
-        System.err.println(keys[i] + "  missing from parameter list");
-        }
-        */
-        }
-                
+                                
     /** The PreenFM2 doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
         the purposes of writing to a file. */
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)

@@ -68,13 +68,10 @@ public class KawaiK5 extends Synth
     public static final int[] MINOR_SEVENTH_HARMONICS = { 7, 14, 28, 56 };
     public static final int[] MAJOR_SECOND_HARMONICS = { 9, 18, 36, 72 };
         
-    SynthPanel[] synthPanels = new SynthPanel[6];
-
     public KawaiK5()
         {
         for(int i = 0; i < parameters.length; i++)
             {
-//            System.err.println("" + parameters[i] + " " + Integer.valueOf(paramNumbers[i]));
             parametersToIndex.put(parameters[i], Integer.valueOf(paramNumbers[i]));
             }
 
@@ -109,7 +106,8 @@ public class KawaiK5 extends Synth
         vbox.add(addPitchEnvelope(1, Style.COLOR_C()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("General 1", synthPanels[0] = (SynthPanel)soundPanel);
+        ((SynthPanel)soundPanel).makePasteable("s1");
+        addTab("General 1", (SynthPanel)soundPanel);
                 
         
         soundPanel = new SynthPanel(this);
@@ -129,7 +127,8 @@ public class KawaiK5 extends Synth
         vbox.add(addPitchEnvelope(2, Style.COLOR_C()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("General 2", synthPanels[1] = (SynthPanel)soundPanel);
+        ((SynthPanel)soundPanel).makePasteable("s2");
+        addTab("General 2", (SynthPanel)soundPanel);
                 
         
                
@@ -149,7 +148,8 @@ public class KawaiK5 extends Synth
         vbox.add(hbox);
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Harmonics 1", synthPanels[2] = (SynthPanel)soundPanel);
+        ((SynthPanel)soundPanel).makePasteable("s1");
+        addTab("Harmonics 1", (SynthPanel)soundPanel);
                 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
@@ -162,7 +162,8 @@ public class KawaiK5 extends Synth
         vbox.add(hbox);
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Harmonics 2", synthPanels[3] = (SynthPanel)soundPanel);
+       ((SynthPanel)soundPanel).makePasteable("s2");
+        addTab("Harmonics 2", (SynthPanel)soundPanel);
                 
 
         soundPanel = new SynthPanel(this);
@@ -177,7 +178,8 @@ public class KawaiK5 extends Synth
         vbox.add(addDHGEnvelope(1, 4, Style.COLOR_A()));
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Envelopes/KS 1", synthPanels[4] = (SynthPanel)soundPanel);
+        ((SynthPanel)soundPanel).makePasteable("s1");
+        addTab("Envelopes/KS 1", (SynthPanel)soundPanel);
                 
 
         soundPanel = new SynthPanel(this);
@@ -192,7 +194,8 @@ public class KawaiK5 extends Synth
         vbox.add(addDHGEnvelope(2, 4, Style.COLOR_A()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Envelopes/KS 2", synthPanels[5] = (SynthPanel)soundPanel);
+        ((SynthPanel)soundPanel).makePasteable("s2");
+        addTab("Envelopes/KS 2", (SynthPanel)soundPanel);
 
         model.set("name", "INIT");  // has to be 10 long
 
@@ -212,7 +215,6 @@ public class KawaiK5 extends Synth
         // We can't reasonably send to patches if we send in bulk.
         transmitTo.setEnabled(false);
 
-        addKawaiK5Menu();
         return frame;
         }         
 
@@ -257,140 +259,6 @@ public class KawaiK5 extends Synth
             return true;
             }
         }
-
-    //boolean sendKawaiParametersInBulk = true;
-        
-    public void addKawaiK5Menu()
-        {
-        JMenu menu = new JMenu("Kawai K5");
-        menubar.add(menu);
-
-/*
-// classic patch names
-                
-JMenu sendParameters = new JMenu("Send Parameters");
-menu.add(sendParameters);
-                
-String str = getLastX("SendParameters", getSynthName(), true);
-if (str == null)
-sendKawaiParametersInBulk = true;
-else if (str.equalsIgnoreCase("BULK"))
-sendKawaiParametersInBulk = true;
-else if (str.equalsIgnoreCase("INDIVIDUALLY"))
-sendKawaiParametersInBulk = false;
-else sendKawaiParametersInBulk = true;
-
-ButtonGroup bg = new ButtonGroup();
-
-JRadioButtonMenuItem separately = new JRadioButtonMenuItem("Individually");
-separately.addActionListener(new ActionListener()
-{
-public void actionPerformed(ActionEvent evt)
-{
-sendKawaiParametersInBulk = false;
-setLastX("INDIVIDUALLY", "SendParameters", getSynthName(), true);
-}
-});
-sendParameters.add(separately);
-bg.add(separately);
-if (sendKawaiParametersInBulk == false) 
-separately.setSelected(true);
-
-JRadioButtonMenuItem bulk = new JRadioButtonMenuItem("In Bulk, Overwriting Patch SID-12");
-bulk.addActionListener(new ActionListener()
-{
-public void actionPerformed(ActionEvent evt)
-{
-sendKawaiParametersInBulk = true;
-setLastX("BULK", "SendParameters", getSynthName(), true);
-}
-});
-sendParameters.add(bulk);
-bg.add(bulk);
-if (sendKawaiParametersInBulk == true) 
-bulk.setSelected(true);
-*/
-
-        menu.add(copy);
-        copy.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                SynthPanel p = findPanel();
-                if (p != null) p.copyPanel(true);
-                }
-            });
-        menu.add(paste);
-        paste.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                SynthPanel p = findPanel();
-                if (p != null) p.pastePanel(true);
-                }
-            });
-        menu.addSeparator();
-        menu.add(copyMutable);
-        copyMutable.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                SynthPanel p = findPanel();
-                if (p != null) p.copyPanel(false);
-                }
-            });
-        menu.add(pasteMutable);
-        pasteMutable.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                SynthPanel p = findPanel();
-                if (p != null) p.pastePanel(false);
-                }
-            });
-        menu.addSeparator();
-        reset.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                SynthPanel p = findPanel();
-                if (p != null) p.resetPanel();
-                }
-            });
-        menu.add(reset);
-        }
-
-    public void tabChanged()
-        {
-        super.tabChanged();
-        boolean isOscillator = (getSelectedTabTitle().startsWith("General") ||
-            getSelectedTabTitle().startsWith("Harmonics") ||
-            getSelectedTabTitle().startsWith("Envelopes") );
-        copy.setEnabled(isOscillator);
-        paste.setEnabled(isOscillator);
-        copyMutable.setEnabled(isOscillator);
-        pasteMutable.setEnabled(isOscillator);
-        reset.setEnabled(isOscillator);
-        }
-    
-    public SynthPanel findPanel()
-        {
-        String title = getSelectedTabTitle();
-        if (title.equals("General 1"))
-            return synthPanels[0];
-        else if (title.equals("General 2"))
-            return synthPanels[1];
-        else if (title.equals("Harmonics 1"))
-            return synthPanels[2];
-        else if (title.equals("Harmonics 1"))
-            return synthPanels[3];
-        else if (title.equals("Envelopes/KS 1"))
-            return synthPanels[4];
-        else if (title.equals("Envelopes/KS 2"))
-            return synthPanels[5];
-        else return null;
-        }
-        
         
     HBox[] harmonics = new HBox[2];
     JComponent[] harmonicsSources = new JComponent[4];
@@ -481,7 +349,7 @@ bulk.setSelected(true);
     public JComponent addBasic(int source, Color color)
         {
         Category category = new Category(this, "Basic Edit", color);
-        category.makePasteable("basics");
+        category.makePasteable("s" + source + "basic");
 
         JComponent comp;
         String[] params;
@@ -489,22 +357,22 @@ bulk.setSelected(true);
         
         VBox vbox = new VBox();
         params = MOD_DESTINATIONS;
-        comp = new Chooser("Pedal Destination", this, "basics" + source + "pedalassign", params);
+        comp = new Chooser("Pedal Destination", this, "s" + source + "basic" + "pedalassign", params);
         vbox.add(comp);
 
         params = MOD_DESTINATIONS;
-        comp = new Chooser("Mod Wheel", this, "basics" + source + "wheelassign", params);
+        comp = new Chooser("Mod Wheel", this, "s" + source + "basic" + "wheelassign", params);
         vbox.add(comp);
         hbox.add(vbox);
 
-        comp = new LabelledDial("Delay", this, "basics" + source + "delay", color, 0, 31);
+        comp = new LabelledDial("Delay", this, "s" + source + "basic" + "delay", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Pedal", this, "basics" + source + "pedaldep", color, -31, 31);
+        comp = new LabelledDial("Pedal", this, "s" + source + "basic" + "pedaldep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
 
-        comp = new LabelledDial("Mod Wheel", this, "basics" + source + "wheeldep", color, -31, 31);
+        comp = new LabelledDial("Mod Wheel", this, "s" + source + "basic" + "wheeldep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
 
@@ -515,13 +383,13 @@ bulk.setSelected(true);
     public JComponent addKSCurve(int source, Color color)
         {
         Category category = new Category(this, "Key Scaling Curve", color);
-        category.makePasteable("kss");
+        category.makePasteable("s" + source + "ks");
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         
-        comp = new LabelledDial("Breakpoint", this, "kss" + source + "breakpoint", color, 0, 127)
+        comp = new LabelledDial("Breakpoint", this, "s" + source + "ks" + "breakpoint", color, 0, 127)
             {
             public String map(int val)
                 {
@@ -530,10 +398,10 @@ bulk.setSelected(true);
             };
         hbox.add(comp);
 
-        comp = new LabelledDial("Left", this, "kss" + source + "left", color, -31, 31);
+        comp = new LabelledDial("Left", this, "s" + source + "ks" + "left", color, -31, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Right", this, "kss" + source + "right", color, -31, 31);
+        comp = new LabelledDial("Right", this, "s" + source + "ks" + "right", color, -31, 31);
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -544,18 +412,18 @@ bulk.setSelected(true);
     public JComponent addPitch(int source, Color color)
         {
         Category category = new Category(this, "Pitch (DFG)", color);
-        category.makePasteable("dfgs");
+        category.makePasteable("s" + source + "dfg");
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        comp = new CheckBox("Fixed", this, "dfgs" + source + "key", false);
+        comp = new CheckBox("Fixed", this, "s" + source + "dfg" + "key", false);
         vbox.add(comp); 
         hbox.add(vbox);   
 
-        comp = new LabelledDial("Fixed Key", this, "dfgs" + source + "fixno", color, 0, 127)
+        comp = new LabelledDial("Fixed Key", this, "s" + source + "dfg" + "fixno", color, 0, 127)
             {
             public String map(int val)
                 {
@@ -564,30 +432,30 @@ bulk.setSelected(true);
             };
         hbox.add(comp);
 
-        comp = new LabelledDial("Coarse", this, "dfgs" + source + "coarse", color, -48, 48);
+        comp = new LabelledDial("Coarse", this, "s" + source + "dfg" + "coarse", color, -48, 48);
         ((LabelledDial)comp).addAdditionalLabel("Tune");
         hbox.add(comp);
 
-        comp = new LabelledDial("Fine", this, "dfgs" + source + "fine", color, -31, 31);
+        comp = new LabelledDial("Fine", this, "s" + source + "dfg" + "fine", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Tune");
         hbox.add(comp);
 
-        comp = new LabelledDial("Pitch Bend", this, "dfgs" + source + "benderdep", color, 0, 24);
+        comp = new LabelledDial("Pitch Bend", this, "s" + source + "dfg" + "benderdep", color, 0, 24);
         hbox.add(comp);
 
-        comp = new LabelledDial("Aftertouch", this, "dfgs" + source + "prsdep", color, -31, 31);
+        comp = new LabelledDial("Aftertouch", this, "s" + source + "dfg" + "prsdep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);
                 
-        comp = new LabelledDial("LFO", this, "dfgs" + source + "lfodep", color, 0, 31);
+        comp = new LabelledDial("LFO", this, "s" + source + "dfg" + "lfodep", color, 0, 31);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);
 
-        comp = new LabelledDial("Envelope", this, "dfgs" + source + "envdep", color, -24, 24);
+        comp = new LabelledDial("Envelope", this, "s" + source + "dfg" + "envdep", color, -24, 24);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);
 
-        comp = new LabelledDial("Aftertouch", this, "dfgs" + source + "preslfodep", color, -31, 31);
+        comp = new LabelledDial("Aftertouch", this, "s" + source + "dfg" + "preslfodep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("LFO Mod");
         hbox.add(comp);
 
@@ -599,77 +467,77 @@ bulk.setSelected(true);
     public JComponent addPitchEnvelope(int source, Color color)
         {
         Category category = new Category(this, "Pitch (DFG) Envelope", color);
-        category.makePasteable("dfgs");
-        category.makeDistributable("dfgs");
+        category.makePasteable("s" + source + "dfg");
+        category.makeDistributable("s" + source + "dfg");
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        comp = new CheckBox("Loop", this, "dfgs" + source + "envloop", false);
+        comp = new CheckBox("Loop", this, "s" + source + "dfg" + "envloop", false);
         ((CheckBox)comp).addToWidth(2);
         vbox.add(comp); 
         hbox.add(vbox);   
 
-        comp = new LabelledDial("Velocity", this, "dfgs" + source + "veloenvdep", color, -31, 31);
+        comp = new LabelledDial("Velocity", this, "s" + source + "dfg" + "veloenvdep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 1", this, "dfgs" + source + "envrateseg1", color, 0, 31);
+        comp = new LabelledDial("Rate 1", this, "s" + source + "dfg" + "envrateseg1", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 1", this, "dfgs" + source + "envlevelseg1", color, -31, 31);
+        comp = new LabelledDial("Level 1", this, "s" + source + "dfg" + "envlevelseg1", color, -31, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 2", this, "dfgs" + source + "envrateseg2", color, 0, 31);
+        comp = new LabelledDial("Rate 2", this, "s" + source + "dfg" + "envrateseg2", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 2", this, "dfgs" + source + "envlevelseg2", color, -31, 31);
+        comp = new LabelledDial("Level 2", this, "s" + source + "dfg" + "envlevelseg2", color, -31, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 3", this, "dfgs" + source + "envrateseg3", color, 0, 31);
+        comp = new LabelledDial("Rate 3", this, "s" + source + "dfg" + "envrateseg3", color, 0, 31);
         ((LabelledDial)comp).addAdditionalLabel("(Loop Start) ");
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 3", this, "dfgs" + source + "envlevelseg3", color, -31, 31);
+        comp = new LabelledDial("Level 3", this, "s" + source + "dfg" + "envlevelseg3", color, -31, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 4", this, "dfgs" + source + "envrateseg4", color, 0, 31);
+        comp = new LabelledDial("Rate 4", this, "s" + source + "dfg" + "envrateseg4", color, 0, 31);
         ((LabelledDial)comp).addAdditionalLabel("(Loop End) ");
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 4", this, "dfgs" + source + "envlevelseg4", color, -31, 31);
+        comp = new LabelledDial("Level 4", this, "s" + source + "dfg" + "envlevelseg4", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("(Sustain)");
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 5", this, "dfgs" + source + "envrateseg5", color, 0, 31);
+        comp = new LabelledDial("Rate 5", this, "s" + source + "dfg" + "envrateseg5", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 5", this, "dfgs" + source + "envlevelseg5", color, -31, 31);
+        comp = new LabelledDial("Level 5", this, "s" + source + "dfg" + "envlevelseg5", color, -31, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 6", this, "dfgs" + source + "envrateseg6", color, 0, 31);
+        comp = new LabelledDial("Rate 6", this, "s" + source + "dfg" + "envrateseg6", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 6", this, "dfgs" + source + "envlevelseg6", color, -31, 31);
+        comp = new LabelledDial("Level 6", this, "s" + source + "dfg" + "envlevelseg6", color, -31, 31);
         hbox.add(comp);
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null,  
-                           "dfgs" + source + "envrateseg1",
-                           "dfgs" + source + "envrateseg2",
-                           "dfgs" + source + "envrateseg3",
-                           "dfgs" + source + "envrateseg4",
-                           "dfgs" + source + "envrateseg5",
-                           "dfgs" + source + "envrateseg6" },
+                           "s" + source + "dfg" + "envrateseg1",
+                           "s" + source + "dfg" + "envrateseg2",
+                           "s" + source + "dfg" + "envrateseg3",
+                           "s" + source + "dfg" + "envrateseg4",
+                           "s" + source + "dfg" + "envrateseg5",
+                           "s" + source + "dfg" + "envrateseg6" },
             new String[] { null,  
-                           "dfgs" + source + "envlevelseg1",
-                           "dfgs" + source + "envlevelseg2",
-                           "dfgs" + source + "envlevelseg3",
-                           "dfgs" + source + "envlevelseg4",
-                           "dfgs" + source + "envlevelseg5",
-                           "dfgs" + source + "envlevelseg6" },
+                           "s" + source + "dfg" + "envlevelseg1",
+                           "s" + source + "dfg" + "envlevelseg2",
+                           "s" + source + "dfg" + "envlevelseg3",
+                           "s" + source + "dfg" + "envlevelseg4",
+                           "s" + source + "dfg" + "envlevelseg5",
+                           "s" + source + "dfg" + "envlevelseg6" },
             new double[] { 0, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31 },
             new double[] { 0, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63 });
                 
@@ -715,8 +583,8 @@ bulk.setSelected(true);
     public JComponent addDHG(int source, Color color)
         {
         Category category = new Category(this, "Harmonics (DHG)", color);
-        category.makePasteable("dhgs");
-        category.makeDistributable("dhgs");
+        category.makePasteable("s" + source + "dhg");
+        category.makeDistributable("s" + source + "dhg");
 
         JComponent comp;
         String[] params;
@@ -736,20 +604,20 @@ bulk.setSelected(true);
                 //// non-foolish thing with the chooser below.  This impacts on emitting and parsing, because if you compress these
                 //// two parameters into one, when the envelope is NOT modulating the harmonic, what envelope is doing the, erm,
                 //// non-modulating?  We don't have that information any more.  So what I'm doing is as follows.  When we parse a patch,
-                //// we'll read in the two parameters and compress them to a single stored parameter called, say, dhgs2harm16envselmodyn.
-                //// Additionally we'll store the envelope parameter as dhgs2harm16envselmodyn-env.  When we need to emit the parameter
+                //// we'll read in the two parameters and compress them to a single stored parameter called, say, s2dhgharm16envselmodyn.
+                //// Additionally we'll store the envelope parameter as s2dhgharm16envselmodyn-env.  When we need to emit the parameter
                 //// or dump the patch, if the mod is ON, then we just write the chosen envelope.  But if the mod is OFF, then we write
-                //// out the envelope in dhgs2harm16envselmodyn-env.  Note that while dhgs2harm16envselmodyn goes 0:OFF, 1:1, 2:2, 3:3, 4:4,
-                //// the dhgs2harm16envselmodyn-env parameter goes 0:1, 1:2, 2:3, 3:4.
+                //// out the envelope in s2dhgharm16envselmodyn-env.  Note that while s2dhgharm16envselmodyn goes 0:OFF, 1:1, 2:2, 3:3, 4:4,
+                //// the s2dhgharm16envselmodyn-env parameter goes 0:1, 1:2, 2:3, 3:4.
 
                 params = ENVELOPES;
-                comp = new Chooser("" + (j * 16 + i + 1) + " Env", this, "dhgs" + source + "harm" + (j * 16 + i + 1) + "envselmodyn", params);
+                comp = new Chooser("" + (j * 16 + i + 1) + " Env", this, "s" + source + "dhg" + "harm" + (j * 16 + i + 1) + "envselmodyn", params);
                 vbox2.add(comp);  
                 
-                model.set("dhgs" + source + "harm" + (j * 16 + i + 1) + "envselmodyn-env", 0);    // this will be our hidden env parameter (see emitting/parsing later)
-                model.setStatus("dhgs" + source + "harm" + (j * 16 + i + 1) + "envselmodyn-env", model.STATUS_IMMUTABLE);
+                model.set("s" + source + "dhg" + "harm" + (j * 16 + i + 1) + "envselmodyn-env", 0);    // this will be our hidden env parameter (see emitting/parsing later)
+                model.setStatus("s" + source + "dhg" + "harm" + (j * 16 + i + 1) + "envselmodyn-env", model.STATUS_IMMUTABLE);
                 
-                comp = new LabelledDial("" + (j * 16 + i + 1) + " Level", this, "dhgs" + source + "harm" + (j * 16 + i + 1) + "level", color, 0, 99);
+                comp = new LabelledDial("" + (j * 16 + i + 1) + " Level", this, "s" + source + "dhg" + "harm" + (j * 16 + i + 1) + "level", color, 0, 99);
                 dials[(source - 1) * 63 + (j * 16 + i)] = (LabelledDial) comp;
                 vbox2.add(comp);
                 hbox.add(vbox2);
@@ -783,13 +651,13 @@ bulk.setSelected(true);
                 ///// See IMPORTANT NOTE above.
                 
                 params = ENVELOPES;
-                comp = new Chooser("" + (48 + j * 8 + i + 1) + " Env", this, "dhgs" + source + "harm" + (48 + j * 8 + i + 1) + "envselmodyn", params);
+                comp = new Chooser("" + (48 + j * 8 + i + 1) + " Env", this, "s" + source + "dhg" + "harm" + (48 + j * 8 + i + 1) + "envselmodyn", params);
                 vbox2.add(comp);  
                 
-                model.set("dhgs" + source + "harm" + (48 + j * 8 + i + 1) + "envselmodyn-env", 0);    // this will be our hidden env parameter (see emitting/parsing later)
-                model.setStatus("dhgs" + source + "harm" + (48 + j * 8 + i + 1) + "envselmodyn-env", model.STATUS_IMMUTABLE);
+                model.set("s" + source + "dhg" + "harm" + (48 + j * 8 + i + 1) + "envselmodyn-env", 0);    // this will be our hidden env parameter (see emitting/parsing later)
+                model.setStatus("s" + source + "dhg" + "harm" + (48 + j * 8 + i + 1) + "envselmodyn-env", model.STATUS_IMMUTABLE);
                                 
-                comp = new LabelledDial("" + (48 + j * 8 + i + 1) + " Level", this, "dhgs" + source + "harm" + (48 + j * 8 + i + 1) + "level", color, 0, 99);
+                comp = new LabelledDial("" + (48 + j * 8 + i + 1) + " Level", this, "s" + source + "dhg" + "harm" + (48 + j * 8 + i + 1) + "level", color, 0, 99);
                 dials[(source - 1) * 63 + (48 + j * 8 + i)] = (LabelledDial) comp;
                 vbox2.add(comp);
                 hbox.add(vbox2);
@@ -799,7 +667,7 @@ bulk.setSelected(true);
             vbox.add(Strut.makeVerticalStrut(20));
             }
 
-        comp = new CheckBox("Mod", this, "dhgs" + source + "modonoff", false);
+        comp = new CheckBox("Mod", this, "s" + source + "dhg" + "modonoff", false);
         hbox.addLast(comp);
                 
         return vbox;
@@ -812,11 +680,11 @@ bulk.setSelected(true);
         {
         if (index >= 0 && index < 63)
             {
-            model.set("dhgs" + 1 + "harm" + (index + 1) + "level", (int)(val * 99));
+            model.set("s1dhgharm" + (index + 1) + "level", (int)(val * 99));
             }
         else if (index > 63 && index < 127)
             {
-            model.set("dhgs" + 2 + "harm" + (index + 1 - 64) + "level", (int)(val * 99));
+            model.set("s2dhgharm" + (index + 1 - 64) + "level", (int)(val * 99));
             }
         }
                 
@@ -940,13 +808,13 @@ bulk.setSelected(true);
                 {
                 if (i < 63)
                     {
-                    levels[i] = "dhgs" + 1 + "harm" + (i + 1) + "level";
-                    mods[i] = "dhgs" + 1 + "harm" + (i + 1) + "envselmodyn";
+                    levels[i] = "s" + 1 + "dhgharm" + (i + 1) + "level";
+                    mods[i] = "s" + 1 + "dhgharm" + (i + 1) + "envselmodyn";
                     }
                 else
                     {
-                    levels[i] = "dhgs" + 2 + "harm" + (i + 1 - 63) + "level";
-                    mods[i] = "dhgs" + 2 + "harm" + (i + 1 - 63) + "envselmodyn";
+                    levels[i] = "s" + 2 + "dhgharm" + (i + 1 - 63) + "level";
+                    mods[i] = "s" + 2 + "dhgharm" + (i + 1 - 63) + "envselmodyn";
                     }
                 }
 
@@ -989,9 +857,9 @@ bulk.setSelected(true);
                         }
                                         
                     if (harmonic < 63)
-                        KawaiK5.this.model.set("dhgs" + 1 + "harm" + (harmonic + 1) + "envselmodyn", (int)val);
+                        KawaiK5.this.model.set("s" + 1 + "dhgharm" + (harmonic + 1) + "envselmodyn", (int)val);
                     else
-                        KawaiK5.this.model.set("dhgs" + 2 + "harm" + (harmonic + 1 - 63) + "envselmodyn", (int)val);
+                        KawaiK5.this.model.set("s" + 2 + "dhgharm" + (harmonic + 1 - 63) + "envselmodyn", (int)val);
                     }
 
                 public void updateHighlightIndex(int index)
@@ -1043,9 +911,9 @@ bulk.setSelected(true);
                     double val = y * 99.0;
                                 
                     if (harmonic < 63)
-                        KawaiK5.this.model.set("dhgs" + 1 + "harm" + (harmonic + 1) + "level", (int)val);
+                        KawaiK5.this.model.set("s" + 1 + "dhgharm" + (harmonic + 1) + "level", (int)val);
                     else
-                        KawaiK5.this.model.set("dhgs" + 2 + "harm" + (harmonic + 1 - 63) + "level", (int)val);
+                        KawaiK5.this.model.set("s" + 2 + "dhgharm" + (harmonic + 1 - 63) + "level", (int)val);
                     }
 
                 public void updateHighlightIndex(int index)
@@ -1083,8 +951,8 @@ bulk.setSelected(true);
             String[] mods = new String[63];
             for(int i = 0; i < levels.length; i++)
                 {
-                levels[i] = "dhgs" + source + "harm" + (i + 1) + "level";
-                mods[i] = "dhgs" + source + "harm" + (i + 1) + "envselmodyn";
+                levels[i] = "s" + source + "dhg" + "harm" + (i + 1) + "level";
+                mods[i] = "s" + source + "dhg" + "harm" + (i + 1) + "envselmodyn";
                 }
 
             double[] widths = new double[63];
@@ -1125,7 +993,7 @@ bulk.setSelected(true);
                             val = modconstraint; 
                         }
                                         
-                    KawaiK5.this.model.set("dhgs" + source + "harm" + (harmonic + 1) + "envselmodyn", (int)val);
+                    KawaiK5.this.model.set("s" + source + "dhg" + "harm" + (harmonic + 1) + "envselmodyn", (int)val);
                     }
 
                 public void updateHighlightIndex(int index)
@@ -1175,7 +1043,7 @@ bulk.setSelected(true);
                                         
                     double val = y * 99.0;
                                 
-                    KawaiK5.this.model.set("dhgs" + source + "harm" + (harmonic + 1) + "level", (int)val);
+                    KawaiK5.this.model.set("s" + source + "dhg" + "harm" + (harmonic + 1) + "level", (int)val);
                     }
 
                 public void updateHighlightIndex(int index)
@@ -1280,8 +1148,8 @@ bulk.setSelected(true);
     public JComponent addDHGEnvelope(int source, int envelope, Color color)
         {
         Category category = new Category(this, "Harmonics (DHG) Envelope " + envelope, color);
-        category.makePasteable("dhgs");
-        category.makeDistributable("dhgs");
+        category.makePasteable("s" + source + "dhg");
+        category.makeDistributable("s" + source + "dhg");
 
         JComponent comp;
         String[] params;
@@ -1289,15 +1157,15 @@ bulk.setSelected(true);
         
         VBox vbox = new VBox();
         params = MAX_SEGMENTS;
-        comp = new Chooser("Max Segment", this, "dhgs" + source + "env" + envelope + "maxsegonoff", params);
+        comp = new Chooser("Max Segment", this, "s" + source + "dhg" + "env" + envelope + "maxsegonoff", params);
         vbox.add(comp);
         hbox.add(vbox);
                 
-        comp = new CheckBox("Active", this, "dhgs" + source + "env" + envelope + "onoff", false);
+        comp = new CheckBox("Active", this, "s" + source + "dhg" + "env" + envelope + "onoff", false);
         vbox.add(comp); 
         hbox.add(vbox);   
 
-        comp = new LabelledDial("Mod Depth", this, "dhgs" + source + "env" + envelope + "moddepth", color, 0, 31)
+        comp = new LabelledDial("Mod Depth", this, "s" + source + "dhg" + "env" + envelope + "moddepth", color, 0, 31)
             {
             public String map(int val)
                 {
@@ -1307,58 +1175,58 @@ bulk.setSelected(true);
             };
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 1", this, "dhgs" + source + "env" + envelope + "seg1rate", color, 0, 31);
+        comp = new LabelledDial("Rate 1", this, "s" + source + "dhg" + "env" + envelope + "seg1rate", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 1", this, "dhgs" + source + "env" + envelope + "seg1level", color, 0, 31);
+        comp = new LabelledDial("Level 1", this, "s" + source + "dhg" + "env" + envelope + "seg1level", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 2", this, "dhgs" + source + "env" + envelope + "seg2rate", color, 0, 31);
+        comp = new LabelledDial("Rate 2", this, "s" + source + "dhg" + "env" + envelope + "seg2rate", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 2", this, "dhgs" + source + "env" + envelope + "seg2level", color, 0, 31);
+        comp = new LabelledDial("Level 2", this, "s" + source + "dhg" + "env" + envelope + "seg2level", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 3", this, "dhgs" + source + "env" + envelope + "seg3rate", color, 0, 31);
+        comp = new LabelledDial("Rate 3", this, "s" + source + "dhg" + "env" + envelope + "seg3rate", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 3", this, "dhgs" + source + "env" + envelope + "seg3level", color, 0, 31);
+        comp = new LabelledDial("Level 3", this, "s" + source + "dhg" + "env" + envelope + "seg3level", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 4", this, "dhgs" + source + "env" + envelope + "seg4rate", color, 0, 31);
+        comp = new LabelledDial("Rate 4", this, "s" + source + "dhg" + "env" + envelope + "seg4rate", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 4", this, "dhgs" + source + "env" + envelope + "seg4level", color, 0, 31);
+        comp = new LabelledDial("Level 4", this, "s" + source + "dhg" + "env" + envelope + "seg4level", color, 0, 31);
         ((LabelledDial)comp).addAdditionalLabel("(Sustain)");
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 5", this, "dhgs" + source + "env" + envelope + "seg5rate", color, 0, 31);
+        comp = new LabelledDial("Rate 5", this, "s" + source + "dhg" + "env" + envelope + "seg5rate", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 5", this, "dhgs" + source + "env" + envelope + "seg5level", color, 0, 31);
+        comp = new LabelledDial("Level 5", this, "s" + source + "dhg" + "env" + envelope + "seg5level", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 6", this, "dhgs" + source + "env" + envelope + "seg6rate", color, 0, 31);
+        comp = new LabelledDial("Rate 6", this, "s" + source + "dhg" + "env" + envelope + "seg6rate", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 6", this, "dhgs" + source + "env" + envelope + "seg6level", color, 0, 31);
+        comp = new LabelledDial("Level 6", this, "s" + source + "dhg" + "env" + envelope + "seg6level", color, 0, 31);
         hbox.add(comp);
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null,  
-                           "dhgs" + source + "env" + envelope + "seg1rate",
-                           "dhgs" + source + "env" + envelope + "seg2rate",
-                           "dhgs" + source + "env" + envelope + "seg3rate",
-                           "dhgs" + source + "env" + envelope + "seg4rate",
-                           "dhgs" + source + "env" + envelope + "seg5rate",
-                           "dhgs" + source + "env" + envelope + "seg6rate" },
+                           "s" + source + "dhg" + "env" + envelope + "seg1rate",
+                           "s" + source + "dhg" + "env" + envelope + "seg2rate",
+                           "s" + source + "dhg" + "env" + envelope + "seg3rate",
+                           "s" + source + "dhg" + "env" + envelope + "seg4rate",
+                           "s" + source + "dhg" + "env" + envelope + "seg5rate",
+                           "s" + source + "dhg" + "env" + envelope + "seg6rate" },
             new String[] { null,  
-                           "dhgs" + source + "env" + envelope + "seg1level",
-                           "dhgs" + source + "env" + envelope + "seg2level",
-                           "dhgs" + source + "env" + envelope + "seg3level",
-                           "dhgs" + source + "env" + envelope + "seg4level",
-                           "dhgs" + source + "env" + envelope + "seg5level",
-                           "dhgs" + source + "env" + envelope + "seg6level" },
+                           "s" + source + "dhg" + "env" + envelope + "seg1level",
+                           "s" + source + "dhg" + "env" + envelope + "seg2level",
+                           "s" + source + "dhg" + "env" + envelope + "seg3level",
+                           "s" + source + "dhg" + "env" + envelope + "seg4level",
+                           "s" + source + "dhg" + "env" + envelope + "seg5level",
+                           "s" + source + "dhg" + "env" + envelope + "seg6level" },
             new double[] { 0, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31 },
             new double[] { 0, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31 });
         hbox.addLast(comp);
@@ -1373,7 +1241,7 @@ bulk.setSelected(true);
     public JComponent addDHGEnvelopeGlobal(int source, Color color)
         {
         Category category = new Category(this, "Harmonics (DHG) Envelope Global", color);
-        category.makePasteable("dhgs");
+        category.makePasteable("s" + source + "dhg");
 
         JComponent comp;
         String[] params;
@@ -1382,135 +1250,135 @@ bulk.setSelected(true);
         
         /*
           params = DHG_SELECT;
-          comp = new Chooser("Select", this, "dhgs" + source + "harmsel", params);
+          comp = new Chooser("Select", this, "s" + source + "dhg" + "harmsel", params);
           vbox.add(comp);
           hbox.add(vbox);   
 
           params = ANGLES;
-          comp = new Chooser("Angle", this, "dhgs" + source + "angle", params);
+          comp = new Chooser("Angle", this, "s" + source + "dhg" + "angle", params);
           vbox.add(comp);
         */
 
         params = SIMPLE_ENVELOPES;
-        comp = new Chooser("All Env", this, "dhgs" + source + "allenv", params);
+        comp = new Chooser("All Env", this, "s" + source + "dhg" + "allenv", params);
         vbox.add(comp);
-        comp = new CheckBox("Mod", this, "dhgs" + source + "allmodonoff", false);
-        vbox.add(comp);
-        hbox.add(vbox);
-
-        vbox = new VBox();
-        params = SIMPLE_ENVELOPES;
-        comp = new Chooser("Odd Env", this, "dhgs" + source + "oddenv", params);
-        vbox.add(comp);
-        comp = new CheckBox("Mod", this, "dhgs" + source + "oddmodonoff", false);
+        comp = new CheckBox("Mod", this, "s" + source + "dhg" + "allmodonoff", false);
         vbox.add(comp);
         hbox.add(vbox);
 
         vbox = new VBox();
         params = SIMPLE_ENVELOPES;
-        comp = new Chooser("Even Env", this, "dhgs" + source + "evenenv", params);
+        comp = new Chooser("Odd Env", this, "s" + source + "dhg" + "oddenv", params);
         vbox.add(comp);
-        comp = new CheckBox("Mod", this, "dhgs" + source + "evenmodonoff", false);
-        vbox.add(comp);
-        hbox.add(vbox);
-
-        vbox = new VBox();
-        params = SIMPLE_ENVELOPES;
-        comp = new Chooser("Octave Env", this, "dhgs" + source + "octaveenv", params);
-        vbox.add(comp);
-        comp = new CheckBox("Mod", this, "dhgs" + source + "octavemodonoff", false);
+        comp = new CheckBox("Mod", this, "s" + source + "dhg" + "oddmodonoff", false);
         vbox.add(comp);
         hbox.add(vbox);
 
         vbox = new VBox();
         params = SIMPLE_ENVELOPES;
-        comp = new Chooser("Fifth Env", this, "dhgs" + source + "fifthenv", params);
+        comp = new Chooser("Even Env", this, "s" + source + "dhg" + "evenenv", params);
         vbox.add(comp);
-        comp = new CheckBox("Mod", this, "dhgs" + source + "fifthmodonoff", false);
+        comp = new CheckBox("Mod", this, "s" + source + "dhg" + "evenmodonoff", false);
         vbox.add(comp);
         hbox.add(vbox);
 
         vbox = new VBox();
-        comp = new CheckBox("Shadow", this, "dhgs" + source + "shadowonoff", false);
+        params = SIMPLE_ENVELOPES;
+        comp = new Chooser("Octave Env", this, "s" + source + "dhg" + "octaveenv", params);
+        vbox.add(comp);
+        comp = new CheckBox("Mod", this, "s" + source + "dhg" + "octavemodonoff", false);
+        vbox.add(comp);
+        hbox.add(vbox);
+
+        vbox = new VBox();
+        params = SIMPLE_ENVELOPES;
+        comp = new Chooser("Fifth Env", this, "s" + source + "dhg" + "fifthenv", params);
+        vbox.add(comp);
+        comp = new CheckBox("Mod", this, "s" + source + "dhg" + "fifthmodonoff", false);
+        vbox.add(comp);
+        hbox.add(vbox);
+
+        vbox = new VBox();
+        comp = new CheckBox("Shadow", this, "s" + source + "dhg" + "shadowonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);   
         
 
         // we don't display these
                 
-        model.set("dhgs" + source + "all", 0);
-        model.setStatus("dhgs" + source + "all", Model.STATUS_IMMUTABLE);
-        model.set("dhgs" + source + "odd", 0);
-        model.setStatus("dhgs" + source + "odd", Model.STATUS_IMMUTABLE);
-        model.set("dhgs" + source + "even", 0);
-        model.setStatus("dhgs" + source + "even", Model.STATUS_IMMUTABLE);
-        model.set("dhgs" + source + "octave", 0);
-        model.setStatus("dhgs" + source + "octave", Model.STATUS_IMMUTABLE);
-        model.set("dhgs" + source + "fifth", 0);
-        model.setStatus("dhgs" + source + "fifth", Model.STATUS_IMMUTABLE);
-        model.set("dhgs" + source + "rangefrom", 0);
-        model.setStatus("dhgs" + source + "rangefrom", Model.STATUS_IMMUTABLE);
-        model.set("dhgs" + source + "rangeto", 0);
-        model.setStatus("dhgs" + source + "rangeto", Model.STATUS_IMMUTABLE);
-        model.set("dhgs" + source + "select", 0);
-        model.setStatus("dhgs" + source + "select", Model.STATUS_IMMUTABLE);
-        model.set("dhgs" + source + "angle", 0);
-        model.setStatus("dhgs" + source + "angle", Model.STATUS_IMMUTABLE);
-        model.set("dhgs" + source + "harmsel", 0);
-        model.setStatus("dhgs" + source + "harmsel", Model.STATUS_IMMUTABLE);
+        model.set("s" + source + "dhg" + "all", 0);
+        model.setStatus("s" + source + "dhg" + "all", Model.STATUS_IMMUTABLE);
+        model.set("s" + source + "dhg" + "odd", 0);
+        model.setStatus("s" + source + "dhg" + "odd", Model.STATUS_IMMUTABLE);
+        model.set("s" + source + "dhg" + "even", 0);
+        model.setStatus("s" + source + "dhg" + "even", Model.STATUS_IMMUTABLE);
+        model.set("s" + source + "dhg" + "octave", 0);
+        model.setStatus("s" + source + "dhg" + "octave", Model.STATUS_IMMUTABLE);
+        model.set("s" + source + "dhg" + "fifth", 0);
+        model.setStatus("s" + source + "dhg" + "fifth", Model.STATUS_IMMUTABLE);
+        model.set("s" + source + "dhg" + "rangefrom", 0);
+        model.setStatus("s" + source + "dhg" + "rangefrom", Model.STATUS_IMMUTABLE);
+        model.set("s" + source + "dhg" + "rangeto", 0);
+        model.setStatus("s" + source + "dhg" + "rangeto", Model.STATUS_IMMUTABLE);
+        model.set("s" + source + "dhg" + "select", 0);
+        model.setStatus("s" + source + "dhg" + "select", Model.STATUS_IMMUTABLE);
+        model.set("s" + source + "dhg" + "angle", 0);
+        model.setStatus("s" + source + "dhg" + "angle", Model.STATUS_IMMUTABLE);
+        model.set("s" + source + "dhg" + "harmsel", 0);
+        model.setStatus("s" + source + "dhg" + "harmsel", Model.STATUS_IMMUTABLE);
 
 
 /*
-  comp = new LabelledDial("All", this, "dhgs" + source + "all", color, 0, 99);
-  model.setStatus("dhgs" + source + "all", Model.STATUS_IMMUTABLE);
+  comp = new LabelledDial("All", this, "s" + source + "dhg" + "all", color, 0, 99);
+  model.setStatus("s" + source + "dhg" + "all", Model.STATUS_IMMUTABLE);
   hbox.add(comp);
 
-  comp = new LabelledDial("Odd", this, "dhgs" + source + "odd", color, 0, 99);
-  model.setStatus("dhgs" + source + "odd", Model.STATUS_IMMUTABLE);
+  comp = new LabelledDial("Odd", this, "s" + source + "dhg" + "odd", color, 0, 99);
+  model.setStatus("s" + source + "dhg" + "odd", Model.STATUS_IMMUTABLE);
   hbox.add(comp);
 
-  comp = new LabelledDial("Even", this, "dhgs" + source + "even", color, 0, 99);
-  model.setStatus("dhgs" + source + "even", Model.STATUS_IMMUTABLE);
+  comp = new LabelledDial("Even", this, "s" + source + "dhg" + "even", color, 0, 99);
+  model.setStatus("s" + source + "dhg" + "even", Model.STATUS_IMMUTABLE);
   hbox.add(comp);
 
-  comp = new LabelledDial("Octave", this, "dhgs" + source + "octave", color, 0, 99);
-  model.setStatus("dhgs" + source + "octave", Model.STATUS_IMMUTABLE);
+  comp = new LabelledDial("Octave", this, "s" + source + "dhg" + "octave", color, 0, 99);
+  model.setStatus("s" + source + "dhg" + "octave", Model.STATUS_IMMUTABLE);
   hbox.add(comp);
 
-  comp = new LabelledDial("Fifth", this, "dhgs" + source + "fifth", color, 0, 99);
-  model.setStatus("dhgs" + source + "fifth", Model.STATUS_IMMUTABLE);
+  comp = new LabelledDial("Fifth", this, "s" + source + "dhg" + "fifth", color, 0, 99);
+  model.setStatus("s" + source + "dhg" + "fifth", Model.STATUS_IMMUTABLE);
   hbox.add(comp);
 
-  comp = new LabelledDial("Range Low", this, "dhgs" + source + "rangefrom", color, 1, 63);
+  comp = new LabelledDial("Range Low", this, "s" + source + "dhg" + "rangefrom", color, 1, 63);
   hbox.add(comp);
 
-  comp = new LabelledDial("Range High", this, "dhgs" + source + "rangeto", color, 1, 63);
+  comp = new LabelledDial("Range High", this, "s" + source + "dhg" + "rangeto", color, 1, 63);
   hbox.add(comp);
 */      
 
 
-        comp = new LabelledDial("Velocity", this, "dhgs" + source + "velodep", color, -31, 31);
+        comp = new LabelledDial("Velocity", this, "s" + source + "dhg" + "velodep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
 
-        comp = new LabelledDial("Pressure", this, "dhgs" + source + "presdep", color, -31, 31);
+        comp = new LabelledDial("Pressure", this, "s" + source + "dhg" + "presdep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
 
-        comp = new LabelledDial("Key", this, "dhgs" + source + "ksdep", color, -31, 31);
+        comp = new LabelledDial("Key", this, "s" + source + "dhg" + "ksdep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Scaling");
         hbox.add(comp);
 
-        comp = new LabelledDial("LFO", this, "dhgs" + source + "lfodep", color, 0, 31);
+        comp = new LabelledDial("LFO", this, "s" + source + "dhg" + "lfodep", color, 0, 31);
         ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
                 
         // These four we don't have widgets for
         
-        model.set("dhgs1harm", 1);
-        model.setStatus("dhgs1harm", Model.STATUS_IMMUTABLE);
-        model.set("dhgs2harm", 1);
-        model.setStatus("dhgs2harm", Model.STATUS_IMMUTABLE);
+        model.set("s1dhgharm", 1);
+        model.setStatus("s1dhgharm", Model.STATUS_IMMUTABLE);
+        model.set("s2dhgharm", 1);
+        model.setStatus("s2dhgharm", Model.STATUS_IMMUTABLE);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -1534,7 +1402,7 @@ bulk.setSelected(true);
         vbox.add(comp); 
         hbox.add(vbox);   
 
-        comp = new LabelledDial("-1", this, "dftcneg1level", color, 0, 63);
+        comp = new LabelledDial("-1", this, "dftc11level", color, 0, 63);  // we call it 11 rather than -1 so we can properly do category distribution
         hbox.add(comp);
 
         comp = new LabelledDial("0", this, "dftc0level", color, 0, 63);
@@ -1570,7 +1438,7 @@ bulk.setSelected(true);
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, null, null, null, null, null, null, null, null, null, null },
             new String[] { 
-                "dftcneg1level",
+                "dftc11level",
                 "dftc0level",
                 "dftc1level",
                 "dftc2level",
@@ -1595,58 +1463,58 @@ bulk.setSelected(true);
     public JComponent addFilter(int source, Color color)
         {
         Category category = new Category(this, "Filter (DDF)", color);
-        category.makePasteable("ddfs");
+        category.makePasteable("s" + source + "ddf");
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        comp = new CheckBox("Active", this, "ddfs" + source + "ddfonoff", false);
+        comp = new CheckBox("Active", this, "s" + source + "ddf" + "ddfonoff", false);
         vbox.add(comp); 
 
-        comp = new CheckBox("Global Mod", this, "ddfs" + source + "ddfmodonoff", false);
+        comp = new CheckBox("Global Mod", this, "s" + source + "ddf" + "ddfmodonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);   
 
-        comp = new LabelledDial("Flat Level", this, "ddfs" + source + "flatlevel", color, 0, 31);
+        comp = new LabelledDial("Flat Level", this, "s" + source + "ddf" + "flatlevel", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Cutoff", this, "ddfs" + source + "cutoff", color, 0, 99);
+        comp = new LabelledDial("Cutoff", this, "s" + source + "ddf" + "cutoff", color, 0, 99);
         hbox.add(comp);
 
-        comp = new LabelledDial("Slope", this, "ddfs" + source + "slope", color, 0, 31);
+        comp = new LabelledDial("Slope", this, "s" + source + "ddf" + "slope", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Cutoff Mod", this, "ddfs" + source + "cutoffmod", color, 0, 31);
+        comp = new LabelledDial("Cutoff Mod", this, "s" + source + "ddf" + "cutoffmod", color, 0, 31);
         ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
 
-        comp = new LabelledDial("Slope Mod", this, "ddfs" + source + "slopemod", color, 0, 31);
+        comp = new LabelledDial("Slope Mod", this, "s" + source + "ddf" + "slopemod", color, 0, 31);
         ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
 
-        comp = new LabelledDial("Envelope", this, "ddfs" + source + "envdep", color, -31, 31);
+        comp = new LabelledDial("Envelope", this, "s" + source + "ddf" + "envdep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);
 
-        comp = new LabelledDial("Velocity", this, "ddfs" + source + "veloenvdep", color, -31, 31);
+        comp = new LabelledDial("Velocity", this, "s" + source + "ddf" + "veloenvdep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Env Mod");
         hbox.add(comp);
 
-        comp = new LabelledDial("Velocity", this, "ddfs" + source + "velodep", color, -31, 31);
+        comp = new LabelledDial("Velocity", this, "s" + source + "ddf" + "velodep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);
 
-        comp = new LabelledDial("Aftertouch", this, "ddfs" + source + "presdep", color, -31, 31);
+        comp = new LabelledDial("Aftertouch", this, "s" + source + "ddf" + "presdep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);
                 
-        comp = new LabelledDial("Key Scale", this, "ddfs" + source + "ksdep", color, -31, 31);
+        comp = new LabelledDial("Key Scale", this, "s" + source + "ddf" + "ksdep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);
                 
-        comp = new LabelledDial("LFO", this, "ddfs" + source + "lfodep", color, 0, 31);
+        comp = new LabelledDial("LFO", this, "s" + source + "ddf" + "lfodep", color, 0, 31);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);
 
@@ -1657,8 +1525,8 @@ bulk.setSelected(true);
     public JComponent addFilterEnvelope(int source, Color color)
         {
         Category category = new Category(this, "Filter (DDF) Envelope", color);
-        category.makePasteable("ddfs");
-        category.makeDistributable("ddfs");
+        category.makePasteable("s" + source + "ddf");
+        category.makeDistributable("s" + source + "ddf");
 
         JComponent comp;
         String[] params;
@@ -1666,62 +1534,62 @@ bulk.setSelected(true);
         
         VBox vbox = new VBox();
         params = MAX_SEGMENTS;
-        comp = new Chooser("Max Segment", this, "ddfs" + source + "envmaxsegonoff", params);
+        comp = new Chooser("Max Segment", this, "s" + source + "ddf" + "envmaxsegonoff", params);
         vbox.add(comp);
         hbox.add(vbox);
                 
-        comp = new LabelledDial("Rate 1", this, "ddfs" + source + "envseg1rate", color, 0, 31);
+        comp = new LabelledDial("Rate 1", this, "s" + source + "ddf" + "envseg1rate", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 1", this, "ddfs" + source + "envseg1level", color, 0, 31);
+        comp = new LabelledDial("Level 1", this, "s" + source + "ddf" + "envseg1level", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 2", this, "ddfs" + source + "envseg2rate", color, 0, 31);
+        comp = new LabelledDial("Rate 2", this, "s" + source + "ddf" + "envseg2rate", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 2", this, "ddfs" + source + "envseg2level", color, 0, 31);
+        comp = new LabelledDial("Level 2", this, "s" + source + "ddf" + "envseg2level", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 3", this, "ddfs" + source + "envseg3rate", color, 0, 31);
+        comp = new LabelledDial("Rate 3", this, "s" + source + "ddf" + "envseg3rate", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 3", this, "ddfs" + source + "envseg3level", color, 0, 31);
+        comp = new LabelledDial("Level 3", this, "s" + source + "ddf" + "envseg3level", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 4", this, "ddfs" + source + "envseg4rate", color, 0, 31);
+        comp = new LabelledDial("Rate 4", this, "s" + source + "ddf" + "envseg4rate", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 4", this, "ddfs" + source + "envseg4level", color, 0, 31);
+        comp = new LabelledDial("Level 4", this, "s" + source + "ddf" + "envseg4level", color, 0, 31);
         ((LabelledDial)comp).addAdditionalLabel("(Sustain)");
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 5", this, "ddfs" + source + "envseg5rate", color, 0, 31);
+        comp = new LabelledDial("Rate 5", this, "s" + source + "ddf" + "envseg5rate", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 5", this, "ddfs" + source + "envseg5level", color, 0, 31);
+        comp = new LabelledDial("Level 5", this, "s" + source + "ddf" + "envseg5level", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 6", this, "ddfs" + source + "envseg6rate", color, 0, 31);
+        comp = new LabelledDial("Rate 6", this, "s" + source + "ddf" + "envseg6rate", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Level 6", this, "ddfs" + source + "envseg6level", color, 0, 31);
+        comp = new LabelledDial("Level 6", this, "s" + source + "ddf" + "envseg6level", color, 0, 31);
         hbox.add(comp);
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null,  
-                           "ddfs" + source + "envseg1rate",
-                           "ddfs" + source + "envseg2rate",
-                           "ddfs" + source + "envseg3rate",
-                           "ddfs" + source + "envseg4rate",
-                           "ddfs" + source + "envseg5rate",
-                           "ddfs" + source + "envseg6rate" },
+                           "s" + source + "ddf" + "envseg1rate",
+                           "s" + source + "ddf" + "envseg2rate",
+                           "s" + source + "ddf" + "envseg3rate",
+                           "s" + source + "ddf" + "envseg4rate",
+                           "s" + source + "ddf" + "envseg5rate",
+                           "s" + source + "ddf" + "envseg6rate" },
             new String[] { null,  
-                           "ddfs" + source + "envseg1level",
-                           "ddfs" + source + "envseg2level",
-                           "ddfs" + source + "envseg3level",
-                           "ddfs" + source + "envseg4level",
-                           "ddfs" + source + "envseg5level",
-                           "ddfs" + source + "envseg6level" },
+                           "s" + source + "ddf" + "envseg1level",
+                           "s" + source + "ddf" + "envseg2level",
+                           "s" + source + "ddf" + "envseg3level",
+                           "s" + source + "ddf" + "envseg4level",
+                           "s" + source + "ddf" + "envseg5level",
+                           "s" + source + "ddf" + "envseg6level" },
             new double[] { 0, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31 },
             new double[] { 0, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31 });
         hbox.addLast(comp);
@@ -1734,42 +1602,42 @@ bulk.setSelected(true);
     public JComponent addDDA(int source, Color color)
         {
         Category category = new Category(this, "Amplifier (DDA)", color);
-        category.makePasteable("ddas");
+        category.makePasteable("s" + source + "dda");
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        comp = new CheckBox("Active", this, "ddas" + source + "ddaonoff", false);
+        comp = new CheckBox("Active", this, "s" + source + "dda" + "ddaonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);
                 
-        comp = new LabelledDial("Velocity", this, "ddas" + source + "attackvelodep", color, -31, 31);
+        comp = new LabelledDial("Velocity", this, "s" + source + "dda" + "attackvelodep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);
 
-        comp = new LabelledDial("Aftertouch", this, "ddas" + source + "presdep", color, -31, 31);
-        ((LabelledDial)comp).addAdditionalLabel("Mod");
-        hbox.add(comp);
-                
-        comp = new LabelledDial("Key Scale", this, "ddas" + source + "ksdep", color, -31, 31);
+        comp = new LabelledDial("Aftertouch", this, "s" + source + "dda" + "presdep", color, -31, 31);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);
                 
-        comp = new LabelledDial("LFO", this, "ddas" + source + "lfodep", color, 0, 31);
+        comp = new LabelledDial("Key Scale", this, "s" + source + "dda" + "ksdep", color, -31, 31);
+        ((LabelledDial)comp).addAdditionalLabel("Mod");
+        hbox.add(comp);
+                
+        comp = new LabelledDial("LFO", this, "s" + source + "dda" + "lfodep", color, 0, 31);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);
 
-        comp = new LabelledDial("Attack Vel", this, "ddas" + source + "attackvelrate", color, -15, 15);
+        comp = new LabelledDial("Attack Vel", this, "s" + source + "dda" + "attackvelrate", color, -15, 15);
         ((LabelledDial)comp).addAdditionalLabel("Rate Mod");
         hbox.add(comp);
 
-        comp = new LabelledDial("Release Vel", this, "ddas" + source + "releasevelrate", color, -15, 15);
+        comp = new LabelledDial("Release Vel", this, "s" + source + "dda" + "releasevelrate", color, -15, 15);
         ((LabelledDial)comp).addAdditionalLabel("Rate Mod");
         hbox.add(comp);
 
-        comp = new LabelledDial("Key Scale", this, "ddas" + source + "ksrate", color, -15, 15);
+        comp = new LabelledDial("Key Scale", this, "s" + source + "dda" + "ksrate", color, -15, 15);
         ((LabelledDial)comp).addAdditionalLabel("Rate Mod");
         hbox.add(comp);
 
@@ -1780,8 +1648,8 @@ bulk.setSelected(true);
     public JComponent addDDAEnvelope(int source, Color color)
         {
         Category category = new Category(this, "Amplifier (DDA) Envelope", color);
-        category.makePasteable("ddas");
-        category.makeDistributable("ddas");
+        category.makePasteable("s" + source + "dda");
+        category.makeDistributable("s" + source + "dda");
 
         JComponent comp;
         String[] params;
@@ -1789,102 +1657,102 @@ bulk.setSelected(true);
         
         VBox vbox = new VBox();
         params = MAX_SEGMENTS;
-        comp = new Chooser("Max Segment", this, "ddas" + source + "envmaxsegonoff", params);
+        comp = new Chooser("Max Segment", this, "s" + source + "dda" + "envmaxsegonoff", params);
         vbox.add(comp);
         hbox.add(vbox);
 
         vbox = new VBox();
-        comp = new LabelledDial("Rate 1", this, "ddas" + source + "envseg1rate", color, 0, 31);
+        comp = new LabelledDial("Rate 1", this, "s" + source + "dda" + "envseg1rate", color, 0, 31);
         vbox.add(comp);
-        comp = new CheckBox("Mod", this, "ddas" + source + "envseg1modonoff", false);
+        comp = new CheckBox("Mod", this, "s" + source + "dda" + "envseg1modonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);
         vbox = new VBox();
 
 
-        comp = new LabelledDial("Level 1", this, "ddas" + source + "envseg1level", color, 0, 31);
+        comp = new LabelledDial("Level 1", this, "s" + source + "dda" + "envseg1level", color, 0, 31);
         hbox.add(comp); 
                 
-        comp = new LabelledDial("Rate 2", this, "ddas" + source + "envseg2rate", color, 0, 31);
+        comp = new LabelledDial("Rate 2", this, "s" + source + "dda" + "envseg2rate", color, 0, 31);
         vbox.add(comp);
-        comp = new CheckBox("Mod", this, "ddas" + source + "envseg2modonoff", false);
+        comp = new CheckBox("Mod", this, "s" + source + "dda" + "envseg2modonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);
         vbox = new VBox();
 
 
-        comp = new LabelledDial("Level 2", this, "ddas" + source + "envseg2level", color, 0, 31);
+        comp = new LabelledDial("Level 2", this, "s" + source + "dda" + "envseg2level", color, 0, 31);
         hbox.add(comp); 
 
-        comp = new LabelledDial("Rate 3", this, "ddas" + source + "envseg3rate", color, 0, 31);
+        comp = new LabelledDial("Rate 3", this, "s" + source + "dda" + "envseg3rate", color, 0, 31);
         vbox.add(comp);
-        comp = new CheckBox("Mod", this, "ddas" + source + "envseg3modonoff", false);
+        comp = new CheckBox("Mod", this, "s" + source + "dda" + "envseg3modonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);
         vbox = new VBox();
 
 
-        comp = new LabelledDial("Level 3", this, "ddas" + source + "envseg3level", color, 0, 31);
+        comp = new LabelledDial("Level 3", this, "s" + source + "dda" + "envseg3level", color, 0, 31);
         hbox.add(comp); 
 
-        comp = new LabelledDial("Rate 4", this, "ddas" + source + "envseg4rate", color, 0, 31);
+        comp = new LabelledDial("Rate 4", this, "s" + source + "dda" + "envseg4rate", color, 0, 31);
         vbox.add(comp);
-        comp = new CheckBox("Mod", this, "ddas" + source + "envseg4modonoff", false);
+        comp = new CheckBox("Mod", this, "s" + source + "dda" + "envseg4modonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);
         vbox = new VBox();
 
 
-        comp = new LabelledDial("Level 4", this, "ddas" + source + "envseg4level", color, 0, 31);
+        comp = new LabelledDial("Level 4", this, "s" + source + "dda" + "envseg4level", color, 0, 31);
         ((LabelledDial)comp).addAdditionalLabel("(Sustain)");
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 5", this, "ddas" + source + "envseg5rate", color, 0, 31);
+        comp = new LabelledDial("Rate 5", this, "s" + source + "dda" + "envseg5rate", color, 0, 31);
         vbox.add(comp); 
-        comp = new CheckBox("Mod", this, "ddas" + source + "envseg5modonoff", false);
-        vbox.add(comp); 
-        hbox.add(vbox);
-        vbox = new VBox();
-
-
-        comp = new LabelledDial("Level 5", this, "ddas" + source + "envseg5level", color, 0, 31);
-        hbox.add(comp);
-
-        comp = new LabelledDial("Rate 6", this, "ddas" + source + "envseg6rate", color, 0, 31);
-        vbox.add(comp);
-        comp = new CheckBox("Mod", this, "ddas" + source + "envseg6modonoff", false);
+        comp = new CheckBox("Mod", this, "s" + source + "dda" + "envseg5modonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);
         vbox = new VBox();
 
 
-        comp = new LabelledDial("Level 6", this, "ddas" + source + "envseg6level", color, 0, 31);
+        comp = new LabelledDial("Level 5", this, "s" + source + "dda" + "envseg5level", color, 0, 31);
         hbox.add(comp);
 
-        comp = new LabelledDial("Rate 7", this, "ddas" + source + "envseg7rate", color, 0, 31);
+        comp = new LabelledDial("Rate 6", this, "s" + source + "dda" + "envseg6rate", color, 0, 31);
         vbox.add(comp);
-        comp = new CheckBox("Mod", this, "ddas" + source + "envseg7modonoff", false);
+        comp = new CheckBox("Mod", this, "s" + source + "dda" + "envseg6modonoff", false);
+        vbox.add(comp); 
+        hbox.add(vbox);
+        vbox = new VBox();
+
+
+        comp = new LabelledDial("Level 6", this, "s" + source + "dda" + "envseg6level", color, 0, 31);
+        hbox.add(comp);
+
+        comp = new LabelledDial("Rate 7", this, "s" + source + "dda" + "envseg7rate", color, 0, 31);
+        vbox.add(comp);
+        comp = new CheckBox("Mod", this, "s" + source + "dda" + "envseg7modonoff", false);
         vbox.add(comp); 
         hbox.add(vbox);
         vbox = new VBox();
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null,  
-                           "ddas" + source + "envseg1rate",
-                           "ddas" + source + "envseg2rate",
-                           "ddas" + source + "envseg3rate",
-                           "ddas" + source + "envseg4rate",
-                           "ddas" + source + "envseg5rate",
-                           "ddas" + source + "envseg6rate",
-                           "ddas" + source + "envseg7rate",
+                           "s" + source + "dda" + "envseg1rate",
+                           "s" + source + "dda" + "envseg2rate",
+                           "s" + source + "dda" + "envseg3rate",
+                           "s" + source + "dda" + "envseg4rate",
+                           "s" + source + "dda" + "envseg5rate",
+                           "s" + source + "dda" + "envseg6rate",
+                           "s" + source + "dda" + "envseg7rate",
                 },
             new String[] { null,  
-                           "ddas" + source + "envseg1level",
-                           "ddas" + source + "envseg2level",
-                           "ddas" + source + "envseg3level",
-                           "ddas" + source + "envseg4level",
-                           "ddas" + source + "envseg5level",
-                           "ddas" + source + "envseg6level",
+                           "s" + source + "dda" + "envseg1level",
+                           "s" + source + "dda" + "envseg2level",
+                           "s" + source + "dda" + "envseg3level",
+                           "s" + source + "dda" + "envseg4level",
+                           "s" + source + "dda" + "envseg5level",
+                           "s" + source + "dda" + "envseg6level",
                            null
                 },
             new double[] { 0, .1428571428 / 31, .1428571428 / 31, .1428571428 / 31, .1428571428 / 31, .1428571428 / 31, .1428571428 / 31,  .1428571428 / 31 },
@@ -1901,20 +1769,20 @@ bulk.setSelected(true);
     public Object[] emitAll(String key)
         {
         // we have to check for these or else they'll trigger later
-        if (key.equals("dhgs1harm")) return new Object[0];
-        if (key.equals("dhgs2harm")) return new Object[0];
-        if (key.equals("dhgs1odd") ||
-            key.equals("dhgs1even") ||
-            key.equals("dhgs1octave") ||
-            key.equals("dhgs1fifth") ||
-            key.equals("dhgs1select") ||
-            key.equals("dhgs1all") ||
-            key.equals("dhgs2odd") ||
-            key.equals("dhgs2even") ||
-            key.equals("dhgs2octave") ||
-            key.equals("dhgs2fifth") ||
-            key.equals("dhgs2select") ||
-            key.equals("dhgs2all")) return new Object[0];
+        if (key.equals("s1dhgharm")) return new Object[0];
+        if (key.equals("s2dhgharm")) return new Object[0];
+        if (key.equals("s1dhgodd") ||
+            key.equals("s1dhgeven") ||
+            key.equals("s1dhgoctave") ||
+            key.equals("s1dhgfifth") ||
+            key.equals("s1dhgselect") ||
+            key.equals("s1dhgall") ||
+            key.equals("s2dhgodd") ||
+            key.equals("s2dhgeven") ||
+            key.equals("s2dhgoctave") ||
+            key.equals("s2dhgfifth") ||
+            key.equals("s2dhgselect") ||
+            key.equals("s2dhgall")) return new Object[0];
         if (key.equals("constrainharmonics") || 
             key.equals("constrainmodharmonics")) return new Object[0];
         if (key.equals("bank")) return new Object[0];
@@ -1928,19 +1796,19 @@ bulk.setSelected(true);
 
         // determine source
         int source = 0;  // doesn't matter
-        if (key.startsWith("basics"))
+        if (key.startsWith("s1basic") || key.startsWith("s2basic"))
             {
             source = (key.charAt(6) == '1' ? 0 : 1);
             }
-        else if (key.startsWith("kss"))
+        else if (key.startsWith("s1ks") || key.startsWith("s2ks"))
             {
             source = (key.charAt(3) == '1' ? 0 : 1);
             }
-        else if (key.startsWith("dhgs") || 
-            key.startsWith("ddas") || 
-            key.startsWith("ddfs") ||
-            key.startsWith("dhgs") || 
-            key.startsWith("dfgs"))
+        else if (key.startsWith("s1dhg") || key.startsWith("s2dhg") ||
+            key.startsWith("s1dda") || key.startsWith("s2dda") ||
+            key.startsWith("s1ddf") || key.startsWith("s2ddf") ||
+            key.startsWith("s1dhg") || key.startsWith("s2dhg") ||
+            key.startsWith("s1dfg") || key.startsWith("s2dfg"))
             {
             source = (key.charAt(4) == '1' ? 0 : 1);
             }        
@@ -1961,33 +1829,30 @@ bulk.setSelected(true);
                 }
             return data;
             }
-        else if (key.startsWith("dhgs") && key.endsWith("maxsegonoff") ||
-            key.startsWith("ddfs") && key.endsWith("maxsegonoff") ||
-            key.startsWith("ddas") && key.endsWith("maxsegonoff"))
+        else if ((key.startsWith("s1dhg") || key.startsWith("s2dhg"))&& key.endsWith("maxsegonoff") ||
+            (key.startsWith("s1ddf") || key.startsWith("s2ddf")) && key.endsWith("maxsegonoff") ||
+            (key.startsWith("s1dda") || key.startsWith("s2dda")) && key.endsWith("maxsegonoff"))
             {
             int paramNum = 0;
-            if (key.startsWith("ddf")) paramNum = 131;
-            else if (key.startsWith("dda")) paramNum = 161;
-            else if (key.startsWith("dhgs1env1") ||
-                key.startsWith("dhgs2env1")) paramNum = 52;
-            else if (key.startsWith("dhgs1env2") ||
-                key.startsWith("dhgs2env2")) paramNum = 53;
-            else if (key.startsWith("dhgs1env3") ||
-                key.startsWith("dhgs2env3")) paramNum = 54;
-            else if (key.startsWith("dhgs1env4") ||
-                key.startsWith("dhgs2env4")) paramNum = 55;
-            else System.err.println("Weird Key? " + key);
+            if (key.startsWith("s1ddf") || key.startsWith("s2ddf")) paramNum = 131;
+            else if (key.startsWith("s1dda") || key.startsWith("s2dda")) paramNum = 161;
+            else if (key.startsWith("s1dhgenv1") ||
+                key.startsWith("s2dhgenv1")) paramNum = 52;
+            else if (key.startsWith("s1dhgenv2") ||
+                key.startsWith("s2dhgenv2")) paramNum = 53;
+            else if (key.startsWith("s1dhgenv3") ||
+                key.startsWith("s2dhgenv3")) paramNum = 54;
+            else if (key.startsWith("s1dhgenv4") ||
+                key.startsWith("s2dhgenv4")) paramNum = 55;
+            else System.err.println("Warning (KorgMicroKorg): Invalid Key " + key);
                 
             int c = model.get(key, 0);
             data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127),(byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
             return data;
             }
-        else if ((key.startsWith("dhgs1harm") || key.startsWith("dhgs2harm")) && !(key.equals("dhgs1harmsel") || key.equals("dhgs2harmsel")))  // harmonics
+        else if ((key.startsWith("s1dhgharm") || key.startsWith("s2dhgharm")) && !(key.equals("s1dhgharmsel") || key.equals("s2dhgharmsel")))  // harmonics
             {
             String[] numbers = key.split("[\\D]+");
-            //System.err.println(key);
-            //for(int i = 0; i < numbers.length; i++)
-            //      System.err.println(numbers[i]);
             int harmonic = Integer.parseInt(numbers[2]);
                 
             if (key.endsWith("envselmodyn"))
@@ -2038,7 +1903,7 @@ bulk.setSelected(true);
             }
         else 
             {
-            System.err.println("Unknown Key " + key);
+            System.err.println("Warning (KorgMicroKorg): Unknown Key " + key);
             return new Object[0];
             }
         }
@@ -2086,7 +1951,6 @@ bulk.setSelected(true);
         for(int i = 0; i < data.length; i++)
             {
             data[i] = (byte)(((result[v++] & 0xF) << 4) | (result[v++] & 0xF));
-//                      System.err.println("" + i + " " + data[i]);
             }
 
         // Name ...
@@ -2101,15 +1965,15 @@ bulk.setSelected(true);
         
         // Pre-DHG Parameters...
 
-        pos = unloadData(data, pos, volume, basics1pedalassign);
-        pos = unloadData(data, pos, basics1pedalassign, portamentosw, new int[] { 4, 0 }, new int[] { 4, 4 } );
+        pos = unloadData(data, pos, volume, s1basicpedalassign);
+        pos = unloadData(data, pos, s1basicpedalassign, portamentosw, new int[] { 4, 0 }, new int[] { 4, 4 } );
         pos = unloadData(data, pos, portamentosw, mode, new int[] { 7, 0 }, new int[] { 1, 6 } );
-        pos = unloadData(data, pos, mode, dfgs1coarse, new int[] { 2, 0 }, new int[] { 1, 2 } );
-        pos = unloadData(data, pos, dfgs1coarse, dfgs1key);
-        pos = unloadData(data, pos, dfgs1key, dfgs1envdep, new int[] { 7, 0 }, new int[] { 1, 7 } );
-        pos = unloadData(data, pos, dfgs1envdep, dfgs1envloop);
-        pos = unloadData(data, pos, dfgs1envloop, dfgs1envrateseg1, new int[] { 7, 0 }, new int[] { 1, 7 } );
-        pos = unloadData(data, pos, dfgs1envrateseg1, dhgs1velodep);  // in fact it just goes to the harmonics
+        pos = unloadData(data, pos, mode, s1dfgcoarse, new int[] { 2, 0 }, new int[] { 1, 2 } );
+        pos = unloadData(data, pos, s1dfgcoarse, s1dfgkey);
+        pos = unloadData(data, pos, s1dfgkey, s1dfgenvdep, new int[] { 7, 0 }, new int[] { 1, 7 } );
+        pos = unloadData(data, pos, s1dfgenvdep, s1dfgenvloop);
+        pos = unloadData(data, pos, s1dfgenvloop, s1dfgenvrateseg1, new int[] { 7, 0 }, new int[] { 1, 7 } );
+        pos = unloadData(data, pos, s1dfgenvrateseg1, s1dhgvelodep);  // in fact it just goes to the harmonics
         
         // Harmonics levels...
                 
@@ -2170,37 +2034,37 @@ bulk.setSelected(true);
                 
         // DHG and Post-DHG parameters...
         
-        pos = unloadData(data, pos, dhgs1velodep, dhgs1env1onoff);
-        pos = unloadData(data, pos, dhgs1env1onoff, dhgs1modonoff, new int[] { 7, 0 }, new int[] { 1, 5 } );
-        pos = unloadData(data, pos, dhgs1modonoff, dhgs1rangefrom, new int[] { 7, 0 }, new int[] { 1, 2 } );
-        pos = unloadData(data, pos, dhgs1rangefrom, dhgs1oddmodonoff);
-        pos = unloadData(data, pos, dhgs1oddmodonoff, dhgs1allmodonoff, new int[] { 7, 4, 3, 0 }, new int[] { 1, 2, 1, 2 } );
-        pos = unloadData(data, pos, dhgs1allmodonoff, dhgs1angle, new int[] { 7, 4 }, new int[] { 1, 2 } );
-        pos = unloadData(data, pos, dhgs1angle, dhgs1shadowonoff);
+        pos = unloadData(data, pos, s1dhgvelodep, s1dhgenv1onoff);
+        pos = unloadData(data, pos, s1dhgenv1onoff, s1dhgmodonoff, new int[] { 7, 0 }, new int[] { 1, 5 } );
+        pos = unloadData(data, pos, s1dhgmodonoff, s1dhgrangefrom, new int[] { 7, 0 }, new int[] { 1, 2 } );
+        pos = unloadData(data, pos, s1dhgrangefrom, s1dhgoddmodonoff);
+        pos = unloadData(data, pos, s1dhgoddmodonoff, s1dhgallmodonoff, new int[] { 7, 4, 3, 0 }, new int[] { 1, 2, 1, 2 } );
+        pos = unloadData(data, pos, s1dhgallmodonoff, s1dhgangle, new int[] { 7, 4 }, new int[] { 1, 2 } );
+        pos = unloadData(data, pos, s1dhgangle, s1dhgshadowonoff);
 
         int shadowpos = pos;
 
-        pos = unloadDataUnified(data, pos, dhgs1env1maxseg1onoff, dhgs1env1seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 }, new int[] { dhgs1shadowonoff, dhgs2shadowonoff } );
+        pos = unloadDataUnified(data, pos, s1dhgenv1maxseg1onoff, s1dhgenv1seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 }, new int[] { s1dhgshadowonoff, s2dhgshadowonoff } );
                 
         // handle shadow specially
-        model.set("dhgs1shadowonoff", (data[shadowpos] & 255) >>> 7);
-        model.set("dhgs2shadowonoff", (data[shadowpos + 1] & 255) >>> 7);
+        model.set("s1dhgshadowonoff", (data[shadowpos] & 255) >>> 7);
+        model.set("s2dhgshadowonoff", (data[shadowpos + 1] & 255) >>> 7);
         
-        pos = unloadData(data, pos, dhgs1env1seg1rate, dhgs1env2maxseg1onoff);
-        pos = unloadDataUnified(data, pos, dhgs1env2maxseg1onoff, dhgs1env2seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 } );
-        pos = unloadData(data, pos, dhgs1env2seg1rate, dhgs1env3maxseg1onoff);
-        pos = unloadDataUnified(data, pos, dhgs1env3maxseg1onoff, dhgs1env3seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 } );
-        pos = unloadData(data, pos, dhgs1env3seg1rate, dhgs1env4maxseg1onoff);
-        pos = unloadDataUnified(data, pos, dhgs1env4maxseg1onoff, dhgs1env4seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 } );
-        pos = unloadData(data, pos, dhgs1env4seg1rate, ddfs1ddfonoff);
-        pos = unloadData(data, pos, ddfs1ddfonoff, ddfs1envseg1rate, new int[] { 7, 6, 0 }, new int[] { 1, 1, 5 } );
-        pos = unloadData(data, pos, ddfs1envseg1rate, ddfs1envmaxseg1onoff);
-        pos = unloadDataUnified(data, pos, ddfs1envmaxseg1onoff, ddas1attackvelodep, new int[] { 6, 0 }, new int[] { 1, 6 } );
-        pos = unloadData(data, pos, ddas1attackvelodep, ddas1ddaonoff);
-        pos = unloadData(data, pos, ddas1ddaonoff, ddas1attackvelrate, new int[] { 7, 0 }, new int[] { 1, 7 } );
-        pos = unloadData(data, pos, ddas1attackvelrate, ddas1envseg1modonoff);
-        pos = unloadData(data, pos, ddas1envseg1modonoff, ddas1envmaxseg1onoff, new int[] { 6, 0 }, new int[] { 1, 6 } );
-        pos = unloadDataUnified(data, pos, ddas1envmaxseg1onoff, lfoshape, new int[] { 6, 0 }, new int[] { 1, 6 } );
+        pos = unloadData(data, pos, s1dhgenv1seg1rate, s1dhgenv2maxseg1onoff);
+        pos = unloadDataUnified(data, pos, s1dhgenv2maxseg1onoff, s1dhgenv2seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 } );
+        pos = unloadData(data, pos, s1dhgenv2seg1rate, s1dhgenv3maxseg1onoff);
+        pos = unloadDataUnified(data, pos, s1dhgenv3maxseg1onoff, s1dhgenv3seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 } );
+        pos = unloadData(data, pos, s1dhgenv3seg1rate, s1dhgenv4maxseg1onoff);
+        pos = unloadDataUnified(data, pos, s1dhgenv4maxseg1onoff, s1dhgenv4seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 } );
+        pos = unloadData(data, pos, s1dhgenv4seg1rate, s1ddfddfonoff);
+        pos = unloadData(data, pos, s1ddfddfonoff, s1ddfenvseg1rate, new int[] { 7, 6, 0 }, new int[] { 1, 1, 5 } );
+        pos = unloadData(data, pos, s1ddfenvseg1rate, s1ddfenvmaxseg1onoff);
+        pos = unloadDataUnified(data, pos, s1ddfenvmaxseg1onoff, s1ddaattackvelodep, new int[] { 6, 0 }, new int[] { 1, 6 } );
+        pos = unloadData(data, pos, s1ddaattackvelodep, s1ddaddaonoff);
+        pos = unloadData(data, pos, s1ddaddaonoff, s1ddaattackvelrate, new int[] { 7, 0 }, new int[] { 1, 7 } );
+        pos = unloadData(data, pos, s1ddaattackvelrate, s1ddaenvseg1modonoff);
+        pos = unloadData(data, pos, s1ddaenvseg1modonoff, s1ddaenvmaxseg1onoff, new int[] { 6, 0 }, new int[] { 1, 6 } );
+        pos = unloadDataUnified(data, pos, s1ddaenvmaxseg1onoff, lfoshape, new int[] { 6, 0 }, new int[] { 1, 6 } );
         pos++;
         pos++;
                 
@@ -2257,15 +2121,15 @@ bulk.setSelected(true);
         
         // Pre-DHG Parameters...
 
-        pos = loadData(data, pos, volume, basics1pedalassign);
-        pos = loadData(data, pos, basics1pedalassign, portamentosw, new int[] { 4, 0 }, new int[] { 4, 4 } );
+        pos = loadData(data, pos, volume, s1basicpedalassign);
+        pos = loadData(data, pos, s1basicpedalassign, portamentosw, new int[] { 4, 0 }, new int[] { 4, 4 } );
         pos = loadData(data, pos, portamentosw, mode, new int[] { 7, 0 }, new int[] { 1, 6 } );
-        pos = loadData(data, pos, mode, dfgs1coarse, new int[] { 2, 0 }, new int[] { 1, 2 } );
-        pos = loadData(data, pos, dfgs1coarse, dfgs1key);
-        pos = loadData(data, pos, dfgs1key, dfgs1envdep, new int[] { 7, 0 }, new int[] { 1, 7 } );
-        pos = loadData(data, pos, dfgs1envdep, dfgs1envloop);
-        pos = loadData(data, pos, dfgs1envloop, dfgs1envrateseg1, new int[] { 7, 0 }, new int[] { 1, 7 } );
-        pos = loadData(data, pos, dfgs1envrateseg1, dhgs1velodep);  // in fact it just goes to the harmonics
+        pos = loadData(data, pos, mode, s1dfgcoarse, new int[] { 2, 0 }, new int[] { 1, 2 } );
+        pos = loadData(data, pos, s1dfgcoarse, s1dfgkey);
+        pos = loadData(data, pos, s1dfgkey, s1dfgenvdep, new int[] { 7, 0 }, new int[] { 1, 7 } );
+        pos = loadData(data, pos, s1dfgenvdep, s1dfgenvloop);
+        pos = loadData(data, pos, s1dfgenvloop, s1dfgenvrateseg1, new int[] { 7, 0 }, new int[] { 1, 7 } );
+        pos = loadData(data, pos, s1dfgenvrateseg1, s1dhgvelodep);  // in fact it just goes to the harmonics
         
         // Harmonics levels...
                 
@@ -2301,37 +2165,37 @@ bulk.setSelected(true);
                 
         // DHG and Post-DHG parameters...
         
-        pos = loadData(data, pos, dhgs1velodep, dhgs1env1onoff);
-        pos = loadData(data, pos, dhgs1env1onoff, dhgs1modonoff, new int[] { 7, 0 }, new int[] { 1, 5 } );
-        pos = loadData(data, pos, dhgs1modonoff, dhgs1rangefrom, new int[] { 7, 0 }, new int[] { 1, 2 } );
-        pos = loadData(data, pos, dhgs1rangefrom, dhgs1oddmodonoff);
-        pos = loadData(data, pos, dhgs1oddmodonoff, dhgs1allmodonoff, new int[] { 7, 4, 3, 0 }, new int[] { 1, 2, 1, 2 } );
-        pos = loadData(data, pos, dhgs1allmodonoff, dhgs1angle, new int[] { 7, 4 }, new int[] { 1, 2 } );
-        pos = loadData(data, pos, dhgs1angle, dhgs1shadowonoff);
+        pos = loadData(data, pos, s1dhgvelodep, s1dhgenv1onoff);
+        pos = loadData(data, pos, s1dhgenv1onoff, s1dhgmodonoff, new int[] { 7, 0 }, new int[] { 1, 5 } );
+        pos = loadData(data, pos, s1dhgmodonoff, s1dhgrangefrom, new int[] { 7, 0 }, new int[] { 1, 2 } );
+        pos = loadData(data, pos, s1dhgrangefrom, s1dhgoddmodonoff);
+        pos = loadData(data, pos, s1dhgoddmodonoff, s1dhgallmodonoff, new int[] { 7, 4, 3, 0 }, new int[] { 1, 2, 1, 2 } );
+        pos = loadData(data, pos, s1dhgallmodonoff, s1dhgangle, new int[] { 7, 4 }, new int[] { 1, 2 } );
+        pos = loadData(data, pos, s1dhgangle, s1dhgshadowonoff);
 
         int shadowpos = pos;
 
-        pos = loadDataUnified(data, pos, dhgs1env1maxseg1onoff, dhgs1env1seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 }, new int[] { dhgs1shadowonoff, dhgs2shadowonoff } );
+        pos = loadDataUnified(data, pos, s1dhgenv1maxseg1onoff, s1dhgenv1seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 }, new int[] { s1dhgshadowonoff, s2dhgshadowonoff } );
         
         // handle shadow specially
-        data[shadowpos] = (byte)(data[shadowpos] | (model.get("dhgs1shadowonoff", 0) << 7));
-        data[shadowpos + 1] = (byte)(data[shadowpos + 1] | (model.get("dhgs2shadowonoff", 0) << 7));
+        data[shadowpos] = (byte)(data[shadowpos] | (model.get("s1dhgshadowonoff", 0) << 7));
+        data[shadowpos + 1] = (byte)(data[shadowpos + 1] | (model.get("s2dhgshadowonoff", 0) << 7));
         
-        pos = loadData(data, pos, dhgs1env1seg1rate, dhgs1env2maxseg1onoff);
-        pos = loadDataUnified(data, pos, dhgs1env2maxseg1onoff, dhgs1env2seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 } );
-        pos = loadData(data, pos, dhgs1env2seg1rate, dhgs1env3maxseg1onoff);
-        pos = loadDataUnified(data, pos, dhgs1env3maxseg1onoff, dhgs1env3seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 } );
-        pos = loadData(data, pos, dhgs1env3seg1rate, dhgs1env4maxseg1onoff);
-        pos = loadDataUnified(data, pos, dhgs1env4maxseg1onoff, dhgs1env4seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 } );
-        pos = loadData(data, pos, dhgs1env4seg1rate, ddfs1ddfonoff);
-        pos = loadData(data, pos, ddfs1ddfonoff, ddfs1envseg1rate, new int[] { 7, 6, 0 }, new int[] { 1, 1, 5 } );
-        pos = loadData(data, pos, ddfs1envseg1rate, ddfs1envmaxseg1onoff);
-        pos = loadDataUnified(data, pos, ddfs1envmaxseg1onoff, ddas1attackvelodep, new int[] { 6, 0 }, new int[] { 1, 6 } );
-        pos = loadData(data, pos, ddas1attackvelodep, ddas1ddaonoff);
-        pos = loadData(data, pos, ddas1ddaonoff, ddas1attackvelrate, new int[] { 7, 0 }, new int[] { 1, 7 } );
-        pos = loadData(data, pos, ddas1attackvelrate, ddas1envseg1modonoff);
-        pos = loadData(data, pos, ddas1envseg1modonoff, ddas1envmaxseg1onoff, new int[] { 6, 0 }, new int[] { 1, 6 } );
-        pos = loadDataUnified(data, pos, ddas1envmaxseg1onoff, lfoshape, new int[] { 6, 0 }, new int[] { 1, 6 } );
+        pos = loadData(data, pos, s1dhgenv1seg1rate, s1dhgenv2maxseg1onoff);
+        pos = loadDataUnified(data, pos, s1dhgenv2maxseg1onoff, s1dhgenv2seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 } );
+        pos = loadData(data, pos, s1dhgenv2seg1rate, s1dhgenv3maxseg1onoff);
+        pos = loadDataUnified(data, pos, s1dhgenv3maxseg1onoff, s1dhgenv3seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 } );
+        pos = loadData(data, pos, s1dhgenv3seg1rate, s1dhgenv4maxseg1onoff);
+        pos = loadDataUnified(data, pos, s1dhgenv4maxseg1onoff, s1dhgenv4seg1rate, new int[] { 6, 0 }, new int[] { 1, 6 } );
+        pos = loadData(data, pos, s1dhgenv4seg1rate, s1ddfddfonoff);
+        pos = loadData(data, pos, s1ddfddfonoff, s1ddfenvseg1rate, new int[] { 7, 6, 0 }, new int[] { 1, 1, 5 } );
+        pos = loadData(data, pos, s1ddfenvseg1rate, s1ddfenvmaxseg1onoff);
+        pos = loadDataUnified(data, pos, s1ddfenvmaxseg1onoff, s1ddaattackvelodep, new int[] { 6, 0 }, new int[] { 1, 6 } );
+        pos = loadData(data, pos, s1ddaattackvelodep, s1ddaddaonoff);
+        pos = loadData(data, pos, s1ddaddaonoff, s1ddaattackvelrate, new int[] { 7, 0 }, new int[] { 1, 7 } );
+        pos = loadData(data, pos, s1ddaattackvelrate, s1ddaenvseg1modonoff);
+        pos = loadData(data, pos, s1ddaenvseg1modonoff, s1ddaenvmaxseg1onoff, new int[] { 6, 0 }, new int[] { 1, 6 } );
+        pos = loadDataUnified(data, pos, s1ddaenvmaxseg1onoff, lfoshape, new int[] { 6, 0 }, new int[] { 1, 6 } );
         data[pos++] = 0;
         data[pos++] = 0;
 
@@ -2378,7 +2242,6 @@ bulk.setSelected(true);
         for(int i = 0; i < pos; i++)
             {
             result[v++] = (byte)((data[i] & 0xFF) >>> 4);
-//              System.err.println("" + (i + 8) + " " + data[i]);
             result[v++] = (byte)(data[i] & 0xF);
             }
         result[v] = (byte)0xF7;
@@ -2530,411 +2393,411 @@ bulk.setSelected(true);
     "name8",
     "volume",
     "balance",
-    "basics1delay",                         // 10
-    "basics2delay",
-    "basics1pedaldep",
-    "basics2pedaldep",
-    "basics1wheeldep",
-    "basics2wheeldep",
-    "basics1pedalassign",
-    "basics1wheelassign",
-    "basics2pedalassign",
-    "basics2wheelassign",
-    "portamentosw",                         // 20
+    "s1basicdelay",                         // 10
+    "s2basicdelay",
+    "s1basicpedaldep",
+    "s2basicpedaldep",
+    "s1basicwheeldep",
+    "s2basicwheeldep",
+    "s1basicpedalassign",
+    "s1basicwheelassign",
+    "s2basicpedalassign",
+    "s2basicwheelassign",
+    "portamentosw",                         // 20 
     "portamentospeed",
     "mode",
     "picmode",
         
 /// DFG
         
-    "dfgs1coarse",
-    "dfgs2coarse",
-    "dfgs1fine",
-    "dfgs2fine",
-    "dfgs1key",
-    "dfgs1fixno",
-    "dfgs2key",                                     // 30
-    "dfgs2fixno",
-    "dfgs1envdep",
-    "dfgs2envdep",
-    "dfgs1prsdep",
-    "dfgs2prsdep",
-    "dfgs1benderdep",
-    "dfgs2benderdep",
-    "dfgs1veloenvdep",
-    "dfgs2veloenvdep",
-    "dfgs1lfodep",                          // 40
-    "dfgs2lfodep",
-    "dfgs1preslfodep",
-    "dfgs2preslfodep",
-    "dfgs1envloop",
-    "dfgs1envrateseg1",
-    "dfgs2envloop",
-    "dfgs2envrateseg1",
-    "dfgs1envrateseg2",
-    "dfgs2envrateseg2",
-    "dfgs1envrateseg3",                             // 50
-    "dfgs2envrateseg3",
-    "dfgs1envrateseg4",
-    "dfgs2envrateseg4",
-    "dfgs1envrateseg5",
-    "dfgs2envrateseg5",
-    "dfgs1envrateseg6",
-    "dfgs2envrateseg6",
-    "dfgs1envlevelseg1",
-    "dfgs2envlevelseg1",
-    "dfgs1envlevelseg2",                    // 60
-    "dfgs2envlevelseg2",
-    "dfgs1envlevelseg3",
-    "dfgs2envlevelseg3",
-    "dfgs1envlevelseg4",
-    "dfgs2envlevelseg4",
-    "dfgs1envlevelseg5",
-    "dfgs2envlevelseg5",
-    "dfgs1envlevelseg6",
-    "dfgs2envlevelseg6",
+    "s1dfgcoarse",
+    "s2dfgcoarse",
+    "s1dfgfine",
+    "s2dfgfine",
+    "s1dfgkey",
+    "s1dfgfixno",
+    "s2dfgkey",                                     // 30
+    "s2dfgfixno",
+    "s1dfgenvdep",
+    "s2dfgenvdep",
+    "s1dfgprsdep",
+    "s2dfgprsdep",
+    "s1dfgbenderdep",
+    "s2dfgbenderdep",
+    "s1dfgveloenvdep",
+    "s2dfgveloenvdep",
+    "s1dfglfodep",                          // 40
+    "s2dfglfodep",
+    "s1dfgpreslfodep",
+    "s2dfgpreslfodep",
+    "s1dfgenvloop",
+    "s1dfgenvrateseg1",
+    "s2dfgenvloop",
+    "s2dfgenvrateseg1",
+    "s1dfgenvrateseg2",
+    "s2dfgenvrateseg2",
+    "s1dfgenvrateseg3",                             // 50
+    "s2dfgenvrateseg3",
+    "s1dfgenvrateseg4",
+    "s2dfgenvrateseg4",
+    "s1dfgenvrateseg5",
+    "s2dfgenvrateseg5",
+    "s1dfgenvrateseg6",
+    "s2dfgenvrateseg6",
+    "s1dfgenvlevelseg1",
+    "s2dfgenvlevelseg1",
+    "s1dfgenvlevelseg2",                    // 60
+    "s2dfgenvlevelseg2",
+    "s1dfgenvlevelseg3",
+    "s2dfgenvlevelseg3",
+    "s1dfgenvlevelseg4",
+    "s2dfgenvlevelseg4",
+    "s1dfgenvlevelseg5",
+    "s2dfgenvlevelseg5",
+    "s1dfgenvlevelseg6",
+    "s2dfgenvlevelseg6",
         
 /// DHG
 /// Harmonics not listed, but then...
         
-    "dhgs1velodep",                                 // 70
-    "dhgs2velodep",
-    "dhgs1presdep",
-    "dhgs2presdep",
-    "dhgs1ksdep",
-    "dhgs2ksdep",
-    "dhgs1lfodep",
-    "dhgs2lfodep",
-    "dhgs1env1onoff",                               // 80
-    "dhgs1env1moddepth",    // mistake,
-    "dhgs2env1onoff",
-    "dhgs2env1moddepth",    // mistake,
-    "dhgs1env2onoff",
-    "dhgs1env2moddepth",    // mistake,
-    "dhgs2env2onoff",
-    "dhgs2env2moddepth",    // mistake,
-    "dhgs1env3onoff",
-    "dhgs1env3moddepth",    // mistake,
-    "dhgs2env3onoff",
-    "dhgs2env3moddepth",    // mistake,
-    "dhgs1env4onoff",                               // 90
-    "dhgs1env4moddepth",    // mistake,
-    "dhgs2env4onoff",
-    "dhgs2env4moddepth",    // mistake,
-    "dhgs1modonoff",
-    "dhgs1harmsel",
-    "dhgs2modonoff",
-    "dhgs2harmsel",
-    "dhgs1rangefrom",
-    "dhgs2rangefrom",
-    "dhgs1rangeto",                         // 100
-    "dhgs2rangeto",
-    "dhgs1oddmodonoff",
-    "dhgs1oddenv",
-    "dhgs1evenmodonoff",    // this must be an error -- was 
-    "dhgs1evenenv",
-    "dhgs2oddmodonoff",
-    "dhgs2oddenv",
-    "dhgs2evenmodonoff",    // this must be an error -- was 
-    "dhgs2evenenv",
-    "dhgs1octavemodonoff",                  // 110
-    "dhgs1octaveenv",
-    "dhgs1fifthmodonoff",
-    "dhgs1fifthenv",
-    "dhgs2octavemodonoff",
-    "dhgs2octaveenv",
-    "dhgs2fifthmodonoff",
-    "dhgs2fifthenv",
-    "dhgs1allmodonoff",
-    "dhgs1allenv",                          // 120
-    "dhgs2allmodonoff",
-    "dhgs2allenv",
-    "dhgs1angle",
-    "dhgs2angle",
-    "dhgs1harm",
-    "dhgs2harm",
-    "dhgs1shadowonoff",     // mistake,
-    "dhgs1env1maxsegonoff", // mistake,
-    "dhgs1env1seg1level",
-    "dhgs2shadowonoff",     // mistake,
-    "dhgs2env1maxsegonoff", // mistake,                     130
-    "dhgs2env1seg1level",
-    "dhgs1env1maxsegonoff", // mistake,
-    "dhgs1env1seg2level",
-    "dhgs2env1maxsegonoff", // mistake,
-    "dhgs2env1seg2level",
-    "dhgs1env1maxsegonoff", // mistake,
-    "dhgs1env1seg3level",
-    "dhgs2env1maxsegonoff", // mistake,
-    "dhgs2env1seg3level",
-    "dhgs1env1maxsegonoff", // mistake,                     140
-    "dhgs1env1seg4level",
-    "dhgs2env1maxsegonoff", // mistake,
-    "dhgs2env1seg4level",
-    "dhgs1env1maxsegonoff", // mistake,
-    "dhgs1env1seg5level",
-    "dhgs2env1maxsegonoff", // mistake,
-    "dhgs2env1seg5level",
-    "dhgs1env1maxsegonoff", // mistake,
-    "dhgs1env1seg6level",
-    "dhgs2env1maxsegonoff", // mistake,                     // 150
-    "dhgs2env1seg6level",
-    "dhgs1env1seg1rate",                                    
-    "dhgs2env1seg1rate",
-    "dhgs1env1seg2rate",
-    "dhgs2env1seg2rate",
-    "dhgs1env1seg3rate",
-    "dhgs2env1seg3rate",
-    "dhgs1env1seg4rate",
-    "dhgs2env1seg4rate",
-    "dhgs1env1seg5rate",                                    // 160
-    "dhgs2env1seg5rate",
-    "dhgs1env1seg6rate",
-    "dhgs2env1seg6rate",
-    "dhgs1env2maxsegonoff", // mistake,
-    "dhgs1env2seg1level",
-    "dhgs2env2maxsegonoff", // mistake,
-    "dhgs2env2seg1level",
-    "dhgs1env2maxsegonoff", // mistake,
-    "dhgs1env2seg2level",
-    "dhgs2env2maxsegonoff", // mistake,             // 170
-    "dhgs2env2seg2level",
-    "dhgs1env2maxsegonoff", // mistake,
-    "dhgs1env2seg3level",
-    "dhgs2env2maxsegonoff", // mistake,
-    "dhgs2env2seg3level",
-    "dhgs1env2maxsegonoff", // mistake,
-    "dhgs1env2seg4level",
-    "dhgs2env2maxsegonoff", // mistake,
-    "dhgs2env2seg4level",
-    "dhgs1env2maxsegonoff", // mistake,             // 180
-    "dhgs1env2seg5level",
-    "dhgs2env2maxsegonoff", // mistake,
-    "dhgs2env2seg5level",
-    "dhgs1env2maxsegonoff", // mistake,
-    "dhgs1env2seg6level",
-    "dhgs2env2maxsegonoff", // mistake,
-    "dhgs2env2seg6level",
-    "dhgs1env2seg1rate",
-    "dhgs2env2seg1rate",
-    "dhgs1env2seg2rate",                                    // 190
-    "dhgs2env2seg2rate",
-    "dhgs1env2seg3rate",
-    "dhgs2env2seg3rate",
-    "dhgs1env2seg4rate",
-    "dhgs2env2seg4rate",
-    "dhgs1env2seg5rate",
-    "dhgs2env2seg5rate",
-    "dhgs1env2seg6rate",
-    "dhgs2env2seg6rate",
-    "dhgs1env3maxsegonoff", // mistake,             // 200
-    "dhgs1env3seg1level",
-    "dhgs2env3maxsegonoff", // mistake,
-    "dhgs2env3seg1level",
-    "dhgs1env3maxsegonoff", // mistake,
-    "dhgs1env3seg2level",
-    "dhgs2env3maxsegonoff", // mistake,
-    "dhgs2env3seg2level",
-    "dhgs1env3maxsegonoff", // mistake,
-    "dhgs1env3seg3level",
-    "dhgs2env3maxsegonoff", // mistake,                     // 210
-    "dhgs2env3seg3level",
-    "dhgs1env3maxsegonoff", // mistake,
-    "dhgs1env3seg4level",
-    "dhgs2env3maxsegonoff", // mistake,
-    "dhgs2env3seg4level",
-    "dhgs1env3maxsegonoff", // mistake,
-    "dhgs1env3seg5level",
-    "dhgs2env3maxsegonoff", // mistake,
-    "dhgs2env3seg5level",
-    "dhgs1env3maxsegonoff", // mistake,                     // 220
-    "dhgs1env3seg6level",
-    "dhgs2env3maxsegonoff", // mistake,
-    "dhgs2env3seg6level",
-    "dhgs1env3seg1rate",
-    "dhgs2env3seg1rate",
-    "dhgs1env3seg2rate",
-    "dhgs2env3seg2rate",
-    "dhgs1env3seg3rate",
-    "dhgs2env3seg3rate",
-    "dhgs1env3seg4rate",                            // 230
-    "dhgs2env3seg4rate",
-    "dhgs1env3seg5rate",
-    "dhgs2env3seg5rate",
-    "dhgs1env3seg6rate",
-    "dhgs2env3seg6rate",
-    "dhgs1env4maxsegonoff", // mistake,
-    "dhgs1env4seg1level",
-    "dhgs2env4maxsegonoff", // mistake,
-    "dhgs2env4seg1level",
-    "dhgs1env4maxsegonoff", // mistake,             // 240
-    "dhgs1env4seg2level",
-    "dhgs2env4maxsegonoff", // mistake,
-    "dhgs2env4seg2level",
-    "dhgs1env4maxsegonoff", // mistake,
-    "dhgs1env4seg3level",
-    "dhgs2env4maxsegonoff", // mistake,
-    "dhgs2env4seg3level",
-    "dhgs1env4maxsegonoff", // mistake,
-    "dhgs1env4seg4level",
-    "dhgs2env4maxsegonoff", // mistake,             // 250
-    "dhgs2env4seg4level",
-    "dhgs1env4maxsegonoff", // mistake,
-    "dhgs1env4seg5level",
-    "dhgs2env4maxsegonoff", // mistake,
-    "dhgs2env4seg5level",
-    "dhgs1env4maxsegonoff", // mistake,
-    "dhgs1env4seg6level",
-    "dhgs2env4maxsegonoff", // mistake,
-    "dhgs2env4seg6level",
-    "dhgs1env4seg1rate",                                            // 260
-    "dhgs2env4seg1rate",
-    "dhgs1env4seg2rate",
-    "dhgs2env4seg2rate",
-    "dhgs1env4seg3rate",
-    "dhgs2env4seg3rate",
-    "dhgs1env4seg4rate",
-    "dhgs2env4seg4rate",
-    "dhgs1env4seg5rate",
-    "dhgs2env4seg5rate",
-    "dhgs1env4seg6rate",                                            // 270
-    "dhgs2env4seg6rate",
+    "s1dhgvelodep",                                 // 70
+    "s2dhgvelodep",
+    "s1dhgpresdep",
+    "s2dhgpresdep",
+    "s1dhgksdep",
+    "s2dhgksdep",
+    "s1dhglfodep",
+    "s2dhglfodep",
+    "s1dhgenv1onoff",                               // 80
+    "s1dhgenv1moddepth",    // mistake,
+    "s2dhgenv1onoff",
+    "s2dhgenv1moddepth",    // mistake,
+    "s1dhgenv2onoff",
+    "s1dhgenv2moddepth",    // mistake,
+    "s2dhgenv2onoff",
+    "s2dhgenv2moddepth",    // mistake,
+    "s1dhgenv3onoff",
+    "s1dhgenv3moddepth",    // mistake,
+    "s2dhgenv3onoff",
+    "s2dhgenv3moddepth",    // mistake,
+    "s1dhgenv4onoff",                               // 90
+    "s1dhgenv4moddepth",    // mistake,
+    "s2dhgenv4onoff",
+    "s2dhgenv4moddepth",    // mistake,
+    "s1dhgmodonoff",
+    "s1dhgharmsel",
+    "s2dhgmodonoff",
+    "s2dhgharmsel",
+    "s1dhgrangefrom",
+    "s2dhgrangefrom",
+    "s1dhgrangeto",                         // 100
+    "s2dhgrangeto",
+    "s1dhgoddmodonoff",
+    "s1dhgoddenv",
+    "s1dhgevenmodonoff",    // this must be an error -- was 
+    "s1dhgevenenv",
+    "s2dhgoddmodonoff",
+    "s2dhgoddenv",
+    "s2dhgevenmodonoff",    // this must be an error -- was 
+    "s2dhgevenenv",
+    "s1dhgoctavemodonoff",                  // 110
+    "s1dhgoctaveenv",
+    "s1dhgfifthmodonoff",
+    "s1dhgfifthenv",
+    "s2dhgoctavemodonoff",
+    "s2dhgoctaveenv",
+    "s2dhgfifthmodonoff",
+    "s2dhgfifthenv",
+    "s1dhgallmodonoff",
+    "s1dhgallenv",                          // 120
+    "s2dhgallmodonoff",
+    "s2dhgallenv",
+    "s1dhgangle",
+    "s2dhgangle",
+    "s1dhgharm",
+    "s2dhgharm",
+    "s1dhgshadowonoff",     // mistake,
+    "s1dhgenv1maxsegonoff", // mistake,
+    "s1dhgenv1seg1level",
+    "s2dhgshadowonoff",     // mistake,
+    "s2dhgenv1maxsegonoff", // mistake,                     130
+    "s2dhgenv1seg1level",
+    "s1dhgenv1maxsegonoff", // mistake,
+    "s1dhgenv1seg2level",
+    "s2dhgenv1maxsegonoff", // mistake,
+    "s2dhgenv1seg2level",
+    "s1dhgenv1maxsegonoff", // mistake,
+    "s1dhgenv1seg3level",
+    "s2dhgenv1maxsegonoff", // mistake,
+    "s2dhgenv1seg3level",
+    "s1dhgenv1maxsegonoff", // mistake,                     140
+    "s1dhgenv1seg4level",
+    "s2dhgenv1maxsegonoff", // mistake,
+    "s2dhgenv1seg4level",
+    "s1dhgenv1maxsegonoff", // mistake,
+    "s1dhgenv1seg5level",
+    "s2dhgenv1maxsegonoff", // mistake,
+    "s2dhgenv1seg5level",
+    "s1dhgenv1maxsegonoff", // mistake,
+    "s1dhgenv1seg6level",
+    "s2dhgenv1maxsegonoff", // mistake,                     // 150
+    "s2dhgenv1seg6level",
+    "s1dhgenv1seg1rate",                                    
+    "s2dhgenv1seg1rate",
+    "s1dhgenv1seg2rate",
+    "s2dhgenv1seg2rate",
+    "s1dhgenv1seg3rate",
+    "s2dhgenv1seg3rate",
+    "s1dhgenv1seg4rate",
+    "s2dhgenv1seg4rate",
+    "s1dhgenv1seg5rate",                                    // 160
+    "s2dhgenv1seg5rate",
+    "s1dhgenv1seg6rate",
+    "s2dhgenv1seg6rate",
+    "s1dhgenv2maxsegonoff", // mistake,
+    "s1dhgenv2seg1level",
+    "s2dhgenv2maxsegonoff", // mistake,
+    "s2dhgenv2seg1level",
+    "s1dhgenv2maxsegonoff", // mistake,
+    "s1dhgenv2seg2level",
+    "s2dhgenv2maxsegonoff", // mistake,             // 170
+    "s2dhgenv2seg2level",
+    "s1dhgenv2maxsegonoff", // mistake,
+    "s1dhgenv2seg3level",
+    "s2dhgenv2maxsegonoff", // mistake,
+    "s2dhgenv2seg3level",
+    "s1dhgenv2maxsegonoff", // mistake,
+    "s1dhgenv2seg4level",
+    "s2dhgenv2maxsegonoff", // mistake,
+    "s2dhgenv2seg4level",
+    "s1dhgenv2maxsegonoff", // mistake,             // 180
+    "s1dhgenv2seg5level",
+    "s2dhgenv2maxsegonoff", // mistake,
+    "s2dhgenv2seg5level",
+    "s1dhgenv2maxsegonoff", // mistake,
+    "s1dhgenv2seg6level",
+    "s2dhgenv2maxsegonoff", // mistake,
+    "s2dhgenv2seg6level",
+    "s1dhgenv2seg1rate",
+    "s2dhgenv2seg1rate",
+    "s1dhgenv2seg2rate",                                    // 190
+    "s2dhgenv2seg2rate",
+    "s1dhgenv2seg3rate",
+    "s2dhgenv2seg3rate",
+    "s1dhgenv2seg4rate",
+    "s2dhgenv2seg4rate",
+    "s1dhgenv2seg5rate",
+    "s2dhgenv2seg5rate",
+    "s1dhgenv2seg6rate",
+    "s2dhgenv2seg6rate",
+    "s1dhgenv3maxsegonoff", // mistake,             // 200
+    "s1dhgenv3seg1level",
+    "s2dhgenv3maxsegonoff", // mistake,
+    "s2dhgenv3seg1level",
+    "s1dhgenv3maxsegonoff", // mistake,
+    "s1dhgenv3seg2level",
+    "s2dhgenv3maxsegonoff", // mistake,
+    "s2dhgenv3seg2level",
+    "s1dhgenv3maxsegonoff", // mistake,
+    "s1dhgenv3seg3level",
+    "s2dhgenv3maxsegonoff", // mistake,                     // 210
+    "s2dhgenv3seg3level",
+    "s1dhgenv3maxsegonoff", // mistake,
+    "s1dhgenv3seg4level",
+    "s2dhgenv3maxsegonoff", // mistake,
+    "s2dhgenv3seg4level",
+    "s1dhgenv3maxsegonoff", // mistake,
+    "s1dhgenv3seg5level",
+    "s2dhgenv3maxsegonoff", // mistake,
+    "s2dhgenv3seg5level",
+    "s1dhgenv3maxsegonoff", // mistake,                     // 220
+    "s1dhgenv3seg6level",
+    "s2dhgenv3maxsegonoff", // mistake,
+    "s2dhgenv3seg6level",
+    "s1dhgenv3seg1rate",
+    "s2dhgenv3seg1rate",
+    "s1dhgenv3seg2rate",
+    "s2dhgenv3seg2rate",
+    "s1dhgenv3seg3rate",
+    "s2dhgenv3seg3rate",
+    "s1dhgenv3seg4rate",                            // 230
+    "s2dhgenv3seg4rate",
+    "s1dhgenv3seg5rate",
+    "s2dhgenv3seg5rate",
+    "s1dhgenv3seg6rate",
+    "s2dhgenv3seg6rate",
+    "s1dhgenv4maxsegonoff", // mistake,
+    "s1dhgenv4seg1level",
+    "s2dhgenv4maxsegonoff", // mistake,
+    "s2dhgenv4seg1level",
+    "s1dhgenv4maxsegonoff", // mistake,             // 240
+    "s1dhgenv4seg2level",
+    "s2dhgenv4maxsegonoff", // mistake,
+    "s2dhgenv4seg2level",
+    "s1dhgenv4maxsegonoff", // mistake,
+    "s1dhgenv4seg3level",
+    "s2dhgenv4maxsegonoff", // mistake,
+    "s2dhgenv4seg3level",
+    "s1dhgenv4maxsegonoff", // mistake,
+    "s1dhgenv4seg4level",
+    "s2dhgenv4maxsegonoff", // mistake,             // 250
+    "s2dhgenv4seg4level",
+    "s1dhgenv4maxsegonoff", // mistake,
+    "s1dhgenv4seg5level",
+    "s2dhgenv4maxsegonoff", // mistake,
+    "s2dhgenv4seg5level",
+    "s1dhgenv4maxsegonoff", // mistake,
+    "s1dhgenv4seg6level",
+    "s2dhgenv4maxsegonoff", // mistake,
+    "s2dhgenv4seg6level",
+    "s1dhgenv4seg1rate",                                            // 260
+    "s2dhgenv4seg1rate",
+    "s1dhgenv4seg2rate",
+    "s2dhgenv4seg2rate",
+    "s1dhgenv4seg3rate",
+    "s2dhgenv4seg3rate",
+    "s1dhgenv4seg4rate",
+    "s2dhgenv4seg4rate",
+    "s1dhgenv4seg5rate",
+    "s2dhgenv4seg5rate",
+    "s1dhgenv4seg6rate",                                            // 270
+    "s2dhgenv4seg6rate",
         
 /// DDF
         
-    "ddfs1cutoff",
-    "ddfs2cutoff",
-    "ddfs1cutoffmod",
-    "ddfs2cutoffmod",
-    "ddfs1slope",
-    "ddfs2slope",
-    "ddfs1slopemod",
-    "ddfs2slopemod",
-    "ddfs1flatlevel",                                       // 280
-    "ddfs2flatlevel",
-    "ddfs1velodep",
-    "ddfs2velodep",
-    "ddfs1presdep",
-    "ddfs2presdep",
-    "ddfs1ksdep",
-    "ddfs2ksdep",
-    "ddfs1envdep",
-    "ddfs2envdep",
-    "ddfs1veloenvdep",                              // 290
-    "ddfs2veloenvdep",
-    "ddfs1ddfonoff",
-    "ddfs1ddfmodonoff",
-    "ddfs1lfodep",
-    "ddfs2ddfonoff",
-    "ddfs2ddfmodonoff",
-    "ddfs2lfodep",
-    "ddfs1envseg1rate",
-    "ddfs2envseg1rate",
-    "ddfs1envseg2rate",                             // 300
-    "ddfs2envseg2rate",
-    "ddfs1envseg3rate",
-    "ddfs2envseg3rate",
-    "ddfs1envseg4rate",
-    "ddfs2envseg4rate",
-    "ddfs1envseg5rate",
-    "ddfs2envseg5rate",
-    "ddfs1envseg6rate",
-    "ddfs2envseg6rate",
-    "ddfs1envmaxsegonoff",  // mistake,                     // 310
-    "ddfs1envseg1level",
-    "ddfs2envmaxsegonoff",  // mistake,
-    "ddfs2envseg1level",
-    "ddfs1envmaxsegonoff",  // mistake,
-    "ddfs1envseg2level",
-    "ddfs2envmaxsegonoff",  // mistake,
-    "ddfs2envseg2level",
-    "ddfs1envmaxsegonoff",  // mistake,
-    "ddfs1envseg3level",
-    "ddfs2envmaxsegonoff",  // mistake,                     // 320
-    "ddfs2envseg3level",
-    "ddfs1envmaxsegonoff",  // mistake,
-    "ddfs1envseg4level",
-    "ddfs2envmaxsegonoff",  // mistake,
-    "ddfs2envseg4level",
-    "ddfs1envmaxsegonoff",  // mistake,
-    "ddfs1envseg5level",
-    "ddfs2envmaxsegonoff",  // mistake,
-    "ddfs2envseg5level",
-    "ddfs1envmaxsegonoff",  // mistake,                     // 330  
-    "ddfs1envseg6level",
-    "ddfs2envmaxsegonoff",  // mistake,
-    "ddfs2envseg6level",
+    "s1ddfcutoff",
+    "s2ddfcutoff",
+    "s1ddfcutoffmod",
+    "s2ddfcutoffmod",
+    "s1ddfslope",
+    "s2ddfslope",
+    "s1ddfslopemod",
+    "s2ddfslopemod",
+    "s1ddfflatlevel",                                       // 280
+    "s2ddfflatlevel",
+    "s1ddfvelodep",
+    "s2ddfvelodep",
+    "s1ddfpresdep",
+    "s2ddfpresdep",
+    "s1ddfksdep",
+    "s2ddfksdep",
+    "s1ddfenvdep",
+    "s2ddfenvdep",
+    "s1ddfveloenvdep",                              // 290
+    "s2ddfveloenvdep",
+    "s1ddfddfonoff",
+    "s1ddfddfmodonoff",
+    "s1ddflfodep",
+    "s2ddfddfonoff",
+    "s2ddfddfmodonoff",
+    "s2ddflfodep",
+    "s1ddfenvseg1rate",
+    "s2ddfenvseg1rate",
+    "s1ddfenvseg2rate",                             // 300
+    "s2ddfenvseg2rate",
+    "s1ddfenvseg3rate",
+    "s2ddfenvseg3rate",
+    "s1ddfenvseg4rate",
+    "s2ddfenvseg4rate",
+    "s1ddfenvseg5rate",
+    "s2ddfenvseg5rate",
+    "s1ddfenvseg6rate",
+    "s2ddfenvseg6rate",
+    "s1ddfenvmaxsegonoff",  // mistake,                     // 310
+    "s1ddfenvseg1level",
+    "s2ddfenvmaxsegonoff",  // mistake,
+    "s2ddfenvseg1level",
+    "s1ddfenvmaxsegonoff",  // mistake,
+    "s1ddfenvseg2level",
+    "s2ddfenvmaxsegonoff",  // mistake,
+    "s2ddfenvseg2level",
+    "s1ddfenvmaxsegonoff",  // mistake,
+    "s1ddfenvseg3level",
+    "s2ddfenvmaxsegonoff",  // mistake,                     // 320
+    "s2ddfenvseg3level",
+    "s1ddfenvmaxsegonoff",  // mistake,
+    "s1ddfenvseg4level",
+    "s2ddfenvmaxsegonoff",  // mistake,
+    "s2ddfenvseg4level",
+    "s1ddfenvmaxsegonoff",  // mistake,
+    "s1ddfenvseg5level",
+    "s2ddfenvmaxsegonoff",  // mistake,
+    "s2ddfenvseg5level",
+    "s1ddfenvmaxsegonoff",  // mistake,                     // 330  
+    "s1ddfenvseg6level",
+    "s2ddfenvmaxsegonoff",  // mistake,
+    "s2ddfenvseg6level",
         
 /// DDA
         
-    "ddas1attackvelodep",   // mistake,
-    "ddas2attackvelodep",   // mistake,
-    "ddas1presdep",
-    "ddas2presdep",
-    "ddas1ksdep",
-    "ddas2ksdep",
-    "ddas1ddaonoff",                                                        // 340
-    "ddas1lfodep",
-    "ddas2ddaonoff",
-    "ddas2lfodep",
-    "ddas1attackvelrate",   // mistake,
-    "ddas2attackvelrate",   // mistake,
-    "ddas1releasevelrate",
-    "ddas2releasevelrate",
-    "ddas1ksrate",
-    "ddas2ksrate",
-    "ddas1envseg1modonoff",                                         // 350
-    "ddas1envseg1rate",
-    "ddas2envseg1modonoff",
-    "ddas2envseg1rate",
-    "ddas1envseg2modonoff",
-    "ddas1envseg2rate",
-    "ddas2envseg2modonoff",
-    "ddas2envseg2rate",
-    "ddas1envseg3modonoff",
-    "ddas1envseg3rate",
-    "ddas2envseg3modonoff",                                         // 360
-    "ddas2envseg3rate",
-    "ddas1envseg4modonoff",
-    "ddas1envseg4rate",
-    "ddas2envseg4modonoff",
-    "ddas2envseg4rate",
-    "ddas1envseg5modonoff",
-    "ddas1envseg5rate",
-    "ddas2envseg5modonoff",
-    "ddas2envseg5rate",
-    "ddas1envseg6modonoff",                                         // 370
-    "ddas1envseg6rate",
-    "ddas2envseg6modonoff",
-    "ddas2envseg6rate",
-    "ddas1envseg7modonoff",
-    "ddas1envseg7rate",
-    "ddas2envseg7modonoff",
-    "ddas2envseg7rate",
-    "ddas1envmaxsegonoff",  // mistake,
-    "ddas1envseg1level",
-    "ddas2envmaxsegonoff",  // mistake,                     // 380
-    "ddas2envseg1level",
-    "ddas1envmaxsegonoff",  // mistake,
-    "ddas1envseg2level",
-    "ddas2envmaxsegonoff",  // mistake,
-    "ddas2envseg2level",
-    "ddas1envmaxsegonoff",  // mistake,
-    "ddas1envseg3level",
-    "ddas2envmaxsegonoff",  // mistake,
-    "ddas2envseg3level",
-    "ddas1envmaxsegonoff",  // mistake,                     // 390
-    "ddas1envseg4level",
-    "ddas2envmaxsegonoff",  // mistake,
-    "ddas2envseg4level",
-    "ddas1envmaxsegonoff",  // mistake,
-    "ddas1envseg5level",
-    "ddas2envmaxsegonoff",  // mistake,
-    "ddas2envseg5level",
-    "ddas1envmaxsegonoff",  // mistake,
-    "ddas1envseg6level",
-    "ddas2envmaxsegonoff",  // mistake,
-    "ddas2envseg6level",
+    "s1ddaattackvelodep",   // mistake,
+    "s2ddaattackvelodep",   // mistake,
+    "s1ddapresdep",
+    "s2ddapresdep",
+    "s1ddaksdep",
+    "s2ddaksdep",
+    "s1ddaddaonoff",                                                        // 340
+    "s1ddalfodep",
+    "s2ddaddaonoff",
+    "s2ddalfodep",
+    "s1ddaattackvelrate",   // mistake,
+    "s2ddaattackvelrate",   // mistake,
+    "s1ddareleasevelrate",
+    "s2ddareleasevelrate",
+    "s1ddaksrate",
+    "s2ddaksrate",
+    "s1ddaenvseg1modonoff",                                         // 350
+    "s1ddaenvseg1rate",
+    "s2ddaenvseg1modonoff",
+    "s2ddaenvseg1rate",
+    "s1ddaenvseg2modonoff",
+    "s1ddaenvseg2rate",
+    "s2ddaenvseg2modonoff",
+    "s2ddaenvseg2rate",
+    "s1ddaenvseg3modonoff",
+    "s1ddaenvseg3rate",
+    "s2ddaenvseg3modonoff",                                         // 360
+    "s2ddaenvseg3rate",
+    "s1ddaenvseg4modonoff",
+    "s1ddaenvseg4rate",
+    "s2ddaenvseg4modonoff",
+    "s2ddaenvseg4rate",
+    "s1ddaenvseg5modonoff",
+    "s1ddaenvseg5rate",
+    "s2ddaenvseg5modonoff",
+    "s2ddaenvseg5rate",
+    "s1ddaenvseg6modonoff",                                         // 370
+    "s1ddaenvseg6rate",
+    "s2ddaenvseg6modonoff",
+    "s2ddaenvseg6rate",
+    "s1ddaenvseg7modonoff",
+    "s1ddaenvseg7rate",
+    "s2ddaenvseg7modonoff",
+    "s2ddaenvseg7rate",
+    "s1ddaenvmaxsegonoff",  // mistake,
+    "s1ddaenvseg1level",
+    "s2ddaenvmaxsegonoff",  // mistake,                     // 380
+    "s2ddaenvseg1level",
+    "s1ddaenvmaxsegonoff",  // mistake,
+    "s1ddaenvseg2level",
+    "s2ddaenvmaxsegonoff",  // mistake,
+    "s2ddaenvseg2level",
+    "s1ddaenvmaxsegonoff",  // mistake,
+    "s1ddaenvseg3level",
+    "s2ddaenvmaxsegonoff",  // mistake,
+    "s2ddaenvseg3level",
+    "s1ddaenvmaxsegonoff",  // mistake,                     // 390
+    "s1ddaenvseg4level",
+    "s2ddaenvmaxsegonoff",  // mistake,
+    "s2ddaenvseg4level",
+    "s1ddaenvmaxsegonoff",  // mistake,
+    "s1ddaenvseg5level",
+    "s2ddaenvmaxsegonoff",  // mistake,
+    "s2ddaenvseg5level",
+    "s1ddaenvmaxsegonoff",  // mistake,
+    "s1ddaenvseg6level",
+    "s2ddaenvmaxsegonoff",  // mistake,
+    "s2ddaenvseg6level",
         
 /// LFO
         
@@ -2945,17 +2808,17 @@ bulk.setSelected(true);
         
 /// KS
         
-    "kss1right",
-    "kss2right",
-    "kss1left",
-    "kss2left",
-    "kss1breakpoint",                                                       // 410
-    "kss2breakpoint",
+    "s1ksright",
+    "s2ksright",
+    "s1ksleft",
+    "s2ksleft",
+    "s1ksbreakpoint",                                                       // 410
+    "s2ksbreakpoint",
         
 /// DFT
         
     "dftonoff",
-    "dftcneg1level",        // mistake,
+    "dftc11level",        // mistake,
     "dftc0level",
     "dftc1level",
     "dftc2level",
@@ -3423,259 +3286,259 @@ bulk.setSelected(true);
 
     public static final String[] HARMONICS_PARAMETERS = new String[]
     {
-    "dhgs1harm1level",
-    "dhgs2harm1level",
-    "dhgs1harm2level",
-    "dhgs2harm2level",
-    "dhgs1harm3level",
-    "dhgs2harm3level",
-    "dhgs1harm4level",
-    "dhgs2harm4level",
-    "dhgs1harm5level",
-    "dhgs2harm5level",
-    "dhgs1harm6level",
-    "dhgs2harm6level",
-    "dhgs1harm7level",
-    "dhgs2harm7level",
-    "dhgs1harm8level",
-    "dhgs2harm8level",
-    "dhgs1harm9level",
-    "dhgs2harm9level",
-    "dhgs1harm10level",
-    "dhgs2harm10level",
-    "dhgs1harm11level",
-    "dhgs2harm11level",
-    "dhgs1harm12level",
-    "dhgs2harm12level",
-    "dhgs1harm13level",
-    "dhgs2harm13level",
-    "dhgs1harm14level",
-    "dhgs2harm14level",
-    "dhgs1harm15level",
-    "dhgs2harm15level",
-    "dhgs1harm16level",
-    "dhgs2harm16level",
-    "dhgs1harm17level",
-    "dhgs2harm17level",
-    "dhgs1harm18level",
-    "dhgs2harm18level",
-    "dhgs1harm19level",
-    "dhgs2harm19level",
-    "dhgs1harm20level",
-    "dhgs2harm20level",
-    "dhgs1harm21level",
-    "dhgs2harm21level",
-    "dhgs1harm22level",
-    "dhgs2harm22level",
-    "dhgs1harm23level",
-    "dhgs2harm23level",
-    "dhgs1harm24level",
-    "dhgs2harm24level",
-    "dhgs1harm25level",
-    "dhgs2harm25level",
-    "dhgs1harm26level",
-    "dhgs2harm26level",
-    "dhgs1harm27level",
-    "dhgs2harm27level",
-    "dhgs1harm28level",
-    "dhgs2harm28level",
-    "dhgs1harm29level",
-    "dhgs2harm29level",
-    "dhgs1harm30level",
-    "dhgs2harm30level",
-    "dhgs1harm31level",
-    "dhgs2harm31level",
-    "dhgs1harm32level",
-    "dhgs2harm32level",
-    "dhgs1harm33level",
-    "dhgs2harm33level",
-    "dhgs1harm34level",
-    "dhgs2harm34level",
-    "dhgs1harm35level",
-    "dhgs2harm35level",
-    "dhgs1harm36level",
-    "dhgs2harm36level",
-    "dhgs1harm37level",
-    "dhgs2harm37level",
-    "dhgs1harm38level",
-    "dhgs2harm38level",
-    "dhgs1harm39level",
-    "dhgs2harm39level",
-    "dhgs1harm40level",
-    "dhgs2harm40level",
-    "dhgs1harm41level",
-    "dhgs2harm41level",
-    "dhgs1harm42level",
-    "dhgs2harm42level",
-    "dhgs1harm43level",
-    "dhgs2harm43level",
-    "dhgs1harm44level",
-    "dhgs2harm44level",
-    "dhgs1harm45level",
-    "dhgs2harm45level",
-    "dhgs1harm46level",
-    "dhgs2harm46level",
-    "dhgs1harm47level",
-    "dhgs2harm47level",
-    "dhgs1harm48level",
-    "dhgs2harm48level",
-    "dhgs1harm49level",
-    "dhgs2harm49level",
-    "dhgs1harm50level",
-    "dhgs2harm50level",
-    "dhgs1harm51level",
-    "dhgs2harm51level",
-    "dhgs1harm52level",
-    "dhgs2harm52level",
-    "dhgs1harm53level",
-    "dhgs2harm53level",
-    "dhgs1harm54level",
-    "dhgs2harm54level",
-    "dhgs1harm55level",
-    "dhgs2harm55level",
-    "dhgs1harm56level",
-    "dhgs2harm56level",
-    "dhgs1harm57level",
-    "dhgs2harm57level",
-    "dhgs1harm58level",
-    "dhgs2harm58level",
-    "dhgs1harm59level",
-    "dhgs2harm59level",
-    "dhgs1harm60level",
-    "dhgs2harm60level",
-    "dhgs1harm61level",
-    "dhgs2harm61level",
-    "dhgs1harm62level",
-    "dhgs2harm62level",
-    "dhgs1harm63level",
-    "dhgs2harm63level",
-    "dhgs1harm2envselmodyn",
-    "dhgs1harm1envselmodyn",
-    "dhgs2harm2envselmodyn",
-    "dhgs2harm1envselmodyn",
-    "dhgs1harm4envselmodyn",
-    "dhgs1harm3envselmodyn",
-    "dhgs2harm4envselmodyn",
-    "dhgs2harm3envselmodyn",
-    "dhgs1harm6envselmodyn",
-    "dhgs1harm5envselmodyn",
-    "dhgs2harm6envselmodyn",
-    "dhgs2harm5envselmodyn",
-    "dhgs1harm8envselmodyn",
-    "dhgs1harm7envselmodyn",
-    "dhgs2harm8envselmodyn",
-    "dhgs2harm7envselmodyn",
-    "dhgs1harm10envselmodyn",
-    "dhgs1harm9envselmodyn",
-    "dhgs2harm10envselmodyn",
-    "dhgs2harm9envselmodyn",
-    "dhgs1harm12envselmodyn",
-    "dhgs1harm11envselmodyn",
-    "dhgs2harm12envselmodyn",
-    "dhgs2harm11envselmodyn",
-    "dhgs1harm14envselmodyn",
-    "dhgs1harm13envselmodyn",
-    "dhgs2harm14envselmodyn",
-    "dhgs2harm13envselmodyn",
-    "dhgs1harm16envselmodyn",
-    "dhgs1harm15envselmodyn",
-    "dhgs2harm16envselmodyn",
-    "dhgs2harm15envselmodyn",
-    "dhgs1harm18envselmodyn",
-    "dhgs1harm17envselmodyn",
-    "dhgs2harm18envselmodyn",
-    "dhgs2harm17envselmodyn",
-    "dhgs1harm20envselmodyn",
-    "dhgs1harm19envselmodyn",
-    "dhgs2harm20envselmodyn",
-    "dhgs2harm19envselmodyn",
-    "dhgs1harm22envselmodyn",
-    "dhgs1harm21envselmodyn",
-    "dhgs2harm22envselmodyn",
-    "dhgs2harm21envselmodyn",
-    "dhgs1harm24envselmodyn",
-    "dhgs1harm23envselmodyn",
-    "dhgs2harm24envselmodyn",
-    "dhgs2harm23envselmodyn",
-    "dhgs1harm26envselmodyn",
-    "dhgs1harm25envselmodyn",
-    "dhgs2harm26envselmodyn",
-    "dhgs2harm25envselmodyn",
-    "dhgs1harm28envselmodyn",
-    "dhgs1harm27envselmodyn",
-    "dhgs2harm28envselmodyn",
-    "dhgs2harm27envselmodyn",
-    "dhgs1harm30envselmodyn",
-    "dhgs1harm29envselmodyn",
-    "dhgs2harm30envselmodyn",
-    "dhgs2harm29envselmodyn",
-    "dhgs1harm32envselmodyn",
-    "dhgs1harm31envselmodyn",
-    "dhgs2harm32envselmodyn",
-    "dhgs2harm31envselmodyn",
-    "dhgs1harm34envselmodyn",
-    "dhgs1harm33envselmodyn",
-    "dhgs2harm34envselmodyn",
-    "dhgs2harm33envselmodyn",
-    "dhgs1harm36envselmodyn",
-    "dhgs1harm35envselmodyn",
-    "dhgs2harm36envselmodyn",
-    "dhgs2harm35envselmodyn",
-    "dhgs1harm38envselmodyn",
-    "dhgs1harm37envselmodyn",
-    "dhgs2harm38envselmodyn",
-    "dhgs2harm37envselmodyn",
-    "dhgs1harm40envselmodyn",
-    "dhgs1harm39envselmodyn",
-    "dhgs2harm40envselmodyn",
-    "dhgs2harm39envselmodyn",
-    "dhgs1harm42envselmodyn",
-    "dhgs1harm41envselmodyn",
-    "dhgs2harm42envselmodyn",
-    "dhgs2harm41envselmodyn",
-    "dhgs1harm44envselmodyn",
-    "dhgs1harm43envselmodyn",
-    "dhgs2harm44envselmodyn",
-    "dhgs2harm43envselmodyn",
-    "dhgs1harm46envselmodyn",
-    "dhgs1harm45envselmodyn",
-    "dhgs2harm46envselmodyn",
-    "dhgs2harm45envselmodyn",
-    "dhgs1harm48envselmodyn",
-    "dhgs1harm47envselmodyn",
-    "dhgs2harm48envselmodyn",
-    "dhgs2harm47envselmodyn",
-    "dhgs1harm50envselmodyn",
-    "dhgs1harm49envselmodyn",
-    "dhgs2harm50envselmodyn",
-    "dhgs2harm49envselmodyn",
-    "dhgs1harm52envselmodyn",
-    "dhgs1harm51envselmodyn",
-    "dhgs2harm52envselmodyn",
-    "dhgs2harm51envselmodyn",
-    "dhgs1harm54envselmodyn",
-    "dhgs1harm53envselmodyn",
-    "dhgs2harm54envselmodyn",
-    "dhgs2harm53envselmodyn",
-    "dhgs1harm56envselmodyn",
-    "dhgs1harm55envselmodyn",
-    "dhgs2harm56envselmodyn",
-    "dhgs2harm55envselmodyn",
-    "dhgs1harm58envselmodyn",
-    "dhgs1harm57envselmodyn",
-    "dhgs2harm58envselmodyn",
-    "dhgs2harm57envselmodyn",
-    "dhgs1harm60envselmodyn",
-    "dhgs1harm59envselmodyn",
-    "dhgs2harm60envselmodyn",
-    "dhgs2harm59envselmodyn",
-    "dhgs1harm62envselmodyn",
-    "dhgs1harm61envselmodyn",
-    "dhgs2harm62envselmodyn",
-    "dhgs2harm61envselmodyn",
-    "dhgs1harm63envselmodyn",
-    "dhgs2harm63envselmodyn",
-    "dhgs2harm63envselmodyn"
+    "s1dhgharm1level",
+    "s2dhgharm1level",
+    "s1dhgharm2level",
+    "s2dhgharm2level",
+    "s1dhgharm3level",
+    "s2dhgharm3level",
+    "s1dhgharm4level",
+    "s2dhgharm4level",
+    "s1dhgharm5level",
+    "s2dhgharm5level",
+    "s1dhgharm6level",
+    "s2dhgharm6level",
+    "s1dhgharm7level",
+    "s2dhgharm7level",
+    "s1dhgharm8level",
+    "s2dhgharm8level",
+    "s1dhgharm9level",
+    "s2dhgharm9level",
+    "s1dhgharm10level",
+    "s2dhgharm10level",
+    "s1dhgharm11level",
+    "s2dhgharm11level",
+    "s1dhgharm12level",
+    "s2dhgharm12level",
+    "s1dhgharm13level",
+    "s2dhgharm13level",
+    "s1dhgharm14level",
+    "s2dhgharm14level",
+    "s1dhgharm15level",
+    "s2dhgharm15level",
+    "s1dhgharm16level",
+    "s2dhgharm16level",
+    "s1dhgharm17level",
+    "s2dhgharm17level",
+    "s1dhgharm18level",
+    "s2dhgharm18level",
+    "s1dhgharm19level",
+    "s2dhgharm19level",
+    "s1dhgharm20level",
+    "s2dhgharm20level",
+    "s1dhgharm21level",
+    "s2dhgharm21level",
+    "s1dhgharm22level",
+    "s2dhgharm22level",
+    "s1dhgharm23level",
+    "s2dhgharm23level",
+    "s1dhgharm24level",
+    "s2dhgharm24level",
+    "s1dhgharm25level",
+    "s2dhgharm25level",
+    "s1dhgharm26level",
+    "s2dhgharm26level",
+    "s1dhgharm27level",
+    "s2dhgharm27level",
+    "s1dhgharm28level",
+    "s2dhgharm28level",
+    "s1dhgharm29level",
+    "s2dhgharm29level",
+    "s1dhgharm30level",
+    "s2dhgharm30level",
+    "s1dhgharm31level",
+    "s2dhgharm31level",
+    "s1dhgharm32level",
+    "s2dhgharm32level",
+    "s1dhgharm33level",
+    "s2dhgharm33level",
+    "s1dhgharm34level",
+    "s2dhgharm34level",
+    "s1dhgharm35level",
+    "s2dhgharm35level",
+    "s1dhgharm36level",
+    "s2dhgharm36level",
+    "s1dhgharm37level",
+    "s2dhgharm37level",
+    "s1dhgharm38level",
+    "s2dhgharm38level",
+    "s1dhgharm39level",
+    "s2dhgharm39level",
+    "s1dhgharm40level",
+    "s2dhgharm40level",
+    "s1dhgharm41level",
+    "s2dhgharm41level",
+    "s1dhgharm42level",
+    "s2dhgharm42level",
+    "s1dhgharm43level",
+    "s2dhgharm43level",
+    "s1dhgharm44level",
+    "s2dhgharm44level",
+    "s1dhgharm45level",
+    "s2dhgharm45level",
+    "s1dhgharm46level",
+    "s2dhgharm46level",
+    "s1dhgharm47level",
+    "s2dhgharm47level",
+    "s1dhgharm48level",
+    "s2dhgharm48level",
+    "s1dhgharm49level",
+    "s2dhgharm49level",
+    "s1dhgharm50level",
+    "s2dhgharm50level",
+    "s1dhgharm51level",
+    "s2dhgharm51level",
+    "s1dhgharm52level",
+    "s2dhgharm52level",
+    "s1dhgharm53level",
+    "s2dhgharm53level",
+    "s1dhgharm54level",
+    "s2dhgharm54level",
+    "s1dhgharm55level",
+    "s2dhgharm55level",
+    "s1dhgharm56level",
+    "s2dhgharm56level",
+    "s1dhgharm57level",
+    "s2dhgharm57level",
+    "s1dhgharm58level",
+    "s2dhgharm58level",
+    "s1dhgharm59level",
+    "s2dhgharm59level",
+    "s1dhgharm60level",
+    "s2dhgharm60level",
+    "s1dhgharm61level",
+    "s2dhgharm61level",
+    "s1dhgharm62level",
+    "s2dhgharm62level",
+    "s1dhgharm63level",
+    "s2dhgharm63level",
+    "s1dhgharm2envselmodyn",
+    "s1dhgharm1envselmodyn",
+    "s2dhgharm2envselmodyn",
+    "s2dhgharm1envselmodyn",
+    "s1dhgharm4envselmodyn",
+    "s1dhgharm3envselmodyn",
+    "s2dhgharm4envselmodyn",
+    "s2dhgharm3envselmodyn",
+    "s1dhgharm6envselmodyn",
+    "s1dhgharm5envselmodyn",
+    "s2dhgharm6envselmodyn",
+    "s2dhgharm5envselmodyn",
+    "s1dhgharm8envselmodyn",
+    "s1dhgharm7envselmodyn",
+    "s2dhgharm8envselmodyn",
+    "s2dhgharm7envselmodyn",
+    "s1dhgharm10envselmodyn",
+    "s1dhgharm9envselmodyn",
+    "s2dhgharm10envselmodyn",
+    "s2dhgharm9envselmodyn",
+    "s1dhgharm12envselmodyn",
+    "s1dhgharm11envselmodyn",
+    "s2dhgharm12envselmodyn",
+    "s2dhgharm11envselmodyn",
+    "s1dhgharm14envselmodyn",
+    "s1dhgharm13envselmodyn",
+    "s2dhgharm14envselmodyn",
+    "s2dhgharm13envselmodyn",
+    "s1dhgharm16envselmodyn",
+    "s1dhgharm15envselmodyn",
+    "s2dhgharm16envselmodyn",
+    "s2dhgharm15envselmodyn",
+    "s1dhgharm18envselmodyn",
+    "s1dhgharm17envselmodyn",
+    "s2dhgharm18envselmodyn",
+    "s2dhgharm17envselmodyn",
+    "s1dhgharm20envselmodyn",
+    "s1dhgharm19envselmodyn",
+    "s2dhgharm20envselmodyn",
+    "s2dhgharm19envselmodyn",
+    "s1dhgharm22envselmodyn",
+    "s1dhgharm21envselmodyn",
+    "s2dhgharm22envselmodyn",
+    "s2dhgharm21envselmodyn",
+    "s1dhgharm24envselmodyn",
+    "s1dhgharm23envselmodyn",
+    "s2dhgharm24envselmodyn",
+    "s2dhgharm23envselmodyn",
+    "s1dhgharm26envselmodyn",
+    "s1dhgharm25envselmodyn",
+    "s2dhgharm26envselmodyn",
+    "s2dhgharm25envselmodyn",
+    "s1dhgharm28envselmodyn",
+    "s1dhgharm27envselmodyn",
+    "s2dhgharm28envselmodyn",
+    "s2dhgharm27envselmodyn",
+    "s1dhgharm30envselmodyn",
+    "s1dhgharm29envselmodyn",
+    "s2dhgharm30envselmodyn",
+    "s2dhgharm29envselmodyn",
+    "s1dhgharm32envselmodyn",
+    "s1dhgharm31envselmodyn",
+    "s2dhgharm32envselmodyn",
+    "s2dhgharm31envselmodyn",
+    "s1dhgharm34envselmodyn",
+    "s1dhgharm33envselmodyn",
+    "s2dhgharm34envselmodyn",
+    "s2dhgharm33envselmodyn",
+    "s1dhgharm36envselmodyn",
+    "s1dhgharm35envselmodyn",
+    "s2dhgharm36envselmodyn",
+    "s2dhgharm35envselmodyn",
+    "s1dhgharm38envselmodyn",
+    "s1dhgharm37envselmodyn",
+    "s2dhgharm38envselmodyn",
+    "s2dhgharm37envselmodyn",
+    "s1dhgharm40envselmodyn",
+    "s1dhgharm39envselmodyn",
+    "s2dhgharm40envselmodyn",
+    "s2dhgharm39envselmodyn",
+    "s1dhgharm42envselmodyn",
+    "s1dhgharm41envselmodyn",
+    "s2dhgharm42envselmodyn",
+    "s2dhgharm41envselmodyn",
+    "s1dhgharm44envselmodyn",
+    "s1dhgharm43envselmodyn",
+    "s2dhgharm44envselmodyn",
+    "s2dhgharm43envselmodyn",
+    "s1dhgharm46envselmodyn",
+    "s1dhgharm45envselmodyn",
+    "s2dhgharm46envselmodyn",
+    "s2dhgharm45envselmodyn",
+    "s1dhgharm48envselmodyn",
+    "s1dhgharm47envselmodyn",
+    "s2dhgharm48envselmodyn",
+    "s2dhgharm47envselmodyn",
+    "s1dhgharm50envselmodyn",
+    "s1dhgharm49envselmodyn",
+    "s2dhgharm50envselmodyn",
+    "s2dhgharm49envselmodyn",
+    "s1dhgharm52envselmodyn",
+    "s1dhgharm51envselmodyn",
+    "s2dhgharm52envselmodyn",
+    "s2dhgharm51envselmodyn",
+    "s1dhgharm54envselmodyn",
+    "s1dhgharm53envselmodyn",
+    "s2dhgharm54envselmodyn",
+    "s2dhgharm53envselmodyn",
+    "s1dhgharm56envselmodyn",
+    "s1dhgharm55envselmodyn",
+    "s2dhgharm56envselmodyn",
+    "s2dhgharm55envselmodyn",
+    "s1dhgharm58envselmodyn",
+    "s1dhgharm57envselmodyn",
+    "s2dhgharm58envselmodyn",
+    "s2dhgharm57envselmodyn",
+    "s1dhgharm60envselmodyn",
+    "s1dhgharm59envselmodyn",
+    "s2dhgharm60envselmodyn",
+    "s2dhgharm59envselmodyn",
+    "s1dhgharm62envselmodyn",
+    "s1dhgharm61envselmodyn",
+    "s2dhgharm62envselmodyn",
+    "s2dhgharm61envselmodyn",
+    "s1dhgharm63envselmodyn",
+    "s2dhgharm63envselmodyn",
+    "s2dhgharm63envselmodyn"
     };
 
     public int loadData(byte[] data, int pos, int start, int end)
@@ -3742,7 +3605,6 @@ bulk.setSelected(true);
         {
         for(int i = start; i < end; i++)
             {
-//              System.err.println("" + pos +  "(" + data[pos] + "): 0 - 7");
             model.set(parameters[i], data[pos++]);
             }
         return pos;
@@ -3755,7 +3617,6 @@ bulk.setSelected(true);
             {
             for(int b = 0; b < bit.length; b++)
                 {
-//                      System.err.println("" + pos + "(" + data[pos] + "): " + bit[b] + " - " + (bit[b] + len[b]));
                 model.set(parameters[i], (data[pos] >>> bit[b]) & (255 >>> (8 - len[b])));
                 i++;
                 }
@@ -3784,7 +3645,6 @@ bulk.setSelected(true);
                         
             for(int b = 0; b < bit.length; b++)
                 {
-//                      System.err.println("" + pos + "(" + data[pos] + "): " + bit[b] + " - " + (bit[b] + len[b]));
                 int val = (data[pos] >>> bit[b]) & (255 >>> (8 - len[b]));
                 if (b == 0)
                     {
@@ -3812,44 +3672,44 @@ bulk.setSelected(true);
 ///// of data that all have the same pattern to which we can apply loadData and unloadData.
 
     public static final int volume = 8;
-    public static final int basics1pedalassign = 16;
+    public static final int s1basicpedalassign = 16;
     public static final int portamentosw = 20;
     public static final int mode = 22;
-    public static final int dfgs1coarse = 24;
-    public static final int dfgs1key = 28;
-    public static final int dfgs1envdep = 32;
-    public static final int dfgs1envloop = 44;
-    public static final int dfgs1envrateseg1 = 48;
+    public static final int s1dfgcoarse = 24;
+    public static final int s1dfgkey = 28;
+    public static final int s1dfgenvdep = 32;
+    public static final int s1dfgenvloop = 44;
+    public static final int s1dfgenvrateseg1 = 48;
 
 // harmonics go here -- we handle them specially
 
-    public static final int dhgs1velodep = 70;
-    public static final int dhgs1env1onoff = 78;
-    public static final int dhgs1modonoff = 94;
-    public static final int dhgs1rangefrom = 98;
-    public static final int dhgs1oddmodonoff = 102;
-    public static final int dhgs1allmodonoff = 118;
-    public static final int dhgs1angle = 122;
-    public static final int dhgs1shadowonoff = 126;
-    public static final int dhgs1env1maxseg1onoff = 127;
-    public static final int dhgs2shadowonoff = 129;
-    public static final int dhgs2env1maxseg1onoff = 130;
-    public static final int dhgs1env1maxseg2onoff = 132;
-    public static final int dhgs1env1seg1rate = 152;
-    public static final int dhgs1env2maxseg1onoff = 164;
-    public static final int dhgs1env2seg1rate = 188;
-    public static final int dhgs1env3maxseg1onoff = 200;
-    public static final int dhgs1env3seg1rate = 224;
-    public static final int dhgs1env4maxseg1onoff = 236;
-    public static final int dhgs1env4seg1rate = 260;
-    public static final int ddfs1ddfonoff = 292;
-    public static final int ddfs1envseg1rate = 298;
-    public static final int ddfs1envmaxseg1onoff = 310;
-    public static final int ddas1attackvelodep = 334;
-    public static final int ddas1ddaonoff = 340;
-    public static final int ddas1attackvelrate = 344;
-    public static final int ddas1envseg1modonoff = 350;
-    public static final int ddas1envmaxseg1onoff = 378;
+    public static final int s1dhgvelodep = 70;
+    public static final int s1dhgenv1onoff = 78;
+    public static final int s1dhgmodonoff = 94;
+    public static final int s1dhgrangefrom = 98;
+    public static final int s1dhgoddmodonoff = 102;
+    public static final int s1dhgallmodonoff = 118;
+    public static final int s1dhgangle = 122;
+    public static final int s1dhgshadowonoff = 126;
+    public static final int s1dhgenv1maxseg1onoff = 127;
+    public static final int s2dhgshadowonoff = 129;
+    public static final int s2dhgenv1maxseg1onoff = 130;
+    public static final int s1dhgenv1maxseg2onoff = 132;
+    public static final int s1dhgenv1seg1rate = 152;
+    public static final int s1dhgenv2maxseg1onoff = 164;
+    public static final int s1dhgenv2seg1rate = 188;
+    public static final int s1dhgenv3maxseg1onoff = 200;
+    public static final int s1dhgenv3seg1rate = 224;
+    public static final int s1dhgenv4maxseg1onoff = 236;
+    public static final int s1dhgenv4seg1rate = 260;
+    public static final int s1ddfddfonoff = 292;
+    public static final int s1ddfenvseg1rate = 298;
+    public static final int s1ddfenvmaxseg1onoff = 310;
+    public static final int s1ddaattackvelodep = 334;
+    public static final int s1ddaddaonoff = 340;
+    public static final int s1ddaattackvelrate = 344;
+    public static final int s1ddaenvseg1modonoff = 350;
+    public static final int s1ddaenvmaxseg1onoff = 378;
 
 // some zeros go here!
 

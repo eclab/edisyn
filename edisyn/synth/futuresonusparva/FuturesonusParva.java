@@ -250,7 +250,7 @@ public class FuturesonusParva extends Synth
     public JComponent addOscillator(int osc, Color color)
         {
         Category category  = new Category(this, "Oscillator " + osc, color);
-        category.makePasteable("osc");
+        category.makePasteable("osc" + osc);
                         
         JComponent comp;
         String[] params;
@@ -315,7 +315,7 @@ public class FuturesonusParva extends Synth
         Category category  = new Category(this, "Envelope " + env + 
                 (env == 1 ? " (Amplitude)" : 
                 (env == 2 ? " (Filter Cutoff)" : "")), color);
-        category.makePasteable("env");
+        category.makePasteable("env" + env);
                         
         JComponent comp;
         String[] params;
@@ -380,7 +380,7 @@ public class FuturesonusParva extends Synth
     public JComponent addLFO(int lfo, Color color)
         {
         Category category  = new Category(this, "LFO " + lfo, color);
-        category.makePasteable("lfo");
+        category.makePasteable("lfo" + lfo);
                         
         JComponent comp;
         String[] params;
@@ -765,7 +765,7 @@ public class FuturesonusParva extends Synth
                 
         if (toWorkingMemory)
             {
-            System.err.println("ERROR: request to send to working memory, that shouldn't happen for the time being");
+            System.err.println("Warning (FuturesonusParva): request to send to working memory, that shouldn't happen for the time being");
             return new byte[0];
             }
                   

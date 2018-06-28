@@ -104,6 +104,7 @@ public class KorgMicroKorg extends Synth
                 }
                                 
             soundPanel.add(vbox, BorderLayout.CENTER);
+            ((SynthPanel)soundPanel).makePasteable("timbre" + timbre);
             addTab(timbre == 3 ? "Vocoder" : "Timbre " + timbre, soundPanel);
             }
                         
@@ -227,7 +228,6 @@ public class KorgMicroKorg extends Synth
                     switch (model.get(key, 0))
                         {
                         case 0:
-                            //addTab("Timbre 1", panels[0]);
                             insertTab("Timbre 1", panels[0], 1);
                             break;
                         case 1:
@@ -488,7 +488,7 @@ public class KorgMicroKorg extends Synth
     public JComponent addTimbreGeneral(int timbre, Color color)
         {
         Category category  = new Category(this, "General", color);
-        category.makePasteable("timbre");
+        category.makePasteable("timbre" + timbre);
                         
         JComponent comp;
         String[] params;
@@ -515,7 +515,7 @@ public class KorgMicroKorg extends Synth
     public JComponent addPitch(int timbre, Color color)
         {
         Category category  = new Category(this, "Pitch", color);
-        category.makePasteable("timbre");
+        category.makePasteable("timbre" + timbre);
                        
         JComponent comp;
         String[] params;
@@ -547,7 +547,7 @@ public class KorgMicroKorg extends Synth
     public JComponent addOsc1(int timbre, Color color)
         {
         Category category  = new Category(this, "Oscillator 1", color);
-        category.makePasteable("timbre");
+        category.makePasteable("timbre" + timbre);
                         
         JComponent comp;
         String[] params;
@@ -582,7 +582,7 @@ public class KorgMicroKorg extends Synth
     public JComponent addOsc2(int timbre, Color color)
         {
         Category category  = new Category(this, (timbre == 3 ? "Audio In" : "Oscillator 2"), color);
-        category.makePasteable("timbre");
+        category.makePasteable("timbre" + timbre);
                         
         JComponent comp;
         String[] params;
@@ -628,7 +628,7 @@ public class KorgMicroKorg extends Synth
     public JComponent addMixer(int timbre, Color color)
         {
         Category category  = new Category(this, "Mixer", color);
-        category.makePasteable("timbre");
+        category.makePasteable("timbre" + timbre);
                         
         JComponent comp;
         String[] params;
@@ -651,7 +651,7 @@ public class KorgMicroKorg extends Synth
     public JComponent addFilter(int timbre, Color color)
         {
         Category category  = new Category(this, "Filter", color);
-        category.makePasteable("timbre");
+        category.makePasteable("timbre" + timbre);
                         
         JComponent comp;
         String[] params;
@@ -725,7 +725,7 @@ public class KorgMicroKorg extends Synth
     public JComponent addAmplifier(int timbre, Color color)
         {
         Category category  = new Category(this, "Amplifier", color);
-        category.makePasteable("timbre");
+        category.makePasteable("timbre" + timbre);
                         
         JComponent comp;
         String[] params;
@@ -777,7 +777,7 @@ public class KorgMicroKorg extends Synth
     public JComponent addEnvelope(int timbre, int envelope, Color color)
         {
         Category category  = new Category(this, (envelope == 1 ? "Filter Envelope" : "Amplifier Envelope"), color);
-        category.makePasteable("timbre");
+        category.makePasteable("timbre" + timbre + "env" + envelope);
                         
         JComponent comp;
         String[] params;
@@ -786,24 +786,24 @@ public class KorgMicroKorg extends Synth
         
         if (timbre != 3 || envelope != 1)
             {
-            comp = new LabelledDial("Attack", this, "timbreenv" + timbre + "" + envelope + "attack", color, 0, 127);
+            comp = new LabelledDial("Attack", this, "timbre" + timbre + "env" + envelope + "attack", color, 0, 127);
             hbox.add(comp);
 
-            comp = new LabelledDial("Decay", this, "timbreenv" + timbre + "" + envelope + "decay", color, 0, 127);
+            comp = new LabelledDial("Decay", this, "timbre" + timbre + "env" + envelope + "decay", color, 0, 127);
             hbox.add(comp);
             }
 
-        comp = new LabelledDial("Sustain", this, "timbreenv" + timbre + "" + envelope + "sustain", color, 0, 127);
+        comp = new LabelledDial("Sustain", this, "timbre" + timbre + "env" + envelope + "sustain", color, 0, 127);
         hbox.add(comp);
 
         if (timbre != 3 || envelope != 1)
             {
-            comp = new LabelledDial("Release", this, "timbreenv" + timbre + "" + envelope + "release", color, 0, 127);
+            comp = new LabelledDial("Release", this, "timbre" + timbre + "env" + envelope + "release", color, 0, 127);
             hbox.add(comp);
 
             comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                new String[] { null, "timbreenv" + timbre + "" + envelope + "attack", "timbreenv" + timbre + "" + envelope + "decay", null,"timbreenv" + timbre + "" + envelope + "release" },
-                new String[] { null, null, "timbreenv" + timbre + "" + envelope + "sustain", "timbreenv" + timbre + "" + envelope + "sustain", null },
+                new String[] { null, "timbre" + timbre + "env" + envelope + "attack", "timbre" + timbre + "env" + envelope + "decay", null,"timbre" + timbre + "env" + envelope + "release" },
+                new String[] { null, null, "timbre" + timbre + "env" + envelope + "sustain", "timbre" + timbre + "env" + envelope + "sustain", null },
                 new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
                 new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
             hbox.addLast(comp);
@@ -816,7 +816,7 @@ public class KorgMicroKorg extends Synth
     public JComponent addLFO(int timbre, int lfo, Color color)
         {
         Category category  = new Category(this, "LFO " + lfo, color);
-        category.makePasteable("timbre");
+        category.makePasteable("timbre" + timbre + "lfo" + lfo);
                         
         JComponent comp;
         String[] params;
@@ -824,22 +824,22 @@ public class KorgMicroKorg extends Synth
         VBox vbox = new VBox();
         
         params = LFO_WAVES;
-        comp = new Chooser("Wave", this, "timbrelfo" + timbre + "" + lfo + "wave", params);
+        comp = new Chooser("Wave", this, "timbre" + timbre + "lfo" + lfo + "wave", params);
         vbox.add(comp);
 
         params = LFO_KEY_SYNC;
-        comp = new Chooser("Key Sync", this, "timbrelfo" + timbre + "" + lfo + "keysync", params);
+        comp = new Chooser("Key Sync", this, "timbre" + timbre + "lfo" + lfo + "keysync", params);
         vbox.add(comp);
         hbox.add(vbox);
 
-        comp = new CheckBox("Tempo Sync", this, "timbrelfo" + timbre + "" + lfo + "temposync");
+        comp = new CheckBox("Tempo Sync", this, "timbre" + timbre + "lfo" + lfo + "temposync");
         ((CheckBox)comp).addToWidth(2);
         hbox.add(comp);        
 
-        comp = new LabelledDial("Frequency", this, "timbrelfo" + timbre + "" + lfo + "frequency", color, 0, 127);
+        comp = new LabelledDial("Frequency", this, "timbre" + timbre + "lfo" + lfo + "frequency", color, 0, 127);
         hbox.add(comp);
 
-        comp = new LabelledDial("Sync Note", this, "timbrelfo" + timbre + "" + lfo + "syncnote", color, 0, 14)
+        comp = new LabelledDial("Sync Note", this, "timbre" + timbre + "lfo" + lfo + "syncnote", color, 0, 14)
             {
             public String map(int val)
                 {
@@ -920,8 +920,8 @@ public class KorgMicroKorg extends Synth
     public JComponent addPatch(int timbre, Color color)
         {
         Category category  = new Category(this, "Patches", color);
-        category.makePasteable("timbre");
-        category.makeDistributable("timbre");
+        category.makePasteable("timbre" + timbre);
+        category.makeDistributable("timbre" + timbre);
                         
         JComponent comp;
         String[] params;
@@ -1103,26 +1103,26 @@ public class KorgMicroKorg extends Synth
                 model.set("timbre" + i + "amppanpot", data[offset + 26]);
                 model.set("timbre" + i + "ampdistortion", data[offset + 27] & 1);
                 model.set("timbre" + i + "ampkeyboardtrack", data[offset + 29]);
-                model.set("timbreenv" + i + "1" + "attack", data[offset + 30]);
-                model.set("timbreenv" + i + "1" + "decay", data[offset + 31]);
-                model.set("timbreenv" + i + "1" + "sustain", data[offset + 32]);
-                model.set("timbreenv" + i + "1" + "release", data[offset + 33]);
-                model.set("timbreenv" + i + "2" + "attack", data[offset + 34]);
-                model.set("timbreenv" + i + "2" + "decay", data[offset + 35]);
-                model.set("timbreenv" + i + "2" + "sustain", data[offset + 36]);
-                model.set("timbreenv" + i + "2" + "release", data[offset + 37]);
-                model.set("timbrelfo" + i + "1" + "keysync", (data[offset + 38] >>> 4) & 3);
-                model.set("timbrelfo" + i + "1" + "wave", (data[offset + 38]) & 3);
-                model.set("timbrelfo" + i + "1" + "frequency", data[offset + 39]);
-                model.set("timbrelfo" + i + "1" + "temposync", (data[offset + 40] >>> 7) & 1);
+                model.set("timbre" + i + "env1" + "attack", data[offset + 30]);
+                model.set("timbre" + i + "env1" + "decay", data[offset + 31]);
+                model.set("timbre" + i + "env1" + "sustain", data[offset + 32]);
+                model.set("timbre" + i + "env1" + "release", data[offset + 33]);
+                model.set("timbre" + i + "env2" + "attack", data[offset + 34]);
+                model.set("timbre" + i + "env2" + "decay", data[offset + 35]);
+                model.set("timbre" + i + "env2" + "sustain", data[offset + 36]);
+                model.set("timbre" + i + "env2" + "release", data[offset + 37]);
+                model.set("timbre" + i + "lfo1" + "keysync", (data[offset + 38] >>> 4) & 3);
+                model.set("timbre" + i + "lfo1" + "wave", (data[offset + 38]) & 3);
+                model.set("timbre" + i + "lfo1" + "frequency", data[offset + 39]);
+                model.set("timbre" + i + "lfo1" + "temposync", (data[offset + 40] >>> 7) & 1);
                 // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                model.set("timbrelfo" + i + "1" + "syncnote", (data[offset + 40]) & 15);
-                model.set("timbrelfo" + i + "2" + "keysync", (data[offset + 41] >>> 4) & 3);
-                model.set("timbrelfo" + i + "2" + "wave", (data[offset + 41]) & 3);
-                model.set("timbrelfo" + i + "2" + "frequency", data[offset + 42]);
-                model.set("timbrelfo" + i + "2" + "temposync", (data[offset + 43] >>> 7) & 1);
+                model.set("timbre" + i + "lfo1" + "syncnote", (data[offset + 40]) & 15);
+                model.set("timbre" + i + "lfo2" + "keysync", (data[offset + 41] >>> 4) & 3);
+                model.set("timbre" + i + "lfo2" + "wave", (data[offset + 41]) & 3);
+                model.set("timbre" + i + "lfo2" + "frequency", data[offset + 42]);
+                model.set("timbre" + i + "lfo2" + "temposync", (data[offset + 43] >>> 7) & 1);
                 // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                model.set("timbrelfo" + i + "2" + "syncnote", (data[offset + 43]) & 15);
+                model.set("timbre" + i + "lfo2" + "syncnote", (data[offset + 43]) & 15);
                 for(int j = 1; j <= 4; j++)
                     {
                     // documentation says this is bits 4...7 but this has to be wrong, since the values only go 0...7
@@ -1167,30 +1167,30 @@ public class KorgMicroKorg extends Synth
             model.set("timbre" + i + "ampdirectlevel", data[offset + 28]);
             model.set("timbre" + i + "ampdistortion", data[offset + 29] & 1);
             model.set("timbre" + i + "ampkeyboardtrack", data[offset + 31]);
-            model.set("timbreenv" + i + "1" + "sustain", data[offset + 34]);
-            model.set("timbreenv" + i + "2" + "attack", data[offset + 36]);
-            model.set("timbreenv" + i + "2" + "decay", data[offset + 37]);
-            model.set("timbreenv" + i + "2" + "sustain", data[offset + 38]);
-            model.set("timbreenv" + i + "2" + "release", data[offset + 39]);
-            model.set("timbrelfo" + i + "1" + "keysync", (data[offset + 40] >>> 4) & 3);
-            model.set("timbrelfo" + i + "1" + "wave", (data[offset + 40]) & 3);
-            model.set("timbrelfo" + i + "1" + "frequency", data[offset + 41]);
-            model.set("timbrelfo" + i + "1" + "temposync", (data[offset + 42] >>> 7) & 1);
+            model.set("timbre" + i + "env1" + "sustain", data[offset + 34]);
+            model.set("timbre" + i + "env2" + "attack", data[offset + 36]);
+            model.set("timbre" + i + "env2" + "decay", data[offset + 37]);
+            model.set("timbre" + i + "env2" + "sustain", data[offset + 38]);
+            model.set("timbre" + i + "env2" + "release", data[offset + 39]);
+            model.set("timbre" + i + "lfo1" + "keysync", (data[offset + 40] >>> 4) & 3);
+            model.set("timbre" + i + "lfo1" + "wave", (data[offset + 40]) & 3);
+            model.set("timbre" + i + "lfo1" + "frequency", data[offset + 41]);
+            model.set("timbre" + i + "lfo1" + "temposync", (data[offset + 42] >>> 7) & 1);
             // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-            model.set("timbrelfo" + i + "1" + "syncnote", (data[offset + 42]) & 15);
-            model.set("timbrelfo" + i + "2" + "keysync", (data[offset + 43] >>> 4) & 3);
-            model.set("timbrelfo" + i + "2" + "wave", (data[offset + 43]) & 3);
-            model.set("timbrelfo" + i + "2" + "frequency", data[offset + 44]);
-            model.set("timbrelfo" + i + "2" + "temposync", (data[offset + 45] >>> 7) & 1);
+            model.set("timbre" + i + "lfo1" + "syncnote", (data[offset + 42]) & 15);
+            model.set("timbre" + i + "lfo2" + "keysync", (data[offset + 43] >>> 4) & 3);
+            model.set("timbre" + i + "lfo2" + "wave", (data[offset + 43]) & 3);
+            model.set("timbre" + i + "lfo2" + "frequency", data[offset + 44]);
+            model.set("timbre" + i + "lfo2" + "temposync", (data[offset + 45] >>> 7) & 1);
             // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-            model.set("timbrelfo" + i + "2" + "syncnote", (data[offset + 45]) & 15);
+            model.set("timbre" + i + "lfo2" + "syncnote", (data[offset + 45]) & 15);
             for(int j = 1; j <= 8; j++)
                 {
                 // the documentation is very unclear here.  It appears that it says that pairs of MIDI values
                 // should be exactly the same.
                 model.set("channel" + j + "level", data[offset + ((j-1) * 2) + 46]);
                 if (data[offset + ((j-1) * 2) + 46] != data[offset + ((j-1) * 2) + 47])
-                    System.err.println("Channel" + j + "level inconsistent in pair: " + data[offset + ((j-1) * 2) + 47]);
+                    System.err.println("Warning (KorgMicroKorg): Channel" + j + "level inconsistent in pair: " + data[offset + ((j-1) * 2) + 47]);
                 }
             for(int j = 1; j <= 8; j++)
                 {
@@ -1198,7 +1198,7 @@ public class KorgMicroKorg extends Synth
                 // should be exactly the same.
                 model.set("channel" + j + "pan", data[offset + ((j-1) * 2) + 62]);
                 if (data[offset + ((j-1) * 2) + 62] != data[offset + ((j-1) * 2) + 63])
-                    System.err.println("Channel" + j + "pan inconsistent in pair: " + data[offset + ((j-1) * 2) + 63]);
+                    System.err.println("Warning (KorgMicroKorg): Channel" + j + "pan inconsistent in pair: " + data[offset + ((j-1) * 2) + 63]);
                 }
             for(int j = 1; j <= 16; j++)
                 {
@@ -1215,12 +1215,12 @@ public class KorgMicroKorg extends Synth
                 int val = (a << 24) | (b << 16) | (c << 8) | d;
                 if (val >= 0x7FFFFF00)
                     {
-                    System.err.println("Too large value for hold number " + j + ": " + val);
+                    System.err.println("Warning (KorgMicroKorg): Too large value for hold number " + j + ": " + val);
                     val = 0x7FFFFF00;
                     }
                 if (val < 0) 
                     {
-                    System.err.println("Huh?  hold number " + j + " is negative: " + val);
+                    System.err.println("Warning (KorgMicroKorg): Hold number " + j + " is negative: " + val);
                     val = 0;
                     }
                 model.set("channel" + j + "hold", val);
@@ -1230,15 +1230,6 @@ public class KorgMicroKorg extends Synth
         revise();       
         return PARSE_SUCCEEDED;     
         }
-    
-    /*
-      public void dump(byte[] data)
-      {
-      System.err.println("\n\nDUMP");
-      for(int i = 0; i < data.length; i++)
-      System.err.println("" + i + ": " + data[i] + " (" + (char)(data[i]) + ")");
-      }
-    */
     
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
@@ -1340,26 +1331,26 @@ public class KorgMicroKorg extends Synth
                 data[offset + 27] = (byte)model.get("timbre" + i + "ampdistortion");
                 data[offset + 28] = 64;
                 data[offset + 29] = (byte)model.get("timbre" + i + "ampkeyboardtrack");
-                data[offset + 30] = (byte)model.get("timbreenv" + i + "1" + "attack");
-                data[offset + 31] = (byte)model.get("timbreenv" + i + "1" + "decay");
-                data[offset + 32] = (byte)model.get("timbreenv" + i + "1" + "sustain");
-                data[offset + 33] = (byte)model.get("timbreenv" + i + "1" + "release");
-                data[offset + 34] = (byte)model.get("timbreenv" + i + "2" + "attack");
-                data[offset + 35] = (byte)model.get("timbreenv" + i + "2" + "decay");
-                data[offset + 36] = (byte)model.get("timbreenv" + i + "2" + "sustain");
-                data[offset + 37] = (byte)model.get("timbreenv" + i + "2" + "release");
-                data[offset + 38] = (byte)((model.get("timbrelfo" + i + "1" + "keysync") << 4 ) | 
-                    (model.get("timbrelfo" + i + "1" + "wave")));
-                data[offset + 39] = (byte)model.get("timbrelfo" + i + "1" + "frequency");
-                data[offset + 40] = (byte)(model.get("timbrelfo" + i + "1" + "temposync") << 7);
+                data[offset + 30] = (byte)model.get("timbre" + i + "env1" + "attack");
+                data[offset + 31] = (byte)model.get("timbre" + i + "env1" + "decay");
+                data[offset + 32] = (byte)model.get("timbre" + i + "env1" + "sustain");
+                data[offset + 33] = (byte)model.get("timbre" + i + "env1" + "release");
+                data[offset + 34] = (byte)model.get("timbre" + i + "env2" + "attack");
+                data[offset + 35] = (byte)model.get("timbre" + i + "env2" + "decay");
+                data[offset + 36] = (byte)model.get("timbre" + i + "env2" + "sustain");
+                data[offset + 37] = (byte)model.get("timbre" + i + "env2" + "release");
+                data[offset + 38] = (byte)((model.get("timbre" + i + "lfo1" + "keysync") << 4 ) | 
+                    (model.get("timbre" + i + "lfo1" + "wave")));
+                data[offset + 39] = (byte)model.get("timbre" + i + "lfo1" + "frequency");
+                data[offset + 40] = (byte)(model.get("timbre" + i + "lfo1" + "temposync") << 7);
                 // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                data[offset + 40] = (byte)model.get("timbrelfo" + i + "1" + "syncnote");
-                data[offset + 41] = (byte)((model.get("timbrelfo" + i + "2" + "keysync") << 4 ) |
-                    (model.get("timbrelfo" + i + "2" + "wave")));
-                data[offset + 42] = (byte)model.get("timbrelfo" + i + "2" + "frequency");
-                data[offset + 43] = (byte)(model.get("timbrelfo" + i + "2" + "temposync") << 7);
+                data[offset + 40] = (byte)model.get("timbre" + i + "lfo1" + "syncnote");
+                data[offset + 41] = (byte)((model.get("timbre" + i + "lfo2" + "keysync") << 4 ) |
+                    (model.get("timbre" + i + "lfo2" + "wave")));
+                data[offset + 42] = (byte)model.get("timbre" + i + "lfo2" + "frequency");
+                data[offset + 43] = (byte)(model.get("timbre" + i + "lfo2" + "temposync") << 7);
                 // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                data[offset + 43] = (byte)model.get("timbrelfo" + i + "2" + "syncnote");
+                data[offset + 43] = (byte)model.get("timbre" + i + "lfo2" + "syncnote");
                 for(int j = 1; j <= 4; j++)
                     {
                     // documentation says this is bits 4...7 but this has to be wrong, since the values only go 0...7
@@ -1411,24 +1402,24 @@ public class KorgMicroKorg extends Synth
             data[offset + 30] = (byte)64;
             data[offset + 31] = (byte)model.get("timbre" + i + "ampkeyboardtrack");
             data[offset + 32] = data[offset + 33] = 0;
-            data[offset + 34] = (byte)model.get("timbreenv" + i + "1" + "sustain");
+            data[offset + 34] = (byte)model.get("timbre" + i + "env1" + "sustain");
             data[offset + 35] = 0;
-            data[offset + 36] = (byte)model.get("timbreenv" + i + "2" + "attack");
-            data[offset + 37] = (byte)model.get("timbreenv" + i + "2" + "decay");
-            data[offset + 38] = (byte)model.get("timbreenv" + i + "2" + "sustain");
-            data[offset + 39] = (byte)model.get("timbreenv" + i + "2" + "release");
-            data[offset + 40] = (byte)((model.get("timbrelfo" + i + "1" + "keysync") << 4 ) | 
-                model.get("timbrelfo" + i + "1" + "wave"));
-            data[offset + 41] = (byte)model.get("timbrelfo" + i + "1" + "frequency");
-            data[offset + 42] = (byte)((model.get("timbrelfo" + i + "1" + "temposync") << 7) |
+            data[offset + 36] = (byte)model.get("timbre" + i + "env2" + "attack");
+            data[offset + 37] = (byte)model.get("timbre" + i + "env2" + "decay");
+            data[offset + 38] = (byte)model.get("timbre" + i + "env2" + "sustain");
+            data[offset + 39] = (byte)model.get("timbre" + i + "env2" + "release");
+            data[offset + 40] = (byte)((model.get("timbre" + i + "lfo1" + "keysync") << 4 ) | 
+                model.get("timbre" + i + "lfo1" + "wave"));
+            data[offset + 41] = (byte)model.get("timbre" + i + "lfo1" + "frequency");
+            data[offset + 42] = (byte)((model.get("timbre" + i + "lfo1" + "temposync") << 7) |
                 // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                model.get("timbrelfo" + i + "1" + "syncnote"));
-            data[offset + 43] = (byte)((model.get("timbrelfo" + i + "2" + "keysync") << 4 ) |
-                model.get("timbrelfo" + i + "2" + "wave"));
-            data[offset + 44] = (byte)model.get("timbrelfo" + i + "2" + "frequency");
-            data[offset + 45] = (byte)((model.get("timbrelfo" + i + "2" + "temposync") << 7) |
+                model.get("timbre" + i + "lfo1" + "syncnote"));
+            data[offset + 43] = (byte)((model.get("timbre" + i + "lfo2" + "keysync") << 4 ) |
+                model.get("timbre" + i + "lfo2" + "wave"));
+            data[offset + 44] = (byte)model.get("timbre" + i + "lfo2" + "frequency");
+            data[offset + 45] = (byte)((model.get("timbre" + i + "lfo2" + "temposync") << 7) |
                 // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                model.get("timbrelfo" + i + "2" + "syncnote"));
+                model.get("timbre" + i + "lfo2" + "syncnote"));
             for(int j = 1; j <= 8; j++)
                 {
                 // the documentation is very unclear here.  It appears that it says that pairs of MIDI values
@@ -1575,12 +1566,12 @@ public class KorgMicroKorg extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 11 ... 78, with no zero or nine digits");
+                showSimpleError(title, "The Patch Number must be an integer 11 ... 78, with no zero or nine digits\n(81...88 are reserved for Vocoder Patches)");
                 continue;
                 }
             if (n < 11 || n > 78 || n % 10 == 0 || n % 10 == 9)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 11 ... 78, with no zero or nine digits");
+                showSimpleError(title, "The Patch Number must be an integer 11 ... 78, with no zero or nine digits\n(81...88 are reserved for Vocoder Patches)");
                 continue;
                 }
                                 

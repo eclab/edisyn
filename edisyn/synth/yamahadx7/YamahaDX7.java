@@ -420,7 +420,7 @@ public class YamahaDX7 extends Synth
     public JComponent addKeyScaling(final int src, Color color)
         {
         final Category category = new Category(this, "Keyboard Level Scaling " + src, color);
-        category.makePasteable("operator");
+        category.makePasteable("operator" + src);
 
         JComponent comp;
         String[] params;
@@ -473,7 +473,7 @@ public class YamahaDX7 extends Synth
     public JComponent addOperator(final int src, Color color)
         {
         final Category category = new Category(this, "Operator " + src, color);
-        category.makePasteable("operator");
+        category.makePasteable("operator" + src);
 
         JComponent comp;
         String[] params;
@@ -546,8 +546,8 @@ public class YamahaDX7 extends Synth
     public JComponent addEnvelope(final int envelope, Color color)
         {
         Category category = new Category(this, "Operator Envelope " + envelope, color);
-        category.makePasteable("operator");
-        category.makeDistributable("operator", true);
+        category.makePasteable("operator" + envelope);
+        category.makeDistributable("operator" + envelope);
 
         JComponent comp;
         String[] params;
@@ -823,7 +823,7 @@ public class YamahaDX7 extends Synth
             }
         else 
             {
-            System.err.println("Can't emit key " + key);
+            System.err.println("Warning (YamahaDX7): Can't emit key " + key);
             return new Object[0];
             }
         }

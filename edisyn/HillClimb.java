@@ -827,7 +827,7 @@ public class HillClimb extends SynthPanel
         if (stackEmpty())
             {
             // uh oh...
-            System.err.println("EMPTY STACK!");
+            System.err.println("Warning (Midi): " + "Empty Stack");
             return;
             }
         else if (stackInitial())
@@ -862,7 +862,7 @@ public class HillClimb extends SynthPanel
         if (stackEmpty())
             {
             // uh oh...
-            System.err.println("EMPTY STACK!");
+            System.err.println("Warning (Midi) 2: " + "Empty Stack");
             return;
             }
         else if (stackInitial())

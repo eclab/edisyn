@@ -2237,7 +2237,6 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         {
         JFrame frame = super.sprout();
         receiveCurrent.setEnabled(false);  // we can't request the "current" performance
-        //addWavestationMenu();
         return frame;
         }
 
@@ -3818,7 +3817,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
     public JComponent addFX(final int fxnum, Color color)
         {
         Category category  = new Category(this, "FX " + fxnum, color);
-        category.makePasteable("fx");
+        category.makePasteable("fx" + fxnum);
                         
         JComponent comp;
         String[] params;
@@ -3933,7 +3932,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
     public JComponent addPart(int part, Color color)
         {
         final Category category  = new Category(this, "Part " + part, color);
-        category.makePasteable("part");
+        category.makePasteable("part" + part);
         
         Updatable updatable = new Updatable()
             {
@@ -4224,7 +4223,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 
             if (index == -1)  // unused (typically says "reserved for future use")
                 {
-                System.err.println("PCL List entry not found: " + fxtype + ":" + paramnum + " (probably 'reserved').");
+                System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + paramnum + " (probably 'reserved').");
                 }
             else
                 {
@@ -4366,7 +4365,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             else if (key.equals("series"))
                 index = FX_PLACEMENT;
             else
-                System.err.println("Unknown Key " + key);
+                System.err.println("Warning (KorgWavestationPerformance): Unknown Key " + key);
                         
             byte[] mesg = paramBytes(index, val);
             return new byte[][] { /*bank_mesg, num_mesg,*/ part_mesg, mesg };
@@ -4668,7 +4667,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                                 
                 if (index == -1)  // unused (typically says "reserved for future use")
                     {
-                    System.err.println("PCL List entry not found: " + fxtype + ":" + paramnum + " (probably reserved').");
+                    System.err.println("Warning (KorgWavestationPerformance) 2: PCL List entry not found: " + fxtype + ":" + paramnum + " (probably reserved').");
                     }
                 else
                     {
@@ -4828,7 +4827,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                                                 
                     if (index == -1)  // unused (typically says "reserved for future use")
                         {
-                        System.err.println("PCL List entry not found: " + fxtype + ":" + paramnum + " (probably 'reserved').");
+                        System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + paramnum + " (probably 'reserved').");
                         continue;
                         }
                                                 

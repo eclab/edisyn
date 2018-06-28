@@ -25,7 +25,7 @@ public class Category extends JComponent implements Gatherable
     Synth synth;
     
     String preamble;
-    boolean reduceAllDigits = false;
+    String distributePreamble;
     boolean pasteable = false;
     boolean distributable = false;
     
@@ -37,20 +37,21 @@ public class Category extends JComponent implements Gatherable
     MenuItem distributeToMutable = new MenuItem("Distribute (Mutation Parameters Only)");
     MenuItem reset = new MenuItem("Reset Category");
     
-    public void makePasteable(String preamble) { makePasteable(preamble, false); }
-    public void makePasteable(String preamble, boolean reduceAllDigits) { this.reduceAllDigits = reduceAllDigits; copy.setEnabled(true); copyFromMutable.setEnabled(true); paste.setEnabled(true); pasteToMutable.setEnabled(true); pasteable = true; this.preamble = preamble; }
-    public void makeDistributable(String preamble) { makeDistributable(preamble, false);}
-    public void makeDistributable(String preamble, boolean reduceAllDigits) { this.reduceAllDigits = reduceAllDigits; distribute.setEnabled(true); distributeToMutable.setEnabled(true); distributable = true; this.preamble = preamble; }
+    public void makePasteable(String preamble) { pasteable = true; this.preamble = preamble; }
+    public void makeDistributable(String preamble) { distributable = true; this.distributePreamble = preamble; }
     public void makeUnresettable() { reset.setEnabled(false); }
     
     PopupMenu pop = new PopupMenu();
       
-    boolean isPasteCompatibleCategory()
+    public boolean isPasteCompatible(String preamble)
         {
-        return (pasteable &&
-            preamble != null &&
-            synth.getCopyPreamble() != null &&
-            synth.getCopyPreamble().equals(preamble));
+        String copyPreamble = synth.getCopyPreamble();
+        String myPreamble = preamble;
+        if (copyPreamble == null) return false;
+        if (myPreamble == null) return false;
+
+		return (pasteable && 
+			reduceAllDigitsAfterPreamble(copyPreamble, "").equals(reduceAllDigitsAfterPreamble(myPreamble, "")));
         }
         
     boolean canDistributeKey()   
@@ -121,12 +122,17 @@ public class Category extends JComponent implements Gatherable
                 }
             } 
         synth.setCopyKeys(keys);   
-        synth.setCopyPreamble(preamble);                
+        synth.setCopyPreamble(preamble);
         }
         
         
     void pasteCategory(boolean includeImmutable)
         {
+        String copyPreamble = synth.getCopyPreamble();
+        String myPreamble = preamble;
+        if (copyPreamble == null) return;
+        if (myPreamble == null) return;
+        
         ArrayList copyKeys = synth.getCopyKeys();
         if (copyKeys == null || copyKeys.size() == 0)
             return;  // oops
@@ -140,13 +146,11 @@ public class Category extends JComponent implements Gatherable
             if (components.get(i) instanceof HasKey)
                 {
                 String key = (String)(((HasKey)(components.get(i))).getKey());
-                String reduced = (reduceAllDigits ? 
-                    reduceAllDigitsAfterPreamble(key, preamble) : 
-                    reduceFirstDigitsAfterPreamble(key, preamble));
+                String reduced = reducePreamble(key, myPreamble);
                 keys.put(reduced, key);
                 }    
             }               
-                
+
         String[] mutationKeys = synth.getMutationKeys();
         if (mutationKeys == null) mutationKeys = new String[0];
         HashSet mutationSet = new HashSet(Arrays.asList(mutationKeys));
@@ -155,9 +159,7 @@ public class Category extends JComponent implements Gatherable
         for(int i = 0; i < copyKeys.size(); i++)
             {
             String key = (String)(copyKeys.get(i));
-            String reduced = (reduceAllDigits ? 
-                reduceAllDigitsAfterPreamble(key, synth.getCopyPreamble()) : 
-                reduceFirstDigitsAfterPreamble(key, synth.getCopyPreamble()));
+            String reduced = reducePreamble(key, copyPreamble);
             String mapped = (String)(keys.get(reduced));
             if (mapped != null)
                 {
@@ -174,11 +176,12 @@ public class Category extends JComponent implements Gatherable
                         }
                     }
                 else
-                    System.err.println("Key didn't exist " + mapped);
+                    System.err.println("Warning (Category) 2: Key didn't exist " + mapped);
                 }
             else
-                System.err.println("Null mapping for " + key + " (reduced to " + reduced + ")");                                        
+                System.err.println("Warning (Category) 2: Null mapping for " + key + " (reduced to " + reduced + ")");                                        
             }
+        synth.revise();               
         }
         
     void distributeCategory(boolean includeImmutable)
@@ -188,11 +191,7 @@ public class Category extends JComponent implements Gatherable
 
         if (lastKey != null)
             {
-            String lastReduced = (reduceAllDigits ? 
-                reduceAllDigitsAfterPreamble(lastKey, preamble) : 
-                    (pasteable ? 
-                    reduceSecondDigitsAfterPreamble(lastKey, preamble) : 
-                    reduceFirstDigitsAfterPreamble(lastKey, preamble)));
+            String lastReduced = reduceAllDigitsAfterPreamble(lastKey, distributePreamble);
 
             String[] mutationKeys = synth.getMutationKeys();
             if (mutationKeys == null) mutationKeys = new String[0];
@@ -207,12 +206,8 @@ public class Category extends JComponent implements Gatherable
                     {
                     HasKey nc = (HasKey)(components.get(i));
                     String key = nc.getKey();
-                    String reduced = (reduceAllDigits ? 
-                        reduceAllDigitsAfterPreamble(key, preamble) : 
-                            (pasteable ? 
-                            reduceSecondDigitsAfterPreamble(key, preamble) : 
-                            reduceFirstDigitsAfterPreamble(key, preamble)));
-                                
+                    String reduced = reduceAllDigitsAfterPreamble(key, distributePreamble);
+                               
                     if (reduced.equals(lastReduced))
                         {
                         if (model.exists(key) && (mutationSet.contains(key) || includeImmutable))
@@ -227,22 +222,32 @@ public class Category extends JComponent implements Gatherable
                                 }
                             }
                         else
-                            System.err.println("Key didn't exist " + key);
+                            System.err.println("Warning (Category): Key didn't exist " + key);
                         }
                     else
-                        System.err.println("Null mapping for " + key + " (reduced to " + reduced + ")");                                        
+                        System.err.println("Warning (Category): Null mapping for " + key + " (reduced to " + reduced + ")");                                        
                     }
                 }
             }
-        }
+         synth.revise();               
+       }
     
     final static int STATE_FIRST_NUMBER = 0;
     final static int STATE_FIRST_STRING = 1;
     final static int STATE_NUMBER = 2;
     final static int STATE_FINISHED = 3;
-
         
-    static String reduceAllDigitsAfterPreamble(String name, String preamble)
+    public static String reducePreamble(String name, String preamble)
+    	{
+    	if (!name.startsWith(preamble)) 
+    		{
+    		System.err.println("Warning (Category): Key " + name + " doesn't start with " + preamble);
+    		return name;
+    		}
+    	return reduceAllDigitsAfterPreamble(preamble, "") + name.substring(preamble.length());
+    	}
+    	
+    public static String reduceAllDigitsAfterPreamble(String name, String preamble)
         {
         char[] n = name.toCharArray();
         StringBuilder sb = new StringBuilder();
@@ -278,7 +283,7 @@ public class Category extends JComponent implements Gatherable
         }
 
     /** This function removes the FIRST string of digits in a name after a preamble, returns the resulting name. */
-    static String reduceFirstDigitsAfterPreamble(String name, String preamble)
+    public static String reduceFirstDigitsAfterPreamble(String name, String preamble)
         {
         char[] n = name.toCharArray();
         StringBuilder sb = new StringBuilder();
@@ -319,7 +324,7 @@ public class Category extends JComponent implements Gatherable
         }
 
     /** This function removes the SECOND string of digits in a name after a preamble, returns the resulting name. */
-    static String reduceSecondDigitsAfterPreamble(String name, String preamble)
+    public static String reduceSecondDigitsAfterPreamble(String name, String preamble)
         {
         char[] n = name.toCharArray();
         StringBuilder sb = new StringBuilder();
@@ -394,8 +399,10 @@ public class Category extends JComponent implements Gatherable
                             (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
                             ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK)))
                         {
-                        paste.setEnabled(pasteable && isPasteCompatibleCategory());
-                        pasteToMutable.setEnabled(pasteable && isPasteCompatibleCategory());
+                        copy.setEnabled(pasteable);
+                        copyFromMutable.setEnabled(pasteable);
+                        paste.setEnabled(pasteable && isPasteCompatible(preamble));
+                        pasteToMutable.setEnabled(pasteable && isPasteCompatible(preamble));
                         distribute.setEnabled(distributable && canDistributeKey());
                         distributeToMutable.setEnabled(distributable && canDistributeKey());
                         
@@ -558,7 +565,6 @@ public class Category extends JComponent implements Gatherable
     
     public void setName(String label)
         {
-        
         // here we're going to do a little hack.  TitledBorder doesn't put the title
         // on the FAR LEFT of the line, so when we draw the border we get a little square
         // dot to the left of the title which looks really annoying.  Rather than build a

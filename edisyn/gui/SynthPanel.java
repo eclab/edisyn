@@ -34,19 +34,27 @@ public class SynthPanel extends JPanel implements Gatherable
 
     public Insets getInsets() { return Style.SYNTH_PANEL_INSETS(); }
 
-    String preamble;        
+    String preamble = "";
     PopupMenu pop = new PopupMenu();
-    boolean pasteable = true;
+
+	boolean unresettable = false;
+    boolean pasteable = false;
     public void makePasteable(String preamble) { pasteable = true; this.preamble = preamble; }
-      
-    boolean isPasteCompatibleCategory()
+    public boolean isPasteable() { return pasteable; }
+    public void makeUnresettable() { unresettable = true; }
+    public boolean isUnresettable() { return unresettable; }
+    
+    public boolean isPasteCompatible(String preamble)
         {
-        return (pasteable &&
-            preamble != null &&
-            synth.getCopyPreamble() != null &&
-            synth.getCopyPreamble().equals(preamble));
+        String copyPreamble = synth.getCopyPreamble();
+        String myPreamble = preamble;
+        if (copyPreamble == null) return false;
+        if (myPreamble == null) return false;
+
+		return (pasteable && 
+			Category.reduceAllDigitsAfterPreamble(copyPreamble, "").equals(Category.reduceAllDigitsAfterPreamble(myPreamble, "")));
         }
-        
+            
     public void gatherAllComponents(java.util.ArrayList list)
         {
         Component[] c = getComponents();
@@ -69,6 +77,7 @@ public class SynthPanel extends JPanel implements Gatherable
                 {
                 HasKey nc = (HasKey)(components.get(i));
                 String key = nc.getKey();
+
                 if (synth.getModel().exists(key) && other.getModel().exists(key))
                     {
                     if (synth.getModel().isString(key))
@@ -81,7 +90,7 @@ public class SynthPanel extends JPanel implements Gatherable
                         }
                     }
                 else
-                    System.err.println("key missing in model : " + key);
+                    System.err.println("Warning (SynthPanel): Key missing in model : " + key);
                 }
             }               
         }
@@ -106,16 +115,21 @@ public class SynthPanel extends JPanel implements Gatherable
                 }
             } 
         synth.setCopyKeys(keys);   
-        synth.setCopyPreamble(preamble);                
+        synth.setCopyPreamble(preamble);
         }
         
         
     public void pastePanel(boolean includeImmutable)
         {
+        String copyPreamble = synth.getCopyPreamble();
+        String myPreamble = preamble;
+        if (copyPreamble == null) return;
+        if (myPreamble == null) return;
+
         ArrayList copyKeys = synth.getCopyKeys();
         if (copyKeys == null || copyKeys.size() == 0)
             return;  // oops
-        
+                
         // First we need to map OUR keys
         HashMap keys = new HashMap();
         ArrayList components = new ArrayList();
@@ -125,7 +139,7 @@ public class SynthPanel extends JPanel implements Gatherable
             if (components.get(i) instanceof HasKey)
                 {
                 String key = (String)(((HasKey)(components.get(i))).getKey());
-                String reduced = reduceFirstDigitsAfterPreamble(key, preamble);
+                String reduced = Category.reducePreamble(key, myPreamble);
                 keys.put(reduced, key);
                 }    
             }               
@@ -138,7 +152,7 @@ public class SynthPanel extends JPanel implements Gatherable
         for(int i = 0; i < copyKeys.size(); i++)
             {
             String key = (String)(copyKeys.get(i));
-            String reduced = reduceFirstDigitsAfterPreamble(key, synth.getCopyPreamble());
+            String reduced = Category.reducePreamble(key, copyPreamble);
             String mapped = (String)(keys.get(reduced));
             if (mapped != null)
                 {
@@ -155,112 +169,11 @@ public class SynthPanel extends JPanel implements Gatherable
                         }
                     }
                 else
-                    System.err.println("Key didn't exist " + mapped);
+                    System.err.println("Warning (SynthPanel): Key didn't exist " + mapped);
                 }
             else
-                System.err.println("Null mapping for " + key + " (reduced to " + reduced + ")");                                        
+                System.err.println("Warning (SynthPanel): Null mapping for " + key + " (reduced to " + reduced + ")");                                        
             }
-        }
-
-    final static int STATE_FIRST_NUMBER = 0;
-    final static int STATE_FIRST_STRING = 1;
-    final static int STATE_NUMBER = 2;
-    final static int STATE_FINISHED = 3;
-
-    /** This function removes the FIRST string of digits in a name after a preamble, returns the resulting name. */
-    static String reduceFirstDigitsAfterPreamble(String name, String preamble)
-        {
-        char[] n = name.toCharArray();
-        StringBuilder sb = new StringBuilder();
-
-        for(int i = 0; i < preamble.length(); i++)
-            {
-            sb.append(n[i]);
-            }
-                        
-        int state = STATE_FIRST_STRING;
-        for(int i = preamble.length(); i < n.length; i++)
-            {
-            if (state == STATE_FIRST_STRING)
-                {
-                if (Character.isDigit(n[i]))
-                    {
-                    state = STATE_NUMBER;
-                    }
-                else
-                    {
-                    sb.append(n[i]);
-                    }
-                }
-            else if (state == STATE_NUMBER)
-                {
-                if (!Character.isDigit(n[i]))
-                    {
-                    sb.append(n[i]);
-                    state = STATE_FINISHED;
-                    }
-                }
-            else // state == STATE_FINISHED
-                {
-                sb.append(n[i]);
-                }
-            }
-        return sb.toString();
-        }
-
-    /** This function removes the SECOND string of digits in a name after a preamble, returns the resulting name. */
-    static String reduceSecondDigitsAfterPreamble(String name, String preamble)
-        {
-        char[] n = name.toCharArray();
-        StringBuilder sb = new StringBuilder();
-
-        for(int i = 0; i < preamble.length(); i++)
-            {
-            sb.append(n[i]);
-            }
-                        
-        int state = STATE_FIRST_NUMBER;
-        for(int i = preamble.length(); i < n.length; i++)
-            {
-            if (state == STATE_FIRST_NUMBER)
-                {
-                if (!Character.isDigit(n[i]))
-                    {
-                    // add it and jump to next state
-                    sb.append(n[i]);
-                    state = STATE_FIRST_STRING;
-                    }
-                else
-                    {
-                    sb.append(n[i]);
-                    }
-                }
-            else if (state == STATE_FIRST_STRING)
-                {
-                if (Character.isDigit(n[i]))
-                    {
-                    // skip it and jump to next state
-                    state = STATE_NUMBER;
-                    }
-                else
-                    {
-                    sb.append(n[i]);
-                    }
-                }
-            else if (state == STATE_NUMBER)
-                {
-                if (!Character.isDigit(n[i]))
-                    {
-                    // add it and jump to next state
-                    sb.append(n[i]);
-                    state = STATE_FINISHED;
-                    }
-                }
-            else  // state == STATE_FINISHED
-                {
-                sb.append(n[i]);
-                }
-            }
-        return sb.toString();
+        synth.revise();               
         }
     }

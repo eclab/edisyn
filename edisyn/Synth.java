@@ -105,6 +105,13 @@ public abstract class Synth extends JComponent implements Updatable
     /** Indicates that we are a sacrificial synth which is parsing an incoming sysex dump and then will be merged with the main synth. */
     public boolean isParsingForMerge() { return parsingForMerge; }
 
+    public JMenuItem copyTab = new JMenuItem("Copy Tab");
+    public JMenuItem pasteTab = new JMenuItem("Paste Tab");
+    public JMenuItem copyMutableTab = new JMenuItem("Copy Tab (Mutation Parameters Only)");
+    public JMenuItem pasteMutableTab = new JMenuItem("Paste Tab (Mutation Parameters Only)");
+    public JMenuItem resetTab = new JMenuItem("Reset Tab");
+    
+
     //boolean useMapForRecombination = true;
     boolean showingMutation = false;
     /** Returns true if we're currently trying to merge with another patch.  */
@@ -140,6 +147,9 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
     public Model buildModel() { return new Model(); }
+
+
+
 
     /////// CREATION AND CONSTRUCTION
 
@@ -344,14 +354,7 @@ public abstract class Synth extends JComponent implements Updatable
     { 
     //edisyn.synth.futuresonusparva.FuturesonusParva.class,
     //edisyn.synth.generic.Generic.class,
-    edisyn.synth.korgsg.KorgSG.class,
-    edisyn.synth.korgsg.KorgSGMulti.class,
-    edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
-    edisyn.synth.korgmicrokorg.KorgMicroKorg.class,
-    edisyn.synth.korgmicrokorg.KorgMicroKorgVocoder.class,
-    edisyn.synth.korgwavestation.KorgWavestationPerformance.class,
-    edisyn.synth.korgwavestation.KorgWavestationPatch.class,
-    edisyn.synth.korgwavestation.KorgWavestationSequence.class,
+    edisyn.synth.dsiprophet08.DSIProphet08.class,
     edisyn.synth.kawaik1.KawaiK1.class, 
     edisyn.synth.kawaik1.KawaiK1Multi.class, 
     edisyn.synth.kawaik4.KawaiK4.class, 
@@ -359,6 +362,14 @@ public abstract class Synth extends JComponent implements Updatable
     edisyn.synth.kawaik4.KawaiK4Drum.class,
     edisyn.synth.kawaik4.KawaiK4Effect.class,
     edisyn.synth.kawaik5.KawaiK5.class,
+    edisyn.synth.korgmicrokorg.KorgMicroKorg.class,
+    edisyn.synth.korgmicrokorg.KorgMicroKorgVocoder.class,
+    edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
+    edisyn.synth.korgsg.KorgSG.class,
+    edisyn.synth.korgsg.KorgSGMulti.class,
+    edisyn.synth.korgwavestation.KorgWavestationPerformance.class,
+    edisyn.synth.korgwavestation.KorgWavestationPatch.class,
+    edisyn.synth.korgwavestation.KorgWavestationSequence.class,
     edisyn.synth.oberheimmatrix1000.OberheimMatrix1000.class, 
     edisyn.synth.preenfm2.PreenFM2.class,
     edisyn.synth.waldorfblofeld.WaldorfBlofeld.class, 
@@ -812,9 +823,9 @@ public abstract class Synth extends JComponent implements Updatable
                 // verify
                 int val = model.get(key);
                 if (val < model.getMin(key))
-                    { model.set(key, model.getMin(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key));}
+                    { model.set(key, model.getMin(key)); System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + model.get(key));}
                 if (val > model.getMax(key))
-                    { model.set(key, model.getMax(key)); System.err.println("Warning: Revised " + key + " from " + val + " to " + model.get(key));}
+                    { model.set(key, model.getMax(key)); System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + model.get(key));}
                 }
             }
             
@@ -2013,7 +2024,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
-            System.err.println("Warning: Didn't Parse");
+            System.err.println("Warning (Synth): Didn't Parse");
             }
         }  
 
@@ -2137,11 +2148,27 @@ public abstract class Synth extends JComponent implements Updatable
     ///////////    SPROUT AND MENU HANDLING
 
 
+	public SynthPanel findPanel()
+		{
+        Component tab = tabs.getSelectedComponent();
+    	if (tab instanceof JScrollPane)
+    		{
+    		Component inner = ((JScrollPane)tab).getViewport().getView();
+    		if (inner instanceof SynthPanel)
+    			{
+    			return (SynthPanel) inner;
+    			}
+    		}
+    	return null;
+		}
+
     public void tabChanged()
         {
         // cancel learning
         setLearningCC(false);
-        if (tabs.getSelectedComponent() == hillClimbPane)
+        
+        Component tab = tabs.getSelectedComponent();
+        if (tab == hillClimbPane)
             {
             hillClimb.startup();
             }
@@ -2149,6 +2176,31 @@ public abstract class Synth extends JComponent implements Updatable
             {
             hillClimb.shutdown();
             }
+            
+        pasteTab.setEnabled(false);
+        pasteMutableTab.setEnabled(false);
+        copyTab.setEnabled(false);
+        copyMutableTab.setEnabled(false);
+        resetTab.setEnabled(false);
+        
+        SynthPanel panel = findPanel();
+    	if (panel != null)
+    		{
+			if (panel.isPasteable())
+				{
+				copyTab.setEnabled(true);
+				copyMutableTab.setEnabled(true);
+				}
+			if (!panel.isUnresettable())
+				{
+				resetTab.setEnabled(true);
+				}
+			if (panel.isPasteCompatible(getCopyPreamble()))
+				{
+				pasteTab.setEnabled(true);
+				pasteMutableTab.setEnabled(true);
+				}
+    		}
         }
 
 
@@ -2806,6 +2858,85 @@ public abstract class Synth extends JComponent implements Updatable
                 doHillClimb();
                 }
             });
+
+        menu.addSeparator();
+        
+        menu.add(copyTab);
+        copyTab.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                SynthPanel p = findPanel();
+                if (p != null) p.copyPanel(true);
+                }
+            });
+        menu.add(pasteTab);
+        pasteTab.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                SynthPanel p = findPanel();
+                if (p != null) 
+                	{
+                	getUndo().push(getModel());
+                	getUndo().setWillPush(false);
+                	setSendMIDI(false);
+                	p.pastePanel(true);
+                	setSendMIDI(true);
+                	// We do this TWICE because for some synthesizers, updating a parameter
+                	// will reveal other parameters which also must be updated but aren't yet
+                	// in the mapping.
+                	p.pastePanel(true);
+                	getUndo().setWillPush(true);
+                	}
+                }
+            });
+        menu.add(copyMutableTab);
+        copyMutableTab.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                SynthPanel p = findPanel();
+                if (p != null) p.copyPanel(false);
+                }
+            });
+        menu.add(pasteMutableTab);
+        pasteMutableTab.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                SynthPanel p = findPanel();
+                if (p != null) 
+                	{
+                	getUndo().push(getModel());
+                	getUndo().setWillPush(false);
+                	setSendMIDI(false);
+                	p.pastePanel(false);
+                	setSendMIDI(true);
+                	// We do this TWICE because for some synthesizers, updating a parameter
+                	// will reveal other parameters which also must be updated but aren't yet
+                	// in the mapping.
+                	p.pastePanel(false);
+                	getUndo().setWillPush(true);
+                	}
+                }
+            });
+        resetTab.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                SynthPanel p = findPanel();
+                if (p != null) 
+                	{
+                	getUndo().push(getModel());
+                	getUndo().setWillPush(false);
+                	p.resetPanel();
+                	getUndo().setWillPush(true);
+                	}
+                }
+            });
+        menu.add(resetTab);
+
 
         menu.addSeparator();
         
@@ -3798,7 +3929,9 @@ public abstract class Synth extends JComponent implements Updatable
     
         updateTitle();
         numOpenWindows++;  
-        
+ 
+    	tabChanged();	// so we reset the copy tab etc. menus
+       
         return frame;
         }
 
@@ -3907,8 +4040,8 @@ public abstract class Synth extends JComponent implements Updatable
                 
     void doReset()
         {
-        if (!showSimpleConfirm("Reset", "Reset the parameters to initial values?"))
-            return;
+        //if (!showSimpleConfirm("Reset", "Reset the parameters to initial values?"))
+        //    return;
                 
         setSendMIDI(false);
         // because loadDefaults isn't wrapped in an undo, we have to
@@ -4858,7 +4991,7 @@ public abstract class Synth extends JComponent implements Updatable
                             }
                         else 
                             {
-                            System.err.println("Download of " + getPatchLocationName(currentPatch) + " failed.  Trying again.");
+                            System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Trying again.");
                             Synth.this.merging = 0.0;
                             performRequestDump(currentPatch, true);
                             }

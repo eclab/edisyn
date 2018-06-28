@@ -214,7 +214,7 @@ public class YamahaTX81ZMulti extends Synth
     public JComponent addInstrument(final int src, Color color)
         {
         final Category category = new Category(this, "Instrument " + src, color);
-        category.makePasteable("instrument");
+        category.makePasteable("instrument" + src);
 
         JComponent comp;
         String[] params;
@@ -570,7 +570,7 @@ public class YamahaTX81ZMulti extends Synth
             }
         else 
             {
-            System.err.println("Can't emit key " + key);
+            System.err.println("Warning (YamahaTX81ZMulti): Can't emit key " + key);
             return new Object[0];
             }
         }
@@ -624,7 +624,7 @@ public class YamahaTX81ZMulti extends Synth
                 combined = combined % 160;
 
                 if (msb > 1 || lsb > 127 || oldcombined != combined)
-                    System.err.println("Corrupt voice number or bank in received data.");
+                    System.err.println("Warning (YamahaTX81ZMulti): Corrupt voice number or bank in received data.");
 
 
                 model.set("instrument" + (instrument + 1) + "voicenumber", combined % 32);

@@ -162,7 +162,7 @@ public class KawaiK5 extends Synth
         vbox.add(hbox);
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-       ((SynthPanel)soundPanel).makePasteable("s2");
+        ((SynthPanel)soundPanel).makePasteable("s2");
         addTab("Harmonics 2", (SynthPanel)soundPanel);
                 
 

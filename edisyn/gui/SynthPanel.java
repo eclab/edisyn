@@ -37,7 +37,7 @@ public class SynthPanel extends JPanel implements Gatherable
     String preamble = "";
     PopupMenu pop = new PopupMenu();
 
-	boolean unresettable = false;
+    boolean unresettable = false;
     boolean pasteable = false;
     public void makePasteable(String preamble) { pasteable = true; this.preamble = preamble; }
     public boolean isPasteable() { return pasteable; }
@@ -51,8 +51,8 @@ public class SynthPanel extends JPanel implements Gatherable
         if (copyPreamble == null) return false;
         if (myPreamble == null) return false;
 
-		return (pasteable && 
-			Category.reduceAllDigitsAfterPreamble(copyPreamble, "").equals(Category.reduceAllDigitsAfterPreamble(myPreamble, "")));
+        return (pasteable && 
+            Category.reduceAllDigitsAfterPreamble(copyPreamble, "").equals(Category.reduceAllDigitsAfterPreamble(myPreamble, "")));
         }
             
     public void gatherAllComponents(java.util.ArrayList list)

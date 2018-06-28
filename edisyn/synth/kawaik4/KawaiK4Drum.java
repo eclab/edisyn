@@ -283,7 +283,7 @@ public class KawaiK4Drum extends Synth
                 vbox.addBottom(keys[model.get(key, 36) - 36]);
                 vbox.revalidate();
                 vbox.repaint();
-        		category.makePasteable("key" + (model.get(key, 36) - 35));  // so we reset the preamble
+                category.makePasteable("key" + (model.get(key, 36) - 35));  // so we reset the preamble
                 }
             });
                         

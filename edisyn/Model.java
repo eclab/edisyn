@@ -183,9 +183,8 @@ public class Model implements Cloneable
         within metric min and metric max.
     */
     public Model mutate(Random random, String[] keys, double weight)
-        {
-        //// This makes the weight more sensitive.
-        // weight = weight * weight;
+        {        
+        Model m = (Model)(this.clone());
         
         if (undoListener!= null)
             {
@@ -236,7 +235,7 @@ public class Model implements Cloneable
                 {
                 int a = getMetricMin(keys[i]);
                 int b = getMetricMax(keys[i]);
-                double mutWeight = Math.sqrt(weight);
+                double mutWeight = weight;
                 double mutProb = mutWeight;
                 if (random.nextDouble() < mutProb)
                     {
@@ -294,7 +293,7 @@ public class Model implements Cloneable
             {
             undoListener.setWillPush(true);
             }
-            
+        
         return this;
         }
 

@@ -470,6 +470,7 @@ public class DSIProphet08 extends Synth
                 else return "PW " + (val - 4);
                 }
             };
+        getModel().setMetricMin("layer" + layer + "dco" + osc + "shape", 4);
         hbox.add(comp);
 
         comp = new LabelledDial("Glide", this, "layer" + layer + "dco" + osc + "glide", color, 0, 127);
@@ -703,6 +704,8 @@ public class DSIProphet08 extends Synth
                 else return LFO_FREQUENCIES[val - 151];
                 }
             };
+        // this is a tough call, as the stuff above 150 is metric, just in a different way
+		getModel().setMetricMax("layer" + layer + "lfo" + lfo + "frequency", 150);
         hbox.add(comp);
                 
         comp = new LabelledDial("Amount", this, "layer" + layer + "lfo" + lfo + "amount", color, 0, 127);

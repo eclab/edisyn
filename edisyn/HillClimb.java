@@ -59,6 +59,7 @@ public class HillClimb extends SynthPanel
     /// NUMBER OF CANDIDATE SOLUTIONS
         
     public static final int NUM_CANDIDATES = 32;
+    public static final int STAGE_SIZE = 16;
     public static final int ARCHIVE_SIZE = 6;
     // There are more models than candidates: #17 is the current Model
     public static final int NUM_MODELS = NUM_CANDIDATES + ARCHIVE_SIZE + 1;
@@ -68,7 +69,7 @@ public class HillClimb extends SynthPanel
 
     JRadioButton[][] ratings = new JRadioButton[NUM_MODELS + 1][3];
     PushButton[] plays = new PushButton[NUM_MODELS];
-    public static final int INITIAL_MUTATION_RATE = 5;
+    public static final int INITIAL_MUTATION_RATE = 37;		// roughly 5 when we do weight^3
     public static final int INITIAL_RECOMBINATION_RATE = 75;
     Blank blank;
     Category iterations;
@@ -583,7 +584,19 @@ public class HillClimb extends SynthPanel
         eb.addLast(bigger);
         vbox.add(eb);
 
-        LabelledDial mutationRate = new LabelledDial("Mutation", blank, "mutationrate", Style.COLOR_GLOBAL(), 0, 100);
+        LabelledDial mutationRate = new LabelledDial("Mutation", blank, "mutationrate", Style.COLOR_GLOBAL(), 0, 100)
+        	{
+        	public String map(int val)
+        		{
+        		double v = ((val / 100.0) * (val / 100.0) * (val / 100.0)) * 100;
+        		if (v == 100)
+        			return "100.0";
+        		else if (v >= 10.0)
+        			return String.format("%.2f", v);
+        		else
+	        		return String.format("%.3f", v);
+        		}
+        	};
         mutationRate.addAdditionalLabel("Rate");
         blank.getModel().set("mutationrate", INITIAL_MUTATION_RATE);
         vbox.add(mutationRate);
@@ -910,8 +923,8 @@ public class HillClimb extends SynthPanel
         String[] keys = synth.getMutationKeys();
         double weight = blank.getModel().get("mutationrate", 0) / 100.0;
         
-        double mutationWeight = weight * MUTATION_WEIGHT;
-        
+        weight = weight * weight * weight;  // make more sensitive at low end
+                
         int numMutations = 1;
         
         for(int i = 0; i < NUM_CANDIDATES; i++)
@@ -919,7 +932,7 @@ public class HillClimb extends SynthPanel
             currentModels[i] = newSeed.copy();
             for(int j = 0; j < numMutations; j++)
                 {
-                currentModels[i] = currentModels[i].mutate(random, keys, mutationWeight);
+                currentModels[i] = currentModels[i].mutate(random, keys, weight);
                 }
             if (i % 4 == 3)
                 numMutations++;
@@ -934,14 +947,14 @@ public class HillClimb extends SynthPanel
         ratings[NUM_MODELS][2].setSelected(true);
         }
 
-    void shuffle(Random random, Model[] array, int len)
+    void shuffle(Random random, Model[] array, int start, int len)
         {
         for (int i = len - 1; i > 0; i--)
             {
             int index = random.nextInt(i + 1);
-            Model temp = array[index];
-            array[index] = array[i];
-            array[i] = temp;
+            Model temp = array[start + index];
+            array[start + index] = array[start + i];
+            array[start + i] = temp;
             }
         }
 
@@ -949,17 +962,20 @@ public class HillClimb extends SynthPanel
     
     void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA)
         {
-        int numStages = NUM_CANDIDATES / 16;
+        int numStages = NUM_CANDIDATES / STAGE_SIZE;
         
         for(int i = 0; i < numStages; i++)
             {
-            produce(random, keys, recombination, weight, a, b, c, oldA, i);
+            produce(random, keys, recombination, weight, a, b, c, oldA, i * STAGE_SIZE);
             }
+
+        shuffle(random, currentModels, 0, STAGE_SIZE);
+        shuffle(random, currentModels, STAGE_SIZE, STAGE_SIZE);
         }
         
     void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model c, Model oldA, int stage)
         {
-        double mutationWeight = (stage + 1) * MUTATION_WEIGHT * weight;
+        double mutationWeight = (stage/STAGE_SIZE + 1) * MUTATION_WEIGHT * weight;
         
         // A + B
         currentModels[stage + 0] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, mutationWeight);
@@ -997,23 +1013,24 @@ public class HillClimb extends SynthPanel
             // B + C
             currentModels[stage + 15] = b.copy().recombine(random, c, keys, recombination).mutate(random, keys, mutationWeight);
             }
-        
-        shuffle(random, currentModels, NUM_MODELS - 1);
         }
         
     void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA)
         {
-        int numStages = NUM_CANDIDATES / 16;
+        int numStages = NUM_CANDIDATES / STAGE_SIZE;
         
         for(int i = 0; i < numStages; i++)
             {
-            produce(random, keys, recombination, weight, a, b, oldA, i);
+            produce(random, keys, recombination, weight, a, b, oldA, i * STAGE_SIZE);
             }
+        
+        shuffle(random, currentModels, 0, STAGE_SIZE);
+        shuffle(random, currentModels, STAGE_SIZE, STAGE_SIZE);
         }
         
     void produce(Random random, String[] keys, double recombination, double weight, Model a, Model b, Model oldA, int stage)
         {
-        double mutationWeight = (stage + 1) * MUTATION_WEIGHT * weight;
+        double mutationWeight = (stage/STAGE_SIZE + 1) * MUTATION_WEIGHT * weight;
         
         // A + B
         currentModels[stage + 0] = a.copy().recombine(random, b, keys, recombination).mutate(random, keys, mutationWeight);
@@ -1051,23 +1068,24 @@ public class HillClimb extends SynthPanel
             currentModels[stage + 14] = b.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
             currentModels[stage + 15] = b.copy().mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
             }
-        
-        shuffle(random, currentModels, NUM_MODELS - 1);
         }
                 
     void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA)
         {
-        int numStages = NUM_CANDIDATES / 16;
+        int numStages = NUM_CANDIDATES / STAGE_SIZE;
         
         for(int i = 0; i < numStages; i++)
             {
-            produce(random, keys, recombination, weight, a, oldA, i);
+            produce(random, keys, recombination, weight, a, oldA, i * STAGE_SIZE);
             }
+
+        shuffle(random, currentModels, 0, STAGE_SIZE);
+        shuffle(random, currentModels, STAGE_SIZE, STAGE_SIZE);
         }
         
     void produce(Random random, String[] keys, double recombination, double weight, Model a, Model oldA, int stage)
         {
-        double mutationWeight = (stage + 1) * MUTATION_WEIGHT * weight;
+        double mutationWeight = (stage/STAGE_SIZE + 1) * MUTATION_WEIGHT * weight;
         
         // A
         currentModels[stage + 0] = a.copy().mutate(random, keys, mutationWeight);
@@ -1092,8 +1110,6 @@ public class HillClimb extends SynthPanel
             currentModels[stage + 14] = a.copy().opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
             currentModels[stage + 15] = a.copy().opposite(random, oldA, keys, recombination, false).opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
             }
-        
-        shuffle(random, currentModels, NUM_MODELS - 1);
         }
              
     void climb(boolean determineBest)
@@ -1103,6 +1119,8 @@ public class HillClimb extends SynthPanel
         double recombination = blank.getModel().get("recombinationrate", 0) / 100.0;
         double weight = blank.getModel().get("mutationrate", 0) / 100.0;
         
+        weight = weight * weight * weight;  // make more sensitive at low end
+
         int[] bestModels = new int[3];
         
         currentModels[NUM_MODELS - 1] = synth.getModel();

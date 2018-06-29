@@ -184,8 +184,6 @@ public class Model implements Cloneable
     */
     public Model mutate(Random random, String[] keys, double weight)
         {        
-        Model m = (Model)(this.clone());
-        
         if (undoListener!= null)
             {
             undoListener.push(this);
@@ -293,7 +291,7 @@ public class Model implements Cloneable
             {
             undoListener.setWillPush(true);
             }
-        
+                    
         return this;
         }
 

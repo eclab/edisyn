@@ -91,6 +91,7 @@ public class DSIProphet08 extends Synth
         
         soundPanel.add(vbox, BorderLayout.CENTER);
         soundPanel.makePasteable("layer1");
+        soundPanel.setSendsAllParameters(false);
         addTab("Oscillators and Filters A", soundPanel);
                 
 
@@ -123,6 +124,7 @@ public class DSIProphet08 extends Synth
         
         soundPanel.add(vbox, BorderLayout.CENTER);
         soundPanel.makePasteable("layer2");
+        soundPanel.setSendsAllParameters(false);
         addTab("Oscillators and Filters B", soundPanel);
                 
                         
@@ -752,7 +754,8 @@ public class DSIProphet08 extends Synth
         {
         final Category category  = new Category(this, "Sequencer", color);
         category.makePasteable("layer" + layer);
-                        
+        category.makeDistributable("layer" + layer);
+                       
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();        

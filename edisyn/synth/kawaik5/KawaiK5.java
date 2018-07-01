@@ -139,9 +139,12 @@ public class KawaiK5 extends Synth
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-        vbox.add(addDHG(1, Style.COLOR_A()));
+        Category dhg1 = (Category)addDHG(1, Style.COLOR_A());
+        vbox.add(dhg1);
         hbox = new HBox();
-        hbox.add(addDHG2(1, Style.COLOR_A()));
+        JComponent dhg2 = addDHG2(1, Style.COLOR_A());
+        dhg1.setAuxillary((Gatherable)dhg2);
+        hbox.add(dhg2);
         harmonics[0] = new HBox();
         harmonics[0].addLast(harmonicsSources[0]);
         hbox.addLast(harmonics[0]);
@@ -153,9 +156,12 @@ public class KawaiK5 extends Synth
                 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-        vbox.add(addDHG(2, Style.COLOR_A()));
+        dhg1 = (Category)addDHG(2, Style.COLOR_A());
+        vbox.add(dhg1);
         hbox = new HBox();
-        hbox.add(addDHG2(2, Style.COLOR_A()));
+        dhg2 = addDHG2(2, Style.COLOR_A());
+        dhg1.setAuxillary((Gatherable)dhg2);
+        hbox.add(dhg2);
         harmonics[1] = new HBox();
         harmonics[1].addLast(harmonicsSources[1]);
         hbox.addLast(harmonics[1]);
@@ -585,7 +591,8 @@ public class KawaiK5 extends Synth
         Category category = new Category(this, "Harmonics (DHG)", color);
         category.makePasteable("s" + source + "dhg");
         category.makeDistributable("s" + source + "dhg");
-
+        category.setSendsAllParameters(true);				// otherwise, it's painfully slow
+        
         JComponent comp;
         String[] params;
         VBox vbox = new VBox();
@@ -699,7 +706,6 @@ public class KawaiK5 extends Synth
         HBox hbox = new HBox();
         VBox main = new VBox();
         
-        
         params = HARMONIC_CONSTRAINTS;
         comp = new Chooser("Constrain Harmonics: ", this, "constrainharmonics", params)
             {
@@ -722,6 +728,11 @@ public class KawaiK5 extends Synth
             {
             public void perform(int i)
                 {
+				// we'll avoid individual updates because they're so slow.  Instead we'll
+				// do a bulk update at the end
+				 boolean currentMIDI = getSendMIDI();
+				 setSendMIDI(false);
+
                 int start = 0;
                 int end = 127;
                 if (getModel().get("mode", 0) == 0)
@@ -789,7 +800,10 @@ public class KawaiK5 extends Synth
                         }
                     break;
                     }
-                }
+                    
+				setSendMIDI(currentMIDI);
+				sendAllParameters();
+               }
             };
         vbox.add(comp);
         vbox.addLast(Stretch.makeVerticalStretch());

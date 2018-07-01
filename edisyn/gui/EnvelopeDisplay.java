@@ -147,6 +147,8 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         this(synth, color, xKeys, yKeys, xConstants, yConstants, null);
         }
 
+    public AWTEventListener releaseListener = null;
+    
     public EnvelopeDisplay(Synth synth, Color color, String[] xKeys, String[] yKeys, double xConstants[], double yConstants[], double[] angles)
         {
         super();
@@ -227,17 +229,51 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                                 
             public void mousePressed(MouseEvent e)
                 {
+                mouseDown();
                 highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
                 updateFromMouse(mouseToX(e.getX()), mouseToY(e.getY()), false);
                 updateHighlightIndex(highlightIndex);
                 repaint();
+                if (releaseListener != null)
+                	{
+                	releaseListener = null;
+               		}
+
+				// This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
+				// same component that received mouseClicked.  What the ... ? Asinine.
+				// So we create a global event listener which checks for mouseReleased and
+				// calls our own private function.  EVERYONE is going to do this.
+							
+				Toolkit.getDefaultToolkit().addAWTEventListener( releaseListener = new AWTEventListener()
+					{
+					public void eventDispatched(AWTEvent evt)
+						{
+						if (evt instanceof MouseEvent && evt.getID() == MouseEvent.MOUSE_RELEASED)
+							{
+							MouseEvent e = (MouseEvent) evt;
+							if (releaseListener != null)
+								{
+                				mouseUp();
+                				highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
+                				updateHighlightIndex(highlightIndex);
+ 								Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener );
+                				repaint();
+                				}
+							}
+						}
+					}, AWTEvent.MOUSE_EVENT_MASK);
+
                 }
                                 
             public void mouseReleased(MouseEvent e)
                 {
-                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
-                updateHighlightIndex(highlightIndex);
-                repaint();
+                if (releaseListener == null)
+                	{
+                	mouseUp();
+                	highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
+                	updateHighlightIndex(highlightIndex);
+                	repaint();
+                	}
                 }
             };
                 
@@ -245,6 +281,12 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         addMouseMotionListener(ma);
         }
 
+	/** Empty hook, called when mouse is pressed */
+	public void mouseDown() { }
+
+	/** Empty hook, called when mouse is released */
+	public void mouseUp() { }
+	
     int highlightIndex = NO_HIGHLIGHT;
 
     public static final int NO_HIGHLIGHT = -1;

@@ -67,7 +67,8 @@ public class KawaiK5 extends Synth
     public static final int[] MAJOR_THIRD_HARMONICS = { 5, 10, 20, 40, 80 };
     public static final int[] MINOR_SEVENTH_HARMONICS = { 7, 14, 28, 56 };
     public static final int[] MAJOR_SECOND_HARMONICS = { 9, 18, 36, 72 };
-        
+    
+    
     public KawaiK5()
         {
         for(int i = 0; i < parameters.length; i++)
@@ -846,6 +847,19 @@ public class KawaiK5 extends Synth
 
             comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), new String[63 * 2], mods, widths, heights2)
                 {
+                // The mouseDown and mouseUp code here enables us to only do undo()
+                // ONCE.
+                public void mouseDown()
+                	{
+                	getUndo().push(getModel());
+                	getUndo().setWillPush(false);
+                	}
+                
+                public void mouseUp()
+                	{
+                	getUndo().setWillPush(true);
+                	}
+                	
                 public void updateFromMouse(double x, double y, boolean continuation)
                     {
                     if (x < 0)
@@ -908,6 +922,19 @@ public class KawaiK5 extends Synth
 
             comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), new String[63 * 2], levels, widths, heights)
                 {
+                // The mouseDown and mouseUp code here enables us to only do undo()
+                // ONCE.
+                public void mouseDown()
+                	{
+                	getUndo().push(getModel());
+                	getUndo().setWillPush(false);
+                	}
+                
+                public void mouseUp()
+                	{
+                	getUndo().setWillPush(true);
+                	}
+                	
                 public void updateFromMouse(double x, double y, boolean continuation)
                     {
                     if (x < 0)

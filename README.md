@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 15)
+Synthesizer Patch Editor (Version 16)
  
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -14,6 +14,7 @@ Edisyn is a synthesizer patch editor library written in pure Java.   It runs on 
 
 Edisyn presently supports:
 
+* DSI Prophet '08 
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes)
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
 * Oberheim Matrix 1000

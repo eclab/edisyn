@@ -39,10 +39,13 @@ public class SynthPanel extends JPanel implements Gatherable
 
     boolean unresettable = false;
     boolean pasteable = false;
+    boolean sendsAllParameters = true;
     public void makePasteable(String preamble) { pasteable = true; this.preamble = preamble; }
     public boolean isPasteable() { return pasteable; }
     public void makeUnresettable() { unresettable = true; }
     public boolean isUnresettable() { return unresettable; }
+    public void setSendsAllParameters(boolean val) { sendsAllParameters = val; }
+    public boolean getSendsAllParameters() { return sendsAllParameters; }
     
     public boolean isPasteCompatible(String preamble)
         {
@@ -68,7 +71,13 @@ public class SynthPanel extends JPanel implements Gatherable
 
     public void resetPanel()
         {
-        Synth other = Synth.instantiate(synth.getClass(), synth.getSynthNameLocal(), true, true, synth.tuple);
+         boolean currentMIDI = synth.getSendMIDI();
+        if (sendsAllParameters)
+        	{
+        	synth.setSendMIDI(false);
+        	}
+        	
+       Synth other = Synth.instantiate(synth.getClass(), synth.getSynthNameLocal(), true, true, synth.tuple);
         ArrayList components = new ArrayList();
         gatherAllComponents(components);
         for(int i = 0; i < components.size(); i++)
@@ -83,7 +92,7 @@ public class SynthPanel extends JPanel implements Gatherable
                     if (synth.getModel().isString(key))
                         {
                         synth.getModel().set(key, other.getModel().get(key, ""));
-                        }
+                       }
                     else
                         {
                         synth.getModel().set(key, other.getModel().get(key, 0));
@@ -93,6 +102,14 @@ public class SynthPanel extends JPanel implements Gatherable
                     System.err.println("Warning (SynthPanel): Key missing in model : " + key);
                 }
             }               
+
+        if (sendsAllParameters)
+        	{
+        	synth.setSendMIDI(currentMIDI);
+        	synth.sendAllParameters();
+	        }
+        // so we don't have independent updates in OS X
+        repaint();
         }
         
     public void copyPanel(boolean includeImmutable)
@@ -143,7 +160,13 @@ public class SynthPanel extends JPanel implements Gatherable
                 keys.put(reduced, key);
                 }    
             }               
-                
+        
+        boolean currentMIDI = synth.getSendMIDI();
+        if (sendsAllParameters)
+        	{
+        	synth.setSendMIDI(false);
+        	}
+        	
         String[] mutationKeys = synth.getMutationKeys();
         if (mutationKeys == null) mutationKeys = new String[0];
         HashSet mutationSet = new HashSet(Arrays.asList(mutationKeys));
@@ -174,6 +197,15 @@ public class SynthPanel extends JPanel implements Gatherable
             else
                 System.err.println("Warning (SynthPanel): Null mapping for " + key + " (reduced to " + reduced + ")");                                        
             }
-        synth.revise();               
+        
+	    synth.revise();
+
+        if (sendsAllParameters)
+        	{
+        	synth.setSendMIDI(currentMIDI);
+        	synth.sendAllParameters();
+	        }
+        // so we don't have independent updates in OS X
+        repaint();
         }
     }

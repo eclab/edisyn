@@ -28,6 +28,8 @@ public class Category extends JComponent implements Gatherable
     String distributePreamble;
     boolean pasteable = false;
     boolean distributable = false;
+    boolean sendsAllParameters = false;
+    Gatherable auxillary = null;
     
     MenuItem copy = new MenuItem("Copy Category");
     MenuItem paste = new MenuItem("Paste Category");
@@ -40,6 +42,17 @@ public class Category extends JComponent implements Gatherable
     public void makePasteable(String preamble) { pasteable = true; this.preamble = preamble; }
     public void makeDistributable(String preamble) { distributable = true; this.distributePreamble = preamble; }
     public void makeUnresettable() { reset.setEnabled(false); }
+    public void setSendsAllParameters(boolean val) { sendsAllParameters = val; }
+    public boolean getSendsAllParameters() { return sendsAllParameters; }
+    
+    /** Returns an auxillary component.  Sometimes a Category is broken into two pieces
+    	(see KawaiK5 Harmonics (DHG) category for example), and when we gather elements,
+    	we want to gather from the auxillary as well. */
+    public Gatherable getAuxillary() { return auxillary; }
+    /** Sets an auxillary component.  Sometimes a Category is broken into two pieces
+    	(see KawaiK5 Harmonics (DHG) category for example), and when we gather elements,
+    	we want to gather from the auxillary as well. */
+    public void setAuxillary(Gatherable comp) { auxillary = comp; }
     
     PopupMenu pop = new PopupMenu();
       
@@ -76,6 +89,12 @@ public class Category extends JComponent implements Gatherable
       
     void resetCategory()
         {
+         boolean currentMIDI = synth.getSendMIDI();
+        if (sendsAllParameters)
+        	{
+        	synth.setSendMIDI(false);
+        	}
+        	
         Synth other = Synth.instantiate(synth.getClass(), synth.getSynthNameLocal(), true, true, synth.tuple);
         ArrayList components = new ArrayList();
         gatherAllComponents(components);
@@ -100,6 +119,14 @@ public class Category extends JComponent implements Gatherable
                     System.err.println("Key missing in model : " + key);
                 }
             }               
+
+        if (sendsAllParameters)
+        	{
+        	synth.setSendMIDI(currentMIDI);
+        	synth.sendAllParameters();
+	        }
+        // so we don't have independent updates in OS X
+        repaint();
         }
         
     void copyCategory(boolean includeImmutable)
@@ -151,6 +178,12 @@ public class Category extends JComponent implements Gatherable
                 }    
             }               
 
+        boolean currentMIDI = synth.getSendMIDI();
+        if (sendsAllParameters)
+        	{
+        	synth.setSendMIDI(false);
+        	}
+
         String[] mutationKeys = synth.getMutationKeys();
         if (mutationKeys == null) mutationKeys = new String[0];
         HashSet mutationSet = new HashSet(Arrays.asList(mutationKeys));
@@ -181,7 +214,16 @@ public class Category extends JComponent implements Gatherable
             else
                 System.err.println("Warning (Category) 2: Null mapping for " + key + " (reduced to " + reduced + ")");                                        
             }
-        synth.revise();               
+
+	    synth.revise();
+
+        if (sendsAllParameters)
+        	{
+        	synth.setSendMIDI(currentMIDI);
+        	synth.sendAllParameters();
+	        }
+        // so we don't have independent updates in OS X
+        repaint();
         }
         
     void distributeCategory(boolean includeImmutable)
@@ -191,6 +233,12 @@ public class Category extends JComponent implements Gatherable
 
         if (lastKey != null)
             {
+			boolean currentMIDI = synth.getSendMIDI();
+			if (sendsAllParameters)
+				{
+				synth.setSendMIDI(false);
+				}
+        	
             String lastReduced = reduceAllDigitsAfterPreamble(lastKey, distributePreamble);
 
             String[] mutationKeys = synth.getMutationKeys();
@@ -228,8 +276,17 @@ public class Category extends JComponent implements Gatherable
                         System.err.println("Warning (Category): Null mapping for " + key + " (reduced to " + reduced + ")");                                        
                     }
                 }
+        
+			synth.revise();
+
+			if (sendsAllParameters)
+				{
+				synth.setSendMIDI(currentMIDI);
+				synth.sendAllParameters();
+				}
             }
-        synth.revise();               
+        // so we don't have independent updates in OS X
+        repaint();
         }
     
     final static int STATE_FIRST_NUMBER = 0;
@@ -619,7 +676,11 @@ public class Category extends JComponent implements Gatherable
             list.add(c[i]);
             if (c[i] instanceof Gatherable)
                 ((Gatherable)c[i]).gatherAllComponents(list);
-            }                       
+            }
+        if (auxillary != null)
+        	{
+        	auxillary.gatherAllComponents(list);
+        	}
         }
     
     public void paintComponent(Graphics g)

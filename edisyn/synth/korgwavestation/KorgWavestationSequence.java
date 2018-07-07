@@ -79,7 +79,7 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        //writeTo.setEnabled(false);  // there's no such thing as "writing" a sequence
+        transmitTo.setEnabled(false);  // there's no such thing as "sending to" another patch -- you should always write to it
         receiveCurrent.setEnabled(false);  // we can't request the "current" sequence
         addWavestationMenu();
         return frame;
@@ -117,10 +117,7 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
         HBox hbox2 = new HBox();
         comp = new PatchDisplay(this, 9);
         hbox2.add(comp);
-        vbox.add(hbox2);
-        
-        VBox vbox2 = new VBox();
-        hbox2 = new HBox();
+/*
         comp = new StringComponent("Sequence Name", this, "name", NAME_LENGTH, "Name must be up to " + NAME_LENGTH + " ASCII characters.")  // is this right?
             {
             public String replace(String val)
@@ -134,7 +131,21 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
                 updateTitle();
                 }
             };
+*/
+        comp = new ReadOnlyString("Sequence Name", this, "name", NAME_LENGTH)
+            {
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                updateTitle();
+                }
+            };
         hbox2.add(comp);
+
+        vbox.add(hbox2);
+        
+        VBox vbox2 = new VBox();
+        hbox2 = new HBox();
 
         comp = lengthbutton = new NumberButton("Num Steps", this, "length", 0, NUM_STEPS, "Value must be 0..." + NUM_STEPS + ".")
             {
@@ -276,7 +287,7 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
         else
             {
             String[] waves = new String[517 - 32];
-            for(int i = 0; i < 517; i++)
+            for(int i = 0; i < 517 - 32; i++)
                 {
                 waves[i] = "Wave " + i;
                 }
@@ -311,7 +322,7 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
                 setSendMIDI(false);
                 String currentKey = getKey().replace("bank", "number");
                 int currentWave = model.get(currentKey, 0);
-                waves.setElements("Wave", buildWaves(model.get("key", 0) == 1 ? BANK_CARD : 0));
+                waves.setElements("Wave", buildWaves(model.get(key, 0) == 1 ? BANK_CARD : 0));
                 model.set(currentKey, currentWave);
                 setSendMIDI(oldSendMIDI);
                 }
@@ -817,14 +828,14 @@ return pos;
                     }
                 else
                     {
-                    model.set(MAIN_KEYS[i], (data[pos++] << 8) | (data[pos++] & 255));
+                    model.set(MAIN_KEYS[i], (data[pos++] << 7) | (data[pos++] & 127));
                     }
                 }
             for(int j = 0; j < NUM_STEPS; j++)
                 {
                 for(int i = 0; i < STEP_KEYS.length; i++)
                     {
-                    model.set("step" + (i + 1) + STEP_KEYS[i], (data[pos++] << 8) | (data[pos++] & 255));
+                    model.set("step" + (j + 1) + STEP_KEYS[i], (data[pos++] << 7) | (data[pos++] & 127));
                     }
                 }                
             }
@@ -926,7 +937,7 @@ return pos;
         byte[] nummesg = null;
         if (status == STATUS_UPDATING_ONE_PARAMETER)
             {
-            nummesg = paramBytes(WAVE_SEQ_NUM, edisynToWSBank[model.get("number")]);
+            nummesg = paramBytes(WAVE_SEQ_NUM, model.get("number", 0));
             }
                 
         if (key.equals("step"))         // we'll use this to just change the current step, not that it matters because the screen doesn't change unless the user presses a button...
@@ -934,12 +945,14 @@ return pos;
             byte[] mesg = paramBytes(WAVE_SEQ_STEP, model.get(key));
             return new byte[][] { bankmesg, nummesg, mesg };
             }
-        else if (key.equals("name"))
+        /*
+        	// bug in SR always puts a \0 at the beginning, ruining the name  So we don't do it.
+        	else if (key.equals("name"))
             {
-            // Why isn't this WAVE_SEQ_NAME?
             byte[] mesg = paramBytes(SAVE_SOURCE_NAME, model.get(key, "").toCharArray());
-            return new byte[][] { bankmesg, nummesg, mesg };
+            return new byte[][] { mesg }; //bankmesg, nummesg, mesg };
             }
+            */
         else if (key.startsWith("step"))
             {
             // emit when it's just one parameter, or when we're doing a bulk send but
@@ -1012,10 +1025,10 @@ return pos;
                     // first clear the sequence
                     obj[pos++] = paramBytes(EXECUTE_WAVESEQ_INIT, 1);
                                 
-                    // Now we have ONE wave step.  We need to insert length additional ones
+                    // Now we have ONE wave step.  We need to insert length-1 additional ones
                                                 
                     // Now insert steps.  Each time we go back to step 0 because it seems to be a bit faster
-                    for(int i = 0; i < length; i++)
+                    for(int i = 0; i < length - 1; i++)
                         {
                         obj[pos++] = paramBytes(WAVE_SEQ_STEP, 0);
                         obj[pos++] = paramBytes(EXECUTE_INSERT_WS_STEP, 1);
@@ -1097,7 +1110,7 @@ return pos;
     public static final int MS_PER_STEP_BY_INDEX = 7;
     public static final int MS_PER_STEP = 250;
     public static final int MS_PER_INITIALIZATION = 1000;
-    public static final int MS_PER_STEP_DATA = 70;
+    public static final int MS_PER_STEP_DATA = 80;
     int stepPos = 0;
     boolean sendingLength = false;
     public static final int MINIMUM_SENT_ELEMENTS_FOR_DISPLAY_CHANGE = 20;
@@ -1162,7 +1175,7 @@ return pos;
         
     public static String[] MAIN_KEYS = new String[]
     {
-    "name", "length", "modsource", "looprepeats", "loopbackandforth", "start", "loopstart", "loopend", "modulationamount", "modsource"
+    "name", "length", "looprepeats", "loopbackandforth", "start", "loopstart", "loopend", "modulationamount", "modsource"
     };
         
     public static String[] STEP_KEYS = new String[]
@@ -1189,7 +1202,7 @@ return pos;
         
         // we have a hack here to send patch information first so we write it to the right place.
         tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_BANK, edisynToWSBank[model.get("bank")]) });
-        tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_NUM, edisynToWSBank[model.get("number")]) });
+        tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_NUM, model.get("number", 0)) });
         super.sendAllParameters();      
         
         currentParameter = 0;
@@ -1210,7 +1223,7 @@ return pos;
             {
             // we have a hack here to send patch information first so we write it to the right place.
             tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_BANK, edisynToWSBank[model.get("bank")]) });
-            tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_NUM, edisynToWSBank[model.get("number")]) });
+            tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_NUM, model.get("number", 0)) });
 
             // send length first.  Note it doesn't send the wave parameters, those will get
             // sent in the next step automatically.
@@ -1274,17 +1287,17 @@ return pos;
             else
                 {
                 int val = model.get(MAIN_KEYS[i], 0);
-                sysex[pos++] = (byte)((val >>> 8) & 255);
-                sysex[pos++] = (byte)(val & 255);
+                sysex[pos++] = (byte)((val >>> 7) & 127);
+                sysex[pos++] = (byte)(val & 127);
                 }
             }
         for(int j = 0; j < NUM_STEPS; j++)
             {
             for(int i = 0; i < STEP_KEYS.length; i++)
                 {
-                int val = model.get("step" + (i + 1) + STEP_KEYS[i], 0);
-                sysex[pos++] = (byte)((val >>> 8) & 255);
-                sysex[pos++] = (byte)(val & 255);
+                int val = model.get("step" + (j + 1) + STEP_KEYS[i], 0);
+                sysex[pos++] = (byte)((val >>> 7) & 127);
+                sysex[pos++] = (byte)(val & 127);
                 }
             }
         
@@ -1692,6 +1705,8 @@ return pos;
     
     public void stepSolo()
         {
+        tryToSendSysex(paramBytes(WAVE_SEQ_BANK, edisynToWSBank[model.get("bank")]));
+        tryToSendSysex(paramBytes(WAVE_SEQ_NUM, model.get("number", 0)));
         tryToSendSysex(paramBytes(EXECUTE_SOLO_WS_STEP, 1));
         }
     
@@ -1709,7 +1724,7 @@ return pos;
             });
         menu.add(sendTestPerformanceMenu);
 
-        JMenuItem soloMenu = new JMenuItem("Toggle Solo-Step");
+        JMenuItem soloMenu = new JMenuItem("Toggle Solo-Step [First Press Perf, then Edit]");
         soloMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -1772,6 +1787,11 @@ return pos;
         */
                 
         }
+
+	public boolean getSendsParametersAfterLoad()
+		{
+		return false;
+		}
 
     }
     

@@ -1,0 +1,74 @@
+At present Edisyn's Sequence editor doesn't bank-save all sequences
+(the only real option for the Wavestation, EX, and A/D).  Instead it
+uses special SR commands to emit the sequence, and slowly.  Because
+the Wavestation doesn't have sysex for saving a single wave sequence,
+Edisyn has to make one up for saving to disk.  This file describes
+that format.
+
+HEADER
+
+0xF0 
+0x7D	// indicates "Educational Use"
+'E' 'D' 'I' 'S' 'Y' 'N' ' ' 'K' 'O' 'R' 'G' 'W' 'S' 'S' 'R' ' ' 'S' 'E' 'Q'
+0x00	// version number
+Bank	// 0 ...
+Number	// 0 ...
+Name0	// ASCII
+Name1   // ASCII
+Name2   // ASCII
+Name3   // ASCII
+Name4   // ASCII
+Name5   // ASCII
+Name6   // ASCII
+Name7	// ASCII
+
+
+GLOBALS		// These are all assumed to be bytes and sent MSB + LSB
+
+Length		// 0 ...
+Mod Source	// Modulation Source [See Table]
+Loop Repeats	// 0 ... 127
+Loop Back and Forth	// 0 or 1
+Start		// 1 ... 255
+Loop Start 	// 1 ... 255
+Loop End	// 1 ... 255
+Modulation Amount	// -127 ... 127	
+Modulation Source
+
+
+FOR EACH STEP (ALL 255 OF THEM)		// These are all sent MSB + LSB
+
+Semitone	// -24 ... 24	// assumed to be a byte
+Fine		// -99 ... 99	// assumed to be a byte
+Level		// 0 ... 99	// assumed to be a byte
+Duration	// 1 ... 500	// assumed to be unsigned 14-bit
+Crossfade	// 0 ... 998	// assumed to be unsigned 14-bit
+Number		// 0 ... 484	// assumed to be unsigned 14-bit
+Bank		// [really card];  0 or 1	assumed to be a byte
+
+
+FOOTER
+
+0xF7
+
+
+
+TABLE 1:  MODULATION SOURCES
+
+0	"Linear Keyboard"
+1	"Centered Keyboard"
+2	"Linear Velocity"
+3	"Exponential Velocity"
+4	"LFO1"
+5	"LFO2"
+6	"Envelope 1"
+7	"Aftertouch"
+8	"AT + Mod Wheel"
+9	"Mod Wheel"
+10	"MIDI 1"
+11	"MIDI 2"
+12	"MIDI Mod Pedal"
+
+
+
+

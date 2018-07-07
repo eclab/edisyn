@@ -5,9 +5,9 @@
 
 <p>This editor is designed work with the <b>Korg Wavestation SR</b>.  It will <b>not</b> work with any other Wavestation models (the original Wavestation, the Wavestation EX, or the Wavestation A/D).
 
-<p><b>Communicating with Edisyn</b> Set your SR to receive sysex parameters, and also to receive program change and bank select commands, as well as All Notes Off.  Turn off memory protect (including for your card if you need to).  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.
+<p><b><font color="red">IMPORTANT NOTE</font></b> It is very important that you read this document carefully and entirely, especially the "Gotchas" section, before manipulating your SR wave sequences with this editor, or you will lose and/or corrupt data.
 
-<p>It is <b>very important</b> that you read the <b>Gotchas</b> below to understand Edisyn's strategy for building wave sequences, and why things can be slow.
+<p><b>Communicating with Edisyn</b> Set your SR to receive sysex parameters, and also to receive program change and bank select commands, as well as All Notes Off.  Turn off memory protect (including for your card if you need to).  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.
 
 <p>
 <p><b>Hints</b>
@@ -26,27 +26,34 @@
 
 <p><b>Gotchas</b>
 
+<p>The Wavestation SR has a number of serious issues regarding its wave sequences.  You need to make sure you understand them.
+
 <ul>
-<li>There is no current working memory for wave sequences: any parameter changes you make will be immediately permanent.  Thus you should back up before using this editor.
+<li><font color="red"><b>Important. </b></font>There is no current working memory for wave sequences: any parameter changes you make will be <b>immediately permanent.</b>  Thus:
 
-<p><li>You cannot receive the current wave sequence (there is no "current" wave sequence).  You have to be specific about which wave sequence you want.
+<p><ul>
+<li>You should back up before using this editor on your SR.
 
-<p><li>The Wavestation doesn't have any way to receive a single wave sequence: it unfortunately expects to receive all wave sequences together as a huge 11Kbyte block.  Edisyn gets around this by sending all the parameters individually: but one parameter is a problem: the sequence length.  In order to change the sequence length, Edisyn must erase all the existing steps in the sequence, then repeatedly insert steps one by one until the desired length is reached, then set all the step parameter values.
+<p><li>Unlike other patch editors, this patch editor will not send parameters upon loading from disk, as it will automatically overwrite stuff.
 
-<p><p>The problem is that inserting a step in a sequence is very fast if the sequence length is (initially) small, but as the length grows, so does the amount of time needed to do the insert.  Thus building a long sequence can take a very long time using this method.  If you want to build a short sequence, you might find it easier to build a sequence of length 1, and then gradually increase it by pressing the "Add Step" button.
+<p>Any parameter tweak you make will be immediately written to the SR.  I suggest instead that you <i>disable</i> the "Sends Real-Time Changes" option in Edisyn's MIDI menu.
 
-<p><p>For this reason, Edisyn by default only changes step length when you click on the "Number of Steps" button.  The number of steps is not normally included when you send the Wave Sequence.  But you can change this behavior in the Wavestation menu.
-
-<p><li>By default Performance 0 and Patch 0 are set up to play the given Wave Sequence so it can be auditioned.  You can turn this feature off in the Wavestation menu.
-
-<p><li>Updating individual parameters is a little pokey.  This is because Edisyn must insert a significant delay between successive parameter updates or they'll get dropped by the SR.
-
-<p><li>Due to an apparent bug, the SR doesn't let you change the name of a wave sequence using parameters.  You can only change it by saving out the whole wave sequence block (which Edisyn doesn't do).  So at present Edisyn can't change wave sequence names; you'll have to do it manually (when in the wave sequence editing pages, press Write, change the name, and press Write again).
-
+<p>Undoing, merging, mutating, hill-climbing, etc. all make permanent changes.  This can bite you.
 </ul>
 
-<p><b>Notes</b>
-<p>For the time being, I have elected to not have the patch editor update itself in response to manual parameter changes made directly on the synth.  The SR is just too complex a beast.  
+<p><li>The Wavestation cannot receive a single wave sequence: it expects to receive all wave sequences together as a huge 11Kbyte block.  This means that the normal way to send or write a sequence would be for Edisyn to load the entire block, make a change, and then write out again.  Edisyn doesn't do this.  Instead, it sends individual parameters.
+
+<p>The problem is that writing out individual parameters on the SR is both slow and buggy, and particularly slow if you have a long sequence (in computer speak, building a sequence of length N takes O(N^2) time, ugh).  
+
+<p>For this reason, Edisyn by default only changes the step length when writing a sequence.  This can have unforseen consequences.  For example, if you increase the step length, and then UNDO it, the step length is NOT decreased on the SR -- it stays the same, though it has changed in Edisyn (and so the two are now out of sync). 
+
+<p>For similar reasons, "Send To Patch..." is disabled.
+
+<p><li>Real-time updating individual parameters is a little pokey.  This is because Edisyn must insert a significant delay between successive parameter updates or they'll get dropped by the SR.
+
+<p><li>Due to a Korg bug, if you try to change the name of a patch on the SR over MIDI, it gets corrupted (specifically, the first byte of the string is replaced with value 0).  So Edisyn doesn't allow you to change wave sequence names: you'll have to do it manually.  To do this, go to the wave sequence editing page (Perf, Edit, Edit, Page+, Edit), make sure you're naming the wave sequence you want to name, then press Write, edit the name, and press Write, then Yes. 
+
+</ul>
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

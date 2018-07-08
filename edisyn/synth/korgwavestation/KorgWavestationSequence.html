@@ -20,7 +20,10 @@
 <p><b>The Wavestation Menu</b>  
 <ul>
 <li>Wave Sequences must be auditioned by playing them in a Performance holding a Patch.  If you select <b>Set up Test Performance/Patch in RAM 1 Slot 0 Wave A</b>, Edisyn will temporarily modify Performance 1:0 so that it contains a single Part, at full volume, with no effects and default settings.  The Part will be Patch 1:0, consisting of a single Wave (A).  This Wave will be your current Wave Sequence.  Just don't write the Performance or the Patch and you'll be fine.
+
 <p><li>You can also toggle on/off the soloing of the current step by selecting <b>Toggle Solo Step</b>.  Note that the Wavestation will ignore this request unless you're currently editing a performance, patch, or wave sequence on the SR's screen.  So you might, for example, press <b>Perf</b> and then <b>Edit</b> before issuing this menu option.   Also Edisyn can't tell if you've turned on the toggle or turned it off: to do this, you have to be editing a wave sequence on the SR screen.  To do this, you might first press <b>Perf Edit Edit Page+ Edit</b>.  Then if you do the toggle, it's on if you see a blinking "S".
+
+<p><li>Finally, if you choose <b>Block Sending Any Parameters</b>, you can prevent Edisyn from sending parameters except when writing to a patch.  This is useful (and <b><font color="red">you should have it turned on by default</font></b>) because changing parameters on wave sequences in the Wavestation is immediate and permanent.  You probably don't want that.  See Gotchas below.
 </ul>
 
 
@@ -36,18 +39,16 @@
 
 <p><li>Unlike other patch editors, this patch editor will not send parameters upon loading from disk, as it will automatically overwrite stuff.
 
-<p>Any parameter tweak you make will be immediately written to the SR.  I suggest instead that you <i>disable</i> the "Sends Real-Time Changes" option in Edisyn's MIDI menu.
-
-<p>Undoing, merging, mutating, hill-climbing, etc. all make permanent changes.  This can bite you.
+<p><li>Any parameter tweak, or undo/redo, or mutate, or merge, or hill-climb, or nudge, or send that you perform will be immediately written to the SR permanently.  You probably don't want that.  I suggest instead that you turn on <b>Block Sending Any Parameters</b> in the Wavestation menu until you understand the implications of what you're doing (I've messed up things too often myself).  You can still write parameters to the patch when this menu option is turned on.
 </ul>
 
 <p><li>The Wavestation cannot receive a single wave sequence: it expects to receive all wave sequences together as a huge 11Kbyte block.  This means that the normal way to send or write a sequence would be for Edisyn to load the entire block, make a change, and then write out again.  Edisyn doesn't do this.  Instead, it sends individual parameters.
 
-<p>The problem is that writing out individual parameters on the SR is both slow and buggy, and particularly slow if you have a long sequence (in computer speak, building a sequence of length N takes O(N^2) time, ugh).  
+<p><br>The problem is that writing out individual parameters on the SR is both slow and buggy, and particularly slow if you have a long sequence (in computer speak, building a sequence of length N takes O(N^2) time, ugh).  
 
-<p>For this reason, Edisyn by default only changes the step length when writing a sequence.  This can have unforseen consequences.  For example, if you increase the step length, and then UNDO it, the step length is NOT decreased on the SR -- it stays the same, though it has changed in Edisyn (and so the two are now out of sync). 
+<p><br>For this reason, Edisyn by default only changes the step length when writing a sequence.  This can have unforseen consequences.  For example, if you increase the step length, and then UNDO it, the step length is NOT decreased on the SR -- it stays the same, though it has changed in Edisyn (and so the two are now out of sync). 
 
-<p>For similar reasons, "Send To Patch..." is disabled.
+<p><br>For similar reasons, "Send To Patch..." is disabled.
 
 <p><li>Real-time updating individual parameters is a little pokey.  This is because Edisyn must insert a significant delay between successive parameter updates or they'll get dropped by the SR.
 

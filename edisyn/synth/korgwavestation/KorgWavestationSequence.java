@@ -1092,6 +1092,39 @@ return pos;
             }
         }
 
+
+
+	// To create a sequence we:
+	// 1. Initialize
+	// 2. If the length is zero, we just delete the step created after initialization and we're done
+	// 3. Else for N-1 steps
+	// 3.1   For N - 1 steps
+	// 3.1.1    Go to step zero
+	// 3.1.2    Insert a step
+	// 3.2   Go to step zero
+	// 3.3   For N steps
+	// 3.3.1     Change all step parameters
+	// 3.3.2     Go to next step
+	//
+	// To update a sequence we start at line 3.2
+	//
+	// Also if we update a single parameter, we just do the appropriate item inside 3.3.1
+	//
+	// After initialization (1), insertion (3.1.2), and parameter changes (each change in 3.3.1) we do a pause.
+	// the pauses are defined as:
+	//
+	// After initialization
+	//	MS_PER_INITIALIZATION
+	// After step insertion (but not step move) [steps are one-based here]
+	//	MS_PER_STEP_BY_INDEX * step * 2 + MS_PER_STEP
+	// After each parameter
+	//	MS_PER_STEP_DATA
+	//
+	// Note that step insertion has O(n) pauses, so it's O(n^2) all together.  :-(
+	// Also note that MS_PER_STEP_DATA is not the same as MS_PER_STEP, which is just
+	// a constant on top of the O(n^2).
+	
+
     public static final int MS_PER_STEP_BY_INDEX = 7;
     public static final int MS_PER_STEP = 250;
     public static final int MS_PER_INITIALIZATION = 1000;

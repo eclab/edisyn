@@ -4525,12 +4525,49 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
     
     public static final int NYBBLIZED_LENGTH = 181;
 
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
-        model.set("bank", wsToEdisynBank[data[5]]);
-        model.set("number", data[6]);
+        if (data[4] == (byte)0x49)
+            {
+            model.set("bank", wsToEdisynBank[data[5]]);
+            model.set("number", data[6]);
+            return subparse(data, 7);
+            }
+        else
+            {
+            // extract names
+            String[] n = new String[50];
+            for(int i = 0; i < 50; i++)
+                {
+                // yuck, denybblize and extract the patch just to get the name...
+                byte[] d = denybblize(data, i * NYBBLIZED_LENGTH * 2 + 6, NYBBLIZED_LENGTH * 2);
+        
+                Performance performance = new Performance();
+                performance.read(d, 0);
+        
+                n[i] = new String(performance.name);
+                } 
                 
-        data = denybblize(data, 7);
+            // Now that we have an array of names, one per patch, we present the user with options;
+            // 0. Cancel [handled automatically]
+            // 1. Save the bank data [handled automatically]
+            // 2. Upload the bank data [handled automatically] 
+            // 3. Load and edit a certain patch number
+            int patchNum = showBankSysexOptions(data, n);
+            if (patchNum < 0) return PARSE_CANCELLED;
+                
+            model.set("bank", wsToEdisynBank[data[5]]);
+            model.set("number", patchNum);
+
+            // okay, we're loading and editing patch number patchNum.  Here we go.
+            return subparse(data, patchNum * NYBBLIZED_LENGTH * 2 + 6);      
+            }
+        }
+                
+
+    public int subparse(byte[] data, int pos)
+        {
+        data = denybblize(data, pos);
 
         // The Wavestation effects documentation is woefully incomplete.  It is missing
         // critical information how the serial/parallel routing is embedded, and also
@@ -4593,9 +4630,11 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         // bits 1 and 3 being set).  This doesn't happen in Mix 4 because in Parallel, 
         // Mix 4's default is RIGHT, which is the same value (11) as WET.
    
-        
+        System.err.println("---->" + getSendMIDI());
+        new Throwable().printStackTrace();
+                
         Performance performance = new Performance();
-        performance.read(data, 0);
+        performance.read(data, 0);        
 
         model.set("name", new String(performance.name));
                 
@@ -4611,8 +4650,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         model.set("fxmod4amount", (((performance.fxPerfBlock[4] & 0xFF) >>> 4) & 15) | ((((performance.fxPerfBlock[1] & 0xFF) << 1) & 128) >> 3));
                                 
         model.set("fxseries", (performance.fxPerfBlock[0] & 0xFF) >>> 7);
+
                 
-        boolean extendedEffects = (((performance.fxPerfBlock[1] & 0xFF) >>> 7) == 1);
+        boolean extendedEffects = (((performance.fxPerfBlock[1] & 0xFF) >>> 7) == 1);                       
                                 
         for(int fx = 1; fx <= 2; fx++)
             {
@@ -4626,7 +4666,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                         
             if (fxtype == 0) // NO_EFFECT
                 continue;
-                        
+                
             model.setUpdateListeners(false);
                         
             // First we zero out
@@ -4692,7 +4732,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                     model.set(key, fxVal);
                     }
                 }
-                                
+
             model.setUpdateListeners(true);
                         
             // finally update all the listeners
@@ -4947,15 +4987,24 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
     public static final int EXPECTED_SYSEX_LENGTH = 371;
     public static boolean recognize(byte[] data)
         {
-        return (data.length == EXPECTED_SYSEX_LENGTH &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x42 &&
-            data[3] == (byte)0x28 &&
-            data[4] == (byte)0x49);                 
+        return ((data.length == EXPECTED_SYSEX_LENGTH &&
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte)0x42 &&
+                data[3] == (byte)0x28 &&
+                data[4] == (byte)0x49)
+            
+            || recognizeBulk(data));              
         }
     
-    
-    
+    public static boolean recognizeBulk(byte[] data)
+        {
+        return ((data.length == 18108 &&
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte)0x42 &&
+                data[3] == (byte)0x28 &&
+                data[4] == (byte)0x4D));
+            
+        }    
     
     /////// OTHER ABSTRACT METHODS
     

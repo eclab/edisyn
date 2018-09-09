@@ -69,7 +69,7 @@ public class HillClimb extends SynthPanel
 
     JRadioButton[][] ratings = new JRadioButton[NUM_MODELS + 1][3];
     PushButton[] plays = new PushButton[NUM_MODELS];
-    public static final int INITIAL_MUTATION_RATE = 37;		// roughly 5 when we do weight^3
+    public static final int INITIAL_MUTATION_RATE = 37;         // roughly 5 when we do weight^3
     public static final int INITIAL_RECOMBINATION_RATE = 75;
     Blank blank;
     Category iterations;
@@ -585,18 +585,18 @@ public class HillClimb extends SynthPanel
         vbox.add(eb);
 
         LabelledDial mutationRate = new LabelledDial("Mutation", blank, "mutationrate", Style.COLOR_GLOBAL(), 0, 100)
-        	{
-        	public String map(int val)
-        		{
-        		double v = ((val / 100.0) * (val / 100.0) * (val / 100.0)) * 100;
-        		if (v == 100)
-        			return "100.0";
-        		else if (v >= 10.0)
-        			return String.format("%.2f", v);
-        		else
-	        		return String.format("%.3f", v);
-        		}
-        	};
+            {
+            public String map(int val)
+                {
+                double v = ((val / 100.0) * (val / 100.0) * (val / 100.0)) * 100;
+                if (v == 100)
+                    return "100.0";
+                else if (v >= 10.0)
+                    return String.format("%.2f", v);
+                else
+                    return String.format("%.3f", v);
+                }
+            };
         mutationRate.addAdditionalLabel("Rate");
         blank.getModel().set("mutationrate", INITIAL_MUTATION_RATE);
         vbox.add(mutationRate);

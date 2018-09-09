@@ -22,6 +22,8 @@ import java.awt.*;
 
 public class HTMLBrowser extends JPanel
     {
+    Object HTMLTextToSet = null;
+    
     java.util.Stack stack = new java.util.Stack();
     JEditorPane infoPane;
     JScrollPane scroll;
@@ -81,7 +83,7 @@ public class HTMLBrowser extends JPanel
             }
         return (buffer.toString());
         }
-                
+    
     public HTMLBrowser(InputStream stream)
         {
         this(new InputStreamReader(stream));
@@ -96,9 +98,23 @@ public class HTMLBrowser extends JPanel
     /** Constructs an HTMLBrowser using either an HTML string or a URL */
     public HTMLBrowser(final Object HTMLTextOrURL)
         {
+        HTMLTextToSet = HTMLTextOrURL;
+        
         infoPane = new JEditorPane()
             {
             public Insets getInsets() { return Style.HTML_DISPLAY_INSETS(); }
+
+            // This is a trick to delay loading until or if the user displays the HTMLBrowser
+            // so as to save some time.
+            // For some reason I can't have this in the outer HTMLBrowser -- it's never called!
+            // So instead we have it here in the JEditorPane.
+            public void paintComponent(Graphics g)
+                {
+                if (HTMLTextToSet != null)
+                    HTMLBrowser.this.setText(HTMLTextToSet);
+                HTMLTextToSet = null;
+                super.paintComponent(g);
+                }
             };
                 
         // set the base font and force the HTML Browser to use it
@@ -129,9 +145,6 @@ public class HTMLBrowser extends JPanel
         backButtonBox.add(backButton);
         backButtonBox.add(Box.createGlue());
 
-
-        setText(HTMLTextOrURL);
-        
 
         // make the hyperlinks active
         infoPane.addHyperlinkListener(new HyperlinkListener()

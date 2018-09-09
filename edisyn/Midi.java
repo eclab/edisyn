@@ -404,18 +404,22 @@ public class Midi
         
         if (inDevices.size() == 0)
             {
+            synth.disableMenuBar();
             JOptionPane.showOptionDialog(synth, "There are no MIDI devices available to receive from.",  
                 "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
                 JOptionPane.WARNING_MESSAGE, null,
                 new String[] { "Run Disconnected" }, "Run Disconnected");
+            synth.enableMenuBar();
             return CANCELLED;
             }
         else if (outDevices.size() == 0)
             {
+            synth.disableMenuBar();
             JOptionPane.showOptionDialog(synth, "There are no MIDI devices available to send to.",  
                 "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
                 JOptionPane.WARNING_MESSAGE, null,
                 new String[] { "Run Disconnected" }, "Run Disconnected");
+            synth.enableMenuBar();
             return CANCELLED;
             }
         else
@@ -466,11 +470,13 @@ public class Midi
 
                         
             boolean result = false;
+            synth.disableMenuBar();
             if (initialID != null)
                 result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Synth ID", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, outID, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
             else
                 result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
-                                
+            synth.enableMenuBar();
+                             
             if (result)
                 {
                 // we need to build a tuple
@@ -486,7 +492,9 @@ public class Midi
                     tuple.id = synth.reviseID(prospectiveID);
                     if (!tuple.id.equals(prospectiveID))
                         {
+                        synth.disableMenuBar();
                         JOptionPane.showMessageDialog(synth, "The ID was revised to: " + tuple.id, "Device ID", JOptionPane.WARNING_MESSAGE);
+                        synth.enableMenuBar();
                         }
                     }
                                 
@@ -495,10 +503,12 @@ public class Midi
                 tuple.inReceiver = inReceiver;
                 if (tuple.in == null)
                     {
+                    synth.disableMenuBar();
                     JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the incoming MIDI Device.",  
                         "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
                         JOptionPane.WARNING_MESSAGE, null,
                         new String[] { "Run Disconnected" }, "Run Disconnected");
+                    synth.enableMenuBar();
                     return FAILED;
                     }
 
@@ -506,10 +516,12 @@ public class Midi
                 tuple.out = tuple.outWrap.getReceiver();
                 if (tuple.out == null)
                     {
+                    synth.disableMenuBar();
                     JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the outgoing MIDI Device.",  
                         "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
                         JOptionPane.WARNING_MESSAGE, null,
                         new String[] { "Run Disconnected" }, "Run Disconnected");
+                    synth.enableMenuBar();
                     return FAILED;
                     }
 
@@ -525,10 +537,12 @@ public class Midi
                     tuple.keyReceiver = keyReceiver;
                     if (tuple.key == null)
                         {
+                        synth.disableMenuBar();
                         JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the Controller MIDI Device.",  
                             "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
                             JOptionPane.WARNING_MESSAGE, null,
                             new String[] { "Run without Controller" }, "Run without Controller");
+                        synth.enableMenuBar();
                         tuple.keyWrap = null;
                         tuple.key = null;
                         }

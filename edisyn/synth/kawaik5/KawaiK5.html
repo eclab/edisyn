@@ -39,6 +39,12 @@ will be 3 and OFF.
 
 <p>Last, you can set the harmonics to one of several <b>presets</b> such as sawtooth or square waves.
 
+<p>Note that drawing on the harmonics display will normally be jumpy and glitchy because every change you make on the display
+sends an associated MIDI parameter sysex messages to the synth, and this requires a significant pause or the K5 will not
+respond properly.  You can disable this in one of two ways: either Disconnect MIDI, or turn off "Sends Real Time Changes",
+both located in the MIDI menu.  After that you should find drawing in the display to be much smoother (and various other
+operations, like setting a Preset, to be much faster).
+
 <p><b>Gotchas</b>
 
 <ul>

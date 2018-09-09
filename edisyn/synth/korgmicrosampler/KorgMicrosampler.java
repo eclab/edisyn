@@ -3720,7 +3720,7 @@ public class KorgMicrosampler extends Synth
             }
         }
 
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
         // NRPN Data
         model.set("currentpattern", data[27]);

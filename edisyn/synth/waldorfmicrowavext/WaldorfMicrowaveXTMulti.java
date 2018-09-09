@@ -1109,13 +1109,13 @@ public class WaldorfMicrowaveXTMulti extends Synth
         }
         
 
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
         // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
         // format example, it's written as 0x11.  It's actually 0x11, though we don't check for it here.
                 
         boolean retval = true;
-        if (!ignorePatch && data[5] < 8)  // or < 1 ? Anyway, otherwise it's probably just local patch data.  Too bad they do this. :-(
+        if (data[5] < 8)  // or < 1 ? Anyway, otherwise it's probably just local patch data.  Too bad they do this. :-(
             {
             model.set("number", data[6]);
             }

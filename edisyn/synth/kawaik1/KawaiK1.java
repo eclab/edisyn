@@ -809,12 +809,54 @@ public class KawaiK1 extends Synth
             }
         }
 
-
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
-        model.set("bank", (data[7] / 8) + (data[6] == 0x00 ? 0 : 8));
-        model.set("number", data[7] % 8);
+        if (data[3] == (byte)0x20) // single
+            {               
+            model.set("bank", (data[7] / 8) + (data[6] == 0x00 ? 0 : 8));
+            model.set("number", data[7] % 8);
+            return subparse(data, 8);
+            }
+        else                            // block 
+            {
+            // extract names
+            char[][] names = new char[32][10];
+            for(int i = 0; i < 32; i++)
+                {
+                for (int j = 0; j < 10; j++)
+                    {
+                    names[i][j] = (char)(data[8 + (i * 88) + j] & 127);
+                    }
+                }
                         
+            String[] n = new String[32];
+            for(int i = 0; i < 32; i++)
+                {
+                n[i] = "" + (i + 1) + "   " + new String(names[i]);
+                } 
+                
+            // Now that we have an array of names, one per patch, we present the user with options;
+            // 0. Cancel [handled automatically]
+            // 1. Save the bank data [handled automatically]
+            // 2. Upload the bank data [handled automatically] 
+            // 3. Load and edit a certain patch number
+            int patchNum = showBankSysexOptions(data, n);
+            if (patchNum < 0) return PARSE_CANCELLED;
+            
+            boolean upper = (data[7] == 0);  // == 0 is I or E, == 0x20 is i or e
+            boolean internal = (data[6] == 0);
+            
+            model.set("bank", (patchNum / 8) + (internal ? 0 : 8) + (upper ? 0 : 4));
+            model.set("number", patchNum % 8);
+
+            // okay, we're loading and editing patch number patchNum.  Here we go.
+            return subparse(data, patchNum * 88 + 8);         
+            }
+                
+        }
+        
+    public int subparse(byte[] data, int pos)
+        {
         byte[] name = new byte[10];
                         
         // The K1 is riddled with byte-mangling.  :-(
@@ -828,53 +870,53 @@ public class KawaiK1 extends Synth
                                 
             if (i < 10)  // name
                 {
-                name[i] = data[i + 8];
+                name[i] = data[i + pos];
                 }
             else if (key.equals("s1coarsefix"))
                 {
-                coarsefix[0] = data[i + 8];
+                coarsefix[0] = data[i + pos];
                 }
             else if (key.equals("s2coarsefix"))
                 {
-                coarsefix[1] = data[i + 8];
+                coarsefix[1] = data[i + pos];
                 }
             else if (key.equals("s3coarsefix"))
                 {
-                coarsefix[2] = data[i + 8];
+                coarsefix[2] = data[i + pos];
                 }
             else if (key.equals("s4coarsefix"))
                 {
-                coarsefix[3] = data[i + 8];
+                coarsefix[3] = data[i + pos];
                 }
             else if (key.equals("polymode_sources_s1ams1>s2_s3ams3>s4"))
                 {
-                model.set("polymode", data[i + 8] & 3);
-                model.set("sources", (data[i + 8] >>> 2) & 1);
-                model.set("s1ams1>s2", (data[i + 8] >>> 3) & 3);
-                model.set("s3ams3>s4", (data[i + 8] >>> 5) & 3);
+                model.set("polymode", data[i + pos] & 3);
+                model.set("sources", (data[i + pos] >>> 2) & 1);
+                model.set("s1ams1>s2", (data[i + pos] >>> 3) & 3);
+                model.set("s3ams3>s4", (data[i + pos] >>> 5) & 3);
                 }
             else if (key.equals("s1mute_s2mute_s3mute_s4mute"))
                 {
                 // In the Kawai *K4* manual, there is an error: 0 is mute OFF and 1 is MUTE ON.
                 // I don't know if this holds for the K1.  We'll find out soon....
-                model.set("s1mute", (data[i + 8] & 1));
-                model.set("s2mute", ((data[i + 8] >>> 1) & 1));
-                model.set("s3mute", ((data[i + 8] >>> 2) & 1));
-                model.set("s4mute", ((data[i + 8] >>> 3) & 1));
+                model.set("s1mute", (data[i + pos] & 1));
+                model.set("s2mute", ((data[i + pos] >>> 1) & 1));
+                model.set("s3mute", ((data[i + pos] >>> 2) & 1));
+                model.set("s4mute", ((data[i + pos] >>> 3) & 1));
                 }
             else if (key.equals("lfo1shape_kscurve_wheelassign"))
                 {
-                model.set("lfo1shape", data[i + 8] & 3);
-                model.set("kscurve", (data[i + 8] >>> 2) & 7);
-                model.set("wheelassign", (data[i + 8] >>> 5) & 3);
+                model.set("lfo1shape", data[i + pos] & 3);
+                model.set("kscurve", (data[i + pos] >>> 2) & 7);
+                model.set("wheelassign", (data[i + pos] >>> 5) & 3);
                 }
             else if (key.equals("s1waveselecthi_keytrack_vib/a.bendsw_prs>frqsw_velcurve"))
                 {
-                model.set("s1waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 - 4]));                // hi and lo
-                model.set("s1keytrack", (data[i + 8] >>> 1) & 1);
-                model.set("s1vib/a.bendsw", (data[i + 8] >>> 2) & 1);
-                model.set("s1prs>frqsw", (data[i + 8] >>> 3) & 1);
-                model.set("s1velcurve", (data[i + 8] >>> 4) & 7);
+                model.set("s1waveselect", ((data[i + pos] & 1) << 7) | (data[i + pos - 4]));                // hi and lo
+                model.set("s1keytrack", (data[i + pos] >>> 1) & 1);
+                model.set("s1vib/a.bendsw", (data[i + pos] >>> 2) & 1);
+                model.set("s1prs>frqsw", (data[i + pos] >>> 3) & 1);
+                model.set("s1velcurve", (data[i + pos] >>> 4) & 7);
                 
                 // now that we know keytrack, we can compute coarsefix
                 if (model.get("s1keytrack", 0) == 0)
@@ -890,11 +932,11 @@ public class KawaiK1 extends Synth
                 }
             else if (key.equals("s2waveselecthi_keytrack_vib/a.bendsw_prs>frqsw_velcurve"))
                 {
-                model.set("s2waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 - 4]));                // hi and lo
-                model.set("s2keytrack", (data[i + 8] >>> 1) & 1);
-                model.set("s2vib/a.bendsw", (data[i + 8] >>> 2) & 1);
-                model.set("s2prs>frqsw", (data[i + 8] >>> 3) & 1);
-                model.set("s2velcurve", (data[i + 8] >>> 4) & 7);
+                model.set("s2waveselect", ((data[i + pos] & 1) << 7) | (data[i + pos - 4]));                // hi and lo
+                model.set("s2keytrack", (data[i + pos] >>> 1) & 1);
+                model.set("s2vib/a.bendsw", (data[i + pos] >>> 2) & 1);
+                model.set("s2prs>frqsw", (data[i + pos] >>> 3) & 1);
+                model.set("s2velcurve", (data[i + pos] >>> 4) & 7);
 
                 // now that we know keytrack, we can compute coarsefix
                 if (model.get("s2keytrack", 0) == 0)
@@ -910,11 +952,11 @@ public class KawaiK1 extends Synth
                 }
             else if (key.equals("s3waveselecthi_keytrack_vib/a.bendsw_prs>frqsw_velcurve"))
                 {
-                model.set("s3waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 - 4]));                // hi and lo
-                model.set("s3keytrack", (data[i + 8] >>> 1) & 1);
-                model.set("s3vib/a.bendsw", (data[i + 8] >>> 2) & 1);
-                model.set("s3prs>frqsw", (data[i + 8] >>> 3) & 1);
-                model.set("s3velcurve", (data[i + 8] >>> 4) & 7);
+                model.set("s3waveselect", ((data[i + pos] & 1) << 7) | (data[i + pos - 4]));                // hi and lo
+                model.set("s3keytrack", (data[i + pos] >>> 1) & 1);
+                model.set("s3vib/a.bendsw", (data[i + pos] >>> 2) & 1);
+                model.set("s3prs>frqsw", (data[i + pos] >>> 3) & 1);
+                model.set("s3velcurve", (data[i + pos] >>> 4) & 7);
 
                 // now that we know keytrack, we can compute coarsefix
                 if (model.get("s3keytrack", 0) == 0)
@@ -930,11 +972,11 @@ public class KawaiK1 extends Synth
                 }
             else if (key.equals("s4waveselecthi_keytrack_vib/a.bendsw_prs>frqsw_velcurve"))
                 {
-                model.set("s4waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 - 4]));                // hi and lo
-                model.set("s4keytrack", (data[i + 8] >>> 1) & 1);
-                model.set("s4vib/a.bendsw", (data[i + 8] >>> 2) & 1);
-                model.set("s4prs>frqsw", (data[i + 8] >>> 3) & 1);
-                model.set("s4velcurve", (data[i + 8] >>> 4) & 7);
+                model.set("s4waveselect", ((data[i + pos] & 1) << 7) | (data[i + pos - 4]));                // hi and lo
+                model.set("s4keytrack", (data[i + pos] >>> 1) & 1);
+                model.set("s4vib/a.bendsw", (data[i + pos] >>> 2) & 1);
+                model.set("s4prs>frqsw", (data[i + pos] >>> 3) & 1);
+                model.set("s4velcurve", (data[i + pos] >>> 4) & 7);
 
                 // now that we know keytrack, we can compute coarsefix
                 if (model.get("s4keytrack", 0) == 0)
@@ -966,7 +1008,7 @@ public class KawaiK1 extends Synth
                 }
             else
                 {
-                model.set(key, data[i + 8]);
+                model.set(key, data[i + pos]);
                 }
             }
 
@@ -1188,9 +1230,27 @@ public class KawaiK1 extends Synth
             (data[4] == (byte)0x00) &&
             (data[5] == (byte)0x03) &&  // K1
             (data[6] == (byte)0x00 || data[6] == (byte)0x01) &&
-            (data[7] < (byte)64));  // that is, it's single, not multi
+            (data[7] < (byte)64)  // that is, it's single, not multi
+
+            || recognizeBulk(data));
         }
         
+    public static boolean recognizeBulk(byte[] data)
+        {
+        return (
+            // Block Multi Data Dump (5-9)
+            
+            data.length == 2825 &&
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x40 &&
+            // don't care about 2, it's the channel
+            data[3] == (byte)0x21 &&    // block
+            data[4] == (byte)0x00 &&
+            data[5] == (byte)0x03);
+        // don't care about 6, we'll use it later
+        // don't care about 7, we'll use it later
+        } 
+
 
     public static final int EXPECTED_SYSEX_LENGTH = 97;        
     

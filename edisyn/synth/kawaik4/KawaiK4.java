@@ -643,7 +643,8 @@ public class KawaiK4 extends Synth
         String[] params;
         final HBox hbox = new HBox();
 
-        comp = new LabelledDial("Depth", this,  "f" + filterenv + "dcfenvdep", color, 0, 100, 50);
+        comp = new LabelledDial("Envelope", this,  "f" + filterenv + "dcfenvdep", color, 0, 100, 50);
+        ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
 
         comp = new LabelledDial("Attack", this, "f" + filterenv + "dcfenvattack", color, 0, 100);
@@ -1032,11 +1033,51 @@ public class KawaiK4 extends Synth
         }
 
 
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
-        model.set("bank", (data[7] / 16) + (data[6] == 0x00 ? 0 : 4));
-        model.set("number", data[7] % 16);
+        if (data[3] == (byte)0x20) // single
+            {               
+            model.set("bank", (data[7] / 16) + (data[6] == 0x00 ? 0 : 4));
+            model.set("number", data[7] % 16);
+            return subparse(data, 8);
+            }
+        else                            // block or All-patch, it'll work for both since singles are at the start
+            {
+            // extract names
+            char[][] names = new char[64][10];
+            for(int i = 0; i < 64; i++)
+                {
+                for (int j = 0; j < 10; j++)
+                    {
+                    names[i][j] = (char)(data[8 + (i * 131) + j] & 127);
+                    }
+                }
                         
+            String[] n = new String[64];
+            for(int i = 0; i < 64; i++)
+                {
+                n[i] = "" + (i + 1) + "   " + new String(names[i]);
+                } 
+                
+            // Now that we have an array of names, one per patch, we present the user with options;
+            // 0. Cancel [handled automatically]
+            // 1. Save the bank data [handled automatically]
+            // 2. Upload the bank data [handled automatically] 
+            // 3. Load and edit a certain patch number
+            int patchNum = showBankSysexOptions(data, n);
+            if (patchNum < 0) return PARSE_CANCELLED;
+                
+            model.set("bank", (patchNum / 16) + (data[6] == 0x00 ? 0 : 4));
+            model.set("number", patchNum % 16);
+
+            // okay, we're loading and editing patch number patchNum.  Here we go.
+            return subparse(data, patchNum * 131 + 8);                                                  
+            }
+        }
+
+
+    public int subparse(byte[] data, int offset)
+        {                        
         byte[] name = new byte[10];
                         
         // The K4 is riddled with byte-mangling.  :-(
@@ -1047,56 +1088,56 @@ public class KawaiK4 extends Synth
                                 
             if (i < 10)  // name
                 {
-                name[i] = data[i + 8];
+                name[i] = data[i + offset];
                 }
             else if (key.equals("effect"))
                 {
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("effect", data[i + 8] & 31);
+                model.set("effect", data[i + offset] & 31);
                 }
             else if (key.equals("sourcemode_polymode_s1ams1>s2_s3ams3>s4"))
                 {
-                model.set("sourcemode", data[i + 8] & 3);
-                model.set("polymode", (data[i + 8] >>> 2) & 3);
-                model.set("s1ams1>s2", (data[i + 8] >>> 4) & 1);
+                model.set("sourcemode", data[i + offset] & 3);
+                model.set("polymode", (data[i + offset] >>> 2) & 3);
+                model.set("s1ams1>s2", (data[i + offset] >>> 4) & 1);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("s3ams3>s4", (data[i + 8] >>> 5) & 1);
+                model.set("s3ams3>s4", (data[i + offset] >>> 5) & 1);
                 }
             else if (key.equals("s1mute_s2mute_s3mute_s4mute_lfo2shape"))
                 {
                 // Error in Section 6.  0 is mute OFF and 1 is mute ON. 
-                model.set("s1mute", (data[i + 8] & 1));
-                model.set("s2mute", ((data[i + 8] >>> 1) & 1));
-                model.set("s3mute", ((data[i + 8] >>> 2) & 1));
-                model.set("s4mute", ((data[i + 8] >>> 3) & 1));
+                model.set("s1mute", (data[i + offset] & 1));
+                model.set("s2mute", ((data[i + offset] >>> 1) & 1));
+                model.set("s3mute", ((data[i + offset] >>> 2) & 1));
+                model.set("s4mute", ((data[i + offset] >>> 3) & 1));
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("lfo2shape", (data[i + 8] >>> 4) & 3);
+                model.set("lfo2shape", (data[i + offset] >>> 4) & 3);
                 }
             else if (key.equals("pitchbend_wheelassign"))
                 {
-                model.set("pitchbend", data[i + 8] & 31);
+                model.set("pitchbend", data[i + offset] & 31);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("wheelassign", (data[i + 8] >>> 4) & 3);
+                model.set("wheelassign", (data[i + offset] >>> 4) & 3);
                 }
             else if (key.equals("s1waveselecthi_kscurve"))
                 {
-                model.set("s1waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 4]));                // hi and lo
-                model.set("s1kscurve", data[i + 8] >>> 4);
+                model.set("s1waveselect", ((data[i + offset] & 1) << 7) | (data[i + offset + 4]));                // hi and lo
+                model.set("s1kscurve", data[i + offset] >>> 4);
                 }
             else if (key.equals("s2waveselecthi_kscurve"))
                 {
-                model.set("s2waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 4]));                // hi and lo
-                model.set("s2kscurve", data[i + 8] >>> 4);
+                model.set("s2waveselect", ((data[i + offset] & 1) << 7) | (data[i + offset + 4]));                // hi and lo
+                model.set("s2kscurve", data[i + offset] >>> 4);
                 }
             else if (key.equals("s3waveselecthi_kscurve"))
                 {
-                model.set("s3waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 4]));                // hi and lo
-                model.set("s3kscurve", data[i + 8] >>> 4);
+                model.set("s3waveselect", ((data[i + offset] & 1) << 7) | (data[i + offset + 4]));                // hi and lo
+                model.set("s3kscurve", data[i + offset] >>> 4);
                 }
             else if (key.equals("s4waveselecthi_kscurve"))
                 {
-                model.set("s4waveselect", ((data[i + 8] & 1) << 7) | (data[i + 8 + 4]));                // hi and lo
-                model.set("s4kscurve", data[i + 8] >>> 4);
+                model.set("s4waveselect", ((data[i + offset] & 1) << 7) | (data[i + offset + 4]));                // hi and lo
+                model.set("s4kscurve", data[i + offset] >>> 4);
                 }
             else if (key.equals("s1waveselectlo"))
                 {
@@ -1116,67 +1157,67 @@ public class KawaiK4 extends Synth
                 }
             else if (key.equals("s1coarse_keytrack"))
                 {
-                model.set("s1coarse", data[i + 8] & 63);
-                model.set("s1keytrack", data[i + 8] >>> 6);
+                model.set("s1coarse", data[i + offset] & 63);
+                model.set("s1keytrack", data[i + offset] >>> 6);
                 }
             else if (key.equals("s2coarse_keytrack"))
                 {
-                model.set("s2coarse", data[i + 8] & 63);
-                model.set("s2keytrack", data[i + 8] >>> 6);
+                model.set("s2coarse", data[i + offset] & 63);
+                model.set("s2keytrack", data[i + offset] >>> 6);
                 }
             else if (key.equals("s3coarse_keytrack"))
                 {
-                model.set("s3coarse", data[i + 8] & 63);
-                model.set("s3keytrack", data[i + 8] >>> 6);
+                model.set("s3coarse", data[i + offset] & 63);
+                model.set("s3keytrack", data[i + offset] >>> 6);
                 }
             else if (key.equals("s4coarse_keytrack"))
                 {
-                model.set("s4coarse", data[i + 8] & 63);
-                model.set("s4keytrack", data[i + 8] >>> 6);
+                model.set("s4coarse", data[i + offset] & 63);
+                model.set("s4keytrack", data[i + offset] >>> 6);
                 }
             else if (key.equals("s1prs>frqsw_vib/a.bendsw_velcurve"))
                 {
-                model.set("s1prs>frqsw", data[i + 8] & 1);
-                model.set("s1vib/a.bendsw", (data[i + 8] >>> 1) & 1);
+                model.set("s1prs>frqsw", data[i + offset] & 1);
+                model.set("s1vib/a.bendsw", (data[i + offset] >>> 1) & 1);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("s1velcurve", (data[i + 8] >>> 2) & 7);
+                model.set("s1velcurve", (data[i + offset] >>> 2) & 7);
                 }
             else if (key.equals("s2prs>frqsw_vib/a.bendsw_velcurve"))
                 {
-                model.set("s2prs>frqsw", data[i + 8] & 1);
-                model.set("s2vib/a.bendsw", (data[i + 8] >>> 1) & 1);
+                model.set("s2prs>frqsw", data[i + offset] & 1);
+                model.set("s2vib/a.bendsw", (data[i + offset] >>> 1) & 1);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("s2velcurve", (data[i + 8] >>> 2) & 7);
+                model.set("s2velcurve", (data[i + offset] >>> 2) & 7);
                 }
             else if (key.equals("s3prs>frqsw_vib/a.bendsw_velcurve"))
                 {
-                model.set("s3prs>frqsw", data[i + 8] & 1);
-                model.set("s3vib/a.bendsw", (data[i + 8] >>> 1) & 1);
+                model.set("s3prs>frqsw", data[i + offset] & 1);
+                model.set("s3vib/a.bendsw", (data[i + offset] >>> 1) & 1);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("s3velcurve", (data[i + 8] >>> 2) & 7);
+                model.set("s3velcurve", (data[i + offset] >>> 2) & 7);
                 }
             else if (key.equals("s4prs>frqsw_vib/a.bendsw_velcurve"))
                 {
-                model.set("s4prs>frqsw", data[i + 8] & 1);
-                model.set("s4vib/a.bendsw", (data[i + 8] >>> 1) & 1);
+                model.set("s4prs>frqsw", data[i + offset] & 1);
+                model.set("s4vib/a.bendsw", (data[i + offset] >>> 1) & 1);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("s4velcurve", (data[i + 8] >>> 2) & 7);
+                model.set("s4velcurve", (data[i + offset] >>> 2) & 7);
                 }
             else if (key.equals("f1resonance_lfosw"))
                 {
-                model.set("f1resonance", data[i + 8] & 7);
+                model.set("f1resonance", data[i + offset] & 7);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("f1lfosw", (data[i + 8] >>> 3) & 1);
+                model.set("f1lfosw", (data[i + offset] >>> 3) & 1);
                 }
             else if (key.equals("f2resonance_lfosw"))
                 {
-                model.set("f2resonance", data[i + 8] & 7);
+                model.set("f2resonance", data[i + offset] & 7);
                 // it looks like the K4 can send junk in the upper bits :-(
-                model.set("f2lfosw", (data[i + 8] >>> 3) & 1);
+                model.set("f2lfosw", (data[i + offset] >>> 3) & 1);
                 }
             else
                 {
-                model.set(key, data[i + 8]);
+                model.set(key, data[i + offset]);
                 }
             }
 
@@ -1396,16 +1437,48 @@ public class KawaiK4 extends Synth
     
     public static boolean recognize(byte[] data)
         {
-        return ((data.length == EXPECTED_SYSEX_LENGTH) &&
-            (data[0] == (byte)0xF0) &&
-            (data[1] == (byte)0x40) &&
-            (data[3] == (byte)0x20) &&
-            (data[4] == (byte)0x00) &&
-            (data[5] == (byte)0x04) &&
-            (data[6] == (byte)0x00 || data[6] == (byte)0x02) &&
-            (data[7] < (byte)64));  // that is, it's single, not multi
+        return (((data.length == EXPECTED_SYSEX_LENGTH) &&
+                (data[0] == (byte)0xF0) &&
+                (data[1] == (byte)0x40) &&
+                (data[3] == (byte)0x20) &&
+                (data[4] == (byte)0x00) &&
+                (data[5] == (byte)0x04) &&
+                (data[6] == (byte)0x00 || data[6] == (byte)0x02) &&
+                (data[7] < (byte)64))  // that is, it's single, not multi
+            
+            || recognizeBulk(data));
         }
         
+    public static boolean recognizeBulk(byte[] data)
+        {
+        return  ((
+                // Block Single Data Dump (5-9)
+            
+                data.length == 8393 &&
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte)0x40 &&
+                // don't care about 2, it's the channel
+                data[3] == (byte)0x21 &&    // block
+                data[4] == (byte)0x00 &&
+                data[5] == (byte)0x04 &&
+                // don't care about 6, we'll use it later
+                data[7] == (byte)0x00)
+            
+            ||
+            
+                (
+                // All Patch Data Dump (5-11)
+            
+                data.length == 15123 &&
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte)0x40 &&
+                // don't care about 2, it's the channel
+                data[3] == (byte)0x22 &&    // All Patch
+                data[4] == (byte)0x00 &&
+                data[5] == (byte)0x04 &&
+                // don't care about 6, we'll use it later
+                data[7] == (byte)0x00));
+        } 
 
     public static final int EXPECTED_SYSEX_LENGTH = 140;        
     

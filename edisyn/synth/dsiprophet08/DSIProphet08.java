@@ -707,7 +707,7 @@ public class DSIProphet08 extends Synth
                 }
             };
         // this is a tough call, as the stuff above 150 is metric, just in a different way
-		getModel().setMetricMax("layer" + layer + "lfo" + lfo + "frequency", 150);
+        getModel().setMetricMax("layer" + layer + "lfo" + lfo + "frequency", 150);
         hbox.add(comp);
                 
         comp = new LabelledDial("Amount", this, "layer" + layer + "lfo" + lfo + "amount", color, 0, 127);
@@ -1458,12 +1458,12 @@ public class DSIProphet08 extends Synth
   return false;
   }               
 */      
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
         // unfortunately, the Prophet '08 doesn't provide number/bank info
         // with its edit buffer data dump.  :-(
         
-        if (!ignorePatch && data[3] == 0x02)  // program data only, not (0x03) edit buffer
+        if (data[3] == 0x02)  // program data only, not (0x03) edit buffer
             {
             model.set("bank", data[4]);
             model.set("number", data[5]);

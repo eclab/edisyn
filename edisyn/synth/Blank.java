@@ -169,7 +169,7 @@ public class Blank extends Synth
         return false;
         }
 
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         { 
         // This bulk patch data will come from a file or transmitted over sysex.
         // You should parse it into the model and return PARSE_SUCCEEDED if successful,
@@ -178,23 +178,31 @@ public class Blank extends Synth
         // successful but not complete enough to assume that we have a full patch.
         // For example, the Yamaha TX81Z needs two separate parses of dumps before a patch
         // is complete -- you should only return PARSE_SUCCEEDED when the second one has come in.
+        // There is also PARSE_CANCELLED if the user cancelled the parsing process (this
+        // would only make sense for certain interactive parsing mechanisms, and only certain
+        // synths would have it) and the patch was not modified.
         // Additionally, PARSE_SUCCEEDED_UNTITLED should be returned if we don't want the
         // patch's filename to be updated to reflect the loaded file, but otherwise the
         // parse succeeded.
-        // IGNOREPATCH tells you whether you should ignore any patch access
-        // information (number, bank, etc.) embedded in the data or store it in the
-        // model as well.   FROMFILE indicates that the parse is from a sysex file.
+        // FROMFILE indicates that the parse is from a sysex file.
         return PARSE_FAILED; 
         }
         
     public static boolean recognize(byte[] data)
         {
-        // This method should return TRUE, if the data is correct sysex data for a 
-        // a bulk dump to your kind of synthesizer, and so you can receive it via
+        // This method should return TRUE if the data is correct sysex data for a 
+        // a patch dump to your kind of synthesizer, and so you can receive it via
         // parse().
         //
         // Notice that this is a STATIC method -- but you need to implement it
         // anyway.  Edisyn will call the right static version using reflection magic.
+        //
+        // You MUST implement this method or an exception will be thrown.
+        //
+        // There is a similar method elsewhere, called recognizeBulk(data),
+        // which you can optionally additionally implement if you support reading
+        // bulk data patches.
+        //
         return false;
         }
 
@@ -358,11 +366,30 @@ public class Blank extends Synth
         // data regarding the patch store location.  TOFILE indicates that the write will
         // be to a sysex file.
         //
+        // The Object[] array returned can consist any combination of the following:
+        //
+        // 1. A fully construted and populated javax.sound.midi.ShortMessage or
+        //    javax.sound.midi.SysexMessage
+        // 
+        // 2. A byte[] consisting of the bytes for a sysex message, including the 0xF0
+        //    and 0xF7.
+        //
+        // 3. A java.util.Integer, which will be used to indicate a pause in milliseconds
+        //    before sending the next item in the Object[] array to the synthesizer.
+        //
+        // 4. null, which is a no-op and is ignored.
+        //
+        // If emitAll(..., ..., true) then the ObjectArray will be flattened after you
+        // have returned it.  This means that all non-sysex messages (things that aren't
+        // javax.sound.midi.SysexMessage or a byte[]) will be stripped out, since this
+        // is for a sysex file.
+        //
         // IMPORTANT NOTE: if writing to a file, any NON-sysex messages will be
         // stripped out by Edisyn, and the remainder will be concatenated together
         // into one stream.
         //
         // If you need to send more than just a simple sysex message, override this one.
+        
         return super.emitAll(tempModel, toWorkingMemory, toFile);
         }
 
@@ -496,6 +523,27 @@ public class Blank extends Synth
 
     ////// YOU MAY WANT TO IMPLEMENT SOME OF THE FOLLOWING
 
+
+    public static boolean recognizeBulk(byte[] data)
+        {
+        // This method should return TRUE if the data is correct sysex data for a 
+        // a *bulk* patch (that is, multi-patch) dump to your kind of synthesizer,
+        // and so you can receive it via parse() along with single-patch dumps.
+        //
+        // Notice that this is a STATIC method -- but you need to implement it
+        // anyway.  Edisyn will call the right static version using reflection magic.
+        //
+        // You don't have to implement this method -- it will return false by default --
+        // but you DO have to implement its complement, the recognize(data) method.
+        //
+        // Note that if you implement recognizeBulk(data), then in your parse(...)
+        // method you may need to do something with the data.  A good idea is to
+        // offer to either (1) upload the sysex to the synth (2) save the sysex to a file
+        // or (3) select a patch from the sysex to edit -- or (4) cancel.  This is
+        // the approach taken in the DX7 patch editor and you could implement it that
+        // way, just steal code from there.
+        return false;
+        }
 
     public void parseParameter(byte[] data)
         {
@@ -707,5 +755,21 @@ public class Blank extends Synth
         return; 
         }
 
+    public boolean getSendsParametersAfterLoad()
+        {
+        // This is called immediately after a successful load but before sending the parameters.
+        // If your synth shouldn't return parameters after a load, perhaps because sending is
+        // costly, override this to return false, or pop up a dialog asking the user what to do
+        // and return that.
+        return true;
+        }
+                
+    public static int getNumSysexDumpsPerPatch()
+        {
+        // Some synthesizers (notably the Yamaha TX81Z) require *multiple* sysex dumps to upload,
+        // download, or load a patch.  Override this to indicate how many.  By default, this 
+        // value is simply 1.
+        return 1;
+        }
 
     }

@@ -474,11 +474,52 @@ public class KawaiK1Multi extends Synth
     };
 
 
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
-        model.set("bank", ((data[7] - 64) / 8) + (data[6] == 0x00 ? 0 : 4));
-        model.set("number", (data[7] - 64) % 8);
+        if (data[3] == (byte)0x20) // single
+            {
+            model.set("bank", ((data[7] - 64) / 8) + (data[6] == 0x00 ? 0 : 4));
+            model.set("number", (data[7] - 64) % 8);
+            return subparse(data, 8);
+            }
+        else                            // block 
+            {
+            // extract names
+            char[][] names = new char[32][10];
+            for(int i = 0; i < 32; i++)
+                {
+                for (int j = 0; j < 10; j++)
+                    {
+                    names[i][j] = (char)(data[8 + (i * 76) + j] & 127);
+                    }
+                }
                         
+            String[] n = new String[32];
+            for(int i = 0; i < 32; i++)
+                {
+                n[i] = "" + (i + 1) + "   " + new String(names[i]);
+                } 
+                
+            // Now that we have an array of names, one per patch, we present the user with options;
+            // 0. Cancel [handled automatically]
+            // 1. Save the bank data [handled automatically]
+            // 2. Upload the bank data [handled automatically] 
+            // 3. Load and edit a certain patch number
+            int patchNum = showBankSysexOptions(data, n);
+            if (patchNum < 0) return PARSE_CANCELLED;
+            
+            boolean internal = (data[6] == 0);
+            
+            model.set("bank", (patchNum / 8) + (internal ? 0 : 4));
+            model.set("number", patchNum % 8);
+
+            // okay, we're loading and editing patch number patchNum.  Here we go.
+            return subparse(data, patchNum * 76 + 8);         
+            }
+        }               
+                
+    public int subparse(byte[] data, int pos)
+        {
         byte[] name = new byte[10];
 
         for(int i = 0; i < 75; i++)
@@ -489,12 +530,12 @@ public class KawaiK1Multi extends Synth
                                                         
             if (i < 10)  // name
                 {
-                name[i] = data[i + 8];
+                name[i] = data[i + pos];
                 }
             else if (key.endsWith("singleno"))
                 {
-                int bank = data[i + 8] / 8;
-                int number = data[i + 8] % 8;
+                int bank = data[i + pos] / 8;
+                int number = data[i + pos] % 8;
                 
                 model.set("section" + section + "bank", bank);
                 model.set("section" + section + "number", number);
@@ -502,21 +543,21 @@ public class KawaiK1Multi extends Synth
             else if (key.endsWith("poly_output_playmode1"))
                 {
                 final int NEXT_SECTION = 8;
-                model.set("section" + section + "poly", data[i + 8] & 15);
-                model.set("section" + section + "output", (data[i + 8] >>> 4) & 3);
+                model.set("section" + section + "poly", data[i + pos] & 15);
+                model.set("section" + section + "output", (data[i + pos] >>> 4) & 3);
                 model.set("section" + section + "playmode", 
-                    (((data[i + 8 + NEXT_SECTION] >>> 6) & 1) << 1) |       /// next byte sequence
-                    ((data[i + 8] >>> 6) & 1));
+                    (((data[i + pos + NEXT_SECTION] >>> 6) & 1) << 1) |       /// next byte sequence
+                    ((data[i + pos] >>> 6) & 1));
                 }
             else if (key.endsWith("channel_velocitysw_playmode2"))
                 {
-                model.set("section" + section + "channel", data[i + 8] & 15);
-                model.set("section" + section + "velocitysw", (data[i + 8] >>> 4) & 3);
+                model.set("section" + section + "channel", data[i + pos] & 15);
+                model.set("section" + section + "velocitysw", (data[i + pos] >>> 4) & 3);
                 // ignore playmode2, we already handled it
                 }
             else
                 {
-                model.set(key, data[i + 8]);
+                model.set(key, data[i + pos]);
                 }
             }
 
@@ -645,16 +686,34 @@ public class KawaiK1Multi extends Synth
                 
     public static boolean recognize(byte[] data)
         {
-        return (data.length == EXPECTED_SYSEX_LENGTH &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x40 &&
-            data[3] == (byte)0x20 &&
-            data[4] == (byte)0x00 &&
-            data[5] == (byte)0x03 &&
-            (data[6] == (byte)0x00 || data[6] == (byte)0x01) &&
-            data[7] >= 64);  // that is, it's multi, not single
+        return ((data.length == EXPECTED_SYSEX_LENGTH &&
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte)0x40 &&
+                data[3] == (byte)0x20 &&
+                data[4] == (byte)0x00 &&
+                data[5] == (byte)0x03 &&
+                (data[6] == (byte)0x00 || data[6] == (byte)0x01) &&
+                data[7] >= 64)  // that is, it's multi, not single
+
+            || recognizeBulk(data));
         }
         
+    public static boolean recognizeBulk(byte[] data)
+        {
+        return (
+            // Block Multi Data Dump
+            
+            data.length == 2441 &&
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x40 &&
+            // don't care about 2, it's the channel
+            data[3] == (byte)0x21 &&    // block
+            data[4] == (byte)0x00 &&
+            data[5] == (byte)0x03 &&
+            // don't care about 6, we'll use it later
+            data[7] == (byte)0x40);    // multi
+        } 
+
 
     public static final int EXPECTED_SYSEX_LENGTH = 85;        
     

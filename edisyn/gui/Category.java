@@ -46,12 +46,12 @@ public class Category extends JComponent implements Gatherable
     public boolean getSendsAllParameters() { return sendsAllParameters; }
     
     /** Returns an auxillary component.  Sometimes a Category is broken into two pieces
-    	(see KawaiK5 Harmonics (DHG) category for example), and when we gather elements,
-    	we want to gather from the auxillary as well. */
+        (see KawaiK5 Harmonics (DHG) category for example), and when we gather elements,
+        we want to gather from the auxillary as well. */
     public Gatherable getAuxillary() { return auxillary; }
     /** Sets an auxillary component.  Sometimes a Category is broken into two pieces
-    	(see KawaiK5 Harmonics (DHG) category for example), and when we gather elements,
-    	we want to gather from the auxillary as well. */
+        (see KawaiK5 Harmonics (DHG) category for example), and when we gather elements,
+        we want to gather from the auxillary as well. */
     public void setAuxillary(Gatherable comp) { auxillary = comp; }
     
     PopupMenu pop = new PopupMenu();
@@ -89,12 +89,12 @@ public class Category extends JComponent implements Gatherable
       
     void resetCategory()
         {
-         boolean currentMIDI = synth.getSendMIDI();
+        boolean currentMIDI = synth.getSendMIDI();
         if (sendsAllParameters)
-        	{
-        	synth.setSendMIDI(false);
-        	}
-        	
+            {
+            synth.setSendMIDI(false);
+            }
+                
         Synth other = Synth.instantiate(synth.getClass(), synth.getSynthNameLocal(), true, true, synth.tuple);
         ArrayList components = new ArrayList();
         gatherAllComponents(components);
@@ -121,10 +121,10 @@ public class Category extends JComponent implements Gatherable
             }               
 
         if (sendsAllParameters)
-        	{
-        	synth.setSendMIDI(currentMIDI);
-        	synth.sendAllParameters();
-	        }
+            {
+            synth.setSendMIDI(currentMIDI);
+            synth.sendAllParameters();
+            }
         // so we don't have independent updates in OS X
         repaint();
         }
@@ -180,9 +180,9 @@ public class Category extends JComponent implements Gatherable
 
         boolean currentMIDI = synth.getSendMIDI();
         if (sendsAllParameters)
-        	{
-        	synth.setSendMIDI(false);
-        	}
+            {
+            synth.setSendMIDI(false);
+            }
 
         String[] mutationKeys = synth.getMutationKeys();
         if (mutationKeys == null) mutationKeys = new String[0];
@@ -215,13 +215,13 @@ public class Category extends JComponent implements Gatherable
                 System.err.println("Warning (Category) 2: Null mapping for " + key + " (reduced to " + reduced + ")");                                        
             }
 
-	    synth.revise();
+        synth.revise();
 
         if (sendsAllParameters)
-        	{
-        	synth.setSendMIDI(currentMIDI);
-        	synth.sendAllParameters();
-	        }
+            {
+            synth.setSendMIDI(currentMIDI);
+            synth.sendAllParameters();
+            }
         // so we don't have independent updates in OS X
         repaint();
         }
@@ -233,12 +233,12 @@ public class Category extends JComponent implements Gatherable
 
         if (lastKey != null)
             {
-			boolean currentMIDI = synth.getSendMIDI();
-			if (sendsAllParameters)
-				{
-				synth.setSendMIDI(false);
-				}
-        	
+            boolean currentMIDI = synth.getSendMIDI();
+            if (sendsAllParameters)
+                {
+                synth.setSendMIDI(false);
+                }
+                
             String lastReduced = reduceAllDigitsAfterPreamble(lastKey, distributePreamble);
 
             String[] mutationKeys = synth.getMutationKeys();
@@ -277,13 +277,13 @@ public class Category extends JComponent implements Gatherable
                     }
                 }
         
-			synth.revise();
+            synth.revise();
 
-			if (sendsAllParameters)
-				{
-				synth.setSendMIDI(currentMIDI);
-				synth.sendAllParameters();
-				}
+            if (sendsAllParameters)
+                {
+                synth.setSendMIDI(currentMIDI);
+                synth.sendAllParameters();
+                }
             }
         // so we don't have independent updates in OS X
         repaint();
@@ -678,9 +678,9 @@ public class Category extends JComponent implements Gatherable
                 ((Gatherable)c[i]).gatherAllComponents(list);
             }
         if (auxillary != null)
-        	{
-        	auxillary.gatherAllComponents(list);
-        	}
+            {
+            auxillary.gatherAllComponents(list);
+            }
         }
     
     public void paintComponent(Graphics g)

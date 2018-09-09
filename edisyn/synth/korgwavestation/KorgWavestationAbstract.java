@@ -818,9 +818,13 @@ public abstract class KorgWavestationAbstract extends Synth
     // denybblizes all the data starting at OFFSET and going up to, but not including, the final two bytes (checksum and F7)
     public byte[] denybblize(byte[] nybbles, int offset)
         {
-        byte[] data = new byte[(nybbles.length - offset - 2) / 2];
-        if (data.length * 2 + 2 + offset != nybbles.length)
-            System.err.println("Warning (KorgWavestationAbstract): denybblizing an odd array");
+        return denybblize(nybbles, offset, (nybbles.length - offset - 2));
+        }
+
+    // denybblizes all the data starting at OFFSET and reading LENGTH bytes
+    public byte[] denybblize(byte[] nybbles, int offset, int length)
+        {
+        byte[] data = new byte[length / 2];
         for(int i = 0; i < data.length; i++)
             {
             data[i] = (byte)(nybbles[i * 2 + offset] | (nybbles[i * 2 + offset + 1] << 4));

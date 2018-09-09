@@ -36,9 +36,9 @@ public class KawaiK5 extends Synth
     public static final String[] MOD_DESTINATIONS = { "LFO", "Harmonics", "Cutoff", "Slope", "Off" };
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     public static final String[] LFO_SHAPES = { "Triangle", "Inv Triangle", "Square", "Inv Square", "Sawtooth", "Inv Sawtooth" };
-    public static final String[] HARMONIC_CONSTRAINTS = { "All", "Odd", "Even", "First Third", "Second Third", "Third Third", "Octaves", "Fifths", "Major Thirds", "Minor Sevenths", "Major Seconds" };
+    public static final String[] HARMONIC_CONSTRAINTS = { "All", "Odd", "Even", "First Third", "Second Third", "Third Third", "Octaves", "Fifths", "Major Thirds", "Minor Sevenths", "Major Seconds", "Major Sevenths", "Minor Seconds", "Minor Thirds", "Major Sixths" };
     public static final String[] HARMONIC_MOD_CONSTRAINTS = { "None", "1", "2", "3", "4" };
-    public static final String[] DISPLAY_PRESETS = { "Sawtooth Wave", "Square Wave", "Pseudo-Triangle", "All Off", "All On" };
+    public static final String[] DISPLAY_PRESETS = { "Sawtooth Wave", "Square Wave", "Triangle Wave", "All Off", "All On" };
     public static final char[] LEGAL_CHARACTERS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '-', ':', '/', '*', '?', '!', '#', '*', '(', ')', '\"', '+', '.', '=', ' '};
 
     // Harmonic Constraints
@@ -50,14 +50,18 @@ public class KawaiK5 extends Synth
     public static final int THIRD_THIRD = 5;
     public static final int OCTAVE = 6;
     public static final int FIFTH = 7;
-    public static final int THIRD = 8;
-    public static final int SEVENTH = 9;
-    public static final int SECOND = 10; 
+    public static final int MAJOR_THIRD = 8;
+    public static final int MINOR_SEVENTH = 9;
+    public static final int MAJOR_SECOND = 10; 
+    public static final int MAJOR_SEVENTH = 11; 
+    public static final int MINOR_SECOND = 12; 
+    public static final int MINOR_THIRD = 13; 
+    public static final int MAJOR_SIXTH = 14; 
     
     // Harmonic Mod Constraints
     public static final int SAWTOOTH = 0;
     public static final int SQUARE = 1;
-    public static final int PSEUDO_TRIANGLE = 2;
+    public static final int TRIANGLE = 2;
     public static final int ALL_OFF = 3;
     public static final int ALL_ON = 4;
     
@@ -65,8 +69,12 @@ public class KawaiK5 extends Synth
     public static final int[] OCTAVE_HARMONICS = { 1, 2, 4, 8, 16, 32, 64 };
     public static final int[] FIFTH_HARMONICS = { 3, 6, 12, 24, 48, 96 };               // -1 because we're in the 64..127 
     public static final int[] MAJOR_THIRD_HARMONICS = { 5, 10, 20, 40, 80 };
-    public static final int[] MINOR_SEVENTH_HARMONICS = { 7, 14, 28, 56 };
+    public static final int[] MINOR_SEVENTH_HARMONICS = { 7, 14, 28, 56, 112 };
     public static final int[] MAJOR_SECOND_HARMONICS = { 9, 18, 36, 72 };
+    public static final int[] MAJOR_SEVENTH_HARMONICS = { 15, 30, 60, 120 };
+    public static final int[] MINOR_SECOND_HARMONICS = { 17, 34, 68 };
+    public static final int[] MINOR_THIRD_HARMONICS = { 19, 38, 76 };
+    public static final int[] MAJOR_SIXTH_HARMONICS = { 27, 54, 108 };
     
     
     public KawaiK5()
@@ -592,7 +600,7 @@ public class KawaiK5 extends Synth
         Category category = new Category(this, "Harmonics (DHG)", color);
         category.makePasteable("s" + source + "dhg");
         category.makeDistributable("s" + source + "dhg");
-        category.setSendsAllParameters(true);				// otherwise, it's painfully slow
+        category.setSendsAllParameters(true);                           // otherwise, it's painfully slow
         
         JComponent comp;
         String[] params;
@@ -729,10 +737,10 @@ public class KawaiK5 extends Synth
             {
             public void perform(int i)
                 {
-				// we'll avoid individual updates because they're so slow.  Instead we'll
-				// do a bulk update at the end
-				 boolean currentMIDI = getSendMIDI();
-				 setSendMIDI(false);
+                // we'll avoid individual updates because they're so slow.  Instead we'll
+                // do a bulk update at the end
+                boolean currentMIDI = getSendMIDI();
+                setSendMIDI(false);
 
                 int start = 0;
                 int end = 127;
@@ -770,20 +778,38 @@ public class KawaiK5 extends Synth
                             }
                         }
                     break;
-                    case PSEUDO_TRIANGLE:
+                    // This assumes all positive harmonics of course, which 
+                    // is wrong but since humans can't hear phase differences...
+                    case TRIANGLE:
                         {
-                        for(int h = start; h < end; h++)
+                        for(int h = start + 1; h < end; h += 2)
                             {
                             setHarmonic(h, 0);
                             }
 
-                        for(int h = start; h < end; h += 4)
+                        for(int h = start; h < end; h += 2)
                             {
                             setHarmonic(h, 1.0 / ((initial + 1) * (initial + 1)));
                             initial++;
                             }
                         }
                     break;
+                    /*
+                      case PSEUDO_TRIANGLE:
+                      {
+                      for(int h = start; h < end; h++)
+                      {
+                      setHarmonic(h, 0);
+                      }
+
+                      for(int h = start; h < end; h += 4)
+                      {
+                      setHarmonic(h, 1.0 / ((initial + 1) * (initial + 1)));
+                      initial++;
+                      }
+                      }
+                      break;
+                    */
                     case ALL_OFF:
                         {
                         for(int h = start; h < end; h++)
@@ -802,9 +828,9 @@ public class KawaiK5 extends Synth
                     break;
                     }
                     
-				setSendMIDI(currentMIDI);
-				sendAllParameters();
-               }
+                setSendMIDI(currentMIDI);
+                sendAllParameters();
+                }
             };
         vbox.add(comp);
         vbox.addLast(Stretch.makeVerticalStretch());
@@ -850,16 +876,16 @@ public class KawaiK5 extends Synth
                 // The mouseDown and mouseUp code here enables us to only do undo()
                 // ONCE.
                 public void mouseDown()
-                	{
-                	getUndo().push(getModel());
-                	getUndo().setWillPush(false);
-                	}
+                    {
+                    getUndo().push(getModel());
+                    getUndo().setWillPush(false);
+                    }
                 
                 public void mouseUp()
-                	{
-                	getUndo().setWillPush(true);
-                	}
-                	
+                    {
+                    getUndo().setWillPush(true);
+                    }
+                        
                 public void updateFromMouse(double x, double y, boolean continuation)
                     {
                     if (x < 0)
@@ -925,16 +951,16 @@ public class KawaiK5 extends Synth
                 // The mouseDown and mouseUp code here enables us to only do undo()
                 // ONCE.
                 public void mouseDown()
-                	{
-                	getUndo().push(getModel());
-                	getUndo().setWillPush(false);
-                	}
+                    {
+                    getUndo().push(getModel());
+                    getUndo().setWillPush(false);
+                    }
                 
                 public void mouseUp()
-                	{
-                	getUndo().setWillPush(true);
-                	}
-                	
+                    {
+                    getUndo().setWillPush(true);
+                    }
+                        
                 public void updateFromMouse(double x, double y, boolean continuation)
                     {
                     if (x < 0)
@@ -1059,7 +1085,7 @@ public class KawaiK5 extends Synth
                     return (int)(x * (63.0 - 1) + 0.5);
                     }
 
-                public boolean constrainTo(int index) { return _constrainTo(index + (source == 1 ? 0 : 63)); }
+                public boolean constrainTo(int index) { return _constrainTo(index); }
 
                 public int verticalBorderThickness() { return 4; }
                 };
@@ -1109,7 +1135,7 @@ public class KawaiK5 extends Synth
                     return (int)(x * (63.0 - 1) + 0.5);
                     }
                         
-                public boolean constrainTo(int index) { return _constrainTo(index + (source == 1 ? 0 : 63)); }
+                public boolean constrainTo(int index) { return _constrainTo(index); }
                 };
             vbox2.addLast(comp);
             hbox.addLast(vbox2);
@@ -1163,24 +1189,49 @@ public class KawaiK5 extends Synth
                     if (FIFTH_HARMONICS[i] == (index + 1)) return true;
                 return false; 
                 }
-            case THIRD:
+            case MAJOR_THIRD:
                 {
                 for(int i = 0; i < MAJOR_THIRD_HARMONICS.length; i++)
                     if (MAJOR_THIRD_HARMONICS[i] == (index + 1)) return true;
                 return false;                                           
                 }
-            case SEVENTH:
+            case MINOR_SEVENTH:
                 {
                 for(int i = 0; i < MINOR_SEVENTH_HARMONICS.length; i++)
                     if (MINOR_SEVENTH_HARMONICS[i] == (index + 1)) return true;
                 return false;                                           
                 }
-            case SECOND:
+            case MAJOR_SECOND:
                 {
                 for(int i = 0; i < MAJOR_SECOND_HARMONICS.length; i++)
                     if (MAJOR_SECOND_HARMONICS[i] == (index + 1)) return true;
                 return false;                                           
                 }
+            case MAJOR_SEVENTH:
+                {
+                for(int i = 0; i < MAJOR_SEVENTH_HARMONICS.length; i++)
+                    if (MAJOR_SEVENTH_HARMONICS[i] == (index + 1)) return true;
+                return false;                                           
+                }
+            case MINOR_SECOND:
+                {
+                for(int i = 0; i < MINOR_SECOND_HARMONICS.length; i++)
+                    if (MINOR_SECOND_HARMONICS[i] == (index + 1)) return true;
+                return false;                                           
+                }
+            case MINOR_THIRD:
+                {
+                for(int i = 0; i < MINOR_THIRD_HARMONICS.length; i++)
+                    if (MINOR_THIRD_HARMONICS[i] == (index + 1)) return true;
+                return false;                                           
+                }
+            case MAJOR_SIXTH:
+                {
+                for(int i = 0; i < MAJOR_SIXTH_HARMONICS.length; i++)
+                    if (MAJOR_SIXTH_HARMONICS[i] == (index + 1)) return true;
+                return false;                                           
+                }
+
             }
         return false;
         }
@@ -1885,7 +1936,7 @@ public class KawaiK5 extends Synth
                 key.startsWith("s2dhgenv3")) paramNum = 54;
             else if (key.startsWith("s1dhgenv4") ||
                 key.startsWith("s2dhgenv4")) paramNum = 55;
-            else System.err.println("Warning (KorgMicroKorg): Invalid Key " + key);
+            else System.err.println("Warning (KawaiK5): Invalid Key " + key);
                 
             int c = model.get(key, 0);
             data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127),(byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
@@ -1944,7 +1995,7 @@ public class KawaiK5 extends Synth
             }
         else 
             {
-            System.err.println("Warning (KorgMicroKorg): Unknown Key " + key);
+            System.err.println("Warning (KawaiK5): Unknown Key " + key);
             return new Object[0];
             }
         }
@@ -1979,8 +2030,16 @@ public class KawaiK5 extends Synth
             }
         }
 
+    boolean validBulkSysex(byte[] result, int pos)
+        {
+        if (pos + EXPECTED_SYSEX_LENGTH >= result.length) return false;
+        if (result[pos] != (byte)0xF0) return false;
+        for(int i = pos + 1; i < pos + EXPECTED_SYSEX_LENGTH; i++)
+            if (result[i] >= 128) return false;
+        return (result[pos + EXPECTED_SYSEX_LENGTH - 1] == (byte)0xF7);
+        }
 
-    public int parse(byte[] result, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] result, boolean fromFile)
         {
         model.set("bank", result[7] / 12);
         model.set("number", result[7] % 12);
@@ -2117,7 +2176,7 @@ public class KawaiK5 extends Synth
         pos = unloadData(data, pos, dftc0level, dftc0level + 10);
         pos++;
 
-        return PARSE_SUCCEEDED;
+        return PARSE_SUCCEEDED;                 
         }
     
         
@@ -2312,7 +2371,7 @@ public class KawaiK5 extends Synth
         return ((data.length == EXPECTED_SYSEX_LENGTH) &&
             (data[0] == (byte)0xF0) &&
             (data[1] == (byte)0x40) &&
-            (data[3] == (byte)0x20) &&
+            ((data[3] == (byte)0x20) || (data[3] == (byte)0x21)) &&
             (data[4] == (byte)0x00) &&
             (data[5] == (byte)0x02) &&  // K5
             (data[6] == (byte)0x00));
@@ -2320,7 +2379,6 @@ public class KawaiK5 extends Synth
         
 
     public static final int EXPECTED_SYSEX_LENGTH = 993;        
-    
     
     boolean isLegalCharacter(char c)
         {

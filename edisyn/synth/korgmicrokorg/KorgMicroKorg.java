@@ -1015,7 +1015,7 @@ public class KorgMicroKorg extends Synth
  
         
     
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
         data = convertTo8Bit(data, 5);
 

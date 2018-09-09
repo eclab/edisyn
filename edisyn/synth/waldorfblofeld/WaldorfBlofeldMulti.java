@@ -1161,10 +1161,10 @@ public class WaldorfBlofeldMulti extends Synth
         }
         
 
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
         boolean retval = true;
-        if (!ignorePatch && data[5] < 8)  // 8?  Maybe 1.  Anyway otherwise it's probably just local patch data.  Too bad they do this. :-(
+        if (data[5] < 8)  // 8?  Maybe 1.  Anyway otherwise it's probably just local patch data.  Too bad they do this. :-(
             {
             model.set("number", data[6]);
             }

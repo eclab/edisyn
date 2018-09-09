@@ -318,7 +318,7 @@ public class KawaiK4Drum extends Synth
             }
         }
 
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
         model.set("bank", data[6] == 0x01 ? 0 : 1);
                         

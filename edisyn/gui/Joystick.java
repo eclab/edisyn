@@ -167,43 +167,43 @@ public class Joystick extends JComponent
                 mouseDown();
                 
                 if (releaseListener != null)
-                	{
-                	releaseListener = null;
-               		}
+                    {
+                    releaseListener = null;
+                    }
 
-				// This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
-				// same component that received mouseClicked.  What the ... ? Asinine.
-				// So we create a global event listener which checks for mouseReleased and
-				// calls our own private function.  EVERYONE is going to do this.
-							
-				Toolkit.getDefaultToolkit().addAWTEventListener( releaseListener = new AWTEventListener()
-					{
-					public void eventDispatched(AWTEvent evt)
-						{
-						if (evt instanceof MouseEvent && evt.getID() == MouseEvent.MOUSE_RELEASED)
-							{
-							MouseEvent e = (MouseEvent) evt;
-							if (releaseListener != null)
-								{
-								mouseUp();
-								if (snap)
-									{
-									xPos = 0;
-									yPos = 0;
-									if (xPositions.length > 0)
-										{
-										xPositions[position] = 0;
-										yPositions[position] = 0;
-										}
-									updatePosition();
-									}
-								pressed = false;
- 								Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener );
-								repaint();
-                				}
-							}
-						}
-					}, AWTEvent.MOUSE_EVENT_MASK);
+                // This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
+                // same component that received mouseClicked.  What the ... ? Asinine.
+                // So we create a global event listener which checks for mouseReleased and
+                // calls our own private function.  EVERYONE is going to do this.
+                                                        
+                Toolkit.getDefaultToolkit().addAWTEventListener( releaseListener = new AWTEventListener()
+                    {
+                    public void eventDispatched(AWTEvent evt)
+                        {
+                        if (evt instanceof MouseEvent && evt.getID() == MouseEvent.MOUSE_RELEASED)
+                            {
+                            MouseEvent e = (MouseEvent) evt;
+                            if (releaseListener != null)
+                                {
+                                mouseUp();
+                                if (snap)
+                                    {
+                                    xPos = 0;
+                                    yPos = 0;
+                                    if (xPositions.length > 0)
+                                        {
+                                        xPositions[position] = 0;
+                                        yPositions[position] = 0;
+                                        }
+                                    updatePosition();
+                                    }
+                                pressed = false;
+                                Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener );
+                                repaint();
+                                }
+                            }
+                        }
+                    }, AWTEvent.MOUSE_EVENT_MASK);
 
 
                 boolean found = false;
@@ -247,30 +247,30 @@ public class Joystick extends JComponent
             public void mouseReleased(MouseEvent e)
                 {
                 if (releaseListener == null)
-                	{
-                	mouseUp();
-					if (snap)
-						{
-						xPos = 0;
-						yPos = 0;
-						if (xPositions.length > 0)
-							{
-							xPositions[position] = 0;
-							yPositions[position] = 0;
-							}
-						updatePosition();
-						}
-					pressed = false;
-					repaint();
-					}
+                    {
+                    mouseUp();
+                    if (snap)
+                        {
+                        xPos = 0;
+                        yPos = 0;
+                        if (xPositions.length > 0)
+                            {
+                            xPositions[position] = 0;
+                            yPositions[position] = 0;
+                            }
+                        updatePosition();
+                        }
+                    pressed = false;
+                    repaint();
+                    }
                 }
             });
         repaint();
         }
 
-	/** Empty hook, called when mouse is pressed */
-	public void mouseDown() { }
+    /** Empty hook, called when mouse is pressed */
+    public void mouseDown() { }
 
-	/** Empty hook, called when mouse is released */
-	public void mouseUp() { }
+    /** Empty hook, called when mouse is released */
+    public void mouseUp() { }
     }

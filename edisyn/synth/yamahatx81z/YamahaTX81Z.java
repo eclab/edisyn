@@ -497,7 +497,7 @@ public class YamahaTX81Z extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Pitch Bias");
         hbox2.add(comp);
         
-        comp = new LabelledDial("Breath Ctrl.", this, "breathcontrolenvelopbias", color, 0, 99);
+        comp = new LabelledDial("Breath Ctrl.", this, "breathcontrolenvelopebias", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("Env. Bias");
         hbox2.add(comp);
 
@@ -810,6 +810,50 @@ public class YamahaTX81Z extends Synth
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "operator" + envelope + "attackrate", "operator" + envelope + "decay1rate", "operator" + envelope + "decay2rate", "operator" + envelope + "releaserate" },
             new String[] { null, null, "operator" + envelope + "decay1level", "operator" + envelope + "decay1level", null },
+            new double[] { 0, 1.0/3, 1.0/3, 1.0/3, 1.0/3 },
+            new double[] { 0, 1.0, 1.0 / 15.0, 1.0 / 30.0, 0 },
+            new double[] { 0, (Math.PI/4/31), (Math.PI/4/31), (Math.PI/4/31), (Math.PI/4/31) })  // note we convert the release rate to 31
+            {
+			public double preprocessXKey(int index, String key, double value)
+				{
+				System.err.println(key);
+				if (key.equals("operator" + envelope + "releaserate"))
+					{
+					return (31.0 - ( (value - 1) * 31.0 / 14.0 ));
+					}
+				else 
+					return 31.0 - value;
+				}
+
+            public void postProcess(double[] xVals, double[] yVals)
+                {
+                if (model.get("operator" + envelope + "decay2rate") == 0)
+                    {
+                    yVals[3] = yVals[2];
+                    xVals[3] = 1.0 / 3;
+                    }
+
+                int shift = model.get("operator" + envelope + "shift");
+                                        
+                if (shift > 0)
+                    {
+                    for(int i = 0; i < 5; i++)
+                        {
+                        yVals[i] = 1 - yVals[i];
+                                                
+                        for(int j = 0; j < shift; j++)  
+                            yVals[i] /= 2.0;
+                                                                                                        
+                        yVals[i] = 1 - yVals[i];
+                        }
+                    }
+                }
+            };
+
+        /*
+        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+            new String[] { null, "operator" + envelope + "attackrate", "operator" + envelope + "decay1rate", "operator" + envelope + "decay2rate", "operator" + envelope + "releaserate" },
+            new String[] { null, null, "operator" + envelope + "decay1level", "operator" + envelope + "decay1level", null },
             new double[] { 0, 0.25/31.0, 0.25/ 31.0,  0.25/31.0, 0.25/15.0 },
             new double[] { 0, 1.0,                1.0 / 15.0,    1.0 / 30.0, 0 })
             {
@@ -841,6 +885,7 @@ public class YamahaTX81Z extends Synth
                     }
                 }
             };
+        */
         model.register("operator" + envelope + "shift", (Updatable)comp);
         hbox.addLast(comp);
                 
@@ -943,7 +988,7 @@ public class YamahaTX81Z extends Synth
     "breathcontrolpitch",
     "breathcontrolamplitude",          
     "breathcontrolpitchbias",
-    "breathcontrolenvelopbias",
+    "breathcontrolenvelopebias",
     "name1",
     "name2",
     "name3",
@@ -1099,7 +1144,7 @@ public class YamahaTX81Z extends Synth
     final static int VCED = 1;
     final static int ACED = 2;
         
-    int subparse(byte[] data, boolean ignorePatch, boolean fromFile)
+    int subparse(byte[] data, boolean fromFile)
         {
         // okay we're not recursing, let's parse
         
@@ -1174,26 +1219,37 @@ public class YamahaTX81Z extends Synth
         }
                 
 
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
-        if (data.length == 41 + 101) // probably ACED + VCED, break up and call recursively
+        if (data.length == 4104)  // VMEM
             {
+            return parseVMEM(data, fromFile);
+            }
+        else if (data.length >= 41 + 101) // probably ACED + VCED + [optional more junk] break up and call recursively
+            {
+            if (data.length > 41 + 101)
+                {
+                showSimpleMessage("Multiple Patches", 
+                    "<html>This file may contain multiple patches, but not in bank format.<br>" +
+                    "Because of the TX81Z's strange way of loading patches (two sysex files)<br>" +
+                    "Edisyn can currently only open the <b>first patch</b> in this file.");
+                }
+                
             byte[] d = new byte[41];
             System.arraycopy(data, 0, d, 0, 41); 
-            int result = subparse(d, ignorePatch, fromFile);
+            int result = subparse(d, fromFile);
             if (result == FAIL)
                 return PARSE_FAILED;
             d = new byte[101];
             System.arraycopy(data, 41, d, 0, 101);
-            result = subparse(d, ignorePatch, fromFile);
+            result = subparse(d, fromFile);
             if (result == FAIL)
                 return PARSE_FAILED;
             return PARSE_SUCCEEDED;
             }
         else
             {
-            int result = subparse(data, ignorePatch, fromFile);
-            // we want to return *false* if this is ACED data, since it's not complete
+            int result = subparse(data, fromFile);
             if (result == FAIL)
                 return PARSE_FAILED;
             else if (result == ACED)
@@ -1201,6 +1257,160 @@ public class YamahaTX81Z extends Synth
             else // if (result == VCED)
                 return PARSE_SUCCEEDED;
             }
+                        
+        }
+        
+    public int parseVMEM(byte[] data, boolean fromFile)
+        {
+        // extract names
+        char[][] names = new char[32][10];
+        for(int i = 0; i < 32; i++)
+            {
+            for (int j = 0; j < 10; j++)
+                {
+                names[i][j] = (char)(data[i * 128 + 57 + j + 6] & 127);
+                }
+            }
+                        
+        String[] n = new String[32];
+        for(int i = 0; i < 32; i++)
+            {
+            n[i] = "" + (i + 1) + "   " + new String(names[i]);
+            }
+            
+        // Now that we have an array of names, one per patch, we present the user with options;
+        // 0. Cancel [handled automatically]
+        // 1. Save the bank data [handled automatically]
+        // 2. Upload the bank data [handled automatically] 
+        // 3. Load and edit a certain patch number
+        int patchNum = showBankSysexOptions(data, n);
+        if (patchNum < 0) 
+            return PARSE_CANCELLED;
+
+        model.set("name", new String(names[patchNum]));
+        model.set("number", patchNum);
+        model.set("bank", 0);                   // we don't know what the bank is in reality
+                
+        // okay, we're loading and editing patch number patchNum.  Here we go.
+        int patch = patchNum * 128;
+        int pos = 0;
+                                                                                
+        for(int op = 0; op < 4; op++)
+            {
+            // attack rate
+            model.set(allParameters[pos++], data[patch + op * 10 + 0 + 6] & 31);
+            // decay 1 rate
+            model.set(allParameters[pos++], data[patch + op * 10 + 1 + 6] & 31);
+            // decay 2 rate
+            model.set(allParameters[pos++], data[patch + op * 10 + 2 + 6] & 31);
+            // release rate
+            model.set(allParameters[pos++], data[patch + op * 10 + 3 + 6] & 15);
+            // decay 1 level
+            model.set(allParameters[pos++], data[patch + op * 10 + 4 + 6] & 15);
+            // level scaling
+            model.set(allParameters[pos++], data[patch + op * 10 + 5 + 6] & 127);
+            // rate scaling
+            model.set(allParameters[pos++], (data[patch + op * 10 + 9 + 6] >>> 3) & 3);
+            // eg bias sensitivity
+            model.set(allParameters[pos++], (data[patch + op * 10 + 6 + 6] >>> 3) & 7);
+            // amplitude modulation
+            model.set(allParameters[pos++], (data[patch + op * 10 + 6 + 6] >>> 6) & 1);
+            // key velocity sensitivity
+            model.set(allParameters[pos++], (data[patch + op * 10 + 6 + 6] >>> 0) & 7);
+            // operator output level
+            model.set(allParameters[pos++], data[patch + op * 10 + 7 + 6] & 127);
+            // frequency
+            model.set(allParameters[pos++], data[patch + op * 10 + 8 + 6] & 63);
+            // detune
+            model.set(allParameters[pos++], (data[patch + op * 10 + 9 + 6] >>> 0) & 7);
+            }
+
+
+        // algorithm
+        model.set(allParameters[pos++], (data[patch + 40 + 6] >>> 0) & 7);
+        // feedback
+        model.set(allParameters[pos++], (data[patch + 40 + 6] >>> 3) & 7);
+        // lfo speed
+        model.set(allParameters[pos++], data[patch + 41 + 6] & 127);
+        // lfo delay
+        model.set(allParameters[pos++], data[patch + 42 + 6] & 127);
+        // pitch modulation depth
+        model.set(allParameters[pos++], data[patch + 43 + 6] & 127);
+        // amplitude modulation depth
+        model.set(allParameters[pos++], data[patch + 44 + 6] & 127);
+        // lfo sync
+        model.set(allParameters[pos++], (data[patch + 40 + 6] >>> 6) & 1);
+        // lfo wave
+        model.set(allParameters[pos++], (data[patch + 45 + 6] >>> 0) & 3);
+        // pitch modulation sensitivity
+        model.set(allParameters[pos++], (data[patch + 45 + 6] >>> 4) & 7);
+        // amplitude modulation sensitivity
+        model.set(allParameters[pos++], (data[patch + 45 + 6] >>> 2) & 3);
+        // transpose
+        model.set(allParameters[pos++], data[patch + 46 + 6] & 63);  // not marked in the documentation, but it goes 0...48
+
+
+        // poly/mono
+        model.set(allParameters[pos++], (data[patch + 48 + 6] >>> 3) & 1);
+        // pitch bend range
+        model.set(allParameters[pos++], data[patch + 47 + 6] & 15);
+        // portamento mode
+        model.set(allParameters[pos++], (data[patch + 48 + 6] >>> 0) & 1);
+        // portamento time
+        model.set(allParameters[pos++], data[patch + 49 + 6] & 127);
+        // foot control volume
+        model.set(allParameters[pos++], data[patch + 50 + 6] & 127);
+        // sustain -- nonexistent
+        model.set(allParameters[pos++], (data[patch + 48 + 6] >>> 2) & 1);
+        // portamento -- nonexistent
+        model.set(allParameters[pos++], (data[patch + 48 + 6] >>> 1) & 1);
+        // chorus -- nonexistent
+        model.set(allParameters[pos++], (data[patch + 48 + 6] >>> 4) & 1);
+        // modulation wheel pitch
+        model.set(allParameters[pos++], data[patch + 51 + 6] & 127);
+        // modulation wheel amplitude
+        model.set(allParameters[pos++], data[patch + 52 + 6] & 127);
+        // breath control pitch
+        model.set(allParameters[pos++], data[patch + 53 + 6] & 127);
+        // breath control amplitude
+        model.set(allParameters[pos++], data[patch + 54 + 6] & 127);
+        // breath control pitch bias
+        model.set(allParameters[pos++], data[patch + 55 + 6] & 127);
+        // breath control eg bias
+        model.set(allParameters[pos++], data[patch + 56 + 6] & 127);
+        
+        //// Names appear here
+        
+        //// Then parameters NOT used in the TX81Z
+        
+        //// Then Operator 4...1 On/Off
+        
+        //// Then additional parameters
+        pos = 0;  // reset
+        for(int op = 0; op < 4; op++)
+            {
+            // eg shift
+            model.set(allAdditionalParameters[pos++], (data[patch + op * 2 + 73 + 6] >>> 4) & 3);
+            // fixed frequency
+            model.set(allAdditionalParameters[pos++], (data[patch + op * 2 + 73 + 6] >>> 3) & 1);
+            // fixed frequency range
+            model.set(allAdditionalParameters[pos++], (data[patch + op * 2 + 73 + 6] >>> 0) & 7);
+
+            // operator waveform
+            model.set(allAdditionalParameters[pos++], (data[patch + op * 2 + 74 + 6] >>> 4) & 7);
+            // frequency range fine
+            model.set(allAdditionalParameters[pos++], (data[patch + op * 2 + 74 + 6] >>> 0) & 15);
+            }
+
+        // reverb rate
+        model.set(allAdditionalParameters[pos++], data[patch + 81 + 6] & 7);
+        // foot controller pitch
+        model.set(allAdditionalParameters[pos++], data[patch + 82 + 6] & 127);
+        // foot controller amplitude
+        model.set(allAdditionalParameters[pos++], data[patch + 83 + 6] & 127);
+             
+        revise();
+        return PARSE_SUCCEEDED;
         }
  
     
@@ -1318,8 +1528,21 @@ public class YamahaTX81Z extends Synth
             (byte)'8', (byte)'9', (byte)'7', (byte)'6',
             (byte)'A', (byte)'E', (byte)0xF7 }; 
         }
+        
+    public static boolean recognizeBulk(byte[] data)
+        {
+        // VMEM
+        boolean b = (data.length == 4104 &&
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x43 &&
+            // don't care about 2, it's the channel
+            data[3] == (byte)0x04 &&
+            data[4] == (byte)0x20 &&        // manual says 10 but this is wrong
+            data[5] == (byte)0x00);
+        return b;
+        }
 
-    public static boolean recognize(byte[] data)
+    static boolean recognizeBasic(byte[] data)
         {
         // VCED
         if (data.length == 101 &&
@@ -1357,6 +1580,17 @@ public class YamahaTX81Z extends Synth
             return true;
         
         else return false;
+        }
+        
+    public static int getNumSysexDumpsPerPatch(byte[] data) 
+        {
+        if (recognizeBasic(data)) return 2;
+        else return 1;
+        }
+
+    public static boolean recognize(byte[] data)
+        {
+        return recognizeBasic(data) || recognizeBulk(data);
         }
         
     static boolean isACED(byte[] data)

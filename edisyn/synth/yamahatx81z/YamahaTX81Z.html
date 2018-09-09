@@ -6,6 +6,8 @@
 
 <p><b>Communicating with Edisyn</b> Set your TX81Z's receive and transmit channel to the same thing (perhaps Channel 1).  Set the program change to be <b>Com</b> (Common).  Make sure that Sysex is turned <b>on</b>.
 
+<p><b>Bank Sysex</b> This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
+
 <p><b>About the Menu</b> If you mutate or recombine patches (using randomize, merge, hill-climb, or nudge) it may result in unfortunate operator frequency results. The Restrict Mutated Frequency Ratios... menu lets you restrict mutation or recombination of operator frequecies so that they only result in integer values or only to coarse-tune settings (either way, no fine tune).  I suggest integers.  I strongly suggest you also edit the mutation parameters to remove Fixed Frequency, Detune, and Frequency Ratio Fine from every operator, and also Transpose from the global settings.
 
 <p><b>Gotchas</b>
@@ -14,7 +16,8 @@
 <li>
 The TX81Z doesn't have a way to send or write patches from sysex.  Though Edisyn could manipulate the TX81Z's front buttons via sysex in order to write patches, it's a little dangerous.  So Edisyn doesn't provide it as an option.  To write a patch you have to send to the current patch from Edisyn, then manually save it to your desired patch from the front panel.
 <p><li>Similarly, changing patches is challenging: it requires a bit of manipulation of the front panel using the TX81Z's unusual "press buttons for me" sysex options.  It should work in general, but if strange things happen, let me know.
-<p><li>The TX81Z is very unusual in that its patches aren't updated by a sysex bulk data command, but by <b>two of them in sequence</b>.  This is a backwards-compatibility thing with earlier 4-op synthesizers.  Thus when you save a patch to a file in Edisyn, you'll actually be saving <b>two</b> sysex commands concatenated together.  You should be aware of this in case you try sending it from librarian software and it doesn't like it (it shouldn't be a problem).
+<p><li>The TX81Z is very unusual in that its patches aren't updated by a single sysex command, but by <b>two of them in sequence</b>.  This is a backwards-compatibility thing with earlier 4-op synthesizers.  Thus when you save a patch to a file in Edisyn, you'll actually be saving <b>two</b> sysex commands concatenated together.  You should be aware of this in case you try sending it from librarian software and it doesn't like it (it shouldn't be a problem).
+<p><li>Similarly, if another editor has saved multiple single patches (rather than a bank (or VMEM) patch) to a single file, because they come in pairs, Edisyn at present cannot read any more than the first one.
 </ul>
 
 <p>Thanks to Matt Gregory (mgregory22@gmail.com) for his considerable help in debugging this patch editor.  Thanks also to Jesse Guessford and the GMU School of Music.

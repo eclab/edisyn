@@ -7,7 +7,9 @@
 
 <p>This editor will work with the <b>Kawai K1</b>, the <b>Kawai K1m</b>, and the <b>Kawai K1r</b>.
 
-<p><b>Communicating with Edisyn</b> Turn of INT PROTCT and CARD PROTECT.  Set your K1 to receive Program Changes (set RCV PGM to NORM) and Exclusive (RCV EXCL).  See pages 38, 41, and 42 of the manual.  You'll also probably want your send channel and receive channel to be the same. 
+<p><b>Communicating with Edisyn</b> Turn of INT PROTECT and CARD PROTECT.  Set your K1 to receive Program Changes (set RCV PGM to NORM) and Exclusive (RCV EXCL).  See pages 38, 41, and 42 of the manual.  You'll also probably want your send channel and receive channel to be the same. 
+
+<p><b>Bank Sysex</b> This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
 
 <p><b>About the Menu</b> The Kawai K1 has no sysex command which would enable Edisyn to send a patch to its temporary memory.  However this is important to enable merging, nudging, hill-climbing, randomization, etc.  One way to get around this is to send individual parameters one by one.  However the K1 needs about 50ms after each and every parameter change.As a result, this approach (the menu option <b>"Send Parameters: Individually"</b>) takes several seconds, which is unacceptably slow for many things, particularly hill-climbing.
 

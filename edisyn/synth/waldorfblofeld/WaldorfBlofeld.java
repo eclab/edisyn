@@ -2199,10 +2199,10 @@ public class WaldorfBlofeld extends Synth
         revise();
         }
         
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
         boolean retval = true;
-        if (!ignorePatch && data[5] < 8)  // otherwise it's probably just local patch data.  Too bad they do this. :-(
+        if (data[5] < 8)  // otherwise it's probably just local patch data.  Too bad they do this. :-(
             {
             model.set("bank", data[5]);
             model.set("number", data[6]);

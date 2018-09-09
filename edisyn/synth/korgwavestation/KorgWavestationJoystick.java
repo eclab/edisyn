@@ -32,20 +32,20 @@ public class KorgWavestationJoystick extends Joystick implements Updatable
         for(int i = 0; i < keysBD.length; i++)
             synth.getModel().register(keysBD[i], this);
         }
-	
-	// The mouseDown and mouseUp code here enables us to only do undo()
-	// ONCE.
-	public void mouseDown()
-		{
-		synth.getUndo().push(synth.getModel());
-		synth.getUndo().setWillPush(false);
-		}
+        
+    // The mouseDown and mouseUp code here enables us to only do undo()
+    // ONCE.
+    public void mouseDown()
+        {
+        synth.getUndo().push(synth.getModel());
+        synth.getUndo().setWillPush(false);
+        }
 
-	public void mouseUp()
-		{
-		synth.getUndo().setWillPush(true);
-		}
-                	
+    public void mouseUp()
+        {
+        synth.getUndo().setWillPush(true);
+        }
+                        
     public void prepaint(Graphics2D g)
         {
         super.prepaint(g);

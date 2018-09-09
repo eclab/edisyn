@@ -34,7 +34,7 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
     public static final int NUM_STEPS = 255;
     
     NumberButton lengthbutton;
-	JCheckBoxMenuItem blockSending;
+    JCheckBoxMenuItem blockSending;
 
 //    public JCheckBoxMenuItem includeLengthInBulkSend = new JCheckBoxMenuItem("Include Length when Sending");
 
@@ -793,7 +793,7 @@ return pos;
         */
         }
 
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
         setSendMIDI(false);        
         // Are we loading from our special data format?
@@ -828,14 +828,27 @@ return pos;
             }
         else
             {
+            Block block = null;
+            int pos = 0;
+            int mySeq = -1;
+            
             // something came in, either from a load or a spontaneous send.  We specify the bank here.  The number will be requested.
-            if (!requestingPatch && !isParsingForMerge())
+            if (!requestingPatch && !isParsingForMerge() )
                 {
-                boolean result = gatherPatchInfo2("Incoming Sequence Bank", model, false, wsToEdisynBank[data[5]]);
-                if (!result)
+                block = new Block();
+                pos = block.read(denybblize(data, 6), 0);
+
+                String[] n = new String[32];
+                for(int i = 0; i < 32; i++)
+                    {
+                    n[i] = "" + i + "   " + new String(block.seqs[i].name);
+                    }
+
+                mySeq = showBankSysexOptions(data, n);
+                if (mySeq < 0)
                     {
                     setSendMIDI(true);        
-                    return PARSE_FAILED;
+                    return PARSE_CANCELLED;
                     }
                 }
             else    // something came in due to a request.  We've already set the bank and number
@@ -844,17 +857,16 @@ return pos;
                 requestingPatch = false;
                 }
         
-            data = denybblize(data, 6);
-            int pos = 0;
-
-            Block block = new Block();
-            pos = block.read(data, pos);
-
-            // *MY* wave sequence is...
-            int mySeq = model.get("number", 0);
+            // if we didn't choose a sequence, we need to read the block in, extract the number, etc.
+            if (block == null)
+                {
+                block = new Block();
+                pos = block.read(denybblize(data, 6), 0);
+                mySeq = model.get("number", 0);
+                }
+                
             int step = block.seqs[mySeq].link;
             int len = 0;
-                   
             model.set("name", new String(block.seqs[mySeq].name));
         
             // clear others
@@ -935,7 +947,7 @@ return pos;
             }
         else if (key.equals("name"))
             {
-        	// bug in SR always puts a \0 at the beginning, ruining the name  So we don't do it.
+            // bug in SR always puts a \0 at the beginning, ruining the name  So we don't do it.
             //byte[] mesg = paramBytes(SAVE_SOURCE_NAME, model.get(key, "").toCharArray());
             //return new byte[][] { mesg }; //bankmesg, nummesg, mesg };
             return new Object[0];
@@ -1094,36 +1106,36 @@ return pos;
 
 
 
-	// To create a sequence we:
-	// 1. Initialize
-	// 2. If the length is zero, we just delete the step created after initialization and we're done
-	// 3. Else for N-1 steps
-	// 3.1   For N - 1 steps
-	// 3.1.1    Go to step zero
-	// 3.1.2    Insert a step
-	// 3.2   Go to step zero
-	// 3.3   For N steps
-	// 3.3.1     Change all step parameters
-	// 3.3.2     Go to next step
-	//
-	// To update a sequence we start at line 3.2
-	//
-	// Also if we update a single parameter, we just do the appropriate item inside 3.3.1
-	//
-	// After initialization (1), insertion (3.1.2), and parameter changes (each change in 3.3.1) we do a pause.
-	// the pauses are defined as:
-	//
-	// After initialization
-	//	MS_PER_INITIALIZATION
-	// After step insertion (but not step move) [steps are one-based here]
-	//	MS_PER_STEP_BY_INDEX * step * 2 + MS_PER_STEP
-	// After each parameter
-	//	MS_PER_STEP_DATA
-	//
-	// Note that step insertion has O(n) pauses, so it's O(n^2) all together.  :-(
-	// Also note that MS_PER_STEP_DATA is not the same as MS_PER_STEP, which is just
-	// a constant on top of the O(n^2).
-	
+    // To create a sequence we:
+    // 1. Initialize
+    // 2. If the length is zero, we just delete the step created after initialization and we're done
+    // 3. Else for N-1 steps
+    // 3.1   For N - 1 steps
+    // 3.1.1    Go to step zero
+    // 3.1.2    Insert a step
+    // 3.2   Go to step zero
+    // 3.3   For N steps
+    // 3.3.1     Change all step parameters
+    // 3.3.2     Go to next step
+    //
+    // To update a sequence we start at line 3.2
+    //
+    // Also if we update a single parameter, we just do the appropriate item inside 3.3.1
+    //
+    // After initialization (1), insertion (3.1.2), and parameter changes (each change in 3.3.1) we do a pause.
+    // the pauses are defined as:
+    //
+    // After initialization
+    //      MS_PER_INITIALIZATION
+    // After step insertion (but not step move) [steps are one-based here]
+    //      MS_PER_STEP_BY_INDEX * step * 2 + MS_PER_STEP
+    // After each parameter
+    //      MS_PER_STEP_DATA
+    //
+    // Note that step insertion has O(n) pauses, so it's O(n^2) all together.  :-(
+    // Also note that MS_PER_STEP_DATA is not the same as MS_PER_STEP, which is just
+    // a constant on top of the O(n^2).
+        
 
     public static final int MS_PER_STEP_BY_INDEX = 7;
     public static final int MS_PER_STEP = 250;
@@ -1384,12 +1396,17 @@ return pos;
             data[20] == (byte)'Q' &&
             data[21] == (byte)0)
             return true;
-
-        else return (data.length == EXPECTED_SYSEX_LENGTH &&
+        else return recognizeBulk(data);
+        }
+        
+    public static boolean recognizeBulk(byte[] data)
+        {
+        boolean b = (data.length == EXPECTED_SYSEX_LENGTH &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x42 &&
             data[3] == (byte)0x28 &&
-            data[4] == (byte)0x54);                 
+            data[4] == (byte)0x54);   
+        return b;              
         }
     
     
@@ -1546,10 +1563,10 @@ return pos;
             {                       
             int current = model.get("step", 1);
             if (!blockSending.isSelected())
-            	{         
-           		tryToSendSysex(paramBytes(WAVE_SEQ_STEP, model.get("step", 1)));
-            	tryToSendSysex(paramBytes(EXECUTE_DELETE_WS_STEP, 1));
-            	}
+                {         
+                tryToSendSysex(paramBytes(WAVE_SEQ_STEP, model.get("step", 1)));
+                tryToSendSysex(paramBytes(EXECUTE_DELETE_WS_STEP, 1));
+                }
             setSendMIDI(false);
             for(int i = current; i < len; i++)
                 {
@@ -1583,10 +1600,10 @@ return pos;
             // then we update step 1's values to defaults
                         
             if (!blockSending.isSelected())
-            	{         
-            	tryToSendSysex(paramBytes(WAVE_SEQ_STEP, 1));
-            	tryToSendSysex(paramBytes(EXECUTE_INSERT_WS_STEP, 1));
-            	}
+                {         
+                tryToSendSysex(paramBytes(WAVE_SEQ_STEP, 1));
+                tryToSendSysex(paramBytes(EXECUTE_INSERT_WS_STEP, 1));
+                }
             setSendMIDI(false);
             model.set("length", len);
             setSendMIDI(true);
@@ -1607,10 +1624,10 @@ return pos;
             // we put the new step number!
                
             if (!blockSending.isSelected())
-            	{         
-	            tryToSendSysex(paramBytes(WAVE_SEQ_STEP, current));
-	            tryToSendSysex(paramBytes(EXECUTE_INSERT_WS_STEP, 1));
-	            }
+                {         
+                tryToSendSysex(paramBytes(WAVE_SEQ_STEP, current));
+                tryToSendSysex(paramBytes(EXECUTE_INSERT_WS_STEP, 1));
+                }
             setSendMIDI(false);
             for(int i = len; i >= current; i--)             // note >=
                 {
@@ -1747,20 +1764,20 @@ return pos;
             });
         menu.add(blockSending);
 
-		String str = getLastX("BlockSendingParameters", getSynthName(), true);
-	
-		if (str == null)
-			blockSending.setSelected(false);
-		else if (str.equalsIgnoreCase("YES"))
-			blockSending.setSelected(true);
-		else 
-			blockSending.setSelected(false);
-		}
+        String str = getLastX("BlockSendingParameters", getSynthName(), true);
+        
+        if (str == null)
+            blockSending.setSelected(false);
+        else if (str.equalsIgnoreCase("YES"))
+            blockSending.setSelected(true);
+        else 
+            blockSending.setSelected(false);
+        }
 
-	public boolean getSendsParametersAfterLoad()
-		{
-		return false;
-		}
+    public boolean getSendsParametersAfterLoad()
+        {
+        return false;
+        }
 
     }
     

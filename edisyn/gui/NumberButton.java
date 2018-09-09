@@ -93,12 +93,16 @@ public class NumberButton extends NumericalComponent
                         public void ancestorRemoved(javax.swing.event.AncestorEvent e) {}
                         });
                     vbox.add(text);
+                    synth.disableMenuBar();
                     int opt = JOptionPane.showOptionDialog(NumberButton.this, vbox, getTitle(),
                         JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Enter",  "Cancel", "Rules"}, "Enter");
-
+					synth.enableMenuBar();
+					
                     if (opt == JOptionPane.CANCEL_OPTION)       // this is "Rules"
                         {
+                        synth.disableMenuBar();
                         JOptionPane.showMessageDialog(NumberButton.this, instructions, "Rules", JOptionPane.INFORMATION_MESSAGE);
+                        synth.enableMenuBar();
                         }
                     else if (opt == JOptionPane.NO_OPTION)  // this is "Cancel"
                         { 

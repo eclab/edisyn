@@ -44,7 +44,7 @@ public class Model implements Cloneable
     
     public Undo getUndoListener() { return undoListener; }
     public void setUndoListener(Undo up) { undoListener = up; }
-    
+        
     /** Returns TRUE with the given probability. */
     boolean coinToss(Random random, double probability)
         {
@@ -567,20 +567,30 @@ public class Model implements Cloneable
         undoListener = null;
         }
         
+    HashMap getCopy(HashMap map)
+    	{
+    	HashMap m = new HashMap();
+    	m.putAll(map);
+    	return m;
+    	}
+    
     public Object clone()
         {
         Model model = null;
         try { model = (Model)(super.clone()); }
         catch (Exception e) { e.printStackTrace(); }  // never happens
-        model.storage = (LinkedHashMap)(storage.clone());
-        model.min = (HashMap)(min.clone());
-        model.max = (HashMap)(max.clone());
-        model.listeners = (HashMap)(listeners.clone());
-        model.status = (HashMap)(status.clone());
-        model.metricMin = (HashMap)(metricMin.clone());
-        model.metricMax = (HashMap)(metricMax.clone());
-        model.validMin = (HashMap)(validMin.clone());
-        model.validMax = (HashMap)(validMax.clone());
+        
+        // we do putAll  getCopy rather than 
+        model.storage = new LinkedHashMap();
+        model.storage.putAll(storage);
+        model.min = getCopy(min);
+        model.max = getCopy(max);
+        model.listeners = getCopy(listeners);
+        model.status = getCopy(status);
+        model.metricMin = getCopy(metricMin);
+        model.metricMax = getCopy(metricMax);
+        model.validMin = getCopy(validMin);
+        model.validMax = getCopy(validMax);
         model.lastKey = null;
         return model;
         }
@@ -729,6 +739,7 @@ public class Model implements Cloneable
     
     boolean updateListeners = true;
     public void setUpdateListeners(boolean val) { updateListeners = val; }
+    public boolean getUpdateListeners() { return updateListeners; }
     
     public void updateListenersForKey(String key)
         {

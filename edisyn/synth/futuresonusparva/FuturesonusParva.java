@@ -805,13 +805,10 @@ public class FuturesonusParva extends Synth
         }
         
 
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
-        if (!ignorePatch)
-            {
-            model.set("bank", (data[4] & 15));
-            model.set("number", data[5]);
-            }
+        model.set("bank", (data[4] & 15));
+        model.set("number", data[5]);
                 
         byte[] n = new byte[32];
         byte[] d = new byte[data.length - n.length - 7];  // minus name length (nibblized 16-byte), minus 7

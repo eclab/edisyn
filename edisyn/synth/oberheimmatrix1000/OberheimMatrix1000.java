@@ -454,14 +454,17 @@ public class OberheimMatrix1000 extends Synth
         String[] params;
         HBox hbox = new HBox();
         
-        comp = new LabelledDial("Volume", this, "vca1", color, 0, 63);
+        comp = new LabelledDial("VCA 1", this, "vca1", color, 0, 63);
+        ((LabelledDial)comp).addAdditionalLabel("Volume");
         hbox.add(comp);
 
-        comp = new LabelledDial("Volume", this, "vca1velmod", color, -63, 63);
+        comp = new LabelledDial("VCA 1", this, "vca1velmod", color, -63, 63);
+        ((LabelledDial)comp).addAdditionalLabel("Volume");
         ((LabelledDial)comp).addAdditionalLabel("Vel Mod");
         hbox.add(comp);
                 
-        comp = new LabelledDial("Volume", this, "vca2env2mod", color, -63, 63);
+        comp = new LabelledDial("VCA2", this, "vca2env2mod", color, -63, 63);
+        ((LabelledDial)comp).addAdditionalLabel("Volume");
         ((LabelledDial)comp).addAdditionalLabel("Env 2 Mod");
         hbox.add(comp);
         
@@ -1291,7 +1294,7 @@ public class OberheimMatrix1000 extends Synth
     /// 7 bits (& 127).  And in NRPN, all values, even unsigned ones, have 64 added to them to 
     /// push them to 0...127.
     
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
         //  packing by two nibbles per byte (see http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-OberheimMatrix1000.html)
         
@@ -1299,8 +1302,7 @@ public class OberheimMatrix1000 extends Synth
         
         // we don't know the bank, just the number.  :-(
         int number = data[4];
-        if (!ignorePatch)
-            model.set("number", number);
+        model.set("number", number);
                         
         for(int i = 0; i < 134; i++)
             {

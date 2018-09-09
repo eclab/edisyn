@@ -576,64 +576,71 @@ public class YamahaTX81ZMulti extends Synth
         }
         
 
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
-        // data starts at byte 16
-        
         byte name[] = new byte[10];
-        
-        for(int i = 0; i < allParameters.length; i++)
+
+        if (!recognizeBulk(data))
             {
-            byte val = data[i + 16];
-                
-            if (i >= 100) // name
-                {
-                name[i - 100] = val;
-                }
-            else if (allParameters[i].equals("instrument1voicenumbermsb") ||
-                allParameters[i].equals("instrument2voicenumbermsb") ||
-                allParameters[i].equals("instrument3voicenumbermsb") ||
-                allParameters[i].equals("instrument4voicenumbermsb") ||
-                allParameters[i].equals("instrument5voicenumbermsb") ||
-                allParameters[i].equals("instrument6voicenumbermsb") ||
-                allParameters[i].equals("instrument7voicenumbermsb") ||
-                allParameters[i].equals("instrument8voicenumbermsb"))
-                {
-                // ignore, we handle in lsb
-                }
-            else if (allParameters[i].equals("instrument1voicenumberlsb") ||
-                allParameters[i].equals("instrument2voicenumberlsb") ||
-                allParameters[i].equals("instrument3voicenumberlsb") ||
-                allParameters[i].equals("instrument4voicenumberlsb") ||
-                allParameters[i].equals("instrument5voicenumberlsb") ||
-                allParameters[i].equals("instrument6voicenumberlsb") ||
-                allParameters[i].equals("instrument7voicenumberlsb") ||
-                allParameters[i].equals("instrument8voicenumberlsb"))
-                {
-                int instrument = (i / 12);
-                int msb = data[16 + instrument * 12 + 1];
-                int lsb = data[16 + instrument * 12 + 2];
+            // data starts at byte 16
                                 
-                // this data is often corrupted.  So we'll mask it just in case
-                
-                int combined = (((msb & 1) << 7) | (lsb & 127));
-                
-                // we'll also make sure it's in bounds
-                     
-                int oldcombined = combined;           
-                combined = combined % 160;
-
-                if (msb > 1 || lsb > 127 || oldcombined != combined)
-                    System.err.println("Warning (YamahaTX81ZMulti): Corrupt voice number or bank in received data.");
-
-
-                model.set("instrument" + (instrument + 1) + "voicenumber", combined % 32);
-                model.set("instrument" + (instrument + 1) + "voicebank", combined / 32);
-                }
-            else
+            for(int i = 0; i < allParameters.length; i++)
                 {
-                model.set(allParameters[i], val);
+                byte val = data[i + 16];
+                                
+                if (i >= 100) // name
+                    {
+                    name[i - 100] = val;
+                    }
+                else if (allParameters[i].equals("instrument1voicenumbermsb") ||
+                    allParameters[i].equals("instrument2voicenumbermsb") ||
+                    allParameters[i].equals("instrument3voicenumbermsb") ||
+                    allParameters[i].equals("instrument4voicenumbermsb") ||
+                    allParameters[i].equals("instrument5voicenumbermsb") ||
+                    allParameters[i].equals("instrument6voicenumbermsb") ||
+                    allParameters[i].equals("instrument7voicenumbermsb") ||
+                    allParameters[i].equals("instrument8voicenumbermsb"))
+                    {
+                    // ignore, we handle in lsb
+                    }
+                else if (allParameters[i].equals("instrument1voicenumberlsb") ||
+                    allParameters[i].equals("instrument2voicenumberlsb") ||
+                    allParameters[i].equals("instrument3voicenumberlsb") ||
+                    allParameters[i].equals("instrument4voicenumberlsb") ||
+                    allParameters[i].equals("instrument5voicenumberlsb") ||
+                    allParameters[i].equals("instrument6voicenumberlsb") ||
+                    allParameters[i].equals("instrument7voicenumberlsb") ||
+                    allParameters[i].equals("instrument8voicenumberlsb"))
+                    {
+                    int instrument = (i / 12);
+                    int msb = data[16 + instrument * 12 + 1];
+                    int lsb = data[16 + instrument * 12 + 2];
+                                                                
+                    // this data is often corrupted.  So we'll mask it just in case
+                                
+                    int combined = (((msb & 1) << 7) | (lsb & 127));
+                                
+                    // we'll also make sure it's in bounds
+                                         
+                    int oldcombined = combined;           
+                    combined = combined % 160;
+
+                    if (msb > 1 || lsb > 127 || oldcombined != combined)
+                        System.err.println("Warning (YamahaTX81ZMulti): Corrupt voice number or bank in received data.");
+
+
+                    model.set("instrument" + (instrument + 1) + "voicenumber", combined % 32);
+                    model.set("instrument" + (instrument + 1) + "voicebank", combined / 32);
+                    }
+                else
+                    {
+                    model.set(allParameters[i], val);
+                    }
                 }
+            }
+        else            // bulk
+            {
+            return parsePMEM(data, fromFile);
             }
                 
         try { model.set("name", new String(name, "US-ASCII")); }
@@ -643,6 +650,93 @@ public class YamahaTX81ZMulti extends Synth
         return PARSE_SUCCEEDED;
         }
     
+
+    public int parsePMEM(byte[] data, boolean fromFile)
+        {
+        // data starts at byte 16
+                                
+        // extract names
+        char[][] names = new char[32][10];
+        for(int i = 0; i < 32; i++)
+            {
+            for (int j = 0; j < 10; j++)
+                {
+                names[i][j] = (char)(data[i * 76 + 66 + j + 16] & 127);
+                }
+            }
+                        
+        String[] n = new String[32];
+        for(int i = 0; i < 32; i++)
+            {
+            n[i] = "" + (i + 1) + "   " + new String(names[i]);
+            }
+            
+        // Now that we have an array of names, one per patch, we present the user with options;
+        // 0. Cancel [handled automatically]
+        // 1. Save the bank data [handled automatically]
+        // 2. Upload the bank data [handled automatically] 
+        // 3. Load and edit a certain patch number
+        int patchNum = showBankSysexOptions(data, n);
+        if (patchNum < 0) 
+            return PARSE_CANCELLED;
+
+        model.set("name", new String(names[patchNum]));
+        model.set("number", patchNum);
+        model.set("bank", 0);                   // we don't know what the bank is in reality
+                
+        // okay, we're loading and editing patch number patchNum.  Here we go.
+        int patch = patchNum * 76;
+        int pos = 0;
+                                                                                
+        for(int op = 0; op < 8; op++)
+            {
+            // max notes
+            model.set(allParameters[pos++], (data[patch + op * 8 + 0 + 16] >>> 0) & 15);
+            // voice number msb
+            model.set(allParameters[pos++], (data[patch + op * 8 + 0 + 16] >>> 4) & 1);
+            // voice number lsb
+            model.set(allParameters[pos++], data[patch + op * 8 + 1 + 16] & 127);
+            // channel
+            model.set(allParameters[pos++], (data[patch + op * 8 + 2 + 16] >>> 0) & 31);
+            // low key
+            model.set(allParameters[pos++], data[patch + op * 8 + 3 + 16] & 127);
+            // high key
+            model.set(allParameters[pos++], data[patch + op * 8 + 4 + 16] & 127);
+            // detune
+            model.set(allParameters[pos++], data[patch + op * 8 + 5 + 16] & 15);
+            // note shift
+            model.set(allParameters[pos++], (data[patch + op * 8 + 6 + 16] >>> 0) & 63);
+            // volume
+            model.set(allParameters[pos++], data[patch + op * 8 + 7 + 16] & 127);
+            // out assign
+            model.set(allParameters[pos++], (data[patch + op * 8 + 0 + 16] >>> 5) & 3);
+            // lfo select
+            model.set(allParameters[pos++], (data[patch + op * 8 + 2 + 16] >>> 5) & 3);
+            // micro tune enabled
+            model.set(allParameters[pos++], (data[patch + op * 8 + 6 + 16] >>> 6) & 1);            
+            }
+
+        // microtunetable
+        model.set(allParameters[pos++], data[patch + 64 + 16] & 15);
+       
+        // The documentation is poorly written here.  But I believe that
+        // KEY (which needs 4 bits) is b3...b6, EFSEL (which needs 2 bits)
+        // is b1...b2, and ASMODE (which needs 1 bit) is b0.
+       
+        // assignmode
+        model.set(allParameters[pos++], (data[patch + 65 + 16] >>> 0) & 1);
+        // effectselect
+        model.set(allParameters[pos++], (data[patch + 65 + 16] >>> 1) & 3);
+        // microtunekey
+        model.set(allParameters[pos++], (data[patch + 65 + 16] >>> 3) & 15);
+        
+        //// Names appear here
+        
+        revise();
+        return PARSE_SUCCEEDED;
+        }
+        
+        
     public int getPauseAfterChangePatch()
         { 
         return 100; 
@@ -771,14 +865,40 @@ public class YamahaTX81ZMulti extends Synth
     public static boolean recognize(byte[] data)
         {
         // PCED
-        return (data.length == 128 &&        
+        return ((data.length == 128 &&        
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte)0x43 &&
+                // don't care about 2, it's the channel
+                data[3] == 0x7E &&
+                data[4] == 0x00 &&
+                data[5] == 0x78 &&
+                // next it spits out the header "LM  8976PE"
+                data[6] == 'L' &&
+                data[7] == 'M' &&
+                data[8] == ' ' &&
+                data[9] == ' ' &&
+                data[10] == '8' &&
+                data[11] == '9' &&
+                data[12] == '7' &&
+                data[13] == '6' &&
+                data[14] == 'P' &&
+                data[15] == 'E')
+
+            || recognizeBulk(data));
+        
+        }
+        
+    public static boolean recognizeBulk(byte[] data)
+        {
+        // PMEM
+        boolean b = (data.length == 2450 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x43 &&
             // don't care about 2, it's the channel
-            data[3] == 0x7E &&
-            data[4] == 0x00 &&
-            data[5] == 0x78 &&
-            // next it spits out the header "LM  8976PE"
+            data[3] == (byte)0x7E &&
+            data[4] == (byte)0x13 &&        // manual says 10 but this is wrong
+            data[5] == (byte)0x0A &&
+            // next it spits out the header "LM  8976PM"
             data[6] == 'L' &&
             data[7] == 'M' &&
             data[8] == ' ' &&
@@ -788,9 +908,11 @@ public class YamahaTX81ZMulti extends Synth
             data[12] == '7' &&
             data[13] == '6' &&
             data[14] == 'P' &&
-            data[15] == 'E');
+            data[15] == 'M');
+
+        return b;
         }
-        
+
 
     public static final int MAXIMUM_NAME_LENGTH = 10;
     public String revisePatchName(String name)

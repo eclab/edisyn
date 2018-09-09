@@ -971,7 +971,7 @@ public class KorgSG extends Synth
         return newd;
         }
         
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
         // The data is F0, 42, 3[CHANNEL], 4A, 40, ... DATA ..., F7
         

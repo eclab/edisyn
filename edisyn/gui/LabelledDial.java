@@ -36,7 +36,7 @@ public class LabelledDial extends NumericalComponent
 
     public void update(String key, Model model) 
         {
-        dial.field.setText(map(getState()));
+//        dial.field.setText(map(getState()));
         dial.repaint(); 
         }
         
@@ -238,6 +238,45 @@ public class LabelledDial extends NumericalComponent
                     Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
                 }
             }
+ 
+ 		int getProposedState(MouseEvent e)
+ 			{
+                        int y = -(e.getY() - startY);
+                        int range = (getMax() - getMin() + 1 );
+                        double multiplicand = 1;
+                                        
+                        double extent = range;
+                        if (extent < MIN_EXTENT) extent = MIN_EXTENT;
+                        if (extent > MAX_EXTENT) extent = MAX_EXTENT;
+                                        
+                        multiplicand = extent / (double) range;
+                                        
+                        int proposedState = startState + (int)(y / multiplicand);
+
+                    if (((e.getModifiers() & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK) &&
+                    	(((e.getModifiers() & InputEvent.BUTTON2_MASK) == InputEvent.BUTTON2_MASK) || 
+						 ((e.getModifiers() & InputEvent.ALT_MASK) == InputEvent.ALT_MASK)))
+						{
+						proposedState = startState + (int)(y / multiplicand / 64);
+						}
+                    else if ((e.getModifiers() & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK)
+						{
+						proposedState = startState + (int)(y / multiplicand / 16);
+						}
+                    else if (((e.getModifiers() & InputEvent.ALT_MASK) == InputEvent.ALT_MASK))
+						{
+						proposedState = startState + (int)(y / multiplicand / 4);
+						}
+                    else if (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
+                        ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK))
+                        {
+                        proposedState = reviseToAltValue(proposedState);
+                        }
+                    return proposedState;
+ 			}
+ 		
+ 		
+ 
         
         public Dial(Color staticColor)
             {
@@ -298,24 +337,7 @@ public class LabelledDial extends NumericalComponent
                     
                     if (!updatesDynamically)
                         {
-                        //int x = e.getX() - startX;
-                        int y = -(e.getY() - startY);
-                        int range = (getMax() - getMin() + 1 );
-                        double multiplicand = 1;
-                                        
-                        double extent = range;
-                        if (extent < MIN_EXTENT) extent = MIN_EXTENT;
-                        if (extent > MAX_EXTENT) extent = MAX_EXTENT;
-                                        
-                        multiplicand = extent / (double) range;
-                                        
-                        int proposedState = startState + (int)(y / multiplicand);
-
-                        if (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
-                            ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK))
-                            {
-                            proposedState = reviseToAltValue(proposedState);
-                            }
+                        int proposedState = getProposedState(e);
                                                                                 
                         // at present we're just going to use y.  It's confusing to use either y or x.
                         if (startState != proposedState)
@@ -349,24 +371,7 @@ public class LabelledDial extends NumericalComponent
                 {
                 public void mouseDragged(MouseEvent e)
                     {
-                    //int x = e.getX() - startX;
-                    int y = -(e.getY() - startY);
-                    int range = (getMax() - getMin() + 1 );
-                    double multiplicand = 1;
-                    
-                    double extent = range;
-                    if (extent < MIN_EXTENT) extent = MIN_EXTENT;
-                    if (extent > MAX_EXTENT) extent = MAX_EXTENT;
-                    
-                    multiplicand = extent / (double) range;
-                    
-                    int proposedState = startState + (int)(y / multiplicand);
-
-                    if (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
-                        ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK))
-                        {
-                        proposedState = reviseToAltValue(proposedState);
-                        }
+                    int proposedState = getProposedState(e);
                                         
                     // at present we're just going to use y.  It's confusing to use either y or x.
                     if (getState() != proposedState)

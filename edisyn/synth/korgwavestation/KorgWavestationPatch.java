@@ -2027,12 +2027,49 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
   
   
         
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
-        model.set("bank", wsToEdisynBank[data[5]]);
-        model.set("number", data[6]);
+        if (data[4] == (byte)0x40)
+            {
+            model.set("bank", wsToEdisynBank[data[5]]);
+            model.set("number", data[6]);        
+            return subparse(data, 7);
+            }
+        else
+            {
+            // extract names
+            String[] n = new String[35];
+            for(int i = 0; i < 35; i++)
+                {
+                // yuck, denybblize and extract the patch just to get the name...
+                byte[] d = denybblize(data, i * 852 + 6, 852);
+        
+                Patch patch = new Patch();
+                patch.read(d, 0);
+        
+                n[i] = new String(patch.name);
+                } 
                 
-        data = denybblize(data, 7);
+            // Now that we have an array of names, one per patch, we present the user with options;
+            // 0. Cancel [handled automatically]
+            // 1. Save the bank data [handled automatically]
+            // 2. Upload the bank data [handled automatically] 
+            // 3. Load and edit a certain patch number
+            int patchNum = showBankSysexOptions(data, n);
+            if (patchNum < 0) return PARSE_CANCELLED;
+                
+            model.set("bank", wsToEdisynBank[data[5]]);
+            model.set("number", patchNum);
+
+            // okay, we're loading and editing patch number patchNum.  Here we go.
+            return subparse(data, patchNum * 852 + 6);      
+            }
+        }
+                
+                
+    public int subparse(byte[] data, int pos)
+        {
+        data = denybblize(data, pos);
         
         Patch patch = new Patch();
         patch.read(data, 0);
@@ -2512,11 +2549,22 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public static final int EXPECTED_SYSEX_LENGTH = 861;
     public static boolean recognize(byte[] data)
         {
-        return (data.length == EXPECTED_SYSEX_LENGTH &&
+        return ((data.length == EXPECTED_SYSEX_LENGTH &&
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte)0x42 &&
+                data[3] == (byte)0x28 &&
+                data[4] == (byte)0x40)
+            
+            || recognizeBulk(data));                 
+        }
+
+    public static boolean recognizeBulk(byte[] data)
+        {
+        return (data.length == 29828 && // I think it's 29828?  A patch is 852...?
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x42 &&
             data[3] == (byte)0x28 &&
-            data[4] == (byte)0x40);                 
+            data[4] == (byte)0x4C);                 
         }
     
     

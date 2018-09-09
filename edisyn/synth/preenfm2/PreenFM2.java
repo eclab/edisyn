@@ -1719,7 +1719,7 @@ public class PreenFM2 extends Synth
 
     /** The PreenFM2 doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
         the purposes of reading a file. */
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
         final int HEADER = 17;
                 

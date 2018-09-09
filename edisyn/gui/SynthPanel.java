@@ -71,13 +71,13 @@ public class SynthPanel extends JPanel implements Gatherable
 
     public void resetPanel()
         {
-         boolean currentMIDI = synth.getSendMIDI();
+        boolean currentMIDI = synth.getSendMIDI();
         if (sendsAllParameters)
-        	{
-        	synth.setSendMIDI(false);
-        	}
-        	
-       Synth other = Synth.instantiate(synth.getClass(), synth.getSynthNameLocal(), true, true, synth.tuple);
+            {
+            synth.setSendMIDI(false);
+            }
+                
+        Synth other = Synth.instantiate(synth.getClass(), synth.getSynthNameLocal(), true, true, synth.tuple);
         ArrayList components = new ArrayList();
         gatherAllComponents(components);
         for(int i = 0; i < components.size(); i++)
@@ -92,7 +92,7 @@ public class SynthPanel extends JPanel implements Gatherable
                     if (synth.getModel().isString(key))
                         {
                         synth.getModel().set(key, other.getModel().get(key, ""));
-                       }
+                        }
                     else
                         {
                         synth.getModel().set(key, other.getModel().get(key, 0));
@@ -104,10 +104,10 @@ public class SynthPanel extends JPanel implements Gatherable
             }               
 
         if (sendsAllParameters)
-        	{
-        	synth.setSendMIDI(currentMIDI);
-        	synth.sendAllParameters();
-	        }
+            {
+            synth.setSendMIDI(currentMIDI);
+            synth.sendAllParameters();
+            }
         // so we don't have independent updates in OS X
         repaint();
         }
@@ -163,10 +163,10 @@ public class SynthPanel extends JPanel implements Gatherable
         
         boolean currentMIDI = synth.getSendMIDI();
         if (sendsAllParameters)
-        	{
-        	synth.setSendMIDI(false);
-        	}
-        	
+            {
+            synth.setSendMIDI(false);
+            }
+                
         String[] mutationKeys = synth.getMutationKeys();
         if (mutationKeys == null) mutationKeys = new String[0];
         HashSet mutationSet = new HashSet(Arrays.asList(mutationKeys));
@@ -198,13 +198,13 @@ public class SynthPanel extends JPanel implements Gatherable
                 System.err.println("Warning (SynthPanel): Null mapping for " + key + " (reduced to " + reduced + ")");                                        
             }
         
-	    synth.revise();
+        synth.revise();
 
         if (sendsAllParameters)
-        	{
-        	synth.setSendMIDI(currentMIDI);
-        	synth.sendAllParameters();
-	        }
+            {
+            synth.setSendMIDI(currentMIDI);
+            synth.sendAllParameters();
+            }
         // so we don't have independent updates in OS X
         repaint();
         }

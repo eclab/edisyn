@@ -588,6 +588,20 @@ public class YamahaDX7 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("(Start/End) ");
         hbox.add(comp);
         
+        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+            new String[] { null, "operator" + envelope + "rate1", "operator" + envelope + "rate2", "operator" + envelope + "rate3", null, "operator" + envelope + "rate4" },
+            new String[] { "operator" + envelope + "level4", "operator" + envelope + "level1", "operator" + envelope + "level2", "operator" + envelope + "level3",  "operator" + envelope + "level3", "operator" + envelope + "level4" },
+            new double[] { 0, 1.0/5, 1.0/5, 1.0/5, 1.0/5, 1.0/5 },
+            new double[] { 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99 },
+            new double[] { 0, (Math.PI/4/99), (Math.PI/4/99), (Math.PI/4/99), (Math.PI/4/99), (Math.PI/4/99) })
+            {
+			public double preprocessXKey(int index, String key, double value)
+				{
+				return 99.0 - value;
+				}
+            };
+
+        /*
         // ADSR
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "operator" + envelope + "rate1", "operator" + envelope + "rate2", "operator" + envelope + "rate3", null, "operator" + envelope + "rate4" },
@@ -602,6 +616,7 @@ public class YamahaDX7 extends Synth
                     xVals[i] = 0.2 - xVals[i];
                 }
             };
+        */
         hbox.addLast(comp);
                 
         category.add(hbox, BorderLayout.CENTER);
@@ -829,50 +844,9 @@ public class YamahaDX7 extends Synth
         }
 
 
-// maybe merge this with doSaveAs...
-
-    boolean saveBank(byte[] data)
-        {
-        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save Bank to Sysex File...", FileDialog.SAVE);
-
-        if (getPatchName(getModel()) != null)
-            fd.setFile(reviseFileName(getPatchName(getModel()).trim() + ".syx"));
-        else
-            fd.setFile(reviseFileName("Untitled.syx"));
-        String path = getLastDirectory();
-        if (path != null)
-            fd.setDirectory(path);
-            
-        fd.setVisible(true);
-        File f = null; // make compiler happy
-        FileOutputStream os = null;
-        if (fd.getFile() != null)
-            try
-                {
-                f = new File(fd.getDirectory(), ensureFileEndsWith(fd.getFile(), ".syx"));
-                os = new FileOutputStream(f);
-                os.write(data);
-                os.close();
-                setLastDirectory(fd.getDirectory());
-                return true;
-                } 
-            catch (IOException e) // fail
-                {
-                showSimpleError("File Error", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
-                e.printStackTrace();
-                return false;
-                }
-            finally
-                {
-                if (os != null)
-                    try { os.close(); }
-                    catch (IOException e) { }
-                }
-        return false;
-        }
 
 
-    public int parse(byte[] data, boolean ignorePatch, boolean fromFile)
+    public int parse(byte[] data, boolean fromFile)
         {
         if (data[3] == 0)  // 1 single
             {
@@ -909,141 +883,87 @@ public class YamahaDX7 extends Synth
                 {
                 n[i] = "" + (i + 1) + "   " + new String(names[i]);
                 }
-                        
-            while(true)
-                {
-                Color color = new JPanel().getBackground();
-                HBox hbox = new HBox();
-                hbox.setBackground(color);
-                VBox vbox = new VBox();
-                vbox.setBackground(color);
-                vbox.add(new JLabel("   "));
-                if (isParsingForMerge())
-                    {
-                    vbox.add(new JLabel("<html>A Bank Sysex has been received.</html>"));
-                    }
-                else
-                    {
-                    vbox.add(new JLabel("<html>A Bank Sysex has been received.  You can <b>save</b> the sysex to a file,</html>"));
-                    vbox.add(new JLabel("<html><b>write</b> the sysex to the synth, or <b>edit</b> a patch from the list below.</html>"));
-                    }
-                vbox.add(new JLabel("   "));
-                hbox.addLast(vbox);
-                vbox = new VBox();
-                vbox.setBackground(color);
-                vbox.add(hbox);
-                JComboBox box = new JComboBox(n);
-                vbox.add(box);
-                  
-                int result = 0;
-                if (isParsingForMerge())
-                    {
-                    result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Merge Patch", "Cancel" }, "Merge Patch");
-                    if (result > 0) result = 3;  // make it a "cancel"
-                    }
-                else result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Edit Patch" , "Save Bank", "Write Bank", "Cancel" }, "Edit Patch");
-                        
-                if (result == 3 || result < 0)  // cancel?
-                    {
-                    return PARSE_FAILED;
-                    }
-                else if (result == 2)   // write
-                    {
-                    if (showSimpleConfirm("Write Bank", "Are you sure you want to write\nthe whole bank to the synth?"))
-                        {
-                        if (tuple == null || tuple.out == null)
-                            {
-                            if (!setupMIDI())
-                                continue;
-                            }
-                        data[2] = (byte) getChannelOut();
-                        boolean send = getSendMIDI();
-                        setSendMIDI(true);
-                        tryToSendSysex(data);
-                        setSendMIDI(send);      
-                        return PARSE_FAILED;
-                        }
-                    }
-                else if (result == 1)  // save
-                    {
-                    if (saveBank(data))
-                        return PARSE_FAILED;
-                    }
-                else if (result == 0) // edit or merge patch
-                    {
-                    int pos = 0;            
-                    int patch = box.getSelectedIndex() * 128;
-                        
-                    for(int op = 0; op < 6; op++)
-                        {
-                        // operatorNrate1 ... operatorNkeyboardlevelscalingrightdepth
-                        for(int i = 0; i < 11; i++)
-                            {
-                            model.set(allParameters[pos++], data[patch + op * 17 + i + 6]);
-                            }
-                                        
-                        // scaling left curve
-                        model.set(allParameters[pos++], data[patch + op * 17 + 11 + 6] & 3);
-                        // scaling right curve
-                        model.set(allParameters[pos++], (data[patch + op * 17 + 11 + 6] >>> 2) & 3);
-                                
-                        // rate scaling
-                        model.set(allParameters[pos++], data[patch + op * 17 + 12 + 6] & 7);
-                                
-                        // amp mod sensitivity
-                        model.set(allParameters[pos++], data[patch + op * 17 + 13 + 6] & 3);
-                        // key velocity
-                        model.set(allParameters[pos++], (data[patch + op * 17 + 13 + 6] >>> 2) & 7);
-
-                        // output level
-                        model.set(allParameters[pos++], data[patch + op * 17 + 14 + 6]);
-                                        
-                        // osc mode
-                        model.set(allParameters[pos++], data[patch + op * 17 + 15 + 6] & 1);
-                        // freq coarse
-                        model.set(allParameters[pos++], (data[patch + op * 17 + 15 + 6] >>> 1) & 31);
-                        // freq fine
-                        model.set(allParameters[pos++], data[patch + op * 17 + 16 + 6]);
-                        // detune  [note this one is out of position, why Yamaha why?]
-                        model.set(allParameters[pos++], (data[patch + op * 17 + 12 + 6] >>> 3) & 15);
-                        }
-                        
-                    // pitchegrate1 ... pitcheglevel4
-                    for(int i = 102; i < 110; i++)
-                        {
-                        model.set(allParameters[pos++], data[patch + i + 6]);
-                        }
-                                
-                    // algorithm select
-                    model.set(allParameters[pos++], data[patch + 110 + 6] & 31);
-                    // feedback
-                    model.set(allParameters[pos++], data[patch + 111 + 6] & 7);
-                    // osc key sync
-                    model.set(allParameters[pos++], (data[patch + 111 + 6] >>> 3) & 1);
-
-                    // lfospeed ... lfoamplitudemodulationdepth
-                    for(int i = 112; i < 116; i++)
-                        {
-                        model.set(allParameters[pos++], data[patch + i + 6]);
-                        }
-                                
-                    // key sync
-                    model.set(allParameters[pos++], data[patch + 116 + 6] & 1);
-                    // wave
-                    model.set(allParameters[pos++], (data[patch + 116 + 6] >>> 1) & 7);
-                    // lfo pitch mod sens
-                    model.set(allParameters[pos++], (data[patch + 116 + 6] >>> 4) & 7);
-                    // transpose
-                    model.set(allParameters[pos++], (data[patch + 117 + 6]) & 63);
-                                
-                    model.set("name", new String(names[box.getSelectedIndex()]));
+            
+            // Now that we have an array of names, one per patch, we present the user with options;
+            // 0. Cancel [handled automatically]
+            // 1. Save the bank data [handled automatically]
+            // 2. Upload the bank data [handled automatically] 
+            // 3. Load and edit a certain patch number
+            int patchNum = showBankSysexOptions(data, n);
+            if (patchNum < 0) return PARSE_CANCELLED;
                 
-                    model.set("number", box.getSelectedIndex());
-
-                    revise();
-                    return PARSE_SUCCEEDED_UNTITLED;
+            // okay, we're loading and editing patch number patchNum.  Here we go.
+            int patch = patchNum * 128;
+            int pos = 0;
+                                                        
+            for(int op = 0; op < 6; op++)
+                {
+                // operatorNrate1 ... operatorNkeyboardlevelscalingrightdepth
+                for(int i = 0; i < 11; i++)
+                    {
+                    model.set(allParameters[pos++], data[patch + op * 17 + i + 6]);
                     }
+                                        
+                // scaling left curve
+                model.set(allParameters[pos++], data[patch + op * 17 + 11 + 6] & 3);
+                // scaling right curve
+                model.set(allParameters[pos++], (data[patch + op * 17 + 11 + 6] >>> 2) & 3);
+                                
+                // rate scaling
+                model.set(allParameters[pos++], data[patch + op * 17 + 12 + 6] & 7);
+                                
+                // amp mod sensitivity
+                model.set(allParameters[pos++], data[patch + op * 17 + 13 + 6] & 3);
+                // key velocity
+                model.set(allParameters[pos++], (data[patch + op * 17 + 13 + 6] >>> 2) & 7);
+
+                // output level
+                model.set(allParameters[pos++], data[patch + op * 17 + 14 + 6]);
+                                        
+                // osc mode
+                model.set(allParameters[pos++], data[patch + op * 17 + 15 + 6] & 1);
+                // freq coarse
+                model.set(allParameters[pos++], (data[patch + op * 17 + 15 + 6] >>> 1) & 31);
+                // freq fine
+                model.set(allParameters[pos++], data[patch + op * 17 + 16 + 6]);
+                // detune  [note this one is out of position, why Yamaha why?]
+                model.set(allParameters[pos++], (data[patch + op * 17 + 12 + 6] >>> 3) & 15);
                 }
+                        
+            // pitchegrate1 ... pitcheglevel4
+            for(int i = 102; i < 110; i++)
+                {
+                model.set(allParameters[pos++], data[patch + i + 6]);
+                }
+                                
+            // algorithm select
+            model.set(allParameters[pos++], data[patch + 110 + 6] & 31);
+            // feedback
+            model.set(allParameters[pos++], data[patch + 111 + 6] & 7);
+            // osc key sync
+            model.set(allParameters[pos++], (data[patch + 111 + 6] >>> 3) & 1);
+
+            // lfospeed ... lfoamplitudemodulationdepth
+            for(int i = 112; i < 116; i++)
+                {
+                model.set(allParameters[pos++], data[patch + i + 6]);
+                }
+                                
+            // key sync
+            model.set(allParameters[pos++], data[patch + 116 + 6] & 1);
+            // wave
+            model.set(allParameters[pos++], (data[patch + 116 + 6] >>> 1) & 7);
+            // lfo pitch mod sens
+            model.set(allParameters[pos++], (data[patch + 116 + 6] >>> 4) & 7);
+            // transpose
+            model.set(allParameters[pos++], (data[patch + 117 + 6]) & 63);
+                                
+            model.set("name", new String(names[patchNum]));
+                
+            model.set("number", patchNum);
+
+            revise();
+            return PARSE_SUCCEEDED_UNTITLED;
             }
         }
  
@@ -1121,19 +1041,27 @@ public class YamahaDX7 extends Synth
                 // don't care about 2, it's the channel
                 data[3] == (byte)0x00 &&
                 data[4] == (byte)0x01 &&
-                data[5] == (byte)0x1B) ||
+                data[5] == (byte)0x1B) 
+                
+            || recognizeBulk(data));
             
+        }
+
+    public static boolean recognizeBulk(byte[] data)
+        {
+        return  (
             // 32 bulk
             
-                (data.length == 4104 &&
-                data[0] == (byte)0xF0 &&
-                data[1] == (byte)0x43 &&
-                // don't care about 2, it's the channel
-                data[3] == (byte)0x09 &&
-                data[4] == (byte)0x20 &&
-                data[5] == (byte)0x00));
-        }
+            data.length == 4104 &&
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x43 &&
+            // don't care about 2, it's the channel
+            data[3] == (byte)0x09 &&
+            data[4] == (byte)0x20 &&
+            data[5] == (byte)0x00);
+        } 
         
+               
     public static final int MAXIMUM_NAME_LENGTH = 10;
     public String revisePatchName(String name)
         {

@@ -811,7 +811,7 @@ public class HillClimb extends SynthPanel
         {
         if (startedUp)
             {
-            synth.doSendAllSoundsOff();
+            synth.doSendAllSoundsOff(false);
             if (synth.isSendingTestNotes())
                 {
                 synth.doSendTestNotes();

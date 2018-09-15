@@ -117,9 +117,10 @@ At right is a typical tab pane.  You'll note that various widgets are grouped to
 
 \item Displays of {\bf Keyboards}.  Select a key!
 
-\item Various {\bf Dials}.\footnote{Notably absent are {\bf Scrollers}.  Edisyn has software support for scrollers but to be honest they've not proven useful yet.}  These are semicircles in gray, partly in some other color, with a value in the center.  You change these values by clicking on the dial and dragging vertically.  You can also double-click on a dial to reset it to a default value (often zero).  Finally, you can two-finger drag (on the Mac), or spin the mouse wheel to change the dial more subtly.  
+\item Various {\bf Dials}. These are semicircles in gray, partly in some other color, with a value in the center.  Dials vary in orientation.  Most look sort of like a ``C'', with the zero point at the bottom center.  Other dials are symmetric, such as the ``Breath Ctrl. Pitch Bias'' dial (bottom row, second from right in the Figure), and have zero point at center top.  Occasionally dials have other orientations: the goal is to keep the zero point centered (at top or bottom).
 
-Dials vary in orientation.  Most look sort of like a ``C'', with the zero point at the bottom center.  Other dials are symmetric, such as the ``Breath Ctrl. Pitch Bias'' dial (bottom row, second from right in the Figure), and have zero point at center top.  Occasionally dials have other orientations: the goal is to keep the zero point centered (at top or bottom).
+You change values in a Dial by clicking on the dial and dragging vertically.  You can also double-click on a dial to reset it to a default value (often zero).  If the Dial doesn't have the finesse you require to hit an exact value, hold down the {\bf Alt} (or on the Mac, the {\bf Option} key while dragging and you'll get 4\(\times\) the resolution.  Hold down the {\bf Control} key and you'll get 16\(\times\) the resolution. Hold down both keys and you'll get 64\(\times\) the resolution!  Finally, you can  two-finger drag (on the Mac), or spin the mouse wheel to move the value by exactly 1 unit.  
+
 
 \item Some {\bf Checkboxes} (such as ``Portamento'') and {\bf Pop-Up Choosers} or ComboBoxes (such as ``Wave'', set to ``Sawtooth'').  These are should be straightforward.
 
@@ -157,12 +158,27 @@ Persistence appears in other places too.  For example, the Initial Synthesizer d
 
 \section{Loading and Saving Files}
 
+Edisyn is capable of reading both sysex files or MIDI files and extracting sysex patch data from them.  It can in some situations read files which contain many patches: but Edisyn only writes files with a single patch per file, and only in sysex file format.
+
 You can save your edited patch via the {\bf Save} and {\bf Save As...} options in the {\bf File} menu, and you can load a patch via the {\bf Load...} option.  This is called {\it Load} and not {\it Open} because you can only load a file into an existing patch editor: you cannot create a new patch editor automatically on opening a file.  If the sysex file is not for your patch editor, but Edisyn still recognizes its data, it'll ask if you want to load for a different synthesizer.  If Edisyn doesn't recognize the data at all, it'll tell you it's best guess as to the manufacturer of the device which produced it.\footnote{Thanks to the MIDI Association for updating their database to make this possible in Edisyn.}
 
 Most patch editor files are sysex dumps ending in the extension {\tt .syx}.  These files are usually exactly the same sysex data that you'd normally dump to your synthesizer using a patch librarian software program. There are exceptions however.  For example, some synthesizers, like the PreenFM2, have no sysex to speak of at all: they exchange parameters entirely over NRPN.  In this situation, Edisyn has invented a sysex file just for the PreenFM2.  It obviously won't work in your librarian software.
 
-\paragraph{Batch Downoads}
-Edisyn also has limited support for batch-downloading and saving patch files.  To do this, choose {\bf Batch Download...} from the {\bf File} menu.  You'll be asked to specify the directory in which to save patches, and also first patch and the final patch, and then downloading will commence.  Note that if your final patch is ``before'' the first patch, then Edisyn will wrap all the away around to get to the final patch.  For example, if your synth has ten patches 1....10, and you choose 8 as your first patch and 2 as your last patch, then Edisyn will download in this order: 8, 9, 10, 1, 2.
+Some patch editor files have encoded the sysex dumps as MIDI files (typically ending with the extension {\tt .mid}.  Edisyn can extract sysex from these files as well.
+
+\paragraph{Loading a Bulk-Sysex or Bank-Sysex File}
+Edisyn tends to work with files which contain a single patch each.   However many patch files on the internet are what I call {\it bulk sysex} or {\it bank sysex} files.  A bulk sysex file contains a bunch of individual patch sysex messages concatenated together\,---\,you could just cut it up into separate single-patch files.  Bulk sysex files are common to many synthesizers, such as the DSI Prophet '08.  If Edisyn loads a bulk sysex file, it will present you with the option to select and edit a single patch from that file.
+
+It is possible that a bulk sysex file contains patch entries for different kinds of editors.  For example, a bulk sysex file might contain entries for both single patches and multi patches, and these are loaded into different editors.  Edisyn will inform you that there are patches for different editors involved, let you select which editor you're interested in, and then let you select which patch you want to edit.
+
+Some synthesizers have special {\it bank sysex} messages which contain an entire bank (or in some cases, an entire synthesizer's memory worth) of patches.  These messages could be stored in files or arrive from the synthesizer itself.  Only a few Edisyn patch editors know how to deal with these messages: notably the DX7 patch editor can handle these just fine.  In this case, you will be given three options, to upload the entire bank to the synthesizer, to save the entire bank to a file, or to select a single patch from the bank and edit it.
+
+It's theoretically possible that a bulk sysex file might contain multiple bank sysex messages.  Do not expect Edisyn to handle these properly, though you might get lucky.
+
+Edisyn cannot construct (and thus save or upload) new bank sysex messages or files.
+
+\paragraph{Batch Downloads}
+Edisyn also has limited support for batch-downloading patches, one by one, and saving them to your disk as separate files.  To do this, choose {\bf Batch Download...} from the {\bf File} menu.  You'll be asked to specify the directory in which to save patches, and also first patch and the final patch, and then downloading will commence.  Note that if your final patch is ``before'' the first patch, then Edisyn will wrap all the away around to get to the final patch.  For example, if your synth has ten patches 1....10, and you choose 8 as your first patch and 2 as your last patch, then Edisyn will download in this order: 8, 9, 10, 1, 2.
 
 If Edisyn can't download a particular patch (the synth isn't responding), it'll try again and again until successful.  So if it gets stuck, 
 you can always stop batch-downloading at any time by choosing {\bf Stop Downloading Batch} from the {\bf File} menu.  Note that you can still screw with knobs, etc. while Edisyn is busy downloading batches: but don't do that.  You're just messing up the batches getting saved.\footnote{I may change this in the future to something less fragile.}
@@ -192,15 +208,18 @@ By selecting {\bf Request Current Patch}, you can also ask your synthesizer to s
 
 Note that various synthesizers cannot do one or another of these tasks.   When this happens, that feature will generally be disabled in the menu.  As always, read the About Tab to learn more about what's going on with that synthesizer model.  See Section \ref{inconsistent} for some information and griping about all this.
 
-\vspace{1em}
+A synthesizer can also offer its own sysex messages to Edisyn without Edisyn requesting them.  Edisyn will try to handle these appropriately.  Some synthesizers might send special {\it bank sysex} messages which contain an entire bank (or in some cases, an entire synthesizer's memory worth) of patches.  Only a few Edisyn patch editors know how to deal with these messages: notably the DX7 patch editor can handle these just fine.  In this case, you will be given three options, to upload the entire bank to the synthesizer (again), to save the entire bank to a file, or to select a single patch from the bank and edit it.
 
-\subsection{Test Notes}
 
-If you don't have a controller keyboard, you can send a test note to your synthesizer by choosing {\bf Send Test Note}.  You can also toggle whether Edisyn constantly sends a stream of test notes by choosing {\bf Send Test Notes}.  And you can shut off all sound on the synthesizer with {\bf Send All Sounds Off} (this also turns off sending test notes).
+\subsection{Playing Test Notes}
+
+If you don't have a controller keyboard, you can send a test note to your synthesizer by choosing {\bf Send Test Note}.  You can also toggle whether Edisyn constantly sends a stream of test notes by choosing {\bf Send Test Notes}.  And you can shut off all sound on the synthesizer with {\bf Send All Sounds Off} (this also turns off sending test notes).\footnote{{\bf Send All Sounds Off} does three things in a row.  First it sends an ``All Sounds Off'' message to all channels.  Then it sends an ``All Notes Off'' message  to all channels (because some synthesizers respond to All Sounds Off but not All Notes Off, or vice versa).  Finally, it does a simple Note Off for any note it may have been playing, to all channels, because there exist a few synths that respond to {\it neither} All Sounds Off nor All Notes Off.}
 
 Edisyn gives you various options for adjusting the test note you send (though it's always a ``C'').  You can change the length of the test notes you send in the {\bf Test Note Length} submenu.  You can change the pitch with {\bf Test Note Pitch}.  And you can change the volume with {\bf Test Note Volume}.
 
 Setting the {\bf Pause Between Test Notes} will change how long Edisyn waits, beyond the note length itself, before it plays the next note if you have {\bf Send Test Notes} on.  It doesn't affect how fast you can play test notes on your own.  One special setting is {\bf Default}: this is defined as an additional pause equal to the note length if the note length is less than 1/2 seconds; or a pause of 1/2 second if the note length is greater than this.
+
+Some synthesizers (such as the Yamaha DX) feature notoriously long release times on their envelopes, so if you're doing hill-climbing (see Section \ref{hillclimb}) or otherwise repeatedly sending test notes, the notes may bleed into each other such that you can't hear the note clearly.  To fix this, you can set {\bf Send All Sounds Off After Note Off} to true.  This will cause the Send Test Note facility to finish a note by abruptly shutting off all sound, like {\bf Send All Sounds Off} does, rather than just sending a simple note-off message (which permits the envelope release). 
 
 \subsection{Testing the Incoming Connection}
 
@@ -270,13 +289,13 @@ There are many situations where these combinations are useful.  Here's a fun exa
 
 In some situations you might wish to get Edisyn to communicate with a software synth: for example Dexed\footnote{https:/\!/asb2m10.github.io/dexed/} is a nice DX7 emulator and works well with Edisyn.  Or perhaps you might want to use Edisyn to translate CC messages from your DAW into Edisyn parameter changes, which then get forwarded to a synthesizer as sysex (see Section \ref{remotecontrolofedisyn} to learn how to map CC messages to parameter changes).
 
-You'd think it'd be easy to connect directly to another piece of software on your computer.  But you'd be wrong!  The problem is that Edisyn, because it's written in Java, can only connect to {\it MIDI devices}, and your software synthesizer or DAW has probably not registered itself as a device\,---\,it likewise probably is designed only to connect to MIDI devices.
-
 \begin{wrapfigure}{r}{3in}
 \begin{center}\vspace{-1em}\includegraphics[width=3in]{Loopback.pdf}\end{center}
-\vspace{-1em}
+\vspace{-2em}
 \caption{A MIDI loopback connecting Edisyn with a software synthesizer via a virtual device.}\label{loopback}
 \end{wrapfigure}
+
+You'd think it'd be easy to connect directly to another piece of software on your computer.  But you'd be wrong!  The problem is that Edisyn, because it's written in Java, can only connect to {\it MIDI devices}, and your software synthesizer or DAW has probably not registered itself as a device\,---\,it likewise probably is designed only to connect to MIDI devices.
 
 To get around this, you need to make a {\it MIDI loopback}.  This is where you create two {\it virtual devices} which are connected to one another.  Edisyn and your software synth can see these devices.  Consider Figure \ref{loopback}.  If Edisyn outputs to Virtual Device X (say) and your software synth is set up to {\it input} from Virtual Device X, then it will receive what Edisyn outputs.
 

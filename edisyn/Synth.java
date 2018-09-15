@@ -73,7 +73,8 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem getAll;
     public JMenuItem testIncomingController;
     public JMenuItem testIncomingSynth;
-
+	public JCheckBoxMenuItem sendsAllSoundsOffBetweenNotesMenu;
+	
     Model[] nudge = new Model[4];
     JMenuItem[] nudgeTowards = new JMenuItem[8];
     
@@ -196,7 +197,7 @@ public abstract class Synth extends JComponent implements Updatable
                 // we call this here even though it's already been called as a result of frame.setVisible(true)
                 // because it's *after* setupMidi(...) and so it gives synths a chance to send
                 // a MIDI sysex message in response to the window becoming front.
-                synth.sendAllSoundsOff();  // not doSendAllSoundsOff(), because we don't want to stop the test notes per se
+                synth.sendAllSoundsOff();  // not doSendAllSoundsOff(false), because we don't want to stop the test notes per se
                 synth.windowBecameFront();                              
                 }
             synth.undo.setWillPush(true);
@@ -362,6 +363,7 @@ public abstract class Synth extends JComponent implements Updatable
     { 
     //edisyn.synth.futuresonusparva.FuturesonusParva.class,
     //edisyn.synth.generic.Generic.class,
+    edisyn.synth.casiocz.CasioCZ.class,
     edisyn.synth.dsiprophet08.DSIProphet08.class,
     edisyn.synth.kawaik1.KawaiK1.class, 
     edisyn.synth.kawaik1.KawaiK1Multi.class, 
@@ -3261,7 +3263,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doSendAllSoundsOff();
+                doSendAllSoundsOff(false);
                 }
             });
                 
@@ -3731,6 +3733,23 @@ public abstract class Synth extends JComponent implements Updatable
                 tns[0].setSelected(true); setTestNoteVelocity(127); break;
             }        
 
+        sendsAllSoundsOffBetweenNotesMenu = new JCheckBoxMenuItem("Send All Sounds Off After Note Off");
+        sendsAllSoundsOffBetweenNotesMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+				doSendsAllSoundsOffBetweenNotes();
+                }
+            });
+        
+        menu.add(sendsAllSoundsOffBetweenNotesMenu);
+
+        String str1 = getLastX("SendAllSoundsOffBetweenNotes", getSynthNameLocal(), false);
+        if (str1 == null) str1 = "false";
+        sendsAllSoundsOffBetweenNotes = Boolean.parseBoolean(str1);
+        sendsAllSoundsOffBetweenNotesMenu.setSelected(sendsAllSoundsOffBetweenNotes);
+
+
 
         menu = new JMenu("Map");
         menubar.add(menu);
@@ -4013,7 +4032,7 @@ public abstract class Synth extends JComponent implements Updatable
 
             public void windowActivated(WindowEvent e)
                 {
-                sendAllSoundsOff(); // not doSendAllSoundsOff because we don't want to turn off the test notes
+                sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
                 windowBecameFront();
                 lastActiveWindow = frame;
                 }
@@ -4186,7 +4205,6 @@ public abstract class Synth extends JComponent implements Updatable
     
     boolean noMIDIPause = false;
     boolean sendingAllSoundsOff = false;
-    public void doSendAllSoundsOff() { doSendAllSoundsOff(false); }
     void doSendAllSoundsOff(boolean fromDoSendTestNotes)  // used to break infinite loop fights with doSendTestNotes()
         {
         if (!fromDoSendTestNotes && sendingTestNotes)
@@ -4208,16 +4226,18 @@ public abstract class Synth extends JComponent implements Updatable
         noMIDIPause = true;
         try
             {
-            // do an all sounds off (some synths don't properly respond to all notes off)
-            for(int i = 0; i < 16; i++)
-                tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
-            // do an all notes off (some synths don't properly respond to all sounds off)
-            for(int i = 0; i < 16; i++)
-                tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
-            // for some synths that respond to neither <ahem Korg Wavestation>, maybe we can turn off the current note,
+            System.err.println("Sending All Sounds Off");
+			// do an all sounds off (some synths don't properly respond to all notes off)
+			for(int i = 0; i < 16; i++)
+				tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
+			// do an all notes off (some synths don't properly respond to all sounds off)
+			for(int i = 0; i < 16; i++)
+				tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
+            // Plus, for some synths that respond to neither <ahem Korg Wavestation>, maybe we can turn off the current note,
             // assuming the user hasn't changed it.            
             for(int i = 0; i < 16; i++)
-                tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, i, getTestNotePitch(), 0));
+            	for(int j = 0; j < TEST_NOTE_PITCHES.length; j++)
+                	tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, i, TEST_NOTE_PITCHES[j], 64));
             }
         catch (InvalidMidiDataException e2)
             {
@@ -4304,7 +4324,21 @@ public abstract class Synth extends JComponent implements Updatable
         allowsTransmitsParameters = transmitParameters.isSelected();
         setLastX("" + allowsTransmitsParameters, "AllowTransmitParameters", getSynthNameLocal(), false);
         }
+        
+    boolean sendsAllSoundsOffBetweenNotes;
     
+    public boolean getSendsAllSoundsOffBetweenNotes()
+    	{
+    	return sendsAllSoundsOffBetweenNotes;
+    	}
+    
+	void doSendsAllSoundsOffBetweenNotes()
+		{
+        sendsAllSoundsOffBetweenNotes = sendsAllSoundsOffBetweenNotesMenu.isSelected();
+        setLastX("" + sendsAllSoundsOffBetweenNotes, "SendAllSoundsOffBetweenNotes", getSynthNameLocal(), false);
+		}
+    
+    public static final int[] TEST_NOTE_PITCHES = new int[] { 96, 84, 72, 60, 48, 36, 24 };
     int testNote = 60;
     void setTestNotePitch(int note) { testNote = note; }
     public int getTestNotePitch() { return testNote; }
@@ -4327,15 +4361,9 @@ public abstract class Synth extends JComponent implements Updatable
         final int velocity = getTestNoteVelocity();
         try
             {
-            // turn off existing note
-            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, getTestNotePitch(), velocity));
-            
-            // clear all notes -- often synthesizers like FM synths will have crazy long decays
-            sendAllSoundsOff();
-                        
             // play new note
             tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, getTestNotePitch(), velocity));
-                                                                        
+                                                         
             // schedule a note off
             final int myNoteOnTick = ++noteOnTick;
             javax.swing.Timer noteTimer = new javax.swing.Timer(testNoteLength, new ActionListener()
@@ -4345,7 +4373,12 @@ public abstract class Synth extends JComponent implements Updatable
                     if (alwaysSendNoteOff || noteOnTick == myNoteOnTick)  // no more note on messages
                         try
                             {
-                            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, getTestNotePitch(), velocity));
+                            System.err.println("Note Off");
+							// clear all notes
+							if (getSendsAllSoundsOffBetweenNotes())
+								sendAllSoundsOff();
+                        	else
+                            	tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, getTestNotePitch(), velocity));
                             noteOnTick = 0;
                             }
                         catch (Exception e3)
@@ -4676,7 +4709,7 @@ public abstract class Synth extends JComponent implements Updatable
         
         else if (requestCloseWindow())
             {
-            doSendAllSoundsOff();
+            sendAllSoundsOff();
                                 
             // get rid of MIDI connection
             if (tuple != null)

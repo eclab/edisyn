@@ -807,6 +807,8 @@ public class YamahaTX81Z extends Synth
     
 
         // ADSR
+        // This will *more or less* work, though the release rate will be slightly short
+        // for reasons beyond me.
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "operator" + envelope + "attackrate", "operator" + envelope + "decay1rate", "operator" + envelope + "decay2rate", "operator" + envelope + "releaserate" },
             new String[] { null, null, "operator" + envelope + "decay1level", "operator" + envelope + "decay1level", null },
@@ -816,7 +818,6 @@ public class YamahaTX81Z extends Synth
             {
 			public double preprocessXKey(int index, String key, double value)
 				{
-				System.err.println(key);
 				if (key.equals("operator" + envelope + "releaserate"))
 					{
 					return (31.0 - ( (value - 1) * 31.0 / 14.0 ));

@@ -4226,7 +4226,6 @@ public abstract class Synth extends JComponent implements Updatable
         noMIDIPause = true;
         try
             {
-            System.err.println("Sending All Sounds Off");
 			// do an all sounds off (some synths don't properly respond to all notes off)
 			for(int i = 0; i < 16; i++)
 				tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
@@ -4373,7 +4372,6 @@ public abstract class Synth extends JComponent implements Updatable
                     if (alwaysSendNoteOff || noteOnTick == myNoteOnTick)  // no more note on messages
                         try
                             {
-                            System.err.println("Note Off");
 							// clear all notes
 							if (getSendsAllSoundsOffBetweenNotes())
 								sendAllSoundsOff();

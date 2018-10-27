@@ -1,0 +1,35 @@
+<html><head></head>
+<body>
+
+
+<h1>E-Mu Morpheus and Ultra Proteus</h1>
+<h2>Single Patch Editor</h2>
+
+<p>This editor will work with the <b>E-Mu Morpheus</b> and the <b>E-Mu Ultra Propheus</b>, but you will need to set a switch to indicate which one you are using.
+
+<p><b>Communicating with Edisyn</b> Set the MIDI ID to the same you'll be setting in Edisyn (typically 0).  In your default MIDI Map, turn OFF Program Change Map, and turn ON Bank Select and Program Change.  Feel free to reduce the Sysex packet delay to 0.  <b>Make certain that the Preset button is pressed</b>. 
+
+<p><b>Gotchas</b> 
+
+<ul>
+<li>Neither the Morpheus nor the Ultra Proteus can send to the current patch -- they can only write patches, or send individual parameters.  But sending to the current patch is a critical function.  Instead of (slowly) sending all parameters, Edisyn instead will write to patch 126 of the Preset RAM bank.  This means that you will overwrite this patch number every time you "send" the current patch.  (It's 126 because 127 is the default init patch).
+
+<p><li>This editor works with both the Morpheus and the Ultra Proteus.  These two synthesizers have identical sysex, except for four parameters: the two layers' instruments and the two layer's filters.  The patch editor provides a checkbox labeled "Ultra Proteus": if you select this checkbox, then the editor is in Ultra Proteus mode, otherwise it is in Morpheus mode.  You can tell what mode the editor is in because it displays that synthesizer type in the window's title bar.  Your mode choice will affect the instruments available.  It will not affect the filter list: instead, filters that are only available in the Ultra Proteus will have a "[UP]" next to them.  It's important to have this mode set properly when you load a patch: things won't work right otherwise, and Edisyn can't tell whether the incoming patch is for the Morpheus or Ultra Proteus just by looking at it.
+
+<p><li>In the Patching panel, some destinations are only available for the Note On matrix and will not work in the Real Time matrix nor (I believe) the Foot Switch options.  These destinations are indicated with an "[N]" next to them.  
+
+<p><li>You cannot request the current patch on the Morpheus or Ultra Proteus.
+
+</ul>
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>October 2018
+</table>
+
+
+

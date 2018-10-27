@@ -42,16 +42,25 @@ import edisyn.synth.*;
 ***/
 
 
-
 public class HillClimb extends SynthPanel
     {
+    // OPERATIONS
+    public static final int OPERATION_SEED_FROM_PATCH = 0;
+    public static final int OPERATION_SEED_FROM_NUDGE = 1;
+    public static final int OPERATION_SEED_FROM_FOUR = 2;
+    public static final int OPERATION_SEED_FROM_SIX = 3;
+    public static final int OPERATION_CLIMB = 4;
+    public static final int OPERATION_CONSTRICT = 5;
+
     /// HILL CLIMBING STACK
     
     class State
         {
         Model[] parents;
         int[] parentIndices;
+        boolean[] parentsSelected;
         Model[] children;
+        int operation;
         }
     ArrayList stack = new ArrayList();
         
@@ -67,10 +76,13 @@ public class HillClimb extends SynthPanel
     // models currently being played and displayed
     Model[] currentModels = new Model[NUM_MODELS];
 
+    public int operation;
+
     JRadioButton[][] ratings = new JRadioButton[NUM_MODELS + 1][3];
+    JCheckBox[] selected = new JCheckBox[NUM_CANDIDATES];
     PushButton[] plays = new PushButton[NUM_MODELS];
     public static final int INITIAL_MUTATION_RATE = 37;         // roughly 5 when we do weight^3
-    public static final int INITIAL_RECOMBINATION_RATE = 75;
+    public static final int STANDARD_RECOMBINATION_RATE = 75;
     Blank blank;
     Category iterations;
     int currentPlay = 0;
@@ -80,7 +92,9 @@ public class HillClimb extends SynthPanel
     PushButton climb;
     PushButton reset;
     PushButton back;
+    PushButton constrict;
     JCheckBox bigger;
+    JCheckBox smooth;
     
     VBox candidates;
     VBox extraCandidates1;
@@ -93,17 +107,25 @@ public class HillClimb extends SynthPanel
         else
             return (State)(stack.remove(stack.size() - 1));
         }
-        
-    void pushStack(int[] parentIndices, Model[] parents, Model[] children)
+    
+    void pushStack(int[] parentIndices, Model[] parents, boolean[] parentsSelected, Model[] children)
         {
         State state = new State();
         state.parents = new Model[parents.length];
         state.parentIndices = new int[parents.length];
+        state.parentsSelected = new boolean[parentsSelected.length];
+        state.operation = operation;
         
         for(int i = 0; i < parents.length; i++)
             {
             state.parents[i] = copy(parents[i]);
             state.parentIndices[i] = parentIndices[i];
+            state.parentsSelected[i] = parentsSelected[i];
+            }
+
+        for(int i = 0; i < parentsSelected.length; i++)
+            {
+            state.parentsSelected[i] = parentsSelected[i];
             }
         
         state.children = new Model[children.length];
@@ -143,6 +165,84 @@ public class HillClimb extends SynthPanel
                     (char)('q' + (_i - NUM_CANDIDATES)) :
                     'z')));
         }
+    
+    /*
+      void seed(int type)
+      {
+      Random random = synth.random;
+      String[] keys = synth.getMutationKeys();
+      double weight = blank.getModel().get("recombinationrate", 0) / 100.0;
+                
+      switch(val)
+      {
+      case 0:
+      {
+      for(int i = 0; i < 4; i++)
+      currentModels[i] = (Model)(synth.nudge[i].clone());
+      int m = 4;
+      for(int i = 0; i < 4; i++)
+      for(int j = 0; j < 4; j++)
+      {
+      if (j == i) continue;
+      currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
+      }
+      // fill the next 16
+      for(int i = 16; i < 32; i++)
+      {
+      // pick two parents, try to make them different from one another
+      int p1 = random.nextInt(16);
+      int p2 = 0;
+      for(int j = 0; j < 100; j++)
+      {
+      p2 = random.nextInt(16);
+      if (p2 != p1) break;
+      }
+      currentModels[i] = currentModels[p1].copy().crossover(random, currentModels[p1], keys, weight);
+      }
+      operation = OPERATION_SEED_FROM_NUDGE;
+      }
+      break;
+      case 1:
+      {
+      int m = 4;
+      for(int i = 0; i < 4; i++)
+      for(int j = 0; j < 4; j++)
+      {
+      if (j == i) continue;
+      currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
+      }
+      // fill the next 16
+      for(int i = 16; i < 32; i++)
+      {
+      // pick two parents, try to make them different from one another
+      int p1 = random.nextInt(16);
+      int p2 = 0;
+      for(int j = 0; j < 100; j++)
+      {
+      p2 = random.nextInt(16);
+      if (p2 != p1) break;
+      }
+      currentModels[i] = currentModels[p1].copy().crossover(random, currentModels[p1], keys, weight);
+      }
+      operation = OPERATION_SEED_FROM_FOUR;
+      }
+      break;
+      case 2:
+      {
+      int m = 6;
+      for(int i = 0; i < 6; i++)
+      for(int j = 0; j < 6; j++)
+      {
+      if (j == i) continue;
+      if (m >= 32) break;
+      currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
+      }
+      operation = OPERATION_SEED_FROM_SIX;
+      }
+      break;
+      }
+      }
+    */
     
     VBox buildCandidate(int i)
         {
@@ -214,6 +314,8 @@ public class HillClimb extends SynthPanel
   vbox.add(b);
 */            
 
+        HBox hh = new HBox();
+        VBox vv = new VBox();
 
         Box b = new Box(BoxLayout.X_AXIS);
         b.setBackground(Style.BACKGROUND_COLOR());
@@ -223,8 +325,9 @@ public class HillClimb extends SynthPanel
         ratings[i][0].setForeground(Style.TEXT_COLOR());
         ratings[i][0].setFont(Style.SMALL_FONT());
         ratings[i][0].putClientProperty("JComponent.sizeVariant", "small");
-        b.add(Box.createGlue());
-        vbox.add(b);
+        ratings[i][0].setOpaque(false);  // for windows
+        
+        vv.add(b);
                         
         b = new Box(BoxLayout.X_AXIS);
         b.setBackground(Style.BACKGROUND_COLOR());
@@ -234,8 +337,9 @@ public class HillClimb extends SynthPanel
         ratings[i][1].setForeground(Style.TEXT_COLOR());
         ratings[i][1].setFont(Style.SMALL_FONT());
         ratings[i][1].putClientProperty("JComponent.sizeVariant", "small");
+        ratings[i][1].setOpaque(false);  // for windows
         b.add(Box.createGlue());
-        vbox.add(b);
+        vv.add(b);
                         
         b = new Box(BoxLayout.X_AXIS);
         b.setBackground(Style.BACKGROUND_COLOR());
@@ -245,10 +349,28 @@ public class HillClimb extends SynthPanel
         ratings[i][2].setForeground(Style.TEXT_COLOR());
         ratings[i][2].setFont(Style.SMALL_FONT());
         ratings[i][2].putClientProperty("JComponent.sizeVariant", "small");
+        ratings[i][2].setOpaque(false);  // for windows
         b.add(Box.createGlue());
-        vbox.add(b);
-/* */          
-            
+        vv.add(b);
+                
+        hh.add(vv);
+                
+        vv = new VBox();
+        if (i < NUM_CANDIDATES)
+            {
+            selected[i] = new JCheckBox("");
+            selected[i].setFocusable(false);
+            selected[i].setForeground(Style.TEXT_COLOR());
+            selected[i].setOpaque(false);  // for windows
+            selected[i].setFont(Style.SMALL_FONT());
+            selected[i].setSelected(true);
+            selected[i].putClientProperty("JComponent.sizeVariant", "small");
+            vv.add(selected[i]);
+            }
+        hh.add(vv);
+        vbox.add(hh);
+        
+           
         JMenuItem[] doItems = new JMenuItem[13];
         doItems[0] = new JMenuItem("Keep Patch");
         doItems[0].addActionListener(new ActionListener()
@@ -337,7 +459,6 @@ public class HillClimb extends SynthPanel
                 {
                 Random random = synth.random;
                 String[] keys = synth.getMutationKeys();
-                double recombination = blank.getModel().get("recombinationrate", 0) / 100.0;
 
                 for(int i = 0; i < NUM_CANDIDATES; i++)
                     {
@@ -415,6 +536,8 @@ public class HillClimb extends SynthPanel
         {
         super(synth);
         
+        blank = new Blank();
+
         addAncestorListener ( new AncestorListener ()
             {
             public void ancestorAdded ( AncestorEvent event )
@@ -489,6 +612,7 @@ public class HillClimb extends SynthPanel
         ButtonGroup two = new ButtonGroup();
         ButtonGroup three = new ButtonGroup();
                 
+                
         VBox top = new VBox();
         HBox toprow = new HBox();
         add(top, BorderLayout.CENTER);
@@ -497,7 +621,13 @@ public class HillClimb extends SynthPanel
 
         Category panel = new Category(null, "Iteration 1", Style.COLOR_GLOBAL());
         iterations = panel;
-                
+
+
+        HBox iterationsBox = new HBox();
+
+        VBox vbox = new VBox();
+
+// has to be first so others can have their size based on it
         back = new PushButton("Back Up")
             {
             public void perform()
@@ -507,7 +637,8 @@ public class HillClimb extends SynthPanel
                 }
             };
         back.getButton().setFocusable(false);
-            
+           
+
         climb = new PushButton("Climb")
             {
             public void perform()
@@ -519,47 +650,27 @@ public class HillClimb extends SynthPanel
         climb.getButton().setPreferredSize(back.getButton().getPreferredSize());
         climb.getButton().setFocusable(false);
                 
-        reset = new PushButton("Reset")
-            {
-            public void perform()
-                {
-                if (synth.showSimpleConfirm("Reset", "Are you sure you want to reset the Hill-Climber?"))
-                    {
-                    initialize((Model)(synth.getModel().clone()), true);
-                    resetCurrentPlay();
-                    }
-                }
-            };
-        reset.getButton().setPreferredSize(back.getButton().getPreferredSize());
-        reset.getButton().setFocusable(false);
-                
-        retry = new PushButton("Retry")
-            {
-            public void perform()
-                {
-                again();
-                resetCurrentPlay();
-                }
-            };
-        retry.getButton().setPreferredSize(back.getButton().getPreferredSize());
-        retry.getButton().setFocusable(false);
-
-        VBox vbox = new VBox();
         vbox.add(climb);
-        vbox.add(retry);
-        vbox.add(back);
-        vbox.add(reset);
-        
-        HBox iterationsBox = new HBox();
-        iterationsBox.add(vbox);
 
-        blank = new Blank();
-        blank.getModel().set("recombinationrate", INITIAL_RECOMBINATION_RATE);
-
-        vbox = new VBox();
+        LabelledDial mutationRate = new LabelledDial("Rate", blank, "mutationrate", Style.COLOR_GLOBAL(), 0, 100)
+            {
+            public String map(int val)
+                {
+                double v = ((val / 100.0) * (val / 100.0) * (val / 100.0)) * 100;
+                if (v == 100)
+                    return "100.0";
+                else if (v >= 10.0)
+                    return String.format("%.2f", v);
+                else
+                    return String.format("%.3f", v);
+                }
+            };
+        blank.getModel().set("mutationrate", INITIAL_MUTATION_RATE);
+        vbox.add(mutationRate);
                 
         bigger = new JCheckBox("Bigger");
         bigger.setFocusable(false);
+        bigger.setOpaque(false);  // for windows
         bigger.setForeground(Style.TEXT_COLOR());
         bigger.setFont(Style.SMALL_FONT());
         bigger.putClientProperty("JComponent.sizeVariant", "small");
@@ -581,26 +692,109 @@ public class HillClimb extends SynthPanel
             });
         bigger.setSelected(false);
         HBox eb = new HBox();
-        eb.addLast(bigger);
+        eb.add(bigger);
         vbox.add(eb);
 
-        LabelledDial mutationRate = new LabelledDial("Mutation", blank, "mutationrate", Style.COLOR_GLOBAL(), 0, 100)
+
+        iterationsBox.add(vbox);
+        
+        vbox = new VBox();
+        constrict = new PushButton("Constrict")
+            {
+            public void perform()
+                {
+                constrict();
+                resetCurrentPlay();
+                }
+            };
+        constrict.getButton().setPreferredSize(back.getButton().getPreferredSize());
+        constrict.getButton().setFocusable(false);
+        vbox = new VBox();
+        vbox.add(constrict);
+
+        LabelledDial recombinationRate = new LabelledDial("Rate", blank, "recombinationrate", Style.COLOR_GLOBAL(), 0, 100)
             {
             public String map(int val)
                 {
-                double v = ((val / 100.0) * (val / 100.0) * (val / 100.0)) * 100;
-                if (v == 100)
+                if (val == 100) 
                     return "100.0";
-                else if (v >= 10.0)
-                    return String.format("%.2f", v);
+                else if (val >= 10.0)
+                    return String.format("%.2f", (double)val);
                 else
-                    return String.format("%.3f", v);
+                    return String.format("%.3f", (double)val);
                 }
             };
-        mutationRate.addAdditionalLabel("Rate");
-        blank.getModel().set("mutationrate", INITIAL_MUTATION_RATE);
-        vbox.add(mutationRate);
-        
+        blank.getModel().set("recombinationrate", STANDARD_RECOMBINATION_RATE);
+        vbox.add(recombinationRate);
+
+        smooth = new JCheckBox("Smooth");
+        smooth.setOpaque(false);  // for windows
+        smooth.setFocusable(false);
+        smooth.setForeground(Style.TEXT_COLOR());
+        smooth.setFont(Style.SMALL_FONT());
+        smooth.putClientProperty("JComponent.sizeVariant", "small");
+        smooth.setSelected(false);
+        eb = new HBox();
+        eb.addLast(smooth);             // we do addLast rather than add to overcome the stupid OS X "Smoo..." bug.
+        vbox.add(eb);
+
+ 
+ 
+ 
+ 
+        iterationsBox.add(vbox);
+
+
+        vbox = new VBox();
+ 
+        retry = new PushButton("Retry")
+            {
+            public void perform()
+                {
+                again();
+                resetCurrentPlay();
+                }
+            };
+        retry.getButton().setPreferredSize(back.getButton().getPreferredSize());
+        retry.getButton().setFocusable(false);
+        vbox.add(retry);
+
+        // add the aforementioned Back up button
+        vbox.add(back);
+              
+        /*
+          reset = new PushButton("Reset")
+          {
+          public void perform()
+          {
+          if (synth.showSimpleConfirm("Reset", "Are you sure you want to reset the Hill-Climber?"))
+          {
+          initialize((Model)(synth.getModel().clone()), OPERATION_SEED_FROM_PATCH);
+          resetCurrentPlay();
+          }
+          }
+          };
+          reset.getButton().setPreferredSize(back.getButton().getPreferredSize());
+          reset.getButton().setFocusable(false);
+          vbox.add(reset);
+        */
+
+        reset = new PushButton("Reset...",
+            new String[] { "From Original Patch",
+                           "From Nudge Targets", 
+                           "From First Four Candidates",
+                           "From First Six Candidates" })
+            {
+            public void perform(int val)
+                {
+                initialize(val == OPERATION_SEED_FROM_PATCH ? synth.getModel() : null, val);
+                resetCurrentPlay();
+                }
+            };
+        reset.getButton().setPreferredSize(back.getButton().getPreferredSize());
+        reset.getButton().setFocusable(false);
+        vbox.add(reset);
+
         iterationsBox.add(vbox);
         
         panel.add(iterationsBox, BorderLayout.WEST);
@@ -614,18 +808,10 @@ public class HillClimb extends SynthPanel
             vbox = buildCandidate(NUM_CANDIDATES + i);
             hbox.add(vbox);
             }
-        toprow.add(panel);
-        
-        // Add Current 
-        panel = new Category(null, "Current", Style.COLOR_C());
-        
-        vbox = buildCandidate(NUM_MODELS - 1);
-        HBox curr = new HBox();
-        curr.add(vbox);
-        panel.add(curr);
+        panel.add(hbox);
         toprow.addLast(panel);
         top.add(toprow);
-
+        
         // Add Candidates
 
         panel =  new Category(null, "Candidates", Style.COLOR_B());
@@ -660,6 +846,16 @@ public class HillClimb extends SynthPanel
         HBox hb = new HBox();
         hb.add(panel);
 
+        VBox currentAndNone = new VBox();
+
+        // Add Current 
+        panel = new Category(null, "Current", Style.COLOR_C());
+        
+        vbox = buildCandidate(NUM_MODELS - 1);
+        HBox currentHBox = new HBox();
+        currentHBox.add(vbox);
+        panel.add(currentHBox);
+        currentAndNone.add(panel);
 
         // Add None
         panel = new Category(null, "None", Style.COLOR_C());
@@ -673,6 +869,7 @@ public class HillClimb extends SynthPanel
         ratings[NUM_MODELS][0].setForeground(Style.TEXT_COLOR());
         ratings[NUM_MODELS][0].setFont(Style.SMALL_FONT());
         ratings[NUM_MODELS][0].putClientProperty("JComponent.sizeVariant", "small");
+        ratings[NUM_MODELS][0].setOpaque(false);  // for windows
         b.add(Box.createGlue());
         vbox.add(b);
                         
@@ -684,6 +881,7 @@ public class HillClimb extends SynthPanel
         ratings[NUM_MODELS][1].setForeground(Style.TEXT_COLOR());
         ratings[NUM_MODELS][1].setFont(Style.SMALL_FONT());
         ratings[NUM_MODELS][1].putClientProperty("JComponent.sizeVariant", "small");
+        ratings[NUM_MODELS][1].setOpaque(false);  // for windows
         b.add(Box.createGlue());
         vbox.add(b);
                         
@@ -695,6 +893,7 @@ public class HillClimb extends SynthPanel
         ratings[NUM_MODELS][2].setForeground(Style.TEXT_COLOR());
         ratings[NUM_MODELS][2].setFont(Style.SMALL_FONT());
         ratings[NUM_MODELS][2].putClientProperty("JComponent.sizeVariant", "small");
+        ratings[NUM_MODELS][2].setOpaque(false);  // for windows
         b.add(Box.createGlue());
         vbox.add(b);
         VBox bar = new VBox();
@@ -704,8 +903,9 @@ public class HillClimb extends SynthPanel
         foo.add(Strut.makeHorizontalStrut(40));
         panel.add(foo);
         
+        currentAndNone.add(panel);
         
-        hb.addLast(panel);
+        hb.addLast(currentAndNone);
 
         top.add(hb);
         
@@ -840,17 +1040,18 @@ public class HillClimb extends SynthPanel
         if (stackEmpty())
             {
             // uh oh...
-            System.err.println("Warning (Midi): " + "Empty Stack");
+            System.err.println("Warning (HillClimb): " + "Empty Stack");
             return;
             }
-        else if (stackInitial())
+        else if (operation == OPERATION_SEED_FROM_PATCH)
             {
-            initialize(topStack().parents[0], true);
-            ratings[NUM_MODELS][0].setSelected(true);
-            ratings[NUM_MODELS][1].setSelected(true);
-            ratings[NUM_MODELS][2].setSelected(true);
+            initialize(synth.getModel(), operation);
             }
-        else
+        else if (operation == OPERATION_SEED_FROM_NUDGE || operation == OPERATION_SEED_FROM_FOUR || operation == OPERATION_SEED_FROM_SIX)
+            {
+            initialize(null,  operation);
+            }
+        else if (operation == OPERATION_CLIMB)
             {
             State state = popStack();
             System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
@@ -864,10 +1065,24 @@ public class HillClimb extends SynthPanel
                 if (state.parentIndices[j] != -1)
                     ratings[state.parentIndices[j]][j].setSelected(true);
                 }
+                
+            for(int j = 0; j < state.parentsSelected.length; j++)
+                {
+                selected[j].setSelected(state.parentsSelected[j]);
+                }
         
             climb(false);
             }
+        else if (operation == OPERATION_CONSTRICT)
+            {
+            State state = popStack();
+            System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
 
+            ratings[NUM_MODELS][0].setSelected(true);
+            ratings[NUM_MODELS][1].setSelected(true);
+            ratings[NUM_MODELS][2].setSelected(true);
+            constrict();
+            }
         }
         
     void pop()
@@ -875,7 +1090,7 @@ public class HillClimb extends SynthPanel
         if (stackEmpty())
             {
             // uh oh...
-            System.err.println("Warning (Midi) 2: " + "Empty Stack");
+            System.err.println("Warning (HillClimb) 2: " + "Empty Stack");
             return;
             }
         else if (stackInitial())
@@ -885,6 +1100,7 @@ public class HillClimb extends SynthPanel
         else
             {
             State state = popStack();
+            operation = state.operation;
             System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
 
             for(int j = 0; j < state.parentIndices.length; j++)
@@ -892,10 +1108,15 @@ public class HillClimb extends SynthPanel
                 if (state.parentIndices[j] != -1)
                     ratings[state.parentIndices[j]][j].setSelected(true);
                 }
+
+            for(int j = 0; j < state.parentsSelected.length; j++)
+                {
+                selected[j].setSelected(state.parentsSelected[j]);
+                }
+                                
+            iterations.setName("Iteration " + stack.size());
+            repaint();
             }        
-                
-        iterations.setName("Iteration " + stack.size());
-        repaint();
         }
     
     public void startHillClimbing()
@@ -906,45 +1127,122 @@ public class HillClimb extends SynthPanel
             }       
         currentModels[NUM_CANDIDATES + ARCHIVE_SIZE] = synth.getModel();
         
-        initialize(synth.getModel(), true);
+        initialize(synth.getModel(),  OPERATION_SEED_FROM_PATCH);
         }
-    
-    void initialize(Model seed, boolean clear)
+
+    boolean[] getSelectedResults()
+        {
+        boolean[] sel = new boolean[NUM_CANDIDATES];
+        for(int i = 0; i < sel.length; i++)
+            {
+            sel[i] = selected[i].isSelected();
+            }
+        return sel;
+        }
+        
+
+    void initialize(Model seed, int operation)
         {
         // we need a model with NO callbacks
-        Model newSeed = seed.copy();
-                
-        if (clear)
-            {
-            stack.clear();
-            }
-                
+        stack.clear();
+        this.operation = operation;
         Random random = synth.random;
         String[] keys = synth.getMutationKeys();
-        double weight = blank.getModel().get("mutationrate", 0) / 100.0;
         
-        weight = weight * weight * weight;  // make more sensitive at low end
-                
-        int numMutations = 1;
-        
-        for(int i = 0; i < NUM_CANDIDATES; i++)
+        switch(operation)
             {
-            currentModels[i] = newSeed.copy();
-            for(int j = 0; j < numMutations; j++)
+            case OPERATION_SEED_FROM_PATCH:
                 {
-                currentModels[i] = currentModels[i].mutate(random, keys, weight);
+                Model newSeed = seed.copy();                
+                double weight = blank.getModel().get("mutationrate", 0) / 100.0;
+                weight = weight * weight * weight;  // make more sensitive at low end
+                int numMutations = 1;
+                
+                for(int i = 0; i < NUM_CANDIDATES; i++)
+                    {
+                    currentModels[i] = newSeed.copy();
+                    for(int j = 0; j < numMutations; j++)
+                        currentModels[i] = currentModels[i].mutate(random, keys, weight);
+                    if (i % 4 == 3) numMutations++;
+                    }
+
+                for(int i = 0; i < selected.length; i++)
+                    selected[i].setSelected(true);
                 }
-            if (i % 4 == 3)
-                numMutations++;
+            break;
+            case OPERATION_SEED_FROM_NUDGE:
+                {
+                double weight = blank.getModel().get("recombinationrate", 0) / 100.0;
+                for(int i = 0; i < 4; i++)
+                    currentModels[i] = (Model)(synth.nudge[i].clone());
+                int m = 4;
+                for(int i = 0; i < 4; i++)
+                    for(int j = 0; j < 4; j++)
+                        {
+                        if (j == i) continue;
+                        currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
+                        }
+                // fill the next 16
+                for(int i = 16; i < 32; i++)
+                    {
+                    // pick two parents, try to make them different from one another
+                    int p1 = random.nextInt(16);
+                    int p2 = 0;
+                    for(int j = 0; j < 100; j++)
+                        {
+                        p2 = random.nextInt(16);
+                        if (p2 != p1) break;
+                        }
+                    currentModels[i] = currentModels[p1].copy().crossover(random, currentModels[p1], keys, weight);
+                    }
+                }
+            break;
+            case OPERATION_SEED_FROM_FOUR:
+                {
+                double weight = blank.getModel().get("recombinationrate", 0) / 100.0;
+                int m = 4;
+                for(int i = 0; i < 4; i++)
+                    for(int j = 0; j < 4; j++)
+                        {
+                        if (j == i) continue;
+                        currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
+                        }
+                // fill the next 16
+                for(int i = 16; i < 32; i++)
+                    {
+                    // pick two parents, try to make them different from one another
+                    int p1 = random.nextInt(16);
+                    int p2 = 0;
+                    for(int j = 0; j < 100; j++)
+                        {
+                        p2 = random.nextInt(16);
+                        if (p2 != p1) break;
+                        }
+                    currentModels[i] = currentModels[p1].copy().crossover(random, currentModels[p1], keys, weight);
+                    }
+                }
+            break;
+            case OPERATION_SEED_FROM_SIX:
+                {
+                double weight = blank.getModel().get("recombinationrate", 0) / 100.0;
+                int m = 6;
+                for(int i = 0; i < 6; i++)
+                    for(int j = 0; j < 6; j++)
+                        {
+                        if (j == i) continue;
+                        if (m >= 32) break;
+                        currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
+                        }
+                }
+            break;
             }
-
-        pushStack(new int[] {-1, -1, -1}, new Model[] { newSeed, newSeed, newSeed}, currentModels);
+                                
+        pushStack(new int[] {-1, -1, -1}, new Model[] { seed, null, null }, getSelectedResults(), currentModels);
         iterations.setName("Iteration " + stack.size());
-        repaint();
-
         ratings[NUM_MODELS][0].setSelected(true);
         ratings[NUM_MODELS][1].setSelected(true);
         ratings[NUM_MODELS][2].setSelected(true);
+        repaint();
         }
 
     void shuffle(Random random, Model[] array, int start, int len)
@@ -1111,12 +1409,91 @@ public class HillClimb extends SynthPanel
             currentModels[stage + 15] = a.copy().opposite(random, oldA, keys, recombination, false).opposite(random, oldA, keys, recombination, false).mutate(random, keys, mutationWeight).mutate(random, keys, mutationWeight);
             }
         }
-             
+    
+    
+    void constrict()
+        {
+        int poolSize= (bigger.isSelected() ? NUM_CANDIDATES : STAGE_SIZE);  // that is, 32 vs 16
+        Random random = synth.random;
+        String[] keys = synth.getMutationKeys();
+        double weight = blank.getModel().get("recombinationrate", 0) / 100.0;
+                
+                        
+        // Identify the individuals to replace and the ones to keep
+        int numToReplace = 0;
+        for(int i = 0; i < selected.length; i++)
+            {
+            if (!selected[i].isSelected()) numToReplace++;
+            }
+        int[] replace = new int[numToReplace];
+        int[] keep = new int[poolSize - numToReplace];
+
+        if (replace.length == 0 || keep.length == 0) return;
+
+        int k = 0;
+        int r = 0;
+        for(int i = 0; i < poolSize; i++)
+            {
+            if (selected[i].isSelected()) 
+                keep[k++] = i;
+            else
+                replace[r++] = i;
+            }
+                
+        pushStack(new int[] { -1, -1, -1 }, new Model[] { currentModels[NUM_CANDIDATES - 1], null, null }, getSelectedResults(), currentModels);
+        operation = OPERATION_CONSTRICT;
+                
+        // Now replace the individuals
+        for(int i = 0; i < replace.length; i++)
+            {
+            // pick two parents, try to make them different from one another
+            int p1 = random.nextInt(keep.length);
+            int p2 = 0;
+            for(int j = 0; j < 100; j++)
+                {
+                p2 = random.nextInt(keep.length);
+                if (p2 != p1) break;
+                }
+                
+            if (smooth.isSelected())
+                {
+                // recombine
+                currentModels[replace[i]] = currentModels[keep[p1]].copy().recombine(random, currentModels[keep[p2]], keys, weight);
+                }
+            else
+                {
+                // cross over
+                currentModels[replace[i]] = currentModels[keep[p1]].copy().crossover(random, currentModels[keep[p2]], keys, weight);
+                }
+            }
+                
+        // Move the new ones to the beginning
+        Model[] old = (Model[])(currentModels.clone());
+        int count = 0;
+        for(int i = 0; i < replace.length; i++)
+            {
+            currentModels[count++] = old[replace[i]];
+            }
+        for(int i = 0; i < keep.length; i++)
+            {
+            currentModels[count++] = old[keep[i]];
+            }
+        
+        iterations.setName("Iteration " + stack.size());
+        repaint();
+        
+        ratings[NUM_MODELS][0].setSelected(true);
+        ratings[NUM_MODELS][1].setSelected(true);
+        ratings[NUM_MODELS][2].setSelected(true);
+        for(int i = 0; i < NUM_CANDIDATES; i++)
+            selected[i].setSelected(true);
+        }
+        
+        
     void climb(boolean determineBest)
         {
         Random random = synth.random;
         String[] keys = synth.getMutationKeys();
-        double recombination = blank.getModel().get("recombinationrate", 0) / 100.0;
         double weight = blank.getModel().get("mutationrate", 0) / 100.0;
         
         weight = weight * weight * weight;  // make more sensitive at low end
@@ -1169,18 +1546,21 @@ public class HillClimb extends SynthPanel
             }
         else if (bestModels[1] == -1)
             {
-            pushStack(bestModels, new Model[] { currentModels[bestModels[0]], null, null }, currentModels);
-            produce(random, keys, recombination, weight, currentModels[bestModels[0]], oldA);
+            pushStack(bestModels, new Model[] { currentModels[bestModels[0]], null, null }, getSelectedResults(), currentModels);
+            produce(random, keys, STANDARD_RECOMBINATION_RATE / 100.0, weight, currentModels[bestModels[0]], oldA);
+            operation = OPERATION_CLIMB;
             }
         else if (bestModels[2] == -1)
             {
-            pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], null }, currentModels);
-            produce(random, keys, recombination, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], oldA);
+            pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], null }, getSelectedResults(), currentModels);
+            produce(random, keys, STANDARD_RECOMBINATION_RATE / 100.0, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], oldA);
+            operation = OPERATION_CLIMB;
             }
         else
             {
-            pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]] }, currentModels);
-            produce(random, keys, recombination, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]], oldA);
+            pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]] }, getSelectedResults(), currentModels);
+            produce(random, keys, STANDARD_RECOMBINATION_RATE / 100.0, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]], oldA);
+            operation = OPERATION_CLIMB;
             }
         
         if (!zeroModels)

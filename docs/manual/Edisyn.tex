@@ -30,6 +30,8 @@ By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 \setcounter{tocdepth}{1}
 \tableofcontents
 
+\clearpage
+
 %\vspace{0.5em}
 \section{About Edisyn}
 
@@ -38,21 +40,23 @@ Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter e
 \begin{itemize}
 %\item Futuresonus Parva
 \item Dave Smith Instruments Prophet '08 (Single)
+\item E-Mu Morpheus and Proteus (Single)
 \item Kawai K1, K1m, and K1r (Single and Multimode)
 \item Kawai K4 and K4r (Single and Multimode)
 \item Kawai K5 and K5m (Single)
 \item Korg SG Rack (Single and Multimode)
+\item Korg Microkorg
 \item Korg Microsampler
 \item Korg Wavestation SR (Performance, Patch, and Wave Sequence)
 \item Oberheim Matrix 1000 (Single)
 \item PreenFM2 (Single)
 \item Waldorf Blofeld Desktop, Blofeld Desktop SL, and Blofeld Keyboard (Single and Multimode)
 \item Waldorf Microwave II, Microwave XT, and Microwave XTk (Single and Multimode)
-\item Yamaha DX7 Family (DX7, TX7, TX216/816, etc.) (Single)
+\item Yamaha DX7 Family (DX7, TX7, TX216/816, Dexed, etc.) (Single)
 \item Yamaha TX81Z (Single and Multimode)
 \end{itemize}
 
-Edisyn does not support patches for global parameters, nor for wave, sample, or wavetable editing etc.  Additionally, though it can do bulk downloads and save them as individual patches, Edisyn is {\bf not at present a librarian tool}.  You should use a good free librarian software program, such as SysEx Librarian on the Mac.
+You'll note a pattern among these synthesizers: many are very difficult to program.\footnote{So why are the Prophet '08, Blofeld, and Microwave XT there then?  Because in fact these synthesizers are all ones I own or have had access to.}  That's one of my interests.  Edisyn's patch editors try to cover the most common needs, and so it does not support patches for global parameters, nor for wave, sample, or wavetable editing etc.  Additionally, though it can do bulk downloads and save them as individual patches, Edisyn is {\bf not at present a librarian tool}.  You should use a good free librarian software program, such as SysEx Librarian on the Mac.
 
 
 \section{Starting Edisyn}
@@ -95,19 +99,19 @@ If you are not connected to MIDI, or if you cancel, then Edisyn will inform you 
 
 \section{Edisyn Patch Editors}
 
-\begin{wrapfigure}{r}{3in}
-\vspace{-3em}\includegraphics[scale=0.3]{2.png}
-\vspace{-3em}\caption{Typical Patch Editor Panel (TX81Z)}\label{typicalpatcheditorpanel}
-\vspace{-1em}
-\end{wrapfigure}
-
-
 An Edisyn patch editor is a single window with multiple tabbed panes.  You can switch tabs by clicking on them or via shortcuts (see the {\bf Tabs Menu}).  The far-right tab is the {\bf About Tab}.  It gives you information about the eccentricities of the synthesizer that require custom behavior in Edisyn (they all do!).  You should read it carefully to understand how Edisyn will interact with your synthesizer.  
 
 \paragraph{Categories}
 At right is a typical tab pane.  You'll note that various widgets are grouped together in regions (called {\bf Categories}).  There are four categories shown here.  Three are arbitrary categories for this synthesizer: ``Global'', ``LFO'', and ``Controllers''.  They're in various colors to differentiate them.  Other categories will be found in other tab panes.  But one category is special: the {\bf Synthesizer Category}, always shown in white, here named ``Yamaha TX81Z''.  It normally contains the patch name and bank/patch number.
 
-\paragraph{Widgets}  Edisyn has a number of widgets.  Here are some:
+\begin{wrapfigure}{r}{3in}
+\vspace{-2em}\includegraphics[scale=0.3]{2.png}
+\vspace{-3em}\caption{Typical Patch Editor Panel (TX81Z)}\label{typicalpatcheditorpanel}
+\vspace{-2em}
+\end{wrapfigure}
+
+
+\paragraph{Widgets}  Edisyn has a number of widgets.  Here are a few of them:
 
 \begin{itemize} 
 
@@ -116,7 +120,9 @@ At right is a typical tab pane.  You'll note that various widgets are grouped to
 \item The {\bf Patch Name Button}, currently showing ``DEMO SOUND''.  Click on this button to change the name of your patch.  A dialog will pop up to let you change the sound, with an additional {\bf Rules} button to explain the constraints the synthesizer places on patch names.
 
 \item Displays of {\bf Keyboards}.  Select a key!
+\end{itemize}
 
+\begin{itemize}
 \item Various {\bf Dials}. These are semicircles in gray, partly in some other color, with a value in the center.  Dials vary in orientation.  Most look sort of like a ``C'', with the zero point at the bottom center.  Other dials are symmetric, such as the ``Breath Ctrl. Pitch Bias'' dial (bottom row, second from right in the Figure), and have zero point at center top.  Occasionally dials have other orientations: the goal is to keep the zero point centered (at top or bottom).
 
 You change values in a Dial by clicking on the dial and dragging vertically.  You can also double-click on a dial to reset it to a default value (often zero).  If the Dial doesn't have the finesse you require to hit an exact value, hold down the {\bf Alt} (or on the Mac, the {\bf Option} key while dragging and you'll get 4\(\times\) the resolution.  Hold down the {\bf Control} key and you'll get 16\(\times\) the resolution. Hold down both keys and you'll get 64\(\times\) the resolution!  Finally, you can  two-finger drag (on the Mac), or spin the mouse wheel to move the value by exactly 1 unit.  
@@ -185,6 +191,9 @@ you can always stop batch-downloading at any time by choosing {\bf Stop Download
 
 Also note that as a failsafe Edisyn only allows the frontmost window to receive data over MIDI.  This means that while you're batch-downloading, you can't go to some other patch editor: the downloading patch editor must stay in front.  You can go to another application though (read a web browser say).
 
+\paragraph{Exporting to Text}
+Perhaps you might wish to describe your patch on you blog or your favorite forum.  if you choose {\bf Export to Text...} from the {\bf File} menu, Edisyn will write out all of its patch parameters to a text file.   Edisyn may occasionally break out parameters more than your synthesizer does: though usually it's pretty close to a one-to-one mapping.  The parameter names can be cryptic sometimes: Edisyn often (not always) names parameters in a manner fairly similar to how they're specified by the synthesizer manufacturer in its MIDI Sysex document, and synth manufacturers are not known for being consistent in their naming between the sysex document and the user manual.
+
 
 \section{Communicating with a Synthesizer}
 
@@ -219,7 +228,7 @@ Edisyn gives you various options for adjusting the test note you send (though it
 
 Setting the {\bf Pause Between Test Notes} will change how long Edisyn waits, beyond the note length itself, before it plays the next note if you have {\bf Send Test Notes} on.  It doesn't affect how fast you can play test notes on your own.  One special setting is {\bf Default}: this is defined as an additional pause equal to the note length if the note length is less than 1/2 seconds; or a pause of 1/2 second if the note length is greater than this.
 
-Some synthesizers (such as the Yamaha DX) feature notoriously long release times on their envelopes, so if you're doing hill-climbing (see Section \ref{hillclimb}) or otherwise repeatedly sending test notes, the notes may bleed into each other such that you can't hear the note clearly.  To fix this, you can set {\bf Send All Sounds Off After Note Off} to true.  This will cause the Send Test Note facility to finish a note by abruptly shutting off all sound, like {\bf Send All Sounds Off} does, rather than just sending a simple note-off message (which permits the envelope release). 
+Some synthesizers (such as the Yamaha DX) feature notoriously long release times on their envelopes, so if you're doing hill-climbing (see Section \ref{hillclimb}) or otherwise repeatedly sending test notes, the notes may bleed into each other such that you can't hear the note clearly.  To fix this, you can set {\bf Send All Sounds Off Before Note On} to true.  This will cause the Send Test Note facility to abruptly shut off all sound, like {\bf Send All Sounds Off} does, just before sending a new note.
 
 \subsection{Testing the Incoming Connection}
 
@@ -382,7 +391,7 @@ Note that your parameter choices, as well as using them for recombination, are p
 \subsection{Hill-Climbing}
 \label{hillclimb}
 
-\begin{wrapfigure}{r}{2.9in}
+\begin{wrapfigure}{r}{3.2in}
 \vspace{-2em}\includegraphics[scale=0.27]{HillClimbPanel.png}
 \vspace{-2em}
 \caption{The Hill-Climber Panel}
@@ -1023,7 +1032,7 @@ String[] heightKeys = new String[] { null, null, "sustain", "sustain", null };
 double[] heightConstants = new double[] { 0.0, 1.0, 1.0 / 127, 1.0 / 127, 0.0 };
 \end{verbatim}
 
-It's possible that your envelope isn't always positive: it can go negative.   The EnvelopeDisplay assumes that your parameters are all positive numbers (like 0--127), but it does allow to draw a line indicating where the X axis should be, via the {\bf setAxis(...)} method.  See the fourth example in Figure \ref{envelopedisplays}.
+It's possible that your envelope isn't always positive: it can go negative.   The EnvelopeDisplay normally assumes that your parameters are all positive numbers (like 0--127), but it does allow to draw a line indicating where the X axis should be, via the {\bf setAxis(...)} method.  See the fourth example in Figure \ref{envelopedisplays}.  You can also indicate that your Y values are {\it signed}, which means that when multiplied against their respective constants, they will range from -1...1 instead of from 0...1.  This is done with {\bf setSigned(...)}.
 
 You also can also tell the EnvelopeDisplay to draw a vertical line at some key position and a dotted line at another, using the methods {\bf setFinalStageKey(...)} and {\bf setSustainStageKey(...)} respectively (these are named after their use in the Waldorf Microwave XT).  These keys should specify the {\it stage number} (the point) where the line is drawn.  For example, if the sustain stage key's value is 4, then the line should be drawn through point number 4 (zero-indexed) in the envelope.  See the third example in Figure \ref{envelopedisplays}.
 
@@ -1050,6 +1059,8 @@ double[] angles = new double[] { 0, (Math.PI/4/127),   (Math.PI/4/127), 0, (Math
 JComponent comp = new EnvelopeDisplay(this, Color.red, "ADSR", 
                 timeKeys, heightKeys, timeConstants, heightConstants, angles);
 \end{verbatim}
+
+Sometimes you need {\it both} angles {\it and} times.  For example, in the E-Mu Ultra Proteus, attack and decay and release are measured in rate, but ``hold'' measures how long (in time) we stay at maximum attack before starting decay.  To do this, if you set the appropriate angle to {\tt EnvelopeDisplay.TIME}, then the corresponding time constant will revert to being used as a measure of time rather than a maximum length for the angle.
 
 This {\it still} might not be flexible enough for you.  For example, the Yamaha TX81Z has, shall we say, an unusual approach to defining angles.  You can do further post processing on the \(\langle x,y\rangle\) coordinates of each of the points (where  both X and Y vary from 0...1) by overriding the {\bf postProcess(...)} method like this:
 

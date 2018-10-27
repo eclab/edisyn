@@ -137,8 +137,8 @@ public class StringComponent extends JComponent implements Updatable, HasKey
                     synth.disableMenuBar();
                     int opt = JOptionPane.showOptionDialog(StringComponent.this, vbox, getTitle(),
                         JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Enter",  "Cancel", "Rules"}, "Enter");
-					synth.enableMenuBar();
-					
+                    synth.enableMenuBar();
+                                        
                     if (opt == JOptionPane.CANCEL_OPTION)       // this is "Rules"
                         {
                         synth.disableMenuBar();

@@ -4629,10 +4629,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         // the Wavestation is resetting the default (from 1 to 11 -- a change of 10, hence
         // bits 1 and 3 being set).  This doesn't happen in Mix 4 because in Parallel, 
         // Mix 4's default is RIGHT, which is the same value (11) as WET.
-   
-        System.err.println("---->" + getSendMIDI());
-        new Throwable().printStackTrace();
-                
+                   
         Performance performance = new Performance();
         performance.read(data, 0);        
 

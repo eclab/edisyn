@@ -73,8 +73,8 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem getAll;
     public JMenuItem testIncomingController;
     public JMenuItem testIncomingSynth;
-	public JCheckBoxMenuItem sendsAllSoundsOffBetweenNotesMenu;
-	
+    public JCheckBoxMenuItem sendsAllSoundsOffBetweenNotesMenu;
+        
     Model[] nudge = new Model[4];
     JMenuItem[] nudgeTowards = new JMenuItem[8];
     
@@ -101,9 +101,9 @@ public abstract class Synth extends JComponent implements Updatable
     
     /** Replaces the model with one whose hashmaps have been compacted. */
     public void compactModel()
-    	{
-		model = ((Model)(model.clone()));
-    	}
+        {
+        model = ((Model)(model.clone()));
+        }
 
     boolean testIncomingControllerMIDI;
     boolean testIncomingSynthMIDI;
@@ -189,8 +189,30 @@ public abstract class Synth extends JComponent implements Updatable
             if (!throwaway)
                 {
                 synth.sprout();
-                JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
-                frame.setVisible(true);
+                final JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+
+                if (Style.isMac())
+                    {
+                    // When you pack a large frame in OS X, it appears to trigger a bug where if the
+                    // Synth's frame is taller than the maximum window bounds, minus some slop, instead of 
+                    // setting it to that size, it'll minimize it to zero.  :-(  This workaround seems to do
+                    // the job.  The exact minimal slop value is 11: I'm setting it to 20 for good measure.
+                                        
+                    Rectangle size = frame.getBounds();
+                    Rectangle bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+                    if (size.width > bounds.width)
+                        {
+                        size.width = bounds.width;
+                        frame.setBounds(size);
+                        }
+                    if (size.height > bounds.height - 20)
+                        {
+                        size.height = bounds.height - 20;
+                        frame.setBounds(size);
+                        }
+                    }
+
+                frame.show();
                 if (setupMIDI) 
                     synth.setupMIDI("Choose MIDI devices to send to and receive from.", tuple);
 
@@ -363,8 +385,10 @@ public abstract class Synth extends JComponent implements Updatable
     { 
     //edisyn.synth.futuresonusparva.FuturesonusParva.class,
     //edisyn.synth.generic.Generic.class,
-    edisyn.synth.casiocz.CasioCZ.class,
+    //edisyn.synth.casiocz.CasioCZ.class,
     edisyn.synth.dsiprophet08.DSIProphet08.class,
+    edisyn.synth.emumorpheus.EmuMorpheus.class,
+    edisyn.synth.emumorpheus.EmuMorpheusHyper.class,
     edisyn.synth.kawaik1.KawaiK1.class, 
     edisyn.synth.kawaik1.KawaiK1Multi.class, 
     edisyn.synth.kawaik4.KawaiK4.class, 
@@ -1465,7 +1489,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             return false;
             }
-            
+        
         for(int i = 1; i < data.length - 1; i++)
             {
             if (data[i] < 0)  // uh oh, high byte
@@ -2006,12 +2030,14 @@ public abstract class Synth extends JComponent implements Updatable
         panel.add(p, BorderLayout.NORTH);
 
         synth.disableMenuBar();
-       	boolean ret = (JOptionPane.showConfirmDialog(synth, panel, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null) == JOptionPane.OK_OPTION);
+        boolean ret = (JOptionPane.showConfirmDialog(synth, panel, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null) == JOptionPane.OK_OPTION);
         synth.enableMenuBar();
         return ret;
         }
            
-           
+    
+    /** Returns the synth name to be used in the title bar. */
+    public String getTitleBarSynthName() { return getSynthNameLocal(); }
 
     /** Updates the JFrame title to reflect the synthesizer type, the patch information, and the filename if any. */
     public void updateTitle()
@@ -2019,7 +2045,7 @@ public abstract class Synth extends JComponent implements Updatable
         JFrame frame = ((JFrame)(SwingUtilities.getRoot(this)));
         if (frame != null) 
             {
-            String synthName = getSynthNameLocal().trim();
+            String synthName = getTitleBarSynthName().trim();
             String fileName = (file == null ? "        Untitled" : "        " + file.getName());
             String disconnectedWarning = ((tuple == null || tuple.in == null) ? "   DISCONNECTED" : "");
             String downloadingWarning = (patchTimer != null ? "   DOWNLOADING" : "");
@@ -2127,7 +2153,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** Given a preferences path X for a given synth, sets X to have the given value.. 
         Also sets the global path X to the value.  Typically this method is called by a
         a cover function (see for example setLastSynth(...) ) */
-    private static final void setLastX(String value, String x, String synthName)
+    static final void setLastX(String value, String x, String synthName)
         {
         setLastX(value, x, synthName, false);
         }
@@ -2152,7 +2178,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** Given a preferences path X for a given synth, sets X to have the given value.. 
         Also sets the global path X to the value.  Typically this method is called by a
         a cover function (see for example setLastSynth(...) ) */
-    private static final void setLastX(String value, String x)
+    static final void setLastX(String value, String x)
         {
         java.util.prefs.Preferences global_p = Prefs.getGlobalPreferences("Data");
         global_p.put(x, value);
@@ -2163,7 +2189,7 @@ public abstract class Synth extends JComponent implements Updatable
         If there is no such value, then returns the value stored in X in the globals.
         If there again is no such value, returns null.  Typically this method is called by a
         a cover function (see for example getLastSynth(...) ) */
-    private static final String getLastX(String x, String synthName)
+    public static final String getLastX(String x, String synthName)
         {
         return getLastX(x, synthName, false);
         }
@@ -2443,6 +2469,16 @@ public abstract class Synth extends JComponent implements Updatable
             getAll.setEnabled(false);
             }
 
+        JMenuItem saveToText = new JMenuItem("Export to Text...");
+        menu.add(saveToText);
+        saveToText.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doSaveText();
+                }
+            });
+
         menu = new JMenu("Edit");
         menubar.add(menu);
                 
@@ -2605,7 +2641,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(0);
                 }
             });
-        nudgeTowards[0].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[0].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.ALT_MASK));
                 
         nudgeTowards[1] = new JMenuItem("Towards 2");
         nudgeMenu.add(nudgeTowards[1]);
@@ -2616,7 +2652,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(1);
                 }
             });
-        nudgeTowards[1].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[1].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.ALT_MASK));
                 
         nudgeTowards[2] = new JMenuItem("Towards 3");
         nudgeMenu.add(nudgeTowards[2]);
@@ -2627,7 +2663,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(2);
                 }
             });
-        nudgeTowards[2].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[2].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.ALT_MASK));
                 
         nudgeTowards[3] = new JMenuItem("Towards 4");
         nudgeMenu.add(nudgeTowards[3]);
@@ -2638,7 +2674,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(3);
                 }
             });
-        nudgeTowards[3].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[3].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.ALT_MASK));
         
         nudgeMenu.addSeparator();
 
@@ -2651,7 +2687,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(4);
                 }
             });
-        nudgeTowards[4].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_5, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[4].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_5, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK | InputEvent.ALT_MASK));
                 
         nudgeTowards[5] = new JMenuItem("Away from 2");
         nudgeMenu.add(nudgeTowards[5]);
@@ -2662,7 +2698,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(5);
                 }
             });
-        nudgeTowards[5].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_6, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[5].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_6, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK | InputEvent.ALT_MASK));
                 
         nudgeTowards[6] = new JMenuItem("Away from 3");
         nudgeMenu.add(nudgeTowards[6]);
@@ -2673,7 +2709,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(6);
                 }
             });
-        nudgeTowards[6].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_7, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[6].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_7, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK | InputEvent.ALT_MASK));
                 
         nudgeTowards[7] = new JMenuItem("Away from 4");
         nudgeMenu.add(nudgeTowards[7]);
@@ -2684,7 +2720,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doNudge(7);
                 }
             });
-        nudgeTowards[7].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+        nudgeTowards[7].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_8, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK | InputEvent.ALT_MASK));
 
         nudgeMenu.addSeparator();
 
@@ -3202,7 +3238,34 @@ public abstract class Synth extends JComponent implements Updatable
                 doWriteToPatch();
                 }
             });
-                
+            
+        /*
+          JMenuItem sendSysex = new JMenuItem("Send Sysex...");
+          menu.add(sendSysex);
+          sendSysex.addActionListener(new ActionListener()
+          {
+          public void actionPerformed( ActionEvent e)
+          {
+          String hex = JOptionPane.showInputDialog(Synth.this, "Enter a sysex hex string", "");
+          if (hex != null)
+          {
+          java.util.Scanner scanner = new java.util.Scanner(hex);
+          ArrayList list = new ArrayList();
+          while(scanner.hasNextInt(16))
+          {
+          list.add(new Integer(scanner.nextInt(16)));
+          }
+          byte[] data = new byte[list.size()];
+          for(int i = 0; i < data.length; i++)
+          {
+          data[i] = (byte)(((Integer)(list.get(i))).intValue());
+          }
+          tryToSendSysex(data);
+          }
+          }
+          });
+        */
+        
         menu.addSeparator();
 
         JMenuItem change = new JMenuItem("Change MIDI");
@@ -3733,12 +3796,12 @@ public abstract class Synth extends JComponent implements Updatable
                 tns[0].setSelected(true); setTestNoteVelocity(127); break;
             }        
 
-        sendsAllSoundsOffBetweenNotesMenu = new JCheckBoxMenuItem("Send All Sounds Off After Note Off");
+        sendsAllSoundsOffBetweenNotesMenu = new JCheckBoxMenuItem("Send All Sounds Off Before Note On");
         sendsAllSoundsOffBetweenNotesMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
-				doSendsAllSoundsOffBetweenNotes();
+                doSendsAllSoundsOffBetweenNotes();
                 }
             });
         
@@ -3979,23 +4042,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doTab(7);
                 }
             });
-        
-        // Set up Windows  
-        if (Style.isWindows() || Style.isUnix())
-            {
-            //              JMenu help = new JMenu("Help");
-            JMenu about = new JMenu("About Edisyn");
-            about.addActionListener(new ActionListener()
-                {
-                public void actionPerformed(ActionEvent e)
-                    {
-                    doAbout();
-                    }
-                });
-            }
-        
-        //      -XDignore.symbol.file
-                
+                        
         // Set up Mac.  See Mac.java.
         if (Style.isMac())
             Mac.setup(this);
@@ -4019,9 +4066,9 @@ public abstract class Synth extends JComponent implements Updatable
             menubar.add(helpMenu);
             }
 
-        frame.getContentPane().add(this);
-        frame.pack();
-                
+        frame.getContentPane().setLayout(new BorderLayout());
+        frame.getContentPane().add(this, BorderLayout.CENTER);
+
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); 
         frame.addWindowListener(new java.awt.event.WindowAdapter() 
             {
@@ -4044,6 +4091,7 @@ public abstract class Synth extends JComponent implements Updatable
  
         tabChanged();   // so we reset the copy tab etc. menus
        
+        frame.pack();
         return frame;
         }
 
@@ -4226,17 +4274,17 @@ public abstract class Synth extends JComponent implements Updatable
         noMIDIPause = true;
         try
             {
-			// do an all sounds off (some synths don't properly respond to all notes off)
-			for(int i = 0; i < 16; i++)
-				tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
-			// do an all notes off (some synths don't properly respond to all sounds off)
-			for(int i = 0; i < 16; i++)
-				tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
+            // do an all sounds off (some synths don't properly respond to all notes off)
+            for(int i = 0; i < 16; i++)
+                tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
+            // do an all notes off (some synths don't properly respond to all sounds off)
+            for(int i = 0; i < 16; i++)
+                tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
             // Plus, for some synths that respond to neither <ahem Korg Wavestation>, maybe we can turn off the current note,
             // assuming the user hasn't changed it.            
             for(int i = 0; i < 16; i++)
-            	for(int j = 0; j < TEST_NOTE_PITCHES.length; j++)
-                	tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, i, TEST_NOTE_PITCHES[j], 64));
+                for(int j = 0; j < TEST_NOTE_PITCHES.length; j++)
+                    tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, i, TEST_NOTE_PITCHES[j], 64));
             }
         catch (InvalidMidiDataException e2)
             {
@@ -4327,15 +4375,15 @@ public abstract class Synth extends JComponent implements Updatable
     boolean sendsAllSoundsOffBetweenNotes;
     
     public boolean getSendsAllSoundsOffBetweenNotes()
-    	{
-    	return sendsAllSoundsOffBetweenNotes;
-    	}
+        {
+        return sendsAllSoundsOffBetweenNotes;
+        }
     
-	void doSendsAllSoundsOffBetweenNotes()
-		{
+    void doSendsAllSoundsOffBetweenNotes()
+        {
         sendsAllSoundsOffBetweenNotes = sendsAllSoundsOffBetweenNotesMenu.isSelected();
         setLastX("" + sendsAllSoundsOffBetweenNotes, "SendAllSoundsOffBetweenNotes", getSynthNameLocal(), false);
-		}
+        }
     
     public static final int[] TEST_NOTE_PITCHES = new int[] { 96, 84, 72, 60, 48, 36, 24 };
     int testNote = 60;
@@ -4360,6 +4408,10 @@ public abstract class Synth extends JComponent implements Updatable
         final int velocity = getTestNoteVelocity();
         try
             {
+            // possibly clear all notes
+            if (getSendsAllSoundsOffBetweenNotes())
+                sendAllSoundsOff();
+                                
             // play new note
             tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, getTestNotePitch(), velocity));
                                                          
@@ -4372,11 +4424,7 @@ public abstract class Synth extends JComponent implements Updatable
                     if (alwaysSendNoteOff || noteOnTick == myNoteOnTick)  // no more note on messages
                         try
                             {
-							// clear all notes
-							if (getSendsAllSoundsOffBetweenNotes())
-								sendAllSoundsOff();
-                        	else
-                            	tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, getTestNotePitch(), velocity));
+                            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, getTestNotePitch(), velocity));
                             noteOnTick = 0;
                             }
                         catch (Exception e3)
@@ -4635,7 +4683,7 @@ public abstract class Synth extends JComponent implements Updatable
                 fd.setDirectory(path);
             }            
             
-    	disableMenuBar();
+        disableMenuBar();
         fd.setVisible(true);
         enableMenuBar();
         File f = null; // make compiler happy
@@ -4905,7 +4953,7 @@ public abstract class Synth extends JComponent implements Updatable
                 fd.setDirectory(path);
             }
                 
-    	disableMenuBar();
+        disableMenuBar();
         fd.setVisible(true);
         enableMenuBar();
         File f = null; // make compiler happy
@@ -5050,7 +5098,7 @@ public abstract class Synth extends JComponent implements Updatable
                                                     otherSynth = (Synth)(instantiate(Synth.this.getClass(), getSynthNameLocal(), true, false, null));
                                                 otherSynth.printRevised = false;
                                                 otherSynth.setSendMIDI(false);
-        										otherSynth.undo.setWillPush(false);
+                                                otherSynth.undo.setWillPush(false);
                                                 otherSynth.getModel().clearListeners();         // otherwise we GC horribly.....
                                                 otherSynth.parse(data[i], true);
                                                 pNames[0][count] = "" + count + "   " + otherSynth.getPatchName(otherSynth.model);
@@ -5078,7 +5126,7 @@ public abstract class Synth extends JComponent implements Updatable
                                     vbox.add(hbox);
                                     vbox.add(menu);
  
- 									disableMenuBar();
+                                    disableMenuBar();
                                     int result = JOptionPane.showOptionDialog(this, vbox, "Choose Patch from File", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] {  "Merge", "Cancel" }, "Merge");
                                     enableMenuBar();
                                      
@@ -5133,8 +5181,8 @@ public abstract class Synth extends JComponent implements Updatable
                                                     otherSynth = (Synth)(instantiate(synths[external[j]], synthNames[external[j]], true, false, null));
                                                 otherSynth.printRevised = false;
                                                 otherSynth.setSendMIDI(false);
-        										otherSynth.undo.setWillPush(false);
-                                               otherSynth.getModel().clearListeners();         // otherwise we GC horribly.....
+                                                otherSynth.undo.setWillPush(false);
+                                                otherSynth.getModel().clearListeners();         // otherwise we GC horribly.....
                                                 otherSynth.parse(data[i], true);
                                                 pNames[j][count] = "" + count + "   " + otherSynth.getPatchName(otherSynth.model);
                                                 }                                                       
@@ -5362,7 +5410,11 @@ public abstract class Synth extends JComponent implements Updatable
         // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
         otherSynth.repaint();
         
-        return (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
+        if (otherSynth.getSendsParametersAfterLoad()) // we'll need to do this
+            otherSynth.sendAllParameters();
+                
+        // we don't want this to look like it's succeeded
+        return false;  // (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
         }
                 
 
@@ -5723,63 +5775,63 @@ public abstract class Synth extends JComponent implements Updatable
     ArrayList<JMenuItem> disabledMenus = null;
     int disableCount;
     /** Disables the menu bar.  disableMenuBar() and enableMenuBar() work in tandem to work around
-    	a goofy bug in OS X: you can't disable the menu bar and reenable it: it won't reenable
-    	unless the application loses focus and regains it, and even then sometimes it won't work.
-    	These functions work properly however.  You want to disable and enable the menu bar because
-    	in OS X the menu bar still functions even when in a modal dialog!  Bad OS X Java errors.
+        a goofy bug in OS X: you can't disable the menu bar and reenable it: it won't reenable
+        unless the application loses focus and regains it, and even then sometimes it won't work.
+        These functions work properly however.  You want to disable and enable the menu bar because
+        in OS X the menu bar still functions even when in a modal dialog!  Bad OS X Java errors.
     */
     public void disableMenuBar()
-    	{
-    	if (disabledMenus == null)
-    		{
-    		disabledMenus = new ArrayList<JMenuItem>();
-    		disableCount = 0;
-			JMenuBar bar = ((JFrame)(SwingUtilities.getWindowAncestor(this))).getJMenuBar();
-			for(int i = 0; i < bar.getMenuCount(); i++)
-				{
-				JMenu menu = bar.getMenu(i);
-				if (menu != null)
-					{
-					for(int j = 0; j < menu.getItemCount(); j++)
-						{
-						JMenuItem item = menu.getItem(j);
-						if (item != null && item.isEnabled())
-							{
-							disabledMenus.add(item);
-							item.setEnabled(false);
-							}
-						}
-					}
-				}
-    		}
-    	else
-    		{
-    		disableCount++;
-    		return;
-    		}
-    	}       
-    	
+        {
+        if (disabledMenus == null)
+            {
+            disabledMenus = new ArrayList<JMenuItem>();
+            disableCount = 0;
+            JMenuBar bar = ((JFrame)(SwingUtilities.getWindowAncestor(this))).getJMenuBar();
+            for(int i = 0; i < bar.getMenuCount(); i++)
+                {
+                JMenu menu = bar.getMenu(i);
+                if (menu != null)
+                    {
+                    for(int j = 0; j < menu.getItemCount(); j++)
+                        {
+                        JMenuItem item = menu.getItem(j);
+                        if (item != null && item.isEnabled())
+                            {
+                            disabledMenus.add(item);
+                            item.setEnabled(false);
+                            }
+                        }
+                    }
+                }
+            }
+        else
+            {
+            disableCount++;
+            return;
+            }
+        }       
+        
     /** Enables the menu bar.  disableMenuBar() and enableMenuBar() work in tandem to work around
-    	a goofy bug in OS X: you can't disable the menu bar and reenable it: it won't reenable
-    	unless the application loses focus and regains it, and even then sometimes it won't work.
-    	These functions work properly however.  You want to disable and enable the menu bar because
-    	in OS X the menu bar still functions even when in a modal dialog!  Bad OS X Java errors.
+        a goofy bug in OS X: you can't disable the menu bar and reenable it: it won't reenable
+        unless the application loses focus and regains it, and even then sometimes it won't work.
+        These functions work properly however.  You want to disable and enable the menu bar because
+        in OS X the menu bar still functions even when in a modal dialog!  Bad OS X Java errors.
     */
     public void enableMenuBar()
-    	{
-    	if (disableCount == 0)
-    		{
-    		for(int i = 0; i < disabledMenus.size(); i++)
-    			{
-    			disabledMenus.get(i).setEnabled(true);
-    			}
-    		disabledMenus = null;
-    		}
-    	else
-    		{
-    		disableCount--;
-    		}
-    	}       
+        {
+        if (disableCount == 0)
+            {
+            for(int i = 0; i < disabledMenus.size(); i++)
+                {
+                disabledMenus.get(i).setEnabled(true);
+                }
+            disabledMenus = null;
+            }
+        else
+            {
+            disableCount--;
+            }
+        }       
             
     // Guarantee that the given filename ends with the given ending.    
     public static String ensureFileEndsWith(String filename, String ending)
@@ -5954,12 +6006,12 @@ public abstract class Synth extends JComponent implements Updatable
                 if (result != 0) result = 3;  // make it a "cancel"
                 }
             else 
-            	{
-            	disableMenuBar();
-            	result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Edit Patch" , "Save Bank", "Write Bank", "Cancel" }, "Edit Patch");
-             	enableMenuBar();
-             	}
-             	
+                {
+                disableMenuBar();
+                result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Edit Patch" , "Save Bank", "Write Bank", "Cancel" }, "Edit Patch");
+                enableMenuBar();
+                }
+                
             if (result == 3 || result < 0)  // cancel.  ESC and Close Box both return < 0
                 {
                 return BANK_CANCELLED;
@@ -5993,9 +6045,9 @@ public abstract class Synth extends JComponent implements Updatable
                 if (path != null)
                     fd.setDirectory(path);
                         
-    	disableMenuBar();
+                disableMenuBar();
                 fd.setVisible(true);
-        enableMenuBar();
+                enableMenuBar();
         
                 File f = null; // make compiler happy
                 FileOutputStream os = null;
@@ -6030,5 +6082,44 @@ public abstract class Synth extends JComponent implements Updatable
                         
         }
 
-        
+         
+    /** Writes out all parameters to a text file. */
+    void doSaveText()
+        {
+        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Write Patch to Text File...", FileDialog.SAVE);
+                
+        if (getPatchName(getModel()) != null)
+            fd.setFile(reviseFileName(getPatchName(getModel()).trim() + ".txt"));
+        else
+            fd.setFile(reviseFileName("Untitled.txt"));
+        String path = getLastDirectory();
+        if (path != null)
+            fd.setDirectory(path);
+                
+        disableMenuBar();
+        fd.setVisible(true);
+        enableMenuBar();
+        File f = null; // make compiler happy
+        PrintWriter os = null;
+        if (fd.getFile() != null)
+            try
+                {
+                f = new File(fd.getDirectory(), ensureFileEndsWith(fd.getFile(), ".txt"));
+                os = new PrintWriter(new FileOutputStream(f));
+                getModel().print(os);
+                os.close();
+                setLastDirectory(fd.getDirectory());
+                } 
+            catch (IOException e) // fail
+                {
+                showSimpleError("File Error", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
+                e.printStackTrace();
+                }
+            finally
+                {
+                if (os != null)
+                    os.close();
+                }
+        }
+       
     }

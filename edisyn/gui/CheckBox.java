@@ -38,7 +38,9 @@ public class CheckBox extends NumericalComponent
         {
         this(label, synth, key, false);
         }
-                
+    
+    public boolean isFlipped() { return flipped; }
+     
     public void addToWidth(int val)
         {
         addToWidth = val;

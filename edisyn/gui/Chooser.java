@@ -42,6 +42,11 @@ public class Chooser extends NumericalComponent
 
     boolean callActionListener = true;
     
+    public String map(int val)
+        {
+        return "" + combo.getItemAt(val);
+        }
+    
     public void setCallActionListener(boolean val)
         {
         callActionListener = val;

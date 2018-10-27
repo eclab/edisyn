@@ -291,7 +291,6 @@ public class Model implements Cloneable
             {
             undoListener.setWillPush(true);
             }
-                    
         return this;
         }
 
@@ -451,65 +450,6 @@ public class Model implements Cloneable
         metric crossover: we pick a random new value between the two values inclusive.
         Otherwise with 0.5 probability we select our parameter, else the other model's parameter.
     */
-    public Model recombine2(Random random, Model model, String[] keys, double weight)
-        {
-        if (undoListener!= null)
-            {
-            undoListener.push(this);
-            undoListener.setWillPush(false);
-            }
-                
-        for(int i = 0; i < keys.length; i++)
-            {
-            // skip if the key doesn't exist, is immutable, is restricted, or is a string
-            if (!model.exists(keys[i])) { continue; }
-            if (getStatus(keys[i]) == STATUS_IMMUTABLE || isString(keys[i]) || getStatus(keys[i]) == STATUS_RESTRICTED) continue;
-            if (minExists(keys[i]) && maxExists(keys[i]) && getMin(keys[i]) >= getMax(keys[i]))  continue;  // no range
-
-            // skip if we fail a coin toss            
-            if (coinToss(random, 1.0 - weight)) continue;
-
-            // we cross over metrically if we're both within the metric range
-            if (metricMinExists(keys[i]) &&
-                metricMaxExists(keys[i]) &&
-                get(keys[i], 0) >= getMetricMin(keys[i]) &&
-                get(keys[i], 0) <= getMetricMax(keys[i]) &&
-                model.get(keys[i], 0) >= getMetricMin(keys[i]) &&
-                model.get(keys[i], 0) <= getMetricMax(keys[i])) 
-                {
-                int a = get(keys[i], 0);
-                int b = model.get(keys[i], a);
-                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
-                        randomValidValueWithin(keys[i], random, a, b)));
-                }
-            else // we pick one or the other
-                {
-                if (coinToss(random, 0.5))
-                    set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
-                            model.get(keys[i], 0)));
-                }
-            }
-
-        if (undoListener!= null)
-            {
-            undoListener.setWillPush(true);
-            }
-            
-        return this;
-        }
-    
-  
-    /** Recombines (potentially the keys provided.  
-        Recombination works as follows.  For each key, we first see if we're permitted to mutate it
-        (no immutable status, other model doesn't have the key).  Next with 1.0 - WEIGHT probability 
-        we don't recombine at all. Otherwise we recombine:
-                
-        <p>If the parameter is a string, we keep our value.  
-        If the parameter is an integer, and we have a metric range,
-        and BOTH our value AND the other model's value are within that range, then we do 
-        metric crossover: we pick a random new value between the two values inclusive.
-        Otherwise with 0.5 probability we select our parameter, else the other model's parameter.
-    */
     public Model recombine(Random random, Model model, String[] keys, double weight)
         {
         if (undoListener!= null)
@@ -536,6 +476,7 @@ public class Model implements Cloneable
                 int a = get(keys[i], 0);
                 int b = model.get(keys[i], a);
                 double qq = a - weight * (a - b);
+                
                 int q = 0;
                 
                 // round towards b
@@ -543,7 +484,7 @@ public class Model implements Cloneable
                     q = (int)Math.ceil(qq);
                 else
                     q = (int)Math.floor(qq);
-                
+
                 set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), randomValidValueWithin(keys[i], random, a, q)));
                 }
             else if (coinToss(random, weight))
@@ -557,9 +498,44 @@ public class Model implements Cloneable
             {
             undoListener.setWillPush(true);
             }
+        return this;
+        }
+
+
+    /** Crosses over the keys provided.  This works as follows. 
+        For each key, we first see if we're permitted to mutate it
+        (no immutable status, other model doesn't have the key).  Next with 1.0 - WEIGHT probability 
+        we don't cross over at all. Otherwise we adopt the parameter from the other individual half of the time.
+    */
+    public Model crossover(Random random, Model model, String[] keys, double weight)
+        {
+        if (undoListener!= null)
+            {
+            undoListener.push(this);
+            undoListener.setWillPush(false);
+            }
+                
+        for(int i = 0; i < keys.length; i++)
+            {
+            // skip if the key doesn't exist, is immutable, is restricted, or is a string
+            if (!model.exists(keys[i])) { continue; }
+            if (getStatus(keys[i]) == STATUS_IMMUTABLE || isString(keys[i]) || getStatus(keys[i]) == STATUS_RESTRICTED) continue;
+            
+            if (coinToss(random, weight))
+                {
+                if (coinToss(random, 0.5))
+                    set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), model.get(keys[i], 0)));
+                }
+            }
+
+        if (undoListener!= null)
+            {
+            undoListener.setWillPush(true);
+            }
             
         return this;
         }
+
   
     public void clearListeners()
         {
@@ -568,11 +544,11 @@ public class Model implements Cloneable
         }
         
     HashMap getCopy(HashMap map)
-    	{
-    	HashMap m = new HashMap();
-    	m.putAll(map);
-    	return m;
-    	}
+        {
+        HashMap m = new HashMap();
+        m.putAll(map);
+        return m;
+        }
     
     public Object clone()
         {
@@ -1091,28 +1067,71 @@ public class Model implements Cloneable
         {
         print(new PrintWriter(new OutputStreamWriter(System.err)));
         }
-        
-    /** Print the model parameters to the given writer.   If diffsOnly, then only the model parameters which
-        differ from the default will be printed. */
+    
+    static final String FALSE_STRING = "<<<<false>>>>>";
+    static final String TRUE_STRING = "<<<<false>>>>>";
+    String getModelParameterText(String key)
+        {
+        if (isString(key))
+            return "\"" + get(key, "") + "\"";
+                
+        ArrayList l = (ArrayList)(listeners.get(key));
+        if (l == null) 
+            return "" + get(key, 0);
+                        
+        for(int i = 0; i < l.size(); i++)
+            {
+            Object obj = l.get(i);
+            // Lots of things can be NumericalComponents so we're just going
+            // to focus on the primary items
+            if (obj instanceof Chooser)
+                {
+                return ((Chooser)obj).map(get(key, 0));
+                }
+            else if (obj instanceof CheckBox)
+                {
+                return (get(key, 0) == 0 ? FALSE_STRING : TRUE_STRING);
+                }
+            else if (obj instanceof LabelledDial)
+                {
+                return ((LabelledDial)obj).map(get(key, 0));
+                }
+            else if (obj instanceof NumberTextField)
+                {
+                return "" + ((NumberTextField)obj).getValue();
+                }
+            }
+        return "" + get(key, 0);
+        }
+    
+    /** Print the model parameters to the given writer. */
     public void print(PrintWriter out)
         {
         String[] keys = getKeys();
+        Arrays.sort(keys);
         for(int i = 0; i < keys.length; i++)
             {
             if (isString(keys[i]))
-                {
-                String str =  get(keys[i], "");
-                out.println(keys[i] + ": \"" + get(keys[i], "") + "\"    ");
-                }
+                out.println(keys[i] + ": " + getModelParameterText(keys[i]));
             else if (isInteger(keys[i]))
                 {
-                int j = get(keys[i], 0);
-                out.println(keys[i] + ": " + j + "    ");
+                String str = getModelParameterText(keys[i]);
+                String str2 = "" + get(keys[i], 0);
+                if (str.equals(FALSE_STRING))
+                    {
+                    out.println(keys[i] + ": False");
+                    }
+                else if (str.equals(TRUE_STRING))
+                    {
+                    out.println(keys[i] + ": True");
+                    }
+                else if (str.equals(str2))
+                    out.println(keys[i] + ": " + str);
+                else
+                    out.println(keys[i] + ": " + str + " (" + str2 + ")");
                 }
             else
-                {
-                out.println(keys[i] + ": FOREIGN OBJECT " + get(keys[i]));
-                }
+                out.println(keys[i] + ": UNKNOWN OBJECT " + get(keys[i]));
             }
         }
         

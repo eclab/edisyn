@@ -816,15 +816,15 @@ public class YamahaTX81Z extends Synth
             new double[] { 0, 1.0, 1.0 / 15.0, 1.0 / 30.0, 0 },
             new double[] { 0, (Math.PI/4/31), (Math.PI/4/31), (Math.PI/4/31), (Math.PI/4/31) })  // note we convert the release rate to 31
             {
-			public double preprocessXKey(int index, String key, double value)
-				{
-				if (key.equals("operator" + envelope + "releaserate"))
-					{
-					return (31.0 - ( (value - 1) * 31.0 / 14.0 ));
-					}
-				else 
-					return 31.0 - value;
-				}
+            public double preprocessXKey(int index, String key, double value)
+                {
+                if (key.equals("operator" + envelope + "releaserate"))
+                    {
+                    return (31.0 - ( (value - 1) * 31.0 / 14.0 ));
+                    }
+                else 
+                    return 31.0 - value;
+                }
 
             public void postProcess(double[] xVals, double[] yVals)
                 {
@@ -852,40 +852,40 @@ public class YamahaTX81Z extends Synth
             };
 
         /*
-        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null, "operator" + envelope + "attackrate", "operator" + envelope + "decay1rate", "operator" + envelope + "decay2rate", "operator" + envelope + "releaserate" },
-            new String[] { null, null, "operator" + envelope + "decay1level", "operator" + envelope + "decay1level", null },
-            new double[] { 0, 0.25/31.0, 0.25/ 31.0,  0.25/31.0, 0.25/15.0 },
-            new double[] { 0, 1.0,                1.0 / 15.0,    1.0 / 30.0, 0 })
-            {
-            public void postProcess(double[] xVals, double[] yVals)
-                {
-                if (model.get("operator" + envelope + "decay2rate") == 0)
-                    {
-                    yVals[3] = yVals[2];
-                    }
+          comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+          new String[] { null, "operator" + envelope + "attackrate", "operator" + envelope + "decay1rate", "operator" + envelope + "decay2rate", "operator" + envelope + "releaserate" },
+          new String[] { null, null, "operator" + envelope + "decay1level", "operator" + envelope + "decay1level", null },
+          new double[] { 0, 0.25/31.0, 0.25/ 31.0,  0.25/31.0, 0.25/15.0 },
+          new double[] { 0, 1.0,                1.0 / 15.0,    1.0 / 30.0, 0 })
+          {
+          public void postProcess(double[] xVals, double[] yVals)
+          {
+          if (model.get("operator" + envelope + "decay2rate") == 0)
+          {
+          yVals[3] = yVals[2];
+          }
 
-                xVals[1] = 0.25 - xVals[1];
-                xVals[2] = 0.25 - xVals[2];
-                xVals[3] = 0.25 - xVals[3];
-                xVals[4] = 0.25 - xVals[4];
+          xVals[1] = 0.25 - xVals[1];
+          xVals[2] = 0.25 - xVals[2];
+          xVals[3] = 0.25 - xVals[3];
+          xVals[4] = 0.25 - xVals[4];
                                         
-                int shift = model.get("operator" + envelope + "shift");
+          int shift = model.get("operator" + envelope + "shift");
                                         
-                if (shift > 0)
-                    {
-                    for(int i = 0; i < 5; i++)
-                        {
-                        yVals[i] = 1 - yVals[i];
+          if (shift > 0)
+          {
+          for(int i = 0; i < 5; i++)
+          {
+          yVals[i] = 1 - yVals[i];
                                                 
-                        for(int j = 0; j < shift; j++)  
-                            yVals[i] /= 2.0;
+          for(int j = 0; j < shift; j++)  
+          yVals[i] /= 2.0;
                                                                                                         
-                        yVals[i] = 1 - yVals[i];
-                        }
-                    }
-                }
-            };
+          yVals[i] = 1 - yVals[i];
+          }
+          }
+          }
+          };
         */
         model.register("operator" + envelope + "shift", (Updatable)comp);
         hbox.addLast(comp);

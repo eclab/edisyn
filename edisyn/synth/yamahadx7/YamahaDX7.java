@@ -595,27 +595,27 @@ public class YamahaDX7 extends Synth
             new double[] { 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99 },
             new double[] { 0, (Math.PI/4/99), (Math.PI/4/99), (Math.PI/4/99), (Math.PI/4/99), (Math.PI/4/99) })
             {
-			public double preprocessXKey(int index, String key, double value)
-				{
-				return 99.0 - value;
-				}
+            public double preprocessXKey(int index, String key, double value)
+                {
+                return 99.0 - value;
+                }
             };
 
         /*
         // ADSR
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null, "operator" + envelope + "rate1", "operator" + envelope + "rate2", "operator" + envelope + "rate3", null, "operator" + envelope + "rate4" },
-            new String[] { "operator" + envelope + "level4", "operator" + envelope + "level1", "operator" + envelope + "level2", "operator" + envelope + "level3",  "operator" + envelope + "level3", "operator" + envelope + "level4" },
-            new double[] { 0, 0.2/99, 0.2/99, 0.2/99, 0.0, 0.2/99 },
-            new double[] { 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99 })
-            {
-            public void postProcess(double[] xVals, double[] yVals)
-                {
-                // The DX7 uses 99 for SHORT and 0 for LONG, weird
-                for(int i = 1; i < 6; i++)
-                    xVals[i] = 0.2 - xVals[i];
-                }
-            };
+        new String[] { null, "operator" + envelope + "rate1", "operator" + envelope + "rate2", "operator" + envelope + "rate3", null, "operator" + envelope + "rate4" },
+        new String[] { "operator" + envelope + "level4", "operator" + envelope + "level1", "operator" + envelope + "level2", "operator" + envelope + "level3",  "operator" + envelope + "level3", "operator" + envelope + "level4" },
+        new double[] { 0, 0.2/99, 0.2/99, 0.2/99, 0.0, 0.2/99 },
+        new double[] { 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99 })
+        {
+        public void postProcess(double[] xVals, double[] yVals)
+        {
+        // The DX7 uses 99 for SHORT and 0 for LONG, weird
+        for(int i = 1; i < 6; i++)
+        xVals[i] = 0.2 - xVals[i];
+        }
+        };
         */
         hbox.addLast(comp);
                 

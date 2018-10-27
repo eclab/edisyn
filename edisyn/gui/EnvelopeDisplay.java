@@ -70,13 +70,19 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     int height = 84;
     int behavior[] = null;
     double yOffset = 0.0;
+    boolean signed = false;
     
+    public static final double TIME = -1;
+        
     public static final int NUM_INTERVALS = 2;
     String[] startKey = new String[NUM_INTERVALS];
     String[] endKey = new String[NUM_INTERVALS];
     
     String finalStageKey;
     String sustainStageKey;
+    
+    public boolean getSigned() { return signed; }
+    public void setSigned(boolean val) { signed = val; }
     
     public void addVerticalDivider(double location)
         {
@@ -316,15 +322,15 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         {
         }
 
-	public double preprocessXKey(int index, String key, double value)
-		{
-		return value;
-		}
+    public double preprocessXKey(int index, String key, double value)
+        {
+        return value;
+        }
 
-	public double preprocessYKey(int index, String key, double value)
-		{
-		return value;
-		}
+    public double preprocessYKey(int index, String key, double value)
+        {
+        return value;
+        }
 
     /** Mostly fills the background appropriately. */
     public void paintComponent(Graphics g)
@@ -351,7 +357,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                 
             if (xKeys[i] != null)
                 {
-                if (angles != null && i > 0)                    // we're doing angles
+                if (angles != null && i > 0 && angles[i] != TIME)                    // we're doing angles
                     {
                     double yd = Math.abs(ys[i] - ys[i-1]);
                     double xd = Math.abs(yd / Math.tan(Math.PI/2.0 - angles[i] * preprocessXKey(i, xKeys[i], synth.getModel().get(xKeys[i], 0))));
@@ -396,8 +402,15 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             xs[i] += xcurrent;
             xcurrent = xcurrent + f;
             }
+            
         for(int i = 0; i < ys.length; i++)
             {
+            if (signed)     // instead of going 0...1 it goes -1...1, so we have to map it to 0...1
+                {
+                ys[i] /= 2.0;
+                ys[i] += 0.5;
+                }
+                
             ys[i] *= rect.height;
             }
             

@@ -1057,7 +1057,7 @@ public class YamahaDX7 extends Synth
             data[1] == (byte)0x43 &&
             // don't care about 2, it's the channel
             data[3] == (byte)0x09 &&
-            //data[4] == (byte)0x20 &&		// sometimes this is 0x10 by mistake
+            //data[4] == (byte)0x20 &&          // sometimes this is 0x10 by mistake
             data[5] == (byte)0x00);
         } 
         

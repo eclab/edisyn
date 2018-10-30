@@ -181,6 +181,19 @@ public class EmuMorpheusMap extends Synth
         
     public static String[] FX_BUSES = new String[] { "Main", "Sub1", "Sub2" };             
     
+    public int getFXType(int fx, int id)
+    	{
+    	int[] types = (fx == 1 ? FX_A_TYPES : FX_B_TYPES);
+    	for(int i = 0; i < types.length; i++)
+    		{
+    		if (types[i] == id) return i;
+    		}
+    	System.err.println("WARNING (EmuMorpheusMap getFXType): type " + id + " does not exist for FX " + fx);
+    	return 0;  // "No Effect"
+    	}
+    
+    public static int[] FX_A_TYPES = new int[] { 0, 1, 2, 16, 17, 7, 8, 18, 5, 6, 3, 4, 19, 20, 21, 22, 24, 23, 25, 11, 13, 12, 9, 10, 14 };
+    
     public static String[] FX_A_NAMES = new String[]
     {
     "No Effect",
@@ -210,6 +223,8 @@ public class EmuMorpheusMap extends Synth
     "Echo",
     };
         
+    public static int[] FX_B_TYPES = new int[] { 128, 132, 138, 130, 133, 131, 134, 135, 129 };
+    
     public static String[] FX_B_NAMES = new String[]
     {
     "No Effect",
@@ -557,6 +572,14 @@ public class EmuMorpheusMap extends Synth
                 {
                 val =  val - 1;
                 }
+            else if (key.endsWith("fx1type"))
+				{
+				val = FX_A_TYPES[val];
+				}
+            else if (key.endsWith("fx2type"))
+				{
+				val = FX_B_TYPES[val];
+				}
 
             if (val < 0) val = val + 16384;
             data[7] = (byte)(val % 128);
@@ -612,6 +635,14 @@ public class EmuMorpheusMap extends Synth
                 {
                 val =  val - 1;
                 }
+            else if (parameters[i].endsWith("fx1type"))
+				{
+				val = FX_A_TYPES[val];
+				}
+            else if (parameters[i].endsWith("fx2type"))
+				{
+				val = FX_B_TYPES[val];
+				}
                         
             if (val < 0) val = val + 16384;
             data[offset++] = (byte)(val % 128);
@@ -657,9 +688,19 @@ public class EmuMorpheusMap extends Synth
 
             if (parameters[i].endsWith("mixbus"))
                 val = val + 1;
-            
-            if (!parameters[i].equals("---"))
+                
+            if (parameters[i].endsWith("fx1type"))
+				{
+				model.set(parameters[i], getFXType(1, val));
+				}
+            else if (parameters[i].endsWith("fx2type"))
+				{
+				model.set(parameters[i], getFXType(2, val));
+				}
+            else if (!parameters[i].equals("---"))
+            	{
                 model.set(parameters[i], val);
+                }
             }
                             
         revise();

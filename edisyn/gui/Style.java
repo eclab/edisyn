@@ -135,7 +135,6 @@ public class Style
     public static Border CHECKBOX_NON_HIGHLIGHTED_BORDER() { return BorderFactory.createEmptyBorder(3, 3, 3, 3); }
     
 
-
     /////// PATCH CONSTANTS
     //public static Color PATCH_UNSYNCED_TEXT_COLOR() { return DYNAMIC_COLOR() ; }
     public static Border PATCH_BORDER() { return BorderFactory.createEmptyBorder(4, 4, 6, 4); }

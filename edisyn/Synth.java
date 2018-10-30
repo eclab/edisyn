@@ -389,6 +389,7 @@ public abstract class Synth extends JComponent implements Updatable
     edisyn.synth.dsiprophet08.DSIProphet08.class,
     edisyn.synth.emumorpheus.EmuMorpheus.class,
     edisyn.synth.emumorpheus.EmuMorpheusHyper.class,
+    edisyn.synth.emumorpheus.EmuMorpheusMap.class,
     edisyn.synth.kawaik1.KawaiK1.class, 
     edisyn.synth.kawaik1.KawaiK1Multi.class, 
     edisyn.synth.kawaik4.KawaiK4.class, 

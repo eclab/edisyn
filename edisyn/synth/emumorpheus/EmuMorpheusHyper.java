@@ -171,6 +171,7 @@ public class EmuMorpheusHyper extends Synth
             };
         hbox.add(comp);
 
+		hbox.add(Strut.makeHorizontalStrut(50));
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
@@ -365,13 +366,26 @@ public class EmuMorpheusHyper extends Synth
             {            
             byte[] data = new byte[] { (byte)0xF0, (byte)0x18, (byte)0x0C, getID(), (byte)0x03, 0, 0, 0, 0, (byte)0xF7 };
             final int PARAM_OFFSET = 8704;
-            int param;
+            int param = 0;
             if (key.startsWith("fg") &&
                 (key.endsWith("level") || key.endsWith("type")))
                 {
-                String base = key.substring(0,7);
+                String base = key.substring(0,6);
                 param = ((Integer)(parametersToIndex.get(base + "typelevel"))).intValue();
                 }
+            else if (key.startsWith("z") && (key.endsWith("bank") || key.endsWith("number")))
+            	{
+            	try
+            		{
+            		int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
+                	param = ((Integer)(parametersToIndex.get("z" + zone + "preset"))).intValue() + PARAM_OFFSET;
+	            	}
+	            catch (Exception ex)
+	            	{
+	            	// shouldn't ever happen
+	            	ex.printStackTrace();
+	            	}
+            	}
             else
                 {
                 param = ((Integer)(parametersToIndex.get(key))).intValue() + PARAM_OFFSET;
@@ -385,12 +399,30 @@ public class EmuMorpheusHyper extends Synth
             if (key.startsWith("fg") &&
                 (key.endsWith("level") || key.endsWith("type")))
                 {
-                String base = key.substring(0,7);
+                String base = key.substring(0,6);
                 int level = model.get(base + "level");
                 if (level < 0) level += 256;
                                 
                 val = (model.get(base + "type", 0) << 8) | level;
                 }
+            else if (key.startsWith("z") && (key.endsWith("bank") || key.endsWith("number")))
+            	{
+            	try
+            		{
+            		// this is just a guess...
+            		int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
+            		val = model.get("z" + zone + "bank") * 128 + model.get("z" + zone + "bank");
+	            	}
+	            catch (Exception ex)
+	            	{
+	            	// shouldn't ever happen
+	            	ex.printStackTrace();
+	            	}
+            	}
+			else if (key.startsWith("fgseg") && (key.endsWith("condjump")))
+				{
+				if (val >= 6) val += 2; 	// there's a gap that we can't do
+				}
 
             if (val < 0) val = val + 16384;
             data[7] = (byte)(val % 128);
@@ -454,13 +486,31 @@ public class EmuMorpheusHyper extends Synth
 
             if (parameters[i].endsWith("typelevel"))
                 {
-                String base = parameters[i].substring(0,7);
+                String base = parameters[i].substring(0,6);
                 int level = model.get(base + "level");
                 if (level < 0) level += 256;
                                 
                 val = (model.get(base + "type", 0) << 8) | level;
                 }
-                        
+            else if (parameters[i].startsWith("z") && (parameters[i].endsWith("preset")))
+            	{
+            	try
+            		{
+            		// this is just a guess...
+            		int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
+            		val = model.get("z" + zone + "bank") * 128 + model.get("z" + zone + "bank");
+	            	}
+	            catch (Exception ex)
+	            	{
+	            	// shouldn't ever happen
+	            	ex.printStackTrace();
+	            	}
+            	}
+			else if (parameters[i].startsWith("fgseg") && (parameters[i].endsWith("condjump")))
+				{
+				if (val >= 6) val += 2; 	// there's a gap that we can't do
+				}
+                       
             if (val < 0) val = val + 16384;
             data[offset++] = (byte)(val % 128);
             checksum += data[offset-1];
@@ -492,7 +542,8 @@ public class EmuMorpheusHyper extends Synth
 
     public int parse(byte[] data, boolean fromFile)
         {
-        int NN = data[6] + data[67] * 128;
+        int NN = data[6] + data[7] * 128;
+        System.err.println("" + NN + " " + NN/128 + " " + NN%128);
         model.set("bank", NN / 128);
         model.set("number", NN % 128);
         
@@ -521,12 +572,32 @@ public class EmuMorpheusHyper extends Synth
                 int level = (val & 255);
                 if (level > 127)
                     level -= 256;
-                String base = parameters[i].substring(0,7) ;
+                String base = parameters[i].substring(0,6);
                 model.set(base + "type", type);
                 model.set(base + "level", level);
                 }
+            else if (parameters[i].startsWith("z") && (parameters[i].endsWith("preset")))
+            	{
+            	try
+            		{
+            		// this is just a guess...
+            		int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
+            		model.set("z" + zone + "bank", val / 128);
+            		model.set("z" + zone + "number", val % 128);
+	            	}
+	            catch (Exception ex)
+	            	{
+	            	// shouldn't ever happen
+	            	ex.printStackTrace();
+	            	}
+            	}
             else
-                {                        
+                {                  
+            	if (parameters[i].startsWith("fgseg") && (parameters[i].endsWith("condjump")))
+            		{
+            		if (val >= 8) val -= 2; 	// there's a gap that we can't do
+            		}
+
                 if (!parameters[i].equals("---"))
                     model.set(parameters[i], val);
                 }
@@ -574,11 +645,12 @@ public class EmuMorpheusHyper extends Synth
                 
     public static boolean recognize(byte[] data)
         {
+        System.err.println(parameters.length);
         return  data.length == 10 + parameters.length * 2 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte) 0x18 &&
             data[2] == (byte) 0x0C &&
-            data[4] == (byte) 0x44;
+            data[4] == (byte) 0x45;
         }
         
     public static final int MAXIMUM_NAME_LENGTH = 12;
@@ -723,6 +795,7 @@ public class EmuMorpheusHyper extends Synth
     "z1highkey",
     "z1lowvel",
     "z1highvel",
+    "z1veloffset",
     "z1xpose",
     "z1coarsetune",
     "z1finetune",
@@ -733,6 +806,7 @@ public class EmuMorpheusHyper extends Synth
     "z2highkey",
     "z2lowvel",
     "z2highvel",
+    "z2veloffset",
     "z2xpose",
     "z2coarsetune",
     "z2finetune",
@@ -743,6 +817,7 @@ public class EmuMorpheusHyper extends Synth
     "z3highkey",
     "z3lowvel",
     "z3highvel",
+    "z3veloffset",
     "z3xpose",
     "z3coarsetune",
     "z3finetune",
@@ -753,6 +828,7 @@ public class EmuMorpheusHyper extends Synth
     "z4highkey",
     "z4lowvel",
     "z4highvel",
+    "z4veloffset",
     "z4xpose",
     "z4coarsetune",
     "z4finetune",
@@ -763,6 +839,7 @@ public class EmuMorpheusHyper extends Synth
     "z5highkey",
     "z5lowvel",
     "z5highvel",
+    "z5veloffset",
     "z5xpose",
     "z5coarsetune",
     "z5finetune",
@@ -773,6 +850,7 @@ public class EmuMorpheusHyper extends Synth
     "z6highkey",
     "z6lowvel",
     "z6highvel",
+    "z6veloffset",
     "z6xpose",
     "z6coarsetune",
     "z6finetune",
@@ -783,6 +861,7 @@ public class EmuMorpheusHyper extends Synth
     "z7highkey",
     "z7lowvel",
     "z7highvel",
+    "z7veloffset",
     "z7xpose",
     "z7coarsetune",
     "z7finetune",
@@ -793,6 +872,7 @@ public class EmuMorpheusHyper extends Synth
     "z8highkey",
     "z8lowvel",
     "z8highvel",
+    "z8veloffset",
     "z8xpose",
     "z8coarsetune",
     "z8finetune",
@@ -803,6 +883,7 @@ public class EmuMorpheusHyper extends Synth
     "z9highkey",
     "z9lowvel",
     "z9highvel",
+    "z9veloffset",
     "z9xpose",
     "z9coarsetune",
     "z9finetune",
@@ -813,6 +894,7 @@ public class EmuMorpheusHyper extends Synth
     "z10highkey",
     "z10lowvel",
     "z10highvel",
+    "z10veloffset",
     "z10xpose",
     "z10coarsetune",
     "z10finetune",
@@ -823,6 +905,7 @@ public class EmuMorpheusHyper extends Synth
     "z11highkey",
     "z11lowvel",
     "z11highvel",
+    "z11veloffset",
     "z11xpose",
     "z11coarsetune",
     "z11finetune",
@@ -833,6 +916,7 @@ public class EmuMorpheusHyper extends Synth
     "z12highkey",
     "z12lowvel",
     "z12highvel",
+    "z12veloffset",
     "z12xpose",
     "z12coarsetune",
     "z12finetune",
@@ -843,6 +927,7 @@ public class EmuMorpheusHyper extends Synth
     "z13highkey",
     "z13lowvel",
     "z13highvel",
+    "z13veloffset",
     "z13xpose",
     "z13coarsetune",
     "z13finetune",
@@ -853,6 +938,7 @@ public class EmuMorpheusHyper extends Synth
     "z14highkey",
     "z14lowvel",
     "z14highvel",
+    "z14veloffset",
     "z14xpose",
     "z14coarsetune",
     "z14finetune",
@@ -863,6 +949,7 @@ public class EmuMorpheusHyper extends Synth
     "z15highkey",
     "z15lowvel",
     "z15highvel",
+    "z15veloffset",
     "z15xpose",
     "z15coarsetune",
     "z15finetune",
@@ -873,6 +960,7 @@ public class EmuMorpheusHyper extends Synth
     "z16highkey",
     "z16lowvel",
     "z16highvel",
+    "z16veloffset",
     "z16xpose",
     "z16coarsetune",
     "z16finetune",

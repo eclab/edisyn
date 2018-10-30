@@ -95,8 +95,8 @@ public class EmuMorpheusMap extends Synth
         loadDefaults();        
         }
                 
-    //public String getDefaultResourceFileName() { return "EmuMorpheus.init"; }
-    //public String getHTMLResourceFileName() { return "EmuMorpheus.html"; }
+    public String getDefaultResourceFileName() { return "EmuMorpheusMap.init"; }
+    public String getHTMLResourceFileName() { return "EmuMorpheusMap.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
@@ -164,7 +164,7 @@ public class EmuMorpheusMap extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-        comp = new LabelledDial("Program Map", this, "progmap", color, -1, 3)
+        comp = new LabelledDial("Program Change Map", this, "progmap", color, -1, 3)
             {
             public String map(int val)
                 {
@@ -421,7 +421,7 @@ public class EmuMorpheusMap extends Synth
         vbox.add(comp);
 		hbox.add(vbox);
 		
-        comp = new LabelledDial("Number", this, "ch" + ch + "program", color, 0, 127);
+        comp = new LabelledDial("Number", this, "ch" + ch + "number", color, 0, 127);
         hbox.add(comp);
 
         comp = new LabelledDial("Volume", this, "ch" + ch + "volume", color, 0, 127);
@@ -436,6 +436,12 @@ public class EmuMorpheusMap extends Synth
                 }
             };
         hbox.add(comp);
+
+ 		vbox = new VBox();
+	    params = PROGRAM_BANKS;
+        comp = new Chooser("MIDI Bank Select", this, "ch" + ch + "bankselect", params);
+        vbox.add(comp);
+        hbox.add(vbox);
 
 		vbox = new VBox();
         comp = new CheckBox("Enable All", this, "ch" + ch + "enable");
@@ -560,15 +566,42 @@ public class EmuMorpheusMap extends Synth
             {            
             byte[] data = new byte[] { (byte)0xF0, (byte)0x18, (byte)0x0C, getID(), (byte)0x03, 0, 0, 0, 0, (byte)0xF7 };
             final int PARAM_OFFSET = 2048;
-            System.err.println(key);
-            int param = ((Integer)(parametersToIndex.get(key))).intValue() + PARAM_OFFSET;
-                            
+            int param = 0;
+            
+            if (key.startsWith("ch") && (key.endsWith("bank") || key.endsWith("number")))
+            	{
+            	try
+            		{
+            		int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
+                	param = ((Integer)(parametersToIndex.get("ch" + zone + "program"))).intValue() + PARAM_OFFSET;
+	            	}
+	            catch (Exception ex)
+	            	{
+	            	// shouldn't ever happen
+	            	ex.printStackTrace();
+	            	}
+                }
+            else param = ((Integer)(parametersToIndex.get(key))).intValue() + PARAM_OFFSET;;
+                  
             data[5] = (byte)(param % 128);
             data[6] = (byte)(param / 128);
             
             int val = model.get(key, 0);
 
-            if (key.endsWith("mixbus"))
+			if (key.startsWith("ch") && (key.endsWith("bank") || key.endsWith("number")))
+            	{
+            	try
+            		{
+            		int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
+	            	val = model.get("ch" + zone + "bank") * 128 + model.get("ch" + zone + "number");
+	            	}
+	            catch (Exception ex)
+	            	{
+	            	// shouldn't ever happen
+	            	ex.printStackTrace();
+	            	}
+	            }
+	        else if (key.endsWith("mixbus"))
                 {
                 val =  val - 1;
                 }
@@ -631,7 +664,20 @@ public class EmuMorpheusMap extends Synth
             {
             int val = model.get(parameters[i], 0);
 
-            if (parameters[i].endsWith("mixbus"))
+ 			if (parameters[i].startsWith("ch") && (parameters[i].endsWith("program")))
+            	{
+            	try
+            		{
+            		int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
+            		val = model.get("ch" + zone + "bank") * 128 + model.get("ch" + zone + "number");
+	            	}
+	            catch (Exception ex)
+	            	{
+	            	// shouldn't ever happen
+	            	ex.printStackTrace();
+	            	}
+	            }
+            else if (parameters[i].endsWith("mixbus"))
                 {
                 val =  val - 1;
                 }
@@ -686,7 +732,22 @@ public class EmuMorpheusMap extends Synth
             if (val >= 8192)
                 val = val - 16384;
 
-            if (parameters[i].endsWith("mixbus"))
+			if (parameters[i].startsWith("ch") && (parameters[i].endsWith("program")))
+            	{
+            	try
+            		{
+            		// this is just a guess...
+            		int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
+            		model.set("ch" + zone + "bank", val / 128);
+            		model.set("ch" + zone + "number", val % 128);
+	            	}
+	            catch (Exception ex)
+	            	{
+	            	// shouldn't ever happen
+	            	ex.printStackTrace();
+	            	}
+	            }
+            else if (parameters[i].endsWith("mixbus"))
                 val = val + 1;
                 
             if (parameters[i].endsWith("fx1type"))
@@ -843,7 +904,7 @@ public class EmuMorpheusMap extends Synth
     "---",    
     "---",   
     "ch1program",
-    "ch1bank",
+    "ch1bankselect",
     "ch1volume",
     "ch1pan",
     "ch1mixbus",
@@ -864,7 +925,7 @@ public class EmuMorpheusMap extends Synth
     "ch1ftsw3enbl",
 
     "ch2program",
-    "ch2bank",
+    "ch2bankselect",
     "ch2volume",
     "ch2pan",
     "ch2mixbus",
@@ -885,7 +946,7 @@ public class EmuMorpheusMap extends Synth
     "ch2ftsw3enbl",
 
     "ch3program",
-    "ch3bank",
+    "ch3bankselect",
     "ch3volume",
     "ch3pan",
     "ch3mixbus",
@@ -906,7 +967,7 @@ public class EmuMorpheusMap extends Synth
     "ch3ftsw3enbl",
 
     "ch4program",
-    "ch4bank",
+    "ch4bankselect",
     "ch4volume",
     "ch4pan",
     "ch4mixbus",
@@ -927,7 +988,7 @@ public class EmuMorpheusMap extends Synth
     "ch4ftsw3enbl",
 
     "ch5program",
-    "ch5bank",
+    "ch5bankselect",
     "ch5volume",
     "ch5pan",
     "ch5mixbus",
@@ -948,7 +1009,7 @@ public class EmuMorpheusMap extends Synth
     "ch5ftsw3enbl",
 
     "ch6program",
-    "ch6bank",
+    "ch6bankselect",
     "ch6volume",
     "ch6pan",
     "ch6mixbus",
@@ -969,7 +1030,7 @@ public class EmuMorpheusMap extends Synth
     "ch6ftsw3enbl",
 
     "ch7program",
-    "ch7bank",
+    "ch7bankselect",
     "ch7volume",
     "ch7pan",
     "ch7mixbus",
@@ -990,7 +1051,7 @@ public class EmuMorpheusMap extends Synth
     "ch7ftsw3enbl",
 
     "ch8program",
-    "ch8bank",
+    "ch8bankselect",
     "ch8volume",
     "ch8pan",
     "ch8mixbus",
@@ -1011,7 +1072,7 @@ public class EmuMorpheusMap extends Synth
     "ch8ftsw3enbl",
 
     "ch9program",
-    "ch9bank",
+    "ch9bankselect",
     "ch9volume",
     "ch9pan",
     "ch9mixbus",
@@ -1032,7 +1093,7 @@ public class EmuMorpheusMap extends Synth
     "ch9ftsw3enbl",
 
     "ch10program",
-    "ch10bank",
+    "ch10bankselect",
     "ch10volume",
     "ch10pan",
     "ch10mixbus",
@@ -1053,7 +1114,7 @@ public class EmuMorpheusMap extends Synth
     "ch10ftsw3enbl",
 
     "ch11program",
-    "ch11bank",
+    "ch11bankselect",
     "ch11volume",
     "ch11pan",
     "ch11mixbus",
@@ -1074,7 +1135,7 @@ public class EmuMorpheusMap extends Synth
     "ch11ftsw3enbl",
 
     "ch12program",
-    "ch12bank",
+    "ch12bankselect",
     "ch12volume",
     "ch12pan",
     "ch12mixbus",
@@ -1095,7 +1156,7 @@ public class EmuMorpheusMap extends Synth
     "ch12ftsw3enbl",
 
     "ch13program",
-    "ch13bank",
+    "ch13bankselect",
     "ch13volume",
     "ch13pan",
     "ch13mixbus",
@@ -1116,7 +1177,7 @@ public class EmuMorpheusMap extends Synth
     "ch13ftsw3enbl",
 
     "ch14program",
-    "ch14bank",
+    "ch14bankselect",
     "ch14volume",
     "ch14pan",
     "ch14mixbus",
@@ -1137,7 +1198,7 @@ public class EmuMorpheusMap extends Synth
     "ch14ftsw3enbl",
 
     "ch15program",
-    "ch15bank",
+    "ch15bankselect",
     "ch15volume",
     "ch15pan",
     "ch15mixbus",
@@ -1158,7 +1219,7 @@ public class EmuMorpheusMap extends Synth
     "ch15ftsw3enbl",
 
     "ch16program",
-    "ch16bank",
+    "ch16bankselect",
     "ch16volume",
     "ch16pan",
     "ch16mixbus",

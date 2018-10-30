@@ -92,8 +92,8 @@ public class EmuMorpheusHyper extends Synth
         loadDefaults();        
         }
                 
-    public String getDefaultResourceFileName() { return "EmuMorpheus.init"; }
-    public String getHTMLResourceFileName() { return "EmuMorpheus.html"; }
+    public String getDefaultResourceFileName() { return "EmuMorpheusHyper.init"; }
+    public String getHTMLResourceFileName() { return "EmuMorpheusHyper.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
@@ -171,7 +171,7 @@ public class EmuMorpheusHyper extends Synth
             };
         hbox.add(comp);
 
-		hbox.add(Strut.makeHorizontalStrut(50));
+		hbox.add(Strut.makeHorizontalStrut(5));
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
@@ -259,8 +259,16 @@ public class EmuMorpheusHyper extends Synth
         params = BANKS;
         comp = new Chooser("Bank", this, "z" + zone + "bank", params);
         vbox.add(comp);
-
-        comp = new LabelledDial("Number", this, "z" + zone + "number", color, 0, 127);
+		hbox.add(vbox);
+		
+        comp = new LabelledDial("Number", this, "z" + zone + "number", color, -1, 127)
+        	{
+            public String map(int val)
+                {
+                if (val == -1) return "None";
+                else return "" + val;
+                }
+        	};
         hbox.add(comp);
 
         comp = new LabelledDial("Volume", this, "z" + zone + "volume", color, 0, 127);
@@ -273,7 +281,7 @@ public class EmuMorpheusHyper extends Synth
             {
             public String map(int val)
                 {
-                return "" + NOTES[val % 12] + "" + (val / 12 + 1);
+                return "" + NOTES[val % 12] + "" + (val / 12 - 2);
                 }
             };
         hbox.add(comp);
@@ -282,7 +290,7 @@ public class EmuMorpheusHyper extends Synth
             {
             public String map(int val)
                 {
-                return "" + NOTES[val % 12] + "" + (val / 12 + 1);
+                return "" + NOTES[val % 12] + "" + (val / 12 - 2);
                 }
             };
         hbox.add(comp);
@@ -409,9 +417,11 @@ public class EmuMorpheusHyper extends Synth
             	{
             	try
             		{
-            		// this is just a guess...
             		int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
-            		val = model.get("z" + zone + "bank") * 128 + model.get("z" + zone + "bank");
+            		if (model.get("z" + zone + "number") == -1)
+            			val = -1;
+            		else
+	            		val = model.get("z" + zone + "bank") * 128 + model.get("z" + zone + "number");
 	            	}
 	            catch (Exception ex)
 	            	{
@@ -496,9 +506,11 @@ public class EmuMorpheusHyper extends Synth
             	{
             	try
             		{
-            		// this is just a guess...
             		int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
-            		val = model.get("z" + zone + "bank") * 128 + model.get("z" + zone + "bank");
+            		if (model.get("z" + zone + "number") == -1)
+            			val = -1;
+            		else
+            			val = model.get("z" + zone + "bank") * 128 + model.get("z" + zone + "number");
 	            	}
 	            catch (Exception ex)
 	            	{

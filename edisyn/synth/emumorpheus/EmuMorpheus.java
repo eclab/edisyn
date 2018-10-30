@@ -1102,17 +1102,17 @@ public class EmuMorpheus extends Synth
 
         //if (toWorkingMemory || toFile)
         //    {
-            Object[] result = new Object[] { data };
-            return result;
+        Object[] result = new Object[] { data };
+        return result;
         //    }
         /*
-        else // need to do a write
-            {
-            Object[] result = new Object[2];
-            result[0] = data;
-            result[1] = new byte[] { (byte)0xF0, (byte)0x18, (byte)0x0C, (byte)getID(), (byte)0x22, (byte)0, (byte)NN, (byte)0xF7 };
-            return result;
-            }
+          else // need to do a write
+          {
+          Object[] result = new Object[2];
+          result[0] = data;
+          result[1] = new byte[] { (byte)0xF0, (byte)0x18, (byte)0x0C, (byte)getID(), (byte)0x22, (byte)0, (byte)NN, (byte)0xF7 };
+          return result;
+          }
         */
         }
         

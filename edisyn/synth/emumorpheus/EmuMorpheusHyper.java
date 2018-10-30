@@ -171,7 +171,7 @@ public class EmuMorpheusHyper extends Synth
             };
         hbox.add(comp);
 
-		hbox.add(Strut.makeHorizontalStrut(5));
+        hbox.add(Strut.makeHorizontalStrut(5));
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
@@ -259,16 +259,16 @@ public class EmuMorpheusHyper extends Synth
         params = BANKS;
         comp = new Chooser("Bank", this, "z" + zone + "bank", params);
         vbox.add(comp);
-		hbox.add(vbox);
-		
+        hbox.add(vbox);
+                
         comp = new LabelledDial("Number", this, "z" + zone + "number", color, -1, 127)
-        	{
+            {
             public String map(int val)
                 {
                 if (val == -1) return "None";
                 else return "" + val;
                 }
-        	};
+            };
         hbox.add(comp);
 
         comp = new LabelledDial("Volume", this, "z" + zone + "volume", color, 0, 127);
@@ -382,18 +382,18 @@ public class EmuMorpheusHyper extends Synth
                 param = ((Integer)(parametersToIndex.get(base + "typelevel"))).intValue();
                 }
             else if (key.startsWith("z") && (key.endsWith("bank") || key.endsWith("number")))
-            	{
-            	try
-            		{
-            		int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
-                	param = ((Integer)(parametersToIndex.get("z" + zone + "preset"))).intValue() + PARAM_OFFSET;
-	            	}
-	            catch (Exception ex)
-	            	{
-	            	// shouldn't ever happen
-	            	ex.printStackTrace();
-	            	}
-            	}
+                {
+                try
+                    {
+                    int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
+                    param = ((Integer)(parametersToIndex.get("z" + zone + "preset"))).intValue() + PARAM_OFFSET;
+                    }
+                catch (Exception ex)
+                    {
+                    // shouldn't ever happen
+                    ex.printStackTrace();
+                    }
+                }
             else
                 {
                 param = ((Integer)(parametersToIndex.get(key))).intValue() + PARAM_OFFSET;
@@ -414,25 +414,25 @@ public class EmuMorpheusHyper extends Synth
                 val = (model.get(base + "type", 0) << 8) | level;
                 }
             else if (key.startsWith("z") && (key.endsWith("bank") || key.endsWith("number")))
-            	{
-            	try
-            		{
-            		int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
-            		if (model.get("z" + zone + "number") == -1)
-            			val = -1;
-            		else
-	            		val = model.get("z" + zone + "bank") * 128 + model.get("z" + zone + "number");
-	            	}
-	            catch (Exception ex)
-	            	{
-	            	// shouldn't ever happen
-	            	ex.printStackTrace();
-	            	}
-            	}
-			else if (key.startsWith("fgseg") && (key.endsWith("condjump")))
-				{
-				if (val >= 6) val += 2; 	// there's a gap that we can't do
-				}
+                {
+                try
+                    {
+                    int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
+                    if (model.get("z" + zone + "number") == -1)
+                        val = -1;
+                    else
+                        val = model.get("z" + zone + "bank") * 128 + model.get("z" + zone + "number");
+                    }
+                catch (Exception ex)
+                    {
+                    // shouldn't ever happen
+                    ex.printStackTrace();
+                    }
+                }
+            else if (key.startsWith("fgseg") && (key.endsWith("condjump")))
+                {
+                if (val >= 6) val += 2;         // there's a gap that we can't do
+                }
 
             if (val < 0) val = val + 16384;
             data[7] = (byte)(val % 128);
@@ -503,25 +503,25 @@ public class EmuMorpheusHyper extends Synth
                 val = (model.get(base + "type", 0) << 8) | level;
                 }
             else if (parameters[i].startsWith("z") && (parameters[i].endsWith("preset")))
-            	{
-            	try
-            		{
-            		int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
-            		if (model.get("z" + zone + "number") == -1)
-            			val = -1;
-            		else
-            			val = model.get("z" + zone + "bank") * 128 + model.get("z" + zone + "number");
-	            	}
-	            catch (Exception ex)
-	            	{
-	            	// shouldn't ever happen
-	            	ex.printStackTrace();
-	            	}
-            	}
-			else if (parameters[i].startsWith("fgseg") && (parameters[i].endsWith("condjump")))
-				{
-				if (val >= 6) val += 2; 	// there's a gap that we can't do
-				}
+                {
+                try
+                    {
+                    int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
+                    if (model.get("z" + zone + "number") == -1)
+                        val = -1;
+                    else
+                        val = model.get("z" + zone + "bank") * 128 + model.get("z" + zone + "number");
+                    }
+                catch (Exception ex)
+                    {
+                    // shouldn't ever happen
+                    ex.printStackTrace();
+                    }
+                }
+            else if (parameters[i].startsWith("fgseg") && (parameters[i].endsWith("condjump")))
+                {
+                if (val >= 6) val += 2;         // there's a gap that we can't do
+                }
                        
             if (val < 0) val = val + 16384;
             data[offset++] = (byte)(val % 128);
@@ -535,17 +535,17 @@ public class EmuMorpheusHyper extends Synth
 
         //if (toWorkingMemory | toFile)
         //    {
-            Object[] result = new Object[] { data };
-            return result;
+        Object[] result = new Object[] { data };
+        return result;
         //    }
         /*
-        else // need to do a write
-            {
-            Object[] result = new Object[2];
-            result[0] = data;
-            result[1] = new byte[] { (byte)0xF0, (byte)0x18, (byte)0x0C, (byte)getID(), (byte)0x22, (byte)0, (byte)NN, (byte)0xF7 };
-            return result;
-            }
+          else // need to do a write
+          {
+          Object[] result = new Object[2];
+          result[0] = data;
+          result[1] = new byte[] { (byte)0xF0, (byte)0x18, (byte)0x0C, (byte)getID(), (byte)0x22, (byte)0, (byte)NN, (byte)0xF7 };
+          return result;
+          }
         */
         }
         
@@ -589,26 +589,26 @@ public class EmuMorpheusHyper extends Synth
                 model.set(base + "level", level);
                 }
             else if (parameters[i].startsWith("z") && (parameters[i].endsWith("preset")))
-            	{
-            	try
-            		{
-            		// this is just a guess...
-            		int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
-            		model.set("z" + zone + "bank", val / 128);
-            		model.set("z" + zone + "number", val % 128);
-	            	}
-	            catch (Exception ex)
-	            	{
-	            	// shouldn't ever happen
-	            	ex.printStackTrace();
-	            	}
-            	}
+                {
+                try
+                    {
+                    // this is just a guess...
+                    int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
+                    model.set("z" + zone + "bank", val / 128);
+                    model.set("z" + zone + "number", val % 128);
+                    }
+                catch (Exception ex)
+                    {
+                    // shouldn't ever happen
+                    ex.printStackTrace();
+                    }
+                }
             else
                 {                  
-            	if (parameters[i].startsWith("fgseg") && (parameters[i].endsWith("condjump")))
-            		{
-            		if (val >= 8) val -= 2; 	// there's a gap that we can't do
-            		}
+                if (parameters[i].startsWith("fgseg") && (parameters[i].endsWith("condjump")))
+                    {
+                    if (val >= 8) val -= 2;         // there's a gap that we can't do
+                    }
 
                 if (!parameters[i].equals("---"))
                     model.set(parameters[i], val);

@@ -182,15 +182,15 @@ public class EmuMorpheusMap extends Synth
     public static String[] FX_BUSES = new String[] { "Main", "Sub1", "Sub2" };             
     
     public int getFXType(int fx, int id)
-    	{
-    	int[] types = (fx == 1 ? FX_A_TYPES : FX_B_TYPES);
-    	for(int i = 0; i < types.length; i++)
-    		{
-    		if (types[i] == id) return i;
-    		}
-    	System.err.println("WARNING (EmuMorpheusMap getFXType): type " + id + " does not exist for FX " + fx);
-    	return 0;  // "No Effect"
-    	}
+        {
+        int[] types = (fx == 1 ? FX_A_TYPES : FX_B_TYPES);
+        for(int i = 0; i < types.length; i++)
+            {
+            if (types[i] == id) return i;
+            }
+        System.err.println("WARNING (EmuMorpheusMap getFXType): type " + id + " does not exist for FX " + fx);
+        return 0;  // "No Effect"
+        }
     
     public static int[] FX_A_TYPES = new int[] { 0, 1, 2, 16, 17, 7, 8, 18, 5, 6, 3, 4, 19, 20, 21, 22, 24, 23, 25, 11, 13, 12, 9, 10, 14 };
     
@@ -309,18 +309,18 @@ public class EmuMorpheusMap extends Synth
     { }
     };
         
-        public static int[][] FX_B_VALUES = new int[][]
-        {
-        { },
-        { 0, 255, 100, 0, 255, 100, 0, 127, 100 },
-        { 0, 255, 100, 0, 255, 100 },
-        { 0, 255, 50, 0, 255, 50, 1, 255, 1, -127, 127, -64 },
-        { 0, 255, 50, 0, 255, 0, 1, 255, 1, 0, 127, 64 },
-        { 0, 255, 50, 0, 255, 50, 1, 255, 1, -127, 127, 0 },
-        { 1, 255, 255, 0, 127, 127, 1, 255, 200, 0, 127, 127, 0, 255, 200 },
-        { 1, 255, 255, 0, 127, 127, 1, 255, 200, 0, 127, 127, 0, 255, 200 },
-        { }
-        };
+    public static int[][] FX_B_VALUES = new int[][]
+    {
+    { },
+    { 0, 255, 100, 0, 255, 100, 0, 127, 100 },
+    { 0, 255, 100, 0, 255, 100 },
+    { 0, 255, 50, 0, 255, 50, 1, 255, 1, -127, 127, -64 },
+    { 0, 255, 50, 0, 255, 0, 1, 255, 1, 0, 127, 64 },
+    { 0, 255, 50, 0, 255, 50, 1, 255, 1, -127, 127, 0 },
+    { 1, 255, 255, 0, 127, 127, 1, 255, 200, 0, 127, 127, 0, 255, 200 },
+    { 1, 255, 255, 0, 127, 127, 1, 255, 200, 0, 127, 127, 0, 255, 200 },
+    { }
+    };
 
     public JComponent generateFX(int fx, String[] params, final int[] values, Color color)
         {
@@ -375,7 +375,7 @@ public class EmuMorpheusMap extends Synth
         params = FX_BUSES;
         comp = new Chooser("Bus", this, "fx" + fx + "bus", params);
         vbox.add(comp);
-		hbox.add(vbox);
+        hbox.add(vbox);
 
         comp = new LabelledDial("Amount", this, "fx" + fx + "amt", color, 0, 100);
         hbox.add(comp);
@@ -393,7 +393,7 @@ public class EmuMorpheusMap extends Synth
                 };
             hbox.add(comp);
             }
-		
+                
         hbox.add(fxcomp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -419,8 +419,8 @@ public class EmuMorpheusMap extends Synth
         params = MIX_BUS;
         comp = new Chooser("Mix Bus", this, "ch" + ch + "mixbus", params);
         vbox.add(comp);
-		hbox.add(vbox);
-		
+        hbox.add(vbox);
+                
         comp = new LabelledDial("Number", this, "ch" + ch + "number", color, 0, 127);
         hbox.add(comp);
 
@@ -428,7 +428,7 @@ public class EmuMorpheusMap extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Pan", this, "ch" + ch + "pan", color, -8, 7)
-        	{
+            {
             public String map(int val)
                 {
                 if (val == -8) return "Preset";
@@ -437,13 +437,13 @@ public class EmuMorpheusMap extends Synth
             };
         hbox.add(comp);
 
- 		vbox = new VBox();
-	    params = PROGRAM_BANKS;
+        vbox = new VBox();
+        params = PROGRAM_BANKS;
         comp = new Chooser("MIDI Bank Select", this, "ch" + ch + "bankselect", params);
         vbox.add(comp);
         hbox.add(vbox);
 
-		vbox = new VBox();
+        vbox = new VBox();
         comp = new CheckBox("Enable All", this, "ch" + ch + "enable");
         vbox.add(comp);
 
@@ -454,7 +454,7 @@ public class EmuMorpheusMap extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-		vbox = new VBox();
+        vbox = new VBox();
         comp = new CheckBox("Volume Control", this, "ch" + ch + "volctlenbl");
         vbox.add(comp);
 
@@ -465,7 +465,7 @@ public class EmuMorpheusMap extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-		vbox = new VBox();
+        vbox = new VBox();
         comp = new CheckBox("Mono Pressure", this, "ch" + ch + "mpressenbl");
         vbox.add(comp);
 
@@ -476,7 +476,7 @@ public class EmuMorpheusMap extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-		vbox = new VBox();
+        vbox = new VBox();
 
         comp = new CheckBox("Control B", this, "ch" + ch + "ctlbenbl");
         vbox.add(comp);
@@ -489,7 +489,7 @@ public class EmuMorpheusMap extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-		vbox = new VBox();
+        vbox = new VBox();
         comp = new CheckBox("Footswitch 1", this, "ch" + ch + "ftsw1enbl");
         ((CheckBox)comp).addToWidth(2);
         vbox.add(comp);
@@ -569,17 +569,17 @@ public class EmuMorpheusMap extends Synth
             int param = 0;
             
             if (key.startsWith("ch") && (key.endsWith("bank") || key.endsWith("number")))
-            	{
-            	try
-            		{
-            		int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
-                	param = ((Integer)(parametersToIndex.get("ch" + zone + "program"))).intValue() + PARAM_OFFSET;
-	            	}
-	            catch (Exception ex)
-	            	{
-	            	// shouldn't ever happen
-	            	ex.printStackTrace();
-	            	}
+                {
+                try
+                    {
+                    int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
+                    param = ((Integer)(parametersToIndex.get("ch" + zone + "program"))).intValue() + PARAM_OFFSET;
+                    }
+                catch (Exception ex)
+                    {
+                    // shouldn't ever happen
+                    ex.printStackTrace();
+                    }
                 }
             else param = ((Integer)(parametersToIndex.get(key))).intValue() + PARAM_OFFSET;;
                   
@@ -588,31 +588,31 @@ public class EmuMorpheusMap extends Synth
             
             int val = model.get(key, 0);
 
-			if (key.startsWith("ch") && (key.endsWith("bank") || key.endsWith("number")))
-            	{
-            	try
-            		{
-            		int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
-	            	val = model.get("ch" + zone + "bank") * 128 + model.get("ch" + zone + "number");
-	            	}
-	            catch (Exception ex)
-	            	{
-	            	// shouldn't ever happen
-	            	ex.printStackTrace();
-	            	}
-	            }
-	        else if (key.endsWith("mixbus"))
+            if (key.startsWith("ch") && (key.endsWith("bank") || key.endsWith("number")))
+                {
+                try
+                    {
+                    int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
+                    val = model.get("ch" + zone + "bank") * 128 + model.get("ch" + zone + "number");
+                    }
+                catch (Exception ex)
+                    {
+                    // shouldn't ever happen
+                    ex.printStackTrace();
+                    }
+                }
+            else if (key.endsWith("mixbus"))
                 {
                 val =  val - 1;
                 }
             else if (key.endsWith("fx1type"))
-				{
-				val = FX_A_TYPES[val];
-				}
+                {
+                val = FX_A_TYPES[val];
+                }
             else if (key.endsWith("fx2type"))
-				{
-				val = FX_B_TYPES[val];
-				}
+                {
+                val = FX_B_TYPES[val];
+                }
 
             if (val < 0) val = val + 16384;
             data[7] = (byte)(val % 128);
@@ -664,31 +664,31 @@ public class EmuMorpheusMap extends Synth
             {
             int val = model.get(parameters[i], 0);
 
- 			if (parameters[i].startsWith("ch") && (parameters[i].endsWith("program")))
-            	{
-            	try
-            		{
-            		int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
-            		val = model.get("ch" + zone + "bank") * 128 + model.get("ch" + zone + "number");
-	            	}
-	            catch (Exception ex)
-	            	{
-	            	// shouldn't ever happen
-	            	ex.printStackTrace();
-	            	}
-	            }
+            if (parameters[i].startsWith("ch") && (parameters[i].endsWith("program")))
+                {
+                try
+                    {
+                    int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
+                    val = model.get("ch" + zone + "bank") * 128 + model.get("ch" + zone + "number");
+                    }
+                catch (Exception ex)
+                    {
+                    // shouldn't ever happen
+                    ex.printStackTrace();
+                    }
+                }
             else if (parameters[i].endsWith("mixbus"))
                 {
                 val =  val - 1;
                 }
             else if (parameters[i].endsWith("fx1type"))
-				{
-				val = FX_A_TYPES[val];
-				}
+                {
+                val = FX_A_TYPES[val];
+                }
             else if (parameters[i].endsWith("fx2type"))
-				{
-				val = FX_B_TYPES[val];
-				}
+                {
+                val = FX_B_TYPES[val];
+                }
                         
             if (val < 0) val = val + 16384;
             data[offset++] = (byte)(val % 128);
@@ -700,8 +700,8 @@ public class EmuMorpheusMap extends Synth
         data[offset++] = (byte)(checksum & 127);
         data[offset++] = (byte)0xF7;
 
-		Object[] result = new Object[] { data };
-		return result;
+        Object[] result = new Object[] { data };
+        return result;
         }
         
     public boolean getSendsParametersAfterNonMergeParse() { return true; }
@@ -732,34 +732,34 @@ public class EmuMorpheusMap extends Synth
             if (val >= 8192)
                 val = val - 16384;
 
-			if (parameters[i].startsWith("ch") && (parameters[i].endsWith("program")))
-            	{
-            	try
-            		{
-            		// this is just a guess...
-            		int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
-            		model.set("ch" + zone + "bank", val / 128);
-            		model.set("ch" + zone + "number", val % 128);
-	            	}
-	            catch (Exception ex)
-	            	{
-	            	// shouldn't ever happen
-	            	ex.printStackTrace();
-	            	}
-	            }
+            if (parameters[i].startsWith("ch") && (parameters[i].endsWith("program")))
+                {
+                try
+                    {
+                    // this is just a guess...
+                    int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
+                    model.set("ch" + zone + "bank", val / 128);
+                    model.set("ch" + zone + "number", val % 128);
+                    }
+                catch (Exception ex)
+                    {
+                    // shouldn't ever happen
+                    ex.printStackTrace();
+                    }
+                }
             else if (parameters[i].endsWith("mixbus"))
                 val = val + 1;
                 
             if (parameters[i].endsWith("fx1type"))
-				{
-				model.set(parameters[i], getFXType(1, val));
-				}
+                {
+                model.set(parameters[i], getFXType(1, val));
+                }
             else if (parameters[i].endsWith("fx2type"))
-				{
-				model.set(parameters[i], getFXType(2, val));
-				}
+                {
+                model.set(parameters[i], getFXType(2, val));
+                }
             else if (!parameters[i].equals("---"))
-            	{
+                {
                 model.set(parameters[i], val);
                 }
             }
@@ -774,15 +774,15 @@ public class EmuMorpheusMap extends Synth
         // I don't think you can change the patch at all
         
         /*
-        int bank = tempModel.get("bank", 0);
-        if (bank == 2)  // card
-            bank++;  // because the card's actual bank is bank 3
-        int number = tempModel.get("number", 0);
-        // It appears that the Morpheus / Ultraproteus are among
-        // the rare machines which use 14-bit CCs
-        tryToSendMIDI(buildLongCC(getChannelOut(), 0x00, bank));
-        tryToSendMIDI(buildPC(getChannelOut(), number));
-    	*/
+          int bank = tempModel.get("bank", 0);
+          if (bank == 2)  // card
+          bank++;  // because the card's actual bank is bank 3
+          int number = tempModel.get("number", 0);
+          // It appears that the Morpheus / Ultraproteus are among
+          // the rare machines which use 14-bit CCs
+          tryToSendMIDI(buildLongCC(getChannelOut(), 0x00, bank));
+          tryToSendMIDI(buildPC(getChannelOut(), number));
+        */
         }
 
     public byte[] requestDump(Model tempModel)

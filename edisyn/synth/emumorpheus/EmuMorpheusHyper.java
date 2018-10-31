@@ -555,7 +555,6 @@ public class EmuMorpheusHyper extends Synth
     public int parse(byte[] data, boolean fromFile)
         {
         int NN = data[6] + data[7] * 128;
-        System.err.println("" + NN + " " + NN/128 + " " + NN%128);
         model.set("bank", NN / 128);
         model.set("number", NN % 128);
         
@@ -657,7 +656,6 @@ public class EmuMorpheusHyper extends Synth
                 
     public static boolean recognize(byte[] data)
         {
-        System.err.println(parameters.length);
         return  data.length == 10 + parameters.length * 2 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte) 0x18 &&

@@ -32,6 +32,12 @@ public class LabelledDial extends NumericalComponent
     boolean updatesDynamically = true;
     boolean updatingDynamically = false;
         
+    public void setEnabled(boolean val)
+    	{
+    	dial.setEnabled(val);
+    	label.setEnabled(val);
+    	}
+    	
     public Insets getInsets() { return Style.LABELLED_DIAL_INSETS(); }
 
     public void update(String key, Model model) 
@@ -227,8 +233,18 @@ public class LabelledDial extends NumericalComponent
         public Dimension getPreferredSize() { return new Dimension(Style.LABELLED_DIAL_WIDTH(), Style.LABELLED_DIAL_WIDTH()); }
         public Dimension getMinimumSize() { return new Dimension(Style.LABELLED_DIAL_WIDTH(), Style.LABELLED_DIAL_WIDTH()); }
         
+		boolean enabled = true;
+		
+		public void setEnabled(boolean val)
+			{
+			enabled = val;
+			field.setEnabled(val);
+			repaint();
+			}
+    	
         void mouseReleased(MouseEvent e)
             {                       
+                    if (!enabled) return;
             if (mouseDown)
                 {
                 status = STATUS_STATIC;
@@ -290,7 +306,8 @@ public class LabelledDial extends NumericalComponent
                 {
                 public void mouseWheelMoved(MouseWheelEvent e) 
                     {
-                    int val = getState() - e.getWheelRotation() / 2;
+                     if (!enabled) return;
+                   int val = getState() - e.getWheelRotation() / 2;
                     if (val > getMax()) val = getMax();
                     if (val < getMin()) val = getMin();
 
@@ -302,6 +319,7 @@ public class LabelledDial extends NumericalComponent
                 {
                 public void mousePressed(MouseEvent e)
                     {
+                    if (!enabled) return;
                     mouseDown = true;
                     startX = e.getX();
                     startY = e.getY();
@@ -332,6 +350,7 @@ public class LabelledDial extends NumericalComponent
                 MouseEvent lastRelease;
                 public void mouseReleased(MouseEvent e)
                     {
+                    if (!enabled) return;
                     if (e == lastRelease) // we just had this event because we're in the AWT Event Listener.  So we ignore it
                         return;
                     
@@ -371,6 +390,7 @@ public class LabelledDial extends NumericalComponent
                 {
                 public void mouseDragged(MouseEvent e)
                     {
+                    if (!enabled) return;
                     int proposedState = getProposedState(e);
                                         
                     // at present we're just going to use y.  It's confusing to use either y or x.
@@ -473,6 +493,9 @@ public class LabelledDial extends NumericalComponent
             arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH() / 2, rect.getY() + Style.DIAL_STROKE_WIDTH()/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH(), rect.getHeight() - Style.DIAL_STROKE_WIDTH(), startAngle, interval, Arc2D.OPEN);
 
             graphics.draw(arc);
+
+            if (!enabled) return;
+
             graphics.setStroke(Style.DIAL_THICK_STROKE());
             arc = new Arc2D.Double();
                 

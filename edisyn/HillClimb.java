@@ -652,7 +652,8 @@ public class HillClimb extends SynthPanel
                 
         vbox.add(climb);
 
-        LabelledDial mutationRate = new LabelledDial("Rate", blank, "mutationrate", Style.COLOR_GLOBAL(), 0, 100)
+         String s = synth.getLastX("HillClimbMutationRate", null);
+       LabelledDial mutationRate = new LabelledDial("Rate", blank, "mutationrate", Style.COLOR_GLOBAL(), 0, 100)
             {
             public String map(int val)
                 {
@@ -664,8 +665,21 @@ public class HillClimb extends SynthPanel
                 else
                     return String.format("%.3f", v);
                 }
+            
+            public void update(String key, Model model)
+            	{
+            	super.update(key, model);
+            	synth.setLastX("" + model.get(key), "HillClimbMutationRate", null);
+            	}
             };
-        blank.getModel().set("mutationrate", INITIAL_MUTATION_RATE);
+        
+        int v = INITIAL_MUTATION_RATE;
+        if (s != null)
+      	try { v = Integer.parseInt(s); } catch (Exception e) { e.printStackTrace(); }
+        if (v < 0 || v > 100) v = INITIAL_MUTATION_RATE;
+        mutationRate.setState(v);
+        
+        blank.getModel().set("mutationrate", v);
         vbox.add(mutationRate);
                 
         bigger = new JCheckBox("Bigger");
@@ -675,6 +689,8 @@ public class HillClimb extends SynthPanel
         bigger.setFont(Style.SMALL_FONT());
         bigger.putClientProperty("JComponent.sizeVariant", "small");
         
+        s = synth.getLastX("HillClimbBigger", null);
+
         bigger.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -688,9 +704,16 @@ public class HillClimb extends SynthPanel
                     }
                 candidates.revalidate();
                 candidates.repaint();
+
+            	synth.setLastX("" + bigger.isSelected(), "HillClimbBigger", null);
                 }
             });
-        bigger.setSelected(false);
+            
+        boolean bb = false;
+        if (s != null)
+        try { bb = (s.equals("true")); } catch (Exception e) { e.printStackTrace(); }
+
+        bigger.setSelected(bb);
         HBox eb = new HBox();
         eb.add(bigger);
         vbox.add(eb);
@@ -712,7 +735,9 @@ public class HillClimb extends SynthPanel
         vbox = new VBox();
         vbox.add(constrict);
 
-        LabelledDial recombinationRate = new LabelledDial("Rate", blank, "recombinationrate", Style.COLOR_GLOBAL(), 0, 100)
+         s = synth.getLastX("HillClimbRecombinationRate", null);
+
+       LabelledDial recombinationRate = new LabelledDial("Rate", blank, "recombinationrate", Style.COLOR_GLOBAL(), 0, 100)
             {
             public String map(int val)
                 {
@@ -723,8 +748,21 @@ public class HillClimb extends SynthPanel
                 else
                     return String.format("%.3f", (double)val);
                 }
+            
+            public void update(String key, Model model)
+            	{
+            	super.update(key, model);
+            	synth.setLastX("" + model.get(key), "HillClimbRecombinationRate", null);
+            	}
             };
-        blank.getModel().set("recombinationrate", STANDARD_RECOMBINATION_RATE);
+
+        v = STANDARD_RECOMBINATION_RATE;
+        if (s != null)
+       	try { v = Integer.parseInt(s); } catch (Exception e) { e.printStackTrace(); }
+        if (v < 0 || v > 100) v = STANDARD_RECOMBINATION_RATE;
+        recombinationRate.setState(v);
+        
+        blank.getModel().set("recombinationrate", v);
         vbox.add(recombinationRate);
 
         smooth = new JCheckBox("Smooth");
@@ -733,7 +771,23 @@ public class HillClimb extends SynthPanel
         smooth.setForeground(Style.TEXT_COLOR());
         smooth.setFont(Style.SMALL_FONT());
         smooth.putClientProperty("JComponent.sizeVariant", "small");
-        smooth.setSelected(false);
+ 
+         s = synth.getLastX("HillClimbSmooth", null);
+       smooth.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+            	synth.setLastX("" + smooth.isSelected(), "HillClimbSmooth", null);
+                }
+            });
+        
+        bb = false;
+        if (s != null)
+		try { bb = (s.equals("true")); } catch (Exception e) { e.printStackTrace(); }
+
+        smooth.setSelected(bb);
+        
+        
         eb = new HBox();
         eb.addLast(smooth);             // we do addLast rather than add to overcome the stupid OS X "Smoo..." bug.
         vbox.add(eb);

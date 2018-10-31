@@ -94,7 +94,10 @@ public class HillClimb extends SynthPanel
     PushButton back;
     PushButton constrict;
     JCheckBox bigger;
-    JCheckBox smooth;
+    LabelledDial mutationRate;
+    LabelledDial recombinationRate;
+    
+    JComboBox method = new JComboBox(new String[] { "Hill-Climber", "Constrictor", "Smooth Constrictor" });
     
     VBox candidates;
     VBox extraCandidates1;
@@ -653,7 +656,7 @@ public class HillClimb extends SynthPanel
         vbox.add(climb);
 
         String s = synth.getLastX("HillClimbMutationRate", null);
-        LabelledDial mutationRate = new LabelledDial("Rate", blank, "mutationrate", Style.COLOR_GLOBAL(), 0, 100)
+        mutationRate = new LabelledDial("Rate", blank, "mutationrate", Style.COLOR_GLOBAL(), 0, 100)
             {
             public String map(int val)
                 {
@@ -682,43 +685,6 @@ public class HillClimb extends SynthPanel
         blank.getModel().set("mutationrate", v);
         vbox.add(mutationRate);
                 
-        bigger = new JCheckBox("Bigger");
-        bigger.setFocusable(false);
-        bigger.setOpaque(false);  // for windows
-        bigger.setForeground(Style.TEXT_COLOR());
-        bigger.setFont(Style.SMALL_FONT());
-        bigger.putClientProperty("JComponent.sizeVariant", "small");
-        
-        s = synth.getLastX("HillClimbBigger", null);
-
-        bigger.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                candidates.remove(extraCandidates1);
-                candidates.remove(extraCandidates2);
-                if (bigger.isSelected())
-                    {
-                    candidates.add(extraCandidates1);
-                    candidates.add(extraCandidates2);
-                    }
-                candidates.revalidate();
-                candidates.repaint();
-
-                synth.setLastX("" + bigger.isSelected(), "HillClimbBigger", null);
-                }
-            });
-            
-        boolean bb = false;
-        if (s != null)
-            try { bb = (s.equals("true")); } catch (Exception e) { e.printStackTrace(); }
-
-        bigger.setSelected(bb);
-        HBox eb = new HBox();
-        eb.add(bigger);
-        vbox.add(eb);
-
-
         iterationsBox.add(vbox);
         
         vbox = new VBox();
@@ -737,7 +703,7 @@ public class HillClimb extends SynthPanel
 
         s = synth.getLastX("HillClimbRecombinationRate", null);
 
-        LabelledDial recombinationRate = new LabelledDial("Rate", blank, "recombinationrate", Style.COLOR_GLOBAL(), 0, 100)
+        recombinationRate = new LabelledDial("Rate", blank, "recombinationrate", Style.COLOR_GLOBAL(), 0, 100)
             {
             public String map(int val)
                 {
@@ -764,37 +730,6 @@ public class HillClimb extends SynthPanel
         
         blank.getModel().set("recombinationrate", v);
         vbox.add(recombinationRate);
-
-        smooth = new JCheckBox("Smooth");
-        smooth.setOpaque(false);  // for windows
-        smooth.setFocusable(false);
-        smooth.setForeground(Style.TEXT_COLOR());
-        smooth.setFont(Style.SMALL_FONT());
-        smooth.putClientProperty("JComponent.sizeVariant", "small");
- 
-        s = synth.getLastX("HillClimbSmooth", null);
-        smooth.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                synth.setLastX("" + smooth.isSelected(), "HillClimbSmooth", null);
-                }
-            });
-        
-        bb = false;
-        if (s != null)
-            try { bb = (s.equals("true")); } catch (Exception e) { e.printStackTrace(); }
-
-        smooth.setSelected(bb);
-        
-        
-        eb = new HBox();
-        eb.addLast(smooth);             // we do addLast rather than add to overcome the stupid OS X "Smoo..." bug.
-        vbox.add(eb);
-
- 
- 
- 
  
         iterationsBox.add(vbox);
 
@@ -851,7 +786,75 @@ public class HillClimb extends SynthPanel
 
         iterationsBox.add(vbox);
         
-        panel.add(iterationsBox, BorderLayout.WEST);
+        panel.add(iterationsBox, BorderLayout.CENTER);
+
+        s = synth.getLastX("HillClimbMethod", null);
+        method.setFont(Style.SMALL_FONT());
+        method.putClientProperty("JComponent.sizeVariant", "small");
+        method.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                int m = method.getSelectedIndex();
+                synth.setLastX("" + m, "HillClimbMethod", null);
+                setMethod(m);
+                }
+            });
+        
+        v = 0;
+        if (s != null)
+            try { v = Integer.parseInt(s); } catch (Exception e) { e.printStackTrace(); }
+        if (v < 0 || v > 2) v = 0;
+        method.setSelectedIndex(v);
+ 
+ 
+        JLabel methodLabel = new JLabel("Method: ");
+        methodLabel.setForeground(Style.TEXT_COLOR());
+        methodLabel.setFont(Style.SMALL_FONT());
+        methodLabel.putClientProperty("JComponent.sizeVariant", "small");
+        methodLabel.setOpaque(false);  // for windows
+        
+        HBox eb = new HBox();
+        eb.add(methodLabel);
+        eb.add(method);             // we do addLast rather than add to overcome the stupid OS X "Smoo..." bug.
+
+
+        bigger = new JCheckBox("Big");
+        bigger.setFocusable(false);
+        bigger.setOpaque(false);  // for windows
+        bigger.setForeground(Style.TEXT_COLOR());
+        bigger.setFont(Style.SMALL_FONT());
+        bigger.putClientProperty("JComponent.sizeVariant", "small");
+        
+        s = synth.getLastX("HillClimbBigger", null);
+
+        bigger.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                candidates.remove(extraCandidates1);
+                candidates.remove(extraCandidates2);
+                if (bigger.isSelected())
+                    {
+                    candidates.add(extraCandidates1);
+                    candidates.add(extraCandidates2);
+                    }
+                candidates.revalidate();
+                candidates.repaint();
+
+                synth.setLastX("" + bigger.isSelected(), "HillClimbBigger", null);
+                }
+            });
+            
+        boolean bb = false;
+        if (s != null)
+            try { bb = (s.equals("true")); } catch (Exception e) { e.printStackTrace(); }
+
+        bigger.setSelected(bb);
+        eb.addLast(bigger);
+
+		panel.add(eb, BorderLayout.NORTH);
+ 
         toprow.add(panel);
         
         panel = new Category(null, "Archive", Style.COLOR_A());
@@ -975,6 +978,8 @@ public class HillClimb extends SynthPanel
             currentModels[i] = (Model)(synth.getModel().clone());
             }
         currentModels[NUM_CANDIDATES + ARCHIVE_SIZE] = synth.getModel();
+
+		setMethod(method.getSelectedIndex());
         }
         
     
@@ -1030,6 +1035,21 @@ public class HillClimb extends SynthPanel
                 }
             }
         }
+
+	void setMethod(int method)
+		{
+		boolean c = (method == 0);
+		climb.getButton().setEnabled(c);
+		constrict.getButton().setEnabled(!c);
+		for(int i = 0; i < ratings.length; i++)
+			for(int j = 0; j < ratings[i].length; j++)
+				if (ratings[i][j] != null) ratings[i][j].setEnabled(c);
+		for(int i = 0; i < selected.length; i++)
+			if (selected[i] != null) selected[i].setEnabled(!c);
+		mutationRate.setEnabled(c);
+		recombinationRate.setEnabled(!c);
+		this.method.setSelectedIndex(method);
+		}
       
     int lastPlayedSound()
         {
@@ -1509,7 +1529,7 @@ public class HillClimb extends SynthPanel
                 if (p2 != p1) break;
                 }
                 
-            if (smooth.isSelected())
+            if (method.getSelectedIndex() == 2)
                 {
                 // recombine
                 currentModels[replace[i]] = currentModels[keep[p1]].copy().recombine(random, currentModels[keep[p2]], keys, weight);

@@ -652,8 +652,8 @@ public class HillClimb extends SynthPanel
                 
         vbox.add(climb);
 
-         String s = synth.getLastX("HillClimbMutationRate", null);
-       LabelledDial mutationRate = new LabelledDial("Rate", blank, "mutationrate", Style.COLOR_GLOBAL(), 0, 100)
+        String s = synth.getLastX("HillClimbMutationRate", null);
+        LabelledDial mutationRate = new LabelledDial("Rate", blank, "mutationrate", Style.COLOR_GLOBAL(), 0, 100)
             {
             public String map(int val)
                 {
@@ -667,15 +667,15 @@ public class HillClimb extends SynthPanel
                 }
             
             public void update(String key, Model model)
-            	{
-            	super.update(key, model);
-            	synth.setLastX("" + model.get(key), "HillClimbMutationRate", null);
-            	}
+                {
+                super.update(key, model);
+                synth.setLastX("" + model.get(key), "HillClimbMutationRate", null);
+                }
             };
         
         int v = INITIAL_MUTATION_RATE;
         if (s != null)
-      	try { v = Integer.parseInt(s); } catch (Exception e) { e.printStackTrace(); }
+            try { v = Integer.parseInt(s); } catch (Exception e) { e.printStackTrace(); }
         if (v < 0 || v > 100) v = INITIAL_MUTATION_RATE;
         mutationRate.setState(v);
         
@@ -705,13 +705,13 @@ public class HillClimb extends SynthPanel
                 candidates.revalidate();
                 candidates.repaint();
 
-            	synth.setLastX("" + bigger.isSelected(), "HillClimbBigger", null);
+                synth.setLastX("" + bigger.isSelected(), "HillClimbBigger", null);
                 }
             });
             
         boolean bb = false;
         if (s != null)
-        try { bb = (s.equals("true")); } catch (Exception e) { e.printStackTrace(); }
+            try { bb = (s.equals("true")); } catch (Exception e) { e.printStackTrace(); }
 
         bigger.setSelected(bb);
         HBox eb = new HBox();
@@ -735,9 +735,9 @@ public class HillClimb extends SynthPanel
         vbox = new VBox();
         vbox.add(constrict);
 
-         s = synth.getLastX("HillClimbRecombinationRate", null);
+        s = synth.getLastX("HillClimbRecombinationRate", null);
 
-       LabelledDial recombinationRate = new LabelledDial("Rate", blank, "recombinationrate", Style.COLOR_GLOBAL(), 0, 100)
+        LabelledDial recombinationRate = new LabelledDial("Rate", blank, "recombinationrate", Style.COLOR_GLOBAL(), 0, 100)
             {
             public String map(int val)
                 {
@@ -750,15 +750,15 @@ public class HillClimb extends SynthPanel
                 }
             
             public void update(String key, Model model)
-            	{
-            	super.update(key, model);
-            	synth.setLastX("" + model.get(key), "HillClimbRecombinationRate", null);
-            	}
+                {
+                super.update(key, model);
+                synth.setLastX("" + model.get(key), "HillClimbRecombinationRate", null);
+                }
             };
 
         v = STANDARD_RECOMBINATION_RATE;
         if (s != null)
-       	try { v = Integer.parseInt(s); } catch (Exception e) { e.printStackTrace(); }
+            try { v = Integer.parseInt(s); } catch (Exception e) { e.printStackTrace(); }
         if (v < 0 || v > 100) v = STANDARD_RECOMBINATION_RATE;
         recombinationRate.setState(v);
         
@@ -772,18 +772,18 @@ public class HillClimb extends SynthPanel
         smooth.setFont(Style.SMALL_FONT());
         smooth.putClientProperty("JComponent.sizeVariant", "small");
  
-         s = synth.getLastX("HillClimbSmooth", null);
-       smooth.addActionListener(new ActionListener()
+        s = synth.getLastX("HillClimbSmooth", null);
+        smooth.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
-            	synth.setLastX("" + smooth.isSelected(), "HillClimbSmooth", null);
+                synth.setLastX("" + smooth.isSelected(), "HillClimbSmooth", null);
                 }
             });
         
         bb = false;
         if (s != null)
-		try { bb = (s.equals("true")); } catch (Exception e) { e.printStackTrace(); }
+            try { bb = (s.equals("true")); } catch (Exception e) { e.printStackTrace(); }
 
         smooth.setSelected(bb);
         

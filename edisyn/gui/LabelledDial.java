@@ -33,11 +33,11 @@ public class LabelledDial extends NumericalComponent
     boolean updatingDynamically = false;
         
     public void setEnabled(boolean val)
-    	{
-    	dial.setEnabled(val);
-    	label.setEnabled(val);
-    	}
-    	
+        {
+        dial.setEnabled(val);
+        label.setEnabled(val);
+        }
+        
     public Insets getInsets() { return Style.LABELLED_DIAL_INSETS(); }
 
     public void update(String key, Model model) 
@@ -233,18 +233,18 @@ public class LabelledDial extends NumericalComponent
         public Dimension getPreferredSize() { return new Dimension(Style.LABELLED_DIAL_WIDTH(), Style.LABELLED_DIAL_WIDTH()); }
         public Dimension getMinimumSize() { return new Dimension(Style.LABELLED_DIAL_WIDTH(), Style.LABELLED_DIAL_WIDTH()); }
         
-		boolean enabled = true;
-		
-		public void setEnabled(boolean val)
-			{
-			enabled = val;
-			field.setEnabled(val);
-			repaint();
-			}
-    	
+        boolean enabled = true;
+                
+        public void setEnabled(boolean val)
+            {
+            enabled = val;
+            field.setEnabled(val);
+            repaint();
+            }
+        
         void mouseReleased(MouseEvent e)
             {                       
-                    if (!enabled) return;
+            if (!enabled) return;
             if (mouseDown)
                 {
                 status = STATUS_STATIC;
@@ -306,8 +306,8 @@ public class LabelledDial extends NumericalComponent
                 {
                 public void mouseWheelMoved(MouseWheelEvent e) 
                     {
-                     if (!enabled) return;
-                   int val = getState() - e.getWheelRotation() / 2;
+                    if (!enabled) return;
+                    int val = getState() - e.getWheelRotation() / 2;
                     if (val > getMax()) val = getMax();
                     if (val < getMin()) val = getMin();
 

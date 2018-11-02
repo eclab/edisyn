@@ -18,12 +18,13 @@
 \usepackage{algorithm}
 
 \sloppy
+\newcommand\ignore[1]{}
 
 \newcommand\myfrac[2]{#1/#2}
 \begin{document}
 
 \noindent {\Huge\bf Edisyn}\\[0.5em]
-{\large \bf A Java-based Synthesizer Patch Editor, Version 16\\[0.2em]
+{\large \bf A Java-based Synthesizer Patch Editor, Version 17\\[0.2em]
 By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 
 \vspace{-1em}
@@ -391,22 +392,24 @@ Note that your parameter choices, as well as using them for recombination, are p
 \subsection{Hill-Climbing}
 \label{hillclimb}
 
-\begin{wrapfigure}{r}{3.2in}
+\begin{wrapfigure}{r}{3.6in}
 \vspace{-2em}\includegraphics[scale=0.27]{HillClimbPanel.png}
 \vspace{-2em}
 \caption{The Hill-Climber Panel}
 \label{hcpanel}
 \end{wrapfigure}
 
-Edisyn's {\it hill-climber}\footnote{Important Note.  The Hill Climber is a work in progress and as testing and research continues on it, it may change significantly} is another of its patch-exploration tools.  You select it by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  This will add a new tab to your patch editor labelled {\bf Hill-Climb}.   When you fire up the Hill-Climber, it appears as an additional tab after your {\bf About} tab.  Whenever you select a tab other than the hill-climber tab, the hill-climber will pause; when you go back to the hill-climber tab it will resume.  You get rid of the hill-climber by selecting {\bf Stop Hill-Climbing} in the {\bf Edit} menu. 
+Edisyn's {\it hill-climber} is another of its patch-exploration tools.  You select it by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  This will add a new tab to your patch editor labelled {\bf Hill-Climb}.   When you fire up the Hill-Climber, it appears as an additional tab after your {\bf About} tab.  Whenever you select a tab other than the hill-climber tab, the hill-climber will pause; when you go back to the hill-climber tab it will resume.  You get rid of the hill-climber by selecting {\bf Stop Hill-Climbing} in the {\bf Edit} menu. 
+
+In the Hill-Climber tab, make sure that the ``Method'' combobox is set to {\it Hill-Climb}: for other methods, see the Constrictor Section (\ref{constrict}).
 
 Edisyn's Hill-Climber repeatedly offers you sixteen new versions of patches and asks you to choose your top three preferences.  After you have chosen them, the Hill-Climber will try to build a new set of sounds whose parameters are similar to your choices in various ways.  The Hill-Climber builds new sounds by recombining your top three sound choices in certain ways and adding some degree of noise (mutation) to them.   If you're lucky, Edisyn will head towards regions of the synthesizer's parameter space which make sounds you like.  {\bf Hint:  You will have more success with the hill-climber if you restrict the parameters being mutated to just those you want to explore.}  Different kinds of synthesizers will also benefit from different amounts of exploration (mutation and recombination) rates.  You'll need to tweak those as necessary.
 
 \paragraph{Candidates} This region holds the current candidate patches. When you start up the Hill-Climber, it will begin playing each candidate patch in turn.  If you don't want Edisyn to play automatically, you can turn it off by choosing {\bf Send Test Notes...} in the {\bf MIDI} menu.  Either way, you can manually play a patch by pressing its {\bf Play} button, or by typing the key located on that button.   You can of course also choose which three patches you like the most (in order).
 
-\paragraph{Iterations} After you have selected your preferred patches, you can build a new set of patches from them by pressing the {\bf Climb} button.  This will also increment the iteration number.  If you don't like the patches that were built, you can try again by pressing the {\bf Retry} button.  If you'd like to back up to a previous iteration, press {\bf Back Up}.  Finally, to reset back to the very first iteration, press {\bf Reset}.
+\paragraph{Iterations} After you have selected your preferred patches, you can build a new set of patches from them by pressing the {\bf Climb} button.  This will also increment the iteration number.  If you don't like the patches that were built, you can try again by pressing the {\bf Retry} button.  If you'd like to back up to a previous iteration, press {\bf Back Up}.  Finally, to reset back to the very first iteration, press {\bf Reset} and choose ``From Original Patch'.
 
-The amount of mutation noise used when generating new patches is specified by the {\bf Mutation Rate} dial.  Typically you'd select something around 5--10.  Additionally, by default the Hill-Climber lets you select from 16 candidates.  But if you press {\bf Bigger}, this set will expand to 32 candidates.
+The amount of mutation noise used when generating new patches is specified by the {\bf Mutation Rate} dial.  Typically you'd select something around 5--10.  Additionally, by default the Hill-Climber lets you select from 16 candidates.  But if you press {\bf Big}, this set will expand to 32 candidates.
 
 \paragraph{Archive} If you like a patch and you'd like to hold onto it even after hill-climbing to the next iteration, you can place it in the {\it archive}.  The archive consists of six patch locations: to copy a patch to a given archive location, click on its {\bf Options} button and select one of {\bf Archive to q} through {\bf Archive to v} (the Archive patches are so named because presently played by pressing keys q through v).  Archived patches can also be selected to participate in hill-climbing: just pick a number under a given patch.
 
@@ -426,6 +429,30 @@ The amount of mutation noise used when generating new patches is specified by th
 
 All the patches can be played by pressing their associated letter.  But additionally you can (at present) {\bf Climb} by pressing the Space Bar, {\bf Retry} by pressing the Return/Enter key, and {\bf Back Up} by pressing Backspace.
 
+\subsection{Constricting}
+\label{constrict}
+
+\begin{wrapfigure}{r}{3.6in}
+\vspace{-2em}\includegraphics[scale=0.27]{ConstrictorPanel.png}
+\vspace{-2em}
+\caption{The Hill-Climber Panel converted for Constricting.}
+\label{constrictorpanel}
+\end{wrapfigure}
+
+The {\it Constrictor} is similar to the Hill-Climber in many ways, yet its dynamics and behavior are quite different.   You choose the Constrictor in the same way as the Hill-Climber: by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  Then in the Hill-Climb tab, change the ``Method'' combobox to either {\it Constrictor} or to {\it Smooth Constrictor}.    
+
+The Constrictor auditions patches to you in exactly the same way was the Hill-Climber.  But you're not given the option of choosing your top three choices.  Instead, you're asked to choose which patches you {\it don't like}.  This is done by deselecting their checkboxes.  Afterwards, you click on the {\bf Constrict} button and those patches will be replaced with recombined versions of the remaining patches.  The newly recombined replacements will be moved to the front of the Candidates so you hear them first.
+
+The idea behind the Constrictor is to start with a set of varied but high-quality patches\,---\,derived from well-vetted factory patches for example.  Think of these patches as the outer boundaries of a large region of the space.  As you delete patch sounds you don't like, this region slowly begins to collapse, until ultimately it converges to a single patch.
+
+\paragraph{Initialization}  For the constrictor to work, you have to initialize the Candidates with a set of varied patches.  You could load these patches one by one by clicking on each Candidates' Options button and choosing {\it Load from File}.  But there's an easier way.  Load just the first four Candidates this way, via Load from File, and then clicking on the {\bf Reset} button and choose {\bf From First Four Candidates}.  The remaining candidates (5...16, or even 5...32) will be generated from recombinations of the first four.  If you're doing 32 candidates (that is, you pressed the {\it Big} button), you might consider loading the first six candidates and then choosing {\bf From First Six Candidates}, which gives a better mix.
+
+\paragraph{Smooth Versus Unsmooth}
+The smooth constrictor recombines candidates by interpolating between their metric parameters.  The unsmooth constrictor recombines them by simply picking one parameter or the other from the parents.  The unsmooth constrictor makes a more varied set of patches.  Tests have found that people like the smooth constrictor better, so I might get rid of Unsmooth in the future.
+
+\paragraph{Using the Constrictor Along with the Hill-Climber} It's not a bad idea to start with a constrictor, constrict down to a single patch or so, and then switch over to the hill-climber and hill-climb from there.  It is a {\bf bad} idea to go from the hill-climber to the constrictor because the hill-climber restricts the candidates to a small space and the constrictor will constrict that small space almost immediately.
+
+\ignore{
 \subsection{How the Hill-Climber Makes New Sounds}
 
 The Hill-Climber builds new sounds by recombining your top three sound choices and adding some degree of noise (mutation) to them.  Let's say that your top three sounds were sounds {\bf A, B,} and {\bf C}, and that your {\it previous} ``A'' from last time is called {\bf Z}.      You can also select only two top choices (A and B), or  single choice (A).   Figure \ref{hcfigure} explains the mechanism by which the 16 new patches are generated through various recombination and mutation mechanisms for the first 16 patches.  If you have chosen to use 32 candidate patches, then the second 16 are done exactly like the first 16, except with twice the mutation rate.
@@ -652,7 +679,7 @@ This takes two values \(v\) and \(w\) for a given parameter \(P\) and returns a 
 This is used to find a new patch \(Q\) which is on the {\it other side} of patch \(P\) from where patch \(S\) is.  There are two reasons you might want to do this.  One obvious reason is because you want to essentially move \(P\) away from \(S\) (so \(P\) becomes \(Q\)).  This is called {\it fleeing}: it's used in Edisyn for {\it nudging away} from a target patch.
 
 The other reason is because you have recently moved from \(S\) to \(P\), and now you'd like to move \(P\) even {\it further} in that direction.  This is the ``minus'' operation  done the Hill-Climbing procedure (see Figure~\ref{hcfigure}).  You'll note from Figure \ref{recombine} that the Opposite procedure takes a {\it flee} argument to distinguish between your two reasons.   This largely influences what will happen if the two parameter values are the same.\footnote{Note that we assume that all metric parameters are integers, not real-valued}.
-
+}
 \section{Writing a Patch Editor}
 
 So you want to write a patch editor?  They're not easy.  But they're fun!  Here are some hints. 

@@ -12,6 +12,8 @@ I've been asked where my Patreon page is.  So, sure, here's my <a href="https://
 
 Edisyn is a synthesizer patch editor library written in pure Java.   It runs on OS X, Linux, and Windows.  
 
+Edisyn is particularly good at exploring the space of patches.  It has to my knowledge the most sophisticated set of general-purpose patch-exploration tools of any patch editor available.
+
 Edisyn presently supports:
  
 * DSI Prophet '08 
@@ -30,7 +32,7 @@ Edisyn presently supports:
 * Korg MicroKorg
 * Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
 
-Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, extensive parameter space exploration tools (randomization/merging/nudging/hill-climbing/constricting) with per-parameter customization, real-time parameter updates, test notes, etc.
+Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, randomization, merging, nudging, hill-climbing, patch constriction, per-parameter customization, real-time parameter updates, test notes, etc.
 
 ## Manual
 

@@ -13,9 +13,9 @@ I've been asked where my Patreon page is.  So, sure, here's my <a href="https://
 Edisyn is a synthesizer patch editor library written in pure Java.   It runs on OS X, Linux, and Windows.  
 
 Edisyn presently supports:
-
+ 
 * DSI Prophet '08 
-* E-Mu Morpheus and Ultraproteus
+* E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap modes)
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes)
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
 * Oberheim Matrix 1000

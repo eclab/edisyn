@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 16)
+Synthesizer Patch Editor (Version 17)
  
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -15,6 +15,7 @@ Edisyn is a synthesizer patch editor library written in pure Java.   It runs on 
 Edisyn presently supports:
 
 * DSI Prophet '08 
+* E-Mu Morpheus and Ultraproteus
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes)
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
 * Oberheim Matrix 1000
@@ -29,7 +30,7 @@ Edisyn presently supports:
 * Korg MicroKorg
 * Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
 
-Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, extensive parameter space exploration tools (randomization/merging/nudging/hill-climbing) with per-parameter customization, real-time parameter updates, test notes, etc.
+Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, extensive parameter space exploration tools (randomization/merging/nudging/hill-climbing/constricting) with per-parameter customization, real-time parameter updates, test notes, etc.
 
 ## Manual
 
@@ -61,17 +62,18 @@ Now you should be able to run Edisyn.  Let me know if this all works.
 
 I believe that the following should work:
 
-1. [Download and install Java 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  The JRE should work fine.
+1. [Download and install Java 11](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  The JRE should work fine.
 
 2. Download Edisyn's jar file, called [edisyn.jar](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar), presently located in the "jar" directory.
 
 3. Double-click on edisyn.jar to launch Edisyn.
 
-#### Note
+#### Important Note for Windows User
 
-Edisyn makes heavy use of Java preferences to store persistence information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows.  You might get a bunch of complaints from the system, but Edisyn will work: it just won't have anything persistent.
+Java versions earlier than 11 (or so) do not handle high-resolution displays properly, so Edisyn will appear teeny-tiny.  You need to upgrade to 11.
 
-I'll try to get some information about how to get Java preferences working.  Rumor has it that this will be fixed anyway in Java 9.
+Also Edisyn makes heavy use of Java preferences to store persistence information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows for earlier versions of Java.  I think this is fixed as of Java 11 but you should check and let me know.
+
 
 ### Installation and Running on Linux
 

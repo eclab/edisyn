@@ -853,7 +853,7 @@ public class HillClimb extends SynthPanel
         bigger.setSelected(bb);
         eb.addLast(bigger);
 
-		panel.add(eb, BorderLayout.NORTH);
+        panel.add(eb, BorderLayout.NORTH);
  
         toprow.add(panel);
         
@@ -979,7 +979,7 @@ public class HillClimb extends SynthPanel
             }
         currentModels[NUM_CANDIDATES + ARCHIVE_SIZE] = synth.getModel();
 
-		setMethod(method.getSelectedIndex());
+        setMethod(method.getSelectedIndex());
         }
         
     
@@ -1036,20 +1036,20 @@ public class HillClimb extends SynthPanel
             }
         }
 
-	void setMethod(int method)
-		{
-		boolean c = (method == 0);
-		climb.getButton().setEnabled(c);
-		constrict.getButton().setEnabled(!c);
-		for(int i = 0; i < ratings.length; i++)
-			for(int j = 0; j < ratings[i].length; j++)
-				if (ratings[i][j] != null) ratings[i][j].setEnabled(c);
-		for(int i = 0; i < selected.length; i++)
-			if (selected[i] != null) selected[i].setEnabled(!c);
-		mutationRate.setEnabled(c);
-		recombinationRate.setEnabled(!c);
-		this.method.setSelectedIndex(method);
-		}
+    void setMethod(int method)
+        {
+        boolean c = (method == 0);
+        climb.getButton().setEnabled(c);
+        constrict.getButton().setEnabled(!c);
+        for(int i = 0; i < ratings.length; i++)
+            for(int j = 0; j < ratings[i].length; j++)
+                if (ratings[i][j] != null) ratings[i][j].setEnabled(c);
+        for(int i = 0; i < selected.length; i++)
+            if (selected[i] != null) selected[i].setEnabled(!c);
+        mutationRate.setEnabled(c);
+        recombinationRate.setEnabled(!c);
+        this.method.setSelectedIndex(method);
+        }
       
     int lastPlayedSound()
         {

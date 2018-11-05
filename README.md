@@ -7,6 +7,12 @@ By Sean Luke (sean@cs.gmu.edu)
 
 I've been asked where my Patreon page is.  So, sure, here's my <a href="https://www.patreon.com/SeanLuke">Patreon page</a>.
 
+Related projects:  
+
+* [Flow](https://github.com/eclab/flow), a fully-modular, polyphonic, additive software synthesizer.
+* [Gizmo](https://cs.gmu.edu/~sean/projects/gizmo/), an Arduino-based MIDI Swiss Army knife
+
+
 
 ## About
 

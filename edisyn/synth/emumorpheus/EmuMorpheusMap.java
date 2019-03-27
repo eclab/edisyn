@@ -172,6 +172,7 @@ public class EmuMorpheusMap extends Synth
                 else return "" + val;
                 }
             };
+        getModel().setMetricMin("progmap", 0);
         hbox.add(comp);
 
 
@@ -391,6 +392,7 @@ public class EmuMorpheusMap extends Synth
                     else return "" + val;
                     }
                 };
+        	getModel().setMetricMax("fx" + fx + "baamt", 100);
             hbox.add(comp);
             }
                 
@@ -435,6 +437,7 @@ public class EmuMorpheusMap extends Synth
                 else return "" + val;
                 }
             };
+        getModel().setMetricMin("ch" + ch + "pan", -7);
         hbox.add(comp);
 
         vbox = new VBox();

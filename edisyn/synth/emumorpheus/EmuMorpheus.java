@@ -356,6 +356,7 @@ public class EmuMorpheus extends Synth
                 else return "" + val;
                 }
             };
+        getModel().setMetricMax("bendrange", 12);
         hbox.add(comp);
 
         comp = new LabelledDial("Velocity", this, "velocitycurve", color, 0, 5)
@@ -367,6 +368,7 @@ public class EmuMorpheus extends Synth
                 else return "" + val;
                 }
             };
+        getModel().setMetricMax("velocitycurve", 4);  // I presume "off" is metric
         ((LabelledDial)comp).addAdditionalLabel("Curve");
         hbox.add(comp);
         
@@ -378,6 +380,7 @@ public class EmuMorpheus extends Synth
                 else return "Poly " + val;
                 }
             };
+        getModel().setMetricMin("portmode", 1);
         ((LabelledDial)comp).addAdditionalLabel("Mode");
         hbox.add(comp);
 

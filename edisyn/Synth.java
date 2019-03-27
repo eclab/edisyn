@@ -405,8 +405,10 @@ public abstract class Synth extends JComponent implements Updatable
     edisyn.synth.korgwavestation.KorgWavestationPerformance.class,
     edisyn.synth.korgwavestation.KorgWavestationPatch.class,
     edisyn.synth.korgwavestation.KorgWavestationSequence.class,
+    //edisyn.synth.linnstrument.Linnstrument.class,
     edisyn.synth.oberheimmatrix1000.OberheimMatrix1000.class, 
     edisyn.synth.preenfm2.PreenFM2.class,
+   // edisyn.synth.rolandjv880.RolandJV880.class,
     edisyn.synth.waldorfblofeld.WaldorfBlofeld.class, 
     edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti.class, 
     edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT.class, 
@@ -3240,32 +3242,6 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
             
-        /*
-          JMenuItem sendSysex = new JMenuItem("Send Sysex...");
-          menu.add(sendSysex);
-          sendSysex.addActionListener(new ActionListener()
-          {
-          public void actionPerformed( ActionEvent e)
-          {
-          String hex = JOptionPane.showInputDialog(Synth.this, "Enter a sysex hex string", "");
-          if (hex != null)
-          {
-          java.util.Scanner scanner = new java.util.Scanner(hex);
-          ArrayList list = new ArrayList();
-          while(scanner.hasNextInt(16))
-          {
-          list.add(new Integer(scanner.nextInt(16)));
-          }
-          byte[] data = new byte[list.size()];
-          for(int i = 0; i < data.length; i++)
-          {
-          data[i] = (byte)(((Integer)(list.get(i))).intValue());
-          }
-          tryToSendSysex(data);
-          }
-          }
-          });
-        */
         
         menu.addSeparator();
 
@@ -3290,6 +3266,31 @@ public abstract class Synth extends JComponent implements Updatable
             });
             
         menu.addSeparator();
+
+          JMenuItem sendSysex = new JMenuItem("Send Sysex...");
+          menu.add(sendSysex);
+          sendSysex.addActionListener(new ActionListener()
+          {
+          public void actionPerformed( ActionEvent e)
+          {
+          String hex = JOptionPane.showInputDialog(Synth.this, "Enter a sysex hex string", "");
+          if (hex != null)
+          {
+          java.util.Scanner scanner = new java.util.Scanner(hex);
+          ArrayList list = new ArrayList();
+          while(scanner.hasNextInt(16))
+          {
+          list.add(new Integer(scanner.nextInt(16)));
+          }
+          byte[] data = new byte[list.size()];
+          for(int i = 0; i < data.length; i++)
+          {
+          data[i] = (byte)(((Integer)(list.get(i))).intValue());
+          }
+          tryToSendSysex(data);
+          }
+          }
+          });
 
         testIncomingSynth = new JMenuItem("Report Next Synth MIDI");
         menu.add(testIncomingSynth);

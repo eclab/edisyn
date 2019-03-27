@@ -169,6 +169,7 @@ public class EmuMorpheusHyper extends Synth
                 else return "Poly " + val;
                 }
             };
+        getModel().setMetricMin("portmode", 1);
         hbox.add(comp);
 
         hbox.add(Strut.makeHorizontalStrut(5));
@@ -269,6 +270,7 @@ public class EmuMorpheusHyper extends Synth
                 else return "" + val;
                 }
             };
+        getModel().setMetricMin("z" + zone + "number", 0);
         hbox.add(comp);
 
         comp = new LabelledDial("Volume", this, "z" + zone + "volume", color, 0, 127);

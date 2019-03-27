@@ -665,6 +665,7 @@ public class DSIProphet08 extends Synth
                     else return "Rest";
                     }
                 };
+        	getModel().setMetricMax("layer" + layer + "track" + track + "note" + i, 125);  // Reset and Rest are non-metric
             hbox.add(comp);
             }
         
@@ -1682,4 +1683,185 @@ public class DSIProphet08 extends Synth
         int number = (model.get("number") + 1);
         return ("" + (model.get("bank") + 1) + "-" + (number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
         }
+
+
+
+    final static String[] tetraParameters = new String[]
+    {
+    "layer1dco1frequency",    
+    "layer1dco1finetune",    
+    "layer1dco1shape",    
+    "layer1dco1glide",    
+    "layer1dco1key",   
+     
+    "layer1suboscillator1level",
+    
+    "layer1dco2frequency",    
+    "layer1dco2finetune",    
+    "layer1dco2shape",    
+    "layer1dco2glide",    
+    "layer1dco2key",
+    
+    "layer1suboscillator2level",
+
+    "layer1sync",    
+    "layer1glidemode",    
+    "layer1slop",    
+    
+    "layer1pitchbendrange",    
+    
+    "layer1mix",    
+    "layer1noise",    
+
+	"layer1feedbackvolume",
+
+	"layer1feedback gain",
+
+    "layer1vcffrequency",    
+    "layer1vcfresonance",    
+    "layer1vcfkeyboardamount",    
+    "layer1vcfaudiomodulation",    
+    "layer1vcfpoles",    
+
+    "layer1env1amount",    
+    "layer1env1velocityamount",    
+    "layer1env1delay",    
+    "layer1env1attack",    
+    "layer1env1decay",    
+    "layer1env1sustain",    
+    "layer1env1release",    
+
+    "layer1vcainitiallevel",    
+    
+    "layer1env2amount",    
+    "layer1env2velocityamount",    
+    "layer1env2delay",    
+    "layer1env2attack",    
+    "layer1env2decay",    
+    "layer1env2sustain",    
+    "layer1env2release",    
+
+    
+    "layer1vcaoutputspread",    
+    "layer1vcavoicevolume",    
+
+
+
+    "layer1lfo1frequency",    
+    "layer1lfo1shape",    
+    "layer1lfo1amount",    
+    "layer1lfo1moddestination",    
+    "layer1lfo1keysync",    
+
+    "layer1lfo2frequency",    
+    "layer1lfo2shape",    
+    "layer1lfo2amount",    
+    "layer1lfo2moddestination",    
+    "layer1lfo2keysync",    
+
+    "layer1lfo3frequency",    
+    "layer1lfo3shape",    
+    "layer1lfo3amount",    
+    "layer1lfo3moddestination",    
+    "layer1lfo3keysync",    
+
+    "layer1lfo4frequency",    
+    "layer1lfo4shape",    
+    "layer1lfo4amount",    
+    "layer1lfo4moddestination",    
+    "layer1lfo4keysync",
+
+    "layer1env3moddestination",    
+    "layer1env3amount",    
+    "layer1env3velocityamount",    
+    "layer1env3delay",    
+    "layer1env3attack",    
+    "layer1env3decay",    
+    "layer1env3sustain",    
+    "layer1env3release",  
+
+    "layer1env3repeat",    
+
+    "layer1mod1source",    
+    "layer1mod1amount",    
+    "layer1mod1destination",    
+
+    "layer1mod2source",    
+    "layer1mod2amount",    
+    "layer1mod2destination",    
+
+    "layer1mod3source",    
+    "layer1mod3amount",    
+    "layer1mod3destination",    
+
+    "layer1mod4source",    
+    "layer1mod4amount",    
+    "layer1mod4destination",    
+
+    "layer1wheelamount",    
+    "layer1wheeldestination",    
+    "layer1pressureamount",    
+    "layer1pressuredestination",    
+    "layer1breathamount",    
+    "layer1breathdestination",    
+    "layer1velocityamount",    
+    "layer1velocitydestination",    
+    "layer1footamount",    
+    "layer1footdestination",  
+    
+    "layer1unisonmode",    
+    "layer1unisonkeymode",    
+    "layer1unison",    
+
+	    
+	"layer1pushitnote",
+	"layer1pushitvelocity",
+	"layer1pushitmode",
+
+    "splitpoint",
+    "keyboardmode",
+	
+    "layer1tempo",    
+    "layer1clockdivide",    
+
+    "layer1arpeggiatormode",    
+
+    "layer1arpeggiator",    
+
+    "layer1sequencertrigger",    
+   
+    "layer1sequencer",    
+    
+    // 107 ... 110
+    
+    "assignableparameter1",    
+    "assignableparameter2",    
+    "assignableparameter3",    
+    "assignableparameter4",    
+
+	// 115 ... 116
+
+	"editorbyte",
+	
+	// 118 ... 119
+    
+    "layer1track1destination",
+    
+    // 121 ... 135
+    
+    "layer1track2destination",    
+    
+    // 137 ... 151
+    
+    "layer1track3destination",   
+    
+    // 153 ... 167
+     
+    "layer1track4destination",    
+
+  	// 168 ... 183
+  	
+  	// name...
+    };
+
     }

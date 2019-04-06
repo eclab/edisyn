@@ -381,42 +381,8 @@ public abstract class Synth extends JComponent implements Updatable
     //////// SYNTHESIZER EDIT PANES
         
     /** All synthesizer editor pane classes in Edisyn */
-    public static final Class[] synths = new Class[] 
-    { 
-    //edisyn.synth.futuresonusparva.FuturesonusParva.class,
-    //edisyn.synth.generic.Generic.class,
-    //edisyn.synth.casiocz.CasioCZ.class,
-    edisyn.synth.dsiprophet08.DSIProphet08.class,
-    edisyn.synth.emumorpheus.EmuMorpheus.class,
-    edisyn.synth.emumorpheus.EmuMorpheusHyper.class,
-    edisyn.synth.emumorpheus.EmuMorpheusMap.class,
-    edisyn.synth.kawaik1.KawaiK1.class, 
-    edisyn.synth.kawaik1.KawaiK1Multi.class, 
-    edisyn.synth.kawaik4.KawaiK4.class, 
-    edisyn.synth.kawaik4.KawaiK4Multi.class, 
-    edisyn.synth.kawaik4.KawaiK4Drum.class,
-    edisyn.synth.kawaik4.KawaiK4Effect.class,
-    edisyn.synth.kawaik5.KawaiK5.class,
-    edisyn.synth.korgmicrokorg.KorgMicroKorg.class,
-    edisyn.synth.korgmicrokorg.KorgMicroKorgVocoder.class,
-    edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
-    edisyn.synth.korgsg.KorgSG.class,
-    edisyn.synth.korgsg.KorgSGMulti.class,
-    edisyn.synth.korgwavestation.KorgWavestationPerformance.class,
-    edisyn.synth.korgwavestation.KorgWavestationPatch.class,
-    edisyn.synth.korgwavestation.KorgWavestationSequence.class,
-    //edisyn.synth.linnstrument.Linnstrument.class,
-    edisyn.synth.oberheimmatrix1000.OberheimMatrix1000.class, 
-    edisyn.synth.preenfm2.PreenFM2.class,
-   // edisyn.synth.rolandjv880.RolandJV880.class,
-    edisyn.synth.waldorfblofeld.WaldorfBlofeld.class, 
-    edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti.class, 
-    edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT.class, 
-    edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti.class, 
-    edisyn.synth.yamahadx7.YamahaDX7.class, 
-    edisyn.synth.yamahatx81z.YamahaTX81Z.class, 
-    edisyn.synth.yamahatx81z.YamahaTX81ZMulti.class,
-    };
+    // https://www.logicbig.com/tutorials/core-java-tutorial/java-se-api/service-loader.html
+    public static final Class[] synths = ServiceLoader.load(Synth.class).stream().map(ServiceLoader.Provider::type).toArray(Class[]::new);
     
     /** All synthesizer names in Edisyn, one per class in synths */
     public static String[] getSynthNames()

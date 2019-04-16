@@ -12,6 +12,9 @@ Related projects:
 * [Flow](https://github.com/eclab/flow), a fully-modular, polyphonic, additive software synthesizer.
 * [Gizmo](https://cs.gmu.edu/~sean/projects/gizmo/), an Arduino-based MIDI Swiss Army knife
 
+## Paper on Edisyn's Stochastic Patch Exploration Tools
+
+[Paper Here](https://cs.gmu.edu/~sean/papers/evomusart19.pdf).  Presented at EvoMUSART 2019.
 
 
 ## About

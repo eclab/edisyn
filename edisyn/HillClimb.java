@@ -655,7 +655,7 @@ public class HillClimb extends SynthPanel
                 
         vbox.add(climb);
 
-        String s = synth.getLastX("HillClimbMutationRate", null);
+        String s = synth.getLastX("HillClimbMutationRate", synth.getSynthNameLocal());
         mutationRate = new LabelledDial("Rate", blank, "mutationrate", Style.COLOR_GLOBAL(), 0, 100)
             {
             public String map(int val)
@@ -672,7 +672,7 @@ public class HillClimb extends SynthPanel
             public void update(String key, Model model)
                 {
                 super.update(key, model);
-                synth.setLastX("" + model.get(key), "HillClimbMutationRate", null);
+                synth.setLastX("" + model.get(key), "HillClimbMutationRate", synth.getSynthNameLocal());
                 }
             };
         
@@ -701,7 +701,7 @@ public class HillClimb extends SynthPanel
         vbox = new VBox();
         vbox.add(constrict);
 
-        s = synth.getLastX("HillClimbRecombinationRate", null);
+        s = synth.getLastX("HillClimbRecombinationRate", synth.getSynthNameLocal());  // we don't do this one anyway
 
         recombinationRate = new LabelledDial("Rate", blank, "recombinationrate", Style.COLOR_GLOBAL(), 0, 100)
             {
@@ -718,7 +718,7 @@ public class HillClimb extends SynthPanel
             public void update(String key, Model model)
                 {
                 super.update(key, model);
-                synth.setLastX("" + model.get(key), "HillClimbRecombinationRate", null);
+                synth.setLastX("" + model.get(key), "HillClimbRecombinationRate", synth.getSynthNameLocal());
                 }
             };
 
@@ -788,7 +788,7 @@ public class HillClimb extends SynthPanel
         
         panel.add(iterationsBox, BorderLayout.CENTER);
 
-        s = synth.getLastX("HillClimbMethod", null);
+        s = synth.getLastX("HillClimbMethod", synth.getSynthNameLocal());
         method.setFont(Style.SMALL_FONT());
         method.putClientProperty("JComponent.sizeVariant", "small");
         method.addActionListener(new ActionListener()
@@ -796,7 +796,7 @@ public class HillClimb extends SynthPanel
             public void actionPerformed(ActionEvent e)
                 {
                 int m = method.getSelectedIndex();
-                synth.setLastX("" + m, "HillClimbMethod", null);
+                synth.setLastX("" + m, "HillClimbMethod", synth.getSynthNameLocal());
                 setMethod(m);
                 }
             });
@@ -826,7 +826,7 @@ public class HillClimb extends SynthPanel
         bigger.setFont(Style.SMALL_FONT());
         bigger.putClientProperty("JComponent.sizeVariant", "small");
         
-        s = synth.getLastX("HillClimbBigger", null);
+        s = synth.getLastX("HillClimbBigger", synth.getSynthNameLocal());
 
         bigger.addActionListener(new ActionListener()
             {
@@ -842,7 +842,7 @@ public class HillClimb extends SynthPanel
                 candidates.revalidate();
                 candidates.repaint();
 
-                synth.setLastX("" + bigger.isSelected(), "HillClimbBigger", null);
+                synth.setLastX("" + bigger.isSelected(), "HillClimbBigger", synth.getSynthNameLocal());
                 }
             });
             

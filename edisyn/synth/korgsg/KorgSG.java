@@ -445,22 +445,22 @@ public class KorgSG extends Synth
         effects[EFFECT_STEREO_DELAY] = new HBox();
         addDepth(effect, color, effects[EFFECT_STEREO_DELAY]);
                                 
-        comp = new LabelledDial("Delay Time", this, "effect" + effect + "stereodelay" + "delaytimeleft", color, 0, 500)
+        comp = new LabelledDial("Delay Time", this, "effect" + effect + "stereodelay" + "delaytimel", color, 0, 500)
             {
             public int reviseToAltValue(int val)
                 {
-                model.setBounded("effect" + effect + "stereodelay" + "delaytimeright", val);
+                model.setBounded("effect" + effect + "stereodelay" + "delaytimel", val);
                 return val;
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Left");
         effects[EFFECT_STEREO_DELAY].add(comp);
 
-        comp = new LabelledDial("Delay Time", this, "effect" + effect + "stereodelay" + "delaytimeright", color, 0, 500)
+        comp = new LabelledDial("Delay Time", this, "effect" + effect + "stereodelay" + "delaytimer", color, 0, 500)
             {
             public int reviseToAltValue(int val)
                 {
-                model.setBounded("effect" + effect + "stereodelay" + "delaytimeleft", val);
+                model.setBounded("effect" + effect + "stereodelay" + "delaytimer", val);
                 return val;
                 }
             };

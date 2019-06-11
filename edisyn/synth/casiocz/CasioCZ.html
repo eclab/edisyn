@@ -1,0 +1,42 @@
+<html><head></head>
+<body>
+
+
+<h1>Casio CZ Series</h1> 
+<h2>Single Patch Editor</h2>
+
+<p>This editor will work with the <b>Casio CZ-1, CZ-101, CZ-1000, CZ-3000, and CZ-5000</b>.
+
+<p><b>Communicating with Edisyn</b> 
+<p>Set the MIDI channel to the same as being used in Edisyn, and enable Program Change.  If you're planning on writing to the synthesizer, turn off write protect.  On the CZ-1, you must also enable System Exclusive Tone Data and make sure that MIDI is turned on.
+
+<p><b>CZ-1 Versus the Others</b>
+<P>Because it has more features, the CZ-1 different MIDI than the other synths, though it can receive patches in their format.  To send or write to a CZ-1, click the "CZ-1" button.  To send or write to a CZ-101/1000/3000/5000, turn off that button.
+
+<p><b>Features</b>
+
+<p>Even if you're an experienced CZ patch programmer, you may be confused by this patch editor.  That's because Casio only provides a subset of options for their waveforms via their front end and manual: much more is available over sysex.  You should first read (<a href="http://www.kasploosh.com/projects/CZ/11800-spelunking/">http://www.kasploosh.com/projects/CZ/11800-spelunking/</a>) about how the CZ waveforms actually work: Edisyn's editor lets you modify them they way they really are.
+
+<p>In reality, the CZ series provides you with two <b>waveforms</b> and one <b>window</b> for each oscillator.  The second waveform can optionally be turned off.  The waveforms are different than what you were taught in the manual: they are saw, square, pulse, "null" (nothing), sine-pulse, saw-pulse, multi-sine, and 2x pulse.  Each of these waveforms can be windowed with different windows to force them to zero at the end of each period.  The windows are: saw, triangle, trapezoid, pulse, and 2x saw.  If you have no idea what all this means, then read the aforementioned URL: you'll discover a whole new synthesizer! 
+
+<p>Additionally, the CZ has more modulation options and an additional hidden flag ("Mute Line 1") than you were be led to believe.  Edisyn provides access to all of these.  For more information, see <a href="http://www.kasploosh.com/projects/CZ/11800-spelunking/8-modulation.html">http://www.kasploosh.com/projects/CZ/11800-spelunking/8-modulation.html</a>
+
+<p><b>Gotchas</b> 
+
+<ul>
+<li>The Casio CZ series cannot receive individual parameters: you have to send them in bulk.
+
+<p><li>When you change the patch on the CZ, it will automatically send a patch dump over sysex, which will in turn change Edisyn.  If this happens to you, just do an "undo" and your edits will be back as they were.  You could temporarily block this behavior by doing "Change Midi..." and change "Receive From" to something other than the CZ.
+</ul>
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>June 2019 
+</table>
+
+
+

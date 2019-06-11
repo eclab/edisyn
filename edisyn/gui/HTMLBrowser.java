@@ -126,7 +126,7 @@ public class HTMLBrowser extends JPanel
         // Change the link color
         HTMLEditorKit kit = new HTMLEditorKit();
         StyleSheet styleSheet = kit.getStyleSheet();
-        styleSheet.addRule("body {background-color:transparent;}\n"); //change links to red
+        styleSheet.addRule("body {background-color:transparent;}\n b { color:#ffaaaa; }\n a { color:#8b9fef; }\n"); //change links to red
         infoPane.setEditorKit(kit);
                
         infoPane.setEditable(false);

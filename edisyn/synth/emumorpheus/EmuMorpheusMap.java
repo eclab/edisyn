@@ -392,7 +392,7 @@ public class EmuMorpheusMap extends Synth
                     else return "" + val;
                     }
                 };
-        	getModel().setMetricMax("fx" + fx + "baamt", 100);
+            getModel().setMetricMax("fx" + fx + "baamt", 100);
             hbox.add(comp);
             }
                 

@@ -172,8 +172,6 @@ public class EmuMorpheus extends Synth
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Patching", soundPanel);
-
-
                         
         model.set("name", "Untitled");
         model.set("bank", 0);

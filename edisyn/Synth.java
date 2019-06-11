@@ -365,59 +365,37 @@ public abstract class Synth extends JComponent implements Updatable
         setLearningCC(false);
         }
         
-        
-        
-
-
-
-
-
-
-
-
-
 
 
     //////// SYNTHESIZER EDIT PANES
         
     /** All synthesizer editor pane classes in Edisyn */
-    public static final Class[] synths = new Class[] 
-    { 
-    //edisyn.synth.futuresonusparva.FuturesonusParva.class,
-    //edisyn.synth.generic.Generic.class,
-    //edisyn.synth.casiocz.CasioCZ.class,
-    edisyn.synth.dsiprophet08.DSIProphet08.class,
-    edisyn.synth.emumorpheus.EmuMorpheus.class,
-    edisyn.synth.emumorpheus.EmuMorpheusHyper.class,
-    edisyn.synth.emumorpheus.EmuMorpheusMap.class,
-    edisyn.synth.kawaik1.KawaiK1.class, 
-    edisyn.synth.kawaik1.KawaiK1Multi.class, 
-    edisyn.synth.kawaik4.KawaiK4.class, 
-    edisyn.synth.kawaik4.KawaiK4Multi.class, 
-    edisyn.synth.kawaik4.KawaiK4Drum.class,
-    edisyn.synth.kawaik4.KawaiK4Effect.class,
-    edisyn.synth.kawaik5.KawaiK5.class,
-    edisyn.synth.korgmicrokorg.KorgMicroKorg.class,
-    edisyn.synth.korgmicrokorg.KorgMicroKorgVocoder.class,
-    edisyn.synth.korgmicrosampler.KorgMicrosampler.class,
-    edisyn.synth.korgsg.KorgSG.class,
-    edisyn.synth.korgsg.KorgSGMulti.class,
-    edisyn.synth.korgwavestation.KorgWavestationPerformance.class,
-    edisyn.synth.korgwavestation.KorgWavestationPatch.class,
-    edisyn.synth.korgwavestation.KorgWavestationSequence.class,
-    //edisyn.synth.linnstrument.Linnstrument.class,
-    edisyn.synth.oberheimmatrix1000.OberheimMatrix1000.class, 
-    edisyn.synth.preenfm2.PreenFM2.class,
-   // edisyn.synth.rolandjv880.RolandJV880.class,
-    edisyn.synth.waldorfblofeld.WaldorfBlofeld.class, 
-    edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti.class, 
-    edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT.class, 
-    edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti.class, 
-    edisyn.synth.yamahadx7.YamahaDX7.class, 
-    edisyn.synth.yamahatx81z.YamahaTX81Z.class, 
-    edisyn.synth.yamahatx81z.YamahaTX81ZMulti.class,
-    };
+    static final Class[] synths = loadSynths();
     
+    
+    static Class[] loadSynths()
+        {
+        ArrayList<Class> al = new ArrayList<>();
+        Scanner scan = new java.util.Scanner(edisyn.Synth.class.getResourceAsStream("synth/Synths.txt"));
+        while(scan.hasNextLine())
+            {
+            String str = scan.nextLine().trim();
+            if (!(str.length() == 0 || str.startsWith("#")))
+                {
+                try
+                    {
+                    al.add(Class.forName(str));
+                    }
+                catch (ClassNotFoundException ex)
+                    {
+                    System.err.println("Couldn't load class " + str);
+                    }
+                }
+            }
+        return (Class[])(al.toArray(new Class[al.size()]));
+        }
+
+
     /** All synthesizer names in Edisyn, one per class in synths */
     public static String[] getSynthNames()
         {
@@ -1089,13 +1067,19 @@ public abstract class Synth extends JComponent implements Updatable
                                     {
                                     if (merging != 0.0)
                                         {
-                                        if (merge(data, merging))
+                                        if (merge(data, merging) == PARSE_INCOMPLETE)
                                             {
+                                            //System.err.println("Still Merging");
+                                            }
+                                        else
+                                            {
+                                            //System.err.println("Merging Done?");
                                             merging = 0.0;
                                             }
                                         }
                                     else
                                         {
+                                        mergeSynth = null;
                                         // we turn off MIDI because parse() calls revise() which triggers setParameter() with its changes
                                         setSendMIDI(false);
                                         undo.setWillPush(false);
@@ -1108,7 +1092,7 @@ public abstract class Synth extends JComponent implements Updatable
                                             }
                                         else if (result == PARSE_FAILED)
                                             {
-                                            showSimpleError("Merge Error", "Could not merge the patch.");
+                                            showSimpleError("Receive Error", "Could not read the patch.");
                                             }
 
                                         undo.setWillPush(true);
@@ -1796,39 +1780,56 @@ public abstract class Synth extends JComponent implements Updatable
         arrived (a merge call will be made for each one), return FALSE, until
         you finally have collected enough data to do a merge, at which point
         you should return super.merge(revisedData, probability). */
-    public boolean merge(byte[] data, double probability)
+    
+    Synth mergeSynth = null;
+    public int merge(byte[] data, double probability)
         {
         setSendMIDI(false);
-        undo.setWillPush(false);
-        Model backup = (Model)(model.clone());
 
-        Synth newSynth = instantiate(Synth.this.getClass(), getSynthNameLocal(), true, false, tuple);
-        newSynth.setSendMIDI(false);
-        newSynth.parsingForMerge = true;
-        int result = newSynth.parse(data, false);
-        newSynth.parsingForMerge = false;
-        newSynth.setSendMIDI(true);
+        if (mergeSynth == null)
+            {
+            mergeSynth = instantiate(Synth.this.getClass(), getSynthNameLocal(), true, false, tuple);
+            }
+
+        mergeSynth.setSendMIDI(false);
+        mergeSynth.parsingForMerge = true;
+        int result = mergeSynth.parse(data, false);
+        mergeSynth.parsingForMerge = false;
+        mergeSynth.setSendMIDI(true);
+        
         if (result == PARSE_CANCELLED)
             {
             // nothing
-            return false;
+            mergeSynth = null;
+            setSendMIDI(false);
+            return result;
+            }
+        else if (result == PARSE_INCOMPLETE)
+            {
+            setSendMIDI(false);
+            return result;
             }
         else if (result == PARSE_FAILED)
             {
             showSimpleError("Merge Error", "Could not merge the patch.");
-            return false;
+            mergeSynth = null;
+            setSendMIDI(false);
+            return result;
             }
         else
             {
-            model.recombine(random, newSynth.getModel(), getMutationKeys(), probability); //useMapForRecombination ? getMutationKeys() : model.getKeys()
+            undo.setWillPush(false);
+            Model backup = (Model)(model.clone());
+            model.recombine(random, mergeSynth.getModel(), getMutationKeys(), probability); //useMapForRecombination ? getMutationKeys() : model.getKeys()
             revise();  // just in case
+            mergeSynth = null;        
                                 
             undo.setWillPush(true);
             if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
                 undo.push(backup);
             setSendMIDI(true);
             sendAllParameters();
-        
+
             // this last statement fixes a mystery.  When I call Randomize or Reset on
             // a Blofeld or on a Microwave, all of the widgets update simultaneously.
             // But on a Blofeld Multi or Microwave Multi they update one at a time.
@@ -1836,7 +1837,7 @@ public abstract class Synth extends JComponent implements Updatable
             // into the Blofeld, and it makes no difference!  For some reason the OS X
             // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
             repaint();
-            return true;
+            return result;
             }
         }
 
@@ -2365,7 +2366,7 @@ public abstract class Synth extends JComponent implements Updatable
         JMenu newSynth = new JMenu("New Synth");
         menu.add(newSynth);
         String[] synthNames = getSynthNames();
-        for(int i = 0; i < synths.length; i++)
+        for(int i = 0; i < synthNames.length; i++)
             {
             final int _i = i;
             JMenuItem synthMenu = new JMenuItem(synthNames[i]);
@@ -3194,6 +3195,7 @@ public abstract class Synth extends JComponent implements Updatable
 
 
         transmitCurrent = new JMenuItem("Send to Current Patch");
+        transmitCurrent.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(transmitCurrent);
         transmitCurrent.addActionListener(new ActionListener()
             {
@@ -3232,7 +3234,6 @@ public abstract class Synth extends JComponent implements Updatable
         menu.addSeparator();
 
         writeTo = new JMenuItem("Write to Patch...");
-        writeTo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(writeTo);
         writeTo.addActionListener(new ActionListener()
             {
@@ -3267,30 +3268,30 @@ public abstract class Synth extends JComponent implements Updatable
             
         menu.addSeparator();
 
-          JMenuItem sendSysex = new JMenuItem("Send Sysex...");
-          menu.add(sendSysex);
-          sendSysex.addActionListener(new ActionListener()
-          {
-          public void actionPerformed( ActionEvent e)
-          {
-          String hex = JOptionPane.showInputDialog(Synth.this, "Enter a sysex hex string", "");
-          if (hex != null)
-          {
-          java.util.Scanner scanner = new java.util.Scanner(hex);
-          ArrayList list = new ArrayList();
-          while(scanner.hasNextInt(16))
-          {
-          list.add(new Integer(scanner.nextInt(16)));
-          }
-          byte[] data = new byte[list.size()];
-          for(int i = 0; i < data.length; i++)
-          {
-          data[i] = (byte)(((Integer)(list.get(i))).intValue());
-          }
-          tryToSendSysex(data);
-          }
-          }
-          });
+        JMenuItem sendSysex = new JMenuItem("Send Sysex...");
+        menu.add(sendSysex);
+        sendSysex.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                String hex = JOptionPane.showInputDialog(Synth.this, "Enter a sysex hex string", "");
+                if (hex != null)
+                    {
+                    java.util.Scanner scanner = new java.util.Scanner(hex);
+                    ArrayList list = new ArrayList();
+                    while(scanner.hasNextInt(16))
+                        {
+                        list.add(new Integer(scanner.nextInt(16)));
+                        }
+                    byte[] data = new byte[list.size()];
+                    for(int i = 0; i < data.length; i++)
+                        {
+                        data[i] = (byte)(((Integer)(list.get(i))).intValue());
+                        }
+                    tryToSendSysex(data);
+                    }
+                }
+            });
 
         testIncomingSynth = new JMenuItem("Report Next Synth MIDI");
         menu.add(testIncomingSynth);
@@ -4818,11 +4819,17 @@ public abstract class Synth extends JComponent implements Updatable
 
     public byte[][] cutUpSysex(byte[] data)
         {
+        boolean begin = true;
         ArrayList sysex = new ArrayList();
         for(int start = 0; start < data.length; start++)
             {
             if (data[start] != (byte)0xF0)
-                return (byte[][])sysex.toArray(new byte[sysex.size()][]);
+                {
+                if (begin) continue;    // looks like
+                else
+                    return (byte[][])sysex.toArray(new byte[sysex.size()][]);
+                }
+            begin = false;
             int end;
             for(end = start + 1; end < data.length; end++)
                 {
@@ -4927,6 +4934,7 @@ public abstract class Synth extends JComponent implements Updatable
         
     boolean doOpen(boolean merge)
         {
+        mergeSynth = null;
         boolean succeeded = false;
         parsingForMerge = merge;
         String[] synthNames =  getSynthNames();
@@ -5032,18 +5040,16 @@ public abstract class Synth extends JComponent implements Updatable
                                 String val = Midi.getManufacturerForSysex(data[0]);
                                                                         
                                 if (val == null)
-                                    showSimpleError("Patch Error", "File contains sysex for a synthesizer which uses multiple dumps\n" +
-                                        "for a single patch.  In this case, Edisyn can only load the first\n" +
-                                        "dump, but it has an invalid manufacturer ID.");
+                                    showSimpleError("Patch Error", "File contains sysex for a synthesizer with an invalid manufacturer ID.");
                                 else
-                                    showSimpleError("Patch Error", "File contains sysex for a synthesizer which uses multiple dumps\n" +
-                                        "for a single patch.  In this case, Edisyn can only load the first\n" +
-                                        "dump, but it doesn't know how to load this one.  The first dump\n" +
-                                        "appears to be by the following manufcaturer:\n" + val);
+                                    showSimpleError("Patch Error", "Edisyn doesn't know how to load this synthesizer.\n" +
+                                        "The patch appears to be by the following manufacturer:\n" + val);
                                 succeeded = false;
                                 }
                             else 
-                                loadOne(flatten(data), rec, recognizeLocal(data[0]), merge, f, fd, false);
+                                {
+                                succeeded = loadOne(flatten(data), rec, recognizeLocal(data[0]), merge, f, fd, false);
+                                }
                             }
 
 
@@ -5333,7 +5339,8 @@ public abstract class Synth extends JComponent implements Updatable
         Model backup = (Model)(model.clone());
         if (merge)
             {
-            succeeded = merge(data, getMergeProbability());
+            int res = merge(data, getMergeProbability());
+            succeeded = (res == PARSE_SUCCEEDED || res == PARSE_SUCCEEDED_UNTITLED);
             if (!succeeded)
                 {
                 showSimpleError("File Error", "Could not read the patch.");

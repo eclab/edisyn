@@ -1,0 +1,36 @@
+# edisyn.synth.futuresonusparva.FuturesonusParva
+# edisyn.synth.generic.Generic
+ edisyn.synth.casiocz.CasioCZ
+# edisyn.synth.linnstrument.Linnstrument
+edisyn.synth.dsiprophet08.DSIProphet08
+edisyn.synth.emumorpheus.EmuMorpheus
+edisyn.synth.emumorpheus.EmuMorpheusHyper
+edisyn.synth.emumorpheus.EmuMorpheusMap
+edisyn.synth.kawaik1.KawaiK1 
+edisyn.synth.kawaik1.KawaiK1Multi 
+edisyn.synth.kawaik4.KawaiK4 
+edisyn.synth.kawaik4.KawaiK4Multi 
+edisyn.synth.kawaik4.KawaiK4Drum
+edisyn.synth.kawaik4.KawaiK4Effect
+edisyn.synth.kawaik5.KawaiK5
+edisyn.synth.korgmicrokorg.KorgMicroKorg
+edisyn.synth.korgmicrokorg.KorgMicroKorgVocoder
+edisyn.synth.korgmicrosampler.KorgMicrosampler
+edisyn.synth.korgsg.KorgSG
+edisyn.synth.korgsg.KorgSGMulti
+edisyn.synth.korgwavestation.KorgWavestationPerformance
+edisyn.synth.korgwavestation.KorgWavestationPatch
+edisyn.synth.korgwavestation.KorgWavestationSequence
+edisyn.synth.oberheimmatrix1000.OberheimMatrix1000 
+edisyn.synth.preenfm2.PreenFM2
+edisyn.synth.redsounddarkstar.RedSoundDarkStar
+edisyn.synth.rolandjv880.RolandJV880
+edisyn.synth.rolandjv880.RolandJV880Multi
+edisyn.synth.waldorfblofeld.WaldorfBlofeld 
+edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti 
+edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT 
+edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti 
+edisyn.synth.yamahadx7.YamahaDX7 
+edisyn.synth.yamahatx81z.YamahaTX81Z 
+edisyn.synth.yamahatx81z.YamahaTX81ZMulti
+

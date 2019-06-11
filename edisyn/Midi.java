@@ -184,7 +184,7 @@ public class Midi
             {
             midiDevices = uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider.getMidiDeviceInfo();
             }
-        catch (Exception ex)
+        catch (Throwable ex)
             {
             midiDevices = MidiSystem.getMidiDeviceInfo();
             }
@@ -897,11 +897,14 @@ public class Midi
             {
             return new DividedSysex(getMessage());
             }
+        
         public int getStatus() { return 0xF0; }   // not that this really matters
+        
         public DividedSysex(byte[] data)
             {
             super(data);
             }
+            
         public static DividedSysex[] divide(MidiMessage sysex, int chunksize)
             {
             byte[] data = sysex.getMessage();
@@ -916,6 +919,14 @@ public class Midi
                 m[i] = new DividedSysex(d);
                 }
             return m;
+            }
+            
+        public static DividedSysex[] create(byte[][] sysex)
+            {
+            DividedSysex[] div = new DividedSysex[sysex.length];
+            for(int i = 0; i < sysex.length; i++)
+                div[i] = new DividedSysex(sysex[i]);
+            return div;
             }
         }
         

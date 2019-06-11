@@ -81,6 +81,7 @@ public class Chooser extends NumericalComponent
                 
         // look for it...
         for(int i = 0; i < vals.length; i++)
+            {
             if (vals[i] == state)
                 {
                 // This is due to a Java bug.
@@ -92,6 +93,8 @@ public class Chooser extends NumericalComponent
                 setCallActionListener(true);
                 return;
                 }
+            }
+//        System.err.println("Invalid value for " + key + " (" + state + ")"); 
         }
 
     public Insets getInsets() 
@@ -103,19 +106,39 @@ public class Chooser extends NumericalComponent
         else
             return Style.CHOOSER_INSETS(); 
         }
+        
+    static int[] buildDefaultValues(String[] elements)
+        {
+        int[] values = new int[elements.length];
+        for(int i = 0; i < values.length; i++) values[i] = i;
+        return values;
+        }
 
     /** Creates a JComboBox with the given label, modifying the given key in the Style.
         The elements in the box are given by elements, and their corresponding numerical
         values in the model 0...n. */
     public Chooser(String _label, Synth synth, String key, String[] elements)
         {
-        this(_label, synth, key, elements, null);
+        this(_label, synth, key, elements, buildDefaultValues(elements));
         }
 
+    /** Creates a JComboBox with the given label, modifying the given key in the Style.
+        The elements in the box are given by elements, and their corresponding numerical
+        values in the model 0...n. */
+    public Chooser(String _label, Synth synth, String key, String[] elements, int[] values)
+        {
+        this(_label, synth, key, elements, values, null);
+        }
+        
     /** Creates a JComboBox with the given label, modifying the given key in the Style.
         The elements in the box are given by elements, with images in icons, and their corresponding numerical
         values in the model 0...n.   Note that OS X won't behave properly with icons larger than about 34 high. */
     public Chooser(String _label, final Synth synth, final String key, String[] elements, ImageIcon[] icons)
+        {
+        this(_label, synth, key, elements, buildDefaultValues(elements), icons);
+        }
+
+    public Chooser(String _label, final Synth synth, final String key, String[] elements, int[] values, ImageIcon[] icons)
         {
         super(synth, key);
                 
@@ -157,7 +180,7 @@ public class Chooser extends NumericalComponent
         combo.setFont(Style.SMALL_FONT());
         combo.setMaximumRowCount(33);           // 33, not 32, to accommodate modulation destinations for Matrix 1000
         
-        setElements(_label, elements);
+        setElements(_label, elements, values);
 
         this.icons = icons;
         this.labels = elements;
@@ -190,27 +213,10 @@ public class Chooser extends NumericalComponent
                 // its value.  OOPS.
                 if (callActionListener)
                     {
-                    setState(combo.getSelectedIndex());
+                    setState(vals[combo.getSelectedIndex()]);
                     }
                 }
             });
-
-/*
-  combo.addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  // This is due to a Java bug.
-  // Unlike other widgets (like JCheckBox), JComboBox calls
-  // the actionlistener even when you programmatically change
-  // its value.  OOPS.
-  if (callActionListener)
-  {
-  setState(combo.getSelectedIndex());
-  }
-  }
-  });
-*/
         }
     
     public boolean isLabelToLeft() { return false; }
@@ -254,6 +260,11 @@ public class Chooser extends NumericalComponent
         
     public void setElements(String _label, String[] elements)
         {
+        setElements(_label, elements, buildDefaultValues(elements));
+        }
+
+    public void setElements(String _label, String[] elements, int[] values)
+        {
         setCallActionListener(false);
         label.setText("  " + _label);
         combo.removeAllItems();
@@ -261,12 +272,18 @@ public class Chooser extends NumericalComponent
         for(int i = 0; i < elements.length; i++)
             combo.addItem(elements[i]);
 
-        vals = new int[elements.length];
-        for(int i = 0; i < vals.length; i++) 
-            vals[i] = i;
-                        
-        setMin(0);
-        setMax(elements.length - 1);
+        vals = (int[])values.clone(); 
+                
+        int _min = Integer.MAX_VALUE;
+        int _max = Integer.MIN_VALUE;
+        for(int i = 0; i < values.length; i++)
+            {
+            if (_min > values[i]) _min = values[i];
+            if (_max < values[i]) _max = values[i];
+            }
+                                       
+        setMin(_min);
+        setMax(_max);
         setCallActionListener(true);
         
         combo.setSelectedIndex(0);

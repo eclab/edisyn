@@ -1618,18 +1618,18 @@ public class YamahaTX81Z extends Synth
     
     byte[] lastACED;
     // gotta get two merge results
-    public boolean merge(byte[] data, double probability)
+    public int merge(byte[] data, double probability)
         {
         if (isACED(data))
             { 
             lastACED = (byte[]) data.clone(); 
-            return false;
+            return PARSE_INCOMPLETE;
             }
         else
             {
             if (lastACED == null)  // uh oh, didn't get it
                 {
-                return false;
+                return PARSE_FAILED;
                 }
             else
                 {

@@ -665,7 +665,7 @@ public class DSIProphet08 extends Synth
                     else return "Rest";
                     }
                 };
-        	getModel().setMetricMax("layer" + layer + "track" + track + "note" + i, 125);  // Reset and Rest are non-metric
+            getModel().setMetricMax("layer" + layer + "track" + track + "note" + i, 125);  // Reset and Rest are non-metric
             hbox.add(comp);
             }
         
@@ -1713,9 +1713,9 @@ public class DSIProphet08 extends Synth
     "layer1mix",    
     "layer1noise",    
 
-	"layer1feedbackvolume",
+    "layer1feedbackvolume",
 
-	"layer1feedback gain",
+    "layer1feedback gain",
 
     "layer1vcffrequency",    
     "layer1vcfresonance",    
@@ -1813,14 +1813,14 @@ public class DSIProphet08 extends Synth
     "layer1unisonkeymode",    
     "layer1unison",    
 
-	    
-	"layer1pushitnote",
-	"layer1pushitvelocity",
-	"layer1pushitmode",
+            
+    "layer1pushitnote",
+    "layer1pushitvelocity",
+    "layer1pushitmode",
 
     "splitpoint",
     "keyboardmode",
-	
+        
     "layer1tempo",    
     "layer1clockdivide",    
 
@@ -1839,11 +1839,11 @@ public class DSIProphet08 extends Synth
     "assignableparameter3",    
     "assignableparameter4",    
 
-	// 115 ... 116
+    // 115 ... 116
 
-	"editorbyte",
-	
-	// 118 ... 119
+    "editorbyte",
+        
+    // 118 ... 119
     
     "layer1track1destination",
     
@@ -1859,9 +1859,9 @@ public class DSIProphet08 extends Synth
      
     "layer1track4destination",    
 
-  	// 168 ... 183
-  	
-  	// name...
+    // 168 ... 183
+        
+    // name...
     };
 
     }

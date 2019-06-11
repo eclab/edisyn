@@ -77,6 +77,11 @@ public class WaldorfBlofeld extends Synth
     
     public WaldorfBlofeld()
         {
+        int x = 0;
+        x = x + 1;
+        x = x - 1;
+        System.err.println(5 / x);
+        
         for(int i = 0; i < allParameters.length; i++)
             {
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));

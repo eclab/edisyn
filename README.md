@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 17)
+Synthesizer Patch Editor (Version 18)
  
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -25,12 +25,14 @@ Edisyn is particularly good at exploring the space of patches.  It has to my kno
 
 Edisyn presently supports:
  
+* Casio CZ Series
 * DSI Prophet '08 
 * E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap modes)
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes)
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
 * Oberheim Matrix 1000
 * PreenFM2
+* Roland JV-80 and JV-880 (Single and Multi Modes)
 * Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)
 * Kawai K5 and K5m

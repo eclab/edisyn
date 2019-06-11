@@ -1,3 +1,5 @@
+\synctex = 1
+
 %%%% Copyright 2017 by Sean Luke
 %%%% Distributed Under the Apache 2.0 License
 
@@ -19,6 +21,7 @@
 
 \sloppy
 \newcommand\ignore[1]{}
+\newcommand\bump{\vspace{12in}}
 
 \newcommand\myfrac[2]{#1/#2}
 \begin{document}
@@ -40,17 +43,19 @@ Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter e
 
 \begin{itemize}
 %\item Futuresonus Parva
+\item Casio CZ Series (Single)
 \item Dave Smith Instruments Prophet '08 (Single)
 \item E-Mu Morpheus and Proteus (Single, Hyperpreset, and MidiMap)
 \item Kawai K1, K1m, and K1r (Single and Multimode)
 \item Kawai K4 and K4r (Single and Multimode)
 \item Kawai K5 and K5m (Single)
 \item Korg SG Rack (Single and Multimode)
-\item Korg Microkorg
+\item Korg Microkorg (Single)
 \item Korg Microsampler
 \item Korg Wavestation SR (Performance, Patch, and Wave Sequence)
 \item Oberheim Matrix 1000 (Single)
 \item PreenFM2 (Single)
+\item Roland JV-80 and JV-880 (Single and Multimode)
 \item Waldorf Blofeld Desktop, Blofeld Desktop SL, and Blofeld Keyboard (Single and Multimode)
 \item Waldorf Microwave II, Microwave XT, and Microwave XTk (Single and Multimode)
 \item Yamaha DX7 Family (DX7, TX7, TX216/816, Dexed, etc.) (Single)
@@ -59,6 +64,8 @@ Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter e
 
 You'll note a pattern among these synthesizers: many are very difficult to program.\footnote{So why are the Prophet '08, Blofeld, and Microwave XT there then?  Because in fact these synthesizers are all ones I own or have had access to.}  That's one of my interests.  Edisyn's patch editors try to cover the most common needs, and so it does not support patches for global parameters, nor for wave, sample, or wavetable editing etc.  Additionally, though it can do bulk downloads and save them as individual patches, Edisyn is {\bf not at present a librarian tool}.  You should use a good free librarian software program, such as SysEx Librarian on the Mac.
 
+
+\bump
 
 \section{Starting Edisyn}
 \label{startingedisyn}
@@ -299,13 +306,13 @@ There are many situations where these combinations are useful.  Here's a fun exa
 
 In some situations you might wish to get Edisyn to communicate with a software synth: for example Dexed\footnote{https:/\!/asb2m10.github.io/dexed/} is a nice DX7 emulator and works well with Edisyn.  Or perhaps you might want to use Edisyn to translate CC messages from your DAW into Edisyn parameter changes, which then get forwarded to a synthesizer as sysex (see Section \ref{remotecontrolofedisyn} to learn how to map CC messages to parameter changes).
 
+You'd think it'd be easy to connect directly to another piece of software on your computer.  But you'd be wrong!  The problem is that Edisyn, because it's written in Java, can only connect to {\it MIDI devices}, and your software synthesizer or DAW has probably not registered itself as a device\,---\,it likewise probably is designed only to connect to MIDI devices.
+
 \begin{wrapfigure}{r}{3in}
 \begin{center}\vspace{-1em}\includegraphics[width=3in]{Loopback.pdf}\end{center}
 \vspace{-2em}
 \caption{A MIDI loopback connecting Edisyn with a software synthesizer via a virtual device.}\label{loopback}
 \end{wrapfigure}
-
-You'd think it'd be easy to connect directly to another piece of software on your computer.  But you'd be wrong!  The problem is that Edisyn, because it's written in Java, can only connect to {\it MIDI devices}, and your software synthesizer or DAW has probably not registered itself as a device\,---\,it likewise probably is designed only to connect to MIDI devices.
 
 To get around this, you need to make a {\it MIDI loopback}.  This is where you create two {\it virtual devices} which are connected to one another.  Edisyn and your software synth can see these devices.  Consider Figure \ref{loopback}.  If Edisyn outputs to Virtual Device X (say) and your software synth is set up to {\it input} from Virtual Device X, then it will receive what Edisyn outputs.
 
@@ -375,7 +382,7 @@ Some patch editors may not be able to perform merges because the synthesizers ca
 You can restrict Mutation (Randomize) and Recombination (Nudge and Merge) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutation Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutation Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
 
 \begin{wrapfigure}{r}{3in}
-\vspace{-1em}\includegraphics[scale=0.3]{5.png}
+\vspace{-2em}\includegraphics[scale=0.3]{5.png}
 \vspace{-3em}\caption{Editing Mutation Parameters}\label{mutationparameters}
 \end{wrapfigure}
 
@@ -713,6 +720,7 @@ Below is a little table of the current patch editors for Edisyn, and various Edi
 \begin{sideways}Standard Sysex File\end{sideways}\\[0.5em]
 \hline\\[-0.5em]
 %Futuresonus Parva&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}&&&\\
+Casio CZ&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
 DSI Prophet '08&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
 E-Mu Morpheus / UltraProteus&{\cm}& &{\cm}& & &{\cm}&{\cm}& & &{\cm}            \\
 Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}            \\
@@ -720,9 +728,10 @@ Waldorf Blofeld&{\cm}*&{\cm}*&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}& & & {\cm}         
 Kawai K1/K1r/K1m&{\cm}*& &{\cm}& & & &{\cm}& &{\cm}&{\cm}            \\
 Kawai K4/K4r&{\cm}*& &{\cm}& &{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}            \\
 Kawai K5/K5m&{\cm}&{\cm}&{\cm}& & &{\cm}&{\cm}& &{\cm}&{\cm}            \\
-Yamaha DX7&{\cm}&{\cm}& & & & {\cm}& &  & &{\cm}*            \\
-Yamaha TX81Z&{\cm}*& & &{\cm}&{\cm}& & &  & &{\cm}            \\
+Yamaha DX7&{\cm}&{\cm}& & & & {\cm}& &  & &{\cm}            \\
+Yamaha TX81Z&{\cm}*& & &{\cm}&{\cm}& & &  & &{\cm}*            \\
 PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &            \\
+Roland JV-80/880&{\cm}& &{\cm}&{\cm}&{\cm}& &{\cm}& & &{\cm}*          \\
 Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}*&{\cm}*&{\cm}& & &{\cm}          \\
 Korg Microsampler&{\cm}*&{\cm}*& & & & & &  &  &         \\
 Korg SG Rack&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}\\

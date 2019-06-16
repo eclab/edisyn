@@ -17,7 +17,7 @@ import java.awt.event.*;
    A wrapper for JComboBox which edits and responds to changes to a numerical value
    in the model. The numerical value is assumed to of a min/max range 0...n-1,
    which corresponds to the n elements displayed in the JComboBox.  However you can
-   change this an in fact map each element to its own special integer.
+   change this and in fact map each element to its own special integer.
         
    For the Mac, the JComboBox is made small (JComponent.sizeVariant = small), but this
    probably won't do anything in Linux or Windows.
@@ -74,11 +74,11 @@ public class Chooser extends NumericalComponent
         // it's possible that we're sharing a parameter
         // (see for example Blofeld Parameter 9), so here
         // we need to make sure we're within bounds
-        if (state < 0)
-            state = 0;
-        if (state > vals.length)
-            state = vals.length - 1;
-                
+        if (minExists() && state < getMin())
+            state = getMin();
+        if (maxExists() && state > getMax())
+            state = getMax();
+
         // look for it...
         for(int i = 0; i < vals.length; i++)
             {
@@ -94,7 +94,7 @@ public class Chooser extends NumericalComponent
                 return;
                 }
             }
-//        System.err.println("Invalid value for " + key + " (" + state + ")"); 
+//        System.err.println("Invalid value for " + key + " (" + state + ")");
         }
 
     public Insets getInsets() 
@@ -106,7 +106,7 @@ public class Chooser extends NumericalComponent
         else
             return Style.CHOOSER_INSETS(); 
         }
-        
+
     static int[] buildDefaultValues(String[] elements)
         {
         int[] values = new int[elements.length];
@@ -129,7 +129,7 @@ public class Chooser extends NumericalComponent
         {
         this(_label, synth, key, elements, values, null);
         }
-        
+
     /** Creates a JComboBox with the given label, modifying the given key in the Style.
         The elements in the box are given by elements, with images in icons, and their corresponding numerical
         values in the model 0...n.   Note that OS X won't behave properly with icons larger than about 34 high. */
@@ -246,6 +246,11 @@ public class Chooser extends NumericalComponent
         return combo.getSelectedIndex();
         }
         
+    public int getValue()
+        {
+        return vals[getIndex()];
+        }
+
     public void setIndex(int index)
         {
         setCallActionListener(false);
@@ -272,8 +277,8 @@ public class Chooser extends NumericalComponent
         for(int i = 0; i < elements.length; i++)
             combo.addItem(elements[i]);
 
-        vals = (int[])values.clone(); 
-                
+        vals = (int[])values.clone();
+
         int _min = Integer.MAX_VALUE;
         int _max = Integer.MIN_VALUE;
         for(int i = 0; i < values.length; i++)
@@ -281,17 +286,17 @@ public class Chooser extends NumericalComponent
             if (_min > values[i]) _min = values[i];
             if (_max < values[i]) _max = values[i];
             }
-                                       
+
         setMin(_min);
         setMax(_max);
         setCallActionListener(true);
-        
+
         combo.setSelectedIndex(0);
-        setState(combo.getSelectedIndex());
+        setState(vals[0]);
         revalidate();
         repaint();
         }
-        
+
     class ComboBoxRenderer extends JLabel implements ListCellRenderer 
         {
         public ComboBoxRenderer() 

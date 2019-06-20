@@ -10,7 +10,8 @@ I've been asked where my Patreon page is.  So, sure, here's my <a href="https://
 Related projects:  
 
 * [Flow](https://github.com/eclab/flow), a fully-modular, polyphonic, additive software synthesizer.
-* [Gizmo](https://cs.gmu.edu/~sean/projects/gizmo/), an Arduino-based MIDI Swiss Army knife
+* [Gizmo](https://cs.gmu.edu/~sean/projects/gizmo/), an Arduino-based MIDI Swiss Army knife.
+* [Computational Music Synthesis](https://cs.gmu.edu/~sean/book/synthesis/), an open-content book on building software synthesizers.
 
 ## Paper on Edisyn's Stochastic Patch Exploration Tools
 

@@ -824,7 +824,7 @@ return pos;
                     {
                     model.set("step" + (j + 1) + STEP_KEYS[i], (data[pos++] << 7) | (data[pos++] & 127));
                     }
-                }                
+                }
             }
         else
             {
@@ -1611,9 +1611,9 @@ return pos;
 
             model.set("step" + 1 + "semitone", 0);
             model.set("step" + 1 + "fine", 0);
-            model.set("step" + 1 + "level", 0);
-            model.set("step" + 1 + "duration", 1);
-            model.set("step" + 1 + "crossfade", 0);
+            model.set("step" + 1 + "level", 99);
+            model.set("step" + 1 + "duration", 24);
+            model.set("step" + 1 + "crossfade", 20);
             model.set("step" + 1 + "number", 0);
             model.set("step" + 1 + "bank", 0);      ///// ROM?  CARD?   Dunno.
             }
@@ -1633,9 +1633,9 @@ return pos;
                 {
                 model.set("step" + i + "semitone", model.get("step" + (i - 1) + "semitone", 0));
                 model.set("step" + i + "fine", model.get("step" + (i - 1) + "fine", 0));
-                model.set("step" + i + "level", model.get("step" + (i - 1) + "level", 0));
-                model.set("step" + i + "duration", model.get("step" + (i - 1) + "duration", 1));
-                model.set("step" + i + "crossfade", model.get("step" + (i - 1) + "crossfade", 0));
+                model.set("step" + i + "level", model.get("step" + (i - 1) + "level", 99));
+                model.set("step" + i + "duration", model.get("step" + (i - 1) + "duration", 24));
+                model.set("step" + i + "crossfade", model.get("step" + (i - 1) + "crossfade", 20));
                 model.set("step" + i + "number", model.get("step" + (i - 1) + "number", 0));
                 model.set("step" + i + "bank", model.get("step" + (i - 1) + "bank", 0));        ///// ROM?  CARD?   Dunno.
                 }
@@ -1647,14 +1647,11 @@ return pos;
             // We'll make it a copy of the "old" current step.
             model.set("step" + current + "semitone", model.get("step" + (current + 1) + "semitone", 0));
             model.set("step" + current + "fine", model.get("step" + (current + 1) + "fine", 0));
-            model.set("step" + current + "level", model.get("step" + (current + 1) + "level", 0));
-            model.set("step" + current + "duration", model.get("step" + (current + 1) + "duration", 1));
-            model.set("step" + current + "crossfade", model.get("step" + (current + 1) + "crossfade", 0));
+            model.set("step" + current + "level", model.get("step" + (current + 1) + "level", 99));
+            model.set("step" + current + "duration", model.get("step" + (current + 1) + "duration", 24));
+            model.set("step" + current + "crossfade", model.get("step" + (current + 1) + "crossfade", 20));
             model.set("step" + current + "number", model.get("step" + (current + 1) + "number", 0));
             model.set("step" + current + "bank", model.get("step" + (current + 1) + "bank", 0));    ///// ROM?  CARD?   Dunno.
-                        
-                        
-                        
             }
         }
 

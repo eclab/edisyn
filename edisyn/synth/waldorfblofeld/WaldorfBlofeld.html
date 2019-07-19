@@ -10,6 +10,15 @@
 
 <p><b>SL Option</b> The SL option gives you the option of specifying a <b>sound sample</b> instead of a <b>wave</b> on Oscillators 1 and 2. This is turned on by choosing a <b>Sample Bank</b> in the editor: then the wave menu turns into a sample menu.  You turn it off by choosing <b>None</b> in the Sample Bank.  BTW, if you're wondering why Edisyn's SL Sample Banks end at Bank L, that's the furthest a contributor could get his to go before crashing his Blofeld.  So there you go.  
 
+<p><b>Uploading Wavetables</b> Under the Blofeld menu you'll find an option to upload a wavetable.  You can upload wavetables from three different formats:
+
+<ul>
+<li><b>WAV files from http://waveeditonline.com</b>  This is a large collection of WAV files encoding wavetables for other devices.  You can even download all of them as one zip file.  Edisyn will convert them to the Blofeld as best it can (resampling to the Blofeld's lower sampling rate).  These are particularly good because there is a very nice free wavetable editor available, <b>http://synthtech.com/waveedit</b>
+<li><b>Sysex files in SYX or MID format.</b>  These are groups of one or more wavetables in standard Blofeld sysex.  A good source of these wavetables is <b>http://synth.stromeko.net/Downloads.html</b>
+</ul>
+
+<b>Important note:</b>You probaby want to turn Limit WT <i>off</i> when using user wavetables.  Otherwise the Blofeld will not work properly with any PWM values greater than 120.
+
 <p><b>Gotchas</b> Only two at present:
 
 <ul>

@@ -73,7 +73,31 @@ public class WaldorfBlofeld extends Synth
     static final String[] SAMPLE_BANKS = new String[] { "None", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L" };
             
             
-    
+    public JFrame sprout()     
+        {
+        JFrame frame = super.sprout();
+        addBlofeldMenu();
+        return frame;
+        }
+
+    WaldorfBlofeldWavetable wavetable = new WaldorfBlofeldWavetable();
+
+    public void addBlofeldMenu()
+        {
+        JMenu menu = new JMenu("Blofeld");
+        menubar.add(menu);
+        JMenuItem writeWavetableMenu = new JMenuItem("Upload Wavetable...");
+        writeWavetableMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                wavetable.upload(WaldorfBlofeld.this);
+                }
+            });
+        menu.add(writeWavetableMenu);
+        }
+            
+
     
     public WaldorfBlofeld()
         {

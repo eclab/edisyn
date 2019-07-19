@@ -5135,7 +5135,8 @@ public abstract class Synth extends JComponent implements Updatable
                                     vbox.add(menu);
  
                                     disableMenuBar();
-                                    int result = JOptionPane.showOptionDialog(this, vbox, "Choose Patch from File", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] {  "Merge", "Cancel" }, "Merge");
+                                    int result = JOptionPane.showOptionDialog(this, vbox, "Choose Patch from File", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, 
+                                    	null, new Object[] {  "Merge", "Cancel" }, "Merge");
                                     enableMenuBar();
                                      
                                     if (result == 1)  // cancel?

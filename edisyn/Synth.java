@@ -78,9 +78,6 @@ public abstract class Synth extends JComponent implements Updatable
     Model[] nudge = new Model[4];
     JMenuItem[] nudgeTowards = new JMenuItem[8];
     
-    // counter for note-on messages so we don't have a million note-off messages in a row
-    int noteOnTick;
-    
     protected Undo undo = new Undo(this);
     public Undo getUndo() { return undo; }
         
@@ -3340,7 +3337,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doSendTestNote(false);
+                doSendTestNote();
                 }
             });
 
@@ -3363,7 +3360,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 if (hillClimbing)
                     hillClimb.updateSound();
-                doSendTestNote(hillClimbing);
+                doSendTestNote();
                 if (hillClimbing)
                     hillClimb.postUpdateSound();
                 }
@@ -4301,7 +4298,7 @@ public abstract class Synth extends JComponent implements Updatable
     void setTestNoteLength(int val)
         {
         testNoteLength = val;
-        setTestNotePause(getTestNotePause());  // update in case it's default
+        setTestNotePause(getTestNotePause());  // update in case it's default.  This also changes the timer length.
         }
 
     int getTestNoteLength()
@@ -4400,13 +4397,12 @@ public abstract class Synth extends JComponent implements Updatable
     void setTestNoteVelocity(int velocity) { testNoteVelocity = velocity; }
     public int getTestNoteVelocity() { return testNoteVelocity; }
     
-    void doSendTestNote(boolean restartTestNotesTimer)
+    volatile int lastTestNote = -1;
+    
+	javax.swing.Timer noteTimer = null;
+    public void doSendTestNote()
         {
-        doSendTestNote(getTestNotePitch(), false, restartTestNotesTimer);
-        }
-
-    public void doSendTestNote(final int testNote, final boolean alwaysSendNoteOff, boolean restartTestNotesTimer)
-        {
+        final int testNote = getTestNotePitch();
         final int channel = getTestNoteChannel();
         final int velocity = getTestNoteVelocity();
         try
@@ -4416,24 +4412,35 @@ public abstract class Synth extends JComponent implements Updatable
                 sendAllSoundsOff();
                                 
             // play new note
-            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, getTestNotePitch(), velocity));
+            if (lastTestNote != -1)
+            	{
+				System.err.println("off1");
+                tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
+                }
+                
+			System.err.println("on");
+			lastTestNote = getTestNotePitch();
+            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, lastTestNote, velocity));
                                                          
             // schedule a note off
-            final int myNoteOnTick = ++noteOnTick;
-            javax.swing.Timer noteTimer = new javax.swing.Timer(testNoteLength, new ActionListener()
+            if (noteTimer != null) noteTimer.stop();
+            noteTimer = new javax.swing.Timer(testNoteLength, new ActionListener()
                 {
                 public void actionPerformed(ActionEvent e)
                     {
-                    if (alwaysSendNoteOff || noteOnTick == myNoteOnTick)  // no more note on messages
-                        try
-                            {
-                            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, getTestNotePitch(), velocity));
-                            noteOnTick = 0;
-                            }
-                        catch (Exception e3)
-                            {
-                            e3.printStackTrace();
-                            }
+                    if (lastTestNote != -1)
+                    	{
+						try
+							{
+							tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
+							lastTestNote = -1;
+							noteTimer = null;
+							}
+						catch (Exception e3)
+							{
+							e3.printStackTrace();
+							}
+						}
                     }
                 });
             noteTimer.setRepeats(false);
@@ -4450,11 +4457,8 @@ public abstract class Synth extends JComponent implements Updatable
         // This SHOULD put the test notes timer back in the queue AFTER our note-off timer so we have enough
         // time to turn off the note before the test notes timer fires another note.
                   
-        if (restartTestNotesTimer)
-            {
-            sendTestNotesTimer.setInitialDelay(getTestNoteTotalLength() + getPauseBetweenHillClimbPlays());
-            sendTestNotesTimer.restart();
-            }
+		sendTestNotesTimer.setInitialDelay(getTestNoteTotalLength() + getPauseBetweenHillClimbPlays());
+		sendTestNotesTimer.restart();
         }
 
     void doMapCC(int type)
@@ -5647,13 +5651,6 @@ public abstract class Synth extends JComponent implements Updatable
                         if (incomingPatch && patchLocationEquals(getModel(), currentPatch))
                             {
                             processCurrentPatch();
-                            /*
-                              doSendTestNote(false);
-                              simplePause(testNoteLength);
-                              try { tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, getTestNoteChannel(), testNote, getTestNoteVelocity())); }
-                              catch (InvalidMidiDataException ex) { }
-                              simplePause(testNotePause);             
-                            */              
                             requestNextPatch();
                             }
                         else 

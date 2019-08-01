@@ -4399,7 +4399,7 @@ public abstract class Synth extends JComponent implements Updatable
     
     volatile int lastTestNote = -1;
     
-	javax.swing.Timer noteTimer = null;
+    javax.swing.Timer noteTimer = null;
     public void doSendTestNote()
         {
         final int testNote = getTestNotePitch();
@@ -4413,13 +4413,13 @@ public abstract class Synth extends JComponent implements Updatable
                                 
             // play new note
             if (lastTestNote != -1)
-            	{
-				System.err.println("off1");
+                {
+                System.err.println("off1");
                 tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
                 }
                 
-			System.err.println("on");
-			lastTestNote = getTestNotePitch();
+            System.err.println("on");
+            lastTestNote = getTestNotePitch();
             tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, lastTestNote, velocity));
                                                          
             // schedule a note off
@@ -4429,18 +4429,18 @@ public abstract class Synth extends JComponent implements Updatable
                 public void actionPerformed(ActionEvent e)
                     {
                     if (lastTestNote != -1)
-                    	{
-						try
-							{
-							tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
-							lastTestNote = -1;
-							noteTimer = null;
-							}
-						catch (Exception e3)
-							{
-							e3.printStackTrace();
-							}
-						}
+                        {
+                        try
+                            {
+                            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
+                            lastTestNote = -1;
+                            noteTimer = null;
+                            }
+                        catch (Exception e3)
+                            {
+                            e3.printStackTrace();
+                            }
+                        }
                     }
                 });
             noteTimer.setRepeats(false);
@@ -4457,8 +4457,8 @@ public abstract class Synth extends JComponent implements Updatable
         // This SHOULD put the test notes timer back in the queue AFTER our note-off timer so we have enough
         // time to turn off the note before the test notes timer fires another note.
                   
-		sendTestNotesTimer.setInitialDelay(getTestNoteTotalLength() + getPauseBetweenHillClimbPlays());
-		sendTestNotesTimer.restart();
+        sendTestNotesTimer.setInitialDelay(getTestNoteTotalLength() + getPauseBetweenHillClimbPlays());
+        sendTestNotesTimer.restart();
         }
 
     void doMapCC(int type)
@@ -5140,7 +5140,7 @@ public abstract class Synth extends JComponent implements Updatable
  
                                     disableMenuBar();
                                     int result = JOptionPane.showOptionDialog(this, vbox, "Choose Patch from File", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, 
-                                    	null, new Object[] {  "Merge", "Cancel" }, "Merge");
+                                        null, new Object[] {  "Merge", "Cancel" }, "Merge");
                                     enableMenuBar();
                                      
                                     if (result == 1)  // cancel?

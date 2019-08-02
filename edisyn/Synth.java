@@ -4414,11 +4414,9 @@ public abstract class Synth extends JComponent implements Updatable
             // play new note
             if (lastTestNote != -1)
                 {
-                System.err.println("off1");
                 tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
                 }
                 
-            System.err.println("on");
             lastTestNote = getTestNotePitch();
             tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, lastTestNote, velocity));
                                                          

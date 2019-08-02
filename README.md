@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 18)
+Synthesizer Patch Editor (Version 19)
  
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -29,7 +29,7 @@ Edisyn presently supports:
 * Casio CZ Series
 * DSI Prophet '08 
 * E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap modes)
-* Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes)
+* Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading, see the Blofeld editor's "About" panel)
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
 * Oberheim Matrix 1000
 * PreenFM2

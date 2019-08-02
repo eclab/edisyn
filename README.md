@@ -73,7 +73,7 @@ Now you should be able to run Edisyn.  Let me know if this all works.
 
 #### If Edisyn bombs in OS X on selecting a patch editor...
 
-You may have installed the MMJ (MIDI Java) library in the past, which is now obsolete.  Look in /Library/Java/Extensions/ or in \[Your Home Directory\]/Library/Java/Extensions for the files **mmj.jar** or **libmmj.jnilib**.  If you find them, remove them from the directory and try again.
+You may have installed the MMJ (MIDI Java) library in the past, which is now obsolete.  This library was required by old applications but no longer works properly and should be removed.  Look in /Library/Java/Extensions/ or in \[Your Home Directory\]/Library/Java/Extensions for the files **mmj.jar** or **libmmj.jnilib**.  If you find them, remove them from the directory and try again.
 
 
 ### Installation and Running on Windows

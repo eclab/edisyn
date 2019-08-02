@@ -124,20 +124,21 @@ public class WaldorfBlofeldWavetable
                 sysex[i][4] == (byte)0x12 &&
                 sysex[i].length == 410)
                 {
+                current[count] = sysex[i];
+                count++;
                 if (count == 64)
                     {
                     sysexA.add(current);
                     current = new byte[64][410];
                     count = 0;
                     }
-                current[count++] = sysex[i];
                 }
             }
                 
         byte[][][] syx = sysexA.toArray(new byte[0][0][0]);
         if (syx.length == 0) // uh oh
             {
-            synth.showSimpleError("This file doesn't seem to contain any wavetable data", "No data");
+            synth.showSimpleError("No data", "This file doesn't seem to contain any wavetable data.");
             }
         else if (syx.length == 1)
             {

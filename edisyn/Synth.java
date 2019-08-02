@@ -4401,21 +4401,30 @@ public abstract class Synth extends JComponent implements Updatable
     
     javax.swing.Timer noteTimer = null;
     public void doSendTestNote()
+    	{
+    	doSendTestNote(getTestNotePitch(), true);
+    	}
+
+    public void doSendTestNote(int testNote, boolean clearOldNotes)
         {
-        final int testNote = getTestNotePitch();
         final int channel = getTestNoteChannel();
         final int velocity = getTestNoteVelocity();
         try
             {
-            // possibly clear all notes
-            if (getSendsAllSoundsOffBetweenNotes())
-                sendAllSoundsOff();
-                                
-            // play new note
-            if (lastTestNote != -1)
-                {
-                tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
-                }
+			// possibly clear all notes
+			if (clearOldNotes)
+				{
+				if (getSendsAllSoundsOffBetweenNotes())
+					{
+					sendAllSoundsOff();
+                    }
+                           
+				// play new note
+				if (lastTestNote != -1)
+					{
+					tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
+					}
+				}
                 
             lastTestNote = getTestNotePitch();
             tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, lastTestNote, velocity));
@@ -4430,7 +4439,10 @@ public abstract class Synth extends JComponent implements Updatable
                         {
                         try
                             {
-                            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
+                            if (clearOldNotes)
+                            	{
+                            	tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
+                            	}
                             lastTestNote = -1;
                             noteTimer = null;
                             }
@@ -4454,9 +4466,12 @@ public abstract class Synth extends JComponent implements Updatable
         // then we tell the test notes timer to reset itself to exactly the same initial delay as our timer.
         // This SHOULD put the test notes timer back in the queue AFTER our note-off timer so we have enough
         // time to turn off the note before the test notes timer fires another note.
-                  
-        sendTestNotesTimer.setInitialDelay(getTestNoteTotalLength() + getPauseBetweenHillClimbPlays());
-        sendTestNotesTimer.restart();
+        
+        if (sendTestNotesTimer.isRunning())
+        	{
+	        sendTestNotesTimer.setInitialDelay(getTestNoteTotalLength() + getPauseBetweenHillClimbPlays());
+	        sendTestNotesTimer.restart();
+	        }
         }
 
     void doMapCC(int type)

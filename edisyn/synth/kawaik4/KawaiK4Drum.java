@@ -267,7 +267,7 @@ public class KawaiK4Drum extends Synth
             {
             public void userPressed(int key)
                 {
-                doSendTestNote(key, true, false);
+                doSendTestNote(key, false);
                 }
             };
         ((KeyDisplay)comp).setDynamicUpdate(true);

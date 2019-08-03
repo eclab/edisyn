@@ -6,7 +6,7 @@
 package edisyn;
 
 /**
-   Implemented by listeners registered in the model to update themselves when a given key changes.
+   Implemented  by listeners registered in the model to update themselves when a given key changes.
         
    @author Sean Luke
 */

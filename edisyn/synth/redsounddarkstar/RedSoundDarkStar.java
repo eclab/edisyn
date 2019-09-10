@@ -56,7 +56,7 @@ public class RedSoundDarkStar extends Synth
         JFrame frame = super.sprout();
         getAll.setEnabled(false);
         merge.setEnabled(false);
-        writeTo.setEnabled(false);
+        transmitTo.setEnabled(false);
         receiveCurrent.setEnabled(false);
         receivePatch.setEnabled(false);
         transmitParameters.setEnabled(false);
@@ -1107,16 +1107,23 @@ public class RedSoundDarkStar extends Synth
         else return "" + num;
         }
     
+    public Model getNextPatchLocation(Model model)
+        {
+        int number = model.get("number");
+        
+        number++;
+        if (number >= 64)
+            {
+            number = 0;
+            }
+                
+        Model newModel = buildModel();
+        newModel.set("number", number);
+        return newModel;
+        }
+
     public void changePatch(Model tempModel) 
         {
         tryToSendMIDI(buildPC(getChannelOut(), tempModel.get("number")));
-
-        // we assume that we successfully did it
-        if (!isMerging())  // we're actually loading the patch, not merging with it
-            {
-            setSendMIDI(false);
-            model.set("number", tempModel.get("number"));
-            setSendMIDI(true);
-            }
         }
     }

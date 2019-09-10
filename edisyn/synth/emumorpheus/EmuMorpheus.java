@@ -29,20 +29,29 @@ public class EmuMorpheus extends Synth
     public HashMap ultraproteusFilterOffsetsToIndex = new HashMap();
     public HashMap morpheusInstrumentOffsetsToIndex = new HashMap();
     public HashMap morpheusFilterOffsetsToIndex = new HashMap();
-        
+    
+    JCheckBox ultraProteusCheck;
+    
     boolean morpheus;
     public static final String ULTRAPROTEUS_KEY = "UltraProteus";
     public static final int NUM_MORPHEUS_FILTERS = 198;
     
+    public static final int MINIMUM_ULTRAPROTEUS_INSTRUMENT_OFFSET = 2304;
+//    public static final int MINIMUM_ULTRAPROTEUS_FILTER_OFFSET = ULTRAPROTEUS_FILTER_OFFSETS[NUM_MORPHEUS_FILTERS];
+    
     public boolean isMorpheus() { return morpheus; }
-    public void setMorpheus(boolean val)
+    public void setMorpheus(boolean val, boolean save)
         {
-        setLastX("" + (!val), ULTRAPROTEUS_KEY, getSynthName(), true);
+        if (save)
+        	{
+        	setLastX("" + (!val), ULTRAPROTEUS_KEY, getSynthName(), true);
+        	}
         morpheus = val;
         for(int i = 0; i < 2; i++)
             {
             instrumentChoosers[i].setElements("Type", getInstruments());
             }
+        ultraProteusCheck.setSelected(!val);  // hopefully this isn't recursive
         updateTitle();
         }
     
@@ -50,7 +59,7 @@ public class EmuMorpheus extends Synth
         {
         if (MORPHEUS_FILTERS == null)
             {
-            // Load the morpheus filters dynamically, since they're a strict subset and may not be used.  Heck, why not?
+            // Load the cilters dynamically, since they're a strict subset and may not be used.  Heck, why not?
             MORPHEUS_FILTERS = new String[NUM_MORPHEUS_FILTERS];
             MORPHEUS_FILTER_OFFSETS = new int[NUM_MORPHEUS_FILTERS];
             MORPHEUS_FILTER_TYPES = new int[NUM_MORPHEUS_FILTERS];
@@ -176,8 +185,11 @@ public class EmuMorpheus extends Synth
         model.set("name", "Untitled");
         model.set("bank", 0);
         model.set("number", 0);
-                
+        
+    	// loadDefaults will reset to UltraProteus so here we're gonna reset it back
+    	boolean mo = isMorpheus();
         loadDefaults();        
+        setMorpheus(mo, false);
         }
                 
     public String getDefaultResourceFileName() { return "EmuMorpheus.init"; }
@@ -234,19 +246,19 @@ public class EmuMorpheus extends Synth
         comp = new PatchDisplay(this, 7);
         hbox2.add(comp);
         
-        JCheckBox check = new JCheckBox("Ultra Proteus");
-        check.setSelected(!morpheus);
-        check.addActionListener(new ActionListener()
+        ultraProteusCheck = new JCheckBox("Ultra Proteus");
+        ultraProteusCheck.setSelected(!morpheus);
+        ultraProteusCheck.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
-                setMorpheus(!check.isSelected());
+                setMorpheus(!ultraProteusCheck.isSelected(), true);
                 }
             });
-        check.setFont(Style.SMALL_FONT());
-        check.setOpaque(false);
-        check.setForeground(Style.TEXT_COLOR());
-        hbox2.add(check);
+        ultraProteusCheck.setFont(Style.SMALL_FONT());
+        ultraProteusCheck.setOpaque(false);
+        ultraProteusCheck.setForeground(Style.TEXT_COLOR());
+        hbox2.add(ultraProteusCheck);
         hbox.addLast(Stretch.makeHorizontalStretch());
         vbox.add(hbox2);
         
@@ -1159,17 +1171,29 @@ public class EmuMorpheus extends Synth
                 {
                 if (parameters[i].endsWith("instrument"))
                     {
-                    int v = val;
+                    int v = val;       
+                    if (parameters[i].equals("layer1instrument"))
+                    	{
+                    	// The only way to distinguish the Morpheus from the UltraProteus is that they have
+                    	// different instrument regions (and the Ultraproteus has some more filters).  So here
+                    	// based on the FIRST instrument value, we'll decide whether to set to morpheus or
+                    	// ultraproteus mode.
+                    	//
+                    	// we can only do it for layer 1 instrument because setMorpheus() resets
+                    	// the choosers, which in turn reset the instrument model value, so if we do it
+                    	// for layer 2, it'll reset the layer 1 instrument to "No Instrument"
+                    	setMorpheus(v < MINIMUM_ULTRAPROTEUS_INSTRUMENT_OFFSET, false);         	
+                    	}
                     try
                         {
-                        if (morpheus)
+                        if (isMorpheus())
                             val = ((Integer)(morpheusInstrumentOffsetsToIndex.get(Integer.valueOf(val)))).intValue();
                         else                                            
                             val = ((Integer)(ultraproteusInstrumentOffsetsToIndex.get(Integer.valueOf(val)))).intValue();
-                        }
+                    	}
                     catch (Exception ex)
                         {
-                        System.err.println("WARNING: Bad instrument offset " + v);
+                        //System.err.println("WARNING: Bad instrument offset " + v + " Morpheus? " + morpheus + " " + val);
                         val = 0;
                         }
                     }
@@ -1178,14 +1202,14 @@ public class EmuMorpheus extends Synth
                     int v = val;
                     try
                         {
-                        if (morpheus)
+                        if (isMorpheus())
                             val = ((Integer)(morpheusFilterOffsetsToIndex.get(Integer.valueOf(val)))).intValue();
                         else                                            
                             val = ((Integer)(ultraproteusFilterOffsetsToIndex.get(Integer.valueOf(val)))).intValue();
                         }
                     catch (Exception ex)
                         {
-                        System.err.println("WARNING: Bad filter type " + v);
+                        //System.err.println("WARNING: Bad filter type " + v);
                         val = 0;
                         }
                     }
@@ -1194,7 +1218,7 @@ public class EmuMorpheus extends Synth
                     model.set(parameters[i], val);
                 }
             }
-                            
+        
         revise();
         return PARSE_SUCCEEDED;
         }
@@ -2090,6 +2114,7 @@ public class EmuMorpheus extends Synth
     
     public static final String[] ULTRAPROTEUS_INSTRUMENTS = new String[] 
     {
+    "No Instrument",
     "Stereo Grand",
     "Stereo Slack",
     "Stereo Tight",
@@ -2564,6 +2589,7 @@ public class EmuMorpheus extends Synth
 
     public static final String[] MORPHEUS_INSTRUMENTS = new String[]
     {
+    "No Instrument",
     "Dance Drums 1",
     "Dance Drums 2",
     "Dancer Synth",
@@ -3400,8 +3426,10 @@ public class EmuMorpheus extends Synth
     };
 
 
+// Note that some Morpheus patches report "0" as an offset -- I think this should be interpreted as 1792 (no instrument)
     public static final int[] MORPHEUS_INSTRUMENT_OFFSETS = new int[]
     {
+    1792,		// notpart of the instrument offsets sysex dump, but it represents "No instrument"
     1793,
     1794,
     1795,
@@ -3648,6 +3676,7 @@ public class EmuMorpheus extends Synth
                                     
     public static final int[] ULTRAPROTEUS_INSTRUMENT_OFFSETS = new int[]
     {
+    2304,		// notpart of the instrument offsets sysex dump, but it represents "No instrument"
     2305,   
     2306,   
     2307,   

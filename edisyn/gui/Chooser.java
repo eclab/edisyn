@@ -17,7 +17,7 @@ import java.awt.event.*;
    A wrapper for JComboBox which edits and responds to changes to a numerical value
    in the model. The numerical value is assumed to of a min/max range 0...n-1,
    which corresponds to the n elements displayed in the JComboBox.  However you can
-   change this an in fact map each element to its own special integer.
+   change this and in fact map each element to its own special integer.
         
    For the Mac, the JComboBox is made small (JComponent.sizeVariant = small), but this
    probably won't do anything in Linux or Windows.
@@ -145,7 +145,6 @@ public class Chooser extends NumericalComponent
         label.setFont(Style.SMALL_FONT());
         label.setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
         label.setForeground(Style.TEXT_COLOR());
-        //label.setMaximumSize(label.getPreferredSize());
 
         combo = new JComboBox(elements)
             {
@@ -187,7 +186,6 @@ public class Chooser extends NumericalComponent
         if (icons != null)
             {
             combo.setRenderer(new ComboBoxRenderer());
-            //if (Style.isMac()) 
             combo.putClientProperty("JComponent.sizeVariant", "regular");
             }
 

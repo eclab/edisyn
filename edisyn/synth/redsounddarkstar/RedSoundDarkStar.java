@@ -28,14 +28,14 @@ public class RedSoundDarkStar extends Synth
     public static final String[] LFO_WAVES = { "Ramp", "Triangle", "Square", "Sine", "Pulse", "Sample & Hold", "Random" };
     public static final String[] MIDI_SYNC = { "Off", "1/8 beat", "1/6 beat", "1/4 beat", "1/3 beat", "1/2 beat", "2/3 beat", "3/4 beat", "1 beat", "2 beats", "3 beats", "1 bar", "1.5 bars", "2 bars", "3 bars", "4 bars" };
     public static final String[] MOD_SOURCES = { "Envelope 1", "Envelope 2", "LFO 1", "LFO 2" };
-    public static final String[] PITCH_OFFSETS = { "None", "Fourth", "Fifth", "Octave", "Octave + Maj 3rd", "Octave + Fourth", "Octave + Fifth", "2 Octaves" };
+    public static final String[] PITCH_OFFSETS = { "None", "Fourth", "Fifth", "Octave", "Octave + Major 3rd", "Octave + Fourth", "Octave + Fifth", "2 Octaves" };
     public static final String[] OSCILLATOR_SOURCES = { "Normal", "Formant", "White Noise", "Pink Noise", "Blue Noise", "Eternal 1", "External 2" };
     public static final String[] KEY_TRACKING = { "Off", "25%", "50%", "100%", "150%", "-25%", "-50%" };
     public static final String[] FILTER_TYPES = { "Low Pass", "Band Pass", "High Pass" };
     public static final String[] TREMOLO_SOURCES = { "LFO 1", "LFO 2" };
     public static final String[] PAN_MOD_SOURCES = { "Pot", "Envelope 1", "Envelope 2", "LFO 1", "LFO 2" };
     public static final String[] PORTAMENTO_TYPES = { "Off", "Type 1", "Type 2", "Pre-glide 1", "Pre-glide 2", "Pre-glide 3", "Pre-glide 4", "Pre-glide 5", "Pre-glide 6" };
-    public static final String[] JOYSTICK_ASSIGNMENTS = { "Normal", "Filter", "Mix [XP2]", "Envelope 1 [XP2]", "Envelope 2 [XP2]", "LFO [XP2]" };
+    public static final String[] JOYSTICK_ASSIGNMENTS = { "Off", "X: Filter Freq  Y: Resonance", "X: Mix  Y: Ring Mod  [XP2]", "X: Env1 Attack  Y: Decay  [XP2]", "X: Env2 Attack  Y: Decay  [XP2]", "X: LFO1 Speed  Y: LFO2 Speed  [XP2]" };
     public static final String[] OUTPUT_ASSIGNMENTS = { "Main Outputs", "Aux Outputs" };
     public static final String[] AUDITION_TYPES = { "Arp 3", "Note 1", "Note 2", "Note 3", "Bass 1", "Bass 2", "Bass 3", "Bass Drum", "Chord 1", "Chord 2", "Snare", "Arp 1", "Arp 2" };
 
@@ -313,7 +313,7 @@ public class RedSoundDarkStar extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("FX Send", this, "fxsend", color, 0, 15);
+        comp = new LabelledDial("FX Send", this, "part" + part + "fxsend", color, 0, 15);
         ((LabelledDial)comp).addAdditionalLabel("[XP2]");
         hbox.add(comp);
         
@@ -339,16 +339,18 @@ public class RedSoundDarkStar extends Synth
         comp = new Chooser("Joystick Assign", this, "part" + part + "joystickassign", params);
         vbox.add(comp);
 
+        HBox hbox2 = new HBox();
         params = OUTPUT_ASSIGNMENTS;
         comp = new Chooser("Output Assign [XP2]", this, "part" + part + "outputassign", params);
-        vbox.add(comp);
+        hbox2.add(comp);
+        
+        params = AUDITION_TYPES;
+        comp = new Chooser("Audition Type [XP2]", this, "part" + part + "auditiontype", params);
+        hbox2.add(comp);
+        vbox.add(hbox2);
         hbox.add(vbox);
         
         vbox = new VBox();
-
-        params = AUDITION_TYPES;
-        comp = new Chooser("Audition Type [XP2]", this, "part" + part + "auditiontype", params);
-        vbox.add(comp);
 
         comp = new CheckBox("Part Output Shift", this, "part" + part + "partoutputshift");
         vbox.add(comp);
@@ -420,6 +422,14 @@ public class RedSoundDarkStar extends Synth
         params = LFO_WAVES;
         comp = new Chooser("Shape", this, "part" + part + "lfo" + lfo + "shape", params);
         vbox.add(comp);
+        HBox hbox2 = new HBox();
+        params = MIDI_SYNC;
+        comp = new Chooser("MIDI Sync", this, "part" + part + "lfo" + lfo + "midisync", params);
+        hbox2.add(comp);
+        comp = new CheckBox("Sync", this, "part" + part + "lfo" + lfo + "sync");
+        ((CheckBox)comp).addToWidth(2);
+        hbox2.add(comp);
+        vbox.add(hbox2);
         hbox.add(vbox);
 
         comp = new LabelledDial("Speed", this, "part" + part + "lfo" + lfo + "speed", color, 0, 127);
@@ -495,14 +505,19 @@ public class RedSoundDarkStar extends Synth
         if (osc == 2)
             {
             vbox = new VBox();
-            params = OSCILLATOR_SOURCES;
-            comp = new Chooser("Source", this, "part" + part + "osc" + osc + "source", params);
-            vbox.add(comp);
-
             params = PITCH_OFFSETS;
             comp = new Chooser("Pitch Offset", this, "part" + part + "osc" + osc + "pitchoffset", params);
             vbox.add(comp);
 
+            HBox hbox2 = new HBox();
+            params = OSCILLATOR_SOURCES;
+            comp = new Chooser("Source", this, "part" + part + "osc" + osc + "source", params);
+            hbox2.add(comp);
+
+            comp = new CheckBox("Sync", this, "part" + part + "osc" + osc + "sync");
+            ((CheckBox)comp).addToWidth(2);
+            hbox2.add(comp);
+            vbox.add(hbox2);
             hbox.add(vbox);
             }
 
@@ -521,16 +536,6 @@ public class RedSoundDarkStar extends Synth
 
         comp = new LabelledDial("Waveform", this, "part" + part + "osc" + osc + "waveform", color, 0, 127);
         hbox.add(comp);
-
-        if (osc == 2)
-            {
-            vbox = new VBox();
-            comp = new CheckBox("Sync", this, "part" + part + "osc" + osc + "sync");
-            ((CheckBox)comp).addToWidth(2);
-            vbox.add(comp);
-
-            hbox.add(vbox);
-            }
 
         comp = new LabelledDial("Pitch Mod", this, "part" + part + "osc" + osc + "pulsewidthmod", color, 0, 127);
         category.add(hbox, BorderLayout.CENTER);
@@ -565,179 +570,501 @@ public class RedSoundDarkStar extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
+        comp = new LabelledDial("Frequency", this, "part" + part + "filterfreq", color, 0, 127);
+        hbox.add(comp);
+
+        comp = new LabelledDial("Resonance", this, "part" + part + "filterres", color, 0, 127);
+        hbox.add(comp);
+
         comp = new LabelledDial("Envelope Mod", this, "part" + part + "filterenvmod", color, 0, 127);
         hbox.add(comp);
 
         comp = new LabelledDial("LFO Mod", this, "part" + part + "filterlfomod", color, 0, 127);
         hbox.add(comp);
 
-        comp = new LabelledDial("Resonance", this, "part" + part + "filterresonance", color, 0, 127);
-        hbox.add(comp);
-
-        comp = new LabelledDial("Resonance Mod", this, "part" + part + "filterresonancemode", color, 0, 127);
+        comp = new LabelledDial("Resonance Mod", this, "part" + part + "filterresmodsource", color, 0, 127);
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }                
  
-/*
-  public int parse(byte[] data, boolean fromFile)
-  {
-  if (data[3] == 0)  // 1 single
-  {
-  // yay for DX7 simplicity
-  for(int i = 0; i < allParameters.length - 10; i++)
-  {
-  model.set(allParameters[i], data[i + 6]);
-  }
+    int denybble(byte[] data, int pos)
+        {
+        return (data[pos] << 4) | data[pos+1];
+        }
                 
-  char[] name = new char[10];
-  for(int i = 0; i < 10; i ++)
-  {
-  name[i] = (char)(data[allParameters.length - 10 + i + 6] & 127);
-  }
-  model.set("name", new String(name));
-                
-  revise();
-  return PARSE_SUCCEEDED;
-  }
-  else                        // bulk
-  {
-  // extract names
-  char[][] names = new char[32][10];
-  for(int i = 0; i < 32; i++)
-  {
-  for (int j = 0; j < 10; j++)
-  {
-  names[i][j] = (char)(data[6 + (i * 128) + 118 + j] & 127);
-  }
-  }
-                        
-  String[] n = new String[32];
-  for(int i = 0; i < 32; i++)
-  {
-  n[i] = "" + (i + 1) + "   " + new String(names[i]);
-  }
-            
-  // Now that we have an array of names, one per patch, we present the user with options;
-  // 0. Cancel [handled automatically]
-  // 1. Save the bank data [handled automatically]
-  // 2. Upload the bank data [handled automatically] 
-  // 3. Load and edit a certain patch number
-  int patchNum = showBankSysexOptions(data, n);
-  if (patchNum < 0) return PARSE_CANCELLED;
-                
-  // okay, we're loading and editing patch number patchNum.  Here we go.
-  int patch = patchNum * 128;
-  int pos = 0;
-                                                        
-  for(int op = 0; op < 6; op++)
-  {
-  // operatorNrate1 ... operatorNkeyboardlevelscalingrightdepth
-  for(int i = 0; i < 11; i++)
-  {
-  model.set(allParameters[pos++], data[patch + op * 17 + i + 6]);
-  }
-                                        
-  // scaling left curve
-  model.set(allParameters[pos++], data[patch + op * 17 + 11 + 6] & 3);
-  // scaling right curve
-  model.set(allParameters[pos++], (data[patch + op * 17 + 11 + 6] >>> 2) & 3);
-                                
-  // rate scaling
-  model.set(allParameters[pos++], data[patch + op * 17 + 12 + 6] & 7);
-                                
-  // amp mod sensitivity
-  model.set(allParameters[pos++], data[patch + op * 17 + 13 + 6] & 3);
-  // key velocity
-  model.set(allParameters[pos++], (data[patch + op * 17 + 13 + 6] >>> 2) & 7);
-
-  // output level
-  model.set(allParameters[pos++], data[patch + op * 17 + 14 + 6]);
-                                        
-  // osc mode
-  model.set(allParameters[pos++], data[patch + op * 17 + 15 + 6] & 1);
-  // freq coarse
-  model.set(allParameters[pos++], (data[patch + op * 17 + 15 + 6] >>> 1) & 31);
-  // freq fine
-  model.set(allParameters[pos++], data[patch + op * 17 + 16 + 6]);
-  // detune  [note this one is out of position, why Yamaha why?]
-  model.set(allParameters[pos++], (data[patch + op * 17 + 12 + 6] >>> 3) & 15);
-  }
-                        
-  // pitchegrate1 ... pitcheglevel4
-  for(int i = 102; i < 110; i++)
-  {
-  model.set(allParameters[pos++], data[patch + i + 6]);
-  }
-                                
-  // algorithm select
-  model.set(allParameters[pos++], data[patch + 110 + 6] & 31);
-  // feedback
-  model.set(allParameters[pos++], data[patch + 111 + 6] & 7);
-  // osc key sync
-  model.set(allParameters[pos++], (data[patch + 111 + 6] >>> 3) & 1);
-
-  // lfospeed ... lfoamplitudemodulationdepth
-  for(int i = 112; i < 116; i++)
-  {
-  model.set(allParameters[pos++], data[patch + i + 6]);
-  }
-                                
-  // key sync
-  model.set(allParameters[pos++], data[patch + 116 + 6] & 1);
-  // wave
-  model.set(allParameters[pos++], (data[patch + 116 + 6] >>> 1) & 7);
-  // lfo pitch mod sens
-  model.set(allParameters[pos++], (data[patch + 116 + 6] >>> 4) & 7);
-  // transpose
-  model.set(allParameters[pos++], (data[patch + 117 + 6]) & 63);
-                                
-  model.set("name", new String(names[patchNum]));
-                
-  model.set("number", patchNum);
-
-  revise();
-  return PARSE_SUCCEEDED_UNTITLED;
-  }
-  }
+    public boolean parseVoiceData(byte[] data, int pos, int part)
+        {
+        model.set("part" + part + "lfo1speed", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "lfo2speed", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "lfo1delay", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "lfo2delay", denybble(data, pos));
+        pos += 2;
+        int val = denybble(data, pos);
+        model.set("part" + part + "lfo1shape", val & 0x03);
+        model.set("part" + part + "lfo1sync", (val >>> 2) & 0x01);
+        model.set("part" + part + "lfo1midisync", (val >>> 3) & 0x0F);
+        pos += 2;
+        val = denybble(data, pos);
+        model.set("part" + part + "lfo2shape", val & 0x03);
+        model.set("part" + part + "lfo2sync", (val >>> 2) & 0x01);
+        model.set("part" + part + "lfo2midisync", (val >>> 3) & 0x0F);
+        pos += 2;
+        model.set("part" + part + "env1attack", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "env2attack", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "env1decay", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "env2decay", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "env1sustain", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "env2sustain", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "env1release", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "env2release", denybble(data, pos));
+        pos += 2;
+        val = denybble(data, pos);
+        model.set("part" + part + "env1velocity", val & 0x03);
+        model.set("part" + part + "env2velocity", (val >>> 2) & 0x03);
+        pos += 2;
+        model.set("part" + part + "osc1pitchmod", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "osc2pitchmod", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "osc1detune", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "osc2detune", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "osc1pwm", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "osc2pwm", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "osc1waveform", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "osc2waveform", denybble(data, pos));
+        pos += 2;
+        val = denybble(data, pos);
+        model.set("part" + part + "osc1pitchmodsource", val & 0x03);
+        model.set("part" + part + "osc1pulsewidthmodsource", (val >>> 2) & 0x03);
+        model.set("part" + part + "osc1pitchmodsource", (val >>> 4) & 0x03);
+        model.set("part" + part + "osc2pulsewidthmodsource", (val >>> 6) & 0x03);
+        pos += 2;
+        val = denybble(data, pos);
+        model.set("part" + part + "osc2pitchoffset", val & 0x0F);
+        model.set("part" + part + "osc2sync", (val >>> 4) & 0x01);
+        model.set("part" + part + "osc2source", (val >>> 5) & 0x07);
+        pos += 2;
+        model.set("part" + part + "mix", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "ring", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "filterfreq", denybble(data, pos));
+        pos += 2;
+        val = denybble(data, pos);
+        model.set("part" + part + "filterkeytracking", val & 0x07);
+        model.set("part" + part + "filteron", (val >>> 3) & 0x01);
+        model.set("part" + part + "filtertype", (val >>> 4) & 0x03);
+        model.set("part" + part + "filterresmodsource", (val >>> 6) & 0x03);
+        pos += 2;
+        model.set("part" + part + "filterenvmod", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "filterlfomod", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "filterres", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "volume", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "pan", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "tremolo", denybble(data, pos));
+        pos += 2;
+        val = denybble(data, pos);
+        model.set("part" + part + "tremolomodsource", val & 0x03);
+        model.set("part" + part + "panmodsource", (val >>> 2) & 0x07);
+        pos += 2;
+        val = denybble(data, pos);
+        model.set("part" + part + "channel", val & 0x0F);
+        model.set("part" + part + "polyphony", (val >>> 4) & 0x0F);
+        pos += 2;
+        model.set("part" + part + "notelo", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "notehi", denybble(data, pos));
+        pos += 2;
+        val = denybble(data, pos);
+        model.set("part" + part + "transpose", val & 0x3F);
+        model.set("part" + part + "sustain", (val >>> 6) & 0x01);
+        pos += 2;
+        val = denybble(data, pos);
+        model.set("part" + part + "portamentotime", val & 0x7F);
+        model.set("part" + part + "autoglide", (val >>> 7) & 0x01);
+        pos += 2;
+        val = denybble(data, pos);
+        model.set("part" + part + "bendrange", val & 0x0F);
+        model.set("part" + part + "portamentotype", (val >>> 4) & 0x0F);
+        pos += 2;
+        val = denybble(data, pos);
+        model.set("part" + part + "aftertouchpitch", val & 0x0F);
+        model.set("part" + part + "aftertouchfilter", (val >>> 4) & 0x0F);
+        pos += 2;
+        val = denybble(data, pos);
+        model.set("part" + part + "modwheelpitch", val & 0x0F);
+        model.set("part" + part + "modwheelfilter", (val >>> 4) & 0x0F);
+        pos += 2;
+        val = denybble(data, pos);
+        model.set("part" + part + "joystickassign", val & 0x07);
+        model.set("part" + part + "outputassign", (val >>> 3) & 0x03);
+        model.set("part" + part + "auditiontype", (val >>> 5) & 0x0F);
+        pos += 2;
+        val = denybble(data, pos);
+        model.set("part" + part + "partoutputshift", val & 0x01);
+        model.set("part" + part + "envshift", (val >>> 1) & 0x01);
+        model.set("part" + part + "envhalfshift", (val >>> 2) & 0x01);
+        model.set("part" + part + "oscshift", (val >>> 3) & 0x01);
+        model.set("part" + part + "oschalfshift", (val >>> 4) & 0x01);
+        model.set("part" + part + "lfoshift", (val >>> 5) & 0x01);
+        model.set("part" + part + "lfohalfshift", (val >>> 6) & 0x01);
+        model.set("part" + part + "filtershift", (val >>> 7) & 0x01);
+        pos += 2;
+        // last two bytes are unused
+        return true;
+        }
  
-    
-  public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-  {
-  simplePause(50);                // dunno if I need it, it was needed for the TX81Z
+    public static final int NUM_VOICES = 5;
+    public static final int VOICE_DATA_LENGTH = 100;
         
-  byte[] data = new byte[163];
-  data[0] = (byte)0xF0;
-  data[1] = (byte)0x43;
-  data[2] = (byte)(getChannelOut());
-  data[3] = (byte)0x00;
-  data[4] = (byte)0x01;
-  data[5] = (byte)0x1B;
-                                
-  // yay for DX7 simplicity
-  for(int i = 0; i < allParameters.length - 10; i++)
-  {
-  data[i + 6] = (byte)(model.get(allParameters[i], 0));
-  }
+    public int parse(byte[] data, boolean fromFile)
+        {
+        // DarkStar data comes in the following forms
+        // VOICEDATA is 100 bytes
+        // Others are 1 byte each
+        
+        // DarkStar or XP2 Single Voice: 108 bytes
+        // F0 00 20 3B 02 01 03 VOICEDATA f7
+        
+        // DarkStar Single Performance: 512 bytes
+        // F0 00 20 3B 02 01 01 VOICEDATA(x5) 00 EDITPART 00 00 f7
+        
+        // XP2 Single Performance: 516 bytes
+        // F0 00 20 3B 02 01 01 VOICEDATA(x5) FX1 FX2 FX3 FX4 FX5 DEPTH RATE EDITPART f7
+        
+        // DarkStar Bulk Dump Single Performance: 514 bytes
+        // F0 00 20 3B 02 01 02 PERFNUM(x2) VOICEDATA(x5) 00 EDITPART 00 00 f7
+        
+        // XP2 Bulk Dump Single Performance: 518 bytes
+        // F0 00 20 3B 02 01 02 PERFNUM(x2) VOICEDATA(x5) FX1 FX2 FX3 FX4 FX5 DEPTH RATE EDITPART f7
 
-  for(int i = 0; i < 10; i ++)
-  {
-  data[allParameters.length - 10 + i + 6] = (byte)((model.get("name", "          ") + "          ").charAt(i));
-  }
-                
-  data[161] = produceChecksum(data, 6);
-  data[162] = (byte)0xF7;
+        // We're gonna try to recognize all of them
+
+        if (data.length == 108)
+            {
+            if (!parseVoiceData(data, 7, 0))
+                return PARSE_FAILED;
+            }
+        else if (data.length == 512)
+            {
+            setXP2(false);
+            for(int i = 0; i < NUM_VOICES; i++)
+                if (!parseVoiceData(data, 7 + VOICE_DATA_LENGTH * i, i))
+                    return PARSE_FAILED;
+            model.set("currenteditpart", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 2]);
+            }
+        else if (data.length == 516)
+            {
+            setXP2(true);
+            for(int i = 0; i < NUM_VOICES; i++)
+                if (!parseVoiceData(data, 7 + VOICE_DATA_LENGTH * i, i))
+                    return PARSE_FAILED;
+            for(int i = 0; i < NUM_VOICES; i++)
+                model.set("part" + (i + 1) + "fxsend", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + i]);
+            model.set("chorusdepth", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 6]);
+            model.set("chorusrate", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 7]);
+            model.set("currenteditpart", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 8]);
+            }
+        else if (data.length == 514)
+            {
+            setXP2(false);
+            model.set("number", (data[7] << 4) + data[8]);
+            for(int i = 0; i < NUM_VOICES; i++)
+                if (!parseVoiceData(data, 9 + VOICE_DATA_LENGTH * i + 2, i))
+                    return PARSE_FAILED;
+            model.set("currenteditpart", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 2 + 2]);
+            }
+        else if (data.length == 518)
+            {
+            setXP2(true);
+            model.set("number", (data[7] << 4) + data[8]);
+            for(int i = 0; i < NUM_VOICES; i++)
+                if (!parseVoiceData(data, 9 + VOICE_DATA_LENGTH * i + 2, i))
+                    return PARSE_FAILED;
+            for(int i = 0; i < NUM_VOICES; i++)
+                model.set("part" + (i + 1) + "fxsend", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + i + 2]);
+            model.set("chorusdepth", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 6 + 2]);
+            model.set("chorusrate", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 7 + 2]);
+            model.set("currenteditpart", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 8 + 2]);
+            }
+        revise();
+        return PARSE_SUCCEEDED;
+        }
+ 
+    void addData(byte[] data, int pos, int val)
+        {
+        data[pos] = (byte)((val >> 4) & 0x0F);
+        data[pos+1] = (byte)((val >> 0) & 0x0F);
+        }
+ 
+    public void emitVoiceData(byte[] data, int pos, int part)
+        {
+        addData(data, pos, model.get("part" + part + "lfo2speed", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "lfo2speed", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "lfo1delay", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "lfo2delay", 0));
+        pos += 2;
+        addData(data, pos,
+            ((model.get("part" + part + "lfo1shape", 0) & 0x03) << 0 ) |
+            ((model.get("part" + part + "lfo1sync", 0) & 0x01) << 2)  |
+            ((model.get("part" + part + "lfo1sync", 0) & 0x0F) << 3));
+        pos += 2;
+        addData(data, pos,
+            ((model.get("part" + part + "lfo2shape", 0) & 0x03) << 0 ) |
+            ((model.get("part" + part + "lfo2sync", 0) & 0x01) << 2)  |
+            ((model.get("part" + part + "lfo2midisync", 0) & 0x0F) << 3));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "env1attack", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "env2attack", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "env1decay", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "env2decay", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "env1sustain", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "env2sustain", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "env1release", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "env2release", 0));
+        pos += 2;
+        addData(data, pos,
+            ((model.get("part" + part + "env1velocity", 0) & 0x03) << 0 ) |
+            ((model.get("part" + part + "env2velocity", 0) & 0x03) << 2));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "osc1pitchmod", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "osc2pitchmod", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "osc1detune", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "osc2detune", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "osc1pwm", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "osc2pwm", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "osc1waveform", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "osc2waveform", 0));
+        pos += 2;
+        addData(data, pos,
+            ((model.get("part" + part + "osc1pitchmodsource", 0) & 0x03) << 0 ) |
+            ((model.get("part" + part + "osc1pulsewidthmodsource", 0) & 0x03) << 2)  |
+            ((model.get("part" + part + "osc1pitchmodsource", 0) & 0x03) << 4)  |
+            ((model.get("part" + part + "osc2pulsewidthmodsource", 0) & 0x03) << 6));
+        pos += 2;
+        addData(data, pos,
+            ((model.get("part" + part + "osc2pitchoffset", 0) & 0x0F) << 0 ) |
+            ((model.get("part" + part + "osc2sync", 0) & 0x01) << 4)  |
+            ((model.get("part" + part + "osc2source", 0) & 0x07) << 5));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "mix", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "ring", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "filterfreq", 0));
+        pos += 2;
+        addData(data, pos,
+            ((model.get("part" + part + "filterkeytracking", 0) & 0x07) << 0 ) |
+            ((model.get("part" + part + "filteron", 0) & 0x01) << 3)  |
+            ((model.get("part" + part + "filtertype", 0) & 0x03) << 4)  |
+            ((model.get("part" + part + "filterresmodsource", 0) & 0x03) << 6));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "filterenvmod", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "filterlfomod", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "filterres", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "volume", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "pan", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "tremolo", 0));
+        pos += 2;
+        addData(data, pos,
+            ((model.get("part" + part + "tremolomodsource", 0) & 0x03) << 0 ) |
+            ((model.get("part" + part + "panmodsource", 0) & 0x07) << 2));
+        pos += 2;
+        addData(data, pos,
+            ((model.get("part" + part + "channel", 0) & 0x0F) << 0 ) |
+            ((model.get("part" + part + "polyphony", 0) & 0x0F) << 4));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "notelo", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "notehi", 0));
+        pos += 2;
+        addData(data, pos,
+            ((model.get("part" + part + "transpose", 0) & 0x3F) << 0 ) |
+            ((model.get("part" + part + "sustain", 0) & 0x01) << 6));
+        pos += 2;
+        addData(data, pos,
+            ((model.get("part" + part + "portamentotime", 0) & 0x7F) << 0 ) |
+            ((model.get("part" + part + "autoglide", 0) & 0x01) << 7));
+        pos += 2;
+        addData(data, pos,
+            ((model.get("part" + part + "bendrange", 0) & 0x0F) << 0 ) |
+            ((model.get("part" + part + "portamentotype", 0) & 0x0F) << 4));
+        pos += 2;
+        addData(data, pos,
+            ((model.get("part" + part + "aftertouchpitch", 0) & 0x0F) << 0 ) |
+            ((model.get("part" + part + "aftertouchfilter", 0) & 0x0F) << 4));
+        pos += 2;
+        addData(data, pos,
+            ((model.get("part" + part + "modwheelpitch", 0) & 0x0F) << 0 ) |
+            ((model.get("part" + part + "modwheelfilter", 0) & 0x0F) << 4));
+        pos += 2;
+        addData(data, pos,
+            ((model.get("part" + part + "joystickassign", 0) & 0x07) << 0 ) |
+            ((model.get("part" + part + "outputassign", 0) & 0x03) << 3)  |
+            ((model.get("part" + part + "auditiontype", 0) & 0x0F) << 5));
+        pos += 2;
+        addData(data, pos,
+            ((model.get("part" + part + "partoutputshift", 0) & 0x01) << 0 ) |
+            ((model.get("part" + part + "envshift", 0) & 0x01) << 1)  |
+            ((model.get("part" + part + "envhalfshift", 0) & 0x01) << 2)  |
+            ((model.get("part" + part + "oscshift", 0) & 0x01) << 3)  |
+            ((model.get("part" + part + "oschalfshift", 0) & 0x01) << 4)  |
+            ((model.get("part" + part + "lfoshift", 0) & 0x01) << 5)  |
+            ((model.get("part" + part + "lfohalfshift", 0) & 0x01) << 6)  |
+            ((model.get("part" + part + "filtershift", 0) & 0x01) << 7));
+        pos += 2;
+        // last two bytes are unused
+        }
+
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
+        {
+        // DarkStar data comes in the following forms
+        // VOICEDATA is 100 bytes
+        // Others are 1 byte each
         
-  return data;
-  }
-*/
+        // DarkStar or XP2 Single Voice: 108 bytes
+        // F0 00 20 3B 02 01 03 VOICEDATA f7
+        
+        // DarkStar Single Performance: 512 bytes
+        // F0 00 20 3B 02 01 01 VOICEDATA(x5) 00 EDITPART 00 00 f7
+        
+        // XP2 Single Performance: 516 bytes
+        // F0 00 20 3B 02 01 01 VOICEDATA(x5) FX1 FX2 FX3 FX4 FX5 CHORUS DEPTH EDITPART f7
+        
+        // DarkStar Bulk Dump Single Performance: 514 bytes
+        // F0 00 20 3B 02 01 02 PERFNUM(x2) VOICEDATA(x5) 00 EDITPART 00 00 f7
+        
+        // XP2 Bulk Dump Single Performance: 518 bytes
+        // F0 00 20 3B 02 01 02 PERFNUM(x2) VOICEDATA(x5) FX1 FX2 FX3 FX4 FX5 CHORUS DEPTH EDITPART f7
+
+        // We emit all but the first one.  Our choice depends on (1) if it's an XP2 or not 
+        // and (2) if we're writing or sending
+                
+        byte[] data = null;
+        if (isXP2())
+            {
+            int offset = 0;
+            if (toWorkingMemory || toFile)
+                {
+                data = new byte[516];
+                data[6] = (byte)0x01;
+                // FX1 FX2 FX3 FX4 FX5 CHORUS DEPTH EDITPART
+                offset = 7 + VOICE_DATA_LENGTH * NUM_VOICES;
+                for(int i = 0; i < NUM_VOICES; i++)
+                    emitVoiceData(data, 7 + VOICE_DATA_LENGTH * i, i);
+                }
+            else
+                {
+                data = new byte[518];                           
+                data[6] = (byte)0x02;
+                // PERFNUM
+                int number = tempModel.get("number", 0);
+                data[7] = (byte)((number >> 4) & 0x0F);
+                data[8] = (byte)((number >> 0) & 0x0F);
+                offset = 9 + VOICE_DATA_LENGTH * NUM_VOICES;
+                for(int i = 0; i < NUM_VOICES; i++)
+                    emitVoiceData(data, 9 + VOICE_DATA_LENGTH * i, i);
+                }
+
+            // FX1 FX2 FX3 FX4 FX5 CHORUS DEPTH EDITPART
+            for(int i = 0; i < NUM_VOICES; i++)
+                {
+                int val = model.get("part" + (i + 1) + "fxsend", 0);
+                data[offset + i] = (byte)((val >> 4) & 0x0F);
+                data[offset + i + 1] = (byte)((val >> 0) & 0x0F);
+                }
+            int val = model.get("chorusdepth", 0);
+            data[offset + 5] = (byte)((val >> 4) & 0x0F);
+            data[offset + 6] = (byte)((val >> 0) & 0x0F);
+            val = model.get("chorusrate", 0);
+            data[offset + 7] = (byte)((val >> 4) & 0x0F);
+            data[offset + 8] = (byte)((val >> 0) & 0x0F);
+            val = model.get("currenteditpart", 0);
+            data[offset + 9] = (byte)((val >> 4) & 0x0F);
+            data[offset + 10] = (byte)((val >> 0) & 0x0F);
+            }
+        else
+            {
+            if (toWorkingMemory || toFile)
+                {
+                data = new byte[512];
+                data[6] = (byte)0x01;
+                for(int i = 0; i < NUM_VOICES; i++)
+                    emitVoiceData(data, 7 + VOICE_DATA_LENGTH * i, i);
+                }
+            else
+                {
+                data = new byte[514];
+                data[6] = (byte)0x02;
+                // PERFNUM
+                int number = tempModel.get("number", 0);
+                data[7] = (byte)((number >> 4) & 0x0F);
+                data[8] = (byte)((number >> 0) & 0x0F);
+                for(int i = 0; i < NUM_VOICES; i++)
+                    emitVoiceData(data, 9 + VOICE_DATA_LENGTH * i, i);
+                }
+            }
+                        
+        data[0] = (byte)0xF0;
+        data[1] = (byte)0x00;
+        data[2] = (byte)0x20;
+        data[3] = (byte)0x3B;
+        data[4] = (byte)0x02;
+        data[5] = (byte)0x01;
+        data[data.length - 1] = (byte)0xF7;
+        
+        return data;
+        }
+
 
     public static boolean recognize(byte[] data)
         {
         // DarkStar data comes in the following forms
-        // VOICE DATA is 100 bytes
+        // VOICEDATA is 100 bytes
         // Others are 1 byte each
         
         // DarkStar or XP2 Single Voice: 108 bytes

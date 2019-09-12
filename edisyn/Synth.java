@@ -77,6 +77,7 @@ public abstract class Synth extends JComponent implements Updatable
         
     Model[] nudge = new Model[4];
     JMenuItem[] nudgeTowards = new JMenuItem[8];
+    Favorites favorites = new Favorites();
     
     protected Undo undo = new Undo(this);
     public Undo getUndo() { return undo; }
@@ -369,6 +370,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** All synthesizer editor pane classes in Edisyn */
     static final Class[] synths = loadSynths();
     
+    public static Class[] getSynths() { return synths; }
     
     static Class[] loadSynths()
         {
@@ -2011,13 +2013,13 @@ public abstract class Synth extends JComponent implements Updatable
         return ret;
         }
 
-
-
     /** Perform a JOptionPane confirm dialog with MUTLIPLE widgets that the user can select.  The widgets are provided
-        in the array WIDGETS, and each has an accompanying label in LABELS.   Returns TRUE if the user performed
-        the operation, FALSE if cancelled. */
-    public static boolean showMultiOption(Synth synth, String[] labels, JComponent[] widgets, String title, String message)
-        {
+        in the array WIDGETS, and each has an accompanying label in LABELS.   You specify what BUTTONS appear along the bottom
+        as the OPTIONS, which (on the Mac) appear right-to-left. You also get to specify well as the default option -- what
+        button is chosen if the user presses RETURN.  On the Mac, classically this is the first (rightmost) options. 
+        Returns the option number selected; otherwise returns -1 if the user clicked the close box. */
+    public static int showMultiOption(Synth synth, String[] labels, JComponent[] widgets, String[] options, int defaultOption, String title, String message)
+    	{
         WidgetList list = new WidgetList(labels, widgets);
 
         JPanel panel = new JPanel();
@@ -2030,10 +2032,19 @@ public abstract class Synth extends JComponent implements Updatable
         panel.add(list, BorderLayout.CENTER);
         panel.add(p, BorderLayout.NORTH);
 
-        synth.disableMenuBar();
-        boolean ret = (JOptionPane.showConfirmDialog(synth, panel, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null) == JOptionPane.OK_OPTION);
-        synth.enableMenuBar();
+        if (synth != null) synth.disableMenuBar();
+        int ret = JOptionPane.showOptionDialog(synth, panel, title, JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[defaultOption]);
+        if (synth != null) synth.enableMenuBar();
         return ret;
+    	}
+
+
+    /** Perform a JOptionPane confirm dialog with MUTLIPLE widgets that the user can select.  The widgets are provided
+        in the array WIDGETS, and each has an accompanying label in LABELS.   Returns TRUE if the user performed
+        the operation, FALSE if cancelled. */
+    public static boolean showMultiOption(Synth synth, String[] labels, JComponent[] widgets, String title, String message)
+        {
+        return showMultiOption(synth, labels, widgets, new String[] { "Okay", "Cancel" }, 0, title, message) == 0;
         }
            
     
@@ -2230,7 +2241,7 @@ public abstract class Synth extends JComponent implements Updatable
     static void setLastSynth(String synth) { setLastX(synth, "Synth", null, false); }
     // gets the last synthesizer opened via the global window.
     static String getLastSynth() { return getLastX("Synth", null, false); }
-
+	
     public static Color getLastColor(String key, Color defaultColor)
         {
         String val = getLastX(key);
@@ -2360,6 +2371,10 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
+        JMenu newSynth = favorites.buildNewSynthMenu(this);
+        menu.add(newSynth);
+
+        /*
         JMenu newSynth = new JMenu("New Synth");
         menu.add(newSynth);
         String[] synthNames = getSynthNames();
@@ -2376,6 +2391,7 @@ public abstract class Synth extends JComponent implements Updatable
                 });
             newSynth.add(synthMenu);
             }
+        */
         
         JMenuItem _copy = new JMenuItem("Duplicate Synth");
         _copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -4507,8 +4523,9 @@ public abstract class Synth extends JComponent implements Updatable
         {
         instantiate(Synth.this.getClass(), getSynthNameLocal(), false, true, tuple);
         }
-                
-    void doNewSynth(int synth)
+           
+    /** This is public to allow Favorites to access it only. */     
+    public void doNewSynth(int synth)
         {
         String[] synthNames = getSynthNames();
         instantiate(synths[synth], synthNames[synth], false, true, tuple);
@@ -5448,6 +5465,9 @@ public abstract class Synth extends JComponent implements Updatable
     /** Pops up at the start of the program to ask the user what synth he wants. */
     static Synth doNewSynthPanel()
         {
+       	return Favorites.doNewSynthDialog();
+        
+        /*
         JPanel p = new JPanel();
         p.setLayout(new BorderLayout());
         p.add(new JLabel("    "), BorderLayout.NORTH);
@@ -5460,6 +5480,15 @@ public abstract class Synth extends JComponent implements Updatable
         String[] synthNames = getSynthNames();
         JComboBox combo = new JComboBox(synthNames);
         combo.setMaximumRowCount(32);
+        
+        // actionListener bug causes it to fire when the combo is first set programmatically
+combo.addItemListener(new ItemListener()
+	{
+	public void itemStateChanged(ItemEvent event) {
+       if (event.getStateChange() == ItemEvent.SELECTED) {
+System.err.println("-->" + combo.getSelectedItem());
+       }
+    }});
                 
         // Note: Java classdocs are wrong: if you set a selected item to null (or to something not in the list)
         // it doesn't just not change the current selected item, it sets it to some blank item.
@@ -5479,6 +5508,7 @@ public abstract class Synth extends JComponent implements Updatable
             setLastSynth("" + combo.getSelectedItem());
             return instantiate(synths[combo.getSelectedIndex()], synthNames[combo.getSelectedIndex()], false, (result == 0), null);
             }
+        */
         }
 
     void doPrefs()

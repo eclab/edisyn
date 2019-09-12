@@ -73,12 +73,13 @@ You'll note a pattern among these synthesizers: many are very difficult to progr
 \begin{wrapfigure}{r}{2.2in}
 \vspace{-2em}\includegraphics[scale=0.3]{0.png}
 \vspace{-3em}\caption{Initial Synthesizer Dialog}\label{initialsynthpanel}
-\vspace{-1em}
 \end{wrapfigure}
 
 If you're on a Mac, Edisyn will look like a standard application, just double-click on it.  On other platforms, Edisyn comes as a single Java jar file.  Just double-click on the jar file (you'll have to have Java installed) and Edisyn should launch.
 
-You'll first be presented with the dialog at right, asking you to choose a synthesizer patch editor.  You can either connect to a synth then and there, or run in {\bf Disconnected Mode}, where you're not attached to MIDI.  You can also quit immediately.
+You'll first be presented with the dialog at right, asking you to choose a synthesizer patch editor.  You can either select from {\it all} synthesizers available, or from those you have {\it recently} edited with Edisyn (the very most recent one is auto-selected for you). If you can't figure out why the {\it ``All Synths''} option is disabled, try first choosing ``{\it Select another synthesizer...}'' from the ``{\it Recent}'' popup.
+
+Once you've picked a synthesizer, if you click {\it Run} Edisyn will attempt to connect to it via MIDI directly; you can also run in {\bf Disconnected Mode}, where you're not attached to MIDI.  And of course you can {\it Quit}.
 
 \begin{wrapfigure}{r}{2.7in}
 \includegraphics[scale=0.3]{1.png}
@@ -94,6 +95,8 @@ Edisyn will now build a patch editor for you and display it.  But unless you cho
 \item The {\bf Channel} on which the synthesizer is listening.  (Here, 1).
 \end{itemize}
 
+\vspace{-1em}
+\vbox{
 \begin{itemize}
 \item (Not visible here) The optional {\bf ID} of the synthesizer.  Some synthesizers require a special ID embedded in their sysex so they can tell that the message is for them rather than another copy of the same synthesizer.  (The Yamaha TX81Z doesn't have an ID, so it's not displayed in this example).
 \item The USB MIDI Device from which you will receive MIDI data sent by a {\bf controller}.  This may be a controller keyboard to play test notes on the synthesizer, or it may be a control surface to send CC data to the synthesizer or to Edisyn itself.  Here we are receiving from an Arturia Beatstep.
@@ -103,7 +106,7 @@ Edisyn will now build a patch editor for you and display it.  But unless you cho
 If you are not connected to MIDI, or if you cancel, then Edisyn will inform you that you must continue in {\bf Disconnected Mode}.
 
 \paragraph{Important Note}  If your USB MIDI device is manually disconnected, Edisyn won't know until you ask Edisyn to send the synth something (perhaps changing a parameter or uploading a patch).  At that point, Edisyn will get a clue and the patch editor window will change to {\bf Disconnected Mode}.'
-
+}
 
 \section{Edisyn Patch Editors}
 
@@ -160,7 +163,7 @@ If you are connected to a synthesizer over MIDI, then changing a widget will mod
 
 \section{Creating and Setting Up Additional Patch Editors}
 
-A patch editor is created by selecting one of the various {\bf New...} menu options in the {\bf File} menu.  You have to create a new a patch editor before you can start loading a patch from a file or from the synthesizer.  You can also {\bf Duplicate} an existing patch editor (in the {\bf File} menu).  This will exactly duplicate the existing patch as well.  
+A patch editor is created by selecting one of the various {\bf New...} menu options in the {\bf File} menu.\footnote{The {\bf New Synth} menu presents you with several options.  First there are the patch editors you have {\it recently selected}, if any.  Next come {\it all available} patch editors.  Finally, you have menu choices to {\it remove} patch editors from the recent list.}   You have to create a new a patch editor before you can start loading a patch from a file or from the synthesizer.  You can also {\bf Duplicate} an existing patch editor (in the {\bf File} menu).  This will exactly duplicate the existing patch as well.  
 
 Whenever you create a new patch editor or duplicate one, you will once again be asked to set up MIDI as discussed in Section \ref{startingedisyn}, or to run in Disconnected Mode.
 

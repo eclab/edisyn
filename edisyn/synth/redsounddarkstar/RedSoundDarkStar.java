@@ -215,6 +215,7 @@ public class RedSoundDarkStar extends Synth
     public JComponent addOscillatorsGeneral(int part, Color color)
         {
         Category category = new Category(this, "Oscillators", color);
+        category.makePasteable("part" + part);
 
         JComponent comp;
         String[] params;
@@ -234,7 +235,18 @@ public class RedSoundDarkStar extends Synth
         comp = new LabelledDial("Volume", this, "part" + part + "volume", color, 0, 127);
         hbox.add(comp);
         
-        comp = new LabelledDial("Pan", this, "part" + part + "pan", color, 0, 127);
+        comp = new LabelledDial("Pan", this, "part" + part + "pan", color, 0, 127)
+            {
+            public boolean isSymmetric() { return true; }
+            public int getDefaultValue() { return 64; }
+
+            public String map(int val)
+                {
+                if (val == 64) return "--";
+                else if (val < 64) return "< " + (64 - val);
+                else return "" + (val - 64) + " >";
+                }
+            };
         hbox.add(comp);
         
         comp = new LabelledDial("Tremolo", this, "part" + part + "tremolo", color, 0, 127);
@@ -267,6 +279,7 @@ public class RedSoundDarkStar extends Synth
     public JComponent addGeneral(int part, Color color)
         {
         Category category = new Category(this, "General", color);
+        category.makePasteable("part" + part);
 
         JComponent comp;
         String[] params;
@@ -300,13 +313,12 @@ public class RedSoundDarkStar extends Synth
         comp = new LabelledDial("Note Hi", this, "part" + part + "notehi", color, 0, 127);
         hbox.add(comp);
         
-        comp = new LabelledDial("Transpose", this, "part" + part + "transpose", color, 0, 48)
+        comp = new LabelledDial("Transpose", this, "part" + part + "transpose", color, 0, 48, 24)
             {
-            public String map(int val)
-                {
-                return "" + (val - 24);
-                }
-            };
+            public boolean isSymmetric() { return true; }
+            public int getDefaultValue() { return 24; }
+			};
+			
         hbox.add(comp);
         
         comp = new LabelledDial("Portamento", this, "part" + part + "portamentotime", color, 0, 63);
@@ -329,6 +341,7 @@ public class RedSoundDarkStar extends Synth
     public JComponent addModulation(int part, Color color)
         {
         Category category = new Category(this, "Modulation", color);
+        category.makePasteable("part" + part);
 
         JComponent comp;
         String[] params;
@@ -387,19 +400,39 @@ public class RedSoundDarkStar extends Synth
 
         hbox.add(vbox);
                 
-        comp = new LabelledDial("Aftertouch", this, "part" + part + "aftertouchpitch", color, 0, 14, -7);
+        comp = new LabelledDial("Aftertouch", this, "part" + part + "aftertouchpitch", color, 0, 14, 7)
+			{
+            public boolean isSymmetric() { return true; }
+            public int getDefaultValue() { return 7; }
+        	};
+        	
         ((LabelledDial)comp).addAdditionalLabel("Pitch");
         hbox.add(comp);
         
-        comp = new LabelledDial("Aftertouch", this, "part" + part + "aftertouchfilter", color, 0, 14, -7);
+        comp = new LabelledDial("Aftertouch", this, "part" + part + "aftertouchfilter", color, 0, 14, 7)
+			{
+            public boolean isSymmetric() { return true; }
+            public int getDefaultValue() { return 7; }
+        	};
+        	
         ((LabelledDial)comp).addAdditionalLabel("Filter");
         hbox.add(comp);
         
-        comp = new LabelledDial("Mod Wheel", this, "part" + part + "modwheelpitch", color, 0, 14, -7);
+        comp = new LabelledDial("Mod Wheel", this, "part" + part + "modwheelpitch", color, 0, 14, 7)
+			{
+            public boolean isSymmetric() { return true; }
+            public int getDefaultValue() { return 7; }
+        	};
+        	
         ((LabelledDial)comp).addAdditionalLabel("Pitch");
         hbox.add(comp);
         
-        comp = new LabelledDial("Mod Wheel", this, "part" + part + "modwheelfilter", color, 0, 14, -7);
+        comp = new LabelledDial("Mod Wheel", this, "part" + part + "modwheelfilter", color, 0, 14, 7)
+			{
+            public boolean isSymmetric() { return true; }
+            public int getDefaultValue() { return 7; }
+        	};
+        	
         ((LabelledDial)comp).addAdditionalLabel("Filter");
         hbox.add(comp);
         
@@ -413,6 +446,7 @@ public class RedSoundDarkStar extends Synth
     public JComponent addLFO(int part, int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
+        category.makePasteable("part" + part + "lfo" + lfo);
 
         JComponent comp;
         String[] params;
@@ -446,6 +480,7 @@ public class RedSoundDarkStar extends Synth
     public JComponent addEnvelope(int part, int env, Color color)
         {
         Category category = new Category(this, "Envelope " + env, color);
+        category.makePasteable("part" + part + "env" + env);
                 
         JComponent comp;
         String[] params;
@@ -487,6 +522,7 @@ public class RedSoundDarkStar extends Synth
     public JComponent addOscillator(int part, int osc, Color color)
         {
         final Category category = new Category(this, "Oscillator " + osc, color);
+        category.makePasteable("part" + part + "osc" + osc);
 
         JComponent comp;
         String[] params;
@@ -521,16 +557,16 @@ public class RedSoundDarkStar extends Synth
             hbox.add(vbox);
             }
 
-        comp = new LabelledDial("Pitch Mod", this, "part" + part + "osc" + osc + "pulsewidthmod", color, 0, 127);
+        comp = new LabelledDial("Pitch Mod", this, "part" + part + "osc" + osc + "pitchmod", color, 0, 127, 64);
         hbox.add(comp);
 
-        comp = new LabelledDial("Detune", this, "part" + part + "osc" + osc + "detune", color, 0, 127);
+        comp = new LabelledDial("Detune", this, "part" + part + "osc" + osc + "detune", color, 0, 127, 64);
         hbox.add(comp);
 
-        comp = new LabelledDial("Pulse Width", this, "part" + part + "osc" + osc + "pulsewidth", color, 0, 127);
+        comp = new LabelledDial("Pulse Width", this, "part" + part + "osc" + osc + "pulsewidth", color, 0, 127, 64);
         hbox.add(comp);
 
-        comp = new LabelledDial("Pulse Width", this, "part" + part + "osc" + osc + "pulsewidthmod", color, 0, 127);
+        comp = new LabelledDial("Pulse Width", this, "part" + part + "osc" + osc + "pulsewidthmod", color, 0, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Mod");
         hbox.add(comp);
 
@@ -959,6 +995,8 @@ public class RedSoundDarkStar extends Synth
         pos += 2;
         // last two bytes are unused
         }
+
+    public byte[] emit(String key) { return new byte[0]; }
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {

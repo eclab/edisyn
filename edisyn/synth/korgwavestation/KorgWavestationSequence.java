@@ -34,7 +34,9 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
     public static final int NUM_STEPS = 255;
     
     NumberButton lengthbutton;
-    JCheckBoxMenuItem blockSending;
+    boolean blockSending = true;
+    
+    public void setBlockSending(boolean val) { blockSending = val; } // mostly just used for Testing
 
 //    public JCheckBoxMenuItem includeLengthInBulkSend = new JCheckBoxMenuItem("Include Length when Sending");
 
@@ -72,7 +74,8 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
         
         model.set("number", 0);
         model.set("bank", 0);
-
+		model.setStatus("magnify", model.STATUS_IMMUTABLE);
+		
         loadDefaults();
         }
                 
@@ -138,7 +141,7 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
             {
             public void submitValue(int val)
                 {
-                if (blockSending.isSelected() || verifyLengthChange(val))
+                if (blockSending || verifyLengthChange(val))
                     {
                     super.submitValue(val);
                         
@@ -273,12 +276,12 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
             }
         else
             {
-            String[] waves = new String[517 - 32];
-            for(int i = 0; i < 517 - 32; i++)
+            String[] waves = new String[518 - 32];
+            for(int i = 0; i < 518 - 32; i++)
                 {
-                waves[i] = "Wave " + i;
+                waves[i] = "Card Wave " + (i + 32);
                 }
-            return waves;
+          return waves;
             }
         }
         
@@ -810,19 +813,23 @@ return pos;
                     {
                     char[] name = new char[NAME_LENGTH];
                     for(int j = 0; j < NAME_LENGTH; j++)
-                        { int d = data[pos++]; if (d < 0) d += 256; name[j] = (char)d; }
+                        { 
+                        int d = data[pos++]; 
+                        if (d < 0) d += 256; 
+                        name[j] = (char)d; 
+                        }
                     model.set(MAIN_KEYS[i], new String(name));
                     }
                 else
                     {
-                    model.set(MAIN_KEYS[i], (data[pos++] << 7) | (data[pos++] & 127));
+                    model.set(MAIN_KEYS[i], ((data[pos++] << 7) | (data[pos++] & 127)) - 127);    		// so to make everything positive (-127 is the smallest value in any parameter)
                     }
                 }
             for(int j = 0; j < NUM_STEPS; j++)
                 {
                 for(int i = 0; i < STEP_KEYS.length; i++)
                     {
-                    model.set("step" + (j + 1) + STEP_KEYS[i], (data[pos++] << 7) | (data[pos++] & 127));
+                    model.set("step" + (j + 1) + STEP_KEYS[i], ((data[pos++] << 7) | (data[pos++] & 127)) - 127);   		// so to make everything positive (-127 is the smallest value in any parameter)
                     }
                 }
             }
@@ -919,7 +926,7 @@ return pos;
     
     public Object[] emitAll(String key, int status)
         {
-        if (!writingParameters && blockSending.isSelected()) return new Object[0];  // we don't send anything
+        if (!writingParameters && blockSending) return new Object[0];  // we don't send anything
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
         if (key.equals("magnify")) return new Object[0]; // this is not emittable
@@ -1226,7 +1233,7 @@ return pos;
         if (!getSendMIDI())
             return;
 
-        if (!writingParameters && blockSending.isSelected()) return;  // we don't send anything
+        if (!writingParameters && blockSending) return;  // we don't send anything
                 
         sendingAllParameters = true;
         totalParameters = offsetParameters + 14 * getModel().get("length") + 7;
@@ -1324,7 +1331,7 @@ return pos;
                 }
             else
                 {
-                int val = model.get(MAIN_KEYS[i], 0);
+                int val = model.get(MAIN_KEYS[i], 0) + 127;		// so to make everything positive (-127 is the smallest value in any parameter)
                 sysex[pos++] = (byte)((val >>> 7) & 127);
                 sysex[pos++] = (byte)(val & 127);
                 }
@@ -1333,7 +1340,7 @@ return pos;
             {
             for(int i = 0; i < STEP_KEYS.length; i++)
                 {
-                int val = model.get("step" + (j + 1) + STEP_KEYS[i], 0);
+                int val = model.get("step" + (j + 1) + STEP_KEYS[i], 0) + 127;		// so to make everything positive (-127 is the smallest value in any parameter)
                 sysex[pos++] = (byte)((val >>> 7) & 127);
                 sysex[pos++] = (byte)(val & 127);
                 }
@@ -1562,7 +1569,7 @@ return pos;
         else
             {                       
             int current = model.get("step", 1);
-            if (!blockSending.isSelected())
+            if (!blockSending)
                 {         
                 tryToSendSysex(paramBytes(WAVE_SEQ_STEP, model.get("step", 1)));
                 tryToSendSysex(paramBytes(EXECUTE_DELETE_WS_STEP, 1));
@@ -1599,7 +1606,7 @@ return pos;
             // If the length is 0 -> 1, then we just do a simple insert at position 1.  We set the new length and the step to 1,
             // then we update step 1's values to defaults
                         
-            if (!blockSending.isSelected())
+            if (!blockSending)
                 {         
                 tryToSendSysex(paramBytes(WAVE_SEQ_STEP, 1));
                 tryToSendSysex(paramBytes(EXECUTE_INSERT_WS_STEP, 1));
@@ -1623,7 +1630,7 @@ return pos;
             // matter if we're inserting before or after.  The only difference of consequence is where
             // we put the new step number!
                
-            if (!blockSending.isSelected())
+            if (!blockSending)
                 {         
                 tryToSendSysex(paramBytes(WAVE_SEQ_STEP, current));
                 tryToSendSysex(paramBytes(EXECUTE_INSERT_WS_STEP, 1));
@@ -1751,24 +1758,28 @@ return pos;
             });
         menu.add(soloMenu);
 
-        blockSending = new JCheckBoxMenuItem("Block Sending Any Parameters");
-        blockSending.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                setLastX(blockSending.isSelected() ? "YES" : "NO", "BlockSendingParameters", getSynthName(), true);
-                }
-            });
-        menu.add(blockSending);
-
+        JCheckBoxMenuItem blockSendingMenu = new JCheckBoxMenuItem("Block Sending Any Parameters");
+        
         String str = getLastX("BlockSendingParameters", getSynthName(), true);
         
         if (str == null)
-            blockSending.setSelected(false);
+            blockSending = false;
         else if (str.equalsIgnoreCase("YES"))
-            blockSending.setSelected(true);
+            blockSending = true;
         else 
-            blockSending.setSelected(false);
+            blockSending = false;
+        blockSendingMenu.setSelected(blockSending);
+
+        blockSendingMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                blockSending = blockSendingMenu.isSelected(); 
+                setLastX(blockSending ? "YES" : "NO", "BlockSendingParameters", getSynthName(), true);
+                }
+            });
+        menu.add(blockSendingMenu);
+
         }
 
     public boolean getSendsParametersAfterLoad()

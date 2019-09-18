@@ -1319,6 +1319,7 @@ public class OberheimMatrix1000 extends Synth
                 {
                 // there is no value = 1, that's the same as value = 0
                 if (value >= 1) value = (byte)(value - 1);
+                model.set(key, value);
                 }
             else if (key.equals("dco1fixedmods1"))
                 {
@@ -2888,4 +2889,15 @@ public class OberheimMatrix1000 extends Synth
         "GREEZY1",
         "GRNDR 6*"
         };
+        
+    public boolean testVerify(Synth synth2, 
+    							String key,
+    							Object obj1, Object obj2) 
+    							{
+    							// destinations must be zero when sources are zero
+    							if (key.endsWith("source")) return true;
+    							if (key.endsWith("destination")) return true;
+    							return false;
+    							}
+
     }

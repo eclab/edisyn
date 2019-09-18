@@ -28,6 +28,7 @@ public class KorgMicrosampler extends Synth
     public static final int EFFECTS_DIVIDER = 10;
     public static final int OCTAVE = 3;  // starts at octave 3? 
     
+    public static final int MAX_NUM_FX_PARAMS = 20;
     
     ///// NOTE
     ///// The nightmare of settings below are various tables that enable Edisyn to convert
@@ -241,10 +242,9 @@ public class KorgMicrosampler extends Synth
         
     public KorgMicrosampler()
         {
-
         // set default parameters for fx
         for(int type = 0; type < FX_TYPE.length; type++)
-            for(int param = 0; param < 20; param++)
+            for(int param = 0; param < MAX_NUM_FX_PARAMS; param++)
                 {
                 model.set("fx" + type + "param" + param, FX_DEFAULT_SETTINGS[type][param]);
                 model.setMin("fx" + type + "param" + param, 0);
@@ -272,6 +272,9 @@ public class KorgMicrosampler extends Synth
         for(int i = 1; i < 37; i ++)
             model.set("sample" + i + "name", "Untitled");
                         
+		model.setStatus("pattern", model.STATUS_IMMUTABLE);
+		model.setStatus("samplenumber", model.STATUS_IMMUTABLE);
+		
         loadDefaults();        
         }
           
@@ -3138,7 +3141,7 @@ public class KorgMicrosampler extends Synth
 
                 setSendMIDI(false);
                 // Reset default settings
-                for(int param = 0; param < 20; param++)
+                for(int param = 0; param < MAX_NUM_FX_PARAMS; param++)
                     {
                     model.set("fx" + type + "param" + param, FX_DEFAULT_SETTINGS[type][param]);
                     }
@@ -3455,7 +3458,7 @@ public class KorgMicrosampler extends Synth
         data[756] = (byte)model.get("fxtype", 0);
         data[757] = (byte)model.get("fxparametercontrol1", 0);
         data[758] = (byte)model.get("fxparametercontrol2", 0);
-        for(int i = 0; i < 20; i++)
+        for(int i = 0; i < MAX_NUM_FX_PARAMS; i++)
             {
             int sub = i;
             data[759 + i] = (byte)getSigned("fx" + data[756] + "param" + sub, 0);
@@ -3767,7 +3770,7 @@ public class KorgMicrosampler extends Synth
         model.set("fxtype", data[756]);
         model.set("fxparametercontrol1", data[757]);
         model.set("fxparametercontrol2", data[758]);
-        for(int i = 0; i < 20; i++)
+        for(int i = 0; i < MAX_NUM_FX_PARAMS; i++)
             {
             int sub = i;
             int type = data[756];
@@ -3899,4 +3902,16 @@ public class KorgMicrosampler extends Synth
         merge.setEnabled(false);
         return frame;
         }
+
+
+
+    public boolean testVerify(Synth synth2, 
+    							String key,
+    							Object obj1, Object obj2) 
+    							{
+    							// we don't emit all the fx params, just the ones for the currently-displayed fx type
+    							for(int i = 0; i < MAX_NUM_FX_PARAMS; i++)
+    								if (key.endsWith("param" + i)) return true;
+    							return false;
+    							}
     }

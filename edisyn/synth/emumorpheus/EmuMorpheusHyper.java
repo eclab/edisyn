@@ -512,7 +512,11 @@ public class EmuMorpheusHyper extends Synth
                     if (model.get("z" + zone + "number") == -1)
                         val = -1;
                     else
-                        val = model.get("z" + zone + "bank") * 128 + model.get("z" + zone + "number");
+                    	{
+                    	// Banks are:  RAM: 0-127, ROM: 128-255, CARD: 384-511 [manual incorrectly says "383", p. 276]
+                    	int b = model.get("z" + zone + "bank");
+                        val = (b == 2 ? 384 : b * 128) + model.get("z" + zone + "number");
+                        }
                     }
                 catch (Exception ex)
                     {
@@ -595,8 +599,18 @@ public class EmuMorpheusHyper extends Synth
                     {
                     // this is just a guess...
                     int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
-                    model.set("z" + zone + "bank", val / 128);
-                    model.set("z" + zone + "number", val % 128);
+                    if (val < 0) // namely, -1
+                    	{
+						model.set("z" + zone + "bank", 0);
+						model.set("z" + zone + "number", -1);
+                    	}
+                    else
+                    	{
+                    	int b = val / 128;
+                    	if (b == 3) b = 2;		// Card Presets
+	                    model.set("z" + zone + "bank", b);
+	                    model.set("z" + zone + "number", val % 128);
+	                    }
                     }
                 catch (Exception ex)
                     {
@@ -1068,4 +1082,12 @@ public class EmuMorpheusHyper extends Synth
         
     public static final String[] FUNCTION_GENERATOR__TYPES = new String[] { "Absolute", "Delta", "Rnd Absolute", "Rnd Delta" };
         
+    public boolean testVerify(Synth synth2, 
+    							String key,
+    							Object obj1, Object obj2) 
+    							{
+       							// if the zone number is -1, then there is no bank because
+       							// there is no patch, so the bank is read in as 0
+ 								return (key.startsWith("z") && key.endsWith("bank"));
+    							}
     }

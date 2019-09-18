@@ -91,6 +91,8 @@ public class KawaiK4Drum extends Synth
         
         model.set("bank", 0);           // internal
 
+		model.setStatus("note", model.STATUS_IMMUTABLE);
+
         loadDefaults();
         }
         
@@ -559,7 +561,7 @@ public class KawaiK4Drum extends Synth
         for(int i = 0; i < 682; i++)
             {
             String key = allParameters[i];
-                        
+                      
             int note = (i / 11);
                 
             if (b == 10)  // sub-checksum 
@@ -588,7 +590,9 @@ public class KawaiK4Drum extends Synth
                 bytes[b] = (data[i] = (byte)((model.get("key" + note + "waveselect2") & 127)));
                 }
             else
+            	{
                 bytes[b] = (data[i] = (byte)(model.get(key)));
+                }
             b++;
             }
 

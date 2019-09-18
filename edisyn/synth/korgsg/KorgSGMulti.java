@@ -798,5 +798,12 @@ public class KorgSGMulti extends Synth
         return BANKS[model.get("bank")] + (number > 9 ? "" : "0") + number;
         }
         
+    public boolean testVerify(Synth synth2, 
+    							String key,
+    							Object obj1, Object obj2) 
+    							{
+    							// there are two kinds of the KorgSG with different filter options
+    							return (key.endsWith("filt"));    
+    							}
     }
     

@@ -335,7 +335,7 @@ public class KawaiK4Multi extends Synth
         model.removeMetricMinMax("section" + src + "bank");
         hbox.add(comp);
         
-        comp = new LabelledDial("Number", this, "section" + src + "number", color, 0, 16, -1);
+        comp = new LabelledDial("Number", this, "section" + src + "number", color, 0, 15, -1);
         model.removeMetricMinMax("section" + src + "number");
         hbox.add(comp);
 

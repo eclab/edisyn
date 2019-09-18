@@ -2203,7 +2203,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 // Bank_Exp specifies which group it is for each of the waves.  I believe
 // it works like this.  For each Wave there are two bits.  If both bits are
 // unset, it's group 1 (0, 1, 2, 3).  If the first bit is set, it's group 
-// 2 (4, 5, 6, 7).  If the second bit is set, it's group 3 (8, 9, 10, 10).
+// 2 (4, 5, 6, 7).  If the second bit is set, it's group 3 (8, 9, 10, 11).
 // It's not clear what happens if both bits are set.
 
             int bita = ((patch.bankExp >>> i) & 1);   // we assume Wave A = 0, Wave B = 1, etc.
@@ -2211,15 +2211,15 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
             if (bitb == 1)
                 {
-                model.set(osc + "wavebank", wsBankExpToEdisynBank[patch.waves[i].waveBank + 8]);
+                model.set(osc + "wavebank", wsExpToEdisynBank[patch.waves[i].waveBank + 8]);
                 }
             else if (bita == 1)
                 {
-                model.set(osc + "wavebank", wsBankExpToEdisynBank[patch.waves[i].waveBank + 4]);
+                model.set(osc + "wavebank", wsExpToEdisynBank[patch.waves[i].waveBank + 4]);
                 }
             else
                 {
-                model.set(osc + "wavebank", wsBankExpToEdisynBank[patch.waves[i].waveBank]);
+                model.set(osc + "wavebank", wsExpToEdisynBank[patch.waves[i].waveBank]);
                 }
 
             }
@@ -2348,7 +2348,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
             patch.waves[i].s1Lfo1R = model.get(osc + "lfo1ratemodsource"); 
             patch.waves[i].s1Lfo1A = model.get(osc + "lfo1depthmodsource"); 
-            patch.waves[i].lfo1Shape = (model.get(osc + "lfo1sync") << 7) |  model.get(osc + "lfo1shape");
+            patch.waves[i].lfo1Shape = (model.get(osc + "lfo1sync") << 7) | model.get(osc + "lfo1shape");
             patch.waves[i].lfo1Rate = model.get(osc + "lfo1rate"); 
             patch.waves[i].lfo1Amt = model.get(osc + "lfo1amount"); 
             patch.waves[i].lfo1Delay = model.get(osc + "lfo1delay"); 
@@ -2363,7 +2363,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
             patch.waves[i].s1Lfo2R = model.get(osc + "lfo2ratemodsource"); 
             patch.waves[i].s1Lfo2A = model.get(osc + "lfo2depthmodsource"); 
-            patch.waves[i].lfo1Shape = (model.get(osc + "lfo2sync") << 7) |  model.get(osc + "lfo2shape");
+            patch.waves[i].lfo2Shape = (model.get(osc + "lfo2sync") << 7) | model.get(osc + "lfo2shape");
             patch.waves[i].lfo2Rate = model.get(osc + "lfo2rate"); 
             patch.waves[i].lfo2Amt = model.get(osc + "lfo2amount"); 
             patch.waves[i].lfo2Delay = model.get(osc + "lfo2delay"); 
@@ -2434,9 +2434,9 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 // This is computed according to the Developer FAQ
             patch.waves[i].patchOutput = ((model.get(osc + "busd") << 3) |
                 (model.get(osc + "busc") << 2) |
-                (model.get(osc + "busb") << 2) |
+                (model.get(osc + "busb") << 1) |
                 (model.get(osc + "busa")));
-                                                        
+                    
 // I need to compute these I believe.  The following code is from the Developer FAQ.
 
             if (patch.waves[i].lfo1Fade == 0)
@@ -2449,16 +2449,16 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
             else
                 patch.waves[i].lfo2Inc = (0x7FFFFFL * (long)patch.waves[i].lfo2Amt) / (RATE_TAB[patch.waves[i].lfo2Fade] * 127);
 
-// Now I need to compute patch.bankExp and patch.waves[i].waveBank
-            patch.waves[i].waveBank = edisynToWSBank[model.get(osc + "wavebank")] % 4;
+// Now I need to compute patch.waves[i].waveBank
+            patch.waves[i].waveBank = edisynToWSExpBank[model.get(osc + "wavebank")] % 4;
             }
 
 // Now compute patch.bankExp
 // Not sure if I need to set BOTH bits.  Doesn't appear so.
-        int b1 = edisynToWSBank[model.get("osc1wavebank")];
-        int b2 = edisynToWSBank[model.get("osc2wavebank")];
-        int b3 = edisynToWSBank[model.get("osc3wavebank")];
-        int b4 = edisynToWSBank[model.get("osc4wavebank")];
+        int b1 = edisynToWSExpBank[model.get("osc1wavebank")];
+        int b2 = edisynToWSExpBank[model.get("osc2wavebank")];
+        int b3 = edisynToWSExpBank[model.get("osc3wavebank")];
+        int b4 = edisynToWSExpBank[model.get("osc4wavebank")];
         patch.bankExp =
             (b1 >= 8 ? 16 : b1 >= 4 ? 1 : 0) + 
             (b2 >= 8 ? 32 : b2 >= 4 ? 2 : 0) + 

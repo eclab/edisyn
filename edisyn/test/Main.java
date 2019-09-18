@@ -117,13 +117,13 @@ public class Main
 	public void printCommandFormat(String preamble, boolean quit)
 		{
 		if (preamble != null) System.err.println(preamble);
-		System.err.println("Usage:  " + 
+		System.err.println("\nUsage:  " + 
 			(name == null ? "" : name) + 
 			(commands.length == 0 ? "" : " [ARGUMENTS] " + 
 			(restDescription == null ? "" : restDescription)));
 		if (commands.length != 0)
 			{
-			System.err.println("Arguments:");
+			System.err.println("\nArguments:");
 			for(int j = 0; j < commands.length; j++)
 				System.err.println("\t" + commands[j] + 
 					(FLAG.equals(types[j]) ? "\t         \t" : "\t" + types[j] + " \t") +
@@ -133,7 +133,7 @@ public class Main
 			{
 			System.err.println("\t-h\t         \tShows this usage text");
 			}
-		if (postamble != null) System.err.println(postamble);
+		if (postamble != null) System.err.println("\n" + postamble + "\n");
 		if (quit) System.exit(1);
 
 		}

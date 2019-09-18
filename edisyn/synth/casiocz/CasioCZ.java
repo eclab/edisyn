@@ -1511,4 +1511,27 @@ public class CasioCZ extends Synth
   return frame;
   }         
 */
+
+    public boolean testVerify(Synth synth2, 
+    							String key,
+    							Object obj1, Object obj2) 
+    							{
+    							if (isCZ1())
+    								{
+    								// CZ1 names are padded with spaces when emitted
+    								return (key.equals("name"));
+    								}
+    							else
+    								{
+    								// these are CZ1-only and are ignored on parsing
+    								return (key.equals("line1env1velocity") ||
+    								key.equals("line1env2velocity") ||
+    								key.equals("line1env3velocity") ||
+									key.equals("line2env1velocity") ||
+    								key.equals("line2env2velocity") ||
+    								key.equals("line2env3velocity") ||
+    								key.equals("line1env3mainlevel") ||
+    								key.equals("line2env3mainlevel"));
+    								}
+    							}
     }

@@ -768,7 +768,7 @@ public class KorgSG extends Synth
         effects[FLANGER_DELAY] = new HBox();
         addDepth(effect, color, effects[FLANGER_DELAY]);
                                 
-        comp = new LabelledDial("Flanger", this, "effect" + effect + "flangerdelay" + "flangerdelaytime", color, 0, 200)
+        comp = new LabelledDial("Flanger", this, "effect" + effect + "flangerdelay" + "flangerdelaytime", color, 0, 50)
             {
             public String map(int val)
                 {
@@ -794,7 +794,10 @@ public class KorgSG extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Feedback");
         effects[FLANGER_DELAY].add(comp);
 
-        comp = new LabelledDial("Delay", this, "effect" + effect + "flangerdelay" + "delaytime", color, 0, 450);
+        comp = new LabelledDial("Delay", this, "effect" + effect + "flangerdelay" + "delaytime", color, 0, 225)
+        	{
+            public String map(int val) { return "" + (val * 2); }
+        	};
         ((LabelledDial)comp).addAdditionalLabel("Time");
         effects[FLANGER_DELAY].add(comp);
 
@@ -817,7 +820,7 @@ public class KorgSG extends Synth
             {
             effects[HYPER_ENHANCER] = new HBox();
                                                                 
-            comp = new LabelledDial("Depth", this, "effect" + effect + "hyperenhancer" + "ldepth", color, 0, 1)
+            comp = new LabelledDial("Depth", this, "effect" + effect + "hyperenhancer" + "ldepth", color, 0, 100)
                 {
                 public String map(int val)      
                     {
@@ -833,7 +836,7 @@ public class KorgSG extends Synth
             ((LabelledDial)comp).addAdditionalLabel("(Left)");
             effects[HYPER_ENHANCER].add(comp);
 
-            comp = new LabelledDial("Depth", this, "effect" + effect + "hyperenhancer" + "rdepth", color, 0, 1)
+            comp = new LabelledDial("Depth", this, "effect" + effect + "hyperenhancer" + "rdepth", color, 0, 100)
                 {
                 public String map(int val)      
                     {
@@ -852,7 +855,7 @@ public class KorgSG extends Synth
             comp = new LabelledDial("Trim", this, "effect" + effect + "hyperenhancer" + "trim", color, 0, 100);
             effects[HYPER_ENHANCER].add(comp);
 
-            comp = new LabelledDial("Low", this, "effect" + effect + "hyperenhancer" + "lowfrequency", color, 1, 70);
+            comp = new LabelledDial("Low", this, "effect" + effect + "hyperenhancer" + "lowfreq", color, 1, 70);
             ((LabelledDial)comp).addAdditionalLabel("Frequency");
             effects[HYPER_ENHANCER].add(comp);
 
@@ -860,7 +863,7 @@ public class KorgSG extends Synth
             ((LabelledDial)comp).addAdditionalLabel("Blend");
             effects[HYPER_ENHANCER].add(comp);
 
-            comp = new LabelledDial("High", this, "effect" + effect + "hyperenhancer" + "highfrequency", color, 1, 40);
+            comp = new LabelledDial("High", this, "effect" + effect + "hyperenhancer" + "highfreq", color, 1, 40);
             ((LabelledDial)comp).addAdditionalLabel("Frequency");
             effects[HYPER_ENHANCER].add(comp);
 
@@ -1054,10 +1057,10 @@ public class KorgSG extends Synth
                 model.set("effect" + effect + "earlyreflection" + "eqlow", data[offset + 7]);
                 break;
             case EFFECT_STEREO_DELAY:
-                model.set("effect" + effect + "stereodelay" + "delaytimel", (data[offset + 1] << 8) | data[offset + 0]);
+                model.set("effect" + effect + "stereodelay" + "delaytimel", (data[offset + 1] << 8) | (data[offset + 0] & 0xFF));
                 model.set("effect" + effect + "stereodelay" + "feedback", data[offset + 2]);
                 model.set("effect" + effect + "stereodelay" + "highdamp", data[offset + 3]);
-                model.set("effect" + effect + "stereodelay" + "delaytimer", (data[offset + 5] << 8) | data[offset + 4]);
+                model.set("effect" + effect + "stereodelay" + "delaytimer", (data[offset + 5] << 8) | (data[offset + 4] & 0xFF));
                 model.set("effect" + effect + "stereodelay" + "eqhigh", data[offset + 6]);
                 model.set("effect" + effect + "stereodelay" + "eqlow", data[offset + 7]);
                 break;
@@ -1065,15 +1068,15 @@ public class KorgSG extends Synth
                 model.set("effect" + effect + "stereochorus" + "moddepth", data[offset + 0]);
                 model.set("effect" + effect + "stereochorus" + "modspeed", range(data[offset + 1]));
                 model.set("effect" + effect + "stereochorus" + "mgshape", (data[offset + 2] == 2 ? 0 : 1));  // is either 02 or 03
-                model.set("effect" + effect + "stereochorus" + "delaytime", data[offset + 4]);
+                model.set("effect" + effect + "stereochorus" + "delaytime", range(data[offset + 4]));
                 model.set("effect" + effect + "stereochorus" + "eqhigh", data[offset + 6]);
                 model.set("effect" + effect + "stereochorus" + "eqlow", data[offset + 7]);
                 break;
             case EFFECT_FLANGER:
-                model.set("effect" + effect + "stereoflanger" + "delaytime", data[offset + 0]);
+                model.set("effect" + effect + "stereoflanger" + "delaytime", range(data[offset + 0]));
                 model.set("effect" + effect + "stereoflanger" + "moddepth", data[offset + 1]);
                 model.set("effect" + effect + "stereoflanger" + "modspeed", data[offset + 2]);
-                model.set("effect" + effect + "stereoflanger" + "resonance", data[offset + 3]);
+                model.set("effect" + effect + "stereoflanger" + "resonance", data[offset + 3]);		// -99 ... 99
                 model.set("effect" + effect + "stereoflanger" + "eqhigh", data[offset + 6]);
                 model.set("effect" + effect + "stereoflanger" + "eqlow", data[offset + 7]);
                 break;
@@ -1089,7 +1092,7 @@ public class KorgSG extends Synth
                 model.set("effect" + effect + "stereophaser" + "moddepth", data[offset + 0]);
                 model.set("effect" + effect + "stereophaser" + "modspeed", range(data[offset + 1]));
                 model.set("effect" + effect + "stereophaser" + "mgshape", (data[offset + 2] == 2 ? 0 : 1));  // is either 02 or 03
-                model.set("effect" + effect + "stereophaser" + "feedback", data[offset + 3]);
+                model.set("effect" + effect + "stereophaser" + "feedback", data[offset + 3]);		// -99 ... 99
                 model.set("effect" + effect + "stereophaser" + "manual", data[offset + 4]);
                 break;
             case EFFECT_ROTARY_SPEAKER:
@@ -1103,7 +1106,7 @@ public class KorgSG extends Synth
                 model.set("effect" + effect + "autopan" + "depth", data[offset + 0]);
                 model.set("effect" + effect + "autopan" + "speed", range(data[offset + 1]));
                 model.set("effect" + effect + "autopan" + "mgshape", (data[offset + 2] == 2 ? 0 : 1));  // is either 02 or 03
-                model.set("effect" + effect + "autopan" + "shape", data[offset + 3]);
+                model.set("effect" + effect + "autopan" + "shape", data[offset + 3]);		// -99 ... 99
                 model.set("effect" + effect + "autopan" + "eqhigh", data[offset + 6]);
                 model.set("effect" + effect + "autopan" + "eqlow", data[offset + 7]);
                 break;
@@ -1520,5 +1523,15 @@ public class KorgSG extends Synth
         return BANKS[model.get("bank")] + (number > 9 ? "" : "0") + number;
         }
         
+    public boolean testVerify(Synth synth2, 
+    							String key,
+    							Object obj1, Object obj2) 
+    							{
+    							// lots of effects will not be loaded
+    							if (key.startsWith("effect")) return true;    
+    							// name is padded
+    							if (key.equals("name")) return true; 
+    							return false;
+    							}
     }
     

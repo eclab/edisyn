@@ -1115,7 +1115,7 @@ public class KawaiK4 extends Synth
                 }
             else if (key.equals("pitchbend_wheelassign"))
                 {
-                model.set("pitchbend", data[i + offset] & 31);
+                model.set("pitchbend", data[i + offset] & 15);
                 // it looks like the K4 can send junk in the upper bits :-(
                 model.set("wheelassign", (data[i + offset] >>> 4) & 3);
                 }
@@ -1271,8 +1271,8 @@ public class KawaiK4 extends Synth
                 // Error in Section 6.  0 is mute OFF and 1 is mute ON. 
                 // Perhaps our strategy should be to eliminate mute entirely and just turn the level down.
                 // That way when we load a patch that's got a mute in it, we're not confused.
-                data[i] = (byte)((model.get("lfo2shape") << 4));  // mutes are all zero (off)
-                //data[i] = (byte)((model.get("s1mute")) | ((model.get("s2mute")) << 1) | ((model.get("s3mute")) << 2) | ((model.get("s4mute")) << 3) | (model.get("lfo2shape") << 4));
+                //data[i] = (byte)((model.get("lfo2shape") << 4));  // mutes are all zero (off)
+                data[i] = (byte)((model.get("s1mute")) | ((model.get("s2mute")) << 1) | ((model.get("s3mute")) << 2) | ((model.get("s4mute")) << 3) | (model.get("lfo2shape") << 4));
                 }
             else if (key.equals("s1envelopelevel"))
                 {
@@ -1581,4 +1581,16 @@ public class KawaiK4 extends Synth
         
         return BANKS[model.get("bank")] + (model.get("number") + 1 < 10 ? "0" : "") + ((model.get("number") + 1));
         }
+
+    public boolean testVerify(Synth synth2, 
+    							String key,
+    							Object obj1, Object obj2) 
+    							{
+    								// The K4 editor has a strategy where mute values are handled by 
+    								// turning off the envelope level, so these will be wrong
+    								return (key.equals("s1envelopelevel") ||
+    								key.equals("s2envelopelevel") ||
+    								key.equals("s3envelopelevel") ||
+									key.equals("s4envelopelevel"));
+    							}
     }

@@ -17,7 +17,7 @@ import java.io.*;
 import javax.sound.midi.*;
 
 /**
-   A patch editor for the Korg SG RACK [Multi].  Note NOT for the SG Pro X.
+   A performance editor for the Korg Wavestation.
         
    @author Sean Luke
 */
@@ -66,7 +66,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
     ////
     //// Including "No Effects", there are 56 effects in the SR.  8 of these effects are "extended effects"
     //// not found in the original Wavestation.  These effects are organized into certain groups where
-    //// they have parameters in common.   Edisyn breaks them into 31 groups.  The FX_MAP array below 
+    //// they have parameters in common.   Edisyn breaks them into 31 groups.  The FX_GROUP array below 
     //// indicates, for each effect, the group it is in.
     ////
     //// Next comes FX_PARAMETERS.  This is an array of arrays of parameters, ONE ARRAY PER GROUP.  The parameters
@@ -84,7 +84,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
     //// Next comes FX_PRESETS.  This is another copy from the presets list in Korg's Effects.txt document, slightly tweaked.
     //// For each FX, it contains an array of preset values, corresponding to elements in that FX type's PCL List.
 
-    static final int FX_MAP[] = new int[]
+    static final int FX_GROUP[] = new int[]
     {
     0,              // Off
     1,              // Small Hall
@@ -902,6 +902,12 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         };
 
 
+
+	public static final int ST_BYTE = 0;	// Storage block byte number
+	public static final int ST_BIT = 1;		// Storage block bit offset
+	public static final int PA_LEN = 2;		// Parameter bit length.  If negative, then sign-padded.  If positive, then zero-padded.
+	public static final int PA_NUM = 3;		// Parameter number
+	public static final int PA_BIT = 4;		// Parameter bit offset
 
 
     public static final int[][][] FX_PCL_LIST = new int[][][] {
@@ -3836,17 +3842,17 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 super.update(key, model);
                 int type = model.get(key, 0);
                 main.removeLast();
-                main.addLast(fx[fxnum - 1][FX_MAP[type]]);
+                main.addLast(fx[fxnum - 1][FX_GROUP[type]]);
                 main.revalidate();
                 main.repaint();
-                setFXPreset(fxnum);
+                resetFX(fxnum);
                 }
             };
         vbox = new VBox();
         vbox.add(comp);
         main.add(vbox);
 
-        main.addLast(fx[fxnum - 1][FX_MAP[0]]);
+        main.addLast(fx[fxnum - 1][FX_GROUP[0]]);
                         
         category.add(main, BorderLayout.CENTER);
         return category;
@@ -4178,43 +4184,32 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         }    
 
 
-    public void setFXPreset(int fx)
+    public void resetFX(int fx)
         {
-        int fxtype = model.get("fx" + fx + "type");
-        if (fxtype == 0) return;
-        
+        for(int fxtype = 1; fxtype < FX_GROUP.length; fxtype++)
+        	{
         model.setUpdateListeners(false);
+        
         // clear
-        for(int pcl = 0; pcl < FX_PCL_LIST[FX_MAP[fxtype]].length; pcl++)
-            {
-            int paramnum = FX_PCL_LIST[FX_MAP[fxtype]][pcl][3];
-
-            int index = FX_INDICES[FX_MAP[fxtype]][0];  // a default in case we can't find it
-            for(int i = 1; i < FX_INDICES[FX_MAP[fxtype]].length; i++)
-                {
-                if (FX_INDICES[FX_MAP[fxtype]][i] == paramnum)
-                    {
-                    index = i;
-                    break;
-                    }
-                }
-
-            String key = "fx" + fx + "class" + FX_MAP[fxtype] + "param" + index;
-            model.set(key, 0);
+        for(int index = 0; index < FX_INDICES[FX_GROUP[fxtype]].length; index++)
+        	{
+            model.set("fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index, 0);
             }
         
         // set
-        for(int pcl = 0; pcl < FX_PCL_LIST[FX_MAP[fxtype]].length; pcl++)
+        for(int pcl = 0; pcl < FX_PCL_LIST[FX_GROUP[fxtype]].length; pcl++)
             {
-            int value = FX_PRESETS[fxtype][pcl];  // note NOT FX_MAP
-//              int bitlen = FX_PCL_LIST[FX_MAP[fxtype]][pcl][2];
-            int paramnum = FX_PCL_LIST[FX_MAP[fxtype]][pcl][3];
-            int parambit = FX_PCL_LIST[FX_MAP[fxtype]][pcl][4];
+            int value = FX_PRESETS[fxtype][pcl];  						// note NOT FX_GROUP[fxtype]
+			int bytenum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BYTE];	// unused
+			int bit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BIT];			// unused
+			int bitlen = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_LEN];		// unused
+			int paramnum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_NUM];
+			int parambit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_BIT];
                 
-            int index = -1;  // a default in case we can't find it
-            for(int i = 0; i < FX_INDICES[FX_MAP[fxtype]].length; i++)
+            int index = -1;
+            for(int i = 0; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
                 {
-                if (FX_INDICES[FX_MAP[fxtype]][i] == paramnum)
+                if (FX_INDICES[FX_GROUP[fxtype]][i] == paramnum)
                     {
                     index = i;
                     break;
@@ -4223,22 +4218,26 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 
             if (index == -1)  // unused (typically says "reserved for future use")
                 {
-                System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + paramnum + " (probably 'reserved').");
+                //System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + FX_GROUP[fxtype] + ":" + paramnum + " (probably 'reserved').");
                 }
             else
                 {
-                String key = "fx" + fx + "class" + FX_MAP[fxtype] + "param" + index;
+                String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index;
                 model.set(key, model.get(key) | (value << parambit));
                 }
+            }
             }
         revise();
         model.setUpdateListeners(true);
 
+        int fxtype = model.get("fx" + fx + "type");
+        if (fxtype == 0) return;
+
         // update
-        int[] indices = FX_INDICES[FX_MAP[fxtype]];
+        int[] indices = FX_INDICES[FX_GROUP[fxtype]];
         for(int i = 0; i < indices.length; i++)
             {
-            String key = "fx" + fx + "class" + FX_MAP[fxtype] + "param" + i;
+            String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + i;
             model.set(key, (model.get(key, 0)));
             }
         
@@ -4636,18 +4635,20 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         model.set("name", new String(performance.name));
                 
         // parse fx
-                
+
         model.set("fxmix3amount", performance.fxPerfBlock[2] & 15);
         model.set("fxmod3source", performance.fxPerfBlock[3] & 15);
-        // the sign is at bit 6.  We push to bit 7, then rotate (>>, not >>>) to slot 4 to do a signed extension.
-        model.set("fxmod3amount", (performance.fxPerfBlock[4] & 15) | (((performance.fxPerfBlock[0] << 1) & 128) >> 3));
-        model.set("fxmix4amount", ((performance.fxPerfBlock[2] & 0xFF) >>> 4) & 15);
-        model.set("fxmod4source", ((performance.fxPerfBlock[3] & 0xFF) >>> 4) & 15);
-        // the sign is at bit 6.  We push to bit 7, then rotate (>>, not >>>) to slot 4 to do a signed extension.
-        model.set("fxmod4amount", (((performance.fxPerfBlock[4] & 0xFF) >>> 4) & 15) | ((((performance.fxPerfBlock[1] & 0xFF) << 1) & 128) >> 3));
-                                
+        model.set("fxmod3amount", (performance.fxPerfBlock[4] & 15));
+        // the sign is at bit 6.
+        if (((performance.fxPerfBlock[0] >>> 6) & 1) == 1)  // negative
+        	model.set("fxmod3amount", 0 - (model.get("fxmod3amount", 0)));
+        model.set("fxmix4amount", (performance.fxPerfBlock[2] >>> 4) & 15);
+        model.set("fxmod4source", (performance.fxPerfBlock[3] >>> 4) & 15);
+        model.set("fxmod4amount", (performance.fxPerfBlock[4] >>> 4) & 15);
+        // the sign is at bit 6.
+        if (((performance.fxPerfBlock[1] >>> 6) & 1) == 1)  // negative
+        	model.set("fxmod4amount", 0 - (model.get("fxmod4amount", 0)));
         model.set("fxseries", (performance.fxPerfBlock[0] & 0xFF) >>> 7);
-
                 
         boolean extendedEffects = (((performance.fxPerfBlock[1] & 0xFF) >>> 7) == 1);                       
                                 
@@ -4665,46 +4666,65 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 continue;
                 
             model.setUpdateListeners(false);
+
+/*
+	public static final int ST_BYTE = 0;	// Storage block byte number
+	public static final int ST_BIT = 1;		// Storage block bit offset
+	public static final int PA_LEN = 2;		// Parameter bit length.  If negative, then sign-padded.  If positive, then zero-padded.
+	public static final int PA_NUM = 3;		// Parameter number
+	public static final int PA_BIT = 4;		// Parameter bit offset
+*/
                         
             // First we zero out
-            for(int pcl = 0; pcl < FX_PCL_LIST[FX_MAP[fxtype]].length; pcl++)
+            for(int pcl = 0; pcl < FX_PCL_LIST[FX_GROUP[fxtype]].length; pcl++)
                 {
-                int paramnum = FX_PCL_LIST[FX_MAP[fxtype]][pcl][3];
-                int index = FX_INDICES[FX_MAP[fxtype]][0];  // a default in case we can't find it
-                for(int i = 1; i < FX_INDICES[FX_MAP[fxtype]].length; i++)
+                int paramnum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_NUM];
+                int index = -1;
+                for(int i = 1; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
                     {
-                    if (FX_INDICES[FX_MAP[fxtype]][i] == paramnum)
+                    if (FX_INDICES[FX_GROUP[fxtype]][i] == paramnum)
                         {
                         index = i;
                         break;
                         }
                     }
-                String key = "fx" + fx + "class" + FX_MAP[fxtype] + "param" + index;
-                model.set(key, 0);
+                if (index == -1)
+                	{
+                    // System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + FX_GROUP[fxtype] + ":" + paramnum + " (probably 'reserved').");
+		          	}
+                else
+                	{
+	                String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index;
+     	           	model.set(key, 0);
+     	           	}
                 }
 
             // Now we load
-            for(int pcl = 0; pcl < FX_PCL_LIST[FX_MAP[fxtype]].length; pcl++)
+            for(int pcl = 0; pcl < FX_PCL_LIST[FX_GROUP[fxtype]].length; pcl++)
                 {
-                int bytenum = FX_PCL_LIST[FX_MAP[fxtype]][pcl][0];
-                int bit = FX_PCL_LIST[FX_MAP[fxtype]][pcl][1];
-                int bitlen = FX_PCL_LIST[FX_MAP[fxtype]][pcl][2];
-                int paramnum = FX_PCL_LIST[FX_MAP[fxtype]][pcl][3];
-                int parambit = FX_PCL_LIST[FX_MAP[fxtype]][pcl][4];
+                int bytenum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BYTE];
+                int bit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BIT];
+                int bitlen = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_LEN];
+                int paramnum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_NUM];
+                int parambit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_BIT];
 
                 int index = -1;
-                for(int i = 0; i < FX_INDICES[FX_MAP[fxtype]].length; i++)
+                for(int i = 0; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
                     {
-                    if (FX_INDICES[FX_MAP[fxtype]][i] == paramnum)
+                    if (FX_INDICES[FX_GROUP[fxtype]][i] == paramnum)
                         {
                         index = i;
                         break;
                         }
                     }
+
+// [FAIL] fx1class7param3 is [300] vs [44]
+// [FAIL] fx1class7param4 is [400] vs [144]
+// [FAIL] fx2class18param5 is [400] vs [144]
                                 
                 if (index == -1)  // unused (typically says "reserved for future use")
                     {
-                    System.err.println("Warning (KorgWavestationPerformance) 2: PCL List entry not found: " + fxtype + ":" + paramnum + " (probably reserved').");
+                	// System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + FX_GROUP[fxtype] + ":" + paramnum + " (probably 'reserved').");
                     }
                 else
                     {
@@ -4712,19 +4732,18 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                     int top = ((performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] & 0xFF) >>> bit);
                     // now push to the top of the byte
                     top = ((top << (8 - Math.abs(bitlen))) & 0xFF);
-
                     // now push back to the bottom of the byte.  This dance fills everything above with zeros or sign extends
                     if (bitlen < 0)
                         top = (((byte)top) >> (8 - Math.abs(bitlen)));          // notice the >> and +.  The (byte) forces sign extension of the byte.
                     else
-                        top = (top >>> (8 - Math.abs(bitlen)));         // here we don't WANT a (byte)
+                        top = (top >>> (8 - bitlen));         // here we don't WANT a (byte), since we want zero extension
                                 
                     // Now we're ready to position the data
-                    String key = "fx" + fx + "class" + FX_MAP[fxtype] + "param" + index;
+                    String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index;
 
                     int fxVal = model.get(key);
                     fxVal = fxVal | (top << parambit);
-                                
+
                     // Now set the data again
                     model.set(key, fxVal);
                     }
@@ -4734,10 +4753,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                         
             // finally update all the listeners
 
-            int[] indices = FX_INDICES[FX_MAP[fxtype]];
+            int[] indices = FX_INDICES[FX_GROUP[fxtype]];
             for(int i = 0; i < indices.length; i++)
                 {
-                String key = "fx" + fx + "class" + FX_MAP[fxtype] + "param" + i;
+                String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + i;
                 model.set(key, (model.get(key, 0)));
                 }
 
@@ -4755,7 +4774,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             if (performance.parts[i].bankNum < 0 || performance.parts[i].bankNum > 4)
                 model.set(part + "bank", 0);
             else
-                model.set(part + "bank", wsBankExpToEdisynBank[((performance.parts[i].partMode >>> 6) & 3) * 4 + performance.parts[i].bankNum]);
+                model.set(part + "bank", wsExpToEdisynBank[((performance.parts[i].partMode >>> 6) & 3) * 4 + performance.parts[i].bankNum]);
                                 
             model.set(part + "playmode", ((performance.parts[i].partMode >>> 4) & 3) - 1);
             model.set(part + "voicemode", ((performance.parts[i].partMode >>> 2) & 3) - 1);
@@ -4814,14 +4833,14 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
         performance.fxPerfBlock[2] = (byte)(performance.fxPerfBlock[2] | model.get("fxmix3amount"));
         performance.fxPerfBlock[3] = (byte)(performance.fxPerfBlock[3] | model.get("fxmod3source"));
-        performance.fxPerfBlock[4] = (byte)(performance.fxPerfBlock[4] | (model.get("fxmod3amount") & 15));
-        performance.fxPerfBlock[0] = (byte)(performance.fxPerfBlock[0] | ((model.get("fxmod3amount") & 128) >> 1));  // this should be >>, not >>>: sign goes in slot 6
+        performance.fxPerfBlock[4] = (byte)(performance.fxPerfBlock[4] | (Math.abs(model.get("fxmod3amount")) & 15));
+        performance.fxPerfBlock[0] = (byte)(performance.fxPerfBlock[0] | (model.get("fxmod3amount") < 0 ? 64 : 0)); //  sign goes in slot 6
 
         performance.fxPerfBlock[2] = (byte)(performance.fxPerfBlock[2] | (model.get("fxmix4amount") << 4));
         performance.fxPerfBlock[3] = (byte)(performance.fxPerfBlock[3] | (model.get("fxmod4source") << 4));
-        performance.fxPerfBlock[4] = (byte)(performance.fxPerfBlock[4] | ((model.get("fxmod4amount") & 15) << 4));
-        performance.fxPerfBlock[1] = (byte)(performance.fxPerfBlock[1] | ((model.get("fxmod4amount") & 128) >> 1));  // this should be >>, not >>>: sign goes in slot 6
-                
+        performance.fxPerfBlock[4] = (byte)(performance.fxPerfBlock[4] | ((Math.abs(model.get("fxmod4amount")) & 15) << 4));
+        performance.fxPerfBlock[1] = (byte)(performance.fxPerfBlock[1] | (model.get("fxmod4amount") < 0 ? 64 : 0));  //  sign goes in slot 6
+        
         performance.fxPerfBlock[0] = (byte)(performance.fxPerfBlock[0] | (model.get("fxseries") << 7));         
                 
         // always set extended effects
@@ -4833,7 +4852,8 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                         
             if (fxtype >= 48)  // extended effect
                 {
-                performance.fxPerfBlock[(fx == 1 ? 5 : 13)] = (byte)(performance.fxPerfBlock[(fx == 1 ? 5 : 13)] | (fxtype + 2 - 47));
+                performance.fxPerfBlock[(fx == 1 ? 5 : 13)] = (byte)(performance.fxPerfBlock[(fx == 1 ? 5 : 13)] | (fxtype - 47));
+                performance.fxPerfBlock[fx - 1] = (byte)(performance.fxPerfBlock[fx - 1] | 2);		// "No Effect"
                 }
             else
                 {
@@ -4844,18 +4864,18 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             if (fxtype != 0)
                 {
                 // Now we load
-                for(int pcl = 0; pcl < FX_PCL_LIST[FX_MAP[fxtype]].length; pcl++)
+                for(int pcl = 0; pcl < FX_PCL_LIST[FX_GROUP[fxtype]].length; pcl++)
                     {
-                    int bytenum = FX_PCL_LIST[FX_MAP[fxtype]][pcl][0];
-                    int bit = FX_PCL_LIST[FX_MAP[fxtype]][pcl][1];
-                    int bitlen = FX_PCL_LIST[FX_MAP[fxtype]][pcl][2];
-                    int paramnum = FX_PCL_LIST[FX_MAP[fxtype]][pcl][3];
-                    int parambit = FX_PCL_LIST[FX_MAP[fxtype]][pcl][4];
+                    int bytenum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BYTE];
+                    int bit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BIT];
+                    int bitlen = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_LEN];
+                    int paramnum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_NUM];
+                    int parambit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_BIT];
 
-                    int index = FX_INDICES[FX_MAP[fxtype]][0];  // a default in case we can't find it
-                    for(int i = 1; i < FX_INDICES[FX_MAP[fxtype]].length; i++)
+                    int index = -1;  
+                    for(int i = 1; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
                         {
-                        if (FX_INDICES[FX_MAP[fxtype]][i] == paramnum)
+                        if (FX_INDICES[FX_GROUP[fxtype]][i] == paramnum)
                             {
                             index = i;
                             break;
@@ -4864,36 +4884,36 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                                                 
                     if (index == -1)  // unused (typically says "reserved for future use")
                         {
-                        System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + paramnum + " (probably 'reserved').");
-                        continue;
+                		// System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + FX_GROUP[fxtype] + ":" + paramnum + " (probably 'reserved').");
                         }
-                                                
-                    String key = "fx" + fx + "class" + FX_MAP[fxtype] + "param" + index;
+                    else
+                    	{                     
+						String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index;
 
-                    int top = model.get(key);
-                                                                
-                    // push to the bottom of the byte
-                    top  = ((top & 0xFF) >>> parambit);
-                    // now push to the top of the byte
-                    top = ((top << (8 - Math.abs(bitlen))) & 0xFF);
-                    // Now push back to the bottom of the byte
-                    top = (top >>> (8 - Math.abs(bitlen)));
-                                                
-                    // Now we're ready to position the data
-
-                    performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] = 
-                        (byte)(performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] | ((top << bit) & 0xFF));
+						int top = model.get(key);
+																
+						// push to the bottom of the *int*, not byte
+						top = (top >>> parambit);
+						// now push to the top of the byte
+						top = ((top << (8 - Math.abs(bitlen))) & 0xFF);
+						// Now push back to the bottom of the byte
+						top = (top >>> (8 - Math.abs(bitlen)));
+												
+						// Now we're ready to position the data
+						performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] = 
+							(byte)(performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] | ((top << bit) & 0xFF));
+						}
                     }
                 }
             }
-                
+               
         // emit parts
                 
         for(int i = 0; i < 8; i++)
             {
             String part = "part" + (i + 1);
                         
-            int bank = edisynToWSBankExpBank[model.get(part + "bank")];
+            int bank = edisynToWSExpBank[model.get(part + "bank")];
             performance.parts[i].bankNum = bank % 4;
             performance.parts[i].partMode = (((bank / 4) & 3) << 6) | 
                 ((model.get(part + "playmode") + 1) << 4) |

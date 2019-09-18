@@ -216,6 +216,9 @@ public class KawaiK5 extends Synth
 
         model.set("bank", 0);
         model.set("number", 0);
+
+		model.setStatus("constrainharmonics", model.STATUS_IMMUTABLE);
+		model.setStatus("constrainmodharmonics", model.STATUS_IMMUTABLE);
         
         loadDefaults();        
         }
@@ -3817,6 +3820,24 @@ public class KawaiK5 extends Synth
     public static final int dftc0level = 414;
 
 // a zero goes here! 
-    
-    
+
+    public boolean testVerify(Synth synth2, 
+    							String key,
+    							Object obj1, Object obj2) 
+    							{
+    							// See discussion above about envselmodyn-env vs envselmodyn and how
+    							// it's different when written out
+    							if (key.endsWith("envselmodyn-env")) return true;
+								
+								// Name is padded
+								if (key.equals("name")) return true;
+								
+								// These are not real
+    							if (key.endsWith("constrainharmonics")) return true;
+    							if (key.endsWith("constrainmodharmonics")) return true;
+
+    							return false;
+    							}
+
     }
+					

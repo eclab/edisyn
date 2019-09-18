@@ -657,8 +657,8 @@ public abstract class KorgWavestationAbstract extends Synth
 
     public static final int[] edisynToWSBank = new int[] { 0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 2, 3 };
     public static final int[] wsToEdisynBank = new int[] { 0, 1, 10, 11, 2, 3, 4, 5, 6, 7, 8, 9 };
-    public static final int[] wsBankExpToEdisynBank = new int[] { 0, 1, 10, 11, 3, 4, 2, 5, 6, 7, 8, 9 };
-    public static final int[] edisynToWSBankExpBank = new int[] {0, 1, 6, 4, 5, 7, 8, 9, 10, 11, 2, 3 };
+    public static final int[] wsExpToEdisynBank = new int[] { 0, 1, 10, 11, 3, 4, 2, 5, 6, 7, 8, 9 };
+    public static final int[] edisynToWSExpBank = new int[] {0, 1, 6, 4, 5, 7, 8, 9, 10, 11, 2, 3 };
 
 
     public static final int DEFAULT_PART = 1;
@@ -908,9 +908,9 @@ public abstract class KorgWavestationAbstract extends Synth
     public static final int BANK_CARD = 11;
     public String[] buildWaves(int bank)
         {
-        String[] waves = new String[517];
+        String[] waves = new String[518];
         
-        for(int i = 0; i < 517; i++)
+        for(int i = 0; i < 518; i++)
             {
             waves[i] = waveName(bank, i);
             }

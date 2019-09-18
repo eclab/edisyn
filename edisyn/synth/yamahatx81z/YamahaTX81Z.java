@@ -128,6 +128,14 @@ public class YamahaTX81Z extends Synth
         
         model.set("name", "INIT VOICE");
         
+        // unused parameters still need min/max
+        model.setMin("sustain", 0);
+        model.setMax("sustain", 1);
+        model.setMin("chorus", 0);
+        model.setMax("chorus", 1);
+        model.setMin("portamento", 0);
+        model.setMax("portamento", 1);
+        
         loadDefaults();        
         }
                 

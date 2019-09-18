@@ -91,6 +91,22 @@ public class EmuMorpheusMap extends Synth
         model.set("name", "Untitled");
         model.set("bank", 0);
         model.set("number", 0);
+        
+        // We need default min and max values for Test.java
+        for(int n = 0; n < FX_A_PARAMETERS.length; n++)
+        	for(int i = 0; i < 10; i++)		// we're doing all 10 even though many fx don't need that
+				{
+				model.set("fx1n" + n + "parmvals" + (i + 1), 0);
+				model.setMin("fx1n" + n + "parmvals" + (i + 1), -255);
+				model.setMax("fx1n" + n + "parmvals" + (i + 1), 255);
+				}
+        for(int n = 0; n < FX_B_PARAMETERS.length; n++)
+        	for(int i = 0; i < 10; i++)		// we're doing all 10 even though many fx don't need that
+				{
+				model.set("fx2n" + n + "parmvals" + (i + 1), 0);
+				model.setMin("fx2n" + n + "parmvals" + (i + 1), -255);
+				model.setMax("fx2n" + n + "parmvals" + (i + 1), 255);
+				}
                 
         loadDefaults();        
         }
@@ -323,15 +339,17 @@ public class EmuMorpheusMap extends Synth
     { }
     };
 
-    public JComponent generateFX(int fx, String[] params, final int[] values, Color color)
+    public JComponent generateFX(int fx, int type, String[] params, final int[] values, Color color)
         {
         HBox hbox = new HBox();
         for(int i = 0; i < params.length; i++)
             {
-            hbox.add(new LabelledDial(params[i], this, "fx" + fx + "parmvals" + (i + 1), color, values[0], values[1])
+            final int _i = i;
+            LabelledDial dial = new LabelledDial(params[i], this, "fx" + fx + "n" + type + "parmvals" + (i + 1), color, values[i * 3 + 0], values[i * 3 + 1])
                 {
-                public int getDefaultValue() { return values[2]; }
-                });
+                public int getDefaultValue() { return values[_i * 3 + 2]; }
+                };
+            hbox.add(dial);
             }
         return hbox;
         }
@@ -349,7 +367,7 @@ public class EmuMorpheusMap extends Synth
         
         for(int i = 0; i < fxvals.length; i++)
             {
-            fxComponents[fx - 1][i] = generateFX(fx, fxparams[i], fxvals[i], color);
+            fxComponents[fx - 1][i] = generateFX(fx, i, fxparams[i], fxvals[i], color);
             }
 
         JComponent comp;
@@ -584,7 +602,19 @@ public class EmuMorpheusMap extends Synth
                     ex.printStackTrace();
                     }
                 }
-            else param = ((Integer)(parametersToIndex.get(key))).intValue() + PARAM_OFFSET;;
+            else if (key.startsWith("fx1n"))
+            	{
+            	int num = Integer.parseInt(key.substring("fx1n10".length()).replaceAll("[^0-9]+", " ").trim());
+            	String key2 = "fx1parmvals" + num;
+            	param = ((Integer)(parametersToIndex.get(key2))).intValue() + PARAM_OFFSET;
+            	}
+            else if (key.startsWith("fx2n"))
+            	{
+            	int num = Integer.parseInt(key.substring("fx2n10".length()).replaceAll("[^0-9]+", " ").trim());
+            	String key2 = "fx2parmvals" + num;
+            	param = ((Integer)(parametersToIndex.get(key2))).intValue() + PARAM_OFFSET;
+            	}
+            else param = ((Integer)(parametersToIndex.get(key))).intValue() + PARAM_OFFSET;
                   
             data[5] = (byte)(param % 128);
             data[6] = (byte)(param / 128);
@@ -608,11 +638,11 @@ public class EmuMorpheusMap extends Synth
                 {
                 val =  val - 1;
                 }
-            else if (key.endsWith("fx1type"))
+            else if (key.equals("fx1type"))
                 {
                 val = FX_A_TYPES[val];
                 }
-            else if (key.endsWith("fx2type"))
+            else if (key.equals("fx2type"))
                 {
                 val = FX_B_TYPES[val];
                 }
@@ -684,14 +714,24 @@ public class EmuMorpheusMap extends Synth
                 {
                 val =  val - 1;
                 }
-            else if (parameters[i].endsWith("fx1type"))
+            else if (parameters[i].equals("fx1type"))
                 {
                 val = FX_A_TYPES[val];
                 }
-            else if (parameters[i].endsWith("fx2type"))
+            else if (parameters[i].equals("fx2type"))
                 {
                 val = FX_B_TYPES[val];
                 }
+            else if (parameters[i].startsWith("fx1parmvals"))
+            	{
+            	int index = Integer.parseInt(parameters[i].substring("fx1parmvals".length()));
+            	val = model.get("fx1n" + model.get("fx1type", 0) + "parmvals" + index, 0);
+            	}
+            else if (parameters[i].startsWith("fx2parmvals"))
+            	{
+            	int index = Integer.parseInt(parameters[i].substring("fx2parmvals".length()));
+            	val = model.get("fx2n" + model.get("fx2type", 0) + "parmvals" + index, 0);
+            	}
                         
             if (val < 0) val = val + 16384;
             data[offset++] = (byte)(val % 128);
@@ -712,6 +752,26 @@ public class EmuMorpheusMap extends Synth
 
     public int parse(byte[] data, boolean fromFile)
         {
+        // First, let's reset the FX parameters to defaults
+        for(int n = 0; n < FX_A_VALUES.length; n++)
+		for(int j = 0; j < FX_A_PARAMETERS[n].length; j++)
+			{
+			if (FX_A_VALUES[n].length / 3 > j)
+				model.set("fx1n" + n + "parmvals" + (j + 1), FX_A_VALUES[n][j * 3 + 2]);
+			else
+				model.set("fx1n" + n + "parmvals" + (j + 1), 0);
+			}
+			
+        for(int n = 0; n < FX_B_VALUES.length; n++)
+		for(int j = 0; j < FX_B_PARAMETERS[n].length; j++)
+			{
+			if (FX_B_VALUES[n].length / 3 > j)
+				model.set("fx2n" + n + "parmvals" + (j + 1), FX_B_VALUES[n][j * 3 + 2]);
+			else
+				model.set("fx2n" + n + "parmvals" + (j + 1), 0);
+			}
+        
+        
         int NN = data[6] + data[7] * 128;
         model.set("bank", NN / 128);
         model.set("number", NN % 128);
@@ -722,7 +782,7 @@ public class EmuMorpheusMap extends Synth
         char[] name = new char[12];
         for(int i = 0; i < 12; i++)
             {
-            int val = (data[offset++] + data[offset++] * 128);
+            int val = (data[offset++] + data[offset++] * (int)128);
             name[i] = (char)val;
             }
         model.set("name", new String(name));
@@ -731,7 +791,7 @@ public class EmuMorpheusMap extends Synth
         for(int i = 12; i < parameters.length; i++)
             {
             int o = offset;
-            int val = (data[offset++] + data[offset++] * 128);
+            int val = (data[offset++] + data[offset++] * (int)128);
             if (val >= 8192)
                 val = val - 16384;
 
@@ -751,22 +811,36 @@ public class EmuMorpheusMap extends Synth
                     }
                 }
             else if (parameters[i].endsWith("mixbus"))
+                {
                 val = val + 1;
-                
-            if (parameters[i].endsWith("fx1type"))
-                {
-                model.set(parameters[i], getFXType(1, val));
+                model.set(parameters[i], val);
                 }
-            else if (parameters[i].endsWith("fx2type"))
+            else if (parameters[i].equals("fx1type"))
                 {
-                model.set(parameters[i], getFXType(2, val));
+                val = getFXType(1, val);
+                model.set(parameters[i], val);
                 }
+            else if (parameters[i].equals("fx2type"))
+                {
+                val = getFXType(2, val);
+                model.set(parameters[i], val);
+                }
+            else if (parameters[i].startsWith("fx1parmvals"))
+            	{
+            	int index = Integer.parseInt(parameters[i].substring("fx1parmvals".length()));
+            	model.set("fx1n" + model.get("fx1type", 0) + "parmvals" + index, val);
+            	}
+            else if (parameters[i].startsWith("fx2parmvals"))
+            	{
+            	int index = Integer.parseInt(parameters[i].substring("fx2parmvals".length()));
+            	model.set("fx2n" + model.get("fx2type", 0) + "parmvals" + index, val);
+            	}
             else if (!parameters[i].equals("---"))
                 {
                 model.set(parameters[i], val);
                 }
             }
-                            
+           
         revise();
         return PARSE_SUCCEEDED;
         }
@@ -1251,7 +1325,7 @@ public class EmuMorpheusMap extends Synth
     "fx1parmvals5",
     "fx1parmvals6",
     "fx1parmvals7",
-    "fx1parmvals7",
+    "fx1parmvals8",
     "fx1parmvals9",
     "fx1parmvals10",
     "fx2type",
@@ -1262,7 +1336,7 @@ public class EmuMorpheusMap extends Synth
     "fx2parmvals5",
     "fx2parmvals6",
     "fx2parmvals7",
-    "fx2parmvals7",
+    "fx2parmvals8",
     "fx2parmvals9",
     "fx2parmvals10",
     "fx1amt",
@@ -1271,5 +1345,23 @@ public class EmuMorpheusMap extends Synth
     "fx1bus",
     "fx2bus"
     };
-            
+
+    public boolean testVerify(Synth synth2, 
+    							String key,
+    							Object obj1, Object obj2) 
+    							{
+    							// These are randomized but when loaded they're not necessarily used
+    							// because only the current fx type's parameters are loaded.  Also some,
+    							// notably all >= 5, don't even exist
+          						return (key.endsWith("parmvals1") ||
+										key.endsWith("parmvals2") ||
+										key.endsWith("parmvals3") ||
+										key.endsWith("parmvals4") ||
+										key.endsWith("parmvals5") ||
+										key.endsWith("parmvals6") ||
+										key.endsWith("parmvals7") ||
+										key.endsWith("parmvals8") ||
+										key.endsWith("parmvals9") ||
+										key.endsWith("parmvals10"));
+								}
     }

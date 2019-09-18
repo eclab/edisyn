@@ -4645,7 +4645,8 @@ public abstract class Synth extends JComponent implements Updatable
 
     double lastMutate = 0.0;
 
-    void doMutate(double probability)
+	/** This method is public to allow the test classes to access it. */
+    public void doMutate(double probability)
         {
         if (probability == 0.0) 
             return;
@@ -5892,9 +5893,9 @@ System.err.println("-->" + combo.getSelectedItem());
         else return filename + ending;
         }
                 
-    // Flattens a two-dimensional array to a one-dimensional array,
-    // stripping out the non-sysex elements
-    byte[] flatten(Object[] data)
+    /** Flattens a two-dimensional array to a one-dimensional array,
+    	stripping out the non-sysex elements.  A utility method. */
+    public byte[] flatten(Object[] data)
         {
         if (data == null)
             return null;

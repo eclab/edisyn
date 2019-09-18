@@ -176,7 +176,7 @@ public abstract class Synth extends JComponent implements Updatable
         
     /** Builds a synth of the given CLASS, with the given synth NAME.
         If THROWAWAY is true, then the window won't be sprouted and MIDI won't be set up.
-        If SETUPMIDI is false, then IDI won't be set up.  The TUPLE provides the default
+        If SETUPMIDI is false, then MIDI won't be set up.  The TUPLE provides the default
         MIDI devices. */
         
     public static Synth instantiate(Class _class, String name, boolean throwaway, boolean setupMIDI, Midi.Tuple tuple)
@@ -6171,5 +6171,7 @@ System.err.println("-->" + combo.getSelectedItem());
                     os.close();
                 }
         }
+    
+    public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2) { return false; }
        
     }

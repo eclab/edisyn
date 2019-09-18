@@ -808,7 +808,7 @@ public class Model implements Cloneable
         else return d.intValue();
         }
               
-    Object getValue(String key) { return storage.get(key); }
+    public Object getValue(String key) { return storage.get(key); }
       
     /** Returns whether the key is associated with a String. 
         If there is no key stored in the Model, then FALSE is returned. */        

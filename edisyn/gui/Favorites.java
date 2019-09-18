@@ -100,8 +100,8 @@ public class Favorites
 		{
 		Favorites f = new Favorites();
 		
-        String[] synthNames = Synth.getSynthNames();
-		JComboBox combo2 = new JComboBox(synthNames);   
+        final String[] synthNames = Synth.getSynthNames();
+		JComboBox combo2 = new JComboBox(new String[0]);   
         combo2.setMaximumRowCount(24);
         
         ArrayList<String> sortedTop = (ArrayList<String>)(f.top.clone());
@@ -133,7 +133,16 @@ public class Favorites
 				{
 			   	if (event.getStateChange() == ItemEvent.SELECTED) 
 			   		{
-			   		combo2.setEnabled(combo1.getSelectedIndex() == sortedTop.size());  // it's select another synth
+			   		if (combo1.getSelectedIndex() == sortedTop.size())
+			   			{
+			   			combo2.setModel(new DefaultComboBoxModel(synthNames));
+				   		combo2.setEnabled(true);  // it's select another synth
+				   		}
+				   	else
+				   		{
+			   			combo2.setModel(new DefaultComboBoxModel(new String[0]));
+				   		combo2.setEnabled(false);  // it's select another synth
+				   		}
 			   		}
 				}
 			});
@@ -149,11 +158,13 @@ public class Favorites
 					break;
 					}
 				}
-			combo2.setEnabled(false);
+			   			combo2.setModel(new DefaultComboBoxModel(new String[0]));
+				   		combo2.setEnabled(false);  // it's select another synth
 			}
 		else
 			{
-			combo1.setEnabled(false);
+			   			combo2.setModel(new DefaultComboBoxModel(synthNames));
+				   		combo2.setEnabled(true);  // it's select another synth
 			}
 
 		int result = Synth.showMultiOption(null,

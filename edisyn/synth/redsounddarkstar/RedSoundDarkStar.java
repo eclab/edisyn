@@ -32,7 +32,7 @@ public class RedSoundDarkStar extends Synth
     public static final String[] OSCILLATOR_SOURCES = { "Normal", "Formant", "White Noise", "Pink Noise", "Blue Noise", "Eternal 1", "External 2" };
     public static final String[] KEY_TRACKING = { "Off", "25%", "50%", "100%", "150%", "-25%", "-50%" };
     public static final String[] FILTER_TYPES = { "Low Pass", "Band Pass", "High Pass" };
-    public static final String[] TREMOLO_SOURCES = { "LFO 1", "LFO 2" };
+    public static final String[] tremelo_SOURCES = { "LFO 1", "LFO 2" };
     public static final String[] PAN_MOD_SOURCES = { "Pot", "Envelope 1", "Envelope 2", "LFO 1", "LFO 2" };
     public static final String[] PORTAMENTO_TYPES = { "Off", "Type 1", "Type 2", "Pre-glide 1", "Pre-glide 2", "Pre-glide 3", "Pre-glide 4", "Pre-glide 5", "Pre-glide 6" };
     public static final String[] JOYSTICK_ASSIGNMENTS = { "Off", "X: Filter Freq  Y: Resonance", "X: Mix  Y: Ring Mod  [XP2]", "X: Env1 Attack  Y: Decay  [XP2]", "X: Env2 Attack  Y: Decay  [XP2]", "X: LFO1 Speed  Y: LFO2 Speed  [XP2]" };
@@ -222,8 +222,8 @@ public class RedSoundDarkStar extends Synth
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        params = TREMOLO_SOURCES;
-        comp = new Chooser("Tremolo Mod Source", this, "part" + part + "tremelomodsource", params);
+        params = tremelo_SOURCES;
+        comp = new Chooser("Tremelo Mod Source", this, "part" + part + "tremelomodsource", params);
         vbox.add(comp);
 
         params = PAN_MOD_SOURCES;
@@ -249,7 +249,7 @@ public class RedSoundDarkStar extends Synth
             };
         hbox.add(comp);
         
-        comp = new LabelledDial("Tremolo", this, "part" + part + "tremolo", color, 0, 127);
+        comp = new LabelledDial("Tremelo", this, "part" + part + "tremelo", color, 0, 127);
         hbox.add(comp);
         
         comp = new LabelledDial("Mix", this, "part" + part + "mix", color, 0, 127)
@@ -445,7 +445,7 @@ public class RedSoundDarkStar extends Synth
 
     public JComponent addLFO(int part, int lfo, Color color)
         {
-        Category category = new Category(this, "LFO " + lfo, color);
+        Category category = new Category(this, "LFO " + lfo + (lfo == 2 ? " (Filter Frequency)" : ""), color);
         category.makePasteable("part" + part + "lfo" + lfo);
 
         JComponent comp;
@@ -479,7 +479,7 @@ public class RedSoundDarkStar extends Synth
 
     public JComponent addEnvelope(int part, int env, Color color)
         {
-        Category category = new Category(this, "Envelope " + env, color);
+        Category category = new Category(this, "Envelope " + env + (env == 1 ? " (Amplitude)" : " (Filter Frequency)"), color);
         category.makePasteable("part" + part + "env" + env);
                 
         JComponent comp;
@@ -528,26 +528,16 @@ public class RedSoundDarkStar extends Synth
         String[] params;
         final HBox hbox = new HBox();
         
-        VBox vbox = new VBox();
-        params = MOD_SOURCES;
-        comp = new Chooser("Pitch Mod", this, "part" + part + "osc" + osc + "pitchmodsource", params);
-        vbox.add(comp);
-
-        params = MOD_SOURCES;
-        comp = new Chooser("Pulse Width Mod", this, "part" + part + "osc" + osc + "pulsewidthmodsource", params);
-        vbox.add(comp);
-        hbox.add(vbox);
-
         if (osc == 2)
             {
-            vbox = new VBox();
+            VBox vbox = new VBox();
             params = PITCH_OFFSETS;
             comp = new Chooser("Pitch Offset", this, "part" + part + "osc" + osc + "pitchoffset", params);
             vbox.add(comp);
 
             HBox hbox2 = new HBox();
             params = OSCILLATOR_SOURCES;
-            comp = new Chooser("Source", this, "part" + part + "osc" + osc + "source", params);
+            comp = new Chooser("Oscillator Source", this, "part" + part + "osc" + osc + "source", params);
             hbox2.add(comp);
 
             comp = new CheckBox("Sync", this, "part" + part + "osc" + osc + "sync");
@@ -556,6 +546,16 @@ public class RedSoundDarkStar extends Synth
             vbox.add(hbox2);
             hbox.add(vbox);
             }
+
+        VBox vbox = new VBox();
+        params = MOD_SOURCES;
+        comp = new Chooser("Pitch Mod Source", this, "part" + part + "osc" + osc + "pitchmodsource", params);
+        vbox.add(comp);
+
+        params = MOD_SOURCES;
+        comp = new Chooser("Pulse Width Mod Source", this, "part" + part + "osc" + osc + "pulsewidthmodsource", params);
+        vbox.add(comp);
+        hbox.add(vbox);
 
         comp = new LabelledDial("Pitch Mod", this, "part" + part + "osc" + osc + "pitchmod", color, 0, 127, 64);
         hbox.add(comp);
@@ -573,7 +573,6 @@ public class RedSoundDarkStar extends Synth
         comp = new LabelledDial("Waveform", this, "part" + part + "osc" + osc + "waveform", color, 0, 127);
         hbox.add(comp);
 
-        comp = new LabelledDial("Pitch Mod", this, "part" + part + "osc" + osc + "pulsewidthmod", color, 0, 127);
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
@@ -602,7 +601,7 @@ public class RedSoundDarkStar extends Synth
         vbox.add(comp);
 
         params = MOD_SOURCES;
-        comp = new Chooser("Modulation Source", this, "part" + part + "filtermodsource", params);
+        comp = new Chooser("Resonance Mod Source", this, "part" + part + "filterresmodsource", params);
         vbox.add(comp);
         hbox.add(vbox);
 
@@ -612,13 +611,13 @@ public class RedSoundDarkStar extends Synth
         comp = new LabelledDial("Resonance", this, "part" + part + "filterres", color, 0, 127);
         hbox.add(comp);
 
-        comp = new LabelledDial("Envelope Mod", this, "part" + part + "filterenvmod", color, 0, 127);
+        comp = new LabelledDial("Envelope 2 Mod", this, "part" + part + "filterenvmod", color, 0, 127);
         hbox.add(comp);
 
-        comp = new LabelledDial("LFO Mod", this, "part" + part + "filterlfomod", color, 0, 127);
+        comp = new LabelledDial("LFO 2 Mod", this, "part" + part + "filterlfomod", color, 0, 127);
         hbox.add(comp);
 
-        comp = new LabelledDial("Resonance Mod", this, "part" + part + "filterresmodsource", color, 0, 127);
+        comp = new LabelledDial("Resonance Mod", this, "part" + part + "filterresmod", color, 0, 127);
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -627,11 +626,16 @@ public class RedSoundDarkStar extends Synth
  
     int denybble(byte[] data, int pos)
         {
-        return (data[pos] << 4) | data[pos+1];
+    	// Some of the dark star stuff is 8-bit, so we have to make sure we're positive
+        int v = (data[pos] << 4) | data[pos+1];
+        if (v < 0) v += 256;
+        return v;
         }
                 
     public boolean parseVoiceData(byte[] data, int pos, int part)
         {
+        part++;		// we're 1...5, not 0...4
+
         model.set("part" + part + "lfo1speed", denybble(data, pos));
         pos += 2;
         model.set("part" + part + "lfo2speed", denybble(data, pos));
@@ -641,14 +645,14 @@ public class RedSoundDarkStar extends Synth
         model.set("part" + part + "lfo2delay", denybble(data, pos));
         pos += 2;
         int val = denybble(data, pos);
-        model.set("part" + part + "lfo1shape", val & 0x03);
-        model.set("part" + part + "lfo1sync", (val >>> 2) & 0x01);
-        model.set("part" + part + "lfo1midisync", (val >>> 3) & 0x0F);
+        model.set("part" + part + "lfo1shape", val & 0x07);
+        model.set("part" + part + "lfo1sync", (val >>> 3) & 0x01);
+        model.set("part" + part + "lfo1midisync", (val >>> 4) & 0x0F);
         pos += 2;
         val = denybble(data, pos);
-        model.set("part" + part + "lfo2shape", val & 0x03);
-        model.set("part" + part + "lfo2sync", (val >>> 2) & 0x01);
-        model.set("part" + part + "lfo2midisync", (val >>> 3) & 0x0F);
+        model.set("part" + part + "lfo2shape", val & 0x07);
+        model.set("part" + part + "lfo2sync", (val >>> 3) & 0x01);
+        model.set("part" + part + "lfo2midisync", (val >>> 4) & 0x0F);
         pos += 2;
         model.set("part" + part + "env1attack", denybble(data, pos));
         pos += 2;
@@ -667,8 +671,8 @@ public class RedSoundDarkStar extends Synth
         model.set("part" + part + "env2release", denybble(data, pos));
         pos += 2;
         val = denybble(data, pos);
-        model.set("part" + part + "env1velocity", val & 0x03);
-        model.set("part" + part + "env2velocity", (val >>> 2) & 0x03);
+        model.set("part" + part + "env1velocity", val & 0x07);
+        model.set("part" + part + "env2velocity", (val >>> 3) & 0x07);
         pos += 2;
         model.set("part" + part + "osc1pitchmod", denybble(data, pos));
         pos += 2;
@@ -678,9 +682,13 @@ public class RedSoundDarkStar extends Synth
         pos += 2;
         model.set("part" + part + "osc2detune", denybble(data, pos));
         pos += 2;
-        model.set("part" + part + "osc1pwm", denybble(data, pos));
+        model.set("part" + part + "osc1pulsewidth", denybble(data, pos));
         pos += 2;
-        model.set("part" + part + "osc2pwm", denybble(data, pos));
+        model.set("part" + part + "osc2pulsewidth", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "osc1pulsewidthmod", denybble(data, pos));
+        pos += 2;
+        model.set("part" + part + "osc2pulsewidthmod", denybble(data, pos));
         pos += 2;
         model.set("part" + part + "osc1waveform", denybble(data, pos));
         pos += 2;
@@ -689,7 +697,7 @@ public class RedSoundDarkStar extends Synth
         val = denybble(data, pos);
         model.set("part" + part + "osc1pitchmodsource", val & 0x03);
         model.set("part" + part + "osc1pulsewidthmodsource", (val >>> 2) & 0x03);
-        model.set("part" + part + "osc1pitchmodsource", (val >>> 4) & 0x03);
+        model.set("part" + part + "osc2pitchmodsource", (val >>> 4) & 0x03);
         model.set("part" + part + "osc2pulsewidthmodsource", (val >>> 6) & 0x03);
         pos += 2;
         val = denybble(data, pos);
@@ -715,14 +723,16 @@ public class RedSoundDarkStar extends Synth
         pos += 2;
         model.set("part" + part + "filterres", denybble(data, pos));
         pos += 2;
+        model.set("part" + part + "filterresmod", denybble(data, pos));
+        pos += 2;
         model.set("part" + part + "volume", denybble(data, pos));
         pos += 2;
         model.set("part" + part + "pan", denybble(data, pos));
         pos += 2;
-        model.set("part" + part + "tremolo", denybble(data, pos));
+        model.set("part" + part + "tremelo", denybble(data, pos));
         pos += 2;
         val = denybble(data, pos);
-        model.set("part" + part + "tremolomodsource", val & 0x03);
+        model.set("part" + part + "tremelomodsource", val & 0x03);
         model.set("part" + part + "panmodsource", (val >>> 2) & 0x07);
         pos += 2;
         val = denybble(data, pos);
@@ -798,20 +808,20 @@ public class RedSoundDarkStar extends Synth
 
         // We're gonna try to recognize all of them
 
-        if (data.length == 108)
+        if (data.length == 108)		// Single Voice
             {
             if (!parseVoiceData(data, 7, 0))
                 return PARSE_FAILED;
             }
-        else if (data.length == 512)
+        else if (data.length == 512)		// XP Single Performance
             {
             setXP2(false);
             for(int i = 0; i < NUM_VOICES; i++)
                 if (!parseVoiceData(data, 7 + VOICE_DATA_LENGTH * i, i))
                     return PARSE_FAILED;
-            model.set("currenteditpart", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 2]);
+            model.set("currenteditpart", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 1]);
             }
-        else if (data.length == 516)
+        else if (data.length == 516)		// XP2 Single Performance
             {
             setXP2(true);
             for(int i = 0; i < NUM_VOICES; i++)
@@ -819,20 +829,20 @@ public class RedSoundDarkStar extends Synth
                     return PARSE_FAILED;
             for(int i = 0; i < NUM_VOICES; i++)
                 model.set("part" + (i + 1) + "fxsend", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + i]);
-            model.set("chorusdepth", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 6]);
-            model.set("chorusrate", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 7]);
-            model.set("currenteditpart", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 8]);
+            model.set("chorusdepth", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 5]);
+            model.set("chorusrate", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 6]);
+            model.set("currenteditpart", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 7]);
             }
-        else if (data.length == 514)
+        else if (data.length == 514)		// XP Bulk Performance
             {
             setXP2(false);
             model.set("number", (data[7] << 4) + data[8]);
             for(int i = 0; i < NUM_VOICES; i++)
                 if (!parseVoiceData(data, 9 + VOICE_DATA_LENGTH * i + 2, i))
                     return PARSE_FAILED;
-            model.set("currenteditpart", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 2 + 2]);
+            model.set("currenteditpart", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 1]);
             }
-        else if (data.length == 518)
+        else if (data.length == 518)		// XP2 Bulk Performance
             {
             setXP2(true);
             model.set("number", (data[7] << 4) + data[8]);
@@ -840,10 +850,10 @@ public class RedSoundDarkStar extends Synth
                 if (!parseVoiceData(data, 9 + VOICE_DATA_LENGTH * i + 2, i))
                     return PARSE_FAILED;
             for(int i = 0; i < NUM_VOICES; i++)
-                model.set("part" + (i + 1) + "fxsend", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + i + 2]);
-            model.set("chorusdepth", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 6 + 2]);
-            model.set("chorusrate", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 7 + 2]);
-            model.set("currenteditpart", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 8 + 2]);
+                model.set("part" + (i + 1) + "fxsend", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + i]);
+            model.set("chorusdepth", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 5]);
+            model.set("chorusrate", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 6]);
+            model.set("currenteditpart", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 7]);
             }
         revise();
         return PARSE_SUCCEEDED;
@@ -857,7 +867,9 @@ public class RedSoundDarkStar extends Synth
  
     public void emitVoiceData(byte[] data, int pos, int part)
         {
-        addData(data, pos, model.get("part" + part + "lfo2speed", 0));
+        part++;		// we're 1...5, not 0...4
+        
+        addData(data, pos, model.get("part" + part + "lfo1speed", 0));
         pos += 2;
         addData(data, pos, model.get("part" + part + "lfo2speed", 0));
         pos += 2;
@@ -866,14 +878,14 @@ public class RedSoundDarkStar extends Synth
         addData(data, pos, model.get("part" + part + "lfo2delay", 0));
         pos += 2;
         addData(data, pos,
-            ((model.get("part" + part + "lfo1shape", 0) & 0x03) << 0 ) |
-            ((model.get("part" + part + "lfo1sync", 0) & 0x01) << 2)  |
-            ((model.get("part" + part + "lfo1sync", 0) & 0x0F) << 3));
+            ((model.get("part" + part + "lfo1shape", 0) & 0x07) << 0 ) |
+            ((model.get("part" + part + "lfo1sync", 0) & 0x01) << 3)  |
+            ((model.get("part" + part + "lfo1midisync", 0) & 0x0F) << 4));
         pos += 2;
         addData(data, pos,
-            ((model.get("part" + part + "lfo2shape", 0) & 0x03) << 0 ) |
-            ((model.get("part" + part + "lfo2sync", 0) & 0x01) << 2)  |
-            ((model.get("part" + part + "lfo2midisync", 0) & 0x0F) << 3));
+            ((model.get("part" + part + "lfo2shape", 0) & 0x07) << 0 ) |
+            ((model.get("part" + part + "lfo2sync", 0) & 0x01) << 3)  |
+            ((model.get("part" + part + "lfo2midisync", 0) & 0x0F) << 4));
         pos += 2;
         addData(data, pos, model.get("part" + part + "env1attack", 0));
         pos += 2;
@@ -892,8 +904,8 @@ public class RedSoundDarkStar extends Synth
         addData(data, pos, model.get("part" + part + "env2release", 0));
         pos += 2;
         addData(data, pos,
-            ((model.get("part" + part + "env1velocity", 0) & 0x03) << 0 ) |
-            ((model.get("part" + part + "env2velocity", 0) & 0x03) << 2));
+            ((model.get("part" + part + "env1velocity", 0) & 0x07) << 0 ) |
+            ((model.get("part" + part + "env2velocity", 0) & 0x07) << 3));
         pos += 2;
         addData(data, pos, model.get("part" + part + "osc1pitchmod", 0));
         pos += 2;
@@ -903,9 +915,13 @@ public class RedSoundDarkStar extends Synth
         pos += 2;
         addData(data, pos, model.get("part" + part + "osc2detune", 0));
         pos += 2;
-        addData(data, pos, model.get("part" + part + "osc1pwm", 0));
+        addData(data, pos, model.get("part" + part + "osc1pulsewidth", 0));
         pos += 2;
-        addData(data, pos, model.get("part" + part + "osc2pwm", 0));
+        addData(data, pos, model.get("part" + part + "osc2pulsewidth", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "osc1pulsewidthmod", 0));
+        pos += 2;
+        addData(data, pos, model.get("part" + part + "osc2pulsewidthmod", 0));
         pos += 2;
         addData(data, pos, model.get("part" + part + "osc1waveform", 0));
         pos += 2;
@@ -914,7 +930,7 @@ public class RedSoundDarkStar extends Synth
         addData(data, pos,
             ((model.get("part" + part + "osc1pitchmodsource", 0) & 0x03) << 0 ) |
             ((model.get("part" + part + "osc1pulsewidthmodsource", 0) & 0x03) << 2)  |
-            ((model.get("part" + part + "osc1pitchmodsource", 0) & 0x03) << 4)  |
+            ((model.get("part" + part + "osc2pitchmodsource", 0) & 0x03) << 4)  |
             ((model.get("part" + part + "osc2pulsewidthmodsource", 0) & 0x03) << 6));
         pos += 2;
         addData(data, pos,
@@ -940,14 +956,16 @@ public class RedSoundDarkStar extends Synth
         pos += 2;
         addData(data, pos, model.get("part" + part + "filterres", 0));
         pos += 2;
+        addData(data, pos, model.get("part" + part + "filterresmod", 0));
+        pos += 2;
         addData(data, pos, model.get("part" + part + "volume", 0));
         pos += 2;
         addData(data, pos, model.get("part" + part + "pan", 0));
         pos += 2;
-        addData(data, pos, model.get("part" + part + "tremolo", 0));
+        addData(data, pos, model.get("part" + part + "tremelo", 0));
         pos += 2;
         addData(data, pos,
-            ((model.get("part" + part + "tremolomodsource", 0) & 0x03) << 0 ) |
+            ((model.get("part" + part + "tremelomodsource", 0) & 0x03) << 0 ) |
             ((model.get("part" + part + "panmodsource", 0) & 0x07) << 2));
         pos += 2;
         addData(data, pos,
@@ -996,7 +1014,7 @@ public class RedSoundDarkStar extends Synth
         // last two bytes are unused
         }
 
-    public byte[] emit(String key) { return new byte[0]; }
+    public byte[] emit(String key) { return new byte[0]; }		// can't emit individual parameters :-(
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
@@ -1052,18 +1070,14 @@ public class RedSoundDarkStar extends Synth
             for(int i = 0; i < NUM_VOICES; i++)
                 {
                 int val = model.get("part" + (i + 1) + "fxsend", 0);
-                data[offset + i] = (byte)((val >> 4) & 0x0F);
-                data[offset + i + 1] = (byte)((val >> 0) & 0x0F);
+                data[offset + i] = (byte)val;
                 }
             int val = model.get("chorusdepth", 0);
-            data[offset + 5] = (byte)((val >> 4) & 0x0F);
-            data[offset + 6] = (byte)((val >> 0) & 0x0F);
+            data[offset + 5] = (byte)val;
             val = model.get("chorusrate", 0);
-            data[offset + 7] = (byte)((val >> 4) & 0x0F);
-            data[offset + 8] = (byte)((val >> 0) & 0x0F);
+            data[offset + 6] = (byte)val;
             val = model.get("currenteditpart", 0);
-            data[offset + 9] = (byte)((val >> 4) & 0x0F);
-            data[offset + 10] = (byte)((val >> 0) & 0x0F);
+            data[offset + 7] = (byte)val;
             }
         else
             {
@@ -1073,6 +1087,7 @@ public class RedSoundDarkStar extends Synth
                 data[6] = (byte)0x01;
                 for(int i = 0; i < NUM_VOICES; i++)
                     emitVoiceData(data, 7 + VOICE_DATA_LENGTH * i, i);
+                data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 1] = (byte)(model.get("currenteditpart", 0));
                 }
             else
                 {
@@ -1084,6 +1099,7 @@ public class RedSoundDarkStar extends Synth
                 data[8] = (byte)((number >> 0) & 0x0F);
                 for(int i = 0; i < NUM_VOICES; i++)
                     emitVoiceData(data, 9 + VOICE_DATA_LENGTH * i, i);
+                data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 1] = (byte)(model.get("currenteditpart", 0));
                 }
             }
                         
@@ -1164,4 +1180,21 @@ public class RedSoundDarkStar extends Synth
         {
         tryToSendMIDI(buildPC(getChannelOut(), tempModel.get("number")));
         }
+
+    public boolean testVerify(Synth synth2, 
+    							String key,
+    							Object obj1, Object obj2) 
+    							{
+    							if (!isXP2())		// The XP doesn't have any of the following
+    								{
+    								if (key.equals("part1fxsend")) return true;
+    								if (key.equals("part2fxsend")) return true;
+    								if (key.equals("part3fxsend")) return true;
+    								if (key.equals("part4fxsend")) return true;
+    								if (key.equals("part5fxsend")) return true;
+    								if (key.equals("chorusdepth")) return true;
+    								if (key.equals("chorusrate")) return true;
+    								}
+    							return false;
+    							}
     }

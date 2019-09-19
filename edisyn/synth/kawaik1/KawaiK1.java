@@ -1341,31 +1341,31 @@ public class KawaiK1 extends Synth
         }
 
     public boolean testVerify(Synth synth2, 
-    							String key,
-    							Object obj1, Object obj2) 
-    							{
-    								// The K1 editor has a strategy where mute values are handled by 
-    								// turning off the envelope level, so these will be wrong
-    								return (key.equals("s1envelopelevel") ||
-    								key.equals("s2envelopelevel") ||
-    								key.equals("s3envelopelevel") ||
-									key.equals("s4envelopelevel") ||
-    								key.equals("s1mute") ||
-    								key.equals("s2mute") ||
-    								key.equals("s3mute") ||
-    								key.equals("s4mute") ||
-    								
-    								// The K1 stores EITHER fix OR coarse depending on the keytrack
-    								// parameter.  It's crazy.  So four of the following will always
-    								// be wrong
-    								key.equals("s1fix") ||
-    								key.equals("s2fix") ||
-    								key.equals("s3fix") ||
-									key.equals("s4fix") ||
-    								key.equals("s1coarse") ||
-    								key.equals("s2coarse") ||
-    								key.equals("s3coarse") ||
-    								key.equals("s4coarse")
-    								);
-    							}
+        String key,
+        Object obj1, Object obj2) 
+        {
+        // The K1 editor has a strategy where mute values are handled by 
+        // turning off the envelope level, so these will be wrong
+        return (key.equals("s1envelopelevel") ||
+            key.equals("s2envelopelevel") ||
+            key.equals("s3envelopelevel") ||
+            key.equals("s4envelopelevel") ||
+            key.equals("s1mute") ||
+            key.equals("s2mute") ||
+            key.equals("s3mute") ||
+            key.equals("s4mute") ||
+                                                                
+            // The K1 stores EITHER fix OR coarse depending on the keytrack
+            // parameter.  It's crazy.  So four of the following will always
+            // be wrong
+            key.equals("s1fix") ||
+            key.equals("s2fix") ||
+            key.equals("s3fix") ||
+            key.equals("s4fix") ||
+            key.equals("s1coarse") ||
+            key.equals("s2coarse") ||
+            key.equals("s3coarse") ||
+            key.equals("s4coarse")
+            );
+        }
     }

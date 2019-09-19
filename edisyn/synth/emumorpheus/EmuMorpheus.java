@@ -43,9 +43,9 @@ public class EmuMorpheus extends Synth
     public void setMorpheus(boolean val, boolean save)
         {
         if (save)
-        	{
-        	setLastX("" + (!val), ULTRAPROTEUS_KEY, getSynthName(), true);
-        	}
+            {
+            setLastX("" + (!val), ULTRAPROTEUS_KEY, getSynthName(), true);
+            }
         morpheus = val;
         for(int i = 0; i < 2; i++)
             {
@@ -186,8 +186,8 @@ public class EmuMorpheus extends Synth
         model.set("bank", 0);
         model.set("number", 0);
         
-    	// loadDefaults will reset to UltraProteus so here we're gonna reset it back
-    	boolean mo = isMorpheus();
+        // loadDefaults will reset to UltraProteus so here we're gonna reset it back
+        boolean mo = isMorpheus();
         loadDefaults();        
         setMorpheus(mo, false);
         }
@@ -1173,24 +1173,24 @@ public class EmuMorpheus extends Synth
                     {
                     int v = val;       
                     if (parameters[i].equals("layer1instrument"))
-                    	{
-                    	// The only way to distinguish the Morpheus from the UltraProteus is that they have
-                    	// different instrument regions (and the Ultraproteus has some more filters).  So here
-                    	// based on the FIRST instrument value, we'll decide whether to set to morpheus or
-                    	// ultraproteus mode.
-                    	//
-                    	// we can only do it for layer 1 instrument because setMorpheus() resets
-                    	// the choosers, which in turn reset the instrument model value, so if we do it
-                    	// for layer 2, it'll reset the layer 1 instrument to "No Instrument"
-                    	setMorpheus(v < MINIMUM_ULTRAPROTEUS_INSTRUMENT_OFFSET, false);         	
-                    	}
+                        {
+                        // The only way to distinguish the Morpheus from the UltraProteus is that they have
+                        // different instrument regions (and the Ultraproteus has some more filters).  So here
+                        // based on the FIRST instrument value, we'll decide whether to set to morpheus or
+                        // ultraproteus mode.
+                        //
+                        // we can only do it for layer 1 instrument because setMorpheus() resets
+                        // the choosers, which in turn reset the instrument model value, so if we do it
+                        // for layer 2, it'll reset the layer 1 instrument to "No Instrument"
+                        setMorpheus(v < MINIMUM_ULTRAPROTEUS_INSTRUMENT_OFFSET, false);                 
+                        }
                     try
                         {
                         if (isMorpheus())
                             val = ((Integer)(morpheusInstrumentOffsetsToIndex.get(Integer.valueOf(val)))).intValue();
                         else                                            
                             val = ((Integer)(ultraproteusInstrumentOffsetsToIndex.get(Integer.valueOf(val)))).intValue();
-                    	}
+                        }
                     catch (Exception ex)
                         {
                         //System.err.println("WARNING: Bad instrument offset " + v + " Morpheus? " + morpheus + " " + val);
@@ -3429,7 +3429,7 @@ public class EmuMorpheus extends Synth
 // Note that some Morpheus patches report "0" as an offset -- I think this should be interpreted as 1792 (no instrument)
     public static final int[] MORPHEUS_INSTRUMENT_OFFSETS = new int[]
     {
-    1792,		// notpart of the instrument offsets sysex dump, but it represents "No instrument"
+    1792,               // notpart of the instrument offsets sysex dump, but it represents "No instrument"
     1793,
     1794,
     1795,
@@ -3676,7 +3676,7 @@ public class EmuMorpheus extends Synth
                                     
     public static final int[] ULTRAPROTEUS_INSTRUMENT_OFFSETS = new int[]
     {
-    2304,		// notpart of the instrument offsets sysex dump, but it represents "No instrument"
+    2304,               // notpart of the instrument offsets sysex dump, but it represents "No instrument"
     2305,   
     2306,   
     2307,   

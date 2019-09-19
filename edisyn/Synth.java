@@ -2019,7 +2019,7 @@ public abstract class Synth extends JComponent implements Updatable
         button is chosen if the user presses RETURN.  On the Mac, classically this is the first (rightmost) options. 
         Returns the option number selected; otherwise returns -1 if the user clicked the close box. */
     public static int showMultiOption(Synth synth, String[] labels, JComponent[] widgets, String[] options, int defaultOption, String title, String message)
-    	{
+        {
         WidgetList list = new WidgetList(labels, widgets);
 
         JPanel panel = new JPanel();
@@ -2036,7 +2036,7 @@ public abstract class Synth extends JComponent implements Updatable
         int ret = JOptionPane.showOptionDialog(synth, panel, title, JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[defaultOption]);
         if (synth != null) synth.enableMenuBar();
         return ret;
-    	}
+        }
 
 
     /** Perform a JOptionPane confirm dialog with MUTLIPLE widgets that the user can select.  The widgets are provided
@@ -2241,7 +2241,7 @@ public abstract class Synth extends JComponent implements Updatable
     static void setLastSynth(String synth) { setLastX(synth, "Synth", null, false); }
     // gets the last synthesizer opened via the global window.
     static String getLastSynth() { return getLastX("Synth", null, false); }
-	
+        
     public static Color getLastColor(String key, Color defaultColor)
         {
         String val = getLastX(key);
@@ -2375,22 +2375,22 @@ public abstract class Synth extends JComponent implements Updatable
         menu.add(newSynth);
 
         /*
-        JMenu newSynth = new JMenu("New Synth");
-        menu.add(newSynth);
-        String[] synthNames = getSynthNames();
-        for(int i = 0; i < synthNames.length; i++)
-            {
-            final int _i = i;
-            JMenuItem synthMenu = new JMenuItem(synthNames[i]);
-            synthMenu.addActionListener(new ActionListener()
-                {
-                public void actionPerformed(ActionEvent e)
-                    {
-                    doNewSynth(_i);
-                    }
-                });
-            newSynth.add(synthMenu);
-            }
+          JMenu newSynth = new JMenu("New Synth");
+          menu.add(newSynth);
+          String[] synthNames = getSynthNames();
+          for(int i = 0; i < synthNames.length; i++)
+          {
+          final int _i = i;
+          JMenuItem synthMenu = new JMenuItem(synthNames[i]);
+          synthMenu.addActionListener(new ActionListener()
+          {
+          public void actionPerformed(ActionEvent e)
+          {
+          doNewSynth(_i);
+          }
+          });
+          newSynth.add(synthMenu);
+          }
         */
         
         JMenuItem _copy = new JMenuItem("Duplicate Synth");
@@ -4417,9 +4417,9 @@ public abstract class Synth extends JComponent implements Updatable
     
     javax.swing.Timer noteTimer = null;
     public void doSendTestNote()
-    	{
-    	doSendTestNote(getTestNotePitch(), true);
-    	}
+        {
+        doSendTestNote(getTestNotePitch(), true);
+        }
 
     public void doSendTestNote(int testNote, boolean clearOldNotes)
         {
@@ -4427,20 +4427,20 @@ public abstract class Synth extends JComponent implements Updatable
         final int velocity = getTestNoteVelocity();
         try
             {
-			// possibly clear all notes
-			if (clearOldNotes)
-				{
-				if (getSendsAllSoundsOffBetweenNotes())
-					{
-					sendAllSoundsOff();
+            // possibly clear all notes
+            if (clearOldNotes)
+                {
+                if (getSendsAllSoundsOffBetweenNotes())
+                    {
+                    sendAllSoundsOff();
                     }
                            
-				// play new note
-				if (lastTestNote != -1)
-					{
-					tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
-					}
-				}
+                // play new note
+                if (lastTestNote != -1)
+                    {
+                    tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
+                    }
+                }
                 
             lastTestNote = getTestNotePitch();
             tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, lastTestNote, velocity));
@@ -4456,9 +4456,9 @@ public abstract class Synth extends JComponent implements Updatable
                         try
                             {
                             if (clearOldNotes)
-                            	{
-                            	tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
-                            	}
+                                {
+                                tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
+                                }
                             lastTestNote = -1;
                             noteTimer = null;
                             }
@@ -4484,10 +4484,10 @@ public abstract class Synth extends JComponent implements Updatable
         // time to turn off the note before the test notes timer fires another note.
         
         if (sendTestNotesTimer.isRunning())
-        	{
-	        sendTestNotesTimer.setInitialDelay(getTestNoteTotalLength() + getPauseBetweenHillClimbPlays());
-	        sendTestNotesTimer.restart();
-	        }
+            {
+            sendTestNotesTimer.setInitialDelay(getTestNoteTotalLength() + getPauseBetweenHillClimbPlays());
+            sendTestNotesTimer.restart();
+            }
         }
 
     void doMapCC(int type)
@@ -4645,7 +4645,7 @@ public abstract class Synth extends JComponent implements Updatable
 
     double lastMutate = 0.0;
 
-	/** This method is public to allow the test classes to access it. */
+    /** This method is public to allow the test classes to access it. */
     public void doMutate(double probability)
         {
         if (probability == 0.0) 
@@ -5466,49 +5466,49 @@ public abstract class Synth extends JComponent implements Updatable
     /** Pops up at the start of the program to ask the user what synth he wants. */
     static Synth doNewSynthPanel()
         {
-       	return Favorites.doNewSynthDialog();
+        return Favorites.doNewSynthDialog();
         
         /*
-        JPanel p = new JPanel();
-        p.setLayout(new BorderLayout());
-        p.add(new JLabel("    "), BorderLayout.NORTH);
-        p.add(new JLabel("Select a Synthesizer to Edit:"), BorderLayout.CENTER);
-        p.add(new JLabel("    "), BorderLayout.SOUTH);
+          JPanel p = new JPanel();
+          p.setLayout(new BorderLayout());
+          p.add(new JLabel("    "), BorderLayout.NORTH);
+          p.add(new JLabel("Select a Synthesizer to Edit:"), BorderLayout.CENTER);
+          p.add(new JLabel("    "), BorderLayout.SOUTH);
 
-        JPanel p2 = new JPanel();
-        p2.setLayout(new BorderLayout());
-        p2.add(p, BorderLayout.NORTH);
-        String[] synthNames = getSynthNames();
-        JComboBox combo = new JComboBox(synthNames);
-        combo.setMaximumRowCount(32);
+          JPanel p2 = new JPanel();
+          p2.setLayout(new BorderLayout());
+          p2.add(p, BorderLayout.NORTH);
+          String[] synthNames = getSynthNames();
+          JComboBox combo = new JComboBox(synthNames);
+          combo.setMaximumRowCount(32);
         
-        // actionListener bug causes it to fire when the combo is first set programmatically
-combo.addItemListener(new ItemListener()
-	{
-	public void itemStateChanged(ItemEvent event) {
-       if (event.getStateChange() == ItemEvent.SELECTED) {
-System.err.println("-->" + combo.getSelectedItem());
-       }
-    }});
+          // actionListener bug causes it to fire when the combo is first set programmatically
+          combo.addItemListener(new ItemListener()
+          {
+          public void itemStateChanged(ItemEvent event) {
+          if (event.getStateChange() == ItemEvent.SELECTED) {
+          System.err.println("-->" + combo.getSelectedItem());
+          }
+          }});
                 
-        // Note: Java classdocs are wrong: if you set a selected item to null (or to something not in the list)
-        // it doesn't just not change the current selected item, it sets it to some blank item.
-        String synth = getLastSynth();
-        if (synth != null) combo.setSelectedItem(synth);
-        p2.add(combo, BorderLayout.CENTER);
+          // Note: Java classdocs are wrong: if you set a selected item to null (or to something not in the list)
+          // it doesn't just not change the current selected item, it sets it to some blank item.
+          String synth = getLastSynth();
+          if (synth != null) combo.setSelectedItem(synth);
+          p2.add(combo, BorderLayout.CENTER);
         
-        // For some reason the "Cancel" option is the MIDDLE option
-        //disableMenuBar();
-        int result = JOptionPane.showOptionDialog(null, p2, "Edisyn", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Run", "Quit", "Disconnected" }, "Run");
-        //enableMenuBar();
-        if (result == 1 ||      // cancel
-            result < 0)             // window closed or ESC
-            return null;
-        else 
-            {
-            setLastSynth("" + combo.getSelectedItem());
-            return instantiate(synths[combo.getSelectedIndex()], synthNames[combo.getSelectedIndex()], false, (result == 0), null);
-            }
+          // For some reason the "Cancel" option is the MIDDLE option
+          //disableMenuBar();
+          int result = JOptionPane.showOptionDialog(null, p2, "Edisyn", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Run", "Quit", "Disconnected" }, "Run");
+          //enableMenuBar();
+          if (result == 1 ||      // cancel
+          result < 0)             // window closed or ESC
+          return null;
+          else 
+          {
+          setLastSynth("" + combo.getSelectedItem());
+          return instantiate(synths[combo.getSelectedIndex()], synthNames[combo.getSelectedIndex()], false, (result == 0), null);
+          }
         */
         }
 
@@ -5894,7 +5894,7 @@ System.err.println("-->" + combo.getSelectedItem());
         }
                 
     /** Flattens a two-dimensional array to a one-dimensional array,
-    	stripping out the non-sysex elements.  A utility method. */
+        stripping out the non-sysex elements.  A utility method. */
     public byte[] flatten(Object[] data)
         {
         if (data == null)

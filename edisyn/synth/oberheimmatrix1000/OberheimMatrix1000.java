@@ -2891,13 +2891,13 @@ public class OberheimMatrix1000 extends Synth
         };
         
     public boolean testVerify(Synth synth2, 
-    							String key,
-    							Object obj1, Object obj2) 
-    							{
-    							// destinations must be zero when sources are zero
-    							if (key.endsWith("source")) return true;
-    							if (key.endsWith("destination")) return true;
-    							return false;
-    							}
+        String key,
+        Object obj1, Object obj2) 
+        {
+        // destinations must be zero when sources are zero
+        if (key.endsWith("source")) return true;
+        if (key.endsWith("destination")) return true;
+        return false;
+        }
 
     }

@@ -317,8 +317,8 @@ public class RedSoundDarkStar extends Synth
             {
             public boolean isSymmetric() { return true; }
             public int getDefaultValue() { return 24; }
-			};
-			
+            };
+                        
         hbox.add(comp);
         
         comp = new LabelledDial("Portamento", this, "part" + part + "portamentotime", color, 0, 63);
@@ -401,38 +401,38 @@ public class RedSoundDarkStar extends Synth
         hbox.add(vbox);
                 
         comp = new LabelledDial("Aftertouch", this, "part" + part + "aftertouchpitch", color, 0, 14, 7)
-			{
+            {
             public boolean isSymmetric() { return true; }
             public int getDefaultValue() { return 7; }
-        	};
-        	
+            };
+                
         ((LabelledDial)comp).addAdditionalLabel("Pitch");
         hbox.add(comp);
         
         comp = new LabelledDial("Aftertouch", this, "part" + part + "aftertouchfilter", color, 0, 14, 7)
-			{
+            {
             public boolean isSymmetric() { return true; }
             public int getDefaultValue() { return 7; }
-        	};
-        	
+            };
+                
         ((LabelledDial)comp).addAdditionalLabel("Filter");
         hbox.add(comp);
         
         comp = new LabelledDial("Mod Wheel", this, "part" + part + "modwheelpitch", color, 0, 14, 7)
-			{
+            {
             public boolean isSymmetric() { return true; }
             public int getDefaultValue() { return 7; }
-        	};
-        	
+            };
+                
         ((LabelledDial)comp).addAdditionalLabel("Pitch");
         hbox.add(comp);
         
         comp = new LabelledDial("Mod Wheel", this, "part" + part + "modwheelfilter", color, 0, 14, 7)
-			{
+            {
             public boolean isSymmetric() { return true; }
             public int getDefaultValue() { return 7; }
-        	};
-        	
+            };
+                
         ((LabelledDial)comp).addAdditionalLabel("Filter");
         hbox.add(comp);
         
@@ -626,7 +626,7 @@ public class RedSoundDarkStar extends Synth
  
     int denybble(byte[] data, int pos)
         {
-    	// Some of the dark star stuff is 8-bit, so we have to make sure we're positive
+        // Some of the dark star stuff is 8-bit, so we have to make sure we're positive
         int v = (data[pos] << 4) | data[pos+1];
         if (v < 0) v += 256;
         return v;
@@ -634,7 +634,7 @@ public class RedSoundDarkStar extends Synth
                 
     public boolean parseVoiceData(byte[] data, int pos, int part)
         {
-        part++;		// we're 1...5, not 0...4
+        part++;         // we're 1...5, not 0...4
 
         model.set("part" + part + "lfo1speed", denybble(data, pos));
         pos += 2;
@@ -808,12 +808,12 @@ public class RedSoundDarkStar extends Synth
 
         // We're gonna try to recognize all of them
 
-        if (data.length == 108)		// Single Voice
+        if (data.length == 108)         // Single Voice
             {
             if (!parseVoiceData(data, 7, 0))
                 return PARSE_FAILED;
             }
-        else if (data.length == 512)		// XP Single Performance
+        else if (data.length == 512)            // XP Single Performance
             {
             setXP2(false);
             for(int i = 0; i < NUM_VOICES; i++)
@@ -821,7 +821,7 @@ public class RedSoundDarkStar extends Synth
                     return PARSE_FAILED;
             model.set("currenteditpart", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 1]);
             }
-        else if (data.length == 516)		// XP2 Single Performance
+        else if (data.length == 516)            // XP2 Single Performance
             {
             setXP2(true);
             for(int i = 0; i < NUM_VOICES; i++)
@@ -833,7 +833,7 @@ public class RedSoundDarkStar extends Synth
             model.set("chorusrate", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 6]);
             model.set("currenteditpart", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 7]);
             }
-        else if (data.length == 514)		// XP Bulk Performance
+        else if (data.length == 514)            // XP Bulk Performance
             {
             setXP2(false);
             model.set("number", (data[7] << 4) + data[8]);
@@ -842,7 +842,7 @@ public class RedSoundDarkStar extends Synth
                     return PARSE_FAILED;
             model.set("currenteditpart", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 1]);
             }
-        else if (data.length == 518)		// XP2 Bulk Performance
+        else if (data.length == 522 || data.length == 518)            // XP2 Bulk Performance
             {
             setXP2(true);
             model.set("number", (data[7] << 4) + data[8]);
@@ -867,7 +867,7 @@ public class RedSoundDarkStar extends Synth
  
     public void emitVoiceData(byte[] data, int pos, int part)
         {
-        part++;		// we're 1...5, not 0...4
+        part++;         // we're 1...5, not 0...4
         
         addData(data, pos, model.get("part" + part + "lfo1speed", 0));
         pos += 2;
@@ -1014,7 +1014,7 @@ public class RedSoundDarkStar extends Synth
         // last two bytes are unused
         }
 
-    public byte[] emit(String key) { return new byte[0]; }		// can't emit individual parameters :-(
+    public byte[] emit(String key) { return new byte[0]; }              // can't emit individual parameters :-(
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
@@ -1139,17 +1139,18 @@ public class RedSoundDarkStar extends Synth
         // We're gonna try to recognize all of them
                 
         return (
-            data[0] == 0xF0 &&
-            data[1] == 0x00 &&
-            data[2] == 0x20 &&
-            data[3] == 0x3B &&
-            data[4] == 0x02 &&
-            data[5] == 0x01 &&
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x00 &&
+            data[2] == (byte)0x20 &&
+            data[3] == (byte)0x3B &&
+            data[4] == (byte)0x02 &&
+            data[5] == (byte)0x01 &&
                 (data.length == 108 ||
                 data.length == 512 ||
                 data.length == 516 ||
                 data.length == 514 ||
-                data.length == 518));        
+                data.length == 518 ||
+                data.length == 522));        
         }
 
     public static String getSynthName() { return "Red Sound DarkStar"; }
@@ -1182,19 +1183,19 @@ public class RedSoundDarkStar extends Synth
         }
 
     public boolean testVerify(Synth synth2, 
-    							String key,
-    							Object obj1, Object obj2) 
-    							{
-    							if (!isXP2())		// The XP doesn't have any of the following
-    								{
-    								if (key.equals("part1fxsend")) return true;
-    								if (key.equals("part2fxsend")) return true;
-    								if (key.equals("part3fxsend")) return true;
-    								if (key.equals("part4fxsend")) return true;
-    								if (key.equals("part5fxsend")) return true;
-    								if (key.equals("chorusdepth")) return true;
-    								if (key.equals("chorusrate")) return true;
-    								}
-    							return false;
-    							}
+        String key,
+        Object obj1, Object obj2) 
+        {
+        if (!isXP2())           // The XP doesn't have any of the following
+            {
+            if (key.equals("part1fxsend")) return true;
+            if (key.equals("part2fxsend")) return true;
+            if (key.equals("part3fxsend")) return true;
+            if (key.equals("part4fxsend")) return true;
+            if (key.equals("part5fxsend")) return true;
+            if (key.equals("chorusdepth")) return true;
+            if (key.equals("chorusrate")) return true;
+            }
+        return false;
+        }
     }

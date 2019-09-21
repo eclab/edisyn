@@ -799,11 +799,11 @@ public class KorgSGMulti extends Synth
         }
         
     public boolean testVerify(Synth synth2, 
-    							String key,
-    							Object obj1, Object obj2) 
-    							{
-    							// there are two kinds of the KorgSG with different filter options
-    							return (key.endsWith("filt"));    
-    							}
+        String key,
+        Object obj1, Object obj2) 
+        {
+        // there are two kinds of the KorgSG with different filter options
+        return (key.endsWith("filt"));    
+        }
     }
     

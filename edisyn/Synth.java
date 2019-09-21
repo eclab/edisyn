@@ -4907,7 +4907,7 @@ public abstract class Synth extends JComponent implements Updatable
     int[] recognizeAnySynthForSysex(byte[][] data)
         {
         boolean[] recognized = new boolean[synths.length];
-                
+
         int lastSynth = 0;
         for(int i = 0; i < data.length; i++)
             {

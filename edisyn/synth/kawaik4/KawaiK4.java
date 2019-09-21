@@ -1583,14 +1583,14 @@ public class KawaiK4 extends Synth
         }
 
     public boolean testVerify(Synth synth2, 
-    							String key,
-    							Object obj1, Object obj2) 
-    							{
-    								// The K4 editor has a strategy where mute values are handled by 
-    								// turning off the envelope level, so these will be wrong
-    								return (key.equals("s1envelopelevel") ||
-    								key.equals("s2envelopelevel") ||
-    								key.equals("s3envelopelevel") ||
-									key.equals("s4envelopelevel"));
-    							}
+        String key,
+        Object obj1, Object obj2) 
+        {
+        // The K4 editor has a strategy where mute values are handled by 
+        // turning off the envelope level, so these will be wrong
+        return (key.equals("s1envelopelevel") ||
+            key.equals("s2envelopelevel") ||
+            key.equals("s3envelopelevel") ||
+            key.equals("s4envelopelevel"));
+        }
     }

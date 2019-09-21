@@ -74,8 +74,8 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
         
         model.set("number", 0);
         model.set("bank", 0);
-		model.setStatus("magnify", model.STATUS_IMMUTABLE);
-		
+        model.setStatus("magnify", model.STATUS_IMMUTABLE);
+                
         loadDefaults();
         }
                 
@@ -281,7 +281,7 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
                 {
                 waves[i] = "Card Wave " + (i + 32);
                 }
-          return waves;
+            return waves;
             }
         }
         
@@ -822,14 +822,14 @@ return pos;
                     }
                 else
                     {
-                    model.set(MAIN_KEYS[i], ((data[pos++] << 7) | (data[pos++] & 127)) - 127);    		// so to make everything positive (-127 is the smallest value in any parameter)
+                    model.set(MAIN_KEYS[i], ((data[pos++] << 7) | (data[pos++] & 127)) - 127);                  // so to make everything positive (-127 is the smallest value in any parameter)
                     }
                 }
             for(int j = 0; j < NUM_STEPS; j++)
                 {
                 for(int i = 0; i < STEP_KEYS.length; i++)
                     {
-                    model.set("step" + (j + 1) + STEP_KEYS[i], ((data[pos++] << 7) | (data[pos++] & 127)) - 127);   		// so to make everything positive (-127 is the smallest value in any parameter)
+                    model.set("step" + (j + 1) + STEP_KEYS[i], ((data[pos++] << 7) | (data[pos++] & 127)) - 127);               // so to make everything positive (-127 is the smallest value in any parameter)
                     }
                 }
             }
@@ -1331,7 +1331,7 @@ return pos;
                 }
             else
                 {
-                int val = model.get(MAIN_KEYS[i], 0) + 127;		// so to make everything positive (-127 is the smallest value in any parameter)
+                int val = model.get(MAIN_KEYS[i], 0) + 127;             // so to make everything positive (-127 is the smallest value in any parameter)
                 sysex[pos++] = (byte)((val >>> 7) & 127);
                 sysex[pos++] = (byte)(val & 127);
                 }
@@ -1340,7 +1340,7 @@ return pos;
             {
             for(int i = 0; i < STEP_KEYS.length; i++)
                 {
-                int val = model.get("step" + (j + 1) + STEP_KEYS[i], 0) + 127;		// so to make everything positive (-127 is the smallest value in any parameter)
+                int val = model.get("step" + (j + 1) + STEP_KEYS[i], 0) + 127;          // so to make everything positive (-127 is the smallest value in any parameter)
                 sysex[pos++] = (byte)((val >>> 7) & 127);
                 sysex[pos++] = (byte)(val & 127);
                 }

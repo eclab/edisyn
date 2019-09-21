@@ -7,7 +7,7 @@
 
 <p><b>Bank Sysex</b> This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
 
-<p><b>Communicating with Edisyn</b> Set your SR to receive sysex parameters, and also to receive program change and bank select commands, as well as All Notes Off.  Turn off memory protect (including for your card if you need to).  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.
+<p><b>Communicating with Edisyn</b> Set your SR to receive sysex parameters, and also to receive program change and bank select commands, as well as All Notes Off.  Turn off memory protect (including for your card if you need to).  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.  Remember that the Wavestation plays performances, not patches: so it may play things in addition to the patch you're playing.  To prevent this, read "The Wavestation Menu" below.
 
 <p><b>Hints</b>
 <ul>
@@ -17,25 +17,31 @@
 <p><li>If you choose a Wave Sequence, you'll be given the option to <b>Show</b> it: this isn't an option for ordinary waves.
 <p><li>In case you hadn't noticed, you can drag the points in the mixer display.  The display goes from -127 to 127 along each axis.  Note that the dials (for example the dial marked "AC0" are not restricted to coordinate values within the mixer diamond.  However when the Wavestation actually uses these coordinates, it will clamp them to within the diamond area as is shown in the display.
 <p><li>You can also double-click on a point in the mixer display to reset it to the origin.
+<!--
 <p><li>You can cut, paste, and reset entire Waves via the Wavestation menu.  Note that this will normally be slow, as it involves sending all the changed parameters to the Wavestation (which is slow on the SR).  You can speed things up by unchecking "Sends Real Time Changes".
+-->
 </ul>
 
 <p><b>The Wavestation Menu</b>  
 <ul>
 <li>Patches must be auditioned by playing them in a Performance.  If you select <b>Set up Test Performance in RAM 1 Slot 0</b>, Edisyn will temporarily modify Performance 1:0 so that it contains a single Part, at full volume, with no effects and default settings, whose Patch is your current Patch.   After this, if you modify parameters or send the patch again, it'll stay auditioned since the current Performance is still referring to it.  Just don't write the Performance.
+<!--
 <p><li>Just as you can copy, paste, and reset parameters in individual categories (by right-mouse-clicking, or shift-clicking, or two-finger clicking, on a category name) you can also copy, paste, or reset parameters in an entire Wave via the Wavestation Menu.
+-->
 </ul>
+
 
 <p><b>Gotchas</b>
 
 <ul>
 <li>The Wavestation doesn't have an option to allow Edisyn to send parameters in bulk to its current working memory.  Instead, Edisyn will always bulk-send the parameters to the patch's declared bank and number.  You will change this bank and number when you <b>Send to Patch...</b>, <b>Request Patch...</b>, or <b>Load...</b>.
-<p><li>Due to an unfortunate bug, the Wavestation SR cannot write patches.  Instead, you will have to write the patch yourself.  To do this, first <b>Send to Patch...</b> to the desired bank and patch number.  Then press the <b>Edit Button</b> on the SR twice, which should get you to this patch.  Finally, press the <b>Write/Compare</b> button (which should be lit).  When it asks you if you want to write to the patch, press the <b>Write Compare</b> button again.
+<p><li>Due to an unfortunate SR bug, the Wavestation SR cannot write patches in reponse to a MIDI command from Edisyn.  Instead, you will have to write the patch yourself.  To do this, first <b>Send to Patch...</b> to the desired bank and patch number.  Then press the <b>Edit Button</b> on the SR twice, which should get you to this patch.  Finally, press the <b>Write/Compare</b> button (which should be lit).  When it asks you if you want to write to the patch, press the <b>Write Compare</b> button again.
 <p><li>Changes to parameters aren't displayed on the Wavestation SR unless that parameter is currently specifically selected on the Wavestation's screen.
 <p><li>Updating individual parameters is a little pokey.  This is because Edisyn must insert a significant delay between successive parameter updates or they'll get dropped by the SR.
+</ul>
 
 <p><b>Notes</b>
-<p>For the time being, I have elected to not have the patch editor update itself in response to manual parameter changes made directly on the synth.  The SR is just too complex a beast
+<p>For the time being, I have elected to not have the patch editor update itself in response to manual parameter changes made directly on the synth.  The SR MIDI format is just too complex a beast to make this easy.
 
 
 

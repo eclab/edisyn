@@ -272,9 +272,9 @@ public class KorgMicrosampler extends Synth
         for(int i = 1; i < 37; i ++)
             model.set("sample" + i + "name", "Untitled");
                         
-		model.setStatus("pattern", model.STATUS_IMMUTABLE);
-		model.setStatus("samplenumber", model.STATUS_IMMUTABLE);
-		
+        model.setStatus("pattern", model.STATUS_IMMUTABLE);
+        model.setStatus("samplenumber", model.STATUS_IMMUTABLE);
+                
         loadDefaults();        
         }
           
@@ -3906,12 +3906,12 @@ public class KorgMicrosampler extends Synth
 
 
     public boolean testVerify(Synth synth2, 
-    							String key,
-    							Object obj1, Object obj2) 
-    							{
-    							// we don't emit all the fx params, just the ones for the currently-displayed fx type
-    							for(int i = 0; i < MAX_NUM_FX_PARAMS; i++)
-    								if (key.endsWith("param" + i)) return true;
-    							return false;
-    							}
+        String key,
+        Object obj1, Object obj2) 
+        {
+        // we don't emit all the fx params, just the ones for the currently-displayed fx type
+        for(int i = 0; i < MAX_NUM_FX_PARAMS; i++)
+            if (key.endsWith("param" + i)) return true;
+        return false;
+        }
     }

@@ -12,7 +12,7 @@
 <p><b>Gotchas</b> 
 
 <ul>
-<li>Neither the Morpheus nor the Ultra Proteus can send to the current patch -- they can only write patches, or send individual parameters.  But sending to the current patch is a critical function.  Instead of (slowly) sending all parameters, Edisyn instead will write to patch 126 of the Preset RAM bank.  This means that you will overwrite this patch number every time you "send" the current patch.  (It's 126 because 127 is the default init patch -- well, actually everything from 120...127 is the init patch, but I'm being consistent with Edisyn's Single Patch editor).
+<li>Neither the Morpheus nor the Ultra Proteus can send to the current patch -- they can only write patches, or send individual parameters.  But sending to the current patch is a critical function.  Instead of (slowly) sending all parameters, Edisyn instead will write to patch 126 of the HyperPreset RAM bank.  This means that you will overwrite this patch number every time you "send" the current patch.  (It's 126 because 127 is the default init patch -- well, actually everything from 120...127 is the init patch, but I'm being consistent with Edisyn's Single Patch editor).
 
 <p><li>You cannot request the current patch on the Morpheus or Ultra Proteus.
 

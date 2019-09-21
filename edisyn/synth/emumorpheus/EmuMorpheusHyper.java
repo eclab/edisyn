@@ -638,8 +638,10 @@ public class EmuMorpheusHyper extends Synth
     public void changePatch(Model tempModel)
         {
         int bank = tempModel.get("bank", 0);
-        if (bank == 2)  // card
-            bank++;  // because the card's actual bank is bank 3
+        if (bank == 0) // RAM
+        	bank = 2;		// actual RAM hyper bank is 2
+        if (bank == 1)  // card
+            bank = 4;  // because the card's actual bank is bank 2
         int number = tempModel.get("number", 0);
         // It appears that the Morpheus / Ultraproteus are among
         // the rare machines which use 14-bit CCs
@@ -993,7 +995,7 @@ public class EmuMorpheusHyper extends Synth
     };
     
 
-    public static final String[] BANKS = new String[] { "RAM", "ROM", "Card" };
+    public static final String[] BANKS = new String[] { "RAM", "Card" };
     public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
         
 

@@ -91,7 +91,7 @@ public class KawaiK4Drum extends Synth
         
         model.set("bank", 0);           // internal
 
-		model.setStatus("note", model.STATUS_IMMUTABLE);
+        model.setStatus("note", model.STATUS_IMMUTABLE);
 
         loadDefaults();
         }
@@ -590,7 +590,7 @@ public class KawaiK4Drum extends Synth
                 bytes[b] = (data[i] = (byte)((model.get("key" + note + "waveselect2") & 127)));
                 }
             else
-            	{
+                {
                 bytes[b] = (data[i] = (byte)(model.get(key)));
                 }
             b++;

@@ -279,9 +279,9 @@ public class KorgMicroKorg extends Synth
         params = ARPEGGIO_TARGETS;
         comp = new Chooser("Target", this, "arptarget", params);
 
-         if (!(this instanceof KorgMicroKorgVocoder))
+        if (!(this instanceof KorgMicroKorgVocoder))
             {
-           vbox.add(comp);
+            vbox.add(comp);
             }
         
         HBox hbox2 = new HBox();
@@ -1075,71 +1075,71 @@ public class KorgMicroKorg extends Synth
         
         
         
- 		protected void subparse(byte[] data)
- 			{
-            for(int i = 1; i <= 2; i++)
+    protected void subparse(byte[] data)
+        {
+        for(int i = 1; i <= 2; i++)
+            {
+            int offset = 38 + 108 * (i - 1);
+            model.set("timbre" + i + "assignmode", (data[offset + 1] >>> 6) & 3);
+            model.set("timbre" + i + "ampeg2reset", (data[offset + 1] >>> 5) & 1);
+            model.set("timbre" + i + "filtereg1reset", (data[offset + 1] >>> 4) & 1);
+            model.set("timbre" + i + "triggermode", (data[offset + 1] >>> 3) & 1);
+            model.set("timbre" + i + "unisondetune", data[offset + 2]);
+            model.set("timbre" + i + "tune", data[offset + 3]);
+            model.set("timbre" + i + "bendrange", data[offset + 4]);
+            model.set("timbre" + i + "transpose", data[offset + 5]);
+            model.set("timbre" + i + "vibratoint", data[offset + 6]);
+            model.set("timbre" + i + "osc1wave", data[offset + 7]);
+            model.set("timbre" + i + "osc1ctrl1", data[offset + 8]);
+            model.set("timbre" + i + "osc1ctrl2", data[offset + 9]);
+            model.set("timbre" + i + "osc1dwgswave", data[offset + 10]);
+            model.set("timbre" + i + "osc2modselect", (data[offset + 12] >>> 4) & 3);
+            model.set("timbre" + i + "osc2wave", data[offset + 12] & 3);
+            model.set("timbre" + i + "osc2semitone", data[offset + 13]);
+            model.set("timbre" + i + "osc2tune", data[offset + 14]);
+            model.set("timbre" + i + "portamentotime", data[offset + 15] & 127);
+            model.set("timbre" + i + "osc1level", data[offset + 16]);
+            model.set("timbre" + i + "osc2level", data[offset + 17]);
+            model.set("timbre" + i + "noise", data[offset + 18]);
+            model.set("timbre" + i + "filtertype", data[offset + 19]);
+            model.set("timbre" + i + "filtercutoff", data[offset + 20]);
+            model.set("timbre" + i + "filterresonance", data[offset + 21]);
+            model.set("timbre" + i + "filtereg1intensity", data[offset + 22]);
+            model.set("timbre" + i + "filterkeyboardtrack", data[offset + 24]);
+            model.set("timbre" + i + "amplevel", data[offset + 25]);
+            model.set("timbre" + i + "amppanpot", data[offset + 26]);
+            model.set("timbre" + i + "ampdistortion", data[offset + 27] & 1);
+            model.set("timbre" + i + "ampkeyboardtrack", data[offset + 29]);
+            model.set("timbre" + i + "env1" + "attack", data[offset + 30]);
+            model.set("timbre" + i + "env1" + "decay", data[offset + 31]);
+            model.set("timbre" + i + "env1" + "sustain", data[offset + 32]);
+            model.set("timbre" + i + "env1" + "release", data[offset + 33]);
+            model.set("timbre" + i + "env2" + "attack", data[offset + 34]);
+            model.set("timbre" + i + "env2" + "decay", data[offset + 35]);
+            model.set("timbre" + i + "env2" + "sustain", data[offset + 36]);
+            model.set("timbre" + i + "env2" + "release", data[offset + 37]);
+            model.set("timbre" + i + "lfo1" + "keysync", (data[offset + 38] >>> 4) & 3);
+            model.set("timbre" + i + "lfo1" + "wave", (data[offset + 38]) & 3);
+            model.set("timbre" + i + "lfo1" + "frequency", data[offset + 39]);
+            model.set("timbre" + i + "lfo1" + "temposync", (data[offset + 40] >>> 7) & 1);
+            // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
+            model.set("timbre" + i + "lfo1" + "syncnote", (data[offset + 40]) & 15);
+            model.set("timbre" + i + "lfo2" + "keysync", (data[offset + 41] >>> 4) & 3);
+            model.set("timbre" + i + "lfo2" + "wave", (data[offset + 41]) & 3);
+            model.set("timbre" + i + "lfo2" + "frequency", data[offset + 42]);
+            model.set("timbre" + i + "lfo2" + "temposync", (data[offset + 43] >>> 7) & 1);
+            // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
+            model.set("timbre" + i + "lfo2" + "syncnote", (data[offset + 43]) & 15);
+            for(int j = 1; j <= 4; j++)
                 {
-                int offset = 38 + 108 * (i - 1);
-                model.set("timbre" + i + "assignmode", (data[offset + 1] >>> 6) & 3);
-                model.set("timbre" + i + "ampeg2reset", (data[offset + 1] >>> 5) & 1);
-                model.set("timbre" + i + "filtereg1reset", (data[offset + 1] >>> 4) & 1);
-                model.set("timbre" + i + "triggermode", (data[offset + 1] >>> 3) & 1);
-                model.set("timbre" + i + "unisondetune", data[offset + 2]);
-                model.set("timbre" + i + "tune", data[offset + 3]);
-                model.set("timbre" + i + "bendrange", data[offset + 4]);
-                model.set("timbre" + i + "transpose", data[offset + 5]);
-                model.set("timbre" + i + "vibratoint", data[offset + 6]);
-                model.set("timbre" + i + "osc1wave", data[offset + 7]);
-                model.set("timbre" + i + "osc1ctrl1", data[offset + 8]);
-                model.set("timbre" + i + "osc1ctrl2", data[offset + 9]);
-                model.set("timbre" + i + "osc1dwgswave", data[offset + 10]);
-                model.set("timbre" + i + "osc2modselect", (data[offset + 12] >>> 4) & 3);
-                model.set("timbre" + i + "osc2wave", data[offset + 12] & 3);
-                model.set("timbre" + i + "osc2semitone", data[offset + 13]);
-                model.set("timbre" + i + "osc2tune", data[offset + 14]);
-                model.set("timbre" + i + "portamentotime", data[offset + 15] & 127);
-                model.set("timbre" + i + "osc1level", data[offset + 16]);
-                model.set("timbre" + i + "osc2level", data[offset + 17]);
-                model.set("timbre" + i + "noise", data[offset + 18]);
-                model.set("timbre" + i + "filtertype", data[offset + 19]);
-                model.set("timbre" + i + "filtercutoff", data[offset + 20]);
-                model.set("timbre" + i + "filterresonance", data[offset + 21]);
-                model.set("timbre" + i + "filtereg1intensity", data[offset + 22]);
-                model.set("timbre" + i + "filterkeyboardtrack", data[offset + 24]);
-                model.set("timbre" + i + "amplevel", data[offset + 25]);
-                model.set("timbre" + i + "amppanpot", data[offset + 26]);
-                model.set("timbre" + i + "ampdistortion", data[offset + 27] & 1);
-                model.set("timbre" + i + "ampkeyboardtrack", data[offset + 29]);
-                model.set("timbre" + i + "env1" + "attack", data[offset + 30]);
-                model.set("timbre" + i + "env1" + "decay", data[offset + 31]);
-                model.set("timbre" + i + "env1" + "sustain", data[offset + 32]);
-                model.set("timbre" + i + "env1" + "release", data[offset + 33]);
-                model.set("timbre" + i + "env2" + "attack", data[offset + 34]);
-                model.set("timbre" + i + "env2" + "decay", data[offset + 35]);
-                model.set("timbre" + i + "env2" + "sustain", data[offset + 36]);
-                model.set("timbre" + i + "env2" + "release", data[offset + 37]);
-                model.set("timbre" + i + "lfo1" + "keysync", (data[offset + 38] >>> 4) & 3);
-                model.set("timbre" + i + "lfo1" + "wave", (data[offset + 38]) & 3);
-                model.set("timbre" + i + "lfo1" + "frequency", data[offset + 39]);
-                model.set("timbre" + i + "lfo1" + "temposync", (data[offset + 40] >>> 7) & 1);
-                // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                model.set("timbre" + i + "lfo1" + "syncnote", (data[offset + 40]) & 15);
-                model.set("timbre" + i + "lfo2" + "keysync", (data[offset + 41] >>> 4) & 3);
-                model.set("timbre" + i + "lfo2" + "wave", (data[offset + 41]) & 3);
-                model.set("timbre" + i + "lfo2" + "frequency", data[offset + 42]);
-                model.set("timbre" + i + "lfo2" + "temposync", (data[offset + 43] >>> 7) & 1);
-                // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                model.set("timbre" + i + "lfo2" + "syncnote", (data[offset + 43]) & 15);
-                for(int j = 1; j <= 4; j++)
-                    {
-                    // documentation says this is bits 4...7 but this has to be wrong, since the values only go 0...7
-                    model.set("timbre" + i + "patch" + j + "destination", (data[offset + ((j-1) * 2) + 44] >>> 4) & 7);
-                    // documentation says this is bits 0...3 but this has to be wrong, since the values only go 0...7
-                    model.set("timbre" + i + "patch" + j + "source", (data[offset + ((j-1) * 2) + 44]) & 7);
-                    model.set("timbre" + i + "patch" + j + "intensity", data[offset + ((j-1) * 2) + 45]);
-                    }
+                // documentation says this is bits 4...7 but this has to be wrong, since the values only go 0...7
+                model.set("timbre" + i + "patch" + j + "destination", (data[offset + ((j-1) * 2) + 44] >>> 4) & 7);
+                // documentation says this is bits 0...3 but this has to be wrong, since the values only go 0...7
+                model.set("timbre" + i + "patch" + j + "source", (data[offset + ((j-1) * 2) + 44]) & 7);
+                model.set("timbre" + i + "patch" + j + "intensity", data[offset + ((j-1) * 2) + 45]);
                 }
             }
+        }
         
         
     
@@ -1178,17 +1178,17 @@ public class KorgMicroKorg extends Synth
             }
         // set up voice mode
         if (this instanceof KorgMicroKorgVocoder)
-        	{
-        	data[16] = (byte)(3 << 4);  // vocoder is voicemode "3"
-        	}
+            {
+            data[16] = (byte)(3 << 4);  // vocoder is voicemode "3"
+            }
         else if (model.get("voicemode", 0) == 0)
-        		{
-        		data[16] = (byte)(0 << 4);
-        		}
-        	else
-        		{
-        		data[16] = (byte)(2 << 4);
-        		}
+            {
+            data[16] = (byte)(0 << 4);
+            }
+        else
+            {
+            data[16] = (byte)(2 << 4);
+            }
 
         data[17] = 0;
         data[18] = 60;
@@ -1243,76 +1243,76 @@ public class KorgMicroKorg extends Synth
         }
         
     protected void subemit(byte[] data)
+        {
+        for(int i = 1; i <= 2; i++)
             {
-            for(int i = 1; i <= 2; i++)
+            int offset = 38 + 108 * (i - 1);
+            data[offset + 0] = (byte)-1;
+            data[offset + 1] = (byte)((model.get("timbre" + i + "assignmode") << 6) |
+                (model.get("timbre" + i + "ampeg2reset") << 5) | 
+                (model.get("timbre" + i + "filtereg1reset") << 4) |
+                (model.get("timbre" + i + "triggermode") << 3));
+            data[offset + 2] = (byte)model.get("timbre" + i + "unisondetune");
+            data[offset + 3] = (byte)model.get("timbre" + i + "tune");
+            data[offset + 4] = (byte)model.get("timbre" + i + "bendrange");
+            data[offset + 5] = (byte)model.get("timbre" + i + "transpose");
+            data[offset + 6] = (byte)model.get("timbre" + i + "vibratoint");
+            data[offset + 7] = (byte)model.get("timbre" + i + "osc1wave");
+            data[offset + 8] = (byte)model.get("timbre" + i + "osc1ctrl1");
+            data[offset + 9] = (byte)model.get("timbre" + i + "osc1ctrl2");
+            data[offset + 10] = (byte)model.get("timbre" + i + "osc1dwgswave");
+            data[offset + 11] = 0;
+            data[offset + 12] = (byte)((model.get("timbre" + i + "osc2modselect") << 4) | 
+                ((byte)model.get("timbre" + i + "osc2wave")));
+            data[offset + 13] = (byte)model.get("timbre" + i + "osc2semitone");
+            data[offset + 14] = (byte)model.get("timbre" + i + "osc2tune");
+            data[offset + 15] = (byte)model.get("timbre" + i + "portamentotime");
+            data[offset + 16] = (byte)model.get("timbre" + i + "osc1level");
+            data[offset + 17] = (byte)model.get("timbre" + i + "osc2level");
+            data[offset + 18] = (byte)model.get("timbre" + i + "noise");
+            data[offset + 19] = (byte)model.get("timbre" + i + "filtertype");
+            data[offset + 20] = (byte)model.get("timbre" + i + "filtercutoff");
+            data[offset + 21] = (byte)model.get("timbre" + i + "filterresonance");
+            data[offset + 22] = (byte)model.get("timbre" + i + "filtereg1intensity");
+            data[offset + 23] = 64;
+            data[offset + 24] = (byte)model.get("timbre" + i + "filterkeyboardtrack");
+            data[offset + 25] = (byte)model.get("timbre" + i + "amplevel");
+            data[offset + 26] = (byte)model.get("timbre" + i + "amppanpot");
+            data[offset + 27] = (byte)model.get("timbre" + i + "ampdistortion");
+            data[offset + 28] = 64;
+            data[offset + 29] = (byte)model.get("timbre" + i + "ampkeyboardtrack");
+            data[offset + 30] = (byte)model.get("timbre" + i + "env1" + "attack");
+            data[offset + 31] = (byte)model.get("timbre" + i + "env1" + "decay");
+            data[offset + 32] = (byte)model.get("timbre" + i + "env1" + "sustain");
+            data[offset + 33] = (byte)model.get("timbre" + i + "env1" + "release");
+            data[offset + 34] = (byte)model.get("timbre" + i + "env2" + "attack");
+            data[offset + 35] = (byte)model.get("timbre" + i + "env2" + "decay");
+            data[offset + 36] = (byte)model.get("timbre" + i + "env2" + "sustain");
+            data[offset + 37] = (byte)model.get("timbre" + i + "env2" + "release");
+            data[offset + 38] = (byte)((model.get("timbre" + i + "lfo1" + "keysync") << 4 ) | 
+                (model.get("timbre" + i + "lfo1" + "wave")));
+            data[offset + 39] = (byte)model.get("timbre" + i + "lfo1" + "frequency");
+            data[offset + 40] = (byte)((model.get("timbre" + i + "lfo1" + "temposync") << 7) |
+                // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
+                model.get("timbre" + i + "lfo1" + "syncnote"));
+            data[offset + 41] = (byte)((model.get("timbre" + i + "lfo2" + "keysync") << 4 ) |
+                (model.get("timbre" + i + "lfo2" + "wave")));
+            data[offset + 42] = (byte)model.get("timbre" + i + "lfo2" + "frequency");
+            data[offset + 43] = (byte)((model.get("timbre" + i + "lfo2" + "temposync") << 7) |
+                // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
+                model.get("timbre" + i + "lfo2" + "syncnote"));
+            for(int j = 1; j <= 4; j++)
                 {
-                int offset = 38 + 108 * (i - 1);
-                data[offset + 0] = (byte)-1;
-                data[offset + 1] = (byte)((model.get("timbre" + i + "assignmode") << 6) |
-                    (model.get("timbre" + i + "ampeg2reset") << 5) | 
-                    (model.get("timbre" + i + "filtereg1reset") << 4) |
-                    (model.get("timbre" + i + "triggermode") << 3));
-                data[offset + 2] = (byte)model.get("timbre" + i + "unisondetune");
-                data[offset + 3] = (byte)model.get("timbre" + i + "tune");
-                data[offset + 4] = (byte)model.get("timbre" + i + "bendrange");
-                data[offset + 5] = (byte)model.get("timbre" + i + "transpose");
-                data[offset + 6] = (byte)model.get("timbre" + i + "vibratoint");
-                data[offset + 7] = (byte)model.get("timbre" + i + "osc1wave");
-                data[offset + 8] = (byte)model.get("timbre" + i + "osc1ctrl1");
-                data[offset + 9] = (byte)model.get("timbre" + i + "osc1ctrl2");
-                data[offset + 10] = (byte)model.get("timbre" + i + "osc1dwgswave");
-                data[offset + 11] = 0;
-                data[offset + 12] = (byte)((model.get("timbre" + i + "osc2modselect") << 4) | 
-                    ((byte)model.get("timbre" + i + "osc2wave")));
-                data[offset + 13] = (byte)model.get("timbre" + i + "osc2semitone");
-                data[offset + 14] = (byte)model.get("timbre" + i + "osc2tune");
-                data[offset + 15] = (byte)model.get("timbre" + i + "portamentotime");
-                data[offset + 16] = (byte)model.get("timbre" + i + "osc1level");
-                data[offset + 17] = (byte)model.get("timbre" + i + "osc2level");
-                data[offset + 18] = (byte)model.get("timbre" + i + "noise");
-                data[offset + 19] = (byte)model.get("timbre" + i + "filtertype");
-                data[offset + 20] = (byte)model.get("timbre" + i + "filtercutoff");
-                data[offset + 21] = (byte)model.get("timbre" + i + "filterresonance");
-                data[offset + 22] = (byte)model.get("timbre" + i + "filtereg1intensity");
-                data[offset + 23] = 64;
-                data[offset + 24] = (byte)model.get("timbre" + i + "filterkeyboardtrack");
-                data[offset + 25] = (byte)model.get("timbre" + i + "amplevel");
-                data[offset + 26] = (byte)model.get("timbre" + i + "amppanpot");
-                data[offset + 27] = (byte)model.get("timbre" + i + "ampdistortion");
-                data[offset + 28] = 64;
-                data[offset + 29] = (byte)model.get("timbre" + i + "ampkeyboardtrack");
-                data[offset + 30] = (byte)model.get("timbre" + i + "env1" + "attack");
-                data[offset + 31] = (byte)model.get("timbre" + i + "env1" + "decay");
-                data[offset + 32] = (byte)model.get("timbre" + i + "env1" + "sustain");
-                data[offset + 33] = (byte)model.get("timbre" + i + "env1" + "release");
-                data[offset + 34] = (byte)model.get("timbre" + i + "env2" + "attack");
-                data[offset + 35] = (byte)model.get("timbre" + i + "env2" + "decay");
-                data[offset + 36] = (byte)model.get("timbre" + i + "env2" + "sustain");
-                data[offset + 37] = (byte)model.get("timbre" + i + "env2" + "release");
-                data[offset + 38] = (byte)((model.get("timbre" + i + "lfo1" + "keysync") << 4 ) | 
-                    (model.get("timbre" + i + "lfo1" + "wave")));
-                data[offset + 39] = (byte)model.get("timbre" + i + "lfo1" + "frequency");
-                data[offset + 40] = (byte)((model.get("timbre" + i + "lfo1" + "temposync") << 7) |
-                // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                	model.get("timbre" + i + "lfo1" + "syncnote"));
-                data[offset + 41] = (byte)((model.get("timbre" + i + "lfo2" + "keysync") << 4 ) |
-                    (model.get("timbre" + i + "lfo2" + "wave")));
-                data[offset + 42] = (byte)model.get("timbre" + i + "lfo2" + "frequency");
-                data[offset + 43] = (byte)((model.get("timbre" + i + "lfo2" + "temposync") << 7) |
-                // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                	model.get("timbre" + i + "lfo2" + "syncnote"));
-                for(int j = 1; j <= 4; j++)
-                    {
-                    // documentation says this is bits 4...7 but this has to be wrong, since the values only go 0...7
-                    data[offset + ((j-1) * 2) + 44] = (byte)((model.get("timbre" + i + "patch" + j + "destination") << 4) |
-                        // documentation says this is bits 0...3 but this has to be wrong, since the values only go 0...7
-                        (model.get("timbre" + i + "patch" + j + "source")));
-                    data[offset + ((j-1) * 2) + 45] = (byte)model.get("timbre" + i + "patch" + j + "intensity");
-                    }
-                for(int j = 52; j < 108; j++)
-                    data[offset + j] = 0;
+                // documentation says this is bits 4...7 but this has to be wrong, since the values only go 0...7
+                data[offset + ((j-1) * 2) + 44] = (byte)((model.get("timbre" + i + "patch" + j + "destination") << 4) |
+                    // documentation says this is bits 0...3 but this has to be wrong, since the values only go 0...7
+                    (model.get("timbre" + i + "patch" + j + "source")));
+                data[offset + ((j-1) * 2) + 45] = (byte)model.get("timbre" + i + "patch" + j + "intensity");
                 }
+            for(int j = 52; j < 108; j++)
+                data[offset + j] = 0;
             }
+        }
 
         
     public void parseParameter(byte[] data)
@@ -1478,14 +1478,14 @@ public class KorgMicroKorg extends Synth
         return (bank == 0 ? "A." : "B.") + (number / 8 + 1) + "" + (number % 8 + 1);
         }
         
-     public boolean testVerify(Synth synth2, 
-    							String key,
-    							Object obj1, Object obj2) 
-    							{
-    							// we define timbre 3 (vocoder) even though we don't load it
-    							if (key.startsWith("timbre3")) return true;
-    							if (key.startsWith("channel")) return true;
-    							return false;
-    							}
-   }
+    public boolean testVerify(Synth synth2, 
+        String key,
+        Object obj1, Object obj2) 
+        {
+        // we define timbre 3 (vocoder) even though we don't load it
+        if (key.startsWith("timbre3")) return true;
+        if (key.startsWith("channel")) return true;
+        return false;
+        }
+    }
     

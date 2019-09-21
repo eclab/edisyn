@@ -795,9 +795,9 @@ public class KorgSG extends Synth
         effects[FLANGER_DELAY].add(comp);
 
         comp = new LabelledDial("Delay", this, "effect" + effect + "flangerdelay" + "delaytime", color, 0, 225)
-        	{
+            {
             public String map(int val) { return "" + (val * 2); }
-        	};
+            };
         ((LabelledDial)comp).addAdditionalLabel("Time");
         effects[FLANGER_DELAY].add(comp);
 
@@ -1076,7 +1076,7 @@ public class KorgSG extends Synth
                 model.set("effect" + effect + "stereoflanger" + "delaytime", range(data[offset + 0]));
                 model.set("effect" + effect + "stereoflanger" + "moddepth", data[offset + 1]);
                 model.set("effect" + effect + "stereoflanger" + "modspeed", data[offset + 2]);
-                model.set("effect" + effect + "stereoflanger" + "resonance", data[offset + 3]);		// -99 ... 99
+                model.set("effect" + effect + "stereoflanger" + "resonance", data[offset + 3]);         // -99 ... 99
                 model.set("effect" + effect + "stereoflanger" + "eqhigh", data[offset + 6]);
                 model.set("effect" + effect + "stereoflanger" + "eqlow", data[offset + 7]);
                 break;
@@ -1092,7 +1092,7 @@ public class KorgSG extends Synth
                 model.set("effect" + effect + "stereophaser" + "moddepth", data[offset + 0]);
                 model.set("effect" + effect + "stereophaser" + "modspeed", range(data[offset + 1]));
                 model.set("effect" + effect + "stereophaser" + "mgshape", (data[offset + 2] == 2 ? 0 : 1));  // is either 02 or 03
-                model.set("effect" + effect + "stereophaser" + "feedback", data[offset + 3]);		// -99 ... 99
+                model.set("effect" + effect + "stereophaser" + "feedback", data[offset + 3]);           // -99 ... 99
                 model.set("effect" + effect + "stereophaser" + "manual", data[offset + 4]);
                 break;
             case EFFECT_ROTARY_SPEAKER:
@@ -1106,7 +1106,7 @@ public class KorgSG extends Synth
                 model.set("effect" + effect + "autopan" + "depth", data[offset + 0]);
                 model.set("effect" + effect + "autopan" + "speed", range(data[offset + 1]));
                 model.set("effect" + effect + "autopan" + "mgshape", (data[offset + 2] == 2 ? 0 : 1));  // is either 02 or 03
-                model.set("effect" + effect + "autopan" + "shape", data[offset + 3]);		// -99 ... 99
+                model.set("effect" + effect + "autopan" + "shape", data[offset + 3]);           // -99 ... 99
                 model.set("effect" + effect + "autopan" + "eqhigh", data[offset + 6]);
                 model.set("effect" + effect + "autopan" + "eqlow", data[offset + 7]);
                 break;
@@ -1524,14 +1524,14 @@ public class KorgSG extends Synth
         }
         
     public boolean testVerify(Synth synth2, 
-    							String key,
-    							Object obj1, Object obj2) 
-    							{
-    							// lots of effects will not be loaded
-    							if (key.startsWith("effect")) return true;    
-    							// name is padded
-    							if (key.equals("name")) return true; 
-    							return false;
-    							}
+        String key,
+        Object obj1, Object obj2) 
+        {
+        // lots of effects will not be loaded
+        if (key.startsWith("effect")) return true;    
+        // name is padded
+        if (key.equals("name")) return true; 
+        return false;
+        }
     }
     

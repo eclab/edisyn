@@ -4186,6 +4186,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
     public void resetFX(int fx)
         {
+        undo.setWillPush(false);
         for(int fxtype = 1; fxtype < FX_GROUP.length; fxtype++)
             {
             model.setUpdateListeners(false);
@@ -4240,7 +4241,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + i;
             model.set(key, (model.get(key, 0)));
             }
-        
+        undo.setWillPush(true);
         }
         
         

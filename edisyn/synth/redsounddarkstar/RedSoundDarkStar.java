@@ -626,8 +626,10 @@ public class RedSoundDarkStar extends Synth
  
     int denybble(byte[] data, int pos)
         {
+        // The spec is wrong: it's LSB, then MSB
+        // int v = (data[pos] << 4) | data[pos+1];
+         int v = (data[pos + 1] << 4) | data[pos];
         // Some of the dark star stuff is 8-bit, so we have to make sure we're positive
-        int v = (data[pos] << 4) | data[pos+1];
         if (v < 0) v += 256;
         return v;
         }
@@ -808,6 +810,12 @@ public class RedSoundDarkStar extends Synth
 
         // We're gonna try to recognize all of them
 
+        // NOTE: this data is wrong -- it appears that the XP2 Single Performance is *520* bytes,
+        // and the XP2 Bulk Dump Single Performance is *522* bytes
+        
+        // The globals at the end go: FX1 FX2 FX3 FX4 FX5 [0] ChorusDepth ChorusRate CurrentEditPart [0] [0] [0] [0xF7]
+
+
         if (data.length == 108)         // Single Voice
             {
             if (!parseVoiceData(data, 7, 0))
@@ -821,7 +829,7 @@ public class RedSoundDarkStar extends Synth
                     return PARSE_FAILED;
             model.set("currenteditpart", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 1]);
             }
-        else if (data.length == 516)            // XP2 Single Performance
+        else if (data.length == 520)            // XP2 Single Performance
             {
             setXP2(true);
             for(int i = 0; i < NUM_VOICES; i++)
@@ -829,9 +837,11 @@ public class RedSoundDarkStar extends Synth
                     return PARSE_FAILED;
             for(int i = 0; i < NUM_VOICES; i++)
                 model.set("part" + (i + 1) + "fxsend", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + i]);
-            model.set("chorusdepth", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 5]);
-            model.set("chorusrate", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 6]);
-            model.set("currenteditpart", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 7]);
+        	// then comes a 0
+            model.set("chorusdepth", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 6]);
+            model.set("chorusrate", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 7]);
+            model.set("currenteditpart", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 8]);
+        	// then comes three 0
             }
         else if (data.length == 514)            // XP Bulk Performance
             {
@@ -842,7 +852,7 @@ public class RedSoundDarkStar extends Synth
                     return PARSE_FAILED;
             model.set("currenteditpart", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 1]);
             }
-        else if (data.length == 522 || data.length == 518)            // XP2 Bulk Performance
+        else if (data.length == 522)            // XP2 Bulk Performance
             {
             setXP2(true);
             model.set("number", (data[7] << 4) + data[8]);
@@ -851,9 +861,11 @@ public class RedSoundDarkStar extends Synth
                     return PARSE_FAILED;
             for(int i = 0; i < NUM_VOICES; i++)
                 model.set("part" + (i + 1) + "fxsend", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + i]);
-            model.set("chorusdepth", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 5]);
-            model.set("chorusrate", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 6]);
-            model.set("currenteditpart", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 7]);
+        	// then comes a 0
+            model.set("chorusdepth", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 6]);
+            model.set("chorusrate", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 7]);
+            model.set("currenteditpart", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 8]);
+        	// then comes three 0
             }
         revise();
         return PARSE_SUCCEEDED;
@@ -861,8 +873,9 @@ public class RedSoundDarkStar extends Synth
  
     void addData(byte[] data, int pos, int val)
         {
-        data[pos] = (byte)((val >> 4) & 0x0F);
-        data[pos+1] = (byte)((val >> 0) & 0x0F);
+        // The spec is wrong: it's LSB, then MSB
+        data[pos] = (byte)((val >> 0) & 0x0F);
+        data[pos + 1] = (byte)((val >> 4) & 0x0F);
         }
  
     public void emitVoiceData(byte[] data, int pos, int part)
@@ -1040,6 +1053,11 @@ public class RedSoundDarkStar extends Synth
         // We emit all but the first one.  Our choice depends on (1) if it's an XP2 or not 
         // and (2) if we're writing or sending
                 
+        // NOTE: this data is wrong -- it appears that the XP2 Single Performance is *520* bytes,
+        // and the XP2 Bulk Dump Single Performance is *522* bytes
+        
+        // The globals at the end go: FX1 FX2 FX3 FX4 FX5 [0] ChorusDepth ChorusRate CurrentEditPart [0] [0] [0] [0xF7]
+
         byte[] data = null;
         if (isXP2())
             {
@@ -1048,7 +1066,6 @@ public class RedSoundDarkStar extends Synth
                 {
                 data = new byte[516];
                 data[6] = (byte)0x01;
-                // FX1 FX2 FX3 FX4 FX5 CHORUS DEPTH EDITPART
                 offset = 7 + VOICE_DATA_LENGTH * NUM_VOICES;
                 for(int i = 0; i < NUM_VOICES; i++)
                     emitVoiceData(data, 7 + VOICE_DATA_LENGTH * i, i);
@@ -1066,18 +1083,22 @@ public class RedSoundDarkStar extends Synth
                     emitVoiceData(data, 9 + VOICE_DATA_LENGTH * i, i);
                 }
 
-            // FX1 FX2 FX3 FX4 FX5 CHORUS DEPTH EDITPART
+            // FX1 FX2 FX3 FX4 FX5 [0] CHORUS DEPTH EDITPART [0] [0] [0]
             for(int i = 0; i < NUM_VOICES; i++)
                 {
                 int val = model.get("part" + (i + 1) + "fxsend", 0);
                 data[offset + i] = (byte)val;
                 }
+            data[offset + 5] = 0;
             int val = model.get("chorusdepth", 0);
-            data[offset + 5] = (byte)val;
-            val = model.get("chorusrate", 0);
             data[offset + 6] = (byte)val;
-            val = model.get("currenteditpart", 0);
+            val = model.get("chorusrate", 0);
             data[offset + 7] = (byte)val;
+            val = model.get("currenteditpart", 0);
+            data[offset + 8] = (byte)val;
+            data[offset + 9] = 0;
+            data[offset + 10] = 0;
+            data[offset + 11] = 0;
             }
         else
             {
@@ -1137,6 +1158,10 @@ public class RedSoundDarkStar extends Synth
         // F0 00 20 3B 02 01 02 PERFNUM(x2) VOICEDATA(x5) FX1 FX2 FX3 FX4 FX5 CHORUS DEPTH EDITPART f7
 
         // We're gonna try to recognize all of them
+        
+        // NOTE: this data is wrong -- it appears that the XP2 Single Performance is *520* bytes,
+        // and the XP2 Bulk Dump Single Performance is *522* bytes
+        
                 
         return (
             data[0] == (byte)0xF0 &&
@@ -1149,7 +1174,7 @@ public class RedSoundDarkStar extends Synth
                 data.length == 512 ||
                 data.length == 516 ||
                 data.length == 514 ||
-                data.length == 518 ||
+                data.length == 520 ||
                 data.length == 522));        
         }
 

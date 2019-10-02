@@ -1064,7 +1064,7 @@ public class RedSoundDarkStar extends Synth
             int offset = 0;
             if (toWorkingMemory || toFile)
                 {
-                data = new byte[516];
+                data = new byte[520];
                 data[6] = (byte)0x01;
                 offset = 7 + VOICE_DATA_LENGTH * NUM_VOICES;
                 for(int i = 0; i < NUM_VOICES; i++)
@@ -1072,7 +1072,7 @@ public class RedSoundDarkStar extends Synth
                 }
             else
                 {
-                data = new byte[518];                           
+                data = new byte[522];                           
                 data[6] = (byte)0x02;
                 // PERFNUM
                 int number = tempModel.get("number", 0);

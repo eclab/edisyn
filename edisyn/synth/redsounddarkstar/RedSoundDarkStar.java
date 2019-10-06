@@ -77,6 +77,8 @@ public class RedSoundDarkStar extends Synth
         for(int i = 1; i <= 5; i++)
             {
             JComponent sourcePanel = new SynthPanel(this);
+            ((SynthPanel)sourcePanel).makePasteable("part" + i);
+            
             vbox = new VBox();
                 
             hbox = new HBox();

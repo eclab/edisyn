@@ -123,8 +123,8 @@ public class RedSoundDarkStar extends Synth
         loadDefaults();        
         }
                 
-    //public String getDefaultResourceFileName() { return "YamahaDX7.init"; }
-    //public String getHTMLResourceFileName() { return "YamahaDX7.html"; }
+    public String getDefaultResourceFileName() { return "RedSoundDarkStar.init"; }
+    public String getHTMLResourceFileName() { return "RedSoundDarkStar.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
@@ -249,16 +249,7 @@ public class RedSoundDarkStar extends Synth
             };
         hbox.add(comp);
         
-        comp = new LabelledDial("Tremelo", this, "part" + part + "tremelo", color, 0, 127)
-	        {
-		        public boolean isSymmetric() { return true; }
-		        public int getDefaultValue() { return 64; }
-		        public String map(int val)
-		        {
-			       return "" + (64-val);
-		        }
-
-	        };
+        comp = new LabelledDial("Tremelo", this, "part" + part + "tremelo", color, 0, 127, 64);
         hbox.add(comp);
         
         comp = new LabelledDial("Mix", this, "part" + part + "mix", color, 0, 127)
@@ -620,40 +611,13 @@ public class RedSoundDarkStar extends Synth
         comp = new LabelledDial("Resonance", this, "part" + part + "filterres", color, 0, 127);
         hbox.add(comp);
 
-        comp = new LabelledDial("Envelope 2 Mod", this, "part" + part + "filterenvmod", color, 0, 127)
-	        {
-		        public boolean isSymmetric() { return true; }
-		        public int getDefaultValue() { return 64; }
-		        public String map(int val)
-		        {
-			        return "" + (64-val);
-		        }
-
-	        };
+        comp = new LabelledDial("Envelope 2 Mod", this, "part" + part + "filterenvmod", color, 0, 127, 64);
         hbox.add(comp);
 
-        comp = new LabelledDial("LFO 2 Mod", this, "part" + part + "filterlfomod", color, 0, 127)
-	        {
-		        public boolean isSymmetric() { return true; }
-		        public int getDefaultValue() { return 64; }
-		        public String map(int val)
-		        {
-			        return "" + (64-val);
-		        }
-
-	        };
+        comp = new LabelledDial("LFO 2 Mod", this, "part" + part + "filterlfomod", color, 0, 127, 64);
         hbox.add(comp);
 
-        comp = new LabelledDial("Resonance Mod", this, "part" + part + "filterresmod", color, 0, 127)
-	        {
-		        public boolean isSymmetric() { return true; }
-		        public int getDefaultValue() { return 64; }
-		        public String map(int val)
-		        {
-			        return "" + (64-val);
-		        }
-
-	        };
+        comp = new LabelledDial("Resonance Mod", this, "part" + part + "filterresmod", color, 0, 127, 64)
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -743,7 +707,7 @@ public class RedSoundDarkStar extends Synth
         model.set("part" + part + "osc2sync", (val >>> 4) & 0x01);
         model.set("part" + part + "osc2source", (val >>> 5) & 0x07);
         pos += 2;
-        model.set("part" + part + "mix", denybble(data, pos));
+        model.set("part" + part + "mix", 127 - denybble(data, pos));		// On the DarkStar the 100% osc1 is *127* and 100% osc2 is *0* even though it's far left for osc1.  Go figure.
         pos += 2;
         model.set("part" + part + "ring", denybble(data, pos));
         pos += 2;
@@ -854,8 +818,20 @@ public class RedSoundDarkStar extends Synth
 
         if (data.length == 108)         // Single Voice
             {
-            if (!parseVoiceData(data, 7, 0))
-                return PARSE_FAILED;
+            JComboBox combo = new JComboBox(new String[] { "Part 1", "Part 2", "Part 3", "Part 4", "Part 5" });
+            int result = showMultiOption(this, 
+            	new String[] { "Part" }, 
+            	new JComponent[] { combo },
+            	new String[] { "Select", "Cancel" }, 0, 
+            	"Single Part",
+            	"Data for a single part was received.  Where should it go?");
+            if (result == 0)
+            	{
+	            if (!parseVoiceData(data, 7, combo.getSelectedIndex()))
+	                return PARSE_FAILED;
+	            }
+	        else
+	        	return PARSE_CANCELLED;
             }
         else if (data.length == 512)            // XP Single Performance
             {
@@ -987,7 +963,7 @@ public class RedSoundDarkStar extends Synth
             ((model.get("part" + part + "osc2sync", 0) & 0x01) << 4)  |
             ((model.get("part" + part + "osc2source", 0) & 0x07) << 5));
         pos += 2;
-        addData(data, pos, model.get("part" + part + "mix", 0));
+        addData(data, pos, 127 - model.get("part" + part + "mix", 0));		// On the DarkStar the 100% osc1 is *127* and 100% osc2 is *0* even though it's far left for osc1.  Go figure.
         pos += 2;
         addData(data, pos, model.get("part" + part + "ring", 0));
         pos += 2;
@@ -1215,6 +1191,11 @@ public class RedSoundDarkStar extends Synth
         }
 
     public static String getSynthName() { return "Red Sound DarkStar"; }
+
+    public String getPatchName(Model model) 
+        {
+        return "Patch " + getPatchLocationName(model);
+        }
 
     public String getPatchLocationName(Model model)
         {

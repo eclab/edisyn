@@ -1,5 +1,5 @@
 /***
-    Copyright 2017 by Sean Luke
+    Copyright 2019 by Sean Luke
     Licensed under the Apache License version 2.0
 */
 
@@ -20,7 +20,7 @@ import javax.sound.midi.*;
 /**
    A patch editor for the Red Sound Darkstar.
         
-   @author Sean Luke
+   @author Sean Luke and Bryan Hoyle
 */
 
 public class RedSoundDarkStar extends Synth
@@ -105,7 +105,7 @@ public class RedSoundDarkStar extends Synth
             hbox.add(addEnvelope(i, 1, Style.COLOR_A()));
             hbox.addLast(addEnvelope(i, 2, Style.COLOR_A()));
             vbox.add(hbox);
-            vbox.add(addModulation(1, Style.COLOR_A()));
+            vbox.add(addModulation(i, Style.COLOR_A()));
                         
             sourcePanel.add(vbox, BorderLayout.CENTER);
             if (i == 1)
@@ -617,7 +617,7 @@ public class RedSoundDarkStar extends Synth
         comp = new LabelledDial("LFO 2 Mod", this, "part" + part + "filterlfomod", color, 0, 127, 64);
         hbox.add(comp);
 
-        comp = new LabelledDial("Resonance Mod", this, "part" + part + "filterresmod", color, 0, 127, 64)
+        comp = new LabelledDial("Resonance Mod", this, "part" + part + "filterresmod", color, 0, 127, 64);
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -767,8 +767,8 @@ public class RedSoundDarkStar extends Synth
         pos += 2;
         val = denybble(data, pos);
         model.set("part" + part + "joystickassign", val & 0x07);
-        model.set("part" + part + "outputassign", (val >>> 3) & 0x03);
-        model.set("part" + part + "auditiontype", (val >>> 5) & 0x0F);
+        model.set("part" + part + "outputassign", (val >>> 3) & 0x01);
+        model.set("part" + part + "auditiontype", (val >>> 4) & 0x0F);
         pos += 2;
         val = denybble(data, pos);
         model.set("part" + part + "partoutputshift", val & 0x01);
@@ -1023,8 +1023,8 @@ public class RedSoundDarkStar extends Synth
         pos += 2;
         addData(data, pos,
             ((model.get("part" + part + "joystickassign", 0) & 0x07) << 0 ) |
-            ((model.get("part" + part + "outputassign", 0) & 0x03) << 3)  |
-            ((model.get("part" + part + "auditiontype", 0) & 0x0F) << 5));
+            ((model.get("part" + part + "outputassign", 0) & 0x01) << 3)  |
+            ((model.get("part" + part + "auditiontype", 0) & 0x0F) << 4));
         pos += 2;
         addData(data, pos,
             ((model.get("part" + part + "partoutputshift", 0) & 0x01) << 0 ) |

@@ -249,11 +249,20 @@ public class RedSoundDarkStar extends Synth
             };
         hbox.add(comp);
         
-        comp = new LabelledDial("Tremelo", this, "part" + part + "tremelo", color, 0, 127);
+        comp = new LabelledDial("Tremelo", this, "part" + part + "tremelo", color, 0, 127)
+	        {
+		        public boolean isSymmetric() { return true; }
+		        public int getDefaultValue() { return 64; }
+		        public String map(int val)
+		        {
+			       return "" + (64-val);
+		        }
+
+	        };
         hbox.add(comp);
         
         comp = new LabelledDial("Mix", this, "part" + part + "mix", color, 0, 127)
-            {
+	        {
             public boolean isSymmetric() { return true; }
             public int getDefaultValue() { return 64; }
 
@@ -611,20 +620,47 @@ public class RedSoundDarkStar extends Synth
         comp = new LabelledDial("Resonance", this, "part" + part + "filterres", color, 0, 127);
         hbox.add(comp);
 
-        comp = new LabelledDial("Envelope 2 Mod", this, "part" + part + "filterenvmod", color, 0, 127);
+        comp = new LabelledDial("Envelope 2 Mod", this, "part" + part + "filterenvmod", color, 0, 127)
+	        {
+		        public boolean isSymmetric() { return true; }
+		        public int getDefaultValue() { return 64; }
+		        public String map(int val)
+		        {
+			        return "" + (64-val);
+		        }
+
+	        };
         hbox.add(comp);
 
-        comp = new LabelledDial("LFO 2 Mod", this, "part" + part + "filterlfomod", color, 0, 127);
+        comp = new LabelledDial("LFO 2 Mod", this, "part" + part + "filterlfomod", color, 0, 127)
+	        {
+		        public boolean isSymmetric() { return true; }
+		        public int getDefaultValue() { return 64; }
+		        public String map(int val)
+		        {
+			        return "" + (64-val);
+		        }
+
+	        };
         hbox.add(comp);
 
-        comp = new LabelledDial("Resonance Mod", this, "part" + part + "filterresmod", color, 0, 127);
+        comp = new LabelledDial("Resonance Mod", this, "part" + part + "filterresmod", color, 0, 127)
+	        {
+		        public boolean isSymmetric() { return true; }
+		        public int getDefaultValue() { return 64; }
+		        public String map(int val)
+		        {
+			        return "" + (64-val);
+		        }
+
+	        };
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }                
  
-    int denybble(byte[] data, int pos)
+	    int denybble(byte[] data, int pos)
         {
         // The spec is wrong: it's LSB, then MSB
         // int v = (data[pos] << 4) | data[pos+1];

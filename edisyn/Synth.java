@@ -2016,7 +2016,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** Perform a JOptionPane confirm dialog with MUTLIPLE widgets that the user can select.  The widgets are provided
         in the array WIDGETS, and each has an accompanying label in LABELS.   You specify what BUTTONS appear along the bottom
         as the OPTIONS, which (on the Mac) appear right-to-left. You also get to specify well as the default option -- what
-        button is chosen if the user presses RETURN.  On the Mac, classically this is the first (rightmost) options. 
+        button is chosen if the user presses RETURN.  On the Mac, classically this is the first (rightmost) option. 
         Returns the option number selected; otherwise returns -1 if the user clicked the close box. */
     public static int showMultiOption(Synth synth, String[] labels, JComponent[] widgets, String[] options, int defaultOption, String title, String message)
         {

@@ -1,0 +1,32 @@
+<html><head></head>
+<body>
+
+<h1>Red Sound DarkStar and DarkStar XP2</h1> 
+<h2>Single Patch Editor</h2>
+
+<p>This patch editor works fine on the DarkStar XP2; it likely will not work properly on the DarkStar but will soon once we get a bit more sysex data from DarkStar users.  It is not meant to work with the Vocoda.
+
+<p><b>Communicating with Edisyn</b> Set Protect to OFF (Utility 3).  Set the Master MIDI Channel (Utility 8) to the same channel as Edisyn is using. 
+
+<p><b>Gotchas</b>
+
+<p>The DarkStar's sysex is extremely limited.  
+<ul>
+<li> There is no way for Edisyn to request a patch.  You will need to send a patch manually from the DarkStar via Save Program (Utility 5).  Edisyn also responds to Save Part Voice (Utility 4) and Save All Programs (Utility 6 or 7).
+
+<p><li> Similarly there is no way to request a merge.
+
+<p><li>The DarkStar also has no way to send to a specific patch: you can only send to the current patch memory, or write to a patch.
+
+<p><li>The DarkStar cannot respond to individual patch parameter changes.
+</ul>
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke and Bryan Hoyle</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>October 2019
+</table>
+

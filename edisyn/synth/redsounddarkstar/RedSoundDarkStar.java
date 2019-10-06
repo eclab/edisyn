@@ -705,7 +705,7 @@ public class RedSoundDarkStar extends Synth
         model.set("part" + part + "osc2pulsewidthmodsource", (val >>> 6) & 0x03);
         pos += 2;
         val = denybble(data, pos);
-        model.set("part" + part + "osc2pitchoffset", val & 0x0F);
+        model.set("part" + part + "osc2pitchoffset", val & 0x07);
         model.set("part" + part + "osc2sync", (val >>> 4) & 0x01);
         model.set("part" + part + "osc2source", (val >>> 5) & 0x07);
         pos += 2;
@@ -961,7 +961,7 @@ public class RedSoundDarkStar extends Synth
             ((model.get("part" + part + "osc2pulsewidthmodsource", 0) & 0x03) << 6));
         pos += 2;
         addData(data, pos,
-            ((model.get("part" + part + "osc2pitchoffset", 0) & 0x0F) << 0 ) |
+            ((model.get("part" + part + "osc2pitchoffset", 0) & 0x07) << 0 ) |
             ((model.get("part" + part + "osc2sync", 0) & 0x01) << 4)  |
             ((model.get("part" + part + "osc2source", 0) & 0x07) << 5));
         pos += 2;

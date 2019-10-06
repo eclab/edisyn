@@ -33,6 +33,7 @@ Edisyn presently supports:
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
 * Oberheim Matrix 1000
 * PreenFM2
+* Redsound Darkstar XP2
 * Roland JV-80 and JV-880 (Single and Multi Modes)
 * Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)

@@ -630,7 +630,7 @@ public class RedSoundDarkStar extends Synth
         {
         // The spec is wrong: it's LSB, then MSB
         // int v = (data[pos] << 4) | data[pos+1];
-         int v = (data[pos + 1] << 4) | data[pos];
+        int v = (data[pos + 1] << 4) | data[pos];
         // Some of the dark star stuff is 8-bit, so we have to make sure we're positive
         if (v < 0) v += 256;
         return v;
@@ -694,9 +694,9 @@ public class RedSoundDarkStar extends Synth
         pos += 2;
         model.set("part" + part + "osc2pulsewidthmod", denybble(data, pos));
         pos += 2;
-        model.set("part" + part + "osc1waveform", denybble(data, pos));
+        model.set("part" + part + "osc1waveform", denybble(data, pos) & 0x7F);		 // garbage comes in on high bit
         pos += 2;
-        model.set("part" + part + "osc2waveform", denybble(data, pos));
+        model.set("part" + part + "osc2waveform", denybble(data, pos) & 0x7F);		 // garbage comes in on high bit
         pos += 2;
         val = denybble(data, pos);
         model.set("part" + part + "osc1pitchmodsource", val & 0x03);
@@ -713,7 +713,7 @@ public class RedSoundDarkStar extends Synth
         pos += 2;
         model.set("part" + part + "ring", denybble(data, pos));
         pos += 2;
-        model.set("part" + part + "filterfreq", denybble(data, pos));
+        model.set("part" + part + "filterfreq", denybble(data, pos) & 0x7F);		 // garbage comes in on high bit
         pos += 2;
         val = denybble(data, pos);
         model.set("part" + part + "filterkeytracking", val & 0x07);
@@ -890,6 +890,8 @@ public class RedSoundDarkStar extends Synth
         // The spec is wrong: it's LSB, then MSB
         data[pos] = (byte)((val >> 0) & 0x0F);
         data[pos + 1] = (byte)((val >> 4) & 0x0F);
+        //data[pos + 1] = (byte)((val >> 0) & 0x0F);
+        //data[pos] = (byte)((val >> 4) & 0x0F);
         }
  
     public void emitVoiceData(byte[] data, int pos, int part)

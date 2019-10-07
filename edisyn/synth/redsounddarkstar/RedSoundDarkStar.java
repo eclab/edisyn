@@ -644,9 +644,9 @@ public class RedSoundDarkStar extends Synth
         pos += 2;
         model.set("part" + part + "lfo2speed", denybble(data, pos));
         pos += 2;
-        model.set("part" + part + "lfo1delay", denybble(data, pos));
+        model.set("part" + part + "lfo1delay", denybble(data, pos) & 0x7F);		 // garbage comes in on high bit
         pos += 2;
-        model.set("part" + part + "lfo2delay", denybble(data, pos));
+        model.set("part" + part + "lfo2delay", denybble(data, pos) & 0x7F);		 // garbage comes in on high bit
         pos += 2;
         int val = denybble(data, pos);
         model.set("part" + part + "lfo1shape", val & 0x07);
@@ -736,8 +736,8 @@ public class RedSoundDarkStar extends Synth
         model.set("part" + part + "tremelo", denybble(data, pos));
         pos += 2;
         val = denybble(data, pos);
-        model.set("part" + part + "tremelomodsource", val & 0x03);
-        model.set("part" + part + "panmodsource", (val >>> 2) & 0x07);
+        model.set("part" + part + "tremelomodsource", val & 0x01);
+        model.set("part" + part + "panmodsource", (val >>> 1) & 0x07);
         pos += 2;
         val = denybble(data, pos);
         model.set("part" + part + "channel", val & 0x0F);
@@ -860,7 +860,7 @@ public class RedSoundDarkStar extends Synth
         else if (data.length == 514)            // XP Bulk Performance
             {
             setXP2(false);
-            model.set("number", (data[7] << 4) + data[8]);
+            model.set("number", (data[8] << 4) + data[7]);
             for(int i = 0; i < NUM_VOICES; i++)
                 if (!parseVoiceData(data, 9 + VOICE_DATA_LENGTH * i + 2, i))
                     return PARSE_FAILED;
@@ -869,7 +869,7 @@ public class RedSoundDarkStar extends Synth
         else if (data.length == 522)            // XP2 Bulk Performance
             {
             setXP2(true);
-            model.set("number", (data[7] << 4) + data[8]);
+            model.set("number", (data[8] << 4) + data[7]);
             for(int i = 0; i < NUM_VOICES; i++)
                 if (!parseVoiceData(data, 9 + VOICE_DATA_LENGTH * i + 2, i))
                     return PARSE_FAILED;
@@ -994,8 +994,8 @@ public class RedSoundDarkStar extends Synth
         addData(data, pos, model.get("part" + part + "tremelo", 0));
         pos += 2;
         addData(data, pos,
-            ((model.get("part" + part + "tremelomodsource", 0) & 0x03) << 0 ) |
-            ((model.get("part" + part + "panmodsource", 0) & 0x07) << 2));
+            ((model.get("part" + part + "tremelomodsource", 0) & 0x01) << 0 ) |
+            ((model.get("part" + part + "panmodsource", 0) & 0x07) << 1));
         pos += 2;
         addData(data, pos,
             ((model.get("part" + part + "channel", 0) & 0x0F) << 0 ) |
@@ -1092,8 +1092,8 @@ public class RedSoundDarkStar extends Synth
                 data[6] = (byte)0x02;
                 // PERFNUM
                 int number = tempModel.get("number", 0);
-                data[7] = (byte)((number >> 4) & 0x0F);
-                data[8] = (byte)((number >> 0) & 0x0F);
+                data[7] = (byte)((number >> 0) & 0x0F);
+                data[8] = (byte)((number >> 4) & 0x0F);
                 offset = 9 + VOICE_DATA_LENGTH * NUM_VOICES;
                 for(int i = 0; i < NUM_VOICES; i++)
                     emitVoiceData(data, 9 + VOICE_DATA_LENGTH * i, i);
@@ -1132,8 +1132,8 @@ public class RedSoundDarkStar extends Synth
                 data[6] = (byte)0x02;
                 // PERFNUM
                 int number = tempModel.get("number", 0);
-                data[7] = (byte)((number >> 4) & 0x0F);
-                data[8] = (byte)((number >> 0) & 0x0F);
+                data[7] = (byte)((number >> 0) & 0x0F);
+                data[8] = (byte)((number >> 4) & 0x0F);
                 for(int i = 0; i < NUM_VOICES; i++)
                     emitVoiceData(data, 9 + VOICE_DATA_LENGTH * i, i);
                 data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 1] = (byte)(model.get("currenteditpart", 0));

@@ -255,7 +255,7 @@ public class RedSoundDarkStar extends Synth
         hbox.add(comp);
         
         comp = new LabelledDial("Mix", this, "part" + part + "mix", color, 0, 127)
-	        {
+            {
             public boolean isSymmetric() { return true; }
             public int getDefaultValue() { return 64; }
 
@@ -626,7 +626,7 @@ public class RedSoundDarkStar extends Synth
         return category;
         }                
  
-	    int denybble(byte[] data, int pos)
+    int denybble(byte[] data, int pos)
         {
         // The spec is wrong: it's LSB, then MSB
         // int v = (data[pos] << 4) | data[pos+1];
@@ -714,7 +714,7 @@ public class RedSoundDarkStar extends Synth
         model.set("part" + part + "osc2sync", (val >>> 4) & 0x01);
         model.set("part" + part + "osc2source", (val >>> 5) & 0x07);
         pos += 2;
-        model.set("part" + part + "mix", 127 - denybble(data, pos));		// On the DarkStar the 100% osc1 is *127* and 100% osc2 is *0* even though it's far left for osc1.  Go figure.
+        model.set("part" + part + "mix", 127 - denybble(data, pos));            // On the DarkStar the 100% osc1 is *127* and 100% osc2 is *0* even though it's far left for osc1.  Go figure.
         pos += 2;
         model.set("part" + part + "ring", denybble(data, pos));
         pos += 2;
@@ -827,18 +827,18 @@ public class RedSoundDarkStar extends Synth
             {
             JComboBox combo = new JComboBox(new String[] { "Part 1", "Part 2", "Part 3", "Part 4", "Part 5" });
             int result = showMultiOption(this, 
-            	new String[] { "Part" }, 
-            	new JComponent[] { combo },
-            	new String[] { "Select", "Cancel" }, 0, 
-            	"Single Part",
-            	"Data for a single part was received.  Where should it go?");
+                new String[] { "Part" }, 
+                new JComponent[] { combo },
+                new String[] { "Select", "Cancel" }, 0, 
+                "Single Part",
+                "Data for a single part was received.  Where should it go?");
             if (result == 0)
-            	{
-	            if (!parseVoiceData(data, 7, combo.getSelectedIndex()))
-	                return PARSE_FAILED;
-	            }
-	        else
-	        	return PARSE_CANCELLED;
+                {
+                if (!parseVoiceData(data, 7, combo.getSelectedIndex()))
+                    return PARSE_FAILED;
+                }
+            else
+                return PARSE_CANCELLED;
             }
         else if (data.length == 512)            // XP Single Performance
             {
@@ -856,11 +856,11 @@ public class RedSoundDarkStar extends Synth
                     return PARSE_FAILED;
             for(int i = 0; i < NUM_VOICES; i++)
                 model.set("part" + (i + 1) + "fxsend", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + i]);
-        	// then comes a 0
+            // then comes a 0
             model.set("chorusdepth", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 6]);
             model.set("chorusrate", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 7]);
             model.set("currenteditpart", data[7 + VOICE_DATA_LENGTH * NUM_VOICES + 8]);
-        	// then comes three 0
+            // then comes three 0
             }
         else if (data.length == 514)            // XP Bulk Performance
             {
@@ -880,12 +880,12 @@ public class RedSoundDarkStar extends Synth
                     return PARSE_FAILED;
             for(int i = 0; i < NUM_VOICES; i++)
                 model.set("part" + (i + 1) + "fxsend", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + i]);
-        	// then comes a 0
+            // then comes a 0
             model.set("chorusdepth", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 6]);
             model.set("chorusrate", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 7]);
             model.set("currenteditpart", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 8]);
-        	// then comes three 0
-        	revise();
+            // then comes three 0
+            revise();
             }
         revise();
         return PARSE_SUCCEEDED;
@@ -973,7 +973,7 @@ public class RedSoundDarkStar extends Synth
             ((model.get("part" + part + "osc2sync", 0) & 0x01) << 4)  |
             ((model.get("part" + part + "osc2source", 0) & 0x07) << 5));
         pos += 2;
-        addData(data, pos, 127 - model.get("part" + part + "mix", 0));		// On the DarkStar the 100% osc1 is *127* and 100% osc2 is *0* even though it's far left for osc1.  Go figure.
+        addData(data, pos, 127 - model.get("part" + part + "mix", 0));          // On the DarkStar the 100% osc1 is *127* and 100% osc2 is *0* even though it's far left for osc1.  Go figure.
         pos += 2;
         addData(data, pos, model.get("part" + part + "ring", 0));
         pos += 2;

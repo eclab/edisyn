@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 19)
+Synthesizer Patch Editor (Version 20)
  
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -33,7 +33,7 @@ Edisyn presently supports:
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
 * Oberheim Matrix 1000
 * PreenFM2
-* Redsound Darkstar XP2
+* Red Sound DarkStar XP2
 * Roland JV-80 and JV-880 (Single and Multi Modes)
 * Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)

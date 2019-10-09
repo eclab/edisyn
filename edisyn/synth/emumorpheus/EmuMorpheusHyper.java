@@ -639,7 +639,7 @@ public class EmuMorpheusHyper extends Synth
         {
         int bank = tempModel.get("bank", 0);
         if (bank == 0) // RAM
-        	bank = 2;		// actual RAM hyper bank is 2
+            bank = 2;               // actual RAM hyper bank is 2
         if (bank == 1)  // card
             bank = 4;  // because the card's actual bank is bank 2
         int number = tempModel.get("number", 0);

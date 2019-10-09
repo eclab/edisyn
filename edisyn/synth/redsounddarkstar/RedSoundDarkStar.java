@@ -644,10 +644,15 @@ public class RedSoundDarkStar extends Synth
         pos += 2;
         model.set("part" + part + "lfo2speed", denybble(data, pos));
         pos += 2;
-        model.set("part" + part + "lfo1delay", denybble(data, pos) /*& 0x7F*/);		 // garbage comes in on high bit
+        model.set("part" + part + "lfo1delay", denybble(data, pos));
         pos += 2;
-        model.set("part" + part + "lfo2delay", denybble(data, pos) /*& 0x7F*/);		 // garbage comes in on high bit
+        
+        // a bug in the DarkStar sysex for factory patches sometimes sends 148.  We are assuming this is actually 0.
+        int bug = denybble(data, pos);
+        if (bug == 148) bug = 0;
+        model.set("part" + part + "lfo2delay", bug);
         pos += 2;
+        
         int val = denybble(data, pos);
         model.set("part" + part + "lfo1shape", val & 0x07);
         model.set("part" + part + "lfo1sync", (val >>> 3) & 0x01);
@@ -694,9 +699,9 @@ public class RedSoundDarkStar extends Synth
         pos += 2;
         model.set("part" + part + "osc2pulsewidthmod", denybble(data, pos));
         pos += 2;
-        model.set("part" + part + "osc1waveform", denybble(data, pos) /*& 0x7F*/);		 // garbage comes in on high bit
+        model.set("part" + part + "osc1waveform", denybble(data, pos));
         pos += 2;
-        model.set("part" + part + "osc2waveform", denybble(data, pos) /*& 0x7F*/);		 // garbage comes in on high bit
+        model.set("part" + part + "osc2waveform", denybble(data, pos));
         pos += 2;
         val = denybble(data, pos);
         model.set("part" + part + "osc1pitchmodsource", val & 0x03);
@@ -713,7 +718,7 @@ public class RedSoundDarkStar extends Synth
         pos += 2;
         model.set("part" + part + "ring", denybble(data, pos));
         pos += 2;
-        model.set("part" + part + "filterfreq", denybble(data, pos) /*& 0x7F*/);		 // garbage comes in on high bit
+        model.set("part" + part + "filterfreq", denybble(data, pos));
         pos += 2;
         val = denybble(data, pos);
         model.set("part" + part + "filterkeytracking", val & 0x07);
@@ -870,7 +875,6 @@ public class RedSoundDarkStar extends Synth
             {
             setXP2(true);
             model.set("number", (data[8] << 4) + data[7]);
-            System.err.println("----> " + model.get("number", 0));
             for(int i = 0; i < NUM_VOICES; i++)
                 if (!parseVoiceData(data, 9 + VOICE_DATA_LENGTH * i, i))
                     return PARSE_FAILED;
@@ -882,7 +886,6 @@ public class RedSoundDarkStar extends Synth
             model.set("currenteditpart", data[9 + VOICE_DATA_LENGTH * NUM_VOICES + 8]);
         	// then comes three 0
         	revise();
-        	System.err.println("done");
             }
         revise();
         return PARSE_SUCCEEDED;

@@ -17,6 +17,9 @@ Related projects:
 
 [Paper Here](https://cs.gmu.edu/~sean/papers/evomusart19.pdf).  Presented at EvoMUSART 2019.
 
+## Contributors
+
+* Bryan Hoyle (collaboration on the Red Sound DarkStar editor)
 
 ## About
 

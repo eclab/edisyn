@@ -177,7 +177,7 @@ public class WaldorfBlofeldMulti extends Synth
         // multi-mode on the Blofeld can't switch patches
         transmitTo.setEnabled(false);    
         transmitParameters.setEnabled(false);
-        transmitParameters.setSelected(false);        
+        transmitParameters.setSelected(false); 
         return frame;   
         }         
                 
@@ -1209,8 +1209,6 @@ public class WaldorfBlofeldMulti extends Synth
         }
 
 
-
-
     public Model getNextPatchLocation(Model model)
         {
         int number = model.get("number");
@@ -1241,4 +1239,5 @@ public class WaldorfBlofeldMulti extends Synth
         {
         return true;
         }
+    
     }

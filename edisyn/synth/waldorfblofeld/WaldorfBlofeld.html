@@ -23,6 +23,16 @@
 
 <b>Important note:</b> You probaby want to turn Limit WT <i>off</i> when using user wavetables.  Otherwise the Blofeld will not work properly with any PWM values greater than 120.
 
+<p><b>Uploading Pseudo-MPE</b> The Blofeld doesn't support MPE.  But it does support 16 separate patch slots in a multimode patch, which can be taken advantage of by instruments such as the Linnstrument. To do this each slot must be identical except for a unique MIDI channel, and each slot must be set to the desired single patch.  You can do this in two ways.
+
+<ul>
+<li><b>Write Patch as Psuedo-MPE</b>&nbsp;&nbsp;&nbsp; This writes a multimode patch which points to your current single patch, including the current name, bank, and (single patch) number.  You get to choose what multimode patch number to write to.
+
+<p><li><b>Write Pseudo-MPE on Batch Download</b>&nbsp;&nbsp;&nbsp; If you check this, then if you start a batch download, for each downloaded patch, Edisyn will automatically write a multimode patch which points to it, including the current name, bank, and (single patch) number.  The multimode patch number will be the same as the single number.  Thus if you download exactly one bank of single patches, you'll have multimode patches loaded for all of them.  
+
+<p>Why is this connected to batch download?  Because in order to properly write multimode patches, Edisyn needs to know the <i>name</i> of the single-mode patch to which they refer (so it can call the multimode patch by the same name).  To do this it must load the single-mode patch.  The easiest way to load single-mode patches in bulk is by hijacking the bulk download facility.  So there you have it.
+</ul>
+
 <p><b>Gotchas</b> Only two at present:
 
 <ul>
@@ -40,6 +50,6 @@ If you send a patch, or modify its parameters, the Blofeld's patch screen does n
 <td><b>Sean Luke</b>
 <tr>
 <td align=right>Date&nbsp;&nbsp;&nbsp;
-<td>June 2017 (Revised August 2019)
+<td>June 2017 (Last revision October 2019)
 </table>
 

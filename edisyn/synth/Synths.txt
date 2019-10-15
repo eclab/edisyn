@@ -1,5 +1,5 @@
 # edisyn.synth.futuresonusparva.FuturesonusParva
-#edisyn.synth.generic.Generic
+edisyn.synth.generic.Generic
 edisyn.synth.casiocz.CasioCZ
 # edisyn.synth.linnstrument.Linnstrument
 edisyn.synth.dsiprophet08.DSIProphet08

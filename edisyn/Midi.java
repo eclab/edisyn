@@ -127,7 +127,7 @@ public class Midi
                     thru = new Thru();
                     transmitter.setReceiver(thru);
                     }
-                catch(Exception e) { e.printStackTrace(); }
+                catch(Exception e) { ExceptionDump.postThrowable(e, "Receiver: " + receiver + "\nDevice: " + device + "\nTransmitter: " + transmitter); e.printStackTrace(); }
                         
             if (thru != null)
                 {
@@ -149,7 +149,7 @@ public class Midi
                     recv.addReceiver(device.getReceiver());
                     receiver = recv;
                     }
-                catch(Exception e) { e.printStackTrace(); }
+                catch(Exception e) { ExceptionDump.postThrowable(e, "\nDevice: " + device); e.printStackTrace(); }
             return receiver; 
             }
         }
@@ -204,7 +204,7 @@ public class Midi
                     allDevices.add(new MidiDeviceWrapper(d));
                     }
                 }
-            catch(Exception e) { }
+            catch(Exception e) { ExceptionDump.postThrowable(e); }
             }
             
         // Do they hold the same exact devices?
@@ -250,7 +250,7 @@ public class Midi
                     keyDevices.add(mdn);
                     }
                 }
-            catch(Exception e) { }
+            catch(Exception e) { ExceptionDump.postThrowable(e); }
             }
 
         outDevices = new ArrayList();
@@ -264,7 +264,7 @@ public class Midi
                     outDevices.add(mdn);
                     }
                 }
-            catch(Exception e) { }
+            catch(Exception e) { ExceptionDump.postThrowable(e); }
             }
         }
 
@@ -371,7 +371,7 @@ public class Midi
             try
                 { return Integer.parseInt(val); }
             catch (Exception e)
-                { e.printStackTrace(); return -1; }
+                { ExceptionDump.postThrowable(e); e.printStackTrace(); return -1; }
             }
         }
     
@@ -385,7 +385,7 @@ public class Midi
             try
                 { return Integer.parseInt(val); }
             catch (Exception e)
-                { e.printStackTrace(); return -1; }
+                { ExceptionDump.postThrowable(e); e.printStackTrace(); return -1; }
             }
         }
     
@@ -503,12 +503,15 @@ public class Midi
                 tuple.inReceiver = inReceiver;
                 if (tuple.in == null)
                     {
+                        synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the incoming MIDI Device.");
+/*
                     synth.disableMenuBar();
                     JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the incoming MIDI Device.",  
                         "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
                         JOptionPane.WARNING_MESSAGE, null,
                         new String[] { "Run Disconnected" }, "Run Disconnected");
                     synth.enableMenuBar();
+*/
                     return FAILED;
                     }
 
@@ -516,12 +519,15 @@ public class Midi
                 tuple.out = tuple.outWrap.getReceiver();
                 if (tuple.out == null)
                     {
+                    synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the outgoing MIDI Device.");
+/*
                     synth.disableMenuBar();
                     JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the outgoing MIDI Device.",  
                         "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
                         JOptionPane.WARNING_MESSAGE, null,
                         new String[] { "Run Disconnected" }, "Run Disconnected");
                     synth.enableMenuBar();
+*/
                     return FAILED;
                     }
 
@@ -537,11 +543,14 @@ public class Midi
                     tuple.keyReceiver = keyReceiver;
                     if (tuple.key == null)
                         {
+                        synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the Controller MIDI Device.");
+/*
                         synth.disableMenuBar();
                         JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the Controller MIDI Device.",  
                             "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
                             JOptionPane.WARNING_MESSAGE, null,
                             new String[] { "Run without Controller" }, "Run without Controller");
+*/
                         synth.enableMenuBar();
                         tuple.keyWrap = null;
                         tuple.key = null;

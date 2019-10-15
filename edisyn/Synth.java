@@ -966,7 +966,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         try
             {
-            int v_msb = (value >>> 7);
+            int v_msb = ((value >>> 7) & 127);
             int v_lsb = (value & 127);
             return new Object[]
                 {
@@ -1986,6 +1986,42 @@ public abstract class Synth extends JComponent implements Updatable
         JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
         enableMenuBar();
         inSimpleError = false;
+        }
+
+    /** Display a simple error message. */
+    public void showErrorWithStackTrace(Throwable error, String title, String message)
+        {
+        if (!ExceptionDump.lastThrowableExists())
+        	{
+        	System.err.println("WARNING: error with stack trace requested but there's no Throwable");
+        	new Throwable().printStackTrace();
+        	showSimpleError(title, message);
+        	}
+        else
+        	{
+			// A Bug in OS X (perhaps others?) Java causes multiple copies of the same Menu event to be issued
+			// if we're popping up a dialog box in response, and if the Menu event is caused by command-key which includes
+			// a modifier such as shift.  To get around it, we're just blocking multiple recursive message dialogs here.
+		
+			if (inSimpleError) return;
+			inSimpleError = true;
+			disableMenuBar();
+			String[] options = new String[] { "Okay", "Save Error" };
+			int ret = JOptionPane.showOptionDialog(this, message, title, JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+			enableMenuBar();
+			inSimpleError = false;
+		
+			if (ret == 1)
+				{
+				ExceptionDump.saveThrowable(this);
+				}
+			}
+        }
+
+    /** Display a simple error message. */
+    public void showErrorWithStackTrace(String title, String message)
+        {
+        showErrorWithStackTrace(null, title, message);
         }
 
     /** Display a simple error message. */
@@ -4738,7 +4774,7 @@ public abstract class Synth extends JComponent implements Updatable
                 } 
             catch (IOException e) // fail
                 {
-                showSimpleError("File Error", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
+                showErrorWithStackTrace(e, "File Error", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
                 e.printStackTrace();
                 }
             finally
@@ -4771,7 +4807,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             catch (Exception e) // fail
                 {
-                showSimpleError("File Error", "An error occurred while saving to the file " + file);
+                showErrorWithStackTrace(e, "File Error", "An error occurred while saving to the file " + file);
                 e.printStackTrace();
                 }
             finally
@@ -4842,6 +4878,16 @@ public abstract class Synth extends JComponent implements Updatable
                         System.arraycopy(data, 0, sysex[count], 1, data.length);
                         count++;
                         }
+                        /*
+            for(int i = 0; i < sysex.length; i++)
+            	{
+            	System.err.println("\n\n FILE " + i);
+            	for(int j = 0; j < sysex[i].length; j++)
+            		{
+            		System.err.println(j + "\t" + sysex[i][j]);
+            		}
+            	}
+            	*/
             return sysex;
             }
         catch (Exception ex)
@@ -5310,7 +5356,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }        
             catch (Throwable e) // fail  -- could be an Error or an Exception
                 {
-                showSimpleError("File Error", "An error occurred while loading from the file.");
+                showErrorWithStackTrace(e, "File Error", "An error occurred while loading from the file.");
                 e.printStackTrace();
                 }
             finally
@@ -5631,6 +5677,8 @@ public abstract class Synth extends JComponent implements Updatable
         
     public int getBulkDownloadWaitTime() { return 500; }
     
+   public boolean isBatchDownloading() { return patchTimer != null; }
+    
     void doGetAllPatches()
         {
         if (patchTimer != null)
@@ -5766,7 +5814,7 @@ public abstract class Synth extends JComponent implements Updatable
                 patchTimer.stop();
                 patchTimer = null;
                 getAll.setText("Download Batch...");
-                showSimpleError("Batch Download Failed.", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
+                showErrorWithStackTrace(e, "Batch Download Failed.", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
                 e.printStackTrace();
                 }
             finally
@@ -6117,7 +6165,7 @@ public abstract class Synth extends JComponent implements Updatable
                         } 
                     catch (IOException e) // fail
                         {
-                        showSimpleError("File Error", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
+                        showErrorWithStackTrace(e, "File Error", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
                         e.printStackTrace();
                         if (os != null)
                             try { os.close(); }
@@ -6163,7 +6211,7 @@ public abstract class Synth extends JComponent implements Updatable
                 } 
             catch (IOException e) // fail
                 {
-                showSimpleError("File Error", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
+                showErrorWithStackTrace(e, "File Error", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
                 e.printStackTrace();
                 }
             finally

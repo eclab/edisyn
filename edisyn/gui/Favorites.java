@@ -13,7 +13,7 @@ import java.util.prefs.*;
 
 public class Favorites
     {
-    public static final int DEFAULT_MAXIMUM = 8;
+    public static final int DEFAULT_MAXIMUM = 10;
     int maximum;
     ArrayList<String> top = new ArrayList<>();
         
@@ -170,7 +170,7 @@ public class Favorites
         int result = Synth.showMultiOption(null,
             new String[] { "Recent", "All Synths" },
             new JComboBox[] { combo1, combo2 },
-            new String[] { "Okay", "Cancel", "Disconnected" },
+            new String[] { "Okay", "Quit", "Disconnected" },
             0, 
             "Edisyn",
             "Select a synthesizer to edit");

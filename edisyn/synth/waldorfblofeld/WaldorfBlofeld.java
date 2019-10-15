@@ -81,6 +81,7 @@ public class WaldorfBlofeld extends Synth
         }
 
     WaldorfBlofeldWavetable wavetable = new WaldorfBlofeldWavetable();
+	JCheckBoxMenuItem mpeMenu;
 
     public void addBlofeldMenu()
         {
@@ -95,8 +96,51 @@ public class WaldorfBlofeld extends Synth
                 }
             });
         menu.add(writeWavetableMenu);
+
+        mpeMenu = new JCheckBoxMenuItem("Write Pseudo-MPE on Batch Download");
+        menu.add(mpeMenu);
+
+		JMenuItem oneMPEMenu = new JMenuItem("Write Patch as Pseudo-MPE");
+        oneMPEMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+		
+            int n = 0;
+		String title = "Write Patch as Pseudo-MPE";
+        while(true)
+            {
+            boolean result = showMultiOption(WaldorfBlofeld.this, new String[] { "Patch Number"}, 
+                new JComponent[] { number }, title, "Enter the Multimode patch number.");
+                
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException ex)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                continue;
+                }
+                
+            if (n < 1 || n > 128)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                continue;
+                }
+
+            if (result) 
+                break;
+            }           
+                 
+        	boolean send = getSendMIDI();
+        	setSendMIDI(true);
+        	tryToSendSysex(getMPEForPatch(model.get("bank", 0), model.get("number"), n - 1, model.get("name", "")));
+        	setSendMIDI(send);
+            }
+            });
+
+        menu.add(oneMPEMenu);
         }
-            
+
 
     
     public WaldorfBlofeld()
@@ -2222,7 +2266,27 @@ public class WaldorfBlofeld extends Synth
             }
         revise();
         }
-        
+    
+    
+    public byte[] getMPEForPatch(int bank, int number, int multinumber, String name)
+    	{
+    	WaldorfBlofeldMulti multi = (WaldorfBlofeldMulti)
+    		instantiate(WaldorfBlofeldMulti.class, "", true, false, null);
+    	
+        multi.setSendMIDI(false);
+        multi.getUndo().setWillPush(false);
+        multi.model.setUpdateListeners(false);
+    	multi.model.set("number", multinumber);
+    	for(int j = 1; j <= 16; j++)
+    			{
+    			multi.model.set("inst" + j + "bank", bank);
+    			multi.model.set("inst" + j + "number", number);
+    			multi.model.set("name", name);
+    			}
+		return multi.emit(null, false, false);
+		}
+
+    
     public int parse(byte[] data, boolean fromFile)
         {
         boolean retval = true;
@@ -2240,7 +2304,16 @@ public class WaldorfBlofeld extends Synth
             {
             setParameterByIndex(i, data[i + 7]);
             }
-        revise();       
+        revise();    
+        
+        if (mpeMenu != null && mpeMenu.isSelected() && isBatchDownloading())
+        	{
+        	boolean send = getSendMIDI();
+        	setSendMIDI(true);
+        	tryToSendSysex(getMPEForPatch(model.get("bank", 0), model.get("number", 0), model.get("number", 0), model.get("name", "")));
+        	setSendMIDI(send);
+        	}
+           
         return PARSE_SUCCEEDED;     
         }
         
@@ -2437,6 +2510,6 @@ public class WaldorfBlofeld extends Synth
         return BANKS[model.get("bank")] + 
             (number > 99 ? "" : (number > 9 ? "0" : "00")) + number;
         }
-        
+                
     }
     

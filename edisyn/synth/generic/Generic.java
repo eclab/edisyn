@@ -7,6 +7,7 @@ package edisyn.synth.generic;
 
 import edisyn.*;
 import edisyn.gui.*;
+import edisyn.util.*;
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
@@ -167,15 +168,21 @@ public class Generic extends Synth
         HBox hbox = new HBox();
         //hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
         //vbox.add(hbox);
-        vbox.add(addController(0, Style.COLOR_A()));
+        vbox.add(addRawController(0, Style.COLOR_A()));
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Basic", soundPanel);
+        tabs.addTab("All CC", soundPanel);
 
         vbox = new VBox();
-        vbox.add(addController(64, Style.COLOR_A()));
+        vbox.add(addRawController(64, Style.COLOR_A()));
         soundPanel = new SynthPanel(this);
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Basic2", soundPanel);
+        tabs.addTab("All CC", soundPanel);
+        
+        vbox = new VBox();
+        vbox.add(addCustomController(Style.COLOR_B()));
+        soundPanel = new SynthPanel(this);
+        soundPanel.add(vbox, BorderLayout.CENTER);
+        tabs.addTab("Custom CC", soundPanel);
         
         vbox = new VBox();
         hbox.add(new Joystick(this));
@@ -220,9 +227,92 @@ public class Generic extends Synth
         return globalCategory;
         }
 
-    public JComponent addController(final int offset, Color color)
+	public JComponent addCustomController(Color color)
+		{
+        Category category = new Category(this, "Custom CC", color);
+                
+        JComponent comp;
+        String[] params;
+        
+		VBox main = new VBox();
+		for(int j = 1; j < 18; j += 3)
+			{
+			HBox hbox = new HBox();
+			for(int i = j; i < j + 3 ; i++)
+				{
+				final int _i = i;
+				VBox vbox = new VBox();
+				
+				LabelledDial msblsb = new LabelledDial("MSB + LSB", this, "cust-cc-msb-lsb-" + i, color, 0, 16383);
+				
+				comp = new LabelledDial("Parameter", this, "cust-cc-param-" + i, color, 0, 127)
+					{
+					public void update(String key, Model model)	
+						{
+						super.update(key, model);
+						msblsb.setEnabled(model.get(key) < 32);
+						}
+					};
+					
+				vbox.add(comp);
+                comp = new StringComponent(null, this, "cust-cc-name-" + i, 5, "Name can be as long as you like")
+                    {
+                    public String getCommand() { return "Enter CC Label"; }
+                    };
+				model.set("cust-cc-name-" + i, "Name");
+				vbox.add(comp);
+				hbox.add(vbox);
+				
+				vbox = new VBox();
+				comp = msblsb;
+				vbox.add(comp);
+				comp = new CheckBox("On", this, "cust-cc-msb-" + i)
+					{
+					public void update(String key, Model model) { getCheckBox().setSelected(getState() > 64); }
+					};
+				((CheckBox)comp).setMax(127);
+				((CheckBox)comp).setState(((CheckBox)comp).getState());
+				vbox.add(comp);
+				hbox.add(vbox);
+
+				vbox = new VBox();
+				comp = new LabelledDial("MSB", this, "cust-cc-msb-" + i, color, 0, 127);
+				vbox.add(comp);
+				comp = new PushButton("Send") 
+					{ 
+					public void perform() 
+						{ 
+						getModel().set("cust-cc-msb-" + _i, getModel().get("cust-cc-msb-" + _i)); 
+						} 
+					};
+				vbox.add(comp);
+				hbox.add(vbox);
+
+				vbox = new VBox();
+				comp = new LabelledDial("MSB Alt", this, "cust-cc-msb-alt-" + i, color, 0, 127);
+				vbox.add(comp);
+				comp = new PushButton("Alt") 
+					{ 
+					public void perform() 
+						{ 
+						getModel().set("cust-cc-msb-alt-" + _i, getModel().get("cust-cc-msb-alt-" + _i)); 
+						} 
+					};
+				vbox.add(comp);
+				hbox.add(vbox);
+				hbox.add(Strut.makeHorizontalStrut(40));
+				}
+			main.add(hbox);
+			main.add(Strut.makeVerticalStrut(5));
+			}
+        
+        category.add(main);
+        return category;
+		}
+
+    public JComponent addRawController(final int offset, Color color)
         {
-        Category globalCategory = new Category(this, "Raw CC", color);
+        Category category = new Category(this, "Raw CC", color);
                 
         JComponent comp;
         String[] params;
@@ -240,9 +330,9 @@ public class Generic extends Synth
                         
                 VBox v = new VBox();
                 HBox h = new HBox();
-                comp = new CheckBox("On", this, "controller" + (i + offset))
+                comp = new CheckBox("On", this, "cc" + (i + offset))
                     {
-                    public void update(String key, Model model) { getCheckBox().setSelected(getState() > 0); }
+                    public void update(String key, Model model) { getCheckBox().setSelected(getState() > 64); }
                     };
                 ((CheckBox)comp).setMax(127);
                 ((CheckBox)comp).setState(((CheckBox)comp).getState());
@@ -251,17 +341,17 @@ public class Generic extends Synth
                     { 
                     public void perform() 
                         { 
-                        getModel().set("controller" + _i, getModel().get("controller" +  (_i + offset))); 
+                        getModel().set("cc" + _i, getModel().get("cc" +  (_i + offset))); 
                         } 
                     };
                 v.add(comp);
                 h.add(v);
                 vbox.add(h);
-                comp = new LabelledDial(null, this, "controller" + (i + offset), color, 0, 127);
+                comp = new LabelledDial(null, this, "cc" + (i + offset), color, 0, 127);
                 h.add(comp);
 
 
-                comp = new StringComponent(null, this, "controllername" + (i + offset), 6, "Name can be as long as you like")
+                comp = new StringComponent(null, this, "cc-name" + (i + offset), 6, "Name can be as long as you like")
                     {
                     public String getTitle() { return "CC " +  (_i + offset); }
                     public String getCommand() { return "Enter CC Label"; }
@@ -272,107 +362,20 @@ public class Generic extends Synth
 
                 hbox.add(vbox);
                 if (CC_NAMES[i + offset].equals(""))
-                    model.set("controllername" + (i + offset), "CC " + (i + offset));
+                    model.set("cc-name" + (i + offset), "CC " + (i + offset));
                 else
-                    model.set("controllername" + (i + offset), "CC " +  (i + offset) + " " + CC_NAMES[i + offset]);
+                    model.set("cc-name" + (i + offset), "CC " +  (i + offset) + " " + CC_NAMES[i + offset]);
                 }
             main.add(hbox);
             }
         
-        globalCategory.add(main);
-        return globalCategory;
+        category.add(main);
+        return category;
         }
     
     
         
         
-        
-    /////// SOME NOTES ABOUT RELATIONSHIPS BETWEEN CERTAIN METHODS
-        
-
-    /// There are a lot of redundant methods here.  You only have to override some of them.
-
-    /// PARSING (LOADING OR RECEIVING)
-    /// When a message is received from the synthesizser, Edisyn will do this:
-    /// If the message is a Sysex Message, then
-    ///     Call recognize(message data).  If it returns true, then
-    ///                     Call parse(message data, fromFile) [we presume it's a dump or a load from a file]
-    ///             Else
-    ///                     Call parseParameter(message data) [we presume it's a parameter change, or maybe something else]
-    /// Else if the message is a complete CC or NRPN message
-    ///             Call handleSynthCCOrNRPN(message) [it's some CC or NRPN that your synth is sending us, maybe a parameter change?]
-        
-    /// SENDING A SINGLE PARAMETER OF KEY key
-    /// Call emitAll(key)
-    ///     This calls emit(key)
-    ///
-    /// You could override either of these methods, but probably not both.
-        
-    /// SENDING TO CURRENT
-    /// Call sendAllParameters().  This does:
-    ///             If getSendsAllParametersInBulk(), this calls:
-    ///                     emitAll(tempModel, toWorkingMemory = true, toFile)
-    ///                             This calls emit(tempModel, toWorkingMemory = true, toFile)
-    ///             Else for every key it calls:
-    ///             Call emitAll(key)
-    ///                     This calls emit(key)
-    ///
-    /// You could override either of the emit...(tempModel...) methods, but probably not both.
-    /// You could override either of the emit...(key...) methods, but probably not both.
-
-    /// SENDING TO A PATCH
-    /// Call gatherPatchInfo(...,tempModel,...)
-    /// If successful
-    ///             Call changePatch(tempModel)
-    ///     Call sendAllParameters().  This does:
-    ///                     If getSendsAllParametersInBulk(), this calls:
-    ///                             emitAll(tempModel, toWorkingMemory = true, toFile)
-    ///                                     This calls emit(tempModel, toWorkingMemory = true, toFile)
-    ///                     Else for every key it calls:
-    ///                     Call emitAll(key)
-    ///                             This calls emit(key)
-    ///     
-    /// You could override either of the emit...(tempModel...) methods, but probably not both.
-    /// You could override either of the emit...(key...) methods, but probably not both.
-        
-    /// WRITING OR SAVING
-    /// Call gatherPatchInfo(...,tempModel,...)
-    /// If successful
-    ///     Call emitAll(tempModel, toWorkingMemory = false, toFile)
-    ///                     This calls emit(tempModel, toWorkingMemory = false, toFile)
-    ///             Call changePatch(tempModel)
-    ///
-    /// You could override either of the emit methods, but probably not both.
-    /// Note that saving strips out the non-sysex bytes from emitAll.
-        
-    /// SAVING
-    /// Call emitAll(tempModel, toWorkingMemory, toFile)
-    ///             This calls emit(tempModel, toWorkingMemory, toFile)
-    ///
-    /// You could override either of the emit methods, but probably not both.
-    /// Note that saving strips out the non-sysex bytes from emitAll.
-        
-    /// REQUESTING A PATCH 
-    /// If we're requesting the CURRENT patch
-    ///             Call performRequestCurrentDump()
-    ///                     this then calls requestCurrentDump()
-    /// Else
-    ///     Call gatherPatchInfo(...,tempModel,...)
-    ///             If successful
-    ///                     Call performRequestDump(tempModel)
-    ///                             This calls changePatch(tempModel)
-    ///                             Then it calls requestDump(tempModel)
-    ///
-    /// You could override performRequestCurrentDump or requestCurrentDump, but probably not both.
-    /// Similarly, you could override performRequestDump or requestDump, but probably not both
-
-
-
-
-
-
-
-
     ////// YOU MUST OVERRIDE ALL OF THE FOLLOWING
 
     public void changePatch(Model tempModel)
@@ -635,20 +638,23 @@ public class Generic extends Synth
 
     public Object[] emitAll(String key)
         {
-        // This writes a single parameter out to the synth.
-        //
-        // If you need to send more than just a simple sysex message, override this one.
-        return super.emitAll(key);
+        if (key.startsWith("cc-"))
+        	{
+        	int cc = StringUtility.getInt(key);
+	        return buildCC(getChannelOut(), cc, model.get(key));
+	    	}
+	    else if (key.startsWith("cust-cc-msb-lsb-"))
+	    	{
+	    	int param = StringUtility.getInt(key);
+	        return buildLongCC(getChannelOut(), model.get("cust-cc-param-" + param), model.get(key));
+	    	}
+	    else if (key.startsWith("cust-cc-msb-alt-") || key.startsWith("cust-cc-msb-"))
+	    	{
+	    	int param = StringUtility.getInt(key);
+	        return buildCC(getChannelOut(), model.get("cust-cc-param-" + param), model.get(key));
+	    	}
+	    else return new Object[0];
         }
-
-    public byte[] emit(String key) 
-        { 
-        // This writes a single parameter out to the synth.
-        //
-        // If you need to send just a simple sysex message, override this one.
-        return new byte[0]; 
-        }
-
 
 
 

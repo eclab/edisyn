@@ -40,6 +40,7 @@ public class Tuning extends Synth
         tabs.addTab("65-128", soundPanel);
         
         model.set("name", DEFAULT_NAME);  		// or whatever, to set the initial name of your patch (assuming you use "name" as the key for the patch name)
+        model.set("number", 0);
         //loadDefaults();                   // this tells Edisyn to load the ".init" sysex file you created.  If you haven't set that up, it won't bother
         }
 
@@ -52,7 +53,11 @@ public class Tuning extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-
+        
+        VBox vbox = new VBox();
+        comp = new PatchDisplay(this, 3);
+        vbox.add(comp);
+        
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
             public String replace(String val)
@@ -66,9 +71,9 @@ public class Tuning extends Synth
                 updateTitle();
                 }
             };
-        hbox.add(comp);
+        vbox.add(comp);
                                 
-        globalCategory.add(hbox, BorderLayout.WEST);
+        globalCategory.add(vbox, BorderLayout.WEST);
         return globalCategory;
         }
         

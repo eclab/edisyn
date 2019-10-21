@@ -7,6 +7,7 @@ package edisyn.synth.emumorpheus;
 
 import edisyn.*;
 import edisyn.gui.*;
+import edisyn.utility;
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
@@ -387,7 +388,7 @@ public class EmuMorpheusHyper extends Synth
                 {
                 try
                     {
-                    int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
+                    int zone = StringUtility.getInt(key);
                     param = ((Integer)(parametersToIndex.get("z" + zone + "preset"))).intValue() + PARAM_OFFSET;
                     }
                 catch (Exception ex)
@@ -419,7 +420,7 @@ public class EmuMorpheusHyper extends Synth
                 {
                 try
                     {
-                    int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
+                    int zone = StringUtility.getInt(key);
                     if (model.get("z" + zone + "number") == -1)
                         val = -1;
                     else
@@ -508,7 +509,7 @@ public class EmuMorpheusHyper extends Synth
                 {
                 try
                     {
-                    int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
+                    int zone = StringUtility.getInt(parameters[i]);
                     if (model.get("z" + zone + "number") == -1)
                         val = -1;
                     else
@@ -598,7 +599,7 @@ public class EmuMorpheusHyper extends Synth
                 try
                     {
                     // this is just a guess...
-                    int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
+                    int zone = StringUtility.getInt(parameters[i]);
                     if (val < 0) // namely, -1
                         {
                         model.set("z" + zone + "bank", 0);

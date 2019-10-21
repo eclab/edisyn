@@ -7,6 +7,7 @@ package edisyn.synth.emumorpheus;
 
 import edisyn.*;
 import edisyn.gui.*;
+import edisyn.utility;
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
@@ -593,7 +594,7 @@ public class EmuMorpheusMap extends Synth
                 {
                 try
                     {
-                    int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
+                    int zone = StringUtility.getInt(key);
                     param = ((Integer)(parametersToIndex.get("ch" + zone + "program"))).intValue() + PARAM_OFFSET;
                     }
                 catch (Exception ex)
@@ -604,13 +605,13 @@ public class EmuMorpheusMap extends Synth
                 }
             else if (key.startsWith("fx1n"))
                 {
-                int num = Integer.parseInt(key.substring("fx1n10".length()).replaceAll("[^0-9]+", " ").trim());
+                int num = StringUtility.getIntAfter(key, "fx1n10");
                 String key2 = "fx1parmvals" + num;
                 param = ((Integer)(parametersToIndex.get(key2))).intValue() + PARAM_OFFSET;
                 }
             else if (key.startsWith("fx2n"))
                 {
-                int num = Integer.parseInt(key.substring("fx2n10".length()).replaceAll("[^0-9]+", " ").trim());
+                int num = StringUtility.getIntAfter(key, "fx2n10");
                 String key2 = "fx2parmvals" + num;
                 param = ((Integer)(parametersToIndex.get(key2))).intValue() + PARAM_OFFSET;
                 }
@@ -625,7 +626,7 @@ public class EmuMorpheusMap extends Synth
                 {
                 try
                     {
-                    int zone = Integer.parseInt(key.replaceAll("[^0-9]+", " ").trim());
+                    int zone = StringUtility.getInt(key);
                     val = model.get("ch" + zone + "bank") * 128 + model.get("ch" + zone + "number");
                     }
                 catch (Exception ex)
@@ -701,7 +702,7 @@ public class EmuMorpheusMap extends Synth
                 {
                 try
                     {
-                    int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
+                    int zone = StringUtility.getInt(parameters[i]);
                     val = model.get("ch" + zone + "bank") * 128 + model.get("ch" + zone + "number");
                     }
                 catch (Exception ex)
@@ -800,7 +801,7 @@ public class EmuMorpheusMap extends Synth
                 try
                     {
                     // this is just a guess...
-                    int zone = Integer.parseInt(parameters[i].replaceAll("[^0-9]+", " ").trim());
+                    int zone = StringUtility.getInt(parameters[i]);
                     model.set("ch" + zone + "bank", val / 128);
                     model.set("ch" + zone + "number", val % 128);
                     }

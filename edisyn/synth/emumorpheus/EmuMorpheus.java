@@ -1256,8 +1256,86 @@ public class EmuMorpheus extends Synth
         JFrame frame = super.sprout();
         receiveCurrent.setEnabled(false); // can't request current
         transmitTo.setEnabled(false);  // can't send to a given patch
+        addMorpheusMenu();
         return frame;
         }
+        
+    public void addMorpheusMenu()
+        {
+        JMenu menu = new JMenu("Morpheus/Ultraproteus");
+        menubar.add(menu);
+
+		JMenuItem oneMPEMenu = new JMenuItem("Write Patch as Pseudo-MPE");
+        oneMPEMenu.addActionListener(new ActionListener()
+            {
+        	JComboBox bank = new JComboBox(EmuMorpheusMap.BANKS);
+            public void actionPerformed(ActionEvent e)
+                {
+        		JTextField number = new JTextField("1", 3);
+		
+            int n = 0;
+			String title = "Write Patch as Pseudo-MPE";
+			while(true)
+				{
+				boolean result = showMultiOption(EmuMorpheus.this, new String[] { "Bank", "Patch Number"}, 
+					new JComponent[] { bank, number }, title, "Enter the MidiMap patch number.");
+				
+				try { n = Integer.parseInt(number.getText()); }
+				catch (NumberFormatException ex)
+					{
+					showSimpleError(title, "The Patch Number must be an integer 1 ... 16");
+					continue;
+					}
+				
+				if (n < 1 || n > 16)
+					{
+					showSimpleError(title, "The Patch Number must be an integer 1 ... 16");
+					continue;
+					}
+
+				if (result) 
+					break;
+				}           
+
+            int i = bank.getSelectedIndex();
+                        				 
+				boolean send = getSendMIDI();
+				setSendMIDI(true);
+				Object[] b = getMPEForPatch(model.get("bank", 0), model.get("number"), n - 1, i, model.get("name", ""));
+				tryToSendMIDI(b);
+				setSendMIDI(send);
+				}
+            });
+
+        menu.add(oneMPEMenu);
+        }
+
+    public Object[] getMPEForPatch(int bank, int number, int multinumber, int multibank, String name)
+    	{
+    	// first, let's convert the bank, which is in EmuMorpheus.BANKS
+    	// We're receiving RAM=0 ROM=1 CARD=2
+    	// But we need to convert it to EmuMorpheusMap.PROGRAM_BANKS,
+    	// which is RAM=0 ROM=1 CARD=3	[2 is RAM Hypers and 4 is CARD Hypers]
+    	if (bank == 2) bank = 3;
+    	
+    	EmuMorpheusMap multi = (EmuMorpheusMap)
+    		instantiate(EmuMorpheusMap.class, "", true, false, null);
+    	
+        multi.setSendMIDI(false);
+        multi.getUndo().setWillPush(false);
+        multi.model.setUpdateListeners(false);
+    	multi.model.set("number", multinumber);
+    	multi.model.set("bank", multibank);
+    	for(int j = 1; j <= 16; j++)
+    			{
+    			multi.model.set("ch" + j + "bank", bank);
+    			multi.model.set("ch" + j + "number", number);
+    			}
+    	multi.model.set("name", name);
+		return multi.emitAll(null, false, false);
+		}
+
+    
                 
     public static boolean recognize(byte[] data)
         {

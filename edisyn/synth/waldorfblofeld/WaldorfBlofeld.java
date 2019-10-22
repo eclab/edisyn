@@ -97,8 +97,11 @@ public class WaldorfBlofeld extends Synth
             });
         menu.add(writeWavetableMenu);
 
-        mpeMenu = new JCheckBoxMenuItem("Write Pseudo-MPE on Batch Download");
-        menu.add(mpeMenu);
+        /// FIXME: the Blofeld can't seem to handle this even slowly.  It just freaks out and initializes
+        /// the single patches!  So this is cut out for now.
+        //mpeMenu = new JCheckBoxMenuItem("Write Pseudo-MPE on Batch Download");
+        //menu.add(mpeMenu);
+        
 
 		JMenuItem oneMPEMenu = new JMenuItem("Write Patch as Pseudo-MPE");
         oneMPEMenu.addActionListener(new ActionListener()
@@ -2281,8 +2284,8 @@ public class WaldorfBlofeld extends Synth
     			{
     			multi.model.set("inst" + j + "bank", bank);
     			multi.model.set("inst" + j + "number", number);
-    			multi.model.set("name", name);
     			}
+    	multi.model.set("name", name);
 		return multi.emit(null, false, false);
 		}
 
@@ -2308,6 +2311,8 @@ public class WaldorfBlofeld extends Synth
         
         if (mpeMenu != null && mpeMenu.isSelected() && isBatchDownloading())
         	{
+        	// the Blofeld needs a break, or it starts filling up its buffer after about 32 uploads
+			simplePause(getPauseAfterChangePatch());
         	boolean send = getSendMIDI();
         	setSendMIDI(true);
         	tryToSendSysex(getMPEForPatch(model.get("bank", 0), model.get("number", 0), model.get("number", 0), model.get("name", "")));

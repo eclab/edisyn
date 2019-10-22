@@ -23,15 +23,9 @@
 
 <b>Important note:</b> You probaby want to turn Limit WT <i>off</i> when using user wavetables.  Otherwise the Blofeld will not work properly with any PWM values greater than 120.
 
-<p><b>Uploading Pseudo-MPE</b> The Blofeld doesn't support MPE.  But it does support 16 separate patch slots in a multimode patch, which can be taken advantage of by instruments such as the Linnstrument. To do this each slot must be identical except for a unique MIDI channel, and each slot must be set to the desired single patch.  You can do this in two ways.
+<p><b>Uploading Pseudo-MPE</b> The Blofeld doesn't support MPE.  But we can fake it by setting up one of its multimode patches in a special way, and this can be taken advantage of by instruments such as the Linnstrument. 
 
-<ul>
-<li><b>Write Patch as Psuedo-MPE</b>&nbsp;&nbsp;&nbsp; This writes a multimode patch which points to your current single patch, including the current name, bank, and (single patch) number.  You get to choose what multimode patch number to write to.
-
-<p><li><b>Write Pseudo-MPE on Batch Download</b>&nbsp;&nbsp;&nbsp; If you check this, then if you start a batch download, for each downloaded patch, Edisyn will automatically write a multimode patch which points to it, including the current name, bank, and (single patch) number.  The multimode patch number will be the same as the single number.  Thus if you download exactly one bank of single patches, you'll have multimode patches loaded for all of them.  
-
-<p>Why is this connected to batch download?  Because in order to properly write multimode patches, Edisyn needs to know the <i>name</i> of the single-mode patch to which they refer (so it can call the multimode patch by the same name).  To do this it must load the single-mode patch.  The easiest way to load single-mode patches in bulk is by hijacking the bulk download facility.  So there you have it.
-</ul>
+<P>You can prepare a multimode patch slot with <b>Write Patch as Psuedo-MPE</b>.  This writes a multimode patch which points to your current single patch, including the current name, bank, and (single patch) number.  Each slot in the multimode patch will refer to this patch but have a unique MIDI channel. You get to choose what multimode patch number to write to. Note that your single-patch must already be written to the synth.
 
 <p><b>Gotchas</b> Only two at present:
 

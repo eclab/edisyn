@@ -9,6 +9,11 @@
 
 <p><b>Communicating with Edisyn</b> Set the MIDI ID to the same you'll be setting in Edisyn (typically 0).  In your default MIDI Map, turn OFF Program Change Map, and turn ON Bank Select and Program Change.  Feel free to reduce the Sysex packet delay to 0.  <b>Make certain that the Preset button is pressed</b>. 
 
+<p><b>Uploading Pseudo-MPE</b> The Morpheus/Ultraproteus doesn't support MPE.  But we can fake it by setting up one of its midimap patches in a special way, and this can be taken advantage of by instruments such as the Linnstrument. 
+
+<P>You can prepare a midimap patch slot with <b>Write Patch as Psuedo-MPE</b>.  This writes a midimap patch which points to your current single patch, including the current name, bank, and (single patch) number.  Each slot in the midimap patch will refer to this patch but have a unique MIDI channel. You get to choose what midimap patch number to write to. Note that your single-patch must already be written to the synth.  You need to make sure that your <b>MIDI Mode is set to "Multi"</b> to play the patch.
+
+
 <p><b>Gotchas</b> 
 
 <ul>

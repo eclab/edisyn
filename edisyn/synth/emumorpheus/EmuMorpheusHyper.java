@@ -7,7 +7,7 @@ package edisyn.synth.emumorpheus;
 
 import edisyn.*;
 import edisyn.gui.*;
-import edisyn.utility;
+import edisyn.util.*;
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.border.*;

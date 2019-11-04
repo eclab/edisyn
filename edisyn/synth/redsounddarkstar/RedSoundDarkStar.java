@@ -38,6 +38,7 @@ public class RedSoundDarkStar extends Synth
     public static final String[] JOYSTICK_ASSIGNMENTS = { "Off", "X: Filter Freq  Y: Resonance", "X: Mix  Y: Ring Mod  [XP2]", "X: Env1 Attack  Y: Decay  [XP2]", "X: Env2 Attack  Y: Decay  [XP2]", "X: LFO1 Speed  Y: LFO2 Speed  [XP2]" };
     public static final String[] OUTPUT_ASSIGNMENTS = { "Main Outputs", "Aux Outputs" };
     public static final String[] AUDITION_TYPES = { "Arp 3", "Note 1", "Note 2", "Note 3", "Bass 1", "Bass 2", "Bass 3", "Bass Drum", "Chord 1", "Chord 2", "Snare", "Arp 1", "Arp 2" };
+	public static final String[] PARTS = { "Part 1", "Part 2", "Part 3", "Part 4", "Part 5" };
 
     boolean xp2;
     public static final String XP2_KEY = "XP2";
@@ -55,14 +56,50 @@ public class RedSoundDarkStar extends Synth
         {
         JFrame frame = super.sprout();
         getAll.setEnabled(false);
-        merge.setEnabled(false);
+        //merge.setEnabled(false);
         transmitTo.setEnabled(false);
         receiveCurrent.setEnabled(false);
         receivePatch.setEnabled(false);
         transmitParameters.setEnabled(false);
         transmitParameters.setSelected(false);
+        addDarkStarMenu();
         return frame;
         }         
+
+    public void addDarkStarMenu()
+        {
+        JMenu menu = new JMenu("DarkStar");
+        menubar.add(menu);
+
+		JMenuItem partmenu = new JMenuItem("Swap Parts...");
+        partmenu.addActionListener(new ActionListener()
+            {
+        	JComboBox part1 = new JComboBox(PARTS);
+        	JComboBox part2 = new JComboBox(PARTS);
+        	
+            public void actionPerformed(ActionEvent e)
+            	{
+			boolean result = showMultiOption(RedSoundDarkStar.this, new String[] { "Swap", "With" }, 
+				new JComponent[] { part1, part2 }, "Swap Parts...", "Enter the parts to swap with one another.");
+				
+			if (result)
+				{
+            	int p1 = part1.getSelectedIndex();
+            	int p2 = part2.getSelectedIndex();
+                for(int i = 0; i < BASIC_PARAMETERS.length; i++)
+                	{
+					int temp = model.get("part" + (p1 + 1) + BASIC_PARAMETERS[i], 0);
+					model.set("part" + (p1 + 1) + BASIC_PARAMETERS[i],
+							model.get("part" + (p2 + 1) + BASIC_PARAMETERS[i], 0));
+					model.set("part" + (p2 + 1) + BASIC_PARAMETERS[i], temp);
+                	}
+                sendAllParameters();
+				}
+				}				
+            });
+
+        menu.add(partmenu);
+        }
 
     public RedSoundDarkStar()
         {
@@ -825,7 +862,7 @@ public class RedSoundDarkStar extends Synth
 
         if (data.length == 108)         // Single Voice
             {
-            JComboBox combo = new JComboBox(new String[] { "Part 1", "Part 2", "Part 3", "Part 4", "Part 5" });
+            JComboBox combo = new JComboBox(PARTS);
             int result = showMultiOption(this, 
                 new String[] { "Part" }, 
                 new JComponent[] { combo },
@@ -1250,4 +1287,88 @@ public class RedSoundDarkStar extends Synth
             }
         return false;
         }
+
+
+	// This is really only used to swap parts
+	public static final String[] BASIC_PARAMETERS = new String[] 	
+		{
+"lfo2speed",
+"lfo2speed",
+"lfo1delay",
+"lfo2delay",
+"lfo1shape",
+"lfo1sync",
+"lfo1midisync",
+"lfo2shape",
+"lfo2sync",
+"lfo2midisync",
+"env1attack",
+"env2attack",
+"env1decay",
+"env2decay",
+"env1sustain",
+"env2sustain",
+"env1release",
+"env2release",
+"env1velocity",
+"env2velocity",
+"osc1pitchmod",
+"osc2pitchmod",
+"osc1detune",
+"osc2detune",
+"osc1pulsewidth",
+"osc2pulsewidth",
+"osc1pulsewidthmod",
+"osc2pulsewidthmod",
+"osc1waveform",
+"osc2waveform",
+"osc1pitchmodsource",
+"osc1pulsewidthmodsource",
+"osc2pitchmodsource",
+"osc2pulsewidthmodsource",
+"osc2pitchoffset",
+"osc2sync",
+"osc2source",
+"mix",
+"ring",
+"filterfreq",
+"filterkeytracking",
+"filteron",
+"filtertype",
+"filterresmodsource",
+"filterenvmod",
+"filterlfomod",
+"filterres",
+"filterresmod",
+"volume",
+"pan",
+"tremelo",
+"tremelomodsource",
+"panmodsource",
+"channel",
+"polyphony",
+"notelo",
+"notehi",
+"transpose",
+"sustain",
+"portamentotime",
+"autoglide",
+"bendrange",
+"portamentotype",
+"aftertouchpitch",
+"aftertouchfilter",
+"modwheelpitch",
+"modwheelfilter",
+"joystickassign",
+"outputassign",
+"auditiontype",
+"partoutputshift",
+"envshift",
+"envhalfshift",
+"oscshift",
+"oschalfshift",
+"lfoshift",
+"lfohalfshift",
+"filtershift"
+		};
     }

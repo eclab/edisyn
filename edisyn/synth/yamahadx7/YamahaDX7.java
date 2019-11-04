@@ -848,6 +848,9 @@ public class YamahaDX7 extends Synth
 
     public int parse(byte[] data, boolean fromFile)
         {
+        for(int i = 1; i < data.length - 1; i++)
+        	data[i] = (byte)(data[i] & 127);  // strip out the hi bit -- looks like some files are corrupted with hi bits
+        	
         if (data[3] == 0)  // 1 single
             {
             // yay for DX7 simplicity

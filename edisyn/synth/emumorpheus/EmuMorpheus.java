@@ -1745,8 +1745,8 @@ public class EmuMorpheus extends Synth
     "LFO 1",
     "LFO 2",
     "Aux Env",
-    "FuncGen 2",
     "FuncGen 1",
+    "FuncGen 2",
     "Free FuncGen"
     };
         

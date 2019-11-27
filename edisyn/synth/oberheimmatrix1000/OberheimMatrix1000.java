@@ -1265,11 +1265,6 @@ public class OberheimMatrix1000 extends Synth
             value = model.get(key) + 1;  // tracking source has no "none"
             }
         // don't need to customize portamentomode though we'll have to do it on parse
-                
-        //else if (key.equals("portamentomode"))
-        //              {
-        //              // two things are both exponential
-        //              }
         else
             {
             index = ((Integer)(internalParametersToIndex.get(key))).intValue();
@@ -1380,13 +1375,23 @@ public class OberheimMatrix1000 extends Synth
                 }
             }
         
-        // to get the bank, we'll extract it from the name.  It appears to be the fourth character
-        int bank = name[3] - '0';
-        if (bank < 0 || bank > 9)
-            bank = 0;
-        model.set("bank", bank);
+        // to get the bank, we'll try to extract it from the name.  It appears to be the fourth character
+        boolean validname = false;
+        int bank = 0;
+        if (name[0] == 'B' && name[1] == 'N' || name[2] == 'K' || name[4] == ':' || name[5] == ' ')  // probably BNK_: __
+        	{
+        	bank = name[3] - '0';
+        	if (bank < 0 || bank > 9)
+        	    bank = 0;
+        	model.set("bank", bank);
+        	}
+        else
+        	{
+        	model.set("bank", 0);		// default?
+        	validname = true;
+        	}
         
-        if (!fromFile && useClassicPatchNames)
+        if (!fromFile && useClassicPatchNames && !validname)
             {
             model.set("name", PATCH_NAMES[bank * 100 + number]);                    
             }

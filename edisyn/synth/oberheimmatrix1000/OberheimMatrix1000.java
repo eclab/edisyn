@@ -1612,26 +1612,34 @@ public class OberheimMatrix1000 extends Synth
         // 0AH - SET BANK
         // we write this store-command as a sysex command 
         // so it gets stripped when we do a save to file
-        byte[] data2 = new byte[6];
-        data2[0] = (byte)0xF0;
-        data2[1] = (byte)0x10;
-        data2[2] = (byte)0x06;  
-        data2[3] = (byte)0x0A;
-        data2[4] = (byte)(bank);
-        data2[5] = (byte)0xF7;
+        // 
+        // I think this should be compatible with the 6/6R because they don't respond to it at all
+        byte[] data = new byte[6];
+        data[0] = (byte)0xF0;
+        data[1] = (byte)0x10;
+        data[2] = (byte)0x06;  
+        data[3] = (byte)0x0A;
+        data[4] = (byte)(bank);
+        data[5] = (byte)0xF7;
 
-        tryToSendSysex(data2);
+        tryToSendSysex(data);
+
+
+
 
         // 0CH - UNLOCK BANK
         // we write this store-command as a sysex command 
         // so it gets stripped when we do a save to file
         // annoying that this gets re-locked by SET BANK
-        byte[] data = new byte[5];
-        data2[0] = (byte)0xF0;
-        data2[1] = (byte)0x10;
-        data2[2] = (byte)0x06;  
-        data2[3] = (byte)0x0C;
-        data2[4] = (byte)0xF7;
+        // 
+        // I think this should be compatible with the 6/6R because they don't respond to it at all
+        data = new byte[5];
+        data[0] = (byte)0xF0;
+        data[1] = (byte)0x10;
+        data[2] = (byte)0x06;  
+        data[3] = (byte)0x0C;
+        data[4] = (byte)0xF7;
+        //tryToSendSysex(data);			// right now this really isn't necessary.
                         
         // Next do a program change
                 

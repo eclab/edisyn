@@ -2388,7 +2388,16 @@ public abstract class Synth extends JComponent implements Updatable
 
         String html = getHTMLResourceFileName();
         if (html != null)
-            tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream(html)));
+        	{
+        	try
+        		{
+	            tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream(html)));
+	            }
+	        catch (Exception ex)
+	        	{
+	        	System.err.println("Error locating HTML file " + html);
+	        	}
+            }
 
         final JFrame frame = new JFrame();
         menubar = new JMenuBar();
@@ -4197,7 +4206,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         } 
         
-    void doRequestMerge(double percentage)
+    public void doRequestMerge(double percentage)
         {
         if (tuple == null || tuple.out == null)
             {
@@ -5512,7 +5521,19 @@ public abstract class Synth extends JComponent implements Updatable
     /** Pops up at the start of the program to ask the user what synth he wants. */
     static Synth doNewSynthPanel()
         {
-        return Favorites.doNewSynthDialog();
+        while(true)
+        	{
+        	try
+        		{
+        		return Favorites.doNewSynthDialog();
+        		}
+       		catch (Exception ex)
+        		{
+        		ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Sorry, I couldn't open that patch editor.\nTry another one.", 
+                		"Can't Open Editor", JOptionPane.ERROR_MESSAGE);
+        		}
+        	}
         
         /*
           JPanel p = new JPanel();

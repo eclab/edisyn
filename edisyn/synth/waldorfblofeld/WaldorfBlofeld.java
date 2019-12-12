@@ -698,9 +698,10 @@ public class WaldorfBlofeld extends Synth
                 vbox.add(comp);
 
                 hbox.add(vbox);
-                }
-                        
+                }    
             main.add(hbox);
+            if (row == 1)
+            	main.add(Strut.makeVerticalStrut(15));
             }
                                 
         category.add(main, BorderLayout.WEST);
@@ -1085,7 +1086,7 @@ public class WaldorfBlofeld extends Synth
                 updateTitle();
                 }
             };
-        vbox.addBottom(comp);  // doesn't work right :-(
+        vbox.add(comp);  // doesn't work right :-(
         hbox.add(vbox);
 
         //        vbox = new VBox();
@@ -1158,7 +1159,7 @@ public class WaldorfBlofeld extends Synth
 
         params = MOD_SOURCES;
         comp = new Chooser("Pitch Mod Source", this, "oscpitchsource", params);
-        vbox.addBottom(comp);
+        vbox.add(comp);
 
         hbox.add(vbox);
 

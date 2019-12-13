@@ -21,11 +21,13 @@
 
 <ul>
 <li>
-4-op synthesizers like the TX81Z have no way to write patches from sysex: you will have to send the current patch from Edisyn, then manually save it to your desired patch location on the synthesizer itself.
+Most 4-op synthesizers have no way to write patches from sysex: you will have to send the current patch from Edisyn, then manually save it to your desired patch location on the synthesizer itself.
 
 <p><li>The 4-op family is very unusual in that patches aren't single sysex commands, but a sequence of them (so-called VCED, ACED, ACED2, and EFEDS sysex commands).  Thus when you save a patch to a file in Edisyn, you'll actually be saving <b>multiple</b> sysex commands concatenated together.  You should be aware of this in case you try sending this patch later from some librarian software or editor (it shouldn't be a problem).  Similarly, if another editor has saved multiple single patches (rather than a bank (or VMEM) patch) to a single file, because they come in pairs, Edisyn at present cannot read any more than the first one.
 
 <p><li>On the TX81Z and DX11 (but not other 4-op synths) changing patches is weird.  I think I have a method which should work for all of them, but if it strange things happen, let me know.
+
+<p><li>On changing patches, the TX81Z will read "MIDI Buffer Full" and not change its display even if the patch has changed.  Press almost any button and it'll reset the display.
 
 </ul>
 

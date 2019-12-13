@@ -1939,7 +1939,7 @@ public class Yamaha4Op extends Synth
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
         // We ALWAYS change the patch no matter what.  We have to.
-        changePatch(tempModel);
+        performChangePatch(tempModel);
         tryToSendSysex(requestDump(tempModel));
         }
 
@@ -1997,6 +1997,7 @@ public class Yamaha4Op extends Synth
     	return new byte[] { }; // just in case
         }
     
+    public int getPauseAfterChangePatch() { return 50; }		// TX81Z fails if it's less than 50 or so
     
     final static int FAIL = -1;
 
@@ -2023,7 +2024,9 @@ public class Yamaha4Op extends Synth
         return b;
         }
 
-    static boolean recognizeBasic(byte[] data)
+// returns a guess as to the number of sysex commands this file is trying to load per patch.
+// Or if we don't recognize it, then 0
+    static int recognizeBasic(byte[] data)
         {
         // EFEDS
 		if (data.length >= 21 &&
@@ -2044,7 +2047,7 @@ public class Yamaha4Op extends Synth
             data[13] == '6' &&
             data[14] == 'E' &&
             data[15] == 'F')
-            return true;
+            return 4;
 
         // ACED2
 		if (data.length >= 28 &&
@@ -2065,7 +2068,7 @@ public class Yamaha4Op extends Synth
             data[13] == '3' &&
             data[14] == 'A' &&
             data[15] == 'E')
-            return true;
+            return 3;
 
         // ACED
 		if (data.length >= 41 &&
@@ -2086,7 +2089,7 @@ public class Yamaha4Op extends Synth
             data[13] == '6' &&
             data[14] == 'A' &&
             data[15] == 'E')
-            return true;
+            return 2;
         
         // VCED
         if (data.length == 101 &&
@@ -2096,20 +2099,21 @@ public class Yamaha4Op extends Synth
             data[3] == (byte)0x03 &&
             data[4] == (byte)0x00 &&
             data[5] == (byte)0x5D)
-            return true;
+            return 1;
 
-        else return false;
+        else return 0;
         }
         
     public static int getNumSysexDumpsPerPatch(byte[] data) 
         {
-        if (recognizeBasic(data)) return 2;
+        int i = recognizeBasic(data);		// we'll try here to guess how many patches are in a chunk in this file
+        if (i > 0) return i;
         else return 1;
         }
 
     public static boolean recognize(byte[] data)
         {
-        return recognizeBasic(data) || recognizeBulk(data);
+        return (recognizeBasic(data) > 0) || recognizeBulk(data);
         }
         
 	ArrayList<byte[]> resultsSoFar = new ArrayList<>();

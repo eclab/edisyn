@@ -32,22 +32,22 @@ Edisyn presently supports:
 * Casio CZ Series (CZ101, CZ1000, CZ3000, CZ5000, CZ-1)
 * DSI Prophet '08 
 * E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap modes)
-* Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading, see the Blofeld editor's "About" panel)
-* Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
+* Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
+* Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)
+* Kawai K5 and K5m
+* Korg SG Rack (Single and Multi Modes) and Korg SG Pro X (Single Mode)
+* Korg Microsampler
+* Korg MicroKorg
+* Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
 * Oberheim Matrix 1000
 * PreenFM2
 * Red Sound DarkStar and DarkStar XP2 (Single and Per-Part)
 * Roland D-110 (Tone and Multi Modes)
 * Roland JV-80 and JV-880 (Single and Multi Modes)
-* Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
-* Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)
-* Kawai K5 and K5m
+* Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading, see the Blofeld editor's "About" panel)
+* Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
 * Yamaha DX7 Family (DX7, TX7, TX802, TX216/TX816, Dexed)
 * Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, etc.) (Single and Multi Modes)
-* Korg SG Rack (Single and Multi Modes) and Korg SG Pro X (Single Mode)
-* Korg Microsampler
-* Korg MicroKorg
-* Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
 
 Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, randomization, merging, nudging, hill-climbing, patch constriction, per-parameter customization, real-time parameter updates, test notes, etc.
 

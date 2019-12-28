@@ -28,7 +28,7 @@ public class Tuning extends Synth
             
         VBox vbox = new VBox();
         vbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
-       	vbox.add(addTuning(1, Style.COLOR_A()));
+        vbox.add(addTuning(1, Style.COLOR_A()));
         SynthPanel soundPanel = new SynthPanel(this);
         soundPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("Global, 1-64", soundPanel);
@@ -39,7 +39,7 @@ public class Tuning extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("65-128", soundPanel);
         
-        model.set("name", DEFAULT_NAME);  		// or whatever, to set the initial name of your patch (assuming you use "name" as the key for the patch name)
+        model.set("name", DEFAULT_NAME);                // or whatever, to set the initial name of your patch (assuming you use "name" as the key for the patch name)
         model.set("number", 0);
         //loadDefaults();                   // this tells Edisyn to load the ".init" sysex file you created.  If you haven't set that up, it won't bother
         }
@@ -101,8 +101,8 @@ public class Tuning extends Synth
         }
 
 
-	public JComponent addTuning(int num, Color color)
-		{
+    public JComponent addTuning(int num, Color color)
+        {
         Category category = new Category(this, "Tuning " + (num == 0 ? "1-64" : "65-128"), color);
                 
         JComponent comp;
@@ -110,26 +110,26 @@ public class Tuning extends Synth
         
         int pos = (num == 1 ? 1 : 65);
         
-		VBox main = new VBox();
-		for(int j = pos; j < pos + 64; j += 8)
-			{
-			HBox hbox = new HBox();
-			for(int i = j; i < j + 8 ; i++)
-				{
-				if (i != j) hbox.add(Strut.makeHorizontalStrut(10));
+        VBox main = new VBox();
+        for(int j = pos; j < pos + 64; j += 8)
+            {
+            HBox hbox = new HBox();
+            for(int i = j; i < j + 8 ; i++)
+                {
+                if (i != j) hbox.add(Strut.makeHorizontalStrut(10));
 
-				comp  = new LabelledDial("" + i + " Base", this, "base-" + i, color, 0, 127);
-				hbox.add(comp);
+                comp  = new LabelledDial("" + i + " Base", this, "base-" + i, color, 0, 127);
+                hbox.add(comp);
 
-				comp  = new LabelledDial("" + i + " Detune", this, "detune-" + i, color, 0, 16383);
-				hbox.add(comp);
-			}
-		main.add(hbox);
-		}
+                comp  = new LabelledDial("" + i + " Detune", this, "detune-" + i, color, 0, 16383);
+                hbox.add(comp);
+                }
+            main.add(hbox);
+            }
         
         category.add(main);
         return category;
-		}
+        }
 
         
     ////// YOU MUST OVERRIDE ALL OF THE FOLLOWING
@@ -239,8 +239,8 @@ public class Tuning extends Synth
         {
         int current = model.get("number", 0) + 1;
         if (current > 127) 
-        	current = 0;
-        	
+            current = 0;
+                
         Model newModel = buildModel();
         newModel.set("number", current);
         return newModel;
@@ -248,13 +248,13 @@ public class Tuning extends Synth
 
     public boolean patchLocationEquals(Model patch1, Model patch2)
         {
-       	return patch1.get("number", 0) == patch2.get("number", 0);
+        return patch1.get("number", 0) == patch2.get("number", 0);
         }
     
     
     
  
-     public String getPatchName(Model model) 
+    public String getPatchName(Model model) 
         {
         return model.get("name", DEFAULT_NAME);
         }
@@ -265,9 +265,9 @@ public class Tuning extends Synth
         
         char[] c = name.toCharArray();
         for(int i = 0; i < c.length; i++)
-        if (c[i] > 127) c[i] = 32;
+            if (c[i] > 127) c[i] = 32;
 
-		return new String(c);       
+        return new String(c);       
         }
         
     public void revise()
@@ -306,9 +306,9 @@ public class Tuning extends Synth
     
     
     public byte[] emit(String key) 
-    	{ 
-    	return new byte[0]; 
-    	}
+        { 
+        return new byte[0]; 
+        }
 
 
 

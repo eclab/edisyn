@@ -80,9 +80,18 @@ public class Undo
             }
         Model model = undo.pop();
         synth.updateUndoMenus();
+        
         if (debug) System.err.println("Debug (Undo): Undo " + current + " to " + model + " Left: " + undo.size());
  
         if (debug) printStacks();
+
+        // this last statement fixes a mystery.  When I call Randomize or Reset on
+        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+        // But on a Blofeld Multi or Microwave Multi they update one at a time.
+        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+        // into the Blofeld, and it makes no difference!  For some reason the OS X
+        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+        synth.repaint();
         return model;        
         }
                 
@@ -104,6 +113,13 @@ public class Undo
         if (debug) System.err.println("Debug (Undo): Redo " + current + " to " + model + " Left: " + redo.size());
         if (debug) printStacks();
 
+        // this last statement fixes a mystery.  When I call Randomize or Reset on
+        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+        // But on a Blofeld Multi or Microwave Multi they update one at a time.
+        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+        // into the Blofeld, and it makes no difference!  For some reason the OS X
+        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+        synth.repaint();
         return model;
         }
     }

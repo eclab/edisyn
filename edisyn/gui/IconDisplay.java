@@ -32,7 +32,10 @@ public class IconDisplay extends JComponent implements Updatable
 
     public void update(String key, Model model) 
         { 
-        icon.setIcon(icons[model.get(key, 0)]);
+        int v = model.get(key, 0);
+        if (v < icons.length && v >= 0)
+            icon.setIcon(icons[v]);
+        else System.err.println("Warning (IconDisplay): invalid value for key " + key + ", was " + v);
         icon.repaint();
         }
 

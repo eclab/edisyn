@@ -503,14 +503,14 @@ public class Midi
                 tuple.inReceiver = inReceiver;
                 if (tuple.in == null)
                     {
-                        synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the incoming MIDI Device.");
+                    synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the incoming MIDI Device.");
 /*
-                    synth.disableMenuBar();
-                    JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the incoming MIDI Device.",  
-                        "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                        JOptionPane.WARNING_MESSAGE, null,
-                        new String[] { "Run Disconnected" }, "Run Disconnected");
-                    synth.enableMenuBar();
+  synth.disableMenuBar();
+  JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the incoming MIDI Device.",  
+  "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+  JOptionPane.WARNING_MESSAGE, null,
+  new String[] { "Run Disconnected" }, "Run Disconnected");
+  synth.enableMenuBar();
 */
                     return FAILED;
                     }
@@ -521,12 +521,12 @@ public class Midi
                     {
                     synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the outgoing MIDI Device.");
 /*
-                    synth.disableMenuBar();
-                    JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the outgoing MIDI Device.",  
-                        "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                        JOptionPane.WARNING_MESSAGE, null,
-                        new String[] { "Run Disconnected" }, "Run Disconnected");
-                    synth.enableMenuBar();
+  synth.disableMenuBar();
+  JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the outgoing MIDI Device.",  
+  "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+  JOptionPane.WARNING_MESSAGE, null,
+  new String[] { "Run Disconnected" }, "Run Disconnected");
+  synth.enableMenuBar();
 */
                     return FAILED;
                     }
@@ -545,11 +545,11 @@ public class Midi
                         {
                         synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the Controller MIDI Device.");
 /*
-                        synth.disableMenuBar();
-                        JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the Controller MIDI Device.",  
-                            "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                            JOptionPane.WARNING_MESSAGE, null,
-                            new String[] { "Run without Controller" }, "Run without Controller");
+  synth.disableMenuBar();
+  JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the Controller MIDI Device.",  
+  "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+  JOptionPane.WARNING_MESSAGE, null,
+  new String[] { "Run without Controller" }, "Run without Controller");
 */
                         synth.enableMenuBar();
                         tuple.keyWrap = null;

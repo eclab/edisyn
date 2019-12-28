@@ -21,7 +21,7 @@ public class SanityCheck
             "SanityCheck goes through all of the synthesizers, or a specific one, and one by one it\n" +
             "does a simple sanity check on them.  First, it creates a synthesizer, randomizes\n" +
             "its parameters, and emits them to a data stream.  Then it creates a second copy of the\n" +
-            "synthesizer, reads the parameters in from that data strem, and compares the two.\n" + 
+            "synthesizer, reads the parameters in from that data stream, and compares the two.\n" + 
             "They should be identical.  Any parameters that are not identical are referred to the\n" +
             "method Synth.testVerify(...) to determine if being kosher is acceptable.  If not, the\n" +
             "parameter is noted as [FAIL] or [NULL] (indicating that one of the parameter values is\n" +

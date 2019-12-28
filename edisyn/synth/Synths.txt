@@ -1,6 +1,6 @@
 # edisyn.synth.futuresonusparva.FuturesonusParva
-edisyn.synth.generic.Generic
-edisyn.synth.tuning.Tuning
+#edisyn.synth.generic.Generic
+#edisyn.synth.tuning.Tuning
 edisyn.synth.casiocz.CasioCZ
 # edisyn.synth.linnstrument.Linnstrument
 edisyn.synth.dsiprophet08.DSIProphet08
@@ -19,12 +19,14 @@ edisyn.synth.korgmicrokorg.KorgMicroKorgVocoder
 edisyn.synth.korgmicrosampler.KorgMicrosampler
 edisyn.synth.korgsg.KorgSG
 edisyn.synth.korgsg.KorgSGMulti
-edisyn.synth.korgwavestation.KorgWavestationPerformance
 edisyn.synth.korgwavestation.KorgWavestationPatch
+edisyn.synth.korgwavestation.KorgWavestationPerformance
 edisyn.synth.korgwavestation.KorgWavestationSequence
 edisyn.synth.oberheimmatrix1000.OberheimMatrix1000 
 edisyn.synth.preenfm2.PreenFM2
 edisyn.synth.redsounddarkstar.RedSoundDarkStar
+edisyn.synth.rolandd110.RolandD110Tone
+edisyn.synth.rolandd110.RolandD110Multi
 edisyn.synth.rolandjv880.RolandJV880
 edisyn.synth.rolandjv880.RolandJV880Multi
 edisyn.synth.waldorfblofeld.WaldorfBlofeld 
@@ -32,6 +34,7 @@ edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti
 edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT 
 edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti 
 edisyn.synth.yamahadx7.YamahaDX7 
+edisyn.synth.yamaha4op.Yamaha4Op
+edisyn.synth.yamaha4op.Yamaha4OpMulti
 edisyn.synth.yamahatx81z.YamahaTX81Z 
-edisyn.synth.yamahatx81z.YamahaTX81ZMulti
-
+#edisyn.synth.yamahatx81z.YamahaTX81ZMulti

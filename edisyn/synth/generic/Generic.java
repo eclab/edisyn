@@ -227,88 +227,88 @@ public class Generic extends Synth
         return globalCategory;
         }
 
-	public JComponent addCustomController(Color color)
-		{
+    public JComponent addCustomController(Color color)
+        {
         Category category = new Category(this, "Custom CC", color);
                 
         JComponent comp;
         String[] params;
         
-		VBox main = new VBox();
-		for(int j = 1; j < 18; j += 3)
-			{
-			HBox hbox = new HBox();
-			for(int i = j; i < j + 3 ; i++)
-				{
-				final int _i = i;
-				VBox vbox = new VBox();
-				
-				LabelledDial msblsb = new LabelledDial("MSB + LSB", this, "cust-cc-msb-lsb-" + i, color, 0, 16383);
-				
-				comp = new LabelledDial("Parameter", this, "cust-cc-param-" + i, color, 0, 127)
-					{
-					public void update(String key, Model model)	
-						{
-						super.update(key, model);
-						msblsb.setEnabled(model.get(key) < 32);
-						}
-					};
-					
-				vbox.add(comp);
+        VBox main = new VBox();
+        for(int j = 1; j < 18; j += 3)
+            {
+            HBox hbox = new HBox();
+            for(int i = j; i < j + 3 ; i++)
+                {
+                final int _i = i;
+                VBox vbox = new VBox();
+                                
+                LabelledDial msblsb = new LabelledDial("MSB + LSB", this, "cust-cc-msb-lsb-" + i, color, 0, 16383);
+                                
+                comp = new LabelledDial("Parameter", this, "cust-cc-param-" + i, color, 0, 127)
+                    {
+                    public void update(String key, Model model)     
+                        {
+                        super.update(key, model);
+                        msblsb.setEnabled(model.get(key) < 32);
+                        }
+                    };
+                                        
+                vbox.add(comp);
                 comp = new StringComponent(null, this, "cust-cc-name-" + i, 5, "Name can be as long as you like")
                     {
                     public String getCommand() { return "Enter CC Label"; }
                     };
-				model.set("cust-cc-name-" + i, "Name");
-				vbox.add(comp);
-				hbox.add(vbox);
-				
-				vbox = new VBox();
-				comp = msblsb;
-				vbox.add(comp);
-				comp = new CheckBox("On", this, "cust-cc-msb-" + i)
-					{
-					public void update(String key, Model model) { getCheckBox().setSelected(getState() > 64); }
-					};
-				((CheckBox)comp).setMax(127);
-				((CheckBox)comp).setState(((CheckBox)comp).getState());
-				vbox.add(comp);
-				hbox.add(vbox);
+                model.set("cust-cc-name-" + i, "Name");
+                vbox.add(comp);
+                hbox.add(vbox);
+                                
+                vbox = new VBox();
+                comp = msblsb;
+                vbox.add(comp);
+                comp = new CheckBox("On", this, "cust-cc-msb-" + i)
+                    {
+                    public void update(String key, Model model) { getCheckBox().setSelected(getState() > 64); }
+                    };
+                ((CheckBox)comp).setMax(127);
+                ((CheckBox)comp).setState(((CheckBox)comp).getState());
+                vbox.add(comp);
+                hbox.add(vbox);
 
-				vbox = new VBox();
-				comp = new LabelledDial("MSB", this, "cust-cc-msb-" + i, color, 0, 127);
-				vbox.add(comp);
-				comp = new PushButton("Send") 
-					{ 
-					public void perform() 
-						{ 
-						getModel().set("cust-cc-msb-" + _i, getModel().get("cust-cc-msb-" + _i)); 
-						} 
-					};
-				vbox.add(comp);
-				hbox.add(vbox);
+                vbox = new VBox();
+                comp = new LabelledDial("MSB", this, "cust-cc-msb-" + i, color, 0, 127);
+                vbox.add(comp);
+                comp = new PushButton("Send") 
+                    { 
+                    public void perform() 
+                        { 
+                        getModel().set("cust-cc-msb-" + _i, getModel().get("cust-cc-msb-" + _i)); 
+                        } 
+                    };
+                vbox.add(comp);
+                hbox.add(vbox);
 
-				vbox = new VBox();
-				comp = new LabelledDial("MSB Alt", this, "cust-cc-msb-alt-" + i, color, 0, 127);
-				vbox.add(comp);
-				comp = new PushButton("Alt") 
-					{ 
-					public void perform() 
-						{ 
-						getModel().set("cust-cc-msb-alt-" + _i, getModel().get("cust-cc-msb-alt-" + _i)); 
-						} 
-					};
-				vbox.add(comp);
-				hbox.add(vbox);
-				hbox.add(Strut.makeHorizontalStrut(40));
-				}
-			main.add(hbox);
-			main.add(Strut.makeVerticalStrut(5));
-			}
+                vbox = new VBox();
+                comp = new LabelledDial("MSB Alt", this, "cust-cc-msb-alt-" + i, color, 0, 127);
+                vbox.add(comp);
+                comp = new PushButton("Alt") 
+                    { 
+                    public void perform() 
+                        { 
+                        getModel().set("cust-cc-msb-alt-" + _i, getModel().get("cust-cc-msb-alt-" + _i)); 
+                        } 
+                    };
+                vbox.add(comp);
+                hbox.add(vbox);
+                hbox.add(Strut.makeHorizontalStrut(40));
+                }
+            main.add(hbox);
+            main.add(Strut.makeVerticalStrut(5));
+            }
         
         category.add(main);
         return category;
-		}
+        }
 
     public JComponent addRawController(final int offset, Color color)
         {
@@ -639,21 +639,21 @@ public class Generic extends Synth
     public Object[] emitAll(String key)
         {
         if (key.startsWith("cc-"))
-        	{
-        	int cc = StringUtility.getInt(key);
-	        return buildCC(getChannelOut(), cc, model.get(key));
-	    	}
-	    else if (key.startsWith("cust-cc-msb-lsb-"))
-	    	{
-	    	int param = StringUtility.getInt(key);
-	        return buildLongCC(getChannelOut(), model.get("cust-cc-param-" + param), model.get(key));
-	    	}
-	    else if (key.startsWith("cust-cc-msb-alt-") || key.startsWith("cust-cc-msb-"))
-	    	{
-	    	int param = StringUtility.getInt(key);
-	        return buildCC(getChannelOut(), model.get("cust-cc-param-" + param), model.get(key));
-	    	}
-	    else return new Object[0];
+            {
+            int cc = StringUtility.getInt(key);
+            return buildCC(getChannelOut(), cc, model.get(key));
+            }
+        else if (key.startsWith("cust-cc-msb-lsb-"))
+            {
+            int param = StringUtility.getInt(key);
+            return buildLongCC(getChannelOut(), model.get("cust-cc-param-" + param), model.get(key));
+            }
+        else if (key.startsWith("cust-cc-msb-alt-") || key.startsWith("cust-cc-msb-"))
+            {
+            int param = StringUtility.getInt(key);
+            return buildCC(getChannelOut(), model.get("cust-cc-param-" + param), model.get(key));
+            }
+        else return new Object[0];
         }
 
 

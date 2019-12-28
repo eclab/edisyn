@@ -1,0 +1,29 @@
+<html><head></head>
+<body>
+
+<h1>Roland D-110</h1> 
+<h2>Tone Editor</h2>
+
+<p>This patch editor is designed for the D-110.  Its behavior with the D-10 is unknown.
+
+<p><b>Communicating with Edisyn</b> When you set up MIDI in the patch editor, you can specify the MIDI channel and the Synth ID.  Set the synth ID to the same as your synthesizer (17 is customary).  Set the Send Channel to correspond to the channel of the Part/Timbre you want to test your Tone in.  I suggest Channel 1, and setting up Part 1 to use Channel 1 (see "About the D110 Menu" below).  Make certain that Memory Protect is OFF and (this is very important) that Overflow is OFF.  Earlier ROMs have a bug which causes sysex dumps to fail if Overflow is not OFF.  Note that you may have to Memory Protect to OFF every time you turn on the synthesizer.  
+
+<p><b>About the D-110 Menu</b> A Tone roughly corresponds to a single playable voice on the D-110, but you can't just upload it and try it out.  This is because, insanely, the primary "patch" of the D-110 is a multi-mode patch.  There is no notion of a single-mode patch.  Thus in order to play a Tone, you have to set up a multi-mode patch which refers to the tone in one of its parts (or "timbres").  To make this easy, Edisyn has a menu option called <b>Set up Test Patch for Timbre 1</b>, which does exactly what it says on the tin: it loads a test multimode patch which has Timbre 1 pointing to your Tone.  All other Timbres are turned off.  Your Tone is then loaded for good measure.
+
+<p>When you <b>Send to Current Patch</b>, which sends the Tone to temporary memory on the D-110, exactly which of the 8 Timbres does it send it to?  Similarly, which Timbre's Tone is loaded when you <b>Request Current Patch</b>?  You can specify this with one of the menus <b>Current Patch is Timbre <i>N</i></b>.  By default this is 1 (which would be the usual case).
+
+<p><b>Gotchas</b>
+
+<ul>
+<li>If you've used the D-110 long enough to figure out its bizarre structure, you probably know by now that the notion of a Timbre is completely useless.  Although you can save and load Timbres to RAM, Patches do not actually store references to Timbres: they store references to Tones.  Thus this patch editor provides no facilities for Timbres at all, just Tone editing.
+</ul>
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>December 2019
+</table>
+

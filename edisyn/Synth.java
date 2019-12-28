@@ -999,6 +999,23 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
 
+    /** Concatenates two object arrays nondestructively.  Useful for making chains of MIDI messages. */
+    public Object[] concatenate(Object[] a, Object[] b)
+        {
+        Object[] result = new Object[a.length + b.length];
+        System.arraycopy(a, 0, result, 0, a.length);
+        System.arraycopy(b, 0, result, a.length, b.length);
+        return result;
+        }
+
+    /** Concatenates two byte arrays nondestructively.  Useful for making chains of MIDI messages. */
+    public byte[] concatenate(byte[] a, byte[] b)
+        {
+        byte[] result = new byte[a.length + b.length];
+        System.arraycopy(a, 0, result, 0, a.length);
+        System.arraycopy(b, 0, result, a.length, b.length);
+        return result;
+        }
 
 
 
@@ -1481,8 +1498,11 @@ public abstract class Synth extends JComponent implements Updatable
             if (data[i] < 0)  // uh oh, high byte
                 {
                 String s = "";
-                for(int j = 0; j <= i; j++)
-                    s = s + (data[j] < 0 ? data[j] + 255 : data[j]) + " ";
+                int start = i - 20;
+                if (start < 0) start = 0;
+                for(int j = start; j <= i; j++)
+                    s = s + j + ": " + String.format("%02X", data[j]) + " " + (data[j] < 0 ? data[j] + 256 : data[j]) + " " +
+                        (data[j] >= 32 && data[j] < 127 ? (char)data[j] : "") + "\n";
                 new RuntimeException("High byte in sysex found.  First example is byte #" + i + "\n" + s).printStackTrace();
                 break;
                 }
@@ -1992,30 +2012,30 @@ public abstract class Synth extends JComponent implements Updatable
     public void showErrorWithStackTrace(Throwable error, String title, String message)
         {
         if (!ExceptionDump.lastThrowableExists())
-        	{
-        	System.err.println("WARNING: error with stack trace requested but there's no Throwable");
-        	new Throwable().printStackTrace();
-        	showSimpleError(title, message);
-        	}
+            {
+            System.err.println("WARNING: error with stack trace requested but there's no Throwable");
+            new Throwable().printStackTrace();
+            showSimpleError(title, message);
+            }
         else
-        	{
-			// A Bug in OS X (perhaps others?) Java causes multiple copies of the same Menu event to be issued
-			// if we're popping up a dialog box in response, and if the Menu event is caused by command-key which includes
-			// a modifier such as shift.  To get around it, we're just blocking multiple recursive message dialogs here.
-		
-			if (inSimpleError) return;
-			inSimpleError = true;
-			disableMenuBar();
-			String[] options = new String[] { "Okay", "Save Error" };
-			int ret = JOptionPane.showOptionDialog(this, message, title, JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
-			enableMenuBar();
-			inSimpleError = false;
-		
-			if (ret == 1)
-				{
-				ExceptionDump.saveThrowable(this);
-				}
-			}
+            {
+            // A Bug in OS X (perhaps others?) Java causes multiple copies of the same Menu event to be issued
+            // if we're popping up a dialog box in response, and if the Menu event is caused by command-key which includes
+            // a modifier such as shift.  To get around it, we're just blocking multiple recursive message dialogs here.
+                
+            if (inSimpleError) return;
+            inSimpleError = true;
+            disableMenuBar();
+            String[] options = new String[] { "Okay", "Save Error" };
+            int ret = JOptionPane.showOptionDialog(this, message, title, JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+            enableMenuBar();
+            inSimpleError = false;
+                
+            if (ret == 1)
+                {
+                ExceptionDump.saveThrowable(this);
+                }
+            }
         }
 
     /** Display a simple error message. */
@@ -2388,15 +2408,15 @@ public abstract class Synth extends JComponent implements Updatable
 
         String html = getHTMLResourceFileName();
         if (html != null)
-        	{
-        	try
-        		{
-	            tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream(html)));
-	            }
-	        catch (Exception ex)
-	        	{
-	        	System.err.println("Error locating HTML file " + html);
-	        	}
+            {
+            try
+                {
+                tabs.addTab("About", new HTMLBrowser(this.getClass().getResourceAsStream(html)));
+                }
+            catch (Exception ex)
+                {
+                System.err.println("Error locating HTML file " + html);
+                }
             }
 
         final JFrame frame = new JFrame();
@@ -4887,16 +4907,16 @@ public abstract class Synth extends JComponent implements Updatable
                         System.arraycopy(data, 0, sysex[count], 1, data.length);
                         count++;
                         }
-                        /*
-            for(int i = 0; i < sysex.length; i++)
-            	{
-            	System.err.println("\n\n FILE " + i);
-            	for(int j = 0; j < sysex[i].length; j++)
-            		{
-            		System.err.println(j + "\t" + sysex[i][j]);
-            		}
-            	}
-            	*/
+            /*
+              for(int i = 0; i < sysex.length; i++)
+              {
+              System.err.println("\n\n FILE " + i);
+              for(int j = 0; j < sysex[i].length; j++)
+              {
+              System.err.println(j + "\t" + sysex[i][j]);
+              }
+              }
+            */
             return sysex;
             }
         catch (Exception ex)
@@ -5522,18 +5542,18 @@ public abstract class Synth extends JComponent implements Updatable
     static Synth doNewSynthPanel()
         {
         while(true)
-        	{
-        	try
-        		{
-        		return Favorites.doNewSynthDialog();
-        		}
-       		catch (Exception ex)
-        		{
-        		ex.printStackTrace();
+            {
+            try
+                {
+                return Favorites.doNewSynthDialog();
+                }
+            catch (Exception ex)
+                {
+                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Sorry, I couldn't open that patch editor.\nTry another one.", 
-                		"Can't Open Editor", JOptionPane.ERROR_MESSAGE);
-        		}
-        	}
+                    "Can't Open Editor", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         
         /*
           JPanel p = new JPanel();
@@ -5698,7 +5718,7 @@ public abstract class Synth extends JComponent implements Updatable
         
     public int getBulkDownloadWaitTime() { return 500; }
     
-   public boolean isBatchDownloading() { return patchTimer != null; }
+    public boolean isBatchDownloading() { return patchTimer != null; }
     
     void doGetAllPatches()
         {

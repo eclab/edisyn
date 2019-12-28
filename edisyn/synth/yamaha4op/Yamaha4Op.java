@@ -24,61 +24,61 @@ import javax.sound.midi.*;
    <p>Synthesizers <i>not</i> supported: DX9, FB01
    <p>Synthesizers which <i>might</i> work: WT11, V50, DS55
 
-	<p>Yamaha's 4-Op family have many parameters in common and later synthesizers have sysex
-	protocols which are roughly backward-compatible with earlier ones, so we can support
-	all of them here.  The most complex issue is that different synthesizers have (for unknown reasons)
-	different commands for requesting patch dumps.  Another complicating factor: the various
-	synthesizers have patches organized in banks of different size, number, and availability.
-	
-	<p>To maintain backward compatibility, the 4-Op family doesn't send a dump of a patch as a
-	single sysex command but in fact up to four separate commands.  This complicates matters for
-	Edisyn considerably when it attempts to do patch merging and loading.  Thankfully in general
-	these commands come in a rational and predictable order, with the newer commands arriving
-	first and the oldest-defined commands arriving last, always culminating in the "VCED" sysex
-	command, so we can recognize when a patch has completed arrival.
-	
-	<p>The four sysex commands are:
-	<ul>
-	<li><b>VCED</b> is the original sysex dump command, containing the primary collection of
-		voice parameters for the family.  The DX21, DX27, and DX100 only have this command.
-	<li><b>ACED</b> is contains quite a lot of additional voice parameters.  The TX81Z uses ACED and VCED.
-	<li><b>ACED2</b> is contains a few more voice parameters.  The DX11 uses ACED2, ACED, and VCED.
-	<li><b>EFEDS</b> contains a few effects parameters.  The TQ5, YS100, YS200, and B200 use
-		EFEDS, ACED2, ACED, and VCED.
-	</ul>
-	
-	<p>Thus commands arrive in the following possible strings, depending on the synthesizer:
-	<ul>
-	<li>VCED
-	<li>ACED, VCED
-	<li>ACED2, ACED, VCED
-	<li>EFEDS, ACED2, ACED, VCED
-	</ul>
-		
-	<p>Within a command, certain parameters are supported by certain synthesizers.  Notably, only
-	certain parameters in VCED are supported by various synths.
-	
-	<p>To parse a patch, Edisyn requests the patch, then updates it piecemeal as various sysex commands
-	arrive.  When VCED finally arrives, Edisyn then declares the patch completed (for merging purposes
-	for example).  When emitting a patch, Edisyn always emits all four sysex commands in the order
-	EFEDS, ACED2, ACED, and then VCED.
+   <p>Yamaha's 4-Op family have many parameters in common and later synthesizers have sysex
+   protocols which are roughly backward-compatible with earlier ones, so we can support
+   all of them here.  The most complex issue is that different synthesizers have (for unknown reasons)
+   different commands for requesting patch dumps.  Another complicating factor: the various
+   synthesizers have patches organized in banks of different size, number, and availability.
+        
+   <p>To maintain backward compatibility, the 4-Op family doesn't send a dump of a patch as a
+   single sysex command but in fact up to four separate commands.  This complicates matters for
+   Edisyn considerably when it attempts to do patch merging and loading.  Thankfully in general
+   these commands come in a rational and predictable order, with the newer commands arriving
+   first and the oldest-defined commands arriving last, always culminating in the "VCED" sysex
+   command, so we can recognize when a patch has completed arrival.
+        
+   <p>The four sysex commands are:
+   <ul>
+   <li><b>VCED</b> is the original sysex dump command, containing the primary collection of
+   voice parameters for the family.  The DX21, DX27, and DX100 only have this command.
+   <li><b>ACED</b> is contains quite a lot of additional voice parameters.  The TX81Z uses ACED and VCED.
+   <li><b>ACED2</b> is contains a few more voice parameters.  The DX11 uses ACED2, ACED, and VCED.
+   <li><b>EFEDS</b> contains a few effects parameters.  The TQ5, YS100, YS200, and B200 use
+   EFEDS, ACED2, ACED, and VCED.
+   </ul>
+        
+   <p>Thus commands arrive in the following possible strings, depending on the synthesizer:
+   <ul>
+   <li>VCED
+   <li>ACED, VCED
+   <li>ACED2, ACED, VCED
+   <li>EFEDS, ACED2, ACED, VCED
+   </ul>
+                
+   <p>Within a command, certain parameters are supported by certain synthesizers.  Notably, only
+   certain parameters in VCED are supported by various synths.
+        
+   <p>To parse a patch, Edisyn requests the patch, then updates it piecemeal as various sysex commands
+   arrive.  When VCED finally arrives, Edisyn then declares the patch completed (for merging purposes
+   for example).  When emitting a patch, Edisyn always emits all four sysex commands in the order
+   EFEDS, ACED2, ACED, and then VCED.
 
-	<p>In addition to these commands, all 4-op synthesizers supported by Edisyn also provide VMEM,
-	a special 4104-byte long sysex command which stores an entire bank of 32 patches.  VMEM is the
-	same across all synthesizers, as it encompasses all the data in EFEDS, ACED2, ACED, and VCED,
-	whether or not the synthesizer supports all of their features.  Edisyn can parse incoming VMEM
-	as a bulk patch bank sysex command.  Edisyn does not emit VMEM.
-	
-	<p>Two synthesizers in this family (TX81Z and DX11) also support multitimbral facilities with
-	up to 8 different sounds.  These are handled by a different sysex command called PCED.  Edisyn
-	supports PCED in a different patch editor.  Four other synthesizers (TQ5, YS100, YS200, B200)
-	are also 8-way multitimbral but via a different sysex command, and this is currently not supported.
-	
-	<p>Because these synthesizers have (unfortunately) different bank memory structures and
-	(really unfortunately) different dump request commands and (really really unfortunately)
-	different patch-change commands, we are forced to have the user specify which synthesizer
-	he is emitting to.  These are the various synthesizer TYPES as shown below.  Were it not
-	for these situations, we'd be able to have a truly unified patch editor.  Oh well!
+   <p>In addition to these commands, all 4-op synthesizers supported by Edisyn also provide VMEM,
+   a special 4104-byte long sysex command which stores an entire bank of 32 patches.  VMEM is the
+   same across all synthesizers, as it encompasses all the data in EFEDS, ACED2, ACED, and VCED,
+   whether or not the synthesizer supports all of their features.  Edisyn can parse incoming VMEM
+   as a bulk patch bank sysex command.  Edisyn does not emit VMEM.
+        
+   <p>Two synthesizers in this family (TX81Z and DX11) also support multitimbral facilities with
+   up to 8 different sounds.  These are handled by a different sysex command called PCED.  Edisyn
+   supports PCED in a different patch editor.  Four other synthesizers (TQ5, YS100, YS200, B200)
+   are also 8-way multitimbral but via a different sysex command, and this is currently not supported.
+        
+   <p>Because these synthesizers have (unfortunately) different bank memory structures and
+   (really unfortunately) different dump request commands and (really really unfortunately)
+   different patch-change commands, we are forced to have the user specify which synthesizer
+   he is emitting to.  These are the various synthesizer TYPES as shown below.  Were it not
+   for these situations, we'd be able to have a truly unified patch editor.  Oh well!
    
    @author Sean Luke
 */
@@ -93,8 +93,8 @@ public class Yamaha4Op extends Synth
     public static final int TYPE_DX11 = 3;
     public static final int TYPE_TQ5_YS100_YS200_B200 = 4;
     public static final String[] TYPES = { "DX21", "DX27, DX100", "TX81Z", "DX11", "TQ5, YSx00, B200 (>)" };
-    public static final String[] CHANNELS = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
-    public static final String[] BANKS = { "I", "A [11/TX]", "B [11/TX]", "C [11/TX]", "D [11/TX]" };
+    public static final String[] BANKS = { "I", "A", "B", "C", "D" };
+    public static final String[] TQ5_BANKS = { "Preset", "User", "Card" };
     public static final String[] WAVES = {"W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8"};
     public static final ImageIcon[] WAVE_ICONS = 
         {
@@ -134,12 +134,12 @@ public class Yamaha4Op extends Synth
     public static final String[] POLY_MODES = new String[] { "Poly 1", "Poly 2", "Solo 1", "Solo 2" };
     public static final String[] OUT_SELECTS = new String[] { "A", "B", "C", "D", "E", "F", "G", "H" };
     public static final String[] WHEEL_ASSIGNMENTS = new String[] { "Vibrato", "LFO", "Filter" };
-	public static final String[] EFFECTS = new String[] { "Reverb - Hall", "Reverb - Room", "Reverb - Plate", "Delay", "Delay - Left/Right", "Stereo Echo", "Distortion + Reverb", "Distortion + Echo", "Gated Reverb", "Reverse Gate" };
+    public static final String[] EFFECTS = new String[] { "Reverb - Hall", "Reverb - Room", "Reverb - Plate", "Delay", "Delay - Left/Right", "Stereo Echo", "Distortion + Reverb", "Distortion + Echo", "Gated Reverb", "Reverse Gate" };
 
-	public static final String TYPE_KEY = "type";
-	int synthType = TYPE_TX81Z;
-	JComboBox synthTypeCombo;
-	
+    public static final String TYPE_KEY = "type";
+    int synthType = TYPE_TX81Z;
+    JComboBox synthTypeCombo;
+        
     public int getSynthType() { return synthType; }
     public void setSynthType(int val, boolean save)
         {
@@ -156,17 +156,17 @@ public class Yamaha4Op extends Synth
         {
         String m = getLastX(TYPE_KEY, getSynthName());
         try
-        	{
-        	synthType = (m == null ? TYPE_TX81Z : Integer.parseInt(m));
-       		if (synthType < TYPE_DX21 || synthType > TYPE_TQ5_YS100_YS200_B200)
-        		{
-        		synthType = TYPE_TX81Z;
-        		}
-        	}
+            {
+            synthType = (m == null ? TYPE_TX81Z : Integer.parseInt(m));
+            if (synthType < TYPE_DX21 || synthType > TYPE_TQ5_YS100_YS200_B200)
+                {
+                synthType = TYPE_TX81Z;
+                }
+            }
         catch (NumberFormatException ex)
-        	{
-        	synthType = TYPE_TX81Z;
-        	}
+            {
+            synthType = TYPE_TX81Z;
+            }
         
         model.set("bank", 0);
         model.set("number", 0);
@@ -233,7 +233,7 @@ public class Yamaha4Op extends Synth
         addTab("Operators 3-4", sourcePanel);
         
         sourcePanel = new SynthPanel(this);
-    	vbox = new VBox();
+        vbox = new VBox();
         vbox.add(addPitchEnvelope(Style.COLOR_A()));
         vbox.add(addEffects(Style.COLOR_A()));
         sourcePanel.add(vbox, BorderLayout.CENTER);
@@ -265,40 +265,55 @@ public class Yamaha4Op extends Synth
     public String getHTMLResourceFileName() { return "Yamaha4Op.html"; }
 
 
-    // DX21 Change Patch 		[Though there are banks, we can only access the first one, just 32 values]
-    // DX27/100 Dump Request	[We can access voices 0...23.  The BANK voices are just links, and the ROM voices cannot be accessed]
-    // DX11 Dump Request		[We can access voices 0...32 in banks I, A, B, C, D, but only write to I]
-    // TX81Z Dump Request		[We can access voices 0...32 in banks I, A, B, C, D, but only write to I]
-    // TQ5 Dump Request			[We can access voices 0...99.  Selection of BANK (user/card/preset) can only be done from the front panel.]
+    // DX21 Change Patch                [Though there are banks, we can only access the first one, just 32 values]
+    // DX27/100 Dump Request    [We can access voices 0...23 in banks I, A, B, C, D, but only write to I]
+    // DX11 Dump Request                [We can access voices 0...31 in banks I, A, B, C, D, but only write to I]
+    // TX81Z Dump Request               [We can access voices 0...32 in banks I, A, B, C, D, but only write to I]
+    // TQ5 Dump Request                 [We can access voices 0...99.  There are three BANKS, Internal, Preset, and Card.]
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
-        JComboBox bank = new JComboBox(BANKS);
-	    bank.setSelectedIndex(model.get("bank"));
         int type = getSynthType();
-        if (writing || (type != TYPE_TX81Z && type != TYPE_DX11))
+        JComboBox bank = null;
+        
+        if (!writing && (type == TYPE_TX81Z || type == TYPE_DX11 || type == TYPE_DX27_DX100))
             {
-            bank = new JComboBox(new String[] { "I" });
-            bank.setSelectedIndex(0);
+            bank = new JComboBox(BANKS);
+            bank.setSelectedIndex(model.get("bank"));
+            }
+        else if (!writing && (type == TYPE_TQ5_YS100_YS200_B200))
+            {
+            bank = new JComboBox(TQ5_BANKS);
+            if (model.get("bank") > 3)
+                {
+                System.err.println("Warning (Yamaha4Op): bank is invalid (" + bank + "), changing to 0");
+                bank.setSelectedIndex(0);
+                }
+            else
+                bank.setSelectedIndex(model.get("bank"));
             }
         
         int maxNumber =
-        	(type == TYPE_DX21 ? 32 :
-        		(type == TYPE_DX27_DX100 ? 24 :
-        			(type == TYPE_DX11 ? 32 :
-        				(type == TYPE_TX81Z? 32 :
-        					100))));
+            (type == TYPE_DX21 ? 32 :
+                (type == TYPE_DX27_DX100 ? 24 :
+                    (type == TYPE_DX11 ? 32 :
+                        (type == TYPE_TX81Z ? 32 :
+                        100))));
         
         int num = model.get("number");
         if (num < 0 || num >= maxNumber)
-        	num = 0;
+            num = 0;
         
-        JTextField number = new JTextField("" + num + 1, 3);
+        JTextField number = new JTextField("" + 
+            (type == TYPE_TQ5_YS100_YS200_B200 ? num : num + 1), 3);
 
         while(true)
             {
-            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number");
+            boolean result = false;
+            if (bank == null)
+                result = showMultiOption(this, new String[] { "Patch Number" }, new JComponent[] { number }, title, "Enter the Patch number.");
+            else
+                result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
                 
             if (result == false) 
                 return false;
@@ -307,18 +322,31 @@ public class Yamaha4Op extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1..." + maxNumber);
+                if (type == TYPE_TQ5_YS100_YS200_B200)
+                    showSimpleError(title, "The Patch Number must be an integer 0...99");
+                else
+                    showSimpleError(title, "The Patch Number must be an integer 1..." + maxNumber);
                 continue;
                 }
-            if (n < 1 || n > maxNumber)
+            if (type == TYPE_TQ5_YS100_YS200_B200)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1..." + maxNumber);
-                continue;
+                if (n < 0 || n >= maxNumber)    // note >=
+                    {
+                    showSimpleError(title, "The Patch Number must be an integer 0...99");
+                    continue;
+                    }
                 }
-                
-            n--;
+            else
+                {
+                if (n < 1 || n > maxNumber)             // note >
+                    {
+                    showSimpleError(title, "The Patch Number must be an integer 1..." + maxNumber);
+                    continue;
+                    }
+                n--;
+                }
                                 
-            int i = bank.getSelectedIndex();
+            int i = (bank == null ? 0 : bank.getSelectedIndex());
                         
             change.set("bank", i);
             change.set("number", n);
@@ -441,11 +469,12 @@ public class Yamaha4Op extends Synth
                 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, 4);
+        final PatchDisplay pd = new PatchDisplay(this, 10);
+        comp = pd;
         hbox2.add(comp);
         vbox.add(hbox2);
 
- 		JLabel label = new JLabel("Synth Type");
+        JLabel label = new JLabel("Synth Type");
         label.setFont(Style.SMALL_FONT());
         label.setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
         label.setForeground(Style.TEXT_COLOR());
@@ -457,6 +486,7 @@ public class Yamaha4Op extends Synth
             public void actionPerformed(ActionEvent e)
                 {
                 setSynthType(synthTypeCombo.getSelectedIndex(), true);
+                pd.update("bank", model);  // doesn't matter what the key is, so I put in "bank"
                 }
             });
         synthTypeCombo.putClientProperty("JComponent.sizeVariant", "small");
@@ -502,8 +532,8 @@ public class Yamaha4Op extends Synth
         
         comp = new LabelledDial("Algorithm", this, "algorithm", color, 0, 7, -1);
         model.removeMetricMinMax("algorithm");  // it's a set
-		vbox.add(comp);
-		
+        vbox.add(comp);
+                
         comp = new CheckBox("Mono", this, "mono");
         vbox.add(comp);
 
@@ -537,7 +567,7 @@ public class Yamaha4Op extends Synth
         hbox2.add(comp);
 
         vbox.add(hbox2);
-        	
+                
         vbox.add(Strut.makeVerticalStrut(10));
         
         hbox.add(vbox);
@@ -589,12 +619,12 @@ public class Yamaha4Op extends Synth
             new double[] { 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99},
             new double[] { 0, (Math.PI/4/99), (Math.PI/4/99), (Math.PI/4/99) })
             {
-             public double preprocessXKey(int index, String key, double value)
+            public double preprocessXKey(int index, String key, double value)
                 {
                 return 99.0 - value;
                 }
 
-           public void postProcess(double[] xVals, double[] yVals)
+            public void postProcess(double[] xVals, double[] yVals)
                 {
                 }
             };
@@ -603,7 +633,7 @@ public class Yamaha4Op extends Synth
 
         hbox.addLast(comp);
 
-       	VBox vbox2 = new VBox();
+        VBox vbox2 = new VBox();
         vbox2.add(hbox);
         vbox2.addLast(new HBox());
         
@@ -622,13 +652,13 @@ public class Yamaha4Op extends Synth
   
         params = EFFECTS;
         comp = new Chooser("Preset [>]", this, "effectpreset", params);
-		vbox.add(comp);
-		
+        vbox.add(comp);
+                
         comp = new CheckBox("Chorus [21,11]", this, "chorus");
         ((CheckBox)comp).addToWidth(3);
         vbox.add(comp);
-		hbox.add(vbox);
-		
+        hbox.add(vbox);
+                
         comp = new LabelledDial("Time [>]", this, "effecttime", color, 0, 40);
         hbox.add(comp);
 
@@ -706,7 +736,7 @@ public class Yamaha4Op extends Synth
 
         hbox.add(vbox);
 
-		vbox = new VBox();
+        vbox = new VBox();
         HBox hbox2 = new HBox();
 
         comp = new LabelledDial("Breath Ctrl.", this, "breathcontrolpitch", color, 0, 99);
@@ -742,22 +772,22 @@ public class Yamaha4Op extends Synth
         
         comp = new LabelledDial("Aftertouch", this, "aftertouchpitch", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("Pitch");
-        ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>] ");
+        ((LabelledDial)comp).addAdditionalLabel(" [11,>] ");
         hbox2.add(comp);
         
         comp = new LabelledDial("Aftertouch", this, "aftertouchamplitude", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("Amplitude");
-        ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>] ");
+        ((LabelledDial)comp).addAdditionalLabel(" [11,>] ");
         hbox2.add(comp);
         
         comp = new LabelledDial("Aftertouch", this, "aftertouchpitchbias", color, 0, 99, 50);
         ((LabelledDial)comp).addAdditionalLabel("Pitch Bias");
-         ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>] ");
-       hbox2.add(comp);
+        ((LabelledDial)comp).addAdditionalLabel(" [11,>] ");
+        hbox2.add(comp);
         
         comp = new LabelledDial("Aftertouch", this, "aftertouchenvelopebias", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("Env. Bias");
-        ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>] ");
+        ((LabelledDial)comp).addAdditionalLabel(" [11,>] ");
         hbox2.add(comp);
 
         comp = new LabelledDial("Foot Ctrl.", this, "footcontrolvolume", color, 0, 99);
@@ -1034,8 +1064,8 @@ public class Yamaha4Op extends Synth
                     return SHIFTS[val];
                     }
                 };
-         	((LabelledDial)comp).addAdditionalLabel(" [11,TX,>] ");
-           // we're not going to add it.  Instead we're just going to put a space in.
+            ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>] ");
+            // we're not going to add it.  Instead we're just going to put a space in.
             comp = Strut.makeStrut(comp);
             model.setStatus("operator" + envelope + "shift", Model.STATUS_IMMUTABLE);
             }
@@ -1049,7 +1079,7 @@ public class Yamaha4Op extends Synth
                     return SHIFTS[val];
                     }
                 };
-         	((LabelledDial)comp).addAdditionalLabel(" [11,TX,>] ");
+            ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>] ");
             }
         hbox.add(comp);
     
@@ -1212,12 +1242,12 @@ public class Yamaha4Op extends Synth
     "name8",
     "name9",
     "name10",
-    "pitchattackrate",				// Yamaha DX21 only
-    "pitchdecayrate",				// Yamaha DX21 only
-    "pitchreleaserate",				// Yamaha DX21 only
-    "pitchattacklevel",			// Yamaha DX21 only
-    "pitchdecaylevel",			// Yamaha DX21 only
-    "pitchreleaselevel",			// Yamaha DX21 only
+    "pitchattackrate",                          // Yamaha DX21 only
+    "pitchdecayrate",                           // Yamaha DX21 only
+    "pitchreleaserate",                         // Yamaha DX21 only
+    "pitchattacklevel",                 // Yamaha DX21 only
+    "pitchdecaylevel",                  // Yamaha DX21 only
+    "pitchreleaselevel",                        // Yamaha DX21 only
     };
 
 
@@ -1318,6 +1348,7 @@ public class Yamaha4Op extends Synth
     public static final int EFEDS_GROUP = 36; // 00100100
     public static final int PCED_GROUP = 16; // 00010000        says 00010011 in the manual, wrong
     public static final int REMOTE_SWITCH_GROUP = 19; // 00010011        same as ACED_GROUP
+    public static final int TQ5_REMOTE_SWITCH_GROUP = 0x24;
 
     public Object[] emitAll(String key)
         {
@@ -1412,43 +1443,43 @@ public class Yamaha4Op extends Synth
             // Look for EFEDS
             int val = parseEFEDS(data, pos);
             if (val != FAIL)
-            	{
-            	pos = val;
-            	foundSomething = true;
-            	}
+                {
+                pos = val;
+                foundSomething = true;
+                }
 
             // Look for ACED2
             val = parseACED2(data, pos);
             if (val != FAIL)
-            	{
-            	pos = val;
-            	foundSomething = true;
-            	}
+                {
+                pos = val;
+                foundSomething = true;
+                }
 
             // Look for ACED
             val = parseACED(data, pos);
             if (val != FAIL)
-            	{
-            	pos = val;
-            	foundSomething = true;
-            	}
+                {
+                pos = val;
+                foundSomething = true;
+                }
             
             // Look for VCED
             val = parseVCED(data, pos);
             if (val != FAIL)
-            	{
-            	pos = val;
-            	foundSomething = true;
-            	foundVCED = true;
-            	}
+                {
+                pos = val;
+                foundSomething = true;
+                foundVCED = true;
+                }
             
             if (!foundSomething) return PARSE_FAILED;
             else if (!foundVCED) return PARSE_INCOMPLETE;
             else 
-            	{
-	            revise(); 
-            	return PARSE_SUCCEEDED;
-            	}
+                {
+                revise(); 
+                return PARSE_SUCCEEDED;
+                }
             }
         }
         
@@ -1459,33 +1490,33 @@ public class Yamaha4Op extends Synth
             data[offset + 4] == 0x00 &&
             data[offset + 5] == 0x5D) // VCED?
             {
-			byte[] name = new byte[11];
-			name[10] = '\0';  // yes I know it's that already...
-		
-			for(int i = 0; i < vcedParameters.length; i++)
-				{
-				byte val = data[offset + i + 6];
-				
-				if (vcedParameters[i].equals("-"))
-					continue;
-				else if (i >= 77 && i <= 86) // name
-					{
-					name[i - 77] = val;
-					}
-				else
-					{
-					model.set(vcedParameters[i], val);
-					}
-				}
+            byte[] name = new byte[11];
+            name[10] = '\0';  // yes I know it's that already...
+                
+            for(int i = 0; i < vcedParameters.length; i++)
+                {
+                byte val = data[offset + i + 6];
+                                
+                if (vcedParameters[i].equals("-"))
+                    continue;
+                else if (i >= 77 && i <= 86) // name
+                    {
+                    name[i - 77] = val;
+                    }
+                else
+                    {
+                    model.set(vcedParameters[i], val);
+                    }
+                }
             try { model.set("name", new String(name, "US-ASCII")); }
             catch (Exception e) { e.printStackTrace(); return FAIL; }
 
-	        return offset + 101;    
+            return offset + 101;    
             }
         else 
-        	{
-        	return FAIL;
-        	}
+            {
+            return FAIL;
+            }
         }
 
     int parseACED(byte[] data, int offset)
@@ -1506,23 +1537,23 @@ public class Yamaha4Op extends Synth
             data[offset + 14] == 'A' &&
             data[offset + 15] == 'E')
             {
-			for(int i = 0; i < acedParameters.length; i++)
-				{
-				byte val = data[offset + i + 16];
-				
-				if (acedParameters[i].equals("-"))
-					continue;
-				else
-					{
-					model.set(acedParameters[i], val);
-					}
-				}
-	        return offset + 41;    
+            for(int i = 0; i < acedParameters.length; i++)
+                {
+                byte val = data[offset + i + 16];
+                                
+                if (acedParameters[i].equals("-"))
+                    continue;
+                else
+                    {
+                    model.set(acedParameters[i], val);
+                    }
+                }
+            return offset + 41;    
             }
         else 
-        	{
-        	return FAIL;
-        	}
+            {
+            return FAIL;
+            }
         }
 
                 
@@ -1544,23 +1575,23 @@ public class Yamaha4Op extends Synth
             data[offset + 14] == 'A' &&
             data[offset + 15] == 'E')
             {
-			for(int i = 0; i < aced2Parameters.length; i++)
-				{
-				byte val = data[offset + i + 16];
-				
-				if (aced2Parameters[i].equals("-"))
-					continue;
-				else
-					{
-					model.set(aced2Parameters[i], val);
-					}
-				}
-	        return offset + 28;    
+            for(int i = 0; i < aced2Parameters.length; i++)
+                {
+                byte val = data[offset + i + 16];
+                                
+                if (aced2Parameters[i].equals("-"))
+                    continue;
+                else
+                    {
+                    model.set(aced2Parameters[i], val);
+                    }
+                }
+            return offset + 28;    
             }
         else 
-        	{
-        	return FAIL;
-        	}
+            {
+            return FAIL;
+            }
         }
 
     int parseEFEDS(byte[] data, int offset)
@@ -1581,23 +1612,23 @@ public class Yamaha4Op extends Synth
             data[offset + 14] == 'E' &&
             data[offset + 15] == 'F')
             {
-			for(int i = 0; i < efedsParameters.length; i++)
-				{
-				byte val = data[offset + i + 16];
-				
-				if (efedsParameters[i].equals("-"))
-					continue;
-				else
-					{
-					model.set(efedsParameters[i], val);
-					}
-				}
-	        return offset + 21;    
+            for(int i = 0; i < efedsParameters.length; i++)
+                {
+                byte val = data[offset + i + 16];
+                                
+                if (efedsParameters[i].equals("-"))
+                    continue;
+                else
+                    {
+                    model.set(efedsParameters[i], val);
+                    }
+                }
+            return offset + 21;    
             }
         else 
-        	{
-        	return FAIL;
-        	}
+            {
+            return FAIL;
+            }
         }
 
 
@@ -1732,7 +1763,7 @@ public class Yamaha4Op extends Synth
         //// Pitch Level 3
         model.set(vcedParameters[pos++], data[patch + 72 + 6] & 127);
         
-        pos = 0;	// reset, we're now doing ACED
+        pos = 0;        // reset, we're now doing ACED
         for(int op = 0; op < 4; op++)
             {
             // eg shift
@@ -1754,7 +1785,7 @@ public class Yamaha4Op extends Synth
         // foot controller amplitude
         model.set(acedParameters[pos++], data[patch + 83 + 6] & 127);
         
-        pos = 0;	// reset, we're now doing ACED2
+        pos = 0;        // reset, we're now doing ACED2
         // Aftertouch Pitch
         model.set(acedParameters[pos++], data[patch + 84 + 6] & 7);        
         // Aftertouch Amplitude
@@ -1764,16 +1795,16 @@ public class Yamaha4Op extends Synth
         // Aftertouch EG BBias
         model.set(acedParameters[pos++], data[patch + 87 + 6] & 7);
 
-		// skip bytes 88..90
+        // skip bytes 88..90
 
-        pos = 0;	// reset, we're now doing EFEDS
+        pos = 0;        // reset, we're now doing EFEDS
         // Effect Preset Number
         model.set(acedParameters[pos++], data[patch + 91 + 6] & 15);        
         // Effect Time
         model.set(acedParameters[pos++], data[patch + 92 + 6] & 63);
         // Effect Balance
         model.set(acedParameters[pos++], data[patch + 93 + 6] & 127);
-		
+                
         revise();
         return PARSE_SUCCEEDED;
         }
@@ -1832,7 +1863,7 @@ public class Yamaha4Op extends Synth
         for(int i = 0; i < aced2Parameters.length; i++)
             {
             if (!(aced2Parameters[i].equals("-")))
-	            data[i + 10] = (byte)(model.get(aced2Parameters[i]));
+                data[i + 10] = (byte)(model.get(aced2Parameters[i]));
             }
 
         result[1][0] = (byte)0xF0;
@@ -1902,9 +1933,9 @@ public class Yamaha4Op extends Synth
             }
 
         for(int i = vcedParameters.length - 6; i < vcedParameters.length; i++)
-        	{
-			data[pos++] = (byte)(model.get(vcedParameters[i]));
-			}
+            {
+            data[pos++] = (byte)(model.get(vcedParameters[i]));
+            }
         
         result[3][0] = (byte)0xF0;
         result[3][1] = 0x43;
@@ -1951,65 +1982,71 @@ public class Yamaha4Op extends Synth
         }
     
 
-    // DX21 Dump Request 		F0 43 2CH 03 F7
-    // DX27/100 Dump Request	F0 43 2CH 03 F7
-    // DX11 Dump Request		F0 43 2CH 7E "LM  8023AE" F7	[ACED2 + ACED + VCED]
-    // TX81Z Dump Request		F0 43 2CH 7E "LM  8976AE" F7 	[ACED + VCED]		// It says 0CH but that's wrong
-    // TQ5 Dump Request			F0 43 2CH 7E "LM  8036EF" F7	[EFEDS + ACED2 + ACED + VCED]
+    // DX21 Dump Request                F0 43 2CH 03 F7
+    // DX27/100 Dump Request    F0 43 2CH 03 F7
+    // DX11 Dump Request                F0 43 2CH 7E "LM  8023AE" F7    [ACED2 + ACED + VCED]
+    // TX81Z Dump Request               F0 43 2CH 7E "LM  8976AE" F7    [ACED + VCED]           // It says 0CH but that's wrong
+    // TQ5 Dump Request                 F0 43 2CH 7E "LM  8036EF" F7    [EFEDS + ACED2 + ACED + VCED]
+
+    // DX21 Change Patch                [Though there are banks, we can only access the first one, just 32 values]
+    // DX27/100 Dump Request    [We can access voices 0...23 in banks I, A, B, C, D, but only write to I]
+    // DX11 Dump Request                [We can access voices 0...31 in banks I, A, B, C, D, but only write to I]
+    // TX81Z Dump Request               [We can access voices 0...32 in banks I, A, B, C, D, but only write to I]
+    // TQ5 Dump Request                 [We can access voices 0...99.  There are three BANKS, Internal, Preset, and Card.]
 
     public byte[] requestCurrentDump()
         {
         byte channel = (byte)(getChannelOut());
-    	switch (getSynthType())
-    		{
-    		case TYPE_DX21:	
-    		case TYPE_DX27_DX100:
-    			{
-         		return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x03, (byte)0xF7 }; 
-	   			}
-//    		break;
-    		case TYPE_DX11:
-    			{
-        		return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
-        	    	(byte)'L', (byte)'M', (byte)' ', (byte)' ',
-        	    	(byte)'8', (byte)'0', (byte)'2', (byte)'3',
-        	    	(byte)'E', (byte)'F', (byte)0xF7 }; 
-    			}
-//    		break;
-    		case TYPE_TX81Z:
-    		    {
-        		return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
-        	    	(byte)'L', (byte)'M', (byte)' ', (byte)' ',
-        	    	(byte)'8', (byte)'9', (byte)'7', (byte)'6',
-        	    	(byte)'A', (byte)'E', (byte)0xF7 }; 
-   				}
-//    		break;
-    		case TYPE_TQ5_YS100_YS200_B200:
-    		    {
-        		return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
-        	    	(byte)'L', (byte)'M', (byte)' ', (byte)' ',
-        	    	(byte)'8', (byte)'0', (byte)'3', (byte)'6',
-        	    	(byte)'E', (byte)'F', (byte)0xF7 }; 
-    			}
-//    		break;
-    		}
-    	System.err.println("Warning (Yamaha4Op): Invalid synth type in requestCurrentDump(): " + getSynthType());
-    	return new byte[] { }; // just in case
+        switch (getSynthType())
+            {
+            case TYPE_DX21: 
+            case TYPE_DX27_DX100:
+                {
+                return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x03, (byte)0xF7 }; 
+                }
+//              break;
+            case TYPE_DX11:
+                {
+                return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
+                    (byte)'L', (byte)'M', (byte)' ', (byte)' ',
+                    (byte)'8', (byte)'0', (byte)'2', (byte)'3',
+                    (byte)'E', (byte)'F', (byte)0xF7 }; 
+                }
+//              break;
+            case TYPE_TX81Z:
+                {
+                return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
+                    (byte)'L', (byte)'M', (byte)' ', (byte)' ',
+                    (byte)'8', (byte)'9', (byte)'7', (byte)'6',
+                    (byte)'A', (byte)'E', (byte)0xF7 }; 
+                }
+//              break;
+            case TYPE_TQ5_YS100_YS200_B200:
+                {
+                return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
+                    (byte)'L', (byte)'M', (byte)' ', (byte)' ',
+                    (byte)'8', (byte)'0', (byte)'3', (byte)'6',
+                    (byte)'E', (byte)'F', (byte)0xF7 }; 
+                }
+//              break;
+            }
+        System.err.println("Warning (Yamaha4Op): Invalid synth type in requestCurrentDump(): " + getSynthType());
+        return new byte[] { }; // just in case
         }
     
-    public int getPauseAfterChangePatch() { return 50; }		// TX81Z fails if it's less than 50 or so
+    public int getPauseAfterChangePatch() { return 100; }               // TX81Z fails if it's less than 50 or so
     
     final static int FAIL = -1;
 
     public static int findSysexLength(byte[] data, int pos)
-    	{
-    	for(int i = pos; i < data.length; i++)
-    		{
-    		if (data[i] == (byte)0xF7)
-    			return i + 1;
-    		}
-    	return FAIL;
-    	}
+        {
+        for(int i = pos; i < data.length; i++)
+            {
+            if (data[i] == (byte)0xF7)
+                return i + 1;
+            }
+        return FAIL;
+        }
     
     public static boolean recognizeBulk(byte[] data)
         {
@@ -2029,7 +2066,7 @@ public class Yamaha4Op extends Synth
     static int recognizeBasic(byte[] data)
         {
         // EFEDS
-		if (data.length >= 21 &&
+        if (data.length >= 21 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x43 &&
             // don't care about 2, it's the channel
@@ -2050,7 +2087,7 @@ public class Yamaha4Op extends Synth
             return 4;
 
         // ACED2
-		if (data.length >= 28 &&
+        if (data.length >= 28 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x43 &&
             // don't care about 2, it's the channel
@@ -2071,7 +2108,7 @@ public class Yamaha4Op extends Synth
             return 3;
 
         // ACED
-		if (data.length >= 41 &&
+        if (data.length >= 41 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x43 &&
             // don't care about 2, it's the channel
@@ -2106,7 +2143,7 @@ public class Yamaha4Op extends Synth
         
     public static int getNumSysexDumpsPerPatch(byte[] data) 
         {
-        int i = recognizeBasic(data);		// we'll try here to guess how many patches are in a chunk in this file
+        int i = recognizeBasic(data);           // we'll try here to guess how many patches are in a chunk in this file
         if (i > 0) return i;
         else return 1;
         }
@@ -2116,13 +2153,13 @@ public class Yamaha4Op extends Synth
         return (recognizeBasic(data) > 0) || recognizeBulk(data);
         }
         
-	ArrayList<byte[]> resultsSoFar = new ArrayList<>();
-	
+    ArrayList<byte[]> resultsSoFar = new ArrayList<>();
+        
     public void doRequestMerge(double percentage)
-    	{
-    	resultsSoFar = new ArrayList<>();
-    	super.doRequestMerge(percentage);
-    	}
+        {
+        resultsSoFar = new ArrayList<>();
+        super.doRequestMerge(percentage);
+        }
 
     // gotta get two merge results
     public int merge(byte[] data, double probability)
@@ -2134,28 +2171,28 @@ public class Yamaha4Op extends Synth
             // don't care about 2, it's the channel
             data[3] == (byte)0x03 &&
             data[4] == (byte)0x00 &&
-            data[5] == (byte)0x5D)			// VCED, flatten
-            	{
-            	// Flatten
-            	int count = 0;
-            	for(int i = 0; i < resultsSoFar.size(); i++)
-            		{
-            		count += resultsSoFar.get(i).length;
-            		}
-            	byte[] total = new byte[count];
-            	count = 0;
-            	for(int i = 0; i < resultsSoFar.size(); i++)
-            		{
-            		byte[] d = resultsSoFar.get(i);
-            		System.arraycopy(d, 0, total, count, d.length);
-            		count += d.length;
-            		}
-            	return super.merge(total, probability);
-            	}
+            data[5] == (byte)0x5D)                      // VCED, flatten
+            {
+            // Flatten
+            int count = 0;
+            for(int i = 0; i < resultsSoFar.size(); i++)
+                {
+                count += resultsSoFar.get(i).length;
+                }
+            byte[] total = new byte[count];
+            count = 0;
+            for(int i = 0; i < resultsSoFar.size(); i++)
+                {
+                byte[] d = resultsSoFar.get(i);
+                System.arraycopy(d, 0, total, count, d.length);
+                count += d.length;
+                }
+            return super.merge(total, probability);
+            }
         else
-        	{
-        	return PARSE_INCOMPLETE;
-        	}
+            {
+            return PARSE_INCOMPLETE;
+            }
         }
     
     public static final int MAXIMUM_NAME_LENGTH = 10;
@@ -2193,17 +2230,17 @@ public class Yamaha4Op extends Synth
 
 
 
+    // DX21 Change Patch                [Though there are banks, we can only access the first one, just 32 values]
+    // DX27/100 Dump Request    [We can access voices 0...23 in banks I, A, B, C, D, but only write to I]
+    // DX11 Dump Request                [We can access voices 0...31 in banks I, A, B, C, D, but only write to I]
+    // TX81Z Dump Request               [We can access voices 0...32 in banks I, A, B, C, D, but only write to I]
+    // TQ5 Dump Request                 [We can access voices 0...99.  There are three BANKS, Internal, Preset, and Card.]
 
-    // DX21 Change Patch 		PC
-    //							[Though there are banks, we can only access the first one, just 32 values]
-    // DX27/100 Dump Request	PC
-    //							[We can access voices 0...23.  The BANK voices are just links, and the ROM voices cannot be accessed]
-    // DX11 Dump Request		Unknown: maybe modify slot 127 in PC table to PC value, press SINGLE, send PC 127.  See page 50 of service manual
-    //							[We can access voices 0...32 in banks I, A, B, C, D, but only write to I]
-    // TX81Z Dump Request		Modify slot 127 in PC table to PC value, press PLAY/PERFORM, send PC 127
-    //							[We can access voices 0...32 in banks I, A, B, C, D, but only write to I]
-    // TQ5 Dump Request			PC  
-    //							[We can access voices 0...99.  Selection of BANK (user/card/preset) can only be done from the front panel.]
+    // DX21 Change Patch                PC
+    // DX27/100 Dump Request    PC
+    // DX11 Dump Request                Unknown: maybe modify slot 127 in PC table to PC value, press SINGLE, send PC 127.  See page 50 of service manual
+    // TX81Z Dump Request               Modify slot 127 in PC table to PC value, press PLAY/PERFORM, send PC 127
+    // TQ5 Dump Request                 Send command to press the "preset", "card", or "internal" button, then PC  
 
     public void changePatch(Model tempModel) 
         {
@@ -2211,81 +2248,101 @@ public class Yamaha4Op extends Synth
         int number = tempModel.get("number");
 
         switch (getSynthType())
-        	{
-        	case TYPE_DX21:
-        		{
-        		if (number >= 32)
-	        		{
-	        		System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 32));
-	        		number = number % 32;
-	        		}
-				tryToSendMIDI(buildPC(getChannelOut(), number));
-        		}
-        	case TYPE_DX27_DX100:
-        		{
-        		if (number >= 24)
-	        		{
-	        		System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 24));
-	        		number = number % 24;
-	        		}
-				tryToSendMIDI(buildPC(getChannelOut(), number));
-        		}
-        	break;
-        	case TYPE_DX11:
-        	case TYPE_TX81Z:
-        		{
-        		// [Note: I don't know if this will work for the DX11, but I'm taking a shot here.]
-        		// 
-				// A program change in the TX81Z is a complicated affair.  We need to do three things:
-				//
-				// 1. Modify a slot in the program change table to the patch we want.  We'll modify slot 127.
-				//
-				// 2. At this point the TX81Z is in a strange "I got edited via MIDI" mode.  We need to get
-				//    out of that and into standard program mode.  We do this by using sysex commands to virtually press
-				//    the PLAY/PERFORM switch.
-				//
-				// 3. Now we're either in PLAY mode or we're in PERFORM mode.  At this point we send a PC 127, which
-				//    causes the system to look up slot 127 in its table, discover it's a performance patch,
-				//    and switch to that, while also changing to PERFORM mode. 
+            {
+            case TYPE_DX21:
+                {
+                if (number >= 32)
+                    {
+                    System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 32));
+                    number = number % 32;
+                    }
+                tryToSendMIDI(buildPC(getChannelOut(), number));
+                }
+            case TYPE_DX27_DX100:
+                {
+                if (number >= 24)
+                    {
+                    System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 24));
+                    number = number % 24;
+                    }
+                number = number + bank * 24;
+                tryToSendMIDI(buildPC(getChannelOut(), number));
+                }
+            break;
+            case TYPE_DX11:
+            case TYPE_TX81Z:
+                {
+                // [Note: I don't know if this will work for the DX11, but I'm taking a shot here.]
+                // 
+                // A program change in the TX81Z is a complicated affair.  We need to do three things:
+                //
+                // 1. Modify a slot in the program change table to the patch we want.  We'll modify slot 127.
+                //
+                // 2. At this point the TX81Z is in a strange "I got edited via MIDI" mode.  We need to get
+                //    out of that and into standard program mode.  We do this by using sysex commands to virtually press
+                //    the PLAY/PERFORM switch.
+                //
+                // 3. Now we're either in PLAY mode or we're in PERFORM mode.  At this point we send a PC 127, which
+                //    causes the system to look up slot 127 in its table, discover it's a performance patch,
+                //    and switch to that, while also changing to PERFORM mode. 
 
-				// Change program change table position 127 to our desired patch
-       			int val = bank * 32 + number;
-        		byte lo = (byte)(val & 127);
-        		byte hi = (byte)(val >>> 7);
-				byte[] table = new byte[9];
-				table[0] = (byte)0xF0;
-				table[1] = (byte)0x43;
-				table[2] = (byte)(16 + getChannelOut());
-				table[3] = (byte)0x10;
-				table[4] = (byte)127;  // really!
-				table[5] = (byte)127;  // we're changing table position 127
-				table[6] = hi;
-				table[7] = lo;
-				table[8] = (byte)0xF7;
-				tryToSendSysex(table);
-		
-				// Instruct the TX81Z to press its "PLAY/PERFORM" button.  Else maybe the "SINGLE" button for the DX11?  Dunno
-				byte PP = getSynthType() == TYPE_TX81Z ? (byte) 68 : (byte) 118;
-				byte VV = (byte) 0;
-				byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getChannelOut()), REMOTE_SWITCH_GROUP, PP, (byte)0x7F, (byte)0xF7 };
-				tryToSendSysex(data);
+                // Change program change table position 127 to our desired patch
+                int val = bank * 32 + number;
+                byte lo = (byte)(val & 127);
+                byte hi = (byte)(val >>> 7);
+                byte[] table = new byte[9];
+                table[0] = (byte)0xF0;
+                table[1] = (byte)0x43;
+                table[2] = (byte)(16 + getChannelOut());
+                table[3] = (byte)0x10;
+                table[4] = (byte)127;  // really!
+                table[5] = (byte)127;  // we're changing table position 127
+                table[6] = hi;
+                table[7] = lo;
+                table[8] = (byte)0xF7;
+                tryToSendSysex(table);
+                                                
+                // Instruct the TX81Z to press its "PLAY/PERFORM" button.  Else maybe the "SINGLE" button for the DX11?  Dunno
+                byte PP = getSynthType() == TYPE_TX81Z ? (byte) 68 : (byte) 118;
+                byte VV = (byte) 0;
+                byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getChannelOut()), REMOTE_SWITCH_GROUP, PP, (byte)0x7F, (byte)0xF7 };
+                tryToSendSysex(data);
 
-				// Do the program change to program 127
-				tryToSendMIDI(buildPC(getChannelOut(), 127));
-        		}
-        	break;
-        	case TYPE_TQ5_YS100_YS200_B200:
-        		{
-        		if (number >= 100)
-	        		{
-	        		System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 100));
-	        		number = number % 100;
-	        		}
-				tryToSendMIDI(buildPC(getChannelOut(), number));
-        		}
-        	break;        		
-        	}
-        	
+                // Do the program change to program 127
+                tryToSendMIDI(buildPC(getChannelOut(), 127));
+                }
+            break;
+            case TYPE_TQ5_YS100_YS200_B200:
+                {
+                if (bank > 3) 
+                    {
+                    System.err.println("Warning (Yamaha4Op): bank is invalid (" + bank + "), changing to 0");
+                    bank = 0;
+                    }
+                                
+                if (number >= 100)
+                    {
+                    System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 100));
+                    number = number % 100;
+                    }
+                        
+                // First we'll attempt to switch to the right bank by pressing magic butons
+                byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getChannelOut()), TQ5_REMOTE_SWITCH_GROUP,
+                                
+                    // documentation is wrong here.  The manual says 116 = card 117 = user 118 = preset
+                    // but in fact it's 116 = preset 117 = user 118 = card
+                    (byte)(bank == 0 ? 116 :                // user
+                            (bank == 1 ? 117 :      // preset
+                            118)),                  // card
+                    (byte)127, (byte)0xF7 };
+                tryToSendSysex(data);
+                                
+                // Do the program change
+                tryToSendMIDI(buildPC(getChannelOut(), number));
+                }
+            break;                  
+            }
+                
         
         // we assume that we successfully did it
         if (!isMerging())  // we're actually loading the patch, not merging with it
@@ -2300,11 +2357,11 @@ public class Yamaha4Op extends Synth
     public String getPatchName(Model model) { return model.get("name", "INIT VOICE"); }
 
 
-    // DX21 Change Patch 		[Though there are banks, we can only access the first one, just 32 values]
-    // DX27/100 Dump Request	[We can access voices 0...23.  The BANK voices are just links, and the ROM voices cannot be accessed]
-    // DX11 Dump Request		[We can access voices 0...32 in banks I, A, B, C, D, but only write to I]
-    // TX81Z Dump Request		[We can access voices 0...32 in banks I, A, B, C, D, but only write to I]
-    // TQ5 Dump Request			[We can access voices 0...99.  Selection of BANK (user/card/preset) can only be done from the front panel.]
+    // DX21 Change Patch                [Though there are banks, we can only access the first one, just 32 values]
+    // DX27/100 Dump Request    [We can access voices 0...23 in banks I, A, B, C, D, but only write to I]
+    // DX11 Dump Request                [We can access voices 0...31 in banks I, A, B, C, D, but only write to I]
+    // TX81Z Dump Request               [We can access voices 0...32 in banks I, A, B, C, D, but only write to I]
+    // TQ5 Dump Request                 [We can access voices 0...99.  There are three BANKS, Internal, Preset, and Card.]
 
     public Model getNextPatchLocation(Model model)
         {
@@ -2313,19 +2370,19 @@ public class Yamaha4Op extends Synth
         
         int type = getSynthType();
         int maxNumber =
-        	(type == TYPE_DX21 ? 32 :
-        		(type == TYPE_DX27_DX100 ? 24 :
-        			(type == TYPE_DX11 ? 32 :
-        				(type == TYPE_TX81Z? 32 :
-        					100))));
+            (type == TYPE_DX21 ? 32 :
+                (type == TYPE_DX27_DX100 ? 24 :
+                    (type == TYPE_DX11 ? 32 :
+                        (type == TYPE_TX81Z ? 32 :
+                        100))));
 
         int maxBank =
-        	(type == TYPE_DX21 ? 1 :
-        		(type == TYPE_DX27_DX100 ? 1 :
-        			(type == TYPE_DX11 ? 5 :
-        				(type == TYPE_TX81Z? 5 :
-        					1))));
-        					
+            (type == TYPE_DX21 ? 1 :
+                (type == TYPE_DX27_DX100 ? 5 :
+                    (type == TYPE_DX11 ? 5 :
+                        (type == TYPE_TX81Z ? 5 :
+                        3))));
+                                                
         number++;
         if (number >= maxNumber)
             {
@@ -2350,7 +2407,19 @@ public class Yamaha4Op extends Synth
         if (!model.exists("bank")) return null;
         
         int number = model.get("number") + 1;
-        return BANKS[model.get("bank")] + (number > 9 ? "" : "0") + number;
+        
+        int type = getSynthType();
+        if (type == TYPE_DX27_DX100 || type == TYPE_DX11 || type == TYPE_TX81Z)          
+            return BANKS[model.get("bank")] + (number > 9 ? "" : "0") + number;
+        else if (type == TYPE_TQ5_YS100_YS200_B200)
+            {
+            number -= 1;    // we start at 00
+            int bank = model.get("bank");
+            if (bank > 3) bank = 0;
+            return TQ5_BANKS[bank] + " " + (number > 9 ? "" : "0") + number;
+            }
+        else
+            return "" + (number > 9 ? "" : "0") + number;
         }
         
 

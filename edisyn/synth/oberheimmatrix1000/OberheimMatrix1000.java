@@ -1379,17 +1379,17 @@ public class OberheimMatrix1000 extends Synth
         boolean validname = false;
         int bank = 0;
         if (name[0] == 'B' && name[1] == 'N' || name[2] == 'K' || name[4] == ':' || name[5] == ' ')  // probably BNK_: __
-        	{
-        	bank = name[3] - '0';
-        	if (bank < 0 || bank > 9)
-        	    bank = 0;
-        	model.set("bank", bank);
-        	}
+            {
+            bank = name[3] - '0';
+            if (bank < 0 || bank > 9)
+                bank = 0;
+            model.set("bank", bank);
+            }
         else
-        	{
-        	model.set("bank", 0);		// default?
-        	validname = true;
-        	}
+            {
+            model.set("bank", 0);           // default?
+            validname = true;
+            }
         
         if (!fromFile && useClassicPatchNames && !validname)
             {
@@ -1639,7 +1639,7 @@ public class OberheimMatrix1000 extends Synth
         data[2] = (byte)0x06;  
         data[3] = (byte)0x0C;
         data[4] = (byte)0xF7;
-        //tryToSendSysex(data);			// right now this really isn't necessary.
+        //tryToSendSysex(data);                 // right now this really isn't necessary.
                         
         // Next do a program change
                 

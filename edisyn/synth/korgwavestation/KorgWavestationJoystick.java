@@ -37,18 +37,25 @@ public class KorgWavestationJoystick extends Joystick implements Updatable
     // ONCE.
     public void mouseDown()
         {
-        synth.getUndo().push(synth.getModel());
-        synth.getUndo().setWillPush(false);
+        if (!realtime)
+            {
+            synth.getUndo().push(synth.getModel());
+            synth.getUndo().setWillPush(false);
+            }
         }
 
     public void mouseUp()
         {
-        synth.getUndo().setWillPush(true);
+        if (!realtime)
+            {
+            synth.getUndo().setWillPush(true);
+            }
         }
-                        
+
     public void prepaint(Graphics2D g)
         {
         super.prepaint(g);
+        
         g.setColor(Style.DIAL_UNSET_COLOR());
         g.setStroke(new BasicStroke(Style.DIAL_STROKE_WIDTH() / 4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
         g.draw(new Line2D.Double(margin, getHeight() / 2.0, getWidth() / 2.0, margin));
@@ -56,18 +63,21 @@ public class KorgWavestationJoystick extends Joystick implements Updatable
         g.draw(new Line2D.Double(getWidth() - margin, getHeight() / 2.0, getWidth() / 2.0, margin));
         g.draw(new Line2D.Double(getWidth() - margin, getHeight() / 2.0, getWidth() / 2.0, getHeight() - margin));
 
-        for(int i = 0; i < xPositions.length - 1; i++)
+        if (!realtime)
             {
-            double centerX = (xPositions[i] + 1) / 2 * (getWidth() - margin * 2) + margin;
-            double centerY = (yPositions[i] + 1) / 2 * (getHeight() - margin * 2) + margin;
+            for(int i = 0; i < xPositions.length - 1; i++)
+                {
+                double centerX = (xPositions[i] + 1) / 2 * (getWidth() - margin * 2) + margin;
+                double centerY = (yPositions[i] + 1) / 2 * (getHeight() - margin * 2) + margin;
 
-            double centerX2 = (xPositions[i + 1] + 1) / 2 * (getWidth() - margin * 2) + margin;
-            double centerY2 = (yPositions[i + 1] + 1) / 2 * (getHeight() - margin * 2) + margin;
+                double centerX2 = (xPositions[i + 1] + 1) / 2 * (getWidth() - margin * 2) + margin;
+                double centerY2 = (yPositions[i + 1] + 1) / 2 * (getHeight() - margin * 2) + margin;
 
-            g.setColor(colors[i]);
-            g.draw(new Line2D.Double(centerX, centerY, (centerX + centerX2)/2.0, (centerY + centerY2)/2.0));
-            g.setColor(colors[i + 1]);
-            g.draw(new Line2D.Double(centerX2, centerY2, (centerX + centerX2)/2.0, (centerY + centerY2)/2.0));
+                g.setColor(colors[i]);
+                g.draw(new Line2D.Double(centerX, centerY, (centerX + centerX2)/2.0, (centerY + centerY2)/2.0));
+                g.setColor(colors[i + 1]);
+                g.draw(new Line2D.Double(centerX2, centerY2, (centerX + centerX2)/2.0, (centerY + centerY2)/2.0));
+                }
             }
         }
 
@@ -83,13 +93,51 @@ public class KorgWavestationJoystick extends Joystick implements Updatable
     public void updatePosition()
         {
         super.updatePosition();
-        updating = true;
-        int x = (int)Math.round((xPos + 1.0) * 127);
-        int y = (int)Math.round((0.0 - yPos + 1.0) * 127);
-        synth.getModel().set(keysAC[position], x);
-        synth.getModel().set(keysBD[position], y);
-        updating = false;
+        
+        int x = (int)Math.round((xPos + 1.0) * 128);
+        if (x > 255) x = 255;
+        int y = (int)Math.round((0.0 - yPos + 1.0) * 128);
+        if (y > 255) y = 255;
+
+        if (realtime)
+            {
+            synth.tryToSendMIDI(synth.concatenate(
+                    synth.buildCC(synth.getChannelOut(), 16, x / 2),
+                    synth.buildCC(synth.getChannelOut(), 17, y / 2)));
+            }
+        else
+            {
+            updating = true;
+            synth.getModel().set(keysAC[position], x);
+            synth.getModel().set(keysBD[position], y);
+            updating = false;
+            }
         }
+    
+    public double[] oldXPositions;
+    public double[] oldYPositions;
+    public Color[] oldColors;
+    boolean realtime;
+    public void setRealtime(boolean val)
+        {
+        if (val)
+            {
+            oldXPositions = xPositions;
+            oldYPositions = yPositions;
+            oldColors = colors;
+            setNumPositions(new Color[] { Color.ORANGE });
+            realtime = true;
+            }
+        else
+            {
+            setNumPositions(oldColors);
+            xPositions = oldXPositions;
+            yPositions = oldYPositions;
+            realtime = false;
+            }
+        repaint();
+        }
+        
         
     public void updateAll()
         {

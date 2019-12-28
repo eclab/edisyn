@@ -41,6 +41,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public HashMap subkeysToSubparameters = new HashMap();
     public HashMap keysToParameters = new HashMap();
 
+    KorgWavestationJoystick joy;
+
     public KorgWavestationPatch()
         {
         for(int i = 0; i < keys.length; i++)
@@ -279,6 +281,20 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
             };
         ((LabelledDial)comp).addAdditionalLabel("Repeats");
         hbox.add(comp);
+        
+        JCheckBox realtime = new JCheckBox("Real-Time Joystick");
+        realtime.setFont(Style.SMALL_FONT());
+        realtime.setOpaque(false);
+        realtime.setForeground(Style.TEXT_COLOR());
+        realtime.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                joy.setRealtime(realtime.isSelected());
+                }
+            });
+        hbox.add(Strut.makeHorizontalStrut(150));
+        hbox.add(realtime);
         main.add(hbox);
 
         hbox = new HBox();
@@ -424,7 +440,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         mainH.add(Strut.makeHorizontalStrut(40));
         mainH.add(Stretch.makeVerticalStretch());
                 
-        final KorgWavestationJoystick joy = new KorgWavestationJoystick(this, 
+        joy = new KorgWavestationJoystick(this, 
             new String[] { "mixx0", "mixx1", "mixx2", "mixx3", "mixx4" },
             new String[] { "mixy0", "mixy1", "mixy2", "mixy3", "mixy4" });
         joy.setNumPositions(colors);

@@ -29,7 +29,7 @@ Edisyn is particularly good at exploring the space of patches.  It has to my kno
 
 Edisyn presently supports:
  
-* Casio CZ Series
+* Casio CZ Series (CZ101, CZ1000, CZ3000, CZ5000, CZ-1)
 * DSI Prophet '08 
 * E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap modes)
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading, see the Blofeld editor's "About" panel)
@@ -41,8 +41,8 @@ Edisyn presently supports:
 * Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)
 * Kawai K5 and K5m
-* Yamaha DX7 Family (Single)
-* Yamaha TX81Z (Single and Multi Modes)
+* Yamaha DX7 Family (DX7, TX7, TX802, TX216/TX816, Dexed)
+* Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, etc.) (Single and Multi Modes)
 * Korg SG Rack (Single and Multi Modes) and Korg SG Pro X (Single Mode)
 * Korg Microsampler
 * Korg MicroKorg
@@ -95,6 +95,12 @@ I believe that the following should work:
 Java versions earlier than 11 (or so) do not handle high-resolution displays properly, so Edisyn will appear teeny-tiny.  You need to upgrade to 11.
 
 Also Edisyn makes heavy use of Java preferences to store persistence information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows for earlier versions of Java.  I think this is fixed as of Java 11 but you should check and let me know.
+
+#### Bug Status...
+
+I have had a report of Edisyn quitting prematurely (likely bombing) when sending or writing sysex messages in Windows for the CZ Series patch editor.  I think this may be related to the MIDI Interface used but am not certain.  If you have success, or failure, in using the CZ series patch editor (Windows only), please let me know.
+
+
 
 
 ### Installation and Running on Linux

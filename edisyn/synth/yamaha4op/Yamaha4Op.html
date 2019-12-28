@@ -4,7 +4,18 @@
 <h1>Yamaha 4-Operator FM Synthesizer Family</h1> 
 <h2>Single Patch Editor</h2>
 
-<p>This patch editor is meant to work with a variety of Yamaha 4-Op FM synthesizers, including the DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, and B200.  It will not work with the DX9 nor the FB01.  Its compatibility with later 4-Op synths, such as the WT11, V50, and DS55, is unknown.  The patch editor was originally designed for, and primarily tested on, the TX81Z.  It has also been tested on the TQ5.
+<p>This patch editor is meant to work with a variety of Yamaha 4-Op FM synthesizers.  However it has only been tested with certain ones.  If you try it with your synthesizer and it doesn't work, please contact me (<b>sean@cs.gmu.edu</b>) and I will work with you to modify it to get it working.  Status:
+
+<ul>
+<li><b>DX9, FB08</b>&nbsp;&nbsp;&nbsp;&nbsp; Incompatible.  Will not work.
+<li><b>DX21</b>&nbsp;&nbsp;&nbsp;&nbsp; Should work, but untested.
+<li><b>DX27, DX100</b>&nbsp;&nbsp;&nbsp;&nbsp; Should work, but untested.
+<li><b>TX81Z</b>&nbsp;&nbsp;&nbsp;&nbsp; Works.
+<li><b>DX11</b>&nbsp;&nbsp;&nbsp;&nbsp; Likely will not quite work yet, but should be very easy to get to work if you contact me.
+<li><b>TQ5</b>&nbsp;&nbsp;&nbsp;&nbsp; Works.
+<li><b>YS100, YS200, B200</b>&nbsp;&nbsp;&nbsp;&nbsp; Should work, but untested.
+<li><b>WT11, V50, DS500</b>&nbsp;&nbsp;&nbsp;&nbsp; Unknown.
+</ul>
 
 <p><b>Communicating with Edisyn</b> Set your synthesizer's receive and transmit channel to the same thing (perhaps Channel 1).  Set the program change to be <b>Com</b> (Common).  Make sure that Sysex reception and transmission are turned <b>on</b> and that memory protect is <b>off</b>.
 
@@ -16,18 +27,29 @@
 
 <p><b>About the Menu</b> If you mutate or recombine patches (using randomize, merge, hill-climb, or nudge) it may result in unfortunate operator frequency results. The Restrict Mutated Frequency Ratios... menu lets you restrict mutation or recombination of operator frequecies so that they only result in integer values or only to coarse-tune settings (either way, no fine tune).  I suggest integers.  I strongly suggest you also edit the mutation parameters to remove Fixed Frequency, Detune, and Frequency Ratio Fine from every operator, and also Transpose from the global settings.
 
+<p><b>Selecting a Patch Bank and Number</b>  Different 4-Op synths have different organizations of memory, and so differ in the banks and patch numbers you can access.  Specifically:
+
+<ul>
+<li> <b>DX21</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank, 32 patches, plus 128 voice ROM memory.  The ROM cannot be accessed without loading it into internal memory, erasing an existing internal patch (or all of them), so I have elected not to do that automatically.  You will have to manually load a ROM patch into internal in order for Edisyn to access it.
+<li> <b>DX27, DX100</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + 4 "banks" (A B C D), 24 patches each.  The "banks" are just links to either internal patches or to a set of 192 presets in ROM.  Edisyn can't directly access a ROM: you have to manually set up a patch in a "bank" which points to it. 
+<li> <b>DX11, TX81Z</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + 4 ROM preset banks, 32 patches each.
+<li> <b>TQ5, YS100, YS200, B200</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + preset bank + card bank, 100 patches each.
+<li> <b>WT11, V50, DS500</b>&nbsp;&nbsp;&nbsp;&nbsp;Unknown.
+</ul>
 
 <p><b>Gotchas</b>
 
 <ul>
 <li>
-Most 4-op synthesizers have no way to write patches from sysex: you will have to send the current patch from Edisyn, then manually save it to your desired patch location on the synthesizer itself.
+Most 4-op synthesizers have no way to write patches from sysex: you will have to send to the current patch from Edisyn, then manually save it to your desired patch location on the synthesizer itself.
 
-<p><li>The 4-op family is very unusual in that patches aren't single sysex commands, but a sequence of them (so-called VCED, ACED, ACED2, and EFEDS sysex commands).  Thus when you save a patch to a file in Edisyn, you'll actually be saving <b>multiple</b> sysex commands concatenated together.  You should be aware of this in case you try sending this patch later from some librarian software or editor (it shouldn't be a problem).  Similarly, if another editor has saved multiple single patches (rather than a bank (or VMEM) patch) to a single file, because they come in pairs, Edisyn at present cannot read any more than the first one.
+<p><li>The 4-op family is very unusual in that patches aren't expressed with single sysex commands, but a sequence of them (so-called VCED, ACED, ACED2, and EFEDS sysex commands).  Thus when you save a patch to a file in Edisyn, you'll actually be saving <b>multiple</b> sysex commands concatenated together.  You should be aware of this in case you try sending this patch later from some librarian software or editor (it shouldn't be a problem).  
+
+<p>Additionally, if another editor has saved to a single file multiple single patches broken out as these sequences, Edisyn cannot read any more than the first one.  Thankfully this is unusual; normally groups of patches are saved to a filein bank (or VMEM) format).  Edisyn can read files with multiple VMEM patches.
 
 <p><li>On the TX81Z and DX11 (but not other 4-op synths) changing patches is weird.  I think I have a method which should work for all of them, but if it strange things happen, let me know.
 
-<p><li>On changing patches, the TX81Z will read "MIDI Buffer Full" and not change its display even if the patch has changed.  Press almost any button and it'll reset the display.
+<p><li>When changing patches, the TX81Z will read "MIDI Buffer Full" and not change its display even if the patch has changed.  Press almost any button and it'll reset the display.
 
 </ul>
 
@@ -40,6 +62,7 @@ Most 4-op synthesizers have no way to write patches from sysex: you will have to
 <td><b>Sean Luke</b>
 <tr>
 <td align=right>Date&nbsp;&nbsp;&nbsp;
-<td>September 2017
+<td>TX81Z Version: September 2017
+<br>4-Op Version: December 2019
 </table>
 

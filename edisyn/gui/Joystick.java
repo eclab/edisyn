@@ -20,8 +20,8 @@ public class Joystick extends JComponent
     public int position = 0;
     boolean pressed = false;
     boolean snap = false;
-    String[] parameter = new String[4];
-    int[] lastVal = new int[4];
+    //String[] parameter = new String[4];
+    //int[] lastVal = new int[4];
     public Synth synth;    
     public Color[] colors = new Color[0];
     boolean drawsUnpressedCursor = true;
@@ -33,8 +33,8 @@ public class Joystick extends JComponent
     public int getPosition() { return position; }
     public void setSnap(boolean val) { snap = val; }
     public boolean getSnap() { return snap; }
-    public void setParameter(String param, int index) { parameter[index] = param; lastVal[index] = -1;}
-    public String getParameter(int index) { return parameter[index]; }
+    //public void setParameter(String param, int index) { parameter[index] = param; lastVal[index] = -1;}
+    //public String getParameter(int index) { return parameter[index]; }
     public boolean getDrawsUnpressedCursor() { return drawsUnpressedCursor; }
     public void setDrawsUnpressedCursor(boolean val) { drawsUnpressedCursor = val; }
     

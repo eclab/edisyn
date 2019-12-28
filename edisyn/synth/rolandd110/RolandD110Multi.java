@@ -110,6 +110,7 @@ public class RolandD110Multi extends Synth
         JFrame frame = super.sprout();
         // It doesn't make sense to send to current patch
         receiveCurrent.setEnabled(false);
+        transmitTo.setEnabled(false);
         return frame;
         }         
 
@@ -118,7 +119,9 @@ public class RolandD110Multi extends Synth
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
-        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+        int original = model.get("number");
+                
+        JTextField number = new JTextField("" + ((original / 8 + 1) * 10 + (original % 8 + 1)), 3);
 
         while(true)
             {
@@ -132,16 +135,17 @@ public class RolandD110Multi extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1...64");
+                showSimpleError(title, "The Patch Number must be an integer 11...88.\nDigits 9 and 0 are not permitted.");
                 continue;
                 }
-            if (n < 1 || n > 64)
+            if (n < 1 || n > 88 || (n % 10 == 9) || (n % 10 == 0))
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1...64");
+                showSimpleError(title, "The Patch Number must be an integer 11...88.\nDigits 9 and 0 are not permitted.");
                 continue;
                 }
-                
-            n--;
+            
+            n = ((n / 10) - 1) * 8 + (n % 10 - 1);
+            
             change.set("number", n);
             return true;
             }
@@ -827,7 +831,6 @@ public class RolandD110Multi extends Synth
                 if (allCommonParameters[i].equals("-")) continue;
                 if (allCommonParameters[i].equals("rhythmoutputlevel")) continue;       // this is done at the end
                 buf1[10 + i + 8 - 1] = (byte)model.get(allCommonParameters[i]);
-                System.err.println("" + String.format("%02X", 10 + i + 8 - 1) + " " + allCommonParameters[i]);  // skipped the patchname, so -1
                 }
                                 
             for(int p = 1; p <= 8; p++)
@@ -836,12 +839,9 @@ public class RolandD110Multi extends Synth
                     {
                     if (allPartParameters[i] == "-") continue;
                     buf1[0x1F + 8 + (p - 1) * 0x0C + i] = (byte)model.get("p" + p + allPartParameters[i]);
-                    System.err.println("" + String.format("%02X", 0x1F + 8 + (p - 1) * 0x0C + i) 
-                        + " " + "p" + p + allPartParameters[i]);
                     }
                 }
             buf1[buf1.length - 3] = (byte)model.get("rhythmoutputlevel");
-            System.err.println("" + String.format("%02X", buf1.length - 3) + " " + "rhythmoutputlevel");  // skipped the patchname, so -1
             buf1[buf1.length - 2] = produceChecksum(buf1, 5, buf1.length - 2);
             buf1[buf1.length - 1] = (byte)0xF7;
             return new Object[] { buf1 };
@@ -952,7 +952,8 @@ public class RolandD110Multi extends Synth
         // yet and this method will bomb badly.  So we return null in this case.
         if (!model.exists("number")) return null;
         
-        return (model.get("number") + 1 < 10 ? "0" : "") + ((model.get("number") + 1));
+        int original = model.get("number");
+        return ("" + ((original / 8 + 1) * 10 + (original % 8 + 1)));
         }
 
     /** Roland only allows IDs from 17...32.  Don't ask. */

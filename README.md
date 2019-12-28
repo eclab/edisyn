@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 20)
+Synthesizer Patch Editor (Version 21)
  
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -37,6 +37,7 @@ Edisyn presently supports:
 * Oberheim Matrix 1000
 * PreenFM2
 * Red Sound DarkStar and DarkStar XP2 (Single and Per-Part)
+* Roland D-110 (Tone and Multi Modes)
 * Roland JV-80 and JV-880 (Single and Multi Modes)
 * Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)

@@ -8,10 +8,13 @@
 
 <p><b>Communicating with Edisyn</b>Set the synth ID to the same as your synthesizer (17 is customary).  Make certain that Memory Protect is OFF and (this is very important) that Overflow is OFF.  Earlier ROMs have a bug which causes sysex dumps to fail if Overflow is not OFF.  Note that you may have to Memory Protect to OFF every time you turn on the synthesizer.  
 
+<p><b>Real-Time Parameter Bugs</b> I have received a report that sending real-time parameter changes can crash the D-110.  The configuration was a 1.06 ROM, Windows, and a Midiplus Tbox 2X2 adapter.  I have had no problems at all: I am using a 1.10 ROM, MacOS, Tascam 2x2 adapter.  I suspect the issue is the older ROM. If you experience this problem, you can uncheck the <b>Sends Real Time Changes</b> menu.  Please report any problems you have experienced.
+
 <p><b>Gotchas</b>
 
 <ul>
 <li>The Roland-D110 is the only synthesizer I am aware of which doesn't have the concept of a single-mode patch: it <i>only</i> has multimode patches, which it calls simply "Patches".  I have opted to call this <b>Roland D-110 [Multi]</b> rather than <b>Roland D-110 [Patch]</b> to stay consistent with other Edisyn synthesizers.
+<li>If you've used the D-110 long enough to figure out its bizarre structure, you probably know by now that the notion of a Timbre is completely useless.  It's a holdover from the Roland D-10 structure, where it made more sense.  Although you can save and load Timbres to RAM, Patches do not actually store references to Timbres: they store references to Tones.  Thus this patch editor provides no facilities for Timbres at all, just Patch editing.
 <li>You will find that if you grab lots of Partials for a given Part in the Partial Reserve section, others will be reduced: you can only have 32 partials total.
 <li>You can specify one of four Tone Groups (banks) for a given Part: Preset A, Preset B, Internal/Card, and Rhythm.  Only in Internal/Card can you load the resulting Tone.  For the others, you cannot load the tone (to my knowledge); but I have elected to display the name of the Tone for you, under the Tone Number dial.  
 <li>The D-110 by default has its parts starting at MIDI channel 2.  I have elected instead to change this to MIDI Channel 1, as is the standard in the rest of the normal, non-insane synthesizer world.

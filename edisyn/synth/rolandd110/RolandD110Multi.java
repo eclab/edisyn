@@ -682,8 +682,8 @@ public class RolandD110Multi extends Synth
             data[3] = (byte)0x16;
             data[4] = (byte)0x12;
             System.arraycopy(checkdata, 0, data, 5, checkdata.length);
-            data[19] = checksum;
-            data[20] = (byte)0xF7;
+            data[18] = checksum;
+            data[19] = (byte)0xF7;
                     
             return data;
             }
@@ -915,6 +915,8 @@ public class RolandD110Multi extends Synth
     public int getPauseAfterChangePatch() { return 100; }
 
     public int getPauseAfterSendAllParameters() { return 100; } 
+
+	public int getPauseAfterSendOneParameter() { return 25; }	// In the 1.07 firmware notes it says "at least 20ms" (http://llamamusic.com/d110/ROM_IC_Bug_Fixes.html).  In my firmware (1.10) the D-110 can handle changes thrown at it full blast, but earlier firmware (1.07) cannot.
  
     public void changePatch(Model tempModel)
         {

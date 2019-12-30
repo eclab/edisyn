@@ -170,7 +170,7 @@ public class Favorites
         int result = Synth.showMultiOption(null,
             new String[] { "Recent", "All Synths" },
             new JComboBox[] { combo1, combo2 },
-            new String[] { "Okay", "Quit", "Disconnected" },
+            new String[] { "Open", "Quit", "Disconnected" },
             0, 
             "Edisyn",
             "Select a synthesizer to edit");

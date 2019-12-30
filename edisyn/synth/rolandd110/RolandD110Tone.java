@@ -359,29 +359,36 @@ public class RolandD110Tone extends Synth
         comp = new LabelledDial("Structure 1-2", this, "structure1and2", color, 0, 12, -1);
         model.removeMetricMinMax("structure1and2");  // it's a set
         hbox.add(comp);
+        
+        hbox.add(Strut.makeHorizontalStrut(8));
 
         comp = new IconDisplay(null, STRUCTURE_ICONS, this, "structure1and2");
         hbox.add(comp);
+
+        hbox.add(Strut.makeHorizontalStrut(8));
 
         comp = new LabelledDial("Structure 3-4", this, "structure3and4", color, 0, 12, -1);
         model.removeMetricMinMax("structure3and4");  // it's a set
         hbox.add(comp);
 
+        hbox.add(Strut.makeHorizontalStrut(8));
+
         comp = new IconDisplay(null, STRUCTURE_ICONS, this, "structure3and4");
         hbox.add(comp);
         vbox.add(hbox);
+        vbox.add(Strut.makeVerticalStrut(8));
 
         HBox hbox2 = new HBox();
         comp = new CheckBox("Env No Sustain", this, "envmode");
         ((CheckBox)comp).addToWidth(2);
         hbox2.add(comp);
-        comp = new CheckBox("Mute 1", this, "p1mute");
+        comp = new CheckBox("Mute 1", this, "p1mute", true);
         hbox2.add(comp);
-        comp = new CheckBox("Mute 2", this, "p2mute");
+        comp = new CheckBox("Mute 2", this, "p2mute", true);
         hbox2.add(comp);
-        comp = new CheckBox("Mute 3", this, "p3mute");
+        comp = new CheckBox("Mute 3", this, "p3mute", true);
         hbox2.add(comp);
-        comp = new CheckBox("Mute 4", this, "p4mute");
+        comp = new CheckBox("Mute 4", this, "p4mute", true);
         hbox2.add(comp);
 
         vbox.add(hbox2);
@@ -1045,7 +1052,9 @@ public class RolandD110Tone extends Synth
                 }
             else
                 {
-                CC = (byte)(CC + ((Integer)(allPartialParametersToIndex.get(key.substring(2)))).intValue());  // get rid of the "p1"
+                int offset = CC + ((Integer)(allPartialParametersToIndex.get(key.substring(2)))).intValue();  // get rid of the "p1"
+            	BB += (byte)(offset / 128);
+                CC = (byte)(offset % 128);
                 }
             }
         else if (key.startsWith("p2"))
@@ -1057,7 +1066,9 @@ public class RolandD110Tone extends Synth
                 }
             else
                 {
-                CC = (byte)(CC + ((Integer)(allPartialParametersToIndex.get(key.substring(2)))).intValue());  // get rid of the "p1"
+                int offset = CC + ((Integer)(allPartialParametersToIndex.get(key.substring(2)))).intValue();  // get rid of the "p1"
+            	BB += (byte)(offset / 128);
+                CC = (byte)(offset % 128);
                 }
             }
         else if (key.startsWith("p3"))
@@ -1070,7 +1081,9 @@ public class RolandD110Tone extends Synth
                 }
             else
                 {
-                CC = (byte)(CC + ((Integer)(allPartialParametersToIndex.get(key.substring(2)))).intValue());  // get rid of the "p1"
+                int offset = CC + ((Integer)(allPartialParametersToIndex.get(key.substring(2)))).intValue();  // get rid of the "p1"
+            	BB += (byte)(offset / 128);
+                CC = (byte)(offset % 128);
                 }
             }
         else if (key.startsWith("p4"))
@@ -1083,7 +1096,9 @@ public class RolandD110Tone extends Synth
                 }
             else
                 {
-                CC = (byte)(CC + ((Integer)(allPartialParametersToIndex.get(key.substring(2)))).intValue());  // get rid of the "p1"
+                int offset = CC + ((Integer)(allPartialParametersToIndex.get(key.substring(2)))).intValue();  // get rid of the "p1"
+            	BB += (byte)(offset / 128);
+                CC = (byte)(offset % 128);
                 }
             }
         else                // Common
@@ -1348,6 +1363,8 @@ public class RolandD110Tone extends Synth
 
     public int getPauseAfterSendAllParameters() { return 100; } 
  
+	public int getPauseAfterSendOneParameter() { return 25; }	// In the 1.07 firmware notes it says "at least 20ms" (http://llamamusic.com/d110/ROM_IC_Bug_Fixes.html).  In my firmware (1.10) the D-110 can handle changes thrown at it full blast, but earlier firmware (1.07) cannot.
+	
     public Model getNextPatchLocation(Model model)
         {
         int number = model.get("number");

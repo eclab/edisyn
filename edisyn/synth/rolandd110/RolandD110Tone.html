@@ -8,6 +8,8 @@
 
 <p><b>Communicating with Edisyn</b> When you set up MIDI in the patch editor, you can specify the MIDI channel and the Synth ID.  Set the synth ID to the same as your synthesizer (17 is customary).  Set the Send Channel to correspond to the channel of the Part/Timbre you want to test your Tone in.  I suggest Channel 1, and setting up Part 1 to use Channel 1 (see "About the D110 Menu" below).  Make certain that Memory Protect is OFF and (this is very important) that Overflow is OFF.  Earlier ROMs have a bug which causes sysex dumps to fail if Overflow is not OFF.  Note that you may have to Memory Protect to OFF every time you turn on the synthesizer.  
 
+<p><b>Real-Time Parameter Bugs</b> I have received a report that sending real-time parameter changes can crash the D-110.  The configuration was a 1.06 ROM, Windows, and a Midiplus Tbox 2X2 adapter.  I have had no problems at all: I am using a 1.10 ROM, MacOS, Tascam 2x2 adapter.  I suspect the issue is the older ROM. If you experience this problem, you can uncheck the <b>Sends Real Time Changes</b> menu.  Please report any problems you have experienced.
+
 <p><b>About the D-110 Menu</b> A Tone roughly corresponds to a single playable voice on the D-110, but you can't just upload it and try it out.  This is because, insanely, the primary "patch" of the D-110 is a multi-mode patch.  There is no notion of a single-mode patch.  Thus in order to play a Tone, you have to set up a multi-mode patch which refers to the tone in one of its parts (or "timbres").  To make this easy, Edisyn has a menu option called <b>Set up Test Patch for Timbre 1</b>, which does exactly what it says on the tin: it loads a test multimode patch which has Timbre 1 pointing to your Tone.  All other Timbres are turned off.  Your Tone is then loaded for good measure.
 
 <p>When you <b>Send to Current Patch</b>, which sends the Tone to temporary memory on the D-110, exactly which of the 8 Timbres does it send it to?  Similarly, which Timbre's Tone is loaded when you <b>Request Current Patch</b>?  You can specify this with one of the menus <b>Current Patch is Timbre <i>N</i></b>.  By default this is 1 (which would be the usual case).
@@ -15,7 +17,7 @@
 <p><b>Gotchas</b>
 
 <ul>
-<li>If you've used the D-110 long enough to figure out its bizarre structure, you probably know by now that the notion of a Timbre is completely useless.  Although you can save and load Timbres to RAM, Patches do not actually store references to Timbres: they store references to Tones.  Thus this patch editor provides no facilities for Timbres at all, just Tone editing.
+<li>If you've used the D-110 long enough to figure out its bizarre structure, you probably know by now that the notion of a Timbre is completely useless.  It's a holdover from the Roland D-10 structure, where it made more sense.  Although you can save and load Timbres to RAM, Patches do not actually store references to Timbres: they store references to Tones.  Thus this patch editor provides no facilities for Timbres at all, just Tone editing.
 </ul>
 
 <p><table border=0 cellpadding=0 cellspacing=5>

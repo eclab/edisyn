@@ -2301,9 +2301,9 @@ public class Yamaha4Op extends Synth
                 table[7] = lo;
                 table[8] = (byte)0xF7;
                 tryToSendSysex(table);
-                                                
-                // Instruct the TX81Z to press its "PLAY/PERFORM" button.  Else maybe the "SINGLE" button for the DX11?  Dunno
-                byte PP = getSynthType() == TYPE_TX81Z ? (byte) 68 : (byte) 118;
+
+                // Instruct the TX81Z to press its "PLAY/PERFORM" button.  Else maybe the "PERFORM" button for the DX11?  Or "SINGLE"?  Dunno
+                byte PP = getSynthType() == TYPE_TX81Z ? (byte) 68 : (byte) 119;		// 119 is "PERFORM", 118 is "SINGLE"
                 byte VV = (byte) 0;
                 byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getChannelOut()), REMOTE_SWITCH_GROUP, PP, (byte)0x7F, (byte)0xF7 };
                 tryToSendSysex(data);

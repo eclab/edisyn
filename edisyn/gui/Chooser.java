@@ -205,14 +205,17 @@ public class Chooser extends NumericalComponent
             {
             public void itemStateChanged(ItemEvent e)
                 {
-                // This is due to a Java bug.
-                // Unlike other widgets (like JCheckBox), JComboBox calls
-                // the actionlistener even when you programmatically change
-                // its value.  OOPS.
-                if (callActionListener)
-                    {
-                    setState(vals[combo.getSelectedIndex()]);
-                    }
+                if (e.getStateChange() == ItemEvent.SELECTED)  // we're not interested in deselection events
+                	{
+					// This is due to a Java bug.
+					// Unlike other widgets (like JCheckBox), JComboBox calls
+					// the actionlistener even when you programmatically change
+					// its value.  OOPS.
+					if (callActionListener)
+						{
+						setState(vals[combo.getSelectedIndex()]);
+						}
+					}
                 }
             });
         }

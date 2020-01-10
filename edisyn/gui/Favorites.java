@@ -131,7 +131,7 @@ public class Favorites
             {
             public void itemStateChanged(ItemEvent event) 
                 {
-                if (event.getStateChange() == ItemEvent.SELECTED) 
+                if (event.getStateChange() == ItemEvent.SELECTED) 	// not interested in deselection events
                     {
                     if (combo1.getSelectedIndex() == sortedTop.size())
                         {

@@ -219,6 +219,26 @@ public class RolandD110Tone extends Synth
                 }
             });
         menu.add(setupTestPatchMenu);
+        JMenuItem writeMultiPatchesMenu = new JMenuItem("Write Multi Patches, One per Tone");
+        writeMultiPatchesMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+				disableMenuBar();
+				JComboBox combo = new JComboBox(RolandD110Multi.TONE_GROUP);
+				combo.setSelectedIndex(2);  // Internal/Card
+				boolean result = Synth.showMultiOption(RolandD110Tone.this, 
+					new String[] { "Tone Group" },  
+					new JComponent[] { combo }, 
+					"Write Multi Patches", 
+					"<html>Select the Tone Group to write Multi Patches for.<br><br>" + 
+					"<font size=-2><font color=red><b>Warning:</b></font> continuing will overwrite all Multi Patches on your D-110.<br>" + 
+					"This action will freeze Edisyn for about 13 seconds.  Hang tight.</font></html>");
+				enableMenuBar();
+				if (result) writeMultiPatches(combo.getSelectedIndex());
+                }
+            });
+        menu.add(writeMultiPatchesMenu);
         menu.addSeparator();
         ButtonGroup g = new ButtonGroup();
         for(int i = 0; i < 8; i++)
@@ -272,7 +292,51 @@ public class RolandD110Tone extends Synth
             }
         }
     
+    // Write 64 Multi patches, each of which points to the corresponding tone
+    // in its timbre 1.
+        
+    public void writeMultiPatches(int bank)
+        {
+        if (tuple == null)
+            if (!setupMIDI(tuple))
+                return;
+
+        if (tuple != null)
+            {
+            final RolandD110Multi synth = new RolandD110Multi();
+            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
             
+            // we need to set me to be the active synth because the little confirmation window that
+            // pops up prior to this causes me to NOT be the active synth, grrr...
+            synth.setActiveSynth(true);
+            if (synth.tuple != null)
+                {
+                for(int p = 0; p < 64; p++)
+                	{
+					synth.loadDefaults();
+				
+					for(int i = 1; i <= 8; i++)
+						{
+						synth.getModel().set("p" + i + "midichannel", RolandD110Multi.MIDI_CHANNEL_OFF);
+						synth.getModel().set("p" + i + "partialreserve", 0);
+						synth.getModel().set("p" + i + "outputlevel", 100);
+						}
+						
+					synth.getModel().set("p1midichannel", getChannelOut());
+					synth.getModel().set("p1partialreserve", 32);
+					synth.getModel().set("p1tonegroup", bank);
+					synth.getModel().set("p1tonenumber", p);
+					synth.getModel().set("patchname", "Patch " + p);
+					synth.getModel().set("number", p);
+				
+					synth.writeAllParameters(synth.getModel());
+					}
+				synth.getModel().set("number", model.get("number"));
+				synth.performChangePatch(synth.getModel());
+                }
+            }
+        }
+               
     public String getDefaultResourceFileName() { return "RolandD110Tone.init"; }
     public String getHTMLResourceFileName() { return "RolandD110Tone.html"; }
 

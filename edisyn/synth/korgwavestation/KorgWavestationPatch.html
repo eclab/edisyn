@@ -5,11 +5,11 @@
 
 <p>This editor is designed work with the <b>Korg Wavestation SR</b>.  It will <b>not</b> work with any other Wavestation models (the original Wavestation, the Wavestation EX, or the Wavestation A/D).
 
-<p><b>Bank Sysex</b> This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
+<p><b>Bank Sysex</b><br> This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
 
-<p><b>Communicating with Edisyn</b> Set your SR to receive sysex parameters, and also to receive program change and bank select commands, as well as All Notes Off.  Turn off memory protect (including for your card if you need to).  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.  Remember that the Wavestation plays performances, not patches: so it may play things in addition to the patch you're playing.  To prevent this, read "The Wavestation Menu" below.
+<p><b>Communicating with Edisyn</b><br> Set your SR to receive sysex parameters, and also to receive program change and bank select commands, as well as All Notes Off.  Turn off memory protect (including for your card if you need to).  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.  Remember that the Wavestation plays performances, not patches: so it may play things in addition to the patch you're playing.  To prevent this, read "The Wavestation Menu" below.
 
-<p><b>The "Real-Time Joystick" Check Box</b> This checkbox, located on the Global page, controls the behavior of the Joystick.  If unchecked then the Joystick allows you to change the positions of the five mixer envelope values.  If checked, then the Joystick controls the SR's real-time Joystick CC messages.  That is, you can manipulate the SR in real-time as if it had a Joystick like other Wavestations do.
+<p><b>The "Real-Time Joystick" Check Box</b><br> This checkbox, located on the Global page, controls the behavior of the Joystick.  If unchecked then the Joystick allows you to change the positions of the five mixer envelope values.  If checked, then the Joystick controls the SR's real-time Joystick CC messages.  That is, you can manipulate the SR in real-time as if it had a Joystick like other Wavestations do.
 
 <p><b>Hints</b>
 <ul>
@@ -42,8 +42,8 @@
 <p><li>Updating individual parameters is a little pokey.  This is because Edisyn must insert a significant delay between successive parameter updates or they'll get dropped by the SR.
 </ul>
 
-<p><b>Notes</b>
-<p>For the time being, I have elected to not have the patch editor update itself in response to manual parameter changes made directly on the synth.  The SR MIDI format is just too complex a beast to make this easy.
+<p><b>Notes</b><br>
+For the time being, I have elected to not have the patch editor update itself in response to manual parameter changes made directly on the synth.  The SR MIDI format is just too complex a beast to make this easy.
 
 
 

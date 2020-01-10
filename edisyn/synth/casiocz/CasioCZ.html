@@ -7,10 +7,14 @@
 
 <p>This editor will work with the <b>Casio CZ-1, CZ-101, CZ-1000, CZ-3000, and CZ-5000</b>.
 
-<p><b>Communicating with Edisyn</b> 
+<p><b><font color=red>Windows/Linux Warning</font></b><br>
+This editor will not work properly under Linux or Windows: it will crash Java.  The reason is as follows.  The Casio has highly nonstandard sysex messages -- instead of sending a whole message, you have to
+send them in fragments.  To do this, Edisyn has a special kind of MIDIMessage called DividedSysex which will send fragments at a time.  However these fragments appear to tickle a low-level bug in Java's MIDI handling, which causes it to crash in a very bad way (not freeing a pointer).  As such, you cannot use this editor except with Macs.  I'm sorry.
+
+<p><b>Communicating with Edisyn</b><br> 
 <p>Set the MIDI channel to the same as being used in Edisyn, and enable Program Change.  If you're planning on writing to the synthesizer, turn off write protect.  On the CZ-1, you must also enable System Exclusive Tone Data and make sure that MIDI is turned on.
 
-<p><b>CZ-1 Versus the Others</b>
+<p><b>CZ-1 Versus the Others</b><br>
 <P>Because it has more features, the CZ-1 different MIDI than the other synths, though it can receive patches in their format.  To send or write to a CZ-1, click the "CZ-1" button.  To send or write to a CZ-101/1000/3000/5000, turn off that button.
 
 <p><b>Features</b>

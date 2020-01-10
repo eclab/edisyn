@@ -17,24 +17,24 @@
 <li><b>WT11, V50, DS500</b>&nbsp;&nbsp;&nbsp;&nbsp; Unknown.
 </ul>
 
-<p><b>Communicating with Edisyn</b> Set your synthesizer's receive and transmit channel to the same thing (perhaps Channel 1).  Set the program change to be <b>Com</b> (Common).  Make sure that Sysex reception and transmission are turned <b>on</b> and that memory protect is <b>off</b>.
+<p><b>Communicating with Edisyn</b><br> Set your synthesizer's receive and transmit channel to the same thing (perhaps Channel 1).  Set the program change to be <b>Com</b> (Common).  Make sure that Sysex reception and transmission are turned <b>on</b> and that memory protect is <b>off</b>.
 
-<p><b>Setting the Synthesizer Type</b>.  The 4-Op synthesizers differ from one another in how their memory is organized (banks, patches, etc.), and how they respond to change-patch requests.  You have to let Edisyn know what kind of synthesizer you're using or else it'll make the wrong kind of requests.
+<p><b>Setting the Synthesizer Type</b><br>  The 4-Op synthesizers differ from one another in how their memory is organized (banks, patches, etc.), and how they respond to change-patch requests.  You have to let Edisyn know what kind of synthesizer you're using or else it'll make the wrong kind of requests.
 
-<p><b>Per-Synthesizer Parameters</b>.  Some 4-Op synthesizers have parameters and options that others do not.  Various parameters in this patch editor are labeled to indicate this.  You may see: <b>21</b> for the DX21, <b>27</b> for the DX27, <b>100</b> for the DX100, <b>11</b> for the DX11, <b>TX</b> for the TX81Z, and the special symbol <b>&gt;</b> which indicates later synthesizers, notably the TQ5, YS100, YS200, and B200.
+<p><b>Per-Synthesizer Parameters</b><br>  Some 4-Op synthesizers have parameters and options that others do not.  Various parameters in this patch editor are labeled to indicate this.  You may see: <b>21</b> for the DX21, <b>27</b> for the DX27, <b>100</b> for the DX100, <b>11</b> for the DX11, <b>TX</b> for the TX81Z, and the special symbol <b>&gt;</b> which indicates later synthesizers, notably the TQ5, YS100, YS200, and B200.
 
-<p><b>Bank Sysex</b> This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
+<p><b>Bank Sysex</b><br> This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
 
-<p><b>About the Menu</b> If you mutate or recombine patches (using randomize, merge, hill-climb, or nudge) it may result in unfortunate operator frequency results. The Restrict Mutated Frequency Ratios... menu lets you restrict mutation or recombination of operator frequecies so that they only result in integer values or only to coarse-tune settings (either way, no fine tune).  I suggest integers.  I strongly suggest you also edit the mutation parameters to remove Fixed Frequency, Detune, and Frequency Ratio Fine from every operator, and also Transpose from the global settings.
+<p><b>About the Menu</b><br> If you mutate or recombine patches (using randomize, merge, hill-climb, or nudge) it may result in unfortunate operator frequency results. The Restrict Mutated Frequency Ratios... menu lets you restrict mutation or recombination of operator frequecies so that they only result in integer values or only to coarse-tune settings (either way, no fine tune).  I suggest integers.  I strongly suggest you also edit the mutation parameters to remove Fixed Frequency, Detune, and Frequency Ratio Fine from every operator, and also Transpose from the global settings.
 
-<p><b>Selecting a Patch Bank and Number</b>  Different 4-Op synths have different organizations of memory, and so differ in the banks and patch numbers you can access.  Specifically:
+<p><b>Selecting a Patch Bank and Number</b><br>  Different 4-Op synths have different organizations of memory, and so differ in the banks and patch numbers you can access.  Specifically:
 
 <ul>
 <li> <b>DX21</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank, 32 patches, plus 128 voice ROM memory.  The ROM cannot be accessed without loading it into internal memory, erasing an existing internal patch (or all of them), so I have elected not to do that automatically.  You will have to manually load a ROM patch into internal in order for Edisyn to access it.
-<li> <b>DX27, DX100</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + 4 "banks" (A B C D), 24 patches each.  The "banks" are just links to either internal patches or to a set of 192 presets in ROM.  Edisyn can't directly access a ROM: you have to manually set up a patch in a "bank" which points to it. 
-<li> <b>DX11, TX81Z</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + 4 ROM preset banks, 32 patches each.
-<li> <b>TQ5, YS100, YS200, B200</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + preset bank + card bank, 100 patches each.
-<li> <b>WT11, V50, DS500</b>&nbsp;&nbsp;&nbsp;&nbsp;Unknown.
+<p><li> <b>DX27, DX100</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + 4 "banks" (A B C D), 24 patches each.  The "banks" are just links to either internal patches or to a set of 192 presets in ROM.  Edisyn can't directly access a ROM patch: you'd have to manually set up a ROM patch in a "bank" which points to it. 
+<p><li> <b>DX11, TX81Z</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + 4 ROM preset banks, 32 patches each.
+<p><li> <b>TQ5, YS100, YS200, B200</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + preset bank + card bank, 100 patches each.
+<p><li> <b>WT11, V50, DS500</b>&nbsp;&nbsp;&nbsp;&nbsp;Unknown.
 </ul>
 
 <p><b>Gotchas</b>
@@ -45,7 +45,7 @@ Most 4-op synthesizers have no way to write patches from sysex: you will have to
 
 <p><li>The 4-op family is very unusual in that patches aren't expressed with single sysex commands, but a sequence of them (so-called VCED, ACED, ACED2, and EFEDS sysex commands).  Thus when you save a patch to a file in Edisyn, you'll actually be saving <b>multiple</b> sysex commands concatenated together.  You should be aware of this in case you try sending this patch later from some librarian software or editor (it shouldn't be a problem).  
 
-<p>Additionally, if another editor has saved to a single file multiple single patches broken out as these sequences, Edisyn cannot read any more than the first one.  Thankfully this is unusual; normally groups of patches are saved to a filein bank (or VMEM) format).  Edisyn can read files with multiple VMEM patches.
+<br><br>Additionally, if another editor has saved to a single file multiple single patches broken out as these sequences, Edisyn cannot read any more than the first one.  Thankfully this is unusual; normally groups of patches are saved to a filein bank (or VMEM) format).  Edisyn can read files with multiple VMEM patches.
 
 <p><li>On the TX81Z and DX11 (but not other 4-op synths) changing patches is weird.  I think I have a method which should work for all of them, but if it strange things happen, let me know.
 

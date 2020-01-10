@@ -804,4 +804,10 @@ public class KawaiK4Multi extends Synth
         
         return BANKS[model.get("bank")] + (model.get("number") + 1 < 10 ? "0" : "") + ((model.get("number") + 1));
         }
+
+    public byte[] adjustBankSysexForEmit(byte[] data, Model model)
+    	{ 
+        data[2] = (byte) getChannelOut();
+    	return data; 
+    	}
     }

@@ -2423,4 +2423,9 @@ public class Yamaha4Op extends Synth
         }
         
 
+    public byte[] adjustBankSysexForEmit(byte[] data, Model model)
+    	{ 
+        data[2] = (byte) getChannelOut();
+    	return data; 
+    	}
     }

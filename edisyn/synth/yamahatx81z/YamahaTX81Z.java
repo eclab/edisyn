@@ -1769,5 +1769,10 @@ public class YamahaTX81Z extends Synth
         return BANKS[model.get("bank")] + (number > 9 ? "" : "0") + number;
         }
         
+    public byte[] adjustBankSysexForEmit(byte[] data, Model model)
+    	{ 
+        data[2] = (byte) getChannelOut();
+    	return data; 
+    	}
 
     }

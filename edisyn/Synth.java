@@ -465,7 +465,7 @@ public abstract class Synth extends JComponent implements Updatable
     public static Window lastActiveWindow = null;
 
     /** Temporarily sets me to be the active synth. */
-    protected void setActiveSynth(boolean val) { activeSynth = val; }
+    public void setActiveSynth(boolean val) { activeSynth = val; }
     boolean activeSynth = false;
         
     public boolean amActiveSynth()
@@ -2103,7 +2103,6 @@ public abstract class Synth extends JComponent implements Updatable
         return showMultiOption(synth, labels, widgets, new String[] { "Okay", "Cancel" }, 0, title, message) == 0;
         }
            
-    
     /** Returns the synth name to be used in the title bar. */
     public String getTitleBarSynthName() { return getSynthNameLocal(); }
 
@@ -2286,6 +2285,25 @@ public abstract class Synth extends JComponent implements Updatable
         {
         return Prefs.getGlobalPreferences("Data").get(x, null);
         }
+    
+    /** Given a preferences path X for a given synth, checks to see if "true" is stored
+    	there.  If so, returns true.  If not, sets "true" in that location and returns false.
+    	This can be used to do once-only things like this:
+    	<p><tt>
+    	if (!checkAndSet("OnceOnlyExample, getSynthNameLocal()))   <br>
+    	{ showSimpleError("Warning!", "This Warning will only appear once!");  }
+    */
+    public static boolean checkAndSet(String x, String synthName)
+    	{
+    	String val = getLastX(x, synthName, true);
+    	System.err.println(val);
+    	if (val == null || "false".equalsIgnoreCase(val))
+    		{
+    		setLastX("true", x, synthName, true);
+    		return false;
+    		}
+    	return true;
+    	}
 
    
     // sets the last directory used by load, save, or save as

@@ -2014,7 +2014,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (!ExceptionDump.lastThrowableExists())
             {
             System.err.println("WARNING: error with stack trace requested but there's no Throwable");
-            new Throwable().printStackTrace();
+            error.printStackTrace();
             showSimpleError(title, message);
             }
         else
@@ -3467,7 +3467,8 @@ public abstract class Synth extends JComponent implements Updatable
         sendTestNotesTimer.setRepeats(true);
 
         ButtonGroup testNoteGroup = new ButtonGroup();
-        JRadioButtonMenuItem tns[] = new JRadioButtonMenuItem[7];
+        
+        JRadioButtonMenuItem tns[] = new JRadioButtonMenuItem[8];
                 
         JMenu testNoteLength = new JMenu("Test Note Length");
         menu.add(testNoteLength);
@@ -3548,6 +3549,17 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
         testNoteGroup.add(tn);
+        tn = tns[7] = new JRadioButtonMenuItem("16 Seconds");
+        testNoteLength.add(tn);
+        tn.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setTestNoteLength(16000);
+                setLastX("" + getTestNoteLength(), "TestNoteLength", getSynthNameLocal(), false); 
+                }
+            });
+        testNoteGroup.add(tn);
 
         int v = getLastXAsInt("TestNoteLength", getSynthNameLocal(), 500, false);
         switch(v)
@@ -3566,6 +3578,8 @@ public abstract class Synth extends JComponent implements Updatable
                 tns[5].setSelected(true); setTestNoteLength(v); break;
             case 8000:
                 tns[6].setSelected(true); setTestNoteLength(v); break;
+            case 16000:
+                tns[7].setSelected(true); setTestNoteLength(v); break;
             default:
                 tns[2].setSelected(true); setTestNoteLength(500); break;
             }        
@@ -6125,8 +6139,12 @@ public abstract class Synth extends JComponent implements Updatable
     public static final int BANK_SAVED = -2;
     public static final int BANK_UPLOADED = - 3;
         
-    public static int getNumSysexDumpsPerPatch() { return 1; }
-        
+    /** Override this method to modify the given bank sysex data so it can be emitted properly to the synthesizer
+    	specified by the provided model: for example, you might modify the outgoing channel or synthesizer id. 
+    	Many synthesizers (Kawai, Korg, Yamaha notably) just need set <tt>data[2] = (byte)getChannelOut(); </tt>
+    */
+    public byte[] adjustBankSysexForEmit(byte[] data, Model model) { return data; }
+    
     public int showBankSysexOptions(byte[] data, String[] names)
         {
         while(true)
@@ -6183,7 +6201,7 @@ public abstract class Synth extends JComponent implements Updatable
                         if (!setupMIDI())
                             continue;
                         }
-                    data[2] = (byte) getChannelOut();
+                    adjustBankSysexForEmit(data, getModel());
                     boolean send = getSendMIDI();
                     setSendMIDI(true);
                     tryToSendSysex(data);

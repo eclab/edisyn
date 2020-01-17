@@ -33,8 +33,10 @@ edisyn.synth.waldorfblofeld.WaldorfBlofeld
 edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti 
 edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT 
 edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti 
-edisyn.synth.yamahadx7.YamahaDX7 
 edisyn.synth.yamaha4op.Yamaha4Op
 edisyn.synth.yamaha4op.Yamaha4OpMulti
-edisyn.synth.yamahatx81z.YamahaTX81Z 
+edisyn.synth.yamahadx7.YamahaDX7 
+edisyn.synth.yamahatg33.YamahaTG33
+edisyn.synth.yamahatg33.YamahaTG33Multi
+#edisyn.synth.yamahatx81z.YamahaTX81Z 
 #edisyn.synth.yamahatx81z.YamahaTX81ZMulti

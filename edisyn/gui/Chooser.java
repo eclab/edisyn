@@ -198,7 +198,6 @@ public class Chooser extends NumericalComponent
         else
             add(label, BorderLayout.NORTH);
         
-        
         /// Apparent OS X Java bug: sometimes after you programmatically change
         /// the value of a JComboBox, it no longer sends ActionListener events.  :-(   
         combo.addItemListener(new ItemListener()
@@ -214,11 +213,14 @@ public class Chooser extends NumericalComponent
 					if (callActionListener)
 						{
 						setState(vals[combo.getSelectedIndex()]);
+	                	userSelected(key, synth.getModel());
 						}
 					}
                 }
             });
         }
+        
+    public void userSelected(String key, Model model) { }
     
     public boolean isLabelToLeft() { return false; }
     

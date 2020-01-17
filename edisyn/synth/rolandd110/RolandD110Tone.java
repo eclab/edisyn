@@ -224,18 +224,18 @@ public class RolandD110Tone extends Synth
             {
             public void actionPerformed(ActionEvent e)
                 {
-				disableMenuBar();
-				JComboBox combo = new JComboBox(RolandD110Multi.TONE_GROUP);
-				combo.setSelectedIndex(2);  // Internal/Card
-				boolean result = Synth.showMultiOption(RolandD110Tone.this, 
-					new String[] { "Tone Group" },  
-					new JComponent[] { combo }, 
-					"Write Multi Patches", 
-					"<html>Select the Tone Group to write Multi Patches for.<br><br>" + 
-					"<font size=-2><font color=red><b>Warning:</b></font> continuing will overwrite all Multi Patches on your D-110.<br>" + 
-					"This action will freeze Edisyn for about 13 seconds.  Hang tight.</font></html>");
-				enableMenuBar();
-				if (result) writeMultiPatches(combo.getSelectedIndex());
+                disableMenuBar();
+                JComboBox combo = new JComboBox(RolandD110Multi.TONE_GROUP);
+                combo.setSelectedIndex(2);  // Internal/Card
+                boolean result = Synth.showMultiOption(RolandD110Tone.this, 
+                    new String[] { "Tone Group" },  
+                    new JComponent[] { combo }, 
+                    "Write Multi Patches", 
+                    "<html>Select the Tone Group to write Multi Patches for.<br><br>" + 
+                    "<font size=-2><font color=red><b>Warning:</b></font> continuing will overwrite all Multi Patches on your D-110.<br>" + 
+                    "This action will freeze Edisyn for about 13 seconds.  Hang tight.</font></html>");
+                enableMenuBar();
+                if (result) writeMultiPatches(combo.getSelectedIndex());
                 }
             });
         menu.add(writeMultiPatchesMenu);
@@ -312,27 +312,27 @@ public class RolandD110Tone extends Synth
             if (synth.tuple != null)
                 {
                 for(int p = 0; p < 64; p++)
-                	{
-					synth.loadDefaults();
-				
-					for(int i = 1; i <= 8; i++)
-						{
-						synth.getModel().set("p" + i + "midichannel", RolandD110Multi.MIDI_CHANNEL_OFF);
-						synth.getModel().set("p" + i + "partialreserve", 0);
-						synth.getModel().set("p" + i + "outputlevel", 100);
-						}
-						
-					synth.getModel().set("p1midichannel", getChannelOut());
-					synth.getModel().set("p1partialreserve", 32);
-					synth.getModel().set("p1tonegroup", bank);
-					synth.getModel().set("p1tonenumber", p);
-					synth.getModel().set("patchname", "Patch " + p);
-					synth.getModel().set("number", p);
-				
-					synth.writeAllParameters(synth.getModel());
-					}
-				synth.getModel().set("number", model.get("number"));
-				synth.performChangePatch(synth.getModel());
+                    {
+                    synth.loadDefaults();
+                                
+                    for(int i = 1; i <= 8; i++)
+                        {
+                        synth.getModel().set("p" + i + "midichannel", RolandD110Multi.MIDI_CHANNEL_OFF);
+                        synth.getModel().set("p" + i + "partialreserve", 0);
+                        synth.getModel().set("p" + i + "outputlevel", 100);
+                        }
+                                                
+                    synth.getModel().set("p1midichannel", getChannelOut());
+                    synth.getModel().set("p1partialreserve", 32);
+                    synth.getModel().set("p1tonegroup", bank);
+                    synth.getModel().set("p1tonenumber", p);
+                    synth.getModel().set("patchname", "Patch " + p);
+                    synth.getModel().set("number", p);
+                                
+                    synth.writeAllParameters(synth.getModel());
+                    }
+                synth.getModel().set("number", model.get("number"));
+                synth.performChangePatch(synth.getModel());
                 }
             }
         }
@@ -1117,7 +1117,7 @@ public class RolandD110Tone extends Synth
             else
                 {
                 int offset = CC + ((Integer)(allPartialParametersToIndex.get(key.substring(2)))).intValue();  // get rid of the "p1"
-            	BB += (byte)(offset / 128);
+                BB += (byte)(offset / 128);
                 CC = (byte)(offset % 128);
                 }
             }
@@ -1131,7 +1131,7 @@ public class RolandD110Tone extends Synth
             else
                 {
                 int offset = CC + ((Integer)(allPartialParametersToIndex.get(key.substring(2)))).intValue();  // get rid of the "p1"
-            	BB += (byte)(offset / 128);
+                BB += (byte)(offset / 128);
                 CC = (byte)(offset % 128);
                 }
             }
@@ -1146,7 +1146,7 @@ public class RolandD110Tone extends Synth
             else
                 {
                 int offset = CC + ((Integer)(allPartialParametersToIndex.get(key.substring(2)))).intValue();  // get rid of the "p1"
-            	BB += (byte)(offset / 128);
+                BB += (byte)(offset / 128);
                 CC = (byte)(offset % 128);
                 }
             }
@@ -1161,7 +1161,7 @@ public class RolandD110Tone extends Synth
             else
                 {
                 int offset = CC + ((Integer)(allPartialParametersToIndex.get(key.substring(2)))).intValue();  // get rid of the "p1"
-            	BB += (byte)(offset / 128);
+                BB += (byte)(offset / 128);
                 CC = (byte)(offset % 128);
                 }
             }
@@ -1427,8 +1427,8 @@ public class RolandD110Tone extends Synth
 
     public int getPauseAfterSendAllParameters() { return 100; } 
  
-	public int getPauseAfterSendOneParameter() { return 25; }	// In the 1.07 firmware notes it says "at least 20ms" (http://llamamusic.com/d110/ROM_IC_Bug_Fixes.html).  In my firmware (1.10) the D-110 can handle changes thrown at it full blast, but earlier firmware (1.07) cannot.
-	
+    public int getPauseAfterSendOneParameter() { return 25; }       // In the 1.07 firmware notes it says "at least 20ms" (http://llamamusic.com/d110/ROM_IC_Bug_Fixes.html).  In my firmware (1.10) the D-110 can handle changes thrown at it full blast, but earlier firmware (1.07) cannot.
+        
     public Model getNextPatchLocation(Model model)
         {
         int number = model.get("number");

@@ -1,0 +1,42 @@
+<html><head></head>
+<body>
+
+<h1>Yamaha TG33, SY22, and SY35</h1> 
+<h2>Single Patch Editor</h2>
+
+<p>This patch editor ought to work properly with all three synthesizers, but it has only been tested on the TG33.  Please let me know of any discrepancies you discover.
+
+<p><b>Communicating with Edisyn</b><br>Set your synthesizer to receive and transmit on the same MIDI channel (perhaps Channel 1).  Turn on Program Change and System Exclusive data.  Turn off memory protect.  The TG-33 also has a "device number": ideally this should be set to the same as the MIDI channel.  You set both the device number and MIDI channel in Edisyn when connecting to the synthesizer via the <b>Change MIDI</b> menu.
+
+<p><b>Selecting the Synthesizer Type</b><br>Your choice of Synth Type in the Global panel will determine the waves available in Tones A and C (the SY35 is different), and will also determine the kind of sysex message used to send patches to the synthesizer (the TG33 is different).  You need to make sure you have sent the Synth Type appropriately both prior to editing and prior to sending patches to your synth.
+
+<p><b>About the TG33 Menu</b><br>This menu has two additional options for you.  <b>Send Patch as Pseudo-MPE</b> will prepare a Multimode patch for the TG33 (not the SY22 or SY35) which references this patch, both in current working memory.  The Multimode patch will reference it in every single channel, which makes it easy to use MPE devices to play the patch. Note that you'll need to first put the unit into Multi mode manually (see "Gotchas" below).  The name of the multimode patch will be the same as that currently in the single-mode patch editor.  <b>Receive Vector Data Only</b> will only update Edisyn in response to vector data, not any other data.  Thus if you load a file or if Edisyn receives a patch from the TG33/SY22/SY35, only the vector data portion will be updated.  This might be useful for editing the vector on the synth manually, then loading it.  
+
+<p><b>Gotchas</b>
+
+<ul>
+<li>Edisyn cannot write patches to patch memory locations: you can only send them to the current working memory.  From there, you will have to manually save them to an appropriate memory location if you like.
+
+<br><p><li>If the synthesizer is in Multi mode and you request a voice (single) patch, the synthesizer will provide it but it will <i>not go into Voice mode</i>.  You have to do that manually.  The converse is true as well.  Note that if, on the TG33, you change a real-time voice parameter, the synth will <i>automatically</i> switch to voice mode.  You will find this annoying.
+
+<br><p><li>For related reasons, patch changes to and from preset or internal memory don't work: you have to manually press the appropriate button.  Thus you can't do batch downloads properly across different banks.
+
+<br><p><li>The TG33, SY22, and SY35 are odd machines: they have many more parameters than are available from the front panel.  Notably, all of them allow you to program both the carrier and modulator parameters of the FM tones, as well as the FM algorithm in question.  So you will find rather more options here than expected.
+
+<br><p><li>Only the TG33 can receive real-time parameter changes; and nearly all Modulator parameters and a few others cannot be sent.  Furthermore, the TG33 is very slow in responding to real-time parameter changes.
+
+<br><p><li>A number of parameters range from 0...99 on-screen, but in reality they range from 0...127 or 0...64 and are just mapped to 0...99.  Edisyn uses the true mapping values; this means that when you change a number, it may not be the same on Edisyn as it says on the synth.
+
+<br><p><li>The TG33 may occasionally get caught in a strange "Cannot Edit" warning message on-screen when receiving real-time parameter changes.  You can get it out of this by selecting the voice and edit buttons again, or some similar combination.
+
+</ul>
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>January 2020
+</table>
+

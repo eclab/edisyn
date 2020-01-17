@@ -1595,8 +1595,8 @@ public class KawaiK4 extends Synth
         }
 
     public byte[] adjustBankSysexForEmit(byte[] data, Model model)
-    	{ 
+        { 
         data[2] = (byte) getChannelOut();
-    	return data; 
-    	}
+        return data; 
+        }
     }

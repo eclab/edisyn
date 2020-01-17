@@ -26,6 +26,9 @@ public class Yamaha4OpMulti extends Synth
     {
     /// Various collections of parameter names for pop-up menus
         
+    public static final int TYPE_TX81Z = 0;
+    public static final int TYPE_DX11 = 1;
+    public static final String[] TYPES = { "TX81Z", "DX11" };
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     public static final String[] CHANNELS = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
     public static final String[] BANKS = { "I", "A", "B", "C", "D" };
@@ -34,6 +37,22 @@ public class Yamaha4OpMulti extends Synth
     public static final String[] MICROTUNE_KEYS = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     public static final String[] LFO_SELECT = { "Off", "Instrument 1", "Instrument 2", "Vibrato" };
     public static final String[] OUT_ASSIGN = { "Off", "I", "II", "I and II" };
+
+    public static final String TYPE_KEY = "type";
+    int synthType = TYPE_TX81Z;
+    JComboBox synthTypeCombo;
+        
+    public int getSynthType() { return synthType; }
+    public void setSynthType(int val, boolean save)
+        {
+        if (save)
+            {
+            setLastX("" + val, TYPE_KEY, getSynthName(), true);
+            }
+        synthType = val;
+        synthTypeCombo.setSelectedIndex(val);  // hopefully this isn't recursive
+        updateTitle();
+        }
 
     public Yamaha4OpMulti()
         {
@@ -142,9 +161,12 @@ public class Yamaha4OpMulti extends Synth
                 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, 4);
+        final PatchDisplay pd = new PatchDisplay(this, 4);
+        comp = pd;
         hbox2.add(comp);
         vbox.add(hbox2);
+        
+        hbox2 = new HBox();
         
         comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 10 ASCII characters.")
             {
@@ -159,11 +181,36 @@ public class Yamaha4OpMulti extends Synth
                 updateTitle();
                 }
             };
-        vbox.addBottom(comp);  // doesn't work right :-(
+        hbox2.add(comp);
+
+        JLabel label = new JLabel("Synth Type");
+        label.setFont(Style.SMALL_FONT());
+        label.setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
+        label.setForeground(Style.TEXT_COLOR());
+
+        synthTypeCombo = new JComboBox(TYPES);
+        synthTypeCombo.setSelectedIndex(getSynthType());
+        synthTypeCombo.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                setSynthType(synthTypeCombo.getSelectedIndex(), true);
+                pd.update("bank", model);  // doesn't matter what the key is, so I put in "bank"
+                }
+            });
+        synthTypeCombo.putClientProperty("JComponent.sizeVariant", "small");
+        synthTypeCombo.setEditable(false);
+        synthTypeCombo.setFont(Style.SMALL_FONT());
+        VBox st = new VBox();
+        st.add(label);
+        st.addLast(synthTypeCombo);
+        hbox2.add(st);
+        
+        vbox.add(hbox2);
         hbox.add(vbox);
 
         // Not enough space to show the title
-        hbox.addLast(Strut.makeHorizontalStrut(125));
+        hbox.addLast(Strut.makeHorizontalStrut(20));
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
@@ -984,8 +1031,8 @@ public class Yamaha4OpMulti extends Synth
         table[8] = (byte)0xF7;
         tryToSendSysex(table);
         
-        // Instruct the TX81Z to press its "PLAY/PERFORM" button
-        byte PP = (byte) 68;
+        // Instruct the TX81Z to press its "PLAY/PERFORM" button.  Or "PERFORM" on the DX11
+        byte PP = getSynthType() == TYPE_TX81Z ? (byte) 68 : (byte) 119;                // 119 is "PERFORM", 118 is "SINGLE"
         byte VV = (byte) 0;
         byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getChannelOut()), REMOTE_SWITCH_GROUP, PP, (byte)0x7F, (byte)0xF7 };
         tryToSendSysex(data);
@@ -1032,10 +1079,10 @@ public class Yamaha4OpMulti extends Synth
         }
         
 
-     public byte[] adjustBankSysexForEmit(byte[] data, Model model)
-    	{ 
+    public byte[] adjustBankSysexForEmit(byte[] data, Model model)
+        { 
         data[2] = (byte) getChannelOut();
-    	return data; 
-    	}
+        return data; 
+        }
   
     }

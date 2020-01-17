@@ -5119,9 +5119,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         }
 
     public byte[] adjustBankSysexForEmit(byte[] data, Model model)
-    	{ 
+        { 
         data[2] = (byte) getChannelOut();
-    	return data; 
-    	}
+        return data; 
+        }
     }
     

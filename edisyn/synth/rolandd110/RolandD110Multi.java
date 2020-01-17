@@ -916,7 +916,7 @@ public class RolandD110Multi extends Synth
 
     public int getPauseAfterSendAllParameters() { return 100; } 
 
-	public int getPauseAfterSendOneParameter() { return 25; }	// In the 1.07 firmware notes it says "at least 20ms" (http://llamamusic.com/d110/ROM_IC_Bug_Fixes.html).  In my firmware (1.10) the D-110 can handle changes thrown at it full blast, but earlier firmware (1.07) cannot.
+    public int getPauseAfterSendOneParameter() { return 25; }       // In the 1.07 firmware notes it says "at least 20ms" (http://llamamusic.com/d110/ROM_IC_Bug_Fixes.html).  In my firmware (1.10) the D-110 can handle changes thrown at it full blast, but earlier firmware (1.07) cannot.
  
     public void changePatch(Model tempModel)
         {

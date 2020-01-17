@@ -2,10 +2,11 @@
 <body>
 
 <h1>Yamaha 4-Operator FM Synthesizer Family</h1> 
-<h2>Multimode Patch Editor</h2>
+<h2>Multimode Patch Editor (TX81Z and DX11 only)</h2>
 
-<p>This editor is designed for multimode patches from the Yamaha TX81Z and DX11.  There are some later 4-Op synthesizers which support a simple kind of
-multimode (YS100, YS200, B200, etc.) but multimode is not a patch but a global system setting.  At present I have elected not to support these synthesizers.
+<p>This editor is designed for multimode patches from the Yamaha TX81Z and DX11.  
+
+<p>There are some later 4-Op synthesizers (YS100, YS200, B200, etc.) which support a simple kind of multimode, but it a global system setting, not a patch.  At present I have elected not to support these synthesizers.
 
 <p><b>Communicating with Edisyn</b><br> Set your synth's receive and transmit channel to the same thing (perhaps Channel 1).  Set the program change to be <b>Com</b> (Common).  Make sure that Sysex is turned <b>on</b>.
 
@@ -18,10 +19,12 @@ multimode (YS100, YS200, B200, etc.) but multimode is not a patch but a global s
 <li>The TX81Z is notorious for getting in corrupted states when receiving MIDI transmissions, either because of buffer overflows ("MIDI Buffer Full!") or just messing up.  Performance Mode seems to be the worst at this.  I'm working on minimizing these, but you'll still see them.  If this happens, or if Edisyn doesn't seem to be receiving data correctly or is displaying data wrong, press the Play/Performance button to go out into Single patch mode, move to another patch temporarily (press Right and then Left, say) to clear the performance data, and try again.  Let me know.
 
 <p><li>
-4-op synthesizers like the TX81Z have no way to write patches from sysex: you will have to send the current patch from Edisyn, then manually save it to your desired patch location on the synthesizer itself.
+4-op synthesizers like the DX11 and TX81Z have no way to write patches from sysex: you will have to send the current patch from Edisyn, then manually save it to your desired patch location on the synthesizer itself.
 
-<p><li>Similarly, changing patches is challenging: it requires a bit of manipulation of the front panel using the TX81Z's unusual "press buttons for me" sysex options.  It should work in general, but if strange things happen, let me know.
+<p><li>Similarly, changing patches is challenging: it requires a bit of manipulation of the front panel using special sysex options.  It should work in general, but if strange things happen, let me know.
 </ul>
+
+<p><b>Thanks</b><br>Thanks to Matt Gregory (mgregory22@gmail.com) for his considerable help in debugging this patch editor.  Thanks also to Jesse Guessford and the GMU School of Music.  And thanks to Thor Zollinger (thor276@cableone.net) for his help in getting the DX11 editor working properly.
 
 
 <p><table border=0 cellpadding=0 cellspacing=5>

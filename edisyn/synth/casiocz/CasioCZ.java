@@ -1446,9 +1446,12 @@ public class CasioCZ extends Synth
             // break up
             byte[] header = new byte[7];
             System.arraycopy(data, 0, header, 0, header.length);
-            byte[] main = new byte[isCZ1() ? 144 * 2 : 128 * 2];
+            byte[] main = new byte[isCZ1() ? 144 * 2 + 1 : 128 * 2 + 1]; // new byte[isCZ1() ? 144 * 2 : 128 * 2];
             System.arraycopy(data, 7, main, 0, main.length);
-            return new Object[] { new Midi.DividedSysex(header), new Integer(MIDI_PAUSE), new Midi.DividedSysex(main), new Integer(MIDI_PAUSE), new Midi.DividedSysex(new byte[] { (byte)0xF7 }) };
+            main[main.length - 1] = (byte)0xF7;
+            return new Object[] { new Midi.DividedSysex(header), new Integer(MIDI_PAUSE), new Midi.DividedSysex(main) }; 
+            // Never send this, it triggers a crash in Linux/Windows
+            // new Integer(MIDI_PAUSE), new Midi.DividedSysex(new byte[] { (byte)0xF7 }) };
             }
         }
 
@@ -1466,12 +1469,13 @@ public class CasioCZ extends Synth
         byte cz1 = (byte)(isCZ1() ? 0x11 : 0x10);
         byte chan = (byte)(0x70 | getChannelOut());
 
-        Object[] data = new Object[5];
+        Object[] data = new Object[4];  /// new Object[5];
         data[0] = new Midi.DividedSysex(new byte[] { (byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, 0x60 });
         data[1] = new Integer(MIDI_PAUSE);
         data[2] = new Midi.DividedSysex(new byte[] { chan, 0x31 });
         data[3] = new Integer(MIDI_PAUSE);
-        data[4] = new Midi.DividedSysex(new byte[] { (byte)0xF7 });
+        // Never send this last one, it triggers a crash in Windows and Linux
+        //data[4] = new Midi.DividedSysex(new byte[] { (byte)0xF7 });
         tryToSendMIDI(data);
         }
 
@@ -1495,22 +1499,29 @@ public class CasioCZ extends Synth
         int number = tempModel.get("number");
         byte location = (byte)(bank * 8 + number);
 
-        Object[] data = new Object[5];
+        Object[] data = new Object[4];  /// new Object[5];
         data[0] = new Midi.DividedSysex(new byte[] { (byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, location });
         data[1] = new Integer(MIDI_PAUSE);
         data[2] = new Midi.DividedSysex(new byte[] { chan, 0x31 });
         data[3] = new Integer(MIDI_PAUSE);
-        data[4] = new Midi.DividedSysex(new byte[] { (byte)0xF7 });
+        // Never send this last one, it triggers a crash in Windows and Linux
+        //data[4] = new Midi.DividedSysex(new byte[] { (byte)0xF7 });
         tryToSendMIDI (data);
         }
 
-/*
-  public JFrame sprout()
-  {
-  JFrame frame = super.sprout();
-  return frame;
-  }         
-*/
+    public JFrame sprout()
+        {
+        JFrame frame = super.sprout();
+        if (!checkAndSet("WindowsWarning", getSynthNameLocal()))
+            {
+            if (Style.isWindows() || Style.isUnix())
+                {
+                showSimpleError("Windows / Linux Warning",
+                    "The Casio CZ patch editor will not work properly\nunder Windows Linux and will likely crash Edisyn.\n\nSee The About Pane for more information.");
+                }
+            }
+        return frame;
+        }         
 
     public boolean testVerify(Synth synth2, 
         String key,

@@ -180,11 +180,20 @@ public class Midi
         {
         MidiDevice.Info[] midiDevices;
         
-        try
+        if (Style.isMac())
+            //if (true)
             {
-            midiDevices = uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider.getMidiDeviceInfo();
+            try
+                {
+                midiDevices = uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider.getMidiDeviceInfo();
+                }
+            catch (Throwable ex)
+                {
+                System.err.println("WARNING (Midi.java): error on obtaining CoreMIDI4J, but we think we're a Mac.  This should never happen.");
+                midiDevices = MidiSystem.getMidiDeviceInfo();
+                }
             }
-        catch (Throwable ex)
+        else
             {
             midiDevices = MidiSystem.getMidiDeviceInfo();
             }
@@ -911,10 +920,10 @@ public class Midi
         
         public DividedSysex(byte[] data)
             {
-            super(data);
+            super(data.clone());
             }
             
-        public static DividedSysex[] divide(MidiMessage sysex, int chunksize)
+        public static DividedSysex[] divide(SysexMessage sysex, int chunksize)
             {
             byte[] data = sysex.getMessage();
             int extra = 0;

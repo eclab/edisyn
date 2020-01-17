@@ -26,5 +26,154 @@ public class StringUtility
         {
         return getInt(string.substring(preamble.length()));
         }
+
+    final static int STATE_FIRST_NUMBER = 0;
+    final static int STATE_FIRST_STRING = 1;
+    final static int STATE_NUMBER = 2;
+    final static int STATE_FINISHED = 3;
+        
+    public static String reducePreamble(String name, String preamble)
+        {
+        if (!name.startsWith(preamble)) 
+            {
+            System.err.println("Warning (Category): Key " + name + " doesn't start with " + preamble);
+            return name;
+            }
+        return reduceAllDigitsAfterPreamble(preamble, "") + name.substring(preamble.length());
+        }
+        
+    public static String reduceAllDigitsAfterPreamble(String name, String preamble)
+        {
+        char[] n = name.toCharArray();
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < preamble.length(); i++)
+            {
+            sb.append(n[i]);
+            }
+                        
+        int state = STATE_FIRST_STRING;
+        for(int i = preamble.length(); i < n.length; i++)
+            {
+            if (state == STATE_FIRST_STRING)
+                {
+                if (Character.isDigit(n[i]))
+                    {
+                    state = STATE_FINISHED;
+                    }
+                else
+                    {
+                    sb.append(n[i]);
+                    }
+                }
+            else if (state == STATE_FINISHED)
+                {
+                if (!Character.isDigit(n[i]))
+                    {
+                    sb.append(n[i]);
+                    }
+                }
+            }
+        return sb.toString();
+        }
+
+    /** This function removes the FIRST string of digits in a name after a preamble, returns the resulting name. */
+    public static String reduceFirstDigitsAfterPreamble(String name, String preamble)
+        {
+        char[] n = name.toCharArray();
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < preamble.length(); i++)
+            {
+            sb.append(n[i]);
+            }
+                        
+        int state = STATE_FIRST_STRING;
+        for(int i = preamble.length(); i < n.length; i++)
+            {
+            if (state == STATE_FIRST_STRING)
+                {
+                if (Character.isDigit(n[i]))
+                    {
+                    state = STATE_NUMBER;
+                    }
+                else
+                    {
+                    sb.append(n[i]);
+                    }
+                }
+            else if (state == STATE_NUMBER)
+                {
+                if (!Character.isDigit(n[i]))
+                    {
+                    sb.append(n[i]);
+                    state = STATE_FINISHED;
+                    }
+                }
+            else // state == STATE_FINISHED
+                {
+                sb.append(n[i]);
+                }
+            }
+        return sb.toString();
+        }
+
+    /** This function removes the SECOND string of digits in a name after a preamble, returns the resulting name. */
+    public static String reduceSecondDigitsAfterPreamble(String name, String preamble)
+        {
+        char[] n = name.toCharArray();
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < preamble.length(); i++)
+            {
+            sb.append(n[i]);
+            }
+                        
+        int state = STATE_FIRST_NUMBER;
+        for(int i = preamble.length(); i < n.length; i++)
+            {
+            if (state == STATE_FIRST_NUMBER)
+                {
+                if (!Character.isDigit(n[i]))
+                    {
+                    // add it and jump to next state
+                    sb.append(n[i]);
+                    state = STATE_FIRST_STRING;
+                    }
+                else
+                    {
+                    sb.append(n[i]);
+                    }
+                }
+            else if (state == STATE_FIRST_STRING)
+                {
+                if (Character.isDigit(n[i]))
+                    {
+                    // skip it and jump to next state
+                    state = STATE_NUMBER;
+                    }
+                else
+                    {
+                    sb.append(n[i]);
+                    }
+                }
+            else if (state == STATE_NUMBER)
+                {
+                if (!Character.isDigit(n[i]))
+                    {
+                    // add it and jump to next state
+                    sb.append(n[i]);
+                    state = STATE_FINISHED;
+                    }
+                }
+            else  // state == STATE_FINISHED
+                {
+                sb.append(n[i]);
+                }
+            }
+        return sb.toString();
+        }
+
+
     }
 

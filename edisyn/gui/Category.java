@@ -12,6 +12,7 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
+import edisyn.util.*;
 
 /**
    A pretty container for widgets to categorize them
@@ -64,7 +65,7 @@ public class Category extends JComponent implements Gatherable
         if (myPreamble == null) return false;
 
         return (pasteable && 
-            reduceAllDigitsAfterPreamble(copyPreamble, "").equals(reduceAllDigitsAfterPreamble(myPreamble, "")));
+            StringUtility.reduceAllDigitsAfterPreamble(copyPreamble, "").equals(StringUtility.reduceAllDigitsAfterPreamble(myPreamble, "")));
         }
         
     boolean canDistributeKey()   
@@ -173,7 +174,7 @@ public class Category extends JComponent implements Gatherable
             if (components.get(i) instanceof HasKey)
                 {
                 String key = (String)(((HasKey)(components.get(i))).getKey());
-                String reduced = reducePreamble(key, myPreamble);
+                String reduced = StringUtility.reducePreamble(key, myPreamble);
                 keys.put(reduced, key);
                 }    
             }               
@@ -192,7 +193,7 @@ public class Category extends JComponent implements Gatherable
         for(int i = 0; i < copyKeys.size(); i++)
             {
             String key = (String)(copyKeys.get(i));
-            String reduced = reducePreamble(key, copyPreamble);
+            String reduced = StringUtility.reducePreamble(key, copyPreamble);
             String mapped = (String)(keys.get(reduced));
             if (mapped != null)
                 {
@@ -239,7 +240,7 @@ public class Category extends JComponent implements Gatherable
                 synth.setSendMIDI(false);
                 }
                 
-            String lastReduced = reduceAllDigitsAfterPreamble(lastKey, distributePreamble);
+            String lastReduced = StringUtility.reduceAllDigitsAfterPreamble(lastKey, distributePreamble);
 
             String[] mutationKeys = synth.getMutationKeys();
             if (mutationKeys == null) mutationKeys = new String[0];
@@ -254,7 +255,7 @@ public class Category extends JComponent implements Gatherable
                     {
                     HasKey nc = (HasKey)(components.get(i));
                     String key = nc.getKey();
-                    String reduced = reduceAllDigitsAfterPreamble(key, distributePreamble);
+                    String reduced = StringUtility.reduceAllDigitsAfterPreamble(key, distributePreamble);
                                
                     if (reduced.equals(lastReduced))
                         {
@@ -289,153 +290,6 @@ public class Category extends JComponent implements Gatherable
         repaint();
         }
     
-    final static int STATE_FIRST_NUMBER = 0;
-    final static int STATE_FIRST_STRING = 1;
-    final static int STATE_NUMBER = 2;
-    final static int STATE_FINISHED = 3;
-        
-    public static String reducePreamble(String name, String preamble)
-        {
-        if (!name.startsWith(preamble)) 
-            {
-            System.err.println("Warning (Category): Key " + name + " doesn't start with " + preamble);
-            return name;
-            }
-        return reduceAllDigitsAfterPreamble(preamble, "") + name.substring(preamble.length());
-        }
-        
-    public static String reduceAllDigitsAfterPreamble(String name, String preamble)
-        {
-        char[] n = name.toCharArray();
-        StringBuilder sb = new StringBuilder();
-
-        for(int i = 0; i < preamble.length(); i++)
-            {
-            sb.append(n[i]);
-            }
-                        
-        int state = STATE_FIRST_STRING;
-        for(int i = preamble.length(); i < n.length; i++)
-            {
-            if (state == STATE_FIRST_STRING)
-                {
-                if (Character.isDigit(n[i]))
-                    {
-                    state = STATE_FINISHED;
-                    }
-                else
-                    {
-                    sb.append(n[i]);
-                    }
-                }
-            else if (state == STATE_FINISHED)
-                {
-                if (!Character.isDigit(n[i]))
-                    {
-                    sb.append(n[i]);
-                    }
-                }
-            }
-        return sb.toString();
-        }
-
-    /** This function removes the FIRST string of digits in a name after a preamble, returns the resulting name. */
-    public static String reduceFirstDigitsAfterPreamble(String name, String preamble)
-        {
-        char[] n = name.toCharArray();
-        StringBuilder sb = new StringBuilder();
-
-        for(int i = 0; i < preamble.length(); i++)
-            {
-            sb.append(n[i]);
-            }
-                        
-        int state = STATE_FIRST_STRING;
-        for(int i = preamble.length(); i < n.length; i++)
-            {
-            if (state == STATE_FIRST_STRING)
-                {
-                if (Character.isDigit(n[i]))
-                    {
-                    state = STATE_NUMBER;
-                    }
-                else
-                    {
-                    sb.append(n[i]);
-                    }
-                }
-            else if (state == STATE_NUMBER)
-                {
-                if (!Character.isDigit(n[i]))
-                    {
-                    sb.append(n[i]);
-                    state = STATE_FINISHED;
-                    }
-                }
-            else // state == STATE_FINISHED
-                {
-                sb.append(n[i]);
-                }
-            }
-        return sb.toString();
-        }
-
-    /** This function removes the SECOND string of digits in a name after a preamble, returns the resulting name. */
-    public static String reduceSecondDigitsAfterPreamble(String name, String preamble)
-        {
-        char[] n = name.toCharArray();
-        StringBuilder sb = new StringBuilder();
-
-        for(int i = 0; i < preamble.length(); i++)
-            {
-            sb.append(n[i]);
-            }
-                        
-        int state = STATE_FIRST_NUMBER;
-        for(int i = preamble.length(); i < n.length; i++)
-            {
-            if (state == STATE_FIRST_NUMBER)
-                {
-                if (!Character.isDigit(n[i]))
-                    {
-                    // add it and jump to next state
-                    sb.append(n[i]);
-                    state = STATE_FIRST_STRING;
-                    }
-                else
-                    {
-                    sb.append(n[i]);
-                    }
-                }
-            else if (state == STATE_FIRST_STRING)
-                {
-                if (Character.isDigit(n[i]))
-                    {
-                    // skip it and jump to next state
-                    state = STATE_NUMBER;
-                    }
-                else
-                    {
-                    sb.append(n[i]);
-                    }
-                }
-            else if (state == STATE_NUMBER)
-                {
-                if (!Character.isDigit(n[i]))
-                    {
-                    // add it and jump to next state
-                    sb.append(n[i]);
-                    state = STATE_FINISHED;
-                    }
-                }
-            else  // state == STATE_FINISHED
-                {
-                sb.append(n[i]);
-                }
-            }
-        return sb.toString();
-        }
-
             
     /** If synth is non-null, then double-clicking on the category will select or deselect all the
         components inside it for mutation purposes. */

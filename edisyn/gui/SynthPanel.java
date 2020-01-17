@@ -12,7 +12,7 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
-
+import edisyn.util.*;
 
 /**
    A pretty panel for a synthesizer
@@ -55,7 +55,7 @@ public class SynthPanel extends JPanel implements Gatherable
         if (myPreamble == null) return false;
 
         return (pasteable && 
-            Category.reduceAllDigitsAfterPreamble(copyPreamble, "").equals(Category.reduceAllDigitsAfterPreamble(myPreamble, "")));
+            StringUtility.reduceAllDigitsAfterPreamble(copyPreamble, "").equals(StringUtility.reduceAllDigitsAfterPreamble(myPreamble, "")));
         }
             
     public void gatherAllComponents(java.util.ArrayList list)
@@ -156,7 +156,7 @@ public class SynthPanel extends JPanel implements Gatherable
             if (components.get(i) instanceof HasKey)
                 {
                 String key = (String)(((HasKey)(components.get(i))).getKey());
-                String reduced = Category.reducePreamble(key, myPreamble);
+                String reduced = StringUtility.reducePreamble(key, myPreamble);
                 keys.put(reduced, key);
                 }    
             }               
@@ -175,7 +175,7 @@ public class SynthPanel extends JPanel implements Gatherable
         for(int i = 0; i < copyKeys.size(); i++)
             {
             String key = (String)(copyKeys.get(i));
-            String reduced = Category.reducePreamble(key, copyPreamble);
+            String reduced = StringUtility.reducePreamble(key, copyPreamble);
             String mapped = (String)(keys.get(reduced));
             if (mapped != null)
                 {

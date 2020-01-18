@@ -33,7 +33,10 @@ public class YamahaTG33 extends Synth
     public static final String[] TYPES = { "TG33", "SY22", "SY35" };
 
 
-    public static final String[] BANKS = new String[] { "I", "P1", "P2", "C1", "C2" };
+ 		public final byte VOICE_BUTTON = 0x06;
+		public final byte MULTI_BUTTON = 0x07;
+
+   public static final String[] BANKS = new String[] { "I", "P1", "P2", "C1", "C2" };
 
     public static final String[] RATES = new String[]
     { "1", "2", "3", "4", "5", "6", "7", "8" };
@@ -1603,7 +1606,7 @@ public class YamahaTG33 extends Synth
             byte[] data = send(key);
             if (data.length == 0)
                 {
-                System.err.println("Warning (YamahaTG33): Can't emit key " + key);
+//                System.err.println("Warning (YamahaTG33): Can't emit key " + key);
                 return new Object[0];
                 }
             else 
@@ -2331,7 +2334,7 @@ public class YamahaTG33 extends Synth
         {
         // I notice that sometimes we can't load immediately after a change patch, so...
         // Perhaps just a smidgen?
-        return 100;
+        return 1000;
         }
 
 
@@ -2343,9 +2346,16 @@ public class YamahaTG33 extends Synth
         // Weird.
         final int[] bankvals = new int[] { 0, 2, 5, 1, 4 };
         
-		// The secret to successful bank selects on the TG33 is to do the MSB (0) bank
-		// select FIRST (value = 0), then the LSB (32) bank select (value = bank), THEN do the PC.
+        // The TG33/SY22/SY35 requires that bank selects be both MSB and LSB (MSB first), but the documentation
+        // doesn't explain this.  Furthermore, you have to do bank selects prior to PC.  Furthermore,
+        // if the synth is in Edit mode, all bank selects are IGNORED.  So...
+        //  
+		// The secret to successful bank selects on the TG33 is to first get out of Edit mode by
+		// pressing the VOICE or MULTI buttons, then do the MSB (0) bank
+		// select (value = 0), then the LSB (32) bank select (value = bank), THEN do the PC.
 		// Yes.  Nuts.
+		tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(getID() + 16), 0x26, 0x07, VOICE_BUTTON, (byte)0xF7 });
+		simplePause(getPauseAfterChangePatch());
         tryToSendMIDI(buildCC(getChannelOut(), 0, 0));
         tryToSendMIDI(buildCC(getChannelOut(), 32, bankvals[tempModel.get("bank")]));
         tryToSendMIDI(buildPC(getChannelOut(), tempModel.get("number")));

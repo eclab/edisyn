@@ -44,9 +44,9 @@ public class YamahaTG33Multi extends Synth
 
     public static final String[] GROUPS = new String[] { "1", "2" };
 
-    public static final String[] VOICE_BANKS = new String[] { "Internal/Card", "Preset 1", "Preset 2 [TG33]" };
+    public static final String[] VOICE_BANKS = new String[] { "I/C", "P1", "P2" };
 
-    public static final String[] BANKS = new String[] { "Internal", "Card 1", "Card 2" };
+    public static final String[] BANKS = new String[] { "I", "C1", "C2" };
 
     public static final String[] VOICE_PRESETS = new String[] 
     {
@@ -159,7 +159,7 @@ public class YamahaTG33Multi extends Synth
                 showSimpleError(title, "The Patch Number must be an integer 11...28.\nDigits 9 and 0 are not permitted.");
                 continue;
                 }
-            if (n < 1 || n > 28 || (n % 10 == 9) || (n % 10 == 0))
+            if (n % 10 == 0 || n % 10 == 9 || n < 11 || n > 28)      
                 {
                 showSimpleError(title, "The Patch Number must be an integer 11...28.\nDigits 9 and 0 are not permitted.");
                 continue;
@@ -629,6 +629,7 @@ public class YamahaTG33Multi extends Synth
         {
         // We ALWAYS change the patch no matter what.  We have to.
         changePatch(tempModel);
+		simplePause(getPauseAfterChangePatch());
         tryToSendSysex(requestDump(tempModel));
         }
 
@@ -737,17 +738,27 @@ public class YamahaTG33Multi extends Synth
 
     public static String getSynthName() { return "Yamaha TG33 [Multi]"; }
 
+    public int getPauseAfterChangePatch()
+        {
+        // I notice that sometimes we can't load immediately after a change patch, so...
+        // Perhaps just a smidgen?
+        return 100;
+        }
+
     public void changePatch(Model tempModel) 
         {
-        int bank = tempModel.get("bank");
         // Banks are stored in Edisyn as INTERNAL Card1 Card2
         // But on the TG33 the [multi] bank select data values are
         // INTERNAL=16 Card1=17 CARD2=20
         // Weird.
         final int[] bankvals = new int[] { 16, 17, 20 };
         
-        // bank select 
-        tryToSendMIDI(buildCC(getChannelOut(), 0, bankvals[tempModel.get("bank")]));
+		// The secret to successful bank selects on the TG33 is to do the MSB (0) bank
+		// select FIRST (value = 0), then the LSB (32) bank select (value = bank), THEN 
+		// do the PC (value = number+64).
+		// Yes.  Nuts.
+        tryToSendMIDI(buildCC(getChannelOut(), 0, 0));
+        tryToSendMIDI(buildCC(getChannelOut(), 32, bankvals[tempModel.get("bank")]));
         tryToSendMIDI(buildPC(getChannelOut(), 64 + tempModel.get("number")));
 
         // we assume that we successfully did it
@@ -772,7 +783,7 @@ public class YamahaTG33Multi extends Synth
             {
             bank++;
             number = 0;
-            if (bank >= 6)
+            if (bank >= 4)
                 bank = 0;
             }
                 
@@ -788,9 +799,10 @@ public class YamahaTG33Multi extends Synth
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
         if (!model.exists("number")) return null;
-        
-        int number = model.get("number") + 1;
-        return "" + (number > 9 ? "" : "0") + number;
+        if (!model.exists("bank")) return null;
+
+        int original = model.get("number");
+        return (BANKS[model.get("bank")] + " " + ((original / 8 + 1) * 10 + (original % 8 + 1)));
         }
 
     public byte[] adjustBankSysexForEmit(byte[] data, Model model)

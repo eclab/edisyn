@@ -519,7 +519,7 @@ public class YamahaTG33 extends Synth
                 showSimpleError(title, "The Patch Number must be an integer 11...88.\nDigits 9 and 0 are not permitted.");
                 continue;
                 }
-            if (n < 1 || n > 88 || (n % 10 == 9) || (n % 10 == 0))
+            if (n % 10 == 0 || n % 10 == 9 || n < 11 || n > 88)      
                 {
                 showSimpleError(title, "The Patch Number must be an integer 11...88.\nDigits 9 and 0 are not permitted.");
                 continue;
@@ -2209,6 +2209,7 @@ public class YamahaTG33 extends Synth
         {
         // We ALWAYS change the patch no matter what.  We have to.
         changePatch(tempModel);
+		simplePause(getPauseAfterChangePatch());
         tryToSendSysex(requestDump(tempModel));
         }
 
@@ -2326,17 +2327,27 @@ public class YamahaTG33 extends Synth
         
     public static String getSynthName() { return "Yamaha TG33/SY22/SY35"; }
 
+    public int getPauseAfterChangePatch()
+        {
+        // I notice that sometimes we can't load immediately after a change patch, so...
+        // Perhaps just a smidgen?
+        return 100;
+        }
+
+
     public void changePatch(Model tempModel) 
         {
-        int bank = tempModel.get("bank");
         // Banks are stored in Edisyn as INTERNAL P1 P2 Card1 Card2
         // But on the TG33 the bank select data values are
         // INTERNAL=0 Card1=1 Preset1=2 Card2=4 PRESET2=5
         // Weird.
         final int[] bankvals = new int[] { 0, 2, 5, 1, 4 };
         
-        // bank select 
-        tryToSendMIDI(buildCC(getChannelOut(), 0, bankvals[tempModel.get("bank")]));
+		// The secret to successful bank selects on the TG33 is to do the MSB (0) bank
+		// select FIRST (value = 0), then the LSB (32) bank select (value = bank), THEN do the PC.
+		// Yes.  Nuts.
+        tryToSendMIDI(buildCC(getChannelOut(), 0, 0));
+        tryToSendMIDI(buildCC(getChannelOut(), 32, bankvals[tempModel.get("bank")]));
         tryToSendMIDI(buildPC(getChannelOut(), tempModel.get("number")));
 
         // we assume that we successfully did it

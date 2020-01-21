@@ -2328,6 +2328,11 @@ public class YamahaTG33 extends Synth
             model.set("name", newnm);
         }
         
+    public String getTitleBarSynthName()
+        {
+        return "Yamaha " + TYPES[synthType];
+        }
+        
     public static String getSynthName() { return "Yamaha TG33/SY22/SY35"; }
 
     public int getPauseAfterChangePatch()

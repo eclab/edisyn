@@ -210,15 +210,24 @@ public class RolandD110Tone extends Synth
         {
         JMenu menu = new JMenu("D-110");
         menubar.add(menu);
-        JMenuItem setupTestPatchMenu = new JMenuItem("Set up Test Patch for Timbre 1");
+        JMenuItem setupTestPatchMenu = new JMenuItem("Set up Test Patch for Timbre 1 Only");
         setupTestPatchMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
-                setupTestPatch();
+                setupTestPatch(true);
                 }
             });
         menu.add(setupTestPatchMenu);
+        JMenuItem setupTestPatchMenu2 = new JMenuItem("Set up Test Patch for All Timbres");
+        setupTestPatchMenu2.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                setupTestPatch(false);
+                }
+            });
+        menu.add(setupTestPatchMenu2);
         JMenuItem writeMultiPatchesMenu = new JMenuItem("Write Multi Patches, One per Tone");
         writeMultiPatchesMenu.addActionListener(new ActionListener()
             {
@@ -247,7 +256,7 @@ public class RolandD110Tone extends Synth
             JRadioButtonMenuItem m = new JRadioButtonMenuItem("Current Patch is Timbre " + (i + 1));
             if (i == 0)
                 m.setSelected(true);
-            setupTestPatchMenu.addActionListener(new ActionListener()
+            m.addActionListener(new ActionListener()
                 {
                 public void actionPerformed(ActionEvent e)
                     {
@@ -262,7 +271,7 @@ public class RolandD110Tone extends Synth
     // Prepare a Patch whose slot N has the current MIDI channel, and has all the partials in reserve.
     // N is defined as the current emit location.  All other slots have zero partials and MIDI channel OFF.
         
-    public void setupTestPatch()
+    public void setupTestPatch(boolean timbre1)
         {
         if (tuple == null)
             if (!setupMIDI(tuple))
@@ -278,13 +287,32 @@ public class RolandD110Tone extends Synth
                 
                 for(int i = 1; i <= 8; i++)
                     {
-                    synth.getModel().set("p" + i + "midichannel", RolandD110Multi.MIDI_CHANNEL_OFF);
-                    synth.getModel().set("p" + i + "partialreserve", 0);
                     synth.getModel().set("p" + i + "outputlevel", 100);
+                    
+                    if (timbre1)
+                    	{
+                    	// turn off everybody
+                    	synth.getModel().set("p" + i + "midichannel", RolandD110Multi.MIDI_CHANNEL_OFF);
+	                    synth.getModel().set("p" + i + "partialreserve", 0);
+                    	}
+                    else
+                    	{
+                    	// turn on everybody, sharing equally
+                    	synth.getModel().set("p" + i + "midichannel", (i - 1));
+	                    synth.getModel().set("p" + i + "partialreserve", 4);
+                    	}
                     }
-                        
-                synth.getModel().set("p" + (emitLocation + 1) + "midichannel", getChannelOut());
-                synth.getModel().set("p" + (emitLocation + 1) + "partialreserve", 32);
+                
+                // prepare timbre1
+                if (timbre1)
+                	{
+                	synth.getModel().set("p" + (emitLocation + 1) + "midichannel", getChannelOut());
+                	synth.getModel().set("p" + (emitLocation + 1) + "partialreserve", 32);
+                	}
+            
+        		// turn off rhythm
+                synth.getModel().set("rhythmmidichannel", RolandD110Multi.MIDI_CHANNEL_OFF);
+                synth.getModel().set("rhythmoutputlevel", 0);
                 
                 synth.sendAllParameters();
                 sendAllParameters();
@@ -1302,8 +1330,8 @@ public class RolandD110Tone extends Synth
             byte LSB = (byte)(loc & 127);
             byte MSB = (byte)((loc >>> 7) & 127);
             buf[5] = (byte)0x04;
-            buf[6] = LSB;
-            buf[7] = MSB;
+            buf[6] = MSB;
+            buf[7] = LSB;
             }
         else
             {

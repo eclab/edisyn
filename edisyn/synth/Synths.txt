@@ -7,6 +7,7 @@ edisyn.synth.dsiprophet08.DSIProphet08
 edisyn.synth.emumorpheus.EmuMorpheus
 edisyn.synth.emumorpheus.EmuMorpheusHyper
 edisyn.synth.emumorpheus.EmuMorpheusMap
+edisyn.synth.emuproteus.EmuProteus
 edisyn.synth.kawaik1.KawaiK1 
 edisyn.synth.kawaik1.KawaiK1Multi 
 edisyn.synth.kawaik4.KawaiK4 
@@ -36,6 +37,7 @@ edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti
 edisyn.synth.yamaha4op.Yamaha4Op
 edisyn.synth.yamaha4op.Yamaha4OpMulti
 edisyn.synth.yamahadx7.YamahaDX7 
+edisyn.synth.yamahafb01.YamahaFB01
 edisyn.synth.yamahatg33.YamahaTG33
 edisyn.synth.yamahatg33.YamahaTG33Multi
 #edisyn.synth.yamahatx81z.YamahaTX81Z 

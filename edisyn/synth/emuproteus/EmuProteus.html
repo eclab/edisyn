@@ -1,0 +1,35 @@
+<html><head></head>
+<body>
+
+
+<h1>E-Mu Proteus 1, 2, 3, and 1+Orchestral</h3>
+<h2>Single Patch Editor</h2>
+
+<p>This editor will work with the <b>E-Mu Proteus 1, 2, 3,</b> and <b>1+Orchestral</b>, but you will need to set a switch to indicate which one you are using, as this will affect which patch numbers you can load and what instruments are available..
+
+<p><b>Communicating with Edisyn</b><br> Set the MIDI ID to the same you'll be setting in Edisyn (typically 0).
+
+<p><b>Gotchas</b> 
+
+<ul>
+<li>The Proteus series cannot send to the current patch -- they can only write patches, or send individual parameters.  But sending to the current patch is a critical function.  Instead of (slowly) sending all parameters, Edisyn instead will write to patch 63 of the Preset RAM.  This means that you will overwrite this patch number every time you "send" the current patch.
+
+<br><p><li>While the Proteus 2 and 3 can set the Chorus to OFF or to 1-15, the Proteus 1 can only actually set the Chorus to OFF and ON.
+
+<br><p><li>You cannot request the current patch on the Proteus.
+
+<br><p><li>In order to change patches (to request a new one or to send or write a patch), Edisyn must modify the Proteus's Program Map table: but there is no way to do this with precision.  As such, Edisyn just obliterates the table in the process.  I hope you didn't have anything on that you wanted to keep.
+
+</ul>
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>January 2020
+</table>
+
+
+

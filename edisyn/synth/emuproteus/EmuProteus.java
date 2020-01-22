@@ -24,17 +24,16 @@ import javax.sound.midi.*;
 
 public class EmuProteus extends Synth
     {
-	public static final String[] CROSSFADE_MODES = new String[] { "Off", "Crossfade", "Cross-switch" };
-	public static final String[] CROSSFADE_DIRECTIONS = new String[] { "Pri->Sec", "Sec->Pri" };
-	public static final String[] VELOCITY_CURVES = new String[] { "Off", "1", "2", "3", "4", "Global" };
-	public static final String[] KEYBOARD_TUNINGS = new String[] { "Equal", "Just C", "Valotti", "19 Tone", "Gamelan", "User" };
-	public static final String[] OUTPUTS = new String[] { "Main", "Sub 1", "Sub 2" };
-	public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+    public static final String[] CROSSFADE_MODES = new String[] { "Off", "Crossfade", "Cross-switch" };
+    public static final String[] CROSSFADE_DIRECTIONS = new String[] { "Pri->Sec", "Sec->Pri" };
+    public static final String[] VELOCITY_CURVES = new String[] { "Off", "1", "2", "3", "4", "Global" };
+    public static final String[] KEYBOARD_TUNINGS = new String[] { "Equal", "Just C", "Valotti", "19 Tone", "Gamelan", "User" };
+    public static final String[] OUTPUTS = new String[] { "Main", "Sub 1", "Sub 2" };
+    public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
 /// FIXME:  On the Proteus 1 screen, the order is RAND TRI SINE SAW SQUARE.  In the docs, it's as below.  Dunno.
-public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Square", "Sawtooth", "Random" };
-
-	
+    public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Square", "Sawtooth", "Random" };
+        
     public static final int TYPE_1 = 0;
     public static final int TYPE_1_ORCHESTRAL = 1;
     public static final int TYPE_2 = 2;
@@ -62,40 +61,40 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
     public void updateChoosers()
         {
         for(int j = 0; j < 2; j++)
-        	{
-			JComboBox box = instrumentChoosers[j].getCombo();
-			int sel = box.getSelectedIndex();
-			box.removeAllItems();
-			String[] elts = (synthType == TYPE_1 ? PROTEUS_1_INSTRUMENTS :
-								(synthType == TYPE_1_ORCHESTRAL ? PROTEUS_1_ORCHESTRAL_INSTRUMENTS :
-									(synthType == TYPE_2 ? PROTEUS_2_INSTRUMENTS : PROTEUS_3_INSTRUMENTS)));
-			for(int i = 0; i < elts.length; i++)
-				box.addItem(elts[i]);
-			instrumentChoosers[j].setMax(elts.length - 1);
-			if (sel <= elts.length)
-				box.setSelectedIndex(sel);
-			else
-				box.setSelectedIndex(0);
-			}
+            {
+            JComboBox box = instrumentChoosers[j].getCombo();
+            int sel = box.getSelectedIndex();
+            box.removeAllItems();
+            String[] elts = (synthType == TYPE_1 ? PROTEUS_1_INSTRUMENTS :
+                    (synthType == TYPE_1_ORCHESTRAL ? PROTEUS_1_ORCHESTRAL_INSTRUMENTS :
+                    (synthType == TYPE_2 ? PROTEUS_2_INSTRUMENTS : PROTEUS_3_INSTRUMENTS)));
+            for(int i = 0; i < elts.length; i++)
+                box.addItem(elts[i]);
+            instrumentChoosers[j].setMax(elts.length - 1);
+            if (sel <= elts.length)
+                box.setSelectedIndex(sel);
+            else
+                box.setSelectedIndex(0);
+            }
         }
 
-	
+        
     public EmuProteus()
         {
         if (parametersToIndex == null)
-        	{
-        	parametersToIndex = new HashMap();
-        	proteus2MappingToIndex = new HashMap();
-        	
-			for(int i = 0; i < parameters.length; i++)
-				{
-				parametersToIndex.put(parameters[i], Integer.valueOf(i));
-				}
+            {
+            parametersToIndex = new HashMap();
+            proteus2MappingToIndex = new HashMap();
+                
+            for(int i = 0; i < parameters.length; i++)
+                {
+                parametersToIndex.put(parameters[i], Integer.valueOf(i));
+                }
 
-			for(int i = 0; i < PROTEUS_2_MAPPING.length; i++)
-				{
-				proteus2MappingToIndex.put(Integer.valueOf(PROTEUS_2_MAPPING[i]), Integer.valueOf(i));
-				}
+            for(int i = 0; i < PROTEUS_2_MAPPING.length; i++)
+                {
+                proteus2MappingToIndex.put(Integer.valueOf(PROTEUS_2_MAPPING[i]), Integer.valueOf(i));
+                }
             }
             
         String m = getLastX(TYPE_KEY, getSynthName());
@@ -119,22 +118,22 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
-		hbox.addLast(addEnvelope(3, Style.COLOR_C()));
+        hbox.addLast(addEnvelope(3, Style.COLOR_C()));
         vbox.add(hbox);
         
         vbox.add(addInstrument(1, Style.COLOR_A())); 
- 		HBox hbox2 = new HBox();
+        HBox hbox2 = new HBox();
         hbox2.add(addEnvelope(1, Style.COLOR_A()));
         hbox2.addLast(addKeyboard(Style.COLOR_C()));
-		vbox.add(hbox2); 
-		
+        vbox.add(hbox2); 
+                
         vbox.add(addInstrument(2, Style.COLOR_B()));
-		hbox2 = new HBox();
+        hbox2 = new HBox();
         hbox2.add(addEnvelope(2, Style.COLOR_B()));
         hbox2.addLast(addCrossfade(Style.COLOR_C()));
-		vbox.add(hbox2);
+        vbox.add(hbox2);
         vbox.add(addSplits(Style.COLOR_C()));
-  		
+                
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Instruments", soundPanel);
                 
@@ -187,37 +186,37 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
             catch (NumberFormatException e)
                 {
                 if (writing)
-                	showSimpleError(title, "The Patch Number must be an integer 64...127");
+                    showSimpleError(title, "The Patch Number must be an integer 64...127");
                 else if (getSynthType() == TYPE_1_ORCHESTRAL)
-                	showSimpleError(title, "The Patch Number must be an integer 0...487");
-				else
-					showSimpleError(title, "The Patch Number must be an integer 0...191");
+                    showSimpleError(title, "The Patch Number must be an integer 0...487");
+                else
+                    showSimpleError(title, "The Patch Number must be an integer 0...191");
                 continue;
                 }
             if (writing)
-            	{
-            	if (n < 64 || n > 127)
-					{
-					showSimpleError(title, "The Patch Number must be an integer 64...127");
-					continue;
-					}
-				}
+                {
+                if (n < 64 || n > 127)
+                    {
+                    showSimpleError(title, "The Patch Number must be an integer 64...127");
+                    continue;
+                    }
+                }
             else if (getSynthType() == TYPE_1_ORCHESTRAL)
-            	{
-            	if (n < 0 || n > 487)
-					{
-					showSimpleError(title, "The Patch Number must be an integer 0...487");
-					continue;
-					}
-				}
-			else
-				{
-            	if (n < 0 || n > 191)
-					{
-					showSimpleError(title, "The Patch Number must be an integer 0...191");
-					continue;
-					}
-				}
+                {
+                if (n < 0 || n > 487)
+                    {
+                    showSimpleError(title, "The Patch Number must be an integer 0...487");
+                    continue;
+                    }
+                }
+            else
+                {
+                if (n < 0 || n > 191)
+                    {
+                    showSimpleError(title, "The Patch Number must be an integer 0...191");
+                    continue;
+                    }
+                }
                                                 
             change.set("number", n);
                         
@@ -286,8 +285,8 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
         params = OUTPUTS;
         comp = new Chooser("Output", this, "submix", params);
         vbox.add(comp);
-		hbox.add(vbox);
-		
+        hbox.add(vbox);
+                
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
         }
@@ -306,16 +305,16 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
         vbox = new VBox();
         params = PROTEUS_1_INSTRUMENTS;
         comp = new Chooser("Instrument", this, "i" + inst + "instrument", params)
-        	{
-        	// normally if we're outside the min/max bounds, 
-        	// setState will bound to those values.  Here
-        	// we pick a more randomized mechanism 
-        	public void setState(int val)
-        		{
-        		val = val % getCombo().getItemCount();
-        		super.setState(val);
-        		}
-        	};
+            {
+            // normally if we're outside the min/max bounds, 
+            // setState will bound to those values.  Here
+            // we pick a more randomized mechanism 
+            public void setState(int val)
+                {
+                val = val % getCombo().getItemCount();
+                super.setState(val);
+                }
+            };
         instrumentChoosers[inst - 1] = (Chooser)comp;
         vbox.add(comp);
 
@@ -334,7 +333,7 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
         ((LabelledDial)comp).addAdditionalLabel("Coarse");
         hbox.add(comp);
 
-		// no, really.  The range is 129 long!
+        // no, really.  The range is 129 long!
         comp = new LabelledDial("Tuning", this, "i" + inst + "tuningfine", color, -64, 64);
         ((LabelledDial)comp).addAdditionalLabel("Fine");
         hbox.add(comp);
@@ -349,32 +348,32 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
         hbox.add(comp);
                 
         comp = new LabelledDial("Low Key", this, "i" + inst + "lowkey", color, 0, 127)
-        	{
-        	public String map(int value)
-        		{
-        		return NOTES[value % 12] + (value / 12 - 2);
-        		}
-        	};
+            {
+            public String map(int value)
+                {
+                return NOTES[value % 12] + (value / 12 - 2);
+                }
+            };
         hbox.add(comp);
 
         comp = new LabelledDial("High Key", this, "i" + inst + "highkey", color, 0, 127)
-        	{
-        	public String map(int value)
-        		{
-        		return NOTES[value % 12] + (value / 12 - 2);
-        		}
-        	};
+            {
+            public String map(int value)
+                {
+                return NOTES[value % 12] + (value / 12 - 2);
+                }
+            };
         hbox.add(comp);
 
-		/// FIXME: Indicate that on the Proteus/1, it's just on/off (0/1)
+        /// FIXME: Indicate that on the Proteus/1, it's just on/off (0/1)
         comp = new LabelledDial("Chorus", this, "i" + inst + "chorus", color, 0, 15)
-        	{
-        	public String map(int value)
-        		{
-        		if (value == 0) return "Off";
-        		else return ("" + value);
-        		}
-        	};
+            {
+            public String map(int value)
+                {
+                if (value == 0) return "Off";
+                else return ("" + value);
+                }
+            };
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -385,28 +384,28 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
     public JComponent addEnvelope(int inst, Color color)
         {
         Category category = new Category(this, (inst == 1 ? "Primary Alternative Envelope" :
-        		(inst == 2 ? "Secondary Alternative Envelope" : "Auxiliary Envelope")), color);
+                (inst == 2 ? "Secondary Alternative Envelope" : "Auxiliary Envelope")), color);
         category.makePasteable("i" + inst);
               
         JComponent comp;
         String[] params;
         final HBox hbox = new HBox();
 
-		if (inst == 1 || inst == 2)
-			{
-			VBox vbox = new VBox();
-			comp = new CheckBox("On", this, "i" + inst + "envelopeon");
-			vbox.add(comp);
-			hbox.add(vbox);
-			}
-		else
-			{
-			comp = new LabelledDial("Amount", this, "i" + inst + "amount", color, 0, 127);
-			hbox.add(comp);
-			
-			comp = new LabelledDial("Delay", this, "i" + inst + "delay", color, 0, 127);
-			hbox.add(comp);
-			}
+        if (inst == 1 || inst == 2)
+            {
+            VBox vbox = new VBox();
+            comp = new CheckBox("On", this, "i" + inst + "envelopeon");
+            vbox.add(comp);
+            hbox.add(vbox);
+            }
+        else
+            {
+            comp = new LabelledDial("Amount", this, "i" + inst + "amount", color, 0, 127);
+            hbox.add(comp);
+                        
+            comp = new LabelledDial("Delay", this, "i" + inst + "delay", color, 0, 127);
+            hbox.add(comp);
+            }
 
         comp = new LabelledDial("Attack", this, "i" + inst + "attack", color, 0, 99);
         hbox.add(comp);
@@ -443,38 +442,38 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
         String[] params;
         final HBox hbox = new HBox();
 
-		VBox vbox = new VBox();
-		params = VELOCITY_CURVES;
-		comp = new Chooser("Velocity Curve", this, "velocitycurve", params);
-		vbox.add(comp);
-		params = KEYBOARD_TUNINGS;
-		comp = new Chooser("Keyboard Tuning", this, "keyboardtuning", params);
-		vbox.add(comp);
-		hbox.add(vbox);
-		
-		comp = new LabelledDial("Pitch Bend", this, "pitchbendrange", color, 0, 13)
-			{
-			public String map(int value)
-				{
-				if (value == 13) return "Global";
-				return "" + value;
-				}
-			};
+        VBox vbox = new VBox();
+        params = VELOCITY_CURVES;
+        comp = new Chooser("Velocity Curve", this, "velocitycurve", params);
+        vbox.add(comp);
+        params = KEYBOARD_TUNINGS;
+        comp = new Chooser("Keyboard Tuning", this, "keyboardtuning", params);
+        vbox.add(comp);
+        hbox.add(vbox);
+                
+        comp = new LabelledDial("Pitch Bend", this, "pitchbendrange", color, 0, 13)
+            {
+            public String map(int value)
+                {
+                if (value == 13) return "Global";
+                return "" + value;
+                }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Range");
-		hbox.add(comp);
+        hbox.add(comp);
 
-		comp = new LabelledDial("Pressure", this, "pressureamount", color, -128, 127);
-		hbox.add(comp);
-		
-		comp = new LabelledDial("Keyboard", this, "keyboardcenter", color, 0, 128)
-			{
-			public String map(int value)
-				{
-        		return NOTES[value % 12] + (value / 12 - 2);
-				}
-			};
+        comp = new LabelledDial("Pressure", this, "pressureamount", color, -128, 127);
+        hbox.add(comp);
+                
+        comp = new LabelledDial("Keyboard", this, "keyboardcenter", color, 0, 128)
+            {
+            public String map(int value)
+                {
+                return NOTES[value % 12] + (value / 12 - 2);
+                }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Center");
-		hbox.add(comp);
+        hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -506,12 +505,12 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
         hbox.add(comp);
 
         comp = new LabelledDial("Switch Point", this, "switchpoint", color, 0, 128)
-        	{
-        	public String map(int value)
-        		{
-        		return "" + value + ":" + NOTES[value % 12] + (value / 12 - 2);
-        		}
-        	};
+            {
+            public String map(int value)
+                {
+                return "" + value + ":" + NOTES[value % 12] + (value / 12 - 2);
+                }
+            };
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -526,32 +525,32 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
         JComponent comp;
         String[] params;
         VBox vbox2 = new VBox();
-         HBox hbox = new HBox();
+        HBox hbox = new HBox();
 
-		for(int i = 1; i <= 6; i++)
-			{
-	        VBox vbox = new VBox();
-	        params = KEYVEL_SOURCES;
-	        comp = new Chooser("" + i + " Source", this, "keyvelsource" + i, params);
-	        vbox.add(comp);
-	
-	        params = KEYVEL_DESTINATIONS;
-	        comp = new Chooser("" + i + " Destination", this, "keyveldest" + i, params);
-	        vbox.add(comp);
-			
-			
-			comp = new LabelledDial("" + i + " Amount", this, "keyvelamount" + i, color, -128, 127);
-			hbox.add(comp);
+        for(int i = 1; i <= 6; i++)
+            {
+            VBox vbox = new VBox();
+            params = KEYVEL_SOURCES;
+            comp = new Chooser("" + i + " Source", this, "keyvelsource" + i, params);
+            vbox.add(comp);
+        
+            params = KEYVEL_DESTINATIONS;
+            comp = new Chooser("" + i + " Destination", this, "keyveldest" + i, params);
+            vbox.add(comp);
+                        
+                        
+            comp = new LabelledDial("" + i + " Amount", this, "keyvelamount" + i, color, -128, 127);
+            hbox.add(comp);
 
-			hbox.add(vbox);
-			if (i == 3 || i == 6)
-				{
-				vbox2.add(hbox);
-				//if (i == 3) 
-				vbox2.add(Strut.makeVerticalStrut(20));
-				hbox = new HBox();
-				}
-			}
+            hbox.add(vbox);
+            if (i == 3 || i == 6)
+                {
+                vbox2.add(hbox);
+                //if (i == 3) 
+                vbox2.add(Strut.makeVerticalStrut(20));
+                hbox = new HBox();
+                }
+            }
 
         category.add(vbox2, BorderLayout.CENTER);
         return category;
@@ -564,31 +563,31 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
 
         JComponent comp;
         String[] params;
-         HBox hbox = new HBox();
+        HBox hbox = new HBox();
 
 
-		VBox vbox = new VBox();
-		params = FOOTSWITCH_DESTINATIONS;
-		comp = new Chooser("Footswitch 1 Destination", this, "footswitchdest1", params);
-		vbox.add(comp);
-		comp = new Chooser("Footswitch 2 Destination", this, "footswitchdest2", params);
-		vbox.add(comp);
-		comp = new Chooser("Footswitch 3 Destination", this, "footswitchdest3", params);
-		vbox.add(comp);
-		hbox.add(vbox);
-		
-		comp = new LabelledDial("Controller A", this, "controlleramount1", color, -128, 127);
+        VBox vbox = new VBox();
+        params = FOOTSWITCH_DESTINATIONS;
+        comp = new Chooser("Footswitch 1 Destination", this, "footswitchdest1", params);
+        vbox.add(comp);
+        comp = new Chooser("Footswitch 2 Destination", this, "footswitchdest2", params);
+        vbox.add(comp);
+        comp = new Chooser("Footswitch 3 Destination", this, "footswitchdest3", params);
+        vbox.add(comp);
+        hbox.add(vbox);
+                
+        comp = new LabelledDial("Controller A", this, "controlleramount1", color, -128, 127);
         ((LabelledDial)comp).addAdditionalLabel("Amount");
-		hbox.add(comp);
-		comp = new LabelledDial("Controller B", this, "controlleramount2", color, -128, 127);
+        hbox.add(comp);
+        comp = new LabelledDial("Controller B", this, "controlleramount2", color, -128, 127);
         ((LabelledDial)comp).addAdditionalLabel("Amount");
-		hbox.add(comp);
-		comp = new LabelledDial("Controller C", this, "controlleramount3", color, -128, 127);
+        hbox.add(comp);
+        comp = new LabelledDial("Controller C", this, "controlleramount3", color, -128, 127);
         ((LabelledDial)comp).addAdditionalLabel("Amount");
-		hbox.add(comp);
-		comp = new LabelledDial("Controller D", this, "controlleramount4", color, -128, 127);
+        hbox.add(comp);
+        comp = new LabelledDial("Controller D", this, "controlleramount4", color, -128, 127);
         ((LabelledDial)comp).addAdditionalLabel("Amount");
-		hbox.add(comp);
+        hbox.add(comp);
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
@@ -602,34 +601,34 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
         JComponent comp;
         String[] params;
         VBox vbox2 = new VBox();
-         HBox hbox = new HBox();
+        HBox hbox = new HBox();
 
-		for(int i = 1; i <= 8; i++)
-			{
-	        VBox vbox = new VBox();
-	        params = REALTIME_SOURCES;
-	        comp = new Chooser("" + i + " Source", this, "realtimesource" + i, params);
-	        vbox.add(comp);
-	
-	        params = REALTIME_DESTINATIONS;
-	        comp = new Chooser("" + i + " Destination", this, "realtimedest" + i, params);
-	        vbox.add(comp);
+        for(int i = 1; i <= 8; i++)
+            {
+            VBox vbox = new VBox();
+            params = REALTIME_SOURCES;
+            comp = new Chooser("" + i + " Source", this, "realtimesource" + i, params);
+            vbox.add(comp);
+        
+            params = REALTIME_DESTINATIONS;
+            comp = new Chooser("" + i + " Destination", this, "realtimedest" + i, params);
+            vbox.add(comp);
 
-			hbox.add(vbox);
-			if (i == 4 || i == 8)
-				{
-				vbox2.add(hbox);
-				if (i == 4) vbox2.add(Strut.makeVerticalStrut(20));
-				hbox = new HBox();
-				}
-			}
+            hbox.add(vbox);
+            if (i == 4 || i == 8)
+                {
+                vbox2.add(hbox);
+                if (i == 4) vbox2.add(Strut.makeVerticalStrut(20));
+                hbox = new HBox();
+                }
+            }
 
         category.add(vbox2, BorderLayout.CENTER);
         return category;
         }
         
         
-     public JComponent addLFO(int lfo, Color color)
+    public JComponent addLFO(int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
         category.makePasteable("lfo" + lfo);
@@ -661,7 +660,7 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
         }
 
 
-     public JComponent addSplits(Color color)
+    public JComponent addSplits(Color color)
         {
         Category category = new Category(this, "Splits", color);
         category.makeDistributable("");
@@ -671,36 +670,36 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
         HBox hbox = new HBox();
         VBox vbox = new VBox();
 
-		for(int i = 0; i < 4; i++)
-			{
-			if (i >= 1)
-				{
-				hbox.add(Strut.makeHorizontalStrut(20));
-				comp = new LabelledDial("Preset", this, "link" + i, color, 0, 191);
-				((LabelledDial)comp).addAdditionalLabel("Link " + i);
-				hbox.add(comp);
-				}
+        for(int i = 0; i < 4; i++)
+            {
+            if (i >= 1)
+                {
+                hbox.add(Strut.makeHorizontalStrut(20));
+                comp = new LabelledDial("Preset", this, "link" + i, color, 0, 191);
+                ((LabelledDial)comp).addAdditionalLabel("Link " + i);
+                hbox.add(comp);
+                }
 
-			comp = new LabelledDial("Low Key", this, "lowkey" + i, color, 0, 127)
-				{
-				public String map(int value)
-					{
-					return NOTES[value % 12] + (value / 12 - 2);
-					}
-				};
-			((LabelledDial)comp).addAdditionalLabel(i == 0 ? "Main" : ("Link " + i));
-			hbox.add(comp);
+            comp = new LabelledDial("Low Key", this, "lowkey" + i, color, 0, 127)
+                {
+                public String map(int value)
+                    {
+                    return NOTES[value % 12] + (value / 12 - 2);
+                    }
+                };
+            ((LabelledDial)comp).addAdditionalLabel(i == 0 ? "Main" : ("Link " + i));
+            hbox.add(comp);
 
-			comp = new LabelledDial("High Key", this, "highkey" + i, color, 0, 127)
-				{
-				public String map(int value)
-					{
-					return NOTES[value % 12] + (value / 12 - 2);
-					}
-				};
-			((LabelledDial)comp).addAdditionalLabel(i == 0 ? "Main" : ("Link " + i));
-			hbox.add(comp);
-			}
+            comp = new LabelledDial("High Key", this, "highkey" + i, color, 0, 127)
+                {
+                public String map(int value)
+                    {
+                    return NOTES[value % 12] + (value / 12 - 2);
+                    }
+                };
+            ((LabelledDial)comp).addAdditionalLabel(i == 0 ? "Main" : ("Link " + i));
+            hbox.add(comp);
+            }
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -753,10 +752,10 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
             byte paramLSB = (byte)(param & 127);
             int val = model.get(key);
             if (key.endsWith("instrument"))
-            	{
-				val = instrumentToSysex(val);
-            	}
-            byte valMSB = (byte)((val >> 7) & 127);		// note >>, not >>>.  We're doing signed extension
+                {
+                val = instrumentToSysex(val);
+                }
+            byte valMSB = (byte)((val >> 7) & 127);             // note >>, not >>>.  We're doing signed extension
             byte valLSB = (byte)(val & 127);
             
             byte[] data = new byte[] { (byte)0xF0, (byte)0x18, (byte)0x04, getID(), (byte)0x03, paramLSB, paramMSB, valLSB, valMSB, (byte)0xF7 };
@@ -814,16 +813,16 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
             {
             int val = model.get(parameters[i], 0);
             if (parameters[i].endsWith("instrument"))
-            	{
-				val = instrumentToSysex(val);
-            	}
+                {
+                val = instrumentToSysex(val);
+                }
             if (val < 0) val = val + 16384;
             data[offset++] = (byte)(val % 128);
             checksum += data[offset-1];
             data[offset++] = (byte)(val / 128);
             checksum += data[offset-1];
-			}
-			
+            }
+                        
         data[offset++] = (byte)(checksum & 127);
         data[offset++] = (byte)0xF7;
 
@@ -855,17 +854,17 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
             {
             int val = (data[offset++] + data[offset++] * 128);
 
-			if (parameters[i].endsWith("instrument"))
-				{
-				val = sysexToInstrument(val);
-				}
-			else
-				{
-	            if (val >= 8192)
-    	            val = val - 16384;
-    	        }
+            if (parameters[i].endsWith("instrument"))
+                {
+                val = sysexToInstrument(val);
+                }
+            else
+                {
+                if (val >= 8192)
+                    val = val - 16384;
+                }
             model.set(parameters[i], val);
-			}
+            }
         revise();
         return PARSE_SUCCEEDED;
         }
@@ -957,9 +956,9 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
     public String getTitleBarSynthName()
         {
         if (synthType == TYPE_1_ORCHESTRAL)
-        	return "E-Mu Proteus 1+Orchestral";
+            return "E-Mu Proteus 1+Orchestral";
         else
-        	return "E-Mu " + TYPES[synthType];
+            return "E-Mu " + TYPES[synthType];
         }
         
     public static String getSynthName() { return "E-Mu Proteus"; }
@@ -1004,259 +1003,259 @@ public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Sq
     /// so we have to have a disambiguation table.  The unique number for an instrument is a 14-bit
     /// integer (or course), whose top 5 bits are the sound set number and the bottom 8 bits are the
     /// sample number within the soundset.
-	public int sysexToInstrument(int sysexValue)
-		{
-		int set = (sysexValue >>> 8);
-		int num = (sysexValue & 255);
-		if (synthType == TYPE_1)
-			{
-			if (set == 0)
-				{
-				return num;
-				}
-			else
+    public int sysexToInstrument(int sysexValue)
+        {
+        int set = (sysexValue >>> 8);
+        int num = (sysexValue & 255);
+        if (synthType == TYPE_1)
+            {
+            if (set == 0)
+                {
+                return num;
+                }
+            else
                 {
                 System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus1 but set is " + set);
                 return 0;
                 }
-			}
-		else if (synthType == TYPE_1_ORCHESTRAL)
-			{
-			if (set == 0)
-				{
-				return num;
-				}
-			else if (set == 2)
-				{
-				return num + 126;
-				}
-			else
+            }
+        else if (synthType == TYPE_1_ORCHESTRAL)
+            {
+            if (set == 0)
+                {
+                return num;
+                }
+            else if (set == 2)
+                {
+                return num + 126;
+                }
+            else
                 {
                 System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus1+Orchestral but set is " + set);
                 return 0;
                 }
-			}
-		else if (synthType == TYPE_2)
-			{
-			if (set == 1 || set == 2)
-				{
-				Integer val = (Integer)proteus2MappingToIndex.get(Integer.valueOf(sysexValue));
-				if (val == null) 
-					{
-                	System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus2 but set/instrument was " + sysexValue);
-                	return 0;
-					}
-				else return val.intValue();
-				}
-			else
+            }
+        else if (synthType == TYPE_2)
+            {
+            if (set == 1 || set == 2)
+                {
+                Integer val = (Integer)proteus2MappingToIndex.get(Integer.valueOf(sysexValue));
+                if (val == null) 
+                    {
+                    System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus2 but set/instrument was " + sysexValue);
+                    return 0;
+                    }
+                else return val.intValue();
+                }
+            else
                 {
                 System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus2 but set is " + set + " " + sysexValue);
                 return 0;
                 }
-			}
-		else if (synthType == TYPE_3)
-			{
-			if (set == 3)
-				{
-				return num;
-				}
-			else
+            }
+        else if (synthType == TYPE_3)
+            {
+            if (set == 3)
+                {
+                return num;
+                }
+            else
                 {
                 System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus3 but set is " + set);
                 return 0;
                 }
-			}
-		else
-			{
-                System.err.println("Warning (EmuProteus sysexToInstrument): Unknown synth type " + synthType);
-                return 0;
-			}
-		}
+            }
+        else
+            {
+            System.err.println("Warning (EmuProteus sysexToInstrument): Unknown synth type " + synthType);
+            return 0;
+            }
+        }
 
-	public int instrumentToSysex(int instrument)
-		{
-		if (synthType == TYPE_1)
-			{
-			return instrument;
-			}
-		else if (synthType == TYPE_1_ORCHESTRAL)
-			{
-			if (instrument <= 125)
-				{
-				return instrument;
-				}
-			else
-				{
-				return 256 * 2 + (instrument - 126);
-				}
-			}
-		else if (synthType == TYPE_2)
-			{
-			return PROTEUS_2_MAPPING[instrument];
-			}
-		else if (synthType == TYPE_3)
-			{
-			return 256 * 3 + instrument;
-			}
-		else
-			{
-			System.err.println("Warning (EmuProteus instrumentToSysex): Unknown synth type " + synthType);
-			return 0;
-			}
-		}		
+    public int instrumentToSysex(int instrument)
+        {
+        if (synthType == TYPE_1)
+            {
+            return instrument;
+            }
+        else if (synthType == TYPE_1_ORCHESTRAL)
+            {
+            if (instrument <= 125)
+                {
+                return instrument;
+                }
+            else
+                {
+                return 256 * 2 + (instrument - 126);
+                }
+            }
+        else if (synthType == TYPE_2)
+            {
+            return PROTEUS_2_MAPPING[instrument];
+            }
+        else if (synthType == TYPE_3)
+            {
+            return 256 * 3 + instrument;
+            }
+        else
+            {
+            System.err.println("Warning (EmuProteus instrumentToSysex): Unknown synth type " + synthType);
+            return 0;
+            }
+        }               
 
 
     static HashMap proteus2MappingToIndex = null;
 
 
-public static final int[] PROTEUS_2_MAPPING = new int[]
-{
-0x0000,
-0x0101,
-0x0102,
-0x0103,
-0x0104,
-0x0105,
-0x0106,
-0x0107,
-0x0108,
-0x0109,
-0x010A,
-0x010D,
-0x010B,
-0x010C,
-0x010E,
-0x0201,
-0x0202,
-0x0203,
-0x0205,
-0x0206,
-0x0207,
-0x0208,
-0x0204,
-0x0209,
-0x020A,
-0x020B,
-0x020C,
-0x020D,
-0x010F,
-0x013F,
-0x0141,
-0x0110,
-0x020E,
-0x020F,
-0x0210,
-0x0211,
-0x0212,
-0x0213,
-0x0214,
-0x021E,
-0x024F,
-0x0215,
-0x0111,
-0x0140,
-0x0112,
-0x0113,
-0x0216,
-0x0114,
-0x0115,
-0x0116,
-0x0117,
-0x0118,
-0x0119,
-0x011A,
-0x011B,
-0x011C,
-0x011D,
-0x011E,
-0x011F,
-0x0120,
-0x0121,
-0x0122,
-0x0123,
-0x0124,
-0x0125,
-0x0217,
-0x0218,
-0x0219,
-0x021A,
-0x021B,
-0x021C,
-0x021D,
-0x0126,
-0x0127,
-0x0128,
-0x0129,
-0x012A,
-0x012B,
-0x012C,
-0x012D,
-0x012E,
-0x012F,
-0x0130,
-0x0131,
-0x0132,
-0x0133,
-0x0134,
-0x0135,
-0x0136,
-0x0137,
-0x0138,
-0x0139,
-0x013A,
-0x013B,
-0x0220,
-0x0221,
-0x0222,
-0x0223,
-0x0224,
-0x0225,
-0x0226,
-0x0227,
-0x0228,
-0x0229,
-0x022A,
-0x022B,
-0x022C,
-0x022D,
-0x022E,
-0x022F,
-0x0230,
-0x0231,
-0x0232,
-0x0233,
-0x0234,
-0x0235,
-0x0236,
-0x0237,
-0x0238,
-0x0239,
-0x023A,
-0x023B,
-0x023C,
-0x023D,
-0x023E,
-0x023F,
-0x0240,
-0x0241,
-0x0242,
-0x0243,
-0x0244,
-0x0245,
-0x0246,
-0x0247,
-0x0248,
-0x0249,
-0x024A,
-0x024B,
-0x024C,
-0x024D,
-0x024E,
-0x021F,
-0x013C,
-0x013D,
-0x013E,
-};
+    public static final int[] PROTEUS_2_MAPPING = new int[]
+    {
+    0x0000,
+    0x0101,
+    0x0102,
+    0x0103,
+    0x0104,
+    0x0105,
+    0x0106,
+    0x0107,
+    0x0108,
+    0x0109,
+    0x010A,
+    0x010D,
+    0x010B,
+    0x010C,
+    0x010E,
+    0x0201,
+    0x0202,
+    0x0203,
+    0x0205,
+    0x0206,
+    0x0207,
+    0x0208,
+    0x0204,
+    0x0209,
+    0x020A,
+    0x020B,
+    0x020C,
+    0x020D,
+    0x010F,
+    0x013F,
+    0x0141,
+    0x0110,
+    0x020E,
+    0x020F,
+    0x0210,
+    0x0211,
+    0x0212,
+    0x0213,
+    0x0214,
+    0x021E,
+    0x024F,
+    0x0215,
+    0x0111,
+    0x0140,
+    0x0112,
+    0x0113,
+    0x0216,
+    0x0114,
+    0x0115,
+    0x0116,
+    0x0117,
+    0x0118,
+    0x0119,
+    0x011A,
+    0x011B,
+    0x011C,
+    0x011D,
+    0x011E,
+    0x011F,
+    0x0120,
+    0x0121,
+    0x0122,
+    0x0123,
+    0x0124,
+    0x0125,
+    0x0217,
+    0x0218,
+    0x0219,
+    0x021A,
+    0x021B,
+    0x021C,
+    0x021D,
+    0x0126,
+    0x0127,
+    0x0128,
+    0x0129,
+    0x012A,
+    0x012B,
+    0x012C,
+    0x012D,
+    0x012E,
+    0x012F,
+    0x0130,
+    0x0131,
+    0x0132,
+    0x0133,
+    0x0134,
+    0x0135,
+    0x0136,
+    0x0137,
+    0x0138,
+    0x0139,
+    0x013A,
+    0x013B,
+    0x0220,
+    0x0221,
+    0x0222,
+    0x0223,
+    0x0224,
+    0x0225,
+    0x0226,
+    0x0227,
+    0x0228,
+    0x0229,
+    0x022A,
+    0x022B,
+    0x022C,
+    0x022D,
+    0x022E,
+    0x022F,
+    0x0230,
+    0x0231,
+    0x0232,
+    0x0233,
+    0x0234,
+    0x0235,
+    0x0236,
+    0x0237,
+    0x0238,
+    0x0239,
+    0x023A,
+    0x023B,
+    0x023C,
+    0x023D,
+    0x023E,
+    0x023F,
+    0x0240,
+    0x0241,
+    0x0242,
+    0x0243,
+    0x0244,
+    0x0245,
+    0x0246,
+    0x0247,
+    0x0248,
+    0x0249,
+    0x024A,
+    0x024B,
+    0x024C,
+    0x024D,
+    0x024E,
+    0x021F,
+    0x013C,
+    0x013D,
+    0x013E,
+    };
 
 
     /** Map of parameter -> index in the allParameters array. */
@@ -1397,807 +1396,807 @@ public static final int[] PROTEUS_2_MAPPING = new int[]
     "keyboardtuning",
     };
     
-public static final String[] FOOTSWITCH_DESTINATIONS = new String[]
-	{
-	"Off",
-	"Sustain",
-	"Primary Sustain",
-	"Secondary Sustain",
-	"Alternate Volume Env",
-	"Primary Alternate Volume Env",
-	"Secondary Alternate Volume Env",
-	"Alternate Volume Rel",
-	"Primary Alternate Volume Rel",
-	"Secondary Alternate Volume Rel",
-	"Cross-Switch"
-	};
-
-public static final String[] REALTIME_SOURCES = new String[]
-	{
-	"Pitch Wheel",
-	"MIDI Control A",
-	"MIDI Control B",
-	"MIDI Control C",
-	"MIDI Control D",
-	"Mono Pressure",
-	"Polyphonic Pressure",
-	"LFO 1",
-	"LFO 2",
-	"Auxilliary Envelope"
-	};
-	
-public static final String[] REALTIME_DESTINATIONS = new String[]
-	{
+    public static final String[] FOOTSWITCH_DESTINATIONS = new String[]
+    {
     "Off",
-"Pitch",
-"Primary Pitch",
-"Secondary Pitch",
-"Volume",
-"Primary Volume",
-"Secondary Volume",
-"Attack",
-"Primary Attack",
-"Secondary Attack",
-"Decay",
-"Primary Decay",
-"Secondary Decay",
-"Release",
-"Primary Release",
-"Secondary Release",
-"Crossfade",
-"LFO 1 Amount",
-"LFO 1 Rate",
-"LFO 2 Amount",
-"LFO 2 Rate",
-"Auxiliary Envelope Amount",
-"Auxiliary Envelope Attack",
-"Auxiliary Envelope Decay",
-"Auxiliary Envelope Release"
-	};
+    "Sustain",
+    "Primary Sustain",
+    "Secondary Sustain",
+    "Alternate Volume Env",
+    "Primary Alternate Volume Env",
+    "Secondary Alternate Volume Env",
+    "Alternate Volume Rel",
+    "Primary Alternate Volume Rel",
+    "Secondary Alternate Volume Rel",
+    "Cross-Switch"
+    };
+
+    public static final String[] REALTIME_SOURCES = new String[]
+    {
+    "Pitch Wheel",
+    "MIDI Control A",
+    "MIDI Control B",
+    "MIDI Control C",
+    "MIDI Control D",
+    "Mono Pressure",
+    "Polyphonic Pressure",
+    "LFO 1",
+    "LFO 2",
+    "Auxilliary Envelope"
+    };
+        
+    public static final String[] REALTIME_DESTINATIONS = new String[]
+    {
+    "Off",
+    "Pitch",
+    "Primary Pitch",
+    "Secondary Pitch",
+    "Volume",
+    "Primary Volume",
+    "Secondary Volume",
+    "Attack",
+    "Primary Attack",
+    "Secondary Attack",
+    "Decay",
+    "Primary Decay",
+    "Secondary Decay",
+    "Release",
+    "Primary Release",
+    "Secondary Release",
+    "Crossfade",
+    "LFO 1 Amount",
+    "LFO 1 Rate",
+    "LFO 2 Amount",
+    "LFO 2 Rate",
+    "Auxiliary Envelope Amount",
+    "Auxiliary Envelope Attack",
+    "Auxiliary Envelope Decay",
+    "Auxiliary Envelope Release"
+    };
 
 
-public static final String[] KEYVEL_SOURCES = new String[] { "Key", "Velocity" };
+    public static final String[] KEYVEL_SOURCES = new String[] { "Key", "Velocity" };
 
-public static final String[] KEYVEL_DESTINATIONS = new String[]
-	{
-"Off",
-"Pitch",
-"Primary Pitch",
-"Secondary Pitch",
-"Volume",
-"Primary Volume",
-"Secondary Volume",
-"Attack",
-"Primary Attack",
-"Secondary Attack",
-"Decay",
-"Primary Decay",
-"Secondary Decay",
-"Release",
-"Primary Release",
-"Secondary Release",
-"Crossfade",
-"LFO 1 Amount",
-"LFO 1 Rate",
-"LFO 2 Amount",
-"LFO 2 Rate",
-"Auxiliary Envelope Amount",
-"Auxiliary Envelope Attack",
-"Auxiliary Envelope Decay",
-"Auxiliary Envelope Release",
-"Sample Start",
-"Primary Sample Start",
-"Secondary Sample Start",
-"Pan",
-"Primary Pan",
-"Secondary Pan",
-"Tone",
-"Primary Tone",
-"Secondary Tone"
-	};
+    public static final String[] KEYVEL_DESTINATIONS = new String[]
+    {
+    "Off",
+    "Pitch",
+    "Primary Pitch",
+    "Secondary Pitch",
+    "Volume",
+    "Primary Volume",
+    "Secondary Volume",
+    "Attack",
+    "Primary Attack",
+    "Secondary Attack",
+    "Decay",
+    "Primary Decay",
+    "Secondary Decay",
+    "Release",
+    "Primary Release",
+    "Secondary Release",
+    "Crossfade",
+    "LFO 1 Amount",
+    "LFO 1 Rate",
+    "LFO 2 Amount",
+    "LFO 2 Rate",
+    "Auxiliary Envelope Amount",
+    "Auxiliary Envelope Attack",
+    "Auxiliary Envelope Decay",
+    "Auxiliary Envelope Release",
+    "Sample Start",
+    "Primary Sample Start",
+    "Secondary Sample Start",
+    "Pan",
+    "Primary Pan",
+    "Secondary Pan",
+    "Tone",
+    "Primary Tone",
+    "Secondary Tone"
+    };
 
-	
+        
 
     public static final String[] PROTEUS_1_INSTRUMENTS = new String[]
     {
-"No Instrument",
-"Piano",
-"Piano Pad",
-"Loose Piano",
-"Tight Piano",
-"Strings",
-"Long Strings",
-"Slow Strings",
-"Dark Strings",
-"Voices",
-"Slow Voices",
-"Dark Choir",
-"Synth Flute",
-"Soft Flute",
-"Alto Sax",
-"Tenor Sax",
-"Baritone Sax",
-"Dark Sax",
-"Soft Trumpet",
-"Dark Soft Trumpet",
-"Hard Trumpet",
-"Dark Hard Trumpet",
-"Horn Falls",
-"Trombone 1",
-"Trombone 2",
-"French Horn",
-"Brass 1",
-"Brass 2",
-"Brass 3",
-"Trombone/Sax",
-"Guitar Mute",
-"Electric Guitar",
-"Acoustic Guitar",
-"Rock Bass",
-"Stone Bass",
-"Flint Bass",
-"Funk Slap",
-"Funk Pop",
-"Harmonics",
-"Rock/Harmonics",
-"Stone/Harmonics",
-"Nose Bass",
-"Bass Synth 1",
-"Bass Synth 2",
-"Synth Pad",
-"Medium Envelope Pad",
-"Long Envelope Pad",
-"Dark Synth",
-"Percussive Organ",
-"Marimba",
-"Vibraphone",
-"All Percussion (Balanced)",
-"All Percussion (Unbalanced)",
-"Standard Percussion Setup 1",
-"Standard Percussion Setup 2",
-"Standard Percussion Setup 3",
-"Kicks",
-"Snares",
-"Toms",
-"Cymbals",
-"Latin Drums",
-"Latin Percussion",
-"Agogo Bell",
-"Woodblock",
-"Conga",
-"Timbale",
-"Ride Cymbal",
-"Percussion FX1",
-"Percussion FX2",
-"Metal",
-"Oct 1 (Sine)",
-"Oct 2 All",
-"Oct 3 All",
-"Oct 4 All",
-"Oct 5 All",
-"Oct 6 All",
-"Oct 7 All",
-"Oct 2 Odd",
-"Oct 3 Odd",
-"Oct 4 Odd",
-"Oct 5 Odd",
-"Oct 6 Odd",
-"Oct 7 Odd",
-"Oct 2 Even",
-"Oct 3 Even",
-"Oct 4 Even",
-"Oct 5 Even",
-"Oct 6 Even",
-"Oct 7 Even",
-"Low Odds",
-"Low Evens",
-"Four Octaves",
-"Synth Cycle 1",
-"Synth Cycle 2",
-"Synth Cycle 3",
-"Synth Cycle 4",
-"Fundamental Gone 1",
-"Fundamental Gone 2",
-"Bite Cycle",
-"Buzzy Cycle 1",
-"Metalphone 1",
-"Metalphone 2",
-"Metalphone 3",
-"Metalphone 4",
-"Duck Cycle 1",
-"Duck Cycle 2",
-"Duck Cycle 3",
-"Wind Cycle 1",
-"Wind Cycle 2",
-"Wind Cycle 3",
-"Wind Cycle 4",
-"Organ Cycle 1",
-"Organ Cycle 2",
-"Noise",
-"Stray Voice 1",
-"Stray Voice 2",
-"Stray Voice 3",
-"Stray Voice 4",
-"Synth String 1",
-"Synth String 2",
-"Animals",
-"Reed",
-"Pluck 1",
-"Pluck 2",
-"Mallet 1",
-"Mallet 2",
+    "No Instrument",
+    "Piano",
+    "Piano Pad",
+    "Loose Piano",
+    "Tight Piano",
+    "Strings",
+    "Long Strings",
+    "Slow Strings",
+    "Dark Strings",
+    "Voices",
+    "Slow Voices",
+    "Dark Choir",
+    "Synth Flute",
+    "Soft Flute",
+    "Alto Sax",
+    "Tenor Sax",
+    "Baritone Sax",
+    "Dark Sax",
+    "Soft Trumpet",
+    "Dark Soft Trumpet",
+    "Hard Trumpet",
+    "Dark Hard Trumpet",
+    "Horn Falls",
+    "Trombone 1",
+    "Trombone 2",
+    "French Horn",
+    "Brass 1",
+    "Brass 2",
+    "Brass 3",
+    "Trombone/Sax",
+    "Guitar Mute",
+    "Electric Guitar",
+    "Acoustic Guitar",
+    "Rock Bass",
+    "Stone Bass",
+    "Flint Bass",
+    "Funk Slap",
+    "Funk Pop",
+    "Harmonics",
+    "Rock/Harmonics",
+    "Stone/Harmonics",
+    "Nose Bass",
+    "Bass Synth 1",
+    "Bass Synth 2",
+    "Synth Pad",
+    "Medium Envelope Pad",
+    "Long Envelope Pad",
+    "Dark Synth",
+    "Percussive Organ",
+    "Marimba",
+    "Vibraphone",
+    "All Percussion (Balanced)",
+    "All Percussion (Unbalanced)",
+    "Standard Percussion Setup 1",
+    "Standard Percussion Setup 2",
+    "Standard Percussion Setup 3",
+    "Kicks",
+    "Snares",
+    "Toms",
+    "Cymbals",
+    "Latin Drums",
+    "Latin Percussion",
+    "Agogo Bell",
+    "Woodblock",
+    "Conga",
+    "Timbale",
+    "Ride Cymbal",
+    "Percussion FX1",
+    "Percussion FX2",
+    "Metal",
+    "Oct 1 (Sine)",
+    "Oct 2 All",
+    "Oct 3 All",
+    "Oct 4 All",
+    "Oct 5 All",
+    "Oct 6 All",
+    "Oct 7 All",
+    "Oct 2 Odd",
+    "Oct 3 Odd",
+    "Oct 4 Odd",
+    "Oct 5 Odd",
+    "Oct 6 Odd",
+    "Oct 7 Odd",
+    "Oct 2 Even",
+    "Oct 3 Even",
+    "Oct 4 Even",
+    "Oct 5 Even",
+    "Oct 6 Even",
+    "Oct 7 Even",
+    "Low Odds",
+    "Low Evens",
+    "Four Octaves",
+    "Synth Cycle 1",
+    "Synth Cycle 2",
+    "Synth Cycle 3",
+    "Synth Cycle 4",
+    "Fundamental Gone 1",
+    "Fundamental Gone 2",
+    "Bite Cycle",
+    "Buzzy Cycle 1",
+    "Metalphone 1",
+    "Metalphone 2",
+    "Metalphone 3",
+    "Metalphone 4",
+    "Duck Cycle 1",
+    "Duck Cycle 2",
+    "Duck Cycle 3",
+    "Wind Cycle 1",
+    "Wind Cycle 2",
+    "Wind Cycle 3",
+    "Wind Cycle 4",
+    "Organ Cycle 1",
+    "Organ Cycle 2",
+    "Noise",
+    "Stray Voice 1",
+    "Stray Voice 2",
+    "Stray Voice 3",
+    "Stray Voice 4",
+    "Synth String 1",
+    "Synth String 2",
+    "Animals",
+    "Reed",
+    "Pluck 1",
+    "Pluck 2",
+    "Mallet 1",
+    "Mallet 2",
     };
 
-	public static final String[] PROTEUS_1_ORCHESTRAL_INSTRUMENTS = new String[]
-	{
-"No Instrument",
-"Piano",
-"Piano Pad",
-"Loose Piano",
-"Tight Piano",
-"Strings",
-"Long Strings",
-"Slow Strings",
-"Dark Strings",
-"Voices",
-"Slow Voices",
-"Dark Choir",
-"Synth Flute",
-"Soft Flute",
-"Alto Sax",
-"Tenor Sax",
-"Baritone Sax",
-"Dark Sax",
-"Soft Trumpet",
-"Dark Soft Trumpet",
-"Hard Trumpet",
-"Dark Hard Trumpet",
-"Horn Falls",
-"Trombone 1",
-"Trombone 2",
-"French Horn",
-"Brass 1",
-"Brass 2",
-"Brass 3",
-"Trombone/Sax",
-"Guitar Mute",
-"Electric Guitar",
-"Acoustic Guitar",
-"Rock Bass",
-"Stone Bass",
-"Flint Bass",
-"Funk Slap",
-"Funk Pop",
-"Harmonics",
-"Rock/Harmonics",
-"Stone/Harmonics",
-"Nose Bass",
-"Bass Synth 1",
-"Bass Synth 2",
-"Synth Pad",
-"Medium Envelope Pad",
-"Long Envelope Pad",
-"Dark Synth",
-"Percussive Organ",
-"Marimba",
-"Vibraphone",
-"All Percussion (Balanced)",
-"All Percussion (Unbalanced)",
-"Standard Percussion Setup 1",
-"Standard Percussion Setup 2",
-"Standard Percussion Setup 3",
-"Kicks",
-"Snares",
-"Toms",
-"Cymbals",
-"Latin Drums",
-"Latin Percussion",
-"Agogo Bell",
-"Woodblock",
-"Conga",
-"Timbale",
-"Ride Cymbal",
-"Percussion FX1",
-"Percussion FX2",
-"Metal",
-"Oct 1 (Sine)",
-"Oct 2 All",
-"Oct 3 All",
-"Oct 4 All",
-"Oct 5 All",
-"Oct 6 All",
-"Oct 7 All",
-"Oct 2 Odd",
-"Oct 3 Odd",
-"Oct 4 Odd",
-"Oct 5 Odd",
-"Oct 6 Odd",
-"Oct 7 Odd",
-"Oct 2 Even",
-"Oct 3 Even",
-"Oct 4 Even",
-"Oct 5 Even",
-"Oct 6 Even",
-"Oct 7 Even",
-"Low Odds",
-"Low Evens",
-"Four Octaves",
-"Synth Cycle 1",
-"Synth Cycle 2",
-"Synth Cycle 3",
-"Synth Cycle 4",
-"Fundamental Gone 1",
-"Fundamental Gone 2",
-"Bite Cycle",
-"Buzzy Cycle 1",
-"Metalphone 1",
-"Metalphone 2",
-"Metalphone 3",
-"Metalphone 4",
-"Duck Cycle 1",
-"Duck Cycle 2",
-"Duck Cycle 3",
-"Wind Cycle 1",
-"Wind Cycle 2",
-"Wind Cycle 3",
-"Wind Cycle 4",
-"Organ Cycle 1",
-"Organ Cycle 2",
-"Noise",
-"Stray Voice 1",
-"Stray Voice 2",
-"Stray Voice 3",
-"Stray Voice 4",
-"Synth String 1",
-"Synth String 2",
-"Animals",
-"Reed",
-"Pluck 1",
-"Pluck 2",
-"Mallet 1",
-"Mallet 2",
-"Solo Cello",
-"Solo Viola",
-"Solo Violin",
-"Gambambo",
-"Quartet 1",
-"Quartet 2",
-"Quartet 3",
-"Quartet 4",
-"Pizz Basses",
-"Pizz Celli",
-"Pizz Violas",
-"Pizz Violin",
-"Pizzicombo",
-"Bass Clarinet",
-"Clarinet",
-"Bass Clarinet/Clarinet",
-"Contra Bassoon",
-"Bassoon",
-"English Horn",
-"Oboe",
-"Woodwinds",
-"Harmon Mute",
-"Tubular Bell",
-"Timpani",
-"Timpani/Tubular Bell",
-"Tamborine",
-"Tam Tam",
-"Percussion 3",
-"Special Effects",
-"Oboe noVib",
-"Upright Pizz",
-"Sine Wave",
-"Triangle Wave",
-"Square Wave",
-"Pulse 33%",
-"Pulse 25%",
-"Pulse 10%",
-"Sawtooth",
-"Sawtooth Odd Gone",
-"Ramp",
-"Ramp Even Only",
-"Violin Essence",
-"Buzzoon",
-"Brassy Wave",
-"Reedy Buzz",
-"Growl Wave",
-"HarpsiWave",
-"Fuzzy Gruzz",
-"Power 5ths",
-"Filtered Saw",
-"Ice Bell",
-"Bronze Age",
-"Iron Plate",
-"Aluminum",
-"Lead Beam",
-"Steel Extract",
-"Winter Glass",
-"Town Bell Wash",
-"Orchestral Bells",
-"Tubular SE",
-"Soft Bell Wave",
-"Swirly",
-"Tack Attack",
-"Shimmer Wave",
-"Moog Lead",
-"B3 SE",
-"Mild Tone",
-"Piper",
-"Ah Wave",
-"Vocal Wave",
-"Fuzzy Clav",
-"Electrhode",
-"Whine 1",
-"Whine 2",
-"Metal Drone",
-"Silver Race",
-"Metal Attack",
-"Filter Bass",
-	};
-	
+    public static final String[] PROTEUS_1_ORCHESTRAL_INSTRUMENTS = new String[]
+    {
+    "No Instrument",
+    "Piano",
+    "Piano Pad",
+    "Loose Piano",
+    "Tight Piano",
+    "Strings",
+    "Long Strings",
+    "Slow Strings",
+    "Dark Strings",
+    "Voices",
+    "Slow Voices",
+    "Dark Choir",
+    "Synth Flute",
+    "Soft Flute",
+    "Alto Sax",
+    "Tenor Sax",
+    "Baritone Sax",
+    "Dark Sax",
+    "Soft Trumpet",
+    "Dark Soft Trumpet",
+    "Hard Trumpet",
+    "Dark Hard Trumpet",
+    "Horn Falls",
+    "Trombone 1",
+    "Trombone 2",
+    "French Horn",
+    "Brass 1",
+    "Brass 2",
+    "Brass 3",
+    "Trombone/Sax",
+    "Guitar Mute",
+    "Electric Guitar",
+    "Acoustic Guitar",
+    "Rock Bass",
+    "Stone Bass",
+    "Flint Bass",
+    "Funk Slap",
+    "Funk Pop",
+    "Harmonics",
+    "Rock/Harmonics",
+    "Stone/Harmonics",
+    "Nose Bass",
+    "Bass Synth 1",
+    "Bass Synth 2",
+    "Synth Pad",
+    "Medium Envelope Pad",
+    "Long Envelope Pad",
+    "Dark Synth",
+    "Percussive Organ",
+    "Marimba",
+    "Vibraphone",
+    "All Percussion (Balanced)",
+    "All Percussion (Unbalanced)",
+    "Standard Percussion Setup 1",
+    "Standard Percussion Setup 2",
+    "Standard Percussion Setup 3",
+    "Kicks",
+    "Snares",
+    "Toms",
+    "Cymbals",
+    "Latin Drums",
+    "Latin Percussion",
+    "Agogo Bell",
+    "Woodblock",
+    "Conga",
+    "Timbale",
+    "Ride Cymbal",
+    "Percussion FX1",
+    "Percussion FX2",
+    "Metal",
+    "Oct 1 (Sine)",
+    "Oct 2 All",
+    "Oct 3 All",
+    "Oct 4 All",
+    "Oct 5 All",
+    "Oct 6 All",
+    "Oct 7 All",
+    "Oct 2 Odd",
+    "Oct 3 Odd",
+    "Oct 4 Odd",
+    "Oct 5 Odd",
+    "Oct 6 Odd",
+    "Oct 7 Odd",
+    "Oct 2 Even",
+    "Oct 3 Even",
+    "Oct 4 Even",
+    "Oct 5 Even",
+    "Oct 6 Even",
+    "Oct 7 Even",
+    "Low Odds",
+    "Low Evens",
+    "Four Octaves",
+    "Synth Cycle 1",
+    "Synth Cycle 2",
+    "Synth Cycle 3",
+    "Synth Cycle 4",
+    "Fundamental Gone 1",
+    "Fundamental Gone 2",
+    "Bite Cycle",
+    "Buzzy Cycle 1",
+    "Metalphone 1",
+    "Metalphone 2",
+    "Metalphone 3",
+    "Metalphone 4",
+    "Duck Cycle 1",
+    "Duck Cycle 2",
+    "Duck Cycle 3",
+    "Wind Cycle 1",
+    "Wind Cycle 2",
+    "Wind Cycle 3",
+    "Wind Cycle 4",
+    "Organ Cycle 1",
+    "Organ Cycle 2",
+    "Noise",
+    "Stray Voice 1",
+    "Stray Voice 2",
+    "Stray Voice 3",
+    "Stray Voice 4",
+    "Synth String 1",
+    "Synth String 2",
+    "Animals",
+    "Reed",
+    "Pluck 1",
+    "Pluck 2",
+    "Mallet 1",
+    "Mallet 2",
+    "Solo Cello",
+    "Solo Viola",
+    "Solo Violin",
+    "Gambambo",
+    "Quartet 1",
+    "Quartet 2",
+    "Quartet 3",
+    "Quartet 4",
+    "Pizz Basses",
+    "Pizz Celli",
+    "Pizz Violas",
+    "Pizz Violin",
+    "Pizzicombo",
+    "Bass Clarinet",
+    "Clarinet",
+    "Bass Clarinet/Clarinet",
+    "Contra Bassoon",
+    "Bassoon",
+    "English Horn",
+    "Oboe",
+    "Woodwinds",
+    "Harmon Mute",
+    "Tubular Bell",
+    "Timpani",
+    "Timpani/Tubular Bell",
+    "Tamborine",
+    "Tam Tam",
+    "Percussion 3",
+    "Special Effects",
+    "Oboe noVib",
+    "Upright Pizz",
+    "Sine Wave",
+    "Triangle Wave",
+    "Square Wave",
+    "Pulse 33%",
+    "Pulse 25%",
+    "Pulse 10%",
+    "Sawtooth",
+    "Sawtooth Odd Gone",
+    "Ramp",
+    "Ramp Even Only",
+    "Violin Essence",
+    "Buzzoon",
+    "Brassy Wave",
+    "Reedy Buzz",
+    "Growl Wave",
+    "HarpsiWave",
+    "Fuzzy Gruzz",
+    "Power 5ths",
+    "Filtered Saw",
+    "Ice Bell",
+    "Bronze Age",
+    "Iron Plate",
+    "Aluminum",
+    "Lead Beam",
+    "Steel Extract",
+    "Winter Glass",
+    "Town Bell Wash",
+    "Orchestral Bells",
+    "Tubular SE",
+    "Soft Bell Wave",
+    "Swirly",
+    "Tack Attack",
+    "Shimmer Wave",
+    "Moog Lead",
+    "B3 SE",
+    "Mild Tone",
+    "Piper",
+    "Ah Wave",
+    "Vocal Wave",
+    "Fuzzy Clav",
+    "Electrhode",
+    "Whine 1",
+    "Whine 2",
+    "Metal Drone",
+    "Silver Race",
+    "Metal Attack",
+    "Filter Bass",
+    };
+        
     public static final String[] PROTEUS_2_INSTRUMENTS = new String[]
     {
-"No Instrument",
-"Arco Basses",
-"Arco Celli",
-"Arco Violas",
-"Arco Violin",
-"Dark Basses",
-"Dark Celli",
-"Dark Violas",
-"Dark Violin",
-"Low Tremolo",
-"High Tremolo",
-"Tremolande",
-"Strings 1",
-"Strings 2",
-"Strings 3",
-"Solo Cello",
-"Solo Viola",
-"Solo Violin",
-"Quartet 1",
-"Quartet 2",
-"Quartet 3",
-"Quartet 4",
-"Gambambo",
-"Pizz Basses",
-"Pizz Celli",
-"Pizz Violas",
-"Pizz Violin",
-"Pizzicombo",
-"Flute w/Vib",
-"Flute noVib",
-"Flute",
-"Piccolo",
-"Bass Clarinet",
-"Clarinet",
-"Bass Clarinet/Clarinet",
-"Contra Bassoon",
-"Bassoon",
-"English Horn",
-"Oboe w/Vib",
-"Oboe noVib",
-"Oboe",
-"Woodwinds",
-"Hi Trombone",
-"Lo Trombone",
-"MF Trumpet",
-"FF Trumpet",
-"Harmon Mute",
-"MF French Horn",
-"FF French Horn",
-"Tuba",
-"FF Brass",
-"MF Brass",
-"Harp",
-"Xylophone",
-"Celesta",
-"Triangle",
-"Bass Drum",
-"Snare Drum",
-"Piatti",
-"Temple Block",
-"Glockenspiel",
-"Percussion 1",
-"Percussion 2",
-"Low Percussion 2",
-"High Percussion 2",
-"Tubular Bell",
-"Timpani",
-"Timpani/Tubular Bell",
-"Tambourine",
-"Tam Tam",
-"Percussion 3",
-"Special Effects",
-"Oct 1 (Sine)",
-"Oct 2 All",
-"Oct 3 All",
-"Oct 4 All",
-"Oct 5 All",
-"Oct 6 All",
-"Oct 7 All",
-"Oct 2 Odd",
-"Oct 3 Odd",
-"Oct 4 Odd",
-"Oct 5 Odd",
-"Oct 6 Odd",
-"Oct 7 Odd",
-"Oct 2 Even",
-"Oct 3 Even",
-"Oct 4 Even",
-"Oct 5 Even",
-"Oct 6 Even",
-"Oct 7 Even",
-"Low Odds",
-"Low Evens",
-"Four Octaves",
-"Sine Wave",
-"Triangle Wave",
-"Square Wave",
-"Pulse 33%",
-"Pulse 25%",
-"Pulse 10%",
-"Sawtooth",
-"Sawtooth Odd Gone",
-"Ramp",
-"Ramp Even Only",
-"Violin Essence",
-"Buzzoon",
-"Brassy Wave",
-"Reedy Buzz",
-"Growl Wave",
-"HarpsiWave",
-"Fuzzy Gruzz",
-"Power 5ths",
-"Filtered Saw",
-"Ice Bell",
-"Bronze Age",
-"Iron Plate",
-"Aluminum",
-"Lead Beam",
-"Steel Extract",
-"Winter Glass",
-"Town Bell Wash",
-"Orchestral Bells",
-"Tubular SE",
-"Soft Bell Wave",
-"Swirly",
-"Tack Attack",
-"Shimmer Wave",
-"Moog Lead",
-"B3 SE",
-"Mild Tone",
-"Piper",
-"Ah Wave",
-"Vocal Wave",
-"Fuzzy Clav",
-"Electrhode",
-"Whine 1",
-"Whine 2",
-"Metal Drone",
-"Silver Race",
-"Metal Attack",
-"Filter Bass",
-"Upright Pizz",
-"Nylon Pluck 1",
-"Nylon Pluck 2",
-"Plucked Bass",
-	};
+    "No Instrument",
+    "Arco Basses",
+    "Arco Celli",
+    "Arco Violas",
+    "Arco Violin",
+    "Dark Basses",
+    "Dark Celli",
+    "Dark Violas",
+    "Dark Violin",
+    "Low Tremolo",
+    "High Tremolo",
+    "Tremolande",
+    "Strings 1",
+    "Strings 2",
+    "Strings 3",
+    "Solo Cello",
+    "Solo Viola",
+    "Solo Violin",
+    "Quartet 1",
+    "Quartet 2",
+    "Quartet 3",
+    "Quartet 4",
+    "Gambambo",
+    "Pizz Basses",
+    "Pizz Celli",
+    "Pizz Violas",
+    "Pizz Violin",
+    "Pizzicombo",
+    "Flute w/Vib",
+    "Flute noVib",
+    "Flute",
+    "Piccolo",
+    "Bass Clarinet",
+    "Clarinet",
+    "Bass Clarinet/Clarinet",
+    "Contra Bassoon",
+    "Bassoon",
+    "English Horn",
+    "Oboe w/Vib",
+    "Oboe noVib",
+    "Oboe",
+    "Woodwinds",
+    "Hi Trombone",
+    "Lo Trombone",
+    "MF Trumpet",
+    "FF Trumpet",
+    "Harmon Mute",
+    "MF French Horn",
+    "FF French Horn",
+    "Tuba",
+    "FF Brass",
+    "MF Brass",
+    "Harp",
+    "Xylophone",
+    "Celesta",
+    "Triangle",
+    "Bass Drum",
+    "Snare Drum",
+    "Piatti",
+    "Temple Block",
+    "Glockenspiel",
+    "Percussion 1",
+    "Percussion 2",
+    "Low Percussion 2",
+    "High Percussion 2",
+    "Tubular Bell",
+    "Timpani",
+    "Timpani/Tubular Bell",
+    "Tambourine",
+    "Tam Tam",
+    "Percussion 3",
+    "Special Effects",
+    "Oct 1 (Sine)",
+    "Oct 2 All",
+    "Oct 3 All",
+    "Oct 4 All",
+    "Oct 5 All",
+    "Oct 6 All",
+    "Oct 7 All",
+    "Oct 2 Odd",
+    "Oct 3 Odd",
+    "Oct 4 Odd",
+    "Oct 5 Odd",
+    "Oct 6 Odd",
+    "Oct 7 Odd",
+    "Oct 2 Even",
+    "Oct 3 Even",
+    "Oct 4 Even",
+    "Oct 5 Even",
+    "Oct 6 Even",
+    "Oct 7 Even",
+    "Low Odds",
+    "Low Evens",
+    "Four Octaves",
+    "Sine Wave",
+    "Triangle Wave",
+    "Square Wave",
+    "Pulse 33%",
+    "Pulse 25%",
+    "Pulse 10%",
+    "Sawtooth",
+    "Sawtooth Odd Gone",
+    "Ramp",
+    "Ramp Even Only",
+    "Violin Essence",
+    "Buzzoon",
+    "Brassy Wave",
+    "Reedy Buzz",
+    "Growl Wave",
+    "HarpsiWave",
+    "Fuzzy Gruzz",
+    "Power 5ths",
+    "Filtered Saw",
+    "Ice Bell",
+    "Bronze Age",
+    "Iron Plate",
+    "Aluminum",
+    "Lead Beam",
+    "Steel Extract",
+    "Winter Glass",
+    "Town Bell Wash",
+    "Orchestral Bells",
+    "Tubular SE",
+    "Soft Bell Wave",
+    "Swirly",
+    "Tack Attack",
+    "Shimmer Wave",
+    "Moog Lead",
+    "B3 SE",
+    "Mild Tone",
+    "Piper",
+    "Ah Wave",
+    "Vocal Wave",
+    "Fuzzy Clav",
+    "Electrhode",
+    "Whine 1",
+    "Whine 2",
+    "Metal Drone",
+    "Silver Race",
+    "Metal Attack",
+    "Filter Bass",
+    "Upright Pizz",
+    "Nylon Pluck 1",
+    "Nylon Pluck 2",
+    "Plucked Bass",
+    };
 
     public static final String[] PROTEUS_3_INSTRUMENTS = new String[]
     {
-"No Instrument",
-"Renaissance",
-"East Indian",
-"Folk America",
-"Down Under",
-"Troubadour",
-"Irish Harp",
-"Dulcimer",
-"Koto",
-"Banjo",
-"Hi Tar",
-"Guitar",
-"Sitar",
-"Tamburas",
-"Psaltry",
-"Waterphone 1",
-"Waterphone 2",
-"Pizz Bass",
-"Tam/Sitar",
-"Accordion",
-"Harmonica",
-"Harmonica",
-"Mizmars",
-"Shanai",
-"Penny Whistle",
-"Ocarina",
-"Shofar A",
-"Shofar B",
-"Shofars",
-"Siku",
-"Shakuhachi",
-"Ney Flute",
-"Bagpipe Drone",
-"Chanter A",
-"Chanter B",
-"Drone/ChanterA",
-"Drone/ChanterB",
-"Roarer/Catcher",
-"Bull Roarer",
-"Spirit Catcher",
-"Didjeridu",
-"Didjeridu A",
-"Didjeridu B",
-"Didjeridu C",
-"Jews Harp",
-"Jews Harp A",
-"Jews Harp B",
-"Jews Harp C",
-"Jews Harp D",
-"Trombone",
-"French Horn",
-"Trumpet",
-"Mid East Drum",
-"Udu Drum",
-"Bata Drums",
-"The Tabla",
-"Wood Drum",
-"Gamelan",
-"Bonang Kenong",
-"Kenong Bonang",
-"Seribu Pulau",
-"Surdo Drum",
-"Maracas",
-"Plexitones",
-"Traps",
-"All Percussion",
-"All Percussion 1P",
-"All Percussion",
-"Snare Drum",
-"Kck Drum",
-"Hi-Hat Closed",
-"Hi-Hat Open",
-"Wood Block",
-"Steel Drum",
-"Castanet",
-"Buzz/Likembe",
-"Likembe",
-"Likembe Buzz",
-"Surdo open",
-"Surdo Mute",
-"Deff Slap",
-"Deff Mute",
-"Bendir",
-"Req Open",
-"Req Slap",
-"Maraca A",
-"Maraca B",
-"Maraca C",
-"Maraca D",
-"Udu Tone",
-"Udu Release",
-"Udu Finger",
-"Udu Slap",
-"Bata Ipu Tone",
-"Bata Ipu Slap",
-"Bata Enu Tone",
-"Bata Hi Tone",
-"Bata Hi Mute",
-"Bata Hi Slap",
-"Crickets",
-"Baya Tone",
-"Baya Slap",
-"Baya Hit",
-"Tabla Tone",
-"Tabla Mute A",
-"Tabla Mute B",
-"Tabla Mute C",
-"Tabla Open",
-"China Gong",
-"Nepal Cymbal",
-"Tibetan Bowl",
-"Crotales",
-"Bonang",
-"Kenong",
-"Saron",
-"Suwuk Gong",
-"Clapper Stick",
-"Rosewood Bass",
-"Rosewood Tick",
-"Rosewood Harm.",
-"Rosewood Finger",
-"Tanzanian Shaker",
-"Hula Stick",
-"Log Drum",
-"Plexi-Tone",
-"Plexi-Slap A",
-"Plexi-Slap B",
-"Plexi-Slap C",
-"Oct 1 (Sine)",
-"Oct 2 All",
-"Oct 3 All",
-"Oct 4 All",
-"Oct 5 All",
-"Oct 6 All",
-"Oct 7 All",
-"Oct 2 Odd",
-"Oct 3 Odd",
-"Oct 4 Odd",
-"Oct 5 Odd",
-"Oct 6 Odd",
-"Oct 7 Odd",
-"Oct 2 Even",
-"Oct 3 Even",
-"Oct 4 Even",
-"Oct 5 Even",
-"Oct 6 Even",
-"Oct 7 Even",
-"Low Odds",
-"Low Evens",
-"Four Octaves",
-"Synth Cycle 1",
-"Synth Cycle 2",
-"Synth Cycle 3",
-"Synth Cycle 4",
-"Fundamental Gone 1",
-"Fundamental Gone 2",
-"Bite Cycle",
-"Buzzy Cycle 1",
-"Metalphone 1",
-"Metalphone 2",
-"Metalphone 3",
-"Metalphone 4",
-"Duck Cycle 1",
-"Duck Cycle 2",
-"Duck Cycle 3",
-"Wind Cycle 1",
-"Wind Cycle 2",
-"Wind Cycle 3",
-"Wind Cycle 4",
-"Organ Cycle 1",
-"Organ Cycle 2",
-"Noise",
-"Dark Noise",
-"Triangle",
-"Square",
-"Sawtooth",
-"Sawtooth Odd Gone",
-"Ramp",
-"Ramp Even Only",
-"Violin Essence",
-"Buzzoon",
-"Brassy Wave",
-"Reedy Buzz",
-"Growl Wave",
-"HarpsiWave",
-"Fuzzy Gruzz",
-"Power 5ths",
-"Filtered Saw",
-"Ice Bell",
-"Bronze Age",
-"Iron Plate",
-"Aluminum",
-"Lead Beam",
-"Steel Extract",
-"Winter Glass",
-"Asian Gongs 1",
-"Asian Gongs 2",
-"Suwak Wave",
-"Savannah Land",
-"Swamp Thing",
-"Bugs 1",
-"Bugs 2",
-"Bugs 3",
-"Bugs 4",
-"Bugs 5",
-"Bugs 6",
-"Crickets",
-"Woodpecker 1",
-"Woodpecker 2",
-"Frogz",
-"Tribe 1",
-"Tribe 2",
-	};
+    "No Instrument",
+    "Renaissance",
+    "East Indian",
+    "Folk America",
+    "Down Under",
+    "Troubadour",
+    "Irish Harp",
+    "Dulcimer",
+    "Koto",
+    "Banjo",
+    "Hi Tar",
+    "Guitar",
+    "Sitar",
+    "Tamburas",
+    "Psaltry",
+    "Waterphone 1",
+    "Waterphone 2",
+    "Pizz Bass",
+    "Tam/Sitar",
+    "Accordion",
+    "Harmonica",
+    "Harmonica",
+    "Mizmars",
+    "Shanai",
+    "Penny Whistle",
+    "Ocarina",
+    "Shofar A",
+    "Shofar B",
+    "Shofars",
+    "Siku",
+    "Shakuhachi",
+    "Ney Flute",
+    "Bagpipe Drone",
+    "Chanter A",
+    "Chanter B",
+    "Drone/ChanterA",
+    "Drone/ChanterB",
+    "Roarer/Catcher",
+    "Bull Roarer",
+    "Spirit Catcher",
+    "Didjeridu",
+    "Didjeridu A",
+    "Didjeridu B",
+    "Didjeridu C",
+    "Jews Harp",
+    "Jews Harp A",
+    "Jews Harp B",
+    "Jews Harp C",
+    "Jews Harp D",
+    "Trombone",
+    "French Horn",
+    "Trumpet",
+    "Mid East Drum",
+    "Udu Drum",
+    "Bata Drums",
+    "The Tabla",
+    "Wood Drum",
+    "Gamelan",
+    "Bonang Kenong",
+    "Kenong Bonang",
+    "Seribu Pulau",
+    "Surdo Drum",
+    "Maracas",
+    "Plexitones",
+    "Traps",
+    "All Percussion",
+    "All Percussion 1P",
+    "All Percussion",
+    "Snare Drum",
+    "Kck Drum",
+    "Hi-Hat Closed",
+    "Hi-Hat Open",
+    "Wood Block",
+    "Steel Drum",
+    "Castanet",
+    "Buzz/Likembe",
+    "Likembe",
+    "Likembe Buzz",
+    "Surdo open",
+    "Surdo Mute",
+    "Deff Slap",
+    "Deff Mute",
+    "Bendir",
+    "Req Open",
+    "Req Slap",
+    "Maraca A",
+    "Maraca B",
+    "Maraca C",
+    "Maraca D",
+    "Udu Tone",
+    "Udu Release",
+    "Udu Finger",
+    "Udu Slap",
+    "Bata Ipu Tone",
+    "Bata Ipu Slap",
+    "Bata Enu Tone",
+    "Bata Hi Tone",
+    "Bata Hi Mute",
+    "Bata Hi Slap",
+    "Crickets",
+    "Baya Tone",
+    "Baya Slap",
+    "Baya Hit",
+    "Tabla Tone",
+    "Tabla Mute A",
+    "Tabla Mute B",
+    "Tabla Mute C",
+    "Tabla Open",
+    "China Gong",
+    "Nepal Cymbal",
+    "Tibetan Bowl",
+    "Crotales",
+    "Bonang",
+    "Kenong",
+    "Saron",
+    "Suwuk Gong",
+    "Clapper Stick",
+    "Rosewood Bass",
+    "Rosewood Tick",
+    "Rosewood Harm.",
+    "Rosewood Finger",
+    "Tanzanian Shaker",
+    "Hula Stick",
+    "Log Drum",
+    "Plexi-Tone",
+    "Plexi-Slap A",
+    "Plexi-Slap B",
+    "Plexi-Slap C",
+    "Oct 1 (Sine)",
+    "Oct 2 All",
+    "Oct 3 All",
+    "Oct 4 All",
+    "Oct 5 All",
+    "Oct 6 All",
+    "Oct 7 All",
+    "Oct 2 Odd",
+    "Oct 3 Odd",
+    "Oct 4 Odd",
+    "Oct 5 Odd",
+    "Oct 6 Odd",
+    "Oct 7 Odd",
+    "Oct 2 Even",
+    "Oct 3 Even",
+    "Oct 4 Even",
+    "Oct 5 Even",
+    "Oct 6 Even",
+    "Oct 7 Even",
+    "Low Odds",
+    "Low Evens",
+    "Four Octaves",
+    "Synth Cycle 1",
+    "Synth Cycle 2",
+    "Synth Cycle 3",
+    "Synth Cycle 4",
+    "Fundamental Gone 1",
+    "Fundamental Gone 2",
+    "Bite Cycle",
+    "Buzzy Cycle 1",
+    "Metalphone 1",
+    "Metalphone 2",
+    "Metalphone 3",
+    "Metalphone 4",
+    "Duck Cycle 1",
+    "Duck Cycle 2",
+    "Duck Cycle 3",
+    "Wind Cycle 1",
+    "Wind Cycle 2",
+    "Wind Cycle 3",
+    "Wind Cycle 4",
+    "Organ Cycle 1",
+    "Organ Cycle 2",
+    "Noise",
+    "Dark Noise",
+    "Triangle",
+    "Square",
+    "Sawtooth",
+    "Sawtooth Odd Gone",
+    "Ramp",
+    "Ramp Even Only",
+    "Violin Essence",
+    "Buzzoon",
+    "Brassy Wave",
+    "Reedy Buzz",
+    "Growl Wave",
+    "HarpsiWave",
+    "Fuzzy Gruzz",
+    "Power 5ths",
+    "Filtered Saw",
+    "Ice Bell",
+    "Bronze Age",
+    "Iron Plate",
+    "Aluminum",
+    "Lead Beam",
+    "Steel Extract",
+    "Winter Glass",
+    "Asian Gongs 1",
+    "Asian Gongs 2",
+    "Suwak Wave",
+    "Savannah Land",
+    "Swamp Thing",
+    "Bugs 1",
+    "Bugs 2",
+    "Bugs 3",
+    "Bugs 4",
+    "Bugs 5",
+    "Bugs 6",
+    "Crickets",
+    "Woodpecker 1",
+    "Woodpecker 2",
+    "Frogz",
+    "Tribe 1",
+    "Tribe 2",
+    };
     }

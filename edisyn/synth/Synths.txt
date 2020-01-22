@@ -1,5 +1,4 @@
 # edisyn.synth.futuresonusparva.FuturesonusParva
-#edisyn.synth.generic.Generic
 #edisyn.synth.tuning.Tuning
 edisyn.synth.casiocz.CasioCZ
 # edisyn.synth.linnstrument.Linnstrument
@@ -42,3 +41,5 @@ edisyn.synth.yamahatg33.YamahaTG33
 edisyn.synth.yamahatg33.YamahaTG33Multi
 #edisyn.synth.yamahatx81z.YamahaTX81Z 
 #edisyn.synth.yamahatx81z.YamahaTX81ZMulti
+edisyn.synth.generic.Generic
+

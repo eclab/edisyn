@@ -1679,11 +1679,17 @@ public class PreenFM2 extends Synth
 
         // set up the sysex data.  Note that the original vals data is stored in 16 bit,
         // so we need two bytes per.
+        
+        // I have identified an error in the sysex protocol: we were starting at HEADER=17
+        // rather than HEADER=18.  Thus version 0 was overwriting the version byte!
+        // So we're updating to HEADER=18, changing the sysex version to 1, and (importantly)
+        // making a small change in the header, so it now says "EDISYN-PREENFM2" rather than
+        // "EDISYN PREENFM2" to detect the older version and be backward compatible.
                 
         // Our header, which says 0xF0 0x7D "EDISYN PREENFM2" VERSIONBYTE=0,
         // is 18 long.  We also have one byte for the footer 0xF7
                 
-        final int HEADER = 17;
+        final int HEADER = 18;
 
         byte[] sysex = new byte[(sysexKeys.length + 11) * 2 + HEADER + 1];
         sysex[0] = (byte)0xF0;
@@ -1694,7 +1700,7 @@ public class PreenFM2 extends Synth
         sysex[5] = (byte)'S';
         sysex[6] = (byte)'Y';
         sysex[7] = (byte)'N';
-        sysex[8] = (byte)' ';
+        sysex[8] = (byte)'-';
         sysex[9] = (byte)'P';
         sysex[10] = (byte)'R';
         sysex[11] = (byte)'E';
@@ -1703,7 +1709,7 @@ public class PreenFM2 extends Synth
         sysex[14] = (byte)'F';
         sysex[15] = (byte)'M';
         sysex[16] = (byte)'2';
-        sysex[17] = (byte)0;            // sysex version
+        sysex[17] = (byte)1;            // sysex version
         
         for(int i = 0; i < vals.length ; i++)
             {
@@ -1721,7 +1727,8 @@ public class PreenFM2 extends Synth
         the purposes of reading a file. */
     public int parse(byte[] data, boolean fromFile)
         {
-        final int HEADER = 17;
+        int HEADER = 18;
+        if (data[8] == ' ') HEADER = 17;  		// backward compatibility with version "0"
                 
         for(int i = 0; i < sysexKeys.length - 1; i++)
             {
@@ -1754,7 +1761,7 @@ public class PreenFM2 extends Synth
             data[5] == (byte)'S' &&
             data[6] == (byte)'Y' &&
             data[7] == (byte)'N' &&
-            data[8] == (byte)' ' &&
+            (data[8] == (byte)' ' || data[8] == (byte)'-') &&		// versions 1 and 0
             data[9] == (byte)'P' &&
             data[10] == (byte)'R' &&
             data[11] == (byte)'E' &&
@@ -1763,7 +1770,9 @@ public class PreenFM2 extends Synth
             data[14] == (byte)'F' &&
             data[15] == (byte)'M' &&
             data[16] == (byte)'2' &&
-            data[17] == (byte)0);
+            (data[8] == (byte)'-' ? 
+            	(data[17] == (byte)1) :		// version 1
+            	 true));					// version "0" -- who knows what value data[17] would be
         return val;
         }
 

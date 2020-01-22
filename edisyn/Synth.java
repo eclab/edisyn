@@ -217,7 +217,10 @@ public abstract class Synth extends JComponent implements Updatable
                 // we call this here even though it's already been called as a result of frame.setVisible(true)
                 // because it's *after* setupMidi(...) and so it gives synths a chance to send
                 // a MIDI sysex message in response to the window becoming front.
-                synth.sendAllSoundsOff();  // not doSendAllSoundsOff(false), because we don't want to stop the test notes per se
+                if (synth.sendAllSoundsOffWhenWindowActivated())
+                	{
+	                synth.sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
+	                }
                 synth.windowBecameFront();                              
                 }
             synth.undo.setWillPush(true);
@@ -4192,7 +4195,10 @@ public abstract class Synth extends JComponent implements Updatable
 
             public void windowActivated(WindowEvent e)
                 {
-                sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
+                if (sendAllSoundsOffWhenWindowActivated())
+                	{
+	                sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
+	                }
                 windowBecameFront();
                 lastActiveWindow = frame;
                 }
@@ -4668,7 +4674,10 @@ public abstract class Synth extends JComponent implements Updatable
         
     void doQuit()
         {
-        sendAllSoundsOff();
+		if (sendAllSoundsOffWhenWindowActivated())
+			{
+			sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
+			}
         simplePause(50);        // maybe enough time to flush out the all sounds off notes?  dunno
         System.exit(0);
         }
@@ -4890,7 +4899,10 @@ public abstract class Synth extends JComponent implements Updatable
         
         else if (requestCloseWindow())
             {
-            sendAllSoundsOff();
+			if (sendAllSoundsOffWhenWindowActivated())
+				{
+				sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
+				}
                                 
             // get rid of MIDI connection
             if (tuple != null)
@@ -6297,6 +6309,8 @@ public abstract class Synth extends JComponent implements Updatable
                     os.close();
                 }
         }
+        
+    public boolean sendAllSoundsOffWhenWindowActivated() { return true; }
     
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2) { return false; }
        

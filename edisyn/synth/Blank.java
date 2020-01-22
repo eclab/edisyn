@@ -772,4 +772,25 @@ public class Blank extends Synth
         return 1;
         }
 
+	public boolean sendAllSoundsOffWhenWindowActivated()
+		{
+		// When a window becomes the front window, by default it sends all sounds off.  Override
+		// this to return FALSE if you don't want this to happen.  [Generally you do]. 
+		return true;
+		}
+
+    public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
+		{
+		// The edisyn.test.SanityCheck class performs sanity-checks on synthesizer classes
+		// by randomizing a synth instance, then writing it out, then reading it back in in a new synth, 
+		// and comparing the two.  When parameters are different, this could be because of an emit bug 
+		// or a parse bug, OR it could be entirely legitimate (perhaps you don't emit a certain 
+		// parameter, or use it for a special purpose, etc.)  Before it issues an error in this case,
+		// it calls this method to see if the difference is legitimate.  It calls testVerify(...)
+		// on the first synth, passing in the second one.  The parameter in question is provided as
+		// a key, as are the two values (as Strings or Integers) in question.  Return TRUE if the
+		// difference is legitimate, else false.  By default, all differences are considered illegitimate.
+		return false;
+		}
+
     }

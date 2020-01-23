@@ -12,13 +12,15 @@
 <p><b>Gotchas</b> 
 
 <ul>
-<li>The Proteus series cannot send to the current patch -- they can only write patches, or send individual parameters.  But sending to the current patch is a critical function.  Instead of (slowly) sending all parameters, Edisyn instead will write to patch 63 of the Preset RAM.  This means that you will overwrite this patch number every time you "send" the current patch.
+<li>The different Proteus series machines have different instruments and different numbers of instruments.  If you load or receive a patch meant for a different Proteus than you have set, then the instruments will not load properly and will be set to "No Instrument".  (For example, if you have set Edisyn to Proteus 1 and you load a patch meant for a Proteus 3). 
+
+<br><p><li>The Proteus series cannot send to the current patch -- they can only write patches, or send individual parameters.  But sending to the current patch is a critical function.  Instead of (slowly) sending all parameters, Edisyn instead will write to patch 127.  This means that you will overwrite this patch number every time you "send" the current patch.
 
 <br><p><li>While the Proteus 2 and 3 can set the Chorus to OFF or to 1-15, the Proteus 1 can only actually set the Chorus to OFF and ON.
 
 <br><p><li>You cannot request the current patch on the Proteus.
 
-<br><p><li>In order to change patches (to request a new one or to send or write a patch), Edisyn must modify the Proteus's Program Map table: but there is no way to do this with precision.  As such, Edisyn just obliterates the table in the process.  I hope you didn't have anything on that you wanted to keep.
+<br><p><li>In order to change patches (to request a new one or to send or write a patch), Edisyn must modify the Proteus's Program Map table: but there is no way to do this with precision.  As such, Edisyn just obliterates the table in the process.  I hope you didn't have anything in there that you wanted to keep.
 
 </ul>
 

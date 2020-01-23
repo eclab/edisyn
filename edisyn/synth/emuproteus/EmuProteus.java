@@ -32,7 +32,7 @@ public class EmuProteus extends Synth
     public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
 /// FIXME:  On the Proteus 1 screen, the order is RAND TRI SINE SAW SQUARE.  In the docs, it's as below.  Dunno.
-    public static final String[] LFO_SHAPES = new String[] { "Triangle", "Sine", "Square", "Sawtooth", "Random" };
+    public static final String[] LFO_SHAPES = new String[] { "Random", "Triangle", "Sine", "Sawtooth", "Square" };
         
     public static final int TYPE_1 = 0;
     public static final int TYPE_1_ORCHESTRAL = 1;
@@ -400,7 +400,7 @@ public class EmuProteus extends Synth
             }
         else
             {
-            comp = new LabelledDial("Amount", this, "i" + inst + "amount", color, 0, 127);
+            comp = new LabelledDial("Amount", this, "i" + inst + "amount", color, -128, 127);
             hbox.add(comp);
                         
             comp = new LabelledDial("Delay", this, "i" + inst + "delay", color, 0, 127);
@@ -675,7 +675,15 @@ public class EmuProteus extends Synth
             if (i >= 1)
                 {
                 hbox.add(Strut.makeHorizontalStrut(20));
-                comp = new LabelledDial("Preset", this, "link" + i, color, 0, 191);
+                comp = new LabelledDial("Preset", this, "link" + i, color, -1, 511)
+                	{
+                	public String map(int val)
+                		{
+                		if (val == -1) return "Off";
+                		if (val <= 191) return "" + val;
+                		else return "" + val + "[+]";
+                		}
+                	};
                 ((LabelledDial)comp).addAdditionalLabel("Link " + i);
                 hbox.add(comp);
                 }
@@ -772,7 +780,7 @@ public class EmuProteus extends Synth
         int NN = tempModel.get("number", 0);
         if (toWorkingMemory)
             {
-            NN = 63;               // we write to the top writable patch number in RAM
+            NN = 127;               // we write to the top writable patch number in RAM
             // furthermore we have to change the patch because sendAllParameters
             // doesn't do it by default
             Model model = new Model();
@@ -1015,7 +1023,7 @@ public class EmuProteus extends Synth
                 }
             else
                 {
-                System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus1 but set is " + set);
+//                System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus1 but set is " + set);
                 return 0;
                 }
             }
@@ -1031,7 +1039,7 @@ public class EmuProteus extends Synth
                 }
             else
                 {
-                System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus1+Orchestral but set is " + set);
+//                System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus1+Orchestral but set is " + set);
                 return 0;
                 }
             }
@@ -1042,14 +1050,14 @@ public class EmuProteus extends Synth
                 Integer val = (Integer)proteus2MappingToIndex.get(Integer.valueOf(sysexValue));
                 if (val == null) 
                     {
-                    System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus2 but set/instrument was " + sysexValue);
+//                    System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus2 but set/instrument was " + sysexValue);
                     return 0;
                     }
                 else return val.intValue();
                 }
             else
                 {
-                System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus2 but set is " + set + " " + sysexValue);
+//                System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus2 but set is " + set);
                 return 0;
                 }
             }
@@ -1061,7 +1069,7 @@ public class EmuProteus extends Synth
                 }
             else
                 {
-                System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus3 but set is " + set);
+//                System.err.println("Warning (EmuProteus sysexToInstrument): Synth is Proteus3 but set is " + set);
                 return 0;
                 }
             }

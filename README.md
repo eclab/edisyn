@@ -65,7 +65,7 @@ Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux)
 
 ### Installation and Running on OS X 
 
-First install Edisyn from the [Edisyn.app.zip](https://github.com/eclab/edisyn/raw/master/install/Edisyn.app.zip) file located in the "install" directory.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
+First install Edisyn from the [Edisyn.app.zip](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.app.zip) file located in the "install" directory.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
 
 
 Sierra has really locked down the ability to run an application that's not from a commercial, paying Apple Developer.  And I'm not one.  So you will have to instruct Sierra to permit Edisyn to run.

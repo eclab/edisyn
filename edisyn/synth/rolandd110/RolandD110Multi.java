@@ -529,7 +529,7 @@ public class RolandD110Multi extends Synth
 
     final static String[] allSystemParameters = new String[]
     {
-    "-",                                // master tune
+//    "-",                                // master tune
     "reverbmode",
     "reverbtime",
     "reverblevel",
@@ -767,7 +767,7 @@ public class RolandD110Multi extends Synth
             buf1[4] = (byte)0x12;
             buf1[5] = (byte)0x10;
             buf1[6] = (byte)0x00;
-            buf1[7] = (byte)0x00;
+            buf1[7] = (byte)0x01;               // skip master tune
             for(int i = 0; i < allSystemParameters.length; i++)
                 {
                 if (allSystemParameters[i].equals("-")) continue;

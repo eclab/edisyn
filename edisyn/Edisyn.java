@@ -20,7 +20,7 @@ import javax.swing.*;
 
 public class Edisyn 
     {
-    public static final int VERSION = 21;
+    public static final int VERSION = 22;
     
     public static void main(String[] args)
         {

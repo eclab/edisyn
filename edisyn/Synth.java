@@ -217,10 +217,10 @@ public abstract class Synth extends JComponent implements Updatable
                 // we call this here even though it's already been called as a result of frame.setVisible(true)
                 // because it's *after* setupMidi(...) and so it gives synths a chance to send
                 // a MIDI sysex message in response to the window becoming front.
-                if (synth.sendAllSoundsOffWhenWindowActivated())
-                	{
-	                synth.sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
-	                }
+                if (synth.sendAllSoundsOffWhenWindowChanges())
+                    {
+                    synth.sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
+                    }
                 synth.windowBecameFront();                              
                 }
             synth.undo.setWillPush(true);
@@ -1239,15 +1239,19 @@ public abstract class Synth extends JComponent implements Updatable
                                         boolean voiceMessage = ( status < 0xF0 );
 
                                         // should we attempt to reroute to the synth?
-                                        if (channel == tuple.keyChannel || tuple.keyChannel == tuple.KEYCHANNEL_OMNI)
+                                        if (channel == (tuple.keyChannel - 1) || tuple.keyChannel == tuple.KEYCHANNEL_OMNI)
                                             {
                                             channel = getVoiceMessageRoutedChannel(channel, getChannelOut());
                                             }
 
                                         if (voiceMessage)
+                                            {
                                             newMessage = new ShortMessage(status, channel, data1, data2);
+                                            }
                                         else
+                                            {
                                             newMessage = new ShortMessage(status, data1, data2);
+                                            }
                                                                 
                                         tryToSendMIDI(newMessage);
                                         messageFromController(newMessage, false, true);
@@ -1422,6 +1426,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
     
+    boolean midiDebug = false;
     
     Object[] midiSendLock = new Object[0];
 
@@ -1430,6 +1435,11 @@ public abstract class Synth extends JComponent implements Updatable
         valid (4) an error occurred when the receiver tried to send the data.  */
     public boolean tryToSendMIDI(MidiMessage message)
         {
+        if (midiDebug)
+            {
+            System.err.println("MIDI " + (message == null ? "NULL" : Midi.format(message)));
+            }
+                
         if (message == null) 
             { return false; }
         else if (!amActiveSynth())
@@ -1653,6 +1663,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         catch (Exception e)
             {
+            System.err.println("Synth.java Recognize(Class, byte[]) ERROR.  Could not obtain or invoke method for " + synthClass); 
             e.printStackTrace();
             return false;
             }
@@ -2290,23 +2301,22 @@ public abstract class Synth extends JComponent implements Updatable
         }
     
     /** Given a preferences path X for a given synth, checks to see if "true" is stored
-    	there.  If so, returns true.  If not, sets "true" in that location and returns false.
-    	This can be used to do once-only things like this:
-    	<p><tt>
-    	if (!checkAndSet("OnceOnlyExample, getSynthNameLocal()))   <br>
-    	{ showSimpleError("Warning!", "This Warning will only appear once!");  }
+        there.  If so, returns true.  If not, sets "true" in that location and returns false.
+        This can be used to do once-only things like this:
+        <p><tt>
+        if (!checkAndSet("OnceOnlyExample, getSynthNameLocal()))   <br>
+        { showSimpleError("Warning!", "This Warning will only appear once!");  }
     */
     public static boolean checkAndSet(String x, String synthName)
-    	{
-    	String val = getLastX(x, synthName, true);
-    	System.err.println(val);
-    	if (val == null || "false".equalsIgnoreCase(val))
-    		{
-    		setLastX("true", x, synthName, true);
-    		return false;
-    		}
-    	return true;
-    	}
+        {
+        String val = getLastX(x, synthName, true);
+        if (val == null || "false".equalsIgnoreCase(val))
+            {
+            setLastX("true", x, synthName, true);
+            return false;
+            }
+        return true;
+        }
 
    
     // sets the last directory used by load, save, or save as
@@ -3304,13 +3314,14 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        transmitTo = new JMenuItem("Send to Patch...");
-        menu.add(transmitTo);
-        transmitTo.addActionListener(new ActionListener()
+
+        writeTo = new JMenuItem("Write to Patch...");
+        menu.add(writeTo);
+        writeTo.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doSendToPatch();
+                doWriteToPatch();
                 }
             });
 
@@ -3330,18 +3341,46 @@ public abstract class Synth extends JComponent implements Updatable
         transmitParameters.setSelected(allowsTransmitsParameters);
 
                 
-        menu.addSeparator();
 
-        writeTo = new JMenuItem("Write to Patch...");
-        menu.add(writeTo);
-        writeTo.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doWriteToPatch();
-                }
-            });
-            
+        transmitTo = new JMenuItem("Send to Patch...");
+/*
+  menu.add(transmitTo);
+  transmitTo.addActionListener(new ActionListener()
+  {
+  public void actionPerformed( ActionEvent e)
+  {
+  doSendToPatch();
+  }
+  });
+
+  transmitParameters = new JCheckBoxMenuItem("Sends Real Time Changes");
+  menu.add(transmitParameters);
+  transmitParameters.addActionListener(new ActionListener()
+  {
+  public void actionPerformed( ActionEvent e)
+  {
+  doAllowParameterTransmit();
+  }
+  });
+
+  String sendInRealTime = getLastX("AllowTransmitParameters", getSynthNameLocal(), false);
+  if (sendInRealTime == null) sendInRealTime = "true";
+  allowsTransmitsParameters = Boolean.parseBoolean(sendInRealTime);
+  transmitParameters.setSelected(allowsTransmitsParameters);
+
+                
+  menu.addSeparator();
+
+  writeTo = new JMenuItem("Write to Patch...");
+  menu.add(writeTo);
+  writeTo.addActionListener(new ActionListener()
+  {
+  public void actionPerformed( ActionEvent e)
+  {
+  doWriteToPatch();
+  }
+  });
+*/            
         
         menu.addSeparator();
 
@@ -4195,10 +4234,10 @@ public abstract class Synth extends JComponent implements Updatable
 
             public void windowActivated(WindowEvent e)
                 {
-                if (sendAllSoundsOffWhenWindowActivated())
-                	{
-	                sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
-	                }
+                if (sendAllSoundsOffWhenWindowChanges())
+                    {
+                    sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
+                    }
                 windowBecameFront();
                 lastActiveWindow = frame;
                 }
@@ -4674,10 +4713,10 @@ public abstract class Synth extends JComponent implements Updatable
         
     void doQuit()
         {
-		if (sendAllSoundsOffWhenWindowActivated())
-			{
-			sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
-			}
+        if (sendAllSoundsOffWhenWindowChanges())
+            {
+            sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
+            }
         simplePause(50);        // maybe enough time to flush out the all sounds off notes?  dunno
         System.exit(0);
         }
@@ -4899,10 +4938,10 @@ public abstract class Synth extends JComponent implements Updatable
         
         else if (requestCloseWindow())
             {
-			if (sendAllSoundsOffWhenWindowActivated())
-				{
-				sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
-				}
+            if (sendAllSoundsOffWhenWindowChanges())
+                {
+                sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
+                }
                                 
             // get rid of MIDI connection
             if (tuple != null)
@@ -5970,7 +6009,9 @@ public abstract class Synth extends JComponent implements Updatable
             {
             disabledMenus = new ArrayList<JMenuItem>();
             disableCount = 0;
-            JMenuBar bar = ((JFrame)(SwingUtilities.getWindowAncestor(this))).getJMenuBar();
+            JFrame ancestor = ((JFrame)(SwingUtilities.getWindowAncestor(this)));
+            if (ancestor == null) return;
+            JMenuBar bar = ancestor.getJMenuBar();
             for(int i = 0; i < bar.getMenuCount(); i++)
                 {
                 JMenu menu = bar.getMenu(i);
@@ -6152,8 +6193,8 @@ public abstract class Synth extends JComponent implements Updatable
     public static final int BANK_UPLOADED = - 3;
         
     /** Override this method to modify the given bank sysex data so it can be emitted properly to the synthesizer
-    	specified by the provided model: for example, you might modify the outgoing channel or synthesizer id. 
-    	Many synthesizers (Kawai, Korg, Yamaha notably) just need set <tt>data[2] = (byte)getChannelOut(); </tt>
+        specified by the provided model: for example, you might modify the outgoing channel or synthesizer id. 
+        Many synthesizers (Kawai, Korg, Yamaha notably) just need set <tt>data[2] = (byte)getChannelOut(); </tt>
     */
     public byte[] adjustBankSysexForEmit(byte[] data, Model model) { return data; }
     
@@ -6310,7 +6351,8 @@ public abstract class Synth extends JComponent implements Updatable
                 }
         }
         
-    public boolean sendAllSoundsOffWhenWindowActivated() { return true; }
+    /** */
+    public boolean sendAllSoundsOffWhenWindowChanges() { return true; }
     
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2) { return false; }
        

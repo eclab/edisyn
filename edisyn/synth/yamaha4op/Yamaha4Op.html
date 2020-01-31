@@ -7,7 +7,7 @@
 <p>This patch editor is meant to work with a variety of Yamaha 4-Op FM synthesizers.  However it has only been tested with certain ones.  If you try it with your synthesizer and it doesn't work, please contact me (<b>sean@cs.gmu.edu</b>) and I will work with you to modify it to get it working.  Status:
 
 <ul>
-<li><b>DX9, FB08</b>&nbsp;&nbsp;&nbsp;&nbsp; Incompatible.  Will not work.
+<li><b>DX9, FB01</b>&nbsp;&nbsp;&nbsp;&nbsp; Incompatible.  Will not work.
 <li><b>DX21</b>&nbsp;&nbsp;&nbsp;&nbsp; Should work, but untested.
 <li><b>DX27, DX100</b>&nbsp;&nbsp;&nbsp;&nbsp; Should work, but untested.
 <li><b>TX81Z</b>&nbsp;&nbsp;&nbsp;&nbsp; Works.
@@ -47,7 +47,7 @@ Most 4-op synthesizers have no way to write patches from sysex: you will have to
 
 <br><br>Additionally, if another editor has saved to a single file multiple single patches broken out as these sequences, Edisyn cannot read any more than the first one.  Thankfully this is unusual; normally groups of patches are saved to a filein bank (or VMEM) format).  Edisyn can read files with multiple VMEM patches.
 
-<p><li>On the TX81Z and DX11 (but not other 4-op synths) changing patches is weird.  I think I have a method which should work for all of them, but if it strange things happen, let me know.
+<p><li>On the TX81Z and DX11 (but not other 4-op synths) changing patches has bugs.  I think I have a method which should work, but if it strange things happen, let me know.
 
 <p><li>When changing patches, the TX81Z will read "MIDI Buffer Full" and not change its display even if the patch has changed.  Press almost any button and it'll reset the display.
 

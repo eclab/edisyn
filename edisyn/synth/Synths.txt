@@ -36,10 +36,11 @@ edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti
 edisyn.synth.yamaha4op.Yamaha4Op
 edisyn.synth.yamaha4op.Yamaha4OpMulti
 edisyn.synth.yamahadx7.YamahaDX7 
-edisyn.synth.yamahafb01.YamahaFB01
+#edisyn.synth.yamahafb01.YamahaFB01
+#edisyn.synth.yamahafb01.YamahaFB01Multi
 edisyn.synth.yamahatg33.YamahaTG33
 edisyn.synth.yamahatg33.YamahaTG33Multi
 #edisyn.synth.yamahatx81z.YamahaTX81Z 
 #edisyn.synth.yamahatx81z.YamahaTX81ZMulti
 edisyn.synth.generic.Generic
-
+#edisyn.synth.yamaha4op.Test

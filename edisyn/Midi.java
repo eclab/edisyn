@@ -911,6 +911,8 @@ public class Midi
         
     public static class DividedSysex extends MidiMessage
         {
+        public byte[] getData() { return data; }
+        
         public Object clone()
             {
             return new DividedSysex(getMessage());
@@ -950,9 +952,17 @@ public class Midi
         
     public static String format(MidiMessage message)
         {
-        if (message instanceof DividedSysex)
+        if (message == null)
             {
-            return "A Special Edisyn message (shouldn't happen)";
+            return "null";
+            }
+        else if (message instanceof DividedSysex)
+            {
+            byte[] d = ((DividedSysex)message).getData();
+            String s = "Divided Sysex";
+            for(int i = 0; i < d.length; i++)
+                s += (" " + String.format("%02x", d[i]));
+            return s;
             }
         else if (message instanceof MetaMessage)
             {
@@ -991,8 +1001,6 @@ public class Midi
             return type + (c == -1 ? "" : (" (Channel " + c + ")"));
             }
         }
-
-
 
     static HashMap manufacturers = null;
     

@@ -1728,7 +1728,7 @@ public class PreenFM2 extends Synth
     public int parse(byte[] data, boolean fromFile)
         {
         int HEADER = 18;
-        if (data[8] == ' ') HEADER = 17;  		// backward compatibility with version "0"
+        if (data[8] == ' ') HEADER = 17;                // backward compatibility with version "0"
                 
         for(int i = 0; i < sysexKeys.length - 1; i++)
             {
@@ -1761,7 +1761,7 @@ public class PreenFM2 extends Synth
             data[5] == (byte)'S' &&
             data[6] == (byte)'Y' &&
             data[7] == (byte)'N' &&
-            (data[8] == (byte)' ' || data[8] == (byte)'-') &&		// versions 1 and 0
+            (data[8] == (byte)' ' || data[8] == (byte)'-') &&           // versions 1 and 0
             data[9] == (byte)'P' &&
             data[10] == (byte)'R' &&
             data[11] == (byte)'E' &&
@@ -1770,9 +1770,9 @@ public class PreenFM2 extends Synth
             data[14] == (byte)'F' &&
             data[15] == (byte)'M' &&
             data[16] == (byte)'2' &&
-            (data[8] == (byte)'-' ? 
-            	(data[17] == (byte)1) :		// version 1
-            	 true));					// version "0" -- who knows what value data[17] would be
+                (data[8] == (byte)'-' ? 
+                (data[17] == (byte)1) :         // version 1
+                true));                                        // version "0" -- who knows what value data[17] would be
         return val;
         }
 

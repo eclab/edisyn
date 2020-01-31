@@ -33,10 +33,10 @@ public class YamahaTG33 extends Synth
     public static final String[] TYPES = { "TG33", "SY22", "SY35" };
 
 
- 		public final byte VOICE_BUTTON = 0x06;
-		public final byte MULTI_BUTTON = 0x07;
+    public final byte VOICE_BUTTON = 0x06;
+    public final byte MULTI_BUTTON = 0x07;
 
-   public static final String[] BANKS = new String[] { "I", "P1", "P2", "C1", "C2" };
+    public static final String[] BANKS = new String[] { "I", "P1", "P2", "C1", "C2" };
 
     public static final String[] RATES = new String[]
     { "1", "2", "3", "4", "5", "6", "7", "8" };
@@ -371,7 +371,7 @@ public class YamahaTG33 extends Synth
         sourcePanel = new SynthPanel(this);
         vbox = new VBox();
         
-        vbox.add(addVector(false, 1, Style.COLOR_A()));
+        vbox.add(addVector(true, 1, Style.COLOR_A()));
 
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("Level 1-25", sourcePanel);
@@ -388,7 +388,7 @@ public class YamahaTG33 extends Synth
         sourcePanel = new SynthPanel(this);
         vbox = new VBox();
         
-        vbox.add(addVector(true, 1, Style.COLOR_A()));
+        vbox.add(addVector(false, 1, Style.COLOR_A()));
 
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("Detune 1-25", sourcePanel);
@@ -761,12 +761,12 @@ public class YamahaTG33 extends Synth
                         }
                     };
                 hbox.add(comp);
-                comp = new LabelledDial("X Axis " + j, this,  param + j + "xaxis", color, 0, 62, 31)
+                comp = new LabelledDial("X " + j + "  D-C", this,  param + j + "xaxis", color, 0, 62, 31)
                     {
                     public boolean isSymmetric() { return true; }
                     };
                 hbox.add(comp);
-                comp = new LabelledDial("Y Axis " + j, this,  param + j + "yaxis" , color, 0, 62, 31)
+                comp = new LabelledDial("Y " + j + "  B-A", this,  param + j + "yaxis" , color, 0, 62, 31)
                     {
                     public boolean isSymmetric() { return true; }
                     };
@@ -1496,6 +1496,7 @@ public class YamahaTG33 extends Synth
                 else if (key.endsWith("lforate")) val = 127 - val;                                       // reversed
                 else if (key.endsWith("volume")) val = 127 - val;                                       // reversed
                 else if (key.endsWith("levelscaling")) val = val * 16;
+                else if (key.endsWith("frequencyshift")) val -= 12;                                                                     // 2's complement
 
                 return(new byte[]
                     {
@@ -1520,6 +1521,7 @@ public class YamahaTG33 extends Synth
                 else if (key.endsWith("volume")) val = 127 - val;                                       // reversed
                 else if (key.endsWith("level")) val = 127 - val;                                        // reversed
                 else if (key.endsWith("levelscaling")) val = val * 16;
+                else if (key.endsWith("frequencyshift")) val -= 12;                                                                     // 2's complement
 
                 return(new byte[]
                     {
@@ -2212,7 +2214,7 @@ public class YamahaTG33 extends Synth
         {
         // We ALWAYS change the patch no matter what.  We have to.
         changePatch(tempModel);
-		simplePause(getPauseAfterChangePatch());
+        simplePause(getPauseAfterChangePatch());
         tryToSendSysex(requestDump(tempModel));
         }
 
@@ -2355,12 +2357,12 @@ public class YamahaTG33 extends Synth
         // doesn't explain this.  Furthermore, you have to do bank selects prior to PC.  Furthermore,
         // if the synth is in Edit mode, all bank selects are IGNORED.  So...
         //  
-		// The secret to successful bank selects on the TG33 is to first get out of Edit mode by
-		// pressing the VOICE or MULTI buttons, then do the MSB (0) bank
-		// select (value = 0), then the LSB (32) bank select (value = bank), THEN do the PC.
-		// Yes.  Nuts.
-		tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(getID() + 16), 0x26, 0x07, VOICE_BUTTON, (byte)0xF7 });
-		simplePause(getPauseAfterChangePatch());
+        // The secret to successful bank selects on the TG33 is to first get out of Edit mode by
+        // pressing the VOICE or MULTI buttons, then do the MSB (0) bank
+        // select (value = 0), then the LSB (32) bank select (value = bank), THEN do the PC.
+        // Yes.  Nuts.
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(getID() + 16), 0x26, 0x07, VOICE_BUTTON, (byte)0xF7 });
+        simplePause(getPauseAfterChangePatch());
         tryToSendMIDI(buildCC(getChannelOut(), 0, 0));
         tryToSendMIDI(buildCC(getChannelOut(), 32, bankvals[tempModel.get("bank")]));
         tryToSendMIDI(buildPC(getChannelOut(), tempModel.get("number")));

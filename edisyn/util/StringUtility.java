@@ -4,9 +4,16 @@
 */
 
 package edisyn.util;
+import java.util.*;
 
 public class StringUtility
     {
+    
+    public static int getFirstInt(String string)
+        {
+        return new Scanner(string).useDelimiter("\\D+").nextInt();
+        }
+    
     /** Returns the sole integer embedded within the string.  If
         multiple integers are embedded, they will be concatenated into a larger
         integer, which you probably don't want.  Throws NumberFormatException
@@ -15,7 +22,7 @@ public class StringUtility
         {
         return Integer.parseInt(string.replaceAll("[^0-9]+", " ").trim());
         }
-                
+           
     /** Returns the sole integer embedded within the string after a preamble.  
         Does not check to see if the preamble is real -- it better be!  If
         multiple integers are embedded after the preamble, they will be 

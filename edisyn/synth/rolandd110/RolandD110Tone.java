@@ -290,27 +290,27 @@ public class RolandD110Tone extends Synth
                     synth.getModel().set("p" + i + "outputlevel", 100);
                     
                     if (timbre1)
-                    	{
-                    	// turn off everybody
-                    	synth.getModel().set("p" + i + "midichannel", RolandD110Multi.MIDI_CHANNEL_OFF);
-	                    synth.getModel().set("p" + i + "partialreserve", 0);
-                    	}
+                        {
+                        // turn off everybody
+                        synth.getModel().set("p" + i + "midichannel", RolandD110Multi.MIDI_CHANNEL_OFF);
+                        synth.getModel().set("p" + i + "partialreserve", 0);
+                        }
                     else
-                    	{
-                    	// turn on everybody, sharing equally
-                    	synth.getModel().set("p" + i + "midichannel", (i - 1));
-	                    synth.getModel().set("p" + i + "partialreserve", 4);
-                    	}
+                        {
+                        // turn on everybody, sharing equally
+                        synth.getModel().set("p" + i + "midichannel", (i - 1));
+                        synth.getModel().set("p" + i + "partialreserve", 4);
+                        }
                     }
                 
                 // prepare timbre1
                 if (timbre1)
-                	{
-                	synth.getModel().set("p" + (emitLocation + 1) + "midichannel", getChannelOut());
-                	synth.getModel().set("p" + (emitLocation + 1) + "partialreserve", 32);
-                	}
+                    {
+                    synth.getModel().set("p" + (emitLocation + 1) + "midichannel", getChannelOut());
+                    synth.getModel().set("p" + (emitLocation + 1) + "partialreserve", 32);
+                    }
             
-        		// turn off rhythm
+                // turn off rhythm
                 synth.getModel().set("rhythmmidichannel", RolandD110Multi.MIDI_CHANNEL_OFF);
                 synth.getModel().set("rhythmoutputlevel", 0);
                 
@@ -1391,10 +1391,11 @@ public class RolandD110Tone extends Synth
     // Requests a Tone from the current emitLocation
     public byte[] requestCurrentDump()
         {
-        // we're loading from Tone Temporary [synth]
-        byte AA = (byte)(0x02);
-        byte BB = (byte)(0x00);
-        byte CC = (byte)(0x00);
+        byte AA = (byte)(0x04);
+        int loc = emitLocation * (TEMP_TONE_LENGTH - 10);
+        byte BB = (byte)(loc & 127);
+        byte CC = (byte)((loc >>> 7) & 127);
+
         // total length is 246.  Not sure why it's not 256
         byte LSB = (byte)118;           // 0x76
         byte MSB = (byte)1; 
@@ -1413,7 +1414,7 @@ public class RolandD110Tone extends Synth
             (data[4] == (byte)0x12) &&
             (data[5] == 0x02 || data[5] == (byte)0x04 || data[5] == (byte)0x08)) &&  // tones
             // tone temporary areas
-            (data.length == TEMP_TONE_LENGTH | data.length == MEMORY_TONE_LENGTH);
+            (data.length == TEMP_TONE_LENGTH || data.length == MEMORY_TONE_LENGTH);
         }
         
     public static final int MAXIMUM_NAME_LENGTH = 10;

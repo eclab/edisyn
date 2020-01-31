@@ -26,8 +26,8 @@ import edisyn.util.*;
 
 public class YamahaTG33Multi extends Synth
     {
- 		public final byte VOICE_BUTTON = 0x06;
-		public final byte MULTI_BUTTON = 0x07;
+    public final byte VOICE_BUTTON = 0x06;
+    public final byte MULTI_BUTTON = 0x07;
 
     public static final String[] CENTS = new String[] { "-50", "-47", "-44", "-41", "-38", "-34", "-31", "-28", "-25", "-22", "-19", "-16", "-12", "-9", "-6", "-3",
                                                         "0", "3", "6", "9", "12", "16", "19", "22", "25", "28", "31", "34", "38", "41", "44", "47", "50" };
@@ -632,7 +632,7 @@ public class YamahaTG33Multi extends Synth
         {
         // We ALWAYS change the patch no matter what.  We have to.
         changePatch(tempModel);
-		simplePause(getPauseAfterChangePatch());
+        simplePause(getPauseAfterChangePatch());
         tryToSendSysex(requestDump(tempModel));
         }
 
@@ -760,16 +760,16 @@ public class YamahaTG33Multi extends Synth
         // doesn't explain this.  Furthermore, you have to do bank selects prior to PC.  Furthermore,
         // if the synth is in Edit mode, all bank selects are IGNORED.  So...
         //  
-		// The secret to successful bank selects on the TG33 is to first get out of Edit mode by
-		// pressing the VOICE or MULTI buttons, then do the MSB (0) bank
-		// select (value = 0), then the LSB (32) bank select (value = bank), THEN do the PC.
-		// Yes.  Nuts.
-		// 
-		// Note that I don't know if this will work right on the SY22/SY35, since they probably don't have
-		// the sysex to press the VOICE and MULTI buttons, so if you're in edit mode you will probably
-		// have to press the manually.
-		tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(getID() + 16), 0x26, 0x07, MULTI_BUTTON, (byte)0xF7 });
-		simplePause(getPauseAfterChangePatch());
+        // The secret to successful bank selects on the TG33 is to first get out of Edit mode by
+        // pressing the VOICE or MULTI buttons, then do the MSB (0) bank
+        // select (value = 0), then the LSB (32) bank select (value = bank), THEN do the PC.
+        // Yes.  Nuts.
+        // 
+        // Note that I don't know if this will work right on the SY22/SY35, since they probably don't have
+        // the sysex to press the VOICE and MULTI buttons, so if you're in edit mode you will probably
+        // have to press the manually.
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(getID() + 16), 0x26, 0x07, MULTI_BUTTON, (byte)0xF7 });
+        simplePause(getPauseAfterChangePatch());
         tryToSendMIDI(buildCC(getChannelOut(), 0, 0));
         tryToSendMIDI(buildCC(getChannelOut(), 32, bankvals[tempModel.get("bank")]));
         tryToSendMIDI(buildPC(getChannelOut(), 64 + tempModel.get("number")));

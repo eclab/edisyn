@@ -35,10 +35,13 @@ public class EmuProteus extends Synth
     public static final String[] LFO_SHAPES = new String[] { "Random", "Triangle", "Sine", "Sawtooth", "Square" };
         
     public static final int TYPE_1 = 0;
-    public static final int TYPE_1_ORCHESTRAL = 1;
-    public static final int TYPE_2 = 2;
-    public static final int TYPE_3 = 3;
-    public static final String[] TYPES = { "Proteus 1", "1+Orchestral", "Proteus 2", "Proteus 3" };
+    public static final int TYPE_1_XR = 1;
+    public static final int TYPE_1_ORCHESTRAL = 2;
+    public static final int TYPE_2 = 3;
+    public static final int TYPE_2_XR = 4;
+    public static final int TYPE_3 = 5;
+    public static final int TYPE_3_XR = 6;
+    public static final String[] TYPES = { "Proteus 1", "Proteus 1 XR", "1+Orchestral", "Proteus 2", "Proteus 2 XR", "Proteus 3", "Proteus 3 XR" };
     public static final String TYPE_KEY = "type";
     int synthType = TYPE_1;
     JComboBox synthTypeCombo;
@@ -58,6 +61,7 @@ public class EmuProteus extends Synth
 
     Chooser[] instrumentChoosers = new Chooser[2];
 
+
     public void updateChoosers()
         {
         for(int j = 0; j < 2; j++)
@@ -65,9 +69,9 @@ public class EmuProteus extends Synth
             JComboBox box = instrumentChoosers[j].getCombo();
             int sel = box.getSelectedIndex();
             box.removeAllItems();
-            String[] elts = (synthType == TYPE_1 ? PROTEUS_1_INSTRUMENTS :
+            String[] elts = ((synthType == TYPE_1 || synthType == TYPE_1_XR) ? PROTEUS_1_INSTRUMENTS :
                     (synthType == TYPE_1_ORCHESTRAL ? PROTEUS_1_ORCHESTRAL_INSTRUMENTS :
-                    (synthType == TYPE_2 ? PROTEUS_2_INSTRUMENTS : PROTEUS_3_INSTRUMENTS)));
+                    ((synthType == TYPE_2 || synthType == TYPE_2_XR) ? PROTEUS_2_INSTRUMENTS : PROTEUS_3_INSTRUMENTS)));
             for(int i = 0; i < elts.length; i++)
                 box.addItem(elts[i]);
             instrumentChoosers[j].setMax(elts.length - 1);
@@ -101,7 +105,7 @@ public class EmuProteus extends Synth
         try
             {
             synthType = (m == null ? TYPE_1 : Integer.parseInt(m));
-            if (synthType < TYPE_1 || synthType > TYPE_3)
+            if (synthType < TYPE_1 || synthType > TYPE_3_XR)
                 {
                 synthType = TYPE_1;
                 }
@@ -172,7 +176,12 @@ public class EmuProteus extends Synth
         while(true)
             {
             String range = "(0...191)";
-            if (writing) range = "(64...127)";
+            if (synthType == TYPE_1_XR || synthType == TYPE_2_XR || synthType == TYPE_3_XR)
+                {
+                if (writing) range = "(0...255)";
+                else range = "(0...383)";
+                }
+            else if (writing) range = "(64...127)";
             else if (getSynthType() == TYPE_1_ORCHESTRAL) range = "(0...487)";
             
             boolean result = showMultiOption(this, new String[] { "Patch Number"}, 
@@ -185,13 +194,35 @@ public class EmuProteus extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                if (writing)
+                if (synthType == TYPE_1_XR || synthType == TYPE_2_XR || synthType == TYPE_3_XR)
+                    {
+                    if (writing)
+                        showSimpleError(title, "The Patch Number must be an integer 0...255");
+                    else
+                        showSimpleError(title, "The Patch Number must be an integer 0...383");                                  
+                    }
+                else if (writing)
                     showSimpleError(title, "The Patch Number must be an integer 64...127");
                 else if (getSynthType() == TYPE_1_ORCHESTRAL)
                     showSimpleError(title, "The Patch Number must be an integer 0...487");
                 else
+                    {
                     showSimpleError(title, "The Patch Number must be an integer 0...191");
+                    }
                 continue;
+                }
+            if (synthType == TYPE_1_XR || synthType == TYPE_2_XR || synthType == TYPE_3_XR)
+                {
+                if (n < 0 || n > 255)
+                    {
+                    showSimpleError(title, "The Patch Number must be an integer 0...255");
+                    continue;
+                    }
+                else if (n < 0 || n > 383)
+                    {
+                    showSimpleError(title, "The Patch Number must be an integer 0...383");
+                    continue;
+                    }
                 }
             if (writing)
                 {
@@ -676,14 +707,14 @@ public class EmuProteus extends Synth
                 {
                 hbox.add(Strut.makeHorizontalStrut(20));
                 comp = new LabelledDial("Preset", this, "link" + i, color, -1, 511)
-                	{
-                	public String map(int val)
-                		{
-                		if (val == -1) return "Off";
-                		if (val <= 191) return "" + val;
-                		else return "" + val + "[+]";
-                		}
-                	};
+                    {
+                    public String map(int val)
+                        {
+                        if (val == -1) return "Off";
+                        if (val <= 191) return "" + val;
+                        else return "" + val + "[+]";
+                        }
+                    };
                 ((LabelledDial)comp).addAdditionalLabel("Link " + i);
                 hbox.add(comp);
                 }
@@ -1015,7 +1046,7 @@ public class EmuProteus extends Synth
         {
         int set = (sysexValue >>> 8);
         int num = (sysexValue & 255);
-        if (synthType == TYPE_1)
+        if (synthType == TYPE_1 || synthType == TYPE_1_XR)
             {
             if (set == 0)
                 {
@@ -1043,7 +1074,7 @@ public class EmuProteus extends Synth
                 return 0;
                 }
             }
-        else if (synthType == TYPE_2)
+        else if (synthType == TYPE_2 || synthType == TYPE_2_XR)
             {
             if (set == 1 || set == 2)
                 {
@@ -1061,7 +1092,7 @@ public class EmuProteus extends Synth
                 return 0;
                 }
             }
-        else if (synthType == TYPE_3)
+        else if (synthType == TYPE_3 || synthType == TYPE_3_XR)
             {
             if (set == 3)
                 {
@@ -1082,7 +1113,7 @@ public class EmuProteus extends Synth
 
     public int instrumentToSysex(int instrument)
         {
-        if (synthType == TYPE_1)
+        if (synthType == TYPE_1 || synthType == TYPE_1_XR)
             {
             return instrument;
             }
@@ -1097,11 +1128,11 @@ public class EmuProteus extends Synth
                 return 256 * 2 + (instrument - 126);
                 }
             }
-        else if (synthType == TYPE_2)
+        else if (synthType == TYPE_2 || synthType == TYPE_2_XR)
             {
             return PROTEUS_2_MAPPING[instrument];
             }
-        else if (synthType == TYPE_3)
+        else if (synthType == TYPE_3 || synthType == TYPE_3_XR)
             {
             return 256 * 3 + instrument;
             }

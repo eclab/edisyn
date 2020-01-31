@@ -197,12 +197,12 @@ public class Generic extends Synth
         tabs.addTab("RPN", soundPanel);
         
         /*
-        vbox = new VBox();
-        hbox.add(new Joystick(this));
-        vbox.add(hbox);
-        soundPanel = new SynthPanel(this);
-        soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("Joystick", soundPanel);
+          vbox = new VBox();
+          hbox.add(new Joystick(this));
+          vbox.add(hbox);
+          soundPanel = new SynthPanel(this);
+          soundPanel.add(vbox, BorderLayout.CENTER);
+          tabs.addTab("Joystick", soundPanel);
         */
         
         model.set("name", "CC / NRPN / RPN");  // or whatever, to set the initial name of your patch (assuming you use "name" as the key for the patch name)
@@ -211,18 +211,18 @@ public class Generic extends Synth
 
     /** Add the global patch category (name, id, number, etc.) */
 /*
-    public JComponent addNameGlobal(Color color)
-        {
-        Category globalCategory = new Category(this, "Generic", color);
+  public JComponent addNameGlobal(Color color)
+  {
+  Category globalCategory = new Category(this, "Generic", color);
                 
-        JComponent comp;
-        String[] params;
-        HBox hbox = new HBox();
-        hbox.add(Strut.makeHorizontalStrut(100));
+  JComponent comp;
+  String[] params;
+  HBox hbox = new HBox();
+  hbox.add(Strut.makeHorizontalStrut(100));
         
-        globalCategory.add(hbox, BorderLayout.WEST);
-        return globalCategory;
-        }
+  globalCategory.add(hbox, BorderLayout.WEST);
+  return globalCategory;
+  }
 */
 
     public JComponent addCustomController(Color color)
@@ -230,11 +230,11 @@ public class Generic extends Synth
         Category category = new Category(this, "Custom CC", color);
         
         for(int i = 1; i <= 18; i++)
-        	{
-        	model.set("cust-cc-lsb-" + i, 0);
-        	model.setMin("cust-cc-lsb-" + i, 0);
-        	model.setMax("cust-cc-lsb-" + i, 1);
-        	}
+            {
+            model.set("cust-cc-lsb-" + i, 0);
+            model.setMin("cust-cc-lsb-" + i, 0);
+            model.setMax("cust-cc-lsb-" + i, 1);
+            }
         
         JComponent comp;
         String[] params;
@@ -249,50 +249,50 @@ public class Generic extends Synth
                 VBox vbox = new VBox();
 
                 final LabelledDial msb = new LabelledDial("MSB", this, "cust-cc-value-" + i, color, 0, 127);
-                	
+                        
                 final LabelledDial msbalt = new LabelledDial("MSB", this, "cust-cc-value-alt-" + i, color, 0, 127);
 
                 final CheckBox on = new CheckBox("On", this, "cust-cc-value-" + i)
                     {
                     public void update(String key, Model model) 
-                    	{ 
-                		if (model.get("cust-cc-lsb-" + _i) > 0 && model.get("cust-cc-param-" + _i) < 32)
-                    		{
-                    		getCheckBox().setSelected(getState() > 64 * 128); 
-                    		}
-                    	else
-                    		{
-                    		getCheckBox().setSelected(getState() > 64); 
-                    		}
-                    	}
+                        { 
+                        if (model.get("cust-cc-lsb-" + _i) > 0 && model.get("cust-cc-param-" + _i) < 32)
+                            {
+                            getCheckBox().setSelected(getState() > 64 * 128); 
+                            }
+                        else
+                            {
+                            getCheckBox().setSelected(getState() > 64); 
+                            }
+                        }
                     };
                 on.setMax(127);
                 on.setState(on.getState());
  
                 final CheckBox lsb = new CheckBox("+LSB", this, "cust-cc-lsb-" + i)
-                	{
-                	public void update(String key, Model model)
-                		{
-                		super.update(key, model);
-                		if (model.get("cust-cc-lsb-" + _i) > 0 && model.get("cust-cc-param-" + _i) < 32)
-                			{
-                			msb.setLabel("MSB+LSB");
-                			msbalt.setLabel("MSB+LSB");
-                			msb.setMax(16383);
-                			msbalt.setMax(16383);
-               			}
-                		else
-                			{
-                			msb.setLabel("MSB");
-                			msbalt.setLabel("MSB");
-                			msb.setMax(127);
-                			msbalt.setMax(127);
-                			}
+                    {
+                    public void update(String key, Model model)
+                        {
+                        super.update(key, model);
+                        if (model.get("cust-cc-lsb-" + _i) > 0 && model.get("cust-cc-param-" + _i) < 32)
+                            {
+                            msb.setLabel("MSB+LSB");
+                            msbalt.setLabel("MSB+LSB");
+                            msb.setMax(16383);
+                            msbalt.setMax(16383);
+                            }
+                        else
+                            {
+                            msb.setLabel("MSB");
+                            msbalt.setLabel("MSB");
+                            msb.setMax(127);
+                            msbalt.setMax(127);
+                            }
                         }
-                	};
+                    };
                 lsb.addToWidth(2);
                
-                VBox vbox2 = new VBox();                                	
+                VBox vbox2 = new VBox();                                        
                 comp = new LabelledDial("Parameter", this, "cust-cc-param-" + i, color, 0, 127)
                     {
                     public void update(String key, Model model)     
@@ -300,20 +300,20 @@ public class Generic extends Synth
                         super.update(key, model);
                         lsb.setEnabled(model.get("cust-cc-param-" + _i) < 32);
 
-                		if (model.get("cust-cc-lsb-" + _i) > 0 && model.get("cust-cc-param-" + _i) < 32)
-                			{
-                			msb.setLabel("MSB+LSB");
-                			msbalt.setLabel("MSB+LSB");
-                			msb.setMax(16383);
-                			msbalt.setMax(16383);
-                			}
-                		else
-                			{
-                			msb.setLabel("MSB");
-                			msbalt.setLabel("MSB");
-                			msb.setMax(127);
-                			msbalt.setMax(127);
-                			}
+                        if (model.get("cust-cc-lsb-" + _i) > 0 && model.get("cust-cc-param-" + _i) < 32)
+                            {
+                            msb.setLabel("MSB+LSB");
+                            msbalt.setLabel("MSB+LSB");
+                            msb.setMax(16383);
+                            msbalt.setMax(16383);
+                            }
+                        else
+                            {
+                            msb.setLabel("MSB");
+                            msbalt.setLabel("MSB");
+                            msb.setMax(127);
+                            msbalt.setMax(127);
+                            }
                         }
                     };
                                         
@@ -329,24 +329,24 @@ public class Generic extends Synth
                 comp = on;
                 vbox2.add(comp);
                 hbox2.add(vbox2);
-				vbox.add(hbox2);
-				
+                vbox.add(hbox2);
+                                
                 comp = new StringComponent(null, this, "cust-cc-name-" + i, 6, "Name can be up to 12 long")
                     {
                     public String replace(String val)
-                    	{
-                    	return (val + "            ").substring(0,12).trim();
-                    	}
+                        {
+                        return (val + "            ").substring(0,12).trim();
+                        }
 
                     public String getCommand() { return "Enter CC Label up to 12 chars"; }
                     };
                 model.set("cust-cc-name-" + i, "Name");
                 vbox.add(comp);
                 hbox.add(vbox);
-                	
+                        
                 vbox = new VBox();
                 comp = msb;
-                	
+                        
                 vbox.add(comp);
                 comp = new PushButton("Send") 
                     { 
@@ -360,7 +360,7 @@ public class Generic extends Synth
 
                 vbox = new VBox();
                 comp = msbalt;
-                	
+                        
                 vbox.add(comp);
                 comp = new PushButton("Alt") 
                     { 
@@ -387,11 +387,11 @@ public class Generic extends Synth
         Category category = new Category(this, "NRPN", color);
         
         for(int i = 1; i <= 18; i++)
-        	{
-        	model.set("cust-nrpn-lsb-" + i, 0);
-        	model.setMin("cust-nrpn-lsb-" + i, 0);
-        	model.setMax("cust-nrpn-lsb-" + i, 1);
-        	}
+            {
+            model.set("cust-nrpn-lsb-" + i, 0);
+            model.setMin("cust-nrpn-lsb-" + i, 0);
+            model.setMax("cust-nrpn-lsb-" + i, 1);
+            }
         
         
         JComponent comp;
@@ -407,70 +407,70 @@ public class Generic extends Synth
                 VBox vbox = new VBox();
 
                 final LabelledDial msb = new LabelledDial("MSB", this, "cust-nrpn-value-" + i, color, 0, 127);
-                	
+                        
                 final LabelledDial msbalt = new LabelledDial("MSB", this, "cust-nrpn-value-alt-" + i, color, 0, 127);
 
                 final CheckBox on = new CheckBox("On", this, "cust-nrpn-value-" + i)
                     {
                     public void update(String key, Model model) 
-                    	{ 
-                		if (model.get("cust-nrpn-lsb-" + _i) > 0)
-                    		{
-                    		getCheckBox().setSelected(getState() > 64 * 128); 
-                    		}
-                    	else
-                    		{
-                    		getCheckBox().setSelected(getState() > 64); 
-                    		}
-                    	}
+                        { 
+                        if (model.get("cust-nrpn-lsb-" + _i) > 0)
+                            {
+                            getCheckBox().setSelected(getState() > 64 * 128); 
+                            }
+                        else
+                            {
+                            getCheckBox().setSelected(getState() > 64); 
+                            }
+                        }
                     };
                 on.setMax(127);
                 on.setState(on.getState());
  
                 final CheckBox lsb = new CheckBox("+LSB", this, "cust-nrpn-lsb-" + i)
-                	{
-                	public void update(String key, Model model)
-                		{
-                		super.update(key, model);
-                		if (model.get("cust-nrpn-lsb-" + _i) > 0)
-                			{
-                			msb.setLabel("MSB+LSB");
-                			msbalt.setLabel("MSB+LSB");
-                			msb.setMax(16383);
-                			msbalt.setMax(16383);
-               			}
-                		else
-                			{
-                			msb.setLabel("MSB");
-                			msbalt.setLabel("MSB");
-                			msb.setMax(127);
-                			msbalt.setMax(127);
-                			}
+                    {
+                    public void update(String key, Model model)
+                        {
+                        super.update(key, model);
+                        if (model.get("cust-nrpn-lsb-" + _i) > 0)
+                            {
+                            msb.setLabel("MSB+LSB");
+                            msbalt.setLabel("MSB+LSB");
+                            msb.setMax(16383);
+                            msbalt.setMax(16383);
+                            }
+                        else
+                            {
+                            msb.setLabel("MSB");
+                            msbalt.setLabel("MSB");
+                            msb.setMax(127);
+                            msbalt.setMax(127);
+                            }
                         }
-                	};
+                    };
                 lsb.addToWidth(2);
                
-                VBox vbox2 = new VBox();                                	
+                VBox vbox2 = new VBox();                                        
                 comp = new LabelledDial("Parameter", this, "cust-nrpn-param-" + i, color, 0, 16383)
                     {
                     public void update(String key, Model model)     
                         {
                         super.update(key, model);
 
-                		if (model.get("cust-nrpn-lsb-" + _i) > 0)
-                			{
-                			msb.setLabel("MSB+LSB");
-                			msbalt.setLabel("MSB+LSB");
-                			msb.setMax(16383);
-                			msbalt.setMax(16383);
-                			}
-                		else
-                			{
-                			msb.setLabel("MSB");
-                			msbalt.setLabel("MSB");
-                			msb.setMax(127);
-                			msbalt.setMax(127);
-                			}
+                        if (model.get("cust-nrpn-lsb-" + _i) > 0)
+                            {
+                            msb.setLabel("MSB+LSB");
+                            msbalt.setLabel("MSB+LSB");
+                            msb.setMax(16383);
+                            msbalt.setMax(16383);
+                            }
+                        else
+                            {
+                            msb.setLabel("MSB");
+                            msbalt.setLabel("MSB");
+                            msb.setMax(127);
+                            msbalt.setMax(127);
+                            }
                         }
                     };
                                         
@@ -486,24 +486,24 @@ public class Generic extends Synth
                 comp = on;
                 vbox2.add(comp);
                 hbox2.add(vbox2);
-				vbox.add(hbox2);
-				
+                vbox.add(hbox2);
+                                
                 comp = new StringComponent(null, this, "cust-nrpn-name-" + i, 6, "Name can be up to 12 long")
                     {
                     public String replace(String val)
-                    	{
-                    	return (val + "            ").substring(0,12).trim();
-                    	}
+                        {
+                        return (val + "            ").substring(0,12).trim();
+                        }
 
                     public String getCommand() { return "Enter NRPN Label up to 12 chars"; }
                     };
                 model.set("cust-nrpn-name-" + i, "Name");
                 vbox.add(comp);
                 hbox.add(vbox);
-                	
+                        
                 vbox = new VBox();
                 comp = msb;
-                	
+                        
                 vbox.add(comp);
                 comp = new PushButton("Send") 
                     { 
@@ -517,7 +517,7 @@ public class Generic extends Synth
 
                 vbox = new VBox();
                 comp = msbalt;
-                	
+                        
                 vbox.add(comp);
                 comp = new PushButton("Alt") 
                     { 
@@ -544,11 +544,11 @@ public class Generic extends Synth
         Category category = new Category(this, "RPN", color);
         
         for(int i = 1; i <= 18; i++)
-        	{
-        	model.set("cust-rpn-lsb-" + i, 0);
-        	model.setMin("cust-rpn-lsb-" + i, 0);
-        	model.setMax("cust-rpn-lsb-" + i, 1);
-        	}
+            {
+            model.set("cust-rpn-lsb-" + i, 0);
+            model.setMin("cust-rpn-lsb-" + i, 0);
+            model.setMax("cust-rpn-lsb-" + i, 1);
+            }
         
         
         JComponent comp;
@@ -564,70 +564,70 @@ public class Generic extends Synth
                 VBox vbox = new VBox();
 
                 final LabelledDial msb = new LabelledDial("MSB", this, "cust-rpn-value-" + i, color, 0, 127);
-                	
+                        
                 final LabelledDial msbalt = new LabelledDial("MSB", this, "cust-rpn-value-alt-" + i, color, 0, 127);
 
                 final CheckBox on = new CheckBox("On", this, "cust-rpn-value-" + i)
                     {
                     public void update(String key, Model model) 
-                    	{ 
-                		if (model.get("cust-rpn-lsb-" + _i) > 0)
-                    		{
-                    		getCheckBox().setSelected(getState() > 64 * 128); 
-                    		}
-                    	else
-                    		{
-                    		getCheckBox().setSelected(getState() > 64); 
-                    		}
-                    	}
+                        { 
+                        if (model.get("cust-rpn-lsb-" + _i) > 0)
+                            {
+                            getCheckBox().setSelected(getState() > 64 * 128); 
+                            }
+                        else
+                            {
+                            getCheckBox().setSelected(getState() > 64); 
+                            }
+                        }
                     };
                 on.setMax(127);
                 on.setState(on.getState());
  
                 final CheckBox lsb = new CheckBox("+LSB", this, "cust-rpn-lsb-" + i)
-                	{
-                	public void update(String key, Model model)
-                		{
-                		super.update(key, model);
-                		if (model.get("cust-rpn-lsb-" + _i) > 0)
-                			{
-                			msb.setLabel("MSB+LSB");
-                			msbalt.setLabel("MSB+LSB");
-                			msb.setMax(16383);
-                			msbalt.setMax(16383);
-               			}
-                		else
-                			{
-                			msb.setLabel("MSB");
-                			msbalt.setLabel("MSB");
-                			msb.setMax(127);
-                			msbalt.setMax(127);
-                			}
+                    {
+                    public void update(String key, Model model)
+                        {
+                        super.update(key, model);
+                        if (model.get("cust-rpn-lsb-" + _i) > 0)
+                            {
+                            msb.setLabel("MSB+LSB");
+                            msbalt.setLabel("MSB+LSB");
+                            msb.setMax(16383);
+                            msbalt.setMax(16383);
+                            }
+                        else
+                            {
+                            msb.setLabel("MSB");
+                            msbalt.setLabel("MSB");
+                            msb.setMax(127);
+                            msbalt.setMax(127);
+                            }
                         }
-                	};
+                    };
                 lsb.addToWidth(2);
                
-                VBox vbox2 = new VBox();                                	
+                VBox vbox2 = new VBox();                                        
                 comp = new LabelledDial("Parameter", this, "cust-rpn-param-" + i, color, 0, 16383)
                     {
                     public void update(String key, Model model)     
                         {
                         super.update(key, model);
 
-                		if (model.get("cust-rpn-lsb-" + _i) > 0)
-                			{
-                			msb.setLabel("MSB+LSB");
-                			msbalt.setLabel("MSB+LSB");
-                			msb.setMax(16383);
-                			msbalt.setMax(16383);
-                			}
-                		else
-                			{
-                			msb.setLabel("MSB");
-                			msbalt.setLabel("MSB");
-                			msb.setMax(127);
-                			msbalt.setMax(127);
-                			}
+                        if (model.get("cust-rpn-lsb-" + _i) > 0)
+                            {
+                            msb.setLabel("MSB+LSB");
+                            msbalt.setLabel("MSB+LSB");
+                            msb.setMax(16383);
+                            msbalt.setMax(16383);
+                            }
+                        else
+                            {
+                            msb.setLabel("MSB");
+                            msbalt.setLabel("MSB");
+                            msb.setMax(127);
+                            msbalt.setMax(127);
+                            }
                         }
                     };
                                         
@@ -643,24 +643,24 @@ public class Generic extends Synth
                 comp = on;
                 vbox2.add(comp);
                 hbox2.add(vbox2);
-				vbox.add(hbox2);
-				
+                vbox.add(hbox2);
+                                
                 comp = new StringComponent(null, this, "cust-rpn-name-" + i, 6, "Name can be up to 12 long")
                     {
                     public String replace(String val)
-                    	{
-                    	return (val + "            ").substring(0,12).trim();
-                    	}
+                        {
+                        return (val + "            ").substring(0,12).trim();
+                        }
 
                     public String getCommand() { return "Enter RPN Label up to 12 chars"; }
                     };
                 model.set("cust-rpn-name-" + i, "Name");
                 vbox.add(comp);
                 hbox.add(vbox);
-                	
+                        
                 vbox = new VBox();
                 comp = msb;
-                	
+                        
                 vbox.add(comp);
                 comp = new PushButton("Send") 
                     { 
@@ -674,7 +674,7 @@ public class Generic extends Synth
 
                 vbox = new VBox();
                 comp = msbalt;
-                	
+                        
                 vbox.add(comp);
                 comp = new PushButton("Alt") 
                     { 
@@ -740,9 +740,9 @@ public class Generic extends Synth
                 comp = new StringComponent(null, this, "cc-name-" + (i + offset), 6, "Name can be up to 20 long")
                     {
                     public String replace(String val)
-                    	{
-                    	return (val + "                    ").substring(0,20).trim();
-                    	}
+                        {
+                        return (val + "                    ").substring(0,20).trim();
+                        }
                     public String getTitle() { return "CC " +  (_i + offset); }
                     public String getCommand() { return "Enter CC Label up to 20 chars"; }
                     };
@@ -763,57 +763,57 @@ public class Generic extends Synth
         return category;
         }
     
-    public boolean recognize(byte[] data)
-    	{
+    public static boolean recognize(byte[] data)
+        {
         final int HEADER = 11;
-    	return (data.length == HEADER + 1 + (18 * 19 * 3 + 128 * 21) &&
-    		data[0] == 0xF0 &&
-    		data[1] == 0x7D &&
-        data[2] =='E' &&
-        data[3] =='D' &&
-        data[4] =='I' &&
-        data[5] =='S' &&
-        data[6] =='Y' &&
-        data[7] =='N' &&
-        data[8] ==' ' &&
-        data[9] =='C' &&
-        data[10] =='C');
-    	}
-    	
+        return (data.length == HEADER + 1 + (18 * 19 * 3 + 128 * 21) &&
+            data[0] == 0xF0 &&
+            data[1] == 0x7D &&
+            data[2] =='E' &&
+            data[3] =='D' &&
+            data[4] =='I' &&
+            data[5] =='S' &&
+            data[6] =='Y' &&
+            data[7] =='N' &&
+            data[8] ==' ' &&
+            data[9] =='C' &&
+            data[10] =='C');
+        }
+        
     public int parse(byte[] data, boolean fromFile) 
-    	{ 
-    	if (!fromFile) return PARSE_FAILED;
-    	
+        { 
+        if (!fromFile) return PARSE_FAILED;
+        
         final int HEADER = 11;
-    	int pos = HEADER;
-    	
+        int pos = HEADER;
+        
         for(int i = 1; i <= 18 ; i++)
             {
             model.set("cust-cc-param-" + i, ((data[pos++] << 7) | data[pos++]) );
             model.set("cust-cc-value-" + i, ((data[pos++] << 7) | data[pos++]) );
             model.set("cust-cc-value-alt-" + i, ((data[pos++] << 7) | data[pos++]) );
             model.set("cust-cc-lsb-" + i, (data[pos++]));
-			
-			char[] name = new char[12];
-			for(int j = 0; j < 12; j++)
-				{
-				name[j] = (char)(data[pos++]);
-	            }
+                        
+            char[] name = new char[12];
+            for(int j = 0; j < 12; j++)
+                {
+                name[j] = (char)(data[pos++]);
+                }
             model.set("cust-cc-value-name-" + i, new String(name).trim());
             }
 
         for(int i = 1; i <= 18 ; i++)
-        	{
+            {
             model.set("cust-nrpn-param-" + i, ((data[pos++] << 7) | data[pos++]) );
             model.set("cust-nrpn-value-" + i, ((data[pos++] << 7) | data[pos++]) );
             model.set("cust-nrpn-value-alt-" + i, ((data[pos++] << 7) | data[pos++]) );
             model.set("cust-nrpn-lsb-" + i, (data[pos++]));
-			
-			char[] name = new char[12];
-			for(int j = 0; j < 12; j++)
-				{
-				name[j] = (char)(data[pos++]);
-	            }
+                        
+            char[] name = new char[12];
+            for(int j = 0; j < 12; j++)
+                {
+                name[j] = (char)(data[pos++]);
+                }
             model.set("cust-nrpn-value-name-" + i, new String(name).trim());
             }
             
@@ -823,35 +823,35 @@ public class Generic extends Synth
             model.set("cust-rpn-value-" + i, ((data[pos++] << 7) | data[pos++]) );
             model.set("cust-rpn-value-alt-" + i, ((data[pos++] << 7) | data[pos++]) );
             model.set("cust-rpn-lsb-" + i, (data[pos++]));
-			
-			char[] name = new char[12];
-			for(int j = 0; j < 12; j++)
-				{
-				name[j] = (char)(data[pos++]);
-	            }
+                        
+            char[] name = new char[12];
+            for(int j = 0; j < 12; j++)
+                {
+                name[j] = (char)(data[pos++]);
+                }
             model.set("cust-rpn-value-name-" + i, new String(name).trim());
             }
 
         for(int i = 1; i <= 128; i++)
             {
             model.set("cc-" + i, (data[pos++]));
-			char[] name = new char[20];
-			for(int j = 0; j < 20; j++)
-				{
-				name[j] = (char)(data[pos++]);
-	            }
+            char[] name = new char[20];
+            for(int j = 0; j < 20; j++)
+                {
+                name[j] = (char)(data[pos++]);
+                }
             model.set("cc-name-" + i, new String(name).trim());
-			}  
-		
-		revise();
-		
-		return PARSE_SUCCEEDED;        
-    	}
+            }  
+                
+        revise();
+                
+        return PARSE_SUCCEEDED;        
+        }
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    	{
-    	if (!toFile) return new byte[0];
-    	
+        {
+        if (!toFile) return new byte[0];
+        
         final int HEADER = 11;
 
         byte[] sysex = new byte[HEADER + 1 + (18 * 19 * 3 + 128 * 21)];
@@ -871,127 +871,127 @@ public class Generic extends Synth
         
         for(int i = 1; i <= 18 ; i++)
             {
-            {
-            int val = model.get("cust-cc-param-" + i);
-            byte msb = (byte)((val >>> 7) & 127);
-            byte lsb = (byte)(val & 127);
-            sysex[pos++] = msb;
-            sysex[pos++] = lsb;
-			}
-			{
-            int val = model.get("cust-cc-value-" + i);
-            byte msb = (byte)((val >>> 7) & 127);
-            byte lsb = (byte)(val & 127);
-            sysex[pos++] = msb;
-            sysex[pos++] = lsb;
-			}
-			{
-            int val = model.get("cust-cc-value-alt-" + i);
-            byte msb = (byte)((val >>> 7) & 127);
-            byte lsb = (byte)(val & 127);
-            sysex[pos++] = msb;
-            sysex[pos++] = lsb;
-			}
-			
-			{
-            int val = model.get("cust-cc-lsb-" + i);
-            sysex[pos++] = (byte)val;
-			}
-			
-			String s = model.get("cust-cc-value-name-" + i,"") + "                ";
-			for(int j = 0; j < 12; j++)
-				{
-	            int val = (int)(s.charAt(j));
-	            sysex[pos++] = (byte) val;
-	            }
+                {
+                int val = model.get("cust-cc-param-" + i);
+                byte msb = (byte)((val >>> 7) & 127);
+                byte lsb = (byte)(val & 127);
+                sysex[pos++] = msb;
+                sysex[pos++] = lsb;
+                }
+                {
+                int val = model.get("cust-cc-value-" + i);
+                byte msb = (byte)((val >>> 7) & 127);
+                byte lsb = (byte)(val & 127);
+                sysex[pos++] = msb;
+                sysex[pos++] = lsb;
+                }
+                {
+                int val = model.get("cust-cc-value-alt-" + i);
+                byte msb = (byte)((val >>> 7) & 127);
+                byte lsb = (byte)(val & 127);
+                sysex[pos++] = msb;
+                sysex[pos++] = lsb;
+                }
+                        
+                {
+                int val = model.get("cust-cc-lsb-" + i);
+                sysex[pos++] = (byte)val;
+                }
+                        
+            String s = model.get("cust-cc-value-name-" + i,"") + "                ";
+            for(int j = 0; j < 12; j++)
+                {
+                int val = (int)(s.charAt(j));
+                sysex[pos++] = (byte) val;
+                }
             }
 
         for(int i = 1; i <= 18 ; i++)
             {
-            {
-            int val = model.get("cust-nrpn-param-" + i);
-            byte msb = (byte)((val >>> 7) & 127);
-            byte lsb = (byte)(val & 127);
-            sysex[pos++] = msb;
-            sysex[pos++] = lsb;
-			}
-			{
-            int val = model.get("cust-nrpn-value-" + i);
-            byte msb = (byte)((val >>> 7) & 127);
-            byte lsb = (byte)(val & 127);
-            sysex[pos++] = msb;
-            sysex[pos++] = lsb;
-			}
-			{
-            int val = model.get("cust-nrpn-value-alt-" + i);
-            byte msb = (byte)((val >>> 7) & 127);
-            byte lsb = (byte)(val & 127);
-            sysex[pos++] = msb;
-            sysex[pos++] = lsb;
-			}
-			{
-            int val = model.get("cust-nrpn-lsb-" + i);
-	            sysex[pos++] = (byte) val;
-			}
-			String s = model.get("cust-nrpn-value-name-" + i,"") + "                ";
-			for(int j = 0; j < 12; j++)
-				{
-	            int val = (int)(s.charAt(j));
-	            sysex[pos++] = (byte) val;
-	            }
+                {
+                int val = model.get("cust-nrpn-param-" + i);
+                byte msb = (byte)((val >>> 7) & 127);
+                byte lsb = (byte)(val & 127);
+                sysex[pos++] = msb;
+                sysex[pos++] = lsb;
+                }
+                {
+                int val = model.get("cust-nrpn-value-" + i);
+                byte msb = (byte)((val >>> 7) & 127);
+                byte lsb = (byte)(val & 127);
+                sysex[pos++] = msb;
+                sysex[pos++] = lsb;
+                }
+                {
+                int val = model.get("cust-nrpn-value-alt-" + i);
+                byte msb = (byte)((val >>> 7) & 127);
+                byte lsb = (byte)(val & 127);
+                sysex[pos++] = msb;
+                sysex[pos++] = lsb;
+                }
+                {
+                int val = model.get("cust-nrpn-lsb-" + i);
+                sysex[pos++] = (byte) val;
+                }
+            String s = model.get("cust-nrpn-value-name-" + i,"") + "                ";
+            for(int j = 0; j < 12; j++)
+                {
+                int val = (int)(s.charAt(j));
+                sysex[pos++] = (byte) val;
+                }
             }
             
         for(int i = 1; i <= 18 ; i++)
             {
-            {
-            int val = model.get("cust-rpn-param-" + i);
-            byte msb = (byte)((val >>> 7) & 127);
-            byte lsb = (byte)(val & 127);
-            sysex[pos++] = msb;
-            sysex[pos++] = lsb;
-			}
-			{
-            int val = model.get("cust-rpn-value-" + i);
-            byte msb = (byte)((val >>> 7) & 127);
-            byte lsb = (byte)(val & 127);
-            sysex[pos++] = msb;
-            sysex[pos++] = lsb;
-			}
-			{
-            int val = model.get("cust-rpn-value-alt-" + i);
-            byte msb = (byte)((val >>> 7) & 127);
-            byte lsb = (byte)(val & 127);
-            sysex[pos++] = msb;
-            sysex[pos++] = lsb;
-			}
-			{
-            int val = model.get("cust-rpn-lsb-" + i);
-	            sysex[pos++] = (byte) val;
-			}
-			String s = model.get("cust-rpn-value-name-" + i,"") + "                ";
-			for(int j = 0; j < 12; j++)
-				{
-	            int val = (int)(s.charAt(j));
-	            sysex[pos++] = (byte) val;
-	            }
+                {
+                int val = model.get("cust-rpn-param-" + i);
+                byte msb = (byte)((val >>> 7) & 127);
+                byte lsb = (byte)(val & 127);
+                sysex[pos++] = msb;
+                sysex[pos++] = lsb;
+                }
+                {
+                int val = model.get("cust-rpn-value-" + i);
+                byte msb = (byte)((val >>> 7) & 127);
+                byte lsb = (byte)(val & 127);
+                sysex[pos++] = msb;
+                sysex[pos++] = lsb;
+                }
+                {
+                int val = model.get("cust-rpn-value-alt-" + i);
+                byte msb = (byte)((val >>> 7) & 127);
+                byte lsb = (byte)(val & 127);
+                sysex[pos++] = msb;
+                sysex[pos++] = lsb;
+                }
+                {
+                int val = model.get("cust-rpn-lsb-" + i);
+                sysex[pos++] = (byte) val;
+                }
+            String s = model.get("cust-rpn-value-name-" + i,"") + "                ";
+            for(int j = 0; j < 12; j++)
+                {
+                int val = (int)(s.charAt(j));
+                sysex[pos++] = (byte) val;
+                }
             }            
 
         for(int i = 1; i <= 128; i++)
             {
-				{
-				int val = model.get("cc-" + i);
-	            sysex[pos++] = (byte) val;
-				}
-				{
-				String s = model.get("cc-name-" + i,"") + "                    ";
-				for(int j = 0; j < 20; j++)
-					{
-					int val = (int)(s.charAt(j));
-	            	sysex[pos++] = (byte) val;
-					}
-				}  
-			}          
-        sysex[sysex.length - 1] = (byte)0xF7;    	
+                {
+                int val = model.get("cc-" + i);
+                sysex[pos++] = (byte) val;
+                }
+                {
+                String s = model.get("cc-name-" + i,"") + "                    ";
+                for(int j = 0; j < 20; j++)
+                    {
+                    int val = (int)(s.charAt(j));
+                    sysex[pos++] = (byte) val;
+                    }
+                }  
+            }          
+        sysex[sysex.length - 1] = (byte)0xF7;           
         
         return sysex;
         }
@@ -1009,92 +1009,92 @@ public class Generic extends Synth
             int param = StringUtility.getInt(key);
             int val = model.get(key);
             if (model.get("cust-cc-param-" + param) > 32 ||
-            	model.get("cust-cc-lsb-" + param) == 0)  // just 127
-            		{
-            		return buildCC(getChannelOut(), model.get("cust-cc-param-" + param), val);
-            		}
-        	else
-        		{
-        		return buildLongCC(getChannelOut(), model.get("cust-cc-param-" + param), val);
-        		}
+                model.get("cust-cc-lsb-" + param) == 0)  // just 127
+                {
+                return buildCC(getChannelOut(), model.get("cust-cc-param-" + param), val);
+                }
+            else
+                {
+                return buildLongCC(getChannelOut(), model.get("cust-cc-param-" + param), val);
+                }
             }
         else if (key.startsWith("cust-cc-value-"))
             {
             int param = StringUtility.getInt(key);
             int val = model.get(key);
             if (model.get("cust-cc-param-" + param) > 32 ||
-            	model.get("cust-cc-lsb-" + param) == 0)  // just 127
-            		{
-            		return buildCC(getChannelOut(), model.get("cust-cc-param-" + param), val);
-            		}
-        	else
-        		{
-        		return buildLongCC(getChannelOut(), model.get("cust-cc-param-" + param), val);
-        		}
+                model.get("cust-cc-lsb-" + param) == 0)  // just 127
+                {
+                return buildCC(getChannelOut(), model.get("cust-cc-param-" + param), val);
+                }
+            else
+                {
+                return buildLongCC(getChannelOut(), model.get("cust-cc-param-" + param), val);
+                }
             }
         else if (key.startsWith("cust-nrpn-value-alt-"))
             {
             int param = StringUtility.getInt(key);
             int val = model.get(key);
             if (model.get("cust-nrpn-param-" + param) > 32 ||
-            	model.get("cust-nrpn-lsb-" + param) == 0)  // just 127
-            		{
-            		return buildNRPN(getChannelOut(), model.get("cust-nrpn-param-" + param), val * 128);
-            		}
-        	else
-        		{
-        		return buildNRPN(getChannelOut(), model.get("cust-nrpn-param-" + param), val);
-        		}
+                model.get("cust-nrpn-lsb-" + param) == 0)  // just 127
+                {
+                return buildNRPN(getChannelOut(), model.get("cust-nrpn-param-" + param), val * 128);
+                }
+            else
+                {
+                return buildNRPN(getChannelOut(), model.get("cust-nrpn-param-" + param), val);
+                }
             }
         else if (key.startsWith("cust-nrpn-value-"))
             {
             int param = StringUtility.getInt(key);
             int val = model.get(key);
             if (model.get("cust-nrpn-param-" + param) > 32 ||
-            	model.get("cust-nrpn-lsb-" + param) == 0)  // just 127
-            		{
-            		return buildNRPN(getChannelOut(), model.get("cust-nrpn-param-" + param), val * 128);
-            		}
-        	else
-        		{
-        		return buildNRPN(getChannelOut(), model.get("cust-nrpn-param-" + param), val);
-        		}
+                model.get("cust-nrpn-lsb-" + param) == 0)  // just 127
+                {
+                return buildNRPN(getChannelOut(), model.get("cust-nrpn-param-" + param), val * 128);
+                }
+            else
+                {
+                return buildNRPN(getChannelOut(), model.get("cust-nrpn-param-" + param), val);
+                }
             }
         else if (key.startsWith("cust-rpn-value-alt-"))
             {
             int param = StringUtility.getInt(key);
             int val = model.get(key);
             if (model.get("cust-rpn-param-" + param) > 32 ||
-            	model.get("cust-rpn-lsb-" + param) == 0)  // just 127
-            		{
-            		return buildNRPN(getChannelOut(), model.get("cust-rpn-param-" + param), val * 128);
-            		}
-        	else
-        		{
-        		return buildNRPN(getChannelOut(), model.get("cust-rpn-param-" + param), val);
-        		}
+                model.get("cust-rpn-lsb-" + param) == 0)  // just 127
+                {
+                return buildNRPN(getChannelOut(), model.get("cust-rpn-param-" + param), val * 128);
+                }
+            else
+                {
+                return buildNRPN(getChannelOut(), model.get("cust-rpn-param-" + param), val);
+                }
             }
         else if (key.startsWith("cust-rpn-value-"))
             {
             int param = StringUtility.getInt(key);
             int val = model.get(key);
             if (model.get("cust-rpn-param-" + param) > 32 ||
-            	model.get("cust-rpn-lsb-" + param) == 0)  // just 127
-            		{
-            		return buildNRPN(getChannelOut(), model.get("cust-rpn-param-" + param), val * 128);
-            		}
-        	else
-        		{
-        		return buildNRPN(getChannelOut(), model.get("cust-rpn-param-" + param), val);
-        		}
+                model.get("cust-rpn-lsb-" + param) == 0)  // just 127
+                {
+                return buildNRPN(getChannelOut(), model.get("cust-rpn-param-" + param), val * 128);
+                }
+            else
+                {
+                return buildNRPN(getChannelOut(), model.get("cust-rpn-param-" + param), val);
+                }
             }
         else return new Object[0];
         }
 
-	public boolean sendAllSoundsOffWhenWindowActivated()
-		{
-		return false;
-		}
+    public boolean sendAllSoundsOffWhenWindowChanges()
+        {
+        return false;
+        }
 
 
     public static String getSynthName() 

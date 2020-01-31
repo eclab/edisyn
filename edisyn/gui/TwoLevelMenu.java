@@ -65,10 +65,10 @@ public class TwoLevelMenu extends JPanel
                 {
                 public void itemStateChanged(ItemEvent e)
                     {
-                    if (e.getStateChange() == ItemEvent.SELECTED)	// not interested in deselection events
-                    	{
-	                    selection(getPrimary(), getSecondary());
-	                    }
+                    if (e.getStateChange() == ItemEvent.SELECTED)       // not interested in deselection events
+                        {
+                        selection(getPrimary(), getSecondary());
+                        }
                     }
                 });
             }
@@ -77,11 +77,11 @@ public class TwoLevelMenu extends JPanel
             {
             public void itemStateChanged(ItemEvent e)
                 {
-                    if (e.getStateChange() == ItemEvent.SELECTED)	// not interested in deselection events
-                    	{
-                updateSecondaryBox();
-                selection(getPrimary(), getSecondary());
-                	}
+                if (e.getStateChange() == ItemEvent.SELECTED)       // not interested in deselection events
+                    {
+                    updateSecondaryBox();
+                    selection(getPrimary(), getSecondary());
+                    }
                 }
             });
         }

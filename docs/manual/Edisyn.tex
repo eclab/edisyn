@@ -41,15 +41,18 @@ By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 
 Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter exploration of a variety of synthesizers.  It is not skewmorphic or (mostly) skinnable: its design is plain and consistent.  Edisyn is free open source.  Edisyn currently supports the following synthesizers:
 
+{
+\small
 \begin{itemize}
 %\item Futuresonus Parva
 \item Casio CZ Series (Single)
 \item Dave Smith Instruments Prophet '08 (Single)
-\item E-Mu Morpheus and Proteus (Single, Hyperpreset, and MidiMap)
+\item E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap)
+\item E-Mu Proteus 1, 1 XR, 2, 2 XR, 3, 3 XR, and 1+Orchestral (Single)
 \item Kawai K1, K1m, and K1r (Single and Multimode)
 \item Kawai K4 and K4r (Single and Multimode)
 \item Kawai K5 and K5m (Single)
-\item Korg SG Rack (Single and Multimode)
+\item Korg SG Rack and SG Pro X (Single and (for SG Rack) Multimode)
 \item Korg Microkorg (Single)
 \item Korg Microsampler
 \item Korg Wavestation SR (Performance, Patch, and Wave Sequence)
@@ -60,13 +63,16 @@ Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter e
 \item Roland JV-80 and JV-880 (Single and Multimode)
 \item Waldorf Blofeld Desktop, Blofeld Desktop SL, and Blofeld Keyboard (Single and Multimode, plus wavetable uploading in Single: see the Blofeld's ``About'' panel)
 \item Waldorf Microwave II, Microwave XT, and Microwave XTk (Single and Multimode)
-\item Yamaha DX7 Family (DX7, TX7, TX216/816, Dexed, etc.) (Single)
+\item Yamaha DX7 Family (DX7, TX7, TX216/816, Korg Volca FM, Dexed, etc.) (Single)
 \item Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, etc.) (Single and Multimode (for TX81Z and DX11))
+\item Yamaha TG33, SY22, and SY35 (Single and TG33-only Multimode)
+\item (Plus general CC, NRPN, and RPN editing)
 \end{itemize}
+}
 
 You'll note a pattern among these synthesizers: many are very difficult to program.\footnote{So why are the Prophet '08, Blofeld, and Microwave XT there then?  Because in fact these synthesizers are all ones I own or have had access to.}  That's one of my interests.  
 
-Edisyn's patch editors try to cover the most common needs, and so it does not support patches for global parameters, nor for wave, sample, or wavetable editing\footnote{The Blofeld patch editor only supports wavetable {\it uploading}: there's an excellent external wavetable-editing tool available at http;/\!/waveeditonline.com} etc.  Additionally, though it can do bulk downloads and save them as individual patches, Edisyn is {\bf not at present a librarian tool}.  You should use a good free librarian software program, such as SysEx Librarian on the Mac.
+Edisyn's patch editors try to cover the most common needs, and so it does not support patches for global parameters, nor for wave, sample, or wavetable editing\footnote{The Blofeld patch editor only supports wavetable {\it uploading}, not {\it editing}: this is because there's an excellent external wavetable-editing tool available at http:/\!/waveeditonline.com which is better than anything I could possibly write.} etc.  Additionally, though it can do bulk downloads and save them as individual patches, Edisyn is {\bf not at present a librarian tool}.  You should use a good free librarian software program, such as SysEx Librarian on the Mac.
 
 
 \bump
@@ -222,15 +228,15 @@ By selecting {\bf Request Current Patch}, you can also ask your synthesizer to s
 
 {\bf Send to Current Patch} will dump Edisyn's current patch to the synthesizer, instructing it to only update its local working memory, and not to store the patch in permanent memory.  This operation is primarily used to sync up certain synthesizers which do not update themselves in real-time in response to parameter changes you make.
 
-{\bf Send to Patch...} will ask the synthesizer to change to a new patch and bank which you specify, then dump Edisyn's current patch to the synthesizer in its working (not permanent) memory.  This also isn't used all that much: but some synthesizers (like the PreenFM2 or TX81Z) cannot be permanently written to remotely.  Instead you send to a patch, then store the patch manually on the synthesizer itself.
+%{\bf Send to Patch...} will ask the synthesizer to change to a new patch and bank which you specify, then dump Edisyn's current patch to the synthesizer in its working (not permanent) memory.  This also isn't used all that much: but some synthesizers (like the PreenFM2 or TX81Z) cannot be permanently written to remotely.  Instead you send to a patch, then store the patch manually on the synthesizer itself.
 
 {\bf Sends Real Time Changes} controls whether the Edisyn will send parameter changes to the synthesizer in real time in response to you changing widgets in the patch editor.  This isn't necessarily determined by the synth model.  For example, the default ROM for the Oberheim Matrix 1000 cannot handle real-time changes: but ROM versions 1.16 or 1.20 (later bug fixes by the Oberheim user community) allow real-time changes with no issue.  
 
-{\bf Write to Patch...} will ask the synthesizer to change to a new patch and bank which you specify, then dump Edisyn's current patch to the synthesizer to its permanent memory.  
+{\bf Write to Patch...} will ask the synthesizer to change to a new patch and bank which you specify, then dump Edisyn's current patch to the synthesizer to its permanent memory.  Some synthesizers (like the PreenFM2 or TX81Z) cannot be written to remotely via Edisyn. Instead, you will need to Send to Current Patch, then manually save the current patch to patch RAM on the synth itself.
 
 \vspace{1em}
 
-Note that various synthesizers cannot do one or another of these tasks.   When this happens, that feature will generally be disabled in the menu.  As always, read the About Tab to learn more about what's going on with that synthesizer model.  See Section \ref{inconsistent} for some information and griping about all this.
+Some synthesizers cannot do one or another of these tasks.   When this happens, that feature will generally be disabled in the menu.  As always, read the About Tab to learn more about what's going on with that synthesizer model.  See Section \ref{inconsistent} for some information and griping about all this.
 
 A synthesizer can also offer its own sysex messages to Edisyn without Edisyn requesting them.  Edisyn will try to handle these appropriately.  Some synthesizers might send special {\it bank sysex} messages which contain an entire bank (or in some cases, an entire synthesizer's memory worth) of patches.  Only a few Edisyn patch editors know how to deal with these messages: notably the DX7 patch editor can handle these just fine.  In this case, you will be given three options, to upload the entire bank to the synthesizer (again), to save the entire bank to a file, or to select a single patch from the bank and edit it.
 
@@ -313,7 +319,7 @@ There are many situations where these combinations are useful.  Here's a fun exa
 
 In some situations you might wish to get Edisyn to communicate with a software synth: for example Dexed\footnote{https:/\!/asb2m10.github.io/dexed/} is a nice DX7 emulator and works well with Edisyn.  Or perhaps you might want to use Edisyn to translate CC messages from your DAW into Edisyn parameter changes, which then get forwarded to a synthesizer as sysex (see Section \ref{remotecontrolofedisyn} to learn how to map CC messages to parameter changes).
 
-You'd think it'd be easy to connect directly to another piece of software on your computer.  But you'd be wrong!  The problem is that Edisyn, because it's written in Java, can only connect to {\it MIDI devices}, and your software synthesizer or DAW has probably not registered itself as a device\,---\,it likewise probably is designed only to connect to MIDI devices.
+You'd think it'd be easy to connect directly to another piece of software on your computer.  But you'd be wrong!  The problem is that Edisyn, because it's written in Java, can only connect to {\it MIDI devices}, and your software synthesizer or DAW has probably not registered itself as a device\,---\,it likewise probably is designed only to connect to MIDI devices, and so cannot see Edisyn either.
 
 \begin{wrapfigure}{r}{3in}
 \begin{center}\vspace{-1em}\includegraphics[width=3in]{Loopback.pdf}\end{center}
@@ -337,6 +343,10 @@ Similarly, if you need your software synth to respond to Edisyn, you need to mak
 This procedure will create a bunch of of virtual devices with names like {\tt VirMIDI [hw:2,0,0]} or {\tt VirMIDI [hw:2,1,8]}.  Select a device whose third number is 0 (such as {\tt VirMIDI [hw:2,0,0]} or {\tt VirMIDI [hw:3,1,0]}, but not {\tt VirMIDI [hw:2,1,1]}).  Have Edisyn send to this device and have the software synthesizer listen from the same device.  If you want to hook Edisyn and your synth up the other direction (so Edisyn receives from the synthesizer), you'll need to select a second virtual device.
 \end{itemize}
 
+\paragraph{Warning}  The ``loop'' in {\it loopback} is apropos.  If you fire up Edisyn and you're not careful, it may set up your loopback as both its input and output.  That would be unfortunate: Edisyn would send a patch out the loopback, which would then arrive at Edisyn's input, which would cause Edisyn to parse the same patch, which would in turn cause Edisyn to send the patch {\it again}, and so on.  So you want to make sure that Edisyn doesn't have the same loopback device as both input and output.  Obviously other devices (such as your MIDI/USB converter) can serve as both input and output.
+
+
+\vbox{
 \section{Editing and Exploratory Patch Creation}
 
 Edisyn has a number of facilities to help you program your synthesizer, including tools to help you wander through the possible space of patches to hunt for the sound you want.  Here's what you can do:
@@ -344,6 +354,7 @@ Edisyn has a number of facilities to help you program your synthesizer, includin
 \paragraph{Undo and Redo}  Edisyn has infinite levels of undo and redo.  When you change a parameter or do a wholesale modification, this can be undone, as can patch dumps and merges from the synthesizer.  Individual parameter changes made manually on the synthesizer are not undoable even if they're reflected in Edisyn (it'd be too many).  Loading and saving patches is not undoable.  See the {\bf Edit} menu.
 
 \paragraph{Reset}  You can reset the patch editor to its ``init patch''.  Just choose {\bf Reset} in the {\bf Edit} menu.
+}
 
 \paragraph{Category Cut/Paste, Distribution, and Reset}  Each category has a pop-up menu you get when you right-click or shift-click (or two-finger click on a Mac trackpad) on the category name. You can:
 
@@ -390,7 +401,7 @@ You can restrict Mutation (Randomize) and Recombination (Nudge and Merge) to onl
 
 \begin{wrapfigure}{r}{3in}
 \vspace{-2em}\includegraphics[scale=0.3]{5.png}
-\vspace{-3em}\caption{Editing Mutation Parameters}\label{mutationparameters}
+\vspace{-2em}\caption{Editing Mutation Parameters}\label{mutationparameters}
 \end{wrapfigure}
 
 You can change these of course: just click on them and you can remove them from being updated (or add them back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title.  The categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}.  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
@@ -462,7 +473,7 @@ The idea behind the Constrictor is to start with a set of varied but high-qualit
 \paragraph{Initialization}  For the constrictor to work, you have to initialize the Candidates with a set of varied patches.  You could load these patches one by one by clicking on each Candidates' Options button and choosing {\it Load from File}.  But there's an easier way.  Load just the first four Candidates this way, via Load from File, and then clicking on the {\bf Reset} button and choose {\bf From First Four Candidates}.  The remaining candidates (5...16, or even 5...32) will be generated from recombinations of the first four.  If you're doing 32 candidates (that is, you pressed the {\it Big} button), you might consider loading the first six candidates and then choosing {\bf From First Six Candidates}, which gives a better mix.
 
 \paragraph{Smooth Versus Unsmooth}
-The smooth constrictor recombines candidates by interpolating between their metric parameters.  The unsmooth constrictor recombines them by simply picking one parameter or the other from the parents.  The unsmooth constrictor makes a more varied set of patches.  Tests have found that people like the smooth constrictor better, so I might get rid of Unsmooth in the future.
+The smooth constrictor recombines candidates by interpolating between their metric parameters.  The unsmooth constrictor recombines them by simply picking one parameter or the other from the parents.  The unsmooth constrictor makes a more noisy set of patches.  Tests have found that people like the smooth constrictor better, so I might get rid of Unsmooth in the future.
 
 \paragraph{Using the Constrictor Along with the Hill-Climber} It's not a bad idea to start with a constrictor, constrict down to a single patch or so, and then switch over to the hill-climber and hill-climb from there.  It is a {\bf bad} idea to go from the hill-climber to the constrictor because the hill-climber restricts the candidates to a small space and the constrictor will constrict that small space almost immediately.
 
@@ -727,23 +738,26 @@ Below is a little table of the current patch editors for Edisyn, and various Edi
 \begin{sideways}Standard Sysex File\end{sideways}\\[0.5em]
 \hline\\[-0.5em]
 %Futuresonus Parva&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}&&&\\
-Casio CZ&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
+Casio CZ&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*            \\
 DSI Prophet '08&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
 E-Mu Morpheus / UltraProteus&{\cm}& &{\cm}& & &{\cm}&{\cm}& & &{\cm}            \\
+E-Mu Proteus&{\cm}& &{\cm}& & &{\cm}&{\cm}& & &{\cm}            \\
 Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}            \\
 Waldorf Blofeld&{\cm}*&{\cm}*&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}& & & {\cm}            \\
 Kawai K1/K1r/K1m&{\cm}*& &{\cm}& & & &{\cm}& &{\cm}&{\cm}            \\
 Kawai K4/K4r&{\cm}*& &{\cm}& &{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}            \\
 Kawai K5/K5m&{\cm}&{\cm}&{\cm}& & &{\cm}&{\cm}& &{\cm}&{\cm}            \\
 Yamaha DX7&{\cm}&{\cm}& & & & {\cm}& &  & &{\cm}            \\
-Yamaha TX81Z&{\cm}*& & &{\cm}&{\cm}& & &  & &{\cm}*            \\
-PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &            \\
-Red Sound DarkStar XP2&&&&&{\cm}&&{\cm}& & &            \\
+Yamaha 4-Op&{\cm}*& & &{\cm}&{\cm}& & &  & &{\cm}*            \\
+Yamaha TG33/SY22/SY35&{\cm}*& &{\cm}&{\cm}&{\cm}& & &  & &{\cm}            \\
+PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &{\cm}\\
+Red Sound DarkStar/DarkStar XP2&&&&&{\cm}&&{\cm}& & &            \\
+Roland D-110&{\cm}& &{\cm}*&{\cm}*&{\cm}*& &{\cm}*& & &{\cm}          \\
 Roland JV-80/880&{\cm}& &{\cm}&{\cm}&{\cm}& &{\cm}& & &{\cm}*          \\
 Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}*&{\cm}*&{\cm}& & &{\cm}          \\
 Korg Microsampler&{\cm}*&{\cm}*& & & & & &  &  &         \\
 Korg SG Rack&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}\\
-Korg Wavestation&{\cm}&&{\cm}&{\cm}*&{\cm}*&{\cm}&{\cm}&{\cm}*&&{\cm}\\
+Korg Wavestation SR&{\cm}&&{\cm}&{\cm}*&{\cm}*&{\cm}&{\cm}&{\cm}*&&{\cm}\\
 \end{tabular}
 }
 \\[1em]
@@ -1243,7 +1257,7 @@ Both emit(Model, ...) and emitAll(Model, ...) receive a temporary model.  This m
 You may not be able to write, or you may not be able to send to a specific patch, or to the current patch, depending on your synthesizer.  If so, you can do any of:
 
 \begin{verbatim}
-transmitTo.setEnabled(false);  // turns of the "Send to Patch..." menu option
+%transmitTo.setEnabled(false);  // turns of the "Send to Patch..." menu option
 transmitCurrent.setEnabled(false);  // turns of the "Send to Current Patch" menu option
 writeTo.setEnabled(false);  // turns of the "Write to Patch..." menu option
 \end{verbatim}

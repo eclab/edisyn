@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 21)
+Synthesizer Patch Editor (Version 22)
  
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -30,14 +30,15 @@ Edisyn is particularly good at exploring the space of patches.  It has to my kno
 Edisyn presently supports:
  
 * Casio CZ Series (CZ101, CZ1000, CZ3000, CZ5000, CZ-1)
-* DSI Prophet '08 
+* DSI Prophet '08
 * E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap modes)
+* E-Mu Proteus 1, 1XR, 2, 2XR, 3, 3XR, and 1+Orchestral
 * Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)
 * Kawai K5 and K5m
-* Korg SG Rack (Single and Multi Modes) and Korg SG Pro X (Single Mode)
-* Korg Microsampler
+* Korg SG Rack (Single and Multi Modes) and Korg SG Pro X
 * Korg MicroKorg
+* Korg Microsampler
 * Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
 * Oberheim Matrix 1000
 * PreenFM2
@@ -46,8 +47,10 @@ Edisyn presently supports:
 * Roland JV-80 and JV-880 (Single and Multi Modes)
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading, see the Blofeld editor's "About" panel)
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
-* Yamaha DX7 Family (DX7, TX7, TX802, TX216/TX816, Dexed)
-* Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, etc.) (Single and Multi Modes)
+* Yamaha DX7 Family (DX7, TX7, TX802, TX216/TX816, Korg Volca FM, Dexed)
+* Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, etc.) (Single and (TX81Z and DX11 only) Multi Modes)
+* Yamaha TG33, SY22, and SY35 (Single and (TG33-only) Multi Modes)
+* General CC, NRPN, and RPN editing
 
 Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, randomization, merging, nudging, hill-climbing, patch constriction, per-parameter customization, real-time parameter updates, test notes, etc.
 

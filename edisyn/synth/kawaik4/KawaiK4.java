@@ -1594,7 +1594,7 @@ public class KawaiK4 extends Synth
             key.equals("s4envelopelevel"));
         }
 
-    public byte[] adjustBankSysexForEmit(byte[] data, Model model)
+    public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)
         { 
         data[2] = (byte) getChannelOut();
         return data; 

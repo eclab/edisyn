@@ -5117,11 +5117,5 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 //      return model.get("hillclimbdelay");
         return 1100;
         }
-
-    public byte[] adjustBankSysexForEmit(byte[] data, Model model)
-        { 
-        data[2] = (byte) getChannelOut();
-        return data; 
-        }
     }
     

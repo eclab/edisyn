@@ -12,6 +12,7 @@ import javax.swing.*;
 
 public abstract class KorgWavestationAbstract extends Synth
     {
+    public static final String[] WRITABLE_BANKS = new String[] { "RAM 1", "RAM 2", "RAM 3", "Card" };
     public static final String[] BANKS = new String[] { "RAM 1", "RAM 2", "RAM 3", "ROM 4", "ROM 5", "ROM 6", "ROM 7", "ROM 8", "ROM 9", "ROM10", "ROM11", "Card" };
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     public static final String[] SOURCES = new String[] { "Linear Keyboard", "Centered Keyboard", "Linear Velocity", "Exponential Velocity", "LFO1", "LFO2", "Envelope 1", "Aftertouch", "AT + Mod Wheel", "Mod Wheel", "MIDI 1", "MIDI 2", "MIDI Mod Pedal" };
@@ -917,6 +918,32 @@ public abstract class KorgWavestationAbstract extends Synth
         return waves;
         }
         
+    public String[] getBanksForBankSysex(byte[] data, Model model) 
+    	{ 
+    	return WRITABLE_BANKS;
+    	}
 
+	/// FIXME -- is wsToEdisynBank the right conversion?
+    public int getDefaultBankForBankSysex(byte[] data, Model model) 
+    	{ 
+    	int b = wsToEdisynBank[data[5]];
+    	if (b < 4)
+    		{
+    		return b;
+    		}
+    	else if (b == 1)
+    		{
+    		return 4;
+    		}
+    	else return 0;
+    	}
 
+	/// FIXME -- is wsToEdisynBank the right conversion?
+    public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)
+        { 
+        data[2] = (byte) (0x30 + getChannelOut());
+        if (bank == 4) bank = 11;
+        data[5] = edisynToWSBank(bank);
+        return data; 
+        }
     }

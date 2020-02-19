@@ -14,6 +14,7 @@ edisyn.synth.kawaik4.KawaiK4Multi
 edisyn.synth.kawaik4.KawaiK4Drum
 edisyn.synth.kawaik4.KawaiK4Effect
 edisyn.synth.kawaik5.KawaiK5
+edisyn.synth.kawaik5.KawaiK5Multi
 edisyn.synth.korgmicrokorg.KorgMicroKorg
 edisyn.synth.korgmicrokorg.KorgMicroKorgVocoder
 edisyn.synth.korgmicrosampler.KorgMicrosampler
@@ -36,8 +37,8 @@ edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti
 edisyn.synth.yamaha4op.Yamaha4Op
 edisyn.synth.yamaha4op.Yamaha4OpMulti
 edisyn.synth.yamahadx7.YamahaDX7 
-#edisyn.synth.yamahafb01.YamahaFB01
-#edisyn.synth.yamahafb01.YamahaFB01Multi
+edisyn.synth.yamahafb01.YamahaFB01
+edisyn.synth.yamahafb01.YamahaFB01Multi
 edisyn.synth.yamahatg33.YamahaTG33
 edisyn.synth.yamahatg33.YamahaTG33Multi
 #edisyn.synth.yamahatx81z.YamahaTX81Z 

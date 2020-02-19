@@ -2703,7 +2703,6 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         {
         return 1100;
         }
-
     }
     
     

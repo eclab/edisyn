@@ -803,7 +803,7 @@ public class KawaiK1Multi extends Synth
         return BANKS[model.get("bank")] + (model.get("number") + 1 < 10 ? "0" : "") + ((model.get("number") + 1));
         }
 
-    public byte[] adjustBankSysexForEmit(byte[] data, Model model)
+    public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)
         { 
         data[2] = (byte) getChannelOut();
         return data; 

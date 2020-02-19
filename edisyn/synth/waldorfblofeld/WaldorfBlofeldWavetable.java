@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.*;
 import edisyn.*;
 import edisyn.gui.*;
-import edisyn.synth.waldorfblofeld.utility.*;
+import edisyn.util.*;
 
 public class WaldorfBlofeldWavetable
     {

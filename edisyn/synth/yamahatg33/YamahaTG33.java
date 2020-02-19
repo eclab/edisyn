@@ -2744,12 +2744,16 @@ public class YamahaTG33 extends Synth
         { 0,6,2,8,0,0,0,0,0,10,10,10,0,2,2,2,2,1,4,9,0 } 
         };
 
-    public byte[] adjustBankSysexForEmit(byte[] data, Model model)
+    public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)
         { 
         if (getSynthType() == TYPE_TG33)
             data[2] = (byte)(getID());
         else
             data[2] = (byte)(getChannelOut());
+            
+        /// At present we're not adding a 100ms delay for the bulk upload segments.
+        /// That's required in the manual, but I'm not sure where to insert them.
+        
         return data; 
         }
 

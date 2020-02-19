@@ -1079,7 +1079,7 @@ public class Yamaha4OpMulti extends Synth
         }
         
 
-    public byte[] adjustBankSysexForEmit(byte[] data, Model model)
+    public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)
         { 
         data[2] = (byte) getChannelOut();
         return data; 

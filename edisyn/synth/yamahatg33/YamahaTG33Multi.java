@@ -818,7 +818,7 @@ public class YamahaTG33Multi extends Synth
         return (BANKS[model.get("bank")] + " " + ((original / 8 + 1) * 10 + (original % 8 + 1)));
         }
 
-    public byte[] adjustBankSysexForEmit(byte[] data, Model model)
+    public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)
         { 
         data[2] = (byte) getChannelOut();
         return data; 

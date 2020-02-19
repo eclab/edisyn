@@ -706,7 +706,7 @@ public class Generic extends Synth
         VBox main = new VBox();
         HBox hbox = new HBox();
         
-        for(int j = 1; j <= 64; j+=8)
+        for(int j = 0; j < 64; j+=8)
             {
             hbox = new HBox();
             for(int i = j; i < j+8; i++)
@@ -751,10 +751,10 @@ public class Generic extends Synth
 
 
                 hbox.add(vbox);
-                if (CC_NAMES[i + offset - 1].equals(""))
+                if (CC_NAMES[i + offset].equals(""))
                     model.set("cc-name-" + (i + offset), "CC " + (i + offset));
                 else
-                    model.set("cc-name-" + (i + offset), "CC " +  (i + offset) + " " + CC_NAMES[i + offset - 1]);
+                    model.set("cc-name-" + (i + offset), "CC " +  (i + offset) + " " + CC_NAMES[i + offset]);
                 }
             main.add(hbox);
             }
@@ -976,7 +976,7 @@ public class Generic extends Synth
                 }
             }            
 
-        for(int i = 1; i <= 128; i++)
+        for(int i = 0; i < 128; i++)
             {
                 {
                 int val = model.get("cc-" + i);
@@ -1036,8 +1036,7 @@ public class Generic extends Synth
             {
             int param = StringUtility.getInt(key);
             int val = model.get(key);
-            if (model.get("cust-nrpn-param-" + param) > 32 ||
-                model.get("cust-nrpn-lsb-" + param) == 0)  // just 127
+            if (model.get("cust-nrpn-lsb-" + param) == 0)  // just 127
                 {
                 return buildNRPN(getChannelOut(), model.get("cust-nrpn-param-" + param), val * 128);
                 }
@@ -1050,8 +1049,7 @@ public class Generic extends Synth
             {
             int param = StringUtility.getInt(key);
             int val = model.get(key);
-            if (model.get("cust-nrpn-param-" + param) > 32 ||
-                model.get("cust-nrpn-lsb-" + param) == 0)  // just 127
+            if (model.get("cust-nrpn-lsb-" + param) == 0)  // just 127
                 {
                 return buildNRPN(getChannelOut(), model.get("cust-nrpn-param-" + param), val * 128);
                 }
@@ -1064,8 +1062,7 @@ public class Generic extends Synth
             {
             int param = StringUtility.getInt(key);
             int val = model.get(key);
-            if (model.get("cust-rpn-param-" + param) > 32 ||
-                model.get("cust-rpn-lsb-" + param) == 0)  // just 127
+            if (model.get("cust-rpn-lsb-" + param) == 0)  // just 127
                 {
                 return buildNRPN(getChannelOut(), model.get("cust-rpn-param-" + param), val * 128);
                 }
@@ -1078,8 +1075,7 @@ public class Generic extends Synth
             {
             int param = StringUtility.getInt(key);
             int val = model.get(key);
-            if (model.get("cust-rpn-param-" + param) > 32 ||
-                model.get("cust-rpn-lsb-" + param) == 0)  // just 127
+            if (model.get("cust-rpn-lsb-" + param) == 0)  // just 127
                 {
                 return buildNRPN(getChannelOut(), model.get("cust-rpn-param-" + param), val * 128);
                 }

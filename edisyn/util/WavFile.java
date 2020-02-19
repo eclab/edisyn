@@ -1,4 +1,4 @@
-package edisyn.synth.waldorfblofeld.utility;
+package edisyn.util;
 
 import java.io.*;
 

@@ -1,0 +1,27 @@
+<html><head></head>
+<body>
+
+
+<h1>Kawai K5</h1> 
+<h2>Multimode Patch Editor</h2>
+
+<p>This editor will work with the <b>Kawai K5</b> and <b>Kawai K5m</b>.
+
+<p><b>Communicating with Edisyn</b><br> Turn of memory protect.  Set your K5 to transmit and receive &lt;SYSTEM&gt; MIDI on the same channel as you've set up Edisyn (perhaps channel 1?), and likewise to transmit and receive &lt;EXCLUSIVE&gt; MIDI on that same channel.
+
+<p><b>About Patch MID-12</b><br> The Kawai K5 has no sysex command which would enable Edisyn to send a patch to its temporary memory.  However this is important to enable merging, nudging, hill-climbing, randomization, etc.  One way to get around this is to send individual parameters one by one.  However the K5 has a great deal of parameters, so this approach is simply too slow.  
+
+<p>So instead of sending a patch to temporary memory, Edisyn <b>writes</b> the patch to patch number MID-12 (the very last one).  This will erase and overwrite this patch and basically treat it as a scratch area.
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td>Thanks to
+<td><b>Aleksandr Glubochanskiy</b> (glubaster@gmail.com) for his help in development of this patch editor.
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>February 2020
+</table>
+

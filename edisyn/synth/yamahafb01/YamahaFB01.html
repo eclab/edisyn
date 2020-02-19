@@ -1,0 +1,42 @@
+<html><head></head>
+<body>
+
+<h1>Yamaha FB01</h1> 
+<h2>Single Patch Editor</h2>
+
+<p>This patch editor will work with the FB01 only.  For other 4-op FM synthesizers, see the Yamaha 4-op synthesizer family patch editor.
+
+<p><b>Communicating with Edisyn</b><br>Turn off Memory protection (Protect OFF): you'll have to do this every time you turn on the FB01, but there is a menu option to assist here, called <b>Turn Memory Protect Off</b>.  Set Edisyn's synth ID to 15 to the same as the FB01's System MIDI Channel (I suggest 1).  Set Ediysn's MIDI channel to the same as the FB01's "Instrument 1 MIDI Channel" (I suggest 1).  Edisyn will send to Instrument 1 on the FB01: you can set up Instrument 1 with the Menu "Setup Configuration for Instrument 1".  See the discussion below about why this setup should be performed.
+
+<p><b>Instruments vs Configurations</b><br>
+The FB01 is strange in that you cannot just play a single patch, but rather you must first place that patch in a multi patch (or "configuration") instrument slot and then play the MIDI channel associated with that slot.  However this unit only has 8-note polyphony, so the whole notion of multitimbral use is a bit silly.
+
+<p>For this reason, Edisyn assumes that your single patch will be placed into <b>Instrument 1</b>.  The FB01 menu contains a helpful option called <b>Setup Configuration for Instrument 1</b> which creates a Configuration where only Instrument 1 is active, with all voices, and on MIDI channel 1.  You ought to set up this configuration first before editing a patch.
+
+<p><b>System versus Instrument MIDI Channels</b><br>
+There are notionally <b>two different MIDI "channels"</b> associated with editing a patch.  First, there is the Actual MIDI channel you'll use to <i>play</i> the patch -- this is the channel associated with the instrument slot it's been placed in.  Edisyn only uses the first instrument slot in your Configuration.  Assuming you've set up your FB01 by selecting <b>Setup Configuration for Instrument 1</b> in Edisyn, this slot will be set to MIDI channel 1, so unless you've changed that you should set Edisyn's outgoing MIDI channel to 1.
+
+<p>Second, there is the FB01's "System MIDI Channel".  This isn't really a MIDI channel: it's in fact just a synth ID, and it should be set to Edisyn's synth ID for the FB01.  I suggest setting both of them to 1.
+
+<p><b>Bank Names</b><br>
+The FB01 is quite unusual in that its banks have names.  They're not displayed anywhere, but you can indeed change them.  When you load a bank or receive it over MIDI, the bank name will appear in the Bank dialog box.  If you change the name (up to 8 characters) and then write or save the bank, the name will be changed.
+
+<p><b>Gotchas</b>
+
+<ul>
+<li>The Level (volume) and Sustain Level parameters are backwards: 0 is <i>maximum</i> and the high value is <i>minimum volume</i>.
+
+<p><li>The FB01's envelopes are odd.  They're standard ADSR envelopes with a twist: a <i>Decay 2</i> parameter, which I believe indicates the rate at which the <i>Sustain</i> decays to zero.  There's no good way to represent this in an envelope display.  What Edisyn does is drop from the Sustain level to one half of that level over the Decay 2 time, then drop to zero for the Release time.  Not great but you'll get used to it.
+
+<p><li>There are a number of parameters on the FB-01, reproduced in Edisyn's editor, whose meaning is cryptic.  I won't be able to help you with them.  I do believe that User Code is a free parameter that you can use freely for whatever purpose you like.  Detune doesn't seem to have much, or any, effect.
+</ul>
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td><b>February 2020</b>
+</table>
+

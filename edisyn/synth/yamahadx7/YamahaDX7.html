@@ -4,7 +4,11 @@
 <h1>Yamaha DX7 Family</h1> 
 <h2>Single Patch Editor</h2>
 
-<p>This patch editor ought to work properly with the DX7-compatible family (DX7, TX816/TX216, TX7, and perhaps other models such as the DX7 II or Korg Volca FM).  However it has only been tested on the Yamaha TX216, TX7, and Dexed.  Please let me know of any discrepancies you discover.
+<p>This patch editor ought to work properly with the DX7-compatible family (DX7, TX816/TX216, TX7, Korg Volca FM, Dexed, much of the DX200, and possibly synths such as the DX7 II).  It is likely to also work on the DX9 (see below).  However it has only been tested on the Yamaha TX216, TX7, and Dexed.  Please let me know of any discrepancies you discover.
+
+<p><b>About the DX9</b><br> The DX9 is patch-compatible with the DX7 but it is missing a few features.  Most importantly, the DX9 only has four operators and thus eight algorithms.  The eight DX9 algorithms are indicated as you scroll through the 32 DX7 algorithms.  In the DX9 version of the algorithms, operators 1 through 4 correspond to operators 3 through 6 on the DX7; and the DX7's operators 1 and 2 are ignored.  Additionally, while the DX7 has 32 patches in its RAM banks, the DX9 only has 20.   
+
+<p><b>About the DX200</b><br>The DX200 is roughly compatible with the DX7, but has certain additional patch parameters lacking in the DX7 (the so-called ACED/AMEM parameters), and Edisyn does not emit or parse these parameters.  These include: per-operator amplitude modulation sensitivity; pitch envelope generator range, scaling depth, and velocity switch; LFO key trigger; poly/mono/unison switch; pitch bend range and step; random pitch fluctuation; portamento mode, step, and time; and unison detune depth.
 
 <p><b>Bank Sysex</b><br> This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
 

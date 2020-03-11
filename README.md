@@ -35,21 +35,22 @@ Edisyn presently supports:
 * E-Mu Proteus 1, 1XR, 2, 2XR, 3, 3XR, and 1+Orchestral
 * Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)
-* Kawai K5 and K5m
+* Kawai K5 and K5m (Single and Multi Modes)
 * Korg SG Rack (Single and Multi Modes) and Korg SG Pro X
-* Korg MicroKorg
+* Korg MicroKorg (Single and Vocoder Modes)
 * Korg Microsampler
 * Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
 * Oberheim Matrix 1000
 * PreenFM2
-* Red Sound DarkStar and DarkStar XP2 (Single and Per-Part)
+* Red Sound DarkStar and DarkStar XP2
 * Roland D-110 (Tone and Multi Modes)
 * Roland JV-80 and JV-880 (Single and Multi Modes)
-* Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading, see the Blofeld editor's "About" panel)
+* Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading)
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
-* Yamaha DX7 Family (DX7, TX7, TX802, TX216/TX816, Korg Volca FM, Dexed)
-* Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, etc.) (Single and (TX81Z and DX11 only) Multi Modes)
-* Yamaha TG33, SY22, and SY35 (Single and (TG33-only) Multi Modes)
+* Yamaha DX7 Family (DX7, TX7, TX802, TX216/TX816, Korg Volca FM, Dexed, DX200, DX9)
+* Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, etc.) (Single and (for TX81Z and DX11) Multi Modes)
+* Yamaha FB01 (Single and Multi Modes)
+* Yamaha TG33, SY22, and SY35 (Single and (for TG33) Multi Modes)
 * General CC, NRPN, and RPN editing
 
 Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, randomization, merging, nudging, hill-climbing, patch constriction, per-parameter customization, real-time parameter updates, test notes, etc.
@@ -67,7 +68,6 @@ Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux)
 
 First install Edisyn from the [Edisyn.app.zip](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.app.zip) file located in the "install" directory.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
 
-
 Sierra has really locked down the ability to run an application that's not from a commercial, paying Apple Developer.  And I'm not one.  So you will have to instruct Sierra to permit Edisyn to run.
 
 Let's assume you stuck Edisyn in the /Applications directory as usual.  Then:
@@ -78,6 +78,8 @@ Let's assume you stuck Edisyn in the /Applications directory as usual.  Then:
 5. Quit the Terminal Program
 
 Now you should be able to run Edisyn.  Let me know if this all works.
+
+If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
 #### If Edisyn bombs in OS X on selecting a patch editor...
 
@@ -94,17 +96,14 @@ I believe that the following should work:
 
 3. Double-click on edisyn.jar to launch Edisyn.
 
+If you want to use Edisyn in combination with a DAW, see the manual's section on build
+ing a MIDI Loopback.
+
 #### Important Note for Windows User
 
 Java versions earlier than 11 (or so) do not handle high-resolution displays properly, so Edisyn will appear teeny-tiny.  You need to upgrade to 11.
 
 Also Edisyn makes heavy use of Java preferences to store persistence information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows for earlier versions of Java.  I think this is fixed as of Java 11 but you should check and let me know.
-
-#### Bug Status...
-
-I have had a report of Edisyn quitting prematurely (likely bombing) when sending or writing sysex messages in Windows for the CZ Series patch editor.  I think this may be related to the MIDI Interface used but am not certain.  If you have success, or failure, in using the CZ series patch editor (Windows only), please let me know.
-
-
 
 
 ### Installation and Running on Linux
@@ -116,6 +115,10 @@ I'm told that Edisyn works fine if you have installed *Java 8*.  After this:
 2. You'll need to figure out how to make it so that double-clicking on the jar file launches it in java.  In Ubuntu, here's what you do: right-click on the jar file icon and choose "Properties".  Then select the "Open With" tab, and select your Java VM (for example "Open JDK Java 8 Runtime").  The press "Set as Default".  This makes the Java VM the default application to launch jar files.
 
 3. Thereafter you should be able to just double-click on the file to launch Edisyn.
+
+If you want to use Edisyn in combination with a DAW, see the manual's section on build
+ing a MIDI Loopback.
+
 
 
 ### Running from the command line (OS X, Windows, Linux)

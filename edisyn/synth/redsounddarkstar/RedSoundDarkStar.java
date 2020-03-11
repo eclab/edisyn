@@ -32,7 +32,7 @@ public class RedSoundDarkStar extends Synth
     public static final String[] OSCILLATOR_SOURCES = { "Normal", "Formant", "White Noise", "Pink Noise", "Blue Noise", "Eternal 1", "External 2" };
     public static final String[] KEY_TRACKING = { "Off", "25%", "50%", "100%", "150%", "-25%", "-50%" };
     public static final String[] FILTER_TYPES = { "Low Pass", "Band Pass", "High Pass" };
-    public static final String[] tremelo_SOURCES = { "LFO 1", "LFO 2" };
+    public static final String[] TREMELO_SOURCES = { "LFO 1", "LFO 2" };
     public static final String[] PAN_MOD_SOURCES = { "Pot", "Envelope 1", "Envelope 2", "LFO 1", "LFO 2" };
     public static final String[] PORTAMENTO_TYPES = { "Off", "Type 1", "Type 2", "Pre-glide 1", "Pre-glide 2", "Pre-glide 3", "Pre-glide 4", "Pre-glide 5", "Pre-glide 6" };
     public static final String[] JOYSTICK_ASSIGNMENTS = { "Off", "X: Filter Freq  Y: Resonance", "X: Mix  Y: Ring Mod  [XP2]", "X: Env1 Attack  Y: Decay  [XP2]", "X: Env2 Attack  Y: Decay  [XP2]", "X: LFO1 Speed  Y: LFO2 Speed  [XP2]" };
@@ -261,7 +261,7 @@ public class RedSoundDarkStar extends Synth
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        params = tremelo_SOURCES;
+        params = TREMELO_SOURCES;
         comp = new Chooser("Tremelo Mod Source", this, "part" + part + "tremelomodsource", params);
         vbox.add(comp);
 

@@ -943,7 +943,7 @@ public abstract class KorgWavestationAbstract extends Synth
         { 
         data[2] = (byte) (0x30 + getChannelOut());
         if (bank == 4) bank = 11;
-        data[5] = edisynToWSBank(bank);
+        data[5] = (byte) edisynToWSBank[bank];
         return data; 
         }
     }

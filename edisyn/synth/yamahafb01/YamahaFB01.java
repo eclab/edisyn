@@ -43,7 +43,7 @@ public class YamahaFB01 extends Synth
     public static final String[] KEYBOARD_LEVEL_SCALING_TYPES = new String[] { "1", "2", "3", "4" };
     public static final String[] AMPLITUDE_MODULATION = new String[] { "Modulator (Off)", "Carrier (On)" };
     public static final String[] WRITE_BANKS = { "1 (A)", "2 (B)" };
-    public static final String[] BANKS = { "1 (A)", "2 (B)", "3", "4", "5", "6", "7" };
+    public static final String[] BANKS = { "1 (A)", "2 (B)", "3 (ROM 1)", "4 (ROM 2)", "5 (ROM 3)", "6 (ROM 4)", "7 (ROM 5)" };
 
 	// It is not fully clear that these are the algorithms.  I suspect they are for two reasons:
 	// First, I believe the FB01 uses the same FM chip as the TX81Z, so it's likely to use
@@ -132,7 +132,7 @@ public class YamahaFB01 extends Synth
             {
             public void actionPerformed(ActionEvent e)
                 {
-                setupTestPatch(true);
+                setupTestPatch();
                 }
             });
         menu.add(setupTestPatchMenu);
@@ -158,7 +158,7 @@ public class YamahaFB01 extends Synth
 		tryToSendSysex(new byte[] { (byte)0xF0, 0x43, 0x75, 0x00, 0x10, 0x21, 0x00, (byte)0xF7 });
 		}
 
-    public void setupTestPatch(boolean part1)
+    public void setupTestPatch()
         {
         if (tuple == null)
             if (!setupMIDI(tuple))
@@ -171,7 +171,10 @@ public class YamahaFB01 extends Synth
             if (synth.tuple != null)
                 {
                 synth.loadDefaults();
-                
+                synth.getModel().set("name", "Edisyn");
+ 				synth.getModel().set("op" + 1 + "midichannel", getChannelOut());
+               
+                /*
                 for(int i = 1; i <= 8; i++)
                     {
                     synth.getModel().set("op" + i + "outputlevel", 0);
@@ -182,11 +185,11 @@ public class YamahaFB01 extends Synth
                 // prepare part1
                 if (part1)
                     {
-                    synth.getModel().set("op" + 1 + "outputlevel", 100);
-                    synth.getModel().set("op" + 1 + "numberofnotes", 8);
-                    synth.getModel().set("op" + 1 + "midichannel", getChannelOut());
+                    //synth.getModel().set("op" + 1 + "outputlevel", 100);
+                    //synth.getModel().set("op" + 1 + "numberofnotes", 8);
                     }
-                            
+                */
+     
                 synth.sendAllParameters();
                 sendAllParameters();
                 }
@@ -221,12 +224,12 @@ public class YamahaFB01 extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1...24");
+                showSimpleError(title, "The Patch Number must be an integer 1...48");
                 continue;
                 }
-            if (n < 1 || n > 24)
+            if (n < 1 || n > 48)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1...24");
+                showSimpleError(title, "The Patch Number must be an integer 1...48");
                 continue;
                 }
                 
@@ -252,7 +255,7 @@ public class YamahaFB01 extends Synth
                 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, 8);
+        comp = new PatchDisplay(this, 10);
         hbox2.add(comp);
         vbox.add(hbox2);
         
@@ -275,9 +278,10 @@ public class YamahaFB01 extends Synth
         comp = new LabelledDial("User Code", this, "usercode", color, 0, 255);
         hbox.add(comp);
 
+/*
         // Not enough space to show the title
         hbox.addLast(Strut.makeHorizontalStrut(30));
-
+*/
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
         }
@@ -557,8 +561,8 @@ public class YamahaFB01 extends Synth
                 {
                 return new Object[]
                     {
-                    emitAll("op" + k + "velocitysensitivityforlevel")[0],
-                    emitAll("op" + k + "detune")[0]
+                    emitAll("op" + op + "velocitysensitivityforlevel")[0],
+                    emitAll("op" + op + "detune")[0]
                     };
                 }
             else if (k.equals("velocitysensitivityforlevel"))
@@ -621,7 +625,7 @@ public class YamahaFB01 extends Synth
             if (key.equals("name"))
                 {
                 // handle specially
-                String name = model.get("name") + "       ";
+                String name = model.get("name", "Init") + "       ";
                 Object[] obj = new Object[7];
                 for(int i = 0; i < 7; i++)
                     {

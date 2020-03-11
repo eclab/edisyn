@@ -1547,7 +1547,7 @@ public abstract class Synth extends JComponent implements Updatable
                         }
                     else
                         {
-                        MidiMessage[] messages = Midi.DividedSysex.divide(message, 16);
+                        MidiMessage[] messages = Midi.DividedSysex.divide(message, fragmentSize);
                         for(int i = 0; i < messages.length; i++)
                             {
                             if (i > 0) simplePause(getPauseBetweenSysexFragments());

@@ -924,18 +924,31 @@ public class Midi
             {
             super(data.clone());
             }
-            
+        
+        // We don't allow size-1 chunks because of the Windows/Linux 0xF7 bug
+        static final int MINIMUM_LAST_CHUNK_SIZE = 2;
+
         public static DividedSysex[] divide(SysexMessage sysex, int chunksize)
             {
             byte[] data = sysex.getMessage();
             int extra = 0;
-            if ((data.length / chunksize) * chunksize != data.length)
-                extra = 1;
+            
+            // we have to work around a Windows/Linux Java bug here: a bare 0xF7
+            // will crash the program.  So we need to lengthen the last chunk
+            // rather than shorten it if it'd be "too short".  Otherwise we set
+            // extra = 1 to have a last short chunk.
+               
+            if ((data.length / chunksize) * chunksize < data.length - MINIMUM_LAST_CHUNK_SIZE)
+            	{
+            	extra = 1;
+            	}
+
             DividedSysex[] m = new DividedSysex[data.length / chunksize + extra];
-            for(int i = 0, chunk = 0; i < m.length; i++, chunk += chunksize)
+            for(int i = 0, pos = 0; i < m.length; i++, pos += chunksize)
                 {
-                byte[] d = new byte[Math.min(data.length - chunk, chunksize)];
-                System.arraycopy(data, chunk, d, 0, d.length);
+                // the very last chunk might be smaller to slightly larger than chunksize
+                byte[] d = new byte[i == m.length - 1 ? data.length - pos : chunksize];
+                System.arraycopy(data, pos, d, 0, d.length);
                 m[i] = new DividedSysex(d);
                 }
             return m;

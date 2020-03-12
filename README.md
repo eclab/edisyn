@@ -57,7 +57,7 @@ Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline mo
 
 ## Manual
 
-Edisyn has an [extensive manual](https://github.com/eclab/edisyn/raw/master/docs/manual/Edisyn.pdf) which describes how to run it, and (if you are so inclined) how to make new patch editors.
+Edisyn has an [extensive manual](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.pdf) which describes how to run it, and (if you are so inclined) how to make new patch editors.
 
 ## Install and Run Edisyn
 
@@ -92,7 +92,7 @@ I believe that the following should work:
 
 1. [Download and install Java 11](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  The JRE should work fine.
 
-2. Download Edisyn's jar file, called [edisyn.jar](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar), presently located in the "jar" directory.
+2. Download Edisyn's jar file, called [edisyn.jar](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar), presently located in the "jar" directory.
 
 3. Double-click on edisyn.jar to launch Edisyn.
 
@@ -110,7 +110,7 @@ Also Edisyn makes heavy use of Java preferences to store persistence information
 
 I'm told that Edisyn works fine if you have installed *Java 8*.  After this:
 
-1. Download [Edisyn's jar file](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar) located in the "jar" directory.
+1. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar) located in the "jar" directory.
 
 2. You'll need to figure out how to make it so that double-clicking on the jar file launches it in java.  In Ubuntu, here's what you do: right-click on the jar file icon and choose "Properties".  Then select the "Open With" tab, and select your Java VM (for example "Open JDK Java 8 Runtime").  The press "Set as Default".  This makes the Java VM the default application to launch jar files.
 
@@ -125,7 +125,7 @@ ing a MIDI Loopback.
 
 1. Make sure Java is installed.
 
-2. Download [Edisyn's jar file](https://github.com/eclab/edisyn/raw/master/jar/edisyn.jar) located in the "jar" directory.
+2. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar) located in the "jar" directory.
 
 3. Run Edisyn as:   `java -jar edisyn.jar`
 

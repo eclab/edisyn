@@ -35,7 +35,7 @@ Edisyn presently supports:
 * E-Mu Proteus 1, 1XR, 2, 2XR, 3, 3XR, and 1+Orchestral
 * Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)
-* Kawai K5 and K5m (Single and Multi Modes)
+* Kawai K5 and K5m (Single and Multi Modes, plus single-cycle wave uploading)
 * Korg SG Rack (Single and Multi Modes) and Korg SG Pro X
 * Korg MicroKorg (Single and Vocoder Modes)
 * Korg Microsampler

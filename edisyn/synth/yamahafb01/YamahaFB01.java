@@ -25,12 +25,12 @@ import javax.sound.midi.*;
 */
 
 /**
-	The sysex for the Yamaha FB01 is documented very poorly. There are two sources:
-	the User Manual and the Service Manual, and both of them are highly cryptic,
-	missing (different!) procedures, rife with amazing errors, and contradictory.  
-	Fun fact: the bulk voice
-	dump commands do not even explain that the first "packet" in the sysex is in fact
-	the *bank name*, a concept not even brought up in either manual.  
+   The sysex for the Yamaha FB01 is documented very poorly. There are two sources:
+   the User Manual and the Service Manual, and both of them are highly cryptic,
+   missing (different!) procedures, rife with amazing errors, and contradictory.  
+   Fun fact: the bulk voice
+   dump commands do not even explain that the first "packet" in the sysex is in fact
+   the *bank name*, a concept not even brought up in either manual.  
 **/
 
 
@@ -45,11 +45,11 @@ public class YamahaFB01 extends Synth
     public static final String[] WRITE_BANKS = { "1 (A)", "2 (B)" };
     public static final String[] BANKS = { "1 (A)", "2 (B)", "3 (ROM 1)", "4 (ROM 2)", "5 (ROM 3)", "6 (ROM 4)", "7 (ROM 5)" };
 
-	// It is not fully clear that these are the algorithms.  I suspect they are for two reasons:
-	// First, I believe the FB01 uses the same FM chip as the TX81Z, so it's likely to use
-	// the same algorithm set.  Second, MidiQuest displays these algorithms.  But as the
-	// FB01 manual has no information at all on it, I must just make this assumption.
-	
+    // It is not fully clear that these are the algorithms.  I suspect they are for two reasons:
+    // First, I believe the FB01 uses the same FM chip as the TX81Z, so it's likely to use
+    // the same algorithm set.  Second, MidiQuest displays these algorithms.  But as the
+    // FB01 manual has no information at all on it, I must just make this assumption.
+        
     public static final ImageIcon[] ALGORITHM_ICONS = 
         {
         new ImageIcon(YamahaFB01.class.getResource("Algorithm1.png")),
@@ -62,9 +62,9 @@ public class YamahaFB01 extends Synth
         new ImageIcon(YamahaFB01.class.getResource("Algorithm8.png"))
         };
 
-	// Unlike the D-110, we're going to permit only one emit location: slot 0.
-	public static final byte EMIT_LOCATION = 0;
-	
+    // Unlike the D-110, we're going to permit only one emit location: slot 0.
+    public static final byte EMIT_LOCATION = 0;
+        
     public YamahaFB01()
         {
         model.set("bank", 0);
@@ -150,13 +150,13 @@ public class YamahaFB01 extends Synth
 /// This site makes the following claims that we might wish to look into:
 /// https://www.vogons.org/viewtopic.php?p=362894#p362894
 /// 
-///	F0 43 75 00 10 21 00 F7 - Turns memory-protect off
+///     F0 43 75 00 10 21 00 F7 - Turns memory-protect off
 /// F0 43 75 00 10 20 00 F7 - Sets the system channel to 1
 
-	public void turnMemoryProtectOff()
-		{
-		tryToSendSysex(new byte[] { (byte)0xF0, 0x43, 0x75, 0x00, 0x10, 0x21, 0x00, (byte)0xF7 });
-		}
+    public void turnMemoryProtectOff()
+        {
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, 0x75, 0x00, 0x10, 0x21, 0x00, (byte)0xF7 });
+        }
 
     public void setupTestPatch()
         {
@@ -172,22 +172,22 @@ public class YamahaFB01 extends Synth
                 {
                 synth.loadDefaults();
                 synth.getModel().set("name", "Edisyn");
- 				synth.getModel().set("op" + 1 + "midichannel", getChannelOut());
+                synth.getModel().set("op" + 1 + "midichannel", getChannelOut());
                
                 /*
-                for(int i = 1; i <= 8; i++)
-                    {
-                    synth.getModel().set("op" + i + "outputlevel", 0);
-                    synth.getModel().set("op" + i + "numberofnotes", 0);
-                    synth.getModel().set("op" + i + "midichannel", (getChannelOut() + 1) % 16);  // so nobody is getChannelOut()
-                    }
+                  for(int i = 1; i <= 8; i++)
+                  {
+                  synth.getModel().set("op" + i + "outputlevel", 0);
+                  synth.getModel().set("op" + i + "numberofnotes", 0);
+                  synth.getModel().set("op" + i + "midichannel", (getChannelOut() + 1) % 16);  // so nobody is getChannelOut()
+                  }
                 
-                // prepare part1
-                if (part1)
-                    {
-                    //synth.getModel().set("op" + 1 + "outputlevel", 100);
-                    //synth.getModel().set("op" + 1 + "numberofnotes", 8);
-                    }
+                  // prepare part1
+                  if (part1)
+                  {
+                  //synth.getModel().set("op" + 1 + "outputlevel", 100);
+                  //synth.getModel().set("op" + 1 + "numberofnotes", 8);
+                  }
                 */
      
                 synth.sendAllParameters();
@@ -279,8 +279,8 @@ public class YamahaFB01 extends Synth
         hbox.add(comp);
 
 /*
-        // Not enough space to show the title
-        hbox.addLast(Strut.makeHorizontalStrut(30));
+// Not enough space to show the title
+hbox.addLast(Strut.makeHorizontalStrut(30));
 */
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
@@ -318,7 +318,7 @@ public class YamahaFB01 extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-		// the service manual says this is 0...6, but the sysex patches go to 7
+        // the service manual says this is 0...6, but the sysex patches go to 7
         comp = new LabelledDial("Feedback", this, "feedback", color, 0, 7);
         hbox.add(comp);
 
@@ -431,9 +431,9 @@ public class YamahaFB01 extends Synth
         // Also several patches stored in the FB01 also set 7.  So I'm going with -3...+4,
         // dunno if that's right.
         comp = new LabelledDial("Detune", this, "op" + src + "detune", color, 0, 7, 3)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            };
                 
         hbox.add(comp);
         
@@ -506,21 +506,21 @@ public class YamahaFB01 extends Synth
                     return 15.0 - value;
                     }
                 else
-                	{
+                    {
                     return 31.0 - value;
                     }
                 }
             public double preprocessYKey(int index, String key, double value)
-            	{
+                {
                 if (key.equals("op" + envelope + "sustainlevel"))
-                	{
-                	return 15.0 - value;
-                	}
+                    {
+                    return 15.0 - value;
+                    }
                 else
-                	{
-                	return value;
-                	}
-            	}
+                    {
+                    return value;
+                    }
+                }
             };
         hbox.addLast(comp);
                 
@@ -529,15 +529,15 @@ public class YamahaFB01 extends Synth
         }
 
 
-	// According to here:
-	// https://yamahadx.yahoogroups.narkive.com/5zxnjROM/fb01-dx100-compatibility
+    // According to here:
+    // https://yamahadx.yahoogroups.narkive.com/5zxnjROM/fb01-dx100-compatibility
     // ... the FM operators are reversed, so 1-4 becomes 4-1.  This jibes with what MIDIQuest does.
      
     public Object[] emitAll(String key)
         {
         if (key.equals("bank") || key.equals("number"))
-        	return new Object[0];
-        	
+            return new Object[0];
+                
         // The FB01 is ALL PACKED BYTE SYSEX, even for single parameters, ugh.
         // So we have to do custom emits for every single freakin' key.  :-(  :-(
         
@@ -633,7 +633,7 @@ public class YamahaFB01 extends Synth
                     val = (byte)(name.charAt(i) & 127);
                     // parameter change by System Channel + Instrument Number page 49 of user manual
                     byte[] data = new byte[] { (byte)0xF0, 0x43, 0x75, (byte)(getID() - 1), (byte)(24 + EMIT_LOCATION),
-                    	(byte)param, (byte)(val & 15), (byte)((val >>> 4) & 15), (byte)0xF7 };
+                        (byte)param, (byte)(val & 15), (byte)((val >>> 4) & 15), (byte)0xF7 };
                     obj[i] = data;
                     }
                 return obj;
@@ -695,9 +695,9 @@ public class YamahaFB01 extends Synth
                 }
             }
             
-       	// parameter change by System Channel + Instrument Number page 49 of user manual
+        // parameter change by System Channel + Instrument Number page 49 of user manual
         byte[] data = new byte[] { (byte)0xF0, 0x43, 0x75, (byte)(getID() - 1), (byte)(24 + EMIT_LOCATION),
-        	(byte)param, (byte)(val & 15), (byte)((val >>> 4) & 15), (byte)0xF7 };
+            (byte)param, (byte)(val & 15), (byte)((val >>> 4) & 15), (byte)0xF7 };
         return new Object[] { data };
         }
 
@@ -727,8 +727,8 @@ public class YamahaFB01 extends Synth
         model.set("op4enable", (d[pos] >>> 3) & 1);
         pos++;
 
-		// The service manual has the left and right output enable flags,
-		// but the user manual does not
+        // The service manual has the left and right output enable flags,
+        // but the user manual does not
         model.set("leftoutputenable", (d[pos] >>> 7) & 1);
         model.set("rightoutputenable", (d[pos] >>> 6) & 1);
         model.set("feedback", (d[pos] >>> 3) & 7);
@@ -740,7 +740,7 @@ public class YamahaFB01 extends Synth
         model.set("lfowave", d[pos++] >>> 5);
         model.set("transpose", d[pos++]);
         
-        for(int op = 4; op >= 1; op--)		// operators are reversed
+        for(int op = 4; op >= 1; op--)          // operators are reversed
             {
             model.set("op" + op + "level", d[pos++] & 127);
             // this is the most complex -- an operator split across two different bytes
@@ -784,29 +784,29 @@ public class YamahaFB01 extends Synth
     //// F0
     //// 43
     //// 75
-    //// 0n		n = "System Channel Number" (ID)
+    //// 0n             n = "System Channel Number" (ID)
     //// 00
     //// 00
-    //// 0m		m = Bank number
-    //// 00		byte count
-    //// 40		byte count
-    //// 16 BYTES	Bank Name [nybblized 8 bytes, low first, then high]
-    //// 48 ZEROS	"Reserved" [nybblized 24 bytes, low first, then high]
+    //// 0m             m = Bank number
+    //// 00             byte count
+    //// 40             byte count
+    //// 16 BYTES       Bank Name [nybblized 8 bytes, low first, then high]
+    //// 48 ZEROS       "Reserved" [nybblized 24 bytes, low first, then high]
     //// CHECKSUM on the previous 16 bytes and 48 zeros
     //// 48 PACKETS
     //// F7
     ////
-	////
-	//// We might also see:
+    ////
+    //// We might also see:
     ////
     //// F0
     //// 43
-    //// 0n		n = "System Channel Number" (ID)
+    //// 0n             n = "System Channel Number" (ID)
     //// 0C
-    //// 00		byte count
-    //// 40		byte count
-    //// 16 BYTES	Bank Name [nybblized 8 bytes, low first, then high]
-    //// 48 ZEROS	"Reserved" [nybblized 24 bytes, low first, then high]
+    //// 00             byte count
+    //// 40             byte count
+    //// 16 BYTES       Bank Name [nybblized 8 bytes, low first, then high]
+    //// 48 ZEROS       "Reserved" [nybblized 24 bytes, low first, then high]
     //// CHECKSUM on the previous 16 bytes and 48 zeros
     //// 48 PACKETS
     //// F7
@@ -817,8 +817,8 @@ public class YamahaFB01 extends Synth
     //// F0
     //// 43
     //// 75
-    //// 0n		n = "System Channel Number" (ID)
-    //// 0m		m = 8 + "Instrument Number"
+    //// 0n             n = "System Channel Number" (ID)
+    //// 0m             m = 8 + "Instrument Number"
     //// 00
     //// 00
     //// 1 PACKET
@@ -826,9 +826,9 @@ public class YamahaFB01 extends Synth
     ////
     ////
     //// A PACKET is the data for one voice, and defined as:
-    //// 01		byte count
-    //// 00		byte count
-    //// 128 BYTES 	Voice Data [nybblized 64 bytes, low first, then high] (Parameter List 6, page 19 Service Manual, or Voice Data Format, page 53 User Manual)
+    //// 01             byte count
+    //// 00             byte count
+    //// 128 BYTES      Voice Data [nybblized 64 bytes, low first, then high] (Parameter List 6, page 19 Service Manual, or Voice Data Format, page 53 User Manual)
     //// CHECKSUM on the Voice Data
     
         
@@ -942,14 +942,14 @@ public class YamahaFB01 extends Synth
         d[pos++] = (byte)((model.get("lfosync") << 7) | model.get("lfopitchmodulationdepth"));
         d[pos++] = (byte)((model.get("op1enable") << 6) | (model.get("op2enable") << 5) | (model.get("op3enable") << 4) | (model.get("op4enable") << 3));
 
-		// The service manual has the left and right output enable flags,
-		// but the user manual does not
+        // The service manual has the left and right output enable flags,
+        // but the user manual does not
         d[pos++] = (byte)((model.get("leftoutputenable") << 7) | (model.get("rightoutputenable") << 6) | (model.get("feedback") << 3) | model.get("algorithm"));
         d[pos++] = (byte)((model.get("lfopitchmodulationsensitivity") << 4) | model.get("lfoamplitudemodulationsensitivity"));
         d[pos++] = (byte)(model.get("lfowave") << 5);
         d[pos++] = (byte)(model.get("transpose"));
         
-        for(int op = 4; op >= 1; op--)		// operators are reversed
+        for(int op = 4; op >= 1; op--)          // operators are reversed
             {
             d[pos++] = (byte)(model.get("op" + op + "level"));
             d[pos++] = (byte)((((model.get("op" + op + "keyboardlevelscalingtype") >>> 0) & 1) << 7) | 
@@ -1052,32 +1052,32 @@ public class YamahaFB01 extends Synth
         // to be 0x00 here and 0x40 there, but the manual says the opposite.  These were
         // showstopper documentation bugs.
         return new byte[] { (byte)0xF0, 0x43, 0x75, (byte)(getID() - 1), (byte)(40 + EMIT_LOCATION),
-        	0x00,		// user manual (p. 47) says 0x00, service manual says 0x40, user manual is right
-        	0x00, (byte)0xF7 }; 
+            0x00,           // user manual (p. 47) says 0x00, service manual says 0x40, user manual is right
+            0x00, (byte)0xF7 }; 
         }
     
     public static boolean recognize(byte[] data)
         {
         return 
-        // Voice Bank 0, see top of page 55, user manual
-        	(data.length == 8 + 16 + 48 + 48 * (64 * 2 + 3) &&
-            	data[0] == (byte)0xF0 &&
-            	data[1] == 0x43 &&
-            	data[3] == 0x0C) ||
-        // Voice Bank x, see page 55, user manual
+            // Voice Bank 0, see top of page 55, user manual
+            (data.length == 8 + 16 + 48 + 48 * (64 * 2 + 3) &&
+            data[0] == (byte)0xF0 &&
+            data[1] == 0x43 &&
+            data[3] == 0x0C) ||
+            // Voice Bank x, see page 55, user manual
             (data.length == 11 + 16 + 48 + 48 * (64 * 2 + 3) &&
-            	data[0] == (byte)0xF0 &&
-            	data[1] == 0x43 &&
-            	data[2] == 0x75 &&
-            	data[4] == 0x00 &&
-            	data[5] == 0x00) ||
-        // Instrument i voice data, see page 57, user manual
+            data[0] == (byte)0xF0 &&
+            data[1] == 0x43 &&
+            data[2] == 0x75 &&
+            data[4] == 0x00 &&
+            data[5] == 0x00) ||
+            // Instrument i voice data, see page 57, user manual
             (data.length == 8 + (64 * 2 + 3) &&
-            	data[0] == (byte)0xF0 &&
-            	data[1] == 0x43 &&
-            	data[2] == 0x75 &&
-            	data[5] == 0x00 &&
-            	data[6] == 0x00);
+            data[0] == (byte)0xF0 &&
+            data[1] == 0x43 &&
+            data[2] == 0x75 &&
+            data[5] == 0x00 &&
+            data[6] == 0x00);
         }
             
     public static final int MAXIMUM_NAME_LENGTH = 7;
@@ -1127,22 +1127,22 @@ public class YamahaFB01 extends Synth
     public void changePatch(Model tempModel) 
         {
         byte[] bankData = new byte[] 
-        	{ 
-        		// Parameter Change (1 byte), command #1 of left column, page 13, service manual
-        		(byte)0xF0, 0x43, 0x75, (byte)(getID() - 1), (byte)(24 + EMIT_LOCATION),
-        		0x04,	// "bank", instrument 1
-        		(byte)(tempModel.get("bank")),
-        		(byte)0xF7
-        	};
-        	
+            { 
+            // Parameter Change (1 byte), command #1 of left column, page 13, service manual
+            (byte)0xF0, 0x43, 0x75, (byte)(getID() - 1), (byte)(24 + EMIT_LOCATION),
+            0x04,   // "bank", instrument 1
+            (byte)(tempModel.get("bank")),
+            (byte)0xF7
+            };
+                
         byte[] numberData = new byte[] 
-        	{ 
-        		// Parameter Change (1 byte), command #1 of left column, page 13, service manual
-        		(byte)0xF0, 0x43, 0x75, (byte)(getID() - 1), (byte)(24 + EMIT_LOCATION),
-        		0x05,	// "number" (voice), instrument 1
-        		(byte)(tempModel.get("number")),
-        		(byte)0xF7
-        	};
+            { 
+            // Parameter Change (1 byte), command #1 of left column, page 13, service manual
+            (byte)0xF0, 0x43, 0x75, (byte)(getID() - 1), (byte)(24 + EMIT_LOCATION),
+            0x05,   // "number" (voice), instrument 1
+            (byte)(tempModel.get("number")),
+            (byte)0xF7
+            };
         
         // dunno if this is gonna work.
         tryToSendMIDI(new Object[] { bankData, new Integer(getPauseAfterChangePatch()), numberData });
@@ -1213,145 +1213,145 @@ public class YamahaFB01 extends Synth
 
 
 
-	///// BANK SYSEX OPTIONS
-	/////
-	///// The FB01 is unusual in three respects when it comes to Bank Sysex.
-	/////
-	///// 0. Bank sysex isn't for the whole synthesizer, but rather for just a single bank in
-	/////    the synthesizer.  Though there are 9 banks we can read from, there are only two
-	/////    banks we can write to.  This means that we need to allow the user to select which
-	/////    bank he wants, and modify the sysex file to reflect this.
-	/////
-	///// 1. There are two different sysex commands for bank sysex.  One stipulates Voice Bank 0.
-	/////    The other stipulates Voice Bank X (though there are really only two voice banks we can
-	/////    write to!  0 and 1.  Of course, we have 9 we can read from).
-	/////
-	///// 2. Banks can have names.  That's kind of weird.
-	/////
-	///// So the code below (1) offers the user a bank name that he can change, (2) offers the user
-	///// two different banks he can choose to write to, and (2) modifies all bank sysex uploads to use
-	///// the Voice Bank X sysex version.
-	
+    ///// BANK SYSEX OPTIONS
+    /////
+    ///// The FB01 is unusual in three respects when it comes to Bank Sysex.
+    /////
+    ///// 0. Bank sysex isn't for the whole synthesizer, but rather for just a single bank in
+    /////    the synthesizer.  Though there are 9 banks we can read from, there are only two
+    /////    banks we can write to.  This means that we need to allow the user to select which
+    /////    bank he wants, and modify the sysex file to reflect this.
+    /////
+    ///// 1. There are two different sysex commands for bank sysex.  One stipulates Voice Bank 0.
+    /////    The other stipulates Voice Bank X (though there are really only two voice banks we can
+    /////    write to!  0 and 1.  Of course, we have 9 we can read from).
+    /////
+    ///// 2. Banks can have names.  That's kind of weird.
+    /////
+    ///// So the code below (1) offers the user a bank name that he can change, (2) offers the user
+    ///// two different banks he can choose to write to, and (2) modifies all bank sysex uploads to use
+    ///// the Voice Bank X sysex version.
+        
 
-	/// We add a bank name field so the user can change it.
+    /// We add a bank name field so the user can change it.
     JTextField nameField;
     public JComponent getAdditionalBankSysexOptionsComponents(byte[] data, String[] names) 
-    	{
-    	int pos = 6;
-    	if (data[2] == 0x75)
-    		{
-    		pos = 9;
-    		}
-    	char[] n = new char[8];
-    	for(int i = 0; i < 8; i++)
-    		{
-    		n[i] = (char)(data[pos + i * 2] | (data[pos + i * 2 + 1] << 4));
-    		}
-    	
-    	Box box = new Box(BoxLayout.X_AXIS);
-    	box.add(new JLabel("Bank Name  "));
-    	nameField = new JTextField(new String(n));
-    	box.add(nameField);
-    	return box;
-    	}
+        {
+        int pos = 6;
+        if (data[2] == 0x75)
+            {
+            pos = 9;
+            }
+        char[] n = new char[8];
+        for(int i = 0; i < 8; i++)
+            {
+            n[i] = (char)(data[pos + i * 2] | (data[pos + i * 2 + 1] << 4));
+            }
+        
+        Box box = new Box(BoxLayout.X_AXIS);
+        box.add(new JLabel("Bank Name  "));
+        nameField = new JTextField(new String(n));
+        box.add(nameField);
+        return box;
+        }
 
-	public String getBankName(byte[] data)
-		{
-		int pos = (data[2] == 0x75 ? 9 : 6);
-		char[] name = new char[8];
-		for(int i = 0; i < 8; i++)
-			{
-			name[i] = (char)(data[pos + i * 2] | (data[pos + i * 2 + 1] << 4));
-			}
-		String s = new String(name).trim();
-		if (s.equals("")) return super.getBankName(data);
-		else return s;
-		}
+    public String getBankName(byte[] data)
+        {
+        int pos = (data[2] == 0x75 ? 9 : 6);
+        char[] name = new char[8];
+        for(int i = 0; i < 8; i++)
+            {
+            name[i] = (char)(data[pos + i * 2] | (data[pos + i * 2 + 1] << 4));
+            }
+        String s = new String(name).trim();
+        if (s.equals("")) return super.getBankName(data);
+        else return s;
+        }
 
     public String[] getBanksForBankSysex(byte[] data, Model model) 
-    	{ 
-    	return WRITE_BANKS;
-    	}
+        { 
+        return WRITE_BANKS;
+        }
 
     public int getDefaultBankForBankSysex(byte[] data, Model model) 
-    	{ 
-    	if (data[2] == 0x75)
-    		{
-    		if (data[6] < 2) return data[6];
-    		}
-    	return 0;
-    	}
+        { 
+        if (data[2] == 0x75)
+            {
+            if (data[6] < 2) return data[6];
+            }
+        return 0;
+        }
 
     public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)
         {
         // Extract the chosen bank
         int b = model.get("bank", 0);
         if (b > 1) 
-        	{
+            {
             System.err.println("Warning (YamahaFB01): " + "Bad bank " + b);
-        	b = 0;
-        	}
+            b = 0;
+            }
 
         // First, we're going to convert this entirely to Voice Bank X
         if (data[2] != 0x75)
-        	{
-        	byte[] data2 = new byte[6363];
-        	data2[0] = (byte) 0xF0;
-        	data2[1] = 0x43;
-        	data2[2] = 0x75;
-        	data2[3] = (byte)(getID() - 1);  
-        	data2[4] = 0;
-        	data2[5] = 0;
-        	data2[6] = (byte) b;
-        	data2[7] = 0;
-        	data2[8] = 0x40;
-        	System.arraycopy(data, 6, data2, 9, 6354);
-        	data = data2;
-        	}
+            {
+            byte[] data2 = new byte[6363];
+            data2[0] = (byte) 0xF0;
+            data2[1] = 0x43;
+            data2[2] = 0x75;
+            data2[3] = (byte)(getID() - 1);  
+            data2[4] = 0;
+            data2[5] = 0;
+            data2[6] = (byte) b;
+            data2[7] = 0;
+            data2[8] = 0x40;
+            System.arraycopy(data, 6, data2, 9, 6354);
+            data = data2;
+            }
         else
-        	{
-             data[3] = (byte) (getID() - 1);
-             data[6] = (byte) b;
-       		}
+            {
+            data[3] = (byte) (getID() - 1);
+            data[6] = (byte) b;
+            }
         
-		// Change the bank patch name
-		int pos = (data[2] == 0x75 ? 9 : 6);
-		String name = revisePatchName(nameField.getText()) + "        ";
-		for(int i = 0; i < 8; i++)
-			{
-			data[pos + i * 2] = (byte)(name.charAt(i) & 15);
-			data[pos + i * 2 + 1] = (byte)((name.charAt(i) >>> 4) & 7);
-			}
-			
-		// Break into pieces: the FB01 requires that each packet be separated by 100ms
-		byte[][] d = new byte[49][];
-		int start = 74;
-		
-		d[0] = new byte[start];
-		System.arraycopy(data, 0, d[0], 0, start);		// Bank packet
-		
-		for(int i = 0; i < 48; i++)
-			{
-			if (i == 47)		// last one
-				{
-				d[i + 1] = new byte[1 + 131];
-				System.arraycopy(data, start + i * 131 , d[i + 1], 0, 1 + 131);		// include 0xF7
-				}
-			else
-				{
-				d[i + 1] = new byte[131];
-				System.arraycopy(data, start + i * 131 , d[i + 1], 0, 131);
-				}
-			}
+        // Change the bank patch name
+        int pos = (data[2] == 0x75 ? 9 : 6);
+        String name = revisePatchName(nameField.getText()) + "        ";
+        for(int i = 0; i < 8; i++)
+            {
+            data[pos + i * 2] = (byte)(name.charAt(i) & 15);
+            data[pos + i * 2 + 1] = (byte)((name.charAt(i) >>> 4) & 7);
+            }
+                        
+        // Break into pieces: the FB01 requires that each packet be separated by 100ms
+        byte[][] d = new byte[49][];
+        int start = 74;
+                
+        d[0] = new byte[start];
+        System.arraycopy(data, 0, d[0], 0, start);              // Bank packet
+                
+        for(int i = 0; i < 48; i++)
+            {
+            if (i == 47)            // last one
+                {
+                d[i + 1] = new byte[1 + 131];
+                System.arraycopy(data, start + i * 131 , d[i + 1], 0, 1 + 131);         // include 0xF7
+                }
+            else
+                {
+                d[i + 1] = new byte[131];
+                System.arraycopy(data, start + i * 131 , d[i + 1], 0, 131);
+                }
+            }
 
-		Object[] div = Midi.DividedSysex.create(d);		// build the divided sysex
-		Object[] obj = new Object[49 * 2 - 1];			// insert 120ms (100ms is the minimum) in-between the 49 divided packets
-		for(int i = 0; i < d.length; i++)
-			{
-			obj[i * 2] = div[i];
-			if (i < d.length - 1) 		// we're not the last one
-				obj[i * 2 + 1] = new Integer(120);
-			}
+        Object[] div = Midi.DividedSysex.create(d);             // build the divided sysex
+        Object[] obj = new Object[49 * 2 - 1];                  // insert 120ms (100ms is the minimum) in-between the 49 divided packets
+        for(int i = 0; i < d.length; i++)
+            {
+            obj[i * 2] = div[i];
+            if (i < d.length - 1)           // we're not the last one
+                obj[i * 2 + 1] = new Integer(120);
+            }
 
         return obj; 
         }

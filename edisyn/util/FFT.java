@@ -154,7 +154,7 @@ public class FFT
 /**
  * The reference bitreverse function.
  */
- 	static int bitreverseReference(int j1, int nu) 
+    static int bitreverseReference(int j1, int nu) 
         {
         int j2;
         int k = 0;

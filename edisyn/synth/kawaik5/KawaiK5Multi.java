@@ -24,8 +24,8 @@ import javax.sound.midi.*;
 
 public class KawaiK5Multi extends Synth
     {
-	// This is much, much, MUCH shorter and simpler than the single-patch editor!
-	// It's about 690 lines, compared to the single-patch editor at 4050 lines (!)
+    // This is much, much, MUCH shorter and simpler than the single-patch editor!
+    // It's about 690 lines, compared to the single-patch editor at 4050 lines (!)
         
     public static final String[] BANKS = { "MIA", "MIB", "MIC", "MID", "MEA", "MEB", "MEC", "MED" };
     public static final String[] SINGLE_BANKS = { "A", "B", "C", "D" };
@@ -211,7 +211,7 @@ public class KawaiK5Multi extends Synth
         vbox.add(comp);
         hbox.add(vbox);
         
-           final PushButton showButton = new PushButton("Show")
+        final PushButton showButton = new PushButton("Show")
             {
             public void perform()
                 {
@@ -242,8 +242,8 @@ public class KawaiK5Multi extends Synth
                                 Model tempModel = new Model();
                                 tempModel.set("number", KawaiK5Multi.this.model.get("t" + track + "singlenumber"));
                                 int bank = KawaiK5Multi.this.model.get("t" + track + "singlebank") + 
-                        			(KawaiK5Multi.this.model.get("bank") < 4 ? 0 : 4); 
-                        		tempModel.set("bank", bank);     
+                                    (KawaiK5Multi.this.model.get("bank") < 4 ? 0 : 4); 
+                                tempModel.set("bank", bank);     
                                 synth.performRequestDump(tempModel, false);
                                 }
                             });
@@ -316,13 +316,13 @@ public class KawaiK5Multi extends Synth
         hbox.add(comp);
 
 
-		// FIXME: this one has a hole in it, 1-16 and then 255, which we'll may to 17 here
+        // FIXME: this one has a hole in it, 1-16 and then 255, which we'll may to 17 here
         comp = new LabelledDial("Polyphony", this, "t" + track + "polyphony", color, 0, 17)
             {
             public String map(int val)
                 {
                 if (val == 17)
-                	return "VR";
+                    return "VR";
                 else return "" + val;
                 }
             };
@@ -337,18 +337,18 @@ public class KawaiK5Multi extends Synth
         comp = new LabelledDial("Velocity High", this, "t" + track + "veloswhigh", color, 0, 7);
         hbox.add(comp);
 
-		// FIXME: this is two's complement 
+        // FIXME: this is two's complement 
         comp = new LabelledDial("Transpose", this, "t" + track + "transpose", color, -48, 48)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            };
         hbox.add(comp);
 
-		// FIXME: this is two's complement 
+        // FIXME: this is two's complement 
         comp = new LabelledDial("Tune", this, "t" + track + "tune", color, -31, 31)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            };
         hbox.add(comp);
 
         comp = new LabelledDial("Output", this, "t" + track + "out", color, 0, 3, -1);
@@ -363,7 +363,7 @@ public class KawaiK5Multi extends Synth
         
         
         
-public static final int POLYPHONY_VR = 17;
+    public static final int POLYPHONY_VR = 17;
 
     public int parse(byte[] result, boolean fromFile)
         {
@@ -382,46 +382,46 @@ public static final int POLYPHONY_VR = 17;
         int pos = 0;
         
         for(int i = 1; i < 16; i++)
-        	{
-			model.set("t" + i + "singlebank", (data[pos] >>> 4) & 3);
-			model.set("t" + i + "singlenumber", (data[pos] >>> 0) & 15);
-			pos++;
-			model.set("t" + i + "zonelow", (data[pos] >>> 0) & 127);
-			pos++;
-			model.set("t" + i + "zonehigh", (data[pos] >>> 0) & 127);
-			pos++;
-			int poly = (data[pos] >>> 0) & 255;
-			if (poly == 255)
-				model.set("t" + i + "polyphony", POLYPHONY_VR);
-			else
-				model.set("t" + i + "polyphony", poly);
-			pos++;
-			model.set("t" + i + "channel", (data[pos] >>> 4) & 15);
-			model.set("t" + i + "mode", (data[pos] >>> 0) & 3);
-			pos++;
-			model.set("t" + i + "veloswhigh", (data[pos] >>> 4) & 7);
-			model.set("t" + i + "veloswlow", (data[pos] >>> 0) & 7);
-			pos++;
-			model.set("t" + i + "transpose", (byte)((data[pos] >>> 0) & 255));  // 2's complement, so we cast to a byte
-			pos++;
-			model.set("t" + i + "tune", (byte)((data[pos] >>> 0) & 255));  // 2's complement, so we cast to a byte
-			pos++;
-			model.set("t" + i + "out", (data[pos] >>> 6) & 3);
-			model.set("t" + i + "level", (data[pos] >>> 0) & 63);
-			pos++;
-			model.set("t" + i + "portamento", (data[pos] >>> 7) & 1);
-			model.set("t" + i + "hold", (data[pos] >>> 6) & 1);
-			model.set("t" + i + "volume", (data[pos] >>> 5) & 1);
-			model.set("t" + i + "modulation", (data[pos] >>> 4) & 1);
-			model.set("t" + i + "benderrange", (data[pos] >>> 3) & 1);
-			model.set("t" + i + "pressure", (data[pos] >>> 2) & 1);
-			model.set("t" + i + "expression", (data[pos] >>> 1) & 1);
-			model.set("t" + i + "pedal", (data[pos] >>> 0) & 1);
-			pos++;
-			model.set("t" + i + "velocity", (data[pos] >>> 1) & 1);
-			model.set("t" + i + "program", (data[pos] >>> 0) & 1);
-			pos++;
-			}
+            {
+            model.set("t" + i + "singlebank", (data[pos] >>> 4) & 3);
+            model.set("t" + i + "singlenumber", (data[pos] >>> 0) & 15);
+            pos++;
+            model.set("t" + i + "zonelow", (data[pos] >>> 0) & 127);
+            pos++;
+            model.set("t" + i + "zonehigh", (data[pos] >>> 0) & 127);
+            pos++;
+            int poly = (data[pos] >>> 0) & 255;
+            if (poly == 255)
+                model.set("t" + i + "polyphony", POLYPHONY_VR);
+            else
+                model.set("t" + i + "polyphony", poly);
+            pos++;
+            model.set("t" + i + "channel", (data[pos] >>> 4) & 15);
+            model.set("t" + i + "mode", (data[pos] >>> 0) & 3);
+            pos++;
+            model.set("t" + i + "veloswhigh", (data[pos] >>> 4) & 7);
+            model.set("t" + i + "veloswlow", (data[pos] >>> 0) & 7);
+            pos++;
+            model.set("t" + i + "transpose", (byte)((data[pos] >>> 0) & 255));  // 2's complement, so we cast to a byte
+            pos++;
+            model.set("t" + i + "tune", (byte)((data[pos] >>> 0) & 255));  // 2's complement, so we cast to a byte
+            pos++;
+            model.set("t" + i + "out", (data[pos] >>> 6) & 3);
+            model.set("t" + i + "level", (data[pos] >>> 0) & 63);
+            pos++;
+            model.set("t" + i + "portamento", (data[pos] >>> 7) & 1);
+            model.set("t" + i + "hold", (data[pos] >>> 6) & 1);
+            model.set("t" + i + "volume", (data[pos] >>> 5) & 1);
+            model.set("t" + i + "modulation", (data[pos] >>> 4) & 1);
+            model.set("t" + i + "benderrange", (data[pos] >>> 3) & 1);
+            model.set("t" + i + "pressure", (data[pos] >>> 2) & 1);
+            model.set("t" + i + "expression", (data[pos] >>> 1) & 1);
+            model.set("t" + i + "pedal", (data[pos] >>> 0) & 1);
+            pos++;
+            model.set("t" + i + "velocity", (data[pos] >>> 1) & 1);
+            model.set("t" + i + "program", (data[pos] >>> 0) & 1);
+            pos++;
+            }
 
         // Name ...
         try
@@ -430,9 +430,9 @@ public static final int POLYPHONY_VR = 17;
             }
         catch (UnsupportedEncodingException ex) { } // won't happen
         pos += 8;
-		
-		model.set("volume", (data[pos] >>> 0) & 63);
-		pos++;
+                
+        model.set("volume", (data[pos] >>> 0) & 63);
+        pos++;
 
         return PARSE_SUCCEEDED;                 
         }
@@ -443,18 +443,18 @@ public static final int POLYPHONY_VR = 17;
         super.sendAllParameters();        
 
         // we change patch to MID-12 if we're sending in bulk.
-		// for some insane reason, we must pause somewhat AFTER we have written the patch but 
-		// BEFORE we change the patch to MID-12 or else it won't get
-		// properly loaded into the patch.  I cannot explain it.  And it's a lot!
-					
-		simplePause(400);  // think this is the right amount -- 300 won't cut it
+        // for some insane reason, we must pause somewhat AFTER we have written the patch but 
+        // BEFORE we change the patch to MID-12 or else it won't get
+        // properly loaded into the patch.  I cannot explain it.  And it's a lot!
+                                        
+        simplePause(400);  // think this is the right amount -- 300 won't cut it
 
-		Model tempModel = new Model();
-		tempModel.set("bank", 3);
-		tempModel.set("number", 11);
-		changePatch(tempModel);
-		simplePause(getPauseAfterChangePatch());
-		}
+        Model tempModel = new Model();
+        tempModel.set("bank", 3);
+        tempModel.set("number", 11);
+        changePatch(tempModel);
+        simplePause(getPauseAfterChangePatch());
+        }
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
@@ -466,47 +466,47 @@ public static final int POLYPHONY_VR = 17;
         int pos = 0;
         
         for(int i = 1; i < 16; i++)
-        	{
-        	data[pos] = (byte)((model.get("t" + i + "singlebank") << 4) | (model.get("t" + i + "singlenumber") << 0));
-        	pos++;
-			data[pos] = (byte)((model.get("t" + i + "zonelow") << 0));
-			pos++;
-			data[pos] = (byte)((model.get("t" + i + "zonehigh") << 0));
-			pos++;
-			int poly = model.get("t" + i + "polyphony");
-			if (poly == POLYPHONY_VR) poly = 255;
-			data[pos] = (byte)(poly);
-			pos++;
-        	data[pos] = (byte)((model.get("t" + i + "channel") << 4) | (model.get("t" + i + "mode") << 0));
-        	pos++;
-        	data[pos] = (byte)((model.get("t" + i + "veloswhigh") << 4) | (model.get("t" + i + "veloswlow") << 0));
-        	pos++;
-			data[pos] = (byte)((model.get("t" + i + "transpose") << 0));
-			pos++;
-			data[pos] = (byte)((model.get("t" + i + "tune") << 0));
-			pos++;
-        	data[pos] = (byte)((model.get("t" + i + "out") << 6) | (model.get("t" + i + "level") << 0));
-        	pos++;
-        	data[pos] = (byte)((model.get("t" + i + "portamento") << 7) | 
-        						(model.get("t" + i + "hold") << 6) | 
-        						(model.get("t" + i + "volume") << 5) | 
-        						(model.get("t" + i + "modulation") << 4) | 
-        						(model.get("t" + i + "benderrange") << 3) | 
-        						(model.get("t" + i + "pressure") << 2) | 
-        						(model.get("t" + i + "expression") << 1) | 
-        						(model.get("t" + i + "pedal") << 0));
-        	pos++;
-        	data[pos] = (byte)((model.get("t" + i + "velocity") << 1) | 
-        						(model.get("t" + i + "program") << 0));
-        	pos++;
-			}
+            {
+            data[pos] = (byte)((model.get("t" + i + "singlebank") << 4) | (model.get("t" + i + "singlenumber") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "zonelow") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "zonehigh") << 0));
+            pos++;
+            int poly = model.get("t" + i + "polyphony");
+            if (poly == POLYPHONY_VR) poly = 255;
+            data[pos] = (byte)(poly);
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "channel") << 4) | (model.get("t" + i + "mode") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "veloswhigh") << 4) | (model.get("t" + i + "veloswlow") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "transpose") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "tune") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "out") << 6) | (model.get("t" + i + "level") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "portamento") << 7) | 
+                (model.get("t" + i + "hold") << 6) | 
+                (model.get("t" + i + "volume") << 5) | 
+                (model.get("t" + i + "modulation") << 4) | 
+                (model.get("t" + i + "benderrange") << 3) | 
+                (model.get("t" + i + "pressure") << 2) | 
+                (model.get("t" + i + "expression") << 1) | 
+                (model.get("t" + i + "pedal") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "velocity") << 1) | 
+                (model.get("t" + i + "program") << 0));
+            pos++;
+            }
 
         // Name ...
         String name = model.get("name", "INIT") + "          ";
         for(int i = 0; i < 8; i++)
             data[pos++] = (byte)(name.charAt(i));
 
-		data[pos++] = (byte)((model.get("volume") << 0));
+        data[pos++] = (byte)((model.get("volume") << 0));
 
         /// Compute Kawai's crazy Checksum
                 

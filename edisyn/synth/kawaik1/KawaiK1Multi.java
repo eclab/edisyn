@@ -756,19 +756,19 @@ public class KawaiK1Multi extends Synth
     public int getPauseAfterChangePatch() { return 500; } // 150; }   // Seem to need about > 100ms
     public double getPauseBetweenMIDISends() { return 50;  }  // :-(  :-(
   
- 	// This fixes a bizarre bug.  When you a request dump, the dialog pops up for you
- 	// to specify the patch.  Then Edisyn sends a dump request to the K1.  THEN the dialog
- 	// goes away but this causes an activation event on Edisyn, which causes it to send 
- 	// all sounds off commands.  These seem to come too soon after the patch request
- 	// sysex on the K1 and it then drops the patch request sysex entirely!  So we replicate
- 	// the performRequestDump menu here 
-     public void performRequestDump(Model tempModel, boolean changePatch)
+    // This fixes a bizarre bug.  When you a request dump, the dialog pops up for you
+    // to specify the patch.  Then Edisyn sends a dump request to the K1.  THEN the dialog
+    // goes away but this causes an activation event on Edisyn, which causes it to send 
+    // all sounds off commands.  These seem to come too soon after the patch request
+    // sysex on the K1 and it then drops the patch request sysex entirely!  So we replicate
+    // the performRequestDump menu here 
+    public void performRequestDump(Model tempModel, boolean changePatch)
         {
         if (changePatch)
             performChangePatch(tempModel);
             
         tryToSendSysex(requestDump(tempModel));
-    	simplePause(50);		// should be enough
+        simplePause(50);                // should be enough
         }
 
     public void changePatch(Model tempModel)

@@ -928,10 +928,10 @@ public abstract class Synth extends JComponent implements Updatable
             int v_msb = (value >>> 7);
             int v_lsb = (value & 127);
             if (v_msb > 127) 
-            	{
-            	System.err.println("Problem with " + value);
-            	new Throwable().printStackTrace();
-            	}
+                {
+                System.err.println("Problem with " + value);
+                new Throwable().printStackTrace();
+                }
         
             return new Object[]
                 {
@@ -6199,12 +6199,12 @@ public abstract class Synth extends JComponent implements Updatable
     public static final int BANK_UPLOADED = - 3;
     
     /** Displays a panel asking what to do with a bank sysex with the given data[], and which
-    	contains patches with the given names[].  If the user cancels the panel, then
-    	this method simply returns BANK_CANCELLED.  If the user presses "Save Bank", then the
-    	method saves the bank to a file specified by the user, then returns BANK_SAVED.  If the
-    	user presses "Write Bank", then the method writes the bank to the synthesizer and returns
-    	BANK_UPLOADED.  If the user selects a patch and then presses "Edit Patch" (the default),
-    	then this method returns the patch number (0....) in the bank.
+        contains patches with the given names[].  If the user cancels the panel, then
+        this method simply returns BANK_CANCELLED.  If the user presses "Save Bank", then the
+        method saves the bank to a file specified by the user, then returns BANK_SAVED.  If the
+        user presses "Write Bank", then the method writes the bank to the synthesizer and returns
+        BANK_UPLOADED.  If the user selects a patch and then presses "Edit Patch" (the default),
+        then this method returns the patch number (0....) in the bank.
     */
     
     public int showBankSysexOptions(byte[] data, String[] names)
@@ -6259,22 +6259,22 @@ public abstract class Synth extends JComponent implements Updatable
             else if (result == 2)   // write
                 {
                 boolean choice = false;
-               	String[] banks = getBanksForBankSysex(data, getModel());
-               	int bankChoice = 0;
-               	
-               	if (banks == null || banks.length == 0)
-               		{
-               		choice = showSimpleConfirm("Write Bank", "Write the whole bank to the synth?");
-               		}
-               	else
-               		{
-               		JComboBox combo = new JComboBox(banks);
-               		combo.setSelectedIndex(getDefaultBankForBankSysex(data, getModel()));
-               		choice = (showMultiOption(this, new String[] { "Bank" }, new JComponent[] { combo },
-               					new String[] { "Okay", "Cancel" }, 0, "Write Bank", "Write the whole bank to the synth?") == 0);
-               		bankChoice = combo.getSelectedIndex();
-               		}
-               		
+                String[] banks = getBanksForBankSysex(data, getModel());
+                int bankChoice = 0;
+                
+                if (banks == null || banks.length == 0)
+                    {
+                    choice = showSimpleConfirm("Write Bank", "Write the whole bank to the synth?");
+                    }
+                else
+                    {
+                    JComboBox combo = new JComboBox(banks);
+                    combo.setSelectedIndex(getDefaultBankForBankSysex(data, getModel()));
+                    choice = (showMultiOption(this, new String[] { "Bank" }, new JComponent[] { combo },
+                            new String[] { "Okay", "Cancel" }, 0, "Write Bank", "Write the whole bank to the synth?") == 0);
+                    bankChoice = combo.getSelectedIndex();
+                    }
+                        
                 if (choice)
                     {
                     if (tuple == null || tuple.out == null)
@@ -6287,13 +6287,13 @@ public abstract class Synth extends JComponent implements Updatable
                     boolean send = getSendMIDI();
                     setSendMIDI(true);
                     if (obj instanceof byte[]) 
-                    	{
-                    	tryToSendSysex((byte[])obj);
-                    	}
+                        {
+                        tryToSendSysex((byte[])obj);
+                        }
                     else
-                    	{
-                    	tryToSendMIDI((Object[])obj);
-                    	}
+                        {
+                        tryToSendMIDI((Object[])obj);
+                        }
                     setSendMIDI(send);      
                     return BANK_UPLOADED;
                     }
@@ -6303,10 +6303,10 @@ public abstract class Synth extends JComponent implements Updatable
                 FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save Bank to Sysex File...", FileDialog.SAVE);
 
                 /*
-                if (getPatchName(getModel()) != null)
-                    fd.setFile(reviseFileName(getPatchName(getModel()).trim() + ".syx"));
-                else
-                    fd.setFile(reviseFileName("Untitled.syx"));
+                  if (getPatchName(getModel()) != null)
+                  fd.setFile(reviseFileName(getPatchName(getModel()).trim() + ".syx"));
+                  else
+                  fd.setFile(reviseFileName("Untitled.syx"));
                 */
                 
                 fd.setFile(reviseFileName(getBankName(data) + ".syx"));
@@ -6352,11 +6352,11 @@ public abstract class Synth extends JComponent implements Updatable
         }
         
     /** Override this method to provide banks (if any) for the user to choose from when modifying a bank sysex. 
-    	The default returns null.  */
+        The default returns null.  */
     public String[] getBanksForBankSysex(byte[] data, Model model) { return null; }
 
     /** Override this method to the default bank from getBanksForBankSysex() to display to the user, if any. 
-    	The default is 0, which is likely meaningless. */
+        The default is 0, which is likely meaningless. */
     public int getDefaultBankForBankSysex(byte[] data, Model model) { return 0; }
 
     /** Override this method to modify the given bank sysex data so it can be emitted properly to the synthesizer
@@ -6371,8 +6371,8 @@ public abstract class Synth extends JComponent implements Updatable
     public Object adjustBankSysexForEmit(byte[] data, Model model, int bank) { return data; }
     
     /** Override this method to add an additional JComponent to the Bank Sysex Options dialog; you can then
-    	query this JComponent later to revise the bank dump prior to writing it to disk or to the synth via
-    		adjustBankSysexForEmit(...).  This is a very rare need. By default this method returns null.  */
+        query this JComponent later to revise the bank dump prior to writing it to disk or to the synth via
+        adjustBankSysexForEmit(...).  This is a very rare need. By default this method returns null.  */
     public JComponent getAdditionalBankSysexOptionsComponents(byte[] data, String[] names) { return null; }
     
          
@@ -6416,14 +6416,14 @@ public abstract class Synth extends JComponent implements Updatable
         }
         
     /** Return an appropriate name for the given bank sysex.
-    	This is used to provide the default name for the sysex file. */
-	public String getBankName(byte[] data)
-		{
-		return "Bank";
-		}
+        This is used to provide the default name for the sysex file. */
+    public String getBankName(byte[] data)
+        {
+        return "Bank";
+        }
 
     /** Return whether we should be sending an ALL SOUNDS OFF / ALL NOTES OFF whenever we close the window,
-    	switch to it, open it, etc.  By default this is normally true.  */
+        switch to it, open it, etc.  By default this is normally true.  */
     public boolean sendAllSoundsOffWhenWindowChanges() { return true; }
     
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2) { return false; }

@@ -63,7 +63,7 @@ public class YamahaDX7 extends Synth
         new ImageIcon(YamahaDX7.class.getResource("Algorithm32.png")),
         };
     public static final String[] LFO_WAVES = { "Triangle", "Saw Down", "Saw Up", "Square", "Sine", "Sample & Hold" };
-	public static final String[] DX9_TEXT = { " [DX9: 1] ", "", "", "", " [DX9: 5] ", "", " [DX9: 4] ", " [DX9: 3] ", "", "", "", "", "", " [DX9: 2] ", "", "", "", "", "", "", "", " [DX9: 6] ", "", "", "", "", "", "", "", "", " [DX9: 7] ", " [DX9: 8] " };
+    public static final String[] DX9_TEXT = { " [DX9: 1] ", "", "", "", " [DX9: 5] ", "", " [DX9: 4] ", " [DX9: 3] ", "", "", "", "", "", " [DX9: 2] ", "", "", "", "", "", "", "", " [DX9: 6] ", "", "", "", "", "", "", "", "", " [DX9: 7] ", " [DX9: 8] " };
 
     // These four are from https://github.com/kroger/csound-instruments/blob/master/dx7/dx72csnd.c
     public static final String[] RATIO_COARSE = { "0.5", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" };
@@ -251,7 +251,7 @@ public class YamahaDX7 extends Synth
         }
 
 
-	JLabel algorithmLabel;
+    JLabel algorithmLabel;
     public JComponent addGlobal( Color color)
         {
         Category category = new Category(this, "Global", color);
@@ -261,14 +261,14 @@ public class YamahaDX7 extends Synth
         HBox hbox = new HBox();
         
         comp = new LabelledDial("Algorithm", this, "algorithm", color, 0, 31, -1)
-        	{
+            {
             public void update(String key, Model model)
                 {
                 super.update(key, model);
                 if (algorithmLabel != null)
-	                algorithmLabel.setText(DX9_TEXT[model.get(key)]);
+                    algorithmLabel.setText(DX9_TEXT[model.get(key)]);
                 }
-        	};
+            };
         algorithmLabel = ((LabelledDial)comp).addAdditionalLabel(" [DX9: 1] ");
         model.removeMetricMinMax("algorithm");  // it's a set
         hbox.add(comp);

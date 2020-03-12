@@ -939,9 +939,9 @@ public class Midi
             // extra = 1 to have a last short chunk.
                
             if ((data.length / chunksize) * chunksize < data.length - MINIMUM_LAST_CHUNK_SIZE)
-            	{
-            	extra = 1;
-            	}
+                {
+                extra = 1;
+                }
 
             DividedSysex[] m = new DividedSysex[data.length / chunksize + extra];
             for(int i = 0, pos = 0; i < m.length; i++, pos += chunksize)

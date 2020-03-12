@@ -780,30 +780,30 @@ public class Blank extends Synth
         return true;
         }
 
-	public byte[] adjustBankSysexForEmit(byte[] data, Model model)
-		{
-		// Before a bank sysex file is emitted to a synthesizer, you're given the 
-		// chance to adjust the data file, typically to modify the channel or ID
-    	return data;
-		}
-		 
- 	public JComponent getAdditionalBankSysexOptionsComponents(byte[] data, String[] names)
- 		{
- 		// Before asking the user what he wants to do with a bank sysex file, this method
- 		// is called to provide an additional JComponent you can sneak in the dialog.
- 		// You might use the results of this JComponent to inform what you modify in
- 		// adjustBankSysexForEmit.  It's a rare need though.  By default we return null.
-		return null; 
- 		}
+    public byte[] adjustBankSysexForEmit(byte[] data, Model model)
+        {
+        // Before a bank sysex file is emitted to a synthesizer, you're given the 
+        // chance to adjust the data file, typically to modify the channel or ID
+        return data;
+        }
+                 
+    public JComponent getAdditionalBankSysexOptionsComponents(byte[] data, String[] names)
+        {
+        // Before asking the user what he wants to do with a bank sysex file, this method
+        // is called to provide an additional JComponent you can sneak in the dialog.
+        // You might use the results of this JComponent to inform what you modify in
+        // adjustBankSysexForEmit.  It's a rare need though.  By default we return null.
+        return null; 
+        }
  
-	public String getBankName(byte[] data)
-		{
-		// Before saving a bank sysex file out to a file,
-		// this method is called to return an appropriate name for the bank.  This
-		// name is in turn used to form a filename.  Typically banks don't have names,
-		// so you might as well just use the default return value, which is "Bank".
-		return "Bank";
-		}
+    public String getBankName(byte[] data)
+        {
+        // Before saving a bank sysex file out to a file,
+        // this method is called to return an appropriate name for the bank.  This
+        // name is in turn used to form a filename.  Typically banks don't have names,
+        // so you might as well just use the default return value, which is "Bank".
+        return "Bank";
+        }
 
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
         {

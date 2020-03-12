@@ -15,7 +15,7 @@ import java.awt.event.*;
 import java.util.*;
 import java.io.*;
 import javax.sound.midi.*;
-import edisyn.util.*;									/// FFT, windowed sync, and wave loading
+import edisyn.util.*;                                                                   /// FFT, windowed sync, and wave loading
 
 /**
    A patch editor for the Kawai K5/K5m.
@@ -234,7 +234,7 @@ public class KawaiK5 extends Synth
         // We can't reasonably send to patches if we send in bulk.
         transmitTo.setEnabled(false);
 
-		addK5Menu();
+        addK5Menu();
         return frame;
         }         
 
@@ -2180,11 +2180,11 @@ public class KawaiK5 extends Synth
         performChangePatch(model);     // we need to be at the start for the Oberheim Matrix 1000
         tryToSendMIDI(emitAll(model, false, false));
         
-		// for some insane reason, we must pause somewhat AFTER we have written the patch but 
-		// BEFORE we change the patch or else it won't get
-		// properly loaded into the patch.  I cannot explain it.  And it's a lot!
-				
-		simplePause(400);  // think this is the right amount -- 300 won't cut it
+        // for some insane reason, we must pause somewhat AFTER we have written the patch but 
+        // BEFORE we change the patch or else it won't get
+        // properly loaded into the patch.  I cannot explain it.  And it's a lot!
+                                
+        simplePause(400);  // think this is the right amount -- 300 won't cut it
 
         performChangePatch(model);     // do it at the end AND start here, as opposed to doSendtoPatch, which does it first.  We need to be at the end for the Kawai K4.
         }
@@ -3862,7 +3862,7 @@ public class KawaiK5 extends Synth
                 }
             });
 
-		fd.setDirectory(getLastX("WavDirectory", getSynthNameLocal(), true));
+        fd.setDirectory(getLastX("WavDirectory", getSynthNameLocal(), true));
 
         disableMenuBar();
         fd.setVisible(true);
@@ -3890,142 +3890,142 @@ public class KawaiK5 extends Synth
     public static final double MINIMUM_AMPLITUDE = 0.001;
 
     public double[] doLoadWave()
-			{
-			File file = doLoad("Load Wave...", new String[] { "wav", "WAV" });
-			if (file == null) return null;
-	
-			double[] waves = null;
-			double[] buffer = new double[256];
-			int count = 0;
-	
-			WavFile wavFile = null;
-			try 
-				{
-				double[] _waves = new double[MAXIMUM_SAMPLES];
-				wavFile = WavFile.openWavFile(file);
-			
-				while(true)
-					{
-					// Read frames into buffer
-					int framesRead = wavFile.readFrames(buffer, buffer.length);
-					if (count + framesRead > MAXIMUM_SAMPLES)
-						{
-						showSimpleError("File Too Large", "This file may contain no more than " + MAXIMUM_SAMPLES + " samples.");
-						return null;
-						}
-					System.arraycopy(buffer, 0, _waves, count, framesRead);
-					count += framesRead;
-					if (framesRead < buffer.length) 
-						break;
-					}
-				waves = new double[count];
-				System.arraycopy(_waves, 0, waves, 0, count);
-				}
-			catch (IOException ex)
-				{
-				showSimpleError("File Error", "An error occurred on reading the file.");
-				return null;
-				}
-			catch (WavFileException ex)
-				{
-				showSimpleError("Not a proper WAV file", "WAV files must be mono 16-bit.");
-				return null;
-				}
+        {
+        File file = doLoad("Load Wave...", new String[] { "wav", "WAV" });
+        if (file == null) return null;
+        
+        double[] waves = null;
+        double[] buffer = new double[256];
+        int count = 0;
+        
+        WavFile wavFile = null;
+        try 
+            {
+            double[] _waves = new double[MAXIMUM_SAMPLES];
+            wavFile = WavFile.openWavFile(file);
+                        
+            while(true)
+                {
+                // Read frames into buffer
+                int framesRead = wavFile.readFrames(buffer, buffer.length);
+                if (count + framesRead > MAXIMUM_SAMPLES)
+                    {
+                    showSimpleError("File Too Large", "This file may contain no more than " + MAXIMUM_SAMPLES + " samples.");
+                    return null;
+                    }
+                System.arraycopy(buffer, 0, _waves, count, framesRead);
+                count += framesRead;
+                if (framesRead < buffer.length) 
+                    break;
+                }
+            waves = new double[count];
+            System.arraycopy(_waves, 0, waves, 0, count);
+            }
+        catch (IOException ex)
+            {
+            showSimpleError("File Error", "An error occurred on reading the file.");
+            return null;
+            }
+        catch (WavFileException ex)
+            {
+            showSimpleError("Not a proper WAV file", "WAV files must be mono 16-bit.");
+            return null;
+            }
 
-			try
-				{
-				wavFile.close();
-				}
-			catch (Exception ex) { }
-	
-			int desiredSampleSize = 128 * 2;                          // because we have up to 128 partials
-			int currentSampleSize = waves.length;
-									
-			/// Resample to our sampling rate
-			double[] newvals = WindowedSinc.interpolate(
-				waves,
-				currentSampleSize,
-				desiredSampleSize,              // notice desired and current are swapped -- because these are SIZES, not RATES
-				WINDOW_SIZE,
-				true);           
-			
-			// Note no window.  Should still be okay (I think?)
-			double[] harmonics = FFT.getHarmonics(newvals);
-			double[] finished = new double[harmonics.length / 2];
-			for (int s=1 ; s < harmonics.length / 2; s++)                   // we skip the DC offset (0) and set the Nyquist frequency bin (harmonics.length / 2) to 0
-				{
-				finished[s - 1] = (harmonics[s] >= MINIMUM_AMPLITUDE ? harmonics[s]  : 0 );
-				}
+        try
+            {
+            wavFile.close();
+            }
+        catch (Exception ex) { }
+        
+        int desiredSampleSize = 128 * 2;                          // because we have up to 128 partials
+        int currentSampleSize = waves.length;
+                                                                        
+        /// Resample to our sampling rate
+        double[] newvals = WindowedSinc.interpolate(
+            waves,
+            currentSampleSize,
+            desiredSampleSize,              // notice desired and current are swapped -- because these are SIZES, not RATES
+            WINDOW_SIZE,
+            true);           
+                        
+        // Note no window.  Should still be okay (I think?)
+        double[] harmonics = FFT.getHarmonics(newvals);
+        double[] finished = new double[harmonics.length / 2];
+        for (int s=1 ; s < harmonics.length / 2; s++)                   // we skip the DC offset (0) and set the Nyquist frequency bin (harmonics.length / 2) to 0
+            {
+            finished[s - 1] = (harmonics[s] >= MINIMUM_AMPLITUDE ? harmonics[s]  : 0 );
+            }
 
-			double max = 0;
-			for(int i = 0; i < finished.length; i++)
-				{
-				if (max < finished[i])
-					max = finished[i];
-				}
-					
-			if (max > 0)
-				{
-				for(int i = 0; i < finished.length; i++)
-					{
-					finished[i] /= max;
-					}
-				}
-			
-			return finished;
-			}
+        double max = 0;
+        for(int i = 0; i < finished.length; i++)
+            {
+            if (max < finished[i])
+                max = finished[i];
+            }
+                                        
+        if (max > 0)
+            {
+            for(int i = 0; i < finished.length; i++)
+                {
+                finished[i] /= max;
+                }
+            }
+                        
+        return finished;
+        }
 
-	public static final int HARMONICS_BOTH = 0;
-	public static final int HARMONICS_1 = 1;
-	public static final int HARMONICS_2 = 2;
-	public void loadWaveAsHarmonics(int which)
-		{
-                boolean currentMIDI = getSendMIDI();
+    public static final int HARMONICS_BOTH = 0;
+    public static final int HARMONICS_1 = 1;
+    public static final int HARMONICS_2 = 2;
+    public void loadWaveAsHarmonics(int which)
+        {
+        boolean currentMIDI = getSendMIDI();
         setSendMIDI(false);
-		double[] harm = doLoadWave();
-		if (harm == null) 
-			{
-                setSendMIDI(currentMIDI);
-			return;
-			}
-		
-		switch (which)
-			{
-			case HARMONICS_BOTH:
-			for(int i = 0; i < 63; i++)
-				{
-				int h = (int)(harm[i] * 100);
-				if (h == 100) h = 99;
-				model.set("s1dhgharm" + (i + 1) + "level", h);
-				}
-			for(int i = 0; i < 63; i++)
-				{
-				int h = (int)(harm[i + 64] * 100);		// skip #63
-				if (h == 100) h = 99;
-				model.set("s2dhgharm" + (i + 1) + "level", h);
-				}
-			break;
-			case HARMONICS_1:
-			for(int i = 0; i < 63; i++)
-				{
-				int h = (int)(harm[i] * 100);
-				if (h == 100) h = 99;
-				model.set("s1dhgharm" + (i + 1) + "level", h);
-				}
-			break;
-			case HARMONICS_2:
-			for(int i = 0; i < 63; i++)
-				{
-				int h = (int)(harm[i] * 100);
-				if (h == 100) h = 99;
-				model.set("s2dhgharm" + (i + 1) + "level", h);
-				}
-			break;
-			}
-                setSendMIDI(currentMIDI);
-                sendAllParameters();
-                repaint();
-		}
+        double[] harm = doLoadWave();
+        if (harm == null) 
+            {
+            setSendMIDI(currentMIDI);
+            return;
+            }
+                
+        switch (which)
+            {
+            case HARMONICS_BOTH:
+                for(int i = 0; i < 63; i++)
+                    {
+                    int h = (int)(harm[i] * 100);
+                    if (h == 100) h = 99;
+                    model.set("s1dhgharm" + (i + 1) + "level", h);
+                    }
+                for(int i = 0; i < 63; i++)
+                    {
+                    int h = (int)(harm[i + 64] * 100);              // skip #63
+                    if (h == 100) h = 99;
+                    model.set("s2dhgharm" + (i + 1) + "level", h);
+                    }
+                break;
+            case HARMONICS_1:
+                for(int i = 0; i < 63; i++)
+                    {
+                    int h = (int)(harm[i] * 100);
+                    if (h == 100) h = 99;
+                    model.set("s1dhgharm" + (i + 1) + "level", h);
+                    }
+                break;
+            case HARMONICS_2:
+                for(int i = 0; i < 63; i++)
+                    {
+                    int h = (int)(harm[i] * 100);
+                    if (h == 100) h = 99;
+                    model.set("s2dhgharm" + (i + 1) + "level", h);
+                    }
+                break;
+            }
+        setSendMIDI(currentMIDI);
+        sendAllParameters();
+        repaint();
+        }
 
     public void addK5Menu()
         {
@@ -4040,7 +4040,7 @@ public class KawaiK5 extends Synth
                 }
             });
         menu.add(harmonicsMenu);
-         harmonicsMenu = new JMenuItem("Load Wave into Harmonics 2");
+        harmonicsMenu = new JMenuItem("Load Wave into Harmonics 2");
         harmonicsMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -4049,7 +4049,7 @@ public class KawaiK5 extends Synth
                 }
             });
         menu.add(harmonicsMenu);
-     harmonicsMenu = new JMenuItem("Load Wave into Harmonics 1 + 2");
+        harmonicsMenu = new JMenuItem("Load Wave into Harmonics 1 + 2");
         harmonicsMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)

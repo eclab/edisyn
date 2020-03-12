@@ -919,26 +919,26 @@ public abstract class KorgWavestationAbstract extends Synth
         }
         
     public String[] getBanksForBankSysex(byte[] data, Model model) 
-    	{ 
-    	return WRITABLE_BANKS;
-    	}
+        { 
+        return WRITABLE_BANKS;
+        }
 
-	/// FIXME -- is wsToEdisynBank the right conversion?
+    /// FIXME -- is wsToEdisynBank the right conversion?
     public int getDefaultBankForBankSysex(byte[] data, Model model) 
-    	{ 
-    	int b = wsToEdisynBank[data[5]];
-    	if (b < 4)
-    		{
-    		return b;
-    		}
-    	else if (b == 1)
-    		{
-    		return 4;
-    		}
-    	else return 0;
-    	}
+        { 
+        int b = wsToEdisynBank[data[5]];
+        if (b < 4)
+            {
+            return b;
+            }
+        else if (b == 1)
+            {
+            return 4;
+            }
+        else return 0;
+        }
 
-	/// FIXME -- is wsToEdisynBank the right conversion?
+    /// FIXME -- is wsToEdisynBank the right conversion?
     public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)
         { 
         data[2] = (byte) (0x30 + getChannelOut());

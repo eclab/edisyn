@@ -21,6 +21,7 @@ public class Tuning extends Synth
     {
     public static final String DEFAULT_NAME = "Tuning";
 	public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+    public static final int SCRATCH_SLOT = 0;
     
     public Tuning()
         {
@@ -161,8 +162,6 @@ public class Tuning extends Synth
 		}
         
         
-    //// may not need these
-
     public byte getID() 
         { 
         try 
@@ -192,70 +191,50 @@ public class Tuning extends Synth
 
     public void changePatch(Model tempModel)
         {
-        // Here you do stuff that changes patches on the synth.
-        // You probably want to look at tryToSendSysex() and tryToSendMIDI()
-        //
-        // This method is used primariily to switch to a new patcgh prior to loading it
-        // from the synthesizer or emitting it to the synthesizer.  Some synthesizers do 
-        // not report their patch location information when emitting a dump to Edisyn.  
-        // If this is the case, you might want add some code at the end of this method which
-        // assumes that the patch change and subsequent parse were successful, so you can
-        // just change the patch information here in this method.  You should NOT do this when
-        // changing a patch for the purpose of merging.  So in this case (and ONLY in this case)
-        // you should end this method with something along the lines of:
-        //
-        //     // My synth doesn't report patch info in its parsed data, so here assume that we successfully did it
-        //     if (!isMerging())
-        //         {
-        //         setSendMIDI(false);
-        //         model.set("number", number);
-        //         model.set("bank", bank);
-        //         setSendMIDI(true);
-        //         }
+        // we do nothing
         }
 
     public boolean gatherPatchInfo(String title, Model changeThis, boolean writing)     
         {
-        // Here you want to pop up a window which gathers information about a patch,
-        // such as the patch number and the bank, sufficient to load a specific patch
-        // or save a specific patch to/from the synthesizer.  If WRITING is true, you
-        // may assume that you are writing out to the synthesizer (because sometimes
-        // you can read from some banks but can't write to them).  The title of your
-        // dialog window should be TITLE.
-        //
-        // Return TRUE if you successfully gathered information, FALSE if the user cancelled.
-        //
-        // This can be complex to write.  But take a look at implementations in, for example,
-        // Blofeld.java and freely copy that.
-        //
-        return false;
+        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+
+        while(true)
+            {
+            boolean result = showMultiOption(this, new String[] { "Patch Number"}, 
+                new JComponent[] { number }, title, "Enter the Patch number");
+                
+            if (result == false) 
+                return false;
+                                
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1...128");
+                continue;
+                }
+            if (n < 1 || n > 128)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1...128");
+                continue;
+                }
+                
+            n--;
+                                
+            changeThis.set("number", n);
+                        
+            return true;
+            }
         }
 
-    public int parse(byte[] data, boolean fromFile)
-        { 
-        // This bulk patch data will come from a file or transmitted over sysex.
-        // You should parse it into the model and return PARSE_SUCCEEDED if successful,
-        // PARSE_FAILED if the parse failed, and PARSE_INCOMPLETE if the parse was
-        // successful but not complete enough to assume that we have a full patch.
-        // For example, the Yamaha TX81Z needs two separate parses of dumps before a patch
-        // is complete -- you should only return PARSE_SUCCEEDED when the second one has come in.
-        // IGNOREPATCH tells you whether you should ignore any patch access
-        // information (number, bank, etc.) embedded in the data or store it in the
-        // model as well.   FROMFILE indicates that the parse is from a sysex file.
-        //
-        // If parse resulted in a successful and *complete* 
-        return PARSE_FAILED; 
-        }
-        
     public static boolean recognize(byte[] data)
         {
-        // This method should return TRUE, if the data is correct sysex data for a 
-        // a bulk dump to your kind of synthesizer, and so you can receive it via
-        // parse().
-        //
-        // Notice that this is a STATIC method -- but you need to implement it
-        // anyway.  Edisyn will call the right static version using reflection magic.
-        return false;
+        return (
+        	data[0] == 0xF0 &&
+        	data[1] == 0x7E &&
+        	data[3] == 0x08 &&
+        	data[4] == 0x01 &&
+        	data.length == 8 + 16 + 3 * 128);
         }
 
     public static String getSynthName() 
@@ -288,7 +267,7 @@ public class Tuning extends Synth
     public String getPatchLocationName(Model model)
         {
         if (!model.exists("number")) return null;
-        return ("" + model.get("number"));
+        return ("" + (1 + model.get("number")));
         }
     
     public Model getNextPatchLocation(Model model)
@@ -306,7 +285,6 @@ public class Tuning extends Synth
         {
         return patch1.get("number", 0) == patch2.get("number", 0);
         }
-    
  
     public String getPatchName(Model model) 
         {
@@ -324,55 +302,86 @@ public class Tuning extends Synth
         return new String(c);       
         }
         
-    public void revise()
+    public int parse(byte[] data, boolean fromFile)
         {
-        // In this method you need to verify that all the keys in your model have valid values.
-        // Some synthesizers send invalid values over sysex or NRPN.  For example, the PreenFM2
-        // can send crazy stuff way out of range.
-        //
-        // The default version of this method bounds all the values to between their stated min and
-        // max values.  You might need to do more than this; for example, you might verify that
-        // the name is valid.  In this case, call super.revise() and then do further revision
-        // as you see fit.  For one way to do this, see the Waldorf Blofeld code.
+        char[] n = new char[16];
+        for(int i = 0; i < 16; i++)
+        	{
+        	n[i] = (char)(data[6 + i]);
+        	}
+        model.set("name", new String(n));
         
-        super.revise();
+        for(int i = 0; i < 128; i++)
+        	{
+        	model.set("base-" + (i + 1), data[22 + (i * 3)]);
+        	model.set("detune-" + (i + 1), (data[22 + (i * 3) + 1] << 7) | data[22 + (i * 3) + 2]);
+        	}
+        
+        return PARSE_SUCCEEDED;
         }
-
-
-
-
-
-
-    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile) 
+        
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile) 
         { 
-        return new Object[0]; 
+        byte[] data = new byte[8 + 16 + 3 * 128];
+        data[0] = (byte)0xF0;
+        data[1] = 0x7E;
+        data[2] = getID();
+        data[3] = 0x08;
+        data[4] = 0x01;
+        data[5] = (byte)(toWorkingMemory ? SCRATCH_SLOT : tempModel.get("number"));
+        
+        String name = tempModel.get("name", DEFAULT_NAME) + "                ";
+        for(int i = 0; i < 16; i++)
+        	{
+        	data[6 + i] = (byte)(((int)name.charAt(i)) & 127);
+        	}
+        	
+        for(int i = 0; i < 128; i++)
+        	{
+			int base = model.get("base-" + (i + 1));
+			int detune = model.get("detune-" + (i + 1));
+			int msb = ((detune >>> 7) & 127);
+			int lsb = (detune & 127);
+			data[22 + (i * 3)] = (byte)base;
+			data[22 + (i * 3) + 1] = (byte)msb;
+			data[22 + (i * 3) + 2] = (byte)lsb;
+        	}
+        	
+        int check = data[1];
+        for(int i = 2; i < data.length - 2; i++)
+        	{
+        	check = check ^ data[i];
+        	}
+        
+        data[data.length - 2] = (byte)check;
+        data[data.length - 1] = (byte)0xF7;
+        return data;
         }
     
     
     public byte[] emit(String key) 
         { 
-        return new byte[0]; 
+        if (key.equals("number")) return new byte[0];
+        if (key.equals("name")) return new byte[0];
+        
+		int k = StringUtility.getFirstInt(key);
+		int base = model.get("base-" + k);
+		int detune = model.get("detune-" + k);
+		int msb = ((detune >>> 7) & 127);
+		int lsb = (detune & 127);
+	
+		return new byte[] { (byte)0xF0, 0x7E, getID(), 0x08, 0x02, (byte)model.get("number"), 
+			0x01, (byte)(k - 1), (byte)base, (byte)msb, (byte)lsb, (byte)0xF7 };
         }
 
-
-
-
-
+    public byte[] requestCurrentDump(Model tempModel) 
+        { 
+        return new byte[] { (byte)0xF0, 0x7E, getID(), 0x08, 0x00, (byte)SCRATCH_SLOT, (byte)0xF7 };
+        }
 
     public byte[] requestDump(Model tempModel) 
         { 
-        // This asks the synth to dump a specific patch (number and bank etc. specified
-        // in tempModel).  If CHANGEPATCH is true you should first change the patch.
-        //
-        // If you can let Edisyn call changePatch(), and then you just emit a single
-        // sysex command as a patch request, implement this version.
-        //
-        // It is possible that requestDump and requestCurrentDump are identical.  This
-        // might happen if you always have to change the patch no matter what (see the
-        // description of performRequestDump above) in which case you could just have this
-        // method call requestCurrentDump().
-        
-        return new byte[0]; 
+        return new byte[] { (byte)0xF0, 0x7E, getID(), 0x08, 0x00, (byte)tempModel.get("number"), (byte)0xF7 };
         }
 
 

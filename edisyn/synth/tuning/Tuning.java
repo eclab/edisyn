@@ -20,6 +20,7 @@ import javax.sound.midi.*;
 public class Tuning extends Synth
     {
     public static final String DEFAULT_NAME = "Tuning";
+	public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     
     public Tuning()
         {
@@ -42,6 +43,13 @@ public class Tuning extends Synth
         model.set("name", DEFAULT_NAME);                // or whatever, to set the initial name of your patch (assuming you use "name" as the key for the patch name)
         model.set("number", 0);
         //loadDefaults();                   // this tells Edisyn to load the ".init" sysex file you created.  If you haven't set that up, it won't bother
+        }
+
+    public JFrame sprout()     
+        {
+        JFrame frame = super.sprout();
+        addTuningMenu();
+        return frame;
         }
 
     /** Add the global patch category (name, id, number, etc.) */
@@ -77,6 +85,84 @@ public class Tuning extends Synth
         return globalCategory;
         }
         
+    public JComponent addTuning(int num, Color color)
+        {
+        Category category = new Category(this, "Tuning " + (num == 0 ? "1-64" : "65-128"), color);
+                
+        JComponent comp;
+        String[] params;
+        
+        int pos = (num == 1 ? 1 : 65);
+        
+        VBox main = new VBox();
+        for(int j = pos; j < pos + 64; j += 8)
+            {
+            HBox hbox = new HBox();
+            for(int i = j; i < j + 8 ; i++)
+                {
+                if (i != j) hbox.add(Strut.makeHorizontalStrut(10));
+
+                comp  = new LabelledDial("" + i + " Base", this, "base-" + i, color, 0, 127)
+                	{
+                	public String map(int val)
+                		{
+                		return (NOTES[val % 12] + " " + (val / 12)); 
+                		}
+                	};
+                hbox.add(comp);
+
+                comp  = new LabelledDial("" + i + " Detune", this, "detune-" + i, color, 0, 16383)
+                	{
+                	public String map(int val)
+                		{
+                		return String.format("%3.2f", (val / 16383.0 * 100.0));
+                		}
+                	};
+                hbox.add(comp);
+                }
+            main.add(hbox);
+            }
+        
+        category.add(main);
+        return category;
+        }
+
+
+	public void setTunings(int[] base, int[] detune)
+		{
+        getUndo().push(model);
+        getUndo().setWillPush(false);
+		setSendMIDI(false);
+		for(int i = 0; i < 128; i++)
+			{
+			model.set("base-" + (i + 1), base[i]);
+			model.set("detune-" + (i + 1), base[i]);
+			}
+		repaint();		// see discussion in Blofeld patch editor
+		setSendMIDI(true);
+		getUndo().setWillPush(true);
+		sendAllParameters();
+		}
+
+	public void addTuningMenu()
+		{
+        JMenu menu = new JMenu("Tuning");
+        menubar.add(menu);
+        JMenuItem seanTuningMenu = new JMenuItem("Sean Tuning");
+        seanTuningMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                // for demonstration, we set the tunings to all 0
+                setTunings(new int[128], new int[128]);
+                }
+            });
+        menu.add(seanTuningMenu);
+		}
+        
+        
+    //// may not need these
+
     public byte getID() 
         { 
         try 
@@ -101,37 +187,7 @@ public class Tuning extends Synth
         }
 
 
-    public JComponent addTuning(int num, Color color)
-        {
-        Category category = new Category(this, "Tuning " + (num == 0 ? "1-64" : "65-128"), color);
-                
-        JComponent comp;
-        String[] params;
-        
-        int pos = (num == 1 ? 1 : 65);
-        
-        VBox main = new VBox();
-        for(int j = pos; j < pos + 64; j += 8)
-            {
-            HBox hbox = new HBox();
-            for(int i = j; i < j + 8 ; i++)
-                {
-                if (i != j) hbox.add(Strut.makeHorizontalStrut(10));
 
-                comp  = new LabelledDial("" + i + " Base", this, "base-" + i, color, 0, 127);
-                hbox.add(comp);
-
-                comp  = new LabelledDial("" + i + " Detune", this, "detune-" + i, color, 0, 16383);
-                hbox.add(comp);
-                }
-            main.add(hbox);
-            }
-        
-        category.add(main);
-        return category;
-        }
-
-        
     ////// YOU MUST OVERRIDE ALL OF THE FOLLOWING
 
     public void changePatch(Model tempModel)
@@ -251,8 +307,6 @@ public class Tuning extends Synth
         return patch1.get("number", 0) == patch2.get("number", 0);
         }
     
-    
-    
  
     public String getPatchName(Model model) 
         {
@@ -289,19 +343,9 @@ public class Tuning extends Synth
 
 
 
-
-
-
-    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile) 
+    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile) 
         { 
-        // This does a write of your patch to sysex (to dump to the synth or to store
-        // in a file).  TOWORKINGMEMORY indicates whether the dump will go to the synth's
-        // working memory, or written to a specific patch store.  TEMPMODEL will hold
-        // data regarding the patch store location.  TOFILE indicates that the write will
-        // be to a sysex file.
-        //
-        // If you need to send just a simple sysex message, override this one.
-        return new byte[0]; 
+        return new Object[0]; 
         }
     
     
@@ -332,16 +376,5 @@ public class Tuning extends Synth
         }
 
 
-
-
-    public JFrame sprout()
-        {
-        // This is a great big method in Synth.java, and handles building the JFrame and
-        // constructing all of the menus.  It's called when the editor is having its GUI
-        // constructed.   You may need to do some things here, such as turning off certain
-        // menu options that your synthesizer cannot do.  Be sure to call super.sprout();
-        // first.
-        return super.sprout();
-        }
 
     }

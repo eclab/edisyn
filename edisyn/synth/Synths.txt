@@ -1,5 +1,5 @@
 # edisyn.synth.futuresonusparva.FuturesonusParva
-#edisyn.synth.tuning.Tuning
+edisyn.synth.tuning.Tuning
 #edisyn.synth.alesismicron.AlesisMicron
 edisyn.synth.casiocz.CasioCZ
 # edisyn.synth.linnstrument.Linnstrument

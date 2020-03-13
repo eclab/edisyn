@@ -115,7 +115,7 @@ public class Tuning extends Synth
                 	{
                 	public String map(int val)
                 		{
-                		return String.format("%3.2f", (val / 16383.0 * 100.0));
+                		return String.format("%3.2f", (val / 16384.0 * 100.0));   // Note 16384, no 16383
                 		}
                 	};
                 hbox.add(comp);

@@ -30,7 +30,8 @@ public class EDO extends TuningDefinition {
 	public void configurationPopup() {
 		configured = true;
 		divisions_per_octave =
-			Integer.parseInt(JOptionPane.showInputDialog("Divisions Per Octave"));
+			Integer.parseInt(JOptionPane.showInputDialog("Divisions Per Octave",
+			                                             "12"));
 	}
 	public String getMenuName() {
 		return "EDO";

@@ -173,7 +173,7 @@ public class Tuning extends Synth
 					public void actionPerformed(ActionEvent e)
 					{
 						
-						int root_midi_note = Integer.parseInt(JOptionPane.showInputDialog("Root Midi Note (69 is A4)", "69"));
+						int root_midi_note = Integer.parseInt(JOptionPane.showInputDialog("Root Midi Note (69 is Middle A [440hz])", "69"));
 						double frequency = Double.parseDouble(JOptionPane.showInputDialog("Frequency at selected root midi note", ""+MTS.midiNumberToHz(root_midi_note)));
 						definition.configurationPopup();
 						MTS mts = definition.realize(root_midi_note, frequency);

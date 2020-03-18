@@ -52,15 +52,8 @@ public class Tuning extends Synth
 	{
 		JFrame frame = super.sprout();
 		addTuningMenu();
-<<<<<<< HEAD
-=======
-		//EDO edo = new EDO();
-	//	edo.manuallyConfigure(12);
-	//	MTS mts = edo.realize(69,440); // A4=440hz
-	//	setTunings(mts.bases, mts.detunes);
->>>>>>> 67c3213964807c0bdfe5a7e20c6c3b7ab77c1384
-		return frame;
-	}
+        return frame;
+    }
 
 	/** Add the global patch category (name, id, number, etc.) */
 	public JComponent addNameGlobal(Color color)

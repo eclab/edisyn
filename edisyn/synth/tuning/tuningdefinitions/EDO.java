@@ -23,10 +23,6 @@ public class EDO extends TuningDefinition {
 			                          root_midi_note));
 		}
 	}
-	public void manuallyConfigure(int divisions_per_octave){
-		configured = true;
-		this.divisions_per_octave = divisions_per_octave;
-	}
 	public void configurationPopup() {
 		configured = true;
 		divisions_per_octave =

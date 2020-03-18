@@ -137,7 +137,7 @@ public class Tuning extends Synth
 		for(int i = 0; i < 128; i++)
 			{
 			model.set("base-" + (i + 1), base[i]);
-			model.set("detune-" + (i + 1), base[i]);
+			model.set("detune-" + (i + 1), detune[i]);
 			}
 		repaint();		// see discussion in Blofeld patch editor
 		setSendMIDI(true);

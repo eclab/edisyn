@@ -153,16 +153,6 @@ public class Tuning extends Synth
 	{
 		JMenu menu = new JMenu("Tuning");
 		menubar.add(menu);
-		JMenuItem seanTuningMenu = new JMenuItem("Sean Tuning");
-		seanTuningMenu.addActionListener(new ActionListener()
-			{
-				public void actionPerformed(ActionEvent e)
-				{
-					// for demonstration, we set the tunings to all 0
-					setTunings(new int[128], new int[128]);
-				}
-			});
-		menu.add(seanTuningMenu);
 		for(TuningDefinition definition : tuning_definitions){
 			JMenuItem menuItem = new JMenuItem(definition.getMenuName());
 			menuItem.addActionListener(new ActionListener() {

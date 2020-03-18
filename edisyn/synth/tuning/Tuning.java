@@ -52,10 +52,6 @@ public class Tuning extends Synth
 	{
 		JFrame frame = super.sprout();
 		addTuningMenu();
-		EDO edo = new EDO();
-		edo.manuallyConfigure(12);
-		MTS mts = edo.realize(69,440); // A4=440hz
-		setTunings(mts.bases,mts.detunes);
 		return frame;
 	}
 
@@ -176,8 +172,8 @@ public class Tuning extends Synth
 						int root_midi_note = Integer.parseInt(JOptionPane.showInputDialog("Root Midi Note (69 is Middle A [440hz])", "69"));
 						double frequency = Double.parseDouble(JOptionPane.showInputDialog("Frequency at selected root midi note", ""+MTS.midiNumberToHz(root_midi_note)));
 						definition.configurationPopup();
-						MTS mts = definition.realize(root_midi_note, frequency);
-						setTunings(mts.bases, mts.detunes);
+						definition.realize(root_midi_note, frequency);
+						setTunings(definition.bases, definition.detunes);
 						definition.reset();
 					}
 				});

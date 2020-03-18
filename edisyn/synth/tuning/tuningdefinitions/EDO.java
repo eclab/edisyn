@@ -7,7 +7,8 @@ public class EDO extends TuningDefinition {
 	public static double edoNumberToHz(int m,
 	                                   int divisions_per_octave,
 	                                   double base_freq,
-	                                   int base_note){
+	                                   int base_note)
+	{
 		return Math.pow(2, (m-base_note)/(divisions_per_octave*1.0))*base_freq;
 	}
 	public void realize(int root_midi_note, double frequency) {
@@ -15,10 +16,11 @@ public class EDO extends TuningDefinition {
 			throw new RuntimeException("NOT CONFIGURED!");
 		}
 		for(int i = 0; i < 128; i++){
-			setNoteFreq(i, edoNumberToHz(i,
-			                             divisions_per_octave,
-			                             frequency,
-			                             root_midi_note));
+			setNoteFreq(i,
+			            edoNumberToHz(i,
+			                          divisions_per_octave,
+			                          frequency,
+			                          root_midi_note));
 		}
 	}
 	public void manuallyConfigure(int divisions_per_octave){

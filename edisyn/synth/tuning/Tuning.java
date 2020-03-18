@@ -35,23 +35,30 @@ public class Tuning extends Synth
 		vbox.add(addTuning(1, Style.COLOR_A()));
 		SynthPanel soundPanel = new SynthPanel(this);
 		soundPanel.add(vbox, BorderLayout.CENTER);
-		tabs.addTab("Global, 1-64", soundPanel);
+		tabs.addTab("Global, 0-63", soundPanel);
 
 		vbox = new VBox();
 		vbox.add(addTuning(2, Style.COLOR_A()));
 		soundPanel = new SynthPanel(this);
 		soundPanel.add(vbox, BorderLayout.CENTER);
-		tabs.addTab("65-128", soundPanel);
+		tabs.addTab("64-127", soundPanel);
         
 		model.set("name", DEFAULT_NAME);                // or whatever, to set the initial name of your patch (assuming you use "name" as the key for the patch name)
 		model.set("number", 0);
-		//loadDefaults();                   // this tells Edisyn to load the ".init" sysex file you created.  If you haven't set that up, it won't bother
+		loadDefaults();                   // this tells Edisyn to load the ".init" sysex file you created.  If you haven't set that up, it won't bother
 	}
 
 	public JFrame sprout()     
 	{
 		JFrame frame = super.sprout();
 		addTuningMenu();
+<<<<<<< HEAD
+=======
+		//EDO edo = new EDO();
+	//	edo.manuallyConfigure(12);
+	//	MTS mts = edo.realize(69,440); // A4=440hz
+	//	setTunings(mts.bases, mts.detunes);
+>>>>>>> 67c3213964807c0bdfe5a7e20c6c3b7ab77c1384
 		return frame;
 	}
 
@@ -90,12 +97,12 @@ public class Tuning extends Synth
         
 	public JComponent addTuning(int num, Color color)
 	{
-		Category category = new Category(this, "Tuning " + (num == 1 ? "1-64" : "65-128"), color);
+		Category category = new Category(this, "Tuning " + (num == 1 ? "0-63" : "64-127"), color);
                 
 		JComponent comp;
 		String[] params;
         
-		int pos = (num == 1 ? 1 : 65);
+		int pos = (num == 1 ? 0 : 64);
         
 		VBox main = new VBox();
 		for(int j = pos; j < pos + 64; j += 8)
@@ -138,8 +145,8 @@ public class Tuning extends Synth
 		setSendMIDI(false);
 		for(int i = 0; i < 128; i++)
 			{
-				model.set("base-" + (i + 1), base[i]);
-				model.set("detune-" + (i + 1), detune[i]);
+				model.set("base-" + i, base[i]);
+				model.set("detune-" + i, detune[i]);
 			}
 		repaint();		// see discussion in Blofeld patch editor
 		setSendMIDI(true);
@@ -250,7 +257,7 @@ public class Tuning extends Synth
 	public static boolean recognize(byte[] data)
 	{
 		return (
-		        data[0] == 0xF0 &&
+		        data[0] == (byte)0xF0 &&
 		        data[1] == 0x7E &&
 		        data[3] == 0x08 &&
 		        data[4] == 0x01 &&
@@ -264,13 +271,7 @@ public class Tuning extends Synth
     
 	public String getDefaultResourceFileName() 
 	{
-		// Ultimately your synth will be initialized by loading a file via parse().  This is usually a
-		// sysex file ending in the extension ".init", such as "WaldorfBlofeld.init",
-		// and is located right next to the class file (that is, "WaldorfBlofeld.class").
-		// 
-		// If you return null here, this initialization step will be bypassed.  But final
-		// production code should not do that.
-		return null; 
+		return "Tuning.init"; 
 	}
         
 	public String getHTMLResourceFileName() 
@@ -333,8 +334,8 @@ public class Tuning extends Synth
         
 		for(int i = 0; i < 128; i++)
 			{
-				model.set("base-" + (i + 1), data[22 + (i * 3)]);
-				model.set("detune-" + (i + 1), (data[22 + (i * 3) + 1] << 7) | data[22 + (i * 3) + 2]);
+				model.set("base-" + i, data[22 + (i * 3)]);
+				model.set("detune-" + i, (data[22 + (i * 3) + 1] << 7) | data[22 + (i * 3) + 2]);
 			}
         
 		return PARSE_SUCCEEDED;
@@ -348,9 +349,9 @@ public class Tuning extends Synth
 		data[2] = getID();
 		data[3] = 0x08;
 		data[4] = 0x01;
-		data[5] = (byte)(toWorkingMemory ? SCRATCH_SLOT : tempModel.get("number"));
+		data[5] = (byte)(toWorkingMemory ? SCRATCH_SLOT : (tempModel == null ? model.get("number") : tempModel.get("number")));
         
-		String name = tempModel.get("name", DEFAULT_NAME) + "                ";
+		String name = model.get("name", DEFAULT_NAME) + "                ";
 		for(int i = 0; i < 16; i++)
 			{
 				data[6 + i] = (byte)(((int)name.charAt(i)) & 127);
@@ -358,8 +359,8 @@ public class Tuning extends Synth
         	
 		for(int i = 0; i < 128; i++)
 			{
-				int base = model.get("base-" + (i + 1));
-				int detune = model.get("detune-" + (i + 1));
+				int base = model.get("base-" + i);
+				int detune = model.get("detune-" + i);
 				int msb = ((detune >>> 7) & 127);
 				int lsb = (detune & 127);
 				data[22 + (i * 3)] = (byte)base;

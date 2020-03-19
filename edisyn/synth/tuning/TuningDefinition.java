@@ -45,19 +45,15 @@ public abstract class TuningDefinition
 	
 	public void setNoteFrequency(int note_index, double freq)
 	{
-		int ind = (int)hzToMidiNumber(freq);
+		int ind = (int)Math.floor(hzToMidiNumber(freq));
 		double base = midiNumberToHz(ind);
 		double cents = centsAbove(freq, base);
-		while(cents < 0) {
-			ind--;
-			cents += 100;
-		}
 		int ticks = centsToTicks(cents);
 		if (ticks == TWO_TO_THE_14)	
-			   {
-				   ticks = 0;
-				   ind++;
-			   }
+			{
+				ticks = 0;
+				ind++;
+			}
 		bases[note_index] = ind;
 		detunes[note_index] = ticks;
 	}

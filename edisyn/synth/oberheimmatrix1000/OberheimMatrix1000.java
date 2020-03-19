@@ -17,13 +17,36 @@ import java.io.*;
 import javax.sound.midi.*;
 
 /**
-   A patch editor for the Oberheim Matrix 1000.
+   A patch editor for the Oberheim Matrix 1000, as well as the 6 and 6R
         
    @author Sean Luke
 */
 
 public class OberheimMatrix1000 extends Synth
     {
+    boolean m1000 = true;
+    JCheckBox m1000Check;
+    public static final String M1000_KEY = "Matrix1000";
+    
+    public boolean isM1000() { return m1000; }
+    public void setM1000(boolean val, boolean save)
+        {
+        if (save)
+            {
+            setLastX("" + (!val), M1000_KEY, getSynthName(), true);
+            }
+        m1000 = val;
+
+		// The 6/6r can't receive current patch
+		if (receiveCurrent != null)
+			receiveCurrent.setEnabled(m1000);
+
+        if (m1000Check != null)
+        	m1000Check.setSelected(val);  // hopefully this isn't recursive
+        updateTitle();
+        }
+    
+
     /// Various collections of parameter names for pop-up menus
         
     public static final String[] KEYBOARD_MODES = new String[] { "Reassign", "Rotate", "Unison", "Reassign w/Rob" };
@@ -45,6 +68,10 @@ public class OberheimMatrix1000 extends Synth
 
     public OberheimMatrix1000()
         {
+        String m = getLastX(M1000_KEY, getSynthName());
+        m1000 = (m == null ? true : !Boolean.parseBoolean(m));
+        setM1000(m1000, false);  // so we set the menu
+
         for(int i = 0; i < allParameters.length; i++)
             {
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
@@ -99,8 +126,6 @@ public class OberheimMatrix1000 extends Synth
         envelopePanel.add(vbox, BorderLayout.CENTER);
         addTab("LFOs and Envelopes", envelopePanel);
 
-        
-        
         // MODULATION PANEL
                 
         SynthPanel modulationPanel = new SynthPanel(this);
@@ -123,6 +148,13 @@ public class OberheimMatrix1000 extends Synth
     public String getDefaultResourceFileName() { return "OberheimMatrix1000.init"; }
     public String getHTMLResourceFileName() { return "OberheimMatrix1000.html"; }
 
+	String patchRange(boolean writing)
+		{
+		if (m1000 && writing) return "0...199";
+		else if (m1000) return "0...999";
+		else return "0...99";
+		}
+
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JTextField val = new JTextField("" + model.get("bank") + (model.get("number") < 10 ? "0" : "") + model.get("number"), 3);
@@ -130,7 +162,7 @@ public class OberheimMatrix1000 extends Synth
         while(true)
             {
             boolean result = showMultiOption(this, new String[] { "Patch Number"}, 
-                new JComponent[] { val }, title, "Enter the 3-digit Patch Number");
+                new JComponent[] { val }, title, "Enter the Patch Number (" + patchRange(writing) + ")");
                 
             if (result == false) 
                 return false;
@@ -139,12 +171,14 @@ public class OberheimMatrix1000 extends Synth
             try { n = Integer.parseInt(val.getText()); }
             catch (NumberFormatException e)
                 {
-                showSimpleError(title, "The 3-digit Patch Number must be an integer 0...999");
+                showSimpleError(title, "The Patch Number must be an integer " + patchRange(writing));
                 continue;
                 }
-            if (n < 0 || n > 999)
+            if ((m1000 && writing && (n < 0 || n > 199)) ||
+                (m1000 && !writing && (n < 0 || n > 999)) ||
+                (!m1000 && (n < 0 || n > 99)))
                 {
-                showSimpleError(title, "The 3-digit Patch Number must be an integer 0...999");
+                showSimpleError(title, "The Patch Number must be an integer " + patchRange(writing));
                 continue;
                 }
                                 
@@ -159,6 +193,8 @@ public class OberheimMatrix1000 extends Synth
         {
         JFrame frame = super.sprout();
         transmitTo.setEnabled(false);
+		// The 6/6r can't receive current patch
+		receiveCurrent.setEnabled(m1000);
         addOberheimMenu();
         return frame;
         }         
@@ -170,27 +206,7 @@ public class OberheimMatrix1000 extends Synth
     // If the bytes start at 32, then this makes sense:  bytes 32...63 are stored as-is,
     // and bytes 64..95 get 64 subtracted from them, so they become 0...31.  Clever.
     
-    byte packNameByte(byte n)
-        {
-        /*
-          if (n < 32 || n > 95)
-          n = (byte)32;
-          if (n >= 64)
-          n -= 64;
-        */
-        return n;
-        }
-                
-    byte unpackNameByte(byte n)
-        {
-        /*
-          n = (byte)(n & 63);
-          if (n < 32)
-          n = (byte)(n + 64);
-        */
-        return n;
-        }
-
+    
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
@@ -221,8 +237,21 @@ public class OberheimMatrix1000 extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-        hbox.addLast(Strut.makeHorizontalStrut(100));
-
+        m1000Check = new JCheckBox("Matrix 1000");
+        m1000Check.setSelected(m1000);
+        m1000Check.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                setM1000(m1000Check.isSelected(), true);
+                }
+            });
+        m1000Check.setFont(Style.SMALL_FONT());
+        m1000Check.setOpaque(false);
+        m1000Check.setForeground(Style.TEXT_COLOR());
+        hbox.add(m1000Check);
+        hbox.add(Strut.makeHorizontalStrut(50));
+        
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
         }
@@ -1309,7 +1338,7 @@ public class OberheimMatrix1000 extends Synth
             byte value = (byte)(((hinybble << 4) | (lonybble & 15)));
 
             if (i < 8)  // it's the name
-                name[i] = unpackNameByte(value);
+                name[i] = value;
             else if (key.equals("env1lfotriggermode") || key.equals("env2lfotriggermode") || key.equals("env3lfotriggermode"))
                 {
                 // there is no value = 1, that's the same as value = 0
@@ -1376,20 +1405,25 @@ public class OberheimMatrix1000 extends Synth
             }
         
         // to get the bank, we'll try to extract it from the name.  It appears to be the fourth character
-        boolean validname = false;
+        boolean validname = true;
         int bank = 0;
-        if (name[0] == 'B' && name[1] == 'N' || name[2] == 'K' || name[4] == ':' || name[5] == ' ')  // probably BNK_: __
-            {
-            bank = name[3] - '0';
-            if (bank < 0 || bank > 9)
-                bank = 0;
-            model.set("bank", bank);
-            }
-        else
-            {
-            model.set("bank", 0);           // default?
-            validname = true;
-            }
+        
+        if (m1000)
+        	{
+			if (name[0] == 'B' && name[1] == 'N' || name[2] == 'K' || name[4] == ':' || name[5] == ' ')  // probably BNK_: __
+				{
+				bank = name[3] - '0';
+				if (bank < 0 || bank > 9)
+					bank = 0;
+				model.set("bank", bank);
+				validname = false;
+				}
+			else
+				{
+				model.set("bank", 0);           // default?
+				validname = true;
+				}
+			}
         
         if (!fromFile && useClassicPatchNames && !validname)
             {
@@ -1397,7 +1431,7 @@ public class OberheimMatrix1000 extends Synth
             }
         else
             {
-            // update name just for fun, it may be gibberish
+            // update name just for fun, it may be gibberish or a 6/6R
             try 
                 {
                 model.set("name", new String(name, "US-ASCII"));
@@ -1413,6 +1447,23 @@ public class OberheimMatrix1000 extends Synth
         }
     
 
+    public void sendAllParameters()
+        {
+        if (m1000)
+        	{
+        	super.sendAllParameters();
+        	}
+        else		// PC and write to scratch patch 99
+        	{
+        	changePatch(0, 99);		// Patch 99 is our scratch patch for the Matrix 6/64
+        	simplePause(getPauseAfterChangePatch());
+        	tryToSendMIDI(emitAll(model, true, false));
+        	}
+        }
+
+
+    public int getPauseAfterWritePatch() { return 300; }	// Less than 200 and I'll get failures to PC the second time: at 250 I got a failure to write the patch.  250 might be enough but let's go for 300, yeah, it's a lot
+    
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         if (tempModel == null)
@@ -1430,7 +1481,7 @@ public class OberheimMatrix1000 extends Synth
             String key = allParameters[i];
                 
             if (i < 8)  // it's the name
-                value = packNameByte(name[i]);
+                value = name[i];
             else if (key.equals("env1lfotriggermode") || key.equals("env2lfotriggermode") || key.equals("env3lfotriggermode"))
                 {
                 value = model.get(key);
@@ -1577,12 +1628,18 @@ public class OberheimMatrix1000 extends Synth
         d[1] = (byte)0x10;
         d[2] = (byte)0x06;
 
-        if (toWorkingMemory)
+        if (toWorkingMemory && m1000)
             {
             // 0DH - SINGLE PATCH DATA TO EDIT BUFFER
             d[3] = (byte)0x0D;
             d[4] = (byte)0x00;
             }
+        else if (toWorkingMemory)   // 6/6R only
+        	{
+            // 01H-SINGLE PATCH DATA
+            d[3] = (byte)0x01;
+            d[4] = (byte)99;			// our scratch patch
+        	}
         else
             {
             // 01H-SINGLE PATCH DATA
@@ -1724,10 +1781,9 @@ public class OberheimMatrix1000 extends Synth
             model.set("name", newnm);
         }
         
-    boolean sendingMatrix100Parameters = false;
-    public double getPauseBetweenMIDISends() { if (sendingMatrix100Parameters) return 75; else return 0; }
+    public int getPauseAfterSendOneParameter() { return 75; }
 
-    public static String getSynthName() { return "Oberheim Matrix 1000"; }
+    public static String getSynthName() { return "Oberheim Matrix 6/6R/1000"; }
     
     public String getPatchName(Model model) { return model.get("name", "UNTITLED"); }
     
@@ -1766,34 +1822,6 @@ public class OberheimMatrix1000 extends Synth
         return ("" + model.get("bank")) + 
             (number > 9 ? "" : "0") + 
             (model.get("number"));
-        }
-
-    ///// A bug in the Matrix 1000 means that SINGLE PATCH DATA TO EDIT BUFFER apparently sends
-    ///// corrupted data.  So we can't use it.  But we still need to send!  So we do this by 
-    ///// writing to slot 199 when sending in bulk.  We have to modify sendAllParameters so that if
-    ///// we're sending in bulk, we change the patch to 199 first so that we always have the
-    ///// Matrix 1000 set up right.
-
-    public static final int SEND_MATRIX_NUMBER = 99;
-    public static final int SEND_MATRIX_BANK = 1;
-    public boolean sendMatrixParametersInBulk = true;  // always for now
-
-    public boolean getSendsAllParametersInBulk() { return sendMatrixParametersInBulk; }
-
-    public void sendAllParameters()
-        {
-        // in case we send parameters individually, we'll add a pause between sending parameters here.
-        sendingMatrix100Parameters = true;
-        /*
-          if (sendMatrixParametersInBulk)
-          {
-          // we need to ensure a changepatch to SEND_MATRIX_SLOT here
-          changePatch(SEND_MATRIX_BANK, SEND_MATRIX_NUMBER);
-          }
-        */
-        super.sendAllParameters();
-        // now we turn off the pause
-        sendingMatrix100Parameters = false;
         }
 
     public boolean useClassicPatchNames = true;
@@ -1852,52 +1880,8 @@ public class OberheimMatrix1000 extends Synth
                 patchgroup.add(patch);
                 }
             }
-
-
-        /*
-        // we don't call this for the time being -- sending individual parameters is slow and fraught with problems
-        JMenu sendParameters = new JMenu("Send Parameters...");
-        menu.add(sendParameters);
-                
-        String str = getLastX("SendParameters", getSynthName(), true);
-        if (str == null)
-        sendMatrixParametersInBulk = true;
-        else if (str.equalsIgnoreCase("BULK"))
-        sendMatrixParametersInBulk = true;
-        else if (str.equalsIgnoreCase("INDIVIDUALLY"))
-        sendMatrixParametersInBulk = false;
-        else sendMatrixParametersInBulk = true;
-
-        ButtonGroup bg = new ButtonGroup();
-        JRadioButtonMenuItem bulk = new JRadioButtonMenuItem("In Bulk, using Patch 199");
-        bulk.addActionListener(new ActionListener()
-        {
-        public void actionPerformed(ActionEvent evt)
-        {
-        sendMatrixParametersInBulk = true;
-        setLastX("BULK", "SendParameters", getSynthName(), true);
-        }
-        });
-        sendParameters.add(bulk);
-        bg.add(bulk);
-        if (sendMatrixParametersInBulk == true) bulk.setSelected(true);
-                
-        JRadioButtonMenuItem separately = new JRadioButtonMenuItem("As Individual Parameters");
-        separately.addActionListener(new ActionListener()
-        {
-        public void actionPerformed(ActionEvent evt)
-        {
-        sendMatrixParametersInBulk = false;
-        setLastX("INDIVIDUALLY", "SendParameters", getSynthName(), true);
-        }
-        });
-        sendParameters.add(separately);
-        bg.add(separately);
-        if (sendMatrixParametersInBulk == false) separately.setSelected(true);
-        */
-        }
-        
-        
+		}
+ 
     // These are drawn from the "Matrix 1000 Patchbook"
     public static final String[] PATCH_NAMES = 
         {

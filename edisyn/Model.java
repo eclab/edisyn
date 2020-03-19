@@ -1069,7 +1069,7 @@ public class Model implements Cloneable
         }
     
     static final String FALSE_STRING = "<<<<false>>>>>";
-    static final String TRUE_STRING = "<<<<false>>>>>";
+    static final String TRUE_STRING = "<<<<true>>>>>";
     String getModelParameterText(String key)
         {
         if (isString(key))

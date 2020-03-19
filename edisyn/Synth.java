@@ -883,6 +883,9 @@ public abstract class Synth extends JComponent implements Updatable
     /** Override this to make sure that the given additional time (in ms) has transpired between sending each parameter via emitAll(key). */
     public int getPauseAfterSendOneParameter() { return 0; }
 
+    /** Override this to make sure that the given additional time (in ms) has transpired after writing a patch but before the change patch following. */
+    public int getPauseAfterWritePatch() { return 0; }
+
     /** Override this to return TRUE if, after a patch write, we need to change to the patch *again* so as to load it into memory. */
     public boolean getShouldChangePatchAfterWrite() { return false; }
     
@@ -4406,6 +4409,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         performChangePatch(model);     // we need to be at the start for the Oberheim Matrix 1000
         tryToSendMIDI(emitAll(model, false, false));
+        simplePause(getPauseAfterWritePatch());
         performChangePatch(model);     // do it at the end AND start here, as opposed to doSendtoPatch, which does it first.  We need to be at the end for the Kawai K4.
         }
                 
@@ -6123,7 +6127,7 @@ public abstract class Synth extends JComponent implements Updatable
         return result;
         }
 
-    int getLastXAsInt(String slot, String synth, int defaultVal, boolean getFromSynthOnly)
+    public static int getLastXAsInt(String slot, String synth, int defaultVal, boolean getFromSynthOnly)
         {
         String tnls = getLastX(slot, synth, getFromSynthOnly);
         try
@@ -6140,7 +6144,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
 
-    double getLastXAsDouble(String slot, String synth, double defaultVal, boolean getFromSynthOnly)
+    public static double getLastXAsDouble(String slot, String synth, double defaultVal, boolean getFromSynthOnly)
         {
         String tnls = getLastX(slot, synth, getFromSynthOnly);
         try

@@ -2,8 +2,9 @@ package edisyn.synth.tuning.tuningdefinitions;
 
 import edisyn.synth.tuning.*;
 import edisyn.*;
+import edisyn.gui.*;
 import javax.swing.*;
-
+import java.awt.*;
 
 public class EDO extends TuningDefinition 
 	{
@@ -12,9 +13,28 @@ public class EDO extends TuningDefinition
 		String name = synth.getSynthNameLocal();
 		setConfigured(false);
 		
-		JTextField rootMIDINote = new JTextField("" + Synth.getLastXAsInt("rootMIDINote", name, 69, true));
+		final JTextField rootMIDINote = new JTextField("" + Synth.getLastXAsInt("rootMIDINote", name, 69, true));
 		JTextField rootFrequency = new JTextField("" + Synth.getLastXAsDouble("rootFrequency", name, 440.0, true));
 		JTextField divisionsPerOctave = new JTextField("" + Synth.getLastXAsInt("EDODivisionsPerOctive", name, 12, true));
+		
+		PushButton compute = new PushButton("Compute")
+			{
+			public void perform()
+				{
+				int rmn = -1;
+				try { rmn = Integer.parseInt(rootMIDINote.getText()); if (rmn < 0 || rmn > 127) throw new RuntimeException(); }
+				catch (Exception ex)
+					{
+					synth.showSimpleError("Cannot compute", "The root MIDI note must be an integer between 0 and 127"); 
+					return;
+					}
+				rootFrequency.setText("" + TuningDefinition.midiNumberToHz(rmn));
+				}
+			};
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		panel.add(rootFrequency, BorderLayout.CENTER);
+		panel.add(compute, BorderLayout.EAST);
 		
 		while(true)
 			{
@@ -22,7 +42,7 @@ public class EDO extends TuningDefinition
 				new String[] { 	"Root MIDI Note (0...127)",
 								"Root Frequency", 
 								"Divisions Per Octave" },
-				new JTextField[] { rootMIDINote, rootFrequency, divisionsPerOctave },
+				new JComponent[] { rootMIDINote, panel, divisionsPerOctave },
 				"EDO Tuning",
 				"Enter EDO Tuning Information.  MIDI note 69 is classically A-440.");
 			

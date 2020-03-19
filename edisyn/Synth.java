@@ -2019,6 +2019,12 @@ public abstract class Synth extends JComponent implements Updatable
     /** Display a simple error message. */
     public void showSimpleError(String title, String message)
         {
+        showSimpleError(this, title, message);
+        }
+
+    /** Display a simple error message. */
+    public void showSimpleError(JComponent parent, String title, String message)
+        {
         // A Bug in OS X (perhaps others?) Java causes multiple copies of the same Menu event to be issued
         // if we're popping up a dialog box in response, and if the Menu event is caused by command-key which includes
         // a modifier such as shift.  To get around it, we're just blocking multiple recursive message dialogs here.
@@ -2026,7 +2032,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (inSimpleError) return;
         inSimpleError = true;
         disableMenuBar();
-        JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(parent, message, title, JOptionPane.ERROR_MESSAGE);
         enableMenuBar();
         inSimpleError = false;
         }

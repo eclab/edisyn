@@ -142,6 +142,7 @@ public class Tuning extends Synth
 				model.set("detune-" + i, detune[i]);
 			}
 		repaint();		// see discussion in Blofeld patch editor
+		revise();
 		setSendMIDI(true);
 		getUndo().setWillPush(true);
 		sendAllParameters();
@@ -165,7 +166,6 @@ public class Tuning extends Synth
 						if (_def.isConfigured())
 							{
 							setTunings(_def.getBases(), _def.getDetunes());
-							revise();
 							}
 					}
 				});

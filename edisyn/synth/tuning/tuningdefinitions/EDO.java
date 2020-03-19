@@ -1,35 +1,84 @@
 package edisyn.synth.tuning.tuningdefinitions;
-import edisyn.synth.tuning.*;
-import javax.swing.JOptionPane;
 
-public class EDO extends TuningDefinition {
-	private int divisions_per_octave;
-	public static double edoNumberToHz(int m,
-	                                   int divisions_per_octave,
-	                                   double base_freq,
-	                                   int base_note)
+import edisyn.synth.tuning.*;
+import edisyn.*;
+import javax.swing.*;
+
+
+public class EDO extends TuningDefinition 
 	{
-		return Math.pow(2, (m-base_note)/(divisions_per_octave*1.0))*base_freq;
-	}
-	public void realize(int root_midi_note, double frequency) {
-		if(!configured) {
-			throw new RuntimeException("NOT CONFIGURED!");
+	public void popup(Synth synth)
+		{
+		String name = synth.getSynthNameLocal();
+		setConfigured(false);
+		
+		JTextField rootMIDINote = new JTextField("" + Synth.getLastXAsInt("rootMIDINote", name, 69, true));
+		JTextField rootFrequency = new JTextField("" + Synth.getLastXAsDouble("rootFrequency", name, 440.0, true));
+		JTextField divisionsPerOctave = new JTextField("" + Synth.getLastXAsInt("EDODivisionsPerOctive", name, 12, true));
+		
+		while(true)
+			{
+			boolean res = Synth.showMultiOption(synth,
+				new String[] { 	"Root MIDI Note (0...127)",
+								"Root Frequency", 
+								"Divisions Per Octave" },
+				new JTextField[] { rootMIDINote, rootFrequency, divisionsPerOctave },
+				"EDO Tuning",
+				"Enter EDO Tuning Information.  MIDI note 69 is classically A-440.");
+			
+			if (!res) return;
+			
+			int rmn = -1;
+			try { rmn = Integer.parseInt(rootMIDINote.getText()); if (rmn < 0 || rmn > 127) throw new RuntimeException(); }
+			catch (Exception ex)
+				{
+				synth.showSimpleError("EDO Tuning", "The root MIDI note must be an integer between 0 and 127"); 
+				continue;
+				}
+
+			double rf = -1;
+			try { rf = Integer.parseInt(rootFrequency.getText()); if (rf <= 0) throw new RuntimeException(); }
+			catch (Exception ex)
+				{
+				synth.showSimpleError("EDO Tuning", "The root frequency must be a real value greater than 0.0");
+				continue;
+				}
+
+			int dpo = -1;
+			try { dpo = Integer.parseInt(divisionsPerOctave.getText()); if (dpo <= 0) throw new RuntimeException(); }
+			catch (Exception ex)
+				{
+				synth.showSimpleError("EDO Tuning", "The root MIDI note must be an integer between 0 and 127"); 
+				continue;
+				}
+
+			Synth.setLastX("rootMIDINote", "" + rmn, name, false);
+			Synth.setLastX("rootFrequency", "" + rf, name, false);
+			Synth.setLastX("EDODivisionsPerOctive", "" + dpo, name, false);
+			realize(rmn, rf, dpo);
+			setConfigured(true);
+			return;
+			}
 		}
-		for(int i = 0; i < 128; i++){
-			setNoteFreq(i,
-			            edoNumberToHz(i,
-			                          divisions_per_octave,
-			                          frequency,
-			                          root_midi_note));
-		}
+		
+	public static double edoNumberToHz(int m,
+	                                   int divisionsPerOctave,
+	                                   double baseFreq,
+	                                   int baseNote)
+	{
+		return Math.pow(2, (m - baseNote) / (divisionsPerOctave * 1.0)) * baseFreq;
 	}
-	public void configurationPopup() {
-		configured = true;
-		divisions_per_octave =
-			Integer.parseInt(JOptionPane.showInputDialog("Divisions Per Octave",
-			                                             "12"));
+	
+	void realize(int rootMIDINote, double rootFrequency, int divisionsPerOctave) 
+	{
+		for(int i = 0; i < 128; i++)
+			{
+			setNoteFrequency(i, edoNumberToHz(i,
+			                          divisionsPerOctave,
+			                          rootFrequency,
+			                          rootMIDINote));
+			}
 	}
-	public String getMenuName() {
-		return "EDO";
-	}
+
+	public String getMenuName() { return "EDO"; }
 }

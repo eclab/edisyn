@@ -147,28 +147,30 @@ public class Tuning extends Synth
 		sendAllParameters();
 	}
 
-	private static TuningDefinition[] tuning_definitions = {new EDO()};
+	static TuningDefinition[] tuningDefinitions = { new EDO() };
 	    
 	public void addTuningMenu()
 	{
 		JMenu menu = new JMenu("Tuning");
 		menubar.add(menu);
-		for(TuningDefinition definition : tuning_definitions){
+		for(TuningDefinition definition : tuningDefinitions)
+			{
+			final TuningDefinition _def = definition;
 			JMenuItem menuItem = new JMenuItem(definition.getMenuName());
-			menuItem.addActionListener(new ActionListener() {
+			menuItem.addActionListener(new ActionListener() 
+				{
 					public void actionPerformed(ActionEvent e)
 					{
-						
-						int root_midi_note = Integer.parseInt(JOptionPane.showInputDialog("Root Midi Note (69 is Middle A [440hz])", "69"));
-						double frequency = Double.parseDouble(JOptionPane.showInputDialog("Frequency at selected root midi note", ""+TuningDefinition.midiNumberToHz(root_midi_note)));
-						definition.configurationPopup();
-						definition.realize(root_midi_note, frequency);
-						setTunings(definition.bases, definition.detunes);
-						definition.reset();
+						_def.popup(Tuning.this);
+						if (_def.isConfigured())
+							{
+							setTunings(_def.getBases(), _def.getDetunes());
+							revise();
+							}
 					}
 				});
 			menu.add(menuItem);
-		}
+			}
 	}
         
         

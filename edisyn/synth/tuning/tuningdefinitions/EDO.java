@@ -37,7 +37,7 @@ public class EDO extends TuningDefinition
 				}
 
 			double rf = -1;
-			try { rf = Integer.parseInt(rootFrequency.getText()); if (rf <= 0) throw new RuntimeException(); }
+			try { rf = Double.parseDouble(rootFrequency.getText()); if (rf <= 0) throw new RuntimeException(); }
 			catch (Exception ex)
 				{
 				synth.showSimpleError("EDO Tuning", "The root frequency must be a real value greater than 0.0");

@@ -4,6 +4,7 @@ import edisyn.synth.tuning.*;
 import edisyn.*;
 import edisyn.gui.*;
 import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
 
 public class EDO extends TuningDefinition 
@@ -19,9 +20,10 @@ public class EDO extends TuningDefinition
 			JTextField rootFrequency = new JTextField("" + Synth.getLastXAsDouble("rootFrequency", name, 440.0, true));
 			JTextField divisionsPerOctave = new JTextField("" + Synth.getLastXAsInt("EDODivisionsPerOctive", name, 12, true));
 		
-			PushButton compute = new PushButton("Compute")
+			JButton compute = new JButton("Compute");
+			compute.addActionListener(new ActionListener()
 				{
-				public void perform()
+				public void actionPerformed(ActionEvent e)
 					{
 					int rmn = -1;
 					try { rmn = Integer.parseInt(rootMIDINote.getText()); if (rmn < 0 || rmn > 127) throw new RuntimeException(); }
@@ -32,8 +34,8 @@ public class EDO extends TuningDefinition
 						}
 					rootFrequency.setText("" + TuningDefinition.midiNumberToHz(rmn));
 					}
-				};
-			compute.setBackground(new JButton().getBackground());
+				});
+
 			JPanel panel = new JPanel();
 			panel.setLayout(new BorderLayout());
 			panel.add(rootFrequency, BorderLayout.CENTER);

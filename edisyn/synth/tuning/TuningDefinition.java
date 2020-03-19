@@ -3,7 +3,7 @@ package edisyn.synth.tuning;
 import edisyn.*;
 
 public abstract class TuningDefinition 
-	{
+{
 	int bases[] = new int[128];
 	int detunes[] = new int[128];
 	int rootMIDINote = 0;
@@ -19,9 +19,9 @@ public abstract class TuningDefinition
 	public double getRootFrequency() { return rootFrequency; }
 	public void setRootFrequency(double val) { rootFrequency = val; }
 	
-	 static double LOG_2 = Math.log(2);
-	 static double INV_LOG_2 = 1/LOG_2;
-	 static int TWO_TO_THE_14 = 16384; 		// (int) Math.pow(2, 14);
+	static double LOG_2 = Math.log(2);
+	static double INV_LOG_2 = 1/LOG_2;
+	static int TWO_TO_THE_14 = 16384; 		// (int) Math.pow(2, 14);
 
 	public static double midiNumberToHz(int m)
 	{
@@ -44,16 +44,20 @@ public abstract class TuningDefinition
 	}
 	
 	public void setNoteFrequency(int note_index, double freq)
-		{
+	{
 		int ind = (int)hzToMidiNumber(freq);
 		double base = midiNumberToHz(ind);
 		double cents = centsAbove(freq, base);
+		while(cents < 0) {
+			ind--;
+			cents += 100;
+		}
 		int ticks = centsToTicks(cents);
 		if (ticks == TWO_TO_THE_14)	
-			{
-			ticks = 0;
-			ind++;
-		}
+			   {
+				   ticks = 0;
+				   ind++;
+			   }
 		bases[note_index] = ind;
 		detunes[note_index] = ticks;
 	}

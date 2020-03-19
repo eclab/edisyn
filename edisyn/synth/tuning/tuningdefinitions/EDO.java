@@ -31,6 +31,7 @@ public class EDO extends TuningDefinition
 				rootFrequency.setText("" + TuningDefinition.midiNumberToHz(rmn));
 				}
 			};
+		compute.setBackground(new JButton().getBackground());
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		panel.add(rootFrequency, BorderLayout.CENTER);

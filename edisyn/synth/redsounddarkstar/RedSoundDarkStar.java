@@ -1090,6 +1090,9 @@ public class RedSoundDarkStar extends Synth
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         // DarkStar data comes in the following forms
         // VOICEDATA is 100 bytes
         // Others are 1 byte each

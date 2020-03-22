@@ -1287,6 +1287,9 @@ return pos;
     // We don't send in bulk, so this is for writing to files only
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         if (!toFile) return new byte[0];
         
         byte[] sysex = new byte[STEP_KEYS.length * NUM_STEPS * 2 + (MAIN_KEYS.length - 1) * 2 + NAME_LENGTH + 23 + 2];  // 2 for bank and number
@@ -1316,8 +1319,8 @@ return pos;
         
         int pos = 22;
         
-        sysex[pos++] = (byte)model.get("bank");
-        sysex[pos++] = (byte)model.get("number");
+        sysex[pos++] = (byte)tempModel.get("bank");
+        sysex[pos++] = (byte)tempModel.get("number");
         
         for(int i = 0; i < MAIN_KEYS.length; i++)
             {
@@ -1370,6 +1373,9 @@ return pos;
 
     public byte[] requestDump(Model tempModel)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         model.set("bank", tempModel.get("bank"));
         model.set("number", tempModel.get("number"));
         byte BB = (byte)edisynToWSBank[tempModel.get("bank")];

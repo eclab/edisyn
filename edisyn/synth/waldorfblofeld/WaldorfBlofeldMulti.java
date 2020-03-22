@@ -948,6 +948,7 @@ public class WaldorfBlofeldMulti extends Synth
         {
         if (tempModel == null)
             tempModel = getModel();
+            
         byte DEV = (byte)(getID());
         byte BB = (byte) 0x0;  // multis have only 1 bank
         byte NN = (byte) tempModel.get("number");
@@ -1044,6 +1045,7 @@ public class WaldorfBlofeldMulti extends Synth
         {
         if (tempModel == null)
             tempModel = getModel();
+            
         byte DEV = (byte)(getID());
         byte BB = 0;  // only 1 bank
         byte NN = (byte)tempModel.get("number");

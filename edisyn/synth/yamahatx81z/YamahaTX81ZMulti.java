@@ -750,10 +750,10 @@ public class YamahaTX81ZMulti extends Synth
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-        simplePause(50);
         if (tempModel == null)
             tempModel = getModel();
 
+        simplePause(50);
         byte data[] = new byte[120];
         data[0] = (byte)'L';
         data[1] = (byte)'M';
@@ -840,6 +840,9 @@ public class YamahaTX81ZMulti extends Synth
 
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         // We ALWAYS change the patch no matter what.  We have to.
         changePatch(tempModel);
         tryToSendSysex(requestDump(tempModel));

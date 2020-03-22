@@ -442,6 +442,9 @@ public class KawaiK4Effect extends Synth
 
     public byte[] requestDump(Model tempModel) 
         { 
+        if (tempModel == null)
+            tempModel = getModel();
+
         byte position = (byte)(tempModel.get("number"));
         boolean external = (tempModel.get("bank") == 1);
         return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x00, 0x00, 0x04, 

@@ -2260,8 +2260,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         d[2] = (byte)(48 + getChannelOut());
         d[3] = (byte)0x28;
         d[4] = (byte)0x40;
-        d[5] = (byte)edisynToWSBank[model.get("bank")];
-        d[6] = (byte)model.get("number");
+        d[5] = (byte)edisynToWSBank[tempModel.get("bank")];
+        d[6] = (byte)tempModel.get("number");
        
         Patch patch = new Patch();
 
@@ -2556,6 +2556,9 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
     public byte[] requestDump(Model tempModel)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         byte BB = (byte)edisynToWSBank[tempModel.get("bank")];
         byte NN = (byte)tempModel.get("number");
         return new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), 0x28, 0x10, BB, NN, (byte)0xF7 };

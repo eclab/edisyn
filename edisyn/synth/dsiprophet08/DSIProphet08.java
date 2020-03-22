@@ -1594,6 +1594,9 @@ public class DSIProphet08 extends Synth
 
     public byte[] requestDump(Model tempModel)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         byte[] data = new byte[7];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x01;   // DSI

@@ -1316,6 +1316,9 @@ public class PreenFM2 extends Synth
 
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         // we always change patches, no matter what
         changePatch(tempModel);
                 
@@ -1667,6 +1670,9 @@ public class PreenFM2 extends Synth
         the purposes of writing to a file. */
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         // load all the data, including the name
 
         int[] vals = new int[sysexKeys.length + 11];  // + 11 is enough space for the name (12 chars) plus the other keys

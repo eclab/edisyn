@@ -1314,7 +1314,7 @@ public class OberheimMatrix1000 extends Synth
     /// which range from -64 to +63.  When emitting or parsing a patch, the nybblization just breaks
     /// the byte into two nybbles and that's all.
     ///
-    /// Note however that when sending INDIVIDUAL PARAMETERS, the sysex value is firsty masked to 
+    /// Note however that when sending INDIVIDUAL PARAMETERS, the sysex value is first masked to 
     /// 7 bits (& 127).  And in NRPN, all values, even unsigned ones, have 64 added to them to 
     /// push them to 0...127.
     
@@ -1644,7 +1644,7 @@ public class OberheimMatrix1000 extends Synth
             {
             // 01H-SINGLE PATCH DATA
             d[3] = (byte)0x01;
-            d[4] = (byte)model.get("number");
+            d[4] = (byte)tempModel.get("number");
             }
 
         System.arraycopy(data, 0, d, 5, 268);
@@ -1721,6 +1721,9 @@ public class OberheimMatrix1000 extends Synth
 
     public byte[] requestDump(Model tempModel)
         {               
+        if (tempModel == null)
+            tempModel = getModel();
+
         // Next do a dump request
         byte[] data = new byte[7];
         data[0] = (byte)0xF0;

@@ -328,13 +328,16 @@ public class Tuning extends Synth
         
 	public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile) 
 	{ 
+        if (tempModel == null)
+            tempModel = getModel();
+
 		byte[] data = new byte[8 + 16 + 3 * 128];
 		data[0] = (byte)0xF0;
 		data[1] = 0x7E;
 		data[2] = getID();
 		data[3] = 0x08;
 		data[4] = 0x01;
-		data[5] = (byte)(toWorkingMemory ? SCRATCH_SLOT : (tempModel == null ? model.get("number") : tempModel.get("number")));
+		data[5] = (byte)(toWorkingMemory ? SCRATCH_SLOT : tempModel.get("number"));
         
 		String name = model.get("name", DEFAULT_NAME) + "                ";
 		for(int i = 0; i < 16; i++)
@@ -380,13 +383,16 @@ public class Tuning extends Synth
 		                    0x01, (byte)(k - 1), (byte)base, (byte)msb, (byte)lsb, (byte)0xF7 };
 	}
 
-	public byte[] requestCurrentDump(Model tempModel) 
+	public byte[] requestCurrentDump() 
 	{ 
 		return new byte[] { (byte)0xF0, 0x7E, getID(), 0x08, 0x00, (byte)SCRATCH_SLOT, (byte)0xF7 };
 	}
 
 	public byte[] requestDump(Model tempModel) 
 	{ 
+        if (tempModel == null)
+            tempModel = getModel();
+
 		return new byte[] { (byte)0xF0, 0x7E, getID(), 0x08, 0x00, (byte)tempModel.get("number"), (byte)0xF7 };
 	}
 

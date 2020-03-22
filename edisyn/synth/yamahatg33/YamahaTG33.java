@@ -1973,6 +1973,9 @@ public class YamahaTG33 extends Synth
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         byte[] data = new byte[((getSynthType() == TYPE_TG33) ? 605 : 592)];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x43;
@@ -2212,6 +2215,9 @@ public class YamahaTG33 extends Synth
 
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         // We ALWAYS change the patch no matter what.  We have to.
         changePatch(tempModel);
         simplePause(getPauseAfterChangePatch());

@@ -4812,14 +4812,17 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 */
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
+		if (tempModel == null)
+            tempModel = getModel();
+        
         byte[] d = new byte[EXPECTED_SYSEX_LENGTH];
         d[0] = (byte)0xF0;
         d[1] = (byte)0x42;
         d[2] = (byte)(48 + getChannelOut());
         d[3] = (byte)0x28;
         d[4] = (byte)0x49;
-        d[5] = (byte)edisynToWSBank[model.get("bank")];
-        d[6] = (byte)model.get("number");
+        d[5] = (byte)edisynToWSBank[tempModel.get("bank")];
+        d[6] = (byte)tempModel.get("number");
        
         Performance performance = new Performance();
 
@@ -4996,6 +4999,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
     public byte[] requestDump(Model tempModel)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         byte BB = (byte)edisynToWSBank[tempModel.get("bank")];
         byte NN = (byte)tempModel.get("number");
         return new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x28, (byte)0x19, BB, NN, (byte)0xF7 };

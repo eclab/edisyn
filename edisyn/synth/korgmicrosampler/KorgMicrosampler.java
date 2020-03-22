@@ -3378,6 +3378,9 @@ public class KorgMicrosampler extends Synth
     
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile) 
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         byte[] data = new byte[780];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x7D;

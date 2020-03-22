@@ -1812,6 +1812,9 @@ public class Yamaha4Op extends Synth
     
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
+		if (tempModel == null)
+            tempModel = getModel();
+        
         simplePause(50);
         byte[][] result = new byte[4][];
   
@@ -1969,6 +1972,9 @@ public class Yamaha4Op extends Synth
 
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         // We ALWAYS change the patch no matter what.  We have to.
         performChangePatch(tempModel);
         tryToSendSysex(requestDump(tempModel));

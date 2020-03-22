@@ -764,6 +764,9 @@ public class KawaiK1Multi extends Synth
     // the performRequestDump menu here 
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         if (changePatch)
             performChangePatch(tempModel);
             

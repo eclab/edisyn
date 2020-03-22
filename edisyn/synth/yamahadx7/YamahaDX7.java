@@ -983,6 +983,9 @@ public class YamahaDX7 extends Synth
     
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         simplePause(50);                // dunno if I need it, it was needed for the TX81Z
         
         byte[] data = new byte[163];
@@ -1025,6 +1028,9 @@ public class YamahaDX7 extends Synth
 
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         // We ALWAYS change the patch no matter what.  We have to.
         changePatch(tempModel);
         tryToSendSysex(requestDump(tempModel));

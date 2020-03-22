@@ -652,6 +652,9 @@ public class EmuMorpheusHyper extends Synth
 
     public byte[] requestDump(Model tempModel)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         int NN = tempModel.get("bank", 0) * 128 + tempModel.get("number", 0);
         byte[] data = new byte[8];
         data[0] = (byte)0xF0;

@@ -1394,6 +1394,9 @@ public class KorgSG extends Synth
 
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         // we always change the patch no matter what
         changePatch(tempModel);
 

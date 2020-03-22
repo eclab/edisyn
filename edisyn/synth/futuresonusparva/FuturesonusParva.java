@@ -795,8 +795,8 @@ public class FuturesonusParva extends Synth
         d[1] = (byte) 0x7D;
         d[2] = (byte) 0x00;
         d[3] = (byte) 0x7F;
-        d[4] = (byte) (0x40 | model.get("bank"));
-        d[5] = (byte) model.get("number");
+        d[4] = (byte) (0x40 | tempModel.get("bank"));
+        d[5] = (byte) tempModel.get("number");
         System.arraycopy(name, 0, d, 6, name.length);
         System.arraycopy(data, 0, d, 6 + name.length, data.length);
         d[d.length - 1] = (byte) 0xF7;
@@ -947,7 +947,10 @@ public class FuturesonusParva extends Synth
 
     public byte[] requestDump(Model tempModel)
         {
-        return new byte[] { (byte)0xF0, (byte)0x7D, (byte)0x00, (byte)0x7F, (byte)(0x50 | model.get("bank")), (byte)(model.get("number")), (byte)0xF7 };
+        if (tempModel == null)
+            tempModel = getModel();
+
+        return new byte[] { (byte)0xF0, (byte)0x7D, (byte)0x00, (byte)0x7F, (byte)(0x50 | tempModel.get("bank")), (byte)(tempModel.get("number")), (byte)0xF7 };
         }
     
     public byte[] requestCurrentDump()

@@ -850,6 +850,9 @@ public class Generic extends Synth
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         if (!toFile) return new byte[0];
         
         final int HEADER = 11;

@@ -908,6 +908,9 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
     
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
+		if (tempModel == null)
+            tempModel = getModel();
+        
         int packetlen = 128;
         byte[] data = new byte[packetlen + 11];
         
@@ -1030,6 +1033,9 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
     
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         // we always have to change the patch
         changePatch(tempModel);
         tryToSendSysex(requestDump(tempModel));

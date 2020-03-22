@@ -25,6 +25,7 @@ edisyn.synth.korgwavestation.KorgWavestationPatch
 edisyn.synth.korgwavestation.KorgWavestationPerformance
 edisyn.synth.korgwavestation.KorgWavestationSequence
 edisyn.synth.oberheimmatrix1000.OberheimMatrix1000 
+edisyn.synth.oberheimmatrix1000.OberheimMatrix1000Global
 edisyn.synth.preenfm2.PreenFM2
 edisyn.synth.redsounddarkstar.RedSoundDarkStar
 edisyn.synth.rolandd110.RolandD110Tone

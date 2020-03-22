@@ -828,7 +828,8 @@ public class WaldorfMicrowaveXTMulti extends Synth
         if (key.equals("name"))
             {
             byte[] bytes = new byte[16 * 9];
-            String name = model.get(key, "Init            ") + "                ";            for(int i = 0; i < 16; i++)
+            String name = model.get(key, "Init            ") + "                ";            
+            for(int i = 0; i < 16; i++)
                                                                                                   {
                                                                                                   int index = i;
                                                                                                   byte PP = (byte)(index & 127);
@@ -881,6 +882,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
         {
         if (tempModel == null)
             tempModel = getModel();
+            
         byte DEV = (byte)(getID());
         byte NN = (byte) tempModel.get("number");
         byte BB = 0x0;
@@ -970,6 +972,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 
         if (tempModel == null)
             tempModel = getModel();
+            
         byte DEV = (byte)(getID());
         byte BB = 0;  // only 1 bank
         byte NN = (byte)tempModel.get("number");

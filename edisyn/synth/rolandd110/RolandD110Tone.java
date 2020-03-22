@@ -1316,6 +1316,9 @@ public class RolandD110Tone extends Synth
         
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {             
+        if (tempModel == null)
+            tempModel = getModel();
+
         // set up buffer
         byte[] buf = new byte[toWorkingMemory ? TEMP_TONE_LENGTH : TEMP_TONE_LENGTH];
         
@@ -1335,7 +1338,7 @@ public class RolandD110Tone extends Synth
             }
         else
             {
-            int number = model.get("number", 0);
+            int number = tempModel.get("number", 0);
             buf[5] = (byte) 0x08;
             buf[6] = (byte) (number * 2);
             buf[7] = (byte)(0x00);
@@ -1375,6 +1378,9 @@ public class RolandD110Tone extends Synth
     // Requests a Tone from a specific RAM slot (1...64)
     public byte[] requestDump(Model tempModel)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         int number = tempModel.get("number");
         byte AA = (byte)(0x08);
         byte BB = (byte)(number * 2);

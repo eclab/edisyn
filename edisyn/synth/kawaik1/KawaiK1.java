@@ -1214,6 +1214,9 @@ public class KawaiK1 extends Synth
 
     public byte[] requestDump(Model tempModel)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         boolean external = (tempModel.get("bank") > 7);
         byte position = (byte)((tempModel.get("bank") & 7) * 8 + (tempModel.get("number")));  // 0...63 for IA1...iD8
         return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x00, 0x00, 0x03, 

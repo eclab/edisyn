@@ -756,6 +756,9 @@ public class RolandD110Multi extends Synth
     
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {          
+		if (tempModel == null)
+            tempModel = getModel();
+        
         if (toWorkingMemory)
             {
             // we have to emit to two locations
@@ -818,7 +821,7 @@ public class RolandD110Multi extends Synth
             buf1[3] = (byte)0x16;
             buf1[4] = (byte)0x12;
             buf1[5] = (byte)0x06;
-            buf1[6] = (byte)model.get("number");
+            buf1[6] = (byte)tempModel.get("number");
             buf1[7] = (byte)0x00;
             String name = model.get("patchname", "Untitled") + "          ";
             for(int c = 0; c < 10; c++)
@@ -851,7 +854,10 @@ public class RolandD110Multi extends Synth
     // Requests a Patch from a specific RAM slot (1...64)
     public byte[] requestDump(Model tempModel)
         {
-        int number = model.get("number");
+        if (tempModel == null)
+            tempModel = getModel();
+
+        int number = tempModel.get("number");
         // we're loading from Tone Temporary [synth]
         byte AA = (byte)(0x06);
         byte BB = (byte)(number * 2);

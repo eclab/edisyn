@@ -1130,7 +1130,8 @@ public class CasioCZ extends Synth
         
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-        if (tempModel == null) tempModel = model;
+        if (tempModel == null) 
+        	tempModel = model;
         
         byte[] data = (isCZ1() ? new byte[8 + 144 * 2] : new byte[8 + 128 * 2]);
         
@@ -1482,6 +1483,9 @@ public class CasioCZ extends Synth
 
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         if (changePatch)
             performChangePatch(tempModel);
 

@@ -619,6 +619,9 @@ public class YamahaFB01Multi extends Synth
         
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         int packetlen = 160;
         byte[] data = new byte[packetlen + 11];
         
@@ -701,6 +704,9 @@ public class YamahaFB01Multi extends Synth
     
     public byte[] requestDump(Model tempModel) 
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         // Configuration Memory XX, "Dump Requests", p. 47 User manual
         // Configuration Data Dump, #5 left column of page 14, service manual
         return new byte[] { (byte)0xF0, 0x43, 0x75, (byte)(getID() - 1), 0x20, 0x02, 

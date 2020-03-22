@@ -1425,6 +1425,9 @@ public class YamahaTX81Z extends Synth
     
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
+		if (tempModel == null)
+            tempModel = getModel();
+        
         simplePause(50);
         byte[][] result = new byte[2][];
         
@@ -1467,7 +1470,6 @@ public class YamahaTX81Z extends Synth
         System.arraycopy(data, 0, result[0], 6, data.length);
         result[0][6 + data.length] = produceChecksum(data);
         result[0][7 + data.length] = (byte)0xF7;
-
 
         // Next the VCED
         result[1] = new byte[101];
@@ -1516,6 +1518,9 @@ public class YamahaTX81Z extends Synth
 
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         // We ALWAYS change the patch no matter what.  We have to.
         changePatch(tempModel);
         tryToSendSysex(requestDump(tempModel));

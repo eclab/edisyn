@@ -2362,6 +2362,9 @@ public class KawaiK5 extends Synth
 
     public byte[] requestDump(Model tempModel)
         {
+        if (tempModel == null)
+            tempModel = getModel();
+
         return new byte[] 
             { 
             (byte)0xF0, 

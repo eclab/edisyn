@@ -2054,6 +2054,7 @@ public class WaldorfMicrowaveXT extends Synth
         {
         if (tempModel == null)
             tempModel = getModel();
+            
         byte DEV = (byte)(getID());
         byte BB = (byte) tempModel.get("bank");
         byte NN = (byte) tempModel.get("number");
@@ -2219,6 +2220,7 @@ public class WaldorfMicrowaveXT extends Synth
         {
         if (tempModel == null)
             tempModel = getModel();
+            
         byte DEV = (byte)(getID());
         byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");

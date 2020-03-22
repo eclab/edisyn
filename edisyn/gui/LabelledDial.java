@@ -119,6 +119,8 @@ public class LabelledDial extends NumericalComponent
     public LabelledDial(String _label, Synth synth, String key, Color staticColor, int min, int max)
         {
         this(_label, synth, key, staticColor);
+        if (min > max)
+        	System.err.println("Warning (LabelledDial): min (" + min + ") is > max (" + max + ") for " + key);
         setMin(min);
         setMax(max);
         synth.getModel().setMetricMin(key, min);

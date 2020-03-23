@@ -1415,8 +1415,6 @@ public class OberheimMatrix1000 extends Synth
         // the phrase "BNKx: yy", where x is the bank number and y is the patch number,
         // as direct 7-bit ASCII.  We have to differentiate between these.
         
-        // Notes: The Matrix 6 stores " " directly as " ", so after we add 0x40 it comes out as "`"
-        
 			if (name[0] == 'B' && name[1] == 'N' && name[2] == 'K' && name[4] == ':' && name[5] == ' ')  // probably BNKx: yy
 				{
 				bank = name[3] - '0';
@@ -1429,7 +1427,11 @@ public class OberheimMatrix1000 extends Synth
                     System.err.println("Warning (OberheimMatrix1000): \"BNK:\" found but invalid bank number discovered: " + new String(n));
                     }
 				model.set("bank", bank);
-            	model.set("name", PATCH_NAMES[bank * 100 + number]);                    
+				
+				if (bank >= 2 || useClassicPatchNames)
+	            	model.set("name", PATCH_NAMES[bank * 100 + number]);
+	            else
+	            	model.set("name", "UNTITLED"); 
 				}
 			else								// probably Matrix 6
 				{
@@ -1840,14 +1842,13 @@ public class OberheimMatrix1000 extends Synth
             (model.get("number"));
         }
 
-//    public boolean useClassicPatchNames = true;
+    public boolean useClassicPatchNames = true;
 
     public void addOberheimMenu()
         {
         JMenu menu = new JMenu("Matrix 1000");
         menubar.add(menu);
 
-/*
         // classic patch names
                 
         JCheckBoxMenuItem useClassicPatchNamesMenu = new JCheckBoxMenuItem("Use Classic Patch Names");
@@ -1872,7 +1873,7 @@ public class OberheimMatrix1000 extends Synth
         useClassicPatchNamesMenu.setSelected(useClassicPatchNames);
         
         menu.addSeparator();
-*/
+
         // load patch
         for(int i = 0; i < 1000; i += 50)
             {

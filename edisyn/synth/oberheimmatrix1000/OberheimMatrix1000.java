@@ -1405,42 +1405,50 @@ public class OberheimMatrix1000 extends Synth
             }
         
         // to get the bank, we'll try to extract it from the name.  It appears to be the fourth character
-        boolean validname = true;
         int bank = 0;
         
-        if (m1000)
-        	{
-			if (name[0] == 'B' && name[1] == 'N' || name[2] == 'K' || name[4] == ':' || name[5] == ' ')  // probably BNK_: __
+        // The sysex docs say the name is stored using the "lower 6 bits".  This is technically true but not helpful,
+        // since what's REALLY happening is that the range 0x40...0x5F (@ through _) is stored as 0x00...0x0F, and
+        // the range 0x20...0x3F (space through ?) is kept as is.
+        
+        /// The Matrix 1000 does not store names using the lower 6 bits.  Instead it stores
+        // the phrase "BNKx: yy", where x is the bank number and y is the patch number,
+        // as direct 7-bit ASCII.  We have to differentiate between these.
+        
+        // Notes: The Matrix 6 stores " " directly as " ", so after we add 0x40 it comes out as "`"
+        
+			if (name[0] == 'B' && name[1] == 'N' && name[2] == 'K' && name[4] == ':' && name[5] == ' ')  // probably BNKx: yy
 				{
 				bank = name[3] - '0';
 				if (bank < 0 || bank > 9)
+					{
 					bank = 0;
+					char[] n = new char[8];
+					for(int i = 0; i < 8; i++) 
+						n[i] = (char)name[i];
+                    System.err.println("Warning (OberheimMatrix1000): \"BNK:\" found but invalid bank number discovered: " + new String(n));
+                    }
 				model.set("bank", bank);
-				validname = false;
+            	model.set("name", PATCH_NAMES[bank * 100 + number]);                    
 				}
-			else
+			else								// probably Matrix 6
 				{
+				boolean warning = false;
+				for(int i = 0; i < 8; i++)
+					if (name[i] < 0x20) 	// need to push up
+						name[i] += 0x40;
+					else if (name[i] >= 0x40)
+						warning = true;
+				char[] n = new char[8];
+				for(int i = 0; i < 8; i++) 
+					n[i] = (char)name[i];
+				if (warning)
+					{
+                    System.err.println("Warning (OberheimMatrix1000): Invalid bytes in patch name discovered: " + new String(n));
+                    }
 				model.set("bank", 0);           // default?
-				validname = true;
+				model.set("name", new String(n));
 				}
-			}
-        
-        if (!fromFile && useClassicPatchNames && !validname)
-            {
-            model.set("name", PATCH_NAMES[bank * 100 + number]);                    
-            }
-        else
-            {
-            // update name just for fun, it may be gibberish or a 6/6R
-            try 
-                {
-                model.set("name", new String(name, "US-ASCII"));
-                }
-            catch (UnsupportedEncodingException e)
-                {
-                e.printStackTrace();
-                }
-            }
                 
         revise();
         return PARSE_SUCCEEDED;
@@ -1481,7 +1489,11 @@ public class OberheimMatrix1000 extends Synth
             String key = allParameters[i];
                 
             if (i < 8)  // it's the name
+            	{
                 value = name[i];
+                if (value >= 0x40)
+                	value -= 0x40;	// push 0x40...0x5F to 0x00...0x1F
+                }
             else if (key.equals("env1lfotriggermode") || key.equals("env2lfotriggermode") || key.equals("env3lfotriggermode"))
                 {
                 value = model.get(key);
@@ -1764,8 +1776,9 @@ public class OberheimMatrix1000 extends Synth
         for(int i = 0 ; i < nameb.length(); i++)
             {
             char c = nameb.charAt(i);
-            if (c < 32 || c > 127)
-                nameb.setCharAt(i, ' ');
+            if (c >= 0x60) c = (char)(c - 0x20);  // make uppercase etc.
+            if (c < 0x20 || c >= 0x60) c = ' ';
+            nameb.setCharAt(i, c);
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
@@ -1827,13 +1840,14 @@ public class OberheimMatrix1000 extends Synth
             (model.get("number"));
         }
 
-    public boolean useClassicPatchNames = true;
+//    public boolean useClassicPatchNames = true;
 
     public void addOberheimMenu()
         {
         JMenu menu = new JMenu("Matrix 1000");
         menubar.add(menu);
 
+/*
         // classic patch names
                 
         JCheckBoxMenuItem useClassicPatchNamesMenu = new JCheckBoxMenuItem("Use Classic Patch Names");
@@ -1858,7 +1872,7 @@ public class OberheimMatrix1000 extends Synth
         useClassicPatchNamesMenu.setSelected(useClassicPatchNames);
         
         menu.addSeparator();
-
+*/
         // load patch
         for(int i = 0; i < 1000; i += 50)
             {

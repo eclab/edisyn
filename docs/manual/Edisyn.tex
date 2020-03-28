@@ -246,7 +246,7 @@ A synthesizer can also offer its own sysex messages to Edisyn without Edisyn req
 
 If you don't have a controller keyboard, you can send a test note to your synthesizer by choosing {\bf Send Test Note}.  You can also toggle whether Edisyn constantly sends a stream of test notes by choosing {\bf Send Test Notes}.  And you can shut off all sound on the synthesizer with {\bf Send All Sounds Off} (this also turns off sending test notes).\footnote{{\bf Send All Sounds Off} does three things in a row.  First it sends an ``All Sounds Off'' message to all channels.  Then it sends an ``All Notes Off'' message  to all channels (because some synthesizers respond to All Sounds Off but not All Notes Off, or vice versa).  Finally, it does a simple Note Off for any note it may have been playing, to all channels, because there exist a few synths that respond to {\it neither} All Sounds Off nor All Notes Off.}
 
-Edisyn gives you various options for adjusting the test note you send (though it's always a ``C'').  You can change the length of the test notes you send in the {\bf Test Note Length} submenu.  You can change the pitch with {\bf Test Note Pitch}.  And you can change the volume with {\bf Test Note Volume}.
+Edisyn gives you various options for adjusting the test note you send (though it's always a ``C'').  You can change the length of the test notes you send in the {\bf Test Note Length} submenu.  You can change the pitch with {\bf Test Note Pitch} and the volume with {\bf Test Note Volume}.   Finally, you can play a chord rather than a single note with {\bf Test Note Chord}.  
 
 Setting the {\bf Pause Between Test Notes} will change how long Edisyn waits, beyond the note length itself, before it plays the next note if you have {\bf Send Test Notes} on.  It doesn't affect how fast you can play test notes on your own.  One special setting is {\bf Default}: this is defined as an additional pause equal to the note length if the note length is less than 1/2 seconds; or a pause of 1/2 second if the note length is greater than this.
 
@@ -328,7 +328,7 @@ You'd think it'd be easy to connect directly to another piece of software on you
 \caption{A MIDI loopback connecting Edisyn with a software synthesizer via a virtual device.}\label{loopback}
 \end{wrapfigure}
 
-To get around this, you need to make a {\it MIDI loopback}.  This is where you create two {\it virtual devices} which are connected to one another.  Edisyn and your software synth can see these devices.  Consider Figure \ref{loopback}.  If Edisyn outputs to Virtual Device X (say) and your software synth is set up to {\it input} from Virtual Device X, then it will receive what Edisyn outputs.
+To get around this, you need to make a {\it MIDI loopback}.  This is where you create two {\it virtual devices} which are connected to one another.  Edisyn and your software synth can see these devices.  Consider Figure \ref{loopback}.  If Edisyn {\it outputs} to Virtual Device X (say) and your software synth is set up to {\it input} from Virtual Device X, then it will receive what Edisyn outputs.
 
 Similarly, if you need your software synth to respond to Edisyn, you need to make a {\it second} loopback and hook it up in the reverse order.
 
@@ -465,16 +465,18 @@ All the patches can be played by pressing their associated letter.  But addition
 \label{constrictorpanel}
 \end{wrapfigure}
 
-The {\it Constrictor} is similar to the Hill-Climber in many ways, yet its dynamics and behavior are quite different.   You choose the Constrictor in the same way as the Hill-Climber: by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  Then in the Hill-Climb tab, change the ``Method'' combobox to either {\it Constrictor} or to {\it Smooth Constrictor}.    
+The {\it Constrictor} is similar to the Hill-Climber in many ways, yet its dynamics and behavior are quite different.   You choose the Constrictor in the same way as the Hill-Climber: by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  But then in the Hill-Climb tab, change the ``Method'' combobox to {\it Constrictor}.    
 
-The Constrictor auditions patches to you in exactly the same way was the Hill-Climber.  But you're not given the option of choosing your top three choices.  Instead, you're asked to choose which patches you {\it don't like}.  This is done by deselecting their checkboxes.  Afterwards, you click on the {\bf Constrict} button and those patches will be replaced with recombined versions of the remaining patches.  The newly recombined replacements will be moved to the front of the Candidates so you hear them first.
+The Constrictor auditions patches to you in exactly the same way was the Hill-Climber.  But you're not given the option of choosing your top three choices.  Instead, you're asked to choose which patches you {\it don't like}.  This is done by deselecting their checkboxes.  Afterwards, you click on the {\bf Constrict} button and those patches will be replaced with recombined and mutated versions of the remaining patches.  The newly recombined replacements will be moved to the front of the Candidates so you hear them first.
 
 The idea behind the Constrictor is to start with a set of varied but high-quality patches\,---\,derived from well-vetted factory patches for example.  Think of these patches as the outer boundaries of a large region of the space.  As you delete patch sounds you don't like, this region slowly begins to collapse, until ultimately it converges to a single patch.
 
+The {\it Mutation Rate} dial controls the degree of mutation rate for the constrictor.  Note that this rate is {\it different from}, and stored apart from, the hill-climbing mutation rate.  By default there is no mutation. 
+
 \paragraph{Initialization}  For the constrictor to work, you have to initialize the Candidates with a set of varied patches.  You could load these patches one by one by clicking on each Candidates' Options button and choosing {\it Load from File}.  But there's an easier way.  Load just the first four Candidates this way, via Load from File, and then clicking on the {\bf Reset} button and choose {\bf From First Four Candidates}.  The remaining candidates (5...16, or even 5...32) will be generated from recombinations of the first four.  If you're doing 32 candidates (that is, you pressed the {\it Big} button), you might consider loading the first six candidates and then choosing {\bf From First Six Candidates}, which gives a better mix.
 
-\paragraph{Smooth Versus Unsmooth}
-The smooth constrictor recombines candidates by interpolating between their metric parameters.  The unsmooth constrictor recombines them by simply picking one parameter or the other from the parents.  The unsmooth constrictor makes a more noisy set of patches.  Tests have found that people like the smooth constrictor better, so I might get rid of Unsmooth in the future.
+%\paragraph{Smooth Versus Unsmooth}
+%The smooth constrictor recombines candidates by interpolating between their metric parameters.  The unsmooth constrictor recombines them by simply picking one parameter or the other from the parents.  The unsmooth constrictor makes a more noisy set of patches.  Tests have found that people like the smooth constrictor better, so I might get rid of Unsmooth in the future.
 
 \paragraph{Using the Constrictor Along with the Hill-Climber} It's not a bad idea to start with a constrictor, constrict down to a single patch or so, and then switch over to the hill-climber and hill-climb from there.  It is a {\bf bad} idea to go from the hill-climber to the constrictor because the hill-climber restricts the candidates to a small space and the constrictor will constrict that small space almost immediately.
 

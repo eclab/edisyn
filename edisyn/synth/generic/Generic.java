@@ -29,6 +29,7 @@ public class Generic extends Synth
         "Portamento Time",
         "Data Entry MSB",
         "Volume",
+
         "Balance",
         "",
         "Pan",
@@ -37,6 +38,7 @@ public class Generic extends Synth
         "Effect 2",
         "",
         "",
+
         "",
         "",
         "",
@@ -45,6 +47,7 @@ public class Generic extends Synth
         "",
         "",
         "",
+
         "",
         "",
         "",
@@ -53,13 +56,25 @@ public class Generic extends Synth
         "",
         "",
         "",
+
+        "Bank Selct LSB",
+        "Modulation LSB",
+        "Breath LSB",
         "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        "Foot Cntrl LSB",
+        "Porta Time LSB",
         "Data Entry LSB",
+        "Volume LSB",
+
+        "Balance LSB",
+        "Pan LSB",
+        "Expression LSB",
+        "Effect 1 LSB",
+        "Effect 2 LSB",
+        "",
+        "",
+        "",
+
         "",
         "",
         "",
@@ -68,6 +83,7 @@ public class Generic extends Synth
         "",
         "",
         "",
+
         "",
         "",
         "",
@@ -76,32 +92,16 @@ public class Generic extends Synth
         "",
         "",
         "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+
         "Damper/Sustain",
         "Portamento",
         "Sostenuto",
         "Soft Pedal",
-        "Legato",
+        "Legato Footsw",
         "Hold 2",
         "Sound 1",
         "Sound 2",
+        
         "Sound 3",
         "Sound 4",
         "Sound 5",
@@ -110,13 +110,25 @@ public class Generic extends Synth
         "Sound 8",
         "Sound 9",
         "Sound 10",
-        "Portamento Amt",
+        
+        "",
+        "",
+        "",
+        "",
+        "Portamento Ctrl",
+        "",
+        "",
+        "",
+
+        "Hi Res Vel Pref",
+        "",
         "",
         "Effect 1 Depth",
         "Effect 2 Depth",
         "Effect 3 Depth",
         "Effect 4 Depth",
         "Effect 5 Depth",
+        
         "Data Increment",
         "Data Decrement",
         "NRPN LSB",
@@ -125,6 +137,7 @@ public class Generic extends Synth
         "RPN MSB",
         "",
         "",
+        
         "",
         "",
         "",
@@ -133,6 +146,7 @@ public class Generic extends Synth
         "",
         "",
         "",
+        
         "",
         "",
         "",
@@ -141,6 +155,7 @@ public class Generic extends Synth
         "",
         "",
         "",
+        
         "All Sound Off",
         "Reset Cntrlrs",
         "Local On/Off",
@@ -763,9 +778,9 @@ public class Generic extends Synth
         return category;
         }
     
+	public static final int HEADER = 12;
     public static boolean recognize(byte[] data)
         {
-        final int HEADER = 11;
         return (data.length == HEADER + 1 + (18 * 19 * 3 + 128 * 21) &&
             data[0] == 0xF0 &&
             data[1] == 0x7D &&
@@ -784,7 +799,10 @@ public class Generic extends Synth
         { 
         if (!fromFile) return PARSE_FAILED;
         
-        final int HEADER = 11;
+        int version = (int)data[HEADER - 1];
+        if (version > 0)  // we don't know anything other than version 0
+        	return PARSE_FAILED;
+        	
         int pos = HEADER;
         
         for(int i = 1; i <= 18 ; i++)
@@ -832,7 +850,7 @@ public class Generic extends Synth
             model.set("cust-rpn-value-name-" + i, new String(name).trim());
             }
 
-        for(int i = 1; i <= 128; i++)
+        for(int i = 0; i < 128; i++)
             {
             model.set("cc-" + i, (data[pos++]));
             char[] name = new char[20];
@@ -855,8 +873,6 @@ public class Generic extends Synth
 
         if (!toFile) return new byte[0];
         
-        final int HEADER = 11;
-
         byte[] sysex = new byte[HEADER + 1 + (18 * 19 * 3 + 128 * 21)];
         sysex[0] = (byte)0xF0;
         sysex[1] = (byte)0x7D;
@@ -869,6 +885,7 @@ public class Generic extends Synth
         sysex[8] = (byte)' ';
         sysex[9] = (byte)'C';
         sysex[10] = (byte)'C';
+        sysex[11] = (byte)0;            // sysex version
         
         int pos = HEADER;
         

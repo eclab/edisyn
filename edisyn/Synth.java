@@ -116,7 +116,6 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem pasteMutableTab = new JMenuItem("Paste Tab (Mutation Parameters Only)");
     public JMenuItem resetTab = new JMenuItem("Reset Tab");
     
-
     //boolean useMapForRecombination = true;
     boolean showingMutation = false;
     /** Returns true if we're currently trying to merge with another patch.  */
@@ -3776,6 +3775,40 @@ public abstract class Synth extends JComponent implements Updatable
             }        
 
 
+
+
+
+        JMenu testNoteChord = new JMenu("Test Note Chord");
+        menu.add(testNoteChord);
+        
+        tns = new JRadioButtonMenuItem[CHORDS.length];
+        testNoteGroup = new ButtonGroup();
+        
+        for(int i = 0; i < CHORDS.length; i++)
+        	{
+        	final int _i = i;
+			tns[i] = new JRadioButtonMenuItem(CHORD_NAMES[i]);
+			testNoteChord.add(tns[i]);
+			tns[i].addActionListener(new ActionListener()
+				{
+				public void actionPerformed( ActionEvent e)
+					{
+					setTestNoteChord(_i);
+					setLastX("" + _i, "TestNoteChord", getSynthNameLocal(), false); 
+					}
+				});
+			testNoteGroup.add(tns[i]);
+        	}
+            
+        v = getLastXAsInt("TestNoteChord", getSynthNameLocal(), 0, false);
+        if (v < 0 || v >= CHORDS.length) v = 0;
+        tns[v].setSelected(true); 
+        setTestNoteChord(v);
+
+
+
+
+
         JMenu testNotePitch = new JMenu("Test Note Pitch");
         menu.add(testNotePitch);
         
@@ -4455,10 +4488,8 @@ public abstract class Synth extends JComponent implements Updatable
             for(int i = 0; i < 16; i++)
                 tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
             // Plus, for some synths that respond to neither <ahem Korg Wavestation>, maybe we can turn off the current note,
-            // assuming the user hasn't changed it.            
-            for(int i = 0; i < 16; i++)
-                for(int j = 0; j < TEST_NOTE_PITCHES.length; j++)
-                    tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, i, TEST_NOTE_PITCHES[j], 64));
+            // assuming the user hasn't changed it.   
+            clearChord();
             }
         catch (InvalidMidiDataException e2)
             {
@@ -4498,7 +4529,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
-            return getTestNotePause() + getTestNoteLength();
+             return getTestNotePause() + getTestNoteLength();
             }
         }
 
@@ -4558,20 +4589,82 @@ public abstract class Synth extends JComponent implements Updatable
         sendsAllSoundsOffBetweenNotes = sendsAllSoundsOffBetweenNotesMenu.isSelected();
         setLastX("" + sendsAllSoundsOffBetweenNotes, "SendAllSoundsOffBetweenNotes", getSynthNameLocal(), false);
         }
+
+
+
+    static final int C = 0;
+    static final int Db = 1;
+    static final int D = 2;
+    static final int Eb = 3;
+    static final int E = 4;
+    static final int F = 5;
+    static final int Gb = 6;
+    static final int G = 7;
+    static final int Ab = 8;
+    static final int A = 9;
+    static final int Bb = 10;
+    static final int B = 11;
+    
+    public static final int[][] CHORDS = new int[][]
+    	{{ C }, { C, Eb }, { C, E }, { C, F }, { C, G }, { C, Ab }, { C, A }, { C, C + 12},
+    	 { C, E, G }, { C, Eb, Ab }, { C, F, A }, { C, Eb, G }, { C, E, A }, { C, F, Ab }, { C, G, C + 12} };
+    public static final String[] CHORD_NAMES = new String[]
+    	{ "C", "C Eb (min3)", "C E (Maj3)", "C F (4th)", "C G (5th)", "C Ab (min6)", "C A (Maj6)", "C C2 (Oct)",
+    	  "C E G (Maj)", "C Eb Ab (Maj Inv 1)", "C F A (Maj Inv 2)", "C Eb G (min)", "C E A (min Inv 1)", "C F Ab (min Inv 2", "C G C2 (Oct+5)" };
+    int[] lastChord = new int[0];
+    int[] testNoteChord = new int[0];
+    void setTestNoteChord(int chord) { testNoteChord = CHORDS[chord]; }
     
     public static final int[] TEST_NOTE_PITCHES = new int[] { 96, 84, 72, 60, 48, 36, 24 };
     int testNote = 60;
     void setTestNotePitch(int note) { testNote = note; }
-    public int getTestNotePitch() { return testNote; }
-    
+    int getTestNotePitch() { return testNote; }
+    void playChord()
+    	{
+    	if (testNoteChord != null)
+    		{
+    		int[] chord = new int[testNoteChord.length];
+                try
+                	{
+    		for(int i = 0; i < testNoteChord.length; i++)
+    			{
+    			chord[i] = testNoteChord[i] + getTestNotePitch();
+                	tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, getTestNoteChannel(), chord[i], getTestNoteVelocity()));
+    			}
+                	}
+                catch (Exception ex)
+                	{
+                	ex.printStackTrace();
+                	}
+    		lastChord = chord;
+    		}
+    	}    	
+
+    public void clearChord()
+    	{
+    	if (lastChord != null)
+    		{
+                try
+                	{
+    		for(int i = 0; i < lastChord.length; i++)
+    			{
+                tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, getTestNoteChannel(), lastChord[i], 0));
+    			}
+                	}
+                catch (Exception ex)
+                	{
+                	ex.printStackTrace();
+                	}
+    		}
+    	lastChord = new int[0];
+    	}    	
+    	
     /** Override this to customize the MIDI channel of the test note. */
     public int getTestNoteChannel() { return getChannelOut(); }
 
     int testNoteVelocity = 127;    
     void setTestNoteVelocity(int velocity) { testNoteVelocity = velocity; }
     public int getTestNoteVelocity() { return testNoteVelocity; }
-    
-    volatile int lastTestNote = -1;
     
     javax.swing.Timer noteTimer = null;
     public void doSendTestNote()
@@ -4581,10 +4674,6 @@ public abstract class Synth extends JComponent implements Updatable
 
     public void doSendTestNote(int testNote, boolean clearOldNotes)
         {
-        final int channel = getTestNoteChannel();
-        final int velocity = getTestNoteVelocity();
-        try
-            {
             // possibly clear all notes
             if (clearOldNotes)
                 {
@@ -4592,16 +4681,11 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     sendAllSoundsOff();
                     }
-                           
-                // play new note
-                if (lastTestNote != -1)
-                    {
-                    tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
-                    }
-                }
                 
-            lastTestNote = getTestNotePitch();
-            tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, channel, lastTestNote, velocity));
+                clearChord();
+                }
+            
+			playChord();
                                                          
             // schedule a note off
             if (noteTimer != null) noteTimer.stop();
@@ -4609,31 +4693,19 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 public void actionPerformed(ActionEvent e)
                     {
-                    if (lastTestNote != -1)
-                        {
-                        try
-                            {
-                            if (clearOldNotes)
-                                {
-                                tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, channel, lastTestNote, 0));
-                                }
-                            lastTestNote = -1;
-                            noteTimer = null;
-                            }
-                        catch (Exception e3)
-                            {
-                            e3.printStackTrace();
-                            }
-                        }
+						if (clearOldNotes)
+							{
+							clearChord();
+							}
+						if (noteTimer != null)
+							{
+							noteTimer.stop();
+							noteTimer = null;
+							}
                     }
                 });
             noteTimer.setRepeats(false);
             noteTimer.start();
-            }
-        catch (Exception e2)
-            {
-            e2.printStackTrace();
-            }     
         
         // the purpose of the code below is that when we're hill-climbing we often take longer than the full
         // second of the test notes timer to just get the data out and play.  So here we submit our timer,
@@ -4643,7 +4715,7 @@ public abstract class Synth extends JComponent implements Updatable
         
         if (sendTestNotesTimer.isRunning())
             {
-            sendTestNotesTimer.setInitialDelay(getTestNoteTotalLength() + getPauseBetweenHillClimbPlays());
+            sendTestNotesTimer.setInitialDelay(getTestNoteTotalLength() + (tabs.getSelectedComponent() == hillClimbPane ? getPauseBetweenHillClimbPlays() : 0));
             sendTestNotesTimer.restart();
             }
         }
@@ -4958,6 +5030,22 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
                 }
+                
+            // Kill the timers
+			if (sendTestNotesTimer != null)
+				{
+				sendTestNotesTimer.stop();  // notice we don't set it to null
+				}
+            if (patchTimer != null)
+            	{
+            	patchTimer.stop();
+	            patchTimer = null;
+	            }
+	        if (noteTimer != null)
+	        	{
+	        	noteTimer.stop();
+	        	noteTimer = null;
+	        	}
                                 
             // get rid of MIDI connection
             if (tuple != null)
@@ -5006,16 +5094,16 @@ public abstract class Synth extends JComponent implements Updatable
                         System.arraycopy(data, 0, sysex[count], 1, data.length);
                         count++;
                         }
-            /*
+
               for(int i = 0; i < sysex.length; i++)
               {
               System.err.println("\n\n FILE " + i);
               for(int j = 0; j < sysex[i].length; j++)
               {
-              System.err.println(j + "\t" + sysex[i][j]);
+              System.err.println("" + j + "\t" + String.format("%02X", sysex[i][j]));
               }
               }
-            */
+
             return sysex;
             }
         catch (Exception ex)

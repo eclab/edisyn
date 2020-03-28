@@ -1415,7 +1415,7 @@ public class OberheimMatrix1000 extends Synth
         // the phrase "BNKx: yy", where x is the bank number and y is the patch number,
         // as direct 7-bit ASCII.  We have to differentiate between these.
         
-			if (name[0] == 'B' && name[1] == 'N' && name[2] == 'K' && name[4] == ':' && name[5] == ' ')  // probably BNKx: yy
+			if (name[0] == 'B' && name[1] == 'N' && name[2] == 'K' && name[4] == ':' && name[5] == ' ')  // probably Matrix 1000, hence BNKx: yy
 				{
 				bank = name[3] - '0';
 				if (bank < 0 || bank > 9)
@@ -1433,13 +1433,13 @@ public class OberheimMatrix1000 extends Synth
 	            else
 	            	model.set("name", "UNTITLED"); 
 				}
-			else								// probably Matrix 6
+			else								// probably a Matrix 6/6R
 				{
 				boolean warning = false;
 				for(int i = 0; i < 8; i++)
-					if (name[i] < 0x20) 	// need to push up
+					if (name[i] < 0x20) 	// need to push up 0x00...0x1F to 0x40...0x5F
 						name[i] += 0x40;
-					else if (name[i] >= 0x40)
+					else if (name[i] >= 0x40)	// need to keep 0x20...0x3F where it is, and there shouldn't be anything above 0x40 originally
 						warning = true;
 				char[] n = new char[8];
 				for(int i = 0; i < 8; i++) 

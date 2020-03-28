@@ -52,8 +52,15 @@ public class HillClimb extends SynthPanel
     public static final int OPERATION_CLIMB = 4;
     public static final int OPERATION_CONSTRICT = 5;
 
+	// HILL CLIMBING AND CONSTRICTION RATES
+	// Note that the mutation rates go 0...100 inclusive, ints
+    public static final int INITIAL_HILL_CLIMB_RATE = 37;         // roughly 5 when we do weight^3
+    public static final int INITIAL_CONSTRICT_RATE = 0;
+    // Note that the recombination rates go 0.0...1.0 inclusive, doubles
+    public static final double CLIMB_RECOMBINATION_RATE = 0.75;
+    public static final double CONSTRICT_RECOMBINATION_RATE = 0.75;
+
     /// HILL CLIMBING STACK
-    
     class State
         {
         Model[] parents;
@@ -62,46 +69,83 @@ public class HillClimb extends SynthPanel
         Model[] children;
         int operation;
         }
+    // The stack proper
     ArrayList stack = new ArrayList();
         
         
     /// NUMBER OF CANDIDATE SOLUTIONS
-        
     public static final int NUM_CANDIDATES = 32;
+    /// Candidates are divided into STAGES of 16 each.  The mutation/recombionation procedures use the stage to determine how much mutation to do
     public static final int STAGE_SIZE = 16;
+    // Size of the archive.  We might make this bigger later.
     public static final int ARCHIVE_SIZE = 6;
     // There are more models than candidates: #17 is the current Model
     public static final int NUM_MODELS = NUM_CANDIDATES + ARCHIVE_SIZE + 1;
     
+    
     // models currently being played and displayed
     Model[] currentModels = new Model[NUM_MODELS];
 
-    public int operation;
+	// the most recent procedure performed (see OPERATIONS above)
+    int operation;
 
+	// The ratings buttons, in the form ratings[candidate][rating]
     JRadioButton[][] ratings = new JRadioButton[NUM_MODELS + 1][3];
+	// The selection checkboxes, in the form selected[candidate].  Note that the only candidates are the actual candidates, not archives etc.
     JCheckBox[] selected = new JCheckBox[NUM_CANDIDATES];
+    // The play buttons, in the form plays[candidate]
     PushButton[] plays = new PushButton[NUM_MODELS];
-    public static final int INITIAL_MUTATION_RATE = 37;         // roughly 5 when we do weight^3
-    public static final int STANDARD_RECOMBINATION_RATE = 75;
+    
+    // An empty synth used to store the hillclimbing and constriction model parameters,
+    // since they can't be stored in the regular synth.
     Blank blank;
+    
+    // "Iteration 123"
     Category iterations;
+    
+    // Which sound is currently scheduled to be playing in the regular iteration
     int currentPlay = 0;
+    // Which sound, if any, is currently playing because the user interrupted the regular iteration by pressing the sound's play button.
+    // If no such sound, this is -1
     int temporaryPlay = -1;
-    HBox nudgeBox;
-    PushButton retry;
+    
+    // Climb button
     PushButton climb;
-    PushButton reset;
-    PushButton back;
+    // Constrict button.  Notice that this is different from Climb
     PushButton constrict;
+    // Climb mutation weights
+    LabelledDial hillClimbRate;
+    // Constriction mutation weights.  Notice that this is different from Climb
+    LabelledDial constrictRate;
+
+    // Retry button
+    PushButton retry;
+    // Reset button
+    PushButton reset;
+    // Back button
+    PushButton back;
+    // Bigger checkbox
     JCheckBox bigger;
-    LabelledDial mutationRate;
-    LabelledDial recombinationRate;
     
-    JComboBox method = new JComboBox(new String[] { "Hill-Climber", "Constrictor", "Smooth Constrictor" });
+    // Box holding the hillcimber button and dial
+    VBox hillClimbBox;
+    // Box holding the constrictor button and dial
+    VBox constrictBox;
+    // Box holding either the hillClimbBox or the constrictBox.  Needs to be occasionally revalidated.
+    VBox outerBox;
     
-    VBox candidates;
+    // List of climbing methods
+    JComboBox method = new JComboBox(new String[] { "Hill-Climber", "Constrictor" }); //  "Smooth Constrictor" });
+    
+	// First 16 candidates
     VBox extraCandidates1;
+    // Next 16 candidates
     VBox extraCandidates2;
+    // holds either extraCandidates1 or extraCandidates1 + extraCandidates2
+    VBox candidates;
+    
+    
+    
         
     State popStack()   
         {
@@ -168,85 +212,7 @@ public class HillClimb extends SynthPanel
                     (char)('q' + (_i - NUM_CANDIDATES)) :
                     'z')));
         }
-    
-    /*
-      void seed(int type)
-      {
-      Random random = synth.random;
-      String[] keys = synth.getMutationKeys();
-      double weight = blank.getModel().get("recombinationrate", 0) / 100.0;
-                
-      switch(val)
-      {
-      case 0:
-      {
-      for(int i = 0; i < 4; i++)
-      currentModels[i] = (Model)(synth.nudge[i].clone());
-      int m = 4;
-      for(int i = 0; i < 4; i++)
-      for(int j = 0; j < 4; j++)
-      {
-      if (j == i) continue;
-      currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
-      }
-      // fill the next 16
-      for(int i = 16; i < 32; i++)
-      {
-      // pick two parents, try to make them different from one another
-      int p1 = random.nextInt(16);
-      int p2 = 0;
-      for(int j = 0; j < 100; j++)
-      {
-      p2 = random.nextInt(16);
-      if (p2 != p1) break;
-      }
-      currentModels[i] = currentModels[p1].copy().crossover(random, currentModels[p1], keys, weight);
-      }
-      operation = OPERATION_SEED_FROM_NUDGE;
-      }
-      break;
-      case 1:
-      {
-      int m = 4;
-      for(int i = 0; i < 4; i++)
-      for(int j = 0; j < 4; j++)
-      {
-      if (j == i) continue;
-      currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
-      }
-      // fill the next 16
-      for(int i = 16; i < 32; i++)
-      {
-      // pick two parents, try to make them different from one another
-      int p1 = random.nextInt(16);
-      int p2 = 0;
-      for(int j = 0; j < 100; j++)
-      {
-      p2 = random.nextInt(16);
-      if (p2 != p1) break;
-      }
-      currentModels[i] = currentModels[p1].copy().crossover(random, currentModels[p1], keys, weight);
-      }
-      operation = OPERATION_SEED_FROM_FOUR;
-      }
-      break;
-      case 2:
-      {
-      int m = 6;
-      for(int i = 0; i < 6; i++)
-      for(int j = 0; j < 6; j++)
-      {
-      if (j == i) continue;
-      if (m >= 32) break;
-      currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
-      }
-      operation = OPERATION_SEED_FROM_SIX;
-      }
-      break;
-      }
-      }
-    */
-    
+     
     VBox buildCandidate(int i)
         {
         final int _i = i;
@@ -285,37 +251,6 @@ public class HillClimb extends SynthPanel
         plays[i].getButton().setFocusable(false);
         vbox.add(plays[i]);
 
-
-/*
-  Box b = new Box(BoxLayout.X_AXIS);
-  b.setBackground(Style.BACKGROUND_COLOR());
-  b.add(Box.createGlue());
-  b.add(ratings[i][0] = new JRadioButton("1"));
-  ratings[i][0].setFocusable(false);
-  ratings[i][0].setForeground(Style.TEXT_COLOR());
-  ratings[i][0].setFont(Style.SMALL_FONT());
-  ratings[i][0].putClientProperty("JComponent.sizeVariant", "small");
-  ratings[i][0].setHorizontalTextPosition(SwingConstants.CENTER);
-  ratings[i][0].setVerticalTextPosition(JRadioButton.TOP);
-
-  b.add(ratings[i][1] = new JRadioButton("2"));
-  ratings[i][1].setFocusable(false);
-  ratings[i][1].setForeground(Style.TEXT_COLOR());
-  ratings[i][1].setFont(Style.SMALL_FONT());
-  ratings[i][1].putClientProperty("JComponent.sizeVariant", "small");
-  ratings[i][1].setHorizontalTextPosition(SwingConstants.CENTER);
-  ratings[i][1].setVerticalTextPosition(JRadioButton.TOP);
-
-  b.add(ratings[i][2] = new JRadioButton("3"));
-  ratings[i][2].setFocusable(false);
-  ratings[i][2].setForeground(Style.TEXT_COLOR());
-  ratings[i][2].setFont(Style.SMALL_FONT());
-  ratings[i][2].putClientProperty("JComponent.sizeVariant", "small");
-  ratings[i][2].setHorizontalTextPosition(SwingConstants.CENTER);
-  ratings[i][2].setVerticalTextPosition(JRadioButton.TOP);
-  b.add(Box.createGlue());
-  vbox.add(b);
-*/            
 
         HBox hh = new HBox();
         VBox vv = new VBox();
@@ -627,7 +562,6 @@ public class HillClimb extends SynthPanel
 
 
         HBox iterationsBox = new HBox();
-
         VBox vbox = new VBox();
 
 // has to be first so others can have their size based on it
@@ -641,8 +575,12 @@ public class HillClimb extends SynthPanel
             };
         back.getButton().setFocusable(false);
            
+        outerBox = new VBox();
+        iterationsBox.add(outerBox);
+        
 
-        climb = new PushButton("Climb")
+       hillClimbBox = new VBox();
+       climb = new PushButton("Climb")
             {
             public void perform()
                 {
@@ -653,10 +591,10 @@ public class HillClimb extends SynthPanel
         climb.getButton().setPreferredSize(back.getButton().getPreferredSize());
         climb.getButton().setFocusable(false);
                 
-        vbox.add(climb);
+        hillClimbBox.add(climb);
 
-        String s = synth.getLastX("HillClimbMutationRate", synth.getSynthNameLocal());
-        mutationRate = new LabelledDial("Rate", blank, "mutationrate", Style.COLOR_GLOBAL(), 0, 100)
+        String s = synth.getLastX("HillClimbRate", synth.getSynthNameLocal());
+        hillClimbRate = new LabelledDial("Mutation Rate", blank, "hillclimbrate", Style.COLOR_GLOBAL(), 0, 100)
             {
             public String map(int val)
                 {
@@ -672,22 +610,20 @@ public class HillClimb extends SynthPanel
             public void update(String key, Model model)
                 {
                 super.update(key, model);
-                synth.setLastX("" + model.get(key), "HillClimbMutationRate", synth.getSynthNameLocal());
+                synth.setLastX("" + model.get(key), "HillClimbRate", synth.getSynthNameLocal());
                 }
             };
         
-        int v = INITIAL_MUTATION_RATE;
+        int v = INITIAL_HILL_CLIMB_RATE;
         if (s != null)
             try { v = Integer.parseInt(s); } catch (Exception e) { e.printStackTrace(); }
-        if (v < 0 || v > 100) v = INITIAL_MUTATION_RATE;
-        mutationRate.setState(v);
+        if (v < 0 || v > 100) v = INITIAL_HILL_CLIMB_RATE;
+        hillClimbRate.setState(v);
         
-        blank.getModel().set("mutationrate", v);
-        vbox.add(mutationRate);
+        blank.getModel().set("hillclimbrate", v);
+        hillClimbBox.add(hillClimbRate);
                 
-        iterationsBox.add(vbox);
-        
-        vbox = new VBox();
+        constrictBox = new VBox();
         constrict = new PushButton("Constrict")
             {
             public void perform()
@@ -698,42 +634,40 @@ public class HillClimb extends SynthPanel
             };
         constrict.getButton().setPreferredSize(back.getButton().getPreferredSize());
         constrict.getButton().setFocusable(false);
-        vbox = new VBox();
-        vbox.add(constrict);
+        constrictBox.add(constrict);
 
-        s = synth.getLastX("HillClimbRecombinationRate", synth.getSynthNameLocal());  // we don't do this one anyway
+        s = synth.getLastX("ConstrictRate", synth.getSynthNameLocal());  // we don't do this one anyway
 
-        recombinationRate = new LabelledDial("Rate", blank, "recombinationrate", Style.COLOR_GLOBAL(), 0, 100)
+        constrictRate = new LabelledDial("Mutation Rate", blank, "constrictrate", Style.COLOR_GLOBAL(), 0, 100)
             {
             public String map(int val)
                 {
-                if (val == 100) 
+                double v = ((val / 100.0) * (val / 100.0) * (val / 100.0)) * 100;
+                if (v == 100)
                     return "100.0";
-                else if (val >= 10.0)
-                    return String.format("%.2f", (double)val);
+                else if (v >= 10.0)
+                    return String.format("%.2f", v);
                 else
-                    return String.format("%.3f", (double)val);
+                    return String.format("%.3f", v);
                 }
             
             public void update(String key, Model model)
                 {
                 super.update(key, model);
-                synth.setLastX("" + model.get(key), "HillClimbRecombinationRate", synth.getSynthNameLocal());
+                synth.setLastX("" + model.get(key), "ConstrictRate", synth.getSynthNameLocal());
                 }
             };
 
-        v = STANDARD_RECOMBINATION_RATE;
+        v = INITIAL_CONSTRICT_RATE;
         if (s != null)
             try { v = Integer.parseInt(s); } catch (Exception e) { e.printStackTrace(); }
-        if (v < 0 || v > 100) v = STANDARD_RECOMBINATION_RATE;
-        recombinationRate.setState(v);
+        if (v < 0 || v > 100) v = INITIAL_CONSTRICT_RATE;
+        constrictRate.setState(v);
         
-        blank.getModel().set("recombinationrate", v);
-        vbox.add(recombinationRate);
+        blank.getModel().set("constrictrate", v);
+        constrictBox.add(constrictRate);
  
-        iterationsBox.add(vbox);
-
-
+ 
         vbox = new VBox();
  
         retry = new PushButton("Retry")
@@ -751,23 +685,6 @@ public class HillClimb extends SynthPanel
         // add the aforementioned Back up button
         vbox.add(back);
               
-        /*
-          reset = new PushButton("Reset")
-          {
-          public void perform()
-          {
-          if (synth.showSimpleConfirm("Reset", "Are you sure you want to reset the Hill-Climber?"))
-          {
-          initialize((Model)(synth.getModel().clone()), OPERATION_SEED_FROM_PATCH);
-          resetCurrentPlay();
-          }
-          }
-          };
-          reset.getButton().setPreferredSize(back.getButton().getPreferredSize());
-          reset.getButton().setFocusable(false);
-          vbox.add(reset);
-        */
-
         reset = new PushButton("Reset...",
             new String[] { "From Original Patch",
                            "From Nudge Targets", 
@@ -805,8 +722,17 @@ public class HillClimb extends SynthPanel
         if (s != null)
             try { v = Integer.parseInt(s); } catch (Exception e) { e.printStackTrace(); }
         if (v < 0 || v > 2) v = 0;
+        // reduce smooth and non-smooth constrictors to the same thing
+        if (v == 2) v = 1;
+ 		if (v == 0)
+ 			{
+ 			outerBox.add(hillClimbBox);
+ 			}
+ 		else
+ 			{
+ 			outerBox.add(constrictBox);
+ 			}
         method.setSelectedIndex(v);
- 
  
         JLabel methodLabel = new JLabel("Method: ");
         methodLabel.setForeground(Style.TEXT_COLOR());
@@ -832,17 +758,7 @@ public class HillClimb extends SynthPanel
             {
             public void actionPerformed(ActionEvent e)
                 {
-                candidates.remove(extraCandidates1);
-                candidates.remove(extraCandidates2);
-                if (bigger.isSelected())
-                    {
-                    candidates.add(extraCandidates1);
-                    candidates.add(extraCandidates2);
-                    }
-                candidates.revalidate();
-                candidates.repaint();
-
-                synth.setLastX("" + bigger.isSelected(), "HillClimbBigger", synth.getSynthNameLocal());
+                setBigger(bigger.isSelected());
                 }
             });
             
@@ -980,9 +896,24 @@ public class HillClimb extends SynthPanel
         currentModels[NUM_CANDIDATES + ARCHIVE_SIZE] = synth.getModel();
 
         setMethod(method.getSelectedIndex());
+        setBigger(bb);
         }
         
-    
+   
+   	public void setBigger(boolean bigger)
+   		{
+                candidates.remove(extraCandidates1);
+                candidates.remove(extraCandidates2);
+                if (bigger)
+                    {
+                    candidates.add(extraCandidates1);
+                    candidates.add(extraCandidates2);
+                    }
+                candidates.revalidate();
+                candidates.repaint();
+
+                synth.setLastX("" + bigger, "HillClimbBigger", synth.getSynthNameLocal());
+   		} 
                 
     public static final int UPDATE_SOUND_RATE = 1;
     int updateSoundTick = 0;
@@ -1046,9 +977,20 @@ public class HillClimb extends SynthPanel
                 if (ratings[i][j] != null) ratings[i][j].setEnabled(c);
         for(int i = 0; i < selected.length; i++)
             if (selected[i] != null) selected[i].setEnabled(!c);
-        mutationRate.setEnabled(c);
-        recombinationRate.setEnabled(!c);
+        hillClimbRate.setEnabled(c);
+        constrictRate.setEnabled(!c);
         this.method.setSelectedIndex(method);
+        outerBox.removeAll();
+ 		if (method == 0)
+ 			{
+ 			outerBox.add(hillClimbBox);
+ 			}
+ 		else
+ 			{
+ 			outerBox.add(constrictBox);
+ 			}
+ 		outerBox.revalidate();
+        repaint();
         }
       
     int lastPlayedSound()
@@ -1155,6 +1097,18 @@ public class HillClimb extends SynthPanel
             ratings[NUM_MODELS][0].setSelected(true);
             ratings[NUM_MODELS][1].setSelected(true);
             ratings[NUM_MODELS][2].setSelected(true);
+
+            for(int j = 0; j < state.parentIndices.length; j++)
+                {
+                if (state.parentIndices[j] != -1)
+                    ratings[state.parentIndices[j]][j].setSelected(true);
+                }
+                
+            for(int j = 0; j < state.parentsSelected.length; j++)
+                {
+                selected[j].setSelected(state.parentsSelected[j]);
+                }
+        
             constrict();
             }
         }
@@ -1228,7 +1182,7 @@ public class HillClimb extends SynthPanel
             case OPERATION_SEED_FROM_PATCH:
                 {
                 Model newSeed = seed.copy();                
-                double weight = blank.getModel().get("mutationrate", 0) / 100.0;
+                double weight = blank.getModel().get("hillclimbrate", 0) / 100.0;
                 weight = weight * weight * weight;  // make more sensitive at low end
                 int numMutations = 1;
                 
@@ -1246,7 +1200,7 @@ public class HillClimb extends SynthPanel
             break;
             case OPERATION_SEED_FROM_NUDGE:
                 {
-                double weight = blank.getModel().get("recombinationrate", 0) / 100.0;
+                double weight = blank.getModel().get("constrictrate", 0) / 100.0;
                 for(int i = 0; i < 4; i++)
                     currentModels[i] = (Model)(synth.nudge[i].clone());
                 int m = 4;
@@ -1273,7 +1227,7 @@ public class HillClimb extends SynthPanel
             break;
             case OPERATION_SEED_FROM_FOUR:
                 {
-                double weight = blank.getModel().get("recombinationrate", 0) / 100.0;
+                double weight = blank.getModel().get("constrictrate", 0) / 100.0;
                 int m = 4;
                 for(int i = 0; i < 4; i++)
                     for(int j = 0; j < 4; j++)
@@ -1298,7 +1252,7 @@ public class HillClimb extends SynthPanel
             break;
             case OPERATION_SEED_FROM_SIX:
                 {
-                double weight = blank.getModel().get("recombinationrate", 0) / 100.0;
+                double weight = blank.getModel().get("constrictrate", 0) / 100.0;
                 int m = 6;
                 for(int i = 0; i < 6; i++)
                     for(int j = 0; j < 6; j++)
@@ -1490,9 +1444,10 @@ public class HillClimb extends SynthPanel
         int poolSize= (bigger.isSelected() ? NUM_CANDIDATES : STAGE_SIZE);  // that is, 32 vs 16
         Random random = synth.random;
         String[] keys = synth.getMutationKeys();
-        double weight = blank.getModel().get("recombinationrate", 0) / 100.0;
+        double weight = blank.getModel().get("constrictrate", 0) / 100.0;
                 
-                        
+        weight = weight * weight * weight;  // make more sensitive at low end
+
         // Identify the individuals to replace and the ones to keep
         int numToReplace = 0;
         for(int i = 0; i < selected.length; i++)
@@ -1529,15 +1484,14 @@ public class HillClimb extends SynthPanel
                 if (p2 != p1) break;
                 }
                 
-            if (method.getSelectedIndex() == 2)
+            if (method.getSelectedIndex() == 1)
                 {
+                // our recombination works as follows: 50% of the time we'll do crossover with a 1/2 rate.  Otherwise we'll do it with a 3/4 rate.
+                double rate = CONSTRICT_RECOMBINATION_RATE;
                 // recombine
-                currentModels[replace[i]] = currentModels[keep[p1]].copy().recombine(random, currentModels[keep[p2]], keys, weight);
-                }
-            else
-                {
-                // cross over
-                currentModels[replace[i]] = currentModels[keep[p1]].copy().crossover(random, currentModels[keep[p2]], keys, weight);
+                if (random.nextBoolean())
+                	rate = 0.5;
+                currentModels[replace[i]] = currentModels[keep[p1]].copy().recombine(random, currentModels[keep[p2]], keys, rate).mutate(random, keys, weight);
                 }
             }
                 
@@ -1568,7 +1522,7 @@ public class HillClimb extends SynthPanel
         {
         Random random = synth.random;
         String[] keys = synth.getMutationKeys();
-        double weight = blank.getModel().get("mutationrate", 0) / 100.0;
+        double weight = blank.getModel().get("hillclimbrate", 0) / 100.0;
         
         weight = weight * weight * weight;  // make more sensitive at low end
 
@@ -1621,19 +1575,19 @@ public class HillClimb extends SynthPanel
         else if (bestModels[1] == -1)
             {
             pushStack(bestModels, new Model[] { currentModels[bestModels[0]], null, null }, getSelectedResults(), currentModels);
-            produce(random, keys, STANDARD_RECOMBINATION_RATE / 100.0, weight, currentModels[bestModels[0]], oldA);
+            produce(random, keys, CLIMB_RECOMBINATION_RATE, weight, currentModels[bestModels[0]], oldA);
             operation = OPERATION_CLIMB;
             }
         else if (bestModels[2] == -1)
             {
             pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], null }, getSelectedResults(), currentModels);
-            produce(random, keys, STANDARD_RECOMBINATION_RATE / 100.0, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], oldA);
+            produce(random, keys, CLIMB_RECOMBINATION_RATE, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], oldA);
             operation = OPERATION_CLIMB;
             }
         else
             {
             pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]] }, getSelectedResults(), currentModels);
-            produce(random, keys, STANDARD_RECOMBINATION_RATE / 100.0, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]], oldA);
+            produce(random, keys, CLIMB_RECOMBINATION_RATE, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]], oldA);
             operation = OPERATION_CLIMB;
             }
         

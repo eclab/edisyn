@@ -927,15 +927,15 @@ public abstract class KorgWavestationAbstract extends Synth
     public int getDefaultBankForBankSysex(byte[] data, Model model) 
         { 
         int b = wsToEdisynBank[data[5]];
-        if (b < 4)
+        if (b == 2) //ROM 11
+        	{
+        	return 0;
+        	}
+        else if (b < 4)  //RAM or CARD
             {
             return b;
             }
-        else if (b == 1)
-            {
-            return 4;
-            }
-        else return 0;
+        else return 0;  //ROM
         }
 
     /// FIXME -- is wsToEdisynBank the right conversion?

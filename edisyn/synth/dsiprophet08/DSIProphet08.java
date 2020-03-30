@@ -1700,53 +1700,53 @@ public class DSIProphet08 extends Synth
         JMenu menu = new JMenu("Prophet '08");
         menubar.add(menu);
 
-		JMenuItem a2b = new JMenuItem("Copy A -> B");
-		menu.add(a2b);
-		a2b.addActionListener(new ActionListener()
+        JMenuItem a2b = new JMenuItem("Copy A -> B");
+        menu.add(a2b);
+        a2b.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                setSendMIDI(false);
+                boolean currentPush = undo.getWillPush();
+                undo.setWillPush(false);
+
+                for(int i = 0; i < parameters.length; i++)
                     {
-                    public void actionPerformed(ActionEvent evt)
+                    if (parameters[i].startsWith("layer1"))
                         {
-						setSendMIDI(false);
-						boolean currentPush = undo.getWillPush();
-						undo.setWillPush(false);
-
-						for(int i = 0; i < parameters.length; i++)
-							{
-							if (parameters[i].startsWith("layer1"))
-								{
-								model.set("layer2" + parameters[i].substring(6), model.get(parameters[i]));
-								}
-							}
-		
-						undo.setWillPush(currentPush);
-						setSendMIDI(true);
+                        model.set("layer2" + parameters[i].substring(6), model.get(parameters[i]));
                         }
-                    });
+                    }
+                
+                undo.setWillPush(currentPush);
+                setSendMIDI(true);
+                }
+            });
 
-		JMenuItem b2a = new JMenuItem("Copy A <- B");
-		menu.add(b2a);
-		b2a.addActionListener(new ActionListener()
+        JMenuItem b2a = new JMenuItem("Copy A <- B");
+        menu.add(b2a);
+        b2a.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                setSendMIDI(false);
+                boolean currentPush = undo.getWillPush();
+                undo.setWillPush(false);
+
+                for(int i = 0; i < parameters.length; i++)
                     {
-                    public void actionPerformed(ActionEvent evt)
+                    if (parameters[i].startsWith("layer2"))
                         {
-						setSendMIDI(false);
-						boolean currentPush = undo.getWillPush();
-						undo.setWillPush(false);
-
-						for(int i = 0; i < parameters.length; i++)
-							{
-							if (parameters[i].startsWith("layer2"))
-								{
-								model.set("layer1" + parameters[i].substring(6), model.get(parameters[i]));
-								}
-							}
-		
-						undo.setWillPush(currentPush);
-						setSendMIDI(true);
+                        model.set("layer1" + parameters[i].substring(6), model.get(parameters[i]));
                         }
-                    });
-		}
-		
+                    }
+                
+                undo.setWillPush(currentPush);
+                setSendMIDI(true);
+                }
+            });
+        }
+                
     final static String[] tetraParameters = new String[]
     {
     "layer1dco1frequency",    

@@ -928,9 +928,9 @@ public abstract class KorgWavestationAbstract extends Synth
         { 
         int b = wsToEdisynBank[data[5]];
         if (b == 2) //ROM 11
-        	{
-        	return 0;
-        	}
+            {
+            return 0;
+            }
         else if (b < 4)  //RAM or CARD
             {
             return b;

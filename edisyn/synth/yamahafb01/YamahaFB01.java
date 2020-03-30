@@ -908,7 +908,7 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
     
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-		if (tempModel == null)
+        if (tempModel == null)
             tempModel = getModel();
         
         int packetlen = 128;

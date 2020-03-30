@@ -830,25 +830,25 @@ public class WaldorfMicrowaveXTMulti extends Synth
             byte[] bytes = new byte[16 * 9];
             String name = model.get(key, "Init            ") + "                ";            
             for(int i = 0; i < 16; i++)
-                                                                                                  {
-                                                                                                  int index = i;
-                                                                                                  byte PP = (byte)(index & 127);
-                                                                                                  byte XX = (byte)(name.charAt(i));
-                                                                                                  byte LL = 0x20;
-                                                                                                  if (index > 32)
-                                                                                                      {
-                                                                                                      // In Section 2.23 of sysex document, the locations are listed as going 1...7.
-                                                                                                      // It's actually 0...7
+                {
+                int index = i;
+                byte PP = (byte)(index & 127);
+                byte XX = (byte)(name.charAt(i));
+                byte LL = 0x20;
+                if (index > 32)
+                    {
+                    // In Section 2.23 of sysex document, the locations are listed as going 1...7.
+                    // It's actually 0...7
                 
-                                                                                                      LL = (byte)((index - 32) / 28);  // hope that's right
-                                                                                                      }
+                    LL = (byte)((index - 32) / 28);  // hope that's right
+                    }
                         
-                                                                                                  // In Section 2.23 of sysex document, MULP is declared to be 0x20, but then in the
-                                                                                                  // format example, it's written as 0x21.  It's actually 0x21.
+                // In Section 2.23 of sysex document, MULP is declared to be 0x20, but then in the
+                // format example, it's written as 0x21.  It's actually 0x21.
                 
-                                                                                                  byte[] b = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x21, LL, PP, XX, (byte)0xF7 };
-                                                                                                  System.arraycopy(b, 0, bytes, i * 9, 9);
-                                                                                                  }
+                byte[] b = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x21, LL, PP, XX, (byte)0xF7 };
+                System.arraycopy(b, 0, bytes, i * 9, 9);
+                }
             return bytes;
             }
         else

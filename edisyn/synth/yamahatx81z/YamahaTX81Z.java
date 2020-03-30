@@ -1425,7 +1425,7 @@ public class YamahaTX81Z extends Synth
     
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-		if (tempModel == null)
+        if (tempModel == null)
             tempModel = getModel();
         
         simplePause(50);

@@ -1131,7 +1131,7 @@ public class CasioCZ extends Synth
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         if (tempModel == null) 
-        	tempModel = model;
+            tempModel = model;
         
         byte[] data = (isCZ1() ? new byte[8 + 144 * 2] : new byte[8 + 128 * 2]);
         

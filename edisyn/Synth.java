@@ -3785,20 +3785,20 @@ public abstract class Synth extends JComponent implements Updatable
         testNoteGroup = new ButtonGroup();
         
         for(int i = 0; i < CHORDS.length; i++)
-        	{
-        	final int _i = i;
-			tns[i] = new JRadioButtonMenuItem(CHORD_NAMES[i]);
-			testNoteChord.add(tns[i]);
-			tns[i].addActionListener(new ActionListener()
-				{
-				public void actionPerformed( ActionEvent e)
-					{
-					setTestNoteChord(_i);
-					setLastX("" + _i, "TestNoteChord", getSynthNameLocal(), false); 
-					}
-				});
-			testNoteGroup.add(tns[i]);
-        	}
+            {
+            final int _i = i;
+            tns[i] = new JRadioButtonMenuItem(CHORD_NAMES[i]);
+            testNoteChord.add(tns[i]);
+            tns[i].addActionListener(new ActionListener()
+                {
+                public void actionPerformed( ActionEvent e)
+                    {
+                    setTestNoteChord(_i);
+                    setLastX("" + _i, "TestNoteChord", getSynthNameLocal(), false); 
+                    }
+                });
+            testNoteGroup.add(tns[i]);
+            }
             
         v = getLastXAsInt("TestNoteChord", getSynthNameLocal(), 0, false);
         if (v < 0 || v >= CHORDS.length) v = 0;
@@ -4529,7 +4529,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
-             return getTestNotePause() + getTestNoteLength();
+            return getTestNotePause() + getTestNoteLength();
             }
         }
 
@@ -4606,11 +4606,11 @@ public abstract class Synth extends JComponent implements Updatable
     static final int B = 11;
     
     public static final int[][] CHORDS = new int[][]
-    	{{ C }, { C, Eb }, { C, E }, { C, F }, { C, G }, { C, Ab }, { C, A }, { C, C + 12},
-    	 { C, E, G }, { C, Eb, Ab }, { C, F, A }, { C, Eb, G }, { C, E, A }, { C, F, Ab }, { C, G, C + 12} };
+    {{ C }, { C, Eb }, { C, E }, { C, F }, { C, G }, { C, Ab }, { C, A }, { C, C + 12},
+    { C, E, G }, { C, Eb, Ab }, { C, F, A }, { C, Eb, G }, { C, E, A }, { C, F, Ab }, { C, G, C + 12} };
     public static final String[] CHORD_NAMES = new String[]
-    	{ "C", "C Eb (min3)", "C E (Maj3)", "C F (4th)", "C G (5th)", "C Ab (min6)", "C A (Maj6)", "C C2 (Oct)",
-    	  "C E G (Maj)", "C Eb Ab (Maj Inv 1)", "C F A (Maj Inv 2)", "C Eb G (min)", "C E A (min Inv 1)", "C F Ab (min Inv 2", "C G C2 (Oct+5)" };
+    { "C", "C Eb (min3)", "C E (Maj3)", "C F (4th)", "C G (5th)", "C Ab (min6)", "C A (Maj6)", "C C2 (Oct)",
+      "C E G (Maj)", "C Eb Ab (Maj Inv 1)", "C F A (Maj Inv 2)", "C Eb G (min)", "C E A (min Inv 1)", "C F Ab (min Inv 2)", "C G C2 (Oct + 5)" };
     int[] lastChord = new int[0];
     int[] testNoteChord = new int[0];
     void setTestNoteChord(int chord) { testNoteChord = CHORDS[chord]; }
@@ -4620,45 +4620,45 @@ public abstract class Synth extends JComponent implements Updatable
     void setTestNotePitch(int note) { testNote = note; }
     int getTestNotePitch() { return testNote; }
     void playChord()
-    	{
-    	if (testNoteChord != null)
-    		{
-    		int[] chord = new int[testNoteChord.length];
-                try
-                	{
-    		for(int i = 0; i < testNoteChord.length; i++)
-    			{
-    			chord[i] = testNoteChord[i] + getTestNotePitch();
-                	tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, getTestNoteChannel(), chord[i], getTestNoteVelocity()));
-    			}
-                	}
-                catch (Exception ex)
-                	{
-                	ex.printStackTrace();
-                	}
-    		lastChord = chord;
-    		}
-    	}    	
+        {
+        if (testNoteChord != null)
+            {
+            int[] chord = new int[testNoteChord.length];
+            try
+                {
+                for(int i = 0; i < testNoteChord.length; i++)
+                    {
+                    chord[i] = testNoteChord[i] + getTestNotePitch();
+                    tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, getTestNoteChannel(), chord[i], getTestNoteVelocity()));
+                    }
+                }
+            catch (Exception ex)
+                {
+                ex.printStackTrace();
+                }
+            lastChord = chord;
+            }
+        }       
 
     public void clearChord()
-    	{
-    	if (lastChord != null)
-    		{
-                try
-                	{
-    		for(int i = 0; i < lastChord.length; i++)
-    			{
-                tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, getTestNoteChannel(), lastChord[i], 0));
-    			}
-                	}
-                catch (Exception ex)
-                	{
-                	ex.printStackTrace();
-                	}
-    		}
-    	lastChord = new int[0];
-    	}    	
-    	
+        {
+        if (lastChord != null)
+            {
+            try
+                {
+                for(int i = 0; i < lastChord.length; i++)
+                    {
+                    tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_OFF, getTestNoteChannel(), lastChord[i], 0));
+                    }
+                }
+            catch (Exception ex)
+                {
+                ex.printStackTrace();
+                }
+            }
+        lastChord = new int[0];
+        }       
+        
     /** Override this to customize the MIDI channel of the test note. */
     public int getTestNoteChannel() { return getChannelOut(); }
 
@@ -4674,38 +4674,38 @@ public abstract class Synth extends JComponent implements Updatable
 
     public void doSendTestNote(int testNote, boolean clearOldNotes)
         {
-            // possibly clear all notes
-            if (clearOldNotes)
+        // possibly clear all notes
+        if (clearOldNotes)
+            {
+            if (getSendsAllSoundsOffBetweenNotes())
                 {
-                if (getSendsAllSoundsOffBetweenNotes())
-                    {
-                    sendAllSoundsOff();
-                    }
-                
-                clearChord();
+                sendAllSoundsOff();
                 }
+                
+            clearChord();
+            }
             
-			playChord();
+        playChord();
                                                          
-            // schedule a note off
-            if (noteTimer != null) noteTimer.stop();
-            noteTimer = new javax.swing.Timer(testNoteLength, new ActionListener()
+        // schedule a note off
+        if (noteTimer != null) noteTimer.stop();
+        noteTimer = new javax.swing.Timer(testNoteLength, new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
                 {
-                public void actionPerformed(ActionEvent e)
+                if (clearOldNotes)
                     {
-						if (clearOldNotes)
-							{
-							clearChord();
-							}
-						if (noteTimer != null)
-							{
-							noteTimer.stop();
-							noteTimer = null;
-							}
+                    clearChord();
                     }
-                });
-            noteTimer.setRepeats(false);
-            noteTimer.start();
+                if (noteTimer != null)
+                    {
+                    noteTimer.stop();
+                    noteTimer = null;
+                    }
+                }
+            });
+        noteTimer.setRepeats(false);
+        noteTimer.start();
         
         // the purpose of the code below is that when we're hill-climbing we often take longer than the full
         // second of the test notes timer to just get the data out and play.  So here we submit our timer,
@@ -5032,20 +5032,20 @@ public abstract class Synth extends JComponent implements Updatable
                 }
                 
             // Kill the timers
-			if (sendTestNotesTimer != null)
-				{
-				sendTestNotesTimer.stop();  // notice we don't set it to null
-				}
+            if (sendTestNotesTimer != null)
+                {
+                sendTestNotesTimer.stop();  // notice we don't set it to null
+                }
             if (patchTimer != null)
-            	{
-            	patchTimer.stop();
-	            patchTimer = null;
-	            }
-	        if (noteTimer != null)
-	        	{
-	        	noteTimer.stop();
-	        	noteTimer = null;
-	        	}
+                {
+                patchTimer.stop();
+                patchTimer = null;
+                }
+            if (noteTimer != null)
+                {
+                noteTimer.stop();
+                noteTimer = null;
+                }
                                 
             // get rid of MIDI connection
             if (tuple != null)
@@ -5095,14 +5095,14 @@ public abstract class Synth extends JComponent implements Updatable
                         count++;
                         }
 
-              for(int i = 0; i < sysex.length; i++)
-              {
-              System.err.println("\n\n FILE " + i);
-              for(int j = 0; j < sysex[i].length; j++)
-              {
-              System.err.println("" + j + "\t" + String.format("%02X", sysex[i][j]));
-              }
-              }
+            for(int i = 0; i < sysex.length; i++)
+                {
+                System.err.println("\n\n FILE " + i);
+                for(int j = 0; j < sysex[i].length; j++)
+                    {
+                    System.err.println("" + j + "\t" + String.format("%02X", sysex[i][j]));
+                    }
+                }
 
             return sysex;
             }

@@ -37,12 +37,12 @@ public class OberheimMatrix1000 extends Synth
             }
         m1000 = val;
 
-		// The 6/6r can't receive current patch
-		if (receiveCurrent != null)
-			receiveCurrent.setEnabled(m1000);
+        // The 6/6r can't receive current patch
+        if (receiveCurrent != null)
+            receiveCurrent.setEnabled(m1000);
 
         if (m1000Check != null)
-        	m1000Check.setSelected(val);  // hopefully this isn't recursive
+            m1000Check.setSelected(val);  // hopefully this isn't recursive
         updateTitle();
         }
     
@@ -148,12 +148,12 @@ public class OberheimMatrix1000 extends Synth
     public String getDefaultResourceFileName() { return "OberheimMatrix1000.init"; }
     public String getHTMLResourceFileName() { return "OberheimMatrix1000.html"; }
 
-	String patchRange(boolean writing)
-		{
-		if (m1000 && writing) return "0...199";
-		else if (m1000) return "0...999";
-		else return "0...99";
-		}
+    String patchRange(boolean writing)
+        {
+        if (m1000 && writing) return "0...199";
+        else if (m1000) return "0...999";
+        else return "0...99";
+        }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
@@ -193,8 +193,8 @@ public class OberheimMatrix1000 extends Synth
         {
         JFrame frame = super.sprout();
         transmitTo.setEnabled(false);
-		// The 6/6r can't receive current patch
-		receiveCurrent.setEnabled(m1000);
+        // The 6/6r can't receive current patch
+        receiveCurrent.setEnabled(m1000);
         addOberheimMenu();
         return frame;
         }         
@@ -1415,42 +1415,42 @@ public class OberheimMatrix1000 extends Synth
         // the phrase "BNKx: yy", where x is the bank number and y is the patch number,
         // as direct 7-bit ASCII.  We have to differentiate between these.
         
-			if (name[0] == 'B' && name[1] == 'N' && name[2] == 'K' && name[4] == ':' && name[5] == ' ')  // probably Matrix 1000, hence BNKx: yy
-				{
-				bank = name[3] - '0';
-				if (bank < 0 || bank > 9)
-					{
-					bank = 0;
-					char[] n = new char[8];
-					for(int i = 0; i < 8; i++) 
-						n[i] = (char)name[i];
-                    System.err.println("Warning (OberheimMatrix1000): \"BNK:\" found but invalid bank number discovered: " + new String(n));
-                    }
-				model.set("bank", bank);
-				
-				if (bank >= 2 || useClassicPatchNames)
-	            	model.set("name", PATCH_NAMES[bank * 100 + number]);
-	            else
-	            	model.set("name", "UNTITLED"); 
-				}
-			else								// probably a Matrix 6/6R
-				{
-				boolean warning = false;
-				for(int i = 0; i < 8; i++)
-					if (name[i] < 0x20) 	// need to push up 0x00...0x1F to 0x40...0x5F
-						name[i] += 0x40;
-					else if (name[i] >= 0x40)	// need to keep 0x20...0x3F where it is, and there shouldn't be anything above 0x40 originally
-						warning = true;
-				char[] n = new char[8];
-				for(int i = 0; i < 8; i++) 
-					n[i] = (char)name[i];
-				if (warning)
-					{
-                    System.err.println("Warning (OberheimMatrix1000): Invalid bytes in patch name discovered: " + new String(n));
-                    }
-				model.set("bank", 0);           // default?
-				model.set("name", new String(n));
-				}
+        if (name[0] == 'B' && name[1] == 'N' && name[2] == 'K' && name[4] == ':' && name[5] == ' ')  // probably Matrix 1000, hence BNKx: yy
+            {
+            bank = name[3] - '0';
+            if (bank < 0 || bank > 9)
+                {
+                bank = 0;
+                char[] n = new char[8];
+                for(int i = 0; i < 8; i++) 
+                    n[i] = (char)name[i];
+                System.err.println("Warning (OberheimMatrix1000): \"BNK:\" found but invalid bank number discovered: " + new String(n));
+                }
+            model.set("bank", bank);
+                                
+            if (bank >= 2 || useClassicPatchNames)
+                model.set("name", PATCH_NAMES[bank * 100 + number]);
+            else
+                model.set("name", "UNTITLED"); 
+            }
+        else                                                            // probably a Matrix 6/6R
+            {
+            boolean warning = false;
+            for(int i = 0; i < 8; i++)
+                if (name[i] < 0x20)     // need to push up 0x00...0x1F to 0x40...0x5F
+                    name[i] += 0x40;
+                else if (name[i] >= 0x40)       // need to keep 0x20...0x3F where it is, and there shouldn't be anything above 0x40 originally
+                    warning = true;
+            char[] n = new char[8];
+            for(int i = 0; i < 8; i++) 
+                n[i] = (char)name[i];
+            if (warning)
+                {
+                System.err.println("Warning (OberheimMatrix1000): Invalid bytes in patch name discovered: " + new String(n));
+                }
+            model.set("bank", 0);           // default?
+            model.set("name", new String(n));
+            }
                 
         revise();
         return PARSE_SUCCEEDED;
@@ -1460,19 +1460,19 @@ public class OberheimMatrix1000 extends Synth
     public void sendAllParameters()
         {
         if (m1000)
-        	{
-        	super.sendAllParameters();
-        	}
-        else		// PC and write to scratch patch 99
-        	{
-        	changePatch(0, 99);		// Patch 99 is our scratch patch for the Matrix 6/64
-        	simplePause(getPauseAfterChangePatch());
-        	tryToSendMIDI(emitAll(model, true, false));
-        	}
+            {
+            super.sendAllParameters();
+            }
+        else            // PC and write to scratch patch 99
+            {
+            changePatch(0, 99);             // Patch 99 is our scratch patch for the Matrix 6/64
+            simplePause(getPauseAfterChangePatch());
+            tryToSendMIDI(emitAll(model, true, false));
+            }
         }
 
 
-    public int getPauseAfterWritePatch() { return 300; }	// Less than 200 and I'll get failures to PC the second time: at 250 I got a failure to write the patch.  250 might be enough but let's go for 300, yeah, it's a lot
+    public int getPauseAfterWritePatch() { return 300; }        // Less than 200 and I'll get failures to PC the second time: at 250 I got a failure to write the patch.  250 might be enough but let's go for 300, yeah, it's a lot
     
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
@@ -1491,10 +1491,10 @@ public class OberheimMatrix1000 extends Synth
             String key = allParameters[i];
                 
             if (i < 8)  // it's the name
-            	{
+                {
                 value = name[i];
                 if (value >= 0x40)
-                	value -= 0x40;	// push 0x40...0x5F to 0x00...0x1F
+                    value -= 0x40;  // push 0x40...0x5F to 0x00...0x1F
                 }
             else if (key.equals("env1lfotriggermode") || key.equals("env2lfotriggermode") || key.equals("env3lfotriggermode"))
                 {
@@ -1649,11 +1649,11 @@ public class OberheimMatrix1000 extends Synth
             d[4] = (byte)0x00;
             }
         else if (toWorkingMemory)   // 6/6R only
-        	{
+            {
             // 01H-SINGLE PATCH DATA
             d[3] = (byte)0x01;
-            d[4] = (byte)99;			// our scratch patch
-        	}
+            d[4] = (byte)99;                    // our scratch patch
+            }
         else
             {
             // 01H-SINGLE PATCH DATA
@@ -1898,7 +1898,7 @@ public class OberheimMatrix1000 extends Synth
                 patchgroup.add(patch);
                 }
             }
-		}
+        }
  
     // These are drawn from the "Matrix 1000 Patchbook"
     public static final String[] PATCH_NAMES = 

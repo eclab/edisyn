@@ -52,8 +52,8 @@ public class HillClimb extends SynthPanel
     public static final int OPERATION_CLIMB = 4;
     public static final int OPERATION_CONSTRICT = 5;
 
-	// HILL CLIMBING AND CONSTRICTION RATES
-	// Note that the mutation rates go 0...100 inclusive, ints
+    // HILL CLIMBING AND CONSTRICTION RATES
+    // Note that the mutation rates go 0...100 inclusive, ints
     public static final int INITIAL_HILL_CLIMB_RATE = 37;         // roughly 5 when we do weight^3
     public static final int INITIAL_CONSTRICT_RATE = 0;
     // Note that the recombination rates go 0.0...1.0 inclusive, doubles
@@ -86,12 +86,12 @@ public class HillClimb extends SynthPanel
     // models currently being played and displayed
     Model[] currentModels = new Model[NUM_MODELS];
 
-	// the most recent procedure performed (see OPERATIONS above)
+    // the most recent procedure performed (see OPERATIONS above)
     int operation;
 
-	// The ratings buttons, in the form ratings[candidate][rating]
+    // The ratings buttons, in the form ratings[candidate][rating]
     JRadioButton[][] ratings = new JRadioButton[NUM_MODELS + 1][3];
-	// The selection checkboxes, in the form selected[candidate].  Note that the only candidates are the actual candidates, not archives etc.
+    // The selection checkboxes, in the form selected[candidate].  Note that the only candidates are the actual candidates, not archives etc.
     JCheckBox[] selected = new JCheckBox[NUM_CANDIDATES];
     // The play buttons, in the form plays[candidate]
     PushButton[] plays = new PushButton[NUM_MODELS];
@@ -137,7 +137,7 @@ public class HillClimb extends SynthPanel
     // List of climbing methods
     JComboBox method = new JComboBox(new String[] { "Hill-Climber", "Constrictor" }); //  "Smooth Constrictor" });
     
-	// First 16 candidates
+    // First 16 candidates
     VBox extraCandidates1;
     // Next 16 candidates
     VBox extraCandidates2;
@@ -579,8 +579,8 @@ public class HillClimb extends SynthPanel
         iterationsBox.add(outerBox);
         
 
-       hillClimbBox = new VBox();
-       climb = new PushButton("Climb")
+        hillClimbBox = new VBox();
+        climb = new PushButton("Climb")
             {
             public void perform()
                 {
@@ -724,14 +724,14 @@ public class HillClimb extends SynthPanel
         if (v < 0 || v > 2) v = 0;
         // reduce smooth and non-smooth constrictors to the same thing
         if (v == 2) v = 1;
- 		if (v == 0)
- 			{
- 			outerBox.add(hillClimbBox);
- 			}
- 		else
- 			{
- 			outerBox.add(constrictBox);
- 			}
+        if (v == 0)
+            {
+            outerBox.add(hillClimbBox);
+            }
+        else
+            {
+            outerBox.add(constrictBox);
+            }
         method.setSelectedIndex(v);
  
         JLabel methodLabel = new JLabel("Method: ");
@@ -900,20 +900,20 @@ public class HillClimb extends SynthPanel
         }
         
    
-   	public void setBigger(boolean bigger)
-   		{
-                candidates.remove(extraCandidates1);
-                candidates.remove(extraCandidates2);
-                if (bigger)
-                    {
-                    candidates.add(extraCandidates1);
-                    candidates.add(extraCandidates2);
-                    }
-                candidates.revalidate();
-                candidates.repaint();
+    public void setBigger(boolean bigger)
+        {
+        candidates.remove(extraCandidates1);
+        candidates.remove(extraCandidates2);
+        if (bigger)
+            {
+            candidates.add(extraCandidates1);
+            candidates.add(extraCandidates2);
+            }
+        candidates.revalidate();
+        candidates.repaint();
 
-                synth.setLastX("" + bigger, "HillClimbBigger", synth.getSynthNameLocal());
-   		} 
+        synth.setLastX("" + bigger, "HillClimbBigger", synth.getSynthNameLocal());
+        } 
                 
     public static final int UPDATE_SOUND_RATE = 1;
     int updateSoundTick = 0;
@@ -981,15 +981,15 @@ public class HillClimb extends SynthPanel
         constrictRate.setEnabled(!c);
         this.method.setSelectedIndex(method);
         outerBox.removeAll();
- 		if (method == 0)
- 			{
- 			outerBox.add(hillClimbBox);
- 			}
- 		else
- 			{
- 			outerBox.add(constrictBox);
- 			}
- 		outerBox.revalidate();
+        if (method == 0)
+            {
+            outerBox.add(hillClimbBox);
+            }
+        else
+            {
+            outerBox.add(constrictBox);
+            }
+        outerBox.revalidate();
         repaint();
         }
       
@@ -1490,7 +1490,7 @@ public class HillClimb extends SynthPanel
                 double rate = CONSTRICT_RECOMBINATION_RATE;
                 // recombine
                 if (random.nextBoolean())
-                	rate = 0.5;
+                    rate = 0.5;
                 currentModels[replace[i]] = currentModels[keep[p1]].copy().recombine(random, currentModels[keep[p2]], keys, rate).mutate(random, keys, weight);
                 }
             }

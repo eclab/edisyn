@@ -778,7 +778,7 @@ public class Generic extends Synth
         return category;
         }
     
-	public static final int HEADER = 12;
+    public static final int HEADER = 12;
     public static boolean recognize(byte[] data)
         {
         return (data.length == HEADER + 1 + (18 * 19 * 3 + 128 * 21) &&
@@ -801,8 +801,8 @@ public class Generic extends Synth
         
         int version = (int)data[HEADER - 1];
         if (version > 0)  // we don't know anything other than version 0
-        	return PARSE_FAILED;
-        	
+            return PARSE_FAILED;
+                
         int pos = HEADER;
         
         for(int i = 1; i <= 18 ; i++)

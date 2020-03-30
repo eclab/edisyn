@@ -4812,7 +4812,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 */
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-		if (tempModel == null)
+        if (tempModel == null)
             tempModel = getModel();
         
         byte[] d = new byte[EXPECTED_SYSEX_LENGTH];

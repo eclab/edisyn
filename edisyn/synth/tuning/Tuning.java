@@ -267,10 +267,10 @@ public class Tuning extends Synth
         // 
         // If you return null here, this tab will not be created.  But final
         // production code should not do that.
-        return null; 
+	        return "Tuning.html";
         }
 
-    public String getPatchLocationName(Model model)
+	    public String getPatchLocationName(Model model)
         {
         if (!model.exists("number")) return null;
         return ("" + (1 + model.get("number")));

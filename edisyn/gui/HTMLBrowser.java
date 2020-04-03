@@ -165,18 +165,27 @@ public class HTMLBrowser extends JPanel
                     {
                     java.net.URL url = he.getURL();
                     if((url.getProtocol().equals("http") ||
-                        url.getProtocol().equals("https")) && 
-                       Desktop.isDesktopSupported() &&
-                       Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
+                        url.getProtocol().equals("https")))
 	                    {
-		                    try
-			                    {
-                                    Desktop.getDesktop().browse(url.toURI());
+                            if(Desktop.isDesktopSupported() &&
+                               Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
+                                {
+                                    try
+                                        {
+                                            Desktop.getDesktop().browse(url.toURI());
+                                        }
+                                    catch(Exception e)
+                                        {
+                                            e.printStackTrace();
+                                        }
+	                            }
+                            else
+                                {
+                                    JOptionPane.showMessageDialog(
+                                         null,
+                                         new JTextArea("Opening link in external browser not supported on this computer. The URL was "  + url.toString()));
+
                                 }
-		                    catch(Exception e)
-			                    {
-				                    e.printStackTrace();
-			                    }
 	                    }
                     else
 	                    {

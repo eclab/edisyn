@@ -1,4 +1,14 @@
 .PHONY: jar install
+
+
+all: DUMMY
+		javac -cp libraries/coremidi4j-1.1.jar:edisyn $$(find edisyn -name '*.java') \
+
+run: DUMMY
+	java -cp libraries/coremidi4j-1.1.jar:. edisyn.Edisyn
+
+DUMMY: ;
+
 indent:
 	@ echo This uses emacs to indent all of the code.  To indent with
 	@ echo "ECJ's default indent style, create a .emacs file in your home"
@@ -25,3 +35,4 @@ install: jar
 	javapackager -deploy -native dmg -srcfiles jar/edisyn.jar -appclass edisyn.Edisyn -name Edisyn -outdir install -outfile Edisyn.dmg -v
 	mv install/bundles/Edisyn-1.0.dmg install/Edisyn.dmg
 	rm -rf install/edisyn.jar install/bundles install/Edisyn.dmg.html install/Edisyn.dmg.jnlp 
+

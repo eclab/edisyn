@@ -151,6 +151,7 @@ public class HTMLBrowser extends JPanel
             {
             public void hyperlinkUpdate( HyperlinkEvent he ) 
                 {
+
                 HyperlinkEvent.EventType type = he.getEventType();
                 if (type == HyperlinkEvent.EventType.ENTERED) 
                     {
@@ -163,22 +164,37 @@ public class HTMLBrowser extends JPanel
                 else // clicked on it!
                     {
                     java.net.URL url = he.getURL();
-                    try
-                        {
-                        infoPane.getEditorKit().createDefaultDocument();
-                        infoPane.setPage(url);
-                        if (stack.isEmpty())
+                    if(url.getProtocol().equals("http") ||
+                       url.getProtocol().equals("https"))
+	                    {
+		                    try
+			                    {
+                                    Desktop.getDesktop().browse(url.toURI());
+                                }
+		                    catch(Exception e)
+			                    {
+				                    e.printStackTrace();
+			                    }
+	                    }
+                    else
+	                    {
+                        try
                             {
-                            // show back button
-                            add(backButtonBox,BorderLayout.SOUTH);
-                            revalidate();
+                            infoPane.getEditorKit().createDefaultDocument();
+                            infoPane.setPage(url);
+                            if (stack.isEmpty())
+                                {
+                                // show back button
+                                add(backButtonBox,BorderLayout.SOUTH);
+                                revalidate();
+                                }
+                            stack.push(url);
                             }
-                        stack.push(url);
-                        }
-                    catch (Exception e)
-                        {
-                        e.printStackTrace();
-                        java.awt.Toolkit.getDefaultToolkit().beep();
+                        catch (Exception e)
+                            {
+                            e.printStackTrace();
+                            java.awt.Toolkit.getDefaultToolkit().beep();
+                            }
                         }
                     }
                 }

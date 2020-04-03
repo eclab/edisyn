@@ -164,8 +164,10 @@ public class HTMLBrowser extends JPanel
                 else // clicked on it!
                     {
                     java.net.URL url = he.getURL();
-                    if(url.getProtocol().equals("http") ||
-                       url.getProtocol().equals("https"))
+                    if((url.getProtocol().equals("http") ||
+                        url.getProtocol().equals("https")) && 
+                       Desktop.isDesktopSupported() &&
+                       Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
 	                    {
 		                    try
 			                    {

@@ -1,19 +1,5 @@
 <html>
     <head>
-        <style>
-         h3
-         {
-             margin-top: -10px;
-         }
-         h1
-         {
-             margin-bottom: 0px;
-         }
-         h2
-         {
-             margin-top: 25px;
-         }
-        </style>
     </head>
     <body>
         <h1>Midi Tuning Standard</h1>
@@ -24,18 +10,18 @@
         Midi Tuning Standard works by assigning a pitch to every midi value from
         0-127. Each of these knob pairs represents the frequency to assign to that midi
         value.
-        <p>
-            You compute the pitch by choosing an original note from the
-            12-tone-equal-temperment, A4-440hz, standard modern western tuning as well as
-            an offset in cents from 0-100 above that note. Your resolution in cents is
-            100/2<sup style="font-size:small">16</sup>. The
-            knob panel as it stands is a direct representation of the midi tuning standard
-            sysex and allows you to manually input your desired values. <b>However</b>,
-            this is not the recommended way to set these values. The <b>Tuning</b> menu
-            option has utilities for calculating these knobs in bulk.
-        </p>
+        <br/><br/>
+        You compute the pitch by choosing an original note from the
+        12-tone-equal-temperment, A4-440hz, standard modern western tuning as well as
+        an offset in cents from 0-100 above that note. Your resolution in cents is
+        100/2<sup style="font-size:small">16</sup>. The
+        knob panel as it stands is a direct representation of the midi tuning standard
+        sysex and allows you to manually input your desired values. <b>However</b>,
+        this is not the recommended way to set these values. The <b>Tuning</b> menu
+        option has utilities for calculating these knobs in bulk.
+        <br/>
         <h2>Tuning Utilities</h2>
-        <h3>EDO</h3>
+        <b>EDO</b><br/>
         EDO stands for Equal number of Divisions per Octave and is also commonly known
         as Equal Temperament. Standard western tuning would be 12 EDO with A4 (midi
         note 69) set to 440hz. Other tunings have their advantages and disadvantages
@@ -46,7 +32,9 @@
         midi note number as your root, all it is saying is "I want midi number x from
         my controller to equate to frequency y and to tune the rest of the notes using
         equal temperment with z divisons per octave."
-        <h3> Named Scales </h3>
+        <br/>
+        <br/>
+        <b>Named Scales</b><br/>
         These are scales that are either popular enough or notable enough to be named. You
         can find out more about them on wikipedia.
     </body>

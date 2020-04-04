@@ -7,19 +7,27 @@
 
 <p>This editor will work with the <b>PreenFM2</b>.  It probably won't work with the PreenFM.
 
-<p><b>Communicating with Edisyn</b><br> Set up your PreenFM2 to emit NRPN (not CC) and to receive NRPN (or CC+NRPN).  The PreenFM2 should also be set up to accept Program changes.   Note that Edisyn will only read from and write to <b>Instrument 1</b>.
+<br><br><h3>Communicating with Edisyn</h3>
 
-<p><b>About the Algorithm Diagrams</b><br>  The PreenFM2 has 28 algorithms.  Each algorithm contains <b>operators</b> 
+Set up your PreenFM2 to emit NRPN (not CC) and to receive NRPN (or CC+NRPN).  The PreenFM2 should also be set up to accept Program changes.   Note that Edisyn will only read from and write to <b>Instrument 1</b>.
+
+<br><br><h3>About the Algorithm Diagrams</h3>
+
+The PreenFM2 has 28 algorithms.  Each algorithm contains <b>operators</b> 
 connected by <b>Modulation Indices</b>.  The <b>Output</b> of some of the operators is panned and then mixed to form a final sound.
 
 <p>Edisyn's diagrams represent <b>Operators</b> with little square boxes, each labelled with the operator number.  Operators are connected to other operators with lines whose numbers are the <b>Modulation Indices</b>.  Higher operators feed into lower operators.  Finally, some lines come out of the bottom of Operators but are not connected to other Operators.  These are <b>Outputs</b>.  If an output line is unlabelled, then its output number is the same as the operator number.  If an output line is labelled (in parentheses), then that is its output number.
 
-<p><b>Fun Feature</b><br> Frustrated with setting Operator Frequency values?  There's a way to restrict the (non-fixed) ratios to the limited "greatest hits" subset that Yamaha had provided for 4-operator devices such as the TX81Z, DX100, and so on.  Just drag the Operator Frequency knob while holding down the SHIFT key, or drag with the right mouse button, or (on the Mac), click and drag with two fingers.
+<br><br><h3>Fun Feature</h3>
 
-<p><b>About the Menu</b><br> If you mutate or recombine patches (using randomize, merge, hill-climb, or nudge) it may result in unfortunate operator frequency results.  The <b>Restrict Mutated Frequency Ratios...</b> menu lets you restrict mutation or recombination of operator frequecies so that they only result in integer values or the set provided by the Yamaha TX81Z (integers plus some other interesting decisions).  I suggest integers.  Note that this restriction will impact both frequency ratios <i>and</i> fixed frequencies.  For this reason I also suggest you edit the mutation parameters to remove the fixed frequency checkbox as an option for mutation.
+Frustrated with setting Operator Frequency values?  There's a way to restrict the (non-fixed) ratios to the limited "greatest hits" subset that Yamaha had provided for 4-operator devices such as the TX81Z, DX100, and so on.  Just drag the Operator Frequency knob while holding down the SHIFT key, or drag with the right mouse button, or (on the Mac), click and drag with two fingers.
+
+<br><br><h3>About the Menu</h3>
+
+If you mutate or recombine patches (using randomize, merge, hill-climb, or nudge) it may result in unfortunate operator frequency results.  The <b>Restrict Mutated Frequency Ratios...</b> menu lets you restrict mutation or recombination of operator frequecies so that they only result in integer values or the set provided by the Yamaha TX81Z (integers plus some other interesting decisions).  I suggest integers.  Note that this restriction will impact both frequency ratios <i>and</i> fixed frequencies.  For this reason I also suggest you edit the mutation parameters to remove the fixed frequency checkbox as an option for mutation.
 
 
-<p><b>Gotchas</b> 
+<br><br><h3>Gotchas</h3>
 
 <ul>
 <li>

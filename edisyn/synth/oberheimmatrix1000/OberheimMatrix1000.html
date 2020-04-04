@@ -7,22 +7,29 @@
 
 <p>This editor will work with the <b>Oberheim Matrix 6, 6R,</b> and <b>1000</b>. These machines have slightly different sysex and capabilities: so if you are working with the Matrix 1000, you need to check the "Matrix 1000" box.  If you are working with the 6 or 6R, you need to keep that box unchecked.
 
-<p><b>Communicating with Edisyn</b><br> Make sure that Memory Protect is off (see page 36 of the manual). 
+<br><br><h3>Communicating with Edisyn</h3>
 
-<p><b>Restoring Patches 0...199 on the Matrix 1000</b><br>  If you erased these patches, you can restore them from sysex files stored in the file <b>resources/Matrix1000Banks.zip</b> in Edisyn's repository.
+Make sure that Memory Protect is off (see page 36 of the manual). 
 
-<p><b>About Patch Names</b>The Matrix 1000 and the Matrix 6 store patch names differently.  The 1000 doesn't actually store a name, but just information about bank and number.  If Edisyn sees this, it will attempt to replace this placeholder name with the original "classic" name.  This will include the writeable patches less than 200, unless you uncheck "Use Classic Patch Names" in the Matrix 1000 menu.
+<br><br><h3>Restoring Patches 0...199 on the Matrix 1000</h3>
 
-<p><b>Looking Up Patch Names by Classic Matrix 1000 Name</b>
+If you erased these patches, you can restore them from sysex files stored in the file <b>resources/Matrix1000Banks.zip</b> in Edisyn's repository.
+
+<br><br><h3>About Patch Names</h3>
+
+The Matrix 1000 and the Matrix 6 store patch names differently.  The 1000 doesn't actually store a name, but just information about bank and number.  If Edisyn sees this, it will attempt to replace this placeholder name with the original "classic" name.  This will include the writeable patches less than 200, unless you uncheck "Use Classic Patch Names" in the Matrix 1000 menu.
+
+<br><br><h3>Looking Up Patch Names by Classic Matrix 1000 Name</h3>
+
 <p>If you would like to load a patch from memory, you can look it up by patch name in the Matrix 1000 menu.
 
-<p><b>Suggestions</b>
+<br><br><h3>Suggestions</h3>
 
 <ul>
 <li>If you add a lot of random noise (like >50%) to the Matrix 6/6R1000 via Randomization or Hill-Climbing, it will often fall silent.  This is almost always due to randomization of either the Amplifier section or the Amplifier Envelope (Envelope 2).  I suggest that you first edit the mutation parameters to remove these sections as mutation candidates.
 </ul>
 
-<p><b>Gotchas</b> 
+<br><br><h3>Gotchas</h3>
 
 <ul>
 <li>The 6/6R has no way to request the current patch or to upload to it.  But updating the current working memory is important to many functions in Edisyn.  Thus if you update the current patch on the 6/6R, Edisyn will actually overwrite patch 99, treating it as a "scratch patch".  This means that you cannot rely on patch 99 holding data you've saved there -- Edisyn will scribble over it.  On the Matrix 1000, which can read and write to the current patch, this trick is not used.

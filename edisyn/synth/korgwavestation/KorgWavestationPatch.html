@@ -5,13 +5,20 @@
 
 <p>This editor is designed work with the <b>Korg Wavestation SR</b>.  It will <b>not</b> work with any other Wavestation models (the original Wavestation, the Wavestation EX, or the Wavestation A/D).
 
-<p><b>Bank Sysex</b><br> This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
+<br><br><h3>Bank Sysex</h3>
 
-<p><b>Communicating with Edisyn</b><br> Set your SR to receive sysex parameters, and also to receive program change and bank select commands, as well as All Notes Off.  Turn off memory protect (including for your card if you need to).  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.  Remember that the Wavestation plays performances, not patches: so it may play things in addition to the patch you're playing.  To prevent this, read "The Wavestation Menu" below.
+This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
 
-<p><b>The "Real-Time Joystick" Check Box</b><br> This checkbox, located on the Global page, controls the behavior of the Joystick.  If unchecked then the Joystick allows you to change the positions of the five mixer envelope values.  If checked, then the Joystick controls the SR's real-time Joystick CC messages.  That is, you can manipulate the SR in real-time as if it had a Joystick like other Wavestations do.
+<br><br><h3>Communicating with Edisyn</h3>
 
-<p><b>Hints</b>
+Set your SR to receive sysex parameters, and also to receive program change and bank select commands, as well as All Notes Off.  Turn off memory protect (including for your card if you need to).  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.  Remember that the Wavestation plays performances, not patches: so it may play things in addition to the patch you're playing.  To prevent this, read "The Wavestation Menu" below.
+
+<br><br><h3>The "Real-Time Joystick" Check Box</h3>
+
+This checkbox, located on the Global page, controls the behavior of the Joystick.  If unchecked then the Joystick allows you to change the positions of the five mixer envelope values.  If checked, then the Joystick controls the SR's real-time Joystick CC messages.  That is, you can manipulate the SR in real-time as if it had a Joystick like other Wavestations do.
+
+<br><br><h3>Hints</h3>
+
 <ul>
 <li>Can't figure out how to access the waves beyond Wave A?  Change the "Number of Waves" combo box in the Patch category.
 <p><li>Note that as you change the Wave Bank, the available Wave Sequences (starting with "WS") change as well; though the PCM waves do not (they're the same regardless of bank).  In RAM 1 ... RAM 3 you can change the names of the Wave Sequences on your SR, but Edisyn will continue to use the default names in its list (it's not easy to determine what names you've changed).
@@ -24,7 +31,8 @@
 -->
 </ul>
 
-<p><b>The Wavestation Menu</b>  
+<br><br><h3>The Wavestation Menu</h3>
+
 <ul>
 <li>Patches must be auditioned by playing them in a Performance.  If you select <b>Set up Test Performance in RAM 1 Slot 0</b>, Edisyn will temporarily modify Performance 1:0 so that it contains a single Part, at full volume, with no effects and default settings, whose Patch is your current Patch.   After this, if you modify parameters or send the patch again, it'll stay auditioned since the current Performance is still referring to it.  Just don't write the Performance.
 <!--
@@ -33,7 +41,7 @@
 </ul>
 
 
-<p><b>Gotchas</b>
+<br><br><h3>Gotchas</h3>
 
 <ul>
 <li>The Wavestation doesn't have an option to allow Edisyn to send parameters in bulk to its current working memory.  Instead, Edisyn will always bulk-send the parameters to the patch's declared bank and number.  You will change this bank and number when you <b>Send to Patch...</b>, <b>Request Patch...</b>, or <b>Load...</b>.
@@ -42,7 +50,8 @@
 <p><li>Updating individual parameters is a little pokey.  This is because Edisyn must insert a significant delay between successive parameter updates or they'll get dropped by the SR.
 </ul>
 
-<p><b>Notes</b><br>
+<br><br><h3>Notes</h3>
+
 For the time being, I have elected to not have the patch editor update itself in response to manual parameter changes made directly on the synth.  The SR MIDI format is just too complex a beast to make this easy.
 
 

@@ -6,11 +6,17 @@
 
 <p>This editor will work with the <b>Waldorf Blofeld,</b> the <b>Waldorf Blofeld with SL Option,</b> and the <b>Waldorf Blofeld Keyboard</b> (which automatically comes with the SL option).
 
-<p><b>Communicating with Edisyn</b><br> Set your Blofeld to send <b>Sysex only</b>, not <b>Ctl</b> nor <b>Ctl+Sysex</b>.  Also make sure that <b>Ctrl Receive</b> is on.
+<br><br><h3>Communicating with Edisyn</h3>
 
-<p><b>SL Option</b><br> The SL option gives you the option of specifying a <b>sound sample</b> instead of a <b>wave</b> on Oscillators 1 and 2. This is turned on by choosing a <b>Sample Bank</b> in the editor: then the wave menu turns into a sample menu.  You turn it off by choosing <b>None</b> in the Sample Bank.  BTW, if you're wondering why Edisyn's SL Sample Banks end at Bank L, that's the furthest a contributor could get his to go before crashing his Blofeld.  So there you go.  
+Set your Blofeld to send <b>Sysex only</b>, not <b>Ctl</b> nor <b>Ctl+Sysex</b>.  Also make sure that <b>Ctrl Receive</b> is on.
 
-<p><b>Uploading Wavetables</b><br> Under the Blofeld menu you'll find an option to upload a wavetable.  You can upload wavetables from three different formats:
+<br><br><h3>SL Option</h3>
+
+The SL option gives you the option of specifying a <b>sound sample</b> instead of a <b>wave</b> on Oscillators 1 and 2. This is turned on by choosing a <b>Sample Bank</b> in the editor: then the wave menu turns into a sample menu.  You turn it off by choosing <b>None</b> in the Sample Bank.  BTW, if you're wondering why Edisyn's SL Sample Banks end at Bank L, that's the furthest a contributor could get his to go before crashing his Blofeld.  So there you go.  
+
+<br><br><h3>Uploading Wavetables</h3>
+
+Under the Blofeld menu you'll find an option to upload a wavetable.  You can upload wavetables from three different formats:
 
 <ul>
 <li><b>WAV files from http://waveeditonline.com</b>  This is a large collection of WAV files encoding wavetables for other devices.  You can even download all of them as one zip file.  Edisyn will convert them to the Blofeld as best it can (resampling to the Blofeld's lower sampling rate).  These are particularly good because there is a very nice free wavetable editor available, <b>http://synthtech.com/waveedit</b>
@@ -23,11 +29,15 @@
 
 <b>Important note:</b> You probaby want to turn Limit WT <i>off</i> when using user wavetables.  Otherwise the Blofeld will not work properly with any PWM values greater than 120.
 
-<p><b>Uploading Pseudo-MPE</b><br> The Blofeld doesn't support MPE.  But we can fake it by setting up one of its multimode patches in a special way, and this can be taken advantage of by instruments such as the Linnstrument. 
+<br><br><h3>Uploading Pseudo-MPE</h3>
+
+The Blofeld doesn't support MPE.  But we can fake it by setting up one of its multimode patches in a special way, and this can be taken advantage of by instruments such as the Linnstrument. 
 
 <P>You can prepare a multimode patch slot with <b>Write Patch as Psuedo-MPE</b>.  This writes a multimode patch which points to your current single patch, including the current name, bank, and (single patch) number.  Each slot in the multimode patch will refer to this patch but have a unique MIDI channel. You get to choose what multimode patch number to write to. Note that your single-patch must already be written to the synth.
 
-<p><b>Gotchas</b><br> Only two at present:
+<br><br><h3>Gotchas</h3>
+
+Only two at present:
 
 <ul>
 <li>

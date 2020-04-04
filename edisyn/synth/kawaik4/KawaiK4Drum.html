@@ -7,9 +7,11 @@
 
 <p>This editor will work with the <b>Kawai K4</b> and the <b>Kawai K4r</b>.
 
-<p><b>Communicating with Edisyn</b><br> Set your K4 to receive Program Changes (RCV PGM) and Exclusive (RCV EXCL).  See pages 79 and 80 of the manual.  Set the K4's MIDI RCV channel to the same as Edisyn's Send Channel.  Set the K4's Drum channel to be the same as the "MIDI Channel" knob in the Patch Editor panel; you can do this easily by just changing the knob to some appropriate value.  Note that the K4 Drum Channel shouldn't be set to the same thing as the K4 MIDI RCV channel: otherwise you'll hear both drums and keyboard notes.  And I wouldn't set either of them to OMNI.  Also see the important <b>First Gotcha</b> below, as it relates to the Drum Channel.
+<br><br><h3>Communicating with Edisyn</h3>
 
-<p><b>Hints</b>
+Set your K4 to receive Program Changes (RCV PGM) and Exclusive (RCV EXCL).  See pages 79 and 80 of the manual.  Set the K4's MIDI RCV channel to the same as Edisyn's Send Channel.  Set the K4's Drum channel to be the same as the "MIDI Channel" knob in the Patch Editor panel; you can do this easily by just changing the knob to some appropriate value.  Note that the K4 Drum Channel shouldn't be set to the same thing as the K4 MIDI RCV channel: otherwise you'll hear both drums and keyboard notes.  And I wouldn't set either of them to OMNI.  Also see the important <b>First Gotcha</b> below, as it relates to the Drum Channel.
+
+<br><br><h3>Hints</h3>
 
 <ul>
 <p><li>Though Edisyn will use the K4's standard RCV Channel to send information, if you play a note on your controller (or other message that's passed through) Edisyn will route it to the Drum Channel.  That way you can play drums on the K4 even if your controller can't send MIDI data out 
@@ -26,7 +28,7 @@
 </ul>
 
 
-<p><b>Gotchas</b>
+<br><br><h3>Gotchas</h3>
 
 <ul>
 <li>Due to a bug, the Kawai K4/K4r does not properly tell Edisyn what the Drum MIDI Channel is when sending Edisyn a patch.  As a result the "MIDI Channel" knob will not change.  You'll need to set it manually in the patch panel: when you change the knob, it'll send a message to the K4/K4r to change the Drum Channel to match.

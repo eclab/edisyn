@@ -5,11 +5,15 @@
 
 <p>This editor is designed work with the <b>Korg Wavestation SR</b>.  It will <b>not</b> work with any other Wavestation models (the original Wavestation, the Wavestation EX, or the Wavestation A/D).
 
-<p><b>Bank Sysex</b><br> This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
+<br><br><h3>Bank Sysex</h3>
 
-<p><b>Communicating with Edisyn</b><br> Set your SR to receive sysex parameters, and also to receive program change and bank select commands, as well as All Notes Off.  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.  You'll also want to make sure that you're at the Performance top-level menu, that is, both the "Perf" and "Edit" lights are lit, or else Edisyn may have trouble changing patches on request.
+This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
 
-<p><b>Gotchas</b>
+<br><br><h3>Communicating with Edisyn</h3>
+
+Set your SR to receive sysex parameters, and also to receive program change and bank select commands, as well as All Notes Off.  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.  You'll also want to make sure that you're at the Performance top-level menu, that is, both the "Perf" and "Edit" lights are lit, or else Edisyn may have trouble changing patches on request.
+
+<br><br><h3>Gotchas</h3>
 
 <ul>
 <li>The Wavestation doesn't have an option to allow Edisyn to send parameters in bulk to its current working memory, but this is an important Edisyn feature.  Edisyn instead sends bulk parameters by writing them to the first performance in the current bank, overwriting any existing performance there.  
@@ -23,7 +27,8 @@
 
 </ul>
 
-<p><b>Notes</b>
+<br><br><h3>Notes</h3>
+
 <p>For the time being, I have elected to not have the patch editor update itself in response to manual parameter changes made directly on the synth.  The SR is just too complex a beast.  
 
 <p><table border=0 cellpadding=0 cellspacing=5>

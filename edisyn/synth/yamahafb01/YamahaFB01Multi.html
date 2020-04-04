@@ -6,16 +6,17 @@
 
 <p>This patch editor will work with the FB01 only.  For other 4-op FM synthesizers, see the Yamaha 4-op synthesizer family patch editor.
 
-<p><b>Communicating with Edisyn</b><br>Turn off Memory protection (Protect OFF): you'll have to do this every time you turn on the FB01, but there is a menu option to assist here, called <b>Turn Memory Protect Off</b>.  Set Edisyn's synth ID to the same as the FB01's "System MIDI Channel" (I suggest 1).  Set Ediysn's MIDI channel to the channel of the instrument you are currently testing.
+<br><br><h3>Communicating with Edisyn</h3>
+Turn off Memory protection (Protect OFF): you'll have to do this every time you turn on the FB01, but there is a menu option to assist here, called <b>Turn Memory Protect Off</b>.  Set Edisyn's synth ID to the same as the FB01's "System MIDI Channel" (I suggest 1).  Set Ediysn's MIDI channel to the channel of the instrument you are currently testing.
 
-<p><b>Notes</b><br>
+<br><br><h3>Notes</h3>
 <ul>
 <li>
 The FB01 Is weird when it comes to sysex.  See the <b>About</b> pane for the FB01 Single patch editor for more information about the device (though most of that will not affect your usage of the Multi patch editor).
 <p><li>Banks 3-7 are in ROM and have fixed voice names, which will be displayed under the "Voice Number" dial.
 </ul>
 
-<p><b>Gotchas</b><br>
+<br><br><h3>Gotchas</h3>
 <ul>
 <li>
 Changing an instrument voice (bank or number) may cause the global LFO parameters to change to reflect that instrument.   Edisyn won't know this and so it won't display it until you call <b>Request Current Patch</b>.

@@ -5,21 +5,28 @@
 
 <p>This editor is designed work with the <b>Korg Wavestation SR</b>.  It will <b>not</b> work with any other Wavestation models (the original Wavestation, the Wavestation EX, or the Wavestation A/D).
 
-<p><b><font color="red">IMPORTANT NOTE</font></b><br> It is very important that you read this document carefully and entirely, especially the "Gotchas" section, before manipulating your SR wave sequences with this editor, or you will lose and/or corrupt data.
+<br><br><h3><font color="red">IMPORTANT NOTE</font></h3>
 
-<p><b>Bank Sysex</b><br> Wave sequences can only be loaded a whole bank at a time.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.  Edisyn also can save and load its own proprietary single-wave-sequence sysex format.
+It is very important that you read this document carefully and entirely, especially the "Gotchas" section, before manipulating your SR wave sequences with this editor, or you will lose and/or corrupt data.
 
-<p><b>Communicating with Edisyn</b><br> Set your SR to receive sysex parameters, and also to receive program change and bank select commands, as well as All Notes Off.  Turn off memory protect (including for your card if you need to).  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.
+<br><br><h3>Bank Sysex</h3>
 
-<p>
-<p><b>Hints</b>
+Wave sequences can only be loaded a whole bank at a time.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.  Edisyn also can save and load its own proprietary single-wave-sequence sysex format.
+
+<br><br><h3>Communicating with Edisyn</h3>
+
+Set your SR to receive sysex parameters, and also to receive program change and bank select commands, as well as All Notes Off.  Turn off memory protect (including for your card if you need to).  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.
+
+<br><br><h3>Hints</h3>
+
 <ul>
 <li>Can't figure out how to access any Step beyond Step 1?  Click the "Number of Steps" button and increase the steps.  Warning: don't make this a big number (it takes a long time to make a large sequence).
 
 <p><li>If the wave sequences are too narrow on the display, try changing the <b>Magnify</b> dial.
 </ul>
 
-<p><b>The Wavestation Menu</b>  
+<br><br><h3>The Wavestation Menu</h3>
+
 <ul>
 <li>Wave Sequences must be auditioned by playing them in a Performance holding a Patch.  If you select <b>Set up Test Performance/Patch in RAM 1 Slot 0 Wave A</b>, Edisyn will temporarily modify Performance 1:0 so that it contains a single Part, at full volume, with no effects and default settings.  The Part will be Patch 1:0, consisting of a single Wave (A).  This Wave will be your current Wave Sequence.  Just don't write the Performance or the Patch and you'll be fine.
 
@@ -29,9 +36,9 @@
 </ul>
 
 
-<p><b>Gotchas</b>
+<br><br><h3>Gotchas</h3>
 
-<p>The Wavestation SR has a number of serious issues regarding its wave sequences.  You need to make sure you understand them.
+The Wavestation SR has a number of serious issues regarding its wave sequences.  You need to make sure you understand them.
 
 <ul>
 <li><font color="red"><b>Important. </b></font>There is no current working memory for wave sequences: any parameter changes you make will be <b>immediately permanent.</b>  Thus:

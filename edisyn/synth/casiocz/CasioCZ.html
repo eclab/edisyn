@@ -5,15 +5,19 @@
 <h1>Casio CZ Series</h1> 
 <h2>Single Patch Editor</h2>
 
+<p>blah blah blah blah blah
+
+<h2>Blah blah blah</h2>
+
 <p>This editor will work with the <b>Casio CZ-1, CZ-101, CZ-1000, CZ-3000, and CZ-5000</b>.
 
-<p><b>Communicating with Edisyn</b><br> 
-<p>Set the MIDI channel to the same as being used in Edisyn, and enable Program Change.  If you're planning on writing to the synthesizer, turn off write protect (even if you're just sending to current memory, the CZ will refuse to accept it if write protect is on).  On the CZ-1, you must also enable System Exclusive Tone Data and make sure that MIDI is turned on.
+<br><br><h3>Communicating with Edisyn</h3>
+Set the MIDI channel to the same as being used in Edisyn, and enable Program Change.  If you're planning on writing to the synthesizer, turn off write protect (even if you're just sending to current memory, the CZ will refuse to accept it if write protect is on).  On the CZ-1, you must also enable System Exclusive Tone Data and make sure that MIDI is turned on.
 
-<p><b>CZ-1 Versus the Others</b><br>
+<p><h3>CZ-1 Versus the Others</h3>
 <P>Because it has more features, the CZ-1 different MIDI than the other synths, though it can receive patches in their format.  To send or write to a CZ-1, click the "CZ-1" button.  To send or write to a CZ-101/1000/3000/5000, turn off that button.
 
-<p><b>Features</b>
+<h5>Features</h5>
 
 <p>Even if you're an experienced CZ patch programmer, you may be confused by this patch editor.  That's because Casio only provides a subset of options for their waveforms via their front end and manual: much more is available over sysex.  You should first read (<a href="http://www.kasploosh.com/projects/CZ/11800-spelunking/">http://www.kasploosh.com/projects/CZ/11800-spelunking/</a>) about how the CZ waveforms actually work: Edisyn's editor lets you modify them they way they really are.
 
@@ -21,7 +25,7 @@
 
 <p>Additionally, the CZ has more modulation options and an additional hidden flag ("Mute Line 1") than you were be led to believe.  Edisyn provides access to all of these.  For more information, see <a href="http://www.kasploosh.com/projects/CZ/11800-spelunking/8-modulation.html">http://www.kasploosh.com/projects/CZ/11800-spelunking/8-modulation.html</a>
 
-<p><b>Gotchas</b> 
+<br><br><h3>Gotchas</h3>
 
 <ul>
 <li>The Casio CZ series cannot receive individual parameters: you have to send them in bulk.

@@ -2,7 +2,7 @@
 
 
 all: DUMMY
-		javac -cp libraries/coremidi4j-1.1.jar:edisyn $$(find edisyn -name '*.java') \
+		javac -cp libraries/coremidi4j-1.1.jar:edisyn $$(find edisyn -name '*.java') 
 
 run: DUMMY
 	java -cp libraries/coremidi4j-1.1.jar:. edisyn.Edisyn

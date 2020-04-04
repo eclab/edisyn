@@ -148,6 +148,9 @@ public class Tuning extends Synth
 
 	static TuningDefinition[] tuningDefinitions = {
 		new EDO(),
+	};
+	static TuningDefinition[] namedScales = {
+
 		new RepeatingScale(new double[]{0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200},
 		                   "12 Tone Equal Temperment"),
 		new RepeatingScale(new double[] { 0.000, 70.673, 203.910, 315.641, 386.314, 498.045, 568.718, 701.955, 772.628, 884.359, 1017.596, 1088.269, 1200},
@@ -187,6 +190,25 @@ public class Tuning extends Synth
 					});
 				menu.add(menuItem);
 			}
+		JMenu namedMenu = new JMenu("Named Scales");
+		for(TuningDefinition definition : namedScales)
+			{
+				final TuningDefinition _def = definition;
+				JMenuItem menuItem = new JMenuItem(definition.getMenuName());
+				menuItem.addActionListener(new ActionListener() 
+					{
+						public void actionPerformed(ActionEvent e)
+						{
+							_def.popup(Tuning.this);
+							if (_def.isConfigured())
+								{
+									setTunings(_def.getBases(), _def.getDetunes());
+								}
+						}
+					});
+				namedMenu.add(menuItem);
+			}
+		menu.add(namedMenu);
 	}
         
         

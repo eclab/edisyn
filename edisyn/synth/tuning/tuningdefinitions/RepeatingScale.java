@@ -21,7 +21,6 @@ public class RepeatingScale extends TuningDefinition
 			this.offsets[i] = offsets[i];
 		}
 		this.equivalencyRatio = frequencyAbove(offsets[offsets.length-1], 1);
-		System.out.println(this.equivalencyRatio);
 		this.name = name;
 	}
 	double frequencyAbove(double c2, double f1)
@@ -43,8 +42,6 @@ public class RepeatingScale extends TuningDefinition
 				}
 				int rootsBelow = (int)Math.ceil((double)diff / offsets.length);
 				double baseFreq = rootFrequency/Math.pow(equivalencyRatio, rootsBelow);
-				System.out.println(idx);
-				System.out.println(baseFreq);
 				return frequencyAbove(offsets[idx], baseFreq);
 			}
 		if(midiNum > rootMIDINote)

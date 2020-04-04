@@ -211,6 +211,12 @@ public class Generic extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         tabs.addTab("RPN", soundPanel);
         
+        vbox = new VBox();
+        vbox.add(addOther(Style.COLOR_B()));
+        soundPanel = new SynthPanel(this);
+        soundPanel.add(vbox, BorderLayout.CENTER);
+        tabs.addTab("Other", soundPanel);
+        
         /*
           vbox = new VBox();
           hbox.add(new Joystick(this));
@@ -220,7 +226,7 @@ public class Generic extends Synth
           tabs.addTab("Joystick", soundPanel);
         */
         
-        model.set("name", "CC / NRPN / RPN");  // or whatever, to set the initial name of your patch (assuming you use "name" as the key for the patch name)
+        model.set("name", "MIDI Parameters");  // or whatever, to set the initial name of your patch (assuming you use "name" as the key for the patch name)
         //loadDefaults();                                 // this tells Edisyn to load the ".init" sysex file you created.  If you haven't set that up, it won't bother
         }
 
@@ -777,6 +783,69 @@ public class Generic extends Synth
         category.add(main);
         return category;
         }
+        
+    public JComponent addOther(Color color)
+        {
+        Category category = new Category(this, "Other", color);
+                
+        JComponent comp;
+        String[] params;
+        
+        VBox main = new VBox();
+        HBox hbox = new HBox();
+        
+        comp = new LabelledDial("Pitch Bend", this, "pitchbend", color, 0, 16383)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	public String map(int val)
+        		{
+        		return "" + (val - 8192);
+        		}
+        	};
+        hbox.add(comp);
+
+        comp = new LabelledDial("Pitch Bend", this, "pitchbendrange", color, 0, 127 * 100)
+        	{
+        	public String map(int val)
+        		{
+        		int semitones = (val / 100);
+        		int cents = (val % 100);
+        		return "" + semitones + "." + cents;
+        		}
+        	};
+        ((LabelledDial)comp).addAdditionalLabel("Range");
+        hbox.add(comp);
+
+
+        comp = new LabelledDial("Coarse Tune", this, "coarsetune", color, 0, 127)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	public String map(int val)
+        		{
+        		return "" + (val - 64);
+        		}
+        	};
+        hbox.add(comp);
+
+
+        comp = new LabelledDial("Fine Tune", this, "finetune", color, 0, 16383)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	public String map(int val)
+        		{
+        		if (val == 0) return "-100";
+        		else if (val == 8192) return "--";
+        		else return String.format("%2.2f", (val - 8192) * 100.0 / 8192.0 );
+        		}
+        	};
+        //Font font = ((LabelledDial)comp).getLabelFont();
+        //float size = font.getSize2D();
+        //((LabelledDial)comp).setLabelFont(font.deriveFont(size / 2));
+        hbox.add(comp);
+        
+        category.add(hbox);
+        return category;
+        }
     
     public static final int HEADER = 12;
     public static boolean recognize(byte[] data)
@@ -1017,9 +1086,66 @@ public class Generic extends Synth
         }
         
     
+    public Object[] buildRPN(int channel, int parameter, int value)
+        {
+        try
+            {
+            int p_msb = (parameter >>> 7);
+            int p_lsb = (parameter & 127);
+            int v_msb = (value >>> 7);
+            int v_lsb = (value & 127);
+            if (v_msb > 127) 
+                {
+                System.err.println("Problem with " + value);
+                new Throwable().printStackTrace();
+                }
+        
+            return new Object[]
+                {
+                new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 101, (byte)p_msb),
+                new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 100, (byte)p_lsb),
+                new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 6, (byte)v_msb),
+                new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 38, (byte)v_lsb),
+                };
+            }
+        catch (InvalidMidiDataException e)
+            {
+            e.printStackTrace();
+            return new Object[0];
+            }
+        }
+
     public Object[] emitAll(String key)
         {
-        if (key.startsWith("cc-") && !(key.startsWith("cc-name-")))
+        if (key.equals("pitchbend"))
+        	{
+        	int val = model.get("pitchbend", 0);
+        	try
+        		{
+	            return new Object[] { new ShortMessage(ShortMessage.PITCH_BEND, getChannelOut(), (byte)(val >> 7) & 127 , (byte)val & 127) };
+	            }
+	        catch (InvalidMidiDataException ex)
+	        	{
+	        	ex.printStackTrace();
+	        	return new Object[0];
+	        	}
+        	}
+        else if (key.equals("pitchbendrange"))
+        	{
+        	int val = model.get("pitchbendrange", 0);
+        	int cents = val % 100;
+        	int semitones = val / 100;
+        	return buildRPN(getChannelOut(), 0, cents + semitones * 128);
+        	}
+        else if (key.equals("finetune"))
+        	{
+        	return buildRPN(getChannelOut(), 1, model.get("finetune", 0));
+        	}
+        else if (key.equals("coarsetune"))
+        	{
+        	return buildRPN(getChannelOut(), 2, model.get("coarsetune", 0));
+        	}
+        else if (key.startsWith("cc-") && !(key.startsWith("cc-name-")))
             {
             int cc = StringUtility.getInt(key);
             return buildCC(getChannelOut(), cc, model.get(key));
@@ -1115,7 +1241,7 @@ public class Generic extends Synth
 
     public static String getSynthName() 
         { 
-        return "CC / RPN / NRPN"; 
+        return "MIDI Parameters"; 
         }
 
     public JFrame sprout()

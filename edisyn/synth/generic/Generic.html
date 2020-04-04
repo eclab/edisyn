@@ -1,10 +1,9 @@
 <html><head></head>
 <body>
 
-<h1>CC / NRPN / RPN</h1>
-<h2>Control Facility</h2>
+<h1>MIDI Parameters</h1>
 
-<p>This isn't really a patch editor: it's a device meant to help you send CC, NRPN, and RPN messages to your synthesizer.  I'll be adding to this and augmenting it over time.  Once you've customized your CCs, you can save them to a sysex file and retrieve them later.
+<p>This isn't really a patch editor: it's a device meant to help you send CC, NRPN, RPN, and Pitch Bend messages to your synthesizer.  I'll be adding to this and augmenting it over time.  Once you've customized your CCs, you can save them to a sysex file and retrieve them later.
 
 <p><b>Communicating with Edisyn</b><br>Make sure you've got Edisyn set up to send to the right channel on your synthesizer.
 
@@ -14,11 +13,23 @@ The CC panels give you direct access to all 128 CC parameters: though perhaps yo
 <p>Each CC parameter has a <b>Dial</b> where you can directly change its value, plus a <b>Send</b> button which lets you repeatedly send the current dial value.  There is also an <b>On</b> checkbox: if you select this, then 127 is sent, else 0 is sent (the <b>On</b> checkbox also is selected when a CC value than 64 is sent via the dial).  The CCs each have classic names, but you can change any of them: just click on the <b>Name</b> (or whatever it's called) button.
 
 <p><b>About the Custom CC, NRPN, and RPN Panels</b><br>
-These panels allow you to set up the panel to respond to custom CC, NRPN, and RPN parameters of your choosing.  You select a parameter with the <b>Parameter</b dial, and you can customize its name with the <b>Name</b> button.  Each parameter has two value dials which you can tweak independently.  The idea is that you can repeatedly send either of the values by pressing the <b>Send</b> or <b>Alt</b> buttons.  Changing the dials will also send the parameters in question.
+These panels allow you to set up the panel to respond to custom CC, NRPN, and RPN parameters of your choosing.  Why you'd need RPN is anyone's guess, but there you have it.
+
+<p>You select a parameter with the <b>Parameter</b dial, and you can customize its name with the <b>Name</b> button.  Each parameter has two value dials which you can tweak independently.  The idea is that you can repeatedly send either of the values by pressing the <b>Send</b> or <b>Alt</b> buttons.  Changing the dials will also send the parameters in question.
 
 <p>The dials may be 7-bit MSB-only (0..127) or they may be 14-bit MSB+LSB (0...16383), depending on the setting of the <b>+LSB</b> checkbox.  For Custom CC, only parameters 0...32 are capable of being 14-bit (by sending the LSB at the parameter number + 32): the others must be 7-bit.  NRPN and RPN of course can be either 7-bit MSB-only or 14-bint MSB+LSB at any time.
 
 <p>The <b>On</b> button will send either a 0 (off) or a maximum value (on), changing the <b>Send</b> dial.  It also is selected automatically if the <b>Send</b> dial is set to above half-way.
+
+<p><b>About the Other Panel</b><br>
+This panel gives you access to Pitch Bend, a well as to the three standard RPN messages: Pitch Bend Range (or Sensitivity), Coarse Tuning, and Fine Tuning.
+
+<ul>
+<li>Pitch Bend is the standard bend range: from -8192 to +8191.
+<li>Pitch Bend Range is in semitones (half steps).
+<li>Coarse Tuning is in semitones.
+<li>Fine Tuning is also in semitones.
+</ul>
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

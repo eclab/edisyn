@@ -69,6 +69,7 @@ public abstract class Synth extends JComponent implements Updatable
     public JCheckBoxMenuItem recombinationToggle;
     public JMenuItem hillClimbMenu;
     public JCheckBoxMenuItem testNotes;
+    public JCheckBoxMenuItem repeatCurrentPatch;
     public JComponent hillClimbPane;
     public JMenuItem getAll;
     public JMenuItem testIncomingController;
@@ -3330,6 +3331,7 @@ public abstract class Synth extends JComponent implements Updatable
 
 
         writeTo = new JMenuItem("Write to Patch...");
+        writeTo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()  |  InputEvent.SHIFT_MASK));
         menu.add(writeTo);
         writeTo.addActionListener(new ActionListener()
             {
@@ -3355,6 +3357,17 @@ public abstract class Synth extends JComponent implements Updatable
         transmitParameters.setSelected(allowsTransmitsParameters);
 
                 
+        repeatCurrentPatch = new JCheckBoxMenuItem("Repeatedly Send Current Patch");
+        //repeatCurrentPatch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()  |  InputEvent.SHIFT_MASK));
+        menu.add(repeatCurrentPatch);
+        repeatCurrentPatch.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doRepeatCurrentPatch();
+                }
+            });
+
 
         transmitTo = new JMenuItem("Send to Patch...");
 /*
@@ -3513,14 +3526,28 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed(ActionEvent e)
                 {
-                if (hillClimbing)
-                    hillClimb.updateSound();
-                doSendTestNote();
-                if (hillClimbing)
-                    hillClimb.postUpdateSound();
+                if (repeatingCurrentPatch)
+                	{
+                	if (!hillClimbing)
+                		{
+                		sendAllParameters();
+                		}
+                	}
+                	
+                if (sendingTestNotes)
+                	{
+	                if (hillClimbing)
+	                    hillClimb.updateSound();
+	                doSendTestNote();
+	                if (hillClimbing)
+	                    hillClimb.postUpdateSound();
+	                }
                 }
             });
         sendTestNotesTimer.setRepeats(true);
+        sendingTestNotes = false;
+        repeatingCurrentPatch = false;
+        sendTestNotesTimer.start();
 
         ButtonGroup testNoteGroup = new ButtonGroup();
         
@@ -4546,18 +4573,38 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (sendingTestNotes)
             {
-            sendTestNotesTimer.stop();
+            //sendTestNotesTimer.stop();
             doSendAllSoundsOff(true);
             sendingTestNotes = false;
             testNotes.setSelected(false);
             }       
         else
             {
-            sendTestNotesTimer.start();
+            //sendTestNotesTimer.start();
             sendingTestNotes = true;
             testNotes.setSelected(true);
             }       
         }
+    
+    public void doRepeatCurrentPatch()
+        {
+        if (repeatingCurrentPatch)
+            {
+            repeatingCurrentPatch = false;
+            repeatCurrentPatch.setSelected(false);
+            }       
+        else if (showSimpleConfirm("Repeat Current Patch", "This will constantly send the current patch to your synthesizer.\nThe sends will be at the rate that test notes are sent.\nAre you sure you want to do this?"))
+            {
+            repeatingCurrentPatch = true;
+            repeatCurrentPatch.setSelected(true);
+            }       
+        }
+    
+    boolean repeatingCurrentPatch = false;
+    public boolean isRepeatingCurrentPatch()
+    	{
+    	return repeatingCurrentPatch;
+    	}
         
     public boolean isSendingTestNotes()
         {
@@ -4713,7 +4760,7 @@ public abstract class Synth extends JComponent implements Updatable
         // This SHOULD put the test notes timer back in the queue AFTER our note-off timer so we have enough
         // time to turn off the note before the test notes timer fires another note.
         
-        if (sendTestNotesTimer.isRunning())
+        if (sendingTestNotes) // sendTestNotesTimer.isRunning())
             {
             sendTestNotesTimer.setInitialDelay(getTestNoteTotalLength() + (tabs.getSelectedComponent() == hillClimbPane ? getPauseBetweenHillClimbPlays() : 0));
             sendTestNotesTimer.restart();

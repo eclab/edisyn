@@ -1032,6 +1032,10 @@ public class HillClimb extends SynthPanel
                 {
                 synth.doSendTestNotes();
                 }
+            if (synth.isRepeatingCurrentPatch())
+                {
+                synth.doRepeatCurrentPatch();
+                }
             // restore patch
             synth.sendAllParameters();
             }

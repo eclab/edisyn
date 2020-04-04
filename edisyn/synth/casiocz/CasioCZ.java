@@ -922,8 +922,8 @@ public class CasioCZ extends Synth
                 
             if (cz1)
                 {
-                // Note inversion
-                model.set("line" + line + "env2velocity", (15 - (val >>> 4)));
+                // Note inversion -- CORRECTION, according to Icaro Ferre (icaroferre on github) this is incorrect.
+                model.set("line" + line + "env2velocity", val >>> 4); // (15 - (val >>> 4)));
                 }
             else
                 {
@@ -968,8 +968,8 @@ public class CasioCZ extends Synth
                 
             if (cz1)
                 {
-                // Note inversion
-                model.set("line" + line + "env1velocity", (15 - (val >>> 4)));
+                // Note inversion -- CORRECTION, according to Icaro Ferre (icaroferre on github) this is incorrect.
+                model.set("line" + line + "env1velocity", val >>> 4);   //(15 - (val >>> 4)));
                 }
             else
                 {

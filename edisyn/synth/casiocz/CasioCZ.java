@@ -56,7 +56,7 @@ public class CasioCZ extends Synth
     public static final String[] OCTAVE = new String[] { "0", "+1", "-1" };        
     public static final String[] LINE_SELECT = new String[] { "1", "2", "1+1'", "1+2'"};        
     public static final String[] VIBRATO_WAVES = new String[] { "Triangle", "Saw Up", "Saw Down", "Square" };
-    public static final String[] ENVELOPES = new String[] { "Oscillator (DCO) 1", "Waveform (DCW) 1", "Amplifier (DCA) 1", "Oscillator (DCO) 2", "Waveform (DCW) 2", "Amplifier (DCA) 2",  };
+    public static final String[] ENVELOPES = new String[] { "Oscillator and Pitch Envelope (DCO) 1", "Waveform Envelope (DCW) 1", "Amplifier Envelope (DCA) 1", "Oscillator and Pitch Envelope (DCO) 2", "Waveform Envelope (DCW) 2", "Amplifier Envelope (DCA) 2",  };
     public static final String[] MODULATION = new String[] { "Off", "Off (Again)", "Ring 2", "Noise", "Ring", "Ring (Again)", "Ring 3", "Noise 2" };  // Note that these are out of order, and 2 are missing
     public static final String[] WAVEFORMS = new String[] { "Saw", "Square", "Pulse", "Null", "Sine-Pulse", "Saw-Pulse", "Multi-Sine", "2x Pulse" };
     public static final String[] WINDOWS = new String[] { "None", "Saw", "Triangle", "Trapezoid", "Pulse", "2x Saw" };  // note that the last window is repeated 3 times

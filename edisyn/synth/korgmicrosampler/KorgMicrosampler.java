@@ -398,12 +398,12 @@ public class KorgMicrosampler extends Synth
         
     public JComponent addPattern(Color color)
         {
-        Category category = new Category(this, "Pattern", color);
+        final Category category = new Category(this, "Pattern", color);
         category.makePasteable("pattern1");
 
         JComponent comp;
         String[] params;
-        HBox hbox = new HBox();
+        final HBox hbox = new HBox();
         
         for(int i = 1; i < 17; i++)
             {
@@ -440,7 +440,7 @@ public class KorgMicrosampler extends Synth
     public HBox[] samples = new HBox[36];
     public JComponent addSample(Color color)
         {
-        Category category = new Category(this, "Sample", color);
+        final Category category = new Category(this, "Sample", color);
         category.makePasteable("sample1");
                 
         JComponent comp;
@@ -631,7 +631,7 @@ public class KorgMicrosampler extends Synth
                 
         JComponent comp;
         String[] params;
-        HBox hbox = new HBox();
+        final HBox hbox = new HBox();
         VBox vbox = new VBox();
         
         HBox next = new HBox();
@@ -1122,7 +1122,7 @@ public class KorgMicrosampler extends Synth
         effects[i].add(comp);
 
 
-        HBox timehbox = new HBox();
+        final HBox timehbox = new HBox();
         final JComponent comp1 = new LabelledDial("Time", this, "fx" + i + "param2", color, 0, 99)
             {
             public String map(int val) { return String.format("%2.1f s", ((val + 1) * 0.1)); }

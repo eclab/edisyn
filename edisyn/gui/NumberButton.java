@@ -75,7 +75,7 @@ public class NumberButton extends NumericalComponent
                     int val = synth.getModel().get(key, 0);
                     VBox vbox = new VBox();
                     vbox.add(new JLabel(getCommand()));
-                    JTextField text = new JTextField(maxLength);
+                    final JTextField text = new JTextField(maxLength);
                     text.setText("" + val);
                     
                     // The following hack is inspired by https://tips4java.wordpress.com/2010/03/14/dialog-focus/

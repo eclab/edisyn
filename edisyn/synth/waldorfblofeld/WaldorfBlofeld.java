@@ -2280,14 +2280,14 @@ public class WaldorfBlofeld extends Synth
         
         multi.setSendMIDI(false);
         multi.getUndo().setWillPush(false);
-        multi.model.setUpdateListeners(false);
-        multi.model.set("number", multinumber);
+        multi.getModel().setUpdateListeners(false);
+        multi.getModel().set("number", multinumber);
         for(int j = 1; j <= 16; j++)
             {
-            multi.model.set("inst" + j + "bank", bank);
-            multi.model.set("inst" + j + "number", number);
+            multi.getModel().set("inst" + j + "bank", bank);
+            multi.getModel().set("inst" + j + "number", number);
             }
-        multi.model.set("name", name);
+        multi.getModel().set("name", name);
         return multi.emit(null, false, false);
         }
 

@@ -80,7 +80,7 @@ public abstract class TuningDefinition
 		return rootMIDINoteF;
 	}
 
-	public JComponent getRootFrequencyComponent(Synth synth)
+	public JComponent getRootFrequencyComponent(final Synth synth)
 	{
 		String name = synth.getSynthNameLocal();
 		getRootMIDINote();  // compute it

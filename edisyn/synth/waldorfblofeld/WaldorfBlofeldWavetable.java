@@ -24,7 +24,7 @@ public class WaldorfBlofeldWavetable
         If it's MID or SYX, call uploadSysex() -- this assumes it's one or more Blofeld wavetables in standard sysex format.
     */
                 
-    public void upload(WaldorfBlofeld synth)
+    public void upload(final WaldorfBlofeld synth)
         {
         //// FIRST we have the user choose a file
         

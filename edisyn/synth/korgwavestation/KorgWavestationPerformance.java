@@ -2347,7 +2347,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
 
     // ugh
-    public VBox[] buildFX(int val, Color color)
+    public VBox[] buildFX(final int val, Color color)
         {
         HBox hbox = new HBox();
         VBox vbox = new VBox();
@@ -3832,7 +3832,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         
         fx[fxnum - 1] = buildFX(fxnum, color);
                 
-        HBox main = new HBox();
+        final HBox main = new HBox();
                 
         params = FX;
         comp = new Chooser("Type", this, "fx" + fxnum + "type", params)
@@ -3935,7 +3935,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         return category;
         }
         
-    public JComponent addPart(int part, Color color)
+    public JComponent addPart(final int part, Color color)
         {
         final Category category  = new Category(this, "Part " + part, color);
         category.makePasteable("part" + part);

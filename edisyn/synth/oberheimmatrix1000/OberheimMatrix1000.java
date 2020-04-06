@@ -1851,7 +1851,7 @@ public class OberheimMatrix1000 extends Synth
 
         // classic patch names
                 
-        JCheckBoxMenuItem useClassicPatchNamesMenu = new JCheckBoxMenuItem("Use Classic Patch Names");
+        final JCheckBoxMenuItem useClassicPatchNamesMenu = new JCheckBoxMenuItem("Use Classic Patch Names");
         menu.add(useClassicPatchNamesMenu);
 
         useClassicPatchNamesMenu.addActionListener(new ActionListener()

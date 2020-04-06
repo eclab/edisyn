@@ -1326,15 +1326,15 @@ public class EmuMorpheus extends Synth
         
         multi.setSendMIDI(false);
         multi.getUndo().setWillPush(false);
-        multi.model.setUpdateListeners(false);
-        multi.model.set("number", multinumber);
-        multi.model.set("bank", multibank);
+        multi.getModel().setUpdateListeners(false);
+        multi.getModel().set("number", multinumber);
+        multi.getModel().set("bank", multibank);
         for(int j = 1; j <= 16; j++)
             {
-            multi.model.set("ch" + j + "bank", bank);
-            multi.model.set("ch" + j + "number", number);
+            multi.getModel().set("ch" + j + "bank", bank);
+            multi.getModel().set("ch" + j + "number", number);
             }
-        multi.model.set("name", name);
+        multi.getModel().set("name", name);
         return multi.emitAll(null, false, false);
         }
 

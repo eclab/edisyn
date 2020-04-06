@@ -224,7 +224,7 @@ public class HillClimb extends SynthPanel
                 {
                 if (synth.isSendingTestNotes())
                     {
-                    temporaryPlay = i;
+                    temporaryPlay = _i;
                     }
                 else
                     {
@@ -234,7 +234,7 @@ public class HillClimb extends SynthPanel
                         plays[j].getButton().setText(titleForButton(j));
                         }
                     plays[_i].getButton().setForeground(Color.RED);
-                    plays[_i].getButton().setText("<HTML><B>" + titleForButton(i) + "</b></HTML>");
+                    plays[_i].getButton().setText("<HTML><B>" + titleForButton(_i) + "</b></HTML>");
 
                     // change the model, send all parameters, maybe play a note,
                     // and then restore the model.
@@ -243,7 +243,7 @@ public class HillClimb extends SynthPanel
                     synth.sendAllParameters();
                     synth.doSendTestNote();
                     synth.model = backup;
-                    temporaryPlay = i;
+                    temporaryPlay = _i;
                     }
 
                 }
@@ -470,7 +470,7 @@ public class HillClimb extends SynthPanel
         }
         
         
-    public HillClimb(Synth synth)
+    public HillClimb(final Synth synth)
         {
         super(synth);
         

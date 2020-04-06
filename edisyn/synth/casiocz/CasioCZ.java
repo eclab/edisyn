@@ -263,7 +263,7 @@ public class CasioCZ extends Synth
         comp = new PatchDisplay(this, 8);
         hbox2.add(comp);
 
-        JCheckBox check = new JCheckBox("CZ-1");
+        final JCheckBox check = new JCheckBox("CZ-1");
         check.setSelected(cz1);
         check.addActionListener(new ActionListener()
             {
@@ -373,7 +373,7 @@ public class CasioCZ extends Synth
     /** Add wave envelope category */
     public JComponent addEnvelope(int line, int env, Color color)
         {
-        String envelope = "line" + line + "env" + env;
+        final String envelope = "line" + line + "env" + env;
         
         Category category = new Category(this, ENVELOPES[(line - 1) * 3 + env - 1], color);
         category.makeDistributable(envelope);

@@ -242,7 +242,7 @@ public class RolandD110Multi extends Synth
 
     public JComponent addReserve(Color color)
         {
-        Category category = new Category(this, "Partial Reserve", color);
+        final Category category = new Category(this, "Partial Reserve", color);
 
         JComponent comp;
         String[] params;

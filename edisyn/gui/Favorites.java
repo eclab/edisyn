@@ -15,7 +15,7 @@ public class Favorites
     {
     public static final int DEFAULT_MAXIMUM = 10;
     int maximum;
-    ArrayList<String> top = new ArrayList<>();
+    ArrayList<String> top = new ArrayList<String>();
         
     public boolean contains(String synthName)
         {
@@ -29,7 +29,7 @@ public class Favorites
 
     void buildFromPreferences()
         {
-        top = new ArrayList<>();
+        top = new ArrayList<String>();
         Preferences prefs = Prefs.getGlobalPreferences("Top");
         for(int i = maximum - 1; i >= 0; i--)
             {
@@ -80,7 +80,7 @@ public class Favorites
         
     public void clearAll()
         {
-        top = new ArrayList<>();
+        top = new ArrayList<String>();
         dumpToPreferences();
         }
 
@@ -101,10 +101,10 @@ public class Favorites
         Favorites f = new Favorites();
                 
         final String[] synthNames = Synth.getSynthNames();
-        JComboBox combo2 = new JComboBox(new String[0]);   
+        final JComboBox combo2 = new JComboBox(new String[0]);   
         combo2.setMaximumRowCount(24);
         
-        ArrayList<String> sortedTop = (ArrayList<String>)(f.top.clone());
+        final ArrayList<String> sortedTop = (ArrayList<String>)(f.top.clone());
         Collections.sort(sortedTop);
         
         int[] synthIndices = new int[sortedTop.size()];
@@ -125,7 +125,7 @@ public class Favorites
                     }
                 }
             }
-        JComboBox combo1 = new JComboBox(synthFavs);
+        final JComboBox combo1 = new JComboBox(synthFavs);
         combo1.setMaximumRowCount(synthFavs.length);
         combo1.addItemListener(new ItemListener()
             {
@@ -204,7 +204,7 @@ public class Favorites
         Collections.sort(sortedTop);
         
         boolean hasFavorite = false;
-        String[] synthNames = synth.getSynthNames();
+        final String[] synthNames = synth.getSynthNames();
         for(int j = 0; j < sortedTop.size(); j++)
             {
             for(int k = 0; k < synthNames.length; k++)              // yeah yeah, O(n^2)

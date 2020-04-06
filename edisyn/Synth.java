@@ -38,10 +38,10 @@ public abstract class Synth extends JComponent implements Updatable
     // Counter for total number of open windows.  When this drops to zero,
     // the program will quit automatically.
     static int numOpenWindows = 0;
-    // The model proper
-    public Model model;
-    // Our own private random number generator
-    public Random random;
+    /** The model proper */
+    protected Model model;
+    /** Our own private random number generator */
+    protected Random random;
     // The file associated with the synth
     File file;
     // will the next load be a merge?  If 0, we're not merging.  Else it's the merge probability.
@@ -377,7 +377,7 @@ public abstract class Synth extends JComponent implements Updatable
     
     static Class[] loadSynths()
         {
-        ArrayList<Class> al = new ArrayList<>();
+        ArrayList<Class> al = new ArrayList<Class>();
         Scanner scan = new java.util.Scanner(edisyn.Synth.class.getResourceAsStream("synth/Synths.txt"));
         while(scan.hasNextLine())
             {
@@ -1078,7 +1078,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 }
                                 
-            public void send(final MidiMessage message, long timeStamp)
+            public void send(final MidiMessage message, final long timeStamp)
                 {
                 // I'm doing this in the Swing event thread because I figure it's multithreaded
                 SwingUtilities.invokeLater(new Runnable()
@@ -1202,7 +1202,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 }
                                 
-            public void send(final MidiMessage message, long timeStamp)
+            public void send(final MidiMessage message, final long timeStamp)
                 {
                 // I'm doing this in the Swing event thread because I figure it's multithreaded
                 SwingUtilities.invokeLater(new Runnable()
@@ -4719,7 +4719,7 @@ public abstract class Synth extends JComponent implements Updatable
         doSendTestNote(getTestNotePitch(), true);
         }
 
-    public void doSendTestNote(int testNote, boolean clearOldNotes)
+    public void doSendTestNote(int testNote, final boolean clearOldNotes)
         {
         // possibly clear all notes
         if (clearOldNotes)
@@ -5577,7 +5577,7 @@ public abstract class Synth extends JComponent implements Updatable
                                     vbox.add(hbox);
                                     vbox.add(menu);
  
-                                    JOptionPane pane = new JOptionPane(vbox,  JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] {  "Load in New Editor" , localButton, "Cancel" }, "Load in New Editor");
+                                    final JOptionPane pane = new JOptionPane(vbox,  JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] {  "Load in New Editor" , localButton, "Cancel" }, "Load in New Editor");
                                                                 
                                     localButton.addActionListener(new ActionListener()
                                         {

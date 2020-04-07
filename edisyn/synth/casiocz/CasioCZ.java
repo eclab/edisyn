@@ -922,7 +922,7 @@ public class CasioCZ extends Synth
                 
             if (cz1)
                 {
-                // Note inversion -- CORRECTION, according to Icaro Ferre (icaroferre on github) this is incorrect.
+                // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
                 model.set("line" + line + "env2velocity", val >>> 4); // (15 - (val >>> 4)));
                 }
             else
@@ -968,7 +968,7 @@ public class CasioCZ extends Synth
                 
             if (cz1)
                 {
-                // Note inversion -- CORRECTION, according to Icaro Ferre (icaroferre on github) this is incorrect.
+                // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
                 model.set("line" + line + "env1velocity", val >>> 4);   //(15 - (val >>> 4)));
                 }
             else
@@ -1335,8 +1335,8 @@ public class CasioCZ extends Synth
                         
             if (cz1)
                 {
-                // Note inversion
-                val |= (15 - model.get("line" + line + "env2velocity") << 4);
+                // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
+                val |= (model.get("line" + line + "env2velocity") << 4); // (15 - model.get("line" + line + "env2velocity") << 4);
                 }
                                 
             pos = nybblize(val, data, pos);
@@ -1383,8 +1383,8 @@ public class CasioCZ extends Synth
                         
             if (cz1)
                 {
-                // Note inversion
-                val |= (15 - model.get("line" + line + "env1velocity") << 4);
+                // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
+                val |= (model.get("line" + line + "env1velocity") << 4);   //(15 - model.get("line" + line + "env1velocity") << 4);
                 }
                                 
             pos = nybblize(val, data, pos);

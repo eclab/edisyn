@@ -671,14 +671,14 @@ public class Model implements Cloneable
     boolean recentlySet = false;
     
     /** Checks if any parameter in the model has been recently set.
-    	If so, returns true.
-    	In any event, resets the recently set flag. */
+        If so, returns true.
+        In any event, resets the recently set flag. */
     public boolean checkIfRecentlySet()
-    	{
-    	boolean val = recentlySet;
-    	recentlySet = false;
-    	return val;
-    	}
+        {
+        boolean val = recentlySet;
+        recentlySet = false;
+        return val;
+        }
     
     /** Adds a key with the given Integer value, or changes it to the given value. */        
     public void set(String key, int value)

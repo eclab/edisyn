@@ -165,30 +165,30 @@ public class HTMLBrowser extends JPanel
                     {
                     java.net.URL url = he.getURL();
                     if((url.getProtocol().equals("http") ||
-                        url.getProtocol().equals("https")))
-	                    {
-                            if(Desktop.isDesktopSupported() &&
-                               Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
+                            url.getProtocol().equals("https")))
+                        {
+                        if(Desktop.isDesktopSupported() &&
+                            Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
+                            {
+                            try
                                 {
-                                    try
-                                        {
-                                            Desktop.getDesktop().browse(url.toURI());
-                                        }
-                                    catch(Exception e)
-                                        {
-                                            e.printStackTrace();
-                                        }
-	                            }
-                            else
-                                {
-                                    JOptionPane.showMessageDialog(
-                                         null,
-                                         new JTextArea("Opening link in external browser not supported on this computer. The URL was "  + url.toString()));
-
+                                Desktop.getDesktop().browse(url.toURI());
                                 }
-	                    }
+                            catch(Exception e)
+                                {
+                                e.printStackTrace();
+                                }
+                            }
+                        else
+                            {
+                            JOptionPane.showMessageDialog(
+                                null,
+                                new JTextArea("Opening link in external browser not supported on this computer. The URL was "  + url.toString()));
+
+                            }
+                        }
                     else
-	                    {
+                        {
                         try
                             {
                             infoPane.getEditorKit().createDefaultDocument();

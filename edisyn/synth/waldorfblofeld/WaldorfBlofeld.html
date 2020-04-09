@@ -16,18 +16,20 @@ The SL option gives you the option of specifying a <b>sound sample</b> instead o
 
 <br><br><h3>Uploading Wavetables</h3>
 
-Under the Blofeld menu you'll find an option to upload a wavetable.  You can upload wavetables from three different formats:
+Under the Blofeld menu you'll find an option to upload a wavetable.  You can upload wavetables in three different formats:
 
 <ul>
-<li><b>WAV files from http://waveeditonline.com</b>  This is a large collection of WAV files encoding wavetables for other devices.  You can even download all of them as one zip file.  Edisyn will convert them to the Blofeld as best it can (resampling to the Blofeld's lower sampling rate).  These are particularly good because there is a very nice free wavetable editor available, <b>http://synthtech.com/waveedit</b>
+<li><b>WAV files from <a href="http://waveeditonline.com">http://waveeditonline.com</a></b>  This is a large collection of WAV files encoding wavetables for other devices.  You can even download all of them as one zip file.  Edisyn will convert them to the Blofeld as best it can (resampling to the Blofeld's lower sampling rate).  These are particularly good because there is a very nice free wavetable editor available, <b><a href="http://synthtech.com/waveedit">http://synthtech.com/waveedit</a></b>
 <p><li><b>Sysex files in SYX or MID format.</b>  These are groups of one or more wavetables in standard Blofeld sysex.  Some good sources for these are:
-<ul><li>Stromeko's Waldorf downloads page.   <b>http://synth.stromeko.net/Downloads.html</b>
-<P><li>MarsMelons's custom wavetables.  <b>http://www.marsmelons.com/custom-wavetables-waldorf-blofeld/</b>
-<p><li>Big Gnome's VFX wavetables.  <b>https://tinyurl.com/vfxwavetables</b> (from <b>https://waldorfmusic.com/en/forum/blofeld-en/76-sharing-custom-set-of-blofeld-wavetables</b>)
+<ul><li>Stromeko's Waldorf downloads page.   <b><a href="http://synth.stromeko.net/Downloads.html">http://synth.stromeko.net/Downloads.html</a></b>
+<P><li>MarsMelons's custom wavetables.  <b><a href="http://www.marsmelons.com/custom-wavetables-waldorf-blofeld/">http://www.marsmelons.com/custom-wavetables-waldorf-blofeld/</a></b>
+<p><li>Big Gnome's VFX wavetables.  <b><a href="https://tinyurl.com/vfxwavetables">https://tinyurl.com/vfxwavetables</a></b> (from <b><a href="https://waldorfmusic.com/en/forum/blofeld-en/76-sharing-custom-set-of-blofeld-wavetables">https://waldorfmusic.com/en/forum/blofeld-en/76-sharing-custom-set-of-blofeld-wavetables</a></b>)
 </ul>
 </ul>
 
-<b>Important note:</b> You probaby want to turn Limit WT <i>off</i> when using user wavetables.  Otherwise the Blofeld will not work properly with any PWM values greater than 120.
+<b>Important note:</b> You probaby want to turn Limit WT <i>off</i> when using user wavetables.  Otherwise the Blofeld will not work properly with any PWM values greater than 120.  
+
+<p>Why? Limit WT stands for "Limit Wavetable".  Early Waldorf and PPG wavetables reserved the top few waves for sawtooth, square, and triangle waves regardless of the rest of the wavetable; this would make for weird modulation results.  The Blofeld has those wavetables internally, but LimitWT prevents modulation from reaching those waves.  But your own wavetable probably doesn't have that weirdness, so you want to turn Limit WT off. 
 
 <br><br><h3>Uploading Pseudo-MPE</h3>
 

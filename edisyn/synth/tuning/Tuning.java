@@ -18,12 +18,14 @@ import java.awt.event.*;
 import java.util.*;
 import java.io.*;
 import javax.sound.midi.*;
+import java.util.*;
 
 public class Tuning extends Synth
     {
     public static final String DEFAULT_NAME = "Tuning";
     public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     public static final int SCRATCH_SLOT = 0;
+    File file = null;
     
     public Tuning()
         {
@@ -129,6 +131,7 @@ public class Tuning extends Synth
         category.add(main);
         return category;
         }
+        
     public void setTunings(int[] base, int[] detune)
         {
         getUndo().push(model);
@@ -173,6 +176,17 @@ public class Tuning extends Synth
         {
         JMenu menu = new JMenu("Tuning");
         menubar.add(menu);
+        
+        JMenuItem scala = new JMenuItem("Load Scala File...");
+            scala.addActionListener(new ActionListener() 
+                {
+                public void actionPerformed(ActionEvent e)
+                    {
+					doLoadScala();
+                    }
+                });
+            menu.add(scala);
+
         for(TuningDefinition definition : tuningDefinitions)
             {
             final TuningDefinition _def = definition;
@@ -190,6 +204,7 @@ public class Tuning extends Synth
                 });
             menu.add(menuItem);
             }
+            
         JMenu namedMenu = new JMenu("Named Scales");
         for(TuningDefinition definition : namedScales)
             {
@@ -434,6 +449,50 @@ public class Tuning extends Synth
         return new byte[] { (byte)0xF0, 0x7E, getID(), 0x08, 0x00, (byte)tempModel.get("number"), (byte)0xF7 };
         }
 
+    /** Select a Scala file.  */
+                
+    public void doLoadScala()
+        {
+        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Load a Scala File", FileDialog.LOAD);
+        fd.setFilenameFilter(new FilenameFilter()
+            {
+            public boolean accept(File dir, String name)
+                {
+                return ensureFileEndsWith(name, ".scl").equals(name) || ensureFileEndsWith(name, ".SCL").equals(name);
+                }
+            });
 
+        if (file != null)
+            {
+            fd.setFile(file.getName());
+            fd.setDirectory(file.getParentFile().getPath());
+            }
+        else
+            {
+            String path = getLastDirectory();
+            if (path != null)
+                fd.setDirectory(path);
+            }
+                
+        disableMenuBar();
+        fd.setVisible(true);
+        enableMenuBar();
+
+        FileInputStream is = null;
+        if (fd.getFile() != null)
+            try
+                {
+                file = new File(fd.getDirectory(), fd.getFile());
+                loadScala(file);
+                }
+            catch (IOException ex)
+                {
+                showSimpleError("File Error", "An error occurred on reading the file.");
+                }
+        }
+
+	public void loadScala(File file) throws IOException
+		{
+		}
 
     }

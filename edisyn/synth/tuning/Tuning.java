@@ -483,7 +483,11 @@ public class Tuning extends Synth
             try
                 {
                 file = new File(fd.getDirectory(), fd.getFile());
-                loadScala(file);
+                boolean result = loadScala(file);
+                if (!result)
+                	{
+                	showSimpleError("File Error", "The provided file could not be read.");
+                	}
                 }
             catch (IOException ex)
                 {
@@ -491,8 +495,11 @@ public class Tuning extends Synth
                 }
         }
 
-	public void loadScala(File file) throws IOException
+	// Return FALSE if the file couldn't be read, else load the model and return TRUE
+	// You can also permit an IOException to be thrown
+	public boolean loadScala(File file) throws IOException
 		{
+		return true;
 		}
 
     }

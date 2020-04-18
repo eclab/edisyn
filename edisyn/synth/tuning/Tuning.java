@@ -503,7 +503,7 @@ public class Tuning extends Synth {
             }
         }
         cents.add(0, 0.0); // I expect a 0 at the beginning of my array.
-        Double[] outarr = cents.toArray(Double[]::new);
+        Double[] outarr = cents.toArray(new Double[0]);
         RepeatingScale rs = new RepeatingScale(outarr, DEFAULT_NAME);
         rs.popup(Tuning.this);
         if (rs.isConfigured()) {

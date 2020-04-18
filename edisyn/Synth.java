@@ -113,7 +113,7 @@ public abstract class Synth extends JComponent implements Updatable
     // will the next load be a merge?  If 0, we're not merging.  Else it's the merge probability.
     private double merging = 0.0;
     
-	/** Returns whether we're not merging. */
+    /** Returns whether we're not merging. */
     public boolean isMerging() { return merging != 0.0; }
 
     /** Returns the current merge probability.  If the value is 0.0,

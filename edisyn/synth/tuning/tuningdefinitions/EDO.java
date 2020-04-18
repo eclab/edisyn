@@ -65,10 +65,7 @@ public class EDO extends TuningDefinition
             }
         }
                 
-    public static double edoNumberToHz(int m,
-        int divisionsPerOctave,
-        double baseFreq,
-        int baseNote)
+    public static double edoNumberToHz(int m, int divisionsPerOctave, double baseFreq, int baseNote)
         {
         return Math.pow(2, (m - baseNote) / (divisionsPerOctave * 1.0)) * baseFreq;
         }

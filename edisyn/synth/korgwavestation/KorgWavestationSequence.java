@@ -1764,7 +1764,7 @@ return pos;
             });
         menu.add(soloMenu);
 
-        JCheckBoxMenuItem blockSendingMenu = new JCheckBoxMenuItem("Block Sending Any Parameters");
+        final JCheckBoxMenuItem blockSendingMenu = new JCheckBoxMenuItem("Block Sending Any Parameters");
         
         String str = getLastX("BlockSendingParameters", getSynthName(), true);
         

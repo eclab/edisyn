@@ -2159,11 +2159,11 @@ public class Yamaha4Op extends Synth
         return (recognizeBasic(data) > 0) || recognizeBulk(data);
         }
         
-    ArrayList<byte[]> resultsSoFar = new ArrayList<>();
+    ArrayList<byte[]> resultsSoFar = new ArrayList<byte[]>();
         
     public void doRequestMerge(double percentage)
         {
-        resultsSoFar = new ArrayList<>();
+        resultsSoFar = new ArrayList<byte[]>();
         super.doRequestMerge(percentage);
         }
 

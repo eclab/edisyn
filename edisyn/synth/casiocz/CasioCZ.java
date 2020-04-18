@@ -56,7 +56,7 @@ public class CasioCZ extends Synth
     public static final String[] OCTAVE = new String[] { "0", "+1", "-1" };        
     public static final String[] LINE_SELECT = new String[] { "1", "2", "1+1'", "1+2'"};        
     public static final String[] VIBRATO_WAVES = new String[] { "Triangle", "Saw Up", "Saw Down", "Square" };
-    public static final String[] ENVELOPES = new String[] { "Oscillator (DCO) 1", "Waveform (DCW) 1", "Amplifier (DCA) 1", "Oscillator (DCO) 2", "Waveform (DCW) 2", "Amplifier (DCA) 2",  };
+    public static final String[] ENVELOPES = new String[] { "Oscillator and Pitch Envelope (DCO) 1", "Waveform Envelope (DCW) 1", "Amplifier Envelope (DCA) 1", "Oscillator and Pitch Envelope (DCO) 2", "Waveform Envelope (DCW) 2", "Amplifier Envelope (DCA) 2",  };
     public static final String[] MODULATION = new String[] { "Off", "Off (Again)", "Ring 2", "Noise", "Ring", "Ring (Again)", "Ring 3", "Noise 2" };  // Note that these are out of order, and 2 are missing
     public static final String[] WAVEFORMS = new String[] { "Saw", "Square", "Pulse", "Null", "Sine-Pulse", "Saw-Pulse", "Multi-Sine", "2x Pulse" };
     public static final String[] WINDOWS = new String[] { "None", "Saw", "Triangle", "Trapezoid", "Pulse", "2x Saw" };  // note that the last window is repeated 3 times
@@ -263,7 +263,7 @@ public class CasioCZ extends Synth
         comp = new PatchDisplay(this, 8);
         hbox2.add(comp);
 
-        JCheckBox check = new JCheckBox("CZ-1");
+        final JCheckBox check = new JCheckBox("CZ-1");
         check.setSelected(cz1);
         check.addActionListener(new ActionListener()
             {
@@ -373,7 +373,7 @@ public class CasioCZ extends Synth
     /** Add wave envelope category */
     public JComponent addEnvelope(int line, int env, Color color)
         {
-        String envelope = "line" + line + "env" + env;
+        final String envelope = "line" + line + "env" + env;
         
         Category category = new Category(this, ENVELOPES[(line - 1) * 3 + env - 1], color);
         category.makeDistributable(envelope);
@@ -922,8 +922,8 @@ public class CasioCZ extends Synth
                 
             if (cz1)
                 {
-                // Note inversion
-                model.set("line" + line + "env2velocity", (15 - (val >>> 4)));
+                // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
+                model.set("line" + line + "env2velocity", val >>> 4); // (15 - (val >>> 4)));
                 }
             else
                 {
@@ -968,8 +968,8 @@ public class CasioCZ extends Synth
                 
             if (cz1)
                 {
-                // Note inversion
-                model.set("line" + line + "env1velocity", (15 - (val >>> 4)));
+                // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
+                model.set("line" + line + "env1velocity", val >>> 4);   //(15 - (val >>> 4)));
                 }
             else
                 {
@@ -1335,8 +1335,8 @@ public class CasioCZ extends Synth
                         
             if (cz1)
                 {
-                // Note inversion
-                val |= (15 - model.get("line" + line + "env2velocity") << 4);
+                // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
+                val |= (model.get("line" + line + "env2velocity") << 4); // (15 - model.get("line" + line + "env2velocity") << 4);
                 }
                                 
             pos = nybblize(val, data, pos);
@@ -1383,8 +1383,8 @@ public class CasioCZ extends Synth
                         
             if (cz1)
                 {
-                // Note inversion
-                val |= (15 - model.get("line" + line + "env1velocity") << 4);
+                // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
+                val |= (model.get("line" + line + "env1velocity") << 4);   //(15 - model.get("line" + line + "env1velocity") << 4);
                 }
                                 
             pos = nybblize(val, data, pos);

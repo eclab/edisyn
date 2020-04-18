@@ -115,7 +115,7 @@ public class StringComponent extends JComponent implements Updatable, HasKey
                     String val = synth.getModel().get(key, "").trim();
                     VBox vbox = new VBox();
                     vbox.add(new JLabel(getCommand()));
-                    JTextField text = new JTextField(maxLength);
+                    final JTextField text = new JTextField(maxLength);
                     text.setText(synth.getModel().get(key, ""));
                     
                     // The following hack is inspired by https://tips4java.wordpress.com/2010/03/14/dialog-focus/

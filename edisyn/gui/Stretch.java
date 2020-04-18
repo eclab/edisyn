@@ -36,7 +36,7 @@ public class Stretch
         return _makeStretch(Integer.MAX_VALUE, Integer.MAX_VALUE);
         } 
     
-    static JComponent _makeStretch(int horizontal, int vertical)
+    static JComponent _makeStretch(final int horizontal, final int vertical)
         {
         JPanel panel = new JPanel()
             {

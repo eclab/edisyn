@@ -267,7 +267,7 @@ public class RolandJV880Multi extends Synth
 
     public JComponent addReserve(Color color)
         {
-        Category category = new Category(this, "Voice Reserve", color);
+        final Category category = new Category(this, "Voice Reserve", color);
 
         JComponent comp;
         String[] params;

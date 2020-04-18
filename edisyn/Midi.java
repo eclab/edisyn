@@ -11,6 +11,7 @@ import javax.sound.midi.*;
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
+import java.lang.reflect.*;
 
 /**** 
       Static class which contains methods for handling the global MIDI device facility.
@@ -185,11 +186,15 @@ public class Midi
             {
             try
                 {
-                midiDevices = uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider.getMidiDeviceInfo();
+                Class c = Class.forName("uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider");
+                Method m = c.getMethod("getMidiDeviceInfo", new Class[0]);
+                midiDevices = (MidiDevice.Info[])(m.invoke(null));
+//                midiDevices = uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider.getMidiDeviceInfo();
                 }
             catch (Throwable ex)
                 {
                 System.err.println("WARNING (Midi.java): error on obtaining CoreMIDI4J, but we think we're a Mac.  This should never happen.");
+                ex.printStackTrace();
                 midiDevices = MidiSystem.getMidiDeviceInfo();
                 }
             }

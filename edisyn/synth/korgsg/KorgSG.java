@@ -360,7 +360,7 @@ public class KorgSG extends Synth
     public static final int EFFECT_FLANGER_DELAY = 11;
     public static final int EFFECT_HYPER_ENHANCER = 12;
 
-    public JComponent addEffect(int effect, Color color)
+    public JComponent addEffect(final int effect, Color color)
         {
         JComponent comp;
         String[] params;

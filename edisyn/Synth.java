@@ -38,14 +38,12 @@ public abstract class Synth extends JComponent implements Updatable
     // Counter for total number of open windows.  When this drops to zero,
     // the program will quit automatically.
     static int numOpenWindows = 0;
-    // The model proper
-    public Model model;
-    // Our own private random number generator
-    public Random random;
+    /** The model proper */
+    protected Model model;
+    /** Our own private random number generator */
+    protected Random random;
     // The file associated with the synth
     File file;
-    // will the next load be a merge?  If 0, we're not merging.  Else it's the merge probability.
-    double merging = 0.0;
     
     public JTabbedPane tabs = new JTabbedPane();
 
@@ -69,6 +67,7 @@ public abstract class Synth extends JComponent implements Updatable
     public JCheckBoxMenuItem recombinationToggle;
     public JMenuItem hillClimbMenu;
     public JCheckBoxMenuItem testNotes;
+    public JCheckBoxMenuItem repeatCurrentPatch;
     public JComponent hillClimbPane;
     public JMenuItem getAll;
     public JMenuItem testIncomingController;
@@ -106,9 +105,32 @@ public abstract class Synth extends JComponent implements Updatable
     boolean testIncomingControllerMIDI;
     boolean testIncomingSynthMIDI;
 
+
     boolean parsingForMerge = false;
     /** Indicates that we are a sacrificial synth which is parsing an incoming sysex dump and then will be merged with the main synth. */
     public boolean isParsingForMerge() { return parsingForMerge; }
+
+    // will the next load be a merge?  If 0, we're not merging.  Else it's the merge probability.
+    private double merging = 0.0;
+    
+	/** Returns whether we're not merging. */
+    public boolean isMerging() { return merging != 0.0; }
+
+    /** Returns the current merge probability.  If the value is 0.0,
+        then merging is not occurring. */
+    public double getMergeProbability()
+        {
+        return merging;
+        }
+
+    /** Returns the current merge probability.  If the value is 0.0,
+        then merging is not occurring. */
+    public void setMergeProbability(double val)
+        {
+        if (val < 0) val = 0; 
+        if (val > 1) val = 1;
+        merging = val;
+        }
 
     public JMenuItem copyTab = new JMenuItem("Copy Tab");
     public JMenuItem pasteTab = new JMenuItem("Paste Tab");
@@ -119,7 +141,6 @@ public abstract class Synth extends JComponent implements Updatable
     //boolean useMapForRecombination = true;
     boolean showingMutation = false;
     /** Returns true if we're currently trying to merge with another patch.  */
-    public boolean isMerging() { return merging != 0.0; }
     public boolean isShowingMutation() { return showingMutation; }
     public void setShowingMutation(boolean val) 
         { 
@@ -376,7 +397,7 @@ public abstract class Synth extends JComponent implements Updatable
     
     static Class[] loadSynths()
         {
-        ArrayList<Class> al = new ArrayList<>();
+        ArrayList<Class> al = new ArrayList<Class>();
         Scanner scan = new java.util.Scanner(edisyn.Synth.class.getResourceAsStream("synth/Synths.txt"));
         while(scan.hasNextLine())
             {
@@ -1041,21 +1062,6 @@ public abstract class Synth extends JComponent implements Updatable
     // flag for whether sending MIDI is temporarily turned off or not
     boolean sendMIDI = true;  // we can send MIDI 
 
-    /** Returns the current merge probability.  If the value is 0.0,
-        then merging is not occurring. */
-    public double getMergeProbability()
-        {
-        return merging;
-        }
-
-    /** Returns the current merge probability.  If the value is 0.0,
-        then merging is not occurring. */
-    public void setMergeProbability(double val)
-        {
-        if (val < 0) val = 0; 
-        if (val > 1) val = 1;
-        merging = val;
-        }
 
 
     /** Returns whether the mutation map should be used for recombination. */
@@ -1077,7 +1083,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 }
                                 
-            public void send(final MidiMessage message, long timeStamp)
+            public void send(final MidiMessage message, final long timeStamp)
                 {
                 // I'm doing this in the Swing event thread because I figure it's multithreaded
                 SwingUtilities.invokeLater(new Runnable()
@@ -1101,7 +1107,7 @@ public abstract class Synth extends JComponent implements Updatable
                                         else
                                             {
                                             //System.err.println("Merging Done?");
-                                            merging = 0.0;
+                                            setMergeProbability(0.0);
                                             }
                                         }
                                     else
@@ -1201,7 +1207,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 }
                                 
-            public void send(final MidiMessage message, long timeStamp)
+            public void send(final MidiMessage message, final long timeStamp)
                 {
                 // I'm doing this in the Swing event thread because I figure it's multithreaded
                 SwingUtilities.invokeLater(new Runnable()
@@ -2534,12 +2540,12 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                Synth.this.merging = 1.0;
+                setMergeProbability(1.0);
                 setActiveSynth(true);
                 if (doOpen(true) && getSendsParametersAfterLoad())
                     sendAllParameters();
                 setActiveSynth(false);
-                Synth.this.merging = 0.0;
+                setMergeProbability(0.0);
                 }
             });
         menu.addSeparator();
@@ -3330,6 +3336,7 @@ public abstract class Synth extends JComponent implements Updatable
 
 
         writeTo = new JMenuItem("Write to Patch...");
+        writeTo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()  |  InputEvent.SHIFT_MASK));
         menu.add(writeTo);
         writeTo.addActionListener(new ActionListener()
             {
@@ -3355,6 +3362,17 @@ public abstract class Synth extends JComponent implements Updatable
         transmitParameters.setSelected(allowsTransmitsParameters);
 
                 
+        repeatCurrentPatch = new JCheckBoxMenuItem("Repeatedly Send Current Patch");
+        //repeatCurrentPatch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()  |  InputEvent.SHIFT_MASK));
+        menu.add(repeatCurrentPatch);
+        repeatCurrentPatch.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doRepeatCurrentPatch();
+                }
+            });
+
 
         transmitTo = new JMenuItem("Send to Patch...");
 /*
@@ -3513,14 +3531,28 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed(ActionEvent e)
                 {
-                if (hillClimbing)
-                    hillClimb.updateSound();
-                doSendTestNote();
-                if (hillClimbing)
-                    hillClimb.postUpdateSound();
+                if (repeatingCurrentPatch)
+                    {
+                    if (!hillClimbing)
+                        {
+                        sendAllParameters();
+                        }
+                    }
+                        
+                if (sendingTestNotes)
+                    {
+                    if (hillClimbing)
+                        hillClimb.updateSound();
+                    doSendTestNote();
+                    if (hillClimbing)
+                        hillClimb.postUpdateSound();
+                    }
                 }
             });
         sendTestNotesTimer.setRepeats(true);
+        sendingTestNotes = false;
+        repeatingCurrentPatch = false;
+        sendTestNotesTimer.start();
 
         ButtonGroup testNoteGroup = new ButtonGroup();
         
@@ -4326,7 +4358,7 @@ public abstract class Synth extends JComponent implements Updatable
                 return;
             }
                 
-        Synth.this.merging = 0.0;
+        setMergeProbability(0.0);
         performRequestCurrentDump();
         }  
     
@@ -4346,7 +4378,7 @@ public abstract class Synth extends JComponent implements Updatable
         Model tempModel = buildModel();
         if (gatherPatchInfo("Request Patch", tempModel, false))
             {
-            Synth.this.merging = 0.0;
+            setMergeProbability(0.0);
             performRequestDump(tempModel, true);
             }
         } 
@@ -4362,7 +4394,7 @@ public abstract class Synth extends JComponent implements Updatable
         Model tempModel = buildModel();
         if (gatherPatchInfo("Request Merge", tempModel, false))
             {
-            Synth.this.merging = percentage;
+            setMergeProbability(percentage);
             performRequestDump(tempModel, false);
             }
         }
@@ -4546,17 +4578,42 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (sendingTestNotes)
             {
-            sendTestNotesTimer.stop();
+            //sendTestNotesTimer.stop();
             doSendAllSoundsOff(true);
             sendingTestNotes = false;
             testNotes.setSelected(false);
             }       
         else
             {
-            sendTestNotesTimer.start();
+            //sendTestNotesTimer.start();
             sendingTestNotes = true;
             testNotes.setSelected(true);
             }       
+        }
+    
+    public void doRepeatCurrentPatch()
+        {
+        if (repeatingCurrentPatch)
+            {
+            repeatingCurrentPatch = false;
+            repeatCurrentPatch.setSelected(false);
+            }       
+        else if (showSimpleConfirm("Repeat Current Patch", "This will constantly send the current patch to your synthesizer.\nThe sends will be at the rate that test notes are sent.\nThis is for certain synths with limitations: see the manual.\nAre you sure you want to do this?"))
+            {
+            repeatingCurrentPatch = true;
+            repeatCurrentPatch.setSelected(true);
+            }
+        else
+            {
+            repeatingCurrentPatch = false;
+            repeatCurrentPatch.setSelected(false);
+            }
+        }
+    
+    boolean repeatingCurrentPatch = false;
+    public boolean isRepeatingCurrentPatch()
+        {
+        return repeatingCurrentPatch;
         }
         
     public boolean isSendingTestNotes()
@@ -4672,7 +4729,7 @@ public abstract class Synth extends JComponent implements Updatable
         doSendTestNote(getTestNotePitch(), true);
         }
 
-    public void doSendTestNote(int testNote, boolean clearOldNotes)
+    public void doSendTestNote(int testNote, final boolean clearOldNotes)
         {
         // possibly clear all notes
         if (clearOldNotes)
@@ -4713,7 +4770,7 @@ public abstract class Synth extends JComponent implements Updatable
         // This SHOULD put the test notes timer back in the queue AFTER our note-off timer so we have enough
         // time to turn off the note before the test notes timer fires another note.
         
-        if (sendTestNotesTimer.isRunning())
+        if (sendingTestNotes) // sendTestNotesTimer.isRunning())
             {
             sendTestNotesTimer.setInitialDelay(getTestNoteTotalLength() + (tabs.getSelectedComponent() == hillClimbPane ? getPauseBetweenHillClimbPlays() : 0));
             sendTestNotesTimer.restart();
@@ -5530,7 +5587,7 @@ public abstract class Synth extends JComponent implements Updatable
                                     vbox.add(hbox);
                                     vbox.add(menu);
  
-                                    JOptionPane pane = new JOptionPane(vbox,  JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] {  "Load in New Editor" , localButton, "Cancel" }, "Load in New Editor");
+                                    final JOptionPane pane = new JOptionPane(vbox,  JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] {  "Load in New Editor" , localButton, "Cancel" }, "Load in New Editor");
                                                                 
                                     localButton.addActionListener(new ActionListener()
                                         {
@@ -5958,7 +6015,7 @@ public abstract class Synth extends JComponent implements Updatable
             // request patch
 
             getAll.setText("Stop Downloading Batch");
-            Synth.this.merging = 0.0;
+            setMergeProbability(0.0);
             performRequestDump(currentPatch, true);
             incomingPatch = false;
                 
@@ -5976,7 +6033,7 @@ public abstract class Synth extends JComponent implements Updatable
                         else 
                             {
                             System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Trying again.");
-                            Synth.this.merging = 0.0;
+                            setMergeProbability(0.0);
                             performRequestDump(currentPatch, true);
                             }
                         }
@@ -5997,7 +6054,7 @@ public abstract class Synth extends JComponent implements Updatable
         else
             {
             currentPatch = getNextPatchLocation(currentPatch);
-            Synth.this.merging = 0.0;
+            setMergeProbability(0.0);
             performRequestDump(currentPatch, true);
             incomingPatch = false;
             }

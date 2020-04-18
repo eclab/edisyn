@@ -668,6 +668,18 @@ public class Model implements Cloneable
     
     public static final boolean debug = false;
     
+    boolean recentlySet = false;
+    
+    /** Checks if any parameter in the model has been recently set.
+        If so, returns true.
+        In any event, resets the recently set flag. */
+    public boolean checkIfRecentlySet()
+        {
+        boolean val = recentlySet;
+        recentlySet = false;
+        return val;
+        }
+    
     /** Adds a key with the given Integer value, or changes it to the given value. */        
     public void set(String key, int value)
         {
@@ -688,6 +700,7 @@ public class Model implements Cloneable
         storage.put(key, Integer.valueOf(value));
         lastKey = key;
         updateListenersForKey(key);
+        recentlySet = true;
         }
 
         

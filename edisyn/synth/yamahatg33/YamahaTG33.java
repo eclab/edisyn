@@ -461,7 +461,7 @@ public class YamahaTG33 extends Synth
 
         menu.add(oneMPEMenu);
 
-        JCheckBoxMenuItem vectorMenu = new JCheckBoxMenuItem("Receive Vector Data Only");
+        final JCheckBoxMenuItem vectorMenu = new JCheckBoxMenuItem("Receive Vector Data Only");
         vectorMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -480,15 +480,15 @@ public class YamahaTG33 extends Synth
         
         multi.setSendMIDI(false);
         multi.getUndo().setWillPush(false);
-        multi.model.setUpdateListeners(false);
+        multi.getModel().setUpdateListeners(false);
         for(int j = 1; j <= 16; j++)
             {
-            multi.model.set("c" + j + "bank", bank);
-            multi.model.set("c" + j + "number", number);
-            multi.model.set("c" + j + "on", 1);
-            multi.model.set("c" + j + "volume", 127);
+            multi.getModel().set("c" + j + "bank", bank);
+            multi.getModel().set("c" + j + "number", number);
+            multi.getModel().set("c" + j + "on", 1);
+            multi.getModel().set("c" + j + "volume", 127);
             }
-        multi.model.set("name", name);
+        multi.getModel().set("name", name);
         return multi.emit(null, false, false);
         }
 
@@ -798,7 +798,7 @@ public class YamahaTG33 extends Synth
       Feedback
     */
 
-    public JComponent addTone(int tone, Color color)
+    public JComponent addTone(final int tone, Color color)
         {
         Category category = new Category(this, "Tone " + new String[] { "A", "B", "C", "D" }[tone], color);
         category.makePasteable("tone" + tone);

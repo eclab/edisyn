@@ -795,49 +795,49 @@ public class Generic extends Synth
         HBox hbox = new HBox();
         
         comp = new LabelledDial("Pitch Bend", this, "pitchbend", color, 0, 16383)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val)
-        		{
-        		return "" + (val - 8192);
-        		}
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                return "" + (val - 8192);
+                }
+            };
         hbox.add(comp);
 
         comp = new LabelledDial("Pitch Bend", this, "pitchbendrange", color, 0, 127 * 100)
-        	{
-        	public String map(int val)
-        		{
-        		int semitones = (val / 100);
-        		int cents = (val % 100);
-        		return "" + semitones + "." + cents;
-        		}
-        	};
+            {
+            public String map(int val)
+                {
+                int semitones = (val / 100);
+                int cents = (val % 100);
+                return "" + semitones + "." + cents;
+                }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Range");
         hbox.add(comp);
 
 
         comp = new LabelledDial("Coarse Tune", this, "coarsetune", color, 0, 127)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val)
-        		{
-        		return "" + (val - 64);
-        		}
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                return "" + (val - 64);
+                }
+            };
         hbox.add(comp);
 
 
         comp = new LabelledDial("Fine Tune", this, "finetune", color, 0, 16383)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val)
-        		{
-        		if (val == 0) return "-100";
-        		else if (val == 8192) return "--";
-        		else return String.format("%2.2f", (val - 8192) * 100.0 / 8192.0 );
-        		}
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                if (val == 0) return "-100";
+                else if (val == 8192) return "--";
+                else return String.format("%2.2f", (val - 8192) * 100.0 / 8192.0 );
+                }
+            };
         //Font font = ((LabelledDial)comp).getLabelFont();
         //float size = font.getSize2D();
         //((LabelledDial)comp).setLabelFont(font.deriveFont(size / 2));
@@ -1118,33 +1118,33 @@ public class Generic extends Synth
     public Object[] emitAll(String key)
         {
         if (key.equals("pitchbend"))
-        	{
-        	int val = model.get("pitchbend", 0);
-        	try
-        		{
-	            return new Object[] { new ShortMessage(ShortMessage.PITCH_BEND, getChannelOut(), (byte)(val >> 7) & 127 , (byte)val & 127) };
-	            }
-	        catch (InvalidMidiDataException ex)
-	        	{
-	        	ex.printStackTrace();
-	        	return new Object[0];
-	        	}
-        	}
+            {
+            int val = model.get("pitchbend", 0);
+            try
+                {
+                return new Object[] { new ShortMessage(ShortMessage.PITCH_BEND, getChannelOut(), (byte)(val >> 7) & 127 , (byte)val & 127) };
+                }
+            catch (InvalidMidiDataException ex)
+                {
+                ex.printStackTrace();
+                return new Object[0];
+                }
+            }
         else if (key.equals("pitchbendrange"))
-        	{
-        	int val = model.get("pitchbendrange", 0);
-        	int cents = val % 100;
-        	int semitones = val / 100;
-        	return buildRPN(getChannelOut(), 0, cents + semitones * 128);
-        	}
+            {
+            int val = model.get("pitchbendrange", 0);
+            int cents = val % 100;
+            int semitones = val / 100;
+            return buildRPN(getChannelOut(), 0, cents + semitones * 128);
+            }
         else if (key.equals("finetune"))
-        	{
-        	return buildRPN(getChannelOut(), 1, model.get("finetune", 0));
-        	}
+            {
+            return buildRPN(getChannelOut(), 1, model.get("finetune", 0));
+            }
         else if (key.equals("coarsetune"))
-        	{
-        	return buildRPN(getChannelOut(), 2, model.get("coarsetune", 0));
-        	}
+            {
+            return buildRPN(getChannelOut(), 2, model.get("coarsetune", 0));
+            }
         else if (key.startsWith("cc-") && !(key.startsWith("cc-name-")))
             {
             int cc = StringUtility.getInt(key);

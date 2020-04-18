@@ -7,18 +7,18 @@
 
 <p>This editor will work with the <b>Oberheim Matrix 1000</b>.  It will not work with the 6 or 6R.
 
-<p><b>Why a Global Parameter Editor?</b><br> As a rule, Edisyn does not have editors for global or master parameters for synthesizers, because they're usually set-and-forget affairs with a small number of parameters which can be controlled from the machine's front panel.  However the Matrix 1000 is different: it has some very important global parameters -- notably vibrato LFO settings -- which cannot be set except via an editor.  So I have broken Edisyn's rule in this case.
+<br><br><h3>Why a Global Parameter Editor?</h3> As a rule, Edisyn does not have editors for global or master parameters for synthesizers, because they're usually set-and-forget affairs with a small number of parameters which can be controlled from the machine's front panel.  However the Matrix 1000 is different: it has some very important global parameters -- notably vibrato LFO settings -- which cannot be set except via an editor.  So I have broken Edisyn's rule in this case.
 
 <p>The Matrix 6/6R has a similar set of globals, though it's different enough that we can't easily make an editor which covers both.  The 6/6R also has a few parameters which can't be edited except from an editor, but they're minor and not very important.  So for now the rule holds for the 6/6R. 
 
-<p><b>Communicating with Edisyn</b><br> Make sure that Memory Protect is off (see page 36 of the manual). 
+<br><br><h3>Communicating with Edisyn</h3> Make sure that Memory Protect is off (see page 36 of the manual). 
 
-<p><b>About the Group Patch Tabs</b><br>
+<br><br><h3>About the Group Patch Tabs</h3>
 Multiple Matrix 1000 machines can be chained together to effectively form a single larger machine.  This is done via the <b>Group Mode</b> options.  See page 29 of the manual.  
 
 <p>Additionally each patch (0-999) can be independently set up to use group mode or to ignore it and treat the machine as an independent synthesizer. Why I have absolutely no idea.  See page 31.  Thus there are 1000 checkboxes, one for each patch.
 
-<p><b>Gotchas</b> 
+<br><br><h3>Gotchas</h3> 
 
 <ul>
 <li>This editor deals with a global parameter region rather than a bank of patches.  But while sending to the current patch doesn't make much sense, it's important as a basic patch editor feature.  Thus when you send to the current patch, you're actually just writing (permanently) to the global region.  Likewise requesting the current patch reads from the global region.

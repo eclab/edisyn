@@ -1,13 +1,14 @@
 .PHONY: jar install
 
+#JAVAC = javac ${JAVACFLAGS}
+JAVAC = javac
+#JAVACFLAGS = -target 1.5 -source 1.5
 
 all: DUMMY
-		javac -cp libraries/coremidi4j-1.1.jar:edisyn $$(find edisyn -name '*.java') 
+	javac -cp libraries/coremidi4j-1.1.jar:edisyn $$(find edisyn -name '*.java') 
 
 run: DUMMY
 	java -cp libraries/coremidi4j-1.1.jar:. edisyn.Edisyn
-
-DUMMY: ;
 
 indent:
 	@ echo This uses emacs to indent all of the code.  To indent with
@@ -21,7 +22,7 @@ indent:
 
 jar:
 	rm -rf install/edisyn.jar jar/edisyn.jar uk META-INF
-	javac edisyn/*.java edisyn/*/*.java edisyn/*/*/*.java 
+	${JAVAC} edisyn/*.java edisyn/*/*.java edisyn/*/*/*.java 
 	touch /tmp/manifest.add
 	rm /tmp/manifest.add
 	echo "Main-Class: edisyn.Edisyn" > /tmp/manifest.add

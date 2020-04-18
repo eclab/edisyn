@@ -282,7 +282,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         ((LabelledDial)comp).addAdditionalLabel("Repeats");
         hbox.add(comp);
         
-        JCheckBox realtime = new JCheckBox("Real-Time Joystick");
+        final JCheckBox realtime = new JCheckBox("Real-Time Joystick");
         realtime.setFont(Style.SMALL_FONT());
         realtime.setOpaque(false);
         realtime.setForeground(Style.TEXT_COLOR());

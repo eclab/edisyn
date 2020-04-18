@@ -7,33 +7,40 @@
 
 <p>This editor will work with the <b>Oberheim Matrix 6, 6R,</b> and <b>1000</b>. These machines have slightly different sysex and capabilities: so if you are working with the Matrix 1000, you need to check the "Matrix 1000" box.  If you are working with the 6 or 6R, you need to keep that box unchecked.
 
-<p><b>Communicating with Edisyn</b><br> Make sure that Memory Protect is off (see page 36 of the manual). 
+<br><br><h3>Communicating with Edisyn</h3>
 
-<p><b>Restoring Patches 0...199 on the Matrix 1000</b><br>  If you erased these patches, you can restore them from sysex files stored in the file <b>resources/Matrix1000Banks.zip</b> in Edisyn's repository.
+Make sure that Memory Protect is off (see page 36 of the manual). 
 
-<p><b>About Patch Names</b>The Matrix 1000 and the Matrix 6 store patch names differently.  The 1000 doesn't actually store a name, but just information about bank and number.  If Edisyn sees this, it will attempt to replace this placeholder name with the original "classic" name.  This will include the writeable patches less than 200, unless you uncheck "Use Classic Patch Names" in the Matrix 1000 menu.
+<br><br><h3>Restoring Patches 0...199 on the Matrix 1000</h3>
 
-<p><b>Looking Up Patch Names by Classic Matrix 1000 Name</b>
+If you erased these patches, you can restore them from sysex files stored in the file <b>resources/Matrix1000Banks.zip</b> in Edisyn's repository.
+
+<br><br><h3>About Patch Names</h3>
+
+The Matrix 1000 and the Matrix 6 store patch names differently.  The 1000 doesn't actually store a name, but just information about bank and number.  If Edisyn sees this, it will attempt to replace this placeholder name with the original "classic" name.  This will include the writeable patches less than 200, unless you uncheck "Use Classic Patch Names" in the Matrix 1000 menu.
+
+<br><br><h3>Looking Up Patch Names by Classic Matrix 1000 Name</h3>
+
 <p>If you would like to load a patch from memory, you can look it up by patch name in the Matrix 1000 menu.
 
-<p><b>Suggestions</b>
+<br><br><h3>Suggestions</h3>
 
 <ul>
 <li>If you add a lot of random noise (like >50%) to the Matrix 6/6R1000 via Randomization or Hill-Climbing, it will often fall silent.  This is almost always due to randomization of either the Amplifier section or the Amplifier Envelope (Envelope 2).  I suggest that you first edit the mutation parameters to remove these sections as mutation candidates.
 </ul>
 
-<p><b>Gotchas</b> 
+<br><br><h3>Gotchas</h3>
 
 <ul>
 <li>The 6/6R has no way to request the current patch or to upload to it.  But updating the current working memory is important to many functions in Edisyn.  Thus if you update the current patch on the 6/6R, Edisyn will actually overwrite patch 99, treating it as a "scratch patch".  This means that you cannot rely on patch 99 holding data you've saved there -- Edisyn will scribble over it.  On the Matrix 1000, which can read and write to the current patch, this trick is not used.
 
 <p><li>The original ROM (1.1.1) for the Matrix 1000 can't handle real-time updates very fast: it clogs up quickly.  If you have one of these machines, you should turn off <b>Sends Real Time Changes</b> in the <b>MIDI</b> menu.  Alternatively you can upgrade your ROM to a better one.  There are two options, 1.1.6 and 1.2.0.  I suggest 1.2.0, which I think is somewhat better.  If you are in Europe, you can buy the ROM (it's quite cheap) through Untergeek:
 
-<ul><li><b>http://www.untergeek.de/howto/oberheim-matrix-1000/oberheim-matrix-1000-firmware-v1-20/</b>  
+<ul><li><b><a href="http://www.untergeek.de/howto/oberheim-matrix-1000/oberheim-matrix-1000-firmware-v1-20/">http://www.untergeek.de/howto/oberheim-matrix-1000/oberheim-matrix-1000-firmware-v1-20/</a></b>  
 </ul>
 
 <p>If you are in the USA, you can buy the ROM through Bob Grieb (the author):
-<ul><li><b>http://tauntek.com/contact-information.htm</b>
+<ul><li><b><a href="http://tauntek.com/contact-information.htm">http://tauntek.com/contact-information.htm</a></b>
 
 <p>Note that even with a new ROM, the Matrix 1000 still will be slightly pokey in keeping up with certain parameters.  But it's <i>far</i> better than the original ROM.
 </ul>
@@ -41,7 +48,7 @@
 <p><li>Simiarly, the original Matrix 6 firmware can't handle updates very rapidl
 y.  Bob Grieb has also made a firmware revision for the 6 and 6R:
 
-<ul><li><b>http://tauntek.com/Matrix6Firmware.htm</b>
+<ul><li><b><a href="http://tauntek.com/Matrix6Firmware.htm">http://tauntek.com/Matrix6Firmware.htm</a></b>
 </ul>
 
 <p><li>The patch editor allows you to give patches a name.  This is backwards-compatible with the 6/6r.  However, when you store a patch in the Matrix 1000, your name is not stored.  Instead if you request the patch again, it'll come back with the name <b>BNK<i>b</i>: <i>nn</i></b>, where <b><i>b</i></b> is the bank number, and <b><i>nn</i></b> is the two-digit patch number.

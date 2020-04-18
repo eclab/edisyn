@@ -213,7 +213,7 @@ public class RedSoundDarkStar extends Synth
         vbox.add(comp);
 
         HBox hbox2 = new HBox();
-        JCheckBox check = new JCheckBox("XP2");
+        final JCheckBox check = new JCheckBox("XP2");
         check.setSelected(xp2);
         check.addActionListener(new ActionListener()
             {

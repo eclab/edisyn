@@ -7,14 +7,18 @@
 
 <p>This editor will work with the <b>E-Mu Morpheus</b> and the <b>E-Mu Ultra Propheus</b>, but you will need to set a switch to indicate which one you are using.
 
-<p><b>Communicating with Edisyn</b><br> Set the MIDI ID to the same you'll be setting in Edisyn (typically 0).  In your default MIDI Map, turn OFF Program Change Map, and turn ON Bank Select and Program Change.  Feel free to reduce the Sysex packet delay to 0.  <b>Make certain that the Preset button is pressed</b>. 
+<br><br><h3>Communicating with Edisyn</h3>
 
-<p><b>Uploading Pseudo-MPE</b><br> The Morpheus/Ultraproteus doesn't support MPE.  But we can fake it by setting up one of its midimap patches in a special way, and this can be taken advantage of by instruments such as the Linnstrument. 
+Set the MIDI ID to the same you'll be setting in Edisyn (typically 0).  In your default MIDI Map, turn OFF Program Change Map, and turn ON Bank Select and Program Change.  Feel free to reduce the Sysex packet delay to 0.  <b>Make certain that the Preset button is pressed</b>. 
+
+<br><br><h3>Uploading Pseudo-MPE</h3>
+
+The Morpheus/Ultraproteus doesn't support MPE.  But we can fake it by setting up one of its midimap patches in a special way, and this can be taken advantage of by instruments such as the Linnstrument. 
 
 <P>You can prepare a midimap patch slot with <b>Write Patch as Psuedo-MPE</b>.  This writes a midimap patch which points to your current single patch, including the current name, bank, and (single patch) number.  Each slot in the midimap patch will refer to this patch but have a unique MIDI channel. You get to choose what midimap patch number to write to. Note that your single-patch must already be written to the synth.  You need to make sure that your <b>MIDI Mode is set to "Multi"</b> to play the patch.
 
 
-<p><b>Gotchas</b> 
+<br><br><h3>Gotchas</h3>
 
 <ul>
 <li>Neither the Morpheus nor the Ultra Proteus can send to the current patch -- they can only write patches, or send individual parameters.  But sending to the current patch is a critical function.  Instead of (slowly) sending all parameters, Edisyn instead will write to patch 126 of the Preset RAM bank.  This means that you will overwrite this patch number every time you "send" the current patch.  (It's 126 because 127 is the default init patch).

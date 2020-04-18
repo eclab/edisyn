@@ -3,16 +3,22 @@
 
 <h1>MIDI Parameters</h1>
 
+<h2>Control Panel</h2>
+
 <p>This isn't really a patch editor: it's a device meant to help you send CC, NRPN, RPN, and Pitch Bend messages to your synthesizer.  I'll be adding to this and augmenting it over time.  Once you've customized your CCs, you can save them to a sysex file and retrieve them later.
 
-<p><b>Communicating with Edisyn</b><br>Make sure you've got Edisyn set up to send to the right channel on your synthesizer.
+<br><br><h3>Communicating with Edisyn</h3>
 
-<p><b>About the CC Panels</b><br>
+Make sure you've got Edisyn set up to send to the right channel on your synthesizer.
+
+<br><br><h3>About the CC Panels</h3>
+
 The CC panels give you direct access to all 128 CC parameters: though perhaps you should only play with the first 120 unless you know what you're doing with the last 8.
 
 <p>Each CC parameter has a <b>Dial</b> where you can directly change its value, plus a <b>Send</b> button which lets you repeatedly send the current dial value.  There is also an <b>On</b> checkbox: if you select this, then 127 is sent, else 0 is sent (the <b>On</b> checkbox also is selected when a CC value than 64 is sent via the dial).  The CCs each have classic names, but you can change any of them: just click on the <b>Name</b> (or whatever it's called) button.
 
-<p><b>About the Custom CC, NRPN, and RPN Panels</b><br>
+<br><br><h3>About the Custom CC, NRPN, and RPN Panels</h3>
+
 These panels allow you to set up the panel to respond to custom CC, NRPN, and RPN parameters of your choosing.  Why you'd need RPN is anyone's guess, but there you have it.
 
 <p>You select a parameter with the <b>Parameter</b dial, and you can customize its name with the <b>Name</b> button.  Each parameter has two value dials which you can tweak independently.  The idea is that you can repeatedly send either of the values by pressing the <b>Send</b> or <b>Alt</b> buttons.  Changing the dials will also send the parameters in question.
@@ -21,14 +27,15 @@ These panels allow you to set up the panel to respond to custom CC, NRPN, and RP
 
 <p>The <b>On</b> button will send either a 0 (off) or a maximum value (on), changing the <b>Send</b> dial.  It also is selected automatically if the <b>Send</b> dial is set to above half-way.
 
-<p><b>About the Other Panel</b><br>
+<br><br><h3>About the Other Panel</h3>
+
 This panel gives you access to Pitch Bend, a well as to the three standard RPN messages: Pitch Bend Range (or Sensitivity), Coarse Tuning, and Fine Tuning.
 
 <ul>
 <li>Pitch Bend is the standard bend range: from -8192 to +8191.
-<li>Pitch Bend Range is in semitones (half steps).
-<li>Coarse Tuning is in semitones.
-<li>Fine Tuning is also in semitones.
+<p><li>Pitch Bend Range is in semitones (half steps).
+<p><li>Coarse Tuning is in semitones.
+<p><li>Fine Tuning is also in semitones.
 </ul>
 
 <p><table border=0 cellpadding=0 cellspacing=5>

@@ -101,6 +101,11 @@ public class LabelledDial extends NumericalComponent
         dial.revalidate();
         dial.repaint();
         }
+    
+    public Font getLabelFont()
+        {
+        return dial.field.getFont();
+        }
         
     /** Makes a labelled dial for the given key parameter on the given synth, and with the given color and
         minimum and maximum.  Prior to display, subtractForDisplay is 

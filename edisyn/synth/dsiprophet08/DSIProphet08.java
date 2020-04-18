@@ -226,7 +226,6 @@ public class DSIProphet08 extends Synth
         sequence.makePasteable("layer2");
         addTab("Sequencer B", sequence);
         
-        
         model.set("name", "Untitled");
         model.set("bank", 0);
         model.set("number", 0);
@@ -516,7 +515,7 @@ public class DSIProphet08 extends Synth
         return category;
         }
 
-    public JComponent addEnvelope(int layer, int env, Color color)
+    public JComponent addEnvelope(int layer, final int env, Color color)
         {
         Category category = new Category(this, 
                 (env == FILTER_ENVELOPE ? "Filter Envelope" : 
@@ -631,7 +630,7 @@ public class DSIProphet08 extends Synth
         }
 
 
-    public JComponent addSequencerTrack(int layer, final int track, Color color)
+    public JComponent addSequencerTrack(final int layer, final int track, Color color)
         {
         Category category = new Category(this, "Track " + track, color);
         category.makeDistributable("layer" + layer + "track" + track);

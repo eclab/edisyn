@@ -7,15 +7,21 @@
 
 <p>This editor will work with the <b>Kawai K1</b>, the <b>Kawai K1m</b>, and the <b>Kawai K1r</b>.
 
-<p><b>Communicating with Edisyn</b><br> Turn of INT PROTECT and CARD PROTECT.  Set your K1 to receive Program Changes (set RCV PGM to NORM) and Exclusive (RCV EXCL).  See pages 38, 41, and 42 of the manual.  You'll also probably want your send channel and receive channel to be the same. 
+<br><br><h3>Communicating with Edisyn</h3>
 
-<p><b>Bank Sysex</b><br> This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
+Turn of INT PROTECT and CARD PROTECT.  Set your K1 to receive Program Changes (set RCV PGM to NORM) and Exclusive (RCV EXCL).  See pages 38, 41, and 42 of the manual.  You'll also probably want your send channel and receive channel to be the same. 
 
-<p><b>About the Menu</b><br> The Kawai K1 has no sysex command which would enable Edisyn to send a patch to its temporary memory.  However this is important to enable merging, nudging, hill-climbing, randomization, etc.  One way to get around this is to send individual parameters one by one.  However the K1 needs about 50ms after each and every parameter change.As a result, this approach (the menu option <b>"Send Parameters: Individually"</b>) takes several seconds, which is unacceptably slow for many things, particularly hill-climbing.
+<br><br><h3>Bank Sysex</h3>
+
+This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
+
+<br><br><h3>About the Menu</h3>
+
+The Kawai K1 has no sysex command which would enable Edisyn to send a patch to its temporary memory.  However this is important to enable merging, nudging, hill-climbing, randomization, etc.  One way to get around this is to send individual parameters one by one.  However the K1 needs about 50ms after each and every parameter change.As a result, this approach (the menu option <b>"Send Parameters: Individually"</b>) takes several seconds, which is unacceptably slow for many things, particularly hill-climbing.
 
 <p>Edisyn offers an alternative: instead of sending a patch to temporary memory, you can <b>write</b> the patch to patch number iD-8 (the very last one) or eD-8 (if you're working on the external card).  This will erase and overwrite this patch and basically treat it as a scratch area: but it's fairly fast.  You can choose this option (and I suggest you do) with <b>"Send Parameters: In Bulk, Overwriting Patch iD-8"</b>.  You might want to back up that patch first.  If you messed up, or you need to restore iD-8 ("Rim+Snare"), you can find it in Edisyn's source distribution, under the Resources directory. 
 
-<p><b>Gotchas</b>
+<br><br><h3>Gotchas</h3>
 
 <ul>
 <li>The Kawai K1's sysex is <b>slow</b>: individual parameter changes can only occur once every 50ms.  Indeed Edisyn's patch editor has been set up so that every single MIDI event takes 50ms just in case.  See the discussion about menu options above.

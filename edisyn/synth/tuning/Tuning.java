@@ -591,9 +591,8 @@ public class Tuning extends Synth
             {
             setTunings(rs.getBases(), rs.getDetunes());
             model.set("name", revisePatchName(name));
-            return true;
             }
-        return false;
+        return true;
         }
 
     }

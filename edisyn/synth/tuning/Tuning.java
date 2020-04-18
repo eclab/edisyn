@@ -498,8 +498,7 @@ public class Tuning extends Synth
                 }
         }
 
-    // Return FALSE if the file couldn't be read, else load the model and return
-    // TRUE
+    // Return FALSE if the file couldn't be read, else load the model and return TRUE assuming the user didn't cancel
     // You can also permit an IOException to be thrown
     static boolean isInt(String str) 
         {
@@ -580,9 +579,9 @@ public class Tuning extends Synth
                     }
                 double cent = Math.log(numerator / denominator) / Math.log(2) * 1200;
                 cents.add(cent);
-
                 }
             }
+            
         cents.add(0, 0.0); // I expect a 0 at the beginning of my array.
         Double[] outarr = cents.toArray(new Double[0]);
         RepeatingScale rs = new RepeatingScale(outarr, DEFAULT_NAME);

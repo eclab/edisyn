@@ -517,6 +517,7 @@ public class Tuning extends Synth
         boolean scanned_name_line = false;
         int count = 0;
         ArrayList<Double> cents = new ArrayList<Double>();
+        String name = "UNTITLED";
         while (scan.hasNextLine()) 
             {
             if (scanned_count_line && cents.size() >= count) 
@@ -535,6 +536,7 @@ public class Tuning extends Synth
                 }
             if (!scanned_name_line) 
                 {
+                name = fixed;
                 scanned_name_line = true;
                 continue;
                 }
@@ -588,8 +590,10 @@ public class Tuning extends Synth
         if (rs.isConfigured()) 
             {
             setTunings(rs.getBases(), rs.getDetunes());
+            model.set("name", revisePatchName(name));
+            return true;
             }
-        return true;
+        return false;
         }
 
     }

@@ -5,7 +5,7 @@
 
 <h2>Patch Editor</h2>
 
-This is a tool designed to make create different tunings and scales and to upload them to and request them from synthesizers which support the <b>MIDI Tuning Standard</b> (or MTS).  You can save your tunings as sysex patches.
+<p>This is a tool designed to make create different tunings and scales and to upload them to and request them from synthesizers which support the <b>MIDI Tuning Standard</b> (or MTS).  You can save your tunings as sysex patches.
 
 <br><br><h3>Communicating with Edisyn</h3>
 
@@ -21,9 +21,13 @@ MTS assigns a pitch to every MIDI note value from 0...127. Each of these knob pa
 
 The <b>Tuning</b> menu gives access to various utilities to make it easy to set different common tunings.
 
+<br><br><h3>Load Scala File...</h3>
+
+You can load tunings in the popular <b>Scala</b> format.  These files end in ".scl" or ".SCL".  Scala tunings are relative: you'll also need to specify what the root MIDI note and Root Frequency are.
+
 <br><br><h3>EDO</h3>
 
-EDO stands for <i>Equal number of Divisions per Octave</i> and is also commonly known as Equal Temperament. Standard western tuning would be 12 EDO with A4 (midi note 69) set to 440hz. Other tunings have their advantages and disadvantages and a decent summary of the topic can be found <a href="https://en.wikipedia.org/wiki/Equal_temperament">on Wikipedia</a>.  The calculate button gives the frequency of the selected midi number in standard western tuning, but feel free to use any positive number for frequncy for any midi note number as your root, all it is saying is "I want midi number x from my controller to equate to frequency y and to tune the rest of the notes using equal temperment with z divisons per octave."
+EDO stands for <i>Equal number of Divisions per Octave</i> and is also commonly known as Equal Temperament.  You'll also see the acronyms "ET" or "TET".  Standard western tuning is EDO with A4 (MIDI note 69) set to 440hz, at 12 divisions per octave. Other tunings have their advantages and disadvantages and a decent summary of the topic can be found <a href="https://en.wikipedia.org/wiki/Equal_temperament">on Wikipedia</a>.  The calculate button gives the frequency of the selected midi number in standard western tuning, but feel free to use any positive number for frequncy for any midi note number as your root, all it is saying is "I want midi number x from my controller to equate to frequency y and to tune the rest of the notes using equal temperment with z divisons per octave."
 
 <br><br><h3>Named Scales</h3>
 

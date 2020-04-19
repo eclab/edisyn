@@ -1,8 +1,4 @@
-# edisyn.synth.futuresonusparva.FuturesonusParva
-edisyn.synth.tuning.Tuning
-#edisyn.synth.alesismicron.AlesisMicron
 edisyn.synth.casiocz.CasioCZ
-# edisyn.synth.linnstrument.Linnstrument
 edisyn.synth.dsiprophet08.DSIProphet08
 edisyn.synth.emumorpheus.EmuMorpheus
 edisyn.synth.emumorpheus.EmuMorpheusHyper
@@ -43,7 +39,10 @@ edisyn.synth.yamahafb01.YamahaFB01
 edisyn.synth.yamahafb01.YamahaFB01Multi
 edisyn.synth.yamahatg33.YamahaTG33
 edisyn.synth.yamahatg33.YamahaTG33Multi
-#edisyn.synth.yamahatx81z.YamahaTX81Z 
-#edisyn.synth.yamahatx81z.YamahaTX81ZMulti
 edisyn.synth.generic.Generic
-#edisyn.synth.yamaha4op.Test
+edisyn.synth.tuning.Tuning
+#edisyn.synth.futuresonusparva.FuturesonusParva
+#edisyn.synth.alesismicron.AlesisMicron
+#edisyn.synth.linnstrument.Linnstrument
+#edisyn.synth.yamahatx81z.YamahaTX81Z
+#edisyn.synth.yamahatx81z.YamahaTX81ZMulti

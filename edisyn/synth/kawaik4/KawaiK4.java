@@ -675,11 +675,13 @@ public class KawaiK4 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Time Mod");
         hbox.add(comp);
         
-        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+        EnvelopeDisplay disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "f" + filterenv + "dcfenvattack", "f" + filterenv + "dcfenvdecay", null, "f" + filterenv + "dcfenvrelease" },
             new String[] { null, null, "f" + filterenv + "dcfenvsustain", "f" + filterenv + "dcfenvsustain", null },
             new double[] { 0, 0.25/100.0, 0.25 / 100.0,  0.25, 0.25/100.0},
-            new double[] { 0, 1.0, 1.0 / 100.0, 1.0/100.0, 0 });
+            new double[] { 0.5, 1.0, 1.0 / 100.0, 1.0/100.0, 0.5 });
+        disp.setAxis(50 / 100.0);
+        comp = disp;
         hbox.addLast(comp);
                  
         category.add(hbox, BorderLayout.CENTER);

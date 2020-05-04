@@ -653,7 +653,7 @@ public class KawaiK4 extends Synth
         comp = new LabelledDial("Decay", this, "f" + filterenv + "dcfenvdecay", color, 0, 100);
         hbox.add(comp);
 
-        comp = new LabelledDial("Sustain", this, "f" + filterenv + "dcfenvsustain", color, 0, 100);
+        comp = new LabelledDial("Sustain", this, "f" + filterenv + "dcfenvsustain", color, 0, 100, 50);
         hbox.add(comp);
 
         comp = new LabelledDial("Release", this, "f" + filterenv + "dcfenvrelease", color, 0, 100);

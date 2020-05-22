@@ -25,7 +25,7 @@ Donations are welcome via Paypal.
 
 ## About
 
-Edisyn is a synthesizer patch editor library written in pure Java.   It runs on OS X, Linux, and Windows.  
+Edisyn is a synthesizer patch editor library written in pure Java.   It runs on MacOS, Linux, and Windows.  
 
 Edisyn is particularly good at exploring the space of patches.  It has to my knowledge the most sophisticated set of general-purpose patch-exploration tools of any patch editor available.
 
@@ -65,10 +65,10 @@ Edisyn has an [extensive manual](https://cs.gmu.edu/~eclab/projects/edisyn/Edisy
 
 ## Install and Run Edisyn
 
-Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux) but I am personally developing on and for OS X.  I'd appreciate feedback and screenshots of it running on Windows and Linux so I can tweak things.
+Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux) but I am personally developing on and for MacOS.  I'd appreciate feedback and screenshots of it running on Windows and Linux so I can tweak things.
 
 
-### Installation and Running on OS X 
+### Installation and Running on MacOS
 
 First install Edisyn from the [Edisyn.app.zip](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.app.zip) file located in the "install" directory.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
 
@@ -85,7 +85,12 @@ Now you should be able to run Edisyn.  Let me know if this all works.
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
-#### If Edisyn bombs in OS X on selecting a patch editor...
+#### Dealing with Catalina...
+
+Note that Catalina may have added additional requirements to running Edisyn properly: but I don't have a Catalina machine to test on.  Let me know if you run into issues and/or find solutions to them.
+
+
+#### If Edisyn bombs in MacOS on selecting a patch editor...
 
 You may have installed the MMJ (MIDI Java) library in the past, which is now obsolete.  This library was required by old applications but no longer works properly and should be removed.  Look in /Library/Java/Extensions/ or in \[Your Home Directory\]/Library/Java/Extensions for the files **mmj.jar** or **libmmj.jnilib**.  If you find them, remove them from the directory and try again.
 

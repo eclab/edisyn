@@ -47,7 +47,8 @@ public class YamahaFB01 extends Synth
 
     // It is not fully clear that these are the algorithms.  I suspect they are for two reasons:
     // First, I believe the FB01 uses the same FM chip as the TX81Z, so it's likely to use
-    // the same algorithm set.  Second, MidiQuest displays these algorithms.  But as the
+    // the same algorithm set.  Second, MidiQuest displays these algorithms, though MidiQuest makes a
+    // lot of mistakes overall, so that's not a guarantee of correctness.  As the
     // FB01 manual has no information at all on it, I must just make this assumption.
         
     public static final ImageIcon[] ALGORITHM_ICONS = 
@@ -629,7 +630,7 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
                 Object[] obj = new Object[7];
                 for(int i = 0; i < 7; i++)
                     {
-                    param = i;
+                    param = 0x40 + i;
                     val = (byte)(name.charAt(i) & 127);
                     // parameter change by System Channel + Instrument Number page 49 of user manual
                     byte[] data = new byte[] { (byte)0xF0, 0x43, 0x75, (byte)(getID() - 1), (byte)(24 + EMIT_LOCATION),
@@ -1127,7 +1128,7 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
     //// patch.  And changing the patch for other instruments is out of the question.
     ////
     //// I think what we will have to do is send a special CONFIGURATION PARAMETER CHANGE.
-    //// To do this, we send to parameter change commands, one to change the bank of instrument
+    //// To do this, we send two parameter change commands, one to change the bank of instrument
     //// 1, and one to change the voice number of instrument 1.
     
     public void changePatch(Model tempModel) 

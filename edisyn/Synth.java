@@ -5152,14 +5152,14 @@ public abstract class Synth extends JComponent implements Updatable
                         }
 
 /*
-            for(int i = 0; i < sysex.length; i++)
-                {
-                System.err.println("\n\n FILE " + i);
-                for(int j = 0; j < sysex[i].length; j++)
-                    {
-                    System.err.println("" + j + "\t" + String.format("%02X", sysex[i][j]));
-                    }
-                }
+  for(int i = 0; i < sysex.length; i++)
+  {
+  System.err.println("\n\n FILE " + i);
+  for(int j = 0; j < sysex[i].length; j++)
+  {
+  System.err.println("" + j + "\t" + String.format("%02X", sysex[i][j]));
+  }
+  }
 */
 
             return sysex;
@@ -5334,8 +5334,8 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     okay = showSimpleConfirm("File too Large", "This file is very large.  Loading it could hang Edisyn.\nLoad anyway?");
                     }
-            	
-            	if (okay)
+                
+                if (okay)
                     {
                     byte[][] data;
                     String filename = f.getName();

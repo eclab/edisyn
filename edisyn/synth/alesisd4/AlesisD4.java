@@ -30,7 +30,7 @@ public class AlesisD4 extends Synth
     public static final String[] GROUPS = { "Multi", "Single", "Group 1", "Group 2" }; 
     public static final String[] KEYS =  { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
-	// These are NRPN parameter settings for various stuff we emit for individual parameters
+    // These are NRPN parameter settings for various stuff we emit for individual parameters
     public static final int NRPN_ROOT = 0x10;
     public static final int NRPN_NOTE = 0x19;
     public static final int NRPN_BANK = 0x08;
@@ -92,7 +92,7 @@ public class AlesisD4 extends Synth
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("General and Drums 0-6", sourcePanel);
 
-	boolean primary = true;
+        boolean primary = true;
         for(int i = 7; i <= 60; i+= 18)
             {
             sourcePanel = new SynthPanel(this);
@@ -100,7 +100,7 @@ public class AlesisD4 extends Synth
             vbox.add(addDrums(i, i+18, primary ? Style.COLOR_A() : Style.COLOR_B()));
             sourcePanel.add(vbox, BorderLayout.CENTER);
             addTab("Drums " + i + "-" + (i + 17), sourcePanel);
-		primary = !primary;
+            primary = !primary;
             }
 
         model.set("name", "Untitled");
@@ -110,11 +110,11 @@ public class AlesisD4 extends Synth
         updateChoosers();
         }
                 
-      public String getDefaultResourceFileName() 
-      { 
-      if (isDM5()) return "AlesisDM5.init"; 
-      else return "AlesisD4.init";
-      }
+    public String getDefaultResourceFileName() 
+        { 
+        if (isDM5()) return "AlesisDM5.init"; 
+        else return "AlesisD4.init";
+        }
 
     public String getHTMLResourceFileName() { return "AlesisD4.html"; }
 
@@ -461,7 +461,7 @@ public class AlesisD4 extends Synth
             {
             setDM5(!d4, false);
             if (drumset != -1)
-            	model.set("number", drumset);
+                model.set("number", drumset);
                 
             int pos = 7;            // start of data
                 
@@ -491,7 +491,7 @@ public class AlesisD4 extends Synth
                 
                 int banksum = 0;
                 for(int bb = 0; bb < bank; bb++)
-                	banksum += (d4 ? D4_BANKS[bb > 5 ? 0 : bb] : D5M_BANKS[bb > 7 ? 0 : bb]);
+                    banksum += (d4 ? D4_BANKS[bb > 5 ? 0 : bb] : D5M_BANKS[bb > 7 ? 0 : bb]);
                 
                 // assemble bank and number into voice
                 model.set("drum" + i + "voice", banksum + number);
@@ -506,24 +506,24 @@ public class AlesisD4 extends Synth
         }
 
 
-	public int map(int i, int max)
-		{
-		int v = (int)((i * 127.0 + max) / max);  
-		if (v > 127) v = 127;
-		return v;
-		}
+    public int map(int i, int max)
+        {
+        int v = (int)((i * 127.0 + max) / max);  
+        if (v > 127) v = 127;
+        return v;
+        }
 
     public Object[] emitAll(String key) 
         { 
-    	if (key.equals("drumsetnoteroot"))
-    		{
+        if (key.equals("drumsetnoteroot"))
+            {
             ArrayList data = new ArrayList();
-			final int total = 68;
-			Object[] nrpn = buildNRPN(getChannelOut(), NRPN_ROOT, (128 * map(model.get(key), total-1))); 
-			for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-			data.add(new Integer(PAUSE_NRPN));
+            final int total = 68;
+            Object[] nrpn = buildNRPN(getChannelOut(), NRPN_ROOT, (128 * map(model.get(key), total-1))); 
+            for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
+            data.add(new Integer(PAUSE_NRPN));
             return (Object[])(data.toArray(new Object[0]));
-    		}
+            }
         else if (key.startsWith("drum") && !key.equals("drumsetnoteroot"))
             {
             // we can't emit a parameter, but at least we can set up
@@ -574,88 +574,88 @@ public class AlesisD4 extends Synth
             
             ArrayList data = new ArrayList();
             
-                // I believe this sets the note that preview is playing, and also (?)
-                // more importantly, the later changes after it will change that particular note.
-                // Maybe?
-			Object[] nrpn = null;
+            // I believe this sets the note that preview is playing, and also (?)
+            // more importantly, the later changes after it will change that particular note.
+            // Maybe?
+            Object[] nrpn = null;
             
             // always
-			testNote = drum + model.get("drumsetnoteroot");
+            testNote = drum + model.get("drumsetnoteroot");
             nrpn = buildNRPN(getChannelOut(), NRPN_NOTE, 128 * map(drum, 60));
             for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-			data.add(new Integer(PAUSE_NRPN));
-			
+            data.add(new Integer(PAUSE_NRPN));
+                        
 
-			if (key.endsWith("voice"))
-				{
-				int total = (isDM5() ? D5M_BANKS.length : D4_BANKS.length);
+            if (key.endsWith("voice"))
+                {
+                int total = (isDM5() ? D5M_BANKS.length : D4_BANKS.length);
                 nrpn = buildNRPN(getChannelOut(), NRPN_BANK, (128 * ((bank + 1) * 127 / total)));  
-            for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-			data.add(new Integer(PAUSE_NRPN));
-			
-				 total = (isDM5() ? D5M_BANKS[bank]: D4_BANKS[bank]);
-				 //int math = ((number + 1) * 127) / total;
-				 //int math = ((number + 1 - 1) * 127) / (total - 1);
+                for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
+                data.add(new Integer(PAUSE_NRPN));
+                        
+                total = (isDM5() ? D5M_BANKS[bank]: D4_BANKS[bank]);
+                //int math = ((number + 1) * 127) / total;
+                //int math = ((number + 1 - 1) * 127) / (total - 1);
                 nrpn = buildNRPN(getChannelOut(), NRPN_NUMBER, 128 * map(number, total-1)); 
-            for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-			data.add(new Integer(PAUSE_NRPN));
-				}
-				
-			else if (key.endsWith("coarse"))
-				{
-				final int total = 8;
-				// my mapping function doesn't work for this one
-//                nrpn = buildNRPN(getChannelOut(), NRPN_COARSE, (128 * map(model.get(key), total-1)));		
-                nrpn = buildNRPN(getChannelOut(), NRPN_COARSE, (128 * ((model.get(key) + 1) * 127 / total)));		// this one works however
-            for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-			data.add(new Integer(PAUSE_NRPN));
-				}
-				
-			else if (key.endsWith("fine"))
-				{
-				final int total = 100;
-                nrpn = buildNRPN(getChannelOut(), NRPN_FINE, (128 * map(model.get(key), total-1)));		// (128 * ((model.get(key) + 1) * 127 / total)));  
-            for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-			data.add(new Integer(PAUSE_NRPN));
-				}
+                for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
+                data.add(new Integer(PAUSE_NRPN));
+                }
+                                
+            else if (key.endsWith("coarse"))
+                {
+                final int total = 8;
+                // my mapping function doesn't work for this one
+//                nrpn = buildNRPN(getChannelOut(), NRPN_COARSE, (128 * map(model.get(key), total-1)));         
+                nrpn = buildNRPN(getChannelOut(), NRPN_COARSE, (128 * ((model.get(key) + 1) * 127 / total)));           // this one works however
+                for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
+                data.add(new Integer(PAUSE_NRPN));
+                }
+                                
+            else if (key.endsWith("fine"))
+                {
+                final int total = 100;
+                nrpn = buildNRPN(getChannelOut(), NRPN_FINE, (128 * map(model.get(key), total-1)));             // (128 * ((model.get(key) + 1) * 127 / total)));  
+                for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
+                data.add(new Integer(PAUSE_NRPN));
+                }
 
-			else if (key.endsWith("volume"))
-				{
-				final int total = 100;
-                nrpn = buildNRPN(getChannelOut(), NRPN_VOLUME, (128 * map(model.get(key), total-1)));		// (128 * ((model.get(key) + 1) * 127 / total)));  
-            for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-			data.add(new Integer(PAUSE_NRPN));
-				}
+            else if (key.endsWith("volume"))
+                {
+                final int total = 100;
+                nrpn = buildNRPN(getChannelOut(), NRPN_VOLUME, (128 * map(model.get(key), total-1)));           // (128 * ((model.get(key) + 1) * 127 / total)));  
+                for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
+                data.add(new Integer(PAUSE_NRPN));
+                }
 
-			else if (key.endsWith("pan"))
-				{
-				final int total = 7;
-                nrpn = buildNRPN(getChannelOut(), NRPN_PAN, (128 * map(model.get(key), total-1)));		// (128 * ((model.get(key) + 1) * 127 / total)));  
-            for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-			data.add(new Integer(PAUSE_NRPN));
-				}
+            else if (key.endsWith("pan"))
+                {
+                final int total = 7;
+                nrpn = buildNRPN(getChannelOut(), NRPN_PAN, (128 * map(model.get(key), total-1)));              // (128 * ((model.get(key) + 1) * 127 / total)));  
+                for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
+                data.add(new Integer(PAUSE_NRPN));
+                }
 
-			else if (key.endsWith("output"))
-				{
-				final int total = 2;
-                nrpn = buildNRPN(getChannelOut(), NRPN_OUTPUT, (128 * map(model.get(key), total-1)));		// (128 * ((model.get(key) + 1) * 127 / total)));  
-            for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-			data.add(new Integer(PAUSE_NRPN));
-				}
+            else if (key.endsWith("output"))
+                {
+                final int total = 2;
+                nrpn = buildNRPN(getChannelOut(), NRPN_OUTPUT, (128 * map(model.get(key), total-1)));           // (128 * ((model.get(key) + 1) * 127 / total)));  
+                for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
+                data.add(new Integer(PAUSE_NRPN));
+                }
 
-			else if (key.endsWith("groups"))
-				{
-				final int total = 4;
-                nrpn = buildNRPN(getChannelOut(), NRPN_GROUP, (128 * map(model.get(key), total-1)));		// (128 * ((model.get(key) + 1) * 127 / total)));  
-            for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-			data.add(new Integer(PAUSE_NRPN));
-            	}
-            	
+            else if (key.endsWith("groups"))
+                {
+                final int total = 4;
+                nrpn = buildNRPN(getChannelOut(), NRPN_GROUP, (128 * map(model.get(key), total-1)));            // (128 * ((model.get(key) + 1) * 127 / total)));  
+                for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
+                data.add(new Integer(PAUSE_NRPN));
+                }
+                
             else
-            	{
+                {
                 System.err.println("ERROR (AlesisD4.emit): unknown key " + key + ", should never happen.");
-            	return new Object[0];
-            	}
+                return new Object[0];
+                }
 
             return (Object[])(data.toArray(new Object[0]));
             }
@@ -751,13 +751,13 @@ public class AlesisD4 extends Synth
             tempModel = getModel();
             
         byte NN = (byte)(tempModel.get("number") + 32 + 64);
-       	byte TYPE = (byte)(isDM5() ? 0x13 : 0x06);
+        byte TYPE = (byte)(isDM5() ? 0x13 : 0x06);
         return new byte[] { (byte)0xF0, 0x00, 0x00, 0x0E, TYPE, (byte)getChannelOut(), NN, (byte)0xF7 };
         }
     
     public byte[] requestCurrentDump()
         {
-       	byte TYPE = (byte)(isDM5() ? 0x13 : 0x06);
+        byte TYPE = (byte)(isDM5() ? 0x13 : 0x06);
         return new byte[] { (byte)0xF0, 0x00, 0x00, 0x0E, TYPE, (byte)getChannelOut(), 65, (byte)0xF7 };
         }
     
@@ -800,11 +800,11 @@ public class AlesisD4 extends Synth
         return newModel;
         }
 
-	public int getPauseAfterChangePatch()
-		{
-		return 0;
-		}
-		
+    public int getPauseAfterChangePatch()
+        {
+        return 0;
+        }
+                
     public void changePatch(Model tempModel) 
         {
         tryToSendMIDI(buildPC(getChannelOut(), tempModel.get("number")));
@@ -1871,13 +1871,13 @@ public class AlesisD4 extends Synth
     };
 
 
-  public boolean testVerify(Synth synth2, 
-  String key,
-  Object obj1, Object obj2) 
-  {
-  // spaces at end of name are fine
-  if (key.equals("name")) return true;
-  return false;
-  }
+    public boolean testVerify(Synth synth2, 
+        String key,
+        Object obj1, Object obj2) 
+        {
+        // spaces at end of name are fine
+        if (key.equals("name")) return true;
+        return false;
+        }
         
     }

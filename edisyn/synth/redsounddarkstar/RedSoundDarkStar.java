@@ -1226,7 +1226,7 @@ public class RedSoundDarkStar extends Synth
         
                 
         return (
-				(data.length == 108 ||
+                (data.length == 108 ||
                 data.length == 512 ||
                 data.length == 516 ||
                 data.length == 514 ||

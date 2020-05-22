@@ -2,10 +2,8 @@
 
 # Edisyn
 Synthesizer Patch Editor (Version 22)
- 
-By Sean Luke (sean@cs.gmu.edu)
 
-I've been asked where my Patreon page is.  So, sure, here's my <a href="https://www.patreon.com/SeanLuke">Patreon page</a>.
+By Sean Luke (sean@cs.gmu.edu)
 
 Related projects:  
 
@@ -20,6 +18,10 @@ Related projects:
 ## Contributors
 
 * Bryan Hoyle (collaboration on the Red Sound DarkStar editor)
+
+## Donations
+
+Donations are welcome via Paypal.
 
 ## About
 

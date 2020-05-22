@@ -1,3 +1,4 @@
+edisyn.synth.alesisd4.AlesisD4
 edisyn.synth.casiocz.CasioCZ
 edisyn.synth.dsiprophet08.DSIProphet08
 edisyn.synth.emumorpheus.EmuMorpheus

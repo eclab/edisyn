@@ -59,6 +59,19 @@ public class SanityCheck
                 System.err.println("\n" + c[j]);
                 test(synth, synth2);
                 }
+            if (synth instanceof edisyn.synth.alesisd4.AlesisD4)
+                {
+                ((edisyn.synth.alesisd4.AlesisD4)synth).setDM5(false);
+                ((edisyn.synth.alesisd4.AlesisD4)synth2).setDM5(false);
+                System.err.println("\n" + c[j]);
+                test(synth, synth2);
+                synth = Synth.instantiate(c[j], "whatever", true, false, null);
+                synth2 = Synth.instantiate(c[j], "whatever", true, false, null);
+                ((edisyn.synth.alesisd4.AlesisD4)synth).setDM5(true);
+                ((edisyn.synth.alesisd4.AlesisD4)synth2).setDM5(true);
+                System.err.println("\n" + c[j] + " (DM5)");
+                test(synth, synth2);
+                }
             else
                 {
                 synth = Synth.instantiate(c[j], "whatever", true, false, null);

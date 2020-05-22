@@ -952,8 +952,7 @@ public abstract class Synth extends JComponent implements Updatable
             int v_lsb = (value & 127);
             if (v_msb > 127) 
                 {
-                System.err.println("Problem with " + value);
-                new Throwable().printStackTrace();
+                System.err.println("Synth.java NRPN(int, int, int) ERROR.  Problem with value " + value + " at parameter " + parameter);
                 }
         
             return new Object[]
@@ -4675,7 +4674,7 @@ public abstract class Synth extends JComponent implements Updatable
     public static final int[] TEST_NOTE_PITCHES = new int[] { 96, 84, 72, 60, 48, 36, 24 };
     int testNote = 60;
     void setTestNotePitch(int note) { testNote = note; }
-    int getTestNotePitch() { return testNote; }
+    public int getTestNotePitch() { return testNote; }
     void playChord()
         {
         if (testNoteChord != null)
@@ -5152,6 +5151,7 @@ public abstract class Synth extends JComponent implements Updatable
                         count++;
                         }
 
+/*
             for(int i = 0; i < sysex.length; i++)
                 {
                 System.err.println("\n\n FILE " + i);
@@ -5160,6 +5160,7 @@ public abstract class Synth extends JComponent implements Updatable
                     System.err.println("" + j + "\t" + String.format("%02X", sysex[i][j]));
                     }
                 }
+*/
 
             return sysex;
             }
@@ -5328,11 +5329,13 @@ public abstract class Synth extends JComponent implements Updatable
                 f = new File(fd.getDirectory(), fd.getFile());
                 
                 is = new FileInputStream(f);
+                boolean okay = true;
                 if (f.length() > MAX_FILE_LENGTH)
                     {
-                    showSimpleError("File Error", "File is too large and cannot be loaded.");
+                    okay = showSimpleConfirm("File too Large", "This file is very large.  Loading it could hang Edisyn.\nLoad anyway?");
                     }
-                else
+            	
+            	if (okay)
                     {
                     byte[][] data;
                     String filename = f.getName();

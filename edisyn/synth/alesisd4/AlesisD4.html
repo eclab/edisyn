@@ -1,0 +1,54 @@
+<html><head></head>
+<body>
+
+<h1>Alesis D4 and DM5</h1> 
+<h2>Single Patch Editor</h2>
+
+<p>This patch editor works on the Alesis D4 and DM5 drum synthesizers.
+
+<p><b><font color=red>Important DM5 Note:</font></b> I have not personally tested on the DM5.  Importantly, I do not know if changing a drum sound in Edisyn will always set the right drum sound on your unit in real-time.  For example, changing to Kick 85 (Tribal) might [I'm just making this up now] change your unit to Kick 84 (Cuban) or Kick 86 (Steak).  This could happen for certain drum sounds but not for others due to mathematical bugs in Alesis's NRPN handling.  Please let me know if you find inconsistencies and I will work with you to fix them.
+
+<br><br><h3>Communicating with Edisyn</h3>
+
+Set the MIDI Channel to the same channel as Edisyn is using, or to OMNI.   Set Controllers to on.  Set Program Change Enable ("Prog Change") to ON.  Use the standard Program Change table, that is, one which maps program change events 0...20 directly to drumsets 0...20.
+
+<br><br><h3>About the DM5 Checkbox</h3>
+
+
+The DM5 checkbox changes the drumsets from D4 to DM5 style. The DM5 has completely different and more drums than the D4. If you have set a drum to a high value and then switched <i>back</i> to D4 style, the drum number will be out of range and will get reset to 0 (Big "O").
+
+<p>The button also effects what happens when you create a new patch editor.  Depending on the <i>current</i> setting of this button, when a new patch editor is created, it will load a different default patch (the D4 or DM5 drumset 0 respectively).
+
+
+<p>The button may also be automatically pressed if you load a D4 or DM5 patch from your unit or from disk.
+
+<br><br><h3>About Drum Names</h3>
+
+Drum names take the form <i>Type<i> <i>Number</i> <i>Name</i>.  The types can be any of (K)ick, (S)nare, (C)ymbal, (T)om, (P)ercussion, (E)ffect, and (R)andom. Within a drum type there are some number of drums. On the D4 numbers start with 1, but on the DM5 numbers start with 0.
+
+<br><br><h3>About the Test Note</h3>
+
+The test note is initially middle C.  If you modify a parameter in drum sound, that drum sound's current note becomes the new test note.  This note also becomes the note played when the unit's Preview button is pressed.
+
+
+<br><br><h3>Gotchas</h3>
+
+<ul>
+<li>All drum parameters and the drum root note can be updated in real-time, more or less, but not triggers (nor the patch name).
+
+<p><li>The Fine tuning is in cents and is <b>added</b> to the coarse tuning (in semitones).  Keep in mind that if the coarse tuning is negative, then this addition will look like a subtraction, that is, the fine tuning will move the coarse tuning back towards zero.
+
+<p><li>There are errors in the printed and online DM5 Sound Chart.  There are two entries for Percussion #43: the one called "Screech" does not exist, and is actually Effect #43.  Also, Effect #4 was omitted: it is called "Meddle".
+</ul>
+
+<p>Thanks to Chis Adams for his assistance in working out kinks in the DM5.
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>May 2020
+</table>
+

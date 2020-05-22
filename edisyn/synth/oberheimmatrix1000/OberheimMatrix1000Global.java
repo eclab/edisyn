@@ -46,9 +46,9 @@ public class OberheimMatrix1000Global extends Synth
         hbox.addLast(addGeneral(Style.COLOR_A()));
         vbox.add(hbox);
         
-        vbox.add(addMIDI(Style.COLOR_A()));
+        vbox.add(addMIDI(Style.COLOR_B()));
         vbox.add(addVibrato(Style.COLOR_A()));
-        vbox.add(addGroups(Style.COLOR_A()));
+        vbox.add(addGroups(Style.COLOR_B()));
         
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("General", soundPanel);

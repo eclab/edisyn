@@ -61,14 +61,14 @@ public class SanityCheck
                 }
             if (synth instanceof edisyn.synth.alesisd4.AlesisD4)
                 {
-                ((edisyn.synth.alesisd4.AlesisD4)synth).setDM5(false);
-                ((edisyn.synth.alesisd4.AlesisD4)synth2).setDM5(false);
+                ((edisyn.synth.alesisd4.AlesisD4)synth).setDM5(false, false);
+                ((edisyn.synth.alesisd4.AlesisD4)synth2).setDM5(false, false);
                 System.err.println("\n" + c[j]);
                 test(synth, synth2);
                 synth = Synth.instantiate(c[j], "whatever", true, false, null);
                 synth2 = Synth.instantiate(c[j], "whatever", true, false, null);
-                ((edisyn.synth.alesisd4.AlesisD4)synth).setDM5(true);
-                ((edisyn.synth.alesisd4.AlesisD4)synth2).setDM5(true);
+                ((edisyn.synth.alesisd4.AlesisD4)synth).setDM5(true, false);
+                ((edisyn.synth.alesisd4.AlesisD4)synth2).setDM5(true, false);
                 System.err.println("\n" + c[j] + " (DM5)");
                 test(synth, synth2);
                 }

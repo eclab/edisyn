@@ -30,7 +30,8 @@ Edisyn is a synthesizer patch editor library written in pure Java.   It runs on 
 Edisyn is particularly good at exploring the space of patches.  It has to my knowledge the most sophisticated set of general-purpose patch-exploration tools of any patch editor available.
 
 Edisyn presently supports:
- 
+
+* Alesis D4 and DM5 
 * Casio CZ Series (CZ101, CZ1000, CZ3000, CZ5000, CZ-1)
 * DSI Prophet '08
 * E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap modes)

@@ -20,6 +20,7 @@ This patch editor knows about bank sysex messages (which group together multiple
 <ul>
 <li>The following effect patches are not used by any standard single, multi, or drum patch:  3, 10, 11, 12, 14, 15, 21, 22, 23, 28
 <p><li>In all standard effect patches, Submix H is always "off".
+<p><li>The K4's documentation regarding filter envelopes is wrong.  A filter envelope's strength is multiplied by the envelope depth, and then the whole thing is added to the primary filter cutoff.  A filter envelope starts at 0, rises to maximum attack, then decays to the sustain level (which can be above or below 0!), then finally releases back to 0.   This means that the cutoff starts at the base cutoff value, then rises to some higher value, decays to a sustain possibly <i>below</i> the base cutoff value, then returns the base cutoff on release.  Furthermore, the envelope depth can be inverted, so attacks can go down rather than up.
 </ul>
 
 

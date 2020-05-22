@@ -43,7 +43,7 @@ If you mutate or recombine patches (using randomize, merge, hill-climb, or nudge
 Different 4-Op synths have different organizations of memory, and so differ in the banks and patch numbers you can access.  Specifically:
 
 <ul>
-<li> <b>DX21</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank, 32 patches, plus 128 voice ROM memory.  The ROM cannot be accessed without loading it into internal memory, erasing an existing internal patch (or all of them), so I have elected not to do that automatically.  You will have to manually load a ROM patch into internal in order for Edisyn to access it.
+<li> <b>DX21</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank, 32 patches, plus 128 voice ROM memory.  The ROM cannot be accessed without loading it into internal memory, erasing an existing internal patch (or all of them), so I have elected not to do that automatically.  You will have to manually load a ROM patch into internal memory in order for Edisyn to access it.
 <p><li> <b>DX27, DX100</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + 4 "banks" (A B C D), 24 patches each.  The "banks" are just links to either internal patches or to a set of 192 presets in ROM.  Edisyn can't directly access a ROM patch: you'd have to manually set up a ROM patch in a "bank" which points to it. 
 <p><li> <b>DX11, TX81Z</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + 4 ROM preset banks, 32 patches each.
 <p><li> <b>TQ5, YS100, YS200, B200</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + preset bank + card bank, 100 patches each.
@@ -58,9 +58,9 @@ Most 4-op synthesizers have no way to write patches from sysex: you will have to
 
 <p><li>The 4-op family is very unusual in that patches aren't expressed with single sysex commands, but a sequence of them (so-called VCED, ACED, ACED2, and EFEDS sysex commands).  Thus when you save a patch to a file in Edisyn, you'll actually be saving <b>multiple</b> sysex commands concatenated together.  You should be aware of this in case you try sending this patch later from some librarian software or editor (it shouldn't be a problem).  
 
-<br><br>Additionally, if another editor has saved to a single file multiple single patches broken out as these sequences, Edisyn cannot read any more than the first one.  Thankfully this is unusual; normally groups of patches are saved to a filein bank (or VMEM) format).  Edisyn can read files with multiple VMEM patches.
+<br><br>Additionally, if another editor has saved to a single file multiple single patches broken out as these sequences, Edisyn cannot read any more than the first one.  Thankfully this is unusual; normally groups of patches are saved to a file in "bank" (or "VMEM") format).  Edisyn can read files with multiple VMEM patches.
 
-<p><li>On the TX81Z and DX11 (but not other 4-op synths) changing patches has bugs.  I think I have a method which should work, but if it strange things happen, let me know.
+<p><li>On the TX81Z and DX11 (but not other 4-op synths) changing patches has bugs.  I think I have a method which should work, but if strange things happen, let me know.
 
 <p><li>When changing patches, the TX81Z will read "MIDI Buffer Full" and not change its display even if the patch has changed.  Press almost any button and it'll reset the display.
 

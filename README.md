@@ -55,6 +55,7 @@ Edisyn presently supports:
 * Yamaha FB01 (Single and Multi Modes)
 * Yamaha TG33, SY22, and SY35 (Single and (for TG33) Multi Modes)
 * General CC, NRPN, and RPN editing
+* Microtuning editing
 
 Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, randomization, merging, nudging, hill-climbing, patch constriction, per-parameter customization, real-time parameter updates, test notes, etc.
 

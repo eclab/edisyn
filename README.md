@@ -43,7 +43,7 @@ Edisyn presently supports:
 * Korg MicroKorg (Single and Vocoder Modes)
 * Korg Microsampler
 * Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
-* Oberheim Matrix 1000
+* Oberheim Matrix 6, 6R, and 1000
 * PreenFM2
 * Red Sound DarkStar and DarkStar XP2
 * Roland D-110 (Tone and Multi Modes)

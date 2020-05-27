@@ -105,8 +105,7 @@ I believe that the following should work:
 
 3. Double-click on edisyn.jar to launch Edisyn.
 
-If you want to use Edisyn in combination with a DAW, see the manual's section on build
-ing a MIDI Loopback.
+If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
 #### Important Note for Windows User
 

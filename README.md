@@ -17,7 +17,7 @@ Related projects:
 
 ## Contributors
 
-* Bryan Hoyle (collaboration on the Red Sound DarkStar editor)
+* Bryan Hoyle (collaboration on the Red Sound DarkStar and Microtuning editors)
 
 ## Donations
 
@@ -70,11 +70,11 @@ Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux)
 
 ### Installation and Running on MacOS
 
-First install Edisyn from the [Edisyn.app.zip](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.app.zip) file located in the "install" directory.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
+First install Edisyn from the [Edisyn.app.zip](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.app.zip) file.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
 
-Sierra has really locked down the ability to run an application that's not from a commercial, paying Apple Developer.  And I'm not one.  So you will have to instruct Sierra to permit Edisyn to run.
+MacOS has lately locked down the ability to run an application that's not from a commercial, paying Apple Developer.  And I'm not one.  So you will have to instruct MacOS to permit Edisyn to run.
 
-Let's assume you stuck Edisyn in the /Applications directory as usual.  Then:
+Let's assume you stuck Edisyn in the /Applications directory as usual.  Now we have to tell Gatekeeper to allow Edisyn to run on your machine:
 
 1. Run the Terminal Program (in /Applications/Utilities/)
 2. Type the following command and hit RETURN: `   sudo spctl --add /Applications/Edisyn.app`

@@ -377,8 +377,6 @@ public class DSIProphet08 extends Synth
         hbox.add(comp);
 
 
-//        hbox.addLast(Strut.makeHorizontalStrut(100));
-
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
         }
@@ -929,7 +927,9 @@ public class DSIProphet08 extends Synth
     HashMap parametersToIndex = new HashMap();
 
 
-    /** List of all DSI Prophet 08 parameters in order. */
+    /** List of all DSI Prophet 08 parameters in order,
+    	plus additional Tetra- or Mopho-only parameters mapped
+    	in the the appropriate location given their NRPN values. */
                 
     final static String[] parameters = new String[]
     {

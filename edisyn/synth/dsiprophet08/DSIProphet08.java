@@ -80,6 +80,20 @@ public class DSIProphet08 extends Synth
         reenntrantBlock = true;
         if (store) setLastX("" + val, TYPE_KEY, getSynthName(), false);
         type = val;
+        
+        // reset bank
+        int bank = model.get("bank", 0);
+		if (type == PROPHET_08_ID || type == TETRA_ID)
+			{
+			if (bank > 1)
+				model.set("bank", 0);
+			}
+		else if (type == MOPHO_ID || type == MOPHO_KEYBOARD_ID)
+			{
+			if (bank > 2)
+				model.set("bank", 0);
+			}
+
         updateTitle();
         if (synthTypes != null) synthTypes.setSelectedIndex(type);
         reenntrantBlock = false;

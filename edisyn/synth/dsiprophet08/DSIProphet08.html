@@ -2,14 +2,39 @@
 <body>
 
 
-<h1>Dave Smith Instruments Prophet '08</h1> 
+<h1>Dave Smith Instruments Prophet '08 / Tetra / Mopho</h1> 
 <h2>Single Patch Editor</h2>
 
-<p>This editor will work with the <b>Prophet '08</b> and <b>Prophet '08 Desktop</b>.
+<p>This editor is meant to work with the <b>Prophet '08</b>, <b>Prophet '08 Desktop</b>, <b>Tetra</b>, <b>Mopho</b>, <b>Mopho Keyboard</b>, <b>Mopho SE</b>, and <b>Mopho X4</b>. I say <i>meant to work</i> because I have only tested on the Prophet '08.  I need people with these machines to test on them and provide some reports.
 
 <br><br><h3>Communicating with Edisyn</h3>
 
 Set the MIDI channel to the same as being used in Edisyn.  Set MParamSend to NRPN.  Set M Param Rec to All or NRPN.  Set MIDI Program to ON.  Set MIDI Sysex to ON.  And set MIDIParamLCD to ON.
+
+<br><br><h3>Setting the Synthesizer Type</h3>
+
+These machines are approximately compatible with one another.  But there are some differences, big and small.  The obvious one is: the Mopho series (except for X4) is monophonic and so does not have the two layers present in the Tetra and Pophet '08. If you load a Mopho patch, (missing) Layer B will be set to a copy of Layer A.
+
+<p>There are other differences. Some units have feedback; others have audio input; and the Prophet '08 has neither.  The Prophet '08 doesn't have sub-octave generators unlike the other machines.  Some machines have a few destinations and sources that others do not.  And the Tetra can be split in a variety of ways (Combos) which are not considered by this editor.
+
+<p>Last but not least, these machines by and large have different Sysex machine IDs.
+
+<p>As a result, to upload patches into your sythesizer, you must set Edisyn to the proper Synthesizer Type.  Edisyn will remember your choice next time.  If you load a patch from a different synthesizer type, Edisyn will load the patch but won't deviate from your original choice.
+
+<br><br><h3>Per-Synthesizer Parameters</h3>
+
+The Tetra and Mopho series have several additional parameters not present in the Prophet '08.  These appear under the <b>Tetra/Mopho</b> tab.
+
+<p>Several parameters, destinations, and other settings are specific to certain synthesizers.  The synthesizer in question is marked as follows:
+
+<ul>
+<li>[M] Full Mopho Series
+<li>[K] Mopho Keyboard and SE only
+<li>[T] Tetra
+<li>[X4] Mopho X4 (notably Amplifier Initial Level is marked "not X4")
+</ul>
+
+<p>A few parameters are shared. For example, "Feedback Volume" on the Tetra is "Audio Input Level" on the Mopho series.  And "Spread" on most machines is "Pan" on the Mopho (which is monophonic).
 
 <br><br><h3>Hints</h3>
 
@@ -18,6 +43,8 @@ Set the MIDI channel to the same as being used in Edisyn.  Set MParamSend to NRP
 </ul>
 
 <br><br><h3>Gotchas</h3>
+
+These apply to the Prophet '08.
 
 <ul>
 <li>Even if MIDIParamLCD is set to ON, any real-time changes you make won't be reflected on the Prophet '08 LCD unless you first twiddle a knob so the Prophet '08 is in its edit mode.  I suggest twiddling the Misc Parameters Select knob.
@@ -33,7 +60,7 @@ Set the MIDI channel to the same as being used in Edisyn.  Set MParamSend to NRP
 <td><b>Sean Luke</b>
 <tr>
 <td align=right>Date&nbsp;&nbsp;&nbsp;
-<td>June 2018
+<td>June 2018, Updated May 2020
 </table>
 
 

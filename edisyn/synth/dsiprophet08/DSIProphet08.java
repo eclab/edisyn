@@ -1517,15 +1517,18 @@ public class DSIProphet08 extends Synth
             int t = getType();
             if (t == PROPHET_08_ID || t == TETRA_ID)
             	{
-            	if (bank > 1)
-            		bank = 0;
+            	if (bank < 2)
+            		model.set("bank", bank);
             	}
             else if (t == MOPHO_ID || t == MOPHO_KEYBOARD_ID)
             	{
-            	if (bank > 2)
-            		bank = 2;
+            	if (bank < 3)
+            		model.set("bank", bank);
             	}
-            model.set("bank", bank);
+            else		// The X4 has 8 banks
+            	{
+	            model.set("bank", bank);
+	            }
             model.set("number", data[5]);
             }
 

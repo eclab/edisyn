@@ -53,6 +53,13 @@ public class DSIProphet08 extends Synth
     public static final int SYNTH_TYPE_MOPHO_KEYBOARD = 3;
     public static final int SYNTH_TYPE_MOPHO_X4 = 4;
     
+    // Sysex machine IDs
+	public static final int PROPHET_08_ID = 0x23;
+	public static final int MOPHO_ID = 0x25;
+	public static final int TETRA_ID = 0x26;
+	public static final int MOPHO_KEYBOARD_ID = 0x27;
+	public static final int MOPHO_X4_ID = 0x29;
+
     public static final int FILTER_ENVELOPE = 1;
     public static final int AMPLIFIER_ENVELOPE = 2;
     public static final int THIRD_ENVELOPE = 3;
@@ -852,6 +859,7 @@ public class DSIProphet08 extends Synth
     public JComponent addTetra(int layer, Color color)
         {
         Category category = new Category(this, "Tetra Layer " + (layer == 1 ? "A / Mopho" : "B"), color);
+        category.makePasteable("layer" + layer + "tetra");
                 
         JComponent comp;
         String[] params;
@@ -1506,19 +1514,19 @@ public class DSIProphet08 extends Synth
         else
             System.err.println("Warning (DSIProphet08): Unknown program data format " + data[3]);
         
-        if (data[2] == 0x23 || data[2] == 0x26)		// Prophet '08 or Tetra
+        if (data[2] == PROPHET_08_ID || data[2] == TETRA_ID)		// Prophet '08 or Tetra
         	{
         	/*
-        	if (data[2] == 0x23)
+        	if (data[2] == PROPHET_08_ID)
         		setType(SYNTH_TYPE_PROPHET_08, false);
-        	else
+        	else // if (data[2] == TETRA_ID)
         		setType(SYNTH_TYPE_TETRA, false);
         	*/
 
 			for(int i = 0; i < 384; i++)
 				{
 				int j = i;
-				if (data[2] == 0x26)  // Tetra, need to map
+				if (data[2] == TETRA_ID)  // Tetra, need to map
 					{
 					if (j >= 200) 
 						j -= 200;
@@ -1551,11 +1559,11 @@ public class DSIProphet08 extends Synth
 		else 				// Mopho or Mopho Keyboard / SE
 			{
 			/*
-	        if (data[2] == 0x25)
+	        if (data[2] == MOPHO_ID)
         		setType(SYNTH_TYPE_MOPHO, false);
-        	else if (data[2] == 0x27)
+        	else if (data[2] == MOPHO_KEYBOARD_ID)
         		setType(SYNTH_TYPE_MOPHO_KEYBOARD, false);
-        	else // if (data[2] == 0x29)
+        	else // if (data[2] == MOPHO_X4_ID)
         		setType(SYNTH_TYPE_MOPHO_X4, false);
         	*/
 
@@ -1564,9 +1572,9 @@ public class DSIProphet08 extends Synth
 				int j = i;
 				
 				// Map
-				if (data[2] == 0x25)		// Mopho
+				if (data[2] == MOPHO_ID)		// Mopho
 					j = mophoParams[j];
-				else if (data[2] == 0x27)	// Mopho Keyboard / SE
+				else if (data[2] == MOPHO_KEYBOARD_ID)	// Mopho Keyboard / SE
 					j = mophoKeyParams[j];
 				else 
 					j = mophoX4Params[j];
@@ -1686,7 +1694,7 @@ public class DSIProphet08 extends Synth
             byte[] emit = new byte[(t == SYNTH_TYPE_TETRA || t == SYNTH_TYPE_PROPHET_08) ? 444 : 298];
             emit[0] = (byte)0xF0;
             emit[1] = (byte)0x01;  // DSI
-            emit[2] = (byte)0x23;  // Prophet 08
+            emit[2] = (byte)PROPHET_08_ID;  // Prophet 08
             emit[3] = (byte)0x03;  // Edit Buffer Data Dump
             System.arraycopy(data, 0, emit, 4, data.length);
             emit[emit.length - 1] = (byte)0xF7;
@@ -1697,7 +1705,7 @@ public class DSIProphet08 extends Synth
             byte[] emit = new byte[(t == SYNTH_TYPE_TETRA || t == SYNTH_TYPE_PROPHET_08) ? 446 : 300];
             emit[0] = (byte)0xF0;
             emit[1] = (byte)0x01;  // DSI
-            emit[2] = (byte)0x23;  // Prophet 08
+            emit[2] = (byte)PROPHET_08_ID;  // Prophet 08
             emit[3] = (byte)0x02;  // Program Data Dump
             emit[4] = (byte)tempModel.get("bank", 0);
             emit[5] = (byte)tempModel.get("number", 0);
@@ -1737,25 +1745,25 @@ public class DSIProphet08 extends Synth
 		byte[] data = new byte[5];
 		data[0] = (byte)0xF0;
 		data[1] = (byte)0x01;   // DSI
-		data[2] = (byte)0x23;   // Prophet '08
+		data[2] = (byte)PROPHET_08_ID;   // Prophet '08
 		data[3] = (byte)0x06;
 		data[4] = (byte)0xF7;
 
 		if (getType() == SYNTH_TYPE_TETRA)
 			{
-			data[2] = (byte)0x26;   // Tetra
+			data[2] = (byte)TETRA_ID;   // Tetra
 			}
 		else if (getType() == SYNTH_TYPE_MOPHO)
 			{
-			data[2] = (byte)0x25;   // Mopho
+			data[2] = (byte)MOPHO_ID;   // Mopho
 			}
 		else if (getType() == SYNTH_TYPE_MOPHO_KEYBOARD)
 			{
-			data[2] = (byte)0x27;   // Mopho Keyboard / SE
+			data[2] = (byte)MOPHO_KEYBOARD_ID;   // Mopho Keyboard / SE
 			}
 		else if (getType() == SYNTH_TYPE_MOPHO_X4)
 			{
-			data[2] = (byte)0x29;   // Mopho X4
+			data[2] = (byte)MOPHO_X4_ID;   // Mopho X4
 			}
 			
 		return data;
@@ -1769,7 +1777,7 @@ public class DSIProphet08 extends Synth
         byte[] data = new byte[7];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x01;   // DSI
-        data[2] = (byte)0x23;   // Prophet '08
+        data[2] = (byte)PROPHET_08_ID;   // Prophet '08
         data[3] = (byte)0x05;
         data[4] = (byte)(tempModel.get("bank", 0));
         data[5] = (byte)(tempModel.get("number", 0));
@@ -1777,19 +1785,19 @@ public class DSIProphet08 extends Synth
         
 		if (getType() == SYNTH_TYPE_TETRA)
 			{
-			data[2] = (byte)0x26;   // Tetra
+			data[2] = (byte)TETRA_ID;   // Tetra
 			}
 		else if (getType() == SYNTH_TYPE_MOPHO)
 			{
-			data[2] = (byte)0x25;   // Mopho
+			data[2] = (byte)MOPHO_ID;   // Mopho
 			}
 		else if (getType() == SYNTH_TYPE_MOPHO_KEYBOARD)
 			{
-			data[2] = (byte)0x27;   // Mopho Keyboard / SE
+			data[2] = (byte)MOPHO_KEYBOARD_ID;   // Mopho Keyboard / SE
 			}
  		else if (getType() == SYNTH_TYPE_MOPHO_X4)
 			{
-			data[2] = (byte)0x29;   // Mopho X4
+			data[2] = (byte)MOPHO_X4_ID;   // Mopho X4
 			}
        
         return data;
@@ -1800,52 +1808,52 @@ public class DSIProphet08 extends Synth
         return ((data.length == 446 &&
                 data[0] == (byte)0xF0 &&
                 data[1] == (byte) 0x01 &&       // DSI
-                data[2] == (byte) 0x23 &&       // Prophet 08
+                data[2] == (byte) PROPHET_08_ID &&       // Prophet 08
                 data[3] == (byte) 0x02) ||      // Program Data Dump
                 (data.length == 444 &&
                 data[0] == (byte)0xF0 &&
                 data[1] == (byte) 0x01 &&       // DSI
-                data[2] == (byte) 0x23 &&       // Prophet 08
+                data[2] == (byte) PROPHET_08_ID &&       // Prophet 08
                 data[3] == (byte) 0x03) ||      // Edit Buffer Data Dump
 				(data.length == 446 &&
                 data[0] == (byte)0xF0 &&
                 data[1] == (byte) 0x01 &&       // DSI
-                data[2] == (byte) 0x26 &&       // Tetra
+                data[2] == (byte) TETRA_ID &&       // Tetra
                 data[3] == (byte) 0x02) ||      // Program Data Dump
                 (data.length == 444 &&
                 data[0] == (byte)0xF0 &&
                 data[1] == (byte) 0x01 &&       // DSI
-                data[2] == (byte) 0x26 &&       // Tetra
+                data[2] == (byte) TETRA_ID &&       // Tetra
                 data[3] == (byte) 0x03) ||      // Edit Buffer Data Dump        
 				(data.length == 300 &&
                 data[0] == (byte)0xF0 &&
                 data[1] == (byte) 0x01 &&       // DSI
-                data[2] == (byte) 0x25 &&       // Mopho
+                data[2] == (byte) MOPHO_ID &&       // Mopho
                 data[3] == (byte) 0x02) ||      // Program Data Dump
                 (data.length == 298 &&
                 data[0] == (byte)0xF0 &&
                 data[1] == (byte) 0x01 &&       // DSI
-                data[2] == (byte) 0x25 &&       // Mopho
+                data[2] == (byte) MOPHO_ID &&       // Mopho
                 data[3] == (byte) 0x03) ||      // Edit Buffer Data Dump        
 				(data.length == 300 &&
                 data[0] == (byte)0xF0 &&
                 data[1] == (byte) 0x01 &&       // DSI
-                data[2] == (byte) 0x27 &&       // Mopho Keyboard / SE
+                data[2] == (byte) MOPHO_KEYBOARD_ID &&       // Mopho Keyboard / SE
                 data[3] == (byte) 0x02) ||      // Program Data Dump
                 (data.length == 298 &&
                 data[0] == (byte)0xF0 &&
                 data[1] == (byte) 0x01 &&       // DSI
-                data[2] == (byte) 0x27 &&       // Mopho Keyboard / SE
+                data[2] == (byte) MOPHO_KEYBOARD_ID &&       // Mopho Keyboard / SE
                 data[3] == (byte) 0x03) ||     	// Edit Buffer Data Dump        
 				(data.length == 300 &&
                 data[0] == (byte)0xF0 &&
                 data[1] == (byte) 0x01 &&       // DSI
-                data[2] == (byte) 0x29 &&       // Mopho X4
+                data[2] == (byte) MOPHO_X4_ID &&       // Mopho X4
                 data[3] == (byte) 0x02) ||      // Program Data Dump
                 (data.length == 298 &&
                 data[0] == (byte)0xF0 &&
                 data[1] == (byte) 0x01 &&       // DSI
-                data[2] == (byte) 0x29 &&       // Mopho X4
+                data[2] == (byte) MOPHO_X4_ID &&       // Mopho X4
                 data[3] == (byte) 0x03));      	// Edit Buffer Data Dump        
             }
         
@@ -2058,7 +2066,7 @@ public class DSIProphet08 extends Synth
     // MOPHO X4
     public static final int[] mophoX4Params = new int[]
     	{
-		1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 16, 17, 20, 
+		0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 16, 17, 20, 
 		21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 
 		-1, 40, 41, 33, 34, 35, 36, 37, 38, 39, 42, 43, 44, 
 		45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 

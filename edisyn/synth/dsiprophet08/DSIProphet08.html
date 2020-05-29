@@ -13,13 +13,20 @@ Set the MIDI channel to the same as being used in Edisyn.  Set MParamSend to NRP
 
 <br><br><h3>Setting the Synthesizer Type</h3>
 
-These machines are approximately compatible with one another.  But there are some differences, big and small.  The obvious one is: the Mopho series (except for X4) is monophonic and so does not have the two layers present in the Tetra and Pophet '08. If you load a Mopho patch, (missing) Layer B will be set to a copy of Layer A.
+These machines are approximately compatible with one another, but there are differences.  The obvious one is: the Mopho series (except for X4) is monophonic and so does not have the two layers present in the Tetra and Pophet '08. If you load a Mopho patch, (missing) Layer B will be set to a copy of Layer A.
 
 <p>There are other differences. Some units have feedback; others have audio input; and the Prophet '08 has neither.  The Prophet '08 doesn't have sub-octave generators unlike the other machines.  Some machines have a few destinations and sources that others do not.  And the Tetra can be split in a variety of ways (Combos) which are not considered by this editor.
 
-<p>Last but not least, these machines by and large have different Sysex machine IDs.
+<p>As a result, to upload patches into your sythesizer, you must set Edisyn to the proper Synthesizer Type.  Edisyn will remember your choice next time.  Setting the Synthesizer Type affects the following things:
 
-<p>As a result, to upload patches into your sythesizer, you must set Edisyn to the proper Synthesizer Type.  Edisyn will remember your choice next time.  If you load a patch from a different synthesizer type, Edisyn will load the patch but won't deviate from your original choice.
+<ul>
+<li>You can select the proper bank (the X4 has 8 banks, the other Mophos have 3 banks, and the Prophet/Tetra have 2 banks).
+<li>You can upload patches properly (different synth have different sysex)
+<li>You can request patches properly (again, different sysex)
+<li>You can batch-download from your synth properly (correct banks and sysex)
+</ul>
+
+<p>If you load a patch from a different synthesizer type, Edisyn will load the patch but won't deviate from your original choice.  Because different synths have different numbers of patches, if the incoming patch is set to a bank higher than your current synthesizer type can handle, it will be reset to bank 1.
 
 <br><br><h3>Per-Synthesizer Parameters</h3>
 

@@ -72,6 +72,37 @@ public class SanityCheck
                 System.err.println("\n" + c[j] + " (DM5)");
                 test(synth, synth2);
                 }
+            if (synth instanceof edisyn.synth.dsiprophet08.DSIProphet08)
+                {
+                ((edisyn.synth.dsiprophet08.DSIProphet08)synth).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_PROPHET_08, false);
+                ((edisyn.synth.dsiprophet08.DSIProphet08)synth2).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_PROPHET_08, false);
+                System.err.println("\n" + c[j]);
+                test(synth, synth2);
+                synth = Synth.instantiate(c[j], "whatever", true, false, null);
+                synth2 = Synth.instantiate(c[j], "whatever", true, false, null);
+                ((edisyn.synth.dsiprophet08.DSIProphet08)synth).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_TETRA, false);
+                ((edisyn.synth.dsiprophet08.DSIProphet08)synth2).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_TETRA, false);
+                System.err.println("\n" + c[j] + " (Tetra)");
+                test(synth, synth2);
+                synth = Synth.instantiate(c[j], "whatever", true, false, null);
+                synth2 = Synth.instantiate(c[j], "whatever", true, false, null);
+                ((edisyn.synth.dsiprophet08.DSIProphet08)synth).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_MOPHO, false);
+                ((edisyn.synth.dsiprophet08.DSIProphet08)synth2).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_MOPHO, false);
+                System.err.println("\n" + c[j] + " (Mopho)");
+                test(synth, synth2);
+                synth = Synth.instantiate(c[j], "whatever", true, false, null);
+                synth2 = Synth.instantiate(c[j], "whatever", true, false, null);
+                ((edisyn.synth.dsiprophet08.DSIProphet08)synth).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_MOPHO_KEYBOARD, false);
+                ((edisyn.synth.dsiprophet08.DSIProphet08)synth2).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_MOPHO_KEYBOARD, false);
+                System.err.println("\n" + c[j] + " (Mopho Keyboard and SE)");
+                test(synth, synth2);
+                synth = Synth.instantiate(c[j], "whatever", true, false, null);
+                synth2 = Synth.instantiate(c[j], "whatever", true, false, null);
+                ((edisyn.synth.dsiprophet08.DSIProphet08)synth).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_MOPHO_X4, false);
+                ((edisyn.synth.dsiprophet08.DSIProphet08)synth2).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_MOPHO_X4, false);
+                System.err.println("\n" + c[j] + " (Mopho x4)");
+                test(synth, synth2);
+                }
             else
                 {
                 synth = Synth.instantiate(c[j], "whatever", true, false, null);

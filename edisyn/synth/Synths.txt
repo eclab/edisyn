@@ -1,4 +1,5 @@
 edisyn.synth.alesisd4.AlesisD4
+#edisyn.synth.alesismicron.AlesisMicron
 edisyn.synth.casiocz.CasioCZ
 edisyn.synth.dsiprophet08.DSIProphet08
 edisyn.synth.emumorpheus.EmuMorpheus
@@ -43,7 +44,6 @@ edisyn.synth.yamahatg33.YamahaTG33Multi
 edisyn.synth.generic.Generic
 edisyn.synth.tuning.Tuning
 #edisyn.synth.futuresonusparva.FuturesonusParva
-#edisyn.synth.alesismicron.AlesisMicron
 #edisyn.synth.linnstrument.Linnstrument
 #edisyn.synth.yamahatx81z.YamahaTX81Z
 #edisyn.synth.yamahatx81z.YamahaTX81ZMulti

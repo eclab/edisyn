@@ -1528,7 +1528,7 @@ public class DSIProphet08 extends Synth
         if (data[3] == 0x02)  // program data only, not (0x03) edit buffer
             {
             int bank = data[4];
-            int t = getType();
+            int t = data[2];
             if (t == PROPHET_08_ID || t == TETRA_ID)
             	{
             	if (bank < 2)
@@ -1569,10 +1569,13 @@ public class DSIProphet08 extends Synth
 				if (data[2] == TETRA_ID)  // Tetra, need to map
 					{
 					if (j >= 200) 
-						j -= 200;
-					j = tetraParams[j];
-
-					if (j == -1) { System.err.println("Skipping " + i + " --> " + j + " " + parameters[i]); continue; }
+						{
+						j = tetraParams[j - 200] + 200;
+						}
+					else 
+						{
+						j = tetraParams[j];
+						}
 					}
 				
 				if (!parameters[i].equals("---"))
@@ -1619,23 +1622,25 @@ public class DSIProphet08 extends Synth
 				else 
 					j = mophoX4Params[j];
 				
-				if (j == -1) { System.err.println("Skipping " + i + " --> " + j + " " + parameters[i]); continue; }
-				
-				//System.err.println("" + j + " " + i + " " + parameters[i]);
 				if (!parameters[i].equals("---"))
 					{
-					// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
-					int q = d[j];
-					if (q < 0) q += 256;  // push to unsigned (not 2's complement)
-					model.set(parameters[i], q);
+					if (j != -1)
+						{
+						// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
+						int q = d[j];
+						if (q < 0) q += 256;  // push to unsigned (not 2's complement)
+						model.set(parameters[i], q);
+						}
 					}
 				
 				if (!parameters[i + 200].equals("---"))
 					{
-					// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
-					int q = d[j];
-					if (q < 0) q += 256;  // push to unsigned (not 2's complement)
-					model.set(parameters[i + 200], q);
+					if (j != -1)
+						{// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
+						int q = d[j];
+						if (q < 0) q += 256;  // push to unsigned (not 2's complement)
+						model.set(parameters[i + 200], q);
+						}
 					}
 				}
 		
@@ -1673,12 +1678,15 @@ public class DSIProphet08 extends Synth
 				if (t == SYNTH_TYPE_TETRA)  // Tetra, need to map
 					{
 					if (j >= 200) 
-						j -= 200;
-					j = tetraParams[j];
+						{
+						j = tetraParams[j - 200] + 200;
+						}
+					else 
+						{
+						j = tetraParams[j];
+						}
 					}
-				
-				if (j == -1) { System.err.println("Skipping Emit " + i + " --> " + j + " " + parameters[i]); continue; }
-				
+								
 				if (!parameters[i].equals("---"))
 					{
 					// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
@@ -1709,15 +1717,17 @@ public class DSIProphet08 extends Synth
 					j = mophoKeyParams[j];
 				else
 					j = mophoX4Params[j];
-				
-				if (j == -1) { System.err.println("Skipping Emit " + i + " --> " + j + " " + parameters[i]); continue; }
-				
+								
 				if (!parameters[i].equals("---"))
 					{
 					// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
 					int q = model.get(parameters[i], 0);
 					if (q > 127) q -= 256;  // push to signed (not 2's complement)
-					d[j] = (byte)q;
+					
+					if (j != -1)
+						d[j] = (byte)q;
+					//else
+					//	System.err.println("" + j + " " + i + " " + parameters[i]);
 					}
 				}
 						
@@ -2067,5 +2077,45 @@ public class DSIProphet08 extends Synth
 		198, 199
 		};
 
+    public boolean testVerify(Synth synth2, String key, Object val1, Object val2)
+    	{
+    	int t = getType();
     	
+    	if (t == SYNTH_TYPE_MOPHO || t == SYNTH_TYPE_MOPHO_KEYBOARD || t == SYNTH_TYPE_MOPHO_X4)
+    		{
+    		if (key.startsWith("layer2")) return true;  // no layer 2
+    		}
+    		
+    	if (t == SYNTH_TYPE_MOPHO)
+    		{
+    		return (key.equals("layer1unisonmode") ||
+    				key.equals("layer1unison") ||
+    				key.equals("layer1vcaoutputspread") ||
+    				key.equals("layer1tetrafeedbackgain"));
+    		}
+    	else if (t == SYNTH_TYPE_MOPHO_KEYBOARD)
+    		{
+    		return (key.equals("keyboardmode") ||
+    				key.equals("splitpoint") ||
+    				key.equals("layer1tetraassignableparameter1") || 
+    				key.equals("layer1tetraassignableparameter2") || 
+    				key.equals("layer1tetraassignableparameter3") || 
+    				key.equals("layer1tetraassignableparameter4") || 
+    				key.equals("layer1tetraeditorbyte") || 
+    				key.equals("layer1vcaoutputspread"));
+    		}
+    	else if (t == SYNTH_TYPE_MOPHO_X4)
+    		{
+    		return (key.equals("keyboardmode") ||
+    				key.equals("splitpoint") ||
+    				key.equals("layer1tetraassignableparameter1") || 
+    				key.equals("layer1tetraassignableparameter2") || 
+    				key.equals("layer1tetraassignableparameter3") || 
+    				key.equals("layer1tetraassignableparameter4") || 
+    				key.equals("layer1tetraeditorbyte") || 
+    				key.equals("layer1vcainitiallevel"));
+    		}
+    	return false;
+    	}
     }
+

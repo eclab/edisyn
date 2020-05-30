@@ -99,6 +99,33 @@ public class RedSoundDarkStar extends Synth
             });
 
         menu.add(partmenu);
+
+        partmenu = new JMenuItem("Copy Part...");
+        partmenu.addActionListener(new ActionListener()
+            {
+            JComboBox part1 = new JComboBox(PARTS);
+            JComboBox part2 = new JComboBox(PARTS);
+                
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean result = showMultiOption(RedSoundDarkStar.this, new String[] { "Copy", "To" }, 
+                    new JComponent[] { part1, part2 }, "Copy Part...", "Enter the part to copy, and where to copy it.");
+                                
+                if (result)
+                    {
+                    int p1 = part1.getSelectedIndex();
+                    int p2 = part2.getSelectedIndex();
+                    for(int i = 0; i < BASIC_PARAMETERS.length; i++)
+                        {
+                        int temp = model.get("part" + (p1 + 1) + BASIC_PARAMETERS[i], 0);
+                        model.set("part" + (p2 + 1) + BASIC_PARAMETERS[i], temp);
+                        }
+                    sendAllParameters();
+                    }
+                }                               
+            });
+
+        menu.add(partmenu);
         }
 
     public RedSoundDarkStar()

@@ -20,7 +20,7 @@ These machines are approximately compatible with one another, but there are diff
 <p>Before you work with your synthesizer, you need to set Edisyn to the proper Synthesizer Type.  Edisyn will remember your choice next time.  Setting the Synthesizer Type affects the following things:
 
 <ul>
-<li>You can select the proper bank (the x4 has 8 banks, the other Mophos have 3 banks, and the Prophet/Tetra have 2 banks).
+<li>You can select the proper bank (the Mopho x4 has 8 banks, the Tetra has 4 banks, the other Mophos have 3 banks, and the Prophet '08 has just 2 banks).
 <p><li>You can upload patches properly (different synth have different sysex)
 <p><li>You can request patches properly (again, different sysex)
 <p><li>You can batch-download from your synth properly (correct banks and sysex)
@@ -45,6 +45,20 @@ The Tetra and Mopho series have several additional parameters not present in the
 </ul>
 
 A few parameters are shared. For example, "Feedback Volume" on the Tetra is "Audio Input Level" on the Mopho series.  And "Spread" on most machines is "Pan" on the Mopho (which is monophonic).
+
+<p>But most importantly, Mopho variations will completely ignore the <b>Oscillators and Filters B</b>, <b>Modulation B</b>, and <b>Sequencer B</b> tabs, since they have only one layer (A).  They will also ignore the <b>Tetra Layer B</b> category under the <b>Tetra / Mopho</b> tab.
+
+<br><br><h3>About the Menu</h3>
+
+The menu has several options that are useful for Prophet '08 and Tetra owners.  
+
+<ul>
+<li> <b>Copy A - >B</b>, <b>Copy A &lt;- B</b> and <b>Swap A&lt;->B</b>&nbsp;&nbsp; These menus allow you to move the A and B layers to each other.
+
+<p><li> <b>Load Both Layers</b>, <b>Load Only A</>, and <b>Load Only B</b>&nbsp;&nbsp; When you load a sysex file, receive a dump or merge from your Prophet '08 or Tetra, or reset your patch, your setting here will dictate whether this will effect both layers, or just Layer A or Layer B (keeping the other one intact).  This way, for example, you can just clear out Layer A.  Or you could make a patch consisting of the Layer A of two different patches, by first loading one patch, then copying its Layer A to Layer B, then restricting loading to just Layer A, and then finally loading the second patch.
+</ul>
+
+<p>These menu options are not useful for the Mopho variations, as they have only one layer.
 
 <br><br><h3>Hints</h3>
 

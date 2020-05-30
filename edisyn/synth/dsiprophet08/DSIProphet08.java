@@ -2070,7 +2070,7 @@ public class DSIProphet08 extends Synth
                 }
             });
             
-        JRadioButtonMenuItem restrictA = new JRadioButtonMenuItem("Load only A");
+        JRadioButtonMenuItem restrictA = new JRadioButtonMenuItem("Load Only A");
         menu.add(restrictA);
         restrictA.addActionListener(new ActionListener()
             {
@@ -2080,7 +2080,7 @@ public class DSIProphet08 extends Synth
                 }
             });
 
-        JRadioButtonMenuItem restrictB = new JRadioButtonMenuItem("Load only B");
+        JRadioButtonMenuItem restrictB = new JRadioButtonMenuItem("Load Only B");
         menu.add(restrictB);
         restrictB.addActionListener(new ActionListener()
             {

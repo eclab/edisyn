@@ -49,8 +49,8 @@ public class DSIProphet08 extends Synth
     public static final String[] KEYBOARD_MODES = new String[] { "Normal", "Stack", "Split" };
     public static final String[] PUSH_IT_MODES = new String[] { "Normal", "Toggle", "[M] Audio In" };
     public static final String[] SYNTH_TYPES = new String[] { "[P] Prophet '08", "[T] Tetra", "[M] Mopho", "[K] Mopho Kbd/SE", "[X] Mopho x4" };
-    public static final String[] PRESETS = new String[] { "Off", "Saw", "Tri", "Saw/Tri", "Square" };
-    public static final int[] PRESET_VALS = new int[] { 0, 1, 2, 3, 54 };
+    public static final String[] PRESETS = new String[] { "Saw", "Tri", "Saw/Tri", "Square", "Off" };
+    public static final int[] PRESET_VALS = new int[] { 1, 2, 3, 54, 0 };
     
     
     public static final int SYNTH_TYPE_PROPHET_08 = 0;

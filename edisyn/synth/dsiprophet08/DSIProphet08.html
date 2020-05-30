@@ -5,7 +5,7 @@
 <h1>Dave Smith Instruments Prophet '08 / Tetra / Mopho</h1> 
 <h2>Single Patch Editor</h2>
 
-<p>This editor is meant to work with the <b>Prophet '08</b>, <b>Prophet '08 Desktop</b>, <b>Tetra</b>, <b>Mopho</b>, <b>Mopho Keyboard</b>, <b>Mopho SE</b>, and <b>Mopho X4</b>. I say <i>meant to work</i> because I have only tested on the Prophet '08.  I need people with these machines to test on them and provide some reports.
+<p>This editor is meant to work with the <b>Prophet '08</b>, <b>Prophet '08 Desktop</b>, <b>Tetra</b>, <b>Mopho</b>, <b>Mopho Keyboard</b>, <b>Mopho SE</b>, and <b>Mopho x4</b>. I say <i>meant to work</i> because I have only tested on the Prophet '08.  I need people with these machines to test on them and provide some reports.
 
 <br><br><h3>Communicating with Edisyn</h3>
 
@@ -13,14 +13,14 @@ Set the MIDI channel to the same as being used in Edisyn.  Set MParamSend to NRP
 
 <br><br><h3>Setting the Synthesizer Type</h3>
 
-These machines are approximately compatible with one another, but there are differences.  The obvious one is: the Mopho series (except for X4) is monophonic and so does not have the two layers present in the Tetra and Pophet '08. If you load a Mopho patch, (missing) Layer B will be set to a copy of Layer A.
+These machines are approximately compatible with one another, but there are differences.  The obvious one is: the Mopho series (except for x4) is monophonic and so does not have the two layers present in the Tetra and Pophet '08. If you load a Mopho patch, (missing) Layer B will be set to a copy of Layer A.
 
 <p>There are other differences. Some units have feedback; others have audio input; and the Prophet '08 has neither.  The Prophet '08 also doesn't have sub-octave generators, unlike the others.  Some synths have a few destinations and sources that others do not.  And the Tetra can be split in a variety of ways (Combos) which are not considered by this editor.
 
 <p>Before you work with your synthesizer, you need to set Edisyn to the proper Synthesizer Type.  Edisyn will remember your choice next time.  Setting the Synthesizer Type affects the following things:
 
 <ul>
-<li>You can select the proper bank (the X4 has 8 banks, the other Mophos have 3 banks, and the Prophet/Tetra have 2 banks).
+<li>You can select the proper bank (the x4 has 8 banks, the other Mophos have 3 banks, and the Prophet/Tetra have 2 banks).
 <p><li>You can upload patches properly (different synth have different sysex)
 <p><li>You can request patches properly (again, different sysex)
 <p><li>You can batch-download from your synth properly (correct banks and sysex)
@@ -37,10 +37,11 @@ The Tetra and Mopho series have several additional parameters not present in the
 <p>Several parameters, destinations, and other settings are specific to certain synthesizers.  The synthesizer in question is marked as follows:
 
 <ul>
-<li>[M] Full Mopho Series
-<li>[K] Mopho Keyboard and SE only
+<li>[P] Prophet '08
 <li>[T] Tetra
-<li>[X4] Mopho X4 (notably Amplifier Initial Level is marked "not X4")
+<li>[M] Mopho
+<li>[K] Mopho Keyboard and SE
+<li>[X] Mopho x4
 </ul>
 
 A few parameters are shared. For example, "Feedback Volume" on the Tetra is "Audio Input Level" on the Mopho series.  And "Spread" on most machines is "Pan" on the Mopho (which is monophonic).

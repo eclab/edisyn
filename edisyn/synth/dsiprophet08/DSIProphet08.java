@@ -26,9 +26,9 @@ public class DSIProphet08 extends Synth
     {
     /// Various collections of parameter names for pop-up menus
         
-    public static final String[] MODULATION_SOURCES = new String[] { "Off", "Track 1", "Track 2", "Track 3", "Track 4", "LFO 1", "LFO 2", "LFO 3", "LFO 4", "Filter Env", "Amp Env", "Env 3", "Pitch Bend", "Mod Wheel", "Pressure", "MIDI Breath", "MIDI Foot", "MIDI Expression", "Velocity", "Note Number", "Noise", "[M]AudIn EnvFollow", "[M]AudIn PkHold" };
-    public static final String[] MODULATION_DESTINATIONS = new String[] { "Off", "Osc 1 Freq", "Osc 2 Freq", "Osc 1&2 Freq", "Osc Mix", "Noise Level", "Osc 1 PW", "Osc 2 PW", "Osc 1&2 PW", "Filter Freq", "Filter Resonance", "Filter Audio Mod", "VCA Level", "Pan Sprd/[M]Pos", "LFO 1 Freq", "LFO 2 Freq", "LFO 3 Freq", "LFO 4 Freq", "All LFO Freqs", "LFO 1 Amt", "LFO 2 Amt", "LFO 3 Amt", "LFO 4 Amt", "All LFO Amts", "Filter Env Amt", "Amp Env Amt", "Env 3 Amt", "All Env Amts", "Env 1 Attack", "Env 2 Attack", "Env 3 Attack", "All Env Attacks", "Env 1 Decay", "Env 2 Decay", "Env 3 Decay", "All Env Decays", "Env 1 Release", "Env 2 Release", "Env 3 Release", "All Env Releases", "Mod 1 Amt", "Mod 2 Amt", "Mod 3 Amt", "Mod 4 Amt", "[T]Fdbk/[M]AudIn", "[T/M] Sub Osc 1", "[T/M] Sub Osc 2", "[T/K] Feedbk Gain" };
-    public static final String[] MODULATION_DESTINATIONS_SEQ24 = new String[] { "Off", "Osc 1 Freq", "Osc 2 Freq", "Osc 1&2 Freq", "Osc Mix", "Noise Level", "Osc 1 PW", "Osc 2 PW", "Osc 1&2 PW", "Filter Freq", "Filter Resonance", "Filter Audio Mod", "VCA Level", "Pan Sprd/[M]Pos", "LFO 1 Freq", "LFO 2 Freq", "LFO 3 Freq", "LFO 4 Freq", "All LFO Freqs", "LFO 1 Amt", "LFO 2 Amt", "LFO 3 Amt", "LFO 4 Amt", "All LFO Amts", "Filter Env Amt", "Amp Env Amt", "Env 3 Amt", "All Env Amts", "Env 1 Attack", "Env 2 Attack", "Env 3 Attack", "All Env Attacks", "Env 1 Decay", "Env 2 Decay", "Env 3 Decay", "All Env Decays", "Env 1 Release", "Env 2 Release", "Env 3 Release", "All Env Releases", "Mod 1 Amt", "Mod 2 Amt", "Mod 3 Amt", "Mod 4 Amt", "[T]Fdbk/[M]AudIn", "[T/M] Sub Osc 1", "[T/M] Sub Osc 2", "[T/K] Feedbk Gain", "[T/K] Slew" };
+    public static final String[] MODULATION_SOURCES = new String[] { "Off", "Track 1", "Track 2", "Track 3", "Track 4", "LFO 1", "LFO 2", "LFO 3", "LFO 4", "Filter Env", "Amp Env", "Env 3", "Pitch Bend", "Mod Wheel", "Pressure", "MIDI Breath", "MIDI Foot", "MIDI Expression", "Velocity", "Note Number", "Noise", "[MK]AudIn EnvFollow", "[MK]AudIn PkHold" };
+    public static final String[] MODULATION_DESTINATIONS = new String[] { "Off", "Osc 1 Freq", "Osc 2 Freq", "Osc 1&2 Freq", "Osc Mix", "Noise Level", "Osc 1 PW", "Osc 2 PW", "Osc 1&2 PW", "Filter Freq", "Filter Resonance", "Filter Audio Mod", "VCA Level", "Pan Sprd/[M]Pos", "LFO 1 Freq", "LFO 2 Freq", "LFO 3 Freq", "LFO 4 Freq", "All LFO Freqs", "LFO 1 Amt", "LFO 2 Amt", "LFO 3 Amt", "LFO 4 Amt", "All LFO Amts", "Filter Env Amt", "Amp Env Amt", "Env 3 Amt", "All Env Amts", "Env 1 Attack", "Env 2 Attack", "Env 3 Attack", "All Env Attacks", "Env 1 Decay", "Env 2 Decay", "Env 3 Decay", "All Env Decays", "Env 1 Release", "Env 2 Release", "Env 3 Release", "All Env Releases", "Mod 1 Amt", "Mod 2 Amt", "Mod 3 Amt", "Mod 4 Amt", "[TKX]Fdb[M]AudIn", "[TMKX] Sub Osc 1", "[TMKX] Sub Osc 2", "[TKX]Feedbk Gain" };
+    public static final String[] MODULATION_DESTINATIONS_SEQ24 = new String[] { "Off", "Osc 1 Freq", "Osc 2 Freq", "Osc 1&2 Freq", "Osc Mix", "Noise Level", "Osc 1 PW", "Osc 2 PW", "Osc 1&2 PW", "Filter Freq", "Filter Resonance", "Filter Audio Mod", "VCA Level", "Pan Sprd/[M]Pos", "LFO 1 Freq", "LFO 2 Freq", "LFO 3 Freq", "LFO 4 Freq", "All LFO Freqs", "LFO 1 Amt", "LFO 2 Amt", "LFO 3 Amt", "LFO 4 Amt", "All LFO Amts", "Filter Env Amt", "Amp Env Amt", "Env 3 Amt", "All Env Amts", "Env 1 Attack", "Env 2 Attack", "Env 3 Attack", "All Env Attacks", "Env 1 Decay", "Env 2 Decay", "Env 3 Decay", "All Env Decays", "Env 1 Release", "Env 2 Release", "Env 3 Release", "All Env Releases", "Mod 1 Amt", "Mod 2 Amt", "Mod 3 Amt", "Mod 4 Amt", "[TKX]Fdb[M]AudIn", "[TMKX] Sub Osc 1", "[TMKX] Sub Osc 2", "[TKX]Feedbk Gain", "[TKX] Slew" };
     public static final String[] OSC_SHAPES = new String[] { "Off", "Saw", "Tri", "Saw/Tri" };
     public static final String[] GLIDE_MODES = new String[] { "Fixed Rate", "Fixed Rate Auto", "Fixed Time", "Fixed Time Auto" };
     public static final String[] FILTER_POLES = new String[] { "2-Pole", "4-Pole" };
@@ -44,10 +44,10 @@ public class DSIProphet08 extends Synth
     public static final String[] SEQUENCER_TRIGGERS = new String[] { "Normal", "Normal No Reset", "No Gate", "No Gate, No Reset", "Key Step", "[M] Audio In" };
     public static final String[] KEY_MODES = new String[] { "Low Note", "Low Note Retrigger", "High Note", "High Note Retrigger", "Last Note", "Last Note Retrigger" };
     public static final String[] UNISON_MODES = new String[] { "1 Voice", "All Voices", "All Voices Detune 1",  "All Voices Detune 2",  "All Voices Detune 3" };
-    public static final String[] ARPEGGIATOR_MODES = new String[] { "Up", "Down", "Up/Down", "Assign", "[T/K] Random", "[T/K] 2 Octaves Up", "[T/K] 2 Octaves Down", "[T/K] 2 Octaves Up/Down", "[T/K] 2 Octaves Assign", "[T/K] 2 Octaves Random", "[T/K] 3 Octaves Up", "[T/K] 3 Octaves Down", "[T/K] 3 Octaves Up/Down", "[T/K] 3 Octaves Assign", "[T/K] 3 Octaves Random" };
+    public static final String[] ARPEGGIATOR_MODES = new String[] { "Up", "Down", "Up/Down", "Assign", "[TKX] Random", "[TKX] 2 Octaves Up", "[TKX] 2 Octaves Down", "[TKX] 2 Octaves UpDown", "[TKX] 2 Octaves Assign", "[TKX] 2 Octaves Random", "[TKX] 3 Octaves Up", "[TKX] 3 Octaves Down", "[TKX] 3 Octaves UpDown", "[TKX] 3 Octaves Assign", "[TKX] 3 Octaves Random" };
     public static final String[] KEYBOARD_MODES = new String[] { "Normal", "Stack", "Split" };
     public static final String[] PUSH_IT_MODES = new String[] { "Normal", "Toggle", "[M] Audio In" };
-    public static final String[] SYNTH_TYPES = new String[] { "Prophet '08", "Tetra", "Mopho", "Mopho Kbd/SE", "Mopho X4" };
+    public static final String[] SYNTH_TYPES = new String[] { "[P] Prophet '08", "[T] Tetra", "[M] Mopho", "[K] Mopho Kbd/SE", "[X] Mopho X4" };
     
     public static final int SYNTH_TYPE_PROPHET_08 = 0;
     public static final int SYNTH_TYPE_TETRA = 1;
@@ -370,7 +370,7 @@ public class DSIProphet08 extends Synth
 
         vbox = new VBox();
         params = KEYBOARD_MODES;
-        comp = new Chooser("Keyboard Mode", this, "keyboardmode", params);
+        comp = new Chooser("Keyboard Mode [PT]", this, "keyboardmode", params);
         vbox.add(comp);
         
         synthTypes.setSelectedIndex(type);
@@ -399,7 +399,7 @@ public class DSIProphet08 extends Synth
         
         hbox.add(vbox);
 
-        comp = new LabelledDial("Split Point", this, "splitpoint", color, 0, 127)
+        comp = new LabelledDial("Split Point [PT]", this, "splitpoint", color, 0, 127)
             {
             public String map(int val)
                 {
@@ -442,17 +442,17 @@ public class DSIProphet08 extends Synth
 
         hbox2 = new HBox();
                 
-        comp = new CheckBox("Unison", this, "layer" + layer + "unison");
+        comp = new CheckBox("Unison [Not M]", this, "layer" + layer + "unison");
         comp.setPreferredSize(c1.getPreferredSize());
         hbox2.add(comp);
         
         params = KEY_MODES;
-        comp = new Chooser("Unison Assign", this, "layer" + layer + "unisonkeymode", params);
+        comp = new Chooser("Unison/Key Assign", this, "layer" + layer + "unisonkeymode", params);
         comp.setPreferredSize(c2.getPreferredSize());
         hbox2.add(comp);
 
         params = UNISON_MODES;
-        comp = new Chooser("Unison Mode", this, "layer" + layer + "unisonmode", params);
+        comp = new Chooser("Unison Mode [Not M]", this, "layer" + layer + "unisonmode", params);
         comp.setPreferredSize(c3.getPreferredSize());
         hbox2.add(comp);
 
@@ -677,11 +677,11 @@ public class DSIProphet08 extends Synth
         
                
         comp = new LabelledDial("Initial Level", this, "layer" + layer + "vcainitiallevel", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("[not X4]");
+        ((LabelledDial)comp).addAdditionalLabel("[not X]");
         hbox.add(comp);
                 
         comp = new LabelledDial("Spread", this, "layer" + layer + "vcaoutputspread", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("[M] Pan");
+        ((LabelledDial)comp).addAdditionalLabel("[PTX]");
         hbox.add(comp);
 
         comp = new LabelledDial("Voice", this, "layer" + layer + "vcavoicevolume", color, 0, 127);
@@ -910,12 +910,12 @@ public class DSIProphet08 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Velocity");
 		hbox.add(comp);
 
-        comp = new LabelledDial("Feedback Volume [T]", this, "layer" + layer + "tetrafeedbackvolume", color, 0, 127);
+        comp = new LabelledDial("Feedback Volume [TKX]", this, "layer" + layer + "tetrafeedbackvolume", color, 0, 127);
 		((LabelledDial)comp).addAdditionalLabel(" Audio Input Lvl [M] ");
         hbox.add(comp);
 
         comp = new LabelledDial("Feedback", this, "layer" + layer + "tetrafeedbackgain", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("Gain [T]");
+        ((LabelledDial)comp).addAdditionalLabel("Gain [TKX]");
         hbox.add(comp);
         
         comp = new LabelledDial("Sub Osc 1", this, "layer" + layer + "tetrasuboscillator1level", color, 0, 127);
@@ -927,24 +927,24 @@ public class DSIProphet08 extends Synth
 		if (layer == 1)
 			{
 			comp = new LabelledDial("Assignable", this, "layer" + layer + "tetraassignableparameter1", color, 0, 183);
-        	((LabelledDial)comp).addAdditionalLabel("Parameter 1");
+        	((LabelledDial)comp).addAdditionalLabel("Parameter 1 [TM]");
 			hbox.add(comp);
 
 			comp = new LabelledDial("Assignable", this, "layer" + layer + "tetraassignableparameter2", color, 0, 183);
-        	((LabelledDial)comp).addAdditionalLabel("Parameter 2");
+        	((LabelledDial)comp).addAdditionalLabel("Parameter 2 [TM]");
 			hbox.add(comp);
 
 			comp = new LabelledDial("Assignable", this, "layer" + layer + "tetraassignableparameter3", color, 0, 183);
-        	((LabelledDial)comp).addAdditionalLabel("Parameter 3");
+        	((LabelledDial)comp).addAdditionalLabel("Parameter 3 [TM]");
 			hbox.add(comp);
 
 			comp = new LabelledDial("Assignable", this, "layer" + layer + "tetraassignableparameter4", color, 0, 183);
-        	((LabelledDial)comp).addAdditionalLabel("Parameter 4");
+        	((LabelledDial)comp).addAdditionalLabel("Parameter 4 [TM]");
 			hbox.add(comp);
 
 // DSI tells me this was basically used by the SoundTower editor and is meaningless.  So we build it to create the parameter but don't show it
 			comp = new LabelledDial("Editor", this, "layer" + layer + "tetraeditorbyte", color, 0, 127);
-        	((LabelledDial)comp).addAdditionalLabel("Byte [T]");
+        	((LabelledDial)comp).addAdditionalLabel("Byte [TM]");
 			// hbox.add(comp);
 			}
                                 
@@ -2043,7 +2043,8 @@ public class DSIProphet08 extends Synth
 		-1, 16, 97, 69, 
 		-1, 98, 100, 
 		-1, -1, -1, 105, 106, 107, 108, 
-		-1, -1, 92, 93, 94, 5, 11, 19, 117, 118, 119, 120, 
+		-1, -1, 92, 93, 94, 5, 11, 19,
+		-1, -1, -1, 120, 
 		121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 
 		131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 
 		141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 
@@ -2088,7 +2089,9 @@ public class DSIProphet08 extends Synth
     		
     	if (t == SYNTH_TYPE_MOPHO)
     		{
-    		return (key.equals("layer1unisonmode") ||
+    		return (key.equals("keyboardmode") ||
+    				key.equals("splitpoint") ||
+    				key.equals("layer1unisonmode") ||
     				key.equals("layer1unison") ||
     				key.equals("layer1vcaoutputspread") ||
     				key.equals("layer1tetrafeedbackgain"));

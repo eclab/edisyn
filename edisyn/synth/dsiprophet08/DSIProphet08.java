@@ -32,8 +32,9 @@ public class DSIProphet08 extends Synth
     public static final String[] OSC_SHAPES = new String[] { "Off", "Saw", "Tri", "Saw/Tri" };
     public static final String[] GLIDE_MODES = new String[] { "Fixed Rate", "Fixed Rate Auto", "Fixed Time", "Fixed Time Auto" };
     public static final String[] FILTER_POLES = new String[] { "2-Pole", "4-Pole" };
-    public static final String[] BANKS_PROPHET_TETRA = new String[] { "1", "2" };
+    public static final String[] BANKS_PROPHET = new String[] { "1", "2" };
     public static final String[] BANKS_MOPHO = new String[] { "1", "2", "3" };
+    public static final String[] BANKS_TETRA = new String[] { "1", "2", "3", "4" };
     public static final String[] BANKS_MOPHO_X4 = new String[] { "1", "2", "3", "4", "5", "6", "7", "8" };
     public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     
@@ -47,19 +48,22 @@ public class DSIProphet08 extends Synth
     public static final String[] ARPEGGIATOR_MODES = new String[] { "Up", "Down", "Up/Down", "Assign", "[TKX] Random", "[TKX] 2 Octaves Up", "[TKX] 2 Octaves Down", "[TKX] 2 Octaves UpDown", "[TKX] 2 Octaves Assign", "[TKX] 2 Octaves Random", "[TKX] 3 Octaves Up", "[TKX] 3 Octaves Down", "[TKX] 3 Octaves UpDown", "[TKX] 3 Octaves Assign", "[TKX] 3 Octaves Random" };
     public static final String[] KEYBOARD_MODES = new String[] { "Normal", "Stack", "Split" };
     public static final String[] PUSH_IT_MODES = new String[] { "Normal", "Toggle", "[M] Audio In" };
-    public static final String[] SYNTH_TYPES = new String[] { "[P] Prophet '08", "[T] Tetra", "[M] Mopho", "[K] Mopho Kbd/SE", "[X] Mopho X4" };
+    public static final String[] SYNTH_TYPES = new String[] { "[P] Prophet '08", "[T] Tetra", "[M] Mopho", "[K] Mopho Kbd/SE", "[X] Mopho x4" };
+    public static final String[] PRESETS = new String[] { "Off", "Saw", "Tri", "Saw/Tri", "Square" };
+    public static final int[] PRESET_VALS = new int[] { 0, 1, 2, 3, 54 };
+    
     
     public static final int SYNTH_TYPE_PROPHET_08 = 0;
     public static final int SYNTH_TYPE_TETRA = 1;
     public static final int SYNTH_TYPE_MOPHO = 2;
-    public static final int SYNTH_TYPE_MOPHO_KEYBOARD = 3;
+    public static final int SYNTH_TYPE_MOPHO_KEYBOARD = 3;	// includes SE
     public static final int SYNTH_TYPE_MOPHO_X4 = 4;
     
     // Sysex machine IDs
 	public static final byte PROPHET_08_ID = 0x23;
 	public static final byte MOPHO_ID = 0x25;
 	public static final byte TETRA_ID = 0x26;
-	public static final byte MOPHO_KEYBOARD_ID = 0x27;
+	public static final byte MOPHO_KEYBOARD_ID = 0x27;	// includes SE
 	public static final byte MOPHO_X4_ID = 0x29;
 
 	public static final byte[] ids = { PROPHET_08_ID, TETRA_ID, MOPHO_ID, MOPHO_KEYBOARD_ID, MOPHO_X4_ID };
@@ -67,6 +71,11 @@ public class DSIProphet08 extends Synth
     public static final int FILTER_ENVELOPE = 1;
     public static final int AMPLIFIER_ENVELOPE = 2;
     public static final int THIRD_ENVELOPE = 3;
+    
+    public static final int LOAD_BOTH = 0;
+    public static final int LOAD_A = 1;
+    public static final int LOAD_B = 2;
+    int load = LOAD_BOTH;
     
     JComboBox synthTypes = new JComboBox(SYNTH_TYPES);
     int type = SYNTH_TYPE_PROPHET_08;
@@ -103,6 +112,23 @@ public class DSIProphet08 extends Synth
     public DSIProphet08()
         {
         int panel = 0;
+        
+        try
+        	{
+	        String v = getLastX(TYPE_KEY, getSynthName());
+	        if (v == null)
+	        	setType(SYNTH_TYPE_PROPHET_08, true);
+	        else
+	        	{
+				int val = Integer.parseInt(v);
+		        if (val >= SYNTH_TYPE_PROPHET_08 && val <= SYNTH_TYPE_MOPHO_X4)
+		        	setType(val, false);
+		        }
+	        }
+	    catch (Exception ex)
+	    	{
+	    	ex.printStackTrace();
+	    	}
         
         for(int i = 0; i < parameters.length; i++)
             {
@@ -295,9 +321,11 @@ public class DSIProphet08 extends Synth
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
-        String[] banks = BANKS_PROPHET_TETRA;
+        String[] banks = BANKS_PROPHET;
         int t = getType();
-        if (t == SYNTH_TYPE_MOPHO || t == SYNTH_TYPE_MOPHO_KEYBOARD)
+        if (t == SYNTH_TYPE_TETRA)
+        	banks = BANKS_TETRA;
+        else if (t == SYNTH_TYPE_MOPHO || t == SYNTH_TYPE_MOPHO_KEYBOARD)
         	banks = BANKS_MOPHO;
         else if (t == SYNTH_TYPE_MOPHO_X4)
         	banks = BANKS_MOPHO_X4;
@@ -427,7 +455,11 @@ public class DSIProphet08 extends Synth
 
         HBox hbox2 = new HBox();
 
-        JComponent c1 = comp = new CheckBox("Arpeggiator", this, "layer" + layer + "arpeggiator");
+        CheckBox unison = new CheckBox("Unison [PTKX]", this, "layer" + layer + "unison");
+        unison.addToWidth(1);
+
+       	comp = new CheckBox("Arpeggiator", this, "layer" + layer + "arpeggiator");
+        comp.setPreferredSize(unison.getPreferredSize());
         hbox2.add(comp);
         
         params = ARPEGGIATOR_MODES;
@@ -442,9 +474,7 @@ public class DSIProphet08 extends Synth
 
         hbox2 = new HBox();
                 
-        comp = new CheckBox("Unison [Not M]", this, "layer" + layer + "unison");
-        comp.setPreferredSize(c1.getPreferredSize());
-        hbox2.add(comp);
+        hbox2.add(unison);
         
         params = KEY_MODES;
         comp = new Chooser("Unison/Key Assign", this, "layer" + layer + "unisonkeymode", params);
@@ -452,7 +482,7 @@ public class DSIProphet08 extends Synth
         hbox2.add(comp);
 
         params = UNISON_MODES;
-        comp = new Chooser("Unison Mode [Not M]", this, "layer" + layer + "unisonmode", params);
+        comp = new Chooser("Unison Mode [PTKX]", this, "layer" + layer + "unisonmode", params);
         comp.setPreferredSize(c3.getPreferredSize());
         hbox2.add(comp);
 
@@ -530,7 +560,31 @@ public class DSIProphet08 extends Synth
         VBox vbox = new VBox();
         comp = new CheckBox("Key", this, "layer" + layer + "dco" + osc + "key");
         vbox.add(comp);
+        
+        PushButton button = new PushButton("Preset", PRESETS)
+        	{
+        	public void perform(int i)
+        		{
+        		getModel().set("layer" + layer + "dco" + osc + "shape", PRESET_VALS[i]);
+        		}
+        	};
+        vbox.add(button);
+        
         hbox.add(vbox);
+
+        comp = new LabelledDial("Shape", this, "layer" + layer + "dco" + osc + "shape", color, 0, 103)
+            {
+            public String map(int val)
+                {
+                if (val == 0) return "Off";
+                else if (val == 1) return "Saw";
+                else if (val == 2) return "Tri";
+                else if (val == 3) return "Saw/Tri";
+                else return "PW " + (val - 4);
+                }
+            };
+        getModel().setMetricMin("layer" + layer + "dco" + osc + "shape", 4);
+        hbox.add(comp);
 
         comp = new LabelledDial("Frequency", this, "layer" + layer + "dco" + osc + "frequency", color, 0, 120)
             {
@@ -547,20 +601,6 @@ public class DSIProphet08 extends Synth
             };
         hbox.add(comp);
                 
-        comp = new LabelledDial("Shape", this, "layer" + layer + "dco" + osc + "shape", color, 0, 103)
-            {
-            public String map(int val)
-                {
-                if (val == 0) return "Off";
-                else if (val == 1) return "Saw";
-                else if (val == 2) return "Tri";
-                else if (val == 3) return "Saw/Tri";
-                else return "PW " + (val - 4);
-                }
-            };
-        getModel().setMetricMin("layer" + layer + "dco" + osc + "shape", 4);
-        hbox.add(comp);
-
         comp = new LabelledDial("Glide", this, "layer" + layer + "dco" + osc + "glide", color, 0, 127);
         hbox.add(comp);
                 
@@ -677,7 +717,7 @@ public class DSIProphet08 extends Synth
         
                
         comp = new LabelledDial("Initial Level", this, "layer" + layer + "vcainitiallevel", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("[not X]");
+        ((LabelledDial)comp).addAdditionalLabel("[PTMK]");
         hbox.add(comp);
                 
         comp = new LabelledDial("Spread", this, "layer" + layer + "vcaoutputspread", color, 0, 127);
@@ -1578,7 +1618,15 @@ public class DSIProphet08 extends Synth
 						}
 					}
 				
-				if (!parameters[i].equals("---"))
+				if (load == LOAD_A && !parameters[i].startsWith("layer1"))
+					{
+					// do nothing -- they're not layer 1 (A) parameters
+					}
+				else if (load == LOAD_B && !parameters[i].startsWith("layer2"))
+					{
+					// do nothing -- they're not layer 2 (B) parameters
+					}
+				else if (!parameters[i].equals("---"))
 					{
 					// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
 					int q = d[j];
@@ -1587,16 +1635,19 @@ public class DSIProphet08 extends Synth
 					}
 				}
 		
-			// handle name specially
-			byte[] name = new byte[16];
-			System.arraycopy(d, 184, name, 0, 16);
-			try
+			if (load == LOAD_BOTH)		// we don't load the name if we're just loading A or B
 				{
-				model.set("name", new String(name, "US-ASCII"));
-				}
-			catch (UnsupportedEncodingException e)
-				{
-				e.printStackTrace();
+				// handle name specially
+				byte[] name = new byte[16];
+				System.arraycopy(d, 184, name, 0, 16);
+				try
+					{
+					model.set("name", new String(name, "US-ASCII"));
+					}
+				catch (UnsupportedEncodingException e)
+					{
+					e.printStackTrace();
+					}
 				}
 			}
 		else 				// Mopho or Mopho Keyboard / SE
@@ -1879,9 +1930,11 @@ public class DSIProphet08 extends Synth
         int bank = model.get("bank");
         int number = model.get("number");
         
-        int numBanks = BANKS_PROPHET_TETRA.length;
+        int numBanks = BANKS_PROPHET.length;
         int t = getType();
-        if (t == SYNTH_TYPE_MOPHO || t == SYNTH_TYPE_MOPHO_KEYBOARD)
+        if (t == SYNTH_TYPE_TETRA)
+        	numBanks = BANKS_TETRA.length;
+        else if (t == SYNTH_TYPE_MOPHO || t == SYNTH_TYPE_MOPHO_KEYBOARD)
         	numBanks = BANKS_MOPHO.length;
         else if (t == SYNTH_TYPE_MOPHO_X4)
         	numBanks = BANKS_MOPHO_X4.length;
@@ -1932,6 +1985,7 @@ public class DSIProphet08 extends Synth
             {
             public void actionPerformed(ActionEvent evt)
                 {
+                undo.push(getModel());
                 setSendMIDI(false);
                 boolean currentPush = undo.getWillPush();
                 undo.setWillPush(false);
@@ -1946,6 +2000,7 @@ public class DSIProphet08 extends Synth
                 
                 undo.setWillPush(currentPush);
                 setSendMIDI(true);
+                sendAllParameters();
                 }
             });
 
@@ -1955,6 +2010,7 @@ public class DSIProphet08 extends Synth
             {
             public void actionPerformed(ActionEvent evt)
                 {
+                undo.push(getModel());
                 setSendMIDI(false);
                 boolean currentPush = undo.getWillPush();
                 undo.setWillPush(false);
@@ -1969,8 +2025,75 @@ public class DSIProphet08 extends Synth
                 
                 undo.setWillPush(currentPush);
                 setSendMIDI(true);
+                sendAllParameters();
                 }
             });
+
+        JMenuItem swap = new JMenuItem("Swap A <-> B");
+        menu.add(swap);
+        swap.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                undo.push(getModel());
+                setSendMIDI(false);
+                boolean currentPush = undo.getWillPush();
+                undo.setWillPush(false);
+
+                for(int i = 0; i < parameters.length; i++)
+                    {
+                    if (parameters[i].startsWith("layer2"))
+                        {
+                        int val2 = model.get(parameters[i]);
+                        int val1 = model.get("layer1" + parameters[i].substring(6));
+                        model.set("layer1" + parameters[i].substring(6), val2);
+                        model.set(parameters[i], val1);
+                        }
+                    }
+                
+                undo.setWillPush(currentPush);
+                setSendMIDI(true);
+                sendAllParameters();
+                }
+            });
+            
+        menu.addSeparator();
+
+        JRadioButtonMenuItem loadBoth = new JRadioButtonMenuItem("Load Both Layers");
+        loadBoth.setSelected(true);
+        menu.add(loadBoth);
+        loadBoth.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                load = LOAD_BOTH;
+                }
+            });
+            
+        JRadioButtonMenuItem restrictA = new JRadioButtonMenuItem("Load only A");
+        menu.add(restrictA);
+        restrictA.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                load = LOAD_A;
+                }
+            });
+
+        JRadioButtonMenuItem restrictB = new JRadioButtonMenuItem("Load only B");
+        menu.add(restrictB);
+        restrictB.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                load = LOAD_B;
+                }
+            });
+        
+        ButtonGroup group = new ButtonGroup();
+        group.add(loadBoth);
+        group.add(restrictA);
+        group.add(restrictB);
         }
 
 

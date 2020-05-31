@@ -558,9 +558,6 @@ public class DSIProphet08 extends Synth
         HBox hbox = new HBox();
                
         VBox vbox = new VBox();
-        comp = new CheckBox("Key", this, "layer" + layer + "dco" + osc + "key");
-        vbox.add(comp);
-        
         PushButton button = new PushButton("Preset", PRESETS)
         	{
         	public void perform(int i)
@@ -569,6 +566,9 @@ public class DSIProphet08 extends Synth
         		}
         	};
         vbox.add(button);
+        
+        comp = new CheckBox("Key", this, "layer" + layer + "dco" + osc + "key");
+        vbox.add(comp);
         
         hbox.add(vbox);
 
@@ -1569,7 +1569,7 @@ public class DSIProphet08 extends Synth
             {
             int bank = data[4];
             int t = data[2];
-            if (t == PROPHET_08_ID || t == TETRA_ID)
+            if (t == PROPHET_08_ID)
             	{
             	if (bank < 2)
             		model.set("bank", bank);
@@ -1577,6 +1577,11 @@ public class DSIProphet08 extends Synth
             else if (t == MOPHO_ID || t == MOPHO_KEYBOARD_ID)
             	{
             	if (bank < 3)
+            		model.set("bank", bank);
+            	}
+            else if (t == TETRA_ID)
+            	{
+            	if (bank < 4)
             		model.set("bank", bank);
             	}
             else		// The X4 has 8 banks

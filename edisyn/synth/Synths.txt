@@ -2,6 +2,7 @@ edisyn.synth.alesisd4.AlesisD4
 #edisyn.synth.alesismicron.AlesisMicron
 edisyn.synth.casiocz.CasioCZ
 edisyn.synth.dsiprophet08.DSIProphet08
+#edisyn.synth.dsiprophet08.DSITetraCombo
 edisyn.synth.emumorpheus.EmuMorpheus
 edisyn.synth.emumorpheus.EmuMorpheusHyper
 edisyn.synth.emumorpheus.EmuMorpheusMap

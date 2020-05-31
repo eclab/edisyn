@@ -59,7 +59,7 @@ public class SanityCheck
                 System.err.println("\n" + c[j]);
                 test(synth, synth2);
                 }
-            if (synth instanceof edisyn.synth.alesisd4.AlesisD4)
+            else if (synth instanceof edisyn.synth.alesisd4.AlesisD4)
                 {
                 ((edisyn.synth.alesisd4.AlesisD4)synth).setDM5(false, false);
                 ((edisyn.synth.alesisd4.AlesisD4)synth2).setDM5(false, false);
@@ -72,7 +72,7 @@ public class SanityCheck
                 System.err.println("\n" + c[j] + " (DM5)");
                 test(synth, synth2);
                 }
-            if (synth instanceof edisyn.synth.dsiprophet08.DSIProphet08)
+            else if (synth instanceof edisyn.synth.dsiprophet08.DSIProphet08)
                 {
                 ((edisyn.synth.dsiprophet08.DSIProphet08)synth).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_PROPHET_08, false);
                 ((edisyn.synth.dsiprophet08.DSIProphet08)synth2).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_PROPHET_08, false);

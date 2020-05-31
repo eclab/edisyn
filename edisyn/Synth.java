@@ -7,6 +7,7 @@ package edisyn;
 
 import edisyn.gui.*;
 import edisyn.synth.*;
+import edisyn.util.*;
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
@@ -6087,8 +6088,9 @@ public abstract class Synth extends JComponent implements Updatable
             else
                 filename = filename + ".syx";
             
-            // substitute separators
-            filename = filename.replace('/', '-').replace('\\', '-');
+            filename = StringUtility.makeValidFilename(filename);
+            // substitute separators. Might as well
+            // filename = filename.replace('/', '-').replace('\\', '-');
             
             FileOutputStream os = null;
             File f = null;

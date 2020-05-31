@@ -115,12 +115,12 @@ public class Generic extends Synth
         "",
         "",
         "",
-        "Portamento Ctrl",
+        "Porta Ctrl",
         "",
         "",
         "",
 
-        "Hi Res Vel Pref",
+        "HiRes Vel Pref",
         "",
         "",
         "Effect 1 Depth",
@@ -930,6 +930,11 @@ public class Generic extends Synth
             model.set("cc-name-" + i, new String(name).trim());
             }  
                 
+       	model.set("pitchbend", (data[pos++] << 7) | data[pos++]);
+       	model.set("pitchbendrange", (data[pos++] << 7) | data[pos++]);
+       	model.set("coarsetune", (data[pos++]));
+       	model.set("finetune", (data[pos++] << 7) | data[pos++]);
+               
         revise();
                 
         return PARSE_SUCCEEDED;        
@@ -942,7 +947,7 @@ public class Generic extends Synth
 
         if (!toFile) return new byte[0];
         
-        byte[] sysex = new byte[HEADER + 1 + (18 * 19 * 3 + 128 * 21)];
+        byte[] sysex = new byte[HEADER + 1 + (18 * 19 * 3 + 128 * 21) + 7];
         sysex[0] = (byte)0xF0;
         sysex[1] = (byte)0x7D;
         sysex[2] = (byte)'E';
@@ -1079,7 +1084,20 @@ public class Generic extends Synth
                     sysex[pos++] = (byte) val;
                     }
                 }  
-            }          
+            }
+        
+        int val = model.get("pitchbend");
+        sysex[pos++] = (byte) (val >>> 7);
+        sysex[pos++] = (byte) (val & 127);
+         val = model.get("pitchbendrange");
+        sysex[pos++] = (byte) (val >>> 7);
+        sysex[pos++] = (byte) (val & 127);
+         val = model.get("coarsetune");
+        sysex[pos++] = (byte) val;
+         val = model.get("finetune");
+        sysex[pos++] = (byte) (val >>> 7);
+        sysex[pos++] = (byte) (val & 127);
+               
         sysex[sysex.length - 1] = (byte)0xF7;           
         
         return sysex;

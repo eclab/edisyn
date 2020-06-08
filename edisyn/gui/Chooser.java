@@ -255,7 +255,8 @@ public class Chooser extends NumericalComponent
     public void setIndex(int index)
         {
         setCallActionListener(false);
-        combo.setSelectedIndex(index);
+        if (index < getNumElements())
+        	combo.setSelectedIndex(index);
         setCallActionListener(true);
         }
         

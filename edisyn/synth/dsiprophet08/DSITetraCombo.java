@@ -174,7 +174,6 @@ public class DSITetraCombo extends Synth
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
-//        hbox.add(Strut.makeHorizontalStrut(nameGlobal.getPreferredSize().width));
         nameGlobal = addNameGlobal(2, Style.COLOR_C());
         hbox.add(nameGlobal);
         hbox.add(addGlobal(2, Style.COLOR_B()));
@@ -266,7 +265,6 @@ public class DSITetraCombo extends Synth
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
-//        hbox.add(Strut.makeHorizontalStrut(nameGlobal.getPreferredSize().width));
         nameGlobal = addNameGlobal(3, Style.COLOR_C());
         hbox.add(nameGlobal);
         hbox.add(addGlobal(3, Style.COLOR_B()));
@@ -357,7 +355,6 @@ public class DSITetraCombo extends Synth
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
-//        hbox.add(Strut.makeHorizontalStrut(nameGlobal.getPreferredSize().width));
         nameGlobal = addNameGlobal(4, Style.COLOR_C());
         hbox.add(nameGlobal);
         hbox.add(addGlobal(4, Style.COLOR_B()));
@@ -441,22 +438,6 @@ public class DSITetraCombo extends Synth
         addTab("Seq 4", sequence);
         
         
-/*
-        // TETRA PANEL
-                
-        SynthPanel tetra = new SynthPanel(this);
-
-        vbox = new VBox();
-        vbox.add(addTetra(1, Style.COLOR_C()));
-        vbox.add(addTetra(2, Style.COLOR_B()));
-        vbox.add(addTetra(3, Style.COLOR_C()));
-        vbox.add(addTetra(4, Style.COLOR_B()));
-
-        tetra.add(vbox, BorderLayout.CENTER);
-        addTab("Extra", tetra);
-        */
-        
-
         model.set("name", "Untitled");
         model.set("number", 0);
                 
@@ -534,25 +515,6 @@ public class DSITetraCombo extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-        /*
-        vbox = new VBox();
-        params = KEYBOARD_MODES;
-        comp = new Chooser("Keyboard Mode", this, "keyboardmode", params);
-        vbox.add(comp);
-        
-        hbox.add(vbox);
-
-        comp = new LabelledDial("Split Point", this, "splitpoint", color, 0, 127)
-            {
-            public String map(int val)
-                {
-                return (NOTES[val % 12] + " " + (val / 12));
-                }
-            };
-        hbox.add(comp);
-        */
-
-
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
         }
@@ -580,7 +542,6 @@ public class DSITetraCombo extends Synth
 	    	{
 	    	CheckBox temp = new CheckBox("Arpeggiator [-]", this, "throwaway");
 	    	arpeggiator.setPreferredSize(temp.getPreferredSize());
-//	    	arpeggiator.setMinimumSize(temp.getMinimumSize());
 	    	}
 	       	 
 	        hbox2.add(arpeggiator);
@@ -602,19 +563,10 @@ public class DSITetraCombo extends Synth
         hbox2 = new HBox();
              
 	        hbox2.add(unison);
-
-/*	    else
-	    	{
-	    	VBox vbox2 = new VBox();
-	    	vbox2.add(unison);
-	    	hbox.add(vbox2);
-	    	}
-*/
         
         params = KEY_MODES;
         comp = new Chooser((layer == 1 ? "Unison/Key Assign" : "Unison/Key Assign [-]"), this, "layer" + layer + "unisonkeymode", params);
         comp.setPreferredSize(c2.getPreferredSize());
-//        else comp.setPreferredSize(c3.getPreferredSize());
         hbox2.add(comp);
 
 		
@@ -700,7 +652,6 @@ public class DSITetraCombo extends Synth
         	public void perform(int i)
         		{
         		getModel().set("layer" + layer + "dco" + osc + "shape", PRESET_VALS[i]);
-//        		testit();
         		}
         	};
         vbox.add(button);
@@ -1124,19 +1075,19 @@ public class DSITetraCombo extends Synth
 		else if (layer == 2)
 			{
 			params = tetraAssignableParameters;
-	        comp = new Chooser("Assignable Parameter 2", this, "layer1tetraassignableparameter2", params);
+	        comp = new Chooser("Assignable Parameter 2", this, "layer2tetraassignableparameter2", params);
 	        vbox.add(comp);
 	        }
 		else if (layer == 3)
 			{
 			params = tetraAssignableParameters;
-	        comp = new Chooser("Assignable Parameter 3", this, "layer1tetraassignableparameter3", params);
+	        comp = new Chooser("Assignable Parameter 3", this, "layer3tetraassignableparameter3", params);
 	        vbox.add(comp);
 			}
 		else
 			{
 			params = tetraAssignableParameters;
-	        comp = new Chooser("Assignable Parameter 4", this, "layer1tetraassignableparameter4", params);
+	        comp = new Chooser("Assignable Parameter 4", this, "layer4tetraassignableparameter4", params);
 	        vbox.add(comp);
 	        }
 			
@@ -1144,7 +1095,7 @@ public class DSITetraCombo extends Synth
 
 		if (layer == 1)
 			{
-// DSI tells me this was basically used by the SoundTower editor and is meaningless.  So we build it to create the parameter but don't show it
+			// DSI tells me this was basically used by the SoundTower editor and is meaningless.  So we build it to create the parameter but don't show it
 			comp = new LabelledDial("Editor", this, "layer" + layer + "tetraeditorbyte", color, 0, 127);
         	((LabelledDial)comp).addAdditionalLabel("Byte");
 			// hbox.add(comp);
@@ -1307,10 +1258,10 @@ public class DSITetraCombo extends Synth
     "---",
     "---",
     "---",
-    "layer1tetraassignableparameter1",    
-    "layer1tetraassignableparameter2",    
-    "layer1tetraassignableparameter3",    
-    "layer1tetraassignableparameter4",    
+    "layer1tetraassignableparameter1",    		// Notice layer1...layer4
+    "layer2tetraassignableparameter2",    
+    "layer3tetraassignableparameter3",    
+    "layer4tetraassignableparameter4",    
     "---",
     "layer1tetrafeedbackgain",    
     "layer1tetrapushitnote",    
@@ -2117,9 +2068,9 @@ public class DSITetraCombo extends Synth
             int val = model.get(key, 0);
             
 			if (key.equals("layer1tetraassignableparameter1") || 
-    			key.equals("layer1tetraassignableparameter2") || 
-    			key.equals("layer1tetraassignableparameter3") || 
-    			key.equals("layer1tetraassignableparameter4"))
+    			key.equals("layer2tetraassignableparameter2") || 
+    			key.equals("layer3tetraassignableparameter3") || 
+    			key.equals("layer4tetraassignableparameter4"))
 				{
 				if (!sendAssignableParams) return new Object[0];  // we don't send these
 				
@@ -2138,23 +2089,41 @@ public class DSITetraCombo extends Synth
         }
 
 
+	public void setParamByNRPN(int layer, int num, int val)
+		{
+		String key = parameters[layer * LAYER_SIZE + num];
+		if (key == "---")
+			return;
+		else
+			model.set(key, val);
+		}
+
     public void handleSynthCCOrNRPN(Midi.CCData data)
         {
-        if (data.type == Midi.CCDATA_TYPE_NRPN && data.number <= 383)
+        if (data.type == Midi.CCDATA_TYPE_NRPN && data.number <= 1719)
             {
-            if (data.number >= 184 && data.number <= 199)  // Name
+            if (data.number >= 696 && data.number <= 712)  // Name
                 {
                 char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
-                name[data.number - 184] = (char)(data.value);
+                name[data.number - 696] = (char)(data.value);
                 model.set("name", new String(name));
                 }
             else
                 {
-                String key = parameters[data.number];
-                if (key == "---")
-                    return;
+                int layer = (data.number - BASE_OFFSET) / LAYER_OFFSET;
+                int num = (data.number - BASE_OFFSET) % LAYER_OFFSET;
+                
+                if (layer == 4) // Quad
+                	{
+                	setParamByNRPN(0, num, data.value);
+                	setParamByNRPN(1, num, data.value);
+                	setParamByNRPN(2, num, data.value);
+                	setParamByNRPN(3, num, data.value);
+                	}
                 else
-                    model.set(key, data.value);
+                	{
+                	setParamByNRPN(layer, num, data.value);
+                	}
                 } 
             }               
         }
@@ -2337,9 +2306,9 @@ public class DSITetraCombo extends Synth
 					int q = model.get(parameters[i], 0);
 
 					if (parameters[i].equals("layer1tetraassignableparameter1") || 
-    					parameters[i].equals("layer1tetraassignableparameter2") || 
-    					parameters[i].equals("layer1tetraassignableparameter3") || 
-    					parameters[i].equals("layer1tetraassignableparameter4"))
+    					parameters[i].equals("layer2tetraassignableparameter2") || 
+    					parameters[i].equals("layer3tetraassignableparameter3") || 
+    					parameters[i].equals("layer4tetraassignableparameter4"))
 						{
 							// For the Tetra, there is a hole in these values which we have to ignore
 							if (q >= 111 && q <= 119)
@@ -2369,16 +2338,6 @@ public class DSITetraCombo extends Synth
 					d[pos + i] = (byte)(name[i] & 127);
 				}
 
-/*
-			// handle name specially
-			char[] name = (model.get("name", "Untitled") + "                " ).toCharArray();
-			for(int i = 0; i < 16; i++)
-				d[184 + i] = (byte)(name[i] & 127);
-			*/
-			
-			
-			
-			
 			data = convertTo7Bit(d);  
         
         if (toWorkingMemory)
@@ -2715,19 +2674,6 @@ public class DSITetraCombo extends Synth
            
 					for(int i = 0; i < parameters.length; i++)
 						{
-						/*
-						if (parameters[i].equals("layer1vcavoicevolume"))	// Map 1 -> A always
-							{
-							int val2 = model.get(parameters[i]);
-							newModel.set("layer1" + parameters[i].substring(6), val2);
-							}
-						else if (parameters[i].equals("layer3vcavoicevolume"))	// Map 3 -> B always
-							{
-							int val2 = model.get(parameters[i]);
-							newModel.set("layer2" + parameters[i].substring(6), val2);
-							}
-						else 
-						*/
 						if (parameters[i].equals("layer1editorbyte"))
 							{
 							int val2 = model.get(parameters[i]);
@@ -2735,9 +2681,9 @@ public class DSITetraCombo extends Synth
 							}
 						else if (
 								parameters[i].equals("layer1tetraassignableparameter1") ||
-								parameters[i].equals("layer1tetraassignableparameter2") ||
-								parameters[i].equals("layer1tetraassignableparameter3") ||
-								parameters[i].equals("layer1tetraassignableparameter4")) 	// Map 1 -> A
+								parameters[i].equals("layer2tetraassignableparameter2") ||
+								parameters[i].equals("layer3tetraassignableparameter3") ||
+								parameters[i].equals("layer4tetraassignableparameter4")) 	// Map 1 -> A
 							{
 							int val2 = model.get(parameters[i]);
 							newModel.set("layer1" + parameters[i].substring(6), val2);
@@ -3017,54 +2963,21 @@ public class DSITetraCombo extends Synth
 "Edit Name 16",
 	};
 
-   /*
+
     public boolean testVerify(Synth synth2, String key, Object val1, Object val2)
     	{
 		// These can be invalid regardless due to the hole in the middle    				
     	if (key.equals("layer1tetraassignableparameter1") || 
-    		key.equals("layer1tetraassignableparameter2") || 
-    		key.equals("layer1tetraassignableparameter3") || 
-    		key.equals("layer1tetraassignableparameter4") )
+    		key.equals("layer2tetraassignableparameter2") || 
+    		key.equals("layer3tetraassignableparameter3") || 
+    		key.equals("layer4tetraassignableparameter4") )
+    			return true;
+
+		// This is just a junk widget    				
+    	if (key.equals("throwaway"))
     			return true;
     	
     	else return false;
     	}
-    */
-
-/*
-
-	public void testit()
-		{
-		 int[] dd = new int[]
-		{
-		240, 1, 38, 34, 0, 0, 12, 49, 0, 0, 1, 0, 24, 0, 51, 0, 0, 1, 0, 0, 0, 0, 2, 0, 64, 68, 0, 0, 71, 0, 119, 0, 0, 1, 113, 0, 0, 0, 46, 0, 17, 65, 0, 127, 0, 0, 0, 18, 53, 45, 17, 0, 120, 1, 31, 4, 5, 28, 0, 80, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 127, 0, 0, 0, 127, 0, 0, 127, 0, 127, 0, 0, 127, 0, 127, 0, 127, 0, 0, 127, 0, 1, 0, 1, 60, 100, 8, 1, 60, 0, 22, 1, 0, 0, 0, 0, 1, 12, 10, 20, 0, 20, 0, 28, 46, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 111, 109, 98, 111, 0, 32, 73, 110, 105, 116, 32, 32, 0, 32, 32, 32, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45, 49, 27, 0, 0, 1, 0, 77, 51, 1, 0, 0, 1, 0, 0, 0, 2, 3, 51, 8, 18, 0, 0, 3, 76, 0, 82, 2, 1, 8, 0, 0, 4, 2, 58, 0, 12, 0, 127, 0, 0, 5, 33, 16, 0, 0, 0, 44, 31, 4, 13, 4, 13, 0, 31, 4, 7, 33, 0, 0, 24, 0, 127, 4, 0, 80, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 127, 0, 0, 127, 0, 0, 0, 127, 0, 127, 0, 127, 0, 0, 127, 0, 127, 0, 127, 0, 1, 0, 0, 1, 60, 100, 1, 60, 0, 1, 22, 5, 0, 0, 0, 1, 1, 64, 2, 9, 0, 0, 36, 41, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 127, 127, 127, 127, 127, 0, 28, 0, 0, 126, 126, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 0, 111, 109, 98, 111, 32, 73, 110, 0, 105, 116, 32, 32, 32, 32, 32, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 49, 0, 0, 1, 0, 0, 24, 51, 0, 0, 1, 0, 0, 0, 0, 2, 3, 64, 0, 0, 0, 1, 20, 0, 0, 0, 1, 127, 0, 0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 18, 53, 50, 66, 0, 0, 120, 80, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 127, 0, 0, 0, 127, 0, 0, 127, 0, 0, 127, 0, 127, 0, 127, 0, 127, 0, 0, 127, 0, 1, 0, 1, 60, 0, 100, 1, 60, 0, 120, 1, 0, 0, 0, 0, 1, 1, 2, 9, 0, 0, 15, 8, 44, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 111, 109, 98, 0, 111, 32, 73, 110, 105, 116, 32, 0, 32, 32, 32, 32, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 49, 0, 0, 0, 1, 0, 24, 51, 0, 0, 0, 1, 0, 0, 0, 2, 3, 16, 64, 0, 0, 0, 20, 0, 0, 0, 0, 1, 127, 0, 0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 18, 0, 53, 50, 66, 0, 120, 80, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 127, 0, 0, 127, 0, 0, 0, 127, 0, 127, 0, 127, 0, 0, 127, 0, 127, 0, 127, 0, 0, 1, 0, 1, 60, 100, 1, 60, 0, 0, 120, 1, 0, 0, 0, 1, 0, 1, 2, 9, 0, 15, 2, 44, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 111, 109, 98, 111, 32, 73, 0, 110, 105, 116, 32, 32, 32, 32, 0, 32, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 247
-		};
-		
-		 byte[] d1 = new byte[1024];
-		 byte[] d2 = new byte[154];
-		
-		for(int i = 0; i < 1024; i++)
-			{
-			d1[i] = (byte)dd[i];
-			}
-			
-		d2[0] = (byte)0xF7;
-		
-		for(int i = 1; i < 154; i++)
-			{
-			d2[i] = (byte)dd[i + 1024 - 1];
-			}
-			
-		midi.gatherInSysexData(d1, d1.length);
-		midi.gatherInSysexData(d2, d2.length);
-		
-		}
-
-*/
-
-
-
-
-
     }
 

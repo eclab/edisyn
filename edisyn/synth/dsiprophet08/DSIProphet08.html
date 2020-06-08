@@ -5,7 +5,7 @@
 <h1>Dave Smith Instruments Prophet '08 / Tetra / Mopho</h1> 
 <h2>Single Patch Editor</h2>
 
-<p>This editor is meant to work with the <b>Prophet '08</b>, <b>Prophet '08 Desktop</b>, <b>Tetra</b>, <b>Mopho</b>, <b>Mopho Keyboard</b>, <b>Mopho SE</b>, and <b>Mopho x4</b>. It has been tested successfully on the Prophet '08, Tetra, and Mopho Keyboard.  If you have other models, please provide me with bug reports.
+<p>This editor is meant to work with the <b>Prophet '08</b>, <b>Prophet '08 Desktop</b>, <b>Tetra</b>, <b>Mopho</b>, <b>Mopho Keyboard</b>, <b>Mopho SE</b>, and <b>Mopho x4</b>. It has been tested successfully on the Prophet '08, Tetra, and Mopho Keyboard.  If you have other models, please provide me with bug reports.  This editor will not work with the Rev2.  For Tetra Combo patches, see Edisyn's Tetra Combo editor.
 
 <br><br><h3>Communicating with Edisyn</h3>
 
@@ -15,7 +15,7 @@ Set the MIDI channel to the same as being used in Edisyn.  Set MParamSend to NRP
 
 These synthesizers are approximately compatible with one another, but there are differences.  The biggest one is of course that the Mopho series does not have the two layers present in the Tetra and Prophet '08. If you load a Mopho patch, the (missing) Layer B will be set to a copy of Layer A.
 
-<p>There are other differences. Some units have feedback; others have audio input; and the Prophet '08 has neither.  The Prophet '08 also doesn't have sub-octave generators, unlike the others.  Some synths have certain destinations and sources that others do not.  And the Tetra can be split in a variety of ways (Combos) which are not considered by this editor.
+<p>There are other differences. Some units have feedback; others have audio input; and the Prophet '08 has neither.  The Prophet '08 also doesn't have sub-octave generators, unlike the others.  Some synths have certain destinations and sources that others do not.  
 
 <p>Before you work with your synthesizer, you need to set Edisyn to the proper Synthesizer Type.  Edisyn will remember your choice next time.  Setting the Synthesizer Type affects the following things:
 
@@ -57,7 +57,7 @@ The menu has several options that are useful for Prophet '08 and Tetra owners.
 
 <p><li> <b>Load Both Layers</b>, <b>Load Only A</>, and <b>Load Only B</b>&nbsp;&nbsp; When you load a sysex file, receive a dump or merge from your Prophet '08 or Tetra, or reset your patch, your setting here will dictate whether this will effect both layers, or just Layer A or Layer B (keeping the other one intact).  This way, for example, you can just clear out Layer A.  Or you could make a patch consisting of the Layer A of two different patches, by first loading one patch, then copying its Layer A to Layer B, then restricting loading to just Layer A, and then finally loading the second patch.
 
-<p><li><b>Build Tetra Combo</b> constructs a Tetra Combo patch out of this patch. This is done by copying Layer A to Voices 1 and 2 in the Combo, and Layer B to Voices 3 and 4.
+<p><li><b>Build Tetra Combo</b> constructs a Tetra Combo patch out of this patch. This is done by copying Layer A to Voices 1 and 2 in the Combo, and Layer B to Voices 3 and 4.  All voices will share the same patch name.  The four "assignable parameters" will be distributed to the four voices.
 
 <p><li><b>Send Assignable Params</b> toggles whether Edisyn sends real-time parameter change messages in response to changing any of the four "Assignable Parameter" parameters.  This is because doing so triggers a bug in the Tetra Beta firmware, which causes the parameter to be reset to Osc 1 Freq.  If you're running a Tetra using the Beta firmware, you might like to turn this on; otherwise you can ignore it.
 
@@ -82,7 +82,7 @@ The menu has several options that are useful for Prophet '08 and Tetra owners.
 
 <p><li>Likewise, there is a <i>different</i> hole in the middle of the Mopho's parameters, with the same dangers, and so I have elected to follow the same strategy.
 
-<p><li>If you are using the Tetra's Beta OS, setting any of the assignable parameters in real-time just sets the parameter to "Osc 1 Frequency" due to a bug in the OS.  However you can send or write a patch with the assignable parameters set and it'll work right.
+<p><li>If you are using the Tetra's Beta OS, setting any of the assignable parameters in real-time just sets the parameter to "Osc 1 Frequency" due to a bug in the OS.  However you can send or write a patch with the assignable parameters set and it'll work right.  See discussion of the <b>Send Assignable Params</b> menu option above.
 
 </ul>
 

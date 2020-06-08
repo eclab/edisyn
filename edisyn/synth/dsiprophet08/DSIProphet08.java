@@ -2258,8 +2258,8 @@ public class DSIProphet08 extends Synth
 							{
 							/// IMPORTANT NOTE.  It's important to map A to 1 and 2, and B to 3 and 4, in part
 							/// because VCA Voice Volume (in the Combo man pages it's called "Preset Volume")
-							/// only appears for Voice 1 (as Layer A) and Voice 3 (as Layer B).
-							/// I don't know why though.
+							/// only appears for Voice 1 (as Layer A) and Voice 3 (as Layer B) in the manual.
+							/// I don't know why though -- it appears to have no real meaning in the actual machine.
 							
 							int val2 = model.get(parameters[i]);
 							newModel.set("layer1" + parameters[i].substring(6), val2);
@@ -2276,7 +2276,11 @@ public class DSIProphet08 extends Synth
 					newModel.set("name2", model.get("name", "Untitled"));
 					newModel.set("name3", model.get("name", "Untitled"));
 					newModel.set("name4", model.get("name", "Untitled"));
-				
+					newModel.set("layer1tetraassignableparameter1", model.get("layer1tetraassignableparameter1"));
+					newModel.set("layer2tetraassignableparameter2", model.get("layer1tetraassignableparameter2"));
+					newModel.set("layer3tetraassignableparameter3", model.get("layer1tetraassignableparameter3"));
+					newModel.set("layer4tetraassignableparameter4", model.get("layer1tetraassignableparameter4"));
+					
 					newSynth.getUndo().setWillPush(currentPush);
 					newSynth.setSendMIDI(true);
 				}

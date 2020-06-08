@@ -1,5 +1,5 @@
 /***
-    Copyright 2018 by Sean Luke
+    Copyright 2020 by Sean Luke
     Licensed under the Apache License version 2.0
 */
 
@@ -17,122 +17,57 @@ import java.io.*;
 import javax.sound.midi.*;
 
 /**
-   A patch editor for the Dave Smith Instruments Prophet '08.
+   A combo patch editor for the Dave Smith Instruments Tetra.
         
    @author Sean Luke
 */
 
-public class DSIProphet08 extends Synth
+public class DSITetraCombo extends Synth
     {
     /// Various collections of parameter names for pop-up menus
         
-    public static final String[] MODULATION_SOURCES = new String[] { "Off", "Track 1", "Track 2", "Track 3", "Track 4", "LFO 1", "LFO 2", "LFO 3", "LFO 4", "Filter Env", "Amp Env", "Env 3", "Pitch Bend", "Mod Wheel", "Pressure", "MIDI Breath", "MIDI Foot", "MIDI Expression", "Velocity", "Note Number", "Noise", "[MK]AudIn EnvFollow", "[MK]AudIn PkHold" };
-    public static final String[] MODULATION_DESTINATIONS = new String[] { "Off", "Osc 1 Freq", "Osc 2 Freq", "Osc 1&2 Freq", "Osc Mix", "Noise Level", "Osc 1 PW", "Osc 2 PW", "Osc 1&2 PW", "Filter Freq", "Filter Resonance", "Filter Audio Mod", "VCA Level", "Pan Sprd/[M]Pos", "LFO 1 Freq", "LFO 2 Freq", "LFO 3 Freq", "LFO 4 Freq", "All LFO Freqs", "LFO 1 Amt", "LFO 2 Amt", "LFO 3 Amt", "LFO 4 Amt", "All LFO Amts", "Filter Env Amt", "Amp Env Amt", "Env 3 Amt", "All Env Amts", "Env 1 Attack", "Env 2 Attack", "Env 3 Attack", "All Env Attacks", "Env 1 Decay", "Env 2 Decay", "Env 3 Decay", "All Env Decays", "Env 1 Release", "Env 2 Release", "Env 3 Release", "All Env Releases", "Mod 1 Amt", "Mod 2 Amt", "Mod 3 Amt", "Mod 4 Amt", "[TKX]Fdb[M]AudIn", "[TMKX] Sub Osc 1", "[TMKX] Sub Osc 2", "[TKX]Feedbk Gain" };
-    public static final String[] MODULATION_DESTINATIONS_SEQ24 = new String[] { "Off", "Osc 1 Freq", "Osc 2 Freq", "Osc 1&2 Freq", "Osc Mix", "Noise Level", "Osc 1 PW", "Osc 2 PW", "Osc 1&2 PW", "Filter Freq", "Filter Resonance", "Filter Audio Mod", "VCA Level", "Pan Sprd/[M]Pos", "LFO 1 Freq", "LFO 2 Freq", "LFO 3 Freq", "LFO 4 Freq", "All LFO Freqs", "LFO 1 Amt", "LFO 2 Amt", "LFO 3 Amt", "LFO 4 Amt", "All LFO Amts", "Filter Env Amt", "Amp Env Amt", "Env 3 Amt", "All Env Amts", "Env 1 Attack", "Env 2 Attack", "Env 3 Attack", "All Env Attacks", "Env 1 Decay", "Env 2 Decay", "Env 3 Decay", "All Env Decays", "Env 1 Release", "Env 2 Release", "Env 3 Release", "All Env Releases", "Mod 1 Amt", "Mod 2 Amt", "Mod 3 Amt", "Mod 4 Amt", "[TKX]Fdb[M]AudIn", "[TMKX] Sub Osc 1", "[TMKX] Sub Osc 2", "[TKX]Feedbk Gain", "[TKX] Slew" };
+    public static final String[] MODULATION_SOURCES = new String[] { "Off", "Track 1", "Track 2", "Track 3", "Track 4", "LFO 1", "LFO 2", "LFO 3", "LFO 4", "Filter Env", "Amp Env", "Env 3", "Pitch Bend", "Mod Wheel", "Pressure", "MIDI Breath", "MIDI Foot", "MIDI Expression", "Velocity", "Note Number", "Noise", "AudioIn EnvFollow", "AudioIn PkHold" };
+    public static final String[] MODULATION_DESTINATIONS = new String[] { "Off", "Osc 1 Freq", "Osc 2 Freq", "Osc 1&2 Freq", "Osc Mix", "Noise Level", "Osc 1 PW", "Osc 2 PW", "Osc 1&2 PW", "Filter Freq", "Filter Resonance", "Filter Audio Mod", "VCA Level", "Pan Spread", "LFO 1 Freq", "LFO 2 Freq", "LFO 3 Freq", "LFO 4 Freq", "All LFO Freqs", "LFO 1 Amt", "LFO 2 Amt", "LFO 3 Amt", "LFO 4 Amt", "All LFO Amts", "Filter Env Amt", "Amp Env Amt", "Env 3 Amt", "All Env Amts", "Env 1 Attack", "Env 2 Attack", "Env 3 Attack", "All Env Attacks", "Env 1 Decay", "Env 2 Decay", "Env 3 Decay", "All Env Decays", "Env 1 Release", "Env 2 Release", "Env 3 Release", "All Env Releases", "Mod 1 Amt", "Mod 2 Amt", "Mod 3 Amt", "Mod 4 Amt", "Feedback", "Sub Osc 1", "Sub Osc 2", "Feedback Gain" };
+    public static final String[] MODULATION_DESTINATIONS_SEQ24 = new String[] { "Off", "Osc 1 Freq", "Osc 2 Freq", "Osc 1&2 Freq", "Osc Mix", "Noise Level", "Osc 1 PW", "Osc 2 PW", "Osc 1&2 PW", "Filter Freq", "Filter Resonance", "Filter Audio Mod", "VCA Level", "Pan Spread", "LFO 1 Freq", "LFO 2 Freq", "LFO 3 Freq", "LFO 4 Freq", "All LFO Freqs", "LFO 1 Amt", "LFO 2 Amt", "LFO 3 Amt", "LFO 4 Amt", "All LFO Amts", "Filter Env Amt", "Amp Env Amt", "Env 3 Amt", "All Env Amts", "Env 1 Attack", "Env 2 Attack", "Env 3 Attack", "All Env Attacks", "Env 1 Decay", "Env 2 Decay", "Env 3 Decay", "All Env Decays", "Env 1 Release", "Env 2 Release", "Env 3 Release", "All Env Releases", "Mod 1 Amt", "Mod 2 Amt", "Mod 3 Amt", "Mod 4 Amt", "Feedback", "Sub Osc 1", "Sub Osc 2", "Feedback Gain", "Slew" };
     public static final String[] OSC_SHAPES = new String[] { "Off", "Saw", "Tri", "Saw/Tri" };
     public static final String[] GLIDE_MODES = new String[] { "Fixed Rate", "Fixed Rate Auto", "Fixed Time", "Fixed Time Auto" };
     public static final String[] FILTER_POLES = new String[] { "2-Pole", "4-Pole" };
-    public static final String[] BANKS_PROPHET = new String[] { "1", "2" };
-    public static final String[] BANKS_MOPHO = new String[] { "1", "2", "3" };
-    public static final String[] BANKS_TETRA = new String[] { "1", "2", "3", "4" };
-    public static final String[] BANKS_MOPHO_X4 = new String[] { "1", "2", "3", "4", "5", "6", "7", "8" };
     public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     public static final String[] HALF_NOTES = new String[] { "C", "C+", "C#", "C#+", "D", "D+", "D#", "D#+", "E", "E+", "F", "F+", "F#", "F#+", "G", "G+", "G#", "G#+", "A", "A+", "A#", "A#+", "B", "B+" };
-    
+
     // this one is obviously wrong, the documentation seems strange
     public static final String[] LFO_FREQUENCIES = new String[] { "32 S", "16 S", "8 S", "6 S", "4 S", "3 S", "2 S", "3 S/2", "1 S", "2 S/3", "S/2", "3 S", "S/4", "S/6", "S/8", "S/16" };
     public static final String[] LFO_SHAPES = new String[] { "Triangle", "Reverse Saw", "Sawtooth", "Square", "Random" };
     public static final String[] CLOCK_DIVIDES = new String[] { "Half Note", "Quarter Note", "8th Note", "8th Note Half Swing", "8th Note Full Swing", "8th Note Triplets", "16th Note", "16th Note Half Swing", "16th Note Full Swing", "16th Note Triplets", "32nd Note", "32nd Note Triplets", "64th Note Triplets" };
-    public static final String[] SEQUENCER_TRIGGERS = new String[] { "Normal", "Normal No Reset", "No Gate", "No Gate, No Reset", "Key Step", "[M] Audio In" };
+    public static final String[] SEQUENCER_TRIGGERS = new String[] { "Normal", "Normal No Reset", "No Gate", "No Gate, No Reset", "Key Step", "Audio In" };
     public static final String[] KEY_MODES = new String[] { "Low Note", "Low Note Retrigger", "High Note", "High Note Retrigger", "Last Note", "Last Note Retrigger" };
     public static final String[] UNISON_MODES = new String[] { "1 Voice", "All Voices", "All Voices Detune 1",  "All Voices Detune 2",  "All Voices Detune 3" };
-    public static final String[] ARPEGGIATOR_MODES = new String[] { "Up", "Down", "Up/Down", "Assign", "[TKX] Random", "[TKX] 2 Octaves Up", "[TKX] 2 Octaves Down", "[TKX] 2 Octaves UpDown", "[TKX] 2 Octaves Assign", "[TKX] 2 Octaves Random", "[TKX] 3 Octaves Up", "[TKX] 3 Octaves Down", "[TKX] 3 Octaves UpDown", "[TKX] 3 Octaves Assign", "[TKX] 3 Octaves Random" };
+    public static final String[] ARPEGGIATOR_MODES = new String[] { "Up", "Down", "Up/Down", "Assign", "Random", "2 Octaves Up", "2 Octaves Down", "2 Octaves UpDown", "2 Octaves Assign", "2 Octaves Random", "3 Octaves Up", "3 Octaves Down", "3 Octaves UpDown", "3 Octaves Assign", "3 Octaves Random" };
     public static final String[] KEYBOARD_MODES = new String[] { "Normal", "Stack", "Split" };
-    public static final String[] PUSH_IT_MODES = new String[] { "Normal", "Toggle", "[M] Audio In" };
-    public static final String[] SYNTH_TYPES = new String[] { "[P] Prophet '08", "[T] Tetra", "[M] Mopho", "[K] Mopho Kbd/SE", "[X] Mopho x4" };
+    public static final String[] PUSH_IT_MODES = new String[] { "Normal", "Toggle", "Audio In" };
     public static final String[] PRESETS = new String[] { "Saw", "Tri", "Saw/Tri", "Square", "Off" };
     public static final int[] PRESET_VALS = new int[] { 1, 2, 3, 54, 0 };
-    
-    
-    public static final int SYNTH_TYPE_PROPHET_08 = 0;
-    public static final int SYNTH_TYPE_TETRA = 1;
-    public static final int SYNTH_TYPE_MOPHO = 2;
-    public static final int SYNTH_TYPE_MOPHO_KEYBOARD = 3;	// includes SE
-    public static final int SYNTH_TYPE_MOPHO_X4 = 4;
+    public static final String[] VOICES = new String[] { "Voice 1", "Voice 2", "Voice 3", "Voice 4" };
     
     // Sysex machine IDs
-	public static final byte PROPHET_08_ID = 0x23;
-	public static final byte MOPHO_ID = 0x25;
 	public static final byte TETRA_ID = 0x26;
-	public static final byte MOPHO_KEYBOARD_ID = 0x27;	// includes SE
-	public static final byte MOPHO_X4_ID = 0x29;
-
-	public static final byte[] ids = { PROPHET_08_ID, TETRA_ID, MOPHO_ID, MOPHO_KEYBOARD_ID, MOPHO_X4_ID };
 
     public static final int FILTER_ENVELOPE = 1;
     public static final int AMPLIFIER_ENVELOPE = 2;
     public static final int THIRD_ENVELOPE = 3;
     
-    public static final int LOAD_BOTH = 0;
+    public static final int LOAD_ALL = 0;
     public static final int LOAD_A = 1;
     public static final int LOAD_B = 2;
-    int load = LOAD_BOTH;
+    public static final int LOAD_C = 3;
+    public static final int LOAD_D = 4;
+    int load = LOAD_ALL;
     
     boolean sendAssignableParams;
     
-    JComboBox synthTypes = new JComboBox(SYNTH_TYPES);
-    int type = SYNTH_TYPE_PROPHET_08;
-    public static final String TYPE_KEY = "Type";
-    
-    public int getType() { return type; }
-    boolean reenntrantBlock = false;
-    public void setType(int val, boolean store)
-        {
-        if (reenntrantBlock) return;
-        reenntrantBlock = true;
-        if (store) setLastX("" + val, TYPE_KEY, getSynthName(), false);
-        type = val;
-        
-        // reset bank
-        int bank = model.get("bank", 0);
-		if (type == PROPHET_08_ID || type == TETRA_ID)
-			{
-			if (bank > 1)
-				model.set("bank", 0);
-			}
-		else if (type == MOPHO_ID || type == MOPHO_KEYBOARD_ID)
-			{
-			if (bank > 2)
-				model.set("bank", 0);
-			}
-
-		updateAssignableParameterChoosers();
-        updateTitle();
-        if (synthTypes != null) synthTypes.setSelectedIndex(type);
-        reenntrantBlock = false;
-        }
-    
-
-    public DSIProphet08()
+    public DSITetraCombo()
         {
         int panel = 0;
-        
-        try
-        	{
-	        String v = getLastX(TYPE_KEY, getSynthName());
-	        if (v == null)
-	        	setType(SYNTH_TYPE_PROPHET_08, true);
-	        else
-	        	{
-				int val = Integer.parseInt(v);
-		        if (val >= SYNTH_TYPE_PROPHET_08 && val <= SYNTH_TYPE_MOPHO_X4)
-		        	setType(val, false);
-		        }
-	        }
-	    catch (Exception ex)
-	    	{
-	    	ex.printStackTrace();
-	    	}
         
         for(int i = 0; i < parameters.length; i++)
             {
@@ -145,9 +80,10 @@ public class DSIProphet08 extends Synth
         
         VBox vbox = new VBox();
         HBox hbox = new HBox();
-        JComponent nameGlobal = addNameGlobal(Style.COLOR_GLOBAL());
+        JComponent nameGlobal = addNameGlobal(1, Style.COLOR_GLOBAL());
         hbox.add(nameGlobal);
-        hbox.addLast(addGlobal(1, Style.COLOR_B()));
+        hbox.add(addGlobal(1, Style.COLOR_B()));
+        hbox.addLast(addTetra(1, Style.COLOR_B()));
         vbox.add(hbox);
         
         hbox = new HBox();
@@ -174,13 +110,11 @@ public class DSIProphet08 extends Synth
         vbox2.add(addEnvelope(1, AMPLIFIER_ENVELOPE, Style.COLOR_C()));
         hbox.addLast(vbox2);
         vbox.add(hbox);
-
+        
         soundPanel.add(vbox, BorderLayout.CENTER);
         soundPanel.makePasteable("layer1");
         soundPanel.setSendsAllParameters(false);
-        addTab("Oscillators and Filters A", soundPanel);
-                
-
+        addTab("Osc Filt 1", soundPanel);
                 
 
         // MODULATION PANEL
@@ -213,11 +147,10 @@ public class DSIProphet08 extends Synth
 
         modulationPanel.add(vbox, BorderLayout.CENTER);
         modulationPanel.makePasteable("layer1");
-        addTab("Modulation A", modulationPanel);
+        addTab("Mod 1", modulationPanel);
 
 
-
-        // SEQUENCE PANEL
+         // SEQUENCE PANEL
                 
         SynthPanel sequence = new SynthPanel(this);
 
@@ -230,14 +163,22 @@ public class DSIProphet08 extends Synth
         
         sequence.add(vbox, BorderLayout.CENTER);
         sequence.makePasteable("layer1");
-        addTab("Sequencer A", sequence);
+        addTab("Seq 1", sequence);
         
         
+
+
+
+
+               
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
-        hbox.add(Strut.makeHorizontalStrut(nameGlobal.getPreferredSize().width));
-        hbox.addLast(addGlobal(2, Style.COLOR_B()));
+//        hbox.add(Strut.makeHorizontalStrut(nameGlobal.getPreferredSize().width));
+        nameGlobal = addNameGlobal(2, Style.COLOR_C());
+        hbox.add(nameGlobal);
+        hbox.add(addGlobal(2, Style.COLOR_B()));
+        hbox.addLast(addTetra(2, Style.COLOR_B()));
         vbox.add(hbox);
         
         hbox = new HBox();
@@ -248,7 +189,7 @@ public class DSIProphet08 extends Synth
         
         hbox = new HBox();
 		vbox2 = new VBox(VBox.TOP_CONSUMES);
-		hbox2 = new HBox();
+	 	hbox2 = new HBox();
         hbox2.add(addSuboscillator(2, Style.COLOR_A()));
         hbox2.addLast(addFilter(2, Style.COLOR_B()));
         vbox2.addLast(hbox2);
@@ -268,10 +209,9 @@ public class DSIProphet08 extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         soundPanel.makePasteable("layer2");
         soundPanel.setSendsAllParameters(false);
-        addTab("Oscillators and Filters B", soundPanel);
+        addTab("Osc Filt 2", soundPanel);
                 
                         
-        
 
         modulationPanel = new SynthPanel(this);
         
@@ -301,9 +241,9 @@ public class DSIProphet08 extends Synth
 
         modulationPanel.add(vbox, BorderLayout.CENTER);
         modulationPanel.makePasteable("layer2");
-        addTab("Modulation B", modulationPanel);
+        addTab("Mod 2", modulationPanel);
 
-        
+
 
         sequence = new SynthPanel(this);
         vbox = new VBox();
@@ -315,11 +255,193 @@ public class DSIProphet08 extends Synth
         
         sequence.add(vbox, BorderLayout.CENTER);
         sequence.makePasteable("layer2");
-        addTab("Sequencer B", sequence);
+        addTab("Seq 2", sequence);
+        
 
 
 
 
+
+        
+        soundPanel = new SynthPanel(this);
+        vbox = new VBox();
+        hbox = new HBox();
+//        hbox.add(Strut.makeHorizontalStrut(nameGlobal.getPreferredSize().width));
+        nameGlobal = addNameGlobal(3, Style.COLOR_C());
+        hbox.add(nameGlobal);
+        hbox.add(addGlobal(3, Style.COLOR_B()));
+        hbox.addLast(addTetra(3, Style.COLOR_B()));
+        vbox.add(hbox);
+        
+        hbox = new HBox();
+        hbox.add(addOscillatorGlobal(3, Style.COLOR_A()));
+        hbox.add(addOscillator(3, 1, Style.COLOR_A()));
+        hbox.addLast(addOscillator(3, 2, Style.COLOR_A()));
+        vbox.add(hbox);
+        
+        hbox = new HBox();
+		 vbox2 = new VBox(VBox.TOP_CONSUMES);
+		 hbox2 = new HBox();
+        hbox2.add(addSuboscillator(3, Style.COLOR_A()));
+        hbox2.addLast(addFilter(3, Style.COLOR_B()));
+        vbox2.addLast(hbox2);
+        
+        hbox2 = new HBox();
+		hbox2.add(addFeedback(3, Style.COLOR_A()));
+        hbox2.addLast(addAmplifier(3, Style.COLOR_C()));
+        vbox2.add(hbox2);
+        hbox.add(vbox2);
+
+        vbox2 = new VBox(VBox.TOP_CONSUMES);
+        vbox2.addLast(addEnvelope(3, FILTER_ENVELOPE, Style.COLOR_B()));
+        vbox2.add(addEnvelope(3, AMPLIFIER_ENVELOPE, Style.COLOR_C()));
+        hbox.addLast(vbox2);
+        vbox.add(hbox);
+        
+        soundPanel.add(vbox, BorderLayout.CENTER);
+        soundPanel.makePasteable("layer3");
+        soundPanel.setSendsAllParameters(false);
+        addTab("Osc Filt 3", soundPanel);
+                
+
+     modulationPanel = new SynthPanel(this);
+        
+        vbox = new VBox();
+        
+        hbox = new HBox();
+        hbox.add(addExternalModulation(3, "Velocity", "velocity", Style.COLOR_C()));
+        hbox.addLast(addEnvelope(3, THIRD_ENVELOPE, Style.COLOR_C()));
+        vbox.add(hbox);
+        
+        hbox = new HBox();
+        hbox.add(addExternalModulation(3, "Aftertouch", "pressure", Style.COLOR_C()));
+        hbox.add(addExternalModulation(3, "Mod Wheel", "wheel", Style.COLOR_C()));
+        hbox.add(addExternalModulation(3, "Breath", "breath", Style.COLOR_C()));
+        hbox.addLast(addExternalModulation(3, "Foot Control", "foot", Style.COLOR_C()));
+        vbox.add(hbox);
+                
+        for(int i = 1; i <= 4; i+=2)
+            {
+            hbox = new HBox();
+            hbox.add(addModulation(3, i, Style.COLOR_A()));
+            hbox.add(addModulation(3, i+1, Style.COLOR_A()));
+            hbox.add(addLFO(3, i, Style.COLOR_B()));
+            hbox.addLast(addLFO(3, i+1, Style.COLOR_B()));
+            vbox.add(hbox);
+            }
+
+        modulationPanel.add(vbox, BorderLayout.CENTER);
+        modulationPanel.makePasteable("layer3");
+        addTab("Mod 3", modulationPanel);
+
+
+
+
+         sequence = new SynthPanel(this);
+
+        vbox = new VBox();
+        vbox.add(addSequencer(3, Style.COLOR_C()));
+        vbox.add(addSequencerTrack(3, 1, Style.COLOR_A()));
+        vbox.add(addSequencerTrack(3, 2, Style.COLOR_B()));
+        vbox.add(addSequencerTrack(3, 3, Style.COLOR_A()));
+        vbox.add(addSequencerTrack(3, 4, Style.COLOR_B()));
+        
+        sequence.add(vbox, BorderLayout.CENTER);
+        sequence.makePasteable("layer3");
+        addTab("Seq 3", sequence);
+        
+        
+
+
+
+        soundPanel = new SynthPanel(this);
+        vbox = new VBox();
+        hbox = new HBox();
+//        hbox.add(Strut.makeHorizontalStrut(nameGlobal.getPreferredSize().width));
+        nameGlobal = addNameGlobal(4, Style.COLOR_C());
+        hbox.add(nameGlobal);
+        hbox.add(addGlobal(4, Style.COLOR_B()));
+        hbox.addLast(addTetra(4, Style.COLOR_B()));
+       vbox.add(hbox);
+        
+        hbox = new HBox();
+        hbox.add(addOscillatorGlobal(4, Style.COLOR_A()));
+        hbox.add(addOscillator(4, 1, Style.COLOR_A()));
+        hbox.addLast(addOscillator(4, 2, Style.COLOR_A()));
+        vbox.add(hbox);
+        
+        hbox = new HBox();
+		 vbox2 = new VBox(VBox.TOP_CONSUMES);
+		 hbox2 = new HBox();
+        hbox2.add(addSuboscillator(4, Style.COLOR_A()));
+        hbox2.addLast(addFilter(4, Style.COLOR_B()));
+        vbox2.addLast(hbox2);
+        
+        hbox2 = new HBox();
+		hbox2.add(addFeedback(4, Style.COLOR_A()));
+        hbox2.addLast(addAmplifier(4, Style.COLOR_C()));
+        vbox2.add(hbox2);
+        hbox.add(vbox2);
+
+        vbox2 = new VBox(VBox.TOP_CONSUMES);
+        vbox2.addLast(addEnvelope(4, FILTER_ENVELOPE, Style.COLOR_B()));
+        vbox2.add(addEnvelope(4, AMPLIFIER_ENVELOPE, Style.COLOR_C()));
+        hbox.addLast(vbox2);
+        vbox.add(hbox);
+        
+        soundPanel.add(vbox, BorderLayout.CENTER);
+        soundPanel.makePasteable("layer4");
+        soundPanel.setSendsAllParameters(false);
+        addTab("Osc Filt 4", soundPanel);
+                
+
+
+        modulationPanel = new SynthPanel(this);
+        
+        vbox = new VBox();
+        
+        hbox = new HBox();
+        hbox.add(addExternalModulation(4, "Velocity", "velocity", Style.COLOR_C()));
+        hbox.addLast(addEnvelope(4, THIRD_ENVELOPE, Style.COLOR_C()));
+        vbox.add(hbox);
+        
+        hbox = new HBox();
+        hbox.add(addExternalModulation(4, "Aftertouch", "pressure", Style.COLOR_C()));
+        hbox.add(addExternalModulation(4, "Mod Wheel", "wheel", Style.COLOR_C()));
+        hbox.add(addExternalModulation(4, "Breath", "breath", Style.COLOR_C()));
+        hbox.addLast(addExternalModulation(4, "Foot Control", "foot", Style.COLOR_C()));
+        vbox.add(hbox);
+                
+        for(int i = 1; i <= 4; i+=2)
+            {
+            hbox = new HBox();
+            hbox.add(addModulation(4, i, Style.COLOR_A()));
+            hbox.add(addModulation(4, i+1, Style.COLOR_A()));
+            hbox.add(addLFO(4, i, Style.COLOR_B()));
+            hbox.addLast(addLFO(4, i+1, Style.COLOR_B()));
+            vbox.add(hbox);
+            }
+
+        modulationPanel.add(vbox, BorderLayout.CENTER);
+        modulationPanel.makePasteable("layer4");
+        addTab("Mod 4", modulationPanel);
+        
+
+
+        sequence = new SynthPanel(this);
+        vbox = new VBox();
+        vbox.add(addSequencer(4, Style.COLOR_C()));
+        vbox.add(addSequencerTrack(4, 1, Style.COLOR_A()));
+        vbox.add(addSequencerTrack(4, 2, Style.COLOR_B()));
+        vbox.add(addSequencerTrack(4, 3, Style.COLOR_A()));
+        vbox.add(addSequencerTrack(4, 4, Style.COLOR_B()));
+        
+        sequence.add(vbox, BorderLayout.CENTER);
+        sequence.makePasteable("layer4");
+        addTab("Seq 4", sequence);
+        
+        
+/*
         // TETRA PANEL
                 
         SynthPanel tetra = new SynthPanel(this);
@@ -327,41 +449,32 @@ public class DSIProphet08 extends Synth
         vbox = new VBox();
         vbox.add(addTetra(1, Style.COLOR_C()));
         vbox.add(addTetra(2, Style.COLOR_B()));
-        
+        vbox.add(addTetra(3, Style.COLOR_C()));
+        vbox.add(addTetra(4, Style.COLOR_B()));
+
         tetra.add(vbox, BorderLayout.CENTER);
         addTab("Extra", tetra);
-        
+        */
         
 
         model.set("name", "Untitled");
-        model.set("bank", 0);
         model.set("number", 0);
                 
         loadDefaults();        
         }
                 
-    public String getDefaultResourceFileName() { return "DSIProphet08.init"; }
-    public String getHTMLResourceFileName() { return "DSIProphet08.html"; }
+    public String getDefaultResourceFileName() { return "DSITetraCombo.init"; }
+    public String getHTMLResourceFileName() { return "DSITetraCombo.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
-        String[] banks = BANKS_PROPHET;
-        int t = getType();
-        if (t == SYNTH_TYPE_TETRA)
-        	banks = BANKS_TETRA;
-        else if (t == SYNTH_TYPE_MOPHO || t == SYNTH_TYPE_MOPHO_KEYBOARD)
-        	banks = BANKS_MOPHO;
-        else if (t == SYNTH_TYPE_MOPHO_X4)
-        	banks = BANKS_MOPHO_X4;
-        	
-        JComboBox bank = new JComboBox(banks);
         int num = model.get("number") + 1;
         JTextField number = new JTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);
         
         while(true)
             {
-            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number");
+            boolean result = showMultiOption(this, new String[] { "Patch Number"}, 
+                new JComponent[] { number }, title, "Enter Patch number");
                 
             if (result == false) 
                 return false;
@@ -381,20 +494,17 @@ public class DSIProphet08 extends Synth
                 
             n--;
                                 
-            int i = bank.getSelectedIndex();
-                        
-            change.set("bank", i);
             change.set("number", n);
                         
             return true;
             }
         }
-    
+        
     /** Add the global patch category (name, id, number, etc.) */
-    public JComponent addNameGlobal(Color color)
+    public JComponent addNameGlobal(int layer, Color color)
         {
-        Category globalCategory = new Category(this, getSynthName(), color);
-        globalCategory.makeUnresettable();
+        Category globalCategory = new Category(this, (layer == 1 ? getSynthName() : "Tetra Voice " + layer), color);
+        if (layer == 1) globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -404,7 +514,10 @@ public class DSIProphet08 extends Synth
         comp = new PatchDisplay(this, 4);
         vbox.add(comp);
         
-        comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 characters.")
+        comp = new StringComponent(
+        	(layer == 1 ? "Patch (and Voice 1) Name" : "Voice " + layer + " Name"), 
+        	this, 
+        	(layer == 1 ? "name" : "name" + layer), 16, "Name must be up to 16 characters.")
             {
             public String replace(String val)
                 {
@@ -414,45 +527,22 @@ public class DSIProphet08 extends Synth
             public void update(String key, Model model)
                 {
                 super.update(key, model);
-                updateTitle();
+                if (layer == 1)
+                	updateTitle();
                 }
             };
         vbox.add(comp);
         hbox.add(vbox);
 
+        /*
         vbox = new VBox();
-        
-        synthTypes.setSelectedIndex(type);
-        synthTypes.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                setType(synthTypes.getSelectedIndex(), true);
-                }
-            });
-        synthTypes.putClientProperty("JComponent.sizeVariant", "small");
-        synthTypes.setEditable(false);
-        synthTypes.setFont(Style.SMALL_FONT());
-
-		JLabel label = new JLabel("  Synthesizer Type");
-        label.setFont(Style.SMALL_FONT());
-        label.setBackground(Style.BACKGROUND_COLOR());
-        label.setForeground(Style.TEXT_COLOR());
-
-		JPanel pan = new JPanel();
-		pan.setBackground(Style.BACKGROUND_COLOR());
-		pan.setLayout(new BorderLayout());
-		pan.add(label, BorderLayout.NORTH);
-		pan.add(synthTypes, BorderLayout.CENTER);
-		vbox.add(pan);
-
         params = KEYBOARD_MODES;
-        comp = new Chooser("Keyboard Mode [PT]", this, "keyboardmode", params);
+        comp = new Chooser("Keyboard Mode", this, "keyboardmode", params);
         vbox.add(comp);
-                
+        
         hbox.add(vbox);
 
-        comp = new LabelledDial("Split Point [PT]", this, "splitpoint", color, 0, 127)
+        comp = new LabelledDial("Split Point", this, "splitpoint", color, 0, 127)
             {
             public String map(int val)
                 {
@@ -460,6 +550,7 @@ public class DSIProphet08 extends Synth
                 }
             };
         hbox.add(comp);
+        */
 
 
         globalCategory.add(hbox, BorderLayout.WEST);
@@ -480,17 +571,28 @@ public class DSIProphet08 extends Synth
 
         HBox hbox2 = new HBox();
 
-        CheckBox unison = new CheckBox("Unison [PTKX]", this, "layer" + layer + "unison");
-        unison.addToWidth(1);
-
-       	comp = new CheckBox("Arpeggiator", this, "layer" + layer + "arpeggiator");
-        comp.setPreferredSize(unison.getPreferredSize());
-        hbox2.add(comp);
+		CheckBox unison = null;
+		CheckBox arpeggiator = null;
+		JComponent c2 = null;
+	    arpeggiator = new CheckBox((layer == 1 ? "Arpeggiator" : "Arpeggiator [-]"), this, "layer" + layer + "arpeggiator");
+	       	 
+	    if (layer == 1)
+	    	{
+	    	CheckBox temp = new CheckBox("Arpeggiator [-]", this, "throwaway");
+	    	arpeggiator.setPreferredSize(temp.getPreferredSize());
+//	    	arpeggiator.setMinimumSize(temp.getMinimumSize());
+	    	}
+	       	 
+	        hbox2.add(arpeggiator);
         
         params = ARPEGGIATOR_MODES;
-        JComponent c2 = comp = new Chooser("Arpeggiator Mode", this, "layer" + layer + "arpeggiatormode", params);
+         c2 = comp = new Chooser((layer == 1 ? "Arpeggiator Mode" : "Arpeggiator Mode [-]"), this, "layer" + layer + "arpeggiatormode", params);
         hbox2.add(comp);
-        
+ 
+         unison = new CheckBox((layer == 1 ? "Unison" : "Unison [-]"), this, "layer" + layer + "unison");
+        unison.setPreferredSize(arpeggiator.getPreferredSize());
+
+       
         params = CLOCK_DIVIDES;
         JComponent c3 = comp = new Chooser("Clock Divide", this, "layer" + layer + "clockdivide", params);
         hbox2.add(comp);
@@ -498,18 +600,28 @@ public class DSIProphet08 extends Synth
         vbox.add(hbox2);
 
         hbox2 = new HBox();
-                
-        hbox2.add(unison);
+             
+	        hbox2.add(unison);
+
+/*	    else
+	    	{
+	    	VBox vbox2 = new VBox();
+	    	vbox2.add(unison);
+	    	hbox.add(vbox2);
+	    	}
+*/
         
         params = KEY_MODES;
-        comp = new Chooser("Unison/Key Assign", this, "layer" + layer + "unisonkeymode", params);
+        comp = new Chooser((layer == 1 ? "Unison/Key Assign" : "Unison/Key Assign [-]"), this, "layer" + layer + "unisonkeymode", params);
         comp.setPreferredSize(c2.getPreferredSize());
+//        else comp.setPreferredSize(c3.getPreferredSize());
         hbox2.add(comp);
 
-        params = UNISON_MODES;
-        comp = new Chooser("Unison Mode [PTKX]", this, "layer" + layer + "unisonmode", params);
-        comp.setPreferredSize(c3.getPreferredSize());
-        hbox2.add(comp);
+		
+			params = UNISON_MODES;
+			comp = new Chooser((layer == 1 ? "Unison Mode" : "Unison Mode [-]"), this, "layer" + layer + "unisonmode", params);
+			comp.setPreferredSize(c3.getPreferredSize());
+			hbox2.add(comp);
 
         vbox.add(hbox2);
 
@@ -588,6 +700,7 @@ public class DSIProphet08 extends Synth
         	public void perform(int i)
         		{
         		getModel().set("layer" + layer + "dco" + osc + "shape", PRESET_VALS[i]);
+//        		testit();
         		}
         	};
         vbox.add(button);
@@ -632,6 +745,7 @@ public class DSIProphet08 extends Synth
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
+        
 
     public JComponent addSuboscillator(int layer, Color color)
         {
@@ -643,11 +757,9 @@ public class DSIProphet08 extends Synth
         HBox hbox = new HBox();
                
         comp = new LabelledDial("Level 1", this, "layer" + layer + "tetrasuboscillator1level", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("[TMKX]");
         hbox.add(comp);
 
         comp = new LabelledDial("Level 2", this, "layer" + layer + "tetrasuboscillator2level", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("[TMKX]");
         hbox.add(comp);
                 
         category.add(hbox, BorderLayout.CENTER);
@@ -657,25 +769,24 @@ public class DSIProphet08 extends Synth
 
     public JComponent addFeedback(int layer, Color color)
         {
-        Category category = new Category(this, "Feedback / Audio In", color);
+        Category category = new Category(this, "Feedback", color);
         category.makePasteable("layer" + layer + "tetrasuboscillator");
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
                
-        comp = new LabelledDial("Feedback Volume [TKX]", this, "layer" + layer + "tetrafeedbackvolume", color, 0, 127);
-		((LabelledDial)comp).addAdditionalLabel(" Audio Input Lvl [M] ");
+        comp = new LabelledDial("Feedback", this, "layer" + layer + "tetrafeedbackvolume", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("Volume");
         hbox.add(comp);
 
         comp = new LabelledDial("Feedback", this, "layer" + layer + "tetrafeedbackgain", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("Gain [TKX]");
+        ((LabelledDial)comp).addAdditionalLabel("Gain");
         hbox.add(comp);
                         
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
-
 
     public JComponent addFilter(int layer, Color color)
         {
@@ -785,15 +896,14 @@ public class DSIProphet08 extends Synth
         
                
         comp = new LabelledDial("Initial Level", this, "layer" + layer + "vcainitiallevel", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("[PTMK]");
         hbox.add(comp);
                 
-        comp = new LabelledDial("Spread", this, "layer" + layer + "vcaoutputspread", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("[PTX]");
+        comp = new LabelledDial("Pan", this, "layer" + layer + "vcaoutputspread", color, 0, 127);
         hbox.add(comp);
 
         comp = new LabelledDial("Voice", this, "layer" + layer + "vcavoicevolume", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Volume");
+//        ((LabelledDial)comp).addAdditionalLabel(layer == 1 ? "Volume (A)" : (layer == 3 ? "Volume (B)" : "Volume"));
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.WEST);
@@ -868,6 +978,7 @@ public class DSIProphet08 extends Synth
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
+
 
 
 
@@ -991,7 +1102,7 @@ public class DSIProphet08 extends Synth
     /** Add a Tetra category */
     public JComponent addTetra(int layer, Color color)
         {
-        Category category = new Category(this, "Tetra Layer " + (layer == 1 ? "A / Mopho" : "B"), color);
+        Category category = new Category(this, "Extra", color);
         category.makePasteable("layer" + layer + "tetra");
                 
         JComponent comp;
@@ -1000,81 +1111,65 @@ public class DSIProphet08 extends Synth
         VBox vbox = new VBox();
 
         params = PUSH_IT_MODES;
-        comp = new Chooser("Push-It Mode " + (layer == 1 ? "[TMXK]" : "[T]"), this, "layer" + layer + "tetrapushitmode", params);
+        comp = new Chooser("Push-It Mode", this, "layer" + layer + "tetrapushitmode", params);
         vbox.add(comp);
-		hbox.add(vbox);
                                 
-        comp = new LabelledDial("Push-It Note", this, "layer" + layer + "tetrapushitnote", color, 0, 127)
+ 			
+		if (layer == 1)
+			{
+			params = tetraAssignableParameters;
+	        comp = new Chooser("Assignable Parameter 1", this, "layer1tetraassignableparameter1", params);
+	        vbox.add(comp);
+			}
+		else if (layer == 2)
+			{
+			params = tetraAssignableParameters;
+	        comp = new Chooser("Assignable Parameter 2", this, "layer1tetraassignableparameter2", params);
+	        vbox.add(comp);
+	        }
+		else if (layer == 3)
+			{
+			params = tetraAssignableParameters;
+	        comp = new Chooser("Assignable Parameter 3", this, "layer1tetraassignableparameter3", params);
+	        vbox.add(comp);
+			}
+		else
+			{
+			params = tetraAssignableParameters;
+	        comp = new Chooser("Assignable Parameter 4", this, "layer1tetraassignableparameter4", params);
+	        vbox.add(comp);
+	        }
+			
+			hbox.add(vbox);
+
+		if (layer == 1)
+			{
+// DSI tells me this was basically used by the SoundTower editor and is meaningless.  So we build it to create the parameter but don't show it
+			comp = new LabelledDial("Editor", this, "layer" + layer + "tetraeditorbyte", color, 0, 127);
+        	((LabelledDial)comp).addAdditionalLabel("Byte");
+			// hbox.add(comp);
+			}
+
+
+       comp = new LabelledDial("Push-It", this, "layer" + layer + "tetrapushitnote", color, 0, 127)
         	{
             public String map(int val)
                 {
                 return (NOTES[val % 12] + " " + (val / 12));
                 }
         	};
-        ((LabelledDial)comp).addAdditionalLabel(layer == 1 ? "[TMXK]" : "[T]");
+        ((LabelledDial)comp).addAdditionalLabel("Note");
 		hbox.add(comp);
 
-        comp = new LabelledDial("Push-It Velocity ", this, "layer" + layer + "tetrapushitvelocity", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel(layer == 1 ? "[TMXK]" : "[T]");
+        comp = new LabelledDial("Push-It", this, "layer" + layer + "tetrapushitvelocity", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("Velocity");
 		hbox.add(comp);
 
-		if (layer == 1)
-			{
-			VBox vbox2 = new VBox();
-			
-			params = (getType() == SYNTH_TYPE_MOPHO ? mophoAssignableParameters : tetraAssignableParameters);
-	        assignableParameterChoosers[0] = new Chooser("Assignable Parameter 1 [TM]", this, "layer" + layer + "tetraassignableparameter1", params);
-	        vbox2.add(assignableParameterChoosers[0]);
-
-			params = (getType() == SYNTH_TYPE_MOPHO ? mophoAssignableParameters : tetraAssignableParameters);
-	        assignableParameterChoosers[1] = new Chooser("Assignable Parameter 2 [TM]", this, "layer" + layer + "tetraassignableparameter2", params);
-	        vbox2.add(assignableParameterChoosers[1]);
-			
-			hbox.add(vbox2);
-			vbox2 = new VBox();
-			
-			params = (getType() == SYNTH_TYPE_MOPHO ? mophoAssignableParameters : tetraAssignableParameters);
-	        assignableParameterChoosers[2] = new Chooser("Assignable Parameter 3 [TM]", this, "layer" + layer + "tetraassignableparameter3", params);
-	        vbox2.add(assignableParameterChoosers[2]);
-
-			params = (getType() == SYNTH_TYPE_MOPHO ? mophoAssignableParameters : tetraAssignableParameters);
-	        assignableParameterChoosers[3] = new Chooser("Assignable Parameter 4 [TM]", this, "layer" + layer + "tetraassignableparameter4", params);
-	        vbox2.add(assignableParameterChoosers[3]);
-			
-			hbox.add(vbox2);
-
-// DSI tells me this was basically used by the SoundTower editor and is meaningless.  So we build it to create the parameter but don't show it
-			comp = new LabelledDial("Editor", this, "layer" + layer + "tetraeditorbyte", color, 0, 127);
-        	((LabelledDial)comp).addAdditionalLabel("Byte [TM]");
-			// hbox.add(comp);
-			}
                                 
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
 
-
-	Chooser[] assignableParameterChoosers = new Chooser[4];
-
-	public void updateAssignableParameterChoosers()
-		{
-		if (assignableParameterChoosers[0] == null) // not ready yet
-			return;
-		for(int i = 0; i < assignableParameterChoosers.length; i++)
-			{
-                undo.push(getModel());
-                setSendMIDI(false);
-                boolean currentPush = undo.getWillPush();
-
-			int val = assignableParameterChoosers[i].getIndex();
-			String label = assignableParameterChoosers[i].getLabelText();
-			assignableParameterChoosers[i].setElements(label, getType() == SYNTH_TYPE_MOPHO ? mophoAssignableParameters : tetraAssignableParameters);
-			assignableParameterChoosers[i].setIndex(val);
-			
-                undo.setWillPush(currentPush);
-                setSendMIDI(true);
-			}
-		}
 
 
 
@@ -1083,9 +1178,7 @@ public class DSIProphet08 extends Synth
     HashMap parametersToIndex = new HashMap();
 
 
-    /** List of all DSI Prophet 08 parameters in order,
-    	plus additional Tetra- or Mopho-only parameters mapped
-    	in the the appropriate location given their NRPN values. */
+    /** List of all Tetra- parameters mapped in the the appropriate location given their NRPN values. */
                 
     final static String[] parameters = new String[]
     {
@@ -1228,8 +1321,8 @@ public class DSIProphet08 extends Synth
     "layer1tetrafeedbackvolume",    
     "layer1tetraeditorbyte",
 
-    "splitpoint",
-    "keyboardmode",
+    "---",			// "splitpoint",
+    "---",			// "keyboardmode",
 
     "layer1track1note1",    
     "layer1track1note2",    
@@ -1454,8 +1547,8 @@ public class DSIProphet08 extends Synth
     "layer2tetrafeedbackvolume",    
     "---",
 
-    "---",
-    "---",
+    "---",			// "splitpoint",
+    "---",			// "keyboardmode",
 
     "layer2track1note1",    
     "layer2track1note2",    
@@ -1537,10 +1630,467 @@ public class DSIProphet08 extends Synth
     "---",
     "---",
     "---",
+    "---",
+
+    "layer3dco1frequency",    
+    "layer3dco1finetune",    
+    "layer3dco1shape",    
+    "layer3dco1glide",    
+    "layer3dco1key",    
+    "layer3dco2frequency",    
+    "layer3dco2finetune",    
+    "layer3dco2shape",    
+    "layer3dco2glide",    
+    "layer3dco2key",    
+
+    "layer3sync",    
+    "layer3glidemode",    
+    "layer3slop",    
+    "layer3mix",    
+    "layer3noise",    
+
+    "layer3vcffrequency",    
+    "layer3vcfresonance",    
+    "layer3vcfkeyboardamount",    
+    "layer3vcfaudiomodulation",    
+    "layer3vcfpoles",    
+
+    "layer3env1amount",    
+    "layer3env1velocityamount",    
+    "layer3env1delay",    
+    "layer3env1attack",    
+    "layer3env1decay",    
+    "layer3env1sustain",    
+    "layer3env1release",    
+
+    "layer3vcainitiallevel",    
+    "layer3vcaoutputspread",    
+    "layer3vcavoicevolume",    
+
+    "layer3env2amount",    
+    "layer3env2velocityamount",    
+    "layer3env2delay",    
+    "layer3env2attack",    
+    "layer3env2decay",    
+    "layer3env2sustain",    
+    "layer3env2release",    
+
+
+    "layer3lfo1frequency",    
+    "layer3lfo1shape",    
+    "layer3lfo1amount",    
+    "layer3lfo1moddestination",    
+    "layer3lfo1keysync",    
+
+    "layer3lfo2frequency",    
+    "layer3lfo2shape",    
+    "layer3lfo2amount",    
+    "layer3lfo2moddestination",    
+    "layer3lfo2keysync",    
+
+    "layer3lfo3frequency",    
+    "layer3lfo3shape",    
+    "layer3lfo3amount",    
+    "layer3lfo3moddestination",    
+    "layer3lfo3keysync",    
+
+    "layer3lfo4frequency",    
+    "layer3lfo4shape",    
+    "layer3lfo4amount",    
+    "layer3lfo4moddestination",    
+    "layer3lfo4keysync",
+
+    "layer3env3moddestination",    
+    "layer3env3amount",    
+    "layer3env3velocityamount",    
+    "layer3env3delay",    
+    "layer3env3attack",    
+    "layer3env3decay",    
+    "layer3env3sustain",    
+    "layer3env3release",  
+
+
+    "layer3mod1source",    
+    "layer3mod1amount",    
+    "layer3mod1destination",    
+
+    "layer3mod2source",    
+    "layer3mod2amount",    
+    "layer3mod2destination",    
+
+    "layer3mod3source",    
+    "layer3mod3amount",    
+    "layer3mod3destination",    
+
+    "layer3mod4source",    
+    "layer3mod4amount",    
+    "layer3mod4destination",    
+
+    "layer3track1destination",    
+    "layer3track2destination",    
+    "layer3track3destination",    
+    "layer3track4destination",    
+
+
+    "layer3wheelamount",    
+    "layer3wheeldestination",    
+    "layer3pressureamount",    
+    "layer3pressuredestination",    
+    "layer3breathamount",    
+    "layer3breathdestination",    
+    "layer3velocityamount",    
+    "layer3velocitydestination",    
+    "layer3footamount",    
+    "layer3footdestination",    
+
+    "layer3tempo",    
+    "layer3clockdivide",    
+    "layer3pitchbendrange",    
+    "layer3sequencertrigger",    
+    "layer3unisonmode",    
+    "layer3unisonkeymode",    
+    "layer3arpeggiatormode",    
+
+    "layer3env3repeat",    
+    "layer3unison",    
+    "layer3arpeggiator",    
+    "layer3sequencer",    
+
+    "---",
+    "---",
+    "---",
+    "---",    
+    "---",    
+    "---",    
+    "---",    
+    "---",
+    "layer3tetrafeedbackgain",    
+    "layer3tetrapushitnote",    
+    "layer3tetrapushitvelocity",    
+    "layer3tetrapushitmode",    
+    "layer3tetrasuboscillator1level",    
+    "layer3tetrasuboscillator2level",    
+    "layer3tetrafeedbackvolume",    
+    "---",
+
+    "---",			// "splitpoint",
+    "---",			// "keyboardmode",
+
+    "layer3track1note1",    
+    "layer3track1note2",    
+    "layer3track1note3",    
+    "layer3track1note4",    
+    "layer3track1note5",    
+    "layer3track1note6",    
+    "layer3track1note7",    
+    "layer3track1note8",    
+    "layer3track1note9",    
+    "layer3track1note10",    
+    "layer3track1note11",    
+    "layer3track1note12",    
+    "layer3track1note13",    
+    "layer3track1note14",    
+    "layer3track1note15",    
+    "layer3track1note16",    
+    "layer3track2note1",    
+    "layer3track2note2",    
+    "layer3track2note3",    
+    "layer3track2note4",    
+    "layer3track2note5",    
+    "layer3track2note6",    
+    "layer3track2note7",    
+    "layer3track2note8",    
+    "layer3track2note9",    
+    "layer3track2note10",    
+    "layer3track2note11",    
+    "layer3track2note12",    
+    "layer3track2note13",    
+    "layer3track2note14",    
+    "layer3track2note15",    
+    "layer3track2note16",    
+    "layer3track3note1",    
+    "layer3track3note2",    
+    "layer3track3note3",    
+    "layer3track3note4",    
+    "layer3track3note5",    
+    "layer3track3note6",    
+    "layer3track3note7",    
+    "layer3track3note8",    
+    "layer3track3note9",    
+    "layer3track3note10",    
+    "layer3track3note11",    
+    "layer3track3note12",    
+    "layer3track3note13",    
+    "layer3track3note14",    
+    "layer3track3note15",    
+    "layer3track3note16",    
+    "layer3track4note1",    
+    "layer3track4note2",    
+    "layer3track4note3",    
+    "layer3track4note4",    
+    "layer3track4note5",    
+    "layer3track4note6",    
+    "layer3track4note7",    
+    "layer3track4note8",    
+    "layer3track4note9",    
+    "layer3track4note10",    
+    "layer3track4note11",    
+    "layer3track4note12",    
+    "layer3track4note13",    
+    "layer3track4note14",    
+    "layer3track4note15",    
+    "layer3track4note16",    
+
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+
+
+    "layer4dco1frequency",    
+    "layer4dco1finetune",    
+    "layer4dco1shape",    
+    "layer4dco1glide",    
+    "layer4dco1key",    
+    "layer4dco2frequency",    
+    "layer4dco2finetune",    
+    "layer4dco2shape",    
+    "layer4dco2glide",    
+    "layer4dco2key",    
+
+    "layer4sync",    
+    "layer4glidemode",    
+    "layer4slop",    
+    "layer4mix",    
+    "layer4noise",    
+
+    "layer4vcffrequency",    
+    "layer4vcfresonance",    
+    "layer4vcfkeyboardamount",    
+    "layer4vcfaudiomodulation",    
+    "layer4vcfpoles",    
+
+    "layer4env1amount",    
+    "layer4env1velocityamount",    
+    "layer4env1delay",    
+    "layer4env1attack",    
+    "layer4env1decay",    
+    "layer4env1sustain",    
+    "layer4env1release",    
+
+    "layer4vcainitiallevel",    
+    "layer4vcaoutputspread",    
+    "layer4vcavoicevolume",    
+
+    "layer4env2amount",    
+    "layer4env2velocityamount",    
+    "layer4env2delay",    
+    "layer4env2attack",    
+    "layer4env2decay",    
+    "layer4env2sustain",    
+    "layer4env2release",    
+
+
+    "layer4lfo1frequency",    
+    "layer4lfo1shape",    
+    "layer4lfo1amount",    
+    "layer4lfo1moddestination",    
+    "layer4lfo1keysync",    
+
+    "layer4lfo2frequency",    
+    "layer4lfo2shape",    
+    "layer4lfo2amount",    
+    "layer4lfo2moddestination",    
+    "layer4lfo2keysync",    
+
+    "layer4lfo3frequency",    
+    "layer4lfo3shape",    
+    "layer4lfo3amount",    
+    "layer4lfo3moddestination",    
+    "layer4lfo3keysync",    
+
+    "layer4lfo4frequency",    
+    "layer4lfo4shape",    
+    "layer4lfo4amount",    
+    "layer4lfo4moddestination",    
+    "layer4lfo4keysync",
+
+    "layer4env3moddestination",    
+    "layer4env3amount",    
+    "layer4env3velocityamount",    
+    "layer4env3delay",    
+    "layer4env3attack",    
+    "layer4env3decay",    
+    "layer4env3sustain",    
+    "layer4env3release",  
+
+
+    "layer4mod1source",    
+    "layer4mod1amount",    
+    "layer4mod1destination",    
+
+    "layer4mod2source",    
+    "layer4mod2amount",    
+    "layer4mod2destination",    
+
+    "layer4mod3source",    
+    "layer4mod3amount",    
+    "layer4mod3destination",    
+
+    "layer4mod4source",    
+    "layer4mod4amount",    
+    "layer4mod4destination",    
+
+    "layer4track1destination",    
+    "layer4track2destination",    
+    "layer4track3destination",    
+    "layer4track4destination",    
+
+
+    "layer4wheelamount",    
+    "layer4wheeldestination",    
+    "layer4pressureamount",    
+    "layer4pressuredestination",    
+    "layer4breathamount",    
+    "layer4breathdestination",    
+    "layer4velocityamount",    
+    "layer4velocitydestination",    
+    "layer4footamount",    
+    "layer4footdestination",    
+
+    "layer4tempo",    
+    "layer4clockdivide",    
+    "layer4pitchbendrange",    
+    "layer4sequencertrigger",    
+    "layer4unisonmode",    
+    "layer4unisonkeymode",    
+    "layer4arpeggiatormode",    
+
+    "layer4env3repeat",    
+    "layer4unison",    
+    "layer4arpeggiator",    
+    "layer4sequencer",    
+
+    "---",
+    "---",
+    "---",
+    "---",    
+    "---",    
+    "---",    
+    "---",    
+    "---",
+    "layer4tetrafeedbackgain",    
+    "layer4tetrapushitnote",    
+    "layer4tetrapushitvelocity",    
+    "layer4tetrapushitmode",    
+    "layer4tetrasuboscillator1level",    
+    "layer4tetrasuboscillator2level",    
+    "layer4tetrafeedbackvolume",    
+    "---",
+
+    "---",			// "splitpoint",
+    "---",			// "keyboardmode",
+
+    "layer4track1note1",    
+    "layer4track1note2",    
+    "layer4track1note3",    
+    "layer4track1note4",    
+    "layer4track1note5",    
+    "layer4track1note6",    
+    "layer4track1note7",    
+    "layer4track1note8",    
+    "layer4track1note9",    
+    "layer4track1note10",    
+    "layer4track1note11",    
+    "layer4track1note12",    
+    "layer4track1note13",    
+    "layer4track1note14",    
+    "layer4track1note15",    
+    "layer4track1note16",    
+    "layer4track2note1",    
+    "layer4track2note2",    
+    "layer4track2note3",    
+    "layer4track2note4",    
+    "layer4track2note5",    
+    "layer4track2note6",    
+    "layer4track2note7",    
+    "layer4track2note8",    
+    "layer4track2note9",    
+    "layer4track2note10",    
+    "layer4track2note11",    
+    "layer4track2note12",    
+    "layer4track2note13",    
+    "layer4track2note14",    
+    "layer4track2note15",    
+    "layer4track2note16",    
+    "layer4track3note1",    
+    "layer4track3note2",    
+    "layer4track3note3",    
+    "layer4track3note4",    
+    "layer4track3note5",    
+    "layer4track3note6",    
+    "layer4track3note7",    
+    "layer4track3note8",    
+    "layer4track3note9",    
+    "layer4track3note10",    
+    "layer4track3note11",    
+    "layer4track3note12",    
+    "layer4track3note13",    
+    "layer4track3note14",    
+    "layer4track3note15",    
+    "layer4track3note16",    
+    "layer4track4note1",    
+    "layer4track4note2",    
+    "layer4track4note3",    
+    "layer4track4note4",    
+    "layer4track4note5",    
+    "layer4track4note6",    
+    "layer4track4note7",    
+    "layer4track4note8",    
+    "layer4track4note9",    
+    "layer4track4note10",    
+    "layer4track4note11",    
+    "layer4track4note12",    
+    "layer4track4note13",    
+    "layer4track4note14",    
+    "layer4track4note15",    
+    "layer4track4note16",    
+
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
+    "---",
     "---"
+
     };
     
     
+    public final int LAYER_OFFSET = 256;
+    public final int BASE_OFFSET = 512;
+    public final int LAYER_SIZE = 200;
 
     public Object[] emitAll(String key)
         {
@@ -1550,13 +2100,14 @@ public class DSIProphet08 extends Synth
         int index;
         int value;
         
-        if (key.equals("name"))
+        if (key.startsWith("name"))
             {
+            int pos = (key.equals("name") ? 0 : (key.equals("name2") ? 1 : (key.equals("name3") ? 2 : 3))) * LAYER_OFFSET + BASE_OFFSET + 184;
             Object[] ret = new Object[4 * 16];
-            char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
+            char[] name = (model.get(key, "Untitled") + "                ").toCharArray();
             for(int i = 0; i < 16; i++)
                 {
-                Object[] nrpn = buildNRPN(getChannelOut(), i + 184, name[i]);
+                Object[] nrpn = buildNRPN(getChannelOut(), i + pos, name[i]);
                 System.arraycopy(nrpn, 0, ret, i * 4, 4);
                 }
             return ret;
@@ -1565,34 +2116,27 @@ public class DSIProphet08 extends Synth
             {
             int val = model.get(key, 0);
             
-			if (key.startsWith("layer1tetraassignableparameter") ||
-				key.startsWith("layer2tetraassignableparameter"))
+			if (key.equals("layer1tetraassignableparameter1") || 
+    			key.equals("layer1tetraassignableparameter2") || 
+    			key.equals("layer1tetraassignableparameter3") || 
+    			key.equals("layer1tetraassignableparameter4"))
 				{
 				if (!sendAssignableParams) return new Object[0];  // we don't send these
-
-				if (getType() == SYNTH_TYPE_TETRA)
+				
+				// there is a hole in these values which we have to ignore
+				if (val >= 111 && val <= 119)
 					{
-					// For the Mopho, there is a hole in these values which we have to ignore
-					if (val >= 105 && val <= 119)
-						{
-						// reset to 0
-						val = 0;
-						}
-					}
-				else
-					{
-					// For the Tetra, there is a DIFFRENT hole in these values which we have to ignore
-					if (val >= 111 && val <= 119)
-						{
-						// reset to 0
-						val = 0;
-						}
+					// reset to 0
+					val = 0;
 					}
 				}		
 
-            return buildNRPN(getChannelOut(), ((Integer)(parametersToIndex.get(key))).intValue(), val);
+            int pos = (((Integer)(parametersToIndex.get(key))).intValue());
+            int revisedpos = (pos / LAYER_SIZE) * LAYER_OFFSET + (pos % LAYER_SIZE) + BASE_OFFSET;
+            return buildNRPN(getChannelOut(), revisedpos, val);
             }
         }
+
 
     public void handleSynthCCOrNRPN(Midi.CCData data)
         {
@@ -1672,69 +2216,53 @@ public class DSIProphet08 extends Synth
         // unfortunately, the Prophet '08 doesn't provide number/bank info
         // with its edit buffer data dump.  :-(
         
-        if (data[3] == 0x02)  // program data only, not (0x03) edit buffer
+        if (data[3] == 0x22)  // program data only, not (0x03) edit buffer
             {
-            int bank = data[4];
-            int t = data[2];
-            if (t == PROPHET_08_ID)
-            	{
-            	if (bank < 2)
-            		model.set("bank", bank);
-            	}
-            else if (t == MOPHO_ID || t == MOPHO_KEYBOARD_ID)
-            	{
-            	if (bank < 3)
-            		model.set("bank", bank);
-            	}
-            else if (t == TETRA_ID)
-            	{
-            	if (bank < 4)
-            		model.set("bank", bank);
-            	}
-            else		// The X4 has 8 banks
-            	{
-	            model.set("bank", bank);
-	            }
-            model.set("number", data[5]);
+            model.set("number", data[4]);
             }
 
         byte[] d = null;
-        if (data[3] == 0x02)
-            d = convertTo8Bit(data, 6);
-        else if (data[3] == 0x03)
+        if (data[3] == 0x22)
+            d = convertTo8Bit(data, 5);
+        else if (data[3] == 0x37)
             d = convertTo8Bit(data, 4);
         else
-            System.err.println("Warning (DSIProphet08): Unknown program data format " + data[3]);
+            System.err.println("Warning (DSITetraCombo): Unknown program data format " + data[3]);
         
-        if (data[2] == PROPHET_08_ID || data[2] == TETRA_ID)		// Prophet '08 or Tetra
-        	{
-        	/*
-        	if (data[2] == PROPHET_08_ID)
-        		setType(SYNTH_TYPE_PROPHET_08, false);
-        	else // if (data[2] == TETRA_ID)
-        		setType(SYNTH_TYPE_TETRA, false);
-        	*/
-
-			for(int i = 0; i < 384; i++)
+			for(int i = 0; i < 800; i++)
 				{
 				int j = i;
-				if (data[2] == TETRA_ID)  // Tetra, need to map
-					{
-					if (j >= 200) 
+
+					if (j >= 600)
 						{
-						j = tetraParams[j - 200] + 200;
+						j = tetraComboParams[j - 600] + 768;
+						}
+					else if (j >= 400)
+						{
+						j = tetraComboParams[j - 400] + 512;
+						}
+					else if (j >= 200) 
+						{
+						j = tetraComboParams[j - 200] + 256;
 						}
 					else 
 						{
-						j = tetraParams[j];
+						j = tetraComboParams[j];
 						}
-					}
-				
+								
 				if (load == LOAD_A && !parameters[i].startsWith("layer1"))
 					{
 					// do nothing -- they're not layer 1 (A) parameters
 					}
 				else if (load == LOAD_B && !parameters[i].startsWith("layer2"))
+					{
+					// do nothing -- they're not layer 2 (B) parameters
+					}
+				else if (load == LOAD_C && !parameters[i].startsWith("layer3"))
+					{
+					// do nothing -- they're not layer 2 (B) parameters
+					}
+				else if (load == LOAD_D && !parameters[i].startsWith("layer4"))
 					{
 					// do nothing -- they're not layer 2 (B) parameters
 					}
@@ -1747,78 +2275,27 @@ public class DSIProphet08 extends Synth
 					}
 				}
 		
-			if (load == LOAD_BOTH)		// we don't load the name if we're just loading A or B
+			for(int n = 1; n <= 4; n++)
 				{
+				if (load == LOAD_A && n != 1) continue;
+				if (load == LOAD_B && n != 2) continue;
+				if (load == LOAD_C && n != 3) continue;
+				if (load == LOAD_D && n != 4) continue;
+
 				// handle name specially
 				byte[] name = new byte[16];
-				System.arraycopy(d, 184, name, 0, 16);
+				int pos = ((n-1) * 256) + 184;		// 1: 184, 2: 256+184, 3:512+184, 4:768+184
+				System.arraycopy(d, pos, name, 0, 16);
 				try
 					{
-					model.set("name", new String(name, "US-ASCII"));
+					String key = (n == 1 ? "name" : "name" + n);
+					model.set(key, new String(name, "US-ASCII"));
 					}
 				catch (UnsupportedEncodingException e)
 					{
 					e.printStackTrace();
 					}
 				}
-			}
-		else 				// Mopho or Mopho Keyboard / SE
-			{
-			/*
-	        if (data[2] == MOPHO_ID)
-        		setType(SYNTH_TYPE_MOPHO, false);
-        	else if (data[2] == MOPHO_KEYBOARD_ID)
-        		setType(SYNTH_TYPE_MOPHO_KEYBOARD, false);
-        	else // if (data[2] == MOPHO_X4_ID)
-        		setType(SYNTH_TYPE_MOPHO_X4, false);
-        	*/
-
-			for(int i = 0; i < 184; i++)		// skip name
-				{
-				int j = i;
-				
-				// Map
-				if (data[2] == MOPHO_ID)		// Mopho
-					j = mophoParams[j];
-				else if (data[2] == MOPHO_KEYBOARD_ID)	// Mopho Keyboard / SE
-					j = mophoKeyParams[j];
-				else 
-					j = mophoX4Params[j];
-				
-				if (!parameters[i].equals("---"))
-					{
-					if (j != -1)
-						{
-						// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
-						int q = d[j];
-						if (q < 0) q += 256;  // push to unsigned (not 2's complement)
-						model.set(parameters[i], q);
-						}
-					}
-				
-				if (!parameters[i + 200].equals("---"))
-					{
-					if (j != -1)
-						{// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
-						int q = d[j];
-						if (q < 0) q += 256;  // push to unsigned (not 2's complement)
-						model.set(parameters[i + 200], q);
-						}
-					}
-				}
-		
-			// handle name specially
-			byte[] name = new byte[16];
-			System.arraycopy(d, 184, name, 0, 16);
-			try
-				{
-				model.set("name", new String(name, "US-ASCII"));
-				}
-			catch (UnsupportedEncodingException e)
-				{
-				e.printStackTrace();
-				}
-			}
                 
         revise();
         return PARSE_SUCCEEDED;
@@ -1831,42 +2308,45 @@ public class DSIProphet08 extends Synth
             tempModel = getModel();
 
 		byte[] data = null;
-		int t = getType();
-		if (t == SYNTH_TYPE_TETRA || t == SYNTH_TYPE_PROPHET_08)
-			{
-			byte[] d = new byte[384];
-			for(int i = 0; i < 384; i++)
+
+			byte[] d = new byte[1024];
+			for(int i = 0; i < 800; i++)
 				{
 				int j = i;
-				if (t == SYNTH_TYPE_TETRA)  // Tetra, need to map
-					{
-					if (j >= 200) 
+
+					if (j >= 600)
 						{
-						j = tetraParams[j - 200] + 200;
+						j = tetraComboParams[j - 600] + 768;
+						}
+					else if (j >= 400)
+						{
+						j = tetraComboParams[j - 400] + 512;
+						}
+					else if (j >= 200) 
+						{
+						j = tetraComboParams[j - 200] + 256;
 						}
 					else 
 						{
-						j = tetraParams[j];
+						j = tetraComboParams[j];
 						}
-					}
-				
+								
 				if (!parameters[i].equals("---"))
 					{
 					// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
 					int q = model.get(parameters[i], 0);
-					
-					if (parameters[i].startsWith("layer1tetraassignableparameter") ||
-						parameters[i].startsWith("layer2tetraassignableparameter"))
+
+					if (parameters[i].equals("layer1tetraassignableparameter1") || 
+    					parameters[i].equals("layer1tetraassignableparameter2") || 
+    					parameters[i].equals("layer1tetraassignableparameter3") || 
+    					parameters[i].equals("layer1tetraassignableparameter4"))
 						{
-						if (getType() == SYNTH_TYPE_TETRA)
-							{
 							// For the Tetra, there is a hole in these values which we have to ignore
 							if (q >= 111 && q <= 119)
 								{
 								// reset to 0
 								q = 0;
 								}
-							}
 						}		
 										
 					if (q > 127) q -= 256;  // push to signed (not 2's complement)
@@ -1874,85 +2354,53 @@ public class DSIProphet08 extends Synth
 					}
 				}
 						
-			// handle name specially
-			char[] name = (model.get("name", "Untitled") + "                " ).toCharArray();
-			for(int i = 0; i < 16; i++)
-				d[184 + i] = (byte)(name[i] & 127);
-		
-			data = convertTo7Bit(d);  
-			}
-		else
-			{
-			byte[] d = new byte[200];
-			for(int i = 0; i < 184; i++)		// skip name
+			for(int n = 1; n <= 4; n++)
 				{
-				int j = i;
-				
-				// Map
-				if (t == SYNTH_TYPE_MOPHO)
-					j = mophoParams[j];
-				else if (t == SYNTH_TYPE_MOPHO_KEYBOARD)
-					j = mophoKeyParams[j];
-				else
-					j = mophoX4Params[j];
-								
-				if (!parameters[i].equals("---"))
-					{
-					// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
-					int q = model.get(parameters[i], 0);
+				if (load == LOAD_A && n != 1) continue;
+				if (load == LOAD_B && n != 2) continue;
+				if (load == LOAD_C && n != 3) continue;
+				if (load == LOAD_D && n != 4) continue;
 
-					if (parameters[i].startsWith("layer1tetraassignableparameter") ||
-						parameters[i].startsWith("layer2tetraassignableparameter"))
-						{
-						if (getType() == SYNTH_TYPE_MOPHO)
-							{
-							// For the Mopho, there is a hole in these values which we have to ignore
-							if (q >= 105 && q <= 119)
-								{
-								// reset to 0
-								q = 0;
-								}
-							}
-						}		
-
-					if (q > 127) q -= 256;  // push to signed (not 2's complement)
-					
-					if (j != -1)
-						d[j] = (byte)q;
-					//else
-					//	System.err.println("" + j + " " + i + " " + parameters[i]);
-					}
+				// handle name specially
+				String key = (n == 1 ? "name" : "name" + n);
+				char[] name = (model.get(key, "Untitled") + "                " ).toCharArray();
+				int pos = ((n-1) * 256) + 184;		// 1: 184, 2: 256+184, 3:512+184, 4:768+184
+				for(int i = 0; i < 16; i++)
+					d[pos + i] = (byte)(name[i] & 127);
 				}
-						
+
+/*
 			// handle name specially
 			char[] name = (model.get("name", "Untitled") + "                " ).toCharArray();
 			for(int i = 0; i < 16; i++)
 				d[184 + i] = (byte)(name[i] & 127);
-		
+			*/
+			
+			
+			
+			
 			data = convertTo7Bit(d);  
-			}
         
         if (toWorkingMemory)
             {
-            byte[] emit = new byte[(t == SYNTH_TYPE_TETRA || t == SYNTH_TYPE_PROPHET_08) ? 444 : 298];
+            byte[] emit = new byte[1176];
             emit[0] = (byte)0xF0;
             emit[1] = (byte)0x01;  // DSI
-            emit[2] = ids[t];
-            emit[3] = (byte)0x03;  // Edit Buffer Data Dump
+            emit[2] = TETRA_ID;
+            emit[3] = (byte)0x37;  // Edit Buffer Data Dump
             System.arraycopy(data, 0, emit, 4, data.length);
             emit[emit.length - 1] = (byte)0xF7;
             return emit;
             }
         else
             {
-            byte[] emit = new byte[(t == SYNTH_TYPE_TETRA || t == SYNTH_TYPE_PROPHET_08) ? 446 : 300];
+            byte[] emit = new byte[1177];
             emit[0] = (byte)0xF0;
             emit[1] = (byte)0x01;  // DSI
-            emit[2] = ids[t];
-            emit[3] = (byte)0x02;  // Program Data Dump
-            emit[4] = (byte)tempModel.get("bank", 0);
-            emit[5] = (byte)tempModel.get("number", 0);
-            System.arraycopy(data, 0, emit, 6, data.length);
+            emit[2] = TETRA_ID;
+            emit[3] = (byte)0x22;  // Program Data Dump
+            emit[4] = (byte)tempModel.get("number", 0);
+            System.arraycopy(data, 0, emit, 5, data.length);
             emit[emit.length - 1] = (byte)0xF7;
             return emit;
             }
@@ -1961,7 +2409,13 @@ public class DSIProphet08 extends Synth
         
     public void changePatch(Model tempModel)
         {
-        changePatch(tempModel.get("bank"), tempModel.get("number"));
+        int number = tempModel.get("number");
+        Object[] message = new Object[1];
+        
+        // PC
+        message[0] = buildPC(getChannelOut(), number)[0];
+        
+        tryToSendMIDI(message);
         }
 
     public void writeAllParameters(Model model)
@@ -1970,26 +2424,14 @@ public class DSIProphet08 extends Synth
         tryToSendMIDI(emitAll(model, false, false));
         // we CANNOT do change patch after writing data -- it ruins the sysex write.  DSI Bug it would seem. 
         }
-
-    public void changePatch(int bank, int number)
-        {
-        Object[] message = new Object[2];
-        
-        // bank select
-        message[0] = buildCC(getChannelOut(), 32, bank)[0];
-        // PC
-        message[1] = buildPC(getChannelOut(), number)[0];
-        
-        tryToSendMIDI(message);
-        }
  
     public byte[] requestCurrentDump()
         {
 		byte[] data = new byte[5];
 		data[0] = (byte)0xF0;
 		data[1] = (byte)0x01;   // DSI
-		data[2] = ids[getType()];
-		data[3] = (byte)0x06;
+		data[2] = TETRA_ID;
+		data[3] = (byte)0x38;
 		data[4] = (byte)0xF7;			
 		return data;
         }
@@ -1999,39 +2441,28 @@ public class DSIProphet08 extends Synth
         if (tempModel == null)
             tempModel = getModel();
 
-        byte[] data = new byte[7];
+        byte[] data = new byte[6];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x01;   // DSI
-        data[2] = ids[getType()];
-        data[3] = (byte)0x05;
-        data[4] = (byte)(tempModel.get("bank", 0));
-        data[5] = (byte)(tempModel.get("number", 0));
-        data[6] = (byte)0xF7;
+        data[2] = TETRA_ID;
+        data[3] = (byte)0x21;
+        data[4] = (byte)(tempModel.get("number", 0));
+        data[5] = (byte)0xF7;
         return data;
         }
                 
     public static boolean recognize(byte[] data)
         {
-        return ((data.length == 446 &&
+        return ((data.length == 1177 &&
                 data[0] == (byte)0xF0 &&
                 data[1] == (byte) 0x01 &&       // DSI
-                (data[2] == PROPHET_08_ID ||  data[2] == TETRA_ID) &&
-                data[3] == (byte) 0x02) ||      // Program Data Dump
-                (data.length == 444 &&
+                (data[2] == TETRA_ID) &&
+                data[3] == (byte) 0x22) ||      // Combo Data Dump
+                (data.length == 1176 &&
                 data[0] == (byte)0xF0 &&
                 data[1] == (byte) 0x01 &&       // DSI
-                (data[2] == PROPHET_08_ID ||  data[2] == TETRA_ID) &&
-                data[3] == (byte) 0x03) ||      // Edit Buffer Data Dump
-				(data.length == 300 &&
-                data[0] == (byte)0xF0 &&
-                data[1] == (byte) 0x01 &&       // DSI
-                (data[2] == MOPHO_ID || data[2] == MOPHO_KEYBOARD_ID || data[2] == MOPHO_X4_ID) &&
-                data[3] == (byte) 0x02) ||      // Program Data Dump
-                (data.length == 298 &&
-                data[0] == (byte)0xF0 &&
-                data[1] == (byte) 0x01 &&       // DSI
-                (data[2] == MOPHO_ID || data[2] == MOPHO_KEYBOARD_ID || data[2] == MOPHO_X4_ID) &&
-                data[3] == (byte) 0x03));       // Edit Buffer Data Dump        
+                (data[2] == TETRA_ID) &&
+                data[3] == (byte) 0x37));       // Combo Edit Buffer Data Dump        
             }
         
     public static final int MAXIMUM_NAME_LENGTH = 16;
@@ -2064,34 +2495,20 @@ public class DSIProphet08 extends Synth
             model.set("name", newnm);
         }
         
-    public static String getSynthName() { return "DSI Prophet '08 / Tetra / Mopho"; }
+    public static String getSynthName() { return "DSI Tetra [Combo]"; }
     public String getPatchName(Model model) { return model.get("name", "Untitled"); }
     
     public Model getNextPatchLocation(Model model)
         {
-        int bank = model.get("bank");
         int number = model.get("number");
-        
-        int numBanks = BANKS_PROPHET.length;
-        int t = getType();
-        if (t == SYNTH_TYPE_TETRA)
-        	numBanks = BANKS_TETRA.length;
-        else if (t == SYNTH_TYPE_MOPHO || t == SYNTH_TYPE_MOPHO_KEYBOARD)
-        	numBanks = BANKS_MOPHO.length;
-        else if (t == SYNTH_TYPE_MOPHO_X4)
-        	numBanks = BANKS_MOPHO_X4.length;
         
         number++;
         if (number >= 128)
             {
-            bank++;
             number = 0;
-            if (bank >= 2)
-                bank = 0;
             }
                 
         Model newModel = buildModel();
-        newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
         }
@@ -2102,10 +2519,9 @@ public class DSIProphet08 extends Synth
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
         if (!model.exists("number")) return null;
-        if (!model.exists("bank")) return null;
         
         int number = (model.get("number") + 1);
-        return ("" + (model.get("bank") + 1) + "-" + (number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
+        return ("" + (number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
         }
 
 
@@ -2121,98 +2537,111 @@ public class DSIProphet08 extends Synth
         JMenu menu = new JMenu("DSI");
         menubar.add(menu);
 
-        JMenuItem a2b = new JMenuItem("Copy A -> B");
+        JMenuItem a2b = new JMenuItem("Copy Voice...");
         menu.add(a2b);
         a2b.addActionListener(new ActionListener()
             {
+            JComboBox part1 = new JComboBox(VOICES);
+            JComboBox part2 = new JComboBox(VOICES);
+                
             public void actionPerformed(ActionEvent evt)
                 {
-                undo.push(getModel());
-                setSendMIDI(false);
-                boolean currentPush = undo.getWillPush();
-                undo.setWillPush(false);
+                boolean result = showMultiOption(DSITetraCombo.this, new String[] { "Copy", "To" }, 
+                    new JComponent[] { part1, part2 }, "Copy Voice...", "Enter the voice to copy, and where to copy it.");
 
-                for(int i = 0; i < parameters.length; i++)
+                if (result)
                     {
-                    if (parameters[i].startsWith("layer1"))
-                        {
-                        model.set("layer2" + parameters[i].substring(6), model.get(parameters[i]));
-                        }
-                    }
+                    int p1 = part1.getSelectedIndex() + 1;
+                    int p2 = part2.getSelectedIndex() + 1;
+
+					undo.push(getModel());
+					setSendMIDI(false);
+					boolean currentPush = undo.getWillPush();
+					undo.setWillPush(false);
+
+					for(int i = 0; i < parameters.length; i++)
+						{
+						if (parameters[i].startsWith("layer" + p1))
+							{
+							model.set(("layer" + p2) + parameters[i].substring(6), model.get(parameters[i]));
+							}
+						}
                 
-                undo.setWillPush(currentPush);
-                setSendMIDI(true);
-                sendAllParameters();
+					// copy name
+					String key1 = (p1 == 1 ? "name" : "name" + p1);
+					String key2 = (p2 == 1 ? "name" : "name" + p2);
+					String name1 = model.get(key1, "Untitled");
+					model.set(key2, name1);
+
+					undo.setWillPush(currentPush);
+					setSendMIDI(true);
+					sendAllParameters();
+					}
                 }
             });
 
-        JMenuItem b2a = new JMenuItem("Copy A <- B");
-        menu.add(b2a);
-        b2a.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent evt)
-                {
-                undo.push(getModel());
-                setSendMIDI(false);
-                boolean currentPush = undo.getWillPush();
-                undo.setWillPush(false);
-
-                for(int i = 0; i < parameters.length; i++)
-                    {
-                    if (parameters[i].startsWith("layer2"))
-                        {
-                        model.set("layer1" + parameters[i].substring(6), model.get(parameters[i]));
-                        }
-                    }
-                
-                undo.setWillPush(currentPush);
-                setSendMIDI(true);
-                sendAllParameters();
-                }
-            });
-
-        JMenuItem swap = new JMenuItem("Swap A <-> B");
+        JMenuItem swap = new JMenuItem("Swap Voices...");
         menu.add(swap);
         swap.addActionListener(new ActionListener()
             {
+            JComboBox part1 = new JComboBox(VOICES);
+            JComboBox part2 = new JComboBox(VOICES);
+                
             public void actionPerformed(ActionEvent evt)
                 {
-                undo.push(getModel());
-                setSendMIDI(false);
-                boolean currentPush = undo.getWillPush();
-                undo.setWillPush(false);
+                boolean result = showMultiOption(DSITetraCombo.this, new String[] { "Swap", "With" }, 
+                    new JComponent[] { part1, part2 }, "Swap Voices...", "Enter the voices to swap with one another.");
 
-                for(int i = 0; i < parameters.length; i++)
+                if (result)
                     {
-                    if (parameters[i].startsWith("layer2"))
-                        {
-                        int val2 = model.get(parameters[i]);
-                        int val1 = model.get("layer1" + parameters[i].substring(6));
-                        model.set("layer1" + parameters[i].substring(6), val2);
-                        model.set(parameters[i], val1);
-                        }
-                    }
-                
-                undo.setWillPush(currentPush);
-                setSendMIDI(true);
-                sendAllParameters();
-                }
+                    int p1 = part1.getSelectedIndex() + 1;
+                    int p2 = part2.getSelectedIndex() + 1;
+
+					undo.push(getModel());
+					setSendMIDI(false);
+					boolean currentPush = undo.getWillPush();
+					undo.setWillPush(false);
+
+					for(int i = 0; i < parameters.length; i++)
+						{
+						if (parameters[i].startsWith("layer" + p2))
+							{
+							int val2 = model.get(parameters[i]);
+							int val1 = model.get(("layer" + p1) + parameters[i].substring(6));
+							model.set(("layer" + p1) + parameters[i].substring(6), val2);
+							model.set(parameters[i], val1);
+							}
+						}
+						
+					// swap names
+					String key1 = (p1 == 1 ? "name" : "name" + p1);
+					String key2 = (p2 == 1 ? "name" : "name" + p2);
+					String name1 = model.get(key1, "Untitled");
+					String name2 = model.get(key2, "Untitled");
+					model.set(key1, name2);
+					model.set(key2, name1);
+				
+					undo.setWillPush(currentPush);
+					setSendMIDI(true);
+					sendAllParameters();
+					}
+				}
             });
             
         menu.addSeparator();
 
-        JRadioButtonMenuItem loadBoth = new JRadioButtonMenuItem("Load Both Layers");
+        JRadioButtonMenuItem loadBoth = new JRadioButtonMenuItem("Load All Voices");
         loadBoth.setSelected(true);
         menu.add(loadBoth);
         loadBoth.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt)
                 {
-                load = LOAD_BOTH;
+                load = LOAD_ALL;
                 }
             });
             
-        JRadioButtonMenuItem restrictA = new JRadioButtonMenuItem("Load Only A");
+        JRadioButtonMenuItem restrictA = new JRadioButtonMenuItem("Load Only Voice 1");
         menu.add(restrictA);
         restrictA.addActionListener(new ActionListener()
             {
@@ -2222,7 +2651,7 @@ public class DSIProphet08 extends Synth
                 }
             });
 
-        JRadioButtonMenuItem restrictB = new JRadioButtonMenuItem("Load Only B");
+        JRadioButtonMenuItem restrictB = new JRadioButtonMenuItem("Load Only Voice 2");
         menu.add(restrictB);
         restrictB.addActionListener(new ActionListener()
             {
@@ -2231,22 +2660,54 @@ public class DSIProphet08 extends Synth
                 load = LOAD_B;
                 }
             });
+
+        JRadioButtonMenuItem restrictC = new JRadioButtonMenuItem("Load Only Voice 3");
+        menu.add(restrictC);
+        restrictC.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                load = LOAD_C;
+                }
+            });
+
+        JRadioButtonMenuItem restrictD = new JRadioButtonMenuItem("Load Only Voice 4");
+        menu.add(restrictD);
+        restrictD.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                load = LOAD_D;
+                }
+            });
         
         ButtonGroup group = new ButtonGroup();
         group.add(loadBoth);
         group.add(restrictA);
         group.add(restrictB);
-
-
+        group.add(restrictC);
+        group.add(restrictD);
+        
         menu.addSeparator();
 
-        JMenuItem build = new JMenuItem("Build Tetra Combo");
+        JMenuItem build = new JMenuItem("Build Single Patch...");
         menu.add(build);
         build.addActionListener(new ActionListener()
             {
+            JComboBox part1 = new JComboBox(VOICES);
+            JComboBox part2 = new JComboBox(VOICES);
+                
             public void actionPerformed(ActionEvent evt)
                 {
-			    	Synth newSynth = instantiate(DSITetraCombo.class, DSITetraCombo.getSynthName(), false, true, tuple);
+                boolean result = showMultiOption(DSITetraCombo.this, new String[] { "Layer A", "Layer B" }, 
+                    new JComponent[] { part1, part2 }, "Build Single Patch...", "Enter the voices to put in layers.");
+
+                if (result)
+                    {
+                    int p1 = part1.getSelectedIndex() + 1;
+                    int p2 = part2.getSelectedIndex() + 1;
+
+			    	Synth newSynth = instantiate(DSIProphet08.class, DSIProphet08.getSynthName(), false, true, tuple);
 					newSynth.setSendMIDI(false);
 					boolean currentPush = newSynth.getUndo().getWillPush();
 					newSynth.getUndo().setWillPush(false);
@@ -2254,34 +2715,53 @@ public class DSIProphet08 extends Synth
            
 					for(int i = 0; i < parameters.length; i++)
 						{
-						if (parameters[i].startsWith("layer1"))
+						/*
+						if (parameters[i].equals("layer1vcavoicevolume"))	// Map 1 -> A always
 							{
-							/// IMPORTANT NOTE.  It's important to map A to 1 and 2, and B to 3 and 4, in part
-							/// because VCA Voice Volume (in the Combo man pages it's called "Preset Volume")
-							/// only appears for Voice 1 (as Layer A) and Voice 3 (as Layer B).
-							/// I don't know why though.
-							
 							int val2 = model.get(parameters[i]);
 							newModel.set("layer1" + parameters[i].substring(6), val2);
-							newModel.set("layer2" + parameters[i].substring(6), val2);
 							}
-						else if (parameters[i].startsWith("layer2"))
+						else if (parameters[i].equals("layer3vcavoicevolume"))	// Map 3 -> B always
 							{
 							int val2 = model.get(parameters[i]);
-							newModel.set("layer3" + parameters[i].substring(6), val2);
-							newModel.set("layer4" + parameters[i].substring(6), val2);
+							newModel.set("layer2" + parameters[i].substring(6), val2);
+							}
+						else 
+						*/
+						if (parameters[i].equals("layer1editorbyte"))
+							{
+							int val2 = model.get(parameters[i]);
+							newModel.set("layer1" + parameters[i].substring(6), val2);
+							}
+						else if (
+								parameters[i].equals("layer1tetraassignableparameter1") ||
+								parameters[i].equals("layer1tetraassignableparameter2") ||
+								parameters[i].equals("layer1tetraassignableparameter3") ||
+								parameters[i].equals("layer1tetraassignableparameter4")) 	// Map 1 -> A
+							{
+							int val2 = model.get(parameters[i]);
+							newModel.set("layer1" + parameters[i].substring(6), val2);
+							}
+						else if (parameters[i].startsWith("layer" + p1))
+							{
+							int val2 = model.get(parameters[i]);
+							newModel.set("layer1" + parameters[i].substring(6), val2);
+							}
+						else if (parameters[i].startsWith("layer" + p2))
+							{
+							int val2 = model.get(parameters[i]);
+							newModel.set("layer2" + parameters[i].substring(6), val2);
 							}
 						}
-					newModel.set("name", model.get("name", "Untitled"));
-					newModel.set("name2", model.get("name", "Untitled"));
-					newModel.set("name3", model.get("name", "Untitled"));
-					newModel.set("name4", model.get("name", "Untitled"));
+					String key = (p1 == 1 ? "name" : "name" + p1);
+					newModel.set("name", model.get(key, "Untitled"));
 				
 					newSynth.getUndo().setWillPush(currentPush);
 					newSynth.setSendMIDI(true);
+					}
 				}
-            });        
- 
+            });
+
         String str = getLastX("SendAssignableParams", getSynthName(), true);
 		if (str == null)
 			sendAssignableParams = true;		// default is true
@@ -2302,111 +2782,35 @@ public class DSIProphet08 extends Synth
                 setLastX("" + sendAssignableParams, "SendAssignableParams", getSynthName(), true);
                 }
 			});
-       }
+        }
 
 
-	// These are maps from the Prophet '08 parameters (which are also NRPN values for all machines)
-	// to the data byte positions in the sysex dumps of these respective machines.
-	// A "-1" means that that parameter is not supported by the machine and does not appear
-	// in its dump.  Some machines of course don't support multiple layers either.
-	//
-	// Obviously the Prophet doesn't support a number of parameters too: but they appear among its
-	// parameters above anyway; this made possible by the fact that *all* parameters of *all* machines
-	// have standardized NRPN values and so correspond with specific slots int the Prophet '08.
+	// These are maps from the first-column tetra combo NRPN parameters
+	// to the data byte positions in the sysex dump.
+	// A "-1" means that that parameter is not supported by the tetra and does not appear
+	// in its dump.
 	
     // TETRA
-    public static final int[] tetraParams = new int[]
-    	{
-    	0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 16, 17, 20, 
-    	21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 40, 41, 
-    	33, 34, 35, 36, 37, 38, 39, 42, 43, 44, 45, 46, 47, 48, 
-    	49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 
-    	63, 64, 65, 66, 67, 68, 69, 71, 72, 73, 74, 75, 76, 77, 
-    	78, 79, 80, 81, 82, 107, 108, 109, 110, 83, 84, 85, 86, 
-    	87, 88, 89, 90, 91, 92, 101, 102, 15, 105, 94, 93, 103, 
-    	70, 95, 104, 106, 
-    	-1, -1, -1, 111, 112, 113, 114, 
-    	-1, 19, 96, 97, 98, 
-    	5, 11, 18, 117, 99, 100, 120, 121, 122, 123, 124, 125, 
-    	126, 127, 128, 129, 130, 131, 132, 133, 134, 135,
-    	136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
-    	147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157,
-    	158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 
-    	169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179,
-    	180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190,
-    	191, 192, 193, 194, 195, 196, 197, 198, 199
-    	};
-
-	// MOPHO KEYBOARD and MOPHO SE
-	public static final int[] mophoKeyParams = new int[]
-		{
-		0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 16, 17, 20, 
-		21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, -1, 
-		41, 33, 34, 35, 36, 37, 38, 39, 42, 43, 44, 45, 46, 
-		47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 
-		60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 71, 72, 73, 
-		74, 75, 76, 77, 78, 79, 80, 81, 82, 107, 108, 109, 
-		110, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 101, 
-		102, 15, 105, 94, 93, 103, 70, 95, 104, 106, 
-		-1, -1, -1, -1, -1, -1, -1, -1, 19, 96, 97, 98, 5, 11, 18, 
-		-1, -1, -1, 120, 121, 122, 123, 124, 125, 126, 127, 
-		128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 
-		138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 
-		148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 
-		158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 
-		168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 
-		178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 
-		188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 
-		198, 199
-		};
-	
-	// MOPHO
-    public static final int[] mophoParams = new int[]
-    	{
-		0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 17, 18, 20, 
-		21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 
-		-1, 40, 33, 34, 35, 36, 37, 38, 39, 41, 42, 43, 
-		44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 
-		56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 
-		68, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 
-		81, 101, 102, 103, 104, 82, 83, 84, 85, 86, 87, 
-		88, 89, 90, 91, 95, 96, 15, 99, 
-		-1, 16, 97, 69, 
-		-1, 98, 100, 
-		-1, -1, -1, 105, 106, 107, 108, 
-		-1, -1, 92, 93, 94, 5, 11, 19,
-		-1, -1, -1, 120, 
-		121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 
-		131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 
-		141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 
-		151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 
-		161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 
-		171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 
-		181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 
-		191, 192, 193, 194, 195, 196, 197, 198, 199
-    	};
-    
-    // MOPHO X4
-    public static final int[] mophoX4Params = new int[]
+    public static final int[] tetraComboParams = new int[]
     	{
 		0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 16, 17, 20, 
-		21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 
-		-1, 40, 41, 33, 34, 35, 36, 37, 38, 39, 42, 43, 44, 
-		45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 
-		58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 71, 
-		72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 107, 
-		108, 109, 110, 83, 84, 85, 86, 87, 88, 89, 90, 91, 
-		92, 101, 102, 15, 105, 93, 94, 103, 70, 95, 104, 106, 
-		-1, -1, -1, -1, -1, -1, -1, -1, 19, 96, 97, 98, 5, 11, 18, 
-		-1, -1, -1, 120, 121, 122, 123, 124, 125, 126, 127, 
-		128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 
-		138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 
-		148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 
-		158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 
-		168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 
-		178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 
-		188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 
-		198, 199
+		21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 40, 41, 
+		33, 34, 35, 36, 37, 38, 39, 42, 43, 44, 45, 46, 47, 48, 
+		49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 
+		63, 64, 65, 66, 67, 68, 69, 71, 72, 73, 74, 75, 76, 77, 
+		78, 79, 80, 81, 82, 107, 108, 109, 110, 83, 84, 85, 86, 
+		87, 88, 89, 90, 91, 92, 101, 102, 15, 105, 93, 94, 103, 
+		70, 95, 104, 106, 
+		-1, -1, -1, 111, 112, 113, 114, 
+		-1, 19, 96, 97, 98, 5, 11, 18, 117, 
+		-1, -1, 120, 121, 122, 123, 124, 125, 126, 127, 128, 
+		129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 
+		140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 
+		151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 
+		162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 
+		173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 
+		184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 
+		195, 196, 197, 198, 199    	
 		};
 
 	public static final String[] tetraAssignableParameters = new String[]
@@ -2522,15 +2926,15 @@ public class DSIProphet08 extends Synth
 "Seq 2 Destination",
 "Seq 3 Destination",
 "Seq 4 Destination",
-"[Invalid 1]",
-"[Invalid 2]",
-"[Invalid 3]",
-"[Invalid 4]",
-"[Invalid 5]", 	// "Osc 1 Wave Reset",
-"[Invalid 6]", 	// "Osc 2 Wave Reset",
-"[Invalid 7]",
-"[Invalid 8]",
-"[Invalid 9]",
+"[Empty 1]",
+"[Empty 2]",
+"[Empty 3]",
+"[Empty 4]",
+"[Empty 5]", 	// "Osc 1 Wave Reset",
+"[Empty 6]", 	// "Osc 2 Wave Reset",
+"[Empty 7]",
+"[Empty 8]",
+"[Empty 9]",
 "Seq 1 Step 1",
 "Seq 1 Step 2",
 "Seq 1 Step 3",
@@ -2613,264 +3017,54 @@ public class DSIProphet08 extends Synth
 "Edit Name 16",
 	};
 
-
-	public static final String[] mophoAssignableParameters = new String[]
-		{
-"Osc 1 Frequency",
-"Osc 1 Fine Freq",
-"Osc 1 Shape",
-"Osc 1 Glide",
-"Osc 1 Key Amount",
-"Sub Osc 1 Level",
-"Osc 2 Frequency",
-"Osc 2 Fine Freq",
-"Osc 2 Shape",
-"Osc 2 Glide",
-"Osc 2 Key Amount",
-"Sub Osc 2 Level",
-"Osc Hard Sync",
-"Glide Mode",
-"Oscillator Slop",
-"Pitch Wheel Range",
-"Key Assign",
-"Oscillator Mix",
-"Noise Level",
-"Ext In Volume",
-"Filter Cutoff Freq",
-"Filter Resonance",
-"Filter Keyboard Amt",
-"Filter Audio Mod",
-"Filter Config/Mode",
-"Filter Env Amount",
-"Filter Env Velocity",
-"Filter Env Delay",
-"Filter Env Attack",
-"Filter Env Decay",
-"Filter Env Sustain",
-"Filter Env Release",
-"VCA Level",
-"VCA Env Amount",
-"VCA Env Velocity",
-"VCA Env Delay",
-"VCA Env Attack",
-"VCA Env Decay",
-"VCA Env Sustain",
-"VCA Env Release",
-"Program Volume",
-"LFO 1 Frequency",
-"LFO 1 Shape",
-"LFO 1 Amount",
-"LFO 1 Destination",
-"LFO 1 Key Sync",
-"LFO 2 Frequency",
-"LFO 2 Shape",
-"LFO 2 Amount",
-"LFO 2 Destination",
-"LFO 2 Key Sync",
-"LFO 3 Frequency",
-"LFO 3 Shape",
-"LFO 3 Amount",
-"LFO 3 Destination",
-"LFO 3 Key Sync",
-"LFO 4 Frequency",
-"LFO 4 Shape",
-"LFO 4 Amount",
-"LFO 4 Destination",
-"LFO 4 Key Sync",
-"Env 3 Desination",
-"Env 3 Amount",
-"Env 3 Velocity",
-"Env 3 Delay",
-"Env 3 Attack",
-"Env 3 Decay",
-"Env 3 Sustain",
-"Env 3 Release",
-"Env 3 Repeat",
-"Mod 1 Source",
-"Mod 1 Amount",
-"Mod 1 Destination",
-"Mod 2 Source",
-"Mod 2 Amount",
-"Mod 2 Destination",
-"Mod 3 Source",
-"Mod 3 Amount",
-"Mod 3 Destination",
-"Mod 4 Source",
-"Mod 4 Amount",
-"Mod 4 Destination",
-"Mod Wheel Amount",
-"Mod Wheel Dest",
-"Pressure Amount",
-"Pressure Destination",
-"Breath Amount",
-"Breath Destination",
-"Velocity Amount",
-"Velocity Destination",
-"Foot Control Amt",
-"Foot Control Dest",
-"Push It Note",
-"Push It Velocity",
-"Push It Mode",
-"Clock BPM",
-"Clock Divide",
-"Arpeggiator Mode",
-"Arpeggiator On/Off",
-"Sequence Trigger",
-"Sequencer On/Off",
-"Seq 1 Destination",
-"Seq 2 Destination",
-"Seq 3 Destination",
-"Seq 4 Destination",
-"[Invalid 1]",
-"[Invalid 2]",
-"[Invalid 3]",
-"[Invalid 4]",
-"[Invalid 5]",
-"[Invalid 6]",
-"[Invalid 7]",
-"[Invalid 8]",
-"[Invalid 9]",
-"[Invalid 10]",
-"[Invalid 11]",
-"[Invalid 12]",
-"[Invalid 13]",
-"[Invalid 14]",
-"[Invalid 15]",
-"Seq 1 Step 1",
-"Seq 1 Step 2",
-"Seq 1 Step 3",
-"Seq 1 Step 4",
-"Seq 1 Step 5",
-"Seq 1 Step 6",
-"Seq 1 Step 7",
-"Seq 1 Step 8",
-"Seq 1 Step 9",
-"Seq 1 Step 10",
-"Seq 1 Step 11",
-"Seq 1 Step 12",
-"Seq 1 Step 13",
-"Seq 1 Step 14",
-"Seq 1 Step 15",
-"Seq 1 Step 16",
-"Seq 2 Step 1",
-"Seq 2 Step 2",
-"Seq 2 Step 3",
-"Seq 2 Step 4",
-"Seq 2 Step 5",
-"Seq 2 Step 6",
-"Seq 2 Step 7",
-"Seq 2 Step 8",
-"Seq 2 Step 9",
-"Seq 2 Step 10",
-"Seq 2 Step 11",
-"Seq 2 Step 12",
-"Seq 2 Step 13",
-"Seq 2 Step 14",
-"Seq 2 Step 15",
-"Seq 2 Step 16",
-"Seq 3 Step 1",
-"Seq 3 Step 2",
-"Seq 3 Step 3",
-"Seq 3 Step 4",
-"Seq 3 Step 5",
-"Seq 3 Step 6",
-"Seq 3 Step 7",
-"Seq 3 Step 8",
-"Seq 3 Step 9",
-"Seq 3 Step 10",
-"Seq 3 Step 11",
-"Seq 3 Step 12",
-"Seq 3 Step 13",
-"Seq 3 Step 14",
-"Seq 3 Step 15",
-"Seq 3 Step 16",
-"Seq 4 Step 1",
-"Seq 4 Step 2",
-"Seq 4 Step 3",
-"Seq 4 Step 4",
-"Seq 4 Step 5",
-"Seq 4 Step 6",
-"Seq 4 Step 7",
-"Seq 4 Step 8",
-"Seq 4 Step 9",
-"Seq 4 Step 10",
-"Seq 4 Step 11",
-"Seq 4 Step 12",
-"Seq 4 Step 13",
-"Seq 4 Step 14",
-"Seq 4 Step 15",
-"Seq 4 Step 16",
-"Edit Name 1",
-"Edit Name 2",
-"Edit Name 3",
-"Edit Name 4",
-"Edit Name 5",
-"Edit Name 6",
-"Edit Name 7",
-"Edit Name 8",
-"Edit Name 9",
-"Edit Name 10",
-"Edit Name 11",
-"Edit Name 12",
-"Edit Name 13",
-"Edit Name 14",
-"Edit Name 15",
-"Edit Name 16",
-};
-
+   /*
     public boolean testVerify(Synth synth2, String key, Object val1, Object val2)
     	{
-    	int t = getType();
-    	
-    	if (t == SYNTH_TYPE_MOPHO || t == SYNTH_TYPE_MOPHO_KEYBOARD || t == SYNTH_TYPE_MOPHO_X4)
-    		{
-    		if (key.startsWith("layer2")) return true;  // no layer 2
-    		}
-
 		// These can be invalid regardless due to the hole in the middle    				
     	if (key.equals("layer1tetraassignableparameter1") || 
     		key.equals("layer1tetraassignableparameter2") || 
     		key.equals("layer1tetraassignableparameter3") || 
-    		key.equals("layer1tetraassignableparameter4"))
+    		key.equals("layer1tetraassignableparameter4") )
     			return true;
-
-    		
-    	if (t == SYNTH_TYPE_MOPHO)
-    		{
-    		return (key.equals("keyboardmode") ||
-    				key.equals("splitpoint") ||
-    				key.equals("layer1unisonmode") ||
-    				key.equals("layer1unison") ||
-    				key.equals("layer1vcaoutputspread") ||
-    				key.equals("layer1tetraeditorbyte") || 
-    				key.equals("layer1tetrafeedbackgain"));
-    		}
-    	else if (t == SYNTH_TYPE_MOPHO_KEYBOARD)
-    		{
-    		return (key.equals("keyboardmode") ||
-    				key.equals("splitpoint") ||
-    				key.equals("layer1tetraassignableparameter1") || 
-    				key.equals("layer1tetraassignableparameter2") || 
-    				key.equals("layer1tetraassignableparameter3") || 
-    				key.equals("layer1tetraassignableparameter4") || 
-    				key.equals("layer1tetraeditorbyte") || 
-    				key.equals("layer1vcaoutputspread"));
-    		}
-    	else if (t == SYNTH_TYPE_MOPHO_X4)
-    		{
-    		return (key.equals("keyboardmode") ||
-    				key.equals("splitpoint") ||
-    				key.equals("layer1tetraassignableparameter1") || 
-    				key.equals("layer1tetraassignableparameter2") || 
-    				key.equals("layer1tetraassignableparameter3") || 
-    				key.equals("layer1tetraassignableparameter4") || 
-    				key.equals("layer1tetraeditorbyte") || 
-    				key.equals("layer1vcainitiallevel"));
-    		}
-    	return false;
+    	
+    	else return false;
     	}
-    	
-    	
-    	
+    */
+
+/*
+
+	public void testit()
+		{
+		 int[] dd = new int[]
+		{
+		240, 1, 38, 34, 0, 0, 12, 49, 0, 0, 1, 0, 24, 0, 51, 0, 0, 1, 0, 0, 0, 0, 2, 0, 64, 68, 0, 0, 71, 0, 119, 0, 0, 1, 113, 0, 0, 0, 46, 0, 17, 65, 0, 127, 0, 0, 0, 18, 53, 45, 17, 0, 120, 1, 31, 4, 5, 28, 0, 80, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 127, 0, 0, 0, 127, 0, 0, 127, 0, 127, 0, 0, 127, 0, 127, 0, 127, 0, 0, 127, 0, 1, 0, 1, 60, 100, 8, 1, 60, 0, 22, 1, 0, 0, 0, 0, 1, 12, 10, 20, 0, 20, 0, 28, 46, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 111, 109, 98, 111, 0, 32, 73, 110, 105, 116, 32, 32, 0, 32, 32, 32, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45, 49, 27, 0, 0, 1, 0, 77, 51, 1, 0, 0, 1, 0, 0, 0, 2, 3, 51, 8, 18, 0, 0, 3, 76, 0, 82, 2, 1, 8, 0, 0, 4, 2, 58, 0, 12, 0, 127, 0, 0, 5, 33, 16, 0, 0, 0, 44, 31, 4, 13, 4, 13, 0, 31, 4, 7, 33, 0, 0, 24, 0, 127, 4, 0, 80, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 127, 0, 0, 127, 0, 0, 0, 127, 0, 127, 0, 127, 0, 0, 127, 0, 127, 0, 127, 0, 1, 0, 0, 1, 60, 100, 1, 60, 0, 1, 22, 5, 0, 0, 0, 1, 1, 64, 2, 9, 0, 0, 36, 41, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 127, 127, 127, 127, 127, 0, 28, 0, 0, 126, 126, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 0, 111, 109, 98, 111, 32, 73, 110, 0, 105, 116, 32, 32, 32, 32, 32, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 49, 0, 0, 1, 0, 0, 24, 51, 0, 0, 1, 0, 0, 0, 0, 2, 3, 64, 0, 0, 0, 1, 20, 0, 0, 0, 1, 127, 0, 0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 18, 53, 50, 66, 0, 0, 120, 80, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 127, 0, 0, 0, 127, 0, 0, 127, 0, 0, 127, 0, 127, 0, 127, 0, 127, 0, 0, 127, 0, 1, 0, 1, 60, 0, 100, 1, 60, 0, 120, 1, 0, 0, 0, 0, 1, 1, 2, 9, 0, 0, 15, 8, 44, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 111, 109, 98, 0, 111, 32, 73, 110, 105, 116, 32, 0, 32, 32, 32, 32, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 49, 0, 0, 0, 1, 0, 24, 51, 0, 0, 0, 1, 0, 0, 0, 2, 3, 16, 64, 0, 0, 0, 20, 0, 0, 0, 0, 1, 127, 0, 0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 18, 0, 53, 50, 66, 0, 120, 80, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 127, 0, 0, 127, 0, 0, 0, 127, 0, 127, 0, 127, 0, 0, 127, 0, 127, 0, 127, 0, 0, 1, 0, 1, 60, 100, 1, 60, 0, 0, 120, 1, 0, 0, 0, 1, 0, 1, 2, 9, 0, 15, 2, 44, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 111, 109, 98, 111, 32, 73, 0, 110, 105, 116, 32, 32, 32, 32, 0, 32, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 247
+		};
+		
+		 byte[] d1 = new byte[1024];
+		 byte[] d2 = new byte[154];
+		
+		for(int i = 0; i < 1024; i++)
+			{
+			d1[i] = (byte)dd[i];
+			}
+			
+		d2[0] = (byte)0xF7;
+		
+		for(int i = 1; i < 154; i++)
+			{
+			d2[i] = (byte)dd[i + 1024 - 1];
+			}
+			
+		midi.gatherInSysexData(d1, d1.length);
+		midi.gatherInSysexData(d2, d2.length);
+		
+		}
+
+*/
+
+
+
+
+
     }
 

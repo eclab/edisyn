@@ -32,7 +32,7 @@ If you load a patch from a different synthesizer type, Edisyn will load the patc
 
 <br><br><h3>Per-Synthesizer Parameters</h3>
 
-The Tetra and Mopho series have several additional parameters not present in the Prophet '08.  These appear under the <b>Tetra/Mopho</b> tab.
+The Tetra and Mopho series have several additional parameters not present in the Prophet '08.  Some of these appear under the <b>Extras</b> tab.
 
 <p>Several parameters, destinations, and other settings are specific to certain synthesizers.  The synthesizer in question is marked as follows:
 
@@ -53,9 +53,14 @@ A few parameters are shared. For example, "Feedback Volume" on the Tetra is "Aud
 The menu has several options that are useful for Prophet '08 and Tetra owners.  
 
 <ul>
-<li> <b>Copy A - >B</b>, <b>Copy A &lt;- B</b> and <b>Swap A&lt;->B</b>&nbsp;&nbsp; These menus allow you to move the A and B layers to each other.
+<li> <b>Copy A->B</b>, <b>Copy A&lt;-B</b> and <b>Swap A&lt;->B</b>&nbsp;&nbsp; These menus allow you to move the A and B layers to each other.
 
 <p><li> <b>Load Both Layers</b>, <b>Load Only A</>, and <b>Load Only B</b>&nbsp;&nbsp; When you load a sysex file, receive a dump or merge from your Prophet '08 or Tetra, or reset your patch, your setting here will dictate whether this will effect both layers, or just Layer A or Layer B (keeping the other one intact).  This way, for example, you can just clear out Layer A.  Or you could make a patch consisting of the Layer A of two different patches, by first loading one patch, then copying its Layer A to Layer B, then restricting loading to just Layer A, and then finally loading the second patch.
+
+<p><li><b>Build Tetra Combo</b> constructs a Tetra Combo patch out of this patch. This is done by copying Layer A to Voices 1 and 2 in the Combo, and Layer B to Voices 3 and 4.
+
+<p><li><b>Send Assignable Params</b> toggles whether Edisyn sends real-time parameter change messages in response to changing any of the four "Assignable Parameter" parameters.  This is because doing so triggers a bug in the Tetra Beta firmware, which causes the parameter to be reset to Osc 1 Freq.  If you're running a Tetra using the Beta firmware, you might like to turn this on; otherwise you can ignore it.
+
 </ul>
 
 <p>These menu options are not useful for the Mopho variations, as they have only one layer.
@@ -64,17 +69,34 @@ The menu has several options that are useful for Prophet '08 and Tetra owners.
 
 <ul>
 <li>When you set the destination for a sequencer track to "Osc 1 Freq", "Osc 2 Freq", or "Osc 1&2 Freq", the track dials will change from number values to notes.  The lowest note, <b>C0</b>, corresponds to the note being played by the user -- that is, all sequenced notes are equal to or higher than the played note.  If you need notes lower than the played note, pitch the oscillator frequencies down.
+
+<p><li>On the Tetra, the assignable parameters "[Invalid 5]" and "[Invalid 6]" are, on the Beta OS only, "Osc 1 Wave Reset" and "Osc 2 Wave Reset" respectively.  But they're still subject to the serious assignable parameter crash issues discussed in Gotchase, next.
 </ul>
 
 <br><br><h3>Gotchas</h3>
 
 <ul>
+<li>The Assignable Parameters (in the Extras tab) have several problems:
+<ul>
+<li>There is a hole in the middle of the Tetra's parameters -- you'll see parameters labelled "[Invalid ...]".  These are invalid settings right in the middle of the valid range, and on top of it, the Tetra can crash if it uses them!  So I have opted to do the following.  You are permitted to set to these values in Edisyn, but Edisyn will send, write, or save patches by silently substituting value 0 ("Osc 1 Frequency") instead.
+
+<p><li>Likewise, there is a <i>different</i> hole in the middle of the Mopho's parameters, with the same dangers, and so I have elected to follow the same strategy.
+
+<p><li>If you are using the Tetra's Beta OS, setting any of the assignable parameters in real-time just sets the parameter to "Osc 1 Frequency" due to a bug in the OS.  However you can send or write a patch with the assignable parameters set and it'll work right.
+
+</ul>
+
 <li>Even if MIDIParamLCD is set to ON, any real-time changes you make won't be reflected on the LCD unless you first twiddle a knob so the synth is in its edit mode.  On the Prophet '08 I suggest twiddling the Misc Parameters Select knob.
 
 <p><li>Additionally, even if MIDIParamLCD is on, and the Prophet '08/Tetra is displaying parameter edits, you won't see parameter changes from Layer B unless you press "Edit Layer B".
 
 <P><li>If you change Key Sync for some LFO other than #1, the Prophet's Key Sync light won't change properly, even if that LFO is currently selected on the Prophet '08 front panel.  You have to press some other LFO button, then go back to the LFO in question to see the Key Sync button light properly.
 </ul>
+
+<p>Thanks to Will Taylor for his considerable help in debugging the editor for the Tetra and Mopho Keyboard.
+
+<p>Thanks also to Francois Dussaud for his significant work in debugging the Mopho and Tetra portions of the editor.
+
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

@@ -1,0 +1,74 @@
+<html><head></head>
+<body>
+
+
+<h1>Dave Smith Instruments Tetra</h1> 
+<h2>Combo Patch Editor</h2>
+
+<p>This editor only works with the <b>DSI Tetra</b>.  A Combo is essentially an extension of the standard (2-layer) patch to 4 layers, one for each note.
+
+<br><br><h3>Communicating with Edisyn</h3>
+
+Set the MIDI channel to the same as being used in Edisyn.  Set MParamSend to NRPN.  Set M Param Rec to All or NRPN.  Set MIDI Program to ON.  Set MIDI Sysex to ON.  And set MIDIParamLCD to ON.
+
+<br><br><h3>About the Tab Names</h3>
+
+Combos require many tabs; I apologize for the names, it was needed to fit them all on-screen on Macs.  "Osc Filt A" means "Oscillators and Filters A".  "Mod A" means "Modulation A", and "Seq A" means "Sequencer A".  Likewise for layers B, C, and D.  Note the close relationship to similar tabs in the Prophet '08 / Tetra / Mopho single patch editor.
+
+<br><br><h3>Parameters</h3>
+
+In a combo, all four voices have (more or less) exactly the same set of parameters: however some parameters in voices 2, 3, and 4 have no functionality at all and exist only to make it easy to swap or copy voices.  These non-functional parameters are marked with a <b>[-]</b>.
+
+
+<br><br><h3>About the Menu</h3>
+
+The menu has several options that are useful for Tetra owners.
+
+<ul>
+<li> <b>Copy Voice...</b> and <b>Swap Voices...</b> allow you to copy and swap different Voice layers.
+
+<p><li> <b>Load All Voices</b>, <b>Load Only Voice 1</>, etc.  When you load a sysex file, receive a dump or merge from your Tetra, or reset your combo patch, your setting here will dictate whether this will effect all voice layers, or just a single voice (keeping the others intact).  This way, for example, you can just clear out Voice 1.  Or you could make a combo patch consisting of different voices from different combo pthes, by loading the first patch, the restricting to a specific voice and loading the next patch (which would slot it into that voice).  You may need to swap or copy voices to do that.
+
+<p><li><b>Build Single Patch...</b> constructs a Tetra single patch out of two voices from this Combo.  Note that certain parameters appear only Voice 1 or only in Voices 1 and 3: these will be automatically copied to all the appropriate locations in the Single patch regardless of which voices you have chosen.
+
+<p><li><b>Send Assignable Params</b> toggles whether Edisyn sends real-time parameter change messages to the Tetra in response to changing any of the four "Assignable Parameter" parameters.  This is because doing so triggers a bug in the Tetra Beta firmware, which causes the parameter to be reset to Osc 1 Freq.  If you're running the Beta firmware, you might like to turn this on; otherwise you can ignore it.
+</ul>
+
+
+
+<br><br><h3>Hints</h3>
+
+<ul>
+<li>When you set the destination for a sequencer track to "Osc 1 Freq", "Osc 2 Freq", or "Osc 1&2 Freq", the track dials will change from number values to notes.  The lowest note, <b>C0</b>, corresponds to the note being played by the user -- that is, all sequenced notes are equal to or higher than the played note.  If you need notes lower than the played note, pitch the oscillator frequencies down.
+
+<p><li>On the Tetra, the assignable parameters "[Invalid 5]" and "[Invalid 6]" are, on the Beta OS only, "Osc 1 Wave Reset" and "Osc 2 Wave Reset" respectively.  But they're still subject to the serious assignable parameter crash issues discussed in Gotchase, next.
+
+</ul>
+
+<br><br><h3>Gotchas</h3>
+
+<ul>
+<li>There is a hole in the middle of the Tetra's parameters -- you'll see parameters labelled "[Invalid ...]".  These are invalid settings right in the middle of the valid range, and on top of it, the Tetra can crash if it uses them!  So I have opted to do the following.  You are permitted to set to these values in Edisyn, but Edisyn will send, write, or save patches by silently substituting value 0 ("Osc 1 Frequency") instead.
+
+<p><li>Likewise, there is a <i>different</i> hole in the middle of the Mopho's parameters, with the same dangers, and so I have elected to follow the same strategy.
+
+<p><li>If you are using the Tetra's Beta OS, setting any of the assignable parameters in real-time just sets the parameter to "Osc 1 Frequency" due to a bug in the OS.  However you can send or write a patch with the assignable parameters set and it'll work right.
+</ul>
+
+<li>Even if MIDIParamLCD is set to ON, any real-time changes you make won't be reflected on the LCD unless you first twiddle a knob so the synth is in its edit mode.
+</ul>
+
+<p>Thanks to Francois Dussaud for his significant work in debugging.
+
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>June 2020
+</table>
+
+
+

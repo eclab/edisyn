@@ -1075,4 +1075,175 @@ public class Midi
             return (String)(map.get(new Integer(data[0 + offset])));
             }
         }
+    
+    
+    byte[] inSysex = null;
+    byte[] keySysex = null;
+    
+    public void resetInSysexData()
+    	{
+    	inSysex = null;
+    	}
+    	
+    public void resetKeySysexData()
+    	{
+    	keySysex = null;
+    	}
+    	
+    public byte[] gatherInSysexData(byte[] data, int messageLen)
+    	{
+	   	if (messageLen == 0) // uh...
+	   		{
+    		return null;
+    		}
+    		
+    	if (data.length == 0) // uh...
+    		{
+    		return null;
+    		}
+		    		
+    	if (data[0] == (byte)0xF0)  // it's a new message
+    		{
+    		System.err.println("0xF0");
+    		inSysex = new byte[messageLen];
+	    	System.arraycopy(data, 0, inSysex, 0, messageLen);
+	    	}
+	    else if (data[0] == (byte)0xF7)  // it's a continuation of a message
+	    	{
+    		System.err.println("0xF7");
+	    	if (inSysex == null) // uh...
+	    		return null;
+	    	byte[] temp = new byte[inSysex.length + messageLen - 1];
+	    	
+	    	// yeah yeah, O(n^2), I could obviously do much, much better, maybe later
+	    	System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
+	    	System.arraycopy(data, 1, temp, inSysex.length, messageLen - 1);	// skip the 0xF7
+	    	inSysex = temp;
+	    	}
+	    /*
+	    else 		// May be missing the 0xF7?
+	    	{
+	    	if (inSysex == null) // uh...
+	    		return null;
+	    	byte[] temp = new byte[inSysex.length + messageLen];
+	    	// yeah yeah, O(n^2), I could obviously do much better, maybe later
+	    	System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
+	    	System.arraycopy(data, 0, temp, inSysex.length, messageLen);
+	    	}
+	    */
+for(int i = 0; i < inSysex.length; i++)
+	System.err.print(" " + inSysex[i]);
+	System.err.println();
+		if (inSysex != null && inSysex.length != 0 && inSysex[inSysex.length - 1] == (byte)0xF7)  // completed
+			{
+    		System.err.println("0xF7 END");
+			byte[] temp = inSysex;
+			inSysex = null;
+			return temp;
+			}
+		else return null;
+    	}
+
+
+
+    public byte[] gatherInSysexData(SysexMessage message)
+    	{
+    	int messageLen = message.getLength();
+    	
+	   	if (messageLen == 0) // uh...
+	   		{
+    		return null;
+    		}
+    		
+ 		byte[] data = message.getMessage();
+
+    	if (data.length == 0) // uh...
+    		{
+    		return null;
+    		}
+		    		
+    	if (data[0] == (byte)0xF0)  // it's a new message
+    		{
+    		inSysex = new byte[messageLen];
+	    	System.arraycopy(data, 0, inSysex, 0, inSysex.length);
+	    	}
+	    else if (data[0] == (byte)0xF7)  // it's a continuation of a message
+	    	{
+	    	if (inSysex == null) // uh...
+	    		return null;
+	    	byte[] temp = new byte[inSysex.length + messageLen - 1];
+	    	
+	    	// yeah yeah, O(n^2), I could obviously do much, much better, maybe later
+	    	System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
+	    	System.arraycopy(data, 1, temp, inSysex.length, messageLen - 1);	// skip the 0xF7
+	    	inSysex = temp;
+	    	}
+	    /*
+	    else 		// May be missing the 0xF7?
+	    	{
+	    	if (inSysex == null) // uh...
+	    		return null;
+	    	byte[] temp = new byte[inSysex.length + messageLen];
+	    	// yeah yeah, O(n^2), I could obviously do much better, maybe later
+	    	System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
+	    	System.arraycopy(data, 0, temp, inSysex.length, messageLen);
+	    	}
+	    */
+
+		if (inSysex != null && inSysex.length != 0 && inSysex[inSysex.length - 1] == (byte)0xF7)  // completed
+			{
+			byte[] temp = inSysex;
+			inSysex = null;
+			return temp;
+			}
+		else return null;
+    	}
+
+    public byte[] gatherKeySysexData(SysexMessage message)
+    	{
+    	int messageLen = message.getLength();
+
+    	if (messageLen == 0) // uh...
+    		return null;
+    	
+		byte[] data = message.getMessage();
+
+    	if (data.length == 0) // uh...
+    		return null;
+    		
+    	if (data[0] == 0xF0)  // it's a new message
+    		{
+    		keySysex = new byte[messageLen];
+	    	System.arraycopy(data, 0, keySysex, 0, keySysex.length);
+	    	}
+	    else if (data[0] == 0xF7)  // it's a continuation of a message
+	    	{
+	    	if (keySysex == null) // uh...
+	    		return null;
+	    	byte[] temp = new byte[keySysex.length + messageLen - 1];
+	    	
+	    	// yeah yeah, O(n^2), I could obviously do much, much better, maybe later
+	    	System.arraycopy(keySysex, 0, temp, 0, keySysex.length);
+	    	System.arraycopy(data, 1, temp, keySysex.length, messageLen - 1);	// skip the 0xF7
+	    	}
+	    /*
+	    else 		// May be missing the 0xF7?
+	    	{
+	    	if (keySysex == null) // uh...
+	    		return null;
+	    	byte[] temp = new byte[keySysex.length + messageLen];
+	    	// yeah yeah, O(n^2), I could obviously do much better, maybe later
+	    	System.arraycopy(keySysex, 0, temp, 0, keySysex.length);
+	    	System.arraycopy(data, 0, temp, keySysex.length, messageLen);
+	    	}
+	    */
+
+		if (keySysex != null && keySysex.length != 0 && keySysex[keySysex.length - 1] == 0xF7)  // completed
+			{
+			byte[] temp = keySysex;
+			keySysex = null;
+			return temp;
+			}
+		else return null;
+    	}
     }

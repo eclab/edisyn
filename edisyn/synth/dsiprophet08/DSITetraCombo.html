@@ -41,7 +41,7 @@ The menu has several options that are useful for Tetra owners.
 <ul>
 <li>When you set the destination for a sequencer track to "Osc 1 Freq", "Osc 2 Freq", or "Osc 1&2 Freq", the track dials will change from number values to notes.  The lowest note, <b>C0</b>, corresponds to the note being played by the user -- that is, all sequenced notes are equal to or higher than the played note.  If you need notes lower than the played note, pitch the oscillator frequencies down.
 
-<p><li>On the Tetra, the assignable parameters "[Invalid 5]" and "[Invalid 6]" are, on the Beta OS only, "Osc 1 Wave Reset" and "Osc 2 Wave Reset" respectively.  But they're still subject to the serious assignable parameter crash issues discussed in Gotchase, next.
+<p><li>On the Tetra, the assignable parameters "[Invalid 5]" and "[Invalid 6]" are, on the Beta OS only, "Osc 1 Wave Reset" and "Osc 2 Wave Reset" respectively.  But they're still subject to the serious assignable parameter crash issues discussed in Gotchas, next.
 
 </ul>
 
@@ -50,11 +50,9 @@ The menu has several options that are useful for Tetra owners.
 <ul>
 <li>There is a hole in the middle of the Tetra's parameters -- you'll see parameters labelled "[Invalid ...]".  These are invalid settings right in the middle of the valid range, and on top of it, the Tetra can crash if it uses them!  So I have opted to do the following.  You are permitted to set to these values in Edisyn, but Edisyn will send, write, or save patches by silently substituting value 0 ("Osc 1 Frequency") instead.
 
-<p><li>Likewise, there is a <i>different</i> hole in the middle of the Mopho's parameters, with the same dangers, and so I have elected to follow the same strategy.
+<p><li>A Tetra Combo responds to the "asignable parameters" in unexpected ways.  If you're editing Voice 1 only, the Tetra will respond to Edisyn modifying all four parameters (even though they're on four different tabs in the Edisyn editor).  But if you're editing all four voices, the Tetra will respond only to the assignable parameter for Voice 1!   The Tetra sends odd outputs when you are manually changing these parameters on the Tetra directly, so Edisyn may or may not update accordingly.
 
 <p><li>If you are using the Tetra's Beta OS, setting any of the assignable parameters in real-time just sets the parameter to "Osc 1 Frequency" due to a bug in the OS.  However you can send or write a patch with the assignable parameters set and it'll work right.  See discussion of the <b>Send Assignable Params</b> menu option above.
-
-</ul>
 
 <li>Even if MIDIParamLCD is set to ON, any real-time changes you make won't be reflected on the LCD unless you first twiddle a knob so the synth is in its edit mode.
 </ul>

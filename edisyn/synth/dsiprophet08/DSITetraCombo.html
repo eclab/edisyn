@@ -5,7 +5,8 @@
 <h1>Dave Smith Instruments Tetra</h1> 
 <h2>Combo Patch Editor</h2>
 
-<p>This editor only works with the <b>DSI Tetra</b>.  A Combo is essentially an extension of the standard (2-layer) patch to 4 layers, one for each note.
+<p>This editor only works with the <b>DSI Tetra</b>.  A Combo is essentially an extension of the standard (2-layer) patch to 4 layers, one for each voice.  
+
 
 <br><br><h3>Communicating with Edisyn</h3>
 
@@ -25,9 +26,9 @@ In a combo, all four voices have (more or less) exactly the same set of paramete
 The menu has several options that are useful for Tetra owners.
 
 <ul>
-<li> <b>Copy Voice...</b> and <b>Swap Voices...</b> allow you to copy and swap different Voice layers.
+<li> <b>Copy Voice...</b> and <b>Swap Voices...</b> allow you to copy and swap different voices.
 
-<p><li> <b>Load All Voices</b>, <b>Load Only Voice 1</>, etc.  When you load a sysex file, receive a dump or merge from your Tetra, or reset your combo patch, your setting here will dictate whether this will effect all voice layers, or just a single voice (keeping the others intact).  This way, for example, you can just clear out Voice 1.  Or you could make a combo patch consisting of different voices from different combo pthes, by loading the first patch, the restricting to a specific voice and loading the next patch (which would slot it into that voice).  You may need to swap or copy voices to do that.
+<p><li> <b>Load All Voices</b>, <b>Load Only Voice 1</>, etc.  When you load a sysex file, receive a dump or merge from your Tetra, or reset your combo patch, your setting here will dictate whether this will effect all voices, or just a single voice (keeping the others intact).  This way, for example, you can just clear out Voice 1.  Or you could make a combo patch consisting of different voices from different combo pthes, by loading the first patch, the restricting to a specific voice and loading the next patch (which would slot it into that voice).  You may need to swap or copy voices to do that.
 
 <p><li><b>Build Single Patch...</b> constructs a Tetra single patch out of two voices from this Combo.  The patch name will be the name of the first voice chosen.  The "assignable parameters" from all four voices will also be loaded into the single patch.
 

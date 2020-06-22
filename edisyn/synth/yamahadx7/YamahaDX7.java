@@ -450,8 +450,9 @@ public class YamahaDX7 extends Synth
             {
             public String map(int val)
                 {
-                int oct = (val - 3) / 12;
-                return NOTES[val % 12] + oct;
+                //int oct = (val - 3) / 12;
+                //return NOTES[val % 12] + oct;
+        		return (NOTES[val % 12] + ((val + 9) / 12 - 1));
                 }
             public boolean isSymmetric() { return true; }
             public int getDefaultValue() { return 50; }

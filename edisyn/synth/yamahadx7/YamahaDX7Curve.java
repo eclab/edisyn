@@ -85,7 +85,7 @@ public class YamahaDX7Curve extends JComponent implements Updatable
         
         g.draw(new Rectangle2D.Double(rect.x, rect.y, rect.width, rect.height));
         g.draw(new Line2D.Double(rect.x, rect.y + rect.height/2.0, rect.x + rect.width, rect.y + rect.height / 2.0));
-        g.draw(new Line2D.Double(rect.x + rect.width / 2.0, rect.y, rect.x + rect.width / 2.0, rect.y + rect.height)); 
+        //g.draw(new Line2D.Double(rect.x + rect.width / 2.0, rect.y, rect.x + rect.width / 2.0, rect.y + rect.height)); 
         
         double x = synth.getModel().get(breakpointkey, 50) / 99.0 * rect.width;
         int left = synth.getModel().get(leftkey, 0);

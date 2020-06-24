@@ -449,7 +449,7 @@ public class PreenFM2 extends Synth
         hbox.add(Strut.makeHorizontalStrut(10));
 
         VBox vbox1 = new VBox();       
-        comp = new IconDisplay(null, ALGORITHM_ICONS, this, "algorithm");
+        comp = new IconDisplay(null, ALGORITHM_ICONS, this, "algorithm", 104, 104);
         vbox1.add(comp);
         hbox.add(vbox1);
 

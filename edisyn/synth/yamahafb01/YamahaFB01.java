@@ -302,7 +302,7 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
         
         hbox.add(Strut.makeHorizontalStrut(10));
         
-        comp = new IconDisplay(null, ALGORITHM_ICONS, this, "algorithm");
+        comp = new IconDisplay(null, ALGORITHM_ICONS, this, "algorithm", 104, 104);
         hbox.add(comp);
 
         hbox.add(Strut.makeHorizontalStrut(10));

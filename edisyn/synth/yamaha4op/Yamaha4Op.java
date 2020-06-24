@@ -541,7 +541,7 @@ public class Yamaha4Op extends Synth
         
         hbox.add(Strut.makeHorizontalStrut(10));
 
-        comp = new IconDisplay(null, ALGORITHM_ICONS, this, "algorithm");
+        comp = new IconDisplay(null, ALGORITHM_ICONS, this, "algorithm", 104, 104);
         hbox.add(comp);
 
         hbox.add(Strut.makeHorizontalStrut(10));

@@ -454,7 +454,7 @@ public class RolandD110Tone extends Synth
         
         hbox.add(Strut.makeHorizontalStrut(8));
 
-        comp = new IconDisplay(null, STRUCTURE_ICONS, this, "structure1and2");
+        comp = new IconDisplay(null, STRUCTURE_ICONS, this, "structure1and2", 106, 80);
         hbox.add(comp);
 
         hbox.add(Strut.makeHorizontalStrut(8));
@@ -465,7 +465,7 @@ public class RolandD110Tone extends Synth
 
         hbox.add(Strut.makeHorizontalStrut(8));
 
-        comp = new IconDisplay(null, STRUCTURE_ICONS, this, "structure3and4");
+        comp = new IconDisplay(null, STRUCTURE_ICONS, this, "structure3and4", 106, 80);
         hbox.add(comp);
         vbox.add(hbox);
         vbox.add(Strut.makeVerticalStrut(8));

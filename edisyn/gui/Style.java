@@ -207,4 +207,21 @@ public class Style
         {
         return (OS().indexOf("nix") >= 0 || OS().indexOf("nux") >= 0 || OS().indexOf("aix") > 0 );
         }
+
+	public static boolean isRetinaDisplay() 
+		{
+		GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		try {
+			java.lang.reflect.Field field = graphicsDevice.getClass().getDeclaredField("scale");
+			if (field != null) 
+				{
+				field.setAccessible(true);
+				Object scale = field.get(graphicsDevice);
+				if(scale instanceof Integer && ((Integer) scale).intValue() == 2) return true;
+				}
+			} 
+		catch (Exception e) { e.printStackTrace(); }
+		return false;
+		}
+
     }

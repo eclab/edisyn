@@ -1009,7 +1009,7 @@ public class EmuMorpheus extends Synth
                         val = ULTRAPROTEUS_INSTRUMENT_OFFSETS[val];
                     }
                 else if (key.equals("layer1filttype") ||
-                    key.equals("layer12filttype"))
+                    key.equals("layer2filttype"))
                     {
                     if (morpheus)
                         val = MORPHEUS_FILTER_OFFSETS[val];

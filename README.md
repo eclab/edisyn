@@ -33,7 +33,7 @@ Edisyn presently supports:
 
 * Alesis D4 and DM5 
 * Casio CZ Series (CZ101, CZ1000, CZ3000, CZ5000, CZ-1)
-* DSI Prophet '08
+* DSI Prophet '08, Tetra, Mopho, Mopho Keyboard, Mopho SE, and Mopho x4 (Single and (for Tetra) Combo modes)
 * E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap modes)
 * E-Mu Proteus 1, 1XR, 2, 2XR, 3, 3XR, and 1+Orchestral
 * Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
@@ -53,11 +53,12 @@ Edisyn presently supports:
 * Yamaha DX7 Family (DX7, TX7, TX802, TX216/TX816, Korg Volca FM, Dexed, DX200, DX9)
 * Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, etc.) (Single and (for TX81Z and DX11) Multi Modes)
 * Yamaha FB01 (Single and Multi Modes)
+* Yamaha FS1R (Voice and Performance Modes)
 * Yamaha TG33, SY22, and SY35 (Single and (for TG33) Multi Modes)
 * General CC, NRPN, and RPN editing
 * Microtuning editing
 
-Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, randomization, merging, nudging, hill-climbing, patch constriction, per-parameter customization, real-time parameter updates, test notes, etc.
+Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, randomization, merging, nudging, hill-climbing, patch constriction, per-parameter customization, real-time parameter updates, test notes and chords, etc.
 
 ## Manual
 
@@ -72,9 +73,7 @@ Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux)
 
 First install Edisyn from the [Edisyn.app.zip](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.app.zip) file.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
 
-MacOS has lately locked down the ability to run an application that's not from a commercial, paying Apple Developer.  And I'm not one.  So you will have to instruct MacOS to permit Edisyn to run.
-
-Let's assume you stuck Edisyn in the /Applications directory as usual.  Now we have to tell Gatekeeper to allow Edisyn to run on your machine:
+MacOS has lately locked down the ability to run an application that's not from a commercial, paying Apple Developer.  And I'm not one.  So you will have to instruct MacOS to permit Edisyn to run.  Let's assume you stuck Edisyn in the /Applications directory as usual.  Now we have to tell Gatekeeper to allow Edisyn to run on your machine:
 
 1. Run the Terminal Program (in /Applications/Utilities/)
 2. Type the following command and hit RETURN: `   sudo spctl --add /Applications/Edisyn.app`
@@ -84,6 +83,8 @@ Let's assume you stuck Edisyn in the /Applications directory as usual.  Now we h
 Now you should be able to run Edisyn.  Let me know if this all works.
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
+
+You can also run Edisyn from its jar file from the command line: see "Running from the command line" at end of these instructions. 
 
 #### Dealing with Catalina...
 
@@ -99,7 +100,7 @@ You may have installed the MMJ (MIDI Java) library in the past, which is now obs
 
 I believe that the following should work:
 
-1. [Download and install Java 11](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  The JRE should work fine.
+1. [Download and install at least Java 11](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  The JRE should work fine.
 
 2. Download Edisyn's jar file, called [edisyn.jar](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar), presently located in the "jar" directory.
 
@@ -107,16 +108,16 @@ I believe that the following should work:
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
-#### Important Note for Windows User
+#### Important Note for Windows Users
 
-Java versions earlier than 11 (or so) do not handle high-resolution displays properly, so Edisyn will appear teeny-tiny.  You need to upgrade to 11.
+Java versions earlier than 11 (or so) do not handle high-resolution displays properly, so Edisyn will appear teeny-tiny.  You need to upgrade to 11 or beyond.
 
 Also Edisyn makes heavy use of Java preferences to store persistence information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows for earlier versions of Java.  I think this is fixed as of Java 11 but you should check and let me know.
 
 
 ### Installation and Running on Linux
 
-I'm told that Edisyn works fine if you have installed *Java 8*.  After this:
+I'm told that Edisyn works fine if you have installed at least Java 8.  After this:
 
 1. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar) located in the "jar" directory.
 

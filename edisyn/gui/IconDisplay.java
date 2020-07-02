@@ -27,6 +27,7 @@ public class IconDisplay extends JComponent implements Updatable
     JLabel label;
     JPanel display;
     ImageIcon[] icons;
+    ImageIcon[] originalIcons;
     String key;
     Synth synth;
     ImageIcon icon = null;
@@ -38,7 +39,10 @@ public class IconDisplay extends JComponent implements Updatable
         { 
         int v = model.get(key, 0);
         if (v < icons.length && v >= 0)
+            {
+            buildIcon(v);
             icon = icons[v];
+            }
         else System.err.println("Warning (IconDisplay): invalid value for key " + key + ", was " + v);
         repaint();
         }
@@ -48,27 +52,41 @@ public class IconDisplay extends JComponent implements Updatable
         h = height;
         w = width;
         retina = Style.isRetinaDisplay();
-        for(int i = 0; i < icons.length; i++)
-            {
-            icons[i] = new ImageIcon(icons[i].getImage().getScaledInstance(retina ? width*2 : width, retina ? height*2 : height, java.awt.Image.SCALE_SMOOTH));
-            }
-        buildIconDisplay(label, icons, synth, key);
+        this.icons = new ImageIcon[icons.length];
+        originalIcons = (ImageIcon[])(icons.clone());
+        buildIconDisplay(label, synth, key);
         }
 
+	public void buildIcon(int i)
+		{
+		if (icons[i] == null)
+			{
+			icons[i] = new ImageIcon(originalIcons[i].getImage().getScaledInstance(retina ? w * 2 : w, retina ? h * 2 : h, java.awt.Image.SCALE_SMOOTH));
+			}
+		}
 
     public IconDisplay(String label, ImageIcon[] icons, Synth synth, String key)
         {
-        buildIconDisplay(label, icons, synth, key);
+        this(label, icons, synth, key, icons[0].getImage().getWidth(null), icons[0].getImage().getHeight(null));
         }
 
-    public void buildIconDisplay(String label, ImageIcon[] icons, Synth synth, String key)
+    public void buildIconDisplay(String label, Synth synth, String key)
         {
         this.synth = synth;
         this.key = key;
-        this.icons = icons;
         this.label = new JLabel(label);
         this.display = new JPanel()
         	{
+        	public Dimension getMinimumSize()
+        		{
+        		return new Dimension(w, h);
+        		}
+        		
+        	public Dimension getMaximumSize()
+        		{
+        		return new Dimension(w, h);
+        		}
+        		
         	public Dimension getPreferredSize()
         		{
         		return new Dimension(w, h);
@@ -76,15 +94,22 @@ public class IconDisplay extends JComponent implements Updatable
         		
         	public void paintComponent(Graphics g)
         		{
-        			Graphics2D g2 = (Graphics2D) g;
+        		Graphics2D g2 = (Graphics2D) g;
+        		g2.setColor(Style.BACKGROUND_COLOR());
+        		g2.fillRect(0, 0, getWidth(), getHeight());
         		if (retina)
         			{
+        			g2.setColor(Color.BLACK);
         			AffineTransform a = g2.getTransform();
         			a.scale(0.5, 0.5);
         			g2.setTransform(a);
+        			g2.fillRect(0, 0, getWidth() * 2, getHeight() * 2);
         			}
-        		g2.setColor(Color.BLACK);
-        		g2.fillRect(0, 0, getWidth(), getHeight());
+        		else
+        			{
+        			g2.setColor(Color.BLACK);
+        			g2.fillRect(0, 0, getWidth(), getHeight());
+        			}
         		g2.drawImage(icon.getImage(), 0, 0, null);
         		}
         	};
@@ -93,12 +118,11 @@ public class IconDisplay extends JComponent implements Updatable
         this.label.setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
         this.label.setForeground(Style.TEXT_COLOR());
         setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
-        //this.icon.setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
 
         setLayout(new BorderLayout());
-        add(this.display, BorderLayout.CENTER);
+        add(this.display, BorderLayout.NORTH);
         if (label != null)
-            add(this.label, BorderLayout.NORTH);
+            add(this.label, BorderLayout.CENTER);
 
         synth.getModel().register(key, this);
         update(key, synth.getModel());

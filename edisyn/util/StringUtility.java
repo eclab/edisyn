@@ -53,6 +53,14 @@ public class StringUtility
         {
         return new Scanner(string).useDelimiter("\\D+").nextInt();
         }
+
+    public static int getSecondInt(String string)
+        {
+        Scanner scan = new Scanner(string);
+        scan.useDelimiter("\\D+");
+        scan.nextInt();
+        return scan.nextInt();
+        }
     
     /** Returns the sole integer embedded within the string.  If
         multiple integers are embedded, they will be concatenated into a larger

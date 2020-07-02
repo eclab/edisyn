@@ -1105,6 +1105,14 @@ public abstract class Synth extends JComponent implements Updatable
 									}
                                 else if (recognizeLocal(data))
                                     {
+                                    // this last statement fixes a mystery.  When I call Randomize or Reset on
+                                    // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+                                    // But on a Blofeld Multi or Microwave Multi they update one at a time.
+                                    // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+                                    // into the Blofeld, and it makes no difference!  For some reason the OS X
+                                    // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+                                    repaint();
+                                                                                                
                                     if (merging != 0.0)
                                         {
                                         if (merge(data, merging) == PARSE_INCOMPLETE)
@@ -1158,14 +1166,6 @@ public abstract class Synth extends JComponent implements Updatable
                                         file = null;
                                         }
 
-                                    // this last statement fixes a mystery.  When I call Randomize or Reset on
-                                    // a Blofeld or on a Microwave, all of the widgets update simultaneously.
-                                    // But on a Blofeld Multi or Microwave Multi they update one at a time.
-                                    // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-                                    // into the Blofeld, and it makes no difference!  For some reason the OS X
-                                    // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-                                    repaint();
-                                                                                                
                                     updateTitle();
                                     }
                                 else    // Maybe it's a local Parameter change in sysex?
@@ -1924,6 +1924,14 @@ public abstract class Synth extends JComponent implements Updatable
 			}
         else
             {
+            // this last statement fixes a mystery.  When I call Randomize or Reset on
+            // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+            // But on a Blofeld Multi or Microwave Multi they update one at a time.
+            // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+            // into the Blofeld, and it makes no difference!  For some reason the OS X
+            // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+            repaint();
+
             undo.setWillPush(false);
             Model backup = (Model)(model.clone());
             model.recombine(random, mergeSynth.getModel(), getMutationKeys(), probability); //useMapForRecombination ? getMutationKeys() : model.getKeys()
@@ -1936,13 +1944,6 @@ public abstract class Synth extends JComponent implements Updatable
             setSendMIDI(true);
             sendAllParameters();
 
-            // this last statement fixes a mystery.  When I call Randomize or Reset on
-            // a Blofeld or on a Microwave, all of the widgets update simultaneously.
-            // But on a Blofeld Multi or Microwave Multi they update one at a time.
-            // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-            // into the Blofeld, and it makes no difference!  For some reason the OS X
-            // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-            repaint();
             return result;
             }
         }
@@ -2272,6 +2273,14 @@ public abstract class Synth extends JComponent implements Updatable
             {
             try 
                 {
+                // this last statement fixes a mystery.  When I call Randomize or Reset on
+                // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+                // But on a Blofeld Multi or Microwave Multi they update one at a time.
+                // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+                // into the Blofeld, and it makes no difference!  For some reason the OS X
+                // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+                repaint();
+
                 byte[] buffer = new byte[MAX_FILE_LENGTH];   // better not be longer than this
                 int size = readFully(buffer, stream);
 
@@ -2284,14 +2293,6 @@ public abstract class Synth extends JComponent implements Updatable
                 parse(data, true);
                 setSendMIDI(true);
                 model.setUndoListener(undo);    // okay, redundant, but that way the pattern stays the same
-
-                // this last statement fixes a mystery.  When I call Randomize or Reset on
-                // a Blofeld or on a Microwave, all of the widgets update simultaneously.
-                // But on a Blofeld Multi or Microwave Multi they update one at a time.
-                // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-                // into the Blofeld, and it makes no difference!  For some reason the OS X
-                // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-                repaint();
                 }
             catch (Exception e)
                 {
@@ -2804,7 +2805,7 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     if (lastMutate > 0.0)
                         {
-                        doUndo();
+                        doUndo(false);		// no reason to send it
                         doMutate(lastMutate);
                         }
                     else
@@ -4497,6 +4498,14 @@ public abstract class Synth extends JComponent implements Updatable
                 
     void doReset()
         {
+        // this last statement fixes a mystery.  When I call Randomize or Reset on
+        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+        // But on a Blofeld Multi or Microwave Multi they update one at a time.
+        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+        // into the Blofeld, and it makes no difference!  For some reason the OS X
+        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+        repaint();
+
         //if (!showSimpleConfirm("Reset", "Reset the parameters to initial values?"))
         //    return;
                 
@@ -4511,14 +4520,6 @@ public abstract class Synth extends JComponent implements Updatable
             undo.push(backup);
         setSendMIDI(true);
         sendAllParameters();
-                
-        // this last statement fixes a mystery.  When I call Randomize or Reset on
-        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
-        // But on a Blofeld Multi or Microwave Multi they update one at a time.
-        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-        // into the Blofeld, and it makes no difference!  For some reason the OS X
-        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-        repaint();
         }
                 
     void doWriteToPatch()
@@ -4889,7 +4890,8 @@ public abstract class Synth extends JComponent implements Updatable
         return newSynth;
         }
                 
-    void doUndo()
+    void doUndo() { doUndo(true); }
+    void doUndo(boolean send)
         {
         setSendMIDI(false);
         if (model.equals(undo.top()))
@@ -4900,7 +4902,7 @@ public abstract class Synth extends JComponent implements Updatable
         model.updateAllListeners();
         undo.setWillPush(currentPush);
         setSendMIDI(true);
-        sendAllParameters();
+        if (send) sendAllParameters();
         }
                 
     void doRedo()
@@ -4962,6 +4964,14 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (towards == -1) return;
                 
+        // this last statement fixes a mystery.  When I call Randomize or Reset on
+        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+        // But on a Blofeld Multi or Microwave Multi they update one at a time.
+        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+        // into the Blofeld, and it makes no difference!  For some reason the OS X
+        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+        repaint();
+        
         setSendMIDI(false);
         undo.push(model);
         if (towards < 4)
@@ -4981,14 +4991,6 @@ public abstract class Synth extends JComponent implements Updatable
         setSendMIDI(true);
         sendAllParameters();
 
-        // this last statement fixes a mystery.  When I call Randomize or Reset on
-        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
-        // But on a Blofeld Multi or Microwave Multi they update one at a time.
-        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-        // into the Blofeld, and it makes no difference!  For some reason the OS X
-        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-        repaint();
-        
         lastNudge = towards;
         }
 
@@ -4997,6 +4999,14 @@ public abstract class Synth extends JComponent implements Updatable
     /** This method is public to allow the test classes to access it. */
     public void doMutate(double probability)
         {
+        // this last statement fixes a mystery.  When I call Randomize or Reset on
+        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+        // But on a Blofeld Multi or Microwave Multi they update one at a time.
+        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+        // into the Blofeld, and it makes no difference!  For some reason the OS X
+        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+        repaint();
+
         if (probability == 0.0) 
             return;
                 
@@ -5013,14 +5023,6 @@ public abstract class Synth extends JComponent implements Updatable
         setSendMIDI(true);
         
         sendAllParameters();
-
-        // this last statement fixes a mystery.  When I call Randomize or Reset on
-        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
-        // But on a Blofeld Multi or Microwave Multi they update one at a time.
-        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-        // into the Blofeld, and it makes no difference!  For some reason the OS X
-        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-        repaint();
         lastMutate = probability;
         }
 
@@ -5770,6 +5772,14 @@ public abstract class Synth extends JComponent implements Updatable
         {
         boolean succeeded;
         
+        // this last statement fixes a mystery.  When I call Randomize or Reset on
+        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+        // But on a Blofeld Multi or Microwave Multi they update one at a time.
+        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+        // into the Blofeld, and it makes no difference!  For some reason the OS X
+        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+        repaint();  
+
         setSendMIDI(false);
         undo.setWillPush(false);
         Model backup = (Model)(model.clone());
@@ -5834,13 +5844,6 @@ public abstract class Synth extends JComponent implements Updatable
 
         setSendMIDI(true);
                                                                 
-        // this last statement fixes a mystery.  When I call Randomize or Reset on
-        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
-        // But on a Blofeld Multi or Microwave Multi they update one at a time.
-        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-        // into the Blofeld, and it makes no difference!  For some reason the OS X
-        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-        repaint();  
         return succeeded;       
         }
     
@@ -5849,6 +5852,14 @@ public abstract class Synth extends JComponent implements Updatable
         {
         Synth otherSynth = instantiate(synthClass, synthName, false, true, null);
         otherSynth.setSendMIDI(false);
+        
+        // this last statement fixes a mystery.  When I call Randomize or Reset on
+        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+        // But on a Blofeld Multi or Microwave Multi they update one at a time.
+        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+        // into the Blofeld, and it makes no difference!  For some reason the OS X
+        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+        otherSynth.repaint();
         
         int result = PARSE_ERROR;
         try
@@ -5879,14 +5890,6 @@ public abstract class Synth extends JComponent implements Updatable
 
         otherSynth.setSendMIDI(true);
 
-        // this last statement fixes a mystery.  When I call Randomize or Reset on
-        // a Blofeld or on a Microwave, all of the widgets update simultaneously.
-        // But on a Blofeld Multi or Microwave Multi they update one at a time.
-        // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-        // into the Blofeld, and it makes no difference!  For some reason the OS X
-        // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-        otherSynth.repaint();
-        
         if (otherSynth.getSendsParametersAfterLoad()) // we'll need to do this
             otherSynth.sendAllParameters();
                 

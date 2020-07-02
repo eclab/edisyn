@@ -977,7 +977,7 @@ public class EmuMorpheus extends Synth
                 (key.endsWith("level") || key.endsWith("type")))
                 {
                 String base = key.substring(0,7);
-                param = ((Integer)(parametersToIndex.get(base + "typelevel"))).intValue();
+                param = ((Integer)(parametersToIndex.get(base + "typelevel"))).intValue() + PARAM_OFFSET;
                 }
             else
                 {
@@ -996,7 +996,7 @@ public class EmuMorpheus extends Synth
                 int level = model.get(base + "level");
                 if (level < 0) level += 256;
                                 
-                val = (model.get(base + "type", 0) << 8) | level;
+                val = (model.get(base + "type", 0) << 8) | (level & 127);
                 }
             else
                 {

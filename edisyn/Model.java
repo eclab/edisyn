@@ -256,7 +256,9 @@ public class Model implements Cloneable
                     for(int x = 0; x < VALID_RETRIES; i++)
                         {
                         int lowerRange = getMetricMin(keys[i]) - getMin(keys[i]);
+                        if (lowerRange < 0) System.err.println("WARNING (Model.mutate): metric min is below min.  That can't be right:  " + keys[i]); 
                         int upperRange = getMax(keys[i]) - getMetricMax(keys[i]);
+                        if (upperRange < 0) System.err.println("WARNING (Model.mutate): metric max is above max.  That can't be right:  " + keys[i]); 
                         int delta = random.nextInt(lowerRange + upperRange);
                         if (delta < lowerRange)
                             {
@@ -644,6 +646,13 @@ public class Model implements Cloneable
         list.add(component);
         listeners.put(key, list);
         }
+    
+    public void unregister(String key, Updatable component)
+    	{
+        ArrayList list = (ArrayList)(listeners.get(key));
+        if (list != null)
+        	list.remove(component);
+    	}
 
     /** Returns all the keys in the model as an array, except the hidden ones. */        
     public String[] getKeys()
@@ -703,7 +712,6 @@ public class Model implements Cloneable
         recentlySet = true;
         }
 
-        
     public void setBounded(String key, int value)
         {
         if (isString(key))
@@ -956,7 +964,7 @@ public class Model implements Cloneable
     public int getMin(String key)
         {
         Integer d = (Integer) (min.get(key));
-        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent min extracted for " + key); return 0; }
+        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent min extracted for " + key); new Throwable().printStackTrace(); return 0; }
         else return d.intValue();
         }
                 
@@ -1018,6 +1026,13 @@ public class Model implements Cloneable
             return (val >= getValidMin(key) && val <= getValidMax(key));
         }
     
+    /** Deletes the metric min and max for a key */
+    public void removeMinMax(String key)
+        {
+        min.remove(key);
+        max.remove(key);
+        }
+
     /** Deletes the metric min and max for a key */
     public void removeMetricMinMax(String key)
         {

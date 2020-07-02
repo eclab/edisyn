@@ -26,6 +26,7 @@ public class Category extends JComponent implements Gatherable
     Synth synth;
     
     String preamble;
+    String preamble2;
     String distributePreamble;
     boolean pasteable = false;
     boolean distributable = false;
@@ -41,6 +42,7 @@ public class Category extends JComponent implements Gatherable
     MenuItem reset = new MenuItem("Reset Category");
     
     public void makePasteable(String preamble) { pasteable = true; this.preamble = preamble; }
+    public void makePasteable(String preamble, String preamble2) { pasteable = true; this.preamble = preamble; }
     public void makeDistributable(String preamble) { distributable = true; this.distributePreamble = preamble; }
     public void makeUnresettable() { reset.setEnabled(false); }
     public void setSendsAllParameters(boolean val) { sendsAllParameters = val; }

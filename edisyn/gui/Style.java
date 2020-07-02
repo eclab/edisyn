@@ -208,6 +208,7 @@ public class Style
         return (OS().indexOf("nix") >= 0 || OS().indexOf("nux") >= 0 || OS().indexOf("aix") > 0 );
         }
 
+	// From https://stackoverflow.com/questions/12431148/swing-and-bitmaps-on-retina-displays
 	public static boolean isRetinaDisplay() 
 		{
 		GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();

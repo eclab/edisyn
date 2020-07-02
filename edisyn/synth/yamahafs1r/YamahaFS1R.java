@@ -173,18 +173,39 @@ public class YamahaFS1R extends Synth
         for(int p = 0; p < 4; p++)
             {
             // Rcv
-            tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID()), 0x5E, (byte)(0x30 + p), 0, 0x04, 0, 0x7F, (byte)0xF7 });
+            tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + p), 0, 0x04, 0, 0x7F, (byte)0xF7 });
             // Rcv Max
-            tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID()), 0x5E, (byte)(0x30 + p), 0, 0x03, 0, 0x7F, (byte)0xF7 });
+            tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + p), 0, 0x03, 0, 0x7F, (byte)0xF7 });
             }
                         
         // Set part channel to the same as the performance channel.
         // Keep Rcv Max *off*
         // F0 43 1n 5E 3p 00 ll vv vv F7
         // Rcv
-        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID()), 0x5E, (byte)(0x30 + part), 0, 0x04, 0, 0x10, (byte)0xF7 });
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + part), 0, 0x04, 0, 0x10, (byte)0xF7 });
         }
         
+    public void setupTestPerformance()
+        {
+        if (tuple == null)
+            if (!setupMIDI(tuple))
+                return;
+
+        if (tuple != null)
+            {
+            final YamahaFS1RMulti synth = new YamahaFS1RMulti();
+            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+            if (synth.tuple != null)
+                {
+                synth.loadDefaults();
+                synth.getModel().set("name", "Edisyn");
+                synth.getModel().set("part1fsw", 1);                    // turn on filter switch so we can test with the filter
+                synth.getModel().set("part1rcvchannel", getChannelOut());
+                setPart(1);
+                sendAllParameters();
+                }
+            }
+        }
 
     public void addYamahaFS1RMenu()
         {
@@ -196,9 +217,7 @@ public class YamahaFS1R extends Synth
             {
             public void actionPerformed(ActionEvent e)
                 {
-                setPart(1);
-                // FIXME
-                // Set up a test performance here ...
+                setupTestPerformance();                
                 }
             });
         menu.add(initialize);
@@ -301,11 +320,11 @@ public class YamahaFS1R extends Synth
                         {
                         int op = getOperator(parameters[i]);
                                                 
-                        if (parameters[i].startsWith("operator" + p2) &&
+                        if (parameters[i].startsWith("operator" + p1) &&
                             ((v && (op > 0)) || (u && (op < 0))))           // only copy voiced/unvoiced ops if the user requested it
                             {
                             int val2 = model.get(parameters[i]);
-                            model.set(("operator" + p1) + parameters[i].substring(9), val2);
+                            model.set(("operator" + p2) + parameters[i].substring(9), val2);
                             }
                         }
                                                                                 
@@ -391,8 +410,6 @@ public class YamahaFS1R extends Synth
                     }
                 }
             });
-            
-        menu.addSeparator();
         }
 
     public JFrame sprout()
@@ -585,6 +602,8 @@ public class YamahaFS1R extends Synth
         comp = new LabelledDial("Algorithm", this, "algorithmpresetnumber", color, 0, 87, -1);
         vbox.add(comp);
 
+        model.removeMetricMinMax("algorithmpresetnumber");
+                
         category.add(vbox, BorderLayout.CENTER);
         return category;
         }
@@ -852,6 +871,7 @@ public class YamahaFS1R extends Synth
         params = FILTERS;
         comp = new Chooser("Type", this, "filtertype", params);
         vbox.add(comp);
+        hbox.add(vbox);
 
         // wonder what the zero point would be for THIS                 
         comp = new LabelledDial("Resonance", this,  "filterresonance", color, 0, 116, 16)
@@ -1379,7 +1399,7 @@ public class YamahaFS1R extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Track");
         hbox.add(comp);
         
-        comp = new LabelledDial("Detune", this, "operator" + src + "v" + "detune", color, 0, 14, 7)
+        comp = new LabelledDial("Detune", this, "operator" + src + "v" + "detune", color, 0, 30, 15)
             {
             public boolean isSymmetric() { return true; }
             };
@@ -1654,7 +1674,10 @@ public class YamahaFS1R extends Synth
         comp = new LabelledDial("Skirt", this, "operator" + src + "u" + "spectralskirt", color, 0, 7);          // spectralskirt
         hbox.add(comp);
 
-        comp = new LabelledDial("Level Key", this, "operator" + src + "u" + "levelkeyscaling", color, 0, 14, 7);
+        comp = new LabelledDial("Level Key", this, "operator" + src + "u" + "levelkeyscaling", color, 0, 14, 7)
+            {
+            public boolean isSymmetric() { return true; }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Scaling");
         hbox.add(comp);
     
@@ -2373,7 +2396,6 @@ public class YamahaFS1R extends Synth
             }
         else 
             {
-            System.err.println(key + " is " + ((Integer)obj).intValue());
             return ((Integer)obj).intValue();
             }
         }
@@ -2661,6 +2683,7 @@ public class YamahaFS1R extends Synth
     public Object[] emitAll(String key)
         {
         if (key.equals("number")) return new Object[0];  // this is not emittable
+        if (key.equals("bank")) return new Object[0];  // this is not emittable
 
         if (key.equals("name"))
             {
@@ -2671,7 +2694,7 @@ public class YamahaFS1R extends Synth
                 {
                 int ADDRESS = i;                // we're at the very beginning, so our addresses just happen to be 0...9
                 int LSB = (byte)(name.charAt(i));
-                byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID()), (byte)0x5E, 
+                byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
                     (byte)(64 + part),                      // HIGH: part and common
                     (byte)0,                                        // MEDIUM : operator (common)
                     (byte)ADDRESS,                          // LOW: relative address
@@ -2694,13 +2717,13 @@ public class YamahaFS1R extends Synth
                 {
                 int op = getOperator(allParameters[ADDRESS]);
                 int val = getValue(allParameters[ADDRESS]);
-                int MSB = (val >> 7) & 127;
+                int MSB = (val >>> 7) & 127;
                 int LSB = (val & 127);
                 
                 int address = (ADDRESS < 112 ? ADDRESS :  // common
                     ((ADDRESS - 112) % 62));        // per-op (112 common vals, 62 op vals, 8 ops = 608)
                         
-                byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID()), (byte)0x5E, 
+                byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
                     (byte)((op == 0 ? 64 : 96) + part),                             // HIGH : part and common
                     (byte)((op == 0 ? 0 : (op < 0 ? -op - 1 : op - 1))),    // MEDIUM: operator
                     (byte)address,                          // LOW: relative address
@@ -2716,7 +2739,6 @@ public class YamahaFS1R extends Synth
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-        long val = System.currentTimeMillis();
         if (tempModel == null)
             tempModel = getModel();
 
@@ -2725,13 +2747,13 @@ public class YamahaFS1R extends Synth
         byte[] data = new byte[BYTE_COUNT + 11];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x43;
-        data[2] = (byte)(getID());
+        data[2] = (byte)(getID() - 1);
         data[3] = (byte)0x5E;
-        data[4] = (byte)(BYTE_COUNT >> 7);
+        data[4] = (byte)(BYTE_COUNT >>> 7);
         data[5] = (byte)(BYTE_COUNT & 127);
-        data[6] = (byte)(toWorkingMemory ? 0x40 + part : tempModel.get("number"));
+        data[6] = (byte)(toWorkingMemory ? 0x40 + part : 0x51);
         data[7] = (byte)0x0;
-        data[8] = (byte)0x0;
+        data[8] = (byte)(toWorkingMemory ? 0x00 : tempModel.get("number"));
         
         String name = model.get("name", "INIT VOICE") + "          ";
         for(int i = 0; i < 10; i++)     
@@ -2750,7 +2772,7 @@ public class YamahaFS1R extends Synth
             data[i + 9] = (byte)getValue(allParameters[i]);
             }
                 
-        data[data.length - 2] = produceChecksum(data, 9);
+        data[data.length - 2] = produceChecksum(data, 4);
         data[data.length - 1] = (byte)0xF7;
         return data;
         }
@@ -2800,13 +2822,13 @@ public class YamahaFS1R extends Synth
             }
         
         // Handle POS_operator17vswitch
-        model.set("operator1vswitch", (data[POS_operator17vswitch + 9] >> 0) & 1);
-        model.set("operator2vswitch", (data[POS_operator17vswitch + 9] >> 1) & 1);
-        model.set("operator3vswitch", (data[POS_operator17vswitch + 9] >> 2) & 1);
-        model.set("operator4vswitch", (data[POS_operator17vswitch + 9] >> 3) & 1);
-        model.set("operator5vswitch", (data[POS_operator17vswitch + 9] >> 4) & 1);
-        model.set("operator6vswitch", (data[POS_operator17vswitch + 9] >> 5) & 1);
-        model.set("operator7vswitch", (data[POS_operator17vswitch + 9] >> 6) & 1);
+        model.set("operator1vswitch", (data[POS_operator17vswitch + 9] >>> 0) & 1);
+        model.set("operator2vswitch", (data[POS_operator17vswitch + 9] >>> 1) & 1);
+        model.set("operator3vswitch", (data[POS_operator17vswitch + 9] >>> 2) & 1);
+        model.set("operator4vswitch", (data[POS_operator17vswitch + 9] >>> 3) & 1);
+        model.set("operator5vswitch", (data[POS_operator17vswitch + 9] >>> 4) & 1);
+        model.set("operator6vswitch", (data[POS_operator17vswitch + 9] >>> 5) & 1);
+        model.set("operator7vswitch", (data[POS_operator17vswitch + 9] >>> 6) & 1);
         
         // There's really only one of these...
         for(int i = POS_operator17vswitch + 1; i < POS_operator17uswitch; i++)
@@ -2815,13 +2837,13 @@ public class YamahaFS1R extends Synth
             }
 
         // Handle POS_operator17uswitch
-        model.set("operator1uswitch", (data[POS_operator17uswitch + 9] >> 0) & 1);
-        model.set("operator2uswitch", (data[POS_operator17uswitch + 9] >> 1) & 1);
-        model.set("operator3uswitch", (data[POS_operator17uswitch + 9] >> 2) & 1);
-        model.set("operator4uswitch", (data[POS_operator17uswitch + 9] >> 3) & 1);
-        model.set("operator5uswitch", (data[POS_operator17uswitch + 9] >> 4) & 1);
-        model.set("operator6uswitch", (data[POS_operator17uswitch + 9] >> 5) & 1);
-        model.set("operator7uswitch", (data[POS_operator17uswitch + 9] >> 6) & 1);
+        model.set("operator1uswitch", (data[POS_operator17uswitch + 9] >>> 0) & 1);
+        model.set("operator2uswitch", (data[POS_operator17uswitch + 9] >>> 1) & 1);
+        model.set("operator3uswitch", (data[POS_operator17uswitch + 9] >>> 2) & 1);
+        model.set("operator4uswitch", (data[POS_operator17uswitch + 9] >>> 3) & 1);
+        model.set("operator5uswitch", (data[POS_operator17uswitch + 9] >>> 4) & 1);
+        model.set("operator6uswitch", (data[POS_operator17uswitch + 9] >>> 5) & 1);
+        model.set("operator7uswitch", (data[POS_operator17uswitch + 9] >>> 6) & 1);
         
         for(int i = POS_operator17uswitch + 1; i < POS_formantcontrol1destination; i++)
             {
@@ -2829,21 +2851,21 @@ public class YamahaFS1R extends Synth
             }
                 
         // Handle POS_formantcontrol1destination ... POS_formantcontrol5destination
-        model.set("formantcontrol1dest", (data[POS_formantcontrol1destination + 9 + 0] >> 4) & 3);
-        model.set("formantcontrol1voiced", (data[POS_formantcontrol1destination + 9 + 0] >> 3) & 1);
-        model.set("formantcontrol1op", (data[POS_formantcontrol1destination + 9 + 0] >> 0) & 7);
-        model.set("formantcontrol2dest", (data[POS_formantcontrol1destination + 9 + 1] >> 4) & 3);
-        model.set("formantcontrol2voiced", (data[POS_formantcontrol1destination + 9 + 1] >> 3) & 1);
-        model.set("formantcontrol2op", (data[POS_formantcontrol1destination + 9 + 1] >> 0) & 7);
-        model.set("formantcontrol3dest", (data[POS_formantcontrol1destination + 9 + 2] >> 4) & 3);
-        model.set("formantcontrol3voiced", (data[POS_formantcontrol1destination + 9 + 2] >> 3) & 1);
-        model.set("formantcontrol3op", (data[POS_formantcontrol1destination + 9 + 2] >> 0) & 7);
-        model.set("formantcontrol4dest", (data[POS_formantcontrol1destination + 9 + 3] >> 4) & 3);
-        model.set("formantcontrol4voiced", (data[POS_formantcontrol1destination + 9 + 3] >> 3) & 1);
-        model.set("formantcontrol4op", (data[POS_formantcontrol1destination + 9 + 3] >> 0) & 7);
-        model.set("formantcontrol5dest", (data[POS_formantcontrol1destination + 9 + 4] >> 4) & 3);
-        model.set("formantcontrol5voiced", (data[POS_formantcontrol1destination + 9 + 4] >> 3) & 1);
-        model.set("formantcontrol5op", (data[POS_formantcontrol1destination + 9 + 4] >> 0) & 7);
+        model.set("formantcontrol1dest", (data[POS_formantcontrol1destination + 9 + 0] >>> 4) & 3);
+        model.set("formantcontrol1voiced", (data[POS_formantcontrol1destination + 9 + 0] >>> 3) & 1);
+        model.set("formantcontrol1op", (data[POS_formantcontrol1destination + 9 + 0] >>> 0) & 7);
+        model.set("formantcontrol2dest", (data[POS_formantcontrol1destination + 9 + 1] >>> 4) & 3);
+        model.set("formantcontrol2voiced", (data[POS_formantcontrol1destination + 9 + 1] >>> 3) & 1);
+        model.set("formantcontrol2op", (data[POS_formantcontrol1destination + 9 + 1] >>> 0) & 7);
+        model.set("formantcontrol3dest", (data[POS_formantcontrol1destination + 9 + 2] >>> 4) & 3);
+        model.set("formantcontrol3voiced", (data[POS_formantcontrol1destination + 9 + 2] >>> 3) & 1);
+        model.set("formantcontrol3op", (data[POS_formantcontrol1destination + 9 + 2] >>> 0) & 7);
+        model.set("formantcontrol4dest", (data[POS_formantcontrol1destination + 9 + 3] >>> 4) & 3);
+        model.set("formantcontrol4voiced", (data[POS_formantcontrol1destination + 9 + 3] >>> 3) & 1);
+        model.set("formantcontrol4op", (data[POS_formantcontrol1destination + 9 + 3] >>> 0) & 7);
+        model.set("formantcontrol5dest", (data[POS_formantcontrol1destination + 9 + 4] >>> 4) & 3);
+        model.set("formantcontrol5voiced", (data[POS_formantcontrol1destination + 9 + 4] >>> 3) & 1);
+        model.set("formantcontrol5op", (data[POS_formantcontrol1destination + 9 + 4] >>> 0) & 7);
         
         for(int i = POS_formantcontrol1destination + 5; i < POS_fmcontrol1destination; i++)
             {
@@ -2851,21 +2873,21 @@ public class YamahaFS1R extends Synth
             }
 
         // Handle POS_fmcontrol1destination ... POS_fmcontrol5destination
-        model.set("fmcontrol1dest", (data[POS_fmcontrol1destination + 9 + 0] >> 4) & 3);
-        model.set("fmcontrol1voiced", (data[POS_fmcontrol1destination + 9 + 0] >> 3) & 1);
-        model.set("fmcontrol1op", (data[POS_fmcontrol1destination + 9 + 0] >> 0) & 7);
-        model.set("fmcontrol2dest", (data[POS_fmcontrol1destination + 9 + 1] >> 4) & 3);
-        model.set("fmcontrol2voiced", (data[POS_fmcontrol1destination + 9 + 1] >> 3) & 1);
-        model.set("fmcontrol2op", (data[POS_fmcontrol1destination + 9 + 1] >> 0) & 7);
-        model.set("fmcontrol3dest", (data[POS_fmcontrol1destination + 9 + 2] >> 4) & 3);
-        model.set("fmcontrol3voiced", (data[POS_fmcontrol1destination + 9 + 2] >> 3) & 1);
-        model.set("fmcontrol3op", (data[POS_fmcontrol1destination + 9 + 2] >> 0) & 7);
-        model.set("fmcontrol4dest", (data[POS_fmcontrol1destination + 9 + 3] >> 4) & 3);
-        model.set("fmcontrol4voiced", (data[POS_fmcontrol1destination + 9 + 3] >> 3) & 1);
-        model.set("fmcontrol4op", (data[POS_fmcontrol1destination + 9 + 3] >> 0) & 7);
-        model.set("fmcontrol5dest", (data[POS_fmcontrol1destination + 9 + 4] >> 4) & 3);
-        model.set("fmcontrol5voiced", (data[POS_fmcontrol1destination + 9 + 4] >> 3) & 1);
-        model.set("fmcontrol5op", (data[POS_fmcontrol1destination + 9 + 4] >> 0) & 7);
+        model.set("fmcontrol1dest", (data[POS_fmcontrol1destination + 9 + 0] >>> 4) & 3);
+        model.set("fmcontrol1voiced", (data[POS_fmcontrol1destination + 9 + 0] >>> 3) & 1);
+        model.set("fmcontrol1op", (data[POS_fmcontrol1destination + 9 + 0] >>> 0) & 7);
+        model.set("fmcontrol2dest", (data[POS_fmcontrol1destination + 9 + 1] >>> 4) & 3);
+        model.set("fmcontrol2voiced", (data[POS_fmcontrol1destination + 9 + 1] >>> 3) & 1);
+        model.set("fmcontrol2op", (data[POS_fmcontrol1destination + 9 + 1] >>> 0) & 7);
+        model.set("fmcontrol3dest", (data[POS_fmcontrol1destination + 9 + 2] >>> 4) & 3);
+        model.set("fmcontrol3voiced", (data[POS_fmcontrol1destination + 9 + 2] >>> 3) & 1);
+        model.set("fmcontrol3op", (data[POS_fmcontrol1destination + 9 + 2] >>> 0) & 7);
+        model.set("fmcontrol4dest", (data[POS_fmcontrol1destination + 9 + 3] >>> 4) & 3);
+        model.set("fmcontrol4voiced", (data[POS_fmcontrol1destination + 9 + 3] >>> 3) & 1);
+        model.set("fmcontrol4op", (data[POS_fmcontrol1destination + 9 + 3] >>> 0) & 7);
+        model.set("fmcontrol5dest", (data[POS_fmcontrol1destination + 9 + 4] >>> 4) & 3);
+        model.set("fmcontrol5voiced", (data[POS_fmcontrol1destination + 9 + 4] >>> 3) & 1);
+        model.set("fmcontrol5op", (data[POS_fmcontrol1destination + 9 + 4] >>> 0) & 7);
         
         for(int i = POS_fmcontrol1destination + 5; i < POS_filteregattacktimeveltimescale; i++)
             {
@@ -2873,8 +2895,8 @@ public class YamahaFS1R extends Synth
             }
                 
         // handle POS_filteregattacktimeveltimescale
-        model.set("filteregattacktimevel", (data[POS_filteregattacktimeveltimescale + 9] >> 3) & 7);
-        model.set("filteregtimescale", (data[POS_filteregattacktimeveltimescale + 9] >> 0) & 7);
+        model.set("filteregattacktimevel", (data[POS_filteregattacktimeveltimescale + 9] >>> 3) & 7);
+        model.set("filteregtimescale", (data[POS_filteregattacktimeveltimescale + 9] >>> 0) & 7);
 
 
                 
@@ -2884,17 +2906,17 @@ public class YamahaFS1R extends Synth
             int base = POS_OPERATOR_START + op * POS_OPERATOR_LENGTH;
                 
             // handle base + POS_operator1vkeysynctranspose
-            model.set("operatorv" + (op + 1) + "keysync", (data[base + POS_operator1vkeysynctranspose + 9] >> 6) & 1);
-            model.set("operatorv" + (op + 1) + "transpose", (data[base + POS_operator1vkeysynctranspose + 9] >> 0) & 63);
+            model.set("operator" + (op + 1) + "vkeysync", (data[base + POS_operator1vkeysynctranspose + 9] >>> 6) & 1);
+            model.set("operator" + (op + 1) + "vtranspose", (data[base + POS_operator1vkeysynctranspose + 9] >>> 0) & 63);
                 
             // handle base + POS_operator1vfrequencycoarse
             int val = data[base + POS_operator1vfrequencycoarse + 9];
-            model.set("operatorv" + (op + 1) + "frequencycoarseratio", val);
-            model.set("operatorv" + (op + 1) + "frequencycoarsefixed", val <= 21 ? val : 0);                // bound to 21, bleah
+            model.set("operator" + (op + 1) + "vfrequencycoarseratio", val);
+            model.set("operator" + (op + 1) + "vfrequencycoarsefixed", val <= 21 ? val : 0);                // bound to 21, bleah
 
             val = data[base + POS_operator1vfrequencyfine + 9];
-            model.set("operatorv" + (op + 1) + "frequencyfineratio", val);
-            model.set("operatorv" + (op + 1) + "frequencyfinefixed", val);
+            model.set("operator" + (op + 1) + "vfrequencyfineratio", val);
+            model.set("operator" + (op + 1) + "vfrequencyfinefixed", val);
 
             for(int i = POS_operator1vfrequencyfine + 1; i < POS_operator1vbwbiassensespectralform; i++)
                 {
@@ -2902,13 +2924,13 @@ public class YamahaFS1R extends Synth
                 }
                                 
             // handle base + POS_operator1vbwbiassensespectralform
-            model.set("operatorv" + (op + 1) + "bwbiassense", (data[base + POS_operator1vbwbiassensespectralform + 9] >> 3) & 15);
-            model.set("operatorv" + (op + 1) + "spectralform", (data[base + POS_operator1vbwbiassensespectralform + 9] >> 0) & 7);
+            model.set("operator" + (op + 1) + "vbwbiassense", (data[base + POS_operator1vbwbiassensespectralform + 9] >>> 3) & 15);
+            model.set("operator" + (op + 1) + "vspectralform", (data[base + POS_operator1vbwbiassensespectralform + 9] >>> 0) & 7);
 
             // handle base + POS_operator1vfrequencyoscillatormodespectralskirtfseqtracknumber
-            model.set("operatorv" + (op + 1) + "frequencyoscillatormode", (data[base + POS_operator1vfrequencyoscillatormodespectralskirtfseqtracknumber + 9] >> 6) & 1);
-            model.set("operatorv" + (op + 1) + "spectralskirt", (data[base + POS_operator1vfrequencyoscillatormodespectralskirtfseqtracknumber + 9] >> 3) & 7);
-            model.set("operatorv" + (op + 1) + "frequencyfseqtracknumber", (data[base + POS_operator1vfrequencyoscillatormodespectralskirtfseqtracknumber + 9] >> 0) & 7);
+            model.set("operator" + (op + 1) + "vfrequencyoscillatormode", (data[base + POS_operator1vfrequencyoscillatormodespectralskirtfseqtracknumber + 9] >>> 6) & 1);
+            model.set("operator" + (op + 1) + "vspectralskirt", (data[base + POS_operator1vfrequencyoscillatormodespectralskirtfseqtracknumber + 9] >>> 3) & 7);
+            model.set("operator" + (op + 1) + "vfrequencyfseqtracknumber", (data[base + POS_operator1vfrequencyoscillatormodespectralskirtfseqtracknumber + 9] >>> 0) & 7);
                         
             for(int i = POS_operator1vfrequencyoscillatormodespectralskirtfseqtracknumber + 1; i < POS_operator1vfrequencybiassensepitchmodsense; i++)
                 {
@@ -2916,16 +2938,16 @@ public class YamahaFS1R extends Synth
                 }
                                 
             // handle base + POS_operator1vfrequencybiassensepitchmodsense
-            model.set("operatorv" + (op + 1) + "frequencybiassense", (data[base + POS_operator1vfrequencybiassensepitchmodsense + 9] >> 3) & 15);
-            model.set("operatorv" + (op + 1) + "pitchmodsense", (data[base + POS_operator1vfrequencybiassensepitchmodsense + 9] >> 0) & 7);
+            model.set("operator" + (op + 1) + "vfrequencybiassense", (data[base + POS_operator1vfrequencybiassensepitchmodsense + 9] >>> 3) & 15);
+            model.set("operator" + (op + 1) + "vpitchmodsense", (data[base + POS_operator1vfrequencybiassensepitchmodsense + 9] >>> 0) & 7);
 
             // handle base + POS_operator1vfrequencymodsensefrequencyvelocitysense
-            model.set("operatorv" + (op + 1) + "frequencymodsense", (data[base + POS_operator1vfrequencymodsensefrequencyvelocitysense + 9] >> 4) & 7);
-            model.set("operatorv" + (op + 1) + "frequencyvelocitysense", (data[base + POS_operator1vfrequencymodsensefrequencyvelocitysense + 9] >> 0) & 15);
+            model.set("operator" + (op + 1) + "vfrequencymodsense", (data[base + POS_operator1vfrequencymodsensefrequencyvelocitysense + 9] >>> 4) & 7);
+            model.set("operator" + (op + 1) + "vfrequencyvelocitysense", (data[base + POS_operator1vfrequencymodsensefrequencyvelocitysense + 9] >>> 0) & 15);
 
             // handle base + POS_operator1vampmodsenseampvelocitysense
-            model.set("operatorv" + (op + 1) + "ampmodsense", (data[base + POS_operator1vampmodsenseampvelocitysense + 9] >> 4) & 7);
-            model.set("operatorv" + (op + 1) + "ampvelocitysense", (data[base + POS_operator1vampmodsenseampvelocitysense + 9] >> 0) & 15);
+            model.set("operator" + (op + 1) + "vampmodsense", (data[base + POS_operator1vampmodsenseampvelocitysense + 9] >>> 4) & 7);
+            model.set("operator" + (op + 1) + "vampvelocitysense", (data[base + POS_operator1vampmodsenseampvelocitysense + 9] >>> 0) & 15);
                         
             for(int i = POS_operator1vampmodsenseampvelocitysense + 1; i < POS_operator1uformantpitchmodecoarse; i++)
                 {
@@ -2933,8 +2955,8 @@ public class YamahaFS1R extends Synth
                 }
 
             // handle base + POS_operator1uformantpitchmodecoarse
-            model.set("operatoru" + (op + 1) + "formantpitchmode", (data[base + POS_operator1uformantpitchmodecoarse + 9] >> 5) & 3);
-            model.set("operatoru" + (op + 1) + "frequencycoarse", (data[base + POS_operator1uformantpitchmodecoarse + 9] >> 0) & 31);
+            model.set("operator" + (op + 1) + "uformantpitchmode", (data[base + POS_operator1uformantpitchmodecoarse + 9] >>> 5) & 3);
+            model.set("operator" + (op + 1) + "ufrequencycoarse", (data[base + POS_operator1uformantpitchmodecoarse + 9] >>> 0) & 31);
 
             for(int i = POS_operator1uformantpitchmodecoarse + 1; i < POS_operator1uformantresonancespectralskirt; i++)
                 {
@@ -2942,8 +2964,8 @@ public class YamahaFS1R extends Synth
                 }
 
             // handle base + POS_operator1uformantresonancespectralskirt
-            model.set("operatoru" + (op + 1) + "formantresonance", (data[base + POS_operator1uformantresonancespectralskirt + 9] >> 3) & 7);
-            model.set("operatoru" + (op + 1) + "spectralskirt", (data[base + POS_operator1uformantresonancespectralskirt + 9] >> 0) & 7);
+            model.set("operator" + (op + 1) + "uformantresonance", (data[base + POS_operator1uformantresonancespectralskirt + 9] >>> 3) & 7);
+            model.set("operator" + (op + 1) + "uspectralskirt", (data[base + POS_operator1uformantresonancespectralskirt + 9] >>> 0) & 7);
 
             for(int i = POS_operator1uformantresonancespectralskirt + 1; i < POS_operator1ufrequencymodsensefrequencyvelocitysense; i++)
                 {
@@ -2951,13 +2973,13 @@ public class YamahaFS1R extends Synth
                 }
 
             // handle base + POS_operator1ufrequencymodsensefrequencyvelocitysense
-            model.set("operatoru" + (op + 1) + "frequencymodsense", (data[base + POS_operator1ufrequencymodsensefrequencyvelocitysense + 9] >> 4) & 7);
-            model.set("operatoru" + (op + 1) + "frequencyvelocitysense", (data[base + POS_operator1ufrequencymodsensefrequencyvelocitysense + 9] >> 0) & 15);
+            model.set("operator" + (op + 1) + "ufrequencymodsense", (data[base + POS_operator1ufrequencymodsensefrequencyvelocitysense + 9] >>> 4) & 7);
+            model.set("operator" + (op + 1) + "ufrequencyvelocitysense", (data[base + POS_operator1ufrequencymodsensefrequencyvelocitysense + 9] >>> 0) & 15);
 
             // handle base + POS_operator1uampmodsenseampvelocitysense
 
-            model.set("operatoru" + (op + 1) + "ampmodsense", (data[base + POS_operator1uampmodsenseampvelocitysense + 9] >> 4) & 7);
-            model.set("operatoru" + (op + 1) + "ampvelocitysense", (data[base + POS_operator1uampmodsenseampvelocitysense + 9] >> 0) & 15);
+            model.set("operator" + (op + 1) + "uampmodsense", (data[base + POS_operator1uampmodsenseampvelocitysense + 9] >>> 4) & 7);
+            model.set("operator" + (op + 1) + "uampvelocitysense", (data[base + POS_operator1uampmodsenseampvelocitysense + 9] >>> 0) & 15);
                         
             // there's only one left
             int i = POS_operator1uampmodsenseampvelocitysense + 1;
@@ -2975,11 +2997,11 @@ public class YamahaFS1R extends Synth
         try 
             { 
             byte b = (byte)(Byte.parseByte(tuple.id));
-            if (b >= 0 && b < 16) return b;
+            if (b >= 1 && b < 16) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
         catch (NumberFormatException e) { e.printStackTrace(); }
-        return 0;
+        return 1;
         }
         
     public String reviseID(String id)
@@ -2987,7 +3009,7 @@ public class YamahaFS1R extends Synth
         try 
             { 
             byte b =(byte)(Byte.parseByte(id)); 
-            if (b >= 0 && b < 16) return "" + b;
+            if (b >= 1 && b < 16) return "" + b;
             } 
         catch (NumberFormatException e) { }             // expected
         return "" + getID();
@@ -3018,6 +3040,9 @@ public class YamahaFS1R extends Synth
         // we will have already done a change patch...
         // so all we need to do now is 
         
+        model.set("bank", tempModel.get("bank"));
+        model.set("number", tempModel.get("number"));
+                        
         return requestCurrentDump();
 
         /*
@@ -3038,7 +3063,7 @@ public class YamahaFS1R extends Synth
           {
           (byte)0xF0,
           (byte)0x43,
-          (byte)(32 + getID()),
+          (byte)(32 + getID() - 1),
           (byte)0x5E,
           (byte)0x51,
           0,
@@ -3056,7 +3081,7 @@ public class YamahaFS1R extends Synth
             {
             (byte)0xF0,
             (byte)0x43,
-            (byte)(32 + getID()),
+            (byte)(32 + getID() - 1),
             (byte)0x5E,
             (byte)(0x40 + part),
             0, 
@@ -3300,5 +3325,17 @@ public class YamahaFS1R extends Synth
         { "0.026", "0.053", "0.106", "0.212", "0.425", "0.850", "1.701", "3.402", "6.804", "13.61", "27.22", "54.43", "108.8", "217.7", "435.5", "871.0", "1742", "3484", "6968", "13936", "27873" },
         { "0.026", "0.053", "0.106", "0.213", "0.427", "0.855", "1.710", "3.420", "6.841", "13.68", "27.36", "54.73", "109.4", "218.9", "437.8", "875.7", "1751", "3503", "7006", "14012", "28024" },
         };
+
+    public boolean testVerify(Synth synth2, 
+        String key,
+        Object obj1, Object obj2) 
+        {
+        // These overlap, so if finefixed is the right thing, then fineratio will be wrong and vice versa.
+        // Same for coarse
+        return (key.endsWith("finefixed") ||
+            key.endsWith("fineratio") ||
+            key.endsWith("coarsefixed") ||
+            key.endsWith("coarseratio"));
+        }
 
     }

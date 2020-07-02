@@ -14,7 +14,7 @@ The menu has several options which hopefully make working with the patch editor 
 <ul>
 <li><b>Set Up Test Performance for Part 1 Only</b>&nbsp;&nbsp;&nbsp;This builds a Performance and sends it to the FS1R where all parts are turned ofF except for Part 1.  Part 1 has its Filter Switch turned on so you can test your Voice with the filter, and also has its Receive MIDI Channel set to Edisyn's outgoing MIDI Channel.
 
-<p><li><b>Work With Part (1,2,3,4)</b>&nbsp;&nbsp;&nbsp;This causes Edisyn to use the given Part when sending and requesting the current voice patch.You probably want to set this to Part 1.  
+<p><li><b>Work With Part (1,2,3,4)</b>&nbsp;&nbsp;&nbsp;This causes Edisyn to use the given Part when sending and requesting the current voice patch.It also sets up the Part on the Performance, by modifying the Performance's part MIDI receive channels: the requested Part is set to "PFM" (the same as the Performance's channel, which in turn is the channel you had set up on the FS1R originally); and other Parts have the MIDI receive channels turned off.  You probably would want to set this to Part 1.
 
 <p><li><b>Swap Operators...</b>&nbsp;&nbsp;&nbsp;This lets you swap two operators, including voiced and/or unvoiced parameters.
 

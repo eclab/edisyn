@@ -150,7 +150,6 @@ public class YamahaFS1R extends Synth
         {
         if (breaker) return;
         breaker = true;
-        preparePartChannels();
         if (sendToPart[val] != null)
             {
             // may not be in same thread
@@ -172,10 +171,11 @@ public class YamahaFS1R extends Synth
         // F0 43 1n 5E 3p 00 ll vv vv F7
         for(int p = 0; p < 4; p++)
             {
+            if (p == part) continue;
             // Rcv
             tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + p), 0, 0x04, 0, 0x7F, (byte)0xF7 });
             // Rcv Max
-            tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + p), 0, 0x03, 0, 0x7F, (byte)0xF7 });
+            //tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + p), 0, 0x03, 0, 0x7F, (byte)0xF7 });
             }
                         
         // Set part channel to the same as the performance channel.
@@ -183,6 +183,16 @@ public class YamahaFS1R extends Synth
         // F0 43 1n 5E 3p 00 ll vv vv F7
         // Rcv
         tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + part), 0, 0x04, 0, 0x10, (byte)0xF7 });
+        
+
+        /// For some reason FS1REditor also sends out note reserve information whenever
+        /// the filter switch is turned ON.  This presumably has something to do with the
+        /// fact that the filter switch reduces the total number of notes, but it doesn't
+        /// seem necessary to me.
+        
+        // Turn on Filter for Part 1
+        // F0 43 1n 5E 3p 00 ll vv vv F7
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + part), 0, 0x07, 0, 0x10, (byte)0xF7 });
         }
         
     public void setupTestPerformance()
@@ -199,11 +209,50 @@ public class YamahaFS1R extends Synth
                 {
                 synth.loadDefaults();
                 synth.getModel().set("name", "Edisyn");
-                synth.getModel().set("part1fsw", 1);                    // turn on filter switch so we can test with the filter
-                synth.getModel().set("part1rcvchannel", getChannelOut());
-                setPart(1);
+//                synth.getModel().set("part1fsw", 1);                    // turn on filter switch so we can test with the filter
+//                synth.getModel().set("part1rcvchannel", getChannelOut());
+                setPart(0);
+                preparePartChannels();
                 sendAllParameters();
                 }
+            }
+        }
+
+    public void showMulti()
+        {
+        if (tuple == null)
+            if (!setupMIDI(tuple))
+                return;
+
+        if (tuple != null)
+            {
+            final YamahaFS1RMulti synth = new YamahaFS1RMulti();
+            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+            if (synth.tuple != null)
+                {
+				// This is a little tricky.  When the dump comes in from the synth,
+				// Edisyn will only send it to the topmost panel.  So we first sprout
+				// the panel and show it, and THEN send the dump request.  But this isn't
+				// enough, because what setVisible(...) does is post an event on the
+				// Swing Event Queue to build the window at a later time.  This later time
+				// happens to be after the dump comes in, so it's ignored.  So what we
+				// ALSO do is post the dump request to occur at the end of the Event Queue,
+				// so by the time the dump request has been made, the window is shown and
+				// frontmost.
+										
+				synth.sprout();
+				JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+				frame.setVisible(true);
+
+				SwingUtilities.invokeLater(
+					new Runnable()
+						{
+						public void run() 
+							{ 
+							synth.performRequestCurrentDump();
+							}
+						});
+				}
             }
         }
 
@@ -212,6 +261,16 @@ public class YamahaFS1R extends Synth
         JMenu menu = new JMenu("FS1R");
         menubar.add(menu);
 
+        JMenuItem current = new JMenuItem("Show Current Performance");
+        current.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                showMulti();                
+                }
+            });
+        menu.add(current);
+        
         JMenuItem initialize = new JMenuItem("Set Up Test Performance for Part 1 Only");
         initialize.addActionListener(new ActionListener()
             {
@@ -221,13 +280,23 @@ public class YamahaFS1R extends Synth
                 }
             });
         menu.add(initialize);
+        
+        JMenuItem focus = new JMenuItem("Focus on Part");
+        focus.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                preparePartChannels();                
+                }
+            });
+        menu.add(focus);
         menu.addSeparator();
         
         ButtonGroup group = new ButtonGroup();
         for(int i = 0; i < 4; i++)
             {
             final int _i = i;
-            sendToPart[i] = new JCheckBoxMenuItem("Work with Part " + (i + 1));
+            sendToPart[i] = new JCheckBoxMenuItem("Send/Receive Part " + (i + 1));
             sendToPart[i].addActionListener(new ActionListener()
                 {
                 public void actionPerformed(ActionEvent e)
@@ -238,6 +307,7 @@ public class YamahaFS1R extends Synth
             menu.add(sendToPart[i]);
             group.add(sendToPart[i]);
             }
+        sendToPart[0].setSelected(true);
         
         menu.addSeparator();
 
@@ -1360,6 +1430,7 @@ public class YamahaFS1R extends Synth
         comp = new CheckBox("Key Sync", this, "operator" + src + "v" + "keysync");
         hbox2.add(comp);
         
+        vbox.add(hbox2);
         
         hbox.add(vbox);
 
@@ -2433,7 +2504,7 @@ public class YamahaFS1R extends Synth
                 {
                 int num = StringUtility.getFirstInt(key);
                 if (num < 8)
-                    return extractAddress("operator17vswitch");
+                    return extractAddress("operator17uswitch");
                 else
                     return extractAddress(key);
                 }
@@ -2468,7 +2539,7 @@ public class YamahaFS1R extends Synth
                 {
                 int num = StringUtility.getFirstInt(key);
                 if (num < 8)
-                    return extractAddress("operator17uswitch");
+                    return extractAddress("operator17vswitch");
                 else
                     return extractAddress(key);
                 }
@@ -3032,46 +3103,10 @@ public class YamahaFS1R extends Synth
         return (byte)((128 - checksum) & 127);
         }
 
-
-    // Will request an internal voice.  At present we can't
-    // request voices from presets!!!!  See changePatch() as to why...
     public byte[] requestDump(Model tempModel) 
         {
-        // we will have already done a change patch...
-        // so all we need to do now is 
-        
-        model.set("bank", tempModel.get("bank"));
-        model.set("number", tempModel.get("number"));
-                        
+        // we will have already done a change patch, so we should be able to simply....
         return requestCurrentDump();
-
-        /*
-          if (tempModel.get("bank") > 0)  // we have to load a preset
-          {
-          // load from preset.  We've already done a change patch, which should have loaded into the appropriate location?
-          requestCurrentDump();
-          }
-          else    // internal
-          {
-          //// FIXME
-                
-          // since we've already done a change patch, maybe we can just do requestCurrentDump() ????
-          // requestCurrentDump();
-                
-          // instead of...
-          return new byte[]
-          {
-          (byte)0xF0,
-          (byte)0x43,
-          (byte)(32 + getID() - 1),
-          (byte)0x5E,
-          (byte)0x51,
-          0,
-          (byte)tempModel.get("number"),
-          (byte)0xF7
-          };
-          }
-        */
         }
     
     // Will request the current part
@@ -3135,18 +3170,15 @@ public class YamahaFS1R extends Synth
 
     public void changePatch(Model tempModel) 
         {
-        // We need to set "Program Change Mode = multi". 
-
-        // Just in case, we lock to the proper channel
-        preparePartChannels();
-
-        // Send Bank MSB, which is always 63, go figure...
-        tryToSendMIDI(buildCC(getChannelOut(), 0, 63));
-        // Send Bank LSB 
-        tryToSendMIDI(buildCC(getChannelOut(), 0, tempModel.get("bank")));
-        // Send PC
-        tryToSendMIDI(buildPC(getChannelOut(), tempModel.get("number")));
-                        
+        // We'll change the bank and program number of the given voice.
+        // When we do a request, it'll load from here
+        
+        // Change Bank
+        tryToSendSysex(new byte[] { (byte)0xf0, 0x43, (byte)(16 + (getID() - 1)), 0x5e, (byte)(0x30 + part), 0x00, 0x01, 0x00, (byte)(tempModel.get("bank")), (byte)0xf7});
+        
+        // Change Number
+        tryToSendSysex(new byte[] { (byte)0xf0, 0x43, (byte)(16 + (getID() - 1)), 0x5e, (byte)(0x30 + part), 0x00, 0x02, 0x00, (byte)(tempModel.get("number")), (byte)0xf7});
+        
         // we assume that we successfully did it
         if (!isMerging())  // we're actually loading the patch, not merging with it
             {

@@ -139,48 +139,6 @@ public class YamahaFS1RMulti extends Synth
     };
 
 
-    JCheckBoxMenuItem[] sendToPart = new JCheckBoxMenuItem[4];
-    int part;
-    boolean breaker = false;
-    void setPart(int val) 
-        {
-        if (breaker) return;
-        breaker = true;
-        preparePartChannels();
-        if (sendToPart[val] != null)
-            {
-            // may not be in same thread
-            SwingUtilities.invokeLater(new Runnable()
-                {
-                public void run()
-                    {
-                    sendToPart[val].setSelected(true);              // could call use recursively?  Hence breaker
-                    }
-                });
-            }
-        breaker = false;
-        part = val; 
-        }
-                
-    public void preparePartChannels()
-        {
-        // Turn OFF all the Part channels
-        // F0 43 1n 5E 3p 00 ll vv vv F7
-        for(int p = 0; p < 4; p++)
-            {
-            // Rcv
-            tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + p), 0, 0x04, 0, 0x7F, (byte)0xF7 });
-            // Rcv Max
-            tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + p), 0, 0x03, 0, 0x7F, (byte)0xF7 });
-            }
-                        
-        // Set part channel to the same as the performance channel.
-        // Keep Rcv Max *off*
-        // F0 43 1n 5E 3p 00 ll vv vv F7
-        // Rcv
-        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 2), 0x5E, (byte)(0x30 + part), 0, 0x04, 0, 0x10, (byte)0xF7 });
-        }
-        
     public void addYamahaFS1RMenu()
         {
         JMenu menu = new JMenu("FS1R");
@@ -304,8 +262,8 @@ public class YamahaFS1RMulti extends Synth
             vbox = new VBox();
 
             hbox = new HBox();
-            hbox.add(addPart(i, Style.COLOR_A()));
-            hbox.addLast(addPlay(i, Style.COLOR_B()));
+            hbox.add(addVoice(i, Style.COLOR_A()));
+            hbox.addLast(addOutput(i, Style.COLOR_B()));
             vbox.add(hbox);
             vbox.add(addTone(i, Style.COLOR_C()));
 
@@ -314,7 +272,7 @@ public class YamahaFS1RMulti extends Synth
             hbox.addLast(addEnvelopes(i, Style.COLOR_B()));
             vbox.add(hbox);
 
-            vbox.add(addOther(i, Style.COLOR_C()));
+            vbox.addLast(addPlay(i, Style.COLOR_C()));
                 
             soundPanel.add(vbox, BorderLayout.CENTER);
             addTab("Part " + i, soundPanel);
@@ -740,12 +698,8 @@ public class YamahaFS1RMulti extends Synth
         }
         
         
-    JLabel[] patchNames = new JLabel[4];
-    
-    void updatePatchName(int part)
+    void updatePatchName(int part, Category category)
         {
-        if (patchNames[part - 1] != null)  // may not be set up yet
-            {
             int bank = model.get("part" + part + "banknumber", -100) - 1;
             int number = model.get("part" + part + "programnumber", -100);
                 
@@ -753,40 +707,30 @@ public class YamahaFS1RMulti extends Synth
                 
             if (bank <= 0)
                 {
-                patchNames[part - 1].setText(" ");
+                category.setName("Voice " + part);
                 }
             else 
                 {
-                patchNames[part - 1].setText(VOICES[bank - 1][number]);
+                category.setName("Voice " + part + ": " + VOICES[bank - 1][number]);
                 }
-            }
         }
     
-    public JComponent addPart(int part, Color color)
+    public JComponent addVoice(int part, Color color)
         {
-        Category category = new Category(this, "Part " + part, color);
+        final Category category = new Category(this, "Voice " + part, color);
         category.makePasteable("part" + part);
                 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         
-        VBox vbox = new VBox();
-        params = VOICE_BANKS;
-        comp = new Chooser("Bank", this, "part" + part + "banknumber", params)
-            {
-            public void update(String key, Model model)
-                {
-                super.update(key, model);
-                updatePatchName(part);
-                }
-            };
-        vbox.add(comp);
-
-        comp = new PushButton("Show")
+        final PushButton pushbutton = new PushButton("Show")
             {
             public void perform()
                 {
+                if (YamahaFS1RMulti.this.model.get("part" + part + "banknumber") == 0)  // off
+                	return;
+                	
                 final YamahaFS1R synth = new YamahaFS1R();
                 if (tuple != null)
                     synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
@@ -813,7 +757,7 @@ public class YamahaFS1RMulti extends Synth
                                 { 
                                 Model tempModel = new Model();
                                 synth.setSendMIDI(false);
-                                tempModel.set("bank", YamahaFS1RMulti.this.model.get("part" + part + "banknumber"));
+                                tempModel.set("bank", YamahaFS1RMulti.this.model.get("part" + part + "banknumber") - 1);
                                 tempModel.set("number", YamahaFS1RMulti.this.model.get("part" + part + "programnumber"));
                                 synth.setSendMIDI(true);
                                 synth.performRequestDump(tempModel, false);
@@ -826,23 +770,73 @@ public class YamahaFS1RMulti extends Synth
                     }
                 }
             };
-        vbox.add(comp);
         
-
-        hbox.add(vbox);
-
-        comp = new LabelledDial("       Number       ", this,  "part" + part + "programnumber", color, 0, 127)
+        VBox vbox = new VBox();
+        params = VOICE_BANKS;
+        comp = new Chooser("Voice Bank", this, "part" + part + "banknumber", params)
             {
             public void update(String key, Model model)
                 {
                 super.update(key, model);
-                updatePatchName(part);
+                updatePatchName(part, category);
+                pushbutton.getButton().setEnabled(model.get(key) != 0); // off
                 }
             };
-        patchNames[part - 1] = (((LabelledDial)comp).addAdditionalLabel(" "));
+        vbox.add(comp);
+
+
+    	vbox.add(pushbutton);
+
+        hbox.add(vbox);
+
+        comp = new LabelledDial("Voice", this,  "part" + part + "programnumber", color, 0, 127)
+            {
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                updatePatchName(part, category);
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Number");
         hbox.add(comp);
 
+        comp = new LabelledDial("Receive", this,  "part" + part + "rcvchannel", color, 0, 17)
+            {
+            public String map(int val)
+                {
+                if (val == 16) return "Perf";
+                else if (val == 17) return "Off";
+                else return "" + (val + 1);
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Channel");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Receive", this,  "part" + part + "rcvchannelmax", color, 0, 16)
+            {
+            public String map(int val)
+                {
+                if (val == 16) return "Off";
+                else return "" + (val + 1);
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Channel Max");
+        if (part <= 2)
+            {
+            hbox.add(comp);
+            }
+        else
+            {
+            hbox.add(Strut.makeStrut(comp));
+            }
+
+        comp = new LabelledDial("Reserved", this,  "part" + part + "notereserve", color, 0, 32);
+        ((LabelledDial)comp).addAdditionalLabel("Num Notes");
+        hbox.add(comp);
+
+
         category.add(hbox, BorderLayout.CENTER);
+        updatePatchName(part, category);
         return category;
         }
 
@@ -952,9 +946,9 @@ public class YamahaFS1RMulti extends Synth
         }
 
                 
-    public JComponent addOther(int part, Color color)
+    public JComponent addOutput(int part, Color color)
         {
-        Category category = new Category(this, "Other " + part, color);
+        Category category = new Category(this, "Output " + part, color);
         category.makePasteable("part" + part);
                 
         JComponent comp;
@@ -962,20 +956,13 @@ public class YamahaFS1RMulti extends Synth
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        params = NOTE_PRIORITIES;
-        comp = new Chooser("Note Assign Priority", this, "part" + part + "monopriority", params);
-        vbox.add(comp);
-
-        comp = new CheckBox("Polyphonic", this, "part" + part + "monopolymode");
-        vbox.add(comp);
-
-        comp = new CheckBox("Sustain", this, "part" + part + "sustainrcvsw");
-        vbox.add(comp);
-                
         comp = new CheckBox("Insertion Send", this, "part" + part + "insertionsw");
         vbox.add(comp);
                 
         hbox.add(vbox);
+
+        comp = new LabelledDial("Volume", this, "part" + part + "volume", color, 0, 127);
+        hbox.add(comp);
 
         comp = new LabelledDial("Pan", this,  "part" + part + "pan", color, 0, 127)
             {
@@ -995,9 +982,6 @@ public class YamahaFS1RMulti extends Synth
 
         comp = new LabelledDial("Pan LFO 1", this,  "part" + part + "panlfodepth", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("Depth");
-        hbox.add(comp);
-
-        comp = new LabelledDial("Volume", this, "part" + part + "volume", color, 0, 127);
         hbox.add(comp);
 
         comp = new LabelledDial("Reverb", this, "part" + part + "reverbsend", color, 0, 127);
@@ -1026,39 +1010,18 @@ public class YamahaFS1RMulti extends Synth
         String[] params;
         HBox hbox = new HBox();
         
-        comp = new LabelledDial("Receive", this,  "part" + part + "rcvchannel", color, 0, 17)
-            {
-            public String map(int val)
-                {
-                if (val == 16) return "Perf";
-                else if (val == 17) return "Off";
-                else return "" + (val + 1);
-                }
-            };
-        ((LabelledDial)comp).addAdditionalLabel("Channel");
-        hbox.add(comp);
+        
+        VBox vbox = new VBox();
+        params = NOTE_PRIORITIES;
+        comp = new Chooser("Note Assign Priority", this, "part" + part + "monopriority", params);
+        vbox.add(comp);
 
-        comp = new LabelledDial("Receive", this,  "part" + part + "rcvchannelmax", color, 0, 16)
-            {
-            public String map(int val)
-                {
-                if (val == 16) return "Off";
-                else return "" + (val + 1);
-                }
-            };
-        ((LabelledDial)comp).addAdditionalLabel("Channel Max");
-        if (part <= 2)
-            {
-            hbox.add(comp);
-            }
-        else
-            {
-            hbox.add(Strut.makeStrut(comp));
-            }
+        comp = new CheckBox("Polyphonic", this, "part" + part + "monopolymode");
+        vbox.add(comp);
 
-        comp = new LabelledDial("Reserved", this,  "part" + part + "notereserve", color, 0, 32);
-        ((LabelledDial)comp).addAdditionalLabel("Num Notes");
-        hbox.add(comp);
+        comp = new CheckBox("Sustain", this, "part" + part + "sustainrcvsw");
+        vbox.add(comp);
+        hbox.add(vbox); 
 
         comp = new LabelledDial("Low Note", this,  "part" + part + "notelimitlow", color, 0, 127)
             {
@@ -1085,11 +1048,11 @@ public class YamahaFS1RMulti extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Velocity", this,  "part" + part + "velocitysensedepth", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("Sens. Depth");
+        ((LabelledDial)comp).addAdditionalLabel("Sensitivity Depth");
         hbox.add(comp);
 
         comp = new LabelledDial("Velocity", this,  "part" + part + "velocitysenseoffset", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("Sens. Offset");
+        ((LabelledDial)comp).addAdditionalLabel("Sensitivity Offset");
         hbox.add(comp);
 
         comp = new LabelledDial("Expression", this,  "part" + part + "expressionlowlimit", color, 0, 127);
@@ -1968,7 +1931,12 @@ public class YamahaFS1RMulti extends Synth
 
     public int getAddress(String key)
         {
-        return ((Integer)(allParametersToIndex.get(key))).intValue();
+        int addr = ((Integer)(allParametersToIndex.get(key))).intValue();
+        if (addr < 128 + 0x40) return addr;
+        // it's in a part
+        addr -= (128 + 0x40);
+        addr = addr % 52;		// part size
+        return addr;
         }
 
     public Object[] emitAll(String key)
@@ -2177,8 +2145,8 @@ public class YamahaFS1RMulti extends Synth
                         
             byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
                 (byte)(part == 0 ? 0x10 : 0x30 - 1 + part),     // HIGH
-                (byte)((address >>> 7) & 127),                                  // MEDIUM
-                (byte)(address & 127),                                  // LOW
+                (byte)((address >>> 7) & 127),                   // MEDIUM
+                (byte)(address & 127),                          // LOW
                 (byte)MSB,
                 (byte)LSB, 
                 (byte)0xF7 };
@@ -2692,9 +2660,6 @@ public class YamahaFS1RMulti extends Synth
         // we will have already done a change patch...
         // so all we need to do now is 
         
-        model.set("bank", tempModel.get("bank"));
-        model.set("number", tempModel.get("number"));
-                        
         return requestCurrentDump();
         }
     
@@ -2760,9 +2725,6 @@ public class YamahaFS1RMulti extends Synth
     public void changePatch(Model tempModel) 
         {
         // We need to set "Program Change Mode = multi". 
-
-        // Just in case, we lock to the proper channel
-        preparePartChannels();
 
         // Send Bank MSB, which is always 63, go figure...
         tryToSendMIDI(buildCC(getChannelOut(), 0, 63));

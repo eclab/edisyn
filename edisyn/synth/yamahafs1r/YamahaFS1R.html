@@ -5,17 +5,20 @@
 <h2>Voice Patch Editor</h2>
 
 <br><br><h3>Communicating with Edisyn</h3>
-Set the FS1R's to receive System Exclusive, Bulk Dumps, Bank Selection, and Program Change.  That is, set Rcv SysExcl, RcvBulkDump, Rcv BankSel, and Rcv PgmChng to ON.  Set the FS1R's Device Number to either ALL or to the Synth ID in Edisyn's MIDI panel.  Set Edisyn's send and receive MIDI channels to the FS1R's receive and send channels respectively. 
+Set the FS1R's to receive System Exclusive, Bulk Dumps, Bank Selection, and Program Change.  That is, set Rcv SysExcl, RcvBulkDump, Rcv BankSel, and Rcv PgmChng to ON.    Set the Program Change Mode to "Multi".  Set the FS1R's Device Number to either ALL or to the Synth ID in Edisyn's MIDI panel.  Set Edisyn's send and receive MIDI channels to the FS1R's receive and send channels respectively. 
 
 <br><br><h3>About the FS1R Menu</h3>
 
 The menu has several options which hopefully make working with the patch editor more useful:
 
 <ul>
-<li><b>Set Up Test Performance for Part 1 Only</b>&nbsp;&nbsp;&nbsp;This builds a Performance and sends it to the FS1R where all parts are turned ofF except for Part 1.  Part 1 has its Filter Switch turned on so you can test your Voice with the filter, and also has its Receive MIDI Channel set to Edisyn's outgoing MIDI Channel.
+<li><b>Set Up Test Performance for Part 1 Only</b>&nbsp;&nbsp;&nbsp;This builds a blank Performance with empty effects, and sends it to the FS1R, then sets Send/Receive Part... to 1, and then Auditions the Part (see menu options below).  As a result, the Performance is set up to receive notes only on Part 1, the voice gets sent to Part 1, Part 1's filter is turned on, and the other Parts are turned off.
 
-<p><li><b>Work With Part (1,2,3,4)</b>&nbsp;&nbsp;&nbsp;This causes Edisyn to use the given Part when sending and requesting the current voice patch.It also sets up the Part on the Performance, by modifying the Performance's part MIDI receive channels: the requested Part is set to "PFM" (the same as the Performance's channel, which in turn is the channel you had set up on the FS1R originally); and other Parts have the MIDI receive channels turned off.  You probably would want to set this to Part 1.
+<p><li><b>Audition Part</b>&nbsp;&nbsp;&nbsp;This turns on the current part's MIDI channel, setting it to the the Performance's channel, and it turns off all the other parts' MIDI channels.  That way when you play notes, you will hear exactly and only the voice you're working on.  If you switch to another part, you'll have to focus on it again.  To undo all this, you can fire up a Performance patch editor and manually change the various Part MIDI settings.
 
+<p><li><b>Send/Receive Part (1,2,3,4)</b>&nbsp;&nbsp;&nbsp;This causes Edisyn to use the given Part when sending and requesting the current voice patch.
+You may also wish to Focus on the part (see menu item above) after setting this.
+  
 <p><li><b>Swap Operators...</b>&nbsp;&nbsp;&nbsp;This lets you swap two operators, including voiced and/or unvoiced parameters.
 
 <p><li><b>Copy Operators...</b>&nbsp;&nbsp;&nbsp;This lets you copy an operator to another, including voiced and/or unvoiced parameters.  You can of course copy an operator to another using Edisyn's copy tab menu options, but you can't filter for voiced or unvoiced parameters.

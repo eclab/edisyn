@@ -145,6 +145,8 @@ public class YamahaFS1R extends Synth
 
     JCheckBoxMenuItem[] sendToPart = new JCheckBoxMenuItem[4];
     int part;
+    
+    // FIXME: the breaker won't work because this is invokeLater
     boolean breaker = false;
     void setPart(int val) 
         {
@@ -165,7 +167,7 @@ public class YamahaFS1R extends Synth
         part = val; 
         }
                 
-    public void preparePartChannels()
+    public void preparePartChannels(boolean filter)
         {
         // Turn OFF all the Part channels
         // F0 43 1n 5E 3p 00 ll vv vv F7
@@ -185,17 +187,26 @@ public class YamahaFS1R extends Synth
         tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + part), 0, 0x04, 0, 0x10, (byte)0xF7 });
         
 
-        /// For some reason FS1REditor also sends out note reserve information whenever
-        /// the filter switch is turned ON.  This presumably has something to do with the
-        /// fact that the filter switch reduces the total number of notes, but it doesn't
-        /// seem necessary to me.
-        
-        // Turn on Filter for Part 1
-        // F0 43 1n 5E 3p 00 ll vv vv F7
-        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + part), 0, 0x07, 0, 0x10, (byte)0xF7 });
+		if (filter)
+			{
+			/// For some reason FS1REditor also sends out note reserve information whenever
+			/// the filter switch is turned ON.  This presumably has something to do with the
+			/// fact that the filter switch reduces the total number of notes, but it doesn't
+			/// seem necessary to me.
+		
+			// Turn ON Filter
+			// F0 43 1n 5E 3p 00 ll vv vv F7
+			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + part), 0, 0x07, 0, 0x01, (byte)0xF7 });
+        	}
+        else
+        	{
+			// Turn OFF Filter
+			// F0 43 1n 5E 3p 00 ll vv vv F7
+			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + part), 0, 0x07, 0, 0x00, (byte)0xF7 });
+        	}
         }
         
-    public void setupTestPerformance()
+    public void setupTestPerformance(boolean filter)
         {
         if (tuple == null)
             if (!setupMIDI(tuple))
@@ -209,10 +220,9 @@ public class YamahaFS1R extends Synth
                 {
                 synth.loadDefaults();
                 synth.getModel().set("name", "Edisyn");
-//                synth.getModel().set("part1fsw", 1);                    // turn on filter switch so we can test with the filter
-//                synth.getModel().set("part1rcvchannel", getChannelOut());
+                synth.sendAllParameters();
                 setPart(0);
-                preparePartChannels();
+                preparePartChannels(filter);
                 sendAllParameters();
                 }
             }
@@ -271,22 +281,42 @@ public class YamahaFS1R extends Synth
             });
         menu.add(current);
         
-        JMenuItem initialize = new JMenuItem("Set Up Test Performance for Part 1 Only");
+        JMenuItem initialize = new JMenuItem("Set Up Test Performance for Part 1 with Filter");
         initialize.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
-                setupTestPerformance();                
+                setupTestPerformance(true);                
                 }
             });
         menu.add(initialize);
         
-        JMenuItem focus = new JMenuItem("Focus on Part");
+     	initialize = new JMenuItem("Set Up Test Performance for Part 1 without Filter");
+        initialize.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                setupTestPerformance(false);                
+                }
+            });
+        menu.add(initialize);
+        
+        JMenuItem focus = new JMenuItem("Audition Part with Filter");
         focus.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
-                preparePartChannels();                
+                preparePartChannels(true);                
+                }
+            });
+        menu.add(focus);
+        
+     	focus = new JMenuItem("Audition Part without Filter");
+        focus.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                preparePartChannels(false);                
                 }
             });
         menu.add(focus);
@@ -666,6 +696,7 @@ public class YamahaFS1R extends Synth
         hbox.add(Strut.makeHorizontalStrut(5));
         comp = new IconDisplay(null, ALGORITHM_ICONS, this, "algorithmpresetnumber", 140, 140);
         hbox.add(comp);
+        hbox.addLast(Strut.makeHorizontalStrut(5));
         vbox.add(hbox);
         vbox.add(Strut.makeVerticalStrut(10));
         
@@ -2432,20 +2463,18 @@ public class YamahaFS1R extends Synth
     // common = 0, +op is voiced, -op is unvoiced
     public int getOperator(String key)
         {
-        if (key.startsWith("operator17"))
+    	if (key.startsWith("operator"))
             {
-            if (key.charAt(10) == 'u')
-                {
-                return 0 - StringUtility.getFirstInt(key);
-                }
-            else
-                {
-                return StringUtility.getFirstInt(key);
-                }
-            }
-        else if (key.startsWith("operator"))
-            {
-            if (key.charAt(9) == 'u')
+            // these are common
+			if (key.startsWith("operator17") || key.equals("operator8vswitch") || key.equals("operator8uswitch"))
+				{
+				return 0;
+				}
+			else if (key.endsWith("levelcorrection"))              // these are common
+				{
+				return 0;
+				}
+            else if (key.charAt(9) == 'u')
                 {
                 return 0 - StringUtility.getFirstInt(key);
                 }
@@ -2633,16 +2662,8 @@ public class YamahaFS1R extends Synth
                 return  (model.get("filteregattacktimevel") << 3) |
                     (model.get("filteregtimescale") << 0);
                 }
-            else 
-                {
-                return model.get(key);
-                }
-            }
-        else if (op < 0)        // unvoiced
-            {
-            op = 0 - op;
-            // note that for this if-statment, op will be wrong but that's okay, we don't need it
-            if (key.equals("operator17uswitch"))
+			// note that for this if-statment, op will be wrong but that's okay, we don't need it
+            else if (key.equals("operator17uswitch"))
                 {
                 return  (model.get("operator1uswitch") << 0) |
                     (model.get("operator2uswitch") << 1) |
@@ -2652,7 +2673,26 @@ public class YamahaFS1R extends Synth
                     (model.get("operator6uswitch") << 5) |
                     (model.get("operator7uswitch") << 6);
                 }
-            else if (key.equals("operator" + op + "u" + "formantpitchmodecoarse"))
+			// note that for this if-statment, op will be wrong but that's okay, we don't need it
+            else if (key.equals("operator17vswitch"))
+                {
+                return  (model.get("operator1vswitch") << 0) |
+                    (model.get("operator2vswitch") << 1) |
+                    (model.get("operator3vswitch") << 2) |
+                    (model.get("operator4vswitch") << 3) |
+                    (model.get("operator5vswitch") << 4) |
+                    (model.get("operator6vswitch") << 5) |
+                    (model.get("operator7vswitch") << 6);
+                }
+            else
+                {
+                return model.get(key);
+                }
+            }
+        else if (op < 0)        // unvoiced
+            {
+            op = 0 - op;
+            if (key.equals("operator" + op + "u" + "formantpitchmodecoarse"))
                 {
                 return  (model.get("operator" + op + "u" + "formantpitchmode") << 5) |
                     (model.get("operator" + op + "u" + "frequencycoarse") << 0);
@@ -2679,18 +2719,7 @@ public class YamahaFS1R extends Synth
             }
         else                            //voiced
             {
-            // note that for this if-statment, op will be wrong but that's okay, we don't need it
-            if (key.equals("operator17vswitch"))
-                {
-                return  (model.get("operator1vswitch") << 0) |
-                    (model.get("operator2vswitch") << 1) |
-                    (model.get("operator3vswitch") << 2) |
-                    (model.get("operator4vswitch") << 3) |
-                    (model.get("operator5vswitch") << 4) |
-                    (model.get("operator6vswitch") << 5) |
-                    (model.get("operator7vswitch") << 6);
-                }
-            else if (key.equals("operator" + op + "v" + "frequencycoarse"))
+            if (key.equals("operator" + op + "v" + "frequencycoarse"))
                 {
                 if (model.get("operator" + op + "v" + "frequencyoscillatormode") == 0)  // ratio
                     {
@@ -3174,7 +3203,8 @@ public class YamahaFS1R extends Synth
         // When we do a request, it'll load from here
         
         // Change Bank
-        tryToSendSysex(new byte[] { (byte)0xf0, 0x43, (byte)(16 + (getID() - 1)), 0x5e, (byte)(0x30 + part), 0x00, 0x01, 0x00, (byte)(tempModel.get("bank")), (byte)0xf7});
+        // Remember, that one option in the performance is "off", which is option 0, so we have to add 1
+        tryToSendSysex(new byte[] { (byte)0xf0, 0x43, (byte)(16 + (getID() - 1)), 0x5e, (byte)(0x30 + part), 0x00, 0x01, 0x00, (byte)(tempModel.get("bank") + 1), (byte)0xf7});
         
         // Change Number
         tryToSendSysex(new byte[] { (byte)0xf0, 0x43, (byte)(16 + (getID() - 1)), 0x5e, (byte)(0x30 + part), 0x00, 0x02, 0x00, (byte)(tempModel.get("number")), (byte)0xf7});

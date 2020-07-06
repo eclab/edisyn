@@ -5,14 +5,14 @@
 <h2>Performance Patch Editor</h2>
 
 <br><br><h3>Communicating with Edisyn</h3>
-Set the FS1R's to receive System Exclusive, Bulk Dumps, Bank Selection, and Program Change.  That is, set Rcv SysExcl, RcvBulkDump, Rcv BankSel, and Rcv PgmChng to ON.  Set the Program Change Mode to "Multi".  Set the FS1R's Device Number to either ALL or to the Synth ID in Edisyn's MIDI panel.  Set Edisyn's send and receive MIDI channels to the FS1R's receive and send channels respectively. 
+Set the FS1R's to receive System Exclusive, Bulk Dumps, Bank Selection, and Program Change.  That is, set Rcv SysExcl, RcvBulkDump, Rcv BankSel, and Rcv PgmChng to ON.  Set the Program Change Mode to "Multi".  Set the FS1R's Device Number to either ALL or to the Synth ID in Edisyn's MIDI panel.  For most MIDI devices, you can probably reduce the Dump Interval to 50ms.  Set Edisyn's send and receive MIDI channels to the FS1R's receive and send channels respectively. 
 
 <br><br><h3>About the FS1R Menu</h3>
 
 The menu has several options which hopefully make working with the patch editor more useful:
 
 <ul>
-<p><li><b>Swap Parts...</b>&nbsp;&nbsp;&nbsp;This lets you swap two parts.
+<p><li><b>Swap Parts...</b>&nbsp;&nbsp;&nbsp;This lets you swap two parts.  Note that the Fseq Part (See Common tab) is unchanged, so if it was referring to one of the parts it's now referring to the other.  Similarly, the Voice Control Set part values are not swapped.
 
 <p><li><b>Copy Parts...</b>&nbsp;&nbsp;&nbsp;This lets you copy a part to another.  You can of course also do this with Edisyn's copy tab menu.
 
@@ -21,6 +21,14 @@ The menu has several options which hopefully make working with the patch editor 
 <br><br><h3>Loading DX7 Patches</h3>
 
 It's easy: just use the DX7 Editor.
+
+<br><br><h3>Gotchas</h3>
+<ul>
+<li>Changing patches or loading a patch takes a <b>very long amount of time</b>, during which the FS1R
+ will be unresponsive to requests to play notes etc.  You will find this annoying.
+</ul>
+
+<p>Thanks to K_Take (k_take@dual.squares.net) for giving me access to the source code of FS1REditor and permission to reuse many of its embedded tables, without which Edisyn's patch editor would not have been possible.  And thanks to Thor Zollinger (thor276@cableone.net) for his tutoring on the internal operation of the FS1R.
 
 
 <p><table border=0 cellpadding=0 cellspacing=5>

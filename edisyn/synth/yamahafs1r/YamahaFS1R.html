@@ -5,16 +5,21 @@
 <h2>Voice Patch Editor</h2>
 
 <br><br><h3>Communicating with Edisyn</h3>
-Set the FS1R's to receive System Exclusive, Bulk Dumps, Bank Selection, and Program Change.  That is, set Rcv SysExcl, RcvBulkDump, Rcv BankSel, and Rcv PgmChng to ON.    Set the Program Change Mode to "Multi".  Set the FS1R's Device Number to either ALL or to the Synth ID in Edisyn's MIDI panel.  Set Edisyn's send and receive MIDI channels to the FS1R's receive and send channels respectively. 
+Set the FS1R's to receive System Exclusive, Bulk Dumps, Bank Selection, and Program Change.  That is, set Rcv SysExcl, RcvBulkDump, Rcv BankSel, and Rcv PgmChng to ON.    Set the Program Change Mode to "Multi".  Set the FS1R's Device Number to either ALL or to the Synth ID in Edisyn's MIDI panel.  For most MIDI devices, you can probably reduce the Dump Interval to 50ms.  Set Edisyn's send and receive MIDI channels to the FS1R's receive and send channels respectively. 
 
 <br><br><h3>About the FS1R Menu</h3>
 
 The menu has several options which hopefully make working with the patch editor more useful:
 
 <ul>
-<li><b>Set Up Test Performance for Part 1 Only</b>&nbsp;&nbsp;&nbsp;This builds a blank Performance with empty effects, and sends it to the FS1R, then sets Send/Receive Part... to 1, and then Auditions the Part (see menu options below).  As a result, the Performance is set up to receive notes only on Part 1, the voice gets sent to Part 1, Part 1's filter is turned on, and the other Parts are turned off.
+<li><b>Set Up Test Performance for Part 1 with Filter</b>&nbsp;&nbsp;&nbsp;This builds a blank Performance with empty effects, and sends it to the FS1R, then sets Send/Receive Part... to 1, and then Auditions the Part with the filter switch turned on (see menu options below).  As a result, the Performance is set up to receive notes only on Part 1, the voice gets sent to Part 1, Part 1's filter is turned on, and the other Parts are turned off.
 
-<p><li><b>Audition Part</b>&nbsp;&nbsp;&nbsp;This turns on the current part's MIDI channel, setting it to the the Performance's channel, and it turns off all the other parts' MIDI channels.  That way when you play notes, you will hear exactly and only the voice you're working on.  If you switch to another part, you'll have to focus on it again.  To undo all this, you can fire up a Performance patch editor and manually change the various Part MIDI settings.
+<li><b>Set Up Test Performance for Part 1 without Filter</b>&nbsp;&nbsp;&nbsp;Exactly the same as above, except that Part 1's filter switch is turned off.
+
+<p><li><b>Audition Part with Filter</b>&nbsp;&nbsp;&nbsp;This turns on the current part's MIDI channel, setting it to the the Performance's channel, and it turns off all the other parts' MIDI channels.  That way when you play notes, you will hear exactly and only the voice you're working on.  Additionally, the current part's filter switch is turned on.  If you switch to another part, you'll have to focus on it again.  To undo all this, you can fire up a Performance patch editor and manually change the various Part MIDI settings.
+
+<p><li><b>Audition Part without Filter</b>&nbsp;&nbsp;&nbsp;Exactly the same as above, except that the current part's filter switch is turned off.
+
 
 <p><li><b>Send/Receive Part (1,2,3,4)</b>&nbsp;&nbsp;&nbsp;This causes Edisyn to use the given Part when sending and requesting the current voice patch.
 You may also wish to Focus on the part (see menu item above) after setting this.
@@ -36,6 +41,15 @@ Voices can't be played alone: they have to be placed in a Part in a performance 
 <br><br><h3>Loading DX7 Patches</h3>
 
 It's easy: just use the DX7 Editor.
+
+<br><br><h3>Gotchas</h3>
+<ul>
+<li>Changing patches or loading a patch takes a <b>very long amount of time</b>, during which the FS1R will be unresponsive to requests to play notes etc.  You will find this annoying.
+<li>If you set the bandwidth of an unvoiced operator to 0, unexpected and unstable sounds occur.  See pages 80 and 81 of the manual.
+</ul>
+
+
+<p>Thanks to K_Take (k_take@dual.squares.net) for giving me access to the source code of FS1REditor and permission to reuse many of its embedded tables, without which Edisyn's patch editor would not have been possible.  And thanks to Thor Zollinger (thor276@cableone.net) for his tutoring on the internal operation of the FS1R.
 
 
 <p><table border=0 cellpadding=0 cellspacing=5>

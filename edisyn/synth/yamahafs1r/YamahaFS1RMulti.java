@@ -41,6 +41,7 @@ public class YamahaFS1RMulti extends Synth
     };
 
 
+	// Default names for all voices in banks A...K.  Internal bank is not listed.
     public static final String[][] VOICES = {
         { "Pf Ballad EP", "Pf Clavmann", "Pf Clavmann 2", "Pf Digi Clav", "Pf DX7Classic", "Pf Mtrial Pno", "Pf MtrialPno2", "Pf MtrialPno3", "Pf Real Rose", "Pf Rose Att", "Pf Rose Sft1", "Pf Rose Sft2", "Pf Suit Rose", "Pf Velvt Rose", "Pf 4 Op Clav", "Cp Da Comp", "Cp Synth Bell", "Cp Tabla", "Or B3JazzComp", "Or B3Perc3rd", "Or DrawOrgn", "Or DrawOrgn2", "Or DrawOrgn3", "Or Fs-Organ", "Or Full Drawb", "Or Ham Organ", "Or OR-Right", "Or Organ Fseq", "Or The Lounge", "Gt Jazz Gtr", "Gt Stratmann", "Ba Acid King", "Ba Ana Bass", "Ba AttackBass", "Ba B-Rave", "Ba Bassline 1", "Ba Bassline 2", "Ba BlegBass", "Ba DidgBass", "Ba Dry Syn", "Ba FM Bass", "Ba FundaBass", "Ba HyperFuzz", "Ba JungleBass", "Ba LoFiAcid", "Ba Matze", "Ba Moon Bass", "Ba Phone Bass", "Ba PlastBass", "Ba PunchBass", "Ba Syn Bass", "Ba Technical", "St FairyStrgs", "St JMichel", "St OB String", "St ResoStrgs", "St Saws", "St SloDu Saws", "St SS String", "St SS String2", "En HitMatrial", "Br ANSweep", "Br FS Brass", "Br Hook", "Br ObiehornL", "Br ObiehornR", "Br Quackz", "Br Stab", "Br Swell", "Pi Kuchibue", "Ld Dual Saws2", "Ld DualSquare", "Ld Earth Lead", "Ld Fetish", "Ld Glass Harp", "Ld Glider", "Ld Lead Saw", "Ld Mitosis", "Ld Retronic", "Ld Score Pad", "Ld Tech Lead", "Ld Trance Csm", "Ld Voc Lead", "Pd Add Pad", "Pd Beauty", "Pd Brassetra", "Pd CineSweep", "Pd Fat Pad", "Pd FormantPad", "Pd FormSweep1", "Pd FormSweep2", "Pd FormSweep3", "Pd FormSweep4", "Pd FS Moby II", "Pd Heimdal", "Pd LFO Pad", "Pd Moving", "Pd Nebulous", "Pd OBx Pad", "Pd OBx Pad2", "Pd Octavian", "Pd Paddy", "Pd Qwerty", "Pd Saws&Hold", "Pd Saws2", "Pd SleepyPad", "Pd Spacy Pad", "Pd Starship", "Pd SuperPad", "Pd SweepersVx", "Pd Tech Lead2", "Pd The Seeker", "Pd The Shadow", "Pd Thermal", "Pd VocPhaseA", "Pd Win Pad", "Pd Wind", "Fx Caravan", "Fx DippeDut", "Fx Furry Bell", "Fx Glacial", "Fx Miracle", "Fx MizuGuitar", "Fx Morph", "Fx Nightmare", "Fx RhythmLoop", "Pd Sho", "Fx Spiral" },
         { "Et BagPipe", "Et BagPipe-dl", "Et Gamelan", "Et Gamelan2", "Et Mukkuri", "Et SuikinStr", "Et Thai Boxin", "Et ThumKalimb", "Pc Big-Gamlan", "Pc Eth-Drum1", "Pc Eth-Drum2", "Se Beep VoX", "Se Dark", "Se ForceField", "Se Ghost", "Se Ghost2", "Se Magic", "Se Night", "Se Open Fseq", "Se RadioNoise", "Se Reso SE", "Se Saucer", "Se Scaling SE", "Se Slow Atk", "Se SpaceBomb", "Se WalkinRobo", "Se Warp1", "Se Warp2", "Dr 09 OpenHat", "Dr 09ClHatBel", "Dr Beat BD", "Dr Beat Cym", "Dr Beat SD", "Dr Beat Zap", "Dr Boom", "Dr Choos", "Dr ClosedHat1", "Dr ClosedHat2", "Dr DanceKick", "Dr FS-Kick1", "Dr FS-Kick2", "Dr FS-Kick3", "Dr Hatty", "Dr Hihat", "Dr Nu Kick 1", "Dr Nu Kick 2", "Dr Nu Kick 3", "Dr Nu Snare 1", "Dr Nu Snare 2", "Dr Nu Snare 3", "Dr Open Hat 1", "Dr Open Hat 2", "Dr PowerKick", "Dr Snare", "Dr Tchak", "Dr Tech BD", "Dr Tech HH", "Dr Tech Rim", "Dr Tech SD", "Dr TR Kick", "Dr TR Snare", "Sc DigiSQ1R", "Sc DigiSQ3", "Sc DogBytes", "Sc Fast&Cheap", "Sc Fmt-Pluck", "Sc FunKey", "Sc Funky Tech", "Sc Fusion", "Sc Metallic", "Sc NoiseDecay", "Sc Raymond", "Sc SawSaw", "Sc Snow Decay", "Sc Snow Pixy", "Sc Spellbound", "Sc Syncorgano", "Sc Thin Mini", "Sc VeloSweep", "Sc Vox Tron", "Sc Zansyo", "Sc Zapper", "Vo Celebratn", "Vo Eh Human", "Vo FairyVoice", "Vo FormSweep", "Vo FS-Choir", "Vo FS-Sweep", "Vo Homy", "Vo Human", "Vo Ih Human", "Vo Man_Eh", "Vo NoisyVce", "Vo Oh Human", "Vo Shaman Woo", "Vo Spacy Aaah", "Vo Spacy FX", "Vo SpacySweep", "Vo SweepyVce", "Vo VocoSweep", "Vo VocPhaseB", "Sq AN Arp 1", "Sq AN Arp 2", "Sq Compu Saw", "Sq DigiSQ1", "Sq DigiSQ2", "Sq Drw-EuroDr", "Sq Hard Pulse", "Sq Harry", "Sq New Key", "Sq Power Key", "Sq RythmLoop2", "Sq Saw Pad", "Sq TekBass", "-- FseqBase01", "-- FseqBase02", "-- FseqBase03", "-- FseqBase04", "-- FseqBase05", "-- FseqBase06", "-- FseqBase07", "-- FseqBase08", "-- FseqBase09", "-- FseqBase10", "-- FseqBase11", "-- FseqBase12", "-- FseqBase13", "-- FseqBase14" },
@@ -74,11 +75,13 @@ public class YamahaFS1RMulti extends Synth
     public static final int[] PRESET_VALS = { 5, 6, 7, 8, 9 };          // for now
     public static final String[] EQ_SHAPES = { "Shelving", "Peaking" };
     public static final String[] PARTS = { "1", "2", "3", "4" };
+    public static final int REVERB = 0;
+    public static final int VARIATION = 1;
+    public static final int INSERTION = 2;
+    
 
-    // Taken with permission from FS1REditor by K_Take (https://synth-voice.sakura.ne.jp/fs1r_editor_english.html)
+    // The following two were taken with permission from FS1REditor by K_Take (https://synth-voice.sakura.ne.jp/fs1r_editor_english.html)
     public static final String[] CONTROL_DESTINATIONS = { "Ins->Rev", "Ins->Var", "Volume", "Pan", "Rev Send", "Var Send", "Flt Freq", "Flt Reso", "Flt EGDepth", "Attack Time", "Decay Time", "Release Time", "PEG InitLvl", "PEGAtakTime", "PEG ReleLvl", "PEGReleTime", "V/N Balance", "Formant", "FM", "Pitch Bias", "Amp EG Bias", "Freq Bias", "V BandWidth", "N BandWidth", "LFO1 Pitch", "LFO1 Amp", "LFO1 Freq", "LFO1 Filter", "LFO1 Speed", "LFO2 Filter", "LFO2 Speed", "Fseq Speed", "FseqScratch" };
-
-    // Taken with permission from FS1REditor by K_Take (https://synth-voice.sakura.ne.jp/fs1r_editor_english.html)
     public static final int[] EQ_FREQUENCIES = new int[]
     {
     32,                             //[start low],
@@ -172,8 +175,8 @@ public class YamahaFS1RMulti extends Synth
                         if (parameters[i].startsWith("part" + p2))
                             {
                             int val2 = model.get(parameters[i]);
-                            int val1 = model.get(("part" + p1) + parameters[i].substring(9));
-                            model.set(("part" + p1) + parameters[i].substring(9), val2);
+                            int val1 = model.get(("part" + p1) + parameters[i].substring(5));
+                            model.set(("part" + p1) + parameters[i].substring(5), val2);
                             model.set(parameters[i], val1);
                             }
                         }
@@ -213,7 +216,7 @@ public class YamahaFS1RMulti extends Synth
                         if (parameters[i].startsWith("part" + p1))
                             {
                             int val2 = model.get(parameters[i]);
-                            model.set(("part" + p2) + parameters[i].substring(9), val2);
+                            model.set(("part" + p2) + parameters[i].substring(5), val2);
                             }
                         }
                                                                                 
@@ -227,9 +230,8 @@ public class YamahaFS1RMulti extends Synth
 
     public JFrame sprout()
         {
-        JFrame frame = super.sprout();
-        transmitTo.setEnabled(false);
-        //writeTo.setEnabled(false);
+        JFrame frame = super.sprout();	
+        transmitTo.setEnabled(false);		// Though that doesn't matter any more
         addYamahaFS1RMenu();
         return frame;
         }         
@@ -255,7 +257,6 @@ public class YamahaFS1RMulti extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Common", soundPanel);
 
-
         for(int i = 1; i <= 4; i++)
             {
             soundPanel = new SynthPanel(this);
@@ -278,7 +279,6 @@ public class YamahaFS1RMulti extends Synth
             addTab("Part " + i, soundPanel);
             }
 
-
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         vbox.add(addReverb(Style.COLOR_A()));
@@ -286,7 +286,6 @@ public class YamahaFS1RMulti extends Synth
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Effects 1", soundPanel);
-                        
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
@@ -295,14 +294,9 @@ public class YamahaFS1RMulti extends Synth
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Effects 2", soundPanel);
-                        
-
-
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-
-
         for(int i = 1; i <= 8; i+=2)
             {
             HBox hbox2 = new HBox();
@@ -321,8 +315,6 @@ public class YamahaFS1RMulti extends Synth
         
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Voice Control", soundPanel);
-                        
-                        
                         
         loadDefaults();        
         }
@@ -593,7 +585,8 @@ public class YamahaFS1RMulti extends Synth
         }
     
 
-
+	/** Builds destinations for a given controller.  These destinations must change depending
+		on the choice of Insertion effect.  */
     String[] buildDestinations()
         {
         String[] destinations = new String[15 + CONTROL_DESTINATIONS.length];
@@ -697,7 +690,8 @@ public class YamahaFS1RMulti extends Synth
         return category;
         }
         
-        
+    
+    /** Revises the patch name in the Category title for a given Part. */
     void updatePatchName(int part, Category category)
         {
             int bank = model.get("part" + part + "banknumber", -100) - 1;
@@ -789,7 +783,7 @@ public class YamahaFS1RMulti extends Synth
 
         hbox.add(vbox);
 
-        comp = new LabelledDial("Voice", this,  "part" + part + "programnumber", color, 0, 127)
+        comp = new LabelledDial("Voice", this,  "part" + part + "programnumber", color, 0, 127, -1)
             {
             public void update(String key, Model model)
                 {
@@ -1105,10 +1099,7 @@ public class YamahaFS1RMulti extends Synth
         return category;
         }
 
-    public static final int REVERB = 0;
-    public static final int VARIATION = 1;
-    public static final int INSERTION = 2;
-    
+
     public JComponent[] reverbParams = new JComponent[17];
     public JComponent addReverb(Color color)
         {
@@ -1385,7 +1376,10 @@ public class YamahaFS1RMulti extends Synth
         }
 
 
-    public JComponent buildReverb(int val, Color color)
+
+	/** Rebuilds, then sets to default values the current reverb parameters for the given reverb type, where val = 0 is "No Effect". 
+		This doesn't include the standard parameters (like pan). */
+    JComponent buildReverb(int val, Color color)
         {
         VBox vbox = new VBox();
         if (val == 0)   // No Effect
@@ -1415,7 +1409,9 @@ public class YamahaFS1RMulti extends Synth
         return vbox;
         }    
     
-    public JComponent buildVariation(int val, Color color)
+	/** Rebuilds, then sets to default values the current variation parameters for the given variation type, where val = 0 is "No Effect". 
+		This doesn't include the standard parameters (like pan).  */
+     JComponent buildVariation(int val, Color color)
         {
         VBox vbox = new VBox();
         if (val == 0)   // No Effect
@@ -1445,10 +1441,12 @@ public class YamahaFS1RMulti extends Synth
         return vbox;
         }    
 
+	/** Rebuilds, then sets to default values the current insertion parameters for the given insertion type, where val = 0 is "Thru". 
+		This doesn't include the standard parameters (like pan).  */
     public JComponent buildInsertion(int val, Color color)
         {    
         VBox vbox = new VBox();
-        if (val == 0)   // No Effect
+        if (val == 0)   // Thru
             {
             }
         else
@@ -1485,11 +1483,7 @@ public class YamahaFS1RMulti extends Synth
     /** Map of parameter -> index in the allParameters array. */
     HashMap allParametersToIndex = new HashMap();
 
-
     /** List of all Sysex parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
-
-    /// * indicates parameters which must be handled specially due to packing
-    /// that Waldorf decided to do.  :-(
 
     final static String[] allParameters = new String[] 
     {
@@ -1919,6 +1913,7 @@ public class YamahaFS1RMulti extends Synth
     
 
         
+	/** Returns the part associated with the given key.  For example, "part4pitchbendrangehigh" -> 4 and "eqlowgain" -> 0 */
     // common = 0, part = 1...4
     public int getPart(String key)
         {
@@ -1929,6 +1924,7 @@ public class YamahaFS1RMulti extends Synth
         else return 0;
         }        
 
+	/** Returns the address associated with the given *sysex key*. */
     public int getAddress(String key)
         {
         int addr = ((Integer)(allParametersToIndex.get(key))).intValue();
@@ -1987,37 +1983,37 @@ public class YamahaFS1RMulti extends Synth
                 int v = model.get(key);
                 if (v > 4) key += 95;           // open the hole
                 address = getAddress("fseqspeedhi");
-                val = (v >>> 7) & 127;
-                address2 = getAddress("fseqspeedlo");
-                val2 = (v & 127);               
-                pair = true;
+                val = v; // (v >>> 7) & 127;
+                //address2 = getAddress("fseqspeedlo");
+                //val2 = (v & 127);               
+                //pair = true;
                 }
             else if (key.equals("fseqstartstepoffset"))
                 {
                 int v = model.get(key);
                 address = getAddress("fseqstartstepoffsethi");
-                val = (v >>> 7) & 127;
-                address2 = getAddress("fseqstartstepoffsetlo");
-                val2 = (v & 127);               
-                pair = true;
+                val = v; // (v >>> 7) & 127;
+                //address2 = getAddress("fseqstartstepoffsetlo");
+                //val2 = (v & 127);               
+                //pair = true;
                 }
             else if (key.equals("fseqstartstepoflooppoint"))
                 {
                 int v = model.get(key);
                 address = getAddress("fseqstartstepoflooppointhi");
-                val = (v >>> 7) & 127;
-                address2 = getAddress("fseqstartstepoflooppointlo");
-                val2 = (v & 127);               
-                pair = true;
+                val = v; // (v >>> 7) & 127;
+                //address2 = getAddress("fseqstartstepoflooppointlo");
+                //val2 = (v & 127);               
+                //pair = true;
                 }
             else if (key.equals("fseqendstepoflooppoint"))
                 {
                 int v = model.get(key);
                 address = getAddress("fseqendstepoflooppointhi");
-                val = (v >>> 7) & 127;
-                address2 = getAddress("fseqendstepoflooppointlo");
-                val2 = (v & 127);               
-                pair = true;
+                val = v; // (v >>> 7) & 127;
+                //address2 = getAddress("fseqendstepoflooppointlo");
+                //val2 = (v & 127);               
+                //pair = true;
                 }
             else if (key.equals("fseqplaymode"))
                 {
@@ -2043,17 +2039,15 @@ public class YamahaFS1RMulti extends Synth
                     (model.get("controller" + cont + "kn4") << 3) | 
                     (model.get("controller" + cont + "mc1") << 4) |
                     (model.get("controller" + cont + "mc2") << 5) |
-                    (model.get("controller" + cont + "pb") << 6));
-                address = getAddress("controller" + cont + "sourceswitchlo");
-                val2 = ((model.get("controller" + cont + "cat") << 0) | 
-                    (model.get("controller" + cont + "pat") << 1) |
-                    (model.get("controller" + cont + "fc") << 2) |
-                    (model.get("controller" + cont + "bc") << 3) | 
-                    (model.get("controller" + cont + "mc3") << 4) |
-                    (model.get("controller" + cont + "mw") << 5) |
-                    (model.get("controller" + cont + "mc4") << 6));
-                address2 = getAddress("controller" + cont + "sourceswitchhi");
-                pair = true;
+                    (model.get("controller" + cont + "pb") << 6) | 	
+                	(model.get("controller" + cont + "cat") << 7) | 
+                    (model.get("controller" + cont + "pat") << 8) |
+                    (model.get("controller" + cont + "fc") << 9) |
+                    (model.get("controller" + cont + "bc") << 10) | 
+                    (model.get("controller" + cont + "mc3") << 11) |
+                    (model.get("controller" + cont + "mw") << 12) |
+                    (model.get("controller" + cont + "mc4") << 13));
+                address = getAddress("controller" + cont + "sourceswitchhi");
                 }
             else if (key.startsWith("reverb") && !key.equals("reverbtype") && !key.equals("reverbpan") && !key.equals("reverbreturn"))
                 {
@@ -2065,10 +2059,12 @@ public class YamahaFS1RMulti extends Synth
                 int address_msb = 0x00;
                 int address_lsb = YamahaFS1RFX.revEffectParaLSBTable[param - 1][version];
                 address = (address_msb << 7) | address_lsb;
-                        
+                
+                val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]));
+                /*
                 if (address > 0x60)                     // one byte                                     
                     {
-                    val = (((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) >>> 7) & 127);
+                    val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) & 127);
                     }
                 else                                            // two bytes
                     {
@@ -2077,6 +2073,7 @@ public class YamahaFS1RMulti extends Synth
                     address2 = address + 1;
                     pair = true;
                     }
+                */
                 }
             else if (key.startsWith("variation") && !key.equals("variationtype") && !key.equals("variationpan") && !key.equals("variationreturn"))
                 {
@@ -2089,10 +2086,13 @@ public class YamahaFS1RMulti extends Synth
                 int address_lsb = YamahaFS1RFX.varEffectParaLSBTable[param - 1][version];
                 address = (address_msb << 7) | address_lsb;
                     
+                val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]));
+                /*
                 val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) >>> 7) & 127;
                 val2 = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) & 127);
                 address2 = address + 1;
                 pair = true;
+                */
                 }
             else if (key.startsWith("insertion") && !key.equals("insertiontype") && !key.equals("insertionpan") && !key.equals("insertionlevel"))
                 {
@@ -2105,10 +2105,13 @@ public class YamahaFS1RMulti extends Synth
                 int address_lsb = YamahaFS1RFX.insEffectParaLSBTable[param - 1][version];
                 address = (address_msb << 7) | address_lsb;
                     
+                val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]));
+                /*
                 val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) >>> 7) & 127;
                 val2 = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) & 127);
                 address2 = address + 1;
                 pair = true;
+                */
                 }
             else if (key.endsWith("rcvchannelmax"))
                 {
@@ -2158,8 +2161,8 @@ public class YamahaFS1RMulti extends Synth
                                                 
                 byte[] data2 = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
                     (byte)(part == 0 ? 0x10 : 0x30 - 1 + part),     // HIGH
-                    (byte)((address >>> 7) & 127),                                  // MEDIUM
-                    (byte)(address & 127),                                  // LOW
+                    (byte)((address2 >>> 7) & 127),                                  // MEDIUM
+                    (byte)(address2 & 127),                                  // LOW
                     (byte)MSB,
                     (byte)LSB, 
                     (byte)0xF7 };
@@ -2198,6 +2201,7 @@ public class YamahaFS1RMulti extends Synth
     public static final int OFFSET_PORTAMENTOSWITCHMODE = 0x24;
 
 
+	// Extracts the key from allParameters, then casts it to a byte.  A syntax sugar method, that's all. 
     public byte getB(int pos)
         {
         String key = allParameters[pos];
@@ -2371,8 +2375,6 @@ public class YamahaFS1RMulti extends Synth
                 data[address + 9] = (byte)((val >>> 7) & 127);          // hi   
                 data[address + 1 + 9] = (byte)(val & 127);                      // lo
                 }
-
-
 
         for(int part = 0; part < 4; part++)
             {
@@ -2638,6 +2640,8 @@ public class YamahaFS1RMulti extends Synth
 
     byte produceChecksum(byte[] bytes, int start)
         {
+        //	It appears that the FS1R uses the same checksum as the 4-op and DX7 synths
+        //
         //      The TX816 owner's manual (p. 54) says the checksum is:
         //                              "the least significant 7 bits of the 2's complement sum of 155 data bytes.
         //                               0eeeeeee must be determined so that the least significant 7 bits of the
@@ -2729,7 +2733,7 @@ public class YamahaFS1RMulti extends Synth
         // Send Bank MSB, which is always 63, go figure...
         tryToSendMIDI(buildCC(getChannelOut(), 0, 63));
         // Send Bank LSB 
-        tryToSendMIDI(buildCC(getChannelOut(), 0, tempModel.get("bank")));
+        tryToSendMIDI(buildCC(getChannelOut(), 32, 64 + tempModel.get("bank")));
         // Send PC
         tryToSendMIDI(buildPC(getChannelOut(), tempModel.get("number")));
                         

@@ -1267,7 +1267,9 @@ public class YamahaFS1RMulti extends Synth
             };
         hbox.add(comp);
 
-        comp = new LabelledDial("Level", this,  "insertionlevel", color, 0, 127);
+		// Why this isn't like the other wet/dry settings I have no idea...
+        comp = new LabelledDial("Dry/Wet", this,  "insertionlevel", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
         comp = new LabelledDial("Send to", this,  "sendinsertiontoreverb", color, 0, 127);

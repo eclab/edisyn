@@ -205,6 +205,45 @@ public class YamahaFS1R extends Synth
 			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + part), 0, 0x07, 0, 0x00, (byte)0xF7 });
         	}
         }
+
+    public void stripEffects()
+        {
+        // Technically we don't need to do the insertion stuff as it's routed
+        // into the reverb and variation, whose returns are zeroed anyway, 
+        // and similarlysending variation to reverb..., but for good measure...
+        
+			// Reverb Type = OFF
+			// F0 43 1n 5E 3p 00 ll vv vv F7
+			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x28, 0, 0, (byte)0xF7 });
+
+			// Variation Type = OFF
+			// F0 43 1n 5E 3p 00 ll vv vv F7
+			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x2B, 0, 0, (byte)0xF7 });
+
+			// Insertion Type = THRU
+			// F0 43 1n 5E 3p 00 ll vv vv F7
+			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x2F, 0, 0, (byte)0xF7 });
+
+			// Reverb Return = 0
+			// F0 43 1n 5E 3p 00 ll vv vv F7
+			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x2A, 0, 0, (byte)0xF7 });
+
+			// Variation Return = 0
+			// F0 43 1n 5E 3p 00 ll vv vv F7
+			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x2D, 0, 0, (byte)0xF7 });
+
+			// Variation to Reverb = 0
+			// F0 43 1n 5E 3p 00 ll vv vv F7
+			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x2E, 0, 0, (byte)0xF7 });
+
+			// Send Insertion to Reverb = 0
+			// F0 43 1n 5E 3p 00 ll vv vv F7
+			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x31, 0, 0, (byte)0xF7 });
+
+			// Send Insertion to Variation = 0
+			// F0 43 1n 5E 3p 00 ll vv vv F7
+			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x32, 0, 0, (byte)0xF7 });
+        }
         
     public void setupTestPerformance(boolean filter)
         {
@@ -281,7 +320,8 @@ public class YamahaFS1R extends Synth
             });
         menu.add(current);
         
-        JMenuItem initialize = new JMenuItem("Set Up Test Performance for Part 1 with Filter");
+         menu.addSeparator();
+       JMenuItem initialize = new JMenuItem("Set Up Test Performance for Part 1 with Filter");
         initialize.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -320,6 +360,16 @@ public class YamahaFS1R extends Synth
                 }
             });
         menu.add(focus);
+        
+     	JMenuItem strip = new JMenuItem("Strip Effects");
+        strip.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                stripEffects();                
+                }
+            });
+        menu.add(strip);
         menu.addSeparator();
         
         ButtonGroup group = new ButtonGroup();
@@ -1476,7 +1526,7 @@ public class YamahaFS1R extends Synth
         hbox.add(comp);
 
         // this is actually in COMMON
-        comp = new LabelledDial("Attenuation", this, "operator" + src + "v" + "carrierlevelcorrection", color, 0, 15)
+        comp = new LabelledDial("Attenuation", this, "operator" + src + "v" + "hcorrection", color, 0, 15)
             {
             public String map(int val)
                 {

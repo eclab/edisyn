@@ -14,7 +14,7 @@ The menu has several options which hopefully make working with the patch editor 
 <ul>
 <li><b>Set Up Test Performance for Part 1 with Filter</b>&nbsp;&nbsp;&nbsp;This builds a blank Performance with empty effects, and sends it to the FS1R, then sets Send/Receive Part... to 1, and then Auditions the Part with the filter switch turned on (see menu options below).  As a result, the Performance is set up to receive notes only on Part 1, the voice gets sent to Part 1, Part 1's filter is turned on, and the other Parts are turned off.
 
-<li><b>Set Up Test Performance for Part 1 without Filter</b>&nbsp;&nbsp;&nbsp;Exactly the same as above, except that Part 1's filter switch is turned off.
+<p><li><b>Set Up Test Performance for Part 1 without Filter</b>&nbsp;&nbsp;&nbsp;Exactly the same as above, except that Part 1's filter switch is turned off.
 
 <p><li><b>Audition Part with Filter</b>&nbsp;&nbsp;&nbsp;This turns on the current part's MIDI channel, setting it to the the Performance's channel, and it turns off all the other parts' MIDI channels.  That way when you play notes, you will hear exactly and only the voice you're working on.  Additionally, the current part's filter switch is turned on.  If you switch to another part, you'll have to focus on it again.  To undo all this, you can fire up a Performance patch editor and manually change the various Part MIDI settings.
 
@@ -46,7 +46,8 @@ It's easy: just use the DX7 Editor.
 <br><br><h3>Gotchas</h3>
 <ul>
 <li>Changing patches or loading a patch takes a <b>very long amount of time</b>, during which the FS1R will be unresponsive to requests to play notes etc.  You will find this annoying.
-<li>If you set the bandwidth of an unvoiced operator to 0, unexpected and unstable sounds occur.  See pages 80 and 81 of the manual.
+
+<p><li>If you set the bandwidth of an unvoiced operator to 0, unexpected and unstable sound occurs.  Don't do that: it's not clear why it's even an option.  See pages 80 and 81 of the manual.
 </ul>
 
 

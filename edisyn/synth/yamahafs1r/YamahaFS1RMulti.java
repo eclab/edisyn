@@ -2223,11 +2223,11 @@ public class YamahaFS1RMulti extends Synth
         data[1] = (byte)0x43;
         data[2] = (byte)(getID() - 1);
         data[3] = (byte)0x5E;
-        data[4] = (byte)(BYTE_COUNT >>> 7);
+        data[4] = (byte)((BYTE_COUNT >>> 7) & 127);
         data[5] = (byte)(BYTE_COUNT & 127);
-        data[6] = (byte)(toWorkingMemory ? 0x10 : tempModel.get("number"));
+        data[6] = (byte)(toWorkingMemory ? 0x10 : 0x11);
         data[7] = (byte)0x0;
-        data[8] = (byte)0x0;
+        data[8] = (byte)(toWorkingMemory ? 0x00 : tempModel.get("number"));
         
         String name = model.get("name", "INIT VOICE") + "          ";
         for(int i = 0; i < 12; i++)     

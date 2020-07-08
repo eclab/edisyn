@@ -1526,7 +1526,7 @@ public class YamahaFS1R extends Synth
         hbox.add(comp);
 
         // this is actually in COMMON
-        comp = new LabelledDial("Attenuation", this, "operator" + src + "v" + "hcorrection", color, 0, 15)
+        comp = new LabelledDial("Attenuation", this, "operator" + src + "v" + "carrierlevelcorrection", color, 0, 15)
             {
             public String map(int val)
                 {
@@ -2899,7 +2899,7 @@ public class YamahaFS1R extends Synth
         data[1] = (byte)0x43;
         data[2] = (byte)(getID() - 1);
         data[3] = (byte)0x5E;
-        data[4] = (byte)(BYTE_COUNT >>> 7);
+        data[4] = (byte)((BYTE_COUNT >>> 7) & 127);
         data[5] = (byte)(BYTE_COUNT & 127);
         data[6] = (byte)(toWorkingMemory ? 0x40 + part : 0x51);
         data[7] = (byte)0x0;

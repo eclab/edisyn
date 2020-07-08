@@ -3554,6 +3554,7 @@ public abstract class Synth extends JComponent implements Updatable
         menu.addSeparator();
 
         JMenuItem allSoundsOff = new JMenuItem("Send All Sounds Off");
+        allSoundsOff.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(allSoundsOff);
         allSoundsOff.addActionListener(new ActionListener()
             {

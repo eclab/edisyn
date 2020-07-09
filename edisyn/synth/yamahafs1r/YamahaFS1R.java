@@ -1474,14 +1474,26 @@ public class YamahaFS1R extends Synth
 
         // strange name for bandwidth in the sysex docs
                 
-        LabelledDial bandwidthResonance = new LabelledDial("Bandwidth/", this, "operator" + src + "v" + "frequencyratioofbandspectrum", color, 0, 99);
+        final LabelledDial bandwidthResonance = new LabelledDial("Bandwidth/", this, "operator" + src + "v" + "frequencyratioofbandspectrum", color, 0, 99);
         bandwidthResonance.addAdditionalLabel("Resonance");
 
+        final LabelledDial frequencyNoteScaling = new LabelledDial("Frequency", this, "operator" + src + "v" + "frequencynotescaling", color, 0, 99);
+        ((LabelledDial)frequencyNoteScaling).addAdditionalLabel("Key Scaling");
 
+        final LabelledDial transpose = new LabelledDial("Transpose", this, "operator" + src + "v" + "transpose", color, 0, 48, 24)
+            {
+            public boolean isSymmetric() { return true; }
+            };
 
+        final LabelledDial skirt = new LabelledDial("Skirt", this, "operator" + src + "v" + "spectralskirt", color, 0, 7);
+
+		final HBox extraContainer = new HBox();
+		
+        final CheckBox keySync = new CheckBox("Key Sync", this, "operator" + src + "v" + "keysync");
+        
         VBox vbox = new VBox();
         params = OSC_MODES;
-        comp = new Chooser("Mode", this, "operator" + src + "v" + "frequencyoscillatormode", params) 
+        final Chooser mode = new Chooser("Mode", this, "operator" + src + "v" + "frequencyoscillatormode", params) 
             {
             public void update(String key, Model model)
                 {
@@ -1494,13 +1506,71 @@ public class YamahaFS1R extends Synth
                 boxesContainer.repaint();
                 }
             };
-        vbox.add(comp);
+            
+        final HBox modeContainer = new HBox();
+        modeContainer.addLast(mode);
 
         params = WAVES;
-        comp = new Chooser("Spectral Form", this, "operator" + src + "v" + "spectralform", params);
+        comp = new Chooser("Spectral Form", this, "operator" + src + "v" + "spectralform", params)
+        	{
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                int val = model.get(key);
+                
+                extraContainer.removeAll();
+                
+				modeContainer.removeLast();
+                if (val == 7)
+                	{
+                	modeContainer.addLast(Strut.makeStrut(mode));
+                	}
+                else
+                	{
+                	modeContainer.addLast(mode);
+                	mode.repaint();
+                	}
+                modeContainer.revalidate();
+                modeContainer.repaint();
+                	
+                keySync.setEnabled(val != 7);	// fmt
+                	
+                if (val == 0)		// Sine
+                	{
+                	extraContainer.add(Strut.makeStrut(skirt));
+                	extraContainer.add(Strut.makeStrut(bandwidthResonance));
+                	extraContainer.add(Strut.makeStrut(frequencyNoteScaling));
+                	extraContainer.add(Strut.makeStrut(transpose));
+                	}
+                else if (val == 1 || val == 2 || val == 3 || val == 4)		// all1, all2, odd1, odd2
+                	{
+                	extraContainer.add(skirt);
+                	extraContainer.add(Strut.makeStrut(bandwidthResonance));
+                	extraContainer.add(Strut.makeStrut(frequencyNoteScaling));
+                	extraContainer.add(Strut.makeStrut(transpose));
+                	}
+                else if (val == 5 || val == 6)			// res1, res2
+                	{
+                	extraContainer.add(skirt);
+                	extraContainer.add(bandwidthResonance);
+                	extraContainer.add(Strut.makeStrut(frequencyNoteScaling));
+                	extraContainer.add(Strut.makeStrut(transpose));
+                	}
+                else //if (val == 7)			// fmt
+                	{
+                	extraContainer.add(skirt);
+                	extraContainer.add(bandwidthResonance);
+                	extraContainer.add(frequencyNoteScaling);
+                	extraContainer.add(transpose);
+                	}
+
+                extraContainer.revalidate();
+                extraContainer.repaint();
+                }
+        	};
         vbox.add(comp);
-        hbox.add(vbox);
-        
+        vbox.add(modeContainer);
+
         HBox hbox2 = new HBox();
         
         // This is actually in COMMON 
@@ -1508,19 +1578,11 @@ public class YamahaFS1R extends Synth
         comp = new CheckBox("Fseq", this, "operator" + src + "v" + "switch");
         hbox2.add(comp);
 
-        comp = new CheckBox("Key Sync", this, "operator" + src + "v" + "keysync");
-        hbox2.add(comp);
-        
-        vbox.add(hbox2);
-        
+		hbox2.add(keySync);
+		
+        vbox.add(hbox2);        
         hbox.add(vbox);
 
-        comp = new LabelledDial("Transpose", this, "operator" + src + "v" + "transpose", color, 0, 48, 24)
-            {
-            public boolean isSymmetric() { return true; }
-            };
-        hbox.add(comp);
-    
         comp = new LabelledDial("Output", this, "operator" + src + "v" + "level", color, 0, 99);                // level
         ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
@@ -1536,27 +1598,30 @@ public class YamahaFS1R extends Synth
         ((LabelledDial)comp).addAdditionalLabel("(dB)");
         hbox.add(comp);
 
-        hbox.add(boxesContainer);               // coarse and fine
-        
-        comp = new LabelledDial("Frequency", this, "operator" + src + "v" + "frequencynotescaling", color, 0, 99);
-        ((LabelledDial)comp).addAdditionalLabel("Key Scaling");
-        hbox.add(comp);
-    
-        hbox.add(bandwidthResonance);
-                                
-        comp = new LabelledDial("Skirt", this, "operator" + src + "v" + "spectralskirt", color, 0, 7);
-        hbox.add(comp);
-
         comp = new LabelledDial("Fseq", this, "operator" + src + "v" + "frequencyfseqtracknumber", color, 0, 7, -1);
         ((LabelledDial)comp).addAdditionalLabel("Track");
         hbox.add(comp);
+        
+        hbox.add(boxesContainer);               // coarse and fine
         
         comp = new LabelledDial("Detune", this, "operator" + src + "v" + "detune", color, 0, 30, 15)
             {
             public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
-        
+
+        hbox.add(extraContainer);
+ 
+       /*
+        hbox.add(frequencyNoteScaling);
+    
+        hbox.add(bandwidthResonance);
+                                
+        hbox.add(skirt);
+
+        hbox.add(transpose);
+        */
+    
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
@@ -1760,30 +1825,10 @@ public class YamahaFS1R extends Synth
     
 
 
-        VBox vbox = new VBox();
-        params = FREQ_MODES;
-        comp = new Chooser("Mode", this, "operator" + src + "u" + "formantpitchmode", params);
-        vbox.add(comp);
+		final HBox extraContainer = new HBox();
+		
 
-        // This is actually in COMMON 
-        
-        comp = new CheckBox("Fseq", this, "operator" + src + "u" + "switch");
-        vbox.add(comp);
-        
-        hbox.add(vbox);
-
-        comp = new LabelledDial("Transpose", this, "operator" + src + "u" + "transpose", color, 0, 48, 24)      // transpose
-            {
-            public boolean isSymmetric() { return true; }
-            };
-        hbox.add(comp);
-    
-        comp = new LabelledDial("Output", this, "operator" + src + "u" + "level", color, 0, 99);
-        ((LabelledDial)comp).addAdditionalLabel("Level");
-        hbox.add(comp);
-
-
-        final LabelledDial fineFixed = new LabelledDial("Frequency", this, "operator" + src + "u" + "frequencyfine", color, 0, 127)                     // frequencyfine
+             final LabelledDial fineFixed = new LabelledDial("Frequency", this, "operator" + src + "u" + "frequencyfine", color, 0, 127)                     // frequencyfine
             {
             public String map(int val)
                 {
@@ -1809,13 +1854,70 @@ public class YamahaFS1R extends Synth
                 }               
             };
         coarseFixed.addAdditionalLabel("Coarse");
-        hbox.add(coarseFixed);
-        hbox.add(fineFixed);
         
+        LabelledDial frequencyScaling = new LabelledDial("Frequency", this, "operator" + src + "u" + "formantpitchnotescaling", color, 0, 99);
+        ((LabelledDial)frequencyScaling).addAdditionalLabel("Key Scaling");
+
+
+           VBox vbox = new VBox();
+        params = FREQ_MODES;
+        comp = new Chooser("Mode", this, "operator" + src + "u" + "formantpitchmode", params)
+        	{
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                int val = model.get(key);
+                
+                extraContainer.removeAll();
+
+                if (val == 0)		// Normal
+                	{
+                	extraContainer.add(fineFixed);
+                	extraContainer.add(coarseFixed);
+                	extraContainer.add(frequencyScaling);
+                	}
+                else if (val == 2)		// Fundamental
+                	{
+                 	extraContainer.add(Strut.makeStrut(fineFixed));
+                	extraContainer.add(Strut.makeStrut(coarseFixed));
+                	extraContainer.add(Strut.makeStrut(frequencyScaling));
+               		}
+                else // if (val == 3)			// Formant
+                	{
+                	extraContainer.add(fineFixed);
+                	extraContainer.add(coarseFixed);
+                	extraContainer.add(Strut.makeStrut(frequencyScaling));
+                	}
+                	
+                extraContainer.revalidate();
+                extraContainer.repaint();
+                }
+        	};
+        vbox.add(comp);
+
+        // This is actually in COMMON 
         
-        comp = new LabelledDial("Frequency", this, "operator" + src + "u" + "formantpitchnotescaling", color, 0, 99);
-        ((LabelledDial)comp).addAdditionalLabel("Key Scaling");
+        comp = new CheckBox("Fseq", this, "operator" + src + "u" + "switch");
+        vbox.add(comp);
+        
+        hbox.add(vbox);
+
+        comp = new LabelledDial("Transpose", this, "operator" + src + "u" + "transpose", color, 0, 48, 24)      // transpose
+            {
+            public boolean isSymmetric() { return true; }
+            };
         hbox.add(comp);
+    
+        comp = new LabelledDial("Output", this, "operator" + src + "u" + "level", color, 0, 99);
+        ((LabelledDial)comp).addAdditionalLabel("Level");
+        hbox.add(comp);
+
+
+
+        extraContainer.add(coarseFixed);
+        extraContainer.add(fineFixed);
+        extraContainer.add(frequencyScaling);
+        hbox.add(extraContainer);
     
         comp = new LabelledDial("Resonance", this, "operator" + src + "u" + "formantresonance", color, 0, 7);
         hbox.add(comp);

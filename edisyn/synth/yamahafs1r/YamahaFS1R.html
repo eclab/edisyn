@@ -4,6 +4,8 @@
 <h1>Yamaha FS1R</h1> 
 <h2>Voice Patch Editor</h2>
 
+This editor handles voices, not performances.  Though FS1R performances and voices are meant to work hand-in-hand, Edisyn's voice and performance editors are separate; but they can work together in certain ways as discussed below.
+
 <br><br><h3>Communicating with Edisyn</h3>
 Set the FS1R's to receive System Exclusive, Bulk Dumps, Bank Selection, and Program Change.  That is, set Rcv SysExcl, RcvBulkDump, Rcv BankSel, and Rcv PgmChng to ON.    Set the Program Change Mode to "Multi".  Set the FS1R's Device Number to either ALL or to the Synth ID in Edisyn's MIDI panel.  For most MIDI devices, you can probably reduce the Dump Interval to 50ms.  Set Edisyn's send and receive MIDI channels to the FS1R's receive and send channels respectively. 
 

@@ -75,6 +75,7 @@ public class YamahaFS1RMulti extends Synth
     public static final int[] PRESET_VALS = { 5, 6, 7, 8, 9 };          // for now
     public static final String[] EQ_SHAPES = { "Shelving", "Peaking" };
     public static final String[] PARTS = { "1", "2", "3", "4" };
+    public static final String[] PARTS_PLUS = { "1", "2", "3", "4", "All" };
     public static final int REVERB = 0;
     public static final int VARIATION = 1;
     public static final int INSERTION = 2;
@@ -193,7 +194,7 @@ public class YamahaFS1RMulti extends Synth
         copy.addActionListener(new ActionListener()
             {
             JComboBox part1 = new JComboBox(PARTS);
-            JComboBox part2 = new JComboBox(PARTS);
+            JComboBox part2 = new JComboBox(PARTS_PLUS);
                 
             public void actionPerformed(ActionEvent evt)
                 {
@@ -215,8 +216,19 @@ public class YamahaFS1RMulti extends Synth
                         {
                         if (parameters[i].startsWith("part" + p1))
                             {
-                            int val2 = model.get(parameters[i]);
-                            model.set(("part" + p2) + parameters[i].substring(5), val2);
+                            if (p2 == 5) 	// "All"
+                            	{
+                            	for(int j = 1; j <= 4; j++)
+                            		{
+	                            int val2 = model.get(parameters[i]);
+	                            model.set(("part" + j) + parameters[i].substring(5), val2);
+		                            }
+                            	}
+                            else
+                            	{
+	                            int val2 = model.get(parameters[i]);
+	                            model.set(("part" + p2) + parameters[i].substring(5), val2);
+	                            }
                             }
                         }
                                                                                 
@@ -2920,6 +2932,8 @@ public class YamahaFS1RMulti extends Synth
         return false;
         }
 
+
+	public int getPauseAfterWritePatch() { return 170; }		// don't know if we need any
     }
  
  

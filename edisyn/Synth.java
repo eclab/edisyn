@@ -5440,7 +5440,7 @@ public abstract class Synth extends JComponent implements Updatable
                         
                         if (!local && external.length == 0)
                             {
-                            succeeded = unknownSysexFileError(data[0]);
+                            succeeded = unknownSysexFileError(data);
                             }
                                 
                                 
@@ -5540,7 +5540,7 @@ public abstract class Synth extends JComponent implements Updatable
                                                 	ex.printStackTrace();
                                                 	}
                                                 	
-                                                pNames[0][count] = "" + count + "   " + otherSynth.getPatchName(otherSynth.model);
+                                                pNames[0][count] = "" + (count + 1) + "   " + otherSynth.getPatchName(otherSynth.model);
                                                 }
                                                                                                                                                                                         
                                             indices[0][count] = i;
@@ -5612,7 +5612,7 @@ public abstract class Synth extends JComponent implements Updatable
                                             {
                                             if (recognizeBulk(synths[external[j]], data[i]))
                                                 {
-                                                pNames[j][count] = "" + count + "   Bank Sysex";
+                                                pNames[j][count] = "" + (count + 1) + "   Bank Sysex";
                                                 }
                                             else
                                                 {             
@@ -5633,7 +5633,7 @@ public abstract class Synth extends JComponent implements Updatable
                                                 	ex.printStackTrace();
                                                 	}
                                                 	
-                                                pNames[j][count] = "" + count + "   " + otherSynth.getPatchName(otherSynth.model);
+                                                pNames[j][count] = "" + (count + 1) + "   " + otherSynth.getPatchName(otherSynth.model);
                                                 }                                                       
                                             indices[j][count] = i;
                                             count++;
@@ -5705,7 +5705,7 @@ public abstract class Synth extends JComponent implements Updatable
                                         }
                                     else if (result != null && result.equals("Write All Patches"))
                                     	{
-                                    	if (showSimpleConfirm("Write All Patches", "Write the all patches to the synth?"))
+                                    	if (showSimpleConfirm("Write All Patches", "Write all patches to the synth?"))
                                     		{
 											// need at least one synth
 											 Synth temp = (Synth)(instantiate(synths[external[0]], synthNames[external[0]], true, false, null));
@@ -5748,6 +5748,11 @@ public abstract class Synth extends JComponent implements Updatable
 	// You pass in all the sysex to write out, plus a synth which ought to be typical of the
 	// data being written (it'll be queried with getPauseAfterWritePatch() to determine how much time
 	// to wait in-between writes). 
+	// 
+	// if synth == null, then the pause between writes will be DEFAULT_BULK_WRITE_PAUSE (150ms)
+	
+	public static final int DEFAULT_BULK_WRITE_PAUSE = 150;
+	
 	boolean writeBulk(Synth synth, byte[][] data)
 		{
         if (tuple == null || tuple.out == null)
@@ -5771,8 +5776,10 @@ public abstract class Synth extends JComponent implements Updatable
 		final int[] index = new int[] { 0 };
 		final boolean[] invalid = new boolean[] { false };
 		final javax.swing.Timer[] timer = new javax.swing.Timer[1];
+		final int pause = (synth == null ? DEFAULT_BULK_WRITE_PAUSE : synth.getPauseAfterWritePatch() + 1);
 		
-		timer[0] = new javax.swing.Timer(synth.getPauseAfterWritePatch() + 1, new ActionListener()
+		final long time = System.currentTimeMillis();
+		timer[0] = new javax.swing.Timer(pause , new ActionListener()
 			{
 			public void actionPerformed(ActionEvent e)
 				{
@@ -5780,8 +5787,11 @@ public abstract class Synth extends JComponent implements Updatable
 					{
 					Window win = SwingUtilities.getWindowAncestor(bar);
 					if (win != null) win.dispose();			// force close, though it may already be closed
-					//else System.err.println("WARNING (Synth.writeBulk()): null window ancestor");
 					if (timer[0] != null) timer[0].stop();
+					
+					long time2 = System.currentTimeMillis();
+					if (time2 > time && time2 - time < 1000)
+						simplePause((int)(1000L - (time2 - time)));		// this is a decorative pause to give the user time to spot the window in case it appears and disappears rapidly
 					
 					if (invalid[0])
 						showSimpleError("Write Error", "Some patches could not be written.");
@@ -5794,23 +5804,38 @@ public abstract class Synth extends JComponent implements Updatable
 					}
 				}
 			});
-		timer[0].start();		
+		timer[0].start();
 
     	return true;
 		}
 			
+			
+			
     // Private function used by doOpen(...) to issue an error when Edisyn doesn't know how to parse
     // the provided sysex data.
-    boolean unknownSysexFileError(byte[] data)
+    boolean unknownSysexFileError(byte[][] data)
         {
-        String val = Midi.getManufacturerForSysex(data);
-                                                                                                        
-        if (val == null)
-            showSimpleError("File Error", "File might contain sysex data but has an invalid manufacturer ID.");
-        else
-            showSimpleError("File Error", "File does not contain sysex data that Edisyn knows how to load.\n" +
-                "This appears to be sysex data from the following manufacturer:\n" + val);
-        return false;
+        String val = Midi.getManufacturerForSysex(data[0]);
+               
+		String message = "File might contain sysex data but has an invalid manufacturer ID.";  
+		                                                                                       
+        if (val != null)
+        	message = "<html>File does not contain sysex data that Edisyn knows how to load.<br>" +
+                "This appears to be sysex data from the following manufacturer:<br>" + val + "</html>";
+                
+ 		Object[] options = { "Write to MIDI Anyway", "Cancel" };
+		int result = JOptionPane.showOptionDialog(Synth.this, message, "File Error", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        if (result == 0)
+        	{
+        	// double check
+			if (showSimpleConfirm("Write All Patches", "Write all patches to MIDI?"))
+				{
+        		writeBulk(null, data);
+        		return true;
+				}
+			else return false;
+        	}
+        else return false;
         }
 
 

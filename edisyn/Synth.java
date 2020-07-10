@@ -1,3 +1,4 @@
+
 /***
     Copyright 2017 by Sean Luke
     Licensed under the Apache License version 2.0
@@ -906,8 +907,9 @@ public abstract class Synth extends JComponent implements Updatable
     /** Override this to make sure that the given additional time (in ms) has transpired between sending each parameter via emitAll(key). */
     public int getPauseAfterSendOneParameter() { return 0; }
 
-    /** Override this to make sure that the given additional time (in ms) has transpired after writing a patch but before the change patch following. */
-    public int getPauseAfterWritePatch() { return 0; }
+    /** Override this to make sure that the given additional time (in ms) has transpired after writing a patch but before the change patch following. 
+    	The default is to be the same as getPauseAfterSendAllParameters(); */
+    public int getPauseAfterWritePatch() { return getPauseAfterSendAllParameters(); }
 
     /** Override this to return TRUE if, after a patch write, we need to change to the patch *again* so as to load it into memory. */
     public boolean getShouldChangePatchAfterWrite() { return false; }
@@ -2162,7 +2164,7 @@ public abstract class Synth extends JComponent implements Updatable
         enableMenuBar();
         return ret;
         }
-
+        
     /** Perform a JOptionPane confirm dialog with MUTLIPLE widgets that the user can select.  The widgets are provided
         in the array WIDGETS, and each has an accompanying label in LABELS.   You specify what BUTTONS appear along the bottom
         as the OPTIONS, which (on the Mac) appear right-to-left. You also get to specify well as the default option -- what
@@ -5671,7 +5673,7 @@ public abstract class Synth extends JComponent implements Updatable
                                     vbox.add(hbox);
                                     vbox.add(menu);
  
-                                    final JOptionPane pane = new JOptionPane(vbox,  JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] {  "Load in New Editor" , localButton, "Cancel" }, "Load in New Editor");
+                                    final JOptionPane pane = new JOptionPane(vbox,  JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] {  "Load in New Editor" , localButton, "Write All Patches", "Cancel" }, "Load in New Editor");
                                                                 
                                     localButton.addActionListener(new ActionListener()
                                         {
@@ -5701,6 +5703,16 @@ public abstract class Synth extends JComponent implements Updatable
                                             external[menu.getPrimary()], false,
                                             merge, f, fd, true);
                                         }
+                                    else if (result != null && result.equals("Write All Patches"))
+                                    	{
+                                    	if (showSimpleConfirm("Write All Patches", "Write the all patches to the synth?"))
+                                    		{
+											// need at least one synth
+											 Synth temp = (Synth)(instantiate(synths[external[0]], synthNames[external[0]], true, false, null));
+											succeeded = writeBulk(temp, data);
+                                    		}
+                                    	else succeeded = false;
+                                    	}
                                     else // cancelled in some way.  An apparent bug in JOptionPane is such that if you press ESC, then -1 is returned by getValue().  It should be returning null.
                                         {
                                         succeeded = false;
@@ -5728,7 +5740,65 @@ public abstract class Synth extends JComponent implements Updatable
         return succeeded;
         }
 
+	// This writes out a bulk sysex, using a JProgressBar and a cancel button.  It's a complex thing to
+	// do because it's using a JOptionPane, which is modal and takes control over everything.  To make 
+	// things more complex, this method is called from the Swing event thread.  So I have to use a Timer
+	// to write everything out one by one.
+	//
+	// You pass in all the sysex to write out, plus a synth which ought to be typical of the
+	// data being written (it'll be queried with getPauseAfterWritePatch() to determine how much time
+	// to wait in-between writes). 
+	boolean writeBulk(Synth synth, byte[][] data)
+		{
+        if (tuple == null || tuple.out == null)
+            {
+            if (!setupMIDI())
+                return false;
+            }
+            
+		final boolean[] writeBulkCancelled = new boolean[] { false };
+		final JProgressBar bar = new JProgressBar(0, data.length - 1);
+		SwingUtilities.invokeLater(new Runnable()
+			{
+			public void run()
+				{
+	        	showMultiOption(Synth.this, new String[] { "Progress" } , new JComponent[] { bar }, new String[] { "Cancel" }, 0, "Bulk Write", "Writing patches to synthesizer...");
+	        	writeBulkCancelled[0] = true;
+	        	}
+			});
+		
+		final byte[][] dat = data;
+		final int[] index = new int[] { 0 };
+		final boolean[] invalid = new boolean[] { false };
+		final javax.swing.Timer[] timer = new javax.swing.Timer[1];
+		
+		timer[0] = new javax.swing.Timer(synth.getPauseAfterWritePatch() + 1, new ActionListener()
+			{
+			public void actionPerformed(ActionEvent e)
+				{
+				if (index[0] >= data.length || writeBulkCancelled[0])	// finished
+					{
+					Window win = SwingUtilities.getWindowAncestor(bar);
+					if (win != null) win.dispose();			// force close, though it may already be closed
+					//else System.err.println("WARNING (Synth.writeBulk()): null window ancestor");
+					if (timer[0] != null) timer[0].stop();
+					
+					if (invalid[0])
+						showSimpleError("Write Error", "Some patches could not be written.");
+					}
+				else
+					{
+					if (!tryToSendSysex(dat[index[0]])) invalid[0] = true;	// we ignore the return value because we'll try 
+					index[0]++;
+					bar.setValue(index[0] + 1);
+					}
+				}
+			});
+		timer[0].start();		
 
+    	return true;
+		}
+			
     // Private function used by doOpen(...) to issue an error when Edisyn doesn't know how to parse
     // the provided sysex data.
     boolean unknownSysexFileError(byte[] data)

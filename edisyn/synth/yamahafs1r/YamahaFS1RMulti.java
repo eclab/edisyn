@@ -2601,6 +2601,8 @@ public class YamahaFS1RMulti extends Synth
                 
 
             val = data[base + OFFSET_RCVCHANNELMAX + 9];
+            // There appear to be some invalid values in certain patches, such as val == 18.  These will
+            // get revised to 16 (OFF) anyway, hope that's right.
             model.set("part" + (part + 1) + "rcvchannelmax", val == 0x7F ? 16 : val);
         
             val = data[base + OFFSET_RCVCHANNEL + 9];
@@ -2931,8 +2933,11 @@ public class YamahaFS1RMulti extends Synth
                 
         return false;
         }
-
-
+        
+    // Writing takes a while to process.  However the FS1R has a huge buffer and can handle an entire
+    // bank's worth of writes -- but then it's very slow to process through all of them, constantly displaying
+    // "Bulk Received".  With about a 170ms delay or so, this message disappears right when Edisyn finishes,
+    // so it's a good compromise from a UI standpoint.
 	public int getPauseAfterWritePatch() { return 170; }		// don't know if we need any
     }
  

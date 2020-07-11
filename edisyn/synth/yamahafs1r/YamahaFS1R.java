@@ -3564,5 +3564,9 @@ public class YamahaFS1R extends Synth
             key.endsWith("coarseratio"));
         }
 
+    // Writing takes a while to process.  However the FS1R has a huge buffer and can handle an entire
+    // bank's worth of writes -- but then it's very slow to process through all of them, constantly displaying
+    // "Bulk Received".  With about a 170ms delay or so, this message disappears right when Edisyn finishes,
+    // so it's a good compromise from a UI standpoint.
 	public int getPauseAfterWritePatch() { return 170; }		// don't know if we need any
     }

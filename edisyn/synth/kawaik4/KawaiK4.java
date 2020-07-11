@@ -320,7 +320,7 @@ public class KawaiK4 extends Synth
         model.removeMetricMinMax("effect");
         hbox.add(comp);
 
-        comp = new LabelledDial("Out Select", this, "outselect", color, 0, 7)
+        comp = new LabelledDial("Submix/Out", this, "outselect", color, 0, 7)
             {
             public String map(int val)
                 {
@@ -933,9 +933,9 @@ public class KawaiK4 extends Synth
             byte msb = (byte)(model.get(key) >>> 7);         // particularly for "waveselect"
             byte lsb = (byte)(model.get(key) & 127);
 
-            // These CANNOT be set directly as parameters, but they can be simulated by turning the volume to 0.
             if (key.equals("s1mute") || key.equals("s2mute") || key.equals("s3mute") || key.equals("s4mute"))
-                {
+ /*               {
+	            // These CANNOT be set directly as parameters, but they can be simulated by turning the volume to 0.
                 if (key.startsWith("s1"))
                     source = 0;
                 else if (key.startsWith("s2"))
@@ -951,6 +951,11 @@ public class KawaiK4 extends Synth
                 else                    // mute is OFF
                     lsb = (byte)(model.get("s" + (source + 1) + "envelopelevel"));
                 }
+*/				
+				// send all parameters
+				{
+				return new Object[] { emit(null, true, false), new Integer(getPauseAfterSendAllParameters()) };
+				}
             else if (key.startsWith("s1") && !key.equals("s1ams1>s2"))
                 {
                 source = 0;
@@ -981,7 +986,8 @@ public class KawaiK4 extends Synth
                 source = 1;
                 newkey = "f:" + key.substring(2);
                 }
-                                
+            
+            /*                    
             // handle envelopelevel specially due to mutes above
             if (newkey.equals("s:envelopelevel"))
                 {
@@ -990,6 +996,7 @@ public class KawaiK4 extends Synth
                     lsb = 0;        // set level to 0
                 index = ((Integer)(internalParametersToIndex.get(newkey))).intValue();
                 }
+            */
             // handle waveselect specially
             /*
               else if (newkey.equals("s:waveselect"))
@@ -997,10 +1004,12 @@ public class KawaiK4 extends Synth
               index = 36;      // this is waveselect's parameter
               }
             */
+            /*
             else if (key.equals("s1mute") || key.equals("s2mute") || key.equals("s3mute") || key.equals("s4mute"))
                 {
                 // index already handled
                 }
+            */
             else
                 {
                 index = ((Integer)(internalParametersToIndex.get(newkey))).intValue();

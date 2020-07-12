@@ -5707,7 +5707,7 @@ public abstract class Synth extends JComponent implements Updatable
                                     	{
                                     	if (showSimpleConfirm("Write All Patches", "Write all patches to the synth?"))
                                     		{
-											// need at least one synth
+											// need at least one synth from the patches so we can determine what the pause between writes should be
 											 Synth temp = (Synth)(instantiate(synths[external[0]], synthNames[external[0]], true, false, null));
 											succeeded = writeBulk(temp, data);
                                     		}

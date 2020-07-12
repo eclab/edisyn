@@ -469,7 +469,7 @@ public class KawaiK4 extends Synth
              
         HBox hbox2 = new HBox();   
         // Normally this is in global, but I think it makes more sense here
-        comp = new CheckBox("Mute", this, "s" + src + "mute");
+        comp = new CheckBox("On", this, "s" + src + "mute", true);
         hbox2.add(comp);
         
         if (src == 1)

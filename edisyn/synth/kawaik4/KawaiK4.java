@@ -266,7 +266,7 @@ public class KawaiK4 extends Synth
                 {
                 final KawaiK4Effect synth = new KawaiK4Effect();
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), buildKey2Receiver());
                 if (synth.tuple != null)
                     {
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -934,28 +934,28 @@ public class KawaiK4 extends Synth
             byte lsb = (byte)(model.get(key) & 127);
 
             if (key.equals("s1mute") || key.equals("s2mute") || key.equals("s3mute") || key.equals("s4mute"))
- /*               {
-	            // These CANNOT be set directly as parameters, but they can be simulated by turning the volume to 0.
+                /*               {
+                // These CANNOT be set directly as parameters, but they can be simulated by turning the volume to 0.
                 if (key.startsWith("s1"))
-                    source = 0;
+                source = 0;
                 else if (key.startsWith("s2"))
-                    source = 1;
+                source = 1;
                 else if (key.startsWith("s3"))
-                    source = 2;
+                source = 2;
                 else source = 3;
                                 
                 index = ((Integer)(internalParametersToIndex.get("s:envelopelevel")));
                 msb = (byte)0;
                 if (lsb == 1)  // mute is ON
-                    lsb = 0;        // set level to 0
+                lsb = 0;        // set level to 0
                 else                    // mute is OFF
-                    lsb = (byte)(model.get("s" + (source + 1) + "envelopelevel"));
+                lsb = (byte)(model.get("s" + (source + 1) + "envelopelevel"));
                 }
-*/				
-				// send all parameters
-				{
-				return new Object[] { emit(null, true, false), new Integer(getPauseAfterSendAllParameters()) };
-				}
+                */                              
+                // send all parameters
+                {
+                return new Object[] { emit(null, true, false), new Integer(getPauseAfterSendAllParameters()) };
+                }
             else if (key.startsWith("s1") && !key.equals("s1ams1>s2"))
                 {
                 source = 0;
@@ -990,12 +990,12 @@ public class KawaiK4 extends Synth
             /*                    
             // handle envelopelevel specially due to mutes above
             if (newkey.equals("s:envelopelevel"))
-                {
-                int mute = model.get("s" + (source + 1) + "mute");
-                if (mute == 1)  // mute is ON
-                    lsb = 0;        // set level to 0
-                index = ((Integer)(internalParametersToIndex.get(newkey))).intValue();
-                }
+            {
+            int mute = model.get("s" + (source + 1) + "mute");
+            if (mute == 1)  // mute is ON
+            lsb = 0;        // set level to 0
+            index = ((Integer)(internalParametersToIndex.get(newkey))).intValue();
+            }
             */
             // handle waveselect specially
             /*
@@ -1005,10 +1005,10 @@ public class KawaiK4 extends Synth
               }
             */
             /*
-            else if (key.equals("s1mute") || key.equals("s2mute") || key.equals("s3mute") || key.equals("s4mute"))
-                {
-                // index already handled
-                }
+              else if (key.equals("s1mute") || key.equals("s2mute") || key.equals("s3mute") || key.equals("s4mute"))
+              {
+              // index already handled
+              }
             */
             else
                 {

@@ -930,10 +930,10 @@ public class Generic extends Synth
             model.set("cc-name-" + i, new String(name).trim());
             }  
                 
-       	model.set("pitchbend", (data[pos++] << 7) | data[pos++]);
-       	model.set("pitchbendrange", (data[pos++] << 7) | data[pos++]);
-       	model.set("coarsetune", (data[pos++]));
-       	model.set("finetune", (data[pos++] << 7) | data[pos++]);
+        model.set("pitchbend", (data[pos++] << 7) | data[pos++]);
+        model.set("pitchbendrange", (data[pos++] << 7) | data[pos++]);
+        model.set("coarsetune", (data[pos++]));
+        model.set("finetune", (data[pos++] << 7) | data[pos++]);
                
         revise();
                 
@@ -1089,12 +1089,12 @@ public class Generic extends Synth
         int val = model.get("pitchbend");
         sysex[pos++] = (byte) (val >>> 7);
         sysex[pos++] = (byte) (val & 127);
-         val = model.get("pitchbendrange");
+        val = model.get("pitchbendrange");
         sysex[pos++] = (byte) (val >>> 7);
         sysex[pos++] = (byte) (val & 127);
-         val = model.get("coarsetune");
+        val = model.get("coarsetune");
         sysex[pos++] = (byte) val;
-         val = model.get("finetune");
+        val = model.get("finetune");
         sysex[pos++] = (byte) (val >>> 7);
         sysex[pos++] = (byte) (val & 127);
                

@@ -1709,7 +1709,7 @@ return pos;
         if (tuple != null)
             {
             final KorgWavestationPerformance synth = new KorgWavestationPerformance();
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
             if (synth.tuple != null)
                 {
                 synth.loadDefaults();
@@ -1723,7 +1723,7 @@ return pos;
         if (tuple != null)
             {
             final KorgWavestationPatch synth2 = new KorgWavestationPatch();
-            synth2.tuple = tuple.copy(synth2.buildInReceiver(), synth2.buildKeyReceiver());
+            synth2.tuple = tuple.copy(synth2.buildInReceiver(), synth2.buildKeyReceiver(), synth2.buildKeyReceiver());
             if (synth2.tuple != null)
                 {
                 synth2.loadDefaults();

@@ -623,6 +623,8 @@ public class RedSoundDarkStar extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
+        hbox.add(Strut.makeHorizontalStrut(8));
+
         comp = new LabelledDial("Pitch Mod", this, "part" + part + "osc" + osc + "pitchmod", color, 0, 127, 64);
         hbox.add(comp);
 
@@ -670,6 +672,8 @@ public class RedSoundDarkStar extends Synth
         comp = new Chooser("Resonance Mod Source", this, "part" + part + "filterresmodsource", params);
         vbox.add(comp);
         hbox.add(vbox);
+
+        hbox.add(Strut.makeHorizontalStrut(8));
 
         comp = new LabelledDial("Frequency", this, "part" + part + "filterfreq", color, 0, 127);
         hbox.add(comp);

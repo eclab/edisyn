@@ -525,7 +525,7 @@ public class RolandJV880Multi extends Synth
                 {
                 final RolandJV880 synth = new RolandJV880();
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
                 if (synth.tuple != null)
                     {       
                     // This is a little tricky.  When the dump comes in from the synth,

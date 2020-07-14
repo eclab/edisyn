@@ -241,7 +241,7 @@ public class YamahaTX81ZMulti extends Synth
                 {
                 final YamahaTX81Z synth = new YamahaTX81Z();
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), buildKey2Receiver());
                 if (synth.tuple != null)
                     {
                     // This is a little tricky.  When the dump comes in from the synth,

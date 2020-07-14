@@ -57,17 +57,17 @@ public class DSIProphet08 extends Synth
     public static final int SYNTH_TYPE_PROPHET_08 = 0;
     public static final int SYNTH_TYPE_TETRA = 1;
     public static final int SYNTH_TYPE_MOPHO = 2;
-    public static final int SYNTH_TYPE_MOPHO_KEYBOARD = 3;	// includes SE
+    public static final int SYNTH_TYPE_MOPHO_KEYBOARD = 3;      // includes SE
     public static final int SYNTH_TYPE_MOPHO_X4 = 4;
     
     // Sysex machine IDs
-	public static final byte PROPHET_08_ID = 0x23;
-	public static final byte MOPHO_ID = 0x25;
-	public static final byte TETRA_ID = 0x26;
-	public static final byte MOPHO_KEYBOARD_ID = 0x27;	// includes SE
-	public static final byte MOPHO_X4_ID = 0x29;
+    public static final byte PROPHET_08_ID = 0x23;
+    public static final byte MOPHO_ID = 0x25;
+    public static final byte TETRA_ID = 0x26;
+    public static final byte MOPHO_KEYBOARD_ID = 0x27;      // includes SE
+    public static final byte MOPHO_X4_ID = 0x29;
 
-	public static final byte[] ids = { PROPHET_08_ID, TETRA_ID, MOPHO_ID, MOPHO_KEYBOARD_ID, MOPHO_X4_ID };
+    public static final byte[] ids = { PROPHET_08_ID, TETRA_ID, MOPHO_ID, MOPHO_KEYBOARD_ID, MOPHO_X4_ID };
 
     public static final int FILTER_ENVELOPE = 1;
     public static final int AMPLIFIER_ENVELOPE = 2;
@@ -95,18 +95,18 @@ public class DSIProphet08 extends Synth
         
         // reset bank
         int bank = model.get("bank", 0);
-		if (type == PROPHET_08_ID || type == TETRA_ID)
-			{
-			if (bank > 1)
-				model.set("bank", 0);
-			}
-		else if (type == MOPHO_ID || type == MOPHO_KEYBOARD_ID)
-			{
-			if (bank > 2)
-				model.set("bank", 0);
-			}
+        if (type == PROPHET_08_ID || type == TETRA_ID)
+            {
+            if (bank > 1)
+                model.set("bank", 0);
+            }
+        else if (type == MOPHO_ID || type == MOPHO_KEYBOARD_ID)
+            {
+            if (bank > 2)
+                model.set("bank", 0);
+            }
 
-		updateAssignableParameterChoosers();
+        updateAssignableParameterChoosers();
         updateTitle();
         if (synthTypes != null) synthTypes.setSelectedIndex(type);
         reenntrantBlock = false;
@@ -118,21 +118,21 @@ public class DSIProphet08 extends Synth
         int panel = 0;
         
         try
-        	{
-	        String v = getLastX(TYPE_KEY, getSynthName());
-	        if (v == null)
-	        	setType(SYNTH_TYPE_PROPHET_08, true);
-	        else
-	        	{
-				int val = Integer.parseInt(v);
-		        if (val >= SYNTH_TYPE_PROPHET_08 && val <= SYNTH_TYPE_MOPHO_X4)
-		        	setType(val, false);
-		        }
-	        }
-	    catch (Exception ex)
-	    	{
-	    	ex.printStackTrace();
-	    	}
+            {
+            String v = getLastX(TYPE_KEY, getSynthName());
+            if (v == null)
+                setType(SYNTH_TYPE_PROPHET_08, true);
+            else
+                {
+                int val = Integer.parseInt(v);
+                if (val >= SYNTH_TYPE_PROPHET_08 && val <= SYNTH_TYPE_MOPHO_X4)
+                    setType(val, false);
+                }
+            }
+        catch (Exception ex)
+            {
+            ex.printStackTrace();
+            }
         
         for(int i = 0; i < parameters.length; i++)
             {
@@ -157,14 +157,14 @@ public class DSIProphet08 extends Synth
         vbox.add(hbox);
         
         hbox = new HBox();
-		VBox vbox2 = new VBox(VBox.TOP_CONSUMES);
-		HBox hbox2 = new HBox();
+        VBox vbox2 = new VBox(VBox.TOP_CONSUMES);
+        HBox hbox2 = new HBox();
         hbox2.add(addSuboscillator(1, Style.COLOR_A()));
         hbox2.addLast(addFilter(1, Style.COLOR_B()));
         vbox2.addLast(hbox2);
         
         hbox2 = new HBox();
-		hbox2.add(addFeedback(1, Style.COLOR_A()));
+        hbox2.add(addFeedback(1, Style.COLOR_A()));
         hbox2.addLast(addAmplifier(1, Style.COLOR_C()));
         vbox2.add(hbox2);
         hbox.add(vbox2);
@@ -247,14 +247,14 @@ public class DSIProphet08 extends Synth
         vbox.add(hbox);
         
         hbox = new HBox();
-		vbox2 = new VBox(VBox.TOP_CONSUMES);
-		hbox2 = new HBox();
+        vbox2 = new VBox(VBox.TOP_CONSUMES);
+        hbox2 = new HBox();
         hbox2.add(addSuboscillator(2, Style.COLOR_A()));
         hbox2.addLast(addFilter(2, Style.COLOR_B()));
         vbox2.addLast(hbox2);
         
         hbox2 = new HBox();
-		hbox2.add(addFeedback(2, Style.COLOR_A()));
+        hbox2.add(addFeedback(2, Style.COLOR_A()));
         hbox2.addLast(addAmplifier(2, Style.COLOR_C()));
         vbox2.add(hbox2);
         hbox.add(vbox2);
@@ -348,12 +348,12 @@ public class DSIProphet08 extends Synth
         String[] banks = BANKS_PROPHET;
         int t = getType();
         if (t == SYNTH_TYPE_TETRA)
-        	banks = BANKS_TETRA;
+            banks = BANKS_TETRA;
         else if (t == SYNTH_TYPE_MOPHO || t == SYNTH_TYPE_MOPHO_KEYBOARD)
-        	banks = BANKS_MOPHO;
+            banks = BANKS_MOPHO;
         else if (t == SYNTH_TYPE_MOPHO_X4)
-        	banks = BANKS_MOPHO_X4;
-        	
+            banks = BANKS_MOPHO_X4;
+                
         JComboBox bank = new JComboBox(banks);
         int num = model.get("number") + 1;
         JTextField number = new JTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);
@@ -434,17 +434,17 @@ public class DSIProphet08 extends Synth
         synthTypes.setEditable(false);
         synthTypes.setFont(Style.SMALL_FONT());
 
-		JLabel label = new JLabel("  Synthesizer Type");
+        JLabel label = new JLabel("  Synthesizer Type");
         label.setFont(Style.SMALL_FONT());
         label.setBackground(Style.BACKGROUND_COLOR());
         label.setForeground(Style.TEXT_COLOR());
 
-		JPanel pan = new JPanel();
-		pan.setBackground(Style.BACKGROUND_COLOR());
-		pan.setLayout(new BorderLayout());
-		pan.add(label, BorderLayout.NORTH);
-		pan.add(synthTypes, BorderLayout.CENTER);
-		vbox.add(pan);
+        JPanel pan = new JPanel();
+        pan.setBackground(Style.BACKGROUND_COLOR());
+        pan.setLayout(new BorderLayout());
+        pan.add(label, BorderLayout.NORTH);
+        pan.add(synthTypes, BorderLayout.CENTER);
+        vbox.add(pan);
 
         params = KEYBOARD_MODES;
         comp = new Chooser("Keyboard Mode [PT]", this, "keyboardmode", params);
@@ -483,7 +483,7 @@ public class DSIProphet08 extends Synth
         CheckBox unison = new CheckBox("Unison [PTKX]", this, "layer" + layer + "unison");
         unison.addToWidth(1);
 
-       	comp = new CheckBox("Arpeggiator", this, "layer" + layer + "arpeggiator");
+        comp = new CheckBox("Arpeggiator", this, "layer" + layer + "arpeggiator");
         comp.setPreferredSize(unison.getPreferredSize());
         hbox2.add(comp);
         
@@ -584,12 +584,12 @@ public class DSIProphet08 extends Synth
                
         VBox vbox = new VBox();
         PushButton button = new PushButton("Preset", PRESETS)
-        	{
-        	public void perform(int i)
-        		{
-        		getModel().set("layer" + layer + "dco" + osc + "shape", PRESET_VALS[i]);
-        		}
-        	};
+            {
+            public void perform(int i)
+                {
+                getModel().set("layer" + layer + "dco" + osc + "shape", PRESET_VALS[i]);
+                }
+            };
         vbox.add(button);
         
         comp = new CheckBox("Key", this, "layer" + layer + "dco" + osc + "key");
@@ -665,7 +665,7 @@ public class DSIProphet08 extends Synth
         HBox hbox = new HBox();
                
         comp = new LabelledDial("Feedback Volume [TKX]", this, "layer" + layer + "tetrafeedbackvolume", color, 0, 127);
-		((LabelledDial)comp).addAdditionalLabel(" Audio Input Lvl [M] ");
+        ((LabelledDial)comp).addAdditionalLabel(" Audio Input Lvl [M] ");
         hbox.add(comp);
 
         comp = new LabelledDial("Feedback", this, "layer" + layer + "tetrafeedbackgain", color, 0, 127);
@@ -1002,79 +1002,79 @@ public class DSIProphet08 extends Synth
         params = PUSH_IT_MODES;
         comp = new Chooser("Push-It Mode " + (layer == 1 ? "[TMXK]" : "[T]"), this, "layer" + layer + "tetrapushitmode", params);
         vbox.add(comp);
-		hbox.add(vbox);
+        hbox.add(vbox);
                                 
         comp = new LabelledDial("Push-It Note", this, "layer" + layer + "tetrapushitnote", color, 0, 127)
-        	{
+            {
             public String map(int val)
                 {
                 return (NOTES[val % 12] + " " + (val / 12));
                 }
-        	};
+            };
         ((LabelledDial)comp).addAdditionalLabel(layer == 1 ? "[TMXK]" : "[T]");
-		hbox.add(comp);
+        hbox.add(comp);
 
         comp = new LabelledDial("Push-It Velocity ", this, "layer" + layer + "tetrapushitvelocity", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel(layer == 1 ? "[TMXK]" : "[T]");
-		hbox.add(comp);
+        hbox.add(comp);
 
-		if (layer == 1)
-			{
-			VBox vbox2 = new VBox();
-			
-			params = (getType() == SYNTH_TYPE_MOPHO ? mophoAssignableParameters : tetraAssignableParameters);
-	        assignableParameterChoosers[0] = new Chooser("Assignable Parameter 1 [TM]", this, "layer" + layer + "tetraassignableparameter1", params);
-	        vbox2.add(assignableParameterChoosers[0]);
+        if (layer == 1)
+            {
+            VBox vbox2 = new VBox();
+                        
+            params = (getType() == SYNTH_TYPE_MOPHO ? mophoAssignableParameters : tetraAssignableParameters);
+            assignableParameterChoosers[0] = new Chooser("Assignable Parameter 1 [TM]", this, "layer" + layer + "tetraassignableparameter1", params);
+            vbox2.add(assignableParameterChoosers[0]);
 
-			params = (getType() == SYNTH_TYPE_MOPHO ? mophoAssignableParameters : tetraAssignableParameters);
-	        assignableParameterChoosers[1] = new Chooser("Assignable Parameter 2 [TM]", this, "layer" + layer + "tetraassignableparameter2", params);
-	        vbox2.add(assignableParameterChoosers[1]);
-			
-			hbox.add(vbox2);
-			vbox2 = new VBox();
-			
-			params = (getType() == SYNTH_TYPE_MOPHO ? mophoAssignableParameters : tetraAssignableParameters);
-	        assignableParameterChoosers[2] = new Chooser("Assignable Parameter 3 [TM]", this, "layer" + layer + "tetraassignableparameter3", params);
-	        vbox2.add(assignableParameterChoosers[2]);
+            params = (getType() == SYNTH_TYPE_MOPHO ? mophoAssignableParameters : tetraAssignableParameters);
+            assignableParameterChoosers[1] = new Chooser("Assignable Parameter 2 [TM]", this, "layer" + layer + "tetraassignableparameter2", params);
+            vbox2.add(assignableParameterChoosers[1]);
+                        
+            hbox.add(vbox2);
+            vbox2 = new VBox();
+                        
+            params = (getType() == SYNTH_TYPE_MOPHO ? mophoAssignableParameters : tetraAssignableParameters);
+            assignableParameterChoosers[2] = new Chooser("Assignable Parameter 3 [TM]", this, "layer" + layer + "tetraassignableparameter3", params);
+            vbox2.add(assignableParameterChoosers[2]);
 
-			params = (getType() == SYNTH_TYPE_MOPHO ? mophoAssignableParameters : tetraAssignableParameters);
-	        assignableParameterChoosers[3] = new Chooser("Assignable Parameter 4 [TM]", this, "layer" + layer + "tetraassignableparameter4", params);
-	        vbox2.add(assignableParameterChoosers[3]);
-			
-			hbox.add(vbox2);
+            params = (getType() == SYNTH_TYPE_MOPHO ? mophoAssignableParameters : tetraAssignableParameters);
+            assignableParameterChoosers[3] = new Chooser("Assignable Parameter 4 [TM]", this, "layer" + layer + "tetraassignableparameter4", params);
+            vbox2.add(assignableParameterChoosers[3]);
+                        
+            hbox.add(vbox2);
 
 // DSI tells me this was basically used by the SoundTower editor and is meaningless.  So we build it to create the parameter but don't show it
-			comp = new LabelledDial("Editor", this, "layer" + layer + "tetraeditorbyte", color, 0, 127);
-        	((LabelledDial)comp).addAdditionalLabel("Byte [TM]");
-			// hbox.add(comp);
-			}
+            comp = new LabelledDial("Editor", this, "layer" + layer + "tetraeditorbyte", color, 0, 127);
+            ((LabelledDial)comp).addAdditionalLabel("Byte [TM]");
+            // hbox.add(comp);
+            }
                                 
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
 
 
-	Chooser[] assignableParameterChoosers = new Chooser[4];
+    Chooser[] assignableParameterChoosers = new Chooser[4];
 
-	public void updateAssignableParameterChoosers()
-		{
-		if (assignableParameterChoosers[0] == null) // not ready yet
-			return;
-		for(int i = 0; i < assignableParameterChoosers.length; i++)
-			{
-                undo.push(getModel());
-                setSendMIDI(false);
-                boolean currentPush = undo.getWillPush();
+    public void updateAssignableParameterChoosers()
+        {
+        if (assignableParameterChoosers[0] == null) // not ready yet
+            return;
+        for(int i = 0; i < assignableParameterChoosers.length; i++)
+            {
+            undo.push(getModel());
+            setSendMIDI(false);
+            boolean currentPush = undo.getWillPush();
 
-			int val = assignableParameterChoosers[i].getIndex();
-			String label = assignableParameterChoosers[i].getLabelText();
-			assignableParameterChoosers[i].setElements(label, getType() == SYNTH_TYPE_MOPHO ? mophoAssignableParameters : tetraAssignableParameters);
-			assignableParameterChoosers[i].setIndex(val);
-			
-                undo.setWillPush(currentPush);
-                setSendMIDI(true);
-			}
-		}
+            int val = assignableParameterChoosers[i].getIndex();
+            String label = assignableParameterChoosers[i].getLabelText();
+            assignableParameterChoosers[i].setElements(label, getType() == SYNTH_TYPE_MOPHO ? mophoAssignableParameters : tetraAssignableParameters);
+            assignableParameterChoosers[i].setIndex(val);
+                        
+            undo.setWillPush(currentPush);
+            setSendMIDI(true);
+            }
+        }
 
 
 
@@ -1084,8 +1084,8 @@ public class DSIProphet08 extends Synth
 
 
     /** List of all DSI Prophet 08 parameters in order,
-    	plus additional Tetra- or Mopho-only parameters mapped
-    	in the the appropriate location given their NRPN values. */
+        plus additional Tetra- or Mopho-only parameters mapped
+        in the the appropriate location given their NRPN values. */
                 
     final static String[] parameters = new String[]
     {
@@ -1565,30 +1565,30 @@ public class DSIProphet08 extends Synth
             {
             int val = model.get(key, 0);
             
-			if (key.startsWith("layer1tetraassignableparameter") ||
-				key.startsWith("layer2tetraassignableparameter"))
-				{
-				if (!sendAssignableParams) return new Object[0];  // we don't send these
+            if (key.startsWith("layer1tetraassignableparameter") ||
+                key.startsWith("layer2tetraassignableparameter"))
+                {
+                if (!sendAssignableParams) return new Object[0];  // we don't send these
 
-				if (getType() == SYNTH_TYPE_TETRA)
-					{
-					// For the Mopho, there is a hole in these values which we have to ignore
-					if (val >= 105 && val <= 119)
-						{
-						// reset to 0
-						val = 0;
-						}
-					}
-				else
-					{
-					// For the Tetra, there is a DIFFRENT hole in these values which we have to ignore
-					if (val >= 111 && val <= 119)
-						{
-						// reset to 0
-						val = 0;
-						}
-					}
-				}		
+                if (getType() == SYNTH_TYPE_TETRA)
+                    {
+                    // For the Mopho, there is a hole in these values which we have to ignore
+                    if (val >= 105 && val <= 119)
+                        {
+                        // reset to 0
+                        val = 0;
+                        }
+                    }
+                else
+                    {
+                    // For the Tetra, there is a DIFFRENT hole in these values which we have to ignore
+                    if (val >= 111 && val <= 119)
+                        {
+                        // reset to 0
+                        val = 0;
+                        }
+                    }
+                }               
 
             return buildNRPN(getChannelOut(), ((Integer)(parametersToIndex.get(key))).intValue(), val);
             }
@@ -1677,24 +1677,24 @@ public class DSIProphet08 extends Synth
             int bank = data[4];
             int t = data[2];
             if (t == PROPHET_08_ID)
-            	{
-            	if (bank < 2)
-            		model.set("bank", bank);
-            	}
+                {
+                if (bank < 2)
+                    model.set("bank", bank);
+                }
             else if (t == MOPHO_ID || t == MOPHO_KEYBOARD_ID)
-            	{
-            	if (bank < 3)
-            		model.set("bank", bank);
-            	}
+                {
+                if (bank < 3)
+                    model.set("bank", bank);
+                }
             else if (t == TETRA_ID)
-            	{
-            	if (bank < 4)
-            		model.set("bank", bank);
-            	}
-            else		// The X4 has 8 banks
-            	{
-	            model.set("bank", bank);
-	            }
+                {
+                if (bank < 4)
+                    model.set("bank", bank);
+                }
+            else                // The X4 has 8 banks
+                {
+                model.set("bank", bank);
+                }
             model.set("number", data[5]);
             }
 
@@ -1706,119 +1706,119 @@ public class DSIProphet08 extends Synth
         else
             System.err.println("Warning (DSIProphet08): Unknown program data format " + data[3]);
         
-        if (data[2] == PROPHET_08_ID || data[2] == TETRA_ID)		// Prophet '08 or Tetra
-        	{
-        	/*
-        	if (data[2] == PROPHET_08_ID)
-        		setType(SYNTH_TYPE_PROPHET_08, false);
-        	else // if (data[2] == TETRA_ID)
-        		setType(SYNTH_TYPE_TETRA, false);
-        	*/
+        if (data[2] == PROPHET_08_ID || data[2] == TETRA_ID)            // Prophet '08 or Tetra
+            {
+            /*
+              if (data[2] == PROPHET_08_ID)
+              setType(SYNTH_TYPE_PROPHET_08, false);
+              else // if (data[2] == TETRA_ID)
+              setType(SYNTH_TYPE_TETRA, false);
+            */
 
-			for(int i = 0; i < 384; i++)
-				{
-				int j = i;
-				if (data[2] == TETRA_ID)  // Tetra, need to map
-					{
-					if (j >= 200) 
-						{
-						j = tetraParams[j - 200] + 200;
-						}
-					else 
-						{
-						j = tetraParams[j];
-						}
-					}
-				
-				if (load == LOAD_A && !parameters[i].startsWith("layer1"))
-					{
-					// do nothing -- they're not layer 1 (A) parameters
-					}
-				else if (load == LOAD_B && !parameters[i].startsWith("layer2"))
-					{
-					// do nothing -- they're not layer 2 (B) parameters
-					}
-				else if (!parameters[i].equals("---"))
-					{
-					// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
-					int q = d[j];
-					if (q < 0) q += 256;  // push to unsigned (not 2's complement)
-					model.set(parameters[i], q);
-					}
-				}
-		
-			if (load == LOAD_BOTH)		// we don't load the name if we're just loading A or B
-				{
-				// handle name specially
-				byte[] name = new byte[16];
-				System.arraycopy(d, 184, name, 0, 16);
-				try
-					{
-					model.set("name", new String(name, "US-ASCII"));
-					}
-				catch (UnsupportedEncodingException e)
-					{
-					e.printStackTrace();
-					}
-				}
-			}
-		else 				// Mopho or Mopho Keyboard / SE
-			{
-			/*
-	        if (data[2] == MOPHO_ID)
-        		setType(SYNTH_TYPE_MOPHO, false);
-        	else if (data[2] == MOPHO_KEYBOARD_ID)
-        		setType(SYNTH_TYPE_MOPHO_KEYBOARD, false);
-        	else // if (data[2] == MOPHO_X4_ID)
-        		setType(SYNTH_TYPE_MOPHO_X4, false);
-        	*/
+            for(int i = 0; i < 384; i++)
+                {
+                int j = i;
+                if (data[2] == TETRA_ID)  // Tetra, need to map
+                    {
+                    if (j >= 200) 
+                        {
+                        j = tetraParams[j - 200] + 200;
+                        }
+                    else 
+                        {
+                        j = tetraParams[j];
+                        }
+                    }
+                                
+                if (load == LOAD_A && !parameters[i].startsWith("layer1"))
+                    {
+                    // do nothing -- they're not layer 1 (A) parameters
+                    }
+                else if (load == LOAD_B && !parameters[i].startsWith("layer2"))
+                    {
+                    // do nothing -- they're not layer 2 (B) parameters
+                    }
+                else if (!parameters[i].equals("---"))
+                    {
+                    // Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
+                    int q = d[j];
+                    if (q < 0) q += 256;  // push to unsigned (not 2's complement)
+                    model.set(parameters[i], q);
+                    }
+                }
+                
+            if (load == LOAD_BOTH)          // we don't load the name if we're just loading A or B
+                {
+                // handle name specially
+                byte[] name = new byte[16];
+                System.arraycopy(d, 184, name, 0, 16);
+                try
+                    {
+                    model.set("name", new String(name, "US-ASCII"));
+                    }
+                catch (UnsupportedEncodingException e)
+                    {
+                    e.printStackTrace();
+                    }
+                }
+            }
+        else                            // Mopho or Mopho Keyboard / SE
+            {
+            /*
+              if (data[2] == MOPHO_ID)
+              setType(SYNTH_TYPE_MOPHO, false);
+              else if (data[2] == MOPHO_KEYBOARD_ID)
+              setType(SYNTH_TYPE_MOPHO_KEYBOARD, false);
+              else // if (data[2] == MOPHO_X4_ID)
+              setType(SYNTH_TYPE_MOPHO_X4, false);
+            */
 
-			for(int i = 0; i < 184; i++)		// skip name
-				{
-				int j = i;
-				
-				// Map
-				if (data[2] == MOPHO_ID)		// Mopho
-					j = mophoParams[j];
-				else if (data[2] == MOPHO_KEYBOARD_ID)	// Mopho Keyboard / SE
-					j = mophoKeyParams[j];
-				else 
-					j = mophoX4Params[j];
-				
-				if (!parameters[i].equals("---"))
-					{
-					if (j != -1)
-						{
-						// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
-						int q = d[j];
-						if (q < 0) q += 256;  // push to unsigned (not 2's complement)
-						model.set(parameters[i], q);
-						}
-					}
-				
-				if (!parameters[i + 200].equals("---"))
-					{
-					if (j != -1)
-						{// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
-						int q = d[j];
-						if (q < 0) q += 256;  // push to unsigned (not 2's complement)
-						model.set(parameters[i + 200], q);
-						}
-					}
-				}
-		
-			// handle name specially
-			byte[] name = new byte[16];
-			System.arraycopy(d, 184, name, 0, 16);
-			try
-				{
-				model.set("name", new String(name, "US-ASCII"));
-				}
-			catch (UnsupportedEncodingException e)
-				{
-				e.printStackTrace();
-				}
-			}
+            for(int i = 0; i < 184; i++)            // skip name
+                {
+                int j = i;
+                                
+                // Map
+                if (data[2] == MOPHO_ID)                // Mopho
+                    j = mophoParams[j];
+                else if (data[2] == MOPHO_KEYBOARD_ID)  // Mopho Keyboard / SE
+                    j = mophoKeyParams[j];
+                else 
+                    j = mophoX4Params[j];
+                                
+                if (!parameters[i].equals("---"))
+                    {
+                    if (j != -1)
+                        {
+                        // Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
+                        int q = d[j];
+                        if (q < 0) q += 256;  // push to unsigned (not 2's complement)
+                        model.set(parameters[i], q);
+                        }
+                    }
+                                
+                if (!parameters[i + 200].equals("---"))
+                    {
+                    if (j != -1)
+                        {// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
+                        int q = d[j];
+                        if (q < 0) q += 256;  // push to unsigned (not 2's complement)
+                        model.set(parameters[i + 200], q);
+                        }
+                    }
+                }
+                
+            // handle name specially
+            byte[] name = new byte[16];
+            System.arraycopy(d, 184, name, 0, 16);
+            try
+                {
+                model.set("name", new String(name, "US-ASCII"));
+                }
+            catch (UnsupportedEncodingException e)
+                {
+                e.printStackTrace();
+                }
+            }
                 
         revise();
         return PARSE_SUCCEEDED;
@@ -1830,107 +1830,107 @@ public class DSIProphet08 extends Synth
         if (tempModel == null)
             tempModel = getModel();
 
-		byte[] data = null;
-		int t = getType();
-		if (t == SYNTH_TYPE_TETRA || t == SYNTH_TYPE_PROPHET_08)
-			{
-			byte[] d = new byte[384];
-			for(int i = 0; i < 384; i++)
-				{
-				int j = i;
-				if (t == SYNTH_TYPE_TETRA)  // Tetra, need to map
-					{
-					if (j >= 200) 
-						{
-						j = tetraParams[j - 200] + 200;
-						}
-					else 
-						{
-						j = tetraParams[j];
-						}
-					}
-				
-				if (!parameters[i].equals("---"))
-					{
-					// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
-					int q = model.get(parameters[i], 0);
-					
-					if (parameters[i].startsWith("layer1tetraassignableparameter") ||
-						parameters[i].startsWith("layer2tetraassignableparameter"))
-						{
-						if (getType() == SYNTH_TYPE_TETRA)
-							{
-							// For the Tetra, there is a hole in these values which we have to ignore
-							if (q >= 111 && q <= 119)
-								{
-								// reset to 0
-								q = 0;
-								}
-							}
-						}		
-										
-					if (q > 127) q -= 256;  // push to signed (not 2's complement)
-					d[j] = (byte)q;
-					}
-				}
-						
-			// handle name specially
-			char[] name = (model.get("name", "Untitled") + "                " ).toCharArray();
-			for(int i = 0; i < 16; i++)
-				d[184 + i] = (byte)(name[i] & 127);
-		
-			data = convertTo7Bit(d);  
-			}
-		else
-			{
-			byte[] d = new byte[200];
-			for(int i = 0; i < 184; i++)		// skip name
-				{
-				int j = i;
-				
-				// Map
-				if (t == SYNTH_TYPE_MOPHO)
-					j = mophoParams[j];
-				else if (t == SYNTH_TYPE_MOPHO_KEYBOARD)
-					j = mophoKeyParams[j];
-				else
-					j = mophoX4Params[j];
-								
-				if (!parameters[i].equals("---"))
-					{
-					// Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
-					int q = model.get(parameters[i], 0);
+        byte[] data = null;
+        int t = getType();
+        if (t == SYNTH_TYPE_TETRA || t == SYNTH_TYPE_PROPHET_08)
+            {
+            byte[] d = new byte[384];
+            for(int i = 0; i < 384; i++)
+                {
+                int j = i;
+                if (t == SYNTH_TYPE_TETRA)  // Tetra, need to map
+                    {
+                    if (j >= 200) 
+                        {
+                        j = tetraParams[j - 200] + 200;
+                        }
+                    else 
+                        {
+                        j = tetraParams[j];
+                        }
+                    }
+                                
+                if (!parameters[i].equals("---"))
+                    {
+                    // Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
+                    int q = model.get(parameters[i], 0);
+                                        
+                    if (parameters[i].startsWith("layer1tetraassignableparameter") ||
+                        parameters[i].startsWith("layer2tetraassignableparameter"))
+                        {
+                        if (getType() == SYNTH_TYPE_TETRA)
+                            {
+                            // For the Tetra, there is a hole in these values which we have to ignore
+                            if (q >= 111 && q <= 119)
+                                {
+                                // reset to 0
+                                q = 0;
+                                }
+                            }
+                        }               
+                                                                                
+                    if (q > 127) q -= 256;  // push to signed (not 2's complement)
+                    d[j] = (byte)q;
+                    }
+                }
+                                                
+            // handle name specially
+            char[] name = (model.get("name", "Untitled") + "                " ).toCharArray();
+            for(int i = 0; i < 16; i++)
+                d[184 + i] = (byte)(name[i] & 127);
+                
+            data = convertTo7Bit(d);  
+            }
+        else
+            {
+            byte[] d = new byte[200];
+            for(int i = 0; i < 184; i++)            // skip name
+                {
+                int j = i;
+                                
+                // Map
+                if (t == SYNTH_TYPE_MOPHO)
+                    j = mophoParams[j];
+                else if (t == SYNTH_TYPE_MOPHO_KEYBOARD)
+                    j = mophoKeyParams[j];
+                else
+                    j = mophoX4Params[j];
+                                                                
+                if (!parameters[i].equals("---"))
+                    {
+                    // Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
+                    int q = model.get(parameters[i], 0);
 
-					if (parameters[i].startsWith("layer1tetraassignableparameter") ||
-						parameters[i].startsWith("layer2tetraassignableparameter"))
-						{
-						if (getType() == SYNTH_TYPE_MOPHO)
-							{
-							// For the Mopho, there is a hole in these values which we have to ignore
-							if (q >= 105 && q <= 119)
-								{
-								// reset to 0
-								q = 0;
-								}
-							}
-						}		
+                    if (parameters[i].startsWith("layer1tetraassignableparameter") ||
+                        parameters[i].startsWith("layer2tetraassignableparameter"))
+                        {
+                        if (getType() == SYNTH_TYPE_MOPHO)
+                            {
+                            // For the Mopho, there is a hole in these values which we have to ignore
+                            if (q >= 105 && q <= 119)
+                                {
+                                // reset to 0
+                                q = 0;
+                                }
+                            }
+                        }               
 
-					if (q > 127) q -= 256;  // push to signed (not 2's complement)
-					
-					if (j != -1)
-						d[j] = (byte)q;
-					//else
-					//	System.err.println("" + j + " " + i + " " + parameters[i]);
-					}
-				}
-						
-			// handle name specially
-			char[] name = (model.get("name", "Untitled") + "                " ).toCharArray();
-			for(int i = 0; i < 16; i++)
-				d[184 + i] = (byte)(name[i] & 127);
-		
-			data = convertTo7Bit(d);  
-			}
+                    if (q > 127) q -= 256;  // push to signed (not 2's complement)
+                                        
+                    if (j != -1)
+                        d[j] = (byte)q;
+                    //else
+                    //      System.err.println("" + j + " " + i + " " + parameters[i]);
+                    }
+                }
+                                                
+            // handle name specially
+            char[] name = (model.get("name", "Untitled") + "                " ).toCharArray();
+            for(int i = 0; i < 16; i++)
+                d[184 + i] = (byte)(name[i] & 127);
+                
+            data = convertTo7Bit(d);  
+            }
         
         if (toWorkingMemory)
             {
@@ -1985,13 +1985,13 @@ public class DSIProphet08 extends Synth
  
     public byte[] requestCurrentDump()
         {
-		byte[] data = new byte[5];
-		data[0] = (byte)0xF0;
-		data[1] = (byte)0x01;   // DSI
-		data[2] = ids[getType()];
-		data[3] = (byte)0x06;
-		data[4] = (byte)0xF7;			
-		return data;
+        byte[] data = new byte[5];
+        data[0] = (byte)0xF0;
+        data[1] = (byte)0x01;   // DSI
+        data[2] = ids[getType()];
+        data[3] = (byte)0x06;
+        data[4] = (byte)0xF7;                   
+        return data;
         }
 
     public byte[] requestDump(Model tempModel)
@@ -2022,7 +2022,7 @@ public class DSIProphet08 extends Synth
                 data[1] == (byte) 0x01 &&       // DSI
                 (data[2] == PROPHET_08_ID ||  data[2] == TETRA_ID) &&
                 data[3] == (byte) 0x03) ||      // Edit Buffer Data Dump
-				(data.length == 300 &&
+                (data.length == 300 &&
                 data[0] == (byte)0xF0 &&
                 data[1] == (byte) 0x01 &&       // DSI
                 (data[2] == MOPHO_ID || data[2] == MOPHO_KEYBOARD_ID || data[2] == MOPHO_X4_ID) &&
@@ -2032,7 +2032,7 @@ public class DSIProphet08 extends Synth
                 data[1] == (byte) 0x01 &&       // DSI
                 (data[2] == MOPHO_ID || data[2] == MOPHO_KEYBOARD_ID || data[2] == MOPHO_X4_ID) &&
                 data[3] == (byte) 0x03));       // Edit Buffer Data Dump        
-            }
+        }
         
     public static final int MAXIMUM_NAME_LENGTH = 16;
     public String revisePatchName(String name)
@@ -2075,11 +2075,11 @@ public class DSIProphet08 extends Synth
         int numBanks = BANKS_PROPHET.length;
         int t = getType();
         if (t == SYNTH_TYPE_TETRA)
-        	numBanks = BANKS_TETRA.length;
+            numBanks = BANKS_TETRA.length;
         else if (t == SYNTH_TYPE_MOPHO || t == SYNTH_TYPE_MOPHO_KEYBOARD)
-        	numBanks = BANKS_MOPHO.length;
+            numBanks = BANKS_MOPHO.length;
         else if (t == SYNTH_TYPE_MOPHO_X4)
-        	numBanks = BANKS_MOPHO_X4.length;
+            numBanks = BANKS_MOPHO_X4.length;
         
         number++;
         if (number >= 128)
@@ -2246,635 +2246,635 @@ public class DSIProphet08 extends Synth
             {
             public void actionPerformed(ActionEvent evt)
                 {
-			    	Synth newSynth = instantiate(DSITetraCombo.class, DSITetraCombo.getSynthName(), false, true, tuple);
-					newSynth.setSendMIDI(false);
-					boolean currentPush = newSynth.getUndo().getWillPush();
-					newSynth.getUndo().setWillPush(false);
-					Model newModel = newSynth.getModel();
+                Synth newSynth = instantiate(DSITetraCombo.class, DSITetraCombo.getSynthName(), false, true, tuple);
+                newSynth.setSendMIDI(false);
+                boolean currentPush = newSynth.getUndo().getWillPush();
+                newSynth.getUndo().setWillPush(false);
+                Model newModel = newSynth.getModel();
            
-					for(int i = 0; i < parameters.length; i++)
-						{
-						if (parameters[i].startsWith("layer1"))
-							{
-							/// IMPORTANT NOTE.  It's important to map A to 1 and 2, and B to 3 and 4, in part
-							/// because VCA Voice Volume (in the Combo man pages it's called "Preset Volume")
-							/// only appears for Voice 1 (as Layer A) and Voice 3 (as Layer B) in the manual.
-							/// I don't know why though -- it appears to have no real meaning in the actual machine.
-							
-							int val2 = model.get(parameters[i]);
-							newModel.set("layer1" + parameters[i].substring(6), val2);
-							newModel.set("layer2" + parameters[i].substring(6), val2);
-							}
-						else if (parameters[i].startsWith("layer2"))
-							{
-							int val2 = model.get(parameters[i]);
-							newModel.set("layer3" + parameters[i].substring(6), val2);
-							newModel.set("layer4" + parameters[i].substring(6), val2);
-							}
-						}
-					newModel.set("name", model.get("name", "Untitled"));
-					newModel.set("name2", model.get("name", "Untitled"));
-					newModel.set("name3", model.get("name", "Untitled"));
-					newModel.set("name4", model.get("name", "Untitled"));
-					newModel.set("layer1tetraassignableparameter1", model.get("layer1tetraassignableparameter1"));
-					newModel.set("layer2tetraassignableparameter2", model.get("layer1tetraassignableparameter2"));
-					newModel.set("layer3tetraassignableparameter3", model.get("layer1tetraassignableparameter3"));
-					newModel.set("layer4tetraassignableparameter4", model.get("layer1tetraassignableparameter4"));
-					
-					newSynth.getUndo().setWillPush(currentPush);
-					newSynth.setSendMIDI(true);
-				}
+                for(int i = 0; i < parameters.length; i++)
+                    {
+                    if (parameters[i].startsWith("layer1"))
+                        {
+                        /// IMPORTANT NOTE.  It's important to map A to 1 and 2, and B to 3 and 4, in part
+                        /// because VCA Voice Volume (in the Combo man pages it's called "Preset Volume")
+                        /// only appears for Voice 1 (as Layer A) and Voice 3 (as Layer B) in the manual.
+                        /// I don't know why though -- it appears to have no real meaning in the actual machine.
+                                                        
+                        int val2 = model.get(parameters[i]);
+                        newModel.set("layer1" + parameters[i].substring(6), val2);
+                        newModel.set("layer2" + parameters[i].substring(6), val2);
+                        }
+                    else if (parameters[i].startsWith("layer2"))
+                        {
+                        int val2 = model.get(parameters[i]);
+                        newModel.set("layer3" + parameters[i].substring(6), val2);
+                        newModel.set("layer4" + parameters[i].substring(6), val2);
+                        }
+                    }
+                newModel.set("name", model.get("name", "Untitled"));
+                newModel.set("name2", model.get("name", "Untitled"));
+                newModel.set("name3", model.get("name", "Untitled"));
+                newModel.set("name4", model.get("name", "Untitled"));
+                newModel.set("layer1tetraassignableparameter1", model.get("layer1tetraassignableparameter1"));
+                newModel.set("layer2tetraassignableparameter2", model.get("layer1tetraassignableparameter2"));
+                newModel.set("layer3tetraassignableparameter3", model.get("layer1tetraassignableparameter3"));
+                newModel.set("layer4tetraassignableparameter4", model.get("layer1tetraassignableparameter4"));
+                                        
+                newSynth.getUndo().setWillPush(currentPush);
+                newSynth.setSendMIDI(true);
+                }
             });        
  
         String str = getLastX("SendAssignableParams", getSynthName(), true);
-		if (str == null)
-			sendAssignableParams = true;		// default is true
-		else if (str.equalsIgnoreCase("true"))
-			sendAssignableParams = true;
-		else
-			sendAssignableParams = false;
-		
+        if (str == null)
+            sendAssignableParams = true;            // default is true
+        else if (str.equalsIgnoreCase("true"))
+            sendAssignableParams = true;
+        else
+            sendAssignableParams = false;
+                
         final JCheckBoxMenuItem beta = new JCheckBoxMenuItem("Send Assignable Params");
         beta.setSelected(sendAssignableParams);
         menu.add(beta);
         
         beta.addActionListener(new ActionListener()
-			{
+            {
             public void actionPerformed(ActionEvent evt)
                 {
                 sendAssignableParams = beta.isSelected();
                 setLastX("" + sendAssignableParams, "SendAssignableParams", getSynthName(), true);
                 }
-			});
-       }
+            });
+        }
 
 
-	// These are maps from the Prophet '08 parameters (which are also NRPN values for all machines)
-	// to the data byte positions in the sysex dumps of these respective machines.
-	// A "-1" means that that parameter is not supported by the machine and does not appear
-	// in its dump.  Some machines of course don't support multiple layers either.
-	//
-	// Obviously the Prophet doesn't support a number of parameters too: but they appear among its
-	// parameters above anyway; this made possible by the fact that *all* parameters of *all* machines
-	// have standardized NRPN values and so correspond with specific slots int the Prophet '08.
-	
+    // These are maps from the Prophet '08 parameters (which are also NRPN values for all machines)
+    // to the data byte positions in the sysex dumps of these respective machines.
+    // A "-1" means that that parameter is not supported by the machine and does not appear
+    // in its dump.  Some machines of course don't support multiple layers either.
+    //
+    // Obviously the Prophet doesn't support a number of parameters too: but they appear among its
+    // parameters above anyway; this made possible by the fact that *all* parameters of *all* machines
+    // have standardized NRPN values and so correspond with specific slots int the Prophet '08.
+        
     // TETRA
     public static final int[] tetraParams = new int[]
-    	{
-    	0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 16, 17, 20, 
-    	21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 40, 41, 
-    	33, 34, 35, 36, 37, 38, 39, 42, 43, 44, 45, 46, 47, 48, 
-    	49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 
-    	63, 64, 65, 66, 67, 68, 69, 71, 72, 73, 74, 75, 76, 77, 
-    	78, 79, 80, 81, 82, 107, 108, 109, 110, 83, 84, 85, 86, 
-    	87, 88, 89, 90, 91, 92, 101, 102, 15, 105, 94, 93, 103, 
-    	70, 95, 104, 106, 
-    	-1, -1, -1, 111, 112, 113, 114, 
-    	-1, 19, 96, 97, 98, 
-    	5, 11, 18, 117, 99, 100, 120, 121, 122, 123, 124, 125, 
-    	126, 127, 128, 129, 130, 131, 132, 133, 134, 135,
-    	136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
-    	147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157,
-    	158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 
-    	169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179,
-    	180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190,
-    	191, 192, 193, 194, 195, 196, 197, 198, 199
-    	};
+    {
+    0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 16, 17, 20, 
+    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 40, 41, 
+    33, 34, 35, 36, 37, 38, 39, 42, 43, 44, 45, 46, 47, 48, 
+    49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 
+    63, 64, 65, 66, 67, 68, 69, 71, 72, 73, 74, 75, 76, 77, 
+    78, 79, 80, 81, 82, 107, 108, 109, 110, 83, 84, 85, 86, 
+    87, 88, 89, 90, 91, 92, 101, 102, 15, 105, 94, 93, 103, 
+    70, 95, 104, 106, 
+    -1, -1, -1, 111, 112, 113, 114, 
+    -1, 19, 96, 97, 98, 
+    5, 11, 18, 117, 99, 100, 120, 121, 122, 123, 124, 125, 
+    126, 127, 128, 129, 130, 131, 132, 133, 134, 135,
+    136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
+    147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157,
+    158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 
+    169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179,
+    180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190,
+    191, 192, 193, 194, 195, 196, 197, 198, 199
+    };
 
-	// MOPHO KEYBOARD and MOPHO SE
-	public static final int[] mophoKeyParams = new int[]
-		{
-		0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 16, 17, 20, 
-		21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, -1, 
-		41, 33, 34, 35, 36, 37, 38, 39, 42, 43, 44, 45, 46, 
-		47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 
-		60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 71, 72, 73, 
-		74, 75, 76, 77, 78, 79, 80, 81, 82, 107, 108, 109, 
-		110, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 101, 
-		102, 15, 105, 94, 93, 103, 70, 95, 104, 106, 
-		-1, -1, -1, -1, -1, -1, -1, -1, 19, 96, 97, 98, 5, 11, 18, 
-		-1, -1, -1, 120, 121, 122, 123, 124, 125, 126, 127, 
-		128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 
-		138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 
-		148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 
-		158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 
-		168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 
-		178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 
-		188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 
-		198, 199
-		};
-	
-	// MOPHO
+    // MOPHO KEYBOARD and MOPHO SE
+    public static final int[] mophoKeyParams = new int[]
+    {
+    0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 16, 17, 20, 
+    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, -1, 
+    41, 33, 34, 35, 36, 37, 38, 39, 42, 43, 44, 45, 46, 
+    47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 
+    60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 71, 72, 73, 
+    74, 75, 76, 77, 78, 79, 80, 81, 82, 107, 108, 109, 
+    110, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 101, 
+    102, 15, 105, 94, 93, 103, 70, 95, 104, 106, 
+    -1, -1, -1, -1, -1, -1, -1, -1, 19, 96, 97, 98, 5, 11, 18, 
+    -1, -1, -1, 120, 121, 122, 123, 124, 125, 126, 127, 
+    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 
+    138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 
+    148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 
+    158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 
+    168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 
+    178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 
+    188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 
+    198, 199
+    };
+        
+    // MOPHO
     public static final int[] mophoParams = new int[]
-    	{
-		0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 17, 18, 20, 
-		21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 
-		-1, 40, 33, 34, 35, 36, 37, 38, 39, 41, 42, 43, 
-		44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 
-		56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 
-		68, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 
-		81, 101, 102, 103, 104, 82, 83, 84, 85, 86, 87, 
-		88, 89, 90, 91, 95, 96, 15, 99, 
-		-1, 16, 97, 69, 
-		-1, 98, 100, 
-		-1, -1, -1, 105, 106, 107, 108, 
-		-1, -1, 92, 93, 94, 5, 11, 19,
-		-1, -1, -1, 120, 
-		121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 
-		131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 
-		141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 
-		151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 
-		161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 
-		171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 
-		181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 
-		191, 192, 193, 194, 195, 196, 197, 198, 199
-    	};
+    {
+    0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 17, 18, 20, 
+    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 
+    -1, 40, 33, 34, 35, 36, 37, 38, 39, 41, 42, 43, 
+    44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 
+    56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 
+    68, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 
+    81, 101, 102, 103, 104, 82, 83, 84, 85, 86, 87, 
+    88, 89, 90, 91, 95, 96, 15, 99, 
+    -1, 16, 97, 69, 
+    -1, 98, 100, 
+    -1, -1, -1, 105, 106, 107, 108, 
+    -1, -1, 92, 93, 94, 5, 11, 19,
+    -1, -1, -1, 120, 
+    121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 
+    131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 
+    141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 
+    151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 
+    161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 
+    171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 
+    181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 
+    191, 192, 193, 194, 195, 196, 197, 198, 199
+    };
     
     // MOPHO X4
     public static final int[] mophoX4Params = new int[]
-    	{
-		0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 16, 17, 20, 
-		21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 
-		-1, 40, 41, 33, 34, 35, 36, 37, 38, 39, 42, 43, 44, 
-		45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 
-		58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 71, 
-		72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 107, 
-		108, 109, 110, 83, 84, 85, 86, 87, 88, 89, 90, 91, 
-		92, 101, 102, 15, 105, 93, 94, 103, 70, 95, 104, 106, 
-		-1, -1, -1, -1, -1, -1, -1, -1, 19, 96, 97, 98, 5, 11, 18, 
-		-1, -1, -1, 120, 121, 122, 123, 124, 125, 126, 127, 
-		128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 
-		138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 
-		148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 
-		158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 
-		168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 
-		178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 
-		188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 
-		198, 199
-		};
+    {
+    0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 16, 17, 20, 
+    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 
+    -1, 40, 41, 33, 34, 35, 36, 37, 38, 39, 42, 43, 44, 
+    45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 
+    58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 71, 
+    72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 107, 
+    108, 109, 110, 83, 84, 85, 86, 87, 88, 89, 90, 91, 
+    92, 101, 102, 15, 105, 93, 94, 103, 70, 95, 104, 106, 
+    -1, -1, -1, -1, -1, -1, -1, -1, 19, 96, 97, 98, 5, 11, 18, 
+    -1, -1, -1, 120, 121, 122, 123, 124, 125, 126, 127, 
+    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 
+    138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 
+    148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 
+    158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 
+    168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 
+    178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 
+    188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 
+    198, 199
+    };
 
-	public static final String[] tetraAssignableParameters = new String[]
-		{
-"Osc 1 Frequency",
-"Osc 1 Fine Freq",
-"Osc 1 Shape",
-"Osc 1 Glide",
-"Osc 1 Key Track",
-"Sub Osc 1 Level",
-"Osc 2 Frequency",
-"Osc 2 Fine Freq",
-"Osc 2 Shape",
-"Osc 2 Glide",
-"Osc 2 Key Track",
-"Sub Osc 2 Level",
-"Osc Hard Sync",
-"Glide Mode",
-"Oscillator Slop",
-"Pitch Wheel Range",
-"Oscillator Mix",
-"Noise Level",
-"Feedback Volume",
-"Feedback Gain",
-"Filter Cutoff Freq",
-"Filter Resonance",
-"Filter Keyboard Amt",
-"Filter Audio Mod",
-"Filter Config/Mode",
-"Filter Env Amount",
-"Filter Env Velocity",
-"Filter Env Delay",
-"Filter Env Attack",
-"Filter Env Decay",
-"Filter Env Sustain",
-"Filter Env Release",
-"VCA Level",
-"VCA Env Amount",
-"VCA Env Velocity",
-"VCA Env Delay",
-"VCA Env Attack",
-"VCA Env Decay",
-"VCA Env Sustain",
-"VCA Env Release",
-"Pan Spread",
-"Program Volume",
-"LFO 1 Frequency",
-"LFO 1 Shape",
-"LFO 1 Amount",
-"LFO 1 Destination",
-"LFO 1 Key Sync",
-"LFO 2 Frequency",
-"LFO 2 Shape",
-"LFO 2 Amount",
-"LFO 2 Destination",
-"LFO 2 Key Sync",
-"LFO 3 Frequency",
-"LFO 3 Shape",
-"LFO 3 Amount",
-"LFO 3 Destination",
-"LFO 3 Key Sync",
-"LFO 4 Frequency",
-"LFO 4 Shape",
-"LFO 4 Amount",
-"LFO 4 Destination",
-"LFO 4 Key Sync",
-"Env 3 Desination",
-"Env 3 Amount",
-"Env 3 Velocity",
-"Env 3 Delay",
-"Env 3 Attack",
-"Env 3 Decay",
-"Env 3 Sustain",
-"Env 3 Release",
-"Env 3 Repeat",
-"Mod 1 Source",
-"Mod 1 Amount",
-"Mod 1 Destination",
-"Mod 2 Source",
-"Mod 2 Amount",
-"Mod 2 Destination",
-"Mod 3 Source",
-"Mod 3 Amount",
-"Mod 3 Destination",
-"Mod 4 Source",
-"Mod 4 Amount",
-"Mod 4 Destination",
-"Mod Wheel Amount",
-"Mod Wheel Dest",
-"Pressure Amount",
-"Pressure Destination",
-"Breath Amount",
-"Breath Destination",
-"Velocity Amount",
-"Velocity Destination",
-"Foot Control Amt",
-"Foot Control Dest",
-"Unison Mode",
-"Unison Assign",
-"Unison On/off",
-"Push It Note",
-"Push It Velocity",
-"Push It Mode",
-"Split Point",
-"Key Mode",
-"Clock BPM",
-"Clock Divide",
-"Arpeggiator Mode",
-"Arpeggiator On/Off",
-"Sequence Trigger",
-"Sequencer On/Off",
-"Seq 1 Destination",
-"Seq 2 Destination",
-"Seq 3 Destination",
-"Seq 4 Destination",
-"[Invalid 1]",
-"[Invalid 2]",
-"[Invalid 3]",
-"[Invalid 4]",
-"[Invalid 5]", 	// "Osc 1 Wave Reset",
-"[Invalid 6]", 	// "Osc 2 Wave Reset",
-"[Invalid 7]",
-"[Invalid 8]",
-"[Invalid 9]",
-"Seq 1 Step 1",
-"Seq 1 Step 2",
-"Seq 1 Step 3",
-"Seq 1 Step 4",
-"Seq 1 Step 5",
-"Seq 1 Step 6",
-"Seq 1 Step 7",
-"Seq 1 Step 8",
-"Seq 1 Step 9",
-"Seq 1 Step 10",
-"Seq 1 Step 11",
-"Seq 1 Step 12",
-"Seq 1 Step 13",
-"Seq 1 Step 14",
-"Seq 1 Step 15",
-"Seq 1 Step 16",
-"Seq 2 Step 1",
-"Seq 2 Step 2",
-"Seq 2 Step 3",
-"Seq 2 Step 4",
-"Seq 2 Step 5",
-"Seq 2 Step 6",
-"Seq 2 Step 7",
-"Seq 2 Step 8",
-"Seq 2 Step 9",
-"Seq 2 Step 10",
-"Seq 2 Step 11",
-"Seq 2 Step 12",
-"Seq 2 Step 13",
-"Seq 2 Step 14",
-"Seq 2 Step 15",
-"Seq 2 Step 16",
-"Seq 3 Step 1",
-"Seq 3 Step 2",
-"Seq 3 Step 3",
-"Seq 3 Step 4",
-"Seq 3 Step 5",
-"Seq 3 Step 6",
-"Seq 3 Step 7",
-"Seq 3 Step 8",
-"Seq 3 Step 9",
-"Seq 3 Step 10",
-"Seq 3 Step 11",
-"Seq 3 Step 12",
-"Seq 3 Step 13",
-"Seq 3 Step 14",
-"Seq 3 Step 15",
-"Seq 3 Step 16",
-"Seq 4 Step 1",
-"Seq 4 Step 2",
-"Seq 4 Step 3",
-"Seq 4 Step 4",
-"Seq 4 Step 5",
-"Seq 4 Step 6",
-"Seq 4 Step 7",
-"Seq 4 Step 8",
-"Seq 4 Step 9",
-"Seq 4 Step 10",
-"Seq 4 Step 11",
-"Seq 4 Step 12",
-"Seq 4 Step 13",
-"Seq 4 Step 14",
-"Seq 4 Step 15",
-"Seq 4 Step 16",
-"Edit Name 1",
-"Edit Name 2",
-"Edit Name 3",
-"Edit Name 4",
-"Edit Name 5",
-"Edit Name 6",
-"Edit Name 7",
-"Edit Name 8",
-"Edit Name 9",
-"Edit Name 10",
-"Edit Name 11",
-"Edit Name 12",
-"Edit Name 13",
-"Edit Name 14",
-"Edit Name 15",
-"Edit Name 16",
-	};
+    public static final String[] tetraAssignableParameters = new String[]
+    {
+    "Osc 1 Frequency",
+    "Osc 1 Fine Freq",
+    "Osc 1 Shape",
+    "Osc 1 Glide",
+    "Osc 1 Key Track",
+    "Sub Osc 1 Level",
+    "Osc 2 Frequency",
+    "Osc 2 Fine Freq",
+    "Osc 2 Shape",
+    "Osc 2 Glide",
+    "Osc 2 Key Track",
+    "Sub Osc 2 Level",
+    "Osc Hard Sync",
+    "Glide Mode",
+    "Oscillator Slop",
+    "Pitch Wheel Range",
+    "Oscillator Mix",
+    "Noise Level",
+    "Feedback Volume",
+    "Feedback Gain",
+    "Filter Cutoff Freq",
+    "Filter Resonance",
+    "Filter Keyboard Amt",
+    "Filter Audio Mod",
+    "Filter Config/Mode",
+    "Filter Env Amount",
+    "Filter Env Velocity",
+    "Filter Env Delay",
+    "Filter Env Attack",
+    "Filter Env Decay",
+    "Filter Env Sustain",
+    "Filter Env Release",
+    "VCA Level",
+    "VCA Env Amount",
+    "VCA Env Velocity",
+    "VCA Env Delay",
+    "VCA Env Attack",
+    "VCA Env Decay",
+    "VCA Env Sustain",
+    "VCA Env Release",
+    "Pan Spread",
+    "Program Volume",
+    "LFO 1 Frequency",
+    "LFO 1 Shape",
+    "LFO 1 Amount",
+    "LFO 1 Destination",
+    "LFO 1 Key Sync",
+    "LFO 2 Frequency",
+    "LFO 2 Shape",
+    "LFO 2 Amount",
+    "LFO 2 Destination",
+    "LFO 2 Key Sync",
+    "LFO 3 Frequency",
+    "LFO 3 Shape",
+    "LFO 3 Amount",
+    "LFO 3 Destination",
+    "LFO 3 Key Sync",
+    "LFO 4 Frequency",
+    "LFO 4 Shape",
+    "LFO 4 Amount",
+    "LFO 4 Destination",
+    "LFO 4 Key Sync",
+    "Env 3 Desination",
+    "Env 3 Amount",
+    "Env 3 Velocity",
+    "Env 3 Delay",
+    "Env 3 Attack",
+    "Env 3 Decay",
+    "Env 3 Sustain",
+    "Env 3 Release",
+    "Env 3 Repeat",
+    "Mod 1 Source",
+    "Mod 1 Amount",
+    "Mod 1 Destination",
+    "Mod 2 Source",
+    "Mod 2 Amount",
+    "Mod 2 Destination",
+    "Mod 3 Source",
+    "Mod 3 Amount",
+    "Mod 3 Destination",
+    "Mod 4 Source",
+    "Mod 4 Amount",
+    "Mod 4 Destination",
+    "Mod Wheel Amount",
+    "Mod Wheel Dest",
+    "Pressure Amount",
+    "Pressure Destination",
+    "Breath Amount",
+    "Breath Destination",
+    "Velocity Amount",
+    "Velocity Destination",
+    "Foot Control Amt",
+    "Foot Control Dest",
+    "Unison Mode",
+    "Unison Assign",
+    "Unison On/off",
+    "Push It Note",
+    "Push It Velocity",
+    "Push It Mode",
+    "Split Point",
+    "Key Mode",
+    "Clock BPM",
+    "Clock Divide",
+    "Arpeggiator Mode",
+    "Arpeggiator On/Off",
+    "Sequence Trigger",
+    "Sequencer On/Off",
+    "Seq 1 Destination",
+    "Seq 2 Destination",
+    "Seq 3 Destination",
+    "Seq 4 Destination",
+    "[Invalid 1]",
+    "[Invalid 2]",
+    "[Invalid 3]",
+    "[Invalid 4]",
+    "[Invalid 5]",  // "Osc 1 Wave Reset",
+    "[Invalid 6]",  // "Osc 2 Wave Reset",
+    "[Invalid 7]",
+    "[Invalid 8]",
+    "[Invalid 9]",
+    "Seq 1 Step 1",
+    "Seq 1 Step 2",
+    "Seq 1 Step 3",
+    "Seq 1 Step 4",
+    "Seq 1 Step 5",
+    "Seq 1 Step 6",
+    "Seq 1 Step 7",
+    "Seq 1 Step 8",
+    "Seq 1 Step 9",
+    "Seq 1 Step 10",
+    "Seq 1 Step 11",
+    "Seq 1 Step 12",
+    "Seq 1 Step 13",
+    "Seq 1 Step 14",
+    "Seq 1 Step 15",
+    "Seq 1 Step 16",
+    "Seq 2 Step 1",
+    "Seq 2 Step 2",
+    "Seq 2 Step 3",
+    "Seq 2 Step 4",
+    "Seq 2 Step 5",
+    "Seq 2 Step 6",
+    "Seq 2 Step 7",
+    "Seq 2 Step 8",
+    "Seq 2 Step 9",
+    "Seq 2 Step 10",
+    "Seq 2 Step 11",
+    "Seq 2 Step 12",
+    "Seq 2 Step 13",
+    "Seq 2 Step 14",
+    "Seq 2 Step 15",
+    "Seq 2 Step 16",
+    "Seq 3 Step 1",
+    "Seq 3 Step 2",
+    "Seq 3 Step 3",
+    "Seq 3 Step 4",
+    "Seq 3 Step 5",
+    "Seq 3 Step 6",
+    "Seq 3 Step 7",
+    "Seq 3 Step 8",
+    "Seq 3 Step 9",
+    "Seq 3 Step 10",
+    "Seq 3 Step 11",
+    "Seq 3 Step 12",
+    "Seq 3 Step 13",
+    "Seq 3 Step 14",
+    "Seq 3 Step 15",
+    "Seq 3 Step 16",
+    "Seq 4 Step 1",
+    "Seq 4 Step 2",
+    "Seq 4 Step 3",
+    "Seq 4 Step 4",
+    "Seq 4 Step 5",
+    "Seq 4 Step 6",
+    "Seq 4 Step 7",
+    "Seq 4 Step 8",
+    "Seq 4 Step 9",
+    "Seq 4 Step 10",
+    "Seq 4 Step 11",
+    "Seq 4 Step 12",
+    "Seq 4 Step 13",
+    "Seq 4 Step 14",
+    "Seq 4 Step 15",
+    "Seq 4 Step 16",
+    "Edit Name 1",
+    "Edit Name 2",
+    "Edit Name 3",
+    "Edit Name 4",
+    "Edit Name 5",
+    "Edit Name 6",
+    "Edit Name 7",
+    "Edit Name 8",
+    "Edit Name 9",
+    "Edit Name 10",
+    "Edit Name 11",
+    "Edit Name 12",
+    "Edit Name 13",
+    "Edit Name 14",
+    "Edit Name 15",
+    "Edit Name 16",
+    };
 
 
-	public static final String[] mophoAssignableParameters = new String[]
-		{
-"Osc 1 Frequency",
-"Osc 1 Fine Freq",
-"Osc 1 Shape",
-"Osc 1 Glide",
-"Osc 1 Key Amount",
-"Sub Osc 1 Level",
-"Osc 2 Frequency",
-"Osc 2 Fine Freq",
-"Osc 2 Shape",
-"Osc 2 Glide",
-"Osc 2 Key Amount",
-"Sub Osc 2 Level",
-"Osc Hard Sync",
-"Glide Mode",
-"Oscillator Slop",
-"Pitch Wheel Range",
-"Key Assign",
-"Oscillator Mix",
-"Noise Level",
-"Ext In Volume",
-"Filter Cutoff Freq",
-"Filter Resonance",
-"Filter Keyboard Amt",
-"Filter Audio Mod",
-"Filter Config/Mode",
-"Filter Env Amount",
-"Filter Env Velocity",
-"Filter Env Delay",
-"Filter Env Attack",
-"Filter Env Decay",
-"Filter Env Sustain",
-"Filter Env Release",
-"VCA Level",
-"VCA Env Amount",
-"VCA Env Velocity",
-"VCA Env Delay",
-"VCA Env Attack",
-"VCA Env Decay",
-"VCA Env Sustain",
-"VCA Env Release",
-"Program Volume",
-"LFO 1 Frequency",
-"LFO 1 Shape",
-"LFO 1 Amount",
-"LFO 1 Destination",
-"LFO 1 Key Sync",
-"LFO 2 Frequency",
-"LFO 2 Shape",
-"LFO 2 Amount",
-"LFO 2 Destination",
-"LFO 2 Key Sync",
-"LFO 3 Frequency",
-"LFO 3 Shape",
-"LFO 3 Amount",
-"LFO 3 Destination",
-"LFO 3 Key Sync",
-"LFO 4 Frequency",
-"LFO 4 Shape",
-"LFO 4 Amount",
-"LFO 4 Destination",
-"LFO 4 Key Sync",
-"Env 3 Desination",
-"Env 3 Amount",
-"Env 3 Velocity",
-"Env 3 Delay",
-"Env 3 Attack",
-"Env 3 Decay",
-"Env 3 Sustain",
-"Env 3 Release",
-"Env 3 Repeat",
-"Mod 1 Source",
-"Mod 1 Amount",
-"Mod 1 Destination",
-"Mod 2 Source",
-"Mod 2 Amount",
-"Mod 2 Destination",
-"Mod 3 Source",
-"Mod 3 Amount",
-"Mod 3 Destination",
-"Mod 4 Source",
-"Mod 4 Amount",
-"Mod 4 Destination",
-"Mod Wheel Amount",
-"Mod Wheel Dest",
-"Pressure Amount",
-"Pressure Destination",
-"Breath Amount",
-"Breath Destination",
-"Velocity Amount",
-"Velocity Destination",
-"Foot Control Amt",
-"Foot Control Dest",
-"Push It Note",
-"Push It Velocity",
-"Push It Mode",
-"Clock BPM",
-"Clock Divide",
-"Arpeggiator Mode",
-"Arpeggiator On/Off",
-"Sequence Trigger",
-"Sequencer On/Off",
-"Seq 1 Destination",
-"Seq 2 Destination",
-"Seq 3 Destination",
-"Seq 4 Destination",
-"[Invalid 1]",
-"[Invalid 2]",
-"[Invalid 3]",
-"[Invalid 4]",
-"[Invalid 5]",
-"[Invalid 6]",
-"[Invalid 7]",
-"[Invalid 8]",
-"[Invalid 9]",
-"[Invalid 10]",
-"[Invalid 11]",
-"[Invalid 12]",
-"[Invalid 13]",
-"[Invalid 14]",
-"[Invalid 15]",
-"Seq 1 Step 1",
-"Seq 1 Step 2",
-"Seq 1 Step 3",
-"Seq 1 Step 4",
-"Seq 1 Step 5",
-"Seq 1 Step 6",
-"Seq 1 Step 7",
-"Seq 1 Step 8",
-"Seq 1 Step 9",
-"Seq 1 Step 10",
-"Seq 1 Step 11",
-"Seq 1 Step 12",
-"Seq 1 Step 13",
-"Seq 1 Step 14",
-"Seq 1 Step 15",
-"Seq 1 Step 16",
-"Seq 2 Step 1",
-"Seq 2 Step 2",
-"Seq 2 Step 3",
-"Seq 2 Step 4",
-"Seq 2 Step 5",
-"Seq 2 Step 6",
-"Seq 2 Step 7",
-"Seq 2 Step 8",
-"Seq 2 Step 9",
-"Seq 2 Step 10",
-"Seq 2 Step 11",
-"Seq 2 Step 12",
-"Seq 2 Step 13",
-"Seq 2 Step 14",
-"Seq 2 Step 15",
-"Seq 2 Step 16",
-"Seq 3 Step 1",
-"Seq 3 Step 2",
-"Seq 3 Step 3",
-"Seq 3 Step 4",
-"Seq 3 Step 5",
-"Seq 3 Step 6",
-"Seq 3 Step 7",
-"Seq 3 Step 8",
-"Seq 3 Step 9",
-"Seq 3 Step 10",
-"Seq 3 Step 11",
-"Seq 3 Step 12",
-"Seq 3 Step 13",
-"Seq 3 Step 14",
-"Seq 3 Step 15",
-"Seq 3 Step 16",
-"Seq 4 Step 1",
-"Seq 4 Step 2",
-"Seq 4 Step 3",
-"Seq 4 Step 4",
-"Seq 4 Step 5",
-"Seq 4 Step 6",
-"Seq 4 Step 7",
-"Seq 4 Step 8",
-"Seq 4 Step 9",
-"Seq 4 Step 10",
-"Seq 4 Step 11",
-"Seq 4 Step 12",
-"Seq 4 Step 13",
-"Seq 4 Step 14",
-"Seq 4 Step 15",
-"Seq 4 Step 16",
-"Edit Name 1",
-"Edit Name 2",
-"Edit Name 3",
-"Edit Name 4",
-"Edit Name 5",
-"Edit Name 6",
-"Edit Name 7",
-"Edit Name 8",
-"Edit Name 9",
-"Edit Name 10",
-"Edit Name 11",
-"Edit Name 12",
-"Edit Name 13",
-"Edit Name 14",
-"Edit Name 15",
-"Edit Name 16",
-};
+    public static final String[] mophoAssignableParameters = new String[]
+    {
+    "Osc 1 Frequency",
+    "Osc 1 Fine Freq",
+    "Osc 1 Shape",
+    "Osc 1 Glide",
+    "Osc 1 Key Amount",
+    "Sub Osc 1 Level",
+    "Osc 2 Frequency",
+    "Osc 2 Fine Freq",
+    "Osc 2 Shape",
+    "Osc 2 Glide",
+    "Osc 2 Key Amount",
+    "Sub Osc 2 Level",
+    "Osc Hard Sync",
+    "Glide Mode",
+    "Oscillator Slop",
+    "Pitch Wheel Range",
+    "Key Assign",
+    "Oscillator Mix",
+    "Noise Level",
+    "Ext In Volume",
+    "Filter Cutoff Freq",
+    "Filter Resonance",
+    "Filter Keyboard Amt",
+    "Filter Audio Mod",
+    "Filter Config/Mode",
+    "Filter Env Amount",
+    "Filter Env Velocity",
+    "Filter Env Delay",
+    "Filter Env Attack",
+    "Filter Env Decay",
+    "Filter Env Sustain",
+    "Filter Env Release",
+    "VCA Level",
+    "VCA Env Amount",
+    "VCA Env Velocity",
+    "VCA Env Delay",
+    "VCA Env Attack",
+    "VCA Env Decay",
+    "VCA Env Sustain",
+    "VCA Env Release",
+    "Program Volume",
+    "LFO 1 Frequency",
+    "LFO 1 Shape",
+    "LFO 1 Amount",
+    "LFO 1 Destination",
+    "LFO 1 Key Sync",
+    "LFO 2 Frequency",
+    "LFO 2 Shape",
+    "LFO 2 Amount",
+    "LFO 2 Destination",
+    "LFO 2 Key Sync",
+    "LFO 3 Frequency",
+    "LFO 3 Shape",
+    "LFO 3 Amount",
+    "LFO 3 Destination",
+    "LFO 3 Key Sync",
+    "LFO 4 Frequency",
+    "LFO 4 Shape",
+    "LFO 4 Amount",
+    "LFO 4 Destination",
+    "LFO 4 Key Sync",
+    "Env 3 Desination",
+    "Env 3 Amount",
+    "Env 3 Velocity",
+    "Env 3 Delay",
+    "Env 3 Attack",
+    "Env 3 Decay",
+    "Env 3 Sustain",
+    "Env 3 Release",
+    "Env 3 Repeat",
+    "Mod 1 Source",
+    "Mod 1 Amount",
+    "Mod 1 Destination",
+    "Mod 2 Source",
+    "Mod 2 Amount",
+    "Mod 2 Destination",
+    "Mod 3 Source",
+    "Mod 3 Amount",
+    "Mod 3 Destination",
+    "Mod 4 Source",
+    "Mod 4 Amount",
+    "Mod 4 Destination",
+    "Mod Wheel Amount",
+    "Mod Wheel Dest",
+    "Pressure Amount",
+    "Pressure Destination",
+    "Breath Amount",
+    "Breath Destination",
+    "Velocity Amount",
+    "Velocity Destination",
+    "Foot Control Amt",
+    "Foot Control Dest",
+    "Push It Note",
+    "Push It Velocity",
+    "Push It Mode",
+    "Clock BPM",
+    "Clock Divide",
+    "Arpeggiator Mode",
+    "Arpeggiator On/Off",
+    "Sequence Trigger",
+    "Sequencer On/Off",
+    "Seq 1 Destination",
+    "Seq 2 Destination",
+    "Seq 3 Destination",
+    "Seq 4 Destination",
+    "[Invalid 1]",
+    "[Invalid 2]",
+    "[Invalid 3]",
+    "[Invalid 4]",
+    "[Invalid 5]",
+    "[Invalid 6]",
+    "[Invalid 7]",
+    "[Invalid 8]",
+    "[Invalid 9]",
+    "[Invalid 10]",
+    "[Invalid 11]",
+    "[Invalid 12]",
+    "[Invalid 13]",
+    "[Invalid 14]",
+    "[Invalid 15]",
+    "Seq 1 Step 1",
+    "Seq 1 Step 2",
+    "Seq 1 Step 3",
+    "Seq 1 Step 4",
+    "Seq 1 Step 5",
+    "Seq 1 Step 6",
+    "Seq 1 Step 7",
+    "Seq 1 Step 8",
+    "Seq 1 Step 9",
+    "Seq 1 Step 10",
+    "Seq 1 Step 11",
+    "Seq 1 Step 12",
+    "Seq 1 Step 13",
+    "Seq 1 Step 14",
+    "Seq 1 Step 15",
+    "Seq 1 Step 16",
+    "Seq 2 Step 1",
+    "Seq 2 Step 2",
+    "Seq 2 Step 3",
+    "Seq 2 Step 4",
+    "Seq 2 Step 5",
+    "Seq 2 Step 6",
+    "Seq 2 Step 7",
+    "Seq 2 Step 8",
+    "Seq 2 Step 9",
+    "Seq 2 Step 10",
+    "Seq 2 Step 11",
+    "Seq 2 Step 12",
+    "Seq 2 Step 13",
+    "Seq 2 Step 14",
+    "Seq 2 Step 15",
+    "Seq 2 Step 16",
+    "Seq 3 Step 1",
+    "Seq 3 Step 2",
+    "Seq 3 Step 3",
+    "Seq 3 Step 4",
+    "Seq 3 Step 5",
+    "Seq 3 Step 6",
+    "Seq 3 Step 7",
+    "Seq 3 Step 8",
+    "Seq 3 Step 9",
+    "Seq 3 Step 10",
+    "Seq 3 Step 11",
+    "Seq 3 Step 12",
+    "Seq 3 Step 13",
+    "Seq 3 Step 14",
+    "Seq 3 Step 15",
+    "Seq 3 Step 16",
+    "Seq 4 Step 1",
+    "Seq 4 Step 2",
+    "Seq 4 Step 3",
+    "Seq 4 Step 4",
+    "Seq 4 Step 5",
+    "Seq 4 Step 6",
+    "Seq 4 Step 7",
+    "Seq 4 Step 8",
+    "Seq 4 Step 9",
+    "Seq 4 Step 10",
+    "Seq 4 Step 11",
+    "Seq 4 Step 12",
+    "Seq 4 Step 13",
+    "Seq 4 Step 14",
+    "Seq 4 Step 15",
+    "Seq 4 Step 16",
+    "Edit Name 1",
+    "Edit Name 2",
+    "Edit Name 3",
+    "Edit Name 4",
+    "Edit Name 5",
+    "Edit Name 6",
+    "Edit Name 7",
+    "Edit Name 8",
+    "Edit Name 9",
+    "Edit Name 10",
+    "Edit Name 11",
+    "Edit Name 12",
+    "Edit Name 13",
+    "Edit Name 14",
+    "Edit Name 15",
+    "Edit Name 16",
+    };
 
     public boolean testVerify(Synth synth2, String key, Object val1, Object val2)
-    	{
-    	int t = getType();
-    	
-    	if (t == SYNTH_TYPE_MOPHO || t == SYNTH_TYPE_MOPHO_KEYBOARD || t == SYNTH_TYPE_MOPHO_X4)
-    		{
-    		if (key.startsWith("layer2")) return true;  // no layer 2
-    		}
+        {
+        int t = getType();
+        
+        if (t == SYNTH_TYPE_MOPHO || t == SYNTH_TYPE_MOPHO_KEYBOARD || t == SYNTH_TYPE_MOPHO_X4)
+            {
+            if (key.startsWith("layer2")) return true;  // no layer 2
+            }
 
-		// These can be invalid regardless due to the hole in the middle    				
-    	if (key.equals("layer1tetraassignableparameter1") || 
-    		key.equals("layer1tetraassignableparameter2") || 
-    		key.equals("layer1tetraassignableparameter3") || 
-    		key.equals("layer1tetraassignableparameter4"))
-    			return true;
+        // These can be invalid regardless due to the hole in the middle                                
+        if (key.equals("layer1tetraassignableparameter1") || 
+            key.equals("layer1tetraassignableparameter2") || 
+            key.equals("layer1tetraassignableparameter3") || 
+            key.equals("layer1tetraassignableparameter4"))
+            return true;
 
-    		
-    	if (t == SYNTH_TYPE_MOPHO)
-    		{
-    		return (key.equals("keyboardmode") ||
-    				key.equals("splitpoint") ||
-    				key.equals("layer1unisonmode") ||
-    				key.equals("layer1unison") ||
-    				key.equals("layer1vcaoutputspread") ||
-    				key.equals("layer1tetraeditorbyte") || 
-    				key.equals("layer1tetrafeedbackgain"));
-    		}
-    	else if (t == SYNTH_TYPE_MOPHO_KEYBOARD)
-    		{
-    		return (key.equals("keyboardmode") ||
-    				key.equals("splitpoint") ||
-    				key.equals("layer1tetraassignableparameter1") || 
-    				key.equals("layer1tetraassignableparameter2") || 
-    				key.equals("layer1tetraassignableparameter3") || 
-    				key.equals("layer1tetraassignableparameter4") || 
-    				key.equals("layer1tetraeditorbyte") || 
-    				key.equals("layer1vcaoutputspread"));
-    		}
-    	else if (t == SYNTH_TYPE_MOPHO_X4)
-    		{
-    		return (key.equals("keyboardmode") ||
-    				key.equals("splitpoint") ||
-    				key.equals("layer1tetraassignableparameter1") || 
-    				key.equals("layer1tetraassignableparameter2") || 
-    				key.equals("layer1tetraassignableparameter3") || 
-    				key.equals("layer1tetraassignableparameter4") || 
-    				key.equals("layer1tetraeditorbyte") || 
-    				key.equals("layer1vcainitiallevel"));
-    		}
-    	return false;
-    	}
-    	
-    	
-    	
+                
+        if (t == SYNTH_TYPE_MOPHO)
+            {
+            return (key.equals("keyboardmode") ||
+                key.equals("splitpoint") ||
+                key.equals("layer1unisonmode") ||
+                key.equals("layer1unison") ||
+                key.equals("layer1vcaoutputspread") ||
+                key.equals("layer1tetraeditorbyte") || 
+                key.equals("layer1tetrafeedbackgain"));
+            }
+        else if (t == SYNTH_TYPE_MOPHO_KEYBOARD)
+            {
+            return (key.equals("keyboardmode") ||
+                key.equals("splitpoint") ||
+                key.equals("layer1tetraassignableparameter1") || 
+                key.equals("layer1tetraassignableparameter2") || 
+                key.equals("layer1tetraassignableparameter3") || 
+                key.equals("layer1tetraassignableparameter4") || 
+                key.equals("layer1tetraeditorbyte") || 
+                key.equals("layer1vcaoutputspread"));
+            }
+        else if (t == SYNTH_TYPE_MOPHO_X4)
+            {
+            return (key.equals("keyboardmode") ||
+                key.equals("splitpoint") ||
+                key.equals("layer1tetraassignableparameter1") || 
+                key.equals("layer1tetraassignableparameter2") || 
+                key.equals("layer1tetraassignableparameter3") || 
+                key.equals("layer1tetraassignableparameter4") || 
+                key.equals("layer1tetraeditorbyte") || 
+                key.equals("layer1vcainitiallevel"));
+            }
+        return false;
+        }
+        
+        
+        
     }
 

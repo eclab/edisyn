@@ -2437,7 +2437,7 @@ public class Yamaha4Op extends Synth
 
 
     public boolean testVerify(Synth synth2, String key, Object val1, Object val2)
-    	{
-    	return (key.endsWith("frequencyfine"));  // this gets restricted to 7 if frequencycoarse is small, resulting in sanitycheck errors
-    	}
+        {
+        return (key.endsWith("frequencyfine"));  // this gets restricted to 7 if frequencycoarse is small, resulting in sanitycheck errors
+        }
     }

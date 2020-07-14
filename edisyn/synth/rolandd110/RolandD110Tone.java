@@ -280,7 +280,7 @@ public class RolandD110Tone extends Synth
         if (tuple != null)
             {
             final RolandD110Multi synth = new RolandD110Multi();
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
             if (synth.tuple != null)
                 {
                 synth.loadDefaults();
@@ -332,7 +332,7 @@ public class RolandD110Tone extends Synth
         if (tuple != null)
             {
             final RolandD110Multi synth = new RolandD110Multi();
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
             
             // we need to set me to be the active synth because the little confirmation window that
             // pops up prior to this causes me to NOT be the active synth, grrr...

@@ -551,7 +551,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                 // nothing for the time being
                 final KorgWavestationSequence synth = new KorgWavestationSequence();
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), buildKey2Receiver());
                 if (synth.tuple != null)
                     {       
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -2686,7 +2686,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         if (tuple != null)
             {
             final KorgWavestationPerformance synth = new KorgWavestationPerformance();
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), buildKey2Receiver());
             if (synth.tuple != null)
                 {
                 synth.loadDefaults();

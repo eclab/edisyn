@@ -31,7 +31,17 @@ public class Strut
         return makeStrut(0, space);
         }
 
-    public static JComponent makeStrut(final int width, final int height)
+    public static JComponent makeHorizontalStrut(final int space, boolean setBackground)
+        {
+        return makeStrut(space, 0, setBackground);
+        } 
+                
+    public static JComponent makeVerticalStrut(final int space, boolean setBackground)
+        {
+        return makeStrut(0, space, setBackground);
+        }
+
+    public static JComponent makeStrut(final int width, final int height, boolean setBackground)
         {
         JPanel panel = new JPanel()
             {
@@ -39,8 +49,13 @@ public class Strut
             public Dimension getPreferredSize() { return new Dimension(width, height); }
             public Dimension getMaximumSize() { return new Dimension(width, height); }
             };
-        panel.setBackground(Style.BACKGROUND_COLOR());
+        if (setBackground) panel.setBackground(Style.BACKGROUND_COLOR());
         return panel;
+        } 
+    
+    public static JComponent makeStrut(final int width, final int height)
+        {
+        return makeStrut(width, height, true);
         } 
     
     public static JComponent makeStrut(Component[] components)

@@ -407,8 +407,16 @@ public class YamahaFS1R extends Synth
         iconPanel.setLayout(new BorderLayout());
         iconPanel.add(iconDisplay, BorderLayout.EAST);
                         
-        boolean result = showMultiOption(YamahaFS1R.this, new String[] { "<html>Current<br>Algorithm</html>", "", "<html>Voiced<br>Operators</html>", "", "<html>Unvoiced<br>Operators</html>"}, 
-            new JComponent[] { iconPanel, new JPanel(), voicedPanel, new JPanel(), unvoicedPanel }, "Mute Operators", "<html>Selected operators temporarily have Output Level = 0 and Fseq = OFF.<br>Other operators have Output Level and Fseq restored.</html>");
+        JComponent message = new JPanel();
+        message.setLayout(new BorderLayout());
+        JPanel pan = new JPanel();
+        pan.setLayout(new BorderLayout());
+        pan.add(new JLabel("<html>Selected operators will temporarily&nbsp;&nbsp;&nbsp;<br>have Output Level=0 and Fseq=OFF.<br><br>Unselected operators will have<br>Output Level and Fseq restored.<br><br>Current Algorithm:</html>"), BorderLayout.NORTH);
+        message.add(pan, BorderLayout.CENTER);
+        message.add(iconPanel, BorderLayout.EAST);
+        
+        boolean result = showMultiOption(YamahaFS1R.this, new String[] { "<html>Voiced<br>Operators</html>", "", "<html>Unvoiced<br>Operators</html>"}, 
+            new JComponent[] { voicedPanel, new JPanel(), unvoicedPanel }, "Mute Operators", message);
         
         if (result)
             {

@@ -130,7 +130,7 @@ public class YamahaFS1R extends Synth
     public static final String[] FREQ_MODES = { "Normal", "Fundamental Pitch", "Formant Pitch" };  // Normal, LinkFO, LinkFF
     public static final String[] CONTROL_OPERATORS = { "Voiced 1", "Voiced 2", "Voiced 3", "Voiced 4", "Voiced 5", "Voiced 6", "Voiced 7", "Voiced 8", "Unvoiced 1", "Unvoiced 2", "Unvoiced 3", "Unvoiced 4", "Unvoiced 5", "Unvoiced 6", "Unvoiced 7", "Unvoiced 8" };
     public static final String[] CONTROL_PARAMETERS = { "Off", "Out", "Freq", "Width" };
-    public static final String[] OSC_MODES = { "Ratio", "Fixed" };
+    // public static final String[] OSC_MODES = { "Ratio", "Fixed" };
     public static final String[] EG_RANGES = { "8 Oct", "2 Oct", "1 Oct", "1/2 Oct" };
     public static final String[] BANKS = { "Internal", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K" };
     // These four are from https://github.com/kroger/csound-instruments/blob/master/dx7/dx72csnd.c
@@ -188,23 +188,23 @@ public class YamahaFS1R extends Synth
         tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + part), 0, 0x04, 0, 0x10, (byte)0xF7 });
         
 
-		if (filter)
-			{
-			/// For some reason FS1REditor also sends out note reserve information whenever
-			/// the filter switch is turned ON.  This presumably has something to do with the
-			/// fact that the filter switch reduces the total number of notes, but it doesn't
-			/// seem necessary to me.
-		
-			// Turn ON Filter
-			// F0 43 1n 5E 3p 00 ll vv vv F7
-			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + part), 0, 0x07, 0, 0x01, (byte)0xF7 });
-        	}
+        if (filter)
+            {
+            /// For some reason FS1REditor also sends out note reserve information whenever
+            /// the filter switch is turned ON.  This presumably has something to do with the
+            /// fact that the filter switch reduces the total number of notes, but it doesn't
+            /// seem necessary to me.
+                
+            // Turn ON Filter
+            // F0 43 1n 5E 3p 00 ll vv vv F7
+            tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + part), 0, 0x07, 0, 0x01, (byte)0xF7 });
+            }
         else
-        	{
-			// Turn OFF Filter
-			// F0 43 1n 5E 3p 00 ll vv vv F7
-			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + part), 0, 0x07, 0, 0x00, (byte)0xF7 });
-        	}
+            {
+            // Turn OFF Filter
+            // F0 43 1n 5E 3p 00 ll vv vv F7
+            tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, (byte)(0x30 + part), 0, 0x07, 0, 0x00, (byte)0xF7 });
+            }
         }
 
     public void stripEffects()
@@ -213,37 +213,37 @@ public class YamahaFS1R extends Synth
         // into the reverb and variation, whose returns are zeroed anyway, 
         // and similarlysending variation to reverb..., but for good measure...
         
-			// Reverb Type = OFF
-			// F0 43 1n 5E 3p 00 ll vv vv F7
-			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x28, 0, 0, (byte)0xF7 });
+        // Reverb Type = OFF
+        // F0 43 1n 5E 3p 00 ll vv vv F7
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x28, 0, 0, (byte)0xF7 });
 
-			// Variation Type = OFF
-			// F0 43 1n 5E 3p 00 ll vv vv F7
-			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x2B, 0, 0, (byte)0xF7 });
+        // Variation Type = OFF
+        // F0 43 1n 5E 3p 00 ll vv vv F7
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x2B, 0, 0, (byte)0xF7 });
 
-			// Insertion Type = THRU
-			// F0 43 1n 5E 3p 00 ll vv vv F7
-			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x2F, 0, 0, (byte)0xF7 });
+        // Insertion Type = THRU
+        // F0 43 1n 5E 3p 00 ll vv vv F7
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x2F, 0, 0, (byte)0xF7 });
 
-			// Reverb Return = 0
-			// F0 43 1n 5E 3p 00 ll vv vv F7
-			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x2A, 0, 0, (byte)0xF7 });
+        // Reverb Return = 0
+        // F0 43 1n 5E 3p 00 ll vv vv F7
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x2A, 0, 0, (byte)0xF7 });
 
-			// Variation Return = 0
-			// F0 43 1n 5E 3p 00 ll vv vv F7
-			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x2D, 0, 0, (byte)0xF7 });
+        // Variation Return = 0
+        // F0 43 1n 5E 3p 00 ll vv vv F7
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x2D, 0, 0, (byte)0xF7 });
 
-			// Variation to Reverb = 0
-			// F0 43 1n 5E 3p 00 ll vv vv F7
-			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x2E, 0, 0, (byte)0xF7 });
+        // Variation to Reverb = 0
+        // F0 43 1n 5E 3p 00 ll vv vv F7
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x2E, 0, 0, (byte)0xF7 });
 
-			// Send Insertion to Reverb = 0
-			// F0 43 1n 5E 3p 00 ll vv vv F7
-			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x31, 0, 0, (byte)0xF7 });
+        // Send Insertion to Reverb = 0
+        // F0 43 1n 5E 3p 00 ll vv vv F7
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x31, 0, 0, (byte)0xF7 });
 
-			// Send Insertion to Variation = 0
-			// F0 43 1n 5E 3p 00 ll vv vv F7
-			tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x32, 0, 0, (byte)0xF7 });
+        // Send Insertion to Variation = 0
+        // F0 43 1n 5E 3p 00 ll vv vv F7
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x43, (byte)(16 + getID() - 1), 0x5E, 0x10, 0x01, 0x32, 0, 0, (byte)0xF7 });
         }
         
     public void setupTestPerformance(boolean filter)
@@ -255,7 +255,7 @@ public class YamahaFS1R extends Synth
         if (tuple != null)
             {
             final YamahaFS1RMulti synth = new YamahaFS1RMulti();
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
             if (synth.tuple != null)
                 {
                 synth.loadDefaults();
@@ -277,32 +277,152 @@ public class YamahaFS1R extends Synth
         if (tuple != null)
             {
             final YamahaFS1RMulti synth = new YamahaFS1RMulti();
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
             if (synth.tuple != null)
                 {
-				// This is a little tricky.  When the dump comes in from the synth,
-				// Edisyn will only send it to the topmost panel.  So we first sprout
-				// the panel and show it, and THEN send the dump request.  But this isn't
-				// enough, because what setVisible(...) does is post an event on the
-				// Swing Event Queue to build the window at a later time.  This later time
-				// happens to be after the dump comes in, so it's ignored.  So what we
-				// ALSO do is post the dump request to occur at the end of the Event Queue,
-				// so by the time the dump request has been made, the window is shown and
-				// frontmost.
-										
-				synth.sprout();
-				JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
-				frame.setVisible(true);
+                // This is a little tricky.  When the dump comes in from the synth,
+                // Edisyn will only send it to the topmost panel.  So we first sprout
+                // the panel and show it, and THEN send the dump request.  But this isn't
+                // enough, because what setVisible(...) does is post an event on the
+                // Swing Event Queue to build the window at a later time.  This later time
+                // happens to be after the dump comes in, so it's ignored.  So what we
+                // ALSO do is post the dump request to occur at the end of the Event Queue,
+                // so by the time the dump request has been made, the window is shown and
+                // frontmost.
+                                                                                
+                synth.sprout();
+                JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                frame.setVisible(true);
 
-				SwingUtilities.invokeLater(
-					new Runnable()
-						{
-						public void run() 
-							{ 
-							synth.performRequestCurrentDump();
-							}
-						});
-				}
+                SwingUtilities.invokeLater(
+                    new Runnable()
+                        {
+                        public void run() 
+                            { 
+                            synth.performRequestCurrentDump();
+                            }
+                        });
+                }
+            }
+        }
+        
+    public void showMuteDialog()
+        {
+        JCheckBox[] voiced = new JCheckBox[8];
+        JCheckBox[] unvoiced = new JCheckBox[8];
+        Box voicedBox = new Box(BoxLayout.X_AXIS);
+        Box unvoicedBox = new Box(BoxLayout.X_AXIS);
+        for(int i = 0; i < voiced.length; i++)
+            {
+            voiced[i] = new JCheckBox("" + (i + 1));
+            voicedBox.add(voiced[i]);
+            unvoiced[i] = new JCheckBox("" + (i + 1));
+            unvoicedBox.add(unvoiced[i]);
+            }
+        voicedBox.add(Box.createGlue());
+        unvoicedBox.add(Box.createGlue());
+        
+        JPanel voicedPanel = new JPanel();
+        voicedPanel.setLayout(new BorderLayout());
+        voicedPanel.add(voicedBox, BorderLayout.NORTH);
+        Box vbox = new Box(BoxLayout.X_AXIS);
+        JButton vcheck = new JButton("Check All");
+        vcheck.putClientProperty("JComponent.sizeVariant", "small");
+        vcheck.setFont(Style.SMALL_FONT());
+        vcheck.setHorizontalAlignment(SwingConstants.CENTER);
+        vcheck.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                for(int i = 0; i < voiced.length; i++)
+                    voiced[i].setSelected(true);
+                }
+            });
+        vbox.add(vcheck);
+        JButton vuncheck = new JButton("Uncheck All");
+        vuncheck.putClientProperty("JComponent.sizeVariant", "small");
+        vuncheck.setFont(Style.SMALL_FONT());
+        vuncheck.setHorizontalAlignment(SwingConstants.CENTER);
+        vuncheck.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                for(int i = 0; i < voiced.length; i++)
+                    voiced[i].setSelected(false);
+                }
+            });
+        vbox.add(vuncheck);
+        vbox.add(Box.createGlue());
+        voicedPanel.add(vbox, BorderLayout.CENTER);
+
+        JPanel unvoicedPanel = new JPanel();
+        unvoicedPanel.setLayout(new BorderLayout());
+        unvoicedPanel.add(unvoicedBox, BorderLayout.NORTH);
+        Box ubox = new Box(BoxLayout.X_AXIS);
+        JButton ucheck = new JButton("Check All");
+        ucheck.putClientProperty("JComponent.sizeVariant", "small");
+        ucheck.setFont(Style.SMALL_FONT());
+        ucheck.setHorizontalAlignment(SwingConstants.CENTER);
+        ucheck.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                for(int i = 0; i < voiced.length; i++)
+                    unvoiced[i].setSelected(true);
+                }
+            });
+        ubox.add(ucheck);
+        JButton uuncheck = new JButton("Uncheck All");
+        uuncheck.putClientProperty("JComponent.sizeVariant", "small");
+        uuncheck.setFont(Style.SMALL_FONT());
+        uuncheck.setHorizontalAlignment(SwingConstants.CENTER);
+        uuncheck.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                for(int i = 0; i < voiced.length; i++)
+                    unvoiced[i].setSelected(false);
+                }
+            });
+        ubox.add(uuncheck);
+        JButton likevoiced = new JButton("Like Voiced");
+        likevoiced.putClientProperty("JComponent.sizeVariant", "small");
+        likevoiced.setFont(Style.SMALL_FONT());
+        likevoiced.setHorizontalAlignment(SwingConstants.CENTER);
+        likevoiced.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                for(int i = 0; i < voiced.length; i++)
+                    unvoiced[i].setSelected(voiced[i].isSelected());
+                }
+            });
+        ubox.add(likevoiced);
+        ubox.add(Box.createGlue());
+        unvoicedPanel.add(ubox, BorderLayout.CENTER);
+        
+        IconDisplay iconDisplay = new IconDisplay(null, ALGORITHM_ICONS, this, "algorithmpresetnumber", 140, 140, false);
+        iconDisplay.update("algorithmpresetnumber", getModel());
+        JPanel iconPanel = new JPanel();
+        iconPanel.setLayout(new BorderLayout());
+        iconPanel.add(iconDisplay, BorderLayout.EAST);
+                        
+        boolean result = showMultiOption(YamahaFS1R.this, new String[] { "<html>Current<br>Algorithm</html>", "", "<html>Voiced<br>Operators</html>", "", "<html>Unvoiced<br>Operators</html>"}, 
+            new JComponent[] { iconPanel, new JPanel(), voicedPanel, new JPanel(), unvoicedPanel }, "Mute Operators", "<html>Selected operators temporarily have Output Level = 0 and Fseq = OFF.<br>Other operators have Output Level and Fseq restored.</html>");
+        
+        if (result)
+            {
+            int[] vswitch = new int[8];
+            int[] uswitch = new int[8];
+
+            for(int op = 0; op < 8; op++)
+                {
+                muteOperator(op, true, voiced[op].isSelected());
+                muteOperator(op, false, unvoiced[op].isSelected());
+                vswitch[op] = (voiced[op].isSelected() ? 0 : model.get("operator" + (op + 1) + "v" + "switch"));
+                uswitch[op] = (unvoiced[op].isSelected()? 0 : model.get("operator" + (op + 1) + "u" + "switch"));
+                }
+            setFseqSwitches(vswitch, uswitch);
             }
         }
 
@@ -321,8 +441,8 @@ public class YamahaFS1R extends Synth
             });
         menu.add(current);
         
-         menu.addSeparator();
-       JMenuItem initialize = new JMenuItem("Set Up Test Performance for Part 1 with Filter");
+        menu.addSeparator();
+        JMenuItem initialize = new JMenuItem("Set Up Test Performance for Part 1 with Filter");
         initialize.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -332,7 +452,7 @@ public class YamahaFS1R extends Synth
             });
         menu.add(initialize);
         
-     	initialize = new JMenuItem("Set Up Test Performance for Part 1 without Filter");
+        initialize = new JMenuItem("Set Up Test Performance for Part 1 without Filter");
         initialize.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -352,7 +472,7 @@ public class YamahaFS1R extends Synth
             });
         menu.add(focus);
         
-     	focus = new JMenuItem("Audition Part without Filter");
+        focus = new JMenuItem("Audition Part without Filter");
         focus.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -362,7 +482,7 @@ public class YamahaFS1R extends Synth
             });
         menu.add(focus);
         
-     	JMenuItem strip = new JMenuItem("Strip Effects");
+        JMenuItem strip = new JMenuItem("Strip Effects");
         strip.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -371,6 +491,16 @@ public class YamahaFS1R extends Synth
                 }
             });
         menu.add(strip);
+
+        JMenuItem mute = new JMenuItem("Mute Operators...");
+        mute.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                showMuteDialog();                
+                }
+            });
+        menu.add(mute);
         menu.addSeparator();
         
         ButtonGroup group = new ButtonGroup();
@@ -475,18 +605,18 @@ public class YamahaFS1R extends Synth
                             ((v && (op > 0)) || (u && (op < 0))))           // only copy voiced/unvoiced ops if the user requested it
                             {
                             if (p2 == 9) // "All"
-                            	{
-                            	for(int j = 1; j <= 8; j++)
-                            		{
-		                            int val2 = model.get(parameters[i]);
-		                            model.set(("operator" + j) + parameters[i].substring(9), val2);
-		                            }
-                            	}
+                                {
+                                for(int j = 1; j <= 8; j++)
+                                    {
+                                    int val2 = model.get(parameters[i]);
+                                    model.set(("operator" + j) + parameters[i].substring(9), val2);
+                                    }
+                                }
                             else
-                            	{
-	                            int val2 = model.get(parameters[i]);
-	                            model.set(("operator" + p2) + parameters[i].substring(9), val2);
-	                            }
+                                {
+                                int val2 = model.get(parameters[i]);
+                                model.set(("operator" + p2) + parameters[i].substring(9), val2);
+                                }
                             }
                         }
                                                                                 
@@ -601,9 +731,13 @@ public class YamahaFS1R extends Synth
         hbox.addLast(addFilter(Style.COLOR_B()));
         vbox.add(hbox);
 
-        vbox.add(addFilterEnvelope(Style.COLOR_B()));
-        vbox.add(addPitchEnvelope(Style.COLOR_A()));
-        
+        hbox = new HBox();
+        hbox.addLast(addFilterEnvelope(Style.COLOR_B()));
+        vbox.add(hbox);
+        hbox = new HBox();
+        hbox.addLast(addPitchEnvelope(Style.COLOR_A()));
+        vbox.add(hbox);
+
         hbox = new HBox();
         hbox.add(addLFO(1, Style.COLOR_B())); 
         hbox.addLast(addLFO(2, Style.COLOR_B())); 
@@ -617,7 +751,7 @@ public class YamahaFS1R extends Synth
         vbox2.add(addFMControl(Style.COLOR_C()));
         hbox.addLast(vbox2);
         vbox.add(hbox);
-
+        
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Common", soundPanel);
                         
@@ -762,8 +896,32 @@ public class YamahaFS1R extends Synth
         vbox.add(hbox);
         vbox.add(Strut.makeVerticalStrut(10));
         
+        
+        VBox buttons = new VBox();
+        PushButton button = new PushButton("\u2191")
+            {
+            public void perform()
+                {
+                int val = model.get("algorithmpresetnumber") + 1;
+                if (val <= 87) model.set("algorithmpresetnumber", val);
+                }
+            };
+        buttons.add(button);
+        button = new PushButton("\u2193")
+            {
+            public void perform()
+                {
+                int val = model.get("algorithmpresetnumber") - 1;
+                if (val >= 0) model.set("algorithmpresetnumber", val);
+                }
+            };
+        buttons.add(button);
+        
+        HBox extras = new HBox();
         comp = new LabelledDial("Algorithm", this, "algorithmpresetnumber", color, 0, 87, -1);
-        vbox.add(comp);
+        extras.add(comp);
+        extras.addLast(buttons);                
+        vbox.add(extras);
 
         model.removeMetricMinMax("algorithmpresetnumber");
                 
@@ -784,6 +942,7 @@ public class YamahaFS1R extends Synth
         params = CATEGORIES;
         comp = new Chooser("Category", this, "category", params);
         vbox.add(comp);
+
         hbox.add(vbox);
 
         comp = new LabelledDial("Feedback", this, "voicedfeedbacklevel", color, 0, 7);
@@ -799,8 +958,7 @@ public class YamahaFS1R extends Synth
         return category;
         }
 
-
-
+        
     public JComponent addLFO(int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
@@ -1499,13 +1657,16 @@ public class YamahaFS1R extends Synth
 
         final LabelledDial skirt = new LabelledDial("Skirt", this, "operator" + src + "v" + "spectralskirt", color, 0, 7);
 
-		final HBox extraContainer = new HBox();
-		
-        final CheckBox keySync = new CheckBox("Key Sync", this, "operator" + src + "v" + "keysync");
+        final HBox extraContainer = new HBox();
+                
+        CheckBox keySync = new CheckBox("Key Sync", this, "operator" + src + "v" + "keysync");
         
+        final HBox keySyncContainer = new HBox();
+        keySyncContainer.add(keySync);
+
         VBox vbox = new VBox();
-        params = OSC_MODES;
-        final Chooser mode = new Chooser("Mode", this, "operator" + src + "v" + "frequencyoscillatormode", params) 
+
+        final CheckBox mode = new CheckBox("Fixed", this, "operator" + src + "v" + "frequencyoscillatormode")
             {
             public void update(String key, Model model)
                 {
@@ -1513,18 +1674,41 @@ public class YamahaFS1R extends Synth
                 int val = model.get(key, 0);
                 boxesContainer.remove(boxes[0]);
                 boxesContainer.remove(boxes[1]);
-                boxesContainer.add(boxes[val]);
+                // Note that vspectralform may not exist yet
+                if (model.get("operator" + src + "v" + "spectralform", 0) == 7)  // formant
+                    {
+                    boxesContainer.add(boxes[1]);   // always fixed
+                    }
+                else
+                    {
+                    boxesContainer.add(boxes[val]);
+                    }
                 boxesContainer.revalidate();
                 boxesContainer.repaint();
                 }
             };
-            
-        final HBox modeContainer = new HBox();
-        modeContainer.addLast(mode);
+/*        
+          params = OSC_MODES;
+          final Chooser mode = new Chooser("Mode", this, "operator" + src + "v" + "frequencyoscillatormode", params) 
+          {
+          public void update(String key, Model model)
+          {
+          super.update(key, model);
+          int val = model.get(key, 0);
+          boxesContainer.remove(boxes[0]);
+          boxesContainer.remove(boxes[1]);
+          boxesContainer.add(boxes[val]);
+          boxesContainer.revalidate();
+          boxesContainer.repaint();
+          }
+          };
+*/
+        final VBox modeContainer = new VBox();
+        modeContainer.add(mode);
 
         params = WAVES;
         comp = new Chooser("Spectral Form", this, "operator" + src + "v" + "spectralform", params)
-        	{
+            {
             public void update(String key, Model model)
                 {
                 super.update(key, model);
@@ -1532,67 +1716,68 @@ public class YamahaFS1R extends Synth
                 
                 extraContainer.removeAll();
                 
-				modeContainer.removeLast();
+                modeContainer.removeAll();
+                keySyncContainer.removeAll();
                 if (val == 7)
-                	{
-                	modeContainer.addLast(Strut.makeStrut(mode));
-                	}
+                    {
+                    modeContainer.add(Strut.makeStrut(mode));
+                    keySyncContainer.add(Strut.makeStrut(keySync));
+                    }
                 else
-                	{
-                	modeContainer.addLast(mode);
-                	mode.repaint();
-                	}
+                    {
+                    modeContainer.add(mode);
+                    keySyncContainer.add(keySync);
+                    mode.repaint();
+                    }
                 modeContainer.revalidate();
                 modeContainer.repaint();
-                	
-                keySync.setEnabled(val != 7);	// fmt
-                	
-                if (val == 0)		// Sine
-                	{
-                	extraContainer.add(Strut.makeStrut(skirt));
-                	extraContainer.add(Strut.makeStrut(bandwidthResonance));
-                	extraContainer.add(Strut.makeStrut(frequencyNoteScaling));
-                	extraContainer.add(Strut.makeStrut(transpose));
-                	}
-                else if (val == 1 || val == 2 || val == 3 || val == 4)		// all1, all2, odd1, odd2
-                	{
-                	extraContainer.add(skirt);
-                	extraContainer.add(Strut.makeStrut(bandwidthResonance));
-                	extraContainer.add(Strut.makeStrut(frequencyNoteScaling));
-                	extraContainer.add(Strut.makeStrut(transpose));
-                	}
-                else if (val == 5 || val == 6)			// res1, res2
-                	{
-                	extraContainer.add(skirt);
-                	extraContainer.add(bandwidthResonance);
-                	extraContainer.add(Strut.makeStrut(frequencyNoteScaling));
-                	extraContainer.add(Strut.makeStrut(transpose));
-                	}
-                else //if (val == 7)			// fmt
-                	{
-                	extraContainer.add(skirt);
-                	extraContainer.add(bandwidthResonance);
-                	extraContainer.add(frequencyNoteScaling);
-                	extraContainer.add(transpose);
-                	}
+                keySyncContainer.revalidate();
+                keySyncContainer.repaint();
+                        
+//                keySync.setEnabled(val != 7); // fmt
+                        
+                if (val == 0)           // Sine
+                    {
+                    extraContainer.add(Strut.makeStrut(skirt));
+                    extraContainer.add(Strut.makeStrut(bandwidthResonance));
+                    extraContainer.add(Strut.makeStrut(frequencyNoteScaling));
+                    extraContainer.add(Strut.makeStrut(transpose));
+                    }
+                else if (val == 1 || val == 2 || val == 3 || val == 4)          // all1, all2, odd1, odd2
+                    {
+                    extraContainer.add(skirt);
+                    extraContainer.add(Strut.makeStrut(bandwidthResonance));
+                    extraContainer.add(Strut.makeStrut(frequencyNoteScaling));
+                    extraContainer.add(Strut.makeStrut(transpose));
+                    }
+                else if (val == 5 || val == 6)                  // res1, res2
+                    {
+                    extraContainer.add(skirt);
+                    extraContainer.add(bandwidthResonance);
+                    extraContainer.add(Strut.makeStrut(frequencyNoteScaling));
+                    extraContainer.add(Strut.makeStrut(transpose));
+                    }
+                else //if (val == 7)                    // fmt
+                    {
+                    extraContainer.add(skirt);
+                    extraContainer.add(bandwidthResonance);
+                    extraContainer.add(frequencyNoteScaling);
+                    extraContainer.add(transpose);
+                    }
+                mode.update("operator" + src + "v" + "frequencyoscillatormode", model); // so it updates fixed/ratio frequency
 
                 extraContainer.revalidate();
                 extraContainer.repaint();
                 }
-        	};
+            };
         vbox.add(comp);
-        vbox.add(modeContainer);
 
         HBox hbox2 = new HBox();
-        
-        // This is actually in COMMON 
-        
         comp = new CheckBox("Fseq", this, "operator" + src + "v" + "switch");
         hbox2.add(comp);
-
-		hbox2.add(keySync);
-		
-        vbox.add(hbox2);        
+        hbox2.addLast(modeContainer);
+        vbox.add(hbox2);
+        vbox.add(keySyncContainer);
         hbox.add(vbox);
 
         comp = new LabelledDial("Output", this, "operator" + src + "v" + "level", color, 0, 99);                // level
@@ -1624,14 +1809,14 @@ public class YamahaFS1R extends Synth
 
         hbox.add(extraContainer);
  
-       /*
-        hbox.add(frequencyNoteScaling);
+        /*
+          hbox.add(frequencyNoteScaling);
     
-        hbox.add(bandwidthResonance);
+          hbox.add(bandwidthResonance);
                                 
-        hbox.add(skirt);
+          hbox.add(skirt);
 
-        hbox.add(transpose);
+          hbox.add(transpose);
         */
     
         category.add(hbox, BorderLayout.CENTER);
@@ -1837,10 +2022,10 @@ public class YamahaFS1R extends Synth
     
 
 
-		final HBox extraContainer = new HBox();
-		
+        final HBox extraContainer = new HBox();
+                
 
-             final LabelledDial fineFixed = new LabelledDial("Frequency", this, "operator" + src + "u" + "frequencyfine", color, 0, 127)                     // frequencyfine
+        final LabelledDial fineFixed = new LabelledDial("Frequency", this, "operator" + src + "u" + "frequencyfine", color, 0, 127)                     // frequencyfine
             {
             public String map(int val)
                 {
@@ -1871,10 +2056,10 @@ public class YamahaFS1R extends Synth
         ((LabelledDial)frequencyScaling).addAdditionalLabel("Key Scaling");
 
 
-           VBox vbox = new VBox();
+        VBox vbox = new VBox();
         params = FREQ_MODES;
         comp = new Chooser("Mode", this, "operator" + src + "u" + "formantpitchmode", params)
-        	{
+            {
             public void update(String key, Model model)
                 {
                 super.update(key, model);
@@ -1882,29 +2067,29 @@ public class YamahaFS1R extends Synth
                 
                 extraContainer.removeAll();
 
-                if (val == 0)		// Normal
-                	{
-                	extraContainer.add(fineFixed);
-                	extraContainer.add(coarseFixed);
-                	extraContainer.add(frequencyScaling);
-                	}
-                else if (val == 2)		// Fundamental
-                	{
-                 	extraContainer.add(Strut.makeStrut(fineFixed));
-                	extraContainer.add(Strut.makeStrut(coarseFixed));
-                	extraContainer.add(Strut.makeStrut(frequencyScaling));
-               		}
-                else // if (val == 3)			// Formant
-                	{
-                	extraContainer.add(fineFixed);
-                	extraContainer.add(coarseFixed);
-                	extraContainer.add(Strut.makeStrut(frequencyScaling));
-                	}
-                	
+                if (val == 0)           // Normal
+                    {
+                    extraContainer.add(coarseFixed);
+                    extraContainer.add(fineFixed);
+                    extraContainer.add(frequencyScaling);
+                    }
+                else if (val == 2)              // Fundamental
+                    {
+                    extraContainer.add(Strut.makeStrut(coarseFixed));
+                    extraContainer.add(Strut.makeStrut(fineFixed));
+                    extraContainer.add(Strut.makeStrut(frequencyScaling));
+                    }
+                else // if (val == 3)                   // Formant
+                    {
+                    extraContainer.add(coarseFixed);
+                    extraContainer.add(fineFixed);
+                    extraContainer.add(Strut.makeStrut(frequencyScaling));
+                    }
+                        
                 extraContainer.revalidate();
                 extraContainer.repaint();
                 }
-        	};
+            };
         vbox.add(comp);
 
         // This is actually in COMMON 
@@ -1914,17 +2099,16 @@ public class YamahaFS1R extends Synth
         
         hbox.add(vbox);
 
+        comp = new LabelledDial("Output", this, "operator" + src + "u" + "level", color, 0, 99);
+        ((LabelledDial)comp).addAdditionalLabel("Level");
+        hbox.add(comp);
+
         comp = new LabelledDial("Transpose", this, "operator" + src + "u" + "transpose", color, 0, 48, 24)      // transpose
             {
             public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
     
-        comp = new LabelledDial("Output", this, "operator" + src + "u" + "level", color, 0, 99);
-        ((LabelledDial)comp).addAdditionalLabel("Level");
-        hbox.add(comp);
-
-
 
         extraContainer.add(coarseFixed);
         extraContainer.add(fineFixed);
@@ -2627,17 +2811,17 @@ public class YamahaFS1R extends Synth
     // common = 0, +op is voiced, -op is unvoiced
     public int getOperator(String key)
         {
-    	if (key.startsWith("operator"))
+        if (key.startsWith("operator"))
             {
             // these are common
-			if (key.startsWith("operator17") || key.equals("operator8vswitch") || key.equals("operator8uswitch"))
-				{
-				return 0;
-				}
-			else if (key.endsWith("levelcorrection"))              // these are common
-				{
-				return 0;
-				}
+            if (key.startsWith("operator17") || key.equals("operator8vswitch") || key.equals("operator8uswitch"))
+                {
+                return 0;
+                }
+            else if (key.endsWith("levelcorrection"))              // these are common
+                {
+                return 0;
+                }
             else if (key.charAt(9) == 'u')
                 {
                 return 0 - StringUtility.getFirstInt(key);
@@ -2745,12 +2929,15 @@ public class YamahaFS1R extends Synth
                     {
                     return extractAddress("operator" + op + "v" + "frequencycoarse");
                     }
-                else if (baseKey.equals("frequencycoarsefixed") && model.get("operator" + op + "v" + "frequencyoscillatormode") == 1)
+                else if (baseKey.equals("frequencycoarsefixed") && 
+                        ((model.get("operator" + op + "v" + "frequencyoscillatormode") == 1) ||
+                        (model.get("operator" + op + "v" + "spectralform", 0) == 7)))                          // formant forces this to be be fixed
                     {
                     return extractAddress("operator" + op + "v" + "frequencycoarse");
                     }
                 else
                     {
+                    new Throwable().printStackTrace();
                     return -1;
                     }
                 }
@@ -2760,7 +2947,9 @@ public class YamahaFS1R extends Synth
                     {
                     return extractAddress("operator" + op + "v" + "frequencyfine");
                     }
-                else if (baseKey.equals("frequencyfinefixed") && model.get("operator" + op + "v" + "frequencyoscillatormode") == 1)
+                else if (baseKey.equals("frequencyfinefixed") && 
+                        ((model.get("operator" + op + "v" + "frequencyoscillatormode") == 1) ||
+                        (model.get("operator" + op + "v" + "spectralform", 0) == 7)))
                     {
                     return extractAddress("operator" + op + "v" + "frequencyfine");
                     }
@@ -2826,7 +3015,7 @@ public class YamahaFS1R extends Synth
                 return  (model.get("filteregattacktimevel") << 3) |
                     (model.get("filteregtimescale") << 0);
                 }
-			// note that for this if-statment, op will be wrong but that's okay, we don't need it
+            // note that for this if-statment, op will be wrong but that's okay, we don't need it
             else if (key.equals("operator17uswitch"))
                 {
                 return  (model.get("operator1uswitch") << 0) |
@@ -2837,7 +3026,7 @@ public class YamahaFS1R extends Synth
                     (model.get("operator6uswitch") << 5) |
                     (model.get("operator7uswitch") << 6);
                 }
-			// note that for this if-statment, op will be wrong but that's okay, we don't need it
+            // note that for this if-statment, op will be wrong but that's okay, we don't need it
             else if (key.equals("operator17vswitch"))
                 {
                 return  (model.get("operator1vswitch") << 0) |
@@ -2943,7 +3132,81 @@ public class YamahaFS1R extends Synth
             }
         }
 
-                
+
+    void muteOperator(int op, boolean voiced, boolean mute)
+        {
+        // F0 43 1n 5E 6p mm ll vv vv F7
+        // n: id
+        // p: part
+        // mm: operator
+        // ll: parameter
+        // vv vv:   00 mute 
+        byte[] data = null;
+        if (voiced)
+            {
+            data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
+                (byte)(96 + part),                      // HIGH: part and common
+                (byte)op,
+                (byte)0x16,                                                         // voiced total level
+                (byte)0,
+                (byte)(mute ? 0 : model.get("operator" + (op + 1) + "vlevel")),
+                (byte)0xF7 };      
+            }
+        else
+            {
+            data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
+                (byte)(96 + part),                      // HIGH: part and common
+                (byte)op,
+                (byte)0x2E,                                                                 //unvoiced total level
+                (byte)0,
+                (byte)(mute ? 0 : model.get("operator" + (op + 1) + "ulevel")),
+                (byte)0xF7 };
+            }
+        tryToSendSysex(data);
+        }        
+
+    void setFseqSwitches(int[] voiced, int[] unvoiced)
+        {
+        // F0 43 1n 5E 4p 00 ll vv vv F7
+        // n: id
+        // p: part
+        // ll: parameter
+        // vv vv:   00 mute 
+        byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
+            (byte)(64 + part),                      // HIGH: part and common
+            (byte)0,
+            (byte)0x28,                                                             // voiced switch 8
+            (byte)0,
+            (byte)voiced[7],
+            (byte)0xF7 };      
+        tryToSendSysex(data);
+        data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
+            (byte)(64 + part),                      // HIGH: part and common
+            (byte)0,
+            (byte)0x29,                                                             // voiced switches 1..7
+            (byte)0,
+            (byte)((voiced[0]) | (voiced[1] << 1) | (voiced[2] << 2) | (voiced[3] << 3) | (voiced[4] << 4) | (voiced[5] << 5) | (voiced[6] << 6)),
+            (byte)0xF7 };      
+        tryToSendSysex(data);
+        data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
+            (byte)(64 + part),                      // HIGH: part and common
+            (byte)0,
+            (byte)0x2A,                                                             // unvoiced switch 8
+            (byte)0,
+            (byte)unvoiced[7],
+            (byte)0xF7 };      
+        tryToSendSysex(data);
+        data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
+            (byte)(64 + part),                      // HIGH: part and common
+            (byte)0,
+            (byte)0x2B,                                                             // unvoiced switches 1..7
+            (byte)0,
+            (byte)((unvoiced[0]) | (unvoiced[1] << 1) | (unvoiced[2] << 2) | (unvoiced[3] << 3) | (unvoiced[4] << 4) | (unvoiced[5] << 5) | (unvoiced[6] << 6)),
+            (byte)0xF7 };      
+        tryToSendSysex(data);
+        }        
+            
+    
     public Object[] emitAll(String key)
         {
         if (key.equals("number")) return new Object[0];  // this is not emittable
@@ -2960,7 +3223,7 @@ public class YamahaFS1R extends Synth
                 int LSB = (byte)(name.charAt(i));
                 byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
                     (byte)(64 + part),                      // HIGH: part and common
-                    (byte)0,                                        // MEDIUM : operator (common)
+                    (byte)0,                                // MEDIUM : operator (common)
                     (byte)ADDRESS,                          // LOW: relative address
                     (byte)0,
                     (byte)LSB, 
@@ -3296,10 +3559,21 @@ public class YamahaFS1R extends Synth
         return (byte)((128 - checksum) & 127);
         }
 
+    public void performRequestDump(Model tempModel, boolean changePatch)
+        {
+        if (tempModel == null)
+            tempModel = getModel();
+
+        // We ALWAYS change the patch no matter what.  We have to.  We have to force it for merging
+        changePatch(tempModel);
+        tryToSendSysex(requestDump(tempModel));
+        }
+
     public byte[] requestDump(Model tempModel) 
         {
-        // we will have already done a change patch, so we should be able to simply....
-        return requestCurrentDump();
+        // since performRequestDump ALWAYS changes the patch, we might
+        // as well just call requestCurrentDump() here 
+        return requestCurrentDump(); 
         }
     
     // Will request the current part
@@ -3568,5 +3842,5 @@ public class YamahaFS1R extends Synth
     // bank's worth of writes -- but then it's very slow to process through all of them, constantly displaying
     // "Bulk Received".  With about a 170ms delay or so, this message disappears right when Edisyn finishes,
     // so it's a good compromise from a UI standpoint.
-	public int getPauseAfterWritePatch() { return 170; }		// don't know if we need any
+    public int getPauseAfterWritePatch() { return 170; }            // don't know if we need any
     }

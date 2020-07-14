@@ -41,19 +41,19 @@ public class YamahaFS1RMulti extends Synth
     };
 
 
-	// Default names for all voices in banks A...K.  Internal bank is not listed.
+    // Default names for all voices in banks A...K.  Internal bank is not listed.
     public static final String[][] VOICES = {
-        { "Pf Ballad EP", "Pf Clavmann", "Pf Clavmann 2", "Pf Digi Clav", "Pf DX7Classic", "Pf Mtrial Pno", "Pf MtrialPno2", "Pf MtrialPno3", "Pf Real Rose", "Pf Rose Att", "Pf Rose Sft1", "Pf Rose Sft2", "Pf Suit Rose", "Pf Velvt Rose", "Pf 4 Op Clav", "Cp Da Comp", "Cp Synth Bell", "Cp Tabla", "Or B3JazzComp", "Or B3Perc3rd", "Or DrawOrgn", "Or DrawOrgn2", "Or DrawOrgn3", "Or Fs-Organ", "Or Full Drawb", "Or Ham Organ", "Or OR-Right", "Or Organ Fseq", "Or The Lounge", "Gt Jazz Gtr", "Gt Stratmann", "Ba Acid King", "Ba Ana Bass", "Ba AttackBass", "Ba B-Rave", "Ba Bassline 1", "Ba Bassline 2", "Ba BlegBass", "Ba DidgBass", "Ba Dry Syn", "Ba FM Bass", "Ba FundaBass", "Ba HyperFuzz", "Ba JungleBass", "Ba LoFiAcid", "Ba Matze", "Ba Moon Bass", "Ba Phone Bass", "Ba PlastBass", "Ba PunchBass", "Ba Syn Bass", "Ba Technical", "St FairyStrgs", "St JMichel", "St OB String", "St ResoStrgs", "St Saws", "St SloDu Saws", "St SS String", "St SS String2", "En HitMatrial", "Br ANSweep", "Br FS Brass", "Br Hook", "Br ObiehornL", "Br ObiehornR", "Br Quackz", "Br Stab", "Br Swell", "Pi Kuchibue", "Ld Dual Saws2", "Ld DualSquare", "Ld Earth Lead", "Ld Fetish", "Ld Glass Harp", "Ld Glider", "Ld Lead Saw", "Ld Mitosis", "Ld Retronic", "Ld Score Pad", "Ld Tech Lead", "Ld Trance Csm", "Ld Voc Lead", "Pd Add Pad", "Pd Beauty", "Pd Brassetra", "Pd CineSweep", "Pd Fat Pad", "Pd FormantPad", "Pd FormSweep1", "Pd FormSweep2", "Pd FormSweep3", "Pd FormSweep4", "Pd FS Moby II", "Pd Heimdal", "Pd LFO Pad", "Pd Moving", "Pd Nebulous", "Pd OBx Pad", "Pd OBx Pad2", "Pd Octavian", "Pd Paddy", "Pd Qwerty", "Pd Saws&Hold", "Pd Saws2", "Pd SleepyPad", "Pd Spacy Pad", "Pd Starship", "Pd SuperPad", "Pd SweepersVx", "Pd Tech Lead2", "Pd The Seeker", "Pd The Shadow", "Pd Thermal", "Pd VocPhaseA", "Pd Win Pad", "Pd Wind", "Fx Caravan", "Fx DippeDut", "Fx Furry Bell", "Fx Glacial", "Fx Miracle", "Fx MizuGuitar", "Fx Morph", "Fx Nightmare", "Fx RhythmLoop", "Pd Sho", "Fx Spiral" },
-        { "Et BagPipe", "Et BagPipe-dl", "Et Gamelan", "Et Gamelan2", "Et Mukkuri", "Et SuikinStr", "Et Thai Boxin", "Et ThumKalimb", "Pc Big-Gamlan", "Pc Eth-Drum1", "Pc Eth-Drum2", "Se Beep VoX", "Se Dark", "Se ForceField", "Se Ghost", "Se Ghost2", "Se Magic", "Se Night", "Se Open Fseq", "Se RadioNoise", "Se Reso SE", "Se Saucer", "Se Scaling SE", "Se Slow Atk", "Se SpaceBomb", "Se WalkinRobo", "Se Warp1", "Se Warp2", "Dr 09 OpenHat", "Dr 09ClHatBel", "Dr Beat BD", "Dr Beat Cym", "Dr Beat SD", "Dr Beat Zap", "Dr Boom", "Dr Choos", "Dr ClosedHat1", "Dr ClosedHat2", "Dr DanceKick", "Dr FS-Kick1", "Dr FS-Kick2", "Dr FS-Kick3", "Dr Hatty", "Dr Hihat", "Dr Nu Kick 1", "Dr Nu Kick 2", "Dr Nu Kick 3", "Dr Nu Snare 1", "Dr Nu Snare 2", "Dr Nu Snare 3", "Dr Open Hat 1", "Dr Open Hat 2", "Dr PowerKick", "Dr Snare", "Dr Tchak", "Dr Tech BD", "Dr Tech HH", "Dr Tech Rim", "Dr Tech SD", "Dr TR Kick", "Dr TR Snare", "Sc DigiSQ1R", "Sc DigiSQ3", "Sc DogBytes", "Sc Fast&Cheap", "Sc Fmt-Pluck", "Sc FunKey", "Sc Funky Tech", "Sc Fusion", "Sc Metallic", "Sc NoiseDecay", "Sc Raymond", "Sc SawSaw", "Sc Snow Decay", "Sc Snow Pixy", "Sc Spellbound", "Sc Syncorgano", "Sc Thin Mini", "Sc VeloSweep", "Sc Vox Tron", "Sc Zansyo", "Sc Zapper", "Vo Celebratn", "Vo Eh Human", "Vo FairyVoice", "Vo FormSweep", "Vo FS-Choir", "Vo FS-Sweep", "Vo Homy", "Vo Human", "Vo Ih Human", "Vo Man_Eh", "Vo NoisyVce", "Vo Oh Human", "Vo Shaman Woo", "Vo Spacy Aaah", "Vo Spacy FX", "Vo SpacySweep", "Vo SweepyVce", "Vo VocoSweep", "Vo VocPhaseB", "Sq AN Arp 1", "Sq AN Arp 2", "Sq Compu Saw", "Sq DigiSQ1", "Sq DigiSQ2", "Sq Drw-EuroDr", "Sq Hard Pulse", "Sq Harry", "Sq New Key", "Sq Power Key", "Sq RythmLoop2", "Sq Saw Pad", "Sq TekBass", "-- FseqBase01", "-- FseqBase02", "-- FseqBase03", "-- FseqBase04", "-- FseqBase05", "-- FseqBase06", "-- FseqBase07", "-- FseqBase08", "-- FseqBase09", "-- FseqBase10", "-- FseqBase11", "-- FseqBase12", "-- FseqBase13", "-- FseqBase14" },
-        { "Pf FortePno 1", "Pf FortePno 2", "Pf MM-Piano 1", "Pf MM-Piano 2", "Pf Pianotone1", "Pf Pianotone2", "Pf Pianotone3", "Pf 5thPiano 1", "Pf 5thPiano 2", "Pf PrprdPiano", "Pf Claviano", "Pf BrightPno1", "Pf BrightPno2", "Pf BrightPno3", "Pf Dark Piano", "Pf Digi Piano", "Pf PianoDrops", "Pf PowerPiano", "Pf CP70 1", "Pf CP70 2", "Pf CP70 3", "Pf El.Grand 1", "Pf El.Grand 2", "Pf El.Grand 3", "Pf El.Grand 4", "Pf MM-ElGnd 1", "Pf MM-ElGnd 2", "Pf E.Piano 1", "Pf E.Piano 2", "Pf E.Piano 3", "Pf E.Piano 4", "Pf E.Piano 5", "Pf E.Piano 6", "Pf E.Piano 7", "Pf E.Piano 8", "Pf E.Piano 9", "Pf E.Piano 10", "Pf E.Piano 11", "Pf E.Piano 12", "Pf E.Piano 13", "Pf E.Piano 14", "Pf E.Piano 15", "Pf E.Piano 16", "Pf E.Piano 17", "Pf Aclectic", "Pf DX-Road 1", "Pf DX-Road 2", "Pf DX-Road 3", "Pf DX-Road 4", "Pf DX-Road 5", "Pf BrightEP 1", "Pf BrightEP 2", "Pf EP 1967", "Pf EP 1970", "Pf EP 1980", "Pf EP 1985", "Pf Soft EP 1", "Pf Soft EP 2", "Pf Soft EP 3", "Pf Hard EP 1", "Pf Hard EP 2", "Pf Hard EP 3", "Pf Hard EP 4", "Pf Clicky EP", "Pf Digitine", "Pf Woody EP", "Pf Metaltine", "Pf Tinesquawk", "Pf FullTine 1", "Pf FullTine 2", "Pf Wurli EP", "Pf Wurli Road", "Pf Dark Wurli", "Pf Big Wurlt", "Pf Andrian", "Pf Blustig", "Pf Woodmetal", "Pf CastePiano", "Pf Chorus EP", "Pf BigJazzyEP", "Pf ClearElPno", "Pf NiteclubEP", "Pf CosaRosa", "Pf DX-Ragtime", "Pf Digi Poly", "Pf Duke EP", "Pf DynoRoad", "Pf Clavarpsi", "Pf Wack EP", "Pf HollowKeys", "Pf HonkyTonk1", "Pf HonkyTonk2", "Pf PotlidKeyz", "Pf Knock EP", "Pf Knock Wack", "Pf Mark III", "Pf XtremeTine", "Pf Mod ElPno", "Pf 3D Road", "Pf PinchedEP", "Pf No Tines", "Pf Old Jazz", "Pf Politti", "Pf Pop Piano", "Pf Prc ElPno", "Pf Prds Piano", "Pf Ratio Dob", "Pf ThinnerEP", "Pf Rezzo EP", "Pf RubbaRoad", "Pf SawBellEP", "Pf QuikPlayEP", "Pf Loud Piano", "Pf Urban", "Pf Vics EP", "Pf DX Classic", "Pf ToyPiano 1", "Pf ToyPiano 2", "Pf ToyPiano 3", "Pf ToyPiano 4", "Pf Plasticky", "Pf Harpsi 1", "Pf Harpsi 2", "Pf Harpsi 3", "Pf Harpsi 4", "Pf Harpsi 5", "Pf Harpsi 6", "Pf Harpsi 7" },
-        { "Pf Harpsi 8", "Pf Harpsi 9", "Pf HarpsiWire", "Pf AD 1600s 1", "Pf AD 1600s 2", "Pf AD 1900s", "Pf Caffeine", "Pf RazorWire", "Pf Cembalim", "Pf Cembalo", "Pf ElecHarpsi", "Pf Syn Harpsi", "Pf DX-Clavi 1", "Pf DX-Clavi 2", "Pf DX-Clavi 3", "Pf DX-Clavi 4", "Pf DX-Clavi 5", "Pf DX-Clavi 6", "Pf DX-Clavi 7", "Pf MM-Clavi 1", "Pf MM-Clavi 2", "Pf MM-Clavi 3", "Pf BrightClv1", "Pf BrightClv2", "Pf BasoClavi", "Pf ChorusClav", "Pf Clavecin", "Pf Clavi Comp", "Pf ClaviExcel", "Pf ClaviPluck", "Pf ClaviStaff", "Pf Mute Clavi", "Pf Revinett", "Pf SkeltonClv", "Cp Celesta 1", "Cp Celesta 2", "Cp Celesta 3", "Cp Celesta 4", "Cp MM-Celesta", "Cp Halloween", "Cp Glocken 1", "Cp Glocken 2", "Cp Glocken 3", "Cp Glocken 4", "Cp Glocken 5", "Cp Glocken 6", "Cp HamerGlock", "Cp Magiglokk", "Cp AnvilGlock", "Cp MetalGlock", "Cp Perc Glock", "Cp Glokenring", "Cp SynGlock 1", "Cp SynGlock 2", "Cp MusicBox 1", "Cp MusicBox 2", "Cp MusicBox 3", "Cp MusicBox 4", "Cp MusicBox 5", "Cp MusicBox 6", "Cp MusicBox 7", "Cp MusicBox 8", "Cp MusicBox 9", "Cp MusicBox10", "Cp DX-Vibe 1", "Cp DX-Vibe 2", "Cp DX-Vibe 3", "Cp DX-Vibe 4", "Cp MM-Vibe 1", "Cp MM-Vibe 2", "Cp LFO Vibe", "Cp Vocal Vibe", "Cp Vibetron", "Cp VibraPhone", "Cp DX-Marimb1", "Cp DX-Marimb2", "Cp DX-Marimb3", "Cp DX-Marimb4", "Cp DX-Marimb5", "Cp DX-Marimb6", "Cp DX-Marimb7", "Cp TineMallet", "Cp Thumbpick", "Cp EchoMalet1", "Cp EchoMalet2", "Cp EchoMalet3", "Cp Congorimba", "Cp Bamburimba", "Cp BrightMrmb", "Cp Guitarimba", "Cp MellowMrmb", "Cp Metal Mrmb", "Cp DX-Xylo 1", "Cp DX-Xylo 2", "Cp DX-Xylo 3", "Cp DX-Xylo 4", "Cp DX-Xylo 5", "Cp DX-Xylo 6", "Cp Dual Xylo", "Cp Xylo Log", "Cp Syn Xylo", "Cp Digi Xylo", "Cp DX-Bell 1", "Cp DX-Bell 2", "Cp DX-Bell 3", "Cp DX-Bell 4", "Cp DX-Bell 5", "Cp DX-Bell 6", "Cp DX-Bell 7", "Cp DX-Bell 8", "Cp DX-Bell 9", "Cp DX-Bell 10", "Cp DX-Bell 11", "Cp DX-Bell 12", "Cp SparklBell", "Cp Wire Bell", "Cp DualSparkl", "Cp BellGlassy", "Cp MM-Bell", "Cp Crystal 1", "Cp Crystal 2", "Cp SoftBell 1", "Cp SoftBell 2", "Cp Bell Pluck", "Cp Blow Bell", "Cp Carillon", "Cp BellKeyzis", "Cp Digi Log" },
-        { "Cp DumBells", "Cp MellowBell", "Cp Mini Bell", "Cp Child Bell", "Cp PPP Thing", "Cp Stonemetal", "Cp Syn Chime", "Cp Air Bell", "Cp WrapRound", "Cp TempleBel1", "Cp TempleBel2", "Cp TempleBel3", "Cp TempleBel4", "Cp TempleBel5", "Cp DX-Dlcm 1", "Cp DX-Dlcm 2", "Cp DX-Dlcm 3", "Cp Frozentime", "Cp MetalDlcmr", "Cp Silk Road", "Or Full Organ", "Or DrawOrgan1", "Or DrawOrgan2", "Or DrawOrgan3", "Or DrawOrgan4", "Or DrawOrgan5", "Or DrawOrgan6", "Or DrawOrgan7", "Or DrawOrgan8", "Or DrawOrgan9", "Or DrawOrgn10", "Or DrawOrgn11", "Or DrawOrgn12", "Or DrawOrgn13", "Or DrawOrgn14", "Or DrawOrgn15", "Or DrawOrgn16", "Or Organsynth", "Or ChorusOrgn", "Or RotaryOrgn", "Or CirkusOrgn", "Or JazzDrwbr", "Or Keyclick", "Or VibraOrgan", "Or Farf Out", "Or Grinder", "Or JazzOrgan1", "Or JazzOrgan2", "Or PercOrgan1", "Or PercOrgan2", "Or PercOrgan3", "Or PercOrgan4", "Or PercOrgan5", "Or PercOrgan6", "Or PercOrgan7", "Or PercOrgan8", "Or PercOrgan9", "Or PercOrgn10", "Or PercOrgn11", "Or PercOrgn12", "Or PercOrgn13", "Or PercOrgn14", "Or PercOrgn15", "Or PercOrgn16", "Or PercOrgn17", "Or XtraPerc", "Or Road Organ", "Or Fluteorgan", "Or ClickNoise", "Or Novalis", "Or TouchOrgan", "Or RockOrgan1", "Or RockOrgan2", "Or RockOrgan3", "Or RockOrgan4", "Or RockOrgan5", "Or RockOrgan6", "Or RockOrgan7", "Or RockOrgan8", "Or RockOrgan9", "Or RockOrgn10", "Or RockOrgn11", "Or RockOrgn12", "Or RockOrgn13", "Or RockOrgn14", "Or RockOrgn15", "Or Vox Organ", "Or SynOrgan 1", "Or SynOrgan 2", "Or PlasticOrg", "Or PipeOrgan1", "Or PipeOrgan2", "Or PipeOrgan3", "Or PipeOrgan4", "Or PipeOrgan5", "Or PipeOrgan6", "Or PipeOrgan7", "Or PipeOrgan8", "Or TheatreOrg", "Or SmallPipes", "Or ChorusPipe", "Or Wedding", "Or DX-Chrch 1", "Or DX-Chrch 2", "Or BrightOrgn", "Or TamePipe", "Or PuffOrgan1", "Or PuffOrgan2", "Or Late Down", "Or SoftReedOr", "Or SteamOrgan", "Or StreetOrgn", "Or DX-Acrd 1", "Or DX-Acrd 2", "Or DX-Acrd 3", "Or DX-Acrd 4", "Or DX-Acrd 5", "Or DX-Acrd 6", "Or DX-TngAc", "Or DX-Hmnc 1", "Or DX-Hmnc 2", "Or DX-Hmnc 3", "Or DX-Hmnc 4", "Or Chromonica", "Or FM-Hmnc 1", "Or FM-Hmnc 2", "Or Bluesharp", "Or Buzzharp" },
-        { "Gt DX-AcstGt1", "Gt DX-AcstGt2", "Gt DX-AcstGt3", "Gt DX-AcstGt4", "Gt DX-AcstGt5", "Gt GuitarBell", "Gt LuteGuitar", "Gt DX-PickGt1", "Gt DX-PickGt2", "Gt DX-PickGt3", "Gt DX-PickGt4", "Gt DX-PickGt5", "Gt DX-PickGt6", "Gt DX-PickGt7", "Gt DX-PickGt8", "Gt Synhalon", "Gt Picksynth", "Gt Compitar", "Gt Stratish", "Gt Banjitar", "Gt Touch Mute", "Gt Firenze", "Gt Folknik", "Gt FunkyPluck", "Gt Guitar Box", "Gt Long Nail", "Gt Pianatar", "Gt RhythmPluk", "Gt SteelyPick", "Gt TiteGuitar", "Gt DX-JazzGt1", "Gt DX-JazzGt2", "Gt DX-JazzGt3", "Gt DX-JazzGt4", "Gt DX-JazzGt5", "Gt Guitorgan", "Gt DX-ClGt 1", "Gt DX-ClGt 2", "Gt DX-ClGt 3", "Gt DX-ClGt 4", "Gt DX-ClGt 5", "Gt DX-ClGt 6", "Gt DX-ClGt 7", "Gt DX-ClGt 8", "Gt DX-ClGt 9", "Gt DX-ClGt 10", "Gt DX-ClGt 11", "Gt DX-ClGt 12", "Gt Buzzstring", "Gt DX-MuteGt1", "Gt DX-MuteGt2", "Gt DX-MuteGt3", "Gt DX-MuteGt4", "Gt Heavy Gage", "Gt DX-OvDrGt", "Gt DX-DistGt1", "Gt DX-DistGt2", "Gt DX-DistGt3", "Gt DX-DistGt4", "Gt DX-DistGt5", "Gt Stortion1", "Gt Pluckoww", "Gt Stortion2", "Gt FuzzGuitar", "Ba DX-WoodBa1", "Ba DX-WoodBa2", "Ba DX-WoodBa3", "Ba DX-WoodBa4", "Ba DX-WoodBa5", "Ba DX-WoodBa6", "Ba DX-WoodBa7", "Ba DarkWodBa1", "Ba DarkWodBa2", "Ba BoogieBass", "Ba BassLegend", "Ba DX-FngrBa1", "Ba DX-FngrBa2", "Ba DX-FngrBa3", "Ba DX-FngrBa4", "Ba Fusit Bass", "Ba FingerPick", "Ba HardFinger", "Ba Harm Bass", "Ba Inorganic", "Ba Nasty Bass", "Ba SkweekBass", "Ba DX-PickBa1", "Ba DX-PickBa2", "Ba DX-PickBa3", "Ba DX-PickBa4", "Ba Bass Magic", "Ba Chiff Bass", "Ba Comped EB", "Ba Metal Bass", "Ba Owl Bass", "Ba Pick Pluck", "Ba Plektrumbs", "Ba Wired Bass", "Ba FretlesBa1", "Ba FretlesBa2", "Ba FretlesBa3", "Ba FretlesBa4", "Ba FretlesBa5", "Ba SlapString", "Ba Lite Slap", "Ba RoundWound", "Ba ImpactBass", "Ba Afresh", "Ba WireString", "Ba Clakwire", "Ba SuperBass1", "Ba SuperBass2", "Ba DigiBass 1", "Ba DigiBass 2", "Ba Digit Bass", "Ba Draft Bass", "Ba Brainacus", "Ba DX-SynBa 1", "Ba DX-SynBa 2", "Ba DX-SynBa 3", "Ba DX-SynBa 4", "Ba DX-SynBa 5", "Ba DX-SynBa 6", "Ba DX-SynBa 7", "Ba DX-SynBa 8", "Ba DX-SynBa 9", "Ba AnalogBass", "Ba Nharmonik" },
-        { "Ba BassNovo", "Ba BassResWp", "Ba Cutmandu", "Ba DX-Bass 1", "Ba DX-Bass 2", "Ba DX-Bass 3", "Ba DX-Bass 4", "Ba DX-Bass 5", "Ba DX-Bass 6", "Ba WireBass 1", "Ba WireBass 2", "Ba HardDXBass", "Ba SmakaBass", "Ba AnaBass 1", "Ba AnaBass 2", "Ba AnaBass 3", "Ba 81Z Bass", "Ba DiscBass 1", "Ba DiscBass 2", "Ba Hop Bass 1", "Ba Hop Bass 2", "Ba After 88", "Ba Cable Bass", "Ba Wood Rez", "Ba EazyAction", "Ba ExciteBass", "Ba PrkussBass", "Ba Flapstick", "Ba Jackson", "Ba NipponBass", "Ba Bass Knock", "Ba Ana Stevie", "Ba Munkhen", "Ba Perc Bass", "Ba Remark", "Ba SmoothBass", "Ba Ana Knock", "Ba Jaco Syn", "Ba Werksfunk", "Ba ZedRubba", "St DX-Violin1", "St DX-Violin2", "St DX-Violin3", "St DX-Violin4", "St Violinz", "St DX-Viola 1", "St DX-Viola 2", "St DX-Viola 3", "St DX-Cello 1", "St DX-Cello 2", "St DX-Cello 3", "St DX-Cello 4", "St Rosin", "St DX-Str 1", "St DX-Str 2", "St DX-Str 3", "St DX-Str 4", "St DX-Str 5", "St DX-Str 6", "St DX-Str 7", "St DX-Str 8", "St DX-Str 9", "St DX-Str 10", "St DX-Str 11", "St DX-Str 12", "St DX-Str 13", "St Quick Arco", "St MidString1", "St MidString2", "St LowString1", "St LowString2", "St MM-String", "St DX-AnaSt 1", "St DX-AnaSt 2", "St DX-AnaSt 3", "St DX-SynSt 1", "St DX-SynSt 2", "St DX-SynSt 3", "St DX-SynSt 4", "St DX-SynSt 5", "St DX-SynSt 6", "St DX-SynSt 7", "St WarmStr 1", "St WarmStr 2", "St WarmStr 3", "St WarmStr 4", "St Afternoon", "St Agitate", "St AnnaString", "St Bright Str", "St General", "St GentleMind", "St Gypsy", "St MaxiString", "St Michelle", "St MoterDrive", "St ReverbStrg", "St StrMachine", "St Silk Hall", "St Small Sect", "St Soft Bow", "St Soline", "St Violtron", "St DX-PizzSt", "St PizzString", "St DX-Harp 1", "St DX-Harp 2", "St DX-Harp 3", "St Baroquen", "St Dbl Harp 1", "St Dbl Harp 2", "St Apollon", "St CembaHarp", "St ElectrHarp", "St HarpStrum", "St Lute Harp", "St Metal Harp", "St Orch Harp", "St Syn Harp", "St DX-Timpani", "St Timpanic!", "St Iron Timpa", "En Ensemble", "En HallOrch 1", "En HallOrch 2", "En Orch Brass", "Br DX-Trpt 1", "Br DX-Trpt 2" },
-        { "Br DX-Trpt 3", "Br DX-Trpt 4", "Br DX-Trpt 5", "Br DX-Trpt 6", "Br SilverTrpt", "Br Solo Trpt", "Br SynTrumpet", "Br Trumponica", "Br DX-Trb 1", "Br DX-Trb 2", "Br DX-Trb 3", "Br Mute Trb", "Br DX-Tuba 1", "Br DX-Tuba 2", "Br DX-Tuba 3", "Br DX-Horn", "Br Hornz", "Br Alps Horn", "Br BlunchHorn", "Br Horn Ens", "Br MelowHorn1", "Br MelowHorn2", "Br SimpleHorn", "Br Syn Horns", "Br Vibra Horn", "Br DX-Brass 1", "Br DX-Brass 2", "Br Attack Brs", "Br Brasstring", "Br DX-BrsSec1", "Br DX-BrsSec2", "Br MM-Brass 1", "Br MM-Brass 2", "Br MM-Brass 3", "Br 5th Brass", "Br Blow Brass", "Br Brass Sect", "Br Chorus Brs", "Br Fanfare", "Br Hard Brass", "Br Sample Brs", "Br Single Brs", "Br ThickBrass", "Br TightBrs 1", "Br TightBrs 2", "Br DX-SynBr 1", "Br DX-SynBr 2", "Br DX-SynBr 3", "Br DX-SynBr 4", "Br DX-SynBr 5", "Br DX-SynBr 6", "Br DX-SynBr 7", "Br FilterHorn", "Br SharpBrass", "Br Synthorns", "Br CS80-Brs 1", "Br CS80-Brs 2", "Br Ana Poly", "Br AnaFatBrs", "Br AnalogBrs", "Br Faze Brass", "Br Brassy", "Br Court", "Br DX-FatBrs", "Br RezAttack", "Br FunkyRhytm", "Br Chiffhorns", "Br Juice", "Br Kingdom", "Br PowerDrive", "Br Rahool Brs", "Br SyntiBrs", "Br UltraDrive", "Br Warm Brass", "Rd SopranoSax", "Rd DX-ASax 1", "Rd DX-ASax 2", "Rd Alto Sax", "Rd DX-Tsax", "Rd TenorSax", "Rd Tenorsaxes", "Rd Oboe 1", "Rd Oboe 2", "Rd Oboe 3", "Rd Eng.Horn", "Rd Bassoon", "Rd DX-Clari 1", "Rd DX-Clari 2", "Rd Clari Solo", "Rd Slow Clari", "Rd VibratoCla", "Pi Piccolo 1", "Pi Piccolo 2", "Pi DX-Flute 1", "Pi DX-Flute 2", "Pi DX-Flute 3", "Pi DX-Flute 4", "Pi DX-Flute 5", "Pi DX-Flute 6", "Pi DX-Flute 7", "Pi Air Blower", "Pi MetalFlute", "Pi Song Flute", "Pi Recorder 1", "Pi Recorder 2", "Pi Recorder 3", "Pi DX-PnFlute", "Pi Harvest", "Pi Fuhppps!", "Pi DX-Bottle", "Pi Quena", "Pi Whistle 1", "Pi Whistle 2", "Pi Whistle 3", "Pi Sukiyaki", "Pi SambaWhstl", "Pi Cosmowhist", "Pi DX-Ocrn 1", "Pi DX-Ocrn 2", "Pi DX-Ocrn 3", "Et DX-Sitar 1", "Et DX-Sitar 2", "Et Ethre Four", "Et India", "Et Juice Harp", "Et Syntholin", "Et Pilgrim", "Et Tenjiku" },
-        { "Et Ukabanjo", "Et Xango", "Et Xanu", "Et Zimbalon", "Et DX-Banjo", "Et Shamisen 1", "Et Shamisen 2", "Et Shamisen 3", "Et DX-Koto", "Et DX-Klmb 1", "Et DX-Klmb 2", "Et DX-Klmb 3", "Et DX-Klmb 4", "Et DX-Klmb 5", "Et DX-Bagpipe", "Et DX-Fiddle", "Et African", "Et Bali", "Et Tibetan", "Et Charango", "Et Gamelan 1", "Et Gamelan 2", "Et Gamelan 3", "Et Kinzoku 1", "Et Kinzoku 2", "Et ScotchTone", "Pc DX-Agogo 1", "Pc DX-Agogo 2", "Pc DX-Bongo", "Pc Bongo", "Pc DX-Clave", "Pc DX-Perc", "Pc Block", "Pc Conga Drum", "Pc Cowbell", "Pc Flexatone", "Pc Glaeser", "Pc Log Drum", "Pc SmlShaker", "Pc Metal", "Pc Percud", "Pc RefrsWhstl", "Pc Seq Pluck", "Pc BigShaker", "Pc Side Stick", "Pc Perkabell", "Pc Spoon", "Pc DX-StelCan", "Pc Steel Can", "Pc DX-StelDr1", "Pc DX-StelDr2", "Pc SteelDrum1", "Pc SteelDrum2", "Pc Steel Band", "Pc Jamaica", "Pc Tambarin", "Pc Triangle 1", "Pc Triangle 2", "Pc BellGliss1", "Pc BellGliss2", "Pc Twincle", "Pc MetalBottl", "Pc NipponDrm1", "Pc NipponDrm2", "Pc Janpany", "Pc Nou", "Pc Sumoh Drum", "Pc HandBell 1", "Pc HandBell 2", "Pc JingleBell", "Pc Light Year", "Pc SlightBell", "Pc TracerBell", "Pc MM-SynDr 1", "Pc MM-SynDr 2", "Pc Click Kick", "Pc Hexagon", "Pc Whapit", "Pc Hi-Hat", "Pc Deep Snare", "Pc DX-MtlSnr", "Pc Snapie", "Pc Snare", "Pc Soft Head", "Pc StreetSD", "Pc Tom Herz", "Pc DX-RevCym1", "Pc DX-RevCym2", "Vo DX-Chorus1", "Vo DX-Chorus2", "Vo DX-Chorus3", "Vo DX-Chorus4", "Vo DX-Chorus5", "Vo DX-Chorus6", "Vo DX-Chorus7", "Vo DX-Chorus8", "Vo DX-Chorus9", "Vo DX-Voice 1", "Vo DX-Voice 2", "Vo MM-Voice 1", "Vo MM-Voice 2", "Vo MM-Voice 3", "Vo MM-Voice 4", "Vo DbVoxFem", "Vo Fem Voice", "Vo Lady Vox", "Vo Space Vox", "Vo Syn Vox", "Co Bell+Pno 1", "Co Bell+Pno 2", "Co Bell+Vibe1", "Co Bell+Str", "Co Bell+Vibe2", "Co Cho+Marimb", "Co Clavi+Bass", "Co DX-Ba+Lead", "Co DX-HpSt", "Co EP+Brass 1", "Co EP+Brass 2", "Co EP+Chime", "Co EP+Clavi", "Co Elec Combi", "Co Glock+Brs", "Co Glock+Pno", "Co Harp+Flute", "Co Koto+Flute", "Co MalletHorn", "Co Mrmb+Gtr" },
-        { "Co Orch Chime", "Co Pno+Flute", "Co StringTine", "Co Xylo+Brass", "Ld DX-SynLd 1", "Ld DX-SynLd 2", "Ld DX-SynLd 3", "Ld DX-SynLd 4", "Ld DX-SynLd 5", "Ld DX-SynLd 6", "Ld DX-SynLd 7", "Ld DX-SynLd 8", "Ld DX-SynLd 9", "Ld Pluck Lead", "Ld Perka Lead", "Ld GuitsynLd", "Ld DXSynLd 1", "Ld DXSynLd 2", "Ld DXSynLd 3", "Ld DXSynLd 4", "Ld DXSynLd 5", "Ld DXSynLd 6", "Ld DXSynLd 7", "Ld DXSynLd 8", "Ld SqueezeLd", "Ld Mooganic", "Ld BrassLead1", "Ld BrassLead2", "Ld BrassLead3", "Ld BrassLead4", "Ld Saw Lead", "Ld DX-SawLd 1", "Ld DX-SawLd 2", "Ld DX-Squar", "Ld DX-VoiceLd", "Ld DX-WahLead", "Ld DXAttackLd", "Ld CaliopLd 1", "Ld CaliopLd 2", "Ld CaliopLd 3", "Ld Fifths 1", "Ld Fifths 2", "Ld LdSubHarm", "Ld Buzzer", "Ld Au Campo", "Ld Bass Lead", "Ld Comp Lead", "Ld EadgbeLead", "Ld Flap Synth", "Ld FretlessLd", "Ld Giovanni", "Ld HarmoSynth", "Ld Lead Line", "Ld Lead Phone", "Ld Lyle Lead", "Ld PekingLead", "Ld Puff Pipe", "Ld Reed Lead", "Ld SingleLine", "Ld Super DX", "Ld Sweep Lead", "Ld Vibratoron", "Ld DX-Vocoder", "Ld Winwood", "Pd DrkSweeper", "Pd AnaBrsPad", "Pd 8bitStrPad", "Pd DX-ChoPad1", "Pd DX-ChoPad2", "Pd Bow Pad 1", "Pd Bow Pad 2", "Pd Bow Pad 3", "Pd Glassharp", "Pd Wineglass", "Pd Ice Galaxy", "Pd Ice Heaven", "Pd Hit Pad 1", "Pd Hit Pad 2", "Pd SynBrsPad1", "Pd SynBrsPad2", "Pd SynBrsPad3", "Pd SynBrsPad4", "Pd SynBrsPad5", "Pd SynBrsPad6", "Pd SynBrsPad7", "Pd Vector Pad", "Pd Pada Perka", "Pd DX-MetalPd", "Pd DX-SawPad", "Pd Anna Pad", "Pd Baroque", "Pd BrassyWarm", "Pd Bright Pad", "Pd Clavi Pad", "Pd Digi Pad", "Pd Dispo Pad", "Pd Ethereal", "Pd Film Pad", "Pd Fl.Cloud", "Pd Floating", "Pd Forest99", "Pd Gior Pad", "Pd GreenPeace", "Pd Grunge Pad", "Pd Hyper Sqr", "Pd MM-Pretty", "Pd MonsterPad", "Pd Orwell", "Pd PhaseSweep", "Pd Phasers", "Pd Glass Pad", "Pd Sanctus", "Pd StacHeaven", "Pd Sweep Pad", "Pd Water Log", "Pd Spec-trail", "Pd Whaser Pad", "Pd Whisper", "Pd WhistlePad", "Fx DX-ScFi 1", "Fx DX-ScFi 2", "Fx DX-ScFi 3", "Fx Image 1", "Fx Image 2", "Fx Laser 1", "Fx Laser 2", "Fx Laser 3", "Fx Ri-zer" },
-        { "Fx MM-Shock 1", "Fx MM-Shock 2", "Fx Wallop 1", "Fx Wallop 2", "Fx Angel", "Fx BackSuir", "Fx Bird View", "Fx ChorusElms", "Fx DX-Stars", "Fx Electric", "Fx Evolution", "Fx FM-Growth", "Fx Paddawire", "Fx Fantasynt", "Fx Fluv Push", "Fx Fmilters", "Fx Glassy", "Fx Glastine", "Fx Glocker", "Fx IceRevEcho", "Fx InitEnsmbl", "Fx MetalSweep", "Fx SquareModd", "Fx Mpndg Doom", "Fx Mystrian", "Fx RepertRise", "Fx Space Trip", "Fx Syn Rise", "Fx Glider", "Sc Anna DX", "Sc Analog-X", "Sc DX-Atms 1", "Sc DX-Atms 2", "Sc DX-Bright1", "Sc DX-Bright2", "Sc 90 K", "Sc 200 K", "Sc Arrow-X", "Sc Attacker", "Sc Harp Pad", "Sc ChiLight", "Sc Digi Calio", "Sc Digitar", "Sc Distracted", "Sc FinerThing", "Sc Fuji Stabs", "Sc TouchyEdgy", "Sc Metal Box", "Sc MilkyWays", "Sc New Elms", "Sc Pipebells", "Sc Synsitar", "Sc OctiLate", "Sc NoBoKuto", "Sc Syn Bright", "Sc Ting Voice", "Sc Bottlead", "Sc WhapSynth", "Se DX-Flght", "Se Take Off", "Se DX-Helicpt", "Se Helicopter", "Se DX-Ship", "Se DX-Train", "Se Mobile", "Se Motors", "Se MotorCycle", "Se U Boat", "Se Ambulance", "Se Whiz By", "Se Out-Da-Way", "Se Patrol Car", "Se Sirens", "Se DX-TelBusy", "Se DX-TelCall", "Se DX-TelTone", "Se DX-TlRing1", "Se DX-TlRing2", "Se Bugs&Birds", "Se DX-Insect1", "Se DX-Insect2", "Se DX-Piyo", "Se DX-Growl 1", "Se DX-Growl 2", "Se Animals", "Se DX-Wolf", "Se ManEater", "Se Alarm !", "Se Aura", "Se Chi-S&H", "Se Closing", "Se Computer", "Se Crasher", "Se DX-BigBen", "Se DX-Wave", "Se Descent", "Se Doppler", "Se Factory", "Se GhostLine", "Se Heart Beat", "Se Imaging", "Se IronEcho 1", "Se IronEcho 2", "Se MM-Fall", "Se MachineGun", "Se MobbyDick", "Se On the Run", "Se OuterLimit", "Se Perc Shot", "Se Repeater", "Se Jet Cars 1", "Se Scorchers", "Se Sci-Fi Too", "Se Jet Cars 2", "Se Speak-One", "Se Stopper", "Se Super Foot", "Se Talking DX", "Se Transport", "Se Turn Table", "Se UfoTakeOff", "Se Waterfall", "Se Whik Shot", "Se Bubblets", "Se Yes Talk", "Se Help me !", "Se Paranoir", "Se Screamy" }
+        { "(Pf)    Ballad EP", "(Pf)    Clavmann", "(Pf)    Clavmann 2", "(Pf)    Digi Clav", "(Pf)    DX7Classic", "(Pf)    Mtrial Pno", "(Pf)    MtrialPno2", "(Pf)    MtrialPno3", "(Pf)    Real Rose", "(Pf)    Rose Att", "(Pf)    Rose Sft1", "(Pf)    Rose Sft2", "(Pf)    Suit Rose", "(Pf)    Velvt Rose", "(Pf)    4 Op Clav", "(Cp)    Da Comp", "(Cp)    Synth Bell", "(Cp)    Tabla", "(Or)    B3JazzComp", "(Or)    B3Perc3rd", "(Or)    DrawOrgn", "(Or)    DrawOrgn2", "(Or)    DrawOrgn3", "(Or)    Fs-Organ", "(Or)    Full Drawb", "(Or)    Ham Organ", "(Or)    OR-Right", "(Or)    Organ Fseq", "(Or)    The Lounge", "(Gt)    Jazz Gtr", "(Gt)    Stratmann", "(Ba)    Acid King", "(Ba)    Ana Bass", "(Ba)    AttackBass", "(Ba)    B-Rave", "(Ba)    Bassline 1", "(Ba)    Bassline 2", "(Ba)    BlegBass", "(Ba)    DidgBass", "(Ba)    Dry Syn", "(Ba)    FM Bass", "(Ba)    FundaBass", "(Ba)    HyperFuzz", "(Ba)    JungleBass", "(Ba)    LoFiAcid", "(Ba)    Matze", "(Ba)    Moon Bass", "(Ba)    Phone Bass", "(Ba)    PlastBass", "(Ba)    PunchBass", "(Ba)    Syn Bass", "(Ba)    Technical", "(St)    FairyStrgs", "(St)    JMichel", "(St)    OB String", "(St)    ResoStrgs", "(St)    Saws", "(St)    SloDu Saws", "(St)    SS String", "(St)    SS String2", "(En)    HitMatrial", "(Br)    ANSweep", "(Br)    FS Brass", "(Br)    Hook", "(Br)    ObiehornL", "(Br)    ObiehornR", "(Br)    Quackz", "(Br)    Stab", "(Br)    Swell", "(Pi)    Kuchibue", "(Ld)    Dual Saws2", "(Ld)    DualSquare", "(Ld)    Earth Lead", "(Ld)    Fetish", "(Ld)    Glass Harp", "(Ld)    Glider", "(Ld)    Lead Saw", "(Ld)    Mitosis", "(Ld)    Retronic", "(Ld)    Score Pad", "(Ld)    Tech Lead", "(Ld)    Trance Csm", "(Ld)    Voc Lead", "(Pd)    Add Pad", "(Pd)    Beauty", "(Pd)    Brassetra", "(Pd)    CineSweep", "(Pd)    Fat Pad", "(Pd)    FormantPad", "(Pd)    FormSweep1", "(Pd)    FormSweep2", "(Pd)    FormSweep3", "(Pd)    FormSweep4", "(Pd)    FS Moby II", "(Pd)    Heimdal", "(Pd)    LFO Pad", "(Pd)    Moving", "(Pd)    Nebulous", "(Pd)    OBx Pad", "(Pd)    OBx Pad2", "(Pd)    Octavian", "(Pd)    Paddy", "(Pd)    Qwerty", "(Pd)    Saws&Hold", "(Pd)    Saws2", "(Pd)    SleepyPad", "(Pd)    Spacy Pad", "(Pd)    Starship", "(Pd)    SuperPad", "(Pd)    SweepersVx", "(Pd)    Tech Lead2", "(Pd)    The Seeker", "(Pd)    The Shadow", "(Pd)    Thermal", "(Pd)    VocPhaseA", "(Pd)    Win Pad", "(Pd)    Wind", "(Fx)    Caravan", "(Fx)    DippeDut", "(Fx)    Furry Bell", "(Fx)    Glacial", "(Fx)    Miracle", "(Fx)    MizuGuitar", "(Fx)    Morph", "(Fx)    Nightmare", "(Fx)    RhythmLoop", "(Pd)    Sho", "(Fx)    Spiral" },
+        { "(Et)    BagPipe", "(Et)    BagPipe-dl", "(Et)    Gamelan", "(Et)    Gamelan2", "(Et)    Mukkuri", "(Et)    SuikinStr", "(Et)    Thai Boxin", "(Et)    ThumKalimb", "(Pc)    Big-Gamlan", "(Pc)    Eth-Drum1", "(Pc)    Eth-Drum2", "(Se)    Beep VoX", "(Se)    Dark", "(Se)    ForceField", "(Se)    Ghost", "(Se)    Ghost2", "(Se)    Magic", "(Se)    Night", "(Se)    Open Fseq", "(Se)    RadioNoise", "(Se)    Reso SE", "(Se)    Saucer", "(Se)    Scaling SE", "(Se)    Slow Atk", "(Se)    SpaceBomb", "(Se)    WalkinRobo", "(Se)    Warp1", "(Se)    Warp2", "(Dr)    09 OpenHat", "(Dr)    09ClHatBel", "(Dr)    Beat BD", "(Dr)    Beat Cym", "(Dr)    Beat SD", "(Dr)    Beat Zap", "(Dr)    Boom", "(Dr)    Choos", "(Dr)    ClosedHat1", "(Dr)    ClosedHat2", "(Dr)    DanceKick", "(Dr)    FS-Kick1", "(Dr)    FS-Kick2", "(Dr)    FS-Kick3", "(Dr)    Hatty", "(Dr)    Hihat", "(Dr)    Nu Kick 1", "(Dr)    Nu Kick 2", "(Dr)    Nu Kick 3", "(Dr)    Nu Snare 1", "(Dr)    Nu Snare 2", "(Dr)    Nu Snare 3", "(Dr)    Open Hat 1", "(Dr)    Open Hat 2", "(Dr)    PowerKick", "(Dr)    Snare", "(Dr)    Tchak", "(Dr)    Tech BD", "(Dr)    Tech HH", "(Dr)    Tech Rim", "(Dr)    Tech SD", "(Dr)    TR Kick", "(Dr)    TR Snare", "(Sc)    DigiSQ1R", "(Sc)    DigiSQ3", "(Sc)    DogBytes", "(Sc)    Fast&Cheap", "(Sc)    Fmt-Pluck", "(Sc)    FunKey", "(Sc)    Funky Tech", "(Sc)    Fusion", "(Sc)    Metallic", "(Sc)    NoiseDecay", "(Sc)    Raymond", "(Sc)    SawSaw", "(Sc)    Snow Decay", "(Sc)    Snow Pixy", "(Sc)    Spellbound", "(Sc)    Syncorgano", "(Sc)    Thin Mini", "(Sc)    VeloSweep", "(Sc)    Vox Tron", "(Sc)    Zansyo", "(Sc)    Zapper", "(Vo)    Celebratn", "(Vo)    Eh Human", "(Vo)    FairyVoice", "(Vo)    FormSweep", "(Vo)    FS-Choir", "(Vo)    FS-Sweep", "(Vo)    Homy", "(Vo)    Human", "(Vo)    Ih Human", "(Vo)    Man_Eh", "(Vo)    NoisyVce", "(Vo)    Oh Human", "(Vo)    Shaman Woo", "(Vo)    Spacy Aaah", "(Vo)    Spacy FX", "(Vo)    SpacySweep", "(Vo)    SweepyVce", "(Vo)    VocoSweep", "(Vo)    VocPhaseB", "(Sq)    AN Arp 1", "(Sq)    AN Arp 2", "(Sq)    Compu Saw", "(Sq)    DigiSQ1", "(Sq)    DigiSQ2", "(Sq)    Drw-EuroDr", "(Sq)    Hard Pulse", "(Sq)    Harry", "(Sq)    New Key", "(Sq)    Power Key", "(Sq)    RythmLoop2", "(Sq)    Saw Pad", "(Sq)    TekBass", "(--)    FseqBase01", "(--)    FseqBase02", "(--)    FseqBase03", "(--)    FseqBase04", "(--)    FseqBase05", "(--)    FseqBase06", "(--)    FseqBase07", "(--)    FseqBase08", "(--)    FseqBase09", "(--)    FseqBase10", "(--)    FseqBase11", "(--)    FseqBase12", "(--)    FseqBase13", "(--)    FseqBase14" },
+        { "(Pf)    FortePno 1", "(Pf)    FortePno 2", "(Pf)    MM-Piano 1", "(Pf)    MM-Piano 2", "(Pf)    Pianotone1", "(Pf)    Pianotone2", "(Pf)    Pianotone3", "(Pf)    5thPiano 1", "(Pf)    5thPiano 2", "(Pf)    PrprdPiano", "(Pf)    Claviano", "(Pf)    BrightPno1", "(Pf)    BrightPno2", "(Pf)    BrightPno3", "(Pf)    Dark Piano", "(Pf)    Digi Piano", "(Pf)    PianoDrops", "(Pf)    PowerPiano", "(Pf)    CP70 1", "(Pf)    CP70 2", "(Pf)    CP70 3", "(Pf)    El.Grand 1", "(Pf)    El.Grand 2", "(Pf)    El.Grand 3", "(Pf)    El.Grand 4", "(Pf)    MM-ElGnd 1", "(Pf)    MM-ElGnd 2", "(Pf)    E.Piano 1", "(Pf)    E.Piano 2", "(Pf)    E.Piano 3", "(Pf)    E.Piano 4", "(Pf)    E.Piano 5", "(Pf)    E.Piano 6", "(Pf)    E.Piano 7", "(Pf)    E.Piano 8", "(Pf)    E.Piano 9", "(Pf)    E.Piano 10", "(Pf)    E.Piano 11", "(Pf)    E.Piano 12", "(Pf)    E.Piano 13", "(Pf)    E.Piano 14", "(Pf)    E.Piano 15", "(Pf)    E.Piano 16", "(Pf)    E.Piano 17", "(Pf)    Aclectic", "(Pf)    DX-Road 1", "(Pf)    DX-Road 2", "(Pf)    DX-Road 3", "(Pf)    DX-Road 4", "(Pf)    DX-Road 5", "(Pf)    BrightEP 1", "(Pf)    BrightEP 2", "(Pf)    EP 1967", "(Pf)    EP 1970", "(Pf)    EP 1980", "(Pf)    EP 1985", "(Pf)    Soft EP 1", "(Pf)    Soft EP 2", "(Pf)    Soft EP 3", "(Pf)    Hard EP 1", "(Pf)    Hard EP 2", "(Pf)    Hard EP 3", "(Pf)    Hard EP 4", "(Pf)    Clicky EP", "(Pf)    Digitine", "(Pf)    Woody EP", "(Pf)    Metaltine", "(Pf)    Tinesquawk", "(Pf)    FullTine 1", "(Pf)    FullTine 2", "(Pf)    Wurli EP", "(Pf)    Wurli Road", "(Pf)    Dark Wurli", "(Pf)    Big Wurlt", "(Pf)    Andrian", "(Pf)    Blustig", "(Pf)    Woodmetal", "(Pf)    CastePiano", "(Pf)    Chorus EP", "(Pf)    BigJazzyEP", "(Pf)    ClearElPno", "(Pf)    NiteclubEP", "(Pf)    CosaRosa", "(Pf)    DX-Ragtime", "(Pf)    Digi Poly", "(Pf)    Duke EP", "(Pf)    DynoRoad", "(Pf)    Clavarpsi", "(Pf)    Wack EP", "(Pf)    HollowKeys", "(Pf)    HonkyTonk1", "(Pf)    HonkyTonk2", "(Pf)    PotlidKeyz", "(Pf)    Knock EP", "(Pf)    Knock Wack", "(Pf)    Mark III", "(Pf)    XtremeTine", "(Pf)    Mod ElPno", "(Pf)    3D Road", "(Pf)    PinchedEP", "(Pf)    No Tines", "(Pf)    Old Jazz", "(Pf)    Politti", "(Pf)    Pop Piano", "(Pf)    Prc ElPno", "(Pf)    Prds Piano", "(Pf)    Ratio Dob", "(Pf)    ThinnerEP", "(Pf)    Rezzo EP", "(Pf)    RubbaRoad", "(Pf)    SawBellEP", "(Pf)    QuikPlayEP", "(Pf)    Loud Piano", "(Pf)    Urban", "(Pf)    Vics EP", "(Pf)    DX Classic", "(Pf)    ToyPiano 1", "(Pf)    ToyPiano 2", "(Pf)    ToyPiano 3", "(Pf)    ToyPiano 4", "(Pf)    Plasticky", "(Pf)    Harpsi 1", "(Pf)    Harpsi 2", "(Pf)    Harpsi 3", "(Pf)    Harpsi 4", "(Pf)    Harpsi 5", "(Pf)    Harpsi 6", "(Pf)    Harpsi 7" },
+        { "(Pf)    Harpsi 8", "(Pf)    Harpsi 9", "(Pf)    HarpsiWire", "(Pf)    AD 1600s 1", "(Pf)    AD 1600s 2", "(Pf)    AD 1900s", "(Pf)    Caffeine", "(Pf)    RazorWire", "(Pf)    Cembalim", "(Pf)    Cembalo", "(Pf)    ElecHarpsi", "(Pf)    Syn Harpsi", "(Pf)    DX-Clavi 1", "(Pf)    DX-Clavi 2", "(Pf)    DX-Clavi 3", "(Pf)    DX-Clavi 4", "(Pf)    DX-Clavi 5", "(Pf)    DX-Clavi 6", "(Pf)    DX-Clavi 7", "(Pf)    MM-Clavi 1", "(Pf)    MM-Clavi 2", "(Pf)    MM-Clavi 3", "(Pf)    BrightClv1", "(Pf)    BrightClv2", "(Pf)    BasoClavi", "(Pf)    ChorusClav", "(Pf)    Clavecin", "(Pf)    Clavi Comp", "(Pf)    ClaviExcel", "(Pf)    ClaviPluck", "(Pf)    ClaviStaff", "(Pf)    Mute Clavi", "(Pf)    Revinett", "(Pf)    SkeltonClv", "(Cp)    Celesta 1", "(Cp)    Celesta 2", "(Cp)    Celesta 3", "(Cp)    Celesta 4", "(Cp)    MM-Celesta", "(Cp)    Halloween", "(Cp)    Glocken 1", "(Cp)    Glocken 2", "(Cp)    Glocken 3", "(Cp)    Glocken 4", "(Cp)    Glocken 5", "(Cp)    Glocken 6", "(Cp)    HamerGlock", "(Cp)    Magiglokk", "(Cp)    AnvilGlock", "(Cp)    MetalGlock", "(Cp)    Perc Glock", "(Cp)    Glokenring", "(Cp)    SynGlock 1", "(Cp)    SynGlock 2", "(Cp)    MusicBox 1", "(Cp)    MusicBox 2", "(Cp)    MusicBox 3", "(Cp)    MusicBox 4", "(Cp)    MusicBox 5", "(Cp)    MusicBox 6", "(Cp)    MusicBox 7", "(Cp)    MusicBox 8", "(Cp)    MusicBox 9", "(Cp)    MusicBox10", "(Cp)    DX-Vibe 1", "(Cp)    DX-Vibe 2", "(Cp)    DX-Vibe 3", "(Cp)    DX-Vibe 4", "(Cp)    MM-Vibe 1", "(Cp)    MM-Vibe 2", "(Cp)    LFO Vibe", "(Cp)    Vocal Vibe", "(Cp)    Vibetron", "(Cp)    VibraPhone", "(Cp)    DX-Marimb1", "(Cp)    DX-Marimb2", "(Cp)    DX-Marimb3", "(Cp)    DX-Marimb4", "(Cp)    DX-Marimb5", "(Cp)    DX-Marimb6", "(Cp)    DX-Marimb7", "(Cp)    TineMallet", "(Cp)    Thumbpick", "(Cp)    EchoMalet1", "(Cp)    EchoMalet2", "(Cp)    EchoMalet3", "(Cp)    Congorimba", "(Cp)    Bamburimba", "(Cp)    BrightMrmb", "(Cp)    Guitarimba", "(Cp)    MellowMrmb", "(Cp)    Metal Mrmb", "(Cp)    DX-Xylo 1", "(Cp)    DX-Xylo 2", "(Cp)    DX-Xylo 3", "(Cp)    DX-Xylo 4", "(Cp)    DX-Xylo 5", "(Cp)    DX-Xylo 6", "(Cp)    Dual Xylo", "(Cp)    Xylo Log", "(Cp)    Syn Xylo", "(Cp)    Digi Xylo", "(Cp)    DX-Bell 1", "(Cp)    DX-Bell 2", "(Cp)    DX-Bell 3", "(Cp)    DX-Bell 4", "(Cp)    DX-Bell 5", "(Cp)    DX-Bell 6", "(Cp)    DX-Bell 7", "(Cp)    DX-Bell 8", "(Cp)    DX-Bell 9", "(Cp)    DX-Bell 10", "(Cp)    DX-Bell 11", "(Cp)    DX-Bell 12", "(Cp)    SparklBell", "(Cp)    Wire Bell", "(Cp)    DualSparkl", "(Cp)    BellGlassy", "(Cp)    MM-Bell", "(Cp)    Crystal 1", "(Cp)    Crystal 2", "(Cp)    SoftBell 1", "(Cp)    SoftBell 2", "(Cp)    Bell Pluck", "(Cp)    Blow Bell", "(Cp)    Carillon", "(Cp)    BellKeyzis", "(Cp)    Digi Log" },
+        { "(Cp)    DumBells", "(Cp)    MellowBell", "(Cp)    Mini Bell", "(Cp)    Child Bell", "(Cp)    PPP Thing", "(Cp)    Stonemetal", "(Cp)    Syn Chime", "(Cp)    Air Bell", "(Cp)    WrapRound", "(Cp)    TempleBel1", "(Cp)    TempleBel2", "(Cp)    TempleBel3", "(Cp)    TempleBel4", "(Cp)    TempleBel5", "(Cp)    DX-Dlcm 1", "(Cp)    DX-Dlcm 2", "(Cp)    DX-Dlcm 3", "(Cp)    Frozentime", "(Cp)    MetalDlcmr", "(Cp)    Silk Road", "(Or)    Full Organ", "(Or)    DrawOrgan1", "(Or)    DrawOrgan2", "(Or)    DrawOrgan3", "(Or)    DrawOrgan4", "(Or)    DrawOrgan5", "(Or)    DrawOrgan6", "(Or)    DrawOrgan7", "(Or)    DrawOrgan8", "(Or)    DrawOrgan9", "(Or)    DrawOrgn10", "(Or)    DrawOrgn11", "(Or)    DrawOrgn12", "(Or)    DrawOrgn13", "(Or)    DrawOrgn14", "(Or)    DrawOrgn15", "(Or)    DrawOrgn16", "(Or)    Organsynth", "(Or)    ChorusOrgn", "(Or)    RotaryOrgn", "(Or)    CirkusOrgn", "(Or)    JazzDrwbr", "(Or)    Keyclick", "(Or)    VibraOrgan", "(Or)    Farf Out", "(Or)    Grinder", "(Or)    JazzOrgan1", "(Or)    JazzOrgan2", "(Or)    PercOrgan1", "(Or)    PercOrgan2", "(Or)    PercOrgan3", "(Or)    PercOrgan4", "(Or)    PercOrgan5", "(Or)    PercOrgan6", "(Or)    PercOrgan7", "(Or)    PercOrgan8", "(Or)    PercOrgan9", "(Or)    PercOrgn10", "(Or)    PercOrgn11", "(Or)    PercOrgn12", "(Or)    PercOrgn13", "(Or)    PercOrgn14", "(Or)    PercOrgn15", "(Or)    PercOrgn16", "(Or)    PercOrgn17", "(Or)    XtraPerc", "(Or)    Road Organ", "(Or)    Fluteorgan", "(Or)    ClickNoise", "(Or)    Novalis", "(Or)    TouchOrgan", "(Or)    RockOrgan1", "(Or)    RockOrgan2", "(Or)    RockOrgan3", "(Or)    RockOrgan4", "(Or)    RockOrgan5", "(Or)    RockOrgan6", "(Or)    RockOrgan7", "(Or)    RockOrgan8", "(Or)    RockOrgan9", "(Or)    RockOrgn10", "(Or)    RockOrgn11", "(Or)    RockOrgn12", "(Or)    RockOrgn13", "(Or)    RockOrgn14", "(Or)    RockOrgn15", "(Or)    Vox Organ", "(Or)    SynOrgan 1", "(Or)    SynOrgan 2", "(Or)    PlasticOrg", "(Or)    PipeOrgan1", "(Or)    PipeOrgan2", "(Or)    PipeOrgan3", "(Or)    PipeOrgan4", "(Or)    PipeOrgan5", "(Or)    PipeOrgan6", "(Or)    PipeOrgan7", "(Or)    PipeOrgan8", "(Or)    TheatreOrg", "(Or)    SmallPipes", "(Or)    ChorusPipe", "(Or)    Wedding", "(Or)    DX-Chrch 1", "(Or)    DX-Chrch 2", "(Or)    BrightOrgn", "(Or)    TamePipe", "(Or)    PuffOrgan1", "(Or)    PuffOrgan2", "(Or)    Late Down", "(Or)    SoftReedOr", "(Or)    SteamOrgan", "(Or)    StreetOrgn", "(Or)    DX-Acrd 1", "(Or)    DX-Acrd 2", "(Or)    DX-Acrd 3", "(Or)    DX-Acrd 4", "(Or)    DX-Acrd 5", "(Or)    DX-Acrd 6", "(Or)    DX-TngAc", "(Or)    DX-Hmnc 1", "(Or)    DX-Hmnc 2", "(Or)    DX-Hmnc 3", "(Or)    DX-Hmnc 4", "(Or)    Chromonica", "(Or)    FM-Hmnc 1", "(Or)    FM-Hmnc 2", "(Or)    Bluesharp", "(Or)    Buzzharp" },
+        { "(Gt)    DX-AcstGt1", "(Gt)    DX-AcstGt2", "(Gt)    DX-AcstGt3", "(Gt)    DX-AcstGt4", "(Gt)    DX-AcstGt5", "(Gt)    GuitarBell", "(Gt)    LuteGuitar", "(Gt)    DX-PickGt1", "(Gt)    DX-PickGt2", "(Gt)    DX-PickGt3", "(Gt)    DX-PickGt4", "(Gt)    DX-PickGt5", "(Gt)    DX-PickGt6", "(Gt)    DX-PickGt7", "(Gt)    DX-PickGt8", "(Gt)    Synhalon", "(Gt)    Picksynth", "(Gt)    Compitar", "(Gt)    Stratish", "(Gt)    Banjitar", "(Gt)    Touch Mute", "(Gt)    Firenze", "(Gt)    Folknik", "(Gt)    FunkyPluck", "(Gt)    Guitar Box", "(Gt)    Long Nail", "(Gt)    Pianatar", "(Gt)    RhythmPluk", "(Gt)    SteelyPick", "(Gt)    TiteGuitar", "(Gt)    DX-JazzGt1", "(Gt)    DX-JazzGt2", "(Gt)    DX-JazzGt3", "(Gt)    DX-JazzGt4", "(Gt)    DX-JazzGt5", "(Gt)    Guitorgan", "(Gt)    DX-ClGt 1", "(Gt)    DX-ClGt 2", "(Gt)    DX-ClGt 3", "(Gt)    DX-ClGt 4", "(Gt)    DX-ClGt 5", "(Gt)    DX-ClGt 6", "(Gt)    DX-ClGt 7", "(Gt)    DX-ClGt 8", "(Gt)    DX-ClGt 9", "(Gt)    DX-ClGt 10", "(Gt)    DX-ClGt 11", "(Gt)    DX-ClGt 12", "(Gt)    Buzzstring", "(Gt)    DX-MuteGt1", "(Gt)    DX-MuteGt2", "(Gt)    DX-MuteGt3", "(Gt)    DX-MuteGt4", "(Gt)    Heavy Gage", "(Gt)    DX-OvDrGt", "(Gt)    DX-DistGt1", "(Gt)    DX-DistGt2", "(Gt)    DX-DistGt3", "(Gt)    DX-DistGt4", "(Gt)    DX-DistGt5", "(Gt)    Stortion1", "(Gt)    Pluckoww", "(Gt)    Stortion2", "(Gt)    FuzzGuitar", "(Ba)    DX-WoodBa1", "(Ba)    DX-WoodBa2", "(Ba)    DX-WoodBa3", "(Ba)    DX-WoodBa4", "(Ba)    DX-WoodBa5", "(Ba)    DX-WoodBa6", "(Ba)    DX-WoodBa7", "(Ba)    DarkWodBa1", "(Ba)    DarkWodBa2", "(Ba)    BoogieBass", "(Ba)    BassLegend", "(Ba)    DX-FngrBa1", "(Ba)    DX-FngrBa2", "(Ba)    DX-FngrBa3", "(Ba)    DX-FngrBa4", "(Ba)    Fusit Bass", "(Ba)    FingerPick", "(Ba)    HardFinger", "(Ba)    Harm Bass", "(Ba)    Inorganic", "(Ba)    Nasty Bass", "(Ba)    SkweekBass", "(Ba)    DX-PickBa1", "(Ba)    DX-PickBa2", "(Ba)    DX-PickBa3", "(Ba)    DX-PickBa4", "(Ba)    Bass Magic", "(Ba)    Chiff Bass", "(Ba)    Comped EB", "(Ba)    Metal Bass", "(Ba)    Owl Bass", "(Ba)    Pick Pluck", "(Ba)    Plektrumbs", "(Ba)    Wired Bass", "(Ba)    FretlesBa1", "(Ba)    FretlesBa2", "(Ba)    FretlesBa3", "(Ba)    FretlesBa4", "(Ba)    FretlesBa5", "(Ba)    SlapString", "(Ba)    Lite Slap", "(Ba)    RoundWound", "(Ba)    ImpactBass", "(Ba)    Afresh", "(Ba)    WireString", "(Ba)    Clakwire", "(Ba)    SuperBass1", "(Ba)    SuperBass2", "(Ba)    DigiBass 1", "(Ba)    DigiBass 2", "(Ba)    Digit Bass", "(Ba)    Draft Bass", "(Ba)    Brainacus", "(Ba)    DX-SynBa 1", "(Ba)    DX-SynBa 2", "(Ba)    DX-SynBa 3", "(Ba)    DX-SynBa 4", "(Ba)    DX-SynBa 5", "(Ba)    DX-SynBa 6", "(Ba)    DX-SynBa 7", "(Ba)    DX-SynBa 8", "(Ba)    DX-SynBa 9", "(Ba)    AnalogBass", "(Ba)    Nharmonik" },
+        { "(Ba)    BassNovo", "(Ba)    BassResWp", "(Ba)    Cutmandu", "(Ba)    DX-Bass 1", "(Ba)    DX-Bass 2", "(Ba)    DX-Bass 3", "(Ba)    DX-Bass 4", "(Ba)    DX-Bass 5", "(Ba)    DX-Bass 6", "(Ba)    WireBass 1", "(Ba)    WireBass 2", "(Ba)    HardDXBass", "(Ba)    SmakaBass", "(Ba)    AnaBass 1", "(Ba)    AnaBass 2", "(Ba)    AnaBass 3", "(Ba)    81Z Bass", "(Ba)    DiscBass 1", "(Ba)    DiscBass 2", "(Ba)    Hop Bass 1", "(Ba)    Hop Bass 2", "(Ba)    After 88", "(Ba)    Cable Bass", "(Ba)    Wood Rez", "(Ba)    EazyAction", "(Ba)    ExciteBass", "(Ba)    PrkussBass", "(Ba)    Flapstick", "(Ba)    Jackson", "(Ba)    NipponBass", "(Ba)    Bass Knock", "(Ba)    Ana Stevie", "(Ba)    Munkhen", "(Ba)    Perc Bass", "(Ba)    Remark", "(Ba)    SmoothBass", "(Ba)    Ana Knock", "(Ba)    Jaco Syn", "(Ba)    Werksfunk", "(Ba)    ZedRubba", "(St)    DX-Violin1", "(St)    DX-Violin2", "(St)    DX-Violin3", "(St)    DX-Violin4", "(St)    Violinz", "(St)    DX-Viola 1", "(St)    DX-Viola 2", "(St)    DX-Viola 3", "(St)    DX-Cello 1", "(St)    DX-Cello 2", "(St)    DX-Cello 3", "(St)    DX-Cello 4", "(St)    Rosin", "(St)    DX-Str 1", "(St)    DX-Str 2", "(St)    DX-Str 3", "(St)    DX-Str 4", "(St)    DX-Str 5", "(St)    DX-Str 6", "(St)    DX-Str 7", "(St)    DX-Str 8", "(St)    DX-Str 9", "(St)    DX-Str 10", "(St)    DX-Str 11", "(St)    DX-Str 12", "(St)    DX-Str 13", "(St)    Quick Arco", "(St)    MidString1", "(St)    MidString2", "(St)    LowString1", "(St)    LowString2", "(St)    MM-String", "(St)    DX-AnaSt 1", "(St)    DX-AnaSt 2", "(St)    DX-AnaSt 3", "(St)    DX-SynSt 1", "(St)    DX-SynSt 2", "(St)    DX-SynSt 3", "(St)    DX-SynSt 4", "(St)    DX-SynSt 5", "(St)    DX-SynSt 6", "(St)    DX-SynSt 7", "(St)    WarmStr 1", "(St)    WarmStr 2", "(St)    WarmStr 3", "(St)    WarmStr 4", "(St)    Afternoon", "(St)    Agitate", "(St)    AnnaString", "(St)    Bright Str", "(St)    General", "(St)    GentleMind", "(St)    Gypsy", "(St)    MaxiString", "(St)    Michelle", "(St)    MoterDrive", "(St)    ReverbStrg", "(St)    StrMachine", "(St)    Silk Hall", "(St)    Small Sect", "(St)    Soft Bow", "(St)    Soline", "(St)    Violtron", "(St)    DX-PizzSt", "(St)    PizzString", "(St)    DX-Harp 1", "(St)    DX-Harp 2", "(St)    DX-Harp 3", "(St)    Baroquen", "(St)    Dbl Harp 1", "(St)    Dbl Harp 2", "(St)    Apollon", "(St)    CembaHarp", "(St)    ElectrHarp", "(St)    HarpStrum", "(St)    Lute Harp", "(St)    Metal Harp", "(St)    Orch Harp", "(St)    Syn Harp", "(St)    DX-Timpani", "(St)    Timpanic!", "(St)    Iron Timpa", "(En)    Ensemble", "(En)    HallOrch 1", "(En)    HallOrch 2", "(En)    Orch Brass", "(Br)    DX-Trpt 1", "(Br)    DX-Trpt 2" },
+        { "(Br)    DX-Trpt 3", "(Br)    DX-Trpt 4", "(Br)    DX-Trpt 5", "(Br)    DX-Trpt 6", "(Br)    SilverTrpt", "(Br)    Solo Trpt", "(Br)    SynTrumpet", "(Br)    Trumponica", "(Br)    DX-Trb 1", "(Br)    DX-Trb 2", "(Br)    DX-Trb 3", "(Br)    Mute Trb", "(Br)    DX-Tuba 1", "(Br)    DX-Tuba 2", "(Br)    DX-Tuba 3", "(Br)    DX-Horn", "(Br)    Hornz", "(Br)    Alps Horn", "(Br)    BlunchHorn", "(Br)    Horn Ens", "(Br)    MelowHorn1", "(Br)    MelowHorn2", "(Br)    SimpleHorn", "(Br)    Syn Horns", "(Br)    Vibra Horn", "(Br)    DX-Brass 1", "(Br)    DX-Brass 2", "(Br)    Attack Brs", "(Br)    Brasstring", "(Br)    DX-BrsSec1", "(Br)    DX-BrsSec2", "(Br)    MM-Brass 1", "(Br)    MM-Brass 2", "(Br)    MM-Brass 3", "(Br)    5th Brass", "(Br)    Blow Brass", "(Br)    Brass Sect", "(Br)    Chorus Brs", "(Br)    Fanfare", "(Br)    Hard Brass", "(Br)    Sample Brs", "(Br)    Single Brs", "(Br)    ThickBrass", "(Br)    TightBrs 1", "(Br)    TightBrs 2", "(Br)    DX-SynBr 1", "(Br)    DX-SynBr 2", "(Br)    DX-SynBr 3", "(Br)    DX-SynBr 4", "(Br)    DX-SynBr 5", "(Br)    DX-SynBr 6", "(Br)    DX-SynBr 7", "(Br)    FilterHorn", "(Br)    SharpBrass", "(Br)    Synthorns", "(Br)    CS80-Brs 1", "(Br)    CS80-Brs 2", "(Br)    Ana Poly", "(Br)    AnaFatBrs", "(Br)    AnalogBrs", "(Br)    Faze Brass", "(Br)    Brassy", "(Br)    Court", "(Br)    DX-FatBrs", "(Br)    RezAttack", "(Br)    FunkyRhytm", "(Br)    Chiffhorns", "(Br)    Juice", "(Br)    Kingdom", "(Br)    PowerDrive", "(Br)    Rahool Brs", "(Br)    SyntiBrs", "(Br)    UltraDrive", "(Br)    Warm Brass", "(Rd)    SopranoSax", "(Rd)    DX-ASax 1", "(Rd)    DX-ASax 2", "(Rd)    Alto Sax", "(Rd)    DX-Tsax", "(Rd)    TenorSax", "(Rd)    Tenorsaxes", "(Rd)    Oboe 1", "(Rd)    Oboe 2", "(Rd)    Oboe 3", "(Rd)    Eng.Horn", "(Rd)    Bassoon", "(Rd)    DX-Clari 1", "(Rd)    DX-Clari 2", "(Rd)    Clari Solo", "(Rd)    Slow Clari", "(Rd)    VibratoCla", "(Pi)    Piccolo 1", "(Pi)    Piccolo 2", "(Pi)    DX-Flute 1", "(Pi)    DX-Flute 2", "(Pi)    DX-Flute 3", "(Pi)    DX-Flute 4", "(Pi)    DX-Flute 5", "(Pi)    DX-Flute 6", "(Pi)    DX-Flute 7", "(Pi)    Air Blower", "(Pi)    MetalFlute", "(Pi)    Song Flute", "(Pi)    Recorder 1", "(Pi)    Recorder 2", "(Pi)    Recorder 3", "(Pi)    DX-PnFlute", "(Pi)    Harvest", "(Pi)    Fuhppps!", "(Pi)    DX-Bottle", "(Pi)    Quena", "(Pi)    Whistle 1", "(Pi)    Whistle 2", "(Pi)    Whistle 3", "(Pi)    Sukiyaki", "(Pi)    SambaWhstl", "(Pi)    Cosmowhist", "(Pi)    DX-Ocrn 1", "(Pi)    DX-Ocrn 2", "(Pi)    DX-Ocrn 3", "(Et)    DX-Sitar 1", "(Et)    DX-Sitar 2", "(Et)    Ethre Four", "(Et)    India", "(Et)    Juice Harp", "(Et)    Syntholin", "(Et)    Pilgrim", "(Et)    Tenjiku" },
+        { "(Et)    Ukabanjo", "(Et)    Xango", "(Et)    Xanu", "(Et)    Zimbalon", "(Et)    DX-Banjo", "(Et)    Shamisen 1", "(Et)    Shamisen 2", "(Et)    Shamisen 3", "(Et)    DX-Koto", "(Et)    DX-Klmb 1", "(Et)    DX-Klmb 2", "(Et)    DX-Klmb 3", "(Et)    DX-Klmb 4", "(Et)    DX-Klmb 5", "(Et)    DX-Bagpipe", "(Et)    DX-Fiddle", "(Et)    African", "(Et)    Bali", "(Et)    Tibetan", "(Et)    Charango", "(Et)    Gamelan 1", "(Et)    Gamelan 2", "(Et)    Gamelan 3", "(Et)    Kinzoku 1", "(Et)    Kinzoku 2", "(Et)    ScotchTone", "(Pc)    DX-Agogo 1", "(Pc)    DX-Agogo 2", "(Pc)    DX-Bongo", "(Pc)    Bongo", "(Pc)    DX-Clave", "(Pc)    DX-Perc", "(Pc)    Block", "(Pc)    Conga Drum", "(Pc)    Cowbell", "(Pc)    Flexatone", "(Pc)    Glaeser", "(Pc)    Log Drum", "(Pc)    SmlShaker", "(Pc)    Metal", "(Pc)    Percud", "(Pc)    RefrsWhstl", "(Pc)    Seq Pluck", "(Pc)    BigShaker", "(Pc)    Side Stick", "(Pc)    Perkabell", "(Pc)    Spoon", "(Pc)    DX-StelCan", "(Pc)    Steel Can", "(Pc)    DX-StelDr1", "(Pc)    DX-StelDr2", "(Pc)    SteelDrum1", "(Pc)    SteelDrum2", "(Pc)    Steel Band", "(Pc)    Jamaica", "(Pc)    Tambarin", "(Pc)    Triangle 1", "(Pc)    Triangle 2", "(Pc)    BellGliss1", "(Pc)    BellGliss2", "(Pc)    Twincle", "(Pc)    MetalBottl", "(Pc)    NipponDrm1", "(Pc)    NipponDrm2", "(Pc)    Janpany", "(Pc)    Nou", "(Pc)    Sumoh Drum", "(Pc)    HandBell 1", "(Pc)    HandBell 2", "(Pc)    JingleBell", "(Pc)    Light Year", "(Pc)    SlightBell", "(Pc)    TracerBell", "(Pc)    MM-SynDr 1", "(Pc)    MM-SynDr 2", "(Pc)    Click Kick", "(Pc)    Hexagon", "(Pc)    Whapit", "(Pc)    Hi-Hat", "(Pc)    Deep Snare", "(Pc)    DX-MtlSnr", "(Pc)    Snapie", "(Pc)    Snare", "(Pc)    Soft Head", "(Pc)    StreetSD", "(Pc)    Tom Herz", "(Pc)    DX-RevCym1", "(Pc)    DX-RevCym2", "(Vo)    DX-Chorus1", "(Vo)    DX-Chorus2", "(Vo)    DX-Chorus3", "(Vo)    DX-Chorus4", "(Vo)    DX-Chorus5", "(Vo)    DX-Chorus6", "(Vo)    DX-Chorus7", "(Vo)    DX-Chorus8", "(Vo)    DX-Chorus9", "(Vo)    DX-Voice 1", "(Vo)    DX-Voice 2", "(Vo)    MM-Voice 1", "(Vo)    MM-Voice 2", "(Vo)    MM-Voice 3", "(Vo)    MM-Voice 4", "(Vo)    DbVoxFem", "(Vo)    Fem Voice", "(Vo)    Lady Vox", "(Vo)    Space Vox", "(Vo)    Syn Vox", "(Co)    Bell+Pno 1", "(Co)    Bell+Pno 2", "(Co)    Bell+Vibe1", "(Co)    Bell+Str", "(Co)    Bell+Vibe2", "(Co)    Cho+Marimb", "(Co)    Clavi+Bass", "(Co)    DX-Ba+Lead", "(Co)    DX-HpSt", "(Co)    EP+Brass 1", "(Co)    EP+Brass 2", "(Co)    EP+Chime", "(Co)    EP+Clavi", "(Co)    Elec Combi", "(Co)    Glock+Brs", "(Co)    Glock+Pno", "(Co)    Harp+Flute", "(Co)    Koto+Flute", "(Co)    MalletHorn", "(Co)    Mrmb+Gtr" },
+        { "(Co)    Orch Chime", "(Co)    Pno+Flute", "(Co)    StringTine", "(Co)    Xylo+Brass", "(Ld)    DX-SynLd 1", "(Ld)    DX-SynLd 2", "(Ld)    DX-SynLd 3", "(Ld)    DX-SynLd 4", "(Ld)    DX-SynLd 5", "(Ld)    DX-SynLd 6", "(Ld)    DX-SynLd 7", "(Ld)    DX-SynLd 8", "(Ld)    DX-SynLd 9", "(Ld)    Pluck Lead", "(Ld)    Perka Lead", "(Ld)    GuitsynLd", "(Ld)    DXSynLd 1", "(Ld)    DXSynLd 2", "(Ld)    DXSynLd 3", "(Ld)    DXSynLd 4", "(Ld)    DXSynLd 5", "(Ld)    DXSynLd 6", "(Ld)    DXSynLd 7", "(Ld)    DXSynLd 8", "(Ld)    SqueezeLd", "(Ld)    Mooganic", "(Ld)    BrassLead1", "(Ld)    BrassLead2", "(Ld)    BrassLead3", "(Ld)    BrassLead4", "(Ld)    Saw Lead", "(Ld)    DX-SawLd 1", "(Ld)    DX-SawLd 2", "(Ld)    DX-Squar", "(Ld)    DX-VoiceLd", "(Ld)    DX-WahLead", "(Ld)    DXAttackLd", "(Ld)    CaliopLd 1", "(Ld)    CaliopLd 2", "(Ld)    CaliopLd 3", "(Ld)    Fifths 1", "(Ld)    Fifths 2", "(Ld)    LdSubHarm", "(Ld)    Buzzer", "(Ld)    Au Campo", "(Ld)    Bass Lead", "(Ld)    Comp Lead", "(Ld)    EadgbeLead", "(Ld)    Flap Synth", "(Ld)    FretlessLd", "(Ld)    Giovanni", "(Ld)    HarmoSynth", "(Ld)    Lead Line", "(Ld)    Lead Phone", "(Ld)    Lyle Lead", "(Ld)    PekingLead", "(Ld)    Puff Pipe", "(Ld)    Reed Lead", "(Ld)    SingleLine", "(Ld)    Super DX", "(Ld)    Sweep Lead", "(Ld)    Vibratoron", "(Ld)    DX-Vocoder", "(Ld)    Winwood", "(Pd)    DrkSweeper", "(Pd)    AnaBrsPad", "(Pd)    8bitStrPad", "(Pd)    DX-ChoPad1", "(Pd)    DX-ChoPad2", "(Pd)    Bow Pad 1", "(Pd)    Bow Pad 2", "(Pd)    Bow Pad 3", "(Pd)    Glassharp", "(Pd)    Wineglass", "(Pd)    Ice Galaxy", "(Pd)    Ice Heaven", "(Pd)    Hit Pad 1", "(Pd)    Hit Pad 2", "(Pd)    SynBrsPad1", "(Pd)    SynBrsPad2", "(Pd)    SynBrsPad3", "(Pd)    SynBrsPad4", "(Pd)    SynBrsPad5", "(Pd)    SynBrsPad6", "(Pd)    SynBrsPad7", "(Pd)    Vector Pad", "(Pd)    Pada Perka", "(Pd)    DX-MetalPd", "(Pd)    DX-SawPad", "(Pd)    Anna Pad", "(Pd)    Baroque", "(Pd)    BrassyWarm", "(Pd)    Bright Pad", "(Pd)    Clavi Pad", "(Pd)    Digi Pad", "(Pd)    Dispo Pad", "(Pd)    Ethereal", "(Pd)    Film Pad", "(Pd)    Fl.Cloud", "(Pd)    Floating", "(Pd)    Forest99", "(Pd)    Gior Pad", "(Pd)    GreenPeace", "(Pd)    Grunge Pad", "(Pd)    Hyper Sqr", "(Pd)    MM-Pretty", "(Pd)    MonsterPad", "(Pd)    Orwell", "(Pd)    PhaseSweep", "(Pd)    Phasers", "(Pd)    Glass Pad", "(Pd)    Sanctus", "(Pd)    StacHeaven", "(Pd)    Sweep Pad", "(Pd)    Water Log", "(Pd)    Spec-trail", "(Pd)    Whaser Pad", "(Pd)    Whisper", "(Pd)    WhistlePad", "(Fx)    DX-ScFi 1", "(Fx)    DX-ScFi 2", "(Fx)    DX-ScFi 3", "(Fx)    Image 1", "(Fx)    Image 2", "(Fx)    Laser 1", "(Fx)    Laser 2", "(Fx)    Laser 3", "(Fx)    Ri-zer" },
+        { "(Fx)    MM-Shock 1", "(Fx)    MM-Shock 2", "(Fx)    Wallop 1", "(Fx)    Wallop 2", "(Fx)    Angel", "(Fx)    BackSuir", "(Fx)    Bird View", "(Fx)    ChorusElms", "(Fx)    DX-Stars", "(Fx)    Electric", "(Fx)    Evolution", "(Fx)    FM-Growth", "(Fx)    Paddawire", "(Fx)    Fantasynt", "(Fx)    Fluv Push", "(Fx)    Fmilters", "(Fx)    Glassy", "(Fx)    Glastine", "(Fx)    Glocker", "(Fx)    IceRevEcho", "(Fx)    InitEnsmbl", "(Fx)    MetalSweep", "(Fx)    SquareModd", "(Fx)    Mpndg Doom", "(Fx)    Mystrian", "(Fx)    RepertRise", "(Fx)    Space Trip", "(Fx)    Syn Rise", "(Fx)    Glider", "(Sc)    Anna DX", "(Sc)    Analog-X", "(Sc)    DX-Atms 1", "(Sc)    DX-Atms 2", "(Sc)    DX-Bright1", "(Sc)    DX-Bright2", "(Sc)    90 K", "(Sc)    200 K", "(Sc)    Arrow-X", "(Sc)    Attacker", "(Sc)    Harp Pad", "(Sc)    ChiLight", "(Sc)    Digi Calio", "(Sc)    Digitar", "(Sc)    Distracted", "(Sc)    FinerThing", "(Sc)    Fuji Stabs", "(Sc)    TouchyEdgy", "(Sc)    Metal Box", "(Sc)    MilkyWays", "(Sc)    New Elms", "(Sc)    Pipebells", "(Sc)    Synsitar", "(Sc)    OctiLate", "(Sc)    NoBoKuto", "(Sc)    Syn Bright", "(Sc)    Ting Voice", "(Sc)    Bottlead", "(Sc)    WhapSynth", "(Se)    DX-Flght", "(Se)    Take Off", "(Se)    DX-Helicpt", "(Se)    Helicopter", "(Se)    DX-Ship", "(Se)    DX-Train", "(Se)    Mobile", "(Se)    Motors", "(Se)    MotorCycle", "(Se)    U Boat", "(Se)    Ambulance", "(Se)    Whiz By", "(Se)    Out-Da-Way", "(Se)    Patrol Car", "(Se)    Sirens", "(Se)    DX-TelBusy", "(Se)    DX-TelCall", "(Se)    DX-TelTone", "(Se)    DX-TlRing1", "(Se)    DX-TlRing2", "(Se)    Bugs&Birds", "(Se)    DX-Insect1", "(Se)    DX-Insect2", "(Se)    DX-Piyo", "(Se)    DX-Growl 1", "(Se)    DX-Growl 2", "(Se)    Animals", "(Se)    DX-Wolf", "(Se)    ManEater", "(Se)    Alarm !", "(Se)    Aura", "(Se)    Chi-S&H", "(Se)    Closing", "(Se)    Computer", "(Se)    Crasher", "(Se)    DX-BigBen", "(Se)    DX-Wave", "(Se)    Descent", "(Se)    Doppler", "(Se)    Factory", "(Se)    GhostLine", "(Se)    Heart Beat", "(Se)    Imaging", "(Se)    IronEcho 1", "(Se)    IronEcho 2", "(Se)    MM-Fall", "(Se)    MachineGun", "(Se)    MobbyDick", "(Se)    On the Run", "(Se)    OuterLimit", "(Se)    Perc Shot", "(Se)    Repeater", "(Se)    Jet Cars 1", "(Se)    Scorchers", "(Se)    Sci-Fi Too", "(Se)    Jet Cars 2", "(Se)    Speak-One", "(Se)    Stopper", "(Se)    Super Foot", "(Se)    Talking DX", "(Se)    Transport", "(Se)    Turn Table", "(Se)    UfoTakeOff", "(Se)    Waterfall", "(Se)    Whik Shot", "(Se)    Bubblets", "(Se)    Yes Talk", "(Se)    Help me !", "(Se)    Paranoir", "(Se)    Screamy" }
         };
 
     public static final String[] FSEQS = { "Internal 1", "Internal 2", "Internal 3", "Internal 4", "Internal 5", "Internal 6", "ShoobyDo", "2BarBeat", "D&B", "D&B Fill", "4BarBeat", "YouCanG", "EBSayHey", "RtmSynth", "VocalRtm", "WooWaPa", "UooLha", "FemRtm", "ByonRole", "WowYeah", "ListenVo", "YAMAHAFS", "Laugh", "Laugh2", "AreYouR", "Oiyai", "Oiaiuo", "UuWaUu", "Wao", "RndArp1", "FiltrArp", "RndArp2", "TechArp", "RndArp3", "Voco-Seq", "PopTech", "1BarBeat", "1BrBeat2", "Undo", "RndArp4", "VoclRtm2", "Reiyowha", "RndArp5", "VocalArp", "CanYouGi", "Pu-Yo", "Yaof", "MyaOh", "ChuckRtm", "ILoveYou", "Jan-On", "Welcome", "One-Two", "Edokko", "Everybdy", "Uwau", "YEEAAH", "4-3-2-1", "Test123", "CheckSnd", "ShavaDo", "R-M-H-R", "HiSchool", "M.Blastr", "L&G MayI", "Hellow", "ChowaUu", "Everybd2", "Dodidowa", "Check123", "BranNewY", "BoomBoom", "Hi=Woo", "FreeForm", "FreqPad", "YouKnow", "OldTech", "B/M", "MiniJngl", "EveryB-S", "IYaan", "Yeah", "ThankYou", "Yes=No", "UnWaEDon", "MouthPop", "Fire", "TBLine", "China", "Aeiou", "YaYeYiYo", "C7Seq", "SoundLib", "IYaan2", "Relax" };
@@ -148,6 +148,16 @@ public class YamahaFS1RMulti extends Synth
         JMenu menu = new JMenu("FS1R");
         menubar.add(menu);
 
+        JMenuItem mute = new JMenuItem("Mute Parts...");
+        mute.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                showMuteDialog();                
+                }
+            });
+        menu.add(mute);
+        
         JMenuItem swap = new JMenuItem("Swap Parts...");
         menu.add(swap);
         swap.addActionListener(new ActionListener()
@@ -216,19 +226,19 @@ public class YamahaFS1RMulti extends Synth
                         {
                         if (parameters[i].startsWith("part" + p1))
                             {
-                            if (p2 == 5) 	// "All"
-                            	{
-                            	for(int j = 1; j <= 4; j++)
-                            		{
-	                            int val2 = model.get(parameters[i]);
-	                            model.set(("part" + j) + parameters[i].substring(5), val2);
-		                            }
-                            	}
+                            if (p2 == 5)        // "All"
+                                {
+                                for(int j = 1; j <= 4; j++)
+                                    {
+                                    int val2 = model.get(parameters[i]);
+                                    model.set(("part" + j) + parameters[i].substring(5), val2);
+                                    }
+                                }
                             else
-                            	{
-	                            int val2 = model.get(parameters[i]);
-	                            model.set(("part" + p2) + parameters[i].substring(5), val2);
-	                            }
+                                {
+                                int val2 = model.get(parameters[i]);
+                                model.set(("part" + p2) + parameters[i].substring(5), val2);
+                                }
                             }
                         }
                                                                                 
@@ -242,8 +252,8 @@ public class YamahaFS1RMulti extends Synth
 
     public JFrame sprout()
         {
-        JFrame frame = super.sprout();	
-        transmitTo.setEnabled(false);		// Though that doesn't matter any more
+        JFrame frame = super.sprout();  
+        transmitTo.setEnabled(false);           // Though that doesn't matter any more
         addYamahaFS1RMenu();
         return frame;
         }         
@@ -332,6 +342,83 @@ public class YamahaFS1RMulti extends Synth
         }
                 
                 
+    public void showMuteDialog()
+        {
+        JCheckBox[] parts = new JCheckBox[4];
+        Box partBox = new Box(BoxLayout.X_AXIS);
+        for(int i = 0; i < parts.length; i++)
+            {
+            parts[i] = new JCheckBox("" + (i + 1));
+            partBox.add(parts[i]);
+            }
+        partBox.add(Box.createGlue());
+        
+        JPanel partPanel = new JPanel();
+        partPanel.setLayout(new BorderLayout());
+        partPanel.add(partBox, BorderLayout.NORTH);
+        Box pbox = new Box(BoxLayout.X_AXIS);
+        JButton pcheck = new JButton("Check All");
+        pcheck.putClientProperty("JComponent.sizeVariant", "small");
+        pcheck.setFont(Style.SMALL_FONT());
+        pcheck.setHorizontalAlignment(SwingConstants.CENTER);
+        pcheck.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                for(int i = 0; i < parts.length; i++)
+                    parts[i].setSelected(true);
+                }
+            });
+        pbox.add(pcheck);
+        JButton puncheck = new JButton("Uncheck All");
+        puncheck.putClientProperty("JComponent.sizeVariant", "small");
+        puncheck.setFont(Style.SMALL_FONT());
+        puncheck.setHorizontalAlignment(SwingConstants.CENTER);
+        puncheck.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                for(int i = 0; i < parts.length; i++)
+                    parts[i].setSelected(false);
+                }
+            });
+        pbox.add(puncheck);
+        pbox.add(Box.createGlue());
+        partPanel.add(pbox, BorderLayout.CENTER);
+
+        boolean result = showMultiOption(YamahaFS1RMulti.this, new String[] { "<html>Parts</html>" }, 
+            new JComponent[] { partPanel }, "Mute Parts", "<html>Selected parts have their MIDI<br>channels temporarily turned Off.<br><br>Other parts have their MIDI<br> channels reset to patch settings.</html>");
+        
+        if (result)
+            {
+            for(int part = 0; part < 4; part++)
+                {
+                mutePart(part, parts[part].isSelected());
+                }
+            }
+        }
+        
+
+    void mutePart(int part, boolean mute)
+        {
+        // F0 43 1n 5E 3p 00 ll vv vv F7
+        // n: id
+        // p: part
+        // ll: parameter
+        // vv vv:   00 mute 
+        int channel = model.get("part" + (part + 1) + "rcvchannel");
+        byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
+            (byte)(0x30 + part),                      // HIGH: part and common
+            (byte)0,
+            (byte)0x04,                                                                     // rcv channel
+            (byte)0,
+            (byte)(mute ? 0x7F : 
+                (channel == 17 ? 0x7F : channel)),              // deal with th ehole
+            (byte)0xF7 };
+        tryToSendSysex(data);
+        }        
+                
+
     public String getDefaultResourceFileName() { return "YamahaFS1RMulti.init"; }
     public String getHTMLResourceFileName() { return "YamahaFS1RMulti.html"; }
 
@@ -597,8 +684,8 @@ public class YamahaFS1RMulti extends Synth
         }
     
 
-	/** Builds destinations for a given controller.  These destinations must change depending
-		on the choice of Insertion effect.  */
+    /** Builds destinations for a given controller.  These destinations must change depending
+        on the choice of Insertion effect.  */
     String[] buildDestinations()
         {
         String[] destinations = new String[15 + CONTROL_DESTINATIONS.length];
@@ -706,19 +793,19 @@ public class YamahaFS1RMulti extends Synth
     /** Revises the patch name in the Category title for a given Part. */
     void updatePatchName(int part, Category category)
         {
-            int bank = model.get("part" + part + "banknumber", -100) - 1;
-            int number = model.get("part" + part + "programnumber", -100);
+        int bank = model.get("part" + part + "banknumber", -100) - 1;
+        int number = model.get("part" + part + "programnumber", -100);
                 
-            if (bank == -101 || number == -100) return;  // not set up yet
+        if (bank == -101 || number == -100) return;  // not set up yet
                 
-            if (bank <= 0)
-                {
-                category.setName("Voice " + part);
-                }
-            else 
-                {
-                category.setName("Voice " + part + ": " + VOICES[bank - 1][number]);
-                }
+        if (bank <= 0)
+            {
+            category.setName("Voice " + part);
+            }
+        else 
+            {
+            category.setName("Voice " + part + ": " + VOICES[bank - 1][number]);
+            }
         }
     
     public JComponent addVoice(int part, Color color)
@@ -735,11 +822,11 @@ public class YamahaFS1RMulti extends Synth
             public void perform()
                 {
                 if (YamahaFS1RMulti.this.model.get("part" + part + "banknumber") == 0)  // off
-                	return;
-                	
+                    return;
+                        
                 final YamahaFS1R synth = new YamahaFS1R();
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver());
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
                 if (synth.tuple != null)
                     {       
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -791,7 +878,7 @@ public class YamahaFS1RMulti extends Synth
         vbox.add(comp);
 
 
-    	vbox.add(pushbutton);
+        vbox.add(pushbutton);
 
         hbox.add(vbox);
 
@@ -1279,7 +1366,7 @@ public class YamahaFS1RMulti extends Synth
             };
         hbox.add(comp);
 
-		// Why this isn't like the other wet/dry settings I have no idea...
+        // Why this isn't like the other wet/dry settings I have no idea...
         comp = new LabelledDial("Dry/Wet", this,  "insertionlevel", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
@@ -1391,8 +1478,8 @@ public class YamahaFS1RMulti extends Synth
 
 
 
-	/** Rebuilds, then sets to default values the current reverb parameters for the given reverb type, where val = 0 is "No Effect". 
-		This doesn't include the standard parameters (like pan). */
+    /** Rebuilds, then sets to default values the current reverb parameters for the given reverb type, where val = 0 is "No Effect". 
+        This doesn't include the standard parameters (like pan). */
     JComponent buildReverb(int val, Color color)
         {
         VBox vbox = new VBox();
@@ -1423,9 +1510,9 @@ public class YamahaFS1RMulti extends Synth
         return vbox;
         }    
     
-	/** Rebuilds, then sets to default values the current variation parameters for the given variation type, where val = 0 is "No Effect". 
-		This doesn't include the standard parameters (like pan).  */
-     JComponent buildVariation(int val, Color color)
+    /** Rebuilds, then sets to default values the current variation parameters for the given variation type, where val = 0 is "No Effect". 
+        This doesn't include the standard parameters (like pan).  */
+    JComponent buildVariation(int val, Color color)
         {
         VBox vbox = new VBox();
         if (val == 0)   // No Effect
@@ -1455,8 +1542,8 @@ public class YamahaFS1RMulti extends Synth
         return vbox;
         }    
 
-	/** Rebuilds, then sets to default values the current insertion parameters for the given insertion type, where val = 0 is "Thru". 
-		This doesn't include the standard parameters (like pan).  */
+    /** Rebuilds, then sets to default values the current insertion parameters for the given insertion type, where val = 0 is "Thru". 
+        This doesn't include the standard parameters (like pan).  */
     public JComponent buildInsertion(int val, Color color)
         {    
         VBox vbox = new VBox();
@@ -1927,7 +2014,7 @@ public class YamahaFS1RMulti extends Synth
     
 
         
-	/** Returns the part associated with the given key.  For example, "part4pitchbendrangehigh" -> 4 and "eqlowgain" -> 0 */
+    /** Returns the part associated with the given key.  For example, "part4pitchbendrangehigh" -> 4 and "eqlowgain" -> 0 */
     // common = 0, part = 1...4
     public int getPart(String key)
         {
@@ -1938,14 +2025,14 @@ public class YamahaFS1RMulti extends Synth
         else return 0;
         }        
 
-	/** Returns the address associated with the given *sysex key*. */
+    /** Returns the address associated with the given *sysex key*. */
     public int getAddress(String key)
         {
         int addr = ((Integer)(allParametersToIndex.get(key))).intValue();
         if (addr < 128 + 0x40) return addr;
         // it's in a part
         addr -= (128 + 0x40);
-        addr = addr % 52;		// part size
+        addr = addr % 52;               // part size
         return addr;
         }
 
@@ -2053,8 +2140,8 @@ public class YamahaFS1RMulti extends Synth
                     (model.get("controller" + cont + "kn4") << 3) | 
                     (model.get("controller" + cont + "mc1") << 4) |
                     (model.get("controller" + cont + "mc2") << 5) |
-                    (model.get("controller" + cont + "pb") << 6) | 	
-                	(model.get("controller" + cont + "cat") << 7) | 
+                    (model.get("controller" + cont + "pb") << 6) |      
+                    (model.get("controller" + cont + "cat") << 7) | 
                     (model.get("controller" + cont + "pat") << 8) |
                     (model.get("controller" + cont + "fc") << 9) |
                     (model.get("controller" + cont + "bc") << 10) | 
@@ -2076,17 +2163,17 @@ public class YamahaFS1RMulti extends Synth
                 
                 val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]));
                 /*
-                if (address > 0x60)                     // one byte                                     
-                    {
-                    val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) & 127);
-                    }
-                else                                            // two bytes
-                    {
-                    val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) >>> 7) & 127;
-                    val2 = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) & 127);
-                    address2 = address + 1;
-                    pair = true;
-                    }
+                  if (address > 0x60)                     // one byte                                     
+                  {
+                  val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) & 127);
+                  }
+                  else                                            // two bytes
+                  {
+                  val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) >>> 7) & 127;
+                  val2 = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) & 127);
+                  address2 = address + 1;
+                  pair = true;
+                  }
                 */
                 }
             else if (key.startsWith("variation") && !key.equals("variationtype") && !key.equals("variationpan") && !key.equals("variationreturn"))
@@ -2102,10 +2189,10 @@ public class YamahaFS1RMulti extends Synth
                     
                 val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]));
                 /*
-                val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) >>> 7) & 127;
-                val2 = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) & 127);
-                address2 = address + 1;
-                pair = true;
+                  val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) >>> 7) & 127;
+                  val2 = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) & 127);
+                  address2 = address + 1;
+                  pair = true;
                 */
                 }
             else if (key.startsWith("insertion") && !key.equals("insertiontype") && !key.equals("insertionpan") && !key.equals("insertionlevel"))
@@ -2121,10 +2208,10 @@ public class YamahaFS1RMulti extends Synth
                     
                 val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]));
                 /*
-                val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) >>> 7) & 127;
-                val2 = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) & 127);
-                address2 = address + 1;
-                pair = true;
+                  val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) >>> 7) & 127;
+                  val2 = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) & 127);
+                  address2 = address + 1;
+                  pair = true;
                 */
                 }
             else if (key.endsWith("rcvchannelmax"))
@@ -2215,7 +2302,7 @@ public class YamahaFS1RMulti extends Synth
     public static final int OFFSET_PORTAMENTOSWITCHMODE = 0x24;
 
 
-	// Extracts the key from allParameters, then casts it to a byte.  A syntax sugar method, that's all. 
+    // Extracts the key from allParameters, then casts it to a byte.  A syntax sugar method, that's all. 
     public byte getB(int pos)
         {
         String key = allParameters[pos];
@@ -2656,7 +2743,7 @@ public class YamahaFS1RMulti extends Synth
 
     byte produceChecksum(byte[] bytes, int start)
         {
-        //	It appears that the FS1R uses the same checksum as the 4-op and DX7 synths
+        //      It appears that the FS1R uses the same checksum as the 4-op and DX7 synths
         //
         //      The TX816 owner's manual (p. 54) says the checksum is:
         //                              "the least significant 7 bits of the 2's complement sum of 155 data bytes.
@@ -2673,8 +2760,16 @@ public class YamahaFS1RMulti extends Synth
         }
 
 
-    // Will request an internal voice.  At present we can't
-    // request voices from presets!!!!  See changePatch() as to why...
+    public void performRequestDump(Model tempModel, boolean changePatch)
+        {
+        if (tempModel == null)
+            tempModel = getModel();
+
+        // We ALWAYS change the patch no matter what.  We have to.  We have to force it for merging
+        changePatch(tempModel);
+        tryToSendSysex(requestDump(tempModel));
+        }
+
     public byte[] requestDump(Model tempModel) 
         {
         // we will have already done a change patch...
@@ -2938,7 +3033,7 @@ public class YamahaFS1RMulti extends Synth
     // bank's worth of writes -- but then it's very slow to process through all of them, constantly displaying
     // "Bulk Received".  With about a 170ms delay or so, this message disappears right when Edisyn finishes,
     // so it's a good compromise from a UI standpoint.
-	public int getPauseAfterWritePatch() { return 170; }		// don't know if we need any
+    public int getPauseAfterWritePatch() { return 170; }            // don't know if we need any
     }
  
  

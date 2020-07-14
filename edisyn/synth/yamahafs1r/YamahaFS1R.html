@@ -7,7 +7,7 @@
 This editor handles voices, not performances.  Though FS1R performances and voices are meant to work hand-in-hand, Edisyn's voice and performance editors are separate; but they can work together in certain ways as discussed below.
 
 <br><br><h3>Communicating with Edisyn</h3>
-Set the FS1R's to receive System Exclusive, Bulk Dumps, Bank Selection, and Program Change.  That is, set Rcv SysExcl, RcvBulkDump, Rcv BankSel, and Rcv PgmChng to ON.    Set the Program Change Mode to "Multi".  Set the FS1R's Device Number to either ALL or to the Synth ID in Edisyn's MIDI panel.  For most MIDI devices, you can probably reduce the Dump Interval to 50ms.  Set Edisyn's send and receive MIDI channels to the FS1R's receive and send channels respectively. 
+Set the FS1R's to receive System Exclusive, Bulk Dumps, Bank Selection, and Program Change.  That is, set Rcv SysExcl, RcvBulkDump, Rcv BankSel, and Rcv PgmChng to ON.    Set the Program Change Mode to "Multi".  Set the FS1R's Device Number to either ALL or to the Synth ID in Edisyn's MIDI panel.  For most MIDI devices, you can probably reduce the FS1R's Dump Interval to 50ms.  Set Edisyn's send and receive MIDI channels to the FS1R's receive and send channels respectively. 
 
 <br><br><h3>How Sending, Writing, and Requesting Work</h3>
 
@@ -30,11 +30,13 @@ The menu has several options which hopefully make working with the patch editor 
 
 <p><li><b>Set Up Test Performance for Part 1 without Filter</b>&nbsp;&nbsp;&nbsp;Exactly the same as above, except that Part 1's filter switch is turned off.
 
-<p><li><b>Audition Part with Filter</b>&nbsp;&nbsp;&nbsp;This turns on the current part's MIDI channel, setting it to the the Performance's channel, and it turns off all the other parts' MIDI channels.  That way when you play notes, you will hear exactly and only the voice you're working on.  Additionally, the current part's filter switch is turned on.  You may ind this useful for editing an existing voice patch in the context of its Performance.  If you switch to another part, you'll have to Audition it again.  To undo all this, you can fire up a Performance patch editor and manually change the various Part MIDI settings.  Or you can request the voice's Performance patch (by patch number, not "current patch") from the synth again.
+<p><li><b>Audition Part with Filter</b>&nbsp;&nbsp;&nbsp;This sets the current part's MIDI channel to the the Performance's channel, and it turns off all the other parts' MIDI channels.  That way when you play notes, you will hear exactly and only the voice you're working on.  Additionally, the current part's filter switch is turned on.  You may find this useful for editing an existing voice patch in the context of its Performance.  If you switch to another part, you'll have to Audition it again.  To undo all this, you can fire up a Performance patch editor and manually change the various Part MIDI settings.  Or you can request the voice's Performance patch (by patch number, not "current patch") from the synth again.
 
 <p><li><b>Audition Part without Filter</b>&nbsp;&nbsp;&nbsp;Exactly the same as above, except that the current part's filter switch is turned off.
 
-<p><li><b>Strip Effects</b>&nbsp;&nbsp;/&nbsp;This turns off all effects in the Performance.  You might wish to do this if you had loaded a performance and wanted to hear how a given voice actually sounded.
+<p><li><b>Strip Effects</b>&nbsp;&nbsp;&nbsp;This turns off all effects in the Performance.  You might wish to do this if you had loaded a performance and wanted to hear how a given voice actually sounded.
+
+<p><li><b>Mute Operators...</b>nbsp;&nbsp;&nbsp;This lets you temporarily mute voiced and unvoiced operators of your choice, notionally so you can focus on hearing certain operators.  "Muting" mean that Edisyn will send the FS1R a command to set their Output Level to 0, and another command to disable Fseq.  The actual parameter setting in Edisyn will be unaffected.  If an operator is unmuted, Output Level and Fseq will be restored.  Note that this only applies to immediate real-time changes: requesting a patch, writing a patch, or sending it, may reset the Mute settings.
 
 <p><li><b>Send/Receive Part (1,2,3,4)</b>&nbsp;&nbsp;&nbsp;This causes Edisyn to use the given Part when sending and requesting the current voice patch.  This allows you to work on different Parts of a performance.  You may also wish to Audition on the part (see menu item above) after setting this.
   

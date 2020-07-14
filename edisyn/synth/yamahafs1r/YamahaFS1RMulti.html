@@ -7,14 +7,16 @@
 This editor handles performances, not voices.  Though FS1R performances and voices are meant to work hand-in-hand, Edisyn's voice and performance editors are separate; but they can work together in certain ways as discussed below.
 
 <br><br><h3>Communicating with Edisyn</h3>
-Set the FS1R's to receive System Exclusive, Bulk Dumps, Bank Selection, and Program Change.  That is, set Rcv SysExcl, RcvBulkDump, Rcv BankSel, and Rcv PgmChng to ON.  Set the Program Change Mode to "Multi".  Set the FS1R's Device Number to either ALL or to the Synth ID in Edisyn's MIDI panel.  For most MIDI devices, you can probably reduce the Dump Interval to 50ms.  Set Edisyn's send and receive MIDI channels to the FS1R's receive and send channels respectively. 
+Set the FS1R's to receive System Exclusive, Bulk Dumps, Bank Selection, and Program Change.  That is, set Rcv SysExcl, RcvBulkDump, Rcv BankSel, and Rcv PgmChng to ON.  Set the Program Change Mode to "Multi".  Set the FS1R's Device Number to either ALL or to the Synth ID in Edisyn's MIDI panel.  For most MIDI devices, you can probably reduce the FS1R's Dump Interval to 50ms.  Set Edisyn's send and receive MIDI channels to the FS1R's receive and send channels respectively. 
 
 <br><br><h3>About the FS1R Menu</h3>
 
 The menu has several options which hopefully make working with the patch editor more useful:
 
 <ul>
-<li><b>Swap Parts...</b>&nbsp;&nbsp;&nbsp;This lets you swap two parts.  Note that the Fseq Part (See Common tab) is unchanged, so if it was referring to one of the parts it's now referring to the other.  Similarly, the Voice Control Set part values are not swapped.
+<li><b>Mute Parts...</b>&nbsp;&nbsp;&nbsp;This lets you temporarily mute parts of your choice, notionally so you can focus on hearing certain other parts.  "Muting" mean that Edisyn will send the FS1R a command to set their MIDI channel to OFF.  The actual parameter setting in Edisyn will be unaffected.  If an operator is unmuted, the MIDI channel will be restored.  Note that this only applies to immediate real-time changes: requesting a patch, writing a patch, or sending it, may reset the Mute settings.  
+
+<p><li><b>Swap Parts...</b>&nbsp;&nbsp;&nbsp;This lets you swap two parts.  Note that the Fseq Part (See Common tab) is unchanged, so if it was referring to one of the parts it's now referring to the other.  Similarly, the Voice Control Set part values are not swapped.
 
 <p><li><b>Copy Parts...</b>&nbsp;&nbsp;&nbsp;This lets you copy a part to another (or to all of them).  You can of course also do this with Edisyn's copy tab menu.
 

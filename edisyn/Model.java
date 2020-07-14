@@ -648,11 +648,11 @@ public class Model implements Cloneable
         }
     
     public void unregister(String key, Updatable component)
-    	{
+        {
         ArrayList list = (ArrayList)(listeners.get(key));
         if (list != null)
-        	list.remove(component);
-    	}
+            list.remove(component);
+        }
 
     /** Returns all the keys in the model as an array, except the hidden ones. */        
     public String[] getKeys()

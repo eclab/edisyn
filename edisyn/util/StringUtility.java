@@ -8,46 +8,46 @@ import java.util.*;
 
 public class StringUtility
     {
- 	static boolean isWindows() 
+    static boolean isWindows() 
         {
         return (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0);
         }
 
     public static String makeValidFilename(String filename)
-    	{
-    	char[] f = filename.toCharArray();
-    	
-    	if (isWindows())
-    		{
-			for(int i = 0; i < f.length; i++)
-				{
-				// Lots of stuff is invalid in Windows
-				if (f[i] < ' ' || f[i] >= 127) f[i] = ' ';
-				else if (f[i] == '/') f[i] = '-';
-				else if (f[i] == '\\') f[i] = '-';
-				else if (f[i] == ':') f[i] = '-';
-				else if (f[i] == '*') f[i] = '-';
-				else if (f[i] == '?') f[i] = '!';
-				else if (f[i] == '"') f[i] = '\'';
-				else if (f[i] == '<') f[i] = '[';
-				else if (f[i] == '>') f[i] = ']';
-				else if (f[i] == '|') f[i] = '-';
-				// we're ignoring stuff like PRN and COM etc.
-				}
-			}
-		else
-		 	{
-		 	// technically everything is legal in Unix except for / and \0.  But we'll replace
-		 	// a few more.
-			for(int i = 0; i < f.length; i++)
-				{
-				if (f[i] < ' ' || f[i] >= 127) f[i] = ' ';
-				else if (f[i] == '/') f[i] = '-';
-				else if (f[i] == '\\') f[i] = '-';
-				}
-		 	}
-		 return String.valueOf(f);
-    	}
+        {
+        char[] f = filename.toCharArray();
+        
+        if (isWindows())
+            {
+            for(int i = 0; i < f.length; i++)
+                {
+                // Lots of stuff is invalid in Windows
+                if (f[i] < ' ' || f[i] >= 127) f[i] = ' ';
+                else if (f[i] == '/') f[i] = '-';
+                else if (f[i] == '\\') f[i] = '-';
+                else if (f[i] == ':') f[i] = '-';
+                else if (f[i] == '*') f[i] = '-';
+                else if (f[i] == '?') f[i] = '!';
+                else if (f[i] == '"') f[i] = '\'';
+                else if (f[i] == '<') f[i] = '[';
+                else if (f[i] == '>') f[i] = ']';
+                else if (f[i] == '|') f[i] = '-';
+                // we're ignoring stuff like PRN and COM etc.
+                }
+            }
+        else
+            {
+            // technically everything is legal in Unix except for / and \0.  But we'll replace
+            // a few more.
+            for(int i = 0; i < f.length; i++)
+                {
+                if (f[i] < ' ' || f[i] >= 127) f[i] = ' ';
+                else if (f[i] == '/') f[i] = '-';
+                else if (f[i] == '\\') f[i] = '-';
+                }
+            }
+        return String.valueOf(f);
+        }
     
     public static int getFirstInt(String string)
         {

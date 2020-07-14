@@ -256,7 +256,7 @@ public class Chooser extends NumericalComponent
         {
         setCallActionListener(false);
         if (index < getNumElements())
-        	combo.setSelectedIndex(index);
+            combo.setSelectedIndex(index);
         setCallActionListener(true);
         }
         
@@ -270,18 +270,18 @@ public class Chooser extends NumericalComponent
         setElements(_label, elements, buildDefaultValues(elements));
         }
 
-	// Simply replaces the item text.  The number of elements should be identical.
-	public void replaceElements(String[] elements)
-		{
+    // Simply replaces the item text.  The number of elements should be identical.
+    public void replaceElements(String[] elements)
+        {
         setCallActionListener(false);
         int val = combo.getSelectedIndex();
         combo.removeAllItems();
         for(int i = 0; i < elements.length; i++)
             combo.addItem(elements[i]);
         if (val >= 0) 
-        	combo.setSelectedIndex(val);
+            combo.setSelectedIndex(val);
         setCallActionListener(true);
-		}
+        }
 
     public void setElements(String _label, String[] elements, int[] values)
         {

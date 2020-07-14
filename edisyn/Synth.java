@@ -623,7 +623,7 @@ public abstract class Synth extends JComponent implements Updatable
     public static int PARSE_SUCCEEDED = 2;
     public static int PARSE_SUCCEEDED_UNTITLED = 3;
     public static int PARSE_CANCELLED = 4;
-    static int PARSE_ERROR = 5;		// note not public
+    static int PARSE_ERROR = 5;         // note not public
     
     /** Updates the model to reflect the following sysex patch dump for your synthesizer type.
         FROMFILE indicates that the parse is from a sysex file.
@@ -908,7 +908,7 @@ public abstract class Synth extends JComponent implements Updatable
     public int getPauseAfterSendOneParameter() { return 0; }
 
     /** Override this to make sure that the given additional time (in ms) has transpired after writing a patch but before the change patch following. 
-    	The default is to be the same as getPauseAfterSendAllParameters(); */
+        The default is to be the same as getPauseAfterSendAllParameters(); */
     public int getPauseAfterWritePatch() { return getPauseAfterSendAllParameters(); }
 
     /** Override this to return TRUE if, after a patch write, we need to change to the patch *again* so as to load it into memory. */
@@ -1101,10 +1101,10 @@ public abstract class Synth extends JComponent implements Updatable
                                 {
                                 final byte[] data = midi.gatherInSysexData((SysexMessage)message);
 
-								if (data == null)
-									{
-									// sysex not completed yet
-									}
+                                if (data == null)
+                                    {
+                                    // sysex not completed yet
+                                    }
                                 else if (recognizeLocal(data))
                                     {
                                     // this last statement fixes a mystery.  When I call Randomize or Reset on
@@ -1135,16 +1135,16 @@ public abstract class Synth extends JComponent implements Updatable
                                         undo.setWillPush(false);
                                         Model backup = (Model)(model.clone());
                                         int result = PARSE_ERROR;
-                                       	try 
-                                       		{
-                                       		result = parse(data, false);
-                                       		}
-                                       	catch (Exception ex)
-                                       		{
-                                       		ex.printStackTrace();
-                                       		// result is now PARSE_ERROR
-                                       		}
-                                       		
+                                        try 
+                                            {
+                                            result = parse(data, false);
+                                            }
+                                        catch (Exception ex)
+                                            {
+                                            ex.printStackTrace();
+                                            // result is now PARSE_ERROR
+                                            }
+                                                
                                         incomingPatch = (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
                                         if (result == PARSE_CANCELLED)
                                             {
@@ -1155,9 +1155,9 @@ public abstract class Synth extends JComponent implements Updatable
                                             showSimpleError("Receive Error", "Could not read the patch.");
                                             }
                                         else if (result == PARSE_ERROR)
-                                        	{
+                                            {
                                             showSimpleError("Receive Error", "An error occurred on reading the patch.");
-                                        	}
+                                            }
 
                                         undo.setWillPush(true);
                                         if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
@@ -1221,22 +1221,22 @@ public abstract class Synth extends JComponent implements Updatable
             };
         }
         
-	byte[] extractData(MidiMessage message)
-		{
-		byte[] d = message.getMessage();
-		
-		// weirdly, d.length is permitted to be larger than the actual message length
-		int len = message.getLength();
-		if (len < d.length)
-			{
-			byte[] newD = new byte[len];
-			System.arraycopy(d, 0, newD, 0, len);
-			return newD;
-			}
-		else return d;                     	
-		}
-		
-		
+    byte[] extractData(MidiMessage message)
+        {
+        byte[] d = message.getMessage();
+                
+        // weirdly, d.length is permitted to be larger than the actual message length
+        int len = message.getLength();
+        if (len < d.length)
+            {
+            byte[] newD = new byte[len];
+            System.arraycopy(d, 0, newD, 0, len);
+            return newD;
+            }
+        else return d;                          
+        }
+                
+                
 
     /** Builds a receiver to attach to the current KEY transmitter.  The receiver
         can resend all incoming requests to the OUT receiver. */
@@ -1341,6 +1341,109 @@ public abstract class Synth extends JComponent implements Updatable
             };
         }
     
+    /** Builds a receiver to attach to the current KEY 2 transmitter.  The receiver
+        can resend all incoming requests to the OUT receiver. */
+    public Receiver buildKey2Receiver()
+        {
+        return new Receiver()
+            {
+            public void close()
+                {
+                }
+                                
+            public void send(final MidiMessage message, final long timeStamp)
+                {
+                // I'm doing this in the Swing event thread because I figure it's multithreaded
+                SwingUtilities.invokeLater(new Runnable()
+                    {
+                    public void run()
+                        {
+                        if (amActiveSynth())
+                            {
+                            if (message instanceof ShortMessage)
+                                {
+                                midi.resetKey2SysexData();
+                                ShortMessage shortMessage = (ShortMessage)message;
+                                try
+                                    {
+                                    // we intercept a message if:
+                                    // 1. It's a CC (maybe NRPN)
+                                    // 2. We're not passing through CC
+                                    // 3. It's the right channel OR our key 2 channel is OMNI OR we're doing per-channel CCs
+                                    if (tuple != null &&
+                                        !getPassThroughCC() && 
+                                        shortMessage.getCommand() == ShortMessage.CONTROL_CHANGE &&
+                                        (shortMessage.getChannel() == (tuple.key2Channel - 1) || tuple.key2Channel == tuple.KEYCHANNEL_OMNI || perChannelCCs))
+                                        {
+                                        // we intercept this
+                                        handleKeyRawCC(shortMessage);
+                                        messageFromController(message, true, false);
+                                        }
+                                        
+                                    // We send the message to the synth if:
+                                    // 1. We didn't intercept it
+                                    // 2. We pass through data to the synth
+                                    else if (tuple != null && getPassThroughController())
+                                        {
+                                        // pass it on!
+                                        ShortMessage newMessage = null;
+                                                                                
+                                        // In order to pass on, we have to make a new one.  But 
+                                        // stupidly, ShortMessage has no way of changing its channel, so we have to rebuild
+                                        ShortMessage s = (ShortMessage)message;
+                                        int status = s.getStatus();
+                                        int channel = s.getChannel();
+                                        int data1 = s.getData1();
+                                        int data2 = s.getData2();
+                                        boolean voiceMessage = ( status < 0xF0 );
+
+                                        // should we attempt to reroute to the synth?
+                                        if (channel == (tuple.key2Channel - 1) || tuple.key2Channel == tuple.KEYCHANNEL_OMNI)
+                                            {
+                                            channel = getVoiceMessageRoutedChannel(channel, getChannelOut());
+                                            }
+
+                                        if (voiceMessage)
+                                            {
+                                            newMessage = new ShortMessage(status, channel, data1, data2);
+                                            }
+                                        else
+                                            {
+                                            newMessage = new ShortMessage(status, data1, data2);
+                                            }
+                                                                
+                                        tryToSendMIDI(newMessage);
+                                        messageFromController(newMessage, false, true);
+                                        }
+                                    else
+                                        {
+                                        messageFromController(message, false, false);
+                                        }
+                                    }
+                                catch (InvalidMidiDataException e)
+                                    {
+                                    e.printStackTrace();
+                                    messageFromController(message, false, false);
+                                    }
+                                }
+                            else if (message instanceof SysexMessage && passThroughController)
+                                {
+                                tryToSendSysex(extractData(message));
+                                messageFromController(message, false, true);
+                                }
+                            }
+                        if (testIncomingControllerMIDI) 
+                            { 
+                            showSimpleMessage("Incoming MIDI from Controller", "A MIDI message has arrived from the Controller:\n" + Midi.format(message) + "\nTime: " + timeStamp); 
+                            testIncomingControllerMIDI = false; 
+                            testIncomingController.setText("Report Next Controller MIDI");
+                            } 
+                        }
+                    });
+                }
+            };
+        }    
+    
     public void messageFromController(MidiMessage message, boolean interceptedForInternalUse, boolean routedToSynth) { return; }
 
     public int getVoiceMessageRoutedChannel(int incomingChannel, int synthChannel) { return synthChannel; }
@@ -1362,7 +1465,7 @@ public abstract class Synth extends JComponent implements Updatable
         or you may pass null in if there are no old devices.  Returns TRUE if a new tuple was set up. */
     public boolean setupMIDI(String message, Midi.Tuple oldTuple)
         {
-        Midi.Tuple result = Midi.getNewTuple(oldTuple, this, message, buildInReceiver(), buildKeyReceiver());
+        Midi.Tuple result = Midi.getNewTuple(oldTuple, this, message, buildInReceiver(), buildKeyReceiver(), buildKey2Receiver());
         boolean retval = false;
                 
         if (result == Midi.FAILED)
@@ -1887,19 +1990,20 @@ public abstract class Synth extends JComponent implements Updatable
         
         try 
             {
-        	result = mergeSynth.parse(data, false);
-			 }
-		catch (Exception ex)
-			{
-			ex.printStackTrace();
-			// result is now PARSE_ERROR
-			}
+            result = mergeSynth.parse(data, false);
+            }
+        catch (Exception ex)
+            {
+            ex.printStackTrace();
+            // result is now PARSE_ERROR
+            }
         
         mergeSynth.parsingForMerge = false;
         mergeSynth.setSendMIDI(true);
         
         if (result == PARSE_CANCELLED)
             {
+            System.err.println("CANCELLED");
             // nothing
             mergeSynth = null;
             setSendMIDI(false);
@@ -1907,6 +2011,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else if (result == PARSE_INCOMPLETE)
             {
+            System.err.println("INCOMPLETE");
             setSendMIDI(false);
             return result;
             }
@@ -1917,13 +2022,13 @@ public abstract class Synth extends JComponent implements Updatable
             setSendMIDI(false);
             return result;
             }
-		else if (result == PARSE_ERROR)
-			{
-			showSimpleError("Receive Error", "An error occurred on reading the patch.");
+        else if (result == PARSE_ERROR)
+            {
+            showSimpleError("Receive Error", "An error occurred on reading the patch.");
             mergeSynth = null;
             setSendMIDI(false);
             return result;
-			}
+            }
         else
             {
             // this last statement fixes a mystery.  When I call Randomize or Reset on
@@ -1936,7 +2041,11 @@ public abstract class Synth extends JComponent implements Updatable
 
             undo.setWillPush(false);
             Model backup = (Model)(model.clone());
-            model.recombine(random, mergeSynth.getModel(), getMutationKeys(), probability); //useMapForRecombination ? getMutationKeys() : model.getKeys()
+            if (!model.keyEquals(mergeSynth.getModel()))
+                System.err.println("merge not equal");
+            model.recombine(random, mergeSynth.getModel(), getMutationKeys(), probability);
+            if (!model.keyEquals(backup))
+                System.err.println("doesn't equal");
             revise();  // just in case
             mergeSynth = null;        
                                 
@@ -2807,7 +2916,7 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     if (lastMutate > 0.0)
                         {
-                        doUndo(false);		// no reason to send it
+                        doUndo(false);          // no reason to send it
                         doMutate(lastMutate);
                         }
                     else
@@ -3330,6 +3439,7 @@ public abstract class Synth extends JComponent implements Updatable
             });
 
         receivePatch = new JMenuItem("Request Patch...");
+        receivePatch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
         menu.add(receivePatch);
         receivePatch.addActionListener(new ActionListener()
             {
@@ -5532,14 +5642,14 @@ public abstract class Synth extends JComponent implements Updatable
                                                 otherSynth.getModel().clearListeners();         // otherwise we GC horribly.....
                                                 
                                                 try
-                                                	{
-                                                	otherSynth.parse(data[i], true);
-                                                	}
+                                                    {
+                                                    otherSynth.parse(data[i], true);
+                                                    }
                                                 catch (Exception ex)
-                                                	{
-                                                	ex.printStackTrace();
-                                                	}
-                                                	
+                                                    {
+                                                    ex.printStackTrace();
+                                                    }
+                                                        
                                                 pNames[0][count] = "" + (count + 1) + "   " + otherSynth.getPatchName(otherSynth.model);
                                                 }
                                                                                                                                                                                         
@@ -5625,14 +5735,14 @@ public abstract class Synth extends JComponent implements Updatable
                                                 otherSynth.getModel().clearListeners();         // otherwise we GC horribly.....
 
                                                 try
-                                                	{
-                                                	otherSynth.parse(data[i], true);
-                                                	}
+                                                    {
+                                                    otherSynth.parse(data[i], true);
+                                                    }
                                                 catch (Exception ex)
-                                                	{
-                                                	ex.printStackTrace();
-                                                	}
-                                                	
+                                                    {
+                                                    ex.printStackTrace();
+                                                    }
+                                                        
                                                 pNames[j][count] = "" + (count + 1) + "   " + otherSynth.getPatchName(otherSynth.model);
                                                 }                                                       
                                             indices[j][count] = i;
@@ -5704,15 +5814,15 @@ public abstract class Synth extends JComponent implements Updatable
                                             merge, f, fd, true);
                                         }
                                     else if (result != null && result.equals("Write All Patches"))
-                                    	{
-                                    	if (showSimpleConfirm("Write All Patches", "Write all patches to the synth?"))
-                                    		{
-											// need at least one synth from the patches so we can determine what the pause between writes should be
-											 Synth temp = (Synth)(instantiate(synths[external[0]], synthNames[external[0]], true, false, null));
-											succeeded = writeBulk(temp, data);
-                                    		}
-                                    	else succeeded = false;
-                                    	}
+                                        {
+                                        if (showSimpleConfirm("Write All Patches", "Write all patches to the synth?"))
+                                            {
+                                            // need at least one synth from the patches so we can determine what the pause between writes should be
+                                            Synth temp = (Synth)(instantiate(synths[external[0]], synthNames[external[0]], true, false, null));
+                                            succeeded = writeBulk(temp, data);
+                                            }
+                                        else succeeded = false;
+                                        }
                                     else // cancelled in some way.  An apparent bug in JOptionPane is such that if you press ESC, then -1 is returned by getValue().  It should be returning null.
                                         {
                                         succeeded = false;
@@ -5740,101 +5850,101 @@ public abstract class Synth extends JComponent implements Updatable
         return succeeded;
         }
 
-	// This writes out a bulk sysex, using a JProgressBar and a cancel button.  It's a complex thing to
-	// do because it's using a JOptionPane, which is modal and takes control over everything.  To make 
-	// things more complex, this method is called from the Swing event thread.  So I have to use a Timer
-	// to write everything out one by one.
-	//
-	// You pass in all the sysex to write out, plus a synth which ought to be typical of the
-	// data being written (it'll be queried with getPauseAfterWritePatch() to determine how much time
-	// to wait in-between writes). 
-	// 
-	// if synth == null, then the pause between writes will be DEFAULT_BULK_WRITE_PAUSE (150ms)
-	
-	public static final int DEFAULT_BULK_WRITE_PAUSE = 150;
-	
-	boolean writeBulk(Synth synth, byte[][] data)
-		{
+    // This writes out a bulk sysex, using a JProgressBar and a cancel button.  It's a complex thing to
+    // do because it's using a JOptionPane, which is modal and takes control over everything.  To make 
+    // things more complex, this method is called from the Swing event thread.  So I have to use a Timer
+    // to write everything out one by one.
+    //
+    // You pass in all the sysex to write out, plus a synth which ought to be typical of the
+    // data being written (it'll be queried with getPauseAfterWritePatch() to determine how much time
+    // to wait in-between writes). 
+    // 
+    // if synth == null, then the pause between writes will be DEFAULT_BULK_WRITE_PAUSE (150ms)
+        
+    public static final int DEFAULT_BULK_WRITE_PAUSE = 150;
+        
+    boolean writeBulk(Synth synth, byte[][] data)
+        {
         if (tuple == null || tuple.out == null)
             {
             if (!setupMIDI())
                 return false;
             }
             
-		final boolean[] writeBulkCancelled = new boolean[] { false };
-		final JProgressBar bar = new JProgressBar(0, data.length - 1);
-		SwingUtilities.invokeLater(new Runnable()
-			{
-			public void run()
-				{
-	        	showMultiOption(Synth.this, new String[] { "Progress" } , new JComponent[] { bar }, new String[] { "Cancel" }, 0, "Bulk Write", "Writing patches to synthesizer...");
-	        	writeBulkCancelled[0] = true;
-	        	}
-			});
-		
-		final byte[][] dat = data;
-		final int[] index = new int[] { 0 };
-		final boolean[] invalid = new boolean[] { false };
-		final javax.swing.Timer[] timer = new javax.swing.Timer[1];
-		final int pause = (synth == null ? DEFAULT_BULK_WRITE_PAUSE : synth.getPauseAfterWritePatch() + 1);
-		
-		final long time = System.currentTimeMillis();
-		timer[0] = new javax.swing.Timer(pause , new ActionListener()
-			{
-			public void actionPerformed(ActionEvent e)
-				{
-				if (index[0] >= data.length || writeBulkCancelled[0])	// finished
-					{
-					Window win = SwingUtilities.getWindowAncestor(bar);
-					if (win != null) win.dispose();			// force close, though it may already be closed
-					if (timer[0] != null) timer[0].stop();
-					
-					long time2 = System.currentTimeMillis();
-					if (time2 > time && time2 - time < 1000)
-						simplePause((int)(1000L - (time2 - time)));		// this is a decorative pause to give the user time to spot the window in case it appears and disappears rapidly
-					
-					if (invalid[0])
-						showSimpleError("Write Error", "Some patches could not be written.");
-					}
-				else
-					{
-					if (!tryToSendSysex(dat[index[0]])) invalid[0] = true;	// we ignore the return value because we'll try 
-					index[0]++;
-					bar.setValue(index[0] + 1);
-					}
-				}
-			});
-		timer[0].start();
+        final boolean[] writeBulkCancelled = new boolean[] { false };
+        final JProgressBar bar = new JProgressBar(0, data.length - 1);
+        SwingUtilities.invokeLater(new Runnable()
+            {
+            public void run()
+                {
+                showMultiOption(Synth.this, new String[] { "Progress" } , new JComponent[] { bar }, new String[] { "Cancel" }, 0, "Bulk Write", "Writing patches to synthesizer...");
+                writeBulkCancelled[0] = true;
+                }
+            });
+                
+        final byte[][] dat = data;
+        final int[] index = new int[] { 0 };
+        final boolean[] invalid = new boolean[] { false };
+        final javax.swing.Timer[] timer = new javax.swing.Timer[1];
+        final int pause = (synth == null ? DEFAULT_BULK_WRITE_PAUSE : synth.getPauseAfterWritePatch() + 1);
+                
+        final long time = System.currentTimeMillis();
+        timer[0] = new javax.swing.Timer(pause , new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                if (index[0] >= data.length || writeBulkCancelled[0])   // finished
+                    {
+                    Window win = SwingUtilities.getWindowAncestor(bar);
+                    if (win != null) win.dispose();                 // force close, though it may already be closed
+                    if (timer[0] != null) timer[0].stop();
+                                        
+                    long time2 = System.currentTimeMillis();
+                    if (time2 > time && time2 - time < 1000)
+                        simplePause((int)(1000L - (time2 - time)));             // this is a decorative pause to give the user time to spot the window in case it appears and disappears rapidly
+                                        
+                    if (invalid[0])
+                        showSimpleError("Write Error", "Some patches could not be written.");
+                    }
+                else
+                    {
+                    if (!tryToSendSysex(dat[index[0]])) invalid[0] = true;  // we ignore the return value because we'll try 
+                    index[0]++;
+                    bar.setValue(index[0] + 1);
+                    }
+                }
+            });
+        timer[0].start();
 
-    	return true;
-		}
-			
-			
-			
+        return true;
+        }
+                        
+                        
+                        
     // Private function used by doOpen(...) to issue an error when Edisyn doesn't know how to parse
     // the provided sysex data.
     boolean unknownSysexFileError(byte[][] data)
         {
         String val = Midi.getManufacturerForSysex(data[0]);
                
-		String message = "File might contain sysex data but has an invalid manufacturer ID.";  
-		                                                                                       
+        String message = "File might contain sysex data but has an invalid manufacturer ID.";  
+                                                                                                       
         if (val != null)
-        	message = "<html>File does not contain sysex data that Edisyn knows how to load.<br>" +
+            message = "<html>File does not contain sysex data that Edisyn knows how to load.<br>" +
                 "This appears to be sysex data from the following manufacturer:<br>" + val + "</html>";
                 
- 		Object[] options = { "Write to MIDI Anyway", "Cancel" };
-		int result = JOptionPane.showOptionDialog(Synth.this, message, "File Error", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        Object[] options = { "Write to MIDI Anyway", "Cancel" };
+        int result = JOptionPane.showOptionDialog(Synth.this, message, "File Error", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
         if (result == 0)
-        	{
-        	// double check
-			if (showSimpleConfirm("Write All Patches", "Write all patches to MIDI?"))
-				{
-        		writeBulk(null, data);
-        		return true;
-				}
-			else return false;
-        	}
+            {
+            // double check
+            if (showSimpleConfirm("Write All Patches", "Write all patches to MIDI?"))
+                {
+                writeBulk(null, data);
+                return true;
+                }
+            else return false;
+            }
         else return false;
         }
 
@@ -5899,25 +6009,25 @@ public abstract class Synth extends JComponent implements Updatable
             int result = PARSE_ERROR;
             
             try
-            	{
-            	result = parse(data, true);
-            	}
-			catch (Exception ex)
-				{
-				ex.printStackTrace();
-				// The default result will be PARSE_ERROR
-				}
-				
+                {
+                result = parse(data, true);
+                }
+            catch (Exception ex)
+                {
+                ex.printStackTrace();
+                // The default result will be PARSE_ERROR
+                }
+                                
             if (result == PARSE_FAILED)
                 {
                 showSimpleError("File Error", "Could not read the patch.");
                 succeeded = false;
                 }
-			else if (result == PARSE_ERROR)
-				{
-				showSimpleError("File Error", "An error occurred on reading the patch.");
+            else if (result == PARSE_ERROR)
+                {
+                showSimpleError("File Error", "An error occurred on reading the patch.");
                 succeeded = false;
-				}
+                }
             else                // including PARSE_CANCELLED
                 {
                 undo.setWillPush(true);
@@ -5959,14 +6069,14 @@ public abstract class Synth extends JComponent implements Updatable
         
         int result = PARSE_ERROR;
         try
-        	{
-        	 result = otherSynth.parse(data, true);
-        	 }
-		catch (Exception ex)
-			{
-			ex.printStackTrace();
-			// result is now PARSE_ERROR
-			}
+            {
+            result = otherSynth.parse(data, true);
+            }
+        catch (Exception ex)
+            {
+            ex.printStackTrace();
+            // result is now PARSE_ERROR
+            }
 
         if (result == PARSE_FAILED)
             {
@@ -5975,11 +6085,11 @@ public abstract class Synth extends JComponent implements Updatable
             return false;
             }
         else if (result == PARSE_ERROR)
-        	{
+            {
             otherSynth.showSimpleError("File Error", "An error occurred on reading the patch.");
             otherSynth.setSendMIDI(true);
             return false;
-        	}
+            }
                 
         otherSynth.file = f;
         otherSynth.setLastDirectory(fd.getDirectory());

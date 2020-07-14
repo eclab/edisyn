@@ -253,6 +253,8 @@ public class Midi
         inDevices = new ArrayList();
         keyDevices = new ArrayList();
         keyDevices.add("None");
+        key2Devices = new ArrayList();
+        key2Devices.add("None");
         for(int i = 0; i < allDevices.size(); i++)
             {
             try
@@ -262,6 +264,7 @@ public class Midi
                     {
                     inDevices.add(mdn);
                     keyDevices.add(mdn);
+                    key2Devices.add(mdn);
                     }
                 }
             catch(Exception e) { ExceptionDump.postThrowable(e); }
@@ -286,6 +289,7 @@ public class Midi
     static ArrayList inDevices;
     static ArrayList outDevices;
     static ArrayList keyDevices;
+    static ArrayList key2Devices;
         
     static
         {
@@ -322,11 +326,21 @@ public class Midi
         /** The channel to receive voiced messages from on the keyboard/controller input. */
         public int keyChannel = KEYCHANNEL_OMNI;
         
+        /** The secondary keyboard/controller input */
+        public Thru key2;
+        /** The secondary keyboard/controller input device's wrapper */
+        public MidiDeviceWrapper key2Wrap;
+        /** The currsecondaryent receiver which is attached to the keyboard/controller input
+            to perform its commands.  Typically generated with Synth.buildKeyReceiver() */
+        public Receiver key2Receiver;
+        /** The secondary to receive voiced messages from on the keyboard/controller input. */
+        public int key2Channel = KEYCHANNEL_OMNI;
+        
         public String id = "0";
            
         int refcount = 1;
         
-        public Tuple copy(Receiver inReceiver, Receiver keyReceiver)
+        public Tuple copy(Receiver inReceiver, Receiver keyReceiver, Receiver key2Receiver)
             {
             if (refcount < 1)
                 throw new RuntimeException("Cannot copy a fully disposed Midi tuple");
@@ -339,6 +353,9 @@ public class Midi
             if (key != null)
                 key.addReceiver(keyReceiver);
                 
+            if (key2 != null)
+                key2.addReceiver(key2Receiver);
+                
             return this; 
             }
         
@@ -350,6 +367,8 @@ public class Midi
                 {
                 if (key != null && keyReceiver != null)
                     key.removeReceiver(keyReceiver);
+                if (key2 != null && key2Receiver != null)
+                    key2.removeReceiver(key2Receiver);
                 if (in != null && inReceiver!= null)
                     in.removeReceiver(inReceiver);
 
@@ -360,6 +379,8 @@ public class Midi
 
                 key = null;
                 keyReceiver = null;
+                key2 = null;
+                key2Receiver = null;
                 in = null;
                 inReceiver = null;
                 }
@@ -374,6 +395,9 @@ public class Midi
     
     static void setLastTupleKey(String path, Synth synth) { Synth.setLastX(path, "LastTupleKey", synth.getSynthNameLocal(), false); }
     static String getLastTupleKey(Synth synth) { return Synth.getLastX("LastTupleKey", synth.getSynthNameLocal(), false); }
+    
+    static void setLastTupleKey2(String path, Synth synth) { Synth.setLastX(path, "LastTupleKey2", synth.getSynthNameLocal(), false); }
+    static String getLastTupleKey2(Synth synth) { return Synth.getLastX("LastTupleKey2", synth.getSynthNameLocal(), false); }
     
     static void setLastTupleOutChannel(int channel, Synth synth) { Synth.setLastX("" + channel, "LastTupleOutChannel", synth.getSynthNameLocal(), false); }
     static int getLastTupleOutChannel(Synth synth) 
@@ -403,6 +427,19 @@ public class Midi
             }
         }
     
+    static void setLastTupleKey2Channel(int channel, Synth synth) { Synth.setLastX("" + channel, "LastTupleKey2Channel", synth.getSynthNameLocal(), false); }
+    static int getLastTupleKey2Channel(Synth synth) 
+        { 
+        String val = Synth.getLastX("LastTupleKey2Channel", synth.getSynthNameLocal(), false); 
+        if (val == null) return -1;
+        else 
+            {
+            try
+                { return Integer.parseInt(val); }
+            catch (Exception e)
+                { ExceptionDump.postThrowable(e); e.printStackTrace(); return -1; }
+            }
+        }
 
 
     public static final Tuple CANCELLED = new Tuple();
@@ -410,9 +447,9 @@ public class Midi
         
     /** Works with the user to generate a new Tuple holding new MIDI connections.
         You may provide the old tuple for defaults or pass in null.  You also
-        provide the inReceiver and keyReceiver to be attached to the input and keyboard/controller
+        provide the inReceiver and keyReceiver and key2Receiver to be attached to the input and keyboard/controller
         input.  You get these with Synth.buildKeyReceiver() and Synth.buildInReceiver() */ 
-    public static Tuple getNewTuple(Tuple old, Synth synth, String message, Receiver inReceiver, Receiver keyReceiver)
+    public static Tuple getNewTuple(Tuple old, Synth synth, String message, Receiver inReceiver, Receiver keyReceiver, Receiver key2Receiver)
         {
         updateDevices();
         
@@ -439,6 +476,7 @@ public class Midi
         else
             {
             String[] kc = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
+            String[] k2c = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
             String[] rc = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
 
             JComboBox inCombo = new JComboBox(inDevices.toArray());
@@ -463,6 +501,14 @@ public class Midi
             else if (findDevice(getLastTupleKey(synth), keyDevices) != null)
                 keyCombo.setSelectedItem(findDevice(getLastTupleKey(synth), keyDevices));
 
+            JComboBox key2Combo = new JComboBox(key2Devices.toArray());
+            key2Combo.setMaximumRowCount(32);
+            key2Combo.setSelectedIndex(0);  // "none"
+            if (old != null && old.key2Wrap != null && key2Devices.indexOf(old.key2Wrap) != -1)
+                key2Combo.setSelectedIndex(key2Devices.indexOf(old.key2Wrap));
+            else if (findDevice(getLastTupleKey2(synth), key2Devices) != null)
+                key2Combo.setSelectedItem(findDevice(getLastTupleKey2(synth), key2Devices));
+
             JTextField outID = null;
             String initialID = synth.reviseID(null);
             if (initialID != null)
@@ -482,13 +528,19 @@ public class Midi
             else if (getLastTupleKeyChannel(synth) > 0)
                 keyChannelsCombo.setSelectedIndex(getLastTupleKeyChannel(synth));
 
+            JComboBox key2ChannelsCombo = new JComboBox(kc);
+            key2ChannelsCombo.setMaximumRowCount(17);
+            if (old != null)
+                key2ChannelsCombo.setSelectedIndex(old.key2Channel);
+            else if (getLastTupleKey2Channel(synth) > 0)
+                key2ChannelsCombo.setSelectedIndex(getLastTupleKey2Channel(synth));
                         
             boolean result = false;
             synth.disableMenuBar();
             if (initialID != null)
-                result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Synth ID", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, outID, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
+                result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send/Receive Channel", "Synth ID", "Controller", "Controller Channel", "Controller 2", "Controller 2 Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, outID, keyCombo, keyChannelsCombo, key2Combo, key2ChannelsCombo }, "MIDI Devices", message);
             else
-                result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send Channel", "Controller", "Controller Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, keyCombo, keyChannelsCombo }, "MIDI Devices", message);
+                result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send/Receive Channel", "Controller", "Controller Channel", "Controller 2", "Controller 2 Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, keyCombo, keyChannelsCombo, key2Combo, key2ChannelsCombo }, "MIDI Devices", message);
             synth.enableMenuBar();
                              
             if (result)
@@ -498,6 +550,7 @@ public class Midi
                 Tuple tuple = new Tuple();
                                 
                 tuple.keyChannel = keyChannelsCombo.getSelectedIndex();
+                tuple.key2Channel = key2ChannelsCombo.getSelectedIndex();
                 tuple.outChannel = outChannelsCombo.getSelectedIndex() + 1;
                 
                 if (initialID != null)
@@ -570,6 +623,32 @@ public class Midi
                         tuple.key = null;
                         }
                     }
+
+                if (key2Combo.getSelectedItem() instanceof String)
+                    {
+                    tuple.key2Wrap = null;
+                    tuple.key2 = null;
+                    }
+                else
+                    {
+                    tuple.key2Wrap = ((MidiDeviceWrapper)(key2Combo.getSelectedItem()));
+                    tuple.key2 = tuple.key2Wrap.getThru(key2Receiver);
+                    tuple.key2Receiver = key2Receiver;
+                    if (tuple.key2 == null)
+                        {
+                        synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the Controller 2 MIDI Device.");
+/*
+  synth.disableMenuBar();
+  JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the Controller MIDI Device.",  
+  "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+  JOptionPane.WARNING_MESSAGE, null,
+  new String[] { "Run without Controller" }, "Run without Controller");
+*/
+                        synth.enableMenuBar();
+                        tuple.key2Wrap = null;
+                        tuple.key2 = null;
+                        }
+                    }
                     
                 setLastTupleIn(tuple.inWrap.toString(), synth);
                 setLastTupleOut(tuple.outWrap.toString(), synth);
@@ -577,8 +656,14 @@ public class Midi
                     setLastTupleKey("None", synth);
                 else
                     setLastTupleKey(tuple.keyWrap.toString(), synth);
+                if (tuple.key2Wrap == null)
+                    setLastTupleKey2("None", synth);
+                else
+                    setLastTupleKey2(tuple.key2Wrap.toString(), synth);
                 setLastTupleOutChannel(tuple.outChannel, synth);
                 setLastTupleKeyChannel(tuple.keyChannel, synth);
+                setLastTupleKey2Channel(tuple.key2Channel, synth);
+
                 
                 return tuple;
                 }
@@ -1079,171 +1164,225 @@ public class Midi
     
     byte[] inSysex = null;
     byte[] keySysex = null;
+    byte[] key2Sysex = null;
     
     public void resetInSysexData()
-    	{
-    	inSysex = null;
-    	}
-    	
+        {
+        inSysex = null;
+        }
+        
     public void resetKeySysexData()
-    	{
-    	keySysex = null;
-    	}
-    	
+        {
+        keySysex = null;
+        }
+        
+    public void resetKey2SysexData()
+        {
+        key2Sysex = null;
+        }
+        
     public byte[] gatherInSysexData(byte[] data, int messageLen)
-    	{
-	   	if (messageLen == 0) // uh...
-	   		{
-    		return null;
-    		}
-    		
-    	if (data.length == 0) // uh...
-    		{
-    		return null;
-    		}
-		    		
-    	if (data[0] == (byte)0xF0)  // it's a new message
-    		{
-    		System.err.println("0xF0");
-    		inSysex = new byte[messageLen];
-	    	System.arraycopy(data, 0, inSysex, 0, messageLen);
-	    	}
-	    else if (data[0] == (byte)0xF7)  // it's a continuation of a message
-	    	{
-    		System.err.println("0xF7");
-	    	if (inSysex == null) // uh...
-	    		return null;
-	    	byte[] temp = new byte[inSysex.length + messageLen - 1];
-	    	
-	    	// yeah yeah, O(n^2), I could obviously do much, much better, maybe later
-	    	System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
-	    	System.arraycopy(data, 1, temp, inSysex.length, messageLen - 1);	// skip the 0xF7
-	    	inSysex = temp;
-	    	}
-	    /*
-	    else 		// May be missing the 0xF7?
-	    	{
-	    	if (inSysex == null) // uh...
-	    		return null;
-	    	byte[] temp = new byte[inSysex.length + messageLen];
-	    	// yeah yeah, O(n^2), I could obviously do much better, maybe later
-	    	System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
-	    	System.arraycopy(data, 0, temp, inSysex.length, messageLen);
-	    	}
-	    */
-for(int i = 0; i < inSysex.length; i++)
-	System.err.print(" " + inSysex[i]);
-	System.err.println();
-		if (inSysex != null && inSysex.length != 0 && inSysex[inSysex.length - 1] == (byte)0xF7)  // completed
-			{
-    		System.err.println("0xF7 END");
-			byte[] temp = inSysex;
-			inSysex = null;
-			return temp;
-			}
-		else return null;
-    	}
+        {
+        if (messageLen == 0) // uh...
+            {
+            return null;
+            }
+                
+        if (data.length == 0) // uh...
+            {
+            return null;
+            }
+                                
+        if (data[0] == (byte)0xF0)  // it's a new message
+            {
+            System.err.println("0xF0");
+            inSysex = new byte[messageLen];
+            System.arraycopy(data, 0, inSysex, 0, messageLen);
+            }
+        else if (data[0] == (byte)0xF7)  // it's a continuation of a message
+            {
+            System.err.println("0xF7");
+            if (inSysex == null) // uh...
+                return null;
+            byte[] temp = new byte[inSysex.length + messageLen - 1];
+                
+            // yeah yeah, O(n^2), I could obviously do much, much better, maybe later
+            System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
+            System.arraycopy(data, 1, temp, inSysex.length, messageLen - 1);        // skip the 0xF7
+            inSysex = temp;
+            }
+        /*
+          else                // May be missing the 0xF7?
+          {
+          if (inSysex == null) // uh...
+          return null;
+          byte[] temp = new byte[inSysex.length + messageLen];
+          // yeah yeah, O(n^2), I could obviously do much better, maybe later
+          System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
+          System.arraycopy(data, 0, temp, inSysex.length, messageLen);
+          }
+        */
+        for(int i = 0; i < inSysex.length; i++)
+            System.err.print(" " + inSysex[i]);
+        System.err.println();
+        if (inSysex != null && inSysex.length != 0 && inSysex[inSysex.length - 1] == (byte)0xF7)  // completed
+            {
+            System.err.println("0xF7 END");
+            byte[] temp = inSysex;
+            inSysex = null;
+            return temp;
+            }
+        else return null;
+        }
 
 
 
     public byte[] gatherInSysexData(SysexMessage message)
-    	{
-    	int messageLen = message.getLength();
-    	
-	   	if (messageLen == 0) // uh...
-	   		{
-    		return null;
-    		}
-    		
- 		byte[] data = message.getMessage();
+        {
+        int messageLen = message.getLength();
+        
+        if (messageLen == 0) // uh...
+            {
+            return null;
+            }
+                
+        byte[] data = message.getMessage();
 
-    	if (data.length == 0) // uh...
-    		{
-    		return null;
-    		}
-		    		
-    	if (data[0] == (byte)0xF0)  // it's a new message
-    		{
-    		inSysex = new byte[messageLen];
-	    	System.arraycopy(data, 0, inSysex, 0, inSysex.length);
-	    	}
-	    else if (data[0] == (byte)0xF7)  // it's a continuation of a message
-	    	{
-	    	if (inSysex == null) // uh...
-	    		return null;
-	    	byte[] temp = new byte[inSysex.length + messageLen - 1];
-	    	
-	    	// yeah yeah, O(n^2), I could obviously do much, much better, maybe later
-	    	System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
-	    	System.arraycopy(data, 1, temp, inSysex.length, messageLen - 1);	// skip the 0xF7
-	    	inSysex = temp;
-	    	}
-	    /*
-	    else 		// May be missing the 0xF7?
-	    	{
-	    	if (inSysex == null) // uh...
-	    		return null;
-	    	byte[] temp = new byte[inSysex.length + messageLen];
-	    	// yeah yeah, O(n^2), I could obviously do much better, maybe later
-	    	System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
-	    	System.arraycopy(data, 0, temp, inSysex.length, messageLen);
-	    	}
-	    */
+        if (data.length == 0) // uh...
+            {
+            return null;
+            }
+                                
+        if (data[0] == (byte)0xF0)  // it's a new message
+            {
+            inSysex = new byte[messageLen];
+            System.arraycopy(data, 0, inSysex, 0, inSysex.length);
+            }
+        else if (data[0] == (byte)0xF7)  // it's a continuation of a message
+            {
+            if (inSysex == null) // uh...
+                return null;
+            byte[] temp = new byte[inSysex.length + messageLen - 1];
+                
+            // yeah yeah, O(n^2), I could obviously do much, much better, maybe later
+            System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
+            System.arraycopy(data, 1, temp, inSysex.length, messageLen - 1);        // skip the 0xF7
+            inSysex = temp;
+            }
+        /*
+          else                // May be missing the 0xF7?
+          {
+          if (inSysex == null) // uh...
+          return null;
+          byte[] temp = new byte[inSysex.length + messageLen];
+          // yeah yeah, O(n^2), I could obviously do much better, maybe later
+          System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
+          System.arraycopy(data, 0, temp, inSysex.length, messageLen);
+          }
+        */
 
-		if (inSysex != null && inSysex.length != 0 && inSysex[inSysex.length - 1] == (byte)0xF7)  // completed
-			{
-			byte[] temp = inSysex;
-			inSysex = null;
-			return temp;
-			}
-		else return null;
-    	}
+        if (inSysex != null && inSysex.length != 0 && inSysex[inSysex.length - 1] == (byte)0xF7)  // completed
+            {
+            byte[] temp = inSysex;
+            inSysex = null;
+            return temp;
+            }
+        else return null;
+        }
 
     public byte[] gatherKeySysexData(SysexMessage message)
-    	{
-    	int messageLen = message.getLength();
+        {
+        int messageLen = message.getLength();
 
-    	if (messageLen == 0) // uh...
-    		return null;
-    	
-		byte[] data = message.getMessage();
+        if (messageLen == 0) // uh...
+            return null;
+        
+        byte[] data = message.getMessage();
 
-    	if (data.length == 0) // uh...
-    		return null;
-    		
-    	if (data[0] == 0xF0)  // it's a new message
-    		{
-    		keySysex = new byte[messageLen];
-	    	System.arraycopy(data, 0, keySysex, 0, keySysex.length);
-	    	}
-	    else if (data[0] == 0xF7)  // it's a continuation of a message
-	    	{
-	    	if (keySysex == null) // uh...
-	    		return null;
-	    	byte[] temp = new byte[keySysex.length + messageLen - 1];
-	    	
-	    	// yeah yeah, O(n^2), I could obviously do much, much better, maybe later
-	    	System.arraycopy(keySysex, 0, temp, 0, keySysex.length);
-	    	System.arraycopy(data, 1, temp, keySysex.length, messageLen - 1);	// skip the 0xF7
-	    	}
-	    /*
-	    else 		// May be missing the 0xF7?
-	    	{
-	    	if (keySysex == null) // uh...
-	    		return null;
-	    	byte[] temp = new byte[keySysex.length + messageLen];
-	    	// yeah yeah, O(n^2), I could obviously do much better, maybe later
-	    	System.arraycopy(keySysex, 0, temp, 0, keySysex.length);
-	    	System.arraycopy(data, 0, temp, keySysex.length, messageLen);
-	    	}
-	    */
+        if (data.length == 0) // uh...
+            return null;
+                
+        if (data[0] == 0xF0)  // it's a new message
+            {
+            keySysex = new byte[messageLen];
+            System.arraycopy(data, 0, keySysex, 0, keySysex.length);
+            }
+        else if (data[0] == 0xF7)  // it's a continuation of a message
+            {
+            if (keySysex == null) // uh...
+                return null;
+            byte[] temp = new byte[keySysex.length + messageLen - 1];
+                
+            // yeah yeah, O(n^2), I could obviously do much, much better, maybe later
+            System.arraycopy(keySysex, 0, temp, 0, keySysex.length);
+            System.arraycopy(data, 1, temp, keySysex.length, messageLen - 1);       // skip the 0xF7
+            }
+        /*
+          else                // May be missing the 0xF7?
+          {
+          if (keySysex == null) // uh...
+          return null;
+          byte[] temp = new byte[keySysex.length + messageLen];
+          // yeah yeah, O(n^2), I could obviously do much better, maybe later
+          System.arraycopy(keySysex, 0, temp, 0, keySysex.length);
+          System.arraycopy(data, 0, temp, keySysex.length, messageLen);
+          }
+        */
 
-		if (keySysex != null && keySysex.length != 0 && keySysex[keySysex.length - 1] == 0xF7)  // completed
-			{
-			byte[] temp = keySysex;
-			keySysex = null;
-			return temp;
-			}
-		else return null;
-    	}
+        if (keySysex != null && keySysex.length != 0 && keySysex[keySysex.length - 1] == 0xF7)  // completed
+            {
+            byte[] temp = keySysex;
+            keySysex = null;
+            return temp;
+            }
+        else return null;
+        }
+
+    public byte[] gatherKey2SysexData(SysexMessage message)
+        {
+        int messageLen = message.getLength();
+
+        if (messageLen == 0) // uh...
+            return null;
+        
+        byte[] data = message.getMessage();
+
+        if (data.length == 0) // uh...
+            return null;
+                
+        if (data[0] == 0xF0)  // it's a new message
+            {
+            key2Sysex = new byte[messageLen];
+            System.arraycopy(data, 0, key2Sysex, 0, key2Sysex.length);
+            }
+        else if (data[0] == 0xF7)  // it's a continuation of a message
+            {
+            if (key2Sysex == null) // uh...
+                return null;
+            byte[] temp = new byte[key2Sysex.length + messageLen - 1];
+                
+            // yeah yeah, O(n^2), I could obviously do much, much better, maybe later
+            System.arraycopy(key2Sysex, 0, temp, 0, key2Sysex.length);
+            System.arraycopy(data, 1, temp, key2Sysex.length, messageLen - 1);      // skip the 0xF7
+            }
+        /*
+          else                // May be missing the 0xF7?
+          {
+          if (key2Sysex == null) // uh...
+          return null;
+          byte[] temp = new byte[key2Sysex.length + messageLen];
+          // yeah yeah, O(n^2), I could obviously do much better, maybe later
+          System.arraycopy(key2Sysex, 0, temp, 0, key2Sysex.length);
+          System.arraycopy(data, 0, temp, key2Sysex.length, messageLen);
+          }
+        */
+
+        if (key2Sysex != null && key2Sysex.length != 0 && key2Sysex[key2Sysex.length - 1] == 0xF7)  // completed
+            {
+            byte[] temp = key2Sysex;
+            key2Sysex = null;
+            return temp;
+            }
+        else return null;
+        }
     }

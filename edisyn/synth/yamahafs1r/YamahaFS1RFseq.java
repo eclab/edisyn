@@ -854,7 +854,7 @@ public class YamahaFS1RFseq extends Synth
 			for(int j = 1; j <= 8; j++)
 				{
 				// Thor says that this is inverted
-				val = model.get("frame" + (i + 1) + "voicedlevel" + j);
+				val = 127 - model.get("frame" + (i + 1) + "voicedlevel" + j);
     	data[pos] = (byte)val;
 				pos += 1;
 				}
@@ -870,7 +870,7 @@ public class YamahaFS1RFseq extends Synth
 			for(int j = 1; j <= 8; j++)
 				{
 				// Thor says that this is inverted
-				val = model.get("frame" + (i + 1) + "unvoicedlevel" + j);
+				val = 127 - model.get("frame" + (i + 1) + "unvoicedlevel" + j);
     	data[pos] = (byte)val;
 				pos += 1;
 				}

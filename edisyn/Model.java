@@ -654,6 +654,11 @@ public class Model implements Cloneable
             list.remove(component);
         }
 
+    public ArrayList getListeners(String key)
+        {
+        return (ArrayList)(listeners.get(key));
+        }
+
     /** Returns all the keys in the model as an array, except the hidden ones. */        
     public String[] getKeys()
         {

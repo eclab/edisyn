@@ -5028,7 +5028,8 @@ public abstract class Synth extends JComponent implements Updatable
         setSendMIDI(false);
         if (model.equals(undo.top()))
             model = undo.undo(null);  // don't push into the redo stack
-        model = undo.undo(model);
+        else 
+        	model = undo.undo(model);
         boolean currentPush = undo.getWillPush();
         undo.setWillPush(false);
         model.updateAllListeners();

@@ -11,11 +11,31 @@ Set the FS1R's to receive System Exclusive, Bulk Dumps, Bank Selection, and Prog
 
 <p>Finally, and this one is important: if you are planning on actually writing Fseqs to internal memory, you'll need to change the FS1R's internal memory organization to 64 Voice patches and 6 Fseq slots.  To do this, under <b>Util</b>, go to <b>System</b>, then <b>Others</b>, then change <b>Mem</b> (Memory Allocation) to <b>"IntVoice64"</b>.    Note that this will <b>erase all existing internal voices and Fseqs</b>.
 
+<b><br><h3>About the Menu</h3>
+
+The FS1R menu contains a number options which will hopefully make editing a bit easier.
+
+<ul>
+<li><b>Show Current Performance</b>&nbsp;&nbsp;Loads the current FS1R Performance in an editor.
+<p><li><b>Set Up Test Performance</b>&nbsp;&nbsp;Creates a default FS1R Performance and Voice suitable for testing your Fseq.  The performance has a single Voice in Part 1, using Algorithm 1, with all eight operators (both voiced and unvoiced) controlled by the Fseq.
+<p><li><b>Swap Tracks...</b>&nbsp;&nbsp;Swaps two different tracks.  You can restrict the range of Frames in which this operation occurs.
+<p><li><b>Copy Track To...</b>&nbsp;&nbsp;Copies a track to another track, or to all other tracks. You can restrict the range of Frames in which this operation occurs.
+<p><li><b>Clear Track...</b>&nbsp;&nbsp;Sets all the values of a track to 0.  You can restrict the range of Frames in which this operation occurs.
+<p><li><b>Cut Frames...</b>&nbsp;&nbsp;Cuts out a range of frames and places them on a gaobal clipboard.  Note thatayou can paste these frames back into this editor or into a <b>different editor</b>.
+<p><li><b>Copy Frames...</b>&nbsp;&nbsp;Copies a range of frames to a global clipboard.  Note that you can paste these frames back into this editor or into a <b>different editor</b>.
+<p><li><b>Paste Frames...</b>&nbsp;&nbsp;Inserts the frames from a global clipboard at the provided insertion point.
+<p><li><b>Duplicate Frames...</b>&nbsp;&nbsp;Copies a range of frames, then writes them a new location, overwriting the frames at the position.  This might be called a "stamp" operation.  You can restrict which tracks are affected, and whether pitch is affected.
+</ul>
+
 <br><br><h3>Gotchas</h3>
 <ul>
-<li>This editor does not support real-time Fseq parameter changes.
 
-<p>And thanks to Thor Zollinger (thor276@cableone.net) for his considerable help, code, and ideas in the development of this patch editor.
+<li>These patches are big.  When Edisyn sends or writes a patch, it takes a while for the FS1R to digest it.  Edisyn sends patches all the time: when you load a patch, when you undo, when you randomize, etc.  If you do these things rapidly in sequence, the FS1R will take a long time to update; you should wait a beat between them to let the FS1R catch up.
+
+<p><li>This editor does not support real-time Fseq parameter changes.
+</ul>
+
+<p>Thanks to Thor Zollinger (thor276@cableone.net) for his considerable help, code, and ideas in the development of this patch editor.
 
 
 <p><table border=0 cellpadding=0 cellspacing=5>

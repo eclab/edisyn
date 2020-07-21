@@ -48,7 +48,7 @@ public class Undo
         else return undo.peekFirst();
         }
              
-    void printStacks()
+    public void printStacks()
         {
         System.err.println("Debug (Undo):\nUNDO");
         Object[] o = undo.toArray();
@@ -64,7 +64,8 @@ public class Undo
             }
                 
         }
-           
+    
+    /// If current is null, 
     public Model undo(Model current)
         {
         if (undo.isEmpty())

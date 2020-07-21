@@ -42,6 +42,7 @@ edisyn.synth.yamahafb01.YamahaFB01
 edisyn.synth.yamahafb01.YamahaFB01Multi
 edisyn.synth.yamahafs1r.YamahaFS1R
 edisyn.synth.yamahafs1r.YamahaFS1RMulti
+edisyn.synth.yamahafs1r.YamahaFS1RFseq
 edisyn.synth.yamahatg33.YamahaTG33
 edisyn.synth.yamahatg33.YamahaTG33Multi
 edisyn.synth.generic.Generic

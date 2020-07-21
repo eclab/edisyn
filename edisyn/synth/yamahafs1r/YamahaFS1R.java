@@ -145,7 +145,7 @@ public class YamahaFS1R extends Synth
 
 
     JCheckBoxMenuItem[] sendToPart = new JCheckBoxMenuItem[4];
-    int part;
+    int part = 0;
     
     // FIXME: the breaker won't work because this is invokeLater
     boolean breaker = false;
@@ -541,6 +541,9 @@ public class YamahaFS1R extends Synth
                 
             public void actionPerformed(ActionEvent evt)
                 {
+				part1.setMaximumRowCount(8);
+				part2.setMaximumRowCount(8);
+
                 boolean result = showMultiOption(YamahaFS1R.this, new String[] { "Swap", "With", "Voiced", "Unvoiced"}, 
                     new JComponent[] { part1, part2, voiced, unvoiced }, "Swap Operators...", "Enter the operators to swap with one another.");
 
@@ -578,7 +581,7 @@ public class YamahaFS1R extends Synth
                 }
             });
 
-        JMenuItem copy = new JMenuItem("Copy Operator...");
+        JMenuItem copy = new JMenuItem("Copy Operator To...");
         menu.add(copy);
         copy.addActionListener(new ActionListener()
             {
@@ -589,8 +592,10 @@ public class YamahaFS1R extends Synth
                 
             public void actionPerformed(ActionEvent evt)
                 {
+            part1.setMaximumRowCount(8);
+            part2.setMaximumRowCount(9);
                 boolean result = showMultiOption(YamahaFS1R.this, new String[] { "Copy", "To", "Voiced", "Unvoiced"}, 
-                    new JComponent[] { part1, part2, voiced, unvoiced }, "Copy Operator...", "Enter the operators to copy from and to.");
+                    new JComponent[] { part1, part2, voiced, unvoiced }, "Copy Operator To...", "Enter the operators to copy from and to.");
 
                 if (result)
                     {

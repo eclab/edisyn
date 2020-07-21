@@ -62,7 +62,7 @@ public class YamahaFS1RMulti extends Synth
     public static final String[] NOTES = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     public static final String[] FSEQ_CLOCK = { "midi1/4", "midi1/2", "midi", "midi2/1", "midi4/1" };
     public static final String[] FSEQ_LOOP_MODES = { "One Way", "Round" };
-    public static final String[] FSEQ_PLAY_MODES = { "Fseq", "Scratch" };
+    public static final String[] FSEQ_PLAY_MODES = { "Scratch", "Fseq" };
     public static final String[] FSEQ_PITCH_MODES = { "Fseq", "Fixed" };
     public static final String[] FSEQ_TRIGGERS = { "All", "First" };
     public static final String[] OUTS = { "Off", "Pre Insert", "Post Insert" };
@@ -199,7 +199,7 @@ public class YamahaFS1RMulti extends Synth
                 }
             });
 
-        JMenuItem copy = new JMenuItem("Copy Part...");
+        JMenuItem copy = new JMenuItem("Copy Part To...");
         menu.add(copy);
         copy.addActionListener(new ActionListener()
             {
@@ -209,7 +209,7 @@ public class YamahaFS1RMulti extends Synth
             public void actionPerformed(ActionEvent evt)
                 {
                 boolean result = showMultiOption(YamahaFS1RMulti.this, new String[] { "Copy", "To"}, 
-                    new JComponent[] { part1, part2 }, "Copy Part...", "Enter the parts to copy from and to.");
+                    new JComponent[] { part1, part2 }, "Copy Part To...", "Enter the parts to copy from and to.");
 
                 if (result)
                     {
@@ -575,10 +575,6 @@ public class YamahaFS1RMulti extends Synth
         final LabelledDial so = new LabelledDial("Start", this, "fseqstartstepoffset", color, 0, 511);
 
 
-        params = FSEQ_PARTS;
-        comp = new Chooser("Part", this, "fseqpart", params);
-        vbox.add(comp);
-
         params = FSEQS;
         comp = new Chooser("Fseq", this, "fseq", params)
             {
@@ -617,12 +613,64 @@ public class YamahaFS1RMulti extends Synth
                 }
             };
         vbox.add(comp);
+
+        final PushButton pushbutton = new PushButton("Show")
+            {
+            public void perform()
+                {
+                final YamahaFS1RFseq synth = new YamahaFS1RFseq();
+                if (tuple != null)
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                if (synth.tuple != null)
+                    {       
+                    // This is a little tricky.  When the dump comes in from the synth,
+                    // Edisyn will only send it to the topmost panel.  So we first sprout
+                    // the panel and show it, and THEN send the dump request.  But this isn't
+                    // enough, because what setVisible(...) does is post an event on the
+                    // Swing Event Queue to build the window at a later time.  This later time
+                    // happens to be after the dump comes in, so it's ignored.  So what we
+                    // ALSO do is post the dump request to occur at the end of the Event Queue,
+                    // so by the time the dump request has been made, the window is shown and
+                    // frontmost.
+                                                
+                    synth.sprout();
+                    JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                    frame.setVisible(true);
+                    
+                    int val = model.get("fseq");
+                    int bank = (val < 6 ? 0 : 1);
+                    int number = (val < 6 ? val : val - 6);
+
+                    SwingUtilities.invokeLater(
+                        new Runnable()
+                            {
+                            public void run() 
+                                { 
+                                Model tempModel = new Model();
+                                synth.setSendMIDI(false);
+                                tempModel.set("bank", bank);
+                                tempModel.set("number", number);
+                                synth.setSendMIDI(true);
+                                synth.performRequestDump(tempModel, false);
+                                }
+                            });
+                    }
+                else
+                    {
+                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                    }
+                }
+            };
+        vbox.add(pushbutton);
+
         
         hbox.add(vbox);
         vbox = new VBox();
 
-        vbox.add(lm);
-                        
+        params = FSEQ_PARTS;
+        comp = new Chooser("Part", this, "fseqpart", params);
+        vbox.add(comp);
+
         params = FSEQ_PLAY_MODES;
         comp = new Chooser("Play Mode", this, "fseqplaymode", params);
         vbox.add(comp);
@@ -630,14 +678,15 @@ public class YamahaFS1RMulti extends Synth
         hbox.add(vbox);
         vbox = new VBox();
 
+        vbox.add(lm);      
         vbox.add(pm);
                 
+        hbox.add(vbox);
+        vbox = new VBox();
+
         params = FSEQ_TRIGGERS;
         comp = new Chooser("Key On Trigger", this, "fseqkeyontrigger", params);
         vbox.add(comp);
-
-        hbox.add(vbox);
-        vbox = new VBox();
 
         PushButton button = new PushButton("Speed Preset", PRESETS)
             {

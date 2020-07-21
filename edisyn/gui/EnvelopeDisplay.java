@@ -71,6 +71,19 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     int behavior[] = null;
     double yOffset = 0.0;
     boolean signed = false;
+    boolean filled = true;
+    
+    EnvelopeDisplay[] children = null;
+    
+    public void link(EnvelopeDisplay display)
+        {
+        if (children == null) children = new EnvelopeDisplay[0];
+        EnvelopeDisplay[] temp = new EnvelopeDisplay[children.length + 1];
+        System.arraycopy(children, 0, temp, 0, children.length);
+        temp[temp.length - 1] = display;
+        children = temp;
+        display.children = null;         // unlink it
+        }
     
     public static final double TIME = -1;
         
@@ -131,6 +144,9 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         {
         repaint();
         }
+        
+    public boolean isFilled() { return filled; }
+    public void setFilled(boolean val) { filled = val; }
         
     public void postProcess(double[] xVals, double[] yVals) { }
     
@@ -335,6 +351,11 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     /** Mostly fills the background appropriately. */
     public void paintComponent(Graphics g)
         {
+        paintComponent(g, false);
+        }
+        
+    public void paintComponent(Graphics g, boolean asLink)
+        {
         Graphics2D graphics = (Graphics2D) g;
         
         // count loop intervals
@@ -375,11 +396,25 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         Rectangle rect = getBounds();
         rect.x = 0;
         rect.y = 0;
+        
+        // first fill
 
         graphics.setPaint(Style.BACKGROUND_COLOR());
-        graphics.fill(rect);
+        if (!asLink)
+            graphics.fill(rect);
+
+        // next draw the kids underneath
+                
+        if (!asLink && children != null)
+            {
+            for(int i = 0; i < children.length; i++)
+                {
+                children[i].setBounds(getBounds());
+                children[i].paintComponent(g, true);            // draw it as a link
+                }
+            }
         
-        // revise
+        // Now continue drawing
         
         graphics.setColor(color);
 
@@ -390,9 +425,11 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         if (horizontalBorder) rect.x += Style.ENVELOPE_DISPLAY_BORDER_THICKNESS();
         rect.y += Style.ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS();
         Line2D.Double line = new Line2D.Double(rect.x, rect.y, rect.x + rect.width, rect.y);
-        graphics.draw(line);
+        if (!asLink)
+            graphics.draw(line);
         line = new Line2D.Double(rect.x, rect.y + rect.height, rect.x + rect.width, rect.y + rect.height);
-        graphics.draw(line);
+        if (!asLink)
+            graphics.draw(line);
         
         double xcurrent = 0;
         for(int i = 0; i < xs.length; i++)
@@ -418,7 +455,6 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         if (axis != 0)
             startHeight = rect.height - (rect.height * axis);
 
-                
         Path2D.Double fillp = new Path2D.Double();
         Path2D.Double p = new Path2D.Double();
         Ellipse2D.Double marker[] = new Ellipse2D.Double[xs.length];
@@ -447,9 +483,12 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         fillp.closePath();
         
         graphics.setColor(semiTransparent);
-        graphics.fill(fillp);
+        if (!asLink && filled)
+            graphics.fill(fillp);
         
         graphics.setColor(color);
+        if (asLink)
+            graphics.setColor(Style.ENVELOPE_UNSET_COLOR());                
         graphics.draw(p);
         
         // draw dividers
@@ -462,7 +501,8 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                 double pos = (Double)(verticalDividers.get(i));
                 double x = rect.x + rect.width * pos;
                 line = new Line2D.Double(x, rect.y, x, rect.y + rect.height);
-                graphics.draw(line);
+                if (!asLink)
+                    graphics.draw(line);
                 }
             }
         
@@ -477,7 +517,8 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                 graphics.setColor(Style.TEXT_COLOR());
             else
                 graphics.setColor(color);
-            graphics.fill(marker[i]);
+            if (!asLink)
+                graphics.fill(marker[i]);
             }
         
         // draw axis
@@ -486,7 +527,8 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             graphics.setColor(color);
             line = new Line2D.Double(rect.x, rect.y + startHeight, rect.x + rect.width, rect.y + startHeight);
             graphics.setStroke(Style.ENVELOPE_AXIS_STROKE());
-            graphics.draw(line);
+            if (!asLink)
+                graphics.draw(line);
             }
             
         // draw stage ends
@@ -497,7 +539,8 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             line = new Line2D.Double(rect.x + xs[sustainStage], rect.y,
                 rect.x + xs[sustainStage], rect.y + rect.height);
             graphics.setStroke(Style.ENVELOPE_AXIS_STROKE());
-            graphics.draw(line);
+            if (!asLink)
+                graphics.draw(line);
             }
         
 
@@ -507,10 +550,10 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             line = new Line2D.Double(rect.x + xs[finalStage], rect.y,
                 rect.x + xs[finalStage], rect.y + rect.height);
             graphics.setStroke(new BasicStroke(1.0f));
-            graphics.draw(line);
+            if (!asLink)
+                graphics.draw(line);
             }
         
-            
         graphics.setStroke(new BasicStroke(1.0f));
         // draw intervals
         for(int i = 0; i < numLoops; i++)
@@ -519,18 +562,22 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             double loopEnd = rect.x + xs[postProcessLoopOrStageKey(endKey[i], synth.getModel().get(endKey[i], 0))];
             double loopHeight = rect.y + rect.height + 6 * (i + 1);
             line = new Line2D.Double(loopStart, loopHeight, loopEnd, loopHeight);
-            graphics.draw(line);
+            if (!asLink) 
+                graphics.draw(line);
             Ellipse2D.Double loopEndMarker = new Ellipse2D.Double( loopEnd - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
                 loopHeight - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
                 Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
             graphics.setColor(Style.BACKGROUND_COLOR());
-            graphics.fill(loopEndMarker);
+            if (!asLink)
+                graphics.fill(loopEndMarker);
             graphics.setColor(color);
-            graphics.draw(loopEndMarker);
+            if (!asLink)
+                graphics.draw(loopEndMarker);
             Ellipse2D.Double loopStartMarker = new Ellipse2D.Double( loopStart - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
                 loopHeight - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
                 Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
-            graphics.fill(loopStartMarker);
+            if (!asLink)
+                graphics.fill(loopStartMarker);
             }
         }
         

@@ -100,7 +100,7 @@ public class RedSoundDarkStar extends Synth
 
         menu.add(partmenu);
 
-        partmenu = new JMenuItem("Copy Part...");
+        partmenu = new JMenuItem("Copy Part To...");
         partmenu.addActionListener(new ActionListener()
             {
             JComboBox part1 = new JComboBox(PARTS);
@@ -109,7 +109,7 @@ public class RedSoundDarkStar extends Synth
             public void actionPerformed(ActionEvent e)
                 {
                 boolean result = showMultiOption(RedSoundDarkStar.this, new String[] { "Copy", "To" }, 
-                    new JComponent[] { part1, part2 }, "Copy Part...", "Enter the part to copy, and where to copy it.");
+                    new JComponent[] { part1, part2 }, "Copy Part To...", "Enter the part to copy, and where to copy it.");
                                 
                 if (result)
                     {

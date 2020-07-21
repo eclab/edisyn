@@ -2496,7 +2496,7 @@ public class DSITetraCombo extends Synth
         JMenu menu = new JMenu("DSI");
         menubar.add(menu);
 
-        JMenuItem a2b = new JMenuItem("Copy Voice...");
+        JMenuItem a2b = new JMenuItem("Copy Voice To...");
         menu.add(a2b);
         a2b.addActionListener(new ActionListener()
             {
@@ -2506,7 +2506,7 @@ public class DSITetraCombo extends Synth
             public void actionPerformed(ActionEvent evt)
                 {
                 boolean result = showMultiOption(DSITetraCombo.this, new String[] { "Copy", "To" }, 
-                    new JComponent[] { part1, part2 }, "Copy Voice...", "Enter the voice to copy, and where to copy it.");
+                    new JComponent[] { part1, part2 }, "Copy Voice To...", "Enter the voice to copy, and where to copy it.");
 
                 if (result)
                     {
@@ -2872,15 +2872,15 @@ public class DSITetraCombo extends Synth
     "Seq 2 Destination",
     "Seq 3 Destination",
     "Seq 4 Destination",
-    "[Empty 1]",
-    "[Empty 2]",
-    "[Empty 3]",
-    "[Empty 4]",
-    "[Empty 5]",    // "Osc 1 Wave Reset",
-    "[Empty 6]",    // "Osc 2 Wave Reset",
-    "[Empty 7]",
-    "[Empty 8]",
-    "[Empty 9]",
+    "[Invalid 1]",
+    "[Invalid 2]",
+    "[Invalid 3]",
+    "[Invalid 4]",
+    "[Invalid 5]",    // "Osc 1 Wave Reset",
+    "[Invalid 6]",    // "Osc 2 Wave Reset",
+    "[Invalid 7]",
+    "[Invalid 8]",
+    "[Invalid 9]",
     "Seq 1 Step 1",
     "Seq 1 Step 2",
     "Seq 1 Step 3",

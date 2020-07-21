@@ -26,7 +26,7 @@ In a combo, all four voices have (more or less) exactly the same set of paramete
 The menu has several options that are useful for Tetra owners.
 
 <ul>
-<li> <b>Copy Voice...</b> and <b>Swap Voices...</b> allow you to copy and swap different voices.
+<li> <b>Copy Voice To...</b> and <b>Swap Voices...</b> allow you to copy and swap different voices.
 
 <p><li> <b>Load All Voices</b>, <b>Load Only Voice 1</>, etc.  When you load a sysex file, receive a dump or merge from your Tetra, or reset your combo patch, your setting here will dictate whether this will effect all voices, or just a single voice (keeping the others intact).  This way, for example, you can just clear out Voice 1.  Or you could make a combo patch consisting of different voices from different combo pthes, by loading the first patch, the restricting to a specific voice and loading the next patch (which would slot it into that voice).  You may need to swap or copy voices to do that.
 
@@ -49,7 +49,7 @@ The menu has several options that are useful for Tetra owners.
 <br><br><h3>Gotchas</h3>
 
 <ul>
-<li>There is a hole in the middle of the Tetra's parameters -- you'll see parameters labelled "[Invalid ...]".  These are invalid settings right in the middle of the valid range, and on top of it, the Tetra can crash if it uses them!  So I have opted to do the following.  You are permitted to set to these values in Edisyn, but Edisyn will send, write, or save patches by silently substituting value 0 ("Osc 1 Frequency") instead.
+<li>There is a hole in the middle of the Tetra's assignable parameters -- you'll see parameters labelled "[Invalid ...]".  These are invalid settings right in the middle of the valid range, and on top of it, the Tetra can crash if it uses them!  So I have opted to do the following.  You are permitted to set to these values in Edisyn, but Edisyn will send, write, or save patches by silently substituting value 0 ("Osc 1 Frequency") instead.
 
 <p><li>A Tetra Combo responds to the "asignable parameters" in unexpected ways.  If you're editing Voice 1 only, the Tetra will respond to Edisyn modifying all four parameters (even though they're on four different tabs in the Edisyn editor).  But if you're editing all four voices, the Tetra will respond only to the assignable parameter for Voice 1!   The Tetra sends odd outputs when you are manually changing these parameters on the Tetra directly, so Edisyn may or may not update accordingly.
 

@@ -505,7 +505,7 @@ public class Category extends JComponent implements Gatherable
         
         TitledBorder titledBorder = new TitledBorder(
             matteBorder,
-            " " + label + " ",
+            (label == null || label.equals("") ? "" : " " + label + " "),
             TitledBorder.LEFT,
             TitledBorder.TOP,
             Style.CATEGORY_FONT(),

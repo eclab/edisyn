@@ -241,6 +241,9 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                     setSelectedTabIndex(0);
                 else
                     setSelectedTabIndex(t);
+
+				// reset mutes
+				resetSolo();
                 }
             };
         vbox.add(comp);
@@ -510,7 +513,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel(" ");
-        model.removeMetricMinMax("osc" + osc + "bank");
+        model.removeMetricMinMax("osc" + osc + "wavebank");
         hbox.add(comp);
 
         HBox hbox2 = new HBox();
@@ -2508,11 +2511,26 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     /// Bits DCBA (that is, values 0...15)
     /// ... are set to 1 to represent which waves are muted
 
-    public static final int[] MUTES = new int[]{ 2 + 4 + 8, 1 + 4 + 8, 1 + 2 + 8, 1 + 2 + 4 };
+    public static final int[] MUTES_ABCD = new int[]{ 2 + 4 + 8, 1 + 4 + 8, 1 + 2 + 8, 1 + 2 + 4 };
+    public static final int[] MUTES_AC = new int[]{ 4, 1 };
     public void setSolo()
         {
-        byte[] midi_mesg = paramBytes(WAVE_MUTE, MUTES[getSelectedTabIndex() - 1]);
-        tryToSendSysex(midi_mesg);
+        int wave = getSelectedTabIndex() - 1;		// 0 ... 3
+        int numOsc = model.get("numoscillators");
+        if (numOsc == 0)	// A
+        	{
+        	// do nothing
+        	}
+        else if (numOsc == 1)	// A C
+        	{
+			byte[] midi_mesg = paramBytes(WAVE_MUTE, MUTES_AC[wave]);
+			tryToSendSysex(midi_mesg);
+        	}
+		else				// A B C D
+			{
+	        byte[] midi_mesg = paramBytes(WAVE_MUTE, MUTES_ABCD[wave]);
+	        tryToSendSysex(midi_mesg);
+        	}
         }
                 
     public void resetSolo()

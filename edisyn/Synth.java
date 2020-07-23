@@ -98,12 +98,6 @@ public abstract class Synth extends JComponent implements Updatable
     /** Returns the model associated with this editor. */
     public Model getModel() { return model; }
     
-    /** Replaces the model with one whose hashmaps have been compacted. */
-    public void compactModel()
-        {
-        model = ((Model)(model.clone()));
-        }
-
     boolean testIncomingControllerMIDI;
     boolean testIncomingSynthMIDI;
 
@@ -5073,7 +5067,7 @@ public abstract class Synth extends JComponent implements Updatable
 
     void doSetNudge(int i, Model model, String name)
         {
-        nudge[i] = (Model)(model.clone());
+        nudge[i] = model.copy(); // (Model)(model.clone());		/// don't need listeners
         nudgeTowards[i].setText("Towards " + (i + 1) + ": " + name);
         nudgeTowards[i + 4].setText("Away from " + (i + 1) + ": " + name);
         }

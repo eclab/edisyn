@@ -263,40 +263,42 @@ public class YamahaTX81Z extends Synth
         }
                 
 
+	public class SubModel extends Model
+		{
+		public int reviseMutatedValue(String key, int old, int current)
+			{
+			if (mutationRestriction == OFF)
+				return current;
+			else if (key.startsWith("operator") && key.endsWith("frequencyfine"))
+				{
+				return 0;
+				}
+			else if (key.startsWith("operator") && key.endsWith("frequencycoarse"))
+				{
+				if (mutationRestriction == COARSE)
+					return current;
+				else if (mutationRestriction == INTEGERS)
+					{
+					double val = FREQUENCY_RATIO_NEAREST_INTS[current];
+					for(int i = 0; i < FREQUENCY_RATIOS.length; i++)
+						{
+						if (FREQUENCY_RATIOS[i] == val)  // got it
+							return i;
+						}
+					// never happens
+					return current;
+					}
+				else  // never happens
+					return current;
+				}
+			else
+				return current;
+			}
+		}
+		
     public Model buildModel()
         {
-        return new Model()
-            {
-            public int reviseMutatedValue(String key, int old, int current)
-                {
-                if (mutationRestriction == OFF)
-                    return current;
-                else if (key.startsWith("operator") && key.endsWith("frequencyfine"))
-                    {
-                    return 0;
-                    }
-                else if (key.startsWith("operator") && key.endsWith("frequencycoarse"))
-                    {
-                    if (mutationRestriction == COARSE)
-                        return current;
-                    else if (mutationRestriction == INTEGERS)
-                        {
-                        double val = FREQUENCY_RATIO_NEAREST_INTS[current];
-                        for(int i = 0; i < FREQUENCY_RATIOS.length; i++)
-                            {
-                            if (FREQUENCY_RATIOS[i] == val)  // got it
-                                return i;
-                            }
-                        // never happens
-                        return current;
-                        }
-                    else  // never happens
-                        return current;
-                    }
-                else
-                    return current;
-                }
-            };
+        return new SubModel();
         }
                 
                                 

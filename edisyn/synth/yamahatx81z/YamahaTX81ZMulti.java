@@ -266,7 +266,7 @@ public class YamahaTX81ZMulti extends Synth
                                 int bank = YamahaTX81ZMulti.this.model.get("instrument" + src + "voicebank");
                                 int number = YamahaTX81ZMulti.this.model.get("instrument" + src + "voicenumber");
                                                                 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 tempModel.set("bank", bank);
                                 tempModel.set("number", number);
                                 synth.performRequestDump(tempModel, false);

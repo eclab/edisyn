@@ -814,7 +814,7 @@ public class EmuProteus extends Synth
             NN = 127;               // we write to the top writable patch number in RAM
             // furthermore we have to change the patch because sendAllParameters
             // doesn't do it by default
-            Model model = new Model();
+            Model model = buildModel();
             model.set("number", NN);
             changePatch(model);
             }

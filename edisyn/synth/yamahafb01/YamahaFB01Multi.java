@@ -315,7 +315,7 @@ public class YamahaFB01Multi extends Synth
                             {
                             public void run() 
                                 { 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 tempModel.set("bank", YamahaFB01Multi.this.model.get("inst" + src + "voicebank"));
                                 tempModel.set("number", YamahaFB01Multi.this.model.get("inst" + src + "voicenumber"));
                                 synth.performRequestDump(tempModel, false);

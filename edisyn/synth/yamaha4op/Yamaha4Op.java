@@ -92,7 +92,8 @@ public class Yamaha4Op extends Synth
     public static final int TYPE_TX81Z = 2;
     public static final int TYPE_DX11 = 3;
     public static final int TYPE_TQ5_YS100_YS200_B200 = 4;
-    public static final String[] TYPES = { "DX21", "DX27, DX100", "TX81Z", "DX11", "TQ5, YSx00, B200 (>)" };
+    public static final int TYPE_V50 = 5;
+    public static final String[] TYPES = { "DX21", "DX27, DX100", "TX81Z", "DX11", "TQ5, YSx00, B200 (>)", "V50" };
     public static final String[] BANKS = { "I", "A", "B", "C", "D" };
     public static final String[] TQ5_BANKS = { "Preset", "User", "Card" };
     public static final String[] WAVES = {"W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8"};
@@ -135,6 +136,56 @@ public class Yamaha4Op extends Synth
     public static final String[] OUT_SELECTS = new String[] { "A", "B", "C", "D", "E", "F", "G", "H" };
     public static final String[] WHEEL_ASSIGNMENTS = new String[] { "Vibrato", "LFO", "Filter" };
     public static final String[] EFFECTS = new String[] { "Reverb - Hall", "Reverb - Room", "Reverb - Plate", "Delay", "Delay - Left/Right", "Stereo Echo", "Distortion + Reverb", "Distortion + Echo", "Gated Reverb", "Reverse Gate" };
+
+public static final String[] V50_EFFECTS = new String[] 
+{ 
+"Reverb Hall", "Reverb Room", "Reverb Plate", "Delay", "Delay L/R", "Stereo Echo", "Distortion Reverb", 
+"Distortion Echo", "Gate Reverb", "Reverse Gate", "Early Reflections", "Tone Control 1", "Delay and Reverb", 
+"Delay L/R and Reverb", "Distortion Delay", "Church", "Club", "Stage", "Bath Room", "Metal", "Tunnel", 
+"Doubler 1", "Doubler 2", "Feed Back Gate", "Feed Back Reverse", "Feed Back E/R", "Delay and Tone Control 1", 
+"Delay L/R and Tone Control 1", "Tone Control 2", "Delay and Tone Control 2", "Delay L/R and Tone Control 2", 
+"Distortion", 
+};
+ 
+ 
+public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
+{
+{ "Time", "LPF", "Delay", },			// Reverb Hall
+{ "Time", "LPF", "Delay", },			// Reverb Room
+{ "Time", "LPF", "Delay", },			// Reverb Plate
+{ "Time", "FB Delay", "FB Gain", },			// Delay
+{ "Lch Dly", "Rch Dly", "FB Gain", },			// Delay L/R
+{ "Lch Dly", "Rch Dly", "FB Gain", },			// Stereo Echo
+{ "Time", "Dist.", "Reverb", },			// Distortion Reverb
+{ "Time", "FB Gain", "Dist.", },			// Distortion Echo
+{ "Size", "LPF", "Delay", },			// Gate Reverb
+{ "Size", "LPF", "Delay", },			// Reverse Gate
+{ "Size", "LPF", "Delay", },			// Early Reflections
+{ "Low", "Middle", "High", },			// Tone Control 1
+{ "RevTime", "Delay", "FB Gain", },			// Delay and Reverb
+{ "RevTime", "Lch Dly", "Rch Dly", },			// Delay L/R and Reverb
+{ "Time", "FB Gain", "Dist.", },			// Distortion Delay
+{ "Time", "LPF", "Delay", },			// Church
+{ "Time", "LPF", "Delay", },			// Club
+{ "Time", "LPF", "Delay", },			// Stage
+{ "Time", "LPF", "Delay", },			// Bath Room
+{ "Time", "LPF", "Delay", },			// Metal
+{ "RevTime", "Delay", "FB Gain", },			// Tunnel
+{ "DlyTime", "HPF", "LPF", },			// Doubler 1
+{ "Lch Dly", "Rch Dly", "LPF", },			// Doubler 2
+{ "Size", "LPF", "FB Gain", },			// Feed Back Gate
+{ "Size", "LPF", "FB Gain", },			// Feed Back Reverse
+{ "Size", "LPF", "FB Gain", },			// Feed Back E/R
+{ "Bri.", "Delay", "FB Gain", },			// Delay and Tone Control 1
+{ "Bri.", "Delay", "FB Gain", },			// Delay L/R and Tone Control 1
+{ "HPF", "Middle", "LPF", },			// Tone Control 2
+{ "Bri.", "Delay", "FB Gain", },			// Delay and Tone Control 2
+{ "Bri.", "Delay", "FB Gain", },			// Delay L/R and Tone Control 2
+{ "Dist.", "HPF", "LPF" }			// Distortion
+};
+ 
+ 
+ 
 
     public static final String TYPE_KEY = "type";
     int synthType = TYPE_TX81Z;
@@ -235,7 +286,8 @@ public class Yamaha4Op extends Synth
         sourcePanel = new SynthPanel(this);
         vbox = new VBox();
         vbox.add(addPitchEnvelope(Style.COLOR_A()));
-        vbox.add(addEffects(Style.COLOR_A()));
+        vbox.add(addEffects(Style.COLOR_B()));
+        vbox.add(addV50Effects(Style.COLOR_A()));
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("Other", sourcePanel);
         
@@ -420,10 +472,8 @@ public class Yamaha4Op extends Synth
         }
                 
 
-    public Model buildModel()
-        {
-        return new Model()
-            {
+	public class SubModel extends Model
+		{
             public int reviseMutatedValue(String key, int old, int current)
                 {
                 if (mutationRestriction == OFF)
@@ -453,7 +503,11 @@ public class Yamaha4Op extends Synth
                 else
                     return current;
                 }
-            };
+		}
+		
+    public Model buildModel()
+        {
+        return new SubModel();
         }
                 
                                 
@@ -553,7 +607,7 @@ public class Yamaha4Op extends Synth
         hbox2.add(comp);
 
         comp = new LabelledDial("Reverb Rate", this, "reverbrate", color, 0, 7);
-        ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>] ");
+        ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>,V] ");
         hbox2.add(comp);
 
         comp = new LabelledDial("Transpose", this, "transpose", color, 0, 48, 24)
@@ -669,6 +723,57 @@ public class Yamaha4Op extends Synth
         return category;
         }
 
+    public JComponent addV50Effects(Color color)
+        {
+        Category category = new Category(this, "V50 Effects", color);
+
+        JComponent comp;
+        String[] params;
+        HBox hbox = new HBox();
+        VBox vbox = new VBox();
+  
+        final LabelledDial param1 = new LabelledDial("Parameter 1", this, "veffectparam1", color, 0, 75);
+
+        final LabelledDial param2 = new LabelledDial("Parameter 2", this, "veffectparam2", color, 0, 99);
+
+        final LabelledDial param3 = new LabelledDial("Parameter 3", this, "veffectparam3", color, 0, 99);
+
+        params = V50_EFFECTS;
+        comp = new Chooser("Effect [V]", this, "veffectsel", params)
+        	{
+        	public void update(String key, Model model)
+        		{
+        		super.update(key, model);
+        		param1.setLabel(V50_EFFECTS_PARAMETERS[model.get(key)][0] + " [V]");
+        		param2.setLabel(V50_EFFECTS_PARAMETERS[model.get(key)][1] + " [V]");
+        		param3.setLabel(V50_EFFECTS_PARAMETERS[model.get(key)][2] + " [V]");
+        		}
+        	};
+        vbox.add(comp);
+                
+        comp = new CheckBox("Stereo Mix [V]", this, "veffectstereomix");
+        ((CheckBox)comp).addToWidth(3);
+        vbox.add(comp);
+        hbox.add(vbox);
+                
+        comp = new LabelledDial("Balance [V]", this, "veffectbalance", color, 0, 100, 50)
+        	{
+        	public boolean isSymmetric() { return true; }
+        	};
+        hbox.add(comp);
+        
+        comp = new LabelledDial("Out Level [V]", this, "veffectoutevel", color, 0, 100);
+        hbox.add(comp);
+
+        hbox.add(param1);
+        hbox.add(param2);
+        hbox.add(param3);
+
+        category.add(hbox, BorderLayout.CENTER);
+        return category;
+        }
+
+
     public JComponent addLFO(Color color)
         {
         Category category = new Category(this, "LFO ", color);
@@ -764,45 +869,47 @@ public class Yamaha4Op extends Synth
         hbox2.add(comp);
         
         comp = new LabelledDial("Portamento Time", this, "portamentotime", color, 0, 99);
-        ((LabelledDial)comp).addAdditionalLabel("[21,27,100,11,TX]  ");
+        ((LabelledDial)comp).addAdditionalLabel("[21,27,100,11,TX,V]  ");
         hbox2.add(comp);
         
         vbox.add(hbox2);
+        vbox.add(Strut.makeVerticalStrut(15));
+        
         hbox2 = new HBox();
         
         comp = new LabelledDial("Aftertouch", this, "aftertouchpitch", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("Pitch");
-        ((LabelledDial)comp).addAdditionalLabel(" [11,>] ");
+        ((LabelledDial)comp).addAdditionalLabel(" [11,>,V] ");
         hbox2.add(comp);
         
         comp = new LabelledDial("Aftertouch", this, "aftertouchamplitude", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("Amplitude");
-        ((LabelledDial)comp).addAdditionalLabel(" [11,>] ");
+        ((LabelledDial)comp).addAdditionalLabel(" [11,>,V] ");
         hbox2.add(comp);
         
         comp = new LabelledDial("Aftertouch", this, "aftertouchpitchbias", color, 0, 99, 50);
         ((LabelledDial)comp).addAdditionalLabel("Pitch Bias");
-        ((LabelledDial)comp).addAdditionalLabel(" [11,>] ");
+        ((LabelledDial)comp).addAdditionalLabel(" [11,>,V] ");
         hbox2.add(comp);
         
         comp = new LabelledDial("Aftertouch", this, "aftertouchenvelopebias", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("Env. Bias");
-        ((LabelledDial)comp).addAdditionalLabel(" [11,>] ");
+        ((LabelledDial)comp).addAdditionalLabel(" [11,>,V] ");
         hbox2.add(comp);
 
         comp = new LabelledDial("Foot Ctrl.", this, "footcontrolvolume", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("Volume");
-        ((LabelledDial)comp).addAdditionalLabel(" [21,11,TX,>] ");
+        ((LabelledDial)comp).addAdditionalLabel(" [21,11,TX,>,V] ");
         hbox2.add(comp);
         
         comp = new LabelledDial("Foot Ctrl.", this, "footcontrolpitch", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("Pitch");
-        ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>] ");
+        ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>,V] ");
         hbox2.add(comp);
         
         comp = new LabelledDial("Foot Ctrl.", this, "footcontrolamplitude", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("Amplitude");
-        ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>] ");
+        ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>,V] ");
         hbox2.add(comp);
         
         vbox.add(hbox2);
@@ -876,20 +983,36 @@ public class Yamaha4Op extends Synth
         
         VBox vbox = new VBox();
         params = WAVES;
-        comp = new Chooser("Wave [11,TX,>]", this, "operator" + src + "operatorwaveform", params, WAVE_ICONS);
+        comp = new Chooser("Wave [11,TX,>,V]", this, "operator" + src + "operatorwaveform", params, WAVE_ICONS);
         vbox.add(comp);
-
+        
+		HBox hbox1 = new HBox();
         comp = new CheckBox("AM", this, "operator" + src + "amplitudemodulationenable");
-        vbox.add(comp);
+        hbox1.add(comp);
+        vbox.add(hbox1);
+        
+        HBox hbox2 = new HBox();
+        comp = new CheckBox("Shift [V]", this, "operator" + src + "shift");
+        hbox2.add(comp);
+        comp = new CheckBox("Range [V]", this, "operator" + src + "range");
+        hbox2.add(comp);
+        vbox.add(hbox2);
+
+
         hbox.add(vbox);
 
         comp = new LabelledDial("Env. Bias", this, "operator" + src + "egbiassensitivity", color, 0, 7);
         ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
         hbox.add(comp);
-        
+
+		VBox vbox2 = new VBox();        
         comp = new LabelledDial("Key Velocity", this, "operator" + src + "keyvelocitysensitivity", color, 0, 7);
         ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
-        hbox.add(comp);
+        vbox2.add(comp);
+        comp = new CheckBox("Neg [V]", this, "operator" + src + "keyvelocitysensitivitysign");
+        ((CheckBox)comp).addToWidth(2);
+        vbox2.add(comp);
+        hbox.add(vbox2);
         
         comp = new LabelledDial("Output", this, "operator" + src + "outputlevel", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("Level");
@@ -919,7 +1042,7 @@ public class Yamaha4Op extends Synth
 
         // we define this next so that it populates the model for the other widgets  But we'll add it at the end.
     
-        CheckBox fixcomp = new CheckBox("Fixed [11,TX,>]", this, "operator" + src + "fix")
+        CheckBox fixcomp = new CheckBox("Fixed [11,TX,>,V]", this, "operator" + src + "fix")
             {
             public void update(String key, Model model)
                 {
@@ -1001,7 +1124,7 @@ public class Yamaha4Op extends Synth
 
     
         // we put this last so that by the time it's updating, the fine frequency dials have been built
-        vbox.add(fixcomp);
+        hbox1.add(fixcomp);
         // update its labels just in case
         fixcomp.update("operator" + src + "fix", model);
 
@@ -1047,9 +1170,14 @@ public class Yamaha4Op extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Rate");
         hbox.add(comp);
         
+        VBox vbox2 = new VBox();
         comp = new LabelledDial("Level", this, "operator" + envelope + "levelscaling", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("Scaling");
-        hbox.add(comp);
+        vbox2.add(comp);
+        comp = new CheckBox("Neg [V]", this, "operator" + envelope + "levelscalingsign");
+		((CheckBox)comp).addToWidth(2);
+        vbox2.add(comp);
+        hbox.add(vbox2);
         
         comp = new LabelledDial("Rate", this, "operator" + envelope + "ratescaling", color, 0, 3);
         ((LabelledDial)comp).addAdditionalLabel("Scaling");
@@ -1064,7 +1192,7 @@ public class Yamaha4Op extends Synth
                     return SHIFTS[val];
                     }
                 };
-            ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>] ");
+            ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>,V] ");
             // we're not going to add it.  Instead we're just going to put a space in.
             comp = Strut.makeStrut(comp);
             model.setStatus("operator" + envelope + "shift", Model.STATUS_IMMUTABLE);
@@ -1079,7 +1207,7 @@ public class Yamaha4Op extends Synth
                     return SHIFTS[val];
                     }
                 };
-            ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>] ");
+            ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>,V] ");
             }
         hbox.add(comp);
     

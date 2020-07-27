@@ -358,7 +358,7 @@ public class WaldorfBlofeldMulti extends Synth
                             {
                             public void run() 
                                 { 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 tempModel.set("bank", WaldorfBlofeldMulti.this.model.get("inst" + inst + "bank"));
                                 tempModel.set("number", WaldorfBlofeldMulti.this.model.get("inst" + inst + "number"));
                                 synth.performRequestDump(tempModel, false);

@@ -1104,9 +1104,9 @@ public class RolandJV880 extends Synth
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "tone" + tone + "tvaenvtime1", "tone" + tone + "tvaenvtime2", "tone" + tone + "tvaenvtime3", null, "tone" + tone + "tvaenvtime4" },
-            new String[] { null, "tone" + tone + "tvaenvlevel1", "tone" + tone + "tvaenvlevel2", "tone" + tone + "tvaenvlevel3", "tone" + tone + "tvaenvlevel3", "tone" + tone + "tvaenvlevel4" },
+            new String[] { null, "tone" + tone + "tvaenvlevel1", "tone" + tone + "tvaenvlevel2", "tone" + tone + "tvaenvlevel3", "tone" + tone + "tvaenvlevel3", null },
             new double[] { 0, 0.2 / 127.0, 0.2 / 127.0, 0.2 / 127.0, 0.2, 0.2 / 127.0 },
-            new double[] { 0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0 });
+            new double[] { 0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 });
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);

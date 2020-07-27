@@ -864,7 +864,7 @@ public class FuturesonusParva extends Synth
                 {
                 // build a model if we haven't yet
                 if (mergeModel == null)
-                    mergeModel = new Model();
+                    mergeModel = buildModel();
                         
                 // Load the key, they come in one at a time
                 setSendMIDI(false);
@@ -890,7 +890,7 @@ public class FuturesonusParva extends Synth
                 {
                 // build a model if we haven't yet
                 if (mergeModel == null)
-                    mergeModel = new Model();
+                    mergeModel = buildModel();
                         
                 // Load the key, they come in one at a time
                 setSendMIDI(false);

@@ -319,9 +319,6 @@ public class WaldorfMicrowaveXT extends Synth
             params[i] = "User " + (i - 96 + 1);
         comp = new Chooser("Wavetable", this, "wavetable", params);
 
-        // only standard wavetables are permitted to be mutated
-        model.setValidMax("wavetable", 64);
-
         vbox.add(comp);
 
         hbox.add(vbox);
@@ -2489,5 +2486,26 @@ public class WaldorfMicrowaveXT extends Synth
         int number = model.get("number") + 1;
         return BANKS[model.get("bank")] +  (number > 99 ? "" : (number > 9 ? "0" : "00")) + number;
         }
+
+
+	public static class SubModel extends Model
+		{
+		public int reviseMutatedValue(String key, int old, int current) 
+			{
+			// only standard wavetables are permitted to be mutated
+			if (key.equals("wavetable"))
+					{
+					if (current > 64)		// invalid new proposed value
+						return old;
+					} 
+			return current; 
+			}    
+		}
+
+    public Model buildModel() 
+    	{ 
+    	return new SubModel();
+    	}
+    	
                 
     }

@@ -1038,7 +1038,7 @@ public class EmuMorpheus extends Synth
             NN = 126;               // we write to the top patch number of bank 0 (RAM)
             // furthermore we have to change the patch because sendAllParameters
             // doesn't do it by default
-            Model model = new Model();
+            Model model = buildModel();
             model.set("bank", 0);
             model.set("number", NN);
             changePatch(model);

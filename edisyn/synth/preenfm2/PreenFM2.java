@@ -335,10 +335,8 @@ public class PreenFM2 extends Synth
         if (mutationRestriction == INTEGERS) integers.setSelected(true);
         }
                 
-    public Model buildModel()
-        {
-        return new Model()
-            {
+	public class SubModel extends Model
+		{
             public int reviseMutatedValue(String key, int old, int current)
                 {
                 if (mutationRestriction == OFF)
@@ -384,7 +382,11 @@ public class PreenFM2 extends Synth
                 else
                     return current;
                 }
-            };
+		}
+		
+    public Model buildModel()
+        {
+        return new SubModel();
         }
                 
         
@@ -1519,7 +1521,7 @@ public class PreenFM2 extends Synth
                 {
                 // build a model if we haven't yet
                 if (mergeModel == null)
-                    mergeModel = new Model();
+                    mergeModel = buildModel();
                         
                 // Load the key, they come in one at a time
                 String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));

@@ -521,7 +521,7 @@ public class KawaiK1 extends Synth
 
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null, "s" + envelope + "delay", "s" + envelope + "envelopeattack", "s" + envelope + "envelopedecay", null, "s" + envelope + "enveloperelease" },
+            new String[] { null, "s" + envelope + "envelopedelay", "s" + envelope + "envelopeattack", "s" + envelope + "envelopedecay", null, "s" + envelope + "enveloperelease" },
             new String[] { null, null, null, "s" + envelope + "envelopesustain", "s" + envelope + "envelopesustain", null },
             new double[] { 0, 0.2/100.0, 0.2/100.0, 0.2 / 100.0,  0.2, 0.2/100.0},
             new double[] { 0, 0.0, 1.0, 1.0 / 100.0, 1.0/100.0, 0 });
@@ -1052,7 +1052,7 @@ public class KawaiK1 extends Synth
         // we change patch to #63 if we're sending in bulk.
         if (sendKawaiParametersInBulk)
             {
-            Model tempModel = new Model();
+            Model tempModel = buildModel();
             tempModel.set("bank", 7);
             tempModel.set("number", 7);
             changePatch(tempModel);

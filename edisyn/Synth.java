@@ -167,6 +167,11 @@ public abstract class Synth extends JComponent implements Updatable
         return (String[])(list.toArray(new String[0]));
         }
 
+	/** Override this to return your own customized Model subclass if you have some need to do so,
+		typically in order to override the methods reviseMutatedValue(...)....
+		Note that you should not build this with an anonymous class because
+		it doesn't have a constructor and can't be build via model.newModel().
+		Instead, make a PUBLIC inner class, ideally a static one, and instantiate that. */
     public Model buildModel() { return new Model(); }
 
 

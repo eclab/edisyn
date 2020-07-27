@@ -547,7 +547,7 @@ public class RolandJV880Multi extends Synth
                             {
                             public void run() 
                                 { 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 
                                 int bn = RolandJV880Multi.this.model.get("part" + part + "patchnumber");
                                 int bank = (bn / 64);

@@ -313,7 +313,7 @@ public class Yamaha4OpMulti extends Synth
                                 int bank = Yamaha4OpMulti.this.model.get("instrument" + src + "voicebank");
                                 int number = Yamaha4OpMulti.this.model.get("instrument" + src + "voicenumber");
                                                                 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 tempModel.set("bank", bank);
                                 tempModel.set("number", number);
                                 synth.performRequestDump(tempModel, false);

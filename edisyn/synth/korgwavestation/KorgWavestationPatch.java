@@ -576,7 +576,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                             {
                             public void run() 
                                 { 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 tempModel.set("bank", KorgWavestationPatch.this.model.get("osc" + osc + "wavebank"));
                                 tempModel.set("number", KorgWavestationPatch.this.model.get("osc" + osc + "wave"));
                                 synth.requestingPatch = true; // otherwise the wave sequence editor will ask us for the number to load

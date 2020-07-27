@@ -2094,6 +2094,7 @@ public class KawaiK5 extends Synth
                 model.set(HARMONICS_PARAMETERS[x + 0], 0);
                                 
             model.set(HARMONICS_PARAMETERS[x + 0] + "-env", env2);
+            model.setStatus(HARMONICS_PARAMETERS[x + 0] + "-env", Model.STATUS_IMMUTABLE);
                         
             if (mod1 == 1)
                 model.set(HARMONICS_PARAMETERS[x + 1], env1 + 1);
@@ -2101,6 +2102,7 @@ public class KawaiK5 extends Synth
                 model.set(HARMONICS_PARAMETERS[x + 1], 0);
 
             model.set(HARMONICS_PARAMETERS[x + 1] + "-env", env1);
+            model.setStatus(HARMONICS_PARAMETERS[x + 1] + "-env", Model.STATUS_IMMUTABLE);
             pos++;
             }
 
@@ -2119,6 +2121,7 @@ public class KawaiK5 extends Synth
             model.set(HARMONICS_PARAMETERS[x + 0], 0);
                         
         model.set(HARMONICS_PARAMETERS[x + 0] + "-env", env2);
+        model.setStatus(HARMONICS_PARAMETERS[x + 0] + "-env", Model.STATUS_IMMUTABLE);
 
         if (mod1 == 1)
             model.set(HARMONICS_PARAMETERS[x + 1], env1 + 1);
@@ -2126,7 +2129,7 @@ public class KawaiK5 extends Synth
             model.set(HARMONICS_PARAMETERS[x + 1], 0);
 
         model.set(HARMONICS_PARAMETERS[x + 1] + "-env", env1);
-
+        model.setStatus(HARMONICS_PARAMETERS[x + 1] + "-env", Model.STATUS_IMMUTABLE);
                 
         // DHG and Post-DHG parameters...
         
@@ -2203,7 +2206,7 @@ public class KawaiK5 extends Synth
                         
             simplePause(400);  // think this is the right amount -- 300 won't cut it
 
-            Model tempModel = new Model();
+            Model tempModel = buildModel();
             tempModel.set("bank", 3);
             tempModel.set("number", 11);
             changePatch(tempModel);

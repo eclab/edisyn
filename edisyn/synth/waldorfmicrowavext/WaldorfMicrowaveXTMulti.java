@@ -329,7 +329,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
                             {
                             public void run() 
                                 { 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 tempModel.set("bank", WaldorfMicrowaveXTMulti.this.model.get("inst" + inst + "bank"));
                                 tempModel.set("number", WaldorfMicrowaveXTMulti.this.model.get("inst" + inst + "number"));
                                 synth.tryToSendSysex(synth.requestDump(tempModel));

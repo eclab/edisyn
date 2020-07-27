@@ -4002,7 +4002,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                             {
                             public void run() 
                                 { 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 tempModel.set("bank", KorgWavestationPerformance.this.model.get("part" + part + "bank"));
                                 tempModel.set("number", KorgWavestationPerformance.this.model.get("part" + part + "number"));
                                 synth.performRequestDump(tempModel, false);

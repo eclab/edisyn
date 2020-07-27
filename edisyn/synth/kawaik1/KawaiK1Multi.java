@@ -248,7 +248,7 @@ public class KawaiK1Multi extends Synth
                             {
                             public void run() 
                                 { 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 tempModel.set("bank", KawaiK1Multi.this.model.get("section" + src + "bank"));
                                 tempModel.set("number", KawaiK1Multi.this.model.get("section" + src + "number"));
                                 synth.performRequestDump(tempModel, false);
@@ -603,7 +603,7 @@ public class KawaiK1Multi extends Synth
         // we change patch to #63 if we're sending in bulk.
         if (sendKawaiParametersInBulk)
             {
-            Model tempModel = new Model();
+            Model tempModel = buildModel();
             tempModel.set("bank", 7);
             tempModel.set("number", 7);
             changePatch(tempModel);

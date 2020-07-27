@@ -1333,9 +1333,6 @@ public class WaldorfBlofeld extends Synth
         chooser.getCombo().setMinimumSize(d);
         chooser.getCombo().setMaximumSize(d);
         
-        // only standard wavetables are permitted to be mutated
-        model.setValidMax("osc" + osc + "shape", 67);
-        
         if (osc != 3)
             {
             params = SAMPLE_BANKS;
@@ -2519,5 +2516,26 @@ public class WaldorfBlofeld extends Synth
             (number > 99 ? "" : (number > 9 ? "0" : "00")) + number;
         }
                 
+	public static class SubModel extends Model
+		{
+			public int reviseMutatedValue(String key, int old, int current) 
+				{
+				// only standard wavetables are permitted to be mutated
+				if (key.equals("osc1shape") ||
+					key.equals("osc2shape"))
+						{
+						if (current > 67)		// invalid new proposed value
+							return old;
+						} 
+				return current; 
+				}    
+		}
+		
+    public Model buildModel() 
+    	{ 
+    	return new SubModel();
+    	}
+    	
+
     }
     

@@ -239,7 +239,7 @@ public class KawaiK5Multi extends Synth
                             {
                             public void run() 
                                 { 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 tempModel.set("number", KawaiK5Multi.this.model.get("t" + track + "singlenumber"));
                                 int bank = KawaiK5Multi.this.model.get("t" + track + "singlebank") + 
                                     (KawaiK5Multi.this.model.get("bank") < 4 ? 0 : 4); 
@@ -449,7 +449,7 @@ public class KawaiK5Multi extends Synth
                                         
         simplePause(400);  // think this is the right amount -- 300 won't cut it
 
-        Model tempModel = new Model();
+        Model tempModel = buildModel();
         tempModel.set("bank", 3);
         tempModel.set("number", 11);
         changePatch(tempModel);

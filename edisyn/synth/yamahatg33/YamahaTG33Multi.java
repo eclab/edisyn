@@ -322,7 +322,7 @@ public class YamahaTG33Multi extends Synth
                             {
                             public void run() 
                                 { 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 tempModel.set("number", YamahaTG33Multi.this.model.get("c" + channel + "number"));
                                 int bank = YamahaTG33Multi.this.model.get("c" + channel + "bank");
                                 if (bank < 3)  // internal, preset 1, preset 2

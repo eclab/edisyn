@@ -364,7 +364,7 @@ public class RolandD110Multi extends Synth
                             {
                             public void run() 
                                 { 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 tempModel.set("number", RolandD110Multi.this.model.get("p" + part + "tonenumber"));
                                 synth.performRequestDump(tempModel, false);
                                 }

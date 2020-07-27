@@ -755,9 +755,9 @@ public class RolandD110Tone extends Synth
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "p" + partial + "tvfenvtime1", "p" + partial + "tvfenvtime2", "p" + partial + "tvfenvtime3", "p" + partial + "tvfenvtime4", null, "p" + partial + "tvfenvtime5" },
-            new String[] { null, "p" + partial + "tvfenvlevel1", "p" + partial + "tvfenvlevel2", "p" + partial + "tvfenvlevel3", "p" + partial + "tvfenvsustainlevel", "p" + partial + "tvfenvsustainlevel", "p" + partial + "tvfenvlevel5" },
+            new String[] { null, "p" + partial + "tvfenvlevel1", "p" + partial + "tvfenvlevel2", "p" + partial + "tvfenvlevel3", "p" + partial + "tvfenvsustainlevel", "p" + partial + "tvfenvsustainlevel", null },
             new double[] { 0, 0.2 / 100.0, 0.2 / 100.0, 0.2 / 100.0, 0.2 / 100.0, 0.2, 0.2 / 100.0 },
-            new double[] { 0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0 });
+            new double[] { 0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 0 });
             
         hbox.addLast(comp);
         category.add(hbox, BorderLayout.CENTER);
@@ -926,9 +926,9 @@ public class RolandD110Tone extends Synth
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "p" + partial + "tvaenvtime1", "p" + partial + "tvaenvtime2", "p" + partial + "tvaenvtime3", "p" + partial + "tvaenvtime4", null, "p" + partial + "tvaenvtime5" },
-            new String[] { null, "p" + partial + "tvaenvlevel1", "p" + partial + "tvaenvlevel2", "p" + partial + "tvaenvlevel3", "p" + partial + "tvaenvsustainlevel", "p" + partial + "tvaenvsustainlevel", "p" + partial + "tvaenvlevel5" },
+            new String[] { null, "p" + partial + "tvaenvlevel1", "p" + partial + "tvaenvlevel2", "p" + partial + "tvaenvlevel3", "p" + partial + "tvaenvsustainlevel", "p" + partial + "tvaenvsustainlevel", null },
             new double[] { 0, 0.2 / 100.0, 0.2 / 100.0, 0.2 / 100.0, 0.2 / 100.0, 0.2, 0.2 / 100.0 },
-            new double[] { 0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0 });
+            new double[] { 0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 0 });
             
         hbox.addLast(comp);
         category.add(hbox, BorderLayout.CENTER);

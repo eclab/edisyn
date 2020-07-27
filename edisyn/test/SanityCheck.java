@@ -120,6 +120,12 @@ public class SanityCheck
         {
         try
             {
+            // prepare so raw parsing doesn't try to push a million things on the undo stack and write stuff
+	        synth.setSendMIDI(false);
+        	synth.getUndo().setWillPush(false);
+	        synth2.setSendMIDI(false);
+        	synth2.getUndo().setWillPush(false);
+        	
             synth.doMutate(1.0);
             byte[] data = synth.flatten(synth.emitAll((Model)null, false, true));
             synth2.parse(data, true);

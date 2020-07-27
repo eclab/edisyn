@@ -6077,7 +6077,8 @@ public abstract class Synth extends JComponent implements Updatable
         {
         Synth otherSynth = instantiate(synthClass, synthName, false, true, null);
         otherSynth.setSendMIDI(false);
-        
+		otherSynth.undo.setWillPush(false);
+
         // this last statement fixes a mystery.  When I call Randomize or Reset on
         // a Blofeld or on a Microwave, all of the widgets update simultaneously.
         // But on a Blofeld Multi or Microwave Multi they update one at a time.
@@ -6113,6 +6114,7 @@ public abstract class Synth extends JComponent implements Updatable
         otherSynth.file = f;
         otherSynth.setLastDirectory(fd.getDirectory());
 
+		otherSynth.undo.setWillPush(true);
         otherSynth.setSendMIDI(true);
 
         if (otherSynth.getSendsParametersAfterLoad()) // we'll need to do this

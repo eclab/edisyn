@@ -13,18 +13,21 @@ Set the FS1R's to receive System Exclusive, Bulk Dumps, Bank Selection, and Prog
 
 <b><br><h3>About the Menu</h3>
 
-The FS1R menu contains a number options which will hopefully make editing a bit easier.
+The FS1R menu contains a number of utilities which will hopefully make editing a bit easier.
 
 <ul>
 <li><b>Show Current Performance</b>&nbsp;&nbsp;Loads the current FS1R Performance in an editor.
-<p><li><b>Set Up Test Performance</b>&nbsp;&nbsp;Creates a default FS1R Performance and Voice suitable for testing your Fseq.  The performance has a single Voice in Part 1, using Algorithm 1, with all eight operators (both voiced and unvoiced) controlled by the Fseq.
+<p><li><b>Show Current Part 1</b>&nbsp;&nbsp;Loads the voice associated with the current performance's Part 1 in an editor.
+<p><li><b>Set Up Test Performance and Part 1</b>&nbsp;&nbsp;Creates a default FS1R Performance and Voice suitable for testing your Fseq.  The performance has a single Voice in Part 1, using Algorithm 1, with all eight operators (both voiced and unvoiced) controlled by the Fseq.
 <p><li><b>Swap Tracks...</b>&nbsp;&nbsp;Swaps two different tracks.  You can restrict the range of Frames in which this operation occurs.
 <p><li><b>Copy Track To...</b>&nbsp;&nbsp;Copies a track to another track, or to all other tracks. You can restrict the range of Frames in which this operation occurs.
 <p><li><b>Clear Track...</b>&nbsp;&nbsp;Sets all the values of a track to 0.  You can restrict the range of Frames in which this operation occurs.
-<p><li><b>Cut Frames...</b>&nbsp;&nbsp;Cuts out a range of frames and places them on a gaobal clipboard.  Note thatayou can paste these frames back into this editor or into a <b>different editor</b>.
+<p><li><b>Cut Frames...</b>&nbsp;&nbsp;Cuts out a range of frames and places them on a gaobal clipboard.  Note that you can paste these frames back into this editor or into a <b>different editor</b>.
 <p><li><b>Copy Frames...</b>&nbsp;&nbsp;Copies a range of frames to a global clipboard.  Note that you can paste these frames back into this editor or into a <b>different editor</b>.
-<p><li><b>Paste Frames...</b>&nbsp;&nbsp;Inserts the frames from a global clipboard at the provided insertion point.
-<p><li><b>Duplicate Frames...</b>&nbsp;&nbsp;Copies a range of frames, then writes them a new location, overwriting the frames at the position.  This might be called a "stamp" operation.  You can restrict which tracks are affected, and whether pitch is affected.
+<p><li><b>Paste Frames...</b>&nbsp;&nbsp;Inserts the frames from the global clipboard at the provided insertion point.  
+<p><li><b>Overwrite Frames...</b>&nbsp;&nbsp;Directly overwrites frames at the provided point with the frames stored in the global clipboard.  You can restrict what is overwritten to be certain tracks, voiced/unvoiced only, or including pitch information.
+<p><li><b>Clear Frames...</b>&nbsp;&nbsp;Sets a range of frames to zero.  You can restrict which parameters are erased, including the track, voiced/unvoiced only, or pitch.
+<p><li><b>Duplicate Frame</b>&nbsp;&nbsp;Copies the value of a single frames, overwriting a range of other frames.  You can restrict what is overwritten to be certain tracks, voiced/unvoiced only, or including pitch information.  This might be useful, for example, for setting all frames to a given pitch.
 </ul>
 
 <br><br><h3>Gotchas</h3>

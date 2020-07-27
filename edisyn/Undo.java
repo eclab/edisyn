@@ -31,6 +31,7 @@ public class Undo
         {
         if (!willPush)
             {
+            if (debug) System.err.println("Debug (Undo): Tried to push but didn't (!willPush)");
             return;
             }
         undo.push((Model)(obj.clone()));

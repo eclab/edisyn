@@ -480,7 +480,7 @@ public class YamahaFS1RMulti extends Synth
         hbox2.add(comp);
         vbox.add(hbox2);
         
-        comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 10 ASCII characters.")
+        comp = new StringComponent("Patch Name", this, "name", 12, "Name must be up to 12 ASCII characters.")
             {
             public String replace(String val)
                 {
@@ -646,7 +646,7 @@ public class YamahaFS1RMulti extends Synth
                             {
                             public void run() 
                                 { 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 synth.setSendMIDI(false);
                                 tempModel.set("bank", bank);
                                 tempModel.set("number", number);
@@ -897,7 +897,7 @@ public class YamahaFS1RMulti extends Synth
                             {
                             public void run() 
                                 { 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 synth.setSendMIDI(false);
                                 tempModel.set("bank", YamahaFS1RMulti.this.model.get("part" + part + "banknumber") - 1);
                                 tempModel.set("number", YamahaFS1RMulti.this.model.get("part" + part + "programnumber"));
@@ -2853,7 +2853,7 @@ public class YamahaFS1RMulti extends Synth
             data[3] == (byte)0x5E);
         }
                
-    public static final int MAXIMUM_NAME_LENGTH = 10;
+    public static final int MAXIMUM_NAME_LENGTH = 12;
     public String revisePatchName(String name)
         {
         name = super.revisePatchName(name);  // trim first time

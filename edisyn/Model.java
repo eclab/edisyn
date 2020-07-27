@@ -27,23 +27,783 @@ import edisyn.gui.*;
 
 public class Model implements Cloneable
     {
-    LinkedHashMap storage = new LinkedHashMap();
-    HashMap min = new HashMap();
-    HashMap max = new HashMap();
-    HashMap listeners = new HashMap();
-    HashMap metricMin = new HashMap();
-    HashMap metricMax = new HashMap();
-    HashMap validMin = new HashMap();
-    HashMap validMax = new HashMap();
-    HashMap status = new HashMap();
-    Undo undoListener = null;
-    
-    String lastKey = null;
+     public static final boolean debug = false;
 
-    public static final String ALL_KEYS = "ALL_KEYS";
+    public static final int STATUS_UNSET = 0;				// I haven't set a status for this yet.  For Strings this will result in IMMUTABLE and for ints, FREE
+    public static final int STATUS_FREE = 1;				// The parameter can be mutated
+    public static final int STATUS_IMMUTABLE = 2;			// The parameter cannot be mutated
+    public static final int STATUS_RESTRICTED = 3;			// The parameter cannot be mutated and shouldn't appear in getKeys()
+    public static final String ALL_KEYS = "ALL_KEYS";		// The "key" which registers a listener with all keys
+
+	// The actual value storage.  It's a linked hash map so data iterates in a rational format (basically the order in which it was added originally)
+    LinkedHashMap<String, Node> storage = new LinkedHashMap<String, Node>();
+
+    // The last key which was set
+    String lastKey = null;
     
+    // A new key was set since the last time checkIfRecentlySet() was called 
+    boolean recentlySet = false;
+    
+    // The listeners for ALL_KEYS
+    ArrayList<Updatable> allKeysListeners = new ArrayList<Updatable>();
+
+	// The undo listener
+    Undo undoListener = null;
+
+	// Listeners should be updated when a key is modified
+    boolean updateListeners = true;
+
+    class Node
+    	{
+    	ArrayList<Updatable> listeners = null;		// when listeners is empty, we set it to null to save a tiny bit o space
+    	String stringValue = null;			// if stringValue == null, this is an INTEGER VALUE, else it is a STRING VALUE
+    	int intValue;
+    	int status = STATUS_UNSET;						// If STATUS_UNSET, then if we're a string, we are IMMUTABLE, else we are FREE
+    	int min;
+    	int max;
+    	int metricMin;
+    	int metricMax;
+    	boolean hasMin = false;
+    	boolean hasMax = false;
+    	boolean hasMetricMin = false;
+    	boolean hasMetricMax = false;
+    	
+    	String listenersToString()
+    		{
+    		String s = "";
+    		if (listeners != null)
+    		for(int i = 0; i < listeners.size(); i++)
+    			{
+    			s += " " + listeners.get(i);
+    			}
+    		return s;
+    		}
+    		
+    	public String toString()
+    		{
+    		return
+    			(stringValue == null ? 
+    				"[val: " + intValue +
+    				" min: " + (hasMin ? min : "-") +
+    				" max: " + (hasMin ? max : "-") +
+    				" mmin: " + (hasMetricMin ? metricMin : "-") +
+    				" mmax: " + (hasMetricMax ? metricMax : "-") +
+    				" stat: " + (status == STATUS_UNSET ? "UNSET" : (status == STATUS_FREE ? "FREE" : (status == STATUS_IMMUTABLE ? "IMMUT" : "RESTR"))) +
+    				listenersToString() 
+    			: "[val: \"" + stringValue + "\"" + listenersToString()) + "]";
+    		}
+    	
+    	public Node() { }
+    	
+    	// copy constructor
+    	public Node(Node node, boolean includeListeners)
+    		{
+    		intValue = node.intValue;
+    		stringValue = node.stringValue;
+    		min = node.min;
+    		max = node.max;
+    		metricMin = node.metricMin;
+    		metricMax = node.metricMax;
+    		hasMin = node.hasMin;
+    		hasMax = node.hasMax;
+    		hasMetricMin = node.hasMetricMin;
+    		hasMetricMax = node.hasMetricMax;
+    		status = node.status;
+    		if (includeListeners)
+    			{
+	    		if (node.listeners != null) 
+	    			{
+	    			listeners = new ArrayList<Updatable>(node.listeners);
+	    			}
+	    		}
+    		}
+    	
+    	public boolean equals(Object obj)
+    		{
+    		if (obj == null) return false;
+    		if (!(obj instanceof Node)) return false;
+    		Node other = (Node) obj;
+    		    		
+    		// check values
+    		if (!keyAndBoundsEquals(other)) return false;
+
+    		// check status and listeners
+    		if (other.status != status) return false;
+    		int otherNum = (other.listeners == null ? 0 : other.listeners.size());
+    		int num = (listeners == null ? 0 : listeners.size());
+    		if (otherNum != num) return false;
+    		if (listeners != null && !listeners.equals(other.listeners)) return false;
+    		return true;
+    		}
+    	
+    	public boolean keyAndBoundsEquals(Node other)
+    		{
+    		if (!keyEquals(other)) return false;
+			if (other.hasMin != hasMin) return false;
+			if (other.hasMax != hasMax) return false;
+			if (other.hasMetricMin != hasMetricMin) return false;
+			if (other.hasMetricMax != hasMetricMax) return false;
+			if (hasMin && (other.min != min)) return false;
+			if (hasMax && (other.max != max)) return false;
+			if (hasMetricMin && (other.metricMin != metricMin)) return false;
+			if (hasMetricMax && (other.metricMax != metricMax)) return false;
+			return true;
+    		}
+
+    	public boolean keyEquals(Node other)
+    		{
+    		// check for strings
+    		if (other.stringValue == null && stringValue != null) return false;
+    		if (other.stringValue != null && stringValue == null) return false;
+    		if (stringValue != null && !stringValue.equals(other.stringValue)) return false;
+
+			// it's not a string, check int
+			if (other.intValue != intValue) return false;
+			return true;		
+	   		}
+    	}
+
+	/** Returns the undo listener.  This listener not really a listener: it's an Undo.
+		The model is pushed onto the Undo when a value is set(...). */
     public Undo getUndoListener() { return undoListener; }
+    
+	/** Sets the undo listener.  This listener not really a listener: it's an Undo.
+		The model is pushed onto the Undo when a value is set(...). */
     public void setUndoListener(Undo up) { undoListener = up; }
+
+	/** Returns whether to update listeners when a key's value is set. */        
+    public boolean getUpdateListeners() { return updateListeners; }
+
+	/** Sets whether to update listeners when a key's value is set. */        
+    public void setUpdateListeners(boolean val) { updateListeners = val; }
+    
+	/** Returns all the ALL_KEYS listeners. */        
+    public ArrayList<Updatable> getAllKeysListeners() { return allKeysListeners; }
+
+
+
+
+
+	///// SETTING
+    
+    /** Adds a key with the given Integer value, or changes it to the given value. */        
+    public void set(String key, int value)
+        {
+        if (debug)
+            {
+            System.err.println("Debug (Model):" + key + " --> " + value );
+            if (!exists(key))
+                System.err.println("Debug (Model): " + "Key " + key + " was NEW");
+            }
+            
+        // when do we push on the undo stack?
+        if (undoListener != null &&         // when we have an undo listener AND
+            !key.equals(lastKey) &&         // when the key is not the lastKey AND
+                (!exists(key) ||                        // the key doesn't exist OR
+                !isInteger(key) ||                     // the value isn't an integer OR
+                value != get(key, 0)))         // the value doesn't match the current value 
+            undoListener.push(this);
+            
+        Node n = storage.get(key);
+        if (n == null) { n = new Node(); storage.put(key, n); }
+        n.stringValue = null;
+        n.intValue = value;
+        
+        lastKey = key;
+        recentlySet = true;
+        updateListenersForKey(key);
+        }
+
+    /** Adds a key with the given String value, or changes it to the given value. */        
+    public void set(String key, String value)
+        {
+        if (debug)
+            {
+            if (debug) System.err.println("Debug (Model): " + key + " --> " + value);
+            if (!exists(key))
+                System.err.println("Debug (Model): " + "Key " + key + " was NEW");
+            }
+
+        // when do we push on the undo stack?
+        if (
+            undoListener != null &&         // when we have an undo listener AND
+            !key.equals(lastKey) &&         // when the key is not the lastKey AND
+                (!exists(key) ||                        // the key doesn't exist OR
+                !isString(key) ||                      // the value isn't a string OR
+                !value.equals(get(key, null)))) // the value doesn't match the current value 
+            undoListener.push(this);
+
+        Node n = storage.get(key);
+        if (n == null) { n = new Node(); storage.put(key, n); }
+        n.stringValue = value;
+
+        lastKey = key;
+        recentlySet = true;
+        updateListenersForKey(key);
+        }
+    
+    
+    /** Sets a value, but bounds it to be within min and max limits */
+    public void setBounded(String key, int value)
+        {
+        if (isString(key))
+            return;
+                
+        if (minExists(key))
+            {
+            int min = getMin(key);
+            if (value < min)
+                value = min;
+            }
+                
+        if (maxExists(key))
+            {
+            int max = getMax(key);
+            if (value > max)
+                value = max;
+            }
+        
+        set(key, value);
+        }
+
+    /** Checks if any parameter in the model has been recently set.
+        If so, returns true.
+        In any event, resets the recently set flag. */
+    public boolean checkIfRecentlySet()
+        {
+        boolean val = recentlySet;
+        recentlySet = false;
+        return val;
+        }
+    
+    /** Clears the last key set. */
+    public void clearLastKey()
+        {
+        lastKey = null;
+        }
+    
+    /** Returns the last key set. */
+    public String getLastKey()
+        {
+        return lastKey;
+        }
+        
+     /** Sets the minimum for a given key. */        
+    public void setMin(String key, int value)
+        {
+        Node node = storage.get(key);
+        if (node == null) { System.err.println("Warning (Model): " + "min set for non-existent value " + key);  node = new Node(); storage.put(key, node); }
+        node.min = value;
+        node.hasMin = true;
+        }
+
+    /** Sets the maximum for a given key. */        
+    public void setMax(String key, int value)
+        {
+        Node node = storage.get(key);
+        if (node == null) { System.err.println("Warning (Model): " + "max set for non-existent value " + key); node = new Node(); storage.put(key, node); }
+        node.max = value;
+        node.hasMax = true;
+        }
+        
+     /** Sets the minimum and maximum for a given key. */        
+    public void setMinMax(String key, int min, int max)
+        {
+        Node node = storage.get(key);
+        if (node == null) { System.err.println("Warning (Model): " + "min and max set for non-existent value " + key); node = new Node(); storage.put(key, node); }
+        node.min = min;
+        node.hasMin = true;
+        node.max = max;
+        node.hasMax = true;
+        }
+       
+    /** Sets the metric minimum for a given key. */        
+    public void setMetricMin(String key, int value)
+        {
+        Node node = storage.get(key);
+        if (node == null) { System.err.println("Warning (Model): " + "metric min set for non-existent value " + key); node = new Node(); storage.put(key, node); }
+        node.metricMin = value;
+        }
+                
+    /** Sets the metric maximum for a given key. */        
+    public void setMetricMax(String key, int value)
+        {
+        Node node = storage.get(key);
+        if (node == null) { System.err.println("Warning (Model): " + "metric max set for non-existent value " + key); node = new Node(); storage.put(key, node); }
+        node.metricMax = value;
+        }
+    
+     /** Sets the metric minimum and maximum for a given key. */        
+    public void setMetricMinMax(String key, int min, int max)
+        {
+        Node node = storage.get(key);
+        if (node == null) { System.err.println("Warning (Model): " + "metric min/max set for non-existent value " + key); node = new Node(); storage.put(key, node); }
+        node.metricMin = min;
+        node.metricMax = max;
+        }
+
+     /** Sets the minimum and maximum and metric minimum and maximum for a given key. */        
+    public void setMinMaxMetricMinMax(String key, int min, int max, int metricMin, int metricMax)
+        {
+        Node node = storage.get(key);
+        if (node == null) { System.err.println("Warning (Model): " + "min/max and metric min/max set for non-existent value " + key); node = new Node(); storage.put(key, node); }
+        node.min = min;
+        node.max = max;
+        node.metricMin = metricMin;
+        node.metricMax = metricMax;
+        }
+            
+    /** Sets the status of a key.  The default is STATUS_FREE, except for strings, which are STATUS_IMMUTABLE. */        
+    public void setStatus(String key, int val)
+        {
+        Node node = storage.get(key);
+        if (node == null) { System.err.println("Warning (Model): " + "status set for non-existent value " + key); node = new Node(); storage.put(key, node); }
+        node.status = val;
+        }
+ 
+     /** Deletes the metric min and max for a key */
+    public void removeMinMax(String key)
+        {
+        Node node = storage.get(key);
+        if (node == null) { System.err.println("Warning (Model): " + "min/max removed for non-existent value " + key); return; }
+        node.hasMin = false;
+        node.hasMax = false;
+        }
+
+    /** Deletes the metric min and max for a key */
+    public void removeMetricMinMax(String key)
+        {
+        Node node = storage.get(key);
+        if (node == null) { System.err.println("Warning (Model): " + "metric min/max removed for non-existent value " + key); return; }
+        node.hasMetricMin = false;
+        node.hasMetricMax = false;
+        }
+
+               
+
+
+
+
+
+    
+	///// GETTING
+            
+
+    /** Returns all the keys in the model as an array, except the hidden ones. */        
+    public String[] getKeys()
+        {
+        String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
+        ArrayList revisedKeys = new ArrayList<String>();
+        for(int i = 0; i < keyset.length; i++)
+            if (getStatus(keyset[i]) != STATUS_RESTRICTED)
+                revisedKeys.add(keyset[i]);
+        return (String[])(revisedKeys.toArray(new String[0]));
+        }
+ 
+    /** Returns the value associated with this
+        (String) key, or ifDoesntExist if there is no such value. */        
+    public String get(String key, String ifDoesntExist)
+        {
+    	Node node = storage.get(key);
+		if (node == null)
+			{
+			if (debug)
+                System.err.println("Debug (Model): " + "Key " + key + " does not exist");
+            return ifDoesntExist;
+			}
+		else if (node.stringValue == null)
+			{
+			if (debug)
+                System.err.println("Debug (Model): " + "Key " + key + " is an integer, not an string");
+            return ifDoesntExist;
+			}
+		else return node.stringValue;
+        }
+
+    /** Returns the value associated with this
+        (Integer) key, or ifDoesntExist if there is no such value. */        
+    public int get(String key, int ifDoesntExist)
+        {
+    	Node node = storage.get(key);
+		if (node == null)
+			{
+			if (debug)
+                System.err.println("Debug (Model): " + "Key " + key + " does not exist");
+            return ifDoesntExist;
+			}
+		else if (node.stringValue != null)
+			{
+			if (debug)
+                System.err.println("Debug (Model): " + "Key " + key + " is a string, not an integer");
+            return ifDoesntExist;
+			}
+		else return node.intValue;
+        }
+    
+    /** Returns the value associated with this (Integer) key, or -1 if there is no such value. 
+        If there is no such value, also prints (does not throw) a RuntimeError stacktrace.  */        
+    public int get(String key)
+        {
+        return get(key, -1);
+        }
+              
+    public Object getValue(String key) 
+    	{
+    	Node node = storage.get(key);
+    	if (node == null) return null;
+    	else if (node.stringValue == null)
+    		return Integer.valueOf(node.intValue);
+    	else
+    		return node.stringValue;
+    	}
+      
+    /** Returns whether the key is associated with a String. 
+        If there is no key stored in the Model, then FALSE is returned. */        
+    public boolean isString(String key)
+        {
+        Node node = storage.get(key);
+        if (node == null) return false;
+        else return node.stringValue != null;
+        }
+    
+    /** Returns whether the key is associated with an integer. 
+        If there is no key stored in the Model, then FALSE is returned. */        
+    public boolean isInteger(String key)
+        {
+        Node node = storage.get(key);
+        if (node == null) return false;
+        else return node.stringValue == null;
+        }
+
+    /** Returns whether the key is stored in the model. */        
+    public boolean exists(String key)
+        {
+        return storage.containsKey(key);
+        }
+                
+    /** Returns whether a minimum is stored in the model for the key. */        
+    public boolean minExists(String key)
+        {
+        Node node = storage.get(key);
+        if (node == null) return false;
+        return node.hasMin;
+        }
+
+    /** Returns whether a maximum is stored in the model for the key. */        
+    public boolean maxExists(String key)
+        {
+        Node node = storage.get(key);
+        if (node == null) return false;
+        return node.hasMax;
+        }
+
+   /** Returns whether a metric minimum is stored in the model for the key. */        
+    public boolean metricMinExists(String key)
+        {
+        Node node = storage.get(key);
+        if (node == null) return false;
+        return node.hasMetricMin;
+        }
+
+    /** Returns whether a metric maximum is stored in the model for the key. */        
+    public boolean metricMaxExists(String key)
+        {
+        Node node = storage.get(key);
+        if (node == null) return false;
+        return node.hasMetricMax;
+        }
+    
+    /** Returns whether a given key is declared immutable.  Strings are ALWAYS immutable by default and numbers are ALWAYS free by default. */        
+    public int getStatus(String key)
+        {
+        Node node = storage.get(key);
+        if (node == null)
+        	return STATUS_IMMUTABLE;
+        else if (node.status == STATUS_UNSET)
+        	{
+        	if (node.stringValue != null)
+        		return STATUS_IMMUTABLE;
+        	else
+        		return STATUS_FREE;
+        	}
+        else return node.status;
+        }
+                
+    /** Returns the minimum for a given key, or 0 if no minimum is declared. */        
+    public int getMin(String key)
+        {
+        Node d = storage.get(key);
+        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent node extracted for min for " + key); new Throwable().printStackTrace(); return 0; }
+        if (!d.hasMin) { System.err.println("Warning (Model): " + "Nonexistent min extracted for " + key); new Throwable().printStackTrace(); printNode(key); return 0; }
+        else return d.min;
+        }
+                
+    /** Returns the maximum for a given key, or 0 if no maximum is declared. */        
+    public int getMax(String key)
+        {
+        Node d = storage.get(key);
+        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent node extracted for max for " + key); new Throwable().printStackTrace(); return 0; }
+        if (!d.hasMax) { System.err.println("Warning (Model): " + "Nonexistent max extracted for " + key); new Throwable().printStackTrace(); return 0; }
+        else return d.max;
+        }
+
+    /** Returns the metric minimum for a given key, or 0 if no minimum is declared. */        
+    public int getMetricMin(String key)
+        {
+        Node d = storage.get(key);
+        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent node extracted for metric min for " + key); new Throwable().printStackTrace(); return 0; }
+        if (!d.hasMetricMin) { System.err.println("Warning (Model): " + "Nonexistent metric min extracted for " + key); new Throwable().printStackTrace(); return 0; }
+        else return d.metricMin;
+        }
+                
+    /** Returns the metric maximum for a given key, or 0 if no maximum is declared. */        
+    public int getMetricMax(String key)
+        {
+        Node d = storage.get(key);
+        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent node extracted for metric max for " + key); new Throwable().printStackTrace(); return 0; }
+        if (!d.hasMetricMax) { System.err.println("Warning (Model): " + "Nonexistent metric max extracted for " + key); new Throwable().printStackTrace(); return 0; }
+        else return d.metricMax;
+        }
+    
+    /** Returns getMax(key) - getMin(key) + 1 */
+    public int getRange(String key)
+        {
+        if (minExists(key) && maxExists(key))
+            {
+            return getMax(key) - getMin(key) + 1;
+            }
+        else return 0;
+        }
+
+ 
+ 
+        
+    //// COPYING    
+        
+        
+    /** Exactly duplicates the model, including listeners */
+    public Object clone()
+        {
+		Model m = null;
+        try
+        	{
+        	m = (Model)(super.clone());
+        	}
+        catch (CloneNotSupportedException ex)
+        	{
+        	// do nothing, never happens
+        	}
+        
+		// reload keys
+        m.storage = new LinkedHashMap<String, Node>();
+        String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
+        for(int i = 0; i < keyset.length; i++)
+			{
+			m.storage.put(keyset[i], new Node(storage.get(keyset[i]), true));
+			}
+			
+		m.allKeysListeners = new ArrayList<Updatable>(allKeysListeners);		// make a proper duplicate
+		return m;
+        }
+
+
+    /** Duplicates the model without listeners, without undo listener, and without the last key. */
+    public Model copy()
+        {
+		Model m = null;
+        try
+        	{
+        	m = (Model)(super.clone());
+        	}
+        catch (CloneNotSupportedException ex)
+        	{
+        	// do nothing, never happens
+        	}
+
+		// reload keys
+        m.storage = new LinkedHashMap<String, Node>();
+        String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
+        for(int i = 0; i < keyset.length; i++)
+			{
+			m.storage.put(keyset[i], new Node(storage.get(keyset[i]), false));		// no listeners
+			}
+
+		// clear		
+		m.undoListener = null;
+		m.recentlySet = false;
+		m.lastKey = null;
+		m.allKeysListeners = new ArrayList<Updatable>();
+
+        return m;
+        }
+    
+    /** Copies all values to the given model.  This assumes that the models are the same; only values are transferred.
+    	lastKey is reset in the model, and the listeners are updated.  */
+    public void copyValuesTo(Model model)
+        {
+		// load keys
+        String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
+        for(int i = 0; i < keyset.length; i++)
+			{
+			if (isString(keyset[i]))
+				{
+				model.set(keyset[i], get(keyset[i], ""));
+				}
+			else
+				{
+				model.set(keyset[i], get(keyset[i], 0));
+				}
+			}
+		model.lastKey = null;
+		model.updateAllListeners();
+        }
+        
+
+
+
+
+
+	///// EQUALITY TESTING
+	    
+    public boolean equals(Object other)
+        {
+        if (other == null || !(other instanceof Model))
+            return false;
+        Model model = (Model) other;
+        if (!storage.equals(model.storage))
+            return false;
+        // don't care about lastKey
+        return true;
+        }
+
+    public boolean keyEquals(Model other)
+        {
+        if (other == null)
+            return false;
+        if (!storage.keySet().equals(other.storage.keySet()))
+        	return false;
+        	
+        String[] keys = getKeys();
+        for(int i = 0; i < keys.length; i++)
+        	{
+        	Node n = storage.get(keys[i]);
+        	Node n2 = other.storage.get(keys[i]);
+        	if (n2 == null)		// I can't be null, just the other one
+        		return false;
+        	if (!storage.get(keys[i]).keyEquals(other.storage.get(keys[i])))
+        		return false;
+        	}
+		return true;
+        }
+    
+        
+        
+        
+    //// LISTENERS
+    
+    /** Removes all listeners from the model, including the undoListener. */
+    public void clearListeners()
+        {
+        String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
+        for(int i = 0; i < keyset.length; i++)
+			{
+			Node node = storage.get(keyset[i]);
+			node.listeners = null;
+			}
+        undoListener = null;
+        }
+
+    /** Register a listener to be notified whenever the value associated with the
+        given key is updated.  If the key is ALL_KEYS, then the listener will
+        be notified whenever any key is updated. */
+    public void register(String key, Updatable component)
+        {
+        if (key.equals(ALL_KEYS))
+        	{
+        	allKeysListeners.add(component);
+        	}
+		else
+			{
+			Node node = storage.get(key);
+			if (node == null) { /* System.err.println("Warning (Model): " + "Listener registered for key without value " + key); */ node = new Node(); storage.put(key, node); }
+			if (node.listeners == null)
+				node.listeners = new ArrayList<Updatable>();
+			node.listeners.add(component);
+			}
+        }
+    
+    /** Removes all listeners from the model, including the undoListener. */
+    public void unregister(String key, Updatable component)
+        {
+        if (key.equals(ALL_KEYS))
+        	{
+        	if (!allKeysListeners.remove(component)) { System.err.println("Warning (Model): " + "Listener unregistered for ALL_KEYS but it wasn't registered");  return; }
+        	}
+		else
+			{
+	        Node node = storage.get(key);
+	        if (node == null) { System.err.println("Warning (Model): " + "Listener unregistered for key without value " + key);  return; }
+	        if (node.listeners == null) { System.err.println("Warning (Model): " + "Listener unregistered for key but it wasn't registered " + key);  return; }
+	        if (!node.listeners.remove(component)) { System.err.println("Warning (Model): " + "Listener unregistered for key but it wasn't registered " + key);  return; }
+	        if (node.listeners.isEmpty())
+	        	node.listeners = null;		// let GC
+	        }
+        }
+
+	/** Returns all listeners for the key, but not for ALL_KEYS. */
+    public ArrayList getListeners(String key)
+        {
+        Node node = storage.get(key);
+        if (node == null) { System.err.println("Warning (Model): " + "Listeners requested for key without value " + key);  return null; }
+        if (node.listeners == null)
+        	node.listeners = new ArrayList<Updatable>();
+        return node.listeners;
+        }
+        
+	/** Updates all listeners for the key, and for ALL_KEYS, unless updateListeners is true */
+    public void updateListenersForKey(String key)
+        {
+        if (!updateListeners) return;
+        
+		Node node = storage.get(key);
+		if (node.listeners != null)
+			{
+			for(int i = 0; i < node.listeners.size(); i++)
+				node.listeners.get(i).update(key, this);
+			}
+			
+		for(int i = 0; i < allKeysListeners.size(); i++)
+			{
+			allKeysListeners.get(i).update(key, this);
+			}
+        }
+
+	/** Updates all listeners for for keys, and for ALL_KEYS, unless updateListeners is true */
+    public void updateAllListeners()
+        {
+        if (!updateListeners) return;
+        
+        String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
+        for(int j = 0; j < keyset.length; j++)
+			{
+			updateListenersForKey(keyset[j]);
+			}
+        }
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    ///// MUTATION    
+        
         
     /** Returns TRUE with the given probability. */
     boolean coinToss(Random random, double probability)
@@ -62,27 +822,6 @@ public class Model implements Cloneable
         return a + random.nextInt(range);
         }
        
-    public final static int VALID_RETRIES = 20; 
-    /** Produces a random valid value in the fully closed range [a, b]. */
-    int randomValidValueWithin(String key, Random random, int a, int b)
-        {
-        for(int i = 0; i < VALID_RETRIES; i++)
-            {
-            int v = randomValueWithin(random, a, b);
-            if (isValid(key, v))
-                return v;
-            }
-        return get(key, 0);  // return original
-        }
-
-/*
-  import edisyn.*;   
-  m = new Model();
-  r = new Random(1000);
-  show();
-  for(int i = 0; i < 10000; i++) m.randomValueWithin(r, 5, 10, 7, 0.05);
-*/
-
     static final double STDDEV_CUT = 1.0/2.0;
 
     public static int randomValueWithin(Random random, int a, int b, int center, double weight)
@@ -132,21 +871,6 @@ public class Model implements Cloneable
         return (int)(Math.round(center + delta));
         }
 
-    /** Produces a random valid value in the fully closed range [a, b],
-        choosing from a uniform distribution of size +- weight * (a-b),
-        centered at *center*, and rounded to the nearest integer. */
-    int randomValidValueWithin(String key, Random random, int a, int b, int center, double weight)
-        {
-        for(int i = 0; i < VALID_RETRIES; i++)
-            {
-            int v = randomValueWithin(random, a, b, center, weight);
-            if (isValid(key, v))
-                return v;
-            }
-        return get(key, 0);  // return original
-        }
-
-
     /** Mutates (potentially) all keys.
         Mutation works as follows.  For each key, we first see if we're permitted to mutate it
         (no immutable status, no strings).  If so, we divide the range into the METRIC and NON-METRIC
@@ -167,6 +891,8 @@ public class Model implements Cloneable
         return mutate(random, getKeys(), weight);
         }
         
+	
+	final static int VALID_RETRIES = 20;
     /** Mutates (potentially) the keys provided.
         Mutation works as follows.  For each key, we first see if we're permitted to mutate it
         (no immutable status, no strings).  If so, we divide the range into the METRIC and NON-METRIC
@@ -196,7 +922,7 @@ public class Model implements Cloneable
             // continue if the key is immutable, it's a string, or we fail the coin toss
             if (getStatus(keys[i]) == STATUS_IMMUTABLE || getStatus(keys[i]) == STATUS_RESTRICTED || isString(keys[i])) continue;
             if (minExists(keys[i]) && maxExists(keys[i]) && getMin(keys[i]) >= getMax(keys[i]))  continue;  // no range
-            
+
             boolean hasMetric = false;                              // do we even HAVE a metric range?
             boolean doMetric = false;                               // are we in that range, and should mutate within it?
             boolean pickRandomInMetric = false;                     // are we NOT in that range, but should maybe go to a random value in it?
@@ -238,7 +964,7 @@ public class Model implements Cloneable
                 if (random.nextDouble() < mutProb)
                     {
                     set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0),
-                            randomValidValueWithin(keys[i], random, getMetricMin(keys[i]), getMetricMax(keys[i]), get(keys[i], 0), mutWeight)));
+                            randomValueWithin(random, getMetricMin(keys[i]), getMetricMax(keys[i]), get(keys[i], 0), mutWeight)));
                     }
                 }
             else if (pickRandomInMetric)                    // MAYBE jump into metric
@@ -246,7 +972,7 @@ public class Model implements Cloneable
                 if (coinToss(random, weight))
                     {
                     set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
-                            randomValidValueWithin(keys[i], random, getMetricMin(keys[i]), getMetricMax(keys[i]))));
+                            randomValueWithin(random, getMetricMin(keys[i]), getMetricMax(keys[i]))));
                     }
                 }
             else if (hasMetric)  // MAYBE choose a random new non-metric location
@@ -262,19 +988,19 @@ public class Model implements Cloneable
                         int delta = random.nextInt(lowerRange + upperRange);
                         if (delta < lowerRange)
                             {
-                            if (isValid(keys[i], getMin(keys[i]) + delta))
-                                {
+                            //if (isValid(keys[i], getMin(keys[i]) + delta))
+                            //    {
                                 set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), getMin(keys[i]) + delta));
                                 break;
-                                }
+                            //    }
                             }
                         else
                             {
-                            if (isValid(keys[i], getMetricMax(keys[i]) + 1 + (delta - lowerRange)))
-                                {
+                            //if (isValid(keys[i], getMetricMax(keys[i]) + 1 + (delta - lowerRange)))
+                            //    {
                                 set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), getMetricMax(keys[i]) + 1 + (delta - lowerRange)));
                                 break;
-                                }
+                            //    }
                             }
                         }
                     }
@@ -284,7 +1010,7 @@ public class Model implements Cloneable
                 if (coinToss(random, weight))
                     {
                     set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
-                            randomValidValueWithin(keys[i], random, getMin(keys[i]), getMax(keys[i]))));
+                            randomValueWithin(random, getMin(keys[i]), getMax(keys[i]))));
                     }
                 }
             }
@@ -296,15 +1022,7 @@ public class Model implements Cloneable
         return this;
         }
 
-    void setIfValid(String key, int value)
-        {
-        if (isValid(key, value))
-            set(key, value);
-        else
-            System.err.println("Warning (Model): " + "Invalid opposite value for " + key + ": " + value);
-        }
-
-    /** Finds a point on the OPPOSITE side of the model from where the provided other MODEL is located.
+    /** Finds a point on the OPPOSITE side of the Model from where the provided other MODEL is located.
         Let's call the current model X and the provided model Y.
         Changes all (and only) the METRIC parameters for which both X and Y are currently in metric regions.
         This is done by identifying the value of the parameter on the OPPOSITE side of X from where Y is.
@@ -353,13 +1071,13 @@ public class Model implements Cloneable
                     if (getMetricMin(keys[i]) == getMetricMax(keys[i])) // uh oh
                         { } // don't set anything
                     else if (get(keys[i], 0) == getMetricMax(keys[i]))
-                        setIfValid(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+                        set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
                                 get(keys[i], 0) - 1));
                     else if (get(keys[i], 0) == getMetricMin(keys[i]))
-                        setIfValid(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+                        set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
                                 get(keys[i], 0) + 1));
                     else
-                        setIfValid(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
+                        set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), 
                                 get(keys[i], 0) + (random.nextBoolean() ? 1 : -1)));
                     }
                 else
@@ -369,7 +1087,7 @@ public class Model implements Cloneable
                         int val = 0;
                         for(int j = 0; j < 10; j++)  // we'll try ten times to find something new
                             {
-                            val = randomValidValueWithin(keys[i], random, getMin(keys[i]), getMax(keys[i]));
+                            val = randomValueWithin(random, getMin(keys[i]), getMax(keys[i]));
                             if (val != get(keys[i], 0)) // we want to be different
                                 break;
                             }
@@ -405,7 +1123,7 @@ public class Model implements Cloneable
                 if (metricMaxExists(keys[i]) && q > getMetricMax(keys[i]))
                     q = getMetricMax(keys[i]);
 
-                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), randomValidValueWithin(keys[i], random, a, q)));
+                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), randomValueWithin(random, a, q)));
                 }
             else
                 {
@@ -487,7 +1205,7 @@ public class Model implements Cloneable
                 else
                     q = (int)Math.floor(qq);
 
-                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), randomValidValueWithin(keys[i], random, a, q)));
+                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), randomValueWithin(random, a, q)));
                 }
             else if (coinToss(random, weight))
                 {
@@ -538,525 +1256,34 @@ public class Model implements Cloneable
         return this;
         }
 
-  
-    public void clearListeners()
-        {
-        listeners = new HashMap();
-        undoListener = null;
-        }
-        
-    HashMap getCopy(HashMap map)
-        {
-        HashMap m = new HashMap();
-        m.putAll(map);
-        return m;
-        }
-    
-    public Object clone()
-        {
-        Model model = null;
-        try { model = (Model)(super.clone()); }
-        catch (Exception e) { e.printStackTrace(); }  // never happens
-        
-        // we do putAll  getCopy rather than 
-        model.storage = new LinkedHashMap();
-        model.storage.putAll(storage);
-        model.min = getCopy(min);
-        model.max = getCopy(max);
-        model.listeners = getCopy(listeners);
-        model.status = getCopy(status);
-        model.metricMin = getCopy(metricMin);
-        model.metricMax = getCopy(metricMax);
-        model.validMin = getCopy(validMin);
-        model.validMax = getCopy(validMax);
-        model.lastKey = null;
-        return model;
-        }
-    
-    public boolean equals(Object other)
-        {
-        if (other == null || !(other instanceof Model))
-            return false;
-        Model model = (Model) other;
-        if (!storage.equals(model.storage))
-            return false;
-        if (!min.equals(model.min))
-            return false;
-        if (!max.equals(model.max))
-            return false;
-        if (!listeners.equals(model.listeners))
-            return false;
-        if (!status.equals(model.status))
-            return false;
-        if (!metricMin.equals(model.metricMin))
-            return false;
-        if (!metricMax.equals(model.metricMax))
-            return false;
-        if (!validMin.equals(model.validMin))
-            return false;
-        if (!validMax.equals(model.validMax))
-            return false;
-        // don't care about lastKey
-        return true;
-        }
+
+	/** Override this method in the model produced by synth.buildModel() to revise mutated values if the mutator sets them to invalid things. */
+	public int reviseMutatedValue(String key, int old, int current) { return current; }    
+
+	/** Override this method in the model produced by synth.buildModel() to revise mutated values if the mutator sets them to invalid things. */
+    public String reviseMutatedValue(String key, String old, String current) { return current; }    
 
 
-    public boolean keyEquals(Model other)
-        {
-        if (other == null)
-            return false;
-        if (!storage.equals(other.storage))
-            return false;
-        return true;
-        }
-    
-    public void updateAllListeners()
-        {
-        String[] keys = getKeys();
-        for(int i = 0; i < keys.length; i++)
-            {
-            updateListenersForKey(keys[i]);
-            }
-        }
-    
-    /** Does a clone except for the various listeners */
-    public Model copy()
-        {
-        Model m =((Model)clone());
-        m.clearListeners();
-        return m;
-        }
-    
-    public void copyValuesTo(Model model)
-        {
-        model.storage.clear();
-        model.storage.putAll(storage);
-        model.updateAllListeners();
-        model.lastKey = null;
-        }
-        
-    /** Register a listener to be notified whenever the value associated with the
-        given key is updated.  If the key is ALL_KEYS, then the listener will
-        be notified whenever any key is updated. */
-    public void register(String key, Updatable component)
-        {
-        ArrayList list = (ArrayList)(listeners.get(key));
-        if (list == null) 
-            list = new ArrayList();
-        list.add(component);
-        listeners.put(key, list);
-        }
-    
-    public void unregister(String key, Updatable component)
-        {
-        ArrayList list = (ArrayList)(listeners.get(key));
-        if (list != null)
-            list.remove(component);
-        }
 
-    public ArrayList getListeners(String key)
-        {
-        return (ArrayList)(listeners.get(key));
-        }
 
-    /** Returns all the keys in the model as an array, except the hidden ones. */        
-    public String[] getKeys()
-        {
-        String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
-        ArrayList revisedKeys = new ArrayList<String>();
-        for(int i = 0; i < keyset.length; i++)
-            if (getStatus(keyset[i]) != STATUS_RESTRICTED)
-                revisedKeys.add(keyset[i]);
-        return (String[])(revisedKeys.toArray(new String[0]));
-        }
-        
-    public void clearLastKey()
-        {
-        lastKey = null;
-        }
-        
-    public String getLastKey()
-        {
-        return lastKey;
-        }
-    
-    public static final boolean debug = false;
-    
-    boolean recentlySet = false;
-    
-    /** Checks if any parameter in the model has been recently set.
-        If so, returns true.
-        In any event, resets the recently set flag. */
-    public boolean checkIfRecentlySet()
-        {
-        boolean val = recentlySet;
-        recentlySet = false;
-        return val;
-        }
-    
-    /** Adds a key with the given Integer value, or changes it to the given value. */        
-    public void set(String key, int value)
-        {
-        if (debug)
-            {
-            System.err.println("Debug (Model):" + key + " --> " + value + " [" + getMin(key) + " - " + getMax(key) + "]" );
-            if (!exists(key))
-                System.err.println("Debug (Model): " + "Key " + key + " was NEW");
-            }
-        // when do we push on the undo stack?
-        if (
-            undoListener != null &&         // when we have an undo listener AND
-            !key.equals(lastKey) &&         // when the key is not the lastKey AND
-                (!exists(key) ||                        // the key doesn't exist OR
-                !isInteger(key) ||                     // the value isn't an integer OR
-                value != get(key, 0)))         // the value doesn't match the current value 
-            undoListener.push(this);
-        storage.put(key, Integer.valueOf(value));
-        lastKey = key;
-        updateListenersForKey(key);
-        recentlySet = true;
-        }
 
-    public void setBounded(String key, int value)
-        {
-        if (isString(key))
-            return;
-                
-        if (minExists(key))
-            {
-            int min = getMin(key);
-            if (value < min)
-                value = min;
-            }
-                
-        if (maxExists(key))
-            {
-            int max = getMax(key);
-            if (value > max)
-                value = max;
-            }
-        
-        set(key, value);
-        }
-    
-    boolean updateListeners = true;
-    public void setUpdateListeners(boolean val) { updateListeners = val; }
-    public boolean getUpdateListeners() { return updateListeners; }
-    
-    public void updateListenersForKey(String key)
-        {
-        if (!updateListeners) return;
-        
-        ArrayList list = (ArrayList)(listeners.get(key));
-        if (list != null)
-            {
-            for(int i = 0; i < list.size(); i++)
-                {
-                ((Updatable)(list.get(i))).update(key, this);
-                }
-            }
-        list = (ArrayList)(listeners.get(ALL_KEYS));
-        if (list != null)
-            {
-            for(int i = 0; i < list.size(); i++)
-                {
-                ((Updatable)(list.get(i))).update(key, this);
-                }
-            }
-        }
 
-    /** Adds a key with the given String value, or changes it to the given value. */        
-    public void set(String key, String value)
-        {
-        if (debug)
-            {
-            if (debug) System.err.println("Debug (Model): " + key + " --> " + value);
-            if (!exists(key))
-                System.err.println("Debug (Model): " + "Key " + key + " was NEW");
-            }
 
-        // when do we push on the undo stack?
-        if (
-            undoListener != null &&         // when we have an undo listener AND
-            !key.equals(lastKey) &&         // when the key is not the lastKey AND
-                (!exists(key) ||                        // the key doesn't exist OR
-                !isString(key) ||                      // the value isn't a string OR
-                !value.equals(get(key, null)))) // the value doesn't match the current value 
-            undoListener.push(this);
-        storage.put(key, value);
-        lastKey = key;
-        updateListenersForKey(key);
-        }
-        
-    /** Returns the value associated with this
-        (String) key, or ifDoesntExist if there is no such value. */        
-    public String get(String key, String ifDoesntExist)
-        {
-        if (debug)
-            {
-            if (!exists(key))
-                System.err.println("Debug (Model): " + "Key " + key + " does not exist");
-            }
-        String d = (String) (storage.get(key));
-        if (d == null) return ifDoesntExist;
-        else return d;
-        }
 
-    /** Returns the value associated with this
-        (Integer) key, or ifDoesntExist if there is no such value. */        
-    public int get(String key, int ifDoesntExist)
-        {
-        if (debug)
-            {
-            if (!exists(key))
-                System.err.println("Debug (Model): " + "Key " + key + " does not exist");
-            }
-        Integer d = (Integer) (storage.get(key));
-        if (d == null) return ifDoesntExist;
-        else return d.intValue();
-        }
-    
-    /** Returns the value associated with this (Integer) key, or -1 if there is no such value. 
-        If there is no such value, also prints (does not throw) a RuntimeError stacktrace.  */        
-    public int get(String key)
-        {
-        if (debug)
-            {
-            if (!exists(key))
-                System.err.println("Debug (Model): " + "Key " + key + " does not exist");
-            }
-        Integer d = (Integer) (storage.get(key));
-        if (d == null)  
-            {
-            new RuntimeException("Debug (Model): " + "No Value stored for key " + key + ", returning -1, which is certainly wrong.").printStackTrace();
-            return -1;
-            }
-        else return d.intValue();
-        }
-              
-    public Object getValue(String key) { return storage.get(key); }
-      
-    /** Returns whether the key is associated with a String. 
-        If there is no key stored in the Model, then FALSE is returned. */        
-    public boolean isString(String key)
-        {
-        if (!exists(key)) 
-            return false;
-        else return (storage.get(key) instanceof String);
-        }
-    
 
-    /** Returns whether the key is associated with an integer. 
-        If there is no key stored in the Model, then FALSE is returned. */        
-    public boolean isInteger(String key)
-        {
-        if (!exists(key)) 
-            return false;
-        else return (storage.get(key) instanceof Integer);
-        }
-    
+	///// UTILITIES
+	
 
-    /** Returns whether the key is stored in the model. */        
-    public boolean exists(String key)
-        {
-        return storage.containsKey(key);
-        }
-                
-    /** Returns whether a minimum is stored in the model for the key. */        
-    public boolean minExists(String key)
-        {
-        return min.containsKey(key);
-        }
+	public void printNode(String key)
+		{
+		Node node = storage.get(key);
+		if (node == null) System.err.println("" + key + " -> [NULL NODE]");
+		else System.err.println("" + key + " -> " + node.toString());
+		}
 
-    /** Returns whether a maximum is stored in the model for the key. */        
-    public boolean maxExists(String key)
-        {
-        return max.containsKey(key);
-        }
-
-    /** Sets the minimum for a given key. */        
-    public void setMin(String key, int value)
-        {
-        min.put(key, Integer.valueOf(value));
-        }
-                
-    /** Sets the maximum for a given key. */        
-    public void setMax(String key, int value)
-        {
-        max.put(key, Integer.valueOf(value));
-        }
-        
-    /** Returns whether a metric minimum is stored in the model for the key. */        
-    public boolean metricMinExists(String key)
-        {
-        return metricMin.containsKey(key);
-        }
-
-    /** Returns whether a metric maximum is stored in the model for the key. */        
-    public boolean metricMaxExists(String key)
-        {
-        return metricMax.containsKey(key);
-        }
-
-    /** Returns whether an valid minimum is stored in the model for the key. */        
-    public boolean validMinExists(String key)
-        {
-        return validMin.containsKey(key);
-        }
-
-    /** Returns whether an valid maximum is stored in the model for the key. */        
-    public boolean validMaxExists(String key)
-        {
-        return validMax.containsKey(key);
-        }
-
-    /** Sets the metric minimum for a given key. */        
-    public void setMetricMin(String key, int value)
-        {
-        metricMin.put(key, Integer.valueOf(value));
-        }
-                
-    /** Sets the metric maximum for a given key. */        
-    public void setMetricMax(String key, int value)
-        {
-        metricMax.put(key, Integer.valueOf(value));
-        }
-    
-    /** Sets the valid minimum for a given key. */        
-    public void setValidMin(String key, int value)
-        {
-        validMin.put(key, Integer.valueOf(value));
-        }
-                
-    /** Sets the valid maximum for a given key. */        
-    public void setValidMax(String key, int value)
-        {
-        validMax.put(key, Integer.valueOf(value));
-        }
-    
-    public static final int STATUS_FREE = 0;
-    public static final int STATUS_IMMUTABLE = 1;
-    public static final int STATUS_RESTRICTED = 2;
-
-    /** Sets the status of a key.  The default is STATUS_FREE, except for strings, which are STATUS_IMMUTABLE. */        
-    public void setStatus(String key, int val)
-        {
-        status.put(key, Integer.valueOf(val));
-        }
-                
-    /** Returns whether a given key is declared immutable.  Strings are ALWAYS immutable and you don't need to set them. */        
-    public int getStatus(String key)
-        {
-        if (status.containsKey(key))
-            {
-            return ((Integer)(status.get(key))).intValue();
-            }
-        else if (!exists(key))
-            {
-            return STATUS_IMMUTABLE;
-            }
-        else if (isString(key))
-            {
-            return STATUS_IMMUTABLE;
-            }
-        else // it's a number
-            {
-            return STATUS_FREE;
-            }
-        }
-                
-    /** Returns the minimum for a given key, or 0 if no minimum is declared. */        
-    public int getMin(String key)
-        {
-        Integer d = (Integer) (min.get(key));
-        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent min extracted for " + key); new Throwable().printStackTrace(); return 0; }
-        else return d.intValue();
-        }
-                
-    /** Returns the maximum for a given key, or 0 if no maximum is declared. */        
-    public int getMax(String key)
-        {
-        Integer d = (Integer) (max.get(key));
-        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent max extracted for " + key); return 0; }
-        else return d.intValue();
-        }
-
-    /** Returns the metric minimum for a given key, or 0 if no minimum is declared. */        
-    public int getMetricMin(String key)
-        {
-        Integer d = (Integer) (metricMin.get(key));
-        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent metricMin extracted for " + key); return 0; }
-        else return d.intValue();
-        }
-                
-    /** Returns the metric maximum for a given key, or 0 if no maximum is declared. */        
-    public int getMetricMax(String key)
-        {
-        Integer d = (Integer) (metricMax.get(key));
-        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent metricMax extracted for " + key); return 0; }
-        else return d.intValue();
-        }
-        
-    /** Returns the valid minimum for a given key, or 0 if no minimum is declared. */        
-    public int getValidMin(String key)
-        {
-        Integer d = (Integer) (validMin.get(key));
-        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent validMin extracted for " + key); return 0; }
-        else return d.intValue();
-        }
-                
-    /** Returns the valid maximum for a given key, or 0 if no maximum is declared. */        
-    public int getValidMax(String key)
-        {
-        Integer d = (Integer) (validMax.get(key));
-        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent validMax extracted for " + key); return 0; }
-        else return d.intValue();
-        }
-    
-    public boolean isValid(String key, int val)
-        {
-        boolean hasValidMin = validMinExists(key);
-        boolean hasValidMax = validMaxExists(key);
-        
-        // if we have no restrictions, then everything is valid
-        if (!hasValidMin && !hasValidMax)
-            return true;
-        // if we have one restriction...
-        else if (!hasValidMin)
-            return (val <= getValidMax(key));
-        else if (!hasValidMax)
-            return (val >= getValidMin(key));
-        // we have two restrictions
-        else
-            return (val >= getValidMin(key) && val <= getValidMax(key));
-        }
-    
-    /** Deletes the metric min and max for a key */
-    public void removeMinMax(String key)
-        {
-        min.remove(key);
-        max.remove(key);
-        }
-
-    /** Deletes the metric min and max for a key */
-    public void removeMetricMinMax(String key)
-        {
-        metricMin.remove(key);
-        metricMax.remove(key);
-        }
-
-    public int getRange(String key)
-        {
-        if (minExists(key) && maxExists(key))
-            {
-            return getMax(key) - getMin(key) + 1;
-            }
-        else return 0;
-        }
 
     /** Print to stderr those model parameters for which the provided "other" model
-        does not have identical values.
-    */
+        does not have identical values. */
     public void printDiffs(Model other)
         {
         printDiffs(new PrintWriter(new OutputStreamWriter(System.err)), other);
@@ -1064,8 +1291,7 @@ public class Model implements Cloneable
         
 
     /** Print to the given writer those model parameters for which the provided "other" model
-        does not have identical values.
-    */
+        does not have identical values. */
     public void printDiffs(PrintWriter out, Model other)
         {
         String[] keys = getKeys();
@@ -1108,7 +1334,7 @@ public class Model implements Cloneable
         if (isString(key))
             return "\"" + get(key, "") + "\"";
                 
-        ArrayList l = (ArrayList)(listeners.get(key));
+        ArrayList<Updatable> l = getListeners(key);
         if (l == null) 
             return "" + get(key, 0);
                         
@@ -1167,7 +1393,4 @@ public class Model implements Cloneable
                 out.println(keys[i] + ": UNKNOWN OBJECT " + get(keys[i]));
             }
         }
-        
-    public int reviseMutatedValue(String key, int old, int current) { return current; }    
-    public String reviseMutatedValue(String key, String old, String current) { return current; }    
     }

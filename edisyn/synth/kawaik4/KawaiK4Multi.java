@@ -224,7 +224,7 @@ public class KawaiK4Multi extends Synth
                             {
                             public void run() 
                                 { 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 tempModel.set("number", KawaiK4Multi.this.model.get("effect"));
                                 tempModel.set("bank", KawaiK4Multi.this.model.get("bank"));
                                 synth.performRequestDump(tempModel, false);
@@ -296,7 +296,7 @@ public class KawaiK4Multi extends Synth
                             {
                             public void run() 
                                 { 
-                                Model tempModel = new Model();
+                                Model tempModel = buildModel();
                                 tempModel.set("bank", KawaiK4Multi.this.model.get("section" + src + "bank"));
                                 tempModel.set("number", KawaiK4Multi.this.model.get("section" + src + "number"));
                                 synth.performRequestDump(tempModel, false);

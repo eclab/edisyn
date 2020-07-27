@@ -160,7 +160,7 @@ public class AlesisD4 extends Synth
         HBox hbox = new HBox();
                 
         VBox vbox = new VBox();
-        comp = new PatchDisplay(this, 9);
+        comp = new PatchDisplay(this, null, "number", 9);
         vbox.add(comp);
 
         comp = new StringComponent("Patch Name", this, "name", 15, "Name must be up to 15 ASCII characters.")

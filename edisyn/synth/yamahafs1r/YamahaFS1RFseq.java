@@ -36,6 +36,7 @@ public class YamahaFS1RFseq extends Synth
 
     Box hi = null;
     Box lo = null;
+    Box mid = null;
 
 	static Model pasteboard = null;
 	int pasteboardLo = -1;
@@ -60,7 +61,7 @@ public class YamahaFS1RFseq extends Synth
         addTab("Common", soundPanel);
 
         soundPanel = new SynthPanel(this);
-        soundPanel.add(addFrameControls(true), BorderLayout.NORTH);
+        soundPanel.add(addFrameControls(1), BorderLayout.NORTH);
 		JPanel panel = new JPanel();
 		panel.setBackground(Style.BACKGROUND_COLOR());
 		panel.setLayout(new GridBagLayout());
@@ -81,7 +82,28 @@ public class YamahaFS1RFseq extends Synth
         addTab("1-256", soundPanel);
 
         soundPanel = new SynthPanel(this);
-        soundPanel.add(addFrameControls(false), BorderLayout.NORTH);
+        soundPanel.add(addFrameControls(129), BorderLayout.NORTH);
+		panel = new JPanel();
+		panel.setBackground(Style.BACKGROUND_COLOR());
+		panel.setLayout(new GridBagLayout());
+        c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.fill = c.BOTH;
+        c.weightx = 1;
+        c.weighty = 3;
+        hi = new Box(BoxLayout.Y_AXIS);
+        hi.add(addFrameDisplay(129, true, Style.COLOR_B()));
+        hi.add(addFrameDisplay(129, false, Style.COLOR_B()));
+        panel.add(hi, c);
+        c.weighty = 1;
+        c.gridy = 1;
+        panel.add(addPitchDisplay(129, Style.COLOR_C()), c);
+        soundPanel.add(panel, BorderLayout.CENTER);
+        addTab("129-386", soundPanel);
+
+        soundPanel = new SynthPanel(this);
+        soundPanel.add(addFrameControls(257), BorderLayout.NORTH);
 		panel = new JPanel();
 		panel.setBackground(Style.BACKGROUND_COLOR());
 		panel.setLayout(new GridBagLayout());
@@ -1150,7 +1172,7 @@ public class YamahaFS1RFseq extends Synth
         }
 
 
-    public JComponent addFrameControls(boolean first)
+    public JComponent addFrameControls(int pos)
         {
         String[] params;
         HBox hbox = new HBox();
@@ -1213,19 +1235,26 @@ public class YamahaFS1RFseq extends Synth
         
         VBox labels = new VBox();
         
-        if (first)
+        if (pos == 1)
         	{
         	posx1 = new TextLabel("");
         	labels.add(posx1);
         	posy1 = new TextLabel("");
         	labels.add(posy1);        	
         	}
-        else
+        else if (pos == 257)
         	{
         	posx2 = new TextLabel("");
         	labels.add(posx2);
         	posy2 = new TextLabel("");
         	labels.add(posy2);        	
+        	}
+        else	// (pos == 129)
+        	{
+        	posx3 = new TextLabel("");
+        	labels.add(posx3);
+        	posy3 = new TextLabel("");
+        	labels.add(posy3);        	
         	}
         hbox.addLast(labels);
         
@@ -1234,6 +1263,8 @@ public class YamahaFS1RFseq extends Synth
  
  	TextLabel posx1;
  	TextLabel posy1;
+ 	TextLabel posx3;
+ 	TextLabel posy3;
  	TextLabel posx2;
  	TextLabel posy2;
  
@@ -1310,13 +1341,21 @@ public class YamahaFS1RFseq extends Synth
 					posx1.setText("Frame " + (index + 1) + "    Track " + track  + "    Level " + level);
 					posy1.setText("Frequency " + freq + "    Hz: " + intToFrequencyString(freq, false));
 					}
-				else
+				else if (pos == 257)
 					{
 					int track = model.get("manipulate") + 1;
 					int level = YamahaFS1RFseq.this.model.get("frame" + (index + 257) + (voiced ? "" : "un") + "voicedlevel" + track);
 					int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 257) + (voiced ? "" : "un") + "voicedfrequency" + track);
 					posx2.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
 					posy2.setText("Frequency " + freq + "    Hz: " + intToFrequencyString(freq, false));
+					}
+				else //if (pos == 129)
+					{
+					int track = model.get("manipulate") + 1;
+					int level = YamahaFS1RFseq.this.model.get("frame" + (index + 129) + (voiced ? "" : "un") + "voicedlevel" + track);
+					int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 129) + (voiced ? "" : "un") + "voicedfrequency" + track);
+					posx3.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
+					posy3.setText("Frequency " + freq + "    Hz: " + intToFrequencyString(freq, false));
 					}
 				}
 					
@@ -1421,13 +1460,21 @@ public class YamahaFS1RFseq extends Synth
 					posx1.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
 					posy1.setText("Frequency " + freq + "    Hz: " + intToFrequencyString(freq, false));
 					}
-				else
+				else if (pos == 257)
 					{
 					int track = model.get("manipulate") + 1;
 					int level = YamahaFS1RFseq.this.model.get("frame" + (index + 257) + (voiced ? "" : "un") + "voicedlevel" + track);
 					int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 257) + (voiced ? "" : "un") + "voicedfrequency" + track);
-					posx1.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
+					posx2.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
 					posy2.setText("Frequency " + freq + "    Hz: " + intToFrequencyString(freq, false));
+					}
+				else	// (pos == 129)
+					{
+					int track = model.get("manipulate") + 1;
+					int level = YamahaFS1RFseq.this.model.get("frame" + (index + 129) + (voiced ? "" : "un") + "voicedlevel" + track);
+					int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 129) + (voiced ? "" : "un") + "voicedfrequency" + track);
+					posx3.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
+					posy3.setText("Frequency " + freq + "    Hz: " + intToFrequencyString(freq, false));
 					}
 				}
 					
@@ -1529,10 +1576,17 @@ public class YamahaFS1RFseq extends Synth
 					posx1.setText("Frame " + (index + 1));
 					posy1.setText("Pitch " + pitch + "    Hz: " + intToFrequencyString(pitch, false));
 					}
-				else
+				else if (pos == 257)
 					{
 					int track = model.get("manipulate") + 1;
-					int pitch = YamahaFS1RFseq.this.model.get("frame" + (index + 1) + "pitch");
+					int pitch = YamahaFS1RFseq.this.model.get("frame" + (index + 257) + "pitch");
+					posx1.setText("Frame " + (index + 1));
+					posy1.setText("Pitch " + pitch + "    Hz: " + intToFrequencyString(pitch, false));
+					}
+				else	// (pos == 129)
+					{
+					int track = model.get("manipulate") + 1;
+					int pitch = YamahaFS1RFseq.this.model.get("frame" + (index + 129) + "pitch");
 					posx1.setText("Frame " + (index + 1));
 					posy1.setText("Pitch " + pitch + "    Hz: " + intToFrequencyString(pitch, false));
 					}
@@ -1590,7 +1644,7 @@ public class YamahaFS1RFseq extends Synth
         
     public void rebuildFrameDisplays()
         {
-        if (hi == null || lo == null)  // not ready yet
+        if (hi == null || lo == null || mid == null)  // not ready yet
             return;
                 
         lo.removeAll();
@@ -1598,6 +1652,11 @@ public class YamahaFS1RFseq extends Synth
         lo.add(addFrameDisplay(1, false, Style.COLOR_B()));
         lo.revalidate();
         lo.repaint();
+        mid.removeAll();
+        mid.add(addFrameDisplay(129, true, Style.COLOR_A()));
+        mid.add(addFrameDisplay(129, false, Style.COLOR_B()));
+        mid.revalidate();
+        mid.repaint();
         hi.removeAll();
         hi.add(addFrameDisplay(257, true, Style.COLOR_A()));
         hi.add(addFrameDisplay(257, false, Style.COLOR_B()));

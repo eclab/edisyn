@@ -2052,7 +2052,6 @@ public class YamahaTG33 extends Synth
         pos = emitAC(TONE_C, data, pos);
         pos = emitBD(TONE_D, data, pos);
                 
-                
         // VECTOR COMMON
                 
         data[pos++] = (byte)(model.get("levelspeed"));
@@ -2120,7 +2119,7 @@ public class YamahaTG33 extends Synth
         data[pos++] = (byte)(((model.get(t + "levelscaling") % 8) << 4) | model.get(t + "ratescaling"));
         data[pos++] = (byte)(model.get(t + "delayonoff"));               // note MSB
         data[pos++] = (byte)(model.get(t + "attackrate"));               // note LSB
-        pos++;                                                                                                  // note MSB
+        pos++;         																		// This is "MAX"?                                                                                         // note MSB
         data[pos++] = (byte)(model.get(t + "decay1rate"));               // note LSB
         data[pos++] = (byte)(model.get(t + "decay2rate"));
         data[pos++] = (byte)(model.get(t + "releaserate"));
@@ -2128,7 +2127,7 @@ public class YamahaTG33 extends Synth
         data[pos++] = (byte)(127 - model.get(t + "attacklevel"));
         data[pos++] = (byte)(127 - model.get(t + "decay1level"));
         data[pos++] = (byte)(127 - model.get(t + "decay2level"));
-        pos += 2;
+        if (getSynthType() == TYPE_TG33) pos += 2;			// Not the case for SY35?
         return pos;
         }
         
@@ -2194,7 +2193,7 @@ public class YamahaTG33 extends Synth
         data[pos++] = (byte)(127 - model.get(t + "0attacklevel"));
         data[pos++] = (byte)(127 - model.get(t + "0decay1level"));
         data[pos++] = (byte)(127 - model.get(t + "0decay2level"));
-        pos += 2;               
+        if (getSynthType() == TYPE_TG33) pos += 2;			// Not the case for SY35?
         return pos;
         }
 

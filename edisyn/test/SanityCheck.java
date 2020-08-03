@@ -32,23 +32,23 @@ public class SanityCheck
         quiet = !main.hasFlag("-v");
         
         System.err.println("For help, try:  java edisyn.synth.SanityCheck -h");
-                                                
-        Class[] c = Synth.getSynths();
+          
+        String[] c = Synth.getClassNames();          
         if (main.getString("-c") != null)
-            c = new Class[] { Class.forName(main.getString("-c")) };
-                
+            c = new String[] { main.getString("-c").trim() };
+        
         for(int j = 0; j < c.length; j++)
             {
-            Synth synth = Synth.instantiate(c[j], "whatever", true, false, null);
-            Synth synth2 = Synth.instantiate(c[j], "whatever", true, false, null);
+            Synth synth = Synth.instantiate(c[j], true, false, null);
+            Synth synth2 = Synth.instantiate(c[j], true, false, null);
             if (synth instanceof edisyn.synth.casiocz.CasioCZ)
                 {
                 ((edisyn.synth.casiocz.CasioCZ)synth).setCZ1(false);
                 ((edisyn.synth.casiocz.CasioCZ)synth2).setCZ1(false);
                 System.err.println("\n" + c[j]);
                 test(synth, synth2);
-                synth = Synth.instantiate(c[j], "whatever", true, false, null);
-                synth2 = Synth.instantiate(c[j], "whatever", true, false, null);
+                synth = Synth.instantiate(c[j], true, false, null);
+                synth2 = Synth.instantiate(c[j], true, false, null);
                 ((edisyn.synth.casiocz.CasioCZ)synth).setCZ1(true);
                 ((edisyn.synth.casiocz.CasioCZ)synth2).setCZ1(true);
                 System.err.println("\n" + c[j] + " (CZ1)");
@@ -57,8 +57,8 @@ public class SanityCheck
             else if (synth instanceof edisyn.synth.korgwavestation.KorgWavestationSequence)
                 {
                 ((edisyn.synth.korgwavestation.KorgWavestationSequence)synth).setBlockSending(true);
-                synth = Synth.instantiate(c[j], "whatever", true, false, null);
-                synth2 = Synth.instantiate(c[j], "whatever", true, false, null);
+                synth = Synth.instantiate(c[j], true, false, null);
+                synth2 = Synth.instantiate(c[j], true, false, null);
                 System.err.println("\n" + c[j]);
                 test(synth, synth2);
                 }
@@ -68,8 +68,8 @@ public class SanityCheck
                 ((edisyn.synth.alesisd4.AlesisD4)synth2).setDM5(false, false);
                 System.err.println("\n" + c[j]);
                 test(synth, synth2);
-                synth = Synth.instantiate(c[j], "whatever", true, false, null);
-                synth2 = Synth.instantiate(c[j], "whatever", true, false, null);
+                synth = Synth.instantiate(c[j], true, false, null);
+                synth2 = Synth.instantiate(c[j], true, false, null);
                 ((edisyn.synth.alesisd4.AlesisD4)synth).setDM5(true, false);
                 ((edisyn.synth.alesisd4.AlesisD4)synth2).setDM5(true, false);
                 System.err.println("\n" + c[j] + " (DM5)");
@@ -81,35 +81,54 @@ public class SanityCheck
                 ((edisyn.synth.dsiprophet08.DSIProphet08)synth2).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_PROPHET_08, false);
                 System.err.println("\n" + c[j]);
                 test(synth, synth2);
-                synth = Synth.instantiate(c[j], "whatever", true, false, null);
-                synth2 = Synth.instantiate(c[j], "whatever", true, false, null);
+                synth = Synth.instantiate(c[j], true, false, null);
+                synth2 = Synth.instantiate(c[j], true, false, null);
                 ((edisyn.synth.dsiprophet08.DSIProphet08)synth).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_TETRA, false);
                 ((edisyn.synth.dsiprophet08.DSIProphet08)synth2).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_TETRA, false);
                 System.err.println("\n" + c[j] + " (Tetra)");
                 test(synth, synth2);
-                synth = Synth.instantiate(c[j], "whatever", true, false, null);
-                synth2 = Synth.instantiate(c[j], "whatever", true, false, null);
+                synth = Synth.instantiate(c[j], true, false, null);
+                synth2 = Synth.instantiate(c[j], true, false, null);
                 ((edisyn.synth.dsiprophet08.DSIProphet08)synth).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_MOPHO, false);
                 ((edisyn.synth.dsiprophet08.DSIProphet08)synth2).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_MOPHO, false);
                 System.err.println("\n" + c[j] + " (Mopho)");
                 test(synth, synth2);
-                synth = Synth.instantiate(c[j], "whatever", true, false, null);
-                synth2 = Synth.instantiate(c[j], "whatever", true, false, null);
+                synth = Synth.instantiate(c[j], true, false, null);
+                synth2 = Synth.instantiate(c[j], true, false, null);
                 ((edisyn.synth.dsiprophet08.DSIProphet08)synth).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_MOPHO_KEYBOARD, false);
                 ((edisyn.synth.dsiprophet08.DSIProphet08)synth2).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_MOPHO_KEYBOARD, false);
                 System.err.println("\n" + c[j] + " (Mopho Keyboard and SE)");
                 test(synth, synth2);
-                synth = Synth.instantiate(c[j], "whatever", true, false, null);
-                synth2 = Synth.instantiate(c[j], "whatever", true, false, null);
+                synth = Synth.instantiate(c[j], true, false, null);
+                synth2 = Synth.instantiate(c[j], true, false, null);
                 ((edisyn.synth.dsiprophet08.DSIProphet08)synth).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_MOPHO_X4, false);
                 ((edisyn.synth.dsiprophet08.DSIProphet08)synth2).setType(edisyn.synth.dsiprophet08.DSIProphet08.SYNTH_TYPE_MOPHO_X4, false);
                 System.err.println("\n" + c[j] + " (Mopho x4)");
                 test(synth, synth2);
                 }
+            else if (synth instanceof edisyn.synth.yamahatg33.YamahaTG33)
+                {
+                ((edisyn.synth.yamahatg33.YamahaTG33)synth).setSynthType(edisyn.synth.yamahatg33.YamahaTG33.TYPE_TG33, false);
+                ((edisyn.synth.yamahatg33.YamahaTG33)synth).setSynthType(edisyn.synth.yamahatg33.YamahaTG33.TYPE_TG33, false);
+                System.err.println("\n" + c[j]);
+                test(synth, synth2);
+                synth = Synth.instantiate(c[j], true, false, null);
+                synth2 = Synth.instantiate(c[j], true, false, null);
+                ((edisyn.synth.yamahatg33.YamahaTG33)synth).setSynthType(edisyn.synth.yamahatg33.YamahaTG33.TYPE_SY22, false);
+                ((edisyn.synth.yamahatg33.YamahaTG33)synth).setSynthType(edisyn.synth.yamahatg33.YamahaTG33.TYPE_SY22, false);
+                System.err.println("\n" + c[j] + " (SY22)");
+                test(synth, synth2);
+                synth = Synth.instantiate(c[j], true, false, null);
+                synth2 = Synth.instantiate(c[j], true, false, null);
+                ((edisyn.synth.yamahatg33.YamahaTG33)synth).setSynthType(edisyn.synth.yamahatg33.YamahaTG33.TYPE_SY35, false);
+                ((edisyn.synth.yamahatg33.YamahaTG33)synth).setSynthType(edisyn.synth.yamahatg33.YamahaTG33.TYPE_SY35, false);
+                System.err.println("\n" + c[j] + " (SY35)");
+                test(synth, synth2);
+                }
             else
                 {
-                synth = Synth.instantiate(c[j], "whatever", true, false, null);
-                synth2 = Synth.instantiate(c[j], "whatever", true, false, null);
+                synth = Synth.instantiate(c[j], true, false, null);
+                synth2 = Synth.instantiate(c[j], true, false, null);
                 System.err.println("\n" + c[j]);
                 test(synth, synth2);
                 }

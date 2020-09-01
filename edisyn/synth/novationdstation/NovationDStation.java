@@ -28,6 +28,7 @@ public class NovationDStation extends Synth
     public static final String[] PANS = { "L 4", "L 3", "L 2", "L 2", "--", "R 1", "R 2", "R 3", "R 4", "O 1", "O 2", "O 3", "O 4", "O 5", "O 6" };		// #15 is "O 4" again...
     public static final String[] DRUMS = { "808 Bass Drum", "808 Snare Drum", "808 Low Tom", "808 Mid Tom", "808 High Tom", "808 Rim Shot", "808 Hand Clap", "808 Cowbell", "808 Closed High Hat", "808 Open High Hat", "808 Crash Cymbal", "808 Low Conga", "808 Mid Conga", "808 High Conga", "808 Maracas", "808 Claves", "909 Bass Drum", "909 Snare Drum", "909 Low Tom", "909 Mid Tom", "909 High Tom", "909 Rim Shot", "909 Hand Clap", "909 Closed High Hat", "909 Open High Hat", "909 Crash Cymbal", "909 Ride Cymbal" };
     public static final String[] SETS = { "808", "909" };
+
     /*
 	public static final String[] PROGRAMS = 
 				{
@@ -612,7 +613,75 @@ public class NovationDStation extends Synth
 
     public int parse(byte[] data, boolean fromFile)
         {
-		byte[] d = denybblize(data, 7, 140);
+        if (data[6] == 0x11) 
+        	{
+        	String[] names = new String[15];
+        	for(int i = 0; i < 15; i++)
+        		names[i] = "" + (i + 25);
+        		
+            int patchNum = showBankSysexOptions(data, names);
+            if (patchNum < 0) return PARSE_CANCELLED;
+        	else return parseBulk(data, patchNum, fromFile);
+        	}
+        else
+        	{		
+			byte[] d = denybblize(data, 7, 140);
+		
+			int pos = 0;
+			pos = parseDrum(d, pos, "909BD", 6);
+			pos = parseDrum(d, pos, "909RS", 4);
+			pos = parseDrum(d, pos, "909SD", 6);
+			pos = parseDrum(d, pos, "909HC", 4);
+			pos = parseDrum(d, pos, "909LT", 5);
+			pos = parseDrum(d, pos, "909MT", 5);
+			pos = parseDrum(d, pos, "909CH", 5);
+			pos = parseDrum(d, pos, "909HT", 5);
+			pos = parseDrum(d, pos, "909CC", 5);
+			pos = parseDrum(d, pos, "909RC", 5);
+			pos = parseDrum(d, pos, "909OH", 5);
+			pos = parseDrum(d, pos, "808BD", 6);
+			pos = parseDrum(d, pos, "808RS", 4);
+			pos = parseDrum(d, pos, "808HC", 4);
+			pos = parseDrum(d, pos, "808SD", 6);
+			pos = parseDrum(d, pos, "808CH", 5);
+			pos = parseDrum(d, pos, "808LT", 5);
+			pos = parseDrum(d, pos, "808OH", 5);
+			pos = parseDrum(d, pos, "808MT", 5);
+			pos = parseDrum(d, pos, "808CC", 5);
+			pos = parseDrum(d, pos, "808HT", 5);
+			pos = parseDrum(d, pos, "808CB", 4);
+			pos = parseDrum(d, pos, "808HC", 4);
+			pos = parseDrum(d, pos, "808MC", 4);
+			pos = parseDrum(d, pos, "808LC", 4);
+			pos = parseDrum(d, pos, "808MA", 4);
+			pos = parseDrum(d, pos, "808CL", 4);
+			model.set("banka", d[pos++] & 255);
+			model.set("bankb", d[pos++] & 255);
+			model.set("bankc", d[pos++] & 255);
+			model.set("bankd", d[pos++] & 255);
+			pos+= 6;		// unknown
+			model.set("gmset", d[pos++] & 255);
+			return PARSE_SUCCEEDED;
+			}
+        }
+
+	public JComponent getAdditionalBankSysexOptionsComponents(byte[] data, String[] names)
+		{
+		int rx = data[4100];	// LSB of RX channel
+		int tx = data[4094];	// LSB of TX channel
+		// note that these run 1...16, not 0..16.  I don't know why.
+		VBox vbox = new VBox();
+		vbox.add(Strut.makeVerticalStrut(10));
+		vbox.add(new JLabel("Note: Drumstation bank patches also contain RX/TX channel data."));
+		vbox.add(new JLabel("Writing the bank will set the synth's MIDI RX channel to " + rx));
+		vbox.add(new JLabel("and its MIDI TX channel to " + tx));
+		return vbox;
+		}
+		
+
+    public int parseBulk(byte[] data, int elt, boolean fromFile)
+        {
+        byte[] d = denybblize(data, 7 + 136 * elt, 136);
 		
 		int pos = 0;
 		pos = parseDrum(d, pos, "909BD", 6);
@@ -642,13 +711,14 @@ public class NovationDStation extends Synth
 		pos = parseDrum(d, pos, "808LC", 4);
 		pos = parseDrum(d, pos, "808MA", 4);
 		pos = parseDrum(d, pos, "808CL", 4);
-		model.set("banka", d[pos++] & 255);
-		model.set("bankb", d[pos++] & 255);
-		model.set("bankc", d[pos++] & 255);
-		model.set("bankd", d[pos++] & 255);
-		pos+= 6;		// unknown
-		model.set("gmset", d[pos++] & 255);
-        return PARSE_SUCCEEDED;
+		model.set("banka", d[pos] & 31);										  // [Byte 0 bits 4, 3, 2, 1, 0]
+		model.set("bankb", ((d[pos + 1] & 3) << 3) | (d[pos] & 7));				  // [Byte 1 bits 1, 0] [Byte 0 bits 2, 1, 0]
+		model.set("bankc", ((d[pos + 1] << 2) & 31));							  // [Byte 1 bits 2, 3, 4, 5, 6]
+		model.set("bankd", ((d[pos + 3] >>> 4) << 1) | ((d[pos + 1] >>> 7) & 1)); // [Byte 3 bits 7, 6, 5, 4] [Byte 1 bit 7]
+		pos += 4;		// bank data
+		pos += 2;		// unknown
+		model.set("gmset", (d[pos++] == 0 ? 0 : 1));		 // 808 = 0, 909 = 4
+		return PARSE_SUCCEEDED;
         }
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
@@ -828,7 +898,6 @@ public static final String[] ccParameters = new String[]
 
     public static boolean recognize(byte[] data)
         {
-        // currently we do not recognize the bank sysex
         return (data.length == 288 &&
         	data[0] == (byte)0xF0 &&
         	data[1] == 0x00 &&
@@ -836,67 +905,45 @@ public static final String[] ccParameters = new String[]
         	data[3] == 0x29 &&
         	data[4] == 0x02 &&
         	data[5] == 0x01 &&
-        	data[6] == 0x22);
+        	data[6] == 0x22) || recognizeBulk(data);
+        }
+
+    private static boolean recognizeBulk(byte[] data)
+        {
+        return (data.length == 4104 &&
+        	data[0] == (byte)0xF0 &&
+        	data[1] == 0x00 &&
+        	data[2] == 0x20 &&
+        	data[3] == 0x29 &&
+        	data[4] == 0x02 &&
+        	data[5] == 0x01 &&
+        	data[6] == 0x11);
         }
 
     public static String getSynthName() { return "Novation Drumstation/D-station"; }
-
-	/*
-    public void changePatch(Model tempModel) 
-        {
-        tryToSendMIDI(buildPC(getChannelOut(), tempModel.get("number")));
-
-        // we assume that we successfully did it
-        if (!isMerging())  // we're actually loading the patch, not merging with it
-            {
-            setSendMIDI(false);
-            model.set("number", tempModel.get("number"));
-            setSendMIDI(true);
-            }
-        }
-    */
-    
-    //public String getPatchName(Model model) { return model.get("name", "INIT VOICE"); }
-
-    /*
-    public Model getNextPatchLocation(Model model)
-        {
-        int number = model.get("number");
-        
-        number++;
-        if (number >= 40)
-            {
-            number = 0;
-            }
-                
-        Model newModel = buildModel();
-        newModel.set("number", number);
-        return newModel;
-        }
-    */
-
-    /*
-    public String getPatchLocationName(Model model)
-        {
-        // getPatchLocationName() is called from sprout() as a test to see if we should enable
-        // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
-        // yet and this method will bomb badly.  So we return null in this case.
-        if (!model.exists("number")) return null;
-        
-        int number = model.get("number") + 1;
-        return "" + (number > 9 ? "" : "0") + number;
-        }
-    */
-    
     }
     
     
 /**** 
 NOVATION DRUMSTATION / D-STATION MIDI FORMAT
 
-The Drumstation has only rudimentary sysex as far as I have ascertained.  It has a single patch dump command,
-and no patch request command.  There is also a bank patch dump command but I've not completely reverse engineered
-it yet so it's not listed below.  Some parameters can be updated in real time via CC (as described in the manual).
+The Drumstation has only rudimentary sysex as far as I have ascertained.  It has only two commands, which
+it both transmits and receives:
+
+1. Dump a single patch
+2. Dump batch of 15 patches (numbers 25...39) plus some additional information
+
+There are no sysex commands for updating individual parameters, but many parameters can be updated in real 
+time via CC (as described in the manual).  Thre are also no sysex commands for requesting patches, nor any
+distinction between sending individual patches to current memory versus writing them to patch memory (this
+must be done manually on the machine per the manual).
+
+
+
+-------------------------
+SINGLE PATCH DUMP COMMAND
+-------------------------
+
 
 Sysex is as follows:
 
@@ -907,10 +954,11 @@ Sysex is as follows:
 4	02
 5	01
 6	22
-7...11E 	NYBBLIZED DATA
+7...11E 	280 bytes of NYBBLIZED DATA
 11F	F7
 
 There does not appear to be a checksum.
+
 
 NYBBLIZED DATA
 ==============
@@ -920,7 +968,8 @@ and the second nybble is the low 4 bits.  Thus altogether there are 280 bytes (7
 
 DATA
 ====
-Once denybblized, the 140 bytes of DATA is in the following odd order:
+Once denybblized, the 140 bytes of DATA is in the following odd order.  See TABLES 1...4 for
+information on the 808 and 909 drum data.  See TABLE 6 for information on the Bank data.
 
 6 bytes 909 BD Data
 4 bytes 909 RS Data
@@ -949,16 +998,17 @@ Once denybblized, the 140 bytes of DATA is in the following odd order:
 4 bytes 808 LC Data
 4 bytes 808 MA Data
 4 bytes 808 CL Data
-1 byte Bank A Data
-1 byte Bank B Data
-1 byte Bank C Data
-1 byte Bank D Data
-6 bytes UNUSED
-1 byte GM Set Data
+1 byte Bank A Data			[Table 5]
+1 byte Bank B Data			[Table 5]
+1 byte Bank C Data			[Table 5]
+1 byte Bank D Data			[Table 5]
+6 bytes UNUSED				* use unknown if any
+1 byte GM Set Data			0 for 808 and 1 for 909
 
-The 909 and 808 data take four forms: 6-byte, 5-byte [2 variations], and 4-byte. 
 
-6-byte 808/909 data:
+The 909 and 808 drum data take four forms: 6-byte, 5-byte [2 variations], and 4-byte. 
+
+[TABLE 1] 6-byte 808/909 data:
 
 Byte	Bits						Bits
 0		8: Tune Velocity 			1-7: Tune (0...127)
@@ -968,7 +1018,7 @@ Byte	Bits						Bits
 4		8: Note Off Recognition		1-7: Front Cut (0...99)
 5		5-8: Distortion	(0...15)	1-4: Pan/Output*
 
-5-byte 808/909 data [except 808 Crash Cymbal]:
+[TABLE 2] 5-byte 808/909 data [except 808 Crash Cymbal]:
 
 Byte	Bits						Bits
 0		8: Tune Velocity 			1-7: Tune (0...127)
@@ -977,7 +1027,7 @@ Byte	Bits						Bits
 3		8: Note Off Recognition		1-7: Front Cut (0...99)
 4		5-8: Distortion (0...15)	1-4: Pan/Output*
 
-5-byte 808 data [808 Crash Cymbal Only]:
+[TABLE 3] 5-byte 808 data [808 Crash Cymbal Only]:
 
 Byte	Bits						Bits
 0		8: Level Velocity			1-7: Level (0...127)			*** MidiQuest appears to have this wrong, Crash Cymbal is treated like the other 5-byte drums
@@ -986,8 +1036,7 @@ Byte	Bits						Bits
 3		8: Note Off Recognition		1-7: Front Cut (0...99)
 4		5-8: Distortion (0...15)	1-4: Pan/Output*
 
-
-4-byte 808/909 data:
+[TABLE 4] 4-byte 808/909 data:
 
 Byte	Bits						Bits
 0		8: Tune Velocity 			1-7: Tune (0...127)
@@ -996,13 +1045,13 @@ Byte	Bits						Bits
 3		5-8: Distortion (0...15)	1-4: Pan/Output*
 
 * Pan/Output data is as follows. 0...15 is:
-	L4, L3, L2, L1, --, R1, R2, R3, R4, O1, O2, O3, O4, O5, O6, O4
-	The O4 appears twice in case someone's foolish enough to set the value to 15
+[TABLE 5] L4, L3, L2, L1, --, R1, R2, R3, R4, O1, O2, O3, O4, O5, O6, O4
+			The O4 appears twice in case someone's foolish enough to set the pan/output value to 15
 
 NOTE: change "Level Velocity" ?  That's a MIDIQuest thing.  But "Velocity Velocity" sounds bad.  "Volume Velocity"?
 
 
-Each Bank data is a single byte with the possible values
+[TABLE 6] Each Bank data is a single byte with the possible values
 
 0  808 BD 
 1  808 SD 
@@ -1032,6 +1081,123 @@ Each Bank data is a single byte with the possible values
 25 909 CC 
 26 909 RC
 
-The GM Set data is 0 for 808 and 1 for 909
+
+
+
+
+
+
+
+
+------------------
+BATCH DUMP COMMAND
+------------------
+
+Sysex is as follows:
+
+0		F0
+1		00		Novation
+2		20		Novation
+3		29		Novation
+4		02
+5		01
+6		11
+7...1006 		4096 bytes of NYBBLIZED DATA
+1007	F7
+
+
+NYBBLIZED DATA
+==============
+The Nybblized Data consists of 15 patches (numbers 25 to 39), each of which is 136 8-bit 
+bytes, followed by four footer bytes, of DATA broken into nybble pairs, totaling 4096 bytes
+all told.  The first nybble is the high 4 bits and the second nybble is the low 4 bits.  
+
+
+DATA
+====
+136 bytes	PATCH DATA 25
+136 bytes	PATCH DATA 26
+136 bytes	PATCH DATA 27
+136 bytes	PATCH DATA 28
+136 bytes	PATCH DATA 29
+136 bytes	PATCH DATA 30
+136 bytes	PATCH DATA 31
+136 bytes	PATCH DATA 32
+136 bytes	PATCH DATA 33
+136 bytes	PATCH DATA 34
+136 bytes	PATCH DATA 35
+136 bytes	PATCH DATA 36
+136 bytes	PATCH DATA 37
+136 bytes	PATCH DATA 38
+136 bytes	PATCH DATA 39
+8 bytes		FOOTER DATA
+
+
+PATCH DATA
+==========
+Patch data is similar to the data in the single-patch dump message, except for the
+BANK DATA and GM SET DATA, which is different, and fewer UNUSED bytes.  See TABLES 1-4
+(in the previous single-patch dump sysex) for information about the 808 and 909 data.
+See TABLE 7 below for information about the BANK data.  See TABLE 8 for information
+about the GM SET DATA
+
+6 bytes 909 BD Data
+4 bytes 909 RS Data
+6 bytes 909 SD Data
+4 bytes 909 HC Data
+5 bytes 909 LT Data
+5 bytes 909 MT Data
+5 bytes 909 CH Data
+5 bytes 909 HT Data
+5 bytes 909 CC Data
+5 bytes 909 RC Data
+5 bytes 909 OH Data
+6 bytes 808 BD Data
+4 bytes 808 RS Data
+4 bytes 808 HC Data
+6 bytes 808 SD Data
+5 bytes 808 CH Data
+5 bytes 808 LT Data
+5 bytes 808 OH Data
+5 bytes 808 MT Data
+5 bytes 808 CC Data
+5 bytes 808 HT Data
+4 bytes 808 CB Data
+4 bytes 808 HC Data
+4 bytes 808 MC Data
+4 bytes 808 LC Data
+4 bytes 808 MA Data
+4 bytes 808 CL Data
+4 bytes BANK DATA		* Note different organization than bank data in single patch sysex.  See TABLE 7
+2 bytes UNUSED			* use unknown if any
+1 byte GM SET DATA		0 for 808	4 for 909    * Note different than the single patch sysex version
+
+The 808 and 909 data is the same as in the single-patch sysex.
+
+
+[TABLE 7] BANK DATA
+===================
+The four bytes are, in order, 0, 1, 2, 3
+Bit 7 is the high bit, bit 0 is the low bit
+
+Bank A: [Byte 0 bits 4, 3, 2, 1, 0]
+Bank B:	[Byte 1 bits 1, 0] [Byte 0 bits 2, 1, 0]
+Bank C:	[Byte 1 bits 2, 3, 4, 5, 6]
+Bank D: [Byte 3 bits 7, 6, 5, 4] [Byte 1 bit 7]
+
+The Bank data values are the same as in the single-patch sysex. 
+
+Other use of the bank data region is unknown.
+
+
+FOOTER DATA
+===========
+The eight bytes are, in order, 0, 1, 2, 3, 4, 5, 6, 7
+Bit 7 is the high bit, bit 0 is the low bit
+
+MIDI RX Channel:	byte 6		[1...16:  NOT offset to 0...15; 0 does not appear to be valid]
+MIDI TX Channel:	byte 3		[1...16:  NOT offset to 0...15; 0 does not appear to be valid]
+
+Other use of the footer data is unknown.
 
 ****/

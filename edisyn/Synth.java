@@ -195,6 +195,26 @@ public abstract class Synth extends JComponent implements Updatable
         }
         
         
+    /** Builds a synth of the given CLASSNAME.
+        If THROWAWAY is true, then the window won't be sprouted and MIDI won't be set up.
+        If SETUPMIDI is false, then MIDI won't be set up.  The TUPLE provides the default
+        MIDI devices. */
+        
+    public static Synth instantiate(String classname, boolean throwaway, boolean setupMIDI, Midi.Tuple tuple)
+    	{
+    	try
+    		{
+	    	return instantiate(Class.forName(classname), null, throwaway, setupMIDI, tuple);
+	    	}
+	    catch (Exception ex)
+	    	{
+            JOptionPane.showMessageDialog(null, "An error occurred while creating the synth editor for \n" + classname, "Creation Error", JOptionPane.ERROR_MESSAGE);
+	    	ex.printStackTrace();
+	    	return null;
+	    	}
+    	}
+    
+
     /** Builds a synth of the given CLASS, with the given synth NAME.
         If THROWAWAY is true, then the window won't be sprouted and MIDI won't be set up.
         If SETUPMIDI is false, then MIDI won't be set up.  The TUPLE provides the default
@@ -250,9 +270,7 @@ public abstract class Synth extends JComponent implements Updatable
         catch (Exception e2)
             {
             e2.printStackTrace();
-//            disableMenuBar();
-            JOptionPane.showMessageDialog(null, "An error occurred while creating the synth editor for \n" + name, "Creation Error", JOptionPane.ERROR_MESSAGE);
-//            enableMenuBar();
+            JOptionPane.showMessageDialog(null, "An error occurred while creating the synth editor for \n" + _class.getSimpleName(), "Creation Error", JOptionPane.ERROR_MESSAGE);
             }
         return null;
         }  
@@ -391,79 +409,135 @@ public abstract class Synth extends JComponent implements Updatable
 
     //////// SYNTHESIZER EDIT PANES
         
-    /** All synthesizer editor pane classes in Edisyn */
-    static final Class[] synths = loadSynths();
+    //// You can get the class names of all the synthesizer editors as:
+    ////
+    ////	getClassNames()
+    ////
+	//// There are presently TWO sources of a synthesizer's textual name in Edisyn:
+	//// The synth/Synths.txt file
+	////	This is the source of the information found in numSynths(), getClassNames(), and getSynthNames()
+	////
+	//// Individual synth classes
+	////	Each synth class "overrides" a STATIC method called getSynthName().
+	////	This method can be easily accessed with one of: getSynthNameForClassName(), getSynthNameForClass(), or getSynthNameLocal()
+	////
+	//// The objective here is to speed up Edisyn's load time, which is weighed down by preloading all the
+	//// editor classes, some of which (<ahem>FS1R Fseq</ahem>) have an enormous amount of data.  
+
+    static String[] synthClassNames;
+    static String[] synthNames;
     
-    public static Class[] getSynths() { return synths; }
+    static
+    	{
+    	loadSynths();
+    	}
     
-    static Class[] loadSynths()
+    static Class getSynth(int num)
+    	{
+    	try
+    		{
+    		return Class.forName(synthClassNames[num]);
+	    	}
+	    catch (Exception ex)
+	    	{
+	    	ex.printStackTrace();
+	    	return null;
+	    	}
+    	}
+    
+    static void loadSynths()
         {
-        ArrayList<Class> al = new ArrayList<Class>();
+        ArrayList<String> classes = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<String>();
         Scanner scan = new java.util.Scanner(edisyn.Synth.class.getResourceAsStream("synth/Synths.txt"));
+        boolean firstTime = true;
         while(scan.hasNextLine())
             {
             String str = scan.nextLine().trim();
             if (!(str.length() == 0 || str.startsWith("#")))
-                {
-                try
-                    {
-                    al.add(Class.forName(str));
-                    }
-                catch (ClassNotFoundException ex)
-                    {
-                    System.err.println("Couldn't load class " + str);
-                    }
-                }
+				{
+	            int space = str.indexOf(' ');
+	            int tab = str.indexOf('\t');
+	            if (space == -1 && tab == -1) 
+	            	{
+	            	if (firstTime) System.err.println("synth/Synths.txt has no synth name for certain synths.  Here's what they are, add them:");
+	            	firstTime = false;
+	            	try
+	            		{
+	            		System.err.print(str + "\t");
+	            		Class _class = Class.forName(str);
+		                Method method = _class.getMethod("getSynthName", new Class[] { });
+		                System.err.print((String)(method.invoke(null, new Object[] { } )));
+		                }
+		            catch (Exception ex) { }
+		            System.err.println();
+		            continue;
+	            	}
+				// grab the first one
+	            int result = (tab == -1 ? space : (space == -1 ? tab : (space < tab ? space : tab)));
+	            String classname = str.substring(0, result).trim();
+	            String synthname = str.substring(result).trim();
+   		     	classes.add(classname);
+   		     	names.add(synthname);
+   		     	}	
             }
-        return (Class[])(al.toArray(new Class[al.size()]));
+        synthClassNames = (String[])(classes.toArray(new String[0]));
+        synthNames = (String[])(names.toArray(new String[0]));
         }
 
+	public static int numSynths()
+		{
+		return synthNames.length;
+		}
 
-    /** All synthesizer names in Edisyn, one per class in synths */
+    /** All synthesizer classes in Edisyn.  These are loaded from synth/Synths.txt */
+    public static String[] getClassNames()
+        {
+        return synthClassNames;
+        }
+
+    /** All synthesizer names in Edisyn, one per class in synths.  These are loaded from synth/Synths.txt */
     public static String[] getSynthNames()
         {
-        String[] synthNames = new String[synths.length];
-        for(int i = 0; i < synths.length; i++)
-            {
-            try
-                {
-                synthNames[i] = "Synth with no getSynthName() method, oops";
-                Method method = synths[i].getMethod("getSynthName", new Class[] { });
-                synthNames[i] = (String)(method.invoke(null, new Object[] { } ));
-                }
-            catch (Exception e)
-                {
-                e.printStackTrace();
-                }
-            }
         return synthNames;
         }
                 
+	/** Return the synth name for a given class name, or null if an error occurred. */
+	public static String getSynthNameForClassName(String synth)
+		{
+    	try
+    		{
+    		return getSynthNameForClass(Class.forName(synth));
+    		}
+		catch (Exception ex)
+			{
+			ex.printStackTrace();
+			return null;
+			}
+		}
+		
+	/** Return the synth name for a given class, or null if an error occurred.  This is not loaded from synth/Synths.txt, but rather from the getSynthName() */
+    public static String getSynthNameForClass(Class synth)
+    	{
+    	try
+    		{
+			Method method = synth.getMethod("getSynthName", new Class[] { });
+			return (String)(method.invoke(null, new Object[] { } ));
+			}
+		catch (Exception ex)
+			{
+			ex.printStackTrace();
+			return null;
+			}
+		}
+
     /** Returns the name of this synth, by calling getSynthName(). */
     public final String getSynthNameLocal()
-        {
-        // This code is basically a copy of getSynthNames().
-        // But we can't easily merge them, one has to be static and the other non-static
-        try
-            {
-            Method method = this.getClass().getMethod("getSynthName", new Class[] { });
-            return (String)(method.invoke(null, new Object[] { } ));
-            }
-        catch (Exception e)
-            {
-            e.printStackTrace();
-            }
-        return "Synth with no getSynthName() method, oops";
-        }
-
-                
-                
-                
-                
-                
-                
-                
-                
+    	{
+    	String val = getSynthNameForClass(getClass());
+    	if (val == null) val = "Synth with no getSynthName() method, oops";
+    	return val;
+    	}
                 
                 
     /////// UNDO
@@ -2679,25 +2753,6 @@ public abstract class Synth extends JComponent implements Updatable
         JMenu newSynth = favorites.buildNewSynthMenu(this);
         menu.add(newSynth);
 
-        /*
-          JMenu newSynth = new JMenu("New Synth");
-          menu.add(newSynth);
-          String[] synthNames = getSynthNames();
-          for(int i = 0; i < synthNames.length; i++)
-          {
-          final int _i = i;
-          JMenuItem synthMenu = new JMenuItem(synthNames[i]);
-          synthMenu.addActionListener(new ActionListener()
-          {
-          public void actionPerformed(ActionEvent e)
-          {
-          doNewSynth(_i);
-          }
-          });
-          newSynth.add(synthMenu);
-          }
-        */
-        
         JMenuItem _copy = new JMenuItem("Duplicate Synth");
         _copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(_copy);
@@ -5006,7 +5061,7 @@ public abstract class Synth extends JComponent implements Updatable
     public void doNewSynth(int synth)
         {
         String[] synthNames = getSynthNames();
-        instantiate(synths[synth], synthNames[synth], false, true, tuple);
+        instantiate(getSynth(synth), synthNames[synth], false, true, tuple);
         }
                 
     Synth doDuplicateSynth()
@@ -5345,17 +5400,6 @@ public abstract class Synth extends JComponent implements Updatable
                         count++;
                         }
 
-/*
-  for(int i = 0; i < sysex.length; i++)
-  {
-  System.err.println("\n\n FILE " + i);
-  for(int j = 0; j < sysex[i].length; j++)
-  {
-  System.err.println("" + j + "\t" + String.format("%02X", sysex[i][j]));
-  }
-  }
-*/
-
             return sysex;
             }
         catch (Exception ex)
@@ -5410,9 +5454,9 @@ public abstract class Synth extends JComponent implements Updatable
 
     int recognizeSynthForSysex(byte[] data)
         {
-        for(int i = 0; i < synths.length; i++)
+        for(int i = 0; i < numSynths(); i++)
             {
-            if (recognize(synths[i], data))
+            if (recognize(getSynth(i), data))
                 return i;
             }
         return -1;
@@ -5420,21 +5464,21 @@ public abstract class Synth extends JComponent implements Updatable
 
     int[] recognizeAnySynthForSysex(byte[][] data)
         {
-        boolean[] recognized = new boolean[synths.length];
+        boolean[] recognized = new boolean[numSynths()];
 
         int lastSynth = 0;
         for(int i = 0; i < data.length; i++)
             {
             // a little caching
-            if (recognize(synths[lastSynth], data[i]))
+            if (recognize(getSynth(lastSynth), data[i]))
                 {
                 recognized[lastSynth] = true;
                 continue;
                 }
                                 
-            for(int j = 0; j < synths.length; j++)
+            for(int j = 0; j < numSynths(); j++)
                 {
-                if (recognize(synths[j], data[i]))
+                if (recognize(getSynth(j), data[i]))
                     {
                     recognized[j] = true;
                     lastSynth = j;
@@ -5560,7 +5604,7 @@ public abstract class Synth extends JComponent implements Updatable
                             {
                             for(int j = 0; j < data.length; j++)
                                 {
-                                if (getNumSysexDumpsPerPatch(synths[external[i]], data[j]) > 1)
+                                if (getNumSysexDumpsPerPatch(getSynth(external[i]), data[j]) > 1)
                                     { hasMultipleDumpsSynth = true; break; }
                                 }
                             }
@@ -5578,7 +5622,9 @@ public abstract class Synth extends JComponent implements Updatable
                         else if (data.length == 1)
                             {
                             succeeded = loadOne(data[0], external[0], local, merge, f, fd, false);
-                            }
+							 if (succeeded)
+								this.file = f;
+                           }
                                 
                                 
                         //// Do we have a synth that involves multiple sysex dumps per patch?  Irritating TX81Z
@@ -5600,6 +5646,8 @@ public abstract class Synth extends JComponent implements Updatable
                             else 
                                 {
                                 succeeded = loadOne(flatten(data), rec, recognizeLocal(data[0]), merge, f, fd, false);
+                                if (succeeded)
+                                	this.file = f;
                                 }
                             }
 
@@ -5726,7 +5774,7 @@ public abstract class Synth extends JComponent implements Updatable
                                     int count = 0;
                                     for(int i = 0; i < data.length; i++)
                                         {
-                                        if (recognize(synths[external[j]], data[i]))
+                                        if (recognize(getSynth(external[j]), data[i]))
                                             {
                                             count++;                                                        
                                             }
@@ -5737,17 +5785,17 @@ public abstract class Synth extends JComponent implements Updatable
                                     count = 0;
                                     for(int i = 0; i < data.length; i++)
                                         {
-                                        if (recognize(synths[external[j]], data[i]))
+                                        if (recognize(getSynth(external[j]), data[i]))
                                             {
-                                            if (recognizeBulk(synths[external[j]], data[i]))
+                                            if (recognizeBulk(getSynth(external[j]), data[i]))
                                                 {
                                                 pNames[j][count] = "" + (count + 1) + "   Bank Sysex";
                                                 }
                                             else
                                                 {             
                                                 // build the synth to parse, then parse it and extract the name
-                                                if (otherSynth == null || otherSynth.getClass() != synths[external[j]])
-                                                    otherSynth = (Synth)(instantiate(synths[external[j]], synthNames[external[j]], true, false, null));
+                                                if (otherSynth == null || otherSynth.getClass() != getSynth(external[j]))
+                                                    otherSynth = (Synth)(instantiate(getSynth(external[j]), synthNames[external[j]], true, false, null));
                                                 otherSynth.printRevised = false;
                                                 otherSynth.setSendMIDI(false);
                                                 otherSynth.undo.setWillPush(false);
@@ -5773,7 +5821,7 @@ public abstract class Synth extends JComponent implements Updatable
                                         
                                 if (sNames.length == 1 && pNames[0].length == 1)
                                     {
-                                    succeeded = loadOne(data[indices[0][0]], external[0], synths[external[0]] == this.getClass(), merge, f, fd, false);
+                                    succeeded = loadOne(data[indices[0][0]], external[0], getSynth(external[0]) == this.getClass(), merge, f, fd, false);
                                     }
                                 else
                                     {
@@ -5783,10 +5831,10 @@ public abstract class Synth extends JComponent implements Updatable
                                         {
                                         public void selection(int primary, int secondary)
                                             {
-                                            localButton.setEnabled(Synth.this.getClass() == synths[external[primary]]);
+                                            localButton.setEnabled(Synth.this.getClass() == getSynth(external[primary]));
                                             }
                                         };
-                                    localButton.setEnabled(Synth.this.getClass() == synths[external[0]]);
+                                    localButton.setEnabled(Synth.this.getClass() == getSynth(external[0]));
                                                         
                                     Color color = new JPanel().getBackground();
                                     HBox hbox = new HBox();
@@ -5837,7 +5885,7 @@ public abstract class Synth extends JComponent implements Updatable
                                         if (showSimpleConfirm("Write All Patches", "Write all patches to the synth?"))
                                             {
                                             // need at least one synth from the patches so we can determine what the pause between writes should be
-                                            Synth temp = (Synth)(instantiate(synths[external[0]], synthNames[external[0]], true, false, null));
+                                            Synth temp = (Synth)(instantiate(getSynth(external[0]), synthNames[external[0]], true, false, null));
                                             succeeded = writeBulk(temp, data);
                                             }
                                         else succeeded = false;
@@ -5983,7 +6031,7 @@ public abstract class Synth extends JComponent implements Updatable
                     ".\nIt appears to contain data for the " + synthNames[synth] + 
                     ".\nLoad for the " + synthNames[synth] + " instead?"))
                 {
-                return loadOneExternal(data, synths[synth], synthNames[synth], f, fd);
+                return loadOneExternal(data, getSynth(synth), synthNames[synth], f, fd);
                 }
             else
                 {
@@ -6141,49 +6189,6 @@ public abstract class Synth extends JComponent implements Updatable
                     "Can't Open Editor", JOptionPane.ERROR_MESSAGE);
                 }
             }
-        
-        /*
-          JPanel p = new JPanel();
-          p.setLayout(new BorderLayout());
-          p.add(new JLabel("    "), BorderLayout.NORTH);
-          p.add(new JLabel("Select a Synthesizer to Edit:"), BorderLayout.CENTER);
-          p.add(new JLabel("    "), BorderLayout.SOUTH);
-
-          JPanel p2 = new JPanel();
-          p2.setLayout(new BorderLayout());
-          p2.add(p, BorderLayout.NORTH);
-          String[] synthNames = getSynthNames();
-          JComboBox combo = new JComboBox(synthNames);
-          combo.setMaximumRowCount(32);
-        
-          // actionListener bug causes it to fire when the combo is first set programmatically
-          combo.addItemListener(new ItemListener()
-          {
-          public void itemStateChanged(ItemEvent event) {
-          if (event.getStateChange() == ItemEvent.SELECTED) {
-          System.err.println("-->" + combo.getSelectedItem());
-          }
-          }});
-                
-          // Note: Java classdocs are wrong: if you set a selected item to null (or to something not in the list)
-          // it doesn't just not change the current selected item, it sets it to some blank item.
-          String synth = getLastSynth();
-          if (synth != null) combo.setSelectedItem(synth);
-          p2.add(combo, BorderLayout.CENTER);
-        
-          // For some reason the "Cancel" option is the MIDDLE option
-          //disableMenuBar();
-          int result = JOptionPane.showOptionDialog(null, p2, "Edisyn", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Run", "Quit", "Disconnected" }, "Run");
-          //enableMenuBar();
-          if (result == 1 ||      // cancel
-          result < 0)             // window closed or ESC
-          return null;
-          else 
-          {
-          setLastSynth("" + combo.getSelectedItem());
-          return instantiate(synths[combo.getSelectedIndex()], synthNames[combo.getSelectedIndex()], false, (result == 0), null);
-          }
-        */
         }
 
     void doPrefs()

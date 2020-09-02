@@ -184,7 +184,7 @@ public class Favorites
             }
                 
         f.store(synthNames[synthnum]);
-        return Synth.instantiate(Synth.getSynths()[synthnum], synthNames[synthnum], false, (result == 0), null);
+        return Synth.instantiate(Synth.getClassNames()[synthnum], false, (result == 0), null);
         }
         
         

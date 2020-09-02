@@ -26,6 +26,8 @@ import javax.sound.midi.*;
 
 public class YamahaFS1RFseq extends Synth
     {
+	public static final double MAXFREQ = 23597.0;
+
     public static final String[] BANKS = new String[] { "Internal", "Preset" };
     public static final String[] LOOP_MODES = new String[] { "One Way", "Round" };
     public static final String[] PITCH_MODES = new String[] { "Pitch", "Non-Pitch" };
@@ -37,11 +39,11 @@ public class YamahaFS1RFseq extends Synth
     Box hi = null;
     Box lo = null;
     Box mid = null;
-
-	static Model pasteboard = null;
-	int pasteboardLo = -1;
-	int pasteboardHi = -1;
-	
+    
+    static Model pasteboard = null;
+    int pasteboardLo = -1;
+    int pasteboardHi = -1;
+        
 
     public YamahaFS1RFseq()
         {
@@ -62,9 +64,9 @@ public class YamahaFS1RFseq extends Synth
 
         soundPanel = new SynthPanel(this);
         soundPanel.add(addFrameControls(1), BorderLayout.NORTH);
-		JPanel panel = new JPanel();
-		panel.setBackground(Style.BACKGROUND_COLOR());
-		panel.setLayout(new GridBagLayout());
+        JPanel panel = new JPanel();
+        panel.setBackground(Style.BACKGROUND_COLOR());
+        panel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
@@ -83,19 +85,19 @@ public class YamahaFS1RFseq extends Synth
 
         soundPanel = new SynthPanel(this);
         soundPanel.add(addFrameControls(129), BorderLayout.NORTH);
-		panel = new JPanel();
-		panel.setBackground(Style.BACKGROUND_COLOR());
-		panel.setLayout(new GridBagLayout());
+        panel = new JPanel();
+        panel.setBackground(Style.BACKGROUND_COLOR());
+        panel.setLayout(new GridBagLayout());
         c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
         c.fill = c.BOTH;
         c.weightx = 1;
         c.weighty = 3;
-        hi = new Box(BoxLayout.Y_AXIS);
-        hi.add(addFrameDisplay(129, true, Style.COLOR_B()));
-        hi.add(addFrameDisplay(129, false, Style.COLOR_B()));
-        panel.add(hi, c);
+        mid = new Box(BoxLayout.Y_AXIS);
+        mid.add(addFrameDisplay(129, true, Style.COLOR_B()));
+        mid.add(addFrameDisplay(129, false, Style.COLOR_B()));
+        panel.add(mid, c);
         c.weighty = 1;
         c.gridy = 1;
         panel.add(addPitchDisplay(129, Style.COLOR_C()), c);
@@ -104,9 +106,9 @@ public class YamahaFS1RFseq extends Synth
 
         soundPanel = new SynthPanel(this);
         soundPanel.add(addFrameControls(257), BorderLayout.NORTH);
-		panel = new JPanel();
-		panel.setBackground(Style.BACKGROUND_COLOR());
-		panel.setLayout(new GridBagLayout());
+        panel = new JPanel();
+        panel.setBackground(Style.BACKGROUND_COLOR());
+        panel.setLayout(new GridBagLayout());
         c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
@@ -257,7 +259,7 @@ public class YamahaFS1RFseq extends Synth
         }
 
 
-    public void setupTestPerformance()
+    public void setupTestPerformance(int base)
         {
         if (tuple == null)
             if (!setupMIDI(tuple))
@@ -265,76 +267,80 @@ public class YamahaFS1RFseq extends Synth
 
         if (tuple != null)
             {
-            {
-            // Set up Performance
-            YamahaFS1RMulti synth = new YamahaFS1RMulti();            
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
-            if (synth.tuple != null)
                 {
-                synth.loadDefaults();
-                synth.getModel().set("name", "Edisyn");
-                synth.getModel().set("fseqpart", 1);				// Part 1                
-                synth.getModel().set("part1rcvchannel", 16);		// Perf
-                synth.getModel().set("part2rcvchannel", 17);		// Off
-                synth.getModel().set("part3rcvchannel", 17);		// Off
-                synth.getModel().set("part4rcvchannel", 17);		// Off
-                synth.getModel().set("part1notereserve", 32);		// Perf
-                synth.getModel().set("part2notereserve", 0);		// Off
-                synth.getModel().set("part3notereserve", 0);		// Off
-                synth.getModel().set("part4notereserve", 0);		// Off
-                synth.sendAllParameters();
-            	}
-            }
-	
-			{
-            // Set up Voice
-        	YamahaFS1R synth = new YamahaFS1R();            
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
-            if (synth.tuple != null)
+                // Set up Performance
+                YamahaFS1RMulti synth = new YamahaFS1RMulti();            
+                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                if (synth.tuple != null)
+                    {
+                    synth.loadDefaults();
+                    synth.getModel().set("name", "Edisyn");
+                    synth.getModel().set("fseqpart", 1);                            // Part 1                
+                    synth.getModel().set("part1rcvchannel", 16);            // Perf
+                    synth.getModel().set("part2rcvchannel", 17);            // Off
+                    synth.getModel().set("part3rcvchannel", 17);            // Off
+                    synth.getModel().set("part4rcvchannel", 17);            // Off
+                    synth.getModel().set("part1notereserve", 32);           // Perf
+                    synth.getModel().set("part2notereserve", 0);            // Off
+                    synth.getModel().set("part3notereserve", 0);            // Off
+                    synth.getModel().set("part4notereserve", 0);            // Off
+                    synth.getModel().set("part1banknumber", 3);				// B
+                    synth.getModel().set("part1programnumber", 113 + base);	// program number
+                    synth.sendAllParameters();
+                    }
+                }
+        
+        /*
                 {
-                synth.loadDefaults();
-                // part is already 0
-                synth.getModel().set("name", "Edisyn");
-                synth.getModel().set("operator1vspectralform", 7);	// Formant                
-                synth.getModel().set("operator2vspectralform", 7);	// Formant                
-                synth.getModel().set("operator3vspectralform", 7);	// Formant                
-                synth.getModel().set("operator4vspectralform", 7);	// Formant                
-                synth.getModel().set("operator5vspectralform", 7);	// Formant                
-                synth.getModel().set("operator6vspectralform", 7);	// Formant                
-                synth.getModel().set("operator7vspectralform", 7);	// Formant                
-                synth.getModel().set("operator8vspectralform", 7);	// Formant                
-                synth.getModel().set("operator1vfrequencyfseqtracknumber", 0);	// Operator 1                
-                synth.getModel().set("operator2vfrequencyfseqtracknumber", 1);	// Operator 2                
-                synth.getModel().set("operator3vfrequencyfseqtracknumber", 2);	// Operator 3                
-                synth.getModel().set("operator4vfrequencyfseqtracknumber", 3);	// Operator 4                
-                synth.getModel().set("operator5vfrequencyfseqtracknumber", 4);	// Operator 5                
-                synth.getModel().set("operator6vfrequencyfseqtracknumber", 5);	// Operator 6                
-                synth.getModel().set("operator7vfrequencyfseqtracknumber", 6);	// Operator 7                
-                synth.getModel().set("operator8vfrequencyfseqtracknumber", 7);	// Operator 8                
-                synth.getModel().set("operator1vswitch", 1);       // On         
-                synth.getModel().set("operator2vswitch", 1);       // On
-                synth.getModel().set("operator3vswitch", 1);       // On
-                synth.getModel().set("operator4vswitch", 1);       // On
-                synth.getModel().set("operator5vswitch", 1);       // On
-                synth.getModel().set("operator6vswitch", 1);       // On
-                synth.getModel().set("operator7vswitch", 1);       // On
-                synth.getModel().set("operator8vswitch", 1);       // On
-                synth.getModel().set("operator1uswitch", 1);       // On
-                synth.getModel().set("operator2uswitch", 1);       // On
-                synth.getModel().set("operator3uswitch", 1);       // On
-                synth.getModel().set("operator4uswitch", 1);       // On
-                synth.getModel().set("operator5uswitch", 1);       // On
-                synth.getModel().set("operator6uswitch", 1);       // On
-                synth.getModel().set("operator7uswitch", 1);       // On
-                synth.getModel().set("operator8uswitch", 1);       // On
-                synth.sendAllParameters();
-            	}
-            }
+                // Set up Voice
+                YamahaFS1R synth = new YamahaFS1R();            
+                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                if (synth.tuple != null)
+                    {
+                    synth.loadDefaults();
+                    // part is already 0
+                    synth.getModel().set("name", "Edisyn");
+                    synth.getModel().set("operator1vspectralform", 7);      // Formant                
+                    synth.getModel().set("operator2vspectralform", 7);      // Formant                
+                    synth.getModel().set("operator3vspectralform", 7);      // Formant                
+                    synth.getModel().set("operator4vspectralform", 7);      // Formant                
+                    synth.getModel().set("operator5vspectralform", 7);      // Formant                
+                    synth.getModel().set("operator6vspectralform", 7);      // Formant                
+                    synth.getModel().set("operator7vspectralform", 7);      // Formant                
+                    synth.getModel().set("operator8vspectralform", 7);      // Formant                
+                    synth.getModel().set("operator1vfrequencyfseqtracknumber", 0);  // Operator 1                
+                    synth.getModel().set("operator2vfrequencyfseqtracknumber", 1);  // Operator 2                
+                    synth.getModel().set("operator3vfrequencyfseqtracknumber", 2);  // Operator 3                
+                    synth.getModel().set("operator4vfrequencyfseqtracknumber", 3);  // Operator 4                
+                    synth.getModel().set("operator5vfrequencyfseqtracknumber", 4);  // Operator 5                
+                    synth.getModel().set("operator6vfrequencyfseqtracknumber", 5);  // Operator 6                
+                    synth.getModel().set("operator7vfrequencyfseqtracknumber", 6);  // Operator 7                
+                    synth.getModel().set("operator8vfrequencyfseqtracknumber", 7);  // Operator 8                
+                    synth.getModel().set("operator1vswitch", 1);       // On         
+                    synth.getModel().set("operator2vswitch", 1);       // On
+                    synth.getModel().set("operator3vswitch", 1);       // On
+                    synth.getModel().set("operator4vswitch", 1);       // On
+                    synth.getModel().set("operator5vswitch", 1);       // On
+                    synth.getModel().set("operator6vswitch", 1);       // On
+                    synth.getModel().set("operator7vswitch", 1);       // On
+                    synth.getModel().set("operator8vswitch", 1);       // On
+                    synth.getModel().set("operator1uswitch", 1);       // On
+                    synth.getModel().set("operator2uswitch", 1);       // On
+                    synth.getModel().set("operator3uswitch", 1);       // On
+                    synth.getModel().set("operator4uswitch", 1);       // On
+                    synth.getModel().set("operator5uswitch", 1);       // On
+                    synth.getModel().set("operator6uswitch", 1);       // On
+                    synth.getModel().set("operator7uswitch", 1);       // On
+                    synth.getModel().set("operator8uswitch", 1);       // On
+                    synth.sendAllParameters();
+                    }
+                }
+            */
             
             // Resend Fseq
             sendAllParameters();
-                }
             }
+        }
 
 
     public JFrame sprout()
@@ -345,12 +351,150 @@ public class YamahaFS1RFseq extends Synth
         return frame;
         }         
 
+    int grab(Model m, int frame, String key)
+        {
+        if (frame < 1) frame = 1;
+        if (frame > 512) frame = 512;
+        return m.get("frame" + frame + key);
+        }
+                
+    int filter(Model model, int frame, String key, boolean log)
+        {
+        if (log)
+        	{
+        	return (int)frequencyToInt((
+        		intToFrequency(grab(model, frame-3, key)) + 
+        		2 * intToFrequency(grab(model, frame-2, key)) + 
+        		3 * intToFrequency(grab(model, frame-1, key)) + 
+        		4 * intToFrequency(grab(model, frame, key)) +  
+        		3 * intToFrequency(grab(model, frame+1, key)) + 
+        		2 * intToFrequency(grab(model, frame+2, key)) +
+        		intToFrequency(grab(model, frame+3, key)))
+        		/ 16.0);
+        	}
+        else
+        	{
+        	return (int)((grab(model, frame-3, key) + 2 * grab(model, frame-2, key) + 3 * grab(model, frame-1, key) + 4 * grab(model, frame, key) + 3 * grab(model, frame+1, key) + 2 * grab(model, frame+2, key) + grab(model, frame+3, key)) / 16.0);
+        	}
+        }
+
+	public void buildPhonemes()
+		{
+		YamahaFS1RPhonemes.buildModel(YamahaFS1RFseq.this);
+		}
+		
     public void addYamahaFS1RMenu()
         {
         JMenu menu = new JMenu("FS1R");
         menubar.add(menu);
 
-       JMenuItem current = new JMenuItem("Show Current Performance");
+        JMenuItem text = new JMenuItem("Text");
+        text.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                buildPhonemes();
+                }
+            });
+        menu.add(text);
+
+        JMenuItem smooth = new JMenuItem("Smooth");
+        smooth.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                Model old = model.copy();
+                
+                Model backup = (Model)(model.clone());
+                setSendMIDI(false);
+                undo.setWillPush(false);
+                                        
+                for(int f = 1; f <= 512; f++)
+                    {
+                    for(int i = 1; i <= 8; i++)
+                        {
+                        model.set("frame" + f + "voicedfrequency" + i, filter(old, f, "voicedfrequency" + i, true));
+                        model.set("frame" + f + "voicedlevel" + i, filter(old, f, "voicedlevel" + i, false));
+                        model.set("frame" + f + "unvoicedfrequency" + i, filter(old, f, "unvoicedfrequency" + i, true));
+                        model.set("frame" + f + "unvoicedlevel" + i, filter(old, f, "unvoicedlevel" + i, false));
+                        model.set("frame" + f + "pitch" + i, filter(old, f, "pitch" + i, true));
+                        }
+                    }
+
+                undo.setWillPush(true);
+				if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+					undo.push(backup);
+				repaint();	// generally forces repaints to all happen at once
+                setSendMIDI(true);
+                    sendAllParameters();
+                }
+            });
+        menu.add(smooth);
+
+        JMenuItem dump = new JMenuItem("Dump");
+        dump.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        dump.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                System.err.println(lastIndex);
+                System.err.println(
+                    "{\n" +
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 1) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 1) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 1) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 1) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 2) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 2) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 2) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 2) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 3) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 3) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 3) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 3) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 4) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 4) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 4) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 4) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 5) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 5) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 5) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 5) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 6) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 6) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 6) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 6) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 7) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 7) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 7) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 7) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 8) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 8) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 8) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 8) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "}"                     
+                    );
+                }
+            });
+        menu.add(dump);
+
+        JMenuItem current = new JMenuItem("Show Current Performance");
         current.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -370,15 +514,21 @@ public class YamahaFS1RFseq extends Synth
             });
         menu.add(voice);
         
-        JMenuItem test = new JMenuItem("Set up Test Performance and Part 1");
-        test.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                setupTestPerformance();                
-                }
-            });
-        menu.add(test);
+        JMenu testPerformance = new JMenu("Set up Test Performance and Part 1");
+        menu.add(testPerformance);
+        for(int i = 1; i <= 14; i++)
+        	{
+        	final int _i = i;
+        	JMenuItem test = new JMenuItem("Use Voice \"FseqBase" + (i < 10 ? "0" : "") + i + "\"");
+			test.addActionListener(new ActionListener()
+				{
+				public void actionPerformed(ActionEvent e)
+					{
+					setupTestPerformance(_i);                
+					}
+				});
+        	testPerformance.add(test);
+        	}
         
         menu.addSeparator();
         JMenuItem swap = new JMenuItem("Swap Tracks...");
@@ -392,8 +542,8 @@ public class YamahaFS1RFseq extends Synth
                 
             public void actionPerformed(ActionEvent evt)
                 {
-            part1.setMaximumRowCount(8);
-            part2.setMaximumRowCount(8);
+                part1.setMaximumRowCount(8);
+                part2.setMaximumRowCount(8);
                 boolean result = showMultiOption(YamahaFS1RFseq.this, new String[] { "Swap", "With", "Start Frame", "End Frame" }, 
                     new JComponent[] { part1, part2, frame1, frame2 }, "Swap Tracks...", "Enter the tracks to swap with one another.");
 
@@ -404,14 +554,14 @@ public class YamahaFS1RFseq extends Synth
                     int from = frame1.getValue();
                     int to = frame2.getValue();
                     if (from > to)
-                    	{
-                    	int temp = from;
-                    	from = to;
-                    	to = temp;
-                    	}
+                        {
+                        int temp = from;
+                        from = to;
+                        to = temp;
+                        }
 
-        			Model backup = (Model)(model.clone());
-        			setSendMIDI(false);
+                    Model backup = (Model)(model.clone());
+                    setSendMIDI(false);
                     undo.setWillPush(false);
                                         
                     String[] parameters = model.getKeys();
@@ -421,21 +571,22 @@ public class YamahaFS1RFseq extends Synth
                             {
                             int frame = StringUtility.getFirstInt(parameters[i]);
                             if (frame >= from && frame <= to)
-                            	{
-								String p1key = parameters[i].substring(0, parameters[i].length() - 1) + p1;		// strip off the last number
-								int val2 = model.get(parameters[i]);
-								int val1 = model.get(p1key);  
-								model.set(p1key, val2);
-								model.set(parameters[i], val1);
-								}
+                                {
+                                String p1key = parameters[i].substring(0, parameters[i].length() - 1) + p1;             // strip off the last number
+                                int val2 = model.get(parameters[i]);
+                                int val1 = model.get(p1key);  
+                                model.set(p1key, val2);
+                                model.set(parameters[i], val1);
+                                }
                             }
                         }
                                                                                 
-        			undo.setWillPush(true);
-			        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-        			    undo.push(backup);
-        			setSendMIDI(true);
-        			sendAllParameters();
+                    undo.setWillPush(true);
+                    if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                        undo.push(backup);
+            		repaint();	// generally forces repaints to all happen at once
+                    setSendMIDI(true);
+                    sendAllParameters();
                     }
                 }
             });
@@ -451,8 +602,8 @@ public class YamahaFS1RFseq extends Synth
                 
             public void actionPerformed(ActionEvent evt)
                 {
-            part1.setMaximumRowCount(8);
-            part2.setMaximumRowCount(9);
+                part1.setMaximumRowCount(8);
+                part2.setMaximumRowCount(9);
                 boolean result = showMultiOption(YamahaFS1RFseq.this, new String[] { "Copy", "To", "Start Frame", "End Frame"}, 
                     new JComponent[] { part1, part2, frame1, frame2, }, "Copy Track To...", "Enter the tracks to copy from and to.");
 
@@ -463,51 +614,52 @@ public class YamahaFS1RFseq extends Synth
                     int from = frame1.getValue();
                     int to = frame2.getValue();
                     if (from > to)
-                    	{
-                    	int temp = from;
-                    	from = to;
-                    	to = temp;
-                    	}
+                        {
+                        int temp = from;
+                        from = to;
+                        to = temp;
+                        }
 
-        			Model backup = (Model)(model.clone());
-        			setSendMIDI(false);
+                    Model backup = (Model)(model.clone());
+                    setSendMIDI(false);
                     undo.setWillPush(false);
                                         
                     String[] parameters = model.getKeys();
                     for(int i = 0; i < parameters.length; i++)
                         {
-                    	if (p2 == TRACK_ALL && parameters[i].startsWith("frame"))        // "All"
-                    		{
-                    		int frame = StringUtility.getFirstInt(parameters[i]);
+                        if (p2 == TRACK_ALL && parameters[i].startsWith("frame"))        // "All"
+                            {
+                            int frame = StringUtility.getFirstInt(parameters[i]);
                             if (frame >= from && frame <= to)
-                            	{
-                            String p1key = parameters[i].substring(0, parameters[i].length() - 1) + p1;		// strip off the last number
-                            int val1 = model.get(p1key);  
-                            model.set(parameters[i], val1);
-                            	}
-                    		}
-                    	else if (parameters[i].startsWith("frame") && parameters[i].endsWith("" + p2))
-                    		{
-                    		int frame = StringUtility.getFirstInt(parameters[i]);
+                                {
+                                String p1key = parameters[i].substring(0, parameters[i].length() - 1) + p1;         // strip off the last number
+                                int val1 = model.get(p1key);  
+                                model.set(parameters[i], val1);
+                                }
+                            }
+                        else if (parameters[i].startsWith("frame") && parameters[i].endsWith("" + p2))
+                            {
+                            int frame = StringUtility.getFirstInt(parameters[i]);
                             if (frame >= from && frame <= to)
-                            	{
-                            String p1key = parameters[i].substring(0, parameters[i].length() - 1) + p1;		// strip off the last number
-                            int val1 = model.get(p1key);  
-                            model.set(parameters[i], val1);
-                            	}
-                    		}
+                                {
+                                String p1key = parameters[i].substring(0, parameters[i].length() - 1) + p1;         // strip off the last number
+                                int val1 = model.get(p1key);  
+                                model.set(parameters[i], val1);
+                                }
+                            }
                         }
                                                                                 
-        			undo.setWillPush(true);
-			        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-        			    undo.push(backup);
-        			setSendMIDI(true);
-        			sendAllParameters();
+                    undo.setWillPush(true);
+                    if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                        undo.push(backup);
+	            	repaint();	// generally forces repaints to all happen at once
+                    setSendMIDI(true);
+                    sendAllParameters();
                     }
                 }
             });
  
-		menu.addSeparator();
+        menu.addSeparator();
 
         JMenuItem cut = new JMenuItem("Cut Frames...");
         menu.add(cut);
@@ -526,47 +678,48 @@ public class YamahaFS1RFseq extends Synth
                     int from = frame1.getValue();
                     int to = frame2.getValue();
                     if (from > to)
-                    	{
-                    	int temp = from;
-                    	from = to;
-                    	to = temp;
-                    	}
-                    	
+                        {
+                        int temp = from;
+                        from = to;
+                        to = temp;
+                        }
+                        
                     // grab range
-					pasteboard = buildModel();
+                    pasteboard = buildModel();
                     pasteboardLo = from;
                     pasteboardHi = to;
                     
-        			Model backup = (Model)(model.clone());
-        			setSendMIDI(false);
+                    Model backup = (Model)(model.clone());
+                    setSendMIDI(false);
                     undo.setWillPush(false);
                     
-					for(int i = from; i <= to; i++)
-						{
-						move(model, pasteboard, i, i, TRACK_ALL, true, true, true);
-						}
-						
-					// Shift upper range down
-					for(int i = to + 1; i <= 512; i++)
-						{
-						move(model, model, i, i - (to - from + 1), TRACK_ALL, true, true, true);
-						}
-					
-					// Clear highest range
-					for(int i = 512 - (to - from + 1) + 1; i <= 512; i++)
-						{
-						clear(model, i, TRACK_ALL, true, true, true);
-						}
-					
-        			undo.setWillPush(true);
-			        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-			        	{
-        			    undo.push(backup);
-        				 System.err.println("pushed!");
-        			    }
-        			else System.err.println("The same!");
-        			setSendMIDI(true);
-        			sendAllParameters();
+                    for(int i = from; i <= to; i++)
+                        {
+                        move(model, pasteboard, i, i, TRACK_ALL, true, true, true);
+                        }
+                                                
+                    // Shift upper range down
+                    for(int i = to + 1; i <= 512; i++)
+                        {
+                        move(model, model, i, i - (to - from + 1), TRACK_ALL, true, true, true);
+                        }
+                                        
+                    // Clear highest range
+                    for(int i = 512 - (to - from + 1) + 1; i <= 512; i++)
+                        {
+                        clear(model, i, TRACK_ALL, true, true, true);
+                        }
+                                        
+                    undo.setWillPush(true);
+                    if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                        {
+                        undo.push(backup);
+                        System.err.println("pushed!");
+                        }
+                    else System.err.println("The same!");
+            		repaint();	// generally forces repaints to all happen at once
+                    setSendMIDI(true);
+                    sendAllParameters();
                     }
                 }
             });
@@ -589,21 +742,21 @@ public class YamahaFS1RFseq extends Synth
                     int from = frame1.getValue();
                     int to = frame2.getValue();
                     if (from > to)
-                    	{
-                    	int temp = from;
-                    	from = to;
-                    	to = temp;
-                    	}
+                        {
+                        int temp = from;
+                        from = to;
+                        to = temp;
+                        }
 
                     // grab range
-					pasteboard = buildModel();
+                    pasteboard = buildModel();
                     pasteboardLo = from;
                     pasteboardHi = to;
 
-					for(int i = from; i <= to; i++)
-						{
-						move(model, pasteboard, i, i, TRACK_ALL, true, true, true);
-						}
+                    for(int i = from; i <= to; i++)
+                        {
+                        move(model, pasteboard, i, i, TRACK_ALL, true, true, true);
+                        }
                     }
                 }
             });
@@ -618,10 +771,10 @@ public class YamahaFS1RFseq extends Synth
             public void actionPerformed(ActionEvent evt)
                 {
                 if (pasteboard == null)
-                	{
-                	showSimpleError("Overwrite Frames...", "No frames have been cut/copied yet.");
-                	return;
-        			}
+                    {
+                    showSimpleError("Overwrite Frames...", "No frames have been cut/copied yet.");
+                    return;
+                    }
                 
                 boolean result = showMultiOption(YamahaFS1RFseq.this, new String[] { "At" }, 
                     new JComponent[] { frame1 }, "Paste Frames...", "Enter where to insert the clipboard frames.");
@@ -630,27 +783,28 @@ public class YamahaFS1RFseq extends Synth
                     {
                     int at = frame1.getValue();
                     
-        			Model backup = (Model)(model.clone());
-        			setSendMIDI(false);
+                    Model backup = (Model)(model.clone());
+                    setSendMIDI(false);
                     undo.setWillPush(false);
                     
                     // make room
                     for(int i = 512; i >= at; i--)
-                    	{
-						move(model, model, i, i + (pasteboardHi - pasteboardLo + 1), TRACK_ALL, true, true, true);
-                    	}
+                        {
+                        move(model, model, i, i + (pasteboardHi - pasteboardLo + 1), TRACK_ALL, true, true, true);
+                        }
                     
                     // paste range
-					for(int i = pasteboardLo; i <= pasteboardHi; i++)
-						{
-						move(pasteboard, model, i, i - pasteboardLo + at, TRACK_ALL, true, true, true);
-						}
+                    for(int i = pasteboardLo; i <= pasteboardHi; i++)
+                        {
+                        move(pasteboard, model, i, i - pasteboardLo + at, TRACK_ALL, true, true, true);
+                        }
 
-        			undo.setWillPush(true);
-			        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-        			    undo.push(backup);
-        			setSendMIDI(true);
-        			sendAllParameters();
+                    undo.setWillPush(true);
+                    if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                        undo.push(backup);
+            		repaint();	// generally forces repaints to all happen at once
+                    setSendMIDI(true);
+                    sendAllParameters();
                     }
                 }
             });
@@ -668,16 +822,16 @@ public class YamahaFS1RFseq extends Synth
             public void actionPerformed(ActionEvent evt)
                 {
                 if (pasteboard == null)
-                	{
-                	showSimpleError("Overwrite Frames...", "No frames have been cut/copied yet.");
-                	return;
-        			}
+                    {
+                    showSimpleError("Overwrite Frames...", "No frames have been cut/copied yet.");
+                    return;
+                    }
                 
-            	part1.setMaximumRowCount(9);
-	            part1.setSelectedIndex(8);	// "All"
-				JPanel panel = new JPanel();
-				panel.setLayout(new BorderLayout());
-				panel.add(part1, BorderLayout.WEST);
+                part1.setMaximumRowCount(9);
+                part1.setSelectedIndex(8);  // "All"
+                JPanel panel = new JPanel();
+                panel.setLayout(new BorderLayout());
+                panel.add(part1, BorderLayout.WEST);
                 boolean result = showMultiOption(YamahaFS1RFseq.this, new String[] { "Track", "At", "Voiced", "Unvoiced", "Pitch" }, 
                     new JComponent[] { panel, frame1, voiced, unvoiced, includePitch }, "Overwrite Frames...", "Enter where to overwrite frames, and which tracks to overwrite.");
 
@@ -689,28 +843,29 @@ public class YamahaFS1RFseq extends Synth
                     int p1 = part1.getSelectedIndex() + 1;
                     int at = frame1.getValue();
 
-        			Model backup = (Model)(model.clone());
-        			setSendMIDI(false);
+                    Model backup = (Model)(model.clone());
+                    setSendMIDI(false);
                     undo.setWillPush(false);
                                         
                     // paste range
-					for(int i = pasteboardLo; i <= pasteboardHi; i++)
-						{
-						move(pasteboard, model, i, i - pasteboardLo + at, p1, v, u, pitch);
-						}
-						                                                                                
-        			undo.setWillPush(true);
-			        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-        			    undo.push(backup);
-        			setSendMIDI(true);
-        			sendAllParameters();
+                    for(int i = pasteboardLo; i <= pasteboardHi; i++)
+                        {
+                        move(pasteboard, model, i, i - pasteboardLo + at, p1, v, u, pitch);
+                        }
+                                                                                                                                
+                    undo.setWillPush(true);
+                    if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                        undo.push(backup);
+            		repaint();	// generally forces repaints to all happen at once
+                    setSendMIDI(true);
+                    sendAllParameters();
                     }
                 }
             });
             
-    menu.addSeparator();
+        menu.addSeparator();
     
-	JMenuItem clear = new JMenuItem("Clear Frames...");
+        JMenuItem clear = new JMenuItem("Clear Frames...");
         menu.add(clear);
         clear.addActionListener(new ActionListener()
             {
@@ -723,12 +878,12 @@ public class YamahaFS1RFseq extends Synth
                 
             public void actionPerformed(ActionEvent evt)
                 {
-            	part1.setMaximumRowCount(9);
-	            part1.setSelectedIndex(8);	// "All"
-				JPanel panel = new JPanel();
-				panel.setLayout(new BorderLayout());
-				panel.add(part1, BorderLayout.WEST);
-				boolean result = showMultiOption(YamahaFS1RFseq.this, new String[] { "Track", "Start Frame", "End Frame", "Voiced", "Unvoiced", "Pitch" }, 
+                part1.setMaximumRowCount(9);
+                part1.setSelectedIndex(8);  // "All"
+                JPanel panel = new JPanel();
+                panel.setLayout(new BorderLayout());
+                panel.add(part1, BorderLayout.WEST);
+                boolean result = showMultiOption(YamahaFS1RFseq.this, new String[] { "Track", "Start Frame", "End Frame", "Voiced", "Unvoiced", "Pitch" }, 
                     new JComponent[] { panel, frame1, frame2, voiced, unvoiced, includePitch }, "Clear Frames...", "Enter the frames and tracks to clear.");
 
                 if (result)
@@ -740,53 +895,54 @@ public class YamahaFS1RFseq extends Synth
                     int from = frame1.getValue();
                     int to = frame2.getValue();
                     if (from > to)
-                    	{
-                    	int temp = from;
-                    	from = to;
-                    	to = temp;
-                    	}
+                        {
+                        int temp = from;
+                        from = to;
+                        to = temp;
+                        }
 
-        			Model backup = (Model)(model.clone());
-        			setSendMIDI(false);
+                    Model backup = (Model)(model.clone());
+                    setSendMIDI(false);
                     undo.setWillPush(false);
                                         
                     String[] parameters = model.getKeys();
                     for(int i = 0; i < parameters.length; i++)
                         {
                         if (parameters[i].startsWith("frame"))
-                        	{
-                        	int frame = StringUtility.getFirstInt(parameters[i]);
+                            {
+                            int frame = StringUtility.getFirstInt(parameters[i]);
                             if (frame >= from && frame <= to)
-                            	{
-                       	 		if (parameters[i].endsWith("pitch"))
-                       	 			{
-                       	 			if (pitch) model.set(parameters[i], 0);
-                       	 			}
-                       	 		else if (p1 == TRACK_ALL || parameters[i].endsWith("" + p1))
-                       	 			{
-                       	 			if (parameters[i].contains("unvoiced"))
-                       	 				{
-                       	 				if (u) model.set(parameters[i], 0);
-                       	 				}
-                       	 			else		// voiced			-- notice I searched for "unvoiced", think hard about that...
-                       	 				{
-                       	 				if (v) model.set(parameters[i], 0);
-                       	 				}
-                       	 			}
-                       	 		}
+                                {
+                                if (parameters[i].endsWith("pitch"))
+                                    {
+                                    if (pitch) model.set(parameters[i], 0);
+                                    }
+                                else if (p1 == TRACK_ALL || parameters[i].endsWith("" + p1))
+                                    {
+                                    if (parameters[i].contains("unvoiced"))
+                                        {
+                                        if (u) model.set(parameters[i], 0);
+                                        }
+                                    else            // voiced                       -- notice I searched for "unvoiced", think hard about that...
+                                        {
+                                        if (v) model.set(parameters[i], 0);
+                                        }
+                                    }
+                                }
                             }
                         }
                                                                                 
-        			undo.setWillPush(true);
-			        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-        			    undo.push(backup);
-        			setSendMIDI(true);
-        			sendAllParameters();
+                    undo.setWillPush(true);
+                    if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                        undo.push(backup);
+            		repaint();	// generally forces repaints to all happen at once
+                    setSendMIDI(true);
+                    sendAllParameters();
                     }
                 }
             });
  
- 	JMenuItem distribute = new JMenuItem("Distribute Frame");
+        JMenuItem distribute = new JMenuItem("Distribute Frame");
         menu.add(distribute);
         distribute.addActionListener(new ActionListener()
             {
@@ -800,12 +956,12 @@ public class YamahaFS1RFseq extends Synth
                 
             public void actionPerformed(ActionEvent evt)
                 {
-            	part1.setMaximumRowCount(9);
-	            part1.setSelectedIndex(8);	// "All"
-				JPanel panel = new JPanel();
-				panel.setLayout(new BorderLayout());
-				panel.add(part1, BorderLayout.WEST);
-				boolean result = showMultiOption(YamahaFS1RFseq.this, new String[] { "Track", "Distribute", "To (Start)", "To (End)", "Voiced", "Unvoiced", "Pitch" }, 
+                part1.setMaximumRowCount(9);
+                part1.setSelectedIndex(8);  // "All"
+                JPanel panel = new JPanel();
+                panel.setLayout(new BorderLayout());
+                panel.add(part1, BorderLayout.WEST);
+                boolean result = showMultiOption(YamahaFS1RFseq.this, new String[] { "Track", "Distribute", "To (Start)", "To (End)", "Voiced", "Unvoiced", "Pitch" }, 
                     new JComponent[] { panel, frame0, frame1, frame2, voiced, unvoiced, includePitch }, "Distribute Frames...", "Enter the frame to extract values from and the frame range to copy them to.");
 
                 if (result)
@@ -818,14 +974,14 @@ public class YamahaFS1RFseq extends Synth
                     int from = frame1.getValue();
                     int to = frame2.getValue();
                     if (from > to)
-                    	{
-                    	int temp = from;
-                    	from = to;
-                    	to = temp;
-                    	}
+                        {
+                        int temp = from;
+                        from = to;
+                        to = temp;
+                        }
 
-        			Model backup = (Model)(model.clone());
-        			setSendMIDI(false);
+                    Model backup = (Model)(model.clone());
+                    setSendMIDI(false);
                     undo.setWillPush(false);
                                         
                     String[] parameters = model.getKeys();
@@ -834,110 +990,273 @@ public class YamahaFS1RFseq extends Synth
                         move(model, model, original, i, p1, v, u, pitch);
                         }
                                                                                 
-        			undo.setWillPush(true);
-			        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-        			    undo.push(backup);
-        			setSendMIDI(true);
-        			sendAllParameters();
+                    undo.setWillPush(true);
+                    if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                        undo.push(backup);
+            		repaint();	// generally forces repaints to all happen at once
+                    setSendMIDI(true);
+                    sendAllParameters();
                     }
                 }
             });           
-        }
 
+
+        JMenuItem normalize = new JMenuItem("Normalize Frames...");
+        normalize.addActionListener(new ActionListener()
+            {
+            JComboBox part1 = new JComboBox(TRACKS_PLUS);
+            LabelledSlider frame1 = new LabelledSlider(1, 512, 1);
+            LabelledSlider frame2 = new LabelledSlider(1, 512, 512);
+            JCheckBox voiced = new JCheckBox("", true);
+            JCheckBox unvoiced = new JCheckBox("", true);
+                
+            public void actionPerformed(ActionEvent evt)
+                {
+                part1.setMaximumRowCount(9);
+                part1.setSelectedIndex(8);  // "All"
+                JPanel panel = new JPanel();
+                panel.setLayout(new BorderLayout());
+                panel.add(part1, BorderLayout.WEST);
+                boolean result = showMultiOption(YamahaFS1RFseq.this, new String[] { "Track", "Start", "End", "Voiced", "Unvoiced" }, 
+                    new JComponent[] { panel, frame1, frame2, voiced, unvoiced }, "Normalize Frames...", "Enter the frames to normalize levels.");
+
+                if (result)
+                    {
+                    boolean v = voiced.isSelected();
+                    boolean u = unvoiced.isSelected();
+                    int p1 = part1.getSelectedIndex() + 1;
+                    int from = frame1.getValue();
+                    int to = frame2.getValue();
+                    if (from > to)
+                        {
+                        int temp = from;
+                        from = to;
+                        to = temp;
+                        }
+
+                    Model backup = (Model)(model.clone());
+                    setSendMIDI(false);
+                    undo.setWillPush(false);
+                                  
+                	// determine max  
+                    double max = 0;    
+                    for(int i = from; i <= to; i++)
+                        {
+                        if (p1 == TRACK_ALL)
+                        	{
+                        	for(int op = 1; op <= 8; op++)
+                        		{
+                        		if (v) max = Math.max(max, model.get("frame" + i + "voicedlevel" + op));
+                        		if (u) max = Math.max(max, model.get("frame" + i + "unvoicedlevel" + op));
+                        		}
+                        	}
+                        else
+                        	{
+							if (v) max = Math.max(max, model.get("frame" + i + "voicedlevel" + p1));
+							if (u) max = Math.max(max, model.get("frame" + i + "unvoicedlevel" + p1));
+                        	}
+                        }
+
+                	// normalize  
+                    if (max > 0)
+                    	{   
+						for(int i = from; i <= to; i++)
+							{
+							if (p1 == TRACK_ALL)
+								{
+								for(int op = 1; op <= 8; op++)
+									{
+									if (v) model.set("frame" + i + "voicedlevel" + op,
+										(int)(127.0 * model.get("frame" + i + "voicedlevel" + op) / max));
+									if (u) model.set("frame" + i + "unvoicedlevel" + op,
+										(int)(127.0 * model.get("frame" + i + "unvoicedlevel" + op) / max));
+									}
+								}
+							else
+								{
+								if (v) model.set("frame" + i + "voicedlevel" + p1,
+									(int)(127.0 * model.get("frame" + i + "voicedlevel" + p1) / max));
+								if (u) model.set("frame" + i + "unvoicedlevel" + p1,
+									(int)(127.0 * model.get("frame" + i + "unvoicedlevel" + p1) / max));
+								}
+							}
+						}
+                                                                                
+                    undo.setWillPush(true);
+                    if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                        undo.push(backup);
+            		repaint();	// generally forces repaints to all happen at once
+                    setSendMIDI(true);
+                    sendAllParameters();
+                    }
+                }
+            });
+        menu.add(normalize);
+
+
+        JMenuItem setpitch = new JMenuItem("Set Pitch...");
+        setpitch.addActionListener(new ActionListener()
+            {
+            LabelledSlider frame1 = new LabelledSlider(1, 512, 1);
+            LabelledSlider frame2 = new LabelledSlider(1, 512, 512);
+        	JTextField pitch = new JTextField("440.00");
+                
+            public void actionPerformed(ActionEvent evt)
+                {
+                pitch.setColumns(8);
+                boolean result = showMultiOption(YamahaFS1RFseq.this, new String[] { "Start", "End", "Pitch (Hz)" }, 
+                    new JComponent[] { frame1, frame2, pitch }, "Set Pitch...", "Enter the frames and the pitch (0..." + MAXFREQ + ") to set them to.");
+
+                if (result)
+                    {
+                    double pitchVal = -1;
+					try 
+						{ 
+						pitchVal = Double.parseDouble(pitch.getText());
+						}
+					catch (Exception ex) { }
+					if (pitchVal < 0 || pitchVal > MAXFREQ)
+						{
+						showSimpleError("Invalid Pitch", "The pitch must be between 0 and " + MAXFREQ);
+						}
+					else
+						{
+						int from = frame1.getValue();
+						int to = frame2.getValue();
+						if (from > to)
+							{
+							int temp = from;
+							from = to;
+							to = temp;
+							}
+
+						int val = frequencyToInt(pitchVal);
+						if (val < 0)
+							{
+							System.err.println("Low val " + val);
+							val = 0;
+							}
+						else if (val > 16383)
+							{
+							System.err.println("High val " + val);
+							val = 16383;
+							}
+
+	                    Model backup = (Model)(model.clone());
+						setSendMIDI(false);
+						undo.setWillPush(false);
+								  
+						for(int i = from; i <= to; i++)
+							{
+							model.set("frame" + i + "pitch", val);
+							}
+																				
+						undo.setWillPush(true);
+						if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+							undo.push(backup);
+						repaint();	// generally forces repaints to all happen at once
+						setSendMIDI(true);
+						sendAllParameters();
+						}
+					}
+                }
+            });
+        menu.add(setpitch);
+        }
 
     public static final int TRACK_ALL = 9;
     void move(Model old, Model current, int from, int to, int track, boolean voiced, boolean unvoiced, boolean includePitch)
-    	{
-    	int start = 1;
-    	int end = 8;
-    	if (track != TRACK_ALL)
-    		{
-    		start = track;
-    		end = track;
-    		}
-    		
-    	if (to > 512)
-    		{
-//    		System.err.println("Stupid move to " + to);
-    		return; 
-    		}
+        {
+        int start = 1;
+        int end = 8;
+        if (track != TRACK_ALL)
+            {
+            start = track;
+            end = track;
+            }
+                
+        if (to > 512)
+            {
+//              System.err.println("Stupid move to " + to);
+            return; 
+            }
 
-    	if (to < 1)
-    		{
-    		System.err.println("WARNING, bad move to " + to);
-    		return; 
-    		}
-    	
-    	String frameFrom = "frame" + from;
-    	String frameTo = "frame" + to;
-    	
-	    if (includePitch)
-	    	{
-	    	String keyFrom = frameFrom + "pitch";
-	    	String keyTo = frameTo + "pitch";
-	    	current.set(keyTo, old.get(keyFrom));
-	    	}
-	    	
-    	for(int i = start; i <= end; i++)
-    		{
-	    	if (voiced)
-	    		{
-	    		String keyFrom = frameFrom + "voicedfrequency" + i;
-	    		String keyTo = frameTo + "voicedfrequency" + i;
-	    	current.set(keyTo, old.get(keyFrom));
-	    	 keyFrom = frameFrom + "voicedlevel" + i;
-	    	 keyTo = frameTo + "voicedlevel" + i;
-	    	current.set(keyTo, old.get(keyFrom));
-	    	 }
-	    	if (unvoiced)
-	    		{
-	    	 String keyFrom = frameFrom + "unvoicedfrequency" + i;
-	    	 String keyTo = frameTo + "unvoicedfrequency" + i;
-	    	current.set(keyTo, old.get(keyFrom));
-	    	 keyFrom = frameFrom + "unvoicedlevel" + i;
-	    	 keyTo = frameTo + "unvoicedlevel" + i;
-	    	current.set(keyTo, old.get(keyFrom));
-	    		}
-	    	}
-    	}
+        if (to < 1)
+            {
+            System.err.println("WARNING, bad move to " + to);
+            return; 
+            }
+        
+        String frameFrom = "frame" + from;
+        String frameTo = "frame" + to;
+        
+        if (includePitch)
+            {
+            String keyFrom = frameFrom + "pitch";
+            String keyTo = frameTo + "pitch";
+            current.set(keyTo, old.get(keyFrom));
+            }
+                
+        for(int i = start; i <= end; i++)
+            {
+            if (voiced)
+                {
+                String keyFrom = frameFrom + "voicedfrequency" + i;
+                String keyTo = frameTo + "voicedfrequency" + i;
+                current.set(keyTo, old.get(keyFrom));
+                keyFrom = frameFrom + "voicedlevel" + i;
+                keyTo = frameTo + "voicedlevel" + i;
+                current.set(keyTo, old.get(keyFrom));
+                }
+            if (unvoiced)
+                {
+                String keyFrom = frameFrom + "unvoicedfrequency" + i;
+                String keyTo = frameTo + "unvoicedfrequency" + i;
+                current.set(keyTo, old.get(keyFrom));
+                keyFrom = frameFrom + "unvoicedlevel" + i;
+                keyTo = frameTo + "unvoicedlevel" + i;
+                current.set(keyTo, old.get(keyFrom));
+                }
+            }
+        }
        
     void clear(Model current, int to, int track, boolean voiced, boolean unvoiced, boolean includePitch)
-    	{
-    	int start = 1;
-    	int end = 8;
-    	if (track != TRACK_ALL)
-    		{
-    		start = track;
-    		end = track;
-    		}
-    	
-    	String frameTo = "frame" + to;
-    	
-	    if (includePitch)
-	    	{
-	    	String keyTo = frameTo + "pitch";
-	    	current.set(keyTo, 0);
-	    	}
-	    	
-    		System.err.println("Clearing " + to);
-    	for(int i = start; i <= end; i++)
-    		{
-    		if (voiced)
-    			{
-	    	String keyTo = frameTo + "voicedfrequency" + i;
-	    	current.set(keyTo, 0);
-	    	 keyTo = frameTo + "voicedlevel" + i;
-	    	current.set(keyTo, 0);
-	    	}
-	    	if (unvoiced)
-	    		{
-	    	 String keyTo = frameTo + "unvoicedfrequency" + i;
-	    	current.set(keyTo, 0);
-	    	 keyTo = frameTo + "unvoicedlevel" + i;
-	    	current.set(keyTo, 0);
-	    	}
-	    	}
-    	}
+        {
+        int start = 1;
+        int end = 8;
+        if (track != TRACK_ALL)
+            {
+            start = track;
+            end = track;
+            }
+        
+        String frameTo = "frame" + to;
+        
+        if (includePitch)
+            {
+            String keyTo = frameTo + "pitch";
+            current.set(keyTo, 0);
+            }
+                
+        System.err.println("Clearing " + to);
+        for(int i = start; i <= end; i++)
+            {
+            if (voiced)
+                {
+                String keyTo = frameTo + "voicedfrequency" + i;
+                current.set(keyTo, 0);
+                keyTo = frameTo + "voicedlevel" + i;
+                current.set(keyTo, 0);
+                }
+            if (unvoiced)
+                {
+                String keyTo = frameTo + "unvoicedfrequency" + i;
+                current.set(keyTo, 0);
+                keyTo = frameTo + "unvoicedlevel" + i;
+                current.set(keyTo, 0);
+                }
+            }
+        }
 
         
     /* 
@@ -1022,9 +1341,9 @@ public class YamahaFS1RFseq extends Synth
         else            // here we have a problem, the resolution is too small even for scientific notation, so we have to change the font size
             {
             if (minimize)
-            	return "<html><font size=-2>" + String.format("%4.2e", d) + "</font></html>";
+                return "<html><font size=-2>" + String.format("%4.2e", d) + "</font></html>";
             else
-            	return String.format("%4.2e", d);
+                return String.format("%4.2e", d);
             } 
         }
 
@@ -1179,7 +1498,7 @@ public class YamahaFS1RFseq extends Synth
         JComponent comp;
                 
         params = TRACKS;
-        comp = new Chooser("Manipulate", this, "manipulate", params)
+        comp = new Chooser("Edit", this, "manipulate", params)
             {
             public void update(String key, Model model)
                 {
@@ -1206,6 +1525,19 @@ public class YamahaFS1RFseq extends Synth
             model.set("show" + i, 1);
             model.setStatus("show" + i, Model.STATUS_IMMUTABLE);
             }
+
+       comp = new CheckBox("Display in Hz", this, "showfreq")
+                {
+                public void update(String key, Model model)
+                    {
+                    super.update(key, model);
+                    // this should do the job
+                    rebuildFrameDisplays();
+                    }
+                };
+		hbox.add(comp);
+		model.set("showfreq", 1);
+		model.setStatus("showfreq", Model.STATUS_IMMUTABLE);
 
         PushButton button = new PushButton("Show All")
             {
@@ -1236,38 +1568,39 @@ public class YamahaFS1RFseq extends Synth
         VBox labels = new VBox();
         
         if (pos == 1)
-        	{
-        	posx1 = new TextLabel("");
-        	labels.add(posx1);
-        	posy1 = new TextLabel("");
-        	labels.add(posy1);        	
-        	}
+            {
+            posx1 = new TextLabel("");
+            labels.add(posx1);
+            posy1 = new TextLabel("");
+            labels.add(posy1);              
+            }
         else if (pos == 257)
-        	{
-        	posx2 = new TextLabel("");
-        	labels.add(posx2);
-        	posy2 = new TextLabel("");
-        	labels.add(posy2);        	
-        	}
-        else	// (pos == 129)
-        	{
-        	posx3 = new TextLabel("");
-        	labels.add(posx3);
-        	posy3 = new TextLabel("");
-        	labels.add(posy3);        	
-        	}
+            {
+            posx2 = new TextLabel("");
+            labels.add(posx2);
+            posy2 = new TextLabel("");
+            labels.add(posy2);              
+            }
+        else    // (pos == 129)
+            {
+            posx3 = new TextLabel("");
+            labels.add(posx3);
+            posy3 = new TextLabel("");
+            labels.add(posy3);              
+            }
         hbox.addLast(labels);
         
         return hbox;
         }
  
- 	TextLabel posx1;
- 	TextLabel posy1;
- 	TextLabel posx3;
- 	TextLabel posy3;
- 	TextLabel posx2;
- 	TextLabel posy2;
+    TextLabel posx1;
+    TextLabel posy1;
+    TextLabel posx3;
+    TextLabel posy3;
+    TextLabel posx2;
+    TextLabel posy2;
  
+    int lastIndex;
  
 
     public EnvelopeDisplay buildFrequencyDisplay(int pos, boolean voiced, Color color)
@@ -1315,6 +1648,19 @@ public class YamahaFS1RFseq extends Synth
                     getUndo().setWillPush(true);
                     }
                         
+			    public void postProcess(double[] xVals, double[] yVals)
+			    	{
+                    if (YamahaFS1RFseq.this.model.get("showfreq") == 1)
+                    	{
+				    	for(int i = 0; i < yVals.length; i++)
+				    		{
+				    		yVals[i] = intToFrequency((int)(yVals[i] * 16383)) / MAXFREQ;
+				    		if (yVals[i] > MAXFREQ) yVals[i] = MAXFREQ;
+				    		if (yVals[i] < 0) yVals[i] = 0;
+				    		}
+				    	}
+			    	}
+
                 public void updateFromMouse(double x, double y, boolean continuation)
                     {
                     if (x < 0)
@@ -1326,39 +1672,58 @@ public class YamahaFS1RFseq extends Synth
                     if (y >= 1.0) y = 1.0;
                     int frame = (int)(x * (256.0 - 1) + 0.5);
 
-                    double val = y * 16383;
-                                                                        
-                    YamahaFS1RFseq.this.model.set("frame" + (frame + pos) + (voiced ? "" : "un") + "voicedfrequency" + _o, (int)val);
+                    if (YamahaFS1RFseq.this.model.get("showfreq") == 1)
+                    	{
+                    	double val = (int)(frequencyToInt(y * MAXFREQ));
+                    	if (val > 16383)
+                    		{
+                    		//System.err.println("Val was " + val + " " + y);
+                    		val = 16383;
+                    		}
+                    	if (val < 0)
+                    		{
+                    		//System.err.println("Val was " + val + " " + y);
+                    		val = 0;
+                    		}
+	                    YamahaFS1RFseq.this.model.set("frame" + (frame + pos) + (voiced ? "" : "un") + "voicedfrequency" + _o, (int)val);
+                    	}
+                    else
+                    	{
+	                    double val = y * 16383;                                                                    
+	                    YamahaFS1RFseq.this.model.set("frame" + (frame + pos) + (voiced ? "" : "un") + "voicedfrequency" + _o, (int)val);
+	                    }
                     }
 
-			public void updateHighlightIndex(int index)
-				{
-				if (pos == 1)
-					{
-					int track = model.get("manipulate") + 1;
-					int level = YamahaFS1RFseq.this.model.get("frame" + (index + 1) + (voiced ? "" : "un") + "voicedlevel" + track);
-					int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 1) + (voiced ? "" : "un") + "voicedfrequency" + track);
-					posx1.setText("Frame " + (index + 1) + "    Track " + track  + "    Level " + level);
-					posy1.setText("Frequency " + freq + "    Hz: " + intToFrequencyString(freq, false));
-					}
-				else if (pos == 257)
-					{
-					int track = model.get("manipulate") + 1;
-					int level = YamahaFS1RFseq.this.model.get("frame" + (index + 257) + (voiced ? "" : "un") + "voicedlevel" + track);
-					int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 257) + (voiced ? "" : "un") + "voicedfrequency" + track);
-					posx2.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
-					posy2.setText("Frequency " + freq + "    Hz: " + intToFrequencyString(freq, false));
-					}
-				else //if (pos == 129)
-					{
-					int track = model.get("manipulate") + 1;
-					int level = YamahaFS1RFseq.this.model.get("frame" + (index + 129) + (voiced ? "" : "un") + "voicedlevel" + track);
-					int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 129) + (voiced ? "" : "un") + "voicedfrequency" + track);
-					posx3.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
-					posy3.setText("Frequency " + freq + "    Hz: " + intToFrequencyString(freq, false));
-					}
-				}
-					
+                public void updateHighlightIndex(int index)
+                    {
+                    lastIndex = index;
+                                
+                    if (pos == 1)
+                        {
+                        int track = model.get("manipulate") + 1;
+                        int level = YamahaFS1RFseq.this.model.get("frame" + (index + 1) + (voiced ? "" : "un") + "voicedlevel" + track);
+                        int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 1) + (voiced ? "" : "un") + "voicedfrequency" + track);
+                        posx1.setText("Frame " + (index + 1) + "    Track " + track  + "    Level " + level);
+                        posy1.setText("Raw Freq " + freq + "    Hz " + intToFrequencyString(freq, false));
+                        }
+                    else if (pos == 257)
+                        {
+                        int track = model.get("manipulate") + 1;
+                        int level = YamahaFS1RFseq.this.model.get("frame" + (index + 257) + (voiced ? "" : "un") + "voicedlevel" + track);
+                        int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 257) + (voiced ? "" : "un") + "voicedfrequency" + track);
+                        posx2.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
+                        posy2.setText("Raw Freq " + freq + "    Hz " + intToFrequencyString(freq, false));
+                        }
+                    else //if (pos == 129)
+                        {
+                        int track = model.get("manipulate") + 1;
+                        int level = YamahaFS1RFseq.this.model.get("frame" + (index + 129) + (voiced ? "" : "un") + "voicedlevel" + track);
+                        int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 129) + (voiced ? "" : "un") + "voicedfrequency" + track);
+                        posx3.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
+                        posy3.setText("Raw Freq " + freq + "    Hz " + intToFrequencyString(freq, false));
+                        }
+                    }
+                                        
                 public int highlightIndex(double x, double y, boolean continuation)
                     {
                     if (x < 0) x = 0;
@@ -1450,34 +1815,35 @@ public class YamahaFS1RFseq extends Synth
                     YamahaFS1RFseq.this.model.set("frame" + (frame + pos) + (voiced ? "" : "un") + "voicedlevel" + _o, (int)val);
                     }
 
-			public void updateHighlightIndex(int index)
-				{
-				if (pos == 1)
-					{
-					int track = model.get("manipulate") + 1;
-					int level = YamahaFS1RFseq.this.model.get("frame" + (index + 1) + (voiced ? "" : "un") + "voicedlevel" + track);
-					int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 1) + (voiced ? "" : "un") + "voicedfrequency" + track);
-					posx1.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
-					posy1.setText("Frequency " + freq + "    Hz: " + intToFrequencyString(freq, false));
-					}
-				else if (pos == 257)
-					{
-					int track = model.get("manipulate") + 1;
-					int level = YamahaFS1RFseq.this.model.get("frame" + (index + 257) + (voiced ? "" : "un") + "voicedlevel" + track);
-					int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 257) + (voiced ? "" : "un") + "voicedfrequency" + track);
-					posx2.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
-					posy2.setText("Frequency " + freq + "    Hz: " + intToFrequencyString(freq, false));
-					}
-				else	// (pos == 129)
-					{
-					int track = model.get("manipulate") + 1;
-					int level = YamahaFS1RFseq.this.model.get("frame" + (index + 129) + (voiced ? "" : "un") + "voicedlevel" + track);
-					int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 129) + (voiced ? "" : "un") + "voicedfrequency" + track);
-					posx3.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
-					posy3.setText("Frequency " + freq + "    Hz: " + intToFrequencyString(freq, false));
-					}
-				}
-					
+                public void updateHighlightIndex(int index)
+                    {
+                    lastIndex = index;
+                    if (pos == 1)
+                        {
+                        int track = model.get("manipulate") + 1;
+                        int level = YamahaFS1RFseq.this.model.get("frame" + (index + 1) + (voiced ? "" : "un") + "voicedlevel" + track);
+                        int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 1) + (voiced ? "" : "un") + "voicedfrequency" + track);
+                        posx1.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
+                        posy1.setText("Raw Freq " + freq + "    Hz " + intToFrequencyString(freq, false));
+                        }
+                    else if (pos == 257)
+                        {
+                        int track = model.get("manipulate") + 1;
+                        int level = YamahaFS1RFseq.this.model.get("frame" + (index + 257) + (voiced ? "" : "un") + "voicedlevel" + track);
+                        int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 257) + (voiced ? "" : "un") + "voicedfrequency" + track);
+                        posx2.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
+                        posy2.setText("Raw Freq " + freq + "    Hz " + intToFrequencyString(freq, false));
+                        }
+                    else    // (pos == 129)
+                        {
+                        int track = model.get("manipulate") + 1;
+                        int level = YamahaFS1RFseq.this.model.get("frame" + (index + 129) + (voiced ? "" : "un") + "voicedlevel" + track);
+                        int freq = YamahaFS1RFseq.this.model.get("frame" + (index + 129) + (voiced ? "" : "un") + "voicedfrequency" + track);
+                        posx3.setText("Frame " + (index + 1) + "    Track " + track + "    Level " + level);
+                        posy3.setText("Raw Freq " + freq + "    Hz " + intToFrequencyString(freq, false));
+                        }
+                    }
+                                        
                 public int highlightIndex(double x, double y, boolean continuation)
                     {
                     if (x < 0) x = 0;
@@ -1530,82 +1896,83 @@ public class YamahaFS1RFseq extends Synth
         for(int i = 0; i < heights2.length; i++)
             heights2[i] = 1.0 / 16383;
 
-		String[] mods2 = new String[256];
-		for(int i = 0; i < mods2.length; i++)
-			{
-			mods2[i] = "frame" + (i + pos) + "pitch";
-			}
+        String[] mods2 = new String[256];
+        for(int i = 0; i < mods2.length; i++)
+            {
+            mods2[i] = "frame" + (i + pos) + "pitch";
+            }
 
-		comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), new String[256], mods2, widths, heights2)
-			{
-			// The mouseDown and mouseUp code here enables us to only do undo()
-			// ONCE.
-			public void mouseDown()
-				{
-				getUndo().push(getModel());
-				getUndo().setWillPush(false);
-				}
-			
-			public void mouseUp()
-				{
-				getUndo().setWillPush(true);
-				}
-					
-			public void updateFromMouse(double x, double y, boolean continuation)
-				{
-				if (x < 0)
-					x = 0;
-				else if (x > 1)
-					x = 1.0;
+        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), new String[256], mods2, widths, heights2)
+            {
+            // The mouseDown and mouseUp code here enables us to only do undo()
+            // ONCE.
+            public void mouseDown()
+                {
+                getUndo().push(getModel());
+                getUndo().setWillPush(false);
+                }
+                        
+            public void mouseUp()
+                {
+                getUndo().setWillPush(true);
+                }
+                                        
+            public void updateFromMouse(double x, double y, boolean continuation)
+                {
+                if (x < 0)
+                    x = 0;
+                else if (x > 1)
+                    x = 1.0;
 
-				if (y <= 0.0) y = 0.0;
-				if (y >= 1.0) y = 1.0;
-				int frame = (int)(x * (256.0 - 1) + 0.5);
+                if (y <= 0.0) y = 0.0;
+                if (y >= 1.0) y = 1.0;
+                int frame = (int)(x * (256.0 - 1) + 0.5);
 
-				double val = y * 16383;
-																	
-				YamahaFS1RFseq.this.model.set("frame" + (frame + pos) + "pitch", (int)val);
-				}
+                double val = y * 16383;
+                                                                                                                                        
+                YamahaFS1RFseq.this.model.set("frame" + (frame + pos) + "pitch", (int)val);
+                }
 
-			public void updateHighlightIndex(int index)
-				{
-				if (pos == 1)
-					{
-					int track = model.get("manipulate") + 1;
-					int pitch = YamahaFS1RFseq.this.model.get("frame" + (index + 1) + "pitch");
-					posx1.setText("Frame " + (index + 1));
-					posy1.setText("Pitch " + pitch + "    Hz: " + intToFrequencyString(pitch, false));
-					}
-				else if (pos == 257)
-					{
-					int track = model.get("manipulate") + 1;
-					int pitch = YamahaFS1RFseq.this.model.get("frame" + (index + 257) + "pitch");
-					posx1.setText("Frame " + (index + 1));
-					posy1.setText("Pitch " + pitch + "    Hz: " + intToFrequencyString(pitch, false));
-					}
-				else	// (pos == 129)
-					{
-					int track = model.get("manipulate") + 1;
-					int pitch = YamahaFS1RFseq.this.model.get("frame" + (index + 129) + "pitch");
-					posx1.setText("Frame " + (index + 1));
-					posy1.setText("Pitch " + pitch + "    Hz: " + intToFrequencyString(pitch, false));
-					}
-				}
-				
-			public int highlightIndex(double x, double y, boolean continuation)
-				{
-				if (x < 0) x = 0;
-				if (x > 1.0) x = 1.0;
-				return (int)(x * (256.0 - 1) + 0.5);
-				}
+            public void updateHighlightIndex(int index)
+                {
+                lastIndex = index;
+                if (pos == 1)
+                    {
+                    int track = model.get("manipulate") + 1;
+                    int pitch = YamahaFS1RFseq.this.model.get("frame" + (index + 1) + "pitch");
+                    posx1.setText("Frame " + (index + 1));
+                    posy1.setText("Raw Pitch " + pitch + "    Hz " + intToFrequencyString(pitch, false));
+                    }
+                else if (pos == 257)
+                    {
+                    int track = model.get("manipulate") + 1;
+                    int pitch = YamahaFS1RFseq.this.model.get("frame" + (index + 257) + "pitch");
+                    posx2.setText("Frame " + (index + 1));
+                    posy2.setText("Raw Pitch " + pitch + "    Hz " + intToFrequencyString(pitch, false));
+                    }
+                else    // (pos == 129)
+                    {
+                    int track = model.get("manipulate") + 1;
+                    int pitch = YamahaFS1RFseq.this.model.get("frame" + (index + 129) + "pitch");
+                    posx3.setText("Frame " + (index + 1));
+                    posy3.setText("Raw Pitch " + pitch + "    Hz " + intToFrequencyString(pitch, false));
+                    }
+                }
+                                
+            public int highlightIndex(double x, double y, boolean continuation)
+                {
+                if (x < 0) x = 0;
+                if (x > 1.0) x = 1.0;
+                return (int)(x * (256.0 - 1) + 0.5);
+                }
 
-			public int verticalBorderThickness() { return 4; }
-			};
-		((EnvelopeDisplay)comp).addVerticalDivider(0.5);
-		((EnvelopeDisplay)comp).setPreferredHeight(60);
+            public int verticalBorderThickness() { return 4; }
+            };
+        ((EnvelopeDisplay)comp).addVerticalDivider(0.5);
+        ((EnvelopeDisplay)comp).setPreferredHeight(60);
         ((EnvelopeDisplay)comp).setFilled(false);
         
-		parent = (EnvelopeDisplay)comp;
+        parent = (EnvelopeDisplay)comp;
 
         category.add(parent, BorderLayout.CENTER);
         return category;
@@ -1740,7 +2107,7 @@ public class YamahaFS1RFseq extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Velocity Sens.", this, "velocityensitivityfortempo", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("For Tempo");
+        ((LabelledDial)comp).addAdditionalLabel(" For Tempo ");
         hbox.add(comp);
 
         comp = new LabelledDial("Note", this, "noteassign", color, 0, 127)
@@ -1864,10 +2231,12 @@ public class YamahaFS1RFseq extends Synth
                 {
                 val = model.get("frame" + (i + 1) + "voicedfrequency" + j);
                 data[pos] = (byte)((val >>> 7) & 127);
-                data[pos+1] = (byte)(val & 127);
-                pos += 2;
+                data[pos+8] = (byte)(val & 127);
+                pos += 1;
                 }
-                        
+
+            pos += 8;		// skip lsb
+                                          
             for(int j = 1; j <= 8; j++)
                 {
                 // Thor says that this is inverted
@@ -1880,10 +2249,12 @@ public class YamahaFS1RFseq extends Synth
                 {
                 val = model.get("frame" + (i + 1) + "unvoicedfrequency" + j);
                 data[pos] = (byte)((val >>> 7) & 127);
-                data[pos+1] = (byte)(val & 127);
-                pos += 2;
+                data[pos+8] = (byte)(val & 127);
+                pos += 1;
                 }
-                        
+
+            pos += 8;		// skip lsb
+                                          
             for(int j = 1; j <= 8; j++)
                 {
                 // Thor says that this is inverted
@@ -1963,7 +2334,7 @@ public class YamahaFS1RFseq extends Synth
         model.set("endstep", (data[pos] << 7) | data[pos+1]);
         pos += 2;
         
-       //// Clear frames first
+        //// Clear frames first
         for(int i = 0; i < 512; i++)
             {
             model.set("frame" + (i + 1) + "pitch", 0);
@@ -2001,10 +2372,12 @@ public class YamahaFS1RFseq extends Synth
                         
             for(int j = 1; j <= 8; j++)
                 {
-                model.set("frame" + (i + 1) + "voicedfrequency" + j, (data[pos] << 7) | data[pos+1]);
-                pos += 2;
+                model.set("frame" + (i + 1) + "voicedfrequency" + j, (data[pos] << 7) | data[pos+8]);
+                pos += 1;
                 }
-                        
+            
+            pos += 8;		// skip lsb
+                  
             for(int j = 1; j <= 8; j++)
                 {
                 // Thor says that this is inverted
@@ -2014,10 +2387,12 @@ public class YamahaFS1RFseq extends Synth
 
             for(int j = 1; j <= 8; j++)
                 {
-                model.set("frame" + (i + 1) + "unvoicedfrequency" + j, (data[pos] << 7) | data[pos+1]);
-                pos += 2;
+                model.set("frame" + (i + 1) + "unvoicedfrequency" + j, (data[pos] << 7) | data[pos+8]);
+                pos += 1;
                 }
                         
+            pos += 8;		// skip lsb
+                  
             for(int j = 1; j <= 8; j++)
                 {
                 // Thor says that this is inverted
@@ -2214,15 +2589,15 @@ public class YamahaFS1RFseq extends Synth
         Object obj1, Object obj2) 
         {
         if (key.startsWith("frame0"))  // our throwaway
-        	return true;
+            return true;
         
         if (key.startsWith("frame"))
-        	{
-        	int numFrames = (synth2.getModel().get("format", 0) + 1) * 128;
+            {
+            int numFrames = (synth2.getModel().get("format", 0) + 1) * 128;
             int frame = StringUtility.getFirstInt(key);
-        	if (frame > numFrames)  // we're all done!
-        		return true;
-        	}
+            if (frame > numFrames)  // we're all done!
+                return true;
+            }
         
         return false;
         }
@@ -2266,3 +2641,8 @@ class ScrollableVBox extends VBox implements javax.swing.Scrollable
         return 1;
         }
     }
+
+
+
+
+

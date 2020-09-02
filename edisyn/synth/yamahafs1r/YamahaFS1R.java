@@ -149,7 +149,7 @@ public class YamahaFS1R extends Synth
     
     // FIXME: the breaker won't work because this is invokeLater
     boolean breaker = false;
-    void setPart(int val) 
+    public void setPart(int val) 
         {
         if (breaker) return;
         breaker = true;
@@ -541,8 +541,8 @@ public class YamahaFS1R extends Synth
                 
             public void actionPerformed(ActionEvent evt)
                 {
-				part1.setMaximumRowCount(8);
-				part2.setMaximumRowCount(8);
+                part1.setMaximumRowCount(8);
+                part2.setMaximumRowCount(8);
 
                 boolean result = showMultiOption(YamahaFS1R.this, new String[] { "Swap", "With", "Voiced", "Unvoiced"}, 
                     new JComponent[] { part1, part2, voiced, unvoiced }, "Swap Operators...", "Enter the operators to swap with one another.");
@@ -592,8 +592,8 @@ public class YamahaFS1R extends Synth
                 
             public void actionPerformed(ActionEvent evt)
                 {
-            part1.setMaximumRowCount(8);
-            part2.setMaximumRowCount(9);
+                part1.setMaximumRowCount(8);
+                part2.setMaximumRowCount(9);
                 boolean result = showMultiOption(YamahaFS1R.this, new String[] { "Copy", "To", "Voiced", "Unvoiced"}, 
                     new JComponent[] { part1, part2, voiced, unvoiced }, "Copy Operator To...", "Enter the operators to copy from and to.");
 

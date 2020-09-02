@@ -79,18 +79,22 @@ public class Main
         Returns the value of the given argument as an int.
         The argument must have a type of INT.
     */
-    public int getInt(String arg)
+    public int getInt(String arg, int _default)
         {
-        return (Integer)(arguments.get(arg));
+        Integer i = (Integer)(arguments.get(arg));
+        if (i == null) return _default;
+        else return i;
         }
 
     /** 
         Returns the value of the given argument as a double.
         The argument must have a type of DOUBLE.
     */
-    public double getDouble(String arg)
+    public double getDouble(String arg, double _default)
         {
-        return (Double)(arguments.get(arg));
+        Double d = (Double)(arguments.get(arg));
+        if (d == null) return _default;
+        else return d;
         }
 
     /** 

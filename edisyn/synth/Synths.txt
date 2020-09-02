@@ -1,53 +1,50 @@
-edisyn.synth.alesisd4.AlesisD4
-#edisyn.synth.alesismicron.AlesisMicron
-edisyn.synth.casiocz.CasioCZ
-edisyn.synth.dsiprophet08.DSIProphet08
-edisyn.synth.dsiprophet08.DSITetraCombo
-edisyn.synth.emumorpheus.EmuMorpheus
-edisyn.synth.emumorpheus.EmuMorpheusHyper
-edisyn.synth.emumorpheus.EmuMorpheusMap
-edisyn.synth.emuproteus.EmuProteus
-edisyn.synth.kawaik1.KawaiK1 
-edisyn.synth.kawaik1.KawaiK1Multi 
-edisyn.synth.kawaik4.KawaiK4 
-edisyn.synth.kawaik4.KawaiK4Multi 
-edisyn.synth.kawaik4.KawaiK4Drum
-edisyn.synth.kawaik4.KawaiK4Effect
-edisyn.synth.kawaik5.KawaiK5
-edisyn.synth.kawaik5.KawaiK5Multi
-edisyn.synth.korgmicrokorg.KorgMicroKorg
-edisyn.synth.korgmicrokorg.KorgMicroKorgVocoder
-edisyn.synth.korgmicrosampler.KorgMicrosampler
-edisyn.synth.korgsg.KorgSG
-edisyn.synth.korgsg.KorgSGMulti
-edisyn.synth.korgwavestation.KorgWavestationPatch
-edisyn.synth.korgwavestation.KorgWavestationPerformance
-edisyn.synth.korgwavestation.KorgWavestationSequence
-edisyn.synth.oberheimmatrix1000.OberheimMatrix1000 
-edisyn.synth.oberheimmatrix1000.OberheimMatrix1000Global
-edisyn.synth.preenfm2.PreenFM2
-edisyn.synth.redsounddarkstar.RedSoundDarkStar
-edisyn.synth.rolandd110.RolandD110Tone
-edisyn.synth.rolandd110.RolandD110Multi
-edisyn.synth.rolandjv880.RolandJV880
-edisyn.synth.rolandjv880.RolandJV880Multi
-edisyn.synth.waldorfblofeld.WaldorfBlofeld 
-edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti 
-edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT 
-edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti 
-edisyn.synth.yamaha4op.Yamaha4Op
-edisyn.synth.yamaha4op.Yamaha4OpMulti
-edisyn.synth.yamahadx7.YamahaDX7 
-edisyn.synth.yamahafb01.YamahaFB01
-edisyn.synth.yamahafb01.YamahaFB01Multi
-edisyn.synth.yamahafs1r.YamahaFS1R
-edisyn.synth.yamahafs1r.YamahaFS1RMulti
-edisyn.synth.yamahafs1r.YamahaFS1RFseq
-edisyn.synth.yamahatg33.YamahaTG33
-edisyn.synth.yamahatg33.YamahaTG33Multi
-edisyn.synth.generic.Generic
-edisyn.synth.tuning.Tuning
-#edisyn.synth.futuresonusparva.FuturesonusParva
-#edisyn.synth.linnstrument.Linnstrument
-#edisyn.synth.yamahatx81z.YamahaTX81Z
-#edisyn.synth.yamahatx81z.YamahaTX81ZMulti
+edisyn.synth.alesisd4.AlesisD4	Alesis D4/DM5
+edisyn.synth.casiocz.CasioCZ	Casio CZ
+edisyn.synth.dsiprophet08.DSIProphet08	DSI Prophet '08 / Tetra / Mopho
+edisyn.synth.dsiprophet08.DSITetraCombo	DSI Tetra [Combo]
+edisyn.synth.emumorpheus.EmuMorpheus	E-Mu Morpheus / Ultra Proteus
+edisyn.synth.emumorpheus.EmuMorpheusHyper	E-Mu Morpheus / Ultra Proteus [Hyper]
+edisyn.synth.emumorpheus.EmuMorpheusMap	E-Mu Morpheus / Ultra Proteus [MidiMap]
+edisyn.synth.emuproteus.EmuProteus	E-Mu Proteus
+edisyn.synth.kawaik1.KawaiK1	Kawai K1/K1r/K1m
+edisyn.synth.kawaik1.KawaiK1Multi	Kawai K1/K1r/K1m [Multi]
+edisyn.synth.kawaik4.KawaiK4	Kawai K4/K4r
+edisyn.synth.kawaik4.KawaiK4Multi	Kawai K4/K4r [Multi]
+edisyn.synth.kawaik4.KawaiK4Drum	Kawai K4/K4r [Drum]
+edisyn.synth.kawaik4.KawaiK4Effect	Kawai K4/K4r [Effect]
+edisyn.synth.kawaik5.KawaiK5	Kawai K5/K5m
+edisyn.synth.kawaik5.KawaiK5Multi	Kawai K5/K5m [Multi]
+edisyn.synth.korgmicrokorg.KorgMicroKorg	Korg MicroKorg
+edisyn.synth.korgmicrokorg.KorgMicroKorgVocoder	Korg MicroKorg [Vocoder]
+edisyn.synth.korgmicrosampler.KorgMicrosampler	Korg Microsampler
+edisyn.synth.korgsg.KorgSG	Korg SG Rack
+edisyn.synth.korgsg.KorgSGMulti	Korg SG Rack [Multi]
+edisyn.synth.korgwavestation.KorgWavestationPatch	Korg Wavestation SR [Patch]
+edisyn.synth.korgwavestation.KorgWavestationPerformance	Korg Wavestation SR [Performance]
+edisyn.synth.korgwavestation.KorgWavestationSequence	Korg Wavestation SR [Sequence]
+edisyn.synth.novationdstation.NovationDStation	Novation Drumstation
+edisyn.synth.oberheimmatrix1000.OberheimMatrix1000	Oberheim Matrix 6/6R/1000
+edisyn.synth.oberheimmatrix1000.OberheimMatrix1000Global	Oberheim Matrix 1000 [Global]
+edisyn.synth.preenfm2.PreenFM2	PreenFM2
+edisyn.synth.redsounddarkstar.RedSoundDarkStar	Red Sound DarkStar
+edisyn.synth.rolandd110.RolandD110Tone	Roland D-110 [Tone]
+edisyn.synth.rolandd110.RolandD110Multi	Roland D-110 [Multi]
+edisyn.synth.rolandjv880.RolandJV880	Roland JV-80/880
+edisyn.synth.rolandjv880.RolandJV880Multi	Roland JV-80/880 [Multi]
+edisyn.synth.waldorfblofeld.WaldorfBlofeld	Waldorf Blofeld
+edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti	Waldorf Blofeld [Multi]
+edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT	Waldorf Microwave II/XT/XTk
+edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti	Waldorf Microwave II/XT/XTk [Multi]
+edisyn.synth.yamaha4op.Yamaha4Op	Yamaha 4-Op FM
+edisyn.synth.yamaha4op.Yamaha4OpMulti	Yamaha 4-Op FM [Multi]
+edisyn.synth.yamahadx7.YamahaDX7	Yamaha DX7
+edisyn.synth.yamahafb01.YamahaFB01	Yamaha FB-01
+edisyn.synth.yamahafb01.YamahaFB01Multi	Yamaha FB-01 [Multi]
+edisyn.synth.yamahafs1r.YamahaFS1R	Yamaha FS1R
+edisyn.synth.yamahafs1r.YamahaFS1RMulti	Yamaha FS1R [Performance]
+edisyn.synth.yamahafs1r.YamahaFS1RFseq	Yamaha FS1R [Fseq]
+edisyn.synth.yamahatg33.YamahaTG33	Yamaha TG33/SY22/SY35
+edisyn.synth.yamahatg33.YamahaTG33Multi	Yamaha TG33 [Multi]
+edisyn.synth.generic.Generic	MIDI Parameters
+edisyn.synth.tuning.Tuning	Tuning
+

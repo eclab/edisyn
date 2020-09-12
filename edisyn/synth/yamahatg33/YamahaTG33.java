@@ -1495,7 +1495,6 @@ public class YamahaTG33 extends Synth
                 else if (key.endsWith("lfotype"))  val = LFO_TYPE_MAP[val];
                 else if (key.endsWith("lforate")) val = 127 - val;                                       // reversed
                 else if (key.endsWith("volume")) val = 127 - val;                                       // reversed
-                else if (key.endsWith("levelscaling")) val = val * 16;
                 else if (key.endsWith("frequencyshift")) val -= 12;                                                                     // 2's complement
 
                 return(new byte[]
@@ -1520,7 +1519,6 @@ public class YamahaTG33 extends Synth
                 else if (key.endsWith("lforate")) val = 127 - val;                                       // reversed
                 else if (key.endsWith("volume")) val = 127 - val;                                       // reversed
                 else if (key.endsWith("level")) val = 127 - val;                                        // reversed
-                else if (key.endsWith("levelscaling")) val = val * 16;
                 else if (key.endsWith("frequencyshift")) val -= 12;                                                                     // 2's complement
 
                 return(new byte[]
@@ -1545,6 +1543,8 @@ public class YamahaTG33 extends Synth
                 else if (key.endsWith("attacklevel")) val = 127 - val;                                  // reversed
                 else if (key.endsWith("decay1level")) val = 127 - val;                                  // reversed
                 else if (key.endsWith("decay2level")) val = 127 - val;                                  // reversed
+                else if (key.endsWith("levelscaling")) val = val * 16;
+                else if (key.endsWith("delay")) val = val * 0x80;
 
                 return(new byte[]
                     {
@@ -1568,11 +1568,13 @@ public class YamahaTG33 extends Synth
                 else if (key.endsWith("attacklevel")) val = 127 - val;                                  // reversed
                 else if (key.endsWith("decay1level")) val = 127 - val;                                  // reversed
                 else if (key.endsWith("decay2level")) val = 127 - val;                                  // reversed
-
+                else if (key.endsWith("levelscaling")) val = val * 16;
+                else if (key.endsWith("delay")) val = val * 0x80;
+                
                 return(new byte[]
                     {
                     (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x03,
-                    (byte)voiceEnvelopeBD[0][i], (byte)tone,// ST
+                    (byte)voiceEnvelopeBD[0][i], (byte)(tone == 4 ? 1 : 3),// ST
                     (byte)voiceEnvelopeBD[1][i],                    // F1
                     (byte)voiceEnvelopeBD[2][i],                    // F2
                     (byte)voiceEnvelopeBD[3][i],                    // B1
@@ -1597,9 +1599,20 @@ public class YamahaTG33 extends Synth
             
             String name = model.get("name", "UNTITLED") + "          ";
 
+			int pos = 4;		// start of name in voice common array
             for(int i = 0; i < 8; i++)
                 {
-                result[i] = send("name" + (i + 1));
+				result[i] = (new byte[]
+					{
+					(byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x00,
+					(byte)voiceCommon[0][pos + i], 0x00,                  // ST
+					(byte)voiceCommon[1][pos + i],                        // F1
+					(byte)voiceCommon[2][pos + i],                        // F2
+					(byte)voiceCommon[3][pos + i],                        // B1
+					(byte)voiceCommon[4][pos + i],                        // B2
+					(byte)0x00,											// V1
+					(byte)(name.charAt(i)), (byte)0xF7					// V2
+					});
                 }
             return result;
             }
@@ -1971,12 +1984,14 @@ public class YamahaTG33 extends Synth
         }
                 
 
-    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
+    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         if (tempModel == null)
             tempModel = getModel();
 
         byte[] data = new byte[((getSynthType() == TYPE_TG33) ? 605 : 592)];
+        int len = data.length - 8;	// minus header, minus checksum, minus F7
+        
         data[0] = (byte)0xF0;
         data[1] = (byte)0x43;
 
@@ -1985,8 +2000,8 @@ public class YamahaTG33 extends Synth
         else
             data[2] = (byte)(getChannelOut());
         data[3] = (byte)0x7E;
-        data[4] = (byte)(data.length / 128);
-        data[5] = (byte)(data.length % 128);
+        data[4] = (byte)(len / 128);
+        data[5] = (byte)(len % 128);
         data[6] = (byte)'L';
         data[7] = (byte)'M';
         data[8] = (byte)' ';
@@ -2082,8 +2097,9 @@ public class YamahaTG33 extends Synth
         // for SY data, there's three more empty slots
         
         data[data.length - 2] = produceChecksum(data, 6, data.length - 2);
-        data[data.length - 1] = (byte)0xF7;                  
-        return data;
+        data[data.length - 1] = (byte)0xF7;
+        
+        return new Object[] { data };		// this is Object[] instead of byte[] because I was experimenting with pauses before and after during debugging        
         }
 
     public int emitAC(int tone, byte[] data, int pos)
@@ -2119,8 +2135,8 @@ public class YamahaTG33 extends Synth
         data[pos++] = (byte)(((model.get(t + "levelscaling") % 8) << 4) | model.get(t + "ratescaling"));
         data[pos++] = (byte)(model.get(t + "delayonoff"));               // note MSB
         data[pos++] = (byte)(model.get(t + "attackrate"));               // note LSB
-        pos++;         																		// This is "MAX"?                                                                                         // note MSB
-        data[pos++] = (byte)(model.get(t + "decay1rate"));               // note LSB
+        pos++;         													 // note empty MSB					                                                                                       // note MSB
+        data[pos++] = (byte)(model.get(t + "decay1rate"));               // note LSB		// "MAX" is the top bit but we ignore it
         data[pos++] = (byte)(model.get(t + "decay2rate"));
         data[pos++] = (byte)(model.get(t + "releaserate"));
         data[pos++] = (byte)(127 - model.get(t + "initiallevel"));
@@ -2168,7 +2184,7 @@ public class YamahaTG33 extends Synth
         data[pos++] = (byte)(((model.get(t + "1levelscaling") % 8) << 4) | model.get(t + "1ratescaling"));
         data[pos++] = (byte)(model.get(t + "1delayonoff"));              // note MSB
         data[pos++] = (byte)(model.get(t + "1attackrate"));              // note LSB
-        pos++;                                                                                                  // note MSB
+        pos++;                                                           // note empty MSB
         data[pos++] = (byte)(model.get(t + "1decay1rate"));              // note LSB
         data[pos++] = (byte)(model.get(t + "1decay2rate"));
         data[pos++] = (byte)(model.get(t + "1releaserate"));

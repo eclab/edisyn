@@ -388,6 +388,7 @@ public class YamahaFS1RFseq extends Synth
         JMenu menu = new JMenu("FS1R");
         menubar.add(menu);
 
+/*
         JMenuItem text = new JMenuItem("Text");
         text.addActionListener(new ActionListener()
             {
@@ -493,7 +494,7 @@ public class YamahaFS1RFseq extends Synth
                 }
             });
         menu.add(dump);
-
+*/
         JMenuItem current = new JMenuItem("Show Current Performance");
         current.addActionListener(new ActionListener()
             {

@@ -11,6 +11,12 @@ Set the FS1R's to receive System Exclusive, Bulk Dumps, Bank Selection, and Prog
 
 <p>Finally, and this one is important: if you are planning on actually writing Fseqs to internal memory, you'll need to change the FS1R's internal memory organization to 64 Voice patches and 6 Fseq slots.  To do this, under <b>Util</b>, go to <b>System</b>, then <b>Others</b>, then change <b>Mem</b> (Memory Allocation) to <b>"IntVoice64"</b>.    Note that this will <b>erase all existing internal voices and Fseqs</b>.
 
+<b><br><h3>Using the Displays</h3>
+
+In addition to the myriad of dials on the Common tab, this editor also displays all the voiced, unvoiced, and pitch values for every frame. The frames are divided into three overlapping displays for convenience: frames 1-256, 129-386, and 257-512.  The voiced and unvoiced operator values are all displayed in gray (you can select which operators you want to show), but only one operator can be <i>edited</i> at a time: that operator is shown in red.
+
+<p>There are two displays each for the voiced and unvoiced operators; the larger upper displays show frequency in Hertz, and the lower ones show level.  
+
 <b><br><h3>About the Menu</h3>
 
 The FS1R menu contains a number of utilities which will hopefully make editing a bit easier.
@@ -18,16 +24,23 @@ The FS1R menu contains a number of utilities which will hopefully make editing a
 <ul>
 <li><b>Show Current Performance</b>&nbsp;&nbsp;Loads the current FS1R Performance in an editor.
 <p><li><b>Show Current Part 1</b>&nbsp;&nbsp;Loads the voice associated with the current performance's Part 1 in an editor.
-<p><li><b>Set Up Test Performance and Part 1</b>&nbsp;&nbsp;Creates a default FS1R Performance and Voice suitable for testing your Fseq.  The performance has a single Voice in Part 1, using Algorithm 1, with all eight operators (both voiced and unvoiced) controlled by the Fseq.
+<p><li><b>Set Up Test Performance and Part 1</b>&nbsp;&nbsp;Creates a default FS1R Performance and Voice suitable for testing your Fseq.  The performance has a single Voice in Part 1, chosen from among 14 built-in voices in the FS1R designed for Fseqs.
 <p><li><b>Swap Tracks...</b>&nbsp;&nbsp;Swaps two different tracks.  You can restrict the range of Frames in which this operation occurs.
 <p><li><b>Copy Track To...</b>&nbsp;&nbsp;Copies a track to another track, or to all other tracks. You can restrict the range of Frames in which this operation occurs.
+<!--
 <p><li><b>Clear Track...</b>&nbsp;&nbsp;Sets all the values of a track to 0.  You can restrict the range of Frames in which this operation occurs.
+-->
 <p><li><b>Cut Frames...</b>&nbsp;&nbsp;Cuts out a range of frames and places them on a gaobal clipboard.  Note that you can paste these frames back into this editor or into a <b>different editor</b>.
 <p><li><b>Copy Frames...</b>&nbsp;&nbsp;Copies a range of frames to a global clipboard.  Note that you can paste these frames back into this editor or into a <b>different editor</b>.
 <p><li><b>Paste Frames...</b>&nbsp;&nbsp;Inserts the frames from the global clipboard at the provided insertion point.  
 <p><li><b>Overwrite Frames...</b>&nbsp;&nbsp;Directly overwrites frames at the provided point with the frames stored in the global clipboard.  You can restrict what is overwritten to be certain tracks, voiced/unvoiced only, or including pitch information.
 <p><li><b>Clear Frames...</b>&nbsp;&nbsp;Sets a range of frames to zero.  You can restrict which parameters are erased, including the track, voiced/unvoiced only, or pitch.
+<!--
 <p><li><b>Duplicate Frame</b>&nbsp;&nbsp;Copies the value of a single frames, overwriting a range of other frames.  You can restrict what is overwritten to be certain tracks, voiced/unvoiced only, or including pitch information.  This might be useful, for example, for setting all frames to a given pitch.
+-->
+<p><li><b>Distribute Frame</b>&nbsp;&nbsp;Copies the values of a given frame to a range other frames.
+<p><li><b>NormalizeFrames</b>&nbsp;&nbsp;Normalizes the levels of a range of frames.
+<p><li><b>Set Pitch...</b>&nbsp;&nbsp;Sets the pitch of a range of frames.
 </ul>
 
 <br><br><h3>Gotchas</h3>

@@ -21,12 +21,14 @@ You have to send the patch manually from your unit.  To do this, go to MODE 5 ("
 Edisyn can update a limited number of individual parameters via CC.  See the "Controller Map" in your manual for a list of the parameters and their CC values: Edisyn will update them in real time.  Other parameters can only be updated via patch dump.
 
 
+<br><br><h3>Bank Sysex</h3>
+The Drumstation can also send and receive Bank sysex messages: these are messages which contain all 15 writable patches (25...39).  You can send this kind of message from the Drumstation to Edisyn by going to MODE 5 ("Save"), then selecting "SA", then pressing the "+" button once.  Edisyn can save these messages, upload them to the Drumstation, or edit any one patch in them.
+
+
 <br><br><h3>Gotchas</h3>
 
 <ul>
 <li>While it would be possible to program Edisyn to change the patch and then do a patch send, because we don't know if you've set the switch to PROTECT or to ENABLE, it seems foolish to do this.  For this reason, Edisyn doesn't even display a patch number for the patch. 
-
-<p><li>The Drumstation has a bank sysex message.  However, I have not yet entirely deciphered it and so it Edisyn is not set up to recognize it.
 
 <p><li>There are many myths surrounding the differences between the V1 Drumstation, V2 Drumstation, and D-station.  But the truth is, if you have updated your Drumstation to firmware v1.3, then it is identical in all respects to the D-station, including polyphony and MIDI features.
 </ul>

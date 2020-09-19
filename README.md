@@ -52,7 +52,7 @@ Edisyn presently supports:
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading)
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
 * Yamaha DX7 Family (DX7, TX7, TX802, TX216/TX816, Korg Volca FM, Dexed, DX200, DX9)
-* Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, etc.) (Single and (for TX81Z and DX11) Multi Modes)
+* Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, V50, etc.) (Single and (for TX81Z and DX11) Multi Modes)
 * Yamaha FB01 (Single and Multi Modes)
 * Yamaha FS1R (Voice, Performance, and Fseq Modes)
 * Yamaha TG33, SY22, and SY35 (Single and (for TG33) Multi Modes)

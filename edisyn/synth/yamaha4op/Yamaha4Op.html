@@ -15,7 +15,8 @@
 <li><b>DX11</b>&nbsp;&nbsp;&nbsp;&nbsp; Works.
 <li><b>TQ5</b>&nbsp;&nbsp;&nbsp;&nbsp; Works.
 <li><b>YS100, YS200, B200</b>&nbsp;&nbsp;&nbsp;&nbsp; Should work, but untested.
-<li><b>WT11, V50, DS500</b>&nbsp;&nbsp;&nbsp;&nbsp; Unknown.  The V50 should be easy to get up and running, but I have nothing to test with.  If you have a V50, contact me (sean@cs.gmu.edu).
+<li><b>V50</b>&nbsp;&nbsp;&nbsp;&nbsp; Works, mostly. Shifting to Hi doesn't change the displayed frequency values to Hi values (I don't have all the data for them yet), but moving the dials still does the right thing.
+<li><b>WT11, DS500</b>&nbsp;&nbsp;&nbsp;&nbsp; Unknown.  The V50 should be easy to get up and running, but I have nothing to test with.  If you have a V50, contact me (sean@cs.gmu.edu).
 </ul>
 
 <br><br><h3>Communicating with Edisyn</h3>
@@ -26,9 +27,15 @@ Set your synthesizer's receive and transmit channel to the same thing (perhaps C
 
 The 4-Op synthesizers differ from one another in how their memory is organized (banks, patches, etc.), and how they respond to change-patch requests.  You have to let Edisyn know what kind of synthesizer you're using or else it'll make the wrong kind of requests.
 
+<p>It's also important to set the right synthesizer type before uploading or saving a patch, particularly if you have the V50; or otherwise not all patch information may be uploaded or saved.
+
+<br><br><h3>About the V50</h3>
+
+The V50 editor is not completed yet, and is in a partial state.  In particular, if you Shift to Hi, the Frequency Ratio and Frequency Ratio Fine knobs won't display the proper frequencies (because I don't have that data yet).  However, if you change the knobs, they'll affect the Hi parameters appropriately.
+
 <br><br><h3>Per-Synthesizer Parameters</h3>
 
-Some 4-Op synthesizers have parameters and options that others do not.  Various parameters in this patch editor are labeled to indicate this.  You may see: <b>21</b> for the DX21, <b>27</b> for the DX27, <b>100</b> for the DX100, <b>11</b> for the DX11, <b>TX</b> for the TX81Z, the symbol <b>&gt;</b> which indicates a group of later synthesizers, notably the TQ5, YS100, YS200, and B200, and finally <b>V</b>for the V50.
+Some 4-Op synthesizers have parameters and options that others do not.  Various parameters in this patch editor are labeled to indicate this.  You may see: <b>21</b> for the DX21, <b>27</b> for the DX27, <b>100</b> for the DX100, <b>11</b> for the DX11, <b>TX</b> for the TX81Z, the symbol <b>&gt;</b> which indicates a group of later synthesizers, notably the TQ5, YS100, YS200, and B200, and finally <b>V</b> for the V50.
 
 <br><br><h3>Bank Sysex</h3>
 

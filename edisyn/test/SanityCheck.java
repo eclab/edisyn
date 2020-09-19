@@ -9,15 +9,16 @@ import edisyn.*;
 public class SanityCheck
     {
     static boolean quiet = false;
+    static boolean dump  = false;
         
     public static void main(String[] args) throws ClassNotFoundException
         {
         Main main = new Main("java edisyn.synth.SanityCheck", 
             args, 
             null, 
-            new String[] { "-v", "-c", "-n" }, 
-            new String[] { Main.FLAG, Main.STRING, Main.INT }, 
-            new String[] { "Verbose", "Specific Class", "Number of Times" },
+            new String[] { "-v", "-c", "-n", "-d" }, 
+            new String[] { Main.FLAG, Main.STRING, Main.INT, Main.FLAG }, 
+            new String[] { "Verbose", "Specific Class", "Number of Times", "Dump Test Sysex on Failure" },
             "SanityCheck is essentially a fuzzing tester.\n\n" +
             "SanityCheck goes through all of the synthesizers, or a specific one, and one by one it\n" +
             "does a simple sanity check on them.  First, it creates a synthesizer, randomizes\n" +
@@ -30,6 +31,7 @@ public class SanityCheck
             true);
                 
         quiet = !main.hasFlag("-v");
+        dump = main.hasFlag("-d");
         
         System.err.println("For help, try:  java edisyn.synth.SanityCheck -h");
           
@@ -120,20 +122,33 @@ public class SanityCheck
             else if (synth instanceof edisyn.synth.yamahatg33.YamahaTG33)
                 {
                 ((edisyn.synth.yamahatg33.YamahaTG33)synth).setSynthType(edisyn.synth.yamahatg33.YamahaTG33.TYPE_TG33, false);
-                ((edisyn.synth.yamahatg33.YamahaTG33)synth).setSynthType(edisyn.synth.yamahatg33.YamahaTG33.TYPE_TG33, false);
+                ((edisyn.synth.yamahatg33.YamahaTG33)synth2).setSynthType(edisyn.synth.yamahatg33.YamahaTG33.TYPE_TG33, false);
                 System.err.println(c[j]);
                 test(synth, synth2);
                 synth = Synth.instantiate(c[j], true, false, null);
                 synth2 = Synth.instantiate(c[j], true, false, null);
                 ((edisyn.synth.yamahatg33.YamahaTG33)synth).setSynthType(edisyn.synth.yamahatg33.YamahaTG33.TYPE_SY22, false);
-                ((edisyn.synth.yamahatg33.YamahaTG33)synth).setSynthType(edisyn.synth.yamahatg33.YamahaTG33.TYPE_SY22, false);
+                ((edisyn.synth.yamahatg33.YamahaTG33)synth2).setSynthType(edisyn.synth.yamahatg33.YamahaTG33.TYPE_SY22, false);
                 System.err.println(c[j] + " (SY22)");
                 test(synth, synth2);
                 synth = Synth.instantiate(c[j], true, false, null);
                 synth2 = Synth.instantiate(c[j], true, false, null);
                 ((edisyn.synth.yamahatg33.YamahaTG33)synth).setSynthType(edisyn.synth.yamahatg33.YamahaTG33.TYPE_SY35, false);
-                ((edisyn.synth.yamahatg33.YamahaTG33)synth).setSynthType(edisyn.synth.yamahatg33.YamahaTG33.TYPE_SY35, false);
+                ((edisyn.synth.yamahatg33.YamahaTG33)synth2).setSynthType(edisyn.synth.yamahatg33.YamahaTG33.TYPE_SY35, false);
                 System.err.println(c[j] + " (SY35)");
+                test(synth, synth2);
+                }
+            else if (synth instanceof edisyn.synth.yamaha4op.Yamaha4Op)
+                {
+                ((edisyn.synth.yamaha4op.Yamaha4Op)synth).setSynthType(edisyn.synth.yamaha4op.Yamaha4Op.TYPE_TQ5_YS100_YS200_B200, false);
+                ((edisyn.synth.yamaha4op.Yamaha4Op)synth2).setSynthType(edisyn.synth.yamaha4op.Yamaha4Op.TYPE_TQ5_YS100_YS200_B200, false);
+                System.err.println(c[j]);
+                test(synth, synth2);
+                synth = Synth.instantiate(c[j], true, false, null);
+                synth2 = Synth.instantiate(c[j], true, false, null);
+                ((edisyn.synth.yamaha4op.Yamaha4Op)synth).setSynthType(edisyn.synth.yamaha4op.Yamaha4Op.TYPE_V50, false);
+                ((edisyn.synth.yamaha4op.Yamaha4Op)synth2).setSynthType(edisyn.synth.yamaha4op.Yamaha4Op.TYPE_V50, false);
+                System.err.println(c[j] + " (V50)");
                 test(synth, synth2);
                 }
             else
@@ -149,6 +164,9 @@ public class SanityCheck
         
     public static void test(Synth synth, Synth synth2)
         {
+        boolean failed = false;
+		byte[] data = new byte[0];
+        
         try
             {
             // prepare so raw parsing doesn't try to push a million things on the undo stack and write stuff
@@ -158,7 +176,12 @@ public class SanityCheck
         	synth2.getUndo().setWillPush(false);
         	
             synth.doMutate(1.0);
-            byte[] data = synth.flatten(synth.emitAll((Model)null, false, true));
+            data = synth.flatten(synth.emitAll((Model)null, false, true));
+            if (!synth2.recognizeLocal(data))
+            	{
+            	System.err.println("\t [FAIL] Not Recognized");
+            	failed = true;
+            	}
             synth2.parse(data, true);
             String[] keys = synth.getModel().getKeys();
             for(int i = 0; i < keys.length; i++)
@@ -169,18 +192,38 @@ public class SanityCheck
                     {
                     boolean res = synth.testVerify(synth2, keys[i], obj1, obj2);
                     if (!quiet || !res ) System.err.println((res ? "\t[OKAY] " : "\t[NULL] ") + keys[i] + " is " + obj1 + " vs " + obj2);
+                    failed = failed || !res;
                     }
                 else if (!(obj1.equals(obj2)))
                     {
                     boolean res = synth.testVerify(synth2, keys[i], obj1, obj2);
                     if (!quiet || !res ) System.err.println((res ? "\t[OKAY] " : "\t[FAIL] ") + keys[i] + " is [" + obj1 + "] vs [" + obj2 + "]");
+                    failed = failed || !res;
                     }
                 }
             }
         catch (Exception ex)
             {
             ex.printStackTrace();
+            failed = true;
             }
+        
+        if (failed && dump)
+        	{
+        	System.err.println("DUMP");
+        	System.err.println("Length: " +  data.length);
+        	for(int i = 0; i < data.length; i++)
+        		{
+        		System.err.println("" + i + " " + toHex(data[i]) + " " + data[i] + " " + ((data[i] & 0xFF) < 32 ? "" : (char)(data[i] & 0xFF)));
+        		}
+        	System.err.println("---------");
+        	System.err.println();
+        	}
         }
+
+public static String toHex(int val)
+	{
+	return String.format("0x%08X", val);
+	}
 
     }

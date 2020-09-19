@@ -109,7 +109,7 @@ I believe that the following should work:
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
-#### Important Note for Windows Users
+#### Dealing with High-Resolution Displays
 
 Java doesn't handle high-resolution displays properly in Windows, especially Windows 10.  Be sure to have installed at least Java 11 (otherwise you'll have teeny tiny displays).  You'll still have font issues on 4K monitors.  I am told this can help dealing with it:
 
@@ -120,7 +120,9 @@ Java doesn't handle high-resolution displays properly in Windows, especially Win
 5. Here you can try checking "Use this setting to fix scaling problems for this program instead of the one in Settings"
 6. If #5 isn't working, you might instead try "Override high DPI scaling behavior.  Scaling performed by: System (Enhanced)"
 
-Also Edisyn makes heavy use of Java preferences to store persistence information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows for earlier versions of Java.  I think this is fixed as of Java 11 but you should check and let me know.
+#### Java Preference Problems
+
+Edisyn makes heavy use of Java preferences to store persistence information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows for earlier versions of Java.  I think this is fixed as of Java 11 but you should check and let me know.
 
 
 ### Installation and Running on Linux

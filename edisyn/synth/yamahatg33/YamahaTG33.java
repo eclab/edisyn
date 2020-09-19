@@ -1636,8 +1636,137 @@ public class YamahaTG33 extends Synth
     // They're different for different synths.  Maybe later.
     public int parse(byte[] data, boolean fromFile)
         {
-        return parseOne(16, data, fromFile);
+        if (recognizeBulk(data))
+        	return parseBulk(data, fromFile);
+        else
+	        return parseOne(16, data, fromFile);
         }
+
+	// Bulk data is stored as 14 bytes of header,
+	// plus 16 blobs of 4 patches each.
+	// Each blob is 2 bytes size, then 4 patches concatenated, then 1 byte checksum
+	// For Sy22 and SY35 there's also multi data stored afterwards
+	// finally there's an F7
+	// this is kind of a lie as the first blob has its 2 size bytes embedded earlier in the header,
+	// but it'll work for our purposes here.
+	//
+	// A patch size for TG is 587.  For SY22 and SY35 it's 574
+	//
+	// Total size for TG is 37631
+	// Total size for SY (including multi data) is 38306
+	
+	int[] blobs = new int[16];
+	public int parseBulk(byte[] data, boolean fromFile)
+		{
+		//	Extract names
+		String[] names = new String[64];
+		int[] patches = new int[64];
+		
+		boolean isTG = recognizeTGBulk(data);
+		
+		int pos = 14;
+		for(int i = 0; i < 16; i++)
+			{
+			blobs[i] = pos;
+			// Advance 2 for the data bytes
+			pos += 2;
+			// patches are in blobs of 4
+			for(int ii = i * 4; ii < (i + 1) * 4; ii++)
+				{
+				char[] n = new char[8];
+				for(int p = 0; p < 8; p++)
+					{
+					n[p] = (char)data[pos + (isTG ? 12 : 3) + p];		// name is offset by 12 from pos in TG, 2 in SY
+					}
+				names[ii] = new String(n);
+				patches[ii] = pos;
+				if (isTG) 
+					pos += 587;
+				else
+					pos += 574;		// I think?
+				}
+			// Advance one more for the blob checksum
+			pos += 1;
+			}
+				
+		// Now that we have an array of names, one per patch, we present the user with options;
+		// 0. Cancel [handled automatically]
+		// 1. Save the bank data [handled automatically]
+		// 2. Upload the bank data [handled automatically] 
+		// 3. Load and edit a certain patch number
+		int patchNum = showBankSysexOptions(data, names);
+		if (patchNum < 0) 
+			return PARSE_CANCELLED;
+
+		model.set("name", new String(names[patchNum]));
+		model.set("number", patchNum);
+		model.set("bank", 0);                   // we don't know what the bank is in reality
+			
+		// okay, we're loading and editing patch number patchNum.  Here we go.
+		return parseOne(patches[patchNum], data, fromFile);
+		}
+
+	public static final int BANK_PAUSE_INTERVAL = 100;
+    public Object adjustBankSysexForEmit(byte[] data, Model model, int bank) 
+    	{ 
+        if (getSynthType() == TYPE_TG33)
+            data[2] = (byte)(getID());
+        else
+            data[2] = (byte)(getChannelOut());
+            
+		int[] p = new int[15];
+		p[0] = blobs[1];
+		for(int i = 1; i < p.length; i++)
+			{
+			p[i] = blobs[i + 1] - blobs[i];
+			}
+		
+		// At this point each value in P should contain the SIZE of the chunk except the final chunk.
+		int pos = 0;
+		byte[][] sysex = new byte[16][];
+		for(int i = 0; i < sysex.length - 1; i++)
+			{
+			sysex[i] = new byte[p[i]];
+			System.arraycopy(data, pos, sysex[i], 0, p[i]);
+			pos += p[i];
+			}
+		sysex[sysex.length - 1] = new byte[data.length - pos];
+		System.arraycopy(data, pos, sysex[sysex.length - 1], 0, data.length - pos);
+		
+		// Now we need to build the divided sysex with spaces in-between
+		Midi.DividedSysex[] div = Midi.DividedSysex.create(sysex);
+		Object[] d = new Object[div.length * 2 - 1];
+		for(int i = 0; i < div.length; i++)
+			{
+			d[i * 2] = div[i];
+			if (i != div.length - 1)
+				d[i * 2 + 1] = new Integer(BANK_PAUSE_INTERVAL);
+			}
+		return d;
+    	}
+
+	public JComponent getAdditionalBankSysexOptionsComponents(byte[] data, String[] names)
+		{
+		if (recognizeTGBulk(data))
+			{
+			VBox vbox = new VBox();
+			vbox.add(Strut.makeVerticalStrut(10));
+			vbox.add(new JLabel("This is a TG-33 Bank Sysex file.  You can't write it to the SY-22/35."));
+			return vbox;
+			}
+		else
+			{
+			VBox vbox = new VBox();
+			vbox.add(Strut.makeVerticalStrut(10));
+			vbox.add(new JLabel("This is an SY-22/35 Bank Sysex file.  This file contains multimode"));
+			vbox.add(new JLabel("patches as well as single patches.  If you write it to your SY-22/35,"));
+			vbox.add(new JLabel("it will overwrite your multimode patches as well.  You can write this"));
+			vbox.add(new JLabel("file to your TG-33, but it will only respond to the single patches"));
+			vbox.add(new JLabel("in the file, not the multimode patches"));
+			return vbox;
+			}
+		}
+
 
     /// One gizmo I've added is the ability to ONLY parse the vector from a patch.  This allows the user
     /// to create a new vector on the machine, then upload it and merge it into his existing patch that
@@ -1659,7 +1788,7 @@ public class YamahaTG33 extends Synth
         else
             {        
             //// COMMON
-            if (recognizeTG(data))
+            if (recognizeTG(data) || recognizeTGBulk(data))
                 {
                 b = data[pos++];
                 model.set("configuration", (b >>> 0) & 1);              // "2/4"
@@ -1848,7 +1977,7 @@ public class YamahaTG33 extends Synth
         b = data[pos++];
         model.set(t + "decay2level", 127 - ((b >>> 0) & 127));          // EG D2L
         
-        if (recognizeTG(data))
+        if (recognizeTG(data) || recognizeTGBulk(data))
             {
             pos += 2;
             }
@@ -1975,7 +2104,7 @@ public class YamahaTG33 extends Synth
         b = data[pos++];
         model.set(t + "0decay2level", 127 - ((b >>> 0) & 127));         // C EG D2L             pos += 2;
 
-        if (recognizeTG(data))
+        if (recognizeTG(data) || recognizeTGBulk(data))
             {
             pos += 2;
             }
@@ -1990,28 +2119,47 @@ public class YamahaTG33 extends Synth
             tempModel = getModel();
 
         byte[] data = new byte[((getSynthType() == TYPE_TG33) ? 605 : 592)];
+        boolean[] overflow = new boolean[data.length];
+        
         int len = data.length - 8;	// minus header, minus checksum, minus F7
         
         data[0] = (byte)0xF0;
         data[1] = (byte)0x43;
 
         if (getSynthType() == TYPE_TG33)
+        	{
             data[2] = (byte)(getID());
+			data[3] = (byte)0x7E;
+			data[4] = (byte)(len / 128);
+			data[5] = (byte)(len % 128);
+			data[6] = (byte)'L';
+			data[7] = (byte)'M';
+			data[8] = (byte)' ';
+			data[9] = (byte)' ';
+			data[10] = (byte)'0';
+			data[11] = (byte)'0';
+			data[12] = (byte)'1';
+			data[13] = (byte)'2';
+			data[14] = (byte)'V';
+			data[15] = (byte)'E';
+			}
         else
+        	{
             data[2] = (byte)(getChannelOut());
-        data[3] = (byte)0x7E;
-        data[4] = (byte)(len / 128);
-        data[5] = (byte)(len % 128);
-        data[6] = (byte)'L';
-        data[7] = (byte)'M';
-        data[8] = (byte)' ';
-        data[9] = (byte)' ';
-        data[10] = (byte)'0';
-        data[11] = (byte)'0';
-        data[12] = (byte)'1';
-        data[13] = (byte)'2';
-        data[14] = (byte)'V';
-        data[15] = (byte)'E';
+			data[3] = (byte)0x7E;
+			data[4] = (byte)(len / 128);
+			data[5] = (byte)(len % 128);
+			data[6] = (byte)'P';
+			data[7] = (byte)'K';
+			data[8] = (byte)' ';
+			data[9] = (byte)' ';
+			data[10] = (byte)'2';
+			data[11] = (byte)'2';
+			data[12] = (byte)'0';
+			data[13] = (byte)'3';
+			data[14] = (byte)'A';
+			data[15] = (byte)'E';
+			}
         
         int pos = 16;
         int val;
@@ -2034,13 +2182,15 @@ public class YamahaTG33 extends Synth
             }
         else
             {
+            overflow[pos] = true;
             data[pos++] = 1;                // the first byte is  0 0 0 0 0 0 1
             data[pos++] = 37;               // the second byte is 0 1 0 0 1 0 1
             data[pos++] = (byte)((model.get("effectsenddepth") << 4) | model.get("effecttype"));
             String nm = model.get("name", "Untitled") + "        ";
             for(int i = 0; i < 8; i++)
                 data[pos++] = (byte)(nm.charAt(i));
-            data[pos++] = (byte)(model.get("configuration"));
+            overflow[pos] = true;
+            data[pos++] = (byte)(model.get("configuration"));			// MSB
             data[pos++] = (byte)(model.get("pitchbendrange"));
             }
         
@@ -2052,20 +2202,23 @@ public class YamahaTG33 extends Synth
             (model.get("aftertouchpm") << 5) | 
             (model.get("aftertouchlevel") << 6)); 
         val = model.get("pitchbias") - 12;
-        data[pos++] = (byte)((val & 255) / 128);
+            overflow[pos] = true;
+        data[pos++] = (byte)((val & 255) / 128);					// MSB
         data[pos++] = (byte)((val & 255) % 128);
         data[pos++] = (byte)(model.get("egdelayrate"));
         val = model.get("egattackrate") - 63;
-        data[pos++] = (byte)((val & 255) / 128);
+            overflow[pos] = true;
+        data[pos++] = (byte)((val & 255) / 128);					// MSB
         data[pos++] = (byte)((val & 255) % 128);
         val = model.get("egreleaserate") - 63;
-        data[pos++] = (byte)((val & 255) / 128);
+            overflow[pos] = true;
+        data[pos++] = (byte)((val & 255) / 128);					// MSB
         data[pos++] = (byte)((val & 255) % 128);
                                 
-        pos = emitAC(TONE_A, data, pos);
-        pos = emitBD(TONE_B, data, pos);
-        pos = emitAC(TONE_C, data, pos);
-        pos = emitBD(TONE_D, data, pos);
+        pos = emitAC(TONE_A, data, overflow, pos);
+        pos = emitBD(TONE_B, data, overflow, pos);
+        pos = emitAC(TONE_C, data, overflow, pos);
+        pos = emitBD(TONE_D, data, overflow, pos);
                 
         // VECTOR COMMON
                 
@@ -2079,7 +2232,8 @@ public class YamahaTG33 extends Synth
             {
             val = model.get("level" + (i + 1) + "time");
             if (i == 0 && val == 254) val = 255;
-            data[pos++] = (byte)((val & 255) / 128);
+            overflow[pos] = true;
+            data[pos++] = (byte)((val & 255) / 128);				// MSB
             data[pos++] = (byte)((val & 255) % 128);
             data[pos++] = (byte)(model.get("level" + (i + 1) + "xaxis"));
             data[pos++] = (byte)(model.get("level" + (i + 1) + "yaxis"));
@@ -2088,28 +2242,38 @@ public class YamahaTG33 extends Synth
             {
             val = model.get("detune" + (i + 1) + "time");
             if (i == 0 && val == 254) val = 255;
-            data[pos++] = (byte)((val & 255) / 128);
+            overflow[pos] = true;
+            data[pos++] = (byte)((val & 255) / 128);				// MSB
             data[pos++] = (byte)((val & 255) % 128);
             data[pos++] = (byte)(model.get("detune" + (i + 1) + "xaxis"));
             data[pos++] = (byte)(model.get("detune" + (i + 1) + "yaxis"));
             }
 
-        // for SY data, there's three more empty slots
+        // for SY data, insert the "8-bit" checksum
+        if (getSynthType() != TYPE_TG33)
+        	{
+        	pos++;
+        	byte bb = produce8BitChecksum(data, overflow, 6, pos);
+			data[pos++] = (byte)((bb >>> 7) & 1);
+			data[pos++] = (byte)(bb & 127);
+        	}
         
+        // Now the standard checksum
         data[data.length - 2] = produceChecksum(data, 6, data.length - 2);
         data[data.length - 1] = (byte)0xF7;
         
         return new Object[] { data };		// this is Object[] instead of byte[] because I was experimenting with pauses before and after during debugging        
         }
 
-    public int emitAC(int tone, byte[] data, int pos)
+    public int emitAC(int tone, byte[] data, boolean[] overflow, int pos)
         {
         int val;
         int val2;
         
         String t = "tone" + tone;
         data[pos++] = (byte)(model.get(t + "wavetype"));
-        data[pos++] = (byte)(((model.get(t + "frequencyshift") - 12) & 255) / 128);
+            overflow[pos] = true;
+        data[pos++] = (byte)(((model.get(t + "frequencyshift") - 12) & 255) / 128);		// MSB
         data[pos++] = (byte)(((model.get(t + "frequencyshift") - 12) & 255) % 128);
         val = model.get(t + "aftertouchsensitivity");
         val = (AFTERTOUCH_SENSITIVITY_MAP[val] & 255) / 16;
@@ -2118,11 +2282,14 @@ public class YamahaTG33 extends Synth
         data[pos++] = (byte)((val << 4) | val2);
         val = model.get(t + "lfotype") ;
         val = (LFO_TYPE_MAP[val] & 255) / 32;
-        data[pos++] = (byte)(val / 4);
+            overflow[pos] = true;
+        data[pos++] = (byte)(val / 4);													// MSB
         data[pos++] = (byte)(((val % 4) << 5) | model.get(t + "lfospeed"));
-        data[pos++] = (byte)((model.get(t + "lfodelay") / 128));
+            overflow[pos] = true;
+        data[pos++] = (byte)((model.get(t + "lfodelay") / 128));						// MSB
         data[pos++] = (byte)((model.get(t + "lfodelay") % 128));
-        data[pos++] = (byte)(((127 - (model.get(t + "lforate")) & 255) / 128));
+            overflow[pos] = true;
+        data[pos++] = (byte)(((127 - (model.get(t + "lforate")) & 255) / 128));			// MSB
         data[pos++] = (byte)(((127 - (model.get(t + "lforate")) & 255) % 128));
         data[pos++] = (byte)((model.get(t + "amplitudemod") << 4) | model.get(t + "lfoam"));
         data[pos++] = (byte)((model.get(t + "pitchmod") << 5) | model.get(t + "lfopm"));
@@ -2131,12 +2298,26 @@ public class YamahaTG33 extends Synth
         val = 127 - model.get(t + "volume"); 
         data[pos++] = (byte)val;
         data[pos++] = (byte)((model.get(t + "temperment") << 4) | model.get(t + "detune"));
-        data[pos++] = (byte)(model.get(t + "levelscaling") / 8);
+            overflow[pos] = true;
+        data[pos++] = (byte)(model.get(t + "levelscaling") / 8);						// MSB
         data[pos++] = (byte)(((model.get(t + "levelscaling") % 8) << 4) | model.get(t + "ratescaling"));
+            overflow[pos] = true;
         data[pos++] = (byte)(model.get(t + "delayonoff"));               // note MSB
         data[pos++] = (byte)(model.get(t + "attackrate"));               // note LSB
-        pos++;         													 // note empty MSB					                                                                                       // note MSB
-        data[pos++] = (byte)(model.get(t + "decay1rate"));               // note LSB		// "MAX" is the top bit but we ignore it
+        
+        // "MAX" is the top two bits.  According to "SY-22 / SY-35 MIDI System Exclusive" by Matt Thorman,
+        // documentation accompanying Sy-Edit, it's the peak level (initial=0, attack=1, decay 1=2, decay 2=3)
+		// It's also worth mentioning that it appears that the SY-22/35 breaks ties by the later level
+		
+       	int max = 0;
+       	val = model.get(t + "initiallevel");
+       	if (model.get(t + "attacklevel") >= val) { max = 1; val = model.get(t + "attacklevel"); }
+       	if (model.get(t + "decay1level") >= val) { max = 2; val = model.get(t + "decay1level"); }
+       	if (model.get(t + "decay2level") >= val) { max = 3; }
+            overflow[pos] = true;
+
+       	data[pos++] = (byte)((max >>> 1) & 1);										// MSB of MAX
+        data[pos++] = (byte)(((max & 1) << 6) | model.get(t + "decay1rate"));   // LSB of MAX etc.
         data[pos++] = (byte)(model.get(t + "decay2rate"));
         data[pos++] = (byte)(model.get(t + "releaserate"));
         data[pos++] = (byte)(127 - model.get(t + "initiallevel"));
@@ -2147,15 +2328,23 @@ public class YamahaTG33 extends Synth
         return pos;
         }
         
-    public int emitBD(int tone, byte[] data, int pos)
+public static String toHex(int val)
+	{
+	return String.format("0x%08X", val);
+	}
+
+
+    public int emitBD(int tone, byte[] data, boolean[] overflow, int pos)
         {
         int val;
         int val2;
         
         String t = "tone" + tone;
-        data[pos++] = (byte)((model.get(t + "wavetype")) / 128);
+            overflow[pos] = true;
+        data[pos++] = (byte)((model.get(t + "wavetype")) / 128);						// MSB
         data[pos++] = (byte)((model.get(t + "wavetype")) % 128);
-        data[pos++] = (byte)(((model.get(t + "frequencyshift") - 12) & 255) / 128);
+            overflow[pos] = true;
+        data[pos++] = (byte)(((model.get(t + "frequencyshift") - 12) & 255) / 128);		// MSB
         data[pos++] = (byte)(((model.get(t + "frequencyshift") - 12) & 255) % 128);
         val = model.get(t + "aftertouchsensitivity");
         val = (AFTERTOUCH_SENSITIVITY_MAP[val] & 255) / 16;
@@ -2164,45 +2353,78 @@ public class YamahaTG33 extends Synth
         data[pos++] = (byte)((val << 4) | val2);
         val = model.get(t + "lfotype") ;
         val = (LFO_TYPE_MAP[val] & 255) / 32;
-        data[pos++] = (byte)(val / 4);
+            overflow[pos] = true;
+        data[pos++] = (byte)(val / 4);													// MSB
         data[pos++] = (byte)(((val % 4) << 5) | model.get(t + "lfospeed"));
-        data[pos++] = (byte)((model.get(t + "lfodelay") / 128));
+            overflow[pos] = true;
+        data[pos++] = (byte)((model.get(t + "lfodelay") / 128));						// MSB
         data[pos++] = (byte)((model.get(t + "lfodelay") % 128));
-        data[pos++] = (byte)(((127 - (model.get(t + "lforate")) & 255) / 128));
+            overflow[pos] = true;
+        data[pos++] = (byte)(((127 - (model.get(t + "lforate")) & 255) / 128));			// MSB
         data[pos++] = (byte)(((127 - (model.get(t + "lforate")) & 255) % 128));
         data[pos++] = (byte)((model.get(t + "0amplitudemod") << 5) | (model.get(t + "1amplitudemod") << 4) | model.get(t + "lfoam"));
         data[pos++] = (byte)((model.get(t + "0pitchmod") << 6) | (model.get(t + "1pitchmod") << 5) | model.get(t + "lfopm"));
         val = ENVELOPE_TYPE_MAP[model.get(t + "egtype")] / 16;
         data[pos++] = (byte)((val << 4) | model.get(t + "pan"));
         data[pos++] = (byte)((model.get(t + "algorithm") << 4) | model.get(t + "feedback"));
-        data[pos++] = (byte)model.get(t + "1fixed");                        // MSB
+            overflow[pos] = true;
+        data[pos++] = (byte)model.get(t + "1fixed");                        			// MSB
         data[pos++] = (byte)((model.get(t + "1wave") << 4) | model.get(t + "1frequencyratio"));         // LSB
         val = 127 - model.get(t + "level");
         data[pos++] = (byte)val;
         data[pos++] = (byte)((model.get(t + "1temperment") << 4) | model.get(t + "1detune"));
-        data[pos++] = (byte)(model.get(t + "1levelscaling") / 8);
+            overflow[pos] = true;
+        data[pos++] = (byte)(model.get(t + "1levelscaling") / 8);						// MSB
         data[pos++] = (byte)(((model.get(t + "1levelscaling") % 8) << 4) | model.get(t + "1ratescaling"));
+            overflow[pos] = true;
         data[pos++] = (byte)(model.get(t + "1delayonoff"));              // note MSB
         data[pos++] = (byte)(model.get(t + "1attackrate"));              // note LSB
-        pos++;                                                           // note empty MSB
-        data[pos++] = (byte)(model.get(t + "1decay1rate"));              // note LSB
+        
+        // "MAX" is the top two bits.  According to "SY-22 / SY-35 MIDI System Exclusive" by Matt Thorman,
+        // documentation accompanying Sy-Edit, it's the peak level (initial=0, attack=1, decay 1=2, decay 2=3)
+		// It's also worth mentioning that it appears that the SY-22/35 breaks ties by the later level
+
+       	int max = 0;
+       	val = model.get(t + "1initiallevel");
+       	if (model.get(t + "1attacklevel") > val) { max = 1; val = model.get(t + "1attacklevel"); }
+       	if (model.get(t + "1decay1level") > val) { max = 2; val = model.get(t + "1decay1level"); }
+       	if (model.get(t + "1decay2level") > val) { max = 3; }
+             overflow[pos] = true;
+      	data[pos++] = (byte)((max >>> 1) & 1);										// MSB of MAX
+        data[pos++] = (byte)(((max & 1) << 6) | model.get(t + "1decay1rate"));   // LSB of MAX etc.
+        
         data[pos++] = (byte)(model.get(t + "1decay2rate"));
         data[pos++] = (byte)(model.get(t + "1releaserate"));
         data[pos++] = (byte)(127 - model.get(t + "1initiallevel"));
         data[pos++] = (byte)(127 - model.get(t + "1attacklevel"));
         data[pos++] = (byte)(127 - model.get(t + "1decay1level"));
         data[pos++] = (byte)(127 - model.get(t + "1decay2level"));
+            overflow[pos] = true;
         data[pos++] = (byte)model.get(t + "0fixed");                        // MSB
         data[pos++] = (byte)((model.get(t + "0wave") << 4) | model.get(t + "0frequencyratio"));         // LSB
         val = 127 - model.get(t + "volume");
         data[pos++] = (byte)val;        
         data[pos++] = (byte)((model.get(t + "0temperment") << 4) | model.get(t + "0detune"));
-        data[pos++] = (byte)(model.get(t + "0levelscaling") / 8);
+            overflow[pos] = true;
+        data[pos++] = (byte)(model.get(t + "0levelscaling") / 8);					// MSB
         data[pos++] = (byte)(((model.get(t + "0levelscaling") % 8) << 4) | model.get(t + "0ratescaling"));
+            overflow[pos] = true;
         data[pos++] = (byte)(model.get(t + "0delayonoff"));              // note MSB
         data[pos++] = (byte)(model.get(t + "0attackrate"));              // note LSB
-        pos++;                                                                                                  // note MSB
-        data[pos++] = (byte)(model.get(t + "0decay1rate"));              // note LSB
+
+        // "MAX" is the top two bits.  According to "SY-22 / SY-35 MIDI System Exclusive" by Matt Thorman,
+        // documentation accompanying Sy-Edit, it's the peak level (initial=0, attack=1, decay 1=2, decay 2=3)
+		// It's also worth mentioning that it appears that the SY-22/35 breaks ties by the later level
+
+       	max = 0;
+       	val = model.get(t + "0initiallevel");
+       	if (model.get(t + "0attacklevel") >= val) { max = 1; val = model.get(t + "0attacklevel"); }
+       	if (model.get(t + "0decay1level") >= val) { max = 2; val = model.get(t + "0decay1level"); }
+       	if (model.get(t + "0decay2level") >= val) { max = 3; }
+             overflow[pos] = true;
+      	data[pos++] = (byte)((max >>> 1) & 1);										// MSB of MAX
+        data[pos++] = (byte)(((max & 1) << 6) | model.get(t + "0decay1rate"));   // LSB of MAX etc.
+        
         data[pos++] = (byte)(model.get(t + "0decay2rate"));
         data[pos++] = (byte)(model.get(t + "0releaserate"));
         data[pos++] = (byte)(127 - model.get(t + "0initiallevel"));
@@ -2213,6 +2435,22 @@ public class YamahaTG33 extends Synth
         return pos;
         }
 
+    byte produce8BitChecksum(byte[] bytes, boolean[] overflow, int start, int end)
+        {
+        int checksum = 0;
+        for(int i = start; i < end; i++)
+        	{
+        	if (overflow[i])
+        		{
+        		checksum = (checksum + (bytes[i] * 128));
+        		}
+        	else
+        		{
+	            checksum = (checksum + bytes[i]) & 255;
+	            }
+            }
+        return (byte)((- checksum) & 255);
+        }
 
     byte produceChecksum(byte[] bytes, int start, int end)
         {
@@ -2251,11 +2489,17 @@ public class YamahaTG33 extends Synth
         byte id = 0;
         
         if (getSynthType() == TYPE_TG33)
-            id = (byte)(32 + getID());
+        	{
+        	return new byte[] { (byte)0xF0, (byte)0x43, (byte)(32 + getID()), (byte)0x7E, 
+        						(byte)'L', (byte)'M', (byte)' ', (byte)' ', (byte)'0', 
+        						(byte)'0', (byte)'1', (byte)'2', (byte)'V', (byte)'E', (byte)0xF7 };
+        	}
         else
-            id = (byte)(32 + getChannelOut());
-
-        return new byte[] { (byte)0xF0, (byte)0x43, id, (byte)0x7E, (byte)'L', (byte)'M', (byte)' ', (byte)' ', (byte)'0', (byte)'0', (byte)'1', (byte)'2', (byte)'V', (byte)'E', (byte)0xF7 };
+        	{
+        	return new byte[] { (byte)0xF0, (byte)0x43, (byte)(32 + getChannelOut()), (byte)0x7E, 
+        						(byte)'P', (byte)'K', (byte)' ', (byte)' ', (byte)'2', 
+        						(byte)'2', (byte)'0', (byte)'3', (byte)'A', (byte)'E', (byte)0xF7 };
+        	}
         }
 
     public static boolean recognizeSY(byte[] data)
@@ -2266,6 +2510,8 @@ public class YamahaTG33 extends Synth
                 data[1] == (byte)0x43 &&
                 // don't care about 2, it's the id
                 data[3] == (byte)0x7E &&
+                // don't care about 4, it's the MSB of the data length
+                // dont' care about 5, it's the LSB of the data length
                 data[6] == (byte)'P' &&
                 data[7] == (byte)'K' &&
                 data[8] == (byte)' ' &&
@@ -2276,7 +2522,6 @@ public class YamahaTG33 extends Synth
                 data[13] == (byte)'3' &&
                 data[14] == (byte)'A' &&
                 data[15] == (byte)'E')
-            //|| recognizeBulk(data)
             );
         }
 
@@ -2288,6 +2533,8 @@ public class YamahaTG33 extends Synth
                 data[1] == (byte)0x43 &&
                 // don't care about 2, it's the id
                 data[3] == (byte)0x7E &&
+                // don't care about 4, it's the MSB of the data length
+                // dont' care about 5, it's the LSB of the data length
                 data[6] == (byte)'L' &&
                 data[7] == (byte)'M' &&
                 data[8] == (byte)' ' &&
@@ -2298,27 +2545,66 @@ public class YamahaTG33 extends Synth
                 data[13] == (byte)'2' &&
                 data[14] == (byte)'V' &&
                 data[15] == (byte)'E')
-            //|| recognizeBulk(data)
+            );
+        }
+
+
+    public static boolean recognizeSYBulk(byte[] data)
+        {
+        return  ((
+                data.length == 38306 && 			// includes multi :-(
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte)0x43 &&
+                // don't care about 2, it's the id
+                data[3] == (byte)0x7E &&
+                // don't care about 4, it's the MSB of the data length
+                // dont' care about 5, it's the LSB of the data length
+                data[6] == (byte)'P' &&
+                data[7] == (byte)'K' &&
+                data[8] == (byte)' ' &&
+                data[9] == (byte)' ' &&
+                data[10] == (byte)'2' &&
+                data[11] == (byte)'2' &&
+                data[12] == (byte)'0' &&
+                data[13] == (byte)'3' &&
+                data[14] == (byte)'V' &&
+                data[15] == (byte)'M')
+            );
+        }
+
+    public static boolean recognizeTGBulk(byte[] data)
+        {
+        return  ((
+                data.length == 37631  && 
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte)0x43 &&
+                // don't care about 2, it's the id
+                data[3] == (byte)0x7E &&
+                // don't care about 4, it's the MSB of the data length
+                // dont' care about 5, it's the LSB of the data length
+                data[6] == (byte)'L' &&
+                data[7] == (byte)'M' &&
+                data[8] == (byte)' ' &&
+                data[9] == (byte)' ' &&
+                data[10] == (byte)'0' &&
+                data[11] == (byte)'0' &&
+                data[12] == (byte)'1' &&
+                data[13] == (byte)'2' &&
+                data[14] == (byte)'V' &&
+                data[15] == (byte)'C')
             );
         }
     
     public static boolean recognize(byte[] data)
         {
-        return (recognizeTG(data) || recognizeSY(data));
+        return (recognizeTG(data) || recognizeSY(data) || recognizeBulk(data));
         }
 
 
-/*
   public static boolean recognizeBulk(byte[] data)
   {
-  return  (
-  data.length == 15 + (587 * 4 + 3) * 16 && 
-  data[0] == (byte)0xF0 &&
-  data[1] == (byte)0x43 &&
-  // don't care about 2, it's the channel
-  data[3] == (byte)0x7E );
+  return  (recognizeTGBulk(data) || recognizeSYBulk(data));
   } 
-*/       
                
     public static final int MAXIMUM_NAME_LENGTH = 8;
     public String revisePatchName(String name)
@@ -2764,19 +3050,6 @@ public class YamahaTG33 extends Synth
         { 0,0,1,8,0,15,0,0,0,63,0,0,0,19,19,19,19,0,4,1,7 },
         { 0,6,2,8,0,0,0,0,0,10,10,10,0,2,2,2,2,1,4,9,0 } 
         };
-
-    public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)
-        { 
-        if (getSynthType() == TYPE_TG33)
-            data[2] = (byte)(getID());
-        else
-            data[2] = (byte)(getChannelOut());
-            
-        /// At present we're not adding a 100ms delay for the bulk upload segments.
-        /// That's required in the manual, but I'm not sure where to insert them.
-        
-        return data; 
-        }
 
     public boolean testVerify(Synth synth2, 
         String key,

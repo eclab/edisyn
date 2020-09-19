@@ -314,7 +314,8 @@ public class LabelledDial extends NumericalComponent
                 public void mouseWheelMoved(MouseWheelEvent e) 
                     {
                     if (!enabled) return;
-                    int val = getState() - e.getWheelRotation() / 2;
+                    
+                    int val = getState() - e.getWheelRotation();
                     if (val > getMax()) val = getMax();
                     if (val < getMin()) val = getMin();
 

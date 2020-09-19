@@ -970,7 +970,7 @@ public class EmuMorpheusMap extends Synth
 
 
     /** List of all Emu Morpheus parameters in order. */
-                
+    
     final static String[] parameters = new String[]
     {
     "---",    

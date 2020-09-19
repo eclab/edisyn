@@ -780,7 +780,7 @@ public class Blank extends Synth
         return true;
         }
 
-    public byte[] adjustBankSysexForEmit(byte[] data, Model model)
+    public Object adjustBankSysexForEmit(byte[] data, Model model)
         {
         // Before a bank sysex file is emitted to a synthesizer, you're given the 
         // chance to adjust the data file, typically to modify the channel or ID

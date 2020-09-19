@@ -1760,7 +1760,7 @@ public class PreenFM2 extends Synth
         
     public static boolean recognize(byte[] data)
         {
-        boolean val = (data.length == 472 &&
+        boolean val = (data.length == 473 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x7D &&
             data[2] == (byte)'E' &&
@@ -1784,10 +1784,9 @@ public class PreenFM2 extends Synth
         return val;
         }
 
-
     // These are the keys in the model which will be queried, in order, to emit the model
     // to our fake Sysex file and parse it back in.
-    public String[] sysexKeys = 
+    public static final String[] sysexKeys = 
         {
         "performanceparam1",
         "performanceparam2",

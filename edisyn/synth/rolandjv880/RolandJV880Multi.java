@@ -1085,7 +1085,7 @@ public class RolandJV880Multi extends Synth
                 // Temporary Performance
                 (data[5] == 0x00 && data[6] == 0x00 && (data[7] == 0x10 || data[7] == 0x18 || data[7] == 0x19 || data[7] == 0x1A || data[7] == 0x1B || data[7] == 0x1C || data[7] == 0x1D || data[7] == 0x1E || data[7] == 0x1F))) &&
                  
-            (data.length == 31 + 11 || data.length == 35 + 11));
+            (data.length == 410 || data.length == 31 + 11 || data.length == 35 + 11));
         }
         
     public static final int MAXIMUM_NAME_LENGTH = 12;

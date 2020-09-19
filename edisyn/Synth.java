@@ -47,50 +47,80 @@ public abstract class Synth extends JComponent implements Updatable
     // The file associated with the synth
     File file;
     
+    /** The tab pane at the top of the Synth panel. */
     public JTabbedPane tabs = new JTabbedPane();
 
+    /** The largest permitted sysex file. */
     public static final int MAX_FILE_LENGTH = 512 * 1024;        // so we don't go on forever
 
+	/** Used in emitAll(key...) to indicate that emitAll(...) is being used to send one of a stream of all the parameters. */
     public static final int STATUS_SENDING_ALL_PARAMETERS = 0;
+	/** Used in emitAll(key...) to indicate that emitAll(...) is being used to send just a single parameter, and is not part of a stream of parameters. */
     public static final int STATUS_UPDATING_ONE_PARAMETER = 1;
 
-
+	/** The Synth menu bar */
     public JMenuBar menubar;
+    /** The "Send to Patch..." menu */
     public JMenuItem transmitTo;
+    /** The "Send to Current Patch" menu */
     public JMenuItem transmitCurrent;
+    /** The "Write to Patch..." menu */
     public JMenuItem writeTo;
+    /** The "Undo" menu */
     public JMenuItem undoMenu;
+    /** The "Redo" menu */
     public JMenuItem redoMenu;
+    /** The "Request Current Patch" menu */
     public JMenuItem receiveCurrent;
+    /** The "Request Patch..." menu */
     public JMenuItem receivePatch;
+    /** The "Sends Real Time Changes" menu */
     public JCheckBoxMenuItem transmitParameters;
+    /** The "Request Merge" menu */
     public JMenu merge;
+    /** The "Edit Mutation Parameters" menu */
     public JMenuItem editMutationMenu;
+    /** The "Use Parameters for Nudge/Merge" menu, currently disabled */
     public JCheckBoxMenuItem recombinationToggle;
+    /** The "Hill-Climb" menu */
     public JMenuItem hillClimbMenu;
+    /** The "Send Test Notes" menu */
     public JCheckBoxMenuItem testNotes;
+    /** The "Repeatedly Send Current Patch" menu */
     public JCheckBoxMenuItem repeatCurrentPatch;
+	/** The Hill-Climbing tab pane */
     public JComponent hillClimbPane;
+	/** The "Batch Download..." pane */
     public JMenuItem getAll;
+	/** The "Report Next Controller MIDI" menu */
     public JMenuItem testIncomingController;
+    /** The "Report Next Synth MIDI" menu */
     public JMenuItem testIncomingSynth;
+    /** The "Send All Sounds Off Before Note On" menu */
     public JCheckBoxMenuItem sendsAllSoundsOffBetweenNotesMenu;
         
+    // The four nudge models 
     Model[] nudge = new Model[4];
+	// The 8 nudge-towards menus
     JMenuItem[] nudgeTowards = new JMenuItem[8];
+    // The favorites
     Favorites favorites = new Favorites();
-    
+    // The undo
     protected Undo undo = new Undo(this);
+    
     public Undo getUndo() { return undo; }
-        
+    
+    // The current copy preamble    
     String copyPreamble;
     public String getCopyPreamble() { return copyPreamble; }
     public void setCopyPreamble(String preamble) { copyPreamble = preamble; }
 
+    // The current copy type    
     String copyType;
     public String getCopyType() { return copyType; }
     public void setCopyType(String type) { copyType = type; }
     
+    // The current copy keys    
     ArrayList copyKeys;
     public ArrayList getCopyKeys() { return copyKeys; }
     public void setCopyKeys(ArrayList keys) { copyKeys = keys; }
@@ -425,6 +455,7 @@ public abstract class Synth extends JComponent implements Updatable
 	//// editor classes, some of which (<ahem>FS1R Fseq</ahem>) have an enormous amount of data.  
 
     static String[] synthClassNames;
+    static String[] synthRecognizers;
     static String[] synthNames;
     
     static
@@ -444,7 +475,7 @@ public abstract class Synth extends JComponent implements Updatable
 	    	return null;
 	    	}
     	}
-    
+    	
     static void loadSynths()
         {
         ArrayList<String> classes = new ArrayList<String>();
@@ -483,6 +514,9 @@ public abstract class Synth extends JComponent implements Updatable
             }
         synthClassNames = (String[])(classes.toArray(new String[0]));
         synthNames = (String[])(names.toArray(new String[0]));
+        synthRecognizers = new String[synthClassNames.length];
+        for(int i = 0; i < synthRecognizers.length; i++)
+        	synthRecognizers[i] = synthClassNames[i] + "Rec";
         }
 
 	public static int numSynths()
@@ -1851,11 +1885,18 @@ public abstract class Synth extends JComponent implements Updatable
     /** Returns whether the given sysex patch dump data is a bulk (multi-patch) dump of the type for a synth of the given
         class.  This is done by ultimately calling the CLASS method 
         <tt>public static boolean recognize(data)</tt> that each synthesizer subclass is asked to implement. */
-    public static boolean recognizeBulk(Class synthClass, byte[] data)
+    public static boolean recognizeBulk(String synthClassName, byte[] data)
         {
+        Class recognizer = getRecognizer(synthClassName);
+        if (recognizer == null) 
+        	{ 
+        	System.err.println("Synth.recognizeBulk() WARNING: No recognizer for " + synthClassName); 
+        	return false;
+        	}
+
         try
             {
-            Method method = synthClass.getMethod("recognizeBulk", new Class[] { byte[].class });
+            Method method = recognizer.getMethod("recognizeBulk", new Class[] { byte[].class });
             Object obj = method.invoke(null, data);
             return ((Boolean)obj).booleanValue();
             }
@@ -1868,12 +1909,20 @@ public abstract class Synth extends JComponent implements Updatable
     /** Returns the number of sysex dumps typically required to load a synth
         patch of the given class.  For example, the TX81Z requires *two* sysex dumps
         to load properly, while nearly all other synthesizers require 1. */
-    public static int getNumSysexDumpsPerPatch(Class synthClass, byte[] data)
+    public static int getNumSysexDumpsPerPatch(String synthClassName, byte[] data)
         {
+        Class recognizer = getRecognizer(synthClassName);
+        if (recognizer == null) 
+        	{ 
+        	System.err.println("Synth.getNumSysexDumpsPerPatch() WARNING: No recognizer for " + synthClassName); 
+        	return 1;
+        	}
+
         try
             {
-            Method method = synthClass.getMethod("getNumSysexDumpsPerPatch", new Class[] { byte[].class });
+            Method method = recognizer.getMethod("getNumSysexDumpsPerPatch", new Class[] { byte[].class });
             Object obj = method.invoke(null, data);
+            System.err.println("getNumSysexDumpsPerPatch -> " + synthClassName + " " + ((Integer)obj).intValue());
             return ((Integer)obj).intValue();
             }
         catch (Exception e)
@@ -1886,28 +1935,48 @@ public abstract class Synth extends JComponent implements Updatable
     /** Returns whether the given sysex patch dump data is of the type for a synth of the given
         class.  This is done by ultimately calling the CLASS method 
         <tt>public static boolean recognize(data)</tt> that each synthesizer subclass is asked to implement. */
-    public static boolean recognize(Class synthClass, byte[] data)
+    public static boolean recognize(String synthClassName, byte[] data)
         {
+        Class recognizer = getRecognizer(synthClassName);
+        if (recognizer == null) 
+        	{ 
+        	System.err.println("Synth.recognize() WARNING: No recognizer for " + synthClassName); 
+        	return false;
+        	}
+
         try
             {
-            Method method = synthClass.getMethod("recognize", new Class[] { byte[].class });
+            Method method = recognizer.getMethod("recognize", new Class[] { byte[].class });
             Object obj = method.invoke(null, data);
             return ((Boolean)obj).booleanValue();
             }
         catch (Exception e)
             {
-            System.err.println("Synth.java Recognize(Class, byte[]) ERROR.  Could not obtain or invoke method for " + synthClass); 
+            System.err.println("Synth.java Recognize(Class, byte[]) ERROR.  Could not obtain or invoke method for " + synthClassName); 
             e.printStackTrace();
             return false;
             }
         }
-        
+    
+	public static Class getRecognizer(String synthClassName)
+		{
+		try
+			{
+			return Class.forName(synthClassName + "Rec");
+			}
+		catch (ClassNotFoundException ex)
+			{
+			ex.printStackTrace();
+			return null;
+			}
+		}
+		
     /** Returns whether the given sysex patch dump data is of the type for this particular synth.
         This is done by ultimately calling the CLASS method <tt>public static boolean recognize(data)</tt> 
         that your synthesizer subclass is asked to implement. */
     public final boolean recognizeLocal(byte[] data)
         {
-        return recognize(Synth.this.getClass(), data);
+        return recognize(Synth.this.getClass().getName(), data);
         }
 
     /** Returns whether the given sysex patch dump data is a bulk (multi-patch) dump of the type for this particular synth.
@@ -1915,7 +1984,7 @@ public abstract class Synth extends JComponent implements Updatable
         that your synthesizer subclass is asked to implement. */
     public final boolean recognizeBulkLocal(byte[] data)
         {
-        return recognizeBulk(Synth.this.getClass(), data);
+        return recognizeBulk(Synth.this.getClass().getName(), data);
         }
 
     /** Returns the number of sysex dumps typically required to load a synth
@@ -1923,7 +1992,7 @@ public abstract class Synth extends JComponent implements Updatable
         to load properly, while nearly all other synthesizers require 1. */
     public final int getNumSysexDumpsPerPatchLocal(byte[] data)
         {
-        return getNumSysexDumpsPerPatch(Synth.this.getClass(), data);
+        return getNumSysexDumpsPerPatch(Synth.this.getClass().getName(), data);
         }
 
     void handleInRawCC(ShortMessage message)
@@ -5456,7 +5525,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         for(int i = 0; i < numSynths(); i++)
             {
-            if (recognize(getSynth(i), data))
+            if (recognize(synthClassNames[i], data))
                 return i;
             }
         return -1;
@@ -5470,7 +5539,7 @@ public abstract class Synth extends JComponent implements Updatable
         for(int i = 0; i < data.length; i++)
             {
             // a little caching
-            if (recognize(getSynth(lastSynth), data[i]))
+            if (recognize(synthClassNames[lastSynth], data[i]))
                 {
                 recognized[lastSynth] = true;
                 continue;
@@ -5478,7 +5547,7 @@ public abstract class Synth extends JComponent implements Updatable
                                 
             for(int j = 0; j < numSynths(); j++)
                 {
-                if (recognize(getSynth(j), data[i]))
+                if (recognize(synthClassNames[j], data[i]))
                     {
                     recognized[j] = true;
                     lastSynth = j;
@@ -5531,6 +5600,7 @@ public abstract class Synth extends JComponent implements Updatable
         boolean succeeded = false;
         parsingForMerge = merge;
         String[] synthNames =  getSynthNames();
+        int numDumpsPerPatch = 1;
         
         
         //// FIRST we have the user choose a file
@@ -5604,8 +5674,13 @@ public abstract class Synth extends JComponent implements Updatable
                             {
                             for(int j = 0; j < data.length; j++)
                                 {
-                                if (getNumSysexDumpsPerPatch(getSynth(external[i]), data[j]) > 1)
-                                    { hasMultipleDumpsSynth = true; break; }
+                                int n = getNumSysexDumpsPerPatch(synthClassNames[external[i]], data[j]);
+                                if (n > 1)
+                                    { 
+									numDumpsPerPatch = n;
+                                    hasMultipleDumpsSynth = true; 
+                                    break; 
+                                    }
                                 }
                             }
 
@@ -5645,6 +5720,14 @@ public abstract class Synth extends JComponent implements Updatable
                                 }
                             else 
                                 {
+                                if (data.length > numDumpsPerPatch)
+                                	{
+                                	showSimpleMessage("Can Only Load One Patch",
+                                		"This file contains sysex for a synthesizer which requires multiple sysex messages\n" + 
+                                		"for a single patch.  There might be more than one such patch in this file.\n" + 
+                                		"Edisyn can load only the first patch.");
+                                	}
+
                                 succeeded = loadOne(flatten(data), rec, recognizeLocal(data[0]), merge, f, fd, false);
                                 if (succeeded)
                                 	this.file = f;
@@ -5774,7 +5857,7 @@ public abstract class Synth extends JComponent implements Updatable
                                     int count = 0;
                                     for(int i = 0; i < data.length; i++)
                                         {
-                                        if (recognize(getSynth(external[j]), data[i]))
+                                        if (recognize(synthClassNames[external[j]], data[i]))
                                             {
                                             count++;                                                        
                                             }
@@ -5785,16 +5868,16 @@ public abstract class Synth extends JComponent implements Updatable
                                     count = 0;
                                     for(int i = 0; i < data.length; i++)
                                         {
-                                        if (recognize(getSynth(external[j]), data[i]))
+                                        if (recognize(synthClassNames[external[j]], data[i]))
                                             {
-                                            if (recognizeBulk(getSynth(external[j]), data[i]))
+                                            if (recognizeBulk(synthClassNames[external[j]], data[i]))
                                                 {
                                                 pNames[j][count] = "" + (count + 1) + "   Bank Sysex";
                                                 }
                                             else
                                                 {             
                                                 // build the synth to parse, then parse it and extract the name
-                                                if (otherSynth == null || otherSynth.getClass() != getSynth(external[j]))
+                                                if (otherSynth == null || !otherSynth.getClass().getName().equals(synthClassNames[external[j]]))
                                                     otherSynth = (Synth)(instantiate(getSynth(external[j]), synthNames[external[j]], true, false, null));
                                                 otherSynth.printRevised = false;
                                                 otherSynth.setSendMIDI(false);
@@ -5821,7 +5904,7 @@ public abstract class Synth extends JComponent implements Updatable
                                         
                                 if (sNames.length == 1 && pNames[0].length == 1)
                                     {
-                                    succeeded = loadOne(data[indices[0][0]], external[0], getSynth(external[0]) == this.getClass(), merge, f, fd, false);
+                                    succeeded = loadOne(data[indices[0][0]], external[0], synthClassNames[external[0]].equals(this.getClass().getName()), merge, f, fd, false);
                                     }
                                 else
                                     {
@@ -5831,10 +5914,10 @@ public abstract class Synth extends JComponent implements Updatable
                                         {
                                         public void selection(int primary, int secondary)
                                             {
-                                            localButton.setEnabled(Synth.this.getClass() == getSynth(external[primary]));
+                                            localButton.setEnabled(Synth.this.getClass().getName().equals(synthClassNames[external[primary]]));
                                             }
                                         };
-                                    localButton.setEnabled(Synth.this.getClass() == getSynth(external[0]));
+                                    localButton.setEnabled(Synth.this.getClass().getName().equals(synthClassNames[external[0]]));
                                                         
                                     Color color = new JPanel().getBackground();
                                     HBox hbox = new HBox();

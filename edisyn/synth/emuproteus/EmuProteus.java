@@ -2241,4 +2241,5 @@ public class EmuProteus extends Synth
     "Tribe 1",
     "Tribe 2",
     };
+    
     }

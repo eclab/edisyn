@@ -118,7 +118,7 @@ Java doesn't handle high-resolution displays properly in Windows, especially Win
 3. Click on the "Compatibility" tab
 4. Click on "Change high DPI settings"
 5. Here you can try checking "Use this setting to fix scaling problems for this program instead of the one in Settings"
-5.1 If that's not working, you might instead try "Override high DPI scaling behavior.  Scaling performed by: System (Enhanced)"
+6. If #5 isn't working, you might instead try "Override high DPI scaling behavior.  Scaling performed by: System (Enhanced)"
 
 Also Edisyn makes heavy use of Java preferences to store persistence information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows for earlier versions of Java.  I think this is fixed as of Java 11 but you should check and let me know.
 
@@ -133,8 +133,7 @@ I'm told that Edisyn works fine if you have installed at least Java 8.  After th
 
 3. Thereafter you should be able to just double-click on the file to launch Edisyn.
 
-If you want to use Edisyn in combination with a DAW, see the manual's section on build
-ing a MIDI Loopback.
+If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
 
 

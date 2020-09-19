@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.generic;
 import edisyn.*;
 
 public class GenericRec extends Recognize
-	{
+    {
     public static final int HEADER = 12;
     public static boolean recognize(byte[] data)
         {
@@ -23,6 +23,6 @@ public class GenericRec extends Recognize
             data[8] ==' ' &&
             data[9] =='C' &&
             data[10] =='C' &&
-            data[11] == 0;			// version number.  We recognize only 0
+            data[11] == 0;                      // version number.  We recognize only 0
         }
-	}
+    }

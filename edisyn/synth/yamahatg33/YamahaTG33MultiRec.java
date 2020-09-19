@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.yamahatg33;
 import edisyn.*;
 
 public class YamahaTG33MultiRec extends Recognize
-	{
+    {
     public static boolean recognize(byte[] data)
         {
         return  ((
@@ -28,4 +28,4 @@ public class YamahaTG33MultiRec extends Recognize
 //            || recognizeBulk(data)
             );
         }
-	}
+    }

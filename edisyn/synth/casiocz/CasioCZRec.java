@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.casiocz;
 import edisyn.*;
 
 public class CasioCZRec extends Recognize
-	{
+    {
     public static boolean recognize(byte[] data)
         {
         // We need to recognize four formats
@@ -41,4 +41,4 @@ public class CasioCZRec extends Recognize
             (data[5] == 0x20 || data[5] == 0x21 || data[5] == 0x30));
         }
 
-	}
+    }

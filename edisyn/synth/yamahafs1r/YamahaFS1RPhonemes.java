@@ -31,197 +31,197 @@ public class YamahaFS1RPhonemes
     public static final int PRIMARY_A = 8;
     public static final int PRIMARY_B = 8;
 
-	public static void buildModel(YamahaFS1RFseq synth)
-		{
-		JTextField field = new JTextField("");
-		boolean result = synth.showMultiOption(synth, new String[] { "Phoneme String" }, new JComponent[] { field }, "Phonemes", "Enter a phoneme string.");
-		if (result)
-        	{
-			Model backup = (Model)(synth.getModel().clone());
-			synth.setSendMIDI(false);
-			synth.getUndo().setWillPush(false);
-			
-			boolean res = buildModel(synth, field.getText());
-			synth.getUndo().setWillPush(true);
+    public static void buildModel(YamahaFS1RFseq synth)
+        {
+        JTextField field = new JTextField("");
+        boolean result = synth.showMultiOption(synth, new String[] { "Phoneme String" }, new JComponent[] { field }, "Phonemes", "Enter a phoneme string.");
+        if (result)
+            {
+            Model backup = (Model)(synth.getModel().clone());
+            synth.setSendMIDI(false);
+            synth.getUndo().setWillPush(false);
+                        
+            boolean res = buildModel(synth, field.getText());
+            synth.getUndo().setWillPush(true);
 
             if (res)
-            	{
-				if (!backup.keyEquals(synth.getModel()))  // it's changed, do an undo push
-					synth.getUndo().push(backup);
-            	}
-            synth.repaint();	// generally forces repaints to all happen at once
-			synth.setSendMIDI(true);
-			if (res)
-				{
+                {
+                if (!backup.keyEquals(synth.getModel()))  // it's changed, do an undo push
+                    synth.getUndo().push(backup);
+                }
+            synth.repaint();    // generally forces repaints to all happen at once
+            synth.setSendMIDI(true);
+            if (res)
+                {
                 synth.sendAllParameters();
-				}                                                                                
-			}
-		}
-		
+                }                                                                                
+            }
+        }
+                
     public static boolean buildModel(YamahaFS1RFseq synth, String phonemes)
-    	{
-    	try
-    		{
-	    	int[][][][] dat = getData(phonemes);
-	    	if (dat.length > MAX_PHONEMES)
-	    		{
-	    		synth.showSimpleError("Phoneme Error", "String must be no more than " + MAX_PHONEMES + " phonemes.");
-	    		return false;
-	    		}
-	    		
-	    	int frame = 1;
-	    	Model model = synth.getModel();
-	    	for(int ph = 0; ph < dat.length; ph++)
-	    		{
-	    		// crossfade in
-	    		for(int i = 0; i < CROSSFADE; i++)
-	    			{
-	    			double alpha = (i / (double)(CROSSFADE));
-	    			double beta = 1.0 - alpha;
-	    			for(int op = 0; op < 8; op++)
-	    				{
-						if (ph == 0 || dat[ph-1][0][op][4] == ' ')  // from start or from a space
-							{
-							model.set("frame" + frame + "voicedfrequency" + (op + 1), (int)(
-								alpha * (dat[ph][1][op][0] - dat[ph][0][op][0]) + dat[ph][0][op][0] ));
-							model.set("frame" + frame + "unvoicedfrequency" + (op + 1), (int)(
-								alpha * (dat[ph][1][op][2] - dat[ph][0][op][2]) + dat[ph][0][op][2] ));
-							model.set("frame" + frame + "voicedlevel" + (op + 1), (int)(
-								alpha * dat[ph][1][op][1] ));
-							model.set("frame" + frame + "unvoicedlevel" + (op + 1), (int)(
-								alpha * dat[ph][1][op][3] ));
-							}			
-	    				else if (dat[ph][0][op][4] == ' ')	// to a space ... crossfade out
-	    					{
-							model.set("frame" + frame + "voicedfrequency" + (op + 1), (int)(
-								beta  * (dat[ph - 1][3][op][0] - dat[ph - 1][4][op][0]) + dat[ph - 1][4][op][0]));
-							model.set("frame" + frame + "unvoicedfrequency" + (op + 1), (int)(
-								beta  * (dat[ph - 1][3][op][2] - dat[ph - 1][4][op][2]) + dat[ph - 1][4][op][2]));
-							model.set("frame" + frame + "voicedlevel" + (op + 1), (int)(
-								beta * dat[ph - 1][3][op][1]));
-							model.set("frame" + frame + "unvoicedlevel" + (op + 1), (int)(
-								beta * dat[ph - 1][3][op][3]));
-	    					}
-	    				else		// phoneme to phoneme
-	    					{
-							model.set("frame" + frame + "voicedfrequency" + (op + 1), (int)(
-								alpha * (alpha * (dat[ph][1][op][0] - dat[ph][0][op][0]) + dat[ph][0][op][0]) + 
-								beta * (beta  * (dat[ph - 1][3][op][0] - dat[ph - 1][4][op][0]) + dat[ph - 1][4][op][0] )));
-							model.set("frame" + frame + "unvoicedfrequency" + (op + 1), (int)(
-								alpha * (alpha * (dat[ph][1][op][2] - dat[ph][0][op][2]) + dat[ph][0][op][2]) + 
-								beta * (beta  * (dat[ph - 1][3][op][2] - dat[ph - 1][4][op][2]) + dat[ph - 1][4][op][2] )));
-							model.set("frame" + frame + "voicedlevel" + (op + 1), (int)(
-								alpha * dat[ph][1][op][1] + 
-								beta * dat[ph - 1][3][op][1] ));
-							model.set("frame" + frame + "unvoicedlevel" + (op + 1), (int)(
-								alpha * dat[ph][1][op][3] + 
-								beta * dat[ph - 1][3][op][3] ));
-							}
-		    			}
-		    		model.set("frame" + frame + "pitch", getPitch());
-		    		frame++;
-	    			}
-	    		// steady state 1
-	    		for(int i = 0; i < PRIMARY_A; i++)
-	    			{
-	    			double alpha = (i / (double)(PRIMARY_A));
-	    			for(int op = 0; op < 8; op++)
-	    				{
-		    			model.set("frame" + frame + "voicedfrequency" + (op + 1), (int)(
-								alpha * (dat[ph][2][op][0] - dat[ph][1][op][0]) + dat[ph][1][op][0]));
-		    			model.set("frame" + frame + "unvoicedfrequency" + (op + 1), (int)(
-								alpha * (dat[ph][2][op][2] - dat[ph][1][op][2]) + dat[ph][1][op][2]));
-		    			model.set("frame" + frame + "voicedlevel" + (op + 1), (int)(
-								alpha * (dat[ph][2][op][1] - dat[ph][1][op][1]) + dat[ph][1][op][1]));
-		    			model.set("frame" + frame + "unvoicedlevel" + (op + 1), (int)(
-								alpha * (dat[ph][2][op][3] - dat[ph][1][op][3]) + dat[ph][1][op][3]));
-		    			}
-		    		model.set("frame" + frame + "pitch", getPitch());
-		    		frame++;
-	    			}
+        {
+        try
+            {
+            int[][][][] dat = getData(phonemes);
+            if (dat.length > MAX_PHONEMES)
+                {
+                synth.showSimpleError("Phoneme Error", "String must be no more than " + MAX_PHONEMES + " phonemes.");
+                return false;
+                }
+                        
+            int frame = 1;
+            Model model = synth.getModel();
+            for(int ph = 0; ph < dat.length; ph++)
+                {
+                // crossfade in
+                for(int i = 0; i < CROSSFADE; i++)
+                    {
+                    double alpha = (i / (double)(CROSSFADE));
+                    double beta = 1.0 - alpha;
+                    for(int op = 0; op < 8; op++)
+                        {
+                        if (ph == 0 || dat[ph-1][0][op][4] == ' ')  // from start or from a space
+                            {
+                            model.set("frame" + frame + "voicedfrequency" + (op + 1), (int)(
+                                    alpha * (dat[ph][1][op][0] - dat[ph][0][op][0]) + dat[ph][0][op][0] ));
+                            model.set("frame" + frame + "unvoicedfrequency" + (op + 1), (int)(
+                                    alpha * (dat[ph][1][op][2] - dat[ph][0][op][2]) + dat[ph][0][op][2] ));
+                            model.set("frame" + frame + "voicedlevel" + (op + 1), (int)(
+                                    alpha * dat[ph][1][op][1] ));
+                            model.set("frame" + frame + "unvoicedlevel" + (op + 1), (int)(
+                                    alpha * dat[ph][1][op][3] ));
+                            }                       
+                        else if (dat[ph][0][op][4] == ' ')      // to a space ... crossfade out
+                            {
+                            model.set("frame" + frame + "voicedfrequency" + (op + 1), (int)(
+                                    beta  * (dat[ph - 1][3][op][0] - dat[ph - 1][4][op][0]) + dat[ph - 1][4][op][0]));
+                            model.set("frame" + frame + "unvoicedfrequency" + (op + 1), (int)(
+                                    beta  * (dat[ph - 1][3][op][2] - dat[ph - 1][4][op][2]) + dat[ph - 1][4][op][2]));
+                            model.set("frame" + frame + "voicedlevel" + (op + 1), (int)(
+                                    beta * dat[ph - 1][3][op][1]));
+                            model.set("frame" + frame + "unvoicedlevel" + (op + 1), (int)(
+                                    beta * dat[ph - 1][3][op][3]));
+                            }
+                        else            // phoneme to phoneme
+                            {
+                            model.set("frame" + frame + "voicedfrequency" + (op + 1), (int)(
+                                    alpha * (alpha * (dat[ph][1][op][0] - dat[ph][0][op][0]) + dat[ph][0][op][0]) + 
+                                    beta * (beta  * (dat[ph - 1][3][op][0] - dat[ph - 1][4][op][0]) + dat[ph - 1][4][op][0] )));
+                            model.set("frame" + frame + "unvoicedfrequency" + (op + 1), (int)(
+                                    alpha * (alpha * (dat[ph][1][op][2] - dat[ph][0][op][2]) + dat[ph][0][op][2]) + 
+                                    beta * (beta  * (dat[ph - 1][3][op][2] - dat[ph - 1][4][op][2]) + dat[ph - 1][4][op][2] )));
+                            model.set("frame" + frame + "voicedlevel" + (op + 1), (int)(
+                                    alpha * dat[ph][1][op][1] + 
+                                    beta * dat[ph - 1][3][op][1] ));
+                            model.set("frame" + frame + "unvoicedlevel" + (op + 1), (int)(
+                                    alpha * dat[ph][1][op][3] + 
+                                    beta * dat[ph - 1][3][op][3] ));
+                            }
+                        }
+                    model.set("frame" + frame + "pitch", getPitch());
+                    frame++;
+                    }
+                // steady state 1
+                for(int i = 0; i < PRIMARY_A; i++)
+                    {
+                    double alpha = (i / (double)(PRIMARY_A));
+                    for(int op = 0; op < 8; op++)
+                        {
+                        model.set("frame" + frame + "voicedfrequency" + (op + 1), (int)(
+                                alpha * (dat[ph][2][op][0] - dat[ph][1][op][0]) + dat[ph][1][op][0]));
+                        model.set("frame" + frame + "unvoicedfrequency" + (op + 1), (int)(
+                                alpha * (dat[ph][2][op][2] - dat[ph][1][op][2]) + dat[ph][1][op][2]));
+                        model.set("frame" + frame + "voicedlevel" + (op + 1), (int)(
+                                alpha * (dat[ph][2][op][1] - dat[ph][1][op][1]) + dat[ph][1][op][1]));
+                        model.set("frame" + frame + "unvoicedlevel" + (op + 1), (int)(
+                                alpha * (dat[ph][2][op][3] - dat[ph][1][op][3]) + dat[ph][1][op][3]));
+                        }
+                    model.set("frame" + frame + "pitch", getPitch());
+                    frame++;
+                    }
 
-				// continuations -- just continue the phoneme though to the next one at peak
-				while (ph + 1 < dat.length && (dat[ph][2][0][4] == dat[ph + 1][2][0][4]))  // continuation
-					{
-					for(int i = 0; i < PRIMARY_A + PRIMARY_B + CROSSFADE; i++)
-						{
-						for(int op = 0; op < 8; op++)
-							{
-							model.set("frame" + frame + "voicedfrequency" + (op + 1), (int)(dat[ph][2][op][0] ));
-							model.set("frame" + frame + "unvoicedfrequency" + (op + 1), (int)(dat[ph][2][op][2] ));
-							model.set("frame" + frame + "voicedlevel" + (op + 1), (int)(dat[ph][2][op][1] ));
-							model.set("frame" + frame + "unvoicedlevel" + (op + 1), (int)(dat[ph][2][op][3] ));
-							}
-						model.set("frame" + frame + "pitch", getPitch());
-						frame++;
-						}
-					ph++;		// shift to next phoneme in continuation
-					}
-	    			
-	    		// steady state 2
-	    		for(int i = 0; i < PRIMARY_B; i++)
-	    			{
-	    			double alpha = (i / (double)(PRIMARY_B));
-	    			for(int op = 0; op < 8; op++)
-	    				{
-		    			model.set("frame" + frame + "voicedfrequency" + (op + 1), (int)(
-								alpha * (dat[ph][3][op][0] - dat[ph][2][op][0]) + dat[ph][2][op][0]));
-		    			model.set("frame" + frame + "unvoicedfrequency" + (op + 1), (int)(
-								alpha * (dat[ph][3][op][2] - dat[ph][2][op][2]) + dat[ph][2][op][2]));
-		    			model.set("frame" + frame + "voicedlevel" + (op + 1), (int)(
-								alpha * (dat[ph][3][op][1] - dat[ph][2][op][1]) + dat[ph][2][op][1]));
-		    			model.set("frame" + frame + "unvoicedlevel" + (op + 1), (int)(
-								alpha * (dat[ph][3][op][3] - dat[ph][2][op][3]) + dat[ph][2][op][3]));
-		    			}
-		    		model.set("frame" + frame + "pitch", getPitch());
-		    		frame++;
-	    			}
-	    		}
-	    		
-	    	if (dat.length > 0)
-	    		{ 
-	    		int ph = dat.length;
-				// final fade out
-				for(int i = 0; i < CROSSFADE; i++)
-					{
-					double alpha = (i / (double)(CROSSFADE));
-					double beta = 1.0 - alpha;
-					for(int op = 0; op < 8; op++)
-						{
-						model.set("frame" + frame + "voicedfrequency" + (op + 1), (int)(
-							beta  * (dat[ph - 1][3][op][0] - dat[ph - 1][4][op][0]) + dat[ph - 1][4][op][0]));
-						model.set("frame" + frame + "unvoicedfrequency" + (op + 1), (int)(
-							beta  * (dat[ph - 1][3][op][2] - dat[ph - 1][4][op][2]) + dat[ph - 1][4][op][2]));
-						model.set("frame" + frame + "voicedlevel" + (op + 1), (int)(
-							beta * dat[ph - 1][3][op][1]));
-						model.set("frame" + frame + "unvoicedlevel" + (op + 1), (int)(
-							beta * dat[ph - 1][3][op][3]));
-						}
-					model.set("frame" + frame + "pitch", getPitch());
-					frame++;
-					}
-				}
+                // continuations -- just continue the phoneme though to the next one at peak
+                while (ph + 1 < dat.length && (dat[ph][2][0][4] == dat[ph + 1][2][0][4]))  // continuation
+                    {
+                    for(int i = 0; i < PRIMARY_A + PRIMARY_B + CROSSFADE; i++)
+                        {
+                        for(int op = 0; op < 8; op++)
+                            {
+                            model.set("frame" + frame + "voicedfrequency" + (op + 1), (int)(dat[ph][2][op][0] ));
+                            model.set("frame" + frame + "unvoicedfrequency" + (op + 1), (int)(dat[ph][2][op][2] ));
+                            model.set("frame" + frame + "voicedlevel" + (op + 1), (int)(dat[ph][2][op][1] ));
+                            model.set("frame" + frame + "unvoicedlevel" + (op + 1), (int)(dat[ph][2][op][3] ));
+                            }
+                        model.set("frame" + frame + "pitch", getPitch());
+                        frame++;
+                        }
+                    ph++;           // shift to next phoneme in continuation
+                    }
+                                
+                // steady state 2
+                for(int i = 0; i < PRIMARY_B; i++)
+                    {
+                    double alpha = (i / (double)(PRIMARY_B));
+                    for(int op = 0; op < 8; op++)
+                        {
+                        model.set("frame" + frame + "voicedfrequency" + (op + 1), (int)(
+                                alpha * (dat[ph][3][op][0] - dat[ph][2][op][0]) + dat[ph][2][op][0]));
+                        model.set("frame" + frame + "unvoicedfrequency" + (op + 1), (int)(
+                                alpha * (dat[ph][3][op][2] - dat[ph][2][op][2]) + dat[ph][2][op][2]));
+                        model.set("frame" + frame + "voicedlevel" + (op + 1), (int)(
+                                alpha * (dat[ph][3][op][1] - dat[ph][2][op][1]) + dat[ph][2][op][1]));
+                        model.set("frame" + frame + "unvoicedlevel" + (op + 1), (int)(
+                                alpha * (dat[ph][3][op][3] - dat[ph][2][op][3]) + dat[ph][2][op][3]));
+                        }
+                    model.set("frame" + frame + "pitch", getPitch());
+                    frame++;
+                    }
+                }
+                        
+            if (dat.length > 0)
+                { 
+                int ph = dat.length;
+                // final fade out
+                for(int i = 0; i < CROSSFADE; i++)
+                    {
+                    double alpha = (i / (double)(CROSSFADE));
+                    double beta = 1.0 - alpha;
+                    for(int op = 0; op < 8; op++)
+                        {
+                        model.set("frame" + frame + "voicedfrequency" + (op + 1), (int)(
+                                beta  * (dat[ph - 1][3][op][0] - dat[ph - 1][4][op][0]) + dat[ph - 1][4][op][0]));
+                        model.set("frame" + frame + "unvoicedfrequency" + (op + 1), (int)(
+                                beta  * (dat[ph - 1][3][op][2] - dat[ph - 1][4][op][2]) + dat[ph - 1][4][op][2]));
+                        model.set("frame" + frame + "voicedlevel" + (op + 1), (int)(
+                                beta * dat[ph - 1][3][op][1]));
+                        model.set("frame" + frame + "unvoicedlevel" + (op + 1), (int)(
+                                beta * dat[ph - 1][3][op][3]));
+                        }
+                    model.set("frame" + frame + "pitch", getPitch());
+                    frame++;
+                    }
+                }
 
-			// zero out remainder
-			for(int i = frame; i <= 512; i++)
-				{
-				for(int op = 0; op < 8; op++)
-					{
-					model.set("frame" + i + "voicedfrequency" + (op + 1), 0);
-					model.set("frame" + i + "unvoicedfrequency" + (op + 1), 0);
-					model.set("frame" + i + "voicedlevel" + (op + 1), 0);
-					model.set("frame" + i + "unvoicedlevel" + (op + 1), 0);
-					}
-				model.set("frame" + i + "pitch", 0);
-				}
-			return true;
-	    	}
-	    catch (Exception ex)
-	    	{
-	    	synth.showSimpleError("Phoneme Error", ex.getMessage());
-	    	return false;
-	    	}
-    	}    	
+            // zero out remainder
+            for(int i = frame; i <= 512; i++)
+                {
+                for(int op = 0; op < 8; op++)
+                    {
+                    model.set("frame" + i + "voicedfrequency" + (op + 1), 0);
+                    model.set("frame" + i + "unvoicedfrequency" + (op + 1), 0);
+                    model.set("frame" + i + "voicedlevel" + (op + 1), 0);
+                    model.set("frame" + i + "unvoicedlevel" + (op + 1), 0);
+                    }
+                model.set("frame" + i + "pitch", 0);
+                }
+            return true;
+            }
+        catch (Exception ex)
+            {
+            synth.showSimpleError("Phoneme Error", ex.getMessage());
+            return false;
+            }
+        }       
     
     public static final char[] PHONEMES = new char[]
     {
@@ -303,14 +303,14 @@ public class YamahaFS1RPhonemes
         return 12651;
         }
 
-	public static void printData(int phoneme, int pos)
-		{
-		for(int i = 0; i < 8; i++)
-			System.err.println("" + getVoicedFreq(phoneme, i, pos) + 
-								" " + getVoicedLevel(phoneme, i, pos) + 
-								" " + getUnvoicedFreq(phoneme, i, pos) + 
-								" " + getUnvoicedLevel(phoneme, i, pos) );
-		}
+    public static void printData(int phoneme, int pos)
+        {
+        for(int i = 0; i < 8; i++)
+            System.err.println("" + getVoicedFreq(phoneme, i, pos) + 
+                " " + getVoicedLevel(phoneme, i, pos) + 
+                " " + getUnvoicedFreq(phoneme, i, pos) + 
+                " " + getUnvoicedLevel(phoneme, i, pos) );
+        }
 
     public static final int[][][] PHONEME_DATA = new int[][][]
     {
@@ -2789,4 +2789,4 @@ public class YamahaFS1RPhonemes
         {0, 0, 0, 0},
         },
     };
-}
+    }

@@ -335,55 +335,55 @@ public class PreenFM2 extends Synth
         if (mutationRestriction == INTEGERS) integers.setSelected(true);
         }
                 
-	public class SubModel extends Model
-		{
-            public int reviseMutatedValue(String key, int old, int current)
+    public class SubModel extends Model
+        {
+        public int reviseMutatedValue(String key, int old, int current)
+            {
+            if (mutationRestriction == OFF)
+                return current;
+            else if (key.startsWith("op") && key.endsWith("finetune"))
                 {
-                if (mutationRestriction == OFF)
-                    return current;
-                else if (key.startsWith("op") && key.endsWith("finetune"))
+                return 100;
+                }
+            else if (key.startsWith("op") && key.endsWith("frequency"))
+                {
+                if (mutationRestriction == TX81Z)
+                    return LabelledDial.findClosestValue(current, YAMAHA_FREQUENCY_RATIOS);
+                else if (mutationRestriction == INTEGERS)
                     {
-                    return 100;
-                    }
-                else if (key.startsWith("op") && key.endsWith("frequency"))
-                    {
-                    if (mutationRestriction == TX81Z)
-                        return LabelledDial.findClosestValue(current, YAMAHA_FREQUENCY_RATIOS);
-                    else if (mutationRestriction == INTEGERS)
+                    if (current < 100)
                         {
-                        if (current < 100)
-                            {
-                            // figure out who we're closest to: 25, 33, 50, or 100?
-                            int oneThird = Math.abs(current - 33);
-                            int oneHalf = Math.abs(current - 50);
-                            int oneQuarter = Math.abs(current - 25);
-                            int one = Math.abs(current - 100);
-                            if (one < oneQuarter && one < oneThird && one < oneHalf)
-                                return 100;
-                            else if (oneHalf < oneThird && oneHalf < oneQuarter)
-                                return 50;
-                            else if (oneThird < oneQuarter)
-                                return 33;
-                            else
-                                return 25;
-                            }
+                        // figure out who we're closest to: 25, 33, 50, or 100?
+                        int oneThird = Math.abs(current - 33);
+                        int oneHalf = Math.abs(current - 50);
+                        int oneQuarter = Math.abs(current - 25);
+                        int one = Math.abs(current - 100);
+                        if (one < oneQuarter && one < oneThird && one < oneHalf)
+                            return 100;
+                        else if (oneHalf < oneThird && oneHalf < oneQuarter)
+                            return 50;
+                        else if (oneThird < oneQuarter)
+                            return 33;
                         else
-                            {
-                            int i = (int)(Math.round(current / 100.0)) * 100;
-                            // these should never happen, but ...
-                            if (i < 0) i = 0;
-                            if (i > 1600) i = 1600;
-                            return i;
-                            }
+                            return 25;
                         }
-                    else  // never happens
-                        return current;
+                    else
+                        {
+                        int i = (int)(Math.round(current / 100.0)) * 100;
+                        // these should never happen, but ...
+                        if (i < 0) i = 0;
+                        if (i > 1600) i = 1600;
+                        return i;
+                        }
                     }
-                else
+                else  // never happens
                     return current;
                 }
-		}
-		
+            else
+                return current;
+            }
+        }
+                
     public Model buildModel()
         {
         return new SubModel();

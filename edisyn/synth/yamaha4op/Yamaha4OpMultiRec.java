@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.yamaha4op;
 import edisyn.*;
 
 public class Yamaha4OpMultiRec extends Recognize
-	{
+    {
     public static boolean recognize(byte[] data)
         {
         // PCED
@@ -58,4 +58,4 @@ public class Yamaha4OpMultiRec extends Recognize
 
         return b;
         }
-	}
+    }

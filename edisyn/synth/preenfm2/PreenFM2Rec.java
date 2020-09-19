@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.preenfm2;
 import edisyn.*;
 
 public class PreenFM2Rec extends Recognize
-	{
+    {
     public static boolean recognize(byte[] data)
         {
         boolean val = (data.length == 473 &&
@@ -34,4 +34,4 @@ public class PreenFM2Rec extends Recognize
         return val;
         }
 
-	}
+    }

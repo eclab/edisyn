@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.redsounddarkstar;
 import edisyn.*;
 
 public class RedSoundDarkStarRec extends Recognize
-	{
+    {
     public static boolean recognize(byte[] data)
         {
         // DarkStar data comes in the following forms
@@ -49,4 +49,4 @@ public class RedSoundDarkStarRec extends Recognize
             data[4] == (byte)0x02 &&
             data[5] == (byte)0x01);        
         }
-	}
+    }

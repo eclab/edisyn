@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.yamahatg33;
 import edisyn.*;
 
 public class YamahaTG33Rec extends Recognize
-	{
+    {
     public static boolean recognizeSY(byte[] data)
         {
         return  ((
@@ -58,7 +58,7 @@ public class YamahaTG33Rec extends Recognize
     public static boolean recognizeSYBulk(byte[] data)
         {
         return  ((
-                data.length == 38306 && 			// includes multi :-(
+                data.length == 38306 &&                         // includes multi :-(
                 data[0] == (byte)0xF0 &&
                 data[1] == (byte)0x43 &&
                 // don't care about 2, it's the id
@@ -107,9 +107,9 @@ public class YamahaTG33Rec extends Recognize
         }
 
 
-  public static boolean recognizeBulk(byte[] data)
-  {
-  return  (recognizeTGBulk(data) || recognizeSYBulk(data));
-  } 
+    public static boolean recognizeBulk(byte[] data)
+        {
+        return  (recognizeTGBulk(data) || recognizeSYBulk(data));
+        } 
                
-	}
+    }

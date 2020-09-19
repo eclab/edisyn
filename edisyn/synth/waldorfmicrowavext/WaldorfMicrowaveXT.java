@@ -2488,24 +2488,24 @@ public class WaldorfMicrowaveXT extends Synth
         }
 
 
-	public static class SubModel extends Model
-		{
-		public int reviseMutatedValue(String key, int old, int current) 
-			{
-			// only standard wavetables are permitted to be mutated
-			if (key.equals("wavetable"))
-					{
-					if (current > 64)		// invalid new proposed value
-						return old;
-					} 
-			return current; 
-			}    
-		}
+    public static class SubModel extends Model
+        {
+        public int reviseMutatedValue(String key, int old, int current) 
+            {
+            // only standard wavetables are permitted to be mutated
+            if (key.equals("wavetable"))
+                {
+                if (current > 64)               // invalid new proposed value
+                    return old;
+                } 
+            return current; 
+            }    
+        }
 
     public Model buildModel() 
-    	{ 
-    	return new SubModel();
-    	}
-    	
+        { 
+        return new SubModel();
+        }
+        
                 
     }

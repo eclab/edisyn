@@ -22,7 +22,7 @@ import javax.sound.midi.*;
    
    <p>Synthesizers supported: DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200
    <p>Synthesizers partially-supported: V50
-   <p>Synthesizers <i>not</i> supported: DX9, FB01		(there are other patch editors in Edisyn for them)
+   <p>Synthesizers <i>not</i> supported: DX9, FB01              (there are other patch editors in Edisyn for them)
    <p>Synthesizers which <i>might</i> work: WT11, DS55
 
    <p>Yamaha's 4-Op family have many parameters in common and later synthesizers have sysex
@@ -126,7 +126,7 @@ public class Yamaha4Op extends Synth
     public static final String[] LFO_WAVES = { "Sawtooth", "Square", "Triangle", "Sample & Hold" };
     public static final String[] SHIFTS = { "96dB", "48dB", "24dB", "12dB" };
     public static final String[] FIX_HI_RANGES = { "255Hz", "510Hz", "1KHz", "2KHz", "4KHz", "8KHz", "16KHz", "32KHz" };
-    public static final String[] FIX_LO_RANGES = { "1Hz", "2Hz", "4Hz", "7Hz", "14Hz", "25Hz", "50Hz", "100Hz" };		// not sure if it's 25Hz
+    public static final String[] FIX_LO_RANGES = { "1Hz", "2Hz", "4Hz", "7Hz", "14Hz", "25Hz", "50Hz", "100Hz" };               // not sure if it's 25Hz
     public static final int[] FIX_HI_RANGE_VALS = { 8, 16, 32, 64, 128, 256, 512, 1024 };
     public static final double[] FREQUENCY_RATIOS = { 0.50, 0.71, 0.78, 0.87, 1.00, 1.41, 1.57, 1.73, 2.00, 2.82, 3.00, 3.14, 3.46, 4.00, 4.24, 4.71, 5.00, 5.19, 5.65, 6.00, 6.28, 6.92, 7.00, 7.07, 7.85, 8.00, 8.48, 8.65, 9.00, 9.42, 9.89, 10.00, 10.38, 10.99, 11.00, 11.30, 12.00, 12.11, 12.56, 12.72, 13.00, 13.84, 14.00, 14.10, 14.13, 15.00, 15.55, 15.57, 15.70, 16.96, 17.27, 17.30, 18.37, 18.84, 19.03, 19.78, 20.41, 20.76, 21.20, 21.98, 22.49, 23.55, 24.22, 25.95 };
     public static final double[] FREQUENCY_RATIOS_MAX = { 0.93, 1.32, 1.37, 1.62, 1.93, 2.73, 3.04, 3.35, 2.93, 4.14, 3.93, 4.61, 5.08, 4.93, 5.55, 6.18, 5.93, 6.81, 6.96, 6.93, 7.75, 8.54, 7.93, 8.37, 9.32, 8.93, 9.78, 10.27, 9.93, 10.89, 11.19, 10.93, 12.00, 12.46, 11.93, 12.60, 12.93, 13.73, 14.03, 14.01, 13.93, 15.46, 14.93, 15.42, 15.60, 15.93, 16.83, 17.19, 17.17, 18.24, 18.74, 18.92, 19.65, 20.31, 20.65, 21.06, 21.88, 22.38, 22.47, 23.45, 24.11, 25.02, 25.84, 27.57 };
@@ -142,52 +142,52 @@ public class Yamaha4Op extends Synth
     public static final String[] WHEEL_ASSIGNMENTS = new String[] { "Vibrato", "LFO", "Filter" };
     public static final String[] EFFECTS = new String[] { "Reverb - Hall", "Reverb - Room", "Reverb - Plate", "Delay", "Delay - Left/Right", "Stereo Echo", "Distortion + Reverb", "Distortion + Echo", "Gated Reverb", "Reverse Gate" };
 
-public static final String[] V50_EFFECTS = new String[] 
-{ 
-"Reverb Hall", "Reverb Room", "Reverb Plate", "Delay", "Delay L/R", "Stereo Echo", "Distortion Reverb", 
-"Distortion Echo", "Gate Reverb", "Reverse Gate", "Early Reflections", "Tone Control 1", "Delay and Reverb", 
-"Delay L/R and Reverb", "Distortion Delay", "Church", "Club", "Stage", "Bath Room", "Metal", "Tunnel", 
-"Doubler 1", "Doubler 2", "Feed Back Gate", "Feed Back Reverse", "Feed Back E/R", "Delay and Tone Control 1", 
-"Delay L/R and Tone Control 1", "Tone Control 2", "Delay and Tone Control 2", "Delay L/R and Tone Control 2", 
-"Distortion", 
-};
+    public static final String[] V50_EFFECTS = new String[] 
+    { 
+    "Reverb Hall", "Reverb Room", "Reverb Plate", "Delay", "Delay L/R", "Stereo Echo", "Distortion Reverb", 
+    "Distortion Echo", "Gate Reverb", "Reverse Gate", "Early Reflections", "Tone Control 1", "Delay and Reverb", 
+    "Delay L/R and Reverb", "Distortion Delay", "Church", "Club", "Stage", "Bath Room", "Metal", "Tunnel", 
+    "Doubler 1", "Doubler 2", "Feed Back Gate", "Feed Back Reverse", "Feed Back E/R", "Delay and Tone Control 1", 
+    "Delay L/R and Tone Control 1", "Tone Control 2", "Delay and Tone Control 2", "Delay L/R and Tone Control 2", 
+    "Distortion", 
+    };
  
  
-public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
-{
-{ "Time", "LPF", "Delay", },			// Reverb Hall
-{ "Time", "LPF", "Delay", },			// Reverb Room
-{ "Time", "LPF", "Delay", },			// Reverb Plate
-{ "Time", "FB Delay", "FB Gain", },			// Delay
-{ "Lch Dly", "Rch Dly", "FB Gain", },			// Delay L/R
-{ "Lch Dly", "Rch Dly", "FB Gain", },			// Stereo Echo
-{ "Time", "Dist.", "Reverb", },			// Distortion Reverb
-{ "Time", "FB Gain", "Dist.", },			// Distortion Echo
-{ "Size", "LPF", "Delay", },			// Gate Reverb
-{ "Size", "LPF", "Delay", },			// Reverse Gate
-{ "Size", "LPF", "Delay", },			// Early Reflections
-{ "Low", "Middle", "High", },			// Tone Control 1
-{ "RevTime", "Delay", "FB Gain", },			// Delay and Reverb
-{ "RevTime", "Lch Dly", "Rch Dly", },			// Delay L/R and Reverb
-{ "Time", "FB Gain", "Dist.", },			// Distortion Delay
-{ "Time", "LPF", "Delay", },			// Church
-{ "Time", "LPF", "Delay", },			// Club
-{ "Time", "LPF", "Delay", },			// Stage
-{ "Time", "LPF", "Delay", },			// Bath Room
-{ "Time", "LPF", "Delay", },			// Metal
-{ "RevTime", "Delay", "FB Gain", },			// Tunnel
-{ "DlyTime", "HPF", "LPF", },			// Doubler 1
-{ "Lch Dly", "Rch Dly", "LPF", },			// Doubler 2
-{ "Size", "LPF", "FB Gain", },			// Feed Back Gate
-{ "Size", "LPF", "FB Gain", },			// Feed Back Reverse
-{ "Size", "LPF", "FB Gain", },			// Feed Back E/R
-{ "Bri.", "Delay", "FB Gain", },			// Delay and Tone Control 1
-{ "Bri.", "Delay", "FB Gain", },			// Delay L/R and Tone Control 1
-{ "HPF", "Middle", "LPF", },			// Tone Control 2
-{ "Bri.", "Delay", "FB Gain", },			// Delay and Tone Control 2
-{ "Bri.", "Delay", "FB Gain", },			// Delay L/R and Tone Control 2
-{ "Dist.", "HPF", "LPF" }			// Distortion
-};
+    public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
+    {
+    { "Time", "LPF", "Delay", },                    // Reverb Hall
+    { "Time", "LPF", "Delay", },                    // Reverb Room
+    { "Time", "LPF", "Delay", },                    // Reverb Plate
+    { "Time", "FB Delay", "FB Gain", },                     // Delay
+    { "Lch Dly", "Rch Dly", "FB Gain", },                   // Delay L/R
+    { "Lch Dly", "Rch Dly", "FB Gain", },                   // Stereo Echo
+    { "Time", "Dist.", "Reverb", },                 // Distortion Reverb
+    { "Time", "FB Gain", "Dist.", },                        // Distortion Echo
+    { "Size", "LPF", "Delay", },                    // Gate Reverb
+    { "Size", "LPF", "Delay", },                    // Reverse Gate
+    { "Size", "LPF", "Delay", },                    // Early Reflections
+    { "Low", "Middle", "High", },                   // Tone Control 1
+    { "RevTime", "Delay", "FB Gain", },                     // Delay and Reverb
+    { "RevTime", "Lch Dly", "Rch Dly", },                   // Delay L/R and Reverb
+    { "Time", "FB Gain", "Dist.", },                        // Distortion Delay
+    { "Time", "LPF", "Delay", },                    // Church
+    { "Time", "LPF", "Delay", },                    // Club
+    { "Time", "LPF", "Delay", },                    // Stage
+    { "Time", "LPF", "Delay", },                    // Bath Room
+    { "Time", "LPF", "Delay", },                    // Metal
+    { "RevTime", "Delay", "FB Gain", },                     // Tunnel
+    { "DlyTime", "HPF", "LPF", },                   // Doubler 1
+    { "Lch Dly", "Rch Dly", "LPF", },                       // Doubler 2
+    { "Size", "LPF", "FB Gain", },                  // Feed Back Gate
+    { "Size", "LPF", "FB Gain", },                  // Feed Back Reverse
+    { "Size", "LPF", "FB Gain", },                  // Feed Back E/R
+    { "Bri.", "Delay", "FB Gain", },                        // Delay and Tone Control 1
+    { "Bri.", "Delay", "FB Gain", },                        // Delay L/R and Tone Control 1
+    { "HPF", "Middle", "LPF", },                    // Tone Control 2
+    { "Bri.", "Delay", "FB Gain", },                        // Delay and Tone Control 2
+    { "Bri.", "Delay", "FB Gain", },                        // Delay L/R and Tone Control 2
+    { "Dist.", "HPF", "LPF" }                       // Distortion
+    };
  
  
  
@@ -355,7 +355,7 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
                 bank.setSelectedIndex(model.get("bank"));
             }
         else if (!writing && (type == TYPE_V50))
-        	{
+            {
             bank = new JComboBox(V50_BANKS);
             if (model.get("bank") > 3)
                 {
@@ -364,14 +364,14 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
                 }
             else
                 bank.setSelectedIndex(model.get("bank"));
-        	}
+            }
         
         int maxNumber =
             (type == TYPE_DX21 ? 32 :
                 (type == TYPE_DX27_DX100 ? 24 :
                     (type == TYPE_DX11 ? 32 :
                         (type == TYPE_TX81Z ? 32 :
-                        100))));		// TQ5 and also V50
+                        100))));                // TQ5 and also V50
         
         int num = model.get("number");
         if (num < 0 || num >= maxNumber)
@@ -493,39 +493,39 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
         }
                 
 
-	public class SubModel extends Model
-		{
-            public int reviseMutatedValue(String key, int old, int current)
+    public class SubModel extends Model
+        {
+        public int reviseMutatedValue(String key, int old, int current)
+            {
+            if (mutationRestriction == OFF)
+                return current;
+            else if (key.startsWith("operator") && key.endsWith("frequencyfine"))
                 {
-                if (mutationRestriction == OFF)
+                return 0;
+                }
+            else if (key.startsWith("operator") && key.endsWith("frequencycoarse"))
+                {
+                if (mutationRestriction == COARSE)
                     return current;
-                else if (key.startsWith("operator") && key.endsWith("frequencyfine"))
+                else if (mutationRestriction == INTEGERS)
                     {
-                    return 0;
-                    }
-                else if (key.startsWith("operator") && key.endsWith("frequencycoarse"))
-                    {
-                    if (mutationRestriction == COARSE)
-                        return current;
-                    else if (mutationRestriction == INTEGERS)
+                    double val = FREQUENCY_RATIO_NEAREST_INTS[current];
+                    for(int i = 0; i < FREQUENCY_RATIOS.length; i++)
                         {
-                        double val = FREQUENCY_RATIO_NEAREST_INTS[current];
-                        for(int i = 0; i < FREQUENCY_RATIOS.length; i++)
-                            {
-                            if (FREQUENCY_RATIOS[i] == val)  // got it
-                                return i;
-                            }
-                        // never happens
-                        return current;
+                        if (FREQUENCY_RATIOS[i] == val)  // got it
+                            return i;
                         }
-                    else  // never happens
-                        return current;
+                    // never happens
+                    return current;
                     }
-                else
+                else  // never happens
                     return current;
                 }
-		}
-		
+            else
+                return current;
+            }
+        }
+                
     public Model buildModel()
         {
         return new SubModel();
@@ -761,15 +761,15 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
 
         params = V50_EFFECTS;
         comp = new Chooser("Effect [V]", this, "veffectsel", params)
-        	{
-        	public void update(String key, Model model)
-        		{
-        		super.update(key, model);
-        		param1.setLabel(V50_EFFECTS_PARAMETERS[model.get(key)][0] + " [V]");
-        		param2.setLabel(V50_EFFECTS_PARAMETERS[model.get(key)][1] + " [V]");
-        		param3.setLabel(V50_EFFECTS_PARAMETERS[model.get(key)][2] + " [V]");
-        		}
-        	};
+            {
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                param1.setLabel(V50_EFFECTS_PARAMETERS[model.get(key)][0] + " [V]");
+                param2.setLabel(V50_EFFECTS_PARAMETERS[model.get(key)][1] + " [V]");
+                param3.setLabel(V50_EFFECTS_PARAMETERS[model.get(key)][2] + " [V]");
+                }
+            };
         vbox.add(comp);
                 
         comp = new CheckBox("Stereo Mix [V]", this, "veffectstereomix");
@@ -778,9 +778,9 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
         hbox.add(vbox);
                 
         comp = new LabelledDial("Balance [V]", this, "veffectbalance", color, 0, 100, 50)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            };
         hbox.add(comp);
         
         comp = new LabelledDial("Out Level [V]", this, "veffectoutlevel", color, 0, 100);
@@ -1007,7 +1007,7 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
         comp = new Chooser("Wave [11,TX,>,V]", this, "operator" + src + "operatorwaveform", params, WAVE_ICONS);
         vbox.add(comp);
         
-		HBox hbox1 = new HBox();
+        HBox hbox1 = new HBox();
         comp = new CheckBox("AM", this, "operator" + src + "amplitudemodulationenable");
         hbox1.add(comp);
         comp = new CheckBox("Shift Hi [V]", this, "operator" + src + "vshift");
@@ -1021,7 +1021,7 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
         ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
         hbox.add(comp);
 
-		VBox vbox2 = new VBox();        
+        VBox vbox2 = new VBox();        
         comp = new LabelledDial("Key Velocity", this, "operator" + src + "keyvelocitysensitivity", color, 0, 7);
         ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
         vbox2.add(comp);
@@ -1191,7 +1191,7 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
         ((LabelledDial)comp).addAdditionalLabel("Scaling");
         vbox2.add(comp);
         comp = new CheckBox("Neg [V]", this, "operator" + envelope + "vlevelscalingsign");
-		((CheckBox)comp).addToWidth(2);
+        ((CheckBox)comp).addToWidth(2);
         vbox2.add(comp);
         hbox.add(vbox2);
         
@@ -1299,7 +1299,7 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
     "operator4decay2rate",
     "operator4releaserate",
     "operator4decay1level",
-    "operator4levelscaling",				// vlevelscalingsign
+    "operator4levelscaling",                            // vlevelscalingsign
     "operator4ratescaling",
     "operator4egbiassensitivity",
     "operator4amplitudemodulationenable",                   
@@ -1441,10 +1441,10 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
     "aftertouchpitchbias",
     "aftertouchenvelopebias",
     "operator4vshift",
-    "operator2vshift",		// weirdly out of place
+    "operator2vshift",          // weirdly out of place
     "operator3vshift",
     "operator1vshift",
-    "vlevelscalingsign",		// 1, 2, 3, 4.  I don't know the ordering but I presume 1 is bit 0
+    "vlevelscalingsign",                // 1, 2, 3, 4.  I don't know the ordering but I presume 1 is bit 0
     "-"
     };
 
@@ -1517,7 +1517,7 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
     */
 
     public static final int VCED_GROUP = 18; // 00010010
-    public static final int ACED_GROUP = 19; // 00010011				// ACED, ACED2, and ACED3
+    public static final int ACED_GROUP = 19; // 00010011                                // ACED, ACED2, and ACED3
     public static final int EFEDS_GROUP = 36; // 00100100
     public static final int PCED_GROUP = 16; // 00010000        says 00010011 in the manual, wrong
     public static final int REMOTE_SWITCH_GROUP = 19; // 00010011        same as ACED_GROUP
@@ -1551,25 +1551,25 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
             for(int i = 0; i < 4; i++)
                 {
                 if ((key.equals("operator" + (i + 1) + "vkeyvelocitysensitivitysign") ||
-                	key.equals("operator" + (i + 1) + "vkeyvelocitysensitivitysign")) && synthType == TYPE_V50)
+                        key.equals("operator" + (i + 1) + "vkeyvelocitysensitivitysign")) && synthType == TYPE_V50)
                     {
-					index = ((Integer)(vcedParametersToIndex.get("operator" + (i + 1) + "keyvelocitysensitivity"))).intValue();
-					value = (model.get("operator" + (i + 1) + "keyvelocitysensitivity") | 
-							(model.get("operator" + (i + 1) + "vkeyvelocitysensitivitysign") << 3));
-					break;
-					}
-				}
-				
-			if (index == -1)
-				{
-				if (key.endsWith("vkeyvelocitysensitivitysign"))  // invalid
-					return new Object[0];
-				else
-					{
-	            	index = ((Integer)(vcedParametersToIndex.get(key))).intValue();
-	            	value = model.get(key);
-	            	}
-            	}
+                    index = ((Integer)(vcedParametersToIndex.get("operator" + (i + 1) + "keyvelocitysensitivity"))).intValue();
+                    value = (model.get("operator" + (i + 1) + "keyvelocitysensitivity") | 
+                        (model.get("operator" + (i + 1) + "vkeyvelocitysensitivitysign") << 3));
+                    break;
+                    }
+                }
+                                
+            if (index == -1)
+                {
+                if (key.endsWith("vkeyvelocitysensitivitysign"))  // invalid
+                    return new Object[0];
+                else
+                    {
+                    index = ((Integer)(vcedParametersToIndex.get(key))).intValue();
+                    value = model.get(key);
+                    }
+                }
                             
             byte PP = (byte) index;
             byte VV = (byte) value;
@@ -1586,7 +1586,7 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
                 if (key.equals("operator" + (i+1) + "frequencyfine"))
                     {
                     if (model.get("operator" + (i+1) + "frequencycoarse") < 4)  // it's < 1.0
-                    	{
+                        {
                         value = Math.min(value, 7);  //  only first 8 values are legal
                         break;
                         }
@@ -1604,31 +1604,31 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
             int value = -1;
             
             if (key.endsWith("vlevelscalingsign") && synthType == TYPE_V50)
-				{
-				index = 8;
-				value = ( model.get("operator1vlevelscalingsign") |
-            				(model.get("operator2vlevelscalingsign") << 1) |
-            				(model.get("operator3vlevelscalingsign") << 2) |
-            				(model.get("operator4vlevelscalingsign") << 3));
-				}
+                {
+                index = 8;
+                value = ( model.get("operator1vlevelscalingsign") |
+                    (model.get("operator2vlevelscalingsign") << 1) |
+                    (model.get("operator3vlevelscalingsign") << 2) |
+                    (model.get("operator4vlevelscalingsign") << 3));
+                }
 
-			if (index == -1)
-				{
-				if (key.endsWith("vlevelscalingsign"))  // invalid
-					return new Object[0];
-				else
-					{
-            	 index = ((Integer)(aced2ParametersToIndex.get(key))).intValue();
-            	 value = model.get(key);
-            	 }
-            	 }
+            if (index == -1)
+                {
+                if (key.endsWith("vlevelscalingsign"))  // invalid
+                    return new Object[0];
+                else
+                    {
+                    index = ((Integer)(aced2ParametersToIndex.get(key))).intValue();
+                    value = model.get(key);
+                    }
+                }
             
 
-				// There is no ACED2_GROUP.  We just continue the parameters from 22
-				byte PP = (byte) (index + 23);
-				byte VV = (byte) value;
-				byte[] data = new byte[] { (byte)0xF0, 0x43, channel, ACED_GROUP, PP, VV, (byte)0xF7 };
-				return new Object[] { data };
+            // There is no ACED2_GROUP.  We just continue the parameters from 22
+            byte PP = (byte) (index + 23);
+            byte VV = (byte) value;
+            byte[] data = new byte[] { (byte)0xF0, 0x43, channel, ACED_GROUP, PP, VV, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (aced3ParametersToIndex.containsKey(key))
             {
@@ -1742,11 +1742,11 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
                     {
                     name[i - 77] = val;
                     }
-				else if (vcedParameters[i].endsWith("keyvelocitysensitivity"))  // gotta break out the sign for the V50
-					{
-					model.set(vcedParameters[i], val & 7);
-					model.set(vcedParameters[i].substring(0,9) + "v" + vcedParameters[i].substring(9) + "sign", (val >>> 3) & 1);
-					}
+                else if (vcedParameters[i].endsWith("keyvelocitysensitivity"))  // gotta break out the sign for the V50
+                    {
+                    model.set(vcedParameters[i], val & 7);
+                    model.set(vcedParameters[i].substring(0,9) + "v" + vcedParameters[i].substring(9) + "sign", (val >>> 3) & 1);
+                    }
                 else
                     {
                     model.set(vcedParameters[i], val);
@@ -1826,13 +1826,13 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
                 if (aced2Parameters[i].equals("-"))
                     continue;
                 else if (aced2Parameters[i].equals("vlevelscalingsign"))
-                	{
-                	// I *think* this is the right order?  that is, op 1 is bit 0
-                	model.set("operator1vlevelscalingsign", val & 1);
-                	model.set("operator2vlevelscalingsign", (val >>> 1) & 1);
-                	model.set("operator3vlevelscalingsign", (val >>> 2) & 1);
-                	model.set("operator4vlevelscalingsign", (val >>> 3) & 1);
-                	}
+                    {
+                    // I *think* this is the right order?  that is, op 1 is bit 0
+                    model.set("operator1vlevelscalingsign", val & 1);
+                    model.set("operator2vlevelscalingsign", (val >>> 1) & 1);
+                    model.set("operator3vlevelscalingsign", (val >>> 2) & 1);
+                    model.set("operator4vlevelscalingsign", (val >>> 3) & 1);
+                    }
                 else
                     {
                     model.set(aced2Parameters[i], val);
@@ -2070,9 +2070,9 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
             model.set(acedParameters[pos++], (data[patch + op * 2 + 74 + 6] >>> 4) & 7);
             // eg shift
             model.set(acedParameters[pos++], (data[patch + op * 2 + 73 + 6] >>> 4) & 3);
-             // fixed range mode (V50 only)
+            // fixed range mode (V50 only)
             model.set("operator" + (op + 1) + "vshift", (data[patch + op * 2 + 73 + 6] >>> 6) & 1);  // in docs as "FIXRM" for "FIX RANGE MODE"
-           }
+            }
 
         // reverb rate
         model.set(acedParameters[pos++], data[patch + 81 + 6] & 7);
@@ -2105,19 +2105,19 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
                 
         pos = 0;        // reset, we're now doing ACED3, V50 only
         // V Effect Sel
-        model.set(aced3Parameters[pos++], data[patch + 94 + 6] & 63);		// 0...32, so 64 bit argh     
+        model.set(aced3Parameters[pos++], data[patch + 94 + 6] & 63);           // 0...32, so 64 bit argh     
         // V Balance
-        model.set(aced3Parameters[pos++], data[patch + 95 + 6] & 127);		// 0...100        
+        model.set(aced3Parameters[pos++], data[patch + 95 + 6] & 127);          // 0...100        
         // V Out Level
-        model.set(aced3Parameters[pos++], data[patch + 96 + 6] & 127);		// 0...100        
+        model.set(aced3Parameters[pos++], data[patch + 96 + 6] & 127);          // 0...100        
         // V Effect Stereo Mix
-        model.set(aced3Parameters[pos++], data[patch + 97 + 6] & 1);			// 0...1        
+        model.set(aced3Parameters[pos++], data[patch + 97 + 6] & 1);                    // 0...1        
         // V Param 1
-        model.set(aced3Parameters[pos++], data[patch + 98 + 6] & 127);		// 0...75     
+        model.set(aced3Parameters[pos++], data[patch + 98 + 6] & 127);          // 0...75     
         // V Param 2
-        model.set(aced3Parameters[pos++], data[patch + 99 + 6] & 127);		// 0...99     
+        model.set(aced3Parameters[pos++], data[patch + 99 + 6] & 127);          // 0...99     
         // V Param 3
-        model.set(aced3Parameters[pos++], data[patch + 100 + 6] & 127);		// 0...99
+        model.set(aced3Parameters[pos++], data[patch + 100 + 6] & 127);         // 0...99
         
         revise();
         return PARSE_SUCCEEDED;
@@ -2133,79 +2133,79 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
         byte[][] result = new byte[4][];
   
   
-  	// we can only emit ACED3 *or* EFEDS because if we're emitting
-  	// either of them, then we should only emit *4* sysex chunks 
-  	// (ACED3 + ACED2 + ACED + VCED, or EFEDS + ACED2 + ACED + VCED)
-  	// so that if we save them it makes sense to the loader when trying
-  	// to guess how many sysex chunks are loaded for each patch.
-  	// Yamaha really screwed up here.
-  	
-  		byte[] data = null;
-  		if (getSynthType() == TYPE_V50)
-  			{
-	        // ACED3
-	        result[0] = new byte[38];
-	        data = new byte[30];
-	
-	        data[0] = (byte)'L';
-		    data[1] = (byte)'M';
-   	 		data[2] = (byte)' ';
-        	data[3] = (byte)' ';
-        	data[4] = (byte)'8';
-        	data[5] = (byte)'0';
-        	data[6] = (byte)'7';
-        	data[7] = (byte)'3';
-        	data[8] = (byte)'A';
-        	data[9] = (byte)'E';
-        	
-        	for(int i = 0; i < aced3Parameters.length; i++)
-        	    {
-        	    if (!(aced3Parameters[i].equals("-")))
-        	        data[i + 10] = (byte)(model.get(aced3Parameters[i]));
-        	    }
-	
-		    result[0][0] = (byte)0xF0;
-	        result[0][1] = 0x43;
-	        result[0][2] = (byte)(getChannelOut()); //(byte)(32 + getChannelOut());
-	        result[0][3] = (byte)0x7E;
-	        result[0][4] = 0x00;
-	        result[0][5] = 0x1E;
-	        System.arraycopy(data, 0, result[0], 6, data.length);
-	        result[0][6 + data.length] = produceChecksum(data);
-	        result[0][7 + data.length] = (byte)0xF7;
-	        }
-	    else
-	    	{
-			// EFEDS
-			result[0] = new byte[21];
-			data = new byte[13];
+        // we can only emit ACED3 *or* EFEDS because if we're emitting
+        // either of them, then we should only emit *4* sysex chunks 
+        // (ACED3 + ACED2 + ACED + VCED, or EFEDS + ACED2 + ACED + VCED)
+        // so that if we save them it makes sense to the loader when trying
+        // to guess how many sysex chunks are loaded for each patch.
+        // Yamaha really screwed up here.
+        
+        byte[] data = null;
+        if (getSynthType() == TYPE_V50)
+            {
+            // ACED3
+            result[0] = new byte[38];
+            data = new byte[30];
+        
+            data[0] = (byte)'L';
+            data[1] = (byte)'M';
+            data[2] = (byte)' ';
+            data[3] = (byte)' ';
+            data[4] = (byte)'8';
+            data[5] = (byte)'0';
+            data[6] = (byte)'7';
+            data[7] = (byte)'3';
+            data[8] = (byte)'A';
+            data[9] = (byte)'E';
+                
+            for(int i = 0; i < aced3Parameters.length; i++)
+                {
+                if (!(aced3Parameters[i].equals("-")))
+                    data[i + 10] = (byte)(model.get(aced3Parameters[i]));
+                }
+        
+            result[0][0] = (byte)0xF0;
+            result[0][1] = 0x43;
+            result[0][2] = (byte)(getChannelOut()); //(byte)(32 + getChannelOut());
+            result[0][3] = (byte)0x7E;
+            result[0][4] = 0x00;
+            result[0][5] = 0x1E;
+            System.arraycopy(data, 0, result[0], 6, data.length);
+            result[0][6 + data.length] = produceChecksum(data);
+            result[0][7 + data.length] = (byte)0xF7;
+            }
+        else
+            {
+            // EFEDS
+            result[0] = new byte[21];
+            data = new byte[13];
 
-			data[0] = (byte)'L';
-			data[1] = (byte)'M';
-			data[2] = (byte)' ';
-			data[3] = (byte)' ';
-			data[4] = (byte)'8';
-			data[5] = (byte)'0';
-			data[6] = (byte)'3';
-			data[7] = (byte)'6';
-			data[8] = (byte)'E';
-			data[9] = (byte)'F';
-		
-			for(int i = 0; i < efedsParameters.length; i++)
-				{
-				data[i + 10] = (byte)(model.get(efedsParameters[i]));
-				}
+            data[0] = (byte)'L';
+            data[1] = (byte)'M';
+            data[2] = (byte)' ';
+            data[3] = (byte)' ';
+            data[4] = (byte)'8';
+            data[5] = (byte)'0';
+            data[6] = (byte)'3';
+            data[7] = (byte)'6';
+            data[8] = (byte)'E';
+            data[9] = (byte)'F';
+                
+            for(int i = 0; i < efedsParameters.length; i++)
+                {
+                data[i + 10] = (byte)(model.get(efedsParameters[i]));
+                }
 
-			result[0][0] = (byte)0xF0;
-			result[0][1] = 0x43;
-			result[0][2] = (byte)(getChannelOut());
-			result[0][3] = (byte)0x7E;
-			result[0][4] = 0x00;
-			result[0][5] = 0x0D;
-			System.arraycopy(data, 0, result[0], 6, data.length);
-			result[0][6 + data.length] = produceChecksum(data);
-			result[0][7 + data.length] = (byte)0xF7;
-			}
+            result[0][0] = (byte)0xF0;
+            result[0][1] = 0x43;
+            result[0][2] = (byte)(getChannelOut());
+            result[0][3] = (byte)0x7E;
+            result[0][4] = 0x00;
+            result[0][5] = 0x0D;
+            System.arraycopy(data, 0, result[0], 6, data.length);
+            result[0][6 + data.length] = produceChecksum(data);
+            result[0][7 + data.length] = (byte)0xF7;
+            }
         
         // ACED2
         result[1] = new byte[28];
@@ -2225,12 +2225,12 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
         for(int i = 0; i < aced2Parameters.length; i++)
             {
             if (i == 8)  // "LS SIGN" (level scaling sign), handle specially
-            	{
-            	data[i + 10] = (byte)(	model.get("operator1vlevelscalingsign") |
-            							(model.get("operator2vlevelscalingsign") << 1) |
-            							(model.get("operator3vlevelscalingsign") << 2) |
-            							(model.get("operator4vlevelscalingsign") << 3));
-            	}
+                {
+                data[i + 10] = (byte)(  model.get("operator1vlevelscalingsign") |
+                    (model.get("operator2vlevelscalingsign") << 1) |
+                    (model.get("operator3vlevelscalingsign") << 2) |
+                    (model.get("operator4vlevelscalingsign") << 3));
+                }
             else if (!(aced2Parameters[i].equals("-")))
                 data[i + 10] = (byte)(model.get(aced2Parameters[i]));
             }
@@ -2291,15 +2291,15 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
         int pos = 0;
         for(int i = 0; i < vcedParameters.length - 16; i++)  // no name, no extra gunk
             {
-			if (vcedParameters[i].endsWith("keyvelocitysensitivity"))  // gotta break out the sign for the V50
-				{
-				data[pos++] = (byte)(model.get(vcedParameters[i]) | 
-					(model.get(vcedParameters[i].substring(0,9) + "v" + vcedParameters[i].substring(9) + "sign") << 3));
-				}
+            if (vcedParameters[i].endsWith("keyvelocitysensitivity"))  // gotta break out the sign for the V50
+                {
+                data[pos++] = (byte)(model.get(vcedParameters[i]) | 
+                    (model.get(vcedParameters[i].substring(0,9) + "v" + vcedParameters[i].substring(9) + "sign") << 3));
+                }
             else
-            	{
-           	 	data[pos++] = (byte)(model.get(vcedParameters[i]));
-           	 	}
+                {
+                data[pos++] = (byte)(model.get(vcedParameters[i]));
+                }
             }
         
         String name = model.get("name", "INIT VOICE") + "          ";
@@ -2363,14 +2363,14 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
     
 
     // DX21 Dump Request                F0 43 2CH 03 F7
-    // DX27/100 Dump Request    		F0 43 2CH 03 F7
+    // DX27/100 Dump Request                    F0 43 2CH 03 F7
     // DX11 Dump Request                F0 43 2CH 7E "LM  8023AE" F7    [ACED2 + ACED + VCED]
     // TX81Z Dump Request               F0 43 2CH 7E "LM  8976AE" F7    [ACED + VCED]           // It says 0CH but that's wrong
     // TQ5 Dump Request                 F0 43 2CH 7E "LM  8036EF" F7    [EFEDS + ACED2 + ACED + VCED]
     // V50 Dump Request                 F0 43 2CH 7E "LM  8037AE" F7    [ACED3 + ACED2 + ACED + VCED]
 
     // DX21 Change Patch                [Though there are banks, we can only access the first one, just 32 values]
-    // DX27/100 Dump Request    [		We can access voices 0...23 in banks I, A, B, C, D, but only write to I]
+    // DX27/100 Dump Request    [               We can access voices 0...23 in banks I, A, B, C, D, but only write to I]
     // DX11 Dump Request                [We can access voices 0...31 in banks I, A, B, C, D, but only write to I]
     // TX81Z Dump Request               [We can access voices 0...32 in banks I, A, B, C, D, but only write to I]
     // TQ5 Dump Request                 [We can access voices 0...99.  There are three BANKS, Internal, Preset, and Card.]
@@ -2452,12 +2452,12 @@ public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
         }
         
 /*
-public static String toHex(int val)
-	{
-	return String.format("0x%08X", val);
-	}
-	*/
-	
+  public static String toHex(int val)
+  {
+  return String.format("0x%08X", val);
+  }
+*/
+        
 // returns a guess as to the number of sysex commands this file is trying to load per patch.
 // Or if we don't recognize it, then 0
     static int recognizeBasic(byte[] data)
@@ -2481,7 +2481,7 @@ public static String toHex(int val)
             data[13] == '3' &&
             data[14] == 'A' &&
             data[15] == 'E')
-            return 4;				// VCED + ACED + ACED2 + ACED3
+            return 4;                           // VCED + ACED + ACED2 + ACED3
 
         // EFEDS
         if (data.length >= 21 &&
@@ -2502,7 +2502,7 @@ public static String toHex(int val)
             data[13] == '6' &&
             data[14] == 'E' &&
             data[15] == 'F')
-            return 4;					// VCED + ACED + ACED2 + EFEDS
+            return 4;                                   // VCED + ACED + ACED2 + EFEDS
 
         // ACED2
         if (data.length >= 28 &&
@@ -2523,7 +2523,7 @@ public static String toHex(int val)
             data[13] == '3' &&
             data[14] == 'A' &&
             data[15] == 'E')
-            return 3;					// VCED + ACED + ACED2
+            return 3;                                   // VCED + ACED + ACED2
 
         // ACED
         if (data.length >= 41 &&
@@ -2544,7 +2544,7 @@ public static String toHex(int val)
             data[13] == '6' &&
             data[14] == 'A' &&
             data[15] == 'E')
-            return 2;					// VCED + ACED
+            return 2;                                   // VCED + ACED
         
         // VCED
         if (data.length == 101 &&
@@ -2554,7 +2554,7 @@ public static String toHex(int val)
             data[3] == (byte)0x03 &&
             data[4] == (byte)0x00 &&
             data[5] == (byte)0x5D)
-            return 1;					// VCED alone
+            return 1;                                   // VCED alone
 
         else return 0;
         }
@@ -2649,14 +2649,14 @@ public static String toHex(int val)
 
 
     // DX21 Change Patch                [Though there are banks, we can only access the first one, just 32 values]
-    // DX27/100 Dump Request    		[We can access voices 0...23 in banks I, A, B, C, D, but only write to I]
+    // DX27/100 Dump Request                    [We can access voices 0...23 in banks I, A, B, C, D, but only write to I]
     // DX11 Dump Request                [We can access voices 0...31 in banks I, A, B, C, D, but only write to I]
     // TX81Z Dump Request               [We can access voices 0...32 in banks I, A, B, C, D, but only write to I]
     // TQ5 Dump Request                 [We can access voices 0...99.  There are three BANKS, Internal, Preset, and Card.]
     // V50 Dump Request                 [We can access voices 0...99.  There are three BANKS, Internal, Preset, and Card.]
 
     // DX21 Change Patch                PC
-    // DX27/100 Dump Request    		PC
+    // DX27/100 Dump Request                    PC
     // DX11 Dump Request                Unknown: maybe modify slot 127 in PC table to PC value, press SINGLE, send PC 127.  See page 50 of service manual
     // TX81Z Dump Request               Modify slot 127 in PC table to PC value, press PLAY/PERFORM, send PC 127
     // TQ5 Dump Request                 Send command to press the "preset", "card", or "internal" button, then PC  
@@ -2778,7 +2778,7 @@ public static String toHex(int val)
                 // We do two PCs
                 // First to change banks, this is a weird way to do it.
                 tryToSendMIDI(buildPC(getChannelOut(), bank + 122));
-				// Next to select the patcb                
+                // Next to select the patcb                
                 tryToSendMIDI(buildPC(getChannelOut(), number));
                 }
             break;                  
@@ -2815,14 +2815,14 @@ public static String toHex(int val)
                 (type == TYPE_DX27_DX100 ? 24 :
                     (type == TYPE_DX11 ? 32 :
                         (type == TYPE_TX81Z ? 32 :
-                        100))));		// TQ5 and V50
+                        100))));                // TQ5 and V50
 
         int maxBank =
             (type == TYPE_DX21 ? 1 :
                 (type == TYPE_DX27_DX100 ? 5 :
                     (type == TYPE_DX11 ? 5 :
                         (type == TYPE_TX81Z ? 5 :
-                        3))));			// TQ5 and V50
+                        3))));                  // TQ5 and V50
                                                 
         number++;
         if (number >= maxNumber)
@@ -2881,26 +2881,26 @@ public static String toHex(int val)
     public boolean testVerify(Synth synth2, String key, Object val1, Object val2)
         {
         if (key.endsWith("frequencyfine"))  // this gets restricted to 7 if frequencycoarse is small, resulting in sanitycheck errors
-        	return true;
+            return true;
         if (((Yamaha4Op)synth2).getSynthType() == TYPE_V50)
-        	{
-        	// Obviously won't have EFEDS parameters
-        	return (
-        		key.equals("effectpreset") ||
-        		key.equals("effecttime") ||
-        		key.equals("effectbalance"));			
-        	}
+            {
+            // Obviously won't have EFEDS parameters
+            return (
+                key.equals("effectpreset") ||
+                key.equals("effecttime") ||
+                key.equals("effectbalance"));                   
+            }
         else
-        	{
-        	// Obviously won't have ACED3 parameters
-        	return (
-        		key.equals("veffectparam1") ||
-        		key.equals("veffectparam2") ||
-        		key.equals("veffectparam3") ||
-        		key.equals("veffectsel") ||
-        		key.equals("veffectstereomix") ||
-        		key.equals("veffectbalance") ||
-        		key.equals("veffectoutlevel"));			
-        	}
+            {
+            // Obviously won't have ACED3 parameters
+            return (
+                key.equals("veffectparam1") ||
+                key.equals("veffectparam2") ||
+                key.equals("veffectparam3") ||
+                key.equals("veffectsel") ||
+                key.equals("veffectstereomix") ||
+                key.equals("veffectbalance") ||
+                key.equals("veffectoutlevel"));                 
+            }
         }
     }

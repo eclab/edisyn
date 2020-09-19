@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.korgmicrokorg;
 import edisyn.*;
 
 public class KorgMicroKorgVocoderRec extends Recognize
-	{
+    {
     // converts all but last byte (F7)
     static byte[] convertTo8Bit(byte[] data, int offset)
         {
@@ -47,4 +47,4 @@ public class KorgMicroKorgVocoderRec extends Recognize
         return (voicemode == 3);  // vocoder
         }
 
-	}
+    }

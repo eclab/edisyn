@@ -1017,9 +1017,9 @@ public class Midi
             {
             byte[] data = sysex.getMessage();
             
-			int numchunks = data.length / chunksize;
-			if (numchunks * chunksize < data.length - 1)		// we don't allow a bare 0xF7
-				numchunks++;
+            int numchunks = data.length / chunksize;
+            if (numchunks * chunksize < data.length - 1)            // we don't allow a bare 0xF7
+                numchunks++;
             DividedSysex2[] m = new DividedSysex2[numchunks];  //  + extra];
             for(int i = 0, pos = 0; i < m.length; i++, pos += chunksize)
                 {
@@ -1033,17 +1033,17 @@ public class Midi
                 /// data byte because the initial 0xF0 isn't real.
                 byte[] d = null;
                 int size = (i == m.length - 1 ? data.length - pos : chunksize);
-				if (i == 0)
-					{
-					d = new byte[size];
-					System.arraycopy(data, pos, d, 0, size);
-					}
-				else
-					{
-					d = new byte[1 + size];
-					System.arraycopy(data, pos, d, 1, size);
-					d[0] = (byte)0xF7;
-					}
+                if (i == 0)
+                    {
+                    d = new byte[size];
+                    System.arraycopy(data, pos, d, 0, size);
+                    }
+                else
+                    {
+                    d = new byte[1 + size];
+                    System.arraycopy(data, pos, d, 1, size);
+                    d[0] = (byte)0xF7;
+                    }
                 m[i] = new DividedSysex2(d);
                 }
             return m;
@@ -1054,36 +1054,36 @@ public class Midi
             {
             DividedSysex2[] div = new DividedSysex2[sysex.length];
             for(int i = 0; i < sysex.length; i++)
-            	{
-            	if (sysex[i][0] == (byte)0xF0)  // we're good
-	                div[i] = new DividedSysex2(sysex[i]);
-            	else 
-            		{
-            		byte[] sysex2 = new byte[sysex[i].length + 1];
-					System.arraycopy(sysex[i], 0, sysex2, 1, sysex[i].length);
-					sysex2[0] = (byte)0xF7;	// see discussion in divide() above
-	                div[i] = new DividedSysex2(sysex2);
-	                }
+                {
+                if (sysex[i][0] == (byte)0xF0)  // we're good
+                    div[i] = new DividedSysex2(sysex[i]);
+                else 
+                    {
+                    byte[] sysex2 = new byte[sysex[i].length + 1];
+                    System.arraycopy(sysex[i], 0, sysex2, 1, sysex[i].length);
+                    sysex2[0] = (byte)0xF7; // see discussion in divide() above
+                    div[i] = new DividedSysex2(sysex2);
+                    }
                 }
-                /*
-            for(int i = 0; i < div.length; i++)
-            	{
-            	System.err.println();
-            	System.err.println("CHUNK " + i);
-            	System.err.println();
-            	byte[] data = div[i].getMessage();
-            	for (int j = 0; j < data.length; j++)
-            		{
-            		System.err.println("" + j + " " + toHex(data[j]) + ((data[j] & 255) < 32 ? "" : (char)(data[j] & 255)));
-            		}
-            		
-            	}
-            	*/
-        	return div;
+            /*
+              for(int i = 0; i < div.length; i++)
+              {
+              System.err.println();
+              System.err.println("CHUNK " + i);
+              System.err.println();
+              byte[] data = div[i].getMessage();
+              for (int j = 0; j < data.length; j++)
+              {
+              System.err.println("" + j + " " + toHex(data[j]) + ((data[j] & 255) < 32 ? "" : (char)(data[j] & 255)));
+              }
+                        
+              }
+            */
+            return div;
             }
         }
         
- public static String toHex(int val)
+    public static String toHex(int val)
         {
         return String.format("0x%08X", val);
         }
@@ -1150,18 +1150,18 @@ public class Midi
                 div[i] = new DividedSysex(sysex[i]);
 
 /*
-            for(int i = 0; i < div.length; i++)
-            	{
-            	System.err.println();
-            	System.err.println("CHUNK " + i);
-            	System.err.println();
-            	byte[] data = div[i].getMessage();
-            	for (int j = 0; j < data.length; j++)
-            		{
-            		System.err.println("" + j + " " + toHex(data[j]) + ((data[j] & 255) < 32 ? "" : (char)(data[j] & 255)));
-            		}
-            	}
-            */
+  for(int i = 0; i < div.length; i++)
+  {
+  System.err.println();
+  System.err.println("CHUNK " + i);
+  System.err.println();
+  byte[] data = div[i].getMessage();
+  for (int j = 0; j < data.length; j++)
+  {
+  System.err.println("" + j + " " + toHex(data[j]) + ((data[j] & 255) < 32 ? "" : (char)(data[j] & 255)));
+  }
+  }
+*/
 
             return div;
             }

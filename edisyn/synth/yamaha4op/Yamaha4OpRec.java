@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.yamaha4op;
 import edisyn.*;
 
 public class Yamaha4OpRec extends Recognize
-	{
+    {
     public static int getNumSysexDumpsPerPatch(byte[] data) 
         {
         int i = recognizeBasic(data);           // we'll try here to guess how many patches are in a chunk in this file
@@ -15,12 +15,12 @@ public class Yamaha4OpRec extends Recognize
         else return 1;
         }
 
-	/*
-public static String toHex(int val)
-	{
-	return String.format("0x%08X", val);
-	}
-	*/
+    /*
+      public static String toHex(int val)
+      {
+      return String.format("0x%08X", val);
+      }
+    */
 
     public static boolean recognizeBulk(byte[] data)
         {
@@ -58,7 +58,7 @@ public static String toHex(int val)
             data[13] == '3' &&
             data[14] == 'A' &&
             data[15] == 'E')
-            return 4;				// VCED + ACED + ACED2 + ACED3
+            return 4;                           // VCED + ACED + ACED2 + ACED3
 
         // EFEDS
         if (data.length >= 21 &&
@@ -79,7 +79,7 @@ public static String toHex(int val)
             data[13] == '6' &&
             data[14] == 'E' &&
             data[15] == 'F')
-            return 4;					// VCED + ACED + ACED2 + EFEDS
+            return 4;                                   // VCED + ACED + ACED2 + EFEDS
 
         // ACED2
         if (data.length >= 28 &&
@@ -100,7 +100,7 @@ public static String toHex(int val)
             data[13] == '3' &&
             data[14] == 'A' &&
             data[15] == 'E')
-            return 3;					// VCED + ACED + ACED2
+            return 3;                                   // VCED + ACED + ACED2
 
         // ACED
         if (data.length >= 41 &&
@@ -121,7 +121,7 @@ public static String toHex(int val)
             data[13] == '6' &&
             data[14] == 'A' &&
             data[15] == 'E')
-            return 2;					// VCED + ACED
+            return 2;                                   // VCED + ACED
         
         // VCED
         if (data.length == 101 &&
@@ -131,13 +131,13 @@ public static String toHex(int val)
             data[3] == (byte)0x03 &&
             data[4] == (byte)0x00 &&
             data[5] == (byte)0x5D)
-            return 1;					// VCED alone
+            return 1;                                   // VCED alone
 
         else return 0;
         }
         
-     public static boolean recognize(byte[] data)
+    public static boolean recognize(byte[] data)
         {
         return (recognizeBasic(data) > 0) || recognizeBulk(data);
         }
-	}
+    }

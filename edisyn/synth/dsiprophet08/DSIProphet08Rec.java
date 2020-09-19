@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.dsiprophet08;
 import edisyn.*;
 
 public class DSIProphet08Rec extends Recognize
-	{
+    {
     public static final byte PROPHET_08_ID = 0x23;
     public static final byte MOPHO_ID = 0x25;
     public static final byte TETRA_ID = 0x26;
@@ -37,4 +37,4 @@ public class DSIProphet08Rec extends Recognize
                 (data[2] == MOPHO_ID || data[2] == MOPHO_KEYBOARD_ID || data[2] == MOPHO_X4_ID) &&
                 data[3] == (byte) 0x03));       // Edit Buffer Data Dump        
         }
-	}
+    }

@@ -1,15 +1,15 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.emumorpheus;
 import edisyn.*;
 
 public class EmuMorpheusRec extends Recognize
-	{
-	public static final int NUM_PARAMETERS = 278;
-	
+    {
+    public static final int NUM_PARAMETERS = 278;
+        
     public static boolean recognize(byte[] data)
         {
         return  data.length == 10 + NUM_PARAMETERS * 2 &&
@@ -20,4 +20,4 @@ public class EmuMorpheusRec extends Recognize
             data[5] == (byte) 0x01;
         }
         
-	}
+    }

@@ -862,7 +862,7 @@ public class Generic extends Synth
             data[8] ==' ' &&
             data[9] =='C' &&
             data[10] =='C' &&
-            data[11] == 0;			// version number.  We recognize only 0
+            data[11] == 0;                      // version number.  We recognize only 0
         }
         
     public int parse(byte[] data, boolean fromFile) 

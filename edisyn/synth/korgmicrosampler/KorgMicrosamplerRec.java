@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.korgmicrosampler;
 import edisyn.*;
 
 public class KorgMicrosamplerRec extends Recognize
-	{
+    {
     public static boolean recognize(byte[] data)
         {
         boolean val = (data.length == 780 &&
@@ -41,4 +41,4 @@ public class KorgMicrosamplerRec extends Recognize
         return val;
         }
         
-	}
+    }

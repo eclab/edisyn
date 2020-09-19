@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 24)
+Synthesizer Patch Editor (Version 25)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -43,6 +43,7 @@ Edisyn presently supports:
 * Korg MicroKorg (Single and Vocoder Modes)
 * Korg Microsampler
 * Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
+* Novation Drumstation and D-station
 * Oberheim Matrix 6, 6R, and 1000 (Single and (for 1000) Global Modes) 
 * PreenFM2
 * Red Sound DarkStar and DarkStar XP2
@@ -50,10 +51,10 @@ Edisyn presently supports:
 * Roland JV-80 and JV-880 (Single and Multi Modes)
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading)
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
-* Yamaha DX7 Family (DX7, TX7, TX802, TX216/TX816, Korg Volca FM, Dexed, DX200, DX9, FS1R)
+* Yamaha DX7 Family (DX7, TX7, TX802, TX216/TX816, Korg Volca FM, Dexed, DX200, DX9)
 * Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, etc.) (Single and (for TX81Z and DX11) Multi Modes)
 * Yamaha FB01 (Single and Multi Modes)
-* Yamaha FS1R (Voice and Performance Modes)
+* Yamaha FS1R (Voice, Performance, and Fseq Modes)
 * Yamaha TG33, SY22, and SY35 (Single and (for TG33) Multi Modes)
 * General CC, NRPN, and RPN editing
 * Microtuning editing
@@ -110,7 +111,14 @@ If you want to use Edisyn in combination with a DAW, see the manual's section on
 
 #### Important Note for Windows Users
 
-Java versions earlier than 11 (or so) do not handle high-resolution displays properly, so Edisyn will appear teeny-tiny.  You need to upgrade to 11 or beyond.
+Java doesn't handle high-resolution displays properly in Windows, especially Windows 10.  Be sure to have installed at least Java 11 (otherwise you'll have teeny tiny displays).  You'll still have font issues on 4K monitors.  I am told this can help dealing with it:
+
+1. Find java.exe you installed.
+2. Right-click and select "Properties"
+3. Click on the "Compatibility" tab
+4. Click on "Change high DPI settings"
+5. Here you can try checking "Use this setting to fix scaling problems for this program instead of the one in Settings"
+5.1 If that's not working, you might instead try "Override high DPI scaling behavior.  Scaling performed by: System (Enhanced)"
 
 Also Edisyn makes heavy use of Java preferences to store persistence information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows for earlier versions of Java.  I think this is fixed as of Java 11 but you should check and let me know.
 

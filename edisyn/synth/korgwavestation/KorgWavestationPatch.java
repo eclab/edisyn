@@ -242,8 +242,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                 else
                     setSelectedTabIndex(t);
 
-				// reset mutes
-				resetSolo();
+                // reset mutes
+                resetSolo();
                 }
             };
         vbox.add(comp);
@@ -2515,22 +2515,22 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public static final int[] MUTES_AC = new int[]{ 4, 1 };
     public void setSolo()
         {
-        int wave = getSelectedTabIndex() - 1;		// 0 ... 3
+        int wave = getSelectedTabIndex() - 1;           // 0 ... 3
         int numOsc = model.get("numoscillators");
-        if (numOsc == 0)	// A
-        	{
-        	// do nothing
-        	}
-        else if (numOsc == 1)	// A C
-        	{
-			byte[] midi_mesg = paramBytes(WAVE_MUTE, MUTES_AC[wave]);
-			tryToSendSysex(midi_mesg);
-        	}
-		else				// A B C D
-			{
-	        byte[] midi_mesg = paramBytes(WAVE_MUTE, MUTES_ABCD[wave]);
-	        tryToSendSysex(midi_mesg);
-        	}
+        if (numOsc == 0)        // A
+            {
+            // do nothing
+            }
+        else if (numOsc == 1)   // A C
+            {
+            byte[] midi_mesg = paramBytes(WAVE_MUTE, MUTES_AC[wave]);
+            tryToSendSysex(midi_mesg);
+            }
+        else                            // A B C D
+            {
+            byte[] midi_mesg = paramBytes(WAVE_MUTE, MUTES_ABCD[wave]);
+            tryToSendSysex(midi_mesg);
+            }
         }
                 
     public void resetSolo()

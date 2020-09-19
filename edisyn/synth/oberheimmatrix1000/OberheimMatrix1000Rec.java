@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.oberheimmatrix1000;
 import edisyn.*;
 
 public class OberheimMatrix1000Rec extends Recognize
-	{
+    {
     public static final int EXPECTED_SYSEX_LENGTH = 275;        
         
     public static boolean recognize(byte[] data)
@@ -23,4 +23,4 @@ public class OberheimMatrix1000Rec extends Recognize
             (data[3] == (byte)0x01 || data[3] == (byte)0x0d));
         return v;
         }
-	}
+    }

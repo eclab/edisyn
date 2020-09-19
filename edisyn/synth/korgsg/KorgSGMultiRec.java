@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.korgsg;
 import edisyn.*;
 
 public class KorgSGMultiRec extends Recognize
-	{
+    {
     public static final int EXPECTED_SYSEX_LENGTH = 285;
     public static boolean recognize(byte[] data)
         {
@@ -22,4 +22,4 @@ public class KorgSGMultiRec extends Recognize
         return v;
         }
     
-	}
+    }

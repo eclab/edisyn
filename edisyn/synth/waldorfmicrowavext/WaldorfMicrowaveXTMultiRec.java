@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.waldorfmicrowavext;
 import edisyn.*;
 
 public class WaldorfMicrowaveXTMultiRec extends Recognize
-	{
+    {
     public static boolean recognize(byte[] data)
         {
         // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
@@ -24,4 +24,4 @@ public class WaldorfMicrowaveXTMultiRec extends Recognize
         
     
     public static final int EXPECTED_SYSEX_LENGTH = 265;
-	}
+    }

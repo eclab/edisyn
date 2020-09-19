@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.yamahafb01;
 import edisyn.*;
 
 public class YamahaFB01Rec extends Recognize
-	{
+    {
     public static boolean recognize(byte[] data)
         {
         return 
@@ -31,4 +31,4 @@ public class YamahaFB01Rec extends Recognize
             data[5] == 0x00 &&
             data[6] == 0x00);
         }
-	}
+    }

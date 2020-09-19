@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn;
 
 
 public class Recognize
-	{
+    {
     public static boolean recognizeBulk(byte[] data)
         {
         return false;
@@ -19,7 +19,7 @@ public class Recognize
         }
     
     /*
-    public static int getNumSysexDumpsPerPatch(Class synthClass, byte[] data)
+      public static int getNumSysexDumpsPerPatch(Class synthClass, byte[] data)
     */
     }
         

@@ -53,12 +53,12 @@ public abstract class Synth extends JComponent implements Updatable
     /** The largest permitted sysex file. */
     public static final int MAX_FILE_LENGTH = 512 * 1024;        // so we don't go on forever
 
-	/** Used in emitAll(key...) to indicate that emitAll(...) is being used to send one of a stream of all the parameters. */
+    /** Used in emitAll(key...) to indicate that emitAll(...) is being used to send one of a stream of all the parameters. */
     public static final int STATUS_SENDING_ALL_PARAMETERS = 0;
-	/** Used in emitAll(key...) to indicate that emitAll(...) is being used to send just a single parameter, and is not part of a stream of parameters. */
+    /** Used in emitAll(key...) to indicate that emitAll(...) is being used to send just a single parameter, and is not part of a stream of parameters. */
     public static final int STATUS_UPDATING_ONE_PARAMETER = 1;
 
-	/** The Synth menu bar */
+    /** The Synth menu bar */
     public JMenuBar menubar;
     /** The "Send to Patch..." menu */
     public JMenuItem transmitTo;
@@ -88,11 +88,11 @@ public abstract class Synth extends JComponent implements Updatable
     public JCheckBoxMenuItem testNotes;
     /** The "Repeatedly Send Current Patch" menu */
     public JCheckBoxMenuItem repeatCurrentPatch;
-	/** The Hill-Climbing tab pane */
+    /** The Hill-Climbing tab pane */
     public JComponent hillClimbPane;
-	/** The "Batch Download..." pane */
+    /** The "Batch Download..." pane */
     public JMenuItem getAll;
-	/** The "Report Next Controller MIDI" menu */
+    /** The "Report Next Controller MIDI" menu */
     public JMenuItem testIncomingController;
     /** The "Report Next Synth MIDI" menu */
     public JMenuItem testIncomingSynth;
@@ -101,7 +101,7 @@ public abstract class Synth extends JComponent implements Updatable
         
     // The four nudge models 
     Model[] nudge = new Model[4];
-	// The 8 nudge-towards menus
+    // The 8 nudge-towards menus
     JMenuItem[] nudgeTowards = new JMenuItem[8];
     // The favorites
     Favorites favorites = new Favorites();
@@ -197,11 +197,11 @@ public abstract class Synth extends JComponent implements Updatable
         return (String[])(list.toArray(new String[0]));
         }
 
-	/** Override this to return your own customized Model subclass if you have some need to do so,
-		typically in order to override the methods reviseMutatedValue(...)....
-		Note that you should not build this with an anonymous class because
-		it doesn't have a constructor and can't be build via model.newModel().
-		Instead, make a PUBLIC inner class, ideally a static one, and instantiate that. */
+    /** Override this to return your own customized Model subclass if you have some need to do so,
+        typically in order to override the methods reviseMutatedValue(...)....
+        Note that you should not build this with an anonymous class because
+        it doesn't have a constructor and can't be build via model.newModel().
+        Instead, make a PUBLIC inner class, ideally a static one, and instantiate that. */
     public Model buildModel() { return new Model(); }
 
 
@@ -231,18 +231,18 @@ public abstract class Synth extends JComponent implements Updatable
         MIDI devices. */
         
     public static Synth instantiate(String classname, boolean throwaway, boolean setupMIDI, Midi.Tuple tuple)
-    	{
-    	try
-    		{
-	    	return instantiate(Class.forName(classname), null, throwaway, setupMIDI, tuple);
-	    	}
-	    catch (Exception ex)
-	    	{
+        {
+        try
+            {
+            return instantiate(Class.forName(classname), null, throwaway, setupMIDI, tuple);
+            }
+        catch (Exception ex)
+            {
             JOptionPane.showMessageDialog(null, "An error occurred while creating the synth editor for \n" + classname, "Creation Error", JOptionPane.ERROR_MESSAGE);
-	    	ex.printStackTrace();
-	    	return null;
-	    	}
-    	}
+            ex.printStackTrace();
+            return null;
+            }
+        }
     
 
     /** Builds a synth of the given CLASS, with the given synth NAME.
@@ -441,41 +441,41 @@ public abstract class Synth extends JComponent implements Updatable
         
     //// You can get the class names of all the synthesizer editors as:
     ////
-    ////	getClassNames()
+    ////        getClassNames()
     ////
-	//// There are presently TWO sources of a synthesizer's textual name in Edisyn:
-	//// The synth/Synths.txt file
-	////	This is the source of the information found in numSynths(), getClassNames(), and getSynthNames()
-	////
-	//// Individual synth classes
-	////	Each synth class "overrides" a STATIC method called getSynthName().
-	////	This method can be easily accessed with one of: getSynthNameForClassName(), getSynthNameForClass(), or getSynthNameLocal()
-	////
-	//// The objective here is to speed up Edisyn's load time, which is weighed down by preloading all the
-	//// editor classes, some of which (<ahem>FS1R Fseq</ahem>) have an enormous amount of data.  
+    //// There are presently TWO sources of a synthesizer's textual name in Edisyn:
+    //// The synth/Synths.txt file
+    ////    This is the source of the information found in numSynths(), getClassNames(), and getSynthNames()
+    ////
+    //// Individual synth classes
+    ////    Each synth class "overrides" a STATIC method called getSynthName().
+    ////    This method can be easily accessed with one of: getSynthNameForClassName(), getSynthNameForClass(), or getSynthNameLocal()
+    ////
+    //// The objective here is to speed up Edisyn's load time, which is weighed down by preloading all the
+    //// editor classes, some of which (<ahem>FS1R Fseq</ahem>) have an enormous amount of data.  
 
     static String[] synthClassNames;
     static String[] synthRecognizers;
     static String[] synthNames;
     
     static
-    	{
-    	loadSynths();
-    	}
+        {
+        loadSynths();
+        }
     
     static Class getSynth(int num)
-    	{
-    	try
-    		{
-    		return Class.forName(synthClassNames[num]);
-	    	}
-	    catch (Exception ex)
-	    	{
-	    	ex.printStackTrace();
-	    	return null;
-	    	}
-    	}
-    	
+        {
+        try
+            {
+            return Class.forName(synthClassNames[num]);
+            }
+        catch (Exception ex)
+            {
+            ex.printStackTrace();
+            return null;
+            }
+        }
+        
     static void loadSynths()
         {
         ArrayList<String> classes = new ArrayList<String>();
@@ -486,43 +486,43 @@ public abstract class Synth extends JComponent implements Updatable
             {
             String str = scan.nextLine().trim();
             if (!(str.length() == 0 || str.startsWith("#")))
-				{
-	            int space = str.indexOf(' ');
-	            int tab = str.indexOf('\t');
-	            if (space == -1 && tab == -1) 
-	            	{
-	            	if (firstTime) System.err.println("synth/Synths.txt has no synth name for certain synths.  Here's what they are, add them:");
-	            	firstTime = false;
-	            	try
-	            		{
-	            		System.err.print(str + "\t");
-	            		Class _class = Class.forName(str);
-		                Method method = _class.getMethod("getSynthName", new Class[] { });
-		                System.err.print((String)(method.invoke(null, new Object[] { } )));
-		                }
-		            catch (Exception ex) { }
-		            System.err.println();
-		            continue;
-	            	}
-				// grab the first one
-	            int result = (tab == -1 ? space : (space == -1 ? tab : (space < tab ? space : tab)));
-	            String classname = str.substring(0, result).trim();
-	            String synthname = str.substring(result).trim();
-   		     	classes.add(classname);
-   		     	names.add(synthname);
-   		     	}	
+                {
+                int space = str.indexOf(' ');
+                int tab = str.indexOf('\t');
+                if (space == -1 && tab == -1) 
+                    {
+                    if (firstTime) System.err.println("synth/Synths.txt has no synth name for certain synths.  Here's what they are, add them:");
+                    firstTime = false;
+                    try
+                        {
+                        System.err.print(str + "\t");
+                        Class _class = Class.forName(str);
+                        Method method = _class.getMethod("getSynthName", new Class[] { });
+                        System.err.print((String)(method.invoke(null, new Object[] { } )));
+                        }
+                    catch (Exception ex) { }
+                    System.err.println();
+                    continue;
+                    }
+                // grab the first one
+                int result = (tab == -1 ? space : (space == -1 ? tab : (space < tab ? space : tab)));
+                String classname = str.substring(0, result).trim();
+                String synthname = str.substring(result).trim();
+                classes.add(classname);
+                names.add(synthname);
+                }       
             }
         synthClassNames = (String[])(classes.toArray(new String[0]));
         synthNames = (String[])(names.toArray(new String[0]));
         synthRecognizers = new String[synthClassNames.length];
         for(int i = 0; i < synthRecognizers.length; i++)
-        	synthRecognizers[i] = synthClassNames[i] + "Rec";
+            synthRecognizers[i] = synthClassNames[i] + "Rec";
         }
 
-	public static int numSynths()
-		{
-		return synthNames.length;
-		}
+    public static int numSynths()
+        {
+        return synthNames.length;
+        }
 
     /** All synthesizer classes in Edisyn.  These are loaded from synth/Synths.txt */
     public static String[] getClassNames()
@@ -536,42 +536,42 @@ public abstract class Synth extends JComponent implements Updatable
         return synthNames;
         }
                 
-	/** Return the synth name for a given class name, or null if an error occurred. */
-	public static String getSynthNameForClassName(String synth)
-		{
-    	try
-    		{
-    		return getSynthNameForClass(Class.forName(synth));
-    		}
-		catch (Exception ex)
-			{
-			ex.printStackTrace();
-			return null;
-			}
-		}
-		
-	/** Return the synth name for a given class, or null if an error occurred.  This is not loaded from synth/Synths.txt, but rather from the getSynthName() */
+    /** Return the synth name for a given class name, or null if an error occurred. */
+    public static String getSynthNameForClassName(String synth)
+        {
+        try
+            {
+            return getSynthNameForClass(Class.forName(synth));
+            }
+        catch (Exception ex)
+            {
+            ex.printStackTrace();
+            return null;
+            }
+        }
+                
+    /** Return the synth name for a given class, or null if an error occurred.  This is not loaded from synth/Synths.txt, but rather from the getSynthName() */
     public static String getSynthNameForClass(Class synth)
-    	{
-    	try
-    		{
-			Method method = synth.getMethod("getSynthName", new Class[] { });
-			return (String)(method.invoke(null, new Object[] { } ));
-			}
-		catch (Exception ex)
-			{
-			ex.printStackTrace();
-			return null;
-			}
-		}
+        {
+        try
+            {
+            Method method = synth.getMethod("getSynthName", new Class[] { });
+            return (String)(method.invoke(null, new Object[] { } ));
+            }
+        catch (Exception ex)
+            {
+            ex.printStackTrace();
+            return null;
+            }
+        }
 
     /** Returns the name of this synth, by calling getSynthName(). */
     public final String getSynthNameLocal()
-    	{
-    	String val = getSynthNameForClass(getClass());
-    	if (val == null) val = "Synth with no getSynthName() method, oops";
-    	return val;
-    	}
+        {
+        String val = getSynthNameForClass(getClass());
+        if (val == null) val = "Synth with no getSynthName() method, oops";
+        return val;
+        }
                 
                 
     /////// UNDO
@@ -1889,10 +1889,10 @@ public abstract class Synth extends JComponent implements Updatable
         {
         Class recognizer = getRecognizer(synthClassName);
         if (recognizer == null) 
-        	{ 
-        	System.err.println("Synth.recognizeBulk() WARNING: No recognizer for " + synthClassName); 
-        	return false;
-        	}
+            { 
+            System.err.println("Synth.recognizeBulk() WARNING: No recognizer for " + synthClassName); 
+            return false;
+            }
 
         try
             {
@@ -1913,10 +1913,10 @@ public abstract class Synth extends JComponent implements Updatable
         {
         Class recognizer = getRecognizer(synthClassName);
         if (recognizer == null) 
-        	{ 
-        	System.err.println("Synth.getNumSysexDumpsPerPatch() WARNING: No recognizer for " + synthClassName); 
-        	return 1;
-        	}
+            { 
+            System.err.println("Synth.getNumSysexDumpsPerPatch() WARNING: No recognizer for " + synthClassName); 
+            return 1;
+            }
 
         try
             {
@@ -1939,10 +1939,10 @@ public abstract class Synth extends JComponent implements Updatable
         {
         Class recognizer = getRecognizer(synthClassName);
         if (recognizer == null) 
-        	{ 
-        	System.err.println("Synth.recognize() WARNING: No recognizer for " + synthClassName); 
-        	return false;
-        	}
+            { 
+            System.err.println("Synth.recognize() WARNING: No recognizer for " + synthClassName); 
+            return false;
+            }
 
         try
             {
@@ -1958,19 +1958,19 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
     
-	public static Class getRecognizer(String synthClassName)
-		{
-		try
-			{
-			return Class.forName(synthClassName + "Rec");
-			}
-		catch (ClassNotFoundException ex)
-			{
-			ex.printStackTrace();
-			return null;
-			}
-		}
-		
+    public static Class getRecognizer(String synthClassName)
+        {
+        try
+            {
+            return Class.forName(synthClassName + "Rec");
+            }
+        catch (ClassNotFoundException ex)
+            {
+            ex.printStackTrace();
+            return null;
+            }
+        }
+                
     /** Returns whether the given sysex patch dump data is of the type for this particular synth.
         This is done by ultimately calling the CLASS method <tt>public static boolean recognize(data)</tt> 
         that your synthesizer subclass is asked to implement. */
@@ -5152,7 +5152,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (model.equals(undo.top()))
             model = undo.undo(null);  // don't push into the redo stack
         else 
-        	model = undo.undo(model);
+            model = undo.undo(model);
         boolean currentPush = undo.getWillPush();
         undo.setWillPush(false);
         model.updateAllListeners();
@@ -5196,7 +5196,7 @@ public abstract class Synth extends JComponent implements Updatable
 
     void doSetNudge(int i, Model model, String name)
         {
-        nudge[i] = model.copy(); // (Model)(model.clone());		/// don't need listeners
+        nudge[i] = model.copy(); // (Model)(model.clone());             /// don't need listeners
         nudgeTowards[i].setText("Towards " + (i + 1) + ": " + name);
         nudgeTowards[i + 4].setText("Away from " + (i + 1) + ": " + name);
         }
@@ -5677,7 +5677,7 @@ public abstract class Synth extends JComponent implements Updatable
                                 int n = getNumSysexDumpsPerPatch(synthClassNames[external[i]], data[j]);
                                 if (n > 1)
                                     { 
-									numDumpsPerPatch = n;
+                                    numDumpsPerPatch = n;
                                     hasMultipleDumpsSynth = true; 
                                     break; 
                                     }
@@ -5697,9 +5697,9 @@ public abstract class Synth extends JComponent implements Updatable
                         else if (data.length == 1)
                             {
                             succeeded = loadOne(data[0], external[0], local, merge, f, fd, false);
-							 if (succeeded)
-								this.file = f;
-                           }
+                            if (succeeded)
+                                this.file = f;
+                            }
                                 
                                 
                         //// Do we have a synth that involves multiple sysex dumps per patch?  Irritating TX81Z
@@ -5721,16 +5721,16 @@ public abstract class Synth extends JComponent implements Updatable
                             else 
                                 {
                                 if (data.length > numDumpsPerPatch)
-                                	{
-                                	showSimpleMessage("Can Only Load One Patch",
-                                		"This file contains sysex for a synthesizer which requires multiple sysex messages\n" + 
-                                		"for a single patch.  There might be more than one such patch in this file.\n" + 
-                                		"Edisyn can load only the first patch.");
-                                	}
+                                    {
+                                    showSimpleMessage("Can Only Load One Patch",
+                                        "This file contains sysex for a synthesizer which requires multiple sysex messages\n" + 
+                                        "for a single patch.  There might be more than one such patch in this file.\n" + 
+                                        "Edisyn can load only the first patch.");
+                                    }
 
                                 succeeded = loadOne(flatten(data), rec, recognizeLocal(data[0]), merge, f, fd, false);
                                 if (succeeded)
-                                	this.file = f;
+                                    this.file = f;
                                 }
                             }
 
@@ -6208,7 +6208,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         Synth otherSynth = instantiate(synthClass, synthName, false, true, null);
         otherSynth.setSendMIDI(false);
-		otherSynth.undo.setWillPush(false);
+        otherSynth.undo.setWillPush(false);
 
         // this last statement fixes a mystery.  When I call Randomize or Reset on
         // a Blofeld or on a Microwave, all of the widgets update simultaneously.
@@ -6245,7 +6245,7 @@ public abstract class Synth extends JComponent implements Updatable
         otherSynth.file = f;
         otherSynth.setLastDirectory(fd.getDirectory());
 
-		otherSynth.undo.setWillPush(true);
+        otherSynth.undo.setWillPush(true);
         otherSynth.setSendMIDI(true);
 
         if (otherSynth.getSendsParametersAfterLoad()) // we'll need to do this

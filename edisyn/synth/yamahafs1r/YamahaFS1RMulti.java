@@ -899,7 +899,7 @@ public class YamahaFS1RMulti extends Synth
                                 { 
                                 Model tempModel = buildModel();
                                 synth.setSendMIDI(false);
-                                synth.setPart(part - 1);		// so it auditions properly
+                                synth.setPart(part - 1);                // so it auditions properly
                                 tempModel.set("bank", YamahaFS1RMulti.this.model.get("part" + part + "banknumber") - 1);
                                 tempModel.set("number", YamahaFS1RMulti.this.model.get("part" + part + "programnumber"));
                                 synth.setSendMIDI(true);

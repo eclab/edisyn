@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.rolandjv880;
 import edisyn.*;
 
 public class RolandJV880MultiRec extends Recognize
-	{
+    {
     public static int getNumSysexDumpsPerPatch(byte[] data) 
         {
         return 9;
@@ -29,4 +29,4 @@ public class RolandJV880MultiRec extends Recognize
                  
             (data.length == 410 || data.length == 31 + 11 || data.length == 35 + 11));
         }
-	}
+    }

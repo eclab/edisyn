@@ -23,12 +23,12 @@ public class PatchDisplay extends JPanel implements Updatable
         this(synth, "Patch", "bank", "number", columns);
         }
 
-     public PatchDisplay(Synth synth, String bankKey, String numberKey, int columns)
+    public PatchDisplay(Synth synth, String bankKey, String numberKey, int columns)
         {
         this(synth, "Patch", bankKey, numberKey, columns);
         }
 
-   static String buildInitialString(int columns)
+    static String buildInitialString(int columns)
         {
         String s = "";
         for(int i = 0; i < columns; i++)

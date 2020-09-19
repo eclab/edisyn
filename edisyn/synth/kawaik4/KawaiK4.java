@@ -933,7 +933,7 @@ public class KawaiK4 extends Synth
             byte msb = (byte)(model.get(key) >>> 7);         // particularly for "waveselect"
             byte lsb = (byte)(model.get(key) & 127);
 
-            if (key.equals("s1mute") || key.equals("s2mute") || key.equals("s3mute") || key.equals("s4mute"))	// send all parameters
+            if (key.equals("s1mute") || key.equals("s2mute") || key.equals("s3mute") || key.equals("s4mute"))   // send all parameters
                 {
                 return new Object[] { emit(null, true, false), new Integer(getPauseAfterSendAllParameters()) };
                 }

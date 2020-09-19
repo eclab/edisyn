@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.rolandd110;
 import edisyn.*;
 
 public class RolandD110MultiRec extends Recognize
-	{
+    {
     public static boolean recognize(byte[] data)
         {
         return ((data[0] == (byte)0xF0) &&
@@ -18,4 +18,4 @@ public class RolandD110MultiRec extends Recognize
             (data.length == 138);
         }
                 
-	}
+    }

@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.korgwavestation;
 import edisyn.*;
 
 public class KorgWavestationSequenceRec extends Recognize
-	{
+    {
     public static final int EXPECTED_SYSEX_LENGTH = 17576;
     public static boolean recognize(byte[] data)
         {
@@ -48,4 +48,4 @@ public class KorgWavestationSequenceRec extends Recognize
         return b;              
         }
     
-	}
+    }

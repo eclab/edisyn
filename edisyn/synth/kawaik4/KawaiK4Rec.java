@@ -1,13 +1,13 @@
 /**
-	Copyright 2020 by Sean Luke
-	Licensed under the Apache License version 2.0
+   Copyright 2020 by Sean Luke
+   Licensed under the Apache License version 2.0
 */
 
 package edisyn.synth.kawaik4;
 import edisyn.*;
 
 public class KawaiK4Rec extends Recognize
-	{
+    {
     public static boolean recognize(byte[] data)
         {
         return (((data.length == EXPECTED_SYSEX_LENGTH) &&
@@ -54,4 +54,4 @@ public class KawaiK4Rec extends Recognize
         } 
 
     public static final int EXPECTED_SYSEX_LENGTH = 140;        
-	}
+    }

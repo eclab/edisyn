@@ -1075,7 +1075,7 @@ public class HillClimb extends SynthPanel
             {
             /*
             // reset
-		    ratings[NUM_MODELS][0].setSelected(true);
+            ratings[NUM_MODELS][0].setSelected(true);
             ratings[NUM_MODELS][1].setSelected(true);
             ratings[NUM_MODELS][2].setSelected(true);
 
@@ -1083,43 +1083,43 @@ public class HillClimb extends SynthPanel
             System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
 
             for(int j = 0; j < state.parentIndices.length; j++)
-                {
-                if (state.parentIndices[j] != -1)
-                	{
-                    ratings[state.parentIndices[j]][j].setSelected(true);
-                    }
-                }
+            {
+            if (state.parentIndices[j] != -1)
+            {
+            ratings[state.parentIndices[j]][j].setSelected(true);
+            }
+            }
                 
             for(int j = 0; j < state.parentsSelected.length; j++)
-                {
-                selected[j].setSelected(state.parentsSelected[j]);
-                }
-        	*/
-        	pop();
+            {
+            selected[j].setSelected(state.parentsSelected[j]);
+            }
+            */
+            pop();
             climb();
             }
         else if (operation == OPERATION_CONSTRICT)
             {
             /*
-            State state = popStack();
-            System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
+              State state = popStack();
+              System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
 
-            ratings[NUM_MODELS][0].setSelected(true);
-            ratings[NUM_MODELS][1].setSelected(true);
-            ratings[NUM_MODELS][2].setSelected(true);
+              ratings[NUM_MODELS][0].setSelected(true);
+              ratings[NUM_MODELS][1].setSelected(true);
+              ratings[NUM_MODELS][2].setSelected(true);
 
-            for(int j = 0; j < state.parentIndices.length; j++)
-                {
-                if (state.parentIndices[j] != -1)
-                    ratings[state.parentIndices[j]][j].setSelected(true);
-                }
+              for(int j = 0; j < state.parentIndices.length; j++)
+              {
+              if (state.parentIndices[j] != -1)
+              ratings[state.parentIndices[j]][j].setSelected(true);
+              }
                 
-            for(int j = 0; j < state.parentsSelected.length; j++)
-                {
-                selected[j].setSelected(state.parentsSelected[j]);
-                }
-        	*/
-        	pop();
+              for(int j = 0; j < state.parentsSelected.length; j++)
+              {
+              selected[j].setSelected(state.parentsSelected[j]);
+              }
+            */
+            pop();
             constrict();
             }
         }
@@ -1138,7 +1138,7 @@ public class HillClimb extends SynthPanel
             ratings[NUM_MODELS][0].setSelected(true);
             ratings[NUM_MODELS][1].setSelected(true);
             ratings[NUM_MODELS][2].setSelected(true);
-           }
+            }
         else
             {
             ratings[NUM_MODELS][0].setSelected(true);
@@ -1152,8 +1152,8 @@ public class HillClimb extends SynthPanel
             for(int j = 0; j < state.parentIndices.length; j++)
                 {
                 if (state.parentIndices[j] != -1)
-                	{
-                	System.err.println("Setting " + state.parentIndices[j] + " to " + j);
+                    {
+                    System.err.println("Setting " + state.parentIndices[j] + " to " + j);
                     ratings[state.parentIndices[j]][j].setSelected(true);
                     }
                 }
@@ -1549,21 +1549,21 @@ public class HillClimb extends SynthPanel
 
         currentModels[NUM_MODELS - 1] = synth.getModel();
         
-		// What were the best models before?
+        // What were the best models before?
         int[] bestModels = new int[3];
         
-		for(int j = 0; j < 3; j++)
-			bestModels[j] = -1;
-			
-		// load the best models
-		for(int i = 0; i < NUM_MODELS; i++)
-			{
-			for(int j = 0; j < 3; j++)
-				{
-				if (ratings[i][j].isSelected())
-					bestModels[j] = i;
-				}
-			}
+        for(int j = 0; j < 3; j++)
+            bestModels[j] = -1;
+                        
+        // load the best models
+        for(int i = 0; i < NUM_MODELS; i++)
+            {
+            for(int j = 0; j < 3; j++)
+                {
+                if (ratings[i][j].isSelected())
+                    bestModels[j] = i;
+                }
+            }
         
         // Compact
         if (bestModels[1] == -1)
@@ -1571,8 +1571,8 @@ public class HillClimb extends SynthPanel
             bestModels[1] = bestModels[2];
             bestModels[2] = -1;
             }
-		if (bestModels[0] == -1)
-			{
+        if (bestModels[0] == -1)
+            {
             bestModels[0] = bestModels[1];
             bestModels[1] = bestModels[2];
             bestModels[2] = -1;
@@ -1582,33 +1582,33 @@ public class HillClimb extends SynthPanel
         
         if (bestModels[0] == -1)
             {
-            again();					// nothing was selected as good, so we just do a retry
+            again();                                    // nothing was selected as good, so we just do a retry
             }
         else if (bestModels[1] == -1)
-			{
-			pushStack(bestModels, new Model[] { currentModels[bestModels[0]], null, null }, getSelectedResults(), currentModels);
-			produce(random, keys, CLIMB_RECOMBINATION_RATE, weight, currentModels[bestModels[0]], oldA);
-			operation = OPERATION_CLIMB;
-			}
-		else if (bestModels[2] == -1)
-			{
-			pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], null }, getSelectedResults(), currentModels);
-			produce(random, keys, CLIMB_RECOMBINATION_RATE, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], oldA);
-			operation = OPERATION_CLIMB;
-			}
-		else
-			{
-			pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]] }, getSelectedResults(), currentModels);
-			produce(random, keys, CLIMB_RECOMBINATION_RATE, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]], oldA);
-			operation = OPERATION_CLIMB;
-			}
+            {
+            pushStack(bestModels, new Model[] { currentModels[bestModels[0]], null, null }, getSelectedResults(), currentModels);
+            produce(random, keys, CLIMB_RECOMBINATION_RATE, weight, currentModels[bestModels[0]], oldA);
+            operation = OPERATION_CLIMB;
+            }
+        else if (bestModels[2] == -1)
+            {
+            pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], null }, getSelectedResults(), currentModels);
+            produce(random, keys, CLIMB_RECOMBINATION_RATE, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], oldA);
+            operation = OPERATION_CLIMB;
+            }
+        else
+            {
+            pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]] }, getSelectedResults(), currentModels);
+            produce(random, keys, CLIMB_RECOMBINATION_RATE, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]], oldA);
+            operation = OPERATION_CLIMB;
+            }
         
-		iterations.setName("Iteration " + stack.size());
-		repaint();
-	
-		ratings[NUM_MODELS][0].setSelected(true);
-		ratings[NUM_MODELS][1].setSelected(true);
-		ratings[NUM_MODELS][2].setSelected(true);
+        iterations.setName("Iteration " + stack.size());
+        repaint();
+        
+        ratings[NUM_MODELS][0].setSelected(true);
+        ratings[NUM_MODELS][1].setSelected(true);
+        ratings[NUM_MODELS][2].setSelected(true);
         for(int i = 0; i < NUM_CANDIDATES; i++)
             selected[i].setSelected(true);
         }

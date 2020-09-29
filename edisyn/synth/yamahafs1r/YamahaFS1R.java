@@ -813,14 +813,18 @@ public class YamahaFS1R extends Synth
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JComboBox bank = new JComboBox(BANKS);
+        bank.setEditable(false);
+        bank.setMaximumRowCount(32);
         if (writing)
             {
             bank = new JComboBox(new String[] { "Internal" });
             bank.setEnabled(false);
+            bank.setSelectedIndex(0);
             }
-        bank.setEditable(false);
-        bank.setMaximumRowCount(32);
-        bank.setSelectedIndex(model.get("bank"));
+        else
+        	{
+	        bank.setSelectedIndex(model.get("bank"));
+        	}
                 
         JTextField number = new JTextField("" + (model.get("number") + 1), 3);
                 

@@ -434,6 +434,39 @@ public class YamahaFS1R extends Synth
             }
         }
 
+
+	// For each operator from[i], copies that operator to all operators in to[i][].
+	void copyOperators(int from[], int to[][])
+		{
+		undo.push(getModel());
+		setSendMIDI(false);
+		boolean currentPush = undo.getWillPush();
+		undo.setWillPush(false);
+
+		String[] parameters = model.getKeys();
+		for(int a = 0; a < from.length; a++)
+			{
+			int p1 = from[a];
+			for(int b = 0; b < to[a].length; b++)
+				{
+				int p2 = to[a][b];
+				for(int i = 0; i < parameters.length; i++)
+					{
+					if (parameters[i].startsWith("operator" + p1))           // only copy voiced/unvoiced ops if the user requested it
+						{
+						int val2 = model.get(parameters[i]);
+						model.set(("operator" + p2) + parameters[i].substring(9), val2);
+						}
+					}
+				}
+			}
+																	
+		undo.setWillPush(currentPush);
+		setSendMIDI(true);
+		sendAllParameters();
+		}
+
+
     public void addYamahaFS1RMenu()
         {
         JMenu menu = new JMenu("FS1R");
@@ -580,6 +613,8 @@ public class YamahaFS1R extends Synth
                     }
                 }
             });
+            
+            
 
         JMenuItem copy = new JMenuItem("Copy Operator To...");
         menu.add(copy);
@@ -713,6 +748,38 @@ public class YamahaFS1R extends Synth
                     setSendMIDI(true);
                     sendAllParameters();
                     }
+                }
+            });
+
+
+        menu.addSeparator();
+        JMenuItem copy1 = new JMenuItem("Copy Operator 1");
+        menu.add(copy1);
+        copy1.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                copyOperators(new int[] { 1 }, new int[][] { { 2, 3, 4, 5, 6, 7, 8 } });
+                }
+            });
+
+        JMenuItem copy2 = new JMenuItem("Copy Operators 1, 2");
+        menu.add(copy2);
+        copy2.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                copyOperators(new int[] { 1, 2 }, new int[][] { { 3, 5, 7 }, { 4, 6, 8 } });
+                }
+            });
+            
+        JMenuItem copy3 = new JMenuItem("Copy Operators 1, 2, 3, 4");
+        menu.add(copy3);
+        copy3.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                copyOperators(new int[] { 1, 2, 3, 4 }, new int[][] { { 5 }, { 6 }, { 7 }, { 8 } });
                 }
             });
         }
@@ -3860,4 +3927,9 @@ public class YamahaFS1R extends Synth
     // "Bulk Received".  With about a 170ms delay or so, this message disappears right when Edisyn finishes,
     // so it's a good compromise from a UI standpoint.
     public int getPauseAfterWritePatch() { return 170; }            // don't know if we need any
+
+	// The FS1R is VERY slow to respond and also queues up responses (beware!)
+	public int getBulkDownloadWaitTime() { return 2750; }
+	public int getBulkDownloadFailureCountdown() { return 5; }
+
     }

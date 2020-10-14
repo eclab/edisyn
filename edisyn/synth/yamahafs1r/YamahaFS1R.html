@@ -11,7 +11,7 @@ Set the FS1R's to receive System Exclusive, Bulk Dumps, Bank Selection, and Prog
 
 <br><br><h3>How Sending, Writing, and Requesting Work</h3>
 
-Voices can't be played alone: they have to be placed in a Part in a performance and played there.  To do this, sending, writing, and requesting work in a specific way with regard to the current Part.  This is done by including a new menu option called <b>Send/Receive Part...</b> in the FS1R menu.
+Voices can't be played alone: they have to be placed in a Part in a Performance and played there.  To do this, sending, writing, and requesting work in a specific way with regard to the current Part.  
 
 <ul>
 <li>You specify the current part with <b>Send/Receive Part...</b>, a menu option discussed later here.
@@ -38,7 +38,7 @@ The menu has several options which hopefully make working with the patch editor 
 
 <p><li><b>Mute Operators...</b>nbsp;&nbsp;&nbsp;This lets you temporarily mute voiced and unvoiced operators of your choice, notionally so you can focus on hearing certain operators.  "Muting" mean that Edisyn will send the FS1R a command to set their Output Level to 0, and another command to disable Fseq.  The actual parameter setting in Edisyn will be unaffected.  If an operator is unmuted, Output Level and Fseq will be restored.  Note that this only applies to immediate real-time changes: requesting a patch, writing a patch, or sending it, may reset the Mute settings.
 
-<p><li><b>Send/Receive Part (1,2,3,4)</b>&nbsp;&nbsp;&nbsp;This causes Edisyn to use the given Part when sending and requesting the current voice patch.  This allows you to work on different Parts of a performance.  You may also wish to Audition on the part (see menu item above) after setting this.
+<p><li><b>Send/Receive Part (1, 2, 3, 4)</b>&nbsp;&nbsp;&nbsp;This causes Edisyn to use the given Part when sending and requesting the current voice patch.  This allows you to work on different Parts of a performance.  You may also wish to Audition on the part (see menu item above) after setting this.
   
 <p><li><b>Swap Operators...</b>&nbsp;&nbsp;&nbsp;This lets you swap two operators, including voiced and/or unvoiced parameters.
 
@@ -48,6 +48,17 @@ The menu has several options which hopefully make working with the patch editor 
 
 <p><li><b>Copy Unvoiced->Voiced</b>&nbsp;&nbsp;&nbsp;This copies relevant unvoiced parameters to the equivalent voiced parameters in an operator. 
 
+<p><li><b>Copy 1&nbsp;&nbsp;&nbsp;Copy 1, 2&nbsp;&nbsp;&nbsp;Copy 1, 2, 3, 4</b>&nbsp;&nbsp;&nbsp;These methods bulk copy certain operators to other operators. The purpose of these methods is to facilitate building voices with formants.  Typically you'd arrange operators into identical groups of 8, 4, or 2, and then have the output of each group pass through a different bandpass filter to form a formant filter bank.  There are only certain algorithms appropriate for this, and these methods copy the operators within those algorithms to form identical groups. 
+
+<ul>
+<li><b>Copy 1</b>&nbsp;&nbsp;&nbsp; Copies operator 1 to operators 2, 3, 4, 5, 6, 7, and 8. This is appropriate for Algorithm 1.
+
+<p><li><b>Copy 1, 2</b>&nbsp;&nbsp;&nbsp; Copies operator 1 to operators  3, 5, and 7; and copies operators 2 to operators 4, 6, and 8.  This is appropriate for Algorithm 67.
+
+<p><li><b>Copy 1, 2, 3, 4</b>&nbsp;&nbsp;&nbsp; Copies operator 1 to operator 5; operator 2 to 6; operator 3 to 7; and operator 4 to 8.  This is appropriate for Algorithms 69, 70, 71, 72, and 77.
+</ul>
+
+<p>Note that these three menu options copy and overwrite <i>all</i> the operator parameters, including those involving the (different) bandpass filters.  This means that you need to set up the filter for each group, or set its output level to 0, <i>after</i> applying this copying operation.
 </ul>
 
 
@@ -58,6 +69,8 @@ It's easy: just use the DX7 Editor.
 <br><br><h3>Gotchas</h3>
 <ul>
 <li>Changing patches or loading a patch takes a <b>very long amount of time</b>, during which the FS1R will be unresponsive to requests to play notes etc.  You will find this annoying.
+
+<li>Because loading a patch takes a long time (just under 3 seconds) batch-downloading patches from the unit can take much longer than you'd expect.
 
 <p><li>If you set the bandwidth of an unvoiced operator to 0, unexpected and unstable sound occurs.  Don't do that: it's not clear why it's even an option.  See pages 80 and 81 of the manual.
 

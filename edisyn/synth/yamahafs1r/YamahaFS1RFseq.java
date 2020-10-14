@@ -2608,6 +2608,11 @@ public class YamahaFS1RFseq extends Synth
     // "Bulk Received".  With about a 170ms delay or so, this message disappears right when Edisyn finishes,
     // so it's a good compromise from a UI standpoint.
     public int getPauseAfterWritePatch() { return 170; }            // don't know if we need any
+
+
+	// The FS1R is VERY slow to respond and also queues up responses (beware!)
+	public int getBulkDownloadWaitTime() { return 3000; }
+	public int getBulkDownloadFailureCountdown() { return 5; }
     }
 
 

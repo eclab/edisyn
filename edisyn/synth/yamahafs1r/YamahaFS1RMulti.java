@@ -2214,20 +2214,7 @@ public class YamahaFS1RMulti extends Synth
                 int address_lsb = YamahaFS1RFX.revEffectParaLSBTable[param - 1][version];
                 address = (address_msb << 7) | address_lsb;
                 
-                val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]));
-                /*
-                  if (address > 0x60)                     // one byte                                     
-                  {
-                  val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) & 127);
-                  }
-                  else                                            // two bytes
-                  {
-                  val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) >>> 7) & 127;
-                  val2 = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) & 127);
-                  address2 = address + 1;
-                  pair = true;
-                  }
-                */
+                val = ((model.get(key) + YamahaFS1RFX.getSysexMin(REVERB, version, paraType)));  //YamahaFS1RFX.sysexMinTable[paraType]));
                 }
             else if (key.startsWith("variation") && !key.equals("variationtype") && !key.equals("variationpan") && !key.equals("variationreturn"))
                 {
@@ -2240,13 +2227,7 @@ public class YamahaFS1RMulti extends Synth
                 int address_lsb = YamahaFS1RFX.varEffectParaLSBTable[param - 1][version];
                 address = (address_msb << 7) | address_lsb;
                     
-                val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]));
-                /*
-                  val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) >>> 7) & 127;
-                  val2 = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) & 127);
-                  address2 = address + 1;
-                  pair = true;
-                */
+                val = ((model.get(key) + YamahaFS1RFX.getSysexMin(VARIATION, version, paraType)));  //YamahaFS1RFX.sysexMinTable[paraType]));
                 }
             else if (key.startsWith("insertion") && !key.equals("insertiontype") && !key.equals("insertionpan") && !key.equals("insertionlevel"))
                 {
@@ -2259,13 +2240,7 @@ public class YamahaFS1RMulti extends Synth
                 int address_lsb = YamahaFS1RFX.insEffectParaLSBTable[param - 1][version];
                 address = (address_msb << 7) | address_lsb;
                     
-                val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]));
-                /*
-                  val = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) >>> 7) & 127;
-                  val2 = ((model.get(key) + YamahaFS1RFX.sysexMinTable[paraType]) & 127);
-                  address2 = address + 1;
-                  pair = true;
-                */
+                val = ((model.get(key) + + YamahaFS1RFX.getSysexMin(INSERTION, version, paraType)));  //YamahaFS1RFX.sysexMinTable[paraType]));
                 }
             else if (key.endsWith("rcvchannelmax"))
                 {
@@ -2486,7 +2461,7 @@ public class YamahaFS1RMulti extends Synth
                 if (YamahaFS1RFX.revEffectNameTable[i][version].equals("Reverb Pan")) break;
                         
                 int paraType = YamahaFS1RFX.revParaTypeTable[version][i];
-                val = model.get("reverb" + reverbType + "parameter" + (i + 1)) + YamahaFS1RFX.sysexMinTable[paraType];
+                val = model.get("reverb" + reverbType + "parameter" + (i + 1)) + YamahaFS1RFX.getSysexMin(REVERB, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
                 int address = (0x00 << 7) | YamahaFS1RFX.revEffectParaLSBTable[i][version];
                 if (address < 0x60)     // two bytes
                     {
@@ -2509,7 +2484,7 @@ public class YamahaFS1RMulti extends Synth
                 if (YamahaFS1RFX.varEffectNameTable[i][version].equals("Var Pan")) break;
                         
                 int paraType = YamahaFS1RFX.varParaTypeTable[version][i];
-                val = model.get("variation" + variationType + "parameter" + (i + 1)) + YamahaFS1RFX.sysexMinTable[paraType];
+                val = model.get("variation" + variationType + "parameter" + (i + 1)) + YamahaFS1RFX.getSysexMin(VARIATION, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
                 int address = (YamahaFS1RFX.varEffectParaMSBTable[i][version] << 7) | YamahaFS1RFX.varEffectParaLSBTable[i][version];
                 data[address + 9] = (byte)((val >>> 7) & 127);          // hi   
                 data[address + 1 + 9] = (byte)(val & 127);                      // lo
@@ -2524,7 +2499,7 @@ public class YamahaFS1RMulti extends Synth
                 if (YamahaFS1RFX.insEffectNameTable[i][version].equals("Ins Pan")) break;
 
                 int paraType = YamahaFS1RFX.insParaTypeTable[version][i];
-                val = model.get("insertion" + insertionType + "parameter" + (i + 1)) + YamahaFS1RFX.sysexMinTable[paraType];
+                val = model.get("insertion" + insertionType + "parameter" + (i + 1)) + YamahaFS1RFX.getSysexMin(INSERTION, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
                 int address = (0x01 << 7) | YamahaFS1RFX.insEffectParaLSBTable[i][version];
                 data[address + 9] = (byte)((val >>> 7) & 127);          // hi   
                 data[address + 1 + 9] = (byte)(val & 127);                      // lo
@@ -2684,11 +2659,11 @@ public class YamahaFS1RMulti extends Synth
                 if (address < 0x60)     // two bytes
                     {
                     val = ((data[address + 9] << 7) |
-                        (data[address + 1 + 9]  << 0)) - YamahaFS1RFX.sysexMinTable[paraType];
+                        (data[address + 1 + 9]  << 0)) - YamahaFS1RFX.getSysexMin(REVERB, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
                     }
                 else
                     {
-                    val = data[address + 9] - YamahaFS1RFX.sysexMinTable[paraType];
+                    val = data[address + 9] - YamahaFS1RFX.getSysexMin(REVERB, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
                     }
                 model.set("reverb" + reverbType + "parameter" + (i + 1), val);
                 }
@@ -2706,7 +2681,7 @@ public class YamahaFS1RMulti extends Synth
                 int address = (YamahaFS1RFX.varEffectParaMSBTable[i][version] << 7) | YamahaFS1RFX.varEffectParaLSBTable[i][version];
                         
                 val = ((data[address + 9] << 7) |
-                    (data[address + 1 + 9]  << 0)) - YamahaFS1RFX.sysexMinTable[paraType];
+                    (data[address + 1 + 9]  << 0)) - YamahaFS1RFX.getSysexMin(VARIATION, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
 
                 model.set("variation" + variationType + "parameter" + (i + 1), val);
                 }
@@ -2723,7 +2698,7 @@ public class YamahaFS1RMulti extends Synth
                 int address = (0x01 << 7) | YamahaFS1RFX.insEffectParaLSBTable[i][version];
                         
                 val = ((data[address + 9] << 7) |
-                    (data[address + 1 + 9]  << 0)) - YamahaFS1RFX.sysexMinTable[paraType];
+                    (data[address + 1 + 9]  << 0)) - YamahaFS1RFX.getSysexMin(INSERTION, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
 
                 model.set("insertion" + insertionType + "parameter" + (i + 1), val);
                 }
@@ -3087,6 +3062,12 @@ public class YamahaFS1RMulti extends Synth
     // "Bulk Received".  With about a 170ms delay or so, this message disappears right when Edisyn finishes,
     // so it's a good compromise from a UI standpoint.
     public int getPauseAfterWritePatch() { return 170; }            // don't know if we need any
+
+
+
+	// The FS1R is VERY slow to respond and also queues up responses (beware!)
+	public int getBulkDownloadWaitTime() { return 3000; }
+	public int getBulkDownloadFailureCountdown() { return 5; }
     }
  
  
@@ -3467,10 +3448,20 @@ class YamahaFS1RFX
         };
 
 
+	public static final int getSysexMin(int effect, int version, int type)
+		{
+		// special-case for certain bugs in original table
+		if (effect == YamahaFS1RMulti.INSERTION && version == 13 /*t-wah + dist*/ && type == 12)
+			{
+			return 0x34;
+			}
+		else return sysexMinTable[type];
+		}
+		
     /// For some reason, some effect values are shifted by a certain amount in sysex.  I don't know why.
     // This table provides the amount to shift by, for each effect type.
-    //                                                     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19   20   21   22   23   24   25   26   27   28   29   30   31   32   33   34   35   36   37   38   39   40   41   42   43   44   45   46   47   48   49   50   51   52   53   54   55   56   57   58
-    public static final int sysexMinTable[] = new int[] { 0x00,0x00,0x00,0x22,0x00,0x04,0x1c,0x00,0x00,0x00,0x0e,0x00,0x34,0x00,0x00,0x00,0x00,0x00,0x0a,0x00,0x00,0x00,0x01,0x01,0x01,0x01,0x01,0x34,0x01,0x00,0x04,0x04,0x03,0x0a,0x08,0x1c,0x37,0x4f,0x01,0x0e,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x04,0x03,0x28,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x01 };
+    //                                                     0    1    2    3    4    5    6    7    8    9   10   11           12   13   14   15   16   17   18   19   20   21   22   23   24   25           26   27   28   29   30   31   32   33   34   35   36   37   38   39   40   41   42   43   44   45   46   47   48   49   50   51   52   53   54   55   56   57   58
+    public static final int sysexMinTable[] = new int[] { 0x00,0x00,0x00,0x22,0x00,0x04,0x1c,0x00,0x00,0x00,0x0e,0x00,/*0x34*/0x00,0x00,0x00,0x00,0x00,0x00,0x0a,0x00,0x00,0x00,0x01,0x01,0x01,0x01,/*0x01*/0x00,0x34,0x01,0x00,0x04,0x04,0x03,0x0a,0x08,0x1c,0x37,0x4f,0x01,0x0e,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x04,0x03,0x28,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x01 };
 
 
     // Names for widgets by parameter version for reverbs. revEffectNameTable[param][version] 

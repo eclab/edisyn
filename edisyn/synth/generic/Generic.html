@@ -15,13 +15,13 @@ Make sure you've got Edisyn set up to send to the right channel on your synthesi
 
 The CC panels give you direct access to all 128 CC parameters: though perhaps you should only play with the first 120 unless you know what you're doing with the last 8.
 
-<p>Each CC parameter has a <b>Dial</b> where you can directly change its value, plus a <b>Send</b> button which lets you repeatedly send the current dial value.  There is also an <b>On</b> checkbox: if you select this, then 127 is sent, else 0 is sent (the <b>On</b> checkbox also is selected when a CC value than 64 is sent via the dial).  The CCs each have classic names, but you can change any of them: just click on the <b>Name</b> (or whatever it's called) button.
+<p>Each CC parameter has a <b>Dial</b> where you can directly change its value, plus a <b>Send</b> button which lets you repeatedly send the current dial value.  There is also an <b>On</b> checkbox: if you select this, then 127 is sent, else 0 is sent (the <b>On</b> checkbox also is selected when a CC value greater than or equal to 64 is sent via the dial).  The CCs each have classic names, but you can change any of them: just click on the <b>Name</b> (or whatever it's called) button.
 
 <br><br><h3>About the Custom CC, NRPN, and RPN Panels</h3>
 
 These panels allow you to set up the panel to respond to custom CC, NRPN, and RPN parameters of your choosing.  Why you'd need RPN is anyone's guess, but there you have it.
 
-<p>You select a parameter with the <b>Parameter</b dial, and you can customize its name with the <b>Name</b> button.  Each parameter has two value dials which you can tweak independently.  The idea is that you can repeatedly send either of the values by pressing the <b>Send</b> or <b>Alt</b> buttons.  Changing the dials will also send the parameters in question.
+<p>You select a parameter with the <b>Parameter</b> dial, and you can customize its name with the <b>Name</b> button.  Each parameter has two value dials which you can tweak independently.  The idea is that you can repeatedly send either of the values by pressing the <b>Send</b> or <b>Alt</b> buttons.  Changing the dials will also send the parameters in question.
 
 <p>The dials may be 7-bit MSB-only (0..127) or they may be 14-bit MSB+LSB (0...16383), depending on the setting of the <b>+LSB</b> checkbox.  For Custom CC, only parameters 0...32 are capable of being 14-bit (by sending the LSB at the parameter number + 32): the others must be 7-bit.  NRPN and RPN of course can be either 7-bit MSB-only or 14-bint MSB+LSB at any time.
 

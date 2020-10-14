@@ -6449,29 +6449,49 @@ public abstract class Synth extends JComponent implements Updatable
             setMergeProbability(0.0);
             performRequestDump(currentPatch, true);
             incomingPatch = false;
-                
+            
+           bulkDownloadFailureCountdown = getBulkDownloadFailureCountdown();
             // set timer to request further patches         
             patchTimer = new javax.swing.Timer(getBulkDownloadWaitTime(),
                 new ActionListener()
                     {
                     public void actionPerformed(ActionEvent e)
                         {
-                        if (incomingPatch && patchLocationEquals(getModel(), currentPatch))
-                            {
-                            processCurrentPatch();
-                            requestNextPatch();
-                            }
+                        if (incomingPatch)
+                         	{
+                         	if (patchLocationEquals(getModel(), currentPatch))
+								{
+								bulkDownloadFailureCountdown = getBulkDownloadFailureCountdown();
+								processCurrentPatch();
+								requestNextPatch();
+								}
+							else
+								{
+								System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Received unexpected patch " + getPatchLocationName(getModel()));
+								}
+							}
                         else 
                             {
-                            System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Trying again.");
-                            setMergeProbability(0.0);
-                            performRequestDump(currentPatch, true);
+                            if ((bulkDownloadFailureCountdown--) == 0)
+                            	{
+				           		bulkDownloadFailureCountdown = getBulkDownloadFailureCountdown();
+	                            System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Requesting again.");
+	                            setMergeProbability(0.0);
+	                            performRequestDump(currentPatch, true);
+	                            }
+	                        else
+	                        	{
+	                            System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Waiting: " + (bulkDownloadFailureCountdown + 1));
+	                        	}
                             }
                         }
                     });
             patchTimer.start();
             }
         }
+
+	public int getBulkDownloadFailureCountdown() { return 0; }
+	int bulkDownloadFailureCountdown;
 
     void requestNextPatch()
         {

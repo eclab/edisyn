@@ -63,7 +63,7 @@ Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline mo
 
 #### "Could You Develop a Patch Editor for X?"
 
-Sure!  But building a patch editor is a long-term commitment of debugging and maintenance.  It can't easily be done with a remote person doing the debugging.  So I only build editors for synths I own (I might sell them long after the editor is stable).  So if you'd like, say, the Alesis Andromeda to have an editor, all you have to do is gift me an Alesis Andromeda!
+Sure!  But building a patch editor is a long-term commitment of debugging and maintenance.  It can't easily be done with a remote person handling the debugging.  So with rare exceptions I only build editors for synths I own (I might sell them long after the editor is stable).  So if you'd like, say, the Alesis Andromeda to have an editor, all you have to do is **gift me an Alesis Andromeda!**  I'll even pay for shipping.
 
 ## Manual
 
@@ -128,7 +128,7 @@ Java doesn't handle high-resolution displays properly in Windows, especially Win
 
 Edisyn makes heavy use of Java preferences to store persistence information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows for earlier versions of Java.  I think this is fixed as of Java 11 but you should check and let me know.
 
-### Incorrect Jar Linkage to Java
+#### Incorrect Jar Linkage to Java
 
 When you double-click on a jar file, Windows may not launch Java properly because it has jar files associated with the wrong Java instance.  It's easy to fix this using [JarFix](https://johann.loefflmann.net/en/software/jarfix/index.html)
 

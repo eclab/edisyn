@@ -61,7 +61,7 @@ Edisyn presently supports:
 
 Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, randomization, merging, nudging, hill-climbing, patch constriction, per-parameter customization, real-time parameter updates, test notes and chords, etc.
 
-### "Could You Develop a Patch Editor for X?"
+#### "Could You Develop a Patch Editor for X?"
 
 Building a patch editor is a long-term commitment of debugging and maintenance.  So I only build editors for synths I own (I might sell them long after the editor is stable).  So if you'd like, say, the Alesis Andromeda to have an editor, all you have to do is gift me an Alesis Andromeda!
 

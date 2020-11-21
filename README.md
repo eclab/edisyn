@@ -61,6 +61,10 @@ Edisyn presently supports:
 
 Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, randomization, merging, nudging, hill-climbing, patch constriction, per-parameter customization, real-time parameter updates, test notes and chords, etc.
 
+### "Could You Develop a Patch Editor for X?"
+
+Building a patch editor is a long-term commitment of debugging and maintenance.  So I only build editors for synths I own (I might sell them long after the editor is stable).  So if you'd like, say, the Alesis Andromeda to have an editor, all you have to do is gift me an Alesis Andromeda!
+
 ## Manual
 
 Edisyn has an [extensive manual](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.pdf) which describes how to run it, and (if you are so inclined) how to make new patch editors.
@@ -124,6 +128,9 @@ Java doesn't handle high-resolution displays properly in Windows, especially Win
 
 Edisyn makes heavy use of Java preferences to store persistence information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows for earlier versions of Java.  I think this is fixed as of Java 11 but you should check and let me know.
 
+### Incorrect Jar Linkage to Java
+
+When you double-click on a jar file, Windows may not launch Java properly because it has jar files associated with the wrong Java instance.  It's easy to fix this using [JarFix](https://johann.loefflmann.net/en/software/jarfix/index.html)
 
 ### Installation and Running on Linux
 

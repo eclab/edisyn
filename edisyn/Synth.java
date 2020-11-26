@@ -2232,19 +2232,58 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
-            boolean sent = false;
-            String[] keys = getModel().getKeys();
-            for(int i = 0; i < keys.length; i++)
-                {
-                if (sent = tryToSendMIDI(emitAll(keys[i], STATUS_SENDING_ALL_PARAMETERS)) || sent)
-                    simplePause(getPauseAfterSendOneParameter());
-                }
-            if (sent)
-                simplePause(getPauseAfterSendAllParameters());
+            sendDifferentParameters(null);
             }
         }
 
 
+    /** Individually sends all parameters for which the current model differs from the provided model.
+    	If the provided model is null, then all parameters are sent. */     
+    public void sendDifferentParameters(Model other)
+        {
+        if (!getSendMIDI())
+            return;  // don't bother!  MIDI is off
+
+
+		boolean sent = false;
+		String[] keys = getModel().getKeys();
+
+		if (other == null)
+			{
+			// Send every single parameter
+			for(int i = 0; i < keys.length; i++)
+				{
+				if (sent = tryToSendMIDI(emitAll(keys[i], STATUS_SENDING_ALL_PARAMETERS)) || sent)
+					simplePause(getPauseAfterSendOneParameter());
+				}
+			}
+		else
+			{	
+			// Send only diffs
+			for(int i = 0; i < keys.length; i++)
+				{
+				if (getModel().isInteger(keys[i]))		// integers
+					{
+					if (getModel().get(keys[i], 0) != model.get(keys[i], 0))
+						{
+						if (sent = tryToSendMIDI(emitAll(keys[i], STATUS_SENDING_ALL_PARAMETERS)) || sent)
+							simplePause(getPauseAfterSendOneParameter());
+						}
+					}
+				else		// strings
+					{
+					if (!(getModel().get(keys[i], "").equals(model.get(keys[i], ""))))
+						{
+						if (sent = tryToSendMIDI(emitAll(keys[i], STATUS_SENDING_ALL_PARAMETERS)) || sent)
+							simplePause(getPauseAfterSendOneParameter());
+						}
+					}
+				}
+			}
+			
+		if (sent)
+			simplePause(getPauseAfterSendAllParameters());
+        }
 
 
 

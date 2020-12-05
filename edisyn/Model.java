@@ -27,13 +27,13 @@ import edisyn.gui.*;
 
 public class Model implements Cloneable
     {
-    public static final boolean debug = false;
+    public static boolean debug = false;
 
     public static final int STATUS_UNSET = 0;                           // I haven't set a status for this yet.  For Strings this will result in IMMUTABLE and for ints, FREE
     public static final int STATUS_FREE = 1;                            // The parameter can be mutated
     public static final int STATUS_IMMUTABLE = 2;                       // The parameter cannot be mutated
     public static final int STATUS_RESTRICTED = 3;                      // The parameter cannot be mutated and shouldn't appear in getKeys()
-    public static final String ALL_KEYS = "ALL_KEYS";           // The "key" which registers a listener with all keys
+    public static final String ALL_KEYS = "ALL_KEYS";                           // The "key" which registers a listener with all keys
 
     // The actual value storage.  It's a linked hash map so data iterates in a rational format (basically the order in which it was added originally)
     LinkedHashMap<String, Node> storage = new LinkedHashMap<String, Node>();
@@ -312,8 +312,8 @@ public class Model implements Cloneable
         Node node = storage.get(key);
         if (node == null) { System.err.println("Warning (Model): " + "min and max set for non-existent value " + key); node = new Node(); storage.put(key, node); }
         node.min = min;
-        node.hasMin = true;
         node.max = max;
+        node.hasMin = true;
         node.hasMax = true;
         }
        
@@ -323,6 +323,7 @@ public class Model implements Cloneable
         Node node = storage.get(key);
         if (node == null) { System.err.println("Warning (Model): " + "metric min set for non-existent value " + key); node = new Node(); storage.put(key, node); }
         node.metricMin = value;
+        node.hasMetricMin = true;
         }
                 
     /** Sets the metric maximum for a given key. */        
@@ -331,6 +332,7 @@ public class Model implements Cloneable
         Node node = storage.get(key);
         if (node == null) { System.err.println("Warning (Model): " + "metric max set for non-existent value " + key); node = new Node(); storage.put(key, node); }
         node.metricMax = value;
+        node.hasMetricMax = true;
         }
     
     /** Sets the metric minimum and maximum for a given key. */        
@@ -340,6 +342,8 @@ public class Model implements Cloneable
         if (node == null) { System.err.println("Warning (Model): " + "metric min/max set for non-existent value " + key); node = new Node(); storage.put(key, node); }
         node.metricMin = min;
         node.metricMax = max;
+        node.hasMetricMin = true;
+        node.hasMetricMax = true;
         }
 
     /** Sets the minimum and maximum and metric minimum and maximum for a given key. */        
@@ -351,6 +355,10 @@ public class Model implements Cloneable
         node.max = max;
         node.metricMin = metricMin;
         node.metricMax = metricMax;
+        node.hasMin = true;
+        node.hasMax = true;
+        node.hasMetricMin = true;
+        node.hasMetricMax = true;
         }
             
     /** Sets the status of a key.  The default is STATUS_FREE, except for strings, which are STATUS_IMMUTABLE. */        
@@ -533,8 +541,8 @@ public class Model implements Cloneable
     public int getMin(String key)
         {
         Node d = storage.get(key);
-        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent node extracted for min for " + key); new Throwable().printStackTrace(); return 0; }
-        if (!d.hasMin) { System.err.println("Warning (Model): " + "Nonexistent min extracted for " + key); new Throwable().printStackTrace(); printNode(key); return 0; }
+        if (d == null) { Synth.handleException(new Throwable("Warning (Model): " + "Nonexistent node extracted for min for " + key)); return 0; }
+        if (!d.hasMin) { Synth.handleException(new Throwable("Warning (Model): " + "Nonexistent min extracted for " + key)); return 0; }
         else return d.min;
         }
                 
@@ -542,8 +550,8 @@ public class Model implements Cloneable
     public int getMax(String key)
         {
         Node d = storage.get(key);
-        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent node extracted for max for " + key); new Throwable().printStackTrace(); return 0; }
-        if (!d.hasMax) { System.err.println("Warning (Model): " + "Nonexistent max extracted for " + key); new Throwable().printStackTrace(); return 0; }
+        if (d == null) { Synth.handleException(new Throwable("Warning (Model): " + "Nonexistent node extracted for max for " + key)); return 0; }
+        if (!d.hasMax) { Synth.handleException(new Throwable("Warning (Model): " + "Nonexistent max extracted for " + key)); return 0; }
         else return d.max;
         }
 
@@ -551,8 +559,8 @@ public class Model implements Cloneable
     public int getMetricMin(String key)
         {
         Node d = storage.get(key);
-        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent node extracted for metric min for " + key); new Throwable().printStackTrace(); return 0; }
-        if (!d.hasMetricMin) { System.err.println("Warning (Model): " + "Nonexistent metric min extracted for " + key); new Throwable().printStackTrace(); return 0; }
+        if (d == null) { Synth.handleException(new Throwable("Warning (Model): " + "Nonexistent node extracted for metric min for " + key)); return 0; }
+        if (!d.hasMetricMin) { Synth.handleException(new Throwable("Warning (Model): " + "Nonexistent metric min extracted for " + key)); return 0; }
         else return d.metricMin;
         }
                 
@@ -560,8 +568,8 @@ public class Model implements Cloneable
     public int getMetricMax(String key)
         {
         Node d = storage.get(key);
-        if (d == null) { System.err.println("Warning (Model): " + "Nonexistent node extracted for metric max for " + key); new Throwable().printStackTrace(); return 0; }
-        if (!d.hasMetricMax) { System.err.println("Warning (Model): " + "Nonexistent metric max extracted for " + key); new Throwable().printStackTrace(); return 0; }
+        if (d == null) { Synth.handleException(new Throwable("Warning (Model): " + "Nonexistent node extracted for metric max for " + key)); return 0; }
+        if (!d.hasMetricMax) { Synth.handleException(new Throwable("Warning (Model): " + "Nonexistent metric max extracted for " + key)); return 0; }
         else return d.metricMax;
         }
     
@@ -1256,16 +1264,286 @@ public class Model implements Cloneable
         return this;
         }
 
+    // used by morph to determine if a key is in a metric region for all models 
+    boolean allInMetric(Model[] models, String key)
+        {
+        for(int i = 0; i < models.length; i++)
+            {
+            if (models[i].get(key) < getMetricMin(key) ||
+                models[i].get(key) > getMetricMax(key)) 
+                return false;
+            }
+        return true;
+        }
+    
+    // used by morph to sort the models by weight (strongest first) 
+    class Sort implements Comparable
+        {
+        public Model model;
+        public double weight;
+        public double previousWeight;
+        public Sort(Model model, double weight, double prev) { this.model = model; this.weight = weight; this.previousWeight = prev; }
+        public int compareTo(Object obj)
+            {
+            Sort other = (Sort) obj;
+            if (weight > other.weight) return -1;
+            else if (weight < other.weight) return 1;
+            else return 0;
+            }
+        }
+    
+    public static final int CATEGORICAL_STRATEGY_MORPH = -3;
+    public static final int CATEGORICAL_STRATEGY_DEFAULT = -2;
+    public static final int CATEGORICAL_STRATEGY_STRONGEST = -1;
+    
+    /** This recombiner is meant to be used over and over on the same model to gradually nudge it towards
+        certaiin models.  If you had just two models, it'd be more or less like this:
+        
+        <pre>
+        If (weight == previousWeight)
+        return                                                          // no change in push
+        
+        For each key:
+        If the key is METRIC,
+        average model and model2 by weight
+        If the key is CATEGORICAL (non-metric)
+        If weight >= previousWeight             // we're moving towards model
+        m <- model
+        p <- weight 
+        pw <- previousWeight
+        else
+        m <- model2                                     // we're moving towards model2
+        p <- 1 - weight
+        pw <- 1 - previousWeight
+
+        If we are different from m
+        With a *low* p^a probability                                    // maybe use a = 3?
+        With probability p                                              // mutator A
+        Set key to value in m
+        Else
+        With probability (p - pw)                               // mutator B
+        Set key to value in m
+        </pre>
+ 
+        <p>
+        We have two different probabilistic weighted categorical mutators for the following reason.
+        Mutator A guarantees that by the time we reach the extreme, with 1.0 probability we will have
+        mutated clear to m.  But if you move SLOWLY towards the extreme, it'll change towards m much more
+        rapidly than if you move QUICKLY towards the extreme.  This is because once a parameter has been
+        changed, it's locked and cannot change back.   On the other hand, muator B will mutate
+        at a rate proportional to how fast you move, but it does not guarantee that you'll be at 1.0
+                
+        <p>I have split the difference and have us using Mutator B if we're far away, but as we approach
+        the extreme end (p = 1) we gravitate towards mutator A.
+       
+        <p>However you can have more than one model, so the algorithm is actually more complex than this.
+        In this case when the key is metric, we average by the normalized weights of all the models.  
+        If the key is non-metric, then sort the models by weight and go through them strongest to weakest.
+        Each model gets a chance to change the value of each key.  For each key:
+        - If we're moving away from the model (the previousWeight is stronger than the weight), then
+        we skip this model.  The next model gets a chance and so on.
+        - If the model is the same as us, then it's unchanged and we quit, nobody else gets to change it.
+        - If the model is different, then with normalizeWeight^a probability we either use mutator A 
+        with normalizeWeight probability, or we use mutator B with normalizeWeight probability.  If we
+        wind up mutating, then we quit and nobody else gets to change this key.
+        - Otherwise the next model gets a chance and so on.
+                
+        <p>The goal here is give mutation precedence to the strongest (closest) models in turn THAT WE ARE
+        MOVING TOWARDS, and once we have moved towards a model (or are already the same as that model), 
+        it's locked so we can't mutate away from it.
+        
+        <p>This all assumes that you're using CATEGORICAL_STRATEGY_MORPH as your categorialStrategy.  However
+        there are other options for handling categorical data.  If your categoricalStrategy is CATEGORICAL_STRATEGY_STRONGEST,
+        then no probabilistic morphing occurs among your categorical data at all: instead the data is directly set to the
+        strongest model, that is, the one whose weight is highest.  It doesn't matter if you're moving towards
+        or away from the model.  Simiarly, if your categoricalStratgegy is CATEGORICAL_STRATEGY_DEFAULT,
+        then again, there's no probabilistic morphing but instead the categorical data is locked to the model passed in 
+        to <tt>categoricalDefaultModel</tt>.  Finally, if your categoricalStrategy is set to a value in the range (0...models.length - 1), 
+        then the data is directly set to that model number.
+        
+        <p>We presently handle hybrid (metric/categorical) parameters in a very crude way.  If ALL models
+        are in the metric region, then we treat the parameter as metric; otherwise we treat the parameter as categorical.
+           
+        <p>Because morph is really designed to be used in real-time it seems unwise to include an undolistener
+        in the main model, so I'd set it to null.
+        
+        <p> Make sure that all the models exist and contain all the keys, cause morph doesn't check.
+        To initialize, I'd set the previousWeights to 0.5 each. 
+    */
+    
+    public Model morph(Random random, Model[] models, Model categoricalDefaultModel, String[] keys, double[] weights, double[] previousWeights, int categoricalStrategy)
+        {
+/*
+// First ... if none of our weights have changed, there's no reason to do this at all
+boolean nothingChanged = true;
+for(int i = 0; i < weights.length; i++)
+if (weights[i] == previousWeights[i])
+{ nothingChanged = false; break; }
+if (nothingChanged) return this;
+*/
+        
+        // prepare undo listener if any (likely it will have been deleted)
+        if (undoListener!= null)
+            {
+            undoListener.push(this);
+            undoListener.setWillPush(false);
+            }
+                
+        // Sorts array
+        Sort[] sorts = new Sort[weights.length];
+                
+        // Normalized weights
+        double[] normalized = new double[weights.length];
+
+        // (1) Build and sort the sorts (strongest first)
+        // (2) Normalize weights
+        double sum = 0;
+        for(int i = 0; i < normalized.length; i++)
+            {
+            sorts[i] = new Sort(models[i], weights[i], previousWeights[i]);
+            normalized[i] = weights[i];
+            sum += normalized[i];
+            }
+                        
+        if (sum == 0)           // make everyone have the same normalized weight
+            {
+            for(int i = 0; i < normalized.length; i++)
+                {
+                normalized[i] = 1.0 / normalized.length;        
+                }
+            }
+        else
+            {
+            for(int i = 0; i < normalized.length; i++)
+                {
+                normalized[i] /= sum;           
+                }
+            }
+        Arrays.sort(sorts);             
+                
+        /// FOR EACH KEY
+
+        keys_label : for(int i = 0; i < keys.length; i++)
+            {
+            // skip if the key doesn't exist, is immutable, is restricted, or is a string
+            if (!models[0].exists(keys[i])) { continue; }
+            if (getStatus(keys[i]) == STATUS_IMMUTABLE || isString(keys[i]) || getStatus(keys[i]) == STATUS_RESTRICTED) continue;
+            if (minExists(keys[i]) && maxExists(keys[i]) && getMin(keys[i]) >= getMax(keys[i]))  continue;  // no range
+
+            // If the key is metric AND we're in the metric region in every one of the models
+            /// EDIT: I've decided to say screw it, let hybrid parameters be considered metric
+            /// all the time, otherwise we get lots of jumps for LFO stuff on the Venom for example.
+            if (metricMinExists(keys[i]) &&
+                metricMaxExists(keys[i]))
+                // &&
+                //allInMetric(models, keys[i])) 
+                {
+                /// TREAT AS METRIC
+                
+                /// Compute weighted value using normalized weights
+                double val = 0;
+                for(int j = 0; j < normalized.length; j++)
+                    {
+                    val += normalized[j] * models[j].get(keys[i]);
+                    }
+                
+                // Round towards strongest model, which is sorts[0]
+                if (sorts[0].model.get(keys[i]) > val)
+                    val = (int)Math.ceil(val);
+                else
+                    val = (int)Math.floor(val);
+
+                // Revise and set
+                set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), (int)val));
+                }
+            else 
+                {
+                /// TREAT AS CATEGORICAL
+                
+                // Go through the models strongest to weakest and let each of them have a chance to change the parameter
+                // or to lock it so other models can't change it
+                for(int j = 0; j < sorts.length; j++)
+                    {
+                    if (categoricalStrategy == CATEGORICAL_STRATEGY_MORPH)
+                        {
+                        // If we're moving towards this model rather than away from it (model only gets a chance if we're moving towards it)
+                        if (sorts[j].weight >= sorts[j].previousWeight)
+                            {
+                            // If the model has a different value than our value.  In this case it MIGHT change it.  Otherwise it LOCKS it.
+                            if (sorts[j].model.get(keys[i]) != get(keys[i]))
+                                {
+                                // Which mutator do we use?  Do a coin toss under the weight squared, so we usually do mutator b when further away 
+                                if (coinToss(random, sorts[j].weight * sorts[j].weight * sorts[j].weight))              // right now we're doing p^a with a = 3
+                                    {
+                                    // mutator a -- just mutate with weight probability
+                                    if (coinToss(random, sorts[j].weight))
+                                        {
+                                        set(keys[i], reviseMutatedValue(keys[i], get(keys[i]), sorts[j].model.get(keys[i])));
+                                        continue keys_label;            // lock down -- nobody else gets a chance to change this
+                                        }
+                                    else
+                                        {
+                                        // do nothing, let someone else try
+                                        }
+                                    }       
+                                else
+                                    {
+                                    // mutator b -- mutate by the differnce between the weight and previous weight so small moves don't have much effect
+                                    if (coinToss(random, sorts[j].weight - sorts[j].previousWeight))
+                                        {
+                                        set(keys[i], reviseMutatedValue(keys[i], get(keys[i]), sorts[j].model.get(keys[i])));
+                                        continue keys_label;            // lock down -- nobody else gets a chance to change this
+                                        }
+                                    else
+                                        {
+                                        // do nothing, let someone else try
+                                        }
+                                    }               
+                                }
+                            else
+                                {
+                                // lock down -- nobody else can change this
+                                continue keys_label;
+                                }
+                            }
+                        else
+                            {
+                            // do nothing, let someone else try
+                            }
+                        }
+                    // handle other categorical strategies
+                    else if (categoricalStrategy == CATEGORICAL_STRATEGY_DEFAULT)
+                        {
+                        set(keys[i], reviseMutatedValue(keys[i], get(keys[i]), categoricalDefaultModel.get(keys[i])));
+                        }
+                    else if (categoricalStrategy == CATEGORICAL_STRATEGY_STRONGEST)
+                        {
+                        set(keys[i], reviseMutatedValue(keys[i], get(keys[i]), sorts[0].model.get(keys[i])));
+                        }
+                    else
+                        {
+                        set(keys[i], reviseMutatedValue(keys[i], get(keys[i]), models[categoricalStrategy].get(keys[i])));
+                        }
+                    }
+                }
+            }
+
+        // update undoListener
+        if (undoListener!= null)
+            {
+            undoListener.setWillPush(true);
+            }
+        
+        return this;
+        }
+
+
 
     /** Override this method in the model produced by synth.buildModel() to revise mutated values if the mutator sets them to invalid things. */
     public int reviseMutatedValue(String key, int old, int current) { return current; }    
 
     /** Override this method in the model produced by synth.buildModel() to revise mutated values if the mutator sets them to invalid things. */
     public String reviseMutatedValue(String key, String old, String current) { return current; }    
-
-
-
-
 
 
 
@@ -1363,6 +1641,17 @@ public class Model implements Cloneable
         return "" + get(key, 0);
         }
     
+    public void dumpNodes()
+        {
+        String[] keys = getKeys();
+        Arrays.sort(keys);
+        for(int i = 0; i < keys.length; i++)
+            {
+            printNode(keys[i]);
+            }
+        }
+
+
     /** Print the model parameters to the given writer. */
     public void print(PrintWriter out)
         {

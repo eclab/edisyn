@@ -1,0 +1,48 @@
+<html><head></head><body bgcolor='black'>
+<font color='white'>
+<h1>M-Audio Venom</h1> 
+<h2>Multimode Patch Editor</h2>
+
+<p><b>Communicating with Edisyn</b><br> 
+Set Edisyn's MIDI channel to the same as your Venom.  
+
+<ul>
+<li>To communicate with your Venom over USB, use "Venom Synth In" as the Receive From device, and "Venom Synth Out" as the Send To device.  Set the Venom up to receive MIDI events over USB by holding the Edit button, then pressing the "MIDI Out" key (the A-flat below Middle C) until the screen changes to "MIDI OUT USB".
+
+<p><li>To communicate with your Venom over standard MIDI ports, just use the appropriate MIDI device for your computer.   Set the Venom up to receive MIDI events over 5-pin DIN MIDI cabling by holding the Edit button, then pressing the "MIDI Out" key (the A-flat below Middle C) until the screen changes to "MIDI OUT kEY". 
+</ul>
+
+<p>The Venom's sysex documentation indicates that you can set the Venom's Synth ID.  But to my knowledge this does not actually exist.  If it does, please let me know.  By default Edisyn is hard-coded to use 0.
+
+<p><b>Hints</b><br>
+
+<ul><li>When you change the Bank or Pattern of a Part, the title of the voice category will change to reflect the <b>default single patch name</b>, in case that's helpful to you.  This isn't necessarily the <b>current name</b>, since you may have overwritten the single patch.  It's just a helpful hint.
+
+<p><li>Similarly, when you change the Bank or the Pattern of the Arpeggiator, the title of the arpeggiator category will change to reflect the <b>default arpeggio pattern name</b>, in case that's helpful to you.  This isn't necessarily the <b>current name</b>, since you may have overwritten the arpeggio pattern.  It's just a helpful hint.
+
+<p><li>If you set the Arpeggiator Source to Single or Pattern, you can't set any parameters except Enable.  Even the "Show Arp" button disappears.  If you want to see which Arp it is, click the "Show" button in the Part, then click on "Show Arp" in the resulting Single patch editor.
+
+</ul>
+
+<p><b>Gotchas</b><br>
+
+<ul>
+<li> FX, Voices, Channels, and Arpeggiators all have sources.  Even if you set the source to something other than "Multi", you can still set a variety of parameters which presumably would be in fact defined by the underlying source (Single, Pattern, Part 1, Part2, etc.).  It's not clear to me whether these parameters change anything in this case.
+
+<p><li>Changing patches takes quite a long time (about a half second).
+
+
+</ul>
+
+<p>Thanks to Jan Bote for his assistance and knowledge.
+
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>November 25, 2020
+</table>
+

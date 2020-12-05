@@ -1,0 +1,92 @@
+<html><head></head><body bgcolor='black'>
+<font color='white'>
+<h1>M-Audio Venom</h1> 
+<h2>Arpeggio and Arpeggio Pattern Editor</h2>
+
+<p><b>Communicating with Edisyn</b><br> 
+Set Edisyn's MIDI channel to the same as your Venom.  
+
+<ul>
+<li>To communicate with your Venom over USB, use "Venom Synth In" as the Receive From device, and "Venom Synth Out" as the Send To device.  Set the Venom up to receive MIDI events over USB by holding the Edit button, then pressing the "MIDI Out" key (the A-flat below Middle C) until the screen changes to "MIDI OUT USB".
+
+<p><li>To communicate with your Venom over standard MIDI ports, just use the appropriate MIDI device for your computer.   Set the Venom up to receive MIDI events over 5-pin DIN MIDI cabling by holding the Edit button, then pressing the "MIDI Out" key (the A-flat below Middle C) until the screen changes to "MIDI OUT KEY". 
+</ul>
+
+<p><b>About Arpeggios</b><br>
+Arpeggios contain two parts: a <b>Header</b> and a <b>Pattern</b>.  The header contains the patch name, the default pattern mode, enable, latch, octave range, and so on.  The stuff that appears in the General category at top.  This stuff can and will be overridden by your Single and Multimode patches which use this arpeggio.
+
+<p>The <b>Pattern</b> contains up to 256 pattern steps (0...255) defining notes and other events which specify the arpeggio itself.
+
+<p>Arpeggios can be uploaded to current memory, or they can be stored permanently, where your Single and Multimode patches can refer to them.
+
+<p><b>Pattern Steps</b><br>
+
+Each pattern step can play a <b>note</b> (or turn it off), change a <b>control (CC) parameter</b>, or change the <b>pitch bend</b>. You can also declare a pattern step to be an <b>end marker</b>. 
+
+<ul>
+<li><b>Notes</b>&nbsp;&nbsp;&nbsp;A note has a pitch (marked <b>Note</b>) and a velocity.  I beliee that pitch 60 (middle C) corresponds to the note pressed by the player.  If you set the velocity to 0, it will say <b>Off</b>, and this means to stop playing this given note.
+
+<p><li><b>Control (CC) Parameters</b>&nbsp;&nbsp;&nbsp;Each CC value has a <b>parameter number</b> and a <b>parameter value</b>, both 0...127.  M-Audio asks that you not send NRPN and RPN messages, which means that you should not set the parameter number to 98, 99, 100, or 101.
+
+<p><li><b>Pitch Bend</b>&nbsp;&nbsp;&nbsp;Pitch bend ranges from -8192 to +8191, and has a coarse tuning and a fine tuning.  Set the coarse tuning first, and then further adjust with the fine tuning.  The fine tuning knob shows the actual final value.
+
+<p><li><b>End</b>&nbsp;&nbsp;&nbsp;The End marker indicates the end of your arpeggio pattern.  If your pattern uses less than 256 steps, it'll need an end marker to indicate that the remaining steps are to be ignored.  End markers don't have timestamps: they simply say "End".
+</ul>
+
+<p>Each pattern step occurs at a certain time (marked <b>"When"</b>).  The time values can be 1..
+.768, which correspond to the beginning of the first measure to just before the end of the second measure.  You'll note that some time values are marked "-N-" for certain values of N.  These represent the time values corresponding to sixteenth notes, and serve as a convenience for you.  For example, <b>-1-</b> is the first sixteenth note in the first measure, <b>-2-</b> is the second sixteenth note, and so on.  There are at most two measures, so there are at most 32 sixteenth note
+s.  Because it's inconvenient to dial these in, you can choose them more easily from the <b>Optio
+ns</b> button.
+
+The Options button contains other actions that may prove useful to you as well:
+
+<ul>
+<li><b>Delete</b>&nbsp;&nbsp;&nbsp;Deletes the step, shifting all the later steps down one to fill the gap.
+
+<p><li><b>Insert Before</b>&nbsp;&nbsp;&nbsp;Inserts a new step at this position, shifting the current step and all later steps up by one to make room.
+
+<p><li><b>Swap With Next</b>&nbsp;&nbsp;&nbsp;Swaps this step with the next one beyond it.
+</ul>
+
+
+<p><b>About the Menu</b><br>
+
+<p>The menu contains several items that you will find useful:
+
+<ul>
+<li><b>Load MIDI File...</b>&nbsp;&nbsp;&nbsp;This loads a MIDI file saved from a DAW such as Ableton and sets the Pattern to those values.  If you can, try to set the MIDI file tempo to 96 Parts Per Quarter-Note (PPQ).  Note that patterns cannot be longer than 2 measures (768 parts).
+
+<p><li><b>Sort</b>&nbsp;&nbsp;&nbsp;This rearranges all your pattern steps in order of time ("When"), and puts all the end steps at the end.
+
+<p><li><b>Truncate</b>&nbsp;&nbsp;&nbsp;This deletes all the pattern steps after your first End, setting them all to End.  If you want to end at a certain spot, you could place an End marker at that spot, then truncate, then sort.
+
+<p><li><b>Quantize Up</b>&nbsp;&nbsp;&nbsp;This rounds the times of each pattern step up to the nearest sixteenth note.
+
+<p><li><b>Quantize Down</b>&nbsp;&nbsp;&nbsp;This rounds the times of each pattern step down to the nearest sixteenth note.
+
+<p><li><b>Quantize to Nearest</b>&nbsp;&nbsp;&nbsp;This rounds the times of each pattern step to the nearest sixteenth note.
+
+</ul>
+
+<p><b>Gotchas</b><br>
+
+<ul>
+<li> The Venom sends arpeggio headers and patterns as separate sysex messages.  When Edisyn saves out your patch file, it will save it with both these messages.  Edisyn is capable of reading just a header or just a pattern, but it'd be weird to do so.
+
+<p><li>When Edisyn sends a pattern to the Venom, it first truncates it, then sorts it.  You might as well pre-truncate and pre-sort so you can see exactly what pattern will get sent.
+
+<p><li>It's theoretically possible for a Arpeggio Header to refer to a <i>different numbered</i> Arpeggio Pattern.  But Edisyn assumes this never happens and always associates them with one another.
+</ul>
+
+<p>Thanks to Jan Bote for his assistance and knowledge.
+
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>November 25, 2020
+</table>
+

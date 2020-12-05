@@ -1,0 +1,73 @@
+<html><head></head><body bgcolor='black'>
+<font color='white'>
+<h1>M-Audio Venom</h1> 
+<h2>Single Patch Editor</h2>
+
+<p><b>Communicating with Edisyn</b><br> 
+Set Edisyn's MIDI channel to the same as your Venom.  
+
+<ul>
+<li>To communicate with your Venom over USB, use "Venom Synth In" as the Receive From device, and "Venom Synth Out" as the Send To device.  Set the Venom up to receive MIDI events over USB by holding the Edit button, then pressing the "MIDI Out" key (the A-flat below Middle C) until the screen changes to "MIDI OUT USB".
+
+<p><li>To communicate with your Venom over standard MIDI ports, just use the appropriate MIDI device for your computer.   Set the Venom up to receive MIDI events over 5-pin DIN MIDI cabling by holding the Edit button, then pressing the "MIDI Out" key (the A-flat below Middle C) until the screen changes to "MIDI OUT KEY". 
+</ul>
+
+<p><b>Hints</b><br>
+
+<ul><li>When you change the Bank or the Pattern of the Arpeggiator, the title of the arpeggiator category will change to reflect the <b>default arpeggio pattern name</b>, in case that's helpful to you.  This isn't necessarily the <b>current name</b>, since you may have overwritten the arpeggio pattern.  It's just a helpful hint.
+
+<p><li>The LFOs, A-Mod LFO, and Aux 1 FX have Rates.  Most of the numbers are speeds 0...110.  But 
+above 110 the Rates turn into MIDI Synced rates in the form of notes.  An explanation:
+
+<ul>
+<li><b>1/32 N</b>&nbsp;&nbsp;&nbsp;Thirty-Second Note
+<li><b>1/16 T</b>&nbsp;&nbsp;&nbsp;Sixteenth Note Triplet
+<li><b>1/16 N</b>&nbsp;&nbsp;&nbsp;Sixteenth Note
+<li><b>1/8 T</b>&nbsp;&nbsp;&nbsp;Eighth Note Triplet
+<li><b>1/8 N</b>&nbsp;&nbsp;&nbsp;Eighth Note
+<li><b>1/4 T</b>&nbsp;&nbsp;&nbsp;Quarter Note Triplet
+<li><b>1/8 .</b>&nbsp;&nbsp;&nbsp;Dotted Eighth Note
+<li><b>1/4 N</b>&nbsp;&nbsp;&nbsp;Quarter Note
+<li><b>1/2 T</b>&nbsp;&nbsp;&nbsp;Half Note Triplet
+<li><b>1/4 .</b>&nbsp;&nbsp;&nbsp;Dotted Quarter Note
+<li><b>1/2 N</b>&nbsp;&nbsp;&nbsp;Half Note
+<li><b>1 N</b>&nbsp;&nbsp;&nbsp;Whole Note (1 Bar)
+<li><b>1 .</b>&nbsp;&nbsp;&nbsp;Dotted Whole Note (1.5 Bars)
+<li><b>2 B</b>&nbsp;&nbsp;&nbsp;2 Bars
+<li><b>3 B</b>&nbsp;&nbsp;&nbsp;3 Bars
+<li><b>4 B</b>&nbsp;&nbsp;&nbsp;4 Bars
+</ul>
+
+</ul>
+
+<p><b>Gotchas</b><br>
+
+<ul>
+<p><li>If you set the Arpeggiator Source Pattern, you can't set any parameters except Enable (and the Bank and Pattern Number).  If you want to see the underlying pattern, just click "Show Arp".
+
+<p><li>It's possible that Edisyn has swapped the EQ's (not Master EQ) Low Freq and Low Gain, and similarly the High Freq and High Gain, such that if you change one, actually the other is changed.  If this appears to be the case, please contact me.
+
+<p><li>Vyzex does not support it, but the Venom's Sysex permits LFO 3 to have an Attack, Decay, and Phase.  These may or may not be implemented in the Venom, but Edisyn includes them just in case.
+
+<p><li>Vyzex lists many waveforms for the Venom's LFOs, but it is possible that only the first 8 actually have any effect (that is, up through Logarithmic Sample and Hold).  Edisyn includes them just in case.
+
+<p><li>Changing patches takes quite a long time (about a half second).
+
+<p><li>The Venom's sysex documentation indicates that you can set the Venom's Synth ID.  But to my knowledge this does not actually exist.  If it does, please let me know.  By default Edisyn is hard-coded to use 0.
+
+
+
+</ul>
+
+<p>Thanks to Jan Bote for his assistance and knowledge.
+
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>November 25, 2020
+</table>
+

@@ -18,7 +18,7 @@ import javax.sound.midi.*;
 
 
 /**
-   A patch editor for the Novation Drumstation and D-Station.
+   A patch editor for the Novation Drumstation and D Station.
         
    @author Sean Luke
 */
@@ -920,12 +920,12 @@ public class NovationDStation extends Synth
             data[6] == 0x11);
         }
 
-    public static String getSynthName() { return "Novation Drumstation/D-station"; }
+    public static String getSynthName() { return "Novation Drumstation / D Station"; }
     }
     
     
 /**** 
-      NOVATION DRUMSTATION / D-STATION MIDI FORMAT
+      NOVATION DRUMSTATION / D STATION MIDI FORMAT
 
       The Drumstation has only rudimentary sysex as far as I have ascertained.  It has only two commands, which
       it both transmits and receives:
@@ -936,7 +936,7 @@ public class NovationDStation extends Synth
       There are no sysex commands for updating individual parameters, but many parameters can be updated in real 
       time via CC (as described in the manual).  Thre are also no sysex commands for requesting patches, nor any
       distinction between sending individual patches to current memory versus writing them to patch memory (this
-      must be done manually on the machine per the manual).
+      must be done manually on the machine per the manual -- see the WRITE switch).
 
 
 
@@ -998,10 +998,10 @@ public class NovationDStation extends Synth
       4 bytes 808 LC Data
       4 bytes 808 MA Data
       4 bytes 808 CL Data
-      1 byte Bank A Data                      [Table 5]
-      1 byte Bank B Data                      [Table 5]
-      1 byte Bank C Data                      [Table 5]
-      1 byte Bank D Data                      [Table 5]
+      1 byte Bank A Data                      [Table 6]
+      1 byte Bank B Data                      [Table 6]
+      1 byte Bank C Data                      [Table 6]
+      1 byte Bank D Data                      [Table 6]
       6 bytes UNUSED                          * use unknown if any
       1 byte GM Set Data                      0 for 808 and 1 for 909
 
@@ -1010,45 +1010,61 @@ public class NovationDStation extends Synth
 
       [TABLE 1] 6-byte 808/909 data:
 
-      Byte    Bits                                            Bits
+      Byte            Bits                                    Bits
       0               8: Tune Velocity                        1-7: Tune (0...127)
       1               8: Level Velocity                       1-7: Level (0...127)
       2               8: Tone Velocity                        1-7: Tone                               [or Attack] 
       3               8: Decay Velocity                       1-7: Decay                              [or Snappy]
-      4               8: Note Off Recognition         1-7: Front Cut (0...99)
-      5               5-8: Distortion (0...15)        1-4: Pan/Output*
+      4               8: Note Off Recognition                 1-7: Front Cut (0...99)
+      5               5-8: Distortion (0...15)                1-4: Pan/Output           (see TABLE 5)
 
       [TABLE 2] 5-byte 808/909 data [except 808 Crash Cymbal]:
 
-      Byte    Bits                                            Bits
+      Byte            Bits                                    Bits
       0               8: Tune Velocity                        1-7: Tune (0...127)
       1               8: Level Velocity                       1-7: Level (0...127)
       2               8: Decay Velocity                       1-7: Decay
-      3               8: Note Off Recognition         1-7: Front Cut (0...99)
-      4               5-8: Distortion (0...15)        1-4: Pan/Output*
+      3               8: Note Off Recognition                 1-7: Front Cut (0...99)
+      4               5-8: Distortion (0...15)                1-4: Pan/Output           (see TABLE 5)
 
       [TABLE 3] 5-byte 808 data [808 Crash Cymbal Only]:
 
-      Byte    Bits                                            Bits
+      Byte            Bits                                    Bits
       0               8: Level Velocity                       1-7: Level (0...127)                    *** MidiQuest appears to have this wrong, Crash Cymbal is treated like the other 5-byte drums
       1               8: Tone Velocity                        1-7: Tone (0...127)
       2               8: Decay Velocity                       1-7: Decay
-      3               8: Note Off Recognition         1-7: Front Cut (0...99)
-      4               5-8: Distortion (0...15)        1-4: Pan/Output*
+      3               8: Note Off Recognition                 1-7: Front Cut (0...99)
+      4               5-8: Distortion (0...15)                1-4: Pan/Output           (see TABLE 5)
 
       [TABLE 4] 4-byte 808/909 data:
 
-      Byte    Bits                                            Bits
+      Byte            Bits                                    Bits
       0               8: Tune Velocity                        1-7: Tune (0...127)
       1               8: Level Velocity                       1-7: Level (0...127)
-      2               8: Note Off Recognition         1-7: Front Cut (0...99)
-      3               5-8: Distortion (0...15)        1-4: Pan/Output*
+      2               8: Note Off Recognition                 1-7: Front Cut (0...99)
+      3               5-8: Distortion (0...15)                1-4: Pan/Output           (see TABLE 5)
 
-      * Pan/Output data is as follows. 0...15 is:
-      [TABLE 5] L4, L3, L2, L1, --, R1, R2, R3, R4, O1, O2, O3, O4, O5, O6, O4
-      The O4 appears twice in case someone's foolish enough to set the pan/output value to 15
+      NOTE: change "Level Velocity" ?  That's a MIDIQuest thing.  But "Velocity Velocity" sounds bad.  "Volume Velocity" maybe?
 
-      NOTE: change "Level Velocity" ?  That's a MIDIQuest thing.  But "Velocity Velocity" sounds bad.  "Volume Velocity"?
+      [TABLE 5] 
+      0  L4 
+      1  L3 
+      2  L2
+      3  L1 
+      4  -- 
+      5  R1 
+      6  R2 
+      7  R3 
+      8  R4 
+      9  O1 
+      10 O2 
+      11 O3 
+      12 O4 
+      13 O5 
+      14 O6 
+      15 O4                     The O4 appears twice in case someone's foolish enough to set the pan/output value to 15
+
+
 
 
       [TABLE 6] Each Bank data is a single byte with the possible values
@@ -1061,7 +1077,7 @@ public class NovationDStation extends Synth
       5  808 RS  
       6  808 HC  
       7  808 CB  
-      8  808 CH               *** MidiQuest appears to 808 CH and 808 OH switched erroneously
+      8  808 CH               *** MidiQuest appears to have 808 CH and 808 OH switched erroneously
       9  808 OH
       10 808 CC  
       11 808 LC  
@@ -1109,7 +1125,7 @@ public class NovationDStation extends Synth
       NYBBLIZED DATA
       ==============
       The Nybblized Data consists of 15 patches (numbers 25 to 39), each of which is 136 8-bit 
-      bytes, followed by four footer bytes, of DATA broken into nybble pairs, totaling 4096 bytes
+      bytes, finally followed by four footer bytes, of DATA broken into nybble pairs, totaling 4096 bytes
       all told.  The first nybble is the high 4 bits and the second nybble is the low 4 bits.  
 
 
@@ -1201,3 +1217,5 @@ public class NovationDStation extends Synth
       Other use of the footer data is unknown.
 
 ****/
+
+

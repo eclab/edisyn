@@ -2458,7 +2458,7 @@ public class KawaiK5 extends Synth
             {
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { Synth.handleException(e); }
         }
     
     public Model getNextPatchLocation(Model model)
@@ -3884,7 +3884,7 @@ public class KawaiK5 extends Synth
                 }                       
             catch (Exception ex)
                 {
-                ex.printStackTrace();
+                Synth.handleException(ex); 
                 }
             }
             

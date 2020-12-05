@@ -41,7 +41,7 @@ public class MutationMap
             }
         catch (Exception ex)
             {
-            ex.printStackTrace();
+            Synth.handleException(ex);
             }
         }
     
@@ -66,7 +66,7 @@ public class MutationMap
             }
         catch (Exception ex)
             {
-            ex.printStackTrace();
+            Synth.handleException(ex);
             }
         }
         
@@ -78,7 +78,7 @@ public class MutationMap
             }
         catch (Exception ex)
             {
-            ex.printStackTrace();
+            Synth.handleException(ex);
             }
         map = new HashSet();
         }

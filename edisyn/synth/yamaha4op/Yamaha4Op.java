@@ -1753,7 +1753,7 @@ public class Yamaha4Op extends Synth
                     }
                 }
             try { model.set("name", new String(name, "US-ASCII")); }
-            catch (Exception e) { e.printStackTrace(); return FAIL; }
+            catch (Exception e) { Synth.handleException(e); return FAIL; }
 
             return offset + 101;    
             }

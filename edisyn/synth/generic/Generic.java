@@ -1116,7 +1116,7 @@ public class Generic extends Synth
             if (v_msb > 127) 
                 {
                 System.err.println("Problem with " + value);
-                new Throwable().printStackTrace();
+                Synth.handleException(new Throwable());
                 }
         
             return new Object[]
@@ -1129,7 +1129,7 @@ public class Generic extends Synth
             }
         catch (InvalidMidiDataException e)
             {
-            e.printStackTrace();
+            Synth.handleException(e);
             return new Object[0];
             }
         }
@@ -1145,7 +1145,7 @@ public class Generic extends Synth
                 }
             catch (InvalidMidiDataException ex)
                 {
-                ex.printStackTrace();
+                Synth.handleException(ex); 
                 return new Object[0];
                 }
             }

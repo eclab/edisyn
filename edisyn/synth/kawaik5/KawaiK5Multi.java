@@ -643,7 +643,7 @@ public class KawaiK5Multi extends Synth
             {
             tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x30, 0x00, 0x02, 0x01, (byte)PC, (byte)0xF7 } );
             }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { Synth.handleException(e); }
         }
     
     public Model getNextPatchLocation(Model model)

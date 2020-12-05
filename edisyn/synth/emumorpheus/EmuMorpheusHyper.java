@@ -331,7 +331,7 @@ public class EmuMorpheusHyper extends Synth
             if (b >= 0 && b < 16) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-        catch (NumberFormatException e) { e.printStackTrace(); }
+        catch (NumberFormatException e) { Synth.handleException(e); }
         return 0;
         }
         
@@ -394,7 +394,7 @@ public class EmuMorpheusHyper extends Synth
                 catch (Exception ex)
                     {
                     // shouldn't ever happen
-                    ex.printStackTrace();
+                    Synth.handleException(ex); 
                     }
                 }
             else
@@ -429,7 +429,7 @@ public class EmuMorpheusHyper extends Synth
                 catch (Exception ex)
                     {
                     // shouldn't ever happen
-                    ex.printStackTrace();
+                    Synth.handleException(ex); 
                     }
                 }
             else if (key.startsWith("fgseg") && (key.endsWith("condjump")))
@@ -522,7 +522,7 @@ public class EmuMorpheusHyper extends Synth
                 catch (Exception ex)
                     {
                     // shouldn't ever happen
-                    ex.printStackTrace();
+                    Synth.handleException(ex); 
                     }
                 }
             else if (parameters[i].startsWith("fgseg") && (parameters[i].endsWith("condjump")))
@@ -616,7 +616,7 @@ public class EmuMorpheusHyper extends Synth
                 catch (Exception ex)
                     {
                     // shouldn't ever happen
-                    ex.printStackTrace();
+                    Synth.handleException(ex); 
                     }
                 }
             else

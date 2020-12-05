@@ -1294,7 +1294,7 @@ public class PreenFM2 extends Synth
         int bank = tempModel.get("bank");
         int program = tempModel.get("number");
         
-        if (bank < 256 && bank >= 64) { bank = 0; new RuntimeException("Attempt made to change to combo or invalid single bank " + bank).printStackTrace(); } // Uh oh, Combo, set to 0
+        if (bank < 256 && bank >= 64) { bank = 0; Synth.handleException(new RuntimeException("Attempt made to change to combo or invalid single bank " + bank)); } // Uh oh, Combo, set to 0
         
         tryToSendMIDI(buildLongCC(getChannelOut(), 0, bank));
         tryToSendMIDI(buildPC(getChannelOut(), program));
@@ -2014,7 +2014,7 @@ public class PreenFM2 extends Synth
         if (bank < 256)
             {
             if (bank >= 64) // uh....
-                { new RuntimeException("Invalid Bank " + bank).printStackTrace(); bank = 0; }
+                { Synth.handleException(new RuntimeException("Invalid Bank " + bank)); bank = 0; }
             number++;
             if (number >= 127)
                 {

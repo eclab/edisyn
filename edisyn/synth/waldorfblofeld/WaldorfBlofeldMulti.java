@@ -22,97 +22,97 @@ import java.io.*;
 */
 
 
-/**
-   Multi-mode sysex is entirely undocumented.  Here's my best shot at it, which is working
-   well in Edisyn (https://github.com/eclab/edisyn/)
+/*
+  Multi-mode sysex is entirely undocumented.  Here's my best shot at it, which is working
+  well in Edisyn (https://github.com/eclab/edisyn/)
         
-   -- Sean Luke sean@cs.gmu.edu
+  -- Sean Luke sean@cs.gmu.edu
         
-   PARAMETER CHANGE
+  PARAMETER CHANGE
 
-   There is no parameter change in Multimode so far as I can tell.  If in multimode you
-   have set certain patches to receive parameter changes via (for example) CC, then that
-   will occur to their individual programs. 
+  There is no parameter change in Multimode so far as I can tell.  If in multimode you
+  have set certain patches to receive parameter changes via (for example) CC, then that
+  will occur to their individual programs. 
         
-   MULTI DUMP REQUEST
+  MULTI DUMP REQUEST
 
-   F0
-   3E              Waldorf ID
-   13              Blofeld ID
-   DD              Device ID
-   01              Message ID                   [Multi Request]
-   HH**                    Location High Byte   [Bank]
-   LL**                    Location Low Byte    [Number]
-   F7
+  F0
+  3E              Waldorf ID
+  13              Blofeld ID
+  DD              Device ID
+  01              Message ID                   [Multi Request]
+  HH**            Location High Byte           [Bank]
+  LL**            Location Low Byte            [Number]
+  F7
 
-   ** Where HH is (this is stolen from the Microwave XT Manual):
+  ** Where HH is (this is stolen from the Microwave XT Manual):
 
-   00 00 .. 00 7F          Locations M1 ... M128
-   40 00                   All Multis
-   7F 00                   Multi Mode Edit Buffer?  On the Microwave it's 20 FF
+  00 00 .. 00 7F          Locations M1 ... M128
+  40 00                   All Multis
+  7F 00                   Multi Mode Edit Buffer?  On the Microwave it's 20 FF
 
-   I think there is no checksum, since there's no checksum on a single sound request.
-   However on the Microwave II/XT/XTk's Multi Request, there *is* a checksum, so go figure.
+  I think there is no checksum, since there's no checksum on a single sound request.
+  However on the Microwave II/XT/XTk's Multi Request, there *is* a checksum, so go figure.
 
 
-   MULTI DUMP
+  MULTI DUMP
 
-   F0
-   3E              Waldorf ID
-   13              Blofeld ID
-   00              Device ID
-   11              Message ID      [Multi Dump]
-   HH**                Location High Byte      [Bank]
-   LL**                Location Low Byte       [Number]
+  F0
+  3E              Waldorf ID
+  13              Blofeld ID
+  00              Device ID
+  11              Message ID              [Multi Dump]
+  HH**            Location High Byte      [Bank]
+  LL**            Location Low Byte       [Number]
     
-   --- CHECKSUM STARTS HERE ---
-   name                [16 bytes]
-   00              [reserved]
-   0-127               Multi Volume
-   0-127           Tempo [same format as Arpeggiator Tempo]
-   01***           ["Transmit Keyboard: global / multi": I don't know what that is.  Help?]
-   00              [reserved]
-   02****              [maybe CONTROL W, don't know why this is here, help is welcome]
-   04****              [maybe CONTROL X, don't know why this is here, help is welcome]
-   0B****              [maybe CONTROL Y, don't know why this is here, help is welcome]
-   0C****              [maybe CONTROL Z, don't know why this is here, help is welcome]
-   00              [7 times]
+  --- CHECKSUM STARTS HERE ---
+  name            [16 bytes]
+  00              [reserved]
+  0-127           Multi Volume
+  0-127           Tempo [same format as Arpeggiator Tempo in single mode]
+  01***           ["Transmit Keyboard: global / multi": I don't know what that is.  Help?]
+  00              [reserved]
+  02****          [maybe CONTROL W, don't know why this is here, help is welcome]
+  04****          [maybe CONTROL X, don't know why this is here, help is welcome]
+  0B****          [maybe CONTROL Y, don't know why this is here, help is welcome]
+  0C****          [maybe CONTROL Z, don't know why this is here, help is welcome]
+  00              [7 times]
 
-   Then the following 16 times:
-   0-7                 Bank
-   0-127               Number
-   0-127               Volume
-   0-127               Pan                     [in -64 .. 63 as L64 ... R63]
-   00              [reserved]
-   0-127               Transpose       [in -64 .. 63]
-   16-112              Detune          [in -48 .. 48]
-   0-17                MIDI Channel [Global = 0, Omni = 1, otherwise Channel + 1]
-   0-127               Low Key
-   0-127               Hi Key
-   1-127               Low Vel
-   1-127               Hi Vel
-   bits 0S000LUM*  Bits: Local/Midi/USB/Status {for Status: play=0, mute=1}
-   bits 00CESPWB*  Bits: Pressure/Bend/Wheel/Sustain/Edits/Change
-   01              [reserved?]
-   3F              [reserved?]
-   00              [8 times]
+  Then the following 16 times:
+  0-7             Bank
+  0-127           Number
+  0-127           Volume
+  0-127           Pan                     [in -64 .. 63 as L64 ... R63]
+  00              [reserved]
+  0-127           Transpose       [in -64 .. 63]
+  16-112          Detune          [in -48 .. 48]
+  0-17            MIDI Channel [Global = 0, Omni = 1, otherwise Channel + 1]
+  0-127           Low Key
+  0-127           Hi Key
+  1-127           Low Vel
+  1-127           Hi Vel
+  bits 0S000LUM*  Bits: Local/Midi/USB/Status {for Status: play=0, mute=1}
+  bits 00CESPWB*  Bits: Pressure/Bend/Wheel/Sustain/Edits/Change
+  01              [reserved?]
+  3F              [reserved?]
+  00              [8 times]
     
-   --- CHECKSUM ENDS HERE ---
+  --- CHECKSUM ENDS HERE ---
 
-   Then finally:
-   CHECKSUM
-   F7
+  Then finally:
+  CHECKSUM
+  F7
 
-   * All bits are 0=ignore, 1=receive, except Status, which is 0=play, 1=mute
+  * All bits are 0=ignore, 1=receive, except Status, which is 0=play, 1=mute
 
-   ** Multi Instrument Buffer is HH=7F LL = 00.  I don't know about other
-   stuff, since there's no bank.  Maybe HH=00 LL=n?
+  ** Multi Instrument Buffer is HH=7F LL = 00.  I don't know about other
+  stuff, since there's no bank.  Maybe HH=00 LL=n?
 
-   *** In GOFTER I don't know what this is, it's not in the manual.
+  *** In GOFTER I don't know what this is, it's not in the manual.
 
-   **** These values are defined by the GOFTER patch editor, but I don't know what 
-   purpose they serve if any. Also GOFTER has an option for the Free Button, but it 
-   doesn't seem to do anything.
+  **** These values are defined by the GOFTER patch editor, but I don't know what 
+  purpose they serve if any.  Also GOFTER has an option for the Free Button, but it 
+  doesn't seem to do anything.
 */
 
 
@@ -1131,7 +1131,7 @@ public class WaldorfBlofeldMulti extends Synth
                 }
             catch (UnsupportedEncodingException e)
                 {
-                e.printStackTrace();
+                Synth.handleException(e); 
                 }
             }
         else if (key.endsWith("abits"))
@@ -1195,7 +1195,7 @@ public class WaldorfBlofeldMulti extends Synth
             if (b >= 0) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-        catch (NumberFormatException e) { e.printStackTrace(); }
+        catch (NumberFormatException e) { Synth.handleException(e); }
         return 0;
         }
         

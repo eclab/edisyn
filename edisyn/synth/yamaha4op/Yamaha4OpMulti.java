@@ -691,7 +691,7 @@ public class Yamaha4OpMulti extends Synth
             }
                 
         try { model.set("name", new String(name, "US-ASCII")); }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { Synth.handleException(e); }
                 
         revise();
         return PARSE_SUCCEEDED;

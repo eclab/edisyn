@@ -2262,7 +2262,7 @@ public class DSITetraCombo extends Synth
                 }
             catch (UnsupportedEncodingException e)
                 {
-                e.printStackTrace();
+                Synth.handleException(e); 
                 }
             }
                 

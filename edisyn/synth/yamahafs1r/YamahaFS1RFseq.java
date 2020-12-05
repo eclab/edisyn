@@ -388,113 +388,112 @@ public class YamahaFS1RFseq extends Synth
         JMenu menu = new JMenu("FS1R");
         menubar.add(menu);
 
-/*
-  JMenuItem text = new JMenuItem("Text");
-  text.addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  buildPhonemes();
-  }
-  });
-  menu.add(text);
+        JMenuItem text = new JMenuItem("Text");
+        text.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                buildPhonemes();
+                }
+            });
+        menu.add(text);
 
-  JMenuItem smooth = new JMenuItem("Smooth");
-  smooth.addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  Model old = model.copy();
+        JMenuItem smooth = new JMenuItem("Smooth");
+        smooth.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                Model old = model.copy();
                 
-  Model backup = (Model)(model.clone());
-  setSendMIDI(false);
-  undo.setWillPush(false);
+                Model backup = (Model)(model.clone());
+                setSendMIDI(false);
+                undo.setWillPush(false);
                                         
-  for(int f = 1; f <= 512; f++)
-  {
-  for(int i = 1; i <= 8; i++)
-  {
-  model.set("frame" + f + "voicedfrequency" + i, filter(old, f, "voicedfrequency" + i, true));
-  model.set("frame" + f + "voicedlevel" + i, filter(old, f, "voicedlevel" + i, false));
-  model.set("frame" + f + "unvoicedfrequency" + i, filter(old, f, "unvoicedfrequency" + i, true));
-  model.set("frame" + f + "unvoicedlevel" + i, filter(old, f, "unvoicedlevel" + i, false));
-  model.set("frame" + f + "pitch" + i, filter(old, f, "pitch" + i, true));
-  }
-  }
+                for(int f = 1; f <= 512; f++)
+                    {
+                    for(int i = 1; i <= 8; i++)
+                        {
+                        model.set("frame" + f + "voicedfrequency" + i, filter(old, f, "voicedfrequency" + i, true));
+                        model.set("frame" + f + "voicedlevel" + i, filter(old, f, "voicedlevel" + i, false));
+                        model.set("frame" + f + "unvoicedfrequency" + i, filter(old, f, "unvoicedfrequency" + i, true));
+                        model.set("frame" + f + "unvoicedlevel" + i, filter(old, f, "unvoicedlevel" + i, false));
+                        model.set("frame" + f + "pitch" + i, filter(old, f, "pitch" + i, true));
+                        }
+                    }
 
-  undo.setWillPush(true);
-  if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-  undo.push(backup);
-  repaint();      // generally forces repaints to all happen at once
-  setSendMIDI(true);
-  sendAllParameters();
-  }
-  });
-  menu.add(smooth);
+                undo.setWillPush(true);
+                if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                    undo.push(backup);
+                repaint();      // generally forces repaints to all happen at once
+                setSendMIDI(true);
+                sendAllParameters();
+                }
+            });
+        menu.add(smooth);
 
-  JMenuItem dump = new JMenuItem("Dump");
-  dump.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-  dump.addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  System.err.println(lastIndex);
-  System.err.println(
-  "{\n" +
-  "\t{" + 
-  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 1) + ", " +
-  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 1) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 1) + ", " +
-  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 1) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-  "\t{" + 
-  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 2) + ", " +
-  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 2) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 2) + ", " +
-  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 2) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-  "\t{" + 
-  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 3) + ", " +
-  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 3) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 3) + ", " +
-  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 3) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-  "\t{" + 
-  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 4) + ", " +
-  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 4) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 4) + ", " +
-  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 4) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-  "\t{" + 
-  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 5) + ", " +
-  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 5) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 5) + ", " +
-  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 5) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-  "\t{" + 
-  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 6) + ", " +
-  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 6) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 6) + ", " +
-  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 6) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-  "\t{" + 
-  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 7) + ", " +
-  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 7) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 7) + ", " +
-  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 7) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-  "\t{" + 
-  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 8) + ", " +
-  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 8) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 8) + ", " +
-  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 8) + ", " + 
-  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-  "}"                     
-  );
-  }
-  });
-  menu.add(dump);
-*/
+        JMenuItem dump = new JMenuItem("Dump");
+        dump.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        dump.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                System.err.println(lastIndex);
+                System.err.println(
+                    "{\n" +
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 1) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 1) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 1) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 1) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 2) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 2) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 2) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 2) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 3) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 3) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 3) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 3) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 4) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 4) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 4) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 4) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 5) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 5) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 5) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 5) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 6) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 6) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 6) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 6) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 7) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 7) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 7) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 7) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "\t{" + 
+                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 8) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 8) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 8) + ", " +
+                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 8) + ", " + 
+                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+                    "}"                     
+                    );
+                }
+            });
+        menu.add(dump);
+
         JMenuItem current = new JMenuItem("Show Current Performance");
         current.addActionListener(new ActionListener()
             {
@@ -2420,7 +2419,7 @@ public class YamahaFS1RFseq extends Synth
             if (b >= 1 && b < 16) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-        catch (NumberFormatException e) { e.printStackTrace(); }
+        catch (NumberFormatException e) { Synth.handleException(e); }
         return 1;
         }
         
@@ -2610,9 +2609,9 @@ public class YamahaFS1RFseq extends Synth
     public int getPauseAfterWritePatch() { return 170; }            // don't know if we need any
 
 
-	// The FS1R is VERY slow to respond and also queues up responses (beware!)
-	public int getBulkDownloadWaitTime() { return 3000; }
-	public int getBulkDownloadFailureCountdown() { return 5; }
+    // The FS1R is VERY slow to respond and also queues up responses (beware!)
+    public int getBulkDownloadWaitTime() { return 3000; }
+    public int getBulkDownloadFailureCountdown() { return 5; }
     }
 
 

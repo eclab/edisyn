@@ -5,7 +5,7 @@
 */
 
 package edisyn.gui;
-
+import edisyn.*;
 import java.util.prefs.*;
 
 /** 
@@ -36,7 +36,7 @@ public class Prefs
             }
         catch (Exception ex)
             {
-            ex.printStackTrace();
+            Synth.handleException(ex);
             return false;
             }
         }
@@ -50,7 +50,7 @@ public class Prefs
             }
         catch (Exception ex)
             {
-            ex.printStackTrace();
+            Synth.handleException(ex);
             return false;
             }
         }
@@ -64,7 +64,7 @@ public class Prefs
             }
         catch (Exception ex)
             {
-            ex.printStackTrace();
+            Synth.handleException(ex);
             return false;
             }
         }

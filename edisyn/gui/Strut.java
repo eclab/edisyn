@@ -60,6 +60,11 @@ public class Strut
     
     public static JComponent makeStrut(Component[] components)
         {
+        return makeStrut(components, false, false);
+        }
+
+    public static JComponent makeStrut(Component[] components, boolean zeroWidth, boolean zeroHeight)
+        {
         int maxWidth = 0;
         int maxHeight = 0;
         for(int i = 0; i < components.length; i++)
@@ -71,9 +76,14 @@ public class Strut
             if (maxHeight < size.height)
                 maxHeight = size.height;
             }
-        return makeStrut(maxWidth, maxHeight);
+        return makeStrut((zeroWidth ? 0 : maxWidth), (zeroHeight ? 0 : maxHeight));
         }
         
+    public static JComponent makeStrut(Component component, boolean zeroWidth, boolean zeroHeight)
+        {
+        return makeStrut(new Component[] { component }, zeroWidth, zeroHeight);
+        }
+
     public static JComponent makeStrut(Component component)
         {
         return makeStrut(new Component[] { component });

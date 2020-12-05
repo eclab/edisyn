@@ -728,10 +728,10 @@ public class YamahaTG33Multi extends Synth
             if (b >= 1) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-        catch (NumberFormatException e) { e.printStackTrace(); }
+        catch (NumberFormatException e) { Synth.handleException(e); }
         return 1;
         }
-        
+
     public String reviseID(String id)
         {
         try 

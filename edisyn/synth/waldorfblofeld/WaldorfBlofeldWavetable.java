@@ -8,6 +8,39 @@ import edisyn.*;
 import edisyn.gui.*;
 import edisyn.util.*;
 
+
+        
+/*
+  ABOUT BLOFELD WAVETABLE WAVE SYSEX
+
+  From http://www.lysator.liu.se/~norling/blofeld.html
+
+  Each wave in each wavetable is a separate sysex dump.  Here is its format:
+
+  Index   Label   Value           Description
+  -----------------------------------------------------------
+  0       EXC     F0h             Start of SysEx
+  1       IDW     3Eh             Waldorf Music ID
+  2       IDE     13h             Blofeld ID
+  3       DEV                     Device ID
+  4       IDM     12h             WTBD (Wavetable Dump)
+  5       WT      50h..76h        Wavetable number
+  6       WN      00h..3Fh        Wave number
+  7               00h             Format
+  8-391   WDATA   00h..7Fh        Data: triplets with little-endian signed 21-byte numbers
+  392-405 NAME    20h..7Fh        Wavetable name (ASCII)
+  406             00h             Reserved
+  407             00h             Reserved
+  408     CHK     WDATA & 7Fh     Checksum (add bytes 7..407 together)
+  409     EOX     F7h             End of SysEx
+  -----------------------------------------------------------
+
+  NOTES FROM SEAN: the triplets are sent in order HIGH BYTE, MED BYTE, LOW BYTE.
+
+  So ultimately a wavetable will consist of 64 sysex dumps.
+
+*/
+        
 public class WaldorfBlofeldWavetable
     {
     public static final int WAVEEDIT_WAVE_SIZE = 256;
@@ -446,37 +479,6 @@ public class WaldorfBlofeldWavetable
 
     }
         
-        
-        
-/*** ABOUT BLOFELD WAVETABLE WAVE SYSEX
-
-     From http://www.lysator.liu.se/~norling/blofeld.html
-
-     Each wave in each wavetable is a separate sysex dump.  Here is its format:
-
-     Index   Label   Value           Description
-     -----------------------------------------------------------
-     0       EXC     F0h             Start of SysEx
-     1       IDW     3Eh             Waldorf Music ID
-     2       IDE     13h             Blofeld ID
-     3       DEV                     Device ID
-     4       IDM     12h             WTBD (Wavetable Dump)
-     5       WT      50h..76h        Wavetable number
-     6       WN      00h..3Fh        Wave number
-     7               00h             Format
-     8-391   WDATA   00h..7Fh        Data: triplets with little-endian signed 21-byte numbers
-     392-405 NAME    20h..7Fh        Wavetable name (ASCII)
-     406             00h             Reserved
-     407             00h             Reserved
-     408     CHK     WDATA & 7Fh     Checksum (add bytes 7..407 together)
-     409     EOX     F7h             End of SysEx
-     -----------------------------------------------------------
-
-     NOTES FROM SEAN: the triplets are sent in order HIGH BYTE, MED BYTE, LOW BYTE.
-
-     So ultimately a wavetable will consist of 64 sysex dumps.
-
-*/
         
         
         

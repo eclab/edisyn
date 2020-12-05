@@ -433,9 +433,9 @@ public class YamahaFS1RMulti extends Synth
             bank.setEnabled(false);
             }
         else
-        	{
-	        bank.setSelectedIndex(model.get("bank"));
-	        }
+            {
+            bank.setSelectedIndex(model.get("bank"));
+            }
                 
         JTextField number = new JTextField("" + (model.get("number") + 1), 3);
                 
@@ -2753,7 +2753,7 @@ public class YamahaFS1RMulti extends Synth
             if (b >= 1 && b < 16) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-        catch (NumberFormatException e) { e.printStackTrace(); }
+        catch (NumberFormatException e) { Synth.handleException(e); }
         return 1;
         }
         
@@ -3065,9 +3065,9 @@ public class YamahaFS1RMulti extends Synth
 
 
 
-	// The FS1R is VERY slow to respond and also queues up responses (beware!)
-	public int getBulkDownloadWaitTime() { return 3000; }
-	public int getBulkDownloadFailureCountdown() { return 5; }
+    // The FS1R is VERY slow to respond and also queues up responses (beware!)
+    public int getBulkDownloadWaitTime() { return 3000; }
+    public int getBulkDownloadFailureCountdown() { return 5; }
     }
  
  
@@ -3448,16 +3448,16 @@ class YamahaFS1RFX
         };
 
 
-	public static final int getSysexMin(int effect, int version, int type)
-		{
-		// special-case for certain bugs in original table
-		if (effect == YamahaFS1RMulti.INSERTION && version == 13 /*t-wah + dist*/ && type == 12)
-			{
-			return 0x34;
-			}
-		else return sysexMinTable[type];
-		}
-		
+    public static final int getSysexMin(int effect, int version, int type)
+        {
+        // special-case for certain bugs in original table
+        if (effect == YamahaFS1RMulti.INSERTION && version == 13 /*t-wah + dist*/ && type == 12)
+            {
+            return 0x34;
+            }
+        else return sysexMinTable[type];
+        }
+                
     /// For some reason, some effect values are shifted by a certain amount in sysex.  I don't know why.
     // This table provides the amount to shift by, for each effect type.
     //                                                     0    1    2    3    4    5    6    7    8    9   10   11           12   13   14   15   16   17   18   19   20   21   22   23   24   25           26   27   28   29   30   31   32   33   34   35   36   37   38   39   40   41   42   43   44   45   46   47   48   49   50   51   52   53   54   55   56   57   58

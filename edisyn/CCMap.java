@@ -95,7 +95,7 @@ public class CCMap
             }
         catch (Exception ex)
             {
-            ex.printStackTrace();
+            Synth.handleException(ex);
             }
         }
     
@@ -112,7 +112,7 @@ public class CCMap
             }
         catch (Exception ex)
             {
-            ex.printStackTrace();
+            Synth.handleException(ex);
             }
         }
 
@@ -132,7 +132,7 @@ public class CCMap
                         
                 int munge = 0;
                 try { munge = Integer.parseInt(keys[i]); }
-                catch (Exception e) { e.printStackTrace(); }
+                catch (Exception e) { Synth.handleException(e); }
                         
                 // each Value holds a MODEL KEY STRING
                         
@@ -142,7 +142,7 @@ public class CCMap
             }
         catch (Exception ex)
             {
-            ex.printStackTrace();
+            Synth.handleException(ex);
             }
 
         try
@@ -154,20 +154,20 @@ public class CCMap
                         
                 int munge = 0;
                 try { munge = Integer.parseInt(keys[i]); }
-                catch (Exception e) { e.printStackTrace(); }
+                catch (Exception e) { Synth.handleException(e); }
                         
                 // each Value holds a TYPE INTEGER
 
                 int type = 0;
                 try { type = Integer.parseInt(typePrefs.get(keys[i], "0")); }
-                catch (Exception e) { e.printStackTrace(); }
+                catch (Exception e) { Synth.handleException(e); }
                                                 
                 typeMap.put(Integer.valueOf(munge), Integer.valueOf(type));
                 }
             }
         catch (Exception ex)
             {
-            ex.printStackTrace();
+            Synth.handleException(ex);
             }
         }
         
@@ -180,7 +180,7 @@ public class CCMap
             }
         catch (Exception ex)
             {
-            ex.printStackTrace();
+            Synth.handleException(ex);
             }
         map = new HashMap();
         reverseMap = new HashMap();

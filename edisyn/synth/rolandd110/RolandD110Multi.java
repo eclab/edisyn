@@ -564,7 +564,7 @@ public class RolandD110Multi extends Synth
             if (b >= 17) return (byte)(b - 1);
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-        catch (NumberFormatException e) { e.printStackTrace(); }
+        catch (NumberFormatException e) { Synth.handleException(e); }
         return (byte)16;                // IDs start at 17
         }
         
@@ -934,7 +934,7 @@ public class RolandD110Multi extends Synth
             }
         catch (InvalidMidiDataException ex)
             {
-            ex.printStackTrace();
+            Synth.handleException(ex); 
             }
         }
     

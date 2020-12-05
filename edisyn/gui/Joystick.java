@@ -38,6 +38,9 @@ public class Joystick extends JComponent
     public boolean getDrawsUnpressedCursor() { return drawsUnpressedCursor; }
     public void setDrawsUnpressedCursor(boolean val) { drawsUnpressedCursor = val; }
     
+    public Color unsetColor = Style.DIAL_UNSET_COLOR();
+    public Color getUnsetColor() { return unsetColor; }
+    public void setUnsetColor(Color color) { unsetColor = color; }
         
     public Dimension getMinimumSize()
         {
@@ -52,6 +55,8 @@ public class Joystick extends JComponent
     public void prepaint(Graphics2D g)
         {
         }
+    
+    
     
     public void paintComponent(Graphics g)
         {
@@ -90,7 +95,7 @@ public class Joystick extends JComponent
         if (pressed || drawsUnpressedCursor)
             {
             if (!pressed)
-                g2d.setColor(Style.DIAL_UNSET_COLOR());
+                g2d.setColor(unsetColor);
             else
                 g2d.setColor(Style.DIAL_DYNAMIC_COLOR());
             g2d.setStroke(Style.DIAL_THIN_STROKE());

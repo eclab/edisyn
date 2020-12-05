@@ -52,12 +52,12 @@ public class HTMLBrowser extends JPanel
                 }
             catch (IOException e) 
                 { 
-                e.printStackTrace(); 
+                Synth.handleException(e);
                 infoPane = new JEditorPane(); 
                 }
         else
             {
-            new RuntimeException("Info object was neither a string nor a URL").printStackTrace();
+            Synth.handleException(new RuntimeException("Info object was neither a string nor a URL"));
             infoPane = new JEditorPane();
             }
 
@@ -77,7 +77,7 @@ public class HTMLBrowser extends JPanel
             }
         catch (IOException e)
             {
-            e.printStackTrace();
+            Synth.handleException(e);
             try { buf.close(); }
             catch (IOException e2) { }
             }
@@ -176,7 +176,7 @@ public class HTMLBrowser extends JPanel
                                 }
                             catch(Exception e)
                                 {
-                                e.printStackTrace();
+                                Synth.handleException(e);
                                 }
                             }
                         else
@@ -203,7 +203,7 @@ public class HTMLBrowser extends JPanel
                             }
                         catch (Exception e)
                             {
-                            e.printStackTrace();
+                            Synth.handleException(e);
                             java.awt.Toolkit.getDefaultToolkit().beep();
                             }
                         }

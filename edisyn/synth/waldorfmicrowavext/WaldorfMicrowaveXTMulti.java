@@ -1067,7 +1067,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 }
             catch (UnsupportedEncodingException e)
                 {
-                e.printStackTrace();
+                Synth.handleException(e); 
                 }
             }
         else
@@ -1148,7 +1148,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
             if (b >= 0) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-        catch (NumberFormatException e) { e.printStackTrace(); }
+        catch (NumberFormatException e) { Synth.handleException(e); }
         return 0;
         }
         

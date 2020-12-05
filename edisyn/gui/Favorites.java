@@ -59,7 +59,7 @@ public class Favorites
             global_p.put(("" + i), top.get(i));
             }
                 
-//              try { global_p.flush(); global_p.sync(); } catch (Exception ex) { ex.printStackTrace(); }
+//              try { global_p.flush(); global_p.sync(); } catch (Exception ex) { Synth.handleException(ex); }
         Prefs.save(global_p);
         }       
 

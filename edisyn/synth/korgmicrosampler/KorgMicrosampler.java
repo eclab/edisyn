@@ -3230,7 +3230,7 @@ public class KorgMicrosampler extends Synth
                 {
                 byte[] name = new byte[0];
                 try {  name = model.get("name", "").getBytes("US-ASCII"); }
-                catch (UnsupportedEncodingException ex) { ex.printStackTrace(); }
+                catch (UnsupportedEncodingException ex) { Synth.handleException(ex); }
                                 
                 byte[][] d = new byte[8][12];
                 for(int i = 0; i < 8; i++)
@@ -3281,7 +3281,7 @@ public class KorgMicrosampler extends Synth
                             {
                             byte[] name = new byte[0];
                             try {  name = model.get("sample" + i + "name", "").getBytes("US-ASCII"); }
-                            catch (UnsupportedEncodingException ex) { ex.printStackTrace(); }
+                            catch (UnsupportedEncodingException ex) { Synth.handleException(ex); }
                                 
                             byte[][] d = new byte[8][12];
                             for(int j = 0; j < 8; j++)
@@ -3366,7 +3366,7 @@ public class KorgMicrosampler extends Synth
                             int index = Integer.parseInt(key.substring(prefix.length()));
                             data = new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x7F, 0x41, 0x50, 0x00, (byte)(index + 16), 0x00, (byte)(getSigned(key, 0)), (byte)(model.get(key, 0) >= 0 ? 0 : 0x7F), (byte)0xF7 };
                             }
-                        catch (NumberFormatException ex) { ex.printStackTrace(); }
+                        catch (NumberFormatException ex) { Synth.handleException(ex); }
                         }
                     }
                 }
@@ -3417,7 +3417,7 @@ public class KorgMicrosampler extends Synth
         // Emit Bank and Global data
         byte[] name = new byte[0];
         try {  name = model.get("name", "").getBytes("US-ASCII"); }
-        catch (UnsupportedEncodingException ex) { ex.printStackTrace(); }
+        catch (UnsupportedEncodingException ex) { Synth.handleException(ex); }
         for(int i = 0; i < 8; i++)
             {
             data[29 + i] = i < name.length ? name[i] : 0x20;
@@ -3438,7 +3438,7 @@ public class KorgMicrosampler extends Synth
             {
             name = new byte[0];
             try {  name = model.get("sample" + (i + 1) + "name", "").getBytes("US-ASCII"); }
-            catch (UnsupportedEncodingException ex) { ex.printStackTrace(); }
+            catch (UnsupportedEncodingException ex) { Synth.handleException(ex); }
             for(int j = 0; j < 8; j++)
                 {
                 data[72 + i * 19 + j] = j < name.length ? name[j] : 0x20;
@@ -3517,10 +3517,10 @@ public class KorgMicrosampler extends Synth
                 {
                 byte[] name = new byte[0];
                 try {  name = (model.get("name", "") + "        ").substring(0, 8).getBytes("US-ASCII"); }
-                catch (UnsupportedEncodingException ex) { ex.printStackTrace(); }
+                catch (UnsupportedEncodingException ex) { Synth.handleException(ex); }
                 name[data[7]] = data[9];
                 try { model.set("name", new String(name, "US-ASCII")); }
-                catch (UnsupportedEncodingException ex) { ex.printStackTrace(); }                               
+                catch (UnsupportedEncodingException ex) { Synth.handleException(ex); }                               
                 }
             else if (data[7] == 0x10)  // Bank BPM
                 {
@@ -3674,10 +3674,10 @@ public class KorgMicrosampler extends Synth
                 {
                 byte[] name = new byte[0];
                 try {  name = (model.get("sample" + sn + "name", "") + "        ").substring(0, 8).getBytes("US-ASCII"); }
-                catch (UnsupportedEncodingException ex) { ex.printStackTrace(); }
+                catch (UnsupportedEncodingException ex) { Synth.handleException(ex); }
                 name[data[7]] = data[9];
                 try { model.set("sample" + sn + "name", new String(name, "US-ASCII")); }
-                catch (UnsupportedEncodingException ex) { ex.printStackTrace(); }                               
+                catch (UnsupportedEncodingException ex) { Synth.handleException(ex); }                               
                 }
             else if (data[7] == 0x10)
                 {
@@ -3736,7 +3736,7 @@ public class KorgMicrosampler extends Synth
         byte[] name = new byte[8];
         System.arraycopy(data, 29, name, 0, 8);
         try {  model.set("name", new String(name, "US-ASCII")); }
-        catch (UnsupportedEncodingException ex) { ex.printStackTrace(); }
+        catch (UnsupportedEncodingException ex) { Synth.handleException(ex); }
 
         model.set("bankbpm", (data[37] << 7) | data[38]);
         model.set("bankaudioinfxsw", data[39]);
@@ -3754,7 +3754,7 @@ public class KorgMicrosampler extends Synth
             name = new byte[8];
             System.arraycopy(data, 72 + i * 19, name, 0, 8);
             try {  model.set("sample" + (i + 1) + "name", new String(name, "US-ASCII")); }
-            catch (UnsupportedEncodingException ex) { ex.printStackTrace(); }
+            catch (UnsupportedEncodingException ex) { Synth.handleException(ex); }
 
             model.set("sample" + (i + 1) + "loop", data[72 + i * 19 + 8]);
             model.set("sample" + (i + 1) + "bpmsync", data[72 + i * 19 + 9]);

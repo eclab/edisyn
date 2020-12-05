@@ -111,7 +111,7 @@ public class Tuning extends Synth
                 if (i != j)
                     hbox.add(Strut.makeHorizontalStrut(10));
 
-                comp = new LabelledDial("" + i + " Base", this, "base-" + i, color, 0, 127) 
+                comp = new LabelledDial("" + i + " Base", this, "base" + i, color, 0, 127) 
                     {
                     public String map(int val) 
                         {
@@ -120,7 +120,7 @@ public class Tuning extends Synth
                     };
                 hbox.add(comp);
 
-                comp = new LabelledDial("" + i + " Detune", this, "detune-" + i, color, 0, 16383) 
+                comp = new LabelledDial("" + i + " Detune", this, "detune" + i, color, 0, 16383) 
                     {
                     public String map(int val) 
                         {
@@ -143,8 +143,8 @@ public class Tuning extends Synth
         setSendMIDI(false);
         for (int i = 0; i < 128; i++) 
             {
-            model.set("base-" + i, base[i]);
-            model.set("detune-" + i, detune[i]);
+            model.set("base" + i, base[i]);
+            model.set("detune" + i, detune[i]);
             }
         repaint(); // see discussion in Blofeld patch editor
         revise();
@@ -157,14 +157,14 @@ public class Tuning extends Synth
         { new EDO(), };
     static TuningDefinition[] namedScales = 
         {
-        new RepeatingScale(new Double[] { 0.000, 100.000, 200.000, 300.000, 400.000, 500.000, 600.000, 700.000, 800.000, 900.000, 1000.000, 1100.000, 1200.000 }, "12 Tone Equal Temperment"),
+        new RepeatingScale(new Double[] { 0.000, 100.000, 200.000, 300.000, 400.000, 500.000, 600.000, 700.000, 800.000, 900.000, 1000.000, 1100.000, 1200.000 }, "12 Tone Equal Temperament"),
         new RepeatingScale(new Double[] { 0.000, 70.673, 203.910, 315.641, 386.314, 498.045, 568.718, 701.955, 772.628, 884.359, 1017.596, 1088.269, 1200.0 }, "Pure Major"),
         new RepeatingScale(new Double[] { 0.000, 70.673, 182.404, 315.641, 384.314, 498.045, 568.718, 701.955, 772.628, 884.359, 1017.596, 1088.269, 1200.0 }, "Pure Minor"),
         new RepeatingScale(new Double[] { 0.000, 113.685, 203.910, 294.135, 407.820, 498.045, 611.730, 701.955, 815.640, 905.865, 996.090, 1109.775, 1200.0 }, "Pythagorean"),
         new RepeatingScale(new Double[] { 0.000, 90.225, 192.180, 294.135, 390.225, 498.045, 588.270, 696.090, 792.180, 888.270, 996.090, 1092.180, 1200.0 }, "Werkmeister"),
         new RepeatingScale(new Double[] { 0.000, 90.225, 193.157, 294.135, 386.314, 498.045, 590.224, 696.578, 792.180, 889.735, 996.090, 1088.269, 1200.0 }, "Kirnberger"),
         new RepeatingScale(new Double[] { 0.000, 94.135, 196.090, 298.045, 392.180, 501.955, 592.180, 698.045, 796.090, 894.135, 1000.000, 1090.225, 1200.0 }, "Vallotti and Young"),
-        new RepeatingScale(new Double[] { 0.000, 146.30, 292.61, 438.91, 585.22, 731.52, 877.83, 1024.13, 1170.44, 1316.74, 1463.05, 1609.35, 1755.66, 1901.96 }, "Bohlen-Pierce Equal Temperment") 
+        new RepeatingScale(new Double[] { 0.000, 146.30, 292.61, 438.91, 585.22, 731.52, 877.83, 1024.13, 1170.44, 1316.74, 1463.05, 1609.35, 1755.66, 1901.96 }, "Bohlen-Pierce Equal Temperament") 
         };
 
     public void addTuningMenu() 
@@ -232,7 +232,7 @@ public class Tuning extends Synth
         catch (NullPointerException e) { } // expected. Happens when tuple's not built yet
         catch (NumberFormatException e) 
             {
-            e.printStackTrace();
+            Synth.handleException(e); 
             }
         return 0;
         }
@@ -373,8 +373,8 @@ public class Tuning extends Synth
 
         for (int i = 0; i < 128; i++) 
             {
-            model.set("base-" + i, data[22 + (i * 3)]);
-            model.set("detune-" + i, (data[22 + (i * 3) + 1] << 7) | data[22 + (i * 3) + 2]);
+            model.set("base" + i, data[22 + (i * 3)]);
+            model.set("detune" + i, (data[22 + (i * 3) + 1] << 7) | data[22 + (i * 3) + 2]);
             }
 
         return PARSE_SUCCEEDED;
@@ -401,8 +401,8 @@ public class Tuning extends Synth
 
         for (int i = 0; i < 128; i++) 
             {
-            int base = model.get("base-" + i);
-            int detune = model.get("detune-" + i);
+            int base = model.get("base" + i);
+            int detune = model.get("detune" + i);
             int msb = ((detune >>> 7) & 127);
             int lsb = (detune & 127);
             data[22 + (i * 3)] = (byte) base;
@@ -429,13 +429,13 @@ public class Tuning extends Synth
             return new byte[0];
 
         int k = StringUtility.getFirstInt(key);
-        int base = model.get("base-" + k);
-        int detune = model.get("detune-" + k);
+        int base = model.get("base" + k);
+        int detune = model.get("detune" + k);
         int msb = ((detune >>> 7) & 127);
         int lsb = (detune & 127);
 
         return new byte[] { 
-            (byte) 0xF0, 0x7E, getID(), 0x08, 0x02, (byte) model.get("number"), 0x01, (byte) (k - 1),
+            (byte) 0xF0, 0x7E, getID(), 0x08, 0x02, (byte) model.get("number"), 0x01, (byte) k,
             (byte) base, (byte) msb, (byte) lsb, (byte) 0xF7 };
         }
 

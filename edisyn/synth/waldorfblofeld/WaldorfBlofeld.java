@@ -2022,7 +2022,7 @@ public class WaldorfBlofeld extends Synth
             {
             int i;
             try { i = Integer.parseInt(key.substring(8, 9)); }
-            catch (Exception e) { e.printStackTrace(); return new Object[0]; }
+            catch (Exception e) { Synth.handleException(e); return new Object[0]; }
             int index = 196 + (i - 1) * 12;
             byte HH = (byte)((index >>> 7) & 127);
             byte PP = (byte)(index & 127);
@@ -2034,7 +2034,7 @@ public class WaldorfBlofeld extends Synth
             {
             int i;
             try { i = Integer.parseInt(key.substring(3, 5)); }
-            catch (Exception e) { e.printStackTrace(); return new Object[0]; }
+            catch (Exception e) { Synth.handleException(e); return new Object[0]; }
             if (key.endsWith("length") || key.endsWith("timing"))
                 {
                 int index = i + 342;
@@ -2124,7 +2124,7 @@ public class WaldorfBlofeld extends Synth
                     j = Integer.parseInt(key.substring(8, 9)); 
                     bytes[i] = (byte)((model.get("envelope" + j + "trigger") << 5) | (model.get("envelope" + j + "mode")));
                     }
-                catch (Exception e) { e.printStackTrace(); }
+                catch (Exception e) { Synth.handleException(e); }
                 }
             else if (i >= 327 && i <= 342) // step/glide/accent
                 {
@@ -2202,7 +2202,7 @@ public class WaldorfBlofeld extends Synth
                 model.set("envelope" + j + "trigger", b >>> 5);
                 model.set("envelope" + j + "mode", b & 7);  // even though it's supposed to be 5 bits, only 3 are used!
                 }
-            catch (Exception e) { e.printStackTrace(); }
+            catch (Exception e) { Synth.handleException(e); }
             }
         else if (i >= 327 && i <= 342) // step/glide/accent
             {
@@ -2230,7 +2230,7 @@ public class WaldorfBlofeld extends Synth
                 }
             catch (UnsupportedEncodingException e)
                 {
-                e.printStackTrace();
+                Synth.handleException(e); 
                 }
             }
         else
@@ -2358,7 +2358,7 @@ public class WaldorfBlofeld extends Synth
             // Number change is PC
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0));
             }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { Synth.handleException(e); }
         }
 
     public byte[] requestDump(Model tempModel)
@@ -2466,7 +2466,7 @@ public class WaldorfBlofeld extends Synth
             if (b >= 0) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-        catch (NumberFormatException e) { e.printStackTrace(); }
+        catch (NumberFormatException e) { Synth.handleException(e); }
         return 0;
         }
         

@@ -413,13 +413,13 @@ public class KawaiK1 extends Synth
         if (src == 1)
             {
             params = AM_S1_S2;
-            comp = new Chooser("AM (Ring Modulation)", this, "s1ams1>s2", params);
+            comp = new Chooser("Ring Modulation", this, "s1ams1>s2", params);
             vbox.add(comp);
             }
         else if (src == 3)
             {
             params = AM_S3_S4;
-            comp = new Chooser("AM (Ring Modulation)", this, "s3ams3>s4", params);
+            comp = new Chooser("Ring Modulation", this, "s3ams3>s4", params);
             vbox.add(comp);
             }
 
@@ -1013,7 +1013,7 @@ public class KawaiK1 extends Synth
             }
 
         try { model.set("name", new String(name, "US-ASCII")); }
-        catch (UnsupportedEncodingException e) { e.printStackTrace(); }
+        catch (UnsupportedEncodingException e) { Synth.handleException(e); }
 
         revise();
         return PARSE_SUCCEEDED;
@@ -1325,7 +1325,7 @@ public class KawaiK1 extends Synth
             {
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { Synth.handleException(e); }
         }
     
     public Model getNextPatchLocation(Model model)

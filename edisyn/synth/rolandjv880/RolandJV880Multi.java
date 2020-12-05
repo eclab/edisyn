@@ -717,7 +717,7 @@ public class RolandJV880Multi extends Synth
             if (b >= 17) return (byte)(b - 1);
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-        catch (NumberFormatException e) { e.printStackTrace(); }
+        catch (NumberFormatException e) { Synth.handleException(e); }
         return (byte)16;                // IDs start at 17
         }
         
@@ -1139,7 +1139,7 @@ public class RolandJV880Multi extends Synth
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, BC));
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { Synth.handleException(e); }
         }
         
     public Model getNextPatchLocation(Model model)

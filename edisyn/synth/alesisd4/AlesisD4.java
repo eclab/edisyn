@@ -422,7 +422,7 @@ public class AlesisD4 extends Synth
 
         for(int i = 1; i <= 12; i++)
             {
-            comp = new LabelledDial("Trigger " + i, this, "trigger" + i, color, 0, 60)
+            comp = new LabelledDial("Trigger " + i + " ", this, "trigger" + i, color, 0, 60)
                 {
                 public String map(int val)
                     {

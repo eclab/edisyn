@@ -32,6 +32,8 @@ public class LabelledDial extends NumericalComponent
     boolean updatesDynamically = true;
     boolean updatingDynamically = false;
         
+    public void repaintDial() { dial.repaint(); }
+    
     public void setEnabled(boolean val)
         {
         dial.setEnabled(val);

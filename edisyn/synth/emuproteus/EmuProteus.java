@@ -753,7 +753,7 @@ public class EmuProteus extends Synth
             if (b >= 0 && b < 16) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-        catch (NumberFormatException e) { e.printStackTrace(); }
+        catch (NumberFormatException e) { Synth.handleException(e); }
         return 0;
         }
         

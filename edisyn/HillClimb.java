@@ -309,7 +309,7 @@ public class HillClimb extends SynthPanel
         vbox.add(hh);
         
            
-        JMenuItem[] doItems = new JMenuItem[13];
+        JMenuItem[] doItems = new JMenuItem[14];
         doItems[0] = new JMenuItem("Keep Patch");
         doItems[0].addActionListener(new ActionListener()
             {
@@ -388,10 +388,23 @@ public class HillClimb extends SynthPanel
         if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
             doItems[3].setEnabled(false);
             
-        doItems[4] = null;
+        doItems[4] = new JMenuItem("Copy from Morph");
+        doItems[4].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                synth.setSendMIDI(false);
+                synth.morph.current.copyValuesTo(currentModels[_i]);
+                synth.setSendMIDI(true);
+                }
+            });
+        if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
+            doItems[4].setEnabled(false);
             
-        doItems[5] = new JMenuItem("Nudge Candidates to Me");
-        doItems[5].addActionListener(new ActionListener()
+        doItems[5] = null;
+            
+        doItems[6] = new JMenuItem("Nudge Candidates to Me");
+        doItems[6].addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
@@ -406,10 +419,10 @@ public class HillClimb extends SynthPanel
                 }
             });
 
-        doItems[6] = null;
+        doItems[7] = null;
 
-        doItems[7] = new JMenuItem("Archive to q");
-        doItems[7].addActionListener(new ActionListener()
+        doItems[8] = new JMenuItem("Archive to q");
+        doItems[8].addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
@@ -417,8 +430,8 @@ public class HillClimb extends SynthPanel
                 }
             });
 
-        doItems[8] = new JMenuItem("Archive to r");
-        doItems[8].addActionListener(new ActionListener()
+        doItems[9] = new JMenuItem("Archive to r");
+        doItems[9].addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
@@ -426,8 +439,8 @@ public class HillClimb extends SynthPanel
                 }
             });
 
-        doItems[9] = new JMenuItem("Archive to s");
-        doItems[9].addActionListener(new ActionListener()
+        doItems[10] = new JMenuItem("Archive to s");
+        doItems[10].addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
@@ -435,8 +448,8 @@ public class HillClimb extends SynthPanel
                 }
             });
 
-        doItems[10] = new JMenuItem("Archive to t");
-        doItems[10].addActionListener(new ActionListener()
+        doItems[11] = new JMenuItem("Archive to t");
+        doItems[11].addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
@@ -444,8 +457,8 @@ public class HillClimb extends SynthPanel
                 }
             });
                 
-        doItems[11] = new JMenuItem("Archive to u");
-        doItems[11].addActionListener(new ActionListener()
+        doItems[12] = new JMenuItem("Archive to u");
+        doItems[12].addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
@@ -453,8 +466,8 @@ public class HillClimb extends SynthPanel
                 }
             });
                 
-        doItems[12] = new JMenuItem("Archive to v");
-        doItems[12].addActionListener(new ActionListener()
+        doItems[13] = new JMenuItem("Archive to v");
+        doItems[13].addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
@@ -616,7 +629,7 @@ public class HillClimb extends SynthPanel
         
         int v = INITIAL_HILL_CLIMB_RATE;
         if (s != null)
-            try { v = Integer.parseInt(s); } catch (Exception e) { e.printStackTrace(); }
+            try { v = Integer.parseInt(s); } catch (Exception e) { Synth.handleException(e); }
         if (v < 0 || v > 100) v = INITIAL_HILL_CLIMB_RATE;
         hillClimbRate.setState(v);
         
@@ -660,7 +673,7 @@ public class HillClimb extends SynthPanel
 
         v = INITIAL_CONSTRICT_RATE;
         if (s != null)
-            try { v = Integer.parseInt(s); } catch (Exception e) { e.printStackTrace(); }
+            try { v = Integer.parseInt(s); } catch (Exception e) { Synth.handleException(e); }
         if (v < 0 || v > 100) v = INITIAL_CONSTRICT_RATE;
         constrictRate.setState(v);
         
@@ -720,7 +733,7 @@ public class HillClimb extends SynthPanel
         
         v = 0;
         if (s != null)
-            try { v = Integer.parseInt(s); } catch (Exception e) { e.printStackTrace(); }
+            try { v = Integer.parseInt(s); } catch (Exception e) { Synth.handleException(e); }
         if (v < 0 || v > 2) v = 0;
         // reduce smooth and non-smooth constrictors to the same thing
         if (v == 2) v = 1;
@@ -764,7 +777,7 @@ public class HillClimb extends SynthPanel
             
         boolean bb = false;
         if (s != null)
-            try { bb = (s.equals("true")); } catch (Exception e) { e.printStackTrace(); }
+            try { bb = (s.equals("true")); } catch (Exception e) { Synth.handleException(e); }
 
         bigger.setSelected(bb);
         eb.addLast(bigger);
@@ -1003,7 +1016,7 @@ public class HillClimb extends SynthPanel
     public void postUpdateSound()
         {
         repaint();
-        if (backup!= null)
+        if (backup != null)
             synth.model = backup;
         backup = null;
         }

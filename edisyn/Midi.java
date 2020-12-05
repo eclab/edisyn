@@ -128,7 +128,7 @@ public class Midi
                     thru = new Thru();
                     transmitter.setReceiver(thru);
                     }
-                catch(Exception e) { ExceptionDump.postThrowable(e, "Receiver: " + receiver + "\nDevice: " + device + "\nTransmitter: " + transmitter); e.printStackTrace(); }
+                catch(Exception e) { ExceptionDump.postThrowable(e, "Receiver: " + receiver + "\nDevice: " + device + "\nTransmitter: " + transmitter); Synth.handleException(e); }
                         
             if (thru != null)
                 {
@@ -150,7 +150,7 @@ public class Midi
                     recv.addReceiver(device.getReceiver());
                     receiver = recv;
                     }
-                catch(Exception e) { ExceptionDump.postThrowable(e, "\nDevice: " + device); e.printStackTrace(); }
+                catch(Exception e) { ExceptionDump.postThrowable(e, "\nDevice: " + device); Synth.handleException(e); }
             return receiver; 
             }
         }
@@ -194,7 +194,7 @@ public class Midi
             catch (Throwable ex)
                 {
                 System.err.println("WARNING (Midi.java): error on obtaining CoreMIDI4J, but we think we're a Mac.  This should never happen.");
-                ex.printStackTrace();
+                Synth.handleException(ex);
                 midiDevices = MidiSystem.getMidiDeviceInfo();
                 }
             }
@@ -409,7 +409,7 @@ public class Midi
             try
                 { return Integer.parseInt(val); }
             catch (Exception e)
-                { ExceptionDump.postThrowable(e); e.printStackTrace(); return -1; }
+                { ExceptionDump.postThrowable(e); Synth.handleException(e); return -1; }
             }
         }
     
@@ -423,7 +423,7 @@ public class Midi
             try
                 { return Integer.parseInt(val); }
             catch (Exception e)
-                { ExceptionDump.postThrowable(e); e.printStackTrace(); return -1; }
+                { ExceptionDump.postThrowable(e); Synth.handleException(e); return -1; }
             }
         }
     
@@ -437,7 +437,7 @@ public class Midi
             try
                 { return Integer.parseInt(val); }
             catch (Exception e)
-                { ExceptionDump.postThrowable(e); e.printStackTrace(); return -1; }
+                { ExceptionDump.postThrowable(e); Synth.handleException(e); return -1; }
             }
         }
 

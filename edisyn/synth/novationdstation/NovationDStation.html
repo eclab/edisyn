@@ -1,16 +1,16 @@
 <html><head></head>
 <body>
 
-<h1>Novation Drumstation / D-station</h1> 
+<h1>Novation Drumstation / D&nbsp;Station</h1> 
 <h2>Single Patch Editor</h2>
 
-<p>This patch editor should work with any Drumstation with v1.3 firmware, and with the D-station.  I cannot say if it will work right with earlier firmware than that (testing was done on a D-station).
+<p>This patch editor should work with any Drumstation with v1.3 firmware, and with the D&nbsp;Station.  I cannot say if it will work right with earlier firmware than that (testing was done on a D&nbsp;Station).
 
 <br><br><h3>Communicating with Edisyn</h3>
-It'd be best if you selected PROGRAM mode.  Set the Drumstations MIDI Receive (Rx) channel to be the same as Edisyn's MIDI Send/Receive channel.
+It'd be best if you selected PROGRAM mode.  Set the Drumstation's MIDI Receive (Rx) channel to be the same as Edisyn's MIDI Send/Receive channel.
 
 <br><br><h3>Sending and Writing a Patch to the Drumstation</h3>
-The Drumstation has very, very limited sysex.  Edisyn can send a single patch dump to the synth.  If the Drumstation's "Write" switch is set to PROTECT, then this sends the patch dump to the synth's current working memory as normal.  If the "Write" switch is set to ENABLE, then Edisyn's send in fact overwrites the current patch slot. 
+The Drumstation has very, very limited sysex.  Edisyn can send a single patch dump to the synth.  If the Drumstation's "Write" switch is set to PROTECT, then when Edisyn issues a send, this sends the patch dump to the synth's current working memory as normal.  If the "Write" switch is set to ENABLE, then Edisyn's send in fact overwrites the current patch slot. 
 
 <p>If you have recently sent a patch to current working memory, you can also write that patch by switching the "Write" switch to ENABLE, selecting the desired patch (program) number, and pressing "Write".  Remember that you can only write to slots 25...39; the earlier slots are read-only presets.
 
@@ -30,7 +30,7 @@ The Drumstation can also send and receive Bank sysex messages: these are message
 <ul>
 <li>While it would be possible to program Edisyn to change the patch and then do a patch send, because we don't know if you've set the switch to PROTECT or to ENABLE, it seems foolish to do this.  For this reason, Edisyn doesn't even display a patch number for the patch. 
 
-<p><li>There are many myths surrounding the differences between the V1 Drumstation, V2 Drumstation, and D-station.  But the truth is, if you have updated your Drumstation to firmware v1.3, then it is identical in all respects to the D-station, including polyphony and MIDI features.
+<p><li>There are many myths surrounding the differences between the V1 Drumstation, V2 Drumstation, and D&nbsp;Station.  But the truth is, if you have updated your Drumstation to firmware v1.3, then it is identical in all respects to the D&nbsp;Station, including polyphony and MIDI features.
 </ul>
 
 <p><table border=0 cellpadding=0 cellspacing=5>

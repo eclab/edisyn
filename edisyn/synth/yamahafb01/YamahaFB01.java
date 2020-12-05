@@ -1201,7 +1201,7 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
             if (b >= 1 && b <= 16) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-        catch (NumberFormatException e) { e.printStackTrace(); }
+        catch (NumberFormatException e) { Synth.handleException(e); }
         return 1;
         }
         
@@ -1351,7 +1351,15 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
                 }
             }
 
-        Object[] div = Midi.DividedSysex.create(d);             // build the divided sysex
+        Object[] div = Midi.DividedSysex2.create(d);             // build the divided sysex
+/*
+  for(int i = 0; i < div.length; i++)
+  {
+  System.err.println("\n" + i);
+  System.err.println(Midi.DividedSysex.toString((SysexMessage)div[i]));
+  }
+*/
+                
         Object[] obj = new Object[49 * 2 - 1];                  // insert 120ms (100ms is the minimum) in-between the 49 divided packets
         for(int i = 0; i < d.length; i++)
             {

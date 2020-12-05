@@ -100,9 +100,11 @@ public class Style
     /** Color of the set region in Dials etc. when being updated. */
     public static Color DIAL_DYNAMIC_COLOR() { return DYNAMIC_COLOR(); }
     /** Width of the set region in Dials etc.  Should be a multiple of 2, ideally 4*/
-    public static float DIAL_STROKE_WIDTH() { return 4.0f; }
+    public static float DIAL_STROKE_WIDTH() { return 5.0f; }
+    /** Width of the unset region in Dials etc.  Should be a multiple of 2, ideally 2*/
+    public static float DIAL_STROKE_THIN_WIDTH() { return 3.0f; }
     /** The stroke for the set region in Dials etc. */
-    public static BasicStroke DIAL_THIN_STROKE() { return new BasicStroke(DIAL_STROKE_WIDTH() / 2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL); }
+    public static BasicStroke DIAL_THIN_STROKE() { return new BasicStroke(DIAL_STROKE_THIN_WIDTH(), BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL); }
     /** The stroke for the unset region in Dials etc. */
     public static BasicStroke DIAL_THICK_STROKE() { return new BasicStroke(DIAL_STROKE_WIDTH(), BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL); }
     /** Font used in the center of a dial. */
@@ -221,7 +223,7 @@ public class Style
                 if(scale instanceof Integer && ((Integer) scale).intValue() == 2) return true;
                 }
             } 
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { Synth.handleException(e); }
         return false;
         }
 

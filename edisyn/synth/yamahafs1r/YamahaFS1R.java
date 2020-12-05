@@ -435,36 +435,36 @@ public class YamahaFS1R extends Synth
         }
 
 
-	// For each operator from[i], copies that operator to all operators in to[i][].
-	void copyOperators(int from[], int to[][])
-		{
-		undo.push(getModel());
-		setSendMIDI(false);
-		boolean currentPush = undo.getWillPush();
-		undo.setWillPush(false);
+    // For each operator from[i], copies that operator to all operators in to[i][].
+    void copyOperators(int from[], int to[][])
+        {
+        undo.push(getModel());
+        setSendMIDI(false);
+        boolean currentPush = undo.getWillPush();
+        undo.setWillPush(false);
 
-		String[] parameters = model.getKeys();
-		for(int a = 0; a < from.length; a++)
-			{
-			int p1 = from[a];
-			for(int b = 0; b < to[a].length; b++)
-				{
-				int p2 = to[a][b];
-				for(int i = 0; i < parameters.length; i++)
-					{
-					if (parameters[i].startsWith("operator" + p1))           // only copy voiced/unvoiced ops if the user requested it
-						{
-						int val2 = model.get(parameters[i]);
-						model.set(("operator" + p2) + parameters[i].substring(9), val2);
-						}
-					}
-				}
-			}
-																	
-		undo.setWillPush(currentPush);
-		setSendMIDI(true);
-		sendAllParameters();
-		}
+        String[] parameters = model.getKeys();
+        for(int a = 0; a < from.length; a++)
+            {
+            int p1 = from[a];
+            for(int b = 0; b < to[a].length; b++)
+                {
+                int p2 = to[a][b];
+                for(int i = 0; i < parameters.length; i++)
+                    {
+                    if (parameters[i].startsWith("operator" + p1))           // only copy voiced/unvoiced ops if the user requested it
+                        {
+                        int val2 = model.get(parameters[i]);
+                        model.set(("operator" + p2) + parameters[i].substring(9), val2);
+                        }
+                    }
+                }
+            }
+                                                                                                                                        
+        undo.setWillPush(currentPush);
+        setSendMIDI(true);
+        sendAllParameters();
+        }
 
 
     public void addYamahaFS1RMenu()
@@ -889,9 +889,9 @@ public class YamahaFS1R extends Synth
             bank.setSelectedIndex(0);
             }
         else
-        	{
-	        bank.setSelectedIndex(model.get("bank"));
-        	}
+            {
+            bank.setSelectedIndex(model.get("bank"));
+            }
                 
         JTextField number = new JTextField("" + (model.get("number") + 1), 3);
                 
@@ -3021,7 +3021,7 @@ public class YamahaFS1R extends Synth
                     }
                 else
                     {
-                    new Throwable().printStackTrace();
+                    Synth.handleException(new Throwable());
                     return -1;
                     }
                 }
@@ -3611,7 +3611,7 @@ public class YamahaFS1R extends Synth
             if (b >= 1 && b < 16) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-        catch (NumberFormatException e) { e.printStackTrace(); }
+        catch (NumberFormatException e) { Synth.handleException(e); }
         return 1;
         }
         
@@ -3928,8 +3928,8 @@ public class YamahaFS1R extends Synth
     // so it's a good compromise from a UI standpoint.
     public int getPauseAfterWritePatch() { return 170; }            // don't know if we need any
 
-	// The FS1R is VERY slow to respond and also queues up responses (beware!)
-	public int getBulkDownloadWaitTime() { return 2750; }
-	public int getBulkDownloadFailureCountdown() { return 5; }
+    // The FS1R is VERY slow to respond and also queues up responses (beware!)
+    public int getBulkDownloadWaitTime() { return 2750; }
+    public int getBulkDownloadFailureCountdown() { return 5; }
 
     }

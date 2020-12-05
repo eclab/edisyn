@@ -2210,7 +2210,7 @@ public class WaldorfMicrowaveXT extends Synth
             // Number change is PC
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0));
             }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { Synth.handleException(e); }
         }
 
     public byte[] requestDump(Model tempModel)
@@ -2365,7 +2365,7 @@ public class WaldorfMicrowaveXT extends Synth
                 }
             catch (UnsupportedEncodingException e)
                 {
-                e.printStackTrace();
+                Synth.handleException(e); 
                 }
             }
         else
@@ -2438,7 +2438,7 @@ public class WaldorfMicrowaveXT extends Synth
             if (b >= 0) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-        catch (NumberFormatException e) { e.printStackTrace(); }
+        catch (NumberFormatException e) { Synth.handleException(e); }
         return 0;
         }
         

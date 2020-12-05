@@ -1188,7 +1188,7 @@ public class KawaiK4 extends Synth
             }
 
         try { model.set("name", new String(name, "US-ASCII")); }
-        catch (UnsupportedEncodingException e) { e.printStackTrace(); }
+        catch (UnsupportedEncodingException e) { Synth.handleException(e); }
 
         revise();
         return PARSE_SUCCEEDED;
@@ -1517,7 +1517,7 @@ public class KawaiK4 extends Synth
             {
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { Synth.handleException(e); }
         }
     
     public Model getNextPatchLocation(Model model)

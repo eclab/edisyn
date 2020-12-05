@@ -562,7 +562,7 @@ public class KawaiK1Multi extends Synth
             }
 
         try { model.set("name", new String(name, "US-ASCII")); }
-        catch (UnsupportedEncodingException e) { e.printStackTrace(); }
+        catch (UnsupportedEncodingException e) { Synth.handleException(e); }
 
 
         revise();
@@ -787,7 +787,7 @@ public class KawaiK1Multi extends Synth
             {
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { Synth.handleException(e); }
         }
 
     public Model getNextPatchLocation(Model model)

@@ -131,7 +131,7 @@ public class DSIProphet08 extends Synth
             }
         catch (Exception ex)
             {
-            ex.printStackTrace();
+            Synth.handleException(ex); 
             }
         
         for(int i = 0; i < parameters.length; i++)
@@ -1619,7 +1619,7 @@ public class DSIProphet08 extends Synth
     byte[] convertTo8Bit(byte[] data, int offset)
         {
         // How big?
-        int size = (data.length - offset - 1) / 8 * 7;
+        int size = (data.length - offset - 1) / 8 * 7;          // - 1 is for the 0xF7
         if ((data.length - offset - 1) % 8 > 0)
             size += ((data.length - offset - 1) % 8 - 1);           
         byte[] newd = new byte[size];
@@ -1758,7 +1758,7 @@ public class DSIProphet08 extends Synth
                     }
                 catch (UnsupportedEncodingException e)
                     {
-                    e.printStackTrace();
+                    Synth.handleException(e); 
                     }
                 }
             }
@@ -1816,7 +1816,7 @@ public class DSIProphet08 extends Synth
                 }
             catch (UnsupportedEncodingException e)
                 {
-                e.printStackTrace();
+                Synth.handleException(e); 
                 }
             }
                 

@@ -151,6 +151,15 @@ public class SanityCheck
                     System.err.println(c[j] + " (V50)");
                     test(synth, synth2);
                     }
+                else if (synth instanceof edisyn.synth.maudiovenom.MAudioVenomArp)
+                    {
+                    edisyn.synth.maudiovenom.MAudioVenomArp.truncateAndSortOnEmit = false;
+                    synth = Synth.instantiate(c[j], true, false, null);
+                    synth2 = Synth.instantiate(c[j], true, false, null);
+                    System.err.println(c[j]);
+                    test(synth, synth2);
+                    edisyn.synth.maudiovenom.MAudioVenomArp.truncateAndSortOnEmit = true;
+                    }
                 else
                     {
                     synth = Synth.instantiate(c[j], true, false, null);

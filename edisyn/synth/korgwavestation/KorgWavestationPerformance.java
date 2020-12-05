@@ -4980,13 +4980,13 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         try {
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0,  MIDI_BANKS[tempModel.get("bank", 0)]));
             }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { Synth.handleException(e); }
 
         // change the number
         try {
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), tempModel.get("number", 0) + MIDI_PROG_CHANGE_OFFSETS[tempModel.get("bank", 0)], 0));
             }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { Synth.handleException(e); }
 
         // specify that we're editing said bank
         byte[] bank_mesg = paramBytes(CURRENT_BANK, edisynToWSBank[tempModel.get("bank", 0)]);

@@ -1342,7 +1342,7 @@ public class KorgMicroKorg extends Synth
             // Number change is PC
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), BB * 64 + NN, 0));
             }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { Synth.handleException(e); }
 
         // we assume that we successfully did it
         if (!isMerging())  // we're actually loading the patch, not merging with it

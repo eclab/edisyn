@@ -24,7 +24,7 @@ Set the MIDI channel to the same as being used in Edisyn, and enable Program Cha
 <br><br><h3>Gotchas</h3>
 
 <ul>
-<li>The Casio CZ series cannot receive individual parameters: you have to send them in bulk.
+<li>The Casio CZ series cannot receive individual parameters: you have to send them in bulk.  You could try checking "Repeatedly Send Current Patch" if you liked.  Be sure to read up on exactly what that menu option does.
 
 <p><li>When you change the patch on the CZ, it will automatically send a patch dump over sysex, which will in turn change Edisyn.  If this happens to you, just do an "undo" and your edits will be back as they were.  You could temporarily block this behavior by doing "Change Midi..." and change "Receive From" to something other than the CZ.
 </ul>

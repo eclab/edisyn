@@ -942,7 +942,7 @@ public class FuturesonusParva extends Synth
             // Number change is PC
             tryToSendMIDI(buildPC(getChannelOut(), NN));
             }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { Synth.handleException(e); }
         }
 
     public byte[] requestDump(Model tempModel)

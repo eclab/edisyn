@@ -542,7 +542,7 @@ public class EmuMorpheusMap extends Synth
             if (b >= 0 && b < 16) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-        catch (NumberFormatException e) { e.printStackTrace(); }
+        catch (NumberFormatException e) { Synth.handleException(e); }
         return 0;
         }
         
@@ -600,7 +600,7 @@ public class EmuMorpheusMap extends Synth
                 catch (Exception ex)
                     {
                     // shouldn't ever happen
-                    ex.printStackTrace();
+                    Synth.handleException(ex); 
                     }
                 }
             else if (key.startsWith("fx1n"))
@@ -632,7 +632,7 @@ public class EmuMorpheusMap extends Synth
                 catch (Exception ex)
                     {
                     // shouldn't ever happen
-                    ex.printStackTrace();
+                    Synth.handleException(ex); 
                     }
                 }
             else if (key.endsWith("mixbus"))
@@ -708,7 +708,7 @@ public class EmuMorpheusMap extends Synth
                 catch (Exception ex)
                     {
                     // shouldn't ever happen
-                    ex.printStackTrace();
+                    Synth.handleException(ex); 
                     }
                 }
             else if (parameters[i].endsWith("mixbus"))
@@ -809,7 +809,7 @@ public class EmuMorpheusMap extends Synth
                 catch (Exception ex)
                     {
                     // shouldn't ever happen
-                    ex.printStackTrace();
+                    Synth.handleException(ex); 
                     }
                 }
             else if (parameters[i].endsWith("mixbus"))

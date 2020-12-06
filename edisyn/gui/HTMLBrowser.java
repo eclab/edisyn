@@ -5,6 +5,7 @@
 */
 
 package edisyn.gui;
+import edisyn.*;
 import java.awt.*;
 import javax.swing.*;
 import java.io.*;

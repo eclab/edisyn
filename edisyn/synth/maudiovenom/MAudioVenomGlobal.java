@@ -187,9 +187,10 @@ public class MAudioVenomGlobal extends Synth
         //hbox.add(vbox);
         //vbox = new VBox();
                 
-        //params = MIDI_OUT_MODES;
-        //comp = new Chooser("MIDI Out", this, "midioutmode", params);
+        params = MIDI_OUT_MODES;
+        comp = new Chooser("MIDI Out", this, "midioutmode", params);
         //vbox.add(comp);
+        
 
         comp = new CheckBox("Multi Select", this, "midimultiselect");
         vbox.add(comp);
@@ -301,7 +302,7 @@ public class MAudioVenomGlobal extends Synth
             
             if (key.equals("mastertempomsb"))
                 {
-                model.set("mastertempo", ((d[i] << 8) | d[i + 1]) & 0xFFFF);
+                model.set("mastertempo", ((((int)(d[i] & 0xFF)) << 8) | (d[i + 1] & 0xFF)) & 0xFFFF);
                 }
             else if (key.equals("mastertempolsb"))
                 {
@@ -524,13 +525,14 @@ public class MAudioVenomGlobal extends Synth
                 
             if (key.equals("mastertempomsb"))
                 {
-                d[i] = (byte)(model.get("mastertempo") >>> 8);
+                d[i] = (byte)((model.get("mastertempo") >>> 8) & 255);
                 }
             else if (key.equals("mastertempolsb"))
                 {
                 d[i] = (byte)(model.get("mastertempo") & 255);
                 }
-            else if (key.equals("midisingleselect") || key.equals("midimultiselect") || key.equals("usbrecord") || key.equals("monorecord") || key.equals("localmode"))
+            else if (key.equals("midisingleselect") || key.equals("midimultiselect") || key.equals("usbrecord") || 
+            		key.equals("monorecord") || key.equals("localmode") || key.equals("arpeggiatorroute"))
                 {
                 d[i] = (byte)(model.get(key) == 0 ? 0 : 127);
                 }

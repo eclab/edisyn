@@ -1040,17 +1040,44 @@ public class MAudioVenomArp extends Synth
                 markEnd(i);
                 }
                         
+ 
+ //// NOTE
+ ////
+ //// Gagh, the documentation on p.92-93 is very wrong when it comes to the arp pattern data.
+ ////
+ //// (1) The pattern byte data is transmitted in reverse order than shown: the far right byte
+ ////     comes first, then the byte to its left, then the next byte to its left, and
+ ////     finally the far left byte.
+ ////
+ //// (2) d1 and d2 are mixed up.  The correct table is:
+ ////
+ ////     EVENT TYPE  D1          D2
+ ////     Note        Velocity    Note Num
+ ////     Controller  Value       CC Num
+ ////     Pitch Bend  PB MSB      PB LSB
+ ////
+ //// (3) NOTE and CC events are not properly described.  The correct table is:
+ ////     (F1 = bit 7 of the first byte, F2 = bit 7 of the second byte)
+ ////
+ ////     F2 F1 EVENT TYPE
+ ////     0  0  --END-- [assuming all other bits are 0]
+ ////     0  1  NOTE
+ ////     1  0  CONTROLLER
+ ////     1  1  PITCH BEND
+
+                    
             // Load data
             if (((d.length / 4) * 4) != d.length)
                 {
                 System.err.println("MAudioVenomArp Parse WARNING: pattern data length isn't a multiple of 4.  It's possible some data may have been corrupted.");
                 }
+                
             for(int i = 0; i < d.length; i+=4)      
                 {
-                if (i + 4 >= d.length)  // bad
+                if (i + 4 > d.length)  // bad
                     break;
                 int val = ((d[i + 0] & 0xFF) << 0) | ((d[i + 1] & 0xFF) << 8) | ((d[i + 2] & 0xFF) << 16) | ((d[i + 3] & 0xFF) << 24);
-                
+                                
                 // Error in documentation: d2 and d1 are mixed up
                 
                 model.set("pattern" + (i / 4) + "b", val & 127);

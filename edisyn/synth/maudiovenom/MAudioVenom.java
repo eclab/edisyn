@@ -72,10 +72,16 @@ public class MAudioVenom extends Synth
     "Off", "Envelope 1", "Envelope 2", "Envelope 3", "Envelope 1 Bipolar", "Envelope 2 Bipolar", "Envelope 3 Bipolar", 
     "LFO 1 Wide Bipolar", "LFO 2 Wide Bipolar", "LFO 3 Wide Bipolar", "LFO 1 Wide Unipolar", "LFO 2 Wide Unipolar", 
     "LFO 3 Wide Unipolar", "LFO 1 Fine Bipolar", "LFO 2 Fine Bipolar", "LFO 3 Fine Bipolar", "LFO 1 Fine Unipolar", 
-    "LFO 2 Fine Unipolar", "LFO 3 Fine Unipolar", "+ Velocity", "- Velocity", "Keytrack", "Mod Wheel", "Pitch Bend", 
-    "Channel Touch", "+ Expression", "- Expression", "Sustain", "- Channel Touch", "- Keytrack", "- Mod Wheel", "- Sustain"
+    "LFO 2 Fine Unipolar", "LFO 3 Fine Unipolar", "Velocity", "- Velocity", "Keytrack", "Mod Wheel", "Pitch Bend", 
+    "Aftertouch", "Expression", "- Expression", "Sustain", "- Aftertouch", "- Keytrack", "- Mod Wheel", "- Sustain"
     };    
     public static final String[] MOD_DESTINATIONS = new String[] 
+    {
+    "Off", "Filter Cutoff", "Pitch", "Osc 1 Pitch", "Osc 2 Pitch", "Osc 3 Pitch", "Amplitude", 
+    "Filter Resonance", "Ring Mod", "External Input Level", "FM Amount", "Osc 1 Waveshaper", 
+    "LFO 1 Rate", "LFO 2 Rate", "Osc Detune", "Osc 1 Level", "Osc 2 Level", "Osc 3 Level", 
+    }; 
+    public static final String[] EXTENDED_MOD_DESTINATIONS = new String[] 
     {
     "Off", "Filter Cutoff", "Pitch", "Osc 1 Pitch", "Osc 2 Pitch", "Osc 3 Pitch", "Amplitude", 
     "Filter Resonance", "Ring Mod", "External Input Level", "FM Amount", "Osc 1 Waveshaper", 
@@ -84,7 +90,7 @@ public class MAudioVenom extends Synth
     "Mod 5 Amount", "Mod 6 Amount", "Mod 7 Amount", "Mod 8 Amount", 
     "Mod 9 Amount", "Mod 10 Amount", "Mod 11 Amount", "Mod 12 Amount", 
     "Mod 13 Amount", "Mod 14 Amount", "Mod 15 Amount", "Mod 16 Amount", 
-    }; 
+    };     
     public static final String[] ARP_MODES = new String[] { "Standard", "Phrase", "Drum" };
     public static final String[] ARP_SOURCES = new String[] { "Pattern", "Single" };
     public static final String[] ARP_BANKS = new String[] { "A", "B" };
@@ -626,7 +632,7 @@ public class MAudioVenom extends Synth
             comp = new Chooser("Source " + mod, this, "mod" + mod + "source", params);
             vbox.add(comp);
 
-            params = MOD_DESTINATIONS;
+            params = (mod >= 2 ? EXTENDED_MOD_DESTINATIONS : MOD_DESTINATIONS);
             comp = new Chooser("Destination " + mod, this, "mod" + mod + "destination", params);
             vbox.add(comp);
 
@@ -935,7 +941,10 @@ public class MAudioVenom extends Synth
                 {
                 super.update(key, model);
                 fx.removeLast();
-                fx.addLast(insert[model.get("channelfxtype", 0)]);
+                int channelfxtype = model.get("channelfxtype", 0);
+                if (channelfxtype >= 0 && channelfxtype < insert.length)
+	                fx.addLast(insert[channelfxtype]);
+                else Synth.handleException(new Throwable("Invalid channel fx type: " + channelfxtype));
                 fx.revalidate();
                 fx.repaint();
                 }
@@ -1286,10 +1295,11 @@ public class MAudioVenom extends Synth
                 super.update(key, model);
                 int bank = model.get("arpbank");
                 int pattern = model.get("arppattern");
-                if (bank >= 0 && pattern >= 0)
+                if (bank >= 0  && bank < DEFAULT_ARP_PATTERN_NAMES.length && pattern >= 0 && pattern < DEFAULT_ARP_PATTERN_NAMES[0].length)
                     {
                     category.setName("Arpeggiator (" + DEFAULT_ARP_PATTERN_NAMES[bank][pattern] + ")");
                     }
+                else Synth.handleException(new Throwable("Invalid bank or pattern.  Bank: " + bank + " Pattern: " + pattern));
                 }
             };
         vbox.add(comp);
@@ -1351,8 +1361,9 @@ public class MAudioVenom extends Synth
                     {
                     int bank = model.get("arpbank");
                     int pattern = model.get("arppattern");
-                    if (bank >= 0 && pattern >= 0)
+                	if (bank >= 0  && bank < DEFAULT_ARP_PATTERN_NAMES.length && pattern >= 0 && pattern < DEFAULT_ARP_PATTERN_NAMES[0].length)
                         category.setName("Arpeggiator (" + DEFAULT_ARP_PATTERN_NAMES[bank][pattern] + ")");
+                    else Synth.handleException(new Throwable("Invalid bank or pattern.  Bank: " + bank + " Pattern: " + pattern));
                     }
                 /*
                   else
@@ -1574,7 +1585,8 @@ public class MAudioVenom extends Synth
             int val = model.get(key);
                 
             if (key.equals("glidemode") || key.equals("unisonmode") || key.equals("aux1mode") || 
-                key.equals("aux2mode") || key.equals("apsrc") || key.equals("arpbipolar") || key.equals("arplatchkeys"))
+                key.equals("aux2mode") || key.equals("apsrc") || key.equals("arpbipolar") || 
+                key.equals("arplatchkeys") ||key.equals("arpenable"))
                 {
                 if (val == 1) 
                     val = 127;
@@ -1709,24 +1721,22 @@ public class MAudioVenom extends Synth
         
         int offset = 10;
         
-        byte[] d = new byte[toWorkingMemory ? parameters.length : parameters.length + 1];
+        String[] params = (toWorkingMemory ? parameters : parameters240);
+        byte[] d = new byte[params.length];
         int j = 0;
-        for(int i = 0; i < parameters.length; i++)
+        for(int i = 0; i < params.length; i++)
             {
-            String key = parameters[i];
-                
-            if (key.equals("osc2coarsetune"))
+            String key = params[i];
+            
+            if (key.equals("osc2waveform"))
                 {
-                // this is right after osc2waveform, which has an incorrectly repeated byte
-                // in the sysex IF the data arriving was from a specific patch rather than
-                // from the edit buffer.  So I need to skip this extra byte before continuing
-                // here.
+                // this is doubled
                 if (data.length == 240) // it should be 239
                     {
-                    d[j] = d[j - 1];
-                    j++;
+                	d[j] = (byte)(model.get(key));
+                    d[j + 1] = d[j];
                     }
-                }           
+                }   
                 
             if (key.equals("-"))
                 {
@@ -1737,9 +1747,9 @@ public class MAudioVenom extends Synth
                 // a bug in the venom returns 0 rather than 64 when data.length == 240.
                 // For the time being, I'm replicating this, though I don't know if the
                 // venom can handle a proper upload if it needs this broken upload
-                if (data.length == 240 && model.get(key) == 64)
+                if (data.length == 240)
                     {
-                    d[j] = 0;
+                    d[j] = (byte)(model.get(key) - 64);		// shift to -4 ... +4
                     }
                 else
                     {
@@ -1783,6 +1793,7 @@ public class MAudioVenom extends Synth
                 {
                 d[j] = (byte)(model.get(key));
                 }
+            //System.err.println("WRITING " + j + " " + d[j] + " " + key);
             j++;
             }
                                 
@@ -1804,6 +1815,25 @@ public class MAudioVenom extends Synth
         return result;
         }
 
+	public int processArpOctave(byte val)
+		{
+		System.err.println("arp octave val " + val);
+		int o = val;
+		if (o >= 60 && o <= 68)	// we're good
+			return o;
+		System.err.println("Unusual arp octave value " + o);
+		if (o >= -4 && o <= 4)
+			return 64 + o;
+		else if (o >= 124 && o <= 127)		// (-4 ... -1)
+			return (o - 128 + 64);
+		else if (o >= -128 && o <= -124)	// (0 ... 
+			return (o + 128 + 64);
+		else 
+			{
+			System.err.println("BAD unconverted arp octave value " + o);
+			return 0;
+			}
+		}
 
     public int parse(byte[] data, boolean fromFile)
         {
@@ -1824,10 +1854,14 @@ public class MAudioVenom extends Synth
                                 
         // Load remaining parameters
         int j = 0;
-        for(int i = 0; i < parameters.length; i++)
+        String[] params = (data.length == 240 ? parameters240 : parameters);
+        for(int i = 0; i < params.length; i++)
             {
-            String key = parameters[i];
+            String key = params[i];
+            //System.err.println(key);
             
+            // we're now handling this with a different set of parameters
+            /*
             if (key.equals("osc2coarsetune"))
                 {
                 // this is right after osc2waveform, which has an incorrectly repeated byte
@@ -1839,6 +1873,7 @@ public class MAudioVenom extends Synth
                     j++;
                     }
                 }
+            */
             
             // no else here
             if (key.equals("-"))
@@ -1847,15 +1882,7 @@ public class MAudioVenom extends Synth
                 }
             else if (key.equals("arpoctaverange"))
                 {
-                // a bug in the venom returns 0 rather than 64 when data.length == 240, agh
-                if (d[j] == 0)
-                    {
-                    model.set("arpoctaverange", 64);
-                    }
-                else
-                    {
-                    model.set("arpoctaverange", d[j]);
-                    }
+                model.set("arpoctaverange", processArpOctave(d[i]));
                 }
             else if (key.equals("cutoffhigh"))
                 {
@@ -1883,6 +1910,7 @@ public class MAudioVenom extends Synth
                 {
                 if (d[j] >= 64) // it's a mod destination, need to shift
                     {
+                    //System.err.println("shifting to " + ((d[j] - 64) + 18));
                     model.set(key, (d[j] - 64) + 18);
                     }
                 else
@@ -1892,8 +1920,10 @@ public class MAudioVenom extends Synth
                 }
             else
                 {
+                //System.err.println("" + i + " " + j + " " + d[j] + " " + key);
                 model.set(key, d[j]);
                 }
+            //System.err.println(key + " " + d[j]);
             j++;
             }
                         
@@ -1917,6 +1947,8 @@ public class MAudioVenom extends Synth
             
             setSendMIDI(sendMIDI);
             }
+
+		//System.err.println("-->" + model.get("channelfxtype", -100));
 
         revise();
         return PARSE_SUCCEEDED;
@@ -1975,7 +2007,7 @@ public class MAudioVenom extends Synth
         super.sendAllParameters();
         if (!getSendMIDI())
             return;  // don't bother!  MIDI is off
-        switchScreen();
+//        switchScreen();
         }
 
 
@@ -2016,6 +2048,8 @@ tryToSendMIDI(buildPC(getChannelOut(), number));
 
 // Vyzex seems to send to the venom the following undocumented command to change the patch:
 
+//F0 00 01 05 21 F7 02 15 00 0D 00 100 F7
+
         byte[] data = new byte[13];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x00;
@@ -2055,17 +2089,8 @@ tryToSendMIDI(buildPC(getChannelOut(), number));
 
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
-        // The venom has the ability to load a specific patch.  However its sysex
-        // is broken in two ways: first it has an extra invalid byte (see discussion in parse())
-        // and second the mod sources and destinations are often broken.
-        //
-        // So for the time being, we're going to do a requestCurrentDump instead of
-        // a requestDump.  This means we must always do a changePatch regardless,
-        // so that's why we're overriding this method.
-        // we are always changing patches because we have to do a request current patch,
-        
         performChangePatch(tempModel);
-        tryToSendSysex(requestCurrentDump());
+        tryToSendSysex(requestDump(tempModel));
         model.set("number", tempModel.get("number"));
         model.set("bank", tempModel.get("bank"));
         }
@@ -2127,6 +2152,19 @@ tryToSendMIDI(buildPC(getChannelOut(), number));
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
+            
+        // deal with modulation amount destinations
+        for(int i = 3; i < 16; i++)
+        	{
+        	if (model.get("mod" + i + "destination") == i + 17)	// can't refer to yourself
+        		model.set("mod" + i + "destination", 0);			// off
+        	for(int j = 3; j < 16; j++)
+        		{
+				if (model.get("mod" + j + "destination") == i + 17 &&	// someone is referring to you
+					model.get("mod" + i + "destination") >= 18)			// you're using a modulation destination, not legal 
+					model.set("mod" + i + "destination", 0);				// off
+        		}
+        	}
         }
     
     public static String getSynthName() { return "M-Audio Venom"; }
@@ -2396,6 +2434,218 @@ tryToSendMIDI(buildPC(getChannelOut(), number));
     "-",
     "-",
     };    
+
+
+
+	//// When the data is 240 in size, there are two major differences.
+	//// 1. There's an extra osc2coarsetune for unknown reasons, likely a bug
+	//// 2. The mod matrix is rearranged to source/destination/scaling
+	////    rather than all the sources, then all the destinations, then all the scalings!!!
+
+    final static String[] parameters240 = new String[]
+    {
+    "glidemode",
+    "glidetime",
+    "-",                                    // bank                 2
+    "-",                                    // number               3
+    "env1attack",
+    "env1hold",
+    "env1decay",
+    "env1sustain",
+    "env1release",
+    "env2attack",
+    "env2hold",
+    "env2decay",
+    "env2sustain",
+    "env2release",
+    "env3attack",
+    "env3hold",
+    "env3decay",
+    "env3sustain",
+    "env3release",
+    "startmod",
+    "oscdrift",
+    "bendrange",
+    "ringmod",
+    "fmlevel",
+    "oscflags",                                     // broken out           24
+    "waveshapewidth",
+    "osc1waveform",
+    "osc1coarsetune",
+    "osc1finetune",
+    "osc2waveform",
+    "-",											// ERROR, osc2waveform is repeated
+    "osc2coarsetune",
+    "osc2finetune",
+    "boost",
+    "osc3waveform",
+    "osc3coarsetune",
+    "osc3finetune",
+    "-",                                            // reserved             36
+    "lfo1waveform",
+    "lfo1rate",
+    "lfo1delay",
+    "lfo1attack",
+    "lfo1startphase",
+    "lfo2waveform",
+    "lfo2rate",
+    "lfo2delay",
+    "lfo2attack",
+    "lfo2startphase",
+    "lfo3waveform",
+    "lfo3rate",
+    "lfo3delay",
+    "lfo3attack",
+    "lfo3startphase",
+    "mod1source",
+    "mod1destination",
+    "mod1scaling",
+    "mod2source",
+    "mod2destination",
+    "mod2scaling",
+    "mod3source",
+    "mod3destination",
+    "mod3scaling",
+    "mod4source",
+    "mod4destination",
+    "mod4scaling",
+    "mod5source",
+    "mod5destination",
+    "mod5scaling",
+    "mod6source",
+    "mod6destination",
+    "mod6scaling",
+    "mod7source",
+    "mod7destination",
+    "mod7scaling",
+    "mod8source",
+    "mod8destination",
+    "mod8scaling",
+    "mod9source",
+    "mod9destination",
+    "mod9scaling",
+    "mod10source",
+    "mod10destination",
+    "mod10scaling",
+    "mod11source",
+    "mod11destination",
+    "mod11scaling",
+    "mod12source",
+    "mod12destination",
+    "mod12scaling",
+    "mod13source",
+    "mod13destination",
+    "mod13scaling",
+    "mod14source",
+    "mod14destination",
+    "mod14scaling",
+    "mod15source",
+    "mod15destination",
+    "mod15scaling",
+    "mod16source",
+    "mod16destination",
+    "mod16scaling",
+    "osc1volume",
+    "osc2volume",
+    "osc3volume",
+    "extinvolume",
+    "extinsource",
+    "filtertype",
+    "cutoffhigh",                                   // combined to cutoff           106
+    "cutofflow",                                    // combined to cutoff           107
+    "resonance",
+    "coarsetune",
+    "finetune",
+    "voicemode",
+    "unisonmode",
+    "unisoncount",
+    "unisondetune",
+    "channelvolume",
+    "channelpan",
+    "channeldirect",
+    "channelaux1send",
+    "channelaux2send",
+    "channelfxtype",
+    "hiloeqlowfreq",
+    "hiloeqlowgain",
+    "hiloeqhighfreq",
+    "hiloeqhighgain",
+    "tremolowaveform",
+    "tremolorate",
+    "tremolovoldepth",
+    "tremolopandepth",
+    "autowahtype",
+    "autowahcutoff",
+    "autowahresonance",
+    "autowahsensitivity",
+    "compressorattack",
+    "compressorrelease",
+    "compressorthreshold",
+    "compressorratio",
+    "compressorgain",
+    "distortiontype",
+    "distortiondepth",
+    "distortionpregain",
+    "distortionpostgain",
+    "distortionhighcutoff",
+    "bandpassmidfreq",
+    "bandpassmidgain",
+    "bandpassmidq",
+    "reducerbitdepth",
+    "reducersamplerate",
+    "aux1mode",
+    "aux1type",
+    "aux1depth",
+    "aux1prehp",
+    "aux1predelay",
+    "aux1highdamp",
+    "aux1time",
+    "aux1feedback",
+    "aux1gatedelaytime",
+    "aux1gatethresh",
+    "aux1tonegain",
+    "aux1tonefreq",
+    "aux2mode",
+    "aux2type",
+    "aux2depth",
+    "aux2toaux1",
+    "aux2prehp",
+    "aux2prelp",
+    "aux2time",
+    "aux2feedback",
+    "aux2highdamp",
+    "aux2lforate",
+    "aux2lfodepth",
+    "progvolume",
+    "mastereqlowfreq",
+    "mastereqlowgain",
+    "mastereqmidfreq",
+    "mastereqmidgain",
+    "mastereqhighfreq",
+    "mastereqhighgain",
+    "arpenable",
+    "arpsrc",
+    "arpbank",
+    "arppattern",
+    "arpmode",
+    "arpnoteorder",
+    "arpoctaverange",
+    "arpbipolar",
+    "arplatchkeys",
+    "arprootnote",
+    "-",                                                    // patch names                          188
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    };    
+
+
 
 
 /// arp pattern names

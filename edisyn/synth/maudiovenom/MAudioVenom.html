@@ -43,6 +43,13 @@ above 110 the Rates turn into MIDI Synced rates in the form of notes.  An explan
 <p><b>Gotchas</b><br>
 
 <ul>
+<li>There appear to be some unwritten rules about using Modulation1Amount ... Modulation16Amount as destinations in your modulation matrix.  Edisyn does not enforce these, but bad things may happen if you violate them.
+<ol>
+<li>A slot cannot have itself as a destination (so slot 5 can't have Modulation5Amount as its destination).
+<li>If a slot is presently serving as a destination, it cannot use Modulation1Amount ... Modulation16Amount.  For example, if slot 5 has Modulation6Amount as its destination, then slot 6 cannot use these as its destinations.
+<li>Slots 1 and 2 can't have them as destinations at all.
+</ol>
+
 <p><li>If you set the Arpeggiator Source Pattern, you can't set any parameters except Enable (and the Bank and Pattern Number).  If you want to see the underlying pattern, just click "Show Arp".
 
 <p><li>It's possible that Edisyn has swapped the EQ's (not Master EQ) Low Freq and Low Gain, and similarly the High Freq and High Gain, such that if you change one, actually the other is changed.  If this appears to be the case, please contact me.

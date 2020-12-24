@@ -33,6 +33,7 @@ public class MAudioVenom extends Synth
     // HP = 1952 Valve Oscillator
     // PB = Plan B Model 15     [euro module vco]
     // RP = ARP 2600
+    // MS = ?
     // SH = Roland SH-5
     // OB = SEM
     // MG = Minimoog Model D
@@ -65,7 +66,7 @@ public class MAudioVenom extends Synth
     "08 Maracas", "RP Zap 1", "RP Zap 1", "RP Zap 3", "RP Zap 4", "TB Saw", "TB Square" 
     };
     public static final String[] FILTER_TYPES = new String[] { "Off", "Lowpass 12", "Bandpass 12", "Highpass 12", "Lowpass 24", "Bandpass 24", "Highpass 24" };
-    public static final String[] LFO_WAVES = new String[] { "Sine", "Sine+", "Triangle", "Sawtooth", "Square", "Sample and Hold", "Linear Sample and Hold", "Log Sample and Hold", "Exponential Square", "Logarithmic Square", "Logarithic Up Sawtooth", "Exponential Up Sawtooth" };    
+    public static final String[] LFO_WAVES = new String[] { "Sine", "Sine+", "Triangle", "Sawtooth", "Square", "Sample and Hold", "Linear Sample and Hold", "Log Sample and Hold", "Exp Square", "Log Square", "Log Up Sawtooth", "Exp Up Sawtooth" };    
     public static final String[] A_MOD_WAVES = new String[] { "Sine", "Triangle", "Saw Up", "Saw Down", "Square" };    
     public static final String[] MOD_SOURCES = new String[] 
     { 
@@ -126,9 +127,6 @@ public class MAudioVenom extends Synth
     */
     };
     public static final String[] ARP_NOTE_ORDERS = new String[]  { "Up", "Down", "Up/Down Excl.",  "Up/Down Incl.", "Down/Up Excl.",  "Down/Up Incl.", "Chord" };
-                
-    /* ARP goes 50...300 BPM.  That's 251 values, probably 8 bits */
-        
     public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
         
@@ -373,7 +371,23 @@ public class MAudioVenom extends Synth
         comp = new LabelledDial("Sustain", this, "env" + env + "sustain", color, 0, 127);
         hbox.add(comp);
 
-        comp = new LabelledDial("Release", this, "env" + env + "release", color, 0, 127);
+        if (env == 1)
+            {
+            comp = new LabelledDial("Release", this, "env" + env + "release", color, 0, 126);
+            }
+        else
+            {
+            comp = new LabelledDial("Release", this, "env" + env + "release", color, 0, 127)
+                {
+                public String map(int value)
+                    {
+                    if (value == 127)
+                        return "Hold";
+                    else
+                        return "" + value;
+                    }
+                };
+            }
         hbox.add(comp);
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
@@ -943,7 +957,7 @@ public class MAudioVenom extends Synth
                 fx.removeLast();
                 int channelfxtype = model.get("channelfxtype", 0);
                 if (channelfxtype >= 0 && channelfxtype < insert.length)
-	                fx.addLast(insert[channelfxtype]);
+                    fx.addLast(insert[channelfxtype]);
                 else Synth.handleException(new Throwable("Invalid channel fx type: " + channelfxtype));
                 fx.revalidate();
                 fx.repaint();
@@ -1299,7 +1313,7 @@ public class MAudioVenom extends Synth
                     {
                     category.setName("Arpeggiator (" + DEFAULT_ARP_PATTERN_NAMES[bank][pattern] + ")");
                     }
-                else Synth.handleException(new Throwable("Invalid bank or pattern.  Bank: " + bank + " Pattern: " + pattern));
+                // else Synth.handleException(new Throwable("Invalid bank or pattern.  Bank: " + bank + " Pattern: " + pattern));
                 }
             };
         vbox.add(comp);
@@ -1361,7 +1375,7 @@ public class MAudioVenom extends Synth
                     {
                     int bank = model.get("arpbank");
                     int pattern = model.get("arppattern");
-                	if (bank >= 0  && bank < DEFAULT_ARP_PATTERN_NAMES.length && pattern >= 0 && pattern < DEFAULT_ARP_PATTERN_NAMES[0].length)
+                    if (bank >= 0  && bank < DEFAULT_ARP_PATTERN_NAMES.length && pattern >= 0 && pattern < DEFAULT_ARP_PATTERN_NAMES[0].length)
                         category.setName("Arpeggiator (" + DEFAULT_ARP_PATTERN_NAMES[bank][pattern] + ")");
                     else Synth.handleException(new Throwable("Invalid bank or pattern.  Bank: " + bank + " Pattern: " + pattern));
                     }
@@ -1506,7 +1520,7 @@ public class MAudioVenom extends Synth
                 (byte)0x01, 
                 (byte)0x05, 
                 (byte)0x21,                     // Venom 
-                (byte)0x00, // (byte)getID(), 
+                (byte)DEFAULT_ID, 		// (byte)getID(), 
                 (byte)0x02,                     // Write Data Dump 
                 (byte)0x09,             // Edit Single Param
                 paramMSB,
@@ -1539,16 +1553,16 @@ public class MAudioVenom extends Synth
             }
         else if (key.equals("osc2sync") || key.equals("osc3sync") || key.equals("osc1keytrack") || key.equals("osc2keytrack") || key.equals("osc3keytrack") || key.equals("waveshape"))
             {
-            // map to oscflags
-            // Flags appear to be:
-            // 0    Waveshape ON
-            // 1    OSC 2 Sync
-            // 2    OSC 3 Sync
-            // 3    OSC 1 Keytrack OFF
-            // 4    OSC 2 Keytrack OFF
-            // 5    OSC 3 Keytrack Off
-            // 6    ??
-                
+                // The documentation has a "**" next to oscflags but mistakenly doesn't indicate what they are.  They are:
+                //
+	            // 0    Waveshape ON
+	            // 1    OSC 2 Sync ON
+	            // 2    OSC 3 Sync ON
+	            // 3    OSC 1 Keytrack OFF	[inverted]
+	            // 4    OSC 2 Keytrack OFF	[inverted]
+	            // 5    OSC 3 Keytrack OFF	[inverted]
+	            // 6    UNKNOWN but always set ON               
+
             byte paramMSB = (byte)0x00;
             byte paramLSB = (byte)0x18;         // OscMisc.OscFlags (p. 97)
             int val = 
@@ -1557,8 +1571,9 @@ public class MAudioVenom extends Synth
                 (model.get("osc3sync") << 2) |
                 (model.get("osc1keytrack") << 3) |              // Already flipped...
                 (model.get("osc2keytrack") << 4) |
-                (model.get("osc3keytrack") << 5);
-            
+                (model.get("osc3keytrack") << 5) |
+                0x40;								// set bit 6 to ON
+                            
             byte valMSB = (byte)(val >>> 7);
             byte valLSB = (byte)(val & 127);
             
@@ -1733,7 +1748,7 @@ public class MAudioVenom extends Synth
                 // this is doubled
                 if (data.length == 240) // it should be 239
                     {
-                	d[j] = (byte)(model.get(key));
+                    d[j] = (byte)(model.get(key));
                     d[j + 1] = d[j];
                     }
                 }   
@@ -1749,7 +1764,7 @@ public class MAudioVenom extends Synth
                 // venom can handle a proper upload if it needs this broken upload
                 if (data.length == 240)
                     {
-                    d[j] = (byte)(model.get(key) - 64);		// shift to -4 ... +4
+                    d[j] = (byte)(model.get(key) - 64);         // shift to -4 ... +4
                     }
                 else
                     {
@@ -1766,13 +1781,24 @@ public class MAudioVenom extends Synth
                 }
             else if (key.equals("oscflags"))
                 {
+                // The documentation has a "**" next to oscflags but mistakenly doesn't indicate what they are.  They are:
+                //
+	            // 0    Waveshape ON
+	            // 1    OSC 2 Sync ON
+	            // 2    OSC 3 Sync ON
+	            // 3    OSC 1 Keytrack OFF	[inverted]
+	            // 4    OSC 2 Keytrack OFF	[inverted]
+	            // 5    OSC 3 Keytrack OFF	[inverted]
+	            // 6    UNKNOWN but always set ON               
+
                 d[j] = (byte)(
                     (model.get("waveshape") << 0) | 
                     (model.get("osc2sync") << 1) |
                     (model.get("osc3sync") << 2) |
                     (model.get("osc1keytrack") << 3) |              // Already flipped...
                     (model.get("osc2keytrack") << 4) |
-                    (model.get("osc3keytrack") << 5));
+                    (model.get("osc3keytrack") << 5) |
+                    0x40);									// set bit 6 to ON
                 }
             else if (key.equals("glidemode") || key.equals("unisonmode") || key.equals("aux1mode") || 
                 key.equals("aux2mode") || key.equals("arpsrc") || key.equals("arpbipolar") || key.equals("arplatchkeys") || key.equals("arpenable"))
@@ -1815,25 +1841,278 @@ public class MAudioVenom extends Synth
         return result;
         }
 
-	public int processArpOctave(byte val)
-		{
-		System.err.println("arp octave val " + val);
-		int o = val;
-		if (o >= 60 && o <= 68)	// we're good
-			return o;
-		System.err.println("Unusual arp octave value " + o);
-		if (o >= -4 && o <= 4)
-			return 64 + o;
-		else if (o >= 124 && o <= 127)		// (-4 ... -1)
-			return (o - 128 + 64);
-		else if (o >= -128 && o <= -124)	// (0 ... 
-			return (o + 128 + 64);
-		else 
-			{
-			System.err.println("BAD unconverted arp octave value " + o);
-			return 0;
-			}
-		}
+    public int processArpOctave(byte val)
+        {
+        //System.err.println("arp octave val " + val);
+        int o = val;
+        if (o >= 60 && o <= 68) // we're good
+            return o;
+        //System.err.println("Unusual arp octave value " + o);
+        if (o >= -4 && o <= 4)
+            return 64 + o;
+        else if (o >= 124 && o <= 127)          // (-4 ... -1)
+            return (o - 128 + 64);
+        else if (o >= -128 && o <= -124)        // (0 ... 
+            return (o + 128 + 64);
+        else 
+            {
+            System.err.println("BAD unconverted arp octave value " + o);
+            return 0;
+            }
+        }
+
+
+
+    // The Venom spits out various CC and NRPN when you turn its knobs, corresponding to certain
+    // parameters.  We handle them here.
+	//
+	// The table below indicates the CC values, or in some cases NRPN values when indicated, emitted for
+	// each of the knobs and buttons on the Venom.   It's a weird assortment.  The Modulation wheel also
+	// emits but we're ignoring that of course.  Ranges are always 0-127 for CC, or 0-16383 for 14-bit CC,
+	// unless indicated otherwise.  NRPN ranges are as indicated and always MSB only.
+	//
+	//	 					 COLUMNS 
+	//			1		2		3		4		5
+	//		+----------------------------------------------------------------------------------------------------
+	//    1	|	3/35*	71		103		104		70 (range 0-6)
+	// R  2	|	50		51		30/62*	31/63*	NRPN 17D, NRPN 17E, or BOTH (MSB ONLY OFF:<=63 ON:>64) ***
+	// O  3	|	20		22		23		24		NRPN 16A (MSB ONLY OFF:<=63 ON:>64)
+	// W  4	|	73		75		79		72		126 ON vs. 127 ON **
+	// S  5	|	86		14		15		5		65
+	//    6	|	7		10		91		93		NRPN 120 (range 0-5 MSB ONLY)
+	//
+	//	 * 14-bit CC, sent as LSB and MSB, perhaps separately
+	//  ** Either 126 is sent OR 127 is sent to counter each other
+	// *** NRPN 17D is turned ON and 17E is turned OFF, or the opposite, or both on, or both off (4 possibilities)
+ 	//
+
+    public void handleSynthCCOrNRPN(Midi.CCData data)
+        {
+        boolean sendMIDI = getSendMIDI();
+        setSendMIDI(true);
+
+        if (data.type == Midi.CCDATA_TYPE_RAW_CC)
+            {
+            switch (data.number)
+                {
+                // TOP ROW
+                case 3:         // Filter cutoff Coarse
+                    {
+                    model.set("cutoff", (model.get("cutoff") % 128) + (data.value * 128));
+                    break;
+                    }
+                case 35:        // Filter cutoff fine
+                    {
+                    model.set("cutoff", ((model.get("cutoff") / 128) * 128) + data.value);
+                    break;
+                    }
+                case 71:        // Filter Resonance
+                    {
+                    model.set("resonance", data.value);
+                    break;
+                    }
+                case 103:       // Modulation Depth Node 1      [by default, this is Env2 -> Filter Cutoff]
+                    {
+                    model.set("mod1scaling", data.value);
+                    break;
+                    }
+                case 104:       // Modulation Depth Node 2      [by default, this is Keytrack -> Filter Cutoff]
+                    {
+                    model.set("mod2scaling", data.value);
+                    break;
+                    }
+                case 70:        // VCF Type
+                    {
+                    // 0 = Off
+                    // 1 = 12db LP
+                    // 2 = 12db BP
+                    // 3 = 12db HP
+                    // 4 = 24db LP
+                    // 5 = 24db BP
+                    // 6 = 24db HP
+                    if (data.value <= 6)
+                        model.set("filtertype", data.value);
+                    break;
+                    }
+                        
+                // SECOND ROW
+                case 50:                // OSC3 -> OSC 1 FM
+                    {
+                    model.set("fmlevel", data.value);
+                    break;
+                    }
+                case 51:                // OSC1 * OSC2 Ring Mod Mix Level
+                    {
+                    model.set("ringmod", data.value);
+                    break;
+                    }
+                case 30:                // OSC2 Coarse Tune?    52 = 16' 64 = 8' 72 = 4' 84 = 2'
+                    {
+                    model.set("osc2coarsetune", data.value);
+                    break;
+                    }
+                case 62:                // OSC2 Fine Tune?    0 = -0.5 semitones ... 64 = none  127 = +0.5 semitones
+                    {
+                    model.set("osc2finetune", data.value);
+                    break;
+                    }
+                case 31:                // OSC3 Coarse Tune?    52 = 16' 64 = 8' 72 = 4' 84 = 2'
+                    {
+                    model.set("osc3coarsetune", data.value);
+                    break;
+                    }
+                case 63:                // OSC3 Fine Tune?    0 = -0.5 semitones ... 64 = none  127 = +0.5 semitones
+                    {
+                    model.set("osc3finetune", data.value);
+                    break;
+                    }
+
+                // THIRD ROW
+                case 20:                // EG2 Attack?
+                    {
+                    model.set("env2attack", data.value);
+                    break;
+                    }
+                case 22:                // EG2 Decay?
+                    {
+                    model.set("env2decay", data.value);
+                    break;
+                    }
+                case 23:                // EG2 Sustain?
+                    {
+                    model.set("env2sustain", data.value);
+                    break;
+                    }
+                case 24:                // EG2 Release?  127 = release hold
+                    {
+                    model.set("env2release", data.value);
+                    break;
+                    }
+
+                // FOURTH ROW
+                case 73:                // EG1 Attack
+                    {
+                    model.set("env1attack", data.value);
+                    break;
+                    }
+                case 75:                // EG1 Decay
+                    {
+                    model.set("env1decay", data.value);
+                    break;
+                    }
+                case 79:                // EG1 Sustain
+                    {
+                    model.set("env1sustain", data.value);
+                    break;
+                    }
+                case 72:                // EG1 Release? 127 = release hold
+                    {
+                    model.set("env1release", data.value);
+                    break;
+                    }
+                case 126:               // Mono ON (poly off)
+                    {
+                    model.set("voicemode", 0);
+                    break;
+                    }
+                case 127:               // Poly ON (mono off)
+                    {
+                    model.set("voicemode", 1);
+                    break;
+                    }
+
+
+                // FIFTH ROW
+                case 86:                // LFO1 Rate 0..110, plus others
+                    {
+                    model.set("lfo1rate", data.value);
+                    break;
+                    }
+                case 14:                // LFO2 Rate
+                    {
+                    model.set("lfo2rate", data.value);
+                    break;
+                    }
+                case 15:                // LFO2 Wave            FIXME: (May have "Exponential Square", "Logarithmic Square" backwards?)
+                    {
+                    model.set("lfo2waveform", data.value);
+                    break;
+                    }
+                case 5:                 // Portamento (Glide) time
+                    {
+                    model.set("glidetime", data.value);
+                    break;
+                    }
+                case 65:                // Portamento (Glide) <= 63 off >= 64 on
+                    {
+                    model.set("glidemode", (data.value < 64 ? 0 : 1));
+                    break;
+                    }
+
+
+                // SIXTH ROW
+                case 7:                 // "Synth Track Volume" (Channel volume)
+                    {
+                    model.set("channelvolume", data.value);
+                    break;
+                    }
+                case 10:                // Pan
+                    {
+                    model.set("channelpan", data.value);
+                    break;
+                    }
+                case 91:                // "Reverb Send Level"  (AuxFX1 Send)
+                    {
+                    model.set("channelaux1send", data.value);
+                    break;
+                    }
+                case 93:                // "Delay Send Level"   (AuxFX2 Send)
+                    {
+                    model.set("channelaux2send", data.value);
+                    break;
+                    }
+                }
+            }
+        else if (data.type == Midi.CCDATA_TYPE_NRPN)
+            {
+            switch (data.number)            // COARSE ONLY
+                {
+                // SECOND ROW
+                /// FIXME TEST THIS
+                case (2 * 128 + 125):   // 17D  OSC2 Sync <=63 OFF >= 64 ON             COARSE ONLY
+                    {
+                    model.set("osc2sync", (data.value / 128 < 64 ? 0 : 1));
+                    break;
+                    }
+                /// FIXME TEST THIS
+                case (2 * 128 + 126):   // 17E  OSC3 Sync <=63 OFF >= 63 ON             COARSE ONLY
+                    {
+                    model.set("osc3sync", (data.value / 128 < 64 ? 0 : 1));
+                    break;
+                    }
+                                
+                // THIRD ROW
+                /// FIXME TEST THIS
+                case (2 * 128 + 106):   // Unison Switch <=63 OFF >= 63 ON              COARSE ONLY
+                    {
+                    model.set("unisonmode", (data.value / 128 < 64 ? 0 : 1));
+                    break;
+                    }
+                        
+                // SIXTH ROW
+                /// FIXME TEST THIS
+                case (2 * 128 + 32):    // Insert Select  0 = OFF 1 = EQ  2 = compressor 3 = wah 4 = distortion 5 = "destructive" (reducer)    COARSE ONLY
+                    {
+                    int val = data.value / 128;
+                    if (val <= 5)
+                        model.set("channelfxtype", val);
+                    break;
+                    }
+                }
+            }
+
+        setSendMIDI(sendMIDI);
+        }
 
     public int parse(byte[] data, boolean fromFile)
         {
@@ -1862,17 +2141,17 @@ public class MAudioVenom extends Synth
             
             // we're now handling this with a different set of parameters
             /*
-            if (key.equals("osc2coarsetune"))
-                {
-                // this is right after osc2waveform, which has an incorrectly repeated byte
-                // in the sysex IF the data arriving was from a specific patch rather than
-                // from the edit buffer.  So I need to skip this extra byte before continuing
-                // here.
-                if (data.length == 240) // it should be 239
-                    {
-                    j++;
-                    }
-                }
+              if (key.equals("osc2coarsetune"))
+              {
+              // this is right after osc2waveform, which has an incorrectly repeated byte
+              // in the sysex IF the data arriving was from a specific patch rather than
+              // from the edit buffer.  So I need to skip this extra byte before continuing
+              // here.
+              if (data.length == 240) // it should be 239
+              {
+              j++;
+              }
+              }
             */
             
             // no else here
@@ -1894,12 +2173,23 @@ public class MAudioVenom extends Synth
                 }
             else if (key.equals("oscflags"))
                 {
+                // The documentation has a "**" next to oscflags but mistakenly doesn't indicate what they are.  They are:
+                //
+	            // 0    Waveshape ON
+	            // 1    OSC 2 Sync ON
+	            // 2    OSC 3 Sync ON
+	            // 3    OSC 1 Keytrack OFF	[inverted]
+	            // 4    OSC 2 Keytrack OFF	[inverted]
+	            // 5    OSC 3 Keytrack OFF	[inverted]
+	            // 6    UNKNOWN but always set ON               
+
                 model.set("waveshape", (d[j] >>> 0) & 0x01);
                 model.set("osc2sync", (d[j] >>> 1) & 0x1);
                 model.set("osc3sync", (d[j] >>> 2) & 0x1);
                 model.set("osc1keytrack", (d[j] >>> 3) & 0x1);
                 model.set("osc2keytrack", (d[j] >>> 4) & 0x1);
                 model.set("osc3keytrack", (d[j] >>> 5) & 0x1);
+                // ignore bit 6, we don't know what it is
                 }
             else if (key.equals("glidemode") || key.equals("unisonmode") || key.equals("aux1mode") || 
                 key.equals("aux2mode") || key.equals("arpsrc") || key.equals("arpbipolar") || key.equals("arplatchkeys") || key.equals("arpenable"))
@@ -1948,7 +2238,7 @@ public class MAudioVenom extends Synth
             setSendMIDI(sendMIDI);
             }
 
-		//System.err.println("-->" + model.get("channelfxtype", -100));
+        //System.err.println("-->" + model.get("channelfxtype", -100));
 
         revise();
         return PARSE_SUCCEEDED;
@@ -2095,8 +2385,8 @@ tryToSendMIDI(buildPC(getChannelOut(), number));
         model.set("bank", tempModel.get("bank"));
         }
 
-    public int getPauseAfterChangePatch() { return 400; }
-    public int getPauseAfterSendAllParameters() { return 200; }
+    public int getPauseAfterChangePatch() { return 500; }                               // quite a long time
+    public int getPauseAfterSendAllParameters() { return 750; }
 
     // This is how you'd request a patch, but we're not using it because we have
     // overridden performRequestDump above.
@@ -2155,16 +2445,16 @@ tryToSendMIDI(buildPC(getChannelOut(), number));
             
         // deal with modulation amount destinations
         for(int i = 3; i < 16; i++)
-        	{
-        	if (model.get("mod" + i + "destination") == i + 17)	// can't refer to yourself
-        		model.set("mod" + i + "destination", 0);			// off
-        	for(int j = 3; j < 16; j++)
-        		{
-				if (model.get("mod" + j + "destination") == i + 17 &&	// someone is referring to you
-					model.get("mod" + i + "destination") >= 18)			// you're using a modulation destination, not legal 
-					model.set("mod" + i + "destination", 0);				// off
-        		}
-        	}
+            {
+            if (model.get("mod" + i + "destination") == i + 17)     // can't refer to yourself
+                model.set("mod" + i + "destination", 0);                        // off
+            for(int j = 3; j < 16; j++)
+                {
+                if (model.get("mod" + j + "destination") == i + 17 &&   // someone is referring to you
+                    model.get("mod" + i + "destination") >= 18)                     // you're using a modulation destination, not legal 
+                    model.set("mod" + i + "destination", 0);                                // off
+                }
+            }
         }
     
     public static String getSynthName() { return "M-Audio Venom"; }
@@ -2437,10 +2727,10 @@ tryToSendMIDI(buildPC(getChannelOut(), number));
 
 
 
-	//// When the data is 240 in size, there are two major differences.
-	//// 1. There's an extra osc2coarsetune for unknown reasons, likely a bug
-	//// 2. The mod matrix is rearranged to source/destination/scaling
-	////    rather than all the sources, then all the destinations, then all the scalings!!!
+    //// When the data is 240 in size, there are two major differences.
+    //// 1. There's an extra osc2coarsetune for unknown reasons, likely a bug
+    //// 2. The mod matrix is rearranged to source/destination/scaling
+    ////    rather than all the sources, then all the destinations, then all the scalings!!!
 
     final static String[] parameters240 = new String[]
     {
@@ -2474,7 +2764,7 @@ tryToSendMIDI(buildPC(getChannelOut(), number));
     "osc1coarsetune",
     "osc1finetune",
     "osc2waveform",
-    "-",											// ERROR, osc2waveform is repeated
+    "-",                                                                                        // ERROR, osc2waveform is repeated
     "osc2coarsetune",
     "osc2finetune",
     "boost",

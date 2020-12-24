@@ -274,9 +274,10 @@ public class MAudioVenomMulti extends Synth
                 {
                 super.update(key, model);
                 int bank = model.get("part" + part + "bank");
-                int pattern = model.get("part" + part + "program");
-                if (bank >= 0 && pattern >= 0)
-                    category.setName("Part " + part + " (" + DEFAULT_SINGLE_PATCH_NAMES[bank][pattern] + ")");
+                int program = model.get("part" + part + "program");
+                //System.err.println("part " + part + " bank = " + bank + " program = " + program);
+                if (bank >= 0 && program >= 0)
+                    category.setName("Part " + part + " (" + DEFAULT_SINGLE_PATCH_NAMES[bank][program] + ")");
                 }
             };
         vbox.add(comp);
@@ -291,9 +292,9 @@ public class MAudioVenomMulti extends Synth
                 {
                 super.update(key, model);
                 int bank = model.get("part" + part + "bank");
-                int pattern = model.get("part" + part + "program");
-                if (bank >= 0 && pattern >= 0)
-                    category.setName("Part " + part + " (" + DEFAULT_SINGLE_PATCH_NAMES[bank][pattern] + ")");
+                int program = model.get("part" + part + "program");
+                if (bank >= 0 && program >= 0)
+                    category.setName("Part " + part + " (" + DEFAULT_SINGLE_PATCH_NAMES[bank][program] + ")");
                 }
             };
         hbox.add(comp);
@@ -634,9 +635,6 @@ public class MAudioVenomMulti extends Synth
                 }
             };
         vbox.add(comp);
-        
-        comp = new CheckBox("Enable", this, "aux1mode");
-        vbox.add(comp);
         hbox.add(vbox);
 
         vbox = new VBox();
@@ -660,6 +658,9 @@ public class MAudioVenomMulti extends Synth
                 in.repaint();
                 }
             };              
+        vbox.add(comp);
+        
+        comp = new CheckBox("Enable", this, "aux1mode");
         vbox.add(comp);
 
         in.add(vbox);
@@ -729,9 +730,6 @@ public class MAudioVenomMulti extends Synth
                 }
             };
         vbox.add(comp);
-
-        comp = new CheckBox("Enable", this, "aux2mode");
-        vbox.add(comp);
         hbox.add(vbox);
         vbox = new VBox();
                 
@@ -750,6 +748,8 @@ public class MAudioVenomMulti extends Synth
                 in.repaint();
                 }
             };              
+        vbox.add(comp);
+        comp = new CheckBox("Enable", this, "aux2mode");
         vbox.add(comp);
 
         in.add(vbox);
@@ -823,7 +823,15 @@ public class MAudioVenomMulti extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Freq");
         in.add(comp);
 
-        comp = new LabelledDial("Low", this, "mastereqlowgain", color, 0, 127);
+        comp = new LabelledDial("Low", this, "mastereqlowgain", color, 0, 127)
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int value)
+                {
+                if (value <= 64) return "" + (((value - 64) * 100) / 64) + "%";
+                else return "" + (((value - 64) * 100) / 63) + "%";
+                }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Gain");
         in.add(comp);
 
@@ -831,7 +839,15 @@ public class MAudioVenomMulti extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Freq");
         in.add(comp);
 
-        comp = new LabelledDial("Mid", this, "mastereqmidgain", color, 0, 127);
+        comp = new LabelledDial("Mid", this, "mastereqmidgain", color, 0, 127)
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int value)
+                {
+                if (value <= 64) return "" + (((value - 64) * 100) / 64) + "%";
+                else return "" + (((value - 64) * 100) / 63) + "%";
+                }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Gain");
         in.add(comp);
 
@@ -839,7 +855,15 @@ public class MAudioVenomMulti extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Freq");
         in.add(comp);
 
-        comp = new LabelledDial("High", this, "mastereqhighgain", color, 0, 127);
+        comp = new LabelledDial("High", this, "mastereqhighgain", color, 0, 127)
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int value)
+                {
+                if (value <= 64) return "" + (((value - 64) * 100) / 64) + "%";
+                else return "" + (((value - 64) * 100) / 63) + "%";
+                }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Gain");
         in.add(comp);
 
@@ -1309,7 +1333,7 @@ public class MAudioVenomMulti extends Synth
                     val = 127;
                 }
 
-            System.err.println(key);
+            //System.err.println(key);
             int param = ((Integer)(parametersToIndex.get(key))).intValue();
             byte paramMSB = (byte)(param >>> 7);
             byte paramLSB = (byte)(param & 127);
@@ -1325,7 +1349,7 @@ public class MAudioVenomMulti extends Synth
                 (byte)0x21,                     // Venom 
                 (byte)DEFAULT_ID,               //(byte)getID(), 
                 (byte)0x02,                     // Write Data Dump 
-                (byte)0x09,             // Edit Multi Param
+                (byte)0x0A,             // Edit Multi Param
                 paramMSB,
                 paramLSB,
                 valMSB,                         // This is useless because the data is always 7-bit
@@ -1336,6 +1360,27 @@ public class MAudioVenomMulti extends Synth
             }
                 
         }
+
+    public int processArpOctave(byte val)
+        {
+        //System.err.println("arp octave val " + val);
+        int o = val;
+        if (o >= 60 && o <= 68) // we're good
+            return o;
+        //System.err.println("Unusual arp octave value " + o);
+        if (o >= -4 && o <= 4)
+            return 64 + o;
+        else if (o >= 124 && o <= 127)          // (-4 ... -1)
+            return (o - 128 + 64);
+        else if (o >= -128 && o <= -124)        // (0 ... 
+            return (o + 128 + 64);
+        else 
+            {
+            System.err.println("BAD unconverted arp octave value " + o);
+            return 0;
+            }
+        }
+
 
 
     
@@ -1424,9 +1469,12 @@ public class MAudioVenomMulti extends Synth
         data[4] = (byte)0x21;           // Venom
         data[5] = (byte)DEFAULT_ID;             //(byte)getID();
         data[6] = (byte)0x02;           // Write Data Dump
-        data[7] = (byte)(toWorkingMemory ? 0x00 : 0x02);
-        data[8] = (byte)(toWorkingMemory ? 0x02 : BB + 1);              // it's literally "1..2"
-        data[9] = (byte)NN;             // ignored when toWorkingMemory
+        //data[7] = (byte)(toWorkingMemory ? 0x00 : 0x02);
+        //data[8] = (byte)(toWorkingMemory ? 0x02 : BB + 1);              // it's literally "1..2"
+        //data[9] = (byte)NN;             // ignored when toWorkingMemory
+        data[7] = (byte)0x00;
+        data[8] = (byte)0x02;
+        data[9] = (byte)0x00;
         data[data.length - 1] = (byte)0xF7;     
                 
         byte[] d = new byte[parameters.length];
@@ -1542,6 +1590,8 @@ public class MAudioVenomMulti extends Synth
                 {
                 d[i] = (byte)(model.get(key));
                 }
+                
+            //System.err.println("" + i + " " + key + " " + d[i]);
             }
                                 
         // Load name
@@ -1559,6 +1609,31 @@ public class MAudioVenomMulti extends Synth
         data[data.length - 2] = checksum(data, 6, data.length - 2);             // starting at command
 
         Object[] result = new Object[] { data };
+
+        // Now we need to write properly
+        if (!toWorkingMemory)
+            {
+            result = new Object[] 
+                { 
+                data, 
+                // Issue a Store Patch
+                new byte[] 
+                    { 
+                    (byte)0xF0, 
+                    0x00,
+                    0x01,
+                    0x05, 
+                    0x21, 
+                    (byte)DEFAULT_ID, //getID(), 
+                    0x06,                       // Store Patch
+                    0x02,                                           // Multi Patch Dump
+                    (byte)(BB + 1),
+                    (byte)NN,
+                    (byte)0xF7 
+                    } 
+                };
+            }
+
         return result;
         }
 
@@ -1720,6 +1795,8 @@ public class MAudioVenomMulti extends Synth
                 {
                 model.set(key, d[i]);
                 }
+                
+            //System.err.println("" + i + " " + key + " " + d[i]);
             }
                         
                         
@@ -1861,7 +1938,7 @@ public class MAudioVenomMulti extends Synth
         return data;
         }
 
-    public int getPauseAfterChangePatch() { return 400; }
+    public int getPauseAfterChangePatch() { return 2000; }
 
     // This is how you'd request a patch, but we're not using it because we have
     // overridden performRequestDump above.

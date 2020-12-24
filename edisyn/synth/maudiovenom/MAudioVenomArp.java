@@ -1041,29 +1041,29 @@ public class MAudioVenomArp extends Synth
                 }
                         
  
- //// NOTE
- ////
- //// Gagh, the documentation on p.92-93 is very wrong when it comes to the arp pattern data.
- ////
- //// (1) The pattern byte data is transmitted in reverse order than shown: the far right byte
- ////     comes first, then the byte to its left, then the next byte to its left, and
- ////     finally the far left byte.
- ////
- //// (2) d1 and d2 are mixed up.  The correct table is:
- ////
- ////     EVENT TYPE  D1          D2
- ////     Note        Velocity    Note Num
- ////     Controller  Value       CC Num
- ////     Pitch Bend  PB MSB      PB LSB
- ////
- //// (3) NOTE and CC events are not properly described.  The correct table is:
- ////     (F1 = bit 7 of the first byte, F2 = bit 7 of the second byte)
- ////
- ////     F2 F1 EVENT TYPE
- ////     0  0  --END-- [assuming all other bits are 0]
- ////     0  1  NOTE
- ////     1  0  CONTROLLER
- ////     1  1  PITCH BEND
+            //// NOTE
+            ////
+            //// Gagh, the documentation on p.92-93 is very wrong when it comes to the arp pattern data.
+            ////
+            //// (1) The pattern byte data is transmitted in reverse order than shown: the far right byte
+            ////     comes first, then the byte to its left, then the next byte to its left, and
+            ////     finally the far left byte.
+            ////
+            //// (2) d1 and d2 are mixed up.  The correct table is:
+            ////
+            ////     EVENT TYPE  D1          D2
+            ////     Note        Velocity    Note Num
+            ////     Controller  Value       CC Num
+            ////     Pitch Bend  PB MSB      PB LSB
+            ////
+            //// (3) NOTE and CC events are not properly described.  The correct table is:
+            ////     (F1 = bit 7 of the first byte, F2 = bit 7 of the second byte)
+            ////
+            ////     F2 F1 EVENT TYPE
+            ////     0  0  --END-- [assuming all other bits are 0]
+            ////     0  1  NOTE
+            ////     1  0  CONTROLLER
+            ////     1  1  PITCH BEND
 
                     
             // Load data

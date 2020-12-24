@@ -14,7 +14,9 @@ Set Edisyn's MIDI channel to the same as your Venom.
 
 <p><b>Hints</b><br>
 
-<ul><li>When you change the Bank or the Pattern of the Arpeggiator, the title of the arpeggiator category will change to reflect the <b>default arpeggio pattern name</b>, in case that's helpful to you.  This isn't necessarily the <b>current name</b>, since you may have overwritten the arpeggio pattern.  It's just a helpful hint.
+<ul><li>Edisyn responds to changing the parameter knobs directly on the Venom.
+
+<p><li>When you change the Bank or the Pattern of the Arpeggiator, the title of the arpeggiator category will change to reflect the <b>default arpeggio pattern name</b>, in case that's helpful to you.  This isn't necessarily the <b>current name</b>, since you may have overwritten the arpeggio pattern.  It's just a helpful hint.
 
 <p><li>The LFOs, A-Mod LFO, and Aux 1 FX have Rates.  Most of the numbers are speeds 0...110.  But 
 above 110 the Rates turn into MIDI Synced rates in the form of notes.  An explanation:
@@ -38,17 +40,28 @@ above 110 the Rates turn into MIDI Synced rates in the form of notes.  An explan
 <li><b>4 B</b>&nbsp;&nbsp;&nbsp;4 Bars
 </ul>
 
+<p><li>Though you can set Modulation 1 and 2 to whatever you like, they're so closely associated with Env2 -> Filter Cutoff and Keytrack -> Filter Cutoff respectively that there are knob settings on the front panel labelled "Filter Env Amt" and "Filter Keytrack" which just modify the Modulation 1 and 2 amounts respectively.  Likely for that same reason, Modulation 1 and 2 have limited Destination options.  So it might be wise to keep Modulation 1 and 2 set to their defaults.
+
 </ul>
+
+
 
 <p><b>Gotchas</b><br>
 
 <ul>
-<li>There appear to be some unwritten rules about using Modulation1Amount ... Modulation16Amount as destinations in your modulation matrix.  Edisyn does not enforce these, but bad things may happen if you violate them.
+
+<li>The final four LFO waveforms (Log Square, Exp Square, Log Up Saw, Exp Up Saw) cannot be changed in real-time: you have to send or write the entire patch for the to take effect.
+
+<p><li>There appear to be some unwritten rules about using Mod1Amount ... Mod16Amount as destinations in your modulation matrix.  
 <ol>
-<li>A slot cannot have itself as a destination (so slot 5 can't have Modulation5Amount as its destination).
-<li>If a slot is presently serving as a destination, it cannot use Modulation1Amount ... Modulation16Amount.  For example, if slot 5 has Modulation6Amount as its destination, then slot 6 cannot use these as its destinations.
-<li>Slots 1 and 2 can't have them as destinations at all.
+<li>A slot cannot have itself as a destination (so slot 5 can't have Mod5Amount as its destination).
+<p><li>If a slot is presently serving as a destination of another slot, it cannot use Mod1Amount ... Mod16Amount.  For example, if slot 5 has Mod6Amount as its destination, then slot 6 cannot use these as its destinations.
+<p><li>Slots 1 and 2 can't have them as destinations at all.
 </ol>
+
+Edisyn does not enforce these, though it tries to not violate them on mutation/recombination and randomization.  It's up to you to not manually break these rules.
+
+<p><li>It appears you can't change arpeggiator parameters in real time unless you have first done a Send to Current Patch (or maybe Write To Patch...) first once.
 
 <p><li>If you set the Arpeggiator Source Pattern, you can't set any parameters except Enable (and the Bank and Pattern Number).  If you want to see the underlying pattern, just click "Show Arp".
 
@@ -60,14 +73,22 @@ above 110 the Rates turn into MIDI Synced rates in the form of notes.  An explan
 
 <p><li>Changing patches takes quite a long time (about a half second).
 
+<p><li>Also uploading a new patch takes a long time (about 3/4 second).  This will make morphing and hill-climbing painful.
+
 <p><li>The Venom's sysex documentation indicates that you can set the Venom's Synth ID.  But to my knowledge this does not actually exist.  If it does, please let me know.  By default Edisyn is hard-coded to use 0.
 
 
 
 </ul>
 
-<p>Thanks to Jan Bote for his assistance and knowledge.
 
+<p><b>Note to Vyzex Users</b><br>
+Edisyn is a general-purpose patch editor tool and so its approach is designed to accommodate a wide range of synthesizers.  Vyzex is designed for a single synthesizer, and so it is highly customized for that purpose in ways Edisyn cannot be.  You may have noticed that Edisyn's Venom editor launches immediately, while Vyzex spends a long time loading every single patch from your Venom.  This is because Vyzex stays in sync with your Venom, while Edisyn does not.  As a result the Vyzex can do several things Edisyn cannot.  First, Vyzex acts as a librarian, but Edisyn is just a plain-jane patch editor.  Second, for related reasons, Vyzex tells you exactly which multi-patches depend on the single patch you're overwriting, and can display all the patches at once.  Third, because it knows about all your patches together, Vyzex can dive down into single patches or arpeggio headers to allow you to change portions them from a multi-patch.  This is a confusing and very bad idea, so it's good Edisyn can't do that.  Edisyn can load the single patches or arpeggios associated with a multi-patch so you can edit them separately.
+
+<p>So why use Edisyn instead of Vyzex?  Partly because Vyzex will very soon be obsoleted and impossible to run.  And besides fixing some bad Vyzex errors, Edisyn <i>can</i> do one major thing Vyzex (and M-Audio's installed software) cannot: directly edit arpeggios.
+
+
+<p>Thanks to Jan Bote <jan.bote@gmx.de> for his assistance and knowledge.
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

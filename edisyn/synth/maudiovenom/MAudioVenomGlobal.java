@@ -532,7 +532,7 @@ public class MAudioVenomGlobal extends Synth
                 d[i] = (byte)(model.get("mastertempo") & 255);
                 }
             else if (key.equals("midisingleselect") || key.equals("midimultiselect") || key.equals("usbrecord") || 
-            		key.equals("monorecord") || key.equals("localmode") || key.equals("arpeggiatorroute"))
+                key.equals("monorecord") || key.equals("localmode") || key.equals("arpeggiatorroute"))
                 {
                 d[i] = (byte)(model.get(key) == 0 ? 0 : 127);
                 }

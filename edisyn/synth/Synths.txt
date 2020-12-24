@@ -38,6 +38,7 @@ edisyn.synth.rolandjv880.RolandJV880Multi	Roland JV-80/880 [Multi]
 edisyn.synth.waldorfblofeld.WaldorfBlofeld	Waldorf Blofeld
 edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti	Waldorf Blofeld [Multi]
 edisyn.synth.waldorfkyra.WaldorfKyra	Waldorf Kyra
+edisyn.synth.waldorfkyra.WaldorfKyraMulti	Waldorf Kyra [Multi]
 edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT	Waldorf Microwave II/XT/XTk
 edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti	Waldorf Microwave II/XT/XTk [Multi]
 edisyn.synth.yamaha4op.Yamaha4Op	Yamaha 4-Op FM

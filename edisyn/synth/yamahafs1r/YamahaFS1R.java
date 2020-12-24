@@ -3021,7 +3021,8 @@ public class YamahaFS1R extends Synth
                     }
                 else
                     {
-                    Synth.handleException(new Throwable());
+                    //System.err.println("Um... " + baseKey);
+//                    Synth.handleException(new Throwable());
                     return -1;
                     }
                 }
@@ -3039,7 +3040,8 @@ public class YamahaFS1R extends Synth
                     }
                 else
                     {
-                    return -1;
+                     //System.err.println("Um... " + baseKey);
+                   return -1;
                     }
                 }
             else if (baseKey.equals("keysync") || baseKey.equals("transpose"))

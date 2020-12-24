@@ -34,7 +34,7 @@ public class WaldorfKyraMultiRec extends Recognize
                 (data[4] == 0x01 || data[4] == 0x41)) ||             // "Multi (whole 8 parts)" -- it's not clear why these are different
         
             //      multi name, which for some insane reason is not part of the patch
-                (data.length == 22 + 10 &&
+                (data.length == 16 + 10 &&
                 data[0] == (byte)0xF0 &&
                 data[1] == 0x3E &&
                 data[2] == 0x22 &&

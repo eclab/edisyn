@@ -285,14 +285,11 @@ public class WaldorfKyra extends Synth
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-        hbox = new HBox();
-        hbox.add(addFilters(Style.COLOR_A()));
-        hbox.addLast(addVCA(Style.COLOR_B()));
-        vbox.add(hbox);
+        vbox.add(addFilters(Style.COLOR_A()));
         vbox.add(addFilter(1, Style.COLOR_A()));
         vbox.add(addFilter(2, Style.COLOR_A()));
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Filters, VCA", soundPanel);
+        addTab("Filters", soundPanel);
         
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
@@ -330,6 +327,7 @@ public class WaldorfKyra extends Synth
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
+        vbox.add(addVCA(Style.COLOR_B()));
         hbox.add(addEq(Style.COLOR_A()));
         hbox.addLast(addFormant(Style.COLOR_B()));
         vbox.add(hbox);
@@ -342,7 +340,7 @@ public class WaldorfKyra extends Synth
         vbox.add(addReverb(Style.COLOR_A()));
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Effects", soundPanel);
+        addTab("VCA, Effects", soundPanel);
 
         model.set("bank", 0);
         model.set("number", 0);
@@ -677,6 +675,7 @@ public class WaldorfKyra extends Synth
     public JComponent addOscillator(final int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
+		category.makePasteable("osc" + osc);
 
         JComponent comp;
         String[] params;
@@ -730,7 +729,7 @@ public class WaldorfKyra extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Pitch");
         hbox.add(comp);
 
-        comp = new LabelledDial("LFO 2 to", this, "osc" + osc + "lfo1topitch", color, 0, 127);
+        comp = new LabelledDial("LFO 2 to", this, "osc" + osc + "lfo2topulsewidth", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Pulse Width");
         hbox.add(comp);
 
@@ -802,6 +801,7 @@ public class WaldorfKyra extends Synth
     public JComponent addFilter(int filter, Color color)
         {
         Category category = new Category(this, "Filter " + filter, color);
+		category.makePasteable("filter" + filter);
 
         JComponent comp;
         String[] params;
@@ -866,6 +866,7 @@ public class WaldorfKyra extends Synth
     public JComponent addEnvelope(int env, Color color)
         {
         Category category = new Category(this, "Envelope " + env + (env == 1 ? " (Amplifier)" : (env == 2 ? " (Filter)" : " (Aux)")), color);
+		category.makePasteable("eg" + env);
 
         JComponent comp;
         String[] params;
@@ -936,6 +937,7 @@ public class WaldorfKyra extends Synth
     public JComponent addLFO(int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
+		category.makePasteable("lfo" + lfo);
 
         JComponent comp;
         String[] params;
@@ -990,6 +992,7 @@ public class WaldorfKyra extends Synth
     public JComponent addModMatrix(int mod, Color color)
         {
         Category category = new Category(this, "Slot " + (mod + 1), color);
+		category.makePasteable("modmat" + mod);
 
         JComponent comp;
         String[] params;
@@ -1058,6 +1061,9 @@ public class WaldorfKyra extends Synth
         comp = new LabelledDial("Mod Speed", this, "fxphasermodspeed", color, 0, 127);
         hbox.add(comp);
 
+        comp = new LabelledDial("Mod Depth", this, "fxphasermoddepth", color, 0, 127);
+        hbox.add(comp);
+
         comp = new LabelledDial("Feedback", this, "fxphaserfeedback", color, 0, 127);
         hbox.add(comp);
 
@@ -1106,10 +1112,10 @@ public class WaldorfKyra extends Synth
             };
         hbox.add(comp);
 
-        comp = new LabelledDial("Feedback", this, "fxddlfeedback", color, 0, 127);
+        comp = new LabelledDial("Color", this, "fxddlcolor", color, 0, 127);
         hbox.add(comp);
 
-        comp = new LabelledDial("Color", this, "fxddlcolor", color, 0, 127);
+        comp = new LabelledDial("Feedback", this, "fxddlfeedback", color, 0, 127);
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -1137,13 +1143,13 @@ public class WaldorfKyra extends Synth
         comp = new LabelledDial("Delay Time", this, "fxmdfxdelaytime", color, 0, 127);          // "Delay"?
         hbox.add(comp);
 
-        comp = new LabelledDial("Feedback", this, "fxmdfxfeedback", color, 0, 3);
-        hbox.add(comp);
-
         comp = new LabelledDial("Mod Speed", this, "fxmdfxmodspeed", color, 0, 127);
         hbox.add(comp);
 
         comp = new LabelledDial("Mod Depth", this, "fxmdfxmoddepth", color, 0, 127);
+        hbox.add(comp);
+
+        comp = new LabelledDial("Feedback", this, "fxmdfxfeedback", color, 0, 127);
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -1341,7 +1347,7 @@ public class WaldorfKyra extends Synth
 
     public JComponent addVCA(Color color)
         {
-        Category category = new Category(this, "Amplifier", color);
+        Category category = new Category(this, "Amplifier / Limiter", color);
 
         JComponent comp;
         String[] params;
@@ -1352,10 +1358,6 @@ public class WaldorfKyra extends Synth
         comp = new Chooser("Limiter Curve", this, "fxlimitermode", params);             // this is the same as VCA Saturator Mode
         vbox.add(comp);
         hbox.add(vbox);
-
-//// FIXME: I this VCA Velocity Scaling?
-        comp = new LabelledDial("Drive", this, "vcadrive", color, 0, 127);
-        hbox.add(comp);
 
         comp = new LabelledDial("Pan", this, "vcapan", color, 0, 127)
             {
@@ -1501,8 +1503,11 @@ public class WaldorfKyra extends Synth
     public Object[] emitAll(String key)
         {
         int part = 0;           // Maybe customize for different parts?
-
-        if (key.equals("name"))
+		if (key.equals("-") || key.equals("bank") || key.equals("number"))
+			{
+			return new Object[0];		// do nothing
+			}
+        else if (key.equals("name"))
             {
             String val = model.get(key, "") + "                      ";
 
@@ -1656,13 +1661,17 @@ public class WaldorfKyra extends Synth
         data[7] = (byte)NN;
 
         // magic and version
-        data[8] = (byte)0;                              // What's the magic number?
-        data[9] = (byte)0;                              // What's the version number?
+        data[8] = (byte)0x2e;                              // magic number?
+        data[9] = (byte)0x00;                              // version number?
         
         // handle non-name parameters
         for(int i = 2; i < 202; i++)
             {
-            if (parameters[i].equals("osc1wavetablegroup"))
+            if (parameters[i].equals("-"))
+            	{
+            	data[i + 8] = 0; // do nothing
+            	}
+            else if (parameters[i].equals("osc1wavetablegroup"))
             	{
             	data[i + 8] = (byte)(waveToGroup(model.get("osc1wave")));
             	}
@@ -1713,8 +1722,7 @@ public class WaldorfKyra extends Synth
 
     public int parse(byte[] data, boolean fromFile)
         {
-        if (data[6] != 0x7F &&
-            data[7] != 0x7F)
+        if (data[6] != 0x7F)
             {
             model.set("bank", data[6]);
             model.set("number", data[7]);
@@ -1724,7 +1732,11 @@ public class WaldorfKyra extends Synth
         int group = 0;
         for(int i = 2; i < 202; i++)
             {
-            if (parameters[i].equals("osc1wavetablegroup") || parameters[i].equals("osc2wavetablegroup"))		// group is before number
+            if (parameters[i].equals("-"))
+            	{
+            	// do nothing
+            	}
+			else if (parameters[i].equals("osc1wavetablegroup") || parameters[i].equals("osc2wavetablegroup"))		// group is before number
             	{
             	group = data[i + 8];
             	}
@@ -1803,7 +1815,7 @@ public class WaldorfKyra extends Synth
     "osc1lfo1topitch",
     "osc1lfo2topulsewidth",
     "osc1fmamount",
-    "spare01",
+    "-",									// spare01
     "auxoscillatormode",
     "osc2coarsetune",
     "osc2detune",
@@ -1830,7 +1842,7 @@ public class WaldorfKyra extends Synth
     "filter1lfo3tofreq",
     "filter1keyfollowkey",
     "filter1keyfollowamt",
-    "vcadrive",
+    "-",									// VCA Drive: this was never implemented			
     "fxlimitermode",                                            // this is called PATCH_PARAM_VCA_SATURATOR_MODE 
     "vcapan",
     "vcalfo1toamp",
@@ -1844,7 +1856,7 @@ public class WaldorfKyra extends Synth
     "eg1decay",
     "eg1sustain",
     "eg1release",
-    "spare02",
+    "-",							//"spare02",
     "eg2attack",
     "eg2decay",
     "eg2sustain",
@@ -1874,7 +1886,7 @@ public class WaldorfKyra extends Synth
     "lfo3timesource",
     "lfo1delay",
     "lfo2delay",
-    "spare07",
+    "-",												// spare07
     "modmat0source",
     "modmat0destination0",
     "modmat0amount0",
@@ -1926,10 +1938,10 @@ public class WaldorfKyra extends Synth
     "fxphaserfeedback",
     "fxphasermix",
     "fxphaserwaveshape",
-    "spare12",
-    "spare13",
-    "spare14",
-    "spare15",
+    "-",					// "spare12",
+    "-", 					// "spare13",
+    "-", 					// "spare14",
+    "-", 					// "spare15",
     "fxddltype",
     "fxddldelaytime",
     "fxddlfeedback",
@@ -1937,18 +1949,18 @@ public class WaldorfKyra extends Synth
     "fxddlcolor",
     "fxddlclocksource",
     "fxddlclockbeat",
-    "spare16",
-    "spare17",
-    "spare18",
+    "-", 					// "spare16",
+    "-", 					// "spare17",
+    "-", 					// "spare18",
     "fxmdfxdelaytime",
     "fxmdfxdelayscale",
     "fxmdfxfeedback",
     "fxmdfxmodspeed",
     "fxmdfxmoddepth",
     "fxmdfxmix",
-    "spare19",
-    "spare20",
-    "spare21",
+    "-", 					// "spare19",
+    "-", 					// "spare20",
+    "-", 					// "spare21",
     "dualmodedetune",
     "fxreverbpredelay",
     "fxreverbrt60",                                                 // This is actually reverb time

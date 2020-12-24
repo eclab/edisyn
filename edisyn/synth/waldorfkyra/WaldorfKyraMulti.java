@@ -60,13 +60,44 @@ public class WaldorfKyraMulti extends Synth
         addTab("Parts 5-8", soundPanel);
         
         model.set("number", 0);
-        model.set("name", "Untitled");
+        model.set("name", "Default Multi");
 
         loadDefaults();        
         }
                 
     public String getDefaultResourceFileName() { return "WaldorfKyraMulti.init"; }
     public String getHTMLResourceFileName() { return "WaldorfKyraMulti.html"; }
+
+    public boolean gatherPatchInfo(String title, Model change, boolean writing)
+        {
+        JTextField number = new JTextField("" + model.get("number"), 3);
+                
+        while(true)
+            {
+            boolean result = showMultiOption(this, new String[] {"Patch Number"}, 
+                new JComponent[] { number }, title, "Enter the Patch number.");
+                
+            if (result == false) 
+                return false;
+                                
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 0 ... 127");
+                continue;
+                }
+            if (n < 0 || n > 127)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 0 ... 127");
+                continue;
+                }
+                                
+            change.set("number", n);
+                        
+            return true;
+            }
+        }
 
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
@@ -84,7 +115,7 @@ public class WaldorfKyraMulti extends Synth
  
         vbox.add(hbox);
         
-        comp = new StringComponent("Patch Name", this, "name", 22, "Name must be up to 22 ASCII characters.")
+        comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
             public String replace(String val)
                 {
@@ -103,9 +134,9 @@ public class WaldorfKyraMulti extends Synth
         return globalCategory;
         }
 
-    public String getPatchName(Model model) { return model.get("name", "Untitled"); }
+    public String getPatchName(Model model) { return model.get("name", "Default Multi"); }
 
-    public static final int MAXIMUM_NAME_LENGTH = 22;
+    public static final int MAXIMUM_NAME_LENGTH = 16;
     public String revisePatchName(String name)
         {
         name = super.revisePatchName(name);  // trim first time
@@ -129,7 +160,7 @@ public class WaldorfKyraMulti extends Synth
         // check the easy stuff -- out of range parameters
         super.revise();
         
-        String nm = model.get("name", "Untitled");
+        String nm = model.get("name", "Default Multi");
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
@@ -140,6 +171,7 @@ public class WaldorfKyraMulti extends Synth
     public JComponent addPart(int part, Color color)
         {
         Category category = new Category(this, "Part " + part, color);
+		category.makePasteable("part" + part);
 
         JComponent comp;
         String[] params;
@@ -405,6 +437,9 @@ public class WaldorfKyraMulti extends Synth
 
         int NN = tempModel.get("number", 0);
         
+        // We need to set the model number because responses don't include it.  :-(
+        model.set("number", NN);
+        
         byte[] data = new byte[9];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x3e;
@@ -412,7 +447,7 @@ public class WaldorfKyraMulti extends Synth
         data[3] = (byte)getID();
         data[4] = (byte)0x21;                   // Request Multi (8 parts)
         data[5] = (byte)0x01;                   // Current Version
-        data[6] = (byte)0x01;                   // MSB > 0x00 is the edit buffer
+        data[6] = (byte)0x00;                   // MSB > 0x00 is the edit buffer
         data[7] = (byte)NN;
         data[8] = (byte)0xF7;
         return data;
@@ -420,6 +455,7 @@ public class WaldorfKyraMulti extends Synth
 
     int getPart(String key)
         {
+        //System.err.println(key);
         int param = ((Integer)parametersToIndex.get(key)).intValue();
         return param / 16;
         }
@@ -432,11 +468,15 @@ public class WaldorfKyraMulti extends Synth
 
     public Object[] emitAll(String key)
         {
-        if (key.equals("name"))
+		if (key.equals("-") || key.equals("bank") || key.equals("number"))
+			{
+			return new Object[0];		// do nothing
+			}
+        else if (key.equals("name"))
             {
             String val = model.get(key, "") + "                      ";
 
-            byte[] data = new byte[10 + 22];
+            byte[] data = new byte[10 + 16];
             data[0] = (byte)0xF0;
             data[1] = (byte)0x3e;
             data[2] = (byte)0x22;
@@ -446,7 +486,7 @@ public class WaldorfKyraMulti extends Synth
             data[6] = (byte)0x7f;           // MSB > 0x00 is the edit buffer
             data[7] = (byte)0x7f;           // ignored when using the edit buffer
                 
-            for(int j = 0; j < 22; j++)
+            for(int j = 0; j < 16; j++)
                 {
                 data[j + 8] = (byte)(val.charAt(j) & 127);
                 }
@@ -484,9 +524,9 @@ public class WaldorfKyraMulti extends Synth
         if (tempModel == null)
             tempModel = getModel();
                 
-        byte BB = (byte) tempModel.get("bank");
         byte NN = (byte) tempModel.get("number");
-        if (toWorkingMemory) { BB = 0x7F; NN = 0x7F; }  // current bank, current part?
+        byte BB = (byte) 0;		// Stored patch
+        if (toWorkingMemory) { BB = 0x7F; }		// > 0 is edit buffer
 
         byte[] data = new byte[128 + 10];
         data[0] = (byte)0xF0;
@@ -517,7 +557,7 @@ public class WaldorfKyraMulti extends Synth
         
         String val = model.get("name", "") + "                      ";
 
-        byte[] data2 = new byte[10 + 22];
+        byte[] data2 = new byte[10 + 16];
         data2[0] = (byte)0xF0;
         data2[1] = (byte)0x3e;
         data2[2] = (byte)0x22;
@@ -527,7 +567,7 @@ public class WaldorfKyraMulti extends Synth
         data2[6] = (byte)BB;
         data2[7] = (byte)NN;
 
-        for(int j = 0; j < 22; j++)
+        for(int j = 0; j < 16; j++)
             {
             data2[j + 8] = (byte)(val.charAt(j) & 127);
             }
@@ -548,12 +588,12 @@ public class WaldorfKyraMulti extends Synth
     public int parse(byte[] data, boolean fromFile)
         {
         // There are potentially two sysex messages in a file, so we break it up and parse both of 'em
-        
+        //System.err.println("from file " + fromFile);
         byte[][] cutup = cutUpSysex(data);
         int result = PARSE_FAILED;
 		for(int i = 0; i < cutup.length; i++)
 			{
-			int res = subparse(data, fromFile);
+			int res = subparse(cutup[i], fromFile);
 			if (res == PARSE_SUCCEEDED_UNTITLED && result == PARSE_FAILED)
 				result = PARSE_SUCCEEDED_UNTITLED;
 			else if (res == PARSE_SUCCEEDED) 
@@ -569,10 +609,8 @@ public class WaldorfKyraMulti extends Synth
             {
             // main data
   
-            if (data[6] != 0x7F &&
-                data[7] != 0x7F)
+            if (data[6] != 0x7F)
                 {
-                model.set("bank", data[6]);
                 model.set("number", data[7]);
                 }
 
@@ -584,42 +622,40 @@ public class WaldorfKyraMulti extends Synth
                         
             // Send request for name
                 
-            if (!fromFile && (currentDump || data[6] == 0x7F || data[7] == 0x7F))           // FIXME: maybe we don't need the current dump?  Just rely on data[6] or data[7]?
-                {
-                byte[] d = new byte[9];
-                d[0] = (byte)0xF0;
-                d[1] = (byte)0x3e;
-                d[2] = (byte)0x22;
-                d[3] = (byte)getID();
-                d[4] = (byte)0x39;                      // Request Multi Name
-                d[5] = (byte)0x01;                      // Current Version
-                d[6] = (byte)0x7f;           // MSB > 0x00 is the edit buffer
-                d[7] = (byte)0x7f;           // ignored when loading the edit buffer
-                d[8] = (byte)0xF7;
-                tryToSendSysex(d);
-                }
-            else
-                {
-                int NN = model.get("number", 0);
-                byte[] d = new byte[9];
-                d[0] = (byte)0xF0;
-                d[1] = (byte)0x3e;
-                d[2] = (byte)0x22;
-                d[3] = (byte)getID();
-                d[4] = (byte)0x21;                      // Request Multi (8 parts)
-                d[5] = (byte)0x01;                      // Current Version
-                d[6] = (byte)0x01;                      // MSB > 0x00 is the edit buffer
-                d[7] = (byte)NN;
-                d[8] = (byte)0xF7;
-                tryToSendSysex(d);
-                }
+            if (!fromFile)
+            	{
+				byte[] d = new byte[9];
+				d[0] = (byte)0xF0;
+				d[1] = (byte)0x3e;
+				d[2] = (byte)0x22;
+				d[3] = (byte)getID();
+				if (currentDump || data[6] == 0x7F || data[7] == 0x7F)           // FIXME: maybe we don't need the current dump?  Just rely on data[6] or data[7]?
+					{
+					d[4] = (byte)0x39;                      // Request Multi Name
+					d[5] = (byte)0x01;                      // Current Version
+					d[6] = (byte)0x7f;           // MSB > 0x00 is the edit buffer
+					d[7] = (byte)0x7f;           // ignored when loading the edit buffer
+					}
+				else
+					{
+					d[4] = (byte)0x39;                      // Request Multi Name
+					d[5] = (byte)0x01;                      // Current Version
+					d[6] = (byte)0x00;                      // MSB > 0x00 is the edit buffer
+					d[7] = (byte)(model.get("number", 0));
+					}
+				d[8] = (byte)0xF7;
+				boolean val = getSendMIDI();
+				setSendMIDI(true);
+				tryToSendSysex(d);
+				setSendMIDI(val);
+				}
             return PARSE_SUCCEEDED_UNTITLED;     
             }
         else
             {
             // handle name
-            char[] name = new char[22];
-            for(int i = 0; i < 22; i++)
+            char[] name = new char[16];
+            for(int i = 0; i < 16; i++)
                 {
                 name[i] = (char)(data[i + 8] & 127);
                 }

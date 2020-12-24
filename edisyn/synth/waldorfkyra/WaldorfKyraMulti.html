@@ -1,0 +1,43 @@
+<html><head></head><body bgcolor='black'>
+<font color='white'>
+<h1>Waldorf Kyra</h1> 
+<h2>Multimode Patch Editor</h2>
+
+<p><b>Communicating with Edisyn</b><br> 
+Set "Multi program change" to "Enabled".  Set Edisyn's MIDI channel to the same your Kyra's "Multi program channel" (typically 16). If you do not do this, then Edisyn's requests will result in Single-mode patch changes instead of multi-mode changes.  That will be very confusing.  Also set Edisyn's Synth ID to your Kyra's "MIDI SysEx device ID": typically 17.  
+
+<ul>
+<li>
+To communicate with your Kyra over USB, make sure that "Receive MIDI Program" is "USB" or "MIDI+USB".  You might also wish to set "Send manual dumps to" "USB".
+
+<p><li>To communicate with your Kyra over 5-pin DIN MIDI, make sure that "Receive MIDI Program" is "MIDI" or "MIDI+USB".  You might also wish to set "Send manual dumps to" "MIDI".
+</ul>
+
+<p><b>Hints</b><br>
+
+<ul>
+<li>You can display the Single patch associated with a given Part by clicking on Edisyn's "Show" button for that part.  But remember that may want to set its MIDI channel to the MIDI channel associated with the part, or else Edisyn will modify some default perhaps MIDI channel 0).
+</ul>
+
+<p><b>Gotchas</b><br>
+
+<ul>
+
+<li>Sadly the Kyra does not send out sysex or CC in response to changing knobs, so Edisyn won't get updated if you do that.
+
+<p><li>When Edisyn writes a patch to the Kyra, the Krya may not update the screen to reflect this change.
+
+<p><li>When Edisyn writes a parameter to the Kyra, you won't see that parameter updated unless you're looking at its page in the Kyra's screen.
+</ul>
+
+
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>December 25, 2020
+</table>
+

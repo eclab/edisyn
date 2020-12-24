@@ -229,6 +229,28 @@ public class StringUtility
         return sb.toString();
         }
 
+	public static String rightTrim(String str)
+		{
+		int i = str.length() - 1;
+		while (i >= 0 && Character.isWhitespace(str.charAt(i))) 
+			{
+		    i = i - 1;
+			}
+		return str.substring(0, i + 1);
+		}
+			
 
+	/** Shuffles keys randomly in place and returns it using Fisher-Yates */
+	public static String[] shuffle(String[] keys, Random random)
+		{
+		for(int i = keys.length - 1; i > 0; i--)	// don't include i = 0
+			{
+			int j = random.nextInt(i + 1);		// include j = i
+			String temp = keys[i];
+			keys[i] = keys[j];
+			keys[j] = temp;
+			}
+		return keys;
+		}
     }
 

@@ -372,14 +372,16 @@ public class HillClimb extends SynthPanel
         if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
             doItems[2].setEnabled(false);
 
-        doItems[3] = new JMenuItem("Load from File");
+        doItems[3] = new JMenuItem("Load from File...");
         doItems[3].addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
                 Model backup = synth.model;
                 synth.model = currentModels[_i];
+                synth.setShowingLimitedBankSysex(true);
                 synth.doOpen(false);
+                synth.setShowingLimitedBankSysex(false);
                 currentModels[_i] = synth.model;
                 synth.model = backup;
                 synth.updateTitle();

@@ -400,13 +400,45 @@ public class Model implements Cloneable
     /** Returns all the keys in the model as an array, except the hidden ones. */        
     public String[] getKeys()
         {
+        /*
         String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
         ArrayList revisedKeys = new ArrayList<String>();
         for(int i = 0; i < keyset.length; i++)
             if (getStatus(keyset[i]) != STATUS_RESTRICTED)
                 revisedKeys.add(keyset[i]);
         return (String[])(revisedKeys.toArray(new String[0]));
+        */
+        return getDifferentKeys(null);
         }
+        
+    /** Returns all the keys in the model as an array, except the hidden ones,
+    	which are different from the ones in the other model. If other model
+    	is null, all keys are returned.  */        
+    public String[] getDifferentKeys(Model other)
+        {
+        String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
+        ArrayList revisedKeys = new ArrayList<String>();
+        for(int i = 0; i < keyset.length; i++)
+            if (getStatus(keyset[i]) != STATUS_RESTRICTED)
+            	{
+            	if (other == null || (!keyEquals(keyset[i], other)))
+               		revisedKeys.add(keyset[i]);
+               	}
+        return (String[])(revisedKeys.toArray(new String[0]));
+        }
+        
+ 
+ 	public boolean keyEquals(String key, Model other)
+ 		{
+ 		if (isString(key))
+ 			{
+ 			return get(key, "").equals(other.get(key, ""));
+ 			}
+ 		else
+ 			{
+ 			return get(key, -1) == other.get(key, -1);
+ 			}
+ 		}
  
     /** Returns the value associated with this
         (String) key, or ifDoesntExist if there is no such value. */        
@@ -1293,11 +1325,11 @@ public class Model implements Cloneable
         }
     
     public static final int CATEGORICAL_STRATEGY_MORPH = -3;
-    public static final int CATEGORICAL_STRATEGY_DEFAULT = -2;
-    public static final int CATEGORICAL_STRATEGY_STRONGEST = -1;
+    public static final int CATEGORICAL_STRATEGY_STRONGEST = -2;
+    public static final int CATEGORICAL_STRATEGY_DEFAULT = -1;
     
     /** This recombiner is meant to be used over and over on the same model to gradually nudge it towards
-        certaiin models.  If you had just two models, it'd be more or less like this:
+        certain models.  If you had just two models, it'd be more or less like this:
         
         <pre>
         If (weight == previousWeight)
@@ -1467,17 +1499,19 @@ if (nothingChanged) return this;
                     if (categoricalStrategy == CATEGORICAL_STRATEGY_MORPH)
                         {
                         // If we're moving towards this model rather than away from it (model only gets a chance if we're moving towards it)
-                        if (sorts[j].weight >= sorts[j].previousWeight)
+                        if (sorts[j].weight > sorts[j].previousWeight || sorts[j].weight == 1.0)
                             {
+                            //System.err.println("Towards " + sorts[j].model.get("name", "--") + " " + sorts[j].weight + " " + sorts[j].previousWeight);
                             // If the model has a different value than our value.  In this case it MIGHT change it.  Otherwise it LOCKS it.
                             if (sorts[j].model.get(keys[i]) != get(keys[i]))
                                 {
                                 // Which mutator do we use?  Do a coin toss under the weight squared, so we usually do mutator b when further away 
-                                if (coinToss(random, sorts[j].weight * sorts[j].weight * sorts[j].weight))              // right now we're doing p^a with a = 3
+                                if (coinToss(random, sorts[j].weight * sorts[j].weight * sorts[j].weight * sorts[j].weight))              // right now we're doing p^4
                                     {
                                     // mutator a -- just mutate with weight probability
                                     if (coinToss(random, sorts[j].weight))
                                         {
+                                        //System.err.println("A Updating " + keys[i] + " to " + j);
                                         set(keys[i], reviseMutatedValue(keys[i], get(keys[i]), sorts[j].model.get(keys[i])));
                                         continue keys_label;            // lock down -- nobody else gets a chance to change this
                                         }
@@ -1488,9 +1522,10 @@ if (nothingChanged) return this;
                                     }       
                                 else
                                     {
-                                    // mutator b -- mutate by the differnce between the weight and previous weight so small moves don't have much effect
+                                    // mutator b -- mutate by the difference between the weight and previous weight so small moves don't have much effect
                                     if (coinToss(random, sorts[j].weight - sorts[j].previousWeight))
                                         {
+                                        //System.err.println("B Updating " + keys[i]);
                                         set(keys[i], reviseMutatedValue(keys[i], get(keys[i]), sorts[j].model.get(keys[i])));
                                         continue keys_label;            // lock down -- nobody else gets a chance to change this
                                         }
@@ -1512,13 +1547,13 @@ if (nothingChanged) return this;
                             }
                         }
                     // handle other categorical strategies
-                    else if (categoricalStrategy == CATEGORICAL_STRATEGY_DEFAULT)
-                        {
-                        set(keys[i], reviseMutatedValue(keys[i], get(keys[i]), categoricalDefaultModel.get(keys[i])));
-                        }
                     else if (categoricalStrategy == CATEGORICAL_STRATEGY_STRONGEST)
                         {
                         set(keys[i], reviseMutatedValue(keys[i], get(keys[i]), sorts[0].model.get(keys[i])));
+                        }
+                    else if (categoricalStrategy == CATEGORICAL_STRATEGY_DEFAULT)
+                        {
+                        set(keys[i], reviseMutatedValue(keys[i], get(keys[i]), categoricalDefaultModel.get(keys[i])));
                         }
                     else
                         {
@@ -1534,6 +1569,11 @@ if (nothingChanged) return this;
             undoListener.setWillPush(true);
             }
         
+        for(int i = 0; i < weights.length; i++)
+            {
+            previousWeights[i] = weights[i];
+            }
+
         return this;
         }
 

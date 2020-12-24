@@ -54,6 +54,8 @@ public abstract class Synth extends JComponent implements Updatable
     protected Random random;
     // The file associated with the synth
     File file;
+    // Any file the synth may have been loaded from which isn't the primary file (such as a bank or bulk file)
+    File auxFile;
     /** Returns the current file associated with this synth. */
     public File getFile() { return file; }
     
@@ -2034,6 +2036,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 ccdata.number += CCMap.NRPN_OFFSET;
                 }
+                
             if (learning)
                 {
                 String key = model.getLastKey();
@@ -2050,6 +2053,10 @@ public abstract class Synth extends JComponent implements Updatable
                     setLearningCC(false);
                     }
                 }
+            else if (tabs.getSelectedComponent() == morphPane)
+            	{
+            	morph.handleCC(ccdata);
+            	}
             else
                 {
                 int sub = getCurrentTab();
@@ -2197,11 +2204,7 @@ public abstract class Synth extends JComponent implements Updatable
 
             undo.setWillPush(false);
             Model backup = (Model)(model.clone());
-            if (!model.keyEquals(mergeSynth.getModel()))
-                System.err.println("merge not equal");
             model.recombine(random, mergeSynth.getModel(), getMutationKeys(), probability);
-            if (!model.keyEquals(backup))
-                System.err.println("doesn't equal");
             revise();  // just in case
             mergeSynth = null;        
                                 
@@ -2250,10 +2253,15 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
 
-
     /** Individually sends all parameters for which the current model differs from the provided model.
         If the provided model is null, then all parameters are sent. */     
     public void sendDifferentParameters(Model other)
+    	{
+    	sendDifferentParameters(other, 1.0);
+    	}
+    	
+
+    public void sendDifferentParameters(Model other, double probability)
         {
         if (!getSendMIDI())
             return;  // don't bother!  MIDI is off
@@ -2266,6 +2274,9 @@ public abstract class Synth extends JComponent implements Updatable
             // Send every single parameter
             for(int i = 0; i < keys.length; i++)
                 {
+                if (probability != 1.0 && random.nextDouble() >= probability)
+                	continue;
+
                 if (sent = tryToSendMIDI(emitAll(keys[i], STATUS_SENDING_ALL_PARAMETERS)) || sent)
                     simplePause(getPauseAfterSendOneParameter());
                 }
@@ -2275,6 +2286,9 @@ public abstract class Synth extends JComponent implements Updatable
             // Send only diffs
             for(int i = 0; i < keys.length; i++)
                 {
+                if (probability != 1.0 && random.nextDouble() >= probability)
+                	continue;
+                
                 if (getModel().isInteger(keys[i]))              // integers
                     {
                     if (getModel().get(keys[i], 0) != model.get(keys[i], 0))
@@ -2297,11 +2311,6 @@ public abstract class Synth extends JComponent implements Updatable
         if (sent)
             simplePause(getPauseAfterSendAllParameters());
         }
-
-
-
-
-
 
 
 
@@ -2531,7 +2540,10 @@ public abstract class Synth extends JComponent implements Updatable
         if (frame != null) 
             {
             String synthName = getTitleBarSynthName().trim();
-            String fileName = (file == null ? "        Untitled" : "        " + file.getName());
+            String fileName = (file == null ? 
+            					(auxFile == null ? "        Untitled" : 
+            									   "        (" + auxFile.getName() + ")") :
+            					"        " + file.getName());
             String disconnectedWarning = ((tuple == null || tuple.in == null) ? "   DISCONNECTED" : "");
             String downloadingWarning = (patchTimer != null ? "   DOWNLOADING" : "");
             String learningWarning = (learning ? "   LEARNING" +
@@ -5415,6 +5427,7 @@ public abstract class Synth extends JComponent implements Updatable
                 os.write(flatten(emitAll((Model)null, false, true)));
                 os.close();
                 file = f;
+                auxFile = null;
                 setLastDirectory(fd.getDirectory());
                 } 
             catch (IOException e) // fail
@@ -5590,7 +5603,7 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
 
-    public byte[][] cutUpSysex(byte[] data)
+    public static byte[][] cutUpSysex(byte[] data)
         {
         boolean begin = true;
         ArrayList sysex = new ArrayList();
@@ -5808,8 +5821,10 @@ public abstract class Synth extends JComponent implements Updatable
                         else if (data.length == 1)
                             {
                             succeeded = loadOne(data[0], external[0], local, merge, f, fd, false);
+                            /*
                             if (succeeded)
                                 this.file = f;
+                            */
                             }
                                 
                                 
@@ -5840,8 +5855,10 @@ public abstract class Synth extends JComponent implements Updatable
                                     }
 
                                 succeeded = loadOne(flatten(data), rec, recognizeLocal(data[0]), merge, f, fd, false);
+                                /*
                                 if (succeeded)
                                     this.file = f;
+                                */
                                 }
                             }
 
@@ -6015,11 +6032,12 @@ public abstract class Synth extends JComponent implements Updatable
                                         
                                 if (sNames.length == 1 && pNames[0].length == 1)
                                     {
-                                    succeeded = loadOne(data[indices[0][0]], external[0], synthClassNames[external[0]].equals(this.getClass().getName()), merge, f, fd, false);
+                                    succeeded = loadOne(data[indices[0][0]], external[0], synthClassNames[external[0]].equals(this.getClass().getName()), merge, null, // f, 
+                                    	fd, false);
                                     }
                                 else
                                     {
-                                    final JButton localButton = new JButton("Load In This Editor");
+                                    final JButton localButton = new JButton(isShowingLimitedBankSysex() ? "Load" : "Load In This Editor");
                                     // build the two-level menu
                                     TwoLevelMenu menu = new TwoLevelMenu(sNames, pNames, "Synth", "Patch", 0, 0)
                                         {
@@ -6044,7 +6062,12 @@ public abstract class Synth extends JComponent implements Updatable
                                     vbox.add(hbox);
                                     vbox.add(menu);
  
-                                    final JOptionPane pane = new JOptionPane(vbox,  JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] {  "Load in New Editor" , localButton, "Write All Patches", "Cancel" }, "Load in New Editor");
+                                    final JOptionPane pane = new JOptionPane(vbox,  JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, 
+                                    	isShowingLimitedBankSysex() ?
+                                    		new Object[] { localButton, "Cancel" } :
+                                    		new Object[] {  "Load in New Editor" , localButton, "Write All Patches", "Cancel" }, 
+                                    	isShowingLimitedBankSysex() ? 
+                                    		"Load" : "Load in New Editor");
                                                                 
                                     localButton.addActionListener(new ActionListener()
                                         {
@@ -6066,13 +6089,15 @@ public abstract class Synth extends JComponent implements Updatable
                                         {
                                         succeeded = loadOne(data[indices[menu.getPrimary()][menu.getSecondary()]],
                                             external[menu.getPrimary()], true,
-                                            merge, f, fd, true);
+                                            merge, null, // f, 
+                                            fd, true);
                                         }
                                     else if (result != null && result.equals("Load in New Editor"))
                                         {
                                         succeeded = loadOne(data[indices[menu.getPrimary()][menu.getSecondary()]],
                                             external[menu.getPrimary()], false,
-                                            merge, f, fd, true);
+                                            merge, null, // f, 
+                                            fd, true);
                                         }
                                     else if (result != null && result.equals("Write All Patches"))
                                         {
@@ -6297,7 +6322,13 @@ public abstract class Synth extends JComponent implements Updatable
                 if (result == PARSE_SUCCEEDED)
                     {
                     file = f;
+	                auxFile = null;
                     }
+                else if (result == PARSE_SUCCEEDED_UNTITLED)
+                	{
+                	file = null;
+	                auxFile = f;
+                	}
                 setLastDirectory(fd.getDirectory());
 
                 if (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED)
@@ -6308,6 +6339,8 @@ public abstract class Synth extends JComponent implements Updatable
                     succeeded = false;
                 }
             }
+
+		updateTitle();	// so I show the right filename -- this may not be necessary
 
         setSendMIDI(true);
                                                                 
@@ -6352,8 +6385,18 @@ public abstract class Synth extends JComponent implements Updatable
             otherSynth.setSendMIDI(true);
             return false;
             }
-                
-        otherSynth.file = f;
+        
+        if (result == PARSE_SUCCEEDED)	// not PARSE_SUCEEDED_UNTITLED
+        	{
+        	otherSynth.file = f;
+        	otherSynth.auxFile = null;
+        	}
+        else
+        	{
+        	otherSynth.file = null;
+        	otherSynth.auxFile = f;
+        	}
+        
         otherSynth.setLastDirectory(fd.getDirectory());
 
         otherSynth.undo.setWillPush(true);
@@ -6361,6 +6404,8 @@ public abstract class Synth extends JComponent implements Updatable
 
         if (otherSynth.getSendsParametersAfterLoad()) // we'll need to do this
             otherSynth.sendAllParameters();
+
+		otherSynth.updateTitle();	// so it shows the right filename
                 
         // we don't want this to look like it's succeeded
         return false;  // (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
@@ -6732,7 +6777,14 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (learning)
             updateTitle();
+            
+        sendOneParameter(key);
+        }
 
+        
+    /** Sends a single parameter if the synthesizer is capable of doing this. */
+    public void sendOneParameter(String key)
+        {
         if (allowsTransmitsParameters && getSendMIDI())
             {
             if (tryToSendMIDI(emitAll(key, STATUS_UPDATING_ONE_PARAMETER)))
@@ -6740,7 +6792,6 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
 
-        
         
 
 
@@ -6954,6 +7005,10 @@ public abstract class Synth extends JComponent implements Updatable
         then this method returns the patch number (0....) in the bank.
     */
     
+    boolean showingLimitedBankSysex = false;
+    boolean isShowingLimitedBankSysex() { return showingLimitedBankSysex; }
+    void setShowingLimitedBankSysex(boolean val) { showingLimitedBankSysex = val; }
+    
     public int showBankSysexOptions(byte[] data, String[] names)
         {
         while(true)
@@ -6964,7 +7019,7 @@ public abstract class Synth extends JComponent implements Updatable
             VBox vbox = new VBox();
             vbox.setBackground(color);
             vbox.add(new JLabel("   "));
-            if (isParsingForMerge())
+            if (isParsingForMerge() || isShowingLimitedBankSysex())
                 {
                 vbox.add(new JLabel("<html>A Bank Sysex has been received.</html>"));
                 }
@@ -6985,7 +7040,14 @@ public abstract class Synth extends JComponent implements Updatable
             if (opt != null) vbox.add(opt);
                   
             int result = 0;
-            if (isParsingForMerge())
+            if (isShowingLimitedBankSysex())
+            	{
+                disableMenuBar();
+                result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Load Patch", "Cancel" }, "Load Patch");
+                enableMenuBar();
+                if (result != 0) result = 3;  // make it a "cancel"
+            	}
+            else if (isParsingForMerge())
                 {
                 disableMenuBar();
                 result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Merge Patch", "Cancel" }, "Merge Patch");

@@ -110,7 +110,7 @@ You may have installed the MMJ (MIDI Java) library in the past, which is now obs
 
 I believe that the following should work:
 
-1. [Download and install at least Java 11](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  The JRE should work fine.
+1. [Download and install at least Java 11](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  The JRE should work fine, but if Oracle is no longer offering the JRE, install the JDK (which installs a JRE among other gunk).
 
 2. Download Edisyn's jar file, called [edisyn.jar](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar), presently located in the "jar" directory.
 

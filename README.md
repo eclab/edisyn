@@ -62,7 +62,16 @@ Edisyn presently supports:
 * General CC, NRPN, and RPN editing
 * Microtuning editing
 
-Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, randomization, merging, nudging, hill-climbing, patch constriction, per-parameter customization, real-time parameter updates, test notes and chords, etc.
+Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, per-parameter customization, real-time parameter updates, test notes and chords, etc.  
+
+Edisyn also has a large number of specialized tools designed to help you explore new patch possibilities without directly programming them.  These include:
+
+* *Randomization:* Weighted patch mutation
+* *Merging:* Weighted recombination of two patches
+* *Blending:* Random recombination of two randomly-chosen patches on your synth
+* *Nudging:* Pushing the patch to sound a bit more like one of four other patches 
+* *Morphing:* Real-time interpolation of four patches to form a new patch
+* *Hill-Climbing and Constriction:* evolutionary techniques for guided randomized search through the space of parameters, where Edisyn iteratively offers patch possibilities for you to assess and grade.
 
 #### "Could You Develop a Patch Editor for Synth X for Me?"
 

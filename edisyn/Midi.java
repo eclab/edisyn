@@ -1342,9 +1342,9 @@ public class Midi
           }
         */
         /*
-        for(int i = 0; i < inSysex.length; i++)
-            System.err.print(" " + inSysex[i]);
-        System.err.println();
+          for(int i = 0; i < inSysex.length; i++)
+          System.err.print(" " + inSysex[i]);
+          System.err.println();
         */
         if (inSysex != null && inSysex.length != 0 && inSysex[inSysex.length - 1] == (byte)0xF7)  // completed
             {

@@ -9,38 +9,38 @@ import edisyn.*;
 public class RolandJV880Rec extends Recognize
     {
     public static int getNextSysexPatchGroup(byte[][] sysex, int start)
-    	{
-    	// we presume we need COMMON and then FOUR TONES
-		if (start >= sysex.length) return start;
-		
-		if (recognize(sysex[start]))
-    		{
-    		if (sysex[start].length != 34 + 11)  // common
-				{
-				return start;
-				}
-			}
-		
-		for(int i = 0; i < 4; i++)
-			{
-			if (start >= sysex.length)
-				{
-				System.err.println("RolandJV880MultiRec.getNextSysexPatchGroup(): could not find tone " + i + " before messages terminated.");
-				return start;
-				}
-			else if (!recognize(sysex[start + i]))
-				{
-				System.err.println("RolandJV880MultiRec.getNextSysexPatchGroup(): could not find tone " + i + ".");
-				return start;
-				}
-			else if (sysex[start + i].length != 116 + 11)
-				{
-				System.err.println("RolandJV880MultiRec.getNextSysexPatchGroup(): could not find tone " + i + ", invalid length " + sysex[start + i].length);
-				return start;
-				}
-			}
-    	return start + 5;
-		}
+        {
+        // we presume we need COMMON and then FOUR TONES
+        if (start >= sysex.length) return start;
+                
+        if (recognize(sysex[start]))
+            {
+            if (sysex[start].length != 34 + 11)  // common
+                {
+                return start;
+                }
+            }
+                
+        for(int i = 0; i < 4; i++)
+            {
+            if (start >= sysex.length)
+                {
+                System.err.println("RolandJV880MultiRec.getNextSysexPatchGroup(): could not find tone " + i + " before messages terminated.");
+                return start;
+                }
+            else if (!recognize(sysex[start + i]))
+                {
+                System.err.println("RolandJV880MultiRec.getNextSysexPatchGroup(): could not find tone " + i + ".");
+                return start;
+                }
+            else if (sysex[start + i].length != 116 + 11)
+                {
+                System.err.println("RolandJV880MultiRec.getNextSysexPatchGroup(): could not find tone " + i + ", invalid length " + sysex[start + i].length);
+                return start;
+                }
+            }
+        return start + 5;
+        }
 
     public static boolean recognize(byte[] data)
         {

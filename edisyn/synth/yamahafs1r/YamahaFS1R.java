@@ -3040,8 +3040,8 @@ public class YamahaFS1R extends Synth
                     }
                 else
                     {
-                     //System.err.println("Um... " + baseKey);
-                   return -1;
+                    //System.err.println("Um... " + baseKey);
+                    return -1;
                     }
                 }
             else if (baseKey.equals("keysync") || baseKey.equals("transpose"))

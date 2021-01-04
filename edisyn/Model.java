@@ -401,44 +401,44 @@ public class Model implements Cloneable
     public String[] getKeys()
         {
         /*
-        String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
-        ArrayList revisedKeys = new ArrayList<String>();
-        for(int i = 0; i < keyset.length; i++)
-            if (getStatus(keyset[i]) != STATUS_RESTRICTED)
-                revisedKeys.add(keyset[i]);
-        return (String[])(revisedKeys.toArray(new String[0]));
+          String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
+          ArrayList revisedKeys = new ArrayList<String>();
+          for(int i = 0; i < keyset.length; i++)
+          if (getStatus(keyset[i]) != STATUS_RESTRICTED)
+          revisedKeys.add(keyset[i]);
+          return (String[])(revisedKeys.toArray(new String[0]));
         */
         return getDifferentKeys(null);
         }
         
     /** Returns all the keys in the model as an array, except the hidden ones,
-    	which are different from the ones in the other model. If other model
-    	is null, all keys are returned.  */        
+        which are different from the ones in the other model. If other model
+        is null, all keys are returned.  */        
     public String[] getDifferentKeys(Model other)
         {
         String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
         ArrayList revisedKeys = new ArrayList<String>();
         for(int i = 0; i < keyset.length; i++)
             if (getStatus(keyset[i]) != STATUS_RESTRICTED)
-            	{
-            	if (other == null || (!keyEquals(keyset[i], other)))
-               		revisedKeys.add(keyset[i]);
-               	}
+                {
+                if (other == null || (!keyEquals(keyset[i], other)))
+                    revisedKeys.add(keyset[i]);
+                }
         return (String[])(revisedKeys.toArray(new String[0]));
         }
         
  
- 	public boolean keyEquals(String key, Model other)
- 		{
- 		if (isString(key))
- 			{
- 			return get(key, "").equals(other.get(key, ""));
- 			}
- 		else
- 			{
- 			return get(key, -1) == other.get(key, -1);
- 			}
- 		}
+    public boolean keyEquals(String key, Model other)
+        {
+        if (isString(key))
+            {
+            return get(key, "").equals(other.get(key, ""));
+            }
+        else
+            {
+            return get(key, -1) == other.get(key, -1);
+            }
+        }
  
     /** Returns the value associated with this
         (String) key, or ifDoesntExist if there is no such value. */        

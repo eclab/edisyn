@@ -231,17 +231,17 @@ public class CasioCZ extends Synth
             catch (NumberFormatException e)
                 {
                 if (bank.getSelectedIndex() == 12) // SC
-                	showSimpleError(title, "In Bank SC, the Patch Number must be an integer 1...4");
+                    showSimpleError(title, "In Bank SC, the Patch Number must be an integer 1...4");
                 else
-                	showSimpleError(title, "The Patch Number must be an integer 1...8");
+                    showSimpleError(title, "The Patch Number must be an integer 1...8");
                 continue;
                 }
             if (n < 1 || n > 8 || (bank.getSelectedIndex() == 12 && n > 4))
                 {
                 if (bank.getSelectedIndex() == 12) // SC
-                	showSimpleError(title, "In Bank SC, the Patch Number must be an integer 1...4");
+                    showSimpleError(title, "In Bank SC, the Patch Number must be an integer 1...4");
                 else
-                	showSimpleError(title, "The Patch Number must be an integer 1...8");
+                    showSimpleError(title, "The Patch Number must be an integer 1...8");
                 continue;
                 }
                 
@@ -1096,7 +1096,7 @@ public class CasioCZ extends Synth
         
         number++;
         if (number >= 8 || 
-        	(number >= 4 && bank == 12))		// SC
+            (number >= 4 && bank == 12))            // SC
             {
             bank++;
             number = 0;

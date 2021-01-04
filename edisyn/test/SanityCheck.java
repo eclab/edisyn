@@ -191,9 +191,9 @@ public class SanityCheck
                 {
                 System.err.println("\t [FAIL] Not Recognized");
                 for(int i = 0; i < data.length; i++)
-                	{
-                	System.err.println("" + i + " " + StringUtility.toHex(data[i]));
-                	}
+                    {
+                    System.err.println("" + i + " " + StringUtility.toHex(data[i]));
+                    }
                 failed = true;
                 }
             synth2.parse(data, true);

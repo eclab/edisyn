@@ -6,7 +6,7 @@
 package edisyn;
 
 /**
-	Patch location information
+   Patch location information
 */
 
 public class PatchLocation
@@ -18,26 +18,26 @@ public class PatchLocation
     public PatchLocation(int bank, int number) { this.bank = bank; this.number = number; }
     public PatchLocation(Model model) { this(model.get("bank", NO_BANK), model.get("number", NO_NUMBER)); }
     public boolean equals(Object obj)
-    	{
-    	if (obj == null) return false;
-    	if (!(obj instanceof PatchLocation)) return false;
-    	PatchLocation p = (PatchLocation)obj;
-    	if (p.bank != bank) return false;
-    	if (p.number != number) return false;
-    	return true;
-    	}
+        {
+        if (obj == null) return false;
+        if (!(obj instanceof PatchLocation)) return false;
+        PatchLocation p = (PatchLocation)obj;
+        if (p.bank != bank) return false;
+        if (p.number != number) return false;
+        return true;
+        }
     Model assignLocations(Model model)
-    	{
-    	if (number != NO_NUMBER)
-    		model.set("number", number);
-    	if (bank != NO_BANK)
-    		model.set("bank", bank);
-    	return model;
-    	}
-    	
+        {
+        if (number != NO_NUMBER)
+            model.set("number", number);
+        if (bank != NO_BANK)
+            model.set("bank", bank);
+        return model;
+        }
+        
     public String toString()
-    	{
-    	return "PatchLocation[" + bank + ", " + number + "]";
-    	}
+        {
+        return "PatchLocation[" + bank + ", " + number + "]";
+        }
     }
         

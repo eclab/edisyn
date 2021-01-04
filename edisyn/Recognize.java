@@ -31,12 +31,12 @@ public class Recognize
         }
         
     /** Create your own Synth-specific class version of this static method.
-    	Return end just beyond the sysex messages which comprise a single patch starting at sysex[start].
-    	If there are no such messages, return start. */
+        Return end just beyond the sysex messages which comprise a single patch starting at sysex[start].
+        If there are no such messages, return start. */
     private static int getNextSysexPatchGroup(byte[][] sysex, int start)
-    	{
-    	return start;
-    	}
+        {
+        return start;
+        }
 
     /** Create your own Synth-specific class version of this static method.
         It will be called when the system wants to know what the name is for a patch bank
@@ -49,14 +49,14 @@ public class Recognize
         }
         
     /** A few synthesizers, such as the Kawai K4, have mega-bank sysex which consists of different kinds
-    	of patches, such as single patches and multi patches.  This method is called
-    	to break these into multiple individual or multiple bank patches that can
-    	be parsed by different editors.  If you do not support this, return null
-    	(the default). */
-/*	private byte[][] convertBulkBank(byte[] data)
-    	{
-    	return null;
-    	}
+        of patches, such as single patches and multi patches.  This method is called
+        to break these into multiple individual or multiple bank patches that can
+        be parsed by different editors.  If you do not support this, return null
+        (the default). */
+/*      private byte[][] convertBulkBank(byte[] data)
+        {
+        return null;
+        }
 */
     }
         

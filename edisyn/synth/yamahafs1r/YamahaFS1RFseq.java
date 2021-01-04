@@ -432,68 +432,68 @@ public class YamahaFS1RFseq extends Synth
         menu.add(smooth);
 
 /*
-        JMenuItem dump = new JMenuItem("Dump");
-        dump.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        dump.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                System.err.println(lastIndex);
-                System.err.println(
-                    "{\n" +
-                    "\t{" + 
-                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 1) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 1) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 1) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 1) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-                    "\t{" + 
-                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 2) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 2) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 2) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 2) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-                    "\t{" + 
-                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 3) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 3) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 3) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 3) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-                    "\t{" + 
-                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 4) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 4) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 4) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 4) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-                    "\t{" + 
-                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 5) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 5) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 5) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 5) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-                    "\t{" + 
-                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 6) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 6) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 6) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 6) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-                    "\t{" + 
-                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 7) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 7) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 7) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 7) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-                    "\t{" + 
-                    model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 8) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "voicedlevel" + 8) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 8) + ", " +
-                    model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 8) + ", " + 
-                    model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
-                    "}"                     
-                    );
-                }
-            });
-        menu.add(dump);
+  JMenuItem dump = new JMenuItem("Dump");
+  dump.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+  dump.addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  System.err.println(lastIndex);
+  System.err.println(
+  "{\n" +
+  "\t{" + 
+  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 1) + ", " +
+  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 1) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 1) + ", " +
+  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 1) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+  "\t{" + 
+  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 2) + ", " +
+  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 2) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 2) + ", " +
+  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 2) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+  "\t{" + 
+  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 3) + ", " +
+  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 3) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 3) + ", " +
+  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 3) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+  "\t{" + 
+  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 4) + ", " +
+  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 4) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 4) + ", " +
+  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 4) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+  "\t{" + 
+  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 5) + ", " +
+  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 5) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 5) + ", " +
+  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 5) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+  "\t{" + 
+  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 6) + ", " +
+  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 6) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 6) + ", " +
+  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 6) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+  "\t{" + 
+  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 7) + ", " +
+  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 7) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 7) + ", " +
+  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 7) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+  "\t{" + 
+  model.get("frame" + (lastIndex + 1) + "voicedfrequency" + 8) + ", " +
+  model.get("frame" + (lastIndex + 1) + "voicedlevel" + 8) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "unvoicedfrequency" + 8) + ", " +
+  model.get("frame" + (lastIndex + 1) + "unvoicedlevel" + 8) + ", " + 
+  model.get("frame" + (lastIndex + 1) + "pitch") + "},\n" + 
+  "}"                     
+  );
+  }
+  });
+  menu.add(dump);
 */
 
         JMenuItem current = new JMenuItem("Show Current Performance");
@@ -719,9 +719,9 @@ public class YamahaFS1RFseq extends Synth
                         //System.err.println("pushed!");
                         }
                     else 
-                    	{
-                    	// System.err.println("The same!");
-                    	}
+                        {
+                        // System.err.println("The same!");
+                        }
                     repaint();      // generally forces repaints to all happen at once
                     setSendMIDI(true);
                     sendAllParameters();

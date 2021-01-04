@@ -9,26 +9,26 @@ import edisyn.*;
 public class Yamaha4OpRec extends Recognize
     {
     public static int getNextSysexPatchGroup(byte[][] sysex, int start)
-    	{
-    	if (recognizeBulk(sysex[start]))
-    		return start + 1;
-    		
-    	for(int i = start; i < sysex.length; i++)
-    		{
-    		int rec = recognizeBasic(sysex[i]);
-			// We're looking for VCED		
-			if (rec == RECOGNIZE_BASIC_VCED)	
-				{
-				return i + 1;  // all done
-				}
-			else if (rec == RECOGNIZE_BASIC_NONE) // uh oh
-				{
-				return start;
-				}
-    		}
-    	// if we're here we never found VCED
-    	return start;
-		}
+        {
+        if (recognizeBulk(sysex[start]))
+            return start + 1;
+                
+        for(int i = start; i < sysex.length; i++)
+            {
+            int rec = recognizeBasic(sysex[i]);
+            // We're looking for VCED               
+            if (rec == RECOGNIZE_BASIC_VCED)        
+                {
+                return i + 1;  // all done
+                }
+            else if (rec == RECOGNIZE_BASIC_NONE) // uh oh
+                {
+                return start;
+                }
+            }
+        // if we're here we never found VCED
+        return start;
+        }
 
 
     public static boolean recognizeBulk(byte[] data)
@@ -47,13 +47,13 @@ public class Yamaha4OpRec extends Recognize
 // returns a guess as to the number of sysex commands this file is trying to load per patch.
 // Or if we don't recognize it, then 0
 
-	public static final int RECOGNIZE_BASIC_ACED3 = 5;
-	public static final int RECOGNIZE_BASIC_EFEDS = 4;
-	public static final int RECOGNIZE_BASIC_ACED2 = 3;
-	public static final int RECOGNIZE_BASIC_ACED = 2;
-	public static final int RECOGNIZE_BASIC_VCED = 1;
-	public static final int RECOGNIZE_BASIC_NONE = 0;
-	
+    public static final int RECOGNIZE_BASIC_ACED3 = 5;
+    public static final int RECOGNIZE_BASIC_EFEDS = 4;
+    public static final int RECOGNIZE_BASIC_ACED2 = 3;
+    public static final int RECOGNIZE_BASIC_ACED = 2;
+    public static final int RECOGNIZE_BASIC_VCED = 1;
+    public static final int RECOGNIZE_BASIC_NONE = 0;
+        
     static int recognizeBasic(byte[] data)
         {
         // ACED3

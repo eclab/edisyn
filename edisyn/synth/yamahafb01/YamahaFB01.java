@@ -1282,10 +1282,10 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
         // Extract the chosen bank
         int b = model.get("bank", 0);
         if (b > 1) 
-            {
-            System.err.println("Warning (YamahaFB01): " + "Bad bank " + b);
-            b = 0;
-            }
+        {
+        System.err.println("Warning (YamahaFB01): " + "Bad bank " + b);
+        b = 0;
+        }
         */
             
         // First, we're going to convert this entirely to Voice Bank X

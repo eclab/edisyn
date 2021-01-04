@@ -100,7 +100,7 @@ public class MAudioVenom extends Synth
     {
     "1/32 N", "1/16 T", "1/16 N", "1/8 T", "1/8 N", "1/4 T", "1/8 .", "1/4 N", "1/2 T", "1/4 .", "1/2 N"
     /*
-    Not enough space:
+      Not enough space:
       "1/32 Note", "1/16 Note Triplet", "1/16 Note", "1/8 Note Triplet", "1/8 Note", 
       "1/4 Note Triplet", "Dotted 1/8 Note", "1/4 Note", "1/2 Note Triplet",
       "Dotted 1/4 Note", "1/2 Note"
@@ -115,7 +115,7 @@ public class MAudioVenom extends Synth
     {
     "1/32 N", "1/16 T", "1/16 N", "1/8 T", "1/8 N", "1/4 T", "1/8 .", "1/4 N", "1/2 T", "1/4 .", "1/2 N", "1 N", "1 .", "2 B", "3 B", "4 B"
     /*
-    Not enough space:
+      Not enough space:
       "1/32 Note", "1/16 Note Triplet", "1/16 Note", "1/8 Note Triplet", "1/8 Note", 
       "1/4 Note Triplet", "Dotted 1/8 Note", "1/4 Note", "1/2 Note Triplet",
       "Dotted 1/4 Note", "1/2 Note", "Whole Note", "Dotted Whole Note", 
@@ -1516,7 +1516,7 @@ public class MAudioVenom extends Synth
                 (byte)0x01, 
                 (byte)0x05, 
                 (byte)0x21,                     // Venom 
-                (byte)DEFAULT_ID, 		// (byte)getID(), 
+                (byte)DEFAULT_ID,               // (byte)getID(), 
                 (byte)0x02,                     // Write Data Dump 
                 (byte)0x09,             // Edit Single Param
                 paramMSB,
@@ -1549,15 +1549,15 @@ public class MAudioVenom extends Synth
             }
         else if (key.equals("osc2sync") || key.equals("osc3sync") || key.equals("osc1keytrack") || key.equals("osc2keytrack") || key.equals("osc3keytrack") || key.equals("waveshape"))
             {
-                // The documentation has a "**" next to oscflags but mistakenly doesn't indicate what they are.  They are:
-                //
-	            // 0    Waveshape ON
-	            // 1    OSC 2 Sync ON
-	            // 2    OSC 3 Sync ON
-	            // 3    OSC 1 Keytrack OFF	[inverted]
-	            // 4    OSC 2 Keytrack OFF	[inverted]
-	            // 5    OSC 3 Keytrack OFF	[inverted]
-	            // 6    UNKNOWN but always set ON               
+            // The documentation has a "**" next to oscflags but mistakenly doesn't indicate what they are.  They are:
+            //
+            // 0    Waveshape ON
+            // 1    OSC 2 Sync ON
+            // 2    OSC 3 Sync ON
+            // 3    OSC 1 Keytrack OFF  [inverted]
+            // 4    OSC 2 Keytrack OFF  [inverted]
+            // 5    OSC 3 Keytrack OFF  [inverted]
+            // 6    UNKNOWN but always set ON               
 
             byte paramMSB = (byte)0x00;
             byte paramLSB = (byte)0x18;         // OscMisc.OscFlags (p. 97)
@@ -1568,7 +1568,7 @@ public class MAudioVenom extends Synth
                 (model.get("osc1keytrack") << 3) |              // Already flipped...
                 (model.get("osc2keytrack") << 4) |
                 (model.get("osc3keytrack") << 5) |
-                0x40;								// set bit 6 to ON
+                0x40;                                                           // set bit 6 to ON
                             
             byte valMSB = (byte)(val >>> 7);
             byte valLSB = (byte)(val & 127);
@@ -1779,13 +1779,13 @@ public class MAudioVenom extends Synth
                 {
                 // The documentation has a "**" next to oscflags but mistakenly doesn't indicate what they are.  They are:
                 //
-	            // 0    Waveshape ON
-	            // 1    OSC 2 Sync ON
-	            // 2    OSC 3 Sync ON
-	            // 3    OSC 1 Keytrack OFF	[inverted]
-	            // 4    OSC 2 Keytrack OFF	[inverted]
-	            // 5    OSC 3 Keytrack OFF	[inverted]
-	            // 6    UNKNOWN but always set ON               
+                // 0    Waveshape ON
+                // 1    OSC 2 Sync ON
+                // 2    OSC 3 Sync ON
+                // 3    OSC 1 Keytrack OFF  [inverted]
+                // 4    OSC 2 Keytrack OFF  [inverted]
+                // 5    OSC 3 Keytrack OFF  [inverted]
+                // 6    UNKNOWN but always set ON               
 
                 d[j] = (byte)(
                     (model.get("waveshape") << 0) | 
@@ -1794,7 +1794,7 @@ public class MAudioVenom extends Synth
                     (model.get("osc1keytrack") << 3) |              // Already flipped...
                     (model.get("osc2keytrack") << 4) |
                     (model.get("osc3keytrack") << 5) |
-                    0x40);									// set bit 6 to ON
+                    0x40);                                                                      // set bit 6 to ON
                 }
             else if (key.equals("glidemode") || key.equals("unisonmode") || key.equals("aux1mode") || 
                 key.equals("aux2mode") || key.equals("arpsrc") || key.equals("arpbipolar") || key.equals("arplatchkeys") || key.equals("arpenable"))
@@ -1861,26 +1861,26 @@ public class MAudioVenom extends Synth
 
     // The Venom spits out various CC and NRPN when you turn its knobs, corresponding to certain
     // parameters.  We handle them here.
-	//
-	// The table below indicates the CC values, or in some cases NRPN values when indicated, emitted for
-	// each of the knobs and buttons on the Venom.   It's a weird assortment.  The Modulation wheel also
-	// emits but we're ignoring that of course.  Ranges are always 0-127 for CC, or 0-16383 for 14-bit CC,
-	// unless indicated otherwise.  NRPN ranges are as indicated and always MSB only.
-	//
-	//	 					 COLUMNS 
-	//			1		2		3		4		5
-	//		+----------------------------------------------------------------------------------------------------
-	//    1	|	3/35*	71		103		104		70 (range 0-6)
-	// R  2	|	50		51		30/62*	31/63*	NRPN 17D, NRPN 17E, or BOTH (MSB ONLY OFF:<=63 ON:>64) ***
-	// O  3	|	20		22		23		24		NRPN 16A (MSB ONLY OFF:<=63 ON:>64)
-	// W  4	|	73		75		79		72		126 ON vs. 127 ON **
-	// S  5	|	86		14		15		5		65
-	//    6	|	7		10		91		93		NRPN 120 (range 0-5 MSB ONLY)
-	//
-	//	 * 14-bit CC, sent as LSB and MSB, perhaps separately
-	//  ** Either 126 is sent OR 127 is sent to counter each other
-	// *** NRPN 17D is turned ON and 17E is turned OFF, or the opposite, or both on, or both off (4 possibilities)
- 	//
+    //
+    // The table below indicates the CC values, or in some cases NRPN values when indicated, emitted for
+    // each of the knobs and buttons on the Venom.   It's a weird assortment.  The Modulation wheel also
+    // emits but we're ignoring that of course.  Ranges are always 0-127 for CC, or 0-16383 for 14-bit CC,
+    // unless indicated otherwise.  NRPN ranges are as indicated and always MSB only.
+    //
+    //                                               COLUMNS 
+    //                      1               2               3               4               5
+    //              +----------------------------------------------------------------------------------------------------
+    //    1 |       3/35*   71              103             104             70 (range 0-6)
+    // R  2 |       50              51              30/62*  31/63*  NRPN 17D, NRPN 17E, or BOTH (MSB ONLY OFF:<=63 ON:>64) ***
+    // O  3 |       20              22              23              24              NRPN 16A (MSB ONLY OFF:<=63 ON:>64)
+    // W  4 |       73              75              79              72              126 ON vs. 127 ON **
+    // S  5 |       86              14              15              5               65
+    //    6 |       7               10              91              93              NRPN 120 (range 0-5 MSB ONLY)
+    //
+    //       * 14-bit CC, sent as LSB and MSB, perhaps separately
+    //  ** Either 126 is sent OR 127 is sent to counter each other
+    // *** NRPN 17D is turned ON and 17E is turned OFF, or the opposite, or both on, or both off (4 possibilities)
+    //
 
     public void handleSynthCCOrNRPN(Midi.CCData data)
         {
@@ -2171,13 +2171,13 @@ public class MAudioVenom extends Synth
                 {
                 // The documentation has a "**" next to oscflags but mistakenly doesn't indicate what they are.  They are:
                 //
-	            // 0    Waveshape ON
-	            // 1    OSC 2 Sync ON
-	            // 2    OSC 3 Sync ON
-	            // 3    OSC 1 Keytrack OFF	[inverted]
-	            // 4    OSC 2 Keytrack OFF	[inverted]
-	            // 5    OSC 3 Keytrack OFF	[inverted]
-	            // 6    UNKNOWN but always set ON               
+                // 0    Waveshape ON
+                // 1    OSC 2 Sync ON
+                // 2    OSC 3 Sync ON
+                // 3    OSC 1 Keytrack OFF  [inverted]
+                // 4    OSC 2 Keytrack OFF  [inverted]
+                // 5    OSC 3 Keytrack OFF  [inverted]
+                // 6    UNKNOWN but always set ON               
 
                 model.set("waveshape", (d[j] >>> 0) & 0x01);
                 model.set("osc2sync", (d[j] >>> 1) & 0x1);

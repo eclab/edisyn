@@ -16,11 +16,11 @@ public class YamahaFB01Rec extends Recognize
             {
             name[i] = (char)(data[pos + i * 2] | (data[pos + i * 2 + 1] << 4));
             }
-       	return new String(name).trim();
+        return new String(name).trim();
         }
 
-	public static boolean recognizeBulk(byte[] data)
-		{
+    public static boolean recognizeBulk(byte[] data)
+        {
         return 
             // Voice Bank 0, see top of page 55, user manual
             (data.length == 8 + 16 + 48 + 48 * (64 * 2 + 3) &&
@@ -34,12 +34,12 @@ public class YamahaFB01Rec extends Recognize
             data[2] == 0x75 &&
             data[4] == 0x00 &&
             data[5] == 0x00);
-		}
+        }
 
     public static boolean recognize(byte[] data)
         {
         return recognizeBulk(data) ||
-        	// Instrument i voice data, see page 57, user manual
+            // Instrument i voice data, see page 57, user manual
             (data.length == 8 + (64 * 2 + 3) &&
             data[0] == (byte)0xF0 &&
             data[1] == 0x43 &&

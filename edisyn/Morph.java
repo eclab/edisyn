@@ -32,21 +32,21 @@ public class Morph extends SynthPanel
     HBox outerMargin;
     JPanel outer;
  
-    public static final int TIMER_DELAY = 2;		// too large?  too small?  3ms would be half-time if the sysex messages were all 10 bytes long
+    public static final int TIMER_DELAY = 2;            // too large?  too small?  3ms would be half-time if the sysex messages were all 10 bytes long
     public static final String EDISYN_MORPH_PREFERENCES_KEY = "EdisynMorph";
 //    public static final double[] SEND_PROBABILITY = new double[] { 0, 0, 1, 0.5, 0.25, 0.125, 0.0625, 0.03125 };
     public static final String[] SEND_TO_SYNTH = new String[] { "When Playing Test Notes", "When Changing", "Trickle", "Deluge" };
     public static final String[] CATEGORICAL_STRATEGIES = new String[] { "Morph", "Use Closest", "Use Current Patch", "Use Top Left", "Use Top Right", "Use Bottom Left", "Use Bottom Right" };
     public static final String[] POSITIONS = new String[] { "Top Left", "Top Right", "Bottom Left", "Bottom Right" };
-	
-	public static final int SEND_TYPE_NOTE = 0;
-	public static final int SEND_TYPE_CHANGING = 1;
-	public static final int SEND_TYPE_TRICKLE = 2;
-	public static final int SEND_TYPE_DELUGE = 3;
+        
+    public static final int SEND_TYPE_NOTE = 0;
+    public static final int SEND_TYPE_CHANGING = 1;
+    public static final int SEND_TYPE_TRICKLE = 2;
+    public static final int SEND_TYPE_DELUGE = 3;
 
- 	javax.swing.Timer timer;
- 	int timerDelay = TIMER_DELAY;
- 	int timerCount = 0;
+    javax.swing.Timer timer;
+    int timerDelay = TIMER_DELAY;
+    int timerCount = 0;
     String[] shuffledKeys;
            
     public Morph(final Synth synth)
@@ -55,15 +55,15 @@ public class Morph extends SynthPanel
 
         blank = new Blank();
 
-		// load preferences first 
- 		int xcc = Synth.getLastXAsInt("XCC", EDISYN_MORPH_PREFERENCES_KEY, -1, true); 
-		if (xcc < -1 || xcc > 127) xcc = -1;
-		blank.getModel().set("xcc", xcc);
-		int ycc = Synth.getLastXAsInt("YCC", EDISYN_MORPH_PREFERENCES_KEY, -1, true); 
-		if (ycc < -1 || ycc > 127) ycc = -1;
-		blank.getModel().set("ycc", ycc);
+        // load preferences first 
+        int xcc = Synth.getLastXAsInt("XCC", EDISYN_MORPH_PREFERENCES_KEY, -1, true); 
+        if (xcc < -1 || xcc > 127) xcc = -1;
+        blank.getModel().set("xcc", xcc);
+        int ycc = Synth.getLastXAsInt("YCC", EDISYN_MORPH_PREFERENCES_KEY, -1, true); 
+        if (ycc < -1 || ycc > 127) ycc = -1;
+        blank.getModel().set("ycc", ycc);
         
-       	sources = new Model[4];
+        sources = new Model[4];
         current = new Model();
 
         setLayout(new BorderLayout());
@@ -95,25 +95,25 @@ public class Morph extends SynthPanel
 
         params = SEND_TO_SYNTH;
         Chooser sendtosynth = new Chooser("Send to Synth", blank, "sendonchange", params)
-        	{
-        	public void update(String key, Model model)
-        		{
-        		super.update(key, model);
-        		if (timer != null)
-        			{
-        			if (model.get("sendonchange", SEND_TYPE_NOTE) >= SEND_TYPE_TRICKLE)	// trickle or deluge
-        				{
-        				timer.start();
-        				}
-        			else
-        				{
-        				timer.stop();
-        				}
-        			}
-        		}
-        	};
+            {
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                if (timer != null)
+                    {
+                    if (model.get("sendonchange", SEND_TYPE_NOTE) >= SEND_TYPE_TRICKLE)     // trickle or deluge
+                        {
+                        timer.start();
+                        }
+                    else
+                        {
+                        timer.stop();
+                        }
+                    }
+                }
+            };
         margin.add(sendtosynth);
-        		       
+                               
         margin.add(Strut.makeVerticalStrut(16));
                 
         margin.add(new PushButton("Export...", new String[]
@@ -131,46 +131,46 @@ public class Morph extends SynthPanel
 
         margin.add(Strut.makeVerticalStrut(16));
 
-		JPanel pan = new JPanel();
+        JPanel pan = new JPanel();
         pan.setLayout(new BorderLayout());
         pan.setBackground(getBackground());
-		margin.add(pan);
+        margin.add(pan);
 
-		HBox hbox = new HBox();
-		pan.add(hbox, BorderLayout.CENTER);
+        HBox hbox = new HBox();
+        pan.add(hbox, BorderLayout.CENTER);
         LabelledDial xCC = new LabelledDial("X CC", blank, "xcc", Style.COLOR_A(), -1, 127)
-        	{
+            {
             public void update(String key, Model model)
                 {
                 super.update(key, model);
                 //System.err.println(model.get(key, -1));
-				Synth.setLastX("" + model.get(key, -1), "XCC", EDISYN_MORPH_PREFERENCES_KEY); 
+                Synth.setLastX("" + model.get(key, -1), "XCC", EDISYN_MORPH_PREFERENCES_KEY); 
                 }
 
-        	public String map(int value)
-        		{
-        		if (value == -1) return "Off";
-        		else return "" + value;
-        		}
-        	};
-		hbox.add(xCC); 
+            public String map(int value)
+                {
+                if (value == -1) return "Off";
+                else return "" + value;
+                }
+            };
+        hbox.add(xCC); 
 
         LabelledDial yCC = new LabelledDial("Y CC", blank, "ycc", Style.COLOR_B(), -1, 127)
-        	{
+            {
             public void update(String key, Model model)
                 {
                 super.update(key, model);
                 //System.err.println(model.get(key, -1));
-				Synth.setLastX("" + model.get(key, -1), "YCC", EDISYN_MORPH_PREFERENCES_KEY); 
+                Synth.setLastX("" + model.get(key, -1), "YCC", EDISYN_MORPH_PREFERENCES_KEY); 
                 }
 
-        	public String map(int value)
-        		{
-        		if (value == -1) return "Off";
-        		else return "" + value;
-        		}
-        	};
-		hbox.add(yCC); 
+            public String map(int value)
+                {
+                if (value == -1) return "Off";
+                else return "" + value;
+                }
+            };
+        hbox.add(yCC); 
 
         buttons = new PushButton[4];
         for(int i = 0; i < 4; i++)
@@ -260,31 +260,31 @@ public class Morph extends SynthPanel
         }
     
     public void handleCC(Midi.CCData cc)
-    	{
-    	// the channel is right, we already know that, so just check for type
-    	if (cc.type == Midi.CCDATA_TYPE_RAW_CC)
-    		{
-    		boolean updated = false;
-    		if (cc.number == blank.getModel().get("xcc", -1))
-    			{
-    			joystick.xPos = ((cc.value / 127.0) * 2.0) - 1.0;
-    			updated = true;
-    			}
-    			
-    		if (cc.number == blank.getModel().get("ycc", -1))	// note no "else"
-    			{
-    			joystick.yPos = ((cc.value / 127.0) * 2.0) - 1.0;
-    			updated = true;
-    			}
+        {
+        // the channel is right, we already know that, so just check for type
+        if (cc.type == Midi.CCDATA_TYPE_RAW_CC)
+            {
+            boolean updated = false;
+            if (cc.number == blank.getModel().get("xcc", -1))
+                {
+                joystick.xPos = ((cc.value / 127.0) * 2.0) - 1.0;
+                updated = true;
+                }
+                        
+            if (cc.number == blank.getModel().get("ycc", -1))       // note no "else"
+                {
+                joystick.yPos = ((cc.value / 127.0) * 2.0) - 1.0;
+                updated = true;
+                }
 
-			if (updated)
-				{
-    			joystick.updatePosition();
+            if (updated)
+                {
+                joystick.updatePosition();
                 update(joystick.xPos, joystick.yPos);
                 }
             joystick.repaint();
-    		}
-    	}
+            }
+        }
     
     public void updateSound()
         {
@@ -400,8 +400,8 @@ public class Morph extends SynthPanel
         if (reset == 0)
             {
             sources[button] = synth.getModel().copy();
-       		String currentPatchName = synth.getPatchName(synth.getModel());
-       		buttons[button].getButton().setText(currentPatchName == null ? "Current Patch" : "" + currentPatchName);
+            String currentPatchName = synth.getPatchName(synth.getModel());
+            buttons[button].getButton().setText(currentPatchName == null ? "Current Patch" : "" + currentPatchName);
             }
         else if (reset == 1)
             {
@@ -551,49 +551,49 @@ public class Morph extends SynthPanel
         shuffledKeys = synth.getModel().getKeys();
         StringUtility.shuffle(shuffledKeys, synth.random);
         
- 		if (timer == null) 
- 			timer = new javax.swing.Timer(timerDelay, new ActionListener()
- 				{
- 				public void actionPerformed(ActionEvent e)
-				{
- 				if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_TRICKLE)	// trickle
- 					{
-					timerCount++;
-					if (timerCount >= shuffledKeys.length)
-						{
-						StringUtility.shuffle(shuffledKeys, synth.random);
-						timerCount = 0;
-						}
-    		        Model backup = synth.getModel();
-            		synth.model = current;
-            		boolean sendMIDI = synth.getSendMIDI();
-            		synth.setSendMIDI(true);
-//					synth.simplePause(100);
-					if (!(shuffledKeys[timerCount].startsWith("modmat") && shuffledKeys[timerCount].contains("amount")))
-						{
-						//System.err.println(shuffledKeys[timerCount]);
-						synth.sendOneParameter(shuffledKeys[timerCount]);
-						}
-            		synth.setSendMIDI(sendMIDI);
-	         	   	synth.model = backup;                   
-					}
-				else if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_DELUGE)	// deluge
-					{
-					Model backup = synth.getModel();
-					synth.model = current;
-            		boolean sendMIDI = synth.getSendMIDI();
-            		synth.setSendMIDI(true);
-					synth.sendAllParameters();
-            		synth.setSendMIDI(sendMIDI);
-					synth.model = backup;                   
-					}
-				else
-					{
-					timer.stop();
-					}
-				}
- 				});
-         }
+        if (timer == null) 
+            timer = new javax.swing.Timer(timerDelay, new ActionListener()
+                {
+                public void actionPerformed(ActionEvent e)
+                    {
+                    if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_TRICKLE)  // trickle
+                        {
+                        timerCount++;
+                        if (timerCount >= shuffledKeys.length)
+                            {
+                            StringUtility.shuffle(shuffledKeys, synth.random);
+                            timerCount = 0;
+                            }
+                        Model backup = synth.getModel();
+                        synth.model = current;
+                        boolean sendMIDI = synth.getSendMIDI();
+                        synth.setSendMIDI(true);
+//                                      synth.simplePause(100);
+                        if (!(shuffledKeys[timerCount].startsWith("modmat") && shuffledKeys[timerCount].contains("amount")))
+                            {
+                            //System.err.println(shuffledKeys[timerCount]);
+                            synth.sendOneParameter(shuffledKeys[timerCount]);
+                            }
+                        synth.setSendMIDI(sendMIDI);
+                        synth.model = backup;                   
+                        }
+                    else if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_DELUGE)      // deluge
+                        {
+                        Model backup = synth.getModel();
+                        synth.model = current;
+                        boolean sendMIDI = synth.getSendMIDI();
+                        synth.setSendMIDI(true);
+                        synth.sendAllParameters();
+                        synth.setSendMIDI(sendMIDI);
+                        synth.model = backup;                   
+                        }
+                    else
+                        {
+                        timer.stop();
+                        }
+                    }
+                });
+        }
         
     public void startup()
         {
@@ -606,13 +606,13 @@ public class Morph extends SynthPanel
             }
         startedUp = true;
         if (timer != null)
-        	timer.start();
+            timer.start();
         }
                 
     public void shutdown()
         {
         if (timer != null) 
-        	timer.stop();
+            timer.stop();
         if (startedUp)
             {
             synth.doSendAllSoundsOff(false);

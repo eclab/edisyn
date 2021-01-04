@@ -202,13 +202,13 @@ public class WaldorfKyra extends Synth
     
     public static final int[] LFO_PHASES = new int[]
     {
-	0, 1, 3, 4, 6, 7, 9, 10, 11, 13, 14, 16, 17, 18, 20, 21, 23, 24, 26, 27, 28, 30, 
-	31, 33, 34, 35, 37, 38, 40, 41, 43, 44, 45, 47, 48, 50, 51, 52, 54, 55, 57, 58, 
-	60, 61, 62, 64, 65, 67, 68, 69, 71, 72, 74, 75, 77, 78, 79, 81, 82, 84, 85, 86, 
-	88, 90, 91, 92, 94, 95, 96, 98, 99, 101, 102, 103, 105, 106, 108, 109, 111, 112, 
-	113, 115, 116, 118, 119, 120, 122, 123, 125, 126, 128, 129, 130, 132, 133, 135, 
-	136, 137, 139, 140, 142, 143, 145, 146, 147, 149, 150, 152, 153, 154, 156, 157, 
-	159, 160, 162, 163, 164, 166, 167, 169, 170, 171, 173, 174, 176, 177, 179, 180
+    0, 1, 3, 4, 6, 7, 9, 10, 11, 13, 14, 16, 17, 18, 20, 21, 23, 24, 26, 27, 28, 30, 
+    31, 33, 34, 35, 37, 38, 40, 41, 43, 44, 45, 47, 48, 50, 51, 52, 54, 55, 57, 58, 
+    60, 61, 62, 64, 65, 67, 68, 69, 71, 72, 74, 75, 77, 78, 79, 81, 82, 84, 85, 86, 
+    88, 90, 91, 92, 94, 95, 96, 98, 99, 101, 102, 103, 105, 106, 108, 109, 111, 112, 
+    113, 115, 116, 118, 119, 120, 122, 123, 125, 126, 128, 129, 130, 132, 133, 135, 
+    136, 137, 139, 140, 142, 143, 145, 146, 147, 149, 150, 152, 153, 154, 156, 157, 
+    159, 160, 162, 163, 164, 166, 167, 169, 170, 171, 173, 174, 176, 177, 179, 180
     };
     
     // Used for LFO Delay, Attack, Decay, and Release times
@@ -320,8 +320,8 @@ public class WaldorfKyra extends Synth
         hbox = new HBox();
         hbox.add(addLFO(3, Style.COLOR_B()));
         hbox.addLast(addArpeggiator(Style.COLOR_C()));
-		vbox.add(hbox);
-		
+        vbox.add(hbox);
+                
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Modulation", soundPanel);
 
@@ -632,17 +632,17 @@ public class WaldorfKyra extends Synth
         comp = new LabelledDial("Pattern", this, "arppattern", color, 0, 127);
         hbox.add(comp);
 
-		// On the Kyra, gate length is 1% ... 100%, which is mapped 0...99.  Docs appear to be wrong.
+        // On the Kyra, gate length is 1% ... 100%, which is mapped 0...99.  Docs appear to be wrong.
         comp = new LabelledDial("Gate Length", this, "arpgatelength", color, 0, 99)
-        	{
-        	public String map(int value)
-        		{
-        		return "" + (value + 1) + "%";
-        		}
-        	};
+            {
+            public String map(int value)
+                {
+                return "" + (value + 1) + "%";
+                }
+            };
         hbox.add(comp);
 
-		// the tempo goes 58...185, and sysex goes 0...127 but the documentation suggests 0...117 which makes no sense
+        // the tempo goes 58...185, and sysex goes 0...127 but the documentation suggests 0...117 which makes no sense
         comp = new LabelledDial("Tempo", this, "arptempo", color, 0, 127);
         hbox.add(comp);
 
@@ -650,72 +650,72 @@ public class WaldorfKyra extends Synth
         return category;
         }
 
-	// Given a wave from 0...4096, returns the wave number in its corresponding group
-	int waveToNumber(int wave)
-		{
-		int total = 0;
-		for(int i = 0; i < WAVE_COUNTS.length; i++)
-			{
-			if (total + WAVE_COUNTS[i] > wave)
-				{
-				// got it
-				return wave - total;
-				}
-			else total += WAVE_COUNTS[i];
-			}
-		return -1;
-		}
+    // Given a wave from 0...4096, returns the wave number in its corresponding group
+    int waveToNumber(int wave)
+        {
+        int total = 0;
+        for(int i = 0; i < WAVE_COUNTS.length; i++)
+            {
+            if (total + WAVE_COUNTS[i] > wave)
+                {
+                // got it
+                return wave - total;
+                }
+            else total += WAVE_COUNTS[i];
+            }
+        return -1;
+        }
 
-	// Given a wave from 0...4096, returns the corresponding group
-	int waveToGroup(int wave)
-		{
-		int total = 0;
-		for(int i = 0; i < WAVE_COUNTS.length; i++)
-			{
-			if (total + WAVE_COUNTS[i] > wave)
-				{
-				// got it
-				return i;
-				}
-			else total += WAVE_COUNTS[i];
-			}
-		return -1;
-		}
+    // Given a wave from 0...4096, returns the corresponding group
+    int waveToGroup(int wave)
+        {
+        int total = 0;
+        for(int i = 0; i < WAVE_COUNTS.length; i++)
+            {
+            if (total + WAVE_COUNTS[i] > wave)
+                {
+                // got it
+                return i;
+                }
+            else total += WAVE_COUNTS[i];
+            }
+        return -1;
+        }
 
-	// Given a wave group and number, returns the given wave 
-	int getWave(int group, int number)
-		{
-		int total = 0;
-		for(int i = 0; i < group; i++)
-			{
-			total += WAVE_COUNTS[i];
-			}
-		return total + number;
-		}
+    // Given a wave group and number, returns the given wave 
+    int getWave(int group, int number)
+        {
+        int total = 0;
+        for(int i = 0; i < group; i++)
+            {
+            total += WAVE_COUNTS[i];
+            }
+        return total + number;
+        }
 
 
 
-	static String[] WAVE_NAMES = null;
+    static String[] WAVE_NAMES = null;
     public JComponent addOscillator(final int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
-		category.makePasteable("osc" + osc);
+        category.makePasteable("osc" + osc);
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         VBox vbox = new VBox();
    
-   		// build wave names if this is the first time
-		if (WAVE_NAMES == null)
-			{
-			WAVE_NAMES = new String[4096];
-			for(int i = 0; i < WAVE_NAMES.length; i++)
-				{
-				WAVE_NAMES[i] = WAVE_GROUPS[waveToGroup(i)] + " (" + waveToNumber(i) + ")";
-				}
-			}
-			
+        // build wave names if this is the first time
+        if (WAVE_NAMES == null)
+            {
+            WAVE_NAMES = new String[4096];
+            for(int i = 0; i < WAVE_NAMES.length; i++)
+                {
+                WAVE_NAMES[i] = WAVE_GROUPS[waveToGroup(i)] + " (" + waveToNumber(i) + ")";
+                }
+            }
+                        
         comp = new Chooser("Wave", this, "osc" + osc + "wave", WAVE_NAMES);
         vbox.add(comp);
                 
@@ -825,7 +825,7 @@ public class WaldorfKyra extends Synth
     public JComponent addFilter(int filter, Color color)
         {
         Category category = new Category(this, "Filter " + filter, color);
-		category.makePasteable("filter" + filter);
+        category.makePasteable("filter" + filter);
 
         JComponent comp;
         String[] params;
@@ -890,7 +890,7 @@ public class WaldorfKyra extends Synth
     public JComponent addEnvelope(int env, Color color)
         {
         Category category = new Category(this, "Envelope " + env + (env == 1 ? " (Amplifier)" : (env == 2 ? " (Filter)" : " (Aux)")), color);
-		category.makePasteable("eg" + env);
+        category.makePasteable("eg" + env);
 
         JComponent comp;
         String[] params;
@@ -899,20 +899,20 @@ public class WaldorfKyra extends Synth
         
         // Bass delay is now deprecated
         /*
-        VBox vbox = new VBox();
-        if (env == 2 || env == 3)
-            {
-            comp = new CheckBox("Bass Delay", this, "eg" + env + "bassdelay");
-            bd = (CheckBox)comp;
-            vbox.add(comp);
-            }
-        else
-            {
-            // this will only work if envelope 1 is constructed AFTER envelope 2
-            vbox.add(Strut.makeStrut(bd));
-            }
-        hbox.add(vbox);
-    	*/
+          VBox vbox = new VBox();
+          if (env == 2 || env == 3)
+          {
+          comp = new CheckBox("Bass Delay", this, "eg" + env + "bassdelay");
+          bd = (CheckBox)comp;
+          vbox.add(comp);
+          }
+          else
+          {
+          // this will only work if envelope 1 is constructed AFTER envelope 2
+          vbox.add(Strut.makeStrut(bd));
+          }
+          hbox.add(vbox);
+        */
 
         comp = new LabelledDial("Attack", this, "eg" + env + "attack", color, 0, 127)
             {
@@ -964,7 +964,7 @@ public class WaldorfKyra extends Synth
     public JComponent addLFO(int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
-		category.makePasteable("lfo" + lfo);
+        category.makePasteable("lfo" + lfo);
 
         JComponent comp;
         String[] params;
@@ -984,16 +984,16 @@ public class WaldorfKyra extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-		VBox ratebox = new VBox();
+        VBox ratebox = new VBox();
         LabelledDial rate = new LabelledDial("Rate", this, "lfo" + lfo + "rate", color, 0, 127)
             {
             public String map(int value)
                 {
                 value = value + 1;
-                if ((lfo == 1 || lfo == 2) && model.get("lfo" + lfo + "range", 0) == 1)	// extended range
-                	{
-                	value *= 4;
-                	}
+                if ((lfo == 1 || lfo == 2) && model.get("lfo" + lfo + "range", 0) == 1) // extended range
+                    {
+                    value *= 4;
+                    }
                 int pre = (value / 10);
                 int post = (value % 10);
                 return "" + pre + "." + post; // + " Hz";
@@ -1001,17 +1001,17 @@ public class WaldorfKyra extends Synth
             };
         ratebox.add(rate);
         if (lfo == 1 || lfo == 2)
-        	{
-        	CheckBox extend = new CheckBox("Extend", this, "lfo" + lfo + "range") // define it first so it's already loaded when we make the dial
-        		{
-				public void update(String key, Model model)
-					{
-					super.update(key, model);
-					rate.repaint();
-					}
-        		};
-        	ratebox.add(extend);
-        	}
+            {
+            CheckBox extend = new CheckBox("Extend", this, "lfo" + lfo + "range") // define it first so it's already loaded when we make the dial
+                {
+                public void update(String key, Model model)
+                    {
+                    super.update(key, model);
+                    rate.repaint();
+                    }
+                };
+            ratebox.add(extend);
+            }
         hbox.add(ratebox);
 
 
@@ -1045,45 +1045,45 @@ public class WaldorfKyra extends Synth
     public JComponent addModMatrix(int mod, Color color)
         {
         Category category = new Category(this, "Slot " + (mod + 1), color);
-		category.makePasteable("modmat" + mod);
+        category.makePasteable("modmat" + mod);
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         
-            VBox vbox = new VBox();
-            params = MOD_SOURCES;
-            comp = new Chooser("Source", this, "modmat" + mod + "source", params);
-            vbox.add(comp);
+        VBox vbox = new VBox();
+        params = MOD_SOURCES;
+        comp = new Chooser("Source", this, "modmat" + mod + "source", params);
+        vbox.add(comp);
 
-            params = MOD_DESTINATIONS;
-            comp = new Chooser("Destination 1", this, "modmat" + mod + "destination0", params);
-            vbox.add(comp);
+        params = MOD_DESTINATIONS;
+        comp = new Chooser("Destination 1", this, "modmat" + mod + "destination0", params);
+        vbox.add(comp);
 
-            hbox.add(vbox);
-            vbox = new VBox();
+        hbox.add(vbox);
+        vbox = new VBox();
 
-            params = MOD_DESTINATIONS;
-            comp = new Chooser("Destination 2", this, "modmat" + mod + "destination1", params);
-            vbox.add(comp);
+        params = MOD_DESTINATIONS;
+        comp = new Chooser("Destination 2", this, "modmat" + mod + "destination1", params);
+        vbox.add(comp);
 
-            params = MOD_DESTINATIONS;
-            comp = new Chooser("Destination 3", this, "modmat" + mod + "destination2", params);
-            vbox.add(comp);
-            hbox.add(vbox);
+        params = MOD_DESTINATIONS;
+        comp = new Chooser("Destination 3", this, "modmat" + mod + "destination2", params);
+        vbox.add(comp);
+        hbox.add(vbox);
             
-            hbox.add(Strut.makeHorizontalStrut(8));
+        hbox.add(Strut.makeHorizontalStrut(8));
                         
-            comp = new LabelledDial("Amount 1", this, "modmat" + mod + "amount0", color, 0, 127, 64);
-            hbox.add(comp);
+        comp = new LabelledDial("Amount 1", this, "modmat" + mod + "amount0", color, 0, 127, 64);
+        hbox.add(comp);
                         
-            hbox.add(Strut.makeHorizontalStrut(8));
-            comp = new LabelledDial("Amount 2", this, "modmat" + mod + "amount1", color, 0, 127, 64);
-            hbox.add(comp);
+        hbox.add(Strut.makeHorizontalStrut(8));
+        comp = new LabelledDial("Amount 2", this, "modmat" + mod + "amount1", color, 0, 127, 64);
+        hbox.add(comp);
                         
-            hbox.add(Strut.makeHorizontalStrut(8));
-            comp = new LabelledDial("Amount 3", this, "modmat" + mod + "amount2", color, 0, 127, 64);
-            hbox.add(comp);
+        hbox.add(Strut.makeHorizontalStrut(8));
+        comp = new LabelledDial("Amount 3", this, "modmat" + mod + "amount2", color, 0, 127, 64);
+        hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -1225,7 +1225,7 @@ public class WaldorfKyra extends Synth
         comp = new LabelledDial("Predelay", this, "fxreverbpredelay", color, 0, 127);
         hbox.add(comp);
 
-        comp = new LabelledDial("Time", this, "fxreverbrt60", color, 0, 127);		// reverb time
+        comp = new LabelledDial("Time", this, "fxreverbrt60", color, 0, 127);           // reverb time
         hbox.add(comp);
 
         comp = new LabelledDial("Damping", this, "fxreverbdamping", color, 0, 127);
@@ -1517,7 +1517,7 @@ public class WaldorfKyra extends Synth
             multi.getModel().set("part" + j + "patchnumber", number);
             multi.getModel().set("part" + j + "transpose", 24);
             multi.getModel().set("part" + j + "detune", 64);
-            multi.getModel().set("part" + j + "lowerkeyrange", 1);		// not permitted to be 0
+            multi.getModel().set("part" + j + "lowerkeyrange", 1);              // not permitted to be 0
             multi.getModel().set("part" + j + "upperkeyrange", 127);
             multi.getModel().set("part" + j + "rxvolume", 1);
             multi.getModel().set("part" + j + "rxprogram", 1);
@@ -1646,10 +1646,10 @@ public class WaldorfKyra extends Synth
     public Object[] emitAll(String key)
         {
         int part = 0;           // Maybe customize for different parts?
-		if (key.equals("-") || key.equals("bank") || key.equals("number"))
-			{
-			return new Object[0];		// do nothing
-			}
+        if (key.equals("-") || key.equals("bank") || key.equals("number"))
+            {
+            return new Object[0];           // do nothing
+            }
         else if (key.equals("name"))
             {
             String val = model.get(key, "") + "                      ";
@@ -1676,7 +1676,7 @@ public class WaldorfKyra extends Synth
             return nm;
             }
         else if (key.equals("osc1wave"))
-        	{
+            {
             int param = ((Integer)parametersToIndex.get("osc1wavetablegroup")).intValue();
             int val = waveToGroup(model.get(key, 0));
         
@@ -1708,9 +1708,9 @@ public class WaldorfKyra extends Synth
             data2[9] = (byte)0xF7;
             
             return new Object[] { data, data2 };
-        	}
+            }
         else if (key.equals("osc2wave"))
-        	{
+            {
             int param = ((Integer)parametersToIndex.get("osc2wavetablegroup")).intValue();
             int val = waveToGroup(model.get(key, 0));
         
@@ -1742,7 +1742,7 @@ public class WaldorfKyra extends Synth
             data2[9] = (byte)0xF7;
             
             return new Object[] { data, data2 };
-        	}
+            }
         else
             {
             int param = ((Integer)parametersToIndex.get(key)).intValue();
@@ -1777,7 +1777,7 @@ public class WaldorfKyra extends Synth
         data[1] = (byte)0x3e;
         data[2] = (byte)0x22;
         data[3] = (byte)getID();
-        data[4] = (byte)0x00;                   // Send Patch		-- we must always do 0x00, not 0x40
+        data[4] = (byte)0x00;                   // Send Patch           -- we must always do 0x00, not 0x40
         data[5] = (byte)0x01;                   // Current Version
         data[6] = (byte)BB;
         data[7] = (byte)NN;
@@ -1790,25 +1790,25 @@ public class WaldorfKyra extends Synth
         for(int i = 2; i < 202; i++)
             {
             if (parameters[i].equals("-"))
-            	{
-            	data[i + 8] = 0; // do nothing
-            	}
+                {
+                data[i + 8] = 0; // do nothing
+                }
             else if (parameters[i].equals("osc1wavetablegroup"))
-            	{
-            	data[i + 8] = (byte)(waveToGroup(model.get("osc1wave")));
-            	}
+                {
+                data[i + 8] = (byte)(waveToGroup(model.get("osc1wave")));
+                }
             else if (parameters[i].equals("osc1wavetablenumber"))
-            	{
-            	data[i + 8] = (byte)(waveToNumber(model.get("osc1wave")));
-            	}
+                {
+                data[i + 8] = (byte)(waveToNumber(model.get("osc1wave")));
+                }
             else if (parameters[i].equals("osc2wavetablegroup"))
-            	{
-            	data[i + 8] = (byte)(waveToGroup(model.get("osc2wave")));
-            	}
+                {
+                data[i + 8] = (byte)(waveToGroup(model.get("osc2wave")));
+                }
             else if (parameters[i].equals("osc2wavetablenumber"))
-            	{
-            	data[i + 8] = (byte)(waveToNumber(model.get("osc2wave")));
-            	}
+                {
+                data[i + 8] = (byte)(waveToNumber(model.get("osc2wave")));
+                }
             else
                 {
                 data[i + 8] = (byte)(model.get(parameters[i], 0));
@@ -1834,76 +1834,76 @@ public class WaldorfKyra extends Synth
         return data;
         }
 
-	public void parseParameter(byte[] data)
-		{
-		if (data.length == 10 && 	// single parameter
-            		data[0] == (byte)0xF0 &&
-            		data[1] == 0x3E &&
-            		data[2] == 0x22 &&
-            		(data[4] == 0x10 || data[4] == 0x50))
-            			{
-		// extract part
-		int part = ((data[6] >>> 4) & 3);
-		// extract param
-		int param = ((data[6] & 1) << 7) | data[7];
-		// extract value
-		int val = data[8];
-		
-		// "name"
-        // name chars are params 202 through 223
-		if (param >= 202 && param <= 223)
-			{
-			char c = (char) val;
-			int pos = param - 202;
-			char[] name = (model.get("name", "") + "                      ").toCharArray();
-			name[pos] = c;
-        	model.set("name", new String(StringUtility.rightTrim(new String(name))));
-			}
-		
-		// "osc1wavetablegroup"
-		else if (parameters[param].equals("osc1wavetablegroup"))
-			{
-			int group = val;
-			int number = waveToNumber(model.get("osc1wave"));
-			if (WAVE_COUNTS[group] <= number) // no longer legal, need to revise to default value, hopefully osc1wavetablenumber will come along soon
-				number = 0;
-			model.set("osc1wave", getWave(group, number));
-			}
-		
-		// "osc1wavetablenumber"
-		else if (parameters[param].equals("osc1wavetablenumber"))
-			{
-			int group = waveToGroup(model.get("osc1wave"));
-			int number = val;
-			if (WAVE_COUNTS[group] <= number) // no longer legal, need to revise to default value, hope this doesn't happen
-				number = 0;
-			model.set("osc1wave", getWave(group, number));
-			}
-		
-		// "osc2wavetablegroup"
-		else if (parameters[param].equals("osc2wavetablegroup"))
-			{
-			int group = val;
-			int number = waveToNumber(model.get("osc2wave"));
-			if (WAVE_COUNTS[group] <= number) // no longer legal, need to revise to default value, hopefully osc1wavetablenumber will come along soon
-				number = 0;
-			model.set("osc2wave", getWave(group, number));
-			}
-		
-		// "osc2wavetablenumber"
-		else if (parameters[param].equals("osc2wavetablenumber"))
-			{
-			int group = waveToGroup(model.get("osc2wave"));
-			int number = val;
-			if (WAVE_COUNTS[group] <= number) // no longer legal, need to revise to default value, hope this doesn't happen
-				number = 0;
-			model.set("osc2wave", getWave(group, number));
-			}
-		
-        else
+    public void parseParameter(byte[] data)
+        {
+        if (data.length == 10 &&        // single parameter
+            data[0] == (byte)0xF0 &&
+            data[1] == 0x3E &&
+            data[2] == 0x22 &&
+            (data[4] == 0x10 || data[4] == 0x50))
             {
-            model.set(parameters[param], val);
-            }
+            // extract part
+            int part = ((data[6] >>> 4) & 3);
+            // extract param
+            int param = ((data[6] & 1) << 7) | data[7];
+            // extract value
+            int val = data[8];
+                
+            // "name"
+            // name chars are params 202 through 223
+            if (param >= 202 && param <= 223)
+                {
+                char c = (char) val;
+                int pos = param - 202;
+                char[] name = (model.get("name", "") + "                      ").toCharArray();
+                name[pos] = c;
+                model.set("name", new String(StringUtility.rightTrim(new String(name))));
+                }
+                
+            // "osc1wavetablegroup"
+            else if (parameters[param].equals("osc1wavetablegroup"))
+                {
+                int group = val;
+                int number = waveToNumber(model.get("osc1wave"));
+                if (WAVE_COUNTS[group] <= number) // no longer legal, need to revise to default value, hopefully osc1wavetablenumber will come along soon
+                    number = 0;
+                model.set("osc1wave", getWave(group, number));
+                }
+                
+            // "osc1wavetablenumber"
+            else if (parameters[param].equals("osc1wavetablenumber"))
+                {
+                int group = waveToGroup(model.get("osc1wave"));
+                int number = val;
+                if (WAVE_COUNTS[group] <= number) // no longer legal, need to revise to default value, hope this doesn't happen
+                    number = 0;
+                model.set("osc1wave", getWave(group, number));
+                }
+                
+            // "osc2wavetablegroup"
+            else if (parameters[param].equals("osc2wavetablegroup"))
+                {
+                int group = val;
+                int number = waveToNumber(model.get("osc2wave"));
+                if (WAVE_COUNTS[group] <= number) // no longer legal, need to revise to default value, hopefully osc1wavetablenumber will come along soon
+                    number = 0;
+                model.set("osc2wave", getWave(group, number));
+                }
+                
+            // "osc2wavetablenumber"
+            else if (parameters[param].equals("osc2wavetablenumber"))
+                {
+                int group = waveToGroup(model.get("osc2wave"));
+                int number = val;
+                if (WAVE_COUNTS[group] <= number) // no longer legal, need to revise to default value, hope this doesn't happen
+                    number = 0;
+                model.set("osc2wave", getWave(group, number));
+                }
+                
+            else
+                {
+                model.set(parameters[param], val);
+                }
             }
         }
 
@@ -1920,23 +1920,23 @@ public class WaldorfKyra extends Synth
         for(int i = 2; i < 202; i++)
             {
             if (parameters[i].equals("-"))
-            	{
-            	// do nothing
-            	}
-			else if (parameters[i].equals("osc1wavetablegroup") || parameters[i].equals("osc2wavetablegroup"))		// group is before number
-            	{
-            	group = data[i + 8];
-            	}
+                {
+                // do nothing
+                }
+            else if (parameters[i].equals("osc1wavetablegroup") || parameters[i].equals("osc2wavetablegroup"))              // group is before number
+                {
+                group = data[i + 8];
+                }
             else if (parameters[i].equals("osc1wavetablenumber"))
-            	{
-            	int number = data[i + 8];
-            	model.set("osc1wave", getWave(group, number));
-            	}
+                {
+                int number = data[i + 8];
+                model.set("osc1wave", getWave(group, number));
+                }
             else if (parameters[i].equals("osc2wavetablenumber"))
-            	{
-            	int number = data[i + 8];
-            	model.set("osc2wave", getWave(group, number));
-            	}
+                {
+                int number = data[i + 8];
+                model.set("osc2wave", getWave(group, number));
+                }
             else
                 {
                 model.set(parameters[i], data[i+8]);
@@ -1994,7 +1994,7 @@ public class WaldorfKyra extends Synth
     "osc1lfo1topitch",
     "osc1lfo2topulsewidth",
     "osc1fmamount",
-    "-",									// spare01
+    "-",                                                                        // spare01
     "auxoscillatormode",
     "osc2coarsetune",
     "osc2detune",
@@ -2011,7 +2011,7 @@ public class WaldorfKyra extends Synth
     "osc2lfo2topulsewidth",
     "osc2hardsync",
     "hypersawsuboscillator",
-    "filter1mode",							// The docs talk about two magic bits, "bypass" (0x08) and "enable" (0x10), but I am assured this is just internal and they never show up.
+    "filter1mode",                                                      // The docs talk about two magic bits, "bypass" (0x08) and "enable" (0x10), but I am assured this is just internal and they never show up.
     "filterconfiguration",
     "filter1frequency",
     "filter1resonance",
@@ -2021,12 +2021,12 @@ public class WaldorfKyra extends Synth
     "filter1lfo3tofreq",
     "filter1keyfollowkey",
     "filter1keyfollowamt",
-    "-",									// VCA Drive: this was never implemented			
+    "-",                                                                        // VCA Drive: this was never implemented                        
     "fxlimitermode",                        // this was originally called PATCH_PARAM_VCA_SATURATOR_MODE 
     "vcapan",
     "vcalfo1toamp",
     "vcalfo2topan",
-    "filter2mode",							// The docs talk about two magic bits, "bypass" (0x08) and "enable" (0x10), but I am assured this is just internal and they never show up.
+    "filter2mode",                                                      // The docs talk about two magic bits, "bypass" (0x08) and "enable" (0x10), but I am assured this is just internal and they never show up.
     "filter2frequency",
     "filter2resonance",
     "filter2eg1tofreq",
@@ -2035,17 +2035,17 @@ public class WaldorfKyra extends Synth
     "eg1decay",
     "eg1sustain",
     "eg1release",
-    "-",							//"spare02",
+    "-",                                                        //"spare02",
     "eg2attack",
     "eg2decay",
     "eg2sustain",
     "eg2release",
-    "-",							// "eg2bassdelay", (deprecated)
+    "-",                                                        // "eg2bassdelay", (deprecated)
     "eg3attack",
     "eg3decay",
     "eg3sustain",
     "eg3release",
-    "-",							// "eg3bassdelay", (deprecated)
+    "-",                                                        // "eg3bassdelay", (deprecated)
     "filter2lfo2tofreq",
     "filter2lfo3tofreq",
     "filter2keyfollowkey",
@@ -2065,7 +2065,7 @@ public class WaldorfKyra extends Synth
     "lfo3timesource",
     "lfo1delay",
     "lfo2delay",
-    "velocityscaling",					// was spare07
+    "velocityscaling",                                  // was spare07
     "modmat0source",
     "modmat0destination0",
     "modmat0amount0",
@@ -2117,10 +2117,10 @@ public class WaldorfKyra extends Synth
     "fxphaserfeedback",
     "fxphasermix",
     "fxphaserwaveshape",
-    "lfo1range",					// was "spare12",
-    "lfo2range", 					// was "spare13",
-    "lfo1phase", 					// was "spare14",
-    "lfo2phase", 					// was "spare15",
+    "lfo1range",                                        // was "spare12",
+    "lfo2range",                                        // was "spare13",
+    "lfo1phase",                                        // was "spare14",
+    "lfo2phase",                                        // was "spare15",
     "fxddltype",
     "fxddldelaytime",
     "fxddlfeedback",
@@ -2128,18 +2128,18 @@ public class WaldorfKyra extends Synth
     "fxddlcolor",
     "fxddlclocksource",
     "fxddlclockbeat",
-    "-", 					// "spare16",
-    "-", 					// "spare17",
-    "latchmode", 					// was "spare18",
+    "-",                                        // "spare16",
+    "-",                                        // "spare17",
+    "latchmode",                                        // was "spare18",
     "fxmdfxdelaytime",
     "fxmdfxdelayscale",
     "fxmdfxfeedback",
     "fxmdfxmodspeed",
     "fxmdfxmoddepth",
     "fxmdfxmix",
-    "-", 					// "spare19",
-    "-", 					// "spare20",
-    "-", 					// "spare21",
+    "-",                                        // "spare19",
+    "-",                                        // "spare20",
+    "-",                                        // "spare21",
     "dualmodedetune",
     "fxreverbpredelay",
     "fxreverbrt60",                   // This is reverb time

@@ -1026,7 +1026,7 @@ public abstract class Synth extends JComponent implements Updatable
     public boolean sendAllSoundsOffWhenWindowChanges() { return true; }
     
     /** Called when, during Sanity Check testing, another synth (synth2) contains a different value (obj2) for a given
-    	key than you hold (namely obj1).  Return true if this is acceptable. */
+        key than you hold (namely obj1).  Return true if this is acceptable. */
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2) { return false; }
 
     /** Return an extra pause (beyond the pause after sending all parameters) after playing a test sound while hill-climbing. */
@@ -1714,25 +1714,25 @@ public abstract class Synth extends JComponent implements Updatable
             {
             if (data[i] < 0)  // uh oh, high byte
                 {
-                if (!foundHighByte)		// print out some stuff
-                	{
-					String s = "";
-					int start = 0; // = i - 20;
-					if (start < 0) start = 0;
-					for(int j = start; j <= i; j++)
-						s = s + j + ": " + String.format("%02X", data[j]) + " " + (data[j] < 0 ? data[j] + 256 : data[j]) + " " +
-							(data[j] >= 32 && data[j] < 127 ? (char)data[j] : "") + "\n";
-					Synth.handleException(new RuntimeException("High byte in sysex found.  First example is byte #" + i + "\n" + s));
-					foundHighByte = true;
-					}
-				else
-					{
-					System.err.println("Second high byte in sysex found.  Byte is #" + i);
-					}
-					
-				// try to fix things
-				if (data[i] != 0xF7)
-					data[i] = (byte)(data[i] & 127);
+                if (!foundHighByte)             // print out some stuff
+                    {
+                    String s = "";
+                    int start = 0; // = i - 20;
+                    if (start < 0) start = 0;
+                    for(int j = start; j <= i; j++)
+                        s = s + j + ": " + String.format("%02X", data[j]) + " " + (data[j] < 0 ? data[j] + 256 : data[j]) + " " +
+                            (data[j] >= 32 && data[j] < 127 ? (char)data[j] : "") + "\n";
+                    Synth.handleException(new RuntimeException("High byte in sysex found.  First example is byte #" + i + "\n" + s));
+                    foundHighByte = true;
+                    }
+                else
+                    {
+                    System.err.println("Second high byte in sysex found.  Byte is #" + i);
+                    }
+                                        
+                // try to fix things
+                if (data[i] != 0xF7)
+                    data[i] = (byte)(data[i] & 127);
 //                break;
                 }
             }
@@ -1880,9 +1880,9 @@ public abstract class Synth extends JComponent implements Updatable
                     }
                 }
             else if (tabs.getSelectedComponent() == morphPane)
-            	{
-            	morph.handleCC(ccdata);
-            	}
+                {
+                morph.handleCC(ccdata);
+                }
             else
                 {
                 int sub = getCurrentTab();
@@ -2082,10 +2082,10 @@ public abstract class Synth extends JComponent implements Updatable
     /** Individually sends all parameters for which the current model differs from the provided model.
         If the provided model is null, then all parameters are sent. */     
     public void sendDifferentParameters(Model other)
-    	{
-    	sendDifferentParameters(other, 1.0);
-    	}
-    	
+        {
+        sendDifferentParameters(other, 1.0);
+        }
+        
 
     public void sendDifferentParameters(Model other, double probability)
         {
@@ -2101,7 +2101,7 @@ public abstract class Synth extends JComponent implements Updatable
             for(int i = 0; i < keys.length; i++)
                 {
                 if (probability != 1.0 && random.nextDouble() >= probability)
-                	continue;
+                    continue;
 
                 if (sent = tryToSendMIDI(emitAll(keys[i], STATUS_SENDING_ALL_PARAMETERS)) || sent)
                     simplePause(getPauseAfterSendOneParameter());
@@ -2113,7 +2113,7 @@ public abstract class Synth extends JComponent implements Updatable
             for(int i = 0; i < keys.length; i++)
                 {
                 if (probability != 1.0 && random.nextDouble() >= probability)
-                	continue;
+                    continue;
                 
                 if (getModel().isInteger(keys[i]))              // integers
                     {
@@ -2146,11 +2146,11 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 
-	////////// RECOGNITION
+    ////////// RECOGNITION
 
 
 
-	/** Returns the recognizer for a given class name */
+    /** Returns the recognizer for a given class name */
     public static Class getRecognizer(String synthClassName)
         {
         try
@@ -2246,47 +2246,47 @@ public abstract class Synth extends JComponent implements Updatable
     // Convert Bulk Bank
         
     /* Converts a bulk bank (a bank sysex consisting of different kinds of patches) into separate
-    	bank sysex messages or individual messages or a combination.  This is done by ultimately calling the CLASS method 
-        <tt>public static boolean convertBulkBank(data)</tt> that each synthesizer subclass is asked to implement. */
+       bank sysex messages or individual messages or a combination.  This is done by ultimately calling the CLASS method 
+       <tt>public static boolean convertBulkBank(data)</tt> that each synthesizer subclass is asked to implement. */
 /*    public static byte[][] convertBulkBank(String synthClassName, byte[] data)
-        {
-        Class recognizer = getRecognizer(synthClassName);
-        if (recognizer == null) 
-            { 
-            System.err.println("Synth.convertBulkBank() WARNING: No recognizer for " + synthClassName); 
-            return false;
-            }
+      {
+      Class recognizer = getRecognizer(synthClassName);
+      if (recognizer == null) 
+      { 
+      System.err.println("Synth.convertBulkBank() WARNING: No recognizer for " + synthClassName); 
+      return false;
+      }
 
-        try
-            {
-            Method method = recognizer.getMethod("convertBulkBank", new Class[] { byte[].class });
-            Object obj = method.invoke(null, data);
-            return ((Boolean)obj).booleanValue();
-            }
-        catch (Exception e)
-            {
-            return false;
-            }
-        }
+      try
+      {
+      Method method = recognizer.getMethod("convertBulkBank", new Class[] { byte[].class });
+      Object obj = method.invoke(null, data);
+      return ((Boolean)obj).booleanValue();
+      }
+      catch (Exception e)
+      {
+      return false;
+      }
+      }
 */
 
     /* Converts a bulk bank (a bank sysex consisting of different kinds of patches) into separate
-    	bank sysex messages or individual messages or a combination
-        This is done by ultimately calling the CLASS method <tt>public static boolean convertBulkBank(data)</tt> 
-        that your synthesizer subclass is asked to implement. */
+       bank sysex messages or individual messages or a combination
+       This is done by ultimately calling the CLASS method <tt>public static boolean convertBulkBank(data)</tt> 
+       that your synthesizer subclass is asked to implement. */
 /*
-    public final byte[][] convertBulkBankLocal(byte[] data)
-        {
-        return convertBulkBankLocal(Synth.this.getClass().getName(), data);
-        }
+  public final byte[][] convertBulkBankLocal(byte[] data)
+  {
+  return convertBulkBankLocal(Synth.this.getClass().getName(), data);
+  }
 */
 
 
-	// Getting a Sysex Patch Group
-	
+    // Getting a Sysex Patch Group
+        
 
     /** Returns the position just after the end of the sysex group, starting at start,
-    	which represents a single patch for the synthesizer of the given class.  */
+        which represents a single patch for the synthesizer of the given class.  */
     public static int getNextSysexPatchGroup(String synthClassName, byte[][] sysex, int start)
         {
         Class recognizer = getRecognizer(synthClassName);
@@ -2353,8 +2353,8 @@ public abstract class Synth extends JComponent implements Updatable
     /// Recognition utilities
         
   
-	/** Returns true if any of the given data contain sysex messages
-		recognized by this synthesizer. */
+    /** Returns true if any of the given data contain sysex messages
+        recognized by this synthesizer. */
     boolean recognizeAnyForLocal(byte[][] data)
         {
         for(int i = 0; i < data.length; i++)
@@ -2365,8 +2365,8 @@ public abstract class Synth extends JComponent implements Updatable
         return false;
         }
 
- 	/** Returns the synthesizer which recognizes this sysex message, or -1 if none. */
-   int recognizeSynthForSysex(byte[] data)
+    /** Returns the synthesizer which recognizes this sysex message, or -1 if none. */
+    int recognizeSynthForSysex(byte[] data)
         {
         for(int i = 0; i < numSynths(); i++)
             {
@@ -2376,7 +2376,7 @@ public abstract class Synth extends JComponent implements Updatable
         return -1;
         }
 
- 	/** Returns all the synthesizers which recognize any message in this data. */
+    /** Returns all the synthesizers which recognize any message in this data. */
     int[] recognizeAnySynthForSysex(byte[][] data)
         {
         boolean[] recognized = new boolean[numSynths()];
@@ -2584,7 +2584,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         disableMenuBar();
         int ret = JOptionPane.showOptionDialog(Synth.this, message, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-        	new String[] { okOption, "Cancel" } , okOption);
+            new String[] { okOption, "Cancel" } , okOption);
         enableMenuBar();
         return (ret == 0);
         }
@@ -2653,9 +2653,9 @@ public abstract class Synth extends JComponent implements Updatable
             {
             String synthName = getTitleBarSynthName().trim();
             String fileName = (file == null ? 
-            					(auxFile == null ? "        Untitled" : 
-            									   "        (" + auxFile.getName() + ")") :
-            					"        " + file.getName());
+                    (auxFile == null ? "        Untitled" : 
+                    "        (" + auxFile.getName() + ")") :
+                "        " + file.getName());
             String disconnectedWarning = ((tuple == null || tuple.in == null) ? "   DISCONNECTED" : "");
             String downloadingWarning = (patchTimer != null ? "   DOWNLOADING" : "");
             String learningWarning = (learning ? "   LEARNING" +
@@ -3141,7 +3141,7 @@ public abstract class Synth extends JComponent implements Updatable
 
 
     /** Produces the JFrame for a Synth and displays it.  This generally builds the entire
-    	menu subsystem as well, so it's pretty involved.  */
+        menu subsystem as well, so it's pretty involved.  */
     public JFrame sprout()
         {
         setLayout(new BorderLayout());
@@ -5772,7 +5772,7 @@ public abstract class Synth extends JComponent implements Updatable
         
         
         
-	///// SYSEX UTILITIES
+    ///// SYSEX UTILITIES
         
     /** Returns all sysex messages in the given MIDI file (not sysex file). */
     public byte[][] extractSysexFromMidFile(File f)
@@ -5855,9 +5855,9 @@ public abstract class Synth extends JComponent implements Updatable
 
 
     /** Flattens a two-dimensional array to a one-dimensional array, stripping out the non-sysex elements. 
-    	The array may contain (1) byte[] sysex data (2) Sysex Messages of the form javax.sound.midi.SysexMessage
-    	(3) other data, notably Integers. #3 is stripped out, and 1 and 2 are concatenated into a stream of
-    	bytes suitable to save as a file or send to a synthesizer as a collection of sysex messages.
+        The array may contain (1) byte[] sysex data (2) Sysex Messages of the form javax.sound.midi.SysexMessage
+        (3) other data, notably Integers. #3 is stripped out, and 1 and 2 are concatenated into a stream of
+        bytes suitable to save as a file or send to a synthesizer as a collection of sysex messages.
     */
     public byte[] flatten(Object[] data)
         {
@@ -5908,7 +5908,7 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
 
-	/** Breaks data into multiple sysex messages, discarding apparent non-sysex data. */
+    /** Breaks data into multiple sysex messages, discarding apparent non-sysex data. */
     public static byte[][] cutUpSysex(byte[] data)
         {
         ArrayList sysex = new ArrayList();
@@ -5937,306 +5937,306 @@ public abstract class Synth extends JComponent implements Updatable
 
 
     
-	/** Collects the sysex messages stored in data into
-		Patches, discarding those which do not seem to match anything Edisyn knows about.
-	*/
-	public Patch[] gatherPatchSysex(byte[][] sysex)
-		{
-		int pos = 0;
-		ArrayList patches = new ArrayList();
-		
-		while(pos < sysex.length)
-			{
-			// First, do we have a synth for this thing?
-			int rec = recognizeSynthForSysex(sysex[pos]);
-			if (rec >= 0)
-				{
-				// How many sysex messages per patch?
-				int next = getNextSysexPatchGroup(getClassNames()[rec], sysex, pos);
-				if (next > pos)
-					{
-					byte[][] groups = new byte[next - pos][];
-					for(int i = 0; i < groups.length; i++)
-						{
-						groups[i] = sysex[i + pos];
-						}
-					patches.add(new Patch(rec, groups, recognizeBulk(getClassNames()[rec], sysex[pos])));
-					pos = next;
-					}
-				else
-					{
-					pos++;		// I *think* this should work?
-					}
-				}
-			else
-				{
-				pos++;	// skip this sysex message
-				}
-			}
+    /** Collects the sysex messages stored in data into
+        Patches, discarding those which do not seem to match anything Edisyn knows about.
+    */
+    public Patch[] gatherPatchSysex(byte[][] sysex)
+        {
+        int pos = 0;
+        ArrayList patches = new ArrayList();
+                
+        while(pos < sysex.length)
+            {
+            // First, do we have a synth for this thing?
+            int rec = recognizeSynthForSysex(sysex[pos]);
+            if (rec >= 0)
+                {
+                // How many sysex messages per patch?
+                int next = getNextSysexPatchGroup(getClassNames()[rec], sysex, pos);
+                if (next > pos)
+                    {
+                    byte[][] groups = new byte[next - pos][];
+                    for(int i = 0; i < groups.length; i++)
+                        {
+                        groups[i] = sysex[i + pos];
+                        }
+                    patches.add(new Patch(rec, groups, recognizeBulk(getClassNames()[rec], sysex[pos])));
+                    pos = next;
+                    }
+                else
+                    {
+                    pos++;          // I *think* this should work?
+                    }
+                }
+            else
+                {
+                pos++;  // skip this sysex message
+                }
+            }
 
-		Patch[] p = (Patch[])(patches.toArray(new Patch[0]));
+        Patch[] p = (Patch[])(patches.toArray(new Patch[0]));
 
-		// build names for each patch
-    	Synth temp = null;
-    	HashMap map = new HashMap();
-    	for(int i = 0; i < p.length; i++)
-    		{
-    		if (p[i].bulk)
-    			{
-    			String classname = getClassNames()[p[i].synth];
-    			String bankname = getBankName(classname, flatten(p[i].sysex));
-    			if (map.containsKey(classname))
-    				{
-    				int in = ((Integer)(map.get(classname))).intValue();
-    				p[i].name = "Bank Sysex (" + in + ") " + bankname;
-    				map.put(classname, Integer.valueOf(in + 1));
-    				}
-    			else
-    				{
-    				p[i].name = "Bank Sysex " + bankname;
-    				map.put(classname, Integer.valueOf(2));
-    				}
-    			}
-    		else
-    			{
-    			// This is easily the slowest part.  We have to 
-				// build the synth to parse, then parse it and extract the name
-				try
-					{
-					if (temp == null || temp.getClass() != getSynth(p[i].synth))
-						temp = (Synth)(instantiate(getClassNames()[p[i].synth], true, false, null));
-					temp.printRevised = false;
-					temp.setSendMIDI(false);
-					temp.undo.setWillPush(false);
-					temp.getModel().clearListeners();         // otherwise we GC horribly.....
-					temp.parse(flatten(p[i].sysex), true);
-					p[i].name = temp.getPatchName(temp.model);
-					}
-				catch (Exception ex)
-					{
-					Synth.handleException(ex);
-					}
-    			}
-    		}
-    		
-    	return p;
-		}
-
-
-	/** Reduces a group of patches to just those whose synthesizer matches THIS synthesizer.  */
-	Patch[] reducePatchesToLocal(Patch[] patches)
-		{
-		String thisClassName = getClass().getName();
-		int count = 0;
-		for(int i = 0; i < patches.length; i++)
-			{
-			if (thisClassName.equals(getClassNames()[patches[i].synth]))
-				count++;
-			}
-		Patch[] reduced = new Patch[count];
-		count = 0;
-		for(int i = 0; i < patches.length; i++)
-			{
-			if (thisClassName.equals(getClassNames()[patches[i].synth]))
-				reduced[count++] = patches[i];
-			}
-		return reduced;
-		}
+        // build names for each patch
+        Synth temp = null;
+        HashMap map = new HashMap();
+        for(int i = 0; i < p.length; i++)
+            {
+            if (p[i].bulk)
+                {
+                String classname = getClassNames()[p[i].synth];
+                String bankname = getBankName(classname, flatten(p[i].sysex));
+                if (map.containsKey(classname))
+                    {
+                    int in = ((Integer)(map.get(classname))).intValue();
+                    p[i].name = "Bank Sysex (" + in + ") " + bankname;
+                    map.put(classname, Integer.valueOf(in + 1));
+                    }
+                else
+                    {
+                    p[i].name = "Bank Sysex " + bankname;
+                    map.put(classname, Integer.valueOf(2));
+                    }
+                }
+            else
+                {
+                // This is easily the slowest part.  We have to 
+                // build the synth to parse, then parse it and extract the name
+                try
+                    {
+                    if (temp == null || temp.getClass() != getSynth(p[i].synth))
+                        temp = (Synth)(instantiate(getClassNames()[p[i].synth], true, false, null));
+                    temp.printRevised = false;
+                    temp.setSendMIDI(false);
+                    temp.undo.setWillPush(false);
+                    temp.getModel().clearListeners();         // otherwise we GC horribly.....
+                    temp.parse(flatten(p[i].sysex), true);
+                    p[i].name = temp.getPatchName(temp.model);
+                    }
+                catch (Exception ex)
+                    {
+                    Synth.handleException(ex);
+                    }
+                }
+            }
+                
+        return p;
+        }
 
 
-	/** Extracts indices into a patch[] array in the form int[synthtype][patchnum], so we can 
-		grab out of patch[] all the patches for a given synthesizer. */
-	int[][] extractPatchIndices(Patch[] patches)
-		{
-		// compute how many different kinds of synths we have
-		int count = 0;
-		boolean[] set = new boolean[synthClassNames.length];
-		for(int i = 0; i < patches.length; i++)
-			{
-			if (!set[patches[i].synth])
-				{
-				count++;
-				set[patches[i].synth] = true;
-				}
-			}
-				
-		// next compute the different synths and the counts for each
-		int[] synths = new int[count];
-		count = 0;
-		set = new boolean[synthClassNames.length];
-		for(int i = 0; i < patches.length; i++)
-			{
-			if (!set[patches[i].synth])
-				{
-				synths[count] = patches[i].synth;
-				count++;
-				set[patches[i].synth] = true;
-				}
-			}
+    /** Reduces a group of patches to just those whose synthesizer matches THIS synthesizer.  */
+    Patch[] reducePatchesToLocal(Patch[] patches)
+        {
+        String thisClassName = getClass().getName();
+        int count = 0;
+        for(int i = 0; i < patches.length; i++)
+            {
+            if (thisClassName.equals(getClassNames()[patches[i].synth]))
+                count++;
+            }
+        Patch[] reduced = new Patch[count];
+        count = 0;
+        for(int i = 0; i < patches.length; i++)
+            {
+            if (thisClassName.equals(getClassNames()[patches[i].synth]))
+                reduced[count++] = patches[i];
+            }
+        return reduced;
+        }
 
-		// next count the patches for each synth
-		int[] counts = new int[count];
-		for(int i = 0; i < patches.length; i++)
-			{
-			for(int j = 0; j < synths.length; j++)
-				{
-				if (patches[i].synth == synths[j])  // found it
-					{
-					counts[j]++;
-					break;
-					}
-				}
-			}
 
-		// next prepare the ragged patch slots for each synth
-		int[][] indices = new int[synths.length][];
-		for(int i = 0; i < indices.length; i++)
-			{
-			indices[i] = new int[counts[i]];
-			}
-			
-		// next load the indices
-		counts = new int[count];
-		for(int i = 0; i < patches.length; i++)
-			{
-			for(int j = 0; j < synths.length; j++)
-				{
-				if (patches[i].synth == synths[j])  // found it
-					{
-					indices[j][counts[j]] = i;
-					counts[j]++;
-					break;
-					}
-				}
-			}
-		
-		return indices;
-		}
+    /** Extracts indices into a patch[] array in the form int[synthtype][patchnum], so we can 
+        grab out of patch[] all the patches for a given synthesizer. */
+    int[][] extractPatchIndices(Patch[] patches)
+        {
+        // compute how many different kinds of synths we have
+        int count = 0;
+        boolean[] set = new boolean[synthClassNames.length];
+        for(int i = 0; i < patches.length; i++)
+            {
+            if (!set[patches[i].synth])
+                {
+                count++;
+                set[patches[i].synth] = true;
+                }
+            }
+                                
+        // next compute the different synths and the counts for each
+        int[] synths = new int[count];
+        count = 0;
+        set = new boolean[synthClassNames.length];
+        for(int i = 0; i < patches.length; i++)
+            {
+            if (!set[patches[i].synth])
+                {
+                synths[count] = patches[i].synth;
+                count++;
+                set[patches[i].synth] = true;
+                }
+            }
 
-	/** Extracts the class names for synthesizers from the given patches, in the order provided by the outer array of indices. 
-		Indices were generated by extractPatchIndices(). 
-		*/
-	String[] extractSynthClassNames(Patch[] patches, int[][] indices)
-		{
-		String[] names = new String[indices.length];
-		for(int i = 0; i < indices.length; i++)
-			{
-			names[i] = getClassNames()[patches[indices[i][0]].synth];
-			}
-		return names;
-		}
+        // next count the patches for each synth
+        int[] counts = new int[count];
+        for(int i = 0; i < patches.length; i++)
+            {
+            for(int j = 0; j < synths.length; j++)
+                {
+                if (patches[i].synth == synths[j])  // found it
+                    {
+                    counts[j]++;
+                    break;
+                    }
+                }
+            }
 
-	/** Extracts the synthesizer names for synthesizers from the given patches, in the order provided by the outer array of indices.  
-		Indices were generated by extractPatchIndices().
-	*/
-	String[] extractSynthNames(Patch[] patches, int[][] indices)
-		{
-		String[] names = new String[indices.length];
-		for(int i = 0; i < indices.length; i++)
-			{
-			names[i] = getSynthNames()[patches[indices[i][0]].synth];
-			}
-		return names;
-		}
+        // next prepare the ragged patch slots for each synth
+        int[][] indices = new int[synths.length][];
+        for(int i = 0; i < indices.length; i++)
+            {
+            indices[i] = new int[counts[i]];
+            }
+                        
+        // next load the indices
+        counts = new int[count];
+        for(int i = 0; i < patches.length; i++)
+            {
+            for(int j = 0; j < synths.length; j++)
+                {
+                if (patches[i].synth == synths[j])  // found it
+                    {
+                    indices[j][counts[j]] = i;
+                    counts[j]++;
+                    break;
+                    }
+                }
+            }
+                
+        return indices;
+        }
 
-	/** Extracts the patch names for synthesizers from the given patches, in the same structure as provided by indices.
-		Indices were generated by extractPatchIndices().
-	*/
-	String[][] extractPatchNames(Patch[] patches, int[][] indices)
-		{
-		String[][] names = new String[indices.length][];
-		for(int i = 0; i < indices.length; i++)
-			{
-			names[i] = new String[indices[i].length];
-			for(int j = 0; j < indices[i].length; j++)
-				{
-				names[i][j] = patches[indices[i][j]].name;
-				}
-			}
-		return names;
-		}
+    /** Extracts the class names for synthesizers from the given patches, in the order provided by the outer array of indices. 
+        Indices were generated by extractPatchIndices(). 
+    */
+    String[] extractSynthClassNames(Patch[] patches, int[][] indices)
+        {
+        String[] names = new String[indices.length];
+        for(int i = 0; i < indices.length; i++)
+            {
+            names[i] = getClassNames()[patches[indices[i][0]].synth];
+            }
+        return names;
+        }
 
-	/** Reorganizes the patches in the order provided by indices. 
-		Indices were generated by extractPatchIndices().
-	*/
-	Patch[][] organizePatches(Patch[] patches, int[][] indices)
-		{
-		Patch[][] p = new Patch[indices.length][];
-		for(int i = 0; i < indices.length; i++)
-			{
-			p[i] = new Patch[indices[i].length];
-			for(int j = 0; j < indices[i].length; j++)
-				{
-				p[i][j] = patches[indices[i][j]];
-				}
-			}
-		return p;
-		}
+    /** Extracts the synthesizer names for synthesizers from the given patches, in the order provided by the outer array of indices.  
+        Indices were generated by extractPatchIndices().
+    */
+    String[] extractSynthNames(Patch[] patches, int[][] indices)
+        {
+        String[] names = new String[indices.length];
+        for(int i = 0; i < indices.length; i++)
+            {
+            names[i] = getSynthNames()[patches[indices[i][0]].synth];
+            }
+        return names;
+        }
+
+    /** Extracts the patch names for synthesizers from the given patches, in the same structure as provided by indices.
+        Indices were generated by extractPatchIndices().
+    */
+    String[][] extractPatchNames(Patch[] patches, int[][] indices)
+        {
+        String[][] names = new String[indices.length][];
+        for(int i = 0; i < indices.length; i++)
+            {
+            names[i] = new String[indices[i].length];
+            for(int j = 0; j < indices[i].length; j++)
+                {
+                names[i][j] = patches[indices[i][j]].name;
+                }
+            }
+        return names;
+        }
+
+    /** Reorganizes the patches in the order provided by indices. 
+        Indices were generated by extractPatchIndices().
+    */
+    Patch[][] organizePatches(Patch[] patches, int[][] indices)
+        {
+        Patch[][] p = new Patch[indices.length][];
+        for(int i = 0; i < indices.length; i++)
+            {
+            p[i] = new Patch[indices[i].length];
+            for(int j = 0; j < indices[i].length; j++)
+                {
+                p[i][j] = patches[indices[i][j]];
+                }
+            }
+        return p;
+        }
 
     // Returns 0 if cancelled, 1 if corrupt, fix, 2 if not corrupt
     int checkCorruptSysex(byte[] data)
-    	{
-        for(int i = 1; i < data.length - 1; i++)	// not first or last
-        	{
-			if (data[i] < 0) // uh oh
-				{
-            	if (showSimpleConfirm("Corrupt Sysex Data", "This data appears to have some corruption.\nTry to fix and upload?", "Try to Fix and Upload"))
-            		{
-            		return 1;
-            		}
-            	else
-            		{
-            		return 0;
-            		}
-				}
-        	}
-    	return 2;
-    	}
+        {
+        for(int i = 1; i < data.length - 1; i++)        // not first or last
+            {
+            if (data[i] < 0) // uh oh
+                {
+                if (showSimpleConfirm("Corrupt Sysex Data", "This data appears to have some corruption.\nTry to fix and upload?", "Try to Fix and Upload"))
+                    {
+                    return 1;
+                    }
+                else
+                    {
+                    return 0;
+                    }
+                }
+            }
+        return 2;
+        }
 
     // Returns 0 if cancelled, 1 if corrupt, fix, 2 if not corrupt
     int checkCorruptSysex(byte[][] data)
-    	{
-    	for(int i = 0; i < data.length; i++)
-    		{
-    		int ret = checkCorruptSysex(data[i]);
-    		if (ret == 0) // cancelled
-    			return 0;
-    		else if (ret == 1)	//fix
-    			return 1;
-    		}
-    	return 2;
-    	}
+        {
+        for(int i = 0; i < data.length; i++)
+            {
+            int ret = checkCorruptSysex(data[i]);
+            if (ret == 0) // cancelled
+                return 0;
+            else if (ret == 1)      //fix
+                return 1;
+            }
+        return 2;
+        }
 
     /** Returns TRUE if fixed or not corrupt, FALSE if cancelled */
     public boolean fixCorruptSysex(byte[] data)
-    	{
-    	int ret = checkCorruptSysex(data);
-    	if (ret == 0) return false;
-    	if (ret == 2) return true;
-    	for(int i = 1; i < data.length - 1; i++)	// not first or last
-    		{
-    		// fix
-    		if (data[i] < 0) data[i] = (byte)(data[i] & 127);
-    		}
-    	return true;
-    	}
+        {
+        int ret = checkCorruptSysex(data);
+        if (ret == 0) return false;
+        if (ret == 2) return true;
+        for(int i = 1; i < data.length - 1; i++)        // not first or last
+            {
+            // fix
+            if (data[i] < 0) data[i] = (byte)(data[i] & 127);
+            }
+        return true;
+        }
 
     /** Returns TRUE if fixed or not corrupt, FALSE if cancelled */
     public boolean fixCorruptSysex(byte[][] data)
-    	{
-    	int ret = checkCorruptSysex(data);
-    	if (ret == 0) return false;
-    	if (ret == 2) return true;
-    	for(int j = 0; j < data.length; j++)
-    		{
-			for(int i = 1; i < data[j].length - 1; i++)	// not first or last
-				{
-				// fix
-				if (data[j][i] < 0) data[j][i] = (byte)(data[j][i] & 127);
-				}
-			}
-    	return true;
-    	}
+        {
+        int ret = checkCorruptSysex(data);
+        if (ret == 0) return false;
+        if (ret == 2) return true;
+        for(int j = 0; j < data.length; j++)
+            {
+            for(int i = 1; i < data[j].length - 1; i++)     // not first or last
+                {
+                // fix
+                if (data[j][i] < 0) data[j][i] = (byte)(data[j][i] & 127);
+                }
+            }
+        return true;
+        }
     
 
 
@@ -6250,127 +6250,127 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 
-	/////// FILE OPENING AND BULK SYSEX HANDLING
+    /////// FILE OPENING AND BULK SYSEX HANDLING
 
     
     class UString 
-    	{
-    	String string;
-    	public UString(String str) { string = str; }
-    	public String toString() { return string; }
-    	}
-    	
+        {
+        String string;
+        public UString(String str) { string = str; }
+        public String toString() { return string; }
+        }
+        
     UString[] makeUniqueStrings(String[] strings)
-    	{
-    	UString[] strs = new UString[strings.length];
-    	for(int i = 0; i < strings.length; i++)
-    		strs[i] = new UString(strings[i]);
-    	return strs;
-    	}
-    	
+        {
+        UString[] strs = new UString[strings.length];
+        for(int i = 0; i < strings.length; i++)
+            strs[i] = new UString(strings[i]);
+        return strs;
+        }
+        
     UString[][] makeUniqueStrings(String[][] strings)
-    	{
-    	UString[][] strs = new UString[strings.length][];
-    	for(int i = 0; i < strings.length; i++)
-    		{
-    		strs[i] = new UString[strings[i].length];
-    		for(int j = 0; j < strings[i].length; j++)
-    			{    			
-    			strs[i][j] = new UString(strings[i][j]);
-    			}
-    		}
-    	return strs;
-    	}
+        {
+        UString[][] strs = new UString[strings.length][];
+        for(int i = 0; i < strings.length; i++)
+            {
+            strs[i] = new UString[strings[i].length];
+            for(int j = 0; j < strings[i].length; j++)
+                {                       
+                strs[i][j] = new UString(strings[i][j]);
+                }
+            }
+        return strs;
+        }
 
-	public static final int BULK_DIALOG_RESULT_CANCEL = 0;
-	public static final int BULK_DIALOG_RESULT_LOCAL = 1;
-	public static final int BULK_DIALOG_RESULT_NEW = 2;
-	public static final int BULK_DIALOG_RESULT_WRITE = 3;
-	
-	/** Displays a bulk dialog panel for patches, returning data in the form { result, primary, secondary }.
-		primary and secondary are only meaningful if result is BULK_DIALOG_RESULT_LOCAL or BULK_DIALOG_RESULT_NEW. */
-	public int[] displayLoadBulkDialog(Patch[] patches, int[][] patchIndices, String title, String localLoad, String newLoad, String writeAll, String cancel, boolean reduced )
-		{
-		String[][] patchnames = extractPatchNames(patches, patchIndices);
-		String[] classnames = extractSynthClassNames(patches, patchIndices);
-		String[] synthnames = extractSynthNames(patches, patchIndices);
-		
-		// build the two-level menu
-		final JButton localButton = new JButton(localLoad);
-		localButton.setEnabled(Synth.this.getClass().getName().equals(classnames[0]));
+    public static final int BULK_DIALOG_RESULT_CANCEL = 0;
+    public static final int BULK_DIALOG_RESULT_LOCAL = 1;
+    public static final int BULK_DIALOG_RESULT_NEW = 2;
+    public static final int BULK_DIALOG_RESULT_WRITE = 3;
+        
+    /** Displays a bulk dialog panel for patches, returning data in the form { result, primary, secondary }.
+        primary and secondary are only meaningful if result is BULK_DIALOG_RESULT_LOCAL or BULK_DIALOG_RESULT_NEW. */
+    public int[] displayLoadBulkDialog(Patch[] patches, int[][] patchIndices, String title, String localLoad, String newLoad, String writeAll, String cancel, boolean reduced )
+        {
+        String[][] patchnames = extractPatchNames(patches, patchIndices);
+        String[] classnames = extractSynthClassNames(patches, patchIndices);
+        String[] synthnames = extractSynthNames(patches, patchIndices);
+                
+        // build the two-level menu
+        final JButton localButton = new JButton(localLoad);
+        localButton.setEnabled(Synth.this.getClass().getName().equals(classnames[0]));
 
-		TwoLevelMenu menu = new TwoLevelMenu(synthnames, makeUniqueStrings(patchnames), "Synth", "Patch", 0, 0)
-			{
-			public void selection(int primary, int secondary)
-				{
-				localButton.setEnabled(Synth.this.getClass().getName().equals(classnames[primary]));
-				}
-			};
-							
-		Color color = new JPanel().getBackground();
-		HBox hbox = new HBox();
-		hbox.setBackground(color);
-		VBox vbox = new VBox();
-		vbox.setBackground(color);
-		vbox.add(new JLabel("   "));
-		vbox.add(new JLabel("Choose a patch."));
-		vbox.add(new JLabel("   "));
-		hbox.addLast(vbox);
-		vbox = new VBox();
-		vbox.setBackground(color);
-		vbox.add(hbox);
-		vbox.add(menu);
+        TwoLevelMenu menu = new TwoLevelMenu(synthnames, makeUniqueStrings(patchnames), "Synth", "Patch", 0, 0)
+            {
+            public void selection(int primary, int secondary)
+                {
+                localButton.setEnabled(Synth.this.getClass().getName().equals(classnames[primary]));
+                }
+            };
+                                                        
+        Color color = new JPanel().getBackground();
+        HBox hbox = new HBox();
+        hbox.setBackground(color);
+        VBox vbox = new VBox();
+        vbox.setBackground(color);
+        vbox.add(new JLabel("   "));
+        vbox.add(new JLabel("Choose a patch."));
+        vbox.add(new JLabel("   "));
+        hbox.addLast(vbox);
+        vbox = new VBox();
+        vbox.setBackground(color);
+        vbox.add(hbox);
+        vbox.add(menu);
 
-		JComboBox actions = null;
-		if (!reduced)
-			{
-			actions = new JComboBox(new String[] { localLoad, newLoad, writeAll });
-			vbox.add(new JSeparator());
+        JComboBox actions = null;
+        if (!reduced)
+            {
+            actions = new JComboBox(new String[] { localLoad, newLoad, writeAll });
+            vbox.add(new JSeparator());
             vbox.add(new JLabel("   "));
 
-//			vbox.add(Strut.makeVerticalStrut(16));
-			JPanel actionsPanel = new JPanel();
-			actionsPanel.setLayout(new BorderLayout());
-			actionsPanel.add(new JLabel("Action  "), BorderLayout.WEST);
-			actionsPanel.add(actions, BorderLayout.CENTER);
-			vbox.add(actionsPanel);
-			}
+//                      vbox.add(Strut.makeVerticalStrut(16));
+            JPanel actionsPanel = new JPanel();
+            actionsPanel.setLayout(new BorderLayout());
+            actionsPanel.add(new JLabel("Action  "), BorderLayout.WEST);
+            actionsPanel.add(actions, BorderLayout.CENTER);
+            vbox.add(actionsPanel);
+            }
 
-		final JOptionPane pane = new JOptionPane(vbox,  JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, 
-			reduced ?
-				new Object[] { localButton, "Cancel" } :
-				new Object[] {  "Do Action", "Cancel" }, 
-			reduced ? 
-				localButton : "Do Action");
-								
-		localButton.addActionListener(new ActionListener()
-			{
-			public void actionPerformed(ActionEvent e)
-				{
-				pane.setValue(localButton);
-				}
-			});
-									
-		JDialog dialog = pane.createDialog(this, title);
-		disableMenuBar();
-		dialog.show();
-		enableMenuBar();
-		Object result = pane.getValue();
-		if (result == null) return new int[] { BULK_DIALOG_RESULT_CANCEL, menu.getPrimary(), menu.getSecondary() };
-		else if (result.equals(localButton)) return new int[] { BULK_DIALOG_RESULT_LOCAL, menu.getPrimary(), menu.getSecondary() };
-		else if (result.equals("Do Action")) 
-			{
-			if (actions.getSelectedIndex() == 0)  // local load
-				return new int[] { BULK_DIALOG_RESULT_LOCAL, menu.getPrimary(), menu.getSecondary() };
-			else if (actions.getSelectedIndex() == 1)  // new load
-				return new int[] { BULK_DIALOG_RESULT_NEW, menu.getPrimary(), menu.getSecondary() };
-			else // if (actions.getSelectedIndex() == 2)  // write
-				return new int[] { BULK_DIALOG_RESULT_WRITE, menu.getPrimary(), menu.getSecondary() };
-			}
-		// cancelled in some way.  An apparent bug in JOptionPane is such that if you press ESC, then -1 is returned by getValue().  It should be returning null.
-		else return new int[] { BULK_DIALOG_RESULT_CANCEL, menu.getPrimary(), menu.getSecondary() };
-		}
-		
+        final JOptionPane pane = new JOptionPane(vbox,  JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, 
+            reduced ?
+            new Object[] { localButton, "Cancel" } :
+            new Object[] {  "Do Action", "Cancel" }, 
+            reduced ? 
+            localButton : "Do Action");
+                                                                
+        localButton.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                pane.setValue(localButton);
+                }
+            });
+                                                                        
+        JDialog dialog = pane.createDialog(this, title);
+        disableMenuBar();
+        dialog.show();
+        enableMenuBar();
+        Object result = pane.getValue();
+        if (result == null) return new int[] { BULK_DIALOG_RESULT_CANCEL, menu.getPrimary(), menu.getSecondary() };
+        else if (result.equals(localButton)) return new int[] { BULK_DIALOG_RESULT_LOCAL, menu.getPrimary(), menu.getSecondary() };
+        else if (result.equals("Do Action")) 
+            {
+            if (actions.getSelectedIndex() == 0)  // local load
+                return new int[] { BULK_DIALOG_RESULT_LOCAL, menu.getPrimary(), menu.getSecondary() };
+            else if (actions.getSelectedIndex() == 1)  // new load
+                return new int[] { BULK_DIALOG_RESULT_NEW, menu.getPrimary(), menu.getSecondary() };
+            else // if (actions.getSelectedIndex() == 2)  // write
+                return new int[] { BULK_DIALOG_RESULT_WRITE, menu.getPrimary(), menu.getSecondary() };
+            }
+        // cancelled in some way.  An apparent bug in JOptionPane is such that if you press ESC, then -1 is returned by getValue().  It should be returning null.
+        else return new int[] { BULK_DIALOG_RESULT_CANCEL, menu.getPrimary(), menu.getSecondary() };
+        }
+                
 
     boolean doOpen(boolean merge)
         {
@@ -6411,12 +6411,12 @@ public abstract class Synth extends JComponent implements Updatable
         File f = null; // make compiler happy
         FileInputStream is = null;
         if (fd.getFile() != null)
-        	{
+            {
             try
                 {
                 f = new File(fd.getDirectory(), fd.getFile());
                 
-             	//// SECOND if the file is really big we check to see if that's okay
+                //// SECOND if the file is really big we check to see if that's okay
 
                 is = new FileInputStream(f);
                 boolean okay = true;
@@ -6427,7 +6427,7 @@ public abstract class Synth extends JComponent implements Updatable
                 
                 if (okay)
                     {
-	             	//// THIRD we extract all sysex from the file
+                    //// THIRD we extract all sysex from the file
 
                     byte[][] data;
                     String filename = f.getName();
@@ -6451,88 +6451,88 @@ public abstract class Synth extends JComponent implements Updatable
                         }
                     else 
                         {
-				        //// FOURTH we break the sysex into patches we can work with
+                        //// FOURTH we break the sysex into patches we can work with
 
-						Patch[] patches = gatherPatchSysex(data);
-						if (merge) patches = reducePatchesToLocal(patches);			// this will reduce us to just our own kind of patches
-						
-				        //// FIFTH if we can't find any usable patches, inform the user
+                        Patch[] patches = gatherPatchSysex(data);
+                        if (merge) patches = reducePatchesToLocal(patches);                     // this will reduce us to just our own kind of patches
+                                                
+                        //// FIFTH if we can't find any usable patches, inform the user
 
-						if (patches.length == 0)		// no patches anyone recognizes
-							{
-							if (isShowingLimitedBankSysex() || merge)
-								{
+                        if (patches.length == 0)                // no patches anyone recognizes
+                            {
+                            if (isShowingLimitedBankSysex() || merge)
+                                {
                                 showSimpleError("Load Error", "File does not contain a patch that Edisyn can load.");
-                                succeeded = false;								
+                                succeeded = false;                                                              
                                 }
-							else
-								{
-								// offer to upload anyway
-								succeeded = unknownSysexFileError(data);
-								}
-							}
+                            else
+                                {
+                                // offer to upload anyway
+                                succeeded = unknownSysexFileError(data);
+                                }
+                            }
 
-				        //// SIXTH if there's just one patch, load it
+                        //// SIXTH if there's just one patch, load it
 
-						else if (patches.length == 1)	// just a single patch, so we load it
-							{
-							succeeded = loadOne(flatten(patches[0].sysex), patches[0].synth, recognizeAnyForLocal(data), merge, f, fd, false);
-							}
+                        else if (patches.length == 1)   // just a single patch, so we load it
+                            {
+                            succeeded = loadOne(flatten(patches[0].sysex), patches[0].synth, recognizeAnyForLocal(data), merge, f, fd, false);
+                            }
 
-				        //// SEVENTH if there are multiple patches, offer the user several options
+                        //// SEVENTH if there are multiple patches, offer the user several options
 
-						else							// multiple patches, let's display them
-							{
-							int[][] patchIndices = extractPatchIndices(patches);
-							String[] classNames = extractSynthClassNames(patches, patchIndices);
-							Patch[][] pat = organizePatches(patches, patchIndices);
+                        else                                                    // multiple patches, let's display them
+                            {
+                            int[][] patchIndices = extractPatchIndices(patches);
+                            String[] classNames = extractSynthClassNames(patches, patchIndices);
+                            Patch[][] pat = organizePatches(patches, patchIndices);
 
-							int[] results = displayLoadBulkDialog(
-								patches, 
-								patchIndices,
-								"Choose Patch from File",
-								merge ? "Merge" : (isShowingLimitedBankSysex() ? "Load" : "Load In This Editor"), 
-								"Load in New Editor", 
-								"Write All Patches", "Cancel", (isShowingLimitedBankSysex() || merge) );
-							int result = results[0];
-							int primary = results[1];
-							int secondary = results[2];
-							
-							//System.err.println(result);
-							if (result == BULK_DIALOG_RESULT_CANCEL)
-								{
-								succeeded = false;
-								}
-							else if (result == BULK_DIALOG_RESULT_LOCAL)
-								{
-								//System.err.println("local");
-								succeeded = loadOne(flatten(pat[primary][secondary].sysex), pat[primary][secondary].synth, 
-									this.getClass().equals(getSynth(pat[primary][secondary].synth)), merge, null, fd, false);
-								}
-							else if (result == BULK_DIALOG_RESULT_NEW)
-								{
-								succeeded = loadOneExternal(flatten(pat[primary][secondary].sysex), getSynth(pat[primary][secondary].synth), null, fd);
-								}
-							else if (result == BULK_DIALOG_RESULT_WRITE)
-								{
-								if (showSimpleConfirm("Write All Patches", "Write all patches to the synth?"))
-									{
-									// need at least one synth from the patches so we can determine what the pause between writes should be
-									succeeded = writeBulk((Synth)(instantiate(classNames[0], true, false, null)), data);
-									}
-								else succeeded = false;
-								}
-							else		/// uh....`
-								{
-								succeeded = false;
-								}
-							}
-						}
-					}
-				else		// "not okay"
-					{
-					succeeded = false;
-					}
+                            int[] results = displayLoadBulkDialog(
+                                patches, 
+                                patchIndices,
+                                "Choose Patch from File",
+                                merge ? "Merge" : (isShowingLimitedBankSysex() ? "Load" : "Load In This Editor"), 
+                                "Load in New Editor", 
+                                "Write All Patches", "Cancel", (isShowingLimitedBankSysex() || merge) );
+                            int result = results[0];
+                            int primary = results[1];
+                            int secondary = results[2];
+                                                        
+                            //System.err.println(result);
+                            if (result == BULK_DIALOG_RESULT_CANCEL)
+                                {
+                                succeeded = false;
+                                }
+                            else if (result == BULK_DIALOG_RESULT_LOCAL)
+                                {
+                                //System.err.println("local");
+                                succeeded = loadOne(flatten(pat[primary][secondary].sysex), pat[primary][secondary].synth, 
+                                    this.getClass().equals(getSynth(pat[primary][secondary].synth)), merge, null, fd, false);
+                                }
+                            else if (result == BULK_DIALOG_RESULT_NEW)
+                                {
+                                succeeded = loadOneExternal(flatten(pat[primary][secondary].sysex), getSynth(pat[primary][secondary].synth), null, fd);
+                                }
+                            else if (result == BULK_DIALOG_RESULT_WRITE)
+                                {
+                                if (showSimpleConfirm("Write All Patches", "Write all patches to the synth?"))
+                                    {
+                                    // need at least one synth from the patches so we can determine what the pause between writes should be
+                                    succeeded = writeBulk((Synth)(instantiate(classNames[0], true, false, null)), data);
+                                    }
+                                else succeeded = false;
+                                }
+                            else            /// uh....`
+                                {
+                                succeeded = false;
+                                }
+                            }
+                        }
+                    }
+                else            // "not okay"
+                    {
+                    succeeded = false;
+                    }
                 }        
             catch (Throwable e) // fail  -- could be an Error or an Exception
                 {
@@ -6576,7 +6576,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
             
         if (!fixCorruptSysex(data))
-        	return false;
+            return false;
         
         final boolean[] writeBulkCancelled = new boolean[] { false };
         final JProgressBar bar = new JProgressBar(0, data.length - 1);
@@ -6743,13 +6743,13 @@ public abstract class Synth extends JComponent implements Updatable
                 if (result == PARSE_SUCCEEDED)
                     {
                     file = f;
-	                auxFile = null;
+                    auxFile = null;
                     }
                 else if (result == PARSE_SUCCEEDED_UNTITLED)
-                	{
-                	file = null;
-	                auxFile = f;
-                	}
+                    {
+                    file = null;
+                    auxFile = f;
+                    }
                 setLastDirectory(fd.getDirectory());
 
                 if (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED)
@@ -6761,7 +6761,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             }
 
-		updateTitle();	// so I show the right filename -- this may not be necessary
+        updateTitle();  // so I show the right filename -- this may not be necessary
 
         setSendMIDI(true);
                                                                 
@@ -6807,16 +6807,16 @@ public abstract class Synth extends JComponent implements Updatable
             return false;
             }
         
-        if (result == PARSE_SUCCEEDED)	// not PARSE_SUCEEDED_UNTITLED
-        	{
-        	otherSynth.file = f;
-        	otherSynth.auxFile = null;
-        	}
+        if (result == PARSE_SUCCEEDED)  // not PARSE_SUCEEDED_UNTITLED
+            {
+            otherSynth.file = f;
+            otherSynth.auxFile = null;
+            }
         else
-        	{
-        	otherSynth.file = null;
-        	otherSynth.auxFile = f;
-        	}
+            {
+            otherSynth.file = null;
+            otherSynth.auxFile = f;
+            }
         
         otherSynth.setLastDirectory(fd.getDirectory());
 
@@ -6826,7 +6826,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (otherSynth.getSendsParametersAfterLoad()) // we'll need to do this
             otherSynth.sendAllParameters();
 
-		otherSynth.updateTitle();	// so it shows the right filename
+        otherSynth.updateTitle();       // so it shows the right filename
                 
         // we don't want this to look like it's succeeded
         return false;  // (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
@@ -7292,11 +7292,11 @@ public abstract class Synth extends JComponent implements Updatable
                   
             int result = 0;
             if (isShowingLimitedBankSysex())
-            	{
+                {
                 disableMenuBar();
                 result = JOptionPane.showOptionDialog(this, vbox, "Bank Sysex Received", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {  "Load Patch", "Cancel" }, "Load Patch");
                 enableMenuBar();
-            	}
+                }
             else if (isParsingForMerge())
                 {
                 disableMenuBar();
@@ -7306,8 +7306,8 @@ public abstract class Synth extends JComponent implements Updatable
             else 
                 {
                 actions = new JComboBox(new String[] {  "Edit Patch in Bank", "Save Bank...", "Write Bank to Synthesizer" });
-            vbox.add(new JLabel("   "));
-			vbox.add(new JSeparator());
+                vbox.add(new JLabel("   "));
+                vbox.add(new JSeparator());
 //                vbox.add(Strut.makeVerticalStrut(16));
                 JPanel actionsPanel = new JPanel();
                 actionsPanel.setLayout(new BorderLayout());
@@ -7325,99 +7325,99 @@ public abstract class Synth extends JComponent implements Updatable
                 return BANK_CANCELLED;
                 }
             else if (actions != null)
-            	{
-            	if (actions.getSelectedIndex() == 2)	// write bank
-					{
-					boolean choice = false;
-					String[] banks = getBanksForBankSysex(data, getModel());
-					int bankChoice = 0;
-				
-					if (banks == null || banks.length == 0)
-						{
-						choice = showSimpleConfirm("Write Bank", "Write the whole bank to the synth?");
-						}
-					else
-						{
-						JComboBox combo = new JComboBox(banks);
-						combo.setSelectedIndex(getDefaultBankForBankSysex(data, getModel()));
-						choice = (showMultiOption(this, new String[] { "Write to Bank" }, new JComponent[] { combo },
-								new String[] { "Write", "Cancel" }, 0, "Write Bank", "Write the whole bank to the synth?") == 0);
-						bankChoice = combo.getSelectedIndex();
-						}
-						
-					if (choice)
-						{
-						if (tuple == null || tuple.out == null)
-							{
-							if (!setupMIDI())
-								continue;
-							}
+                {
+                if (actions.getSelectedIndex() == 2)    // write bank
+                    {
+                    boolean choice = false;
+                    String[] banks = getBanksForBankSysex(data, getModel());
+                    int bankChoice = 0;
+                                
+                    if (banks == null || banks.length == 0)
+                        {
+                        choice = showSimpleConfirm("Write Bank", "Write the whole bank to the synth?");
+                        }
+                    else
+                        {
+                        JComboBox combo = new JComboBox(banks);
+                        combo.setSelectedIndex(getDefaultBankForBankSysex(data, getModel()));
+                        choice = (showMultiOption(this, new String[] { "Write to Bank" }, new JComponent[] { combo },
+                                new String[] { "Write", "Cancel" }, 0, "Write Bank", "Write the whole bank to the synth?") == 0);
+                        bankChoice = combo.getSelectedIndex();
+                        }
+                                                
+                    if (choice)
+                        {
+                        if (tuple == null || tuple.out == null)
+                            {
+                            if (!setupMIDI())
+                                continue;
+                            }
 
-				        if (!fixCorruptSysex(data))
-        					return BANK_CANCELLED;
+                        if (!fixCorruptSysex(data))
+                            return BANK_CANCELLED;
 
-						Object obj = adjustBankSysexForEmit(data, getModel(), bankChoice);
-						boolean send = getSendMIDI();
-						setSendMIDI(true);
-						if (obj instanceof byte[]) 
-							{
-							tryToSendSysex((byte[])obj);
-							}
-						else
-							{
-							tryToSendMIDI((Object[])obj);
-							}
-						setSendMIDI(send);      
-						return BANK_UPLOADED;
-						}
-                	}
-				else if (actions.getSelectedIndex() == 1)
-					{
-					FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save Bank to Sysex File...", FileDialog.SAVE);
+                        Object obj = adjustBankSysexForEmit(data, getModel(), bankChoice);
+                        boolean send = getSendMIDI();
+                        setSendMIDI(true);
+                        if (obj instanceof byte[]) 
+                            {
+                            tryToSendSysex((byte[])obj);
+                            }
+                        else
+                            {
+                            tryToSendMIDI((Object[])obj);
+                            }
+                        setSendMIDI(send);      
+                        return BANK_UPLOADED;
+                        }
+                    }
+                else if (actions.getSelectedIndex() == 1)
+                    {
+                    FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save Bank to Sysex File...", FileDialog.SAVE);
 
-					fd.setFile(StringUtility.reviseFileName(getSynthNameLocal() + ".bank" + getBankNameLocal(data) + ".syx"));
-					String path = getLastDirectory();
-					if (path != null)
-						fd.setDirectory(path);
-					
-					disableMenuBar();
-					fd.setVisible(true);
-					enableMenuBar();
-	
-					File f = null; // make compiler happy
-					FileOutputStream os = null;
-					if (fd.getFile() != null)
-						try
-							{
-							f = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx"));
-							os = new FileOutputStream(f);
-							os.write(data);
-							os.close();
-							setLastDirectory(fd.getDirectory());
-							if (os != null)
-								try { os.close(); }
-								catch (IOException ex) { }
-							return BANK_SAVED;
-							} 
-						catch (IOException e) // fail
-							{
-							showErrorWithStackTrace(e, "File Error", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
-							Synth.handleException(e);
-							if (os != null)
-								try { os.close(); }
-								catch (IOException ex) { }
-							continue;  // try again
-							}
-					}
-				else // if actions.getSelectedIndex() == 0
-					{
-					return box.getSelectedIndex();
-					}
-				}
-			else		// Load or Merge Patch
-				{
-				return box.getSelectedIndex();
-				}
+                    fd.setFile(StringUtility.reviseFileName(getSynthNameLocal() + ".bank" + getBankNameLocal(data) + ".syx"));
+                    String path = getLastDirectory();
+                    if (path != null)
+                        fd.setDirectory(path);
+                                        
+                    disableMenuBar();
+                    fd.setVisible(true);
+                    enableMenuBar();
+        
+                    File f = null; // make compiler happy
+                    FileOutputStream os = null;
+                    if (fd.getFile() != null)
+                        try
+                            {
+                            f = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx"));
+                            os = new FileOutputStream(f);
+                            os.write(data);
+                            os.close();
+                            setLastDirectory(fd.getDirectory());
+                            if (os != null)
+                                try { os.close(); }
+                                catch (IOException ex) { }
+                            return BANK_SAVED;
+                            } 
+                        catch (IOException e) // fail
+                            {
+                            showErrorWithStackTrace(e, "File Error", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
+                            Synth.handleException(e);
+                            if (os != null)
+                                try { os.close(); }
+                                catch (IOException ex) { }
+                            continue;  // try again
+                            }
+                    }
+                else // if actions.getSelectedIndex() == 0
+                    {
+                    return box.getSelectedIndex();
+                    }
+                }
+            else            // Load or Merge Patch
+                {
+                return box.getSelectedIndex();
+                }
             }
         }
                
@@ -7469,10 +7469,10 @@ public abstract class Synth extends JComponent implements Updatable
     
     
     public static void printSysex(byte[] data)
-    	{
-    	System.err.print(Midi.getManufacturerForSysex(data) + " " + data.length + ":  ");
-    	for(int i = 0; i < data.length; i++)
-    		System.err.print(" " + StringUtility.toHex(data[i]));
-    	System.err.println();
-    	}    
+        {
+        System.err.print(Midi.getManufacturerForSysex(data) + " " + data.length + ":  ");
+        for(int i = 0; i < data.length; i++)
+            System.err.print(" " + StringUtility.toHex(data[i]));
+        System.err.println();
+        }    
     }

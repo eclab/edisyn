@@ -171,7 +171,7 @@ public class WaldorfKyraMulti extends Synth
     public JComponent addPart(int part, Color color)
         {
         Category category = new Category(this, "Part " + part, color);
-		category.makePasteable("part" + part);
+        category.makePasteable("part" + part);
 
         JComponent comp;
         String[] params;
@@ -468,10 +468,10 @@ public class WaldorfKyraMulti extends Synth
 
     public Object[] emitAll(String key)
         {
-		if (key.equals("-") || key.equals("bank") || key.equals("number"))
-			{
-			return new Object[0];		// do nothing
-			}
+        if (key.equals("-") || key.equals("bank") || key.equals("number"))
+            {
+            return new Object[0];           // do nothing
+            }
         else if (key.equals("name"))
             {
             String val = model.get(key, "") + "                      ";
@@ -525,15 +525,15 @@ public class WaldorfKyraMulti extends Synth
             tempModel = getModel();
                 
         byte NN = (byte) tempModel.get("number");
-        byte BB = (byte) 0;		// Stored patch
-        if (toWorkingMemory) { BB = 0x7F; }		// > 0 is edit buffer
+        byte BB = (byte) 0;             // Stored patch
+        if (toWorkingMemory) { BB = 0x7F; }             // > 0 is edit buffer
 
         byte[] data = new byte[128 + 10];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x3e;
         data[2] = (byte)0x22;
         data[3] = (byte)getID();
-        data[4] = (byte)0x01;                   // Send Multi 		-- we must always do 0x01, not 0x41
+        data[4] = (byte)0x01;                   // Send Multi           -- we must always do 0x01, not 0x41
         data[5] = (byte)0x01;                   // Current Version
         data[6] = (byte)BB;
         data[7] = (byte)NN;
@@ -587,24 +587,24 @@ public class WaldorfKyraMulti extends Synth
 
 // This is moot, as the Kyra Mutimode doesn't emit sysex parameters.  :-(
 /*
-	public void parseParameter(byte[] data)
-		{
-		if (data.length == 10 && 
-            	data[0] == (byte)0xF0 &&
-            	data[1] == 0x3E &&
-            	data[2] == 0x22 &&
-            	(data[4] == 0x11 || data[4] == 0x51))
-            			{	
-			// extract part
-			int part = (data[6] & 3);
-			// extract param
-			int param = data[7];
-			// extract value
-			int val = data[8];
+  public void parseParameter(byte[] data)
+  {
+  if (data.length == 10 && 
+  data[0] == (byte)0xF0 &&
+  data[1] == 0x3E &&
+  data[2] == 0x22 &&
+  (data[4] == 0x11 || data[4] == 0x51))
+  {       
+  // extract part
+  int part = (data[6] & 3);
+  // extract param
+  int param = data[7];
+  // extract value
+  int val = data[8];
 
-			model.set("part" + (part + 1) + basicParameters[param], val);
-			}
-        }
+  model.set("part" + (part + 1) + basicParameters[param], val);
+  }
+  }
 */
 
     public int parse(byte[] data, boolean fromFile)
@@ -613,19 +613,19 @@ public class WaldorfKyraMulti extends Synth
         //System.err.println("from file " + fromFile);
         byte[][] cutup = cutUpSysex(data);
         int result = PARSE_FAILED;
-		for(int i = 0; i < cutup.length; i++)
-			{
-			int res = subparse(cutup[i], fromFile);
-			if (res == PARSE_SUCCEEDED_UNTITLED && result == PARSE_FAILED)
-				result = PARSE_SUCCEEDED_UNTITLED;
-			else if (res == PARSE_SUCCEEDED) 
-				result = PARSE_SUCCEEDED;
-			}
-		return result;
-		}
+        for(int i = 0; i < cutup.length; i++)
+            {
+            int res = subparse(cutup[i], fromFile);
+            if (res == PARSE_SUCCEEDED_UNTITLED && result == PARSE_FAILED)
+                result = PARSE_SUCCEEDED_UNTITLED;
+            else if (res == PARSE_SUCCEEDED) 
+                result = PARSE_SUCCEEDED;
+            }
+        return result;
+        }
 
-	public int subparse(byte[] data, boolean fromFile)
-		{        	
+    public int subparse(byte[] data, boolean fromFile)
+        {               
         // is it the name or the main data?
         if (data[4] == 0x01 || data[4] == 0x41)
             {
@@ -645,32 +645,32 @@ public class WaldorfKyraMulti extends Synth
             // Send request for name
                 
             if (!fromFile)
-            	{
-				byte[] d = new byte[9];
-				d[0] = (byte)0xF0;
-				d[1] = (byte)0x3e;
-				d[2] = (byte)0x22;
-				d[3] = (byte)getID();
-				if (currentDump || data[6] == 0x7F || data[7] == 0x7F)           // FIXME: maybe we don't need the current dump?  Just rely on data[6] or data[7]?
-					{
-					d[4] = (byte)0x39;                      // Request Multi Name
-					d[5] = (byte)0x01;                      // Current Version
-					d[6] = (byte)0x7f;           // MSB > 0x00 is the edit buffer
-					d[7] = (byte)0x7f;           // ignored when loading the edit buffer
-					}
-				else
-					{
-					d[4] = (byte)0x39;                      // Request Multi Name
-					d[5] = (byte)0x01;                      // Current Version
-					d[6] = (byte)0x00;                      // MSB > 0x00 is the edit buffer
-					d[7] = (byte)(model.get("number", 0));
-					}
-				d[8] = (byte)0xF7;
-				boolean val = getSendMIDI();
-				setSendMIDI(true);
-				tryToSendSysex(d);
-				setSendMIDI(val);
-				}
+                {
+                byte[] d = new byte[9];
+                d[0] = (byte)0xF0;
+                d[1] = (byte)0x3e;
+                d[2] = (byte)0x22;
+                d[3] = (byte)getID();
+                if (currentDump || data[6] == 0x7F || data[7] == 0x7F)           // FIXME: maybe we don't need the current dump?  Just rely on data[6] or data[7]?
+                    {
+                    d[4] = (byte)0x39;                      // Request Multi Name
+                    d[5] = (byte)0x01;                      // Current Version
+                    d[6] = (byte)0x7f;           // MSB > 0x00 is the edit buffer
+                    d[7] = (byte)0x7f;           // ignored when loading the edit buffer
+                    }
+                else
+                    {
+                    d[4] = (byte)0x39;                      // Request Multi Name
+                    d[5] = (byte)0x01;                      // Current Version
+                    d[6] = (byte)0x00;                      // MSB > 0x00 is the edit buffer
+                    d[7] = (byte)(model.get("number", 0));
+                    }
+                d[8] = (byte)0xF7;
+                boolean val = getSendMIDI();
+                setSendMIDI(true);
+                tryToSendSysex(d);
+                setSendMIDI(val);
+                }
             return PARSE_SUCCEEDED_UNTITLED;     
             }
         else
@@ -692,24 +692,24 @@ public class WaldorfKyraMulti extends Synth
     public static String getSynthName() { return "Waldorf Kyra [Multi]"; }
     
     public static final String[] basicParameters = new String[]
-    	{
-		"outputchannel",
-		"midichannel",
-		"volume",
-		"pan",
-		"patchbank",
-		"patchnumber",
-		"transpose",
-		"detune",
-		"lowerkeyrange",
-		"upperkeyrange",
-		"rxvolume",
-		"rxprogram",
-		"enabledelay",
-		"enablemdfx",
-		"enableeq",
-		"enablereverb",
-    	};
+    {
+    "outputchannel",
+    "midichannel",
+    "volume",
+    "pan",
+    "patchbank",
+    "patchnumber",
+    "transpose",
+    "detune",
+    "lowerkeyrange",
+    "upperkeyrange",
+    "rxvolume",
+    "rxprogram",
+    "enabledelay",
+    "enablemdfx",
+    "enableeq",
+    "enablereverb",
+    };
 
     HashMap parametersToIndex = new HashMap();
     public static final String[] parameters = new String[] 

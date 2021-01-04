@@ -1423,11 +1423,6 @@ public class RolandJV880 extends Synth
             return new Object[] { data };
             }
         }
-    
-    public static int getNumSysexDumpsPerPatch(byte[] data) 
-        {
-        return 5;
-        }
 
     int parseStatus = 0;
         

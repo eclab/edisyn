@@ -8,19 +8,28 @@ import edisyn.*;
 
 public class Yamaha4OpRec extends Recognize
     {
-    public static int getNumSysexDumpsPerPatch(byte[] data) 
-        {
-        int i = recognizeBasic(data);           // we'll try here to guess how many patches are in a chunk in this file
-        if (i > 0) return i;
-        else return 1;
-        }
+    public static int getNextSysexPatchGroup(byte[][] sysex, int start)
+    	{
+    	if (recognizeBulk(sysex[start]))
+    		return start + 1;
+    		
+    	for(int i = start; i < sysex.length; i++)
+    		{
+    		int rec = recognizeBasic(sysex[i]);
+			// We're looking for VCED		
+			if (rec == RECOGNIZE_BASIC_VCED)	
+				{
+				return i + 1;  // all done
+				}
+			else if (rec == RECOGNIZE_BASIC_NONE) // uh oh
+				{
+				return start;
+				}
+    		}
+    	// if we're here we never found VCED
+    	return start;
+		}
 
-    /*
-      public static String toHex(int val)
-      {
-      return String.format("0x%08X", val);
-      }
-    */
 
     public static boolean recognizeBulk(byte[] data)
         {
@@ -37,6 +46,14 @@ public class Yamaha4OpRec extends Recognize
 
 // returns a guess as to the number of sysex commands this file is trying to load per patch.
 // Or if we don't recognize it, then 0
+
+	public static final int RECOGNIZE_BASIC_ACED3 = 5;
+	public static final int RECOGNIZE_BASIC_EFEDS = 4;
+	public static final int RECOGNIZE_BASIC_ACED2 = 3;
+	public static final int RECOGNIZE_BASIC_ACED = 2;
+	public static final int RECOGNIZE_BASIC_VCED = 1;
+	public static final int RECOGNIZE_BASIC_NONE = 0;
+	
     static int recognizeBasic(byte[] data)
         {
         // ACED3
@@ -58,7 +75,7 @@ public class Yamaha4OpRec extends Recognize
             data[13] == '3' &&
             data[14] == 'A' &&
             data[15] == 'E')
-            return 4;                           // VCED + ACED + ACED2 + ACED3
+            return 5;                           // VCED + ACED + ACED2 + ACED3
 
         // EFEDS
         if (data.length >= 21 &&
@@ -138,6 +155,6 @@ public class Yamaha4OpRec extends Recognize
         
     public static boolean recognize(byte[] data)
         {
-        return (recognizeBasic(data) > 0) || recognizeBulk(data);
+        return (recognizeBasic(data) != RECOGNIZE_BASIC_NONE) || recognizeBulk(data);
         }
     }

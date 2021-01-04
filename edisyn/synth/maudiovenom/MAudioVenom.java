@@ -22,29 +22,23 @@ import javax.sound.midi.*;
    @author Sean Luke
 */
 
+
+//// Some open issues:
+
+// Arp latch and octave parameters don't seem to be responded to in real time unless you've sent ONE patch upload first
+
+// Send to Current patch always resets the patch bank / number to A 000
+
+// Osc flags bit 6 is set by Vyzex but is unknown to me
+
+
+
 public class MAudioVenom extends Synth
     {
     public static final byte DEFAULT_ID = (byte)0x7F;           // this seems to be what the venom returns
     
     public static final String[] BANKS = new String[] { "A", "B", "C", "D" };
     public static final String[] WRITEABLE_BANKS = new String[] { "C", "D" };
-    
-    // KEY:
-    // HP = 1952 Valve Oscillator
-    // PB = Plan B Model 15     [euro module vco]
-    // RP = ARP 2600
-    // MS = ?
-    // SH = Roland SH-5
-    // OB = SEM
-    // MG = Minimoog Model D
-    // AL = ?
-    // DR = ?
-    // FM = ?  Presumably something FM
-    // 08 = 808
-    // 09 = 909
-    // TB = ?
-    // JX = ?
-    // DP = ?
     
     public static final String[] WAVEFORMS = new String[] 
     { 
@@ -106,6 +100,7 @@ public class MAudioVenom extends Synth
     {
     "1/32 N", "1/16 T", "1/16 N", "1/8 T", "1/8 N", "1/4 T", "1/8 .", "1/4 N", "1/2 T", "1/4 .", "1/2 N"
     /*
+    Not enough space:
       "1/32 Note", "1/16 Note Triplet", "1/16 Note", "1/8 Note Triplet", "1/8 Note", 
       "1/4 Note Triplet", "Dotted 1/8 Note", "1/4 Note", "1/2 Note Triplet",
       "Dotted 1/4 Note", "1/2 Note"
@@ -120,6 +115,7 @@ public class MAudioVenom extends Synth
     {
     "1/32 N", "1/16 T", "1/16 N", "1/8 T", "1/8 N", "1/4 T", "1/8 .", "1/4 N", "1/2 T", "1/4 .", "1/2 N", "1 N", "1 .", "2 B", "3 B", "4 B"
     /*
+    Not enough space:
       "1/32 Note", "1/16 Note Triplet", "1/16 Note", "1/8 Note Triplet", "1/8 Note", 
       "1/4 Note Triplet", "Dotted 1/8 Note", "1/4 Note", "1/2 Note Triplet",
       "Dotted 1/4 Note", "1/2 Note", "Whole Note", "Dotted Whole Note", 

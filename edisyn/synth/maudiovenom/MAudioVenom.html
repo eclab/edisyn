@@ -73,7 +73,7 @@ Edisyn does not enforce these, though it tries to not violate them on mutation/r
 
 <p><li>Changing patches takes quite a long time (about a half second).
 
-<p><li>Also uploading a new patch takes a long time (about 3/4 second).  This will make morphing and hill-climbing painful.
+<p><li>Also uploading a new patch takes a long time (about 3/4 second).  This will make morphing and hill-climbing painful, as well as loading files and undo/redo.
 
 <p><li>The Venom's sysex documentation indicates that you can set the Venom's Synth ID.  But to my knowledge this does not actually exist.  If it does, please let me know.  By default Edisyn is hard-coded to use 0.
 
@@ -87,8 +87,33 @@ Edisyn is a general-purpose patch editor tool and so its approach is designed to
 
 <p>So why use Edisyn instead of Vyzex?  Partly because Vyzex will very soon be obsoleted and impossible to run.  And besides fixing some bad Vyzex errors, Edisyn <i>can</i> do one major thing Vyzex (and M-Audio's installed software) cannot: directly edit arpeggios.
 
+<p><b>Interesting Facts</b><br>
 
-<p>Thanks to Jan Bote <jan.bote@gmx.de> for his assistance and knowledge.
+The Venom's waveforms come from certain sources as indicated by initials at the beginning of them.  Here are the ones I know of:
+
+<ul>
+    
+<li>    HP = HP 200CD 1952 Valve Oscillator
+<li>    PB = Plan B Model 15     [Eurorack module]
+<li>    RP = ARP 2600 Grayface
+<li>    MS = MS-20 
+<li>    SH = Roland SH-5
+<li>    OB = Oberheim SEM
+<li>    MG = Minimoog Model D
+<li>    AL = Alesis Fusion
+<li>    DR = Presumably some kind of Drums ?
+<li>    FM = Presumably something FM ?
+<li>    08 = Roland TR-808
+<li>    09 = Roland TR-909 
+<li>    TB = Roland TB-303
+<li>    JX = Roland JX-8P
+<li>    DP = Doepfer A-137	[Eurorack module]
+<li>	Bit = Harvestman Zorlon Cannon [Eurorack module]
+</ul>
+
+
+
+<p>Thanks to Jan Bote (jan.bote@gmx.de) for his assistance and knowledge.
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

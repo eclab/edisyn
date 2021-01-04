@@ -2246,7 +2246,7 @@ public class DSIProphet08 extends Synth
             {
             public void actionPerformed(ActionEvent evt)
                 {
-                Synth newSynth = instantiate(DSITetraCombo.class, DSITetraCombo.getSynthName(), false, true, tuple);
+                Synth newSynth = instantiate(DSITetraCombo.class, false, true, tuple);
                 newSynth.setSendMIDI(false);
                 boolean currentPush = newSynth.getUndo().getWillPush();
                 newSynth.getUndo().setWillPush(false);

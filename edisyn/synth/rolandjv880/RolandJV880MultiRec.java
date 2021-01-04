@@ -8,10 +8,39 @@ import edisyn.*;
 
 public class RolandJV880MultiRec extends Recognize
     {
-    public static int getNumSysexDumpsPerPatch(byte[] data) 
-        {
-        return 9;
-        }
+    public static int getNextSysexPatchGroup(byte[][] sysex, int start)
+    	{
+    	// we presume we need COMMON and then FOUR TONES
+		if (start >= sysex.length) return start;
+		
+		if (recognize(sysex[start]))
+    		{
+    		if (sysex[start].length != 31 + 11)  // common
+				{
+				return start;
+				}
+			}
+		
+		for(int i = 0; i < 8; i++)
+			{
+			if (start >= sysex.length)
+				{
+				System.err.println("RolandJV880MultiRec.getNextSysexPatchGroup(): could not find tone " + i + " before messages terminated.");
+				return start;
+				}
+			else if (!recognize(sysex[start + i]))
+				{
+				System.err.println("RolandJV880MultiRec.getNextSysexPatchGroup(): could not find tone " + i + ".");
+				return start;
+				}
+			else if (sysex[start + i].length != 35 + 11)
+				{
+				System.err.println("RolandJV880MultiRec.getNextSysexPatchGroup(): could not find tone " + i + ", invalid length " + sysex[start + i].length);
+				return start;
+				}
+			}
+    	return start + 9;
+		}
 
     public static boolean recognize(byte[] data)
         {

@@ -3862,7 +3862,7 @@ public class KawaiK5 extends Synth
             public boolean accept(File dir, String name)
                 {
                 for(int i = 0; i < filenameExtensions.length; i++)
-                    if (ensureFileEndsWith(name, filenameExtensions[i]).equals(name))
+                    if (StringUtility.ensureFileEndsWith(name, filenameExtensions[i]).equals(name))
                         return true;
                 return false;
                 }

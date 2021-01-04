@@ -431,6 +431,7 @@ public class YamahaFS1RFseq extends Synth
             });
         menu.add(smooth);
 
+/*
         JMenuItem dump = new JMenuItem("Dump");
         dump.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         dump.addActionListener(new ActionListener()
@@ -493,6 +494,7 @@ public class YamahaFS1RFseq extends Synth
                 }
             });
         menu.add(dump);
+*/
 
         JMenuItem current = new JMenuItem("Show Current Performance");
         current.addActionListener(new ActionListener()
@@ -714,9 +716,12 @@ public class YamahaFS1RFseq extends Synth
                     if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
                         {
                         undo.push(backup);
-                        System.err.println("pushed!");
+                        //System.err.println("pushed!");
                         }
-                    else System.err.println("The same!");
+                    else 
+                    	{
+                    	// System.err.println("The same!");
+                    	}
                     repaint();      // generally forces repaints to all happen at once
                     setSendMIDI(true);
                     sendAllParameters();
@@ -1238,7 +1243,7 @@ public class YamahaFS1RFseq extends Synth
             current.set(keyTo, 0);
             }
                 
-        System.err.println("Clearing " + to);
+        // System.err.println("Clearing " + to);
         for(int i = start; i <= end; i++)
             {
             if (voiced)

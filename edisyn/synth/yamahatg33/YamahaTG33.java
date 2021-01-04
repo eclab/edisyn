@@ -476,7 +476,7 @@ public class YamahaTG33 extends Synth
     public byte[] getMPEForPatch(int bank, int number, String name)
         {
         YamahaTG33Multi multi = (YamahaTG33Multi)
-            instantiate(YamahaTG33Multi.class, "", true, false, null);
+            instantiate(YamahaTG33Multi.class, true, false, null);
         
         multi.setSendMIDI(false);
         multi.getUndo().setWillPush(false);

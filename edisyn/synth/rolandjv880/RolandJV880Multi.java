@@ -874,11 +874,6 @@ public class RolandJV880Multi extends Synth
             }
         }
     
-    public static int getNumSysexDumpsPerPatch(byte[] data) 
-        {
-        return 9;
-        }
-
     int parseStatus = 0;
         
     public int parse(byte[] data, boolean fromFile)

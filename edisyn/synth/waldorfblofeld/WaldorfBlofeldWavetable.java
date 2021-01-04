@@ -66,10 +66,10 @@ public class WaldorfBlofeldWavetable
             {
             public boolean accept(File dir, String name)
                 {
-                return synth.ensureFileEndsWith(name, ".wav").equals(name) || synth.ensureFileEndsWith(name, ".WAV").equals(name) ||
-                    synth.ensureFileEndsWith(name, ".syx").equals(name) || synth.ensureFileEndsWith(name, ".SYX").equals(name) ||
-                    synth.ensureFileEndsWith(name, ".sysex").equals(name) || synth.ensureFileEndsWith(name, ".mid").equals(name) ||
-                    synth.ensureFileEndsWith(name, ".MID").equals(name)  ;
+                return StringUtility.ensureFileEndsWith(name, ".wav").equals(name) || StringUtility.ensureFileEndsWith(name, ".WAV").equals(name) ||
+                    StringUtility.ensureFileEndsWith(name, ".syx").equals(name) || StringUtility.ensureFileEndsWith(name, ".SYX").equals(name) ||
+                    StringUtility.ensureFileEndsWith(name, ".sysex").equals(name) || StringUtility.ensureFileEndsWith(name, ".mid").equals(name) ||
+                    StringUtility.ensureFileEndsWith(name, ".MID").equals(name)  ;
                 }
             });
 

@@ -70,11 +70,11 @@ public class WaldorfKyra extends Synth
     public static final String[] VOICE_MODES = {  "Wave", "Hypersaw" };
     public static final String[] KEY_MODES = {  "Polyphonic", "Monophonic" };
     public static final String[] ARP_MODES = { "UpDown", "Up", "Down", "Chord", "Random" };
+    public static final String[] LATCH_MODES = { "Sustain Pedal", "Key Latch" };
     public static final String[] ARP_OCTAVES = { "1 Oct", "2 Oct", "3 Oct" };
     public static final String[] ARP_BEATS = { "1/32", "1/16 T", "1/16", "1/8 T", "1/16 D", "1/8", "1/4 T", "1/8 D", "1/4", };
     public static final String[] SUBOSCILLATOR_SHAPES = { "Saw", "Square", "Pulse", "Triangle", "Saw / Root", "Square / Root", "Pulse / Root", "Triangle / Root" };
     public static final String[] AUX_OSCILLATOR_MODES = { "Noise", "Ring Mod" };
-    // FIXME: There's also a "bypass bit" 0x08. There's also an "enable bit" 0x10. They should always be 1.
     public static final String[] FILTER_MODES = { "12dB Low Pass", "24dB Low Pass", "12dB Band Pass", "24db Band Pass", "12dB High Pass", "24dB High Pass" };         
     public static final String[] LFO_MODES = { "Monophonic", "Polyphonic", "Random Phase", "Dual Antiphase", "Dual Quadrature" }; 
     public static final String[] LFO3_MODES = { "Monophonic", "Polyphonic", "Random Phase" };
@@ -200,6 +200,17 @@ public class WaldorfKyra extends Synth
     17700, 18600, 19500, 20500
     };
     
+    public static final int[] LFO_PHASES = new int[]
+    {
+	0, 1, 3, 4, 6, 7, 9, 10, 11, 13, 14, 16, 17, 18, 20, 21, 23, 24, 26, 27, 28, 30, 
+	31, 33, 34, 35, 37, 38, 40, 41, 43, 44, 45, 47, 48, 50, 51, 52, 54, 55, 57, 58, 
+	60, 61, 62, 64, 65, 67, 68, 69, 71, 72, 74, 75, 77, 78, 79, 81, 82, 84, 85, 86, 
+	88, 90, 91, 92, 94, 95, 96, 98, 99, 101, 102, 103, 105, 106, 108, 109, 111, 112, 
+	113, 115, 116, 118, 119, 120, 122, 123, 125, 126, 128, 129, 130, 132, 133, 135, 
+	136, 137, 139, 140, 142, 143, 145, 146, 147, 149, 150, 152, 153, 154, 156, 157, 
+	159, 160, 162, 163, 164, 166, 167, 169, 170, 171, 173, 174, 176, 177, 179, 180
+    };
+    
     // Used for LFO Delay, Attack, Decay, and Release times
     public static final int[] TIMES = new int[] 
     {
@@ -300,15 +311,17 @@ public class WaldorfKyra extends Synth
         vbox.add(addEnvelope(1, Style.COLOR_A()));
         vbox.add(env2);
         vbox.add(addEnvelope(3, Style.COLOR_A()));
-        vbox.add(addLFO(1, Style.COLOR_B()));
+
+        hbox = new HBox();
+        hbox.add(addLFO(1, Style.COLOR_B()));
+        hbox.addLast(addLFO(2, Style.COLOR_B()));
+        vbox.add(hbox);
         
         hbox = new HBox();
-        hbox.add(addLFO(2, Style.COLOR_B()));
-        hbox.addLast(addLFO(3, Style.COLOR_B()));
-        vbox.add(hbox);
-                
-        vbox.add(addArpeggiator(Style.COLOR_C()));
-
+        hbox.add(addLFO(3, Style.COLOR_B()));
+        hbox.addLast(addArpeggiator(Style.COLOR_C()));
+		vbox.add(hbox);
+		
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Modulation", soundPanel);
 
@@ -478,7 +491,8 @@ public class WaldorfKyra extends Synth
 
         hbox.add(vbox);
 
-        comp = new LabelledDial("Volume", this, "patchvolume", color, 0, 127);
+        comp = new LabelledDial("Patch", this, "patchvolume", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("Volume");
         hbox.add(comp);
 
         comp = new LabelledDial("Portamento", this, "portamentotime", color, 0, 127)
@@ -587,6 +601,10 @@ public class WaldorfKyra extends Synth
         comp = new Chooser("Mode", this, "arpmode", params);
         vbox.add(comp);
 
+        params = LATCH_MODES;
+        comp = new Chooser("Latch Mode", this, "latchmode", params);
+        vbox.add(comp);
+
         comp = new CheckBox("Active", this, "arpenable");
         vbox.add(comp);
 
@@ -614,12 +632,18 @@ public class WaldorfKyra extends Synth
         comp = new LabelledDial("Pattern", this, "arppattern", color, 0, 127);
         hbox.add(comp);
 
-// FIXME: On the Kyra, gate length is 1% ... 100%.  Don't know how to convert this
-        comp = new LabelledDial("Gate Length", this, "arpgatelength", color, 0, 127);
+		// On the Kyra, gate length is 1% ... 100%, which is mapped 0...99.  Docs appear to be wrong.
+        comp = new LabelledDial("Gate Length", this, "arpgatelength", color, 0, 99)
+        	{
+        	public String map(int value)
+        		{
+        		return "" + (value + 1) + "%";
+        		}
+        	};
         hbox.add(comp);
 
-// FIXME: the tempo goes 58...185 but this makes no sense 
-        comp = new LabelledDial("Tempo", this, "arptempo", color, 0, 17);
+		// the tempo goes 58...185, and sysex goes 0...127 but the documentation suggests 0...117 which makes no sense
+        comp = new LabelledDial("Tempo", this, "arptempo", color, 0, 127);
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -862,7 +886,7 @@ public class WaldorfKyra extends Synth
         }
 
         
-    CheckBox bd;
+    //CheckBox bd;
     public JComponent addEnvelope(int env, Color color)
         {
         Category category = new Category(this, "Envelope " + env + (env == 1 ? " (Amplifier)" : (env == 2 ? " (Filter)" : " (Aux)")), color);
@@ -872,6 +896,9 @@ public class WaldorfKyra extends Synth
         String[] params;
         HBox hbox = new HBox();
         
+        
+        // Bass delay is now deprecated
+        /*
         VBox vbox = new VBox();
         if (env == 2 || env == 3)
             {
@@ -884,8 +911,8 @@ public class WaldorfKyra extends Synth
             // this will only work if envelope 1 is constructed AFTER envelope 2
             vbox.add(Strut.makeStrut(bd));
             }
-
         hbox.add(vbox);
+    	*/
 
         comp = new LabelledDial("Attack", this, "eg" + env + "attack", color, 0, 127)
             {
@@ -951,25 +978,42 @@ public class WaldorfKyra extends Synth
         params = (lfo == 3 ? LFO3_MODES : LFO_MODES);
         comp = new Chooser("Mode", this, "lfo" + lfo + "mode", params);
         vbox.add(comp);
-        hbox.add(vbox);
 
-        vbox = new VBox();
         params = LFO_TIME_SOURCES;
         comp = new Chooser("Time Source", this, "lfo" + lfo + "timesource", params);            // FIXME: Is this lfosync?
         vbox.add(comp);
         hbox.add(vbox);
 
-        comp = new LabelledDial("Rate", this, "lfo" + lfo + "rate", color, 0, 127)
+		VBox ratebox = new VBox();
+        LabelledDial rate = new LabelledDial("Rate", this, "lfo" + lfo + "rate", color, 0, 127)
             {
             public String map(int value)
                 {
                 value = value + 1;
+                if ((lfo == 1 || lfo == 2) && model.get("lfo" + lfo + "range", 0) == 1)	// extended range
+                	{
+                	value *= 4;
+                	}
                 int pre = (value / 10);
                 int post = (value % 10);
-                return "" + pre + "." + post + " Hz";
+                return "" + pre + "." + post; // + " Hz";
                 }
             };
-        hbox.add(comp);
+        ratebox.add(rate);
+        if (lfo == 1 || lfo == 2)
+        	{
+        	CheckBox extend = new CheckBox("Extend", this, "lfo" + lfo + "range") // define it first so it's already loaded when we make the dial
+        		{
+				public void update(String key, Model model)
+					{
+					super.update(key, model);
+					rate.repaint();
+					}
+        		};
+        	ratebox.add(extend);
+        	}
+        hbox.add(ratebox);
+
 
         if (lfo == 1 || lfo == 2)
             {
@@ -978,6 +1022,15 @@ public class WaldorfKyra extends Synth
                 public String map(int value)
                     {
                     return (TIMES[value] / 1000) + "." + (TIMES[value] % 1000); // + "s";
+                    }
+                };
+            hbox.add(comp);
+
+            comp = new LabelledDial("Phase", this, "lfo" + lfo + "phase", color, 0, 127)
+                {
+                public String map(int value)
+                    {
+                    return "" + LFO_PHASES[value];
                     }
                 };
             hbox.add(comp);
@@ -1379,6 +1432,10 @@ public class WaldorfKyra extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Pan");
         hbox.add(comp);
 
+        comp = new LabelledDial("Velocity", this, "velocityscaling", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("Scaling");
+        hbox.add(comp);
+
         comp = new LabelledDial("FX Dynamics", this, "fxdynamicsfinallevel", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Final Level");
         hbox.add(comp);
@@ -1387,7 +1444,93 @@ public class WaldorfKyra extends Synth
         return category;
         }
 
-    
+            
+    public JFrame sprout()     
+        {
+        JFrame frame = super.sprout();
+        addKyraMenu();
+        return frame;
+        }
+
+    public void addKyraMenu()
+        {
+        JMenu menu = new JMenu("Kyra");
+        menubar.add(menu);
+        
+        JMenuItem oneMPEMenu = new JMenuItem("Write Patch as Pseudo-MPE");
+        oneMPEMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+                
+                int n = 0;
+                String title = "Write Patch as Pseudo-MPE";
+                while(true)
+                    {
+                    boolean result = showMultiOption(WaldorfKyra.this, new String[] { "Patch Number"}, 
+                        new JComponent[] { number }, title, "Enter the Multimode patch number.");
+                
+                    try { n = Integer.parseInt(number.getText()); }
+                    catch (NumberFormatException ex)
+                        {
+                        showSimpleError(title, "The Patch Number must be an integer 0 ... 127");
+                        continue;
+                        }
+                
+                    if (n < 1 || n > 128)
+                        {
+                        showSimpleError(title, "The Patch Number must be an integer 0 ... 127");
+                        continue;
+                        }
+
+                    if (result) 
+                        break;
+                    }           
+                 
+                boolean send = getSendMIDI();
+                setSendMIDI(true);
+                tryToSendMIDI(getMPEForPatch(model.get("bank", 0), model.get("number"), n, model.get("name", "")));
+                setSendMIDI(send);
+                }
+            });
+
+        menu.add(oneMPEMenu);
+        }
+        
+    public Object[] getMPEForPatch(int bank, int number, int multinumber, String name)
+        {
+        WaldorfKyraMulti multi = (WaldorfKyraMulti)
+            instantiate(WaldorfKyraMulti.class, true, false, null);
+        
+        multi.setSendMIDI(false);
+        multi.getUndo().setWillPush(false);
+        multi.getModel().setUpdateListeners(false);
+        multi.getModel().set("number", multinumber);
+        for(int j = 1; j <= 8; j++)
+            {
+            multi.getModel().set("part" + j + "outputchannel", 0);
+            multi.getModel().set("part" + j + "midichannel", j - 1);
+            multi.getModel().set("part" + j + "volume", 127);
+            multi.getModel().set("part" + j + "pan", 64);
+            multi.getModel().set("part" + j + "patchbank", bank);
+            multi.getModel().set("part" + j + "patchnumber", number);
+            multi.getModel().set("part" + j + "transpose", 24);
+            multi.getModel().set("part" + j + "detune", 64);
+            multi.getModel().set("part" + j + "lowerkeyrange", 1);		// not permitted to be 0
+            multi.getModel().set("part" + j + "upperkeyrange", 127);
+            multi.getModel().set("part" + j + "rxvolume", 1);
+            multi.getModel().set("part" + j + "rxprogram", 1);
+            multi.getModel().set("part" + j + "enabledelay", 1);
+            multi.getModel().set("part" + j + "enablemdfx", 1);
+            multi.getModel().set("part" + j + "enableeq", 1);
+            multi.getModel().set("part" + j + "enablereverb", 1);
+            }
+        multi.getModel().set("name", name);
+        return multi.emitAll(null, false, false);
+        }
+        
+            
     public byte getID() 
         { 
         try 
@@ -1524,7 +1667,7 @@ public class WaldorfKyra extends Synth
                 data[3] = (byte)getID();
                 data[4] = (byte)0x10;                   // Send Parameter to patch Edit Buffer
                 data[5] = (byte)0x01;                   // Current Version
-                data[6] = (byte)(((param >>> 7) & 127) & (part << 4));
+                data[6] = (byte)(((param >>> 7) & 0x01) | (part << 4));
                 data[7] = (byte)(param & 127);
                 data[8] = (byte)((val.charAt(i)) & 127);
                 data[9] = (byte)0xF7;
@@ -1544,7 +1687,7 @@ public class WaldorfKyra extends Synth
             data[3] = (byte)getID();
             data[4] = (byte)0x10;                   // Send Parameter to patch Edit Buffer
             data[5] = (byte)0x01;                   // Current Version
-            data[6] = (byte)(((param >>> 7) & 127) & (part << 4));
+            data[6] = (byte)(((param >>> 7) & 0x01) | (part << 4));
             data[7] = (byte)(param & 127);
             data[8] = (byte)val;
             data[9] = (byte)0xF7;
@@ -1559,7 +1702,7 @@ public class WaldorfKyra extends Synth
             data2[3] = (byte)getID();
             data2[4] = (byte)0x10;                   // Send Parameter to patch Edit Buffer
             data2[5] = (byte)0x01;                   // Current Version
-            data2[6] = (byte)(((param >>> 7) & 127) & (part << 4));
+            data2[6] = (byte)(((param >>> 7) & 0x01) | (part << 4));
             data2[7] = (byte)(param & 127);
             data2[8] = (byte)val;
             data2[9] = (byte)0xF7;
@@ -1578,7 +1721,7 @@ public class WaldorfKyra extends Synth
             data[3] = (byte)getID();
             data[4] = (byte)0x10;                   // Send Parameter to patch Edit Buffer
             data[5] = (byte)0x01;                   // Current Version
-            data[6] = (byte)(((param >>> 7) & 127) & (part << 4));
+            data[6] = (byte)(((param >>> 7) & 127) | (part << 4));
             data[7] = (byte)(param & 127);
             data[8] = (byte)val;
             data[9] = (byte)0xF7;
@@ -1593,34 +1736,13 @@ public class WaldorfKyra extends Synth
             data2[3] = (byte)getID();
             data2[4] = (byte)0x10;                   // Send Parameter to patch Edit Buffer
             data2[5] = (byte)0x01;                   // Current Version
-            data2[6] = (byte)(((param >>> 7) & 127) & (part << 4));
+            data2[6] = (byte)(((param >>> 7) & 0x01) | (part << 4));
             data2[7] = (byte)(param & 127);
             data2[8] = (byte)val;
             data2[9] = (byte)0xF7;
             
             return new Object[] { data, data2 };
         	}
-        else if (key.equals("filter1mode") ||
-            key.equals("filter2mode"))
-            {
-            // FIXME: There are one or two magic bits:
-            // FIXME: There's also a "bypass bit" 0x08. There's also an "enable bit" 0x10. They should always be 1.
-            int param = ((Integer)parametersToIndex.get(key)).intValue();
-            int val = model.get(key, 0);
-        
-            byte[] data = new byte[10];
-            data[0] = (byte)0xF0;
-            data[1] = (byte)0x3e;
-            data[2] = (byte)0x22;
-            data[3] = (byte)getID();
-            data[4] = (byte)0x10;                   // Send Parameter to patch Edit Buffer
-            data[5] = (byte)0x01;                   // Current Version
-            data[6] = (byte)(((param >>> 7) & 127) & (part << 4));
-            data[7] = (byte)(param & 127);
-            data[8] = (byte)(val | 0x08 | 0x10);
-            data[9] = (byte)0xF7;
-            return new Object[] { data };
-            }
         else
             {
             int param = ((Integer)parametersToIndex.get(key)).intValue();
@@ -1633,7 +1755,7 @@ public class WaldorfKyra extends Synth
             data[3] = (byte)getID();
             data[4] = (byte)0x10;                   // Send Parameter to patch Edit Buffer
             data[5] = (byte)0x01;                   // Current Version
-            data[6] = (byte)(((param >>> 7) & 127) & (part << 4));
+            data[6] = (byte)(((param >>> 7) & 0x01) | (part << 4));
             data[7] = (byte)(param & 127);
             data[8] = (byte)val;
             data[9] = (byte)0xF7;
@@ -1655,7 +1777,7 @@ public class WaldorfKyra extends Synth
         data[1] = (byte)0x3e;
         data[2] = (byte)0x22;
         data[3] = (byte)getID();
-        data[4] = (byte)0x00;                   // Send Patch
+        data[4] = (byte)0x00;                   // Send Patch		-- we must always do 0x00, not 0x40
         data[5] = (byte)0x01;                   // Current Version
         data[6] = (byte)BB;
         data[7] = (byte)NN;
@@ -1687,13 +1809,6 @@ public class WaldorfKyra extends Synth
             	{
             	data[i + 8] = (byte)(waveToNumber(model.get("osc2wave")));
             	}
-            else if (parameters[i].equals("filter1mode") ||
-                parameters[i].equals("filter2mode"))
-                {
-                // FIXME: There are one or two magic bits:
-                // FIXME: There's also a "bypass bit" 0x08. There's also an "enable bit" 0x10. They should always be 1.
-                data[i + 8] = (byte)((model.get(parameters[i], 0)) | 0x08 | 0x10);
-                }
             else
                 {
                 data[i + 8] = (byte)(model.get(parameters[i], 0));
@@ -1719,6 +1834,78 @@ public class WaldorfKyra extends Synth
         return data;
         }
 
+	public void parseParameter(byte[] data)
+		{
+		if (data.length == 10 && 	// single parameter
+            		data[0] == (byte)0xF0 &&
+            		data[1] == 0x3E &&
+            		data[2] == 0x22 &&
+            		(data[4] == 0x10 || data[4] == 0x50))
+            			{
+		// extract part
+		int part = ((data[6] >>> 4) & 3);
+		// extract param
+		int param = ((data[6] & 1) << 7) | data[7];
+		// extract value
+		int val = data[8];
+		
+		// "name"
+        // name chars are params 202 through 223
+		if (param >= 202 && param <= 223)
+			{
+			char c = (char) val;
+			int pos = param - 202;
+			char[] name = (model.get("name", "") + "                      ").toCharArray();
+			name[pos] = c;
+        	model.set("name", new String(StringUtility.rightTrim(new String(name))));
+			}
+		
+		// "osc1wavetablegroup"
+		else if (parameters[param].equals("osc1wavetablegroup"))
+			{
+			int group = val;
+			int number = waveToNumber(model.get("osc1wave"));
+			if (WAVE_COUNTS[group] <= number) // no longer legal, need to revise to default value, hopefully osc1wavetablenumber will come along soon
+				number = 0;
+			model.set("osc1wave", getWave(group, number));
+			}
+		
+		// "osc1wavetablenumber"
+		else if (parameters[param].equals("osc1wavetablenumber"))
+			{
+			int group = waveToGroup(model.get("osc1wave"));
+			int number = val;
+			if (WAVE_COUNTS[group] <= number) // no longer legal, need to revise to default value, hope this doesn't happen
+				number = 0;
+			model.set("osc1wave", getWave(group, number));
+			}
+		
+		// "osc2wavetablegroup"
+		else if (parameters[param].equals("osc2wavetablegroup"))
+			{
+			int group = val;
+			int number = waveToNumber(model.get("osc2wave"));
+			if (WAVE_COUNTS[group] <= number) // no longer legal, need to revise to default value, hopefully osc1wavetablenumber will come along soon
+				number = 0;
+			model.set("osc2wave", getWave(group, number));
+			}
+		
+		// "osc2wavetablenumber"
+		else if (parameters[param].equals("osc2wavetablenumber"))
+			{
+			int group = waveToGroup(model.get("osc2wave"));
+			int number = val;
+			if (WAVE_COUNTS[group] <= number) // no longer legal, need to revise to default value, hope this doesn't happen
+				number = 0;
+			model.set("osc2wave", getWave(group, number));
+			}
+		
+        else
+            {
+            model.set(parameters[param], val);
+            }
+            }
+        }
 
     public int parse(byte[] data, boolean fromFile)
         {
@@ -1750,14 +1937,6 @@ public class WaldorfKyra extends Synth
             	int number = data[i + 8];
             	model.set("osc2wave", getWave(group, number));
             	}
-            else if (parameters[i].equals("filter1mode") ||
-                parameters[i].equals("filter2mode"))
-                {
-                // FIXME: There are one or two magic bits:
-                // FIXME: There's also a "bypass bit" 0x08. There's also an "enable bit" 0x10. They should always be 1.
-                // Strip out here with an 0x07?
-                model.set(parameters[i], data[i+8] & 0x07);
-                }
             else
                 {
                 model.set(parameters[i], data[i+8]);
@@ -1789,7 +1968,7 @@ public class WaldorfKyra extends Synth
     "voicemode",
     "dualmode",
     "bendrange",
-    "auxoscillatorlevel",                                       // this is noise level or ringmod level
+    "auxoscillatorlevel",                  // this is noise level or ringmod level
     "panorama",
     "hypersawintensity",
     "hypersawspread",
@@ -1824,7 +2003,7 @@ public class WaldorfKyra extends Synth
     "osc2wavetablelevel",
     "osc2pulsewidth",
     "osc2subosclevel",
-    "osc2suboscpulsewidth",                                     // This appears nowhere in the Kyra manual.  It's actually suboscillator shape and octave
+    "osc2suboscpulsewidth",               // This appears nowhere in the Kyra manual.  It's actually suboscillator shape and octave
     "osc2suboscdetune",
     "osc2wavetablegroup",
     "osc2wavetablenumber",
@@ -1832,7 +2011,7 @@ public class WaldorfKyra extends Synth
     "osc2lfo2topulsewidth",
     "osc2hardsync",
     "hypersawsuboscillator",
-    "filter1mode",
+    "filter1mode",							// The docs talk about two magic bits, "bypass" (0x08) and "enable" (0x10), but I am assured this is just internal and they never show up.
     "filterconfiguration",
     "filter1frequency",
     "filter1resonance",
@@ -1843,11 +2022,11 @@ public class WaldorfKyra extends Synth
     "filter1keyfollowkey",
     "filter1keyfollowamt",
     "-",									// VCA Drive: this was never implemented			
-    "fxlimitermode",                                            // this is called PATCH_PARAM_VCA_SATURATOR_MODE 
+    "fxlimitermode",                        // this was originally called PATCH_PARAM_VCA_SATURATOR_MODE 
     "vcapan",
     "vcalfo1toamp",
     "vcalfo2topan",
-    "filter2mode",
+    "filter2mode",							// The docs talk about two magic bits, "bypass" (0x08) and "enable" (0x10), but I am assured this is just internal and they never show up.
     "filter2frequency",
     "filter2resonance",
     "filter2eg1tofreq",
@@ -1861,17 +2040,17 @@ public class WaldorfKyra extends Synth
     "eg2decay",
     "eg2sustain",
     "eg2release",
-    "eg2bassdelay",
+    "-",							// "eg2bassdelay", (deprecated)
     "eg3attack",
     "eg3decay",
     "eg3sustain",
     "eg3release",
-    "eg3bassdelay",
+    "-",							// "eg3bassdelay", (deprecated)
     "filter2lfo2tofreq",
     "filter2lfo3tofreq",
     "filter2keyfollowkey",
     "filter2keyfollowamt",
-    "filterbalance",                                            // this is normally called FILTER_1_2_BALANCE but the '1' will cause problems with Edisyn's cut/paste 
+    "filterbalance",                // this is normally called FILTER_1_2_BALANCE but the '1' will cause problems with Edisyn's cut/paste 
     "lfo1shape",
     "lfo2shape",
     "lfo3shape",
@@ -1886,7 +2065,7 @@ public class WaldorfKyra extends Synth
     "lfo3timesource",
     "lfo1delay",
     "lfo2delay",
-    "-",												// spare07
+    "velocityscaling",					// was spare07
     "modmat0source",
     "modmat0destination0",
     "modmat0amount0",
@@ -1938,10 +2117,10 @@ public class WaldorfKyra extends Synth
     "fxphaserfeedback",
     "fxphasermix",
     "fxphaserwaveshape",
-    "-",					// "spare12",
-    "-", 					// "spare13",
-    "-", 					// "spare14",
-    "-", 					// "spare15",
+    "lfo1range",					// was "spare12",
+    "lfo2range", 					// was "spare13",
+    "lfo1phase", 					// was "spare14",
+    "lfo2phase", 					// was "spare15",
     "fxddltype",
     "fxddldelaytime",
     "fxddlfeedback",
@@ -1951,7 +2130,7 @@ public class WaldorfKyra extends Synth
     "fxddlclockbeat",
     "-", 					// "spare16",
     "-", 					// "spare17",
-    "-", 					// "spare18",
+    "latchmode", 					// was "spare18",
     "fxmdfxdelaytime",
     "fxmdfxdelayscale",
     "fxmdfxfeedback",
@@ -1963,7 +2142,7 @@ public class WaldorfKyra extends Synth
     "-", 					// "spare21",
     "dualmodedetune",
     "fxreverbpredelay",
-    "fxreverbrt60",                                                 // This is actually reverb time
+    "fxreverbrt60",                   // This is reverb time
     "fxreverbdamping",
     "fxreverbdarkness",
     "fxreverbmix",
@@ -1971,7 +2150,7 @@ public class WaldorfKyra extends Synth
     "fxdistortiondrive",
     "fxdistortiontype",
     "fxdynamicsfinallevel",
-    "fxdistortionlpf",                                              // "rolloff corner"
+    "fxdistortionlpf",               // "rolloff corner"
     "fxeqlowshelffreq",
     "fxeqlowshelfgain",
     "fxeqmidfreq",

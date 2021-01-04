@@ -1322,7 +1322,7 @@ public class EmuMorpheus extends Synth
         if (bank == 2) bank = 3;
         
         EmuMorpheusMap multi = (EmuMorpheusMap)
-            instantiate(EmuMorpheusMap.class, "", true, false, null);
+            instantiate(EmuMorpheusMap.class, true, false, null);
         
         multi.setSendMIDI(false);
         multi.getUndo().setWillPush(false);

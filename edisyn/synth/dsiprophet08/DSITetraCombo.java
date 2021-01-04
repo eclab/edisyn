@@ -2666,7 +2666,7 @@ public class DSITetraCombo extends Synth
                     int p1 = part1.getSelectedIndex() + 1;
                     int p2 = part2.getSelectedIndex() + 1;
 
-                    Synth newSynth = instantiate(DSIProphet08.class, DSIProphet08.getSynthName(), false, true, tuple);
+                    Synth newSynth = instantiate(DSIProphet08.class, false, true, tuple);
                     newSynth.setSendMIDI(false);
                     boolean currentPush = newSynth.getUndo().getWillPush();
                     newSynth.getUndo().setWillPush(false);

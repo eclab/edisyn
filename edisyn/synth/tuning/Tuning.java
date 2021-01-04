@@ -461,7 +461,7 @@ public class Tuning extends Synth
             {
             public boolean accept(File dir, String name) 
                 {
-                return ensureFileEndsWith(name, ".scl").equals(name) || ensureFileEndsWith(name, ".SCL").equals(name);
+                return StringUtility.ensureFileEndsWith(name, ".scl").equals(name) || StringUtility.ensureFileEndsWith(name, ".SCL").equals(name);
                 }
             });
 

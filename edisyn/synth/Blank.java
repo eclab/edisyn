@@ -764,14 +764,17 @@ public class Blank extends Synth
         return true;
         }
                 
-    public static int getNumSysexDumpsPerPatch()
-        {
-        // Some synthesizers (notably the Yamaha TX81Z) require *multiple* sysex dumps to upload,
-        // download, or load a patch.  Override this to indicate how many.  By default, this 
-        // value is simply 1.
-        return 1;
-        }
-
+    public static int getNextSysexPatchGroup(byte[][] sysex, int start)
+    	{
+        // Starting with sysex[start], return the start of the NEXT patch.
+        // For example, if your synthesizer uses three sysex messages for a patch,
+        // and the the messages may be found in sysex[start], sysex[start+1],
+        // and sysex[start+2], then return start+3  If no patch for your synthesizer
+        // begins at sysex[start], or if it is incomplete before the sysex
+        // messages are finished then return start. 
+    	return 1;
+		}
+		
     public boolean sendAllSoundsOffWhenWindowChanges()
         {
         // When a window becomes the front window, is closed, quits, etc., then

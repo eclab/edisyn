@@ -1509,7 +1509,7 @@ public class MAudioVenomArp extends Synth
             {
             public boolean accept(File dir, String name)
                 {
-                return ensureFileEndsWith(name, ".mid").equals(name) || ensureFileEndsWith(name, ".MID").equals(name) || ensureFileEndsWith(name, ".midi").equals(name) || ensureFileEndsWith(name, ".MIDI").equals(name);
+                return StringUtility.ensureFileEndsWith(name, ".mid").equals(name) || StringUtility.ensureFileEndsWith(name, ".MID").equals(name) || StringUtility.ensureFileEndsWith(name, ".midi").equals(name) || StringUtility.ensureFileEndsWith(name, ".MIDI").equals(name);
                 }
             });
 

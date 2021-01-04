@@ -533,7 +533,7 @@ public class WaldorfKyraMulti extends Synth
         data[1] = (byte)0x3e;
         data[2] = (byte)0x22;
         data[3] = (byte)getID();
-        data[4] = (byte)0x01;                   // Send Multi
+        data[4] = (byte)0x01;                   // Send Multi 		-- we must always do 0x01, not 0x41
         data[5] = (byte)0x01;                   // Current Version
         data[6] = (byte)BB;
         data[7] = (byte)NN;
@@ -584,6 +584,28 @@ public class WaldorfKyraMulti extends Synth
         
         return new Object[] { data, data2 };
         }
+
+// This is moot, as the Kyra Mutimode doesn't emit sysex parameters.  :-(
+/*
+	public void parseParameter(byte[] data)
+		{
+		if (data.length == 10 && 
+            	data[0] == (byte)0xF0 &&
+            	data[1] == 0x3E &&
+            	data[2] == 0x22 &&
+            	(data[4] == 0x11 || data[4] == 0x51))
+            			{	
+			// extract part
+			int part = (data[6] & 3);
+			// extract param
+			int param = data[7];
+			// extract value
+			int val = data[8];
+
+			model.set("part" + (part + 1) + basicParameters[param], val);
+			}
+        }
+*/
 
     public int parse(byte[] data, boolean fromFile)
         {
@@ -669,7 +691,25 @@ public class WaldorfKyraMulti extends Synth
 
     public static String getSynthName() { return "Waldorf Kyra [Multi]"; }
     
-    
+    public static final String[] basicParameters = new String[]
+    	{
+		"outputchannel",
+		"midichannel",
+		"volume",
+		"pan",
+		"patchbank",
+		"patchnumber",
+		"transpose",
+		"detune",
+		"lowerkeyrange",
+		"upperkeyrange",
+		"rxvolume",
+		"rxprogram",
+		"enabledelay",
+		"enablemdfx",
+		"enableeq",
+		"enablereverb",
+    	};
 
     HashMap parametersToIndex = new HashMap();
     public static final String[] parameters = new String[] 

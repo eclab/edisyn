@@ -52,7 +52,7 @@ public class CasioCZ extends Synth
     {
     /// Various collections of parameter names for pop-up menus
         
-    public static final String[] BANKS = new String[] { "A", "B", "C", "D", "E", "F", "G", "H", "CA", "CB" };
+    public static final String[] BANKS = new String[] { "A", "B", "C", "D", "E", "F", "G", "H", "CA", "CB", "SA", "SB", "SC" };
     public static final String[] OCTAVE = new String[] { "0", "+1", "-1" };        
     public static final String[] LINE_SELECT = new String[] { "1", "2", "1+1'", "1+2'"};        
     public static final String[] VIBRATO_WAVES = new String[] { "Triangle", "Saw Up", "Saw Down", "Square" };
@@ -201,18 +201,21 @@ public class CasioCZ extends Synth
         int num = model.get("number") + 1;
         JTextField number = new JTextField("" + num, 3);
         
-        String instructions = "<html>Banks vary depending on device.<p>There are 8 patches per bank." +
-            "<p><table><tr><td><b color=black>Bank</b></td><td><b color=black>CZ-1</b></td><td><b color=black>CZ-101/1K</b></td><td><b color=black>CZ-3K/5K</b></td></tr>" +
-            "<tr><td>A</td><td>A</td><td>Preset 1-8    </td><td>Preset A  </td></tr>" +
-            "<tr><td>B</td><td>B</td><td>Preset 9-16   </td><td>Preset B  </td></tr>" +
-            "<tr><td>C</td><td>C</td><td>              </td><td>Preset C  </td></tr>" +
-            "<tr><td>D</td><td>D</td><td>              </td><td>Preset D  </td></tr>" +
-            "<tr><td>E</td><td>E</td><td>Internal 1-8  </td><td>Internal A</td></tr>" +
-            "<tr><td>F</td><td>F</td><td>Internal 9-16 </td><td>Internal B</td></tr>" +
-            "<tr><td>G</td><td>G</td><td>              </td><td>Internal C</td></tr>" + 
-            "<tr><td>H</td><td>H</td><td>              </td><td>Internal D</td></tr>" +
-            "<tr><td>CA</td><td> </td><td>Cartridge 1-8 </td><td>          </td></tr>" +
-            "<tr><td>CB</td><td> </td><td>Cartridge 9-16</td><td>          </td></tr>" +
+        String instructions = "<html>Banks vary depending on device.<p>There are 8 patches per bank, except SC." +
+            "<p><table><tr><td><b color=black>Bank</b></td><td><b color=black>CZ-1</b></td><td><b color=black>CZ-101/1K</b></td><td><b color=black>CZ-3K/5K</b></td><td><b color=black>CZ-230S</b></td></tr>" +
+            "<tr><td>A</td><td>A</td><td>Preset 1-8     </td><td>Preset A  </td>0-7</tr>" +
+            "<tr><td>B</td><td>B</td><td>Preset 9-16    </td><td>Preset B  </td>8-15</tr>" +
+            "<tr><td>C</td><td>C</td><td>               </td><td>Preset C  </td>16-23</tr>" +
+            "<tr><td>D</td><td>D</td><td>               </td><td>Preset D  </td>24-31</tr>" +
+            "<tr><td>E</td><td>E</td><td>Internal 1-8   </td><td>Internal A</td>32-39</tr>" +
+            "<tr><td>F</td><td>F</td><td>Internal 9-16  </td><td>Internal B</td>40-47</tr>" +
+            "<tr><td>G</td><td>G</td><td>               </td><td>Internal C</td>48-55</tr>" + 
+            "<tr><td>H</td><td>H</td><td>               </td><td>Internal D</td>56-63</tr>" +
+            "<tr><td>CA</td><td> </td><td>Cartridge 1-8 </td><td>          </td>64-71</tr>" +
+            "<tr><td>CB</td><td> </td><td>Cartridge 9-16</td><td>          </td>72-79</tr>" +
+            "<tr><td>SA</td><td> </td><td>              </td><td>          </td>80-87</tr>" +
+            "<tr><td>SB</td><td> </td><td>              </td><td>          </td>88-95</tr>" +
+            "<tr><td>SC</td><td> </td><td>              </td><td>          </td>96-99</tr>" +
             "</table><p></html>";
                         
         while(true)
@@ -227,12 +230,18 @@ public class CasioCZ extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1...8");
+                if (bank.getSelectedIndex() == 12) // SC
+                	showSimpleError(title, "In Bank SC, the Patch Number must be an integer 1...4");
+                else
+                	showSimpleError(title, "The Patch Number must be an integer 1...8");
                 continue;
                 }
-            if (n < 1 || n > 8)
+            if (n < 1 || n > 8 || (bank.getSelectedIndex() == 12 && n > 4))
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1...8");
+                if (bank.getSelectedIndex() == 12) // SC
+                	showSimpleError(title, "In Bank SC, the Patch Number must be an integer 1...4");
+                else
+                	showSimpleError(title, "The Patch Number must be an integer 1...8");
                 continue;
                 }
                 
@@ -1086,11 +1095,12 @@ public class CasioCZ extends Synth
         int number = model.get("number");
         
         number++;
-        if (number >= 8)
+        if (number >= 8 || 
+        	(number >= 4 && bank == 12))		// SC
             {
             bank++;
             number = 0;
-            if (bank >= 10)
+            if (bank >= 12)
                 bank = 0;
             }
                 
@@ -1127,6 +1137,14 @@ public class CasioCZ extends Synth
         name = nameb.toString();
         return name;  // super.revisePatchName(name);  // trim again
         }
+        
+        
+        
+    //// IMPORTANT NOTE ABOUT THE CZ-230S
+    //// To send to current memory in a CZ machine, you emit to "patch" 96 (0x60), which signifies current memory rather than a real patch.
+    //// However on the CZ-230S, there actually *is* a patch 96: and furthermore it's one of only four patches that you can actually write to.
+    //// This means that when you send to current working memory, it'll actually write to patch 96 on the CZ-230S, overwriting its current contents.
+    //// This may be very confusing to CZ-230S users.
         
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {

@@ -3,6 +3,9 @@
 <h1>Waldorf Kyra</h1> 
 <h2>Single Patch Editor</h2>
 
+<p>This editor is designed to work with at Firmware 1.78, though it should be ap
+proximately compatible with earlier versions.
+
 <p><b>Communicating with Edisyn</b><br> 
 Set Edisyn's MIDI channel to the same as the part number channel you're editing (typically 1).  Set Edisyn's Synth ID to your Kyra's "MIDI SysEx device ID": typically 17.  
 
@@ -13,21 +16,24 @@ To communicate with your Kyra over USB, make sure that "Receive MIDI Program" is
 <p><li>To communicate with your Kyra over 5-pin DIN MIDI, make sure that "Receive MIDI Program" is "MIDI" or "MIDI+USB".  You might also wish to set "Send manual dumps to" "MIDI".
 </ul>
 
+<p>If you want Edisyn to update in real time to changes you make on your Kyra (like turning a knob), set "Transmit Automation" to "USB" or "MIDI" as appropriate. 
+
+
 <p><b>Gotchas</b><br>
 
 <ul>
 
-<li>Sadly the Kyra does not send out sysex or CC in response to changing knobs, so Edisyn won't get updated if you do that.
+<li>Though the Kyra has a "Wave Group" and "Wave Number" for each oscillator, Edisyn only has "Wave" (the combination of the two).  This is because there are different numbers of waves for each group, which is problematic to write an editor for.  So you'll have to wade through a lot of waves, sorry.
 
-<p><li>Though the Kyra has a "Wave Group" and "Wave Number" for each oscillator, Edisyn only has "Wave" (the combination of the two).  This is because there are different numbers of waves for each group, which is problematic to write an editor for.  So you'll have to wade through a lot of waves, sorry.
+<p>If you update the "Wave Number" in real time on the Kyra, Edisyn may not properly update its "Wave".  To get it back in sync, update the "Wave Group", and then the "Wave Number" again.
 
 <p><li>When Edisyn writes a patch to the Kyra, the Krya may not update the screen to reflect this change.
 
 <p><li>When Edisyn writes a parameter to the Kyra, you won't see that parameter updated unless you're looking at its page in the Kyra's screen.
 
-<p>There appears to be a significant bug in sending mod matrix amounts or destinations as real-time individual parameters: they can change other parameters, such as pan or volume.  This will be particularly evident if you use the Morph tool set to "Trickle" -- don't do that.
 </ul>
 
+<p>Thanks to Manuel Caballero and Waldorf Music GmbH for their help in developing this patch editor.  Thanks also to Bryan Hoyle for loaning me his unit.
 
 
 <p><table border=0 cellpadding=0 cellspacing=5>

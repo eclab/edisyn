@@ -2273,7 +2273,7 @@ public class WaldorfBlofeld extends Synth
     public byte[] getMPEForPatch(int bank, int number, int multinumber, String name)
         {
         WaldorfBlofeldMulti multi = (WaldorfBlofeldMulti)
-            instantiate(WaldorfBlofeldMulti.class, "", true, false, null);
+            instantiate(WaldorfBlofeldMulti.class, true, false, null);
         
         multi.setSendMIDI(false);
         multi.getUndo().setWillPush(false);

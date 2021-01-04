@@ -1262,19 +1262,6 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
         return box;
         }
 
-    public String getBankName(byte[] data)
-        {
-        int pos = (data[2] == 0x75 ? 9 : 6);
-        char[] name = new char[8];
-        for(int i = 0; i < 8; i++)
-            {
-            name[i] = (char)(data[pos + i * 2] | (data[pos + i * 2 + 1] << 4));
-            }
-        String s = new String(name).trim();
-        if (s.equals("")) return super.getBankName(data);
-        else return s;
-        }
-
     public String[] getBanksForBankSysex(byte[] data, Model model) 
         { 
         return WRITE_BANKS;
@@ -1291,6 +1278,7 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
 
     public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)
         {
+        /*
         // Extract the chosen bank
         int b = model.get("bank", 0);
         if (b > 1) 
@@ -1298,7 +1286,8 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
             System.err.println("Warning (YamahaFB01): " + "Bad bank " + b);
             b = 0;
             }
-
+        */
+            
         // First, we're going to convert this entirely to Voice Bank X
         if (data[2] != 0x75)
             {
@@ -1309,7 +1298,7 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
             data2[3] = (byte)(getID() - 1);  
             data2[4] = 0;
             data2[5] = 0;
-            data2[6] = (byte) b;
+            data2[6] = (byte) bank;
             data2[7] = 0;
             data2[8] = 0x40;
             System.arraycopy(data, 6, data2, 9, 6354);
@@ -1318,7 +1307,7 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
         else
             {
             data[3] = (byte) (getID() - 1);
-            data[6] = (byte) b;
+            data[6] = (byte) bank;
             }
         
         // Change the bank patch name
@@ -1351,7 +1340,7 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
                 }
             }
 
-        Object[] div = Midi.DividedSysex2.create(d);             // build the divided sysex
+        Object[] div = Midi.DividedSysex.create(d);             // build the divided sysex
 /*
   for(int i = 0; i < div.length; i++)
   {

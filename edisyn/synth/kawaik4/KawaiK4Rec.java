@@ -54,4 +54,85 @@ public class KawaiK4Rec extends Recognize
         } 
 
     public static final int EXPECTED_SYSEX_LENGTH = 140;        
+
+
+/**
+	public byte[][] convertBulkBank(byte[] data)
+		{
+		if (data[0] == (byte)0xF0 &&
+			data[1] == (byte)0x40 &&	// Kawai
+			data[3] == (byte)0x22 &&	// All Block Data Dump
+			data[4] == (byte)0x00 &&	// Synthesizers
+			data[5] == (byte)0x04 &&	// Kawai K4
+			(data[6] == (byte)0x00 || 	// Internal
+			data[6] == (byte)0x20) &&	// [or] External
+			data[7] == (byte)0x00)
+				{
+				byte[][] syx = new byte[4][];
+				int pos = 8;
+			
+				// Load Singles
+				int size = 131 * 64;
+				syx[0] = new byte[8 + size];
+				syx[0][0] = (byte)0xF0;
+				syx[0][1] = (byte)0x40;
+				syx[0][2] = (byte)data[2];
+				syx[0][3] = (byte)0x21;
+				syx[0][4] = (byte)0x00;
+				syx[0][5] = (byte)0x04;
+				syx[0][6] = (byte)data[6];
+				syx[0][7] = (byte)0x00;			// Single
+				syx[0][8 + size - 1] = (byte)0xF7;
+				System.arraycopy(data[pos], 0, syx[0][8], 0, size);
+				pos += size;
+			
+				// Load Multis
+				size = 77 * 64;
+				syx[1] = new byte[8 + size];
+				syx[1][0] = (byte)0xF0;
+				syx[1][1] = (byte)0x40;
+				syx[1][2] = (byte)data[2];
+				syx[1][3] = (byte)0x21;
+				syx[1][4] = (byte)0x00;
+				syx[1][5] = (byte)0x04;
+				syx[1][6] = (byte)data[6];
+				syx[1][7] = (byte)0x40;			// Multi
+				syx[1][8 + size - 1] = (byte)0xF7;
+				System.arraycopy(data[pos], 0, syx[1][8], 0, size);
+				pos += size;
+
+				// Load Drum
+				size = 682;
+				syx[2] = new byte[8 + size];
+				syx[2][0] = (byte)0xF0;
+				syx[2][1] = (byte)0x40;
+				syx[2][2] = (byte)data[2];
+				syx[2][3] = (byte)0x20;				// one patch data dump
+				syx[2][4] = (byte)0x00;
+				syx[2][5] = (byte)0x04;
+				syx[2][6] = (byte)data[6];		// Manual says 0x03 is "external", likely error
+				syx[2][7] = (byte)32;			// Drum	(decimal)
+				syx[2][8 + size - 1] = (byte)0xF7;
+				System.arraycopy(data[pos], 0, syx[2][8], 0, size);
+				pos += size;
+
+				// Load Effects
+				size = 35 * 16;
+				syx[3] = new byte[8 + size];
+				syx[3][0] = (byte)0xF0;
+				syx[3][1] = (byte)0x40;
+				syx[3][2] = (byte)data[2];
+				syx[3][3] = (byte)0x20;				// one patch data dump
+				syx[3][4] = (byte)0x00;
+				syx[3][5] = (byte)0x04;
+				syx[3][6] = (byte)data[6];		// Manual says 0x03 is "external", likely error
+				syx[3][7] = (byte)32;			// Drum	(decimal)
+				syx[3][8 + size - 1] = (byte)0xF7;
+				System.arraycopy(data[pos], 0, syx[3][8], 0, size);
+
+				return syx;
+				}
+		else return null;
+		}
+*/
     }

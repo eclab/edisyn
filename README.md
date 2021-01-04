@@ -77,7 +77,7 @@ Sure!  But building a patch editor is a long-term commitment of debugging and ma
 
 #### Why These Synths in Particular?
 
-I have a special interest in hard-to-program synths, either because they have very poor interfaces (or no interface at all), or because their synthesis architecture is difficult to program (FM, Additive).  You'll note the high number of 1U rackmounts.  :-)  Edisyn has many special tools designed to make it easier to program synths like this.  Certain other synths (Blofeld, Prophet '08, etc.) are there because I own them and like making stuff for them.
+I have a special interest in hard-to-program synths, either because they have very poor interfaces (or no interface at all), or because their synthesis architecture is difficult to program (FM, Additive).  You'll note the high number of 1U rackmounts.  :-)  Certain other synths (Blofeld, Prophet '08, etc.) are there because I own them and like making stuff for them.
 
 
 ## Manual
@@ -106,7 +106,7 @@ If you want to use Edisyn in combination with a DAW, see the manual's section on
 
 You can also run Edisyn from its jar file from the command line: see "Running from the command line" at end of these instructions. 
 
-#### Dealing with Catalina..
+#### Dealing with Catalina...
 
 
 Note that Catalina may have added additional requirements to running Edisyn properly: but I don't have a Catalina machine to test on.  Let me know if you run into issues and/or find solutions to them.

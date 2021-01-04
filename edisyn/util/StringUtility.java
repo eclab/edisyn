@@ -252,5 +252,44 @@ public class StringUtility
 			}
 		return keys;
 		}
+
+    static final char DEFAULT_SEPARATOR_REPLACEMENT = '_';
+
+    /** Replace characters in a file name so that they don't include separator or path separator characters. */ 
+    public static String reviseFileName(String name)
+        {
+        if (name == null) name = "";
+        char[] chars = name.toCharArray();
+        for(int i = 0; i < chars.length; i++)
+            {
+            if (chars[i] <= 32 || chars[i] >= 127 ||
+                chars[i] == java.io.File.pathSeparatorChar ||
+                chars[i] == java.io.File.separatorChar)
+                chars[i] = DEFAULT_SEPARATOR_REPLACEMENT;
+            }
+        return new String(chars);
+        }
+
+    /** Guarantee that the given filename ends with the given ending.  */   
+    public static String ensureFileEndsWith(String filename, String ending)
+        {
+        // do we end with the string?
+        if (filename.regionMatches(false,filename.length()-ending.length(),ending,0,ending.length()))
+            return filename;
+        else return filename + ending;
+        }
+    
+	/** Returns the byte as a hex number */
+     public static String toHex(byte val)
+        {
+        return String.format("%02X", val);
+        }
+
+	/** Returns the integer as a hex number */
+    public static String toHexInt(int val)
+        {
+        return String.format("%08X", val);
+        }
+
     }
 

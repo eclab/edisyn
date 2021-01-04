@@ -1,6 +1,7 @@
 package edisyn;
 import java.awt.*;
 import java.io.*;
+import edisyn.util.*;
 
 public class ExceptionDump
     {
@@ -68,7 +69,7 @@ public class ExceptionDump
                 {
                 try
                     {
-                    f = new File(fd.getDirectory(), Synth.ensureFileEndsWith(fd.getFile(), ".txt"));
+                    f = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".txt"));
                     ps = new PrintStream(new FileOutputStream(f));
                     if (auxillary != null)
                         ps.println(auxillary);

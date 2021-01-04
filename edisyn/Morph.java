@@ -401,7 +401,7 @@ public class Morph extends SynthPanel
             {
             sources[button] = synth.getModel().copy();
        		String currentPatchName = synth.getPatchName(synth.getModel());
-       		buttons[button].getButton().setText(currentPatchName == null ? "Current Patch" : "Current Patch : " + currentPatchName);
+       		buttons[button].getButton().setText(currentPatchName == null ? "Current Patch" : "" + currentPatchName);
             }
         else if (reset == 1)
             {
@@ -555,7 +555,7 @@ public class Morph extends SynthPanel
  			timer = new javax.swing.Timer(timerDelay, new ActionListener()
  				{
  				public void actionPerformed(ActionEvent e)
-{
+				{
  				if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_TRICKLE)	// trickle
  					{
 					timerCount++;
@@ -566,14 +566,25 @@ public class Morph extends SynthPanel
 						}
     		        Model backup = synth.getModel();
             		synth.model = current;
-					synth.sendOneParameter(shuffledKeys[timerCount]);
-	         	   synth.model = backup;                   
+            		boolean sendMIDI = synth.getSendMIDI();
+            		synth.setSendMIDI(true);
+//					synth.simplePause(100);
+					if (!(shuffledKeys[timerCount].startsWith("modmat") && shuffledKeys[timerCount].contains("amount")))
+						{
+						//System.err.println(shuffledKeys[timerCount]);
+						synth.sendOneParameter(shuffledKeys[timerCount]);
+						}
+            		synth.setSendMIDI(sendMIDI);
+	         	   	synth.model = backup;                   
 					}
 				else if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_DELUGE)	// deluge
 					{
 					Model backup = synth.getModel();
 					synth.model = current;
+            		boolean sendMIDI = synth.getSendMIDI();
+            		synth.setSendMIDI(true);
 					synth.sendAllParameters();
+            		synth.setSendMIDI(sendMIDI);
 					synth.model = backup;                   
 					}
 				else

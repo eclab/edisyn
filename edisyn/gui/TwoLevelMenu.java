@@ -22,7 +22,7 @@ public class TwoLevelMenu extends JPanel
     WidgetList list;
         
 
-    public TwoLevelMenu(String[] primary, String[][] secondary, 
+    public TwoLevelMenu(Object[] primary, Object[][] secondary, 
         String primaryLabel, String secondaryLabel, 
         int initialPrimary, int initialSecondary)
         {

@@ -5,6 +5,7 @@
 
 package edisyn.test;
 import edisyn.*;
+import edisyn.util.*;
 
 public class SanityCheck
     {
@@ -191,7 +192,7 @@ public class SanityCheck
                 System.err.println("\t [FAIL] Not Recognized");
                 for(int i = 0; i < data.length; i++)
                 	{
-                	System.err.println("" + i + " " + toHex(data[i]));
+                	System.err.println("" + i + " " + StringUtility.toHex(data[i]));
                 	}
                 failed = true;
                 }
@@ -227,16 +228,10 @@ public class SanityCheck
             System.err.println("Length: " +  data.length);
             for(int i = 0; i < data.length; i++)
                 {
-                System.err.println("" + i + " " + toHex(data[i]) + " " + data[i] + " " + ((data[i] & 0xFF) < 32 ? "" : (char)(data[i] & 0xFF)));
+                System.err.println("" + i + " " + StringUtility.toHex(data[i]) + " " + data[i] + " " + ((data[i] & 0xFF) < 32 ? "" : (char)(data[i] & 0xFF)));
                 }
             System.err.println("---------");
             System.err.println();
             }
         }
-
-    public static String toHex(int val)
-        {
-        return String.format("0x%08X", val);
-        }
-
     }

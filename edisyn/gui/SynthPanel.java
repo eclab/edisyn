@@ -77,7 +77,7 @@ public class SynthPanel extends JPanel implements Gatherable
             synth.setSendMIDI(false);
             }
                 
-        Synth other = Synth.instantiate(synth.getClass(), synth.getSynthNameLocal(), true, true, synth.tuple);
+        Synth other = Synth.instantiate(synth.getClass(), true, true, synth.tuple);
         ArrayList components = new ArrayList();
         gatherAllComponents(components);
         for(int i = 0; i < components.size(); i++)

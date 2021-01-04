@@ -12,6 +12,7 @@ import java.util.*;
 import java.awt.*;
 import javax.swing.*;
 import java.lang.reflect.*;
+import edisyn.util.*;
 
 /**** 
       Static class which contains methods for handling the global MIDI device facility.
@@ -999,28 +1000,28 @@ public class Midi
         of divided sysex chunks. 
     */
         
-    public static class DividedSysex2 extends MidiMessage
+    public static class DividedSysex extends MidiMessage
         {
         public byte[] getData() { return data; }
         
         public Object clone()
             {
-            return new DividedSysex2(getMessage());
+            return new DividedSysex(getMessage());
             }
         
-        public DividedSysex2(byte[] data)
+        public DividedSysex(byte[] data)
             {
             super(data.clone());
             }
         
-        public static DividedSysex2[] divide(SysexMessage sysex, int chunksize)
+        public static DividedSysex[] divide(SysexMessage sysex, int chunksize)
             {
             byte[] data = sysex.getMessage();
             
             int numchunks = data.length / chunksize;
             if (numchunks * chunksize < data.length - 1)            // we don't allow a bare 0xF7
                 numchunks++;
-            DividedSysex2[] m = new DividedSysex2[numchunks];  //  + extra];
+            DividedSysex[] m = new DividedSysex[numchunks];  //  + extra];
             for(int i = 0, pos = 0; i < m.length; i++, pos += chunksize)
                 {
                 // We need to insert an 0xF7 at the front of subsequent messages per Java spec 
@@ -1044,25 +1045,25 @@ public class Midi
                     System.arraycopy(data, pos, d, 1, size);
                     d[0] = (byte)0xF7;
                     }
-                m[i] = new DividedSysex2(d);
+                m[i] = new DividedSysex(d);
                 }
             return m;
             }
             
             
-        public static DividedSysex2[] create(byte[][] sysex)
+        public static DividedSysex[] create(byte[][] sysex)
             {
-            DividedSysex2[] div = new DividedSysex2[sysex.length];
+            DividedSysex[] div = new DividedSysex[sysex.length];
             for(int i = 0; i < sysex.length; i++)
                 {
                 if (sysex[i][0] == (byte)0xF0)  // we're good
-                    div[i] = new DividedSysex2(sysex[i]);
+                    div[i] = new DividedSysex(sysex[i]);
                 else 
                     {
                     byte[] sysex2 = new byte[sysex[i].length + 1];
                     System.arraycopy(sysex[i], 0, sysex2, 1, sysex[i].length);
                     sysex2[0] = (byte)0xF7; // see discussion in divide() above
-                    div[i] = new DividedSysex2(sysex2);
+                    div[i] = new DividedSysex(sysex2);
                     }
                 }
             /*
@@ -1074,7 +1075,7 @@ public class Midi
               byte[] data = div[i].getMessage();
               for (int j = 0; j < data.length; j++)
               {
-              System.err.println("" + j + " " + toHex(data[j]) + ((data[j] & 255) < 32 ? "" : (char)(data[j] & 255)));
+              System.err.println("" + j + " " + StringUtility.toHex(data[j]) + ((data[j] & 255) < 32 ? "" : (char)(data[j] & 255)));
               }
                         
               }
@@ -1082,14 +1083,9 @@ public class Midi
             return div;
             }
         }
-        
-    public static String toHex(int val)
-        {
-        return String.format("0x%08X", val);
-        }
+    
 
-
-    /** A DividedSysex message is a Sysex MidiMessage which has been broken into chunks.
+    /** A DividedSysexOld message is a Sysex MidiMessage which has been broken into chunks.
         This allows us to send the Sysex as multiple messages, with pauses in-between each
         message, so as not to overflow a MIDI buffer in machines such as a Kawai K1 whose
         processors are not powerful enough to keep up with a large sysex dump. 
@@ -1098,18 +1094,18 @@ public class Midi
         of divided sysex chunks. 
     */
         
-    public static class DividedSysex extends MidiMessage
+    public static class DividedSysexOld extends MidiMessage
         {
         public byte[] getData() { return data; }
         
         public Object clone()
             {
-            return new DividedSysex(getMessage());
+            return new DividedSysexOld(getMessage());
             }
         
         public int getStatus() { return 0xF0; }   // not that this really matters
         
-        public DividedSysex(byte[] data)
+        public DividedSysexOld(byte[] data)
             {
             super(data.clone());
             }
@@ -1117,7 +1113,7 @@ public class Midi
         // We don't allow size-1 chunks because of the Windows/Linux 0xF7 bug
         static final int MINIMUM_LAST_CHUNK_SIZE = 2;
 
-        public static DividedSysex[] divide(SysexMessage sysex, int chunksize)
+        public static DividedSysexOld[] divide(SysexMessage sysex, int chunksize)
             {
             byte[] data = sysex.getMessage();
             int extra = 0;
@@ -1132,22 +1128,22 @@ public class Midi
                 extra = 1;
                 }
 
-            DividedSysex[] m = new DividedSysex[data.length / chunksize + extra];
+            DividedSysexOld[] m = new DividedSysexOld[data.length / chunksize + extra];
             for(int i = 0, pos = 0; i < m.length; i++, pos += chunksize)
                 {
                 // the very last chunk might be smaller to slightly larger than chunksize
                 byte[] d = new byte[i == m.length - 1 ? data.length - pos : chunksize];
                 System.arraycopy(data, pos, d, 0, d.length);
-                m[i] = new DividedSysex(d);
+                m[i] = new DividedSysexOld(d);
                 }
             return m;
             }
             
-        public static DividedSysex[] create(byte[][] sysex)
+        public static DividedSysexOld[] create(byte[][] sysex)
             {
-            DividedSysex[] div = new DividedSysex[sysex.length];
+            DividedSysexOld[] div = new DividedSysexOld[sysex.length];
             for(int i = 0; i < sysex.length; i++)
-                div[i] = new DividedSysex(sysex[i]);
+                div[i] = new DividedSysexOld(sysex[i]);
 
 /*
   for(int i = 0; i < div.length; i++)
@@ -1158,7 +1154,7 @@ public class Midi
   byte[] data = div[i].getMessage();
   for (int j = 0; j < data.length; j++)
   {
-  System.err.println("" + j + " " + toHex(data[j]) + ((data[j] & 255) < 32 ? "" : (char)(data[j] & 255)));
+  System.err.println("" + j + " " + StringUtility.toHex(data[j]) + ((data[j] & 255) < 32 ? "" : (char)(data[j] & 255)));
   }
   }
 */
@@ -1174,18 +1170,18 @@ public class Midi
             {
             return "null";
             }
-        else if (message instanceof DividedSysex)
+        else if (message instanceof DividedSysexOld)
             {
-            byte[] d = ((DividedSysex)message).getData();
-            String s = "Divided Sysex";
+            byte[] d = ((DividedSysexOld)message).getData();
+            String s = "DividedSysexOld";
             for(int i = 0; i < d.length; i++)
                 s += (" " + String.format("%02x", d[i]));
             return s;
             }
-        else if (message instanceof DividedSysex2)
+        else if (message instanceof DividedSysex)
             {
-            byte[] d = ((DividedSysex2)message).getData();
-            String s = "Divided Sysex2";
+            byte[] d = ((DividedSysex)message).getData();
+            String s = "DividedSysex";
             for(int i = 0; i < d.length; i++)
                 s += (" " + String.format("%02x", d[i]));
             return s;
@@ -1318,13 +1314,13 @@ public class Midi
                                 
         if (data[0] == (byte)0xF0)  // it's a new message
             {
-            System.err.println("0xF0");
+            //System.err.println("0xF0");
             inSysex = new byte[messageLen];
             System.arraycopy(data, 0, inSysex, 0, messageLen);
             }
         else if (data[0] == (byte)0xF7)  // it's a continuation of a message
             {
-            System.err.println("0xF7");
+            //System.err.println("0xF7");
             if (inSysex == null) // uh...
                 return null;
             byte[] temp = new byte[inSysex.length + messageLen - 1];
@@ -1345,12 +1341,14 @@ public class Midi
           System.arraycopy(data, 0, temp, inSysex.length, messageLen);
           }
         */
+        /*
         for(int i = 0; i < inSysex.length; i++)
             System.err.print(" " + inSysex[i]);
         System.err.println();
+        */
         if (inSysex != null && inSysex.length != 0 && inSysex[inSysex.length - 1] == (byte)0xF7)  // completed
             {
-            System.err.println("0xF7 END");
+            //System.err.println("0xF7 END");
             byte[] temp = inSysex;
             inSysex = null;
             return temp;

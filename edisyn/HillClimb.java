@@ -1168,7 +1168,7 @@ public class HillClimb extends SynthPanel
                 {
                 if (state.parentIndices[j] != -1)
                     {
-                    System.err.println("Setting " + state.parentIndices[j] + " to " + j);
+                    //System.err.println("Setting " + state.parentIndices[j] + " to " + j);
                     ratings[state.parentIndices[j]][j].setSelected(true);
                     }
                 }

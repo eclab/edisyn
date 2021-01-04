@@ -122,7 +122,7 @@ If you want to use Edisyn in combination with a DAW, see the manual's section on
 
 Java doesn't handle high-resolution displays properly in Windows, especially Windows 10.  Be sure to have installed at least Java 11 (otherwise you'll have teeny tiny displays).  You'll still have font issues on 4K monitors.  I am told this can help dealing with it:
 
-1. Find java.exe you installed.
+1. Find the java.exe file you installed.
 2. Right-click and select "Properties"
 3. Click on the "Compatibility" tab
 4. Click on "Change high DPI settings"

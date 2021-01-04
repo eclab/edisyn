@@ -64,7 +64,7 @@ Edisyn presently supports:
 
 Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline modes, per-parameter customization, real-time parameter updates, test notes and chords, etc.  
 
-Edisyn also has a large number of specialized tools designed to help you explore new patch possibilities without directly programming them.  These include:
+Edisyn also has many specialized tools designed to help you explore new patch possibilities without directly programming them.  These include:
 
 * *Randomization:* Weighted patch mutation
 * *Merging:* Weighted recombination of two patches of your choice

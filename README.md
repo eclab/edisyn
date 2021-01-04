@@ -18,10 +18,11 @@ Related projects:
 ## Contributors
 
 * Bryan Hoyle (collaboration on the Red Sound DarkStar and Microtuning editors)
+* Special thanks to Derek Cook's [CoreMidi4J](https://github.com/DerekCook/CoreMidi4J), which Edisyn uses to fix critical bugs in MacOS's sysex handling.
 
 ## Donations
 
-Donations are welcome via Paypal.
+Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
 ## About
 

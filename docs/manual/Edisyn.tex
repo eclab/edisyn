@@ -15,7 +15,7 @@
 \usepackage{array}
 \usepackage{color}
 \usepackage{rotating}
-\usepackage[nobottomtitles*]{titlesec}
+%\usepackage[nobottomtitles*]{titlesec}
 \usepackage[noend]{algorithmic}
 \usepackage{algorithm}
 \usepackage{multicol}
@@ -190,9 +190,9 @@ Whenever you create a new patch editor or duplicate one, you will once again be 
 
 \subsection{Persistence}
 
-Now would be a good time to mention an Edisyn feature you may never notice otherwise: many things are {\bf persistent}.  For example, if you choose ``Arturia Beatstep'' as the controller for your Blofeld patch, the next time you call up a Blofeld patch editor, ``Arturia Beatstep'' will be presented as the default choice in the MIDI Devices window, assuming your Arturia Beatstep is plugged in.  This goes for everything in the MIDI Devices window.  Furthermore, if you pop a new patch editor for a synthesizer you have never edited before, the Arturia Beatstep will be the default option for that one too (until you change it one time).    And these options are per synthesizer type.
+Now would be a good time to mention an Edisyn feature you may never notice otherwise: many things are {\bf persistent}.  For example, if you choose ``Arturia Beatstep'' as the controller for your Blofeld patch, the next time you call up a Blofeld patch editor, ``Arturia Beatstep'' will be presented as the default choice in the MIDI Devices window, assuming your Arturia Beatstep is plugged in.  This goes for everything in the MIDI Devices window.  Furthermore, if you pop up a new patch editor for a synthesizer you have never edited before, the Arturia Beatstep will be the default option for that one too (until you change it one time).    And these options are per synthesizer type.
 
-Persistence appears in other places too.  For example, the Initial Synthesizer dialog will default to the last synth you chose in that dialog.  And certain many choices are persistent as well.
+Persistence appears in other places too.  For example, the Initial Synthesizer dialog will default to the last synth you chose in that dialog.  Persistence shows up in many other places as well.
 
 \section{Loading and Saving Files}
 
@@ -200,22 +200,22 @@ Edisyn is capable of reading both sysex files or MIDI files and extracting sysex
 
 You can save your edited patch via the {\bf Save} and {\bf Save As...} options in the {\bf File} menu, and you can load a patch via the {\bf Load...} option.  This is called {\it Load} and not {\it Open} because you can only load a file into an existing patch editor: you cannot create a new patch editor automatically on opening a file.  If the sysex file is not for your patch editor, but Edisyn still recognizes its data, it'll ask if you want to load for a different synthesizer.  If Edisyn doesn't recognize the data at all, it'll still tell you the manufacturer and give you the option of uploading the data.\footnote{Thanks to the MIDI Association for updating their database to make this possible in Edisyn.}
 
-Most patch editor files are sysex dumps ending in the extension {\tt .syx}.  These files are usually exactly the same sysex data that you'd normally dump to your synthesizer using a patch librarian software program. There are exceptions however.  For example, some synthesizers, like the PreenFM2, have no sysex to speak of at all: they exchange parameters entirely over NRPN.  In this situation, Edisyn has invented a sysex file just for the PreenFM2.  It obviously won't work in your librarian software.
+Most patch editor files are sysex dumps ending in the extension {\tt .syx}.  These files are usually exactly the same sysex data that you'd normally dump to your synthesizer using a patch librarian software program. There are exceptions however.  For example, some synthesizers, like the PreenFM2, have no sysex to speak of at all: they exchange parameters entirely over NRPN.  In this situation, Edisyn has invented a sysex file just for the PreenFM2.  This sysex file obviously wouldn't work with your librarian software.
 
 Some patch editor files have encoded the sysex dumps as MIDI files (typically ending with the extension {\tt .mid}.  Edisyn can extract sysex from these files as well.
 
 \paragraph{Loading or Receiving a Bulk-Sysex or Bank-Sysex File}
-Edisyn tends to work with files which contain a single patch each.   However many patch files on the internet are what I call {\it bulk sysex} files, and others are {\it bank sysex} files.  
+Edisyn tends to work with files which contain a single patch each.   However many patch files on the internet contain multiple patches.  There are two kinds of files of this type: what I call {\it bulk sysex} files, and {\it bank sysex} files.  
 
-A bulk sysex file contains a bunch of individual patch sysex messages concatenated together\,---\,you could just cut it up into separate single-patch files.  Bulk sysex files are common in many synthesizers, such as the DSI Prophet '08 or the Yamaha FS1R.  When Edisyn loads a bulk sysex file, it will present you with two primary options: you can {\it select and edit} a single patch from that file, either in the current editor or a new editor, or you can {\it upload} all of the patches in the file to your synthesizer.
+A {\bf bulk sysex} file is just a bunch of individual patch sysex messages concatenated together\,---\,you could just cut it up into separate single-patch files if you liked.\footnote{This is harder than it sounds: some synthesizer patches consist of not one but several sysex messages as a group, and the number isn't consistent.  Edisyn does its best to sort out what the patches are in the file, but if you get something which looks wrong, send the file to me and let me look at it.}    Bulk sysex files are common in many synthesizers, such as the DSI Prophet '08 or the Yamaha FS1R or the Waldorf Blofeld.  When Edisyn loads a bulk sysex file, it will present you a couple of options: you can {\it select and edit} a single patch from that file, either in the current editor or a new editor, or you can {\it write} (upload) all of the patches in the file to your synthesizer.
 
-It is possible that a bulk sysex file contains patch entries for different kinds of editors.  For example, a bulk sysex file might contain entries for both single patches and multi patches, and these are loaded into different editors.  Edisyn will inform you when there are patches for different editors involved, and let you select first which editor you're interested in, then let you select which patch you want to edit.  Also, when Edisyn presents you with a collection of bulk sysex patches, they'll be numbered 1 ... \(n\).  This doesn't mean that they'll be {\it written} to slots 1...\(n\) on your synthesizer: it's just the order that they appear in the file.
+It is possible that a bulk sysex file contains patch entries for several different kinds of editors or even synthesizers.  For example, a bulk sysex file might contain entries for both single patches and multi patches for a given synthesizer, and these are loaded into different editors.  Edisyn will inform you when there are patches for different editors involved, and let you first select which editor you're interested in, then select which patch you want to edit. 
 
-Other synthesizers have special {\it bank sysex} messages which contain an entire bank (or in some cases, an entire synthesizer's memory worth) of patches.  These messages could be stored in files or be dumped to Edisyn from the synthesizer itself.  Only a few Edisyn patch editors know how to deal with these messages: notably the DX7 patch editor can handle bank messages just fine.  When Edisyn has received a bank sysex message or loaded one from a file, you will be given three options, to {\it upload} the entire bank to the synthesizer, to {\it save} the entire bank to a file, or to {\it select} a single patch from the bank and edit it.
+Other synthesizers have special {\bf bank sysex} messages which contain an entire bank (or in some cases, an entire synthesizer's memory worth) of patches in a single message.  For example, most files on the internet for the Yamaha DX7 synthesizer are bank sysex files.   Edisyn might find a message like this when loading a file, or it might receive the message from the synth over MIDI.   When Edisyn has received a bank sysex message or loaded one from a file, you can again {\it select and edit} a single patch from that bank, either in the current editor or a new editor, or you can {\it write} (upload) all of the patches in the bank to your synthesizer; or you can {\it save} the whole bank as to a file as a single bank sysex message.
 
-It's entirely possible that a bulk sysex file might itself contain multiple bank sysex messages.  If from the Bulk Sysex window you select one to load into the editor, Edisyn will then present you with the Bank Sysex window.  Note that in the Bulk Sysex window, these sysex messages will be simply labelled ``Bank Sysex'', since Edisyn has no other patch name for them.
+It's entirely possible that a bulk sysex file might itself contain multiple bank sysex messages.  If from the Bulk Sysex window you select a bank sysex message, Edisyn will then present you with the Bank Sysex window for that bank.  Note that in the Bulk Sysex window, these sysex messages will typically be labelled ``Bank Sysex'', since Edisyn usually has no other patch name for them.
 
-Edisyn cannot presently construct (and thus save or upload) new bank sysex messages or files.
+Edisyn cannot presently construct (and thus save or upload) new bank or bulk sysex messages or files.
 
 \paragraph{Batch Downloads}
 Edisyn also has limited support for batch-downloading patches, one by one, and saving them to your disk as separate files.  To do this, choose {\bf Batch Download...} from the {\bf File} menu.  You'll be asked to specify the directory in which to save patches, and also first patch and the final patch, and then downloading will commence.  Note that if your final patch is ``before'' the first patch, then Edisyn will wrap all the away around to get to the final patch.  For example, if your synth has ten patches 1....10, and you choose 8 as your first patch and 2 as your last patch, then Edisyn will download in this order: 8, 9, 10, 1, 2.
@@ -343,14 +343,14 @@ You'd think it'd be easy to connect directly to another piece of software on you
 \caption{A MIDI loopback connecting Edisyn with a software synthesizer via a virtual device.}\label{loopback}
 \end{wrapfigure}
 
-To get around this, you need to make a {\it MIDI loopback}.  This is where you create two {\it virtual devices} which are connected to one another.  Edisyn and your software synth can see these devices.  Consider Figure \ref{loopback}.  If Edisyn {\it outputs} to Virtual Device X (say) and your software synth is set up to {\it input} from Virtual Device X, then it will receive what Edisyn outputs.
+To get around this, you need to make a {\it MIDI loopback}.  This is where you create two {\it virtual devices} which are connected to one another.  Edisyn and your software synth or DAW can see these devices.  Consider Figure \ref{loopback}.  If Edisyn {\it outputs} to Virtual Device X (say) and your software synth or DAW is set up to {\it input} from Virtual Device X, then it will receive what Edisyn outputs.
 
-Similarly, if you need your software synth to respond to Edisyn, you need to make a {\it second} loopback and hook it up in the reverse order.
+Similarly, if you need your software synth or DAW to send MIDI to Edisyn, you need to make a {\it second} loopback and hook it up in the reverse order.
 
 \paragraph{Making a Loopback Device}  This varies depending on your operating system.
 
 \begin{itemize}
-\item {\bf On the Mac}\quad First, open the application \textsf{/Applications/Utilities/Audio MIDI Setup}.  Next, click on the ``IAC Driver'' icon to open the ``IAC Driver Properties'' window.  Add a new port, named whatever you like.  Check the box ``Device is Online''.  This new port will be appear to Edisyn and to your software synth as the loopback device.   You can add more ports to create more loopbacks.  A loopback is only one-way: if you want Edisyn to send to {\it and} receive from a software synthesizer, you'll need to make two ports.
+\item {\bf On the Mac}\quad First, open the application \textsf{/Applications/Utilities/Audio MIDI Setup}.  Next, click on the ``IAC Driver'' icon to open the ``IAC Driver Properties'' window.  Add a new port, named whatever you like.  Check the box ``Device is Online''.  This new port will be appear to Edisyn and to your software synth as the loopback device.   You can add more ports to create more loopbacks.  A loopback is only one-way: if you want Edisyn to send to {\it and} receive from a software synthesizer or DAW, you'll need to make two ports.
 
 \item {\bf On Windows}\quad There is no way to do this in Windows directly: instead you'll need to run a program which provides this service.  Programs include {\sf loopMIDI},  {\sf loopBe1}, MIDIOx's {\sf MidiYoke}, and so on.  Googling for ``loopback MIDI Windows'' will get you there. 
 
@@ -365,7 +365,9 @@ This procedure will create a bunch of of virtual devices with names like {\tt Vi
 \vbox{
 \section{Editing and Exploratory Patch Creation}
 
-Edisyn has a large xnumber of facilities to help you program your synthesizer, including tools to help you wander through the possible space of patches to hunt for the sound you want.  Here's what you can do:
+Edisyn has a large number of facilities to help you program your synthesizer, including tools to help you wander through the possible space of patches to hunt for the sound you want.  Here's what you can do.
+
+\subsection{Editing Tools} 
 
 \paragraph{Undo and Redo}  Edisyn has infinite levels of undo and redo.  When you change a parameter or do a wholesale modification, this can be undone, as can patch dumps and merges from the synthesizer.  Individual parameter changes made manually on the synthesizer are not undoable even if they're reflected in Edisyn (it'd be too many).  Loading and saving patches is not undoable.  See the {\bf Edit} menu.
 
@@ -387,26 +389,30 @@ Edisyn has a large xnumber of facilities to help you program your synthesizer, i
 \begin{itemize}
 \item {\bf Copy Tab}\quad Marks the tab to be pasted into other compatible categories.
 \item {\bf Paste Tab}\quad   Copies over all the parameters from the ``copy'' tab, if it is compatible.
-\item {\bf Copy Tab (Mutation Parameters only)}\quad Marks the tab to be pasted into other compatible tabs, but only from the mutation parameters you have set.
-\item {\bf Paste Tab (Mutation Parameters only)}\quad   Copies over all the parameters from the ``copy'' tab, but only to the mutation parameters you have set.
+\item {\bf Copy Tab (Mutation Parameters only)}\quad Marks the tab to be pasted into other compatible tabs, but only from the mutation parameters you have set (see Section~\ref{restriction}).
+\item {\bf Paste Tab (Mutation Parameters only)}\quad   Copies over all the parameters from the ``copy'' tab, but only to the mutation parameters you have set (see Section~\ref{restriction}).
 \item {\bf Reset} \quad  This resets all the parameters in the tab to their defaults.
 \end{itemize}
 
+\subsection{Exploration Tools} 
+
 \paragraph{Randomize (by some amount)}  You can add some randomness your patch parameters.  Try a small value: values \(\geq 50\%\) are essentially full randomization.  See the {\bf Randomize} submenu in the {\bf Edit} menu.   Because it's so common to randomize, then undo and try again, you can also do undo-and-randomize-again as a single task: select {\bf Undo and Randomize Again} in the {\bf Randomize} submenu of the {\bf MIDI} menu.  See below for a discussion of how randomization (called {\bf mutation}) works in Edisyn.
 
-\paragraph{Nudge}  The nudge facility lets you push your patch to sound more and more like one of four other target patches you have chosen.  You can use this, plus randomize, to wander about in the patch space.  Before you can nudge, you have to first select patches to nudge towards.  You can pick up to four patches by first setting up or loading the patch in your patch editor, then selecting one of {\bf Set 1} ... {\bf Set 4} in the {\bf Nudge} submenu of the {\bf Edit} menu.  You don't have to ultimately select all four. 
+\paragraph{Merge (by some amount)}  This causes Edisyn to directly {\bf recombine}  with your current patch with another patch to form a randomly merged patch.  You specify the degree of recombination as a percentage: see the options in the {\bf Request Merge} submenu of the {\bf MIDI} menu.
 
-Above the {\bf Set} options are four {\bf Towards} and four {\bf Away From} options, also in the {\bf Nudge} submenu of the {\bf MIDI} menu.  When you set a patch, its current name will appear in the equivalent Towards/Away From option.  The patch name is just a helpful reminder\,---\,it's entirely possible for four completely different patches to have the same name.
+Some patch editors may not be able to perform merges because the synthesizers can't load specific patches: if your synth can't do {\bf Request Patch...}, it probably can't do a merge either.  A few synthesizers (like the Red Sound Darkstar) can only do merges with some manual effort on your part: see their About panes.
+
+\paragraph{Load and Merge}  This option, in the {\bf File} menu, lets you load a file and merge it with your current patch in more or less the same way that {\bf Merge} works.  The merge percentage is always 100\% (that is, half-half).
+
+\paragraph{Blend}  This causes Edisyn to request two random patches from your synthesizer and merge them with one another, with a merge percentage randomly ranging from 50\% to 100\%, producing an entirely new randomly combined patch.  See the {\bf Blend} submenu in the {\bf Edit} menu.  You do your first blend by selecting {\bf Once...}, then selecting the beginning and ending patches defining the patch range from which Blend will select its random patches.  Blend will then do its thing.  If you want to try again, select {\bf Undo and Blend Again}.\footnote{Note that because Blend loads the first patch, then merges the second, it effectively pushes two things onto the undo stack; so Undo and Blend Again will pop {\it two} things off before re-blending.  This might be confusing.}
+
+\paragraph{Nudge}  The nudge facility lets you push your patch to sound more and more like one of four other target patches you have chosen.   Before you can nudge, you have to first select patches to nudge towards.  You can pick up to four patches by choosing an option under the {\bf Setup 1} ... {\bf Setup 4} submenus under the {\bf Edit > Nudge} menu.  These options will load nudge targets 1...4 with copies drawn from various sources.   Your options are: {\bf From Current Patch}, {\bf Load File...}, {\bf From Morph} (the current Morph value, see Section~\ref{morph} below), and {\bf From Hill-Climb Archive q} through {\bf v} (the six Hill-Climb archives, see Section~\ref{hillclimb} below). You don't have to set up all four targets.
+
+Above the {\bf Setup} options are four {\bf Towards} and four {\bf Away From} options, also in the {\bf Nudge} submenu of the {\bf MIDI} menu.  When you set up a patch, its name will appear in those Towards/Away From options.  The patch name is just a helpful reminder\,---\, different patches can have the same name.
 
 When you chose any of {\bf Towards 1:...} through {\bf Towards 4:...}, your current patch will get {\bf recombined} with the target patch, by default by 25\%, to move it towards that target.    Similarly, when you chose any of {\bf Away From 1:...} through {\bf Away From 4:...}, your current patch will get adjusted (through a form of recombination) to {\it move away from} the target patch, by default by 25\%.  You can change the degree of recombination under the {\bf Set Nudge Recombination} menu.  Additionally you can add some automatic mutation whenever you nudge: just set its amount under the {\bf Set Nudge Mutation} menu (by default it's 0\%). If you did a nudge and didn't like it, you can try a slightly different one with {\bf Undo and Nudge Again}.
 
 A hint.  It's a good idea to select target patches which don't have some radical difference creating a nonlinearity in the space between them: for example, if you were doing FM, I'd pick patches which all used the same operator Algorithm.  See below for a discussion of how recombination works in Edisyn.
-
-\paragraph{Merge (by some amount)}  Merging is a lot like nudging.  But instead of nudging towards a predefined target patch, you are asking your synthesizer to load a given patch, which Edisyn will then directly {\bf recombine}  with your current patch to form a randomly merged patch.  You specify the degree as a percentage: see the options in the {\bf Request Merge} submenu of the {\bf MIDI} menu.
-
-Some patch editors may not be able to perform merges because the synthesizers can't load specific patches: if your synth can't do {\bf Request Patch...}, it probably can't do a merge either.  
-
-\paragraph{Load and Merge}  This option, in the {\bf File} menu, allows you to load a file and merge it with your current patch in more or less the same way that {\bf Merge} works.  The merge percentage is always 100\% (that is, half-half).
 
 \paragraph{Hill-Climb}  Hill-Climbing repeatedly presents you with sixteen sounds and asks you to choose your top three preferred ones.  Once you have selected the three best, it performs various recombinations and mutations on those sounds to prefer sixteen new ones and the process repeats again.  The idea is for your preferences to guide the hill-climber as it wanders through the space of synth parameters until it lands on something you really like.\footnote{If you're technically inclined, this is basically an evolution strategy (ES) with an elitism of 1 and a biased mutation procedure.  If you'd like to learn more about evolutionary computation methods, google for the free online book {\it Essentials of Metaheuristics} by me.}  For more on the Hill-Climber, see Section \ref{hillclimb}.
 
@@ -416,10 +422,10 @@ Some patch editors may not be able to perform merges because the synthesizers ca
 \subsection{Restricting Mutation and Recombination to Only Certain Parameters}
 \label{restriction} 
 
-You can restrict Mutation (Randomize) and Recombination (Nudge and Merge) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutation Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutation Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
+You can restrict Mutation and Recombination (used in Randomize, Nudge, Merge, Blend, Hill-Climb/Constrict, and Morph) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutation Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutation Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
 
 \begin{wrapfigure}{r}{3in}
-\vspace{-2em}\includegraphics[scale=0.3]{5.png}
+\vspace{-1em}\includegraphics[scale=0.3]{5.png}
 \vspace{-3em}\caption{Editing Mutation Parameters}\label{mutationparameters}
 \end{wrapfigure}
 
@@ -437,7 +443,7 @@ Note that your parameter choices, as well as using them for recombination, are p
 \label{hillclimb}
 
 \begin{wrapfigure}{r}{3.6in}
-\vspace{-5em}\includegraphics[scale=0.27]{HillClimbPanel.png}
+\vspace{-2em}\includegraphics[scale=0.27]{HillClimbPanel.png}
 \vspace{-3em}
 \caption{The Hill-Climber Panel}
 \vspace{-1em}
@@ -446,7 +452,7 @@ Note that your parameter choices, as well as using them for recombination, are p
 
 Edisyn's {\it hill-climber} is another of its patch-exploration tools.  You select it by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  This will add a new tab to your patch editor labelled {\bf Hill-Climb}.   When you fire up the Hill-Climber, it appears as an additional tab after your {\bf About} tab.  Whenever you select a tab other than the hill-climber tab, the hill-climber will pause; when you go back to the hill-climber tab it will resume.  You get rid of the hill-climber by selecting {\bf Stop Hill-Climbing} in the {\bf Edit} menu. 
 
-In the Hill-Climber tab, make sure that the ``Method'' combobox is set to {\it Hill-Climb}: for other methods, see the Constrictor Section (\ref{constrict}).
+In the Hill-Climber tab, make sure that the ``Method'' combobox is set to {\it Hill-Climb}: for other methods, see the Constrictor Section~(\ref{constrict}).
 
 Edisyn's Hill-Climber repeatedly offers you sixteen new versions of patches and asks you to choose your top three preferences.  After you have chosen them, the Hill-Climber will try to build a new set of sounds whose parameters are similar to your choices in various ways.  The Hill-Climber builds new sounds by recombining your top three sound choices in certain ways and adding some degree of noise (mutation) to them.   If you're lucky, Edisyn will head towards regions of the synthesizer's parameter space which make sounds you like.  {\bf Hint:  You will have more success with the hill-climber if you restrict the parameters being mutated to just those you want to explore.}  Different kinds of synthesizers will also benefit from different amounts of exploration (mutation and recombination) rates.  You'll need to tweak those as necessary.
 
@@ -474,6 +480,7 @@ The amount of mutation noise used when generating new patches is specified by th
 
 All the patches can be played by pressing their associated letter.  But additionally you can (at present) {\bf Climb} by pressing the Space Bar, {\bf Retry} by pressing the Return/Enter key, and {\bf Back Up} by pressing Backspace.
 
+\bump
 \subsection{Constricting}
 \label{constrict}
 
@@ -731,7 +738,7 @@ The other reason is because you have recently moved from \(S\) to \(P\), and now
 }
 
 
-
+\bump
 \subsection{Morphing}
 \label{morph}
 

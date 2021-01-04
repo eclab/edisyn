@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 25)
+Synthesizer Patch Editor (Version 26)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -32,7 +32,7 @@ Edisyn is particularly good at exploring the space of patches.  It has to my kno
 Edisyn presently supports:
 
 * Alesis D4 and DM5 
-* Casio CZ Series (CZ101, CZ1000, CZ3000, CZ5000, CZ-1)
+* Casio CZ Series (CZ101, CZ1000, CZ3000, CZ5000, CZ-1, CZ-230S)
 * DSI Prophet '08, Tetra, Mopho, Mopho Keyboard, Mopho SE, and Mopho x4 (Single and (for Tetra) Combo modes)
 * E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap modes)
 * E-Mu Proteus 1, 1XR, 2, 2XR, 3, 3XR, and 1+Orchestral
@@ -43,6 +43,7 @@ Edisyn presently supports:
 * Korg MicroKorg (Single and Vocoder Modes)
 * Korg Microsampler
 * Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
+* M-Audio Venom (Single, Multi, Arpeggiator, and Global Modes)
 * Novation Drumstation and D-station
 * Oberheim Matrix 6, 6R, and 1000 (Single and (for 1000) Global Modes) 
 * PreenFM2
@@ -50,6 +51,7 @@ Edisyn presently supports:
 * Roland D-110 (Tone and Multi Modes)
 * Roland JV-80 and JV-880 (Single and Multi Modes)
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading)
+* Waldorf Kyra (Single and Multi Modes)
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
 * Yamaha DX7 Family (DX7, TX7, TX802, TX216/TX816, Korg Volca FM, Dexed, DX200, DX9)
 * Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, V50, etc.) (Single and (for TX81Z and DX11) Multi Modes)
@@ -96,7 +98,8 @@ If you want to use Edisyn in combination with a DAW, see the manual's section on
 
 You can also run Edisyn from its jar file from the command line: see "Running from the command line" at end of these instructions. 
 
-#### Dealing with Catalina...
+#### Dealing with Catalina..
+
 
 Note that Catalina may have added additional requirements to running Edisyn properly: but I don't have a Catalina machine to test on.  Let me know if you run into issues and/or find solutions to them.
 

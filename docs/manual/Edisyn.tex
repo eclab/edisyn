@@ -29,7 +29,7 @@
 \begin{document}
 
 \noindent {\Huge\bf Edisyn}\\[0.5em]
-{\large \bf A Java-based Synthesizer Patch Editor, Version 25\\[0.2em]
+{\large \bf A Java-based Synthesizer Patch Editor, Version 26\\[0.2em]
 By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 
 \vspace{-1em}
@@ -861,7 +861,7 @@ I particularly love how the Korg Microsampler and the Korg SG are disjoint in th
 Still not scared away?  Okay, we'll start by getting Edisyn set up for development.  Probably the easiest way to fire up Edisyn for purposes of testing is as a build directory.  You just need to add two items to your CLASSPATH:
 
 \begin{enumerate}
-\item The {\tt coremidi4j-1.1.jar} file, located in the {\tt libraries/} folder (you can move it where you like).  This jar file contains the CoreMidi4J library, which enables sysex to work properly on Macs (you'll need it for non-Macs too).
+\item The {\tt coremidi4j-1.5.jar} file, located in the {\tt libraries/} folder (you can move it where you like).  This jar file contains the CoreMidi4J library, which enables sysex to work properly on Macs (you'll need it for non-Macs too).
 \item The {\tt trunk} directory.  This parent directory holds the {\tt edisyn} package.  Or if you like, make some other directory {\tt foo} and move (or link) {\tt edisyn} into that directory, then add {\tt foo} to your CLASSPATH.
 \end{enumerate}
 
@@ -870,33 +870,22 @@ You can then run Edisyn as\ \ \  {\tt java edisyn.Edisyn}
 
 \subsection{Step Three: Create Files}
 
-Let's say you're adding a single (non-multimode) patch editor for the Yamaha DX7.
+Let's say you're adding a single (non-multimode) patch editor for the Yamaha DX7.  Understand that there {\it already} is such an editor, but it's a good exercise to understand the code perhaps.
 
-Make a directory called {\tt edisyn/synth/yamahadx7}.  This directory will store your patch editor and any auxiliary files.  Next copy the file {\tt edisyn/synth/Blank.java} to {\tt edisyn/synth/yamahadx7/YamahaDX7.java}.  That'll be your patch editor code.  Also copy the file {\tt edisyn/synth/Blank.html} to {\tt edisyn/synth/yamahadx7/YamahaDX7.html}.  This will be the ``About'' documentation for your file.  You'll eventually fill it out.
+Make a directory called {\tt edisyn/synth/yamahadx7}.  This directory will store your patch editor and any auxiliary files.  Next copy the file {\tt edisyn/synth/Blank.java} to {\tt edisyn/synth/yamahadx7/YamahaDX7.java}.  That'll be your patch editor code.  You need a separate ``recognizer'' Java file as well\,---\,you can copy the file {\tt edisyn/synth/BlankRec.java} to {\tt edisyn/synth/yamahadx7/YamahaDX7Rec.java}.  This file consists of the code sufficient to recognize a sysex message as belonging to the DX7 without having to instantiate an entire DX7 synth instance, which is costly.  Also copy the file {\tt edisyn/synth/Blank.html} to {\tt edisyn/synth/yamahadx7/YamahaDX7.html}.  This will be the ``About'' documentation for your file.  You'll eventually fill it out.
 
-Modify the {\tt YamahaDX7.java} file to have the proper class name and package.
-
-Edit the {\tt edisyn/Synth.java} file.  In that file there is an array called:
-
-\begin{verbatim}
-public static final Class[] synths
-\end{verbatim}
-
-Add to this array your class:
-
-\begin{verbatim}
-    edisyn.synth.yamahadx7.YamahaDX7.class,
-\end{verbatim}
-
-Now Edisyn knows about your (currently nonexistent) patch file.
-
-Finally, implement the {\tt getSynthName()} and {\tt getHTMLResourceFileName} methods in your class file, along these lines:
+Modify the {\tt YamahaDX7.java} file to have the proper class name and package.  Then edit the {\tt edisyn/synth/Synths.txt} file.  Add to that file a line like this:\\
+\\
+{\tt edisyn.synth.yamahadx7.YamahaDX7\textit{\qquad[tab]\qquad}Yamaha DX7}\\
+\\
+Now Edisyn knows about your (currently nonexistent) patch editor class and also the name which should appear in the menu.  Finally, implement the {\tt getSynthName()} and {\tt getHTMLResourceFileName} methods in your class file, along these lines:
 
 \begin{verbatim}
 public static String getSynthName() { return "Yamaha DX7"; }
 public static String getHTMLResourceFileName() { return "YamahaDX7.html"; }
 \end{verbatim}
 
+It doesn't matter if {\tt YamahaDX7.html} doesn't exist yet.
 
 \subsection{Step Four: Get the UI Working}
 
@@ -905,7 +894,7 @@ This is mostly writing the class constructor and subsidiary functions.  Typicall
 \begin{enumerate}
 \item At the top level we have a {\bf VBox}.  This is a vertical Box to which you can add elements conveniently.  You can also designate an element to be the {\bf bottom} of the box, meaning it will take up all the remaining vertical space.
 \item In the VBox we will place one or more {\bf Categories}.  These are the large colorful named regions in Edisyn (like ``LFO'' or ``Oscillator''). 
-\item Typically inside a Category we'd put an {\bf HBox}.  This is a horizontal box to which you can add elements.  You can also designate an element to be the {\bf last item} of the box, meaning it will take up all the remaining horizontal space.  By doing this, the Category's horizontal colored line nicely stretches the whole length of the window.
+\item Typically inside a Category we'd put an {\bf HBox}.  This is a horizontal box to which you can add elements.  You can also designate an element to be the {\bf last item} of the box, meaning it will take up all the remaining horizontal space.  By doing this, the Category's horizontal colored line nicely stretches the whole length of the window.\footnote{There is an HBox (and VBox) option for designating the {\it first} element to take up all the space.  You still add the item using the addLast(...) method though.}
 \item Inside the HBox you put your widgets.  You might lay them out with additional VBoxes and HBoxes as you see fit. It's particularly common to one or more small widgets (check boxes, choosers) in a VBox, which will cause them to be top-aligned rather than vertically centered as they would if they were stuck directly in the HBox.  It's helpful to look at existing patch editors to see how they did it.
 \item If you need multiple rows, you should put a VBox in the Category, and then put HBoxes inside of that.
 \item You might have multiple Categories on the same row.  To do this, just put them in an HBox.  Make sure the final Category is designated to be the Last Item of the HBox.  You'd put this HBox in the top-level VBox instead of the Categories themselves.
@@ -956,9 +945,45 @@ Edisyn has a number of widgets available.  Most widgets are associated with a si
 The most common widgets are:
 
 \begin{itemize}
+\item {\bf PatchDisplay}\quad This displays your patch bank and number in a pleasing manner.  You typically implement it like this:
+\begin{verbatim}
+JComponent comp = new PatchDisplay(this, 4);		// 4 columns
+\end{verbatim}
+
+The number for your patch is stored in the model with the key {\bf number} (internally this should start at 0).  If your synth uses banks (and the DX7 does not), then it should also be a number (starting at 0) stored in your model with the key {\bf bank}.  PatchDisplay will then display your patch bank and number (which Edisyn calls the {\it patch location}), if you have implemented the method {\tt getPatchLocationName(Model model)}.  The DX7 has no banks, its first patch number is 1 (not 0, though we'll store them zero-based internally), and only has patch numbers less than 100, so this will suffice:
+
+\begin{verbatim}
+    public String getPatchLocationName(Model model)
+        {
+        // It's possible this method is called before "number" and "bank" exist
+        // in the model, so be sure to:
+        if (!model.exists("number")) return null;
+        
+        int number = model.get("number") + 1;
+        return "" + (number > 9 ? "" : "0") + number;
+        }
+\end{verbatim}
+
+More typically, a synth has multiple banks, numbers which start at 0, and more than 100 numbers per bank, so something like this is more typical:
+
+\begin{verbatim}
+      public static final String BANKS = new String[] { "A", "B", "C", "D" };
+      public String getPatchLocationName(Model model)
+        {
+        // It's possible this method is called before "number" and "bank" exist
+        // in the model, so be sure to:
+        if (!model.exists("number")) return null;
+        if (!model.exists("bank")) return null;
+        
+        int number = model.get("number");
+        return (BANKS[model.get("bank")] + " " + 
+            (number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
+        }
+\end{verbatim}
+
 \item {\bf StringComponent}\quad This is the only String widget.  It's used for patch names.  For a patch name, you typically implement it like this:
 \begin{verbatim}
-String key = "name";  // the key in the model
+String key = "name";  // the key in the model -- it's always "name" if your synth uses names
 String instructions = "Name must be up to 10 ASCII characters.";
 JComponent comp = new StringComponent("Patch Name", this, "name", maxLength, instructions)
     {
@@ -1001,12 +1026,14 @@ JComponent comp = new Chooser("Wave", this, key, params, MY_WAVE_ICONS);
 These PNG files would be stored in your {\tt edisyn/synth/yamahadx7/} directory.  They should be no taller than 16 pixels high: OS X refuses to display comboboxes with icons taller than that.
 
 
-\item {\bf Checkbox}\quad This is a simple checkbox.  By default it's on, but there's a setting to have it by default be off.  On is 1 and Off is 0 as stored in the model.
+\item {\bf Checkbox}\quad This is a simple checkbox.  By default, On is 1 and Off is 0 as stored in the model. 
 
 \begin{verbatim}
 String key = "arpeggiatorlatch";  // the key in the model
 JComponent comp = new CheckBox("Arpeggiator Latch", this, key);
 \end{verbatim}
+
+There is an optional constructor to flip it the other away around (On is 0 and Off is 1).
 
 The's a bug in OS X which mis-measures the width of the string needed, so you might see ``Arpeggia...'' instead of ``Arpeggiator Latch'' on-screen.  To fix this, just add a tiny bit to the width: usually one or two pixels are enough:
 
@@ -1136,19 +1163,6 @@ JComponent comp = new PushButton("Show")
 
 Popping up new synth panels from a multimode panel is complex.  Take a look at how {\tt edisyn/synth/waldorfmicrowavext/WaldorfMicrowaveXTMulti.java} does it.
 
-\item {\bf PatchDisplay}\quad This displays your patch and bank in a pleasing manner.\footnote{{\it Why is PatchDisplay so elaborate?  Why not just use a JLabel or something?}\quad Originally PatchDisplay did other complex things like change color.  Now it doesn't.}
-
-\begin{verbatim}
-String numberKey = "number";  // typically or null if you have no patch numbers
-String bankKey = "bank";  // typically, or null if you have no bank numbers
-int numberOfColumns = 10;  // for example
-JComponent comp = new PatchDisplay(this, "Patch", bankKey, numberKey, numberOfColumns)
-    {
-    public String numberString(int number) { "" + number}  // format as you like
-    public String bankString(int bank) { "" + bank}  // format as you like
-    };
-\end{verbatim}
-
 \item {\bf EnvelopeDisplay}\quad This displays a wide variety of envelopes.  Envelopes are drawn as a series of points, and between every successive pair of points we draw a line.    You will provide the EnvelopeDisplay with several arrays defining the coordinates of those points.  
 
 There are two main kinds of envelopes your synthesizer might employ.  First, your synthesizer might define parameters (like attack) in terms of the {\it height} of the attack and also the {\it amount of time} necessary to reach that height.  This is intuitive to draw, but in fact many synthesizers don't do it that way.  Instead, some define it in terms of the {\it height} of the attack and the {\it rate of change} (or slope, or angle).  In the first case, the height of the attack has no bearing on how long it takes to reach it.  But in the second case, the amount of time to reach the attack depends on both the height and on the rate.  This is even further complicated by some synthesizers (like Yamaha's) which use rate, but compute it not in terms of angle, but in terms of (essentially) 90 degrees {\it minus} the angle.  Thus a steeper rate is a {\it lower number}.  You will need to figure out what your synthesizer does exactly.  
@@ -1225,16 +1239,25 @@ JComponent comp = new EnvelopeDisplay(this, Color.red, "ADSR",
 
 Envelopes generally stretch to fill all available space: they're particularly good to put as the ``last'' element in an HBox via addLast().  But you might want to add them elsewhere and fix them to a specific width. In this case, just call {\bf setPreferredWidth(...)}.
 
+\item {\bf Other Objects}.  There are other custom widgets strewn throughout Edisyn, including number-entry fields (see the MicroKorg), Joysticks (see the Wavestation SR), cross-fade envelopes (Wavestation SR again), and much more complex versions of envelope displays for things like harmonics or filters (see the Kawai K5 and the FS1R Fseq).  
 
-\item{\bf Spacers}\quad Occasionally you might need to add some fixed space to separate widgets.  See the {\tt Strut} class for factory methods that can build some struts for you.
+\end{itemize}
 
+\paragraph{Spacing and Positioning}
+
+Edisyn handles most positioning using VBox, HBox, and JPanels set to BorderLayout.  However there are some cases where this is not sufficient to push objects to the right spot.  To this end, Edisyn also provides:
+
+\begin{itemize}
+\item {\bf Strut}.  This is a fixed blank space of zero height and non-zero width, or the other way around.  It's useful to add to an HBox or VBox to push an object to a certain position.  You can also make a Strut that is the exact same dimensions of an existing object.  For example, imagine if you wanted a row of dials, and below it a second row of dials, but with one dial missing (but with the gap left).  You could put a Strut there, set to the size of the LabelledDial above it.
+
+\item {\bf Stretch}.  This is a blank space which stretches to consume all available space in its box, pushing everything else out of the way.
 \end{itemize}
 
 \paragraph{Dynamically Changing Widgets}
 
 One gotcha which shows up in a number of synthesizers (particularly in effects sections) is that if you change (say) the effect type, the number of available parameters, and their names, will change as well.  Eventually Edisyn will have a widget that assists in this, but for now you'll have to manually add and remove widgets.
 
-Edisyn's patch editors usually do this by defining a bunch of HBoxes, one for each effect type, and then remove the current HBox and add the correct new one dynamically in response to the user changing types.  You can see a simple example of this in the Waldorf Microwave XT code, and a more elaborate version in the Blofeld code (where different effects actually share specific widgets).
+Edisyn's patch editors usually do this by defining a bunch of HBoxes, one for each effect type, and then remove the current HBox and add the correct new one dynamically in response to the user changing types.  You can see a simple example of this in the Waldorf Microwave XT code, and a more elaborate version in the Blofeld code (where different effects actually share specific widgets).  This is often triggered inside the {\tt update} method of a Chooser (for the effect type, say).
 
 You'll have to manually remove and add these widgets or HBoxes.  But when should you do so?  That's pretty easy: when the effect type has been updated.  Typically the effect type is shown as a Chooser, and when it is updated, the Chooser's {\bf update(...)} method is called:
 
@@ -1253,7 +1276,7 @@ JComponent comp = new Chooser("Effect Type", this, "effecttype", types)
 
 You'll see various patch editors have implemented update(...) for various purposes.
 
-Hand in hand with this: in some cases you want the update(...) method to be called not only when the widget's key is updated, but when {\it some other key} is updated.  To do this, you can {\it register} a widget to be updated for that key as well.  This is done as follows:
+Hand in hand with this: in some rare cases you want the update(...) method to be called not only when the widget's key is updated, but when {\it some other key} is updated.  To do this, you can {\it register} a widget to be updated for that key as well.  This is done as follows:
 
 \begin{verbatim}
 model.register("keyname", widget);
@@ -1264,27 +1287,100 @@ For example, in the Yamaha TX81Z, the operator frequency is computed as a combin
 \subsection{Step Five: Get Input from the Synth (and File Loading) Working}
 \label{filereading}
 
-There are two ways the synth can send you information: as a bulk sysex patch dump and as individual parameters.  We'll start with the bulk sysex patch dump.
+There are three common ways the synth can send you information: as a sysex patch dump, as a bank sysex message, and as individual parameters.  We'll start with the sysex patch dump.
 
-\paragraph{Bulk Dumps}
+\paragraph{Patch Dumps}
+Let's start by setting up the {\tt edisyn/synth/yamahadx7/YamahaDX7Rec.java} file.  This file contains code which recognizes whether incoming sysex messages should be routed to the DX7, among other tasks.  Give it the proper class name and package.
 
-First, you need to implement the {\bf recognize(...)} method.  This method tells Edisyn that you recognize a bulk dump sysex message.  You should verify the message length and the header to determine that it's a bulk dump and in fact meant is for your type of synthesizer {\it and} is probably correct.  This method will also be called when loading a sysex file from disk.\footnote{In fact the primary purpose of this method is to recognize sysex data loaded from disk: and so other sysex messages don't have their own recognize(...) method.}
+Next, we need to implement the {\bf recognize(...)} method in our recognizer file.  This method tells Edisyn that you recognize a dump sysex message.  You should verify the message length and the header to determine that it's a patch dump and in fact meant is for your type of synthesizer {\it and} is probably correct.  This method will also be called when loading a sysex file from disk.  Here's a simple recognizer for the DX7:
 
-Next, you need to implement the {\bf parse(...)} method.  In this method you will be given a data array and your job is to set the model parameters according to your parsing of this array.  You set parameters using the {\bf set(...)} methods in the model, like this:
+\begin{verbatim}
+    public static boolean recognize(byte[] data)
+        {
+        return ((data.length == 163 &&
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte)0x43 &&
+                // don't care about 2, it's the channel
+                data[3] == (byte)0x00 &&
+                data[4] == (byte)0x01 &&
+                data[5] == (byte)0x1B));            
+        }
+\end{verbatim}
+
+Next, you need to implement the {\bf parse(...)} method in the main {\tt YamahaDX7.java} file.  In this method you will be given a byte array and your job is to set the model parameters according to your parsing of this array.  You set parameters using the {\bf set(...)} methods in the model, like this:
 
 \begin{verbatim}
 getModel().set(numericalKey, 4.2);		// or whatever new value
 getModel().set(stringKey, "newValue");	// or whatever new value
 \end{verbatim}
 
-It is possible that the parse(...) method will actually contain multiple sysex messages, if you loaded from a file. For example, the Yamaha TX81Z's patch isn't a single sysex messages, it's {\it two} messages, to be backward compatible with an unimportant earlier synthesizer for some ridiculous Yamaha reason.  When you receive a dump via the synth, it'll only be one or other other of these messages.  But if you receive a TX81Z dump from a file, it'll be both messages.  Thankfully, the parse() method will tell you whether you're receiving from a file or not.\footnote{Though in fact the TX81Z implementation\,---\,and in fact all Edisyn's parse editors to date\,---\,don't change their parse(...) behavior when receiving from a file.}  So if you do something fancy with emit(...) later, you may need to revise your parse(...) implementation.
+If the parse was successful, you should usually return {\tt PATCH\_SUCCEEDED}.  If you queried the user for more information (Synth.java has good query dialog box methods for you) and the user cancelled the parsing, you should return {\tt PATCH\_CANCELLED}.  If the parse failed due to corruption, say, return {\tt PATCH\_FAILED}.
 
-You also need to implement the {\bf gatherPatchInfo(...)} method.  This method is nontrivial to implement.  Its function is to work with the user to determine the patch number, bank number, etc. necessary to ask the synthesizer for a given patch.  I suggest you take a look at existing patch editors to see how they have implemented it, and largely copy that.  You'll notice that patch-gathering code usually pops up a dialog box with a bunch of rows in it.  How is this done?  Edisyn's Synth.java class has a special method to make this easy: {\bf showMultiOption(...)}.
+\paragraph{Multi-Sysex Patch Dumps}
+Most synthesizers are sane and have one sysex message per patch.  But some are not.  For example, the Yamaha 4-op FM family have patches which consist of up to {\it four} messages in a row!  How is this handled?
 
-Additionally, you need to override methods which issue a dump request to the synth:
+First, Edisyn needs to know what messages form a patch, because some files can have some \(M\) of these messages concatenated together to form some \(N<M\) patches altogether.  If your synth requires multiple messages per patch, you need you recognizer to implement this method:
+
+\begin{verbatim}
+    public static int getNextSysexPatchGroup(byte[][] sysex, int start);
+\end{verbatim}
+
+This method is given an array of of sysex messages and a {\it start} position.  Beginning with the message {\tt sysex[start]} is a patch, possibly consisting of multiple messages, which your synthesizer might or not might not recognize.  If the patch is not for you, return {\tt start}.  Otherwise, let's say you have determined that the patch consists of the next three messages.  Then you should return {\tt start + 3}.  If your synth always uses one message per patch, don't bother implementing this method.
+
+When you receive a dump via the synth over MIDI, it'll contain exactly sysex message (parse() will be ultimately called several times before you've gotten an entire patch).  However when you receive a dump via a file, the data will likely contain {\it all} of these messages.  Thankfully, the parse() method will tell you whether you're receiving from a file or not.  At any rate, if you have yet not received all of the messages necessary to completely parse the patch, you should parse what you can, then return {\tt PATCH\_INCOMPLETE}.  In all likelihood parse() will be called later with the remaining information.
+
+\paragraph{Bank Sysex Dumps}
+
+Some synthesizers can send entire banks of patches as a single sysex message.  The Yamaha DX7 can do this, for example, and in fact it's the standard way DX7 patches are stored on the internet.
+
+To handle bank sysex dumps, you need to first recognize them.  In {\tt YamahaDX7Rec.java}, you need to implement the {\bf recognizeBulk(...)} method.  This method should work just like recognize(), except that it recognizes bank sysex messages.  Here's a simple DX7 Bulk recognizer method:
+
+\begin{verbatim}
+    public static boolean recognizeBulk(byte[] data)
+        {
+        return  (data.length == 4104 &&
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x43 &&
+            // don't care about 2, it's the channel
+            data[3] == (byte)0x09 &&
+            // data[4] == (byte)0x20 &&          // sometimes this is 0x10 by mistake
+            data[5] == (byte)0x00);
+        } 
+\end{verbatim}
+
+Next you need to modify recognize() so that if recognizeBulk() returns true, then recognize() does also.  This is easily done by having recognize call recognizeBulk() internally, such as:
+
+\begin{verbatim}
+    public static boolean recognize(byte[] data)
+        {
+        return (
+            // 1 single
+                (data.length == 163 &&
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte)0x43 &&
+                // don't care about 2, it's the channel
+                data[3] == (byte)0x00 &&
+                data[4] == (byte)0x01 &&
+                data[5] == (byte)0x1B) 
+            // bulk
+            || recognizeBulk(data));
+        }
+\end{verbatim}
+
+Next, you need to modify the {\bf parse(...)} method in the main {\tt YamahaDX7.java} file so that it handles bank sysex messages.  In Edisyn this is done by querying the user as to which patch he wishes to edit from that sysex message (or whether he'd like to do other operations, such as upload the entire bank sysex to the synthesizer, or save it as a file).  
+
+This is done by first extracting the names from the bank sysex message received in parse().  With the names in hand, call {\bf showBankSysexOptions(...)}, passing in the data and the names.  The method will then return either the patch the user has selected, or a negative value indicating that no parse should be done.  If the user has selected a patch, parse it from the bank sysex.
+
+\paragraph{Requesting a Patch from the Synthesizer}
+
+In order for the user to request a patch from the synthesizer, he needs to be able to specify the bank and number.  To do this, you need to implement the {\bf gatherPatchInfo(...)} method.   This method is used for both requesting patches and for writing them: on many synths certain banks are read-only, so they should vary depending on whether requesting or writing is being performed.
+
+This method is nontrivial to implement. I suggest you take a look at existing patch editors to see how they have implemented it, and largely copy that.  You'll notice that patch-gathering code usually pops up a dialog box with a bunch of rows in it.  How is this done?  Edisyn's Synth.java class has a special method to make this easy: {\bf showMultiOption(...)}. 
+
+Next you need to override methods which issue a dump request to the synth:
 
 \begin{itemize}
-\item {\bf performRequestDump(...)} or {\bf requestDump(...)}\quad Override {\it one} of these methods to request a dump from the synth of a specific patch.  requestDump(...) is simpler: you just return bytes corresponding to a sysex message to broadcast to the synth.  performRequestDump(...) lets you manually issue the proper commands.  
+\item {\bf performRequestDump(...)} or {\bf requestDump(...)}\quad Override {\it one} of these methods to request a dump from the synth of a specific patch.  requestDump(...) is simpler: you just return bytes corresponding to a sysex message to broadcast to the synth.  performRequestDump(...) lets you manually issue the proper commands. 
 
 In the second case, the edisyn.Midi class, instantiated in the {\bf midi} instance variable, has several methods for constructing MIDI messages: you can send them, or send sysex messages (as byte arrays) via the {\bf tryToSendMIDI()} or {\bf tryToSendSysex()} methods.  Also you'll have to handle changing the patch: see the information in Blank.java's documentation on this method for an example.
 
@@ -1293,8 +1389,7 @@ Both of these methods take a Model called {\bf tempModel} which will hold inform
 \item {\bf performRequestCurrentDump(...)} or {\bf requestCurrentDump(...)}\quad Override {\it one} of these methods to request a dump from the synth of the current patch being played.  These methods are basically just like performRequestDump(...) and requestDump(...), but they don't take a model (there's no patch number).
 \end{itemize}
 
-You will also probably need to implement {\bf changePatch(...)} to issue a patch change (it'll be called as part of performRequestDump(...)).    It's possible that your synthesizer must pause for a bit after a patch change (the Blofeld, for example, requires almost 200ms).  You may want to implement the {\bf getPauseAfterChangePatch()} method to slow Edisyn down.  If your synth can't change patches to whatever you're editing, that's okay, but you'll need to handle the right behavior later on when you emit a patch to it.
-
+Finally, you will also probably need to implement {\bf changePatch(...)} to issue a patch change (it'll be called as part of performRequestDump(...)).    It's possible that your synthesizer must pause for a bit after a patch change (the Blofeld, for example, requires almost 200ms).  You may want to implement the {\bf getPauseAfterChangePatch()} method to slow Edisyn down.  If your synth can't change patches to whatever you're editing, that's okay, but you'll need to handle the right behavior later on when you emit a patch to it.
 
 If your synth cannot load the current patch you can avoid implementing some of these methods by saying the following:
 
@@ -1312,11 +1407,15 @@ See also the description of these methods in {\tt edisyn/synth/Blank.java}
 
 \paragraph{Individual Parameters}
 
-[If your synth doesn't send out individual parameters, or you don't want to be bothered right now in handling this, you can just ignore this section for now].  Individual parameters might come in as sysex messages, as CC messages, or as NRPN.  Here are your options:
+{\it [If your synth doesn't send out individual parameters, or you don't want to be bothered right now in handling this, you can just ignore this section for now].}
+
+Individual parameters might come in as sysex messages, as CC messages, or as NRPN.  Here are your options:
 
 \begin{itemize}
-\item {\bf Sysex Messages}\quad Here, override the method {\bf parseParameter(...)}.  Note that the provided data might be something else sent via sysex besides just a parameter change.  You can test for that too (and handle it here if you like).
+\item {\bf Sysex Messages}\quad Here, override the method {\bf parseParameter(...)}.  Note that the provided data might be something else sent via sysex besides just a parameter change.  You can test for that too (and handle it here if you like).  Also, your recognizer should {\it not} recognize individual parameter messages, or else they'll be sent to parse() rather than parseParameter().  You don't want that.
+
 \item {\bf NRPN or Cooked CC messages}\quad A cooked CC message is one which doesn't violate any of the RPN/NRPN rules (it's not 6, 38, 97, 98, 99, 100, or 101).  At present Edisyn does not recognize 14-bit CC.  If your messages are always cooked or are NRPN, then you can handle them via {\bf handleSynthCCOrNRPN(...)}, which takes a special {\bf MIDI.CCData} argument that tells you about the message (see the Midi.java class). 
+
 \item {\bf Raw CC Messages}\quad A raw CC message is any message number 0...127 just sent out willy-nilly, not respecting things like RPN/NRPN or 14-bit CC.  If your synth sends out raw CC messages, you need to override {\bf getExpectsRawCCFromSynth()} to return {\bf true}.  Then you handle the messages via  {\bf handleSynthCCOrNRPN(...)} as discussed above.
 \end{itemize}
 
@@ -1329,15 +1428,15 @@ getModel().set(stringKey, "newValue");	// or whatever new value
 
 \paragraph{Note on File Loading}
 
-If your bulk dumps come in as sysex messages, then congratulations, you already have file loading working.  If not, you will need to {\it invent} a bulk sysex format and implement it in the {\bf parse(...)} (and later {\bf emit(...)} methods even if your synthesizer never sends stuff via sysex (such as is the case in the PreenFM2).  That way you can still load and save files.  
+If your patch dumps come in as sysex messages, then congratulations, you already have file loading working.  If not, you will need to {\it invent} a patch sysex format and implement it in the {\bf parse(...)} (and later {\bf emit(...)} methods even if your synthesizer never sends stuff via sysex (such as is the case in the PreenFM2).  That way you can still load and save files.  
 
-You probably ought to use the ``educational use'' wildcard MIDI sysex ID (0x7D).  Edisyn's made-up sysex header for the PreenFM2 currently looks like this: {\tt 0xF0, 0x7D, P, R, E, E, N, F, M, 2, {\it version}.}  Presently {\it version}  is {\tt 0x0}.  You might do something similar.
+You probably ought to use the ``educational use'' wildcard MIDI sysex ID (0x7D).  Edisyn's made-up sysex header for the PreenFM2 currently looks like this: {\tt 0xF0, 0x7D, 'P', 'R', 'E', 'E', 'N', 'F', 'M', '2', {\it version}.}  Presently {\it version}  is {\tt 0x0}.  You might do something similar.
 
 \subsection{Step Six: Get Output to the Synth (and File Writing) Working}
 
-If you've gotten this far, writing is simpler than parsing and requesting, because you've already written a lot of the support code.  You can write out both bulk dumps and individual parameters (as you tweak widgets).
+If you've gotten this far, writing is simpler than parsing and requesting, because you've already written a lot of the support code.  You can write out both patch dumps and individual parameters (as you tweak widgets).
 
-\paragraph{Bulk Dumps}
+\paragraph{Patch Dumps}
 
 You will need to implement {\it one} of the following two methods: either {\bf emitAll(Model, ...)} or {\bf emit(Model, ...)}.  The emit(Model, ...) method is simpler: you just build data for a sysex message and return it.  In emitAll(Model, ...), you build an array consisting of {\it either} javax.sound.midi.SimpleMessage objects {\it or} byte[] arrays corresponding to sysex messages, or a mixture of the two.  These will be emitted one by one.  Most commonly you just override emit(Model, ...).
 
@@ -1359,19 +1458,19 @@ Some synthesizers need a bit of time to rest after receiving a dump before they 
 
 \paragraph{Individual Parameters}
 
-In response to changing a widget, Edisyn will try to change a parameter on your synthesizer.  This is similar to the bulk dump.  Specifically, there are two methods, {\bf emit(String)} and {\bf emitAll(String)}, which work like their bulk counterparts, except that they are tasked to emit a {\it single parameter} to the synthesizer.  Implement only {\it one} of these methods.  If you don't want to do this, just don't implement these methods.
+In response to changing a widget, Edisyn will try to change a parameter on your synthesizer.  This is similar to the patch dump.  Specifically, there are two methods, {\bf emit(String)} and {\bf emitAll(String)}, which work like their patch counterparts, except that they are tasked to emit a {\it single parameter} to the synthesizer.  Implement only {\it one} of these methods.  If you don't want to do this, just don't implement these methods.
 
 If your synthesizer accepts NRPN (such as the PreenFM2), the Midi.java file has some utility methods for building NRPN messages easily.
 
 It's possible that your synthesizer can only accept messages at a certain rate.  You may want to implement the {\bf getPauseBetweenMIDISends()} method to slow Edisyn down.
 
-\paragraph{Bulk Dumps Via Individual Parameters}
+\paragraph{Patch Dumps Via Individual Parameters}
 
-Some synthesizers, such as the PreenFM2, do not accept a bulk dump method at all.  Rather you send a ``bulk dump'' as a whole lot of individual parameter changes.  If your synthesizer is of this type, you should override the method {\bf getSendsAllParametersInBulk()} method to return {\bf false}.
+Some synthesizers, such as the PreenFM2, do not accept a patch dump method at all.  Rather you send a ``patch dump'' as a whole lot of individual parameter changes.  If your synthesizer is of this type, you should override the method {\bf getSendsAllParametersInBulk()} method to return {\bf false}.
 
 \paragraph{Note on File Writing}
 
-See the earlier note at the end of Section \ref{filereading} about File Loading: as discussed there, if your synth doesn't read or write sysex, you'll still need to {\it invent} a bulk sysex format, and implement it in the {\bf emit(...)} and {\bf parse(...)} methods, so you can save and load files to disk.
+See the earlier note at the end of Section \ref{filereading} about File Loading: as discussed there, if your synth doesn't read or write sysex, you'll still need to {\it invent} a patch sysex format, and implement it in the {\bf emit(...)} and {\bf parse(...)} methods, so you can save and load files to disk.
 
 
 \subsection{Step Seven: Create an Init File}
@@ -1389,7 +1488,7 @@ loadDefaults();
 Edisyn can download many patches at once.  To support this, you need to implement a few methods.\footnote{Until you implement {\bf getPatchLocationName(...)} to return something other than {\tt null}, Edisyn will keep the Batch Downloads menu disabled.  So when you implement this method, be sure to also implement the other methods here at the same time.} First, there's
  {\bf getPatchLocationName(...)}, which returns as a String a short version of the patch address (bank, name) to be used in a saved filename.  Next, there's {\bf getNextPatchLocation(...)} which, given a Model containing a patch address, returns a model with the ``next'' patch address (wrapping around to the very first address if necessary).  Finally you need to implement {\bf patchLocationEquals(...)}, which compares two patches to see if they contain the same patch address.
  
-A few synthesizers (notably the PreenFM2) don't send individual patches as single sysex patch dumps, but rather send them as multiple separate NRPN or CC messages.  Edisyn needs to know this so it can make a better guess at whether a patch dump has arrived and is ready to be saved.  To let Edisyn know that your patch editor is for a synthesizer of this type, override the method {\bf  getReceivesPatchesInBulk()} to return false.
+A few synthesizers (notably the PreenFM2) don't send individual patches as single sysex patch dumps, but rather send them as multiple separate NRPN or CC messages.  Edisyn needs to know this so it can make a better guess at whether a patch dump has arrived and is ready to be saved.  To let Edisyn know that your patch editor is for a synthesizer of this type, override the method {\bf getReceivesPatchesInBulk()} to return false.
 
 Compared to the other stuff, this step is easy.\footnote{Note that lots of synthesizers have sysex facilities to dump the entire patch memory, or dump an entire bank, etc.  Edisyn doesn't use these; it requests patches one by one.  This is slower but saves you a lot of coding and is consistent across synthesizers.  So you're welcome.}
   
@@ -1398,7 +1497,7 @@ You're almost done!  Some other items you might want to do.  First, you may need
 
 Second, whenever your patch editor becomes the front window, the method {\bf windowBecameFront()} will be called.  You could override this to send a special message to your synth to update it somehow.  For example, the Waldorf Microwave XT patch editors send a message to the Microwave XT to tell it to switch from single to multi-mode (or back) as appropriate.
 
-Finally when the user clicks on the close box, the method {\bf requestCloseWindow()} is called.  You can override this to query the user about saving the patch etc. first, and then finally return the appropriate value to inform Edisyn that the window should in fact be closed.  Though in fact currently no patch editors implement this method at all.
+Third, when the user clicks on the close box, the method {\bf requestCloseWindow()} is called.  You can override this to query the user about saving the patch etc. first, and then finally return the appropriate value to inform Edisyn that the window should in fact be closed.  Though in fact currently no patch editors implement this method at all.
 
 \subsection{Step Ten: Submit Your Patch Editor!}
 

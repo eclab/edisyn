@@ -45,7 +45,7 @@ Edisyn presently supports:
 * Korg Microsampler
 * Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
 * M-Audio Venom (Single, Multi, Arpeggiator, and Global Modes)
-* Novation Drumstation and D-station
+* Novation Drumstation and D Station
 * Oberheim Matrix 6, 6R, and 1000 (Single and (for 1000) Global Modes) 
 * PreenFM2
 * Red Sound DarkStar and DarkStar XP2
@@ -67,7 +67,7 @@ Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline mo
 * *Randomization:* Weighted patch mutation
 * *Merging:* Weighted recombination of two patches of your choice
 * *Blending:* Random recombination of two randomly-chosen patches on your synth
-* *Nudging:* Pushing the patch to sound a bit more like one of four other patches of your choice
+* *Nudging:* Pushing the patch to sound a bit more (or a bit less) like one of four other patches of your choice
 * *Morphing:* Real-time interpolation of four patches to form a new patch
 * *Hill-Climbing and Constriction:* evolutionary techniques for guided randomized search through the space of parameters, where Edisyn iteratively offers patch possibilities for you to grade, then looks for new ones based on your assessments.
 

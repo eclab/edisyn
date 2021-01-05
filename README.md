@@ -69,7 +69,7 @@ Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline mo
 * *Blending:* Random recombination of two randomly-chosen patches on your synth
 * *Nudging:* Pushing the patch to sound a bit more like one of four other patches of your choice
 * *Morphing:* Real-time interpolation of four patches to form a new patch
-* *Hill-Climbing and Constriction:* evolutionary techniques for guided randomized search through the space of parameters, where Edisyn iteratively offers patch possibilities for you to assess and grade.
+* *Hill-Climbing and Constriction:* evolutionary techniques for guided randomized search through the space of parameters, where Edisyn iteratively offers patch possibilities for you to grade, then looks for new ones based on your assessments.
 
 #### "Could You Develop a Patch Editor for Synth X for Me?"
 
@@ -93,7 +93,15 @@ Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux)
 
 First install Edisyn from the [Edisyn.app.zip](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.app.zip) file.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
 
-MacOS has lately locked down the ability to run an application that's not from a commercial, paying Apple Developer.  And I'm not one.  So you will have to instruct MacOS to permit Edisyn to run.  Let's assume you stuck Edisyn in the /Applications directory as usual.  Now we have to tell Gatekeeper to allow Edisyn to run on your machine:
+MacOS has lately locked down the ability to run an application that's not from a commercial, paying Apple Developer.  And I'm not one.  So you will have to instruct MacOS to permit Edisyn to run.  Let's try the easy approach first:
+
+#### Easy Way to Permit Edisyn to Run
+
+On some versions of MacOS, you can CONTROL-Click on Edisyn's App Icon, and while holding Control down, select "Open".  Now instead of telling you that Edisyn cannot be opened because it's from an unidentified developer, you'll be given the option to do so. You probably will only have to do this once.
+
+#### Slightly Harder Way to Permit Edisyn to Run
+
+If this isn't working, try the following.  Let's assume you stuck Edisyn in the /Applications directory as usual.  Now we have to tell Gatekeeper to allow Edisyn to run on your machine:
 
 1. Run the Terminal Program (in /Applications/Utilities/)
 2. Type the following command and hit RETURN: `   sudo spctl --add /Applications/Edisyn.app`
@@ -105,12 +113,6 @@ Now you should be able to run Edisyn.  Let me know if this all works.
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
 You can also run Edisyn from its jar file from the command line: see "Running from the command line" at end of these instructions. 
-
-#### Dealing with Catalina...
-
-
-Note that Catalina may have added additional requirements to running Edisyn properly: but I don't have a Catalina machine to test on.  Let me know if you run into issues and/or find solutions to them.
-
 
 #### If Edisyn bombs in MacOS on selecting a patch editor...
 

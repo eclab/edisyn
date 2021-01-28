@@ -173,6 +173,7 @@ public class StringComponent extends JComponent implements Updatable, HasKey
             });
                 
         add(change, BorderLayout.SOUTH);
+        synth.getModel().set(key, "");		// gotta set it to something
         }
 
     public void paintComponent(Graphics g)

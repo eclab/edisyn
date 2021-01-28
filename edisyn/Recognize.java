@@ -20,10 +20,9 @@ public class Recognize
 
     /** Create your own Synth-specific class version of this static method.
         It will be called when the system wants to know if the given sysex patch dump
-        is some kind of bulk (multi-patch dump) for your kind of synthesizer.  Return true if so, else false. 
-        If you don't implement this method, by default it returns false -- this would be the
-        case where you don't support any bulk loading via parse(...).  */
-    private static boolean recognizeBulk(byte[] data)
+        is a bank (multi-patch dump) for your kind of synthesizer.  Return true if so, else false. 
+        If you don't handle bank sysex dumps, by default it returns false.  */
+    private static boolean recognizeBank(byte[] data)
         {
         // The Synth.java version of this method is obviously never called.
         // But your subclass's version will be called.

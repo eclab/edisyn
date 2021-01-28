@@ -454,7 +454,7 @@ public class Model implements Cloneable
         else if (node.stringValue == null)
             {
             if (debug)
-                System.err.println("Debug (Model): " + "Key " + key + " is an integer, not an string");
+                System.err.println("Debug (Model): " + "Key " + key + " is an integer, not a string");
             return ifDoesntExist;
             }
         else return node.stringValue;

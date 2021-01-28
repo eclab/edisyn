@@ -33,6 +33,7 @@ public class Edisyn
             // This DOES work, but it's not necessary as the menu says "Edisyn" anyway
             // System.setProperty("apple.awt.application.name", "Edisyn");
             
+            // This makes sure that windows uses the default windows look and feel, not the old Sun one
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             }
         catch(Exception e) { }

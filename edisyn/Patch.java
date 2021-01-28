@@ -12,22 +12,22 @@ import edisyn.util.*;
 
 public class Patch
     {
-    public boolean bulk;
+    public boolean bank;
     public byte[][] sysex;
     public int synth;
     public String name = null;
     int index = 0;
     
-    public Patch(int synth, byte[][] sysex, boolean bulk)
+    public Patch(int synth, byte[][] sysex, boolean bank)
         {
         this.synth = synth;
         this.sysex = sysex;
-        this.bulk = bulk;
+        this.bank = bank;
         } 
     
     public String toString()
         {
-        String s = "Patch[" + name + ", " + synth + ", " + bulk + ", " + index + ", " + sysex.length + "\n";
+        String s = "Patch[" + name + ", " + synth + ", " + bank + ", " + index + ", " + sysex.length + "\n";
         for(int i = 0; i < sysex.length; i++)
             {
             s = s + ("" + i + " (" + sysex[i].length + ") ->");

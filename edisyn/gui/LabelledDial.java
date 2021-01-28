@@ -48,11 +48,12 @@ public class LabelledDial extends NumericalComponent
         dial.repaint(); 
         }
         
-    public void setLabel(String text)
+    public LabelledDial setLabel(String text)
         {
         label.setText(text);
         label.revalidate();
         label.repaint();
+        return this;
         }
         
     public JLabel getJLabel()

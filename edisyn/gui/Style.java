@@ -126,7 +126,9 @@ public class Style
     public static float ENVELOPE_DISPLAY_MARKER_WIDTH() { return 4; }
     /** Stroke for the X axis. */
     public static BasicStroke ENVELOPE_AXIS_STROKE() { return new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, new float[] { 4.0f }, 0.0f); }
-    public static Color ENVELOPE_COLOR() { return DYNAMIC_COLOR(); }
+    public static Color DEFAULT_ENVELOPE_COLOR = DEFAULT_DYNAMIC_COLOR;
+    static Color ENVELOPE_COLOR = DEFAULT_ENVELOPE_COLOR;
+    public static Color ENVELOPE_COLOR() { return ENVELOPE_COLOR; }
     public static Color ENVELOPE_UNSET_COLOR() { return DIAL_UNSET_COLOR(); }
         
     /////// CHECKBOX CONSTANTS
@@ -188,6 +190,7 @@ public class Style
         COLOR_B = Synth.getLastColor("b-color", DEFAULT_COLOR_B);
         COLOR_C = Synth.getLastColor("c-color", DEFAULT_COLOR_C);
         DYNAMIC_COLOR = Synth.getLastColor("dynamic-color", DEFAULT_DYNAMIC_COLOR);
+        ENVELOPE_COLOR = Synth.getLastColor("envelope-color", DEFAULT_ENVELOPE_COLOR);
         UNSET_COLOR = Synth.getLastColor("unset-color", DEFAULT_UNSET_COLOR);
         }
 

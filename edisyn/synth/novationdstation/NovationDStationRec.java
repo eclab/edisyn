@@ -17,10 +17,10 @@ public class NovationDStationRec extends Recognize
             data[3] == 0x29 &&
             data[4] == 0x02 &&
             data[5] == 0x01 &&
-            data[6] == 0x22) || recognizeBulk(data);
+            data[6] == 0x22) || recognizeBank(data);
         }
 
-    public static boolean recognizeBulk(byte[] data)
+    public static boolean recognizeBank(byte[] data)
         {
         return (data.length == 4104 &&
             data[0] == (byte)0xF0 &&

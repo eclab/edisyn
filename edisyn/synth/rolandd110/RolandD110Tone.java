@@ -1412,17 +1412,6 @@ public class RolandD110Tone extends Synth
         return b;
         }
     
-    public static boolean recognize(byte[] data)
-        {
-        return ((data[0] == (byte)0xF0) &&
-            (data[1] == (byte)0x41) &&
-            (data[3] == (byte)0x16) &&
-            (data[4] == (byte)0x12) &&
-            (data[5] == 0x02 || data[5] == (byte)0x04 || data[5] == (byte)0x08)) &&  // tones
-            // tone temporary areas
-            (data.length == TEMP_TONE_LENGTH || data.length == MEMORY_TONE_LENGTH);
-        }
-        
     public static final int MAXIMUM_NAME_LENGTH = 10;
     public String revisePatchName(String name)
         {
@@ -1489,5 +1478,5 @@ public class RolandD110Tone extends Synth
         return (model.get("number") + 1 < 10 ? "0" : "") + ((model.get("number") + 1));
         }
 
-    public int getBulkDownloadWaitTime() { return 750; }
+    public int getBatchDownloadWaitTime() { return 750; }
     }

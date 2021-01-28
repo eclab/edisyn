@@ -2438,19 +2438,6 @@ public class Yamaha4Op extends Synth
         return FAIL;
         }
     
-    public static boolean recognizeBulk(byte[] data)
-        {
-        // VMEM
-        boolean b = (data.length == 4104 &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x43 &&
-            // don't care about 2, it's the channel
-            data[3] == (byte)0x04 &&
-            data[4] == (byte)0x20 &&        // manual says 10 but this is wrong
-            data[5] == (byte)0x00);
-        return b;
-        }
-        
     ArrayList<byte[]> resultsSoFar = new ArrayList<byte[]>();
         
     public void doRequestMerge(double percentage)

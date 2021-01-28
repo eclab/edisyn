@@ -1220,7 +1220,7 @@ return pos;
     "semitone", "fine", "level", "duration", "crossfade", "number", "bank"
     };
         
-    public boolean getSendsAllParametersInBulk() { return false; }
+    public boolean getSendsAllParametersAsDump() { return false; }
     
     public static final int STATUS_KORG_WS_SEQUENCE_WRITING = -10000;
     
@@ -1228,12 +1228,13 @@ return pos;
     int totalParameters = 0;
     int currentParameter = 0;
     boolean sendingAllParameters = false;
-    public void sendAllParameters()
+    
+    public boolean sendAllParametersInternal()
         {
         if (!getSendMIDI())
-            return;
+            return false;
 
-        if (!writingParameters && blockSending) return;  // we don't send anything
+        if (!writingParameters && blockSending) return false;  // we don't send anything
                 
         sendingAllParameters = true;
         totalParameters = offsetParameters + 14 * getModel().get("length") + 7;
@@ -1242,7 +1243,7 @@ return pos;
         // we have a hack here to send patch information first so we write it to the right place.
         tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_BANK, edisynToWSBank[model.get("bank")]) });
         tryToSendMIDI(new Object[] { paramBytes(WAVE_SEQ_NUM, model.get("number", 0)) });
-        super.sendAllParameters();      
+        boolean val = super.sendAllParametersInternal();      
         
         currentParameter = 0;
         offsetParameters = 0;
@@ -1251,6 +1252,7 @@ return pos;
         sequenceGlobalCategory.setName("Sequence");
         paintImmediately(sequenceGlobalCategory.getParent().getBounds());
         sendingAllParameters = false;
+        return val;
         }
     
     boolean writingParameters = false;
@@ -1381,48 +1383,6 @@ return pos;
         byte BB = (byte)edisynToWSBank[tempModel.get("bank")];
         return new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), 0x28, 0x0C, BB, (byte)0xF7 };
         }
-                
-    public static final int EXPECTED_SYSEX_LENGTH = 17576;
-    public static boolean recognize(byte[] data)
-        {
-        if (data.length > 22 &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x7D &&
-            data[2] == (byte)'E' &&
-            data[3] == (byte)'D' &&
-            data[4] == (byte)'I' &&
-            data[5] == (byte)'S' &&
-            data[6] == (byte)'Y' &&
-            data[7] == (byte)'N' &&
-            data[8] == (byte)' ' &&
-            data[9] == (byte)'K' &&
-            data[10] == (byte)'O' &&
-            data[11] == (byte)'R' &&
-            data[12] == (byte)'G' &&
-            data[13] == (byte)'W' &&
-            data[14] == (byte)'S' &&
-            data[15] == (byte)'S' &&
-            data[16] == (byte)'R' &&
-            data[17] == (byte)' ' &&
-            data[18] == (byte)'S' &&
-            data[19] == (byte)'E' &&
-            data[20] == (byte)'Q' &&
-            data[21] == (byte)0)
-            return true;
-        else return recognizeBulk(data);
-        }
-        
-    public static boolean recognizeBulk(byte[] data)
-        {
-        boolean b = (data.length == EXPECTED_SYSEX_LENGTH &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x42 &&
-            data[3] == (byte)0x28 &&
-            data[4] == (byte)0x54);   
-        return b;              
-        }
-    
-    
     
     
     /////// OTHER ABSTRACT METHODS

@@ -733,7 +733,7 @@ public class FuturesonusParva extends Synth
     "-",
     };
 
-    public boolean getSendsAllParametersInBulk() { return false; }
+    public boolean getSendsAllParametersAsDump() { return false; }
 
     // this is MSB first
     public byte[] nybblize(byte[] val)
@@ -957,23 +957,6 @@ public class FuturesonusParva extends Synth
         {
         return new byte[] { (byte)0xF0, (byte)0x7D, (byte)0x00, (byte)0x7F, (byte)0x5F, (byte)0x00, (byte)0xF7 };
         }
-    
-    public static boolean recognize(byte[] data)
-        {
-        // At present this is all I really have to go on.
-        boolean v = (
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x7D &&
-            data[2] == (byte)0x00 &&
-            data[3] == (byte)0x7F &&
-            (data[4] & 0xF0) == 0x40 &&
-            data[5] < 64 &&
-            data[data.length - 1] == (byte)0xF7);
-        return v;
-        }
-    
-    
-    
     
     /////// OTHER ABSTRACT METHODS
     

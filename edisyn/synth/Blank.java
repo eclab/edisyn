@@ -61,7 +61,7 @@ public class Blank extends Synth
         
     /// SENDING TO CURRENT
     /// Call sendAllParameters().  This does:
-    ///             If getSendsAllParametersInBulk(), this calls:
+    ///             If getSendsAllParametersAsDump(), this calls:
     ///                     emitAll(tempModel, toWorkingMemory = true, toFile)
     ///                             This calls emit(tempModel, toWorkingMemory = true, toFile)
     ///             Else for every key it calls:
@@ -76,7 +76,7 @@ public class Blank extends Synth
     /// If successful
     ///             Call changePatch(tempModel)
     ///     Call sendAllParameters().  This does:
-    ///                     If getSendsAllParametersInBulk(), this calls:
+    ///                     If getSendsAllParametersAsDump(), this calls:
     ///                             emitAll(tempModel, toWorkingMemory = true, toFile)
     ///                                     This calls emit(tempModel, toWorkingMemory = true, toFile)
     ///                     Else for every key it calls:
@@ -648,11 +648,11 @@ public class Blank extends Synth
         return NO_SYSEX_FRAGMENT_SIZE;
         }
         
-    public int getBulkDownloadWaitTime()
+    public int getBatchDownloadWaitTime()
         {
         // Edisyn does bulk downloads by iteratively requesting a patch, then
         // waiting for it to load, then saving it.  Edisyn will wait for up to
-        // getBulkDownloadWaitTime() milliseconds before it checks to see if the
+        // getBatchDownloadWaitTime() milliseconds before it checks to see if the
         // patch has arrived and try to save it; else it will issue another request.
         //
         // The default value is 1000 (one second).  If your synth takes more (or less!)
@@ -678,7 +678,7 @@ public class Blank extends Synth
         return; 
         }
 
-    public boolean getSendsAllParametersInBulk() 
+    public boolean getSendsAllParametersAsDump() 
         {
         // Normally this method returns TRUE meaning that when the user sends
         // or writes to the synthesizer, emitAll(model,...) will be called to write
@@ -715,7 +715,7 @@ public class Blank extends Synth
         return false;
         }
 
-    public boolean getReceivesPatchesInBulk()
+    public boolean getReceivesPatchesAsDumps()
         {
         // Most synthesizers send patch dumps to Edisyn via a single sysex message which
         // is handled using the parse(...) method.  But some synthesizers, such as the
@@ -732,6 +732,14 @@ public class Blank extends Synth
         // switch to playing it.  So this command issues a sendAllParameters() on receiving
         // a (non-merge) parse from the synthesizer to keep it up to date.  Example synths
         // with this issue: Waldorf Blofeld and Microwave.
+        return false;
+        }
+
+    public boolean getSendsParametersOnlyOnSendCurrentPatch()
+        {
+        // If this returns true, then Edisyn will only sendAllParmameters() when the user
+        // directly selects "Send Current Patch", and in no other situation (such as
+        // undo/redo, or hill-climbing, or on patch load, etc.)
         return false;
         }
 

@@ -30,11 +30,11 @@ public class Yamaha4OpMultiRec extends Recognize
                 data[14] == 'P' &&
                 data[15] == 'E')
 
-            || recognizeBulk(data));
+            || recognizeBank(data));
         
         }
         
-    public static boolean recognizeBulk(byte[] data)
+    public static boolean recognizeBank(byte[] data)
         {
         // PMEM
         boolean b = (data.length == 2450 &&

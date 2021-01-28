@@ -2241,19 +2241,6 @@ public class WaldorfMicrowaveXT extends Synth
         return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x00, 0x20, 0x00, (byte)((0x20 + 0x00)&127), (byte)0xF7 };
         }
 
-    public static boolean recognize(byte[] data)
-        {
-        boolean v = (
-            data.length == EXPECTED_SYSEX_LENGTH &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x3E &&
-            data[2] == (byte)0x0E &&
-            data[4] == (byte)0x10);
-        return v;
-        }
-        
-
-
     public static final int EXPECTED_SYSEX_LENGTH = 265;        
 
 

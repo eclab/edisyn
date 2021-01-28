@@ -21,14 +21,14 @@ public class YamahaDX7Rec extends Recognize
                 data[4] == (byte)0x01 &&
                 data[5] == (byte)0x1B) 
                 
-            || recognizeBulk(data));
+            || recognizeBank(data));
             
         }
 
-    public static boolean recognizeBulk(byte[] data)
+    public static boolean recognizeBank(byte[] data)
         {
         return  (
-            // 32 bulk
+            // 32 Bank
             
             data.length == 4104 &&
             data[0] == (byte)0xF0 &&

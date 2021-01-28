@@ -370,7 +370,7 @@ public class MAudioVenomGlobal extends Synth
         
 
 // we're going to send parameters individually so we can control whether we send out midioutmode
-    public boolean getSendsAllParametersInBulk() { return false; }
+    public boolean getSendsAllParametersAsDump() { return false; }
 
     public Object[] emitAll(String key)
         {

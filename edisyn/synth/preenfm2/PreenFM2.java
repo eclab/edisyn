@@ -174,8 +174,8 @@ public class PreenFM2 extends Synth
                 
     public String getDefaultResourceFileName() { return "PreenFM2.init"; }
     public String getHTMLResourceFileName() { return "PreenFM2.html"; }
-    public boolean getSendsAllParametersInBulk() { return false; }
-    public boolean getReceivesPatchesInBulk() { return false; }
+    public boolean getSendsAllParametersAsDump() { return false; }
+    public boolean getReceivesPatchesAsDumps() { return false; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
@@ -1758,32 +1758,6 @@ public class PreenFM2 extends Synth
         }
                 
         
-    public static boolean recognize(byte[] data)
-        {
-        boolean val = (data.length == 473 &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x7D &&
-            data[2] == (byte)'E' &&
-            data[3] == (byte)'D' &&
-            data[4] == (byte)'I' &&
-            data[5] == (byte)'S' &&
-            data[6] == (byte)'Y' &&
-            data[7] == (byte)'N' &&
-            (data[8] == (byte)' ' || data[8] == (byte)'-') &&           // versions 1 and 0
-            data[9] == (byte)'P' &&
-            data[10] == (byte)'R' &&
-            data[11] == (byte)'E' &&
-            data[12] == (byte)'E' &&
-            data[13] == (byte)'N' &&
-            data[14] == (byte)'F' &&
-            data[15] == (byte)'M' &&
-            data[16] == (byte)'2' &&
-                (data[8] == (byte)'-' ? 
-                (data[17] == (byte)1) :         // version 1
-                true));                                        // version "0" -- who knows what value data[17] would be
-        return val;
-        }
-
     // These are the keys in the model which will be queried, in order, to emit the model
     // to our fake Sysex file and parse it back in.
     public static final String[] sysexKeys = 
@@ -2041,7 +2015,7 @@ public class PreenFM2 extends Synth
         newModel.set("number", number);
         return newModel;
         }
-    public int getBulkDownloadWaitTime() { return 1000; }
+    public int getBatchDownloadWaitTime() { return 1000; }
 
     public String getPatchLocationName(Model model)
         {

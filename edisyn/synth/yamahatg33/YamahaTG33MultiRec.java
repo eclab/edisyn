@@ -10,7 +10,7 @@ public class YamahaTG33MultiRec extends Recognize
     {
     public static boolean recognize(byte[] data)
         {
-        return  ((
+        return  (
                 data[0] == (byte)0xF0 &&
                 data[1] == (byte)0x43 &&
                 // don't care about 2, it's the id
@@ -24,8 +24,6 @@ public class YamahaTG33MultiRec extends Recognize
                 data[12] == (byte)'1' &&
                 data[13] == (byte)'2' &&
                 data[14] == (byte)'M' &&
-                data[15] == (byte)'E')
-//            || recognizeBulk(data)
-            );
+                data[15] == (byte)'E');
         }
     }

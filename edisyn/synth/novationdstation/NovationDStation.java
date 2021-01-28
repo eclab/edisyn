@@ -1,5 +1,5 @@
 /***
-    Copyright 2017 by Sean Luke
+    Copyright 2020 by Sean Luke
     Licensed under the Apache License version 2.0
 */
 
@@ -894,30 +894,6 @@ public class NovationDStation extends Synth
         int p = param.intValue();
         
         return buildCC(getChannelOut(), p, model.get(key));
-        }
-
-    public static boolean recognize(byte[] data)
-        {
-        return (data.length == 288 &&
-            data[0] == (byte)0xF0 &&
-            data[1] == 0x00 &&
-            data[2] == 0x20 &&
-            data[3] == 0x29 &&
-            data[4] == 0x02 &&
-            data[5] == 0x01 &&
-            data[6] == 0x22) || recognizeBulk(data);
-        }
-
-    public static boolean recognizeBulk(byte[] data)
-        {
-        return (data.length == 4104 &&
-            data[0] == (byte)0xF0 &&
-            data[1] == 0x00 &&
-            data[2] == 0x20 &&
-            data[3] == 0x29 &&
-            data[4] == 0x02 &&
-            data[5] == 0x01 &&
-            data[6] == 0x11);
         }
 
     public static String getSynthName() { return "Novation Drumstation / D Station"; }

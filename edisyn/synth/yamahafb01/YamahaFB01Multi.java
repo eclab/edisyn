@@ -720,34 +720,6 @@ public class YamahaFB01Multi extends Synth
         return new byte[] { (byte)0xF0, 0x43, 0x75, (byte)(getID() - 1), 0x20, 0x01, 0x00, (byte)0xF7 }; 
         }
 
-    public static boolean recognize(byte[] data)
-        {
-        return 
-            // current configuration buffer,
-            // see bottom of page 55, user manual
-            (data.length == 8 + 160 + 2 + 1 &&
-            data[1] == 0x43 &&
-            data[2] == 0x75 &&
-            data[4] == 0x00 &&
-            data[5] == 0x01 &&
-            data[6] == 0x00) ||
-            // configuration memory xx
-            // see top of page 56, user manual
-            (data.length == 8 + 160 + 2 + 1 &&
-            data[1] == 0x43 &&
-            data[2] == 0x75 &&
-            data[4] == 0x00 &&
-            data[5] == 0x02) ||
-            // all configuration memory,
-            // see page 56, user manual
-            (data.length == 8 + 16 * (160 + 2 + 1) &&
-            data[1] == 0x43 &&
-            data[2] == 0x75 &&
-            data[4] == 0x00 &&
-            data[5] == 0x03 &&
-            data[6] == 0x00);
-        }
-     
     public static final int MAXIMUM_NAME_LENGTH = 8;
     public String revisePatchName(String name)
         {

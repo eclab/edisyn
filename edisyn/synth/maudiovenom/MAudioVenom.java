@@ -1867,19 +1867,19 @@ public class MAudioVenom extends Synth
     // emits but we're ignoring that of course.  Ranges are always 0-127 for CC, or 0-16383 for 14-bit CC,
     // unless indicated otherwise.  NRPN ranges are as indicated and always MSB only.
     //
-    //                                               COLUMNS 
-    //                      1               2               3               4               5
-    //              +----------------------------------------------------------------------------------------------------
-    //    1 |       3/35*   71              103             104             70 (range 0-6)
-    // R  2 |       50              51              30/62*  31/63*  NRPN 17D, NRPN 17E, or BOTH (MSB ONLY OFF:<=63 ON:>64) ***
-    // O  3 |       20              22              23              24              NRPN 16A (MSB ONLY OFF:<=63 ON:>64)
-    // W  4 |       73              75              79              72              126 ON vs. 127 ON **
-    // S  5 |       86              14              15              5               65
-    //    6 |       7               10              91              93              NRPN 120 (range 0-5 MSB ONLY)
+    //                        COLUMNS 
+    //          1       2        3        4      5
+    //      +----------------------------------------------------------------------------------------------------
+    //    1 |   3/35*  71      103      104      70 (range 0-6)
+    // R  2 |  50      51       30/62*   31/63*  NRPN 17D, NRPN 17E, or BOTH (MSB ONLY OFF:<=63 ON:>64) ***
+    // O  3 |  20      22       23       24      NRPN 16A (MSB ONLY OFF:<=63 ON:>64)
+    // W  4 |  73      75       79       72      126 ON vs. 127 ON **
+    // S  5 |  86      14       15        5      65
+    //    6 |   7      10       91       93      NRPN 120 (range 0-5 MSB ONLY)
     //
-    //       * 14-bit CC, sent as LSB and MSB, perhaps separately
-    //  ** Either 126 is sent OR 127 is sent to counter each other
-    // *** NRPN 17D is turned ON and 17E is turned OFF, or the opposite, or both on, or both off (4 possibilities)
+    //      * 14-bit CC, sent as LSB and MSB, perhaps separately
+    //     ** Either 126 is sent OR 127 is sent to counter each other
+    //    *** NRPN 17D is turned ON and 17E is turned OFF, or the opposite, or both on, or both off (4 possibilities)
     //
 
     public void handleSynthCCOrNRPN(Midi.CCData data)
@@ -2285,15 +2285,6 @@ public class MAudioVenom extends Synth
         {
         super.performRequestCurrentDump();
         switchScreen();
-        }
-
-    /// This switches the screen when we send to a curent dump but don't change the patch
-    public void sendAllParameters()
-        {
-        super.sendAllParameters();
-        if (!getSendMIDI())
-            return;  // don't bother!  MIDI is off
-//        switchScreen();
         }
 
 

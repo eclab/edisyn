@@ -990,21 +990,6 @@ public class WaldorfMicrowaveXTMulti extends Synth
         return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x01, 0x20, 0x00, (byte)((0x20 + 0x00)&127), (byte)0xF7 };
         }
 
-    public static boolean recognize(byte[] data)
-        {
-        // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
-        // format example, it's written as 0x11.  It's actually 0x11.
-                
-        boolean v = (
-            data.length == EXPECTED_SYSEX_LENGTH &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x3E &&
-            data[2] == (byte)0x0E &&
-            data[4] == (byte)0x11);
-        return v;
-        }
-        
-    
     public static final int EXPECTED_SYSEX_LENGTH = 265;
         
         
@@ -1179,7 +1164,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
         return newModel;
         }
 
-    public int getBulkDownloadWaitTime() { return 1000; }
+    public int getBatchDownloadWaitTime() { return 1000; }
 
     public String getPatchLocationName(Model model)
         {

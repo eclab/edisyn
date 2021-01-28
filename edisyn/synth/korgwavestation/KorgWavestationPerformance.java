@@ -4804,12 +4804,8 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         return PARSE_SUCCEEDED;     
         }
     
-/*
-  public boolean getSendsAllParametersInBulk()
-  {
-  return sendWavestationParametersInBulk;
-  }
-*/
+    public static final int EXPECTED_SYSEX_LENGTH = 371;
+
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         if (tempModel == null)
@@ -5008,28 +5004,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         }
     
     
-    public static final int EXPECTED_SYSEX_LENGTH = 371;
-    public static boolean recognize(byte[] data)
-        {
-        return ((data.length == EXPECTED_SYSEX_LENGTH &&
-                data[0] == (byte)0xF0 &&
-                data[1] == (byte)0x42 &&
-                data[3] == (byte)0x28 &&
-                data[4] == (byte)0x49)
-            
-            || recognizeBulk(data));              
-        }
-    
-    public static boolean recognizeBulk(byte[] data)
-        {
-        return ((data.length == 18108 &&
-                data[0] == (byte)0xF0 &&
-                data[1] == (byte)0x42 &&
-                data[3] == (byte)0x28 &&
-                data[4] == (byte)0x4D));
-            
-        }    
-    
+
     /////// OTHER ABSTRACT METHODS
     
     public boolean gatherPatchInfo(String title, Model change, boolean writing)

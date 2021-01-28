@@ -1357,7 +1357,7 @@ public class YamahaTG33 extends Synth
     ////
     //// 1. The SY22 and SY35 differ in their AWM waves
     //// 2. The TG33 differs from the SY22 and SY85 in its sysex voice common section, which is more detailed
-    //// 3. The TG33 also has three unknown bits marked in its voice-1 bulk sysex documentation: DRM (at byte 0),
+    //// 3. The TG33 also has three unknown bits marked in its voice-1 bank sysex documentation: DRM (at byte 0),
     ////    MAX (at bytes 30, 51, and so on), and PIT -WHEEL- TYP (at byte 15).  I have heard people say that 
     ////    MAX limits the envelope to the maximum volume, and not in a good way, but it's not documented anywhere.
     ////    DRM is entirely unknown.  PIT -WHEEL- TYP is also entirely unknown.
@@ -1366,7 +1366,7 @@ public class YamahaTG33 extends Synth
     //// 5. A number of parameters are 2's complement.  :-(
     //// 6. Several parameters are 2's complement *and* smaller than a byte.
     //// 7. The send-one-parameter sysex commands send the parameters in their shifted positions as prepared for
-    ////    bulk sends.  This is bad for edisyn as it means we have to convert them from simple ordinal values
+    ////    bank sends.  This is bad for edisyn as it means we have to convert them from simple ordinal values
     ////    like 0, 1, 2, 3 to stuff like 0x00, 0x20, 0x40, and whatnot.  On top of it a few of these are also
     ////    2's complement on top of it.
     //// 8. Several parameters are inverted for no reason.  That is, for a desired x value you actually store 127-x.
@@ -1374,8 +1374,8 @@ public class YamahaTG33 extends Synth
     //// 10. The TG33 alone can do single-parameter sends, but the commands for sending individual Modulation
     ////     portion FM parameters is unknown.  
     //// 11. Names change radically from one synth to the other with no explanation.  In fact in the TG33 manual
-    ////     names change from the single-parameter section to the bulk-send section (such as "MODULATION WHEEL PM" to
-    ////     "PIT -WHEEL- PM", what the...).  A great many names in the bulk-send section are cryptic.
+    ////     names change from the single-parameter section to the bank-send section (such as "MODULATION WHEEL PM" to
+    ////     "PIT -WHEEL- PM", what the...).  A great many names in the bank-send section are cryptic.
     //// 12. Some parameters, or groups of parameters, are 2-bytes and others are 1-byte.  And the explanations and
     ////     instructions regarding the are cryptic.  The TG-33 is slightly better described.  The SY-35 sysex is completely
     ////     wrong in its byte numbering.
@@ -1384,7 +1384,7 @@ public class YamahaTG33 extends Synth
         
         
     /// These four maps convert Edisyn values (0, 1, 2, ...) into the actual values for send(key).  They're also used in the
-    /// bulk send but often are immediately counteracted (by dividing by 16 etc.).  This is just for my own debugging sanity.
+    /// bank send but often are immediately counteracted (by dividing by 16 etc.).  This is just for my own debugging sanity.
                 
     static final byte[] AFTERTOUCH_SENSITIVITY_MAP =  new byte[] { 0x50, 0x60, 0x70, 0x00, 0x10, 0x20, 0x30 };
     static final byte[] VELOCITY_SENSITIVITY_MAP = new byte[] { 0x06, 0x07, 0x08, 0x09, 0x0A, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05 };
@@ -1632,17 +1632,17 @@ public class YamahaTG33 extends Synth
         }
 
 
-    // For the time being, we're just doing single-patch parses, not bulk parses.
+    // For the time being, we're just doing single-patch parses, not bank parses.
     // They're different for different synths.  Maybe later.
     public int parse(byte[] data, boolean fromFile)
         {
-        if (recognizeBulk(data))
-            return parseBulk(data, fromFile);
+        if (YamahaTG33Rec.recognizeBank(data))
+            return parseBank(data, fromFile);
         else
             return parseOne(16, data, fromFile);
         }
 
-    // Bulk data is stored as 14 bytes of header,
+    // Bank data is stored as 14 bytes of header,
     // plus 16 blobs of 4 patches each.
     // Each blob is 2 bytes size, then 4 patches concatenated, then 1 byte checksum
     // For Sy22 and SY35 there's also multi data stored afterwards
@@ -1656,13 +1656,13 @@ public class YamahaTG33 extends Synth
     // Total size for SY (including multi data) is 38306
         
     int[] blobs = new int[16];
-    public int parseBulk(byte[] data, boolean fromFile)
+    public int parseBank(byte[] data, boolean fromFile)
         {
         //      Extract names
         String[] names = new String[64];
         int[] patches = new int[64];
                 
-        boolean isTG = recognizeTGBulk(data);
+        boolean isTG = YamahaTG33Rec.recognizeTGBank(data);
                 
         int pos = 14;
         for(int i = 0; i < 16; i++)
@@ -1747,7 +1747,7 @@ public class YamahaTG33 extends Synth
 
     public JComponent getAdditionalBankSysexOptionsComponents(byte[] data, String[] names)
         {
-        if (recognizeTGBulk(data))
+        if (YamahaTG33Rec.recognizeTGBank(data))
             {
             VBox vbox = new VBox();
             vbox.add(Strut.makeVerticalStrut(10));
@@ -1780,7 +1780,7 @@ public class YamahaTG33 extends Synth
         
         if (isParsingVectorOnly)
             {
-            if (recognizeTG(data))
+            if (YamahaTG33Rec.recognizeTG(data))
                 pos += 0xBB;
             else
                 pos += 174;             // 0xBB - 13.  The difference in Voice common lengths is 13
@@ -1788,7 +1788,7 @@ public class YamahaTG33 extends Synth
         else
             {        
             //// COMMON
-            if (recognizeTG(data) || recognizeTGBulk(data))
+            if (YamahaTG33Rec.recognizeTG(data) || YamahaTG33Rec.recognizeTGBank(data))
                 {
                 b = data[pos++];
                 model.set("configuration", (b >>> 0) & 1);              // "2/4"
@@ -1977,7 +1977,7 @@ public class YamahaTG33 extends Synth
         b = data[pos++];
         model.set(t + "decay2level", 127 - ((b >>> 0) & 127));          // EG D2L
         
-        if (recognizeTG(data) || recognizeTGBulk(data))
+        if (YamahaTG33Rec.recognizeTG(data) || YamahaTG33Rec.recognizeTGBank(data))
             {
             pos += 2;
             }
@@ -2104,7 +2104,7 @@ public class YamahaTG33 extends Synth
         b = data[pos++];
         model.set(t + "0decay2level", 127 - ((b >>> 0) & 127));         // C EG D2L             pos += 2;
 
-        if (recognizeTG(data) || recognizeTGBulk(data))
+        if (YamahaTG33Rec.recognizeTG(data) || YamahaTG33Rec.recognizeTGBank(data))
             {
             pos += 2;
             }
@@ -2502,109 +2502,6 @@ public class YamahaTG33 extends Synth
             }
         }
 
-    public static boolean recognizeSY(byte[] data)
-        {
-        return  ((
-                data.length == 592 && 
-                data[0] == (byte)0xF0 &&
-                data[1] == (byte)0x43 &&
-                // don't care about 2, it's the id
-                data[3] == (byte)0x7E &&
-                // don't care about 4, it's the MSB of the data length
-                // dont' care about 5, it's the LSB of the data length
-                data[6] == (byte)'P' &&
-                data[7] == (byte)'K' &&
-                data[8] == (byte)' ' &&
-                data[9] == (byte)' ' &&
-                data[10] == (byte)'2' &&
-                data[11] == (byte)'2' &&
-                data[12] == (byte)'0' &&
-                data[13] == (byte)'3' &&
-                data[14] == (byte)'A' &&
-                data[15] == (byte)'E')
-            );
-        }
-
-    public static boolean recognizeTG(byte[] data)
-        {
-        return  ((
-                data.length == 15 + (587 + 3)  && 
-                data[0] == (byte)0xF0 &&
-                data[1] == (byte)0x43 &&
-                // don't care about 2, it's the id
-                data[3] == (byte)0x7E &&
-                // don't care about 4, it's the MSB of the data length
-                // dont' care about 5, it's the LSB of the data length
-                data[6] == (byte)'L' &&
-                data[7] == (byte)'M' &&
-                data[8] == (byte)' ' &&
-                data[9] == (byte)' ' &&
-                data[10] == (byte)'0' &&
-                data[11] == (byte)'0' &&
-                data[12] == (byte)'1' &&
-                data[13] == (byte)'2' &&
-                data[14] == (byte)'V' &&
-                data[15] == (byte)'E')
-            );
-        }
-
-
-    public static boolean recognizeSYBulk(byte[] data)
-        {
-        return  ((
-                data.length == 38306 &&                         // includes multi :-(
-                data[0] == (byte)0xF0 &&
-                data[1] == (byte)0x43 &&
-                // don't care about 2, it's the id
-                data[3] == (byte)0x7E &&
-                // don't care about 4, it's the MSB of the data length
-                // dont' care about 5, it's the LSB of the data length
-                data[6] == (byte)'P' &&
-                data[7] == (byte)'K' &&
-                data[8] == (byte)' ' &&
-                data[9] == (byte)' ' &&
-                data[10] == (byte)'2' &&
-                data[11] == (byte)'2' &&
-                data[12] == (byte)'0' &&
-                data[13] == (byte)'3' &&
-                data[14] == (byte)'V' &&
-                data[15] == (byte)'M')
-            );
-        }
-
-    public static boolean recognizeTGBulk(byte[] data)
-        {
-        return  ((
-                data.length == 37631  && 
-                data[0] == (byte)0xF0 &&
-                data[1] == (byte)0x43 &&
-                // don't care about 2, it's the id
-                data[3] == (byte)0x7E &&
-                // don't care about 4, it's the MSB of the data length
-                // dont' care about 5, it's the LSB of the data length
-                data[6] == (byte)'L' &&
-                data[7] == (byte)'M' &&
-                data[8] == (byte)' ' &&
-                data[9] == (byte)' ' &&
-                data[10] == (byte)'0' &&
-                data[11] == (byte)'0' &&
-                data[12] == (byte)'1' &&
-                data[13] == (byte)'2' &&
-                data[14] == (byte)'V' &&
-                data[15] == (byte)'C')
-            );
-        }
-    
-    public static boolean recognize(byte[] data)
-        {
-        return (recognizeTG(data) || recognizeSY(data) || recognizeBulk(data));
-        }
-
-
-    public static boolean recognizeBulk(byte[] data)
-        {
-        return  (recognizeTGBulk(data) || recognizeSYBulk(data));
-        } 
                
     public static final int MAXIMUM_NAME_LENGTH = 8;
     public String revisePatchName(String name)

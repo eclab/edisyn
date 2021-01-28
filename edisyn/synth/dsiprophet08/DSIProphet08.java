@@ -78,6 +78,11 @@ public class DSIProphet08 extends Synth
     public static final int LOAD_B = 2;
     int load = LOAD_BOTH;
     
+    // JComponents
+    JComponent oscPanelB;
+    JComponent modPanelB;
+    JComponent seqPanelB;
+    
     boolean sendAssignableParams;
     
     JComboBox synthTypes = new JComboBox(SYNTH_TYPES);
@@ -268,7 +273,7 @@ public class DSIProphet08 extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         soundPanel.makePasteable("layer2");
         soundPanel.setSendsAllParameters(false);
-        addTab("Oscillators and Filters B", soundPanel);
+        addTab("Oscillators and Filters B", oscPanelB = soundPanel);
                 
                         
         
@@ -301,7 +306,7 @@ public class DSIProphet08 extends Synth
 
         modulationPanel.add(vbox, BorderLayout.CENTER);
         modulationPanel.makePasteable("layer2");
-        addTab("Modulation B", modulationPanel);
+        addTab("Modulation B", modPanelB = modulationPanel);
 
         
 
@@ -315,7 +320,7 @@ public class DSIProphet08 extends Synth
         
         sequence.add(vbox, BorderLayout.CENTER);
         sequence.makePasteable("layer2");
-        addTab("Sequencer B", sequence);
+        addTab("Sequencer B", seqPanelB = sequence);
 
 
 
@@ -428,6 +433,17 @@ public class DSIProphet08 extends Synth
             public void actionPerformed(ActionEvent e)
                 {
                 setType(synthTypes.getSelectedIndex(), true);
+                removeTab("Oscillators and Filters B");
+                removeTab("Modulation B");
+                removeTab("Sequencer B");
+                
+				int t = getType();
+				if (t == SYNTH_TYPE_PROPHET_08 || t == SYNTH_TYPE_TETRA)
+					{
+					insertTab("Oscillators and Filters B", oscPanelB, 3);
+					insertTab("Modulation B", modPanelB, 4);
+					insertTab("Sequencer B", seqPanelB, 5);
+					}
                 }
             });
         synthTypes.putClientProperty("JComponent.sizeVariant", "small");
@@ -2010,30 +2026,6 @@ public class DSIProphet08 extends Synth
         return data;
         }
                 
-    public static boolean recognize(byte[] data)
-        {
-        return ((data.length == 446 &&
-                data[0] == (byte)0xF0 &&
-                data[1] == (byte) 0x01 &&       // DSI
-                (data[2] == PROPHET_08_ID ||  data[2] == TETRA_ID) &&
-                data[3] == (byte) 0x02) ||      // Program Data Dump
-                (data.length == 444 &&
-                data[0] == (byte)0xF0 &&
-                data[1] == (byte) 0x01 &&       // DSI
-                (data[2] == PROPHET_08_ID ||  data[2] == TETRA_ID) &&
-                data[3] == (byte) 0x03) ||      // Edit Buffer Data Dump
-                (data.length == 300 &&
-                data[0] == (byte)0xF0 &&
-                data[1] == (byte) 0x01 &&       // DSI
-                (data[2] == MOPHO_ID || data[2] == MOPHO_KEYBOARD_ID || data[2] == MOPHO_X4_ID) &&
-                data[3] == (byte) 0x02) ||      // Program Data Dump
-                (data.length == 298 &&
-                data[0] == (byte)0xF0 &&
-                data[1] == (byte) 0x01 &&       // DSI
-                (data[2] == MOPHO_ID || data[2] == MOPHO_KEYBOARD_ID || data[2] == MOPHO_X4_ID) &&
-                data[3] == (byte) 0x03));       // Edit Buffer Data Dump        
-        }
-        
     public static final int MAXIMUM_NAME_LENGTH = 16;
     public String revisePatchName(String name)
         {
@@ -2113,6 +2105,20 @@ public class DSIProphet08 extends Synth
         {
         JFrame frame = super.sprout();
         addProphetMenu();
+        
+		removeTab("Oscillators and Filters B");
+		removeTab("Modulation B");
+		removeTab("Sequencer B");
+		
+        int t = getType();
+
+        if (t == SYNTH_TYPE_PROPHET_08 || t == SYNTH_TYPE_TETRA)
+            {
+			insertTab("Oscillators and Filters B", oscPanelB, 3);
+			insertTab("Modulation B", modPanelB, 4);
+			insertTab("Sequencer B", seqPanelB, 5);
+			}
+			
         return frame;
         }         
 

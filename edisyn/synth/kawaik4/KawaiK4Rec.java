@@ -19,10 +19,10 @@ public class KawaiK4Rec extends Recognize
                 (data[6] == (byte)0x00 || data[6] == (byte)0x02) &&
                 (data[7] < (byte)64))  // that is, it's single, not multi
             
-            || recognizeBulk(data));
+            || recognizeBank(data));
         }
         
-    public static boolean recognizeBulk(byte[] data)
+    public static boolean recognizeBank(byte[] data)
         {
         return  ((
                 // Block Single Data Dump (5-9)

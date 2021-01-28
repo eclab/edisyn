@@ -19,7 +19,7 @@ public class YamahaFB01Rec extends Recognize
         return new String(name).trim();
         }
 
-    public static boolean recognizeBulk(byte[] data)
+    public static boolean recognizeBank(byte[] data)
         {
         return 
             // Voice Bank 0, see top of page 55, user manual
@@ -38,7 +38,7 @@ public class YamahaFB01Rec extends Recognize
 
     public static boolean recognize(byte[] data)
         {
-        return recognizeBulk(data) ||
+        return recognizeBank(data) ||
             // Instrument i voice data, see page 57, user manual
             (data.length == 8 + (64 * 2 + 3) &&
             data[0] == (byte)0xF0 &&

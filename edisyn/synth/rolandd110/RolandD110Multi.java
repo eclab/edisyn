@@ -871,16 +871,6 @@ public class RolandD110Multi extends Synth
         return b;
         }
     
-    public static boolean recognize(byte[] data)
-        {
-        return ((data[0] == (byte)0xF0) &&
-            (data[1] == (byte)0x41) &&
-            (data[3] == (byte)0x16) &&
-            (data[4] == (byte)0x12) &&
-            (data[5] == 0x06)) &&  // patches
-            (data.length == 138);
-        }
-                
     public static final int MAXIMUM_NAME_LENGTH = 10;
     public String revisePatchName(String name)
         {
@@ -980,5 +970,5 @@ public class RolandD110Multi extends Synth
             }
         }
         
-    public int getBulkDownloadWaitTime() { return 750; }
+    public int getBatchDownloadWaitTime() { return 750; }
     }

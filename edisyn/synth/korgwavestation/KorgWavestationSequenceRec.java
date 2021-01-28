@@ -35,10 +35,10 @@ public class KorgWavestationSequenceRec extends Recognize
             data[20] == (byte)'Q' &&
             data[21] == (byte)0)
             return true;
-        else return recognizeBulk(data);
+        else return recognizeBank(data);
         }
         
-    public static boolean recognizeBulk(byte[] data)
+    public static boolean recognizeBank(byte[] data)
         {
         boolean b = (data.length == EXPECTED_SYSEX_LENGTH &&
             data[0] == (byte)0xF0 &&

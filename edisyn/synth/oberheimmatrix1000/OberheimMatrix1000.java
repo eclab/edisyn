@@ -1457,17 +1457,18 @@ public class OberheimMatrix1000 extends Synth
         }
     
 
-    public void sendAllParameters()
+    public boolean sendAllParametersInternal()
         {
         if (m1000)
             {
-            super.sendAllParameters();
+            return super.sendAllParametersInternal();
             }
         else            // PC and write to scratch patch 99
             {
             changePatch(0, 99);             // Patch 99 is our scratch patch for the Matrix 6/64
             simplePause(getPauseAfterChangePatch());
             tryToSendMIDI(emitAll(model, true, false));
+            return true;
             }
         }
 
@@ -1749,24 +1750,7 @@ public class OberheimMatrix1000 extends Synth
         data[6] = (byte)0xF7;
         return data;
         }
-                
-    public static final int EXPECTED_SYSEX_LENGTH = 275;        
-        
-    public static boolean recognize(byte[] data)
-        {
-        boolean v = (
-            // The Matrix 1000 doesn't transmit the checksum!
-            // So it could be one of two lengths:
-                (data.length == EXPECTED_SYSEX_LENGTH ||
-                data.length == EXPECTED_SYSEX_LENGTH - 1) &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x10 &&
-            data[2] == (byte)0x06 &&
-            (data[3] == (byte)0x01 || data[3] == (byte)0x0d));
-        return v;
-        }
-        
-
+                    
     public static final int MAXIMUM_NAME_LENGTH = 8;
     public String revisePatchName(String name)
         {

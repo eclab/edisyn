@@ -10,7 +10,7 @@ public class Yamaha4OpRec extends Recognize
     {
     public static int getNextSysexPatchGroup(byte[][] sysex, int start)
         {
-        if (recognizeBulk(sysex[start]))
+        if (recognizeBank(sysex[start]))
             return start + 1;
                 
         for(int i = start; i < sysex.length; i++)
@@ -31,7 +31,7 @@ public class Yamaha4OpRec extends Recognize
         }
 
 
-    public static boolean recognizeBulk(byte[] data)
+    public static boolean recognizeBank(byte[] data)
         {
         // VMEM
         boolean b = (data.length == 4104 &&
@@ -155,6 +155,6 @@ public class Yamaha4OpRec extends Recognize
         
     public static boolean recognize(byte[] data)
         {
-        return (recognizeBasic(data) != RECOGNIZE_BASIC_NONE) || recognizeBulk(data);
+        return (recognizeBasic(data) != RECOGNIZE_BASIC_NONE) || recognizeBank(data);
         }
     }

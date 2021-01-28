@@ -1912,12 +1912,14 @@ public class MAudioVenomMulti extends Synth
         }
 
     /// This switches the screen when we send to a curent dump but don't change the patch
-    public void sendAllParameters()
+    public boolean sendAllParametersInternal()
         {
-        super.sendAllParameters();
-        if (!getSendMIDI())
-            return;  // don't bother!  MIDI is off
-        switchScreen();
+        boolean val = super.sendAllParametersInternal();
+        if (val)
+        	{
+	        switchScreen();
+	        }
+	    return val;
         }
 
 

@@ -50,13 +50,17 @@ above 110 the Rates turn into MIDI Synced rates in the form of notes.  An explan
 
 <ul>
 
-<li>The final four LFO waveforms (Log Square, Exp Square, Log Up Saw, Exp Up Saw) cannot be changed in real-time: you have to send or write the entire patch for the to take effect.
+<p><li>Changing patches takes quite a long time (about a half second).
+
+<p><li>Also uploading a new patch takes a long time (about 3/4 second).  This will make morphing and hill-climbing painful, as well as loading files and undo/redo.
+
+<li>The final four LFO waveforms (Log Square, Exp Square, Log Up Saw, Exp Up Saw) cannot be changed in real-time: you have to send or write the entire patch for them to take effect.
 
 <p><li>There appear to be some unwritten rules about using Mod1Amount ... Mod16Amount as destinations in your modulation matrix.  
 <ol>
 <li>A slot cannot have itself as a destination (so slot 5 can't have Mod5Amount as its destination).
-<p><li>If a slot is presently serving as a destination of another slot, it cannot use Mod1Amount ... Mod16Amount.  For example, if slot 5 has Mod6Amount as its destination, then slot 6 cannot use these as its destinations.
-<p><li>Slots 1 and 2 can't have them as destinations at all.
+<p><li>If a slot is presently serving as a destination of another slot, it cannot use Mod1Amount ... Mod16Amount.  For example, if slot 5 has Mod6Amount as its destination, then slot 6 cannot use any of Mod1Amount ... Mod16Amount as its destinations.
+<p><li>Slots 1 and 2 can't use Mod1Amount ... Mod16Amount as destinations at all.
 </ol>
 
 Edisyn does not enforce these, though it tries to not violate them on mutation/recombination and randomization.  It's up to you to not manually break these rules.
@@ -70,10 +74,6 @@ Edisyn does not enforce these, though it tries to not violate them on mutation/r
 <p><li>Vyzex does not support it, but the Venom's Sysex permits LFO 3 to have an Attack, Decay, and Phase.  These may or may not be implemented in the Venom, but Edisyn includes them just in case.
 
 <p><li>Vyzex lists many waveforms for the Venom's LFOs, but it is possible that only the first 8 actually have any effect (that is, up through Logarithmic Sample and Hold).  Edisyn includes them just in case.
-
-<p><li>Changing patches takes quite a long time (about a half second).
-
-<p><li>Also uploading a new patch takes a long time (about 3/4 second).  This will make morphing and hill-climbing painful, as well as loading files and undo/redo.
 
 <p><li>The Venom's sysex documentation indicates that you can set the Venom's Synth ID.  But to my knowledge this does not actually exist.  If it does, please let me know.  By default Edisyn is hard-coded to use 0.
 

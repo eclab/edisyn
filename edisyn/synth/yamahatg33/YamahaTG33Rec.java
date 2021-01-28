@@ -55,7 +55,7 @@ public class YamahaTG33Rec extends Recognize
         }
 
 
-    public static boolean recognizeSYBulk(byte[] data)
+    public static boolean recognizeSYBank(byte[] data)
         {
         return  ((
                 data.length == 38306 &&                         // includes multi :-(
@@ -78,7 +78,7 @@ public class YamahaTG33Rec extends Recognize
             );
         }
 
-    public static boolean recognizeTGBulk(byte[] data)
+    public static boolean recognizeTGBank(byte[] data)
         {
         return  ((
                 data.length == 37631  && 
@@ -103,13 +103,13 @@ public class YamahaTG33Rec extends Recognize
     
     public static boolean recognize(byte[] data)
         {
-        return (recognizeTG(data) || recognizeSY(data) || recognizeBulk(data));
+        return (recognizeTG(data) || recognizeSY(data) || recognizeBank(data));
         }
 
 
-    public static boolean recognizeBulk(byte[] data)
+    public static boolean recognizeBank(byte[] data)
         {
-        return  (recognizeTGBulk(data) || recognizeSYBulk(data));
+        return  (recognizeTGBank(data) || recognizeSYBank(data));
         } 
                
     }

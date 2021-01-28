@@ -692,7 +692,7 @@ public class KawaiK1 extends Synth
 
 
     // The K1 can't send to temporary memory
-    public boolean getSendsAllParametersInBulk() { return sendKawaiParametersInBulk; }
+    public boolean getSendsAllParametersAsDump() { return sendKawaiParametersInBulk; }
 
     public Object[] emitAll(String key)
         {
@@ -1045,9 +1045,9 @@ public class KawaiK1 extends Synth
         return 70;
         }
         
-    public void sendAllParameters()
+    public boolean sendAllParametersInternal()
         {
-        super.sendAllParameters();
+        boolean val = super.sendAllParametersInternal();
         
         // we change patch to #63 if we're sending in bulk.
         if (sendKawaiParametersInBulk)
@@ -1058,6 +1058,7 @@ public class KawaiK1 extends Synth
             changePatch(tempModel);
             simplePause(getPauseAfterChangePatch());
             }
+        return val;
         }
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
@@ -1224,37 +1225,6 @@ public class KawaiK1 extends Synth
             position, (byte)0xF7};
         }
     
-    public static boolean recognize(byte[] data)
-        {
-        return ((data.length == EXPECTED_SYSEX_LENGTH) &&
-            (data[0] == (byte)0xF0) &&
-            (data[1] == (byte)0x40) &&
-            (data[3] == (byte)0x20) &&
-            (data[4] == (byte)0x00) &&
-            (data[5] == (byte)0x03) &&  // K1
-            (data[6] == (byte)0x00 || data[6] == (byte)0x01) &&
-            (data[7] < (byte)64)  // that is, it's single, not multi
-
-            || recognizeBulk(data));
-        }
-        
-    public static boolean recognizeBulk(byte[] data)
-        {
-        return (
-            // Block Multi Data Dump (5-9)
-            
-            data.length == 2825 &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x40 &&
-            // don't care about 2, it's the channel
-            data[3] == (byte)0x21 &&    // block
-            data[4] == (byte)0x00 &&
-            data[5] == (byte)0x03);
-        // don't care about 6, we'll use it later
-        // don't care about 7, we'll use it later
-        } 
-
-
     public static final int EXPECTED_SYSEX_LENGTH = 97;        
     
     

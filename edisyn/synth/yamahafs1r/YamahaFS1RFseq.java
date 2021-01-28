@@ -2489,18 +2489,6 @@ public class YamahaFS1RFseq extends Synth
             };
         }
 
-    public static boolean recognize(byte[] data)
-        {
-        return ((
-                (data.length == 11 + 32 + 50 * 128) ||
-            (data.length == 11 + 32 + 50 * 256) ||
-            (data.length == 11 + 32 + 50 * 384) ||
-            (data.length == 11 + 32 + 50 * 512)) &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x43 &&
-            data[3] == (byte)0x5E);
-        }
-               
     public static final int MAXIMUM_NAME_LENGTH = 8;
     public String revisePatchName(String name)
         {
@@ -2615,8 +2603,8 @@ public class YamahaFS1RFseq extends Synth
 
 
     // The FS1R is VERY slow to respond and also queues up responses (beware!)
-    public int getBulkDownloadWaitTime() { return 3000; }
-    public int getBulkDownloadFailureCountdown() { return 5; }
+    public int getBatchDownloadWaitTime() { return 3000; }
+    public int getBatchDownloadFailureCountdown() { return 5; }
     }
 
 

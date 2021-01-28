@@ -42,22 +42,6 @@ public class KorgMicroKorgVocoder extends KorgMicroKorg
         return super.addGeneral(true, color);
         }
         
-    public static boolean recognize(byte[] data)
-        {
-        boolean v = (
-            data.length == EXPECTED_SYSEX_LENGTH &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x42 &&
-            data[3] == (byte)0x58 &&
-            data[4] == (byte)0x40);
-        if (v == false) return false;
-        
-        // now decode.  Are we synth or vocoder?
-        data = convertTo8Bit(data, 5);
-        int voicemode = (data[16] >>> 4) & 3;
-        return (voicemode == 3);  // vocoder
-        }
-
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {

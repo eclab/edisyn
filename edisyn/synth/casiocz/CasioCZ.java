@@ -198,6 +198,19 @@ public class CasioCZ extends Synth
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JComboBox bank = new JComboBox(BANKS);
+        
+        // figure bank
+        int mb = model.get("bank", 0);
+        int b = Synth.getLastXAsInt("lastbank", getSynthNameLocal(), -1, true);
+        if (b == 12)	// CZ230S Writable Bank
+        	{
+        	bank.setSelectedIndex(b);
+        	}
+        else
+        	{
+        	bank.setSelectedIndex(mb);
+        	}
+        
         int num = model.get("number") + 1;
         JTextField number = new JTextField("" + num, 3);
         
@@ -251,6 +264,7 @@ public class CasioCZ extends Synth
                         
             change.set("bank", i);
             change.set("number", n);
+        	Synth.setLastX("" + i, "lastbank", getSynthNameLocal(), true);
                         
             return true;
             }
@@ -372,7 +386,6 @@ public class CasioCZ extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
         }
@@ -493,9 +506,15 @@ public class CasioCZ extends Synth
         EnvelopeDisplay disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, envelope + "rate1", envelope + "rate2", envelope + "rate3", envelope + "rate4", envelope + "rate5", envelope + "rate6", envelope + "rate7", envelope + "rate8",  },
             new String[] { null, envelope + "level1", envelope + "level2", envelope + "level3", envelope + "level4", envelope + "level5", envelope + "level6", envelope + "level7", envelope + "level8",  },
-            new double[] { 0, 1.0 / 99.0 / 8, 1.0 / 99.0 / 8, 1.0 / 99.0 / 8, 1.0 / 99.0 / 8, 1.0 / 99.0 / 8, 1.0 / 99.0 / 8, 1.0 / 99.0 / 8, 1.0 / 99.0 / 8 },
+            new double[] { 0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0 },
             new double[] { 0, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel })
             {
+            public void postProcess(double[] xVals, double[] yVals)
+                {
+                // The CZ uses 99 for SHORT and 0 for LONG, weird
+                for(int i = 1; i < 9; i++)
+                    xVals[i] = 1.0 / 8 - xVals[i];
+                }
             public int postProcessLoopOrStageKey(String key, int val)
                 {
                 if (key.equals(envelope + "end"))
@@ -1050,40 +1069,6 @@ public class CasioCZ extends Synth
         return PARSE_SUCCEEDED;
         }
         
-                        
-    public static boolean recognize(byte[] data)
-        {
-        // We need to recognize four formats
-        
-        // F0 44 00 00 7N 20 DD [BREAK] [256 bytes] F7
-        // Receive Request from CZ-101/1K/3K/5K
-        // N = Channel
-        // DD = memory bank
-
-        // F0 44 00 00 7N 21 DD [BREAK] [288 bytes] F7
-        // Receive Request from CZ-1
-        // N = Channel
-        // DD = memory bank
-
-        // These two may be in response to me doing a send, so we need to interept them as well
-
-        // F0 44 00 00 7N 30 [BREAK] [256 bytes] F7
-        // Send Request from CZ-101/1K/3K/5K
-        // N = Channel
-        
-        // F0 44 00 00 7N 30 [BREAK] [288 bytes] F7
-        // Send Request from CZ-1               // Note identical, but longer
-        // N = Channel
-        
-
-        return (
-            data[1] == 0x44 &&
-            data[2] == 0x00 &&
-            data[3] == 0x00 &&
-            (data[4] >= 0x70 && data[4] <= 0x7F) &&
-            (data[5] == 0x20 || data[5] == 0x21 || data[5] == 0x30));
-        }
-
     public String getPatchLocationName(Model model)
         {
         return BANKS[model.get("bank", 0)] + (model.get("number", 0) + 1);
@@ -1150,7 +1135,7 @@ public class CasioCZ extends Synth
         {
         if (tempModel == null) 
             tempModel = model;
-        
+            
         byte[] data = (isCZ1() ? new byte[8 + 144 * 2] : new byte[8 + 128 * 2]);
         
         data[0] = (byte)0xF0;
@@ -1160,7 +1145,7 @@ public class CasioCZ extends Synth
         data[4] = (byte)(0x70 | getChannelOut());
         data[5] = (byte)(isCZ1() ? 0x21 : 0x20);
         data[6] = (byte)(toWorkingMemory ? 0x60 : (byte)(tempModel.get("bank") * 8 + tempModel.get("number")));
-
+        
         int pos = 7;
         int val;
         int low;

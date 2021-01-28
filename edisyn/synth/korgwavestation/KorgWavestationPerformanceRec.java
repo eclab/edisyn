@@ -17,10 +17,10 @@ public class KorgWavestationPerformanceRec extends Recognize
                 data[3] == (byte)0x28 &&
                 data[4] == (byte)0x49)
             
-            || recognizeBulk(data));              
+            || recognizeBank(data));              
         }
     
-    public static boolean recognizeBulk(byte[] data)
+    public static boolean recognizeBank(byte[] data)
         {
         return ((data.length == 18108 &&
                 data[0] == (byte)0xF0 &&

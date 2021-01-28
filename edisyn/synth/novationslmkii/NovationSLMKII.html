@@ -1,0 +1,69 @@
+<html><head></head>
+<body>
+
+<h1>Novation ReMOTE SL Mk II</h1> 
+<h2>Single Patch Editor</h2>
+
+<p>This patch editor should work with any Novation ReMOTE SL Mk II, including the Zero.  I do not know if it works with the original Novation ReMOTE SL series but there's a good chance it does.  It likely does not work with the Compact series, though with some modifications it might be made to work.
+
+<br><br><h3>Communicating with Edisyn</h3>
+Connect to your SL's Port 1 for both the send and receive device.  I'd use USB.
+
+<br><br><h3>Sending Receiving a Patch to the SL</h3>
+The SL has limited sysex options.  Edisyn cannot request a patch (a "template") from the SL -- instead you must manually send Edisyn the patch from the unit.  
+
+<p>If you <b>Send to Current Patch</b> from Edisyn, it will upload the patch to the SL without a patch (template) number.  You'll then have to save it on the unit directly.  If you <b>Write to Patch...</b>, it'll save it directly at the patch number.
+
+<p>Individual parameters cannot be sent.  You have to send a whole patch.
+
+<br><br><h3>About the Buttons</h3>
+Edisyn marks the buttons as A, B, C, D, and Transport.  They are:
+
+<ul>
+<li><b>Buttons A (1-8)</b>&nbsp;&nbsp; Top Left
+<li><b>Buttons B (9-16)</b>&nbsp;&nbsp; Bottom Left
+<li><b>Buttons C (17-24)</b>&nbsp;&nbsp; Top Right
+<li><b>Buttons D (25-32)</b>&nbsp;&nbsp; Bottom Right
+<li><b>Transport</b>&nbsp;&nbsp;Rewind, Fast Forward, Stop, Play, Loop, and Record
+</ul>
+
+<p>Because it has nowhere else to go, the Cross-Fader is lumped in with the Transport buttons.
+
+
+<br><br><h3>Differences with Novation's SLMkII Editor</h3>
+
+Novation's editor has a lot of missing features and serious bugs.  Edisyn tries to be compatible with the SL, not the editor. For example:
+
+<ul>
+<li>The Novation editor sends invalid data regarding ports to the SL which corrupts its responses later.
+<p><li>There are serious, grievous errors in how sysex DV position is determined.
+<p><li> "DV" doesn't work properly for 16-bit encoders -- only one DV is inserted instead of two.
+<p><li>Novation's editor is missing Roland, MSB-LSB, and LSB-MSB options for sysex.
+<p><li>Novation's editor allows template (patch) positions to go to 40 when they should only go to 32.
+<p><li>Novation's editor is missing Realtime, Template, and Bank Change options for buttons.
+<p><li>Novation's editor shows default values, but the unit does not (this might be a bug on the unit, it's not clear).
+<p><li>Novation's editor is missing the crossfader.
+</ul>
+
+Edisyn tries to remedy these errors.
+
+<br><br><h3>Gotchas</h3>
+
+<ul>
+<li>For certain good reasons, you'll find that a few of Edisyn's pop-up menu options are ordered differently than you'd find on the unit or on the original Novation editor.
+
+<p><li>This editor can't edit automap templates: but they're dead now anyway.
+
+<p><li>I've stil not found any way to assign useful values to the Automap/Learn/View/User/Fx/Inst/Mixer buttons.  Now that Automap is gone, they're probably basically dead.
+
+</ul>
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>February 2021
+</table>
+

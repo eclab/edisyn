@@ -125,7 +125,7 @@ I believe that the following should work:
 
 1. [Download and install at least Java 11](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  The JRE should work fine, but if Oracle is no longer offering the JRE, install the JDK (which installs a JRE among other gunk).
 
-2. Download Edisyn's jar file, called [edisyn.jar](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar), presently located in the "jar" directory.
+2. Download Edisyn's jar file, called [edisyn.jar](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
 
 3. Double-click on edisyn.jar to launch Edisyn.
 
@@ -154,7 +154,7 @@ When you double-click on a jar file, Windows may not launch Java properly becaus
 
 I'm told that Edisyn works fine if you have installed at least Java 8.  After this:
 
-1. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar) located in the "jar" directory.
+1. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
 
 2. You'll need to figure out how to make it so that double-clicking on the jar file launches it in java.  In Ubuntu, here's what you do: right-click on the jar file icon and choose "Properties".  Then select the "Open With" tab, and select your Java VM (for example "Open JDK Java 8 Runtime").  The press "Set as Default".  This makes the Java VM the default application to launch jar files.
 
@@ -168,7 +168,7 @@ If you want to use Edisyn in combination with a DAW, see the manual's section on
 
 1. Make sure Java is installed.
 
-2. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar) located in the "jar" directory.
+2. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
 
 3. Run Edisyn as:   `java -jar edisyn.jar`
 

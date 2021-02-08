@@ -20,6 +20,16 @@
 \usepackage{algorithm}
 \usepackage{multicol}
 \usepackage{ragged2e}
+\usepackage[svgnames]{xcolor}
+\usepackage[hyperfootnotes=false,linktocpage=true,linkbordercolor={0.5 0 0}]{hyperref}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}%%% Note that to avoid a link being created from \pageref, just use \pageref*
+%%% End hyperref stuff
+
 
 \sloppy
 \newcommand\ignore[1]{}
@@ -33,7 +43,7 @@
 By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 
 \vspace{-1em}
-\setcounter{tocdepth}{1}
+\setcounter{tocdepth}{2}
 \tableofcontents
 
 \clearpage
@@ -41,7 +51,7 @@ By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 %\vspace{0.5em}
 \section{About Edisyn}
 
-Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter exploration of a variety of synthesizers.  It is not skewmorphic or skinnable: its design is plain and consistent, though you can change the colors.  Edisyn is free open source.  Edisyn currently supports the following synthesizers:
+Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter exploration of a variety of synthesizers.  It is not skeuomorphic or skinnable: its design is plain and consistent, though you can change the colors.  Edisyn is free open source.  Edisyn currently supports the following synthesizers:
 
 {
 \begin{multicols}{2}
@@ -82,7 +92,7 @@ Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter e
 \end{multicols}
 }
 
-You'll note a pattern among these synthesizers: many are very difficult to program.\footnote{So why are the Prophet '08, Blofeld, and Microwave XT there then?  Because in fact these synthesizers are all ones I own or have had access to, so they're there too.}  That's one of my interests.  
+You'll note a pattern among these synthesizers: many are very difficult to program.\footnote{So why are the Prophet '08, Blofeld, Kyra, and Microwave XT there then?  Because in fact these synthesizers are all ones I own or have had access to, so they're there too.}  That's one of my interests.  
 
 Edisyn's patch editors try to cover the most common needs, and so in most cases it does not support patches for global parameters, nor for wave, sample, or wavetable editing\footnote{The Blofeld patch editor only supports wavetable {\it uploading}, not {\it editing}: this is because there's an excellent free wavetable-editing tool available at https:/\!/synthtech.com/waveedit which is better than anything I could possibly write.} etc.  Additionally, though it can do bulk downloads and save them as individual patches, Edisyn is {\bf not at present a librarian tool}.  You should use a good free librarian software program, such as SysEx Librarian on the Mac.
 
@@ -97,7 +107,7 @@ Edisyn's patch editors try to cover the most common needs, and so in most cases 
 \vspace{-3em}\caption{Initial Synthesizer Dialog}\label{initialsynthpanel}
 \end{wrapfigure}
 
-If you're on a Mac, Edisyn will look like a standard application, just double-click on it.  On other platforms, Edisyn comes as a single Java jar file.  Just double-click on the jar file (you'll have to have Java installed) and Edisyn should launch.
+If you're on a Mac, Edisyn will look like a standard application, just double-click on it.  On other platforms, Edisyn comes as a single Java jar file.  Just double-click on the jar file (you'll have to have Java installed) and Edisyn should launch.  See Edisyn's webpage for installation and launching instructions.
 
 You'll first be presented with the dialog at right, asking you to choose a synthesizer patch editor.  You can either select from {\it all} synthesizers available, or from those you have {\it recently} edited with Edisyn (the very most recent one is auto-selected for you). If you can't figure out why the {\it ``All Synths''} option is disabled, try first choosing ``{\it Select another synthesizer...}'' from the ``{\it Recent}'' popup.
 
@@ -161,7 +171,9 @@ At right is a typical tab pane.  You'll note that various widgets are grouped to
 You change values in a Dial by clicking on the dial and dragging vertically.  You can also double-click on a dial to reset it to a default value (often zero).  If the Dial doesn't have the finesse you require to hit an exact value, hold down the {\bf Alt} (or on the Mac, the {\bf Option} key while dragging and you'll get 4\(\times\) the resolution.  Hold down the {\bf Control} key and you'll get 16\(\times\) the resolution. Hold down both keys and you'll get 64\(\times\) the resolution!  Finally, you can  two-finger drag (on the Mac), or spin the mouse wheel to move the value by exactly 1 unit.  
 
 
-\item Some {\bf Checkboxes} (such as ``Portamento'') and {\bf Pop-Up Choosers} or ComboBoxes (such as ``Wave'', set to ``Sawtooth'').  These are should be straightforward.
+\item {\bf Checkboxes} (such as ``Portamento'').  These are should be straightforward.
+
+\item {\bf Pop-Up Choosers} or ComboBoxes (such as ``Wave'', set to ``Sawtooth'').  Ordinarily these work exactly as you expect.  However they have on surprise.  If you select the menu option {\bf Keep Next Popup Open} from the {\bf Map} menu, then the next time you click on a popup-chooser, its menu will stay open even after you have made a selection.  This allows you to try a variety of selections out without having to always reopen the popup menu.  This is particularly useful for large popups, such as for PCM wave samples.  You can get rid of the menu by clicking outside the menu or typing {\it Escape}.  
 
 \item Various {\bf Pictorial Displays}.  Here, changing the ``Algorithm'' dial will modify the Algorithm Display immediately to the right of it.
 
@@ -189,8 +201,7 @@ A patch editor is created by selecting one of the various {\bf New...} menu opti
 
 Whenever you create a new patch editor or duplicate one, you will once again be asked to set up MIDI as discussed in Section \ref{startingedisyn}, or to run in Disconnected Mode.
 
-\subsection{Persistence}
-
+\paragraph{Persistence}
 Now would be a good time to mention an Edisyn feature you may never notice otherwise: many things are {\bf persistent}.  For example, if you choose ``Arturia Beatstep'' as the controller for your Blofeld patch, the next time you call up a Blofeld patch editor, ``Arturia Beatstep'' will be presented as the default choice in the MIDI Devices window, assuming your Arturia Beatstep is plugged in.  This goes for everything in the MIDI Devices window.  Furthermore, if you pop up a new patch editor for a synthesizer you have never edited before, the Arturia Beatstep will be the default option for that one too (until you change it one time).    And these options are per synthesizer type.
 
 Persistence appears in other places too.  For example, the Initial Synthesizer dialog will default to the last synth you chose in that dialog.  Persistence shows up in many other places as well.
@@ -205,28 +216,28 @@ Most patch editor files are sysex dumps ending in the extension {\tt .syx}.  The
 
 Some patch editor files have encoded the sysex dumps as MIDI files (typically ending with the extension {\tt .mid}.  Edisyn can extract sysex from these files as well.
 
-\paragraph{Loading or Receiving a Bulk-Sysex or Bank-Sysex File}
-Edisyn tends to work with files which contain a single patch each.   However many patch files on the internet contain multiple patches.  There are two kinds of files of this type: what I call {\it bulk sysex} files, and {\it bank sysex} files.  
+\subsection{Loading or Receiving a Bulk- or Bank-Sysex File}
+Edisyn tends to work with files which contain a single patch each.   However many patch files on the internet contain multiple patches.  There are two kinds of files of this type: what I call {\bf bulk sysex} files, and {\bf bank sysex} files. 
 
-A {\bf bulk sysex} file is just a bunch of individual patch sysex messages concatenated together\,---\,you could just cut it up into separate single-patch files if you liked.\footnote{This is harder than it sounds: some synthesizer patches consist of not one but several sysex messages as a group, and the number isn't consistent.  Edisyn does its best to sort out what the patches are in the file, but if you get something which looks wrong, send the file to me and let me look at it.}    Bulk sysex files are common in many synthesizers, such as the DSI Prophet '08 or the Yamaha FS1R or the Waldorf Blofeld.  When Edisyn loads a bulk sysex file, it will present you a couple of options: you can {\it select and edit} a single patch from that file, either in the current editor or a new editor, or you can {\it write} (upload) all of the patches in the file to your synthesizer.
+A {\bf bulk sysex} file is just a bunch of individual patch sysex messages concatenated together\,---\,you could just cut it up into separate single-patch files if you liked.\footnote{This is harder than it sounds: some synthesizer patches consist of not one but several sysex messages as a group, and the number isn't consistent.  Edisyn does its best to sort out what the patches are in the file, but if you get something which looks wrong, send the file to me and let me look at it.}    Bulk sysex files are found in many synthesizers, such as the DSI Prophet '08 or the Yamaha FS1R or the Waldorf Blofeld.  When Edisyn loads a bulk sysex file, it will present you a couple of options: you can {\it select and edit} a single patch from that file, either in the current editor or in a new editor, or you can {\it write} (upload) all of the patches in the file to your synthesizer.
 
-It is possible that a bulk sysex file contains patch entries for several different kinds of editors or even synthesizers.  For example, a bulk sysex file might contain entries for both single patches and multi patches for a given synthesizer, and these are loaded into different editors.  Edisyn will inform you when there are patches for different editors involved, and let you first select which editor you're interested in, then select which patch you want to edit. 
+It is possible that a bulk sysex file contains patch entries for several different kinds of editors or even different kinds of synthesizers.  For example, a bulk sysex file might contain entries for both single patches and multi patches for a given synthesizer, and these are loaded into different editors.  Edisyn will inform you when there are patches for different editors involved, and let you first select which editor you're interested in, then select which patch you want to edit. 
 
-Other synthesizers have special {\bf bank sysex} messages which contain an entire bank (or in some cases, an entire synthesizer's memory worth) of patches in a single message.  For example, most files on the internet for the Yamaha DX7 synthesizer are bank sysex files.   Edisyn might find a message like this when loading a file, or it might receive the message from the synth over MIDI.   When Edisyn has received a bank sysex message or loaded one from a file, you can again {\it select and edit} a single patch from that bank, either in the current editor or a new editor, or you can {\it write} (upload) all of the patches in the bank to your synthesizer; or you can {\it save} the whole bank as to a file as a single bank sysex message.
+Other synthesizers have special {\bf bank sysex} messages.  Here, an entire bank (or in some cases, an entire synthesizer's memory's worth) of patches are stored in a single special sysex message.  For example, most files on the internet for the Yamaha DX7 synthesizer are bank sysex files.   Edisyn might find a message like this when loading a file, or it might receive the message from the synth over MIDI.   When Edisyn has received a bank sysex message or has loaded one from a file, you can again {\it select and edit} a single patch from that bank, either in the current editor or a new editor, or you can {\it write} (upload) all of the patches in the bank to your synthesizer; or you can also {\it save} the whole bank to a file as a single bank sysex message.
 
-It's entirely possible that a bulk sysex file might itself contain multiple bank sysex messages.  If from the Bulk Sysex window you select a bank sysex message, Edisyn will then present you with the Bank Sysex window for that bank.  Note that in the Bulk Sysex window, these sysex messages will typically be labelled ``Bank Sysex'', since Edisyn usually has no other patch name for them.
+It's entirely possible that a bulk sysex file might itself contain multiple bank sysex messages (or a mixture of bank and standard messages).  Bulk Sysex window, these sysex messages will typically be labelled ``Bank Sysex'', since Edisyn usually has no other patch name for them (with the exception of the Yamaha FB-01).  If from the Bulk Sysex window you select a bank sysex message, Edisyn will then present you with the Bank Sysex window for that bank. 
 
 Edisyn cannot presently construct (and thus save or upload) new bank or bulk sysex messages or files.
 
-\paragraph{Batch Downloads}
-Edisyn also has limited support for batch-downloading patches, one by one, and saving them to your disk as separate files.  To do this, choose {\bf Batch Download...} from the {\bf File} menu.  You'll be asked to specify the directory in which to save patches, and also first patch and the final patch, and then downloading will commence.  Note that if your final patch is ``before'' the first patch, then Edisyn will wrap all the away around to get to the final patch.  For example, if your synth has ten patches 1....10, and you choose 8 as your first patch and 2 as your last patch, then Edisyn will download in this order: 8, 9, 10, 1, 2.
+\subsection{Batch Downloads}
+Edisyn also has limited support for batch-downloading patches, one by one, and saving them to your disk as separate files or as one bulk sysex file.  To do this, choose {\bf Batch Download...} from the {\bf File} menu.  You'll be asked to specify the directory in which to save patch files, or the bulk sysex file to save as, and also first patch and the final patch, and then downloading will commence.  Note that if your final patch is ``before'' the first patch, then Edisyn will wrap all the away around to get to the final patch.  For example, if your synth has ten patches 1....10, and you choose 8 as your first patch and 2 as your last patch, then Edisyn will download in this order: 8, 9, 10, 1, 2.
 
 If Edisyn can't download a particular patch (the synth isn't responding), it'll try again and again until successful.  So if it gets stuck, 
-you can always stop batch-downloading at any time by choosing {\bf Stop Downloading Batch} from the {\bf File} menu.  Note that you can still screw with knobs, etc. while Edisyn is busy downloading batches: but don't do that.  You're just messing up the batches getting saved.\footnote{I may change this in the future to something less fragile.}
+you can always stop batch-downloading at any time by choosing {\bf Stop Downloading Batch} from the {\bf File} menu.  Note that you can still screw with knobs, etc. while Edisyn is busy downloading batches: but don't do that.  You're just messing up the batches getting saved.%\footnote{I may change this in the future to something less fragile.}
 
-Also note that as a failsafe Edisyn only allows the frontmost window to receive data over MIDI.  This means that while you're batch-downloading, you can't go to some other patch editor: the downloading patch editor must stay in front.  You can go to another application though (read a web browser say).
+Also note that as a failsafe Edisyn only allows the frontmost window to receive data over MIDI.  This means that while you're batch-downloading, you shouldn't switch to some other patch editor window: the downloading patch editor must stay in front.  You can go to another application though (read a web browser say).
 
-\paragraph{Exporting to Text}
+\subsection{Exporting to Text}
 Perhaps you might wish to describe your patch on you blog or your favorite forum.  if you choose {\bf Export to Text...} from the {\bf File} menu, Edisyn will write out all of its patch parameters to a text file.   Edisyn may occasionally break out parameters more than your synthesizer does: though usually it's pretty close to a one-to-one mapping.  The parameter names can be cryptic sometimes: Edisyn often (not always) names parameters in a manner fairly similar to how they're specified by the synthesizer manufacturer in its MIDI Sysex document, and synth manufacturers are not known for being consistent in their naming between the sysex document and the user manual.
 
 
@@ -739,9 +750,12 @@ The other reason is because you have recently moved from \(S\) to \(P\), and now
 }
 
 
-\bump
 \subsection{Morphing}
 \label{morph}
+
+The {\it Morpher} allows you to try out patches, in real time, that are a combination of four different patches. Shown in Figure~\ref{morphpanel}, the Morpher largely consists of a big rectangle with a different patch at each corner.  Once you have set up these patches, you can drag a joystick cursor (the blue circle) within this rectangle, and it will change the synthesizer's patch to reflect a combination of the four patches.  The closer the cursor is to a patch the more it will resemble it.
+
+Patches are updated on your synthesizer in real time as you change the joystick cursor position.  To do this, Edisyn sends the entire patch to the synthesizer on the fly in the same way that ``Send to Current Patch'' is done.  Keep in mind that some synthesizers can take a bit of time to update themselves to a new patch, so depending on the synthesizer this can be either smooth or a bit jumpy.
 
 \begin{wrapfigure}{r}{3.6in}
 \vspace{-2em}\includegraphics[scale=0.27]{Morph.png}
@@ -749,10 +763,6 @@ The other reason is because you have recently moved from \(S\) to \(P\), and now
 \caption{The Morpher.}
 \label{morphpanel}
 \end{wrapfigure}
-
-The {\it Morpher} allows you to try out patches, in real time, that are a combination of four different patches. Shown in Figure~\ref{morphpanel}, the Morpher largely consists of a big rectangle with a different patch at each corner.  Once you have set up these patches, you can drag a joystick cursor (the blue circle) within this rectangle, and it will change the synthesizer's patch to reflect a combination of the four patches.  The closer the cursor is to a patch the more it will resemble it.
-
-Patches are updated on your synthesizer in real time as you change the joystick cursor position.  To do this, Edisyn sends the entire patch to the synthesizer on the fly in the same way that ``Send to Current Patch'' is done.  Keep in mind that some synthesizers can take a bit of time to update themselves to a new patch, so depending on the synthesizer this can be either smooth or a bit jumpy.
 
 \paragraph{Initialization} When you fire up the Morpher, it will place a copy of the current patch in the top-left corner.  You can load patches in additional corners (or overwrite the top-left corner) by clicking on their buttons and choosing  {\it Load from File ...}, which loads a patch from a file.  You can also load a patch from any of the Hill-Climbing archive slots (q through v). And you can take a patch from any of the Nudge slots (1 through~4).  
 
@@ -764,13 +774,13 @@ If you don't initialize a corner, it is set to ``[Empty]''.  Empty corners do no
 
 Non-metric parameters, such as (say) choice of filter or the PCM sampled sound played, are a different matter.  The value for a non-metric parameter is based on a strategy of your choice.  You can force the sound to draw its non-metric parameters entirely from  the current patch, from any of the four corners, or from the closest corner.  Or you can {\it Morph} the non-metric parameter.  This means that as you approach a corner, the probability that the metric parameter will change to match the patch in that corner increases.  
 
-\paragraph{Auditioning} As you are morphing, you'll want to hear the sound in real time: that's the whole point.  The Morpher turns on repeatedly sending test notes just as the Hill-Climber does.   But the big issue is when and how often the morphed patch is sent to the synthesizer.  You have several options here, under the {\it Send to Synth} chooser:
+\paragraph{Auditioning} As you are morphing, you'll want to hear the sound in real time: that's the whole point.  The Morpher turns repeatedly sends test notes just as the Hill-Climber does.   But the big issue is when and how often the morphed patch is sent to the synthesizer.  You have several options here, under the {\it Send to Synth} chooser:
 
 \begin{itemize}
 \item {\it When Playing Test Notes}\quad This is the default, and usually the best option.  Here, the Morpher will send the entire patch immediately before it plays a test note.  (If you have turned off sending test notes, the Morpher will never send the patch).  
 \item {\it When Changing}\quad The Morpher will send the entire patch every time the joystick cursor changes.  This can be slow if the synthesizer takes a long time to update itself, but it is often the best choice if you are playing notes yourself.  Your synthesizer is unlikely to change its sound to reflect this change until the next note is played.
 \item {\it Trickle}\quad The Morpher will constantly send a single random parameter\footnote{Edisyn shuffles the parameters, then sends them in turn, then shuffles again, and so on.} to the synth.  If your synth updates itself in real-time in response to changes to these parameters, this will {\it slowly} update the patch sound of a long-playing note.  However many synths only update themselves when the next note is sounded, in which case it makes more sense to choose {\it When Playing Note}.  Note that sending individual parameters like this may take a while to fully update the patch on the synth.  Also note that this floods MIDI with messages.
-\item {\it Deluge}\quad The Morpher will constantly send the entire patch to the synth.  If your synth updates itself in real-time in response to changes to these parameters, this will {\it rapidly} the patch sound of a long-playing note.  However many synths only update themselves when the next note is sounded, in which case it makes more sense to choose {\it When Playing Note}.  Note that this floods MIDI with messages, causing much more congestion than {\it Trickle} (there's a reason it's called {\it Deluge}).
+\item {\it Deluge}\quad The Morpher will constantly send the entire patch to the synth.  If your synth updates itself in real-time in response to changes to these parameters, this will {\it rapidly} update the patch sound of a long-playing note.  However many synths only update themselves when the next note is sounded, in which case it makes more sense to choose {\it When Playing Note}.  Note that this floods MIDI with messages, causing much more congestion than {\it Trickle} (there's a reason it's called {\it Deluge}).
 \end{itemize}
 
 \paragraph{Editing} During the morphing process you might wish to modify a corner.  In addition to reloading it from various sources as discussed earlier during {\it Initialization}, you have some more options available when clicking on its button.  For example, you can swap corners with one another, which is useful for rearranging corners as you like.  You can also {\it Set to Joystick Position}, which sets the corner to the the current auditioned patch at the Joystick position, and {\it Clear}, which clears a corner of its patch (setting it to ``[Empty]'').
@@ -787,25 +797,24 @@ Non-metric parameters, such as (say) choice of filter or the PCM sampled sound p
 
 
 
-\bump
-
 \section{Writing a Patch Editor}
 
 So you want to write a patch editor?  They're not easy.  But they're fun!  Here are some hints. 
 
-\subsection{Step One: Understand What You're Getting Into}
+\subsection{Understand What You're Getting Into}
 \label{inconsistent}
 
 Make sure you understand that Edisyn can only go so far to help you in writing a patch editor: but synthesizer sysex world is an inconsistent, buggy mess.
 
 For example, the Waldorf Blofeld's multimode sysex is undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).   And it too bombs if you send it invalid data.  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  The Red Sound DarkStar has extremely, {\it extremely} limited sysex.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  There are multiple different strategies for packing data of size 8 bits and up.  Some synths, like the Futuresonus Parva, DSI Prophet '08, and Yamaha DX7, are highly regular in their format, while others, like the infamous Korg Microsampler, require custom tables for nearly every parameter.
 
-Below is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.
+Figure~\ref{patcheditorcapabilities} is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.
 
 \newcommand\samefootnote{\addtocounter{footnote}{-1}\footnotemark}
 \newcommand\backfootnote[1]{\addtocounter{footnote}{-#1}\footnotemark\addtocounter{footnote}{#1}\addtocounter{footnote}{-1}}
 \newcommand\cm{\checkmark}
 
+\begin{table}[t]
 \begin{center}
 {\small
 \begin{tabular}{rllllllllll}
@@ -815,60 +824,66 @@ Below is a little table of the current patch editors for Edisyn, and various Edi
 \begin{sideways}Request Specific Patch\end{sideways}&
 \begin{sideways}Request Current Patch\end{sideways}&
 \begin{sideways}Send to Current Patch\end{sideways}&
-\begin{sideways}Send to Specific Patch\end{sideways}&
 \begin{sideways}Write to Specific Patch\end{sideways}&
 \begin{sideways}Change Mode\end{sideways}&
 \begin{sideways}Receive Error or Ack\end{sideways}&
 \begin{sideways}Standard Sysex File\end{sideways}\\[0.5em]
 \hline\\[-0.5em]
-%Futuresonus Parva&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}&&&\\
-Alesis D4/DM5&{\cm}*&&{\cm}&&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
-Casio CZ&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*            \\
-DSI Prophet '08&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
-E-Mu Morpheus / UltraProteus&{\cm}& &{\cm}& & &{\cm}&{\cm}& & &{\cm}            \\
-E-Mu Proteus&{\cm}& &{\cm}& & &{\cm}&{\cm}& & &{\cm}            \\
-Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}            \\
-Waldorf Blofeld&{\cm}*&{\cm}*&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}& & & {\cm}            \\
-Kawai K1/K1r/K1m&{\cm}*& &{\cm}& & & &{\cm}& &{\cm}&{\cm}            \\
-Kawai K4/K4r&{\cm}*& &{\cm}& &{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}            \\
-Kawai K5/K5m&{\cm}&{\cm}&{\cm}& & &{\cm}&{\cm}& &{\cm}&{\cm}            \\
-Yamaha DX7&{\cm}&{\cm}& & & & {\cm}& &  & &{\cm}            \\
-Yamaha 4-Op&{\cm}*& &{\cm}&{\cm}&{\cm}& & &  & &{\cm}*            \\
-Yamaha FB-01&{\cm}*& &{\cm}&{\cm}&{\cm}& &{\cm}*&  & {\cm}&{\cm}*            \\
-Yamaha FS1R&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}& & &{\cm}            \\
-Yamaha TG33/SY22/SY35&{\cm}*& &{\cm}&{\cm}&{\cm}& & &  & &{\cm}            \\
-PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &{\cm}\\
-Red Sound DarkStar/DarkStar XP2&&&&&{\cm}&&{\cm}& & & {\cm}           \\
-Roland D-110&{\cm}& &{\cm}*&{\cm}*&{\cm}*& &{\cm}*& & &{\cm}          \\
-Roland JV-80/880&{\cm}& &{\cm}&{\cm}&{\cm}& &{\cm}& & &{\cm}*          \\
-Novation Drumstation/D-station&&&&&{\cm}*&&{\cm}*& & &{\cm}          \\
-Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}*&{\cm}*&{\cm}& & &{\cm}          \\
-Korg Microsampler&{\cm}*&{\cm}*& & & & & &  &  &         \\
-Korg SG Rack&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&{\cm}\\
-Korg Wavestation SR&{\cm}&&{\cm}&{\cm}*&{\cm}*&{\cm}&{\cm}&{\cm}*&&{\cm}\\
-M-Audio Venom&{\cm}&&{\cm}*&{\cm}&{\cm}*&{\cm}*&{\cm}*&{\cm}*&{\cm}&{\cm}\\
+%Futuresonus Parva&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&&\\
+Alesis D4/DM5&{\cm}*&&{\cm}&&{\cm}&{\cm}& & &{\cm}            \\
+Casio CZ&&&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*            \\
+DSI Prophet '08&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
+E-Mu Morpheus / UltraProteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
+E-Mu Proteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
+Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}& &{\cm}            \\
+Waldorf Blofeld&{\cm}*&{\cm}*&{\cm}&{\cm}*&{\cm}&{\cm}& & & {\cm}            \\
+Waldorf Kyra&{\cm}&{\cm}&{\cm}*&{\cm}*&{\cm}*&{\cm*}& & & {\cm}*            \\
+Kawai K1/K1r/K1m&{\cm}*& &{\cm}& & &{\cm}& &{\cm}&{\cm}            \\
+Kawai K4/K4r&{\cm}*& &{\cm}& &{\cm}&{\cm}& &{\cm}&{\cm}            \\
+Kawai K5/K5m&{\cm}&{\cm}&{\cm}& & &{\cm}& &{\cm}&{\cm}            \\
+Yamaha DX7&{\cm}&{\cm}& & & & &  & &{\cm}            \\
+Yamaha 4-Op&{\cm}*& &{\cm}&{\cm}&{\cm} & &  & &{\cm}*            \\
+Yamaha FB-01&{\cm}*& &{\cm}&{\cm}&{\cm}&{\cm}*&  & {\cm}&{\cm}*            \\
+Yamaha FS1R&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}& & &{\cm}            \\
+Yamaha TG33/SY22/SY35&{\cm}*& &{\cm}&{\cm}&{\cm}& &  & &{\cm}            \\
+PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &\\
+Red Sound DarkStar/DarkStar XP2&&&&&{\cm}&{\cm}& & & {\cm}           \\
+Roland D-110&{\cm}& &{\cm}*&{\cm}*&{\cm}*&{\cm}*& & &{\cm}          \\
+Roland JV-80/880&{\cm}& &{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*          \\
+Novation Drumstation/D-station&&&&&{\cm}*&{\cm}*& & &{\cm}          \\
+Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}*&{\cm}& & &{\cm}          \\
+Korg Microsampler&{\cm}*&{\cm}*& & & & &  &  &         \\
+Korg SG Rack&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}\\
+Korg Wavestation SR&{\cm}&&{\cm}&{\cm}*&{\cm}*&{\cm}&{\cm}*& &{\cm}\\
+M-Audio Venom&{\cm}&&{\cm}*&{\cm}&{\cm}*&{\cm}*&{\cm}*&{\cm}&{\cm}*\\
 \end{tabular}
 }
 \\[1em]
 * {\it With significant caveats or restrictions}
 \end{center}
-\vspace{1em}
+\vspace{-1em}
+\caption{Patch Editor Capabilities}
+\label{patcheditorcapabilities}
+\end{table}
 
 I particularly love how the Korg Microsampler and the Korg SG are disjoint in their abilities; yet they're from the same company.   Long story short, you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.
 
-\subsection{Step Two: Set Up the Development Environment}
+\subsection{Setting Up the Development Environment}
 
 Still not scared away?  Okay, we'll start by getting Edisyn set up for development.  Probably the easiest way to fire up Edisyn for purposes of testing is as a build directory.  You just need to add two items to your CLASSPATH:
 
+\bump
+
 \begin{enumerate}
 \item The {\tt coremidi4j-1.5.jar} file, located in the {\tt libraries/} folder (you can move it where you like).  This jar file contains the CoreMidi4J library, which enables sysex to work properly on Macs (you'll need it for non-Macs too).
+
 \item The {\tt trunk} directory.  This parent directory holds the {\tt edisyn} package.  Or if you like, make some other directory {\tt foo} and move (or link) {\tt edisyn} into that directory, then add {\tt foo} to your CLASSPATH.
 \end{enumerate}
 
 Now you can compile Edisyn with\ \ \  {\tt javac~edisyn/*.java~edisyn/*/*.java~edisyn/*/*/*.java}\\
 You can then run Edisyn as\ \ \  {\tt java edisyn.Edisyn}
 
-\subsection{Step Three: Create Files}
+\subsection{Creating Files}
 
 Let's say you're adding a single (non-multimode) patch editor for the Yamaha DX7.  Understand that there {\it already} is such an editor, but it's a good exercise to understand the code perhaps.
 
@@ -887,7 +902,7 @@ public static String getHTMLResourceFileName() { return "YamahaDX7.html"; }
 
 It doesn't matter if {\tt YamahaDX7.html} doesn't exist yet.
 
-\subsection{Step Four: Get the UI Working}
+\subsection{Getting the UI Working}
 
 This is mostly writing the class constructor and subsidiary functions.  Typically you will create one {\tt SynthPanel} for each tab in your editor.  A SynthPanel is little more than a JPanel with a black background: you can lay it out however you like.  However Edisyn typically lays it out as follows:
 
@@ -928,15 +943,130 @@ Edisyn is smart about mutating and recombining metric parameters, but for non-me
 
 Parameters can be declared {\bf immutable}, meaning Edisyn can't mutate them or cross them over at all.  Also, all string parameters are automatically immutable.  You'll need to declare the others.
 
+\paragraph{Parameter Conventions}
+
+There are by convention three standard parameter names:
+
+\begin{itemize}
+\item {\bf number}\quad Patch number, always starting at 0
+\item {\bf bank}\quad Patch bank, always starting at 0
+\item {\bf name}\quad Patch name, a string
+\end{itemize}
+
+These are all optional.
+
+Parameters in general by convention are a combination of lower-case letters and numbers.  No hyphens, no spaces, no underscores or other punctuation.  The numbers serve to distinguish between identical hierarchical objects (like multiple envelopes or multiple voices).  Conventionally Edisyn parameter names are 1-indexed so as to match with common synthesizer parameter names in sysex documentation.
+
+Here are some examples:
+
+\begin{itemize}
+\item midichannel
+\item lfo2rate
+\item env3level2
+\item voice4env3level2
+\item voice4env3level2sign
+\end{itemize}
+
+
 \paragraph{Copying and Distributing Parameters}
 
-If your synth has multiple copies of the same category (for example, multiple LFOs), you can {\it copy} parameters wholesale from one category to another.  To do this, parameters must obey a certain convention.  Specifically, parameters in a category must all start with the same {\it preamble}, which must contain no digits, followed by a {\it category number}, which must be all digits.  After that, you can have whatever you like.  For example, {\tt lfo1rate} or {\tt osc14attack}.  If you have four LFO categories, their category numbers might be 1...4, say.  After you have set up your parameters appropriately, you can turn on copy and paste in a given category by calling {\bf makePasteable(\textit{preamble})}, passing in the preamble (not the category number).
+If your synth has multiple copies of the same category (for example, multiple LFOs), you can {\bf copy} parameters wholesale from one category and {\bf paste} them onto another, or {\bf distribute} a parameter value to similar parameters within a category.  Furthermore you can {\bf copy} parameters from one tab to {\bf paste} onto another.  Finally, individual categories, tabs, and the entire patch can be {\bf reset}.    You can get all of this to work as long as your parameters follow a hierarchical convention as discussed here.
 
-Categories also often contain multiple instances of a given parameter.  For example, a step sequencer category might contain 16 steps.  You can {\it distribute} values to all such parameters if you follow the a similar convention, specifically, parameters should start with a {\it preamble}, and then the first string of digits will refer to the index of the parameter.  For example, if your step sequencer had {\tt seq} as its preamble, perhaps you might have {\tt seqstep1} through {\tt seqstep16}.  You an have additional text, such as {\tt seqstep1attack} or whatnot.   After you have set up your parmaters, you can turn on distribution by calling {\bf makeDistributable(\textit{preamble})}, passing in the preamble.
+When one category is {\bf pasted to another category}, each of its parameters is compared each parameter of the other category to see if they {\bf match}, and if they do, then the values are copied to the other category's parameter.   Parameters A and B are compared for matching by stripping off the first number after a {\bf preamble} which you specify.   Additionally, all the numbers {\it in} the preamble are stripped out. Let's say the preamble is ``lfo''.  We might then have:
 
-Your category can also do both of these things.  In this case, all parameter names should obey the copy/paste convention, and distributable parameters should have a {\it second} string of digits somewhere later in the parameter name which refers to the parameter index.  For example, you might have {\tt seq1step1} through {\tt seq1step16} for sequencer 1, and {\tt seq2step1} through {\tt seq2step16} for sequencer 2.
+\begin{center}
+\begin{tabular}{l@{\ \ \(\longrightarrow\)\ \ }ll}
+	{\it parameter} & {\it after stripping} & {\it result}\\
+	\hline
+	lfo1rate 	&	lforate	& (ORIGINAL)\\
+	lfo25rate	&	lforate	& MATCH\\
+	lfo25level	&	lfolevel	& NO MATCH\\
+	lforate2	&	lforate	& FALSE MATCH\\
+	env3rate	&	env3rate   & NO MATCH\\
+\end{tabular}
+\end{center}
 
-Finally, by default categories can be {\it reset}.  It's probably wise to turn this off in the global category.  This is done by calling {\bf makeUnresttable()}.
+Watch out for the fourth row example, where we had a false positive: the first number is stripped regardless of where it appears, as long as it is after the preamble.  Also notice that the fifth row didn't get stripped at all.  This is because it didn't match the preamble.
+
+It's also important to note that if you strip ``lfo1rate'' using the preamble ``lfo'' and you strip ``l14f23o1rate'' using the preamble ``l14f23o1'', these {\it both reduce} to just ``lforate'' and so match.  This is important because often your preambles will contain numbers, but if you don't want  two categories to match, theirs preambles should differ in some way beyond just digits.
+
+Here is another example, using the preamble ``env'':
+
+\begin{center}
+\begin{tabular}{l@{\ \ \(\longrightarrow\)\ \ }ll}
+	{\it parameter} & {\it after stripping} & {\it result}\\
+	\hline
+	env3level1	&	envlevel1 & (ORIGINAL)\\
+	env2level1	&	envlevel1	& MATCH\\
+	env4level2	&	envlevel2	& NO MATCH\\
+\end{tabular}
+\end{center}
+
+By default a category's parameters cannot be copied or pasted.  To permit this, you call {\bf makePasteable(\textit{preamble})} on the Category when you create it.
+
+We can also {\bf distribute} a parameter to other parameters within that category.  Here matching occurs by taking two parameters A and B and stripping {\it all} of the numbers which appear after the preamble.  For example:
+
+\begin{center}
+\begin{tabular}{l@{\ \ \(\longrightarrow\)\ \ }ll}
+	{\it parameter} & {\it after stripping} & {\it result}\\
+	\hline
+	env3level1	&	envlevel & (ORIGINAL)\\
+	env3level24	&	envlevel	& MATCH\\
+	env3rate2		&	envrate	& NO MATCH\\
+	env3level		&	envlevel		&	FALSE MATCH\\
+	env5level1	&	envlevel	& FALSE MATCH	\\
+\end{tabular}
+\end{center}
+
+Again, beware the false match scenarios above.  Since distribution occurs within a category, it's unlikely (I hope) that you'll have both env3level1 and env5level1, assuming you have two different categories, one for each envelope (3 and 5).
+
+By default a category's parameters cannot be distributed.  To permit this, you call {\bf makeDistributable(\textit{preamble})} on the Category when you create it.
+
+You can also paste entire tabs rather than simple categories. Matching is the same as for categories: by stripping off the first number after the preamble, and also the digits within the preamble.  This
+means that if you want to paste one tab onto another, then
+they should have a special preamble which matches.  For
+example, let's say you have two tabs, Voice 1 and Voice 2.
+you could use ``voice'' as your preamble:
+
+
+\begin{center}
+\begin{tabular}{l@{\ \ \(\longrightarrow\)\ \ }ll}
+	{\it parameter} & {\it after stripping} & {\it result}\\
+	\hline
+	voice1lforate	&	voicelforate & (ORIGINAL)\\
+	voice2lforate	&	voicelforate	& MATCH\\
+	voicelfo2rate	&	voicelforate	& FALSE MATCH\\
+\end{tabular}
+\end{center}
+
+If you want to do BOTH pasting of tabs AND pasting categories,
+you need to have hierarchical parameters.  For example, let's assume that your tab is using ``voice'' as its preamble again...
+
+\begin{center}
+\begin{tabular}{l@{\ \ \(\longrightarrow\)\ \ }ll}
+	{\it parameter} & {\it after stripping} & {\it result}\\
+	\hline
+	voice1env3level1	&	voiceenv3level1& (ORIGINAL)\\
+	voice2env3level1	&	voiceenv3level1&		MATCH\\
+	voice2env3level2	&	voiceenv3level2&		NO MATCH\\
+	voice2env4level1	&	voiceenv4level1&		NO MATCH\\
+\end{tabular}
+\end{center}
+
+... while individual categories in the Voice 1 tab might use a more specific preamble, such as "voice1env":
+
+\begin{center}
+\begin{tabular}{l@{\ \ \(\longrightarrow\)\ \ }ll}
+	{\it parameter} & {\it after stripping} & {\it result}\\
+	\hline
+	voice1env3level1	&	voice1envlevel1& (ORIGINAL)\\
+	voice1env4level1	&	voice1envlevel1&		MATCH\\
+	voice1env3level2	&	voice1envlevel2&		NO MATCH\\
+	voice2env3level1	&	voice2envlevel1&		NO MATCH\\
+\end{tabular}
+\end{center}
+
+By default a tab's parameters cannot be distributed as a whole.  To permit this, you call {\bf makePasteable(\textit{preamble})} on the SynthPanel when you create it.
 
 \paragraph{Common Widgets}
 
@@ -1284,13 +1414,13 @@ model.register("keyname", widget);
 
 For example, in the Yamaha TX81Z, the operator frequency is computed as a combination of three widgets: and in the final widget (``Fine'') the final frequency is displayed.  To do this, we have registered the ``Fine'' widget to revise itself (via the map(...) method) whenever any of three different parameters is updated.
 
-\subsection{Step Five: Get Input from the Synth (and File Loading) Working}
+\subsection{Getting Input from the Synth (and File Loading) Working}
 \label{filereading}
 
 There are three common ways the synth can send you information: as a sysex patch dump, as a bank sysex message, and as individual parameters.  We'll start with the sysex patch dump.
 
-\paragraph{Patch Dumps}
-Let's start by setting up the {\tt edisyn/synth/yamahadx7/YamahaDX7Rec.java} file.  This file contains code which recognizes whether incoming sysex messages should be routed to the DX7, among other tasks.  Give it the proper class name and package.
+\paragraph{Recognizing Sysex and Parsing Patch Dumps}
+Let's start by setting up our recognizer, which is stored in the {\tt edisyn/synth/yamahadx7/YamahaDX7Rec.java} file.  This file contains code which recognizes whether incoming sysex messages should be routed to the DX7, among other tasks.  \footnote{You'll note that each synthesizer file has an accompanying recognizer file.  Why not just put the recognizer methods in the synthesizer class?  There's a good reason.  When Edisyn encounters a sysex message, it must go through {\it all} of the synthesizers and ask them one by one if they recognize the message and are capable of parsing it.  To do this would require that Edisyn load all of the class files for the synthesizers: and some class files are {\it enormous}, with huge numbers of strings and other tables.  Check out the Yamaha FX1R patch code for example!  So instead Edisyn just goes though all the recognizer classes instead, which are very small classes and can be checked very rapidly.  Only when it knows it has a sysex message for a given synthesizer does it actually load its class and instantiate it.}   Give it the proper class name and package.
 
 Next, we need to implement the {\bf recognize(...)} method in our recognizer file.  This method tells Edisyn that you recognize a dump sysex message.  You should verify the message length and the header to determine that it's a patch dump and in fact meant is for your type of synthesizer {\it and} is probably correct.  This method will also be called when loading a sysex file from disk.  Here's a simple recognizer for the DX7:
 
@@ -1316,20 +1446,24 @@ getModel().set(stringKey, "newValue");	// or whatever new value
 
 If the parse was successful, you should usually return {\tt PATCH\_SUCCEEDED}.  If you queried the user for more information (Synth.java has good query dialog box methods for you) and the user cancelled the parsing, you should return {\tt PATCH\_CANCELLED}.  If the parse failed due to corruption, say, return {\tt PATCH\_FAILED}.
 
-\paragraph{Multi-Sysex Patch Dumps}
+\paragraph{Recognizing and Parsing Multi-Sysex Patch Dumps}
 Most synthesizers are sane and have one sysex message per patch.  But some are not.  For example, the Yamaha 4-op FM family have patches which consist of up to {\it four} messages in a row!  How is this handled?
 
-First, Edisyn needs to know what messages form a patch, because some files can have some \(M\) of these messages concatenated together to form some \(N<M\) patches altogether.  If your synth requires multiple messages per patch, you need you recognizer to implement this method:
+The first issue lies in {\bf bulk patch files}.  A bulk patch file is a file which contains multiple individual patches, possibly from different kinds of synthesizers, or at least different kinds of patches for the same synth, such as single matches versus multimode patches versus, um, effect patches.  In a perfect world, if the file contained \(N\) patches, it'd contain \(N\) sysex messages concatenated together.  Unfortunately since some synths have multiple sysex message per patch, this can get very complicated.   Edisyn needs to know what messages form a patch, because some files can have some \(M\) of these messages concatenated together to form some \(N<M\) patches altogether.   
+
+If your synth requires multiple messages for a single patch, you need you recognizer to implement this method:
 
 \begin{verbatim}
     public static int getNextSysexPatchGroup(byte[][] sysex, int start);
 \end{verbatim}
 
-This method is given an array of of sysex messages and a {\it start} position.  Beginning with the message {\tt sysex[start]} is a patch, possibly consisting of multiple messages, which your synthesizer might or not might not recognize.  If the patch is not for you, return {\tt start}.  Otherwise, let's say you have determined that the patch consists of the next three messages.  Then you should return {\tt start + 3}.  If your synth always uses one message per patch, don't bother implementing this method.
+This method is given an array of sysex messages and a {\it start} position.  Beginning with the message {\tt sysex[start]} is a patch, possibly consisting of multiple messages, which your synthesizer might or not might not recognize.  If the patch is not for you, return {\tt start}.  Otherwise, let's say you have determined that the patch consists of the next three messages.  Then you should return {\tt start + 3}.  If your synth always uses one message per patch, don't bother implementing this method.
 
-When you receive a dump via the synth over MIDI, it'll contain exactly sysex message (parse() will be ultimately called several times before you've gotten an entire patch).  However when you receive a dump via a file, the data will likely contain {\it all} of these messages.  Thankfully, the parse() method will tell you whether you're receiving from a file or not.  At any rate, if you have yet not received all of the messages necessary to completely parse the patch, you should parse what you can, then return {\tt PATCH\_INCOMPLETE}.  In all likelihood parse() will be called later with the remaining information.
+The second issue lies in {\bf incomplete patch dumps}.  When you receive a dump through parse() via the synth over MIDI, it'll likely contain exactly one sysex message.  Thus if your patch requires multiple sysex messages, parse() will be ultimately called several times before you've gotten an entire patch.  However when you receive a dump via a file, the data will likely contain {\it all} of these messages.  Thankfully, the parse() method will tell you whether you're receiving from a file or not.  
 
-\paragraph{Bank Sysex Dumps}
+At any rate, if you have yet not received all of the messages necessary to completely parse the patch, you should parse what you can, then return {\tt PATCH\_INCOMPLETE}.  In all likelihood parse() will be called later with the remaining information.
+
+\paragraph{Recognizing and Parsing Bank Sysex Dumps}
 
 Some synthesizers can send entire banks of patches as a single sysex message.  The Yamaha DX7 can do this, for example, and in fact it's the standard way DX7 patches are stored on the internet.
 
@@ -1432,7 +1566,7 @@ If your patch dumps come in as sysex messages, then congratulations, you already
 
 You probably ought to use the ``educational use'' wildcard MIDI sysex ID (0x7D).  Edisyn's made-up sysex header for the PreenFM2 currently looks like this: {\tt 0xF0, 0x7D, 'P', 'R', 'E', 'E', 'N', 'F', 'M', '2', {\it version}.}  Presently {\it version}  is {\tt 0x0}.  You might do something similar.
 
-\subsection{Step Six: Get Output to the Synth (and File Writing) Working}
+\subsection{Getting Output to the Synth (and File Writing) Working}
 
 If you've gotten this far, writing is simpler than parsing and requesting, because you've already written a lot of the support code.  You can write out both patch dumps and individual parameters (as you tweak widgets).
 
@@ -1473,7 +1607,7 @@ Some synthesizers, such as the PreenFM2, do not accept a patch dump method at al
 See the earlier note at the end of Section \ref{filereading} about File Loading: as discussed there, if your synth doesn't read or write sysex, you'll still need to {\it invent} a patch sysex format, and implement it in the {\bf emit(...)} and {\bf parse(...)} methods, so you can save and load files to disk.
 
 
-\subsection{Step Seven: Create an Init File}
+\subsection{Creating an Init File}
 
 Now that you've got everything coded and working (hah!) it's time to create an Init file.  To do this, either request an init patch from the synthesizer, or create an appropriate one yourself.  Then save it out as a sysex file.
 
@@ -1483,30 +1617,39 @@ Next, move that file and rename it to {\tt edisyn/synth/yamahadx7/YamahaDX7.init
 loadDefaults();
 \end{verbatim}
 
-\subsection{Step Eight: Get Batch Downloads Working}
+\subsection{Getting Batch Downloads Working}
 
-Edisyn can download many patches at once.  To support this, you need to implement a few methods.\footnote{Until you implement {\bf getPatchLocationName(...)} to return something other than {\tt null}, Edisyn will keep the Batch Downloads menu disabled.  So when you implement this method, be sure to also implement the other methods here at the same time.} First, there's
- {\bf getPatchLocationName(...)}, which returns as a String a short version of the patch address (bank, name) to be used in a saved filename.  Next, there's {\bf getNextPatchLocation(...)} which, given a Model containing a patch address, returns a model with the ``next'' patch address (wrapping around to the very first address if necessary).  Finally you need to implement {\bf patchLocationEquals(...)}, which compares two patches to see if they contain the same patch address.
+Edisyn can download many patches at once.  To support this, you need to implement a few methods.\footnote{Until you implement {\bf getPatchLocationName(...)} to return something other than {\tt null}, Edisyn will keep the Batch Downloads menu disabled.  So when you implement this method, be sure to also implement the other methods here at the same time.} First, there's {\bf getPatchLocationName(...)}, which returns as a String a short version of the patch address (bank, name) to be used in a saved filename.  Next, there's {\bf getNextPatchLocation(...)} which, given a Model containing a patch address, returns a model with the ``next'' patch address (wrapping around to the very first address if necessary).  Finally you need to implement {\bf patchLocationEquals(...)}, which compares two patches to see if they contain the same patch address.
  
 A few synthesizers (notably the PreenFM2) don't send individual patches as single sysex patch dumps, but rather send them as multiple separate NRPN or CC messages.  Edisyn needs to know this so it can make a better guess at whether a patch dump has arrived and is ready to be saved.  To let Edisyn know that your patch editor is for a synthesizer of this type, override the method {\bf getReceivesPatchesInBulk()} to return false.
 
 Compared to the other stuff, this step is easy.\footnote{Note that lots of synthesizers have sysex facilities to dump the entire patch memory, or dump an entire bank, etc.  Edisyn doesn't use these; it requests patches one by one.  This is slower but saves you a lot of coding and is consistent across synthesizers.  So you're welcome.}
   
-\subsection{Step Nine: Other Stuff}
+\subsection{Other Stuff}
 You're almost done!  Some other items you might want to do.  First, you may need to tweak the mutability of parameters.  No string parameters are mutable, but by default all numerical ones are (including checkboxes and choosers).  Occasionally you'd want to make some of those immutable so they will not be modified during merge, hill-climbing, etc.  To do this, you can call {\bf setStatus(..., Model.STATUS\_IMMUTABLE)} on the model.
 
 Second, whenever your patch editor becomes the front window, the method {\bf windowBecameFront()} will be called.  You could override this to send a special message to your synth to update it somehow.  For example, the Waldorf Microwave XT patch editors send a message to the Microwave XT to tell it to switch from single to multi-mode (or back) as appropriate.
 
 Third, when the user clicks on the close box, the method {\bf requestCloseWindow()} is called.  You can override this to query the user about saving the patch etc. first, and then finally return the appropriate value to inform Edisyn that the window should in fact be closed.  Though in fact currently no patch editors implement this method at all.
 
-\subsection{Step Ten: Submit Your Patch Editor!}
+There are many more methods available in {\tt Synth.java} which customize how long it pauses in different situations, how it sends and receives information, etc.  You may need to implement these as necessary.  See {\tt Blank.java} for explanations and default implementations of many of these methods.
+
+\subsection{Submitting Your Patch Editor!}
 
 \begin{itemize}
 \item Clean up the editor code, make it really polished, well documented, and good looking.
-\item Test it well.
+\item Test it well (see below).
 \item Copyright your editor code at the top of the file.  License the editor code under Apache 2.0 (I don't accept anything else).
 \item Send the whole directory to me!  I'd love to include it.
 \end{itemize}
 
+\paragraph{Some Testing Resources}
+
+\begin{itemize}
+\item Make sure you have tools for examining files and watching the MIDI device. I develop on the Mac, so make extensive use of {\tt hexdump} to examine sysex files, as well as the enormously valuable {\tt MIDI Monitor} to spy on sysex and other messages as they come and go.
+\item You can sanity-check your patch editor with {\tt java edisyn.test.SanityCheck -h} which will build an instance of your synth, randomize it, write it to a stream, read it in from the same stream again, and compare the two models to see if they're the same.  In some cases the models {\it cannot} be the same and that's okay: in this case it will call {\tt testVerify(...)} on your synth class with the problematic keys in question, and if you return true, it'll ignore those keys.  Otherwise it'll report an error.
+\item There is a static final variable called {\tt Model.debug}.  If you set it to true, then all reads and writes to the model are logged so you can watch them happening.
+\item {\tt StringUtility.toHex(...)} is useful for printing things out, as is {\tt Synth.printSysex(...)}.
+\end{itemize}
 
 \end{document}

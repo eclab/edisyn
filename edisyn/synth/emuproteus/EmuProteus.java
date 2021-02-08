@@ -326,7 +326,8 @@ public class EmuProteus extends Synth
     public JComponent addInstrument(int inst, Color color)
         {
         Category category = new Category(this, (inst == 1) ? "Primary Instrument" : "Secondary Instrument", color);
-        category.makePasteable("i" + inst);
+//        category.makePasteable("i" + inst);
+        category.makePasteable("i");
 
         JComponent comp;
         String[] params;
@@ -416,7 +417,8 @@ public class EmuProteus extends Synth
         {
         Category category = new Category(this, (inst == 1 ? "Primary Alternative Envelope" :
                 (inst == 2 ? "Secondary Alternative Envelope" : "Auxiliary Envelope")), color);
-        category.makePasteable("i" + inst);
+//        category.makePasteable("i" + inst);
+        category.makePasteable("i");
               
         JComponent comp;
         String[] params;
@@ -662,7 +664,8 @@ public class EmuProteus extends Synth
     public JComponent addLFO(int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
-        category.makePasteable("lfo" + lfo);
+//        category.makePasteable("lfo" + lfo);
+        category.makePasteable("lfo");
 
         JComponent comp;
         String[] params;

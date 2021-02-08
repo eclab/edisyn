@@ -655,7 +655,8 @@ public class WaldorfBlofeld extends Synth
         main.add(parameters[effect - 1]);
 
         category.add(main, BorderLayout.WEST);
-        category.makePasteable("effect" + effect);
+//        category.makePasteable("effect" + effect);
+        category.makePasteable("effect");
                 
         setupEffect(parameters, parametersByEffect, effect, BYPASS);
         return category;
@@ -792,7 +793,8 @@ public class WaldorfBlofeld extends Synth
             category = new Category(this, "Envelope " + envelope, color);
             }
                         
-        category.makePasteable("envelope" + envelope);
+//        category.makePasteable("envelope" + envelope);
+        category.makePasteable("envelope");
 
 
         JComponent comp;
@@ -951,7 +953,8 @@ public class WaldorfBlofeld extends Synth
     public JComponent addLFO(final int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
-        category.makePasteable("lfo" + lfo);
+//        category.makePasteable("lfo" + lfo);
+        category.makePasteable("lfo");
                 
         JComponent comp;
         String[] params;
@@ -1314,7 +1317,8 @@ public class WaldorfBlofeld extends Synth
     public JComponent addOscillator(final int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
-        category.makePasteable("osc" + osc);
+//        category.makePasteable("osc" + osc);
+        category.makePasteable("osc");
 
         JComponent comp;
         String[] params;
@@ -1468,7 +1472,8 @@ public class WaldorfBlofeld extends Synth
     public JComponent addFilter(int filter, Color color)
         {
         Category category = new Category(this, "Filter " + filter, color);
-        category.makePasteable("filter" + filter);
+//        category.makePasteable("filter" + filter);
+        category.makePasteable("filter");
 
         JComponent comp;
         String[] params;

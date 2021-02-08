@@ -309,7 +309,8 @@ public class RolandD110Multi extends Synth
     public JComponent addPart(final int part, Color color)
         {
         Category category = new Category(this, "Part " + part, color);
-        category.makePasteable("p" + part);
+//        category.makePasteable("p" + part);
+        category.makePasteable("p");
 
         JComponent comp;
         String[] params;

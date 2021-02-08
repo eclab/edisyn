@@ -274,7 +274,8 @@ public class KorgSGMulti extends Synth
     public JComponent addTimbre(int val, Color color)
         {
         Category category  = new Category(this, "Timbre " + (val == 1 ? "A" : "B"), color);
-        category.makePasteable("timbre" + val);
+//        category.makePasteable("timbre" + val);
+        category.makePasteable("timbre");
                         
         JComponent comp;
         String[] params;

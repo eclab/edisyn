@@ -104,7 +104,8 @@ public class KorgMicroKorg extends Synth
                 }
                                 
             soundPanel.add(vbox, BorderLayout.CENTER);
-            ((SynthPanel)soundPanel).makePasteable("timbre" + timbre);
+//            ((SynthPanel)soundPanel).makePasteable("timbre" + timbre);
+            ((SynthPanel)soundPanel).makePasteable("timbre");
             addTab(timbre == 3 ? "Vocoder" : "Timbre " + timbre, soundPanel);
             }
                         
@@ -485,7 +486,8 @@ public class KorgMicroKorg extends Synth
     public JComponent addTimbreGeneral(int timbre, Color color)
         {
         Category category  = new Category(this, "General", color);
-        category.makePasteable("timbre" + timbre);
+//        category.makePasteable("timbre" + timbre);
+        category.makePasteable("timbre");
                         
         JComponent comp;
         String[] params;
@@ -512,7 +514,8 @@ public class KorgMicroKorg extends Synth
     public JComponent addPitch(int timbre, Color color)
         {
         Category category  = new Category(this, "Pitch", color);
-        category.makePasteable("timbre" + timbre);
+//        category.makePasteable("timbre" + timbre);
+        category.makePasteable("timbre");
                        
         JComponent comp;
         String[] params;
@@ -544,7 +547,8 @@ public class KorgMicroKorg extends Synth
     public JComponent addOsc1(int timbre, Color color)
         {
         Category category  = new Category(this, "Oscillator 1", color);
-        category.makePasteable("timbre" + timbre);
+//        category.makePasteable("timbre" + timbre);
+        category.makePasteable("timbre");
                         
         JComponent comp;
         String[] params;
@@ -579,7 +583,8 @@ public class KorgMicroKorg extends Synth
     public JComponent addOsc2(int timbre, Color color)
         {
         Category category  = new Category(this, (timbre == 3 ? "Audio In" : "Oscillator 2"), color);
-        category.makePasteable("timbre" + timbre);
+//        category.makePasteable("timbre" + timbre);
+        category.makePasteable("timbre");
                         
         JComponent comp;
         String[] params;
@@ -625,7 +630,8 @@ public class KorgMicroKorg extends Synth
     public JComponent addMixer(int timbre, Color color)
         {
         Category category  = new Category(this, "Mixer", color);
-        category.makePasteable("timbre" + timbre);
+//        category.makePasteable("timbre" + timbre);
+        category.makePasteable("timbre");
                         
         JComponent comp;
         String[] params;
@@ -648,7 +654,8 @@ public class KorgMicroKorg extends Synth
     public JComponent addFilter(int timbre, Color color)
         {
         Category category  = new Category(this, "Filter", color);
-        category.makePasteable("timbre" + timbre);
+//        category.makePasteable("timbre" + timbre);
+        category.makePasteable("timbre");
                         
         JComponent comp;
         String[] params;
@@ -722,7 +729,8 @@ public class KorgMicroKorg extends Synth
     public JComponent addAmplifier(int timbre, Color color)
         {
         Category category  = new Category(this, "Amplifier", color);
-        category.makePasteable("timbre" + timbre);
+//        category.makePasteable("timbre" + timbre);
+        category.makePasteable("timbre");
                         
         JComponent comp;
         String[] params;
@@ -774,7 +782,8 @@ public class KorgMicroKorg extends Synth
     public JComponent addEnvelope(int timbre, int envelope, Color color)
         {
         Category category  = new Category(this, (envelope == 1 ? "Filter Envelope" : "Amplifier Envelope"), color);
-        category.makePasteable("timbre" + timbre + "env" + envelope);
+//        category.makePasteable("timbre" + timbre + "env" + envelope);
+        category.makePasteable("timbre" + timbre + "env");
                         
         JComponent comp;
         String[] params;
@@ -813,7 +822,8 @@ public class KorgMicroKorg extends Synth
     public JComponent addLFO(int timbre, int lfo, Color color)
         {
         Category category  = new Category(this, "LFO " + lfo, color);
-        category.makePasteable("timbre" + timbre + "lfo" + lfo);
+//        category.makePasteable("timbre" + timbre + "lfo" + lfo);
+        category.makePasteable("timbre" + timbre + "lfo");
                         
         JComponent comp;
         String[] params;
@@ -917,8 +927,10 @@ public class KorgMicroKorg extends Synth
     public JComponent addPatch(int timbre, Color color)
         {
         Category category  = new Category(this, "Patches", color);
-        category.makePasteable("timbre" + timbre);
-        category.makeDistributable("timbre" + timbre);
+//        category.makePasteable("timbre" + timbre);
+//        category.makeDistributable("timbre" + timbre);
+        category.makePasteable("timbre");
+        category.makeDistributable("timbre");
                         
         JComponent comp;
         String[] params;

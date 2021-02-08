@@ -399,7 +399,8 @@ public class KorgMicrosampler extends Synth
     public JComponent addPattern(Color color)
         {
         final Category category = new Category(this, "Pattern", color);
-        category.makePasteable("pattern1");
+//        category.makePasteable("pattern");
+        category.makePasteable("pattern");
 
         JComponent comp;
         String[] params;
@@ -426,7 +427,7 @@ public class KorgMicrosampler extends Synth
                 hbox.addLast(patterns[model.get(key, 0) - 1]);
                 hbox.revalidate();
                 hbox.repaint();
-                category.makePasteable("pattern" + model.get(key, 1));
+//                category.makePasteable("pattern" + model.get(key, 1));
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel(" Number ");
@@ -441,7 +442,8 @@ public class KorgMicrosampler extends Synth
     public JComponent addSample(Color color)
         {
         final Category category = new Category(this, "Sample", color);
-        category.makePasteable("sample1");
+//        category.makePasteable("sample1");
+        category.makePasteable("sample");
                 
         JComponent comp;
         String[] params;
@@ -598,7 +600,7 @@ public class KorgMicrosampler extends Synth
                 v.addBottom(samples[model.get(key, 1) - 1]);
                 v.revalidate();
                 v.repaint();
-                category.makePasteable("sample" + model.get(key, 1));
+//                category.makePasteable("sample" + model.get(key, 1));
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel(" Number ");

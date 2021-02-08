@@ -3823,7 +3823,8 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
     public JComponent addFX(final int fxnum, Color color)
         {
         Category category  = new Category(this, "FX " + fxnum, color);
-        category.makePasteable("fx" + fxnum);
+//        category.makePasteable("fx" + fxnum);
+        category.makePasteable("fx");
                         
         JComponent comp;
         String[] params;
@@ -3938,7 +3939,8 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
     public JComponent addPart(final int part, Color color)
         {
         final Category category  = new Category(this, "Part " + part, color);
-        category.makePasteable("part" + part);
+//        category.makePasteable("part" + part);
+        category.makePasteable("part");
         
         Updatable updatable = new Updatable()
             {

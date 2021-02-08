@@ -245,7 +245,8 @@ public class YamahaFB01Multi extends Synth
     public JComponent addInstrument(final int src, Color color)
         {
         final Category category = new Category(this, "Instrument " + src, color);
-        category.makePasteable("inst" + src);
+//        category.makePasteable("inst" + src);
+        category.makePasteable("inst");
 
         JComponent comp;
         String[] params;

@@ -69,7 +69,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         for(int i = 1; i <= 4; i++)
             {
             soundPanel = panels[i - 1] = new SynthPanel(this);
-            panels[i - 1].makePasteable("osc" + i);
+//            panels[i - 1].makePasteable("osc" + i);
+            panels[i - 1].makePasteable("osc");
                         
             vbox = new VBox();
             hbox = new HBox();
@@ -461,7 +462,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addOscillatorMain(final int osc, Color color)
         {
         Category category  = new Category(this, "Wave " + OSCILLATORS[osc - 1], color);
-        category.makePasteable("osc" + osc);
+//        category.makePasteable("osc" + osc);
+        category.makePasteable("osc");
                         
         JComponent comp;
         String[] params;
@@ -619,7 +621,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addLFO(int osc, int lfo, Color color)
         {
         Category category  = new Category(this, "LFO " + lfo, color);
-        category.makePasteable("osc" + osc + "lfo" + lfo);
+//        category.makePasteable("osc" + osc + "lfo" + lfo);
+        category.makePasteable("osc" + osc + "lfo");
                         
         JComponent comp;
         String[] params;
@@ -681,7 +684,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addEnvelope(int osc, int env, Color color)
         {
         Category category  = new Category(this, (env == 1 ? "Envelope 1" : "Amplitude Envelope"), color);
-        category.makePasteable("osc" + osc + "env" + env);
+//        category.makePasteable("osc" + osc + "env" + env);
+        category.makePasteable("osc" + osc + "env");
                         
         JComponent comp;
         String[] params;
@@ -808,7 +812,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addFilter(int osc, Color color)
         {
         Category category  = new Category(this, "Filter", color);
-        category.makePasteable("osc" + osc);
+//        category.makePasteable("osc" + osc);
+        category.makePasteable("osc");
                         
         JComponent comp;
         String[] params;
@@ -852,7 +857,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addAmplifier(int osc, Color color)
         {
         Category category  = new Category(this, "Amplifier", color);
-        category.makePasteable("osc" + osc);
+//        category.makePasteable("osc" + osc);
+        category.makePasteable("osc");
                         
         JComponent comp;
         String[] params;
@@ -889,7 +895,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addPan(int osc, Color color)
         {
         Category category  = new Category(this, "Pan", color);
-        category.makePasteable("osc" + osc);
+//        category.makePasteable("osc" + osc);
+        category.makePasteable("osc");
                         
         JComponent comp;
         String[] params;
@@ -910,7 +917,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addTuning(int osc, Color color)
         {
         Category category  = new Category(this, "Tuning", color);
-        category.makePasteable("osc" + osc);
+//        category.makePasteable("osc" + osc);
+        category.makePasteable("osc");
                         
         JComponent comp;
         String[] params;
@@ -949,7 +957,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addPitch(int osc, Color color)
         {
         Category category  = new Category(this, "Pitch", color);
-        category.makePasteable("osc" + osc);
+//        category.makePasteable("osc" + osc);
+        category.makePasteable("osc");
                         
         JComponent comp;
         String[] params;

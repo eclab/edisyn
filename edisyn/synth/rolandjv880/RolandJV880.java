@@ -109,7 +109,8 @@ public class RolandJV880 extends Synth
             vbox.add(addAmplifierEnvelope(i, Style.COLOR_C()));
 
             sourcePanel.add(vbox, BorderLayout.CENTER);
-            ((SynthPanel)sourcePanel).makePasteable("tone" + i);
+//            ((SynthPanel)sourcePanel).makePasteable("tone" + i);
+            ((SynthPanel)sourcePanel).makePasteable("tone");
             addTab("Tone " + i, sourcePanel);
 
 
@@ -123,7 +124,8 @@ public class RolandJV880 extends Synth
             vbox.add(addExpression(i, Style.COLOR_B()));
 
             sourcePanel.add(vbox, BorderLayout.CENTER);
-            ((SynthPanel)sourcePanel).makePasteable("tone" + i);
+//            ((SynthPanel)sourcePanel).makePasteable("tone" + i);
+            ((SynthPanel)sourcePanel).makePasteable("tone");
             addTab("Mod " + i, sourcePanel);
             }
 
@@ -375,7 +377,8 @@ public class RolandJV880 extends Synth
     public JComponent addWave(int tone, Color color)
         {
         Category category = new Category(this, "Wave", color);
-        category.makePasteable("tone" + tone);
+//        category.makePasteable("tone" + tone);
+        category.makePasteable("tone");
                 
         JComponent comp;
         String[] params;
@@ -432,7 +435,8 @@ public class RolandJV880 extends Synth
     public JComponent addEffects(int tone, Color color)
         {
         Category category = new Category(this, "Effects", color);
-        category.makePasteable("tone" + tone);
+//        category.makePasteable("tone" + tone);
+        category.makePasteable("tone");
 
         JComponent comp;
         String[] params;
@@ -463,7 +467,8 @@ public class RolandJV880 extends Synth
     public JComponent addModulation(int tone, Color color)
         {
         Category category = new Category(this, "Modulation", color);
-        category.makePasteable("tone" + tone);
+//        category.makePasteable("tone" + tone);
+        category.makePasteable("tone");
 
         JComponent comp;
         String[] params;
@@ -512,7 +517,8 @@ public class RolandJV880 extends Synth
     public JComponent addAftertouch(int tone, Color color)
         {
         Category category = new Category(this, "Aftertouch", color);
-        category.makePasteable("tone" + tone);
+//        category.makePasteable("tone" + tone);
+        category.makePasteable("tone");
 
         JComponent comp;
         String[] params;
@@ -562,7 +568,8 @@ public class RolandJV880 extends Synth
     public JComponent addExpression(int tone, Color color)
         {
         Category category = new Category(this, "Expression", color);
-        category.makePasteable("tone" + tone);
+//        category.makePasteable("tone" + tone);
+        category.makePasteable("tone");
 
         JComponent comp;
         String[] params;
@@ -612,7 +619,8 @@ public class RolandJV880 extends Synth
     public JComponent addLFO(int tone, int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
-        category.makePasteable("tone" + tone);
+//        category.makePasteable("tone" + tone);
+        category.makePasteable("tone");
 
         JComponent comp;
         String[] params;
@@ -686,7 +694,8 @@ public class RolandJV880 extends Synth
     public JComponent addPitch(int tone, Color color)
         {
         Category category = new Category(this, "Pitch", color);
-        category.makePasteable("tone" + tone);
+//        category.makePasteable("tone" + tone);
+        category.makePasteable("tone");
 
         JComponent comp;
         String[] params;
@@ -727,7 +736,8 @@ public class RolandJV880 extends Synth
     public JComponent addPitchEnvelope(int tone, Color color)
         {
         Category category = new Category(this, "Pitch Envelope", color);
-        category.makePasteable("tone" + tone);
+//        category.makePasteable("tone" + tone);
+        category.makePasteable("tone");
 
         JComponent comp;
         String[] params;
@@ -817,7 +827,8 @@ public class RolandJV880 extends Synth
     public JComponent addFilter(int tone, Color color)
         {
         Category category = new Category(this, "Filter (TVF)", color);
-        category.makePasteable("tone" + tone);
+//        category.makePasteable("tone" + tone);
+        category.makePasteable("tone");
 
         JComponent comp;
         String[] params;
@@ -861,7 +872,8 @@ public class RolandJV880 extends Synth
     public JComponent addFilterEnvelope(int tone, Color color)
         {
         Category category = new Category(this, "Filter (TVF) Envelope", color);
-        category.makePasteable("tone" + tone);
+//        category.makePasteable("tone" + tone);
+        category.makePasteable("tone");
 
         JComponent comp;
         String[] params;
@@ -952,7 +964,8 @@ public class RolandJV880 extends Synth
     public JComponent addAmplifier(int tone, Color color)
         {
         Category category = new Category(this, "Amplifier (TVA)", color);
-        category.makePasteable("tone" + tone);
+//        category.makePasteable("tone" + tone);
+        category.makePasteable("tone");
 
         JComponent comp;
         String[] params;
@@ -1026,7 +1039,8 @@ public class RolandJV880 extends Synth
     public JComponent addAmplifierEnvelope(int tone, Color color)
         {
         Category category = new Category(this, "Amplifier (TVA) Envelope", color);
-        category.makePasteable("tone" + tone);
+//        category.makePasteable("tone" + tone);
+        category.makePasteable("tone");
 
         JComponent comp;
         String[] params;

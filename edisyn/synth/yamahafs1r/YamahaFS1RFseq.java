@@ -1397,7 +1397,9 @@ public class YamahaFS1RFseq extends Synth
     public JComponent addFrame(int frame, Color color)
         {
         Category category = new Category(this, "Frame " + frame, color);
-
+        category.makePasteable("frame");
+        category.makeDistributable("frame");
+        
         JComponent comp;
         String[] params;
         VBox vbox = new VBox();

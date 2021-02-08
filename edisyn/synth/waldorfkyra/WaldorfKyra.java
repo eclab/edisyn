@@ -699,7 +699,8 @@ public class WaldorfKyra extends Synth
     public JComponent addOscillator(final int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
-        category.makePasteable("osc" + osc);
+//        category.makePasteable("osc" + osc);
+        category.makePasteable("osc");
 
         JComponent comp;
         String[] params;
@@ -825,7 +826,8 @@ public class WaldorfKyra extends Synth
     public JComponent addFilter(int filter, Color color)
         {
         Category category = new Category(this, "Filter " + filter, color);
-        category.makePasteable("filter" + filter);
+//        category.makePasteable("filter" + filter);
+        category.makePasteable("filter");
 
         JComponent comp;
         String[] params;
@@ -890,7 +892,8 @@ public class WaldorfKyra extends Synth
     public JComponent addEnvelope(int env, Color color)
         {
         Category category = new Category(this, "Envelope " + env + (env == 1 ? " (Amplifier)" : (env == 2 ? " (Filter)" : " (Aux)")), color);
-        category.makePasteable("eg" + env);
+//        category.makePasteable("eg" + env);
+        category.makePasteable("eg");
 
         JComponent comp;
         String[] params;
@@ -964,7 +967,8 @@ public class WaldorfKyra extends Synth
     public JComponent addLFO(int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
-        category.makePasteable("lfo" + lfo);
+//        category.makePasteable("lfo" + lfo);
+        category.makePasteable("lfo");
 
         JComponent comp;
         String[] params;
@@ -1045,7 +1049,8 @@ public class WaldorfKyra extends Synth
     public JComponent addModMatrix(int mod, Color color)
         {
         Category category = new Category(this, "Slot " + (mod + 1), color);
-        category.makePasteable("modmat" + mod);
+//        category.makePasteable("modmat" + mod);
+        category.makePasteable("modmat");
 
         JComponent comp;
         String[] params;

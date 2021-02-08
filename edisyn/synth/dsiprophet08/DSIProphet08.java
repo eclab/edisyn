@@ -181,7 +181,8 @@ public class DSIProphet08 extends Synth
         vbox.add(hbox);
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        soundPanel.makePasteable("layer1");
+//        soundPanel.makePasteable("layer1");
+        soundPanel.makePasteable("layer");
         soundPanel.setSendsAllParameters(false);
         addTab("Oscillators and Filters A", soundPanel);
                 
@@ -217,7 +218,8 @@ public class DSIProphet08 extends Synth
             }
 
         modulationPanel.add(vbox, BorderLayout.CENTER);
-        modulationPanel.makePasteable("layer1");
+//        modulationPanel.makePasteable("layer1");
+        modulationPanel.makePasteable("layer");
         addTab("Modulation A", modulationPanel);
 
 
@@ -234,7 +236,8 @@ public class DSIProphet08 extends Synth
         vbox.add(addSequencerTrack(1, 4, Style.COLOR_B()));
         
         sequence.add(vbox, BorderLayout.CENTER);
-        sequence.makePasteable("layer1");
+//        sequence.makePasteable("layer1");
+        sequence.makePasteable("layer2");
         addTab("Sequencer A", sequence);
         
         
@@ -271,7 +274,8 @@ public class DSIProphet08 extends Synth
         vbox.add(hbox);
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        soundPanel.makePasteable("layer2");
+//        soundPanel.makePasteable("layer2");
+        soundPanel.makePasteable("layer");
         soundPanel.setSendsAllParameters(false);
         addTab("Oscillators and Filters B", oscPanelB = soundPanel);
                 
@@ -305,7 +309,8 @@ public class DSIProphet08 extends Synth
             }
 
         modulationPanel.add(vbox, BorderLayout.CENTER);
-        modulationPanel.makePasteable("layer2");
+//        modulationPanel.makePasteable("layer2");
+        modulationPanel.makePasteable("layer");
         addTab("Modulation B", modPanelB = modulationPanel);
 
         
@@ -319,7 +324,8 @@ public class DSIProphet08 extends Synth
         vbox.add(addSequencerTrack(2, 4, Style.COLOR_B()));
         
         sequence.add(vbox, BorderLayout.CENTER);
-        sequence.makePasteable("layer2");
+//        sequence.makePasteable("layer2");
+        sequence.makePasteable("layer");
         addTab("Sequencer B", seqPanelB = sequence);
 
 
@@ -486,7 +492,8 @@ public class DSIProphet08 extends Synth
     public JComponent addGlobal(int layer, Color color)
         {
         Category category = new Category(this, "Performance", color);
-        category.makePasteable("layer" + layer);
+//        category.makePasteable("layer" + layer);
+        category.makePasteable("layer");
 
         JComponent comp;
         String[] params;
@@ -548,7 +555,8 @@ public class DSIProphet08 extends Synth
     public JComponent addOscillatorGlobal(int layer, Color color)
         {
         Category category = new Category(this, "Oscillators", color);
-        category.makePasteable("layer" + layer);
+//        category.makePasteable("layer" + layer);
+        category.makePasteable("layer");
 
         JComponent comp;
         String[] params;
@@ -592,7 +600,8 @@ public class DSIProphet08 extends Synth
     public JComponent addOscillator(int layer, int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
-        category.makePasteable("layer" + layer + "dco" + osc);
+//        category.makePasteable("layer" + layer + "dco" + osc);
+        category.makePasteable("layer" + layer + "dco");
 
         JComponent comp;
         String[] params;
@@ -652,7 +661,8 @@ public class DSIProphet08 extends Synth
     public JComponent addSuboscillator(int layer, Color color)
         {
         Category category = new Category(this, "Sub Osc", color);
-        category.makePasteable("layer" + layer + "tetrasuboscillator");
+//        category.makePasteable("layer" + layer + "tetrasuboscillator");
+        category.makePasteable("layer");
 
         JComponent comp;
         String[] params;
@@ -674,7 +684,8 @@ public class DSIProphet08 extends Synth
     public JComponent addFeedback(int layer, Color color)
         {
         Category category = new Category(this, "Feedback / Audio In", color);
-        category.makePasteable("layer" + layer + "tetrasuboscillator");
+//        category.makePasteable("layer" + layer + "tetrafeedback");
+        category.makePasteable("layer");
 
         JComponent comp;
         String[] params;
@@ -696,7 +707,8 @@ public class DSIProphet08 extends Synth
     public JComponent addFilter(int layer, Color color)
         {
         Category category = new Category(this, "Filter", color);
-        category.makePasteable("layer" + layer + "vcf");
+//        category.makePasteable("layer" + layer + "vcf");
+        category.makePasteable("layer");
 
         JComponent comp;
         String[] params;
@@ -731,7 +743,8 @@ public class DSIProphet08 extends Synth
         Category category = new Category(this, 
                 (env == FILTER_ENVELOPE ? "Filter Envelope" : 
                 (env == AMPLIFIER_ENVELOPE ? "Amplifier Envelope" : "Envelope 3")), color);
-        category.makePasteable("layer" + layer + "env" + env);
+//        category.makePasteable("layer" + layer + "env" + env);
+        category.makePasteable("layer" + layer + "env");
                 
         JComponent comp;
         String[] params;
@@ -792,8 +805,9 @@ public class DSIProphet08 extends Synth
     public JComponent addAmplifier(int layer, Color color)
         {
         Category category = new Category(this, "Amplifier", color);
-        category.makePasteable("layer" + layer + "vca");
-                
+//        category.makePasteable("layer" + layer + "vca");
+         category.makePasteable("layer");
+               
         JComponent comp;
         String[] params;
         final HBox hbox = new HBox();
@@ -820,8 +834,9 @@ public class DSIProphet08 extends Synth
     public JComponent addExternalModulation(int layer, String title, String key, Color color)
         {
         Category category = new Category(this, title, color);
-        category.makePasteable("layer" + layer + "key");
-                
+//        category.makePasteable("layer" + layer + "key");
+        category.makePasteable("layer");
+              
         JComponent comp;
         String[] params;
         final HBox hbox = new HBox();
@@ -846,8 +861,10 @@ public class DSIProphet08 extends Synth
     public JComponent addSequencerTrack(final int layer, final int track, Color color)
         {
         Category category = new Category(this, "Track " + track, color);
-        category.makeDistributable("layer" + layer + "track" + track);
-        category.makePasteable("layer" + layer + "track" + track);
+//        category.makeDistributable("layer" + layer + "track" + track);
+//        category.makePasteable("layer" + layer + "track" + track);
+        category.makeDistributable("layer" + layer + "track");
+        category.makePasteable("layer" + layer + "track");
                 
         JComponent comp;
         String[] params;
@@ -892,7 +909,8 @@ public class DSIProphet08 extends Synth
     public JComponent addLFO(int layer, final int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
-        category.makePasteable("layer" + layer + "lfo" + lfo);
+//        category.makePasteable("layer" + layer + "lfo" + lfo);
+        category.makePasteable("layer" + layer + "lfo");
                 
         JComponent comp;
         String[] params;
@@ -935,7 +953,8 @@ public class DSIProphet08 extends Synth
     public JComponent addModulation(int layer, int mod, Color color)
         {
         Category category  = new Category(this, "Modulation " + mod, color);
-        category.makePasteable("layer" + layer + "mod" + mod);
+//        category.makePasteable("layer" + layer + "mod" + mod);
+        category.makePasteable("layer" + layer + "mod");
 
         JComponent comp;
         String[] params;
@@ -966,8 +985,10 @@ public class DSIProphet08 extends Synth
     public JComponent addSequencer(int layer, Color color)
         {
         final Category category  = new Category(this, "Sequencer", color);
-        category.makePasteable("layer" + layer);
-        category.makeDistributable("layer" + layer);
+//        category.makePasteable("layer" + layer);
+//        category.makeDistributable("layer" + layer);
+        category.makePasteable("layer");
+        category.makeDistributable("layer");
                        
         JComponent comp;
         String[] params;
@@ -1008,7 +1029,8 @@ public class DSIProphet08 extends Synth
     public JComponent addTetra(int layer, Color color)
         {
         Category category = new Category(this, "Tetra Layer " + (layer == 1 ? "A / Mopho" : "B"), color);
-        category.makePasteable("layer" + layer + "tetra");
+//        category.makePasteable("layer" + layer + "tetra");
+        category.makePasteable("layer");
                 
         JComponent comp;
         String[] params;

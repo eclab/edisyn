@@ -202,7 +202,8 @@ public class KawaiK1Multi extends Synth
     public JComponent addSection(final int src, Color color)
         {
         Category category = new Category(this, "Section " + src, color);
-        category.makePasteable("section" + src);
+//        category.makePasteable("section" + src);
+        category.makePasteable("section");
 
         JComponent comp;
         String[] params;

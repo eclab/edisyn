@@ -315,7 +315,8 @@ public class OberheimMatrix1000 extends Synth
     public JComponent addOscillator(int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
-        category.makePasteable("dco" + osc);
+//        category.makePasteable("dco" + osc);
+        category.makePasteable("dco");
 
         JComponent comp;
         String[] params;
@@ -507,7 +508,8 @@ public class OberheimMatrix1000 extends Synth
         {
         Category category = new Category(this, "LFO " + lfo + 
             (lfo == 1 ? "   (Oscillator Frequency)" : "   (Oscillator Pulsewidth)"), color);
-        category.makePasteable("lfo" + lfo);
+//        category.makePasteable("lfo" + lfo);
+        category.makePasteable("lfo");
                 
         JComponent comp;
         String[] params;
@@ -568,7 +570,8 @@ public class OberheimMatrix1000 extends Synth
         Category category = new Category(this, "Envelope " + env + 
                 (env == 1 ? "   (Filter Frequency)" :
                 (env == 2 ?  "   (Amplitude)" : "   (Filter FM)")), color);
-        category.makePasteable("env" + env);
+//        category.makePasteable("env" + env);
+        category.makePasteable("env");
                 
         JComponent comp;
         String[] params;
@@ -706,7 +709,8 @@ public class OberheimMatrix1000 extends Synth
         {
         Category category = new Category(this, "Ramp " + ramp +
             (ramp == 1 ? "   (LFO 1 Amplitude)" : "   (LFO 2 Amplitude)"), color);
-        category.makePasteable("ramp" + ramp);
+//        category.makePasteable("ramp" + ramp);
+        category.makePasteable("ramp");
                 
         JComponent comp;
         String[] params;

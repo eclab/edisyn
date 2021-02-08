@@ -346,7 +346,8 @@ public class MAudioVenom extends Synth
     public JComponent addEnvelope(int env, Color color)
         {
         Category category = new Category(this, "Envelope " + env + " (" + (env == 1 ? "Amplifier)" : (env == 2 ? "Filter Cutoff)" : "Pitch)")), color);
-        category.makePasteable("env" + env);
+//        category.makePasteable("env" + env);
+        category.makePasteable("env");
 
         JComponent comp;
         String[] params;
@@ -411,7 +412,8 @@ public class MAudioVenom extends Synth
     public JComponent addOscillator(int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
-        category.makePasteable("osc" + osc);
+//        category.makePasteable("osc" + osc);
+        category.makePasteable("osc");
 
         JComponent comp;
         String[] params;
@@ -545,7 +547,8 @@ public class MAudioVenom extends Synth
     public JComponent addLFO(int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
-        category.makePasteable("lfo" + lfo);
+//        category.makePasteable("lfo" + lfo);
+        category.makePasteable("lfo");
               
         JComponent comp;
         String[] params;

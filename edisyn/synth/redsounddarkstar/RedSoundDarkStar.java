@@ -141,7 +141,8 @@ public class RedSoundDarkStar extends Synth
         for(int i = 1; i <= 5; i++)
             {
             JComponent sourcePanel = new SynthPanel(this);
-            ((SynthPanel)sourcePanel).makePasteable("part" + i);
+//            ((SynthPanel)sourcePanel).makePasteable("part" + i);
+            ((SynthPanel)sourcePanel).makePasteable("part");
             
             vbox = new VBox();
                 
@@ -281,7 +282,8 @@ public class RedSoundDarkStar extends Synth
     public JComponent addOscillatorsGeneral(int part, Color color)
         {
         Category category = new Category(this, "Oscillators", color);
-        category.makePasteable("part" + part);
+//        category.makePasteable("part" + part);
+        category.makePasteable("part");
 
         JComponent comp;
         String[] params;
@@ -345,7 +347,8 @@ public class RedSoundDarkStar extends Synth
     public JComponent addGeneral(int part, Color color)
         {
         Category category = new Category(this, "General", color);
-        category.makePasteable("part" + part);
+//        category.makePasteable("part" + part);
+        category.makePasteable("part");
 
         JComponent comp;
         String[] params;
@@ -407,7 +410,8 @@ public class RedSoundDarkStar extends Synth
     public JComponent addModulation(int part, Color color)
         {
         Category category = new Category(this, "Modulation", color);
-        category.makePasteable("part" + part);
+//        category.makePasteable("part" + part);
+        category.makePasteable("part");
 
         JComponent comp;
         String[] params;
@@ -512,7 +516,8 @@ public class RedSoundDarkStar extends Synth
     public JComponent addLFO(int part, int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo + (lfo == 2 ? " (Filter Frequency)" : ""), color);
-        category.makePasteable("part" + part + "lfo" + lfo);
+//        category.makePasteable("part" + part + "lfo" + lfo);
+        category.makePasteable("part" + part + "lfo");
 
         JComponent comp;
         String[] params;
@@ -546,7 +551,8 @@ public class RedSoundDarkStar extends Synth
     public JComponent addEnvelope(int part, int env, Color color)
         {
         Category category = new Category(this, "Envelope " + env + (env == 1 ? " (Amplitude)" : " (Filter Frequency)"), color);
-        category.makePasteable("part" + part + "env" + env);
+//        category.makePasteable("part" + part + "env" + env);
+        category.makePasteable("part" + part + "env");
                 
         JComponent comp;
         String[] params;
@@ -588,7 +594,8 @@ public class RedSoundDarkStar extends Synth
     public JComponent addOscillator(int part, int osc, Color color)
         {
         final Category category = new Category(this, "Oscillator " + osc, color);
-        category.makePasteable("part" + part + "osc" + osc);
+//        category.makePasteable("part" + part + "osc" + osc);
+        category.makePasteable("part" + part + "osc");
 
         JComponent comp;
         String[] params;

@@ -299,6 +299,7 @@ public class YamahaFS1RMulti extends Synth
                 
             soundPanel.add(vbox, BorderLayout.CENTER);
             addTab("Part " + i, soundPanel);
+            ((SynthPanel)soundPanel).makePasteable("part");
             }
 
         soundPanel = new SynthPanel(this);
@@ -762,7 +763,8 @@ public class YamahaFS1RMulti extends Synth
     public JComponent addController(int controller, Color color)
         {
         Category category = new Category(this, "Voice Control Set " + controller , color);
-        category.makePasteable("controller" + controller);
+//        category.makePasteable("controller" + controller);
+        category.makePasteable("controller");
                 
         JComponent comp;
         String[] params;
@@ -863,7 +865,8 @@ public class YamahaFS1RMulti extends Synth
     public JComponent addVoice(int part, Color color)
         {
         final Category category = new Category(this, "Voice " + part, color);
-        category.makePasteable("part" + part);
+//        category.makePasteable("part" + part);
+        category.makePasteable("part");
                 
         JComponent comp;
         String[] params;
@@ -989,7 +992,8 @@ public class YamahaFS1RMulti extends Synth
     public JComponent addTone(int part, Color color)
         {
         Category category = new Category(this, "Tone " + part, color);
-        category.makePasteable("part" + part);
+//        category.makePasteable("part" + part);
+        category.makePasteable("part");
                 
         JComponent comp;
         String[] params;
@@ -1051,7 +1055,8 @@ public class YamahaFS1RMulti extends Synth
     public JComponent addPitch(int part, Color color)
         {
         Category category = new Category(this, "Pitch " + part, color);
-        category.makePasteable("part" + part);
+//        category.makePasteable("part" + part);
+        category.makePasteable("part");
                 
         JComponent comp;
         String[] params;
@@ -1095,7 +1100,8 @@ public class YamahaFS1RMulti extends Synth
     public JComponent addOutput(int part, Color color)
         {
         Category category = new Category(this, "Output " + part, color);
-        category.makePasteable("part" + part);
+//        category.makePasteable("part" + part);
+        category.makePasteable("part");
                 
         JComponent comp;
         String[] params;
@@ -1150,7 +1156,8 @@ public class YamahaFS1RMulti extends Synth
     public JComponent addPlay(int part, Color color)
         {
         Category category = new Category(this, "Play " + part, color);
-        category.makePasteable("part" + part);
+//        category.makePasteable("part" + part);
+        category.makePasteable("part");
                 
         JComponent comp;
         String[] params;
@@ -1213,7 +1220,8 @@ public class YamahaFS1RMulti extends Synth
     public JComponent addEnvelopes(int part, Color color)
         {
         Category category = new Category(this, "Envelopes", color);
-        category.makePasteable("part" + part);
+//        category.makePasteable("part" + part);
+        category.makePasteable("part");
                 
         JComponent comp;
         String[] params;

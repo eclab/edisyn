@@ -303,7 +303,8 @@ public class WaldorfBlofeldMulti extends Synth
     public JComponent addInstrument(final int inst, Color color)
         {
         Category category = new Category(this, "Part " + inst, color);
-        category.makePasteable("inst" + inst);
+//        category.makePasteable("inst" + inst);
+        category.makePasteable("inst");
                 
         JComponent comp;
         String[] params;

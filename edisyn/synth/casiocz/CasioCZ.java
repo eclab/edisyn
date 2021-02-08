@@ -168,7 +168,8 @@ public class CasioCZ extends Synth
         vbox.add(addEnvelope(1, DCA, Style.COLOR_C()));
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        soundPanel.makePasteable("line1");
+//        soundPanel.makePasteable("line1");
+        soundPanel.makePasteable("line");
         soundPanel.setSendsAllParameters(false);
         addTab("Global and Line 1", soundPanel);
 
@@ -181,7 +182,8 @@ public class CasioCZ extends Synth
         vbox.add(addEnvelope(2, DCA, Style.COLOR_C()));
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        soundPanel.makePasteable("line2");
+//        soundPanel.makePasteable("line2");
+        soundPanel.makePasteable("line");
         soundPanel.setSendsAllParameters(false);
         addTab("Line 2", soundPanel);
         
@@ -398,8 +400,10 @@ public class CasioCZ extends Synth
         final String envelope = "line" + line + "env" + env;
         
         Category category = new Category(this, ENVELOPES[(line - 1) * 3 + env - 1], color);
-        category.makeDistributable(envelope);
-        category.makePasteable(envelope);
+//        category.makeDistributable(envelope);
+//        category.makePasteable(envelope);
+        category.makeDistributable("line" + line + "env");
+        category.makePasteable("line" + line + "env");
                                 
         JComponent comp;
         String[] params;

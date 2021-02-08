@@ -387,7 +387,8 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
     public JComponent addOperator(final int src, Color color)
         {
         final Category category = new Category(this, "Operator " + src, color);
-        category.makePasteable("op" + src);
+//        category.makePasteable("op" + src);
+        category.makePasteable("op");
 
         JComponent comp;
         String[] params;
@@ -462,7 +463,8 @@ hbox.addLast(Strut.makeHorizontalStrut(30));
     public JComponent addEnvelope(final int envelope, Color color)
         {
         Category category = new Category(this, "Operator Envelope " + envelope, color);
-        category.makePasteable("op" + envelope);
+//        category.makePasteable("op" + envelope);
+        category.makePasteable("op");
 
         JComponent comp;
         String[] params;

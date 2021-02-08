@@ -424,7 +424,8 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addOscillator(int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
-        category.makePasteable("osc" + osc);
+//        category.makePasteable("osc" + osc);
+        category.makePasteable("osc");
 
         JComponent comp;
         String[] params;
@@ -540,7 +541,8 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addWave(int wave, Color color)
         {
         Category category = new Category(this, "Wave " + wave, color);
-        category.makePasteable("wave" + wave);
+//        category.makePasteable("wave" + wave);
+        category.makePasteable("wave");
 
         JComponent comp;
         String[] params;
@@ -867,7 +869,8 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addLFO(final int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
-        category.makePasteable("lfo" + lfo);
+//        category.makePasteable("lfo" + lfo);
+        category.makePasteable("lfo");
                 
         JComponent comp;
         String[] params;
@@ -953,7 +956,8 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addEnvelope(final int env, Color color)
         {
         Category category = new Category(this, env == 1 ? "Filter Envelope" : "Amplifier Envelope", color);
-        category.makePasteable("envelope" + env);
+//        category.makePasteable("envelope" + env);
+        category.makePasteable("envelope");
                 
         JComponent comp;
         String[] params;

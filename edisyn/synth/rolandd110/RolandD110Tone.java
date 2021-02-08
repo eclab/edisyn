@@ -166,7 +166,8 @@ public class RolandD110Tone extends Synth
 
         sourcePanel = new SynthPanel(this);
         sourcePanel.add(vbox, BorderLayout.CENTER);
-        ((SynthPanel)sourcePanel).makePasteable("p" + 1);
+//        ((SynthPanel)sourcePanel).makePasteable("p" + 1);
+        ((SynthPanel)sourcePanel).makePasteable("p");
         addTab("Common and Partial " + 1, sourcePanel);                
 
         for(int i = 2; i < 5; i++)
@@ -187,7 +188,8 @@ public class RolandD110Tone extends Synth
 
             sourcePanel = new SynthPanel(this);
             sourcePanel.add(vbox, BorderLayout.CENTER);
-            ((SynthPanel)sourcePanel).makePasteable("p" + i);
+//            ((SynthPanel)sourcePanel).makePasteable("p" + i);
+        ((SynthPanel)sourcePanel).makePasteable("p");
             addTab("Partial " + i, sourcePanel);
             }
 
@@ -492,7 +494,8 @@ public class RolandD110Tone extends Synth
     public JComponent addWaveGroup(int partial, Color color)
         {
         Category category = new Category(this, "Wavegroup", color);
-        category.makePasteable("p" + partial);
+//        category.makePasteable("p" + partial);
+        category.makePasteable("p");
                 
         JComponent comp;
         String[] params;
@@ -533,7 +536,8 @@ public class RolandD110Tone extends Synth
     public JComponent addPitch(int partial, Color color)
         {
         Category category = new Category(this, "Pitch", color);
-        category.makePasteable("p" + partial);
+//        category.makePasteable("p" + partial);
+        category.makePasteable("p");
                 
         JComponent comp;
         String[] params;
@@ -577,7 +581,8 @@ public class RolandD110Tone extends Synth
     public JComponent addPitchEnvelope(int partial, Color color)
         {
         Category category = new Category(this, "Pitch Envelope", color);
-        category.makePasteable("p" + partial);
+//        category.makePasteable("p" + partial);
+        category.makePasteable("p");
                 
         JComponent comp;
         String[] params;
@@ -637,7 +642,8 @@ public class RolandD110Tone extends Synth
     public JComponent addFilter(int partial, Color color)
         {
         Category category = new Category(this, "Filter", color);
-        category.makePasteable("p" + partial);
+//        category.makePasteable("p" + partial);
+        category.makePasteable("p");
                 
         JComponent comp;
         String[] params;
@@ -705,7 +711,8 @@ public class RolandD110Tone extends Synth
     public JComponent addFilterEnvelope(int partial, Color color)
         {
         Category category = new Category(this, "Filter Envelope", color);
-        category.makePasteable("p" + partial);
+//        category.makePasteable("p" + partial);
+        category.makePasteable("p");
                 
         JComponent comp;
         String[] params;
@@ -769,7 +776,8 @@ public class RolandD110Tone extends Synth
     public JComponent addAmplifier(int partial, Color color)
         {
         Category category = new Category(this, "Amplifier", color);
-        category.makePasteable("p" + partial);
+//        category.makePasteable("p" + partial);
+        category.makePasteable("p");
                 
         JComponent comp;
         String[] params;
@@ -883,7 +891,8 @@ public class RolandD110Tone extends Synth
     public JComponent addAmplifierEnvelope(int partial, Color color)
         {
         Category category = new Category(this, "Amplifier Envelope", color);
-        category.makePasteable("p" + partial);
+//        category.makePasteable("p" + partial);
+        category.makePasteable("p");
                 
         JComponent comp;
         String[] params;

@@ -337,7 +337,8 @@ public class RolandJV880Multi extends Synth
     public JComponent addTransmit(int part, Color color)
         {
         Category category = new Category(this, "Part " + part + " Transmit [JV-80]", color);
-        category.makePasteable("part" + part);
+//        category.makePasteable("part" + part);
+        category.makePasteable("part");
 
         JComponent comp;
         String[] params;
@@ -441,7 +442,8 @@ public class RolandJV880Multi extends Synth
     public JComponent addInternal(int part, Color color)
         {
         Category category = new Category(this, "Part " + part + " Internal [JV-80]", color);
-        category.makePasteable("part" + part);
+//        category.makePasteable("part" + part);
+        category.makePasteable("part");
 
         JComponent comp;
         String[] params;
@@ -498,7 +500,8 @@ public class RolandJV880Multi extends Synth
     public JComponent addPart(final int part, Color color)
         {
         Category category = new Category(this, "Part " + part, color);
-        category.makePasteable("part" + part);
+//        category.makePasteable("part" + part);
+        category.makePasteable("part");
 
         JComponent comp;
         String[] params;

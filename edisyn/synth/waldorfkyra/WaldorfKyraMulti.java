@@ -171,7 +171,8 @@ public class WaldorfKyraMulti extends Synth
     public JComponent addPart(int part, Color color)
         {
         Category category = new Category(this, "Part " + part, color);
-        category.makePasteable("part" + part);
+//        category.makePasteable("part" + part);
+        category.makePasteable("part");
 
         JComponent comp;
         String[] params;

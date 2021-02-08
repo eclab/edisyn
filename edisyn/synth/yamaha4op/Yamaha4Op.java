@@ -996,7 +996,8 @@ public class Yamaha4Op extends Synth
     public JComponent addOperator(final int src, Color color)
         {
         final Category category = new Category(this, "Operator " + src, color);
-        category.makePasteable("operator" + src);
+//        category.makePasteable("operator" + src);
+        category.makePasteable("operator");
 
         JComponent comp;
         String[] params;
@@ -1152,7 +1153,8 @@ public class Yamaha4Op extends Synth
     public JComponent addEnvelope(final int envelope, Color color)
         {
         Category category = new Category(this, "Operator Envelope " + envelope, color);
-        category.makePasteable("operator" + envelope);
+//        category.makePasteable("operator" + envelope);
+        category.makePasteable("operator");
 
         JComponent comp;
         String[] params;

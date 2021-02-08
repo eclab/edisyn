@@ -195,7 +195,8 @@ public class KawaiK5Multi extends Synth
     public JComponent addTrack(final int track, Color color)
         {
         Category category = new Category(this, "Track " + track, color);
-        category.makePasteable("t" + track);
+//        category.makePasteable("t" + track);
+        category.makePasteable("t");
 
         JComponent comp;
         String[] params;

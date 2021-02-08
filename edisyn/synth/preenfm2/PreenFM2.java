@@ -743,7 +743,8 @@ public class PreenFM2 extends Synth
     public JComponent addOperator(final int op, Color color)
         {
         Category category = new Category(this, "Operator " + op, color);
-        category.makePasteable("op" + op);
+//        category.makePasteable("op" + op);
+        category.makePasteable("op");
                 
         JComponent comp;
         String[] params;
@@ -1003,7 +1004,8 @@ public class PreenFM2 extends Synth
     public JComponent addLFO(int lfo, Color color)
         {
         Category category  = new Category(this, "LFO " + lfo, color);
-        category.makePasteable("lfo" + lfo);
+//        category.makePasteable("lfo" + lfo);
+        category.makePasteable("lfo");
                         
         JComponent comp;
         String[] params;
@@ -1086,7 +1088,8 @@ public class PreenFM2 extends Synth
     public JComponent addEnvelope(final int env, Color color)
         {
         Category category = new Category(this, "Envelope " + env, color);
-        category.makePasteable("freeenv" + env);
+//        category.makePasteable("freeenv" + env);
+        category.makePasteable("freeenv");
                 
         JComponent comp;
         String[] params;
@@ -1176,8 +1179,10 @@ public class PreenFM2 extends Synth
     public JComponent addStepSequencer(int seq, Color color)
         {
         Category category  = new Category(this, "Step Sequencer " + seq, color);
-        category.makePasteable("stepseq" + seq);
-        category.makeDistributable("stepseq" + seq);
+//        category.makePasteable("stepseq" + seq);
+//        category.makeDistributable("stepseq" + seq);
+        category.makePasteable("stepseq");
+        category.makeDistributable("stepseq");
                                 
         JComponent comp;
         String[] params;
@@ -1252,7 +1257,8 @@ public class PreenFM2 extends Synth
     public JComponent addNoteScaling(int note, Color color)
         {
         Category category  = new Category(this, "Note " + note + " MIDI Scaling", color);
-        category.makePasteable("note" + note);
+//        category.makePasteable("note" + note);
+        category.makePasteable("note");
                                 
         JComponent comp;
         String[] params;

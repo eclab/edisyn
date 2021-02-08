@@ -895,7 +895,8 @@ public class KorgSG extends Synth
                 
         Category category = new Category(this, "Effect " + effect, color);
         category.add(main, BorderLayout.CENTER);
-        category.makePasteable("effect" + effect);
+//        category.makePasteable("effect" + effect);
+        category.makePasteable("effect");
                 
         return category;
         }

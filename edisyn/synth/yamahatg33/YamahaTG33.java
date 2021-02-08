@@ -801,7 +801,8 @@ public class YamahaTG33 extends Synth
     public JComponent addTone(final int tone, Color color)
         {
         Category category = new Category(this, "Tone " + new String[] { "A", "B", "C", "D" }[tone], color);
-        category.makePasteable("tone" + tone);
+//        category.makePasteable("tone" + tone);
+        category.makePasteable("tone");
 
         String h = "tone" + tone;
         JComponent comp;
@@ -972,7 +973,8 @@ public class YamahaTG33 extends Synth
     public JComponent addFM(int tone, boolean carrier, Color color)
         {
         Category category = new Category(this, (carrier ? "Carrier " : "Modulator " ) + new String[] { "A", "B", "C", "D" }[tone], color);
-        category.makePasteable("tone" + tone);
+//        category.makePasteable("tone" + tone);
+        category.makePasteable("tone");
 
         String h = "tone" + tone + (carrier ? "0" : "1");
         JComponent comp;
@@ -1042,7 +1044,8 @@ public class YamahaTG33 extends Synth
                         ((carrier ? "Carrier " : "Modulator ") + 
                         (tone == TONE_B ? "B" : "D") + " Envelope"))), color);
 
-        category.makePasteable("tone" + tone);
+//        category.makePasteable("tone" + tone);
+        category.makePasteable("tone");
 
         String h = "tone" + tone + ((tone == TONE_B || tone == TONE_D) ? (carrier ? "0" : "1") : "");
         JComponent comp;

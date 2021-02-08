@@ -261,7 +261,8 @@ public class Yamaha4OpMulti extends Synth
     public JComponent addInstrument(final int src, Color color)
         {
         final Category category = new Category(this, "Instrument " + src, color);
-        category.makePasteable("instrument" + src);
+//        category.makePasteable("instrument" + src);
+        category.makePasteable("instrument");
 
         JComponent comp;
         String[] params;

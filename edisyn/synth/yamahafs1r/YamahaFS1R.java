@@ -867,7 +867,8 @@ public class YamahaFS1R extends Synth
             hbox = new HBox();
                 
             soundPanel.add(vbox, BorderLayout.CENTER);
-            ((SynthPanel)soundPanel).makePasteable("operator" + op);
+//            ((SynthPanel)soundPanel).makePasteable("operator" + op);
+            ((SynthPanel)soundPanel).makePasteable("operator");
             addTab("Operator " + op, soundPanel);
             }
 
@@ -1046,7 +1047,8 @@ public class YamahaFS1R extends Synth
     public JComponent addLFO(int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
-        category.makePasteable("lfo" + lfo);
+//        category.makePasteable("lfo" + lfo);
+        category.makePasteable("lfo");
 
         JComponent comp;
         String[] params;

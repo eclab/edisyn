@@ -430,7 +430,8 @@ public class YamahaDX7 extends Synth
     public JComponent addKeyScaling(final int src, Color color)
         {
         final Category category = new Category(this, "Keyboard Level Scaling " + src, color);
-        category.makePasteable("operator" + src);
+//        category.makePasteable("operator" + src);
+        category.makePasteable("operator");
 
         JComponent comp;
         String[] params;
@@ -484,7 +485,8 @@ public class YamahaDX7 extends Synth
     public JComponent addOperator(final int src, Color color)
         {
         final Category category = new Category(this, "Operator " + src, color);
-        category.makePasteable("operator" + src);
+//        category.makePasteable("operator" + src);
+        category.makePasteable("operator");
 
         JComponent comp;
         String[] params;
@@ -557,8 +559,10 @@ public class YamahaDX7 extends Synth
     public JComponent addEnvelope(final int envelope, Color color)
         {
         Category category = new Category(this, "Operator Envelope " + envelope, color);
-        category.makePasteable("operator" + envelope);
-        category.makeDistributable("operator" + envelope);
+//        category.makePasteable("operator" + envelope);
+//        category.makeDistributable("operator" + envelope);
+        category.makePasteable("operator");
+        category.makeDistributable("operator");
 
         JComponent comp;
         String[] params;

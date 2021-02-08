@@ -116,7 +116,8 @@ public class KawaiK5 extends Synth
         vbox.add(addPitchEnvelope(1, Style.COLOR_C()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        ((SynthPanel)soundPanel).makePasteable("s1");
+//        ((SynthPanel)soundPanel).makePasteable("s1");
+        ((SynthPanel)soundPanel).makePasteable("s");
         addTab("General 1", (SynthPanel)soundPanel);
                 
         
@@ -137,7 +138,8 @@ public class KawaiK5 extends Synth
         vbox.add(addPitchEnvelope(2, Style.COLOR_C()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        ((SynthPanel)soundPanel).makePasteable("s2");
+//        ((SynthPanel)soundPanel).makePasteable("s2");
+        ((SynthPanel)soundPanel).makePasteable("s");
         addTab("General 2", (SynthPanel)soundPanel);
                 
         
@@ -161,7 +163,8 @@ public class KawaiK5 extends Synth
         vbox.add(hbox);
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        ((SynthPanel)soundPanel).makePasteable("s1");
+//        ((SynthPanel)soundPanel).makePasteable("s1");
+        ((SynthPanel)soundPanel).makePasteable("s");
         addTab("Harmonics 1", (SynthPanel)soundPanel);
                 
         soundPanel = new SynthPanel(this);
@@ -178,7 +181,8 @@ public class KawaiK5 extends Synth
         vbox.add(hbox);
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        ((SynthPanel)soundPanel).makePasteable("s2");
+//        ((SynthPanel)soundPanel).makePasteable("s2");
+        ((SynthPanel)soundPanel).makePasteable("s");
         addTab("Harmonics 2", (SynthPanel)soundPanel);
                 
 
@@ -194,7 +198,8 @@ public class KawaiK5 extends Synth
         vbox.add(addDHGEnvelope(1, 4, Style.COLOR_A()));
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        ((SynthPanel)soundPanel).makePasteable("s1");
+//        ((SynthPanel)soundPanel).makePasteable("s1");
+        ((SynthPanel)soundPanel).makePasteable("s");
         addTab("Envelopes/KS 1", (SynthPanel)soundPanel);
                 
 
@@ -210,7 +215,8 @@ public class KawaiK5 extends Synth
         vbox.add(addDHGEnvelope(2, 4, Style.COLOR_A()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        ((SynthPanel)soundPanel).makePasteable("s2");
+//        ((SynthPanel)soundPanel).makePasteable("s2");
+        ((SynthPanel)soundPanel).makePasteable("s");
         addTab("Envelopes/KS 2", (SynthPanel)soundPanel);
 
         model.set("name", "INIT");  // has to be 10 long
@@ -369,7 +375,8 @@ public class KawaiK5 extends Synth
     public JComponent addBasic(int source, Color color)
         {
         Category category = new Category(this, "Basic Edit", color);
-        category.makePasteable("s" + source + "basic");
+//        category.makePasteable("s" + source + "basic");
+        category.makePasteable("s");
 
         JComponent comp;
         String[] params;
@@ -403,7 +410,8 @@ public class KawaiK5 extends Synth
     public JComponent addKSCurve(int source, Color color)
         {
         Category category = new Category(this, "Key Scaling Curve", color);
-        category.makePasteable("s" + source + "ks");
+//        category.makePasteable("s" + source + "ks");
+        category.makePasteable("s");
 
         JComponent comp;
         String[] params;
@@ -432,7 +440,8 @@ public class KawaiK5 extends Synth
     public JComponent addPitch(int source, Color color)
         {
         Category category = new Category(this, "Pitch (DFG)", color);
-        category.makePasteable("s" + source + "dfg");
+//        category.makePasteable("s" + source + "dfg");
+        category.makePasteable("s");
 
         JComponent comp;
         String[] params;
@@ -487,8 +496,10 @@ public class KawaiK5 extends Synth
     public JComponent addPitchEnvelope(int source, Color color)
         {
         Category category = new Category(this, "Pitch (DFG) Envelope", color);
-        category.makePasteable("s" + source + "dfg");
-        category.makeDistributable("s" + source + "dfg");
+//        category.makePasteable("s" + source + "dfg");
+//        category.makeDistributable("s" + source + "dfg");
+        category.makePasteable("s");
+        category.makeDistributable("s");
 
         JComponent comp;
         String[] params;
@@ -603,8 +614,11 @@ public class KawaiK5 extends Synth
     public JComponent addDHG(int source, Color color)
         {
         Category category = new Category(this, "Harmonics (DHG)", color);
-        category.makePasteable("s" + source + "dhg");
-        category.makeDistributable("s" + source + "dhg");
+//        category.makePasteable("s" + source + "dhg");
+//        category.makeDistributable("s" + source + "dhg");
+        category.makePasteable("s");
+        category.makeDistributable("s");
+
         category.setSendsAllParameters(true);                           // otherwise, it's painfully slow
         
         JComponent comp;
@@ -1245,8 +1259,10 @@ public class KawaiK5 extends Synth
     public JComponent addDHGEnvelope(int source, int envelope, Color color)
         {
         Category category = new Category(this, "Harmonics (DHG) Envelope " + envelope, color);
-        category.makePasteable("s" + source + "dhg");
-        category.makeDistributable("s" + source + "dhg");
+//        category.makePasteable("s" + source + "dhg");
+//        category.makeDistributable("s" + source + "dhg");
+        category.makePasteable("s");
+        category.makeDistributable("s");
 
         JComponent comp;
         String[] params;
@@ -1338,7 +1354,8 @@ public class KawaiK5 extends Synth
     public JComponent addDHGEnvelopeGlobal(int source, Color color)
         {
         Category category = new Category(this, "Harmonics (DHG) Envelope Global", color);
-        category.makePasteable("s" + source + "dhg");
+//        category.makePasteable("s" + source + "dhg");
+        category.makePasteable("s");
 
         JComponent comp;
         String[] params;
@@ -1560,7 +1577,8 @@ public class KawaiK5 extends Synth
     public JComponent addFilter(int source, Color color)
         {
         Category category = new Category(this, "Filter (DDF)", color);
-        category.makePasteable("s" + source + "ddf");
+//        category.makePasteable("s" + source + "ddf");
+        category.makePasteable("s");
 
         JComponent comp;
         String[] params;
@@ -1622,8 +1640,10 @@ public class KawaiK5 extends Synth
     public JComponent addFilterEnvelope(int source, Color color)
         {
         Category category = new Category(this, "Filter (DDF) Envelope", color);
-        category.makePasteable("s" + source + "ddf");
-        category.makeDistributable("s" + source + "ddf");
+//        category.makePasteable("s" + source + "ddf");
+//        category.makeDistributable("s" + source + "ddf");
+        category.makePasteable("s");
+        category.makeDistributable("s");
 
         JComponent comp;
         String[] params;
@@ -1699,7 +1719,8 @@ public class KawaiK5 extends Synth
     public JComponent addDDA(int source, Color color)
         {
         Category category = new Category(this, "Amplifier (DDA)", color);
-        category.makePasteable("s" + source + "dda");
+//        category.makePasteable("s" + source + "dda");
+        category.makePasteable("s");
 
         JComponent comp;
         String[] params;
@@ -1745,8 +1766,10 @@ public class KawaiK5 extends Synth
     public JComponent addDDAEnvelope(int source, Color color)
         {
         Category category = new Category(this, "Amplifier (DDA) Envelope", color);
-        category.makePasteable("s" + source + "dda");
-        category.makeDistributable("s" + source + "dda");
+//        category.makePasteable("s" + source + "dda");
+//        category.makeDistributable("s" + source + "dda");
+        category.makePasteable("s");
+        category.makeDistributable("s");
 
         JComponent comp;
         String[] params;

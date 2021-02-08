@@ -290,7 +290,8 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
     public Category addStep(int num, Color color)
         {
         Category category = new Category(this, "" + num, color);
-        category.makePasteable("step" + num);
+//        category.makePasteable("step" + num);
+        category.makePasteable("step");
         
         JComponent comp;
         String[] params;

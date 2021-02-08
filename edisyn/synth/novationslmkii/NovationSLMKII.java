@@ -64,8 +64,8 @@ public class NovationSLMKII extends Synth
     public static final String[] PROGRAM_PORTS = { "Use Common","MIDI 1", "MIDI 2", "MIDI 1 2", "USB 1", "USB 1 MIDI 1", "USB 1 MIDI 2", "USB 1 MIDI 1 2", "USB 2", "USB 2 MIDI 1", "USB 2 MIDI 2", "USB 2 MIDI 1 2", "Off" };
     public static final String[] CONTROL_PORTS = { "Use Common", "Use Program", "MIDI 1", "MIDI 2", "MIDI 1 2", "USB 1", "USB 1 MIDI 1", "USB 1 MIDI 2", "USB 1 MIDI 1 2", "USB 2", "USB 2 MIDI 1", "USB 2 MIDI 2", "USB 2 MIDI 1 2",  "USB 3", "USB 3 MIDI 1", "USB 3 MIDI 2", "USB 3 MIDI 1 2", "Off" };
     public static final String[] KEYBOARD_PORTS = { "MIDI 1", "MIDI 2", "MIDI 1 2", "USB 1", "USB 1 MIDI 1", "USB 1 MIDI 2", "USB 1 MIDI 1 2", "USB 2", "USB 2 MIDI 1", "USB 2 MIDI 2", "USB 2 MIDI 1 2", "Off" };
-    public static final String[] SINGLE_DV_TYPES = { "None", "Single", "Roland" };
-    public static final String[] DOUBLE_DV_TYPES = { "None", "LSB-MSB", "MSB-LSB", "Roland" };
+    public static final String[] SINGLE_DV_TYPES = { "None", "Roland", "Single"};
+    public static final String[] DOUBLE_DV_TYPES = { "None", "Roland", "LSB-MSB", "MSB-LSB"};
     /// argh, these are *also* called "types"
 	public static final String[] TOUCHPAD_X_TYPES = { "No Spring/Hold", "Spring Left", "Spring Center", "Spring Right" };
 	public static final String[] TOUCHPAD_Y_TYPES = { "No Spring/Hold", "Spring Down", "Spring Center", "Spring Up" };
@@ -93,15 +93,15 @@ public class NovationSLMKII extends Synth
 	public static final int LOOP_INDEX = 77;
 	public static final int CROSSFADER_INDEX = 85;
 
-	// For our throwaway we'll use pot pickup 0, which has  4 values
-	Chooser throwaway = new Chooser("", this, "control" + 0 + "potpickup", new String[] { "1", "2", "3", "4" });
+	// For our throwaway we'll use pot pickup 0 [which doesn't exist] and which has  4 values
+	Chooser throwaway = new Chooser("", this, "page1control9potpickup", new String[] { "1", "2", "3", "4" });
 
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
         receiveCurrent.setEnabled(false);
         receivePatch.setEnabled(false);
-        getAll.setEnabled(false);
+        //getAll.setEnabled(false);
         merge.setEnabled(false);
         return frame;
         }         
@@ -135,132 +135,132 @@ public class NovationSLMKII extends Synth
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
-        hbox.add(addEncoder(1, index++, Style.COLOR_A()));
-        hbox.addLast(addEncoder(2, index++, Style.COLOR_A()));
+        hbox.add(addEncoder(1, "page1control1", index++, Style.COLOR_A()));
+        hbox.addLast(addEncoder(2, "page1control2", index++, Style.COLOR_A()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addEncoder(3, index++, Style.COLOR_B()));
-        hbox.addLast(addEncoder(4, index++, Style.COLOR_B()));
+        hbox.add(addEncoder(3, "page1control3", index++, Style.COLOR_B()));
+        hbox.addLast(addEncoder(4, "page1control4", index++, Style.COLOR_B()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addEncoder(5, index++, Style.COLOR_A()));
-        hbox.addLast(addEncoder(6, index++, Style.COLOR_A()));
+        hbox.add(addEncoder(5, "page1control5", index++, Style.COLOR_A()));
+        hbox.addLast(addEncoder(6, "page1control6", index++, Style.COLOR_A()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addEncoder(7, index++, Style.COLOR_B()));
-        hbox.addLast(addEncoder(8, index++, Style.COLOR_B()));
+        hbox.add(addEncoder(7, "page1control7", index++, Style.COLOR_B()));
+        hbox.addLast(addEncoder(8, "page1control8", index++, Style.COLOR_B()));
         vbox.add(hbox);
         soundPanel.add(vbox, BorderLayout.CENTER);
-		((SynthPanel)soundPanel).makePasteable("control");
+		((SynthPanel)soundPanel).makePasteable("page");
         addTab("Encoders", soundPanel);
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
-        hbox.add(addPot(1, index++, Style.COLOR_B()));
-        hbox.addLast(addPot(2, index++, Style.COLOR_B()));
+        hbox.add(addPot(1, "page2control1", index++, Style.COLOR_B()));
+        hbox.addLast(addPot(2, "page2control2", index++, Style.COLOR_B()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addPot(3, index++, Style.COLOR_A()));
-        hbox.addLast(addPot(4, index++, Style.COLOR_A()));
+        hbox.add(addPot(3, "page2control3", index++, Style.COLOR_A()));
+        hbox.addLast(addPot(4, "page2control4", index++, Style.COLOR_A()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addPot(5, index++, Style.COLOR_B()));
-        hbox.addLast(addPot(6, index++, Style.COLOR_B()));
+        hbox.add(addPot(5, "page2control5", index++, Style.COLOR_B()));
+        hbox.addLast(addPot(6, "page2control6", index++, Style.COLOR_B()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addPot(7, index++, Style.COLOR_A()));
-        hbox.addLast(addPot(8, index++, Style.COLOR_A()));
+        hbox.add(addPot(7, "page2control7", index++, Style.COLOR_A()));
+        hbox.addLast(addPot(8, "page2control8", index++, Style.COLOR_A()));
         vbox.add(hbox);
         soundPanel.add(vbox, BorderLayout.CENTER);
-		((SynthPanel)soundPanel).makePasteable("control");
+		((SynthPanel)soundPanel).makePasteable("page");
         addTab("Pots", soundPanel);
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
-        hbox.add(addPot(1, index++, Style.COLOR_A()));
-        hbox.addLast(addPot(2, index++, Style.COLOR_A()));
+        hbox.add(addPot(1, "page3control1", index++, Style.COLOR_A()));
+        hbox.addLast(addPot(2, "page3control2", index++, Style.COLOR_A()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addPot(3, index++, Style.COLOR_B()));
-        hbox.addLast(addPot(4, index++, Style.COLOR_B()));
+        hbox.add(addPot(3, "page3control3", index++, Style.COLOR_B()));
+        hbox.addLast(addPot(4, "page3control4", index++, Style.COLOR_B()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addPot(5, index++, Style.COLOR_A()));
-        hbox.addLast(addPot(6, index++, Style.COLOR_A()));
+        hbox.add(addPot(5, "page3control5", index++, Style.COLOR_A()));
+        hbox.addLast(addPot(6, "page3control6", index++, Style.COLOR_A()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addPot(7, index++, Style.COLOR_B()));
-        hbox.addLast(addPot(8, index++, Style.COLOR_B()));
+        hbox.add(addPot(7, "page3control7", index++, Style.COLOR_B()));
+        hbox.addLast(addPot(8, "page3control8", index++, Style.COLOR_B()));
         vbox.add(hbox);
         soundPanel.add(vbox, BorderLayout.CENTER);
-		((SynthPanel)soundPanel).makePasteable("control");
+		((SynthPanel)soundPanel).makePasteable("page");
         addTab("Faders", soundPanel);
         
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
-        hbox.add(addButton(1, index++, Style.COLOR_B()));
-        hbox.addLast(addButton(2, index++, Style.COLOR_B()));
+        hbox.add(addButton(1, "page4control1", index++, Style.COLOR_B()));
+        hbox.addLast(addButton(2, "page4control2", index++, Style.COLOR_B()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addButton(3, index++, Style.COLOR_A()));
-        hbox.addLast(addButton(4, index++, Style.COLOR_A()));
+        hbox.add(addButton(3, "page4control3", index++, Style.COLOR_A()));
+        hbox.addLast(addButton(4, "page4control4", index++, Style.COLOR_A()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addButton(5, index++, Style.COLOR_B()));
-        hbox.addLast(addButton(6, index++, Style.COLOR_B()));
+        hbox.add(addButton(5, "page4control5", index++, Style.COLOR_B()));
+        hbox.addLast(addButton(6, "page4control6", index++, Style.COLOR_B()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addButton(7, index++, Style.COLOR_A()));
-        hbox.addLast(addButton(8, index++, Style.COLOR_A()));
+        hbox.add(addButton(7, "page4control7", index++, Style.COLOR_A()));
+        hbox.addLast(addButton(8, "page4control8", index++, Style.COLOR_A()));
         vbox.add(hbox);
         soundPanel.add(vbox, BorderLayout.CENTER);
-		((SynthPanel)soundPanel).makePasteable("control");
+		((SynthPanel)soundPanel).makePasteable("page");
         addTab("Buttons A", soundPanel);
         
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
-        hbox.add(addButton(1+8, index++, Style.COLOR_A()));
-        hbox.addLast(addButton(2+8, index++, Style.COLOR_A()));
+        hbox.add(addButton(1+8, "page5control1", index++, Style.COLOR_A()));
+        hbox.addLast(addButton(2+8, "page5control2", index++, Style.COLOR_A()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addButton(3+8, index++, Style.COLOR_B()));
-        hbox.addLast(addButton(4+8, index++, Style.COLOR_B()));
+        hbox.add(addButton(3+8, "page5control3", index++, Style.COLOR_B()));
+        hbox.addLast(addButton(4+8, "page5control4", index++, Style.COLOR_B()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addButton(5+8, index++, Style.COLOR_A()));
-        hbox.addLast(addButton(6+8, index++, Style.COLOR_A()));
+        hbox.add(addButton(5+8, "page5control5", index++, Style.COLOR_A()));
+        hbox.addLast(addButton(6+8, "page5control6", index++, Style.COLOR_A()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addButton(7+8, index++, Style.COLOR_B()));
-        hbox.addLast(addButton(8+8, index++, Style.COLOR_B()));
+        hbox.add(addButton(7+8, "page5control7", index++, Style.COLOR_B()));
+        hbox.addLast(addButton(8+8, "page5control8", index++, Style.COLOR_B()));
         vbox.add(hbox);
         soundPanel.add(vbox, BorderLayout.CENTER);
-		((SynthPanel)soundPanel).makePasteable("control");
+		((SynthPanel)soundPanel).makePasteable("page");
         addTab("B", soundPanel);
         
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
-        hbox.add(addButton(1+16, index++, Style.COLOR_B()));
-        hbox.addLast(addButton(2+16, index++, Style.COLOR_B()));
+        hbox.add(addButton(1+16, "page6control1", index++, Style.COLOR_B()));
+        hbox.addLast(addButton(2+16, "page6control2", index++, Style.COLOR_B()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addButton(3+16, index++, Style.COLOR_A()));
-        hbox.addLast(addButton(4+16, index++, Style.COLOR_A()));
+        hbox.add(addButton(3+16, "page6control3", index++, Style.COLOR_A()));
+        hbox.addLast(addButton(4+16, "page6control4", index++, Style.COLOR_A()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addButton(5+16, index++, Style.COLOR_B()));
-        hbox.addLast(addButton(6+16, index++, Style.COLOR_B()));
+        hbox.add(addButton(5+16, "page6control5", index++, Style.COLOR_B()));
+        hbox.addLast(addButton(6+16, "page6control6", index++, Style.COLOR_B()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addButton(7+16, index++, Style.COLOR_A()));
-        hbox.addLast(addButton(8+16, index++, Style.COLOR_A()));
+        hbox.add(addButton(7+16, "page6control7", index++, Style.COLOR_A()));
+        hbox.addLast(addButton(8+16, "page6control8", index++, Style.COLOR_A()));
         vbox.add(hbox);
         soundPanel.add(vbox, BorderLayout.CENTER);
 		((SynthPanel)soundPanel).makePasteable("control");
@@ -269,89 +269,94 @@ public class NovationSLMKII extends Synth
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
-        hbox.add(addButton(1+24, index++, Style.COLOR_A()));
-        hbox.addLast(addButton(2+24, index++, Style.COLOR_A()));
+        hbox.add(addButton(1+24, "page7control1", index++, Style.COLOR_A()));
+        hbox.addLast(addButton(2+24, "page7control2", index++, Style.COLOR_A()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addButton(3+24, index++, Style.COLOR_B()));
-        hbox.addLast(addButton(4+24, index++, Style.COLOR_B()));
+        hbox.add(addButton(3+24, "page7control3", index++, Style.COLOR_B()));
+        hbox.addLast(addButton(4+24, "page7control4", index++, Style.COLOR_B()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addButton(5+24, index++, Style.COLOR_A()));
-        hbox.addLast(addButton(6+24, index++, Style.COLOR_A()));
+        hbox.add(addButton(5+24, "page7control5", index++, Style.COLOR_A()));
+        hbox.addLast(addButton(6+24, "page7control6", index++, Style.COLOR_A()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addButton(7+24, index++, Style.COLOR_B()));
-        hbox.addLast(addButton(8+24, index++, Style.COLOR_B()));
+        hbox.add(addButton(7+24, "page7control7", index++, Style.COLOR_B()));
+        hbox.addLast(addButton(8+24, "page7control8", index++, Style.COLOR_B()));
         vbox.add(hbox);
         soundPanel.add(vbox, BorderLayout.CENTER);
-		((SynthPanel)soundPanel).makePasteable("control");
+		((SynthPanel)soundPanel).makePasteable("page");
         addTab("D", soundPanel);
         
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
-        hbox.add(addDrumPad(1, index++, Style.COLOR_B()));
-        hbox.addLast(addDrumPad(2, index++, Style.COLOR_B()));
+        hbox.add(addDrumPad(1, "page8control1", index++, Style.COLOR_B()));
+        hbox.addLast(addDrumPad(2, "page8control2", index++, Style.COLOR_B()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addDrumPad(3, index++, Style.COLOR_A()));
-        hbox.addLast(addDrumPad(4, index++, Style.COLOR_A()));
+        hbox.add(addDrumPad(3, "page8control3", index++, Style.COLOR_A()));
+        hbox.addLast(addDrumPad(4, "page8control4", index++, Style.COLOR_A()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addDrumPad(5, index++, Style.COLOR_B()));
-        hbox.addLast(addDrumPad(6, index++, Style.COLOR_B()));
+        hbox.add(addDrumPad(5, "page8control5", index++, Style.COLOR_B()));
+        hbox.addLast(addDrumPad(6, "page8control6", index++, Style.COLOR_B()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addDrumPad(7, index++, Style.COLOR_A()));
-        hbox.addLast(addDrumPad(8, index++, Style.COLOR_A()));
+        hbox.add(addDrumPad(7, "page8control7", index++, Style.COLOR_A()));
+        hbox.addLast(addDrumPad(8, "page8control8", index++, Style.COLOR_A()));
         vbox.add(hbox);
         soundPanel.add(vbox, BorderLayout.CENTER);
-		((SynthPanel)soundPanel).makePasteable("control");
+		((SynthPanel)soundPanel).makePasteable("page");
         addTab("Pads", soundPanel);
         
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
-        hbox.add(addPot(1, index++, Style.COLOR_A()));					/// EXPRESSION
-        hbox.addLast(addButton(2, index++, Style.COLOR_A()));			/// SUSTAIN
+        JComponent expression = addPot(1, "page9control1", index++, Style.COLOR_A());
+        JComponent sustain = addButton(2, "page9control3", index++, Style.COLOR_B());
+        JComponent modwheel = addPot(3, "page9control2", index++, Style.COLOR_A());
+        JComponent pitchbend = addPitchBend("page9control4", index++, Style.COLOR_B());
+        // I put these out of order so the category text will fit
+        hbox.add(expression);					/// EXPRESSION
+        hbox.addLast(modwheel);					/// MOD WHEEL
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addPot(3, index++, Style.COLOR_B()));					/// MOD WHEEL
-        hbox.addLast(addPitchBend(index++, Style.COLOR_B()));			/// PITCH BEND
+        hbox.add(sustain);					/// SUSTAIN
+        hbox.addLast(pitchbend);			/// PITCH BEND
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addPitchBend(index++, Style.COLOR_A()));				/// X1
-        hbox.addLast(addPitchBend(index++, Style.COLOR_A()));			/// Y1
+        hbox.add(addPitchBend("page9control5", index++, Style.COLOR_A()));				/// X1
+        hbox.addLast(addPitchBend("page9control6", index++, Style.COLOR_A()));			/// Y1
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addPitchBend(index++, Style.COLOR_B()));				/// X2
-        hbox.addLast(addPitchBend(index++, Style.COLOR_B()));			/// Y2
+        hbox.add(addPitchBend("page9control7", index++, Style.COLOR_B()));				/// X2
+        hbox.addLast(addPitchBend("page9control8", index++, Style.COLOR_B()));			/// Y2
         vbox.add(hbox);
         soundPanel.add(vbox, BorderLayout.CENTER);
-		((SynthPanel)soundPanel).makePasteable("control");
+		((SynthPanel)soundPanel).makePasteable("page");
         addTab("Control", soundPanel);
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
-        hbox.add(addButton(1, index++, Style.COLOR_B()));				/// REWIND
-        hbox.addLast(addButton(2, index++, Style.COLOR_B()));			/// FF
+        hbox.add(addButton(1, "page10control1", index++, Style.COLOR_B()));				/// REWIND
+        hbox.addLast(addButton(2, "page10control2", index++, Style.COLOR_B()));			/// FF
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(addButton(3, index++, Style.COLOR_A()));				/// STOP
-        hbox.addLast(addButton(4, index++, Style.COLOR_A()));			/// PLAY
+        hbox.add(addButton(3, "page10control3", index++, Style.COLOR_A()));				/// STOP
+        hbox.addLast(addButton(4, "page10control4", index++, Style.COLOR_A()));			/// PLAY
         vbox.add(hbox);
         hbox = new HBox();
         
         // Loop and Record are out of order, notice index++ not used
-        hbox.add(addButton(6, index, Style.COLOR_B()));					/// LOOP
-        hbox.addLast(addButton(5, index + 1, Style.COLOR_B()));			/// RECORD
+        hbox.add(addButton(6, "page10control5", index, Style.COLOR_B()));					/// LOOP
+        hbox.addLast(addButton(5, "page10control6", index + 1, Style.COLOR_B()));			/// RECORD
         index += 2;
         vbox.add(hbox);
-        vbox.add(addPot(7, CROSSFADER_INDEX, Style.COLOR_A()));			/// CROSS-FADER
+        vbox.add(addPot(7, "page10control7", CROSSFADER_INDEX, Style.COLOR_A()));			/// CROSS-FADER
         soundPanel.add(vbox, BorderLayout.CENTER);
-		((SynthPanel)soundPanel).makePasteable("control");
+		((SynthPanel)soundPanel).makePasteable("page");
         addTab("Transport", soundPanel);
         
         loadDefaults();        
@@ -424,16 +429,17 @@ public class NovationSLMKII extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, getSynthName(), color);
-        globalCategory.makeUnresettable();
+        //globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-        comp = new PatchDisplay(this, 6);
-        vbox.add(comp);
+        comp = new PatchDisplay(this, 4);
+ 		vbox.add(comp);
  		hbox.add(vbox);
+ 		vbox = new VBox();
  		
         comp = new StringComponent("Patch Name", this, "name", 34, "Name must be up to 34 ASCII characters.")
             {
@@ -491,10 +497,10 @@ public class NovationSLMKII extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-		comp = new Chooser("Touchpad X Type", this, "touchpadxtype", TOUCHPAD_X_TYPES);
+		comp = new Chooser("Touchpad X Type [Key]", this, "touchpadxtype", TOUCHPAD_X_TYPES);
 		vbox.add(comp);
 
-		comp = new Chooser("Touchpad Y Type", this, "touchpadytype", TOUCHPAD_Y_TYPES);
+		comp = new Chooser("Touchpad Y Type [Key]", this, "touchpadytype", TOUCHPAD_Y_TYPES);
 		vbox.add(comp);
 				
 		hbox.add(vbox);
@@ -503,10 +509,10 @@ public class NovationSLMKII extends Synth
         comp = new CheckBox("Pot Pickup", this, "potpickup");
 		vbox.add(comp);
 		
-        comp = new CheckBox("Aftertouch", this, "aftertouch");
+        comp = new CheckBox("Aftertouch [Key]", this, "aftertouch");
 		vbox.add(comp);
 
-        comp = new CheckBox("Enable Keyboard Zones", this, "enablekeyboardzones");
+        comp = new CheckBox("Enable Keyboard Zones [Key]", this, "enablekeyboardzones");
 		vbox.add(comp);
 		hbox.add(vbox);
 
@@ -551,7 +557,7 @@ public class NovationSLMKII extends Synth
 
 	public JComponent addZone(int zone, Color color)
 		{
-        Category category = new Category(this, "Keyboard Zone " + zone, color);
+        Category category = new Category(this, "Keyboard Zone " + zone + " [Key]", color);
 		category.makePasteable("zone" + zone);
 
         
@@ -610,10 +616,10 @@ public class NovationSLMKII extends Synth
 
 
 
-	public JComponent addEncoder(int num, final int index, Color color)
+	public JComponent addEncoder(int num, String prefix, final int index, Color color)
 		{
         Category category = new Category(this, "Encoder " + num, color);
-		category.makePasteable("control" + index);
+		category.makePasteable(prefix.substring(0, prefix.length() - 1));
 
         JComponent comp;
         String[] params;
@@ -623,7 +629,7 @@ public class NovationSLMKII extends Synth
 
 		HBox valbox = new HBox();
 
-		StringComponent name = new StringComponent("Name", this, "control" + index + "name", 8, "Name must be 8 characters long")
+		StringComponent name = new StringComponent("Name", this, prefix + "name", 8, "Name must be 8 characters long")
 			{
 			public String replace(String val)
 				{
@@ -639,34 +645,34 @@ public class NovationSLMKII extends Synth
 				}
 			};
 		
-       	final LabelledDial lowval = new LabelledDial("Low", this, "control" + index + "lowval", color, 0, 127)
-       		{ public String map(int value) { return "" + (model.get("control" + index + "display") != 1 ? value : value - 64); } };
-       	model.register("control" + index + "display", lowval);
-        final LabelledDial highval = new LabelledDial("High", this, "control" + index + "highval", color, 0, 127)
-       		{ public String map(int value) { return "" + (model.get("control" + index + "display") != 1 ? value : value - 64); } };
-       	model.register("control" + index + "display", highval);
-       	//final LabelledDial defaultval = new LabelledDial("Default", this, "control" + index + "defaultval", color, 0, 127)
-       	//	{ public String map(int value) { return "" + (model.get("control" + index + "display") != 1 ? value : value - 64); } };
-       	//model.register("control" + index + "display", defaultval);
-       	final LabelledDial lowvalbig = new LabelledDial("Low", this, "control" + index + "lowvalbig", color, 0, 16383);
-        final LabelledDial highvalbig = new LabelledDial("High", this, "control" + index + "highvalbig", color, 0, 16383);
-       	//final LabelledDial defaultvalbig = new LabelledDial("Default", this, "control" + index + "defaultvalbig", color, 0, 16383);
-        final LabelledDial parammsb = new LabelledDial("Param MSB", this, "control" + index + "parammsb", color, 0, 127);
-        final LabelledDial paramlsb = new LabelledDial("Param LSB", this, "control" + index + "paramlsb", color, 0, 127);
-        //final Chooser mmctype = new Chooser("Command", this, "control" + index + "mmctype", MMCS);
-        //final LabelledDial mmcDevice = new LabelledDial("Device ID", this, "control" + index + "mmcdevice", color, 0, 127);
-        //final LabelledDial template = new LabelledDial("Template", this, "control" + index + "templatenumber", color, 1, 32);
-        //final LabelledDial drumautooff = new LabelledDial("Auto-Off", this, "control" + index + "autooff", color, 0, 127);
-        //final Chooser offsyncval = new Chooser("Off Sync Value", this, "control" + index + "drumoffsync", OFF_SYNC_VALUES);
-        //final Chooser buttontype = new Chooser("Button Type", this, "control" + index + "buttontype", BUTTON_STATES);
-        //final Chooser realtimenotebuttontype = new Chooser("Button Type", this, "control" + index + "realtimenotebuttontype", REALTIME_BUTTON_STATES);
-        //final Chooser bankmode = new Chooser("Bank Mode", this, "control" + index + "bankmode", BANK_CHANGE_MODES);
-        //final Chooser pcmode = new Chooser("Bank Mode", this, "control" + index + "pcbankmode", PROGRAM_CHANGE_MODES);		// yes it says bank mode
-        //final Chooser realtime = new Chooser("Press", this, "control" + index + "realtime", REAL_TIME_VALUES);
-        //final Chooser realtimerelease = new Chooser("Release", this, "control" + index + "realtime", REAL_TIME_VALUES);
-        //final Chooser potpickup = new Chooser("Pot Pickup", this, "control" + index + "potpickup", POT_PICKUPS);
-		final SysexBox sysexBox = new SysexBox(this, index, color);
-        final Chooser display = new Chooser("Display Type", this, "control" + index + "display", ENCODER_DISPLAYS)
+       	final LabelledDial lowval = new LabelledDial("Low", this, prefix + "lowval", color, 0, 127)
+       		{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
+       	model.register(prefix + "display", lowval);
+        final LabelledDial highval = new LabelledDial("High", this, prefix + "highval", color, 0, 127)
+       		{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
+       	model.register(prefix + "display", highval);
+       	//final LabelledDial defaultval = new LabelledDial("Default", this, prefix + "defaultval", color, 0, 127)
+       	//	{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
+       	//model.register(prefix + "display", defaultval);
+       	final LabelledDial lowvalbig = new LabelledDial("Low", this, prefix + "lowvalbig", color, 0, 16383);
+        final LabelledDial highvalbig = new LabelledDial("High", this, prefix + "highvalbig", color, 0, 16383);
+       	//final LabelledDial defaultvalbig = new LabelledDial("Default", this, prefix + "defaultvalbig", color, 0, 16383);
+        final LabelledDial parammsb = new LabelledDial("Param MSB", this, prefix + "parammsb", color, 0, 127);
+        final LabelledDial paramlsb = new LabelledDial("Param LSB", this, prefix + "paramlsb", color, 0, 127);
+        //final Chooser mmctype = new Chooser("Command", this, prefix + "mmctype", MMCS);
+        //final LabelledDial mmcDevice = new LabelledDial("Device ID", this, prefix + "mmcdevice", color, 0, 127);
+        //final LabelledDial template = new LabelledDial("Template", this, prefix + "templatenumber", color, 1, 32);
+        //final LabelledDial drumautooff = new LabelledDial("Auto-Off", this, prefix + "autooff", color, 0, 127);
+        //final Chooser offsyncval = new Chooser("Off Sync Value", this, prefix + "drumoffsync", OFF_SYNC_VALUES);
+        //final Chooser buttontype = new Chooser("Button Type", this, prefix + "buttontype", BUTTON_STATES);
+        //final Chooser realtimenotebuttontype = new Chooser("Button Type", this, prefix + "realtimenotebuttontype", REALTIME_BUTTON_STATES);
+        //final Chooser bankmode = new Chooser("Bank Mode", this, prefix + "bankmode", BANK_CHANGE_MODES);
+        //final Chooser pcmode = new Chooser("Bank Mode", this, prefix + "pcbankmode", PROGRAM_CHANGE_MODES);		// yes it says bank mode
+        //final Chooser realtime = new Chooser("Press", this, prefix + "realtime", REAL_TIME_VALUES);
+        //final Chooser realtimerelease = new Chooser("Release", this, prefix + "realtime", REAL_TIME_VALUES);
+        //final Chooser potpickup = new Chooser("Pot Pickup", this, prefix + "potpickup", POT_PICKUPS);
+		final SysexBox sysexBox = new SysexBox(this, prefix, index, color);
+        final Chooser display = new Chooser("Display Type", this, prefix + "display", ENCODER_DISPLAYS)
         	{
         	public void update(String key, Model model)
         		{
@@ -677,28 +683,28 @@ public class NovationSLMKII extends Synth
 					valbox.add(lowvalbig);
 					valbox.add(highvalbig);
 					//valbox.add(defaultvalbig);
-        			sysexBox.setShows16K(true);
+        			sysexBox.setShows16K(prefix, true);
         			}
         		else
         			{
 					valbox.add(lowval);
 					valbox.add(highval);
 					//valbox.add(defaultval);
-        			sysexBox.setShows16K(false);
+        			sysexBox.setShows16K(prefix, false);
         			}
         		valbox.revalidate();
         		valbox.repaint();
         		}
         	};
-        final Chooser ports = new Chooser("Ports", this, "control" + index + "ports", CONTROL_PORTS);
-        //LabelledDial stepsize = new LabelledDial("Step Size", this, "control" + index + "stepsize", color, 0, 63)
+        final Chooser ports = new Chooser("Ports", this, prefix + "ports", CONTROL_PORTS);
+        //LabelledDial stepsize = new LabelledDial("Step Size", this, prefix + "stepsize", color, 0, 63)
         //	{
         //	public String map(int val)
         //		{
         //		return "" + (val + 1);
         //		}
         //	};
-        final LabelledDial channel = new LabelledDial("Channel", this, "control" + index + "channel", color, 0, 17)
+        final LabelledDial channel = new LabelledDial("Channel", this, prefix + "channel", color, 0, 17)
         	{
         	public String map(int val)
         		{
@@ -737,7 +743,7 @@ Display Format
 
 
 
-        Chooser type = new Chooser("Type", this, "control" + index + "type", ENCODER_TYPES)
+        Chooser type = new Chooser("Type", this, prefix + "type", ENCODER_TYPES)
         	{
         	public void update(String key, Model model)
         		{
@@ -801,15 +807,14 @@ Display Format
 
 
 
-	public JComponent addPot(int num, final int index, Color color)
+	public JComponent addPot(int num, String prefix, final int index, Color color)
 		{
         Category category = new Category(this, 
-        	(index == EXPRESSION_INDEX ? "Expression Pedal" : 
-        		(index == MODWHEEL_INDEX ? "Modulation Wheel" : 
-        			(index == CROSSFADER_INDEX ? "Cross-Fader" : 		// note not CROSSFADER_INDEX, because that value is misleading
-        				(index < FADERS_INDEX ? "Pot " + num : "Fader " + num)))), color);
-        
-		category.makePasteable("control" + index);
+        	(index == EXPRESSION_INDEX ? "Expression" : 
+        		(index == MODWHEEL_INDEX ? "Mod Wheel [Key]" : 
+        			(index == CROSSFADER_INDEX ? "Cross-Fader [Zero]" : 		// note not CROSSFADER_INDEX, because that value is misleading
+        				(index < FADERS_INDEX ? "Pot " + num : "Fader " + num)))), color);        
+		category.makePasteable(prefix.substring(0, prefix.length() - 1));
 
         JComponent comp;
         String[] params;
@@ -818,7 +823,7 @@ Display Format
 		final VBox outer = new VBox();
 
 
-		StringComponent name = new StringComponent("Name", this, "control" + index + "name", 8, "Name must be 8 characters long")
+		StringComponent name = new StringComponent("Name", this, prefix + "name", 8, "Name must be 8 characters long")
 			{
 			public String replace(String val)
 				{
@@ -834,41 +839,40 @@ Display Format
 				}
 			};
 		
-       	final LabelledDial lowval = new LabelledDial("Low", this, "control" + index + "lowval", color, 0, 127)
-       		{ public String map(int value) { return "" + (model.get("control" + index + "display") != 1 ? value : value - 64); } };
-       	model.register("control" + index + "display", lowval);
-       	model.register("control" + index + "type", lowval);
-        final LabelledDial highval = new LabelledDial("High", this, "control" + index + "highval", color, 0, 127)
-       		{ public String map(int value) { return "" + (model.get("control" + index + "display") != 1 ? value : value - 64); } };
-       	model.register("control" + index + "display", highval);
-       	//final LabelledDial defaultval = new LabelledDial("Default", this, "control" + index + "defaultval", color, 0, 127)
-       	//	{ public String map(int value) { return "" + (model.get("control" + index + "display") != 1 ? value : value - 64); } };
-       	//model.register("control" + index + "display", defaultval);
-        final LabelledDial parammsb = new LabelledDial("Param MSB", this, "control" + index + "parammsb", color, 0, 127);
-        final LabelledDial paramlsb = new LabelledDial("Param LSB", this, "control" + index + "paramlsb", color, 0, 127);
-        //final Chooser mmctype = new Chooser("Command", this, "control" + index + "mmctype", MMCS);
-        //final LabelledDial mmcDevice = new LabelledDial("Device ID", this, "control" + index + "mmcdevice", color, 0, 127);
-        //final LabelledDial template = new LabelledDial("Template", this, "control" + index + "templatenumber", color, 1, 32);
-        //final LabelledDial drumautooff = new LabelledDial("Auto-Off", this, "control" + index + "autooff", color, 0, 127);
-        //final Chooser offsyncval = new Chooser("Off Sync Value", this, "control" + index + "drumoffsync", OFF_SYNC_VALUES);
-        //final Chooser buttontype = new Chooser("Button Type", this, "control" + index + "buttontype", BUTTON_STATES);
-        //final Chooser realtimenotebuttontype = new Chooser("Button Type", this, "control" + index + "realtimenotebuttontype", REALTIME_BUTTON_STATES);
-        //final Chooser bankmode = new Chooser("Bank Mode", this, "control" + index + "bankmode", BANK_CHANGE_MODES);
-        //final Chooser pcmode = new Chooser("Bank Mode", this, "control" + index + "pcbankmode", PROGRAM_CHANGE_MODES);		// yes it says bank mode
-        //final Chooser realtime = new Chooser("Press", this, "control" + index + "realtime", REAL_TIME_VALUES);
-        //final Chooser realtimerelease = new Chooser("Release", this, "control" + index + "realtime", REAL_TIME_VALUES);
-        final Chooser potpickup = new Chooser("Pot Pickup", this, "control" + index + "potpickup", POT_PICKUPS);
-        final Chooser display = new Chooser("Display Type", this, "control" + index + "display", POT_DISPLAYS);
-        final Chooser ports = new Chooser("Ports", this, "control" + index + "ports", CONTROL_PORTS);
-		final SysexBox sysexBox = new SysexBox(this, index, color);
-        //LabelledDial stepsize = new LabelledDial("Step Size", this, "control" + index + "stepsize", color, 0, 63)
+       	final LabelledDial lowval = new LabelledDial("Low", this, prefix + "lowval", color, 0, 127)
+       		{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
+       	model.register(prefix + "display", lowval);
+        final LabelledDial highval = new LabelledDial("High", this, prefix + "highval", color, 0, 127)
+       		{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
+       	model.register(prefix + "display", highval);
+       	//final LabelledDial defaultval = new LabelledDial("Default", this, prefix + "defaultval", color, 0, 127)
+       	//	{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
+       	//model.register(prefix + "display", defaultval);
+        final LabelledDial parammsb = new LabelledDial("Param MSB", this, prefix + "parammsb", color, 0, 127);
+        final LabelledDial paramlsb = new LabelledDial("Param LSB", this, prefix + "paramlsb", color, 0, 127);
+        //final Chooser mmctype = new Chooser("Command", this, prefix + "mmctype", MMCS);
+        //final LabelledDial mmcDevice = new LabelledDial("Device ID", this, prefix + "mmcdevice", color, 0, 127);
+        //final LabelledDial template = new LabelledDial("Template", this, prefix + "templatenumber", color, 1, 32);
+        //final LabelledDial drumautooff = new LabelledDial("Auto-Off", this, prefix + "autooff", color, 0, 127);
+        //final Chooser offsyncval = new Chooser("Off Sync Value", this, prefix + "drumoffsync", OFF_SYNC_VALUES);
+        //final Chooser buttontype = new Chooser("Button Type", this, prefix + "buttontype", BUTTON_STATES);
+        //final Chooser realtimenotebuttontype = new Chooser("Button Type", this, prefix + "realtimenotebuttontype", REALTIME_BUTTON_STATES);
+        //final Chooser bankmode = new Chooser("Bank Mode", this, prefix + "bankmode", BANK_CHANGE_MODES);
+        //final Chooser pcmode = new Chooser("Bank Mode", this, prefix + "pcbankmode", PROGRAM_CHANGE_MODES);		// yes it says bank mode
+        //final Chooser realtime = new Chooser("Press", this, prefix + "realtime", REAL_TIME_VALUES);
+        //final Chooser realtimerelease = new Chooser("Release", this, prefix + "realtime", REAL_TIME_VALUES);
+        final Chooser potpickup = new Chooser("Pot Pickup", this, prefix + "potpickup", POT_PICKUPS);
+        final Chooser display = new Chooser("Display Type", this, prefix + "display", POT_DISPLAYS);
+        final Chooser ports = new Chooser("Ports", this, prefix + "ports", CONTROL_PORTS);
+		final SysexBox sysexBox = new SysexBox(this, prefix, index, color);
+        //LabelledDial stepsize = new LabelledDial("Step Size", this, prefix + "stepsize", color, 0, 63)
         //	{
         //	public String map(int val)
         //		{
         //		return "" + (val + 1);
         //		}
         //	};
-        final LabelledDial channel = new LabelledDial("Channel", this, "control" + index + "channel", color, 0, 17)
+        final LabelledDial channel = new LabelledDial("Channel", this, prefix + "channel", color, 0, 17)
         	{
         	public String map(int val)
         		{
@@ -907,7 +911,7 @@ Display Format
 
 
 
-        Chooser type = new Chooser("Type", this, "control" + index + "type", POT_TYPES)
+        Chooser type = new Chooser("Type", this, prefix + "type", POT_TYPES)
         	{
         	public void update(String key, Model model)
         		{
@@ -958,10 +962,17 @@ Display Format
 
 
 		vbox.add(name);
-		HBox inner = new HBox();
-		inner.add(type);
-		inner.add(potpickup);
-		vbox.add(inner);
+		if (index == EXPRESSION_INDEX || index == MODWHEEL_INDEX)
+			{
+			vbox.add(type);
+			}
+		else
+			{
+			HBox inner = new HBox();
+			inner.add(type);
+			inner.add(potpickup);
+			vbox.add(inner);
+			}
 		vbox.add(ports);
 		hbox.add(vbox);
 
@@ -972,7 +983,7 @@ Display Format
 		}
 
 		
-	public JComponent addButton(int num, final int index, Color color)
+	public JComponent addButton(int num, String prefix, final int index, Color color)
 		{
         Category category = new Category(this, 
         	(index < DRUMPADS_INDEX ? "Button " + num :
@@ -982,8 +993,7 @@ Display Format
 	        				(index == STOP_INDEX ? "Stop" :
 	        					(index == PLAY_INDEX ? "Play" :
 	        						(index == RECORD_INDEX ? "Record" : "Loop"))))))), color);
-        
-		category.makePasteable("control" + index);
+		category.makePasteable(prefix.substring(0, prefix.length() - 1));
 
         JComponent comp;
         String[] params;
@@ -992,7 +1002,7 @@ Display Format
 		final VBox outer = new VBox();
 
 
-		StringComponent name = new StringComponent("Name", this, "control" + index + "name", 8, "Name must be 8 characters long")
+		StringComponent name = new StringComponent("Name", this, prefix + "name", 8, "Name must be 8 characters long")
 			{
 			public String replace(String val)
 				{
@@ -1008,68 +1018,68 @@ Display Format
 				}
 			};
 		
-       	final LabelledDial lowval = new LabelledDial("Low", this, "control" + index + "lowval", color, 0, 127)
+       	final LabelledDial lowval = new LabelledDial("Low", this, prefix + "lowval", color, 0, 127)
        		{
        		public String map(int value)
        			{
-       			if (model.get("control" + index + "type") == 6)			// Note
+       			if (model.get(prefix + "type") == 6)			// Note
        				{
                 	return NOTES[value % 12] + (value / 12 - 2);			/// FIXME: is this -2?                    
        				}
        			else
        				{
-       				return "" + ((model.get("control" + index + "display") != 1 ||
-       							model.get("control" + index + "type") > 4) ? value : value - 64); 
+       				return "" + ((model.get(prefix + "display") != 1 ||
+       							model.get(prefix + "type") > 4) ? value : value - 64); 
        				}
        			}
        		};
-       	model.register("control" + index + "display", lowval);
-       	model.register("control" + index + "type", lowval);
-        final LabelledDial highval = new LabelledDial("High", this, "control" + index + "highval", color, 0, 127)
+       	model.register(prefix + "display", lowval);
+       	
+        final LabelledDial highval = new LabelledDial("High", this, prefix + "highval", color, 0, 127)
        		{ 
        		public String map(int value) 
        			{ 
-       				return "" + ((model.get("control" + index + "display") != 1 ||
-       							model.get("control" + index + "type") > 4) ? value : value - 64); 
+       				return "" + ((model.get(prefix + "display") != 1 ||
+       							model.get(prefix + "type") > 4) ? value : value - 64); 
        			} 
        		};
-       	model.register("control" + index + "display", highval);
-       	model.register("control" + index + "type", highval);
-       	//final LabelledDial defaultval = new LabelledDial("Default", this, "control" + index + "defaultval", color, 0, 127)
+       	model.register(prefix + "display", highval);
+       	model.register(prefix + "type", highval);
+       	//final LabelledDial defaultval = new LabelledDial("Default", this, prefix + "defaultval", color, 0, 127)
        	//	{ 
        	//	public String map(int value) 
        	//		{ 
-       	//			return "" + ((model.get("control" + index + "display") != 1 ||
-       	//						model.get("control" + index + "type") > 4) ? value : value - 64); 
+       	//			return "" + ((model.get(prefix + "display") != 1 ||
+       	//						model.get(prefix + "type") > 4) ? value : value - 64); 
        	//		} 
        	//	};
-       	//model.register("control" + index + "display", defaultval);
-       	//model.register("control" + index + "type", defaultval);
-        final LabelledDial parammsb = new LabelledDial("Param MSB", this, "control" + index + "parammsb", color, 0, 127);
-        final LabelledDial paramlsb = new LabelledDial("Param LSB", this, "control" + index + "paramlsb", color, 0, 127);
-        final Chooser mmctype = new Chooser("Command", this, "control" + index + "mmctype", MMCS);
-        final LabelledDial mmcDevice = new LabelledDial("Device ID", this, "control" + index + "mmcdevice", color, 0, 127);
-        final LabelledDial template = new LabelledDial("Template", this, "control" + index + "templatenumber", color, 1, 32);
-        //final LabelledDial drumautooff = new LabelledDial("Auto-Off", this, "control" + index + "autooff", color, 0, 127);
-        //final Chooser offsyncval = new Chooser("Off Sync Value", this, "control" + index + "drumoffsync", OFF_SYNC_VALUES);
-        final Chooser buttontype = new Chooser("Button Type", this, "control" + index + "buttontype", BUTTON_STATES);
-        final Chooser realtimenotebuttontype = new Chooser("Button Type", this, "control" + index + "realtimenotebuttontype", REALTIME_BUTTON_STATES);
-        final Chooser bankmode = new Chooser("Bank Mode", this, "control" + index + "bankmode", BANK_CHANGE_MODES);
-        final Chooser pcmode = new Chooser("Bank Mode", this, "control" + index + "pcbankmode", PROGRAM_CHANGE_MODES);		// yes it says bank mode
-        final Chooser realtime = new Chooser("Press", this, "control" + index + "realtime", REAL_TIME_VALUES);
-        final Chooser realtimerelease = new Chooser("Release", this, "control" + index + "realtime", REAL_TIME_VALUES);
-        //final Chooser potpickup = new Chooser("Pot Pickup", this, "control" + index + "potpickup", POT_PICKUPS);
-        final Chooser display = new Chooser("Display Type", this, "control" + index + "display", BUTTON_DISPLAYS);
-        final Chooser ports = new Chooser("Ports", this, "control" + index + "ports", CONTROL_PORTS);
-		final SysexBox sysexBox = new SysexBox(this, index, color);
-        LabelledDial stepsize = new LabelledDial("Step Size", this, "control" + index + "stepsize", color, 0, 63)
+       	//model.register(prefix + "display", defaultval);
+       	//model.register(prefix + "type", defaultval);
+        final LabelledDial parammsb = new LabelledDial("Param MSB", this, prefix + "parammsb", color, 0, 127);
+        final LabelledDial paramlsb = new LabelledDial("Param LSB", this, prefix + "paramlsb", color, 0, 127);
+        final Chooser mmctype = new Chooser("Command", this, prefix + "mmctype", MMCS);
+        final LabelledDial mmcDevice = new LabelledDial("Device ID", this, prefix + "mmcdevice", color, 0, 127);
+        final LabelledDial template = new LabelledDial("Template", this, prefix + "templatenumber", color, 1, 32);
+        //final LabelledDial drumautooff = new LabelledDial("Auto-Off", this, prefix + "autooff", color, 0, 127);
+        //final Chooser offsyncval = new Chooser("Off Sync Value", this, prefix + "drumoffsync", OFF_SYNC_VALUES);
+        final Chooser buttontype = new Chooser("Button Type", this, prefix + "buttontype", BUTTON_STATES);
+        final Chooser realtimenotebuttontype = new Chooser("Button Type", this, prefix + "realtimenotebuttontype", REALTIME_BUTTON_STATES);
+        final Chooser bankmode = new Chooser("Bank Mode", this, prefix + "bankmode", BANK_CHANGE_MODES);
+        final Chooser pcmode = new Chooser("Bank Mode", this, prefix + "pcbankmode", PROGRAM_CHANGE_MODES);		// yes it says bank mode
+        final Chooser realtime = new Chooser("Press", this, prefix + "realtime", REAL_TIME_VALUES);
+        final Chooser realtimerelease = new Chooser("Release", this, prefix + "realtime", REAL_TIME_VALUES);
+        //final Chooser potpickup = new Chooser("Pot Pickup", this, prefix + "potpickup", POT_PICKUPS);
+        final Chooser display = new Chooser("Display Type", this, prefix + "display", BUTTON_DISPLAYS);
+        final Chooser ports = new Chooser("Ports", this, prefix + "ports", CONTROL_PORTS);
+		final SysexBox sysexBox = new SysexBox(this, prefix, index, color);
+        LabelledDial stepsize = new LabelledDial("Step Size", this, prefix + "stepsize", color, 0, 63)
         	{
         	public String map(int val)
         		{
         		return "" + (val + 1);
         		}
         	};
-        final LabelledDial channel = new LabelledDial("Channel", this, "control" + index + "channel", color, 0, 17)
+        final LabelledDial channel = new LabelledDial("Channel", this, prefix + "channel", color, 0, 17)
         	{
         	public String map(int val)
         		{
@@ -1136,7 +1146,7 @@ Step Size
 */
 
 
-        Chooser type = new Chooser("Type", this, "control" + index + "type", BUTTON_TYPES)
+        Chooser type = new Chooser("Type", this, prefix + "type", BUTTON_TYPES)
         	{
         	public void update(String key, Model model)
         		{
@@ -1257,11 +1267,10 @@ Step Size
 		
 
 		
-	public JComponent addDrumPad(int num, final int index, Color color)
+	public JComponent addDrumPad(int num, String prefix, final int index, Color color)
 		{
         Category category = new Category(this, "Drum Pad " + num, color);
-        
-		category.makePasteable("control" + index);
+		category.makePasteable(prefix.substring(0, prefix.length() - 1));
 
         JComponent comp;
         String[] params;
@@ -1270,7 +1279,7 @@ Step Size
 		final VBox outer = new VBox();
 
 
-		StringComponent name = new StringComponent("Name", this, "control" + index + "name", 8, "Name must be 8 characters long")
+		StringComponent name = new StringComponent("Name", this, prefix + "name", 8, "Name must be 8 characters long")
 			{
 			public String replace(String val)
 				{
@@ -1286,68 +1295,67 @@ Step Size
 				}
 			};
 		
-       	final LabelledDial lowval = new LabelledDial("Low", this, "control" + index + "lowval", color, 0, 127)
+       	final LabelledDial lowval = new LabelledDial("Low", this, prefix + "lowval", color, 0, 127)
        		{
        		public String map(int value)
        			{
-       			if (model.get("control" + index + "type") == 6)	// Note or Drum Note
+       			if (model.get(prefix + "type") == 6)	// Note or Drum Note
        				{
                 	return NOTES[value % 12] + (value / 12 - 2);			/// FIXME: is this -2?                    
        				}
        			else
        				{
-       				return "" + ((model.get("control" + index + "display") != 1 ||
-       							model.get("control" + index + "type") > 4) ? value : value - 64); 
+       				return "" + ((model.get(prefix + "display") != 1 ||
+       							model.get(prefix + "type") > 4) ? value : value - 64); 
        				}
        			}
        		};
-       	model.register("control" + index + "display", lowval);
-       	model.register("control" + index + "type", lowval);
-        final LabelledDial highval = new LabelledDial("High", this, "control" + index + "highval", color, 0, 127)
+       	model.register(prefix + "display", lowval);
+        final LabelledDial highval = new LabelledDial("High", this, prefix + "highval", color, 0, 127)
        		{ 
        		public String map(int value) 
        			{ 
-       				return "" + ((model.get("control" + index + "display") != 1 ||
-       							model.get("control" + index + "type") > 4) ? value : value - 64); 
+       				return "" + ((model.get(prefix + "display") != 1 ||
+       							model.get(prefix + "type") > 4) ? value : value - 64); 
        			} 
        		};
-       	model.register("control" + index + "display", highval);
-       	model.register("control" + index + "type", highval);
-       	//final LabelledDial defaultval = new LabelledDial("Default", this, "control" + index + "defaultval", color, 0, 127)
+       	model.register(prefix + "display", highval);
+       	model.register(prefix + "type", highval);
+       	//final LabelledDial defaultval = new LabelledDial("Default", this, prefix + "defaultval", color, 0, 127)
        	//	{ 
        	//	public String map(int value) 
        	//		{ 
-       	//			return "" + ((model.get("control" + index + "display") != 1 ||
-       	//						model.get("control" + index + "type") > 4) ? value : value - 64); 
+       	//			return "" + ((model.get(prefix + "display") != 1 ||
+       	//						model.get(prefix + "type") > 4) ? value : value - 64); 
        	//		} 
        	//	};
-       	//model.register("control" + index + "display", defaultval);
-       	//model.register("control" + index + "type", defaultval);
-        final LabelledDial parammsb = new LabelledDial("Param MSB", this, "control" + index + "parammsb", color, 0, 127);
-        final LabelledDial paramlsb = new LabelledDial("Param LSB", this, "control" + index + "paramlsb", color, 0, 127);
-        final Chooser mmctype = new Chooser("Command", this, "control" + index + "mmctype", MMCS);
-        final LabelledDial mmcDevice = new LabelledDial("Device ID", this, "control" + index + "mmcdevice", color, 0, 127);
-        final LabelledDial template = new LabelledDial("Template", this, "control" + index + "templatenumber", color, 1, 32);
-        final LabelledDial drumautooff = new LabelledDial("Auto-Off", this, "control" + index + "autooff", color, 0, 127);
-        final Chooser offsyncval = new Chooser("Off Sync Value", this, "control" + index + "drumoffsync", OFF_SYNC_VALUES);
-        final Chooser buttontype = new Chooser("Button Type", this, "control" + index + "buttontype", DRUMPAD_STATES);
-        final Chooser realtimenotebuttontype = new Chooser("Button Type", this, "control" + index + "realtimenotebuttontype", REALTIME_DRUMPAD_STATES);
-        final Chooser bankmode = new Chooser("Bank Mode", this, "control" + index + "bankmode", BANK_CHANGE_MODES);
-        final Chooser pcmode = new Chooser("Bank Mode", this, "control" + index + "pcbankmode", PROGRAM_CHANGE_MODES);		// yes it says bank mode
-        final Chooser realtime = new Chooser("Press", this, "control" + index + "realtime", REAL_TIME_VALUES);
-        final Chooser realtimerelease = new Chooser("Release", this, "control" + index + "realtime", REAL_TIME_VALUES);
-        //final Chooser potpickup = new Chooser("Pot Pickup", this, "control" + index + "potpickup", POT_PICKUPS);
-        final Chooser display = new Chooser("Display Type", this, "control" + index + "display", BUTTON_DISPLAYS);
-        final Chooser ports = new Chooser("Ports", this, "control" + index + "ports", CONTROL_PORTS);
-		final SysexBox sysexBox = new SysexBox(this, index, color);
-        LabelledDial stepsize = new LabelledDial("Step Size", this, "control" + index + "stepsize", color, 0, 63)
+       	//model.register(prefix + "display", defaultval);
+       	//model.register(prefix + "type", defaultval);
+        final LabelledDial parammsb = new LabelledDial("Param MSB", this, prefix + "parammsb", color, 0, 127);
+        final LabelledDial paramlsb = new LabelledDial("Param LSB", this, prefix + "paramlsb", color, 0, 127);
+        final Chooser mmctype = new Chooser("Command", this, prefix + "mmctype", MMCS);
+        final LabelledDial mmcDevice = new LabelledDial("Device ID", this, prefix + "mmcdevice", color, 0, 127);
+        final LabelledDial template = new LabelledDial("Template", this, prefix + "templatenumber", color, 1, 32);
+        final LabelledDial drumautooff = new LabelledDial("Auto-Off", this, prefix + "autooff", color, 0, 127);
+        final Chooser offsyncval = new Chooser("Off Sync Value", this, prefix + "drumoffsync", OFF_SYNC_VALUES);
+        final Chooser buttontype = new Chooser("Button Type", this, prefix + "buttontype", DRUMPAD_STATES);
+        final Chooser realtimenotebuttontype = new Chooser("Button Type", this, prefix + "realtimenotebuttontype", REALTIME_DRUMPAD_STATES);
+        final Chooser bankmode = new Chooser("Bank Mode", this, prefix + "bankmode", BANK_CHANGE_MODES);
+        final Chooser pcmode = new Chooser("Bank Mode", this, prefix + "pcbankmode", PROGRAM_CHANGE_MODES);		// yes it says bank mode
+        final Chooser realtime = new Chooser("Press", this, prefix + "realtime", REAL_TIME_VALUES);
+        final Chooser realtimerelease = new Chooser("Release", this, prefix + "realtime", REAL_TIME_VALUES);
+        //final Chooser potpickup = new Chooser("Pot Pickup", this, prefix + "potpickup", POT_PICKUPS);
+        final Chooser display = new Chooser("Display Type", this, prefix + "display", BUTTON_DISPLAYS);
+        final Chooser ports = new Chooser("Ports", this, prefix + "ports", CONTROL_PORTS);
+		final SysexBox sysexBox = new SysexBox(this, prefix, index, color);
+        LabelledDial stepsize = new LabelledDial("Step Size", this, prefix + "stepsize", color, 0, 63)
         	{
         	public String map(int val)
         		{
         		return "" + (val + 1);
         		}
         	};
-        final LabelledDial channel = new LabelledDial("Channel", this, "control" + index + "channel", color, 0, 17)
+        final LabelledDial channel = new LabelledDial("Channel", this, prefix + "channel", color, 0, 17)
         	{
         	public String map(int val)
         		{
@@ -1415,7 +1423,7 @@ Step Size
 */
 
 
-        Chooser type = new Chooser("Type", this, "control" + index + "type", DRUMPAD_TYPES)
+        Chooser type = new Chooser("Type", this, prefix + "type", DRUMPAD_TYPES)
         	{
         	public void update(String key, Model model)
         		{
@@ -1537,16 +1545,14 @@ Step Size
 		
 
 
-	public JComponent addPitchBend(final int index, Color color)
+	public JComponent addPitchBend(String prefix, final int index, Color color)
 		{
         Category category = new Category(this, 
-        	(index == EXPRESSION_INDEX ? "Expression" :
-	        	(index == PITCHBEND_INDEX ? "Pitch Bend" :
-	        		(index == X1_INDEX ? "Touch Pad X1" :
-	        			(index == X2_INDEX ? "Touch Pad X2" :
-	        				(index == Y1_INDEX ? "Touch Pad Y1" : "Touch Pad Y2"))))), color);
-        
-		category.makePasteable("control" + index);
+			(index == PITCHBEND_INDEX ? "Pitch Bend [Key]" :
+					(index == X1_INDEX ? "X1 [Key]" :	
+						(index == X2_INDEX ? "X2 [Key]" :	
+							(index == Y1_INDEX ? "Y1 [Key]"	 : "Y2 [Key]")))), color);
+		category.makePasteable(prefix.substring(0, prefix.length() - 1));
 
         JComponent comp;
         String[] params;
@@ -1555,7 +1561,7 @@ Step Size
 		final VBox outer = new VBox();
 
 
-		StringComponent name = new StringComponent("Name", this, "control" + index + "name", 8, "Name must be 8 characters long")
+		StringComponent name = new StringComponent("Name", this, prefix + "name", 8, "Name must be 8 characters long")
 			{
 			public String replace(String val)
 				{
@@ -1571,41 +1577,40 @@ Step Size
 				}
 			};
 		
-       	final LabelledDial lowval = new LabelledDial("Low", this, "control" + index + "lowval", color, 0, 127)
-       		{ public String map(int value) { return "" + (model.get("control" + index + "display") != 1 ? value : value - 64); } };
-       	model.register("control" + index + "display", lowval);
-       	model.register("control" + index + "type", lowval);
-        final LabelledDial highval = new LabelledDial("High", this, "control" + index + "highval", color, 0, 127)
-       		{ public String map(int value) { return "" + (model.get("control" + index + "display") != 1 ? value : value - 64); } };
-       	model.register("control" + index + "display", highval);
-       	//final LabelledDial defaultval = new LabelledDial("Default", this, "control" + index + "defaultval", color, 0, 127)
-       	//	{ public String map(int value) { return "" + (model.get("control" + index + "display") != 1 ? value : value - 64); } };
-       	//model.register("control" + index + "display", defaultval);
-        final LabelledDial parammsb = new LabelledDial("Param MSB", this, "control" + index + "parammsb", color, 0, 127);
-        final LabelledDial paramlsb = new LabelledDial("Param LSB", this, "control" + index + "paramlsb", color, 0, 127);
-        //final Chooser mmctype = new Chooser("Command", this, "control" + index + "mmctype", MMCS);
-        //final LabelledDial mmcDevice = new LabelledDial("Device ID", this, "control" + index + "mmcdevice", color, 0, 127);
-        //final LabelledDial template = new LabelledDial("Template", this, "control" + index + "templatenumber", color, 1, 32);
-        //final LabelledDial drumautooff = new LabelledDial("Auto-Off", this, "control" + index + "autooff", color, 0, 127);
-        //final Chooser offsyncval = new Chooser("Off Sync Value", this, "control" + index + "drumoffsync", OFF_SYNC_VALUES);
-        //final Chooser buttontype = new Chooser("Button Type", this, "control" + index + "buttontype", BUTTON_STATES);
-        //final Chooser realtimenotebuttontype = new Chooser("Button Type", this, "control" + index + "realtimenotebuttontype", REALTIME_BUTTON_STATES);
-        //final Chooser bankmode = new Chooser("Bank Mode", this, "control" + index + "bankmode", BANK_CHANGE_MODES);
-        //final Chooser pcmode = new Chooser("Bank Mode", this, "control" + index + "pcbankmode", PROGRAM_CHANGE_MODES);		// yes it says bank mode
-        //final Chooser realtime = new Chooser("Press", this, "control" + index + "realtime", REAL_TIME_VALUES);
-        //final Chooser realtimerelease = new Chooser("Release", this, "control" + index + "realtime", REAL_TIME_VALUES);
-        //final Chooser potpickup = new Chooser("Pot Pickup", this, "control" + index + "potpickup", POT_PICKUPS);
-        final Chooser display = new Chooser("Display Type", this, "control" + index + "display", PITCHBEND_DISPLAYS);
-        final Chooser ports = new Chooser("Ports", this, "control" + index + "ports", CONTROL_PORTS);
-		final SysexBox sysexBox = new SysexBox(this, index, color);
-        //LabelledDial stepsize = new LabelledDial("Step Size", this, "control" + index + "stepsize", color, 0, 63)
+       	final LabelledDial lowval = new LabelledDial("Low", this, prefix + "lowval", color, 0, 127)
+       		{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
+       	model.register(prefix + "display", lowval);
+        final LabelledDial highval = new LabelledDial("High", this, prefix + "highval", color, 0, 127)
+       		{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
+       	model.register(prefix + "display", highval);
+       	//final LabelledDial defaultval = new LabelledDial("Default", this, prefix + "defaultval", color, 0, 127)
+       	//	{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
+       	//model.register(prefix + "display", defaultval);
+        final LabelledDial parammsb = new LabelledDial("Param MSB", this, prefix + "parammsb", color, 0, 127);
+        final LabelledDial paramlsb = new LabelledDial("Param LSB", this, prefix + "paramlsb", color, 0, 127);
+        //final Chooser mmctype = new Chooser("Command", this, prefix + "mmctype", MMCS);
+        //final LabelledDial mmcDevice = new LabelledDial("Device ID", this, prefix + "mmcdevice", color, 0, 127);
+        //final LabelledDial template = new LabelledDial("Template", this, prefix + "templatenumber", color, 1, 32);
+        //final LabelledDial drumautooff = new LabelledDial("Auto-Off", this, prefix + "autooff", color, 0, 127);
+        //final Chooser offsyncval = new Chooser("Off Sync Value", this, prefix + "drumoffsync", OFF_SYNC_VALUES);
+        //final Chooser buttontype = new Chooser("Button Type", this, prefix + "buttontype", BUTTON_STATES);
+        //final Chooser realtimenotebuttontype = new Chooser("Button Type", this, prefix + "realtimenotebuttontype", REALTIME_BUTTON_STATES);
+        //final Chooser bankmode = new Chooser("Bank Mode", this, prefix + "bankmode", BANK_CHANGE_MODES);
+        //final Chooser pcmode = new Chooser("Bank Mode", this, prefix + "pcbankmode", PROGRAM_CHANGE_MODES);		// yes it says bank mode
+        //final Chooser realtime = new Chooser("Press", this, prefix + "realtime", REAL_TIME_VALUES);
+        //final Chooser realtimerelease = new Chooser("Release", this, prefix + "realtime", REAL_TIME_VALUES);
+        //final Chooser potpickup = new Chooser("Pot Pickup", this, prefix + "potpickup", POT_PICKUPS);
+        final Chooser display = new Chooser("Display Type", this, prefix + "display", PITCHBEND_DISPLAYS);
+        final Chooser ports = new Chooser("Ports", this, prefix + "ports", CONTROL_PORTS);
+		final SysexBox sysexBox = new SysexBox(this, prefix, index, color);
+        //LabelledDial stepsize = new LabelledDial("Step Size", this, prefix + "stepsize", color, 0, 63)
         //	{
         // 	public String map(int val)
         //		{
         //		return "" + (val + 1);
         //		}
         //	};
-        final LabelledDial channel = new LabelledDial("Channel", this, "control" + index + "channel", color, 0, 17)
+        final LabelledDial channel = new LabelledDial("Channel", this, prefix + "channel", color, 0, 17)
         	{
         	public String map(int val)
         		{
@@ -1648,7 +1653,7 @@ Display Format
 */
 
 
-        Chooser type = new Chooser("Type", this, "control" + index + "type", PITCHBEND_TYPES)
+        Chooser type = new Chooser("Type", this, prefix + "type", PITCHBEND_TYPES)
         	{
         	public void update(String key, Model model)
         		{
@@ -1755,9 +1760,9 @@ Display Format
 
 
 
-	void emitName(int index, int pos, byte[] data)
+	void emitName(String prefix, int index, int pos, byte[] data)
 		{
-		String name = (model.get("control" + index + "name", "") + "        ").substring(0, 8);
+		String name = (model.get(prefix + "name", "") + "        ").substring(0, 8);
 		char[] chars = name.toCharArray();
 		for(int i = 0; i < 8; i++)
 			{
@@ -1768,161 +1773,164 @@ Display Format
 	static final byte[] TO_ENCODER_DISPLAY = new byte[] { 0x00, 0x01, 0x06, 0x07, 0x011, 0x09 };  // because 0-16k is last
 	static final byte[] TO_CONTROL_PORTS = new byte[] { 0x00, 0x20, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x50, 0x51, 0x52, 0x53, 0x40 };  // because OFF is last
 	static final byte[] TO_CONTROL_CHANNELS = new byte[] { 0x00, 0x20, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f };
-	static final byte[] TO_SINGLE_DV_TYPES = new byte[] { 0, 1, 4 };
-	static final byte[] TO_DOUBLE_DV_TYPES = new byte[] { 0, 2, 3, 4 };
+	static final byte[] TO_SINGLE_DV_TYPES = new byte[] { 0, 4, 1 };
+	static final byte[] TO_DOUBLE_DV_TYPES = new byte[] { 0, 4, 2, 3 };
 
-	void emitEncoder(int index, byte[] data)
+	void emitEncoder(String prefix, int index, byte[] data)
 		{
 		int pos = index * 41 + 0x1a3;
-		int display = model.get("control" + index + "display");
-		emitName(index, pos, data);
-		data[pos + 8] = (byte)model.get("control" + index + "type");			// 0, 1, 2, 3, 4
+		int display = model.get(prefix + "display");
+		emitName(prefix, index, pos, data);
+		data[pos + 8] = (byte)model.get(prefix + "type");			// 0, 1, 2, 3, 4
 		data[pos + 14] = 0x50;
 		data[pos + 15] = TO_ENCODER_DISPLAY[display];
-		data[pos + 18] = TO_CONTROL_PORTS[model.get("control" + index + "ports")];
-		data[pos + 19] = TO_CONTROL_CHANNELS[model.get("control" + index + "channel")];
+		data[pos + 18] = TO_CONTROL_PORTS[model.get(prefix + "ports")];
+		data[pos + 19] = TO_CONTROL_CHANNELS[model.get(prefix + "channel")];
 		
 		if (display == 5) // 16K
 			{
-			int lowvalbig = (byte)model.get("control" + index + "lowvalbig");
+			int lowvalbig = (byte)model.get(prefix + "lowvalbig");
 			data[pos+9] = (byte)((lowvalbig >>> 7) & 127);
 			data[pos+10] = (byte)(lowvalbig & 127);
-			int highvalbig = (byte)model.get("control" + index + "highvalbig");
+			int highvalbig = (byte)model.get(prefix + "highvalbig");
 			data[pos+11] = (byte)((highvalbig >>> 7) & 127);
 			data[pos+12] = (byte)(highvalbig & 127);
-			int defaultvalbig = (byte)model.get("control" + index + "defaultvalbig");
+			int defaultvalbig = (byte)model.get(prefix + "defaultvalbig");
 			data[pos+20] = (byte)((defaultvalbig >>> 7) & 127);
 			data[pos+21] = (byte)(defaultvalbig & 127);
 			}
 		else
 			{
-			int lowval = (byte)model.get("control" + index + "lowval");
+			int lowval = (byte)model.get(prefix + "lowval");
 			data[pos+10] = (byte)(lowval & 127);
-			int highval = (byte)model.get("control" + index + "highval");
+			int highval = (byte)model.get(prefix + "highval");
 			data[pos+12] = (byte)(highval & 127);
-			int defaultval = (byte)model.get("control" + index + "defaultval");
+			//int defaultval = (byte)model.get(prefix + "defaultval");
+			int defaultval = (byte)model.get(prefix + "defaultval");
 			data[pos+21] = (byte)(defaultval & 127);
 			}
-		data[pos + 16] = (byte)model.get("control" + index + "parammsb");
-		data[pos + 17] = (byte)model.get("control" + index + "paramlsb");
+		data[pos + 16] = (byte)model.get(prefix + "parammsb");
+		data[pos + 17] = (byte)model.get(prefix + "paramlsb");
 		boolean isRoland = false;
 		if (display == 5)
 			{
-			int dvtype = model.get("control" + index + "sysexdoubledvtype");
+			int dvtype = model.get(prefix + "sysexdoubledvtype");
 			data[pos + 26] = TO_DOUBLE_DV_TYPES[dvtype];
 			isRoland = (dvtype == 3);
 			}
 		else
 			{
-			int dvtype = model.get("control" + index + "sysexsingledvtype");
+			int dvtype = model.get(prefix + "sysexsingledvtype");
 			data[pos + 26] = TO_SINGLE_DV_TYPES[dvtype];
 			isRoland = (dvtype == 2);
 			}
 			
 		if (isRoland)
 			{
-			data[pos + 27] = (byte)model.get("control" + index + "rolandsysexlength");
+			data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
 			data[pos + 28] = (byte)(data[pos + 27] - 2);	// roland position
 			}
 		else
 			{
-			data[pos + 27] = (byte)model.get("control" + index + "sysexlength");
-			data[pos + 28] = (byte)(model.get("control" + index + "sysexdvpos") + 1);
+			data[pos + 27] = (byte)model.get(prefix + "sysexlength");
+			data[pos + 28] = (byte)(model.get(prefix + "sysexdvpos") + 1);
 			}
 
 		for(int i = 0; i < 12; i++)
 			{
-			data[pos + 29 + i] = (byte)(model.get("control" + index + "sysex" + i));
+			data[pos + 29 + i] = (byte)(model.get(prefix + "sysex" + i));
 			}
 		}
 
     static final byte[] TO_POT_PICKUPS = new byte[] { 0x00, 0x20, 0x40, 0x60 };
     
-	void emitPot(int index, byte[] data)
+	void emitPot(String prefix, int index, byte[] data)
 		{
 		int pos = index * 41 + 0x1a3;
-		emitName(index, pos, data);
-		data[pos + 8] = (byte)model.get("control" + index + "type");		// 0, 1, 2, 3, or 4
+		emitName(prefix, index, pos, data);
+		data[pos + 8] = (byte)model.get(prefix + "type");		// 0, 1, 2, 3, or 4
 		if (index != MODWHEEL_INDEX && index != EXPRESSION_INDEX)
-			data[pos + 14] = TO_POT_PICKUPS[model.get("control" + index + "potpickup")];
+			data[pos + 14] = TO_POT_PICKUPS[model.get(prefix + "potpickup")];
 		else
 			data[pos + 14] = 0x50;
-		data[pos + 15] = (byte)model.get("control" + index + "display");				// 0 or 1
-		data[pos + 18] = TO_CONTROL_PORTS[model.get("control" + index + "ports")];
-		data[pos + 19] = TO_CONTROL_CHANNELS[model.get("control" + index + "channel")];
+		data[pos + 15] = (byte)model.get(prefix + "display");				// 0 or 1
+		data[pos + 18] = TO_CONTROL_PORTS[model.get(prefix + "ports")];
+		data[pos + 19] = TO_CONTROL_CHANNELS[model.get(prefix + "channel")];
 		
-		int lowval = (byte)model.get("control" + index + "lowval");
+		int lowval = (byte)model.get(prefix + "lowval");
 		data[pos+10] = (byte)(lowval & 127);
-		int highval = (byte)model.get("control" + index + "highval");
+		int highval = (byte)model.get(prefix + "highval");
 		data[pos+12] = (byte)(highval & 127);
-		int defaultval = (byte)model.get("control" + index + "defaultval");
+			//int defaultval = (byte)model.get(prefix + "defaultval");
+			int defaultval = (byte)model.get(prefix + "defaultval");
 		data[pos+21] = (byte)(defaultval & 127);
 
-		data[pos + 16] = (byte)model.get("control" + index + "parammsb");
-		data[pos + 17] = (byte)model.get("control" + index + "paramlsb");
+		data[pos + 16] = (byte)model.get(prefix + "parammsb");
+		data[pos + 17] = (byte)model.get(prefix + "paramlsb");
 		
-		int dvtype = model.get("control" + index + "sysexsingledvtype");
+		int dvtype = model.get(prefix + "sysexsingledvtype");
 		data[pos + 26] = TO_SINGLE_DV_TYPES[dvtype];
 		boolean isRoland = (dvtype == 2);
 			
 		if (isRoland)
 			{
-			data[pos + 27] = (byte)model.get("control" + index + "rolandsysexlength");
+			data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
 			data[pos + 28] = (byte)(data[pos + 27] - 2);	// roland position
 			}
 		else
 			{
-			data[pos + 27] = (byte)model.get("control" + index + "sysexlength");
-			data[pos + 28] = (byte)(model.get("control" + index + "sysexdvpos") + 1);
+			data[pos + 27] = (byte)model.get(prefix + "sysexlength");
+			data[pos + 28] = (byte)(model.get(prefix + "sysexdvpos") + 1);
 			}
 
 		for(int i = 0; i < 12; i++)
 			{
-			data[pos + 29 + i] = (byte)(model.get("control" + index + "sysex" + i));
+			data[pos + 29 + i] = (byte)(model.get(prefix + "sysex" + i));
 			}
 		}
 		
 	static final byte[] TO_PITCH_BEND_DISPLAY = new byte[] { 0x00, 0x01, 0x06, 0x07, 0x011 };
 	static final byte[] TO_PITCH_BEND_TYPES = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x0A };
 
-	void emitPitchBend(int index, byte[] data)
+	void emitPitchBend(String prefix, int index, byte[] data)
 		{
 		int pos = index * 41 + 0x1a3;
-		emitName(index, pos, data);
-		data[pos + 8] = TO_PITCH_BEND_TYPES[model.get("control" + index + "type")];
+		emitName(prefix, index, pos, data);
+		data[pos + 8] = TO_PITCH_BEND_TYPES[model.get(prefix + "type")];
 		data[pos + 14] = 0x50;
-		data[pos + 15] = TO_PITCH_BEND_DISPLAY[(byte)model.get("control" + index + "display")];
-		data[pos + 18] = TO_CONTROL_PORTS[model.get("control" + index + "ports")];
-		data[pos + 19] = TO_CONTROL_CHANNELS[model.get("control" + index + "channel")];
+		data[pos + 15] = TO_PITCH_BEND_DISPLAY[(byte)model.get(prefix + "display")];
+		data[pos + 18] = TO_CONTROL_PORTS[model.get(prefix + "ports")];
+		data[pos + 19] = TO_CONTROL_CHANNELS[model.get(prefix + "channel")];
 		
-		int lowval = (byte)model.get("control" + index + "lowval");
+		int lowval = (byte)model.get(prefix + "lowval");
 		data[pos+10] = (byte)(lowval & 127);
-		int highval = (byte)model.get("control" + index + "highval");
+		int highval = (byte)model.get(prefix + "highval");
 		data[pos+12] = (byte)(highval & 127);
-		int defaultval = (byte)model.get("control" + index + "defaultval");
+			//int defaultval = (byte)model.get(prefix + "defaultval");
+			int defaultval = (byte)model.get(prefix + "defaultval");
 		data[pos+21] = (byte)(defaultval & 127);
 
-		data[pos + 16] = (byte)model.get("control" + index + "parammsb");
-		data[pos + 17] = (byte)model.get("control" + index + "paramlsb");
+		data[pos + 16] = (byte)model.get(prefix + "parammsb");
+		data[pos + 17] = (byte)model.get(prefix + "paramlsb");
 		
-		int dvtype = model.get("control" + index + "sysexsingledvtype");
+		int dvtype = model.get(prefix + "sysexsingledvtype");
 		data[pos + 26] = TO_SINGLE_DV_TYPES[dvtype];
 		boolean isRoland = (dvtype == 2);
 			
 		if (isRoland)
 			{
-			data[pos + 27] = (byte)model.get("control" + index + "rolandsysexlength");
+			data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
 			data[pos + 28] = (byte)(data[pos + 27] - 2);	// roland position
 			}
 		else
 			{
-			data[pos + 27] = (byte)model.get("control" + index + "sysexlength");
-			data[pos + 28] = (byte)(model.get("control" + index + "sysexdvpos") + 1);
+			data[pos + 27] = (byte)model.get(prefix + "sysexlength");
+			data[pos + 28] = (byte)(model.get(prefix + "sysexdvpos") + 1);
 			}
 
 		for(int i = 0; i < 12; i++)
 			{
-			data[pos + 29 + i] = (byte)(model.get("control" + index + "sysex" + i));
+			data[pos + 29 + i] = (byte)(model.get(prefix + "sysex" + i));
 			}
 		}		
 		
@@ -1934,107 +1942,108 @@ Display Format
 	static final byte[] TO_BUTTON_PROGRAM_CHANGE_MODES = new byte[] { 0x00, 0x01, 0x02, 0x03 };
 	static final byte[] TO_BUTTON_REAL_TIME = new byte[] { 0x51, 0x52, 0x53, 0x54, 0x55 };
 
-	void emitButton(int index, byte[] data)
+	void emitButton(String prefix, int index, byte[] data)
 		{
 		int pos = index * 41 + 0x1a3;
-		int type = model.get("control" + index + "type");
-		emitName(index, pos, data);
+		int type = model.get(prefix + "type");
+		emitName(prefix, index, pos, data);
 		data[pos + 8] = TO_BUTTON_TYPES[type];
 		data[pos + 14] = 0x50;		// by default
-		data[pos + 15] = TO_BUTTON_DISPLAYS[(byte)model.get("control" + index + "display")];
-		data[pos + 18] = TO_CONTROL_PORTS[model.get("control" + index + "ports")];
+		data[pos + 15] = TO_BUTTON_DISPLAYS[(byte)model.get(prefix + "display")];
+		data[pos + 18] = TO_CONTROL_PORTS[model.get(prefix + "ports")];
 		
 		if (type == 5) 		// MMC
 			{
-			data[pos + 19] = (byte)model.get("control" + index + "mmcdevice");
+			data[pos + 19] = (byte)model.get(prefix + "mmcdevice");
 			}
 		else
 			{
-			data[pos + 19] = TO_CONTROL_CHANNELS[model.get("control" + index + "channel")];
+			data[pos + 19] = TO_CONTROL_CHANNELS[model.get(prefix + "channel")];
 			}
 		
 		
 		if (type == 5)		// MMC
 			{
-			int lowval = (byte)model.get("control" + index + "mmctype") + 1;
+			int lowval = (byte)model.get(prefix + "mmctype") + 1;
 			data[pos+10] = (byte)(lowval & 127);
 			}
 		else if (type == 6)	// Note on/off, same as Realtime
 			{
-			int lowval = (byte)model.get("control" + index + "lowval");
+			int lowval = (byte)model.get(prefix + "lowval");
 			data[pos+10] = (byte)(lowval & 127);
-			int highval = (byte)model.get("control" + index + "highval");
+			int highval = (byte)model.get(prefix + "highval");
 			data[pos+12] = (byte)(highval & 127);
 			}
 		else if (type == 7) 			// Bank Select
 			{
-			data[pos + 16] = (byte)model.get("control" + index + "bankmsb");
-			data[pos + 17] = (byte)model.get("control" + index + "banklsb");
+			data[pos + 16] = (byte)model.get(prefix + "parammsb");
+			data[pos + 17] = (byte)model.get(prefix + "paramlsb");
 			}
 		else if (type == 8) 			// PC
 			{
-			int lowval = (byte)model.get("control" + index + "lowval");
+			int lowval = (byte)model.get(prefix + "lowval");
 			data[pos+10] = (byte)(lowval & 127);
-			int highval = (byte)model.get("control" + index + "highval");
+			int highval = (byte)model.get(prefix + "highval");
 			data[pos+12] = (byte)(highval & 127);
-			data[pos + 16] = (byte)model.get("control" + index + "bankmsb");
-			data[pos + 17] = (byte)model.get("control" + index + "banklsb");
+			data[pos + 16] = (byte)model.get(prefix + "parammsb");
+			data[pos + 17] = (byte)model.get(prefix + "paramlsb");
 			}
 		else if (type == 9)	// Template
 			{
-			int lowval = (byte)model.get("control" + index + "template");
+			int lowval = (byte)model.get(prefix + "template");
 			data[pos+10] = (byte)(lowval & 127);
 			}
 		else if (type == 10)	// Realtime
 			{
-			data[pos+14] = TO_BUTTON_REAL_TIME[model.get("control" + index + "realtime")];
+			data[pos+14] = TO_BUTTON_REAL_TIME[model.get(prefix + "realtime")];
 			}
 		else					// 0, 1, 2, 3, 4
 			{
-			int lowval = (byte)model.get("control" + index + "lowval");
+			int lowval = (byte)model.get(prefix + "lowval");
 			data[pos+10] = (byte)(lowval & 127);
-			int highval = (byte)model.get("control" + index + "highval");
+			int highval = (byte)model.get(prefix + "highval");
 			data[pos+12] = (byte)(highval & 127);
-			int defaultval = (byte)model.get("control" + index + "defaultval");
+			//int defaultval = (byte)model.get(prefix + "defaultval");
+			int defaultval = (byte)model.get(prefix + "defaultval");
 			data[pos+21] = (byte)(defaultval & 127);
 
-			data[pos + 16] = (byte)model.get("control" + index + "parammsb");
-			data[pos + 17] = (byte)model.get("control" + index + "paramlsb");
+			data[pos + 16] = (byte)model.get(prefix + "parammsb");
+			data[pos + 17] = (byte)model.get(prefix + "paramlsb");
 			}
 			
 		if (type == 7)		// Bank Select
 			{
-			data[pos + 13] = TO_BUTTON_BANK_CHANGE_MODES[model.get("control" + index + "pcbankmode")];
+			data[pos + 13] = TO_BUTTON_BANK_CHANGE_MODES[model.get(prefix + "bankmode")];
 			}
 		else if (type == 8)		// PC
 			{
-			data[pos + 13] = TO_BUTTON_PROGRAM_CHANGE_MODES[model.get("control" + index + "bankmode")];
+			data[pos + 13] = TO_BUTTON_PROGRAM_CHANGE_MODES[model.get(prefix + "pcbankmode")];
 			}
 		else
 			{
-			data[pos + 13] = TO_BUTTON_STANDARD_TYPES[model.get("control" + index + "buttontype")];
-			data[pos + 22] = (byte)model.get("control" + index + "stepsize");
+			data[pos + 13] = TO_BUTTON_STANDARD_TYPES[model.get(prefix + "buttontype")];
+			data[pos + 22] = (byte)model.get(prefix + "stepsize");
 			}
 
 		
-		int dvtype = model.get("control" + index + "sysexsingledvtype");
+		int dvtype = model.get(prefix + "sysexsingledvtype");
 		data[pos + 26] = TO_SINGLE_DV_TYPES[dvtype];
 		boolean isRoland = (dvtype == 2);
 			
 		if (isRoland)
 			{
-			data[pos + 27] = (byte)model.get("control" + index + "rolandsysexlength");
+			data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
 			data[pos + 28] = (byte)(data[pos + 27] - 2);	// roland position
 			}
 		else
 			{
-			data[pos + 27] = (byte)model.get("control" + index + "sysexlength");
-			data[pos + 28] = (byte)(model.get("control" + index + "sysexdvpos") + 1);
+			data[pos + 27] = (byte)model.get(prefix + "sysexlength");
+			data[pos + 28] = (byte)(model.get(prefix + "sysexdvpos") + 1);
 			}
 
 		for(int i = 0; i < 12; i++)
 			{
-			data[pos + 29 + i] = (byte)(model.get("control" + index + "sysex" + i));
+			data[pos + 29 + i] = (byte)(model.get(prefix + "sysex" + i));
 			}
 		}		
 		
@@ -2044,107 +2053,108 @@ Display Format
 
 	static final byte[] TO_DRUM_PAD_TYPES = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x0B, 0x08, 0x09, 0x0C, 0x0D };
 
-	void emitDrumPad(int index, byte[] data)
+	void emitDrumPad(String prefix, int index, byte[] data)
 		{
 		int pos = index * 41 + 0x1a3;
-		int type = model.get("control" + index + "type");
-		emitName(index, pos, data);
+		int type = model.get(prefix + "type");
+		emitName(prefix, index, pos, data);
 		data[pos + 8] = TO_DRUM_PAD_TYPES[type];
 		data[pos + 14] = 0x50;		// by default
-		data[pos + 15] = TO_BUTTON_DISPLAYS[(byte)model.get("control" + index + "display")];
-		data[pos + 18] = TO_CONTROL_PORTS[model.get("control" + index + "ports")];
+		data[pos + 15] = TO_BUTTON_DISPLAYS[(byte)model.get(prefix + "display")];
+		data[pos + 18] = TO_CONTROL_PORTS[model.get(prefix + "ports")];
 		
 		if (type == 5) 		// MMC
 			{
-			data[pos + 19] = (byte)model.get("control" + index + "mmcdevice");
+			data[pos + 19] = (byte)model.get(prefix + "mmcdevice");
 			}
 		else
 			{
-			data[pos + 19] = TO_CONTROL_CHANNELS[model.get("control" + index + "channel")];
+			data[pos + 19] = TO_CONTROL_CHANNELS[model.get(prefix + "channel")];
 			}
 		
 		
 		if (type == 5)		// MMC
 			{
-			int lowval = (byte)model.get("control" + index + "mmctype") + 1;
+			int lowval = (byte)model.get(prefix + "mmctype") + 1;
 			data[pos+10] = (byte)(lowval & 127);
 			}
 		else if (type == 6)		// Drum note
 			{
-			int lowval = (byte)model.get("control" + index + "lowval");
+			int lowval = (byte)model.get(prefix + "lowval");
 			data[pos+10] = (byte)(lowval & 127);
-			int highval = (byte)model.get("control" + index + "highval");
+			int highval = (byte)model.get(prefix + "highval");
 			data[pos+12] = (byte)(highval & 127);
 			}
 		else if (type == 7) 			// Bank Select
 			{
-			data[pos + 16] = (byte)model.get("control" + index + "bankmsb");
-			data[pos + 17] = (byte)model.get("control" + index + "banklsb");
+			data[pos + 16] = (byte)model.get(prefix + "parammsb");
+			data[pos + 17] = (byte)model.get(prefix + "paramlsb");
 			}
 		else if (type == 8) 			// PC
 			{
-			int lowval = (byte)model.get("control" + index + "lowval");
+			int lowval = (byte)model.get(prefix + "lowval");
 			data[pos+10] = (byte)(lowval & 127);
-			int highval = (byte)model.get("control" + index + "highval");
+			int highval = (byte)model.get(prefix + "highval");
 			data[pos+12] = (byte)(highval & 127);
-			data[pos + 16] = (byte)model.get("control" + index + "bankmsb");
-			data[pos + 17] = (byte)model.get("control" + index + "banklsb");
+			data[pos + 16] = (byte)model.get(prefix + "parammsb");
+			data[pos + 17] = (byte)model.get(prefix + "paramlsb");
 			}
 		else if (type == 9)	// Template
 			{
-			int lowval = (byte)model.get("control" + index + "template");
+			int lowval = (byte)model.get(prefix + "template");
 			data[pos+10] = (byte)(lowval & 127);
 			}
 		else if (type == 10)	// Realtime
 			{
-			data[pos+14] = TO_BUTTON_REAL_TIME[model.get("control" + index + "realtime")];
+			data[pos+14] = TO_BUTTON_REAL_TIME[model.get(prefix + "realtime")];
 			}
 		else					// 0, 1, 2, 3, 4
 			{
-			int lowval = (byte)model.get("control" + index + "lowval");
+			int lowval = (byte)model.get(prefix + "lowval");
 			data[pos+10] = (byte)(lowval & 127);
-			int highval = (byte)model.get("control" + index + "highval");
+			int highval = (byte)model.get(prefix + "highval");
 			data[pos+12] = (byte)(highval & 127);
-			int defaultval = (byte)model.get("control" + index + "defaultval");
+			//int defaultval = (byte)model.get(prefix + "defaultval");
+			int defaultval = (byte)model.get(prefix + "defaultval");
 			data[pos+21] = (byte)(defaultval & 127);
 
-			data[pos + 16] = (byte)model.get("control" + index + "parammsb");
-			data[pos + 17] = (byte)model.get("control" + index + "paramlsb");
+			data[pos + 16] = (byte)model.get(prefix + "parammsb");
+			data[pos + 17] = (byte)model.get(prefix + "paramlsb");
 			}
 			
 		if (type == 7)		// Bank Select
 			{
-			data[pos + 13] = TO_BUTTON_BANK_CHANGE_MODES[model.get("control" + index + "pcbankmode")];
+			data[pos + 13] = TO_BUTTON_BANK_CHANGE_MODES[model.get(prefix + "bankmode")];
 			}
 		else if (type == 8)		// PC
 			{
-			data[pos + 13] = TO_BUTTON_PROGRAM_CHANGE_MODES[model.get("control" + index + "bankmode")];
+			data[pos + 13] = TO_BUTTON_PROGRAM_CHANGE_MODES[model.get(prefix + "pcbankmode")];
 			}
 		else
 			{
-			data[pos + 13] = TO_BUTTON_STANDARD_TYPES[model.get("control" + index + "buttontype")];
-			data[pos + 22] = (byte)model.get("control" + index + "stepsize");
+			data[pos + 13] = TO_BUTTON_STANDARD_TYPES[model.get(prefix + "buttontype")];
+			data[pos + 22] = (byte)model.get(prefix + "stepsize");
 			}
 
 		
-		int dvtype = model.get("control" + index + "sysexsingledvtype");
+		int dvtype = model.get(prefix + "sysexsingledvtype");
 		data[pos + 26] = TO_SINGLE_DV_TYPES[dvtype];
 		boolean isRoland = (dvtype == 2);
 			
 		if (isRoland)
 			{
-			data[pos + 27] = (byte)model.get("control" + index + "rolandsysexlength");
+			data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
 			data[pos + 28] = (byte)(data[pos + 27] - 2);	// roland position
 			}
 		else
 			{
-			data[pos + 27] = (byte)model.get("control" + index + "sysexlength");
-			data[pos + 28] = (byte)(model.get("control" + index + "sysexdvpos") + 1);
+			data[pos + 27] = (byte)model.get(prefix + "sysexlength");
+			data[pos + 28] = (byte)(model.get(prefix + "sysexdvpos") + 1);
 			}
 
 		for(int i = 0; i < 12; i++)
 			{
-			data[pos + 29 + i] = (byte)(model.get("control" + index + "sysex" + i));
+			data[pos + 29 + i] = (byte)(model.get(prefix + "sysex" + i));
 			}
 		}		
 
@@ -2265,12 +2275,12 @@ Display Format
 		// Unknown Constants		
 		data[pos++] = 0x00;
 		data[pos++] = 0x00;
-		data[pos++] = 0x00;
 		
 		// Drum Note Auto-Off
 		final int DRUMPAD_BASE_INDEX = 56;
 		for(int i = 0; i < 8; i++)
 			{
+			pos++;	// skip zero
 			data[pos++] = (byte)model.get("control" + (DRUMPAD_BASE_INDEX + i) + "autooff");
 			}
 
@@ -2309,14 +2319,22 @@ Display Format
         data[5] = (byte)0x03;
         data[6] = (byte)0x7F;
         
-        if (toWorkingMemory)			// UPLOAD
+        if (toWorkingMemory)			// UPLOAD		-- maybe do RECEIVED?
         	{
+/*
 	        data[7] = (byte)0x00;
 	        data[8] = (byte)0x00;
 	        data[9] = (byte)0x11;
 	        data[10] = (byte)0x02;
 	        data[11] = (byte)0x00;
 	        data[12] = (byte)0x01;
+*/
+	        data[7] = (byte)0x00;
+	        data[8] = (byte)0x00;
+	        data[9] = (byte)0x0B;
+	        data[10] = (byte)0x0E;
+	        data[11] = (byte)0x00;
+	        data[12] = (byte)tempModel.get("number");
         	}
         else							// WRITE
         	{
@@ -2337,48 +2355,48 @@ Display Format
 		// Encoders
 		for(int i = 0; i < 8; i++)
 			{
-			emitEncoder(index++, data);
+			emitEncoder("page1control" + (i + 1), index++, data);
 			}
 		// Pots
 		for(int i = 0; i < 8; i++)
 			{
-			emitPot(index++, data);
+			emitPot("page2control" + (i + 1), index++, data);
 			}
 		// Faders
 		for(int i = 0; i < 8; i++)
 			{
-			emitPot(index++, data);
+			emitPot("page3control" + (i + 1), index++, data);
 			}
 		// Buttons
 		for(int i = 0; i < 32; i++)
 			{
-			emitButton(index++, data);
+			emitButton("page" + ((i / 8) + 4) + "control" + ((i % 8) + 1), index++, data);
 			}
 		// Drumpads
 		for(int i = 0; i < 8; i++)
 			{
-			emitDrumPad(index++, data);
+			emitDrumPad("page8control" + (i + 1), index++, data);
 			}
 		// Expression
-		emitPot(index++, data);
+		emitPot("page9control1", index++, data);
 		// Sustain
-		emitButton(index++, data);
+		emitButton("page9control3", index++, data);
 		// Modwheel
-		emitPot(index++, data);
+		emitPot("page9control2", index++, data);
 		// Pitchbend, X1, Y1, X2, Y2
 		for(int i = 0; i < 5; i++)
 			{
-			emitPitchBend(index++, data);
+			emitPitchBend("page9control" + (i + 4), index++, data);
 			}
 		// Transport Buttons
 		for(int i = 0; i < 6; i++)
 			{
-			emitButton(index++, data);
+			emitButton("page10control" + (i + 1), index++, data);
 			}
 		// Skip 7 controls
 		index += 7;
 		// Cross-Fader
-		emitPot(index++, data);
+		emitPot("page10control7", index++, data);
 		// Skip 4 controls
 		index += 4;
 		// All Done
@@ -2386,6 +2404,15 @@ Display Format
 		return data; 
 		}
 		
+
+	public boolean setupBatchStartingAndEndingPatches(Model startPatch, Model endPatch)
+		{
+		// Hard code to between 1 and 32, and warn user
+        showSimpleMessage("Batch Download", "This will download all 32 patches.\nYou will have to initiate a bulk download from the SL (\"Dump ALL\")." );
+        startPatch.set("number", 0);
+        endPatch.set("number", 31);
+        return true;
+		}
 
 
 
@@ -2395,47 +2422,48 @@ Display Format
 			{
 			if (stuff[i] == val) return i;
 			}
+		// This will happen a lot:
         System.err.println("NovationSLMKII.at() WARNING: Invalid data " + val + " at byte position " + pos + " (" + (pos - 0x1a3)/41 + ", " + (pos - 0x1a3)%41 + ")");
-        new Throwable().printStackTrace();
 		return 0;
 		}
 
 		
-	void parseName(int index, int pos, byte[] data)
+	void parseName(String prefix, int index, int pos, byte[] data)
 		{
 		char[] chars = new char[8];
 		for(int i = 0; i < 8; i++)
 			{
 			chars[i] = (char)data[pos + i];
 			}
-		model.set("control" + index + "name", new String(chars));
+		model.set(prefix + "name", new String(chars));
 		}
 		
 
-	void parseEncoder(int index, byte[] data)
+	void parseEncoder(String prefix, int index, byte[] data)
 		{
 		int pos = index * 41 + 0x1a3;
-		parseName(index, pos, data);
-		model.set("control" + index + "type", data[pos + 8]);
+		parseName(prefix, index, pos, data);
+		model.set(prefix + "type", data[pos + 8]);
 		int display = at(pos + 15, TO_ENCODER_DISPLAY, data[pos + 15]);
-		model.set("control" + index + "display", display);
-		model.set("control" + index + "ports", at(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
-		model.set("control" + index + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
+		model.set(prefix + "display", display);
+			// ports will often have bad data
+		model.set(prefix + "ports", at(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
+		model.set(prefix + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
 		
 		if (display == 5) // 16K
 			{
-			model.set("control" + index + "lowvalbig", (data[pos+9] << 7) | data[pos+10]);
-			model.set("control" + index + "highvalbig", (data[pos+11] << 7) | data[pos+12]);
-			model.set("control" + index + "defaultvalbig", (data[pos+20] << 7) | data[pos+21]);
+			model.set(prefix + "lowvalbig", (data[pos+9] << 7) | data[pos+10]);
+			model.set(prefix + "highvalbig", (data[pos+11] << 7) | data[pos+12]);
+			model.set(prefix + "defaultvalbig", (data[pos+20] << 7) | data[pos+21]);
 			}
 		else
 			{
-			model.set("control" + index + "lowval", data[pos+10]);
-			model.set("control" + index + "highval", data[pos+12]);
-			model.set("control" + index + "defaultval", data[pos+21]);
+			model.set(prefix + "lowval", data[pos+10]);
+			model.set(prefix + "highval", data[pos+12]);
+			//model.set(prefix + "defaultval", data[pos+21]);
 			}
-		model.set("control" + index + "parammsb", data[pos + 16]);
-		model.set("control" + index + "paramlsb", data[pos + 17]);
+		model.set(prefix + "parammsb", data[pos + 16]);
+		model.set(prefix + "paramlsb", data[pos + 17]);
 
 
 // 	dvtype > 0 ? dvtype : (dvpos == 0 ? 0 : 1)
@@ -2445,299 +2473,303 @@ Display Format
 			{
 			int dvtype = at(pos + 26, TO_DOUBLE_DV_TYPES, data[pos + 26]);		// The software always sets the type to 0 even with single DV
 			int dvpos = data[pos + 28];
-			model.set("control" + index + "sysexdvpos", dvpos - 1);
-			model.set("control" + index + "sysexdoubledvtype", dvtype);  // handle both software and unit
+			model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
+			model.set(prefix + "sysexdoubledvtype", dvtype);  // handle both software and unit
 			isRoland = (dvtype == 3);
 			}
 		else
 			{
 			int dvtype = at(pos + 26, TO_SINGLE_DV_TYPES, data[pos + 26]);		// The software always sets the type to 0 even with single DV
 			int dvpos = data[pos + 28];
-			model.set("control" + index + "sysexdvpos", dvpos - 1);
-			model.set("control" + index + "sysexsingledvtype", dvtype);  // handle both software and unit
+			model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
+			model.set(prefix + "sysexsingledvtype", dvtype);  // handle both software and unit
 			isRoland = (dvtype == 2);
 			}
 			
 		if (isRoland)
 			{
-			model.set("control" + index + "rolandsysexlength", data[pos + 27]);
+			model.set(prefix + "rolandsysexlength", data[pos + 27]);
 			}
 		else
 			{
-			model.set("control" + index + "sysexlength", data[pos + 27]);
+			model.set(prefix + "sysexlength", data[pos + 27]);
 			}
 
 		for(int i = 0; i < 12; i++)
 			{
-			model.set("control" + index + "sysex" + i, data[pos + 29 + i]);
+			model.set(prefix + "sysex" + i, data[pos + 29 + i]);
 			}
 		}
 
     
-	void parsePot(int index, byte[] data)
+	void parsePot(String prefix, int index, byte[] data)
 		{
 		int pos = index * 41 + 0x1a3;
-		parseName(index, pos, data);
+		parseName(prefix, index, pos, data);
 
-		model.set("control" + index + "type", data[pos + 8]);
+		model.set(prefix + "type", data[pos + 8]);
 		if (index != MODWHEEL_INDEX && index != EXPRESSION_INDEX)
-			model.set("control" + index + "potpickup", at(pos + 14, TO_POT_PICKUPS, (byte)((data[pos + 14] & (32 + 64)))));		// bits 5 and 6 only
+			model.set(prefix + "potpickup", at(pos + 14, TO_POT_PICKUPS, (byte)((data[pos + 14] & (32 + 64)))));		// bits 5 and 6 only
 		int display = at(pos + 15, TO_ENCODER_DISPLAY, data[pos + 15]);
-		model.set("control" + index + "display", display);
-		model.set("control" + index + "ports", at(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
-		model.set("control" + index + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
+		model.set(prefix + "display", display);
+			// ports will often have bad data
+		model.set(prefix + "ports", at(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
+		model.set(prefix + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
 		
-		model.set("control" + index + "lowval", data[pos+10]);
-		model.set("control" + index + "highval", data[pos+12]);
-		model.set("control" + index + "defaultval", data[pos+21]);
-		model.set("control" + index + "parammsb", data[pos + 16]);
-		model.set("control" + index + "paramlsb", data[pos + 17]);
+		model.set(prefix + "lowval", data[pos+10]);
+		model.set(prefix + "highval", data[pos+12]);
+		//model.set(prefix + "defaultval", data[pos+21]);
+		model.set(prefix + "parammsb", data[pos + 16]);
+		model.set(prefix + "paramlsb", data[pos + 17]);
 
 		int dvtype = at(pos + 26, TO_SINGLE_DV_TYPES, data[pos + 26]);		// The software always sets the type to 0 even with single DV
 		int dvpos = data[pos + 28];
-		model.set("control" + index + "sysexdvpos", dvpos - 1);
-		model.set("control" + index + "sysexsingledvtype", dvtype);  // handle both software and unit
+		model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
+		model.set(prefix + "sysexsingledvtype", dvtype);  // handle both software and unit
 		boolean isRoland = (dvtype == 2);
 
 		if (isRoland)
 			{
-			model.set("control" + index + "rolandsysexlength", data[pos + 27]);
+			model.set(prefix + "rolandsysexlength", data[pos + 27]);
 			}
 		else
 			{
-			model.set("control" + index + "sysexlength", data[pos + 27]);
+			model.set(prefix + "sysexlength", data[pos + 27]);
 			}
 
 		for(int i = 0; i < 12; i++)
 			{
-			model.set("control" + index + "sysex" + i, data[pos + 29 + i]);
+			model.set(prefix + "sysex" + i, data[pos + 29 + i]);
 			}
 		}
 		
-	void parseButton(int index, byte[] data)
+	void parseButton(String prefix, int index, byte[] data)
 		{
 		int pos = index * 41 + 0x1a3;
-		parseName(index, pos, data);
+		parseName(prefix, index, pos, data);
 
 		int type = at(pos + 8, TO_BUTTON_TYPES, data[pos + 8]);
-		model.set("control" + index + "type", type);
+		model.set(prefix + "type", type);
 		int display = at(pos + 15, TO_BUTTON_DISPLAYS, data[pos + 15]);
-		model.set("control" + index + "display", display);
-		model.set("control" + index + "ports", at(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
+		model.set(prefix + "display", display);
+			// ports will often have bad data
+		model.set(prefix + "ports", at(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
 
 		if (type == 5) 		// MMC
 			{
-			model.set("control" + index + "mmcdevice", data[pos + 19]);
+			model.set(prefix + "mmcdevice", data[pos + 19]);
 			}
 		else
 			{
-			model.set("control" + index + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
+			model.set(prefix + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
 			}
 		
 		if (type == 5)		// MMC
 			{
-			model.set("control" + index + "mmctype", data[pos+10] - 1);
+			model.set(prefix + "mmctype", data[pos+10] - 1);
 			}
 		else if (type == 6)	// Note on/off, same as Realtime
 			{
-			model.set("control" + index + "lowval", data[pos+10]);
-			model.set("control" + index + "highval", data[pos+12]);
+			model.set(prefix + "lowval", data[pos+10]);
+			model.set(prefix + "highval", data[pos+12]);
 			}
 		else if (type == 7) 			// Bank Select
 			{
-			model.set("control" + index + "bankmsb", data[pos+16]);
-			model.set("control" + index + "banklsb", data[pos+17]);
+			model.set(prefix + "parammsb", data[pos+16]);
+			model.set(prefix + "paramlsb", data[pos+17]);
 			}
 		else if (type == 8) 			// PC
 			{
-			model.set("control" + index + "lowval", data[pos+10]);
-			model.set("control" + index + "highval", data[pos+12]);
-			model.set("control" + index + "bankmsb", data[pos+16]);
-			model.set("control" + index + "banklsb", data[pos+17]);
+			model.set(prefix + "lowval", data[pos+10]);
+			model.set(prefix + "highval", data[pos+12]);
+			model.set(prefix + "parammsb", data[pos+16]);
+			model.set(prefix + "paramlsb", data[pos+17]);
 			}
 		else if (type == 9)	// Template
 			{
-			model.set("control" + index + "template", data[pos+10]);
+			model.set(prefix + "template", data[pos+10]);
 			}
 		else if (type == 10)	// Realtime
 			{
-			model.set("control" + index + "realtime", at(pos+14, TO_BUTTON_REAL_TIME, data[pos+14]));
+			model.set(prefix + "realtime", at(pos+14, TO_BUTTON_REAL_TIME, data[pos+14]));
 			}
 		else					// 0, 1, 2, 3, 4
 			{
-			model.set("control" + index + "lowval", data[pos+10]);
-			model.set("control" + index + "highval", data[pos+12]);
-			model.set("control" + index + "defaultval", data[pos+21]);
-			model.set("control" + index + "parammsb", data[pos + 16]);
-			model.set("control" + index + "paramlsb", data[pos + 17]);
+			model.set(prefix + "lowval", data[pos+10]);
+			model.set(prefix + "highval", data[pos+12]);
+			//model.set(prefix + "defaultval", data[pos+21]);
+			model.set(prefix + "parammsb", data[pos + 16]);
+			model.set(prefix + "paramlsb", data[pos + 17]);
 			}
 			
 		if (type == 7)		// Bank Select
 			{
-			model.set("control" + index + "pcbankmode", at(pos+13, TO_BUTTON_BANK_CHANGE_MODES, data[pos+13]));
+			model.set(prefix + "bankmode", at(pos+13, TO_BUTTON_BANK_CHANGE_MODES, data[pos+13]));
 			}
 		else if (type == 8)		// PC
 			{
-			model.set("control" + index + "bankmode", at(pos+13, TO_BUTTON_PROGRAM_CHANGE_MODES, data[pos+13]));
+			model.set(prefix + "pcbankmode", at(pos+13, TO_BUTTON_PROGRAM_CHANGE_MODES, data[pos+13]));
 			}
 		else
 			{
-			model.set("control" + index + "buttontype", at(pos+13, TO_BUTTON_STANDARD_TYPES, data[pos+13]));
-			model.set("control" + index + "stepsize", data[pos + 22]);
+			model.set(prefix + "buttontype", at(pos+13, TO_BUTTON_STANDARD_TYPES, data[pos+13]));
+			model.set(prefix + "stepsize", data[pos + 22]);
 			}
 
 		int dvtype = at(pos + 26, TO_SINGLE_DV_TYPES, data[pos + 26]);		// The software always sets the type to 0 even with single DV
 		int dvpos = data[pos + 28];
-		model.set("control" + index + "sysexdvpos", dvpos - 1);
-		model.set("control" + index + "sysexsingledvtype", dvtype);  // handle both software and unit
+		model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
+		model.set(prefix + "sysexsingledvtype", dvtype);  // handle both software and unit
 		boolean isRoland = (dvtype == 2);
 
 		if (isRoland)
 			{
-			model.set("control" + index + "rolandsysexlength", data[pos + 27]);
+			model.set(prefix + "rolandsysexlength", data[pos + 27]);
 			}
 		else
 			{
-			model.set("control" + index + "sysexlength", data[pos + 27]);
+			model.set(prefix + "sysexlength", data[pos + 27]);
 			}
 
 		for(int i = 0; i < 12; i++)
 			{
-			model.set("control" + index + "sysex" + i, data[pos + 29 + i]);
+			model.set(prefix + "sysex" + i, data[pos + 29 + i]);
 			}
 		}		
 						
 	
-	void parseDrumPad(int index, byte[] data)
+	void parseDrumPad(String prefix, int index, byte[] data)
 		{
 		int pos = index * 41 + 0x1a3;
-		parseName(index, pos, data);
+		parseName(prefix, index, pos, data);
 
 		int type = at(pos + 8, TO_DRUM_PAD_TYPES, data[pos + 8]);
-		model.set("control" + index + "type", type);
+		model.set(prefix + "type", type);
 		int display = at(pos + 15, TO_BUTTON_DISPLAYS, data[pos + 15]);
-		model.set("control" + index + "display", display);
-		model.set("control" + index + "ports", at(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
+		model.set(prefix + "display", display);
+			// ports will often have bad data
+		model.set(prefix + "ports", at(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
 
 		if (type == 5) 		// MMC
 			{
-			model.set("control" + index + "mmcdevice", data[pos + 19]);
+			model.set(prefix + "mmcdevice", data[pos + 19]);
 			}
 		else
 			{
-			model.set("control" + index + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
+			model.set(prefix + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
 			}
 		
 		if (type == 5)		// MMC
 			{
-			model.set("control" + index + "mmctype", data[pos+10] - 1);
+			model.set(prefix + "mmctype", data[pos+10] - 1);
 			}
 		else if (type == 6)	// Note on/off, same as Realtime
 			{
-			model.set("control" + index + "lowval", data[pos+10]);
-			model.set("control" + index + "highval", data[pos+12]);
+			model.set(prefix + "lowval", data[pos+10]);
+			model.set(prefix + "highval", data[pos+12]);
 			}
 		else if (type == 7) 			// Bank Select
 			{
-			model.set("control" + index + "bankmsb", data[pos+16]);
-			model.set("control" + index + "banklsb", data[pos+17]);
+			model.set(prefix + "parammsb", data[pos+16]);
+			model.set(prefix + "paramlsb", data[pos+17]);
 			}
 		else if (type == 8) 			// PC
 			{
-			model.set("control" + index + "lowval", data[pos+10]);
-			model.set("control" + index + "highval", data[pos+12]);
-			model.set("control" + index + "bankmsb", data[pos+16]);
-			model.set("control" + index + "banklsb", data[pos+17]);
+			model.set(prefix + "lowval", data[pos+10]);
+			model.set(prefix + "highval", data[pos+12]);
+			model.set(prefix + "parammsb", data[pos+16]);
+			model.set(prefix + "paramlsb", data[pos+17]);
 			}
 		else if (type == 9)	// Template
 			{
-			model.set("control" + index + "template", data[pos+10]);
+			model.set(prefix + "template", data[pos+10]);
 			}
 		else if (type == 10)	// Realtime
 			{
-			model.set("control" + index + "realtime", at(pos+14, TO_BUTTON_REAL_TIME, data[pos+14]));
+			model.set(prefix + "realtime", at(pos+14, TO_BUTTON_REAL_TIME, data[pos+14]));
 			}
 		else					// 0, 1, 2, 3, 4
 			{
-			model.set("control" + index + "lowval", data[pos+10]);
-			model.set("control" + index + "highval", data[pos+12]);
-			model.set("control" + index + "defaultval", data[pos+21]);
-			model.set("control" + index + "parammsb", data[pos + 16]);
-			model.set("control" + index + "paramlsb", data[pos + 17]);
+			model.set(prefix + "lowval", data[pos+10]);
+			model.set(prefix + "highval", data[pos+12]);
+			//model.set(prefix + "defaultval", data[pos+21]);
+			model.set(prefix + "parammsb", data[pos + 16]);
+			model.set(prefix + "paramlsb", data[pos + 17]);
 			}
 			
 		if (type == 7)		// Bank Select
 			{
-			model.set("control" + index + "pcbankmode", at(pos+13, TO_BUTTON_BANK_CHANGE_MODES, data[pos+13]));
+			model.set(prefix + "bankmode", at(pos+13, TO_BUTTON_BANK_CHANGE_MODES, data[pos+13]));
 			}
 		else if (type == 8)		// PC
 			{
-			model.set("control" + index + "bankmode", at(pos+13, TO_BUTTON_PROGRAM_CHANGE_MODES, data[pos+13]));
+			model.set(prefix + "pcbankmode", at(pos+13, TO_BUTTON_PROGRAM_CHANGE_MODES, data[pos+13]));
 			}
 		else
 			{
-			model.set("control" + index + "buttontype", at(pos+13, TO_BUTTON_STANDARD_TYPES, data[pos+13]));
-			model.set("control" + index + "stepsize", data[pos + 22]);
+			model.set(prefix + "buttontype", at(pos+13, TO_BUTTON_STANDARD_TYPES, data[pos+13]));
+			model.set(prefix + "stepsize", data[pos + 22]);
 			}
 
 		int dvtype = at(pos + 26, TO_SINGLE_DV_TYPES, data[pos + 26]);		// The software always sets the type to 0 even with single DV
 		int dvpos = data[pos + 28];
-		model.set("control" + index + "sysexdvpos", dvpos - 1);
-		model.set("control" + index + "sysexsingledvtype", dvtype);  // handle both software and unit
+		model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
+		model.set(prefix + "sysexsingledvtype", dvtype);  // handle both software and unit
 		boolean isRoland = (dvtype == 2);
 
 		if (isRoland)
 			{
-			model.set("control" + index + "rolandsysexlength", data[pos + 27]);
+			model.set(prefix + "rolandsysexlength", data[pos + 27]);
 			}
 		else
 			{
-			model.set("control" + index + "sysexlength", data[pos + 27]);
+			model.set(prefix + "sysexlength", data[pos + 27]);
 			}
 
 		for(int i = 0; i < 12; i++)
 			{
-			model.set("control" + index + "sysex" + i, data[pos + 29 + i]);
+			model.set(prefix + "sysex" + i, data[pos + 29 + i]);
 			}
 		}		
 	
 	
 	
-	void parsePitchBend(int index, byte[] data)
+	void parsePitchBend(String prefix, int index, byte[] data)
 		{
 		int pos = index * 41 + 0x1a3;
-		parseName(index, pos, data);
+		parseName(prefix, index, pos, data);
 		
-		model.set("control" + index + "type", at(pos + 8, TO_PITCH_BEND_TYPES, data[pos + 8]));
+		model.set(prefix + "type", at(pos + 8, TO_PITCH_BEND_TYPES, data[pos + 8]));
 		int display = at(pos + 15, TO_PITCH_BEND_DISPLAY, data[pos + 15]);
-		model.set("control" + index + "display", display);
-		model.set("control" + index + "ports", at(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
-		model.set("control" + index + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
+		model.set(prefix + "display", display);
+			// ports will often have bad data
+		model.set(prefix + "ports", at(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
+		model.set(prefix + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
 		
-		model.set("control" + index + "lowval", data[pos+10]);
-		model.set("control" + index + "highval", data[pos+12]);
-		model.set("control" + index + "defaultval", data[pos+21]);
-		model.set("control" + index + "parammsb", data[pos + 16]);
-		model.set("control" + index + "paramlsb", data[pos + 17]);
+		model.set(prefix + "lowval", data[pos+10]);
+		model.set(prefix + "highval", data[pos+12]);
+		//model.set(prefix + "defaultval", data[pos+21]);
+		model.set(prefix + "parammsb", data[pos + 16]);
+		model.set(prefix + "paramlsb", data[pos + 17]);
 		
 		int dvtype = at(pos + 26, TO_SINGLE_DV_TYPES, data[pos + 26]);		// The software always sets the type to 0 even with single DV
 		int dvpos = data[pos + 28];
-		model.set("control" + index + "sysexdvpos", dvpos - 1);
-		model.set("control" + index + "sysexsingledvtype", dvtype);  // handle both software and unit
+		model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
+		model.set(prefix + "sysexsingledvtype", dvtype);  // handle both software and unit
 		boolean isRoland = (dvtype == 2);
 
 		if (isRoland)
 			{
-			model.set("control" + index + "rolandsysexlength", data[pos + 27]);
+			model.set(prefix + "rolandsysexlength", data[pos + 27]);
 			}
 		else
 			{
-			model.set("control" + index + "sysexlength", data[pos + 27]);
+			model.set(prefix + "sysexlength", data[pos + 27]);
 			}
 
 		for(int i = 0; i < 12; i++)
 			{
-			model.set("control" + index + "sysex" + i, data[pos + 29 + i]);
+			model.set(prefix + "sysex" + i, data[pos + 29 + i]);
 			}
 		}		
 				
@@ -2768,6 +2800,7 @@ Display Format
 		// remaining globals
 		int templatesize = data[pos++];
 		int templatepos = data[pos++];
+		if (templatepos == 0) templatepos = 1;
 		model.set("templatesize", templatesize == 0 ? 1 : templatesize);
 		model.set("templateposition", templatepos);
 		
@@ -2775,8 +2808,10 @@ Display Format
 		
 		// MIDI port groups
 		model.set("progchannel", data[pos++]);
+			// ports will often have bad data
 		model.set("progports", at(pos, TO_PROGRAM_PORTS, data[pos++]));
 		model.set("commonchannel", data[pos++]);
+			// ports will often have bad data
 		model.set("commonports", at(pos, TO_COMMON_PORTS, data[pos++]));
 
 		pos += 2;
@@ -2794,7 +2829,10 @@ Display Format
 		model.set("enablekeyboardzones", data[pos++]);
 		for(int i = 1; i <= 4; i++)	// note <=
 			{
-			model.set("zone" + i + "channel", data[pos++]);
+			int channel = data[pos++];
+			if (channel > 15) channel = 0;		// this often happens
+			model.set("zone" + i + "channel", channel);
+			// ports will often have bad data
 			model.set("zone" + i + "ports", at(pos, TO_KEYBOARD_PORTS, data[pos++]));
 			model.set("zone" + i + "veloffset", data[pos++]);
 			model.set("zone" + i + "minnote", data[pos++]);
@@ -2812,19 +2850,19 @@ Display Format
 		model.set("touchpadxtype", data[pos++]);
 		model.set("touchpadytype", data[pos++]);
 
-		pos += 3;		
+		pos += 2;		
 		
 		// Drum Note Auto-Off
-		final int DRUMPAD_BASE_INDEX = 56;
 		for(int i = 0; i < 8; i++)
 			{
-			model.set("control" + (DRUMPAD_BASE_INDEX + i) + "autooff", data[pos++]);
+			pos++;	// skip zero
+			model.set("page8control" + (i + 1) + "autooff", data[pos++]);
 			}
 
 		// Drum Note Off Sync Value
 		for(int i = 0; i < 8; i++)
 			{
-			model.set("control" + (DRUMPAD_BASE_INDEX + i) + "drumoffsync", data[pos++]);
+			model.set("page8control" + (i + 1) + "drumoffsync", data[pos++]);
 			}
 
 		pos += 9;
@@ -2858,60 +2896,55 @@ Display Format
 		// Encoders
 		for(int i = 0; i < 8; i++)
 			{
-			parseEncoder(index++, data);
+			parseEncoder("page1control" + (i + 1), index++, data);
 			}
 		// Pots
 		for(int i = 0; i < 8; i++)
 			{
-			parsePot(index++, data);
+			parsePot("page2control" + (i + 1), index++, data);
 			}
 		// Faders
 		for(int i = 0; i < 8; i++)
 			{
-			parsePot(index++, data);
+			parsePot("page3control" + (i + 1), index++, data);
 			}
 		// Buttons
 		for(int i = 0; i < 32; i++)
 			{
-			parseButton(index++, data);
+			parseButton("page" + ((i / 8) + 4) + "control" + ((i % 8) + 1), index++, data);
 			}
 		// Drumpads
 		for(int i = 0; i < 8; i++)
 			{
-			parseDrumPad(index++, data);
+			parseDrumPad("page8control" + (i + 1), index++, data);
 			}
 		// Expression
-		parsePot(index++, data);
+		parsePot("page9control1", index++, data);
 		// Sustain
-		parseButton(index++, data);
+		parseButton("page9control3", index++, data);
 		// Modwheel
-		parsePot(index++, data);
+		parsePot("page9control2", index++, data);
 		// Pitchbend, X1, Y1, X2, Y2
 		for(int i = 0; i < 5; i++)
 			{
-			parsePitchBend(index++, data);
+			parsePitchBend("page9control" + (i + 4), index++, data);
 			}
 		// Transport Buttons
 		for(int i = 0; i < 6; i++)
 			{
-			parseButton(index++, data);
+			parseButton("page10control" + (i + 1), index++, data);
 			}
 		// Skip 7 controls
 		index += 7;
 		// Cross-Fader
-		parsePot(index++, data);
+		parsePot("page10control7", index++, data);
 		// Skip 4 controls
 		index += 4;
 		// All Done
 		
-		//revise();
-		
+		revise();
 		return PARSE_SUCCEEDED; 
         }
-
-
-
-
 	}
 
 
@@ -2929,7 +2962,7 @@ class SysexBox extends HBox
  	LabelledDial rolandsysexlength;
 	int index;
 	
-	public SysexBox(Synth synth, int index, Color color)
+	public SysexBox(Synth synth, String prefix, int index, Color color)
 		{
 		model = synth.getModel();
 		this.index = index;
@@ -2941,16 +2974,21 @@ class SysexBox extends HBox
         for(int i = 0; i < sysex.length; i++)
         	{
         	final int _i = i;
-        	sysex[i] = new LabelledDial("Byte " + (i + 1), synth, "control" + index + "sysex" + i, color, 0, 127)
+        	sysex[i] = new LabelledDial("Byte " + (i + 1), synth, prefix + "sysex" + i, color, 0, 127)
         		{
+        	public void update(String key, final Model model)
+        		{
+        		super.update(key, model);
+        		}
+        		
 				public String map(int val)
 					{
-					if (model.get("control" + index + "display") == 5)  // 16 K
+					if (model.get(prefix + "display") == 5)  // 16 K
 						{
-						int dv = model.get("control" + index + "sysexdoubledvtype");
-						 if (dv != 0 && dv != 3)	// DV exists and is not roland
+						int dv = model.get(prefix + "sysexdoubledvtype");
+						 if (dv != 0 && dv != 1)	// DV exists and is not roland
 							{
-							int pos = model.get("control" + index + "sysexdvpos");
+							int pos = model.get(prefix + "sysexdvpos");
 							if (pos == _i || pos == _i - 1)	// I'm in the DV spot
 								{
 								return "DV";
@@ -2959,10 +2997,10 @@ class SysexBox extends HBox
 						}
 					else
 						{
-						int dv = model.get("control" + index + "sysexsingledvtype");
-						 if (dv != 0 && dv != 2)	// DV exists and is not roland
+						int dv = model.get(prefix + "sysexsingledvtype");
+						 if (dv != 0 && dv != 1)	// DV exists and is not roland
 							{
-							if (model.get("control" + index + "sysexdvpos") == _i)	// I'm in the DV spot
+							if (model.get(prefix + "sysexdvpos") == _i)	// I'm in the DV spot
 								{
 								return "DV";
 								}
@@ -2977,42 +3015,60 @@ class SysexBox extends HBox
         	}
 	
 
-		// There are TWO sysex length dials, which alternate being shown depending on 16K
+		// There are TWO sysex length dials, which alternate being shown depending on whether we're roland
 		
-        sysexlength = new LabelledDial("Sysex Length", synth, "control" + index + "sysexlength", color, 0, 12)
+        sysexlength = new LabelledDial("Sysex Length", synth, prefix + "sysexlength", color, 0, 12)
         	{
         	public void update(String key, final Model model)
         		{
         		super.update(key, model);
-        		sysexBytes.removeAll();
-        		int val = model.get(key);
-        		for(int i = 0; i < val; i++)
+        		// only update if we're non-roland display type
+        		if (((model.get(prefix + "display") == 5) && 					// 16K
+        			 (model.get(prefix + "sysexdoubledvtype") == 1)) || 		// 16K is Roland
+        			((model.get(prefix + "display") != 5) && 					// 128
+        			 (model.get(prefix + "sysexsingledvtype") == 1))) 			// 128 is Roland
         			{
-        			sysexBytes.add(sysex[i]);
+        			// it's roland: do NOTHING
         			}
-        		sysexBytes.revalidate();
-        		sysexBytes.repaint();
+        		else
+        			{
+					sysexBytes.removeAll();
+					int val = model.get(key);
+					for(int i = 0; i < val; i++)
+						{
+						sysexBytes.add(sysex[i]);
+						}
+					sysexBytes.revalidate();
+					sysexBytes.repaint();
+					}
         		} 
         	};
         	
-        rolandsysexlength = new LabelledDial("Sysex Length", synth, "control" + index + "rolandsysexlength", color, 9, 12)
+        rolandsysexlength = new LabelledDial("Sysex Length", synth, prefix + "rolandsysexlength", color, 9, 12)
         	{
         	public void update(String key, final Model model)
         		{
         		super.update(key, model);
-        		sysexBytes.removeAll();
-        		int val = model.get(key);
-        		for(int i = 0; i < val; i++)
+        		// only update if we're roland display type
+        		if (((model.get(prefix + "display") == 5) && 					// 16K
+        			 (model.get(prefix + "sysexdoubledvtype") == 1)) || 		// 16K is Roland
+        			((model.get(prefix + "display") != 5) && 					// 128
+        			 (model.get(prefix + "sysexsingledvtype") == 1))) 			// 128 is Roland
         			{
-        			sysexBytes.add(sysex[i]);
-        			}
-        		sysexBytes.revalidate();
-        		sysexBytes.repaint();
-        		} 
+					sysexBytes.removeAll();
+					int val = model.get(key);
+					for(int i = 0; i < val; i++)
+						{
+						sysexBytes.add(sysex[i]);
+						}
+					sysexBytes.revalidate();
+					sysexBytes.repaint();
+					} 
+				}
         	};
         
         final HBox sysexdvposbox = new HBox();
-        final LabelledDial sysexdvpos = new LabelledDial("Data Position", synth, "control" + index + "sysexdvpos", color, 0, 11, -1)
+        final LabelledDial sysexdvpos = new LabelledDial("Data Position", synth, prefix + "sysexdvpos", color, 0, 11, -1)
         	{
               public void update(String key, final Model model)
         		{
@@ -3024,72 +3080,80 @@ class SysexBox extends HBox
 		// There are TWO sysex data type dials, which alternate being shown depending on 16K.  They have
 		// an impact on the sysex length dials so we need to re-update them too
 		
-        sysexsingledvtype = new Chooser("Data Type", synth, "control" + index + "sysexsingledvtype", NovationSLMKII.SINGLE_DV_TYPES)	
+        sysexsingledvtype = new Chooser("Data Type", synth, prefix + "sysexsingledvtype", NovationSLMKII.SINGLE_DV_TYPES)	
         	{
         	public void update(String key, final Model model)
         		{
         		super.update(key, model);
-        		lengthBox.remove(sysexlength);
-        		lengthBox.remove(rolandsysexlength);
-        		if (model.get(key) == 2)	// Roland [single]
+        		// only update if we're the right display type
+        		if (model.get(prefix + "display") != 5) // 16K
         			{
-        			lengthBox.add(rolandsysexlength);
-					rolandsysexlength.update("control" + index + "rolandsysexlength", model);		// so it changes the sysex byte length
-        			}
-        		else
-        			{
-        			lengthBox.add(sysexlength);
-					sysexlength.update("control" + index + "sysexlength", model);		// so it changes the sysex byte length
-        			}
-        			
-        		sysexdvposbox.remove(sysexdvpos);
-        		if (model.get(key) == 1)	// Single
-        			{
-        			sysexdvposbox.add(sysexdvpos);
-        			}
-        			
-        		sysexdvposbox.revalidate();
-        		sysexdvposbox.repaint();
-        		lengthBox.revalidate();
-        		lengthBox.repaint();
-        		sysexBytes.repaint();
-        		} 
+					lengthBox.remove(sysexlength);
+					lengthBox.remove(rolandsysexlength);
+					if (model.get(key) == 1)	// Roland [single]
+						{
+						lengthBox.add(rolandsysexlength);
+						rolandsysexlength.update(prefix + "rolandsysexlength", model);		// so it changes the sysex byte length
+						}
+					else
+						{
+						lengthBox.add(sysexlength);
+						sysexlength.update(prefix + "sysexlength", model);		// so it changes the sysex byte length
+						}
+					
+					sysexdvposbox.remove(sysexdvpos);
+					if (model.get(key) == 2)	// Single
+						{
+						sysexdvposbox.add(sysexdvpos);
+						}
+					
+					sysexdvposbox.revalidate();
+					sysexdvposbox.repaint();
+					lengthBox.revalidate();
+					lengthBox.repaint();
+					sysexBytes.repaint();
+					}
+				}
         	};
         	
-        sysexdoubledvtype = new Chooser("Data Type", synth, "control" + index + "sysexdoubledvtype", NovationSLMKII.DOUBLE_DV_TYPES)
+        sysexdoubledvtype = new Chooser("Data Type", synth, prefix + "sysexdoubledvtype", NovationSLMKII.DOUBLE_DV_TYPES)
         	{
         	public void update(String key, Model model)
         		{
         		super.update(key, model);
-        		lengthBox.remove(sysexlength);
-        		lengthBox.remove(rolandsysexlength);
-        		if (model.get(key) == 3)	// Roland [double]
+        		// only update if we're the right display type
+        		if (model.get(prefix + "display") == 5) // 16K
         			{
-        			lengthBox.add(rolandsysexlength);
-					rolandsysexlength.update("control" + index + "rolandsysexlength", model);		// so it changes the sysex byte length
-        			}
-        		else
-        			{
-        			lengthBox.add(sysexlength);
-					sysexlength.update("control" + index + "sysexlength", model);		// so it changes the sysex byte length
-        			}
-        			
-        		sysexdvposbox.remove(sysexdvpos);
-        		if (model.get(key) == 1 || model.get(key) == 2)	// LSB-MSB or MSB-LSB
-        			{
-        			sysexdvposbox.add(sysexdvpos);
-        			}
-        			
-        		sysexdvposbox.revalidate();
-        		sysexdvposbox.repaint();
-        		lengthBox.revalidate();
-        		lengthBox.repaint();
-        		sysexBytes.repaint();
-        		} 
+					lengthBox.remove(sysexlength);
+					lengthBox.remove(rolandsysexlength);
+					if (model.get(key) == 1)	// Roland [double]
+						{
+						lengthBox.add(rolandsysexlength);
+						rolandsysexlength.update(prefix + "rolandsysexlength", model);		// so it changes the sysex byte length
+						}
+					else
+						{
+						lengthBox.add(sysexlength);
+						sysexlength.update(prefix + "sysexlength", model);		// so it changes the sysex byte length
+						}
+					
+					sysexdvposbox.remove(sysexdvpos);
+					if (model.get(key) == 2 || model.get(key) == 3)	// LSB-MSB or MSB-LSB
+						{
+						sysexdvposbox.add(sysexdvpos);
+						}
+					
+					sysexdvposbox.revalidate();
+					sysexdvposbox.repaint();
+					lengthBox.revalidate();
+					lengthBox.repaint();
+					sysexBytes.repaint();
+					} 
+				}
         	};
     
     	// Assemble
-    	setShows16K(false);		// default
+    	setShows16K(prefix, false);		// default
     	add(typeBox);
     	add(lengthBox);
     	add(sysexdvposbox);
@@ -3097,7 +3161,7 @@ class SysexBox extends HBox
     	}
 
 
-	public void setShows16K(boolean val)
+	public void setShows16K(String prefix, boolean val)
 		{
 		if (val)
 			{
@@ -3105,7 +3169,7 @@ class SysexBox extends HBox
 			typeBox.add(sysexdoubledvtype);
 			typeBox.revalidate();
 			typeBox.repaint();
-			sysexdoubledvtype.update("control" + index + "sysexdoubledvtype", model);
+			sysexdoubledvtype.update(prefix + "sysexdoubledvtype", model);
 			}
 		else
 			{
@@ -3113,7 +3177,7 @@ class SysexBox extends HBox
 			typeBox.add(sysexsingledvtype);
 			typeBox.revalidate();
 			typeBox.repaint();
-			sysexsingledvtype.update("control" + index + "sysexsingledvtype", model);
+			sysexsingledvtype.update(prefix + "sysexsingledvtype", model);
 			}
 		}
 		
@@ -3155,8 +3219,8 @@ RECEIVED:	F0 00 20 29 02 03 7F 00 00 0B 0E 00 PATCHNUM <DATA...> 12 34 F7
 	and the SL does not retain the patch number.  I do not know why.
 
 PATCHNUM is located at position 0C and has a value 0x00 ... 0x1F.  When doing bulk uploads, 
-it appears that there is a secret patch number 0x20 (32) which provides default names for things 
-for automaps [I believe], but it looks like you shouldn't fool around with that.  Indeed you
+it there is a secret patch number 0x20 (32) which provides default information for 
+automaps [I believe], but it looks like you shouldn't fool around with that.  Indeed you
 can occasionally get the SL to indicate "Template-33" when it meant "Template-1": there are
 still some bugs in the device.
 
@@ -3172,175 +3236,182 @@ DATA
 ====
 The 4096 bytes of DATA is as follows (starting at byte 0D):
 
-BYTE	DESCRIPTION			
-0D	Name				34 Bytes, padded with 0x20
-2F	(0x20)
-30	Manufacturer		13 Bytes, padded with 0x20
-	*** NOTE: Name + Maufacturer essentially comprise one string 48 bytes long
-3D 	(0x00)
-3E	(0x00)
-3F	(0x00)
-40	(0x00)
-41	Template Size		0: 1, 2-40: 2-40
-	*** NOTE: The software permits values up to 40, but the Zero (and probably
-	*** other units?) only permits values up to 32 because there are only 32
-	*** templates.  This should be restricted to 32.
-	*** NOTE: Size is never set to 1.  0 represents size 1.
-42	Template Position	0, or 1-40
-	*** Size must be a display value 1...40
-	*** Position must be a display value from 1 ... Size
-	*** If size is display 1, then the sysex values for size and position are both 0
-	*** Otherwise the sysex values for size and position are their display values
-	*** Yes, that's weird
+ADDRESS
+DEC  HEX  DESCRIPTION			
+13   0D   Name				34 Bytes, padded with 0x20
+47   2F   (0x20)
+48   30   Manufacturer		13 Bytes, padded with 0x20
+   *** NOTE: Name + Maufacturer essentially comprise one string 48 bytes long
+61   3D   (0x00)
+62   3E   (0x00)
+63   3F   (0x00)
+64   40   (0x00)
+65   41   Template Size		0: 1, 2-40: 2-40
+   *** NOTE: The software permits values up to 40, but the Zero (and probably
+   *** other units?) only permits values up to 32 because there are only 32
+   *** templates.  This should be restricted to 32.
+   *** NOTE: Size is never set to 1.  0 represents size 1.
+66   42   Template Position	0, or 1-40
+   *** Size must be a display value 1...40
+   *** Position must be a display value from 1 ... Size
+   *** If size is display 1, then the sysex values for size and position are both 0
+   *** Otherwise the sysex values for size and position are their display values
+   *** Yes, that's weird
 
-UNKNOWN		*** I do not know the meaning of some of these constants
-43	(0x00)
-44	(0x5a)
-45	(0x29)
-46	(0x00)
-47	(0x00)
-48	(0x00)
-49	(0x00)
-4A	(0x00)
-4B	(0x00)
-4C	(0x00)
-4D	(0x00)
-4E	(0x00)
-4F	(0x00)
-50	(0x00)
-51	(0x00)
-52	(0x19)
-53	(0x00)
-54	(0x01)
-55	(0x00)
-56	(0x21)
-57	(0x00)
-58	(0x09)
-59	(0x00)
-5A	(0x39)
-5B	(0x00)
-5C	(0x11)
-5D	(0x00)
-5E	(0x29)
-5F	(0x00)
-60	(0x31)
-61	(0x03)
-62	(0x05)
+UNKNOWN      *** I do not know the meaning of some of these constants
+67   43   (0x00)
+68   44   (0x5a)
+69   45   (0x29)
+70   46   (0x00)
+71   47   (0x00)
+72   48   (0x00)
+73   49   (0x00)
+74   4A   (0x00)
+75   4B   (0x00)
+76   4C   (0x00)
+77   4D   (0x00)
+78   4E   (0x00)
+79   4F   (0x00)
+80   50   (0x00)
+81   51   (0x00)
+82   52   (0x19)
+83   53   (0x00)
+84   54   (0x01)
+85   55   (0x00)
+86   56   (0x21)
+87   57   (0x00)
+88   58   (0x09)
+89   59   (0x00)
+90   5A   (0x39)
+91   5B   (0x00)
+92   5C   (0x11)
+93   5D   (0x00)
+94   5E   (0x29)
+95   5F   (0x00)
+96   60   (0x31)
+97   61   (0x03)
+98   62   (0x05)
 
 MIDI PORT GROUPS KEYBOARD
-63	Channel				0-16				[1-16, "As Common"]
-64	Ports				[See Table 4]
-	*** Note: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
+99   63   Channel				0-16				[1-16, "As Common"]
+100  64   Ports				[See Table 4]
+  *** Note: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
 
 MIDI PORT GROUPS COMMON
-65	Channel				0-15				[1-16]
-66	Ports				[See Table 3]
+101  65   Channel				0-15				[1-16]
+102  66   Ports				[See Table 3]
 
-UNKNOWN 		*** I do not know the meaning of these constants
-67	(0x00)
-68	(0x00)
+UNKNOWN      *** I do not know the meaning of these constants
+103  67   (0x00)
+104  68   (0x00)
 
-69	Velocity Curve		0-126	[representing 1-127]
-6A	Octave Setting		0-9		[representing -4 ... 5]
-6B	Pot Pickup ON		0x01
-+->	Aftertouch OFF		0x04
+105  69   Velocity Curve		0-126	[representing 1-127]
+106  6A   Octave Setting		0-9		[representing -4 ... 5]
+107  6B   Pot Pickup ON		0x01
++->  Aftertouch OFF   	0x04
 
-UNKNOWN 		*** I do not know the meaning of these constants
-6C	(0x00)
-6D	(0x07)
+UNKNOWN      *** I do not know the meaning of these constants
+108  6C   (0x00)
+109  6D   (0x07)
 
 KEYBOARD ZONES
-6E	Enable Keyboard Zones	0-1
+110  6E   Enable Keyboard Zones	0-1
 
-6F	Zone 1 Channel		0-15	[1-16]
-70	Zone 1 Ports		[See Table 8]
-71	Zone 1 Vel Offset	0-126		[representing 1-127]
-72	Zone 1 Min			0-127
-73	Zone 1 Max			0-127
-74	Zone 1 Transpose	0-127		[representing -64-63]
-75	Zone 1 Aftertouch	0x04		[Note 0x04 is ON, which is not the same as 6B above]
-+->	Zone 1 Pitch Bend	0x01
-+->	Zone 1 Mod Wheel	0x02
-76  (0x00)
-77  (0x00)
-78  (0x00)
-79	Zone 2 Channel		0-15	[1-16]
-7A	Zone 2 Ports		[See Table 8]
-7B	Zone 2 Vel Offset	0-126		[representing 1-127]
-7C	Zone 2 Min			0-127
-7D	Zone 2 Max			0-127
-7E	Zone 2 Transpose	0-127		[representing -64-63]
-7F	Zone 2 Aftertouch	0x04		[Note 0x04 is ON, which is not the same as 6B above]
-+->	Zone 2 Pitch Bend	0x01
-+->	Zone 2 Mod Wheel	0x02
-80  (0x00)
-81  (0x00)
-82  (0x00)
-83	Zone 3 Channel		0-15	[1-16]
-84	Zone 3 Ports		[See Table 8]
-85	Zone 3 Vel Offset	0-126		[representing 1-127]
-86	Zone 3 Min			0-127
-87	Zone 3 Max			0-127
-88	Zone 3 Transpose	0-127		[representing -64-63]
-89	Zone 3 Aftertouch	0x04		[Note 0x04 is ON, which is not the same as 6B above]
-+->	Zone 3 Pitch Bend	0x01
-+->	Zone 3 Mod Wheel	0x02
-8A  (0x00)
-8B  (0x00)
-8C  (0x00)
-8D	Zone 4 Channel		0-15	[1-16]
-8E	Zone 4 Ports		[See Table 8]
-8F	Zone 4 Vel Offset	0-126		[representing 1-127]
-90	Zone 4 Min			0-127
-91	Zone 4 Max			0-127
-92	Zone 4 Transpose	0-127		[representing -64-63]
-93	Zone 4 Aftertouch	0x04		[Note 0x04 is ON, which is not the same as 6B above]
-+->	Zone 4 Pitch Bend	0x01
-+->	Zone 4 Mod Wheel	0x02
-94	(0x00)
-95	(0x00)
-96	(0x00)
+111  6F   Zone 1 Channel		0-15	[1-16]
+112  70   Zone 1 Ports					[See Table 8]
+113  71   Zone 1 Vel Offset	0-126		[representing 1-127]
+114  72   Zone 1 Min			0-127
+115  73   Zone 1 Max			0-127
+116  74   Zone 1 Transpose	0-127		[representing -64-63]
+117  75   Zone 1 Aftertouch	0x04		[Note 0x04 is ON, which is not the same as 6B above]
++->  Zone 1 Pitch Bend   0x01
++->  Zone 1 Mod Wheel   0x02
+118  76  (0x00)
+119  77  (0x00)
+120  78  (0x00)
+121  79   Zone 2 Channel		0-15	[1-16]
+122  7A   Zone 2 Ports		[			See Table 8]
+123  7B   Zone 2 Vel Offset	0-126		[representing 1-127]
+124  7C   Zone 2 Min			0-127
+125  7D   Zone 2 Max			0-127
+126  7E   Zone 2 Transpose	0-127		[representing -64-63]
+127  7F   Zone 2 Aftertouch	0x04		[Note 0x04 is ON, which is not the same as 6B above]
++->  Zone 2 Pitch Bend   0x01
++->  Zone 2 Mod Wheel   0x02
+128  80  (0x00)
+129  81  (0x00)
+130  82  (0x00)
+131  83   Zone 3 Channel		0-15	[1-16]
+132  84   Zone 3 Ports		[			See Table 8]
+133  85   Zone 3 Vel Offset	0-126		[representing 1-127]
+134  86   Zone 3 Min			0-127
+135  87   Zone 3 Max			0-127
+136  88   Zone 3 Transpose	0-127		[representing -64-63]
+137  89   Zone 3 Aftertouch	0x04		[Note 0x04 is ON, which is not the same as 6B above]
++->  Zone 3 Pitch Bend   0x01
++->  Zone 3 Mod Wheel   0x02
+138  8A  (0x00)
+139  8B  (0x00)
+140  8C  (0x00)
+141  8D   Zone 4 Channel		0-15	[1-16]
+142  8E   Zone 4 Ports					[See Table 8]
+143  8F   Zone 4 Vel Offset	0-126		[representing 1-127]
+144  90   Zone 4 Min			0-127
+145  91   Zone 4 Max			0-127
+146  92   Zone 4 Transpose	0-127		[representing -64-63]
+147  93   Zone 4 Aftertouch	0x04		[Note 0x04 is ON, which is not the same as 6B above]
++->  Zone 4 Pitch Bend   0x01
++->  Zone 4 Mod Wheel   0x02
+148  94   (0x00)
+149  95   (0x00)
+150  96   (0x00)
 
 
 TOUCHPAD TYPES
-97	Touchpad X Type		0-3		{ "No Spring/Hold" = 00, "Spring Right" = 03, "Spring Centre" = 02, "Spring Left" = 01 }
-98	Touchpad Y Type		0-3		{ "No Spring/Hold" = 00, "Spring Up" = 03, "Spring Centre" = 02, "Spring Down" = 01 }
+151  97   Touchpad X Type		0-3		{ "No Spring/Hold" = 00, "Spring Right" = 03, "Spring Centre" = 02, "Spring Left" = 01 }
+152  98   Touchpad Y Type		0-3		{ "No Spring/Hold" = 00, "Spring Up" = 03, "Spring Centre" = 02, "Spring Down" = 01 }
 
-UNKNOWN 		*** I do not know the meaning of these constants
-99	(0x00)
-9A	(0x00)
-9B	(0x00)
+UNKNOWN      *** I do not know the meaning of these constants
+153  99   (0x00)
+154  9A   (0x00)
 
-DRUM NOTES FOR THE EIGHT DRUM PADS -- I guess these couldn't fit in the standard slots
-9C	Drum Note 0 Auto-Off	0-127
-9E	Drum Note 1 Auto-Off	0-127
-A0	Drum Note 2 Auto-Off	0-127
-A2	Drum Note 3 Auto-Off	0-127
-A4	Drum Note 4 Auto-Off	0-127
-A6	Drum Note 5 Auto-Off	0-127
-A8	Drum Note 6 Auto-Off	0-127
-AA	Drum Note 7 Auto-Off	0-127
-AB	Drum Note 0 Off-Sync-Value	[See Table 1]
-AC	Drum Note 1 Off-Sync-Value	[See Table 1]
-AD	Drum Note 2 Off-Sync-Value	[See Table 1]
-AE	Drum Note 3 Off-Sync-Value	[See Table 1]
-AF	Drum Note 4 Off-Sync-Value	[See Table 1]
-B0	Drum Note 5 Off-Sync-Value	[See Table 1]
-B1	Drum Note 6 Off-Sync-Value	[See Table 1]
-B2	Drum Note 7 Off-Sync-Value	[See Table 1]
+DRUM NOTE DATA FOR THE EIGHT DRUM PADS -- I guess this couldn't fit in the standard slots
+155  9B   (0x00)
+156  9C   Drum Note 0 Auto-Off	0-127
+157  9D   (0x00)
+158  9E   Drum Note 1 Auto-Off	0-127
+159  9F   (0x00)
+160  A0   Drum Note 2 Auto-Off	0-127
+161  A1   (0x00)
+162  A2   Drum Note 3 Auto-Off	0-127
+163  A3   (0x00)
+164  A4   Drum Note 4 Auto-Off	0-127
+165  A5   (0x00)
+166  A6   Drum Note 5 Auto-Off	0-127
+167  A7   (0x00)
+168  A8   Drum Note 6 Auto-Off	0-127
+169  A9   (0x00)
+170  AA   Drum Note 7 Auto-Off	0-127
+171  AB   Drum Note 0 Off-Sync-Value	[See Table 1]
+172  AC   Drum Note 1 Off-Sync-Value	[See Table 1]
+173  AD   Drum Note 2 Off-Sync-Value	[See Table 1]
+174  AE   Drum Note 3 Off-Sync-Value	[See Table 1]
+175  AF   Drum Note 4 Off-Sync-Value	[See Table 1]
+176  B0   Drum Note 5 Off-Sync-Value	[See Table 1]
+177  B1   Drum Note 6 Off-Sync-Value	[See Table 1]
+178  B2   Drum Note 7 Off-Sync-Value	[See Table 1]
 
-UNKNOWN 		*** I do not know the meaning of these constants 
-B3 (0x00)
-B4 (0x01)
-B5 (0x00)
-B6 (0x40)
-B7 (0x00)
-B8 (0x00)
-B9 (0x00)
-BA (0x00)
-BB (0x40)
-
-BC-1a2	(0x00)	[231 bytes]
+UNKNOWN      *** I do not know the meaning of these constants 
+179  B3 (0x00)
+180  B4 (0x01)
+181  B5 (0x00)
+182  B6 (0x40)
+183  B7 (0x00)
+184  B8 (0x00)
+185  B9 (0x00)
+186  BA (0x00)
+187  BB (0x40)
+181-418   BC-1a2	(0x00)	[231 bytes]
 
 
 
@@ -3349,119 +3420,133 @@ BC-1a2	(0x00)	[231 bytes]
 *** and other controls that can be programmed on the SL.
 
 ENCODERS
-1a3	Encoder 0	[41 bytes]	[See ENCODER DATA]
-1cc	Encoder 1	[41 bytes]	[See ENCODER DATA]
-1f5	Encoder 2	[41 bytes]	[See ENCODER DATA]
-21e	Encoder 3	[41 bytes]	[See ENCODER DATA]
-247	Encoder 4	[41 bytes]	[See ENCODER DATA]
-270	Encoder 5	[41 bytes]	[See ENCODER DATA]
-299	Encoder 6	[41 bytes]	[See ENCODER DATA]
-2c2	Encoder 7	[41 bytes]	[See ENCODER DATA]
+419  1a3  Encoder 0		[41 bytes]	[See ENCODER DATA]
+460  1cc  Encoder 1		[41 bytes]	[See ENCODER DATA]
+501  1f5  Encoder 2		[41 bytes]	[See ENCODER DATA]
+542  21e  Encoder 3		[41 bytes]	[See ENCODER DATA]
+583  247  Encoder 4		[41 bytes]	[See ENCODER DATA]
+624  270  Encoder 5		[41 bytes]	[See ENCODER DATA]
+665  299  Encoder 6		[41 bytes]	[See ENCODER DATA]
+706  2c2  Encoder 7		[41 bytes]	[See ENCODER DATA]
 
 POTS
-2eb	Pot 0	[41 bytes]	[See POT DATA]
-314	Pot 1	[41 bytes]	[See POT DATA]
-33d	Pot 2	[41 bytes]	[See POT DATA]
-366	Pot 3	[41 bytes]	[See POT DATA]
-38f	Pot 4	[41 bytes]	[See POT DATA]
-3b8	Pot 5	[41 bytes]	[See POT DATA]
-3e1	Pot 6	[41 bytes]	[See POT DATA]
-40a	Pot 7	[41 bytes]	[See POT DATA]
+747  2eb  Pot 0			[41 bytes]	[See POT DATA]
+788  314  Pot 1			[41 bytes]	[See POT DATA]
+829  33d  Pot 2			[41 bytes]	[See POT DATA]
+870  366  Pot 3			[41 bytes]	[See POT DATA]
+911  38f  Pot 4			[41 bytes]	[See POT DATA]
+952  3b8  Pot 5			[41 bytes]	[See POT DATA]
+993  3e1  Pot 6			[41 bytes]	[See POT DATA]
+1034 40a  Pot 7			[41 bytes]	[See POT DATA]
 
 FADERS
-433	Fader 0	[41 bytes]	[See POT DATA]
-45c	Fader 1	[41 bytes]	[See POT DATA]
-485	Fader 2	[41 bytes]	[See POT DATA]
-4ae	Fader 3	[41 bytes]	[See POT DATA]
-4d7	Fader 4	[41 bytes]	[See POT DATA]
-500	Fader 5	[41 bytes]	[See POT DATA]
-529	Fader 6	[41 bytes]	[See POT DATA]
-552	Fader 7	[41 bytes]	[See POT DATA]
+1075 433  Fader 0		[41 bytes]	[See POT DATA]
+1116 45c  Fader 1		[41 bytes]	[See POT DATA]
+1157 485  Fader 2		[41 bytes]	[See POT DATA]
+1198 4ae  Fader 3		[41 bytes]	[See POT DATA]
+1239 4d7  Fader 4		[41 bytes]	[See POT DATA]
+1280 500  Fader 5		[41 bytes]	[See POT DATA]
+1321 529  Fader 6		[41 bytes]	[See POT DATA]
+1362 552  Fader 7		[41 bytes]	[See POT DATA]
 
 BUTTONS A (Top Left Row)
-57b	Button A0	[41 bytes]	[See BUTTON DATA]
-5a4	Button A1	[41 bytes]	[See BUTTON DATA]
-5cd	Button A2	[41 bytes]	[See BUTTON DATA]
-5f6	Button A3	[41 bytes]	[See BUTTON DATA]
-61f	Button A4	[41 bytes]	[See BUTTON DATA]
-648	Button A5	[41 bytes]	[See BUTTON DATA]
-671	Button A6	[41 bytes]	[See BUTTON DATA]
-69a	Button A7	[41 bytes]	[See BUTTON DATA]
+1403 57b  Button A0		[41 bytes]	[See BUTTON DATA]
+1444 5a4  Button A1		[41 bytes]	[See BUTTON DATA]
+1485 5cd  Button A2		[41 bytes]	[See BUTTON DATA]
+1526 5f6  Button A3		[41 bytes]	[See BUTTON DATA]
+1567 61f  Button A4		[41 bytes]	[See BUTTON DATA]
+1608 648  Button A5		[41 bytes]	[See BUTTON DATA]
+1649 671  Button A6		[41 bytes]	[See BUTTON DATA]
+1690 69a  Button A7		[41 bytes]	[See BUTTON DATA]
 
 BUTTONS B (Bottom Left Row)
-6c3	Button B0	[41 bytes]	[See BUTTON DATA]
-6ec	Button B1	[41 bytes]	[See BUTTON DATA]
-715	Button B2	[41 bytes]	[See BUTTON DATA]
-73e	Button B3	[41 bytes]	[See BUTTON DATA]
-767	Button B4	[41 bytes]	[See BUTTON DATA]
-790	Button B5	[41 bytes]	[See BUTTON DATA]
-7b9	Button B6	[41 bytes]	[See BUTTON DATA]
-7e2	Button B7	[41 bytes]	[See BUTTON DATA]
+1731 6c3  Button B0		[41 bytes]	[See BUTTON DATA]
+1772 6ec  Button B1		[41 bytes]	[See BUTTON DATA]
+1813 715  Button B2		[41 bytes]	[See BUTTON DATA]
+1854 73e  Button B3		[41 bytes]	[See BUTTON DATA]
+1895 767  Button B4		[41 bytes]	[See BUTTON DATA]
+1936 790  Button B5		[41 bytes]	[See BUTTON DATA]
+1977 7b9  Button B6		[41 bytes]	[See BUTTON DATA]
+2018 7e2  Button B7		[41 bytes]	[See BUTTON DATA]
 
 BUTTONS C (Top Right Row)
-80b	Button C0	[41 bytes]	[See BUTTON DATA]
-834	Button C1	[41 bytes]	[See BUTTON DATA]
-85d	Button C2	[41 bytes]	[See BUTTON DATA]
-886	Button C3	[41 bytes]	[See BUTTON DATA]
-8af	Button C4	[41 bytes]	[See BUTTON DATA]
-8d8	Button C5	[41 bytes]	[See BUTTON DATA]
-901	Button C6	[41 bytes]	[See BUTTON DATA]
-92a	Button C7	[41 bytes]	[See BUTTON DATA]
-
+2059 80b  Button C0		[41 bytes]	[See BUTTON DATA]
+2100 834  Button C1		[41 bytes]	[See BUTTON DATA]
+2141 85d  Button C2		[41 bytes]	[See BUTTON DATA]
+2182 886  Button C3		[41 bytes]	[See BUTTON DATA]
+2223 8af  Button C4		[41 bytes]	[See BUTTON DATA]
+2264 8d8  Button C5		[41 bytes]	[See BUTTON DATA]
+2305 901  Button C6		[41 bytes]	[See BUTTON DATA]
+2346 92a  Button C7		[41 bytes]	[See BUTTON DATA]
+	
 BUTTONS D (Bottom Right Row)
-953	Button D0	[41 bytes]	[See BUTTON DATA]
-97c	Button D1	[41 bytes]	[See BUTTON DATA]
-9a5	Button D2	[41 bytes]	[See BUTTON DATA]
-9ce	Button D3	[41 bytes]	[See BUTTON DATA]
-9f7	Button D4	[41 bytes]	[See BUTTON DATA]
-a20	Button D5	[41 bytes]	[See BUTTON DATA]
-a49	Button D6	[41 bytes]	[See BUTTON DATA]
-a72	Button D7	[41 bytes]	[See BUTTON DATA]
+2387 953  Button D0		[41 bytes]	[See BUTTON DATA]
+2428 97c  Button D1		[41 bytes]	[See BUTTON DATA]
+2469 9a5  Button D2		[41 bytes]	[See BUTTON DATA]
+2510 9ce  Button D3		[41 bytes]	[See BUTTON DATA]
+2551 9f7  Button D4		[41 bytes]	[See BUTTON DATA]
+2592 a20  Button D5		[41 bytes]	[See BUTTON DATA]
+2633 a49  Button D6		[41 bytes]	[See BUTTON DATA]
+2674 a72  Button D7		[41 bytes]	[See BUTTON DATA]
 
 DRUMPADS
-a9b	Drumpad 0	[41 bytes]	[See DRUMPAD DATA]
-ac4	Drumpad 1	[41 bytes]	[See DRUMPAD DATA]
-aed	Drumpad 2	[41 bytes]	[See DRUMPAD DATA]
-b16	Drumpad 3	[41 bytes]	[See DRUMPAD DATA]
-b3f	Drumpad 4	[41 bytes]	[See DRUMPAD DATA]
-b68	Drumpad 5	[41 bytes]	[See DRUMPAD DATA]
-b91	Drumpad 6	[41 bytes]	[See DRUMPAD DATA]
-bba	Drumpad 7	[41 bytes]	[See DRUMPAD DATA]
+2715 a9b  Drumpad 0		[41 bytes]	[See DRUMPAD DATA]
+2756 ac4  Drumpad 1		[41 bytes]	[See DRUMPAD DATA]
+2797 aed  Drumpad 2		[41 bytes]	[See DRUMPAD DATA]
+2838 b16  Drumpad 3		[41 bytes]	[See DRUMPAD DATA]
+2879 b3f  Drumpad 4		[41 bytes]	[See DRUMPAD DATA]
+2920 b68  Drumpad 5		[41 bytes]	[See DRUMPAD DATA]
+2961 b91  Drumpad 6		[41 bytes]	[See DRUMPAD DATA]
+3002 bba  Drumpad 7		[41 bytes]	[See DRUMPAD DATA]
 
-VARIOUS
-be3	EXPRESSION	[41 bytes]	[See POT DATA]
-c0c	SUSTAIN		[41 bytes]	[See BUTTON DATA]
-c35	MODWHEEL	[41 bytes]	[See POT DATA]
-c5e	PITCHBEND	[41 bytes]	[See PITCHBEND DATA]
-c87	X1			[41 bytes]	[See PITCHBEND DATA]
-cb0	Y1			[41 bytes]	[See PITCHBEND DATA]
-cd9	X2			[41 bytes]	[See PITCHBEND DATA]
-d02	Y2			[41 bytes]	[See PITCHBEND DATA]
+MISCELLANEOUS
+3043 be3  EXPRESSION	[41 bytes]	[See POT DATA]
+3084 c0c  SUSTAIN		[41 bytes]	[See BUTTON DATA]
+3125 c35  MODWHEEL		[41 bytes]	[See POT DATA]
+3166 c5e  PITCHBEND		[41 bytes]	[See PITCHBEND DATA]
+3207 c87  X1			[41 bytes]	[See PITCHBEND DATA]
+3248 cb0  Y1			[41 bytes]	[See PITCHBEND DATA]
+3289 cd9  X2			[41 bytes]	[See PITCHBEND DATA]
+3330 d02  Y2			[41 bytes]	[See PITCHBEND DATA]
 
 TRANSPORT
-d2b	REWIND		[41 bytes]	[See BUTTON DATA]	
-d54	FF			[41 bytes]	[See BUTTON DATA]
-d7d	STOP		[41 bytes]	[See BUTTON DATA]
-da6	PLAY		[41 bytes]	[See BUTTON DATA]
-dcf	RECORD		[41 bytes]	[See BUTTON DATA]
-df8	LOOP		[41 bytes]	[See BUTTON DATA]
-	*** Note that Record and Loop are out of order
-e21	"BUTTON25"	[41 bytes]	[See UNUSED DATA]
-e4a	"BUTTON26"	[41 bytes]	[See UNUSED DATA]
+3371 d2b  REWIND		[41 bytes]	[See BUTTON DATA]	
+3412 d54  FAST FORWARD	[41 bytes]	[See BUTTON DATA]
+3453 d7d  STOP			[41 bytes]	[See BUTTON DATA]
+3494 da6  PLAY			[41 bytes]	[See BUTTON DATA]
+3535 dcf  RECORD		[41 bytes]	[See BUTTON DATA]
+3576 df8  LOOP			[41 bytes]	[See BUTTON DATA]
+  *** Note that Record and Loop are out of order with regard to their location on the unit
 
 EXTRA
-e73	"BUTTON27"	[41 bytes]	[See UNUSED DATA]
-e9c	"BUTTON28"	[41 bytes]	[See UNUSED DATA]
-ec5	"BUTTON29"	[41 bytes]	[See UNUSED DATA]
-eee	"BUTTON30"	[41 bytes]	[See UNUSED DATA]
-f17	UNUSED		[41 bytes]	[See UNUSED DATA]
-f40	CROSS-FADER	[41 bytes]	[See POT DATA]
-f69	UNUSED		[41 bytes]	[See UNUSED DATA]
-f92	UNUSED		[41 bytes]	[See UNUSED DATA]
-fbb	UNUSED		[41 bytes]	[See UNUSED DATA]
-fe4	UNUSED		[41 bytes]	[See UNUSED DATA]
+3617 e21  UNUSED		[41 bytes]	[See UNUSED DATA]
+3658 e4a  UNUSED		[41 bytes]	[See UNUSED DATA]
+3699 e73  UNUSED		[41 bytes]	[See UNUSED DATA]
+3740 e9c  UNUSED		[41 bytes]	[See UNUSED DATA]
+3781 ec5  UNUSED		[41 bytes]	[See UNUSED DATA]
+3822 eee  UNUSED		[41 bytes]	[See UNUSED DATA]
+3863 f17  UNUSED		[41 bytes]	[See UNUSED DATA]
+3904 f40  CROSS-FADER	[41 bytes]	[See POT DATA]
+  *** Note that Novation's editor has no ability to edit the Zero's cross fader at all, but you
+  *** can edit it on the unit proper.
+3945 f69  UNUSED		[41 bytes]	[See UNUSED DATA]
+3986 f92  UNUSED		[41 bytes]	[See UNUSED DATA]
+4027 fbb  UNUSED		[41 bytes]	[See UNUSED DATA]
+4068 fe4  UNUSED		[41 bytes]	[See UNUSED DATA]
 
 ---- END OF DATA ---
+
+
+
+**** Important note: very often Novation patches will contain garbage data in
+**** data fields that aren't currently being used.  The big ones include:
+****     Button Type
+****     Display Format
+****     Channel
+****     Port
+****     [among others]
+**** Be prepared to set these and others to zero or default values when the
+**** data is invalid.
 
 
 
@@ -3882,7 +3967,7 @@ TABLE 7: POT PICKUP VALUES
 *** remaining bits.
 
 *** NOTE: The original Novation editor calls "Off" "Jump", and it calls
-*** "On" "Pickup", but they are not called this on the unit.
+*** "On" "Pickup", but they are not called this on the unit itself.
 
 *** NOTE: Other documentation suggests this should be in the order off, on, global, template,
 *** but that appears to be wrong.
@@ -3904,6 +3989,8 @@ TABLE 8: KEYBOARD PORTS
 4a	USB 2 MIDI 2
 4b	USB 2 MIDI 1 2
 	*** NOTE USB 3 is not available for Keyboard.
+
+
 
 
 TABLE 9: NOTES ON SYSEX TYPES

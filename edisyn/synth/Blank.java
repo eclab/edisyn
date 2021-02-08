@@ -811,10 +811,30 @@ public class Blank extends Synth
         {
         // Before saving a bank sysex file out to a file,
         // this method is called to return an appropriate name for the bank.  This
-        // name is in turn used to form a filename.  Typically banks don't have names,
+        // name is then used to form a filename.  Typically banks don't have names,
         // so you might as well just use the default return value, which is "Bank".
         return "Bank";
         }
+
+	public boolean setupBatchStartingAndEndingPatches(Model startPatch, Model endPatch)
+		{
+		// This method normally queries the user for start and end patch numbers/banks to
+		// use for batch downloading, then sets those patch numbers/banks in the given models,
+		// and returns true, else false if the user canceled the operation.  In rare cases 
+		// you may need to customize this, such as to hard-code the start and end patch.
+		// Otherwise, don't override it.
+		return super.setupBatchStartingAndEndingPatches(startPatch, endPatch);
+		}
+
+      public int getNumberOfPastes() 
+      	{  
+      	// Override this method to force Edisyn to paste multiple times to the same category or tab.
+    	// The reason you might want to do this is because Edisyn uses the *receiving* category to 
+    	// determine the parameters to paste to, and if this category contains componets which dynamically
+    	// appear or disappear, it might require multiple pastes to cause them to appear and eventually
+    	// receive parameter changes.  The default returns DEFAULT_PASTES (3). 
+      	return DEFAULT_PASTES; 
+      	}
 
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
         {

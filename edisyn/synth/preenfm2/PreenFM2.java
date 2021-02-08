@@ -396,7 +396,7 @@ public class PreenFM2 extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "PreenFM2", color);
-        globalCategory.makeUnresettable();
+        //globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;

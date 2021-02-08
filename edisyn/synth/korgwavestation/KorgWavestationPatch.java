@@ -146,7 +146,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, getSynthName(), color);
-        globalCategory.makeUnresettable();
+        //globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;

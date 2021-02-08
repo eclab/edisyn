@@ -90,7 +90,7 @@ public class OberheimMatrix1000Global extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "Oberheim Matrix 1000 [Global]", color);
-        globalCategory.makeUnresettable();
+        //globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;

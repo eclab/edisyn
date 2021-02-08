@@ -24,7 +24,7 @@ public class MAudioVenomRec extends Recognize
             data[4] == (byte) 0x21 &&       // Venom
             // don't care about 5
             data[6] == (byte) 0x02 &&               // Write Data Dump
-            data[7] == (byte) 0x01) ||              // Single Edit Dump
+            (data[7] == (byte) 0x01 || data[7] == (byte) 0x00)) ||              // Single Edit Dump
 
             (data.length == 239 &&
             data[0] == (byte)0xF0 &&

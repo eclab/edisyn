@@ -155,7 +155,7 @@ public class EmuMorpheusMap extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "E-Mu Morpheus [Midimap]", color);           // Notice we've fixed the name
-        globalCategory.makeUnresettable();
+        //globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;

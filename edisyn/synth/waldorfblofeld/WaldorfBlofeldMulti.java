@@ -225,7 +225,7 @@ public class WaldorfBlofeldMulti extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "Waldorf Blofeld [Multi]", color);
-        globalCategory.makeUnresettable();
+        //globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;

@@ -83,7 +83,7 @@ public class MAudioVenomGlobal extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "M-Audio Venom [Global]", color);
-        globalCategory.makeUnresettable();
+        //globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;

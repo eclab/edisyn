@@ -206,7 +206,7 @@ public class MAudioVenomMulti extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "M-Audio Venom [Multi]", color);
-        globalCategory.makeUnresettable();
+        //globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -1657,6 +1657,15 @@ public class MAudioVenomMulti extends Synth
 
     public int parse(byte[] data, boolean fromFile)
         {
+        if (data[7] == 0x02)	 // it's going to a specific patch (0x02 == Multi Patch Dump as opposed to 0x00 == Edit Buffer Dump)
+        	{
+        	int bank = data[8] - 1;
+        	if (bank < 0 || bank > 1) bank = 0;
+        	model.set("bank", bank);
+        	int number = data[9];
+        	model.set("number", number);
+        	}
+
         // First denybblize
         byte[] d = convertTo8Bit(data, 10, data.length - 2);
         

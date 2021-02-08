@@ -485,7 +485,7 @@ public class DSITetraCombo extends Synth
     public JComponent addNameGlobal(int layer, Color color)
         {
         Category globalCategory = new Category(this, (layer == 1 ? getSynthName() : "Tetra Voice " + layer), color);
-        if (layer == 1) globalCategory.makeUnresettable();
+        //if (layer == 1) globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;

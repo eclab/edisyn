@@ -266,7 +266,7 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "Waldorf Microwave II/XT/XTk", color);
-        globalCategory.makeUnresettable();
+        //globalCategory.makeUnresettable();
 
         JComponent comp;
         String[] params;

@@ -200,7 +200,7 @@ public class MAudioVenomArp extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "M-Audio Venom [Arp]", color);
-        globalCategory.makeUnresettable();
+        //globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -973,6 +973,15 @@ public class MAudioVenomArp extends Synth
                                                                   
         if (!pattern)           // We're doing a header
             {
+			if (data[7] == 0x03)	 // it's going to a specific patch (0x03 == Arpeggiator Data Dump as opposed to 0x00 == Edit Buffer Dump)
+				{
+				int bank = data[8] - 1;
+				if (bank < 0 || bank > 1) bank = 0;
+				model.set("bank", bank);
+				int number = data[9];
+				model.set("number", number);
+				}
+
             // First denybblize
             byte[] d = convertTo8Bit(data, 10, data.length - 2);
                         
@@ -1026,9 +1035,8 @@ public class MAudioVenomArp extends Synth
             }
         else
             {
-            // 0110000      48
-            // 1100000      96
-            // 1100000      48 + 96
+            // Unlike the header, we won't load the patch address from this data, so the
+            // header can take precedence over the pattern.
                         
             // First denybblize
 
@@ -1190,7 +1198,7 @@ public class MAudioVenomArp extends Synth
         loadingFromWorkingMemory = false;
 
         int NN = tempModel.get("number", 0);                    // The numbers are 0...127 but...
-        int BB = tempModel.get("bank", 0) + 1;                  // Believe it or not, the banks are literally 1...4
+        int BB = tempModel.get("bank", 0) + 1;                  // Believe it or not, the banks are literally 1...2
 
         // we set the patch number here because it won't get set when loaded
         model.set("number", tempModel.get("number", 0));

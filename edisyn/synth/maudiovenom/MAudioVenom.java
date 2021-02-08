@@ -268,7 +268,7 @@ public class MAudioVenom extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "M-Audio Venom", color);
-        globalCategory.makeUnresettable();
+        //globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -1815,7 +1815,6 @@ public class MAudioVenom extends Synth
                 {
                 d[j] = (byte)(model.get(key));
                 }
-            //System.err.println("WRITING " + j + " " + d[j] + " " + key);
             j++;
             }
                                 
@@ -1839,11 +1838,9 @@ public class MAudioVenom extends Synth
 
     public int processArpOctave(byte val)
         {
-        //System.err.println("arp octave val " + val);
         int o = val;
         if (o >= 60 && o <= 68) // we're good
             return o;
-        //System.err.println("Unusual arp octave value " + o);
         if (o >= -4 && o <= 4)
             return 64 + o;
         else if (o >= 124 && o <= 127)          // (-4 ... -1)
@@ -2112,6 +2109,15 @@ public class MAudioVenom extends Synth
 
     public int parse(byte[] data, boolean fromFile)
         {
+        if (data[7] == 0x01)	 // it's going to a specific patch (0x01 == Single Patch Dump as opposed to 0x00 == Edit Buffer Dump)
+        	{
+        	int bank = data[8] - 1;
+        	if (bank < 0 || bank > 3) bank = 0;
+        	model.set("bank", bank);
+        	int number = data[9];
+        	model.set("number", number);
+        	}
+
         // First denybblize
         byte[] d = convertTo8Bit(data, 10, data.length - 2);
         
@@ -2125,15 +2131,13 @@ public class MAudioVenom extends Synth
             name[i] = (char)(d[(data.length == 240 ? 189 : 188) + i] & 127);
             }
         model.set("name", new String(name));
-                                
-                                
+                                                 
         // Load remaining parameters
         int j = 0;
         String[] params = (data.length == 240 ? parameters240 : parameters);
         for(int i = 0; i < params.length; i++)
             {
             String key = params[i];
-            //System.err.println(key);
             
             // we're now handling this with a different set of parameters
             /*
@@ -2196,7 +2200,6 @@ public class MAudioVenom extends Synth
                 {
                 if (d[j] >= 64) // it's a mod destination, need to shift
                     {
-                    //System.err.println("shifting to " + ((d[j] - 64) + 18));
                     model.set(key, (d[j] - 64) + 18);
                     }
                 else
@@ -2206,10 +2209,8 @@ public class MAudioVenom extends Synth
                 }
             else
                 {
-                //System.err.println("" + i + " " + j + " " + d[j] + " " + key);
                 model.set(key, d[j]);
                 }
-            //System.err.println(key + " " + d[j]);
             j++;
             }
                         
@@ -2233,8 +2234,6 @@ public class MAudioVenom extends Synth
             
             setSendMIDI(sendMIDI);
             }
-
-        //System.err.println("-->" + model.get("channelfxtype", -100));
 
         revise();
         return PARSE_SUCCEEDED;

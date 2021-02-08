@@ -259,7 +259,7 @@ public class EmuProteus extends Synth
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, "E-Mu Proteus", color);
-        globalCategory.makeUnresettable();
+        //globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;

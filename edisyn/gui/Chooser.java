@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
 import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.event.*;
 
 
@@ -151,6 +152,15 @@ public class Chooser extends NumericalComponent
 
         combo = new JComboBox(elements)
             {
+            public void setPopupVisible(boolean val) 
+            	{
+            	if (val == true || 
+            		synth == null || 								// unlikely
+            		synth.persistentChooserMenu == null ||			// such as in Morph
+            		!(synth.persistentChooserMenu.isSelected())) 
+            		super.setPopupVisible(val);
+            	}
+            	
             public Dimension getMinimumSize() 
                 {
                 return getPreferredSize(); 
@@ -176,12 +186,19 @@ public class Chooser extends NumericalComponent
                     }
                 }
             };
-
+            
+        combo.addPopupMenuListener(new PopupMenuListener()
+        	{
+        	public void popupMenuCanceled(PopupMenuEvent e) { synth.persistentChooserMenu.setSelected(false); }
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) { }
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) { }
+        	});
+        
         combo.putClientProperty("JComponent.sizeVariant", "small");
         combo.setEditable(false);
         combo.setFont(Style.SMALL_FONT());
         combo.setMaximumRowCount(33);           // 33, not 32, to accommodate modulation destinations for Matrix 1000
-        
+
         setElements(_label, elements, values);
 
         this.icons = icons;

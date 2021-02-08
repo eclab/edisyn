@@ -17,6 +17,7 @@ public class Patch
     public int synth;
     public String name = null;
     int index = 0;
+    public String location = null;
     
     public Patch(int synth, byte[][] sysex, boolean bank)
         {
@@ -27,7 +28,7 @@ public class Patch
     
     public String toString()
         {
-        String s = "Patch[" + name + ", " + synth + ", " + bank + ", " + index + ", " + sysex.length + "\n";
+        String s = "Patch[" + (location == null ? "" : location) + " " + name + ", " + synth + ", " + bank + ", " + index + ", " + sysex.length + "\n";
         for(int i = 0; i < sysex.length; i++)
             {
             s = s + ("" + i + " (" + sysex[i].length + ") ->");

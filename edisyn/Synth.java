@@ -106,7 +106,9 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem testIncomingSynth;
     /** The "Send All Sounds Off Before Note On" menu */
     public JCheckBoxMenuItem sendsAllSoundsOffBetweenNotesMenu;
-        
+	/** The "Keep Next Popup Open" menu */
+	public JCheckBoxMenuItem persistentChooserMenu;
+	
     // The four nudge models 
     Model[] nudge = new Model[4];
     // The 8 nudge-towards menus
@@ -636,7 +638,8 @@ public abstract class Synth extends JComponent implements Updatable
     /// When a message is received from the synthesizer, Edisyn will do this:
     /// If the message is a Sysex Message, then
     ///     Call recognize(message data).  If it returns true, then
-    ///                     Call parse(message data, fromFile) [we presume it's a dump or a load from a file]
+    ///            			Call performParse(message data, fromFile) [we presume it's a dump or a load from a file]
+    ///                     		Call parse(message data, fromFile) [we presume it's a dump or a load from a file]
     ///             Else
     ///                     Call parseParameter(message data) [we presume it's a parameter change, or maybe something else]
     /// Else if the message is a complete CC or NRPN message
@@ -1159,7 +1162,24 @@ public abstract class Synth extends JComponent implements Updatable
         
         
         
-        
+	/////// PARSING
+	
+    public int performParse(byte[] data, boolean fromFile)
+    	{
+    	boolean previous = model.getUpdateListeners();
+    	model.setUpdateListeners(false);
+    	int val = PARSE_ERROR;
+    	try
+    		{
+    		val = parse(data, fromFile);
+    		}
+    	finally
+    		{
+	    	model.setUpdateListeners(previous);
+    		model.updateAllListeners();
+    		}
+    	return val;
+    	}
         
 
 
@@ -1236,10 +1256,11 @@ public abstract class Synth extends JComponent implements Updatable
                                         int result = PARSE_ERROR;
                                         try 
                                             {
-                                            result = parse(data, false);
+                                            result = performParse(data, false);
                                             }
                                         catch (Exception ex)
                                             {
+                                            System.err.println("The exception is " + ex);
                                             Synth.handleException(ex);
                                             // result is now PARSE_ERROR
                                             }
@@ -1983,7 +2004,7 @@ public abstract class Synth extends JComponent implements Updatable
         
         try 
             {
-            result = mergeSynth.parse(data, false);
+            result = mergeSynth.performParse(data, false);
             }
         catch (Exception ex)
             {
@@ -2766,7 +2787,7 @@ public abstract class Synth extends JComponent implements Updatable
 
                 // parse                        
                 setSendMIDI(false);
-                parse(data, true);
+                performParse(data, true);
                 setSendMIDI(true);
                 model.setUndoListener(undo);    // okay, redundant, but that way the pattern stays the same
                 }
@@ -4770,6 +4791,11 @@ public abstract class Synth extends JComponent implements Updatable
             
             
         menu.addSeparator();
+        
+		persistentChooserMenu  = new JCheckBoxMenuItem("Keep Next Popup Open");
+        persistentChooserMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menu.add(persistentChooserMenu);
+        
         JMenuItem colorMenu = new JMenuItem("Change Color Scheme");
         menu.add(colorMenu);
         colorMenu.addActionListener(new ActionListener()
@@ -6010,7 +6036,7 @@ public abstract class Synth extends JComponent implements Updatable
 
         Patch[] p = (Patch[])(patches.toArray(new Patch[0]));
 
-        // build names for each patch
+        // build names and locations for each patch
         Synth temp = null;
         HashMap map = new HashMap();
         for(int i = 0; i < p.length; i++)
@@ -6043,8 +6069,9 @@ public abstract class Synth extends JComponent implements Updatable
                     temp.setSendMIDI(false);
                     temp.undo.setWillPush(false);
                     temp.getModel().clearListeners();         // otherwise we GC horribly.....
-                    temp.parse(flatten(p[i].sysex), true);
+                    temp.performParse(flatten(p[i].sysex), true);
                     p[i].name = temp.getPatchName(temp.model);
+                    p[i].location = temp.getPatchLocationName(temp.model);
                     }
                 catch (Exception ex)
                     {
@@ -6184,7 +6211,12 @@ public abstract class Synth extends JComponent implements Updatable
             names[i] = new String[indices[i].length];
             for(int j = 0; j < indices[i].length; j++)
                 {
-                names[i][j] = patches[indices[i][j]].name;
+                String location = patches[indices[i][j]].location;
+                String name = patches[indices[i][j]].name;
+                if (location != null)
+                	names[i][j] = location + "   " + name;
+                else
+                    names[i][j] = name;
                 }
             }
         return names;
@@ -6532,14 +6564,12 @@ public abstract class Synth extends JComponent implements Updatable
                             int primary = results[1];
                             int secondary = results[2];
                                                         
-                            //System.err.println(result);
                             if (result == BULK_DIALOG_RESULT_CANCEL)
                                 {
                                 succeeded = false;
                                 }
                             else if (result == BULK_DIALOG_RESULT_LOCAL)
                                 {
-                                //System.err.println("local");
                                 succeeded = loadOne(flatten(pat[primary][secondary].sysex), pat[primary][secondary].synth, 
                                     this.getClass().equals(getSynth(pat[primary][secondary].synth)), merge, null, fd, false);
                                 }
@@ -6751,7 +6781,7 @@ public abstract class Synth extends JComponent implements Updatable
             
             try
                 {
-                result = parse(data, true);
+                result = performParse(data, true);
                 }
             catch (Exception ex)
                 {
@@ -6820,7 +6850,7 @@ public abstract class Synth extends JComponent implements Updatable
         int result = PARSE_ERROR;
         try
             {
-            result = otherSynth.parse(data, true);
+            result = otherSynth.performParse(data, true);
             }
         catch (Exception ex)
             {
@@ -7070,6 +7100,21 @@ public abstract class Synth extends JComponent implements Updatable
 				}
     		}
     	}
+
+	/** This method normally queries the user for start and end patch numbers to
+		use for batch downloading.  In rare cases you may need to customize this,
+		such as to hard-code the start and end patch.  Otherwise, don't override it.
+	*/
+	public boolean setupBatchStartingAndEndingPatches(Model startPatch, Model endPatch)
+		{
+		if (!gatherPatchInfo("Starting Patch", currentPatch, false))
+			return false;
+			
+		if (!gatherPatchInfo("Ending Patch", endPatch, false))
+			return false;
+		
+		return true;
+		}
     
     void doGetAllPatches()
         {
@@ -7089,7 +7134,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doHillClimb();
                 
                 
-            int result = showMultiOption(this, new String[0], new JComponent[0], new String[] { "Save Individual Files", "Save Bulk File", "Cancel"}, 0,
+            int result = showMultiOption(this, new String[0], new JComponent[0], new String[] { "Save as Individual Files", "Save to Bulk File", "Cancel"}, 0,
             	"Batch Download", "Save the Patches as individual files or as a single bulk file?");
             System.err.println(result);
             if (result == -1 || result == 2) return;
@@ -7157,14 +7202,15 @@ public abstract class Synth extends JComponent implements Updatable
 				patchFileOrDirectory = chooser.getSelectedFile();
 				batchPatches = null;
             	}
-                
+            
             currentPatch = buildModel();
-            if (!gatherPatchInfo("Starting Patch", currentPatch, false))
-                { currentPatch = null; return; }
-                
             finalPatch = buildModel();
-            if (!gatherPatchInfo("Ending Patch", finalPatch, false))
-                { currentPatch = null; return; }
+            if (!setupBatchStartingAndEndingPatches(currentPatch, finalPatch))
+            	{
+            	currentPatch = null;
+            	finalPatch = null;
+            	return;
+            	}
                 
             // request patch
 
@@ -7573,8 +7619,16 @@ public abstract class Synth extends JComponent implements Updatable
     
     
     
+    public static final int DEFAULT_PASTES = 3;
+    /** Override this method to force Edisyn to paste multiple times to the same category or tab.
+    	The reason you might want to do this is because Edisyn uses the *receiving* category to 
+    	determine the parameters to paste to, and if this category contains componets which dynamically
+    	appear or disappear, it might require multiple pastes to cause them to appear and eventually
+    	receive parameter changes.  The default returns DEFAULT_PASTES (3).  */
+    public int getNumberOfPastes() { return DEFAULT_PASTES; }
     
     
+
     
     
     

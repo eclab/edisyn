@@ -87,18 +87,37 @@ public class StringUtility
     final static int STATE_NUMBER = 2;
     final static int STATE_FINISHED = 3;
         
-    public static String reducePreamble(String name, String preamble)
+     public static String reduceDigitsInPreamble(String name, String preamble)
         {
         if (!name.startsWith(preamble)) 
             {
             System.err.println("Warning (Category): Key " + name + " doesn't start with " + preamble);
             return name;
             }
-        return reduceAllDigitsAfterPreamble(preamble, "") + name.substring(preamble.length());
-        }
-        
-    public static String reduceAllDigitsAfterPreamble(String name, String preamble)
+
+        char[] n = name.toCharArray();
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < preamble.length(); i++)
+            {
+            if (!Character.isDigit(n[i]))
+	            sb.append(n[i]);
+            }
+        for(int i = preamble.length(); i < n.length; i++)
+        	{
+	        sb.append(n[i]);
+        	}
+         return sb.toString();
+       }
+
+   public static String reduceAllDigitsAfterPreamble(String name, String preamble)
         {
+        if (!name.startsWith(preamble)) 
+            {
+            System.err.println("Warning (Category): Key " + name + " doesn't start with " + preamble);
+            return name;
+            }
+
         char[] n = name.toCharArray();
         StringBuilder sb = new StringBuilder();
 
@@ -135,6 +154,12 @@ public class StringUtility
     /** This function removes the FIRST string of digits in a name after a preamble, returns the resulting name. */
     public static String reduceFirstDigitsAfterPreamble(String name, String preamble)
         {
+        if (!name.startsWith(preamble)) 
+            {
+            System.err.println("Warning (Category): Key " + name + " doesn't start with " + preamble);
+            return name;
+            }
+
         char[] n = name.toCharArray();
         StringBuilder sb = new StringBuilder();
 
@@ -176,6 +201,12 @@ public class StringUtility
     /** This function removes the SECOND string of digits in a name after a preamble, returns the resulting name. */
     public static String reduceSecondDigitsAfterPreamble(String name, String preamble)
         {
+        if (!name.startsWith(preamble)) 
+            {
+            System.err.println("Warning (Category): Key " + name + " doesn't start with " + preamble);
+            return name;
+            }
+
         char[] n = name.toCharArray();
         StringBuilder sb = new StringBuilder();
 

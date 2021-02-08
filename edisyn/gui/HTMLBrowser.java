@@ -39,10 +39,6 @@ public class HTMLBrowser extends JPanel
         // still thinks the URL is valid.
         infoPane.setContentType("text/html");
         Document d = infoPane.getEditorKit().createDefaultDocument();
-        //if (d instanceof AbstractDocument)
-        //      {
-        //      ((AbstractDocument)d).setAsynchronousLoadPriority(1);
-        //      }
         infoPane.setDocument(d);
         if (HTMLTextOrURL instanceof String)
             infoPane.setText((String)HTMLTextOrURL);
@@ -127,7 +123,7 @@ public class HTMLBrowser extends JPanel
         // Change the link color
         HTMLEditorKit kit = new HTMLEditorKit();
         StyleSheet styleSheet = kit.getStyleSheet();
-        styleSheet.addRule("body {background-color:transparent;}\n a { color:#8b9fef; }\n"); //change links to red.  You can't change boldface here because it changes it haeEVERYWHERE
+        styleSheet.addRule("body {background-color:transparent;}\n a { color:#8b9fef; }\n"); //change links to red.  You can't change boldface here because it changes it EVERYWHERE
         infoPane.setEditorKit(kit);
                
         infoPane.setEditable(false);

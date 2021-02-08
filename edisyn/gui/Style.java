@@ -20,7 +20,7 @@ public class Style
     /////// GLOBAL CONSTANTS
     
     /** Background color */
-    public final static Color DEFAULT_BACKGROUND_COLOR = Color.BLACK;
+    public final static Color DEFAULT_BACKGROUND_COLOR = new Color(35, 35, 35);
     static Color BACKGROUND_COLOR = DEFAULT_BACKGROUND_COLOR;
     public static Color BACKGROUND_COLOR() { return BACKGROUND_COLOR; }
     /** Text color */
@@ -94,7 +94,7 @@ public class Style
     /////// DIAL CONSTANTS
 
     /** Color of the unset region in Dials etc. */ 
-    public final static Color DEFAULT_UNSET_COLOR = Color.GRAY; 
+    public final static Color DEFAULT_UNSET_COLOR = new Color(136, 136, 136); 
     static Color UNSET_COLOR = DEFAULT_UNSET_COLOR; 
     public static Color DIAL_UNSET_COLOR() { return UNSET_COLOR; }
     /** Color of the set region in Dials etc. when being updated. */

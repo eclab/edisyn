@@ -155,8 +155,14 @@ public class Category extends JComponent implements Gatherable
         synth.setCopyPreamble(preamble);
         }
         
-        
-    void pasteCategory(boolean includeImmutable)
+    
+    void pasteCategory(boolean includeImmutable)	// ugly hack	
+    	{
+    	for(int i = 0; i < synth.getNumberOfPastes(); i++)
+    		pasteCategory1(includeImmutable);
+    	}
+    	
+    void pasteCategory1(boolean includeImmutable)
         {
         String copyPreamble = synth.getCopyPreamble();
         String myPreamble = preamble;
@@ -176,7 +182,8 @@ public class Category extends JComponent implements Gatherable
             if (components.get(i) instanceof HasKey)
                 {
                 String key = (String)(((HasKey)(components.get(i))).getKey());
-                String reduced = StringUtility.reducePreamble(key, myPreamble);
+                String reduced = StringUtility.reduceFirstDigitsAfterPreamble(key, myPreamble);
+            	reduced = StringUtility.reduceDigitsInPreamble(reduced, myPreamble);
                 keys.put(reduced, key);
                 }    
             }               
@@ -195,7 +202,8 @@ public class Category extends JComponent implements Gatherable
         for(int i = 0; i < copyKeys.size(); i++)
             {
             String key = (String)(copyKeys.get(i));
-            String reduced = StringUtility.reducePreamble(key, copyPreamble);
+            String reduced = StringUtility.reduceFirstDigitsAfterPreamble(key, copyPreamble);
+        	reduced = StringUtility.reduceDigitsInPreamble(reduced, copyPreamble);
             String mapped = (String)(keys.get(reduced));
             if (mapped != null)
                 {
@@ -524,15 +532,24 @@ public class Category extends JComponent implements Gatherable
         repaint();
         }
     
-    public void gatherAllComponents(java.util.ArrayList list)
-        {
-        Component[] c = getComponents();
+    void gatherAllComponents(Container cont, java.util.ArrayList list)
+    	{
+        Component[] c = cont.getComponents();
         for(int i = 0; i < c.length; i++)
             {
             list.add(c[i]);
             if (c[i] instanceof Gatherable)
                 ((Gatherable)c[i]).gatherAllComponents(list);
+            else if (c[i] instanceof JPanel)
+            	gatherAllComponents(((JPanel)c[i]), list);
+            else if (c[i] instanceof Box)	// just in case
+            	gatherAllComponents(((Box)c[i]), list);
             }
+    	}
+    	
+    public void gatherAllComponents(java.util.ArrayList list)
+        {
+        gatherAllComponents(this, list);
         if (auxillary != null)
             {
             auxillary.gatherAllComponents(list);

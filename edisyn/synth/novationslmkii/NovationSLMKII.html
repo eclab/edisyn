@@ -4,7 +4,7 @@
 <h1>Novation ReMOTE SL Mk II</h1> 
 <h2>Single Patch Editor</h2>
 
-<p>This patch editor should work with any Novation ReMOTE SL Mk II, including the Zero.  I do not know if it works with the original Novation ReMOTE SL series but there's a good chance it does.  It likely does not work with the Compact series, though with some modifications it might be made to work.
+<p>This patch editor should work with any Novation ReMOTE SL Mk II, including the Zero.  I do not know if it works with the original Novation ReMOTE SL series but there's a good chance it does.  It likely does not work with the Compact series, though with some modifications it might be made to work.  This editor was tested on a Zero Mk II with the latest firmware (1.3.14). You'd probably want to update to the latest firmware, but beware that the firmware options available on Novation's website are out of date and incorrect.
 
 <br><br><h3>Communicating with Edisyn</h3>
 Connect to your SL's Port 1 for both the send and receive device.  I'd use USB.
@@ -19,7 +19,7 @@ The SL has limited sysex options.  Edisyn cannot request a patch (a "template") 
 <p>You can do a batch download of all the SL's patches, but you cannot specify a range, and because Edisyn cannot request patches from the SL you will have to initiate a bulk dump ("Dump ALL") from your SL. 
 
 <br><br><h3>About the Buttons</h3>
-Edisyn marks the buttons as A, B, C, D, and Transport.  They are:
+Edisyn groups the buttons into A, B, C, D, and Transport.  They are:
 
 <ul>
 <li><b>Buttons A (1-8)</b>&nbsp;&nbsp; Top Left
@@ -37,15 +37,15 @@ You can set any parameter you like, but note that the keyboards have certain cap
 
 <br><br><h3>Cutting and Pasting</h3>
 
-Novation's original editor had considerable flexibility in enabling you to move commands among controls or groups of controls.  Edisyn endeavors to provide as much of this flexibility as it can.  Even though they have some differences between encoders, pots/faders, buttons, drum pads, and pitch bend, you can in fact cut and paste between any control just like in the original editor.  You can also copy and paste entire tabs, as well as keyboard zones.  Edisyn will do its best to match up commands transferred between different kinds of controls.
+Novation's original editor had considerable flexibility in enabling you to move commands among controls or groups of controls.  Edisyn cannot provide this level of flexibility, but it endeavors to give as much as it can.  Even though there are some differences between encoders, pots/faders, buttons, drum pads, and pitch bend, you can in fact cut and paste between any control just like in the original editor.  You can also copy and paste entire tabs, as well as keyboard zones.  Edisyn will do its best to match up commands transferred between different kinds of controls.
 
-<br><br><h3>Differences with Novation's SLMkII Editor</h3>
+<br><br><h3>Bugs in Novation's SLMkII Editor</h3>
 
-Novation's editor has a lot of missing features and serious bugs.  Edisyn tries to be compatible with the SL, not the editor. For example:
+Novation's editor has a lot of missing features and bugs.  Edisyn tries to be compatible with the SL, not the editor. For example:
 
 <ul>
 <li>The Novation editor sends invalid data regarding ports to the SL which can corrupt its responses later.
-<p><li>There are serious, grievous errors in how the sysex data (DV) position is determined.
+<p><li>There are serious errors in how the sysex data (DV) position is determined.
 <p><li>Sysex data (DV) position doesn't work properly for 16-bit encoders -- only one DV is inserted instead of two.
 <p><li>Novation's editor is missing Roland, MSB-LSB, and LSB-MSB options for sysex.
 <p><li>Novation's editor allows template (patch) positions to go to 40 when they should only go to 32.
@@ -55,6 +55,18 @@ Novation's editor has a lot of missing features and serious bugs.  Edisyn tries 
 </ul>
 
 Edisyn tries to remedy these errors.
+
+<br><br><h3>Errors in the Novation SL</h3>
+
+The SL also has a few bugs and oddities itself.
+
+<ul>
+<li>For some reason, you can't edit the default settings of encoders, pots, faders, or the cross-fader directly on the SL.  Edisyn lets you edit them.
+<p><li>The SL permits you to have 14-bit (0-16K) CC parameters with any CC number from 0 to 127, even the MIDI spec only defines 14-bit CC parameters from 0 to 31.
+<p><li>You'll note a mysterious port called "USB3".  This is a hidden port that the SL uses to communicate with Automap software.  Don't use it, it's useless now.
+<p><li>The available bytes for Roland sysex are one less than you'd expect.  So if the sysex length is 10, you will have 9 bytes.  I suppose this is to accommodate the checksum byte, but it's stupid.
+</ul>
+
 
 <br><br><h3>Gotchas</h3>
 
@@ -66,13 +78,11 @@ Edisyn tries to remedy these errors.
 <p><li>I've not found any way to assign useful values to the Automap/Learn/View/User/Fx/Inst/Mixer buttons.  Now that Automap is gone, they're probably useless.  That's unfortunate.
 
 <p><li>There are actually 33 templates.  Template #33 is a special default template for Automap, and shouldn't be played with.  You will find that the bulk download may include all 33 templates; but Edisyn will only let you write to the first 32.
-
-<p><li>You'll note a mysterious port called "USB3".  This is a hidden port that the SL uses to communicate with Automap software.  Don't use it, it's useless now.
 </ul>
 
 <br><br><h3>Hints</h3>
 
-If you need to upload the entire default template settings 
+If you need to upload the entire default template settings for some reason (and they're not very good), Edisyn has them in the file <b>NovationSLMKIIDefaults.zip</b> in the <b>resources</b> directory on Edisyn's repository.
 
 
 <p><table border=0 cellpadding=0 cellspacing=5>

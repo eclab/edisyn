@@ -48,11 +48,11 @@ public class NovationSLMKII extends Synth
     public static final String[] DRUMPAD_TYPES = { "Off", "CC", "NRPN", "RPN", "Sysex", "MMC", "Drum Note", "Bank", "Program", "Template", "Real Time" };
     public static final String[] MMCS = { "Stop", "Play", "Deferred Play", "Forward", "Rewind", "Record", "Record Exit", "Record Pause", "Pause", "Eject", "Chase", "Command Error Reset", "MMC Reset" };
     public static final String[] OFF_SYNC_VALUES = { "Timer", "32nd T", "32nd", "16th T", "16th", "8th T", "16th D", "8th", "4th T", "8th D", "4th", "2nd T", "4th D", "2nd", "1 Bar T", "2nd D", "1 Bar", "2 Bar T", "1 Bar d", "2 Bars", "4 Bar T", "3 Bars", "5 Bar T", "4 Bars", "3 Bar D", "7 Bar T", "5 Bars", "8 Bar T", "6 Bars", "7 Bars", "5 Bar D", "8 Bars", "9 Bars", "7 Bar D", "12 Bars" };
-    public static final String[] BUTTON_STATES = { "Normal/Off", "Momentary", "Toggle", "Step" };
+    public static final String[] BUTTON_STATES = { "Normal", "Momentary", "Toggle", "Step" };
     public static final String[] REALTIME_BUTTON_STATES = { "Normal", "Momentary", "Toggle" };
     public static final String[] BANK_CHANGE_MODES = { "LSB", "MSB", "MSB-LSB" };
     public static final String[] PROGRAM_CHANGE_MODES = { "Off", "LSB", "MSB", "MSB-LSB" };
-    public static final String[] DRUMPAD_STATES = { "Normal/Off", "Velocity", "Toggle", "Step" };
+    public static final String[] DRUMPAD_STATES = { "Normal", "Velocity", "Toggle", "Step" };
     public static final String[] REALTIME_DRUMPAD_STATES = { "Normal", "Momentary" };
     public static final String[] REAL_TIME_VALUES = { "Start Clock", "Continue Clock", "Stop Clock", "Active Sensing", "System Reset" };
     public static final String[] POT_PICKUPS = { "Off", "On", "Template", "Global" };
@@ -651,12 +651,12 @@ public class NovationSLMKII extends Synth
         final LabelledDial highval = new LabelledDial("High", this, prefix + "highval", color, 0, 127)
        		{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
        	model.register(prefix + "display", highval);
-       	//final LabelledDial defaultval = new LabelledDial("Default", this, prefix + "defaultval", color, 0, 127)
-       	//	{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
-       	//model.register(prefix + "display", defaultval);
+       	final LabelledDial defaultval = new LabelledDial("Default", this, prefix + "defaultval", color, 0, 127)
+       		{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
+       	model.register(prefix + "display", defaultval);
        	final LabelledDial lowvalbig = new LabelledDial("Low", this, prefix + "lowvalbig", color, 0, 16383);
         final LabelledDial highvalbig = new LabelledDial("High", this, prefix + "highvalbig", color, 0, 16383);
-       	//final LabelledDial defaultvalbig = new LabelledDial("Default", this, prefix + "defaultvalbig", color, 0, 16383);
+       	final LabelledDial defaultvalbig = new LabelledDial("Default", this, prefix + "defaultvalbig", color, 0, 16383);
         final LabelledDial parammsb = new LabelledDial("Param MSB", this, prefix + "parammsb", color, 0, 127);
         final LabelledDial paramlsb = new LabelledDial("Param LSB", this, prefix + "paramlsb", color, 0, 127);
         //final Chooser mmctype = new Chooser("Command", this, prefix + "mmctype", MMCS);
@@ -678,18 +678,24 @@ public class NovationSLMKII extends Synth
         		{
         		super.update(key, model);
         		valbox.removeAll();
-        		if (model.get(key) == 5)	// 16 bit
+        		int type = model.get(key);
+        		if (type == 2 || type == 3 || type == 4)  // REL1, REL2, APOT
+        			{
+        			// don't add anything to the valbox
+        			sysexBox.setShows16K(prefix, false);
+        			}
+        		else if (type == 5)	// 16 bit
         			{
 					valbox.add(lowvalbig);
 					valbox.add(highvalbig);
-					//valbox.add(defaultvalbig);
+					valbox.add(defaultvalbig);
         			sysexBox.setShows16K(prefix, true);
         			}
         		else
         			{
 					valbox.add(lowval);
 					valbox.add(highval);
-					//valbox.add(defaultval);
+					valbox.add(defaultval);
         			sysexBox.setShows16K(prefix, false);
         			}
         		valbox.revalidate();
@@ -845,9 +851,9 @@ Display Format
         final LabelledDial highval = new LabelledDial("High", this, prefix + "highval", color, 0, 127)
        		{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
        	model.register(prefix + "display", highval);
-       	//final LabelledDial defaultval = new LabelledDial("Default", this, prefix + "defaultval", color, 0, 127)
-       	//	{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
-       	//model.register(prefix + "display", defaultval);
+       	final LabelledDial defaultval = new LabelledDial("Default", this, prefix + "defaultval", color, 0, 127)
+       		{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
+       	model.register(prefix + "display", defaultval);
         final LabelledDial parammsb = new LabelledDial("Param MSB", this, prefix + "parammsb", color, 0, 127);
         final LabelledDial paramlsb = new LabelledDial("Param LSB", this, prefix + "paramlsb", color, 0, 127);
         //final Chooser mmctype = new Chooser("Command", this, prefix + "mmctype", MMCS);
@@ -940,7 +946,7 @@ Display Format
         				}
         			hbox2.add(lowval);
         			hbox2.add(highval);
-        			//hbox2.add(defaultval);
+        			hbox2.add(defaultval);
         			outer.add(hbox2);
         			}
 				else 	// if (val == 4)			// Sysex
@@ -951,7 +957,7 @@ Display Format
 					hbox2 = new HBox();
         			hbox2.add(lowval);
         			hbox2.add(highval);
-        			//hbox2.add(defaultval);
+        			hbox2.add(defaultval);
 					hbox2.add(sysexBox);			// FIXME -- gotta specify 16 bit
 					outer.add(hbox2);
 					}
@@ -982,6 +988,61 @@ Display Format
         return category;
 		}
 
+	void updateChooserPressRelease(String prefix, Chooser press, Chooser release, HBox releaseBox)
+		{
+		int buttontype = model.get(prefix + "realtimenotebuttontype");
+		releaseBox.removeAll();
+		if (buttontype == 0)	// Normal
+			{
+			press.setLabel("Press");
+			}
+		else if (buttontype == 1)	// Momentary
+			{
+			press.setLabel("Press");
+			releaseBox.add(release);
+			release.setLabel("Release");
+			}
+		else if (buttontype == 2)	// Toggle
+			{
+			press.setLabel("Press 1");
+			releaseBox.add(release);
+			release.setLabel("Press 2");
+			}
+		releaseBox.revalidate();
+		releaseBox.repaint();
+		}
+
+	void updatePressRelease(String prefix, LabelledDial press, LabelledDial release, LabelledDial step, HBox releaseBox, HBox stepBox)
+		{
+		int buttontype = model.get(prefix + "buttontype");
+		releaseBox.removeAll();
+		stepBox.removeAll();
+		if (buttontype == 0)	// Normal
+			{
+			press.setLabel("Press");
+			}
+		else if (buttontype == 1)	// Momentary
+			{
+			press.setLabel("Press");
+			releaseBox.add(release);
+			release.setLabel("Release");
+			}
+		else if (buttontype == 2)	// Toggle
+			{
+			press.setLabel("Press 1");
+			releaseBox.add(release);
+			release.setLabel("Press 2");
+			}
+		else if (buttontype == 3)	// Step
+			{
+			press.setLabel("Low");
+			releaseBox.add(release);
+			release.setLabel("High");
+			stepBox.add(step);
+			}
+		releaseBox.revalidate();
+		releaseBox.repaint();
+		}
 		
 	public JComponent addButton(int num, String prefix, final int index, Color color)
 		{
@@ -1007,7 +1068,7 @@ Display Format
 			public String replace(String val)
 				{
 				char[] chars = (val + "        ").toCharArray();
-				char[] newchars = new char[12];
+				char[] newchars = new char[8];
 				for(int i = 0; i < newchars.length; i++)
 					{
 					if (chars[i] >= 32 && chars[i] < 127)
@@ -1043,6 +1104,9 @@ Display Format
        							model.get(prefix + "type") > 4) ? value : value - 64); 
        			} 
        		};
+       	final HBox releaseBox = new HBox();
+       	final HBox stepBox = new HBox();
+       	final HBox chooserReleaseBox = new HBox();
        	model.register(prefix + "display", highval);
        	model.register(prefix + "type", highval);
        	//final LabelledDial defaultval = new LabelledDial("Default", this, prefix + "defaultval", color, 0, 127)
@@ -1062,8 +1126,13 @@ Display Format
         final LabelledDial template = new LabelledDial("Template", this, prefix + "templatenumber", color, 1, 32);
         //final LabelledDial drumautooff = new LabelledDial("Auto-Off", this, prefix + "autooff", color, 0, 127);
         //final Chooser offsyncval = new Chooser("Off Sync Value", this, prefix + "drumoffsync", OFF_SYNC_VALUES);
-        final Chooser buttontype = new Chooser("Button Type", this, prefix + "buttontype", BUTTON_STATES);
-        final Chooser realtimenotebuttontype = new Chooser("Button Type", this, prefix + "realtimenotebuttontype", REALTIME_BUTTON_STATES);
+        final LabelledDial stepsize = new LabelledDial("Step Size", this, prefix + "stepsize", color, 0, 63)
+        	{
+        	public String map(int val)
+        		{
+        		return "" + (val + 1);
+        		}
+        	};
         final Chooser bankmode = new Chooser("Bank Mode", this, prefix + "bankmode", BANK_CHANGE_MODES);
         final Chooser pcmode = new Chooser("Bank Mode", this, prefix + "pcbankmode", PROGRAM_CHANGE_MODES);		// yes it says bank mode
         final Chooser realtime = new Chooser("Press", this, prefix + "realtime", REAL_TIME_VALUES);
@@ -1072,11 +1141,20 @@ Display Format
         final Chooser display = new Chooser("Display Type", this, prefix + "display", BUTTON_DISPLAYS);
         final Chooser ports = new Chooser("Ports", this, prefix + "ports", CONTROL_PORTS);
 		final SysexBox sysexBox = new SysexBox(this, prefix, index, color);
-        LabelledDial stepsize = new LabelledDial("Step Size", this, prefix + "stepsize", color, 0, 63)
+        final Chooser buttontype = new Chooser("Button Type", this, prefix + "buttontype", BUTTON_STATES)
         	{
-        	public String map(int val)
+        	public void update(String key, Model model)
         		{
-        		return "" + (val + 1);
+        		super.update(key, model);
+				updatePressRelease(prefix, lowval, highval, stepsize, releaseBox, stepBox);
+        		}
+        	};
+        final Chooser realtimenotebuttontype = new Chooser("Button Type", this, prefix + "realtimenotebuttontype", REALTIME_BUTTON_STATES)
+        	{
+        	public void update(String key, Model model)
+        		{
+        		super.update(key, model);
+				updateChooserPressRelease(prefix, realtime, realtimerelease, chooserReleaseBox);
         		}
         	};
         final LabelledDial channel = new LabelledDial("Channel", this, prefix + "channel", color, 0, 17)
@@ -1175,9 +1253,11 @@ Step Size
         				hbox2.add(parammsb.setLabel(val == 2 ? "NRPN MSB" : "RPN MSB"));
         				}
         			hbox2.add(lowval.setLabel("Press"));
-        			hbox2.add(highval.setLabel("Release"));
+        			hbox2.add(releaseBox);
+        			//hbox2.add(highval.setLabel("Release"));
         			//hbox2.add(defaultval.setLabel("Default"));
-        			hbox2.add(stepsize);
+        			hbox2.add(stepBox);
+        			//hbox2.add(stepsize);
         			outer.add(hbox2);
         			}
 				else if (val == 4)	// Sysex
@@ -1188,9 +1268,11 @@ Step Size
         			outer.add(hbox2);
         			hbox2 = new HBox();
         			hbox2.add(lowval.setLabel("Press"));
-        			hbox2.add(highval.setLabel("Release"));
+        			hbox2.add(releaseBox);
+					//hbox2.add(highval.setLabel("Release"));
         			//hbox2.add(defaultval.setLabel("Default"));
-        			hbox2.add(stepsize);
+        			hbox2.add(stepBox);
+        			//hbox2.add(stepsize);
 					hbox2.add(sysexBox);			// FIXME -- gotta specify 16 bit
         			outer.add(hbox2);
 					}
@@ -1233,7 +1315,8 @@ Step Size
         			hbox2.add(paramlsb.setLabel("Bank LSB"));
         			hbox2.add(parammsb.setLabel("Bank MSB"));
         			hbox2.add(lowval.setLabel("Press"));		// "PRESS 1" or "Press"
-        			hbox2.add(highval.setLabel("Release"));		// "PRESS 2" or "Release"
+        			hbox2.add(releaseBox);
+					//hbox2.add(highval.setLabel("Release"));		// "PRESS 2" or "Release"
          			outer.add(hbox2);
        			}
 				else if (val == 9)						/// Template
@@ -1245,8 +1328,11 @@ Step Size
 					{
         			outer.add(realtimenotebuttontype);
         			outer.add(realtime);
-        			outer.add(realtimerelease);
+        			//outer.add(realtimerelease);
+        			outer.add(chooserReleaseBox);
 					}
+				updatePressRelease(prefix, lowval, highval, stepsize, releaseBox, stepBox);
+				updateChooserPressRelease(prefix, realtime, realtimerelease, chooserReleaseBox);
         		outer.revalidate();
         		outer.repaint();
         		} 
@@ -1583,9 +1669,9 @@ Step Size
         final LabelledDial highval = new LabelledDial("High", this, prefix + "highval", color, 0, 127)
        		{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
        	model.register(prefix + "display", highval);
-       	//final LabelledDial defaultval = new LabelledDial("Default", this, prefix + "defaultval", color, 0, 127)
-       	//	{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
-       	//model.register(prefix + "display", defaultval);
+       	final LabelledDial defaultval = new LabelledDial("Default", this, prefix + "defaultval", color, 0, 127)
+       		{ public String map(int value) { return "" + (model.get(prefix + "display") != 1 ? value : value - 64); } };
+       	model.register(prefix + "display", defaultval);
         final LabelledDial parammsb = new LabelledDial("Param MSB", this, prefix + "parammsb", color, 0, 127);
         final LabelledDial paramlsb = new LabelledDial("Param LSB", this, prefix + "paramlsb", color, 0, 127);
         //final Chooser mmctype = new Chooser("Command", this, prefix + "mmctype", MMCS);
@@ -1680,9 +1766,10 @@ Display Format
         				hbox2.add(paramlsb.setLabel(val == 2 ? "NRPN LSB" : "RPN LSB"));
         				hbox2.add(parammsb.setLabel(val == 2 ? "NRPN MSB" : "RPN MSB"));
         				}
-        			hbox2.add(lowval.setLabel("Low"));
-        			hbox2.add(highval.setLabel("High"));
-        			//hbox2.add(defaultval.setLabel("Low"));
+        			hbox2.add(lowval);
+        			hbox2.add(highval);
+        			if (index != PITCHBEND_INDEX)
+        				hbox2.add(defaultval);
 	       			outer.add(hbox2);
         			}
 				else if (val == 4)			// Sysex
@@ -1693,7 +1780,8 @@ Display Format
          			hbox2 = new HBox();
         			hbox2.add(lowval);
         			hbox2.add(highval);
-        			//hbox2.add(defaultval);
+        			if (index != PITCHBEND_INDEX)
+        				hbox2.add(defaultval);
 					hbox2.add(sysexBox);			// FIXME -- gotta specify 16 bit
 	       			outer.add(hbox2);
 					}
@@ -1706,6 +1794,8 @@ Display Format
         			hbox2.add(channel);
         			hbox2.add(lowval);
         			hbox2.add(highval);
+        			if (index != PITCHBEND_INDEX)
+        				hbox2.add(defaultval);
 	       			outer.add(hbox2);
 					}
         		outer.revalidate();
@@ -1754,11 +1844,21 @@ Display Format
         return "" + (number > 9 ? "" : "0") + number;
         }
 
-
-
-
-
-
+	// I am defining the SL's "patch name" as follows:`
+	// If there's no manufacturer, then use the name (trimmed).
+	// If there's no name, then use the manufacturer (trimmed).
+	// If there's both, use manufacturer(trimmed) + " " + name(trimmed)
+	// If there's neither, use "Untitled"
+    public String getPatchName(Model model) 
+    	{
+    	String manufacturer = model.get("manufacturer", "").trim();
+    	String name = model.get("name", "").trim();
+    	String result = manufacturer + 
+    			((manufacturer.length() == 0 || name.length() == 0) ? "" : " ") +
+    			name;
+    	if (result.length() == 0) return "Untitled";
+    	else return result;
+    	}
 
 	void emitName(String prefix, int index, int pos, byte[] data)
 		{
@@ -1789,24 +1889,24 @@ Display Format
 		
 		if (display == 5) // 16K
 			{
-			int lowvalbig = (byte)model.get(prefix + "lowvalbig");
+			int lowvalbig = model.get(prefix + "lowvalbig");
 			data[pos+9] = (byte)((lowvalbig >>> 7) & 127);
 			data[pos+10] = (byte)(lowvalbig & 127);
-			int highvalbig = (byte)model.get(prefix + "highvalbig");
+			int highvalbig = model.get(prefix + "highvalbig");
 			data[pos+11] = (byte)((highvalbig >>> 7) & 127);
 			data[pos+12] = (byte)(highvalbig & 127);
-			int defaultvalbig = (byte)model.get(prefix + "defaultvalbig");
+			int defaultvalbig = model.get(prefix + "defaultvalbig");
 			data[pos+20] = (byte)((defaultvalbig >>> 7) & 127);
 			data[pos+21] = (byte)(defaultvalbig & 127);
 			}
 		else
 			{
-			int lowval = (byte)model.get(prefix + "lowval");
+			int lowval = model.get(prefix + "lowval");
 			data[pos+10] = (byte)(lowval & 127);
-			int highval = (byte)model.get(prefix + "highval");
+			int highval = model.get(prefix + "highval");
 			data[pos+12] = (byte)(highval & 127);
-			//int defaultval = (byte)model.get(prefix + "defaultval");
-			int defaultval = (byte)model.get(prefix + "defaultval");
+			//int defaultval = model.get(prefix + "defaultval");
+			int defaultval = model.get(prefix + "defaultval");
 			data[pos+21] = (byte)(defaultval & 127);
 			}
 		data[pos + 16] = (byte)model.get(prefix + "parammsb");
@@ -1816,19 +1916,19 @@ Display Format
 			{
 			int dvtype = model.get(prefix + "sysexdoubledvtype");
 			data[pos + 26] = TO_DOUBLE_DV_TYPES[dvtype];
-			isRoland = (dvtype == 3);
+			isRoland = (dvtype == 1);
 			}
 		else
 			{
 			int dvtype = model.get(prefix + "sysexsingledvtype");
 			data[pos + 26] = TO_SINGLE_DV_TYPES[dvtype];
-			isRoland = (dvtype == 2);
+			isRoland = (dvtype == 1);
 			}
 			
 		if (isRoland)
 			{
 			data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
-			data[pos + 28] = (byte)(data[pos + 27] - 2);	// roland position
+			data[pos + 28] = (byte)(data[pos + 27] - 1);	// roland position
 			}
 		else
 			{
@@ -1857,12 +1957,12 @@ Display Format
 		data[pos + 18] = TO_CONTROL_PORTS[model.get(prefix + "ports")];
 		data[pos + 19] = TO_CONTROL_CHANNELS[model.get(prefix + "channel")];
 		
-		int lowval = (byte)model.get(prefix + "lowval");
+		int lowval = model.get(prefix + "lowval");
 		data[pos+10] = (byte)(lowval & 127);
-		int highval = (byte)model.get(prefix + "highval");
+		int highval = model.get(prefix + "highval");
 		data[pos+12] = (byte)(highval & 127);
-			//int defaultval = (byte)model.get(prefix + "defaultval");
-			int defaultval = (byte)model.get(prefix + "defaultval");
+			//int defaultval = model.get(prefix + "defaultval");
+			int defaultval = model.get(prefix + "defaultval");
 		data[pos+21] = (byte)(defaultval & 127);
 
 		data[pos + 16] = (byte)model.get(prefix + "parammsb");
@@ -1870,12 +1970,12 @@ Display Format
 		
 		int dvtype = model.get(prefix + "sysexsingledvtype");
 		data[pos + 26] = TO_SINGLE_DV_TYPES[dvtype];
-		boolean isRoland = (dvtype == 2);
+		boolean isRoland = (dvtype == 1);
 			
 		if (isRoland)
 			{
 			data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
-			data[pos + 28] = (byte)(data[pos + 27] - 2);	// roland position
+			data[pos + 28] = (byte)(data[pos + 27] - 1);	// roland position
 			}
 		else
 			{
@@ -1902,12 +2002,12 @@ Display Format
 		data[pos + 18] = TO_CONTROL_PORTS[model.get(prefix + "ports")];
 		data[pos + 19] = TO_CONTROL_CHANNELS[model.get(prefix + "channel")];
 		
-		int lowval = (byte)model.get(prefix + "lowval");
+		int lowval = model.get(prefix + "lowval");
 		data[pos+10] = (byte)(lowval & 127);
-		int highval = (byte)model.get(prefix + "highval");
+		int highval = model.get(prefix + "highval");
 		data[pos+12] = (byte)(highval & 127);
-			//int defaultval = (byte)model.get(prefix + "defaultval");
-			int defaultval = (byte)model.get(prefix + "defaultval");
+			//int defaultval = model.get(prefix + "defaultval");
+			int defaultval = model.get(prefix + "defaultval");
 		data[pos+21] = (byte)(defaultval & 127);
 
 		data[pos + 16] = (byte)model.get(prefix + "parammsb");
@@ -1915,12 +2015,12 @@ Display Format
 		
 		int dvtype = model.get(prefix + "sysexsingledvtype");
 		data[pos + 26] = TO_SINGLE_DV_TYPES[dvtype];
-		boolean isRoland = (dvtype == 2);
+		boolean isRoland = (dvtype == 1);
 			
 		if (isRoland)
 			{
 			data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
-			data[pos + 28] = (byte)(data[pos + 27] - 2);	// roland position
+			data[pos + 28] = (byte)(data[pos + 27] - 1);	// roland position
 			}
 		else
 			{
@@ -1964,14 +2064,14 @@ Display Format
 		
 		if (type == 5)		// MMC
 			{
-			int lowval = (byte)model.get(prefix + "mmctype") + 1;
+			int lowval = model.get(prefix + "mmctype") + 1;
 			data[pos+10] = (byte)(lowval & 127);
 			}
 		else if (type == 6)	// Note on/off, same as Realtime
 			{
-			int lowval = (byte)model.get(prefix + "lowval");
+			int lowval = model.get(prefix + "lowval");
 			data[pos+10] = (byte)(lowval & 127);
-			int highval = (byte)model.get(prefix + "highval");
+			int highval = model.get(prefix + "highval");
 			data[pos+12] = (byte)(highval & 127);
 			}
 		else if (type == 7) 			// Bank Select
@@ -1981,16 +2081,16 @@ Display Format
 			}
 		else if (type == 8) 			// PC
 			{
-			int lowval = (byte)model.get(prefix + "lowval");
+			int lowval = model.get(prefix + "lowval");
 			data[pos+10] = (byte)(lowval & 127);
-			int highval = (byte)model.get(prefix + "highval");
+			int highval = model.get(prefix + "highval");
 			data[pos+12] = (byte)(highval & 127);
 			data[pos + 16] = (byte)model.get(prefix + "parammsb");
 			data[pos + 17] = (byte)model.get(prefix + "paramlsb");
 			}
 		else if (type == 9)	// Template
 			{
-			int lowval = (byte)model.get(prefix + "template");
+			int lowval = model.get(prefix + "template");
 			data[pos+10] = (byte)(lowval & 127);
 			}
 		else if (type == 10)	// Realtime
@@ -1999,12 +2099,12 @@ Display Format
 			}
 		else					// 0, 1, 2, 3, 4
 			{
-			int lowval = (byte)model.get(prefix + "lowval");
+			int lowval = model.get(prefix + "lowval");
 			data[pos+10] = (byte)(lowval & 127);
-			int highval = (byte)model.get(prefix + "highval");
+			int highval = model.get(prefix + "highval");
 			data[pos+12] = (byte)(highval & 127);
-			//int defaultval = (byte)model.get(prefix + "defaultval");
-			int defaultval = (byte)model.get(prefix + "defaultval");
+			//int defaultval = model.get(prefix + "defaultval");
+			int defaultval = model.get(prefix + "defaultval");
 			data[pos+21] = (byte)(defaultval & 127);
 
 			data[pos + 16] = (byte)model.get(prefix + "parammsb");
@@ -2028,12 +2128,12 @@ Display Format
 		
 		int dvtype = model.get(prefix + "sysexsingledvtype");
 		data[pos + 26] = TO_SINGLE_DV_TYPES[dvtype];
-		boolean isRoland = (dvtype == 2);
+		boolean isRoland = (dvtype == 1);
 			
 		if (isRoland)
 			{
 			data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
-			data[pos + 28] = (byte)(data[pos + 27] - 2);	// roland position
+			data[pos + 28] = (byte)(data[pos + 27] - 1);	// roland position
 			}
 		else
 			{
@@ -2075,14 +2175,14 @@ Display Format
 		
 		if (type == 5)		// MMC
 			{
-			int lowval = (byte)model.get(prefix + "mmctype") + 1;
+			int lowval = model.get(prefix + "mmctype") + 1;
 			data[pos+10] = (byte)(lowval & 127);
 			}
 		else if (type == 6)		// Drum note
 			{
-			int lowval = (byte)model.get(prefix + "lowval");
+			int lowval = model.get(prefix + "lowval");
 			data[pos+10] = (byte)(lowval & 127);
-			int highval = (byte)model.get(prefix + "highval");
+			int highval = model.get(prefix + "highval");
 			data[pos+12] = (byte)(highval & 127);
 			}
 		else if (type == 7) 			// Bank Select
@@ -2092,16 +2192,16 @@ Display Format
 			}
 		else if (type == 8) 			// PC
 			{
-			int lowval = (byte)model.get(prefix + "lowval");
+			int lowval = model.get(prefix + "lowval");
 			data[pos+10] = (byte)(lowval & 127);
-			int highval = (byte)model.get(prefix + "highval");
+			int highval = model.get(prefix + "highval");
 			data[pos+12] = (byte)(highval & 127);
 			data[pos + 16] = (byte)model.get(prefix + "parammsb");
 			data[pos + 17] = (byte)model.get(prefix + "paramlsb");
 			}
 		else if (type == 9)	// Template
 			{
-			int lowval = (byte)model.get(prefix + "template");
+			int lowval = model.get(prefix + "template");
 			data[pos+10] = (byte)(lowval & 127);
 			}
 		else if (type == 10)	// Realtime
@@ -2110,12 +2210,12 @@ Display Format
 			}
 		else					// 0, 1, 2, 3, 4
 			{
-			int lowval = (byte)model.get(prefix + "lowval");
+			int lowval = model.get(prefix + "lowval");
 			data[pos+10] = (byte)(lowval & 127);
-			int highval = (byte)model.get(prefix + "highval");
+			int highval = model.get(prefix + "highval");
 			data[pos+12] = (byte)(highval & 127);
-			//int defaultval = (byte)model.get(prefix + "defaultval");
-			int defaultval = (byte)model.get(prefix + "defaultval");
+			//int defaultval = model.get(prefix + "defaultval");
+			int defaultval = model.get(prefix + "defaultval");
 			data[pos+21] = (byte)(defaultval & 127);
 
 			data[pos + 16] = (byte)model.get(prefix + "parammsb");
@@ -2139,12 +2239,12 @@ Display Format
 		
 		int dvtype = model.get(prefix + "sysexsingledvtype");
 		data[pos + 26] = TO_SINGLE_DV_TYPES[dvtype];
-		boolean isRoland = (dvtype == 2);
+		boolean isRoland = (dvtype == 1);
 			
 		if (isRoland)
 			{
 			data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
-			data[pos + 28] = (byte)(data[pos + 27] - 2);	// roland position
+			data[pos + 28] = (byte)(data[pos + 27] - 1);	// roland position
 			}
 		else
 			{
@@ -2192,7 +2292,7 @@ Display Format
 		int templatesize = model.get("templatesize");
 		int templatepos = model.get("templateposition");
 		if (templatesize == 1) { templatesize = 0; templatepos = 0; }
-		if (templatepos > templatesize) pos = templatesize;
+		if (templatepos > templatesize) templatepos = templatesize;
 		data[pos++] = (byte)templatesize;
 		data[pos++] = (byte)templatepos;
 		
@@ -2277,17 +2377,16 @@ Display Format
 		data[pos++] = 0x00;
 		
 		// Drum Note Auto-Off
-		final int DRUMPAD_BASE_INDEX = 56;
 		for(int i = 0; i < 8; i++)
 			{
 			pos++;	// skip zero
-			data[pos++] = (byte)model.get("control" + (DRUMPAD_BASE_INDEX + i) + "autooff");
+			data[pos++] = (byte)model.get("page8control" + (i + 1) + "autooff");
 			}
 
 		// Drum Note Off Sync Value
 		for(int i = 0; i < 8; i++)
 			{
-			data[pos++] = (byte)model.get("control" + (DRUMPAD_BASE_INDEX + i) + "drumoffsync");
+			data[pos++] = (byte)model.get("page8control" + (i + 1) + "drumoffsync");
 			}
 
 		// Unknown Constants
@@ -2321,20 +2420,20 @@ Display Format
         
         if (toWorkingMemory)			// UPLOAD		-- maybe do RECEIVED?
         	{
-/*
 	        data[7] = (byte)0x00;
 	        data[8] = (byte)0x00;
 	        data[9] = (byte)0x11;
 	        data[10] = (byte)0x02;
 	        data[11] = (byte)0x00;
 	        data[12] = (byte)0x01;
-*/
+/*
 	        data[7] = (byte)0x00;
 	        data[8] = (byte)0x00;
 	        data[9] = (byte)0x0B;
 	        data[10] = (byte)0x0E;
 	        data[11] = (byte)0x00;
 	        data[12] = (byte)tempModel.get("number");
+*/
         	}
         else							// WRITE
         	{
@@ -2475,7 +2574,7 @@ Display Format
 			int dvpos = data[pos + 28];
 			model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
 			model.set(prefix + "sysexdoubledvtype", dvtype);  // handle both software and unit
-			isRoland = (dvtype == 3);
+			isRoland = (dvtype == 1);
 			}
 		else
 			{
@@ -2483,7 +2582,7 @@ Display Format
 			int dvpos = data[pos + 28];
 			model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
 			model.set(prefix + "sysexsingledvtype", dvtype);  // handle both software and unit
-			isRoland = (dvtype == 2);
+			isRoland = (dvtype == 1);
 			}
 			
 		if (isRoland)
@@ -2526,7 +2625,7 @@ Display Format
 		int dvpos = data[pos + 28];
 		model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
 		model.set(prefix + "sysexsingledvtype", dvtype);  // handle both software and unit
-		boolean isRoland = (dvtype == 2);
+		boolean isRoland = (dvtype == 1);
 
 		if (isRoland)
 			{
@@ -2620,7 +2719,7 @@ Display Format
 		int dvpos = data[pos + 28];
 		model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
 		model.set(prefix + "sysexsingledvtype", dvtype);  // handle both software and unit
-		boolean isRoland = (dvtype == 2);
+		boolean isRoland = (dvtype == 1);
 
 		if (isRoland)
 			{
@@ -2715,7 +2814,7 @@ Display Format
 		int dvpos = data[pos + 28];
 		model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
 		model.set(prefix + "sysexsingledvtype", dvtype);  // handle both software and unit
-		boolean isRoland = (dvtype == 2);
+		boolean isRoland = (dvtype == 1);
 
 		if (isRoland)
 			{
@@ -2756,7 +2855,7 @@ Display Format
 		int dvpos = data[pos + 28];
 		model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
 		model.set(prefix + "sysexsingledvtype", dvtype);  // handle both software and unit
-		boolean isRoland = (dvtype == 2);
+		boolean isRoland = (dvtype == 1);
 
 		if (isRoland)
 			{
@@ -2945,6 +3044,8 @@ Display Format
 		revise();
 		return PARSE_SUCCEEDED; 
         }
+
+    public int getPauseAfterWritePatch() { return 200; }
 	}
 
 
@@ -3057,7 +3158,7 @@ class SysexBox extends HBox
         			{
 					sysexBytes.removeAll();
 					int val = model.get(key);
-					for(int i = 0; i < val; i++)
+					for(int i = 0; i < val - 1; i++)		// roland sysex is weirdly one shorter than it should be
 						{
 						sysexBytes.add(sysex[i]);
 						}
@@ -3180,7 +3281,6 @@ class SysexBox extends HBox
 			sysexsingledvtype.update(prefix + "sysexsingledvtype", model);
 			}
 		}
-		
 	}
 
 
@@ -3584,9 +3684,10 @@ DEC HEX
 	*** NOTE: If the Sysex DV Type is 0, then the DV position is undefined and can be anything
 	*** NOTE: There are serious errors in Novation's editor, which et the Sysex DV Type and
 	*** the DV position to unexpected values.
-	*** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 2, so if sysex is 9, then this value is 7, representing position 8
+	*** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 1
 29  1d	Sysex String		[12 bytes, padded with 0x00]
-	*** NOTE: it appears that for the DV position, 0x7F normally serves as a placeholder
+	*** NOTE: it appears that for the DV position(s), 0x7F normally serves as a placeholder
+	*** NOTE: For Roland Sysex, the sysex string is 1 shorter than expected given the length.
 
 
 
@@ -3626,7 +3727,7 @@ DEC HEX
 	*** NOTE: If the Sysex DV Type is 0, then the DV position is undefined and can be anything
 	*** NOTE: There are serious errors in Novation's editor, which et the Sysex DV Type and
 	*** the DV position to unexpected values.
-	*** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 2, so if sysex is 9, then this value is 7, representing position 8
+	*** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 1
 29  1d	Sysex String		[12 bytes, padded with 0x00]
 	*** NOTE: it appears that for the DV position, 0x7F normally serves as a placeholder
 
@@ -3649,7 +3750,7 @@ DEC HEX
 12  0c	High Value
 		OR Note Velocity
 		or PC Press 2
-13  0d	Button Type			0x00 = Normal/Off, 0x04 = Momentary, 0x08 = Toggle, 0x10 = Step
+13  0d	Button Type			0x00 = Normal, 0x04 = Momentary, 0x08 = Toggle, 0x10 = Step
 							**** NOTE: it says +0x01 is SEND THE MS VALUE FIRST and +0x02 is SEND A 2BYTE VALUE
 							**** But these are not options available in the editors or on the unit
 							OR (Bank Change) 0x00 = LSB, 0x01 = MSB, 0x02 = MSB-LSB
@@ -3674,7 +3775,7 @@ DEC HEX
 	*** NOTE: If the Sysex DV Type is 0, then the DV position is undefined and can be anything
 	*** NOTE: There are serious errors in Novation's editor, which et the Sysex DV Type and
 	*** the DV position to unexpected values.
-	*** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 2, so if sysex is 9, then this value is 7, representing position 8
+	*** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 1
 29  1d	Sysex String		[12 bytes, padded with 0x00]
 	*** NOTE: it appears that for the DV position, 0x7F normally serves as a placeholder
 
@@ -3696,7 +3797,7 @@ DEC HEX
 11  0b	(0x00)				[Normally High Value MSB]
 12  0c	High Value
 		OR Drum note Velocity
-13  0d	Button Type			0x00 = Normal/Off, 0x04 = Velocity, 0x08 = Toggle, 0x10 = Step
+13  0d	Button Type			0x00 = Normal, 0x04 = Velocity, 0x08 = Toggle, 0x10 = Step
 							**** NOTE: it says +0x01 is SEND THE MS VALUE FIRST and +0x02 is SEND A 2BYTE VALUE
 							**** But these are not options available in the editors or on the unit
 							**** NOTE: Momentary is not available for Drumpads, instead it's "Velocity"
@@ -3722,7 +3823,7 @@ DEC HEX
 	*** NOTE: If the Sysex DV Type is 0, then the DV position is undefined and can be anything
 	*** NOTE: There are serious errors in Novation's editor, which et the Sysex DV Type and
 	*** the DV position to unexpected values.
-	*** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 2, so if sysex is 9, then this value is 7, representing position 8
+	*** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 1
 29  1d	Sysex String		[12 bytes, padded with 0x00]
 	*** NOTE: it appears that for the DV position, 0x7F normally serves as a placeholder
 29  1d	Sysex				[12 bytes, padded with 0x00]
@@ -3764,7 +3865,7 @@ DEC HEX
 	*** NOTE: If the Sysex DV Type is 0, then the DV position is undefined and can be anything
 	*** NOTE: There are serious errors in Novation's editor, which et the Sysex DV Type and
 	*** the DV position to unexpected values.
-	*** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 2, so if sysex is 9, then this value is 7, representing position 8
+	*** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 1
 29  1d	Sysex String		[12 bytes, padded with 0x00]
 	*** NOTE: it appears that for the DV position, 0x7F normally serves as a placeholder
 
@@ -3781,7 +3882,7 @@ DEC HEX
 10  0a	Low	Value LSB / MMC Type / Drum note Number/ Template Number (1-32, not 0-31) / PC 
 11  0b	High Value MSB
 12  0c	High Value LSB / Drum note Velocity
-13  0d	Button Type			0x00 = Normal/Off, 0x04 = Momentary, 0x08 = Toggle, 0x10 = Step
+13  0d	Button Type			0x00 = Normal, 0x04 = Momentary, 0x08 = Toggle, 0x10 = Step
 							**** NOTE: it says +0x01 is SEND THE MS VALUE FIRST and +0x02 is SEND A 2BYTE VALUE
 							OR (Bank Change) 0x00 = LSB, 0x01 = MSB, 0x02 = MSB-LSB
 							OR (Prog Change) 0x00 = OFF, 0x01 = LSB, 0x02 = MSB, 0x03 = MSB-LSB 
@@ -3810,7 +3911,7 @@ DEC HEX
 	*** NOTE: If the Sysex DV Type is 0, then the DV position is undefined and can be anything
 	*** NOTE: There are serious errors in Novation's editor, which et the Sysex DV Type and
 	*** the DV position to unexpected values.
-	*** NOTE: For Roland Sysex, the data position is fixed
+	*** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 1
 29  1d	Sysex				[12 bytes, padded with 0x00]
 	*** NOTE: it appears that for the DV position, 0x7F usually serves as a placeholder
 

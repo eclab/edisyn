@@ -3,7 +3,7 @@
     Licensed under the Apache License version 2.0
 */
 
-package edisyn.synth.novationslmkii;
+package edisyn.synth.novationsl;
 
 import edisyn.*;
 import edisyn.gui.*;
@@ -19,12 +19,12 @@ import javax.sound.midi.*;
 
 
 /**
-   A patch editor for the Novation SL MK II.
+   A patch editor for the Novation SL, particularly the MK II.
         
    @author Sean Luke
 */
 
-public class NovationSLMKII extends Synth
+public class NovationSL extends Synth
 {
     
     /// Interesting fact: the unit doesn't have "default", but the editor does.
@@ -136,7 +136,7 @@ public class NovationSLMKII extends Synth
         return titleBarSynthName;
     }
 
-    public NovationSLMKII()
+    public NovationSL()
     {
         String c = getLastX(COMPACT_KEY, getSynthName());
         compact = (c == null ? false : Boolean.parseBoolean(c));
@@ -473,8 +473,8 @@ public class NovationSLMKII extends Synth
     }
        
                 
-    public String getDefaultResourceFileName() { return "NovationSLMKII.init"; }
-    public String getHTMLResourceFileName() { return "NovationSLMKII.html"; }
+    public String getDefaultResourceFileName() { return "NovationSL.init"; }
+    public String getHTMLResourceFileName() { return "NovationSL.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
     {
@@ -2745,7 +2745,7 @@ public class NovationSLMKII extends Synth
                 if (stuff[i] == val) return i;
             }
         // This will happen a lot:
-        System.err.println("NovationSLMKII.at() WARNING: Invalid data " + val + " at byte position " + pos + " (" + (pos - 0x1a3)/41 + ", " + (pos - 0x1a3)%41 + ")");
+        System.err.println("NovationSL.at() WARNING: Invalid data " + val + " at byte position " + pos + " (" + (pos - 0x1a3)/41 + ", " + (pos - 0x1a3)%41 + ")");
         return 0;
     }
 
@@ -3445,7 +3445,7 @@ public class NovationSLMKII extends Synth
             // There are TWO sysex data type dials, which alternate being shown depending on 16K.  They have
             // an impact on the sysex length dials so we need to re-update them too
                 
-            sysexsingledvtype = new Chooser("Data Type", synth, prefix + "sysexsingledvtype", NovationSLMKII.SINGLE_DV_TYPES)       
+            sysexsingledvtype = new Chooser("Data Type", synth, prefix + "sysexsingledvtype", NovationSL.SINGLE_DV_TYPES)       
                 {
                     public void update(String key, final Model model)
                     {
@@ -3481,7 +3481,7 @@ public class NovationSLMKII extends Synth
                     }
                 };
                 
-            sysexdoubledvtype = new Chooser("Data Type", synth, prefix + "sysexdoubledvtype", NovationSLMKII.DOUBLE_DV_TYPES)
+            sysexdoubledvtype = new Chooser("Data Type", synth, prefix + "sysexdoubledvtype", NovationSL.DOUBLE_DV_TYPES)
                 {
                     public void update(String key, Model model)
                     {

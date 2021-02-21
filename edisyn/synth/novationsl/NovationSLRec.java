@@ -3,10 +3,10 @@
    Licensed under the Apache License version 2.0
 */
 
-package edisyn.synth.novationslmkii;
+package edisyn.synth.novationsl;
 import edisyn.*;
 
-public class NovationSLMKIIRec extends Recognize
+public class NovationSLRec extends Recognize
 {
     public static boolean recognize(byte[] data)
     {

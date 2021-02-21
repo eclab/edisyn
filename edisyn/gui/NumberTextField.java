@@ -33,11 +33,11 @@ import java.awt.event.*;
 */
 
 public class NumberTextField extends NumericalComponent
-    {
+{
     JTextField valField;
     JLabel label = new JLabel("888", SwingConstants.LEFT)
         {
-        public Insets getInsets() { return new Insets(0, 0, 0, 0); }
+            public Insets getInsets() { return new Insets(0, 0, 0, 0); }
         };
 
     Color defaultColor;
@@ -45,89 +45,89 @@ public class NumberTextField extends NumericalComponent
         
     boolean edited = false;
     void setEdited(boolean edited)
-        {
+    {
         if (this.edited != edited)
             {
-            this.edited = edited;
-            if (edited)
-                {
-                valField.setBackground(editedColor);
-                }
-            else
-                {
-                valField.setBackground(defaultColor);
-                }
+                this.edited = edited;
+                if (edited)
+                    {
+                        valField.setBackground(editedColor);
+                    }
+                else
+                    {
+                        valField.setBackground(defaultColor);
+                    }
             }
-        }
+    }
         
     public void submit()
-        {
+    {
         if (edited)
             {
-            int val;
-            try
-                {
-                val = Integer.parseInt(valField.getText());
-                }
-            catch (NumberFormatException e) { val = getValue(); }
-            setValue(newValue(val));
+                int val;
+                try
+                    {
+                        val = Integer.parseInt(valField.getText());
+                    }
+                catch (NumberFormatException e) { val = getValue(); }
+                setValue(newValue(val));
             }
-        }
+    }
     
     public void update(String key, Model model)
-        {
+    {
         valField.setText(""+getValue());
         setEdited(false);
-        }
+    }
         
     KeyListener listener = new KeyListener()
         {
-        public void keyReleased(KeyEvent keyEvent) { }
-        public void keyTyped(KeyEvent keyEvent) { }
-        public void keyPressed(KeyEvent keyEvent) {
-            if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER)
-                {
-                submit();
-                }
-            else if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE)  // reset
-                {
-                update(null, synth.getModel());  // doesn't matter
-                }
-            else
-                {
-                setEdited(true);
-                }
+            public void keyReleased(KeyEvent keyEvent) { }
+            public void keyTyped(KeyEvent keyEvent) { }
+            public void keyPressed(KeyEvent keyEvent) {
+                if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER)
+                    {
+                        submit();
+                    }
+                else if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE)  // reset
+                    {
+                        update(null, synth.getModel());  // doesn't matter
+                    }
+                else
+                    {
+                        setEdited(true);
+                    }
             }
         };
     
     FocusAdapter focusAdapter = new FocusAdapter()
         {
-        public void focusLost ( FocusEvent e )
+            public void focusLost ( FocusEvent e )
             {
-            submit();
+                submit();
             }
         };
 
     /** Sets the value without filtering first. */
     public void setValue(int val)
-        {
+    {
         valField.setText(""+val);
         setEdited(false);
         synth.getModel().set(key, val);
-        }
+    }
 
     
     /** Returns the most recently set value. */
     public int getValue()
-        {
+    {
         return synth.getModel().get(key, 0);
-        }
+    }
         
     public JTextField getField() { return valField; }
             
     /** Creates a NumberTextField which does not display the belly button or arrows. */
     public NumberTextField(String _label, final Synth synth, int columns, final Color editedColor, final String key)
-        {
+    {
         super(synth, key);
                         
         setBackground(Style.BACKGROUND_COLOR());
@@ -149,28 +149,28 @@ public class NumberTextField extends NumericalComponent
         this.editedColor = editedColor;
         this.defaultColor = valField.getBackground();
         
-        }
+    }
         
     /** Override this to be informed when a new value has been set.
         The return value should be the value you want the display to show 
         instead. */
     public int newValue(int newValue)
-        {
+    {
         if (newValue < getMin())
             newValue = getMin();
         if (newValue > getMax())
             newValue = getMax();
         return newValue;
-        }
+    }
     
     /** Only call this to access the value field directly */
     public void setText(String val)
-        {
+    {
         valField.setText(val);
-        }
+    }
     
     public String getText()
-        {
+    {
         return valField.getText();
-        }
     }
+}

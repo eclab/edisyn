@@ -16,7 +16,7 @@ import javax.swing.*;
 */
 
 public class Style
-    {
+{
     /////// GLOBAL CONSTANTS
     
     /** Background color */
@@ -74,12 +74,12 @@ public class Style
     /////// CHOOSER CONSTANTS
     
     public static Insets CHOOSER_INSETS() 
-        { 
+    { 
         if (isUnix())
             return new Insets(0, 0, 2, 4); 
         else
             return new Insets(-1, 0, -2, 0);  // no insets
-        }
+    }
     public static Insets CHOOSER_WINDOWS_INSETS() { return new Insets(-1, 6, -2, 0); }  // no insets
     
 
@@ -134,8 +134,8 @@ public class Style
     /////// CHECKBOX CONSTANTS
     /** Border around arpeggiator checkboxes */
     public static Border CHECKBOX_HIGHLIGHTED_BORDER() { return BorderFactory.createCompoundBorder(
-            BorderFactory.createEmptyBorder(2, 2, 2, 2),
-            BorderFactory.createLineBorder(DYNAMIC_COLOR(), 1, true)); }
+                                                                                                   BorderFactory.createEmptyBorder(2, 2, 2, 2),
+                                                                                                   BorderFactory.createLineBorder(DYNAMIC_COLOR(), 1, true)); }
     public static Border CHECKBOX_NON_HIGHLIGHTED_BORDER() { return BorderFactory.createEmptyBorder(3, 3, 3, 3); }
     
 
@@ -170,20 +170,20 @@ public class Style
         
     /** Updates the graphics rendering hints before drawing.  Called by a few widgets.  */
     public static void prepareGraphics(Graphics g)
-        {
+    {
         Graphics2D graphics = (Graphics2D) g;
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        }
+    }
         
     static
-        {
+    {
         updateColors();
-        }
+    }
          
     public static void updateColors()
-        {
+    {
         BACKGROUND_COLOR = Synth.getLastColor("background-color", DEFAULT_BACKGROUND_COLOR);
         TEXT_COLOR = Synth.getLastColor("text-color", DEFAULT_TEXT_COLOR);
         COLOR_A = Synth.getLastColor("a-color", DEFAULT_COLOR_A);
@@ -192,42 +192,42 @@ public class Style
         DYNAMIC_COLOR = Synth.getLastColor("dynamic-color", DEFAULT_DYNAMIC_COLOR);
         ENVELOPE_COLOR = Synth.getLastColor("envelope-color", DEFAULT_ENVELOPE_COLOR);
         UNSET_COLOR = Synth.getLastColor("unset-color", DEFAULT_UNSET_COLOR);
-        }
+    }
 
     /////// OS DISTINGUISHING PROCEDURES
 
     private static String OS() { return System.getProperty("os.name").toLowerCase(); }
 
     public static boolean isWindows() 
-        {
+    {
         return (OS().indexOf("win") >= 0);
-        }
+    }
 
     public static boolean isMac() 
-        {
+    {
         return (OS().indexOf("mac") >= 0 || System.getProperty("mrj.version") != null);
-        }
+    }
 
     public static boolean isUnix() 
-        {
+    {
         return (OS().indexOf("nix") >= 0 || OS().indexOf("nux") >= 0 || OS().indexOf("aix") > 0 );
-        }
+    }
 
     // From https://stackoverflow.com/questions/12431148/swing-and-bitmaps-on-retina-displays
     public static boolean isRetinaDisplay() 
-        {
+    {
         GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         try {
             java.lang.reflect.Field field = graphicsDevice.getClass().getDeclaredField("scale");
             if (field != null) 
                 {
-                field.setAccessible(true);
-                Object scale = field.get(graphicsDevice);
-                if(scale instanceof Integer && ((Integer) scale).intValue() == 2) return true;
+                    field.setAccessible(true);
+                    Object scale = field.get(graphicsDevice);
+                    if(scale instanceof Integer && ((Integer) scale).intValue() == 2) return true;
                 }
-            } 
+        } 
         catch (Exception e) { Synth.handleException(e); }
         return false;
-        }
-
     }
+
+}

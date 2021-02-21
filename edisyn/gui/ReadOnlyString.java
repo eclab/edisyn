@@ -21,7 +21,7 @@ import java.awt.event.*;
 */
 
 public class ReadOnlyString extends JPanel implements Updatable
-    {
+{
     JLabel text;
         
     String key;
@@ -30,15 +30,15 @@ public class ReadOnlyString extends JPanel implements Updatable
     public String getKey() { return key; }
 
     static String buildInitialString(int columns)
-        {
+    {
         String s = "";
         for(int i = 0; i < columns; i++)
             s = s + "M";
         return s;
-        }
+    }
 
     public ReadOnlyString(final String label, final Synth synth, final String key, final int columns)
-        {
+    {
         this.synth = synth;
         Model model = synth.getModel();
         setBackground(Style.BACKGROUND_COLOR());
@@ -48,13 +48,13 @@ public class ReadOnlyString extends JPanel implements Updatable
         final Dimension[] dim = new Dimension[1];
         text = new JLabel(buildInitialString(columns))
             {
-            public Dimension getMinimumSize() { return getPreferredSize(); }
-            public Dimension getMaximumSize() { return getPreferredSize(); }
-            public Dimension getPreferredSize() 
+                public Dimension getMinimumSize() { return getPreferredSize(); }
+                public Dimension getMaximumSize() { return getPreferredSize(); }
+                public Dimension getPreferredSize() 
                 { if (dim[0] == null) 
-                    { return super.getPreferredSize(); }
-                else
-                    { return dim[0]; }
+                        { return super.getPreferredSize(); }
+                    else
+                        { return dim[0]; }
                 }
             };
                 
@@ -79,14 +79,14 @@ public class ReadOnlyString extends JPanel implements Updatable
         model.register(key, this);
 
         add(lab, BorderLayout.NORTH);
-        }
+    }
 
     public void update(String key, Model model)
-        {
+    {
         String name = model.get(key, "");
         if (name == null) name = "";
         text.setText(name);
         text.repaint(); 
-        }
-
     }
+
+}

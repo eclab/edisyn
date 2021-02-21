@@ -23,7 +23,7 @@ import javax.sound.midi.*;
 */
 
 public class KorgSG extends Synth
-    {
+{
     /// Various collections of parameter names for pop-up menus
     
     
@@ -49,24 +49,24 @@ public class KorgSG extends Synth
         
     static final String[] PROGRAMS_REARRANGED;
     static
-        {
+    {
         int x = 0;
         String[] pg = new String[PROGRAMS.length];
         for(int i = 0; i < PROGRAMS.length / 4; i++)
             {
-            for(int j = 0; j < 4; j++)
-                {
-                int _i = i + 1;
-                pg[x++] = BANKS[j] + (_i < 9 ? "0" + _i : _i)  + ": " + PROGRAMS[j * PROGRAMS.length/4 + i];
-                }
+                for(int j = 0; j < 4; j++)
+                    {
+                        int _i = i + 1;
+                        pg[x++] = BANKS[j] + (_i < 9 ? "0" + _i : _i)  + ": " + PROGRAMS[j * PROGRAMS.length/4 + i];
+                    }
             }
         PROGRAMS_REARRANGED = pg;
-        }
+    }
             
 
 
     public KorgSG()
-        {
+    {
         JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
@@ -88,7 +88,7 @@ public class KorgSG extends Synth
         model.set("bank", 0);
         
         loadDefaults();
-        }
+    }
                 
     
     public String getDefaultResourceFileName() { return "KorgSG.init"; }
@@ -98,7 +98,7 @@ public class KorgSG extends Synth
               
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-        {
+    {
         Category globalCategory = new Category(this, getSynthName(), color);
         //globalCategory.makeUnresettable();
                 
@@ -114,15 +114,15 @@ public class KorgSG extends Synth
         
         comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 10 ASCII characters.")
             {
-            public String replace(String val)
+                public String replace(String val)
                 {
-                return revisePatchName(val);
+                    return revisePatchName(val);
                 }
                                 
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                updateTitle();
+                    super.update(key, model);
+                    updateTitle();
                 }
             };
         vbox.addBottom(comp);  // doesn't work right :-(
@@ -132,24 +132,24 @@ public class KorgSG extends Synth
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-        }
+    }
         
     public String revisePatchName(String name)
-        {
+    {
         name = super.revisePatchName(name);
         if (name == null) name = "";
         char[] chars = name.toCharArray();
         for(int i = 0; i < chars.length; i++)
             {
-            if (chars[i] < 32 || chars[i] > 127)
-                chars[i] = ' ';
+                if (chars[i] < 32 || chars[i] > 127)
+                    chars[i] = ' ';
             }
         return new String(chars);
-        }
+    }
 
               
     public JComponent addMain(Color color)
-        {
+    {
         Category category  = new Category(this, "Main", color);
                         
         JComponent comp;
@@ -174,20 +174,20 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial("Brightness", this, "brightness", color, -99, 99)
             {
-            public int getDefaultValue() { return 99; }
+                public int getDefaultValue() { return 99; }
             };
         hbox.add(comp);
 
         comp = new LabelledDial("Key Touch", this, "velocity", color, -99, 99)
             {
-            public int getDefaultValue() { return 99; }
+                public int getDefaultValue() { return 99; }
             };
         ((LabelledDial)comp).addAdditionalLabel("(Velocity)");
         hbox.add(comp);
 
         comp = new LabelledDial("Pitch Bend", this, "pitchbendrange", color, -12, 12)
             {
-            public boolean isSymmetric() { return true; }
+                public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).addAdditionalLabel("Range");
         hbox.add(comp);
@@ -201,10 +201,10 @@ public class KorgSG extends Synth
 
         category.add(hbox);
         return category;
-        }
+    }
         
     public JComponent addScale(Color color)
-        {
+    {
         Category category  = new Category(this, "Scale", color);
                         
         JComponent comp;
@@ -220,20 +220,20 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial("Scale Key", this, "scalekey", color, 0, 11)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return SCALE_KEYS[val];
+                    return SCALE_KEYS[val];
                 }
             };
         hbox.add(comp);
 
         category.add(hbox);
         return category;
-        }
+    }
         
 
     public JComponent addEnvelope(Color color)
-        {
+    {
         Category category  = new Category(this, "Envelope", color);
                         
         JComponent comp;
@@ -255,29 +255,29 @@ public class KorgSG extends Synth
 
         // AD[S]R
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null, "attacktime", "decaytime", null, "releasetime" },
-            new String[] { null, "level", "level", "level", null },
-            new double[] { 0, 0.25 / 198, 0.25 / 198, 0.25, 0.25 / 198 },
-            new double[] { 0, 1.0 / 198, 0.5 / 198, 0.5 / 198, 0 })
+                                   new String[] { null, "attacktime", "decaytime", null, "releasetime" },
+                                   new String[] { null, "level", "level", "level", null },
+                                   new double[] { 0, 0.25 / 198, 0.25 / 198, 0.25, 0.25 / 198 },
+                                   new double[] { 0, 1.0 / 198, 0.5 / 198, 0.5 / 198, 0 })
             {
-            public void postProcess(double[] xs, double[] ys)
+                public void postProcess(double[] xs, double[] ys)
                 {
-                // because we use +/-99 for our envelope values just
-                // like the SG, we need to postprocess this so that
-                // we don't have negative envelope coordinates
-                xs[1] += 0.125;
-                xs[2] += 0.125;
-                xs[4] += 0.125;
-                ys[1] += 0.5;                           
-                ys[2] += 0.25;                          
-                ys[3] += 0.25;                          
+                    // because we use +/-99 for our envelope values just
+                    // like the SG, we need to postprocess this so that
+                    // we don't have negative envelope coordinates
+                    xs[1] += 0.125;
+                    xs[2] += 0.125;
+                    xs[4] += 0.125;
+                    ys[1] += 0.5;                           
+                    ys[2] += 0.25;                          
+                    ys[3] += 0.25;                          
                 }
             };
         hbox.addLast(comp);
         
         category.add(hbox);
         return category;
-        }
+    }
 
 
     //// EFFECTS
@@ -304,20 +304,20 @@ public class KorgSG extends Synth
 
 
     public void addDepth(final int effect, Color color, HBox hbox)
-        {
+    {
         JComponent comp = new LabelledDial("Depth", this, "effect" + effect + "ldepth", color, 0, 100)
             {
-            public String map(int val)      
+                public String map(int val)      
                 {
-                if (val == 0) return "Dry";
-                else if (val == 100) return "Wet";
-                else return "" + val + "%";
+                    if (val == 0) return "Dry";
+                    else if (val == 100) return "Wet";
+                    else return "" + val + "%";
                 }
                                 
-            public int reviseToAltValue(int val)
+                public int reviseToAltValue(int val)
                 {
-                model.setBounded("effect" + effect + "rdepth", val);
-                return val;
+                    model.setBounded("effect" + effect + "rdepth", val);
+                    return val;
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("(Left)");
@@ -327,24 +327,24 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial("Depth", this, "effect" + effect + "rdepth", color, 0, 100)
             {
-            public String map(int val)      
+                public String map(int val)      
                 {
-                if (val == 0) return "Dry";
-                else if (val == 100) return "Wet";
-                else return "" + val + "%";
+                    if (val == 0) return "Dry";
+                    else if (val == 100) return "Wet";
+                    else return "" + val + "%";
                 }
 
-            public int reviseToAltValue(int val)
+                public int reviseToAltValue(int val)
                 {
-                model.setBounded("effect" + effect + "ldepth", val);
-                return val;
+                    model.setBounded("effect" + effect + "ldepth", val);
+                    return val;
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("(Right)");
         // not sure why, but later effects aren't updating the first time.  So I force it here
         ((LabelledDial)comp).update("effect" + effect + "rdepth", model);
         hbox.add(comp);
-        }
+    }
 
     public static final int EFFECT_NONE = 0;
     public static final int EFFECT_REVERB = 1;
@@ -361,7 +361,7 @@ public class KorgSG extends Synth
     public static final int EFFECT_HYPER_ENHANCER = 12;
 
     public JComponent addEffect(final int effect, Color color)
-        {
+    {
         JComponent comp;
         String[] params;
         
@@ -376,9 +376,9 @@ public class KorgSG extends Synth
                                 
         comp = new LabelledDial("Reverb Time", this, "effect" + effect + "reverb" + "time", color, 0, 97)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return String.format("%3.1f", val / 10.0);
+                    return String.format("%3.1f", val / 10.0);
                 }
             };
         effects[REVERB].add(comp);
@@ -395,15 +395,15 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial(" EQ High ", this, "effect" + effect + "reverb" + "eqhigh", color, -12, 12)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "dB"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
             };
         effects[REVERB].add(comp);
 
         comp = new LabelledDial(" EQ Low ", this, "effect" + effect + "reverb" + "eqlow", color, -12, 12)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "dB"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
             };
         effects[REVERB].add(comp);
 
@@ -414,9 +414,9 @@ public class KorgSG extends Synth
                                 
         comp = new LabelledDial("Early Reflection", this, "effect" + effect + "earlyreflection" + "ertime", color, 0, 70)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return "" + (val * 10 + 100);
+                    return "" + (val * 10 + 100);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Time");
@@ -427,15 +427,15 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial(" EQ High ", this, "effect" + effect + "earlyreflection" + "eqhigh", color, -12, 12)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "dB"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
             };
         effects[EFFECT_EARLY_RELFECTION].add(comp);
 
         comp = new LabelledDial(" EQ Low ", this, "effect" + effect + "earlyreflection" + "eqlow", color, -12, 12)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "dB"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
             };
         effects[EFFECT_EARLY_RELFECTION].add(comp);
 
@@ -447,10 +447,10 @@ public class KorgSG extends Synth
                                 
         comp = new LabelledDial("Delay Time", this, "effect" + effect + "stereodelay" + "delaytimel", color, 0, 500)
             {
-            public int reviseToAltValue(int val)
+                public int reviseToAltValue(int val)
                 {
-                model.setBounded("effect" + effect + "stereodelay" + "delaytimel", val);
-                return val;
+                    model.setBounded("effect" + effect + "stereodelay" + "delaytimel", val);
+                    return val;
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Left");
@@ -458,10 +458,10 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial("Delay Time", this, "effect" + effect + "stereodelay" + "delaytimer", color, 0, 500)
             {
-            public int reviseToAltValue(int val)
+                public int reviseToAltValue(int val)
                 {
-                model.setBounded("effect" + effect + "stereodelay" + "delaytimer", val);
-                return val;
+                    model.setBounded("effect" + effect + "stereodelay" + "delaytimer", val);
+                    return val;
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Right");
@@ -469,8 +469,8 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial("Feedback", this, "effect" + effect + "stereodelay" + "feedback", color, -99, 99)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "%"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "%"; }
             };
         effects[EFFECT_STEREO_DELAY].add(comp);
 
@@ -480,15 +480,15 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial(" EQ High ", this, "effect" + effect + "stereodelay" + "eqhigh", color, -12, 12)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "dB"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
             };
         effects[EFFECT_STEREO_DELAY].add(comp);
 
         comp = new LabelledDial(" EQ Low ", this, "effect" + effect + "stereodelay" + "eqlow", color, -12, 12)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "dB"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
             };
         effects[EFFECT_STEREO_DELAY].add(comp);
 
@@ -504,14 +504,14 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial("Mod Speed", this, "effect" + effect + "stereochorus" + "modspeed", color, 0, 216)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val < 100)
-                    return String.format("%4.2f", ( val / 100.0 * 3 + 0.03));
-                else if (val < 200)
-                    return String.format("%3.1f", ((val - 100) * 0.1 + 3.1));
-                else 
-                    return String.format("%4.1f", ((val - 200) + 14));
+                    if (val < 100)
+                        return String.format("%4.2f", ( val / 100.0 * 3 + 0.03));
+                    else if (val < 200)
+                        return String.format("%3.1f", ((val - 100) * 0.1 + 3.1));
+                    else 
+                        return String.format("%4.1f", ((val - 200) + 14));
                 }
             };
         effects[EFFECT_STEREO_CHORUS].add(comp);
@@ -523,15 +523,15 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial(" EQ High ", this, "effect" + effect + "stereochorus" + "eqhigh", color, -12, 12)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "dB"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
             };
         effects[EFFECT_STEREO_CHORUS].add(comp);
 
         comp = new LabelledDial(" EQ Low ", this, "effect" + effect + "stereochorus" + "eqlow", color, -12, 12)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "dB"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
             };
         effects[EFFECT_STEREO_CHORUS].add(comp);
 
@@ -549,9 +549,9 @@ public class KorgSG extends Synth
                                 
         comp = new LabelledDial("Delay Time", this, "effect" + effect + "stereoflanger" + "delaytime", color, 0, 200)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return String.format("%3.1f", val / 10.0);
+                    return String.format("%3.1f", val / 10.0);
                 }
             };
         effects[EFFECT_FLANGER].add(comp);
@@ -564,22 +564,22 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial("Resonance", this, "effect" + effect + "stereoflanger" + "resonance", color, -99, 99)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "%"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "%"; }
             };
         effects[EFFECT_FLANGER].add(comp);
 
         comp = new LabelledDial(" EQ High ", this, "effect" + effect + "stereoflanger" + "eqhigh", color, -12, 12)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "dB"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
             };
         effects[EFFECT_FLANGER].add(comp);
 
         comp = new LabelledDial(" EQ Low ", this, "effect" + effect + "stereoflanger" + "eqlow", color, -12, 12)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "dB"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
             };
         ((LabelledDial)comp).addAdditionalLabel(" ");  // So we're the same height as the others
         effects[EFFECT_FLANGER].add(comp);
@@ -603,15 +603,15 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial(" EQ High ", this, "effect" + effect + "overdrive" + "eqhigh", color, -12, 12)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "dB"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
             };
         effects[OVERDRIVE].add(comp);
 
         comp = new LabelledDial(" EQ Low ", this, "effect" + effect + "overdrive" + "eqlow", color, -12, 12)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "dB"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
             };
         ((LabelledDial)comp).addAdditionalLabel(" ");  // So we're the same height as the others
         effects[OVERDRIVE].add(comp);
@@ -627,22 +627,22 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial("Mod Speed", this, "effect" + effect + "stereophaser" + "modspeed", color, 0, 216)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val < 100)
-                    return String.format("%4.2f", ( val / 100.0 * 3 + 0.03));
-                else if (val < 200)
-                    return String.format("%3.1f", ((val - 100) * 0.1 + 3.1));
-                else 
-                    return String.format("%4.1f", ((val - 200) + 14));
+                    if (val < 100)
+                        return String.format("%4.2f", ( val / 100.0 * 3 + 0.03));
+                    else if (val < 200)
+                        return String.format("%3.1f", ((val - 100) * 0.1 + 3.1));
+                    else 
+                        return String.format("%4.1f", ((val - 200) + 14));
                 }
             };
         effects[STEREO_PHASER].add(comp);
 
         comp = new LabelledDial("Feedback", this, "effect" + effect + "stereophaser" + "feedback", color, -99, 99)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "%"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "%"; }
             };
         effects[STEREO_PHASER].add(comp);
 
@@ -692,36 +692,36 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial("Speed", this, "effect" + effect + "autopan" + "speed", color, 0, 216)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val < 100)
-                    return String.format("%4.2f", ( val / 100.0 * 3 + 0.03));
-                else if (val < 200)
-                    return String.format("%3.1f", ((val - 100) * 0.1 + 3.1));
-                else 
-                    return String.format("%4.1f", ((val - 200) + 14));
+                    if (val < 100)
+                        return String.format("%4.2f", ( val / 100.0 * 3 + 0.03));
+                    else if (val < 200)
+                        return String.format("%3.1f", ((val - 100) * 0.1 + 3.1));
+                    else 
+                        return String.format("%4.1f", ((val - 200) + 14));
                 }
             };
         effects[AUTO_PAN].add(comp);
 
         comp = new LabelledDial("Mod Shape", this, "effect" + effect + "autopan" + "shape", color, -99, 99)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "%"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "%"; }
             };
         effects[AUTO_PAN].add(comp);
 
         comp = new LabelledDial(" EQ High ", this, "effect" + effect + "autopan" + "eqhigh", color, -12, 12)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "dB"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
             };
         effects[AUTO_PAN].add(comp);
 
         comp = new LabelledDial(" EQ Low ", this, "effect" + effect + "autopan" + "eqlow", color, -12, 12)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "dB"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
             };
         effects[AUTO_PAN].add(comp);
 
@@ -743,8 +743,8 @@ public class KorgSG extends Synth
         comp = new LabelledDial("Peak Gain", this, "effect" + effect + "wah" + "peakgain", color, -12, 12)
 
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "dB"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "dB"; }
             };
         effects[WAH].add(comp);
 
@@ -753,7 +753,7 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial("Intensity", this, "effect" + effect + "wah" + "dynamicmodint", color, -15, 15)
             {
-            public boolean isSymmetric() { return true; }
+                public boolean isSymmetric() { return true; }
             };
         effects[WAH].add(comp);
 
@@ -770,9 +770,9 @@ public class KorgSG extends Synth
                                 
         comp = new LabelledDial("Flanger", this, "effect" + effect + "flangerdelay" + "flangerdelaytime", color, 0, 50)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return String.format("%3.1f", val / 10.0);
+                    return String.format("%3.1f", val / 10.0);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Delay Time");
@@ -788,23 +788,23 @@ public class KorgSG extends Synth
 
         comp = new LabelledDial("Flanger", this, "effect" + effect + "flangerdelay" + "flangerfeedback", color, -99, 99)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "%"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "%"; }
             };
         ((LabelledDial)comp).addAdditionalLabel("Feedback");
         effects[FLANGER_DELAY].add(comp);
 
         comp = new LabelledDial("Delay", this, "effect" + effect + "flangerdelay" + "delaytime", color, 0, 225)
             {
-            public String map(int val) { return "" + (val * 2); }
+                public String map(int val) { return "" + (val * 2); }
             };
         ((LabelledDial)comp).addAdditionalLabel("Time");
         effects[FLANGER_DELAY].add(comp);
 
         comp = new LabelledDial("Delay", this, "effect" + effect + "flangerdelay" + "delayfeedback", color, -99, 99)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int val) { return "" + val + "%"; }
+                public boolean isSymmetric() { return true; }
+                public String map(int val) { return "" + val + "%"; }
             };
         ((LabelledDial)comp).addAdditionalLabel("Feedback");
         effects[FLANGER_DELAY].add(comp);
@@ -818,58 +818,58 @@ public class KorgSG extends Synth
         // HYPER ENHANCER
         if (effect == 1)
             {
-            effects[HYPER_ENHANCER] = new HBox();
+                effects[HYPER_ENHANCER] = new HBox();
                                                                 
-            comp = new LabelledDial("Depth", this, "effect" + effect + "hyperenhancer" + "ldepth", color, 0, 100)
-                {
-                public String map(int val)      
+                comp = new LabelledDial("Depth", this, "effect" + effect + "hyperenhancer" + "ldepth", color, 0, 100)
                     {
-                    if (val == 0) return "Dry";
-                    else return "Wet";
-                    }
-                public int reviseToAltValue(int val)
+                        public String map(int val)      
+                        {
+                            if (val == 0) return "Dry";
+                            else return "Wet";
+                        }
+                        public int reviseToAltValue(int val)
+                        {
+                            model.setBounded("effect" + effect + "hyperenhancer" + "rdepth", val);
+                            return val;
+                        }
+                    };
+                ((LabelledDial)comp).addAdditionalLabel("(Left)");
+                effects[HYPER_ENHANCER].add(comp);
+
+                comp = new LabelledDial("Depth", this, "effect" + effect + "hyperenhancer" + "rdepth", color, 0, 100)
                     {
-                    model.setBounded("effect" + effect + "hyperenhancer" + "rdepth", val);
-                    return val;
-                    }
-                };
-            ((LabelledDial)comp).addAdditionalLabel("(Left)");
-            effects[HYPER_ENHANCER].add(comp);
+                        public String map(int val)      
+                        {
+                            if (val == 0) return "Dry";
+                            else return "Wet";
+                        }
+                        public int reviseToAltValue(int val)
+                        {
+                            model.setBounded("effect" + effect + "hyperenhancer" + "ldepth", val);
+                            return val;
+                        }
+                    };
+                ((LabelledDial)comp).addAdditionalLabel("(Right)");
+                effects[HYPER_ENHANCER].add(comp);
 
-            comp = new LabelledDial("Depth", this, "effect" + effect + "hyperenhancer" + "rdepth", color, 0, 100)
-                {
-                public String map(int val)      
-                    {
-                    if (val == 0) return "Dry";
-                    else return "Wet";
-                    }
-                public int reviseToAltValue(int val)
-                    {
-                    model.setBounded("effect" + effect + "hyperenhancer" + "ldepth", val);
-                    return val;
-                    }
-                };
-            ((LabelledDial)comp).addAdditionalLabel("(Right)");
-            effects[HYPER_ENHANCER].add(comp);
+                comp = new LabelledDial("Trim", this, "effect" + effect + "hyperenhancer" + "trim", color, 0, 100);
+                effects[HYPER_ENHANCER].add(comp);
 
-            comp = new LabelledDial("Trim", this, "effect" + effect + "hyperenhancer" + "trim", color, 0, 100);
-            effects[HYPER_ENHANCER].add(comp);
+                comp = new LabelledDial("Low", this, "effect" + effect + "hyperenhancer" + "lowfreq", color, 1, 70);
+                ((LabelledDial)comp).addAdditionalLabel("Frequency");
+                effects[HYPER_ENHANCER].add(comp);
 
-            comp = new LabelledDial("Low", this, "effect" + effect + "hyperenhancer" + "lowfreq", color, 1, 70);
-            ((LabelledDial)comp).addAdditionalLabel("Frequency");
-            effects[HYPER_ENHANCER].add(comp);
+                comp = new LabelledDial("Low", this, "effect" + effect + "hyperenhancer" + "lowblend", color, 0, 100);
+                ((LabelledDial)comp).addAdditionalLabel("Blend");
+                effects[HYPER_ENHANCER].add(comp);
 
-            comp = new LabelledDial("Low", this, "effect" + effect + "hyperenhancer" + "lowblend", color, 0, 100);
-            ((LabelledDial)comp).addAdditionalLabel("Blend");
-            effects[HYPER_ENHANCER].add(comp);
+                comp = new LabelledDial("High", this, "effect" + effect + "hyperenhancer" + "highfreq", color, 1, 40);
+                ((LabelledDial)comp).addAdditionalLabel("Frequency");
+                effects[HYPER_ENHANCER].add(comp);
 
-            comp = new LabelledDial("High", this, "effect" + effect + "hyperenhancer" + "highfreq", color, 1, 40);
-            ((LabelledDial)comp).addAdditionalLabel("Frequency");
-            effects[HYPER_ENHANCER].add(comp);
-
-            comp = new LabelledDial("High", this, "effect" + effect + "hyperenhancer" + "highblend", color, 0, 100);
-            ((LabelledDial)comp).addAdditionalLabel("Blend");
-            effects[HYPER_ENHANCER].add(comp);
+                comp = new LabelledDial("High", this, "effect" + effect + "hyperenhancer" + "highblend", color, 0, 100);
+                ((LabelledDial)comp).addAdditionalLabel("Blend");
+                effects[HYPER_ENHANCER].add(comp);
             }
 
         // Force empty to be the same size
@@ -880,13 +880,13 @@ public class KorgSG extends Synth
         params = (effect == 1 ? EFFECT_TYPES_1 : EFFECT_TYPES_2);
         comp = new Chooser("Type", this, "effect" + effect + "type", params)
             {
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                main.removeLast();
-                main.addLast(effects[model.get(key, 0)]);
-                main.revalidate();
-                main.repaint();
+                    super.update(key, model);
+                    main.removeLast();
+                    main.addLast(effects[model.get(key, 0)]);
+                    main.revalidate();
+                    main.repaint();
                 }
             };
         vbox = new VBox();
@@ -895,11 +895,11 @@ public class KorgSG extends Synth
                 
         Category category = new Category(this, "Effect " + effect, color);
         category.add(main, BorderLayout.CENTER);
-//        category.makePasteable("effect" + effect);
+        //        category.makePasteable("effect" + effect);
         category.makePasteable("effect");
                 
         return category;
-        }
+    }
 
 
 
@@ -909,24 +909,24 @@ public class KorgSG extends Synth
 
     public byte EFFECT_TYPE_BYTES[] = new byte[] { 0x00, 0x01, 0x0A, 0x0D, 0x13, 0x19, 0x1F, 0x20, 0x22, 0x23, 0x25, 0x27, 0x30 };
     public int findEffectType(byte b)
-        {
+    {
         for(int i = 0; i < EFFECT_TYPE_BYTES.length; i++)
             if (EFFECT_TYPE_BYTES[i] == b) 
                 return i;
         System.err.println("Warning (KorgSG): unknown effect type byte " + b);
         return 0;
-        }
+    }
             
     int range(int a)
-        {
+    {
         while (a > 255) a -= 256;
         while (a < 0) a += 256;
         return a;
-        }
+    }
         
     // converts all but last byte (F7)
     byte[] convertTo8Bit(byte[] data, int offset)
-        {
+    {
         // How big?
         int size = (data.length - offset - 1) / 8 * 7;
         if ((data.length - offset - 1) % 8 > 0)
@@ -936,19 +936,19 @@ public class KorgSG extends Synth
         int j = 0;
         for(int i = offset; i < data.length; i += 8)
             {
-            for(int x = 0; x < 7; x++)
-                {
-                if (j + x < newd.length)
-                    newd[j + x] = (byte)(data[i + x + 1] | (byte)(((data[i] >>> x) & 0x1) << 7));
-                }
-            j += 7;
+                for(int x = 0; x < 7; x++)
+                    {
+                        if (j + x < newd.length)
+                            newd[j + x] = (byte)(data[i + x + 1] | (byte)(((data[i] >>> x) & 0x1) << 7));
+                    }
+                j += 7;
             }
         return newd;
-        }
+    }
         
     // converts all bytes
     byte[] convertTo7Bit(byte[] data)
-        {
+    {
         // How big?
         int size = (data.length) / 7 * 8;
         if (data.length % 7 > 0)
@@ -958,25 +958,25 @@ public class KorgSG extends Synth
         int j = 0;
         for(int i = 0; i < data.length; i+=7)
             {
-            for(int x = 0; x < 7; x++)
-                {
-                if (j + x + 1 < newd.length)
+                for(int x = 0; x < 7; x++)
                     {
-                    newd[j + x + 1] = (byte)(data[i + x] & 127);
-                    // Note that I have do to & 1 because data[i + x] is promoted to an int
-                    // first, and then shifted, and that makes a BIG NUMBER which requires
-                    // me to mask out the 1.  I hope this isn't the case for other stuff (which
-                    // is typically 7-bit).
-                    newd[j] = (byte)(newd[j] | (((data[i + x] >>> 7) & 1) << x));
+                        if (j + x + 1 < newd.length)
+                            {
+                                newd[j + x + 1] = (byte)(data[i + x] & 127);
+                                // Note that I have do to & 1 because data[i + x] is promoted to an int
+                                // first, and then shifted, and that makes a BIG NUMBER which requires
+                                // me to mask out the 1.  I hope this isn't the case for other stuff (which
+                                // is typically 7-bit).
+                                newd[j] = (byte)(newd[j] | (((data[i + x] >>> 7) & 1) << x));
+                            }
                     }
-                }
-            j += 8;
+                j += 8;
             }
         return newd;
-        }
+    }
         
     public int parse(byte[] data, boolean fromFile)
-        {
+    {
         // The data is F0, 42, 3[CHANNEL], 4A, 40, ... DATA ..., F7
         
         data = convertTo8Bit(data, 5);
@@ -985,7 +985,7 @@ public class KorgSG extends Synth
         String name;
         for(int i = 0; i < 10; i++)
             {
-            namec[i] = (char)data[i];
+                namec[i] = (char)data[i];
             }
         name = new String(namec);
         model.set("name", name);
@@ -1009,17 +1009,17 @@ public class KorgSG extends Synth
         
         if (model.get("effect1type", 0) == 12)  // hyperenhancer has a custom effect depth, grrrrrrrr
             {
-            model.set("effect1hyperenhancerldepth", data[23] == 0 ? 0 : 100);
-            model.set("effect1hyperenhancerrdepth", data[24] == 0 ? 0 : 100);
-            model.set("effect1ldepth", 0);
-            model.set("effect1rdepth", 0);
+                model.set("effect1hyperenhancerldepth", data[23] == 0 ? 0 : 100);
+                model.set("effect1hyperenhancerrdepth", data[24] == 0 ? 0 : 100);
+                model.set("effect1ldepth", 0);
+                model.set("effect1rdepth", 0);
             }
         else
             {
-            model.set("effect1ldepth", data[23]);
-            model.set("effect1rdepth", data[24]);
-            model.set("effect1hyperenhancerldepth", 0);
-            model.set("effect1hyperenhancerrdepth", 0);
+                model.set("effect1ldepth", data[23]);
+                model.set("effect1rdepth", data[24]);
+                model.set("effect1hyperenhancerldepth", 0);
+                model.set("effect1hyperenhancerrdepth", 0);
             }
                 
         model.set("effect2ldepth", data[25]);
@@ -1032,10 +1032,10 @@ public class KorgSG extends Synth
 
         revise();       
         return PARSE_SUCCEEDED;     
-        }
+    }
     
     void parseEffects(byte[] data, int effect, int effectType)
-        {
+    {
         int offset = (effect == 1 ? 30 : 40);
         
         // all custom, gagh
@@ -1140,10 +1140,10 @@ public class KorgSG extends Synth
                 System.err.println("Warning (KorgSG) 2: Effect " + effect + " has an invalid effect type " + effectType);
                 break;
             }
-        }
+    }
         
     void emitEffects(byte[] data, int effect, int effectType)
-        {
+    {
         int offset = (effect == 1 ? 30 : 40);
         
         // all custom, gagh
@@ -1250,20 +1250,20 @@ public class KorgSG extends Synth
                 System.err.println("Warning (KorgSG): Effect " + effect + " has an invalid effect type " + effectType);
                 break;
             }
-        }
+    }
 
 
 
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
-        {
+    {
         if (tempModel == null)
             tempModel = getModel();
             
         Object[] d = new Object[1];
         if (!toWorkingMemory && !toFile)
             {
-            // we also have to write it out with a transfer.
-            d = new Object[2];
+                // we also have to write it out with a transfer.
+                d = new Object[2];
             }
         
         byte[] data = new byte[50];
@@ -1276,7 +1276,7 @@ public class KorgSG extends Synth
         System.arraycopy(b, 0, namec, 0, b.length);
         for(int i = 0; i < 10; i++)
             {
-            data[i] = (byte)(namec[i] & 127);
+                data[i] = (byte)(namec[i] & 127);
             }
 
         data[10] = (byte)model.get("program", 0);
@@ -1295,13 +1295,13 @@ public class KorgSG extends Synth
                 
         if (model.get("effect1type", 0) == 12)  // hyperenhancer has a custom effect depth, grrrrrrrr
             {
-            data[23] = (byte)model.get("effect1hyperenhancerldepth", 0);
-            data[24] = (byte)model.get("effect1hyperenhancerrdepth", 0);
+                data[23] = (byte)model.get("effect1hyperenhancerldepth", 0);
+                data[24] = (byte)model.get("effect1hyperenhancerrdepth", 0);
             }
         else
             {
-            data[23] = (byte)model.get("effect1ldepth", 0);
-            data[24] = (byte)model.get("effect1rdepth", 0);
+                data[23] = (byte)model.get("effect1ldepth", 0);
+                data[24] = (byte)model.get("effect1rdepth", 0);
             }
 
         data[25] = (byte)model.get("effect2ldepth", 0);
@@ -1331,22 +1331,22 @@ public class KorgSG extends Synth
         
         if (!toWorkingMemory && !toFile)
             {
-            // The SG cannot write to a patch directly.  We have to emit to current memory, then save
-            // to a patch, so we'll tack some extra sysex on in that situation
+                // The SG cannot write to a patch directly.  We have to emit to current memory, then save
+                // to a patch, so we'll tack some extra sysex on in that situation
                     
-            byte BB = (byte) tempModel.get("bank");
-            byte NN = (byte) tempModel.get("number");
+                byte BB = (byte) tempModel.get("bank");
+                byte NN = (byte) tempModel.get("number");
         
-            data = new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x4A, (byte)0x11, (byte)0,
-                (byte)(BB * 16 + NN), (byte)0xF7 };
-            d[1] = data;
+                data = new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x4A, (byte)0x11, (byte)0,
+                                    (byte)(BB * 16 + NN), (byte)0xF7 };
+                d[1] = data;
             }
         return d;
-        }
+    }
 
         
     public void parseParameter(byte[] data)
-        {
+    {
         if (data.length == 6 &&                 // write error report
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x42 &&
@@ -1354,24 +1354,24 @@ public class KorgSG extends Synth
             data[4] == (byte)0x24 &&
             data[5] == (byte)0xF7)
             {
-            showSimpleError("Write/Send Error", "Send or Write Failed (Not Sure Why)");
+                showSimpleError("Write/Send Error", "Send or Write Failed (Not Sure Why)");
             }
         else if (data.length == 6 &&                 // write error report
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x42 &&
-            data[3] == (byte)0x4A &&
-            data[4] == (byte)0x22 &&
-            data[5] == (byte)0xF7)
+                 data[0] == (byte)0xF0 &&
+                 data[1] == (byte)0x42 &&
+                 data[3] == (byte)0x4A &&
+                 data[4] == (byte)0x22 &&
+                 data[5] == (byte)0xF7)
             {
-            showSimpleError("Write/Send Error", "Write Failed (Probably Write-Protect Is On?)");
+                showSimpleError("Write/Send Error", "Write Failed (Probably Write-Protect Is On?)");
             }
-        }
+    }
 
 
     public int getPauseAfterChangePatch() { return 200; }
 
     public void changePatch(Model tempModel)
-        {
+    {
         // enter program mode, which goes back out
         tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x02, 0x0, (byte)0xF7 });
 
@@ -1380,21 +1380,21 @@ public class KorgSG extends Synth
         try {
             // Number change is PC
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), BB * 16 + NN, 0));
-            }
+        }
         catch (Exception e) { Synth.handleException(e); }
 
         // we assume that we successfully did it
         if (!isMerging())  // we're actually loading the patch, not merging with it
             {
-            setSendMIDI(false);
-            model.set("number", tempModel.get("number"));
-            model.set("bank", tempModel.get("bank"));
-            setSendMIDI(true);
+                setSendMIDI(false);
+                model.set("number", tempModel.get("number"));
+                model.set("bank", tempModel.get("bank"));
+                setSendMIDI(true);
             }
-        }
+    }
 
     public void performRequestDump(Model tempModel, boolean changePatch)
-        {
+    {
         if (tempModel == null)
             tempModel = getModel();
 
@@ -1404,28 +1404,28 @@ public class KorgSG extends Synth
         // enter program edit mode, which loads the patch into edit buffer memory
         tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x03, 0x0, (byte)0xF7 });
         tryToSendSysex(requestCurrentDump());
-        }
+    }
             
     public void performRequestCurrentDump()
-        {
+    {
         // enter program mode, which goes back out
         tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x02, 0x0, (byte)0xF7 });
 
         // enter program edit mode, which loads the patch into edit buffer memory
         tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x03, 0x0, (byte)0xF7 });
         tryToSendSysex(requestCurrentDump());
-        }
+    }
             
     public byte[] requestCurrentDump()
-        {
+    {
         return new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x10, (byte)0xF7 };
-        }
+    }
     
     
     /////// OTHER ABSTRACT METHODS
     
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-        {
+    {
         JComboBox bank = new JComboBox(BANKS);
         bank.setEditable(false);
         bank.setMaximumRowCount(32);
@@ -1435,35 +1435,35 @@ public class KorgSG extends Synth
                 
         while(true)
             {
-            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
+                boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                                                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
                 
-            if (result == false) 
-                return false;
+                if (result == false) 
+                    return false;
                                 
-            int n;
-            try { n = Integer.parseInt(number.getText()); }
-            catch (NumberFormatException e)
-                {
-                showSimpleError(title, "The Patch Number must be an integer 1 ... 16");
-                continue;
-                }
-            if (n < 1 || n > 16)
-                {
-                showSimpleError(title, "The Patch Number must be an integer 1 ... 16");
-                continue;
-                }
+                int n;
+                try { n = Integer.parseInt(number.getText()); }
+                catch (NumberFormatException e)
+                    {
+                        showSimpleError(title, "The Patch Number must be an integer 1 ... 16");
+                        continue;
+                    }
+                if (n < 1 || n > 16)
+                    {
+                        showSimpleError(title, "The Patch Number must be an integer 1 ... 16");
+                        continue;
+                    }
                                 
-            change.set("bank", bank.getSelectedIndex());
-            change.set("number", n - 1);
+                change.set("bank", bank.getSelectedIndex());
+                change.set("number", n - 1);
                         
-            return true;
+                return true;
             }
-        }
+    }
         
 
     public void revise()
-        {
+    {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -1471,7 +1471,7 @@ public class KorgSG extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-        }
+    }
         
     public static String getSynthName() { return "Korg SG Rack"; }
     
@@ -1479,27 +1479,27 @@ public class KorgSG extends Synth
     
 
     public Model getNextPatchLocation(Model model)
-        {
+    {
         int bank = model.get("bank");
         int number = model.get("number");
         
         number++;
         if (number >= 16)
             {
-            bank++;
-            number = 0;
-            if (bank >= 4)
-                bank = 0;
+                bank++;
+                number = 0;
+                if (bank >= 4)
+                    bank = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-        }
+    }
 
     public String getPatchLocationName(Model model)
-        {
+    {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -1508,17 +1508,17 @@ public class KorgSG extends Synth
         
         int number = model.get("number") + 1;
         return BANKS[model.get("bank")] + (number > 9 ? "" : "0") + number;
-        }
+    }
         
     public boolean testVerify(Synth synth2, 
-        String key,
-        Object obj1, Object obj2) 
-        {
+                              String key,
+                              Object obj1, Object obj2) 
+    {
         // lots of effects will not be loaded
         if (key.startsWith("effect")) return true;    
         // name is padded
         if (key.equals("name")) return true; 
         return false;
-        }
     }
+}
     

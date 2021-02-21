@@ -21,16 +21,16 @@ import edisyn.util.*;
 */
 
 public class SynthPanel extends JPanel implements Gatherable
-    {             
+{             
     public Synth synth;
     
     public SynthPanel(Synth synth)
-        {
+    {
         this.synth = synth;
         setLayout(new BorderLayout());
         setBackground(Style.BACKGROUND_COLOR());
         setBorder(BorderFactory.createMatteBorder(2, 2, 0, 4, Style.BACKGROUND_COLOR()));
-        }
+    }
 
     public Insets getInsets() { return Style.SYNTH_PANEL_INSETS(); }
 
@@ -48,42 +48,42 @@ public class SynthPanel extends JPanel implements Gatherable
     public boolean getSendsAllParameters() { return sendsAllParameters; }
     
     public boolean isPasteCompatible(String preamble)
-        {
+    {
         String copyPreamble = synth.getCopyPreamble();
         String myPreamble = preamble;
         if (copyPreamble == null) return false;
         if (myPreamble == null) return false;
 
         return (pasteable && 
-            StringUtility.reduceAllDigitsAfterPreamble(copyPreamble, "").equals(StringUtility.reduceAllDigitsAfterPreamble(myPreamble, "")));
-        }
+                StringUtility.reduceAllDigitsAfterPreamble(copyPreamble, "").equals(StringUtility.reduceAllDigitsAfterPreamble(myPreamble, "")));
+    }
             
     void gatherAllComponents(Container cont, java.util.ArrayList list)
-    	{
+    {
         Component[] c = cont.getComponents();
         for(int i = 0; i < c.length; i++)
             {
-            list.add(c[i]);
-            if (c[i] instanceof Gatherable)
-                ((Gatherable)c[i]).gatherAllComponents(list);
-            else if (c[i] instanceof JPanel)
-            	gatherAllComponents(((JPanel)c[i]), list);
-            else if (c[i] instanceof Box)	// just in case
-            	gatherAllComponents(((Box)c[i]), list);
+                list.add(c[i]);
+                if (c[i] instanceof Gatherable)
+                    ((Gatherable)c[i]).gatherAllComponents(list);
+                else if (c[i] instanceof JPanel)
+                    gatherAllComponents(((JPanel)c[i]), list);
+                else if (c[i] instanceof Box)       // just in case
+                    gatherAllComponents(((Box)c[i]), list);
             }
-    	}
-    	
+    }
+        
     public void gatherAllComponents(java.util.ArrayList list)
-        {
+    {
         gatherAllComponents(this, list);
-        }
+    }
 
     public void resetPanel()
-        {
+    {
         boolean currentMIDI = synth.getSendMIDI();
         if (sendsAllParameters)
             {
-            synth.setSendMIDI(false);
+                synth.setSendMIDI(false);
             }
                 
         Synth other = Synth.instantiate(synth.getClass(), true, true, synth.tuple);
@@ -91,38 +91,38 @@ public class SynthPanel extends JPanel implements Gatherable
         gatherAllComponents(components);
         for(int i = 0; i < components.size(); i++)
             {
-            if (components.get(i) instanceof HasKey)
-                {
-                HasKey nc = (HasKey)(components.get(i));
-                String key = nc.getKey();
-
-                if (synth.getModel().exists(key) && other.getModel().exists(key))
+                if (components.get(i) instanceof HasKey)
                     {
-                    if (synth.getModel().isString(key))
-                        {
-                        synth.getModel().set(key, other.getModel().get(key, ""));
-                        }
-                    else
-                        {
-                        synth.getModel().set(key, other.getModel().get(key, 0));
-                        }
+                        HasKey nc = (HasKey)(components.get(i));
+                        String key = nc.getKey();
+
+                        if (synth.getModel().exists(key) && other.getModel().exists(key))
+                            {
+                                if (synth.getModel().isString(key))
+                                    {
+                                        synth.getModel().set(key, other.getModel().get(key, ""));
+                                    }
+                                else
+                                    {
+                                        synth.getModel().set(key, other.getModel().get(key, 0));
+                                    }
+                            }
+                        else
+                            System.err.println("Warning (SynthPanel): Key missing in model : " + key);
                     }
-                else
-                    System.err.println("Warning (SynthPanel): Key missing in model : " + key);
-                }
             }               
 
         if (sendsAllParameters)
             {
-            synth.setSendMIDI(currentMIDI);
-            synth.sendAllParameters();
+                synth.setSendMIDI(currentMIDI);
+                synth.sendAllParameters();
             }
         // so we don't have independent updates in OS X
         repaint();
-        }
+    }
         
     public void copyPanel(boolean includeImmutable)
-        {
+    {
         String[] mutationKeys = synth.getMutationKeys();
         if (mutationKeys == null) mutationKeys = new String[0];
         HashSet mutationSet = new HashSet(Arrays.asList(mutationKeys));
@@ -132,27 +132,27 @@ public class SynthPanel extends JPanel implements Gatherable
         gatherAllComponents(components);
         for(int i = 0; i < components.size(); i++)
             {
-            if (components.get(i) instanceof HasKey)
-                {
-                HasKey nc = (HasKey)(components.get(i));
-                String key = nc.getKey();
-                if (mutationSet.contains(key) || includeImmutable)
-                    keys.add(key);
-                }
+                if (components.get(i) instanceof HasKey)
+                    {
+                        HasKey nc = (HasKey)(components.get(i));
+                        String key = nc.getKey();
+                        if (mutationSet.contains(key) || includeImmutable)
+                            keys.add(key);
+                    }
             } 
         synth.setCopyKeys(keys);   
         synth.setCopyPreamble(preamble);
-        }
+    }
         
         
-    public void pastePanel(boolean includeImmutable)	// ugly hack	
-    	{
-    	for(int i = 0; i < synth.getNumberOfPastes(); i++)
-    		pastePanel1(includeImmutable);
-    	}
-    	
+    public void pastePanel(boolean includeImmutable)    // ugly hack    
+    {
+        for(int i = 0; i < synth.getNumberOfPastes(); i++)
+            pastePanel1(includeImmutable);
+    }
+        
     void pastePanel1(boolean includeImmutable)
-        {
+    {
         String copyPreamble = synth.getCopyPreamble();
         String myPreamble = preamble;
         if (copyPreamble == null) return;
@@ -168,19 +168,19 @@ public class SynthPanel extends JPanel implements Gatherable
         gatherAllComponents(components);
         for(int i = 0; i < components.size(); i++)
             {
-            if (components.get(i) instanceof HasKey)
-                {
-                String key = (String)(((HasKey)(components.get(i))).getKey());
-                String reduced = StringUtility.reduceFirstDigitsAfterPreamble(key, myPreamble);
-            	reduced = StringUtility.reduceDigitsInPreamble(reduced, myPreamble);
-                keys.put(reduced, key);
-                }    
+                if (components.get(i) instanceof HasKey)
+                    {
+                        String key = (String)(((HasKey)(components.get(i))).getKey());
+                        String reduced = StringUtility.reduceFirstDigitsAfterPreamble(key, myPreamble);
+                        reduced = StringUtility.reduceDigitsInPreamble(reduced, myPreamble);
+                        keys.put(reduced, key);
+                    }    
             }               
         
         boolean currentMIDI = synth.getSendMIDI();
         if (sendsAllParameters)
             {
-            synth.setSendMIDI(false);
+                synth.setSendMIDI(false);
             }
                 
         String[] mutationKeys = synth.getMutationKeys();
@@ -190,39 +190,39 @@ public class SynthPanel extends JPanel implements Gatherable
         // Now we change keys as appropriate
         for(int i = 0; i < copyKeys.size(); i++)
             {
-            String key = (String)(copyKeys.get(i));
-            String reduced = StringUtility.reduceFirstDigitsAfterPreamble(key, copyPreamble);
-            	reduced = StringUtility.reduceDigitsInPreamble(reduced, copyPreamble);
-            String mapped = (String)(keys.get(reduced));
-            if (mapped != null)
-                {
-                Model model = synth.getModel();
-                if (model.exists(mapped) && (mutationSet.contains(mapped) || includeImmutable))
+                String key = (String)(copyKeys.get(i));
+                String reduced = StringUtility.reduceFirstDigitsAfterPreamble(key, copyPreamble);
+                reduced = StringUtility.reduceDigitsInPreamble(reduced, copyPreamble);
+                String mapped = (String)(keys.get(reduced));
+                if (mapped != null)
                     {
-                    if (model.isString(mapped))
-                        {
-                        model.set(mapped, model.get(key, model.get(mapped, "")));
-                        }
-                    else
-                        {
-                        model.set(mapped, model.get(key, model.get(mapped, 0)));
-                        }
+                        Model model = synth.getModel();
+                        if (model.exists(mapped) && (mutationSet.contains(mapped) || includeImmutable))
+                            {
+                                if (model.isString(mapped))
+                                    {
+                                        model.set(mapped, model.get(key, model.get(mapped, "")));
+                                    }
+                                else
+                                    {
+                                        model.set(mapped, model.get(key, model.get(mapped, 0)));
+                                    }
+                            }
+                        else
+                            System.err.println("Warning (SynthPanel): Key didn't exist " + mapped);
                     }
                 else
-                    System.err.println("Warning (SynthPanel): Key didn't exist " + mapped);
-                }
-            else
-                System.err.println("Warning (SynthPanel): Null mapping for " + key + " (reduced to " + reduced + ")");                                        
+                    System.err.println("Warning (SynthPanel): Null mapping for " + key + " (reduced to " + reduced + ")");                                        
             }
         
         synth.revise();
 
         if (sendsAllParameters)
             {
-            synth.setSendMIDI(currentMIDI);
-            synth.sendAllParameters();
+                synth.setSendMIDI(currentMIDI);
+                synth.sendAllParameters();
             }
         // so we don't have independent updates in OS X
         repaint();
-        }
     }
+}

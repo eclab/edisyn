@@ -27,7 +27,7 @@ edisyn.synth.maudiovenom.MAudioVenomArp M-Audio Venom [Arp]
 edisyn.synth.maudiovenom.MAudioVenomGlobal	M-Audio Venom [Global]
 edisyn.synth.maudiovenom.MAudioVenomMulti	M-Audio Venom [Multi]
 edisyn.synth.novationdstation.NovationDStation	Novation Drumstation / D Station
-edisyn.synth.novationslmkii.NovationSLMKII	Novation SL MKII
+edisyn.synth.novationslmkii.NovationSLMKII	Novation ReMOTE SL
 edisyn.synth.oberheimmatrix1000.OberheimMatrix1000	Oberheim Matrix 6/6R/1000
 edisyn.synth.oberheimmatrix1000.OberheimMatrix1000Global	Oberheim Matrix 1000 [Global]
 edisyn.synth.preenfm2.PreenFM2	PreenFM2

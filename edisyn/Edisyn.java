@@ -19,11 +19,11 @@ import javax.swing.*;
 */
 
 public class Edisyn 
-    {
-    public static final int VERSION = 26;
+{
+    public static final int VERSION = 27;
     
     public static void main(String[] args)
-        {
+    {
         try {
             System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
             System.setProperty("apple.laf.useScreenMenuBar", "true");
@@ -35,12 +35,24 @@ public class Edisyn
             
             // This makes sure that windows uses the default windows look and feel, not the old Sun one
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            }
+        }
         catch(Exception e) { }
         
         
-
-        if (Synth.doNewSynthPanel() == null)
-            System.exit(0);
-        }
+        
+        String lastSynth = Synth.getLastSynth();
+        boolean showSynth = Synth.getLastXAsBoolean("ShowSynth", null, true, false);
+        Synth synth = null;
+        if (lastSynth != null && showSynth)
+            {
+                synth = Synth.instantiate(lastSynth, false, true, null);
+            }
+        if (synth == null)
+            {
+                if (Synth.doNewSynthPanel() == null)
+                    {
+                        System.exit(0);
+                    }
+            }
     }
+}

@@ -24,7 +24,7 @@ import javax.sound.midi.*;
 */
 
 public class YamahaTG33 extends Synth
-    {
+{
     /// Various collections of parameter names for pop-up menus
     
     public static final int TYPE_TG33 = 0;
@@ -39,9 +39,9 @@ public class YamahaTG33 extends Synth
     public static final String[] BANKS = new String[] { "I", "P1", "P2", "C1", "C2" };
 
     public static final String[] RATES = new String[]
-    { "1", "2", "3", "4", "5", "6", "7", "8" };
+        { "1", "2", "3", "4", "5", "6", "7", "8" };
     public static final ImageIcon[] RATE_ICONS = 
-        {
+    {
         new ImageIcon(YamahaTG33.class.getResource("Rate1.png")),
         new ImageIcon(YamahaTG33.class.getResource("Rate2.png")),
         new ImageIcon(YamahaTG33.class.getResource("Rate3.png")),
@@ -50,16 +50,16 @@ public class YamahaTG33 extends Synth
         new ImageIcon(YamahaTG33.class.getResource("Rate6.png")),
         new ImageIcon(YamahaTG33.class.getResource("Rate7.png")),
         new ImageIcon(YamahaTG33.class.getResource("Rate8.png")),
-        };
+    };
 
     public static final String[] LEVELS = new String[]
-    { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
+        { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
 
     public static final String[] ALGORITHMS = new String[] 
-    { "M->C->", "M,C ->" };
+        { "M->C->", "M,C ->" };
                 
     public static final ImageIcon[] LEVEL_ICONS = 
-        {
+    {
         new ImageIcon(YamahaTG33.class.getResource("Level1.png")),
         new ImageIcon(YamahaTG33.class.getResource("Level2.png")),
         new ImageIcon(YamahaTG33.class.getResource("Level3.png")),
@@ -76,11 +76,11 @@ public class YamahaTG33 extends Synth
         new ImageIcon(YamahaTG33.class.getResource("Level14.png")),
         new ImageIcon(YamahaTG33.class.getResource("Level15.png")),
         new ImageIcon(YamahaTG33.class.getResource("Level16.png")),
-        };
+    };
 
     public static final String[] WAVES = {"W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8"};
     public static final ImageIcon[] WAVE_ICONS = 
-        {
+    {
         new ImageIcon(YamahaTG33.class.getResource("Wave1.png")),
         new ImageIcon(YamahaTG33.class.getResource("Wave2.png")),
         new ImageIcon(YamahaTG33.class.getResource("Wave3.png")),
@@ -89,36 +89,36 @@ public class YamahaTG33 extends Synth
         new ImageIcon(YamahaTG33.class.getResource("Wave6.png")),
         new ImageIcon(YamahaTG33.class.getResource("Wave7.png")),
         new ImageIcon(YamahaTG33.class.getResource("Wave8.png"))
-        };
+    };
         
     public static final String[] LFO_TYPES = new String[] { "Saw Down", "Triangle", "Square", "Sample & Hold", "Saw Up" };
     public static final String[] ENVELOPE_TYPES = new String[] { "User", "Preset", "Piano", "Guitar", "Pluck", "Brass", "Strings", "Organ" };
         
     public static final String[] AWM_WAVES = new String[] 
-    {
-    "Piano", "E.piano", "Clavi", "Cembalo", "Celeste", "P.organ", "E.organ1", "E.organ2", 
-    "Reed", "Trumpet", "Mute Trp", "Trombone", "Flugel", "Fr horn", "BrasAtak", "SynBrass", 
-    "Flute", "Clarinet", "Oboe", "Sax", "Gut", "Steel", "E.Gtr 1", "E.Gtr 2", "Mute Gtr", 
-    "Sitar", "Pluck 1", "Pluck 2", "Wood B 1", "Wood B 2", "E.Bass 1", "E.Bass 2", 
-    "E.Bass 3", "E.Bass 4", "Slap", "Fretless", "SynBass1", "SynBass2", "Strings", 
-    "Vn.Ens.", "Cello", "Pizz.", "Syn Str", "Choir", "Itopia", "Ooo!", "Vibes", "Marimba", 
-    "Bells", "Timapi", "Tom", "E. Tom", "Cuica", "Whistle", "Claps", "Hit", "Harmonic", 
-    "Mix", "Sync", "Bell Mix", "Styroll", "DigiAtak", "Noise 1", "Noise 2", "Oh Hit", 
-    "Water 1", "Water 2", "Stream", "Coin", "Crash", "Bottle", "Tear", "Cracker", 
-    "Scratch", "Metal 1", "Metal 2", "Metal 3", "Metal 4", "Wood", "Bamboo", "Slam", 
-    "Tp. Body", "Tb. Body", "HornBody", "Fl. Body", "Str.Body", "AirBlown", "Reverse1", 
-    "Reverse2", "Reverse3", "EP wv", "Organ wv", "M.Tp wv", "Gtr wv", "Str wv 1", 
-    "Str wv 2", "Pad wv", "Digital1", "Digital2", "Digital3", "Digital4", "Digital5", 
-    "Saw 1", "Saw 2", "Saw 3", "Saw 4", "Square 1", "Square 2", "Square 3", "Square 4", 
-    "Pulse 1", "Pulse 2", "Pulse 3", "Pulse 4", "Pulse 5", "Pulse 6", "Tri", "Sin8'", 
-    "Sin8'+4'", "SEQ 1", "SEQ 2", "SEQ 3", "SEQ 4", "SEQ 5", "SEQ 6", "SEQ 7", "SEQ 8", "Drum set"
-    };
+        {
+            "Piano", "E.piano", "Clavi", "Cembalo", "Celeste", "P.organ", "E.organ1", "E.organ2", 
+            "Reed", "Trumpet", "Mute Trp", "Trombone", "Flugel", "Fr horn", "BrasAtak", "SynBrass", 
+            "Flute", "Clarinet", "Oboe", "Sax", "Gut", "Steel", "E.Gtr 1", "E.Gtr 2", "Mute Gtr", 
+            "Sitar", "Pluck 1", "Pluck 2", "Wood B 1", "Wood B 2", "E.Bass 1", "E.Bass 2", 
+            "E.Bass 3", "E.Bass 4", "Slap", "Fretless", "SynBass1", "SynBass2", "Strings", 
+            "Vn.Ens.", "Cello", "Pizz.", "Syn Str", "Choir", "Itopia", "Ooo!", "Vibes", "Marimba", 
+            "Bells", "Timapi", "Tom", "E. Tom", "Cuica", "Whistle", "Claps", "Hit", "Harmonic", 
+            "Mix", "Sync", "Bell Mix", "Styroll", "DigiAtak", "Noise 1", "Noise 2", "Oh Hit", 
+            "Water 1", "Water 2", "Stream", "Coin", "Crash", "Bottle", "Tear", "Cracker", 
+            "Scratch", "Metal 1", "Metal 2", "Metal 3", "Metal 4", "Wood", "Bamboo", "Slam", 
+            "Tp. Body", "Tb. Body", "HornBody", "Fl. Body", "Str.Body", "AirBlown", "Reverse1", 
+            "Reverse2", "Reverse3", "EP wv", "Organ wv", "M.Tp wv", "Gtr wv", "Str wv 1", 
+            "Str wv 2", "Pad wv", "Digital1", "Digital2", "Digital3", "Digital4", "Digital5", 
+            "Saw 1", "Saw 2", "Saw 3", "Saw 4", "Square 1", "Square 2", "Square 3", "Square 4", 
+            "Pulse 1", "Pulse 2", "Pulse 3", "Pulse 4", "Pulse 5", "Pulse 6", "Tri", "Sin8'", 
+            "Sin8'+4'", "SEQ 1", "SEQ 2", "SEQ 3", "SEQ 4", "SEQ 5", "SEQ 6", "SEQ 7", "SEQ 8", "Drum set"
+        };
 
-//// From original code in file sy_names.c,
-//// by R. P. Hanson, at http://storage.atari-source.org/atari/mirrors/ATARI-MIDI-ARCHIVES/SOUNDS/Yamaha/
-////
-//// My deep thanks to Rich Hanson, who allowed me to use this code as public domain and offered
-//// some tips about the TG33 implementation.
+    //// From original code in file sy_names.c,
+    //// by R. P. Hanson, at http://storage.atari-source.org/atari/mirrors/ATARI-MIDI-ARCHIVES/SOUNDS/Yamaha/
+    ////
+    //// My deep thanks to Rich Hanson, who allowed me to use this code as public domain and offered
+    //// some tips about the TG33 implementation.
 
     public static final String[] SY35_AWM_WAVES = new String[] {
         "Piano", "E Piano", "Clavi", "Cembalo", "Celesta",
@@ -149,54 +149,54 @@ public class YamahaTG33 extends Synth
         "SEQ 6", "SEQ 7", "Drum Set" } ;
 
     public static final String[] FM_WAVES = new String[] 
-    {
-    "E.Piano1", "E.Piano2", "E.Piano3", "E.Plano4", "E.Piano5", "E.Piano6", "E.organ1", "E.organ2", 
-    "E.organ3", "E.organ4", "E.organS", "E.organ6", "E.organ7", "E.organ8", "Brass 1", "Brass 2", 
-    "Brass 3", "Brass 4", "Brass 5", "Brass 6", "Brass 7", "Brass 8", "Brass 9", "Brass 10", 
-    "Brass 11", "Brass 12", "Brass 13", "Brass 14", "Wood 1", "Wood 2", "Wood 3", "Wood 4", "Wood 5", 
-    "Wood 6", "Wood 7", "Wood 8", "Reed 1", "Reed 2", "Reed 3", "Reed 4", "Reed 5", "Reed 6", 
-    "Clavi 1", "Clavi 2", "Clavi 3", "Clavi 4", "Guitar 1", "Guitar 2", "Guitar 3", "Guitar 4", 
-    "Guitar 5", "Guitar 6", "Guitar 7", "Guitar 8", "Bass 1", "Bass 2", "Bass 3", "Bass 4", "Bass 5", 
-    "Bass 6", "Bass 7", "Bass 8", "Bass 9", "Str 1", "Str 2", "Str 3", "Str 4", "Str 5", "Str 6", 
-    "Str 7", "Vibes 1", "Vibes 2", "Vibes 3", "Vibes 4", "Marimba1", "Marimba2", "Marimba3", 
-    "Bells 1", "Bells 2", "Bells 3", "Bells 4", "Bells 5", "Bells 6", "Bells 7", "Bells 8", 
-    "Metal 1", "Metal 2", "Metal 3", "Metal 4", "Metal 5", "Metal 6", "Lead 1", "Lead 2", "Lead 3", 
-    "Lead 4", "Lead 5", "Lead 6", "Lead 7", "Sus. 1", "Sus. 2", "Sus. 3", "Sus. 4", "Sus. 5", 
-    "Sus. 6", "Sus. 7", "Sus. 8", "Sus. 9", "Sus. 10", "Sus. 11", "Sus. 12", "Sus. 13", "Sus. 14", 
-    "Sus. 15", "Attack 1", "Attack 2", "Attack 3", "Attack 4", "Attack 5", "Move 1", "Move 2", 
-    "Move 3", "Move 4", "Move 5", "Move 6", "Move 7", "Decay 1", "Decay 2", "Decay 3", "Decay 4", 
-    "Decay 5", "Decay 6", "Decay 7", "Decay 8", "Decay 9", "Decay 10", "Decay 11", "Decay 12", 
-    "Decay 13", "Decay 14", "Decay 15", "Decay 16", "Decay 17", "Decay 18", "SFX 1", "SFX 2", 
-    "SFX 3", "SFX 4", "SFX 5", "SFX 6", "SFX 7", "Sin 16'", "Sin 8'", "Sin 4'", "Sin2 2/3", 
-    "Sin 2'", "Saw 1", "Saw 2", "Square", "LFOnoise", "Noise 1", "Noise 2", "Digi 1", "Digi 2", 
-    "Digi 3", "Digi 4", "Digi 5", "Digi 6", "Digi 7", "Digi 8", "Digi 9", "Digi 10", "Digi 11", 
-    "wave1-1", "wave1-2", "wave1-3", "wave2-1", "wave2-2", "wave2-3", "wave3-1", "wave3-2", 
-    "wave3-3", "wave4-1", "wave4-2", "wave4-3", "wave5-1", "wave5-2", "wave5-3", "wave6-1", 
-    "wave6-2", "wave6-3", "wave7-1", "wave7-2", "wave7-3", "wave8-1", "wave8-2", "wave8-3", 
-    "wave9-1", "wave9-2", "wave9-3", "wave10-1", "wave10-2", "wave10-3", "wave11-1", "wave11-2", 
-    "wave11-3", "wave12-1", "wave12-2", "wave12-3", "wave13-1", "wave13-2", "wave13-3", "wave14-1", 
-    "wave14-2", "wave14-3", "wave15-1", "wave15-2", "wave15-3", "wave16-1", "wave16-2", "wave16-3", 
-    "wave17-1", "wave17-2", "wave17-3", "wave18-1", "wave18-2", "wave18-3", "wave19-1", "wave19-2", 
-    "wave19-3", "wave20-1", "wave20-2", "wave20-3", "wave21-1", "wave21-2", "wave21-3", "wave22-1", 
-    "wave22-2", "wave22-3", "wave23-1", "wave23-2", "wave23-3", "wave24-1", "wave24-2", "wave24-3", 
-    "wave25-1", "wave25-2", "wave25-3", "wave26-1", "wave26-2", "wave26-3", "wave27-1", "wave27-2", 
-    "wave27-3", "wave28", "wave29", "wave30"
-    };
+        {
+            "E.Piano1", "E.Piano2", "E.Piano3", "E.Plano4", "E.Piano5", "E.Piano6", "E.organ1", "E.organ2", 
+            "E.organ3", "E.organ4", "E.organS", "E.organ6", "E.organ7", "E.organ8", "Brass 1", "Brass 2", 
+            "Brass 3", "Brass 4", "Brass 5", "Brass 6", "Brass 7", "Brass 8", "Brass 9", "Brass 10", 
+            "Brass 11", "Brass 12", "Brass 13", "Brass 14", "Wood 1", "Wood 2", "Wood 3", "Wood 4", "Wood 5", 
+            "Wood 6", "Wood 7", "Wood 8", "Reed 1", "Reed 2", "Reed 3", "Reed 4", "Reed 5", "Reed 6", 
+            "Clavi 1", "Clavi 2", "Clavi 3", "Clavi 4", "Guitar 1", "Guitar 2", "Guitar 3", "Guitar 4", 
+            "Guitar 5", "Guitar 6", "Guitar 7", "Guitar 8", "Bass 1", "Bass 2", "Bass 3", "Bass 4", "Bass 5", 
+            "Bass 6", "Bass 7", "Bass 8", "Bass 9", "Str 1", "Str 2", "Str 3", "Str 4", "Str 5", "Str 6", 
+            "Str 7", "Vibes 1", "Vibes 2", "Vibes 3", "Vibes 4", "Marimba1", "Marimba2", "Marimba3", 
+            "Bells 1", "Bells 2", "Bells 3", "Bells 4", "Bells 5", "Bells 6", "Bells 7", "Bells 8", 
+            "Metal 1", "Metal 2", "Metal 3", "Metal 4", "Metal 5", "Metal 6", "Lead 1", "Lead 2", "Lead 3", 
+            "Lead 4", "Lead 5", "Lead 6", "Lead 7", "Sus. 1", "Sus. 2", "Sus. 3", "Sus. 4", "Sus. 5", 
+            "Sus. 6", "Sus. 7", "Sus. 8", "Sus. 9", "Sus. 10", "Sus. 11", "Sus. 12", "Sus. 13", "Sus. 14", 
+            "Sus. 15", "Attack 1", "Attack 2", "Attack 3", "Attack 4", "Attack 5", "Move 1", "Move 2", 
+            "Move 3", "Move 4", "Move 5", "Move 6", "Move 7", "Decay 1", "Decay 2", "Decay 3", "Decay 4", 
+            "Decay 5", "Decay 6", "Decay 7", "Decay 8", "Decay 9", "Decay 10", "Decay 11", "Decay 12", 
+            "Decay 13", "Decay 14", "Decay 15", "Decay 16", "Decay 17", "Decay 18", "SFX 1", "SFX 2", 
+            "SFX 3", "SFX 4", "SFX 5", "SFX 6", "SFX 7", "Sin 16'", "Sin 8'", "Sin 4'", "Sin2 2/3", 
+            "Sin 2'", "Saw 1", "Saw 2", "Square", "LFOnoise", "Noise 1", "Noise 2", "Digi 1", "Digi 2", 
+            "Digi 3", "Digi 4", "Digi 5", "Digi 6", "Digi 7", "Digi 8", "Digi 9", "Digi 10", "Digi 11", 
+            "wave1-1", "wave1-2", "wave1-3", "wave2-1", "wave2-2", "wave2-3", "wave3-1", "wave3-2", 
+            "wave3-3", "wave4-1", "wave4-2", "wave4-3", "wave5-1", "wave5-2", "wave5-3", "wave6-1", 
+            "wave6-2", "wave6-3", "wave7-1", "wave7-2", "wave7-3", "wave8-1", "wave8-2", "wave8-3", 
+            "wave9-1", "wave9-2", "wave9-3", "wave10-1", "wave10-2", "wave10-3", "wave11-1", "wave11-2", 
+            "wave11-3", "wave12-1", "wave12-2", "wave12-3", "wave13-1", "wave13-2", "wave13-3", "wave14-1", 
+            "wave14-2", "wave14-3", "wave15-1", "wave15-2", "wave15-3", "wave16-1", "wave16-2", "wave16-3", 
+            "wave17-1", "wave17-2", "wave17-3", "wave18-1", "wave18-2", "wave18-3", "wave19-1", "wave19-2", 
+            "wave19-3", "wave20-1", "wave20-2", "wave20-3", "wave21-1", "wave21-2", "wave21-3", "wave22-1", 
+            "wave22-2", "wave22-3", "wave23-1", "wave23-2", "wave23-3", "wave24-1", "wave24-2", "wave24-3", 
+            "wave25-1", "wave25-2", "wave25-3", "wave26-1", "wave26-2", "wave26-3", "wave27-1", "wave27-2", 
+            "wave27-3", "wave28", "wave29", "wave30"
+        };
 
     public static final String[] PANS = new String[] { "<<", "<", "--", ">", ">>" };
 
     public static final String[] EFFECTS = new String[] 
-    {
-    "Reverb Hall", "Reverb Room", "Reverb Plate", "Reverb Club", 
-    "Reverb Metal", "Short Single Delay (1)", "Long Delay (2)", "Long Delay (3)", 
-    "Doubler", "Ping Pong Delay", "Panned Reflections", "Early Reflections", 
-    "Gated Reverb", "Delay and Reverb (1)", "Delay and Reverb (2)", "Distortion and Reverb",
-    };
+        {
+            "Reverb Hall", "Reverb Room", "Reverb Plate", "Reverb Club", 
+            "Reverb Metal", "Short Single Delay (1)", "Long Delay (2)", "Long Delay (3)", 
+            "Doubler", "Ping Pong Delay", "Panned Reflections", "Early Reflections", 
+            "Gated Reverb", "Delay and Reverb (1)", "Delay and Reverb (2)", "Distortion and Reverb",
+        };
         
     public static final String[] CONFIGURATIONS = new String[] 
-    {
-    "A-B", "A-B-C-D"
-    };
+        {
+            "A-B", "A-B-C-D"
+        };
         
 
     boolean isParsingVectorOnly = false;
@@ -207,22 +207,22 @@ public class YamahaTG33 extends Synth
         
     public int getSynthType() { return synthType; }
     public void setSynthType(int val, boolean save)
-        {
+    {
         if (save)
             {
-            setLastX("" + val, TYPE_KEY, getSynthName(), true);
+                setLastX("" + val, TYPE_KEY, getSynthName(), true);
             }
         synthType = val;
         synthTypeCombo.setSelectedIndex(val);  // hopefully this isn't recursive
         updateChoosers();
         updateTitle();
-        }
+    }
 
 
     Chooser[] waveChoosers = new Chooser[4];
 
     public void updateChoosers()
-        {
+    {
         String[] elts = ( getSynthType() == TYPE_SY35 ? SY35_AWM_WAVES : AWM_WAVES );
         JComboBox box = waveChoosers[TONE_A].getCombo();
         int sel = box.getSelectedIndex();
@@ -237,7 +237,7 @@ public class YamahaTG33 extends Synth
         for(int i = 0; i < elts.length; i++)
             box.addItem(elts[i]);
         box.setSelectedIndex(sel);
-        }
+    }
 
     public static final int TONE_A = 0;
     public static final int TONE_B = 1;
@@ -245,28 +245,28 @@ public class YamahaTG33 extends Synth
     public static final int TONE_D = 3;
 
     public JFrame sprout()
-        {
+    {
         JFrame frame = super.sprout();
         transmitTo.setEnabled(false);
         writeTo.setEnabled(false);
         addTG33Menu();
         return frame;
-        }         
+    }         
 
     public YamahaTG33()
-        {
+    {
         String m = getLastX(TYPE_KEY, getSynthName());
         try
             {
-            synthType = (m == null ? TYPE_TG33 : Integer.parseInt(m));
-            if (synthType < TYPE_TG33 || synthType > TYPE_SY35)
-                {
-                synthType = TYPE_TG33;
-                }
+                synthType = (m == null ? TYPE_TG33 : Integer.parseInt(m));
+                if (synthType < TYPE_TG33 || synthType > TYPE_SY35)
+                    {
+                        synthType = TYPE_TG33;
+                    }
             }
         catch (NumberFormatException ex)
             {
-            synthType = TYPE_TG33;
+                synthType = TYPE_TG33;
             }
 
         model.set("number", 0);
@@ -274,48 +274,48 @@ public class YamahaTG33 extends Synth
                 
         if (voiceCommonParametersToIndex == null)
             {
-            voiceCommonParametersToIndex = new HashMap();
-            voiceVectorInitialParametersToIndex = new HashMap();
-            voiceToneACParametersToIndex = new HashMap();
-            voiceToneBDParametersToIndex = new HashMap();
-            voiceEnvelopeACParametersToIndex = new HashMap();
-            voiceEnvelopeBDParametersToIndex = new HashMap();
-            voiceVectorParametersToIndex = new HashMap();
+                voiceCommonParametersToIndex = new HashMap();
+                voiceVectorInitialParametersToIndex = new HashMap();
+                voiceToneACParametersToIndex = new HashMap();
+                voiceToneBDParametersToIndex = new HashMap();
+                voiceEnvelopeACParametersToIndex = new HashMap();
+                voiceEnvelopeBDParametersToIndex = new HashMap();
+                voiceVectorParametersToIndex = new HashMap();
 
-            for(int i = 0; i < voiceCommonParameters.length; i++)
-                {
-                voiceCommonParametersToIndex.put(voiceCommonParameters[i], Integer.valueOf(i));
-                }
+                for(int i = 0; i < voiceCommonParameters.length; i++)
+                    {
+                        voiceCommonParametersToIndex.put(voiceCommonParameters[i], Integer.valueOf(i));
+                    }
 
-            for(int i = 0; i < voiceVectorInitialParameters.length; i++)
-                {
-                voiceVectorInitialParametersToIndex.put(voiceVectorInitialParameters[i], Integer.valueOf(i));
-                }
+                for(int i = 0; i < voiceVectorInitialParameters.length; i++)
+                    {
+                        voiceVectorInitialParametersToIndex.put(voiceVectorInitialParameters[i], Integer.valueOf(i));
+                    }
 
-            for(int i = 0; i < voiceToneACParameters.length; i++)
-                {
-                voiceToneACParametersToIndex.put(voiceToneACParameters[i], Integer.valueOf(i));
-                }
+                for(int i = 0; i < voiceToneACParameters.length; i++)
+                    {
+                        voiceToneACParametersToIndex.put(voiceToneACParameters[i], Integer.valueOf(i));
+                    }
 
-            for(int i = 0; i < voiceToneBDParameters.length; i++)
-                {
-                voiceToneBDParametersToIndex.put(voiceToneBDParameters[i], Integer.valueOf(i));
-                }
+                for(int i = 0; i < voiceToneBDParameters.length; i++)
+                    {
+                        voiceToneBDParametersToIndex.put(voiceToneBDParameters[i], Integer.valueOf(i));
+                    }
 
-            for(int i = 0; i < voiceEnvelopeACParameters.length; i++)
-                {
-                voiceEnvelopeACParametersToIndex.put(voiceEnvelopeACParameters[i], Integer.valueOf(i));
-                }
+                for(int i = 0; i < voiceEnvelopeACParameters.length; i++)
+                    {
+                        voiceEnvelopeACParametersToIndex.put(voiceEnvelopeACParameters[i], Integer.valueOf(i));
+                    }
 
-            for(int i = 0; i < voiceEnvelopeBDParameters.length; i++)
-                {
-                voiceEnvelopeBDParametersToIndex.put(voiceEnvelopeBDParameters[i], Integer.valueOf(i));
-                }
+                for(int i = 0; i < voiceEnvelopeBDParameters.length; i++)
+                    {
+                        voiceEnvelopeBDParametersToIndex.put(voiceEnvelopeBDParameters[i], Integer.valueOf(i));
+                    }
 
-            for(int i = 0; i < voiceVectorParameters.length; i++)
-                {
-                voiceVectorParametersToIndex.put(voiceVectorParameters[i], Integer.valueOf(i));
-                }
+                for(int i = 0; i < voiceVectorParameters.length; i++)
+                    {
+                        voiceVectorParametersToIndex.put(voiceVectorParameters[i], Integer.valueOf(i));
+                    }
             }
 
 
@@ -405,57 +405,57 @@ public class YamahaTG33 extends Synth
 
         updateChoosers();        
         loadDefaults();     
-        }
+    }
                 
     public void addTG33Menu()
-        {
+    {
         JMenu menu = new JMenu("TG33");
         menubar.add(menu);
 
         JMenuItem oneMPEMenu = new JMenuItem("Send Patch as Pseudo-MPE");
         oneMPEMenu.addActionListener(new ActionListener()
             {
-            public void actionPerformed(ActionEvent e)
+                public void actionPerformed(ActionEvent e)
                 {
-                JComboBox bank = new JComboBox(YamahaTG33Multi.VOICE_BANKS);
-                int b = model.get("bank");
-                if (b == 0 || b == 3 || b == 4)
-                    bank.setSelectedIndex(0);
-                else
-                    bank.setSelectedIndex(b);
-                JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+                    JComboBox bank = new JComboBox(YamahaTG33Multi.VOICE_BANKS);
+                    int b = model.get("bank");
+                    if (b == 0 || b == 3 || b == 4)
+                        bank.setSelectedIndex(0);
+                    else
+                        bank.setSelectedIndex(b);
+                    JTextField number = new JTextField("" + (model.get("number") + 1), 3);
                 
-                int n = 0;
-                String title = "Send Patch as Pseudo-MPE";
-                while(true)
-                    {
-                    boolean result = showMultiOption(YamahaTG33.this, new String[] { "Bank", "Patch Number"}, 
-                        new JComponent[] { bank, number }, title, "Enter the patch bank and number.");
-                    if (!result) return;
+                    int n = 0;
+                    String title = "Send Patch as Pseudo-MPE";
+                    while(true)
+                        {
+                            boolean result = showMultiOption(YamahaTG33.this, new String[] { "Bank", "Patch Number"}, 
+                                                             new JComponent[] { bank, number }, title, "Enter the patch bank and number.");
+                            if (!result) return;
 
-                    try { n = Integer.parseInt(number.getText()); }
-                    catch (NumberFormatException ex)
-                        {
-                        showSimpleError(title, "The Patch Number must be an integer 11 ... 88 (no 9s or 0s)");
-                        continue;
-                        }
+                            try { n = Integer.parseInt(number.getText()); }
+                            catch (NumberFormatException ex)
+                                {
+                                    showSimpleError(title, "The Patch Number must be an integer 11 ... 88 (no 9s or 0s)");
+                                    continue;
+                                }
                         
-                    if (n % 10 == 0 || n % 10 == 9 || n < 11 || n > 88)      
-                        {
-                        showSimpleError(title, "The Patch Number must be an integer 11 ... 88 (no 9s or 0s)");
-                        continue;
-                        }
+                            if (n % 10 == 0 || n % 10 == 9 || n < 11 || n > 88)      
+                                {
+                                    showSimpleError(title, "The Patch Number must be an integer 11 ... 88 (no 9s or 0s)");
+                                    continue;
+                                }
                         
-                    break;
-                    }           
+                            break;
+                        }           
                     
-                n = ((n / 10) - 1) * 8 + ((n % 10) - 1);
+                    n = ((n / 10) - 1) * 8 + ((n % 10) - 1);
 
-                int i = bank.getSelectedIndex();
-                boolean send = getSendMIDI();
-                setSendMIDI(true);
-                tryToSendSysex(getMPEForPatch(i, n, model.get("name", "")));
-                setSendMIDI(send);
+                    int i = bank.getSelectedIndex();
+                    boolean send = getSendMIDI();
+                    setSendMIDI(true);
+                    tryToSendSysex(getMPEForPatch(i, n, model.get("name", "")));
+                    setSendMIDI(send);
                 }
             });
 
@@ -464,17 +464,17 @@ public class YamahaTG33 extends Synth
         final JCheckBoxMenuItem vectorMenu = new JCheckBoxMenuItem("Receive Vector Data Only");
         vectorMenu.addActionListener(new ActionListener()
             {
-            public void actionPerformed(ActionEvent e)
+                public void actionPerformed(ActionEvent e)
                 {
-                isParsingVectorOnly = vectorMenu.isSelected();
+                    isParsingVectorOnly = vectorMenu.isSelected();
                 }
             });
         menu.add(vectorMenu);
 
-        }
+    }
 
     public byte[] getMPEForPatch(int bank, int number, String name)
-        {
+    {
         YamahaTG33Multi multi = (YamahaTG33Multi)
             instantiate(YamahaTG33Multi.class, true, false, null);
         
@@ -483,21 +483,21 @@ public class YamahaTG33 extends Synth
         multi.getModel().setUpdateListeners(false);
         for(int j = 1; j <= 16; j++)
             {
-            multi.getModel().set("c" + j + "bank", bank);
-            multi.getModel().set("c" + j + "number", number);
-            multi.getModel().set("c" + j + "on", 1);
-            multi.getModel().set("c" + j + "volume", 127);
+                multi.getModel().set("c" + j + "bank", bank);
+                multi.getModel().set("c" + j + "number", number);
+                multi.getModel().set("c" + j + "on", 1);
+                multi.getModel().set("c" + j + "volume", 127);
             }
         multi.getModel().set("name", name);
         return multi.emit(null, false, false);
-        }
+    }
 
     
     public String getDefaultResourceFileName() { return "YamahaTG33.init"; }
     public String getHTMLResourceFileName() { return "YamahaTG33.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-        {
+    {
         JComboBox bank = new JComboBox(BANKS);
         bank.setEditable(false);
         bank.setMaximumRowCount(32);
@@ -509,36 +509,36 @@ public class YamahaTG33 extends Synth
 
         while(true)
             {
-            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                new JComponent[] { bank, number }, title, "Enter Patch number");
+                boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                                                 new JComponent[] { bank, number }, title, "Enter Patch number");
                 
-            if (result == false)
-                return false;
+                if (result == false)
+                    return false;
                                 
-            int n;
-            try { n = Integer.parseInt(number.getText()); }
-            catch (NumberFormatException e)
-                {
-                showSimpleError(title, "The Patch Number must be an integer 11...88.\nDigits 9 and 0 are not permitted.");
-                continue;
-                }
-            if (n % 10 == 0 || n % 10 == 9 || n < 11 || n > 88)      
-                {
-                showSimpleError(title, "The Patch Number must be an integer 11...88.\nDigits 9 and 0 are not permitted.");
-                continue;
-                }
+                int n;
+                try { n = Integer.parseInt(number.getText()); }
+                catch (NumberFormatException e)
+                    {
+                        showSimpleError(title, "The Patch Number must be an integer 11...88.\nDigits 9 and 0 are not permitted.");
+                        continue;
+                    }
+                if (n % 10 == 0 || n % 10 == 9 || n < 11 || n > 88)      
+                    {
+                        showSimpleError(title, "The Patch Number must be an integer 11...88.\nDigits 9 and 0 are not permitted.");
+                        continue;
+                    }
             
-            n = ((n / 10) - 1) * 8 + (n % 10 - 1);
+                n = ((n / 10) - 1) * 8 + (n % 10 - 1);
             
-            change.set("bank", bank.getSelectedIndex());
-            change.set("number", n);
-            return true;
+                change.set("bank", bank.getSelectedIndex());
+                change.set("number", n);
+                return true;
             }
-        }
+    }
                                     
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-        {
+    {
         Category globalCategory = new Category(this, getSynthName(), color);
         //globalCategory.makeUnresettable();
                 
@@ -562,10 +562,10 @@ public class YamahaTG33 extends Synth
         synthTypeCombo.setSelectedIndex(getSynthType());
         synthTypeCombo.addActionListener(new ActionListener()
             {
-            public void actionPerformed(ActionEvent e)
+                public void actionPerformed(ActionEvent e)
                 {
-                setSynthType(synthTypeCombo.getSelectedIndex(), true);
-                pd.update("bank", model);  // doesn't matter what the key is, so I put in "bank"
+                    setSynthType(synthTypeCombo.getSelectedIndex(), true);
+                    pd.update("bank", model);  // doesn't matter what the key is, so I put in "bank"
                 }
             });
         synthTypeCombo.putClientProperty("JComponent.sizeVariant", "small");
@@ -578,15 +578,15 @@ public class YamahaTG33 extends Synth
         
         comp = new StringComponent("Patch Name", this, "name", 8, "Name must be up to 8 ASCII characters.")
             {
-            public String replace(String val)
+                public String replace(String val)
                 {
-                return revisePatchName(val);
+                    return revisePatchName(val);
                 }
                                 
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                updateTitle();
+                    super.update(key, model);
+                    updateTitle();
                 }
             };
         vbox.add(comp);  // doesn't work right :-(
@@ -598,13 +598,13 @@ public class YamahaTG33 extends Synth
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-        }
+    }
 
 
 
 
     public JComponent addGlobal(Color color)
-        {
+    {
         Category category = new Category(this, "Common", color);
 
         JComponent comp;
@@ -654,7 +654,7 @@ public class YamahaTG33 extends Synth
         
         comp = new LabelledDial("Pitch Bias", this, "pitchbias", color, 0, 24, 12)
             {
-            public boolean isSymmetric() { return true; }
+                public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
         
@@ -664,7 +664,7 @@ public class YamahaTG33 extends Synth
         // WARNING: This must be converted
         comp = new LabelledDial("Envelope", this, "egattackrate", color, 0, 126, 63)
             {
-            public boolean isSymmetric() { return true; }
+                public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).addAdditionalLabel("Attack Rate");
         hbox.add(comp);
@@ -673,7 +673,7 @@ public class YamahaTG33 extends Synth
         vbox = new VBox();
         comp = new LabelledDial("Envelope", this, "egreleaserate", color, 0, 126, 63)
             {
-            public boolean isSymmetric() { return true; }
+                public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).addAdditionalLabel("Release Rate");
         vbox.add(comp);
@@ -693,10 +693,10 @@ public class YamahaTG33 extends Synth
         
         category.add(hbox, BorderLayout.CENTER);
         return category;
-        }
+    }
     
     public JComponent addVectorGlobal(Color color)
-        {
+    {
         Category category = new Category(this, "Vector", color);
 
         JComponent comp;
@@ -708,9 +708,9 @@ public class YamahaTG33 extends Synth
         // WARNING: 160ms must be remapped to 0 in parsing
         comp = new LabelledDial("Level Speed", this, "levelspeed", color, 0, 15)
             {
-            public String map(int value)
+                public String map(int value)
                 {
-                return "" + (value * 10 + 10) + " ms";
+                    return "" + (value * 10 + 10) + " ms";
                 }
             };
         hbox.add(comp);
@@ -718,19 +718,19 @@ public class YamahaTG33 extends Synth
         // WARNING: 160ms must be remapped to 0 in parsing
         comp = new LabelledDial("Detune Speed", this, "detunespeed", color, 0, 15)
             {
-            public String map(int value)
+                public String map(int value)
                 {
-                return "" + (value * 10 + 10) + " ms";
+                    return "" + (value * 10 + 10) + " ms";
                 }
             };
         hbox.add(comp);
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-        }
+    }
     
     public JComponent addVector(boolean level, int start, Color color)
-        {
+    {
         Category category = new Category(this, (level ? "Level Vectors " : "Detune Vectors ") + start + "-" + (start + 24), color);
                 
         JComponent comp;
@@ -743,42 +743,42 @@ public class YamahaTG33 extends Synth
             
         for(int i = start; i < start + 25; i+=5)
             {
-            if (i != start) vbox.add(Strut.makeVerticalStrut(10));
-            for (int j = i; j < i + 5; j++)
-                {
-                if (j != i) hbox.add(Strut.makeHorizontalStrut(10));
-                final int _j = j;
+                if (i != start) vbox.add(Strut.makeVerticalStrut(10));
+                for (int j = i; j < i + 5; j++)
+                    {
+                        if (j != i) hbox.add(Strut.makeHorizontalStrut(10));
+                        final int _j = j;
                         
-                // FIXME: we need to modify the value for #1 during parse/emit...
-                comp = new LabelledDial("Time " + j, this,  param + j + "time", color, 0, (j == 1 ? 254 : 255))
-                    {
-                    public String map(int value)
-                        {
-                        if (value < 254) return "" + value;
-                        else if (value == 254) return (_j == 1 ? "End" : "Repeat");
-                        // value == 255:
-                        else return "End";
-                        }
-                    };
-                hbox.add(comp);
-                comp = new LabelledDial("X " + j + "  D-C", this,  param + j + "xaxis", color, 0, 62, 31)
-                    {
-                    public boolean isSymmetric() { return true; }
-                    };
-                hbox.add(comp);
-                comp = new LabelledDial("Y " + j + "  B-A", this,  param + j + "yaxis" , color, 0, 62, 31)
-                    {
-                    public boolean isSymmetric() { return true; }
-                    };
-                hbox.add(comp);
-                }
-            vbox.add(hbox);
-            hbox = new HBox();
+                        // FIXME: we need to modify the value for #1 during parse/emit...
+                        comp = new LabelledDial("Time " + j, this,  param + j + "time", color, 0, (j == 1 ? 254 : 255))
+                            {
+                                public String map(int value)
+                                {
+                                    if (value < 254) return "" + value;
+                                    else if (value == 254) return (_j == 1 ? "End" : "Repeat");
+                                    // value == 255:
+                                    else return "End";
+                                }
+                            };
+                        hbox.add(comp);
+                        comp = new LabelledDial("X " + j + "  D-C", this,  param + j + "xaxis", color, 0, 62, 31)
+                            {
+                                public boolean isSymmetric() { return true; }
+                            };
+                        hbox.add(comp);
+                        comp = new LabelledDial("Y " + j + "  B-A", this,  param + j + "yaxis" , color, 0, 62, 31)
+                            {
+                                public boolean isSymmetric() { return true; }
+                            };
+                        hbox.add(comp);
+                    }
+                vbox.add(hbox);
+                hbox = new HBox();
             }
                 
         category.add(vbox, BorderLayout.CENTER);
         return category;
-        }
+    }
     
     /*
       COMMON
@@ -799,9 +799,9 @@ public class YamahaTG33 extends Synth
     */
 
     public JComponent addTone(final int tone, Color color)
-        {
+    {
         Category category = new Category(this, "Tone " + new String[] { "A", "B", "C", "D" }[tone], color);
-//        category.makePasteable("tone" + tone);
+        //        category.makePasteable("tone" + tone);
         category.makePasteable("tone");
 
         String h = "tone" + tone;
@@ -814,32 +814,32 @@ public class YamahaTG33 extends Synth
         params = ((tone == TONE_A || tone == TONE_C) ? AWM_WAVES : FM_WAVES);           
         comp = new Chooser("Wave Type", this, h + "wavetype", params)
             {
-            // Notice NOT update().  This is because when we load from a file
-            // or from sysex lots of FM stuff gets updated, but then we might
-            // erase it all when this one is updated.  We only want to revise
-            // the FM stuff when the user has selected directly from the widget.
-            public void userSelected(String key, Model model)
+                // Notice NOT update().  This is because when we load from a file
+                // or from sysex lots of FM stuff gets updated, but then we might
+                // erase it all when this one is updated.  We only want to revise
+                // the FM stuff when the user has selected directly from the widget.
+                public void userSelected(String key, Model model)
                 {
-                if ((tone == TONE_B || tone == TONE_D))
-                    {
-                    // we are going to update a several parameters here so we should do
-                    // it as a single revision.  As it turns out only one parameter will
-                    // output just a few MIDI values, but whatever.
-                    undo.setWillPush(false);
-                    Model backup = (Model)(model.clone());
+                    if ((tone == TONE_B || tone == TONE_D))
+                        {
+                            // we are going to update a several parameters here so we should do
+                            // it as a single revision.  As it turns out only one parameter will
+                            // output just a few MIDI values, but whatever.
+                            undo.setWillPush(false);
+                            Model backup = (Model)(model.clone());
 
-                    // notice update(...) is inside here
-                    super.update(key, model);
-                    updateFMData(tone, model.get(key, 0));
-                    undo.setWillPush(true);
-                    if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-                        undo.push(backup);
-                    repaint();
-                    }
-                else
-                    {
-                    super.update(key, model);
-                    }
+                            // notice update(...) is inside here
+                            super.update(key, model);
+                            updateFMData(tone, model.get(key, 0));
+                            undo.setWillPush(true);
+                            if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                                undo.push(backup);
+                            repaint();
+                        }
+                    else
+                        {
+                            super.update(key, model);
+                        }
                 }               
             };
         waveChoosers[tone] = (Chooser)comp;
@@ -853,56 +853,56 @@ public class YamahaTG33 extends Synth
         vbox = new VBox();
         if ((tone == TONE_B || tone == TONE_D))
             {
-            params = ALGORITHMS;
-            comp = new Chooser("Algorithm", this, h + "algorithm", params);
-            vbox.add(comp);
+                params = ALGORITHMS;
+                comp = new Chooser("Algorithm", this, h + "algorithm", params);
+                vbox.add(comp);
             }
 
         hbox.add(vbox);
                 
         if ((tone == TONE_A || tone == TONE_C))
             {
-            vbox = new VBox();
-            ImageIcon[] icons = LEVEL_ICONS;
-            params = LEVELS;
-            comp = new Chooser("Level Scaling", this, h + "levelscaling", params, icons);
-            vbox.add(comp);
+                vbox = new VBox();
+                ImageIcon[] icons = LEVEL_ICONS;
+                params = LEVELS;
+                comp = new Chooser("Level Scaling", this, h + "levelscaling", params, icons);
+                vbox.add(comp);
         
-            icons = RATE_ICONS;
-            params = RATES;
-            comp = new Chooser("Rate Scaling", this, h + "ratescaling", params, icons);
-            vbox.add(comp);
-            hbox.add(vbox);
+                icons = RATE_ICONS;
+                params = RATES;
+                comp = new Chooser("Rate Scaling", this, h + "ratescaling", params, icons);
+                vbox.add(comp);
+                hbox.add(vbox);
 
-            vbox = new VBox();
+                vbox = new VBox();
 
-            comp = new CheckBox("Amplitude", this, h + "amplitudemod");
-            vbox.add(comp);
+                comp = new CheckBox("Amplitude", this, h + "amplitudemod");
+                vbox.add(comp);
                 
-            comp = new CheckBox("Pitch", this, h + "pitchmod");
-            vbox.add(comp);
+                comp = new CheckBox("Pitch", this, h + "pitchmod");
+                vbox.add(comp);
                 
-            hbox.add(vbox);
+                hbox.add(vbox);
             }
                 
 
         comp = new LabelledDial("Frequency", this, h + "frequencyshift", color, 0, 24, 12)
             {
-            public boolean isSymmetric() { return true; }
+                public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).addAdditionalLabel("Shift");
         hbox.add(comp);
         
         comp = new LabelledDial("Aftertouch", this, h + "aftertouchsensitivity", color, 0, 6, 3)
             {
-            public boolean isSymmetric() { return true; }
+                public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
         hbox.add(comp);
         
         comp = new LabelledDial("Velocity", this, h + "velocitysensitivity", color, 0, 10, 5)
             {
-            public boolean isSymmetric() { return true; }
+                public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
         hbox.add(comp);
@@ -927,53 +927,53 @@ public class YamahaTG33 extends Synth
 
         comp = new LabelledDial("Pan", this, h + "pan", color, 0, 4)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int value)
+                public boolean isSymmetric() { return true; }
+                public String map(int value)
                 {
-                return PANS[value];
+                    return PANS[value];
                 }
             };
         hbox.add(comp);
 
         if ((tone == TONE_A || tone == TONE_C))
             {
-            comp = new LabelledDial("Temperment", this, h + "temperment", color, 0, 3);
-            hbox.add(comp);
-            comp = new LabelledDial("Detune", this, h + "detune", color, 0, 15);
-            hbox.add(comp);
+                comp = new LabelledDial("Temperment", this, h + "temperment", color, 0, 3);
+                hbox.add(comp);
+                comp = new LabelledDial("Detune", this, h + "detune", color, 0, 15);
+                hbox.add(comp);
             }
         else if ((tone == TONE_B || tone == TONE_D))
             {
-            comp = new LabelledDial("Feedback", this, h + "feedback", color, 0, 7);
-            hbox.add(comp);
+                comp = new LabelledDial("Feedback", this, h + "feedback", color, 0, 7);
+                hbox.add(comp);
             }
         
         category.add(hbox, BorderLayout.CENTER);
         return category;
-        }
+    }
     
 
-/*
-  FM Mod and Carrier
-  Wave
-  Fixed
-  Delay Switch
-  Max
-  AM Switch
-  PM Switch
-  Multi   (harmonics?)
-  Level
-  DT1
-  DT2
-  Level Scaling
-  Rate Scaling
-  Envelope stuff...
-*/
+    /*
+      FM Mod and Carrier
+      Wave
+      Fixed
+      Delay Switch
+      Max
+      AM Switch
+      PM Switch
+      Multi   (harmonics?)
+      Level
+      DT1
+      DT2
+      Level Scaling
+      Rate Scaling
+      Envelope stuff...
+    */
 
     public JComponent addFM(int tone, boolean carrier, Color color)
-        {
+    {
         Category category = new Category(this, (carrier ? "Carrier " : "Modulator " ) + new String[] { "A", "B", "C", "D" }[tone], color);
-//        category.makePasteable("tone" + tone);
+        //        category.makePasteable("tone" + tone);
         category.makePasteable("tone");
 
         String h = "tone" + tone + (carrier ? "0" : "1");
@@ -1004,14 +1004,14 @@ public class YamahaTG33 extends Synth
 
         hbox.add(vbox);
 
-/*
-  vbox = new VBox();
+        /*
+          vbox = new VBox();
 
-  comp = new CheckBox("Max", this, h + "max");
-  vbox.add(comp);
+          comp = new CheckBox("Max", this, h + "max");
+          vbox.add(comp);
         
-  hbox.add(vbox);
-*/
+          hbox.add(vbox);
+        */
         vbox = new VBox();
 
         comp = new CheckBox("Amplitude", this, h + "amplitudemod");
@@ -1033,18 +1033,18 @@ public class YamahaTG33 extends Synth
         
         category.add(hbox, BorderLayout.CENTER);
         return category;
-        }
+    }
     
 
     public JComponent addEnvelope(int tone, boolean carrier, Color color)
-        {
+    {
         Category category = new Category(this, 
-                (tone == TONE_A  ? "Envelope A" :
-                    (tone == TONE_C  ? "Envelope C" :
-                        ((carrier ? "Carrier " : "Modulator ") + 
-                        (tone == TONE_B ? "B" : "D") + " Envelope"))), color);
+                                         (tone == TONE_A  ? "Envelope A" :
+                                          (tone == TONE_C  ? "Envelope C" :
+                                           ((carrier ? "Carrier " : "Modulator ") + 
+                                            (tone == TONE_B ? "B" : "D") + " Envelope"))), color);
 
-//        category.makePasteable("tone" + tone);
+        //        category.makePasteable("tone" + tone);
         category.makePasteable("tone");
 
         String h = "tone" + tone + ((tone == TONE_B || tone == TONE_D) ? (carrier ? "0" : "1") : "");
@@ -1057,9 +1057,9 @@ public class YamahaTG33 extends Synth
 
         if (tone == TONE_A || tone == TONE_C || carrier)
             {
-            params = ENVELOPE_TYPES;
-            comp = new Chooser("Envelope Type", this, "tone" + tone + "egtype", params);
-            vbox.add(comp);
+                params = ENVELOPE_TYPES;
+                comp = new Chooser("Envelope Type", this, "tone" + tone + "egtype", params);
+                vbox.add(comp);
             }
 
         comp = new CheckBox("Delay", this, h + "delayonoff");
@@ -1074,7 +1074,7 @@ public class YamahaTG33 extends Synth
         // This is because it's one of the keys which can be outputted in real time and is so part of the
         // lists below.  It's basically unique in this respect.
         comp = new LabelledDial("Amplitude", this, "tone" + tone + 
-            ((tone == TONE_A || tone == TONE_C || carrier) ? "volume" : "level"), color, 0, 127);
+                                ((tone == TONE_A || tone == TONE_C || carrier) ? "volume" : "level"), color, 0, 127);
         hbox.add(comp);
 
         // Note different range AND backwards
@@ -1113,21 +1113,21 @@ public class YamahaTG33 extends Synth
         // It's not clear if these are really rate or time.  I'm going with time.
         // Yamaha is backwards, so we preproces
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null, h + "attackrate", h + "decay1rate", h + "decay2rate", null, h + "releaserate" },
-            new String[] { h + "initiallevel", h + "attacklevel", h + "decay1level", h + "decay2level",  h + "decay2level", null },
-            new double[] { 0, 0.2 / 63, 0.2 / 63, 0.2 / 63, 0.25, 0.2 / 63 },
-            new double[] { 1.0 / 127, 1.0 / 127, 1.0 / 127, 1.0 / 127, 1.0 / 127, 0 } )
+                                   new String[] { null, h + "attackrate", h + "decay1rate", h + "decay2rate", null, h + "releaserate" },
+                                   new String[] { h + "initiallevel", h + "attacklevel", h + "decay1level", h + "decay2level",  h + "decay2level", null },
+                                   new double[] { 0, 0.2 / 63, 0.2 / 63, 0.2 / 63, 0.25, 0.2 / 63 },
+                                   new double[] { 1.0 / 127, 1.0 / 127, 1.0 / 127, 1.0 / 127, 1.0 / 127, 0 } )
             {
-            public double preprocessXKey(int index, String key, double value)
+                public double preprocessXKey(int index, String key, double value)
                 {
-                return 63.0 - value;
+                    return 63.0 - value;
                 }
             };
         hbox.addLast(comp);
         
         category.add(hbox, BorderLayout.CENTER);
         return category;
-        }
+    }
 
 
 
@@ -1136,142 +1136,142 @@ public class YamahaTG33 extends Synth
 
     // voice common
     public static final int[][] voiceCommon = new int[][] 
-    {
-    { 0x00, 0x01, 0x02, 0x02, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x03, 0x06, 0x05, 0x05, 0x04, 0x04, 0x06, 0x01, 0x07, 0x07 },
-    { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
-    { 0x00, 0x01, 0x02, 0x06, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x15, 0x15, 0x15, 0x15, 0x16, 0x17, 0x18, 0x19 },
-    { 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 },
-    { 0x7E, 0x7F, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x3f, 0x5f, 0x6f, 0x7d, 0x7e, 0x7f, 0x7f, 0x7f, 0x7f },
-    };
+        {
+            { 0x00, 0x01, 0x02, 0x02, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x03, 0x06, 0x05, 0x05, 0x04, 0x04, 0x06, 0x01, 0x07, 0x07 },
+            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+            { 0x00, 0x01, 0x02, 0x06, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x15, 0x15, 0x15, 0x15, 0x16, 0x17, 0x18, 0x19 },
+            { 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 },
+            { 0x7E, 0x7F, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x3f, 0x5f, 0x6f, 0x7d, 0x7e, 0x7f, 0x7f, 0x7f, 0x7f },
+        };
                 
     static HashMap voiceCommonParametersToIndex;
 
     public static final String[] voiceCommonParameters = new String[]
-    {
-    "configuration",
-    "effecttype",
-    "effectbalance",
-    "effectsendlevel",
-    "name1",                                    // patch name
-    "name2",
-    "name3",
-    "name4",
-    "name5",
-    "name6",
-    "name7",
-    "name8",
-    "pitchbendrange",
-    "aftertouchlevel",
-    "aftertouchpm",
-    "aftertoucham",
-    "modulationwheelpm",
-    "modulationwheelam",
-    "pitchbias",
-    "egdelayrate",
-    "egattackrate",
-    "egreleaserate",
-    };
+        {
+            "configuration",
+            "effecttype",
+            "effectbalance",
+            "effectsendlevel",
+            "name1",                                    // patch name
+            "name2",
+            "name3",
+            "name4",
+            "name5",
+            "name6",
+            "name7",
+            "name8",
+            "pitchbendrange",
+            "aftertouchlevel",
+            "aftertouchpm",
+            "aftertoucham",
+            "modulationwheelpm",
+            "modulationwheelam",
+            "pitchbias",
+            "egdelayrate",
+            "egattackrate",
+            "egreleaserate",
+        };
         
     // Voice Tone A or C
     public static final int[][] voiceToneAC = new int[][] 
-    {
-    { 0x00, 0x01, 0x05, 0x04, 0x07, 0x09, 0x08, 0x08, 0x07, 0x07, 0x03, 0x02 },
-    { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 
-    { 0x00, 0x01, 0x02, 0x02, 0x03, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09 }, 
-    { 0x01, 0x01, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 },
-    { 0x7f, 0x7f, 0x0f, 0x70, 0x1f, 0x60, 0x7f, 0x7f, 0x70, 0x60, 0x78, 0x7f },
-    };
+        {
+            { 0x00, 0x01, 0x05, 0x04, 0x07, 0x09, 0x08, 0x08, 0x07, 0x07, 0x03, 0x02 },
+            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 
+            { 0x00, 0x01, 0x02, 0x02, 0x03, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09 }, 
+            { 0x01, 0x01, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 },
+            { 0x7f, 0x7f, 0x0f, 0x70, 0x1f, 0x60, 0x7f, 0x7f, 0x70, 0x60, 0x78, 0x7f },
+        };
         
     static HashMap voiceToneACParametersToIndex;
 
     // these will start with tone0 or tone2
     public static final String[] voiceToneACParameters = new String[]
-    {
-    "wavetype",
-    "frequencyshift",
-    "aftertouchsensitivity",
-    "velocitysensitivity",
-    "lfotype",
-    "lfospeed",
-    "lfodelay",
-    "lforate",
-    "lfoam",
-    "lfopm",
-    "pan",
-    "volume",
-    };
+        {
+            "wavetype",
+            "frequencyshift",
+            "aftertouchsensitivity",
+            "velocitysensitivity",
+            "lfotype",
+            "lfospeed",
+            "lfodelay",
+            "lforate",
+            "lfoam",
+            "lfopm",
+            "pan",
+            "volume",
+        };
                 
         
     // Voice Tone B or D
     public static final int[][] voiceToneBD = new int[][] 
-    {
-    { 0x00, 0x01, 0x05, 0x04, 0x07, 0x09, 0x08, 0x08, 0x07, 0x07, 0x03, 0x06, 0x08, 0x02 },
-    { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
-    { 0x16, 0x17, 0x18, 0x18, 0x19, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x21, 0x2D },
-    { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 },
-    { 0x7F, 0x7F, 0x0F, 0x70, 0x1F, 0x60, 0x7F, 0x7F, 0x70, 0x60, 0x78, 0x78, 0x7F, 0x7F },
-    };
+        {
+            { 0x00, 0x01, 0x05, 0x04, 0x07, 0x09, 0x08, 0x08, 0x07, 0x07, 0x03, 0x06, 0x08, 0x02 },
+            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+            { 0x16, 0x17, 0x18, 0x18, 0x19, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x21, 0x2D },
+            { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 },
+            { 0x7F, 0x7F, 0x0F, 0x70, 0x1F, 0x60, 0x7F, 0x7F, 0x70, 0x60, 0x78, 0x78, 0x7F, 0x7F },
+        };
          
     static HashMap voiceToneBDParametersToIndex;
 
     // these will start with tone1 or tone3
     public static final String[] voiceToneBDParameters = new String[]
-    {
-    "wavetype",
-    "frequencyshift",
-    "aftertouchsensitivity",
-    "velocitysensitivity",
-    "lfotype",
-    "lfospeed",
-    "lfodelay",
-    "lforate",
-    "lfoam",
-    "lfopm",
-    "pan",
-    "feedback",
-    "level",
-    "volume",
-    };
+        {
+            "wavetype",
+            "frequencyshift",
+            "aftertouchsensitivity",
+            "velocitysensitivity",
+            "lfotype",
+            "lfospeed",
+            "lfodelay",
+            "lforate",
+            "lfoam",
+            "lfopm",
+            "pan",
+            "feedback",
+            "level",
+            "volume",
+        };
                 
         
     // Voice Element Envelope A or C
     public static final int[][] voiceEnvelopeAC = new int[][] 
-    {
-    { 0x00, 0x07, 0x08, 0x01, 0x03, 0x04, 0x05, 0x06, 0x02, 0x03, 0x04, 0x05 },
-    { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
-    { 0x08, 0x0B, 0x0B, 0x0C, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13 },
-    { 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 },
-    { 0x0F, 0x0F, 0x78, 0x7F, 0x40, 0x40, 0x40, 0x40, 0x00, 0x00, 0x00, 0x00 },
-    };
+        {
+            { 0x00, 0x07, 0x08, 0x01, 0x03, 0x04, 0x05, 0x06, 0x02, 0x03, 0x04, 0x05 },
+            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+            { 0x08, 0x0B, 0x0B, 0x0C, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13 },
+            { 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 },
+            { 0x0F, 0x0F, 0x78, 0x7F, 0x40, 0x40, 0x40, 0x40, 0x00, 0x00, 0x00, 0x00 },
+        };
         
     static HashMap voiceEnvelopeACParametersToIndex;
 
     // these will start with tone0 or tone2
     public static final String[] voiceEnvelopeACParameters = new String[]
-    {
-    "egtype",
-    "levelscaling",
-    "ratescaling",
-    "delayonoff",
-    "attackrate",
-    "decay1rate",
-    "decay2rate",
-    "releaserate",
-    "initiallevel",
-    "attacklevel",
-    "decay1level",
-    "decay2level",
-    };
+        {
+            "egtype",
+            "levelscaling",
+            "ratescaling",
+            "delayonoff",
+            "attackrate",
+            "decay1rate",
+            "decay2rate",
+            "releaserate",
+            "initiallevel",
+            "attacklevel",
+            "decay1level",
+            "decay2level",
+        };
 
     // Voice Element Envelope B or D
     public static final int[][] voiceEnvelopeBD = new int[][] 
-    {
-    { 0x00, 0x07, 0x08, 0x01, 0x03, 0x04, 0x05, 0x06, 0x02, 0x03, 0x04, 0x05 },
-    { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
-    { 0x1E, 0x2F, 0x2F, 0x30, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37 },
-    { 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 },
-    { 0x0F, 0x0F, 0x78, 0x7F, 0x40, 0x40, 0x40, 0x40, 0x00, 0x00, 0x00, 0x00 },
-    };
+        {
+            { 0x00, 0x07, 0x08, 0x01, 0x03, 0x04, 0x05, 0x06, 0x02, 0x03, 0x04, 0x05 },
+            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+            { 0x1E, 0x2F, 0x2F, 0x30, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37 },
+            { 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 },
+            { 0x0F, 0x0F, 0x78, 0x7F, 0x40, 0x40, 0x40, 0x40, 0x00, 0x00, 0x00, 0x00 },
+        };
          
     static HashMap voiceEnvelopeBDParametersToIndex = voiceEnvelopeACParametersToIndex;
 
@@ -1280,75 +1280,75 @@ public class YamahaTG33 extends Synth
 
     // Voice Vector Initial Parameters
     public static final int[][] voiceVectorInitial = new int[][] 
-    {
-    { 0x00, 0x03 },
-    { 0x00, 0x00 },
-    { 0x00, 0x01 },
-    { 0x01, 0x01 }, 
-    { 0x7f, 0x7f },
-    };
+        {
+            { 0x00, 0x03 },
+            { 0x00, 0x00 },
+            { 0x00, 0x01 },
+            { 0x01, 0x01 }, 
+            { 0x7f, 0x7f },
+        };
 
     static HashMap voiceVectorInitialParametersToIndex;
     public static final String[] voiceVectorInitialParameters = new String[]
-    {
-    "levelspeed",
-    "detunespeed",
-    };
+        {
+            "levelspeed",
+            "detunespeed",
+        };
 
     public static final int[][] voiceVector = new int[300][5];
     static HashMap voiceVectorParametersToIndex;
     public static final String[] voiceVectorParameters = new String[300];
 
     static
-        {
+    {
         // I think there is a bug.  lines 254 and on are ST=$02, "Level..." in the manual.
         // But I think they should be ST=$05, "Detune..."
         for(int i = 0; i < 300; i++)
             {
-            voiceVector[i][0] = (i < 150 ? 0x02 : 0x05);
-            voiceVector[i][1] = i / 128;
-            voiceVector[i][2] = (i + 2) % 128;
-            voiceVector[i][3] = 0x01;
-            voiceVector[i][4] = 0x7F;
-            int q = i % 3;
-            voiceVectorParameters[i] = (i < 150 ? "level" : "detune") + ((i < 150 ? i : i - 150) / 3 + 1) + (q == 0 ? "time" : (q == 1 ? "xaxis" : "yaxis")) ;
+                voiceVector[i][0] = (i < 150 ? 0x02 : 0x05);
+                voiceVector[i][1] = i / 128;
+                voiceVector[i][2] = (i + 2) % 128;
+                voiceVector[i][3] = 0x01;
+                voiceVector[i][4] = 0x7F;
+                int q = i % 3;
+                voiceVectorParameters[i] = (i < 150 ? "level" : "detune") + ((i < 150 ? i : i - 150) / 3 + 1) + (q == 0 ? "time" : (q == 1 ? "xaxis" : "yaxis")) ;
             }
-        }
+    }
 
     public byte getID() 
-        { 
+    { 
         try 
             { 
-            byte b = (byte)(Byte.parseByte(tuple.id));
-            if (b > 16) b = 1;
-            if (b >= 1) return b;
+                byte b = (byte)(Byte.parseByte(tuple.id));
+                if (b > 16) b = 1;
+                if (b >= 1) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
         catch (NumberFormatException e) { Synth.handleException(e); }
         return 1;
-        }
+    }
         
     public String reviseID(String id)
-        {
+    {
         try 
             { 
-            byte b =(byte)(Byte.parseByte(id)); 
-            if (b > 16) b = 1;
-            if (b >= 1) return "" + b;
+                byte b =(byte)(Byte.parseByte(id)); 
+                if (b > 16) b = 1;
+                if (b >= 1) return "" + b;
             } 
         catch (NumberFormatException e) { }             // expected
         return "" + getID();
-        }
+    }
 
 
     byte findOn(byte[] map, byte val) 
-        { 
+    { 
         for(int i = 0; i < map.length; i++) 
             {
-            if (map[i] == val) return (byte)i;
+                if (map[i] == val) return (byte)i;
             }
         return 0;
-        }
+    }
                 
                 
 
@@ -1415,235 +1415,235 @@ public class YamahaTG33 extends Synth
         
     // This helper function is called by emitAll(key)
     public byte[] send(String key)
-        {
+    {
         int val = model.get(key, 0);
         if (voiceCommonParametersToIndex.containsKey(key))
             {
-            int i = ((Integer)(voiceCommonParametersToIndex.get(key))).intValue();
+                int i = ((Integer)(voiceCommonParametersToIndex.get(key))).intValue();
             
-            if (key.equals("aftertouchlevel") && val > 0) val = 0x40;
-            else if (key.equals("aftertouchpm") && val > 0) val = 0x20;
-            else if (key.equals("aftertoucham") && val > 0) val = 0x10;
-            else if (key.equals("modulationwheelpm") && val > 0) val = 0x02;
-            else if (key.equals("pitchbias")) val -= 12;                                        // 2's complement
-            else if (key.equals("egattackrate")) val -= 63;                                     // 2's complement
-            else if (key.equals("egreleaserate")) val -= 63;                                    // 2's complement
+                if (key.equals("aftertouchlevel") && val > 0) val = 0x40;
+                else if (key.equals("aftertouchpm") && val > 0) val = 0x20;
+                else if (key.equals("aftertoucham") && val > 0) val = 0x10;
+                else if (key.equals("modulationwheelpm") && val > 0) val = 0x02;
+                else if (key.equals("pitchbias")) val -= 12;                                        // 2's complement
+                else if (key.equals("egattackrate")) val -= 63;                                     // 2's complement
+                else if (key.equals("egreleaserate")) val -= 63;                                    // 2's complement
             
-            return(new byte[]
-                {
-                (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x00,
-                (byte)voiceCommon[0][i], 0x00,                  // ST
-                (byte)voiceCommon[1][i],                        // F1
-                (byte)voiceCommon[2][i],                        // F2
-                (byte)voiceCommon[3][i],                        // B1
-                (byte)voiceCommon[4][i],                        // B2
-                (byte)((val >>> 7) & 1),                        // V1
-                (byte)(val & 127), (byte)0xF7                   // V2
-                });
+                return(new byte[]
+                    {
+                        (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x00,
+                        (byte)voiceCommon[0][i], 0x00,                  // ST
+                        (byte)voiceCommon[1][i],                        // F1
+                        (byte)voiceCommon[2][i],                        // F2
+                        (byte)voiceCommon[3][i],                        // B1
+                        (byte)voiceCommon[4][i],                        // B2
+                        (byte)((val >>> 7) & 1),                        // V1
+                        (byte)(val & 127), (byte)0xF7                   // V2
+                    });
             }
         else if (voiceVectorInitialParametersToIndex.containsKey(key))
             {
-            int i = ((Integer)(voiceVectorInitialParametersToIndex.get(key))).intValue();
-            // need to move the 160
-            if (val == 15) val = 0;
-            else val = val + 1;
-            return(new byte[]
-                {
-                (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x01,
-                (byte)voiceVectorInitial[0][i], 0x00,           // ST
-                (byte)voiceVectorInitial[1][i],                 // F1
-                (byte)voiceVectorInitial[2][i],                 // F2
-                (byte)voiceVectorInitial[3][i],                 // B1
-                (byte)voiceVectorInitial[4][i],                 // B2
-                (byte)((val >>> 7) & 1),                        // V1
-                (byte)(val & 127), (byte)0xF7                   // V2
-                });
+                int i = ((Integer)(voiceVectorInitialParametersToIndex.get(key))).intValue();
+                // need to move the 160
+                if (val == 15) val = 0;
+                else val = val + 1;
+                return(new byte[]
+                    {
+                        (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x01,
+                        (byte)voiceVectorInitial[0][i], 0x00,           // ST
+                        (byte)voiceVectorInitial[1][i],                 // F1
+                        (byte)voiceVectorInitial[2][i],                 // F2
+                        (byte)voiceVectorInitial[3][i],                 // B1
+                        (byte)voiceVectorInitial[4][i],                 // B2
+                        (byte)((val >>> 7) & 1),                        // V1
+                        (byte)(val & 127), (byte)0xF7                   // V2
+                    });
             }
         else if (voiceVectorParametersToIndex.containsKey(key))
             {
-            int i = ((Integer)(voiceVectorParametersToIndex.get(key))).intValue();
+                int i = ((Integer)(voiceVectorParametersToIndex.get(key))).intValue();
             
-            if (key.equals("level1time") && val == 254) val = 255;
-            else if (key.equals("detune1time") && val == 254) val = 255;
+                if (key.equals("level1time") && val == 254) val = 255;
+                else if (key.equals("detune1time") && val == 254) val = 255;
             
-            return(new byte[]
-                {
-                (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x01,
-                (byte)voiceVector[i][0], 0x00,                          // ST
-                (byte)voiceVector[i][1],                        // F1
-                (byte)voiceVector[i][2],                        // F2
-                (byte)voiceVector[i][3],                        // B1
-                (byte)voiceVector[i][4],                        // B2
-                (byte)((val >>> 7) & 1),                        // V1
-                (byte)(val & 127), (byte)0xF7                   // V2
-                });
+                return(new byte[]
+                    {
+                        (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x01,
+                        (byte)voiceVector[i][0], 0x00,                          // ST
+                        (byte)voiceVector[i][1],                        // F1
+                        (byte)voiceVector[i][2],                        // F2
+                        (byte)voiceVector[i][3],                        // B1
+                        (byte)voiceVector[i][4],                        // B2
+                        (byte)((val >>> 7) & 1),                        // V1
+                        (byte)(val & 127), (byte)0xF7                   // V2
+                    });
             }
         else if (key.startsWith("tone"))
             {
-            int tone = 0;
-            if (key.startsWith("tone0")) { tone = 0; key = key.substring(5);}
-            else if (key.startsWith("tone10")) { tone = 4; key = key.substring(6); }
-            else if (key.startsWith("tone2")) { tone = 2; key = key.substring(5); }
-            else if (key.startsWith("tone30")) { tone = 5; key = key.substring(6); }
-            else if (key.startsWith("tone1")) { tone = 1; key = key.substring(5); }
-            else if (key.startsWith("tone3")) { tone = 3; key = key.substring(5); }
-            else { return new byte[0]; } // it's a modulator key we can't change
+                int tone = 0;
+                if (key.startsWith("tone0")) { tone = 0; key = key.substring(5);}
+                else if (key.startsWith("tone10")) { tone = 4; key = key.substring(6); }
+                else if (key.startsWith("tone2")) { tone = 2; key = key.substring(5); }
+                else if (key.startsWith("tone30")) { tone = 5; key = key.substring(6); }
+                else if (key.startsWith("tone1")) { tone = 1; key = key.substring(5); }
+                else if (key.startsWith("tone3")) { tone = 3; key = key.substring(5); }
+                else { return new byte[0]; } // it's a modulator key we can't change
                         
-            if ((tone == 0 || tone == 2) && voiceToneACParametersToIndex.containsKey(key))
-                {
-                int i = ((Integer)(voiceToneACParametersToIndex.get(key))).intValue();
-
-                if (key.endsWith("aftertouchsensitivity")) val = AFTERTOUCH_SENSITIVITY_MAP[val];
-                else if (key.endsWith("velocitysensitivity"))  val = VELOCITY_SENSITIVITY_MAP[val];
-                else if (key.endsWith("lfotype"))  val = LFO_TYPE_MAP[val];
-                else if (key.endsWith("lforate")) val = 127 - val;                                       // reversed
-                else if (key.endsWith("volume")) val = 127 - val;                                       // reversed
-                else if (key.endsWith("frequencyshift")) val -= 12;                                                                     // 2's complement
-
-                return(new byte[]
+                if ((tone == 0 || tone == 2) && voiceToneACParametersToIndex.containsKey(key))
                     {
-                    (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x02,
-                    (byte)voiceToneAC[0][i], (byte)tone,// ST
-                    (byte)voiceToneAC[1][i],                        // F1
-                    (byte)voiceToneAC[2][i],                        // F2
-                    (byte)voiceToneAC[3][i],                        // B1
-                    (byte)voiceToneAC[4][i],                        // B2
-                    (byte)((val >>> 7) & 1),                              // V1
-                    (byte)(val & 127), (byte)0xF7                       // V2
-                    });
-                }
-            else if ((tone == 1 || tone == 3) && voiceToneBDParametersToIndex.containsKey(key))
-                {
-                int i = ((Integer)(voiceToneBDParametersToIndex.get(key))).intValue();
+                        int i = ((Integer)(voiceToneACParametersToIndex.get(key))).intValue();
 
-                if (key.endsWith("aftertouchsensitivity")) val = AFTERTOUCH_SENSITIVITY_MAP[val];
-                else if (key.endsWith("velocitysensitivity"))  val = VELOCITY_SENSITIVITY_MAP[val];
-                else if (key.endsWith("lfotype"))  val = LFO_TYPE_MAP[val];
-                else if (key.endsWith("lforate")) val = 127 - val;                                       // reversed
-                else if (key.endsWith("volume")) val = 127 - val;                                       // reversed
-                else if (key.endsWith("level")) val = 127 - val;                                        // reversed
-                else if (key.endsWith("frequencyshift")) val -= 12;                                                                     // 2's complement
+                        if (key.endsWith("aftertouchsensitivity")) val = AFTERTOUCH_SENSITIVITY_MAP[val];
+                        else if (key.endsWith("velocitysensitivity"))  val = VELOCITY_SENSITIVITY_MAP[val];
+                        else if (key.endsWith("lfotype"))  val = LFO_TYPE_MAP[val];
+                        else if (key.endsWith("lforate")) val = 127 - val;                                       // reversed
+                        else if (key.endsWith("volume")) val = 127 - val;                                       // reversed
+                        else if (key.endsWith("frequencyshift")) val -= 12;                                                                     // 2's complement
 
-                return(new byte[]
+                        return(new byte[]
+                            {
+                                (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x02,
+                                (byte)voiceToneAC[0][i], (byte)tone,// ST
+                                (byte)voiceToneAC[1][i],                        // F1
+                                (byte)voiceToneAC[2][i],                        // F2
+                                (byte)voiceToneAC[3][i],                        // B1
+                                (byte)voiceToneAC[4][i],                        // B2
+                                (byte)((val >>> 7) & 1),                              // V1
+                                (byte)(val & 127), (byte)0xF7                       // V2
+                            });
+                    }
+                else if ((tone == 1 || tone == 3) && voiceToneBDParametersToIndex.containsKey(key))
                     {
-                    (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x02,
-                    (byte)voiceToneBD[0][i], (byte)tone,// ST
-                    (byte)voiceToneBD[1][i],                        // F1
-                    (byte)voiceToneBD[2][i],                        // F2
-                    (byte)voiceToneBD[3][i],                        // B1
-                    (byte)voiceToneBD[4][i],                        // B2
-                    (byte)((val >>> 7) & 1),                              // V1
-                    (byte)(val & 127), (byte)0xF7                       // V2
-                    });
-                }
-            else if ((tone == 0 || tone == 2) && voiceEnvelopeACParametersToIndex.containsKey(key))
-                {
-                int i = ((Integer)(voiceEnvelopeACParametersToIndex.get(key))).intValue();
+                        int i = ((Integer)(voiceToneBDParametersToIndex.get(key))).intValue();
 
-                if (key.endsWith("egtype")) val = ENVELOPE_TYPE_MAP[val];
-                else if (key.endsWith("delayonoff") && val > 0)  val = 0x80;
-                else if (key.endsWith("initiallevel")) val = 127 - val;                                 // reversed
-                else if (key.endsWith("attacklevel")) val = 127 - val;                                  // reversed
-                else if (key.endsWith("decay1level")) val = 127 - val;                                  // reversed
-                else if (key.endsWith("decay2level")) val = 127 - val;                                  // reversed
-                else if (key.endsWith("levelscaling")) val = val * 16;
-                else if (key.endsWith("delay")) val = val * 0x80;
+                        if (key.endsWith("aftertouchsensitivity")) val = AFTERTOUCH_SENSITIVITY_MAP[val];
+                        else if (key.endsWith("velocitysensitivity"))  val = VELOCITY_SENSITIVITY_MAP[val];
+                        else if (key.endsWith("lfotype"))  val = LFO_TYPE_MAP[val];
+                        else if (key.endsWith("lforate")) val = 127 - val;                                       // reversed
+                        else if (key.endsWith("volume")) val = 127 - val;                                       // reversed
+                        else if (key.endsWith("level")) val = 127 - val;                                        // reversed
+                        else if (key.endsWith("frequencyshift")) val -= 12;                                                                     // 2's complement
 
-                return(new byte[]
+                        return(new byte[]
+                            {
+                                (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x02,
+                                (byte)voiceToneBD[0][i], (byte)tone,// ST
+                                (byte)voiceToneBD[1][i],                        // F1
+                                (byte)voiceToneBD[2][i],                        // F2
+                                (byte)voiceToneBD[3][i],                        // B1
+                                (byte)voiceToneBD[4][i],                        // B2
+                                (byte)((val >>> 7) & 1),                              // V1
+                                (byte)(val & 127), (byte)0xF7                       // V2
+                            });
+                    }
+                else if ((tone == 0 || tone == 2) && voiceEnvelopeACParametersToIndex.containsKey(key))
                     {
-                    (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x03,
-                    (byte)voiceEnvelopeAC[0][i], (byte)tone,// ST
-                    (byte)voiceEnvelopeAC[1][i],                    // F1
-                    (byte)voiceEnvelopeAC[2][i],                    // F2
-                    (byte)voiceEnvelopeAC[3][i],                    // B1
-                    (byte)voiceEnvelopeAC[4][i],                    // B2
-                    (byte)((val >>> 7) & 1),                              // V1
-                    (byte)(val & 127), (byte)0xF7                   // V2
-                    });
-                }
-            else if ((tone == 4 || tone == 5) && voiceEnvelopeBDParametersToIndex.containsKey(key))
-                {
-                int i = ((Integer)(voiceEnvelopeBDParametersToIndex.get(key))).intValue();
+                        int i = ((Integer)(voiceEnvelopeACParametersToIndex.get(key))).intValue();
 
-                if (key.endsWith("egtype")) val = ENVELOPE_TYPE_MAP[val];
-                else if (key.endsWith("delayonoff") && val > 0)  val = 0x80;
-                else if (key.endsWith("initiallevel")) val = 127 - val;                                 // reversed
-                else if (key.endsWith("attacklevel")) val = 127 - val;                                  // reversed
-                else if (key.endsWith("decay1level")) val = 127 - val;                                  // reversed
-                else if (key.endsWith("decay2level")) val = 127 - val;                                  // reversed
-                else if (key.endsWith("levelscaling")) val = val * 16;
-                else if (key.endsWith("delay")) val = val * 0x80;
+                        if (key.endsWith("egtype")) val = ENVELOPE_TYPE_MAP[val];
+                        else if (key.endsWith("delayonoff") && val > 0)  val = 0x80;
+                        else if (key.endsWith("initiallevel")) val = 127 - val;                                 // reversed
+                        else if (key.endsWith("attacklevel")) val = 127 - val;                                  // reversed
+                        else if (key.endsWith("decay1level")) val = 127 - val;                                  // reversed
+                        else if (key.endsWith("decay2level")) val = 127 - val;                                  // reversed
+                        else if (key.endsWith("levelscaling")) val = val * 16;
+                        else if (key.endsWith("delay")) val = val * 0x80;
+
+                        return(new byte[]
+                            {
+                                (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x03,
+                                (byte)voiceEnvelopeAC[0][i], (byte)tone,// ST
+                                (byte)voiceEnvelopeAC[1][i],                    // F1
+                                (byte)voiceEnvelopeAC[2][i],                    // F2
+                                (byte)voiceEnvelopeAC[3][i],                    // B1
+                                (byte)voiceEnvelopeAC[4][i],                    // B2
+                                (byte)((val >>> 7) & 1),                              // V1
+                                (byte)(val & 127), (byte)0xF7                   // V2
+                            });
+                    }
+                else if ((tone == 4 || tone == 5) && voiceEnvelopeBDParametersToIndex.containsKey(key))
+                    {
+                        int i = ((Integer)(voiceEnvelopeBDParametersToIndex.get(key))).intValue();
+
+                        if (key.endsWith("egtype")) val = ENVELOPE_TYPE_MAP[val];
+                        else if (key.endsWith("delayonoff") && val > 0)  val = 0x80;
+                        else if (key.endsWith("initiallevel")) val = 127 - val;                                 // reversed
+                        else if (key.endsWith("attacklevel")) val = 127 - val;                                  // reversed
+                        else if (key.endsWith("decay1level")) val = 127 - val;                                  // reversed
+                        else if (key.endsWith("decay2level")) val = 127 - val;                                  // reversed
+                        else if (key.endsWith("levelscaling")) val = val * 16;
+                        else if (key.endsWith("delay")) val = val * 0x80;
                 
-                return(new byte[]
-                    {
-                    (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x03,
-                    (byte)voiceEnvelopeBD[0][i], (byte)(tone == 4 ? 1 : 3),// ST
-                    (byte)voiceEnvelopeBD[1][i],                    // F1
-                    (byte)voiceEnvelopeBD[2][i],                    // F2
-                    (byte)voiceEnvelopeBD[3][i],                    // B1
-                    (byte)voiceEnvelopeBD[4][i],                    // B2
-                    (byte)((val >>> 7) & 1),                              // V1
-                    (byte)(val & 127), (byte)0xF7                   // V2
-                    });
-                }
+                        return(new byte[]
+                            {
+                                (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x03,
+                                (byte)voiceEnvelopeBD[0][i], (byte)(tone == 4 ? 1 : 3),// ST
+                                (byte)voiceEnvelopeBD[1][i],                    // F1
+                                (byte)voiceEnvelopeBD[2][i],                    // F2
+                                (byte)voiceEnvelopeBD[3][i],                    // B1
+                                (byte)voiceEnvelopeBD[4][i],                    // B2
+                                (byte)((val >>> 7) & 1),                              // V1
+                                (byte)(val & 127), (byte)0xF7                   // V2
+                            });
+                    }
             }
         return new byte[0];
-        }
+    }
 
 
     public Object[] emitAll(String key)
-        {
+    {
         if (key.equals("number")) return new Object[0];  // this is not emittable
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         
         if (key.equals("name"))
             {
-            Object[] result = new Object[8];
+                Object[] result = new Object[8];
             
-            String name = model.get("name", "UNTITLED") + "          ";
+                String name = model.get("name", "UNTITLED") + "          ";
 
-            int pos = 4;            // start of name in voice common array
-            for(int i = 0; i < 8; i++)
-                {
-                result[i] = (new byte[]
+                int pos = 4;            // start of name in voice common array
+                for(int i = 0; i < 8; i++)
                     {
-                    (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x00,
-                    (byte)voiceCommon[0][pos + i], 0x00,                  // ST
-                    (byte)voiceCommon[1][pos + i],                        // F1
-                    (byte)voiceCommon[2][pos + i],                        // F2
-                    (byte)voiceCommon[3][pos + i],                        // B1
-                    (byte)voiceCommon[4][pos + i],                        // B2
-                    (byte)0x00,                                                                                     // V1
-                    (byte)(name.charAt(i)), (byte)0xF7                                      // V2
-                    });
-                }
-            return result;
+                        result[i] = (new byte[]
+                            {
+                                (byte)0xF0, 0x43, (byte)(16 + getID()), 0x26, 0x00,
+                                (byte)voiceCommon[0][pos + i], 0x00,                  // ST
+                                (byte)voiceCommon[1][pos + i],                        // F1
+                                (byte)voiceCommon[2][pos + i],                        // F2
+                                (byte)voiceCommon[3][pos + i],                        // B1
+                                (byte)voiceCommon[4][pos + i],                        // B2
+                                (byte)0x00,                                                                                     // V1
+                                (byte)(name.charAt(i)), (byte)0xF7                                      // V2
+                            });
+                    }
+                return result;
             }
         else 
             {
-            byte[] data = send(key);
-            if (data.length == 0)
-                {
-//                System.err.println("Warning (YamahaTG33): Can't emit key " + key);
-                return new Object[0];
-                }
-            else 
-                {
-                return new Object[] { data };
-                }
+                byte[] data = send(key);
+                if (data.length == 0)
+                    {
+                        //                System.err.println("Warning (YamahaTG33): Can't emit key " + key);
+                        return new Object[0];
+                    }
+                else 
+                    {
+                        return new Object[] { data };
+                    }
             }
-        }
+    }
 
 
     // For the time being, we're just doing single-patch parses, not bank parses.
     // They're different for different synths.  Maybe later.
     public int parse(byte[] data, boolean fromFile)
-        {
+    {
         if (YamahaTG33Rec.recognizeBank(data))
             return parseBank(data, fromFile);
         else
             return parseOne(16, data, fromFile);
-        }
+    }
 
     // Bank data is stored as 14 bytes of header,
     // plus 16 blobs of 4 patches each.
@@ -1660,7 +1660,7 @@ public class YamahaTG33 extends Synth
         
     int[] blobs = new int[16];
     public int parseBank(byte[] data, boolean fromFile)
-        {
+    {
         //      Extract names
         String[] names = new String[64];
         int[] patches = new int[64];
@@ -1670,26 +1670,26 @@ public class YamahaTG33 extends Synth
         int pos = 14;
         for(int i = 0; i < 16; i++)
             {
-            blobs[i] = pos;
-            // Advance 2 for the data bytes
-            pos += 2;
-            // patches are in blobs of 4
-            for(int ii = i * 4; ii < (i + 1) * 4; ii++)
-                {
-                char[] n = new char[8];
-                for(int p = 0; p < 8; p++)
+                blobs[i] = pos;
+                // Advance 2 for the data bytes
+                pos += 2;
+                // patches are in blobs of 4
+                for(int ii = i * 4; ii < (i + 1) * 4; ii++)
                     {
-                    n[p] = (char)data[pos + (isTG ? 12 : 3) + p];           // name is offset by 12 from pos in TG, 2 in SY
+                        char[] n = new char[8];
+                        for(int p = 0; p < 8; p++)
+                            {
+                                n[p] = (char)data[pos + (isTG ? 12 : 3) + p];           // name is offset by 12 from pos in TG, 2 in SY
+                            }
+                        names[ii] = new String(n);
+                        patches[ii] = pos;
+                        if (isTG) 
+                            pos += 587;
+                        else
+                            pos += 574;             // I think?
                     }
-                names[ii] = new String(n);
-                patches[ii] = pos;
-                if (isTG) 
-                    pos += 587;
-                else
-                    pos += 574;             // I think?
-                }
-            // Advance one more for the blob checksum
-            pos += 1;
+                // Advance one more for the blob checksum
+                pos += 1;
             }
                                 
         // Now that we have an array of names, one per patch, we present the user with options;
@@ -1707,11 +1707,11 @@ public class YamahaTG33 extends Synth
                         
         // okay, we're loading and editing patch number patchNum.  Here we go.
         return parseOne(patches[patchNum], data, fromFile);
-        }
+    }
 
     public static final int BANK_PAUSE_INTERVAL = 100;
     public Object adjustBankSysexForEmit(byte[] data, Model model, int bank) 
-        { 
+    { 
         if (getSynthType() == TYPE_TG33)
             data[2] = (byte)(getID());
         else
@@ -1721,7 +1721,7 @@ public class YamahaTG33 extends Synth
         p[0] = blobs[1];
         for(int i = 1; i < p.length; i++)
             {
-            p[i] = blobs[i + 1] - blobs[i];
+                p[i] = blobs[i + 1] - blobs[i];
             }
                 
         // At this point each value in P should contain the SIZE of the chunk except the final chunk.
@@ -1729,9 +1729,9 @@ public class YamahaTG33 extends Synth
         byte[][] sysex = new byte[16][];
         for(int i = 0; i < sysex.length - 1; i++)
             {
-            sysex[i] = new byte[p[i]];
-            System.arraycopy(data, pos, sysex[i], 0, p[i]);
-            pos += p[i];
+                sysex[i] = new byte[p[i]];
+                System.arraycopy(data, pos, sysex[i], 0, p[i]);
+                pos += p[i];
             }
         sysex[sysex.length - 1] = new byte[data.length - pos];
         System.arraycopy(data, pos, sysex[sysex.length - 1], 0, data.length - pos);
@@ -1741,34 +1741,34 @@ public class YamahaTG33 extends Synth
         Object[] d = new Object[div.length * 2 - 1];
         for(int i = 0; i < div.length; i++)
             {
-            d[i * 2] = div[i];
-            if (i != div.length - 1)
-                d[i * 2 + 1] = new Integer(BANK_PAUSE_INTERVAL);
+                d[i * 2] = div[i];
+                if (i != div.length - 1)
+                    d[i * 2 + 1] = new Integer(BANK_PAUSE_INTERVAL);
             }
         return d;
-        }
+    }
 
     public JComponent getAdditionalBankSysexOptionsComponents(byte[] data, String[] names)
-        {
+    {
         if (YamahaTG33Rec.recognizeTGBank(data))
             {
-            VBox vbox = new VBox();
-            vbox.add(Strut.makeVerticalStrut(10));
-            vbox.add(new JLabel("This is a TG-33 Bank Sysex file.  You can't write it to the SY-22/35."));
-            return vbox;
+                VBox vbox = new VBox();
+                vbox.add(Strut.makeVerticalStrut(10));
+                vbox.add(new JLabel("This is a TG-33 Bank Sysex file.  You can't write it to the SY-22/35."));
+                return vbox;
             }
         else
             {
-            VBox vbox = new VBox();
-            vbox.add(Strut.makeVerticalStrut(10));
-            vbox.add(new JLabel("This is an SY-22/35 Bank Sysex file.  This file contains multimode"));
-            vbox.add(new JLabel("patches as well as single patches.  If you write it to your SY-22/35,"));
-            vbox.add(new JLabel("it will overwrite your multimode patches as well.  You can write this"));
-            vbox.add(new JLabel("file to your TG-33, but it will only respond to the single patches"));
-            vbox.add(new JLabel("in the file, not the multimode patches"));
-            return vbox;
+                VBox vbox = new VBox();
+                vbox.add(Strut.makeVerticalStrut(10));
+                vbox.add(new JLabel("This is an SY-22/35 Bank Sysex file.  This file contains multimode"));
+                vbox.add(new JLabel("patches as well as single patches.  If you write it to your SY-22/35,"));
+                vbox.add(new JLabel("it will overwrite your multimode patches as well.  You can write this"));
+                vbox.add(new JLabel("file to your TG-33, but it will only respond to the single patches"));
+                vbox.add(new JLabel("in the file, not the multimode patches"));
+                return vbox;
             }
-        }
+    }
 
 
     /// One gizmo I've added is the ability to ONLY parse the vector from a patch.  This allows the user
@@ -1776,102 +1776,102 @@ public class YamahaTG33 extends Synth
     /// he's editing.  Not sure how useful that is, but...
         
     public int parseOne(int pos, byte[] data, boolean fromFile)
-        {
+    {
         byte a;
         byte b;
         byte c;
         
         if (isParsingVectorOnly)
             {
-            if (YamahaTG33Rec.recognizeTG(data))
-                pos += 0xBB;
-            else
-                pos += 174;             // 0xBB - 13.  The difference in Voice common lengths is 13
+                if (YamahaTG33Rec.recognizeTG(data))
+                    pos += 0xBB;
+                else
+                    pos += 174;             // 0xBB - 13.  The difference in Voice common lengths is 13
             }
         else
             {        
-            //// COMMON
-            if (YamahaTG33Rec.recognizeTG(data) || YamahaTG33Rec.recognizeTGBank(data))
-                {
-                b = data[pos++];
-                model.set("configuration", (b >>> 0) & 1);              // "2/4"
-                // model.set("DUNNO", (b >>> 1) & 1);           // DRM  // dunno
-                b = data[pos++];
-                model.set("effecttype", (b >>> 0) & 15);                // "EFFECT"
-                b = data[pos++];
-                model.set("effectbalance", (b >>> 0) & 127);            // EFFECT BALANCE
-                pos+=3; // skip
-                b = data[pos++];
-                model.set("effectsendlevel", (b >>> 0) & 127);          // EFFECT SEND
-                pos+=5; // skip
-                char[] name = new char[8];
-                for(int i = 0; i < name.length; i++)
-                    name[i] = (char)(data[pos++] & 127);
-                model.set("name", new String(name));
-                b = data[pos++];
-                model.set("pitchbendrange", (b >>> 0) & 15);            // PITCH BEND R
+                //// COMMON
+                if (YamahaTG33Rec.recognizeTG(data) || YamahaTG33Rec.recognizeTGBank(data))
+                    {
+                        b = data[pos++];
+                        model.set("configuration", (b >>> 0) & 1);              // "2/4"
+                        // model.set("DUNNO", (b >>> 1) & 1);           // DRM  // dunno
+                        b = data[pos++];
+                        model.set("effecttype", (b >>> 0) & 15);                // "EFFECT"
+                        b = data[pos++];
+                        model.set("effectbalance", (b >>> 0) & 127);            // EFFECT BALANCE
+                        pos+=3; // skip
+                        b = data[pos++];
+                        model.set("effectsendlevel", (b >>> 0) & 127);          // EFFECT SEND
+                        pos+=5; // skip
+                        char[] name = new char[8];
+                        for(int i = 0; i < name.length; i++)
+                            name[i] = (char)(data[pos++] & 127);
+                        model.set("name", new String(name));
+                        b = data[pos++];
+                        model.set("pitchbendrange", (b >>> 0) & 15);            // PITCH BEND R
                         
-                // clearing:
-                model.set("effectsenddepth", 0);
-                }
-            else
-                {
-                pos++;          // the first byte is  0 0 0 0 0 0 1
-                pos++;          // the second byte is 0 1 0 0 1 0 1
+                        // clearing:
+                        model.set("effectsenddepth", 0);
+                    }
+                else
+                    {
+                        pos++;          // the first byte is  0 0 0 0 0 0 1
+                        pos++;          // the second byte is 0 1 0 0 1 0 1
+                        b = data[pos++];
+                        model.set("effecttype", (b >>> 0) & 15);                // EFFECT
+                        model.set("effectsenddepth", (b >>> 4) & 7);                // DEPTH
+                        char[] name = new char[8];
+                        for(int i = 0; i < name.length; i++)
+                            name[i] = (char)(data[pos++] & 127);
+                        model.set("name", new String(name));
+                        a = data[pos++];
+                        b = data[pos++];
+                        model.set("configuration", (a >>> 0) & 1);              // "2/4"
+                        model.set("pitchbendrange", (b >>> 0) & 15);            // PITCH BEND R
+
+                        // clearing:
+                        model.set("effectbalance", 0);
+                        model.set("effectsendlevel", 0);
+                    }
+        
                 b = data[pos++];
-                model.set("effecttype", (b >>> 0) & 15);                // EFFECT
-                model.set("effectsenddepth", (b >>> 4) & 7);                // DEPTH
-                char[] name = new char[8];
-                for(int i = 0; i < name.length; i++)
-                    name[i] = (char)(data[pos++] & 127);
-                model.set("name", new String(name));
+                model.set("modulationwheelam", (b >>> 0) & 1);          // PIT -WHEEL- AM
+                model.set("modulationwheelpm", (b >>> 1) & 1);          // PIT -WHEEL- PM
+                // model.set("DUNNO", (b >>> 2) & 1);                                   // PIT -WHEEL- TYP  // dunno
+                model.set("aftertoucham", (b >>> 4) & 1);               // AFTER TUCH AM
+                model.set("aftertouchpm", (b >>> 5) & 1);               // AFTER TUCH PM  
+                model.set("aftertouchlevel", (b >>> 6) & 1);            // AFTER TUCH LEV  
                 a = data[pos++];
                 b = data[pos++];
-                model.set("configuration", (a >>> 0) & 1);              // "2/4"
-                model.set("pitchbendrange", (b >>> 0) & 15);            // PITCH BEND R
-
-                // clearing:
-                model.set("effectbalance", 0);
-                model.set("effectsendlevel", 0);
-                }
-        
-            b = data[pos++];
-            model.set("modulationwheelam", (b >>> 0) & 1);          // PIT -WHEEL- AM
-            model.set("modulationwheelpm", (b >>> 1) & 1);          // PIT -WHEEL- PM
-            // model.set("DUNNO", (b >>> 2) & 1);                                   // PIT -WHEEL- TYP  // dunno
-            model.set("aftertoucham", (b >>> 4) & 1);               // AFTER TUCH AM
-            model.set("aftertouchpm", (b >>> 5) & 1);               // AFTER TUCH PM  
-            model.set("aftertouchlevel", (b >>> 6) & 1);            // AFTER TUCH LEV  
-            a = data[pos++];
-            b = data[pos++];
-            c = (byte)((a << 7) | b);                                                                   // AFTER PITCH
-            model.set("pitchbias", c + 12);                                                     // 2's complement, 12 off
-            b = data[pos++];
-            model.set("egdelayrate", (b >>> 0) & 127);              // EG DELAY RATE
-            a = data[pos++];
-            b = data[pos++];
-            c = (byte)((a << 7) | b);                                                                   // COMMON ENV. ATTACK
-            model.set("egattackrate", c + 63);                                          // 2's complement, 63 off               
-            a = data[pos++];
-            b = data[pos++];
-            c = (byte)((a << 7) | b);                                                                   // COMMON ENV. RELEASE
-            model.set("egreleaserate", c + 63);                                         // 2's complement 63 off
+                c = (byte)((a << 7) | b);                                                                   // AFTER PITCH
+                model.set("pitchbias", c + 12);                                                     // 2's complement, 12 off
+                b = data[pos++];
+                model.set("egdelayrate", (b >>> 0) & 127);              // EG DELAY RATE
+                a = data[pos++];
+                b = data[pos++];
+                c = (byte)((a << 7) | b);                                                                   // COMMON ENV. ATTACK
+                model.set("egattackrate", c + 63);                                          // 2's complement, 63 off               
+                a = data[pos++];
+                b = data[pos++];
+                c = (byte)((a << 7) | b);                                                                   // COMMON ENV. RELEASE
+                model.set("egreleaserate", c + 63);                                         // 2's complement 63 off
                 
                 
-            // TONES
+                // TONES
             
-            pos = parseAC(TONE_A, data, pos);
-            pos = parseBD(TONE_B, data, pos);
-            pos = parseAC(TONE_C, data, pos);
-            pos = parseBD(TONE_D, data, pos);
+                pos = parseAC(TONE_A, data, pos);
+                pos = parseBD(TONE_B, data, pos);
+                pos = parseAC(TONE_C, data, pos);
+                pos = parseBD(TONE_D, data, pos);
                 
                 
-            // VECTOR COMMON
+                // VECTOR COMMON
                 
-            b = data[pos++];
-            model.set("levelspeed", (b >>> 0) & 127);               // LEVEL SPEED
-            b = data[pos++];
-            model.set("detunespeed", (b >>> 0) & 127);              // DETUNE SPEED
+                b = data[pos++];
+                model.set("levelspeed", (b >>> 0) & 127);               // LEVEL SPEED
+                b = data[pos++];
+                model.set("detunespeed", (b >>> 0) & 127);              // DETUNE SPEED
                 
             }
         
@@ -1879,36 +1879,36 @@ public class YamahaTG33 extends Synth
         
         for(int i = 0; i < 50; i++)
             {
-            a = data[pos++];
-            b = data[pos++];
-            int val = ((a & 127) << 7) | (b & 127);
-            if (i == 0 && val == 255) val = 254;
-            model.set("level" + (i + 1) + "time", val);                                                 // LEVEL TIME INTERVAL STEP
-            b = data[pos++];
-            model.set("level" + (i + 1) + "xaxis", (b >>> 0) & 127);                // LEVEL X-axis
-            b = data[pos++];
-            model.set("level" + (i + 1) + "yaxis", (b >>> 0) & 127);                // LEVEL Y-axis
+                a = data[pos++];
+                b = data[pos++];
+                int val = ((a & 127) << 7) | (b & 127);
+                if (i == 0 && val == 255) val = 254;
+                model.set("level" + (i + 1) + "time", val);                                                 // LEVEL TIME INTERVAL STEP
+                b = data[pos++];
+                model.set("level" + (i + 1) + "xaxis", (b >>> 0) & 127);                // LEVEL X-axis
+                b = data[pos++];
+                model.set("level" + (i + 1) + "yaxis", (b >>> 0) & 127);                // LEVEL Y-axis
             }
         for(int i = 0; i < 50; i++)
             {
-            a = data[pos++];
-            b = data[pos++];
-            int val = ((a & 127) << 7) | (b & 127);
-            if (i == 0 && val == 255) val = 254;
-            model.set("detune" + (i + 1) + "time", val);                                                // DETUNE TIME INTERVAL STEP
-            b = data[pos++];
-            model.set("detune" + (i + 1) + "xaxis", (b >>> 0) & 127);               // DETUNE X-axis
-            b = data[pos++];
-            model.set("detune" + (i + 1) + "yaxis", (b >>> 0) & 127);               // DETUNE Y-axis
+                a = data[pos++];
+                b = data[pos++];
+                int val = ((a & 127) << 7) | (b & 127);
+                if (i == 0 && val == 255) val = 254;
+                model.set("detune" + (i + 1) + "time", val);                                                // DETUNE TIME INTERVAL STEP
+                b = data[pos++];
+                model.set("detune" + (i + 1) + "xaxis", (b >>> 0) & 127);               // DETUNE X-axis
+                b = data[pos++];
+                model.set("detune" + (i + 1) + "yaxis", (b >>> 0) & 127);               // DETUNE Y-axis
             }
         
         revise();
         
         return PARSE_SUCCEEDED;  
-        }
+    }
 
     public int parseAC(int tone, byte[] data, int pos)
-        {
+    {
         byte a;
         byte b;
         byte c;
@@ -1966,7 +1966,7 @@ public class YamahaTG33 extends Synth
         a = data[pos++];
         b = data[pos++];
         model.set(t + "decay1rate", ((b >>> 0) & 63));          // EG D1R
-//              { int max = (a << 1) | (b >>> 6); }                                     // MAX or EG MAX -- we're ignoring this one             
+        //              { int max = (a << 1) | (b >>> 6); }                                     // MAX or EG MAX -- we're ignoring this one             
         b = data[pos++];
         model.set(t + "decay2rate", ((b >>> 0) & 63));          // EG D2R
         b = data[pos++];
@@ -1982,14 +1982,14 @@ public class YamahaTG33 extends Synth
         
         if (YamahaTG33Rec.recognizeTG(data) || YamahaTG33Rec.recognizeTGBank(data))
             {
-            pos += 2;
+                pos += 2;
             }
                 
         return pos;
-        }
+    }
         
     public int parseBD(int tone, byte[] data, int pos)
-        {
+    {
         byte a;
         byte b;
         byte c;
@@ -2059,7 +2059,7 @@ public class YamahaTG33 extends Synth
         a = data[pos++];
         b = data[pos++];
         model.set(t + "1decay1rate", ((b >>> 0) & 63));         // M EG D1R
-//              { int max = (a << 1) | (b >>> 6); }                                     // MAX or EG MAX -- we're ignoring this one             
+        //              { int max = (a << 1) | (b >>> 6); }                                     // MAX or EG MAX -- we're ignoring this one             
         b = data[pos++];
         model.set(t + "1decay2rate", ((b >>> 0) & 63));         // M EG D2R
         b = data[pos++];
@@ -2093,7 +2093,7 @@ public class YamahaTG33 extends Synth
         a = data[pos++];
         b = data[pos++];
         model.set(t + "0decay1rate", ((b >>> 0) & 63));         // C EG D1R
-//              { int max = (a << 1) | (b >>> 6); }                                     // MAX or EG MAX -- we're ignoring this one             
+        //              { int max = (a << 1) | (b >>> 6); }                                     // MAX or EG MAX -- we're ignoring this one             
         b = data[pos++];
         model.set(t + "0decay2rate", ((b >>> 0) & 63));         // C EG D2R
         b = data[pos++];
@@ -2109,15 +2109,15 @@ public class YamahaTG33 extends Synth
 
         if (YamahaTG33Rec.recognizeTG(data) || YamahaTG33Rec.recognizeTGBank(data))
             {
-            pos += 2;
+                pos += 2;
             }
                         
         return pos;
-        }
+    }
                 
 
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
-        {
+    {
         if (tempModel == null)
             tempModel = getModel();
 
@@ -2131,37 +2131,37 @@ public class YamahaTG33 extends Synth
 
         if (getSynthType() == TYPE_TG33)
             {
-            data[2] = (byte)(getID());
-            data[3] = (byte)0x7E;
-            data[4] = (byte)(len / 128);
-            data[5] = (byte)(len % 128);
-            data[6] = (byte)'L';
-            data[7] = (byte)'M';
-            data[8] = (byte)' ';
-            data[9] = (byte)' ';
-            data[10] = (byte)'0';
-            data[11] = (byte)'0';
-            data[12] = (byte)'1';
-            data[13] = (byte)'2';
-            data[14] = (byte)'V';
-            data[15] = (byte)'E';
+                data[2] = (byte)(getID());
+                data[3] = (byte)0x7E;
+                data[4] = (byte)(len / 128);
+                data[5] = (byte)(len % 128);
+                data[6] = (byte)'L';
+                data[7] = (byte)'M';
+                data[8] = (byte)' ';
+                data[9] = (byte)' ';
+                data[10] = (byte)'0';
+                data[11] = (byte)'0';
+                data[12] = (byte)'1';
+                data[13] = (byte)'2';
+                data[14] = (byte)'V';
+                data[15] = (byte)'E';
             }
         else
             {
-            data[2] = (byte)(getChannelOut());
-            data[3] = (byte)0x7E;
-            data[4] = (byte)(len / 128);
-            data[5] = (byte)(len % 128);
-            data[6] = (byte)'P';
-            data[7] = (byte)'K';
-            data[8] = (byte)' ';
-            data[9] = (byte)' ';
-            data[10] = (byte)'2';
-            data[11] = (byte)'2';
-            data[12] = (byte)'0';
-            data[13] = (byte)'3';
-            data[14] = (byte)'A';
-            data[15] = (byte)'E';
+                data[2] = (byte)(getChannelOut());
+                data[3] = (byte)0x7E;
+                data[4] = (byte)(len / 128);
+                data[5] = (byte)(len % 128);
+                data[6] = (byte)'P';
+                data[7] = (byte)'K';
+                data[8] = (byte)' ';
+                data[9] = (byte)' ';
+                data[10] = (byte)'2';
+                data[11] = (byte)'2';
+                data[12] = (byte)'0';
+                data[13] = (byte)'3';
+                data[14] = (byte)'A';
+                data[15] = (byte)'E';
             }
         
         int pos = 16;
@@ -2171,39 +2171,39 @@ public class YamahaTG33 extends Synth
                 
         if (getSynthType() == TYPE_TG33)
             {
-            int unknown_drm = 0;
-            data[pos++] = (byte)((unknown_drm << 1) | model.get("configuration"));
-            data[pos++] = (byte)(model.get("effecttype"));
-            data[pos++] = (byte)(model.get("effectbalance"));
-            pos += 3;  // skip
-            data[pos++] = (byte)(model.get("effectsendlevel"));
-            pos += 5;       // skip
-            String nm = model.get("name", "Untitled") + "        ";
-            for(int i = 0; i < 8; i++)
-                data[pos++] = (byte)(nm.charAt(i));
-            data[pos++] = (byte)(model.get("pitchbendrange"));
+                int unknown_drm = 0;
+                data[pos++] = (byte)((unknown_drm << 1) | model.get("configuration"));
+                data[pos++] = (byte)(model.get("effecttype"));
+                data[pos++] = (byte)(model.get("effectbalance"));
+                pos += 3;  // skip
+                data[pos++] = (byte)(model.get("effectsendlevel"));
+                pos += 5;       // skip
+                String nm = model.get("name", "Untitled") + "        ";
+                for(int i = 0; i < 8; i++)
+                    data[pos++] = (byte)(nm.charAt(i));
+                data[pos++] = (byte)(model.get("pitchbendrange"));
             }
         else
             {
-            overflow[pos] = true;
-            data[pos++] = 1;                // the first byte is  0 0 0 0 0 0 1
-            data[pos++] = 37;               // the second byte is 0 1 0 0 1 0 1
-            data[pos++] = (byte)((model.get("effectsenddepth") << 4) | model.get("effecttype"));
-            String nm = model.get("name", "Untitled") + "        ";
-            for(int i = 0; i < 8; i++)
-                data[pos++] = (byte)(nm.charAt(i));
-            overflow[pos] = true;
-            data[pos++] = (byte)(model.get("configuration"));                   // MSB
-            data[pos++] = (byte)(model.get("pitchbendrange"));
+                overflow[pos] = true;
+                data[pos++] = 1;                // the first byte is  0 0 0 0 0 0 1
+                data[pos++] = 37;               // the second byte is 0 1 0 0 1 0 1
+                data[pos++] = (byte)((model.get("effectsenddepth") << 4) | model.get("effecttype"));
+                String nm = model.get("name", "Untitled") + "        ";
+                for(int i = 0; i < 8; i++)
+                    data[pos++] = (byte)(nm.charAt(i));
+                overflow[pos] = true;
+                data[pos++] = (byte)(model.get("configuration"));                   // MSB
+                data[pos++] = (byte)(model.get("pitchbendrange"));
             }
         
         int pit_type_dunno = 0;
         data[pos++] = (byte)((model.get("modulationwheelam") << 0) |
-            (model.get("modulationwheelpm") << 1) | 
-            (pit_type_dunno << 2) | 
-            (model.get("aftertoucham") << 4) | 
-            (model.get("aftertouchpm") << 5) | 
-            (model.get("aftertouchlevel") << 6)); 
+                             (model.get("modulationwheelpm") << 1) | 
+                             (pit_type_dunno << 2) | 
+                             (model.get("aftertoucham") << 4) | 
+                             (model.get("aftertouchpm") << 5) | 
+                             (model.get("aftertouchlevel") << 6)); 
         val = model.get("pitchbias") - 12;
         overflow[pos] = true;
         data[pos++] = (byte)((val & 255) / 128);                                        // MSB
@@ -2233,32 +2233,32 @@ public class YamahaTG33 extends Synth
         
         for(int i = 0; i < 50; i++)
             {
-            val = model.get("level" + (i + 1) + "time");
-            if (i == 0 && val == 254) val = 255;
-            overflow[pos] = true;
-            data[pos++] = (byte)((val & 255) / 128);                            // MSB
-            data[pos++] = (byte)((val & 255) % 128);
-            data[pos++] = (byte)(model.get("level" + (i + 1) + "xaxis"));
-            data[pos++] = (byte)(model.get("level" + (i + 1) + "yaxis"));
+                val = model.get("level" + (i + 1) + "time");
+                if (i == 0 && val == 254) val = 255;
+                overflow[pos] = true;
+                data[pos++] = (byte)((val & 255) / 128);                            // MSB
+                data[pos++] = (byte)((val & 255) % 128);
+                data[pos++] = (byte)(model.get("level" + (i + 1) + "xaxis"));
+                data[pos++] = (byte)(model.get("level" + (i + 1) + "yaxis"));
             }
         for(int i = 0; i < 50; i++)
             {
-            val = model.get("detune" + (i + 1) + "time");
-            if (i == 0 && val == 254) val = 255;
-            overflow[pos] = true;
-            data[pos++] = (byte)((val & 255) / 128);                            // MSB
-            data[pos++] = (byte)((val & 255) % 128);
-            data[pos++] = (byte)(model.get("detune" + (i + 1) + "xaxis"));
-            data[pos++] = (byte)(model.get("detune" + (i + 1) + "yaxis"));
+                val = model.get("detune" + (i + 1) + "time");
+                if (i == 0 && val == 254) val = 255;
+                overflow[pos] = true;
+                data[pos++] = (byte)((val & 255) / 128);                            // MSB
+                data[pos++] = (byte)((val & 255) % 128);
+                data[pos++] = (byte)(model.get("detune" + (i + 1) + "xaxis"));
+                data[pos++] = (byte)(model.get("detune" + (i + 1) + "yaxis"));
             }
 
         // for SY data, insert the "8-bit" checksum
         if (getSynthType() != TYPE_TG33)
             {
-            pos++;
-            byte bb = produce8BitChecksum(data, overflow, 6, pos);
-            data[pos++] = (byte)((bb >>> 7) & 1);
-            data[pos++] = (byte)(bb & 127);
+                pos++;
+                byte bb = produce8BitChecksum(data, overflow, 6, pos);
+                data[pos++] = (byte)((bb >>> 7) & 1);
+                data[pos++] = (byte)(bb & 127);
             }
         
         // Now the standard checksum
@@ -2266,10 +2266,10 @@ public class YamahaTG33 extends Synth
         data[data.length - 1] = (byte)0xF7;
         
         return new Object[] { data };           // this is Object[] instead of byte[] because I was experimenting with pauses before and after during debugging        
-        }
+    }
 
     public int emitAC(int tone, byte[] data, boolean[] overflow, int pos)
-        {
+    {
         int val;
         int val2;
         
@@ -2329,16 +2329,16 @@ public class YamahaTG33 extends Synth
         data[pos++] = (byte)(127 - model.get(t + "decay2level"));
         if (getSynthType() == TYPE_TG33) pos += 2;                      // Not the case for SY35?
         return pos;
-        }
+    }
         
     public static String toHex(int val)
-        {
+    {
         return String.format("0x%08X", val);
-        }
+    }
 
 
     public int emitBD(int tone, byte[] data, boolean[] overflow, int pos)
-        {
+    {
         int val;
         int val2;
         
@@ -2436,27 +2436,27 @@ public class YamahaTG33 extends Synth
         data[pos++] = (byte)(127 - model.get(t + "0decay2level"));
         if (getSynthType() == TYPE_TG33) pos += 2;                      // Not the case for SY35?
         return pos;
-        }
+    }
 
     byte produce8BitChecksum(byte[] bytes, boolean[] overflow, int start, int end)
-        {
+    {
         int checksum = 0;
         for(int i = start; i < end; i++)
             {
-            if (overflow[i])
-                {
-                checksum = (checksum + (bytes[i] * 128));
-                }
-            else
-                {
-                checksum = (checksum + bytes[i]) & 255;
-                }
+                if (overflow[i])
+                    {
+                        checksum = (checksum + (bytes[i] * 128));
+                    }
+                else
+                    {
+                        checksum = (checksum + bytes[i]) & 255;
+                    }
             }
         return (byte)((- checksum) & 255);
-        }
+    }
 
     byte produceChecksum(byte[] bytes, int start, int end)
-        {
+    {
         //              Presume it's the same procedure as 4-op.
         //      The TX816 owner's manual (p. 54) says the checksum is:
         //                              "the least significant 7 bits of the 2's complement sum of 155 data bytes.
@@ -2467,10 +2467,10 @@ public class YamahaTG33 extends Synth
         for(int i = start; i < end; i++)
             checksum = (checksum + bytes[i]) & 127;
         return (byte)((128 - checksum) & 127);
-        }
+    }
 
     public void performRequestDump(Model tempModel, boolean changePatch)
-        {
+    {
         if (tempModel == null)
             tempModel = getModel();
 
@@ -2478,37 +2478,37 @@ public class YamahaTG33 extends Synth
         changePatch(tempModel);
         simplePause(getPauseAfterChangePatch());
         tryToSendSysex(requestDump(tempModel));
-        }
+    }
 
     public byte[] requestDump(Model tempModel) 
-        {
+    {
         // since performRequestDump ALWAYS changes the patch, we might
         // as well just call requestCurrentDump() here 
         return requestCurrentDump(); 
-        }
+    }
     
     public byte[] requestCurrentDump()
-        {
+    {
         byte id = 0;
         
         if (getSynthType() == TYPE_TG33)
             {
-            return new byte[] { (byte)0xF0, (byte)0x43, (byte)(32 + getID()), (byte)0x7E, 
-                (byte)'L', (byte)'M', (byte)' ', (byte)' ', (byte)'0', 
-                (byte)'0', (byte)'1', (byte)'2', (byte)'V', (byte)'E', (byte)0xF7 };
+                return new byte[] { (byte)0xF0, (byte)0x43, (byte)(32 + getID()), (byte)0x7E, 
+                                    (byte)'L', (byte)'M', (byte)' ', (byte)' ', (byte)'0', 
+                                    (byte)'0', (byte)'1', (byte)'2', (byte)'V', (byte)'E', (byte)0xF7 };
             }
         else
             {
-            return new byte[] { (byte)0xF0, (byte)0x43, (byte)(32 + getChannelOut()), (byte)0x7E, 
-                (byte)'P', (byte)'K', (byte)' ', (byte)' ', (byte)'2', 
-                (byte)'2', (byte)'0', (byte)'3', (byte)'A', (byte)'E', (byte)0xF7 };
+                return new byte[] { (byte)0xF0, (byte)0x43, (byte)(32 + getChannelOut()), (byte)0x7E, 
+                                    (byte)'P', (byte)'K', (byte)' ', (byte)' ', (byte)'2', 
+                                    (byte)'2', (byte)'0', (byte)'3', (byte)'A', (byte)'E', (byte)0xF7 };
             }
-        }
+    }
 
                
     public static final int MAXIMUM_NAME_LENGTH = 8;
     public String revisePatchName(String name)
-        {
+    {
         name = super.revisePatchName(name);  // trim first time
         if (name.length() > MAXIMUM_NAME_LENGTH)
             name = name.substring(0, MAXIMUM_NAME_LENGTH);
@@ -2516,18 +2516,18 @@ public class YamahaTG33 extends Synth
         StringBuffer nameb = new StringBuffer(name);                            
         for(int i = 0 ; i < nameb.length(); i++)
             {
-            char c = nameb.charAt(i);
-            if (c < 32 || c > 127)
-                nameb.setCharAt(i, ' ');
+                char c = nameb.charAt(i);
+                if (c < 32 || c > 127)
+                    nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
-        }        
+    }        
 
 
-/** Verify that all the parameters are within valid values, and tweak them if not. */
+    /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
-        {
+    {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -2535,25 +2535,25 @@ public class YamahaTG33 extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-        }
+    }
         
     public String getTitleBarSynthName()
-        {
+    {
         return "Yamaha " + TYPES[synthType];
-        }
+    }
         
     public static String getSynthName() { return "Yamaha TG33/SY22/SY35"; }
 
     public int getPauseAfterChangePatch()
-        {
+    {
         // I notice that sometimes we can't load immediately after a change patch, so...
         // Perhaps just a smidgen?
         return 1000;
-        }
+    }
 
 
     public void changePatch(Model tempModel) 
-        {
+    {
         // Banks are stored in Edisyn as INTERNAL P1 P2 Card1 Card2
         // But on the TG33 the bank select data values are
         // INTERNAL=0 Card1=1 Preset1=2 Card2=4 PRESET2=5
@@ -2577,37 +2577,37 @@ public class YamahaTG33 extends Synth
         // we assume that we successfully did it
         if (!isMerging())  // we're actually loading the patch, not merging with it
             {
-            setSendMIDI(false);
-            model.set("bank", tempModel.get("bank"));
-            model.set("number", tempModel.get("number"));
-            setSendMIDI(true);
+                setSendMIDI(false);
+                model.set("bank", tempModel.get("bank"));
+                model.set("number", tempModel.get("number"));
+                setSendMIDI(true);
             }
-        }
+    }
     
     public String getPatchName(Model model) { return model.get("name", "UNTITLED"); }
 
     public Model getNextPatchLocation(Model model)
-        {
+    {
         int bank = model.get("bank");
         int number = model.get("number");
         
         number++;
         if (number >= 64)
             {
-            bank++;
-            number = 0;
-            if (bank >= 6)
-                bank = 0;
+                bank++;
+                number = 0;
+                if (bank >= 6)
+                    bank = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-        }
+    }
 
     public String getPatchLocationName(Model model)
-        {
+    {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -2616,45 +2616,45 @@ public class YamahaTG33 extends Synth
 
         int original = model.get("number");
         return (BANKS[model.get("bank")] + " " + ((original / 8 + 1) * 10 + (original % 8 + 1)));
-        }
+    }
 
-//// From original code in file edit_scr.c,
-//// by R. P. Hanson, at http://storage.atari-source.org/atari/mirrors/ATARI-MIDI-ARCHIVES/SOUNDS/Yamaha/
-////
-//// My deep thanks to Rich Hanson, who allowed me to use this code as public domain and offered
-//// some tips about the TG33 implementation.
-//
-//                osc_type *osc_pt ;
-//                osc_pt = &el_pt->osc_2 ;
-//                osc_pt->fixed_frequency = fm_data[el_pt->wave][0] ;
-//                osc_pt->waveform = fm_data[el_pt->wave][1] ;
-//                osc_pt->frequency = fm_data[el_pt->wave][2] ;
-//                osc_pt = &el_pt->osc_1 ;
-//                osc_pt->level = fm_data[el_pt->wave][3] ;
-//                osc_pt->temperament = fm_data[el_pt->wave][4] ;
-//                osc_pt->detune = fm_data[el_pt->wave][5] ;
-//                osc_pt->level_scaling = fm_data[el_pt->wave][6] ;
-//                osc_pt->rate_scaling = fm_data[el_pt->wave][7] ;
-//                osc_pt->envelope_def.delay_switch = fm_data[el_pt->wave][8] ;
-//                osc_pt->envelope_def.attack_rate = fm_data[el_pt->wave][9] ;
-//                osc_pt->envelope_def.drate_1 = fm_data[el_pt->wave][10] ;
-//                osc_pt->envelope_def.drate_2 = fm_data[el_pt->wave][11] ;
-//                osc_pt->envelope_def.release_rate = fm_data[el_pt->wave][12] ;
-//                osc_pt->envelope_def.initial_level = fm_data[el_pt->wave][13] ;
-//                osc_pt->envelope_def.attack_level = fm_data[el_pt->wave][14] ;
-//                osc_pt->envelope_def.dlevel_1 = fm_data[el_pt->wave][15] ;
-//                osc_pt->envelope_def.dlevel_2 = fm_data[el_pt->wave][16] ;
-//                osc_pt->fixed_frequency = fm_data[el_pt->wave][17] ;
-//                osc_pt->waveform = fm_data[el_pt->wave][18] ;
-//                osc_pt->frequency = fm_data[el_pt->wave][19] ;
-//                el_pt->feedback = fm_data[el_pt->wave][20] ;
-//
+    //// From original code in file edit_scr.c,
+    //// by R. P. Hanson, at http://storage.atari-source.org/atari/mirrors/ATARI-MIDI-ARCHIVES/SOUNDS/Yamaha/
+    ////
+    //// My deep thanks to Rich Hanson, who allowed me to use this code as public domain and offered
+    //// some tips about the TG33 implementation.
+    //
+    //                osc_type *osc_pt ;
+    //                osc_pt = &el_pt->osc_2 ;
+    //                osc_pt->fixed_frequency = fm_data[el_pt->wave][0] ;
+    //                osc_pt->waveform = fm_data[el_pt->wave][1] ;
+    //                osc_pt->frequency = fm_data[el_pt->wave][2] ;
+    //                osc_pt = &el_pt->osc_1 ;
+    //                osc_pt->level = fm_data[el_pt->wave][3] ;
+    //                osc_pt->temperament = fm_data[el_pt->wave][4] ;
+    //                osc_pt->detune = fm_data[el_pt->wave][5] ;
+    //                osc_pt->level_scaling = fm_data[el_pt->wave][6] ;
+    //                osc_pt->rate_scaling = fm_data[el_pt->wave][7] ;
+    //                osc_pt->envelope_def.delay_switch = fm_data[el_pt->wave][8] ;
+    //                osc_pt->envelope_def.attack_rate = fm_data[el_pt->wave][9] ;
+    //                osc_pt->envelope_def.drate_1 = fm_data[el_pt->wave][10] ;
+    //                osc_pt->envelope_def.drate_2 = fm_data[el_pt->wave][11] ;
+    //                osc_pt->envelope_def.release_rate = fm_data[el_pt->wave][12] ;
+    //                osc_pt->envelope_def.initial_level = fm_data[el_pt->wave][13] ;
+    //                osc_pt->envelope_def.attack_level = fm_data[el_pt->wave][14] ;
+    //                osc_pt->envelope_def.dlevel_1 = fm_data[el_pt->wave][15] ;
+    //                osc_pt->envelope_def.dlevel_2 = fm_data[el_pt->wave][16] ;
+    //                osc_pt->fixed_frequency = fm_data[el_pt->wave][17] ;
+    //                osc_pt->waveform = fm_data[el_pt->wave][18] ;
+    //                osc_pt->frequency = fm_data[el_pt->wave][19] ;
+    //                el_pt->feedback = fm_data[el_pt->wave][20] ;
+    //
 
     /// updates the FM data that would be changed as a result of changing to a new FM preset wave.
     /// The preset wave FM definitions are in FM_DATA.  This is only called when the user physically
     /// changes the preset Chooser, not when the Chooser updates programmatically.
     public void updateFMData(int tone, int w)
-        {
+    {
         int[] data = FM_DATA[w];
         String c = "tone" + tone + "0";
         String m = "tone" + tone + "1";
@@ -2682,16 +2682,16 @@ public class YamahaTG33 extends Synth
         model.set(t + "feedback", data[20]); 
         model.set(t + "algorithm", 0);                  // I presume 
         revise();       
-        }
+    }
     
-//// From original code in file sy_names.c,
-//// by R. P. Hanson, at http://storage.atari-source.org/atari/mirrors/ATARI-MIDI-ARCHIVES/SOUNDS/Yamaha/
-////
-//// My deep thanks to Rich Hanson, who allowed me to use this code as public domain and offered
-//// some tips about the TG33 implementation.
+    //// From original code in file sy_names.c,
+    //// by R. P. Hanson, at http://storage.atari-source.org/atari/mirrors/ATARI-MIDI-ARCHIVES/SOUNDS/Yamaha/
+    ////
+    //// My deep thanks to Rich Hanson, who allowed me to use this code as public domain and offered
+    //// some tips about the TG33 implementation.
 
-// 256 x 21
-// Note levels are inverted: envelopes and volumes
+    // 256 x 21
+    // Note levels are inverted: envelopes and volumes
     public static final int FM_DATA[][] = new int[][] {
         { 0,0,1,8,0,3,1,0,0,63,33,16,0,49,49,88,127,0,0,9,0 },
         { 0,0,2,8,0,0,7,3,0,45,52,19,1,127,19,21,24,0,0,1,6 },
@@ -2949,18 +2949,18 @@ public class YamahaTG33 extends Synth
         { 0,0,4,8,0,0,1,0,0,0,0,0,0,19,19,19,19,0,1,0,0 },
         { 0,0,1,8,0,15,0,0,0,63,0,0,0,19,19,19,19,0,4,1,7 },
         { 0,6,2,8,0,0,0,0,0,10,10,10,0,2,2,2,2,1,4,9,0 } 
-        };
+    };
 
     public boolean testVerify(Synth synth2, 
-        String key,
-        Object obj1, Object obj2) 
-        {
+                              String key,
+                              Object obj1, Object obj2) 
+    {
         // The TG33 has these but not the SY22 or SY85, or vice versa, so one or more
         // of the will not be set or will be reset
         if (key.equals("effectsenddepth")) return true;
         if (key.equals("effectbalance")) return true;
         if (key.equals("effectsendlevel")) return true;
         return false;
-        }
-        
     }
+        
+}

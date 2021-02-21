@@ -24,7 +24,7 @@ import javax.sound.midi.*;
 */
 
 public class RolandD110Multi extends Synth
-    {
+{
     public static final String[] REVERB_MODE = new String[] { "Room 1", "Room 2", "Hall 1", "Hall 2", "Plate", "Tap Delay 1", "Tap Delay 2", "Tap Delay 3", "Off" };
     public static final String[] TONE_GROUP = new String[] { "Preset A", "Preset B", "Internal/Card", "Rhythm" };
     public static final String[] ASSIGN_MODE = new String[] { "Single / Last Note", "Single / First Note", "Multi / Last Note", "Multi / First Note" };
@@ -56,15 +56,15 @@ public class RolandD110Multi extends Synth
     public static final int MIDI_CHANNEL_OFF = 16;
         
     public RolandD110Multi()
-        {
+    {
         for(int i = 0; i < allPartParameters.length; i++)
             {
-            allPartParametersToIndex.put(allPartParameters[i], Integer.valueOf(i));
+                allPartParametersToIndex.put(allPartParameters[i], Integer.valueOf(i));
             }
 
         for(int i = 0; i < allCommonParameters.length; i++)
             {
-            allCommonParametersToIndex.put(allCommonParameters[i], Integer.valueOf(i));
+                allCommonParametersToIndex.put(allCommonParameters[i], Integer.valueOf(i));
             }
 
                 
@@ -102,58 +102,58 @@ public class RolandD110Multi extends Synth
         model.set("number", 0);
                         
         loadDefaults();        
-        }
+    }
                 
                 
     public JFrame sprout()
-        {
+    {
         JFrame frame = super.sprout();
         // It doesn't make sense to send to current patch
         receiveCurrent.setEnabled(false);
         transmitTo.setEnabled(false);
         return frame;
-        }         
+    }         
 
     public String getDefaultResourceFileName() { return "RolandD110Multi.init"; }
     public String getHTMLResourceFileName() { return "RolandD110Multi.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-        {
+    {
         int original = model.get("number");
                 
         JTextField number = new JTextField("" + ((original / 8 + 1) * 10 + (original % 8 + 1)), 3);
 
         while(true)
             {
-            boolean result = showMultiOption(this, new String[] { "Patch Number"}, 
-                new JComponent[] { number }, title, "Enter Patch number");
+                boolean result = showMultiOption(this, new String[] { "Patch Number"}, 
+                                                 new JComponent[] { number }, title, "Enter Patch number");
                 
-            if (result == false)
-                return false;
+                if (result == false)
+                    return false;
                                 
-            int n;
-            try { n = Integer.parseInt(number.getText()); }
-            catch (NumberFormatException e)
-                {
-                showSimpleError(title, "The Patch Number must be an integer 11...88.\nDigits 9 and 0 are not permitted.");
-                continue;
-                }
-            if (n < 1 || n > 88 || (n % 10 == 9) || (n % 10 == 0))
-                {
-                showSimpleError(title, "The Patch Number must be an integer 11...88.\nDigits 9 and 0 are not permitted.");
-                continue;
-                }
+                int n;
+                try { n = Integer.parseInt(number.getText()); }
+                catch (NumberFormatException e)
+                    {
+                        showSimpleError(title, "The Patch Number must be an integer 11...88.\nDigits 9 and 0 are not permitted.");
+                        continue;
+                    }
+                if (n < 1 || n > 88 || (n % 10 == 9) || (n % 10 == 0))
+                    {
+                        showSimpleError(title, "The Patch Number must be an integer 11...88.\nDigits 9 and 0 are not permitted.");
+                        continue;
+                    }
             
-            n = ((n / 10) - 1) * 8 + (n % 10 - 1);
+                n = ((n / 10) - 1) * 8 + (n % 10 - 1);
             
-            change.set("number", n);
-            return true;
+                change.set("number", n);
+                return true;
             }
-        }
+    }
 
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-        {
+    {
         Category globalCategory = new Category(this, getSynthName(), color);
         //globalCategory.makeUnresettable();
                 
@@ -169,15 +169,15 @@ public class RolandD110Multi extends Synth
         
         comp = new StringComponent("Patch Name", this, "patchname", 10, "Name must be up to 10 ASCII characters.")
             {
-            public String replace(String val)
+                public String replace(String val)
                 {
-                return revisePatchName(val);
+                    return revisePatchName(val);
                 }
                                 
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                updateTitle();
+                    super.update(key, model);
+                    updateTitle();
                 }
             };
         vbox.addBottom(comp);
@@ -187,11 +187,11 @@ public class RolandD110Multi extends Synth
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-        }
+    }
 
 
     public JComponent addReverb( Color color)
-        {
+    {
         Category category = new Category(this, "Reverb", color);
 
         JComponent comp;
@@ -212,10 +212,10 @@ public class RolandD110Multi extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-        }
+    }
 
     public JComponent addRhythm( Color color)
-        {
+    {
         Category category = new Category(this, "Rhythm", color);
 
         JComponent comp;
@@ -227,21 +227,21 @@ public class RolandD110Multi extends Synth
 
         comp = new LabelledDial("MIDI Channel", this, "rhythmmidichannel", color, 0, 16)        
             {
-            public String map(int value)
+                public String map(int value)
                 {
-                if (value == 16) return "Off";
-                else return "" + (value + 1);
+                    if (value == 16) return "Off";
+                    else return "" + (value + 1);
                 }
             };
         hbox.add(comp);
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-        }
+    }
 
 
     public JComponent addReserve(Color color)
-        {
+    {
         final Category category = new Category(this, "Partial Reserve", color);
 
         JComponent comp;
@@ -250,66 +250,66 @@ public class RolandD110Multi extends Synth
         
         for(int i = 0; i < 9; i++)
             {
-            final int _i = i;
-            comp = new LabelledDial(i == 8 ? "Rhythm" : "Part " + (i + 1), this, 
-                i == 8 ? "rhythmpartialreserve" : "p" + (i + 1) + "partialreserve", color, 0, 32)
-                {
-                public void update(String key, Model model) 
+                final int _i = i;
+                comp = new LabelledDial(i == 8 ? "Rhythm" : "Part " + (i + 1), this, 
+                                        i == 8 ? "rhythmpartialreserve" : "p" + (i + 1) + "partialreserve", color, 0, 32)
                     {
-                    // disable listeners
-                    boolean li = model.getUpdateListeners();
-                    model.setUpdateListeners(false);
-                    boolean un = undo.getWillPush();
-                    undo.setWillPush(false);
+                        public void update(String key, Model model) 
+                        {
+                            // disable listeners
+                            boolean li = model.getUpdateListeners();
+                            model.setUpdateListeners(false);
+                            boolean un = undo.getWillPush();
+                            undo.setWillPush(false);
                                 
-                    // how big are we?
-                    int over = 0;
-                    for(int j = 0; j < 9; j++)
-                        {
-                        over = over + model.get(j == 8 ? "rhythmpartialreserve" : "p" + (j + 1) + "partialreserve", 0);
-                        }
-                                        
-                    if (over > 32)
-                        {
-                        over -= 32;
-                                         
-                        // we're over
-                        while(over > 0)
-                            {
+                            // how big are we?
+                            int over = 0;
                             for(int j = 0; j < 9; j++)
                                 {
-                                if (over == 0) break;  // all done
-                                if (j == _i) continue;  // don't decrease myself
-                                int v = model.get(j == 8 ? "rhythmpartialreserve" : "p" + (j + 1) + "partialreserve", 0);
-                                if (v > 0)
-                                    {
-                                    model.set(j == 8 ? "rhythmpartialreserve" : "p" + (j + 1) + "partialreserve", v - 1);
-                                    over--;
-                                    }
+                                    over = over + model.get(j == 8 ? "rhythmpartialreserve" : "p" + (j + 1) + "partialreserve", 0);
                                 }
-                            }
-                        }
+                                        
+                            if (over > 32)
+                                {
+                                    over -= 32;
+                                         
+                                    // we're over
+                                    while(over > 0)
+                                        {
+                                            for(int j = 0; j < 9; j++)
+                                                {
+                                                    if (over == 0) break;  // all done
+                                                    if (j == _i) continue;  // don't decrease myself
+                                                    int v = model.get(j == 8 ? "rhythmpartialreserve" : "p" + (j + 1) + "partialreserve", 0);
+                                                    if (v > 0)
+                                                        {
+                                                            model.set(j == 8 ? "rhythmpartialreserve" : "p" + (j + 1) + "partialreserve", v - 1);
+                                                            over--;
+                                                        }
+                                                }
+                                        }
+                                }
 
-                    // reenable listeners
-                    model.setUpdateListeners(li);
-                    undo.setWillPush(un);                           
+                            // reenable listeners
+                            model.setUpdateListeners(li);
+                            undo.setWillPush(un);                           
                                 
-                    // update, which forces an undo snapshot
-                    super.update(key, model);               
-                    category.repaint();  // otherwise the dials won't update                        
-                    }
-                };
-            hbox.add(comp);
+                            // update, which forces an undo snapshot
+                            super.update(key, model);               
+                            category.repaint();  // otherwise the dials won't update                        
+                        }
+                    };
+                hbox.add(comp);
             }
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-        }
+    }
 
     public JComponent addPart(final int part, Color color)
-        {
+    {
         Category category = new Category(this, "Part " + part, color);
-//        category.makePasteable("p" + part);
+        //        category.makePasteable("p" + part);
         category.makePasteable("p");
 
         JComponent comp;
@@ -321,14 +321,14 @@ public class RolandD110Multi extends Synth
         final JLabel[] lab = new JLabel[1];
         final LabelledDial toneNumber = new LabelledDial("        Tone Number        ", this, "p" + part + "tonenumber", color, 0, 63, -1)
             {
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                if (lab[0] == null) return;  // not set up yet
-                int group = model.get("p" + part + "tonegroup", -1);
-                lab[0].setText(group == 0 ? " " + PRESETS[model.get(key)] + " " :
-                        (group == 1 ? " " + PRESETS[model.get(key) + 64] + " " :
-                        (group == 2 ? "" : " " + PRESETS[model.get(key) + 128] + " ")));
+                    super.update(key, model);
+                    if (lab[0] == null) return;  // not set up yet
+                    int group = model.get("p" + part + "tonegroup", -1);
+                    lab[0].setText(group == 0 ? " " + PRESETS[model.get(key)] + " " :
+                                   (group == 1 ? " " + PRESETS[model.get(key) + 64] + " " :
+                                    (group == 2 ? "" : " " + PRESETS[model.get(key) + 128] + " ")));
                 }
             };
         lab[0] = toneNumber.addAdditionalLabel("");
@@ -339,42 +339,42 @@ public class RolandD110Multi extends Synth
         vbox2.addLast(Stretch.makeVerticalStretch());
         final PushButton showButton = new PushButton("Show")
             {
-            public void perform()
+                public void perform()
                 {
-                final RolandD110Tone synth = new RolandD110Tone();
-                if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
-                if (synth.tuple != null)
-                    {       
-                    // This is a little tricky.  When the dump comes in from the synth,
-                    // Edisyn will only send it to the topmost panel.  So we first sprout
-                    // the panel and show it, and THEN send the dump request.  But this isn't
-                    // enough, because what setVisible(...) does is post an event on the
-                    // Swing Event Queue to build the window at a later time.  This later time
-                    // happens to be after the dump comes in, so it's ignored.  So what we
-                    // ALSO do is post the dump request to occur at the end of the Event Queue,
-                    // so by the time the dump request has been made, the window is shown and
-                    // frontmost.
+                    final RolandD110Tone synth = new RolandD110Tone();
+                    if (tuple != null)
+                        synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                    if (synth.tuple != null)
+                        {       
+                            // This is a little tricky.  When the dump comes in from the synth,
+                            // Edisyn will only send it to the topmost panel.  So we first sprout
+                            // the panel and show it, and THEN send the dump request.  But this isn't
+                            // enough, because what setVisible(...) does is post an event on the
+                            // Swing Event Queue to build the window at a later time.  This later time
+                            // happens to be after the dump comes in, so it's ignored.  So what we
+                            // ALSO do is post the dump request to occur at the end of the Event Queue,
+                            // so by the time the dump request has been made, the window is shown and
+                            // frontmost.
                                                 
-                    synth.sprout();
-                    JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
-                    frame.setVisible(true);
+                            synth.sprout();
+                            JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                            frame.setVisible(true);
 
-                    SwingUtilities.invokeLater(
-                        new Runnable()
-                            {
-                            public void run() 
-                                { 
-                                Model tempModel = buildModel();
-                                tempModel.set("number", RolandD110Multi.this.model.get("p" + part + "tonenumber"));
-                                synth.performRequestDump(tempModel, false);
-                                }
-                            });
-                    }
-                else
-                    {
-                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
-                    }
+                            SwingUtilities.invokeLater(
+                                                       new Runnable()
+                                                       {
+                                                           public void run() 
+                                                           { 
+                                                               Model tempModel = buildModel();
+                                                               tempModel.set("number", RolandD110Multi.this.model.get("p" + part + "tonenumber"));
+                                                               synth.performRequestDump(tempModel, false);
+                                                           }
+                                                       });
+                        }
+                    else
+                        {
+                            showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                        }
                 }
             };
         vbox2.add(showButton);
@@ -382,11 +382,11 @@ public class RolandD110Multi extends Synth
         params = TONE_GROUP;
         comp = new Chooser("Tone Group", this, "p" + part + "tonegroup", params)
             {
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                toneNumber.update("p" + part + "tonenumber", model);
-                showButton.getButton().setEnabled(model.get(key) == 2);         // internal/card
+                    super.update(key, model);
+                    toneNumber.update("p" + part + "tonenumber", model);
+                    showButton.getButton().setEnabled(model.get(key) == 2);         // internal/card
                 }
             };
         hbox2.add(comp);
@@ -402,13 +402,13 @@ public class RolandD110Multi extends Synth
 
         comp = new LabelledDial("Key Shift", this, "p" + part + "keyshift", color, 0, 48, 24)
             {
-            public boolean isSymmetric() { return true; }
+                public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
 
         comp = new LabelledDial("Fine Tune", this, "p" + part + "finetune", color, 0, 100, 50)
             {
-            public boolean isSymmetric() { return true; }
+                public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
 
@@ -417,12 +417,12 @@ public class RolandD110Multi extends Synth
 
         comp = new LabelledDial("Output Assign", this, "p" + part + "outputassign", color, 0, 7)
             {
-            public String map(int value)
+                public String map(int value)
                 {
-                if (value == 0) return "Mix";
-                else if (value == 1) return "Min";
-                else if (value == 2) return "Mult";
-                else return "" + (value - 1);
+                    if (value == 0) return "Mix";
+                    else if (value == 1) return "Min";
+                    else if (value == 2) return "Mult";
+                    else return "" + (value - 1);
                 }
             };
         hbox.add(comp);
@@ -432,21 +432,21 @@ public class RolandD110Multi extends Synth
 
         comp = new LabelledDial("Pan", this, "p" + part + "panpot", color, 0, 14)
             {
-            public boolean isSymmetric() { return true; }
-            public String map(int value)
+                public boolean isSymmetric() { return true; }
+                public String map(int value)
                 {
-                if (value == 7) return "--";
-                else if (value < 7) return "< " + (6 - value);
-                else return "" + (value - 7) + " >";
+                    if (value == 7) return "--";
+                    else if (value < 7) return "< " + (6 - value);
+                    else return "" + (value - 7) + " >";
                 }
             };
         hbox.add(comp);
 
         comp = new LabelledDial("Key Range", this, "p" + part + "keyrangelower", color, 0, 127)
             {
-            public String map(int value)
+                public String map(int value)
                 {
-                return NOTES[value % 12] + ((value / 12) - 1);
+                    return NOTES[value % 12] + ((value / 12) - 1);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Lower");
@@ -454,9 +454,9 @@ public class RolandD110Multi extends Synth
 
         comp = new LabelledDial("Key Range", this, "p" + part + "keyrangeupper", color, 0, 127)
             {
-            public String map(int value)
+                public String map(int value)
                 {
-                return NOTES[value % 12] + ((value / 12) - 1);
+                    return NOTES[value % 12] + ((value / 12) - 1);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Upper");
@@ -464,10 +464,10 @@ public class RolandD110Multi extends Synth
 
         comp = new LabelledDial("MIDI Channel", this, "p" + part + "midichannel", color, 0, 16) 
             {
-            public String map(int value)
+                public String map(int value)
                 {
-                if (value == 16) return "Off";
-                else return "" + (value + 1);
+                    if (value == 16) return "Off";
+                    else return "" + (value + 1);
                 }
             };
                 
@@ -476,109 +476,109 @@ public class RolandD110Multi extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-        }
+    }
 
 
 
     HashMap allPartParametersToIndex = new HashMap();
         
     final static String[] allPartParameters = new String[]
-    {
-    "tonegroup",
-    "tonenumber",
-    "keyshift",
-    "finetune",
-    "benderrange",
-    "assignmode",
-    "outputassign",
-    "-",
-    "outputlevel",
-    "panpot",
-    "keyrangelower",
-    "keyrangeupper",
-    };
+        {
+            "tonegroup",
+            "tonenumber",
+            "keyshift",
+            "finetune",
+            "benderrange",
+            "assignmode",
+            "outputassign",
+            "-",
+            "outputlevel",
+            "panpot",
+            "keyrangelower",
+            "keyrangeupper",
+        };
     
     
     HashMap allCommonParametersToIndex = new HashMap();
         
     final static String[] allCommonParameters = new String[]
-    {
-    "patchname",
-    "reverbmode",
-    "reverbtime",
-    "reverblevel",
-    "p1partialreserve",
-    "p2partialreserve",
-    "p3partialreserve",
-    "p4partialreserve",
-    "p5partialreserve",
-    "p6partialreserve",
-    "p7partialreserve",
-    "p8partialreserve",
-    "rhythmpartialreserve",
-    "p1midichannel",
-    "p2midichannel",
-    "p3midichannel",
-    "p4midichannel",
-    "p5midichannel",
-    "p6midichannel",
-    "p7midichannel",
-    "p8midichannel",
-    "rhythmmidichannel",
-    "rhythmoutputlevel",
-    };
+        {
+            "patchname",
+            "reverbmode",
+            "reverbtime",
+            "reverblevel",
+            "p1partialreserve",
+            "p2partialreserve",
+            "p3partialreserve",
+            "p4partialreserve",
+            "p5partialreserve",
+            "p6partialreserve",
+            "p7partialreserve",
+            "p8partialreserve",
+            "rhythmpartialreserve",
+            "p1midichannel",
+            "p2midichannel",
+            "p3midichannel",
+            "p4midichannel",
+            "p5midichannel",
+            "p6midichannel",
+            "p7midichannel",
+            "p8midichannel",
+            "rhythmmidichannel",
+            "rhythmoutputlevel",
+        };
 
     final static String[] allSystemParameters = new String[]
-    {
-//    "-",                                // master tune
-    "reverbmode",
-    "reverbtime",
-    "reverblevel",
-    "p1partialreserve",
-    "p2partialreserve",
-    "p3partialreserve",
-    "p4partialreserve",
-    "p5partialreserve",
-    "p6partialreserve",
-    "p7partialreserve",
-    "p8partialreserve",
-    "rhythmpartialreserve",
-    "p1midichannel",
-    "p2midichannel",
-    "p3midichannel",
-    "p4midichannel",
-    "p5midichannel",
-    "p6midichannel",
-    "p7midichannel",
-    "p8midichannel",
-    "p8midichannel",
-    "rhythmmidichannel",
-    "-",
-    "patchname",
-    };
+        {
+            //    "-",                                // master tune
+            "reverbmode",
+            "reverbtime",
+            "reverblevel",
+            "p1partialreserve",
+            "p2partialreserve",
+            "p3partialreserve",
+            "p4partialreserve",
+            "p5partialreserve",
+            "p6partialreserve",
+            "p7partialreserve",
+            "p8partialreserve",
+            "rhythmpartialreserve",
+            "p1midichannel",
+            "p2midichannel",
+            "p3midichannel",
+            "p4midichannel",
+            "p5midichannel",
+            "p6midichannel",
+            "p7midichannel",
+            "p8midichannel",
+            "p8midichannel",
+            "rhythmmidichannel",
+            "-",
+            "patchname",
+        };
 
     public byte getID() 
-        { 
+    { 
         try 
             { 
-            byte b = (byte)(Byte.parseByte(tuple.id));
-            if (b >= 17) return (byte)(b - 1);
+                byte b = (byte)(Byte.parseByte(tuple.id));
+                if (b >= 17) return (byte)(b - 1);
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
         catch (NumberFormatException e) { Synth.handleException(e); }
         return (byte)16;                // IDs start at 17
-        }
+    }
         
         
     public byte produceChecksum(byte[] data)
-        {
+    {
         return produceChecksum(data, 0, data.length);
-        }
+    }
                 
     /** The checksum is computed on all the ADDRESS and DATA data.
         Just add up the data, mod 128, and subtract the result from 128. Return that, unless it is 128, in which case return 0. */
     public byte produceChecksum(byte[] data, int start, int end)
-        {
+    {
         // The checksum works as follows:
         // 1. Add all the data
         // 2. mod by 128 (that is, & 127)
@@ -589,37 +589,37 @@ public class RolandD110Multi extends Synth
         int check = 0;
         for(int i = start; i < end; i++)
             {
-            check += data[i];
+                check += data[i];
             }
         check = check & 0x7F;
         check = 0x80 - check;
         if (check == 0x80) check = 0;
         return (byte) check;
-        }
+    }
         
     // Builds a byte[] consisting of the data associated with the given key,
     // which can be then inserted into an emit
     public byte[] getData(String key)
-        {
+    {
         if (key.equals("patchname"))                                // name is 10-byte
             {
-            byte[] data = new byte[10];
-            String name = model.get(key, "Untitled");
-            for(int i = 0; i < name.length(); i++)
-                {
-                data[i] = (byte)(name.charAt(i));
-                }
-            return data;
+                byte[] data = new byte[10];
+                String name = model.get(key, "Untitled");
+                for(int i = 0; i < name.length(); i++)
+                    {
+                        data[i] = (byte)(name.charAt(i));
+                    }
+                return data;
             }
         else
             {
-            return new byte[] { (byte) model.get(key) };
+                return new byte[] { (byte) model.get(key) };
             }
-        }
+    }
 
 
     public byte[] emitPartials()
-        {
+    {
         byte AA = (byte)0x10;
         byte BB = (byte)0x00;
         byte CC = (byte)0x04;           // Location of p1partialreserve in system memory
@@ -627,17 +627,17 @@ public class RolandD110Multi extends Synth
         byte[] payload = new byte[9];
         for(int i = 0; i < payload.length; i++)
             {
-            payload[i] = (byte)(model.get(allCommonParameters[i + 4]));  // starting at p1partialreserve
+                payload[i] = (byte)(model.get(allCommonParameters[i + 4]));  // starting at p1partialreserve
             }
 
         byte checksum = produceChecksum(concatenate(new byte[] { AA, BB, CC }, payload));
         return concatenate(concatenate(new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x16, (byte)0x12, AA, BB, CC }, payload),
-            new byte[] { checksum, (byte) 0xF7 });
-        }
+                           new byte[] { checksum, (byte) 0xF7 });
+    }
         
 
     public byte[] emit(String key)
-        {
+    {
         if (key.equals("-")) return new byte[0];  // this is not emittable
         if (key.equals("number")) return new byte[0];  // this is not emittable
         if (key.equals("rhythmoutputlevel")) return new byte[0];  // this is not emittable it appears
@@ -650,17 +650,17 @@ public class RolandD110Multi extends Synth
 
         if (allCommonParametersToIndex.containsKey(key))
             {
-            // need to load into system memory
-            // So AA = 0x10
-            CC = (byte)(CC + ((Integer)(allCommonParametersToIndex.get(key))).intValue());  
+                // need to load into system memory
+                // So AA = 0x10
+                CC = (byte)(CC + ((Integer)(allCommonParametersToIndex.get(key))).intValue());  
             }
         else
             {
-            // Figure out the part
-            int part = StringUtility.getInt(key);
-            AA = (byte)0x03;
-            CC = (byte)(0x10 * (part - 1));
-            CC = (byte)(CC + ((Integer)(allPartParametersToIndex.get(key.substring(2)))).intValue());       // get rid of the "p1"...
+                // Figure out the part
+                int part = StringUtility.getInt(key);
+                AA = (byte)0x03;
+                CC = (byte)(0x10 * (part - 1));
+                CC = (byte)(CC + ((Integer)(allPartParametersToIndex.get(key.substring(2)))).intValue());       // get rid of the "p1"...
             }
 
         byte[] payload = getData(key);
@@ -668,54 +668,54 @@ public class RolandD110Multi extends Synth
         // Handle irregularities in multi-byte data
         if (payload.length == 10)
             {
-            byte[] data = new byte[20];
+                byte[] data = new byte[20];
                         
-            // gather data which is checksummed
-            byte[] checkdata = new byte[3 + 10];
-            System.arraycopy(new byte[] { AA, BB, CC }, 0, checkdata, 0, 3);
-            System.arraycopy(payload, 0, checkdata, 3, payload.length);
+                // gather data which is checksummed
+                byte[] checkdata = new byte[3 + 10];
+                System.arraycopy(new byte[] { AA, BB, CC }, 0, checkdata, 0, 3);
+                System.arraycopy(payload, 0, checkdata, 3, payload.length);
                         
-            // concatenate all data
-            byte checksum = produceChecksum(checkdata);
-            data[0] = (byte)0xF0;
-            data[1] = (byte)0x41;
-            data[2] = getID();
-            data[3] = (byte)0x16;
-            data[4] = (byte)0x12;
-            System.arraycopy(checkdata, 0, data, 5, checkdata.length);
-            data[18] = checksum;
-            data[19] = (byte)0xF7;
+                // concatenate all data
+                byte checksum = produceChecksum(checkdata);
+                data[0] = (byte)0xF0;
+                data[1] = (byte)0x41;
+                data[2] = getID();
+                data[3] = (byte)0x16;
+                data[4] = (byte)0x12;
+                System.arraycopy(checkdata, 0, data, 5, checkdata.length);
+                data[18] = checksum;
+                data[19] = (byte)0xF7;
                     
-            return data;
+                return data;
             }
         else                                                                                    // Some data is 1-byte
             {
-            byte checksum = produceChecksum(new byte[] { AA, BB, CC, payload[0] });
-            return new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x16, (byte)0x12, AA, BB, CC, payload[0], checksum, (byte)0xF7 };
+                byte checksum = produceChecksum(new byte[] { AA, BB, CC, payload[0] });
+                return new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x16, (byte)0x12, AA, BB, CC, payload[0], checksum, (byte)0xF7 };
             }
-        }
+    }
     
     
     public int parse(byte[] data, boolean fromFile)
-        {
+    {
         // What is the patch number?
         int AA = data[5];
         int BB = data[6];
         int CC = data[7];
         if (AA == 0x06)
             {
-            model.set("number", BB);
+                model.set("number", BB);
             }
         else
             {
-            model.set("number", 0);
+                model.set("number", 0);
             }
         
         int pos = 8;
         String name = "";
         for(int i = 0; i < 10; i++)
             {
-            name = name + ((char)data[pos++]);
+                name = name + ((char)data[pos++]);
             }
         model.set("patchname", name);
         model.set("reverbmode", data[pos++]);
@@ -725,14 +725,14 @@ public class RolandD110Multi extends Synth
         // partial reserve
         for(int p = 1; p < 9; p++)
             {
-            model.set("p" + p + "partialreserve", data[pos++]);
+                model.set("p" + p + "partialreserve", data[pos++]);
             }
         model.set("rhythmpartialreserve", data[pos++]);
 
         // midi 
         for(int p = 1; p < 9; p++)
             {
-            model.set("p" + p + "midichannel", data[pos++]);
+                model.set("p" + p + "midichannel", data[pos++]);
             }
         model.set("rhythmmidichannel", data[pos++]);
         
@@ -740,121 +740,121 @@ public class RolandD110Multi extends Synth
         // parts
         for(int t = 1; t < 9; t++)
             {
-            for(int i = 0; i < allPartParameters.length; i++)
-                {
-                if (allPartParameters[i].equals("-")) { pos++; continue; }  // there's a dummy in patch parameters
-                else
+                for(int i = 0; i < allPartParameters.length; i++)
                     {
-                    model.set("p" + t + allPartParameters[i], data[pos++]);
+                        if (allPartParameters[i].equals("-")) { pos++; continue; }  // there's a dummy in patch parameters
+                        else
+                            {
+                                model.set("p" + t + allPartParameters[i], data[pos++]);
+                            }
                     }
-                }
             }
         model.set("rhythmoutputlevel", data[pos++]);
         revise();
         return PARSE_SUCCEEDED;
-        }
+    }
     
     
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
-        {          
+    {          
         if (tempModel == null)
             tempModel = getModel();
         
         if (toWorkingMemory)
             {
-            // we have to emit to two locations
-            byte[] buf1 = new byte[33 + 10];
-            buf1[0] = (byte)0xF0;
-            buf1[1] = (byte)0x41;
-            buf1[2] = (byte)getID();
-            buf1[3] = (byte)0x16;
-            buf1[4] = (byte)0x12;
-            buf1[5] = (byte)0x10;
-            buf1[6] = (byte)0x00;
-            buf1[7] = (byte)0x01;               // skip master tune
-            for(int i = 0; i < allSystemParameters.length; i++)
-                {
-                if (allSystemParameters[i].equals("-")) continue;
-                if (allSystemParameters[i].equals("patchname"))         // it's last
+                // we have to emit to two locations
+                byte[] buf1 = new byte[33 + 10];
+                buf1[0] = (byte)0xF0;
+                buf1[1] = (byte)0x41;
+                buf1[2] = (byte)getID();
+                buf1[3] = (byte)0x16;
+                buf1[4] = (byte)0x12;
+                buf1[5] = (byte)0x10;
+                buf1[6] = (byte)0x00;
+                buf1[7] = (byte)0x01;               // skip master tune
+                for(int i = 0; i < allSystemParameters.length; i++)
                     {
-                    String name = model.get(allSystemParameters[i], "Untitled") + "          ";
-                    for(int c = 0; c < 10; c++)
-                        {
-                        buf1[i + 8 + c] = (byte)(name.charAt(c));
-                        }
+                        if (allSystemParameters[i].equals("-")) continue;
+                        if (allSystemParameters[i].equals("patchname"))         // it's last
+                            {
+                                String name = model.get(allSystemParameters[i], "Untitled") + "          ";
+                                for(int c = 0; c < 10; c++)
+                                    {
+                                        buf1[i + 8 + c] = (byte)(name.charAt(c));
+                                    }
+                            }
+                        else
+                            {
+                                buf1[i + 8] = (byte)model.get(allSystemParameters[i]);
+                            }
                     }
-                else
-                    {
-                    buf1[i + 8] = (byte)model.get(allSystemParameters[i]);
-                    }
-                }
-            buf1[buf1.length - 2] = produceChecksum(buf1, 5, buf1.length - 2);
-            buf1[buf1.length - 1] = (byte)0xF7;
+                buf1[buf1.length - 2] = produceChecksum(buf1, 5, buf1.length - 2);
+                buf1[buf1.length - 1] = (byte)0xF7;
 
-            byte[] buf2 = new byte[0x80 + 10];
-            buf2[0] = (byte)0xF0;
-            buf2[1] = (byte)0x41;
-            buf2[2] = (byte)getID();
-            buf2[3] = (byte)0x16;
-            buf2[4] = (byte)0x12;
-            buf2[5] = (byte)0x03;
-            buf2[6] = (byte)0x00;
-            buf2[7] = (byte)0x00;
-            for(int p = 1; p <= 8; p++)
-                {
-                for(int i = 0; i < allPartParameters.length; i++)
+                byte[] buf2 = new byte[0x80 + 10];
+                buf2[0] = (byte)0xF0;
+                buf2[1] = (byte)0x41;
+                buf2[2] = (byte)getID();
+                buf2[3] = (byte)0x16;
+                buf2[4] = (byte)0x12;
+                buf2[5] = (byte)0x03;
+                buf2[6] = (byte)0x00;
+                buf2[7] = (byte)0x00;
+                for(int p = 1; p <= 8; p++)
                     {
-                    if (allPartParameters[i] == "-") continue;
-                    buf2[(p-1) * 0x10 + i + 8] = (byte)model.get("p" + p + allPartParameters[i]);
+                        for(int i = 0; i < allPartParameters.length; i++)
+                            {
+                                if (allPartParameters[i] == "-") continue;
+                                buf2[(p-1) * 0x10 + i + 8] = (byte)model.get("p" + p + allPartParameters[i]);
+                            }
                     }
-                }
-            buf2[buf2.length - 2] = produceChecksum(buf2, 5, buf2.length - 2);
-            buf2[buf2.length - 1] = (byte)0xF7;
-            return new Object[] { buf1, buf2 };
+                buf2[buf2.length - 2] = produceChecksum(buf2, 5, buf2.length - 2);
+                buf2[buf2.length - 1] = (byte)0xF7;
+                return new Object[] { buf1, buf2 };
             }
         else
             {
-            // we emit to a single patch location
-            byte[] buf1 = new byte[138];
-            buf1[0] = (byte)0xF0;
-            buf1[1] = (byte)0x41;
-            buf1[2] = (byte)getID();
-            buf1[3] = (byte)0x16;
-            buf1[4] = (byte)0x12;
-            buf1[5] = (byte)0x06;
-            buf1[6] = (byte)tempModel.get("number");
-            buf1[7] = (byte)0x00;
-            String name = model.get("patchname", "Untitled") + "          ";
-            for(int c = 0; c < 10; c++)
-                {
-                buf1[8 + c] = (byte)(name.charAt(c));
-                }
-            for(int i = 0; i < allCommonParameters.length; i++)
-                {
-                if (allCommonParameters[i].equals("patchname")) continue;  // already did it
-                if (allCommonParameters[i].equals("-")) continue;
-                if (allCommonParameters[i].equals("rhythmoutputlevel")) continue;       // this is done at the end
-                buf1[10 + i + 8 - 1] = (byte)model.get(allCommonParameters[i]);
-                }
-                                
-            for(int p = 1; p <= 8; p++)
-                {
-                for(int i = 0; i < allPartParameters.length; i++)
+                // we emit to a single patch location
+                byte[] buf1 = new byte[138];
+                buf1[0] = (byte)0xF0;
+                buf1[1] = (byte)0x41;
+                buf1[2] = (byte)getID();
+                buf1[3] = (byte)0x16;
+                buf1[4] = (byte)0x12;
+                buf1[5] = (byte)0x06;
+                buf1[6] = (byte)tempModel.get("number");
+                buf1[7] = (byte)0x00;
+                String name = model.get("patchname", "Untitled") + "          ";
+                for(int c = 0; c < 10; c++)
                     {
-                    if (allPartParameters[i] == "-") continue;
-                    buf1[0x1F + 8 + (p - 1) * 0x0C + i] = (byte)model.get("p" + p + allPartParameters[i]);
+                        buf1[8 + c] = (byte)(name.charAt(c));
                     }
-                }
-            buf1[buf1.length - 3] = (byte)model.get("rhythmoutputlevel");
-            buf1[buf1.length - 2] = produceChecksum(buf1, 5, buf1.length - 2);
-            buf1[buf1.length - 1] = (byte)0xF7;
-            return new Object[] { buf1 };
+                for(int i = 0; i < allCommonParameters.length; i++)
+                    {
+                        if (allCommonParameters[i].equals("patchname")) continue;  // already did it
+                        if (allCommonParameters[i].equals("-")) continue;
+                        if (allCommonParameters[i].equals("rhythmoutputlevel")) continue;       // this is done at the end
+                        buf1[10 + i + 8 - 1] = (byte)model.get(allCommonParameters[i]);
+                    }
+                                
+                for(int p = 1; p <= 8; p++)
+                    {
+                        for(int i = 0; i < allPartParameters.length; i++)
+                            {
+                                if (allPartParameters[i] == "-") continue;
+                                buf1[0x1F + 8 + (p - 1) * 0x0C + i] = (byte)model.get("p" + p + allPartParameters[i]);
+                            }
+                    }
+                buf1[buf1.length - 3] = (byte)model.get("rhythmoutputlevel");
+                buf1[buf1.length - 2] = produceChecksum(buf1, 5, buf1.length - 2);
+                buf1[buf1.length - 1] = (byte)0xF7;
+                return new Object[] { buf1 };
             }
-        }
+    }
 
     // Requests a Patch from a specific RAM slot (1...64)
     public byte[] requestDump(Model tempModel)
-        {
+    {
         if (tempModel == null)
             tempModel = getModel();
 
@@ -868,13 +868,13 @@ public class RolandD110Multi extends Synth
         
         byte checksum = produceChecksum(new byte[] { AA, BB, CC, (byte)0x00, LSB, MSB });
         byte[] b = new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x16, (byte)0x11, 
-            AA, BB, CC, (byte)0x00, MSB, LSB, checksum, (byte)0xF7 }; 
+                                AA, BB, CC, (byte)0x00, MSB, LSB, checksum, (byte)0xF7 }; 
         return b;
-        }
+    }
     
     public static final int MAXIMUM_NAME_LENGTH = 10;
     public String revisePatchName(String name)
-        {
+    {
         name = super.revisePatchName(name);  // trim first time
         if (name.length() > MAXIMUM_NAME_LENGTH)
             name = name.substring(0, MAXIMUM_NAME_LENGTH);
@@ -882,20 +882,20 @@ public class RolandD110Multi extends Synth
         StringBuffer nameb = new StringBuffer(name);                            
         for(int i = 0 ; i < nameb.length(); i++)
             {
-            char c = nameb.charAt(i);
-            if (c >= 32 && c <= 127)
-                continue;
-            else
-                nameb.setCharAt(i, ' ');
+                char c = nameb.charAt(i);
+                if (c >= 32 && c <= 127)
+                    continue;
+                else
+                    nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
-        }        
+    }        
 
         
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
-        {
+    {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -903,7 +903,7 @@ public class RolandD110Multi extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("patchname", newnm);
-        }
+    }
         
     public static String getSynthName() { return "Roland D-110 [Multi]"; }
     
@@ -916,36 +916,36 @@ public class RolandD110Multi extends Synth
     public int getPauseAfterSendOneParameter() { return 25; }       // In the 1.07 firmware notes it says "at least 20ms" (http://llamamusic.com/d110/ROM_IC_Bug_Fixes.html).  In my firmware (1.10) the D-110 can handle changes thrown at it full blast, but earlier firmware (1.07) cannot.
  
     public void changePatch(Model tempModel)
-        {
+    {
         // though you can change patch to a card patch, there's no way to read or write it via sysex,
         // so we only bother with internal.
         try 
             {
-            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), tempModel.get("number"), 0));
+                tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), tempModel.get("number"), 0));
             }
         catch (InvalidMidiDataException ex)
             {
-            Synth.handleException(ex); 
+                Synth.handleException(ex); 
             }
-        }
+    }
     
     public Model getNextPatchLocation(Model model)
-        {
+    {
         int number = model.get("number");
         
         number++;
         if (number >= 64)
             {
-            number = 0;
+                number = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("number", number);
         return newModel;
-        }
+    }
 
     public String getPatchLocationName(Model model)
-        {
+    {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -953,23 +953,23 @@ public class RolandD110Multi extends Synth
         
         int original = model.get("number");
         return ("" + ((original / 8 + 1) * 10 + (original % 8 + 1)));
-        }
+    }
 
     /** Roland only allows IDs from 17...32.  Don't ask. */
     public String reviseID(String id)
-        {
+    {
         try
             {
-            int val = Integer.parseInt(id);
-            if (val < 17) val = 17;
-            if (val > 32) val = 32;
-            return "" + val;
+                int val = Integer.parseInt(id);
+                if (val < 17) val = 17;
+                if (val > 32) val = 32;
+                return "" + val;
             }
         catch (NumberFormatException ex)
             {
-            return "" + (getID() + 1);
+                return "" + (getID() + 1);
             }
-        }
+    }
         
     public int getBatchDownloadWaitTime() { return 750; }
-    }
+}

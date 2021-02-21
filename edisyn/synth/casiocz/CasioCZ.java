@@ -49,7 +49,7 @@ import javax.sound.midi.*;
 
 
 public class CasioCZ extends Synth
-    {
+{
     /// Various collections of parameter names for pop-up menus
         
     public static final String[] BANKS = new String[] { "A", "B", "C", "D", "E", "F", "G", "H", "CA", "CB", "SA", "SB", "SC" };
@@ -71,47 +71,47 @@ public class CasioCZ extends Synth
 
     // Notice that the ordering is backwards [maybe?].  This isn't documented
     public static final int sysexToVibratoDelayTime(int high, int med, int low)
-        {
+    {
         for(int i = 0; i < VIBRATO_DELAY_TIME_ENCODING.length; i++)
             if (VIBRATO_DELAY_TIME_ENCODING[i][0] == low &&
                 VIBRATO_DELAY_TIME_ENCODING[i][1] == med &&
                 VIBRATO_DELAY_TIME_ENCODING[i][2] == high)
                 return i;
         return -1;
-        }
+    }
 
     // Notice that the ordering is backwards.  This isn't documented
     public static final int sysexToVibratoRate(int high, int med, int low)
-        {
+    {
         for(int i = 0; i < VIBRATO_RATE_ENCODING.length; i++)
             if (VIBRATO_RATE_ENCODING[i][0] == low &&
                 VIBRATO_RATE_ENCODING[i][1] == med &&
                 VIBRATO_RATE_ENCODING[i][2] == high)
                 return i;
         return -1;
-        }
+    }
 
     // Notice that the ordering is backwards.  This isn't documented
     public static final int sysexToVibratoDepth(int high, int med, int low)
-        {
+    {
         for(int i = 0; i < VIBRATO_DEPTH_ENCODING.length; i++)
             if (VIBRATO_DEPTH_ENCODING[i][0] == low &&
                 VIBRATO_DEPTH_ENCODING[i][1] == med &&
                 VIBRATO_DEPTH_ENCODING[i][2] == high)
                 return i;
         return -1;
-        }
+    }
 
-/*
-  public static final int[] DCA_RATE_ENCODING = new int[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x12, 0x13, 0x14, 0x15, 0x16, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x24, 0x25, 0x26, 0x27, 0x28, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x30, 0x31, 0x32, 0x33, 0x34, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3C, 0x3D, 0x3E, 0x3F, 0x40, 0x42, 0x43, 0x44, 0x45, 0x46, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x54, 0x55, 0x56, 0x57, 0x58, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x60, 0x61, 0x62, 0x63, 0x64, 0x66, 0x67, 0x68, 0x69, 0x6A, 0x6C, 0x6D, 0x6E, 0x6F, 0x70, 0x72, 0x73, 0x74, 0x75, 0x77 };
-  public static final int[] DCA_LEVEL_ENCODING = new int[] { 0x00, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F }; 
-  public static final int[] DCO_RATE_ENCODING = new int[] { 0x00, 0x01, 0x02, 0x03, 0x05, 0x06, 0x07, 0x08, 0x0A, 0x0B, 0x0C, 0x0E, 0x0F, 0x10, 0x11, 0x13, 0x14, 0x15, 0x17, 0x18, 0x19, 0x1A, 0x1C, 0x1D, 0x1E, 0x20, 0x21, 0x22, 0x23, 0x25, 0x26, 0x27, 0x29, 0x2A, 0x2B, 0x2C, 0x2E, 0x2F, 0x30, 0x32, 0x33, 0x34, 0x35, 0x37, 0x38, 0x39, 0x3B, 0x3C, 0x3D, 0x3E, 0x40, 0x41, 0x42, 0x44, 0x45, 0x46, 0x47, 0x49, 0x4A, 0x4B, 0x4C, 0x4E, 0x4F, 0x50, 0x52, 0x53, 0x54, 0x55, 0x57, 0x58, 0x59, 0x5B, 0x5C, 0x5D, 0x5E, 0x60, 0x61, 0x62, 0x64, 0x65, 0x66, 0x67, 0x69, 0x6A, 0x6B, 0x6D, 0x6E, 0x6F, 0x70, 0x72, 0x73, 0x74, 0x76, 0x77, 0x78, 0x79, 0x7B, 0x7C, 0x7D, 0x7F };
-  public static final int[] DCO_LEVEL_ENCODING = new int[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67 }; 
-  public static final int[] DCW_RATE_ENCODING = new int[] { 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x14, 0x15, 0x16, 0x17, 0x18, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x20, 0x21, 0x22, 0x23, 0x24, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x32, 0x33, 0x34, 0x35, 0x36, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3E, 0x3F, 0x40, 0x41, 0x42, 0x44, 0x45, 0x46, 0x47, 0x48, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x50, 0x51, 0x52, 0x53, 0x54, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5C, 0x5D, 0x5E, 0x5F, 0x60, 0x62, 0x63, 0x64, 0x65, 0x66, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6E, 0x6F, 0x70, 0x71, 0x72, 0x74, 0x75, 0x76, 0x77, 0x78, 0x7A, 0x7B, 0x7C, 0x7D, 0x7F };
-  public static final int[] DCW_LEVEL_ENCODING = new int[] { 0x00, 0x01, 0x02, 0x03, 0x05, 0x06, 0x07, 0x08, 0x0A, 0x0B, 0x0C, 0x0E, 0x0F, 0x10, 0x11, 0x13, 0x14, 0x15, 0x17, 0x18, 0x19, 0x1A, 0x1C, 0x1D, 0x1E, 0x20, 0x21, 0x22, 0x23, 0x25, 0x26, 0x27, 0x29, 0x2A, 0x2B, 0x2C, 0x2E, 0x2F, 0x30, 0x32, 0x33, 0x34, 0x35, 0x37, 0x38, 0x39, 0x3B, 0x3C, 0x3D, 0x3E, 0x40, 0x41, 0x42, 0x44, 0x45, 0x46, 0x47, 0x49, 0x4A, 0x4B, 0x4C, 0x4E, 0x4F, 0x50, 0x52, 0x53, 0x54, 0x55, 0x57, 0x58, 0x59, 0x5B, 0x5C, 0x5D, 0x5E, 0x60, 0x61, 0x62, 0x64, 0x65, 0x66, 0x67, 0x69, 0x6A, 0x6B, 0x6D, 0x6E, 0x6F, 0x70, 0x72, 0x73, 0x74, 0x76, 0x77, 0x78, 0x79, 0x7B, 0x7C, 0x7D, 0x7F };
-  public static final int[][] LEVEL_ENCODINGS = new int[][] { DCO_LEVEL_ENCODING, DCW_LEVEL_ENCODING, DCA_LEVEL_ENCODING, DCO_LEVEL_ENCODING, DCW_LEVEL_ENCODING, DCA_LEVEL_ENCODING };
-  public static final int[][] RATE_ENCODINGS = new int[][] { DCO_RATE_ENCODING, DCW_RATE_ENCODING, DCA_RATE_ENCODING, DCO_RATE_ENCODING, DCW_RATE_ENCODING, DCA_RATE_ENCODING };
-*/
+    /*
+      public static final int[] DCA_RATE_ENCODING = new int[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x12, 0x13, 0x14, 0x15, 0x16, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x24, 0x25, 0x26, 0x27, 0x28, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x30, 0x31, 0x32, 0x33, 0x34, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3C, 0x3D, 0x3E, 0x3F, 0x40, 0x42, 0x43, 0x44, 0x45, 0x46, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x54, 0x55, 0x56, 0x57, 0x58, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x60, 0x61, 0x62, 0x63, 0x64, 0x66, 0x67, 0x68, 0x69, 0x6A, 0x6C, 0x6D, 0x6E, 0x6F, 0x70, 0x72, 0x73, 0x74, 0x75, 0x77 };
+      public static final int[] DCA_LEVEL_ENCODING = new int[] { 0x00, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F }; 
+      public static final int[] DCO_RATE_ENCODING = new int[] { 0x00, 0x01, 0x02, 0x03, 0x05, 0x06, 0x07, 0x08, 0x0A, 0x0B, 0x0C, 0x0E, 0x0F, 0x10, 0x11, 0x13, 0x14, 0x15, 0x17, 0x18, 0x19, 0x1A, 0x1C, 0x1D, 0x1E, 0x20, 0x21, 0x22, 0x23, 0x25, 0x26, 0x27, 0x29, 0x2A, 0x2B, 0x2C, 0x2E, 0x2F, 0x30, 0x32, 0x33, 0x34, 0x35, 0x37, 0x38, 0x39, 0x3B, 0x3C, 0x3D, 0x3E, 0x40, 0x41, 0x42, 0x44, 0x45, 0x46, 0x47, 0x49, 0x4A, 0x4B, 0x4C, 0x4E, 0x4F, 0x50, 0x52, 0x53, 0x54, 0x55, 0x57, 0x58, 0x59, 0x5B, 0x5C, 0x5D, 0x5E, 0x60, 0x61, 0x62, 0x64, 0x65, 0x66, 0x67, 0x69, 0x6A, 0x6B, 0x6D, 0x6E, 0x6F, 0x70, 0x72, 0x73, 0x74, 0x76, 0x77, 0x78, 0x79, 0x7B, 0x7C, 0x7D, 0x7F };
+      public static final int[] DCO_LEVEL_ENCODING = new int[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67 }; 
+      public static final int[] DCW_RATE_ENCODING = new int[] { 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x14, 0x15, 0x16, 0x17, 0x18, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x20, 0x21, 0x22, 0x23, 0x24, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x32, 0x33, 0x34, 0x35, 0x36, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3E, 0x3F, 0x40, 0x41, 0x42, 0x44, 0x45, 0x46, 0x47, 0x48, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x50, 0x51, 0x52, 0x53, 0x54, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5C, 0x5D, 0x5E, 0x5F, 0x60, 0x62, 0x63, 0x64, 0x65, 0x66, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6E, 0x6F, 0x70, 0x71, 0x72, 0x74, 0x75, 0x76, 0x77, 0x78, 0x7A, 0x7B, 0x7C, 0x7D, 0x7F };
+      public static final int[] DCW_LEVEL_ENCODING = new int[] { 0x00, 0x01, 0x02, 0x03, 0x05, 0x06, 0x07, 0x08, 0x0A, 0x0B, 0x0C, 0x0E, 0x0F, 0x10, 0x11, 0x13, 0x14, 0x15, 0x17, 0x18, 0x19, 0x1A, 0x1C, 0x1D, 0x1E, 0x20, 0x21, 0x22, 0x23, 0x25, 0x26, 0x27, 0x29, 0x2A, 0x2B, 0x2C, 0x2E, 0x2F, 0x30, 0x32, 0x33, 0x34, 0x35, 0x37, 0x38, 0x39, 0x3B, 0x3C, 0x3D, 0x3E, 0x40, 0x41, 0x42, 0x44, 0x45, 0x46, 0x47, 0x49, 0x4A, 0x4B, 0x4C, 0x4E, 0x4F, 0x50, 0x52, 0x53, 0x54, 0x55, 0x57, 0x58, 0x59, 0x5B, 0x5C, 0x5D, 0x5E, 0x60, 0x61, 0x62, 0x64, 0x65, 0x66, 0x67, 0x69, 0x6A, 0x6B, 0x6D, 0x6E, 0x6F, 0x70, 0x72, 0x73, 0x74, 0x76, 0x77, 0x78, 0x79, 0x7B, 0x7C, 0x7D, 0x7F };
+      public static final int[][] LEVEL_ENCODINGS = new int[][] { DCO_LEVEL_ENCODING, DCW_LEVEL_ENCODING, DCA_LEVEL_ENCODING, DCO_LEVEL_ENCODING, DCW_LEVEL_ENCODING, DCA_LEVEL_ENCODING };
+      public static final int[][] RATE_ENCODINGS = new int[][] { DCO_RATE_ENCODING, DCW_RATE_ENCODING, DCA_RATE_ENCODING, DCO_RATE_ENCODING, DCW_RATE_ENCODING, DCA_RATE_ENCODING };
+    */
 
     public static final int[][] DCA_KEY_FOLLOW = new int[][] {{0x00, 0x00}, {0x01, 0x08}, {0x02, 0x11}, {0x03, 0x1A}, {0x04, 0x24}, {0x05, 0x2F}, {0x06, 0x3A}, {0x07, 0x45}, {0x08, 0x52}, {0x09, 0x5F}};
     public static final int[][] DCW_KEY_FOLLOW = new int[][] {{0x00, 0x00}, {0x01, 0x1F}, {0x02, 0x2C}, {0x03, 0x39}, {0x04, 0x46}, {0x05, 0x53}, {0x06, 0x60}, {0x07, 0x6E}, {0x08, 0x92}, {0x09, 0xFF}};
@@ -119,12 +119,12 @@ public class CasioCZ extends Synth
 
     public static final int NO_SUSTAIN_STEP = 0;
 
-/// dca1 level                                  1-15    [backwards!]
-/// line 1 velocity (amp)               0-15
-/// line 1 velocity (wave)              0-15    [backwards!]
-/// line 1 velocity (pitch)             0-15    [backwards!]
-//// ... same for dca2?
-//// Name                                       16 long!        A-Z 0-9 . - / SPACE
+    /// dca1 level                                  1-15    [backwards!]
+    /// line 1 velocity (amp)               0-15
+    /// line 1 velocity (wave)              0-15    [backwards!]
+    /// line 1 velocity (pitch)             0-15    [backwards!]
+    //// ... same for dca2?
+    //// Name                                       16 long!        A-Z 0-9 . - / SPACE
 
 
     boolean cz1;
@@ -132,15 +132,15 @@ public class CasioCZ extends Synth
     
     public boolean isCZ1() { return cz1; }
     public void setCZ1(boolean val)
-        {
+    {
         setLastX("" + (!val), CZ_1_KEY, getSynthName(), true);
         cz1 = val;
         updateTitle();
-        }
+    }
     
 
     public CasioCZ()
-        {
+    {
         int panel = 0;
         
         /*
@@ -168,7 +168,7 @@ public class CasioCZ extends Synth
         vbox.add(addEnvelope(1, DCA, Style.COLOR_C()));
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-//        soundPanel.makePasteable("line1");
+        //        soundPanel.makePasteable("line1");
         soundPanel.makePasteable("line");
         soundPanel.setSendsAllParameters(false);
         addTab("Global and Line 1", soundPanel);
@@ -182,7 +182,7 @@ public class CasioCZ extends Synth
         vbox.add(addEnvelope(2, DCA, Style.COLOR_C()));
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-//        soundPanel.makePasteable("line2");
+        //        soundPanel.makePasteable("line2");
         soundPanel.makePasteable("line");
         soundPanel.setSendsAllParameters(false);
         addTab("Line 2", soundPanel);
@@ -192,26 +192,26 @@ public class CasioCZ extends Synth
         model.set("number", 0);
                 
         loadDefaults();        
-        }
+    }
                 
     public String getDefaultResourceFileName() { return "CasioCZ.init"; }
     public String getHTMLResourceFileName() { return "CasioCZ.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-        {
+    {
         JComboBox bank = new JComboBox(BANKS);
         
         // figure bank
         int mb = model.get("bank", 0);
         int b = Synth.getLastXAsInt("lastbank", getSynthNameLocal(), -1, true);
-        if (b == 12)	// CZ230S Writable Bank
-        	{
-        	bank.setSelectedIndex(b);
-        	}
+        if (b == 12)    // CZ230S Writable Bank
+            {
+                bank.setSelectedIndex(b);
+            }
         else
-        	{
-        	bank.setSelectedIndex(mb);
-        	}
+            {
+                bank.setSelectedIndex(mb);
+            }
         
         int num = model.get("number") + 1;
         JTextField number = new JTextField("" + num, 3);
@@ -235,46 +235,46 @@ public class CasioCZ extends Synth
                         
         while(true)
             {
-            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                new JComponent[] { bank, number }, title, instructions);
+                boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                                                 new JComponent[] { bank, number }, title, instructions);
                 
-            if (result == false) 
-                return false;
+                if (result == false) 
+                    return false;
                                 
-            int n;
-            try { n = Integer.parseInt(number.getText()); }
-            catch (NumberFormatException e)
-                {
-                if (bank.getSelectedIndex() == 12) // SC
-                    showSimpleError(title, "In Bank SC, the Patch Number must be an integer 1...4");
-                else
-                    showSimpleError(title, "The Patch Number must be an integer 1...8");
-                continue;
-                }
-            if (n < 1 || n > 8 || (bank.getSelectedIndex() == 12 && n > 4))
-                {
-                if (bank.getSelectedIndex() == 12) // SC
-                    showSimpleError(title, "In Bank SC, the Patch Number must be an integer 1...4");
-                else
-                    showSimpleError(title, "The Patch Number must be an integer 1...8");
-                continue;
-                }
+                int n;
+                try { n = Integer.parseInt(number.getText()); }
+                catch (NumberFormatException e)
+                    {
+                        if (bank.getSelectedIndex() == 12) // SC
+                            showSimpleError(title, "In Bank SC, the Patch Number must be an integer 1...4");
+                        else
+                            showSimpleError(title, "The Patch Number must be an integer 1...8");
+                        continue;
+                    }
+                if (n < 1 || n > 8 || (bank.getSelectedIndex() == 12 && n > 4))
+                    {
+                        if (bank.getSelectedIndex() == 12) // SC
+                            showSimpleError(title, "In Bank SC, the Patch Number must be an integer 1...4");
+                        else
+                            showSimpleError(title, "The Patch Number must be an integer 1...8");
+                        continue;
+                    }
                 
-            n--;
+                n--;
                                 
-            int i = bank.getSelectedIndex();
+                int i = bank.getSelectedIndex();
                         
-            change.set("bank", i);
-            change.set("number", n);
-        	Synth.setLastX("" + i, "lastbank", getSynthNameLocal(), true);
+                change.set("bank", i);
+                change.set("number", n);
+                Synth.setLastX("" + i, "lastbank", getSynthNameLocal(), true);
                         
-            return true;
+                return true;
             }
-        }
+    }
         
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-        {
+    {
         Category globalCategory = new Category(this, getSynthName(), color);
         //globalCategory.makeUnresettable();
                 
@@ -292,9 +292,9 @@ public class CasioCZ extends Synth
         check.setSelected(cz1);
         check.addActionListener(new ActionListener()
             {
-            public void actionPerformed(ActionEvent e)
+                public void actionPerformed(ActionEvent e)
                 {
-                setCZ1(check.isSelected());
+                    setCZ1(check.isSelected());
                 }
             });
         check.setFont(Style.SMALL_FONT());
@@ -308,15 +308,15 @@ public class CasioCZ extends Synth
         
         comp = new StringComponent("Patch Name [CZ-1]", this, "name", 16, "Name must be up to 16 characters.")
             {
-            public String replace(String val)
+                public String replace(String val)
                 {
-                return revisePatchName(val);
+                    return revisePatchName(val);
                 }
                                 
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                updateTitle();
+                    super.update(key, model);
+                    updateTitle();
                 }
             };
         vbox.add(comp);
@@ -326,11 +326,11 @@ public class CasioCZ extends Synth
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-        }
+    }
                 
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addGlobal(Color color)
-        {
+    {
         Category globalCategory = new Category(this, "Global", color);
                 
         JComponent comp;
@@ -368,14 +368,14 @@ public class CasioCZ extends Synth
 
         comp = new LabelledDial("Detune", this, "detune", color, -47, 47)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val == 0) return "--";
-                int v = Math.abs(val);
-                if (val < 0)
-                    return "-" + (v / 12) + "-" + (v % 12);
-                else
-                    return "+" + (v / 12) + "+" + (v % 12);
+                    if (val == 0) return "--";
+                    int v = Math.abs(val);
+                    if (val < 0)
+                        return "-" + (v / 12) + "-" + (v % 12);
+                    else
+                        return "+" + (v / 12) + "+" + (v % 12);
                 }
             };
         hbox.add(comp);
@@ -390,18 +390,18 @@ public class CasioCZ extends Synth
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-        }
+    }
         
     
     JComponent waveformChooserExample = null;
     /** Add wave envelope category */
     public JComponent addEnvelope(int line, int env, Color color)
-        {
+    {
         final String envelope = "line" + line + "env" + env;
         
         Category category = new Category(this, ENVELOPES[(line - 1) * 3 + env - 1], color);
-//        category.makeDistributable(envelope);
-//        category.makePasteable(envelope);
+        //        category.makeDistributable(envelope);
+        //        category.makePasteable(envelope);
         category.makeDistributable("line" + line + "env");
         category.makePasteable("line" + line + "env");
                                 
@@ -411,29 +411,29 @@ public class CasioCZ extends Synth
  
         if (env == DCO)
             {
-            VBox vbox = new VBox();
-            params = WAVEFORMS;
-            waveformChooserExample = new Chooser("Waveform 1", this, envelope + "waveform1", params);
-            vbox.add(waveformChooserExample);
-            params = WAVEFORMS;
-            waveformChooserExample = new Chooser("Waveform 2", this, envelope + "waveform2", params);
-            vbox.add(waveformChooserExample);
-            comp = new CheckBox("Waveform 2 On", this, envelope + "waveform2on");
-            vbox.add(comp);
-            params = WINDOWS;
-            comp = new Chooser("Window", this, envelope + "window", params);
-            vbox.add(comp);
-            hbox.add(vbox);
+                VBox vbox = new VBox();
+                params = WAVEFORMS;
+                waveformChooserExample = new Chooser("Waveform 1", this, envelope + "waveform1", params);
+                vbox.add(waveformChooserExample);
+                params = WAVEFORMS;
+                waveformChooserExample = new Chooser("Waveform 2", this, envelope + "waveform2", params);
+                vbox.add(waveformChooserExample);
+                comp = new CheckBox("Waveform 2 On", this, envelope + "waveform2on");
+                vbox.add(comp);
+                params = WINDOWS;
+                comp = new Chooser("Window", this, envelope + "window", params);
+                vbox.add(comp);
+                hbox.add(vbox);
             }
         else
             {
-            VBox vbox = new VBox();
-            HBox h = new HBox();
-            comp = new LabelledDial("Key Follow", this, envelope + "keyfollow", color, 0, 9, 0);
-            h.add(comp);
-            vbox.add(h);
-            vbox.add(Strut.makeStrut(waveformChooserExample));
-            hbox.add(vbox);
+                VBox vbox = new VBox();
+                HBox h = new HBox();
+                comp = new LabelledDial("Key Follow", this, envelope + "keyfollow", color, 0, 9, 0);
+                h.add(comp);
+                vbox.add(h);
+                vbox.add(Strut.makeStrut(waveformChooserExample));
+                hbox.add(vbox);
             }
                       
         VBox vbox = new VBox();                 
@@ -441,8 +441,8 @@ public class CasioCZ extends Synth
         vbox.add(comp);
         if (env == DCA)
             {
-            comp = new LabelledDial("Level [CZ-1]", this, envelope + "mainlevel", color, 1, 15);
-            vbox.add(comp);
+                comp = new LabelledDial("Level [CZ-1]", this, envelope + "mainlevel", color, 1, 15);
+                vbox.add(comp);
             }
         hbox.add(vbox);
 
@@ -452,11 +452,11 @@ public class CasioCZ extends Synth
 
         comp = new LabelledDial("Sustain Step", this, envelope + "sustain", color, 0, 8 )
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val == NO_SUSTAIN_STEP)
-                    return "None";
-                else return "" + val;
+                    if (val == NO_SUSTAIN_STEP)
+                        return "None";
+                    else return "" + val;
                 }
             };
         vbox.add(comp);
@@ -470,60 +470,60 @@ public class CasioCZ extends Synth
         
         if (env == DCA)
             {
-            maxRate = 106;
+                maxRate = 106;
             }
         if (env == DCO)
             {
-            maxLevel = 123;
+                maxLevel = 123;
             }
 
         for(int i = 1; i < 9; i++)
             {
-            vbox = new VBox();
-            comp = new LabelledDial("Rate " + i, this, envelope + "rate" + i, color, 0, maxRate);
-            vbox.add(comp);
-            comp = new LabelledDial("Level " + i, this, envelope + "level" + i, color, 0, maxLevel);
-            vbox.add(comp);
-            hbox.add(vbox);
+                vbox = new VBox();
+                comp = new LabelledDial("Rate " + i, this, envelope + "rate" + i, color, 0, maxRate);
+                vbox.add(comp);
+                comp = new LabelledDial("Level " + i, this, envelope + "level" + i, color, 0, maxLevel);
+                vbox.add(comp);
+                hbox.add(vbox);
             }
 
-/*
-  EnvelopeDisplay disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-  new String[] { null, envelope + "rate1", envelope + "rate2", envelope + "rate3", envelope + "rate4", envelope + "rate5", envelope + "rate6", envelope + "rate7", envelope + "rate8",  },
-  new String[] { null, envelope + "level1", envelope + "level2", envelope + "level3", envelope + "level4", envelope + "level5", envelope + "level6", envelope + "level7", envelope + "level8",  },
-  new double[] { 0, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8 },
-  new double[] { 0, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel },
-  new double[] { 0, (Math.PI/4/maxRate), (Math.PI/4/maxRate), (Math.PI/4/maxRate), (Math.PI/4/maxRate), (Math.PI/4/maxRate), (Math.PI/4/maxRate), (Math.PI/4/maxRate), (Math.PI/4/maxRate) })
-  {
-  public int postProcessLoopOrStageKey(String key, int val)
-  {
-  if (key.equals(envelope + "end"))
-  return val + 1;
-  else return val;
-  }
-  };
-  disp.setFinalStageKey(envelope + "end");
-  disp.setSustainStageKey(envelope + "sustain");
-  disp.setPreferredWidth((int)(disp.getPreferredWidth() * 1.5));
-*/
+        /*
+          EnvelopeDisplay disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+          new String[] { null, envelope + "rate1", envelope + "rate2", envelope + "rate3", envelope + "rate4", envelope + "rate5", envelope + "rate6", envelope + "rate7", envelope + "rate8",  },
+          new String[] { null, envelope + "level1", envelope + "level2", envelope + "level3", envelope + "level4", envelope + "level5", envelope + "level6", envelope + "level7", envelope + "level8",  },
+          new double[] { 0, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8 },
+          new double[] { 0, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel },
+          new double[] { 0, (Math.PI/4/maxRate), (Math.PI/4/maxRate), (Math.PI/4/maxRate), (Math.PI/4/maxRate), (Math.PI/4/maxRate), (Math.PI/4/maxRate), (Math.PI/4/maxRate), (Math.PI/4/maxRate) })
+          {
+          public int postProcessLoopOrStageKey(String key, int val)
+          {
+          if (key.equals(envelope + "end"))
+          return val + 1;
+          else return val;
+          }
+          };
+          disp.setFinalStageKey(envelope + "end");
+          disp.setSustainStageKey(envelope + "sustain");
+          disp.setPreferredWidth((int)(disp.getPreferredWidth() * 1.5));
+        */
 
         EnvelopeDisplay disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null, envelope + "rate1", envelope + "rate2", envelope + "rate3", envelope + "rate4", envelope + "rate5", envelope + "rate6", envelope + "rate7", envelope + "rate8",  },
-            new String[] { null, envelope + "level1", envelope + "level2", envelope + "level3", envelope + "level4", envelope + "level5", envelope + "level6", envelope + "level7", envelope + "level8",  },
-            new double[] { 0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0 },
-            new double[] { 0, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel })
+                                                   new String[] { null, envelope + "rate1", envelope + "rate2", envelope + "rate3", envelope + "rate4", envelope + "rate5", envelope + "rate6", envelope + "rate7", envelope + "rate8",  },
+                                                   new String[] { null, envelope + "level1", envelope + "level2", envelope + "level3", envelope + "level4", envelope + "level5", envelope + "level6", envelope + "level7", envelope + "level8",  },
+                                                   new double[] { 0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0, 1.0 / maxRate / 8.0 },
+                                                   new double[] { 0, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel, 1.0 / maxLevel })
             {
-            public void postProcess(double[] xVals, double[] yVals)
+                public void postProcess(double[] xVals, double[] yVals)
                 {
-                // The CZ uses 99 for SHORT and 0 for LONG, weird
-                for(int i = 1; i < 9; i++)
-                    xVals[i] = 1.0 / 8 - xVals[i];
+                    // The CZ uses 99 for SHORT and 0 for LONG, weird
+                    for(int i = 1; i < 9; i++)
+                        xVals[i] = 1.0 / 8 - xVals[i];
                 }
-            public int postProcessLoopOrStageKey(String key, int val)
+                public int postProcessLoopOrStageKey(String key, int val)
                 {
-                if (key.equals(envelope + "end"))
-                    return val + 1;
-                else return val;
+                    if (key.equals(envelope + "end"))
+                        return val + 1;
+                    else return val;
                 }
             };
         disp.setFinalStageKey(envelope + "end");
@@ -534,137 +534,137 @@ public class CasioCZ extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-        }
+    }
     
     public int dcaAllLevelToSysex(int alpha)
-        {
+    {
         // The conversion is:
         // SYSEX     ACTUAL
         // 14            1
         // ...
         // 0             15
         return 15 - alpha;
-        }
+    }
         
     public int sysexToDCAAllLevel(int alpha)
-        {
+    {
         return 15 - alpha;
-        }
+    }
                         
     public int dcoRateToSysex(int alpha)
-        {
+    {
         return (alpha * 127) / 99;
-        }
+    }
     
     public int sysexToDCORate(int beta)
-        {
+    {
         if (beta == 0) return 0;
         else if (beta == 127) return 99;
         else return (beta * 99) / 127 + 1;
-        }
+    }
         
     public int dcoLevelToSysex(int alpha)
-        {
+    {
         if (alpha > 63) return alpha + 4;
         else return alpha;
-        }
+    }
     
     public int sysexToDCOLevel(int beta)
-        {
+    {
         if (beta > 63) return beta - 4;
         else return beta;
-        }
+    }
         
     public int dcwRateToSysex(int alpha)
-        {
+    {
         return (alpha * 119) / 99 + 8;
-        }
+    }
         
     public int sysexToDCWRate(int beta)
-        {
+    {
         if (beta == 8) return 0;
         else if (beta == 127) return 99;
         else return ((beta - 8) * 99) / 119 + 1;
-        }
+    }
         
     public int dcwLevelToSysex(int alpha)
-        {
+    {
         return (alpha * 127) / 99;
-        }
+    }
         
     public int sysexToDCWLevel(int beta)
-        {
+    {
         if (beta == 0) return 0;
         else if (beta == 127) return 99;
         else return (beta * 99) / 127 + 1;
-        }
+    }
 
     public int dcaRateToSysex(int alpha)
-        {
+    {
         return (alpha * 119) / 99;
-        }
+    }
         
     public int sysexToDCARate(int beta)
-        {
+    {
         if (beta == 0) return 0;
         else if (beta == 119) return 99;
         else return (beta * 99) / 119 + 1;
-        }
+    }
         
     public int dcaLevelToSysex(int alpha)
-        {
+    {
         // the documentation in http://www.youngmonkey.ca/nose/audio_tech/synth/Casio-CZ.html
         // appears to be wrong.   It appears that the level is simply a difference of 28 except when 0.  
         if (alpha == 0) return 0;
         else return alpha + 28;
-        }
+    }
         
     public int sysexToDCALevel(int beta)
-        {
+    {
         // the documentation in http://www.youngmonkey.ca/nose/audio_tech/synth/Casio-CZ.html
         // appears to be wrong.   It appears that the level is simply a difference of 28 except when 0.  
         if (beta == 0) return 0;
         else return beta - 28;
-        }
+    }
     
     public static String getSynthName() { return "Casio CZ"; }
  
     public void changePatch(Model tempModel)
-        {
+    {
         int bank = tempModel.get("bank");
         int number = tempModel.get("number");
         int pc = bank * 8 + number;
         tryToSendMIDI(buildPC(getChannelOut(), pc));
         model.set("bank", bank);
         model.set("number", number);
-        }
+    }
 
     public int unnybblize(byte lsb, byte msb)
-        {
+    {
         int v  = ((lsb & 0xF) | (msb << 4));
         if (v < 0) v += 256;
         // System.err.println("nyb: " + Integer.toHexString(lsb) + " " + Integer.toHexString(msb) + " -> " + v);
         return v;
-        }
+    }
                 
     public byte[] nybblize(int val)
-        {
+    {
         byte lsb = (byte)(val & 0xF);
         byte msb = (byte)((val >>> 4) & 0xF);
         // System.err.println("nyb: " + val + " -> " + Integer.toHexString(lsb) + " " + Integer.toHexString(msb));
         return new byte[] { lsb, msb };
-        }
+    }
 
     public int nybblize(int val, byte[] to, int pos)
-        {
+    {
         byte[] nybbles = nybblize(val);
         to[pos] = nybbles[0];
         to[pos+1] = nybbles[1];
         return pos + 2;
-        }
+    }
 
     public int parse(byte[] data, boolean fromFile)
-        {
+    {
         // ugh, CZ sysex is the *worst*.
         
         boolean cz1 = false;
@@ -700,42 +700,42 @@ public class CasioCZ extends Synth
         
         if (data.length == 7 + 144 * 2)
             {
-// we assume we've already changed the bank and number
-//            model.set("bank", 0);
-//            model.set("number", 0);
-            cz1 = true;
+                // we assume we've already changed the bank and number
+                //            model.set("bank", 0);
+                //            model.set("number", 0);
+                cz1 = true;
             }
         else if (data.length == 8 + 144 * 2)
             {
-            if (data[6] <= 80)
-                {
-                model.set("bank", data[6] / 8);
-                model.set("number", data[6] % 8);
-                }
-            cz1 = true;
-            pos = 7;
+                if (data[6] <= 80)
+                    {
+                        model.set("bank", data[6] / 8);
+                        model.set("number", data[6] % 8);
+                    }
+                cz1 = true;
+                pos = 7;
             }
         else if (data.length == 7 + 128 * 2)
             {
-// we assume we've already changed the bank and number
-//            model.set("bank", 0);
-//            model.set("number", 0);
-            cz1 = false;
+                // we assume we've already changed the bank and number
+                //            model.set("bank", 0);
+                //            model.set("number", 0);
+                cz1 = false;
             }
         else if (data.length == 8 + 128 * 2)
             {
-            if (data[6] <= 80)
-                {
-                model.set("bank", data[6] / 8);
-                model.set("number", data[6] % 8);
-                }
-            pos = 7;
-            cz1 = false;
+                if (data[6] <= 80)
+                    {
+                        model.set("bank", data[6] / 8);
+                        model.set("number", data[6] % 8);
+                    }
+                pos = 7;
+                cz1 = false;
             }
         else
             {
-            // Uh....
-            return PARSE_CANCELLED; // We do this because the CZ is chatty in response to us, and we don't want that misinterpreted as a failed parse
+                // Uh....
+                return PARSE_CANCELLED; // We do this because the CZ is chatty in response to us, and we don't want that misinterpreted as a failed parse
             }
                 
         // System.err.println("CZ1: " + cz1);
@@ -842,200 +842,200 @@ public class CasioCZ extends Synth
                 
         for(int line = 1; line < 3; line++)             // line1 and line2
             {
-            // System.err.println("MFW (" + line + ") " + pos);
-            // MFW          (DCO Waveform, Modulation, Line Mute)           ENV 1
+                // System.err.println("MFW (" + line + ") " + pos);
+                // MFW          (DCO Waveform, Modulation, Line Mute)           ENV 1
 
-            high = unnybblize(data[pos], data[pos + 1]);            //  high first.  CZ-1 manual is wrong in its asterisk.
-            pos += 2;
-            low = unnybblize(data[pos], data[pos + 1]);
-            pos += 2;
-            val = (high << 8) | low;
+                high = unnybblize(data[pos], data[pos + 1]);            //  high first.  CZ-1 manual is wrong in its asterisk.
+                pos += 2;
+                low = unnybblize(data[pos], data[pos + 1]);
+                pos += 2;
+                val = (high << 8) | low;
 
-            if (line == 1)
-                {
-                model.set("modulation", (val >>> 3) & 7);               // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/8-modulation.html
-                model.set("muteline1", (val >>> 2) & 1);                // not mentioned in manual.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/8-modulation.html
-                }
+                if (line == 1)
+                    {
+                        model.set("modulation", (val >>> 3) & 7);               // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/8-modulation.html
+                        model.set("muteline1", (val >>> 2) & 1);                // not mentioned in manual.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/8-modulation.html
+                    }
                                 
-            model.set("line" + line + "env1window", (val >>> 6) & 7);               // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
-            model.set("line" + line + "env1waveform2", (val >>> 10) & 7);           // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
-            model.set("line" + line + "env1waveform2on", (val >>> 9) & 1);          // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
-            model.set("line" + line + "env1waveform1", (val >>> 13) & 7);           // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
+                model.set("line" + line + "env1window", (val >>> 6) & 7);               // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
+                model.set("line" + line + "env1waveform2", (val >>> 10) & 7);           // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
+                model.set("line" + line + "env1waveform2on", (val >>> 9) & 1);          // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
+                model.set("line" + line + "env1waveform1", (val >>> 13) & 7);           // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
 
 
-            // MAMD, MAMV   (DCA Key Follow and Level)              ENV 3
+                // MAMD, MAMV   (DCA Key Follow and Level)              ENV 3
 
-            // System.err.println("MAMD (" + line + ") " + pos);
-            low = unnybblize(data[pos], data[pos + 1]);
-            pos += 2;
-            high = unnybblize(data[pos], data[pos + 1]);
-            pos += 2;
-
-            if (cz1)
-                {                       
-                model.set("line" + line + "env3mainlevel", sysexToDCAAllLevel(low >>> 4));
-                }
-            else
-                {
-                model.set("line" + line + "env3mainlevel", 15);
-                }
-
-            // the low byte is complicated but it doesn't actually matter for parsing
-            // we really only care about high, because it contains everything we need to know
-                
-            model.set("line" + line + "env3keyfollow", low & 0xF);
-                
-                
-            // MWMD, MWMV   (DCW Key Follow)                ENV 2
-
-            // System.err.println("MWMD (" + line + ") " + pos);
-            low = unnybblize(data[pos], data[pos + 1]);
-            pos += 2;
-            high = unnybblize(data[pos], data[pos + 1]);
-            pos += 2;
-
-            // cz1 differs from the normal here, but they're the same in their third nybble,
-            // so I'l just use that.
-                
-            model.set("line" + line + "env2keyfollow", low & 0xF);
-
-
-            // PMAL         (DCA Envelope End Step and Velocity)            ENV 3
-                
-            // System.err.println("PMAL (" + line + ") " + pos);
-            val = unnybblize(data[pos], data[pos + 1]);
-            pos += 2;
-                
-            if (cz1)
-                {
-                // Unlike the others, here the velocity is a direct mapping
-                model.set("line" + line + "env3velocity", val >>> 4);
-                }
-            else
-                {
-                model.set("line" + line + "env3velocity", 0);
-                }
-                        
-            model.set("line" + line + "env3end", val & 0xf);
-                
-                
-            // PMA  (DCA Envelope)          ENV 3
-                
-            // System.err.println("PMA (" + line + ") " + pos);
-            model.set("line" + line + "env3sustain", NO_SUSTAIN_STEP);
-            for(int i = 0; i < 8; i++)
-                {
-                int rate = unnybblize(data[pos], data[pos + 1]);
+                // System.err.println("MAMD (" + line + ") " + pos);
+                low = unnybblize(data[pos], data[pos + 1]);
                 pos += 2;
-                int level = unnybblize(data[pos], data[pos + 1]);
+                high = unnybblize(data[pos], data[pos + 1]);
                 pos += 2;
-                        
-                model.set("line" + line + "env3rate" + (i + 1), sysexToDCARate(rate & 127));
-                        
-                // The CZ has a bizarre flag indicating whether the
-                // level is going up or down relative to the previous
-                // level.  We can ignore it here but we'll need to set it 
-                // when we're emitting.
 
-                model.set("line" + line + "env3level" + (i + 1), sysexToDCALevel(level & 127));
+                if (cz1)
+                    {                       
+                        model.set("line" + line + "env3mainlevel", sysexToDCAAllLevel(low >>> 4));
+                    }
+                else
+                    {
+                        model.set("line" + line + "env3mainlevel", 15);
+                    }
+
+                // the low byte is complicated but it doesn't actually matter for parsing
+                // we really only care about high, because it contains everything we need to know
+                
+                model.set("line" + line + "env3keyfollow", low & 0xF);
+                
+                
+                // MWMD, MWMV   (DCW Key Follow)                ENV 2
+
+                // System.err.println("MWMD (" + line + ") " + pos);
+                low = unnybblize(data[pos], data[pos + 1]);
+                pos += 2;
+                high = unnybblize(data[pos], data[pos + 1]);
+                pos += 2;
+
+                // cz1 differs from the normal here, but they're the same in their third nybble,
+                // so I'l just use that.
+                
+                model.set("line" + line + "env2keyfollow", low & 0xF);
+
+
+                // PMAL         (DCA Envelope End Step and Velocity)            ENV 3
+                
+                // System.err.println("PMAL (" + line + ") " + pos);
+                val = unnybblize(data[pos], data[pos + 1]);
+                pos += 2;
+                
+                if (cz1)
+                    {
+                        // Unlike the others, here the velocity is a direct mapping
+                        model.set("line" + line + "env3velocity", val >>> 4);
+                    }
+                else
+                    {
+                        model.set("line" + line + "env3velocity", 0);
+                    }
+                        
+                model.set("line" + line + "env3end", val & 0xf);
+                
+                
+                // PMA  (DCA Envelope)          ENV 3
+                
+                // System.err.println("PMA (" + line + ") " + pos);
+                model.set("line" + line + "env3sustain", NO_SUSTAIN_STEP);
+                for(int i = 0; i < 8; i++)
+                    {
+                        int rate = unnybblize(data[pos], data[pos + 1]);
+                        pos += 2;
+                        int level = unnybblize(data[pos], data[pos + 1]);
+                        pos += 2;
+                        
+                        model.set("line" + line + "env3rate" + (i + 1), sysexToDCARate(rate & 127));
+                        
+                        // The CZ has a bizarre flag indicating whether the
+                        // level is going up or down relative to the previous
+                        // level.  We can ignore it here but we'll need to set it 
+                        // when we're emitting.
+
+                        model.set("line" + line + "env3level" + (i + 1), sysexToDCALevel(level & 127));
                                                 
-                if (level >>> 7 == 1)
-                    {
-                    model.set("line" + line + "env3sustain", (i + 1));
+                        if (level >>> 7 == 1)
+                            {
+                                model.set("line" + line + "env3sustain", (i + 1));
+                            }
                     }
-                }
 
 
-            // PMWL         (DCW Envelope End Step and Velocity)            ENV 2
+                // PMWL         (DCW Envelope End Step and Velocity)            ENV 2
                 
-            // System.err.println("PMWL (" + line + ") " + pos);
-            val = unnybblize(data[pos], data[pos + 1]);
-            pos += 2;
-                
-            if (cz1)
-                {
-                // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
-                model.set("line" + line + "env2velocity", val >>> 4); // (15 - (val >>> 4)));
-                }
-            else
-                {
-                model.set("line" + line + "env2velocity", 0);
-                }
-                        
-            model.set("line" + line + "env2end", val & 0xf);
-                
-                
-            // PMW  (DCW Envelope)          ENV 2
-                
-            // System.err.println("PMW (" + line + ") " + pos);
-            model.set("line" + line + "env2sustain", NO_SUSTAIN_STEP);
-            for(int i = 0; i < 8; i++)
-                {
-                int rate = unnybblize(data[pos], data[pos + 1]);
+                // System.err.println("PMWL (" + line + ") " + pos);
+                val = unnybblize(data[pos], data[pos + 1]);
                 pos += 2;
-                int level = unnybblize(data[pos], data[pos + 1]);
-                pos += 2;
-                        
-                model.set("line" + line + "env2rate" + (i + 1), sysexToDCWRate(rate & 127));
-                        
-                // The CZ has a bizarre flag indicating whether the
-                // level is going up or down relative to the previous
-                // level.  We can ignore it here but we'll need to set it 
-                // when we're emitting.
-
-                model.set("line" + line + "env2level" + (i + 1), sysexToDCWLevel(level & 127));
-                        
-                if (level >>> 7 == 1)
+                
+                if (cz1)
                     {
-                    model.set("line" + line + "env2sustain", (i + 1));
+                        // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
+                        model.set("line" + line + "env2velocity", val >>> 4); // (15 - (val >>> 4)));
                     }
-                }
-
-
-            // PMPL         (DCO Envelope End Step and Velocity)            ENV 1
-                
-            // System.err.println("PMPL (" + line + ") " + pos);
-            val = unnybblize(data[pos], data[pos + 1]);
-            pos += 2;
-                
-            if (cz1)
-                {
-                // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
-                model.set("line" + line + "env1velocity", val >>> 4);   //(15 - (val >>> 4)));
-                }
-            else
-                {
-                model.set("line" + line + "env1velocity", 0);
-                }
-                        
-            model.set("line" + line + "env1end", val & 0xf);
-                
-                
-            // PMP  (DCO Envelope)          ENV 1
-                
-            // System.err.println("PMP (" + line + ") " + pos);
-            model.set("line" + line + "env1sustain", NO_SUSTAIN_STEP);
-            for(int i = 0; i < 8; i++)
-                {
-                int rate = unnybblize(data[pos], data[pos + 1]);
-                pos += 2;
-                int level = unnybblize(data[pos], data[pos + 1]);
-                pos += 2;
-                        
-                model.set("line" + line + "env1rate" + (i + 1), sysexToDCORate(rate & 127));
-                        
-                // The CZ has a bizarre flag indicating whether the
-                // level is going up or down relative to the previous
-                // level.  We can ignore it here but we'll need to set it 
-                // when we're emitting.
-
-                model.set("line" + line + "env1level" + (i + 1), sysexToDCOLevel(level & 127));
-                        
-                if (level >>> 7 == 1)
+                else
                     {
-                    model.set("line" + line + "env1sustain", (i + 1));
+                        model.set("line" + line + "env2velocity", 0);
                     }
-                }
+                        
+                model.set("line" + line + "env2end", val & 0xf);
+                
+                
+                // PMW  (DCW Envelope)          ENV 2
+                
+                // System.err.println("PMW (" + line + ") " + pos);
+                model.set("line" + line + "env2sustain", NO_SUSTAIN_STEP);
+                for(int i = 0; i < 8; i++)
+                    {
+                        int rate = unnybblize(data[pos], data[pos + 1]);
+                        pos += 2;
+                        int level = unnybblize(data[pos], data[pos + 1]);
+                        pos += 2;
+                        
+                        model.set("line" + line + "env2rate" + (i + 1), sysexToDCWRate(rate & 127));
+                        
+                        // The CZ has a bizarre flag indicating whether the
+                        // level is going up or down relative to the previous
+                        // level.  We can ignore it here but we'll need to set it 
+                        // when we're emitting.
+
+                        model.set("line" + line + "env2level" + (i + 1), sysexToDCWLevel(level & 127));
+                        
+                        if (level >>> 7 == 1)
+                            {
+                                model.set("line" + line + "env2sustain", (i + 1));
+                            }
+                    }
+
+
+                // PMPL         (DCO Envelope End Step and Velocity)            ENV 1
+                
+                // System.err.println("PMPL (" + line + ") " + pos);
+                val = unnybblize(data[pos], data[pos + 1]);
+                pos += 2;
+                
+                if (cz1)
+                    {
+                        // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
+                        model.set("line" + line + "env1velocity", val >>> 4);   //(15 - (val >>> 4)));
+                    }
+                else
+                    {
+                        model.set("line" + line + "env1velocity", 0);
+                    }
+                        
+                model.set("line" + line + "env1end", val & 0xf);
+                
+                
+                // PMP  (DCO Envelope)          ENV 1
+                
+                // System.err.println("PMP (" + line + ") " + pos);
+                model.set("line" + line + "env1sustain", NO_SUSTAIN_STEP);
+                for(int i = 0; i < 8; i++)
+                    {
+                        int rate = unnybblize(data[pos], data[pos + 1]);
+                        pos += 2;
+                        int level = unnybblize(data[pos], data[pos + 1]);
+                        pos += 2;
+                        
+                        model.set("line" + line + "env1rate" + (i + 1), sysexToDCORate(rate & 127));
+                        
+                        // The CZ has a bizarre flag indicating whether the
+                        // level is going up or down relative to the previous
+                        // level.  We can ignore it here but we'll need to set it 
+                        // when we're emitting.
+
+                        model.set("line" + line + "env1level" + (i + 1), sysexToDCOLevel(level & 127));
+                        
+                        if (level >>> 7 == 1)
+                            {
+                                model.set("line" + line + "env1sustain", (i + 1));
+                            }
+                    }
             }
                 
                 
@@ -1043,43 +1043,43 @@ public class CasioCZ extends Synth
                 
         if (cz1)
             {
-            // System.err.println("NAME " + pos);
-            byte[] name = new byte[16];
-            for(int i = 0; i < 16; i++)
-                {
-                name[i] = (byte)unnybblize(data[pos], data[pos + 1]);
-                pos+=2;
-                }
-            try
-                {
-                String n = new String(name, "US-ASCII");
-                String n2 = revisePatchName(n);
-                if (!n.equals(n2))
-                    System.err.println("Invalid patch name.  Was \"" + n + "\", revised to \"" + n2 + "\"");
-                model.set("name", n2);
-                }
-            catch (UnsupportedEncodingException e)
-                {
-                // never happens
-                }
+                // System.err.println("NAME " + pos);
+                byte[] name = new byte[16];
+                for(int i = 0; i < 16; i++)
+                    {
+                        name[i] = (byte)unnybblize(data[pos], data[pos + 1]);
+                        pos+=2;
+                    }
+                try
+                    {
+                        String n = new String(name, "US-ASCII");
+                        String n2 = revisePatchName(n);
+                        if (!n.equals(n2))
+                            System.err.println("Invalid patch name.  Was \"" + n + "\", revised to \"" + n2 + "\"");
+                        model.set("name", n2);
+                    }
+                catch (UnsupportedEncodingException e)
+                    {
+                        // never happens
+                    }
             }
         else
             {
-            model.set("name", "UNTITLED");
+                model.set("name", "UNTITLED");
             }
                         
         revise();
                         
         return PARSE_SUCCEEDED;
-        }
+    }
         
     public String getPatchLocationName(Model model)
-        {
+    {
         return BANKS[model.get("bank", 0)] + (model.get("number", 0) + 1);
-        }
+    }
     
     public Model getNextPatchLocation(Model model)
-        {
+    {
         int bank = model.get("bank");
         int number = model.get("number");
         
@@ -1087,45 +1087,45 @@ public class CasioCZ extends Synth
         if (number >= 8 || 
             (number >= 4 && bank == 12))            // SC
             {
-            bank++;
-            number = 0;
-            if (bank >= 12)
-                bank = 0;
+                bank++;
+                number = 0;
+                if (bank >= 12)
+                    bank = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-        }
+    }
     
    
     public String getPatchName(Model model) 
-        {
+    {
         return model.get("name", "UNTITLED");
-        }
+    }
 
     public String revisePatchName(String name)
-        {
+    {
         //name = super.revisePatchName(name);  // trim first time
         name = (name + "                ").substring(0, 16);
         
         StringBuffer nameb = new StringBuffer(name.toUpperCase());                            
         for(int i = 0 ; i < nameb.length(); i++)
             {
-            char c = nameb.charAt(i);
-            if (c >= 'A' && c <= 'Z')
-                continue;
-            else if (c >= '0' && c <= '9')
-                continue;
-            else if (c == '*' || c == '-' || c == '/' || c == ' ' || c == '.')
-                continue;
-            else
-                nameb.setCharAt(i, ' ');
+                char c = nameb.charAt(i);
+                if (c >= 'A' && c <= 'Z')
+                    continue;
+                else if (c >= '0' && c <= '9')
+                    continue;
+                else if (c == '*' || c == '-' || c == '/' || c == ' ' || c == '.')
+                    continue;
+                else
+                    nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return name;  // super.revisePatchName(name);  // trim again
-        }
+    }
         
         
         
@@ -1136,7 +1136,7 @@ public class CasioCZ extends Synth
     //// This may be very confusing to CZ-230S users.
         
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
-        {
+    {
         if (tempModel == null) 
             tempModel = model;
             
@@ -1234,200 +1234,200 @@ public class CasioCZ extends Synth
 
         for(int line = 1; line < 3; line++)             // line1 and line2
             {
-            // MFW          (DCO Waveform, Modulation, Line Mute)           ENV 1
-            // System.err.println("MFW (" + line + ") " + pos);
+                // MFW          (DCO Waveform, Modulation, Line Mute)           ENV 1
+                // System.err.println("MFW (" + line + ") " + pos);
 
-            val =   (model.get("line" + line + "env1window") << 6) |                // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
-                (model.get("line" + line + "env1waveform2") << 10) |    // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
-                (model.get("line" + line + "env1waveform2on") << 9) |   // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
-                (model.get("line" + line + "env1waveform1") << 13);             // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
+                val =   (model.get("line" + line + "env1window") << 6) |                // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
+                    (model.get("line" + line + "env1waveform2") << 10) |    // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
+                    (model.get("line" + line + "env1waveform2on") << 9) |   // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
+                    (model.get("line" + line + "env1waveform1") << 13);             // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/1-which_bits.html
                                                 
-            if (line == 1)
-                {
-                val |=  (model.get("modulation") << 3);         // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/8-modulation.html
-                val |=  (model.get("muteline1") << 2);          // not mentioned in manual.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/8-modulation.html
-                }
+                if (line == 1)
+                    {
+                        val |=  (model.get("modulation") << 3);         // manual is limited in discussion.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/8-modulation.html
+                        val |=  (model.get("muteline1") << 2);          // not mentioned in manual.  See http://www.kasploosh.com/projects/CZ/11800-spelunking/8-modulation.html
+                    }
                         
-            low = val & 255;
-            high = (val >>> 8) & 255;
-            pos = nybblize(high, data, pos);                //  high first.  CZ-1 manual is wrong in its asterisk.
-            pos = nybblize(low, data, pos);         //  high first.  CZ-1 manual is wrong in its asterisk.
+                low = val & 255;
+                high = (val >>> 8) & 255;
+                pos = nybblize(high, data, pos);                //  high first.  CZ-1 manual is wrong in its asterisk.
+                pos = nybblize(low, data, pos);         //  high first.  CZ-1 manual is wrong in its asterisk.
 
                                                                         
 
-            // MAMD, MAMV   (DCA Key Follow and Level)              ENV 3
-            // System.err.println("MAMD (" + line + ") " + pos);
+                // MAMD, MAMV   (DCA Key Follow and Level)              ENV 3
+                // System.err.println("MAMD (" + line + ") " + pos);
 
-            low = DCA_KEY_FOLLOW[model.get("line" + line + "env3keyfollow")][0];
-            high = DCA_KEY_FOLLOW[model.get("line" + line + "env3keyfollow")][1];
-            if (cz1)
-                {
-                low |= (dcaAllLevelToSysex(model.get("line" + line + "env3mainlevel")) << 4);
-                }
-            pos = nybblize(low, data, pos);
-            pos = nybblize(high, data, pos);
+                low = DCA_KEY_FOLLOW[model.get("line" + line + "env3keyfollow")][0];
+                high = DCA_KEY_FOLLOW[model.get("line" + line + "env3keyfollow")][1];
+                if (cz1)
+                    {
+                        low |= (dcaAllLevelToSysex(model.get("line" + line + "env3mainlevel")) << 4);
+                    }
+                pos = nybblize(low, data, pos);
+                pos = nybblize(high, data, pos);
                         
                         
                 
-            // MWMD, MWMV   (DCW Key Follow)                ENV 2
-            // System.err.println("MWMD (" + line + ") " + pos);
+                // MWMD, MWMV   (DCW Key Follow)                ENV 2
+                // System.err.println("MWMD (" + line + ") " + pos);
 
-            if (cz1)
-                {
-                low = DCW_KEY_FOLLOW_CZ1[model.get("line" + line + "env2keyfollow")][0];
-                high = DCW_KEY_FOLLOW_CZ1[model.get("line" + line + "env2keyfollow")][1];
-                }
-            else
-                {
-                low = DCA_KEY_FOLLOW[model.get("line" + line + "env2keyfollow")][0];
-                high = DCW_KEY_FOLLOW[model.get("line" + line + "env2keyfollow")][1];
-                }
+                if (cz1)
+                    {
+                        low = DCW_KEY_FOLLOW_CZ1[model.get("line" + line + "env2keyfollow")][0];
+                        high = DCW_KEY_FOLLOW_CZ1[model.get("line" + line + "env2keyfollow")][1];
+                    }
+                else
+                    {
+                        low = DCA_KEY_FOLLOW[model.get("line" + line + "env2keyfollow")][0];
+                        high = DCW_KEY_FOLLOW[model.get("line" + line + "env2keyfollow")][1];
+                    }
                                 
-            pos = nybblize(low, data, pos);
-            pos = nybblize(high, data, pos);
+                pos = nybblize(low, data, pos);
+                pos = nybblize(high, data, pos);
 
 
 
-            // PMAL         (DCA Envelope End Step and Velocity)            ENV 3
-            // System.err.println("PMAL (" + line + ") " + pos);
+                // PMAL         (DCA Envelope End Step and Velocity)            ENV 3
+                // System.err.println("PMAL (" + line + ") " + pos);
                 
-            val = model.get("line" + line + "env3end");
+                val = model.get("line" + line + "env3end");
                         
-            if (cz1)
-                {
-                val |= (model.get("line" + line + "env3velocity") << 4);
-                }
+                if (cz1)
+                    {
+                        val |= (model.get("line" + line + "env3velocity") << 4);
+                    }
                                 
-            pos = nybblize(val, data, pos);
+                pos = nybblize(val, data, pos);
                 
                 
                 
-            // PMA  (DCA Envelope)          ENV 3
-            // System.err.println("PMA (" + line + ") " + pos);
+                // PMA  (DCA Envelope)          ENV 3
+                // System.err.println("PMA (" + line + ") " + pos);
 
-            for(int i = 0; i < 8; i++)
-                {
-                int rate = dcaRateToSysex(model.get("line" + line + "env3rate" + (i + 1)));
-                int level = dcaLevelToSysex(model.get("line" + line + "env3level" + (i + 1)));
-                        
-                // The CZ has a bizarre flag indicating whether the
-                // level is going up or down relative to the previous
-                // level.
-
-                if (i > 0)
+                for(int i = 0; i < 8; i++)
                     {
-                    int curLevel = model.get("line" + line + "env3level" + (i + 1));
-                    int prevLevel = model.get("line" + line + "env3level" + i);
-                    if (curLevel < prevLevel)
-                        {
-                        rate |= 128;
-                        }
-                    }
-                                        
-                if (model.get("line" + line + "env3sustain") == (i + 1))
-                    {
-                    level |= 128;
-                    }
-                                        
-                pos = nybblize(rate, data, pos);
-                pos = nybblize(level, data, pos);
-                }
-
-
-
-            // PMWL         (DCW Envelope End Step and Velocity)            ENV 2           
-            // System.err.println("PMWL (" + line + ") " + pos);
-                
-            val = model.get("line" + line + "env2end");
+                        int rate = dcaRateToSysex(model.get("line" + line + "env3rate" + (i + 1)));
+                        int level = dcaLevelToSysex(model.get("line" + line + "env3level" + (i + 1)));
                         
-            if (cz1)
-                {
-                // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
-                val |= (model.get("line" + line + "env2velocity") << 4); // (15 - model.get("line" + line + "env2velocity") << 4);
-                }
+                        // The CZ has a bizarre flag indicating whether the
+                        // level is going up or down relative to the previous
+                        // level.
+
+                        if (i > 0)
+                            {
+                                int curLevel = model.get("line" + line + "env3level" + (i + 1));
+                                int prevLevel = model.get("line" + line + "env3level" + i);
+                                if (curLevel < prevLevel)
+                                    {
+                                        rate |= 128;
+                                    }
+                            }
+                                        
+                        if (model.get("line" + line + "env3sustain") == (i + 1))
+                            {
+                                level |= 128;
+                            }
+                                        
+                        pos = nybblize(rate, data, pos);
+                        pos = nybblize(level, data, pos);
+                    }
+
+
+
+                // PMWL         (DCW Envelope End Step and Velocity)            ENV 2           
+                // System.err.println("PMWL (" + line + ") " + pos);
+                
+                val = model.get("line" + line + "env2end");
+                        
+                if (cz1)
+                    {
+                        // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
+                        val |= (model.get("line" + line + "env2velocity") << 4); // (15 - model.get("line" + line + "env2velocity") << 4);
+                    }
                                 
-            pos = nybblize(val, data, pos);
+                pos = nybblize(val, data, pos);
                 
                 
                 
-            // PMW  (DCW Envelope)          ENV 2
-            // System.err.println("PMW (" + line + ") " + pos);
+                // PMW  (DCW Envelope)          ENV 2
+                // System.err.println("PMW (" + line + ") " + pos);
                 
-            for(int i = 0; i < 8; i++)
-                {
-                int rate = dcwRateToSysex(model.get("line" + line + "env2rate" + (i + 1)));
-                int level = dcwLevelToSysex(model.get("line" + line + "env2level" + (i + 1)));
-                        
-                // The CZ has a bizarre flag indicating whether the
-                // level is going up or down relative to the previous
-                // level.
-
-                if (i > 0)
+                for(int i = 0; i < 8; i++)
                     {
-                    int curLevel = model.get("line" + line + "env2level" + (i + 1));
-                    int prevLevel = model.get("line" + line + "env2level" + i);
-                    if (curLevel < prevLevel)
-                        {
-                        rate |= 128;
-                        }
-                    }
-                                        
-                if (model.get("line" + line + "env2sustain") == (i + 1))
-                    {
-                    level |= 128;
-                    }
-                                        
-                pos = nybblize(rate, data, pos);
-                pos = nybblize(level, data, pos);
-                }
-
-
-
-            // PMPL         (DCO Envelope End Step and Velocity)            ENV 1
-            // System.err.println("PMPL (" + line + ") " + pos);
-                
-            val = model.get("line" + line + "env1end");
+                        int rate = dcwRateToSysex(model.get("line" + line + "env2rate" + (i + 1)));
+                        int level = dcwLevelToSysex(model.get("line" + line + "env2level" + (i + 1)));
                         
-            if (cz1)
-                {
-                // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
-                val |= (model.get("line" + line + "env1velocity") << 4);   //(15 - model.get("line" + line + "env1velocity") << 4);
-                }
+                        // The CZ has a bizarre flag indicating whether the
+                        // level is going up or down relative to the previous
+                        // level.
+
+                        if (i > 0)
+                            {
+                                int curLevel = model.get("line" + line + "env2level" + (i + 1));
+                                int prevLevel = model.get("line" + line + "env2level" + i);
+                                if (curLevel < prevLevel)
+                                    {
+                                        rate |= 128;
+                                    }
+                            }
+                                        
+                        if (model.get("line" + line + "env2sustain") == (i + 1))
+                            {
+                                level |= 128;
+                            }
+                                        
+                        pos = nybblize(rate, data, pos);
+                        pos = nybblize(level, data, pos);
+                    }
+
+
+
+                // PMPL         (DCO Envelope End Step and Velocity)            ENV 1
+                // System.err.println("PMPL (" + line + ") " + pos);
+                
+                val = model.get("line" + line + "env1end");
+                        
+                if (cz1)
+                    {
+                        // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
+                        val |= (model.get("line" + line + "env1velocity") << 4);   //(15 - model.get("line" + line + "env1velocity") << 4);
+                    }
                                 
-            pos = nybblize(val, data, pos);
+                pos = nybblize(val, data, pos);
                 
                                 
                 
-            // PMP  (DCO Envelope)          ENV 1
-            // System.err.println("PMP (" + line + ") " + pos);
+                // PMP  (DCO Envelope)          ENV 1
+                // System.err.println("PMP (" + line + ") " + pos);
 
-            for(int i = 0; i < 8; i++)
-                {
-                int rate = dcoRateToSysex(model.get("line" + line + "env1rate" + (i + 1)));
-                int level = dcoLevelToSysex(model.get("line" + line + "env1level" + (i + 1)));
+                for(int i = 0; i < 8; i++)
+                    {
+                        int rate = dcoRateToSysex(model.get("line" + line + "env1rate" + (i + 1)));
+                        int level = dcoLevelToSysex(model.get("line" + line + "env1level" + (i + 1)));
                         
-                // The CZ has a bizarre flag indicating whether the
-                // level is going up or down relative to the previous
-                // level.
+                        // The CZ has a bizarre flag indicating whether the
+                        // level is going up or down relative to the previous
+                        // level.
 
-                if (i > 0)
-                    {
-                    int curLevel = model.get("line" + line + "env1level" + (i + 1));
-                    int prevLevel = model.get("line" + line + "env1level" + i);
-                    if (curLevel < prevLevel)
-                        {
-                        rate |= 128;
-                        }
-                    }
+                        if (i > 0)
+                            {
+                                int curLevel = model.get("line" + line + "env1level" + (i + 1));
+                                int prevLevel = model.get("line" + line + "env1level" + i);
+                                if (curLevel < prevLevel)
+                                    {
+                                        rate |= 128;
+                                    }
+                            }
                                         
-                if (model.get("line" + line + "env1sustain") == (i + 1))
-                    {
-                    level |= 128;
-                    }
+                        if (model.get("line" + line + "env1sustain") == (i + 1))
+                            {
+                                level |= 128;
+                            }
                                         
-                pos = nybblize(rate, data, pos);
-                pos = nybblize(level, data, pos);
-                }
+                        pos = nybblize(rate, data, pos);
+                        pos = nybblize(level, data, pos);
+                    }
                                 
             }
                 
@@ -1437,36 +1437,36 @@ public class CasioCZ extends Synth
                 
         if (cz1)
             {
-            String n = model.get("name", "                ") + "                ";
-            byte[] name = new byte[16];
-            for(int i = 0; i < 16; i++)
-                pos = nybblize(n.charAt(i), data, pos);
+                String n = model.get("name", "                ") + "                ";
+                byte[] name = new byte[16];
+                for(int i = 0; i < 16; i++)
+                    pos = nybblize(n.charAt(i), data, pos);
             }
                                         
                 
         if (toFile)
             {
-            data[pos] = (byte)0xF7;
-            return new Object[] { data };
+                data[pos] = (byte)0xF7;
+                return new Object[] { data };
             }
         else
             {
-            // break up
-            byte[] header = new byte[7];
-            System.arraycopy(data, 0, header, 0, header.length);
-            byte[] main = new byte[isCZ1() ? 144 * 2 + 1 : 128 * 2 + 1]; // new byte[isCZ1() ? 144 * 2 : 128 * 2];
-            System.arraycopy(data, 7, main, 0, main.length);
-            main[main.length - 1] = (byte)0xF7;
-            return new Object[] { new Midi.DividedSysex(header), new Integer(MIDI_PAUSE), new Midi.DividedSysex(main) }; 
-            // Never send this, it triggers a crash in Linux/Windows
-            // new Integer(MIDI_PAUSE), new Midi.DividedSysex(new byte[] { (byte)0xF7 }) };
+                // break up
+                byte[] header = new byte[7];
+                System.arraycopy(data, 0, header, 0, header.length);
+                byte[] main = new byte[isCZ1() ? 144 * 2 + 1 : 128 * 2 + 1]; // new byte[isCZ1() ? 144 * 2 : 128 * 2];
+                System.arraycopy(data, 7, main, 0, main.length);
+                main[main.length - 1] = (byte)0xF7;
+                return new Object[] { new Midi.DividedSysex(header), new Integer(MIDI_PAUSE), new Midi.DividedSysex(main) }; 
+                // Never send this, it triggers a crash in Linux/Windows
+                // new Integer(MIDI_PAUSE), new Midi.DividedSysex(new byte[] { (byte)0xF7 }) };
             }
-        }
+    }
 
     public static final int MIDI_PAUSE = 100;  // CZ
         
     public void performRequestCurrentDump()
-        {
+    {
         // The CZ series has insane sysex.  You have to send the sysex message in pieces
         // and wait for the response, or it won't work.  We're doing it here by sending
         // it in pieces with pauses in the middle and relying on buffering on our end to get
@@ -1485,11 +1485,11 @@ public class CasioCZ extends Synth
         // Never send this last one, it triggers a crash in Windows and Linux
         //data[4] = new Midi.DividedSysex(new byte[] { (byte)0xF7 });
         tryToSendMIDI(data);
-        }
+    }
 
 
     public void performRequestDump(Model tempModel, boolean changePatch)
-        {
+    {
         if (tempModel == null)
             tempModel = getModel();
 
@@ -1518,42 +1518,42 @@ public class CasioCZ extends Synth
         // Never send this last one, it triggers a crash in Windows and Linux
         //data[4] = new Midi.DividedSysex(new byte[] { (byte)0xF7 });
         tryToSendMIDI (data);
-        }
+    }
 
     public JFrame sprout()
-        {
+    {
         JFrame frame = super.sprout();
         if (!checkAndSet("WindowsWarning", getSynthNameLocal()))
             {
-            if (Style.isWindows() || Style.isUnix())
-                {
-                showSimpleError("Windows / Linux Warning",
-                    "The Casio CZ patch editor will not work properly\nunder Windows Linux and will likely crash Edisyn.\n\nSee The About Pane for more information.");
-                }
+                if (Style.isWindows() || Style.isUnix())
+                    {
+                        showSimpleError("Windows / Linux Warning",
+                                        "The Casio CZ patch editor will not work properly\nunder Windows Linux and will likely crash Edisyn.\n\nSee The About Pane for more information.");
+                    }
             }
         return frame;
-        }         
+    }         
 
     public boolean testVerify(Synth synth2, 
-        String key,
-        Object obj1, Object obj2) 
-        {
+                              String key,
+                              Object obj1, Object obj2) 
+    {
         if (isCZ1())
             {
-            // CZ1 names are padded with spaces when emitted
-            return (key.equals("name"));
+                // CZ1 names are padded with spaces when emitted
+                return (key.equals("name"));
             }
         else
             {
-            // these are CZ1-only and are ignored on parsing
-            return (key.equals("line1env1velocity") ||
-                key.equals("line1env2velocity") ||
-                key.equals("line1env3velocity") ||
-                key.equals("line2env1velocity") ||
-                key.equals("line2env2velocity") ||
-                key.equals("line2env3velocity") ||
-                key.equals("line1env3mainlevel") ||
-                key.equals("line2env3mainlevel"));
+                // these are CZ1-only and are ignored on parsing
+                return (key.equals("line1env1velocity") ||
+                        key.equals("line1env2velocity") ||
+                        key.equals("line1env3velocity") ||
+                        key.equals("line2env1velocity") ||
+                        key.equals("line2env2velocity") ||
+                        key.equals("line2env3velocity") ||
+                        key.equals("line1env3mainlevel") ||
+                        key.equals("line2env3mainlevel"));
             }
-        }
     }
+}

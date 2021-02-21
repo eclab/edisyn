@@ -39,7 +39,7 @@
 \begin{document}
 
 \noindent {\Huge\bf Edisyn}\\[0.5em]
-{\large \bf A Java-based Synthesizer Patch Editor, Version 26\\[0.2em]
+{\large \bf A Java-based Synthesizer Patch Editor, Version 27\\[0.2em]
 By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 
 \vspace{-1em}
@@ -109,7 +109,7 @@ Edisyn's patch editors try to cover the most common needs, and so in most cases 
 
 If you're on a Mac, Edisyn will look like a standard application, just double-click on it.  On other platforms, Edisyn comes as a single Java jar file.  Just double-click on the jar file (you'll have to have Java installed) and Edisyn should launch.  See Edisyn's webpage for installation and launching instructions.
 
-You'll first be presented with the dialog at right, asking you to choose a synthesizer patch editor.  You can either select from {\it all} synthesizers available, or from those you have {\it recently} edited with Edisyn (the very most recent one is auto-selected for you). If you can't figure out why the {\it ``All Synths''} option is disabled, try first choosing ``{\it Select another synthesizer...}'' from the ``{\it Recent}'' popup.
+The first time you launch Edisyn, you'll be presented with the dialog at right, asking you to choose a synthesizer patch editor.  You can either select from {\it all} synthesizers available, or from those you have {\it recently} edited with Edisyn (the very most recent one is auto-selected for you). If you can't figure out why the {\it ``All Synths''} option is disabled, try first choosing ``{\it Select another synthesizer...}'' from the ``{\it Recent}'' popup.  
 
 Once you've picked a synthesizer, if you click {\it Open}, Edisyn will attempt to connect to it via MIDI directly; you can also run in {\bf Disconnected Mode}, where you're not attached to MIDI.  And of course you can {\it Quit}.
 
@@ -137,7 +137,9 @@ Edisyn will now build a patch editor for you and display it.  But unless you cho
 
 If you are not connected to MIDI, or if you cancel, then Edisyn will inform you that you must continue in {\bf Disconnected Mode}.
 
-\paragraph{Important Note}  If your USB MIDI device is manually disconnected, Edisyn won't know until you ask Edisyn to send the synth something (perhaps changing a parameter or uploading a patch).  At that point, Edisyn will get a clue and the patch editor window will change to {\bf Disconnected Mode}.'
+\paragraph{Future Launches}  The next time you start up Edisyn, it won't show you the Initial Synthesizer Dialog.  Instead, it'll just pop up the last synthesizer editor type you had created.  If you'd prefer to see the Initial Synthesizer Dialog when launching, uncheck {\bf Launch with Last Editor} in the {\bf Options} menu.
+
+%\paragraph{Important Note}  If your USB MIDI device is manually disconnected, Edisyn won't know until you ask Edisyn to send the synth something (perhaps changing a parameter or uploading a patch).  At that point, Edisyn will get a clue and the patch editor window will change to {\bf Disconnected Mode}.'
 }
 
 \section{Edisyn Patch Editors}
@@ -173,7 +175,7 @@ You change values in a Dial by clicking on the dial and dragging vertically.  Yo
 
 \item {\bf Checkboxes} (such as ``Portamento'').  These are should be straightforward.
 
-\item {\bf Pop-Up Choosers} or ComboBoxes (such as ``Wave'', set to ``Sawtooth'').  Ordinarily these work exactly as you expect.  However they have on surprise.  If you select the menu option {\bf Keep Next Popup Open} from the {\bf Map} menu, then the next time you click on a popup-chooser, its menu will stay open even after you have made a selection.  This allows you to try a variety of selections out without having to always reopen the popup menu.  This is particularly useful for large popups, such as for PCM wave samples.  You can get rid of the menu by clicking outside the menu or typing {\it Escape}.  
+\item {\bf Pop-Up Choosers} or ComboBoxes (such as ``Wave'', set to ``Sawtooth'').  Ordinarily these work exactly as you expect.  However they have on surprise.  If you select the menu option {\bf Keep Next Popup Open} from the {\bf Options} menu, then the next time you click on a popup-chooser, its menu will stay open even after you have made a selection.  This allows you to try a variety of selections out without having to always reopen the popup menu.  This is particularly useful for large popups, such as for PCM wave samples.  You can get rid of the menu by clicking outside the menu or typing {\it Escape}.  
 
 \item Various {\bf Pictorial Displays}.  Here, changing the ``Algorithm'' dial will modify the Algorithm Display immediately to the right of it.
 
@@ -186,6 +188,8 @@ Mose Edisyn envelope displays are read-only -- you can't draw the dots.  But tha
 \end{itemize}
 
 If you are connected to a synthesizer over MIDI, then changing a widget will modify the underlying patch parameter in real time, if the synthesizer supports this.  Also, if you modify a parameter on the synthesizer, then Edisyn will update the corresponding widget or widgets (again, if the synthesizer supports this).
+
+\paragraph{Changing Edisyn's Color Scheme}  If you find Edisyn ugly, you can change the colors with {\bf Change Color Scheme} in the {\bf Options} menu (or reset them with {\bf Reset Color Scheme}.  Note that not all widgets will change their colors until you have restarted Edisyn: until then, you'll get a weird mishmash of colors.
 
 \begin{figure}[t]
 \begin{center}

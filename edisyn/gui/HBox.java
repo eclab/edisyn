@@ -25,7 +25,7 @@ import java.awt.event.*;
 */
 
 public class HBox extends JComponent implements Gatherable
-    {
+{
     Box box;
     JPanel panel = new JPanel();
     JComponent lastComponent;
@@ -33,14 +33,14 @@ public class HBox extends JComponent implements Gatherable
     public Insets getInsets() { return Style.HBOX_INSETS(); }
 
     public HBox()
-        {
+    {
         this(RIGHT_CONSUMES);
-        }
+    }
     
     public static final int LEFT_CONSUMES = 0;
     public static final int RIGHT_CONSUMES = 1;
     public HBox(int alternative)
-        {
+    {
         setLayout(new BorderLayout());
         setBackground(Style.BACKGROUND_COLOR());
         box = new Box(BoxLayout.X_AXIS);
@@ -51,83 +51,83 @@ public class HBox extends JComponent implements Gatherable
         panel.setLayout(new BorderLayout());
         panel.setBackground(Style.BACKGROUND_COLOR());
         add(panel, BorderLayout.CENTER);
-        }
+    }
     
     public void setBackground(Color color)
-        {
+    {
         panel.setBackground(color);
         super.setBackground(color);
-        }
+    }
         
     public void addLast(JComponent component)
-        {
+    {
         lastComponent = component;
         panel.add(lastComponent, BorderLayout.CENTER);
-        }
+    }
 
     public void removeLast()
-        {
+    {
         if (lastComponent != null)
             panel.remove(lastComponent);
         lastComponent = null;
-        }       
+    }       
         
     public void revalidate()
-        {
+    {
         panel.revalidate();
         box.revalidate();
         super.revalidate();
-        }
+    }
                 
     public void removeAll()
-        {
+    {
         box.removeAll();
-        }       
+    }       
 
     public int getCount()
-        {
+    {
         return box.getComponentCount();
-        }
+    }
                 
     public void remove(int component)
-        {
+    {
         box.remove(component);
-        }        
+    }        
         
     public void remove(Component component)
-        {
+    {
         box.remove(component);
-        }        
+    }        
         
     public Component add(Component component)
-        {
+    {
         return box.add(component);
-        }
+    }
 
     void gatherAllComponents(Container cont, java.util.ArrayList list)
-    	{
+    {
         Component[] c = cont.getComponents();
         for(int i = 0; i < c.length; i++)
             {
-            list.add(c[i]);
-            if (c[i] instanceof Gatherable)
-                ((Gatherable)c[i]).gatherAllComponents(list);
-            else if (c[i] instanceof JPanel)
-            	gatherAllComponents(((JPanel)c[i]), list);
-            else if (c[i] instanceof Box)	// just in case
-            	gatherAllComponents(((Box)c[i]), list);
+                list.add(c[i]);
+                if (c[i] instanceof Gatherable)
+                    ((Gatherable)c[i]).gatherAllComponents(list);
+                else if (c[i] instanceof JPanel)
+                    gatherAllComponents(((JPanel)c[i]), list);
+                else if (c[i] instanceof Box)       // just in case
+                    gatherAllComponents(((Box)c[i]), list);
             }
-    	}
-    	
+    }
+        
     public void gatherAllComponents(java.util.ArrayList list)
-        {
+    {
         gatherAllComponents(box, list);
                         
         if (lastComponent != null)
             {                       
-            list.add(lastComponent);
-            if (lastComponent instanceof Gatherable)
-                ((Gatherable)lastComponent).gatherAllComponents(list);
+                list.add(lastComponent);
+                if (lastComponent instanceof Gatherable)
+                    ((Gatherable)lastComponent).gatherAllComponents(list);
             }               
-        }
     }
+}

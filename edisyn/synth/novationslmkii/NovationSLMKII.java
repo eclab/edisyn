@@ -99,7 +99,7 @@ public class NovationSLMKII extends Synth
     // For our throwaway we'll use pot pickup 0 [which doesn't exist] and which has  4 values
     Chooser throwaway = new Chooser("", this, "page1control9potpickup", new String[] { "1", "2", "3", "4" });
 
-	JCheckBox compactCheck;
+    JCheckBox compactCheck;
 
     public JFrame sprout()
     {
@@ -118,10 +118,10 @@ public class NovationSLMKII extends Synth
     public static final String COMPACT_KEY = "Compact";
     
     public boolean isCompact()
-    	{
-    	return compact;
-    	}
-    	
+    {
+        return compact;
+    }
+        
     public void setCompact(boolean val)
     {
         setLastX("" + val, COMPACT_KEY, getSynthName(), true);
@@ -129,12 +129,12 @@ public class NovationSLMKII extends Synth
         updateTitle();
     }
 
-	String titleBarSynthName;
-	    	
+    String titleBarSynthName;
+                
     public String getTitleBarSynthName() 
-    	{ 
-    	return titleBarSynthName;
-    	}
+    { 
+        return titleBarSynthName;
+    }
 
     public NovationSLMKII()
     {
@@ -185,123 +185,123 @@ public class NovationSLMKII extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         ((SynthPanel)soundPanel).makePasteable("page");
         if (isCompact()) addTab("Encoders A", soundPanel);
-		else addTab("Encoders", soundPanel);
+        else addTab("Encoders", soundPanel);
 
-if (isCompact())
-		{
-        soundPanel = new SynthPanel(this);
-        vbox = new VBox();
-        hbox = new HBox();
-        hbox.add(addEncoder(1, "page2control1", index++, Style.COLOR_B()));
-        hbox.addLast(addEncoder(2, "page2control2", index++, Style.COLOR_B()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addEncoder(3, "page2control3", index++, Style.COLOR_A()));
-        hbox.addLast(addEncoder(4, "page2control4", index++, Style.COLOR_A()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addEncoder(5, "page2control5", index++, Style.COLOR_B()));
-        hbox.addLast(addEncoder(6, "page2control6", index++, Style.COLOR_B()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addEncoder(7, "page2control7", index++, Style.COLOR_A()));
-        hbox.addLast(addEncoder(8, "page2control8", index++, Style.COLOR_A()));
-        vbox.add(hbox);
-        soundPanel.add(vbox, BorderLayout.CENTER);
-        ((SynthPanel)soundPanel).makePasteable("page");
-        addTab("B", soundPanel);
+        if (isCompact())
+            {
+                soundPanel = new SynthPanel(this);
+                vbox = new VBox();
+                hbox = new HBox();
+                hbox.add(addEncoder(1, "page2control1", index++, Style.COLOR_B()));
+                hbox.addLast(addEncoder(2, "page2control2", index++, Style.COLOR_B()));
+                vbox.add(hbox);
+                hbox = new HBox();
+                hbox.add(addEncoder(3, "page2control3", index++, Style.COLOR_A()));
+                hbox.addLast(addEncoder(4, "page2control4", index++, Style.COLOR_A()));
+                vbox.add(hbox);
+                hbox = new HBox();
+                hbox.add(addEncoder(5, "page2control5", index++, Style.COLOR_B()));
+                hbox.addLast(addEncoder(6, "page2control6", index++, Style.COLOR_B()));
+                vbox.add(hbox);
+                hbox = new HBox();
+                hbox.add(addEncoder(7, "page2control7", index++, Style.COLOR_A()));
+                hbox.addLast(addEncoder(8, "page2control8", index++, Style.COLOR_A()));
+                vbox.add(hbox);
+                soundPanel.add(vbox, BorderLayout.CENTER);
+                ((SynthPanel)soundPanel).makePasteable("page");
+                addTab("B", soundPanel);
 
-        soundPanel = new SynthPanel(this);
-        vbox = new VBox();
-        hbox = new HBox();
-        hbox.add(addEncoder(1, "page3control1", index++, Style.COLOR_A()));
-        hbox.addLast(addEncoder(2, "page3control2", index++, Style.COLOR_A()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addEncoder(3, "page3control3", index++, Style.COLOR_B()));
-        hbox.addLast(addEncoder(4, "page3control4", index++, Style.COLOR_B()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addEncoder(5, "page3control5", index++, Style.COLOR_A()));
-        hbox.addLast(addEncoder(6, "page3control6", index++, Style.COLOR_A()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addEncoder(7, "page3control7", index++, Style.COLOR_B()));
-        hbox.addLast(addEncoder(8, "page3control8", index++, Style.COLOR_B()));
-        vbox.add(hbox);
-        soundPanel.add(vbox, BorderLayout.CENTER);
-        ((SynthPanel)soundPanel).makePasteable("page");
-        addTab("C", soundPanel);
+                soundPanel = new SynthPanel(this);
+                vbox = new VBox();
+                hbox = new HBox();
+                hbox.add(addEncoder(1, "page3control1", index++, Style.COLOR_A()));
+                hbox.addLast(addEncoder(2, "page3control2", index++, Style.COLOR_A()));
+                vbox.add(hbox);
+                hbox = new HBox();
+                hbox.add(addEncoder(3, "page3control3", index++, Style.COLOR_B()));
+                hbox.addLast(addEncoder(4, "page3control4", index++, Style.COLOR_B()));
+                vbox.add(hbox);
+                hbox = new HBox();
+                hbox.add(addEncoder(5, "page3control5", index++, Style.COLOR_A()));
+                hbox.addLast(addEncoder(6, "page3control6", index++, Style.COLOR_A()));
+                vbox.add(hbox);
+                hbox = new HBox();
+                hbox.add(addEncoder(7, "page3control7", index++, Style.COLOR_B()));
+                hbox.addLast(addEncoder(8, "page3control8", index++, Style.COLOR_B()));
+                vbox.add(hbox);
+                soundPanel.add(vbox, BorderLayout.CENTER);
+                ((SynthPanel)soundPanel).makePasteable("page");
+                addTab("C", soundPanel);
 
-        soundPanel = new SynthPanel(this);
-        vbox = new VBox();
-        hbox = new HBox();
-        hbox.add(addEncoder(1, "page11control1", ENCODERS_D_INDEX + 0, Style.COLOR_A()));
-        hbox.addLast(addEncoder(2, "page11control2", ENCODERS_D_INDEX + 1, Style.COLOR_A()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addEncoder(3, "page11control3", ENCODERS_D_INDEX + 2, Style.COLOR_B()));
-        hbox.addLast(addEncoder(4, "page11control4", ENCODERS_D_INDEX + 3, Style.COLOR_B()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addEncoder(5, "page11control5", ENCODERS_D_INDEX + 4, Style.COLOR_A()));
-        hbox.addLast(addEncoder(6, "page11control6", ENCODERS_D_INDEX + 5, Style.COLOR_A()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addEncoder(7, "page11control7", ENCODERS_D_INDEX + 6, Style.COLOR_B()));
-        hbox.addLast(addEncoder(8, "page11control8", ENCODERS_D_INDEX + 7, Style.COLOR_B()));
-        vbox.add(hbox);
-        soundPanel.add(vbox, BorderLayout.CENTER);
-        ((SynthPanel)soundPanel).makePasteable("page");
-        addTab("D", soundPanel);
-        }
-else
-		{
-        soundPanel = new SynthPanel(this);
-        vbox = new VBox();
-        hbox = new HBox();
-        hbox.add(addPot(1, "page2control1", index++, Style.COLOR_B()));
-        hbox.addLast(addPot(2, "page2control2", index++, Style.COLOR_B()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addPot(3, "page2control3", index++, Style.COLOR_A()));
-        hbox.addLast(addPot(4, "page2control4", index++, Style.COLOR_A()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addPot(5, "page2control5", index++, Style.COLOR_B()));
-        hbox.addLast(addPot(6, "page2control6", index++, Style.COLOR_B()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addPot(7, "page2control7", index++, Style.COLOR_A()));
-        hbox.addLast(addPot(8, "page2control8", index++, Style.COLOR_A()));
-        vbox.add(hbox);
-        soundPanel.add(vbox, BorderLayout.CENTER);
-        ((SynthPanel)soundPanel).makePasteable("page");
-		addTab("Pots", soundPanel);
+                soundPanel = new SynthPanel(this);
+                vbox = new VBox();
+                hbox = new HBox();
+                hbox.add(addEncoder(1, "page11control1", ENCODERS_D_INDEX + 0, Style.COLOR_A()));
+                hbox.addLast(addEncoder(2, "page11control2", ENCODERS_D_INDEX + 1, Style.COLOR_A()));
+                vbox.add(hbox);
+                hbox = new HBox();
+                hbox.add(addEncoder(3, "page11control3", ENCODERS_D_INDEX + 2, Style.COLOR_B()));
+                hbox.addLast(addEncoder(4, "page11control4", ENCODERS_D_INDEX + 3, Style.COLOR_B()));
+                vbox.add(hbox);
+                hbox = new HBox();
+                hbox.add(addEncoder(5, "page11control5", ENCODERS_D_INDEX + 4, Style.COLOR_A()));
+                hbox.addLast(addEncoder(6, "page11control6", ENCODERS_D_INDEX + 5, Style.COLOR_A()));
+                vbox.add(hbox);
+                hbox = new HBox();
+                hbox.add(addEncoder(7, "page11control7", ENCODERS_D_INDEX + 6, Style.COLOR_B()));
+                hbox.addLast(addEncoder(8, "page11control8", ENCODERS_D_INDEX + 7, Style.COLOR_B()));
+                vbox.add(hbox);
+                soundPanel.add(vbox, BorderLayout.CENTER);
+                ((SynthPanel)soundPanel).makePasteable("page");
+                addTab("D", soundPanel);
+            }
+        else
+            {
+                soundPanel = new SynthPanel(this);
+                vbox = new VBox();
+                hbox = new HBox();
+                hbox.add(addPot(1, "page2control1", index++, Style.COLOR_B()));
+                hbox.addLast(addPot(2, "page2control2", index++, Style.COLOR_B()));
+                vbox.add(hbox);
+                hbox = new HBox();
+                hbox.add(addPot(3, "page2control3", index++, Style.COLOR_A()));
+                hbox.addLast(addPot(4, "page2control4", index++, Style.COLOR_A()));
+                vbox.add(hbox);
+                hbox = new HBox();
+                hbox.add(addPot(5, "page2control5", index++, Style.COLOR_B()));
+                hbox.addLast(addPot(6, "page2control6", index++, Style.COLOR_B()));
+                vbox.add(hbox);
+                hbox = new HBox();
+                hbox.add(addPot(7, "page2control7", index++, Style.COLOR_A()));
+                hbox.addLast(addPot(8, "page2control8", index++, Style.COLOR_A()));
+                vbox.add(hbox);
+                soundPanel.add(vbox, BorderLayout.CENTER);
+                ((SynthPanel)soundPanel).makePasteable("page");
+                addTab("Pots", soundPanel);
 
-        soundPanel = new SynthPanel(this);
-        vbox = new VBox();
-        hbox = new HBox();
-        hbox.add(addPot(1, "page3control1", index++, Style.COLOR_A()));
-        hbox.addLast(addPot(2, "page3control2", index++, Style.COLOR_A()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addPot(3, "page3control3", index++, Style.COLOR_B()));
-        hbox.addLast(addPot(4, "page3control4", index++, Style.COLOR_B()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addPot(5, "page3control5", index++, Style.COLOR_A()));
-        hbox.addLast(addPot(6, "page3control6", index++, Style.COLOR_A()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addPot(7, "page3control7", index++, Style.COLOR_B()));
-        hbox.addLast(addPot(8, "page3control8", index++, Style.COLOR_B()));
-        vbox.add(hbox);
-        soundPanel.add(vbox, BorderLayout.CENTER);
-        ((SynthPanel)soundPanel).makePasteable("page");
-		addTab("Faders", soundPanel);
-		}
-		
+                soundPanel = new SynthPanel(this);
+                vbox = new VBox();
+                hbox = new HBox();
+                hbox.add(addPot(1, "page3control1", index++, Style.COLOR_A()));
+                hbox.addLast(addPot(2, "page3control2", index++, Style.COLOR_A()));
+                vbox.add(hbox);
+                hbox = new HBox();
+                hbox.add(addPot(3, "page3control3", index++, Style.COLOR_B()));
+                hbox.addLast(addPot(4, "page3control4", index++, Style.COLOR_B()));
+                vbox.add(hbox);
+                hbox = new HBox();
+                hbox.add(addPot(5, "page3control5", index++, Style.COLOR_A()));
+                hbox.addLast(addPot(6, "page3control6", index++, Style.COLOR_A()));
+                vbox.add(hbox);
+                hbox = new HBox();
+                hbox.add(addPot(7, "page3control7", index++, Style.COLOR_B()));
+                hbox.addLast(addPot(8, "page3control8", index++, Style.COLOR_B()));
+                vbox.add(hbox);
+                soundPanel.add(vbox, BorderLayout.CENTER);
+                ((SynthPanel)soundPanel).makePasteable("page");
+                addTab("Faders", soundPanel);
+            }
+                
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
@@ -323,7 +323,7 @@ else
         soundPanel.add(vbox, BorderLayout.CENTER);
         ((SynthPanel)soundPanel).makePasteable("page");
         if (isCompact()) addTab("Buttons 1", soundPanel);
-		else addTab("Buttons A", soundPanel);
+        else addTab("Buttons A", soundPanel);
         
 
         soundPanel = new SynthPanel(this);
@@ -347,7 +347,7 @@ else
         soundPanel.add(vbox, BorderLayout.CENTER);
         ((SynthPanel)soundPanel).makePasteable("page");
         if (isCompact()) addTab("2", soundPanel);
-		else addTab("B", soundPanel);
+        else addTab("B", soundPanel);
         
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
@@ -370,7 +370,7 @@ else
         soundPanel.add(vbox, BorderLayout.CENTER);
         ((SynthPanel)soundPanel).makePasteable("control");
         if (isCompact()) addTab("3", soundPanel);
-		else addTab("C", soundPanel);
+        else addTab("C", soundPanel);
         
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
@@ -393,7 +393,7 @@ else
         soundPanel.add(vbox, BorderLayout.CENTER);
         ((SynthPanel)soundPanel).makePasteable("page");
         if (isCompact()) addTab("4", soundPanel);
-		else addTab("D", soundPanel);
+        else addTab("D", soundPanel);
         
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
@@ -462,10 +462,10 @@ else
         index += 2;
         vbox.add(hbox);
         if (!isCompact())
-        	{
-			vbox.add(addPot(7, "page10control7", CROSSFADER_INDEX, Style.COLOR_A()));                       /// CROSS-FADER
-			}
-		soundPanel.add(vbox, BorderLayout.CENTER);
+            {
+                vbox.add(addPot(7, "page10control7", CROSSFADER_INDEX, Style.COLOR_A()));                       /// CROSS-FADER
+            }
+        soundPanel.add(vbox, BorderLayout.CENTER);
         ((SynthPanel)soundPanel).makePasteable("page");
         addTab("Transport", soundPanel);
         
@@ -592,7 +592,7 @@ else
                 public void actionPerformed(ActionEvent e)
                 {
                     setCompact(compactCheck.isSelected());
-            		showSimpleMessage("Compact SL", "Changing to/from Compact SL will only affect future patch editors." );
+                    showSimpleMessage("Compact SL", "Changing to/from Compact SL will only affect future patch editors." );
                 }
             });
         compactCheck.setFont(Style.SMALL_FONT());
@@ -2649,31 +2649,31 @@ else
                 emitEncoder("page1control" + (i + 1), index++, data);
             }
         if (isCompact())
-        	{
-        	// Encoders
-			for(int i = 0; i < 8; i++)
-				{
-					emitEncoder("page2control" + (i + 1), index++, data);
-				}
-        	// Encoders
-			for(int i = 0; i < 8; i++)
-				{
-					emitEncoder("page3control" + (i + 1), index++, data);
-				}
-        	}
+            {
+                // Encoders
+                for(int i = 0; i < 8; i++)
+                    {
+                        emitEncoder("page2control" + (i + 1), index++, data);
+                    }
+                // Encoders
+                for(int i = 0; i < 8; i++)
+                    {
+                        emitEncoder("page3control" + (i + 1), index++, data);
+                    }
+            }
         else
-        	{
-			// Pots
-			for(int i = 0; i < 8; i++)
-				{
-					emitPot("page2control" + (i + 1), index++, data);
-				}
-			// Faders
-			for(int i = 0; i < 8; i++)
-				{
-					emitPot("page3control" + (i + 1), index++, data);
-				}
-			}
+            {
+                // Pots
+                for(int i = 0; i < 8; i++)
+                    {
+                        emitPot("page2control" + (i + 1), index++, data);
+                    }
+                // Faders
+                for(int i = 0; i < 8; i++)
+                    {
+                        emitPot("page3control" + (i + 1), index++, data);
+                    }
+            }
         // Buttons
         for(int i = 0; i < 32; i++)
             {
@@ -2701,20 +2701,20 @@ else
                 emitButton("page10control" + (i + 1), index++, data);
             }
         if (isCompact())
-        	{
-        	// Encoders
-			for(int i = 0; i < 8; i++)
-				{
-					emitEncoder("page11control" + (i + 1), index++, data);
-				}
-        	}
-		else
-			{
-       		// Skip 7 controls
-        	index += 7;
-        	// Cross-Fader
-        	emitPot("page10control7", index++, data);
-        	}
+            {
+                // Encoders
+                for(int i = 0; i < 8; i++)
+                    {
+                        emitEncoder("page11control" + (i + 1), index++, data);
+                    }
+            }
+        else
+            {
+                // Skip 7 controls
+                index += 7;
+                // Cross-Fader
+                emitPot("page10control7", index++, data);
+            }
         // Skip 4 controls
         index += 4;
         // All Done
@@ -3221,31 +3221,31 @@ else
                 parseEncoder("page1control" + (i + 1), index++, data);
             }
         if (isCompact())
-        	{
-        	// Encoders
-			for(int i = 0; i < 8; i++)
-				{
-					parseEncoder("page2control" + (i + 1), index++, data);
-				}
-        	// Encoders
-			for(int i = 0; i < 8; i++)
-				{
-					parseEncoder("page3control" + (i + 1), index++, data);
-				}
-        	}
+            {
+                // Encoders
+                for(int i = 0; i < 8; i++)
+                    {
+                        parseEncoder("page2control" + (i + 1), index++, data);
+                    }
+                // Encoders
+                for(int i = 0; i < 8; i++)
+                    {
+                        parseEncoder("page3control" + (i + 1), index++, data);
+                    }
+            }
         else
-        	{
-			// Pots
-			for(int i = 0; i < 8; i++)
-				{
-					parsePot("page2control" + (i + 1), index++, data);
-				}
-			// Faders
-			for(int i = 0; i < 8; i++)
-				{
-					parsePot("page3control" + (i + 1), index++, data);
-				}
-			}
+            {
+                // Pots
+                for(int i = 0; i < 8; i++)
+                    {
+                        parsePot("page2control" + (i + 1), index++, data);
+                    }
+                // Faders
+                for(int i = 0; i < 8; i++)
+                    {
+                        parsePot("page3control" + (i + 1), index++, data);
+                    }
+            }
         // Buttons
         for(int i = 0; i < 32; i++)
             {
@@ -3273,19 +3273,19 @@ else
                 parseButton("page10control" + (i + 1), index++, data);
             }
         if (isCompact())
-        	{
-        	// Encoders
-			for(int i = 0; i < 8; i++)
-				{
-					parseEncoder("page11control" + (i + 1), index++, data);
-				}
-        	}
-		else        // Skip 7 controls
-			{
-			index += 7;
-			// Cross-Fader
-			parsePot("page10control7", index++, data);
-			}
+            {
+                // Encoders
+                for(int i = 0; i < 8; i++)
+                    {
+                        parseEncoder("page11control" + (i + 1), index++, data);
+                    }
+            }
+        else        // Skip 7 controls
+            {
+                index += 7;
+                // Cross-Fader
+                parsePot("page10control7", index++, data);
+            }
         // Skip 4 controls
         index += 4;
         // All Done
@@ -3809,7 +3809,7 @@ else
       *** representing the parameters for the various encoders, buttons, pots, faders, 
       *** and other controls that can be programmed on the SL.
 
-      ENCODERS	(for Compact: ENCODERS A)
+      ENCODERS  (for Compact: ENCODERS A)
       419  1a3  Encoder 0             [41 bytes]      [See ENCODER DATA]
       460  1cc  Encoder 1             [41 bytes]      [See ENCODER DATA]
       501  1f5  Encoder 2             [41 bytes]      [See ENCODER DATA]
@@ -3824,10 +3824,10 @@ else
       ***** NOTE: The entries in this region vary depending on whether the data is
       ***** for the SL / SL MKii, or whether it is for the SL Compact
 
-				SL/SL MKii	SL Compact                  SL/SL MKii       SL Compact
-				----------  ----------                  --------------   ------------------
-				
-                POTS		ENCODERS B
+      SL/SL MKii      SL Compact                  SL/SL MKii       SL Compact
+      ----------  ----------                  --------------   ------------------
+                                
+      POTS            ENCODERS B
       747  2eb  Pot 0       Encoder 8   [41 bytes]      [See POT DATA]   [See ENCODER DATA]
       788  314  Pot 1       Encoder 9   [41 bytes]      [See POT DATA]   [See ENCODER DATA]
       829  33d  Pot 2       Encoder 10  [41 bytes]      [See POT DATA]   [See ENCODER DATA]
@@ -3837,7 +3837,7 @@ else
       993  3e1  Pot 6       Encoder 14  [41 bytes]      [See POT DATA]   [See ENCODER DATA]
       1034 40a  Pot 7       Encoder 15  [41 bytes]      [See POT DATA]   [See ENCODER DATA]
 
-                FADERS      ENCODERS C
+      FADERS      ENCODERS C
       1075 433  Fader 0     Encoder 16  [41 bytes]      [See POT DATA]   [See ENCODER DATA]
       1116 45c  Fader 1     Encoder 17  [41 bytes]      [See POT DATA]   [See ENCODER DATA]
       1157 485  Fader 2     Encoder 18  [41 bytes]      [See POT DATA]   [See ENCODER DATA]
@@ -3926,10 +3926,10 @@ else
       ***** NOTE: The entries in this region vary depending on whether the data is
       ***** for the SL / SL MKii, or whether it is for the SL Compact
 
-				SL/SL MKii	 SL Compact                  SL/SL MKii       SL Compact
-				-----------  ----------                  --------------   ------------------
-				
-                MISC/UNUSED	 ENCODERS D
+      SL/SL MKii       SL Compact                  SL/SL MKii       SL Compact
+      -----------  ----------                  --------------   ------------------
+                                
+      MISC/UNUSED      ENCODERS D
       3617 e21  Unused       Encoder 24  [41 bytes]                       [See ENCOCDER DATA]
       3658 e4a  Unused       Encoder 25  [41 bytes]                       [See ENCOCDER DATA]
       3699 e73  Unused       Encoder 26  [41 bytes]                       [See ENCOCDER DATA]

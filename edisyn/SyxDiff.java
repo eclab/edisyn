@@ -22,9 +22,9 @@ import java.util.*;
 */
 
 public class SyxDiff
-    {
+{
     public static void main(String[] args) throws Exception
-        {
+    {
         FileInputStream scan1 = new FileInputStream(new File(args[0]));
         FileInputStream scan2 = new FileInputStream(new File(args[1]));
                 
@@ -35,19 +35,19 @@ public class SyxDiff
                         
         while(true)
             {
-            int b1 = scan1.read();
-            int b2 = scan2.read();
-            if (b1 < 0 || b2 < 0) break;
+                int b1 = scan1.read();
+                int b2 = scan2.read();
+                if (b1 < 0 || b2 < 0) break;
                         
-            if (index % 8 == 1) foo--;
+                if (index % 8 == 1) foo--;
 
-            System.out.println("" + index + "\t" + 
-                (index % 8 == 0 ? "-" : foo) + "\t" + b1 + "\t" + b2 + "\t" +
-                (b1 > 31 && b1 < 127 ? (char)b1 : "?") + "\t" + 
-                (b2 > 31 && b2 < 127 ? (char)b2 : "?") + "\t" +
-                (b1 == b2 ? "" : "\t<--"));
-            index++;
-            foo++;
+                System.out.println("" + index + "\t" + 
+                                   (index % 8 == 0 ? "-" : foo) + "\t" + b1 + "\t" + b2 + "\t" +
+                                   (b1 > 31 && b1 < 127 ? (char)b1 : "?") + "\t" + 
+                                   (b2 > 31 && b2 < 127 ? (char)b2 : "?") + "\t" +
+                                   (b1 == b2 ? "" : "\t<--"));
+                index++;
+                foo++;
             }
-        }
     }
+}

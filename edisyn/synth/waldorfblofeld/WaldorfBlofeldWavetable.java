@@ -42,7 +42,7 @@ import edisyn.util.*;
 */
         
 public class WaldorfBlofeldWavetable
-    {
+{
     public static final int WAVEEDIT_WAVE_SIZE = 256;
     public static final int WAVEEDIT_WAVETABLE_SIZE = 64;
     public static final int BLOFELD_WAVE_SIZE = 128;
@@ -58,31 +58,31 @@ public class WaldorfBlofeldWavetable
     */
                 
     public void upload(final WaldorfBlofeld synth)
-        {
+    {
         //// FIRST we have the user choose a file
         
         FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(synth)), "Load a wavetable", FileDialog.LOAD);
         fd.setFilenameFilter(new FilenameFilter()
             {
-            public boolean accept(File dir, String name)
+                public boolean accept(File dir, String name)
                 {
-                return StringUtility.ensureFileEndsWith(name, ".wav").equals(name) || StringUtility.ensureFileEndsWith(name, ".WAV").equals(name) ||
-                    StringUtility.ensureFileEndsWith(name, ".syx").equals(name) || StringUtility.ensureFileEndsWith(name, ".SYX").equals(name) ||
-                    StringUtility.ensureFileEndsWith(name, ".sysex").equals(name) || StringUtility.ensureFileEndsWith(name, ".mid").equals(name) ||
-                    StringUtility.ensureFileEndsWith(name, ".MID").equals(name)  ;
+                    return StringUtility.ensureFileEndsWith(name, ".wav").equals(name) || StringUtility.ensureFileEndsWith(name, ".WAV").equals(name) ||
+                        StringUtility.ensureFileEndsWith(name, ".syx").equals(name) || StringUtility.ensureFileEndsWith(name, ".SYX").equals(name) ||
+                        StringUtility.ensureFileEndsWith(name, ".sysex").equals(name) || StringUtility.ensureFileEndsWith(name, ".mid").equals(name) ||
+                        StringUtility.ensureFileEndsWith(name, ".MID").equals(name)  ;
                 }
             });
 
         if (file != null)
             {
-            fd.setFile(file.getName());
-            fd.setDirectory(file.getParentFile().getPath());
+                fd.setFile(file.getName());
+                fd.setDirectory(file.getParentFile().getPath());
             }
         else
             {
-            String path = synth.getLastDirectory();
-            if (path != null)
-                fd.setDirectory(path);
+                String path = synth.getLastDirectory();
+                if (path != null)
+                    fd.setDirectory(path);
             }
                 
         synth.disableMenuBar();
@@ -93,26 +93,26 @@ public class WaldorfBlofeldWavetable
         if (fd.getFile() != null)
             try
                 {
-                file = new File(fd.getDirectory(), fd.getFile());
+                    file = new File(fd.getDirectory(), fd.getFile());
                 
-                if (file.getName().endsWith(".wav") || file.getName().endsWith(".WAV"))
-                    {
-                    uploadWav(synth, file);
-                    }
-                else
-                    {
-                    uploadSysex(synth, file);
-                    }
+                    if (file.getName().endsWith(".wav") || file.getName().endsWith(".WAV"))
+                        {
+                            uploadWav(synth, file);
+                        }
+                    else
+                        {
+                            uploadSysex(synth, file);
+                        }
                 }
             catch (IOException ex)
                 {
-                synth.showSimpleError("File Error", "An error occurred on reading the file.");
+                    synth.showSimpleError("File Error", "An error occurred on reading the file.");
                 }
             catch (WavFileException ex)
                 {
-                synth.showSimpleError("Not a proper WAV file", "WAV files must be mono 16-bit.");
+                    synth.showSimpleError("Not a proper WAV file", "WAV files must be mono 16-bit.");
                 }
-        }
+    }
 
 
     /** Extract the sysex and guess whether it's one wavetable or more.  This is fragile: we're
@@ -123,25 +123,25 @@ public class WaldorfBlofeldWavetable
     */
 
     void uploadSysex(WaldorfBlofeld synth, File file) throws IOException
-        {
+    {
         byte[][] sysex = null;
         if (file.getName().endsWith(".mid") || file.getName().endsWith(".MID"))
             {
-            sysex = synth.extractSysexFromMidFile(file);
+                sysex = synth.extractSysexFromMidFile(file);
             }
         else
             {
-            long len = file.length();
-            if (len > Integer.MAX_VALUE)  // uh oh
-                {
-                synth.showSimpleError("This file is too large", "Too large");
-                return;
-                }
+                long len = file.length();
+                if (len > Integer.MAX_VALUE)  // uh oh
+                    {
+                        synth.showSimpleError("This file is too large", "Too large");
+                        return;
+                    }
                                                                 
-            byte[] data = new byte[(int)len];
-            DataInputStream input = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
-            input.readFully(data);
-            sysex = synth.cutUpSysex(data);
+                byte[] data = new byte[(int)len];
+                DataInputStream input = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
+                input.readFully(data);
+                sysex = synth.cutUpSysex(data);
             }
                         
         // At this point we have the sysex. Let's group them, throwing out specious sysex files.
@@ -151,37 +151,37 @@ public class WaldorfBlofeldWavetable
                 
         for(int i = 0; i < sysex.length; i++)
             {
-            if (sysex[i][0] == (byte)0xF0 &&
-                sysex[i][1] == (byte)0x3E &&
-                sysex[i][2] == (byte)0x13 &&
-                sysex[i][4] == (byte)0x12 &&
-                sysex[i].length == 410)
-                {
-                current[count] = sysex[i];
-                count++;
-                if (count == 64)
+                if (sysex[i][0] == (byte)0xF0 &&
+                    sysex[i][1] == (byte)0x3E &&
+                    sysex[i][2] == (byte)0x13 &&
+                    sysex[i][4] == (byte)0x12 &&
+                    sysex[i].length == 410)
                     {
-                    sysexA.add(current);
-                    current = new byte[64][410];
-                    count = 0;
+                        current[count] = sysex[i];
+                        count++;
+                        if (count == 64)
+                            {
+                                sysexA.add(current);
+                                current = new byte[64][410];
+                                count = 0;
+                            }
                     }
-                }
             }
                 
         byte[][][] syx = sysexA.toArray(new byte[0][0][0]);
         if (syx.length == 0) // uh oh
             {
-            synth.showSimpleError("No data", "This file doesn't seem to contain any wavetable data.");
+                synth.showSimpleError("No data", "This file doesn't seem to contain any wavetable data.");
             }
         else if (syx.length == 1)
             {
-            uploadOneSysex(synth, syx[0]);
+                uploadOneSysex(synth, syx[0]);
             }
         else    // multi
             {
-            uploadMultiSysex(synth, syx);
+                uploadMultiSysex(synth, syx);
             }
-        }
+    }
                 
                 
     /** Ask the user to select from among N wavetables by their names.  Then based
@@ -189,14 +189,14 @@ public class WaldorfBlofeldWavetable
     */
 
     void uploadMultiSysex(WaldorfBlofeld synth, byte[][][] syx)
-        {
+    {
         String[] names = new String[syx.length];
         try
             {
-            for(int i = 0; i < syx.length; i++)
-                {
-                names[i] = new String(syx[i][0], 392, 14, "US-ASCII");
-                }
+                for(int i = 0; i < syx.length; i++)
+                    {
+                        names[i] = new String(syx[i][0], 392, 14, "US-ASCII");
+                    }
             }
         catch (UnsupportedEncodingException ex) { }     // won't happen
 
@@ -220,108 +220,108 @@ public class WaldorfBlofeldWavetable
         int result = 0;
         synth.disableMenuBar();
         result = JOptionPane.showOptionDialog(synth, vbox, "Wavetable", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, 
-            null, new String[] {  "Select", "Cancel" }, "Select");
+                                              null, new String[] {  "Select", "Cancel" }, "Select");
         synth.enableMenuBar();
                         
         if (result == 1 || result < 0)  // cancel.  ESC and Close Box both return < 0
             {
-            return;
+                return;
             }
         else 
             {
-            uploadOneSysex(synth, syx[box.getSelectedIndex()]);
+                uploadOneSysex(synth, syx[box.getSelectedIndex()]);
             }
-        }
+    }
                 
     /** Ask the user to specify the device ID, wavetable number, and wavetable name.
         Then we modify the sysex files appropriately and upload them.
     */
 
     void uploadOneSysex(WaldorfBlofeld synth, byte[][] syx)
-        {
+    {
         int _id = synth.getID();
         int _number = syx[0][5];
         String _name = "";
                 
         try
             {
-            _name = new String(syx[0], 392, 14, "US-ASCII");
+                _name = new String(syx[0], 392, 14, "US-ASCII");
             }
         catch (UnsupportedEncodingException ex) { }     // won't happen
                 
         while(true)
             {
-            JTextField id = new JTextField("" + _id);
-            JTextField number = new JTextField("" + _number);
-            JTextField name = new JTextField(_name);
+                JTextField id = new JTextField("" + _id);
+                JTextField number = new JTextField("" + _number);
+                JTextField name = new JTextField(_name);
 
-            boolean result = Synth.showMultiOption(synth, new String[] { "Device ID", "Wavetable Number", "Wavetable Name" }, 
-                new JComponent[] { id, number, name }, "Write to wavetable...", "Provide the device ID, wavetable number, and wavetable name.");
+                boolean result = Synth.showMultiOption(synth, new String[] { "Device ID", "Wavetable Number", "Wavetable Name" }, 
+                                                       new JComponent[] { id, number, name }, "Write to wavetable...", "Provide the device ID, wavetable number, and wavetable name.");
 
-            if (!result) return;
+                if (!result) return;
                         
-            _name = name.getText();
-            if (_name.length() > 14)
-                {
-                synth.showSimpleError("The name must be no longer than 14 characters", "Wavetable Name");
-                if (_name.length() >= 14)
-                    _name = _name.substring(0, 14);
-                continue;
-                }
+                _name = name.getText();
+                if (_name.length() > 14)
+                    {
+                        synth.showSimpleError("The name must be no longer than 14 characters", "Wavetable Name");
+                        if (_name.length() >= 14)
+                            _name = _name.substring(0, 14);
+                        continue;
+                    }
                                 
-            try
-                {
-                _id = Integer.parseInt(id.getText());
-                if (_id < 0 || _id > 255) throw new NumberFormatException();
-                }
-            catch (NumberFormatException ex)
-                {
-                synth.showSimpleError("The Device ID must be an integer between 0 and 255", "Device ID");
-                _id = synth.getID();
-                continue;
-                }
+                try
+                    {
+                        _id = Integer.parseInt(id.getText());
+                        if (_id < 0 || _id > 255) throw new NumberFormatException();
+                    }
+                catch (NumberFormatException ex)
+                    {
+                        synth.showSimpleError("The Device ID must be an integer between 0 and 255", "Device ID");
+                        _id = synth.getID();
+                        continue;
+                    }
 
-            try
-                {
-                _number = Integer.parseInt(number.getText());
-                if (_number < 80 || _number > 118) throw new NumberFormatException();
-                }
-            catch (NumberFormatException ex)
-                {
-                synth.showSimpleError("The Wavetable Number must be between 80 and 118", "Wavetable Number");
-                _number = 80;
-                continue;
-                }
+                try
+                    {
+                        _number = Integer.parseInt(number.getText());
+                        if (_number < 80 || _number > 118) throw new NumberFormatException();
+                    }
+                catch (NumberFormatException ex)
+                    {
+                        synth.showSimpleError("The Wavetable Number must be between 80 and 118", "Wavetable Number");
+                        _number = 80;
+                        continue;
+                    }
 
-            // success!
-            break;
+                // success!
+                break;
             }
                 
         for(int i = 0; i < syx.length; i++)
             {
-            syx[i][5] = (byte)_number;
-            syx[i][3] = (byte)_id;
+                syx[i][5] = (byte)_number;
+                syx[i][3] = (byte)_id;
 
-            /// LOAD NAME
-            for(int d = 0; d < 14; d++)
-                {
-                if (d >= _name.length())
-                    syx[i][392 + d] = (byte)' ';
-                else
-                    syx[i][392 + d] = (byte)(_name.charAt(d) & 127);
-                }
+                /// LOAD NAME
+                for(int d = 0; d < 14; d++)
+                    {
+                        if (d >= _name.length())
+                            syx[i][392 + d] = (byte)' ';
+                        else
+                            syx[i][392 + d] = (byte)(_name.charAt(d) & 127);
+                    }
                                 
-            // COMPUTE CHECKSUM
-            byte checksum = syx[i][7];
-            for(int c = 7; c <= 407; c++)           // Note <=
-                checksum += syx[i][c];
-            syx[i][408] = (byte)(checksum & 127);   // sum of bytes 7...407 inclusive
+                // COMPUTE CHECKSUM
+                byte checksum = syx[i][7];
+                for(int c = 7; c <= 407; c++)           // Note <=
+                    checksum += syx[i][c];
+                syx[i][408] = (byte)(checksum & 127);   // sum of bytes 7...407 inclusive
                         
-            // send it along
+                // send it along
 
-            synth.tryToSendSysex(syx[i]);
+                synth.tryToSendSysex(syx[i]);
             }
-        }
+    }
 
 
     /** Ask the user to specify the device ID, wavetable number, and wavetable name.
@@ -329,7 +329,7 @@ public class WaldorfBlofeldWavetable
     */
 
     void uploadWav(WaldorfBlofeld synth, File file) throws IOException, WavFileException
-        {
+    {
         int _id = synth.getID();
         int _number = 80;
         String _name = file.getName();
@@ -340,54 +340,54 @@ public class WaldorfBlofeldWavetable
                 
         while(true)
             {
-            JTextField id = new JTextField("" + _id);
-            JTextField number = new JTextField("" + _number);
-            JTextField name = new JTextField(_name);
+                JTextField id = new JTextField("" + _id);
+                JTextField number = new JTextField("" + _number);
+                JTextField name = new JTextField(_name);
 
-            boolean result = Synth.showMultiOption(synth, new String[] { "Device ID", "Wavetable Number", "Wavetable Name" }, 
-                new JComponent[] { id, number, name }, "Write to wavetable...", "Provide the device ID, wavetable number, and wavetable name.");
+                boolean result = Synth.showMultiOption(synth, new String[] { "Device ID", "Wavetable Number", "Wavetable Name" }, 
+                                                       new JComponent[] { id, number, name }, "Write to wavetable...", "Provide the device ID, wavetable number, and wavetable name.");
 
-            if (!result) return;
+                if (!result) return;
                         
-            _name = name.getText();
-            if (_name.length() > 14)
-                {
-                synth.showSimpleError("The name must be no longer than 14 characters", "Wavetable Name");
-                if (_name.length() >= 14)
-                    _name = _name.substring(0, 14);
-                continue;
-                }
+                _name = name.getText();
+                if (_name.length() > 14)
+                    {
+                        synth.showSimpleError("The name must be no longer than 14 characters", "Wavetable Name");
+                        if (_name.length() >= 14)
+                            _name = _name.substring(0, 14);
+                        continue;
+                    }
                                 
-            try
-                {
-                _id = Integer.parseInt(id.getText());
-                if (_id < 0 || _id > 255) throw new NumberFormatException();
-                }
-            catch (NumberFormatException ex)
-                {
-                synth.showSimpleError("The Device ID must be an integer between 0 and 255", "Device ID");
-                _id = synth.getID();
-                continue;
-                }
+                try
+                    {
+                        _id = Integer.parseInt(id.getText());
+                        if (_id < 0 || _id > 255) throw new NumberFormatException();
+                    }
+                catch (NumberFormatException ex)
+                    {
+                        synth.showSimpleError("The Device ID must be an integer between 0 and 255", "Device ID");
+                        _id = synth.getID();
+                        continue;
+                    }
 
-            try
-                {
-                _number = Integer.parseInt(number.getText());
-                if (_number < 80 || _number > 118) throw new NumberFormatException();
-                }
-            catch (NumberFormatException ex)
-                {
-                synth.showSimpleError("The Wavetable Number must be between 80 and 118", "Wavetable Number");
-                _number = 80;
-                continue;
-                }
+                try
+                    {
+                        _number = Integer.parseInt(number.getText());
+                        if (_number < 80 || _number > 118) throw new NumberFormatException();
+                    }
+                catch (NumberFormatException ex)
+                    {
+                        synth.showSimpleError("The Wavetable Number must be between 80 and 118", "Wavetable Number");
+                        _number = 80;
+                        continue;
+                    }
 
-            // success!
-            break;
+                // success!
+                break;
             }
                 
         writeData(synth, file, _id, _number, WINDOW_SIZE, _name);
-        }
+    }
                 
 
     /** Load the data from the file and convert it into a Blofeld wavetable.  This is done by breaking
@@ -398,7 +398,7 @@ public class WaldorfBlofeldWavetable
     */
 
     void writeData(WaldorfBlofeld synth, File file, int deviceID, int wavetableNumber, int windowSize, String name) throws IOException, WavFileException
-        {
+    {
         double[][] waves = new double[WAVEEDIT_WAVETABLE_SIZE][WAVEEDIT_WAVE_SIZE];
         WavFile wavFile = WavFile.openWavFile(file);
         name = (name + "              ").substring(0, 14);              // ensure exactly 14 long
@@ -406,78 +406,78 @@ public class WaldorfBlofeldWavetable
         // read data
         for(int i = 0; i < waves.length; i++)
             {
-            // Read frames into buffer
-            int framesRead = wavFile.readFrames(waves[i], waves[i].length);
-            if (framesRead < waves[i].length) 
-                {
-                System.err.println("Uh oh, error");
-                break;
-                }
+                // Read frames into buffer
+                int framesRead = wavFile.readFrames(waves[i], waves[i].length);
+                if (framesRead < waves[i].length) 
+                    {
+                        System.err.println("Uh oh, error");
+                        break;
+                    }
             }
         wavFile.close();
         
         // parse data
         for(int i = 0; i < BLOFELD_WAVETABLE_SIZE; i++)
             {
-            byte[] data = new byte[410];
+                byte[] data = new byte[410];
                         
-            data[0] = (byte)0xF0;
-            data[1] = (byte)0x3E;
-            data[2] = (byte)0x13;
-            data[3] = (byte)deviceID;
-            data[4] = (byte)0x12;
-            data[5] = (byte)(wavetableNumber);
-            data[6] = (byte)i;
-            data[7] = (byte)0;
+                data[0] = (byte)0xF0;
+                data[1] = (byte)0x3E;
+                data[2] = (byte)0x13;
+                data[3] = (byte)deviceID;
+                data[4] = (byte)0x12;
+                data[5] = (byte)(wavetableNumber);
+                data[6] = (byte)i;
+                data[7] = (byte)0;
                         
-            int madeUpSamplingRate = 256;
+                int madeUpSamplingRate = 256;
                         
-            /// Resample to the Blofeld's sampling rate
-            double[] newvals = WindowedSinc.interpolate(
-                waves[i],
-                madeUpSamplingRate,             // made up
-                madeUpSamplingRate / 2,
-                windowSize,
-                true); 
+                /// Resample to the Blofeld's sampling rate
+                double[] newvals = WindowedSinc.interpolate(
+                                                            waves[i],
+                                                            madeUpSamplingRate,             // made up
+                                                            madeUpSamplingRate / 2,
+                                                            windowSize,
+                                                            true); 
                         
-            for(int d = 0; d < BLOFELD_WAVE_SIZE; d++)
-                {
-                double val = newvals[d];
-                int v = (int)(val * TWO_TO_THE_TWENTY);
+                for(int d = 0; d < BLOFELD_WAVE_SIZE; d++)
+                    {
+                        double val = newvals[d];
+                        int v = (int)(val * TWO_TO_THE_TWENTY);
 
-                // These values must be little-endian.
-                // We assume our code is being run on a little-endian processor.
-                data[8 + d * 3 + 2] = (byte)(v & 127);  // 7 bits
-                data[8 + d * 3 + 1] = (byte)((v >> 7) & 127);
-                data[8 + d * 3 + 0] = (byte)((v >> 14) & 127);
-                }
+                        // These values must be little-endian.
+                        // We assume our code is being run on a little-endian processor.
+                        data[8 + d * 3 + 2] = (byte)(v & 127);  // 7 bits
+                        data[8 + d * 3 + 1] = (byte)((v >> 7) & 127);
+                        data[8 + d * 3 + 0] = (byte)((v >> 14) & 127);
+                    }
                                 
-            /// LOAD NAME
-            for(int d = 0; d < 14; d++)
-                {
-                if (d >= name.length())
-                    data[392 + d] = (byte)' ';
-                else
-                    data[392 + d] = (byte)(name.charAt(d) & 127);
-                }
+                /// LOAD NAME
+                for(int d = 0; d < 14; d++)
+                    {
+                        if (d >= name.length())
+                            data[392 + d] = (byte)' ';
+                        else
+                            data[392 + d] = (byte)(name.charAt(d) & 127);
+                    }
                         
-            data[406] = (byte)0;
-            data[407] = (byte)0;
+                data[406] = (byte)0;
+                data[407] = (byte)0;
                         
-            // COMPUTE CHECKSUM
-            byte checksum = data[7];
-            for(int c = 7; c <= 407; c++)           // Note <=
-                checksum += data[c];
-            data[408] = (byte)(checksum & 127);     // sum of bytes 7...407 inclusive
+                // COMPUTE CHECKSUM
+                byte checksum = data[7];
+                for(int c = 7; c <= 407; c++)           // Note <=
+                    checksum += data[c];
+                data[408] = (byte)(checksum & 127);     // sum of bytes 7...407 inclusive
                         
-            data[409] = (byte)0xF7;
+                data[409] = (byte)0xF7;
 
-            synth.tryToSendSysex(data);
+                synth.tryToSendSysex(data);
                         
             }
-        }
-
     }
+
+}
         
         
         

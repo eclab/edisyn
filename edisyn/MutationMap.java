@@ -14,7 +14,7 @@ import java.util.prefs.*;
 */
 
 public class MutationMap
-    {
+{
     // This is confusing, because although in the preferences
     // the data is stored as TRUE = free, FALSE = not free
     // In the map, the data is stored as STORED = not free
@@ -25,61 +25,61 @@ public class MutationMap
 
     /** Returns whether the parameter is free to be mutated. */
     public boolean isFree(String key)
-        {
+    {
         return !map.contains(key);
-        }
+    }
 
     public void setFree(String key, boolean free)
-        {
+    {
         if (!free) map.add(key);
         else map.remove(key);
 
         prefs.put(key, "" + free);
         try 
             {
-            prefs.sync();
+                prefs.sync();
             }
         catch (Exception ex)
             {
-            Synth.handleException(ex);
+                Synth.handleException(ex);
             }
-        }
+    }
     
     public MutationMap(Preferences prefs)
-        {        
+    {        
         // do a load
         
         this.prefs = prefs;
         try
             {
-            String[] keys = prefs.keys();
-            for(int i = 0; i < keys.length; i++)
-                {
-                // each String holds a PARAMETER                        
-                // each Value holds a BOOLEAN
-                
-                if (prefs.get(keys[i], "true").equals("false"))
+                String[] keys = prefs.keys();
+                for(int i = 0; i < keys.length; i++)
                     {
-                    map.add(keys[i]);
+                        // each String holds a PARAMETER                        
+                        // each Value holds a BOOLEAN
+                
+                        if (prefs.get(keys[i], "true").equals("false"))
+                            {
+                                map.add(keys[i]);
+                            }
                     }
-                }
             }
         catch (Exception ex)
             {
-            Synth.handleException(ex);
+                Synth.handleException(ex);
             }
-        }
+    }
         
     public void clear()
-        {
+    {
         try
             {
-            prefs.clear();
+                prefs.clear();
             }
         catch (Exception ex)
             {
-            Synth.handleException(ex);
+                Synth.handleException(ex);
             }
         map = new HashSet();
-        }
     }
+}

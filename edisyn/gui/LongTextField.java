@@ -33,7 +33,7 @@ import java.awt.event.*;
 */
 
 public abstract class LongTextField extends JComponent implements Updatable
-    {
+{
     String msb;
     String lsb;
     Synth synth;
@@ -41,7 +41,7 @@ public abstract class LongTextField extends JComponent implements Updatable
     JTextField valField;
     JLabel label = new JLabel("888", SwingConstants.LEFT)
         {
-        public Insets getInsets() { return new Insets(0, 0, 0, 0); }
+            public Insets getInsets() { return new Insets(0, 0, 0, 0); }
         };
 
     Color defaultColor;
@@ -49,87 +49,87 @@ public abstract class LongTextField extends JComponent implements Updatable
         
     boolean edited = false;
     void setEdited(boolean edited)
-        {
+    {
         if (this.edited != edited)
             {
-            this.edited = edited;
-            if (edited)
-                {
-                valField.setBackground(editedColor);
-                }
-            else
-                {
-                valField.setBackground(defaultColor);
-                }
+                this.edited = edited;
+                if (edited)
+                    {
+                        valField.setBackground(editedColor);
+                    }
+                else
+                    {
+                        valField.setBackground(defaultColor);
+                    }
             }
-        }
+    }
         
     public void submit()
-        {
+    {
         if (edited)
             {
-            long val;
-            try
-                {
-                val = Long.parseLong(valField.getText());
-                }
-            catch (NumberFormatException e) { val = getValue(); }
-            setValue(newValue(val));
+                long val;
+                try
+                    {
+                        val = Long.parseLong(valField.getText());
+                    }
+                catch (NumberFormatException e) { val = getValue(); }
+                setValue(newValue(val));
             }
-        }
+    }
     
     public void update(String key, Model model)
-        {
+    {
         setValue(getValue());
-        }
+    }
         
     KeyListener listener = new KeyListener()
         {
-        public void keyReleased(KeyEvent keyEvent) { }
-        public void keyTyped(KeyEvent keyEvent) { }
-        public void keyPressed(KeyEvent keyEvent) {
-            if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER)
-                {
-                submit();
-                }
-            else if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE)  // reset
-                {
-                update(null, synth.getModel());  // doesn't matter
-                }
-            else
-                {
-                setEdited(true);
-                }
+            public void keyReleased(KeyEvent keyEvent) { }
+            public void keyTyped(KeyEvent keyEvent) { }
+            public void keyPressed(KeyEvent keyEvent) {
+                if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER)
+                    {
+                        submit();
+                    }
+                else if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE)  // reset
+                    {
+                        update(null, synth.getModel());  // doesn't matter
+                    }
+                else
+                    {
+                        setEdited(true);
+                    }
             }
         };
     
     FocusAdapter focusAdapter = new FocusAdapter()
         {
-        public void focusLost ( FocusEvent e )
+            public void focusLost ( FocusEvent e )
             {
-            submit();
+                submit();
             }
         };
 
     /** Sets the value without filtering first. */
     public void setValue(long val)
-        {
+    {
         valField.setText(""+val);
         setEdited(false);
-        }
+    }
 
     
     /** Returns the most recently set value. */
     public long getValue()
-        {
+    {
         return ((long)(synth.getModel().get(msb, 0)) << 32) | (long)synth.getModel().get(lsb, 0);
-        }
+    }
         
     public JTextField getField() { return valField; }
             
     /** Creates a LongTextField which does not display the belly button or arrows. */
     public LongTextField(String _label, final Synth synth, int columns, final Color editedColor, final String msb, final String lsb)
-        {
+    {
         this.msb = msb;
         this.lsb = lsb;
         this.synth = synth;
@@ -153,7 +153,7 @@ public abstract class LongTextField extends JComponent implements Updatable
         this.editedColor = editedColor;
         this.defaultColor = valField.getBackground();
         
-        }
+    }
         
     /** Override this to be informed when a new value has been set.
         The return value should be the value you want the display to show 
@@ -162,12 +162,12 @@ public abstract class LongTextField extends JComponent implements Updatable
     
     /** Only call this to access the value field directly */
     public void setText(String val)
-        {
+    {
         valField.setText(val);
-        }
+    }
     
     public String getText()
-        {
+    {
         return valField.getText();
-        }
     }
+}

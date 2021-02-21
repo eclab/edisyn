@@ -23,7 +23,7 @@ import javax.sound.midi.*;
 */
 
 public class FuturesonusParva extends Synth
-    {
+{
     static final String[] BANKS = new String[] { "A", "B", "C", "D", "E", "F" };
     static final String[] VOICE_CONFIGURATIONS = new String[] { "Poly", "Unison", "Mono" };
     static final String[] CURVES = new String[] { "Exponential         ", "Linear" };  // note the extra space after Exponential, so the menu is big enough to maintain consistency in its column
@@ -48,10 +48,10 @@ public class FuturesonusParva extends Synth
         "ENV1 Release", "ENV2 Release", "ENV3 Release", "ENV4 Release", "ENV* Release" };
 
     public FuturesonusParva()
-        {
+    {
         for(int i = 0; i < allParameters.length; i++)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
         
         JComponent soundPanel = new SynthPanel(this);
@@ -119,7 +119,7 @@ public class FuturesonusParva extends Synth
         model.set("bank", 0);
         
         loadDefaults();
-        }
+    }
                 
     
     public String getDefaultResourceFileName() { return "FuturesonusParva.init"; }
@@ -129,7 +129,7 @@ public class FuturesonusParva extends Synth
               
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-        {
+    {
         Category globalCategory = new Category(this, getSynthName(), color);
         //globalCategory.makeUnresettable();
 
@@ -145,15 +145,15 @@ public class FuturesonusParva extends Synth
         
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
-            public String replace(String val)
+                public String replace(String val)
                 {
-                return revisePatchName(val);
+                    return revisePatchName(val);
                 }
                                 
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                updateTitle();
+                    super.update(key, model);
+                    updateTitle();
                 }
             };
         vbox.addBottom(comp);  // doesn't work right :-(
@@ -161,25 +161,25 @@ public class FuturesonusParva extends Synth
         
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-        }
+    }
         
     public String revisePatchName(String name)
-        {
+    {
         name = super.revisePatchName(name);
         if (name == null) name = "";
         char[] chars = name.toCharArray();
         for(int i = 0; i < chars.length; i++)
             {
-            if (chars[i] < 32 || chars[i] > 126)        // DEL is not permitted
-                chars[i] = ' ';
+                if (chars[i] < 32 || chars[i] > 126)        // DEL is not permitted
+                    chars[i] = ' ';
             }
         return new String(chars);
-        }
+    }
 
               
               
     public JComponent addOscillators(Color color)
-        {
+    {
         Category category  = new Category(this, "All Oscillators", color);
                         
         JComponent comp;
@@ -203,10 +203,10 @@ public class FuturesonusParva extends Synth
 
         category.add(hbox);
         return category;
-        }        
+    }        
 
     public JComponent addVoice(Color color)
-        {
+    {
         Category category  = new Category(this, "Voice", color);
                         
         JComponent comp;
@@ -244,13 +244,13 @@ public class FuturesonusParva extends Synth
 
         category.add(hbox);
         return category;
-        }        
+    }        
         
 
     public JComponent addOscillator(int osc, Color color)
-        {
+    {
         Category category  = new Category(this, "Oscillator " + osc, color);
-//        category.makePasteable("osc" + osc);
+        //        category.makePasteable("osc" + osc);
         category.makePasteable("osc");
                         
         JComponent comp;
@@ -268,32 +268,32 @@ public class FuturesonusParva extends Synth
 
         if (osc > 1)
             {
-            comp = new CheckBox("Sync to OSC1", this, "osc" + osc + "sync");
-            ((CheckBox) comp).addToWidth(2);
-            vbox.add(comp);
+                comp = new CheckBox("Sync to OSC1", this, "osc" + osc + "sync");
+                ((CheckBox) comp).addToWidth(2);
+                vbox.add(comp);
             }
         hbox.add(vbox);
 
 
         comp = new LabelledDial("Range", this, "osc" + osc + "range", color, 0, 120, 60)
             {
-            public boolean isSymmetric() { return true; }
+                public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);        
 
         comp = new LabelledDial("Fine", this, "osc" + osc + "fine", color, 0, 100, 50)
             {
-            public boolean isSymmetric() { return true; }
+                public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);        
 
         comp = new LabelledDial("Wave", this, "osc" + osc + "wave", color, 1, 53)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val == 1) return "Saw";
-                else if (val == 2) return "Tri";
-                else return "PW " + (val - 3);
+                    if (val == 1) return "Saw";
+                    else if (val == 2) return "Tri";
+                    else return "PW " + (val - 3);
                 }
             };
         hbox.add(comp);        
@@ -309,14 +309,14 @@ public class FuturesonusParva extends Synth
                         
         category.add(hbox);
         return category;
-        }
+    }
 
     public JComponent addEnvelope(int env, Color color)
-        {
+    {
         Category category  = new Category(this, "Envelope " + env + 
-                (env == 1 ? " (Amplitude)" : 
-                (env == 2 ? " (Filter Cutoff)" : "")), color);
-//        category.makePasteable("env" + env);
+                                          (env == 1 ? " (Amplitude)" : 
+                                           (env == 2 ? " (Filter Cutoff)" : "")), color);
+        //        category.makePasteable("env" + env);
         category.makePasteable("env");
                         
         JComponent comp;
@@ -330,9 +330,9 @@ public class FuturesonusParva extends Synth
 
         if (env > 2)
             {
-            params = MOD_DESTINATIONS;
-            comp = new Chooser("Mod Destination", this, "env" + env + "moddst", params);
-            vbox.add(comp);
+                params = MOD_DESTINATIONS;
+                comp = new Chooser("Mod Destination", this, "env" + env + "moddst", params);
+                vbox.add(comp);
             }
         hbox.add(vbox);
                 
@@ -357,7 +357,7 @@ public class FuturesonusParva extends Synth
 
         comp = new LabelledDial("Amount", this, "env" + env + "amount", color, 0, 127, 64)
             {
-            public boolean isSymmetric() { return true; }
+                public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);        
 
@@ -367,22 +367,22 @@ public class FuturesonusParva extends Synth
 
         // ADSR
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null, "env" + env + "attack", "env" + env + "decay", null, "env" + env + "release" },
-            new String[] { null, null, "env" + env + "sustain", "env" + env + "sustain", null },
-            new double[] { 0, 0.3333, 0.3333, 0.3333, 0.3333 },
-            new double[] { 0, 1.0, 1.0 / 127, 1.0 / 127, 0 },
-            new double[] { 0, (Math.PI/4.0/127), (Math.PI/4.0/127), 0, (Math.PI/4.0/127) });
+                                   new String[] { null, "env" + env + "attack", "env" + env + "decay", null, "env" + env + "release" },
+                                   new String[] { null, null, "env" + env + "sustain", "env" + env + "sustain", null },
+                                   new double[] { 0, 0.3333, 0.3333, 0.3333, 0.3333 },
+                                   new double[] { 0, 1.0, 1.0 / 127, 1.0 / 127, 0 },
+                                   new double[] { 0, (Math.PI/4.0/127), (Math.PI/4.0/127), 0, (Math.PI/4.0/127) });
         hbox.addLast(comp);        
                 
         category.add(hbox);
         return category;
-        }
+    }
         
 
     public JComponent addLFO(int lfo, Color color)
-        {
+    {
         Category category  = new Category(this, "LFO " + lfo, color);
-//        category.makePasteable("lfo" + lfo);
+        //        category.makePasteable("lfo" + lfo);
         category.makePasteable("lfo");
                         
         JComponent comp;
@@ -415,10 +415,10 @@ public class FuturesonusParva extends Synth
 
         comp = new LabelledDial("Rate", this, "lfo" + lfo + "rate", color, 0, 127)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val == 0) return "Off";
-                else return "" + val;
+                    if (val == 0) return "Off";
+                    else return "" + val;
                 }
             };
         hbox.add(comp);
@@ -431,10 +431,10 @@ public class FuturesonusParva extends Synth
 
         category.add(hbox);
         return category;
-        }
+    }
 
     public JComponent addFilter(Color color)
-        {
+    {
         Category category  = new Category(this, "Filter", color);
                         
         JComponent comp;
@@ -466,10 +466,10 @@ public class FuturesonusParva extends Synth
 
         category.add(hbox);
         return category;
-        }
+    }
         
     public JComponent addModulation(Color color)
-        {
+    {
         Category category  = new Category(this, "Modulation", color);
         category.makeDistributable("mod");
                         
@@ -481,34 +481,34 @@ public class FuturesonusParva extends Synth
         
         for(int row = 1; row < 17; row+= 4)
             {
-            hbox = new HBox();
-            for(int i = row; i < row + 4; i++)
-                {
-                vbox = new VBox();
-                params = MOD_SOURCES;
-                comp = new Chooser("Source " + i, this, "mod" + i + "source", params);
-                vbox.add(comp);
-
-                params = MOD_DESTINATIONS;
-                comp = new Chooser("Destination " + i, this, "mod" + i + "destination", params);
-                vbox.add(comp);
-                hbox.add(vbox);
-
-                comp = new LabelledDial("Amount " + i, this, "mod" + i + "amount", color, 0, 127, 64)
+                hbox = new HBox();
+                for(int i = row; i < row + 4; i++)
                     {
-                    public boolean isSymmetric() { return true; }
-                    };
-                hbox.add(comp);
-                }
+                        vbox = new VBox();
+                        params = MOD_SOURCES;
+                        comp = new Chooser("Source " + i, this, "mod" + i + "source", params);
+                        vbox.add(comp);
+
+                        params = MOD_DESTINATIONS;
+                        comp = new Chooser("Destination " + i, this, "mod" + i + "destination", params);
+                        vbox.add(comp);
+                        hbox.add(vbox);
+
+                        comp = new LabelledDial("Amount " + i, this, "mod" + i + "amount", color, 0, 127, 64)
+                            {
+                                public boolean isSymmetric() { return true; }
+                            };
+                        hbox.add(comp);
+                    }
                         
-            main.add(hbox);
-            if (row < 13)
-                main.add(Strut.makeVerticalStrut(30));
+                main.add(hbox);
+                if (row < 13)
+                    main.add(Strut.makeVerticalStrut(30));
             }
                                 
         category.add(main, BorderLayout.WEST);
         return category;
-        }
+    }
 
 
     /** Map of parameter -> index in the allParameters array. */
@@ -516,260 +516,260 @@ public class FuturesonusParva extends Synth
 
 
     final static String[] allParameters = new String[/*217 or so*/] 
-    {
-    "-",                // bank
-    "-",                // mod wheel
-    "-",                // breath
-    "-",                // bpm
-    "-",                // foot
-    "-",
-    "-",
-    "-",                // volume
-    "-",
-    "-",
-    "spread",
-    "-",                    // expression
-    "slop",
-    "pan",
-    "noise",
-    "osc1range",
-    "osc1fine",
-    "osc1wave",
-    "osc1level",
-    "osc1glide",
-    "osc2range",
-    "osc2fine",
-    "osc2wave",
-    "osc2level",
-    "osc2glide",
-    "osc2sync",
-    "osc3range",
-    "osc3fine",
-    "osc3wave",
-    "osc3level",
-    "osc3glide",
-    "osc3sync",
-    "-",
-    "-",                            // mod wheel lsb
-    "glide",                        // (global osc glide)
-    "-",
-    "-",
-    "-",
-    "-",
-    "lfo1rate",                   
-    "lfo1wave",
-    "lfo1depth",
-    "lfo1moddst",
-    "lfo1keysync",           
-    "lfo2rate",                   
-    "lfo2wave",
-    "lfo2depth",
-    "lfo2moddst",
-    "lfo2keysync",         
-    "lfo3rate",                   
-    "lfo3wave",
-    "lfo3depth",
-    "lfo3moddst",
-    "lfo3keysync",        
-    "lfo4rate",                   
-    "lfo4wave",
-    "lfo4depth",
-    "lfo4moddst",
-    "lfo4keysync",       
-    "-",                                // VCA Init      
-    "range",                    // (global osc range)     
-    "-",       
-    "-",       
-    "-",       
-    "-",                        // sustain
-    "-",                        // portamento
-    "-",                        // sostenuto
-    "-",                        // soft
-    "-",                        // legato
-    "vcfcutofffine",
-    "vcfcutoff",
-    "vcfresonance",
-    "vcfkeyamt",
-    "vcfaudamt",
-    "-",                            // brightness
-    "vcftype",
-    "env1amount",
-    "env1velocity",
-    "env1attack",
-    "env1decay",
-    "env1sustain",
-    "env1release",
-    "env2amount",
-    "env2velocity",
-    "env2attack",
-    "env2decay",
-    "env2sustain",
-    "env2release",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "env3moddst",
-    "env3amount",
-    "env3velocity",
-    "env3attack",
-    "env3decay",
-    "env3sustain",
-    "env3release",
-    "env4moddst",
-    "env4amount",
-    "env4velocity",
-    "env4attack",
-    "env4decay",
-    "env4sustain",
-    "env4release",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "mod1source",
-    "mod1destination",
-    "mod1amount",
-    "mod2source",
-    "mod2destination",
-    "mod2amount",
-    "mod3source",
-    "mod3destination",
-    "mod3amount",
-    "mod4source",
-    "mod4destination",
-    "mod4amount",
-    "mod5source",
-    "mod5destination",
-    "mod5amount",
-    "mod6source",
-    "mod6destination",
-    "mod6amount",
-    "mod7source",
-    "mod7destination",
-    "mod7amount",
-    "mod8source",
-    "mod8destination",
-    "mod8amount",
-    "mod9source",
-    "mod9destination",
-    "mod9amount",
-    "mod10source",
-    "mod10destination",
-    "mod10amount",
-    "mod11source",
-    "mod11destination",
-    "mod11amount",
-    "mod12source",
-    "mod12destination",
-    "mod12amount",
-    "mod13source",
-    "mod13destination",
-    "mod13amount",
-    "mod14source",
-    "mod14destination",
-    "mod14amount",
-    "mod15source",
-    "mod15destination",
-    "mod15amount",
-    "mod16source",
-    "mod16destination",
-    "mod16amount",
-    "voicecfg",
-    "bendup",
-    "benddown",
-    "detune",
-    "glidemode",
-    "-",                                        // no sustain
-    "cleanosc",
-    "lfo1polar",
-    "lfo2polar",
-    "lfo3polar",
-    "lfo4polar",
-    "lfo1midiclk",
-    "lfo2midiclk",
-    "lfo3midiclk",
-    "lfo4midiclk",
-    "env1loop",
-    "env2loop",
-    "env3loop",
-    "env4loop",
-    "osc1pulse",
-    "osc2pulse",
-    "osc3pulse",
-    "osc1key",
-    "osc2key",
-    "osc3key",
-    "env1curve",
-    "env2curve",
-    "env3curve",
-    "env4curve",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    "-",
-    };
+        {
+            "-",                // bank
+            "-",                // mod wheel
+            "-",                // breath
+            "-",                // bpm
+            "-",                // foot
+            "-",
+            "-",
+            "-",                // volume
+            "-",
+            "-",
+            "spread",
+            "-",                    // expression
+            "slop",
+            "pan",
+            "noise",
+            "osc1range",
+            "osc1fine",
+            "osc1wave",
+            "osc1level",
+            "osc1glide",
+            "osc2range",
+            "osc2fine",
+            "osc2wave",
+            "osc2level",
+            "osc2glide",
+            "osc2sync",
+            "osc3range",
+            "osc3fine",
+            "osc3wave",
+            "osc3level",
+            "osc3glide",
+            "osc3sync",
+            "-",
+            "-",                            // mod wheel lsb
+            "glide",                        // (global osc glide)
+            "-",
+            "-",
+            "-",
+            "-",
+            "lfo1rate",                   
+            "lfo1wave",
+            "lfo1depth",
+            "lfo1moddst",
+            "lfo1keysync",           
+            "lfo2rate",                   
+            "lfo2wave",
+            "lfo2depth",
+            "lfo2moddst",
+            "lfo2keysync",         
+            "lfo3rate",                   
+            "lfo3wave",
+            "lfo3depth",
+            "lfo3moddst",
+            "lfo3keysync",        
+            "lfo4rate",                   
+            "lfo4wave",
+            "lfo4depth",
+            "lfo4moddst",
+            "lfo4keysync",       
+            "-",                                // VCA Init      
+            "range",                    // (global osc range)     
+            "-",       
+            "-",       
+            "-",       
+            "-",                        // sustain
+            "-",                        // portamento
+            "-",                        // sostenuto
+            "-",                        // soft
+            "-",                        // legato
+            "vcfcutofffine",
+            "vcfcutoff",
+            "vcfresonance",
+            "vcfkeyamt",
+            "vcfaudamt",
+            "-",                            // brightness
+            "vcftype",
+            "env1amount",
+            "env1velocity",
+            "env1attack",
+            "env1decay",
+            "env1sustain",
+            "env1release",
+            "env2amount",
+            "env2velocity",
+            "env2attack",
+            "env2decay",
+            "env2sustain",
+            "env2release",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "env3moddst",
+            "env3amount",
+            "env3velocity",
+            "env3attack",
+            "env3decay",
+            "env3sustain",
+            "env3release",
+            "env4moddst",
+            "env4amount",
+            "env4velocity",
+            "env4attack",
+            "env4decay",
+            "env4sustain",
+            "env4release",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "mod1source",
+            "mod1destination",
+            "mod1amount",
+            "mod2source",
+            "mod2destination",
+            "mod2amount",
+            "mod3source",
+            "mod3destination",
+            "mod3amount",
+            "mod4source",
+            "mod4destination",
+            "mod4amount",
+            "mod5source",
+            "mod5destination",
+            "mod5amount",
+            "mod6source",
+            "mod6destination",
+            "mod6amount",
+            "mod7source",
+            "mod7destination",
+            "mod7amount",
+            "mod8source",
+            "mod8destination",
+            "mod8amount",
+            "mod9source",
+            "mod9destination",
+            "mod9amount",
+            "mod10source",
+            "mod10destination",
+            "mod10amount",
+            "mod11source",
+            "mod11destination",
+            "mod11amount",
+            "mod12source",
+            "mod12destination",
+            "mod12amount",
+            "mod13source",
+            "mod13destination",
+            "mod13amount",
+            "mod14source",
+            "mod14destination",
+            "mod14amount",
+            "mod15source",
+            "mod15destination",
+            "mod15amount",
+            "mod16source",
+            "mod16destination",
+            "mod16amount",
+            "voicecfg",
+            "bendup",
+            "benddown",
+            "detune",
+            "glidemode",
+            "-",                                        // no sustain
+            "cleanosc",
+            "lfo1polar",
+            "lfo2polar",
+            "lfo3polar",
+            "lfo4polar",
+            "lfo1midiclk",
+            "lfo2midiclk",
+            "lfo3midiclk",
+            "lfo4midiclk",
+            "env1loop",
+            "env2loop",
+            "env3loop",
+            "env4loop",
+            "osc1pulse",
+            "osc2pulse",
+            "osc3pulse",
+            "osc1key",
+            "osc2key",
+            "osc3key",
+            "env1curve",
+            "env2curve",
+            "env3curve",
+            "env4curve",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+        };
 
     public boolean getSendsAllParametersAsDump() { return false; }
 
     // this is MSB first
     public byte[] nybblize(byte[] val)
-        {
+    {
         byte[] data = new byte[val.length * 2];
         for(int i = 0; i < val.length; i++)
             {
-            data[i * 2] = (byte)(((val[i] & 127) >>> 4) & 127);
-            data[i * 2 + 1] = (byte)(val[i] & 15);
+                data[i * 2] = (byte)(((val[i] & 127) >>> 4) & 127);
+                data[i * 2 + 1] = (byte)(val[i] & 15);
             }
         return data;
-        }
+    }
                 
     public byte[] unnybblize(byte[] val)
-        {
+    {
         byte[] data = new byte[val.length / 2];
         for(int i = 0; i < data.length; i++)
             {
-            data[i] = (byte)((val[i * 2] << 4) | val[i * 2 + 1]);
+                data[i] = (byte)((val[i * 2] << 4) | val[i * 2 + 1]);
             }
         return data;
-        }
+    }
 
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-        {
+    {
         if (tempModel == null)
             tempModel = getModel();
                 
         if (toWorkingMemory)
             {
-            System.err.println("Warning (FuturesonusParva): request to send to working memory, that shouldn't happen for the time being");
-            return new byte[0];
+                System.err.println("Warning (FuturesonusParva): request to send to working memory, that shouldn't happen for the time being");
+                return new byte[0];
             }
                   
         // LOAD NAME
@@ -778,7 +778,7 @@ public class FuturesonusParva extends Synth
         byte[] name = new byte[16];
         for(int i = 0; i < 16; i++)
             {
-            name[i] = (byte)(b[i] & 127);
+                name[i] = (byte)(b[i] & 127);
             }
         name = nybblize(name);
                   
@@ -786,10 +786,10 @@ public class FuturesonusParva extends Synth
         byte[] data = new byte[allParameters.length];
         for(int i = 0; i < allParameters.length; i++)
             {
-            if (allParameters[i].equals("-"))
-                data[i] = 0;
-            else
-                data[i] = (byte)model.get(allParameters[i], 0);
+                if (allParameters[i].equals("-"))
+                    data[i] = 0;
+                else
+                    data[i] = (byte)model.get(allParameters[i], 0);
             }
         data = nybblize(data);
 
@@ -805,11 +805,11 @@ public class FuturesonusParva extends Synth
         d[d.length - 1] = (byte) 0xF7;
 
         return d;
-        }
+    }
         
 
     public int parse(byte[] data, boolean fromFile)
-        {
+    {
         model.set("bank", (data[4] & 15));
         model.set("number", data[5]);
                 
@@ -822,26 +822,26 @@ public class FuturesonusParva extends Synth
         d = unnybblize(d);
         for(int i = 0; i < d.length; i++)       // we use d.length because we might have something shorter than allParameters.length
             {
-            if (!allParameters[i].equals("-"))
-                {
-                model.set(allParameters[i], d[i]);
-                }
+                if (!allParameters[i].equals("-"))
+                    {
+                        model.set(allParameters[i], d[i]);
+                    }
             }
                         
         // LOAD NAME
         try
             {
-            model.set("name", new String(unnybblize(n), "US-ASCII"));
+                model.set("name", new String(unnybblize(n), "US-ASCII"));
             }
         catch (UnsupportedEncodingException ex) { }
 
         revise();
         return PARSE_SUCCEEDED;
-        }
+    }
 
 
     public Object[] emitAll(String key)
-        {
+    {
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
         if (key.equals("name")) return new Object[0];  // this is not emittable
@@ -853,89 +853,89 @@ public class FuturesonusParva extends Synth
             return buildCC(getChannelOut(), index, value);
         else    // it's NRPN.  We're sending MSB first, which is what the Parva expects
             return buildNRPN(getChannelOut(), index - 128, value);
-        }
+    }
 
     Model mergeModel;
 
     public void handleSynthCCOrNRPN(Midi.CCData data)
-        {
+    {
         final int LAST_MERGE_NUMBER = allParameters.length - 1;
         
         if (data.type == Midi.CCDATA_TYPE_RAW_CC)
             {
-            if (isMerging())
-                {
-                // build a model if we haven't yet
-                if (mergeModel == null)
-                    mergeModel = buildModel();
+                if (isMerging())
+                    {
+                        // build a model if we haven't yet
+                        if (mergeModel == null)
+                            mergeModel = buildModel();
                         
-                // Load the key, they come in one at a time
-                setSendMIDI(false);
-                if (!(allParameters[data.number].equals("-")))
-                    {
-                    mergeModel.set(allParameters[data.number], data.value);
+                        // Load the key, they come in one at a time
+                        setSendMIDI(false);
+                        if (!(allParameters[data.number].equals("-")))
+                            {
+                                mergeModel.set(allParameters[data.number], data.value);
+                            }
+                        setSendMIDI(true);
                     }
-                setSendMIDI(true);
-                }
-            else
-                {
-                if (!(allParameters[data.number].equals("-")))
+                else
                     {
-                    setSendMIDI(false);
-                    model.set(allParameters[data.number], data.value);
-                    setSendMIDI(true);
+                        if (!(allParameters[data.number].equals("-")))
+                            {
+                                setSendMIDI(false);
+                                model.set(allParameters[data.number], data.value);
+                                setSendMIDI(true);
+                            }
                     }
-                }
             }
         else if (data.type == Midi.CCDATA_TYPE_NRPN)
             {
-            if (isMerging())
-                {
-                // build a model if we haven't yet
-                if (mergeModel == null)
-                    mergeModel = buildModel();
+                if (isMerging())
+                    {
+                        // build a model if we haven't yet
+                        if (mergeModel == null)
+                            mergeModel = buildModel();
                         
-                // Load the key, they come in one at a time
-                setSendMIDI(false);
-                if (!(allParameters[data.number + 128].equals("-")))
-                    {
-                    mergeModel.set(allParameters[data.number + 128], data.value);
-                    }
-                setSendMIDI(true);
+                        // Load the key, they come in one at a time
+                        setSendMIDI(false);
+                        if (!(allParameters[data.number + 128].equals("-")))
+                            {
+                                mergeModel.set(allParameters[data.number + 128], data.value);
+                            }
+                        setSendMIDI(true);
 
-                // if it's the last key, do the merge
-                if (data.number + 128 == LAST_MERGE_NUMBER)
-                    {
-                    setSendMIDI(false);
-                    Model backup = (Model)(model.clone());
-                    model.recombine(random, mergeModel, getMutationKeys(), getMergeProbability());
-                    if (!backup.keyEquals(getModel()))
-                        undo.push(backup);
-                    setSendMIDI(true);
-                    sendAllParameters();
-                    setMergeProbability(0.0);
-                    mergeModel = null;
+                        // if it's the last key, do the merge
+                        if (data.number + 128 == LAST_MERGE_NUMBER)
+                            {
+                                setSendMIDI(false);
+                                Model backup = (Model)(model.clone());
+                                model.recombine(random, mergeModel, getMutationKeys(), getMergeProbability());
+                                if (!backup.keyEquals(getModel()))
+                                    undo.push(backup);
+                                setSendMIDI(true);
+                                sendAllParameters();
+                                setMergeProbability(0.0);
+                                mergeModel = null;
+                            }
                     }
-                }
-            else
-                {
-                if (!(allParameters[data.number + 128].equals("-")))
+                else
                     {
-                    setSendMIDI(false);
-                    model.set(allParameters[data.number + 128], data.value);
-                    setSendMIDI(true);
+                        if (!(allParameters[data.number + 128].equals("-")))
+                            {
+                                setSendMIDI(false);
+                                model.set(allParameters[data.number + 128], data.value);
+                                setSendMIDI(true);
+                            }
                     }
-                }
             }
         else // RPN
             {
-            // do nothing
+                // do nothing
             }
-        }
+    }
 
 
     public void changePatch(Model tempModel)
-        {
+    {
         byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");
         try {
@@ -944,27 +944,27 @@ public class FuturesonusParva extends Synth
             simplePause(getPauseAfterBankChange());
             // Number change is PC
             tryToSendMIDI(buildPC(getChannelOut(), NN));
-            }
-        catch (Exception e) { Synth.handleException(e); }
         }
+        catch (Exception e) { Synth.handleException(e); }
+    }
 
     public byte[] requestDump(Model tempModel)
-        {
+    {
         if (tempModel == null)
             tempModel = getModel();
 
         return new byte[] { (byte)0xF0, (byte)0x7D, (byte)0x00, (byte)0x7F, (byte)(0x50 | tempModel.get("bank")), (byte)(tempModel.get("number")), (byte)0xF7 };
-        }
+    }
     
     public byte[] requestCurrentDump()
-        {
+    {
         return new byte[] { (byte)0xF0, (byte)0x7D, (byte)0x00, (byte)0x7F, (byte)0x5F, (byte)0x00, (byte)0xF7 };
-        }
+    }
     
     /////// OTHER ABSTRACT METHODS
     
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-        {
+    {
         JComboBox bank = new JComboBox(BANKS);
         bank.setEditable(false);
         bank.setMaximumRowCount(32);
@@ -974,35 +974,35 @@ public class FuturesonusParva extends Synth
                 
         while(true)
             {
-            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
+                boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                                                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
                 
-            if (result == false) 
-                return false;
+                if (result == false) 
+                    return false;
                                 
-            int n;
-            try { n = Integer.parseInt(number.getText()); }
-            catch (NumberFormatException e)
-                {
-                showSimpleError(title, "The Patch Number must be an integer 0 ... 63");
-                continue;
-                }
-            if (n < 0 || n > 63)
-                {
-                showSimpleError(title, "The Patch Number must be an integer 0 ... 63");
-                continue;
-                }
+                int n;
+                try { n = Integer.parseInt(number.getText()); }
+                catch (NumberFormatException e)
+                    {
+                        showSimpleError(title, "The Patch Number must be an integer 0 ... 63");
+                        continue;
+                    }
+                if (n < 0 || n > 63)
+                    {
+                        showSimpleError(title, "The Patch Number must be an integer 0 ... 63");
+                        continue;
+                    }
                                 
-            change.set("bank", bank.getSelectedIndex());
-            change.set("number", n);
+                change.set("bank", bank.getSelectedIndex());
+                change.set("number", n);
                         
-            return true;
+                return true;
             }
-        }
+    }
         
 
     public void revise()
-        {
+    {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -1010,34 +1010,34 @@ public class FuturesonusParva extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-        }
+    }
         
     public static String getSynthName() { return "Futuresonus Parva"; }
     
     public String getPatchName(Model model) { return model.get("name", "Init"); }
 
     public Model getNextPatchLocation(Model model)
-        {
+    {
         int bank = model.get("bank");
         int number = model.get("number");
         
         number++;
         if (number >= 64)
             {
-            bank++;
-            number = 0;
-            if (bank >= 6)
-                bank = 0;
+                bank++;
+                number = 0;
+                if (bank >= 6)
+                    bank = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-        }
+    }
 
     public String getPatchLocationName(Model model)
-        {
+    {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -1046,7 +1046,7 @@ public class FuturesonusParva extends Synth
         
         int number = model.get("number");
         return BANKS[model.get("bank")] + (number > 9 ? "" : "0") + number;
-        }
+    }
 
 
 
@@ -1055,24 +1055,24 @@ public class FuturesonusParva extends Synth
     // The patch editor does a bank change first, then a PC.
     // Override this to pause after the bank change
     public int getPauseAfterBankChange()
-        {
+    {
         return 0;  // in ms
-        }
+    }
 
     // override this to pause after the PC
     public int getPauseAfterChangePatch()
-        {
+    {
         return 0; // in ms
-        }
+    }
 
     // Override this to pause after every NRPN or CC message
     // So as to slow down bulk transmission.  We want to slow it down
     // to JUST BARELY slow enough that the Parva can handle it.
     // Note it's a double, we can pause for less than 1ms
     public double getPauseBetweenMIDISends() 
-        {
+    {
         return 0.0;  // in ms
-        }
-
     }
+
+}
     

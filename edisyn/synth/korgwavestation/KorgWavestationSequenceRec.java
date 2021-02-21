@@ -7,10 +7,10 @@ package edisyn.synth.korgwavestation;
 import edisyn.*;
 
 public class KorgWavestationSequenceRec extends Recognize
-    {
+{
     public static final int EXPECTED_SYSEX_LENGTH = 17576;
     public static boolean recognize(byte[] data)
-        {
+    {
         if (data.length > 22 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x7D &&
@@ -36,16 +36,16 @@ public class KorgWavestationSequenceRec extends Recognize
             data[21] == (byte)0)
             return true;
         else return recognizeBank(data);
-        }
+    }
         
     public static boolean recognizeBank(byte[] data)
-        {
+    {
         boolean b = (data.length == EXPECTED_SYSEX_LENGTH &&
-            data[0] == (byte)0xF0 &&
-            data[1] == (byte)0x42 &&
-            data[3] == (byte)0x28 &&
-            data[4] == (byte)0x54);   
+                     data[0] == (byte)0xF0 &&
+                     data[1] == (byte)0x42 &&
+                     data[3] == (byte)0x28 &&
+                     data[4] == (byte)0x54);   
         return b;              
-        }
-    
     }
+    
+}

@@ -23,7 +23,7 @@ import javax.sound.midi.*;
 */
 
 public class KorgWavestationPerformance extends KorgWavestationAbstract
-    {
+{
     /// Various collections of parameter names for pop-up menus
     
     public static final String[] SCALES = new String[] { "Equal Temperment 1", "Equal Temperment 2", "Pure Major", "Pure Minor", "User 1", "User 2", "User 3", "User 4", "User 5", "User 6", "User 7", "User 8", "User 9", "User 10", "User 11", "User 12" };
@@ -39,19 +39,19 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
     public static final String[] FACTORS = new String[] { "1/1", "1/2", "1/3", "1/4", "1/5", "1/6", "1/7", "1/8", "2/3", "2/5", "2/7", "3/4", "3/5", "3/7", "3/8", "4/5", "4/7", "5/6", "5/7", "5/8", "6/7", "7/8", "2/1", "3/1", "4/1", "5/1", "6/1", "7/1", "8/1", "3/2", "5/2", "7/2", "4/3", "5/3", "7/3", "8/3", "5/4", "7/4", "6/5", "7/5", "8/5", "7/6", "8/7"  };
 
     public static final String[] CHORUS_LFO_RATE = new String[] 
-    {
-    "0.03", "0.06", "0.09", "0.12", "0.15", "0.18", "0.21", "0.24", "0.27", "0.30", "0.33", "0.36", "0.39", "0.42", "0.45", "0.48", "0.51", "0.54", "0.57", "0.60", "0.63", "0.66", "0.69", "0.73", "0.76", "0.80", "0.84", "0.88", "0.93", "0.97", "1.00",
-    "1.07", "1.13", "1.18", "1.24", "1.31", "1.37", "1.44", "1.51", "1.59", "1.67", "1.75", "1.84", "1.93", "2.00",
-    "2.13", "2.24", "2.35", "2.47", "2.59", "2.72", "2.86", "3.00",
-    "3.15", "3.31", "3.48", "3.65", "3.83", "4.00",
-    "4.23", "4.44", "4.66", "4.90", "5.14", "5.40", "5.67", "6.00",
-    "6.26", "6.57", "6.90", "7.25", "7.61", "8.00",
-    "8.39", "8.82", "9.26", "9.72", "10.21", "10.72", "11.26", "11.83", "12.42", "13.00",
-    "13.70", "14.39", "15.11", "15.87", "16.67", "17.00",
-    "18.38", "19.30", "20.27", "21.29", "22.36", "23.48", "24.66", "26.00",
-    "27.00",
-    "28.57", "30.00"
-    };
+        {
+            "0.03", "0.06", "0.09", "0.12", "0.15", "0.18", "0.21", "0.24", "0.27", "0.30", "0.33", "0.36", "0.39", "0.42", "0.45", "0.48", "0.51", "0.54", "0.57", "0.60", "0.63", "0.66", "0.69", "0.73", "0.76", "0.80", "0.84", "0.88", "0.93", "0.97", "1.00",
+            "1.07", "1.13", "1.18", "1.24", "1.31", "1.37", "1.44", "1.51", "1.59", "1.67", "1.75", "1.84", "1.93", "2.00",
+            "2.13", "2.24", "2.35", "2.47", "2.59", "2.72", "2.86", "3.00",
+            "3.15", "3.31", "3.48", "3.65", "3.83", "4.00",
+            "4.23", "4.44", "4.66", "4.90", "5.14", "5.40", "5.67", "6.00",
+            "6.26", "6.57", "6.90", "7.25", "7.61", "8.00",
+            "8.39", "8.82", "9.26", "9.72", "10.21", "10.72", "11.26", "11.83", "12.42", "13.00",
+            "13.70", "14.39", "15.11", "15.87", "16.67", "17.00",
+            "18.38", "19.30", "20.27", "21.29", "22.36", "23.48", "24.66", "26.00",
+            "27.00",
+            "28.57", "30.00"
+        };
                 
     public static final String[] SPLIT_POINTS = new String[] { "160Hz", "200Hz", "250Hz", "320Hz", "400Hz", "500Hz", "640Hz", "800Hz", "1KHz", "1.25KHz", "1.6KHz", "2KHz", "2.5KHz", "3.2KHz", "4KHz", "5KHz", "6.4KHz", "8KHz", "10KHz" };
 
@@ -85,73 +85,73 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
     //// For each FX, it contains an array of preset values, corresponding to elements in that FX type's PCL List.
 
     static final int FX_GROUP[] = new int[]
-    {
-    0,              // Off
-    1,              // Small Hall
-    1,              // Medium Hall
-    2,              // Large Hall
-    1,              // Small Room
-    1,              // Large Room
-    1,              // Live Stage
-    1,              // Wet Plate
-    1,              // Dry Plate
-    1,              // Spring Reverb
-    3,              // Early Reflections 1
-    3,              // Early Reflections 2
-    3,              // Early Reflections 3
-    4,              // Gated Reverb
-    4,              // Reverse Gate
-    5,              // Stereo Delay
-    5,              // Ping-Pong Delay
-    6,              // Dual Mono Delay
-    7,              // Multi-Tap Delay 1
-    7,              // Multi-Tap Delay 2
-    7,              // Multi-Tap Delay 3
-    8,              // Stereo Chorus
-    8,              // Quadrature Chorus
-    8,              // Crossover Chorus
-    9,              // Harmonic Chorus
-    10,             // Stereo Flanger
-    10,             // Stereo Flanger
-    10,             // Crossover Flanger
-    11,             // Enhancer/Exciter
-    12,             // Distortion-Filter
-    12,             // Overdrive-Filter
-    13,             // Stereo Phaser 1
-    13,             // Stereo Phaser 2
-    14,             // Rotary Speaker
-    15,             // Stereo Mod-Pan
-    15,             // Quadrature Mod-Pan
-    16,             // Stereo Parametric EQ
-    17,             // Chorus-Stereo Delay
-    18,             // Flanger-Stereo Delay
-    19,             // Dual Mono Delay/Hall Reverb
-    20,             // Dual Mono Delay/Room Reverb
-    21,             // Dual Mono Delay/Chorus
-    22,             // Dual Mono Delay/Flanger
-    23,             // Dual Mono Delay/Distortion
-    23,             // Dual Mono Delay/Overdrive
-    24,             // Dual Mono Delay/Phaser
-    25,             // Dual Mono Delay/Rotary Speaker
-    26,             // Stereo Pitch Shiter
-    27,             // Modulatable Pitch Shifter-Delay
-    28,             // Stereo Compressor-Limiter/Gate
-    29,             // Small Vocoder 1
-    29,             // Small Vocoder 2
-    29,             // Small Vocoder 3
-    29,             // Small Vocoder 4
-    30,             // Stereo Vocoder-Delay 1
-    30,             // Stereo Vocoder-Delay 2
-    };
+        {
+            0,              // Off
+            1,              // Small Hall
+            1,              // Medium Hall
+            2,              // Large Hall
+            1,              // Small Room
+            1,              // Large Room
+            1,              // Live Stage
+            1,              // Wet Plate
+            1,              // Dry Plate
+            1,              // Spring Reverb
+            3,              // Early Reflections 1
+            3,              // Early Reflections 2
+            3,              // Early Reflections 3
+            4,              // Gated Reverb
+            4,              // Reverse Gate
+            5,              // Stereo Delay
+            5,              // Ping-Pong Delay
+            6,              // Dual Mono Delay
+            7,              // Multi-Tap Delay 1
+            7,              // Multi-Tap Delay 2
+            7,              // Multi-Tap Delay 3
+            8,              // Stereo Chorus
+            8,              // Quadrature Chorus
+            8,              // Crossover Chorus
+            9,              // Harmonic Chorus
+            10,             // Stereo Flanger
+            10,             // Stereo Flanger
+            10,             // Crossover Flanger
+            11,             // Enhancer/Exciter
+            12,             // Distortion-Filter
+            12,             // Overdrive-Filter
+            13,             // Stereo Phaser 1
+            13,             // Stereo Phaser 2
+            14,             // Rotary Speaker
+            15,             // Stereo Mod-Pan
+            15,             // Quadrature Mod-Pan
+            16,             // Stereo Parametric EQ
+            17,             // Chorus-Stereo Delay
+            18,             // Flanger-Stereo Delay
+            19,             // Dual Mono Delay/Hall Reverb
+            20,             // Dual Mono Delay/Room Reverb
+            21,             // Dual Mono Delay/Chorus
+            22,             // Dual Mono Delay/Flanger
+            23,             // Dual Mono Delay/Distortion
+            23,             // Dual Mono Delay/Overdrive
+            24,             // Dual Mono Delay/Phaser
+            25,             // Dual Mono Delay/Rotary Speaker
+            26,             // Stereo Pitch Shiter
+            27,             // Modulatable Pitch Shifter-Delay
+            28,             // Stereo Compressor-Limiter/Gate
+            29,             // Small Vocoder 1
+            29,             // Small Vocoder 2
+            29,             // Small Vocoder 3
+            29,             // Small Vocoder 4
+            30,             // Stereo Vocoder-Delay 1
+            30,             // Stereo Vocoder-Delay 2
+        };
 
 
     public static final int[][] FX_PARAMETERS = new int[][] {
-// NO EFFECT
-            {
-            },
+        // NO EFFECT
+        {
+        },
 
-// REVERB EQ
-            {
+        // REVERB EQ
+        {
             FX_100_WET_DRY0,                // Dry Wet
             FX_MOD1,                                // Mix Mod Source
             FX_PARAM2,                      // Mix Mod Amount
@@ -161,10 +161,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_UPARAM6,                     // HiFreq                   // 5?
             FX_PARAM11,             // EQ Low
             FX_PARAM12,             // EQ Hi
-            },
+        },
 
-// REVERB EQ (LARGE HALL ONLY)
-            {
+        // REVERB EQ (LARGE HALL ONLY)
+        {
             FX_100_WET_DRY0,                // Dry Wet
             FX_MOD1,                                // Mix Mod Source
             FX_PARAM2,                      // Mix Mod Amount
@@ -174,10 +174,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_UPARAM6,                     // HiFreq                   // 5?
             FX_PARAM11,             // EQ Low
             FX_PARAM12,             // EQ Hi
-            },
+        },
 
-// EARLY REFLECTIONS
-            {
+        // EARLY REFLECTIONS
+        {
             FX_100_WET_DRY0,                // Dry Wet
             FX_MOD1,                                // Mix Mod Source
             FX_PARAM2,                      // Mix Mod Amount
@@ -185,20 +185,20 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_UPARAM3,                     // Pre Delay
             FX_PARAM5,                      // EQ Low
             FX_PARAM6,                      // EQ High
-            },
+        },
 
-// GATED REVERB
-            {
+        // GATED REVERB
+        {
             FX_100_WET_DRY0,                // Dry Wet
             FX_UPARAM5,                     // Decay Time
             FX_UPARAM4,                     // Pre Delay
             FX_UPARAM1,                     // Gate Hold
             FX_MOD2,                                // Gate Key Mod
             FX_UPARAM3,                     // Gate Thresh
-            },
+        },
 
-// STEREO DELAY AND PING PONG DELAY
-            {
+        // STEREO DELAY AND PING PONG DELAY
+        {
             FX_100_WET_DRY0,                // Dry Wet      
             FX_MOD1,                                // Mix Mod Source
             FX_PARAM2,                      // Mix Mod Amount
@@ -209,20 +209,20 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_PARAM13,                     // Feedback
             FX_MOD10,                       // Level Mod Source
             FX_PARAM11,                     // Level Mod AMount
-            },
+        },
 
-// DUAL MONO DELAY
-            {
+        // DUAL MONO DELAY
+        {
             FX_11_WET_DRY0,         // Dry/Wet Mix A
             FX_UPARAM1,                     // Delay A
             FX_PARAM2,                      // Feedback A
             FX_11_WET_DRY3,         // Dry/Wet Mix B
             FX_UPARAM4,                     // Delay B
             FX_PARAM5,                      // Feedback B
-            },
+        },
 
-// MULTI-TAP DELAY
-            {
+        // MULTI-TAP DELAY
+        {
             FX_100_WET_DRY0,                // DRY/WET
             FX_MOD1,                                // MIX MOD Source
             FX_PARAM2,                      // MIX MOD AMOUNT
@@ -233,10 +233,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_PARAM5,                      // Level Mod Amount
             FX_PARAM9,                      // EQ Low
             FX_PARAM10,                     // EQ Hi
-            },
+        },
 
-// STEREO CHORUS AND CROSSOVER CHORUS
-            {
+        // STEREO CHORUS AND CROSSOVER CHORUS
+        {
             FX_UPARAM8,                     // LFO Depth
             FX_LFO_RATE5,           // LFO Rate
             FX_MOD6,                                // LFO Rate Mod Source
@@ -247,10 +247,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_FOOTSWITCH_ENABLE1,  // Footswitch
             FX_PARAM10,                     // EQ Low
             FX_PARAM11,                     // EQ HI
-            },
+        },
 
-// HARMONIC CHORUS
-            {
+        // HARMONIC CHORUS
+        {
             FX_UPARAM7,                     // LFO Depth
             FX_MOD8,                                // Depth Mod Source
             FX_PARAM9,                      // Depth Mod Amount
@@ -261,10 +261,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_UPARAM2,                     // Delay Left
             FX_UPARAM3,                     // Delay Right
             FX_FOOTSWITCH_ENABLE1,  // Footswitch
-            },
+        },
 
-// FLANGER
-            {
+        // FLANGER
+        {
             FX_UPARAM4,                     // LFO Range
             FX_RAMP5,                       // Ramp Speed
             FX_MOD6,                                // Ramp Speed Mod Source
@@ -275,10 +275,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_FOOTSWITCH_ENABLE1,  // Footswitch
             FX_PARAM9,                      // EQ Low
             FX_PARAM10,                     // EQ Hi
-            },
+        },
 
-// ENHANCER / EXCITER
-            {
+        // ENHANCER / EXCITER
+        {
             FX_11_WET_DRY0,         // Dry/Wet
             FX_UPARAM1,                     // Excitation
             FX_UPARAM2,                     // Hot Spot
@@ -286,10 +286,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_UPARAM4,                     // Crossover Delay
             FX_PARAM5,                      // EQ Low
             FX_PARAM6,                      // EQ Hi
-            },
+        },
 
-// DISTORTION / FILTER
-            {
+        // DISTORTION / FILTER
+        {
             FX_10_WET_DRY0,         // Wet/Dry
             FX_UPARAM2,                     // Edge
             FX_UPARAM3,                     // Hot Spot
@@ -302,10 +302,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_FOOTSWITCH_ENABLE1,          // Footswitch
             FX_PARAM7,                      // EQ Low
             FX_PARAM8,                      // EQ High
-            },
+        },
 
-// STEREO PHASER
-            {
+        // STEREO PHASER
+        {
             FX_10_WET_DRY0,         // WET/DRY
             FX_UPARAM6,                     // LFO Depth
             FX_MOD7,                                // LFO Depth Mod Source
@@ -316,10 +316,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_UPARAM2,                     // Center Frequency
             FX_PARAM9,                      // Feedback
             FX_FOOTSWITCH_ENABLE1,  // Footswitch
-            },
+        },
 
-// ROTARY SPEAKER
-            {
+        // ROTARY SPEAKER
+        {
             FX_10_WET_DRY0,         // Wet/Dry
             FX_UPARAM2,                     // Depth
             FX_LFO_RATE6,           // Slow Speed
@@ -327,10 +327,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_MOD5,                                // Speed Mod Source
             FX_UPARAM4,                     // Acceleration
             FX_FOOTSWITCH_ENABLE1,  // Footswitch
-            },
+        },
 
-// STEREO MOD PAN
-            {
+        // STEREO MOD PAN
+        {
             FX_11_WET_DRY0,         // Wet/Dry
             FX_MOD1,                                // Dry/Wet Mix Mod Source
             FX_PARAM2,                      // Dry/Wet Mix Mod Amount
@@ -340,10 +340,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_LFO_RATE3,           // LFO Rate
             FX_PARAM7,                      // EQ Low
             FX_PARAM8,                      // EQ High
-            },
+        },
 
-// STEREO PARAMETRIC EQ
-            {
+        // STEREO PARAMETRIC EQ
+        {
             FX_EQ_FREQ_HIGH7,       // Hi Frequency
             FX_PARAM8,                      // High Level
             FX_UPARAM2,                     // Mid Frequency
@@ -353,10 +353,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_PARAM4,                      // Mid Frequency Mod Amount
             FX_EQ_FREQ_LOW0,                // Low Frequency
             FX_PARAM1,                      // Low Level
-            },
+        },
 
-// CHORUS / DELAY
-            {
+        // CHORUS / DELAY
+        {
             FX_100_WET_DRY4,                // Wet/Dry
             FX_UPARAM0,                     // Chorus Delay
             FX_UPARAM2,                     // LFO Depth
@@ -367,10 +367,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_FOOTSWITCH_ENABLE6,  // Footswitch
             FX_PARAM9,                      // EQ Low
             FX_PARAM10,                     // EQ High
-            },
+        },
 
-// FLANGER / DELAY
-            {
+        // FLANGER / DELAY
+        {
             FX_100_WET_DRY4,                // Wet/Dry
             FX_UPARAM0,                     // Flanger Delay
             FX_UPARAM2,                     // LFO Depth
@@ -381,10 +381,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_FOOTSWITCH_ENABLE6,  // Footswitch
             FX_PARAM9,                      // EQ Low
             FX_PARAM10,                     // EQ High
-            },
+        },
 
-// DELAY / REVERB (HALL)
-            {
+        // DELAY / REVERB (HALL)
+        {
             FX_11_WET_DRY0,         // Delay Wet/Dry
             FX_UPARAM1,                     // Delay Time
             FX_PARAM2,                      // Delay Feedback
@@ -392,10 +392,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_UPARAM5,                     // Reverb Decay Time
             FX_UPARAM4,                     // Reverb Predelay
             FX_UPARAM6,                     // High Frequency Damping
-            },
+        },
 
-// DELAY / REVERB (ROOM)
-            {
+        // DELAY / REVERB (ROOM)
+        {
             FX_11_WET_DRY0,         // Delay Wet/Dry
             FX_UPARAM1,                     // Delay Time
             FX_PARAM2,                      // Delay Feedback
@@ -403,10 +403,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_UPARAM5,                     // Reverb Decay Time
             FX_UPARAM4,                     // Reverb Predelay
             FX_UPARAM6,                     // High Frequency Damping
-            },
+        },
 
-// DELAY/CHORUS
-            {
+        // DELAY/CHORUS
+        {
             FX_11_WET_DRY0,         // Delay Wet/Dry
             FX_UPARAM1,                     // Delay Time
             FX_PARAM2,                      // Delay Feedback
@@ -414,10 +414,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_UPARAM5,                     // LFO Depth
             FX_LFO_RATE4,           // LFO Rate
             FX_PARAM6,                      // Chorus Feedback
-            },
+        },
 
-// DELAY/FLANGER
-            {
+        // DELAY/FLANGER
+        {
             FX_11_WET_DRY0,         // Delay Wet/Dry
             FX_UPARAM1,                     // Delay Time
             FX_PARAM2,                      // Delay Feedback
@@ -425,10 +425,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_UPARAM5,                     // LFO Depth
             FX_LFO_RATE4,           // LFO Rate
             FX_PARAM6,                      // Chorus Feedback
-            },
+        },
 
-// DELAY/DISTORTION AND DELAY/OVERDRIVE
-            {
+        // DELAY/DISTORTION AND DELAY/OVERDRIVE
+        {
             FX_11_WET_DRY0,         // Delay Dry/Wet
             FX_UPARAM1,                     // Delay Time
             FX_PARAM2,                      // Delay Feedback
@@ -436,10 +436,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_UPARAM4,                     // Hot Spot
             FX_UPARAM5,                     // Resonance
             FX_UPARAM6,                     // Distortion Output Level
-            },
+        },
 
-// DELAY/PHASER
-            {
+        // DELAY/PHASER
+        {
             FX_11_WET_DRY0,         // Wet/Dry
             FX_UPARAM1,                     // Delay Time
             FX_PARAM2,                      // Delay Feedback
@@ -447,10 +447,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_UPARAM5,                     // LFO Depth
             FX_LFO_RATE4,           // LFO Rate
             FX_PARAM6,                      // Phaser Feedback
-            },
+        },
 
-// DELAY/ROTARY
-            {
+        // DELAY/ROTARY
+        {
             FX_11_WET_DRY0,         // Delay Wet/Dry
             FX_UPARAM1,                     // Delay Time
             FX_PARAM2,                      // Delay Feedback
@@ -458,20 +458,20 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_LFO_RATE7,           // Fast Speed
             FX_MOD5,                                // Speed Mod Source
             FX_UPARAM4,                     // Acceleration
-            },
+        },
 
-// PITCH SHIFT
-            {
+        // PITCH SHIFT
+        {
             FX_11_WET_DRY0,         // Wet/Dry (Delay)
             FX_MOD1,                                // Mix Mod Source
             FX_PARAM2,                      // Mix Mod Amount
             FX_UPARAM3,                     // Pitch Shift
             FX_UPARAM4,                     // Delay Left
             FX_UPARAM5,                     // Delay Right
-            },
+        },
 
-// MODULATABLE PITCH-SHIFTER DELAY
-            {
+        // MODULATABLE PITCH-SHIFTER DELAY
+        {
             FX_11_WET_DRY0,         // Wet/Dry (Delay)
             FX_MOD1,                                // Mix Modulation Source
             FX_PARAM2,                      // Mix Modulation Amount
@@ -482,20 +482,20 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_UPARAM8,                     // Delay Left
             FX_UPARAM7,                     // Delay Right          (interesting, backwards)
             FX_UPARAM9,                     // Feedback
-            },
+        },
 
-// STEREO COMPRESSOR-LIMITER/GATE
-            {
+        // STEREO COMPRESSOR-LIMITER/GATE
+        {
             COMP_CONTROL0,          // Control Source
             FX_UPARAM1,                     // Sensitivity
             FX_UPARAM2,                     // Compression Ratio
             FX_UPARAM3,                     // Compression Threshold
             FX_UPARAM4,                     // Gate Threshold
             FX_UPARAM5,                     // Output Level
-            },
+        },
 
-// SMALL VOCODER
-            {
+        // SMALL VOCODER
+        {
             FX_BUS0,                                // Modulator Bus
             FX_UPARAM1,                     // Modulator Sensitivity
             FX_BUS2,                                // Carrier Bus
@@ -503,10 +503,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_UPARAM4,                     // Sibilance
             FX_MOD5,                                // Sibiliance Mod Source
             FX_PARAM6,                      // Sibilance Mod Amount
-            },
+        },
 
-// STEREO VOCODER
-            {
+        // STEREO VOCODER
+        {
             FX_BUS0,                                // Modulator Bus
             FX_UPARAM1,                     // Modulator Sensitivity
             FX_BUS2,                                // Carrier Bus
@@ -518,19 +518,19 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             FX_UPARAM8,                     // Delay Time
             FX_UPARAM9,                     // Delay Feedback
             FX_UPARAM10,                    // Delay Level
-            },
-        };
+        },
+    };
 
 
 
     public static final int[][] FX_INDICES = new int[][] {
 
-// NO EFFECT
-            {
-            },
+        // NO EFFECT
+        {
+        },
 
-// REVERB EQ
-            {
+        // REVERB EQ
+        {
             0,                // Dry Wet
             1,                                // Mix Mod Source
             2,                      // Mix Mod Amount
@@ -540,10 +540,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             6,                     // HiFreq                    // 5?
             11,             // EQ Low
             12,             // EQ Hi
-            },
+        },
 
-// REVERB EQ (HALL ONLY)
-            {
+        // REVERB EQ (HALL ONLY)
+        {
             0,                // Dry Wet
             1,                                // Mix Mod Source
             2,                      // Mix Mod Amount
@@ -553,10 +553,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             6,                     // HiFreq                    // 5?
             11,             // EQ Low
             12,             // EQ Hi
-            },
+        },
 
-// EARLY REFLECTIONS
-            {
+        // EARLY REFLECTIONS
+        {
             0,                // Dry Wet
             1,                                // Mix Mod Source
             2,                      // Mix Mod Amount
@@ -564,20 +564,20 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             3,                     // Pre Delay
             5,                      // EQ Low
             6,                      // EQ High
-            },
+        },
 
-// GATED REVERB
-            {
+        // GATED REVERB
+        {
             0,                // Dry Wet
             5,                     // Decay Time
             4,                     // Pre Delay
             1,                     // Gate Hold
             2,                                // Gate Key Mod
             3,                     // Gate Thresh
-            },
+        },
 
-// STEREO DELAY AND PING PONG DELAY
-            {
+        // STEREO DELAY AND PING PONG DELAY
+        {
             0,                // Dry Wet      
             1,                                // Mix Mod Source
             2,                      // Mix Mod Amount
@@ -588,20 +588,20 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             3,                     // Feedback
             10,                       // Level Mod Source
             11,                     // Level Mod AMount
-            },
+        },
 
-// DUAL MONO DELAY
-            {
+        // DUAL MONO DELAY
+        {
             0,         // Dry/Wet Mix A
             1,                     // Delay A
             2,                      // Feedback A
             3,         // Dry/Wet Mix B
             4,                     // Delay B
             5,                      // Feedback B
-            },
+        },
 
-// MULTI-TAP DELAY
-            {
+        // MULTI-TAP DELAY
+        {
             0,                // DRY/WET
             1,                                // MIX MOD Source
             2,                      // MIX MOD AMOUNT
@@ -612,10 +612,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             5,                      // Level Mod Amount
             9,                      // EQ Low
             10,                     // EQ Hi
-            },
+        },
 
-// STEREO CHORUS AND CROSSOVER CHORUS
-            {
+        // STEREO CHORUS AND CROSSOVER CHORUS
+        {
             8,                     // LFO Depth
             5,           // LFO Rate
             6,                                // LFO Rate Mod Source
@@ -626,10 +626,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             1,  // Footswitch
             10,                     // EQ Low
             11,                     // EQ HI
-            },
+        },
 
-// HARMONIC CHORUS
-            {
+        // HARMONIC CHORUS
+        {
             7,                     // LFO Depth
             8,                                // Depth Mod Source
             9,                      // Depth Mod Amount
@@ -640,10 +640,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             2,                     // Delay Left
             3,                     // Delay Right
             1,  // Footswitch
-            },
+        },
 
-// FLANGER
-            {
+        // FLANGER
+        {
             4,                     // LFO Range
             5,                       // Ramp Speed
             6,                                // Ramp Speed Mod Source
@@ -654,10 +654,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             1,  // Footswitch
             9,                      // EQ Low
             10,                     // EQ Hi
-            },
+        },
 
-// ENHANCER / EXCITER
-            {
+        // ENHANCER / EXCITER
+        {
             0,         // Dry/Wet
             1,                     // Excitation
             2,                     // Hot Spot
@@ -665,10 +665,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             4,                     // Crossover Delay
             5,                      // EQ Low
             6,                      // EQ Hi
-            },
+        },
 
-// DISTORTION / FILTER
-            {
+        // DISTORTION / FILTER
+        {
             0,         // Wet/Dry
             2,                     // Edge
             3,                     // Hot Spot
@@ -681,10 +681,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             1,          // Footswitch
             7,                      // EQ Low
             8,                      // EQ High
-            },
+        },
 
-// STEREO PHASER
-            {
+        // STEREO PHASER
+        {
             0,         // WET/DRY
             6,                     // LFO Depth
             7,                                // LFO Depth Mod Source
@@ -695,10 +695,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             2,                     // Center Frequency
             9,                      // Feedback
             1,  // Footswitch
-            },
+        },
 
-// ROTARY SPEAKER
-            {
+        // ROTARY SPEAKER
+        {
             0,         // Wet/Dry
             2,                     // Depth
             6,           // Slow Speed
@@ -706,10 +706,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             5,                                // Speed Mod Source
             4,                     // Acceleration
             1,  // Footswitch
-            },
+        },
 
-// STEREO MOD PAN
-            {
+        // STEREO MOD PAN
+        {
             0,         // Wet/Dry
             1,                                // Dry/Wet Mix Mod Source
             2,                      // Dry/Wet Mix Mod Amount
@@ -719,10 +719,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             3,           // LFO Rate
             7,                      // EQ Low
             8,                      // EQ High
-            },
+        },
 
-// STEREO PARAMETRIC EQ
-            {
+        // STEREO PARAMETRIC EQ
+        {
             7,       // Hi Frequency
             8,                      // High Level
             2,                     // Mid Frequency
@@ -732,10 +732,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             4,                      // Mid Frequency Mod Amount
             0,                // Low Frequency
             1,                      // Low Level
-            },
+        },
 
-// CHORUS / DELAY
-            {
+        // CHORUS / DELAY
+        {
             4,                // Wet/Dry
             0,                     // Chorus Delay
             2,                     // LFO Depth
@@ -746,10 +746,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             6,  // Footswitch
             9,                      // EQ Low
             10,                     // EQ High
-            },
+        },
 
-// FLANGER / DELAY
-            {
+        // FLANGER / DELAY
+        {
             4,                // Wet/Dry
             0,                     // Flanger Delay
             2,                     // LFO Depth
@@ -760,10 +760,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             6,  // Footswitch
             9,                      // EQ Low
             10,                     // EQ High
-            },
+        },
 
-// DELAY / REVERB (HALL)
-            {
+        // DELAY / REVERB (HALL)
+        {
             0,         // Delay Wet/Dry
             1,                     // Delay Time
             2,                      // Delay Feedback
@@ -771,10 +771,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             5,                     // Reverb Decay Time
             4,                     // Reverb Predelay
             6,                     // High Frequency Damping
-            },
+        },
 
-// DELAY / REVERB (ROOM)
-            {
+        // DELAY / REVERB (ROOM)
+        {
             0,         // Delay Wet/Dry
             1,                     // Delay Time
             2,                      // Delay Feedback
@@ -782,10 +782,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             5,                     // Reverb Decay Time
             4,                     // Reverb Predelay
             6,                     // High Frequency Damping
-            },
+        },
 
-// DELAY/CHORUS
-            {
+        // DELAY/CHORUS
+        {
             0,         // Delay Wet/Dry
             1,                     // Delay Time
             2,                      // Delay Feedback
@@ -793,10 +793,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             5,                     // LFO Depth
             4,           // LFO Rate
             6,                      // Chorus Feedback
-            },
+        },
 
-// DELAY/FLANGER
-            {
+        // DELAY/FLANGER
+        {
             0,         // Delay Wet/Dry
             1,                     // Delay Time
             2,                      // Delay Feedback
@@ -804,10 +804,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             5,                     // LFO Depth
             4,           // LFO Rate
             6,                      // Chorus Feedback
-            },
+        },
 
-// DELAY/DISTORTION
-            {
+        // DELAY/DISTORTION
+        {
             0,         // Delay Dry/Wet
             1,                     // Delay Time
             2,                      // Delay Feedback
@@ -815,10 +815,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             4,                     // Hot Spot
             5,                     // Resonance
             6,                     // Distortion Output Level
-            },
+        },
 
-// DELAY/PHASER
-            {
+        // DELAY/PHASER
+        {
             0,         // Wet/Dry
             1,                     // Delay Time
             2,                      // Delay Feedback
@@ -826,10 +826,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             5,                     // LFO Depth
             4,           // LFO Rate
             6,                      // Phaser Feedback
-            },
+        },
 
-// DELAY/ROTARY
-            {
+        // DELAY/ROTARY
+        {
             0,         // Delay Wet/Dry
             1,                     // Delay Time
             2,                      // Delay Feedback
@@ -837,20 +837,20 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             7,           // Fast Speed
             5,                                // Speed Mod Source
             4,                     // Acceleration
-            },
+        },
 
-// PITCH SHIFT
-            {
+        // PITCH SHIFT
+        {
             0,         // Wet/Dry (Delay)
             1,                                // Mix Mod Source
             2,                      // Mix Mod Amount
             3,                     // Pitch Shift
             4,                     // Delay Left
             5,                     // Delay Right
-            },
+        },
 
-// MODULATABLE PITCH-SHIFTER DELAY
-            {
+        // MODULATABLE PITCH-SHIFTER DELAY
+        {
             0,         // Wet/Dry (Delay)
             1,                                // Mix Modulation Source
             2,                      // Mix Modulation Amount
@@ -861,20 +861,20 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             8,                     // Delay Left
             7,                     // Delay Right          (interesting, backwards)
             9,                     // Feedback
-            },
+        },
 
-// STEREO COMPRESSOR-LIMITER/GATE
-            {
+        // STEREO COMPRESSOR-LIMITER/GATE
+        {
             0,          // Control Source
             1,                     // Sensitivity
             2,                     // Compression Ratio
             3,                     // Compression Threshold
             4,                     // Gate Threshold
             5,                     // Output Level
-            },
+        },
 
-// SMALL VOCODER
-            {
+        // SMALL VOCODER
+        {
             0,                                // Modulator Bus
             1,                     // Modulator Sensitivity
             2,                                // Carrier Bus
@@ -882,10 +882,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             4,                     // Sibilance
             5,                                // Sibiliance Mod Source
             6,                      // Sibilance Mod Amount
-            },
+        },
 
-// STEREO VOCODER,
-            {
+        // STEREO VOCODER,
+        {
             0,                                // Modulator Bus
             1,                     // Modulator Sensitivity
             2,                                // Carrier Bus
@@ -897,9 +897,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             8,                     // Delay Time
             9,                     // Delay Feedback
             10,                    // Delay Level
-            },
+        },
 
-        };
+    };
 
 
 
@@ -911,8 +911,8 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
 
     public static final int[][][] FX_PCL_LIST = new int[][][] {
-            {
-//// HEADER INFORMATION [STORED HERE AS PCL 0]
+        {
+            //// HEADER INFORMATION [STORED HERE AS PCL 0]
             { 2, 0, 4, 0, 0 }, // p0 = mix 3 level
             { 3, 0, 4, 1, 0 }, // p1 = mix 3 mod src
             { 4, 0, 4, 2, 0 }, // p2 = mix 3 mod amt
@@ -921,10 +921,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 3, 4, 4, 4, 0 }, // p4 = mix 4 mod src
             { 4, 4, 4, 5, 0 }, // p5 = mix 4 mod amt
             { 1, 6, -1, 5, 4 }, // p2 = mix 4 mod amt (sign)
-            },
+        },
             
-// REVERB EQ
-            {
+        // REVERB EQ
+        {
             { 0, 0, 4, 0, 0 }, // p0 = dry/wet mix level
             { 6, 5, 3, 0, 4 }, // p0 = dry/wet mix level (high)
             { 0, 4, 4, 1, 0 }, // p1 = dry/wet mix mod src
@@ -940,10 +940,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 4, 7, -1, 8, 4 }, // p8 = reserved for future use
             { 6, 0, -5, 11, 0 }, // p11 = low EQ
             { 7, 0, -5, 12, 0 }, // p12 = high EQ
-            },
+        },
 
-// REVERB EQ (LARGE HALL ONLY)
-            {
+        // REVERB EQ (LARGE HALL ONLY)
+        {
             { 0, 0, 4, 0, 0 }, // p0 = dry/wet mix level
             { 6, 5, 3, 0, 4 }, // p0 = dry/wet mix level (high)
             { 0, 4, 4, 1, 0 }, // p1 = dry/wet mix mod src
@@ -959,10 +959,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 4, 7, -1, 8, 4 }, // p8 = reserved for future use
             { 6, 0, -5, 11, 0 }, // p11 = low EQ
             { 7, 0, -5, 12, 0 }, // p12 = high EQ
-            },
+        },
 
-// EARLY REFLECTIONS
-            {
+        // EARLY REFLECTIONS
+        {
             { 0, 0, 7, 0, 0 }, // p0 = dry/wet mix level
             { 1, 0, 4, 1, 0 }, // p1 = dry/wet mix mod src
             { 2, 0, -5, 2, 0 }, // p2 = dry/wet mix mod amt
@@ -970,20 +970,20 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 4, 0, 8, 4, 0 }, // p4 = decay time
             { 5, 0, -5, 5, 0 }, // p5 = low EQ
             { 6, 0, -5, 6, 0 }, // p6 = high EQ
-            },
-            {
+        },
+        {
 
-// GATED REVERB
+            // GATED REVERB
             { 0, 0, 7, 0, 0 }, // p0 = dry/wet mix level
             { 1, 0, 7, 1, 0 }, // p1 = gate hold time
             { 2, 0, 4, 2, 0 }, // p2 = key source
             { 3, 0, 8, 3, 0 }, // p3 = threshold
             { 4, 0, 8, 4, 0 }, // p4 = pre delay
             { 5, 0, 8, 5, 0 }, // p5 = decay time
-            },
+        },
 
-// STEREO DELAY AND PING PONG DELAY
-            {
+        // STEREO DELAY AND PING PONG DELAY
+        {
             { 0, 0, 4, 0, 0 }, // p0 = dry/wet mix level (low)
             { 7, 2, 3, 0, 4 }, // p0 = dry/wet mix level (high)
             { 0, 4, 4, 1, 0 }, // p1 = dry/wet mix mod src
@@ -997,10 +997,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 2, 0, -8, 5, 0 }, // p5 = delay mod amt
             { 3, 0, 6, 7, 0 }, // p7 = delay factor
             { 4, 0, -8, 13, 0 }, // p13 = feedback
-            },
+        },
 
-// DUAL MONO DELAY
-            {
+        // DUAL MONO DELAY
+        {
             { 0, 0, 4, 0, 0 }, // p0 = dry/wet mix left
             { 1, 0, 8, 1, 0 }, // p1 = delay time left (low)
             { 2, 0, 2, 1, 8 }, // p1 = delay time left (high)
@@ -1009,10 +1009,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 5, 0, 8, 4, 0 }, // p4 = delay time left (low)
             { 6, 0, 2, 4, 8 }, // p4 = delay time left (high)
             { 7, 0, -8, 5, 0 }, // p5 = feedback left
-            },
+        },
 
-// MULTI-TAP DELAY
-            {
+        // MULTI-TAP DELAY
+        {
             { 0, 0, 4, 0, 0 }, // p0 = dry/wet mix (low)
             { 7, 5, 3, 0, 4 }, // p0 = dry/wet mix (high)
             { 0, 4, 4, 1, 0 }, // p1 = dry/wet mix mod source
@@ -1027,10 +1027,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 5, 0, -8, 8, 0 }, // p8 = feedback
             { 6, 0, -5, 9, 0 }, // p9 = low EQ
             { 7, 0, -5, 10, 0 }, // p10 = high EQ
-            },
+        },
 
-// STEREO CHORUS AND CROSSOVER CHORUS
-            {
+        // STEREO CHORUS AND CROSSOVER CHORUS
+        {
             { 6, 7, 1, 1, 0 }, // p1 = footswitch enable
             { 0, 0, 8, 3, 0 }, // p3 = delay time left
             { 4, 7, 1, 3, 8 }, // p3 = delay time left (high bit)
@@ -1044,10 +1044,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 5, 0, -7, 9, 0 }, // p9 = LFO shape
             { 6, 0, -5, 10, 0 }, // p10 = low EQ
             { 7, 0, -5, 11, 0 }, // p11 = high EQ
-            },
+        },
 
-// HARMONIC CHORUS
-            {
+        // HARMONIC CHORUS
+        {
             { 6, 7, 1, 1, 0 }, // p1 = footswitch enable
             { 0, 0, 8, 2, 0 }, // p2 = delay left
             { 5, 7, 1, 2, 8 }, // p2 = delay left (high bit)
@@ -1060,10 +1060,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 4, 0, 4, 8, 0 }, // p8 = LFO depth mod src
             { 5, 0, -5, 9, 0 }, // p9 = LFO depth mod amt
             { 6, 0, 7, 10, 0 }, // p10 = split point
-            },
+        },
 
-// FLANGER
-            {
+        // FLANGER
+        {
             { 7, 0, -5, 0, 0 }, // p0 = output mix
             { 1, 7, 1, 1, 0 }, // p1 = footswitch enable
             { 0, 0, 8, 3, 0 }, // p3 = top delay
@@ -1076,10 +1076,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 6, 4, 4, 10, 0 }, // p10 = high EQ
             { 3, 4, -1, 9, 5 }, // p9 = low EQ (sign)
             { 3, 5, -1, 10, 5 }, // p10 = high EQ (sign)
-            },
+        },
 
-// ENHANCER / EXCITER
-            {
+        // ENHANCER / EXCITER
+        {
             { 0, 0, 4, 0, 0 }, // p0 = dry/wet mix
             { 1, 0, 7, 1, 0 }, // p1 = harmonic density
             { 2, 0, 4, 2, 0 }, // p2 = hot spot
@@ -1087,10 +1087,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 4, 0, 7, 4, 0 }, // p4 = delay
             { 5, 0, -5, 5, 0 }, // p5 = low EQ
             { 6, 0, -5, 6, 0 }, // p6 = high EQ
-            },
+        },
 
-// DISTORTION / FILTER
-            {
+        // DISTORTION / FILTER
+        {
             { 0, 0, 4, 0, 0 }, // p0 = dry/wet mix
             { 2, 7, 1, 1, 0 }, // p1 = footswitch enable
             { 1, 0, 8, 2, 0 }, // p2 = edge (drive level)
@@ -1105,10 +1105,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 4, 7, 1, 10, 3 }, // p9 = level mod source (high bit)
             { 5, 5, 3, 11, 0 }, // p9 = level mod amount
             { 6, 5, -2, 11, 3 }, // p9 = level mod amount (high bits)
-            },
+        },
 
-// STEREO PHASER
-            {
+        // STEREO PHASER
+        {
             { 0, 0, -5, 0, 0 }, // p0 = dry/wet mix
             { 1, 7, 1, 1, 0 }, // p1 = footswitch
             { 1, 0, 7, 2, 0 }, // p2 = center
@@ -1119,10 +1119,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 5, 0, 4, 7, 0 }, // p7 = LFO depth mod source
             { 6, 0, -5, 8, 0 }, // p8 = LFO depth mod amount
             { 7, 0, -8, 9, 0 }, // p9 = feedback
-            },
+        },
 
-// ROTARY SPEAKER
-            {
+        // ROTARY SPEAKER
+        {
             { 6, 0, 4, 0, 0 }, // p0 = dry/wet mix
             { 6, 4, 1, 1, 0 }, // p1 = footswitch enable
             { 5, 4, 4, 2, 0 }, // p2 = vibrato depth
@@ -1132,10 +1132,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 2, 0, 8, 7, 0 }, // p7 = rotor fast speed
             { 1, 0, 8, 8, 0 }, // p8 = reserved for future use
             { 0, 0, 8, 9, 0 }, // p9 = reserved for future use
-            },
+        },
 
-// STEREO MOD PAN
-            {
+        // STEREO MOD PAN
+        {
             { 0, 0, 4, 0, 0 }, // p0 = dry/wet mix
             { 0, 4, 4, 1, 0 }, // p1 = dry/wet mix mod source
             { 1, 0, -5, 2, 0 }, // p2 = dry/wet mix mod amount
@@ -1145,10 +1145,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 4, 0, -5, 6, 0 }, // p6 = LFO depth mod amount
             { 5, 0, -5, 7, 0 }, // p7 = low EQ
             { 6, 0, -5, 8, 0 }, // p8 = high EQ
-            },
+        },
 
-// STEREO PARAMETRIC EQ
-            {
+        // STEREO PARAMETRIC EQ
+        {
             { 6, 0, 6, 0, 0 }, // p0 = low freq
             { 0, 0, 4, 1, 0 }, // p1 = low level (low)
             { 1, 7, -1, 1, 4 }, // p1 = low level (high)
@@ -1161,10 +1161,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 7, 0, 6, 7, 0 }, // p7 = high freq
             { 4, 4, 4, 8, 0 }, // p8 = high level (low)
             { 5, 5, -1, 8, 4 }, // p8 = high level (high)
-            },
+        },
 
-// CHORUS / DELAY
-            {
+        // CHORUS / DELAY
+        {
             { 5, 4, 4, 0, 0 }, // p0 = chorus/flanger delay time (low)
             { 6, 5, 2, 0, 4 }, // p0 = chorus/flanger delay time (high)
             { 0, 0, 8, 1, 0 }, // p1 = LFO rate
@@ -1178,10 +1178,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 4, 0, -8, 8, 0 }, // p8 = echo feedback
             { 6, 0, -5, 9, 0 }, // p9 = low EQ
             { 7, 0, -5, 10, 0 }, // p10 = high EQ
-            },
+        },
 
-// FLANGER / DELAY
-            {
+        // FLANGER / DELAY
+        {
             { 5, 4, 4, 0, 0 }, // p0 = chorus/flanger delay time (low)
             { 6, 5, 2, 0, 4 }, // p0 = chorus/flanger delay time (high)
             { 0, 0, 8, 1, 0 }, // p1 = LFO rate
@@ -1195,10 +1195,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 4, 0, -8, 8, 0 }, // p8 = echo feedback
             { 6, 0, -5, 9, 0 }, // p9 = low EQ
             { 7, 0, -5, 10, 0 }, // p10 = high EQ
-            },
+        },
 
-// DELAY / REVERB (HALL)
-            {
+        // DELAY / REVERB (HALL)
+        {
             { 0, 0, 4, 0, 0 }, // p0 = dly dry/wet mix
             { 1, 0, 8, 1, 0 }, // p1 = dly delay time (low)
             { 2, 0, 2, 1, 8 }, // p1 = dly delay time (high)
@@ -1208,10 +1208,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 2, 2, 2, 4, 0 }, // p4 = reverb pre-delay (high)
             { 6, 0, 7, 5, 0 }, // p5 = reverb decay time
             { 7, 0, 7, 6, 0 }, // p6 = reverb HF damping
-            },
+        },
 
-// DELAY / REVERB (ROOM)
-            {
+        // DELAY / REVERB (ROOM)
+        {
             { 0, 0, 4, 0, 0 }, // p0 = dly dry/wet mix
             { 1, 0, 8, 1, 0 }, // p1 = dly delay time (low)
             { 2, 0, 2, 1, 8 }, // p1 = dly delay time (high)
@@ -1221,10 +1221,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 2, 2, 2, 4, 0 }, // p4 = reverb pre-delay (high)
             { 6, 0, 7, 5, 0 }, // p5 = reverb decay time
             { 7, 0, 7, 6, 0 }, // p6 = reverb HF damping
-            },
+        },
 
-// DELAY/CHORUS
-            {
+        // DELAY/CHORUS
+        {
             { 0, 0, 4, 0, 0 }, // p0 = dly dry/wet mix
             { 1, 0, 8, 1, 0 }, // p1 = dly delay time (low)
             { 2, 0, 2, 1, 8 }, // p1 = dly delay time (high)
@@ -1233,10 +1233,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 5, 0, 8, 4, 0 }, // p4 = flgr/chr LFO rate
             { 6, 0, 7, 5, 0 }, // p5 = flgr/chr LFO depth
             { 7, 0, -8, 6, 0 }, // p6 = flgr/chr feedback
-            },
+        },
 
-// DELAY/FLANGER
-            {
+        // DELAY/FLANGER
+        {
             { 0, 0, 4, 0, 0 }, // p0 = dly dry/wet mix
             { 1, 0, 8, 1, 0 }, // p1 = dly delay time (low)
             { 2, 0, 2, 1, 8 }, // p1 = dly delay time (high)
@@ -1245,10 +1245,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 5, 0, 8, 4, 0 }, // p4 = flgr/chr LFO rate
             { 6, 0, 7, 5, 0 }, // p5 = flgr/chr LFO depth
             { 7, 0, -8, 6, 0 }, // p6 = flgr/chr feedback
-            },
+        },
 
-// DELAY/DISTORTION AND DELAY/OVERDRIVE
-            {
+        // DELAY/DISTORTION AND DELAY/OVERDRIVE
+        {
             { 0, 0, 4, 0, 0 }, // p0 = dly dry/wet mix
             { 1, 0, 8, 1, 0 }, // p1 = dly delay time (low)
             { 2, 0, 2, 1, 8 }, // p1 = dly delay time (high)
@@ -1257,10 +1257,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 5, 0, 8, 4, 0 }, // p4 = hot spot (filter frequency)
             { 6, 0, 8, 5, 0 }, // p5 = filter resonance
             { 7, 0, 8, 6, 0 }, // p6 = distortion level
-            },
+        },
 
-// DELAY/PHASER
-            {
+        // DELAY/PHASER
+        {
             { 0, 0, 4, 0, 0 }, // p0 = dly dry/wet mix
             { 1, 0, 8, 1, 0 }, // p1 = dly delay time (low)
             { 2, 0, 2, 1, 8 }, // p1 = dly delay time (high)
@@ -1269,10 +1269,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 5, 0, 8, 4, 0 }, // p4 = phaser LFO rate
             { 6, 0, 7, 5, 0 }, // p5 = phaser LFO depth
             { 7, 0, -8, 6, 0 }, // p6 = phaser feedback
-            },
+        },
 
-// DELAY/ROTARY
-            {
+        // DELAY/ROTARY
+        {
             { 0, 0, 4, 0, 0 }, // p0 = dly dry/wet mix
             { 1, 0, 8, 1, 0 }, // p1 = dly delay time (low)
             { 2, 0, 2, 1, 8 }, // p1 = dly delay time (high)
@@ -1281,10 +1281,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 6, 4, 4, 5, 0 }, // p5 = rotor speed mod source
             { 4, 0, 8, 6, 0 }, // p6 = slow rotor speed
             { 5, 0, 8, 7, 0 }, // p7 = fast rotor speed
-            },
+        },
 
-// PITCH SHIFT
-            {
+        // PITCH SHIFT
+        {
             { 0, 0, 8, 0, 0 }, // p0 = dry/wet mix
             { 1, 0, 8, 1, 0 }, // p1 = dry/wet mix mod source
             { 2, 0, 8, 2, 0 }, // p2 = dry/wet mix mod amount
@@ -1293,21 +1293,21 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 6, 0, 1, 4, 8 }, // p4 = delay left (high bit)
             { 5, 0, 8, 5, 0 }, // p5 = delay right
             { 7, 0, 1, 5, 8 }, // p5 = delay right (high bit)
-            },
+        },
 
-//*********************************************************************
-//*                                                                                                                                                     *
-//*             NOTE:   All effects after this point are expanded mode effects.         *
-//*                             The first four bits of p0 must be left blank to allow           *
-//*                             room for the macro number.                                                                      *
-//*                                                                                                                                                     *
-//*{ 0, 0, 4, x, x }, // p0 = macro number      (reserved)                      *
-//*                                                                                                                                                     *
-//*********************************************************************
+        //*********************************************************************
+        //*                                                                                                                                                     *
+        //*             NOTE:   All effects after this point are expanded mode effects.         *
+        //*                             The first four bits of p0 must be left blank to allow           *
+        //*                             room for the macro number.                                                                      *
+        //*                                                                                                                                                     *
+        //*{ 0, 0, 4, x, x }, // p0 = macro number      (reserved)                      *
+        //*                                                                                                                                                     *
+        //*********************************************************************
 
 
-// MODULATABLE PITCH-SHIFTER DELAY
-            {
+        // MODULATABLE PITCH-SHIFTER DELAY
+        {
             { 0, 4, 4, 0, 0 }, // p0 = dry/wet mix
             { 1, 0, 4, 1, 0 }, // p1 = dry/wet mix mod source
             { 1, 4, 4, 2, 0 }, // p2 = dry/wet mix mod amount
@@ -1322,20 +1322,20 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 6, 0, 8, 8, 0 }, // p8 = delay left
             { 4, 7, 1, 8, 8 }, // p8 = delay left (high bit)
             { 7, 0, 8, 9, 0 }, // p9 = feedback
-            },
+        },
 
-// STEREO COMPRESSOR-LIMITER/GATE
-            {
+        // STEREO COMPRESSOR-LIMITER/GATE
+        {
             { 1, 0, 5, 0, 0 }, // p0 = control source
             { 2, 0, 7, 1, 0 }, // p1 = control sensitivity
             { 3, 0, 7, 2, 0 }, // p2 = compression ratio
             { 4, 0, 7, 3, 0 }, // p3 = compression threshold
             { 5, 0, 7, 4, 0 }, // p4 = gate threshold
             { 6, 0, 7, 5, 0 }, // p5 = output level
-            },
+        },
 
-// SMALL VOCODER
-            {
+        // SMALL VOCODER
+        {
             { 0, 4, 2, 0, 0 }, // p0 = modulator bus
             { 1, 0, 7, 1, 0 }, // p1 = modulator sensitivity
             { 0, 6, 2, 2, 0 }, // p2 = carrier bus
@@ -1343,10 +1343,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 3, 0, 4, 4, 0 }, // p4 = sibilance
             { 3, 4, 4, 5, 0 }, // p5 = sibilance mod src
             { 4, 0, -5, 6, 0 }, // p6 = sibilance mod amt
-            },
+        },
 
-// STEREO VOCODER
-            {
+        // STEREO VOCODER
+        {
             { 3, 4, 2, 0, 0 }, // p0 = modulator bus
             { 2, 0, 7, 1, 0 }, // p1 = modulator sensitivity
             { 3, 6, 2, 2, 0 }, // p2 = carrier bus
@@ -1361,16 +1361,16 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 7, 7, 1, 8, 9 }, // p8 = delay time (bit9)
             { 6, 0, 7, 9, 0 }, // p9 = delay feedback
             { 7, 0, 7, 10, 0 }, // p10 = delay level
-            }
-        };
+        }
+    };
 
 
 
     public static final int[][] FX_PRESETS = new int[][] {
-/////           **** Off ****
+        /////           **** Off ****
         { }, 
-/////           **** Small Hall Reverb ****
-            {
+        /////           **** Small Hall Reverb ****
+        {
             14      ,       //p0 = dry/wet mix level
             1       ,       //p0 = dry/wet mix level (high)
             0       ,       //p1 = dry/wet mix mod src
@@ -1387,9 +1387,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             -2      ,       //p11 = low EQ
             0       ,       //p12 = high EQ
 
-            },
-/////           **** Medium Hall Reverb ****
-            {
+        },
+        /////           **** Medium Hall Reverb ****
+        {
             14      ,       //p0 = dry/wet mix level
             1       ,       //p0 = dry/wet mix level (high)
             0       ,       //p1 = dry/wet mix mod src
@@ -1406,9 +1406,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             -2      ,       //p11 = low EQ
             -2      ,       //p12 = high EQ
 
-            },
-/////           **** Large Hall Reverb ****
-            {
+        },
+        /////           **** Large Hall Reverb ****
+        {
             14      ,       //p0 = dry/wet mix level
             1       ,       //p0 = dry/wet mix level (high)
             0       ,       //p1 = dry/wet mix mod src
@@ -1425,9 +1425,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p11 = low EQ
             -2      ,       //p12 = high EQ
 
-            },
-/////           **** Small Room Reverb ****
-            {
+        },
+        /////           **** Small Room Reverb ****
+        {
             13      ,       //p0 = dry/wet mix level
             2       ,       //p0 = dry/wet mix level (high)
             0       ,       //p1 = dry/wet mix mod src
@@ -1444,9 +1444,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             1       ,       //p11 = low EQ
             -1      ,       //p12 = high EQ
 
-            },
-/////           **** Large Room Reverb ****
-            {
+        },
+        /////           **** Large Room Reverb ****
+        {
             3       ,       //p0 = dry/wet mix level
             2       ,       //p0 = dry/wet mix level (high)
             0       ,       //p1 = dry/wet mix mod src
@@ -1463,9 +1463,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             1       ,       //p11 = low EQ
             -4      ,       //p12 = high EQ
 
-            },
-/////           **** Live Stage Reverb ****
-            {
+        },
+        /////           **** Live Stage Reverb ****
+        {
             3       ,       //p0 = dry/wet mix level
             2       ,       //p0 = dry/wet mix level (high)
             0       ,       //p1 = dry/wet mix mod src
@@ -1482,9 +1482,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             -1      ,       //p11 = low EQ
             -1      ,       //p12 = high EQ
 
-            },
-/////           **** Wet Plate Reverb ****
-            {
+        },
+        /////           **** Wet Plate Reverb ****
+        {
             14      ,       //p0 = dry/wet mix level
             1       ,       //p0 = dry/wet mix level (high)
             0       ,       //p1 = dry/wet mix mod src
@@ -1501,9 +1501,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             -1      ,       //p11 = low EQ
             -1      ,       //p12 = high EQ
 
-            },
-/////           **** Dry Plate Reverb ****
-            {
+        },
+        /////           **** Dry Plate Reverb ****
+        {
             4       ,       //p0 = dry/wet mix level
             1       ,       //p0 = dry/wet mix level (high)
             0       ,       //p1 = dry/wet mix mod src
@@ -1520,9 +1520,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             2       ,       //p11 = low EQ
             6       ,       //p12 = high EQ
 
-            },
-/////           **** Spring Reverb ****
-            {
+        },
+        /////           **** Spring Reverb ****
+        {
             4       ,       //p0 = dry/wet mix level
             1       ,       //p0 = dry/wet mix level (high)
             0       ,       //p1 = dry/wet mix mod src
@@ -1539,9 +1539,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             3       ,       //p11 = low EQ
             4       ,       //p12 = high EQ
 
-            },
-/////           **** Early Reflections - EQ 1 ****
-            {
+        },
+        /////           **** Early Reflections - EQ 1 ****
+        {
             50      ,       //p0 = dry/wet mix level
             0       ,       //p1 = dry/wet mix mod src
             0       ,       //p2 = dry/wet mix mod amt
@@ -1550,9 +1550,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p5 = low EQ
             0       ,       //p6 = high EQ
 
-            },
-/////           **** Early Reflections - EQ 2 ****
-            {
+        },
+        /////           **** Early Reflections - EQ 2 ****
+        {
             50      ,       //p0 = dry/wet mix level
             0       ,       //p1 = dry/wet mix mod src
             0       ,       //p2 = dry/wet mix mod amt
@@ -1561,9 +1561,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p5 = low EQ
             0       ,       //p6 = high EQ
 
-            },
-/////           **** Early Reflections - EQ 3 ****
-            {
+        },
+        /////           **** Early Reflections - EQ 3 ****
+        {
             50      ,       //p0 = dry/wet mix level
             0       ,       //p1 = dry/wet mix mod src
             0       ,       //p2 = dry/wet mix mod amt
@@ -1572,9 +1572,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p5 = low EQ
             0       ,       //p6 = high EQ
 
-            },
-/////           **** Forward Gated Reverb ****
-            {
+        },
+        /////           **** Forward Gated Reverb ****
+        {
             50      ,       //p0 = dry/wet mix level
             10      ,       //p1 = gate hold time
             6       ,       //p2 = key source
@@ -1582,9 +1582,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p4 = pre delay
             30      ,       //p5 = decay time
 
-            },
-/////           **** Reverse Gated Reverb ****
-            {
+        },
+        /////           **** Reverse Gated Reverb ****
+        {
             50      ,       //p0 = dry/wet mix level
             30      ,       //p1 = gate hold time
             6       ,       //p2 = key source
@@ -1592,9 +1592,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             20      ,       //p4 = pre delay
             35      ,       //p5 = decay time
 
-            },
-/////           **** Stereo Delay ****
-            {
+        },
+        /////           **** Stereo Delay ****
+        {
             8       ,       //p0 = dry/wet mix level (low)
             2       ,       //p0 = dry/wet mix level (high)
             0       ,       //p1 = dry/wet mix mod src
@@ -1609,9 +1609,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             1       ,       //p7 = delay factor
             40      ,       //p13 = feedback
 
-            },
-/////           **** Ping-Pong Delay ****
-            {
+        },
+        /////           **** Ping-Pong Delay ****
+        {
             8       ,       //p0 = dry/wet mix level (low)
             2       ,       //p0 = dry/wet mix level (high)
             0       ,       //p1 = dry/wet mix mod src
@@ -1626,9 +1626,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p7 = delay factor
             40      ,       //p13 = feedback
 
-            },
-/////           **** Dual Mono Delay ****
-            {
+        },
+        /////           **** Dual Mono Delay ****
+        {
             5       ,       //p0 = dry/wet mix left
             200     ,       //p1 = delay left (low)
             0       ,       //p1 = delay left (high)
@@ -1638,9 +1638,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             1       ,       //p4 = delay right (high)
             45      ,       //p5 = feedback right
 
-            },
-/////           **** Multi-tap Delay - EQ 1 ****
-            {
+        },
+        /////           **** Multi-tap Delay - EQ 1 ****
+        {
             2       ,       //p0 = dry/wet mix (low)
             3       ,       //p0 = dry/wet mix (high)
             0       ,       //p1 = dry/wet mix mod source
@@ -1656,9 +1656,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p9 = low EQ
             0       ,       //p10 = high EQ
 
-            },
-/////           **** Multi-tap Delay - EQ 2 ****
-            {
+        },
+        /////           **** Multi-tap Delay - EQ 2 ****
+        {
             2       ,       //p0 = dry/wet mix (low)
             3       ,       //p0 = dry/wet mix (high)
             0       ,       //p1 = dry/wet mix mod source
@@ -1674,9 +1674,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p9 = low EQ
             0       ,       //p10 = high EQ
 
-            },
-/////           **** Multi-tap Delay - EQ 3 ****
-            {
+        },
+        /////           **** Multi-tap Delay - EQ 3 ****
+        {
             2       ,       //p0 = dry/wet mix (low)
             3       ,       //p0 = dry/wet mix (high)
             0       ,       //p1 = dry/wet mix mod source
@@ -1692,9 +1692,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p9 = low EQ
             0       ,       //p10 = high EQ
 
-            },
-/////           **** Stereo Chorus - EQ ****
-            {
+        },
+        /////           **** Stereo Chorus - EQ ****
+        {
             0       ,       //p1 = footswitch enable
             11      ,       //p3 = delay time left
             0       ,       //p3 = delay time left (high bit)
@@ -1709,9 +1709,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p10 = low EQ
             0       ,       //p11 = high EQ
 
-            },
-/////           **** Quadrature Chorus - EQ ****
-            {
+        },
+        /////           **** Quadrature Chorus - EQ ****
+        {
             0       ,       //p1 = footswitch enable
             11      ,       //p3 = delay time left
             0       ,       //p3 = delay time left (high bit)
@@ -1726,9 +1726,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p10 = low EQ
             0       ,       //p11 = high EQ
 
-            },
-/////           **** Crossover Chorus - EQ ****
-            {
+        },
+        /////           **** Crossover Chorus - EQ ****
+        {
             0       ,       //p1 = footswitch enable
             11      ,       //p3 = delay time left
             0       ,       //p3 = delay time left (high bit)
@@ -1743,9 +1743,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p10 = low EQ
             0       ,       //p11 = high EQ
 
-            },
-/////           **** Harmonic Chorus ****
-            {
+        },
+        /////           **** Harmonic Chorus ****
+        {
             0       ,       //p1 = footswitch enable
             22      ,       //p2 = delay left
             0       ,       //p2 = delay left (high bit)
@@ -1759,9 +1759,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             -7      ,       //p9 = LFO depth mod amt
             1       ,       //p10 = split point
 
-            },
-/////           **** Stereo Flanger - EQ 1 ****
-            {
+        },
+        /////           **** Stereo Flanger - EQ 1 ****
+        {
             -8      ,       //p0 = output mix
             0       ,       //p1 = footswitch enable
             5       ,       //p3 = top delay
@@ -1775,9 +1775,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p9 = low EQ (sign)
             0       ,       //p10 = high EQ (sign)
 
-            },
-/////           **** Stereo Flanger - EQ 2 ****
-            {
+        },
+        /////           **** Stereo Flanger - EQ 2 ****
+        {
             5       ,       //p0 = output mix
             0       ,       //p1 = footswitch enable
             10      ,       //p3 = top delay
@@ -1791,9 +1791,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p9 = low EQ (sign)
             0       ,       //p10 = high EQ (sign)
 
-            },
-/////           **** Crossover Flanger - EQ ****
-            {
+        },
+        /////           **** Crossover Flanger - EQ ****
+        {
             -5      ,       //p0 = output mix
             0       ,       //p1 = footswitch enable
             50      ,       //p3 = top delay
@@ -1807,9 +1807,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p9 = low EQ (sign)
             0       ,       //p10 = high EQ (sign)
 
-            },
-/////           **** Enhancer - Exciter - EQ ****
-            {
+        },
+        /////           **** Enhancer - Exciter - EQ ****
+        {
             11      ,       //p0 = dry/wet mix
             80      ,       //p1 = harmonic density
             1       ,       //p2 = hot spot
@@ -1817,9 +1817,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             25      ,       //p4 = delay
             1       ,       //p5 = low EQ
             1       ,       //p6 = high EQ
-            },
-/////           **** Distortion-Filter-EQ ****
-            {
+        },
+        /////           **** Distortion-Filter-EQ ****
+        {
             10      ,       //p0 = dry/wet mix
             0       ,       //p1 = footswitch enable
             111     ,       //p2 = edge (drive level)
@@ -1835,9 +1835,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p11 = level mod amount
             0       ,       //p11 = level mod amount (high bits)
 
-            },
-/////           **** Overdrive-Filter-EQ ****
-            {
+        },
+        /////           **** Overdrive-Filter-EQ ****
+        {
             10      ,       //p0 = dry/wet mix
             0       ,       //p1 = footswitch enable
             50      ,       //p2 = edge (drive level)
@@ -1853,9 +1853,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p11 = level mod amount
             0       ,       //p11 = level mod amount (high bits)
 
-            },
-/////           **** Stereo Phaser 1 ****
-            {
+        },
+        /////           **** Stereo Phaser 1 ****
+        {
             -5      ,       //p0 = dry/wet mix
             0       ,       //p1 = footswitch
             40      ,       //p2 = center
@@ -1867,9 +1867,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p8 = LFO depth mod amount
             70      ,       //p9 = feedback
 
-            },
-/////           **** Stereo Phaser 2 ****
-            {
+        },
+        /////           **** Stereo Phaser 2 ****
+        {
             5       ,       //p0 = dry/wet mix
             0       ,       //p1 = footswitch
             27      ,       //p2 = center
@@ -1881,9 +1881,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p8 = LFO depth mod amount
             -30     ,       //p9 = feedback
 
-            },
-/////           **** Rotary Speaker ****
-            {
+        },
+        /////           **** Rotary Speaker ****
+        {
             10      ,       //p0 = dry/wet mix
             0       ,       //p1 = footswitch enable
             9       ,       //p2 = vibrato depth
@@ -1894,9 +1894,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             20      ,       //p8 = reserved for future use
             60      ,       //p9 = reserved for future use
 
-            },
-/////           **** Stereo mod-pan - EQ ****
-            {
+        },
+        /////           **** Stereo mod-pan - EQ ****
+        {
             11      ,       //p0 = dry/wet mix
             0       ,       //p1 = dry/wet mix mod source
             0       ,       //p2 = dry/wet mix mod amount
@@ -1907,9 +1907,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p7 = low EQ
             0       ,       //p8 = high EQ
 
-            },
-/////           **** Quadrature mod-pan - EQ ****
-            {
+        },
+        /////           **** Quadrature mod-pan - EQ ****
+        {
             11      ,       //p0 = dry/wet mix
             0       ,       //p1 = dry/wet mix mod source
             0       ,       //p2 = dry/wet mix mod amount
@@ -1920,9 +1920,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p7 = low EQ
             0       ,       //p8 = high EQ
 
-            },
-/////           **** Stereo Parametric EQ ****
-            {
+        },
+        /////           **** Stereo Parametric EQ ****
+        {
             12      ,       //p0 = low freq
             12      ,       //p1 = low gain (low)
             0       ,       //p1 = low gain (high)
@@ -1936,9 +1936,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             12      ,       //p8 = high gain (low)
             0       ,       //p8 = high gain (high)
 
-            },
-/////           **** Chorus-Stereo Delay ****
-            {
+        },
+        /////           **** Chorus-Stereo Delay ****
+        {
             27      ,       //p0 = chorus/flanger delay time (low)
             0       ,       //p0 = chorus/flanger delay time (high)
             30      ,       //p1 = LFO rate
@@ -1953,9 +1953,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             2       ,       //p9 = low EQ
             2       ,       //p10 = high EQ
 
-            },
-/////           **** Flanger-Stereo Delay ****
-            {
+        },
+        /////           **** Flanger-Stereo Delay ****
+        {
             0       ,       //p0 = chorus/flanger delay time (low)
             0       ,       //p0 = chorus/flanger delay time (high)
             10      ,       //p1 = LFO rate
@@ -1970,9 +1970,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p9 = low EQ
             0       ,       //p10 = high EQ
 
-            },
-/////           **** Delay/Hall ****
-            {
+        },
+        /////           **** Delay/Hall ****
+        {
             5       ,       //p0 = dly dry/wet mix
             250     ,       //p1 = dly delay time (low)
             0       ,       //p1 = dly delay time (high)
@@ -1983,9 +1983,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             99      ,       //p5 = reverb decay time
             30      ,       //p6 = reverb HF damping
 
-            },
-/////           **** Delay/Room ****
-            {
+        },
+        /////           **** Delay/Room ****
+        {
             5       ,       //p0 = dly dry/wet mix
             250     ,       //p1 = dly delay time (low)
             0       ,       //p1 = dly delay time (high)
@@ -1996,9 +1996,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             30      ,       //p5 = reverb decay time
             30      ,       //p6 = reverb HF damping
 
-            },
-/////           **** Delay/Chorus ****
-            {
+        },
+        /////           **** Delay/Chorus ****
+        {
             5       ,       //p0 = dly dry/wet mix
             250     ,       //p1 = dly delay time (low)
             0       ,       //p1 = dly delay time (high)
@@ -2008,9 +2008,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             50      ,       //p5 = chr LFO depth
             0       ,       //p6 = chr feedback
 
-            },
-/////           **** Delay/Flanger ****
-            {
+        },
+        /////           **** Delay/Flanger ****
+        {
             5       ,       //p0 = dly dry/wet mix
             250     ,       //p1 = dly delay time (low)
             0       ,       //p1 = dly delay time (high)
@@ -2020,9 +2020,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             50      ,       //p5 = flgr LFO depth
             85      ,       //p6 = flgr feedback
 
-            },
-/////           **** Delay/Distortion-filter ****
-            {
+        },
+        /////           **** Delay/Distortion-filter ****
+        {
             5       ,       //p0 = dly dry/wet mix
             250     ,       //p1 = dly delay time (low)
             0       ,       //p1 = dly delay time (high)
@@ -2032,9 +2032,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             75      ,       //p5 = filter resonance
             5       ,       //p6 = distortion level
 
-            },
-/////           **** Delay/Overdrive-filter ****
-            {
+        },
+        /////           **** Delay/Overdrive-filter ****
+        {
             5       ,       //p0 = dly dry/wet mix
             250     ,       //p1 = dly delay time (low)
             0       ,       //p1 = dly delay time (high)
@@ -2044,9 +2044,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p5 = filter resonance
             15      ,       //p6 = distortion level
 
-            },
-/////           **** Delay/Phaser ****
-            {
+        },
+        /////           **** Delay/Phaser ****
+        {
             5       ,       //p0 = dly dry/wet mix
             250     ,       //p1 = dly delay time (low)
             0       ,       //p1 = dly delay time (high)
@@ -2056,9 +2056,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             30      ,       //p5 = phaser LFO depth
             70      ,       //p6 = phaser feedback
 
-            },
-/////           **** Delay/Rotary Speaker ****
-            {
+        },
+        /////           **** Delay/Rotary Speaker ****
+        {
             5       ,       //p0 = dly dry/wet mix
             250     ,       //p1 = dly delay time (low)
             0       ,       //p1 = dly delay time (high)
@@ -2068,9 +2068,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             25      ,       //p6 = slow rotor speed
             70      ,       //p7 = fast rotor speed
 
-            },
-/////           **** Stereo Pitch Shifter ****
-            {
+        },
+        /////           **** Stereo Pitch Shifter ****
+        {
             6       ,       //p0 = dry/wet mix
             0       ,       //p1 = dry/wet mix mod source
             0       ,       //p2 = dry/wet mix mod amount
@@ -2079,9 +2079,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p4 = delay left (high bit)
             50      ,       //p5 = delay right
             0       ,       //p5 = delay right (high bit)
-            },
-/////           **** Mod Pitch Shift - Delay ****
-            {
+        },
+        /////           **** Mod Pitch Shift - Delay ****
+        {
             6       ,       //p0 = dry/wet mix
             0       ,       //p1 = dry/wet mix mod source
             0       ,       //p2 = dry/wet mix mod amount
@@ -2097,9 +2097,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p8 = delay left (high bit)
             20      ,       //p9 = feedback
 
-            },
-/////           **** Stereo Comp-Lim/Gate ****
-            {
+        },
+        /////           **** Stereo Comp-Lim/Gate ****
+        {
             0       ,       //p0 = control source
             100     ,       //p1 = control sensitivity
             95      ,       //p2 = compression ratio
@@ -2107,9 +2107,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             1       ,       //p4 = gate threshold
             20      ,       //p5 = output level
 
-            },
-/////           **** Small Vocoder 1 ****
-            {
+        },
+        /////           **** Small Vocoder 1 ****
+        {
             0       ,       //p0 = modulator bus
             50      ,       //p1 = modulator sensitivity
             1       ,       //p2 = carrier bus
@@ -2118,9 +2118,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             6       ,       //p5 = sibilance mod src
             8       ,       //p6 = sibilance mod amt
 
-            },
-/////           **** Small Vocoder 2 ****
-            {
+        },
+        /////           **** Small Vocoder 2 ****
+        {
             0       ,       //p0 = modulator bus
             50      ,       //p1 = modulator sensitivity
             1       ,       //p2 = carrier bus
@@ -2129,9 +2129,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             6       ,       //p5 = sibilance mod src
             8       ,       //p6 = sibilance mod amt
 
-            },
-/////           **** Small Vocoder 3 ****
-            {
+        },
+        /////           **** Small Vocoder 3 ****
+        {
             0       ,       //p0 = modulator bus
             50      ,       //p1 = modulator sensitivity
             1       ,       //p2 = carrier bus
@@ -2140,9 +2140,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             6       ,       //p5 = sibilance mod src
             8       ,       //p6 = sibilance mod amt
 
-            },
-/////           **** Small Vocoder 4 ****
-            {
+        },
+        /////           **** Small Vocoder 4 ****
+        {
             0       ,       //p0 = modulator bus
             50      ,       //p1 = modulator sensitivity
             1       ,       //p2 = carrier bus
@@ -2151,9 +2151,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             6       ,       //p5 = sibilance mod src
             8       ,       //p6 = sibilance mod amt
 
-            },
-/////           **** Stereo Vocoder-Dly 1 ****
-            {
+        },
+        /////           **** Stereo Vocoder-Dly 1 ****
+        {
             0       ,       //p0 = modulator bus
             50      ,       //p1 = modulator sensitivity
             1       ,       //p2 = carrier bus
@@ -2168,9 +2168,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p8 = delay time (bit9)
             30      ,       //p9 = delay feedback
             70      ,       //p10 = delay level
-            },
-/////           **** Stereo Vocoder-Dly 2 ****
-            {
+        },
+        /////           **** Stereo Vocoder-Dly 2 ****
+        {
             0       ,       //p0 = modulator bus
             50      ,       //p1 = modulator sensitivity
             1       ,       //p2 = carrier bus
@@ -2185,13 +2185,13 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             0       ,       //p8 = delay time (bit9)
             30      ,       //p9 = delay feedback
             70      ,       //p10 = delay level
-            },
-        };
+        },
+    };
 
 
 
     public KorgWavestationPerformance()
-        {
+    {
         JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
@@ -2232,7 +2232,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         model.set("bank", 0);
 
         loadDefaults();
-        }
+    }
                 
     
     public String getDefaultResourceFileName() { return "KorgWavestationPerformance.init"; }
@@ -2240,16 +2240,16 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 
                 
     public JFrame sprout()     
-        {
+    {
         JFrame frame = super.sprout();
         receiveCurrent.setEnabled(false);  // we can't request the "current" performance
         return frame;
-        }
+    }
 
               
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-        {
+    {
         Category globalCategory = new Category(this, getSynthName(), color);
         //globalCategory.makeUnresettable();
                 
@@ -2265,15 +2265,15 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         
         comp = new StringComponent("Performance Name", this, "name", 15, "Name must be up to 15 ASCII characters.")
             {
-            public String replace(String val)
+                public String replace(String val)
                 {
-                return revisePatchName(val);
+                    return revisePatchName(val);
                 }
                                 
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                updateTitle();
+                    super.update(key, model);
+                    updateTitle();
                 }
             };
         vbox.addBottom(comp);  // doesn't work right :-(
@@ -2288,20 +2288,20 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-        }
+    }
         
     public String revisePatchName(String name)
-        {
+    {
         name = super.revisePatchName(name);
         if (name == null) name = "";
         char[] chars = name.toCharArray();
         for(int i = 0; i < chars.length; i++)
             {
-            if (chars[i] < 32 || chars[i] > 127)
-                chars[i] = ' ';
+                if (chars[i] < 32 || chars[i] > 127)
+                    chars[i] = ' ';
             }
         return new String(chars);
-        }
+    }
 
 
     VBox[][] fx = new VBox[2][31];
@@ -2309,46 +2309,46 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
     public JComponent buildFXDryWetMix(String param, Color color) { return buildFXDryWetMix(param, "", color); }
 
     public JComponent buildFXDryWetMix(String param, String label, Color color)
-        {
+    {
         JComponent comp = new LabelledDial("Dry/Wet", this, param, color, 0, 100)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val == 0)
-                    return "Dry";
-                else if (val == 100)
-                    return "Wet";
-                else return "" + (100 - val) + "/" + val;
+                    if (val == 0)
+                        return "Dry";
+                    else if (val == 100)
+                        return "Wet";
+                    else return "" + (100 - val) + "/" + val;
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Mix" + label);
         return comp;
-        }
+    }
 
     public JComponent buildFXDryWetMixSmall(String param, Color color) { return buildFXDryWetMixSmall(param, "", color); }
 
     public JComponent buildFXDryWetMixSmall(String param, String label, Color color)
-        {
+    {
         JComponent comp = new LabelledDial("Dry/Wet", this, param, color, 1, 11)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val == 1)
-                    return "Dry";
-                else if (val == 11)
-                    return "Wet";
-                else return "" + (11 - val) + "/" + (val - 1);
+                    if (val == 1)
+                        return "Dry";
+                    else if (val == 11)
+                        return "Wet";
+                    else return "" + (11 - val) + "/" + (val - 1);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Mix" + label);
         return comp;
-        }
+    }
 
 
 
     // ugh
     public VBox[] buildFX(final int val, Color color)
-        {
+    {
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         VBox main = new VBox();
@@ -2659,9 +2659,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                         
         comp = new LabelledDial("LFO Rate", this, "fx" + val + "class8param1", color, 1, 100)   
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return CHORUS_LFO_RATE[val - 1];
+                    return CHORUS_LFO_RATE[val - 1];
                 }
             };
         hbox.add(comp);
@@ -2677,9 +2677,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 
         comp = new LabelledDial("LFO Shape", this, "fx" + val + "class8param4", color, -21, 20)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return LFO_SHAPES[val + 21];
+                    return LFO_SHAPES[val + 21];
                 }
             };
         hbox.add(comp);
@@ -2729,9 +2729,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 
         comp = new LabelledDial("LFO Rate", this, "fx" + val + "class9param3", color, 1, 100)   
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return CHORUS_LFO_RATE[val - 1];
+                    return CHORUS_LFO_RATE[val - 1];
                 }
             };
         hbox.add(comp);
@@ -2750,9 +2750,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 
         comp = new LabelledDial("Split Point", this, "fx" + val + "class9param6", color, 0, 18)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return SPLIT_POINTS[val];
+                    return SPLIT_POINTS[val];
                 }
             };
         hbox.add(comp);
@@ -2785,10 +2785,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                         
         comp = new LabelledDial("Ramp Speed", this, "fx" + val + "class10param1", color, 0, 100)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val == 0) return "Manual";
-                else return "" + val;
+                    if (val == 0) return "Manual";
+                    else return "" + val;
                 }
             };
         hbox.add(comp);
@@ -2851,12 +2851,12 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 
         comp = new LabelledDial("Crossover Delay", this, "fx" + val + "class11param4", color, 0, 100);
         // Though this is in fact the correct delay in ms, the Wavestation only displays 0...100
-//                              {
-//                              public String map(int val)
-//                                      {
-//                                      return "" + (val * 32);
-//                                      }
-//                              };
+        //                              {
+        //                              public String map(int val)
+        //                                      {
+        //                                      return "" + (val * 32);
+        //                                      }
+        //                              };
         hbox.add(comp);
                         
         comp = new LabelledDial("EQ Low", this, "fx" + val + "class11param5", color, -12, 12);
@@ -2936,18 +2936,18 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                                                 
         comp = new LabelledDial("Dry/Wet", this, "fx" + val + "class13param0", color, -10, 10)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val == 0)
-                    return "Dry";
-                else if (val == 10)
-                    return "Wet";
-                else if (val == -10)
-                    return "-Wet";
-                else if (val > 0)
-                    return "" + (10 - val) + "/" + val;
-                else
-                    return "-" + (10 - (-val)) + "/" + (-val);
+                    if (val == 0)
+                        return "Dry";
+                    else if (val == 10)
+                        return "Wet";
+                    else if (val == -10)
+                        return "-Wet";
+                    else if (val > 0)
+                        return "" + (10 - val) + "/" + val;
+                    else
+                        return "-" + (10 - (-val)) + "/" + (-val);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Mix");
@@ -2967,10 +2967,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
         comp = new LabelledDial("LFO Rate", this, "fx" + val + "class13param4", color, 0, 100)  
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val == 0) return "Fixed";
-                else return CHORUS_LFO_RATE[val - 1];
+                    if (val == 0) return "Fixed";
+                    else return CHORUS_LFO_RATE[val - 1];
                 }
             };
         hbox.add(comp);
@@ -3021,18 +3021,18 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                         
         comp = new LabelledDial("Slow Speed", this, "fx" + val + "class14param2", color, 1, 100)        
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return CHORUS_LFO_RATE[val - 1];
+                    return CHORUS_LFO_RATE[val - 1];
                 }
             };
         hbox.add(comp);
 
         comp = new LabelledDial("Fast Speed", this, "fx" + val + "class14param3", color, 1, 100)        
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return CHORUS_LFO_RATE[val - 1];
+                    return CHORUS_LFO_RATE[val - 1];
                 }
             };
         hbox.add(comp);
@@ -3091,9 +3091,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
         comp = new LabelledDial("LFO Rate", this, "fx" + val + "class15param6", color, 1, 100)  
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return CHORUS_LFO_RATE[val - 1];
+                    return CHORUS_LFO_RATE[val - 1];
                 }
             };
         hbox.add(comp);
@@ -3116,9 +3116,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                                                 
         comp = new LabelledDial("High Frequency", this, "fx" + val + "class16param0", color, 0, 29)
             {
-            public String map(int val)      
+                public String map(int val)      
                 {
-                return FREQUENCIES[val];
+                    return FREQUENCIES[val];
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel(""); // spacer
@@ -3150,9 +3150,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
         comp = new LabelledDial("Low Frequency", this, "fx" + val + "class16param7", color, 0, 29)
             {
-            public String map(int val)      
+                public String map(int val)      
                 {
-                return FREQUENCIES[val];
+                    return FREQUENCIES[val];
                 }
             };
         hbox.add(comp);
@@ -3183,9 +3183,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
         comp = new LabelledDial("Chorus LFO Rate", this, "fx" + val + "class17param3", color, 1, 100)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return CHORUS_LFO_RATE[val - 1];
+                    return CHORUS_LFO_RATE[val - 1];
                 }
             };
                                 
@@ -3237,9 +3237,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                         
         comp = new LabelledDial("Flanger LFO", this, "fx" + val + "class18param3", color, 1, 100)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return CHORUS_LFO_RATE[val - 1];
+                    return CHORUS_LFO_RATE[val - 1];
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Rate");
@@ -3367,9 +3367,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                         
         comp = new LabelledDial("Chorus LFO Rate", this, "fx" + val + "class21param5", color, 1, 100)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return CHORUS_LFO_RATE[val - 1];
+                    return CHORUS_LFO_RATE[val - 1];
                 }
             };
                                 
@@ -3409,9 +3409,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                         
         comp = new LabelledDial("Flanger LFO Rate", this, "fx" + val + "class22param5", color, 1, 100)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return CHORUS_LFO_RATE[val - 1];
+                    return CHORUS_LFO_RATE[val - 1];
                 }
             };
                                 
@@ -3488,9 +3488,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                         
         comp = new LabelledDial("Phaser LFO Rate", this, "fx" + val + "class24param5", color, 1, 100)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return CHORUS_LFO_RATE[val - 1];
+                    return CHORUS_LFO_RATE[val - 1];
                 }
             };
                                 
@@ -3523,18 +3523,18 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 
         comp = new LabelledDial("Slow Speed", this, "fx" + val + "class25param3", color, 1, 100)        
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return CHORUS_LFO_RATE[val - 1];
+                    return CHORUS_LFO_RATE[val - 1];
                 }
             };
         hbox.add(comp);
 
         comp = new LabelledDial("Fast Speed", this, "fx" + val + "class25param4", color, 1, 100)        
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return CHORUS_LFO_RATE[val - 1];
+                    return CHORUS_LFO_RATE[val - 1];
                 }
             };
         hbox.add(comp);
@@ -3616,9 +3616,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
         comp = new LabelledDial("Shift Scaler", this, "fx" + val + "class27param4", color, 1, 100)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return "" + val + "%";
+                    return "" + val + "%";
                 }
             };
         hbox.add(comp);
@@ -3785,23 +3785,23 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         vbox = new VBox();      
         comp = new PushButton("Up")
             {
-            public void perform()
+                public void perform()
                 {
-                int delay = model.get("fx" + val + "class30param8", 1);
-                int max = model.getMax("fx" + val + "class30param8");
-                if (delay < max)
-                    model.set("fx" + val + "class30param8", delay + 1);
+                    int delay = model.get("fx" + val + "class30param8", 1);
+                    int max = model.getMax("fx" + val + "class30param8");
+                    if (delay < max)
+                        model.set("fx" + val + "class30param8", delay + 1);
                 }
             };
         vbox.add(comp);
         comp = new PushButton("Down")
             {
-            public void perform()
+                public void perform()
                 {
-                int delay = model.get("fx" + val + "class30param8", 1);
-                int min = model.getMin("fx" + val + "class30param8");
-                if (delay > min)
-                    model.set("fx" + val + "class30param8", delay - 1);
+                    int delay = model.get("fx" + val + "class30param8", 1);
+                    int min = model.getMin("fx" + val + "class30param8");
+                    if (delay > min)
+                        model.set("fx" + val + "class30param8", delay - 1);
                 }
             };
         vbox.add(comp);
@@ -3817,13 +3817,13 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
                         
         return fx;
-        }
+    }
         
 
     public JComponent addFX(final int fxnum, Color color)
-        {
+    {
         Category category  = new Category(this, "FX " + fxnum, color);
-//        category.makePasteable("fx" + fxnum);
+        //        category.makePasteable("fx" + fxnum);
         category.makePasteable("fx");
                         
         JComponent comp;
@@ -3838,15 +3838,15 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         params = FX;
         comp = new Chooser("Type", this, "fx" + fxnum + "type", params)
             {
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                int type = model.get(key, 0);
-                main.removeLast();
-                main.addLast(fx[fxnum - 1][FX_GROUP[type]]);
-                main.revalidate();
-                main.repaint();
-                resetFX(fxnum);
+                    super.update(key, model);
+                    int type = model.get(key, 0);
+                    main.removeLast();
+                    main.addLast(fx[fxnum - 1][FX_GROUP[type]]);
+                    main.revalidate();
+                    main.repaint();
+                    resetFX(fxnum);
                 }
             };
         vbox = new VBox();
@@ -3857,10 +3857,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                         
         category.add(main, BorderLayout.CENTER);
         return category;
-        }
+    }
 
     public JComponent addFXGlobal(Color color)
-        {
+    {
         Category category  = new Category(this, "FX", color);
 
         JComponent comp;
@@ -3874,19 +3874,19 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         
         comp = new LabelledDial("Mix 3", this, "fxmix3amount", color, 0, 11)
             {
-            public double getStartAngle()
+                public double getStartAngle()
                 {
-                return 238;
+                    return 238;
                 }
             
-            public int getDefaultValue()
+                public int getDefaultValue()
                 {
-                return 6;
+                    return 6;
                 }
                 
-            public String map(int val)
+                public String map(int val)
                 {
-                return (model.get("fxseries", 0) == 0 ? PARALLEL_MIX[val] : SERIES_MIX[val]);
+                    return (model.get("fxseries", 0) == 0 ? PARALLEL_MIX[val] : SERIES_MIX[val]);
                 }
             };
         model.register("fxseries", ((LabelledDial)comp));  // so it changes from parallel to series
@@ -3895,19 +3895,19 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
         comp = new LabelledDial("Mix 4", this, "fxmix4amount", color, 0, 11)
             {
-            public double getStartAngle()
+                public double getStartAngle()
                 {
-                return 238;
+                    return 238;
                 }
             
-            public int getDefaultValue()
+                public int getDefaultValue()
                 {
-                return 6;
+                    return 6;
                 }
                 
-            public String map(int val)
+                public String map(int val)
                 {
-                return (model.get("fxseries", 0)  == 0 ? PARALLEL_MIX[val] : SERIES_MIX[val]);
+                    return (model.get("fxseries", 0)  == 0 ? PARALLEL_MIX[val] : SERIES_MIX[val]);
                 }
             };
         model.register("fxseries", ((LabelledDial)comp));  // so it changes from parallel to series
@@ -3934,23 +3934,23 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
         category.add(hbox, BorderLayout.WEST);
         return category;
-        }
+    }
         
     public JComponent addPart(final int part, Color color)
-        {
+    {
         final Category category  = new Category(this, "Part " + part, color);
-//        category.makePasteable("part" + part);
+        //        category.makePasteable("part" + part);
         category.makePasteable("part");
         
         Updatable updatable = new Updatable()
             {
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                if (model.get("part" + part + "bank", 0) < 0 || 
-                    model.get("part" + part + "number", 0) < 0)
-                    category.setName("Part " + part + " [Off] ");
-                else
-                    category.setName("Part " + part + ": " + PATCHES[model.get("part" + part + "bank", 0)][model.get("part" + part + "number", 0)] + " ");
+                    if (model.get("part" + part + "bank", 0) < 0 || 
+                        model.get("part" + part + "number", 0) < 0)
+                        category.setName("Part " + part + " [Off] ");
+                    else
+                        category.setName("Part " + part + ": " + PATCHES[model.get("part" + part + "bank", 0)][model.get("part" + part + "number", 0)] + " ");
                 }
             };
         
@@ -3966,10 +3966,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
         comp = new LabelledDial("Patch Bank", this, "part" + part + "bank", color, 0, 11)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                String[] vals = BANKS;
-                return vals[val];
+                    String[] vals = BANKS;
+                    return vals[val];
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel(" ");
@@ -3978,59 +3978,59 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
         final PushButton button = new PushButton("Show")
             {
-            public void perform()
+                public void perform()
                 {
-                final KorgWavestationPatch synth = new KorgWavestationPatch();
-                if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
-                if (synth.tuple != null)
-                    {       
-                    // This is a little tricky.  When the dump comes in from the synth,
-                    // Edisyn will only send it to the topmost panel.  So we first sprout
-                    // the panel and show it, and THEN send the dump request.  But this isn't
-                    // enough, because what setVisible(...) does is post an event on the
-                    // Swing Event Queue to build the window at a later time.  This later time
-                    // happens to be after the dump comes in, so it's ignored.  So what we
-                    // ALSO do is post the dump request to occur at the end of the Event Queue,
-                    // so by the time the dump request has been made, the window is shown and
-                    // frontmost.
+                    final KorgWavestationPatch synth = new KorgWavestationPatch();
+                    if (tuple != null)
+                        synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                    if (synth.tuple != null)
+                        {       
+                            // This is a little tricky.  When the dump comes in from the synth,
+                            // Edisyn will only send it to the topmost panel.  So we first sprout
+                            // the panel and show it, and THEN send the dump request.  But this isn't
+                            // enough, because what setVisible(...) does is post an event on the
+                            // Swing Event Queue to build the window at a later time.  This later time
+                            // happens to be after the dump comes in, so it's ignored.  So what we
+                            // ALSO do is post the dump request to occur at the end of the Event Queue,
+                            // so by the time the dump request has been made, the window is shown and
+                            // frontmost.
                                                 
-                    synth.sprout();
-                    JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
-                    frame.setVisible(true);
+                            synth.sprout();
+                            JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                            frame.setVisible(true);
 
-                    SwingUtilities.invokeLater(
-                        new Runnable()
-                            {
-                            public void run() 
-                                { 
-                                Model tempModel = buildModel();
-                                tempModel.set("bank", KorgWavestationPerformance.this.model.get("part" + part + "bank"));
-                                tempModel.set("number", KorgWavestationPerformance.this.model.get("part" + part + "number"));
-                                synth.performRequestDump(tempModel, false);
-                                }
-                            });
-                    }
-                else
-                    {
-                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
-                    }
+                            SwingUtilities.invokeLater(
+                                                       new Runnable()
+                                                       {
+                                                           public void run() 
+                                                           { 
+                                                               Model tempModel = buildModel();
+                                                               tempModel.set("bank", KorgWavestationPerformance.this.model.get("part" + part + "bank"));
+                                                               tempModel.set("number", KorgWavestationPerformance.this.model.get("part" + part + "number"));
+                                                               synth.performRequestDump(tempModel, false);
+                                                           }
+                                                       });
+                        }
+                    else
+                        {
+                            showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                        }
                 }
             };
 
         comp = new LabelledDial("Patch Number", this, "part" + part + "number", color, -1, 34)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val == -1)
-                    return "Off";
-                else return "" + val;
+                    if (val == -1)
+                        return "Off";
+                    else return "" + val;
                 }
                 
-            public void update(String key, Model model)
+                public void update(String key, Model model)
                 {
-                super.update(key, model);
-                button.getButton().setEnabled(model.get(key) >= 0);
+                    super.update(key, model);
+                    button.getButton().setEnabled(model.get(key) >= 0);
                 }
                 
             };
@@ -4065,9 +4065,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         hbox.add(vbox);
         comp = new LabelledDial("Scale", this, "part" + part + "scalekey", color, 1, 12) 
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return KEYS[(val - 1) % 12];  // note integer division
+                    return KEYS[(val - 1) % 12];  // note integer division
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Tonic Key");
@@ -4081,24 +4081,24 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
         comp = new LabelledDial("FX Bus", this, "part" + part + "fxbus", color, 0, 105)
             {
-            public double getStartAngle()
+                public double getStartAngle()
                 {
-                return 218;
+                    return 218;
                 }
             
-            public int getDefaultValue()
+                public int getDefaultValue()
                 {
-                return 50;
+                    return 50;
                 }
                 
-            public String map(int val)
+                public String map(int val)
                 {
-                if (val >= 1 && val <= 99)
-                    return "" + (100 - val) + "/" + val;
-                else if (val == 0)
-                    return "A";
-                else
-                    return HIGH_BUSSES[val - 100];
+                    if (val >= 1 && val <= 99)
+                        return "" + (100 - val) + "/" + val;
+                    else if (val == 0)
+                        return "A";
+                    else
+                        return HIGH_BUSSES[val - 100];
                 }
             };
         hbox.add(comp);
@@ -4111,22 +4111,22 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         vbox = new VBox();      
         comp = new PushButton("Up")
             {
-            public void perform()
+                public void perform()
                 {
-                int delay = model.get("part" + part + "delay", 1);
-                int max = model.getMax("part" + part + "delay");
-                if (delay < max)
-                    model.set("part" + part + "delay", delay + 1);
+                    int delay = model.get("part" + part + "delay", 1);
+                    int max = model.getMax("part" + part + "delay");
+                    if (delay < max)
+                        model.set("part" + part + "delay", delay + 1);
                 }
             };
         vbox.add(comp);
         comp = new PushButton("Down")
             {
-            public void perform()
+                public void perform()
                 {
-                int delay = model.get("part" + part + "delay", 1);
-                if (delay > 0)
-                    model.set("part" + part + "delay", delay - 1);
+                    int delay = model.get("part" + part + "delay", 1);
+                    if (delay > 0)
+                        model.set("part" + part + "delay", delay - 1);
                 }
             };
         vbox.add(comp);
@@ -4143,9 +4143,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
         comp = new LabelledDial("Lowest", this, "part" + part + "lowkey", color, 0, 127) 
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return KEYS[val % 12] + (val / 12 - 1);  // note integer division
+                    return KEYS[val % 12] + (val / 12 - 1);  // note integer division
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Key");
@@ -4153,9 +4153,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
         comp = new LabelledDial("Highest", this, "part" + part + "hikey", color, 0, 127)
             {
-            public String map(int val)
+                public String map(int val)
                 {
-                return KEYS[val % 12] + (val / 12 - 1);  // note integer division
+                    return KEYS[val % 12] + (val / 12 - 1);  // note integer division
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Key");
@@ -4170,65 +4170,65 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         hbox.add(comp);
 
         // These are for the A/D only.
-/*
-  comp = new LabelledDial("Output", this, "part" + part + "outputchannel", color, 1, 16);
-  ((LabelledDial)comp).addAdditionalLabel("Channel [WS, EX]");
-  hbox.add(comp);
+        /*
+          comp = new LabelledDial("Output", this, "part" + part + "outputchannel", color, 1, 16);
+          ((LabelledDial)comp).addAdditionalLabel("Channel [WS, EX]");
+          hbox.add(comp);
     
-  comp = new LabelledDial("Program", this, "part" + part + "programnumber", color, 0, 127);
-  ((LabelledDial)comp).addAdditionalLabel(" Number [WS, EX] ");
-  hbox.add(comp);
-*/
+          comp = new LabelledDial("Program", this, "part" + part + "programnumber", color, 0, 127);
+          ((LabelledDial)comp).addAdditionalLabel(" Number [WS, EX] ");
+          hbox.add(comp);
+        */
         main.add(hbox);
     
         category.add(main, BorderLayout.WEST);
         return category;
-        }    
+    }    
 
 
     public void resetFX(int fx)
-        {
+    {
         undo.setWillPush(false);
         for(int fxtype = 1; fxtype < FX_GROUP.length; fxtype++)
             {
-            model.setUpdateListeners(false);
+                model.setUpdateListeners(false);
         
-            // clear
-            for(int index = 0; index < FX_INDICES[FX_GROUP[fxtype]].length; index++)
-                {
-                model.set("fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index, 0);
-                }
+                // clear
+                for(int index = 0; index < FX_INDICES[FX_GROUP[fxtype]].length; index++)
+                    {
+                        model.set("fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index, 0);
+                    }
         
-            // set
-            for(int pcl = 0; pcl < FX_PCL_LIST[FX_GROUP[fxtype]].length; pcl++)
-                {
-                int value = FX_PRESETS[fxtype][pcl];                                                // note NOT FX_GROUP[fxtype]
-                int bytenum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BYTE];      // unused
-                int bit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BIT];                   // unused
-                int bitlen = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_LEN];                // unused
-                int paramnum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_NUM];
-                int parambit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_BIT];
+                // set
+                for(int pcl = 0; pcl < FX_PCL_LIST[FX_GROUP[fxtype]].length; pcl++)
+                    {
+                        int value = FX_PRESETS[fxtype][pcl];                                                // note NOT FX_GROUP[fxtype]
+                        int bytenum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BYTE];      // unused
+                        int bit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BIT];                   // unused
+                        int bitlen = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_LEN];                // unused
+                        int paramnum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_NUM];
+                        int parambit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_BIT];
                 
-                int index = -1;
-                for(int i = 0; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
-                    {
-                    if (FX_INDICES[FX_GROUP[fxtype]][i] == paramnum)
-                        {
-                        index = i;
-                        break;
-                        }
-                    }
+                        int index = -1;
+                        for(int i = 0; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
+                            {
+                                if (FX_INDICES[FX_GROUP[fxtype]][i] == paramnum)
+                                    {
+                                        index = i;
+                                        break;
+                                    }
+                            }
                 
-                if (index == -1)  // unused (typically says "reserved for future use")
-                    {
-                    //System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + FX_GROUP[fxtype] + ":" + paramnum + " (probably 'reserved').");
+                        if (index == -1)  // unused (typically says "reserved for future use")
+                            {
+                                //System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + FX_GROUP[fxtype] + ":" + paramnum + " (probably 'reserved').");
+                            }
+                        else
+                            {
+                                String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index;
+                                model.set(key, model.get(key) | (value << parambit));
+                            }
                     }
-                else
-                    {
-                    String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index;
-                    model.set(key, model.get(key) | (value << parambit));
-                    }
-                }
             }
         revise();
         model.setUpdateListeners(true);
@@ -4240,20 +4240,20 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         int[] indices = FX_INDICES[FX_GROUP[fxtype]];
         for(int i = 0; i < indices.length; i++)
             {
-            String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + i;
-            model.set(key, (model.get(key, 0)));
+                String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + i;
+                model.set(key, (model.get(key, 0)));
             }
         undo.setWillPush(true);
-        }
+    }
         
         
     public Object[] emitAll(String key)
-        {
+    {
         simplePause(40);  // without this, we seem to drop some packets as we overfill the buffer
         
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
-//        if (key.equals("hillclimbdelay")) return new Object[0];  // this is not emittable
+        //        if (key.equals("hillclimbdelay")) return new Object[0];  // this is not emittable
                 
         /*
           byte[] bank_mesg = paramBytes(CURRENT_BANK, edisynToWSBank[model.get("bank", 0)]);
@@ -4262,122 +4262,122 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
               
         if (key.equals("name"))
             {
-            byte[] mesg = paramBytes(PROG_NAME, model.get(key, ""));
-            return new byte[][] { /*bank_mesg, num_mesg,*/ mesg };
+                byte[] mesg = paramBytes(PROG_NAME, model.get(key, ""));
+                return new byte[][] { /*bank_mesg, num_mesg,*/ mesg };
             }
         else if (key.startsWith("fx"))
             {
-            int index;
-            int val = model.get(key, 0);
+                int index;
+                int val = model.get(key, 0);
                 
-            if (key.equals("fxseries"))
-                index = FX_PLACEMENT;
-            else if (key.equals("fxmix3amount"))
-                index = FX_MIX_3;
-            else if (key.equals("fxmix4amount"))
-                index = FX_MIX_4;
-            else if (key.equals("fxmod3source"))
-                index = FX_MOD_3;
-            else if (key.equals("fxmod4source"))
-                index = FX_MOD_4;
-            else if (key.equals("fxmod3amount"))
-                index = FX_MOD_AMT_3;
-            else if (key.equals("fxmod4amount"))
-                index = FX_MOD_AMT_4;
-            else if (key.endsWith("type"))
-                {
-                int part = extractNumbers(key)[0];
-                byte[] mesg = paramBytes((part == 1 ? FX1_PROG : FX2_PROG), val);
-                return new byte[][] { /*bank_mesg, num_mesg,*/ mesg };
-                }
-            else
-                {
-                int[] vals = extractNumbers(key);
-                int part = vals[0];
-                int mappedNum = vals[1];
-                int param = vals[2];
+                if (key.equals("fxseries"))
+                    index = FX_PLACEMENT;
+                else if (key.equals("fxmix3amount"))
+                    index = FX_MIX_3;
+                else if (key.equals("fxmix4amount"))
+                    index = FX_MIX_4;
+                else if (key.equals("fxmod3source"))
+                    index = FX_MOD_3;
+                else if (key.equals("fxmod4source"))
+                    index = FX_MOD_4;
+                else if (key.equals("fxmod3amount"))
+                    index = FX_MOD_AMT_3;
+                else if (key.equals("fxmod4amount"))
+                    index = FX_MOD_AMT_4;
+                else if (key.endsWith("type"))
+                    {
+                        int part = extractNumbers(key)[0];
+                        byte[] mesg = paramBytes((part == 1 ? FX1_PROG : FX2_PROG), val);
+                        return new byte[][] { /*bank_mesg, num_mesg,*/ mesg };
+                    }
+                else
+                    {
+                        int[] vals = extractNumbers(key);
+                        int part = vals[0];
+                        int mappedNum = vals[1];
+                        int param = vals[2];
 
-                byte[] prog_mesg = paramBytes((part == 1 ? FX1_PROG : FX2_PROG), model.get("fx" + part + "type", 0));
-                byte[] part_mesg = paramBytes(CURRENT_FX, part);
-                byte[] mesg = paramBytes(FX_PARAMETERS[mappedNum][param], val);
-                return new byte[][] { /*bank_mesg, num_mesg,*/ prog_mesg, part_mesg, mesg };
-                }
-            byte[] mesg = paramBytes(index, val);
-            return new byte[][] { /* bank_mesg, num_mesg,*/ mesg};
+                        byte[] prog_mesg = paramBytes((part == 1 ? FX1_PROG : FX2_PROG), model.get("fx" + part + "type", 0));
+                        byte[] part_mesg = paramBytes(CURRENT_FX, part);
+                        byte[] mesg = paramBytes(FX_PARAMETERS[mappedNum][param], val);
+                        return new byte[][] { /*bank_mesg, num_mesg,*/ prog_mesg, part_mesg, mesg };
+                    }
+                byte[] mesg = paramBytes(index, val);
+                return new byte[][] { /* bank_mesg, num_mesg,*/ mesg};
             }
         else 
             {
-            int part = extractNumbers(key)[0];
-            byte[] part_mesg = paramBytes(CURRENT_PART, part);
+                int part = extractNumbers(key)[0];
+                byte[] part_mesg = paramBytes(CURRENT_PART, part);
                 
-            int index = 0;
-            int val = model.get(key, 0);
+                int index = 0;
+                int val = model.get(key, 0);
                         
-            if (key.endsWith("bank"))
-                { 
-                index = PART_PATCH_BANK;
-                val = edisynToWSBank[model.get(key, 0)];        // ugh, banks are mixed up
-                }
-            else if (key.endsWith("number"))
-                index = PART_PATCH_NUM;
-            else if (key.endsWith("sustain"))
-                index = PART_SUS_ENABLE;
-            else if (key.endsWith("voicemode"))
-                {
-                index = PART_MODE;
-                val = val + 1;  // modes are 1..3, not 0..2
-                }
-            else if (key.endsWith("keypriority"))
-                index = PART_UNI_NOTE_PRIORITY;
-            else if (key.endsWith("scale"))
-                index = PART_MTUNE_TAB ;
-            else if (key.endsWith("playmode"))
-                {
-                index = PART_PLAY_MODE;
-                val = val + 1;  // modes are 1..3, not 0..2
-                }
-            else if (key.endsWith("scalekey"))
-                index = PART_MTUNE_KEY ;
-            else if (key.endsWith("volume"))
-                index = PART_VOLUME;
-            else if (key.endsWith("fxbus"))
-                index = PART_OUTPUT ;
-            else if (key.endsWith("delay"))
-                index = PART_DELAY;
-            else if (key.endsWith("transpose"))
-                index = PART_TRANSPOSE;
-            else if (key.endsWith("detune"))
-                index = PART_DETUNE;
-            else if (key.endsWith("lowkey"))
-                index = PART_KEY_LIMIT_LOW;
-            else if (key.endsWith("hikey"))
-                index = PART_KEY_LIMIT_HIGH;
-            else if (key.endsWith("lowvel"))
-                index = PART_VEL_LIMIT_LOW;
-            else if (key.endsWith("hivel"))
-                index = PART_VEL_LIMIT_HIGH;
-            else if (key.endsWith("outputchannel"))
-                index = PART_MIDI_XMIT_CHAN;
-            else if (key.endsWith("programnumber"))
-                index = PART_PROG_CHANGE_XMIT;
-            else if (key.equals("fx1"))
-                index = FX1_PROG;
-            else if (key.equals("fx2"))
-                index = FX2_PROG;
-            else if (key.equals("series"))
-                index = FX_PLACEMENT;
-            else
-                System.err.println("Warning (KorgWavestationPerformance): Unknown Key " + key);
+                if (key.endsWith("bank"))
+                    { 
+                        index = PART_PATCH_BANK;
+                        val = edisynToWSBank[model.get(key, 0)];        // ugh, banks are mixed up
+                    }
+                else if (key.endsWith("number"))
+                    index = PART_PATCH_NUM;
+                else if (key.endsWith("sustain"))
+                    index = PART_SUS_ENABLE;
+                else if (key.endsWith("voicemode"))
+                    {
+                        index = PART_MODE;
+                        val = val + 1;  // modes are 1..3, not 0..2
+                    }
+                else if (key.endsWith("keypriority"))
+                    index = PART_UNI_NOTE_PRIORITY;
+                else if (key.endsWith("scale"))
+                    index = PART_MTUNE_TAB ;
+                else if (key.endsWith("playmode"))
+                    {
+                        index = PART_PLAY_MODE;
+                        val = val + 1;  // modes are 1..3, not 0..2
+                    }
+                else if (key.endsWith("scalekey"))
+                    index = PART_MTUNE_KEY ;
+                else if (key.endsWith("volume"))
+                    index = PART_VOLUME;
+                else if (key.endsWith("fxbus"))
+                    index = PART_OUTPUT ;
+                else if (key.endsWith("delay"))
+                    index = PART_DELAY;
+                else if (key.endsWith("transpose"))
+                    index = PART_TRANSPOSE;
+                else if (key.endsWith("detune"))
+                    index = PART_DETUNE;
+                else if (key.endsWith("lowkey"))
+                    index = PART_KEY_LIMIT_LOW;
+                else if (key.endsWith("hikey"))
+                    index = PART_KEY_LIMIT_HIGH;
+                else if (key.endsWith("lowvel"))
+                    index = PART_VEL_LIMIT_LOW;
+                else if (key.endsWith("hivel"))
+                    index = PART_VEL_LIMIT_HIGH;
+                else if (key.endsWith("outputchannel"))
+                    index = PART_MIDI_XMIT_CHAN;
+                else if (key.endsWith("programnumber"))
+                    index = PART_PROG_CHANGE_XMIT;
+                else if (key.equals("fx1"))
+                    index = FX1_PROG;
+                else if (key.equals("fx2"))
+                    index = FX2_PROG;
+                else if (key.equals("series"))
+                    index = FX_PLACEMENT;
+                else
+                    System.err.println("Warning (KorgWavestationPerformance): Unknown Key " + key);
                         
-            byte[] mesg = paramBytes(index, val);
-            return new byte[][] { /*bank_mesg, num_mesg,*/ part_mesg, mesg };
+                byte[] mesg = paramBytes(index, val);
+                return new byte[][] { /*bank_mesg, num_mesg,*/ part_mesg, mesg };
             }
-        }
+    }
 
 
 
     class Part
-        {
+    {
         int bankNum;
         int patchNum;
         int level;
@@ -4397,7 +4397,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         int delay;
         
         int read(byte[] data, int pos)
-            {
+        {
             bankNum = readByte(data, pos);
             pos += 1;
             patchNum = readByte(data, pos);
@@ -4434,10 +4434,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             pos += 2;
 
             return pos;
-            }
+        }
                 
         int write(byte[] data, int pos)
-            {
+        {
             writeByte(bankNum, data, pos);
             pos += 1;
             writeByte(patchNum, data, pos);
@@ -4474,29 +4474,29 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             pos += 2;
 
             return pos;
-            }
         }
+    }
     
     class Performance
-        {
+    {
         char[] name = new char[16];
         byte[] fxPerfBlock = new byte[21];
         Part[] parts = new Part[8];
         
         public void setName(String val)
-            {
+        {
             val = val + "                ";
             System.arraycopy(val.toCharArray(), 0, name, 0, name.length);
-            }
+        }
         
         public Performance()
-            {
+        {
             for(int i = 0; i < parts.length; i++)
                 parts[i] = new Part();
-            }
+        }
 
         int read(byte[] data, int pos)
-            {
+        {
             for(int i = 0; i < 16; i++)
                 name[i] = (char)data[i + pos];
             pos += 16;
@@ -4506,10 +4506,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             for(int i = 0; i < 8; i++)
                 pos = parts[i].read(data, pos);
             return pos;
-            }
+        }
 
         int write(byte[] data, int pos)
-            {
+        {
             for(int i = 0; i < 16; i++)
                 data[i + pos] = (byte)name[i];
             pos += 16;
@@ -4519,56 +4519,56 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             for(int i = 0; i < 8; i++)
                 pos = parts[i].write(data, pos);
             return pos;
-            }
-
-
         }
+
+
+    }
 
     
     public static final int NYBBLIZED_LENGTH = 181;
 
     public int parse(byte[] data, boolean fromFile)
-        {
+    {
         if (data[4] == (byte)0x49)
             {
-            model.set("bank", wsToEdisynBank[data[5]]);
-            model.set("number", data[6]);
-            return subparse(data, 7);
+                model.set("bank", wsToEdisynBank[data[5]]);
+                model.set("number", data[6]);
+                return subparse(data, 7);
             }
         else
             {
-            // extract names
-            String[] n = new String[50];
-            for(int i = 0; i < 50; i++)
-                {
-                // yuck, denybblize and extract the patch just to get the name...
-                byte[] d = denybblize(data, i * NYBBLIZED_LENGTH * 2 + 6, NYBBLIZED_LENGTH * 2);
+                // extract names
+                String[] n = new String[50];
+                for(int i = 0; i < 50; i++)
+                    {
+                        // yuck, denybblize and extract the patch just to get the name...
+                        byte[] d = denybblize(data, i * NYBBLIZED_LENGTH * 2 + 6, NYBBLIZED_LENGTH * 2);
         
-                Performance performance = new Performance();
-                performance.read(d, 0);
+                        Performance performance = new Performance();
+                        performance.read(d, 0);
         
-                n[i] = new String(performance.name);
-                } 
+                        n[i] = new String(performance.name);
+                    } 
                 
-            // Now that we have an array of names, one per patch, we present the user with options;
-            // 0. Cancel [handled automatically]
-            // 1. Save the bank data [handled automatically]
-            // 2. Upload the bank data [handled automatically] 
-            // 3. Load and edit a certain patch number
-            int patchNum = showBankSysexOptions(data, n);
-            if (patchNum < 0) return PARSE_CANCELLED;
+                // Now that we have an array of names, one per patch, we present the user with options;
+                // 0. Cancel [handled automatically]
+                // 1. Save the bank data [handled automatically]
+                // 2. Upload the bank data [handled automatically] 
+                // 3. Load and edit a certain patch number
+                int patchNum = showBankSysexOptions(data, n);
+                if (patchNum < 0) return PARSE_CANCELLED;
                 
-            model.set("bank", wsToEdisynBank[data[5]]);
-            model.set("number", patchNum);
+                model.set("bank", wsToEdisynBank[data[5]]);
+                model.set("number", patchNum);
 
-            // okay, we're loading and editing patch number patchNum.  Here we go.
-            return subparse(data, patchNum * NYBBLIZED_LENGTH * 2 + 6);      
+                // okay, we're loading and editing patch number patchNum.  Here we go.
+                return subparse(data, patchNum * NYBBLIZED_LENGTH * 2 + 6);      
             }
-        }
+    }
                 
 
     public int subparse(byte[] data, int pos)
-        {
+    {
         data = denybblize(data, pos);
 
         // The Wavestation effects documentation is woefully incomplete.  It is missing
@@ -4657,111 +4657,111 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                                 
         for(int fx = 1; fx <= 2; fx++)
             {
-            int fxtype = (performance.fxPerfBlock[fx - 1] & 63) - 2;
+                int fxtype = (performance.fxPerfBlock[fx - 1] & 63) - 2;
                                                 
-            // if we're in extended mode and we have a NO EFFECT and the extended list is > 0
-            if (extendedEffects && fxtype == 0 && ((performance.fxPerfBlock[(fx == 1 ? 5 : 13)] & 15) > 0))
-                fxtype = 47 + (performance.fxPerfBlock[(fx == 1 ? 5 : 13)] & 15);  // mod pitch shift (1) is effect 48
+                // if we're in extended mode and we have a NO EFFECT and the extended list is > 0
+                if (extendedEffects && fxtype == 0 && ((performance.fxPerfBlock[(fx == 1 ? 5 : 13)] & 15) > 0))
+                    fxtype = 47 + (performance.fxPerfBlock[(fx == 1 ? 5 : 13)] & 15);  // mod pitch shift (1) is effect 48
 
-            model.set("fx" + fx + "type", fxtype);
+                model.set("fx" + fx + "type", fxtype);
                         
-            if (fxtype == 0) // NO_EFFECT
-                continue;
+                if (fxtype == 0) // NO_EFFECT
+                    continue;
                 
-            model.setUpdateListeners(false);
+                model.setUpdateListeners(false);
 
-/*
-  public static final int ST_BYTE = 0;    // Storage block byte number
-  public static final int ST_BIT = 1;             // Storage block bit offset
-  public static final int PA_LEN = 2;             // Parameter bit length.  If negative, then sign-padded.  If positive, then zero-padded.
-  public static final int PA_NUM = 3;             // Parameter number
-  public static final int PA_BIT = 4;             // Parameter bit offset
-*/
+                /*
+                  public static final int ST_BYTE = 0;    // Storage block byte number
+                  public static final int ST_BIT = 1;             // Storage block bit offset
+                  public static final int PA_LEN = 2;             // Parameter bit length.  If negative, then sign-padded.  If positive, then zero-padded.
+                  public static final int PA_NUM = 3;             // Parameter number
+                  public static final int PA_BIT = 4;             // Parameter bit offset
+                */
                         
-            // First we zero out
-            for(int pcl = 0; pcl < FX_PCL_LIST[FX_GROUP[fxtype]].length; pcl++)
-                {
-                int paramnum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_NUM];
-                int index = -1;
-                for(int i = 1; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
+                // First we zero out
+                for(int pcl = 0; pcl < FX_PCL_LIST[FX_GROUP[fxtype]].length; pcl++)
                     {
-                    if (FX_INDICES[FX_GROUP[fxtype]][i] == paramnum)
-                        {
-                        index = i;
-                        break;
-                        }
-                    }
-                if (index == -1)
-                    {
-                    // System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + FX_GROUP[fxtype] + ":" + paramnum + " (probably 'reserved').");
-                    }
-                else
-                    {
-                    String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index;
-                    model.set(key, 0);
-                    }
-                }
-
-            // Now we load
-            for(int pcl = 0; pcl < FX_PCL_LIST[FX_GROUP[fxtype]].length; pcl++)
-                {
-                int bytenum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BYTE];
-                int bit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BIT];
-                int bitlen = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_LEN];
-                int paramnum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_NUM];
-                int parambit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_BIT];
-
-                int index = -1;
-                for(int i = 0; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
-                    {
-                    if (FX_INDICES[FX_GROUP[fxtype]][i] == paramnum)
-                        {
-                        index = i;
-                        break;
-                        }
+                        int paramnum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_NUM];
+                        int index = -1;
+                        for(int i = 1; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
+                            {
+                                if (FX_INDICES[FX_GROUP[fxtype]][i] == paramnum)
+                                    {
+                                        index = i;
+                                        break;
+                                    }
+                            }
+                        if (index == -1)
+                            {
+                                // System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + FX_GROUP[fxtype] + ":" + paramnum + " (probably 'reserved').");
+                            }
+                        else
+                            {
+                                String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index;
+                                model.set(key, 0);
+                            }
                     }
 
-// [FAIL] fx1class7param3 is [300] vs [44]
-// [FAIL] fx1class7param4 is [400] vs [144]
-// [FAIL] fx2class18param5 is [400] vs [144]
+                // Now we load
+                for(int pcl = 0; pcl < FX_PCL_LIST[FX_GROUP[fxtype]].length; pcl++)
+                    {
+                        int bytenum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BYTE];
+                        int bit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BIT];
+                        int bitlen = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_LEN];
+                        int paramnum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_NUM];
+                        int parambit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_BIT];
+
+                        int index = -1;
+                        for(int i = 0; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
+                            {
+                                if (FX_INDICES[FX_GROUP[fxtype]][i] == paramnum)
+                                    {
+                                        index = i;
+                                        break;
+                                    }
+                            }
+
+                        // [FAIL] fx1class7param3 is [300] vs [44]
+                        // [FAIL] fx1class7param4 is [400] vs [144]
+                        // [FAIL] fx2class18param5 is [400] vs [144]
                                 
-                if (index == -1)  // unused (typically says "reserved for future use")
-                    {
-                    // System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + FX_GROUP[fxtype] + ":" + paramnum + " (probably 'reserved').");
-                    }
-                else
-                    {
-                    // push to the bottom of the byte
-                    int top = ((performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] & 0xFF) >>> bit);
-                    // now push to the top of the byte
-                    top = ((top << (8 - Math.abs(bitlen))) & 0xFF);
-                    // now push back to the bottom of the byte.  This dance fills everything above with zeros or sign extends
-                    if (bitlen < 0)
-                        top = (((byte)top) >> (8 - Math.abs(bitlen)));          // notice the >> and +.  The (byte) forces sign extension of the byte.
-                    else
-                        top = (top >>> (8 - bitlen));         // here we don't WANT a (byte), since we want zero extension
+                        if (index == -1)  // unused (typically says "reserved for future use")
+                            {
+                                // System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + FX_GROUP[fxtype] + ":" + paramnum + " (probably 'reserved').");
+                            }
+                        else
+                            {
+                                // push to the bottom of the byte
+                                int top = ((performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] & 0xFF) >>> bit);
+                                // now push to the top of the byte
+                                top = ((top << (8 - Math.abs(bitlen))) & 0xFF);
+                                // now push back to the bottom of the byte.  This dance fills everything above with zeros or sign extends
+                                if (bitlen < 0)
+                                    top = (((byte)top) >> (8 - Math.abs(bitlen)));          // notice the >> and +.  The (byte) forces sign extension of the byte.
+                                else
+                                    top = (top >>> (8 - bitlen));         // here we don't WANT a (byte), since we want zero extension
                                 
-                    // Now we're ready to position the data
-                    String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index;
+                                // Now we're ready to position the data
+                                String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index;
 
-                    int fxVal = model.get(key);
-                    fxVal = fxVal | (top << parambit);
+                                int fxVal = model.get(key);
+                                fxVal = fxVal | (top << parambit);
 
-                    // Now set the data again
-                    model.set(key, fxVal);
+                                // Now set the data again
+                                model.set(key, fxVal);
+                            }
                     }
-                }
 
-            model.setUpdateListeners(true);
+                model.setUpdateListeners(true);
                         
-            // finally update all the listeners
+                // finally update all the listeners
 
-            int[] indices = FX_INDICES[FX_GROUP[fxtype]];
-            for(int i = 0; i < indices.length; i++)
-                {
-                String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + i;
-                model.set(key, (model.get(key, 0)));
-                }
+                int[] indices = FX_INDICES[FX_GROUP[fxtype]];
+                for(int i = 0; i < indices.length; i++)
+                    {
+                        String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + i;
+                        model.set(key, (model.get(key, 0)));
+                    }
 
             }
                 
@@ -4770,46 +4770,46 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 
         for(int i = 0; i < 8; i++)
             {
-            String part = "part" + (i + 1);
+                String part = "part" + (i + 1);
                         
-            // If the part is unused, the bank number is negative.  We set it to a simple value here.
+                // If the part is unused, the bank number is negative.  We set it to a simple value here.
                                                 
-            if (performance.parts[i].bankNum < 0 || performance.parts[i].bankNum > 4)
-                model.set(part + "bank", 0);
-            else
-                model.set(part + "bank", wsExpToEdisynBank[((performance.parts[i].partMode >>> 6) & 3) * 4 + performance.parts[i].bankNum]);
+                if (performance.parts[i].bankNum < 0 || performance.parts[i].bankNum > 4)
+                    model.set(part + "bank", 0);
+                else
+                    model.set(part + "bank", wsExpToEdisynBank[((performance.parts[i].partMode >>> 6) & 3) * 4 + performance.parts[i].bankNum]);
                                 
-            model.set(part + "playmode", ((performance.parts[i].partMode >>> 4) & 3) - 1);
-            model.set(part + "voicemode", ((performance.parts[i].partMode >>> 2) & 3) - 1);
-            model.set(part + "keypriority", (performance.parts[i].partMode) & 3);  // note NOT - 1
+                model.set(part + "playmode", ((performance.parts[i].partMode >>> 4) & 3) - 1);
+                model.set(part + "voicemode", ((performance.parts[i].partMode >>> 2) & 3) - 1);
+                model.set(part + "keypriority", (performance.parts[i].partMode) & 3);  // note NOT - 1
                         
-            // patch number is -1 when unset
-            model.set(part + "number", performance.parts[i].patchNum);
-            model.set(part + "volume", performance.parts[i].level);
+                // patch number is -1 when unset
+                model.set(part + "number", performance.parts[i].patchNum);
+                model.set(part + "volume", performance.parts[i].level);
                         
-            // This is wrong in the doumentation, it's actually the FX Bus
-            model.set(part + "fxbus", performance.parts[i].output);
-            model.set(part + "lowkey", performance.parts[i].loKey);
-            model.set(part + "hikey", performance.parts[i].hiKey);
-            model.set(part + "lowvel", performance.parts[i].loVel);
-            model.set(part + "hivel", performance.parts[i].hiVel);
-            model.set(part + "transpose", performance.parts[i].trans);
-            model.set(part + "detune", performance.parts[i].detune);
-            model.set(part + "scale", performance.parts[i].tuneTab);
-            model.set(part + "scalekey", performance.parts[i].microTuneKey + 1);  // FIXME -- is this right?
-//                      model.set(part + "??????", performance.parts[i].midiOutChan);
-//                      model.set(part + "??????", performance.parts[i].midiProgNum);
-            model.set(part + "sustain", performance.parts[i].susEnable);
-            model.set(part + "delay", performance.parts[i].delay);
+                // This is wrong in the doumentation, it's actually the FX Bus
+                model.set(part + "fxbus", performance.parts[i].output);
+                model.set(part + "lowkey", performance.parts[i].loKey);
+                model.set(part + "hikey", performance.parts[i].hiKey);
+                model.set(part + "lowvel", performance.parts[i].loVel);
+                model.set(part + "hivel", performance.parts[i].hiVel);
+                model.set(part + "transpose", performance.parts[i].trans);
+                model.set(part + "detune", performance.parts[i].detune);
+                model.set(part + "scale", performance.parts[i].tuneTab);
+                model.set(part + "scalekey", performance.parts[i].microTuneKey + 1);  // FIXME -- is this right?
+                //                      model.set(part + "??????", performance.parts[i].midiOutChan);
+                //                      model.set(part + "??????", performance.parts[i].midiProgNum);
+                model.set(part + "sustain", performance.parts[i].susEnable);
+                model.set(part + "delay", performance.parts[i].delay);
             }
 
         return PARSE_SUCCEEDED;     
-        }
+    }
     
     public static final int EXPECTED_SYSEX_LENGTH = 371;
 
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
-        {
+    {
         if (tempModel == null)
             tempModel = getModel();
         
@@ -4850,95 +4850,95 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                                 
         for(int fx = 1; fx <= 2; fx++)
             {
-            int fxtype = model.get("fx" + fx + "type");
+                int fxtype = model.get("fx" + fx + "type");
                         
-            if (fxtype >= 48)  // extended effect
-                {
-                performance.fxPerfBlock[(fx == 1 ? 5 : 13)] = (byte)(performance.fxPerfBlock[(fx == 1 ? 5 : 13)] | (fxtype - 47));
-                performance.fxPerfBlock[fx - 1] = (byte)(performance.fxPerfBlock[fx - 1] | 2);          // "No Effect"
-                }
-            else
-                {
-                // NO_EFFECT will get 0 in its extended area anyway
-                performance.fxPerfBlock[fx - 1] = (byte)(performance.fxPerfBlock[fx - 1] | (fxtype + 2));
-                }
-
-            if (fxtype != 0)
-                {
-                // Now we load
-                for(int pcl = 0; pcl < FX_PCL_LIST[FX_GROUP[fxtype]].length; pcl++)
+                if (fxtype >= 48)  // extended effect
                     {
-                    int bytenum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BYTE];
-                    int bit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BIT];
-                    int bitlen = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_LEN];
-                    int paramnum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_NUM];
-                    int parambit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_BIT];
-
-                    int index = -1;  
-                    for(int i = 1; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
-                        {
-                        if (FX_INDICES[FX_GROUP[fxtype]][i] == paramnum)
-                            {
-                            index = i;
-                            break;
-                            }
-                        }
-                                                
-                    if (index == -1)  // unused (typically says "reserved for future use")
-                        {
-                        // System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + FX_GROUP[fxtype] + ":" + paramnum + " (probably 'reserved').");
-                        }
-                    else
-                        {                     
-                        String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index;
-
-                        int top = model.get(key);
-                                                                                                                                
-                        // push to the bottom of the *int*, not byte
-                        top = (top >>> parambit);
-                        // now push to the top of the byte
-                        top = ((top << (8 - Math.abs(bitlen))) & 0xFF);
-                        // Now push back to the bottom of the byte
-                        top = (top >>> (8 - Math.abs(bitlen)));
-                                                                                                
-                        // Now we're ready to position the data
-                        performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] = 
-                            (byte)(performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] | ((top << bit) & 0xFF));
-                        }
+                        performance.fxPerfBlock[(fx == 1 ? 5 : 13)] = (byte)(performance.fxPerfBlock[(fx == 1 ? 5 : 13)] | (fxtype - 47));
+                        performance.fxPerfBlock[fx - 1] = (byte)(performance.fxPerfBlock[fx - 1] | 2);          // "No Effect"
                     }
-                }
+                else
+                    {
+                        // NO_EFFECT will get 0 in its extended area anyway
+                        performance.fxPerfBlock[fx - 1] = (byte)(performance.fxPerfBlock[fx - 1] | (fxtype + 2));
+                    }
+
+                if (fxtype != 0)
+                    {
+                        // Now we load
+                        for(int pcl = 0; pcl < FX_PCL_LIST[FX_GROUP[fxtype]].length; pcl++)
+                            {
+                                int bytenum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BYTE];
+                                int bit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BIT];
+                                int bitlen = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_LEN];
+                                int paramnum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_NUM];
+                                int parambit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_BIT];
+
+                                int index = -1;  
+                                for(int i = 1; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
+                                    {
+                                        if (FX_INDICES[FX_GROUP[fxtype]][i] == paramnum)
+                                            {
+                                                index = i;
+                                                break;
+                                            }
+                                    }
+                                                
+                                if (index == -1)  // unused (typically says "reserved for future use")
+                                    {
+                                        // System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + FX_GROUP[fxtype] + ":" + paramnum + " (probably 'reserved').");
+                                    }
+                                else
+                                    {                     
+                                        String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index;
+
+                                        int top = model.get(key);
+                                                                                                                                
+                                        // push to the bottom of the *int*, not byte
+                                        top = (top >>> parambit);
+                                        // now push to the top of the byte
+                                        top = ((top << (8 - Math.abs(bitlen))) & 0xFF);
+                                        // Now push back to the bottom of the byte
+                                        top = (top >>> (8 - Math.abs(bitlen)));
+                                                                                                
+                                        // Now we're ready to position the data
+                                        performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] = 
+                                            (byte)(performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] | ((top << bit) & 0xFF));
+                                    }
+                            }
+                    }
             }
                
         // emit parts
                 
         for(int i = 0; i < 8; i++)
             {
-            String part = "part" + (i + 1);
+                String part = "part" + (i + 1);
                         
-            int bank = edisynToWSExpBank[model.get(part + "bank")];
-            performance.parts[i].bankNum = bank % 4;
-            performance.parts[i].partMode = (((bank / 4) & 3) << 6) | 
-                ((model.get(part + "playmode") + 1) << 4) |
-                ((model.get(part + "voicemode") + 1) << 2) |
-                (model.get(part + "keypriority"));
+                int bank = edisynToWSExpBank[model.get(part + "bank")];
+                performance.parts[i].bankNum = bank % 4;
+                performance.parts[i].partMode = (((bank / 4) & 3) << 6) | 
+                    ((model.get(part + "playmode") + 1) << 4) |
+                    ((model.get(part + "voicemode") + 1) << 2) |
+                    (model.get(part + "keypriority"));
                                                                                         
-            performance.parts[i].patchNum = model.get(part + "number");
-            performance.parts[i].level = model.get(part + "volume");
+                performance.parts[i].patchNum = model.get(part + "number");
+                performance.parts[i].level = model.get(part + "volume");
 
-            // This is wrong in the doumentation, it's actually the FX Bus
-            performance.parts[i].output = model.get(part + "fxbus");
-            performance.parts[i].loKey = model.get(part + "lowkey");
-            performance.parts[i].hiKey = model.get(part + "hikey");
-            performance.parts[i].loVel = model.get(part + "lowvel");
-            performance.parts[i].hiVel = model.get(part + "hivel");
-            performance.parts[i].trans = model.get(part + "transpose");
-            performance.parts[i].detune = model.get(part + "detune");
-            performance.parts[i].tuneTab = model.get(part + "scale");
-            performance.parts[i].microTuneKey = model.get(part + "scalekey") - 1;
-//                      performance.parts[i].midiOutChan = model.get(part + "??????");
-//                      performance.parts[i].midiProgNum = model.get(part + "??????");
-            performance.parts[i].susEnable = model.get(part + "sustain");
-            performance.parts[i].delay = model.get(part + "delay");
+                // This is wrong in the doumentation, it's actually the FX Bus
+                performance.parts[i].output = model.get(part + "fxbus");
+                performance.parts[i].loKey = model.get(part + "lowkey");
+                performance.parts[i].hiKey = model.get(part + "hikey");
+                performance.parts[i].loVel = model.get(part + "lowvel");
+                performance.parts[i].hiVel = model.get(part + "hivel");
+                performance.parts[i].trans = model.get(part + "transpose");
+                performance.parts[i].detune = model.get(part + "detune");
+                performance.parts[i].tuneTab = model.get(part + "scale");
+                performance.parts[i].microTuneKey = model.get(part + "scalekey") - 1;
+                //                      performance.parts[i].midiOutChan = model.get(part + "??????");
+                //                      performance.parts[i].midiProgNum = model.get(part + "??????");
+                performance.parts[i].susEnable = model.get(part + "sustain");
+                performance.parts[i].delay = model.get(part + "delay");
             }
 
         byte[] data = new byte[NYBBLIZED_LENGTH];
@@ -4956,16 +4956,16 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             return new Object[] { d };
         else
             {
-            // we'll attempt a write.  Assuming we did a PC first, then we might be okay because it does a switch to mulltiset and back to performance, see the developer FAQ about writing performances
-            return new Object[] { d, paramBytes(EXECUTE_WRITE, 1) };
+                // we'll attempt a write.  Assuming we did a PC first, then we might be okay because it does a switch to mulltiset and back to performance, see the developer FAQ about writing performances
+                return new Object[] { d, paramBytes(EXECUTE_WRITE, 1) };
             }
-        }
+    }
 
         
     public int getPauseAfterChangePatch() { return 300; }  // looks like 300 is about the minimum, else we get a sysex checksum error on the next sysex dump, probably because bytes were dropped
 
     public void changePatch(Model tempModel)
-        {
+    {
         // we need to do this in order to be able to write.  See Developer FAQ
         byte[] midi_mesg = paramBytes(MIDI_MODE, MULTISET_MIDI_MODE);
         tryToSendSysex(midi_mesg);
@@ -4977,13 +4977,13 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         // change the bank
         try {
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0,  MIDI_BANKS[tempModel.get("bank", 0)]));
-            }
+        }
         catch (Exception e) { Synth.handleException(e); }
 
         // change the number
         try {
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), tempModel.get("number", 0) + MIDI_PROG_CHANGE_OFFSETS[tempModel.get("bank", 0)], 0));
-            }
+        }
         catch (Exception e) { Synth.handleException(e); }
 
         // specify that we're editing said bank
@@ -4993,24 +4993,24 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         // specify that we're editing said number
         byte[] prog_mesg = paramBytes(CURRENT_PROG, tempModel.get("number", 0));
         tryToSendSysex(prog_mesg);
-        }
+    }
 
     public byte[] requestDump(Model tempModel)
-        {
+    {
         if (tempModel == null)
             tempModel = getModel();
 
         byte BB = (byte)edisynToWSBank[tempModel.get("bank")];
         byte NN = (byte)tempModel.get("number");
         return new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x28, (byte)0x19, BB, NN, (byte)0xF7 };
-        }
+    }
     
     
 
     /////// OTHER ABSTRACT METHODS
     
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-        {
+    {
         JComboBox bank = new JComboBox(BANKS);
         bank.setEditable(false);
         bank.setMaximumRowCount(32);
@@ -5020,35 +5020,35 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 
         while(true)
             {
-            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
+                boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                                                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
                 
-            if (result == false) 
-                return false;
+                if (result == false) 
+                    return false;
                                 
-            int n;
-            try { n = Integer.parseInt(number.getText()); }
-            catch (NumberFormatException e)
-                {
-                showSimpleError(title, "The Performance Number must be an integer 0 ... 49");
-                continue;
-                }
-            if (n < 0 || n > 49)
-                {
-                showSimpleError(title, "The Performance Number must be an integer 0 ... 49");
-                continue;
-                }
+                int n;
+                try { n = Integer.parseInt(number.getText()); }
+                catch (NumberFormatException e)
+                    {
+                        showSimpleError(title, "The Performance Number must be an integer 0 ... 49");
+                        continue;
+                    }
+                if (n < 0 || n > 49)
+                    {
+                        showSimpleError(title, "The Performance Number must be an integer 0 ... 49");
+                        continue;
+                    }
                                 
-            change.set("bank", bank.getSelectedIndex());
-            change.set("number", n);
+                change.set("bank", bank.getSelectedIndex());
+                change.set("number", n);
                         
-            return true;
+                return true;
             }
-        }
+    }
         
 
     public void revise()
-        {
+    {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -5056,7 +5056,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-        }
+    }
         
     public static String getSynthName() { return "Korg Wavestation SR [Performance]"; }
     
@@ -5064,27 +5064,27 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
     
 
     public Model getNextPatchLocation(Model model)
-        {
+    {
         int bank = model.get("bank");
         int number = model.get("number");
         
         number++;
         if (number >= 49)
             {
-            bank++;
-            number = 0;
-            if (bank >= 12)
-                bank = 0;
+                bank++;
+                number = 0;
+                if (bank >= 12)
+                    bank = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-        }
+    }
 
     public String getPatchLocationName(Model model)
-        {
+    {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -5093,12 +5093,12 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         
         int number = model.get("number");
         return BANKS[model.get("bank")] + " " + (number > 9 ? "" : "0") + number;
-        }
+    }
 
     public int getPauseBetweenHillClimbPlays()
-        {
-//      return model.get("hillclimbdelay");
+    {
+        //      return model.get("hillclimbdelay");
         return 1100;
-        }
     }
+}
     

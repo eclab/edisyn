@@ -9,6 +9,6 @@ import java.util.*;
 
 
 public interface HasKey
-    {
+{
     public String getKey();
-    }
+}

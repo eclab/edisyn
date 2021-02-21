@@ -12,7 +12,7 @@ import java.io.*;
 import java.awt.geom.*;
 
 public class Joystick extends JComponent
-    {
+{
     public double xPos = 0;
     public double yPos = 0;
     public double[] xPositions = new double[0];
@@ -43,23 +43,23 @@ public class Joystick extends JComponent
     public void setUnsetColor(Color color) { unsetColor = color; }
         
     public Dimension getMinimumSize()
-        {
+    {
         return new Dimension((int)(128 + Style.JOYSTICK_WIDTH() + Style.DIAL_STROKE_WIDTH() + margin), (int)(128 + Style.JOYSTICK_WIDTH() + Style.DIAL_STROKE_WIDTH() + margin));
-        }
+    }
         
     public Dimension getPreferredSize()
-        {
+    {
         return getMinimumSize();
-        }
+    }
     
     public void prepaint(Graphics2D g)
-        {
-        }
+    {
+    }
     
     
     
     public void paintComponent(Graphics g)
-        {
+    {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Style.BACKGROUND_COLOR());
         g2d.fill(new Rectangle2D.Double(0, 0, getWidth(), getHeight()));
@@ -76,52 +76,52 @@ public class Joystick extends JComponent
             
         for(int i = xPositions.length - 1; i >= 0 ; i--)
             {
-            g2d.setColor(colors[i]);
-            double centerX2 = (xPositions[i] + 1) / 2 * (getWidth() - margin * 2) + margin;
-            double centerY2 = (yPositions[i] + 1) / 2 * (getHeight() - margin * 2) + margin;
-            g2d.fill(new Ellipse2D.Double(centerX2 - Style.JOYSTICK_WIDTH() / 4.0, centerY2 - Style.JOYSTICK_WIDTH() / 4.0, Style.JOYSTICK_WIDTH() / 2.0, Style.JOYSTICK_WIDTH() / 2.0));
+                g2d.setColor(colors[i]);
+                double centerX2 = (xPositions[i] + 1) / 2 * (getWidth() - margin * 2) + margin;
+                double centerY2 = (yPositions[i] + 1) / 2 * (getHeight() - margin * 2) + margin;
+                g2d.fill(new Ellipse2D.Double(centerX2 - Style.JOYSTICK_WIDTH() / 4.0, centerY2 - Style.JOYSTICK_WIDTH() / 4.0, Style.JOYSTICK_WIDTH() / 2.0, Style.JOYSTICK_WIDTH() / 2.0));
                 
-            if (xPositions.length > 1)
-                {
-                double hpos = centerY2 - Style.JOYSTICK_WIDTH() / 4.0 - height;
-                if (hpos - height < 0)  // uh oh
-                    hpos = centerY2 + Style.JOYSTICK_WIDTH() / 4.0 + height;
-                g2d.drawString("" + i, 
-                    (float)(centerX2 - g2d.getFontMetrics().stringWidth("" + i) / 2.0),
-                    (float)hpos);
-                }
+                if (xPositions.length > 1)
+                    {
+                        double hpos = centerY2 - Style.JOYSTICK_WIDTH() / 4.0 - height;
+                        if (hpos - height < 0)  // uh oh
+                            hpos = centerY2 + Style.JOYSTICK_WIDTH() / 4.0 + height;
+                        g2d.drawString("" + i, 
+                                       (float)(centerX2 - g2d.getFontMetrics().stringWidth("" + i) / 2.0),
+                                       (float)hpos);
+                    }
             }
         
         if (pressed || drawsUnpressedCursor)
             {
-            if (!pressed)
-                g2d.setColor(unsetColor);
-            else
-                g2d.setColor(Style.DIAL_DYNAMIC_COLOR());
-            g2d.setStroke(Style.DIAL_THIN_STROKE());
-            double centerX = (xPos + 1) / 2 * (getWidth() - margin * 2) + margin;
-            double centerY = (yPos + 1) / 2 * (getHeight() - margin * 2) + margin;
-            g2d.draw(new Ellipse2D.Double(centerX - Style.JOYSTICK_WIDTH() / 2.0, centerY - Style.JOYSTICK_WIDTH() / 2.0, Style.JOYSTICK_WIDTH(), Style.JOYSTICK_WIDTH()));
+                if (!pressed)
+                    g2d.setColor(unsetColor);
+                else
+                    g2d.setColor(Style.DIAL_DYNAMIC_COLOR());
+                g2d.setStroke(Style.DIAL_THIN_STROKE());
+                double centerX = (xPos + 1) / 2 * (getWidth() - margin * 2) + margin;
+                double centerY = (yPos + 1) / 2 * (getHeight() - margin * 2) + margin;
+                g2d.draw(new Ellipse2D.Double(centerX - Style.JOYSTICK_WIDTH() / 2.0, centerY - Style.JOYSTICK_WIDTH() / 2.0, Style.JOYSTICK_WIDTH(), Style.JOYSTICK_WIDTH()));
             }
-        }
+    }
     
     public void updatePosition()
-        {
+    {
         repaint();
-        }
+    }
         
     public void release()
-        {
+    {
         if (snap)
             {
-            xPos = 0;
-            yPos = 0;
-            updatePosition();
+                xPos = 0;
+                yPos = 0;
+                updatePosition();
             }
-        }
+    }
         
     public void revisePosition(MouseEvent e)
-        {
+    {
         xPos = 2 * ((e.getX() - margin) / ((double)getWidth() - (margin * 2.0))) - 1;
         yPos = 2 * ((e.getY() - margin) / ((double)getHeight() - (margin * 2.0))) - 1;
         if (xPos < -1.0) xPos = -1.0;
@@ -130,152 +130,152 @@ public class Joystick extends JComponent
         if (yPos > 1.0) yPos = 1.0;
         if (xPositions.length > 0)
             {
-            xPositions[position] = xPos;
-            yPositions[position] = yPos;
+                xPositions[position] = xPos;
+                yPositions[position] = yPos;
             }
-        }
+    }
         
     public AWTEventListener releaseListener = null;
 
     public Joystick(Synth synth)
-        {
+    {
         this.synth = synth;
         
         addMouseMotionListener(new MouseMotionAdapter()
             {
-            public void mouseDragged(MouseEvent e)
+                public void mouseDragged(MouseEvent e)
                 {
-                revisePosition(e);
-                updatePosition();
+                    revisePosition(e);
+                    updatePosition();
                 }
             });
                         
         addMouseListener(new MouseAdapter()
             {
-            public void mouseClicked(MouseEvent e)
+                public void mouseClicked(MouseEvent e)
                 {
-                if (e.getClickCount() > 1)
-                    {
-                    xPos = 0;
-                    yPos = 0;
-                    if (xPositions.length > 0)
+                    if (e.getClickCount() > 1)
                         {
-                        xPositions[position] = 0;
-                        yPositions[position] = 0;
+                            xPos = 0;
+                            yPos = 0;
+                            if (xPositions.length > 0)
+                                {
+                                    xPositions[position] = 0;
+                                    yPositions[position] = 0;
+                                }
+                            updatePosition();
                         }
-                    updatePosition();
-                    }
                 }
                 
-            public void mousePressed(MouseEvent e)
+                public void mousePressed(MouseEvent e)
                 {
-                mouseDown();
+                    mouseDown();
                 
-                if (releaseListener != null)
-                    {
-                    releaseListener = null;
-                    }
-
-                // This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
-                // same component that received mouseClicked.  What the ... ? Asinine.
-                // So we create a global event listener which checks for mouseReleased and
-                // calls our own private function.  EVERYONE is going to do this.
-                                                        
-                Toolkit.getDefaultToolkit().addAWTEventListener( releaseListener = new AWTEventListener()
-                    {
-                    public void eventDispatched(AWTEvent evt)
+                    if (releaseListener != null)
                         {
-                        if (evt instanceof MouseEvent && evt.getID() == MouseEvent.MOUSE_RELEASED)
+                            releaseListener = null;
+                        }
+
+                    // This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
+                    // same component that received mouseClicked.  What the ... ? Asinine.
+                    // So we create a global event listener which checks for mouseReleased and
+                    // calls our own private function.  EVERYONE is going to do this.
+                                                        
+                    Toolkit.getDefaultToolkit().addAWTEventListener( releaseListener = new AWTEventListener()
+                        {
+                            public void eventDispatched(AWTEvent evt)
                             {
-                            MouseEvent e = (MouseEvent) evt;
-                            if (releaseListener != null)
-                                {
-                                mouseUp();
-                                if (snap)
+                                if (evt instanceof MouseEvent && evt.getID() == MouseEvent.MOUSE_RELEASED)
                                     {
+                                        MouseEvent e = (MouseEvent) evt;
+                                        if (releaseListener != null)
+                                            {
+                                                mouseUp();
+                                                if (snap)
+                                                    {
+                                                        xPos = 0;
+                                                        yPos = 0;
+                                                        if (xPositions.length > 0)
+                                                            {
+                                                                xPositions[position] = 0;
+                                                                yPositions[position] = 0;
+                                                            }
+                                                        updatePosition();
+                                                    }
+                                                pressed = false;
+                                                Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener );
+                                                repaint();
+                                            }
+                                    }
+                            }
+                        }, AWTEvent.MOUSE_EVENT_MASK);
+
+
+                    boolean found = false;
+                    if (xPositions.length > 1)
+                        {
+                            for(int i = 0; i < xPositions.length; i++)
+                                {
+                                    double centerX = (xPositions[i] + 1) / 2 * (getWidth() - margin * 2) + margin;
+                                    double centerY = (yPositions[i] + 1) / 2 * (getHeight() - margin * 2) + margin;
+                                    if (((centerX - e.getX()) * (centerX - e.getX()) +
+                                         (centerY - e.getY()) * (centerY - e.getY())) <= (Style.JOYSTICK_WIDTH() / 4.0) * (Style.JOYSTICK_WIDTH() / 4.0))
+                                        {
+                                            position = i;   // got a new position
+                                            found = true;
+                                            break;
+                                        }
+                                }
+                        }
+                    if (!found && xPositions.length > 1)
+                        {
+                            // maybe try a bit more slop
+                            for(int i = 0; i < xPositions.length; i++)
+                                {
+                                    double centerX = (xPositions[i] + 1) / 2 * (getWidth() - margin * 2) + margin;
+                                    double centerY = (yPositions[i] + 1) / 2 * (getHeight() - margin * 2) + margin;
+                                    if (((centerX - e.getX()) * (centerX - e.getX()) +
+                                         (centerY - e.getY()) * (centerY - e.getY())) <= (Style.JOYSTICK_WIDTH() / 2.0) * (Style.JOYSTICK_WIDTH() / 2.0))
+                                        {
+                                            position = i;   // got a new position
+                                            found = true;
+                                            break;
+                                        }
+                                }
+                        }
+                        
+                    pressed = true;
+                    revisePosition(e);
+                    updatePosition();
+                }
+                                
+                public void mouseReleased(MouseEvent e)
+                {
+                    if (releaseListener == null)
+                        {
+                            mouseUp();
+                            if (snap)
+                                {
                                     xPos = 0;
                                     yPos = 0;
                                     if (xPositions.length > 0)
                                         {
-                                        xPositions[position] = 0;
-                                        yPositions[position] = 0;
+                                            xPositions[position] = 0;
+                                            yPositions[position] = 0;
                                         }
                                     updatePosition();
-                                    }
-                                pressed = false;
-                                Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener );
-                                repaint();
                                 }
-                            }
+                            pressed = false;
+                            repaint();
                         }
-                    }, AWTEvent.MOUSE_EVENT_MASK);
-
-
-                boolean found = false;
-                if (xPositions.length > 1)
-                    {
-                    for(int i = 0; i < xPositions.length; i++)
-                        {
-                        double centerX = (xPositions[i] + 1) / 2 * (getWidth() - margin * 2) + margin;
-                        double centerY = (yPositions[i] + 1) / 2 * (getHeight() - margin * 2) + margin;
-                        if (((centerX - e.getX()) * (centerX - e.getX()) +
-                                (centerY - e.getY()) * (centerY - e.getY())) <= (Style.JOYSTICK_WIDTH() / 4.0) * (Style.JOYSTICK_WIDTH() / 4.0))
-                            {
-                            position = i;   // got a new position
-                            found = true;
-                            break;
-                            }
-                        }
-                    }
-                if (!found && xPositions.length > 1)
-                    {
-                    // maybe try a bit more slop
-                    for(int i = 0; i < xPositions.length; i++)
-                        {
-                        double centerX = (xPositions[i] + 1) / 2 * (getWidth() - margin * 2) + margin;
-                        double centerY = (yPositions[i] + 1) / 2 * (getHeight() - margin * 2) + margin;
-                        if (((centerX - e.getX()) * (centerX - e.getX()) +
-                                (centerY - e.getY()) * (centerY - e.getY())) <= (Style.JOYSTICK_WIDTH() / 2.0) * (Style.JOYSTICK_WIDTH() / 2.0))
-                            {
-                            position = i;   // got a new position
-                            found = true;
-                            break;
-                            }
-                        }
-                    }
-                        
-                pressed = true;
-                revisePosition(e);
-                updatePosition();
-                }
-                                
-            public void mouseReleased(MouseEvent e)
-                {
-                if (releaseListener == null)
-                    {
-                    mouseUp();
-                    if (snap)
-                        {
-                        xPos = 0;
-                        yPos = 0;
-                        if (xPositions.length > 0)
-                            {
-                            xPositions[position] = 0;
-                            yPositions[position] = 0;
-                            }
-                        updatePosition();
-                        }
-                    pressed = false;
-                    repaint();
-                    }
                 }
             });
         repaint();
-        }
+    }
 
     /** Empty hook, called when mouse is pressed */
     public void mouseDown() { }
 
     /** Empty hook, called when mouse is released */
     public void mouseUp() { }
-    }
+}

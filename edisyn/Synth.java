@@ -274,6 +274,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 synth.sprout();
                 final JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+	            setLastSynth(_class.getName());
 
                 if (Style.isMac())
                     {
@@ -2292,45 +2293,6 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 
-    // Convert Bulk Bank
-        
-    /* Converts a bulk bank (a bank sysex consisting of different kinds of patches) into separate
-       bank sysex messages or individual messages or a combination.  This is done by ultimately calling the CLASS method 
-       <tt>public static boolean convertBulkBank(data)</tt> that each synthesizer subclass is asked to implement. */
-/*    public static byte[][] convertBulkBank(String synthClassName, byte[] data)
-      {
-      Class recognizer = getRecognizer(synthClassName);
-      if (recognizer == null) 
-      { 
-      System.err.println("Synth.convertBulkBank() WARNING: No recognizer for " + synthClassName); 
-      return false;
-      }
-
-      try
-      {
-      Method method = recognizer.getMethod("convertBulkBank", new Class[] { byte[].class });
-      Object obj = method.invoke(null, data);
-      return ((Boolean)obj).booleanValue();
-      }
-      catch (Exception e)
-      {
-      return false;
-      }
-      }
-*/
-
-    /* Converts a bulk bank (a bank sysex consisting of different kinds of patches) into separate
-       bank sysex messages or individual messages or a combination
-       This is done by ultimately calling the CLASS method <tt>public static boolean convertBulkBank(data)</tt> 
-       that your synthesizer subclass is asked to implement. */
-/*
-  public final byte[][] convertBulkBankLocal(byte[] data)
-  {
-  return convertBulkBankLocal(Synth.this.getClass().getName(), data);
-  }
-*/
-
-
     // Getting a Sysex Patch Group
         
 
@@ -2898,6 +2860,23 @@ public abstract class Synth extends JComponent implements Updatable
     /** Given a preferences path X for a given synth, returns the value stored in X as an integer.
         If there is no such value, then returns the value stored in X in the globals if !getFromSynthOnly.
         If there again is no such value, returns defaultVal. */
+    public static boolean getLastXAsBoolean(String slot, String synth, boolean defaultVal, boolean getFromSynthOnly)
+        {
+        String val = getLastX(slot, synth, getFromSynthOnly);
+		if ("false".equalsIgnoreCase(val))
+			{
+			return false;
+			}
+		else if ("true".equalsIgnoreCase(val))
+			{
+			return true;
+			}
+		else return defaultVal;
+        }
+
+    /** Given a preferences path X for a given synth, returns the value stored in X as an integer.
+        If there is no such value, then returns the value stored in X in the globals if !getFromSynthOnly.
+        If there again is no such value, returns defaultVal. */
     public static int getLastXAsInt(String slot, String synth, int defaultVal, boolean getFromSynthOnly)
         {
         String tnls = getLastX(slot, synth, getFromSynthOnly);
@@ -2942,10 +2921,12 @@ public abstract class Synth extends JComponent implements Updatable
     // sets the last directory used by load, save, or save as
     public String getLastDirectory() { return getLastX("LastDirectory", getSynthNameLocal(), false); }
     
-    // sets the last synthesizer opened via the global window.
-    static void setLastSynth(String synth) { setLastX(synth, "Synth", null, false); }
-    // gets the last synthesizer opened via the global window.
-    static String getLastSynth() { return getLastX("Synth", null, false); }
+    // sets the last synthesizer opened to the given classname
+    public static void setLastSynth(String synth) { 
+    	setLastX(synth, "Synth", null, false); 
+    	}
+    // returns the classname of the last synthesizer opened
+    public static String getLastSynth() { return getLastX("Synth", null, false); }
         
     public static Color getLastColor(String key, Color defaultColor)
         {
@@ -4790,12 +4771,24 @@ public abstract class Synth extends JComponent implements Updatable
         setPassThroughController(val == null || val.equalsIgnoreCase("true"));
             
             
-        menu.addSeparator();
-        
+        menu = new JMenu("Options");
+        menubar.add(menu);
+                        
 		persistentChooserMenu  = new JCheckBoxMenuItem("Keep Next Popup Open");
         persistentChooserMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		menu.add(persistentChooserMenu);
         
+        JCheckBoxMenuItem launchMenu = new JCheckBoxMenuItem("Launch With Last Editor");
+        menu.add(launchMenu);
+        launchMenu.setSelected(getLastXAsBoolean("ShowSynth", null, true, false));
+        launchMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setLastX("" + launchMenu.isSelected(), "ShowSynth", null);
+                }
+            });
+
         JMenuItem colorMenu = new JMenuItem("Change Color Scheme");
         menu.add(colorMenu);
         colorMenu.addActionListener(new ActionListener()
@@ -4846,6 +4839,8 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
+
+        menu.addSeparator();
 
         JMenuItem taba = new JMenuItem("Tab 1");
         taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -4932,6 +4927,28 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 doTab(7);
+                }
+            });
+
+        taba = new JMenuItem("Tab 9");
+        taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(taba);
+        taba.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doTab(8);
+                }
+            });
+
+        taba = new JMenuItem("Tab 10");
+        taba.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menu.add(taba);
+        taba.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doTab(9);
                 }
             });
                         
@@ -6394,7 +6411,6 @@ public abstract class Synth extends JComponent implements Updatable
             vbox.add(new JSeparator());
             vbox.add(new JLabel("   "));
 
-//                      vbox.add(Strut.makeVerticalStrut(16));
             JPanel actionsPanel = new JPanel();
             actionsPanel.setLayout(new BorderLayout());
             actionsPanel.add(new JLabel("Action  "), BorderLayout.WEST);
@@ -6648,7 +6664,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void run()
                 {
-                showMultiOption(Synth.this, new String[] { "Progress" } , new JComponent[] { bar }, new String[] { "Cancel" }, 0, "Bulk Write", "Writing patches to synthesizer...");
+                showMultiOption(Synth.this, new String[] { "Progress " } , new JComponent[] { bar }, new String[] { "Cancel" }, 0, "Bulk Write", "Writing patches to synthesizer...");
                 writeBulkCancelled[0] = true;
                 }
             });
@@ -6680,6 +6696,7 @@ public abstract class Synth extends JComponent implements Updatable
                 else
                     {
                     if (!tryToSendSysex(dat[index[0]])) invalid[0] = true;  // we ignore the return value because we'll try 
+                    simplePause(pause);
                     index[0]++;
                     bar.setValue(index[0] + 1);
                     }

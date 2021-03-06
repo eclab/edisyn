@@ -2481,6 +2481,33 @@ public class MAudioVenom extends Synth
         return BANKS[bank] + " " + ((number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
     }
         
+    public boolean adjustBulkSysexForWrite(Synth window, byte[][][] data)
+		{
+		int res = showMultiOption(window, new String[0], new JComponent[0], 
+			new String[] { "Bank C", "Bank D", "Cancel" },
+			0, getSynthName() + " Bulk Write", 
+			new JLabel("Write " + getSynthName() + " patches to which bank?"));
+		if (res < 0 || res == 2)
+			return false;
+		else for(int i = 0; i < data.length; i++)
+			{
+			for(int j = 0; j < data[i].length; j++)
+				{
+				data[i][j][5] = DEFAULT_ID;		// 0x7F just in case
+				if (data[i][j][7] == 0x01)	// Single Patch Dump
+					{
+					data[i][j][8] = (byte)(res == 0 ? 3 : 4);			// banks are a=1, b=2, c=3, d=4
+					
+					// recompute checksum
+					int len = data[i][j].length - 2;
+					data[i][j][len] = checksum(data[i][j], 6, len);
+					}
+				else System.err.println("Unknown sysex");
+				}
+			}
+		return true;
+		}
+                 
 
     /** Map of parameter -> index in the allParameters array. */
     static HashMap parametersToIndex = null;

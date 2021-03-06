@@ -806,7 +806,7 @@ public class Model implements Cloneable
         if (!updateListeners) return;
         
         Node node = storage.get(key);
-        if (node.listeners != null)
+        if (node != null && node.listeners != null)
             {
                 for(int i = 0; i < node.listeners.size(); i++)
                     node.listeners.get(i).update(key, this);

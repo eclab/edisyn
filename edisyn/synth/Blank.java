@@ -791,10 +791,23 @@ public class Blank extends Synth
         return true;
     }
 
+    public boolean adjustBulkSysexForWrite(Synth window, byte[][][] data)
+    {
+        // Before a bank sysex file is emitted to a synthesizer, you're given the 
+        // chance to modify the sysex messages, typically to modify the channel or ID.
+        // If you return false, then the write is canceled.  The data arranged as:
+        // byte[patch][sysexmessage][bytes], that is, each patch can have multiple
+        // sysex messages, each of which is some number of bytes.  The provided
+    	// synthesizer is *not* the synthesizer for the data (that's you).  Instead, it
+    	// allows you to properly pop up a confirm dialog centered at the given window.
+    	// That's all it should be used for.
+        return true;
+    }
+                 
     public Object adjustBankSysexForEmit(byte[] data, Model model)
     {
         // Before a bank sysex file is emitted to a synthesizer, you're given the 
-        // chance to adjust the data file, typically to modify the channel or ID
+        // chance to adjust the data, typically to modify the channel or ID
         return data;
     }
                  

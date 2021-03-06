@@ -189,7 +189,7 @@ public class Chooser extends NumericalComponent
             
         combo.addPopupMenuListener(new PopupMenuListener()
             {
-                public void popupMenuCanceled(PopupMenuEvent e) { synth.persistentChooserMenu.setSelected(false); }
+                public void popupMenuCanceled(PopupMenuEvent e) { if (synth.persistentChooserMenu != null) synth.persistentChooserMenu.setSelected(false); }
                 public void popupMenuWillBecomeInvisible(PopupMenuEvent e) { }
                 public void popupMenuWillBecomeVisible(PopupMenuEvent e) { }
             });

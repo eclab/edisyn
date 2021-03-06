@@ -1,0 +1,71 @@
+<html><head></head><body>
+<h1>Waldorf Rocket</h1> 
+<h2>Patch Editor</h2>
+
+This patch editor is meant to work with the Waldorf Rocket with Firmware Version 1.01 installed.  Be sure to update your Rocket to that.  It fixes arpeggiator bugs and adds two more parameters.
+
+
+<p><b>Communicating with Edisyn</b><br> 
+The Rocket communicates with Edisyn over a mixture of Sysex and CC (or what the Rocket manual calls "MIDI Controller Numbers").  This has two complications which you must overcome in order to communicate properly with Edisyn.
+
+<ul>
+<li>
+Set the Rocket's transmit and receive channels to be the same value: and set Edisyn's MIDI channel to that value.  The Rocket patch editor has a menu option (Set MIDI Channels...) which makes it easy to set the Rocket's transmit and receive channels. 
+
+<p><li> The Rocket can assign CC parameters to its knobs and buttons in two different ways: the "default" way and the "alternate" way.  See pages 34 and 35 of the manual.  <b><font color=red>There is a serious error with the "alternate" mapping</font></b>, namely CC 29 is used <i>twice</i> for two different parameters (detune and osc tune).  Oops!  You should make sure that the Rocket is using the "default" map, or you won't be able to edit properly.  The patch editor has a menu option (Set to Default CC Map) which does this for you.  Once you've set things, you probably won't need to set it again.
+</ul>
+
+
+<p><b>Saving and Loading Files</b><br>
+The Rocket doesn't transfer patches via sysex, but via CC.  Thus Edisyn will save and load patches to files using its own proprietary sysex format.  You won't be able to dump these files directly to Rocket, but Edisyn will understand them.
+
+<p><b>The Wave and Tune Dials</b><br>
+The Rocket has a great deal of functionality packed into the Oscillator Wave and Tune Dials.  Edisyn tries to clue you into what the dials are doing at any particular time by changing their labels.  Additionally, the values of the dials have certain cues:
+
+<ul>
+<li><b>Sawtooth</b>
+<ul>
+<li>Sync Env is shown with <b>Inf</b> or with an <b>E</b>.  Its Slave Frequency is shown with an <b>F</b>.
+<p><li>Poly Saw is shown with an <b>N</b> (for number of saws).  Its Poly Detune is shown with a D, and its eight Chords are shown <b>A</b> through <b>H</b>.
+<p><li>Unison is shown with <b>Uni</b>.
+</ul>
+<li><b>Pulse</b>
+<ul>
+<li>Pulsewidth is shown with a <b>P</b>.
+<p><li>Pulse Width Modulation (Depth) is shown with a <b>D</b>.
+<p><li>Pulse Width Modulation (Speed) is shown with an <b>S</b>.
+<p><li>Detune is shown with a <b>D</b>.
+<p><li>Intervals are shown with <b>III, IV, V, Oct, OctIII, OctIV, OctV,</b> and <b>2 Oct</b>.
+</ul>
+</ul>
+
+<p><b>The LFO Depth and Arpeggiator Range Dials</b><br>
+On the Rocket front panel, these are the same dial: but in fact they are separate parameters with separate dials in Edisyn.  The LFO Depth dial shows depth with a <b>D</b> and Semitones (for Pitch only) with an <b>S</b>.  If the target is set to Arpeggiator, the LFO Depth dial doesn't change anything, and just displays a Cutoff-style LFO Depth.  The Arpeggiator Range dial shows Octaves with an <b>O</b>, and Patterns with a <b>P</b>.
+
+<p><b>The LFO Speed and Arpeggiator Tempo Dials</b><br>
+On the Rocket front panel, these are the same dial: but in fact they are separate parameters with separate dials in Edisyn.  I at present do not have precise information about the beats or tempo information from Waldorf on these dials, so they just go 0...127.
+
+<p><b>The LFO Shape and Arp Direction Choosers</b><br>
+The Rocket front panel has only one switch shared by both LFO Shape and Arp Direction.  But in fact these are separate parameters and Edisyn can set them separately.
+
+<p><b>The Semitone and Detune Dials</b><br>
+If you look carefully, you'll notice that the Rocket has no dials named "Detune" and "Semitone".  These are features only available via CC (and only with the most recent firmware).
+
+
+<p><b>Gotchas</b><br>
+
+<ul>
+<li>There is no way to send or receive data for the Headphone Volume knob, the Filter Type switch, the Boost switch, or the Launch button.  They are hard-wired in the Rocket.
+<p><li>There is no way to change the overall main volume of the Rocket, even via MIDI.
+</ul>
+
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>March 1, 2021
+</table>
+

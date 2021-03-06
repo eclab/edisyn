@@ -77,9 +77,10 @@ Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter e
 \item Red Sound DarkStar and DarkStar XP2 (Single and Per-Part)
 \item Roland D-110 (Tone and Multimode)
 \item Roland JV-80 and JV-880 (Single and Multimode)
-\item Waldorf Blofeld Desktop, Blofeld Desktop SL, and Blofeld Keyboard (Single and Multimode, plus wavetable uploading in Single: see the Blofeld's ``About'' panel)
+\item Waldorf Blofeld Desktop, Blofeld Desktop SL, and Blofeld Keyboard (Single and Multimode, plus wavetable uploading in Single)
 \item Waldorf Kyra (Single and Multimode)
 \item Waldorf Microwave II, Microwave XT, and Microwave XTk (Single and Multimode)
+\item Waldorf Rocket
 \item Yamaha DX7 Family (DX7, TX7, TX216/TX816, Korg Volca FM, Dexed, DX200, DX9, etc.) (Single)
 \item Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, etc.) (Single and  (for TX81Z and DX11) Multimode)
 \item Yamaha FB-01 (Single and Multimode)
@@ -94,7 +95,7 @@ Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter e
 
 You'll note a pattern among these synthesizers: many are very difficult to program.\footnote{So why are the Prophet '08, Blofeld, Kyra, and Microwave XT there then?  Because in fact these synthesizers are all ones I own or have had access to, so they're there too.}  That's one of my interests.  
 
-Edisyn's patch editors try to cover the most common needs, and so in most cases it does not support patches for global parameters, nor for wave, sample, or wavetable editing\footnote{The Blofeld patch editor only supports wavetable {\it uploading}, not {\it editing}: this is because there's an excellent free wavetable-editing tool available at https:/\!/synthtech.com/waveedit which is better than anything I could possibly write.} etc.  Additionally, though it can do bulk downloads and save them as individual patches, Edisyn is {\bf not at present a librarian tool}.  You should use a good free librarian software program, such as SysEx Librarian on the Mac.
+Edisyn's patch editors try to cover the most common needs, and so in most cases it does not support patches for global parameters, nor for wave, sample, or wavetable editing\footnote{The Blofeld patch editor only supports wavetable {\it uploading}, not {\it editing}: this is because there's an excellent free wavetable-editing tool available at https:/\!/synthtech.com/waveedit which is better than anything I could possibly write.} etc.  Additionally, though it can handle bulk downloads and files and manipulate them in a variety of ways, Edisyn is {\bf not at present a librarian tool}.  You should use a good free librarian software program, such as SysEx Librarian on the Mac.
 
 
 \bump
@@ -149,6 +150,8 @@ An Edisyn patch editor is a single window with multiple tabbed panes.  You can s
 \paragraph{Categories}
 At right is a typical tab pane.  You'll note that various widgets are grouped together in regions (called {\bf Categories}).  There are four categories shown here.  Three are arbitrary categories for this synthesizer: ``Global'', ``LFO'', and ``Controllers''.  They're in various colors to differentiate them.  Other categories will be found in other tab panes.  But one category is special: the {\bf Synthesizer Category}, always shown in white, here named ``Yamaha TX81Z''.  It normally contains the patch name and bank/patch number.
 
+If you right-click, or Shift-click, on a category name, you'll get a pop-up menu with certain cut, paste, distribution, and reset options.  See Section~\ref{editing} for information about them.
+
 \begin{wrapfigure}{r}{3in}
 \vspace{-2em}\includegraphics[scale=0.3]{2.png}
 \vspace{-3em}\caption{Typical Patch Editor Panel (TX81Z)}\label{typicalpatcheditorpanel}
@@ -175,7 +178,7 @@ You change values in a Dial by clicking on the dial and dragging vertically.  Yo
 
 \item {\bf Checkboxes} (such as ``Portamento'').  These are should be straightforward.
 
-\item {\bf Pop-Up Choosers} or ComboBoxes (such as ``Wave'', set to ``Sawtooth'').  Ordinarily these work exactly as you expect.  However they have on surprise.  If you select the menu option {\bf Keep Next Popup Open} from the {\bf Options} menu, then the next time you click on a popup-chooser, its menu will stay open even after you have made a selection.  This allows you to try a variety of selections out without having to always reopen the popup menu.  This is particularly useful for large popups, such as for PCM wave samples.  You can get rid of the menu by clicking outside the menu or typing {\it Escape}.  
+\item {\bf Pop-Up Choosers} or Combo Boxes (such as ``Wave'', set to ``Sawtooth'').  Ordinarily these work exactly as you expect.  However they have one surprise.  If you select the menu option {\bf Keep Next Popup Open} from the {\bf Options} menu, then the next time you click on a popup-chooser, its menu will stay open even after you have made a selection.  This allows you to try a variety of selections out without having to always reopen the popup menu.  This is particularly useful for large popups, such as for PCM wave samples.  You can get rid of the menu by clicking outside the menu or typing {\it Escape}.  
 
 \item Various {\bf Pictorial Displays}.  Here, changing the ``Algorithm'' dial will modify the Algorithm Display immediately to the right of it.
 
@@ -223,13 +226,26 @@ Some patch editor files have encoded the sysex dumps as MIDI files (typically en
 \subsection{Loading or Receiving a Bulk- or Bank-Sysex File}
 Edisyn tends to work with files which contain a single patch each.   However many patch files on the internet contain multiple patches.  There are two kinds of files of this type: what I call {\bf bulk sysex} files, and {\bf bank sysex} files. 
 
-A {\bf bulk sysex} file is just a bunch of individual patch sysex messages concatenated together\,---\,you could just cut it up into separate single-patch files if you liked.\footnote{This is harder than it sounds: some synthesizer patches consist of not one but several sysex messages as a group, and the number isn't consistent.  Edisyn does its best to sort out what the patches are in the file, but if you get something which looks wrong, send the file to me and let me look at it.}    Bulk sysex files are found in many synthesizers, such as the DSI Prophet '08 or the Yamaha FS1R or the Waldorf Blofeld.  When Edisyn loads a bulk sysex file, it will present you a couple of options: you can {\it select and edit} a single patch from that file, either in the current editor or in a new editor, or you can {\it write} (upload) all of the patches in the file to your synthesizer.
+A {\bf bulk sysex} file is just a bunch of individual patch sysex messages concatenated together\,---\,you could just cut it up into separate single-patch files if you liked.\footnote{This is harder than it sounds: some synthesizer patches consist of not one but several sysex messages as a group, and the number isn't consistent.  Edisyn does its best to sort out what the patches are in the file, but if you get something which looks wrong, send the file to me and let me look at it.}    Bulk sysex files are found in many synthesizers, such as the DSI Prophet '08 or the Yamaha FS1R or the Waldorf Blofeld.  It is possible that a bulk sysex file contains patch entries for several different kinds of editor types or even entirely different kinds of synthesizers.  For example, a bulk sysex file might contain entries for both single patches and multi patches for a given synthesizer, and these are loaded into different editors.  Edisyn will inform you when there are patches for different editors involved, and let you first select which editor you're interested in, then select which patch you want to edit. 
 
-It is possible that a bulk sysex file contains patch entries for several different kinds of editors or even different kinds of synthesizers.  For example, a bulk sysex file might contain entries for both single patches and multi patches for a given synthesizer, and these are loaded into different editors.  Edisyn will inform you when there are patches for different editors involved, and let you first select which editor you're interested in, then select which patch you want to edit. 
+When Edisyn loads a bulk sysex file, it will present you a couple of options: 
 
-Other synthesizers have special {\bf bank sysex} messages.  Here, an entire bank (or in some cases, an entire synthesizer's memory's worth) of patches are stored in a single special sysex message.  For example, most files on the internet for the Yamaha DX7 synthesizer are bank sysex files.   Edisyn might find a message like this when loading a file, or it might receive the message from the synth over MIDI.   When Edisyn has received a bank sysex message or has loaded one from a file, you can again {\it select and edit} a single patch from that bank, either in the current editor or a new editor, or you can {\it write} (upload) all of the patches in the bank to your synthesizer; or you can also {\it save} the whole bank to a file as a single bank sysex message.
+\begin{itemize}
+\item {\it Select and edit} a single patch from that file, either in the current editor or in a new editor
+\item {\it Write} (upload) all of the patches in the file, or patches matching a current synth type, to your synthesizer.
+\item {\it Save} all of the patches in the file, or patches matching a current synth type, to bulk files (one bulk file per synth type).
+\item {\it Save} all of the patches in the file, or patches matching a current synth type, to individual patch files.  If there are multiple synth types, the individual patch files will be placed in separate directories by synth type.
+\end{itemize}
 
-It's entirely possible that a bulk sysex file might itself contain multiple bank sysex messages (or a mixture of bank and standard messages).  Bulk Sysex window, these sysex messages will typically be labelled ``Bank Sysex'', since Edisyn usually has no other patch name for them (with the exception of the Yamaha FB-01).  If from the Bulk Sysex window you select a bank sysex message, Edisyn will then present you with the Bank Sysex window for that bank. 
+Other synthesizers have special {\bf bank sysex} messages.  Here, an entire bank (or in some cases, an entire synthesizer's memory's worth) of patches are stored in a single special sysex message.  For example, most files on the internet for the Yamaha DX7 synthesizer are bank sysex files.   Edisyn might find a message like this when loading a file, or it might receive the message from the synth over MIDI.   When Edisyn has received a bank sysex message or has loaded one from a file, you can:
+
+\begin{itemize}
+\item {\it Select and edit} a single patch from that file, either in the current editor or in a new editor
+\item {\it Write} (upload) all of the patches in the bank to your synthesizer.
+\item {\it Save} the whole bank to a single bank sysex file.
+\end{itemize}
+
+It's entirely possible that a bulk sysex file might itself contain multiple bank sysex messages (or a mixture of bank and standard messages).  These sysex messages will typically be labelled ``Bank Sysex'', since Edisyn usually has no other patch name for them (with the exception of the Yamaha FB-01).  If from the Bulk Sysex window you select a bank sysex message to edit, Edisyn will then present you with the Bank Sysex window for that bank. 
 
 Edisyn cannot presently construct (and thus save or upload) new bank or bulk sysex messages or files.
 
@@ -271,6 +287,7 @@ Some synthesizers cannot do one or another of these tasks.   When this happens, 
 
 A synthesizer can also offer its own sysex messages to Edisyn without Edisyn requesting them.  Edisyn will try to handle these appropriately.  Some synthesizers might send special {\it bank sysex} messages which contain an entire bank (or in some cases, an entire synthesizer's memory worth) of patches.  Only a few Edisyn patch editors know how to deal with these messages: notably the DX7 patch editor can handle these just fine.  In this case, you will be given three options, to upload the entire bank to the synthesizer (again), to save the entire bank to a file, or to select a single patch from the bank and edit it.
 
+\bump
 
 \subsection{Playing Test Notes}
 \label{playingtestnotes}
@@ -380,6 +397,7 @@ This procedure will create a bunch of of virtual devices with names like {\tt Vi
 
 \vbox{
 \section{Editing and Exploratory Patch Creation}
+\label{editing}
 
 Edisyn has a large number of facilities to help you program your synthesizer, including tools to help you wander through the possible space of patches to hunt for the sound you want.  Here's what you can do.
 
@@ -440,12 +458,14 @@ A hint.  It's a good idea to select target patches which don't have some radical
 
 You can restrict Mutation and Recombination (used in Randomize, Nudge, Merge, Blend, Hill-Climb/Constrict, and Morph) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutation Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutation Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
 
+You can change these of course: just click on them and you can remove them from being updated (or add them back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title.  The categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}.  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
+
+\bump
+
 \begin{wrapfigure}{r}{3in}
 \vspace{-1em}\includegraphics[scale=0.3]{5.png}
 \vspace{-3em}\caption{Editing Mutation Parameters}\label{mutationparameters}
 \end{wrapfigure}
-
-You can change these of course: just click on them and you can remove them from being updated (or add them back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title.  The categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}.  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
 
 Some parameters, such as the patch name or certain other parameters, can't be mutated no matter what: these have been declared {\it immutable} by the patch editor.  They will never have a red frame no matter how much you click them.
 
@@ -496,14 +516,14 @@ The amount of mutation noise used when generating new patches is specified by th
 
 All the patches can be played by pressing their associated letter.  But additionally you can (at present) {\bf Climb} by pressing the Space Bar, {\bf Retry} by pressing the Return/Enter key, and {\bf Back Up} by pressing Backspace.
 
-\bump
 \subsection{Constricting}
 \label{constrict}
 
 \begin{wrapfigure}{r}{3.6in}
-\vspace{-2em}\includegraphics[scale=0.27]{ConstrictorPanel.png}
-\vspace{-2em}
+\vspace{-2.65em}\includegraphics[scale=0.27]{ConstrictorPanel.png}
+\vspace{-2.5em}
 \caption{The Hill-Climber Panel converted for Constricting.}
+\vspace{-1em}
 \label{constrictorpanel}
 \end{wrapfigure}
 
@@ -793,32 +813,17 @@ Non-metric parameters, such as (say) choice of filter or the PCM sampled sound p
 
 \paragraph{Exporting a Patch} When you are satisfied with the current sound at your Joystick cursor, you can save it by pressing the {\it Export...} button.  Your three options are to {\it Keep Patch}, which loads the cursor patch into the current editor, {\it Edit Patch}, which loads it into a new patch editor, and {\it Save to File}, which, well, saves it to a file.
 
-\enlargethispage{3em}
 \paragraph{Quitting} Quitting the Morpher works much like quitting the Hill-Climber: choose {\bf  Stop Morphing} in the {\bf Edit} menu.
 
 
 
 
 
-
-\section{Writing a Patch Editor}
-
-So you want to write a patch editor?  They're not easy.  But they're fun!  Here are some hints. 
-
-\subsection{Understand What You're Getting Into}
-\label{inconsistent}
-
-Make sure you understand that Edisyn can only go so far to help you in writing a patch editor: but synthesizer sysex world is an inconsistent, buggy mess.
-
-For example, the Waldorf Blofeld's multimode sysex is undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).   And it too bombs if you send it invalid data.  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  The Red Sound DarkStar has extremely, {\it extremely} limited sysex.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  There are multiple different strategies for packing data of size 8 bits and up.  Some synths, like the Futuresonus Parva, DSI Prophet '08, and Yamaha DX7, are highly regular in their format, while others, like the infamous Korg Microsampler, require custom tables for nearly every parameter.
-
-Figure~\ref{patcheditorcapabilities} is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.
-
 \newcommand\samefootnote{\addtocounter{footnote}{-1}\footnotemark}
 \newcommand\backfootnote[1]{\addtocounter{footnote}{-#1}\footnotemark\addtocounter{footnote}{#1}\addtocounter{footnote}{-1}}
 \newcommand\cm{\checkmark}
 
-\begin{table}[t]
+\begin{table}[t!]
 \begin{center}
 {\small
 \begin{tabular}{rllllllllll}
@@ -842,6 +847,7 @@ E-Mu Proteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
 Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}& &{\cm}            \\
 Waldorf Blofeld&{\cm}*&{\cm}*&{\cm}&{\cm}*&{\cm}&{\cm}& & & {\cm}            \\
 Waldorf Kyra&{\cm}&{\cm}&{\cm}*&{\cm}*&{\cm}*&{\cm*}& & & {\cm}*            \\
+Waldorf Rocket&{\cm}&{\cm}& &{\cm}*&{\cm}*& & & &           \\
 Kawai K1/K1r/K1m&{\cm}*& &{\cm}& & &{\cm}& &{\cm}&{\cm}            \\
 Kawai K4/K4r&{\cm}*& &{\cm}& &{\cm}&{\cm}& &{\cm}&{\cm}            \\
 Kawai K5/K5m&{\cm}&{\cm}&{\cm}& & &{\cm}& &{\cm}&{\cm}            \\
@@ -854,7 +860,7 @@ PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &\\
 Red Sound DarkStar/DarkStar XP2&&&&&{\cm}&{\cm}& & & {\cm}           \\
 Roland D-110&{\cm}& &{\cm}*&{\cm}*&{\cm}*&{\cm}*& & &{\cm}          \\
 Roland JV-80/880&{\cm}& &{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*          \\
-Novation Drumstation/D-station&&&&&{\cm}*&{\cm}*& & &{\cm}          \\
+Novation Drumstation/D Station&&&&&{\cm}*&{\cm}*& & &{\cm}          \\
 Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}*&{\cm}& & &{\cm}          \\
 Korg Microsampler&{\cm}*&{\cm}*& & & & &  &  &         \\
 Korg SG Rack&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}\\
@@ -870,13 +876,23 @@ M-Audio Venom&{\cm}&&{\cm}*&{\cm}&{\cm}*&{\cm}*&{\cm}*&{\cm}&{\cm}*\\
 \label{patcheditorcapabilities}
 \end{table}
 
-I particularly love how the Korg Microsampler and the Korg SG are disjoint in their abilities; yet they're from the same company.   Long story short, you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.
+
+\section{Writing a Patch Editor}
+
+So you want to write a patch editor?  They're not easy.  But they're fun!  Here are some hints. 
+
+\subsection{Understand What You're Getting Into}
+\label{inconsistent}
+
+Make sure you understand that Edisyn can only go so far to help you in writing a patch editor: but synthesizer sysex world is an inconsistent, buggy mess.
+
+For example, the Waldorf Blofeld's multimode sysex is undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).   And it too bombs if you send it invalid data.  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  The Red Sound DarkStar has extremely, {\it extremely} limited sysex.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  There are multiple different strategies for packing data of size 8 bits and up.  Some synths, like the Futuresonus Parva, DSI Prophet '08, and Yamaha DX7, are highly regular in their format, while others, like the infamous Korg Microsampler, require custom tables for nearly every parameter.
+
+Figure~\ref{patcheditorcapabilities} is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.  I particularly love how the Korg Microsampler and the Korg SG are disjoint in their abilities; yet they're from the same company.   Long story short, you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.
 
 \subsection{Setting Up the Development Environment}
 
 Still not scared away?  Okay, we'll start by getting Edisyn set up for development.  Probably the easiest way to fire up Edisyn for purposes of testing is as a build directory.  You just need to add two items to your CLASSPATH:
-
-\bump
 
 \begin{enumerate}
 \item The {\tt coremidi4j-1.5.jar} file, located in the {\tt libraries/} folder (you can move it where you like).  This jar file contains the CoreMidi4J library, which enables sysex to work properly on Macs (you'll need it for non-Macs too).

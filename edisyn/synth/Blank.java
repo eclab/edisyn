@@ -274,6 +274,26 @@ public class Blank extends Synth
         return null;
     }
     
+    public Model getFirstPatchLocation()
+    {
+        // Returns a model containing a patch location (bank, number, etc.) representing the
+        // "first" patch in the synth.  If your synthesizer does not have the notion of patches
+        // at all, return null.  If your synthesizer only has a single "patch", thus a single
+        // patch location, then this method should return that location.
+        //
+        // In most cases you don't have to override this method.  The default version computes
+        // whether you have a "first" patch by setting a model's number and bank to both 0, then
+        // calling getNextPatchLocation().  If that method returns null, or if it returns a model
+        // with no number, then the default version returns null. Otherwise it checks to see if
+        // a model is returned with a bank.  If there is a bank, then bank=0 number=0 is returned.
+        // If there is no bank, then number=0 is returned.  This strategy will work in most cases,
+        // but if your first number or bank, for some reason, is not 0, then it will not work
+        // properly.  In that case you'll need to override it to return the first location yourself.
+        //
+        // This method is used for doing random patch selection.
+        return super.getFirstPatchLocation();
+    }
+
     public Model getNextPatchLocation(Model model)
     {
         // Given the provided model containing a patch location (bank, number, etc.), this should 
@@ -286,7 +306,8 @@ public class Blank extends Synth
         // And yes, if you only have one patch on your synthesizer, then it's always the next patch.
         // Just return it.
         //
-        // This method is used for doing batch downloads.
+        // This method is used for doing batch downloads and random patch selection.
+        
         return null;
     }
 
@@ -594,6 +615,14 @@ public class Blank extends Synth
         // if you set this to >0.
         return 0.0;
     }
+    
+    public int getPauseAfterWritePatch()
+    	{
+        // Some synths need extra time to process a write-patch before 
+        // anything else, notably a follow-up change-patch request.  
+        // The default is to return getPauseAfterSendAllParameters();
+        return super.getPauseAfterWritePatch();
+    	}
         
     public int getPauseAfterSendAllParameters() 
     {
@@ -635,6 +664,15 @@ public class Blank extends Synth
         // and do again immediately.  Here you can specify that pause in milliseconds.
         return 0;
     }
+
+	public int getPauseAfterReceivePatch()
+	{
+		// Some synths, such as the Blofeld, need a short break after sending us 
+		// a patch before we can request a second patch (with no change patch command).  
+		// Override this in milliseconds.  By default this value returns 
+		// getPauseAfterChangePatch();
+		return super.getPauseAfterReceivePatch();
+	}
         
     public int getSysexFragmentSize() 
     {

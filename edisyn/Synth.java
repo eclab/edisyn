@@ -108,6 +108,8 @@ public abstract class Synth extends JComponent implements Updatable
     public JCheckBoxMenuItem sendsAllSoundsOffBetweenNotesMenu;
 	/** The "Keep Next Popup Open" menu */
 	public JCheckBoxMenuItem persistentChooserMenu;
+	/** The "Blend" menu */
+	public JMenu blend;
 	
     // The four nudge models 
     Model[] nudge = new Model[4];
@@ -997,6 +999,11 @@ public abstract class Synth extends JComponent implements Updatable
         The default is to be the same as getPauseAfterSendAllParameters(); */
     public int getPauseAfterWritePatch() { return getPauseAfterSendAllParameters(); }
 
+    /** Override this to make sure that the given additional time (in ms) has transpired after receiving a 
+    	requested patch before we request a second patch (without a change patch command).  
+        The default is to be the same as getPauseAfterChangePatch(); */
+    public int getPauseAfterReceivePatch() { return getPauseAfterChangePatch(); }
+
     /** Override this to return TRUE if, after a patch write, we need to change to the patch *again* so as to load it into memory. */
     public boolean getShouldChangePatchAfterWrite() { return false; }
     
@@ -1287,6 +1294,7 @@ public abstract class Synth extends JComponent implements Updatable
                                         if (getSendsParametersAfterNonMergeParse())
                                             sendAllParameters();
                                         file = null;
+										updateBlend();
                                         }
 
                                     updateTitle();
@@ -2064,6 +2072,9 @@ public abstract class Synth extends JComponent implements Updatable
             if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
                 undo.push(backup);
             setSendMIDI(true);
+            
+            // sometimes synths don't have enough time after a random merge, so we pause here
+            simplePause(getPauseAfterReceivePatch());
             sendAllParameters();
 
             return result;
@@ -3468,6 +3479,37 @@ public abstract class Synth extends JComponent implements Updatable
             });
         undoAndRandomize.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
+
+		blend = new JMenu("Blend");
+        JMenuItem blendOnce = new JMenuItem("Once");
+        blend.add(blendOnce);
+        blendOnce.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doBlendFull();
+                }
+            });
+        JMenuItem blendOnceInRange = new JMenuItem("Once in Range...");
+        blend.add(blendOnceInRange);
+        blendOnceInRange.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doBlendInRange();
+                }
+            });
+        JMenuItem undoAndBlend = new JMenuItem("Undo and Blend Again");
+        blend.add(undoAndBlend);
+        undoAndBlend.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doUndoAndBlendAgain();
+                }
+            });
+        undoAndBlend.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menu.add(blend);
 
         JMenu nudgeMenu = new JMenu("Nudge");
         menu.add(nudgeMenu);
@@ -5053,6 +5095,7 @@ public abstract class Synth extends JComponent implements Updatable
         Model tempModel = buildModel();
         if (gatherPatchInfo("Request Patch", tempModel, false))
             {
+			resetBlend();
             setMergeProbability(0.0);
             performRequestDump(tempModel, true);
             }
@@ -5069,6 +5112,7 @@ public abstract class Synth extends JComponent implements Updatable
         Model tempModel = buildModel();
         if (gatherPatchInfo("Request Merge", tempModel, false))
             {
+			resetBlend();
             setMergeProbability(percentage);
             performRequestDump(tempModel, false);
             }
@@ -7519,6 +7563,7 @@ public abstract class Synth extends JComponent implements Updatable
             // request patch
 
             getAll.setText("Stop Downloading Batch");
+			resetBlend();
             setMergeProbability(0.0);
             performRequestDump(currentPatch, true);
             incomingPatch = false;
@@ -7549,6 +7594,7 @@ public abstract class Synth extends JComponent implements Updatable
                                 {
                                 batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();
                                 System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Requesting again.");
+								resetBlend();
                                 setMergeProbability(0.0);
                                 performRequestDump(currentPatch, true);
                                 }
@@ -7573,14 +7619,15 @@ public abstract class Synth extends JComponent implements Updatable
             patchTimer.stop();
             patchTimer = null;
             saveBatchPatches();
- 					patchFileOrDirectory = null;
-           getAll.setText("Download Batch...");
+ 			patchFileOrDirectory = null;
+           	getAll.setText("Download Batch...");
             showSimpleMessage("Batch Download", "Batch download finished." );
             }
         else
             {
             currentPatch = getNextPatchLocation(currentPatch);
             System.err.println("Patch " + currentPatch.get("bank") + " " + currentPatch.get("number"));
+			resetBlend();
             setMergeProbability(0.0);
             performRequestDump(currentPatch, true);
             incomingPatch = false;
@@ -7668,6 +7715,214 @@ public abstract class Synth extends JComponent implements Updatable
         
         
         
+
+
+    ///////// RANDOM PATCH MERGING
+
+
+    /** Returns a "first" patch location (commonly bank 0 patch 0), or null 
+    	if there is no such location. If your synth has an unusual (non-zero) 
+    	starting number or bank, you may need to override this.  Otherwise you 
+    	can probably avoid implementing this method, assuming that 
+    	getNextPatchLocation(...) returns either null or a model with valid 
+    	numbers and/or banks.  */
+    public Model getFirstPatchLocation()
+    	{
+        Model newModel = buildModel();
+        newModel.set("number", 0);
+        newModel.set("bank", 0);
+        
+        // test to see if this is legitimate
+        Model nextModel = getNextPatchLocation(model);
+        if (nextModel == null)						// uh oh
+        	{
+        	return null;
+        	}
+        // test to see if numbers are implemented
+        if (nextModel.get("number", -1000) == -1000)		// uh oh
+        	{
+        	return null;
+        	}
+        // test to see if banks are implemented
+        if (nextModel.get("bank", -1000) == -1000)		// no banks, revise
+        	{
+			newModel = buildModel();
+			newModel.set("number", 0);
+        	}
+        	
+       	return newModel;
+        }
+    
+    PatchLocation[] allPatchLocations = null;		// a little cacheing
+    /** Returns all the readable patch locations available in the Synth. */
+    public PatchLocation[] gatherAllPatchLocations()
+    	{
+    	if (allPatchLocations != null) return allPatchLocations;
+    	
+    	Model startPatch = getFirstPatchLocation();
+    	if (startPatch != null)
+    		{
+    		Model endPatch = getNextPatchLocation(startPatch);
+    		if (endPatch != null)
+    			{
+    			return gatherPatchLocations(endPatch, startPatch);		// notice they're backward!
+    			}
+    		else		// uh....
+    			{
+				Synth.handleException(new RuntimeException("Synth.gatherAllPatchLocations had no valid next location."));
+    			return new PatchLocation[0];
+    			}
+    		}	
+    	else return new PatchLocation[0];
+    	}
+    	
+    /** Creates an array of patch locations starting at startPatch and ending at endPatch. */
+    public PatchLocation[] gatherPatchLocations(Model startPatch, Model endPatch)
+    	{
+    	PatchLocation start = new PatchLocation(startPatch);
+    	PatchLocation end = new PatchLocation(endPatch);
+    	if (start.number == PatchLocation.NO_NUMBER) 
+    		{
+			Synth.handleException(new RuntimeException("Synth.gatherPatchLocations received a start patch with no valid number."));
+    		return new PatchLocation[0];
+			}
+    	if (end.number == PatchLocation.NO_NUMBER) 
+    		{
+			Synth.handleException(new RuntimeException("Synth.gatherPatchLocations received a start patch with no valid number."));
+    		return new PatchLocation[0];
+			}
+			    	
+		ArrayList patches = new ArrayList();
+    	while(true)
+    		{
+    		patches.add(start);
+    		if (start.equals(end))	// all done
+    			break;
+    			
+    		startPatch = getNextPatchLocation(startPatch);
+    		start = new PatchLocation(startPatch);
+    		}
+    		
+    	return (PatchLocation[])(patches.toArray(new PatchLocation[0]));
+    	}
+        
+
+	Model secondModel = null;
+	PatchLocation[] blendLocations = null;
+	
+	public void doBlendFull()
+		{
+        if (tuple == null || tuple.out == null)
+            {
+            if (!setupMIDI())
+                return;
+            }
+                
+		PatchLocation[] locs = gatherAllPatchLocations();
+		if (locs.length == 0 || locs.length == 1) // uh oh
+			{
+			showSimpleError("Blend Error", "Cannot blend patches for this synthesizer.");
+			}
+		else
+			{
+			blendLocations = locs;
+			performBlend();
+			}
+		}
+
+	public void doBlendInRange()
+		{
+        if (tuple == null || tuple.out == null)
+            {
+            if (!setupMIDI())
+                return;
+            }
+                
+		PatchLocation[] locs = gatherAllPatchLocations();
+		if (locs.length == 0 || locs.length == 1) // uh oh
+			{
+			showSimpleError("Blend Error", "Cannot blend patches for this synthesizer.");
+			}
+		else
+			{
+            Model startPatch = buildModel();
+            if (!gatherPatchInfo("Starting Patch", startPatch, false))
+                { startPatch = null; return; }
+                
+            Model endPatch = buildModel();
+            if (!gatherPatchInfo("Ending Patch", endPatch, false))
+                { endPatch = null; return; }
+			
+			blendLocations = gatherPatchLocations(startPatch, endPatch);
+			performBlend();
+			}
+		}
+	
+	void performBlend()
+		{		
+		PatchLocation first = blendLocations[random.nextInt(blendLocations.length)];
+		PatchLocation second = blendLocations[random.nextInt(blendLocations.length)];
+	
+		while(second.equals(first))
+			{
+			second = blendLocations[random.nextInt(blendLocations.length)];
+			}
+	
+		Model firstModel = first.assignLocations(buildModel());
+		secondModel = second.assignLocations(buildModel());
+	
+		setMergeProbability(0.0);
+		performRequestDump(firstModel, false);	// I don't *think* we need to change the patch
+		}
+		
+	public void doUndoAndBlendAgain()
+		{
+		if (undo.undo.size() >= 2)	// gotta have at least two, because we're undoing twice
+			{
+			if (tuple == null || tuple.out == null)
+				{
+				if (!setupMIDI())
+					return;
+				}
+                
+			if (blendLocations != null)
+				{
+				doUndo(false);          // no reason to send it
+				doUndo(false);          // no reason to send it		// yes, twice
+				performBlend();
+				}
+			else
+				{
+				showSimpleError("Undo", "Can't Undo and Blend Again: no previous blending!");
+				}
+			}
+		else
+			{
+			showSimpleError("Undo", "Can't Undo and Blend Again: no previous blending!");
+			}
+		}
+		
+	void updateBlend()
+		{
+		if (secondModel != null)
+			{
+			setMergeProbability(random.nextDouble() * 0.5 + 0.5);	// from 0.5 to 1.0
+			simplePause(getPauseAfterReceivePatch());
+			performRequestDump(secondModel, false);
+			}
+		secondModel = null;
+		}
+
+	void resetBlend()
+		{
+		secondModel = null;
+		}
+
+                
+
+
+
+
         
     ///////// CALLBACKS
 

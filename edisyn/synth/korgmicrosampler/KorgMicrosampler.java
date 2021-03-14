@@ -3867,6 +3867,7 @@ public class KorgMicrosampler extends Synth
     public JFrame sprout()
     {
         JFrame frame = super.sprout();
+        blend.setEnabled(false);
         receiveCurrent.setEnabled(false);
         receivePatch.setEnabled(false);
         transmitTo.setEnabled(false);

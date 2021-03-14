@@ -4,16 +4,16 @@
 <h1>Novation ReMOTE SL</h1> 
 <h2>Single Patch Editor</h2>
 
-<p>This patch editor was originally designed and tested with the ReMOTE SL Mk II keyboards and the Zero MkII.  However, it probably works fine with the earlier ReMOTE SL Keyboards and Zero (untested).  It may also work properly with the ReMOTE SL Compact (untested), but you have to set it up right (see discussion below).  This patch protocol is extremely complex, and had to be entirely reverse-engineered so the editor is likely to have errors, especially for the untested machines.  If you discover irregularities, please contact me (sean@cs.gmu.edu).
+<p>This patch editor was originally designed and tested with the ReMOTE SL Mk II keyboards and the Zero MkII.  However, it probably works fine with the earlier ReMOTE SL Keyboards and Zero (untested).  It may also work properly with the ReMOTE SL Compact (untested), but you have to set it up right (see discussion below).  It's unknown if this editor works at all with the Nocturn.  This patch protocol is extremely complex, and had to be entirely reverse-engineered, so the editor is likely to have errors, especially for the untested machines.  If you discover irregularities, please contact me (sean@cs.gmu.edu).
 
-<P>This editor was tested on a Zero Mk II with the latest firmware (1.3.14). You'd probably want to update to the latest firmware, but beware that the firmware options available on Novation's website are out of date and incorrect.  It's unknown if this editor works with the Nocturn.
+<P>This editor was tested on a Zero Mk II with the latest firmware (1.3.14). You'd probably want to update to the latest firmware, but beware that the firmware options available on Novation's website are out of date and incorrect.  
 
 
 <br><br><h3>Communicating with Edisyn</h3>
 Connect to your SL's Port 1 for both the send and receive device.  I'd use USB.
 
 <br><br><h3>About the SL Compact</h3>
-Novation's sysex is very strange in that the same exact sysex is meant to work for the SL Compact and for other SL models, even though they have different capabilities: the same sysex data is reused.  The upshot of this is that if you have an SL Compact, you should turn the "Compact" checkbox.  This won't affect your current SL editor (close it), but it will affect future editors.  
+Novation's sysex is very strange in that the same exact sysex is meant to work for the SL Compact and for other SL models, even though they have different capabilities: the same sysex data is reused.  The upshot of this is that if you have an SL Compact, you should turn on the "Compact" checkbox.  This won't affect your current SL editor (close it), but it will affect future editors.  
 
 <p>The Compact version of Edisyn's editor replaces the Faders and Pots with additional banks of Encoders, and eliminates the Cross-fader (which overlaps with a Compact encoder, don't ask).  Note that for sysex compatibility some items still exist in the editor which aren't available in the Compact, such as the X1/Y1/X2/Y2 touchpad controls, MIDI 2 options, and the global pot strategy.  You can just ignore them.
 
@@ -28,7 +28,7 @@ The SL has limited sysex options.  Edisyn cannot request a patch (a "template") 
 
 <p>Individual parameters cannot be sent.  You have to send a whole patch.
 
-<p>You can do a batch download of all the SL's patches, but you cannot specify a range, and because Edisyn cannot request patches from the SL you will have to initiate a bulk dump ("Dump ALL") from your SL. 
+<p>You can do a batch download of all the SL's patches, but you cannot specify a range, and because Edisyn cannot request patches from the SL you will have to initiate a bulk dump ("Dump ALL") from your SL after you have asked Edisyn to start the batch download. 
 
 <br><br><h3>About the Buttons</h3>
 Edisyn groups the buttons into A, B, C, D, and Transport.  They are:
@@ -41,7 +41,7 @@ Edisyn groups the buttons into A, B, C, D, and Transport.  They are:
 <li><b>Transport</b>&nbsp;&nbsp;Rewind, Fast Forward, Stop, Play, Loop, and Record
 </ul>
 
-<p>On the Compact, these button groups are known as 1, 2, 3, and 4, to be compatible with the Compact's odd nomenclature.
+<p>On the Compact, these button groups are known as 1, 2, 3, and 4, and Edisyn will call them this as well, so as to be compatible with the Compact's odd nomenclature.
 
 <p>Because it has nowhere else to go, the Cross-Fader is lumped in with the Transport buttons.
 
@@ -92,9 +92,14 @@ The SL also has a few bugs and oddities itself.
 
 <br><br><h3>Hints</h3>
 
-If you need to upload the entire default template settings for some reason (and they're not very good), Edisyn has them in the file <b>NovationSLMKIIDefaults.zip</b> in the <b>resources</b> directory on Edisyn's repository.
+<ul>
+<li>When setting sysex, remember that the editor doesn't display the F0 at the beginning or the F7 at the end (nor the Roland checksum): but the SL does.
 
-<p>The entire reverse-engineered Novation ReMOTE SL sysex protocol is available at the end of the Java source code for the SL editor.  Check it out!
+<p><li>If you need to upload the entire default template settings for some reason (and they're not very good), Edisyn has them in the file <b>NovationSLMKIIDefaults.zip</b> in the <b>resources</b> directory on Edisyn's repository.  
+
+<p><li>The entire reverse-engineered Novation ReMOTE SL sysex protocol is available at the end of the Java source code for Edisyn's SL editor.  Check it out!
+
+</ul>
 
 
 <p><table border=0 cellpadding=0 cellspacing=5>

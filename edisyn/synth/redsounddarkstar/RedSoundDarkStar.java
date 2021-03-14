@@ -55,6 +55,7 @@ public class RedSoundDarkStar extends Synth
     public JFrame sprout()
     {
         JFrame frame = super.sprout();
+        blend.setEnabled(false);
         getAll.setEnabled(false);
         //merge.setEnabled(false);
         transmitTo.setEnabled(false);

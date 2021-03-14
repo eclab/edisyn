@@ -104,6 +104,7 @@ public class NovationSL extends Synth
     public JFrame sprout()
     {
         JFrame frame = super.sprout();
+        blend.setEnabled(false);
         receiveCurrent.setEnabled(false);
         receivePatch.setEnabled(false);
         //getAll.setEnabled(false);
@@ -3580,7 +3581,7 @@ public class NovationSL extends Synth
       -------------------------
 
       The SL has many sysex messages of dubious value, but it only has limited messages for communicating
-      to Novation's software editor.  Specifically, there is a single family of patch dump sysex messages.
+      with Novation's software editor.  Specifically, there is a single family of patch dump sysex messages.
 
       SUMMARY: I have seen the following messages, which I will call "WRITE", "UPLOAD", and "RECEIVED",
       though these are somewhat misnomers.
@@ -3593,15 +3594,15 @@ public class NovationSL extends Synth
       send to temporary memory.
         
       UPLOAD:         F0 00 20 29 02 03 7F 00 00 11 02 00 01 <DATA...> 12 34 F7
-      This message is sent to the SL from the software editor for brand new patches'
+      This message is sent to the SL from the software editor for brand new patches
       created from scratch.  It appears to send to temporary memory only.
 
       RECEIVED:       F0 00 20 29 02 03 7F 00 00 0B 0E 00 PATCHNUM <DATA...> 12 34 F7
       This message is received by the software editor from the SL.  It's also sent to the SL.
-      Though it has a patch numer, it appears that this command sends to temporary memory only,
+      Though it has a patch number, it appears that this command sends to temporary memory only,
       and the SL does not retain the patch number.  I do not know why.
 
-      PATCHNUM is located at position 0C and has a value 0x00 ... 0x1F.  When doing bulk uploads, 
+      PATCHNUM is located at position 0C (12) and has a value 0x00 ... 0x1F.  When doing bulk uploads, 
       it there is a secret patch number 0x20 (32) which provides default information for 
       automaps [I believe], but it looks like you shouldn't fool around with that.  Indeed you
       can occasionally get the SL to indicate "Template-33" when it meant "Template-1": there are
@@ -3621,10 +3622,11 @@ public class NovationSL extends Synth
 
       ADDRESS
       DEC  HEX  DESCRIPTION                   
-      13   0D   Name                          34 Bytes, padded with 0x20
+      13   0D   Name                  34 Bytes, ASCII, padded with 0x20
       47   2F   (0x20)
-      48   30   Manufacturer          13 Bytes, padded with 0x20
+      48   30   Manufacturer          13 Bytes, ASCII, padded with 0x20
       *** NOTE: Name + Maufacturer essentially comprise one string 48 bytes long
+      
       61   3D   (0x00)
       62   3E   (0x00)
       63   3F   (0x00)
@@ -3634,6 +3636,7 @@ public class NovationSL extends Synth
       *** other units?) only permits values up to 32 because there are only 32
       *** templates.  This should be restricted to 32.
       *** NOTE: Size is never set to 1.  0 represents size 1.
+      
       66   42   Template Position     0, or 1-40
       *** Size must be a display value 1...40
       *** Position must be a display value from 1 ... Size
@@ -3701,7 +3704,7 @@ public class NovationSL extends Synth
       109  6D   (0x07)
 
       KEYBOARD ZONES
-      110  6E   Enable Keyboard Zones 0-1
+      110  6E   Enable Keyboard Zones 		0-1
 
       111  6F   Zone 1 Channel                0-15    [1-16]
       112  70   Zone 1 Ports                                  [See Table 8]
@@ -3824,10 +3827,10 @@ public class NovationSL extends Synth
       ***** NOTE: The entries in this region vary depending on whether the data is
       ***** for the SL / SL MKii, or whether it is for the SL Compact
 
-      SL/SL MKii      SL Compact                  SL/SL MKii       SL Compact
-      ----------  ----------                  --------------   ------------------
+      SL/SL MKii            SL Compact                  SL/SL MKii       SL Compact
+      ----------            ----------                  --------------   ------------------
                                 
-      POTS            ENCODERS B
+      POTS                  ENCODERS B
       747  2eb  Pot 0       Encoder 8   [41 bytes]      [See POT DATA]   [See ENCODER DATA]
       788  314  Pot 1       Encoder 9   [41 bytes]      [See POT DATA]   [See ENCODER DATA]
       829  33d  Pot 2       Encoder 10  [41 bytes]      [See POT DATA]   [See ENCODER DATA]
@@ -3837,7 +3840,7 @@ public class NovationSL extends Synth
       993  3e1  Pot 6       Encoder 14  [41 bytes]      [See POT DATA]   [See ENCODER DATA]
       1034 40a  Pot 7       Encoder 15  [41 bytes]      [See POT DATA]   [See ENCODER DATA]
 
-      FADERS      ENCODERS C
+      FADERS                ENCODERS C
       1075 433  Fader 0     Encoder 16  [41 bytes]      [See POT DATA]   [See ENCODER DATA]
       1116 45c  Fader 1     Encoder 17  [41 bytes]      [See POT DATA]   [See ENCODER DATA]
       1157 485  Fader 2     Encoder 18  [41 bytes]      [See POT DATA]   [See ENCODER DATA]
@@ -3926,10 +3929,10 @@ public class NovationSL extends Synth
       ***** NOTE: The entries in this region vary depending on whether the data is
       ***** for the SL / SL MKii, or whether it is for the SL Compact
 
-      SL/SL MKii       SL Compact                  SL/SL MKii       SL Compact
-      -----------  ----------                  --------------   ------------------
+      SL/SL MKii             SL Compact                  SL/SL MKii       SL Compact
+      -----------            ----------                  --------------   ------------------
                                 
-      MISC/UNUSED      ENCODERS D
+      MISC/UNUSED            ENCODERS D
       3617 e21  Unused       Encoder 24  [41 bytes]                       [See ENCOCDER DATA]
       3658 e4a  Unused       Encoder 25  [41 bytes]                       [See ENCOCDER DATA]
       3699 e73  Unused       Encoder 26  [41 bytes]                       [See ENCOCDER DATA]

@@ -37,7 +37,7 @@ public class WaldorfRocket extends Synth
 	public static final String[] CHORDS = { "A", "B", "C", "D", "E", "F", "G", "H" };
 	public static final String[] OCTAVES = { "1", "2", "2", "3", "3", "4", "4", "4" };		// weird
 	
-	final boolean altMap = false;		// always
+	final boolean altMap = false;		// always, due to the Waldorf bug
 	
     public WaldorfRocket()
     {
@@ -72,11 +72,6 @@ public class WaldorfRocket extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Rocket", soundPanel);
                 
-        // FIXME: should we have these?
-        //model.set("bank", 0);
-        //model.set("number", 0);
-        //model.set("name", "Rocket");
-        
         loadDefaults();        
     }
                 
@@ -84,6 +79,7 @@ public class WaldorfRocket extends Synth
     {
         JFrame frame = super.sprout();
         receivePatch.setEnabled(false);
+        blend.setEnabled(false);
         merge.setEnabled(false);
         writeTo.setEnabled(false);
         getAll.setEnabled(false);			// this is turned off anyway
@@ -694,7 +690,7 @@ public class WaldorfRocket extends Synth
         sysex[12] = (byte)'K';
         sysex[13] = (byte)'E';
         sysex[14] = (byte)'T';
-        sysex[15] = (byte)0;            // sysex version
+        sysex[15] = (byte)0;            	// sysex version currently 0
         
         for(int i = 0; i < parameters.length ; i++)
             {
@@ -708,8 +704,7 @@ public class WaldorfRocket extends Synth
     {
         final int HEADER = WaldorfRocketRec.HEADER;		// 16
 
-
-		if (data[15] == 0)	// I know how to handle version 0
+		if (data[15] == 0)	// I only know how to handle version 0
 			{
 			for(int i = 0; i < parameters.length ; i++)
 				{
@@ -762,7 +757,7 @@ public class WaldorfRocket extends Synth
     public static final int[][] ccs = new int[][] 
         {
         { 70  , 33  },
-        { 79  , 29  },
+        { 79  , 29  },		//  Note that last cc is ALSO 29.  This is a Waldorf Rocket bug.
         { 31  , 31  },
         { 74  , 69  },
         { 71  , 70  },

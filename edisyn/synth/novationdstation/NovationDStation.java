@@ -200,7 +200,7 @@ public class NovationDStation extends Synth
         hbox.add(vbox);
 
         // Not enough space to show the title
-        hbox.addLast(Strut.makeHorizontalStrut(200));
+        hbox.addLast(Strut.makeHorizontalStrut(230));
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
@@ -711,10 +711,10 @@ public class NovationDStation extends Synth
         pos = parseDrum(d, pos, "808LC", 4);
         pos = parseDrum(d, pos, "808MA", 4);
         pos = parseDrum(d, pos, "808CL", 4);
-        model.set("banka", d[pos] & 31);                                                                                  // [Byte 0 bits 4, 3, 2, 1, 0]
-        model.set("bankb", ((d[pos + 1] & 3) << 3) | (d[pos] & 7));                               // [Byte 1 bits 1, 0] [Byte 0 bits 2, 1, 0]
-        model.set("bankc", ((d[pos + 1] << 2) & 31));                                                     // [Byte 1 bits 2, 3, 4, 5, 6]
-        model.set("bankd", ((d[pos + 3] >>> 4) << 1) | ((d[pos + 1] >>> 7) & 1)); // [Byte 3 bits 7, 6, 5, 4] [Byte 1 bit 7]
+        model.set("banka", d[pos] & 31);                                                          // [Byte 0 bits 4, 3, 2, 1, 0]   // or byte 2?
+        model.set("bankb", ((d[pos + 1] & 3) << 3) | ((d[pos] >>> 5) & 7));                       // [Byte 1 bits 1, 0] [Byte 0 bits 7, 6, 5]	// or byte 2 2, 3, 0?
+        model.set("bankc", ((d[pos + 1] << 2) & 31));                                             // [Byte 1 bits 2, 3, 4, 5, 6]
+        model.set("bankd", ((d[pos + 3] >>> 4) << 1) | ((d[pos + 1] >>> 7) & 1)); 				  // [Byte 3 bits 7, 6, 5, 4] [Byte 1 bit 7]
         pos += 4;               // bank data
         pos += 2;               // unknown
         model.set("gmset", (d[pos++] == 0 ? 0 : 1));             // 808 = 0, 909 = 4
@@ -910,7 +910,7 @@ public class NovationDStation extends Synth
       2. Dump batch of 15 patches (numbers 25...39) plus some additional information
 
       There are no sysex commands for updating individual parameters, but many parameters can be updated in real 
-      time via CC (as described in the manual).  Thre are also no sysex commands for requesting patches, nor any
+      time via CC (as described in the manual).  There are also no sysex commands for requesting patches, nor any
       distinction between sending individual patches to current memory versus writing them to patch memory (this
       must be done manually on the machine per the manual -- see the WRITE switch).
 
@@ -944,7 +944,7 @@ public class NovationDStation extends Synth
 
       DATA
       ====
-      Once denybblized, the 140 bytes of DATA is in the following odd order.  See TABLES 1...4 for
+      Once denybblized, the 140 bytes of DATA is in the following order.  See TABLES 1...4 for
       information on the 808 and 909 drum data.  See TABLE 6 for information on the Bank data.
 
       6 bytes 909 BD Data
@@ -979,7 +979,7 @@ public class NovationDStation extends Synth
       1 byte Bank C Data                      [Table 6]
       1 byte Bank D Data                      [Table 6]
       6 bytes UNUSED                          * use unknown if any
-      1 byte GM Set Data                      0 for 808 and 1 for 909
+      1 byte GM Set Data                      0 for 808   or    1 for 909
 
 
       The 909 and 808 drum data take four forms: 6-byte, 5-byte [2 variations], and 4-byte. 
@@ -1128,11 +1128,10 @@ public class NovationDStation extends Synth
       PATCH DATA
       ==========
       Patch data is similar to the data in the single-patch dump message, except for the
-      BANK DATA and GM SET DATA, which is different, and fewer UNUSED bytes.  See TABLES 1-4
+      BANK DATA and GM SET DATA, which are different, and fewer UNUSED bytes.  See TABLES 1-4
       (in the previous single-patch dump sysex) for information about the 808 and 909 data.
-      See TABLE 7 below for information about the BANK data.  See TABLE 8 for information
-      about the GM SET DATA
-
+      See TABLE 7 below for information about the BANK data.  
+      
       6 bytes 909 BD Data
       4 bytes 909 RS Data
       6 bytes 909 SD Data
@@ -1162,19 +1161,22 @@ public class NovationDStation extends Synth
       4 bytes 808 CL Data
       4 bytes BANK DATA               * Note different organization than bank data in single patch sysex.  See TABLE 7
       2 bytes UNUSED                  * use unknown if any
-      1 byte GM SET DATA              0 for 808       4 for 909    * Note different than the single patch sysex version
+      1 byte GM SET DATA              0 for 808   or   4 for 909    * Note different than the single patch sysex version
 
       The 808 and 909 data is the same as in the single-patch sysex.
 
 
       [TABLE 7] BANK DATA
       ===================
-      The four bytes are, in order, 0, 1, 2, 3
-      Bit 7 is the high bit, bit 0 is the low bit
+      Per TABLE 6, each bank is one of 27 possible values.  This requires
+      five bits per bank.  These bits are packed into the four bytes,
+      called bytes 0, 1, 2, and 3 (and stored in that order), in the 
+      following way.  Note that bit 7 is the high bit, down to bit 0 
+      being the low bit.
 
       Bank A: [Byte 0 bits 4, 3, 2, 1, 0]
-      Bank B: [Byte 1 bits 1, 0] [Byte 0 bits 2, 1, 0]
-      Bank C: [Byte 1 bits 2, 3, 4, 5, 6]
+      Bank B: [Byte 1 bits 1, 0] [Byte 0 bits 7, 6, 5]
+      Bank C: [Byte 1 bits 6, 5, 4, 3, 2]
       Bank D: [Byte 3 bits 7, 6, 5, 4] [Byte 1 bit 7]
 
       The Bank data values are the same as in the single-patch sysex. 

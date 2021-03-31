@@ -51,9 +51,10 @@ By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 %\vspace{0.5em}
 \section{About Edisyn}
 
-Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter exploration of a variety of synthesizers.  It is not skeuomorphic or skinnable: its design is plain and consistent, though you can change the colors.  Edisyn is free open source.  Edisyn currently supports the following synthesizers:
+Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter exploration of a variety of synthesizers.  It is not skeuomorphic or skinnable: its design is plain and consistent, though you can change the colors.  Edisyn is free open source.  Edisyn currently supports the following devices: 
 
 {
+\small
 \begin{multicols}{2}
 \begin{flushleft}
 \begin{itemize}
@@ -72,6 +73,7 @@ Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter e
 \item Korg Wavestation SR (Performance, Patch, and Wave Sequence)
 \item M-Audio Venom (Single, Multimode, Arp, and Global)
 \item Novation Drumstation and D Station
+\item Novation SL, SL MKii, and SL Compact Series
 \item Oberheim Matrix 6, 6R, and 1000 (Single and (for 1000) Global)
 \item PreenFM2 (Single)
 \item Red Sound DarkStar and DarkStar XP2 (Single and Per-Part)
@@ -93,7 +95,7 @@ Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter e
 \end{multicols}
 }
 
-You'll note a pattern among these synthesizers: many are very difficult to program.\footnote{So why are the Prophet '08, Blofeld, Kyra, and Microwave XT there then?  Because in fact these synthesizers are all ones I own or have had access to, so they're there too.}  That's one of my interests.  
+You'll note a pattern among these synthesizers: many are very difficult to program.\footnote{So why are the Prophet '08, Blofeld, Kyra, and Microwave XT there then?  Because these synthesizers are all ones I own or have had access to: that's another reason a synth might be in this list.}  That's one of my interests.  
 
 Edisyn's patch editors try to cover the most common needs, and so in most cases it does not support patches for global parameters, nor for wave, sample, or wavetable editing\footnote{The Blofeld patch editor only supports wavetable {\it uploading}, not {\it editing}: this is because there's an excellent free wavetable-editing tool available at https:/\!/synthtech.com/waveedit which is better than anything I could possibly write.} etc.  Additionally, though it can handle bulk downloads and files and manipulate them in a variety of ways, Edisyn is {\bf not at present a librarian tool}.  You should use a good free librarian software program, such as SysEx Librarian on the Mac.
 
@@ -145,7 +147,7 @@ If you are not connected to MIDI, or if you cancel, then Edisyn will inform you 
 
 \section{Edisyn Patch Editors}
 
-An Edisyn patch editor is a single window with multiple tabbed panes.  You can switch tabs by clicking on them or via shortcuts (see the {\bf Tabs Menu}).  The far-right tab is the {\bf About Tab}.  It gives you information about the eccentricities of the synthesizer that require custom behavior in Edisyn (they all do!).  You should read it carefully to understand how Edisyn will interact with your synthesizer.  
+An Edisyn patch editor is a single window with multiple tabbed panes.  You can switch tabs by clicking on them or via shortcuts (see the {\bf Tabs Menu}).  The far-right tab is the {\bf About Tab}.  It gives you information about the eccentricities of the synthesizer that require custom behavior in Edisyn (they all do!).  {\bf \color{red} You should read the About Tab carefully to understand how to get Edisyn to properly with your synthesizer.}
 
 \paragraph{Categories}
 At right is a typical tab pane.  You'll note that various widgets are grouped together in regions (called {\bf Categories}).  There are four categories shown here.  Three are arbitrary categories for this synthesizer: ``Global'', ``LFO'', and ``Controllers''.  They're in various colors to differentiate them.  Other categories will be found in other tab panes.  But one category is special: the {\bf Synthesizer Category}, always shown in white, here named ``Yamaha TX81Z''.  It normally contains the patch name and bank/patch number.
@@ -438,7 +440,9 @@ Some patch editors may not be able to perform merges because the synthesizers ca
 
 \paragraph{Load and Merge}  This option, in the {\bf File} menu, lets you load a file and merge it with your current patch in more or less the same way that {\bf Merge} works.  The merge percentage is always 100\% (that is, half-half).
 
-\paragraph{Blend}  This causes Edisyn to request two random patches from your synthesizer and merge them with one another, with a merge percentage randomly ranging from 50\% to 100\%, producing an entirely new randomly combined patch.  See the {\bf Blend} submenu in the {\bf Edit} menu.  You do your first blend by selecting {\bf Once...}, then selecting the beginning and ending patches defining the patch range from which Blend will select its random patches.  Blend will then do its thing.  If you want to try again, select {\bf Undo and Blend Again}.\footnote{Note that because Blend loads the first patch, then merges the second, it effectively pushes two things onto the undo stack; so Undo and Blend Again will pop {\it two} things off before re-blending.  This might be confusing.}
+\paragraph{Blend}  This causes Edisyn to request two random patches from your synthesizer and merge them with one another, with a merge percentage randomly ranging from 50\% to 100\%, producing an entirely new randomly combined patch.  You could do this manually of course: it's a convenience mechanism.  
+
+See the {\bf Blend} submenu in the {\bf Edit} menu.  You can select two entirely random patches using {\bf Once}, or you can select the patches from a patch range using {\bf Once in Range...} (you'd likely do this to, say, only blend two drum patches or two orchestral patches).   Blend will then do its thing.  If you want to try again, select {\bf Undo and Blend Again}.\footnote{Note that because Blend loads the first patch, then merges the second, it effectively pushes {\it two} things onto the undo stack; so if you want to undo a Blend, you'll need to Undo {\it twice}.  Similarly, Undo and Blend Again will pop {\it two} things off before re-blending.  This might be confusing.}
 
 \paragraph{Nudge}  The nudge facility lets you push your patch to sound more and more like one of four other target patches you have chosen.   Before you can nudge, you have to first select patches to nudge towards.  You can pick up to four patches by choosing an option under the {\bf Setup 1} ... {\bf Setup 4} submenus under the {\bf Edit > Nudge} menu.  These options will load nudge targets 1...4 with copies drawn from various sources.   Your options are: {\bf From Current Patch}, {\bf Load File...}, {\bf From Morph} (the current Morph value, see Section~\ref{morph} below), and {\bf From Hill-Climb Archive q} through {\bf v} (the six Hill-Climb archives, see Section~\ref{hillclimb} below). You don't have to set up all four targets.
 

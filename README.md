@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 26)
+Synthesizer Patch Editor (Version 27)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -46,6 +46,7 @@ Edisyn presently supports:
 * Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
 * M-Audio Venom (Single, Multi, Arpeggiator, and Global Modes)
 * Novation Drumstation and D Station
+* Novation ReMOTE SL, SL MKII, and SL Compact Series (Template)
 * Oberheim Matrix 6, 6R, and 1000 (Single and (for 1000) Global Modes) 
 * PreenFM2
 * Red Sound DarkStar and DarkStar XP2
@@ -54,6 +55,7 @@ Edisyn presently supports:
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading)
 * Waldorf Kyra (Single and Multi Modes)
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
+* Waldorf Rocket
 * Yamaha DX7 Family (DX7, TX7, TX802, TX216/TX816, Korg Volca FM, Dexed, DX200, DX9)
 * Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, V50, etc.) (Single and (for TX81Z and DX11) Multi Modes)
 * Yamaha FB01 (Single and Multi Modes)

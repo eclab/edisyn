@@ -1961,7 +1961,7 @@ public class WaldorfKyra extends Synth
 
     public static String getSynthName() { return "Waldorf Kyra"; }
     
-//    public boolean getSendsParametersAfterNonMergeParse() { return true; }
+    //    public boolean getSendsParametersAfterNonMergeParse() { return true; }
 
     // Change Patch can get stomped if we do a request immediately afterwards
     public int getPauseAfterChangePatch() { return 200; }

@@ -3704,7 +3704,7 @@ public class NovationSL extends Synth
       109  6D   (0x07)
 
       KEYBOARD ZONES
-      110  6E   Enable Keyboard Zones 		0-1
+      110  6E   Enable Keyboard Zones           0-1
 
       111  6F   Zone 1 Channel                0-15    [1-16]
       112  70   Zone 1 Ports                                  [See Table 8]

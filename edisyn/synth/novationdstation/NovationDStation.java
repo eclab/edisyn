@@ -712,9 +712,9 @@ public class NovationDStation extends Synth
         pos = parseDrum(d, pos, "808MA", 4);
         pos = parseDrum(d, pos, "808CL", 4);
         model.set("banka", d[pos] & 31);                                                          // [Byte 0 bits 4, 3, 2, 1, 0]   // or byte 2?
-        model.set("bankb", ((d[pos + 1] & 3) << 3) | ((d[pos] >>> 5) & 7));                       // [Byte 1 bits 1, 0] [Byte 0 bits 7, 6, 5]	// or byte 2 2, 3, 0?
+        model.set("bankb", ((d[pos + 1] & 3) << 3) | ((d[pos] >>> 5) & 7));                       // [Byte 1 bits 1, 0] [Byte 0 bits 7, 6, 5]   // or byte 2 2, 3, 0?
         model.set("bankc", ((d[pos + 1] << 2) & 31));                                             // [Byte 1 bits 2, 3, 4, 5, 6]
-        model.set("bankd", ((d[pos + 3] >>> 4) << 1) | ((d[pos + 1] >>> 7) & 1)); 				  // [Byte 3 bits 7, 6, 5, 4] [Byte 1 bit 7]
+        model.set("bankd", ((d[pos + 3] >>> 4) << 1) | ((d[pos + 1] >>> 7) & 1));                                 // [Byte 3 bits 7, 6, 5, 4] [Byte 1 bit 7]
         pos += 4;               // bank data
         pos += 2;               // unknown
         model.set("gmset", (d[pos++] == 0 ? 0 : 1));             // 808 = 0, 909 = 4

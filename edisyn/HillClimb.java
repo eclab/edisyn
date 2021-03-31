@@ -711,7 +711,7 @@ public class HillClimb extends SynthPanel
                 public void perform(int val)
                 {
                     initialize(val == OPERATION_SEED_FROM_PATCH ? synth.getModel() : 
-                    			val == OPERATION_SEED_FROM_MORPH ? synth.morph.current : null, val);
+                               val == OPERATION_SEED_FROM_MORPH ? synth.morph.current : null, val);
                     resetCurrentPlay();
                 }
             };
@@ -1219,8 +1219,8 @@ public class HillClimb extends SynthPanel
         switch(operation)
             {
             case OPERATION_SEED_FROM_PATCH:
-            // Fall Thru
-			case OPERATION_SEED_FROM_MORPH:
+                // Fall Thru
+            case OPERATION_SEED_FROM_MORPH:
                 {
                     Model newSeed = seed.copy();                
                     double weight = blank.getModel().get("hillclimbrate", 0) / 100.0;

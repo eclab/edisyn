@@ -288,16 +288,16 @@ public class Morph extends SynthPanel
     
     public void updateSound()
     {
-    	if (isShowingPane())
-    		{
-			if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_NOTE)               // send on note instead
-				{
-					Model backup = synth.getModel();
-					synth.model = current;
-					synth.sendAllParameters();
-					synth.model = backup;                   
-				}
-			}
+        if (isShowingPane())
+            {
+                if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_NOTE)               // send on note instead
+                    {
+                        Model backup = synth.getModel();
+                        synth.model = current;
+                        synth.sendAllParameters();
+                        synth.model = backup;                   
+                    }
+            }
     }
         
     public void postUpdateSound()
@@ -610,7 +610,7 @@ public class Morph extends SynthPanel
         startedUp = true;
         if (timer != null)
             timer.start();
-		updateSound();			// otherwise the synth might not get it
+        updateSound();                  // otherwise the synth might not get it
     }
                 
     public void shutdown()

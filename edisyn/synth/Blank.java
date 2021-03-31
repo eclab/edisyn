@@ -782,12 +782,12 @@ public class Blank extends Synth
     }
 
     public boolean getShouldChangePatchAfterWrite()
-	{ 
-		// Some synthesizers, such as the Kyra, write to patch memory but don't appear to
-		// overwrite temporary memory as well.  You can set this to true to send to temporary
-		// memory.
-		return false; 
-	}
+    { 
+        // Some synthesizers, such as the Kyra, write to patch memory but don't appear to
+        // overwrite temporary memory as well.  You can set this to true to send to temporary
+        // memory.
+        return false; 
+    }
 
     public int getVoiceMessageRoutedChannel(int incomingChannel, int synthChannel)
     {

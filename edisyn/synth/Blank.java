@@ -133,14 +133,15 @@ public class Blank extends Synth
         // Here you do stuff that changes patches on the synth.
         // You probably want to look at tryToSendSysex() and tryToSendMIDI()
         //
-        // This method is used primariily to switch to a new patcgh prior to loading it
-        // from the synthesizer or emitting it to the synthesizer.  Some synthesizers do 
+        // This method is used primariily to switch to a new patch prior to loading it
+        // from the synthesizer or emitting it to the synthesizer.  Many synthesizers do 
         // not report their patch location information when emitting a dump to Edisyn.  
         // If this is the case, you might want add some code at the end of this method which
         // assumes that the patch change and subsequent parse were successful, so you can
-        // just change the patch information here in this method.  You should NOT do this when
-        // changing a patch for the purpose of merging.  So in this case (and ONLY in this case)
-        // you should end this method with something along the lines of:
+        // just change the patch information in your model directly here in this method. 
+        // You should NOT do this when changing a patch for the purpose of merging.  
+        // So in this case (and ONLY in this case) you should end this method with something 
+        // along the lines of:
         //
         //     // My synth doesn't report patch info in its parsed data, so here assume that we successfully did it
         //     if (!isMerging())
@@ -164,48 +165,35 @@ public class Blank extends Synth
         // Return TRUE if you successfully gathered information, FALSE if the user cancelled.
         //
         // This can be complex to write.  But take a look at implementations in, for example,
-        // Blofeld.java and freely copy that.
+        // WaldorfBlofeld.java and freely copy that.
         //
         return false;
     }
 
     public int parse(byte[] data, boolean fromFile)
     { 
-        // This bulk patch data will come from a file or transmitted over sysex.
-        // You should parse it into the model and return PARSE_SUCCEEDED if successful,
-        // PARSE_FAILED if the parse failed -- and we assume this means that the editor
-        // data was *not* modified -- and PARSE_INCOMPLETE if the parse was
-        // successful but not complete enough to assume that we have a full patch.
-        // For example, the Yamaha TX81Z needs two separate parses of dumps before a patch
-        // is complete -- you should only return PARSE_SUCCEEDED when the second one has come in.
-        // There is also PARSE_CANCELLED if the user cancelled the parsing process (this
-        // would only make sense for certain interactive parsing mechanisms, and only certain
-        // synths would have it) and the patch was not modified.
-        // Additionally, PARSE_SUCCEEDED_UNTITLED should be returned if we don't want the
-        // patch's filename to be updated to reflect the loaded file, but otherwise the
-        // parse succeeded.
+        // This patch data will come from a file or transmitted over sysex.
         // FROMFILE indicates that the parse is from a sysex file.
+        //
+        // You should parse it into the model and return one of:
+        // - PARSE_SUCCEEDED if successful,
+        // - PARSE_SUCCEEDED_UNTITLED if successful, but we don't want the patch's 
+        // filename to be updated to reflect the loaded file.
+        // - PARSE_CANCELLED if the user cancelled the parsing process (this would only 
+        // make sense for certain interactive parsing mechanisms, and only certain
+        // synths would have it) and the patch was not modified.
+        // - PARSE_FAILED if the parse failed -- we assume this means that you did not modify
+        // the editor data, or reverted it.
+        // - PARSE_INCOMPLETE if the parse was successful but not complete enough to assume 
+        // that we have a full patch.  This is used as follows.  For example, a Yamaha 4-op
+        // synthesizer needs up to four separate sysex messages before a patch is complete,
+        // and you may not have received all of them in this data dump.  You should in this case
+        // return PARSE_INCOMPLETE, and only return PARSE_SUCCEEDED when all the messages have
+        // arrived sufficient to declare the model finished.
+        //
         return PARSE_FAILED; 
     }
         
-    public static boolean recognize(byte[] data)
-    {
-        // This method should return TRUE if the data is correct sysex data for a 
-        // a patch dump to your kind of synthesizer, and so you can receive it via
-        // parse().
-        //
-        // Notice that this is a STATIC method -- but you need to implement it
-        // anyway.  Edisyn will call the right static version using reflection magic.
-        //
-        // You MUST implement this method or an exception will be thrown.
-        //
-        // There is a similar method elsewhere, called recognizeBulk(data),
-        // which you can optionally additionally implement if you support reading
-        // bulk data patches.
-        //
-        return false;
-    }
-
     public static String getSynthName() 
     { 
         // This method should return the name of your synthsizer.
@@ -322,6 +310,20 @@ public class Blank extends Synth
     
     
     
+    
+    ////// DO NOT OVERRIDE THE FOLLOWING
+    
+    public static boolean recognize(byte[] data)
+    {
+        // This is deprecated, and won't work any more.
+        // You should override this in your Recognizer class instead.
+        
+        return false;
+    }
+
+
+    
+    
  
  
     ////// YOU PROBABLY WANT TO OVERRIDE ALL OF THE FOLLOWING
@@ -383,13 +385,13 @@ public class Blank extends Synth
     {
         // This does a write of your patch to sysex (to dump to the synth or to store
         // in a file).  TOWORKINGMEMORY indicates whether the dump will go to the synth's
-        // working memory, or written to a specific patch store.  TEMPMODEL will hold
-        // data regarding the patch store location.  TOFILE indicates that the write will
-        // be to a sysex file.
+        // working memory, or (if false) written to a specific patch store.  TOFILE 
+        // indicates that the write will be written to a sysex file.  TEMPMODEL will hold
+        // data (bank, number) regarding the patch store location.  
         //
         // The Object[] array returned can consist any combination of the following:
         //
-        // 1. A fully construted and populated javax.sound.midi.ShortMessage or
+        // 1. A fully constructed and populated javax.sound.midi.ShortMessage or
         //    javax.sound.midi.SysexMessage
         // 
         // 2. A byte[] consisting of the bytes for a sysex message, including the 0xF0
@@ -400,14 +402,10 @@ public class Blank extends Synth
         //
         // 4. null, which is a no-op and is ignored.
         //
-        // If emitAll(..., ..., true) then the ObjectArray will be flattened after you
-        // have returned it.  This means that all non-sysex messages (things that aren't
-        // javax.sound.midi.SysexMessage or a byte[]) will be stripped out, since this
-        // is for a sysex file.
-        //
-        // IMPORTANT NOTE: if writing to a file, any NON-sysex messages will be
-        // stripped out by Edisyn, and the remainder will be concatenated together
-        // into one stream.
+        // If emitAll(..., ..., true) then that is, if writing to a file, then the 
+        // ObjectArray will be flattened after you have returned it.  This means that 
+        // all non-sysex messages (things that aren't javax.sound.midi.SysexMessage 
+        // or a byte[]) will be stripped out, since this is for a sysex file.
         //
         // If you need to send more than just a simple sysex message, override this one.
         
@@ -418,9 +416,10 @@ public class Blank extends Synth
     { 
         // This does a write of your patch to sysex (to dump to the synth or to store
         // in a file).  TOWORKINGMEMORY indicates whether the dump will go to the synth's
-        // working memory, or written to a specific patch store.  TEMPMODEL will hold
-        // data regarding the patch store location.  TOFILE indicates that the write will
-        // be to a sysex file.
+        // working memory, or (if false) written to a specific patch store.  TOFILE 
+        // indicates that the write will be written to a sysex file.  TEMPMODEL will hold
+        // data (bank, number) regarding the patch store location.  The resulting byte[]
+        // array should consist entirely of zero or more sysex messages.
         //
         // If you need to send just a simple sysex message, override this one.
         return new byte[0]; 
@@ -590,7 +589,8 @@ public class Blank extends Synth
         // will be closed, else it will stay open.  You might use
         // this method to verify with the user that everything is saved,
         // but in fact none of the current synth editors do this, they
-        // just return true immediately.
+        // just return true immediately.  This is a rare need and at 
+        // present no patch editors implement this method at all. 
         return true; 
     }
         
@@ -617,12 +617,12 @@ public class Blank extends Synth
     }
     
     public int getPauseAfterWritePatch()
-    	{
+    {
         // Some synths need extra time to process a write-patch before 
         // anything else, notably a follow-up change-patch request.  
         // The default is to return getPauseAfterSendAllParameters();
         return super.getPauseAfterWritePatch();
-    	}
+    }
         
     public int getPauseAfterSendAllParameters() 
     {
@@ -665,14 +665,14 @@ public class Blank extends Synth
         return 0;
     }
 
-	public int getPauseAfterReceivePatch()
-	{
-		// Some synths, such as the Blofeld, need a short break after sending us 
-		// a patch before we can request a second patch (with no change patch command).  
-		// Override this in milliseconds.  By default this value returns 
-		// getPauseAfterChangePatch();
-		return super.getPauseAfterReceivePatch();
-	}
+    public int getPauseAfterReceivePatch()
+    {
+        // Some synths, such as the Blofeld, need a short break after sending us 
+        // a patch before we can request a second patch (with no change patch command).
+        // This pause is in milliseconds.  By default this function returns 
+        // getPauseAfterChangePatch(), which is a lot but probably adequate.
+        return super.getPauseAfterReceivePatch();
+    }
         
     public int getSysexFragmentSize() 
     {
@@ -781,6 +781,14 @@ public class Blank extends Synth
         return false;
     }
 
+    public boolean getShouldChangePatchAfterWrite()
+	{ 
+		// Some synthesizers, such as the Kyra, write to patch memory but don't appear to
+		// overwrite temporary memory as well.  You can set this to true to send to temporary
+		// memory.
+		return false; 
+	}
+
     public int getVoiceMessageRoutedChannel(int incomingChannel, int synthChannel)
     {
         // Some synthesizers need to reroute voiced messages (messages with channels) from
@@ -836,9 +844,9 @@ public class Blank extends Synth
         // If you return false, then the write is canceled.  The data arranged as:
         // byte[patch][sysexmessage][bytes], that is, each patch can have multiple
         // sysex messages, each of which is some number of bytes.  The provided
-    	// synthesizer is *not* the synthesizer for the data (that's you).  Instead, it
-    	// allows you to properly pop up a confirm dialog centered at the given window.
-    	// That's all it should be used for.
+        // synthesizer is *not* the synthesizer for the data (that's you).  Instead, it
+        // allows you to properly pop up a confirm dialog centered at the given window.
+        // That's all it should be used for.
         return true;
     }
                  
@@ -864,6 +872,7 @@ public class Blank extends Synth
         // this method is called to return an appropriate name for the bank.  This
         // name is then used to form a filename.  Typically banks don't have names,
         // so you might as well just use the default return value, which is "Bank".
+        // At present the one synthesizer with bank names is the Yamaha FB-01.
         return "Bank";
     }
 
@@ -883,7 +892,8 @@ public class Blank extends Synth
         // The reason you might want to do this is because Edisyn uses the *receiving* category to 
         // determine the parameters to paste to, and if this category contains componets which dynamically
         // appear or disappear, it might require multiple pastes to cause them to appear and eventually
-        // receive parameter changes.  The default returns DEFAULT_PASTES (3). 
+        // receive parameter changes.  The default returns DEFAULT_PASTES (3), which is fine for all
+        // current editors.
         return DEFAULT_PASTES; 
     }
 

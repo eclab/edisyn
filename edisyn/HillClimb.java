@@ -46,9 +46,10 @@ public class HillClimb extends SynthPanel
 {
     // OPERATIONS
     public static final int OPERATION_SEED_FROM_PATCH = 0;
-    public static final int OPERATION_SEED_FROM_NUDGE = 1;
-    public static final int OPERATION_SEED_FROM_FOUR = 2;
-    public static final int OPERATION_SEED_FROM_SIX = 3;
+    public static final int OPERATION_SEED_FROM_MORPH = 1;
+    public static final int OPERATION_SEED_FROM_NUDGE = 2;
+    public static final int OPERATION_SEED_FROM_FOUR = 3;
+    public static final int OPERATION_SEED_FROM_SIX = 4;
     public static final int OPERATION_CLIMB = 4;
     public static final int OPERATION_CONSTRICT = 5;
 
@@ -702,13 +703,15 @@ public class HillClimb extends SynthPanel
               
         reset = new PushButton("Reset...",
                                new String[] { "From Original Patch",
+                                              "From Morph",
                                               "From Nudge Targets", 
                                               "From First Four Candidates",
                                               "From First Six Candidates" })
             {
                 public void perform(int val)
                 {
-                    initialize(val == OPERATION_SEED_FROM_PATCH ? synth.getModel() : null, val);
+                    initialize(val == OPERATION_SEED_FROM_PATCH ? synth.getModel() : 
+                    			val == OPERATION_SEED_FROM_MORPH ? synth.morph.current : null, val);
                     resetCurrentPlay();
                 }
             };
@@ -1216,6 +1219,8 @@ public class HillClimb extends SynthPanel
         switch(operation)
             {
             case OPERATION_SEED_FROM_PATCH:
+            // Fall Thru
+			case OPERATION_SEED_FROM_MORPH:
                 {
                     Model newSeed = seed.copy();                
                     double weight = blank.getModel().get("hillclimbrate", 0) / 100.0;

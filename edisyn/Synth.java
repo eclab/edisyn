@@ -1017,6 +1017,9 @@ public abstract class Synth extends JComponent implements Updatable
     	and in no other situation.  By default this returns false. */ 
     public boolean getSendsParametersOnlyOnSendCurrentPatch() { return false; }
 
+    /** Override this to return TRUE if you want Edisyn to sendAllParmameters() immediately after a patch write. This isn't very common (the Kyra seems to need it). */ 
+    public boolean getSendsParametersAfterWrite() { return false; }
+
     /** Return the filename of your default sysex file (for example "MySynth.init"). Should be located right next to the synth's class file ("MySynth.class") */
     public String getDefaultResourceFileName() { return null; }
         
@@ -1272,7 +1275,8 @@ public abstract class Synth extends JComponent implements Updatable
                                             Synth.handleException(ex);
                                             // result is now PARSE_ERROR
                                             }
-                                                
+                                         
+                                         System.err.println("Parse result : " + result);       
                                         incomingPatch = (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
                                         if (result == PARSE_CANCELLED)
                                             {
@@ -1291,8 +1295,13 @@ public abstract class Synth extends JComponent implements Updatable
                                         if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
                                             undo.push(backup);
                                         setSendMIDI(true);
+                                         System.err.println("Sending Parameters?");       
                                         if (getSendsParametersAfterNonMergeParse())
+                                        	{
+                                        	                                         System.err.println("Yes?");       
+
                                             sendAllParameters();
+                                            }
                                         file = null;
 										updateBlend();
                                         }
@@ -5147,7 +5156,7 @@ public abstract class Synth extends JComponent implements Updatable
                 
     void doSendToCurrentPatch()
         {
-        if (tuple == null || tuple.out == null)
+	if (tuple == null || tuple.out == null)
             {
             if (!setupMIDI())
                 return;
@@ -5201,6 +5210,8 @@ public abstract class Synth extends JComponent implements Updatable
         tryToSendMIDI(emitAll(model, false, false));
         simplePause(getPauseAfterWritePatch());
         performChangePatch(model);     // do it at the end AND start here, as opposed to doSendtoPatch, which does it first.  We need to be at the end for the Kawai K4.
+        if (getSendsParametersAfterWrite())
+        	sendAllParameters();
         }
                 
     void doChangeMIDI()
@@ -7480,6 +7491,9 @@ public abstract class Synth extends JComponent implements Updatable
             // turn off hill-climbing
             if (hillClimbing)
                 doHillClimb();
+            // turn off morphing
+            if (morphing)
+            	doMorph();
                 
                 
             int result = showMultiOption(this, new String[0], new JComponent[0], new String[] { "Save as Individual Files", "Save to Bulk File", "Cancel"}, 0,

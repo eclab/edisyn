@@ -46,7 +46,7 @@ Edisyn presently supports:
 * Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
 * M-Audio Venom (Single, Multi, Arpeggiator, and Global Modes)
 * Novation Drumstation and D Station
-* Novation ReMOTE SL, SL MKII, and SL Compact Series (Template)
+* Novation ReMOTE SL, SL MKII, and SL Compact Series
 * Oberheim Matrix 6, 6R, and 1000 (Single and (for 1000) Global Modes) 
 * PreenFM2
 * Red Sound DarkStar and DarkStar XP2

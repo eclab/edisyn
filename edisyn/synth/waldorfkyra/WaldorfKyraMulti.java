@@ -410,6 +410,8 @@ public class WaldorfKyraMulti extends Synth
         tryToSendMIDI(buildPC(getChannelOut(), number));
     }
 
+    // Change Patch can get stomped if we do a request immediately afterwards
+    public int getPauseAfterChangePatch() { return 200; }
 
     boolean currentDump = false;
     public byte[] requestCurrentDump()
@@ -456,7 +458,6 @@ public class WaldorfKyraMulti extends Synth
 
     int getPart(String key)
     {
-        //System.err.println(key);
         int param = ((Integer)parametersToIndex.get(key)).intValue();
         return param / 16;
     }
@@ -586,32 +587,15 @@ public class WaldorfKyraMulti extends Synth
         return new Object[] { data, data2 };
     }
 
-    // This is moot, as the Kyra Mutimode doesn't emit sysex parameters.  :-(
-    /*
-      public void parseParameter(byte[] data)
-      {
-      if (data.length == 10 && 
-      data[0] == (byte)0xF0 &&
-      data[1] == 0x3E &&
-      data[2] == 0x22 &&
-      (data[4] == 0x11 || data[4] == 0x51))
-      {       
-      // extract part
-      int part = (data[6] & 3);
-      // extract param
-      int param = data[7];
-      // extract value
-      int val = data[8];
+    // The Kyra doesn't load into memory when you do a single-patch write.  To be
+    // safe, I'm assuming the same about multimode as well.
+    public boolean getSendsParametersAfterWrite() { return true; }
 
-      model.set("part" + (part + 1) + basicParameters[param], val);
-      }
-      }
-    */
+    // NOTE that the Kyra Mutimode doesn't emit sysex parameters.  :-(
 
     public int parse(byte[] data, boolean fromFile)
     {
         // There are potentially two sysex messages in a file, so we break it up and parse both of 'em
-        //System.err.println("from file " + fromFile);
         byte[][] cutup = cutUpSysex(data);
         int result = PARSE_FAILED;
         for(int i = 0; i < cutup.length; i++)

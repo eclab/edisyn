@@ -1961,7 +1961,14 @@ public class WaldorfKyra extends Synth
 
     public static String getSynthName() { return "Waldorf Kyra"; }
     
+//    public boolean getSendsParametersAfterNonMergeParse() { return true; }
+
+    // Change Patch can get stomped if we do a request immediately afterwards
+    public int getPauseAfterChangePatch() { return 200; }
     
+    // The Kyra doesn't load into memory when you do a write I believe
+    public boolean getSendsParametersAfterWrite() { return true; }
+
 
     HashMap parametersToIndex = new HashMap();
     public static final String[] parameters = new String[] 
